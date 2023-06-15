@@ -6,7 +6,7 @@ on:
     branches:
       - main
       # FIXME: remove
-      - boostrap-app
+      - bootstrap-app
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
