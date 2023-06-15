@@ -1,0 +1,8 @@
+# config file for ecospheres-front
+
+# list of organisations' ids that should be handled by the portal
+# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+# then Informations > ID at the bottom of the page
+organisations:
+  # MTE-CT
+  - 534fff8da3a7292c64a77eee
