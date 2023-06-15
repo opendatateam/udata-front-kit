@@ -5,18 +5,17 @@ const navItems = [
     "text": "Accueil",
   },
   {
-    "to": "datasets",
+    "to": "/datasets",
     "text": "Jeux de données",
   },
   {
-    "to": "organisations",
+    "to": "/organizations",
     "text": "Organisations",
   },
   {
     "to": "/about",
     "text": "À propos",
-  }
-
+  },
 ]
 </script>
 
