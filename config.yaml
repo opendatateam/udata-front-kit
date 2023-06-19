@@ -1,8 +1,11 @@
 # config file for ecospheres-front
 
+# data.gouv.fr API base URL
+datagouvfr_api_url: https://www.data.gouv.fr/api
+
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
-organisations:
+organizations:
   # MTE-CT
   - 534fff8da3a7292c64a77eee
