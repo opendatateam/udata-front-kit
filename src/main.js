@@ -8,6 +8,7 @@ import { createPinia } from "pinia"
 import VueDsfr from "@gouvminint/vue-dsfr"   // Import (par défaut) de la bibliothèque
 import App from "./App.vue"
 import router from "./router"
+import TextClamp from 'vue3-text-clamp'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -15,5 +16,6 @@ const pinia = createPinia()
 app.use(router)
 app.use(VueDsfr)
 app.use(pinia)
+app.use(TextClamp)
 
 app.mount("#app")
