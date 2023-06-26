@@ -44,7 +44,7 @@ export default class DatagouvfrAPI {
    * @returns {import("../../composables/fetch").ComposableFetchResult}
    */
   get (entity_id) {
-    const url = `${this.url()}/${entity_id}`
+    const url = `${this.url()}/${entity_id}/`
     return this.makeRequestAndHandleResponse(url)
   }
 
