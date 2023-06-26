@@ -1,15 +1,15 @@
 <script setup>
 import { useRoute } from "vue-router"
 
-import API from "../../services/api/resources/Organizations"
+import { useOrganizationStore } from "../../store"
 
 const route = useRoute()
-const api = new API()
+const store = useOrganizationStore()
 
-const { data, error } =  api.get(route.params.oid)
+const org = store.getOrAdd(route.params.oid)
 </script>
 
 <template>
-  <h1>{{ data.name }}</h1>
-  <div>{{ data.description }}</div>
+  <h1>{{ org.name }}</h1>
+  <div>{{ org.description }}</div>
 </template>

@@ -5,7 +5,7 @@ const navItems = [
     "text": "Accueil",
   },
   {
-    "to": "/datasets",
+    "to": "#datasets",
     "text": "Jeux de données",
   },
   {
