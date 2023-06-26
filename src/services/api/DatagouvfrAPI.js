@@ -2,6 +2,9 @@ import config from "@/config"
 import { watch } from "vue"
 import { useFetch } from "../../composables/fetch"
 import { toast } from "vue3-toastify"
+import { useLoading } from 'vue-loading-overlay'
+
+const $loading = useLoading()
 
 /**
  * A composable wrapper around data.gouv.fr's API
@@ -27,7 +30,8 @@ export default class DatagouvfrAPI {
    * @returns {import("../../composables/fetch").ComposableFetchResult}
    */
   makeRequestAndHandleResponse (url) {
-    const { data, error } = useFetch(url)
+    const loader = $loading.show()
+    const { data, error } = useFetch(url, () => loader.hide())
     // TODO: unwatch when request is done?
     watch(error, (errorValue) => {
       if (errorValue && errorValue.message) {
