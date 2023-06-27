@@ -81,15 +81,45 @@ export const useOrganizationStore = defineStore("organization", {
   }),
   actions: {
     /**
-     * Init the organization store from the config file values
+     * Get an organizations pagination object from config infos
      *
      * @returns {Array<object>}
      */
-    fillFromConfig () {
-      config.organizations.forEach((org_id) => {
+    getPagination () {
+      const pageSize = config.frontend_setttings.organizations_list_page_size
+      const total = config.organizations.length
+      const nbPages = Math.ceil(total / pageSize)
+      return [...Array(nbPages).keys()].map(page => {
+        page += 1
+        return {
+          label: page,
+          href: "#",
+          title: `Page ${page}`,
+        }
+      })
+    },
+    /**
+     * Get orgs list for a given page from store
+     *
+     * @param {number} page
+     * @returns
+     */
+    getForPage (page = 1) {
+      const pageSize = config.frontend_setttings.organizations_list_page_size
+      return this.data.slice(pageSize * (page - 1), pageSize * page)
+    },
+    /**
+     * Get from store or fetch from API orgs list for a page, using the config
+     *
+     * @param {number} page
+     * @returns {Array<object>}
+     */
+    getOrAddListFromConfig (page = 1) {
+      const pageSize = config.frontend_setttings.organizations_list_page_size
+      config.organizations.slice(pageSize * (page - 1), pageSize * page).forEach((org_id) => {
         this.getOrAdd(org_id)
       })
-      return this.data
+      return this.getForPage(page)
     },
     /**
      * Add an organization to the store
@@ -113,15 +143,5 @@ export const useOrganizationStore = defineStore("organization", {
       const { data } = api.get(org_id)
       return this.add(data)
     },
-    /**
-     * Get datasets for an org from the store or from the API ()
-     *
-     * @param {str} org_id
-     * @returns {object}
-     */
-    getOrAddDatasetForOrg (org_id) {
-      const dStore = useDatasetStore()
-      return dStore.getOrAddDatasetsForOrg(org_id)
-    }
   }
 })
