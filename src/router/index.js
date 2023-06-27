@@ -22,6 +22,18 @@ const router = createRouter({
       component: OrganizationDetailView,
     },
     {
+      path: "/datasets",
+      name: "datasets",
+      // TODO:
+      component: () => import("../views/AboutView.vue"),
+    },
+    {
+      path: "/datasets/:did",
+      name: "dataset_detail",
+      // TODO:
+      component: () => import("../views/AboutView.vue"),
+    },
+    {
       path: "/about",
       name: "about",
       component: () => import("../views/AboutView.vue"),
