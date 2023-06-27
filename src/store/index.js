@@ -86,7 +86,7 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     getPagination () {
-      const pageSize = config.frontend_setttings.organizations_list_page_size
+      const pageSize = config.organizations_list_page_size
       const total = config.organizations.length
       const nbPages = Math.ceil(total / pageSize)
       return [...Array(nbPages).keys()].map(page => {
@@ -102,10 +102,10 @@ export const useOrganizationStore = defineStore("organization", {
      * Get orgs list for a given page from store
      *
      * @param {number} page
-     * @returns
+     * @returns {Array<object>}
      */
     getForPage (page = 1) {
-      const pageSize = config.frontend_setttings.organizations_list_page_size
+      const pageSize = config.organizations_list_page_size
       return this.data.slice(pageSize * (page - 1), pageSize * page)
     },
     /**
@@ -115,7 +115,7 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     getOrAddListFromConfig (page = 1) {
-      const pageSize = config.frontend_setttings.organizations_list_page_size
+      const pageSize = config.organizations_list_page_size
       config.organizations.slice(pageSize * (page - 1), pageSize * page).forEach((org_id) => {
         this.getOrAdd(org_id)
       })
