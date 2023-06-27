@@ -1,9 +1,17 @@
 <script setup>
+import { ref, computed } from "vue"
 import { useOrganizationStore } from "../../store"
 import Card from "../../components/Card.vue"
 
 const store = useOrganizationStore()
-const organizations = store.fillFromConfig()
+
+const currentPage = ref(1)
+const pages = store.getPagination()
+const organizations = computed(() => store.getOrAddListFromConfig(currentPage.value))
+
+function onUpdatePage (page) {
+  currentPage.value = page + 1
+}
 </script>
 
 <template>
@@ -20,4 +28,5 @@ const organizations = store.fillFromConfig()
       />
     </div>
   </div>
+  <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="onUpdatePage" />
 </template>
