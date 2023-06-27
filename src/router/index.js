@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import HomeView from "../views/HomeView.vue"
 import OrganizationsListView from "../views/organizations/OrganizationsListView.vue"
 import OrganizationDetailView from "../views/organizations/OrganizationDetailView.vue"
+import DatasetDetailView from "../views/datasets/DatasetDetailView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,13 +31,17 @@ const router = createRouter({
     {
       path: "/datasets/:did",
       name: "dataset_detail",
-      // TODO:
-      component: () => import("../views/AboutView.vue"),
+      component: DatasetDetailView,
     },
     {
       path: "/about",
       name: "about",
       component: () => import("../views/AboutView.vue"),
+    },
+    {
+      path: "/playground",
+      name: "playground",
+      component: () => import("../playground/Component.vue"),
     },
   ],
 })

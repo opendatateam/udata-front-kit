@@ -3,10 +3,25 @@ import { defineStore } from "pinia"
 
 import config from "@/config.js"
 import OrganizationsAPI from "../services/api/resources/OrganizationsAPI"
+import DatasetsAPI from "../services/api/resources/DatasetsAPI"
 
-const api = new OrganizationsAPI()
+const orgApi = new OrganizationsAPI()
+const datasetsApi = new DatasetsAPI()
 
 
+/**
+ * An organization oriented and paginated store for datasets
+ * data = {
+ *   "{organization_id}": [{
+ *     "page": 1,
+ *     "total": 200,
+ *     "data": [{dataset}, ...]
+ *   }, ...]
+ * }
+ *
+ * A special key `_orphans` exists for storing individual datasets if needed (ie w/o org and pagination)
+ * This is useful when fetching a single dataset on a dataset page
+ */
 export const useDatasetStore = defineStore("dataset", {
   state: () => ({
     data: {}
@@ -52,12 +67,12 @@ export const useDatasetStore = defineStore("dataset", {
     getOrAddDatasetsForOrg (org_id, page = 1) {
       const existing = this.getDatasetsForOrg(org_id, page)
       if (existing.data) return existing
-      const { data, error } = api.getDatasets(org_id, page)
+      const { data } = orgApi.getDatasets(org_id, page)
       // TODO: maybe move to async/await in API to avoid watchers (but will bubble up to component?)
       watch(data, (_data) => {
         if (_data.data) {
           // store the full results with metadata
-          this.add(org_id, _data)
+          this.addDatasets(org_id, _data)
         }
       })
       return this.getDatasetsForOrg(org_id, page)
@@ -68,8 +83,50 @@ export const useDatasetStore = defineStore("dataset", {
      * @param {string} org_id
      * @param {object} res
      */
-    add (org_id, res) {
+    addDatasets (org_id, res) {
       this.data[org_id] = [...(this.data[org_id] || []), res]
+    },
+    /**
+     * Get a dataset from the store given its id
+     *
+     * @param {string} dataset_id
+     * @returns {object}
+     */
+    get (dataset_id) {
+      // flatten pages data for each organization
+      // TODO: suboptimal store structure for this use case, see later if org oriented or flat is better
+      const flattened = Object.keys(this.data).map(org_id => {
+        return this.data[org_id].map(org_data => org_data.data)
+      }).reduce((flat, toFlatten) => flat.concat(toFlatten), []).flat()
+      return flattened.find(d => {
+        // no .value when from org oriented store, .value when API fetch
+        d = d.value || d
+        return d.id === dataset_id || d.slug === dataset_id
+      })
+    },
+    /**
+     * Get an org from the store or from the API if not cached
+     *
+     * @param {string} dataset_id
+     * @returns {object}
+     */
+    getOrAdd (dataset_id) {
+      const existing = this.get(dataset_id)
+      if (existing) return existing
+      const { data } = datasetsApi.get(dataset_id)
+      return this.addOrphan(data)
+    },
+    /**
+     * Add an "orphan" dataset to the store
+     *
+     * @param {object} dataset
+     * @returns {object}
+     */
+    addOrphan (dataset) {
+      this.addDatasets("_orphan", {
+        data: [dataset]
+      })
+      return dataset
     },
   }
 })
@@ -140,7 +197,7 @@ export const useOrganizationStore = defineStore("organization", {
     getOrAdd (org_id) {
       const existing = this.data.find(o => o.value.id === org_id || o.value.slug === org_id)
       if (existing) return existing.value
-      const { data } = api.get(org_id)
+      const { data } = orgApi.get(org_id)
       return this.add(data)
     },
   }

@@ -12,6 +12,7 @@
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
     "axios": "^1.4.0",
+    "marked": "^5.1.0",
     "pinia": "^2.1.4",
     "vue": "^3.3.4",
     "vue-loading-overlay": "^6.0.3",
