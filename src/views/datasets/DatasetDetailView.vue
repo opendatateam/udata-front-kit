@@ -1,35 +1,43 @@
 <script setup>
 import { marked } from "marked"
+import { filesize } from "filesize"
 
 import { useRoute } from "vue-router"
 
 import { useDatasetStore } from "../../store"
-import { computed } from "vue"
+import { computed, onMounted } from "vue"
 
 const route = useRoute()
 const datasetId = route.params.did
 
 const store = useDatasetStore()
-const dataset = store.getOrAdd(datasetId)
+
+const dataset = computed(() => store.get(datasetId) || {})
+
+const formatFileSize = (fileSize) => {
+  if (!fileSize) return "Taille inconnue"
+  return filesize(fileSize)
+}
 
 const files = computed(() => {
-  // FIXME: sometimes value, sometimes no value...
   return dataset.value?.resources?.map(resource => {
     return {
       title: resource.title || "Fichier sans nom",
       format: resource.format,
-      // TODO: convert to human readable
-      size: resource.filesize || "Taille inconnue",
+      size: formatFileSize(resource.filesize),
       href: resource.url,
     }
   })
 })
 
 const description = computed(() => {
-  // FIXME: sometimes value, sometimes no value...
   if (dataset.value?.description) {
     return marked.parse(dataset.value.description, {mangle: false, headerIds: false})
   }
+})
+
+onMounted(() => {
+  store.load(datasetId)
 })
 </script>
 
