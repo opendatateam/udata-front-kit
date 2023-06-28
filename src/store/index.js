@@ -89,10 +89,7 @@ export const useDatasetStore = defineStore("dataset", {
     get (dataset_id) {
       // flatten pages data for each organization
       // TODO: suboptimal store structure for this use case, see later if org oriented or flat is better
-      // TODO: try to simplify since no refs anymore
-      const flattened = Object.keys(this.data).map(org_id => {
-        return this.data[org_id].map(org_data => org_data.data)
-      }).reduce((flat, toFlatten) => flat.concat(toFlatten), []).flat()
+      const flattened = Object.keys(this.data).map(k => this.data[k].map(a => a.data).flat()).flat()
       return flattened.find(d => {
         return d.id === dataset_id || d.slug === dataset_id
       })
