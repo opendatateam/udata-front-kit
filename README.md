@@ -33,3 +33,7 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Setup search engine
+
+See https://github.com/ecolabdata/ecospheres-search-index

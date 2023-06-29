@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue"
 import OrganizationsListView from "../views/organizations/OrganizationsListView.vue"
 import OrganizationDetailView from "../views/organizations/OrganizationDetailView.vue"
 import DatasetDetailView from "../views/datasets/DatasetDetailView.vue"
+import DatasetsListView from "../views/datasets/DatasetsListView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,8 +26,7 @@ const router = createRouter({
     {
       path: "/datasets",
       name: "datasets",
-      // TODO:
-      component: () => import("../views/AboutView.vue"),
+      component: DatasetsListView,
     },
     {
       path: "/datasets/:did",

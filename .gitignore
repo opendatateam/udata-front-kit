@@ -2,3 +2,4 @@ dist/
 node_modules/
 TODO.md
 src/playground
+.env.local
