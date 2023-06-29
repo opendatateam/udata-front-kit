@@ -1,12 +1,15 @@
-import { watch } from "vue"
+// TODO: split into three modules, one for each store
+
 import { defineStore } from "pinia"
 
 import config from "@/config.js"
 import OrganizationsAPI from "../services/api/resources/OrganizationsAPI"
 import DatasetsAPI from "../services/api/resources/DatasetsAPI"
+import SearchAPI from "../services/api/SearchAPI"
 
 const orgApi = new OrganizationsAPI()
 const datasetsApi = new DatasetsAPI()
+const searchAPI = new SearchAPI()
 
 
 /**
@@ -118,7 +121,7 @@ export const useDatasetStore = defineStore("dataset", {
       const dataset = await datasetsApi.get(dataset_id)
       this.addOrphan(dataset)
     },
-  }
+  },
 })
 
 
@@ -199,5 +202,18 @@ export const useOrganizationStore = defineStore("organization", {
       const org = await orgApi.get(org_id)
       return this.add(org)
     },
-  }
+  },
+})
+
+export const useSearchStore = defineStore("search", {
+  state: () => ({
+    data: []
+  }),
+  actions: {
+    async search (query) {
+      console.log(query)
+      const results = await searchAPI.search(query)
+      this.data = results
+    }
+  },
 })
