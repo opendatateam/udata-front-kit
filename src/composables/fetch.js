@@ -1,25 +1,24 @@
 import axios from 'axios'
-import { ref } from 'vue'
 
 /**
- * @typedef {object} ComposableFetchResult
- * @property {ref} data
- * @property {ref} error
+ * HTTP-fetch an URL
  *
  * @param {string} url
- * @param {function?} cb
- * @returns {ComposableFetchResult}
+ * @param {function?} onError
+ * @param {function?} onFinally
+ * @returns {object}
  */
-export function useFetch(url, cb) {
-  const data = ref({})
-  const error = ref(null)
-
-  axios.get(url)
-    .then((res) => data.value = res.data)
-    .catch((err) => (error.value = err))
-    .finally(() => {
-      if (cb) cb()
-    })
-
-  return { data, error }
+export async function useFetch(url, onError, onFinally) {
+  try {
+    const res = await axios.get(url)
+    return res.data
+  } catch (error) {
+    if (onError) {
+      onError(error)
+    } else {
+      throw error
+    }
+  } finally {
+    if (onFinally) onFinally()
+  }
 }

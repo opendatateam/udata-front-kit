@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router"
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 
 import { useOrganizationStore, useDatasetStore } from "../../store"
 import Card from "../../components/Card.vue"
@@ -11,15 +11,21 @@ const organizationId = route.params.oid
 const orgStore = useOrganizationStore()
 const datasetStore = useDatasetStore()
 
-const org = orgStore.getOrAdd(organizationId)
+const org = computed(() => orgStore.get(organizationId) || {})
 
 const currentPage = ref(1)
 const pages = computed(() => datasetStore.getDatasetsPaginationForOrg(organizationId))
-const datasets = computed(() => datasetStore.getOrAddDatasetsForOrg(organizationId, currentPage.value))
+const datasets = computed(() => datasetStore.getDatasetsForOrg(organizationId, currentPage.value))
 
 function onUpdatePage (page) {
   currentPage.value = page + 1
+  datasetStore.loadDatasetsForOrg(organizationId, currentPage.value)
 }
+
+onMounted(() => {
+  orgStore.load(organizationId)
+  datasetStore.loadDatasetsForOrg(organizationId)
+})
 </script>
 
 <template>

@@ -29,16 +29,13 @@ export default class DatagouvfrAPI {
    * @param {string} url
    * @returns {import("../../composables/fetch").ComposableFetchResult}
    */
-  makeRequestAndHandleResponse (url) {
+  async makeRequestAndHandleResponse (url) {
     const loader = $loading.show()
-    const { data, error } = useFetch(url, () => loader.hide())
-    // TODO: unwatch when request is done?
-    watch(error, (errorValue) => {
-      if (errorValue && errorValue.message) {
-        toast(errorValue.message, {type: "error", autoClose: false})
+    return await useFetch(url, (error) => {
+      if (error && error.message) {
+        toast(error.message, {type: "error", autoClose: false})
       }
-    })
-    return { data, error }
+    }, () => loader.hide())
   }
 
   /**
@@ -47,9 +44,9 @@ export default class DatagouvfrAPI {
    * @param {string} entity_id
    * @returns {import("../../composables/fetch").ComposableFetchResult}
    */
-  get (entity_id) {
+  async get (entity_id) {
     const url = `${this.url()}/${entity_id}/`
-    return this.makeRequestAndHandleResponse(url)
+    return await this.makeRequestAndHandleResponse(url)
   }
 
   /**
@@ -57,7 +54,7 @@ export default class DatagouvfrAPI {
    *
    * @returns {import("../../composables/fetch").ComposableFetchResult}
    */
-  list () {
-    return this.makeRequestAndHandleResponse(this.url())
+  async list () {
+    return await this.makeRequestAndHandleResponse(this.url())
   }
 }

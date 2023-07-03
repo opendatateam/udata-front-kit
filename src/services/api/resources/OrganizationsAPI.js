@@ -7,10 +7,10 @@ export default class OrganizationsAPI extends DatagouvfrAPI {
    * Get datasets for an organization
    *
    * @param {str} org_id
-   * @returns {import("../../../composables/fetch").ComposableFetchResult}
+   * @returns {object}
    */
-  getDatasets (org_id, page = 1) {
+  async getDatasets (org_id, page = 1) {
     const url = `${this.url()}/${org_id}/datasets/?page=${page}`
-    return this.makeRequestAndHandleResponse(url)
+    return await this.makeRequestAndHandleResponse(url)
   }
 }

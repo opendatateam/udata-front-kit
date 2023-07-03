@@ -3,13 +3,28 @@ import { defineStore } from "pinia"
 
 import config from "@/config.js"
 import OrganizationsAPI from "../services/api/resources/OrganizationsAPI"
+import DatasetsAPI from "../services/api/resources/DatasetsAPI"
 
-const api = new OrganizationsAPI()
+const orgApi = new OrganizationsAPI()
+const datasetsApi = new DatasetsAPI()
 
 
+/**
+ * An organization oriented and paginated store for datasets
+ * data = {
+ *   "{organization_id}": [{
+ *     "page": 1,
+ *     "total": 200,
+ *     "data": [{dataset}, ...]
+ *   }, ...]
+ * }
+ *
+ * A special key `_orphans` exists for storing individual datasets if needed (ie w/o org and pagination)
+ * This is useful when fetching a single dataset on a dataset page
+ */
 export const useDatasetStore = defineStore("dataset", {
   state: () => ({
-    data: {}
+    data: {},
   }),
   actions: {
     /**
@@ -32,7 +47,7 @@ export const useDatasetStore = defineStore("dataset", {
       })
     },
     /**
-     * Get datasets in store for an org and a page
+     * Get datasets from store for an org and a page
      *
      * @param {string} org_id
      * @param {number} page
@@ -43,23 +58,17 @@ export const useDatasetStore = defineStore("dataset", {
       return this.data[org_id].find(d => d.page == page) || {}
     },
     /**
-     * Get from store or fetch from API datasets for an org and a page
+     * Async function to trigger API fetch of an org's datasets if not known in store
      *
      * @param {string} org_id
      * @param {number} page
      * @returns {Array<object>}
      */
-    getOrAddDatasetsForOrg (org_id, page = 1) {
+    async loadDatasetsForOrg (org_id, page = 1) {
       const existing = this.getDatasetsForOrg(org_id, page)
       if (existing.data) return existing
-      const { data, error } = api.getDatasets(org_id, page)
-      // TODO: maybe move to async/await in API to avoid watchers (but will bubble up to component?)
-      watch(data, (_data) => {
-        if (_data.data) {
-          // store the full results with metadata
-          this.add(org_id, _data)
-        }
-      })
+      const datasets = await orgApi.getDatasets(org_id, page)
+      this.addDatasets(org_id, datasets)
       return this.getDatasetsForOrg(org_id, page)
     },
     /**
@@ -68,8 +77,46 @@ export const useDatasetStore = defineStore("dataset", {
      * @param {string} org_id
      * @param {object} res
      */
-    add (org_id, res) {
+    addDatasets (org_id, res) {
       this.data[org_id] = [...(this.data[org_id] || []), res]
+    },
+    /**
+     * Get a dataset from the store given its id
+     *
+     * @param {string} dataset_id
+     * @returns {object|undefined}
+     */
+    get (dataset_id) {
+      // flatten pages data for each organization
+      // TODO: suboptimal store structure for this use case, see later if org oriented or flat is better
+      const flattened = Object.keys(this.data).map(k => this.data[k].map(a => a.data).flat()).flat()
+      return flattened.find(d => {
+        return d.id === dataset_id || d.slug === dataset_id
+      })
+    },
+    /**
+     * Add an "orphan" dataset to the store
+     *
+     * @param {object} dataset
+     * @returns {object}
+     */
+    addOrphan (dataset) {
+      this.addDatasets("_orphan", {
+        data: [dataset]
+      })
+      return dataset
+    },
+    /**
+     * Async function to trigger API fetch of a dataset if not known in store
+     *
+     * @param {str} dataset_id
+     * @returns {object}
+     */
+    async load (dataset_id) {
+      const existing = this.get(dataset_id)
+      if (existing) return existing
+      const dataset = await datasetsApi.get(dataset_id)
+      this.addOrphan(dataset)
     },
   }
 })
@@ -109,15 +156,15 @@ export const useOrganizationStore = defineStore("organization", {
       return this.data.slice(pageSize * (page - 1), pageSize * page)
     },
     /**
-     * Get from store or fetch from API orgs list for a page, using the config
+     * Async function to trigger API fetch of orgs list for a page, using the config
      *
      * @param {number} page
      * @returns {Array<object>}
      */
-    getOrAddListFromConfig (page = 1) {
+    async loadFromConfig (page = 1) {
       const pageSize = config.organizations_list_page_size
       config.organizations.slice(pageSize * (page - 1), pageSize * page).forEach((org_id) => {
-        this.getOrAdd(org_id)
+        this.load(org_id)
       })
       return this.getForPage(page)
     },
@@ -132,16 +179,25 @@ export const useOrganizationStore = defineStore("organization", {
       return org
     },
     /**
-     * Get an org from the store or from the API if not cached
+     * Get an org from store given its id
+     *
+     * @param {str} org_id
+     * @returns {object|undefined}
+     */
+    get (org_id) {
+      return this.data.find(o => o.id === org_id || o.slug === org_id)
+    },
+    /**
+     * Async function to trigger API fetch of an org if not known in store
      *
      * @param {string} org_id
-     * @returns {object}
+     * @returns {object|undefined}
      */
-    getOrAdd (org_id) {
-      const existing = this.data.find(o => o.value.id === org_id || o.value.slug === org_id)
-      if (existing) return existing.value
-      const { data } = api.get(org_id)
-      return this.add(data)
+    async load (org_id) {
+      const existing = this.get(org_id)
+      if (existing) return existing
+      const org = await orgApi.get(org_id)
+      return this.add(org)
     },
   }
 })
