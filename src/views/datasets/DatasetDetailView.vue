@@ -4,7 +4,7 @@ import { filesize } from "filesize"
 
 import { useRoute } from "vue-router"
 
-import { useDatasetStore } from "../../store"
+import { useDatasetStore } from "../../store/DatasetStore"
 import { computed, onMounted } from "vue"
 
 const route = useRoute()

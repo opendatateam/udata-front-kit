@@ -2,7 +2,8 @@
 import { useRoute } from "vue-router"
 import { computed, onMounted, ref } from "vue"
 
-import { useOrganizationStore, useDatasetStore } from "../../store"
+import { useOrganizationStore } from "../../store/OrganizationStore"
+import { useDatasetStore } from "../../store/DatasetStore"
 import Card from "../../components/Card.vue"
 
 const route = useRoute()
