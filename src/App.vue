@@ -39,4 +39,6 @@ const doSearch = () => {
       <RouterView />
     </div>
   </div>
+
+  <DsfrFooter class="fr-mt-8w" :mandatory-links="[]"></DsfrFooter>
 </template>
