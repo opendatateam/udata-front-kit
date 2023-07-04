@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue"
-import { useOrganizationStore } from "../../store"
+import { useOrganizationStore } from "../../store/OrganizationStore"
 import Card from "../../components/Card.vue"
 
 const store = useOrganizationStore()

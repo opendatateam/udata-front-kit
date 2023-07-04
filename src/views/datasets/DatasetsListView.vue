@@ -2,7 +2,7 @@
 import { computed, onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
 import Card from "../../components/Card.vue"
-import { useSearchStore } from "../../store"
+import { useSearchStore } from "../../store/SearchStore"
 
 const route = useRoute()
 const store = useSearchStore()
