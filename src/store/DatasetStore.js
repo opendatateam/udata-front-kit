@@ -23,7 +23,7 @@ export const useDatasetStore = defineStore("dataset", {
   }),
   actions: {
     /**
-     * Get a datasets pagination object for a given org, from API infos
+     * Get a datasets pagination object for a given org, from store infos
      *
      * @param {str} org_id
      * @returns {Array<object>}
