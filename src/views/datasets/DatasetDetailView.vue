@@ -44,7 +44,7 @@ const files = computed(() => {
     return {
       title: resource.title || "Fichier sans nom",
       format: resource.format,
-      size: formatFileSize(resource.filesize),
+      size: formatFileSize(resource.filesize || resource.extras["check:headers:content-length"] || resource.extras["analysis:content-length"]),
       href: resource.url,
     }
   })
