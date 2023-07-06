@@ -73,49 +73,64 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>{{ dataset.title }}</h1>
-  <div v-html="description"></div>
-  <DsfrFileDownloadList
-    class="fr-mt-4w"
-    :files="files"
-    title="Fichiers du jeu de données"
-  />
+  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+    <div class="fr-grid-row">
+      <div class="fr-col-md-4 es__organization__sidebar" v-if="dataset.organization">
+        <div class="es__organization__sidebar__logo_container">
+          <img :src="dataset.organization.logo">
+        </div>
+        <div class="es__organization__sidebar__metadata_container">
+          <h6><a href="">{{ dataset.organization.name }}</a></h6>
+        </div>
+      </div>
+      <div class="fr-col-md-8">
+        <h1>{{ dataset.title }}</h1>
+        <div v-html="description"></div>
+      </div>
+    </div>
 
-  <h2 class="fr-mt-4w">Réutilisations</h2>
-  <div v-if="!reuses.length">Pas de réutilisation pour ce jeu de données.</div>
-  <div class="fr-grid-row fr-grid-row--gutters">
-    <Card v-for="r in reuses"
-      class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
-      type="dataset"
-      :alt-img="r.title"
-      :external-link="r.page"
-      :title="r.title"
-      :description="r.description"
-      :img="r.organization?.logo || r.owner.avatar"
-    />
+    <DsfrFileDownloadList
+          class="fr-mt-4w"
+          :files="files"
+          title="Fichiers du jeu de données"
+        />
+
+    <h2 class="fr-mt-4w">Réutilisations</h2>
+    <div v-if="!reuses.length">Pas de réutilisation pour ce jeu de données.</div>
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <Card v-for="r in reuses"
+        class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
+        type="dataset"
+        :alt-img="r.title"
+        :external-link="r.page"
+        :title="r.title"
+        :description="r.description"
+        :img="r.organization?.logo || r.owner.avatar"
+      />
+    </div>
+
+    <h2 class="fr-mt-4w">Discussions</h2>
+    <div v-if="!discussions.data?.length">Pas de discussion pour ce jeu de données.</div>
+
+    <DsfrAccordionsGroup>
+      <li v-for="discussion in discussions.data">
+        <DsfrAccordion :id="discussion.id" :title="discussion.title" :expanded-id="expandedDiscussion" @expand="id => expandedDiscussion = id">
+          <template #default>
+            <ul class="es__comment__container">
+              <li v-for="comment in discussion.discussion">
+                <div class="es__comment__metadata fr-mb-1v">
+                  <span class="es__comment__author">{{ comment.posted_by.first_name }} {{ comment.posted_by.last_name }}</span>
+                  <span class="es__comment__date fr-ml-1v">le {{ formatDate(comment.posted_on) }}</span>
+                </div>
+                <div class="es__comment__content">{{ comment.content }}</div>
+              </li>
+            </ul>
+          </template>
+        </DsfrAccordion>
+      </li>
+    </DsfrAccordionsGroup>
+    <DsfrPagination class="fr-mt-2w" v-if="discussionsPages.length" :current-page="discussionsPage - 1" :pages="discussionsPages" @update:current-page="onUpdatePage" />
   </div>
-
-  <h2 class="fr-mt-4w">Discussions</h2>
-  <div v-if="!discussions.data?.length">Pas de discussion pour ce jeu de données.</div>
-
-  <DsfrAccordionsGroup>
-    <li v-for="discussion in discussions.data">
-      <DsfrAccordion :id="discussion.id" :title="discussion.title" :expanded-id="expandedDiscussion" @expand="id => expandedDiscussion = id">
-        <template #default>
-          <ul class="es__comment__container">
-            <li v-for="comment in discussion.discussion">
-              <div class="es__comment__metadata fr-mb-1v">
-                <span class="es__comment__author">{{ comment.posted_by.first_name }} {{ comment.posted_by.last_name }}</span>
-                <span class="es__comment__date fr-ml-1v">le {{ formatDate(comment.posted_on) }}</span>
-              </div>
-              <div class="es__comment__content">{{ comment.content }}</div>
-            </li>
-          </ul>
-        </template>
-      </DsfrAccordion>
-    </li>
-  </DsfrAccordionsGroup>
-  <DsfrPagination class="fr-mt-2w" v-if="discussionsPages.length" :current-page="discussionsPage - 1" :pages="discussionsPages" @update:current-page="onUpdatePage" />
 </template>
 
 <style scoped lang="scss">
@@ -129,6 +144,20 @@ ul.es__comment__container {
 .es__comment__metadata {
   .es__comment__author {
     font-weight: bold;
+  }
+}
+
+.es__organization__sidebar {
+  text-align: center;
+  width: 100%;
+  .es__organization__sidebar__metadata_container {
+    padding: 0 2rem;
+  }
+  .es__organization__sidebar__logo_container {
+    width: 100%;
+    img {
+      max-width: 250px;
+    }
   }
 }
 </style>
