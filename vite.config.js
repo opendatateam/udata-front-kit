@@ -17,5 +17,5 @@ export default defineConfig({
       '@root': resolve(__dirname, './'),
     }
   },
-  base: '/ecospheres-front/',
+  base: '/',
 })
