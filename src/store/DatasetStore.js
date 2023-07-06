@@ -3,7 +3,6 @@ import DatasetsAPI from "../services/api/resources/DatasetsAPI"
 import OrganizationsAPI from "../services/api/resources/OrganizationsAPI"
 
 const datasetsApi = new DatasetsAPI()
-const orgApi = new OrganizationsAPI()
 
 /**
  * An organization oriented and paginated store for datasets
@@ -63,7 +62,7 @@ export const useDatasetStore = defineStore("dataset", {
     async loadDatasetsForOrg (org_id, page = 1) {
       const existing = this.getDatasetsForOrg(org_id, page)
       if (existing.data) return existing
-      const datasets = await orgApi.getDatasets(org_id, page)
+      const datasets = await datasetsApi.getDatasetsForOrganization(org_id, page)
       this.addDatasets(org_id, datasets)
       return this.getDatasetsForOrg(org_id, page)
     },

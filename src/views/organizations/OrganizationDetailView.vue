@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router"
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 
 import { useOrganizationStore } from "../../store/OrganizationStore"
 import { useDatasetStore } from "../../store/DatasetStore"
@@ -15,17 +15,28 @@ const datasetStore = useDatasetStore()
 const org = computed(() => orgStore.get(organizationId) || {})
 
 const currentPage = ref(1)
-const pages = computed(() => datasetStore.getDatasetsPaginationForOrg(organizationId))
-const datasets = computed(() => datasetStore.getDatasetsForOrg(organizationId, currentPage.value))
+const pages = ref([])
+const datasets = ref({})
 
 function onUpdatePage (page) {
   currentPage.value = page + 1
-  datasetStore.loadDatasetsForOrg(organizationId, currentPage.value)
+  datasetStore.loadDatasetsForOrg(org.value.id, currentPage.value).then(_datasets => {
+    datasets.value = _datasets
+  })
 }
+
+// we need the technical id to fetch the datasets and thus pagination
+watch(org, (_org) => {
+  if (_org.id) {
+    datasetStore.loadDatasetsForOrg(_org.id).then(_datasets => {
+      datasets.value = _datasets
+      pages.value = datasetStore.getDatasetsPaginationForOrg(_org.id)
+    })
+  }
+})
 
 onMounted(() => {
   orgStore.load(organizationId)
-  datasetStore.loadDatasetsForOrg(organizationId)
 })
 </script>
 
