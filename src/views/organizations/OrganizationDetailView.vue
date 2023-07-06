@@ -44,8 +44,10 @@ onMounted(() => {
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <h1>{{ org.name }}</h1>
     <div>{{ org.description }}</div>
+
     <h2 class="fr-mt-2w">Jeux de données</h2>
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div v-if="!datasets?.data?.length">Pas de jeu de données pour cette organisation.</div>
+    <div v-else class="fr-grid-row fr-grid-row--gutters">
       <Card v-for="d in datasets.data"
         class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
         type="dataset"

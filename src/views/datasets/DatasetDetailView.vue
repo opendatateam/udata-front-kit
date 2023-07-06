@@ -23,6 +23,16 @@ const reuses = ref([])
 const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
+const selectedTabIndex = ref(0)
+
+const tabs = computed(() => {
+  return [
+    {"title": "Fichiers", "tabId":"tab-0", "panelId":"tab-content-0"},
+    {"title": `Réutilisations (${reuses.value.length})`, "tabId":"tab-1", "panelId":"tab-content-1"},
+    {"title": `Discussions (${discussions.value.total})`, "tabId":"tab-2", "panelId":"tab-content-2"},
+    {"title": "Métadonnées", "tabId":"tab-3", "panelId":"tab-content-3"},
+  ]
+})
 
 const formatFileSize = (fileSize) => {
   if (!fileSize) return "Taille inconnue"
@@ -89,51 +99,92 @@ onMounted(() => {
       </div>
     </div>
 
-    <DsfrFileDownloadList
-          class="fr-mt-4w"
-          :files="files"
-          title="Fichiers du jeu de données"
-        />
+    <DsfrTabs
+      class="fr-mt-2w"
+      tab-list-name="Groupes d'attributs du jeu de données"
+      :tab-titles="tabs"
+      :initial-selected-index="0"
+      :selected-tab-index="selectedTabIndex"
+      @select-tab="(idx) => selectedTabIndex = idx"
+    >
+      <!-- Fichiers -->
+      <DsfrTabContent
+        panel-id="tab-content-0"
+        tab-id="tab-0"
+        :selected="selectedTabIndex === 0"
+      >
+        <DsfrFileDownloadList
+            class="fr-mt-4w"
+            :files="files"
+            title="Fichiers du jeu de données"
+          />
+      </DsfrTabContent>
 
-    <h2 class="fr-mt-4w">Réutilisations</h2>
-    <div v-if="!reuses.length">Pas de réutilisation pour ce jeu de données.</div>
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <Card v-for="r in reuses"
-        class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
-        type="dataset"
-        :alt-img="r.title"
-        :external-link="r.page"
-        :title="r.title"
-        :description="r.description"
-        :img="r.organization?.logo || r.owner.avatar"
-      />
-    </div>
+      <!-- Réutilisations -->
+      <DsfrTabContent
+        panel-id="tab-content-1"
+        tab-id="tab-1"
+        :selected="selectedTabIndex === 1"
+      >
+        <h2 class="fr-mt-4w">Réutilisations</h2>
+        <div v-if="!reuses.length">Pas de réutilisation pour ce jeu de données.</div>
+        <div v-else class="fr-grid-row fr-grid-row--gutters">
+          <Card v-for="r in reuses"
+            class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
+            type="dataset"
+            :alt-img="r.title"
+            :external-link="r.page"
+            :title="r.title"
+            :description="r.description"
+            :img="r.organization?.logo || r.owner.avatar"
+          />
+        </div>
+      </DsfrTabContent>
 
-    <h2 class="fr-mt-4w">Discussions</h2>
-    <div v-if="!discussions.data?.length">Pas de discussion pour ce jeu de données.</div>
+      <!-- Discussions -->
+      <DsfrTabContent
+        panel-id="tab-content-2"
+        tab-id="tab-2"
+        :selected="selectedTabIndex === 2"
+      >
+      <h2 class="fr-mt-4w">Discussions</h2>
+        <div v-if="!discussions.data?.length">Pas de discussion pour ce jeu de données.</div>
+        <DsfrAccordionsGroup>
+          <li v-for="discussion in discussions.data">
+            <DsfrAccordion :id="discussion.id" :title="discussion.title" :expanded-id="expandedDiscussion" @expand="id => expandedDiscussion = id">
+              <template #default>
+                <ul class="es__comment__container">
+                  <li v-for="comment in discussion.discussion">
+                    <div class="es__comment__metadata fr-mb-1v">
+                      <span class="es__comment__author">{{ comment.posted_by.first_name }} {{ comment.posted_by.last_name }}</span>
+                      <span class="es__comment__date fr-ml-1v">le {{ formatDate(comment.posted_on) }}</span>
+                    </div>
+                    <div class="es__comment__content">{{ comment.content }}</div>
+                  </li>
+                </ul>
+              </template>
+            </DsfrAccordion>
+          </li>
+        </DsfrAccordionsGroup>
+        <DsfrPagination class="fr-mt-2w" v-if="discussionsPages.length" :current-page="discussionsPage - 1" :pages="discussionsPages" @update:current-page="onUpdatePage" />
+      </DsfrTabContent>
 
-    <DsfrAccordionsGroup>
-      <li v-for="discussion in discussions.data">
-        <DsfrAccordion :id="discussion.id" :title="discussion.title" :expanded-id="expandedDiscussion" @expand="id => expandedDiscussion = id">
-          <template #default>
-            <ul class="es__comment__container">
-              <li v-for="comment in discussion.discussion">
-                <div class="es__comment__metadata fr-mb-1v">
-                  <span class="es__comment__author">{{ comment.posted_by.first_name }} {{ comment.posted_by.last_name }}</span>
-                  <span class="es__comment__date fr-ml-1v">le {{ formatDate(comment.posted_on) }}</span>
-                </div>
-                <div class="es__comment__content">{{ comment.content }}</div>
-              </li>
-            </ul>
-          </template>
-        </DsfrAccordion>
-      </li>
-    </DsfrAccordionsGroup>
-    <DsfrPagination class="fr-mt-2w" v-if="discussionsPages.length" :current-page="discussionsPage - 1" :pages="discussionsPages" @update:current-page="onUpdatePage" />
+      <!-- Métadonnées -->
+      <DsfrTabContent
+        panel-id="tab-content-3"
+        tab-id="tab-3"
+        :selected="selectedTabIndex === 3"
+      >
+        <pre>{{ dataset }}</pre>
+      </DsfrTabContent>
+    </DsfrTabs>
   </div>
 </template>
 
 <style scoped lang="scss">
+pre {
+  white-space: pre-wrap;
+}
 ul.es__comment__container {
   list-style-type: none;
   padding-inline-start: 0.25rem;
