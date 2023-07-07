@@ -4,7 +4,7 @@ import { computed, onMounted, ref, watch } from "vue"
 
 import { useOrganizationStore } from "../../store/OrganizationStore"
 import { useDatasetStore } from "../../store/DatasetStore"
-import Card from "../../components/Card.vue"
+import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
 const organizationId = route.params.oid
@@ -47,17 +47,16 @@ onMounted(() => {
 
     <h2 class="fr-mt-2w">Jeux de données</h2>
     <div v-if="!datasets?.data?.length">Pas de jeu de données pour cette organisation.</div>
-    <div v-else class="fr-grid-row fr-grid-row--gutters">
-      <Card v-for="d in datasets.data"
-        class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
-        type="dataset"
-        :alt-img="d.title"
-        :link="`/datasets/${d.slug}`"
-        :title="d.title"
-        :description="d.description"
-        :img="d.organization.logo"
-      />
-    </div>
+    <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+      <li v-for="d in datasets.data" class="fr-col-12 fr-col-lg-4">
+        <Tile
+          :link="`/datasets/${d.slug}`"
+          :title="d.title"
+          :description="d.description"
+          :img="d.organization.logo"
+        />
+      </li>
+    </ul>
   </div>
   <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="onUpdatePage" />
 </template>

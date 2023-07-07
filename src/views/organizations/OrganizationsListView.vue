@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue"
 import { useOrganizationStore } from "../../store/OrganizationStore"
-import Card from "../../components/Card.vue"
+import Tile from "../../components/Tile.vue"
 
 const store = useOrganizationStore()
 
@@ -21,16 +21,16 @@ onMounted(() => {
 
 <template>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <Card v-for="org in organizations"
-        class="fr-col-5 fr-m-2w"
-        :alt-img="org.name"
-        :link="`/organizations/${org.slug}`"
-        :title="org.name"
-        :description="org.description"
-        :img="org.logo"
-      />
-    </div>
+    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+      <li v-for="org in organizations" class="fr-col-12 fr-col-lg-4">
+        <Tile
+          :link="`/organizations/${org.slug}`"
+          :title="org.name"
+          :description="org.description"
+          :img="org.logo"
+        />
+      </li>
+    </ul>
   </div>
   <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="onUpdatePage" />
 </template>

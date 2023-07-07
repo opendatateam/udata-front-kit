@@ -42,3 +42,10 @@ const doSearch = () => {
 
   <DsfrFooter class="fr-mt-8w" :mandatory-links="[]"></DsfrFooter>
 </template>
+
+<!-- global styles -->
+<style lang="scss">
+.es__tiles__list {
+  list-style-type: none;
+}
+</style>
