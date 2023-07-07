@@ -8,7 +8,7 @@ import { useRoute } from "vue-router"
 import { useDatasetStore } from "../../store/DatasetStore"
 import { useReuseStore } from "../../store/ReuseStore"
 import { useDiscussionStore } from "../../store/DiscussionStore"
-import Card from "../../components/Card.vue"
+import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
 const datasetId = route.params.did
@@ -24,15 +24,7 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
-
-const tabs = computed(() => {
-  return [
-    {"title": "Fichiers", "tabId":"tab-0", "panelId":"tab-content-0"},
-    {"title": `Réutilisations (${reuses.value.length})`, "tabId":"tab-1", "panelId":"tab-content-1"},
-    {"title": `Discussions (${discussions.value.total})`, "tabId":"tab-2", "panelId":"tab-content-2"},
-    {"title": "Métadonnées", "tabId":"tab-3", "panelId":"tab-content-3"},
-  ]
-})
+const sizes = ref({})
 
 const formatFileSize = (fileSize) => {
   if (!fileSize) return "Taille inconnue"
@@ -50,6 +42,15 @@ const files = computed(() => {
   })
 })
 
+const tabs = computed(() => {
+  return [
+    {"title": `Fichiers (${sizes.value.files})`, "tabId":"tab-0", "panelId":"tab-content-0"},
+    {"title": `Réutilisations (${sizes.value.reuses})`, "tabId":"tab-1", "panelId":"tab-content-1"},
+    {"title": `Discussions (${sizes.value.discussions})`, "tabId":"tab-2", "panelId":"tab-content-2"},
+    {"title": "Métadonnées", "tabId":"tab-3", "panelId":"tab-content-3"},
+  ]
+})
+
 const description = computed(() => {
   if (dataset.value?.description) {
     return marked.parse(dataset.value.description, {mangle: false, headerIds: false})
@@ -65,6 +66,14 @@ const formatDate = (dateString) => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat("default", {dateStyle: "full", timeStyle: "short"}).format(date)
 }
+
+watch([reuses, files, discussions], ([r, f, d]) => {
+  sizes.value = {
+    reuses: r.length,
+    files: f.length,
+    discussions: d.total,
+  }
+})
 
 // launch reuses and discussions fetch as soon as we have the technical id
 watch(dataset, _dataset => {
@@ -128,17 +137,16 @@ onMounted(() => {
       >
         <h2 class="fr-mt-4w">Réutilisations</h2>
         <div v-if="!reuses.length">Pas de réutilisation pour ce jeu de données.</div>
-        <div v-else class="fr-grid-row fr-grid-row--gutters">
-          <Card v-for="r in reuses"
-            class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
-            type="dataset"
-            :alt-img="r.title"
-            :external-link="r.page"
-            :title="r.title"
-            :description="r.description"
-            :img="r.organization?.logo || r.owner.avatar"
-          />
-        </div>
+        <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+          <li v-for="r in reuses" class="fr-col-12 fr-col-lg-6">
+            <Tile
+              :external-link="r.page"
+              :title="r.title"
+              :description="r.description"
+              :img="r.organization?.logo || r.owner.avatar"
+            />
+          </li>
+        </ul>
       </DsfrTabContent>
 
       <!-- Discussions -->
