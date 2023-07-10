@@ -20,7 +20,7 @@ const doSearch = () => {
 <template>
   <DsfrHeader
     service-title="Ecosphères"
-    service-description="Guichet unique des données ministérielles"
+    service-description=""
     home-to="/"
     :quick-links="[]"
     :show-search="true"
