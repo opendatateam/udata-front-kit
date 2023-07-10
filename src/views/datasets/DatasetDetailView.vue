@@ -43,10 +43,11 @@ const files = computed(() => {
 })
 
 const tabs = computed(() => {
+  // FIXME: incluse sizes while fixing reactivity
   return [
-    {"title": `Fichiers (${sizes.value.files})`, "tabId":"tab-0", "panelId":"tab-content-0"},
-    {"title": `Réutilisations (${sizes.value.reuses})`, "tabId":"tab-1", "panelId":"tab-content-1"},
-    {"title": `Discussions (${sizes.value.discussions})`, "tabId":"tab-2", "panelId":"tab-content-2"},
+    {"title": "Fichiers", "tabId":"tab-0", "panelId":"tab-content-0"},
+    {"title": "Réutilisations", "tabId":"tab-1", "panelId":"tab-content-1"},
+    {"title": "Discussions", "tabId":"tab-2", "panelId":"tab-content-2"},
     {"title": "Métadonnées", "tabId":"tab-3", "panelId":"tab-content-3"},
   ]
 })
