@@ -33,9 +33,8 @@ onMounted(() => {
 watchEffect(() => {
   if (!org.value.id) return
   datasetStore.loadDatasetsForOrg(org.value.id).then(_datasets => {
-      console.log("_datasets", _datasets)
       datasets.value = _datasets
-      pages.value = datasetStore.getDatasetsPaginationForOrg(org.id)
+      pages.value = datasetStore.getDatasetsPaginationForOrg(org.value.id)
     })
 })
 </script>
