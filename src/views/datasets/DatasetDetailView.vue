@@ -2,7 +2,7 @@
 import { marked } from "marked"
 import { filesize } from "filesize"
 
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watchEffect } from "vue"
 import { useRoute } from "vue-router"
 
 import { useDatasetStore } from "../../store/DatasetStore"
@@ -24,6 +24,10 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
+
+onMounted(() => {
+  datasetStore.load(datasetId)
+})
 
 const formatFileSize = (fileSize) => {
   if (!fileSize) return "Taille inconnue"
@@ -67,18 +71,13 @@ const formatDate = (dateString) => {
 }
 
 // launch reuses and discussions fetch as soon as we have the technical id
-watch(dataset, _dataset => {
-  if (_dataset?.id) {
-    reuseStore.loadReusesForDataset(_dataset.id).then((r) => reuses.value = r)
-    discussionStore.loadDiscussionsForDataset(_dataset.id).then((d) => {
-      discussions.value = d
-      discussionsPages.value = discussionStore.getDiscussionsPaginationForDataset(_dataset.id)
-    })
-  }
-})
-
-onMounted(() => {
-  datasetStore.load(datasetId)
+watchEffect(() => {
+  if (!dataset.value.id) return
+  reuseStore.loadReusesForDataset(dataset.value.id).then((r) => reuses.value = r)
+  discussionStore.loadDiscussionsForDataset(dataset.value.id).then((d) => {
+    discussions.value = d
+    discussionsPages.value = discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+  })
 })
 </script>
 
@@ -196,7 +195,6 @@ ul.es__comment__container {
     font-weight: bold;
   }
 }
-
 .es__organization__sidebar {
   text-align: center;
   width: 100%;
