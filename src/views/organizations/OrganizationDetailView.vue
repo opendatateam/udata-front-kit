@@ -18,13 +18,6 @@ const currentPage = ref(1)
 const pages = ref([])
 const datasets = ref({})
 
-function onUpdatePage (page) {
-  currentPage.value = page + 1
-  datasetStore.loadDatasetsForOrg(org.value.id, currentPage.value).then(_datasets => {
-    datasets.value = _datasets
-  })
-}
-
 onMounted(() => {
   orgStore.load(organizationId)
 })
@@ -32,11 +25,13 @@ onMounted(() => {
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
   if (!org.value.id) return
-  datasetStore.loadDatasetsForOrg(org.value.id).then(_datasets => {
+  datasetStore.loadDatasetsForOrg(org.value.id, currentPage.value).then(_datasets => {
       datasets.value = _datasets
-      pages.value = datasetStore.getDatasetsPaginationForOrg(org.value.id)
+      if(!pages.value.length) {
+        pages.value = datasetStore.getDatasetsPaginationForOrg(org.value.id)
+      }
     })
-})
+  })
 </script>
 
 <template>
@@ -57,5 +52,5 @@ watchEffect(() => {
       </li>
     </ul>
   </div>
-  <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="onUpdatePage" />
+  <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="p => currentPage = p + 1" />
 </template>
