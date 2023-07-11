@@ -60,11 +60,6 @@ const description = computed(() => {
   }
 })
 
-const onUpdatePage = (page) => {
-  discussionsPage.value = page + 1
-  discussionStore.loadDiscussionsForDataset(dataset.value.id, discussionsPage.value).then((d) => discussions.value = d)
-}
-
 const formatDate = (dateString) => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat("default", {dateStyle: "full", timeStyle: "short"}).format(date)
@@ -74,9 +69,11 @@ const formatDate = (dateString) => {
 watchEffect(() => {
   if (!dataset.value.id) return
   reuseStore.loadReusesForDataset(dataset.value.id).then((r) => reuses.value = r)
-  discussionStore.loadDiscussionsForDataset(dataset.value.id).then((d) => {
+  discussionStore.loadDiscussionsForDataset(dataset.value.id, discussionsPage.value).then((d) => {
     discussions.value = d
-    discussionsPages.value = discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+    if (!discussionsPage.value.length) {
+      discussionsPages.value = discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+    }
   })
 })
 </script>
@@ -164,7 +161,7 @@ watchEffect(() => {
             </DsfrAccordion>
           </li>
         </DsfrAccordionsGroup>
-        <DsfrPagination class="fr-mt-2w" v-if="discussionsPages.length" :current-page="discussionsPage - 1" :pages="discussionsPages" @update:current-page="onUpdatePage" />
+        <DsfrPagination class="fr-mt-2w" v-if="discussionsPages.length" :current-page="discussionsPage - 1" :pages="discussionsPages" @update:current-page="p => discussionsPage = p + 1" />
       </DsfrTabContent>
 
       <!-- Métadonnées -->
