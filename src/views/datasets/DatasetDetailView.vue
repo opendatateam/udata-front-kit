@@ -24,7 +24,6 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
-const sizes = ref({})
 
 const formatFileSize = (fileSize) => {
   if (!fileSize) return "Taille inconnue"
@@ -43,7 +42,6 @@ const files = computed(() => {
 })
 
 const tabs = computed(() => {
-  // FIXME: incluse sizes while fixing reactivity
   return [
     {"title": "Fichiers", "tabId":"tab-0", "panelId":"tab-content-0"},
     {"title": "Réutilisations", "tabId":"tab-1", "panelId":"tab-content-1"},
@@ -67,14 +65,6 @@ const formatDate = (dateString) => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat("default", {dateStyle: "full", timeStyle: "short"}).format(date)
 }
-
-watch([reuses, files, discussions], ([r, f, d]) => {
-  sizes.value = {
-    reuses: r.length,
-    files: f.length,
-    discussions: d.total,
-  }
-})
 
 // launch reuses and discussions fetch as soon as we have the technical id
 watch(dataset, _dataset => {
