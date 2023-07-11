@@ -4,7 +4,7 @@
 datagouvfr_api_url: https://www.data.gouv.fr/api
 
 # display settings
-organizations_list_page_size: 8
+organizations_list_page_size: 9
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

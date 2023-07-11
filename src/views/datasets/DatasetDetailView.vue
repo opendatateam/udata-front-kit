@@ -2,13 +2,13 @@
 import { marked } from "marked"
 import { filesize } from "filesize"
 
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watchEffect } from "vue"
 import { useRoute } from "vue-router"
 
 import { useDatasetStore } from "../../store/DatasetStore"
 import { useReuseStore } from "../../store/ReuseStore"
 import { useDiscussionStore } from "../../store/DiscussionStore"
-import Card from "../../components/Card.vue"
+import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
 const datasetId = route.params.did
@@ -25,13 +25,8 @@ const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 
-const tabs = computed(() => {
-  return [
-    {"title": "Fichiers", "tabId":"tab-0", "panelId":"tab-content-0"},
-    {"title": `Réutilisations (${reuses.value.length})`, "tabId":"tab-1", "panelId":"tab-content-1"},
-    {"title": `Discussions (${discussions.value.total})`, "tabId":"tab-2", "panelId":"tab-content-2"},
-    {"title": "Métadonnées", "tabId":"tab-3", "panelId":"tab-content-3"},
-  ]
+onMounted(() => {
+  datasetStore.load(datasetId)
 })
 
 const formatFileSize = (fileSize) => {
@@ -48,6 +43,15 @@ const files = computed(() => {
       href: resource.url,
     }
   })
+})
+
+const tabs = computed(() => {
+  return [
+    {"title": "Fichiers", "tabId":"tab-0", "panelId":"tab-content-0"},
+    {"title": "Réutilisations", "tabId":"tab-1", "panelId":"tab-content-1"},
+    {"title": "Discussions", "tabId":"tab-2", "panelId":"tab-content-2"},
+    {"title": "Métadonnées", "tabId":"tab-3", "panelId":"tab-content-3"},
+  ]
 })
 
 const description = computed(() => {
@@ -67,18 +71,13 @@ const formatDate = (dateString) => {
 }
 
 // launch reuses and discussions fetch as soon as we have the technical id
-watch(dataset, _dataset => {
-  if (_dataset?.id) {
-    reuseStore.loadReusesForDataset(_dataset.id).then((r) => reuses.value = r)
-    discussionStore.loadDiscussionsForDataset(_dataset.id).then((d) => {
-      discussions.value = d
-      discussionsPages.value = discussionStore.getDiscussionsPaginationForDataset(_dataset.id)
-    })
-  }
-})
-
-onMounted(() => {
-  datasetStore.load(datasetId)
+watchEffect(() => {
+  if (!dataset.value.id) return
+  reuseStore.loadReusesForDataset(dataset.value.id).then((r) => reuses.value = r)
+  discussionStore.loadDiscussionsForDataset(dataset.value.id).then((d) => {
+    discussions.value = d
+    discussionsPages.value = discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+  })
 })
 </script>
 
@@ -128,17 +127,16 @@ onMounted(() => {
       >
         <h2 class="fr-mt-4w">Réutilisations</h2>
         <div v-if="!reuses.length">Pas de réutilisation pour ce jeu de données.</div>
-        <div v-else class="fr-grid-row fr-grid-row--gutters">
-          <Card v-for="r in reuses"
-            class="fr-card--horizontal fr-card--sm fr-col-5 fr-m-2w"
-            type="dataset"
-            :alt-img="r.title"
-            :external-link="r.page"
-            :title="r.title"
-            :description="r.description"
-            :img="r.organization?.logo || r.owner.avatar"
-          />
-        </div>
+        <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+          <li v-for="r in reuses" class="fr-col-12 fr-col-lg-6">
+            <Tile
+              :external-link="r.page"
+              :title="r.title"
+              :description="r.description"
+              :img="r.organization?.logo || r.owner.avatar"
+            />
+          </li>
+        </ul>
       </DsfrTabContent>
 
       <!-- Discussions -->
@@ -197,7 +195,6 @@ ul.es__comment__container {
     font-weight: bold;
   }
 }
-
 .es__organization__sidebar {
   text-align: center;
   width: 100%;

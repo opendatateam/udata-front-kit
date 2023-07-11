@@ -10,7 +10,7 @@ export const useSearchStore = defineStore("search", {
   }),
   actions: {
     async search (query) {
-      const results = await searchAPI.search(query)
+      const results = await searchAPI.search(query, {hitsPerPage: 21})
       this.data = results
     }
   },
