@@ -1,4 +1,7 @@
 import { MeiliSearch } from "meilisearch"
+import { useLoading } from 'vue-loading-overlay'
+
+const $loading = useLoading()
 
 /**
  * A wrapper around search engine API
@@ -8,6 +11,13 @@ export default class SearchAPI {
     const host = import.meta.env.VITE_SEARCH_ENGINE_URL
     const apiKey = import.meta.env.VITE_SEARCH_ENGINE_PUBLIC_KEY
     const client = new MeiliSearch({host, apiKey})
-    return client.index("datasets")
+    this.index = client.index("datasets")
+  }
+
+  search (query, args) {
+    const loader = $loading.show()
+    return this.index.search(query, args).catch(err => {
+      toast(err.message, {type: "error", autoClose: false})
+    }).finally(() => loader.hide())
   }
 }

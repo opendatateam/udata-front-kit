@@ -23,6 +23,7 @@ onMounted(() => {
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <h2 v-if="query">Résultats de recherche pour "{{ query }}"</h2>
     <h2 v-else>Jeux de données</h2>
+    <div class="fr-mb-4w" v-if="query && datasets?.length === 0">Aucun résultat pour cette recherche.</div>
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
         <Tile
