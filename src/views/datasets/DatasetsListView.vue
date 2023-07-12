@@ -9,22 +9,35 @@ const store = useSearchStore()
 const query = computed(() => route.query.q)
 const currentPage = ref(1)
 const searchFilter = ref([])
+const selectedOrg = ref(null)
 
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
 const orgFacets = computed(() => {
   return Object.keys(store.facets["organization.name"] || {}).map(k => {
-    return {count: store.facets["organization.name"][k], value: k}
+    const count = store.facets["organization.name"][k]
+    return {
+      text: `${k} (${count})`,
+      value: k,
+      count,
+    }
   }).sort((a, b) => b.count - a.count)
 })
 
 const filterSearch = (filterKey, filterValue) => {
+  if (!filterValue) return
   searchFilter.value = [`${filterKey} = "${filterValue}"`]
+}
+
+const onSelectOrg = (value) => {
+  selectedOrg.value = value
+  filterSearch("organization.name", value)
 }
 
 const resetFilter = () => {
   searchFilter.value = []
+  selectedOrg.value = null
 }
 
 // reset currentPage when query changes
@@ -44,14 +57,15 @@ watchEffect(() => {
     <h2 v-else>Jeux de données</h2>
     <div class="fr-mb-4w" v-if="query && datasets?.length === 0">Aucun résultat pour cette recherche.</div>
     <div class="fr-grid-row">
-      <div class="fr-col-md-3">
-        <ul>
-          <li v-for="facet in orgFacets">
-            <a href="#" @click.prevent="filterSearch('organization.name', facet.value)">{{ facet.value }} ({{ facet.count }})</a>
-          </li>
-        </ul>
+      <div class="fr-col-md-4 fr-pr-md-2w fr-mb-2w">
+        <div class="fr-mb-2w">
+          <a href="#" :click.prevent.stop="resetFilter" v-if="selectedOrg">x Effacer les filtres</a>
+        </div>
+        <DsfrSelect :options="orgFacets" :model-value="selectedOrg" @update:modelValue="onSelectOrg">
+          <template #label>Organisation</template>
+        </DsfrSelect>
       </div>
-      <div class="fr-col-md-9">
+      <div class="fr-col-md-8">
         <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
           <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
             <Tile
@@ -64,7 +78,6 @@ watchEffect(() => {
         </ul>
       </div>
     </div>
-
   </div>
   <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="p => currentPage = p + 1" />
 </template>
