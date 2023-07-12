@@ -1,5 +1,6 @@
 import { MeiliSearch } from "meilisearch"
 import { useLoading } from 'vue-loading-overlay'
+import { toast } from "vue3-toastify"
 
 const $loading = useLoading()
 

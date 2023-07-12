@@ -10,6 +10,9 @@ export const useSearchStore = defineStore("search", {
     data: {}
   }),
   getters: {
+    facets: (state) => {
+      return state.data.facetDistribution || {}
+    },
     datasets: (state) => {
       return state.data.hits || []
     },
@@ -26,8 +29,8 @@ export const useSearchStore = defineStore("search", {
     },
   },
   actions: {
-    async search (query, page = 1) {
-      const args = { hitsPerPage: pageSize, facets: ["organization.name"], page: page }
+    async search (query, page = 1, filter = []) {
+      const args = { hitsPerPage: pageSize, facets: ["organization.name"], page: page, filter: filter}
       const results = await searchAPI.search(query, args)
       this.data = results
     }

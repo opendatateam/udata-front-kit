@@ -8,17 +8,33 @@ const route = useRoute()
 const store = useSearchStore()
 const query = computed(() => route.query.q)
 const currentPage = ref(1)
+const searchFilter = ref([])
 
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
+const orgFacets = computed(() => {
+  return Object.keys(store.facets["organization.name"] || {}).map(k => {
+    return {count: store.facets["organization.name"][k], value: k}
+  }).sort((a, b) => b.count - a.count)
+})
+
+const filterSearch = (filterKey, filterValue) => {
+  searchFilter.value = [`${filterKey} = "${filterValue}"`]
+}
+
+const resetFilter = () => {
+  searchFilter.value = []
+}
+
 // reset currentPage when query changes
 onBeforeRouteUpdate((to, from) => {
   currentPage.value = 1
+  resetFilter()
 })
 
 watchEffect(() => {
-  store.search(query.value, currentPage.value)
+  store.search(query.value, currentPage.value, searchFilter.value)
 })
 </script>
 
@@ -27,16 +43,28 @@ watchEffect(() => {
     <h2 v-if="query">Résultats de recherche pour "{{ query }}"</h2>
     <h2 v-else>Jeux de données</h2>
     <div class="fr-mb-4w" v-if="query && datasets?.length === 0">Aucun résultat pour cette recherche.</div>
-    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-      <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
-        <Tile
-          :link="`/datasets/${d.slug}`"
-          :title="d.title"
-          :description="d.description"
-          :img="d.organization.logo"
-        />
-      </li>
-    </ul>
+    <div class="fr-grid-row">
+      <div class="fr-col-md-3">
+        <ul>
+          <li v-for="facet in orgFacets">
+            <a href="#" @click.prevent="filterSearch('organization.name', facet.value)">{{ facet.value }} ({{ facet.count }})</a>
+          </li>
+        </ul>
+      </div>
+      <div class="fr-col-md-9">
+        <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+          <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
+            <Tile
+              :link="`/datasets/${d.slug}`"
+              :title="d.title"
+              :description="d.description"
+              :img="d.organization.logo"
+            />
+          </li>
+        </ul>
+      </div>
+    </div>
+
   </div>
   <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="p => currentPage = p + 1" />
 </template>
