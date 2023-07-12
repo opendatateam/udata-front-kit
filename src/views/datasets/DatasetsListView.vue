@@ -1,21 +1,24 @@
 <script setup>
-import { computed, onMounted, watch } from "vue"
-import { useRoute } from "vue-router"
+import { computed, ref, watchEffect } from "vue"
+import { useRoute, onBeforeRouteUpdate } from "vue-router"
 import Tile from "../../components/Tile.vue"
 import { useSearchStore } from "../../store/SearchStore"
 
 const route = useRoute()
 const store = useSearchStore()
 const query = computed(() => route.query.q)
+const currentPage = ref(1)
 
-const datasets = computed(() => store.$state.data.hits)
+const datasets = computed(() => store.datasets)
+const pages = computed(() => store.pagination)
 
-watch(query, _query => {
-  store.search(_query)
+// reset currentPage when query changes
+onBeforeRouteUpdate((to, from) => {
+  currentPage.value = 1
 })
 
-onMounted(() => {
-  store.search(query.value)
+watchEffect(() => {
+  store.search(query.value, currentPage.value)
 })
 </script>
 
@@ -35,4 +38,5 @@ onMounted(() => {
       </li>
     </ul>
   </div>
+  <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="p => currentPage = p + 1" />
 </template>
