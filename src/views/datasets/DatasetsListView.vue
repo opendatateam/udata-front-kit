@@ -20,9 +20,8 @@ const orgFacets = computed(() => {
     return {
       text: `${k} (${count})`,
       value: k,
-      count,
     }
-  }).sort((a, b) => b.count - a.count)
+  }).sort((a, b) => a.value - b.value)
 })
 
 const filterSearch = (filterKey, filterValue) => {
