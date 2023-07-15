@@ -7,11 +7,13 @@ export default class DatasetsAPI extends DatagouvfrAPI {
    * Get datasets for an organization
    *
    * @param {str} org_id Technical org id
+   * @param {number?} page
+   * @param {str?} sort
    * @returns {object}
    */
-  async getDatasetsForOrganization (org_id, page = 1) {
+  async getDatasetsForOrganization (org_id, page = 1, sort = "-created") {
     // WARNING: specify `-created` or another sort explicitely because default sort has a pagination issue
-    const url = `${this.url()}/?organization=${org_id}&page=${page}&sort=-created&page_size=21`
+    const url = `${this.url()}/?organization=${org_id}&page=${page}&sort=${sort}&page_size=21`
     return await this.makeRequestAndHandleResponse(url)
   }
 

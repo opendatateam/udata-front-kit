@@ -1,6 +1,5 @@
 import { defineStore } from "pinia"
 import DatasetsAPI from "../services/api/resources/DatasetsAPI"
-import OrganizationsAPI from "../services/api/resources/OrganizationsAPI"
 
 const datasetsApi = new DatasetsAPI()
 
@@ -20,6 +19,7 @@ const datasetsApi = new DatasetsAPI()
 export const useDatasetStore = defineStore("dataset", {
   state: () => ({
     data: {},
+    sort: null,
   }),
   actions: {
     /**
@@ -45,34 +45,41 @@ export const useDatasetStore = defineStore("dataset", {
      * Get datasets from store for an org and a page
      *
      * @param {string} org_id
-     * @param {number} page
-     * @returns {object}
+     * @param {number?} page
+     * @param {string?} sort Sort order requested
+     * @returns {Array<object>}
      */
-    getDatasetsForOrg (org_id, page = 1) {
-      if (!this.data[org_id]) return {}
-      return this.data[org_id].find(d => d.page == page) || {}
+    getDatasetsForOrg (org_id, page = 1, sort = "-created") {
+      if (this.sort !== sort) return []
+      if (!this.data[org_id]) return []
+      return this.data[org_id].find(d => d.page == page) || []
     },
     /**
      * Async function to trigger API fetch of an org's datasets if not known in store
      *
      * @param {string} org_id
-     * @param {number} page
+     * @param {number?} page
+     * @param {string?} sort Sort order requested
      * @returns {Array<object>}
      */
-    async loadDatasetsForOrg (org_id, page = 1) {
-      const existing = this.getDatasetsForOrg(org_id, page)
+    async loadDatasetsForOrg (org_id, page = 1, sort = "-created") {
+      const existing = this.getDatasetsForOrg(org_id, page, sort)
       if (existing.data) return existing
-      const datasets = await datasetsApi.getDatasetsForOrganization(org_id, page)
-      this.addDatasets(org_id, datasets)
-      return this.getDatasetsForOrg(org_id, page)
+      const datasets = await datasetsApi.getDatasetsForOrganization(org_id, page, sort)
+      this.addDatasets(org_id, datasets, sort)
+      return this.getDatasetsForOrg(org_id, page, sort)
     },
     /**
      * Store the result of a datasets fetch operation for an org in store
      *
      * @param {string} org_id
      * @param {object} res
+     * @param {string} sort Sort order used for this res
      */
-    addDatasets (org_id, res) {
+    addDatasets (org_id, res, sort) {
+      // reset org data if another sort has been requested
+      if (this.sort !== sort) this.data[org_id] = []
+      this.sort = sort
       this.data[org_id] = [...(this.data[org_id] || []), res]
     },
     /**
