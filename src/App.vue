@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue"
-import { RouterView } from "vue-router"
-import { useRouter } from "vue-router"
+import { RouterView, useRouter } from "vue-router"
 import Navigation from "./components/Navigation.vue"
 
 const router = useRouter()
@@ -47,5 +46,8 @@ const doSearch = () => {
 <style lang="scss">
 .es__tiles__list {
   list-style-type: none;
+}
+.justify-end {
+  justify-content: flex-end;
 }
 </style>

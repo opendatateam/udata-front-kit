@@ -40,15 +40,17 @@ export const useOrganizationStore = defineStore("organization", {
     },
     /**
      * Async function to trigger API fetch of orgs list for a page, using the config
+     * and preserving the config file order
      *
      * @param {number} page
      * @returns {Array<object>}
      */
     async loadFromConfig (page = 1) {
       const pageSize = config.organizations_list_page_size
-      config.organizations.slice(pageSize * (page - 1), pageSize * page).forEach((org_id) => {
-        this.load(org_id)
-      })
+      const paginated = config.organizations.slice(pageSize * (page - 1), pageSize * page)
+      for (const org_id of paginated) {
+        await this.load(org_id)
+      }
       return this.getForPage(page)
     },
     /**

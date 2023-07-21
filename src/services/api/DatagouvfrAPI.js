@@ -1,7 +1,7 @@
 import config from "@/config"
 import { useFetch } from "../../composables/fetch"
 import { toast } from "vue3-toastify"
-import { useLoading } from 'vue-loading-overlay'
+import { useLoading } from "vue-loading-overlay"
 
 const $loading = useLoading()
 
