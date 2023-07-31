@@ -7,6 +7,13 @@ const orgApi = new OrganizationsAPI()
 
 export const useOrganizationStore = defineStore("organization", {
   state: () => ({
+    // holds a paginated list of orgs
+    // [
+    //   {
+    //     "page": 1,
+    //     "orgs": []
+    //   }, ...
+    // ]
     data: []
   }),
   actions: {
@@ -35,8 +42,7 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     getForPage (page = 1) {
-      const pageSize = config.organizations_list_page_size
-      return this.data.slice(pageSize * (page - 1), pageSize * page)
+      return this.data.find(d => d.page == page)?.orgs || []
     },
     /**
      * Async function to trigger API fetch of orgs list for a page, using the config
@@ -49,7 +55,7 @@ export const useOrganizationStore = defineStore("organization", {
       const pageSize = config.organizations_list_page_size
       const paginated = config.organizations.slice(pageSize * (page - 1), pageSize * page)
       for (const org_id of paginated) {
-        await this.load(org_id)
+        await this.load(org_id, page)
       }
       return this.getForPage(page)
     },
@@ -57,10 +63,16 @@ export const useOrganizationStore = defineStore("organization", {
      * Add an organization to the store
      *
      * @param {object} org
+     * @param {number} page
      * @returns {object}
      */
-    add (org) {
-      this.data.push(org)
+    add (org, page) {
+      const existing = this.data.find(d => d.page == page)
+      if (existing) {
+        existing.orgs.push(org)
+      } else {
+        this.data.push({page, orgs: [org]})
+      }
       return org
     },
     /**
@@ -70,19 +82,20 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {object|undefined}
      */
     get (org_id) {
-      return this.data.find(o => o.id === org_id || o.slug === org_id)
+      return this.data.map(d => d.orgs).flat().find(o => o.id === org_id || o.slug === org_id)
     },
     /**
      * Async function to trigger API fetch of an org if not known in store
      *
      * @param {string} org_id
+     * @param {number} page
      * @returns {object|undefined}
      */
-    async load (org_id) {
+    async load (org_id, page) {
       const existing = this.get(org_id)
       if (existing) return existing
       const org = await orgApi.get(org_id)
-      return this.add(org)
+      return this.add(org, page)
     },
   },
 })
