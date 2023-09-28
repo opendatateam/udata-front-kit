@@ -1,4 +1,16 @@
-import axios from 'axios'
+import axios from "axios"
+import { useUserStore } from "../store/UserStore"
+
+// inject token in requests if user is loggedIn
+axios.interceptors.request.use(config => {
+  const store = useUserStore()
+  if (store.$state.isLoggedIn) {
+    config.headers = {
+      Authorization: `Bearer ${store.$state.token}`
+    }
+  }
+  return config
+}, error => Promise.reject(error))
 
 /**
  * HTTP-fetch an URL

@@ -9,6 +9,7 @@ import { createPinia } from "pinia"
 import VueDsfr from "@gouvminint/vue-dsfr"   // Import (par défaut) de la bibliothèque
 import App from "./App.vue"
 import router from "./router"
+import * as icons from "./icons.js"
 
 import TextClamp from 'vue3-text-clamp'
 import { LoadingPlugin } from 'vue-loading-overlay'
@@ -17,7 +18,7 @@ const app = createApp(App)
 const pinia = createPinia()
 
 app.use(router)
-app.use(VueDsfr)
+app.use(VueDsfr, { icons: Object.values(icons) })
 app.use(pinia)
 
 app.use(TextClamp)
