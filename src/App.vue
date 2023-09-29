@@ -34,9 +34,15 @@ const doSearch = () => {
 onMounted(() => {
   store.init()
   if (isLoggedIn.value) {
-    // TODO: redirect to login if this fails (token expired)
     api.getProfile().then(data => {
       store.storeInfo(data)
+    }).catch(() => {
+      // getProfile has failed, we're probably using a bad token
+      // keep the current route and redirect to the login flow
+      // TODO: handle this as a response interceptor on 401?
+      store.logout()
+      localStorage.setItem("lastPath", router.currentRoute.value.path)
+      router.push({name: "login"})
     })
   }
 })

@@ -24,7 +24,10 @@ onMounted(() => {
       api.getProfile().then(data => {
         store.storeInfo(data)
       })
-      router.push({name: "home"})
+      const lastPath = localStorage.getItem("lastPath")
+      const next = lastPath ? {path: lastPath} : {name: "home"}
+      localStorage.removeItem("lastPath")
+      router.push(next)
     })
   } else {
     console.log("Logged in!")
