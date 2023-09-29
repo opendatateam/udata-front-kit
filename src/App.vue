@@ -17,7 +17,7 @@ const quickLinks = computed(() => {
     {
       label: isLoggedIn.value ? `${store.$state.data.first_name} ${store.$state.data.last_name}` : "Se connecter",
       icon: isLoggedIn.value ? "ri-logout-box-r-line" : "ri-account-circle-line",
-      to: isLoggedIn.value ? "logout" : "login",
+      to: isLoggedIn.value ? "/logout" : "/login",
       iconRight: isLoggedIn.value,
     }
   ]
