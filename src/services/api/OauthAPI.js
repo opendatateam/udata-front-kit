@@ -6,7 +6,7 @@ export default class OauthAPI {
    * Get a token after PKCE flow
    *
    * @param {object}
-   * @returns {object}
+   * @returns {string}
    */
   async token ({code, pkceCodeVerifier, clientId, clientSecret, redirectURI}) {
     const url = `${config.datagouvfr_base_url}/oauth/token`
@@ -23,5 +23,23 @@ export default class OauthAPI {
       data: bodyFormData,
     })
     return response.data.access_token
+  }
+
+  /**
+   * Logout API call
+   *
+   * @param {string} token
+   * @returns {object}
+   */
+  async logout (token, headers) {
+    const bodyFormData = new FormData()
+    bodyFormData.append("token", token)
+    const response = await axios({
+      method: "post",
+      url: `${config.datagouvfr_base_url}/oauth/revoke`,
+      data: bodyFormData,
+      headers: headers,
+    })
+    return response
   }
 }

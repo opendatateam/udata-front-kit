@@ -48,6 +48,18 @@ export default class AuthService {
     })
   }
 
+  createBasicAuthHeader() {
+    const headerStr = btoa(`${this.clientId}:${this.clientSecret}`);
+    return { Authorization: `Basic ${headerStr}` };
+  }
+
+  /**
+   * Logout remote procedure
+   */
+  async logout (token) {
+    return await api.logout(token, this.createBasicAuthHeader())
+  }
+
   /**
    * Cleanup after login flow
    */

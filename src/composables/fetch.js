@@ -1,8 +1,10 @@
 import axios from "axios"
 import { useUserStore } from "../store/UserStore"
 
+const instance = axios.create()
+
 // inject token in requests if user is loggedIn
-axios.interceptors.request.use(config => {
+instance.interceptors.request.use(config => {
   const store = useUserStore()
   if (store.$state.isLoggedIn) {
     config.headers = {
@@ -22,7 +24,7 @@ axios.interceptors.request.use(config => {
  */
 export async function useFetch(url, onError, onFinally) {
   try {
-    const res = await axios.get(url)
+    const res = await instance.get(url)
     return res.data
   } catch (error) {
     if (onError) {
