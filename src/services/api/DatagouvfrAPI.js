@@ -49,6 +49,17 @@ export default class DatagouvfrAPI {
   }
 
   /**
+   * Get an entity's detail from its id, without wrapper
+   *
+   * @param {string} entity_id
+   * @returns {import("../../composables/fetch").ComposableFetchResult}
+   */
+  async _get (entity_id) {
+    const url = `${this.url()}/${entity_id}/`
+    return await useFetch(url)
+  }
+
+  /**
    * List entities
    *
    * @returns {import("../../composables/fetch").ComposableFetchResult}
