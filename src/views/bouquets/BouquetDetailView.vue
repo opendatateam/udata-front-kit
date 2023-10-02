@@ -1,3 +1,47 @@
 <script setup>
+import { onMounted, ref, computed } from "vue"
+import { useRoute } from "vue-router"
+
+import { useBouquetStore } from "../../store/BouquetStore"
+import { useDatasetStore } from "../../store/DatasetStore"
+import { descriptionFromMarkdown } from "../../utils"
+import Tile from "../../components/Tile.vue"
+
+const route = useRoute()
+const store = useBouquetStore()
+const datasetStore = useDatasetStore()
+const bouquet = ref({})
+const datasets = ref([])
+
+const description = computed(() => descriptionFromMarkdown(bouquet))
+
+onMounted(() => {
+  store.loadBouquet(route.params.bid).then(res => {
+    bouquet.value = res
+    datasetStore.loadMultiple(
+      bouquet.value.datasets.map(d => d.id)
+    ).then(ds => datasets.value = ds)
+  })
+})
 </script>
-<template></template>
+
+<template>
+  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+    <h1>{{ bouquet.name }}</h1>
+    <div v-html="description"></div>
+
+    <h2 class="fr-mt-2w">Jeux de données</h2>
+    <div v-if="!datasets.length">Pas de jeu de données dans ce bouquet.</div>
+    <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+      <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
+        <Tile
+          :link="`/datasets/${d.slug}`"
+          :title="d.title"
+          :description="d.description"
+          :img="d.organization.logo"
+          :is-markdown="true"
+        />
+      </li>
+    </ul>
+  </div>
+</template>

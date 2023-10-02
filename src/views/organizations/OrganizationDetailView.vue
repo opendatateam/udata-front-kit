@@ -1,10 +1,10 @@
 <script setup>
 import { useRoute } from "vue-router"
 import { computed, onMounted, ref, watchEffect } from "vue"
-import { marked } from "marked"
 
 import { useOrganizationStore } from "../../store/OrganizationStore"
 import { useDatasetStore } from "../../store/DatasetStore"
+import { descriptionFromMarkdown } from "../../utils"
 import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
@@ -34,11 +34,7 @@ function doSort (sort) {
   selectedSort.value = sort
 }
 
-const description = computed(() => {
-  if (org.value?.description) {
-    return marked.parse(org.value.description, {mangle: false, headerIds: false})
-  }
-})
+const description = computed(() => descriptionFromMarkdown(org))
 
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {

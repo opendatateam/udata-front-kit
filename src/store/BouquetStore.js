@@ -18,7 +18,7 @@ export const useBouquetStore = defineStore("bouquet", {
       return bouquets.filter(bouquet => bouquet.extras.is_ecospheres || bouquet.tags.includes("ecospheres"))
     },
     /**
-     * Load Ecospheres related topics from API
+     * Load Ecospheres related bouquets from API
      *
      * @returns {Array<object>}
      */
@@ -31,6 +31,26 @@ export const useBouquetStore = defineStore("bouquet", {
         this.data = [...this.data, ...this.filter(response.data)]
       }
       return this.data
+    },
+    /**
+     * Get a bouquet from store
+     *
+     * @param {string} slug
+     * @returns {object}
+     */
+    get (slug) {
+      return this.data.find(b => b.slug === slug)
+    },
+    /**
+     * Get a single bouquet from store or API
+     *
+     * @param {string} slug
+     * @returns {object}
+     */
+    async loadBouquet (slug) {
+      const existing = this.get(slug)
+      if (existing) return existing
+      return await topicsAPI.get(slug)
     },
   },
 })

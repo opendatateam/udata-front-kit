@@ -60,7 +60,7 @@ export const useOrganizationStore = defineStore("organization", {
     /**
      * Load multiple organisations to store
      *
-     * @param {Array<number>} org_ids
+     * @param {Array<string>} org_ids
      * @param {number} page
      * @returns {Promise}
      */

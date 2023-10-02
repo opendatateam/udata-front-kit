@@ -8,6 +8,7 @@ import { useRoute } from "vue-router"
 import { useDatasetStore } from "../../store/DatasetStore"
 import { useReuseStore } from "../../store/ReuseStore"
 import { useDiscussionStore } from "../../store/DiscussionStore"
+import { descriptionFromMarkdown } from "../../utils"
 import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
@@ -55,11 +56,7 @@ const tabs = computed(() => {
   ]
 })
 
-const description = computed(() => {
-  if (dataset.value?.description) {
-    return marked.parse(dataset.value.description, {mangle: false, headerIds: false})
-  }
-})
+const description = computed(() => descriptionFromMarkdown(dataset))
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
