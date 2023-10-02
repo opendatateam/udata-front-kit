@@ -36,13 +36,14 @@ onMounted(() => {
   if (isLoggedIn.value) {
     api.getProfile().then(data => {
       store.storeInfo(data)
-    }).catch(() => {
+    }).catch(err => {
       // getProfile has failed, we're probably using a bad token
       // keep the current route and redirect to the login flow
-      // TODO: handle this as a response interceptor on 401?
-      store.logout()
-      localStorage.setItem("lastPath", router.currentRoute.value.path)
-      router.push({name: "login"})
+      if (err.response?.status === 401) {
+        store.logout()
+        localStorage.setItem("lastPath", router.currentRoute.value.path)
+        router.push({name: "login"})
+      }
     })
   }
 })
