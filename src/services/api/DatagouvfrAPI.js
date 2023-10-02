@@ -56,7 +56,7 @@ export default class DatagouvfrAPI {
    */
   async _get (entity_id) {
     const url = `${this.url()}/${entity_id}/`
-    return await useFetch(url)
+    return await this._request(url)
   }
 
   /**
@@ -65,6 +65,25 @@ export default class DatagouvfrAPI {
    * @returns {import("../../composables/fetch").ComposableFetchResult}
    */
   async list () {
-    return await this.makeRequestAndHandleResponse(this.url())
+    return await this.makeRequestAndHandleResponse(`${this.url()}/`)
+  }
+
+  /**
+   * List entities, without wrapper
+   *
+   * @returns {import("../../composables/fetch").ComposableFetchResult}
+   */
+  async _list () {
+    return await this._request(`${this.url()}/`)
+  }
+
+  /**
+   * Make a request
+   *
+   * @param {*} url
+   * @returns {import("../../composables/fetch").ComposableFetchResult}
+   */
+  async _request (url) {
+    return await useFetch(url)
   }
 }
