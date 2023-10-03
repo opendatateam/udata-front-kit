@@ -42,8 +42,9 @@ onMounted(() => {
       if (err.response?.status === 401) {
         store.logout()
         localStorage.setItem("lastPath", router.currentRoute.value.path)
-        router.push({name: "login"})
+        return router.push({name: "login"})
       }
+      throw err
     })
   }
 })
