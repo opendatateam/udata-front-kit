@@ -13,6 +13,10 @@ const navItems = [
     "text": "Organisations",
   },
   {
+    "to": "/bouquets",
+    "text": "Bouquets",
+  },
+  {
     "to": "/about",
     "text": "À propos",
   },

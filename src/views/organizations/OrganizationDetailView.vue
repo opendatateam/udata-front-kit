@@ -4,6 +4,7 @@ import { computed, onMounted, ref, watchEffect } from "vue"
 
 import { useOrganizationStore } from "../../store/OrganizationStore"
 import { useDatasetStore } from "../../store/DatasetStore"
+import { descriptionFromMarkdown } from "../../utils"
 import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
@@ -33,6 +34,8 @@ function doSort (sort) {
   selectedSort.value = sort
 }
 
+const description = computed(() => descriptionFromMarkdown(org))
+
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
   if (!org.value.id) return
@@ -48,18 +51,18 @@ watchEffect(() => {
 <template>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <h1>{{ org.name }}</h1>
-    <div>{{ org.description }}</div>
+    <div v-html="description"></div>
 
-  <div class="w-100 fr-grid-row fr-grid-row--middle fr-mt-5v justify-end">
-    <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-      <label for="sort-search" class="fr-col-auto fr-text--sm fr-m-0 fr-mr-1w">
-        Trier par :
-      </label>
-      <div class="fr-col">
-        <DsfrSelect :model-value="selectedSort" @update:modelValue="doSort" :options="sorts" label=""></DsfrSelect>
+    <div class="w-100 fr-grid-row fr-grid-row--middle fr-mt-5v justify-end">
+      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+        <label for="sort-search" class="fr-col-auto fr-text--sm fr-m-0 fr-mr-1w">
+          Trier par :
+        </label>
+        <div class="fr-col">
+          <DsfrSelect :model-value="selectedSort" @update:modelValue="doSort" :options="sorts" label=""></DsfrSelect>
+        </div>
       </div>
     </div>
-  </div>
 
     <h2 class="fr-mt-2w">Jeux de données</h2>
     <div v-if="!datasets?.data?.length">Pas de jeu de données pour cette organisation.</div>

@@ -118,7 +118,26 @@ export const useDatasetStore = defineStore("dataset", {
       const existing = this.get(dataset_id)
       if (existing) return existing
       const dataset = await datasetsApi.get(dataset_id)
-      this.addOrphan(dataset)
+      return this.addOrphan(dataset)
     },
+    /**
+     * Load multiple datasets from store or API
+     *
+     * @param {Array<string>} datasets_ids
+     * @returns {Array<object>}
+     */
+    async loadMultiple (datasets_ids) {
+      const datasets = []
+      for (const dataset_id of datasets_ids) {
+        const existing = this.get(dataset_id)
+        if (existing) {
+          datasets.push(existing)
+          continue
+        }
+        const dataset = await this.load(dataset_id)
+        datasets.push(dataset)
+      }
+      return datasets
+    }
   },
 })

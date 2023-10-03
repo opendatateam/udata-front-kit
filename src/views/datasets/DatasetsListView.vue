@@ -1,8 +1,8 @@
 <script setup>
 import { computed, ref, watchEffect } from "vue"
 import { useRoute, onBeforeRouteUpdate } from "vue-router"
-import Tile from "../../components/Tile.vue"
 import { useSearchStore } from "../../store/SearchStore"
+import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
 const store = useSearchStore()
@@ -72,6 +72,7 @@ watchEffect(() => {
               :title="d.title"
               :description="d.description"
               :img="d.organization.logo"
+              :is-markdown="true"
             />
           </li>
         </ul>

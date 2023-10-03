@@ -32,6 +32,7 @@ onMounted(() => {
           :title="org.name"
           :description="org.description"
           :img="org.logo"
+          :is-markdown="true"
         />
       </li>
     </ul>
