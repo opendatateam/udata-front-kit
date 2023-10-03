@@ -43,7 +43,6 @@ const onSubmit = () => {
     tags: ["ecospheres"],
     extras: { is_ecospheres: true },
   }).then(res => {
-    console.log(res)
     router.push({ name: "bouquet_detail", params: { bid: res.id } })
   })
 }
