@@ -29,6 +29,7 @@ export default class OauthAPI {
    * Logout API call
    *
    * @param {string} token
+   * @param {headers} object
    * @returns {object}
    */
   async logout (token, headers) {
