@@ -1,5 +1,4 @@
 <script setup>
-import { marked } from "marked"
 import { filesize } from "filesize"
 
 import { computed, onMounted, ref, watchEffect } from "vue"
