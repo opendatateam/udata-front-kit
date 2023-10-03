@@ -4,6 +4,8 @@ import OrganizationsListView from "../views/organizations/OrganizationsListView.
 import OrganizationDetailView from "../views/organizations/OrganizationDetailView.vue"
 import DatasetDetailView from "../views/datasets/DatasetDetailView.vue"
 import DatasetsListView from "../views/datasets/DatasetsListView.vue"
+import LoginView from "../views/LoginView.vue"
+import LogoutView from "../views/LogoutView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +34,21 @@ const router = createRouter({
       path: "/datasets/:did",
       name: "dataset_detail",
       component: DatasetDetailView,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+    },
+    {
+      path: "/login/callback",
+      name: "login_callback",
+      component: LoginView,
+    },
+    {
+      path: "/logout",
+      name: "logout",
+      component: LogoutView,
     },
     {
       path: "/about",

@@ -1,10 +1,27 @@
 <script setup>
-import { ref } from "vue"
+import { ref, computed, onMounted } from "vue"
 import { RouterView, useRouter } from "vue-router"
+import { useUserStore } from "./store/UserStore"
+import UserAPI from "./services/api/resources/UserAPI"
 import Navigation from "./components/Navigation.vue"
 
 const router = useRouter()
 const query = ref("")
+const api = new UserAPI()
+const store = useUserStore()
+
+const isLoggedIn = computed(() => store.$state.isLoggedIn)
+
+const quickLinks = computed(() => {
+  return [
+    {
+      label: isLoggedIn.value ? `${store.$state.data.first_name} ${store.$state.data.last_name}` : "Se connecter",
+      icon: isLoggedIn.value ? "ri-logout-box-r-line" : "ri-account-circle-line",
+      to: isLoggedIn.value ? "/logout" : "/login",
+      iconRight: isLoggedIn.value,
+    }
+  ]
+})
 
 const updateQuery = (q) => {
   query.value = q
@@ -14,6 +31,23 @@ const doSearch = () => {
   router.push({name: "datasets", query: {q: query.value}})
 }
 
+onMounted(() => {
+  store.init()
+  if (isLoggedIn.value) {
+    api.getProfile().then(data => {
+      store.storeInfo(data)
+    }).catch(err => {
+      // getProfile has failed, we're probably using a bad token
+      // keep the current route and redirect to the login flow
+      if (err.response?.status === 401) {
+        store.logout()
+        localStorage.setItem("lastPath", router.currentRoute.value.path)
+        return router.push({name: "login"})
+      }
+      throw err
+    })
+  }
+})
 </script>
 
 <template>
@@ -21,7 +55,7 @@ const doSearch = () => {
     service-title="Ecosphères"
     service-description=""
     home-to="/"
-    :quick-links="[]"
+    :quick-links="quickLinks"
     :show-search="true"
     @search="doSearch"
     @update:modelValue="updateQuery"

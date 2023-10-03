@@ -1,0 +1,29 @@
+<script setup>
+import { onMounted, computed } from "vue"
+import { useRouter } from "vue-router"
+import { useUserStore } from "../store/UserStore"
+import AuthService from "../services/AuthService"
+
+const router = useRouter()
+const store = useUserStore()
+const auth = new AuthService()
+const token = computed(() => store.$state.token)
+
+onMounted(() => {
+  if (token.value) {
+    auth.logout(token.value).then(() => {
+      store.logout()
+      console.log("Logged out")
+      router.push({name: "home"})
+    })
+  } else {
+    router.push({name: "home"})
+  }
+})
+</script>
+
+<template>
+  <div class="about">
+    <h1>This is a logout page</h1>
+  </div>
+</template>

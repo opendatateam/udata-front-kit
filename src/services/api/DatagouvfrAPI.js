@@ -14,7 +14,7 @@ const $loading = useLoading()
  * e.g. OrganizationsAPI will declare `endpoint = organizations`.
  */
 export default class DatagouvfrAPI {
-  base_url = config.datagouvfr_api_url
+  base_url = `${config.datagouvfr_base_url}/api`
   version = "1"
   endpoint = ""
 

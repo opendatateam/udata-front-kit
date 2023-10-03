@@ -1,6 +1,6 @@
 import DatagouvfrAPI from "../DatagouvfrAPI"
 
-export default class DatasetsAPI extends DatagouvfrAPI {
+export default class ReusesAPI extends DatagouvfrAPI {
   endpoint = "reuses"
 
   /**

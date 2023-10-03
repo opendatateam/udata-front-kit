@@ -1,7 +1,12 @@
 # config file for ecospheres-front
 
-# data.gouv.fr API base URL
-datagouvfr_api_url: https://www.data.gouv.fr/api
+# data.gouv.fr base URL
+datagouvfr_base_url: https://demo.data.gouv.fr
+
+# oauth settings
+datagouvfr_oauth_client_id: 651479c317ad47b21e41a9d4
+# pkce client secret, explicitely public
+datagouvfr_oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
 
 # display settings
 organizations_list_page_size: 9
