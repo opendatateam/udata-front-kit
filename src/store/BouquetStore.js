@@ -27,7 +27,7 @@ export const useBouquetStore = defineStore("bouquet", {
       let response = await topicsAPI._list()
       this.data = this.filter(response.data)
       while (response.next_page) {
-        response = await topicsAPI._request(response.next_page)
+        response = await topicsAPI.fetch(response.next_page)
         this.data = [...this.data, ...this.filter(response.data)]
       }
       return this.data

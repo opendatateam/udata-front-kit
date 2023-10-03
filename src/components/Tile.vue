@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from "vue"
-import { marked } from "marked"
-import { stripHtml } from "string-strip-html"
+import { stripFromMarkdown } from "../utils"
 
 const props = defineProps(["title", "description", "img", "link", "type", "externalLink", "isMarkdown"])
 
@@ -9,8 +8,7 @@ const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
 
 function strip (value) {
   if (props.isMarkdown) {
-    const html = marked.parse(value, {mangle: false, headerIds: false})
-    return stripHtml(html).result
+    return stripFromMarkdown(value)
   }
   return value
 }

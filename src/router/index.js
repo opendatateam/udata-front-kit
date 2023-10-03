@@ -6,6 +6,7 @@ import DatasetDetailView from "../views/datasets/DatasetDetailView.vue"
 import DatasetsListView from "../views/datasets/DatasetsListView.vue"
 import BouquetsListView from "../views/bouquets/BouquetsListView.vue"
 import BouquetDetailView from "../views/bouquets/BouquetDetailView.vue"
+import BouquetAddView from "../views/bouquets/BouquetAddView.vue"
 import LoginView from "../views/LoginView.vue"
 import LogoutView from "../views/LogoutView.vue"
 
@@ -66,6 +67,13 @@ const router = createRouter({
       path: "/about",
       name: "about",
       component: () => import("../views/AboutView.vue"),
+    },
+    /** protected / admin routes  **/
+    {
+      path: "/admin/bouquets/add",
+      name: "bouquet_add",
+      component: BouquetAddView,
+      meta: { requiresAuth: true },
     },
   ],
 })

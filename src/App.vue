@@ -31,13 +31,21 @@ const doSearch = () => {
   router.push({name: "datasets", query: {q: query.value}})
 }
 
+// protect authenticated routes
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth && !store.$state.isLoggedIn) {
+    localStorage.setItem("lastPath", to.path)
+    router.push({name: "login"})
+  }
+})
+
 onMounted(() => {
   store.init()
   if (isLoggedIn.value) {
-    api.getProfile().then(data => {
+    api._list().then(data => {
       store.storeInfo(data)
     }).catch(err => {
-      // getProfile has failed, we're probably using a bad token
+      // profile info fetching has failed, we're probably using a bad token
       // keep the current route and redirect to the login flow
       if (err.response?.status === 401) {
         store.logout()

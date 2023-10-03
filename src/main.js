@@ -2,6 +2,7 @@ import "@gouvfr/dsfr/dist/dsfr.min.css"      // Import des styles du DSFR
 import "@gouvminint/vue-dsfr/styles"         // Import des styles globaux propre à VueDSFR
 import "vue3-toastify/dist/index.css"
 import "vue-loading-overlay/dist/css/index.css"
+import "@vueform/multiselect/themes/default.css"
 import "./assets/main.css"
 
 import { createApp } from "vue"
