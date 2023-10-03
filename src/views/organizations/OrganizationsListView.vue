@@ -1,21 +1,25 @@
 <script setup>
-import { ref, computed, onMounted } from "vue"
+import { ref, onMounted } from "vue"
 import { useOrganizationStore } from "../../store/OrganizationStore"
+import { useLoading } from "vue-loading-overlay"
 import Tile from "../../components/Tile.vue"
 
 const store = useOrganizationStore()
+const $loading = useLoading()
 
 const currentPage = ref(1)
 const pages = store.getPagination()
-const organizations = computed(() => store.getForPage(currentPage.value))
+const organizations = ref([])
 
-function onUpdatePage (page) {
+async function onUpdatePage (page) {
+  const loader = $loading.show()
   currentPage.value = page + 1
-  store.loadFromConfig(currentPage.value)
+  organizations.value = await store.loadFromConfig(currentPage.value)
+  loader.hide()
 }
 
 onMounted(() => {
-  store.loadFromConfig()
+  onUpdatePage(0)
 })
 </script>
 

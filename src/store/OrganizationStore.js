@@ -54,10 +54,27 @@ export const useOrganizationStore = defineStore("organization", {
     async loadFromConfig (page = 1) {
       const pageSize = config.organizations_list_page_size
       const paginated = config.organizations.slice(pageSize * (page - 1), pageSize * page)
-      for (const org_id of paginated) {
-        await this.load(org_id, page)
-      }
+      await this.loadMultiple(paginated, page)
       return this.getForPage(page)
+    },
+    /**
+     * Load multiple organisations to store
+     *
+     * @param {Array<number>} org_ids
+     * @param {number} page
+     * @returns {Promise}
+     */
+    async loadMultiple (org_ids, page) {
+      for (const org_id of org_ids) {
+        const existing = this.get(org_id)
+        if (existing) continue
+        try {
+          const org =  await orgApi._get(org_id)
+          this.add(org, page)
+        } catch (e) {
+          console.log(`Error fetching ${org_id}: ${e}`)
+        }
+      }
     },
     /**
      * Add an organization to the store
