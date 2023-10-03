@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue"
 import { useDatasetStore } from "../../store/DatasetStore"
-import { DsfrButton } from "@gouvminint/vue-dsfr"
 import { useRouter } from "vue-router"
 import SearchAPI from "../../services/api/SearchAPI"
 import TopicsAPI from "../../services/api/resources/TopicsAPI"
