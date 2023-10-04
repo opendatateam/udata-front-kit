@@ -4,11 +4,9 @@ import { useDatasetStore } from "../../store/DatasetStore"
 import { useBouquetStore } from "../../store/BouquetStore"
 import { useRouter, useRoute } from "vue-router"
 import SearchAPI from "../../services/api/SearchAPI"
-import TopicsAPI from "../../services/api/resources/TopicsAPI"
 import Multiselect from "@vueform/multiselect"
 
 const searchAPI = new SearchAPI()
-const topicsAPI = new TopicsAPI()
 const datasetStore = useDatasetStore()
 const bouquetStore = useBouquetStore()
 const router = useRouter()
