@@ -115,4 +115,15 @@ export default class DatagouvfrAPI {
   async create (data) {
     return await this.makeRequestAndHandleResponse(`${this.url()}/`, "post", data)
   }
+
+  /**
+   * Update an entity (PUT)
+   *
+   * @param {string} entity_id
+   * @param {object} data
+   * @returns {Promise}
+   */
+  async update (entity_id, data) {
+    return await this.makeRequestAndHandleResponse(`${this.url()}/${entity_id}/`, "put", data)
+  }
 }

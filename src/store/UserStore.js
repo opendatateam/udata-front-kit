@@ -45,5 +45,11 @@ export const useUserStore = defineStore("user", {
     storeInfo (data) {
       this.data = data
     },
+    /**
+     * Is the user logged-in and admin ?
+     */
+    isAdmin () {
+      return this.isLoggedIn && this.data?.roles?.includes("admin")
+    }
   },
 })

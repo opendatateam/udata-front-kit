@@ -47,10 +47,36 @@ export const useBouquetStore = defineStore("bouquet", {
      * @param {string} slug
      * @returns {object}
      */
-    async loadBouquet (slug) {
+    async load (slug) {
       const existing = this.get(slug)
       if (existing) return existing
       return await topicsAPI.get(slug)
+    },
+    /**
+     * Create a bouquet
+     *
+     * @param {object} bouquet
+     * @returns {object}
+     */
+    async create (bouquet) {
+      const res = await topicsAPI.create(bouquet)
+      this.data.push(res)
+      return res
+    },
+    /**
+     * Update a bouquet
+     *
+     * @param {string} bouquet_id
+     * @param {object} data
+     * @returns {object}
+     */
+    async update (bouquet_id, data) {
+      const res = await topicsAPI.update(bouquet_id, data)
+      this.data = [
+        ...this.data.filter(b => b.id !== bouquet_id),
+        res,
+      ]
+      return res
     },
   },
 })

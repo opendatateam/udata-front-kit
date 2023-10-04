@@ -1,20 +1,26 @@
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import { useDatasetStore } from "../../store/DatasetStore"
-import { useRouter } from "vue-router"
+import { useBouquetStore } from "../../store/BouquetStore"
+import { useRouter, useRoute } from "vue-router"
 import SearchAPI from "../../services/api/SearchAPI"
 import TopicsAPI from "../../services/api/resources/TopicsAPI"
 import Multiselect from "@vueform/multiselect"
 
 const searchAPI = new SearchAPI()
 const topicsAPI = new TopicsAPI()
-const store = useDatasetStore()
+const datasetStore = useDatasetStore()
+const bouquetStore = useBouquetStore()
 const router = useRouter()
+const route = useRoute()
+
+const isCreate = route.name === "bouquet_add"
 
 const form = ref({})
 const datasets = ref([])
 const selectedDataset = ref(null)
 const selector = ref(null)
+const loadedBouquet = ref({})
 
 const search = async (query) => {
   if (!query) return []
@@ -25,7 +31,7 @@ const search = async (query) => {
 }
 
 const onSelect = async (value) => {
-  const dataset = await store.load(value)
+  const dataset = await datasetStore.load(value)
   datasets.value.push(dataset)
   selector.value.clear()
   selector.value.refreshOptions()
@@ -35,21 +41,49 @@ const onDeleteDataset = (datasetId) => {
   datasets.value = datasets.value.filter(d => d.id !== datasetId)
 }
 
-const onSubmit = () => {
-  topicsAPI.create({
+const onSubmit = async () => {
+  let res
+  const data = {
     ...form.value,
     datasets: datasets.value.map(d => d.id),
-    tags: ["ecospheres"],
-    extras: { is_ecospheres: true },
-  }).then(res => {
-    router.push({ name: "bouquet_detail", params: { bid: res.id } })
-  })
+  }
+  if (isCreate) {
+    res = await bouquetStore.create({
+      ...data,
+      tags: ["ecospheres"],
+      extras: { is_ecospheres: true },
+    })
+  } else {
+    res = await bouquetStore.update(loadedBouquet.value.id, {
+      ...data,
+      tags: loadedBouquet.value.tags,
+    })
+  }
+  router.push({ name: "bouquet_detail", params: { bid: res.slug } })
 }
+
+const loadDatasets = async (datasetIds) => {
+  for (const datasetId of datasetIds) {
+    datasets.value.push(await datasetStore.load(datasetId))
+  }
+}
+
+onMounted(() => {
+  if (!isCreate) {
+    bouquetStore.load(route.params.bid).then(data => {
+      loadedBouquet.value = data
+      form.value.name = data.name
+      form.value.description = data.description
+      loadDatasets(data.datasets.map(d => d.id))
+    })
+  }
+})
 </script>
 
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
-    <h1>Ajouter un bouquet</h1>
+    <h1 v-if="isCreate">Ajouter un bouquet</h1>
+    <h1 v-else>Modifier le bouquet {{ loadedBouquet.name }}</h1>
     <form @submit.prevent="onSubmit()">
       <DsfrInput
         class="fr-mt-1w fr-mb-2w"
@@ -102,7 +136,7 @@ const onSubmit = () => {
                 <DsfrButton
                   :icon-only="true" icon="ri-delete-bin-line"
                   title="Supprimer"
-                  @click="onDeleteDataset(d.id)"
+                  @click.stop.prevent="onDeleteDataset(d.id)"
                 />
               </td>
             </tr>

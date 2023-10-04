@@ -13,8 +13,6 @@ const router = useRouter()
 
 const bouquets = computed(() => store.$state.data)
 
-const isAdmin = computed(() => userStore.$state.isLoggedIn && userStore.$state.data?.roles?.includes("admin"))
-
 const goToCreate = () => {
   router.push({name: "bouquet_add"})
 }
@@ -27,14 +25,16 @@ onMounted(() => {
 
 <template>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
-    <DsfrButton
-      class="fr-mb-2w"
-      v-if="isAdmin"
-      label="Ajouter un bouquet"
-      icon="ri-add-circle-line"
-      @click="goToCreate"
-    />
-    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+    <div class="fr-grid-row fr-mb-1w">
+      <DsfrButton
+        class="fr-mb-1w"
+        v-if="userStore.isAdmin()"
+        label="Ajouter un bouquet"
+        icon="ri-add-circle-line"
+        @click="goToCreate"
+      />
+    </div>
+    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
       <li v-for="bouquet in bouquets" class="fr-col-12 fr-col-lg-4">
         <Tile
           :link="`/bouquets/${bouquet.slug}`"
