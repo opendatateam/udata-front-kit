@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
+    "@vueform/multiselect": "^2.6.2",
     "axios": "^1.4.0",
     "filesize": "^10.0.7",
     "marked": "^5.1.0",

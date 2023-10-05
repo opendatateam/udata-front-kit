@@ -27,7 +27,7 @@ export const useBouquetStore = defineStore("bouquet", {
       let response = await topicsAPI._list()
       this.data = this.filter(response.data)
       while (response.next_page) {
-        response = await topicsAPI._request(response.next_page)
+        response = await topicsAPI.request(response.next_page)
         this.data = [...this.data, ...this.filter(response.data)]
       }
       return this.data
@@ -47,10 +47,34 @@ export const useBouquetStore = defineStore("bouquet", {
      * @param {string} slug
      * @returns {object}
      */
-    async loadBouquet (slug) {
+    async load (slug) {
       const existing = this.get(slug)
       if (existing) return existing
       return await topicsAPI.get(slug)
+    },
+    /**
+     * Create a bouquet
+     *
+     * @param {object} bouquet
+     * @returns {object}
+     */
+    async create (bouquet) {
+      const res = await topicsAPI.create(bouquet)
+      this.data.push(res)
+      return res
+    },
+    /**
+     * Update a bouquet
+     *
+     * @param {string} bouquet_id
+     * @param {object} data
+     * @returns {object}
+     */
+    async update (bouquet_id, data) {
+      const res = await topicsAPI.update(bouquet_id, data)
+      const idx = this.data.findIndex(b => b.id === bouquet_id)
+      this.data[idx] = res
+      return res
     },
   },
 })

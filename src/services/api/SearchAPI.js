@@ -15,9 +15,13 @@ export default class SearchAPI {
     this.index = client.index("datasets")
   }
 
+  _search(query, args) {
+    return this.index.search(query, args)
+  }
+
   search (query, args) {
     const loader = $loading.show()
-    return this.index.search(query, args).catch(err => {
+    return this._search(query, args).catch(err => {
       toast(err.message, {type: "error", autoClose: false})
     }).finally(() => loader.hide())
   }

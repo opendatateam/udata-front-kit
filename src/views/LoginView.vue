@@ -21,7 +21,7 @@ onMounted(() => {
     auth.retrieveToken(route.query.code, route.query.state).then(token => {
       auth.cleanup()
       store.login(token)
-      api.getProfile().then(data => {
+      api._list().then(data => {
         store.storeInfo(data)
       })
       const lastPath = localStorage.getItem("lastPath")
