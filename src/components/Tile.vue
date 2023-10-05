@@ -2,7 +2,10 @@
 import { computed } from "vue"
 import { stripFromMarkdown } from "../utils"
 
-const props = defineProps(["title", "description", "img", "link", "type", "externalLink", "isMarkdown"])
+const props = defineProps([
+  "title", "description", "img", "link", "type", "externalLink", "isMarkdown",
+  "notice"
+])
 
 const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
 
@@ -32,5 +35,10 @@ function strip (value) {
     <div v-if="img" class="fr-tile__img">
       <img :src="img" class="fr-responsive-img" alt="">
     </div>
+    <DsfrNotice
+      v-if="notice"
+      :title="notice"
+      :closeable="false"
+    />
   </div>
 </template>

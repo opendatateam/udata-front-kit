@@ -47,6 +47,7 @@ onMounted(() => {
           :description="d.description"
           :img="d.organization.logo"
           :is-markdown="true"
+          :notice="bouquet.extras[`ecospheres:${d.id}:description`]"
         />
       </li>
     </ul>
