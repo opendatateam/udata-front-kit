@@ -44,7 +44,7 @@ export default class DatagouvfrAPI {
    * @param {object} params
    * @returns
    */
-  async fetch (url, method = "get", params = {}) {
+  async request (url, method = "get", params = {}) {
     const res = await instance[method](url, params)
     return res.data
   }
@@ -59,9 +59,10 @@ export default class DatagouvfrAPI {
    */
   async makeRequestAndHandleResponse (url, method = "get", params = {}) {
     const loader = $loading.show()
-    return this.fetch(url, method, params).catch(error => {
+    return this.request(url, method, params).catch(error => {
+      console.error(error)
       if (error && error.message) {
-        toast(error.message, {type: "error", autoClose: false})
+        toast(error.message, { type: "error", autoClose: false })
       }
     }).finally(() => loader.hide())
   }
@@ -85,7 +86,7 @@ export default class DatagouvfrAPI {
    */
   async _get (entity_id) {
     const url = `${this.url()}/${entity_id}/`
-    return await this.fetch(url)
+    return await this.request(url)
   }
 
   /**
@@ -103,7 +104,7 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async _list () {
-    return await this.fetch(`${this.url()}/`)
+    return await this.request(`${this.url()}/`)
   }
 
   /**

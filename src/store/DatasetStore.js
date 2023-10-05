@@ -118,6 +118,7 @@ export const useDatasetStore = defineStore("dataset", {
       const existing = this.get(dataset_id)
       if (existing) return existing
       const dataset = await datasetsApi.get(dataset_id)
+      if (!dataset) return
       return this.addOrphan(dataset)
     },
     /**

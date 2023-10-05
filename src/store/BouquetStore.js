@@ -27,7 +27,7 @@ export const useBouquetStore = defineStore("bouquet", {
       let response = await topicsAPI._list()
       this.data = this.filter(response.data)
       while (response.next_page) {
-        response = await topicsAPI.fetch(response.next_page)
+        response = await topicsAPI.request(response.next_page)
         this.data = [...this.data, ...this.filter(response.data)]
       }
       return this.data
@@ -72,10 +72,8 @@ export const useBouquetStore = defineStore("bouquet", {
      */
     async update (bouquet_id, data) {
       const res = await topicsAPI.update(bouquet_id, data)
-      this.data = [
-        ...this.data.filter(b => b.id !== bouquet_id),
-        res,
-      ]
+      const idx = this.data.findIndex(b => b.id === bouquet_id)
+      this.data[idx] = res
       return res
     },
   },

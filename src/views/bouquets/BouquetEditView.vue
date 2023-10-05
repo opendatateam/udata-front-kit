@@ -30,7 +30,9 @@ const search = async (query) => {
 
 const onSelect = async (value) => {
   const dataset = await datasetStore.load(value)
-  datasets.value.push(dataset)
+  if (dataset) {
+    datasets.value.push(dataset)
+  }
   selector.value.clear()
   selector.value.refreshOptions()
 }
