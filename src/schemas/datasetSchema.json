@@ -1,0 +1,17 @@
+{
+  "$id": "https://ecospheres.ecologie.gouv.fr/schemas/dataset",
+  "type": "object",
+  "title": "Dataset",
+  "description": "TODO",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "TODO"
+    },
+    "uri": {
+      "type": "string",
+      "description": "TODO"
+    }
+  },
+  "required": ["name", "uri"]
+}

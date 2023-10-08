@@ -28,6 +28,12 @@ npm run dev
 npm run build
 ```
 
+### Test with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test
+```
+
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
