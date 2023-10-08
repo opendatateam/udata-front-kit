@@ -1,7 +1,7 @@
-import { defineStore } from "pinia"
-import TopicsAPI from "../services/api/resources/TopicsAPI"
+import { defineStore } from "pinia";
+import TopicsAPI from "../services/api/resources/TopicsAPI";
 
-const topicsAPI = new TopicsAPI()
+const topicsAPI = new TopicsAPI();
 
 export const useBouquetStore = defineStore("bouquet", {
   state: () => ({
@@ -14,23 +14,26 @@ export const useBouquetStore = defineStore("bouquet", {
      * @param {Array} bouquets
      * @returns {Array}
      */
-    filter (bouquets) {
-      return bouquets.filter(bouquet => bouquet.extras.is_ecospheres || bouquet.tags.includes("ecospheres"))
+    filter(bouquets) {
+      return bouquets.filter(
+        (bouquet) =>
+          bouquet.extras.is_ecospheres || bouquet.tags.includes("ecospheres")
+      );
     },
     /**
      * Load Ecospheres related bouquets from API
      *
      * @returns {Array<object>}
      */
-    async loadBouquets () {
-      if (this.data.length > 0) return this.data
-      let response = await topicsAPI._list()
-      this.data = this.filter(response.data)
+    async loadBouquets() {
+      if (this.data.length > 0) return this.data;
+      let response = await topicsAPI._list();
+      this.data = this.filter(response.data);
       while (response.next_page) {
-        response = await topicsAPI.request(response.next_page)
-        this.data = [...this.data, ...this.filter(response.data)]
+        response = await topicsAPI.request(response.next_page);
+        this.data = [...this.data, ...this.filter(response.data)];
       }
-      return this.data
+      return this.data;
     },
     /**
      * Get a bouquet from store
@@ -38,8 +41,8 @@ export const useBouquetStore = defineStore("bouquet", {
      * @param {string} slug
      * @returns {object}
      */
-    get (slug) {
-      return this.data.find(b => b.slug === slug)
+    get(slug) {
+      return this.data.find((b) => b.slug === slug);
     },
     /**
      * Get a single bouquet from store or API
@@ -47,10 +50,10 @@ export const useBouquetStore = defineStore("bouquet", {
      * @param {string} slug
      * @returns {object}
      */
-    async load (slug) {
-      const existing = this.get(slug)
-      if (existing) return existing
-      return await topicsAPI.get(slug)
+    async load(slug) {
+      const existing = this.get(slug);
+      if (existing) return existing;
+      return await topicsAPI.get(slug);
     },
     /**
      * Create a bouquet
@@ -58,10 +61,10 @@ export const useBouquetStore = defineStore("bouquet", {
      * @param {object} bouquet
      * @returns {object}
      */
-    async create (bouquet) {
-      const res = await topicsAPI.create(bouquet)
-      this.data.push(res)
-      return res
+    async create(bouquet) {
+      const res = await topicsAPI.create(bouquet);
+      this.data.push(res);
+      return res;
     },
     /**
      * Update a bouquet
@@ -70,11 +73,11 @@ export const useBouquetStore = defineStore("bouquet", {
      * @param {object} data
      * @returns {object}
      */
-    async update (bouquet_id, data) {
-      const res = await topicsAPI.update(bouquet_id, data)
-      const idx = this.data.findIndex(b => b.id === bouquet_id)
-      this.data[idx] = res
-      return res
+    async update(bouquet_id, data) {
+      const res = await topicsAPI.update(bouquet_id, data);
+      const idx = this.data.findIndex((b) => b.id === bouquet_id);
+      this.data[idx] = res;
+      return res;
     },
   },
-})
+});

@@ -1,14 +1,14 @@
-import { createRouter, createWebHistory } from "vue-router"
-import HomeView from "../views/HomeView.vue"
-import OrganizationsListView from "../views/organizations/OrganizationsListView.vue"
-import OrganizationDetailView from "../views/organizations/OrganizationDetailView.vue"
-import DatasetDetailView from "../views/datasets/DatasetDetailView.vue"
-import DatasetsListView from "../views/datasets/DatasetsListView.vue"
-import BouquetsListView from "../views/bouquets/BouquetsListView.vue"
-import BouquetDetailView from "../views/bouquets/BouquetDetailView.vue"
-import BouquetEditView from "../views/bouquets/BouquetEditView.vue"
-import LoginView from "../views/LoginView.vue"
-import LogoutView from "../views/LogoutView.vue"
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
+import OrganizationsListView from "../views/organizations/OrganizationsListView.vue";
+import OrganizationDetailView from "../views/organizations/OrganizationDetailView.vue";
+import DatasetDetailView from "../views/datasets/DatasetDetailView.vue";
+import DatasetsListView from "../views/datasets/DatasetsListView.vue";
+import BouquetsListView from "../views/bouquets/BouquetsListView.vue";
+import BouquetDetailView from "../views/bouquets/BouquetDetailView.vue";
+import BouquetEditView from "../views/bouquets/BouquetEditView.vue";
+import LoginView from "../views/LoginView.vue";
+import LogoutView from "../views/LogoutView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,6 +82,6 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
   ],
-})
+});
 
 export default router;
