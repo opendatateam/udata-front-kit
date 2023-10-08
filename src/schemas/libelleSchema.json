@@ -1,0 +1,24 @@
+{
+  "$id": "https://ecospheres.ecologie.gouv.fr/schemas/libelle",
+  "type": "object",
+  "title": "Libellé ou données théoriques",
+  "description": "TODO",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "TODO"
+    },
+    "description": {
+      "type": "string",
+      "description": "TODO"
+    },
+    "dataset": {
+      "$ref": "dataset"
+    },
+    "exists": {
+      "type": "boolean",
+      "description": "TODO"
+    }
+  },
+  "required": ["name", "description"]
+}
