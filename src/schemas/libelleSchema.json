@@ -1,7 +1,7 @@
 {
   "$id": "https://ecospheres.ecologie.gouv.fr/schemas/libelle",
   "type": "object",
-  "title": "Libellé ou données théoriques",
+  "title": "Libellé",
   "description": "TODO",
   "properties": {
     "name": {

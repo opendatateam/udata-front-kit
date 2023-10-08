@@ -2,10 +2,11 @@ import { expect, test } from "vitest";
 import Ajv from "ajv";
 import datasetSchema from "../datasetSchema";
 import libelleSchema from "../libelleSchema";
+import bouquetSchema from "../bouquetSchema";
 
 const ajv = new Ajv({
   allErrors: true,
-  schemas: [datasetSchema, libelleSchema],
+  schemas: [datasetSchema, libelleSchema, bouquetSchema],
 });
 
 const dataset = {
@@ -19,7 +20,14 @@ const libelle = {
   dataset: dataset,
 };
 
-test("is a valid libellé", () => {
-  const validate = ajv.getSchema(libelleSchema.$id);
-  expect(validate(libelle)).toBe(true);
+const bouquet = {
+  name: "test",
+  description: "test test test",
+  tags: ["test", "test"],
+  libelles: [libelle],
+};
+
+test("is a valid bouquet", () => {
+  const validate = ajv.getSchema(bouquetSchema.$id);
+  expect(validate(bouquet)).toBe(true);
 });

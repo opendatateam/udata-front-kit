@@ -1,0 +1,26 @@
+{
+  "$id": "https://ecospheres.ecologie.gouv.fr/schemas/bouquet",
+  "type": "object",
+  "title": "Bouquet",
+  "description": "TODO",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "TODO"
+    },
+    "description": {
+      "type": "string",
+      "description": "TODO"
+    },
+    "tags": {
+      "type": "array",
+      "description": "TODO",
+      "items": { "type": "string" }
+    },
+    "libelles": {
+      "type": "array",
+      "items": { "$ref": "libelle" }
+    }
+  },
+  "required": ["name", "description", "tags", "libelles"]
+}
