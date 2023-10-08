@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
 import Ajv from "ajv";
+import addFormats from "ajv-formats";
 import datasetSchema from "../datasetSchema";
 import libelleSchema from "../libelleSchema";
 
@@ -20,6 +21,7 @@ const libelle = {
 };
 
 test("is a valid libellé", () => {
+  addFormats(ajv, ["uri"]);
   const validate = ajv.getSchema(libelleSchema.$id);
   expect(validate(libelle)).toBe(true);
 });
