@@ -2,9 +2,7 @@ Hi there!
 
 I really enjoy Ecosphères, but I _want to propose a feature / recently encountered an issue_.
 
-
 _If feature_
-
 
 ### Here is the user or job story
 
@@ -26,18 +24,13 @@ _Write here._
 
 _Write here. Add UI/UX elements if you have them._
 
-
 ### Here are some additional elements of my proposal
-
 
 _Optional._
 
-
 ---
 
-
 _If bug / issue_
-
 
 ### Here is what I did
 
