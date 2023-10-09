@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import DatasetsAPI from '../services/api/resources/DatasetsAPI'
+import { defineStore } from "pinia"
+import DatasetsAPI from "../services/api/resources/DatasetsAPI"
 
 const datasetsApi = new DatasetsAPI()
 
@@ -16,10 +16,10 @@ const datasetsApi = new DatasetsAPI()
  * A special key `_orphans` exists for storing individual datasets if needed (ie w/o org and pagination)
  * This is useful when fetching a single dataset on a dataset page
  */
-export const useDatasetStore = defineStore('dataset', {
+export const useDatasetStore = defineStore("dataset", {
   state: () => ({
     data: {},
-    sort: null
+    sort: null,
   }),
   actions: {
     /**
@@ -32,12 +32,12 @@ export const useDatasetStore = defineStore('dataset', {
       const datasets = this.getDatasetsForOrg(org_id)
       if (!datasets.data) return []
       const nbPages = Math.ceil(datasets.total / datasets.page_size)
-      return [...Array(nbPages).keys()].map((page) => {
+      return [...Array(nbPages).keys()].map(page => {
         page += 1
         return {
           label: page,
-          href: '#',
-          title: `Page ${page}`
+          href: "#",
+          title: `Page ${page}`,
         }
       })
     },
@@ -49,10 +49,10 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {string?} sort Sort order requested
      * @returns {Array<object>}
      */
-    getDatasetsForOrg(org_id, page = 1, sort = '-created') {
+    getDatasetsForOrg (org_id, page = 1, sort = "-created") {
       if (this.sort !== sort) return []
       if (!this.data[org_id]) return []
-      return this.data[org_id].find((d) => d.page == page) || []
+      return this.data[org_id].find(d => d.page == page) || []
     },
     /**
      * Async function to trigger API fetch of an org's datasets if not known in store
@@ -62,14 +62,10 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {string?} sort Sort order requested
      * @returns {Array<object>}
      */
-    async loadDatasetsForOrg(org_id, page = 1, sort = '-created') {
+    async loadDatasetsForOrg (org_id, page = 1, sort = "-created") {
       const existing = this.getDatasetsForOrg(org_id, page, sort)
       if (existing.data) return existing
-      const datasets = await datasetsApi.getDatasetsForOrganization(
-        org_id,
-        page,
-        sort
-      )
+      const datasets = await datasetsApi.getDatasetsForOrganization(org_id, page, sort)
       this.addDatasets(org_id, datasets, sort)
       return this.getDatasetsForOrg(org_id, page, sort)
     },
@@ -80,7 +76,7 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {object} res
      * @param {string} sort Sort order used for this res
      */
-    addDatasets(org_id, res, sort) {
+    addDatasets (org_id, res, sort) {
       // reset org data if another sort has been requested
       if (this.sort !== sort) this.data[org_id] = []
       this.sort = sort
@@ -92,13 +88,11 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {string} dataset_id
      * @returns {object|undefined}
      */
-    get(dataset_id) {
+    get (dataset_id) {
       // flatten pages data for each organization
       // TODO: suboptimal store structure for this use case, see later if org oriented or flat is better
-      const flattened = Object.keys(this.data)
-        .map((k) => this.data[k].map((a) => a.data).flat())
-        .flat()
-      return flattened.find((d) => {
+      const flattened = Object.keys(this.data).map(k => this.data[k].map(a => a.data).flat()).flat()
+      return flattened.find(d => {
         return d.id === dataset_id || d.slug === dataset_id
       })
     },
@@ -108,8 +102,8 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {object} dataset
      * @returns {object}
      */
-    addOrphan(dataset) {
-      this.addDatasets('_orphan', {
+    addOrphan (dataset) {
+      this.addDatasets("_orphan", {
         data: [dataset]
       })
       return dataset
@@ -120,7 +114,7 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {str} dataset_id
      * @returns {object}
      */
-    async load(dataset_id) {
+    async load (dataset_id) {
       const existing = this.get(dataset_id)
       if (existing) return existing
       const dataset = await datasetsApi.get(dataset_id)
@@ -133,7 +127,7 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {Array<string>} datasets_ids
      * @returns {Array<object>}
      */
-    async loadMultiple(datasets_ids) {
+    async loadMultiple (datasets_ids) {
       const datasets = []
       for (const dataset_id of datasets_ids) {
         const existing = this.get(dataset_id)
@@ -146,5 +140,5 @@ export const useDatasetStore = defineStore('dataset', {
       }
       return datasets
     }
-  }
+  },
 })

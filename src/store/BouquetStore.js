@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia'
-import TopicsAPI from '../services/api/resources/TopicsAPI'
+import { defineStore } from "pinia"
+import TopicsAPI from "../services/api/resources/TopicsAPI"
 
 const topicsAPI = new TopicsAPI()
 
-export const useBouquetStore = defineStore('bouquet', {
+export const useBouquetStore = defineStore("bouquet", {
   state: () => ({
-    data: []
+    data: [],
   }),
   actions: {
     /**
@@ -14,18 +14,15 @@ export const useBouquetStore = defineStore('bouquet', {
      * @param {Array} bouquets
      * @returns {Array}
      */
-    filter(bouquets) {
-      return bouquets.filter(
-        (bouquet) =>
-          bouquet.extras.is_ecospheres || bouquet.tags.includes('ecospheres')
-      )
+    filter (bouquets) {
+      return bouquets.filter(bouquet => bouquet.extras.is_ecospheres || bouquet.tags.includes("ecospheres"))
     },
     /**
      * Load Ecospheres related bouquets from API
      *
      * @returns {Array<object>}
      */
-    async loadBouquets() {
+    async loadBouquets () {
       if (this.data.length > 0) return this.data
       let response = await topicsAPI._list()
       this.data = this.filter(response.data)
@@ -41,8 +38,8 @@ export const useBouquetStore = defineStore('bouquet', {
      * @param {string} slug
      * @returns {object}
      */
-    get(slug) {
-      return this.data.find((b) => b.slug === slug)
+    get (slug) {
+      return this.data.find(b => b.slug === slug)
     },
     /**
      * Get a single bouquet from store or API
@@ -50,7 +47,7 @@ export const useBouquetStore = defineStore('bouquet', {
      * @param {string} slug
      * @returns {object}
      */
-    async load(slug) {
+    async load (slug) {
       const existing = this.get(slug)
       if (existing) return existing
       return await topicsAPI.get(slug)
@@ -61,7 +58,7 @@ export const useBouquetStore = defineStore('bouquet', {
      * @param {object} bouquet
      * @returns {object}
      */
-    async create(bouquet) {
+    async create (bouquet) {
       const res = await topicsAPI.create(bouquet)
       this.data.push(res)
       return res
@@ -73,11 +70,11 @@ export const useBouquetStore = defineStore('bouquet', {
      * @param {object} data
      * @returns {object}
      */
-    async update(bouquet_id, data) {
+    async update (bouquet_id, data) {
       const res = await topicsAPI.update(bouquet_id, data)
-      const idx = this.data.findIndex((b) => b.id === bouquet_id)
+      const idx = this.data.findIndex(b => b.id === bouquet_id)
       this.data[idx] = res
       return res
-    }
-  }
+    },
+  },
 })

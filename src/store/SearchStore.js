@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia"
 
-import SearchAPI from '../services/api/SearchAPI'
+import SearchAPI from "../services/api/SearchAPI"
 
 const searchAPI = new SearchAPI()
 const pageSize = 21
 
-export const useSearchStore = defineStore('search', {
+export const useSearchStore = defineStore("search", {
   state: () => ({
     data: {}
   }),
@@ -18,26 +18,21 @@ export const useSearchStore = defineStore('search', {
     },
     pagination: (state) => {
       if (!state.data) return []
-      return [...Array(state.data.totalPages).keys()].map((page) => {
+      return [...Array(state.data.totalPages).keys()].map(page => {
         page += 1
         return {
           label: page,
-          href: '#',
-          title: `Page ${page}`
+          href: "#",
+          title: `Page ${page}`,
         }
       })
-    }
+    },
   },
   actions: {
-    async search(query, page = 1, filter = []) {
-      const args = {
-        hitsPerPage: pageSize,
-        facets: ['organization.name'],
-        page,
-        filter
-      }
+    async search (query, page = 1, filter = []) {
+      const args = { hitsPerPage: pageSize, facets: ["organization.name"], page: page, filter: filter}
       const results = await searchAPI.search(query, args)
       this.data = results
     }
-  }
+  },
 })

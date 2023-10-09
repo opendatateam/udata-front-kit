@@ -6,12 +6,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.json --ignore-path .gitignore",
-    "format": "prettier . --write"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
-    "@vue/eslint-config-standard": "^8.0.1",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.4.0",
     "filesize": "^10.0.7",
@@ -26,18 +25,13 @@
     "vue3-toastify": "^0.1.11"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.22.15",
     "@modyfi/vite-plugin-yaml": "^1.0.4",
-    "@rushstack/eslint-patch": "^1.5.1",
+    "@rushstack/eslint-patch": "^1.2.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/eslint-config-prettier": "^7.1.0",
-    "eslint": "^8.51.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-json": "^3.1.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "prettier": "2.8.8",
-    "prettier-config-standard": "^7.0.0",
+    "eslint": "^8.39.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "prettier": "^2.8.8",
     "sass": "^1.63.6",
     "vite": "^4.3.9"
   }

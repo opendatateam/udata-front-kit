@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useOrganizationStore } from '../../store/OrganizationStore'
-import { useLoading } from 'vue-loading-overlay'
-import Tile from '../../components/Tile.vue'
+import { ref, onMounted } from "vue"
+import { useOrganizationStore } from "../../store/OrganizationStore"
+import { useLoading } from "vue-loading-overlay"
+import Tile from "../../components/Tile.vue"
 
 const store = useOrganizationStore()
 const $loading = useLoading()
@@ -11,7 +11,7 @@ const currentPage = ref(1)
 const pages = store.getPagination()
 const organizations = ref([])
 
-async function onUpdatePage(page) {
+async function onUpdatePage (page) {
   const loader = $loading.show()
   currentPage.value = page + 1
   organizations.value = await store.loadFromConfig(currentPage.value)
@@ -37,10 +37,5 @@ onMounted(() => {
       </li>
     </ul>
   </div>
-  <DsfrPagination
-    v-if="pages.length"
-    :current-page="currentPage - 1"
-    :pages="pages"
-    @update:current-page="onUpdatePage"
-  />
+  <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="onUpdatePage" />
 </template>
