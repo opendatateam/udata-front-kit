@@ -1,11 +1,11 @@
 <script setup>
-import { useRoute } from "vue-router"
-import { computed, onMounted, ref, watchEffect } from "vue"
+import { useRoute } from 'vue-router'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 
-import { useOrganizationStore } from "../../store/OrganizationStore"
-import { useDatasetStore } from "../../store/DatasetStore"
-import { descriptionFromMarkdown } from "../../utils"
-import Tile from "../../components/Tile.vue"
+import { useOrganizationStore } from '../../store/OrganizationStore'
+import { useDatasetStore } from '../../store/DatasetStore'
+import { descriptionFromMarkdown } from '../../utils'
+import Tile from '../../components/Tile.vue'
 
 const route = useRoute()
 const organizationId = route.params.oid
@@ -18,18 +18,18 @@ const org = computed(() => orgStore.get(organizationId) || {})
 const currentPage = ref(1)
 const pages = ref([])
 const datasets = ref({})
-const selectedSort = ref("-created")
+const selectedSort = ref('-created')
 
 onMounted(() => {
   orgStore.load(organizationId)
 })
 
 const sorts = [
-  { value: "-created", text: "Les plus récemment créés" },
-  { value: "title", text: "Titre" },
+  { value: '-created', text: 'Les plus récemment créés' },
+  { value: 'title', text: 'Titre' }
 ]
 
-function doSort (sort) {
+function doSort(sort) {
   currentPage.value = 1
   selectedSort.value = sort
 }
@@ -39,13 +39,15 @@ const description = computed(() => descriptionFromMarkdown(org))
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
   if (!org.value.id) return
-  datasetStore.loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value).then(_datasets => {
+  datasetStore
+    .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
+    .then((_datasets) => {
       datasets.value = _datasets
-      if(!pages.value.length) {
+      if (!pages.value.length) {
         pages.value = datasetStore.getDatasetsPaginationForOrg(org.value.id)
       }
     })
-  })
+})
 </script>
 
 <template>
@@ -55,17 +57,27 @@ watchEffect(() => {
 
     <div class="w-100 fr-grid-row fr-grid-row--middle fr-mt-5v justify-end">
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-        <label for="sort-search" class="fr-col-auto fr-text--sm fr-m-0 fr-mr-1w">
+        <label
+          for="sort-search"
+          class="fr-col-auto fr-text--sm fr-m-0 fr-mr-1w"
+        >
           Trier par :
         </label>
         <div class="fr-col">
-          <DsfrSelect :model-value="selectedSort" @update:modelValue="doSort" :options="sorts" label=""></DsfrSelect>
+          <DsfrSelect
+            :model-value="selectedSort"
+            :options="sorts"
+            label=""
+            @update:modelValue="doSort"
+          ></DsfrSelect>
         </div>
       </div>
     </div>
 
     <h2 class="fr-mt-2w">Jeux de données</h2>
-    <div v-if="!datasets?.data?.length">Pas de jeu de données pour cette organisation.</div>
+    <div v-if="!datasets?.data?.length">
+      Pas de jeu de données pour cette organisation.
+    </div>
     <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li v-for="d in datasets.data" class="fr-col-12 fr-col-lg-4">
         <Tile
@@ -77,5 +89,10 @@ watchEffect(() => {
       </li>
     </ul>
   </div>
-  <DsfrPagination v-if="pages.length" :current-page="currentPage - 1" :pages="pages" @update:current-page="p => currentPage = p + 1" />
+  <DsfrPagination
+    v-if="pages.length"
+    :current-page="currentPage - 1"
+    :pages="pages"
+    @update:current-page="(p) => (currentPage = p + 1)"
+  />
 </template>

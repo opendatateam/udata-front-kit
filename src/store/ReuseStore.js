@@ -1,11 +1,11 @@
-import { defineStore } from "pinia"
-import ReusesAPI from "../services/api/resources/ReusesAPI"
+import { defineStore } from 'pinia'
+import ReusesAPI from '../services/api/resources/ReusesAPI'
 
 const reusesAPI = new ReusesAPI()
 
-export const useReuseStore = defineStore("reuse", {
+export const useReuseStore = defineStore('reuse', {
   state: () => ({
-    data: {},
+    data: {}
   }),
   actions: {
     /**
@@ -14,7 +14,7 @@ export const useReuseStore = defineStore("reuse", {
      * @param {str} dataset_id
      * @returns {Array<object>}
      */
-    getReusesForDataset (dataset_id) {
+    getReusesForDataset(dataset_id) {
       return this.data[dataset_id]
     },
     /**
@@ -24,7 +24,7 @@ export const useReuseStore = defineStore("reuse", {
      * @param {number} page
      * @returns {Array<object>}
      */
-    async loadReusesForDataset (dataset_id) {
+    async loadReusesForDataset(dataset_id) {
       const existing = this.getReusesForDataset(dataset_id)
       if (existing) return existing
       const reuses = await reusesAPI.getReuses(dataset_id)
@@ -37,9 +37,9 @@ export const useReuseStore = defineStore("reuse", {
      * @param {string} dataset_id
      * @param {Array<object>} res
      */
-    addReuses (dataset_id, res) {
+    addReuses(dataset_id, res) {
       if (!res) return
       this.data[dataset_id] = res
-    },
-   },
+    }
+  }
 })
