@@ -15,7 +15,7 @@ export const useBouquetStore = defineStore("bouquet", {
      * @returns {Array}
      */
     filter (bouquets) {
-      return bouquets.filter(bouquet => bouquet.extras.is_ecospheres || bouquet.tags.includes("ecospheres"))
+      return bouquets.filter(bouquet => bouquet.tags.includes("ecospheres"))
     },
     /**
      * Load Ecospheres related bouquets from API
