@@ -5,6 +5,7 @@ import { useBouquetStore } from "../../store/BouquetStore"
 import { useRouter, useRoute } from "vue-router"
 import SearchAPI from "../../services/api/SearchAPI"
 import Multiselect from "@vueform/multiselect"
+import config from "@/config"
 
 const searchAPI = new SearchAPI()
 const datasetStore = useDatasetStore()
@@ -44,10 +45,10 @@ const modalActions = [
 
 const search = async (query) => {
   if (!query) return []
-  const results = await searchAPI._search(query, { hitsPerPage: 10 })
-  return results.hits.map(r => {
+  const results = await searchAPI._search(query, { page_size: 10 })
+  return results.data.map(r => {
     return { value: r.id, label: r.title }
-  }).filter(r => !datasets.value.map(d => d.id).includes(r.value))
+  }).filter(r => !datasets.value.map(d => d.dataset.id).includes(r.value))
 }
 
 const onSubmitModal = async () => {
@@ -67,7 +68,7 @@ const onSubmitModal = async () => {
 
 const onDeleteDataset = (datasetId) => {
   datasets.value = datasets.value.filter(d => d.dataset.id !== datasetId)
-  delete loadedBouquet.value.extras[`ecospheres:${datasetId}:description`]
+  delete loadedBouquet.value.extras[`${config.universe_name}:${datasetId}:description`]
 }
 
 const onEditDataset = (dataset) => {
@@ -81,7 +82,7 @@ const onEditDataset = (dataset) => {
 const extrasFromDatasets = () => {
   const extras = {}
   for (const dataset of datasets.value) {
-    extras[`ecospheres:${dataset.dataset.id}:description`] = dataset.description
+    extras[`${config.universe_name}:${dataset.dataset.id}:description`] = dataset.description
   }
   return extras
 }
@@ -95,7 +96,7 @@ const onSubmit = async () => {
   if (isCreate) {
     res = await bouquetStore.create({
       ...data,
-      tags: ["ecospheres"],
+      tags: [config.universe_name],
       extras: extrasFromDatasets(),
     })
   } else {
@@ -113,7 +114,7 @@ const loadDatasets = async (datasetIds, bouquet) => {
     const dataset = await datasetStore.load(datasetId)
     datasets.value.push({
       dataset,
-      description: bouquet.extras[`ecospheres:${dataset.id}:description`] || "",
+      description: bouquet.extras[`${config.universe_name}:${dataset.id}:description`] || "",
     })
   }
 }

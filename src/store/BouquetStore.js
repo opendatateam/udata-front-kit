@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import TopicsAPI from "../services/api/resources/TopicsAPI"
+import config from "@/config"
 
 const topicsAPI = new TopicsAPI()
 
@@ -15,7 +16,11 @@ export const useBouquetStore = defineStore("bouquet", {
      * @returns {Array}
      */
     filter (bouquets) {
-      return bouquets.filter(bouquet => bouquet.tags.includes("ecospheres"))
+      return bouquets.filter(bouquet => {
+        return bouquet.tags.includes(config.universe_name)
+          && bouquet.id !== config.universe_topic_id
+          && bouquet.slug !== config.universe_topic_id
+      })
     },
     /**
      * Load Ecospheres related bouquets from API
