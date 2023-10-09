@@ -1,21 +1,21 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia"
 
 // FIXME: we cant use UserAPI here (circular dep?)
 // maybe try to use the service that will use the API
 
-const STORAGE_KEY = 'token'
+const STORAGE_KEY = "token"
 
-export const useUserStore = defineStore('user', {
+export const useUserStore = defineStore("user", {
   state: () => ({
     isLoggedIn: false,
     data: {},
-    token: undefined
+    token: undefined,
   }),
   actions: {
     /**
      * Init store from localStorage
      */
-    init() {
+    init () {
       const token = localStorage.getItem(STORAGE_KEY)
       if (token) {
         this.token = token
@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
     /**
      * Store user info after login
      */
-    login(token) {
+    login (token) {
       this.isLoggedIn = true
       this.token = token
       localStorage.setItem(STORAGE_KEY, token)
@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', {
     /**
      * Reflet logged-out state
      */
-    logout() {
+    logout () {
       this.isLoggedIn = false
       this.token = undefined
       this.data = {}
@@ -42,14 +42,14 @@ export const useUserStore = defineStore('user', {
     /**
      * Store user infos
      */
-    storeInfo(data) {
+    storeInfo (data) {
       this.data = data
     },
     /**
      * Is the user logged-in and admin ?
      */
-    isAdmin() {
-      return this.isLoggedIn && this.data?.roles?.includes('admin')
+    isAdmin () {
+      return this.isLoggedIn && this.data?.roles?.includes("admin")
     }
-  }
+  },
 })

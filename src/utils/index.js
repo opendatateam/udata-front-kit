@@ -1,14 +1,14 @@
-import { marked } from 'marked'
-import { stripHtml } from 'string-strip-html'
+import { marked } from "marked"
+import { stripHtml } from "string-strip-html"
 
 /**
  * Parse description from markdown to HTML
  *
  * @param {ref} ref
  */
-export const descriptionFromMarkdown = (ref, attr = 'description') => {
+export const descriptionFromMarkdown = (ref, attr = "description") => {
   if (ref.value?.description) {
-    return marked.parse(ref.value[attr], { mangle: false, headerIds: false })
+    return marked.parse(ref.value[attr], {mangle: false, headerIds: false})
   }
 }
 
@@ -19,6 +19,6 @@ export const descriptionFromMarkdown = (ref, attr = 'description') => {
  * @returns {string}
  */
 export const stripFromMarkdown = (value) => {
-  const html = marked.parse(value, { mangle: false, headerIds: false })
+  const html = marked.parse(value, {mangle: false, headerIds: false})
   return stripHtml(html).result
 }

@@ -7,12 +7,15 @@ import ViteYaml from '@modyfi/vite-plugin-yaml'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), ViteYaml()],
+  plugins: [
+    vue(),
+    ViteYaml(),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@root': resolve(__dirname, './')
+      '@root': resolve(__dirname, './'),
     }
   },
-  base: '/'
+  base: '/',
 })
