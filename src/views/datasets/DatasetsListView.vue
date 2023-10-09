@@ -1,55 +1,55 @@
 <script setup>
-import { computed, ref, watchEffect } from "vue";
-import { useRoute, onBeforeRouteUpdate } from "vue-router";
-import { useSearchStore } from "../../store/SearchStore";
-import Tile from "../../components/Tile.vue";
+import { computed, ref, watchEffect } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { useSearchStore } from '../../store/SearchStore'
+import Tile from '../../components/Tile.vue'
 
-const route = useRoute();
-const store = useSearchStore();
-const query = computed(() => route.query.q);
-const currentPage = ref(1);
-const searchFilter = ref([]);
-const selectedOrg = ref(null);
+const route = useRoute()
+const store = useSearchStore()
+const query = computed(() => route.query.q)
+const currentPage = ref(1)
+const searchFilter = ref([])
+const selectedOrg = ref(null)
 
-const datasets = computed(() => store.datasets);
-const pages = computed(() => store.pagination);
+const datasets = computed(() => store.datasets)
+const pages = computed(() => store.pagination)
 
 const orgFacets = computed(() => {
-  return Object.keys(store.facets["organization.name"] || {})
+  return Object.keys(store.facets['organization.name'] || {})
     .map((k) => {
-      const count = store.facets["organization.name"][k];
+      const count = store.facets['organization.name'][k]
       return {
         text: `${k} (${count})`,
-        value: k,
-      };
+        value: k
+      }
     })
-    .sort((a, b) => a.value - b.value);
-});
+    .sort((a, b) => a.value - b.value)
+})
 
 const filterSearch = (filterKey, filterValue) => {
-  if (!filterValue) return;
-  searchFilter.value = [`${filterKey} = "${filterValue}"`];
-};
+  if (!filterValue) return
+  searchFilter.value = [`${filterKey} = "${filterValue}"`]
+}
 
 const onSelectOrg = (value) => {
-  selectedOrg.value = value;
-  filterSearch("organization.name", value);
-};
+  selectedOrg.value = value
+  filterSearch('organization.name', value)
+}
 
 const resetFilter = () => {
-  searchFilter.value = [];
-  selectedOrg.value = null;
-};
+  searchFilter.value = []
+  selectedOrg.value = null
+}
 
 // reset currentPage when query changes
 onBeforeRouteUpdate((to, from) => {
-  currentPage.value = 1;
-  resetFilter();
-});
+  currentPage.value = 1
+  resetFilter()
+})
 
 watchEffect(() => {
-  store.search(query.value, currentPage.value, searchFilter.value);
-});
+  store.search(query.value, currentPage.value, searchFilter.value)
+})
 </script>
 
 <template>

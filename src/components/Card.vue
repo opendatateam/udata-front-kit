@@ -1,17 +1,17 @@
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps([
-  "title",
-  "description",
-  "img",
-  "link",
-  "altImg",
-  "type",
-  "externalLink",
-]);
+  'title',
+  'description',
+  'img',
+  'link',
+  'altImg',
+  'type',
+  'externalLink'
+])
 
-const typeClass = computed(() => !!props.type && `es-card--${props.type}`);
+const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
 </script>
 
 <template>

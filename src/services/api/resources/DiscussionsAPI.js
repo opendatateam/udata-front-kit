@@ -1,7 +1,7 @@
-import DatagouvfrAPI from "../DatagouvfrAPI";
+import DatagouvfrAPI from '../DatagouvfrAPI'
 
 export default class DiscussionsAPI extends DatagouvfrAPI {
-  endpoint = "discussions";
+  endpoint = 'discussions'
 
   /**
    * Get discussions for a dataset
@@ -11,7 +11,7 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
    * @returns {object}
    */
   async getDiscussions(dataset_id, page = 1) {
-    const url = `${this.url()}/?for=${dataset_id}&page=${page}`;
-    return await this.makeRequestAndHandleResponse(url);
+    const url = `${this.url()}/?for=${dataset_id}&page=${page}`
+    return await this.makeRequestAndHandleResponse(url)
   }
 }

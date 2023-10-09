@@ -1,26 +1,26 @@
 <script setup>
-import { onMounted, computed } from "vue";
-import { useRouter } from "vue-router";
-import { useBouquetStore } from "../../store/BouquetStore";
-import { useUserStore } from "../../store/UserStore";
-import { useLoading } from "vue-loading-overlay";
-import Tile from "../../components/Tile.vue";
+import { onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useBouquetStore } from '../../store/BouquetStore'
+import { useUserStore } from '../../store/UserStore'
+import { useLoading } from 'vue-loading-overlay'
+import Tile from '../../components/Tile.vue'
 
-const store = useBouquetStore();
-const userStore = useUserStore();
-const $loading = useLoading();
-const router = useRouter();
+const store = useBouquetStore()
+const userStore = useUserStore()
+const $loading = useLoading()
+const router = useRouter()
 
-const bouquets = computed(() => store.$state.data);
+const bouquets = computed(() => store.$state.data)
 
 const goToCreate = () => {
-  router.push({ name: "bouquet_add" });
-};
+  router.push({ name: 'bouquet_add' })
+}
 
 onMounted(() => {
-  const loader = $loading.show();
-  store.loadBouquets().finally(() => loader.hide());
-});
+  const loader = $loading.show()
+  store.loadBouquets().finally(() => loader.hide())
+})
 </script>
 
 <template>

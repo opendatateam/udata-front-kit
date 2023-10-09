@@ -1,25 +1,25 @@
-import axios from "axios";
-import config from "@/config";
-import { toast } from "vue3-toastify";
-import { useLoading } from "vue-loading-overlay";
-import { useUserStore } from "../../store/UserStore";
+import axios from 'axios'
+import config from '@/config'
+import { toast } from 'vue3-toastify'
+import { useLoading } from 'vue-loading-overlay'
+import { useUserStore } from '../../store/UserStore'
 
-const $loading = useLoading();
-const instance = axios.create();
+const $loading = useLoading()
+const instance = axios.create()
 
 // inject token in requests if user is loggedIn
 instance.interceptors.request.use(
   (config) => {
-    const store = useUserStore();
+    const store = useUserStore()
     if (store.$state.isLoggedIn) {
       config.headers = {
-        Authorization: `Bearer ${store.$state.token}`,
-      };
+        Authorization: `Bearer ${store.$state.token}`
+      }
     }
-    return config;
+    return config
   },
   (error) => Promise.reject(error)
-);
+)
 
 /**
  * A composable wrapper around data.gouv.fr's API
@@ -30,12 +30,12 @@ instance.interceptors.request.use(
  * e.g. OrganizationsAPI will declare `endpoint = organizations`.
  */
 export default class DatagouvfrAPI {
-  base_url = `${config.datagouvfr_base_url}/api`;
-  version = "1";
-  endpoint = "";
+  base_url = `${config.datagouvfr_base_url}/api`
+  version = '1'
+  endpoint = ''
 
   url() {
-    return `${this.base_url}/${this.version}/${this.endpoint}`;
+    return `${this.base_url}/${this.version}/${this.endpoint}`
   }
 
   /**
@@ -46,9 +46,9 @@ export default class DatagouvfrAPI {
    * @param {object} params
    * @returns
    */
-  async request(url, method = "get", params = {}) {
-    const res = await instance[method](url, params);
-    return res.data;
+  async request(url, method = 'get', params = {}) {
+    const res = await instance[method](url, params)
+    return res.data
   }
 
   /**
@@ -59,16 +59,16 @@ export default class DatagouvfrAPI {
    * @param {object} params
    * @returns {Promise}
    */
-  async makeRequestAndHandleResponse(url, method = "get", params = {}) {
-    const loader = $loading.show();
+  async makeRequestAndHandleResponse(url, method = 'get', params = {}) {
+    const loader = $loading.show()
     return this.request(url, method, params)
       .catch((error) => {
-        console.error(error);
+        console.error(error)
         if (error && error.message) {
-          toast(error.message, { type: "error", autoClose: false });
+          toast(error.message, { type: 'error', autoClose: false })
         }
       })
-      .finally(() => loader.hide());
+      .finally(() => loader.hide())
   }
 
   /**
@@ -78,8 +78,8 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async get(entity_id) {
-    const url = `${this.url()}/${entity_id}/`;
-    return await this.makeRequestAndHandleResponse(url);
+    const url = `${this.url()}/${entity_id}/`
+    return await this.makeRequestAndHandleResponse(url)
   }
 
   /**
@@ -89,8 +89,8 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async _get(entity_id) {
-    const url = `${this.url()}/${entity_id}/`;
-    return await this.request(url);
+    const url = `${this.url()}/${entity_id}/`
+    return await this.request(url)
   }
 
   /**
@@ -99,7 +99,7 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async list() {
-    return await this.makeRequestAndHandleResponse(`${this.url()}/`);
+    return await this.makeRequestAndHandleResponse(`${this.url()}/`)
   }
 
   /**
@@ -108,7 +108,7 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async _list() {
-    return await this.request(`${this.url()}/`);
+    return await this.request(`${this.url()}/`)
   }
 
   /**
@@ -120,9 +120,9 @@ export default class DatagouvfrAPI {
   async create(data) {
     return await this.makeRequestAndHandleResponse(
       `${this.url()}/`,
-      "post",
+      'post',
       data
-    );
+    )
   }
 
   /**
@@ -135,8 +135,8 @@ export default class DatagouvfrAPI {
   async update(entity_id, data) {
     return await this.makeRequestAndHandleResponse(
       `${this.url()}/${entity_id}/`,
-      "put",
+      'put',
       data
-    );
+    )
   }
 }

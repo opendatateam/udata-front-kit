@@ -1,7 +1,7 @@
-import DatagouvfrAPI from "../DatagouvfrAPI";
+import DatagouvfrAPI from '../DatagouvfrAPI'
 
 export default class ReusesAPI extends DatagouvfrAPI {
-  endpoint = "reuses";
+  endpoint = 'reuses'
 
   /**
    * Get reuses for a dataset
@@ -10,7 +10,7 @@ export default class ReusesAPI extends DatagouvfrAPI {
    * @returns {object}
    */
   async getReuses(dataset_id) {
-    const url = `${this.url()}/?dataset=${dataset_id}`;
-    return await this.makeRequestAndHandleResponse(url);
+    const url = `${this.url()}/?dataset=${dataset_id}`
+    return await this.makeRequestAndHandleResponse(url)
   }
 }

@@ -1,24 +1,24 @@
 <script setup>
-import { computed } from "vue";
-import { stripFromMarkdown } from "../utils";
+import { computed } from 'vue'
+import { stripFromMarkdown } from '../utils'
 
 const props = defineProps([
-  "title",
-  "description",
-  "img",
-  "link",
-  "type",
-  "externalLink",
-  "isMarkdown",
-]);
+  'title',
+  'description',
+  'img',
+  'link',
+  'type',
+  'externalLink',
+  'isMarkdown'
+])
 
-const typeClass = computed(() => !!props.type && `es-card--${props.type}`);
+const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
 
 function strip(value) {
   if (props.isMarkdown) {
-    return stripFromMarkdown(value);
+    return stripFromMarkdown(value)
   }
-  return value;
+  return value
 }
 </script>
 

@@ -1,17 +1,17 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
-const query = ref("");
+const router = useRouter()
+const query = ref('')
 
 // TODO: mutualize w/ App.vue
 const updateQuery = (q) => {
-  query.value = q;
-};
+  query.value = q
+}
 const doSearch = () => {
-  router.push({ name: "datasets", query: { q: query.value } });
-};
+  router.push({ name: 'datasets', query: { q: query.value } })
+}
 </script>
 
 <template>

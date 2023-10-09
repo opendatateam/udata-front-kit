@@ -1,11 +1,11 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 
-import OrganizationsAPI from "../services/api/resources/OrganizationsAPI";
-import config from "@/config.js";
+import OrganizationsAPI from '../services/api/resources/OrganizationsAPI'
+import config from '@/config.js'
 
-const orgApi = new OrganizationsAPI();
+const orgApi = new OrganizationsAPI()
 
-export const useOrganizationStore = defineStore("organization", {
+export const useOrganizationStore = defineStore('organization', {
   state: () => ({
     // holds a paginated list of orgs
     // [
@@ -14,7 +14,7 @@ export const useOrganizationStore = defineStore("organization", {
     //     "orgs": []
     //   }, ...
     // ]
-    data: [],
+    data: []
   }),
   actions: {
     /**
@@ -23,17 +23,17 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     getPagination() {
-      const pageSize = config.organizations_list_page_size;
-      const total = config.organizations.length;
-      const nbPages = Math.ceil(total / pageSize);
+      const pageSize = config.organizations_list_page_size
+      const total = config.organizations.length
+      const nbPages = Math.ceil(total / pageSize)
       return [...Array(nbPages).keys()].map((page) => {
-        page += 1;
+        page += 1
         return {
           label: page,
-          href: "#",
-          title: `Page ${page}`,
-        };
-      });
+          href: '#',
+          title: `Page ${page}`
+        }
+      })
     },
     /**
      * Get orgs list for a given page from store
@@ -42,7 +42,7 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     getForPage(page = 1) {
-      return this.data.find((d) => d.page == page)?.orgs || [];
+      return this.data.find((d) => d.page == page)?.orgs || []
     },
     /**
      * Async function to trigger API fetch of orgs list for a page, using the config
@@ -52,13 +52,13 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     async loadFromConfig(page = 1) {
-      const pageSize = config.organizations_list_page_size;
+      const pageSize = config.organizations_list_page_size
       const paginated = config.organizations.slice(
         pageSize * (page - 1),
         pageSize * page
-      );
-      await this.loadMultiple(paginated, page);
-      return this.getForPage(page);
+      )
+      await this.loadMultiple(paginated, page)
+      return this.getForPage(page)
     },
     /**
      * Load multiple organisations to store
@@ -69,13 +69,13 @@ export const useOrganizationStore = defineStore("organization", {
      */
     async loadMultiple(org_ids, page) {
       for (const org_id of org_ids) {
-        const existing = this.get(org_id);
-        if (existing) continue;
+        const existing = this.get(org_id)
+        if (existing) continue
         try {
-          const org = await orgApi._get(org_id);
-          this.add(org, page);
+          const org = await orgApi._get(org_id)
+          this.add(org, page)
         } catch (e) {
-          console.log(`Error fetching ${org_id}: ${e}`);
+          console.log(`Error fetching ${org_id}: ${e}`)
         }
       }
     },
@@ -87,13 +87,13 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {object}
      */
     add(org, page) {
-      const existing = this.data.find((d) => d.page == page);
+      const existing = this.data.find((d) => d.page == page)
       if (existing) {
-        existing.orgs.push(org);
+        existing.orgs.push(org)
       } else {
-        this.data.push({ page, orgs: [org] });
+        this.data.push({ page, orgs: [org] })
       }
-      return org;
+      return org
     },
     /**
      * Get an org from store given its id
@@ -105,7 +105,7 @@ export const useOrganizationStore = defineStore("organization", {
       return this.data
         .map((d) => d.orgs)
         .flat()
-        .find((o) => o.id === org_id || o.slug === org_id);
+        .find((o) => o.id === org_id || o.slug === org_id)
     },
     /**
      * Async function to trigger API fetch of an org if not known in store
@@ -115,10 +115,10 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {object|undefined}
      */
     async load(org_id, page) {
-      const existing = this.get(org_id);
-      if (existing) return existing;
-      const org = await orgApi.get(org_id);
-      return this.add(org, page);
-    },
-  },
-});
+      const existing = this.get(org_id)
+      if (existing) return existing
+      const org = await orgApi.get(org_id)
+      return this.add(org, page)
+    }
+  }
+})

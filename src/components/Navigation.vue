@@ -1,26 +1,26 @@
 <script setup>
 const navItems = [
   {
-    to: "/",
-    text: "Accueil",
+    to: '/',
+    text: 'Accueil'
   },
   {
-    to: "/datasets",
-    text: "Jeux de données",
+    to: '/datasets',
+    text: 'Jeux de données'
   },
   {
-    to: "/organizations",
-    text: "Organisations",
+    to: '/organizations',
+    text: 'Organisations'
   },
   {
-    to: "/bouquets",
-    text: "Bouquets",
+    to: '/bouquets',
+    text: 'Bouquets'
   },
   {
-    to: "/about",
-    text: "À propos",
-  },
-];
+    to: '/about',
+    text: 'À propos'
+  }
+]
 </script>
 
 <template>

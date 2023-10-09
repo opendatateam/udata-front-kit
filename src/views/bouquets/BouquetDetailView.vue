@@ -1,35 +1,35 @@
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { onMounted, ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-import { useBouquetStore } from "../../store/BouquetStore";
-import { useDatasetStore } from "../../store/DatasetStore";
-import { useUserStore } from "../../store/UserStore";
-import { descriptionFromMarkdown } from "../../utils";
-import Tile from "../../components/Tile.vue";
+import { useBouquetStore } from '../../store/BouquetStore'
+import { useDatasetStore } from '../../store/DatasetStore'
+import { useUserStore } from '../../store/UserStore'
+import { descriptionFromMarkdown } from '../../utils'
+import Tile from '../../components/Tile.vue'
 
-const route = useRoute();
-const router = useRouter();
-const store = useBouquetStore();
-const userStore = useUserStore();
-const datasetStore = useDatasetStore();
-const bouquet = ref({});
-const datasets = ref([]);
+const route = useRoute()
+const router = useRouter()
+const store = useBouquetStore()
+const userStore = useUserStore()
+const datasetStore = useDatasetStore()
+const bouquet = ref({})
+const datasets = ref([])
 
-const description = computed(() => descriptionFromMarkdown(bouquet));
+const description = computed(() => descriptionFromMarkdown(bouquet))
 
 const goToEdit = () => {
-  router.push({ name: "bouquet_edit", params: { bid: bouquet.value.slug } });
-};
+  router.push({ name: 'bouquet_edit', params: { bid: bouquet.value.slug } })
+}
 
 onMounted(() => {
   store.load(route.params.bid).then((res) => {
-    bouquet.value = res;
+    bouquet.value = res
     datasetStore
       .loadMultiple(bouquet.value.datasets.map((d) => d.id))
-      .then((ds) => (datasets.value = ds));
-  });
-});
+      .then((ds) => (datasets.value = ds))
+  })
+})
 </script>
 
 <template>

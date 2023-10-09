@@ -1,90 +1,90 @@
 <script setup>
-import { filesize } from "filesize";
+import { filesize } from 'filesize'
 
-import { computed, onMounted, ref, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { computed, onMounted, ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
 
-import { useDatasetStore } from "../../store/DatasetStore";
-import { useReuseStore } from "../../store/ReuseStore";
-import { useDiscussionStore } from "../../store/DiscussionStore";
-import { descriptionFromMarkdown } from "../../utils";
-import Tile from "../../components/Tile.vue";
+import { useDatasetStore } from '../../store/DatasetStore'
+import { useReuseStore } from '../../store/ReuseStore'
+import { useDiscussionStore } from '../../store/DiscussionStore'
+import { descriptionFromMarkdown } from '../../utils'
+import Tile from '../../components/Tile.vue'
 
-const route = useRoute();
-const datasetId = route.params.did;
+const route = useRoute()
+const datasetId = route.params.did
 
-const datasetStore = useDatasetStore();
-const reuseStore = useReuseStore();
-const discussionStore = useDiscussionStore();
+const datasetStore = useDatasetStore()
+const reuseStore = useReuseStore()
+const discussionStore = useDiscussionStore()
 
-const dataset = computed(() => datasetStore.get(datasetId) || {});
-const discussionsPages = ref([]);
-const reuses = ref([]);
-const discussions = ref({});
-const discussionsPage = ref(1);
-const expandedDiscussion = ref(null);
-const selectedTabIndex = ref(0);
+const dataset = computed(() => datasetStore.get(datasetId) || {})
+const discussionsPages = ref([])
+const reuses = ref([])
+const discussions = ref({})
+const discussionsPage = ref(1)
+const expandedDiscussion = ref(null)
+const selectedTabIndex = ref(0)
 
 onMounted(() => {
-  datasetStore.load(datasetId);
-});
+  datasetStore.load(datasetId)
+})
 
 const formatFileSize = (fileSize) => {
-  if (!fileSize) return "Taille inconnue";
-  return filesize(fileSize);
-};
+  if (!fileSize) return 'Taille inconnue'
+  return filesize(fileSize)
+}
 
 const files = computed(() => {
   return dataset.value?.resources?.map((resource) => {
     return {
-      title: resource.title || "Fichier sans nom",
+      title: resource.title || 'Fichier sans nom',
       format: resource.format,
       size: formatFileSize(
         resource.filesize ||
-          resource.extras["check:headers:content-length"] ||
-          resource.extras["analysis:content-length"]
+          resource.extras['check:headers:content-length'] ||
+          resource.extras['analysis:content-length']
       ),
-      href: resource.url,
-    };
-  });
-});
+      href: resource.url
+    }
+  })
+})
 
 const tabs = computed(() => {
   return [
-    { title: "Fichiers", tabId: "tab-0", panelId: "tab-content-0" },
-    { title: "Réutilisations", tabId: "tab-1", panelId: "tab-content-1" },
-    { title: "Discussions", tabId: "tab-2", panelId: "tab-content-2" },
-    { title: "Qualité", tabId: "tab-3", panelId: "tab-content-3" },
-    { title: "Métadonnées", tabId: "tab-4", panelId: "tab-content-4" },
-  ];
-});
+    { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
+    { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
+    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
+    { title: 'Qualité', tabId: 'tab-3', panelId: 'tab-content-3' },
+    { title: 'Métadonnées', tabId: 'tab-4', panelId: 'tab-content-4' }
+  ]
+})
 
-const description = computed(() => descriptionFromMarkdown(dataset));
+const description = computed(() => descriptionFromMarkdown(dataset))
 
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat("default", {
-    dateStyle: "full",
-    timeStyle: "short",
-  }).format(date);
-};
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('default', {
+    dateStyle: 'full',
+    timeStyle: 'short'
+  }).format(date)
+}
 
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(() => {
-  if (!dataset.value.id) return;
+  if (!dataset.value.id) return
   reuseStore
     .loadReusesForDataset(dataset.value.id)
-    .then((r) => (reuses.value = r));
+    .then((r) => (reuses.value = r))
   discussionStore
     .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
     .then((d) => {
-      discussions.value = d;
+      discussions.value = d
       if (!discussionsPage.value.length) {
         discussionsPages.value =
-          discussionStore.getDiscussionsPaginationForDataset(dataset.value.id);
+          discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
       }
-    });
-});
+    })
+})
 </script>
 
 <template>

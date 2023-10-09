@@ -1,53 +1,53 @@
 <script setup>
-import { useRoute } from "vue-router";
-import { computed, onMounted, ref, watchEffect } from "vue";
+import { useRoute } from 'vue-router'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 
-import { useOrganizationStore } from "../../store/OrganizationStore";
-import { useDatasetStore } from "../../store/DatasetStore";
-import { descriptionFromMarkdown } from "../../utils";
-import Tile from "../../components/Tile.vue";
+import { useOrganizationStore } from '../../store/OrganizationStore'
+import { useDatasetStore } from '../../store/DatasetStore'
+import { descriptionFromMarkdown } from '../../utils'
+import Tile from '../../components/Tile.vue'
 
-const route = useRoute();
-const organizationId = route.params.oid;
+const route = useRoute()
+const organizationId = route.params.oid
 
-const orgStore = useOrganizationStore();
-const datasetStore = useDatasetStore();
+const orgStore = useOrganizationStore()
+const datasetStore = useDatasetStore()
 
-const org = computed(() => orgStore.get(organizationId) || {});
+const org = computed(() => orgStore.get(organizationId) || {})
 
-const currentPage = ref(1);
-const pages = ref([]);
-const datasets = ref({});
-const selectedSort = ref("-created");
+const currentPage = ref(1)
+const pages = ref([])
+const datasets = ref({})
+const selectedSort = ref('-created')
 
 onMounted(() => {
-  orgStore.load(organizationId);
-});
+  orgStore.load(organizationId)
+})
 
 const sorts = [
-  { value: "-created", text: "Les plus récemment créés" },
-  { value: "title", text: "Titre" },
-];
+  { value: '-created', text: 'Les plus récemment créés' },
+  { value: 'title', text: 'Titre' }
+]
 
 function doSort(sort) {
-  currentPage.value = 1;
-  selectedSort.value = sort;
+  currentPage.value = 1
+  selectedSort.value = sort
 }
 
-const description = computed(() => descriptionFromMarkdown(org));
+const description = computed(() => descriptionFromMarkdown(org))
 
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
-  if (!org.value.id) return;
+  if (!org.value.id) return
   datasetStore
     .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
     .then((_datasets) => {
-      datasets.value = _datasets;
+      datasets.value = _datasets
       if (!pages.value.length) {
-        pages.value = datasetStore.getDatasetsPaginationForOrg(org.value.id);
+        pages.value = datasetStore.getDatasetsPaginationForOrg(org.value.id)
       }
-    });
-});
+    })
+})
 </script>
 
 <template>
