@@ -6,6 +6,7 @@ import { useBouquetStore } from "../../store/BouquetStore"
 import { useDatasetStore } from "../../store/DatasetStore"
 import { useUserStore } from "../../store/UserStore"
 import { descriptionFromMarkdown } from "../../utils"
+import config from "@/config"
 import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
@@ -47,7 +48,7 @@ onMounted(() => {
           :description="d.description"
           :img="d.organization.logo"
           :is-markdown="true"
-          :notice="bouquet.extras[`ecospheres:${d.id}:description`]"
+          :notice="bouquet.extras[`${config.universe_name}:${d.id}:description`]"
         />
       </li>
     </ul>

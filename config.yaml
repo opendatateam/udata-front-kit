@@ -3,6 +3,12 @@
 # data.gouv.fr base URL
 datagouvfr_base_url: https://demo.data.gouv.fr
 
+# "universe" topic id
+universe_topic_id: 65141cd780d73f98142e9265
+
+# universe name, used as bouquets tag
+universe_name: ecospheres
+
 # oauth settings
 datagouvfr_oauth_client_id: 651479c317ad47b21e41a9d4
 # pkce client secret, explicitely public
