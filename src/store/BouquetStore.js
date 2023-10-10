@@ -29,12 +29,15 @@ export const useBouquetStore = defineStore("bouquet", {
      */
     async loadBouquets () {
       if (this.data.length > 0) return this.data
-      let response = await topicsAPI._list()
-      this.data = this.filter(response.data)
+      const headers = {"X-Fields": "data{id,slug,tags},next_page"}
+      let response = await topicsAPI._list(headers)
+      let bouquets = this.filter(response.data)
+      // FIXME: Should this logic be included in `_list`? Maybe with an optional `paginate` param?
       while (response.next_page) {
-        response = await topicsAPI.request(response.next_page)
-        this.data = [...this.data, ...this.filter(response.data)]
+        response = await topicsAPI.request(response.next_page, "get", {"headers": headers})
+        bouquets = [...bouquets, ...this.filter(response.data)]
       }
+      this.data = await Promise.all(bouquets.map(b => topicsAPI._get(b.id)))
       return this.data
     },
     /**

@@ -11,9 +11,7 @@ const instance = axios.create()
 instance.interceptors.request.use(config => {
   const store = useUserStore()
   if (store.$state.isLoggedIn) {
-    config.headers = {
-      Authorization: `Bearer ${store.$state.token}`
-    }
+    config.headers.Authorization = `Bearer ${store.$state.token}`
   }
   return config
 }, error => Promise.reject(error))
@@ -45,6 +43,7 @@ export default class DatagouvfrAPI {
    * @returns
    */
   async request (url, method = "get", params = {}) {
+    // FIXME: instance[method] params differ depending on method
     const res = await instance[method](url, params)
     return res.data
   }
@@ -103,8 +102,8 @@ export default class DatagouvfrAPI {
    *
    * @returns {Promise}
    */
-  async _list () {
-    return await this.request(`${this.url()}/`)
+  async _list (headers = {}) {
+    return await this.request(`${this.url()}/`, "get", {"headers": headers})
   }
 
   /**
