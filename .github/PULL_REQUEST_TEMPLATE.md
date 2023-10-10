@@ -23,24 +23,26 @@ _Write here._
 
 _Write here. Add UI/UX elements if you have them._
 
+### Here is the changelog
+
+_Select one or more of the following._
+
 #### Breaking changes
 
-- Deprecate `some_function`.
-  - The functionality is now provided by…
+- _Some change that is not backward compatible 🎖._
 
 #### New features
 
-- In _some module_:
-  - Remove…
+- _Some new feature 🤟._
 
 #### Technical changes
 
-- Rename `private_function`.
+- _Any other technical change (bug fixing, refactoring...) 🛠._
 
 #### Non-technical changes
 
-- Updated `README.md`
+- _Any other non-technical change (documentation, tests, types...) 📖._
 
-### Here are some additional elements of my proposal
+### Here are some additional elements of these changeset
 
 _Optional._
