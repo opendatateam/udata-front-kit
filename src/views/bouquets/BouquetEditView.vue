@@ -45,7 +45,7 @@ const modalActions = [
 
 const search = async (query) => {
   if (!query) return []
-  const results = await searchAPI._search(query, { page_size: 10 })
+  const results = await searchAPI._search(query, config.universe_topic_id, 1, { page_size: 10 })
   return results.data.map(r => {
     return { value: r.id, label: r.title }
   }).filter(r => !datasets.value.map(d => d.dataset.id).includes(r.value))

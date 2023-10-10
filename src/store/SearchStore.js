@@ -17,9 +17,9 @@ export const useSearchStore = defineStore("search", {
       return state.data.data || []
     },
     pagination: (state) => {
-      if (!state.data.total) return []
-      const totalPages = Math.ceil(state.data.total / pageSize)
-      return [...Array(totalPages).keys()].map(page => {
+      if (!state.data) return []
+      if (!state.data.total && !state.data.page_size) return []
+      return [...Array(Math.round((state.data.total / state.data.page_size))).keys()].map(page => {
         page += 1
         return {
           label: page,
@@ -30,9 +30,9 @@ export const useSearchStore = defineStore("search", {
     },
   },
   actions: {
-    async search (query, page = 1) {
-      const args = { page_size: pageSize, page }
-      const results = await searchAPI.search(query, args)
+    async search(query, topic, page = 1, filter = []) {
+      const args = { page_size: pageSize, page: page, filter: filter }
+      const results = await searchAPI.search(query, topic, page, args)
       this.data = results
     }
   },

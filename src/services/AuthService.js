@@ -49,8 +49,8 @@ export default class AuthService {
   }
 
   createBasicAuthHeader() {
-    const headerStr = btoa(`${this.clientId}:${this.clientSecret}`);
-    return { Authorization: `Basic ${headerStr}` };
+    const headerStr = btoa(`${this.clientId}:${this.clientSecret}`)
+    return { Authorization: `Basic ${headerStr}` }
   }
 
   /**
@@ -112,8 +112,8 @@ export default class AuthService {
   }
 
   sha256 (plain) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(plain);
+    const encoder = new TextEncoder()
+    const data = encoder.encode(plain)
     return window.crypto.subtle.digest("SHA-256", data)
   }
 
@@ -123,8 +123,8 @@ export default class AuthService {
   }
 
   async pkceChallengeFromVerifier(v) {
-    const hashed = await this.sha256(v);
-    return this.base64urlencode(hashed);
+    const hashed = await this.sha256(v)
+    return this.base64urlencode(hashed)
   }
 
   /*

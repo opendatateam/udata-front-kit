@@ -12,18 +12,19 @@ export default class SearchAPI extends DatagouvfrAPI{
   version = "2"
   endpoint = "datasets/search"
 
-  _search(query, args) {
+  _search(query, topic, page, args) {
     args = args || {}
-    args.topic = args.topic || config.universe_topic_id
+    args.topic = topic || config.universe_topic_id
+    args.page = page || 1
     args.q = query || ""
     const qs = new URLSearchParams(args).toString()
     const url = `${this.url()}/?${qs}`
     return this.request(url)
   }
 
-  search (query, args) {
+  search (query, topic, page, args) {
     const loader = $loading.show()
-    return this._search(query, args).catch(err => {
+    return this._search(query, topic, page, args).catch(err => {
       toast(err.message, {type: "error", autoClose: false})
     }).finally(() => loader.hide())
   }

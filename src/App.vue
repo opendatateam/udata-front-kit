@@ -4,6 +4,7 @@ import { RouterView, useRouter } from "vue-router"
 import { useUserStore } from "./store/UserStore"
 import UserAPI from "./services/api/resources/UserAPI"
 import Navigation from "./components/Navigation.vue"
+import config from "@/config"
 
 const router = useRouter()
 const query = ref("")
@@ -13,14 +14,18 @@ const store = useUserStore()
 const isLoggedIn = computed(() => store.$state.isLoggedIn)
 
 const quickLinks = computed(() => {
-  return [
-    {
-      label: isLoggedIn.value ? `${store.$state.data.first_name} ${store.$state.data.last_name}` : "Se connecter",
-      icon: isLoggedIn.value ? "ri-logout-box-r-line" : "ri-account-circle-line",
-      to: isLoggedIn.value ? "/logout" : "/login",
-      iconRight: isLoggedIn.value,
-    }
-  ]
+  if(config.website__oauth_option) {
+    return [
+      {
+        label: isLoggedIn.value ? `${store.$state.data.first_name} ${store.$state.data.last_name}` : "Se connecter",
+        icon: isLoggedIn.value ? "ri-logout-box-r-line" : "ri-account-circle-line",
+        to: isLoggedIn.value ? "/logout" : "/login",
+        iconRight: isLoggedIn.value,
+      }
+    ]
+  } else {
+    return
+  }
 })
 
 const updateQuery = (q) => {
@@ -28,7 +33,8 @@ const updateQuery = (q) => {
 }
 
 const doSearch = () => {
-  router.push({name: "datasets", query: {q: query.value}})
+  console.log(query.value)
+  router.push({path: "/datasets", query: {q: query.value}})
 }
 
 // protect authenticated routes
@@ -56,22 +62,25 @@ onMounted(() => {
     })
   }
 })
+
+const logotext = ref(config.website__rf_title)
+const servicetitle = ref(config.website__title)
+const logoOperator = ref(config.website__logo_operator)
+
 </script>
 
 <template>
   <DsfrHeader
-    service-title="Ecosphères"
+    :service-title="servicetitle"
     service-description=""
     home-to="/"
     :quick-links="quickLinks"
     :show-search="true"
     @search="doSearch"
     @update:modelValue="updateQuery"
-    logo-text="MINISTÈRES<br>
-      TRANSITION ÉCOLOGIQUE<br>
-      COHÉSION DES TERRITOIRES<br>
-      TRANSITION ÉNERGÉTIQUE<br>
-      MER"
+    :logo-text="logotext"
+    :operatorImgSrc="logoOperator"
+    :operatorImgStyle="{ height: '60px' }"
   />
 
   <div class="fr-header__body">
