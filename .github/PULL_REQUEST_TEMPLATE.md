@@ -23,7 +23,7 @@ _Write here._
 
 _Write here. Add UI/UX elements if you have them._
 
-### Here is the changelog
+### Here's what changes
 
 _Select one or more of the following._
 
