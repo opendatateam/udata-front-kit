@@ -1,32 +1,51 @@
 Hi there!
 
-I really enjoy Ecosphères, but I _want to propose a feature / recently encountered an issue_.
+I really enjoy Écosphères, _and I want to propose a feature / but I recently
+encountered an issue_.
 
 _If feature_
 
-### Here is the user or job story
+### Here's the job story
 
-> User: _kind of user_.
+> Title : _title_
+> User: _user_
 >
 > When I _situation_,
 > I want to _motivation_,
-> so I can _expected outcome_.
+> so to _expected outcome_.
 
 ### Here is the context or situation
 
-_Write here._
+When I _do this_, I expect _that_ to happen.
 
 ### Here is the problem encountered by users
 
-_Write here._
+It doesn't.
 
 ### Here is a proposal of how to solve the problem
 
-_Write here. Add UI/UX elements if you have them._
+> I see _this_,
+> And I do _that_,
+> And then _something_ happens.
+
+_Add image here if you have one._
 
 ### Here are some additional elements of my proposal
 
-_Optional._
+> Some
+
+> Additional
+
+> Likely scenarios
+
+### Here's the definition of done
+
+- A deployed preview app where to test the aforesaid
+- A test suite covering the aforesaid
+
+### Here's the related OKR
+
+TODO.
 
 ---
 
