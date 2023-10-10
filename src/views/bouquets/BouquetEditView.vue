@@ -22,6 +22,9 @@ const selector = ref(null)
 const loadedBouquet = ref({})
 const isModalOpen = ref(false)
 const isEditDesc = ref(false)
+const showObjectif = ref()
+const showHowto = ref()
+const isFormValidated = ref(false);
 
 const modalActions = [
   {
@@ -93,12 +96,14 @@ const onSubmit = async () => {
     ...form.value,
     datasets: datasets.value.map(d => d.dataset.id),
   }
+
   if (isCreate) {
     res = await bouquetStore.create({
       ...data,
       tags: [config.universe_name],
       extras: extrasFromDatasets(),
     })
+    
   } else {
     res = await bouquetStore.update(loadedBouquet.value.id, {
       ...data,
@@ -106,7 +111,11 @@ const onSubmit = async () => {
       extras: { ...loadedBouquet.value.extras, ...extrasFromDatasets()},
     })
   }
-  router.push({ name: "bouquet_detail", params: { bid: res.slug } })
+  
+  isFormValidated.value = true;
+  setTimeout(() => {
+    router.push({ name: "bouquet_detail", params: { bid: res.slug } })
+  }, 1000)
 }
 
 const loadDatasets = async (datasetIds, bouquet) => {
@@ -132,28 +141,99 @@ onMounted(() => {
 </script>
 
 <template>
+  <component :is="'style'">
+    .required { color: red; } .container { display: grid; grid-template-columns:
+    1fr auto; position: relative; } .hint-on-demand { background-color: var(--grey-1000-50);
+    position: absolute; right: 0; transform: translateY(1.5rem); opacity: 0;
+    transition: opacity 0.3s ease-in-out; } .hint-on-demand.showObjectif, .hint-on-demand.showHowto { opacity: 1;
+    transition: opacity 0.3s ease-in-out; }
+  </component>
+
   <div class="fr-container fr-mt-4w fr-mb-4w">
-    <h1 v-if="isCreate">Ajouter un bouquet</h1>
+    <h1 v-if="isCreate">Description du bouquet de données</h1>
     <h1 v-else>Modifier le bouquet {{ loadedBouquet.name }}</h1>
+    <div style="margin: 1rem 0;">
+      <DsfrAlert
+        v-if="isFormValidated"
+        type="success"
+        title="Bouquet crée"
+        description="Votre bouquet a bien été crée."
+      />
+    </div>
+
     <form @submit.prevent="onSubmit()">
       <DsfrInput
+        label-class="container"
         class="fr-mt-1w fr-mb-2w"
         v-model="form.name"
-        label="Nom du bouquet"
-        type="text"
+        :is-textarea="true"
+        label="Objectif du bouquet *"
         placeholder="Mon bouquet"
         :label-visible="true"
         :required="true"
-      />
+      >
+        <template v-slot:label>
+          <div>
+            Objectif du bouquet
+            <span class="required">&nbsp;*</span>
+          </div>
+          <button
+            @mouseover="showObjectif = true"
+            @mouseout="showObjectif = false"
+            @click="showObjectif = !showObjectif"
+            @blur="showObjectif = false"
+          >
+            <VIcon
+              name="ri-question-fill"
+              color="var(--blue-france-sun-113-625)"
+              style="pointer-events: none;"
+            />
+          </button>
+          <DsfrAlert
+            type="info"
+            class="hint-on-demand"
+            :class="{showObjectif: showObjectif}"
+            description="Indice au survol er"
+          />
+        </template>
+      </DsfrInput>
+    
       <DsfrInput
+        label-class="container"
         class="fr-mt-1w fr-mb-2w"
         v-model="form.description"
-        label="Description du bouquet"
+        label="Comment utiliser ce bouquet *"
         placeholder="Ma description"
         :label-visible="true"
         :is-textarea="true"
         :required="true"
-      />
+      >
+        <template v-slot:label>
+          <div>
+            Comment utiliser ce bouquet
+            <span class="required">&nbsp;*</span>
+          </div>
+          <button
+            @mouseover="showHowto = true"
+            @mouseout="showHowto = false"
+            @click="showHowto = !showHowto"
+            @blur="showHowto = false"
+          >
+            <VIcon
+              name="ri-question-fill"
+              color="var(--blue-france-sun-113-625)"
+              style="pointer-events: none;"
+            />
+          </button>
+          <DsfrAlert
+            type="info"
+            class="hint-on-demand"
+            :class="{showHowto: showHowto}"
+            description="Indice au survol"
+          />
+        </template>
+      </DsfrInput>
+
       <DsfrButton label="Ajouter un jeu de données"
         @click.stop.prevent="isModalOpen = true"
         ref="modalOrigin" :secondary="true" />
