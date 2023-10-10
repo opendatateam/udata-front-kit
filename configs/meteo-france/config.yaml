@@ -16,58 +16,49 @@ universe:
 
 # UI customizations
 website:
-  title: "meteo.data.gouv.fr"
-  rf_title: "RÉPUBLIQUE<br>
-        FRANÇAISE"
+  title: 'meteo.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>
+    FRANÇAISE'
   # leave empty if not pertinent
-  logo_operator: "https://upload.wikimedia.org/wikipedia/fr/4/47/Logo_M%C3%A9t%C3%A9o_France_2016.svg"
-  homepage_title: "Données météo"
-  homepage_subtitle: "Portail des données publiques open data de Météo-France"
+  logo_operator: 'https://upload.wikimedia.org/wikipedia/fr/4/47/Logo_M%C3%A9t%C3%A9o_France_2016.svg'
+  homepage_title: 'Données météo'
+  homepage_subtitle: 'Portail des données publiques open data de Météo-France'
   menu_items:
-    -
-      name: "Accueil"
-      id: "home"
-      linkPage: "/"
-      type: "component"
-    -
-      name: "Jeux de données"
-      id: "datasets"
-      linkPage: "/datasets"
-      type: "component"
-    -
-      name: "Informations"
-      id: "infos"
-      linkPage: "/informations"
-      type: "page"
-      url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/about/ressources.md"
-    -
-      name: "A propos"
-      id: "about"
-      linkPage: "/about"
-      type: "page"
-      url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/charter.md"
+    - name: 'Accueil'
+      id: 'home'
+      linkPage: '/'
+      type: 'component'
+    - name: 'Jeux de données'
+      id: 'datasets'
+      linkPage: '/datasets'
+      type: 'component'
+    - name: 'Informations'
+      id: 'infos'
+      linkPage: '/informations'
+      type: 'page'
+      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/about/ressources.md'
+    - name: 'A propos'
+      id: 'about'
+      linkPage: '/about'
+      type: 'page'
+      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/charter.md'
   # img should be square
   home_buttons:
-    -
-      title: "En savoir plus sur la démarche"
-      link: "/about"
-      img: "https://static.data.gouv.fr/avatars/44/3f1d6b9eac45b2bca7ae9b2a80d812-100.jpg"
-    -
-      title: "Utiliser les API Météo-France"
-      link: "https://portail-api.meteofrance.fr/devportal/apis"
-      img: "https://static.data.gouv.fr/avatars/40/05f4e0291e4ad49a9321071c195cce-100.jpg"
-    -
-      title: "Voir les jeux de données récents"
-      link: "/datasets"
-      img: "https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d"
+    - title: 'En savoir plus sur la démarche'
+      link: '/about'
+      img: 'https://static.data.gouv.fr/avatars/44/3f1d6b9eac45b2bca7ae9b2a80d812-100.jpg'
+    - title: 'Utiliser les API Météo-France'
+      link: 'https://portail-api.meteofrance.fr/devportal/apis'
+      img: 'https://static.data.gouv.fr/avatars/40/05f4e0291e4ad49a9321071c195cce-100.jpg'
+    - title: 'Voir les jeux de données récents'
+      link: '/datasets'
+      img: 'https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d'
   show_topic_charts: true
   list_highlighted_topics:
-    -
-      id: "650db7d220cf97f7caaa3c78"
-      name: "Données climatologiques"
-    -
-      id: "650db7da501723ab94fbf426"
-      name: "Changement climatique"
+    - id: '650db7d220cf97f7caaa3c78'
+      name: 'Données climatologiques'
+    - id: '650db7da501723ab94fbf426'
+      name: 'Changement climatique'
   oauth_option: false
   # display settings
   organizations_list_page_size: 9
