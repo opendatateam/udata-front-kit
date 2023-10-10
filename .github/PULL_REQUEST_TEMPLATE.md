@@ -2,7 +2,7 @@
 
 _Fixes / Relates to / Supercedes / Superceded by / Depends on / Depended upon by_ #XXX
 
-### Here's the job story
+### Job story
 
 > Title : _title_
 > User: _user_
@@ -11,19 +11,19 @@ _Fixes / Relates to / Supercedes / Superceded by / Depends on / Depended upon by
 > I want to _motivation_,
 > so to _expected outcome_.
 
-### Here is the context or situation
+### Context or situation
 
 _Write here._
 
-### Here is the problem encountered by users
+### Problem encountered by users
 
 _Write here._
 
-### Here is a proposal of how to solve the problem
+### Proposal of how to solve the problem
 
 _Write here. Add UI/UX elements if you have them._
 
-### Here's what changes
+### What changes
 
 _Select one or more of the following._
 
@@ -43,6 +43,6 @@ _Select one or more of the following._
 
 - _Any other non-technical change (documentation, tests, types...) 📖._
 
-### Here are some additional elements of these changeset
+### Additional elements of these changeset
 
 _Optional._
