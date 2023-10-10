@@ -1,4 +1,4 @@
-Thanks for contributing to Ecosphères!
+## _Feature proposal | Bug fix | Other_
 
 _Fixes / Relates to / Supercedes / Superceded by / Depends on / Depended upon by_ #XXX
 

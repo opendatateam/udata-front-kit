@@ -1,7 +1,4 @@
-Hi there!
-
-I really enjoy Écosphères, _and I want to propose a feature / but I recently
-encountered an issue_.
+## _Feature request | Bug report | Other_
 
 _If feature_
 
