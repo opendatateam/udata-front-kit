@@ -2,13 +2,14 @@ Thanks for contributing to Ecosphères!
 
 _Fixes / Relates to / Supercedes / Superceded by / Depends on / Depended upon by_ #XXX
 
-### Here is the user or job story
+### Here's the job story
 
-> User: _kind of user_.
+> Title : _title_
+> User: _user_
 >
 > When I _situation_,
 > I want to _motivation_,
-> so I can _expected outcome_.
+> so to _expected outcome_.
 
 ### Here is the context or situation
 
