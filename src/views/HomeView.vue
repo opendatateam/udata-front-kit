@@ -27,7 +27,7 @@ const topicStore = useTopicStore()
 
 const homepageTitle = ref(config.website__homepage_title)
 const homepageSubTitle = ref(config.website__homepage_subtitle)
-const topics = ref(config.website__list_topics)
+const topics = ref(config.website__list_highlited_topics)
 const buttons = ref(config.website__home_buttons)
 const showTopicChart = ref(config.website__show_topic_charts)
 const chartData = computed(() => chartStore.data)

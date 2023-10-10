@@ -9,7 +9,7 @@ const route = useRoute()
 const store = useSearchStore()
 const query = computed(() => route.query.q)
 const mainTopic = ref(config.universe_topic_id)
-const subTopics = ref(config.website__list_topics)
+const subTopics = ref(config.website__list_highlited_topics)
 const topic = computed(() => route.query.topic)
 let searchTopic = topic.value
 const currentPage = ref(1)
@@ -17,7 +17,7 @@ const searchFilter = ref([])
 
 const selectedTopic = computed(() => {
   if (searchTopic) {
-    return config.website__list_topics.filter(
+    return config.website__list_highlited_topics.filter(
       (item) => item.id === searchTopic
     )[0].name
   } else {
@@ -28,7 +28,7 @@ const selectedTopic = computed(() => {
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
-const topicFacetNames = (config.website__list_topics && config.website__list_topics.length) ?  ["Toutes les données"].concat(config.website__list_topics.map((item) => item.name)) : null
+const topicFacetNames = (config.website__list_highlited_topics && config.website__list_highlited_topics.length) ?  ["Toutes les données"].concat(config.website__list_highlited_topics.map((item) => item.name)) : null
 
 
 const filterSearch = (filterKey, filterValue) => {
@@ -40,7 +40,7 @@ const onSelectTopic = (value) => {
   selectedTopic.value = value
   let newTopic = null
   if (value != "Toutes les données") {
-    newTopic = config.website__list_topics.filter(
+    newTopic = config.website__list_highlited_topics.filter(
       (item) => item.name === value
     )[0].id
   }

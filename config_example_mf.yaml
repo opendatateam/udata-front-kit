@@ -65,7 +65,7 @@ website__home_buttons:
 
 website__show_topic_charts: true
 
-website__list_topics:
+website__list_highlited_topics:
   - 
     id: "650db7d220cf97f7caaa3c78"
     name: "Données climatologiques"
