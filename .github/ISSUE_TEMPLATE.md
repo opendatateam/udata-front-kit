@@ -1,6 +1,4 @@
-## _Feature request | Bug report | Other_
-
-_If feature_
+## Feature request
 
 ### Here's the job story
 
@@ -46,7 +44,7 @@ TODO.
 
 ---
 
-_If bug / issue_
+## Bug report
 
 ### Here is what I did
 
@@ -61,5 +59,11 @@ _Write here._
 _Write here._
 
 ### Here is data (or links to it) that can help you reproduce this issue
+
+_Write here._
+
+---
+
+## Other
 
 _Write here._
