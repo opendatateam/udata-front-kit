@@ -9,7 +9,7 @@ import { useReuseStore } from "../../store/ReuseStore"
 import { useDiscussionStore } from "../../store/DiscussionStore"
 import { descriptionFromMarkdown } from "../../utils"
 import Tile from "../../components/Tile.vue"
-import TabContentChartData from "../../components/TabContentChartData.vue"
+import ChartData from "../../components/ChartData.vue"
 
 const route = useRoute()
 const datasetId = route.params.did
@@ -256,7 +256,7 @@ watchEffect(() => {
         :selected="selectedTabIndex === 5"
         v-if="chartData"
       >
-        <TabContentChartData v-if="chartData" :chart-data="chartData" />
+        <ChartData v-if="chartData" :chart-data="chartData" />
       </DsfrTabContent>
     </DsfrTabs>
   </div>
