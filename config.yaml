@@ -21,29 +21,28 @@ website__rf_title: "MINISTÈRES<br>
       COHÉSION DES TERRITOIRES<br>
       TRANSITION ÉNERGÉTIQUE<br>
       MER"
-# leave empty if not pertinent
-website__logo_operator: #"https://upload.wikimedia.org/wikipedia/fr/4/47/Logo_M%C3%A9t%C3%A9o_France_2016.svg"
+website__logo_operator:
 website__homepage_title: "Ecosphères"
 website__homepage_subtitle: "Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**"
 
 # Menu infos, items
 website__menu_items:
-  - 
+  -
     name: "Accueil"
     id: "home"
     linkPage: "/"
     type: "component"
-  - 
+  -
     name: "Jeux de données"
     id: "datasets"
     linkPage: "/datasets"
     type: "component"
-  - 
+  -
     name: "Organizations"
     id: "organizations"
     linkPage: "/organizations"
     type: "component"
-  - 
+  -
     name: "Bouquets"
     id: "bouquets"
     linkPage: "/bouquets"
@@ -56,26 +55,11 @@ website__menu_items:
     url: "https://gist.githubusercontent.com/geoffreyaldebert/f6198f2aa63b18783be7d7d3be0909a9/raw/7f979217a4c878225262eb654be3136bf1fe7157/about.md"
 
 
-# img should be square
 website__home_buttons:
-  # -
-  #   title: "En savoir plus sur la démarche"
-  #   link: "/about"
-  #   img: "https://static.data.gouv.fr/avatars/44/3f1d6b9eac45b2bca7ae9b2a80d812-100.jpg"
-  # -
-  #   title: "Utiliser les API Météo-France"
-  #   link: "https://portail-api.meteofrance.fr/devportal/apis"
-  #   img: "https://static.data.gouv.fr/avatars/40/05f4e0291e4ad49a9321071c195cce-100.jpg"
 
 website__show_topic_charts: false
 
-website__list_highlited_topics:
-  # - 
-  #   id: "650db7d220cf97f7caaa3c78"
-  #   name: "Données climatologiques"
-  # - 
-  #   id: "650db7da501723ab94fbf426"
-  #   name: "Changement climatique"
+website__list_highlighted_topics:
 
 
 website__oauth_option: true
