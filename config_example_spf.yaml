@@ -1,0 +1,86 @@
+# config file for ecospheres-front
+
+# data.gouv.fr base URL
+datagouvfr_base_url: https://demo.data.gouv.fr
+
+# "universe" topic id
+universe_topic_id: 6510731dc0779a7bf331c724 # meteo-test
+
+# universe name, used as bouquets tag
+universe_name: spf
+
+# oauth settings
+datagouvfr_oauth_client_id: 651479c317ad47b21e41a9d4
+# pkce client secret, explicitely public
+datagouvfr_oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
+
+# HomePage Info
+website__title: "spf.data.gouv.fr"
+website__rf_title: "MINISTERE<br>
+      DE LA SANTE<br>ET DE LA PREVENTION"
+# leave empty if not pertinent
+website__logo_operator: "https://static.data.gouv.fr/avatars/76/69d8ead7684d25a80c9fa97d943b06-100.png"
+website__homepage_title: "Données Santé Publique France"
+website__homepage_subtitle: "Portail des données publiques open data de santé SPF"
+
+website__menu_items:
+  - 
+    name: "Accueil"
+    id: "home"
+    linkPage: "/"
+    type: "component"
+  - 
+    name: "Jeux de données"
+    id: "datasets"
+    linkPage: "/datasets"
+    type: "component"
+  -
+    name: "C'est quoi SPF ?"
+    id: "infos"
+    linkPage: "/informations"
+    type: "page"
+    url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/about/ressources.md"
+  -
+    name: "Notice spéciale Covid"
+    id: "covid"
+    linkPage: "/covid"
+    type: "page"
+    url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/charter.md"
+  -
+    name: "L'open data en santé"
+    id: "opendatasante"
+    linkPage: "/opendatasante"
+    type: "page"
+    url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/accessibility.md"
+
+
+# img should be square
+website__home_buttons:
+  -
+    title: "C'est quoi Santé Publique France ?"
+    link: "/about"
+    img: "https://static.data.gouv.fr/avatars/76/69d8ead7684d25a80c9fa97d943b06-100.png"
+  -
+    title: "Voir les jeux de données récents"
+    link: "/datasets"
+    img: "https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d"
+
+website__show_topic_charts: false
+
+website__list_highlited_topics:
+  - 
+    id: "651073475c52b0870ef79afa"
+    name: "Les données autour du coronavirus"
+  - 
+    id: "65107350db5d6288fb10e240"
+    name: "Les données bactéries émergentes"
+
+website__oauth_option: false
+
+# display settings
+organizations_list_page_size: 9
+
+# list of organisations' ids that should be handled by the portal
+# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+# then Informations > ID at the bottom of the page
+organizations:
