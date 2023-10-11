@@ -134,4 +134,20 @@ watchEffect(() => {
   font-size: 1.5rem;
   line-height: 1.5rem;
 }
+.button-home {
+  width: 200px;
+  height: 150;
+  margin-left: 30px;
+  margin-top: 30px;
+  padding-top: 10px;
+}
+
+.button-home:hover {
+  background-color: #ebebeb;
+  cursor: pointer;
+}
+
+.button-name {
+  color: #060091;
+}
 </style>
