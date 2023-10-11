@@ -25,6 +25,7 @@ const isEditDesc = ref(false)
 const showObjectif = ref()
 const showHowto = ref()
 const isFormValidated = ref(false);
+const noWhiteSpace = ref();
 
 const modalActions = [
   {
@@ -97,14 +98,29 @@ const onSubmit = async () => {
     datasets: datasets.value.map(d => d.dataset.id),
   }
 
+  const checkWhiteSpacing = (val) => {
+    if (val.trim() === '') {
+      noWhiteSpace.value = `Merci de bien remplir les champs`
+      return true
+    }
+    return false
+  };
+
   if (isCreate) {
+    if (checkWhiteSpacing(data.name) || checkWhiteSpacing(data.description)) {
+      return;
+    }
+
     res = await bouquetStore.create({
       ...data,
       tags: [config.universe_name],
       extras: extrasFromDatasets(),
     })
-    
   } else {
+    if (checkWhiteSpacing(data.name) || checkWhiteSpacing(data.description)) {
+      return;
+    }
+
     res = await bouquetStore.update(loadedBouquet.value.id, {
       ...data,
       tags: loadedBouquet.value.tags,
@@ -158,6 +174,11 @@ onMounted(() => {
         type="success"
         title="Bouquet crée"
         description="Votre bouquet a bien été crée."
+      />
+      <DsfrAlert
+        v-if="noWhiteSpace"
+        type="warning"
+        :title="noWhiteSpace"
       />
     </div>
 
