@@ -38,7 +38,7 @@ website__menu_items:
     linkPage: "/datasets"
     type: "component"
   -
-    name: "Organizations"
+    name: "Organisations"
     id: "organizations"
     linkPage: "/organizations"
     type: "component"
