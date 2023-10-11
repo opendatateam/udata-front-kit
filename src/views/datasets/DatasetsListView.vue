@@ -8,59 +8,41 @@ import config from "@/config"
 const route = useRoute()
 const store = useSearchStore()
 const query = computed(() => route.query.q)
-const mainTopic = ref(config.universe_topic_id)
-const subTopics = ref(config.website__list_highlited_topics)
 const topic = computed(() => route.query.topic)
+// TODO: this should be handled as reactive value instead
 let searchTopic = topic.value
 const currentPage = ref(1)
-const searchFilter = ref([])
 
-const selectedTopic = computed(() => {
-  if (searchTopic) {
-    return config.website__list_highlited_topics.filter(
-      (item) => item.id === searchTopic
-    )[0].name
-  } else {
-    return null
-  }
-})
+const subTopics = config.website__list_highlighted_topics
+
+const ALL_DATA_LABEL = "Toutes les données"
 
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
-const topicFacetNames = (config.website__list_highlited_topics && config.website__list_highlited_topics.length) ?  ["Toutes les données"].concat(config.website__list_highlited_topics.map((item) => item.name)) : null
-
-
-const filterSearch = (filterKey, filterValue) => {
-  if (!filterValue) return
-  searchFilter.value = [`${filterKey} = "${filterValue}"`]
-}
+const topicFacetNames = (config.website__list_highlighted_topics?.length)
+  ?  [ALL_DATA_LABEL].concat(config.website__list_highlighted_topics.map((item) => item.name))
+  : null
 
 const onSelectTopic = (value) => {
-  selectedTopic.value = value
   let newTopic = null
-  if (value != "Toutes les données") {
-    newTopic = config.website__list_highlited_topics.filter(
+  if (value != ALL_DATA_LABEL) {
+    newTopic = config.website__list_highlighted_topics.filter(
       (item) => item.name === value
     )[0].id
   }
   currentPage.value = 1
   searchTopic = newTopic
-  store.search(query.value, searchTopic, currentPage.value, searchFilter.value)
-}
-
-const resetFilter = () => {
-  searchFilter.value = []
+  store.search(query.value, searchTopic, currentPage.value)
 }
 
 // reset currentPage when query changes
 onBeforeRouteUpdate((to, from) => {
   currentPage.value = 1
-  resetFilter()
 })
 
 watchEffect(() => {
-  store.search(query.value, searchTopic, currentPage.value, searchFilter.value)
+  store.search(query.value, searchTopic, currentPage.value)
 })
 </script>
 
@@ -75,7 +57,6 @@ watchEffect(() => {
       <div v-if="topicFacetNames" class="fr-col-md-3 fr-pr-md-2w fr-mb-2w">
         <DsfrSelect
           :options="topicFacetNames"
-          :model-value="selectedTopic"
           @update:modelValue="onSelectTopic"
           v-if="subTopics"
         >
@@ -85,22 +66,13 @@ watchEffect(() => {
       <div :class="[topicFacetNames ? 'fr-col-md-9' : 'fr-col-md-12']">
         <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
           <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
-            <span v-if="d.organization && d.organization.logo">
-              <Tile
-                :link="`/datasets/${d.slug}`"
-                :title="d.title"
-                :description="d.description"
-                :img="d.organization.logo"
-              />
-            </span>
-            <span v-else>
-              <Tile
-                :link="`/datasets/${d.slug}`"
-                :title="d.title"
-                :description="d.description"
-                :img="null"
-              />
-            </span>
+            <Tile
+              :link="`/datasets/${d.slug}`"
+              :title="d.title"
+              :description="d.description"
+              :img="d.organization?.logo"
+              :is-markdown="true"
+            />
           </li>
         </ul>
       </div>

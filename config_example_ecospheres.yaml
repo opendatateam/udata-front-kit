@@ -28,22 +28,22 @@ website__homepage_subtitle: "Explorez les données ouvertes et restreintes de la
 
 # Menu infos, items
 website__menu_items:
-  - 
+  -
     name: "Accueil"
     id: "home"
     linkPage: "/"
     type: "component"
-  - 
+  -
     name: "Jeux de données"
     id: "datasets"
     linkPage: "/datasets"
     type: "component"
-  - 
+  -
     name: "Organizations"
     id: "organizations"
     linkPage: "/organizations"
     type: "component"
-  - 
+  -
     name: "Bouquets"
     id: "bouquets"
     linkPage: "/bouquets"
@@ -69,11 +69,11 @@ website__home_buttons:
 
 website__show_topic_charts: false
 
-website__list_highlited_topics:
-  # - 
+website__list_highlighted_topics:
+  # -
   #   id: "650db7d220cf97f7caaa3c78"
   #   name: "Données climatologiques"
-  # - 
+  # -
   #   id: "650db7da501723ab94fbf426"
   #   name: "Changement climatique"
 

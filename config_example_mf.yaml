@@ -24,12 +24,12 @@ website__homepage_title: "Données météo"
 website__homepage_subtitle: "Portail des données publiques open data de Météo-France"
 
 website__menu_items:
-  - 
+  -
     name: "Accueil"
     id: "home"
     linkPage: "/"
     type: "component"
-  - 
+  -
     name: "Jeux de données"
     id: "datasets"
     linkPage: "/datasets"
@@ -65,11 +65,11 @@ website__home_buttons:
 
 website__show_topic_charts: true
 
-website__list_highlited_topics:
-  - 
+website__list_highlighted_topics:
+  -
     id: "650db7d220cf97f7caaa3c78"
     name: "Données climatologiques"
-  - 
+  -
     id: "650db7da501723ab94fbf426"
     name: "Changement climatique"
 
