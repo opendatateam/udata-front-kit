@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useDatasetStore } from "../../store/DatasetStore"
-import { useBouquetStore } from "../../store/BouquetStore"
+import { useTopicStore } from "../../store/TopicStore"
 import { useRouter, useRoute } from "vue-router"
 import SearchAPI from "../../services/api/SearchAPI"
 import Multiselect from "@vueform/multiselect"
@@ -9,7 +9,7 @@ import config from "@/config"
 
 const searchAPI = new SearchAPI()
 const datasetStore = useDatasetStore()
-const bouquetStore = useBouquetStore()
+const topicStore = useTopicStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -94,13 +94,13 @@ const onSubmit = async () => {
     datasets: datasets.value.map(d => d.dataset.id),
   }
   if (isCreate) {
-    res = await bouquetStore.create({
+    res = await topicStore.create({
       ...data,
       tags: [config.universe_name],
       extras: extrasFromDatasets(),
     })
   } else {
-    res = await bouquetStore.update(loadedBouquet.value.id, {
+    res = await topicStore.update(loadedBouquet.value.id, {
       ...data,
       tags: loadedBouquet.value.tags,
       extras: { ...loadedBouquet.value.extras, ...extrasFromDatasets()},
@@ -121,7 +121,7 @@ const loadDatasets = async (datasetIds, bouquet) => {
 
 onMounted(() => {
   if (!isCreate) {
-    bouquetStore.load(route.params.bid).then(data => {
+    topicStore.load(route.params.bid).then(data => {
       loadedBouquet.value = data
       form.value.name = data.name
       form.value.description = data.description

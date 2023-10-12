@@ -10,8 +10,7 @@ const topics = props.topics
 const topicsData = computed(() => topicStore.data)
 
 onMounted(() => {
-  // TODO: merge with BouquetStore
-  topicStore.getTopics(topics)
+  topicStore.loadTopicsFromList(topics)
 })
 </script>
 

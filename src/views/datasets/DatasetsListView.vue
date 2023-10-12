@@ -1,8 +1,8 @@
 <script setup>
 import { computed, ref, watchEffect } from "vue"
 import { useRoute, onBeforeRouteUpdate } from "vue-router"
-import Tile from "../../components/Tile.vue"
 import { useSearchStore } from "../../store/SearchStore"
+import Tile from "../../components/Tile.vue"
 import config from "@/config"
 
 const route = useRoute()
@@ -21,7 +21,7 @@ const ALL_DATA_LABEL = "Toutes les données"
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
-// TODO: this may be a filtered reactive subset of TopicStore
+// TODO: this should be a filtered reactive subset of TopicStore
 // storing both the id and the name
 const topicFacetNames = (config.website__list_highlighted_topics?.length)
   ?  [ALL_DATA_LABEL].concat(config.website__list_highlighted_topics.map((item) => item.name))
