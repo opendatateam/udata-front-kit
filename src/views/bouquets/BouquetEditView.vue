@@ -45,7 +45,7 @@ const modalActions = [
 
 const search = async (query) => {
   if (!query) return []
-  const results = await searchAPI._search(query, config.universe_topic_id, 1, { page_size: 10 })
+  const results = await searchAPI._search(query, config.universe.topic_id, 1, { page_size: 10 })
   return results.data.map(r => {
     return { value: r.id, label: r.title }
   }).filter(r => !datasets.value.map(d => d.dataset.id).includes(r.value))
@@ -68,7 +68,7 @@ const onSubmitModal = async () => {
 
 const onDeleteDataset = (datasetId) => {
   datasets.value = datasets.value.filter(d => d.dataset.id !== datasetId)
-  delete loadedBouquet.value.extras[`${config.universe_name}:${datasetId}:description`]
+  delete loadedBouquet.value.extras[`${config.universe.name}:${datasetId}:description`]
 }
 
 const onEditDataset = (dataset) => {
@@ -82,7 +82,7 @@ const onEditDataset = (dataset) => {
 const extrasFromDatasets = () => {
   const extras = {}
   for (const dataset of datasets.value) {
-    extras[`${config.universe_name}:${dataset.dataset.id}:description`] = dataset.description
+    extras[`${config.universe.name}:${dataset.dataset.id}:description`] = dataset.description
   }
   return extras
 }
@@ -96,7 +96,7 @@ const onSubmit = async () => {
   if (isCreate) {
     res = await topicStore.create({
       ...data,
-      tags: [config.universe_name],
+      tags: [config.universe.name],
       extras: extrasFromDatasets(),
     })
   } else {
@@ -114,7 +114,7 @@ const loadDatasets = async (datasetIds, bouquet) => {
     const dataset = await datasetStore.load(datasetId)
     datasets.value.push({
       dataset,
-      description: bouquet.extras[`${config.universe_name}:${dataset.id}:description`] || "",
+      description: bouquet.extras[`${config.universe.name}:${dataset.id}:description`] || "",
     })
   }
 }

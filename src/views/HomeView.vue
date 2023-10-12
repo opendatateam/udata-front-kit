@@ -22,11 +22,11 @@ const doSearch = () => {
   router.push({ name: "datasets", query: { q: query.value } })
 }
 
-const homepageTitle = config.website__homepage_title
-const homepageSubTitle = config.website__homepage_subtitle
-const topics = config.website__list_highlighted_topics
-const buttons = config.website__home_buttons
-const showTopicChart = config.website__show_topic_charts
+const homepageTitle = config.website.homepage_title
+const homepageSubTitle = config.website.homepage_subtitle
+const topics = config.website.list_highlighted_topics
+const buttons = config.website.home_buttons
+const showTopicChart = config.website.show_topic_charts
 </script>
 
 <template>

@@ -14,7 +14,7 @@ import config from "@/config"
 export default class RouterFetch {
   generateRouteItems() {
     let items = []
-    config.website__menu_items.forEach((item) => {
+    config.website.menu_items.forEach((item) => {
       if (item.id === "datasets") {
         items.push({
           path: item.linkPage,
@@ -83,7 +83,7 @@ export default class RouterFetch {
       }
     })
 
-    if (config.website__oauth_option) {
+    if (config.website.oauth_option) {
       items.push({
         path: "/login",
         name: "login",

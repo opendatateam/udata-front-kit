@@ -48,7 +48,7 @@ onMounted(() => {
           :description="d.description"
           :img="d.organization.logo"
           :is-markdown="true"
-          :notice="bouquet.extras[`${config.universe_name}:${d.id}:description`]"
+          :notice="bouquet.extras[`${config.universe.name}:${d.id}:description`]"
         />
       </li>
     </ul>

@@ -29,8 +29,8 @@ export const useTopicStore = defineStore("topic", {
      */
     filter (topics) {
       return topics.filter(topic => {
-        return topic.tags.includes(config.universe_name)
-          && topic.id !== config.universe_topic_id
+        return topic.tags.includes(config.universe.name)
+          && topic.id !== config.universe.topic_id
       })
     },
     /**

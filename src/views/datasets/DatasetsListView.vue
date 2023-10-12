@@ -14,7 +14,7 @@ let searchTopicId = topic.value
 const searchTopicName = ref("")
 const currentPage = ref(1)
 
-const subTopics = config.website__list_highlighted_topics
+const subTopics = config.website.list_highlighted_topics
 
 const ALL_DATA_LABEL = "Toutes les données"
 
@@ -23,14 +23,14 @@ const pages = computed(() => store.pagination)
 
 // TODO: this should be a filtered reactive subset of TopicStore
 // storing both the id and the name
-const topicFacetNames = (config.website__list_highlighted_topics?.length)
-  ?  [ALL_DATA_LABEL].concat(config.website__list_highlighted_topics.map((item) => item.name))
+const topicFacetNames = (config.website.list_highlighted_topics?.length)
+  ?  [ALL_DATA_LABEL].concat(config.website.list_highlighted_topics.map((item) => item.name))
   : null
 
 const onSelectTopic = (value) => {
   let newTopic = null
   if (value != ALL_DATA_LABEL) {
-    newTopic = config.website__list_highlighted_topics.filter(
+    newTopic = config.website.list_highlighted_topics.filter(
       (item) => item.name === value
     )[0].id
   }
@@ -47,8 +47,8 @@ onBeforeRouteUpdate((to, from) => {
 // fill topic name when arriving on the page with a topic ID
 // TODO: topic id is not synced in the URL when selecting a topic
 watchEffect(() => {
-  if (!topic.value || !config.website__list_highlighted_topics) return
-  searchTopicName.value = config.website__list_highlighted_topics.find(t => t.id === topic.value).name
+  if (!topic.value || !config.website.list_highlighted_topics) return
+  searchTopicName.value = config.website.list_highlighted_topics.find(t => t.id === topic.value).name
 })
 
 watchEffect(() => {

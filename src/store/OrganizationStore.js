@@ -23,7 +23,7 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     getPagination () {
-      const pageSize = config.organizations_list_page_size
+      const pageSize = config.website.organizations_list_page_size
       const total = config.organizations.length
       const nbPages = Math.ceil(total / pageSize)
       return [...Array(nbPages).keys()].map(page => {
@@ -52,7 +52,7 @@ export const useOrganizationStore = defineStore("organization", {
      * @returns {Array<object>}
      */
     async loadFromConfig (page = 1) {
-      const pageSize = config.organizations_list_page_size
+      const pageSize = config.website.organizations_list_page_size
       const paginated = config.organizations.slice(pageSize * (page - 1), pageSize * page)
       await this.loadMultiple(paginated, page)
       return this.getForPage(page)

@@ -14,7 +14,7 @@ export default class SearchAPI extends DatagouvfrAPI{
 
   _search(query, topic, page, args) {
     args = args || {}
-    args.topic = topic || config.universe_topic_id
+    args.topic = topic || config.universe.topic_id
     args.page = page || 1
     args.q = query || ""
     const qs = new URLSearchParams(args).toString()
