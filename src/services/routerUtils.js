@@ -11,6 +11,7 @@ import LoginView from "../views/LoginView.vue"
 import LogoutView from "../views/LogoutView.vue"
 import config from "@/config"
 
+// TODO: simplify this, fix indentation, use f-strings
 export default class RouterFetch {
     generateRouteItems() {
         let items = []
@@ -84,7 +85,7 @@ export default class RouterFetch {
                     props: { url: item.url },
                 })
             }
-            
+
             if (config.website__oauth_option) {
                 items.push({
                     path: "/login",
