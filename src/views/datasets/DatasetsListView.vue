@@ -10,7 +10,8 @@ const store = useSearchStore()
 const query = computed(() => route.query.q)
 const topic = computed(() => route.query.topic)
 // TODO: this should be handled as reactive value instead
-let searchTopic = topic.value
+let searchTopicId = topic.value
+const searchTopicName = ref("")
 const currentPage = ref(1)
 
 const subTopics = config.website__list_highlighted_topics
@@ -20,6 +21,8 @@ const ALL_DATA_LABEL = "Toutes les données"
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
+// TODO: this may be a filtered reactive subset of TopicStore
+// storing both the id and the name
 const topicFacetNames = (config.website__list_highlighted_topics?.length)
   ?  [ALL_DATA_LABEL].concat(config.website__list_highlighted_topics.map((item) => item.name))
   : null
@@ -32,8 +35,8 @@ const onSelectTopic = (value) => {
     )[0].id
   }
   currentPage.value = 1
-  searchTopic = newTopic
-  store.search(query.value, searchTopic, currentPage.value)
+  searchTopicId = newTopic
+  store.search(query.value, searchTopicId, currentPage.value)
 }
 
 // reset currentPage when query changes
@@ -41,8 +44,15 @@ onBeforeRouteUpdate((to, from) => {
   currentPage.value = 1
 })
 
+// fill topic name when arriving on the page with a topic ID
+// TODO: topic id is not synced in the URL when selecting a topic
 watchEffect(() => {
-  store.search(query.value, searchTopic, currentPage.value)
+  if (!topic.value || !config.website__list_highlighted_topics) return
+  searchTopicName.value = config.website__list_highlighted_topics.find(t => t.id === topic.value).name
+})
+
+watchEffect(() => {
+  store.search(query.value, searchTopicId, currentPage.value)
 })
 </script>
 
@@ -56,6 +66,7 @@ watchEffect(() => {
     <div class="fr-grid-row">
       <div v-if="topicFacetNames" class="fr-col-md-3 fr-pr-md-2w fr-mb-2w">
         <DsfrSelect
+          :model-value="searchTopicName"
           :options="topicFacetNames"
           @update:modelValue="onSelectTopic"
           v-if="subTopics"
