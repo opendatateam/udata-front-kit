@@ -28,7 +28,6 @@ onMounted(() => {
     <div class="fr-grid-row fr-mb-1w">
       <DsfrButton
         class="fr-mb-1w"
-        v-if="userStore.isAdmin()"
         label="Ajouter un bouquet"
         icon="ri-add-circle-line"
         @click="goToCreate"
