@@ -129,9 +129,15 @@ const onSubmit = async () => {
   }
   
   isFormValidated.value = true;
-  setTimeout(() => {
-    router.push({ name: "bouquet_detail", params: { bid: res.slug } })
-  }, 1000)
+  if(res.status && res.status === 400) {
+    return true
+  }
+  else {
+    setTimeout(() => {
+      router.push({ name: "bouquet_detail", params: { bid: res.slug } })
+    }, 1000)
+  }
+  
 }
 
 const loadDatasets = async (datasetIds, bouquet) => {
@@ -191,7 +197,6 @@ onMounted(() => {
         label="Objectif du bouquet *"
         placeholder="Mon bouquet"
         :label-visible="true"
-        :required="true"
       >
         <template v-slot:label>
           <div>
@@ -227,7 +232,7 @@ onMounted(() => {
         placeholder="Ma description"
         :label-visible="true"
         :is-textarea="true"
-        :required="true"
+
       >
         <template v-slot:label>
           <div>
