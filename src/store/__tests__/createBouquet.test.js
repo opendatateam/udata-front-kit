@@ -13,53 +13,54 @@ describe('create bouquet', () => {
   })
 
   test('create a bouquet', async({store}) => {
-    const payload = {
+    const bouquet = {
       name: "test",
       description: "test",
       tags: ['test'],
     }
-    const {data} = await store.create(payload)
-    expect(data.name).toBe(payload.name)
-    expect(data.description).toBe(payload.description)
-    expect(data.tags).toStrictEqual(payload.tags)
+    const {data} = await store.create(bouquet)
+    expect(data.name).toBe(bouquet.name)
+    expect(data.description).toBe(bouquet.description)
+    expect(data.tags).toStrictEqual(bouquet.tags)
   })
   
   test('create a bouquet when description is not provided', async({store}) => {
-    const payload = {
+    const bouquet = {
       name: "test",
       tags: ['test']
     }
-    const {error} = await store.create(payload)
+    const {error} = await store.create(bouquet)
     expect(error).toBe('error')
   })
 })
 
-describe('update bouquet', () => {
+describe('add information of bouquet', () => {
   beforeEach(async(context) => {
     setActivePinia(createPinia())
     const client = new TopicsAPI
     const storeFactory = createBouquetStore(client);
     const store = storeFactory()
-    const payload = {
+    const bouquet = {
       name: "test",
       description: "test",
       tags: ['test'],
     }
-    await store.create(payload)
+    await store.create(bouquet)
     context.store = store
   })
   
   test('edit a bouquet', async({store}) => {
-    const payload = {
+    const bouquetInformation = {
       subject: 'subject test',
       theme: 'theme test',
       subTheme: 'subTheme test'
     }
 
-    const {data} = await store.update(payload)
-    expect (data.subject).toBe(payload.subject)
-    expect (data.theme).toBe(payload.theme)
-    expect (data.subTheme).toBe(payload.subTheme)
+    const {data:{information}} = await store.addInformation(bouquetInformation)
+    expect (information.subject).toBe(bouquetInformation.subject)
+    expect (information.theme).toBe(bouquetInformation.theme)
+    expect (information.subTheme).toBe(bouquetInformation.subTheme)
   })
 })
+
 

@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import { useBouquetInformationStore } from "@/store/createBouquet-information"
 
 export const createBouquetStore = (client) => {
   return defineStore ('createBouquet', {
@@ -7,9 +8,7 @@ export const createBouquetStore = (client) => {
         id: null,
         name: null,
         description: null,
-        subject: null,
-        theme: null,
-        subTheme: null,
+        information: null,
         tags: []
       },
       error: null
@@ -29,7 +28,7 @@ export const createBouquetStore = (client) => {
         
         return this
       },
-      async update(bouquet){
+      async addInformation(bouquet){
         const payload = {
           extras: {
             subject: bouquet.subject,
@@ -38,11 +37,11 @@ export const createBouquetStore = (client) => {
           }
         }
         const response = await client.update(this.data.id, {...this.data, ...payload})
+        const bouquetInformation = useBouquetInformationStore()
 
+        console.log('bouquetInformation', bouquetInformation)
         if (response.status === 200) {
-          this.data.subject = response.data.extras.subject
-          this.data.theme = response.data.extras.theme
-          this.data.subTheme = response.data.extras['sub-theme']
+          this.data.information = bouquetInformation.create(response)
         } else if (response.status === 400) {
           this.error = "error"
         } else {
