@@ -5,9 +5,9 @@ const api = new OauthAPI()
 
 export default class AuthService {
   constructor () {
-    this.clientSecret = config.datagouvfr_oauth_client_secret
-    this.clientId = config.datagouvfr_oauth_client_id
-    this.baseURL = config.datagouvfr_base_url
+    this.clientSecret = config.datagouvfr.oauth_client_secret
+    this.clientId = config.datagouvfr.oauth_client_id
+    this.baseURL = config.datagouvfr.base_url
     this.redirectURI = `${window.location.origin}/login/callback`
   }
 

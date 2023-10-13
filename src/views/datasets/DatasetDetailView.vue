@@ -9,9 +9,7 @@ import { useReuseStore } from "../../store/ReuseStore"
 import { useDiscussionStore } from "../../store/DiscussionStore"
 import { descriptionFromMarkdown } from "../../utils"
 import Tile from "../../components/Tile.vue"
-
-import { useChartStore } from "../../store/ChartStore"
-import LineChart from "../../components/LineChart.vue"
+import ChartData from "../../components/ChartData.vue"
 
 const route = useRoute()
 const datasetId = route.params.did
@@ -19,7 +17,6 @@ const datasetId = route.params.did
 const datasetStore = useDatasetStore()
 const reuseStore = useReuseStore()
 const discussionStore = useDiscussionStore()
-const chartStore = useChartStore()
 
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const discussionsPages = ref([])
@@ -31,6 +28,11 @@ const selectedTabIndex = ref(0)
 
 onMounted(() => {
   datasetStore.load(datasetId)
+})
+
+const chartData = computed(() => {
+  if (!dataset.value?.extras) return
+  return dataset.value.extras["config:charts"]
 })
 
 const formatFileSize = (fileSize) => {
@@ -49,27 +51,20 @@ const files = computed(() => {
   })
 })
 
-const chartData = computed(() => chartStore.data)
-
 const tabs = computed(() => {
+  const _tabs = [
+    { title: "Fichiers", tabId: "tab-0", panelId: "tab-content-0" },
+    { title: "Réutilisations", tabId: "tab-1", panelId: "tab-content-1" },
+    { title: "Discussions", tabId: "tab-2", panelId: "tab-content-2" },
+    { title: "Qualité", tabId: "tab-3", panelId: "tab-content-3" },
+    { title: "Métadonnées", tabId: "tab-4", panelId: "tab-content-4" },
+  ]
   if (chartData.value) {
-    return [
-      { title: "Fichiers", tabId: "tab-0", panelId: "tab-content-0" },
-      { title: "Réutilisations", tabId: "tab-1", panelId: "tab-content-1" },
-      { title: "Discussions", tabId: "tab-2", panelId: "tab-content-2" },
-      { title: "Qualité", tabId: "tab-3", panelId: "tab-content-3" },
-      { title: "Métadonnées", tabId: "tab-4", panelId: "tab-content-4" },
+    _tabs.push(
       { title: "Visualisations", tabId: "tab-00", panelId: "tab-content-00" },
-    ]
-  } else {
-    return [
-      { title: "Fichiers", tabId: "tab-0", panelId: "tab-content-0" },
-      { title: "Réutilisations", tabId: "tab-1", panelId: "tab-content-1" },
-      { title: "Discussions", tabId: "tab-2", panelId: "tab-content-2" },
-      { title: "Qualité", tabId: "tab-3", panelId: "tab-content-3" },
-      { title: "Métadonnées", tabId: "tab-4", panelId: "tab-content-4" },
-    ]
+    )
   }
+  return _tabs
 })
 
 const description = computed(() => descriptionFromMarkdown(dataset))
@@ -89,8 +84,6 @@ watchEffect(() => {
       discussionsPages.value = discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
     }
   })
-  chartStore.getCharts("datasets", dataset.value.id);
-
 })
 </script>
 
@@ -256,38 +249,15 @@ watchEffect(() => {
         <pre>{{ dataset }}</pre>
       </DsfrTabContent>
 
-     <DsfrTabContent
+      <!-- Visualisations -->
+      <DsfrTabContent
         panel-id="tab-content-00"
         tab-id="tab-00"
         :selected="selectedTabIndex === 5"
         v-if="chartData"
       >
-        <div>
-          <div v-for="item in chartData" v-bind:key="item">
-            <br /><br />
-            <h2 style="text-align: left">{{ item.name }}</h2>
-            <p style="text-align: left">{{ item.description }}</p>
-            <div
-              v-if="item.charts"
-              style="
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <div
-                v-for="chart in item.charts"
-                v-bind:key="chart.url"
-                style="width: 40%"
-              >
-                <LineChart :dataurl="chart.url" />
-              </div>
-            </div>
-          </div>
-        </div>
+        <ChartData v-if="chartData" :chart-data="chartData" />
       </DsfrTabContent>
-
     </DsfrTabs>
   </div>
 </template>

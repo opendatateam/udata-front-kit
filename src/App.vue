@@ -14,18 +14,15 @@ const store = useUserStore()
 const isLoggedIn = computed(() => store.$state.isLoggedIn)
 
 const quickLinks = computed(() => {
-  if(config.website__oauth_option) {
-    return [
-      {
-        label: isLoggedIn.value ? `${store.$state.data.first_name} ${store.$state.data.last_name}` : "Se connecter",
-        icon: isLoggedIn.value ? "ri-logout-box-r-line" : "ri-account-circle-line",
-        to: isLoggedIn.value ? "/logout" : "/login",
-        iconRight: isLoggedIn.value,
-      }
-    ]
-  } else {
-    return
-  }
+  if(!config.website.oauth_option) return
+  return [
+    {
+      label: isLoggedIn.value ? `${store.$state.data.first_name} ${store.$state.data.last_name}` : "Se connecter",
+      icon: isLoggedIn.value ? "ri-logout-box-r-line" : "ri-account-circle-line",
+      to: isLoggedIn.value ? "/logout" : "/login",
+      iconRight: isLoggedIn.value,
+    }
+  ]
 })
 
 const updateQuery = (q) => {
@@ -62,9 +59,9 @@ onMounted(() => {
   }
 })
 
-const logotext = ref(config.website__rf_title)
-const servicetitle = ref(config.website__title)
-const logoOperator = ref(config.website__logo_operator)
+const logotext = ref(config.website.rf_title)
+const servicetitle = ref(config.website.title)
+const logoOperator = ref(config.website.logo_operator)
 
 </script>
 

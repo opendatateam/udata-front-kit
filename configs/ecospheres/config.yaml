@@ -1,87 +1,64 @@
 # config file for ecospheres-front
 
-# data.gouv.fr base URL
-datagouvfr_base_url: https://demo.data.gouv.fr
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 651479c317ad47b21e41a9d4
+  # pkce client secret, explicitely public
+  oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
 
-# "universe" topic id
-universe_topic_id: 65141cd780d73f98142e9265
+universe:
+  # "universe" topic id
+  topic_id: 65141cd780d73f98142e9265
+  # universe name, used as bouquets tag
+  name: ecospheres
 
-# universe name, used as bouquets tag
-universe_name: ecospheres
-
-# oauth settings
-datagouvfr_oauth_client_id: 651479c317ad47b21e41a9d4
-# pkce client secret, explicitely public
-datagouvfr_oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
-
-# HomePage Info
-website__title: "Ecosphères"
-website__rf_title: "MINISTÈRES<br>
+# UI customizations
+website:
+  title: "Ecosphères"
+  rf_title: "MINISTÈRES<br>
       TRANSITION ÉCOLOGIQUE<br>
       COHÉSION DES TERRITOIRES<br>
       TRANSITION ÉNERGÉTIQUE<br>
       MER"
-# leave empty if not pertinent
-website__logo_operator: #"https://upload.wikimedia.org/wikipedia/fr/4/47/Logo_M%C3%A9t%C3%A9o_France_2016.svg"
-website__homepage_title: "Ecosphères"
-website__homepage_subtitle: "Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**"
-
-# Menu infos, items
-website__menu_items:
-  - 
-    name: "Accueil"
-    id: "home"
-    linkPage: "/"
-    type: "component"
-  - 
-    name: "Jeux de données"
-    id: "datasets"
-    linkPage: "/datasets"
-    type: "component"
-  - 
-    name: "Organizations"
-    id: "organizations"
-    linkPage: "/organizations"
-    type: "component"
-  - 
-    name: "Bouquets"
-    id: "bouquets"
-    linkPage: "/bouquets"
-    type: "component"
-  -
-    name: "À propos"
-    id: "about"
-    linkPage: "/about"
-    type: "page"
-    url: "https://gist.githubusercontent.com/geoffreyaldebert/f6198f2aa63b18783be7d7d3be0909a9/raw/7f979217a4c878225262eb654be3136bf1fe7157/about.md"
-
-
-# img should be square
-website__home_buttons:
-  # -
-  #   title: "En savoir plus sur la démarche"
-  #   link: "/about"
-  #   img: "https://static.data.gouv.fr/avatars/44/3f1d6b9eac45b2bca7ae9b2a80d812-100.jpg"
-  # -
-  #   title: "Utiliser les API Météo-France"
-  #   link: "https://portail-api.meteofrance.fr/devportal/apis"
-  #   img: "https://static.data.gouv.fr/avatars/40/05f4e0291e4ad49a9321071c195cce-100.jpg"
-
-website__show_topic_charts: false
-
-website__list_highlited_topics:
-  # - 
-  #   id: "650db7d220cf97f7caaa3c78"
-  #   name: "Données climatologiques"
-  # - 
-  #   id: "650db7da501723ab94fbf426"
-  #   name: "Changement climatique"
-
-
-website__oauth_option: true
-
-# display settings
-organizations_list_page_size: 9
+  # leave empty if not pertinent
+  logo_operator:
+  homepage_title: "Ecosphères"
+  homepage_subtitle: "Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**"
+  menu_items:
+    -
+      name: "Accueil"
+      id: "home"
+      linkPage: "/"
+      type: "component"
+    -
+      name: "Jeux de données"
+      id: "datasets"
+      linkPage: "/datasets"
+      type: "component"
+    -
+      name: "Organisations"
+      id: "organizations"
+      linkPage: "/organizations"
+      type: "component"
+    -
+      name: "Bouquets"
+      id: "bouquets"
+      linkPage: "/bouquets"
+      type: "component"
+    -
+      name: "À propos"
+      id: "about"
+      linkPage: "/about"
+      type: "page"
+      url: "https://gist.githubusercontent.com/geoffreyaldebert/f6198f2aa63b18783be7d7d3be0909a9/raw/7f979217a4c878225262eb654be3136bf1fe7157/about.md"
+  home_buttons:
+  show_topic_charts: false
+  list_highlighted_topics:
+  oauth_option: true
+  # display settings
+  organizations_list_page_size: 9
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

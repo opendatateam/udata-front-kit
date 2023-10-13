@@ -30,8 +30,8 @@ export const useSearchStore = defineStore("search", {
     },
   },
   actions: {
-    async search(query, topic, page = 1, filter = []) {
-      const args = { page_size: pageSize, page: page, filter: filter }
+    async search(query, topic, page = 1) {
+      const args = { page_size: pageSize, page }
       const results = await searchAPI.search(query, topic, page, args)
       this.data = results
     }

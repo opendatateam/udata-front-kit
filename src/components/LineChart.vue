@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watchEffect } from "vue"
+import { computed, watchEffect } from "vue"
 import { datavizStore } from "../store/DatavizStore"
 import {
   Chart as ChartJS,
@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js"
 import { Line } from "vue-chartjs"
 
@@ -61,12 +62,12 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler,
 )
 
 const props = defineProps(["dataurl"])
 const store = datavizStore()
-const data = computed(() => store.data)
 const formatedData = computed(() => store.formatedData)
 const chartName = computed(() => store.chartName)
 const chartUnit = computed(() => store.chartUnit)

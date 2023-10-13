@@ -4,7 +4,7 @@ import config from "@/config";
 
 const navItems = computed(() => {
   let items = [];
-  config.website__menu_items.forEach((item) => {
+  config.website.menu_items.forEach((item) => {
     items.push({
       to: item.linkPage,
       text: item.name,
