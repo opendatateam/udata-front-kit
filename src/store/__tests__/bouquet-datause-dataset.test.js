@@ -21,7 +21,7 @@ test('get a dataset when a dataset is not found', async() => {
   const storeFactory = createDatasetStore({ get });
   const store = storeFactory()
   const dataset = await store.get(notFound.id)
-  expect(dataset.name).toStrictEqual('')
-  expect(dataset.uri).toStrictEqual('')
+  expect(dataset.name).toBeNull
+  expect(dataset.uri).toBeNull
 })
 

@@ -3,14 +3,18 @@ import { defineStore } from "pinia"
 export const createDatasetStore = (client) => {
   return defineStore ('bouquet-datause-dataset', {
     state: () => ({
-      name: '',
-      uri: ''
+      name: null,
+      uri: null
     }),
     actions: {
       async get(id) {
-        const response = client.get(id)
-        this.name = response.title
-        this.uri = response.page
+        const response = await client.get(id)
+        if(response.status === 200) {
+          this.name = response.data.title
+          this.uri = response.data.page
+
+        }
+        
         return this
       }
     }

@@ -1,3 +1,6 @@
 {
-  "message": "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. You have requested this URI [/api/1/datasets/marvin/] but did you mean /api/1/datasets/r/<uuid:id> or /api/1/datasets/<dataset:dataset>/resources/<uuid:rid>/ or /api/1/datasets/<dataset:dataset>/rdf.<format> ?"
+  "status": 400,
+  "data": {
+    "message": "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again. You have requested this URI [/api/1/datasets/marvin/] but did you mean /api/1/datasets/r/<uuid:id> or /api/1/datasets/<dataset:dataset>/resources/<uuid:rid>/ or /api/1/datasets/<dataset:dataset>/rdf.<format> ?"
+  }
 }
