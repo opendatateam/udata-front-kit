@@ -34,7 +34,7 @@ describe('create bouquet', () => {
   })
 })
 
-describe('add information of bouquet', () => {
+describe('add information to bouquet', () => {
   beforeEach(async(context) => {
     setActivePinia(createPinia())
     const client = new TopicsAPI
@@ -63,4 +63,30 @@ describe('add information of bouquet', () => {
   })
 })
 
+describe('add datause to bouquet', () => {
+  beforeEach(async(context) => {
+    setActivePinia(createPinia())
+    const client = new TopicsAPI
+    const storeFactory = createBouquetStore(client);
+    const store = storeFactory()
+    const bouquet = {
+      name: "test",
+      description: "test",
+      tags: ['test'],
+    }
+    await store.create(bouquet)
+    context.store = store
+  })
+  
+  test('edit a bouquet', async({store}) => {
+    const bouquetDatause = {
+      name: 'name test',
+      description: 'description test'
+    }
 
+    const {data:{datauses}} = await store.addDatause(bouquetDatause)
+    const datause = datauses[datauses.length - 1]
+    expect (datause.name).toBe(bouquetDatause.name)
+    expect (datause.description).toBe(bouquetDatause.description)
+  })
+})

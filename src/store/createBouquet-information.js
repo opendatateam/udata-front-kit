@@ -8,9 +8,9 @@ export const useBouquetInformationStore = defineStore("createBouquet-information
   }),
   actions: {
     create(response) {
-      this.subject = response.data.extras.subject
-      this.theme = response.data.extras.theme
-      this.subTheme = response.data.extras['sub-theme']
+      this.subject = response.data.extras['information:subject']
+      this.theme = response.data.extras['information:theme']
+      this.subTheme = response.data.extras['information:sub-theme']
 
       return this
     }

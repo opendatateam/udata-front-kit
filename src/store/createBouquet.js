@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import { useBouquetInformationStore } from "@/store/createBouquet-information"
+import { useBouquetDatauseStore } from "@/store/createBouquet-datause"
 
 export const createBouquetStore = (client) => {
   return defineStore ('createBouquet', {
@@ -9,6 +10,7 @@ export const createBouquetStore = (client) => {
         name: null,
         description: null,
         information: null,
+        datauses: [],
         tags: []
       },
       error: null
@@ -28,20 +30,43 @@ export const createBouquetStore = (client) => {
         
         return this
       },
-      async addInformation(bouquet){
+      async addInformation(bouquet) {
         const payload = {
           extras: {
-            subject: bouquet.subject,
-            theme: bouquet.theme,
-            'sub-theme': bouquet.subTheme
+            'information:subject': bouquet.subject,
+            'information:theme': bouquet.theme,
+            'information:sub-theme': bouquet.subTheme
           }
         }
         const response = await client.update(this.data.id, {...this.data, ...payload})
         const bouquetInformation = useBouquetInformationStore()
 
-        console.log('bouquetInformation', bouquetInformation)
         if (response.status === 200) {
           this.data.information = bouquetInformation.create(response)
+        } else if (response.status === 400) {
+          this.error = "error"
+        } else {
+          this.error = "not found"
+        }
+
+        return this
+      },
+      async addDatause(datause) {
+        const payload = {
+          extras: {
+            datauses: [
+              {
+                name: datause.name,
+                description: datause.description
+              }
+            ]
+          }
+        }
+        const response = await client.update(this.data.id, {...this.data, ...payload})
+        const bouquetDatause = useBouquetDatauseStore()
+
+        if (response.status === 200) {
+          this.data.datauses.push(bouquetDatause.create(response))
         } else if (response.status === 400) {
           this.error = "error"
         } else {
