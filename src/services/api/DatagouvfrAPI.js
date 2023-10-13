@@ -15,6 +15,7 @@ instance.interceptors.request.use(
         Authorization: `Bearer ${store.$state.token}`
       }
     }
+
     return config
   },
   (error) => Promise.reject(error)
@@ -46,8 +47,7 @@ export default class DatagouvfrAPI {
    * @returns
    */
   async request(url, method = 'get', params = {}) {
-    const res = await instance[method](url, params)
-    return res
+    return await instance[method](url, params)
   }
 
   /**
