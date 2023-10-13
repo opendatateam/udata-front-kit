@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 
 export const createBouquetStore = (client) => {
-  return defineStore ('bouquet', {
+  return defineStore ('createBouquet', {
     state: () => ({
       data: {
         id: null,

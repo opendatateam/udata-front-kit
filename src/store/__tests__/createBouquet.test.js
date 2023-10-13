@@ -1,7 +1,7 @@
 import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, expect, test, describe } from 'vitest'
 
-import { createBouquetStore } from '@/store/bouquet'
+import { createBouquetStore } from '@/store/createBouquet'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 
 describe('create bouquet', () => {
