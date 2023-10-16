@@ -1,10 +1,10 @@
 import axios from "axios"
 import config from "@/config"
 // import { toast } from "vue3-toastify"
-// import { useLoading } from "vue-loading-overlay"
+import { useLoading } from "vue-loading-overlay"
 import { useUserStore } from "../../store/UserStore"
 
-// const $loading = useLoading()
+const $loading = useLoading()
 const instance = axios.create()
 
 // inject token in requests if user is loggedIn
@@ -58,13 +58,13 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async makeRequestAndHandleResponse (url, method = "get", params = {}) {
-    // const loader = $loading.show()
+    const loader = $loading.show()
     return this.request(url, method, params).catch(error => {
       // console.error(error)
       if (error && error.message) {
         return error.response
       }
-    })
+    }).finally(() => loader.hide())
   }
 
   /**

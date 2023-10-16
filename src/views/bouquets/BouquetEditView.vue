@@ -25,7 +25,7 @@ const isEditDesc = ref(false)
 const showObjectif = ref()
 const showHowto = ref()
 const isFormValidated = ref(false);
-const noWhiteSpace = ref();
+const errorMessage = ref();
 
 const modalActions = [
   {
@@ -98,39 +98,24 @@ const onSubmit = async () => {
     datasets: datasets.value.map(d => d.dataset.id),
   }
 
-  const checkWhiteSpacing = (val) => {
-    if (val.trim() === '') {
-      noWhiteSpace.value = `Merci de bien remplir les champs`
-      return true
-    }
-    return false
-  };
-
   if (isCreate) {
-    if (checkWhiteSpacing(data.name) || checkWhiteSpacing(data.description)) {
-      return;
-    }
-
     res = await bouquetStore.create({
       ...data,
       tags: [config.universe_name],
       extras: extrasFromDatasets(),
     })
   } else {
-    if (checkWhiteSpacing(data.name) || checkWhiteSpacing(data.description)) {
-      return;
-    }
-
     res = await bouquetStore.update(loadedBouquet.value.id, {
       ...data,
       tags: loadedBouquet.value.tags,
       extras: { ...loadedBouquet.value.extras, ...extrasFromDatasets()},
     })
   }
-  
+
   isFormValidated.value = true;
+
   if(res.status && res.status === 400) {
-    return true
+    errorMessage.value = "Merci de bien remplir les champs"
   }
   else {
     setTimeout(() => {
@@ -163,179 +148,193 @@ onMounted(() => {
 </script>
 
 <template>
-  <component :is="'style'">
-    .required { color: red; } .container { display: grid; grid-template-columns:
-    1fr auto; position: relative; } .hint-on-demand { background-color: var(--grey-1000-50);
-    position: absolute; right: 0; transform: translateY(1.5rem); opacity: 0;
-    transition: opacity 0.3s ease-in-out; } .hint-on-demand.showObjectif, .hint-on-demand.showHowto { opacity: 1;
-    transition: opacity 0.3s ease-in-out; }
-  </component>
-
   <div class="fr-container fr-mt-4w fr-mb-4w">
-    <h1 v-if="isCreate">Description du bouquet de données</h1>
-    <h1 v-else>Modifier le bouquet {{ loadedBouquet.name }}</h1>
-    <div style="margin: 1rem 0;">
-      <DsfrAlert
-        v-if="isFormValidated"
-        type="success"
-        title="Bouquet crée"
-        description="Votre bouquet a bien été crée."
-      />
-      <DsfrAlert
-        v-if="noWhiteSpace"
-        type="warning"
-        :title="noWhiteSpace"
-      />
-    </div>
+    <div class="fr-col-md-7">
+      <h1 v-if="isCreate">Description du bouquet de données</h1>
+      <h1 v-else>Modifier le bouquet {{ loadedBouquet.name }}</h1>
 
-    <form @submit.prevent="onSubmit()">
-      <DsfrInput
-        label-class="container"
-        class="fr-mt-1w fr-mb-2w"
-        v-model="form.name"
-        :is-textarea="true"
-        label="Objectif du bouquet *"
-        placeholder="Mon bouquet"
-        :label-visible="true"
-      >
-        <template v-slot:label>
-          <div>
-            Objectif du bouquet
-            <span class="required">&nbsp;*</span>
-          </div>
-          <button
-            @mouseover="showObjectif = true"
-            @mouseout="showObjectif = false"
-            @click="showObjectif = !showObjectif"
-            @blur="showObjectif = false"
-          >
-            <VIcon
-              name="ri-question-fill"
-              color="var(--blue-france-sun-113-625)"
-              style="pointer-events: none;"
-            />
-          </button>
-          <DsfrAlert
-            type="info"
-            class="hint-on-demand"
-            :class="{showObjectif: showObjectif}"
-            description="Indice au survol er"
-          />
-        </template>
-      </DsfrInput>
-    
-      <DsfrInput
-        label-class="container"
-        class="fr-mt-1w fr-mb-2w"
-        v-model="form.description"
-        label="Comment utiliser ce bouquet *"
-        placeholder="Ma description"
-        :label-visible="true"
-        :is-textarea="true"
-
-      >
-        <template v-slot:label>
-          <div>
-            Comment utiliser ce bouquet
-            <span class="required">&nbsp;*</span>
-          </div>
-          <button
-            @mouseover="showHowto = true"
-            @mouseout="showHowto = false"
-            @click="showHowto = !showHowto"
-            @blur="showHowto = false"
-          >
-            <VIcon
-              name="ri-question-fill"
-              color="var(--blue-france-sun-113-625)"
-              style="pointer-events: none;"
-            />
-          </button>
-          <DsfrAlert
-            type="info"
-            class="hint-on-demand"
-            :class="{showHowto: showHowto}"
-            description="Indice au survol"
-          />
-        </template>
-      </DsfrInput>
-
-      <DsfrButton label="Ajouter un jeu de données"
-        @click.stop.prevent="isModalOpen = true"
-        ref="modalOrigin" :secondary="true" />
-      <DsfrModal
-        ref="modal"
-        :opened="isModalOpen"
-        title="Ajouter un jeu de données"
-        @close="isModalOpen = false"
-        :origin="$refs.modalOrigin"
-        :actions="modalActions"
-      >
-        <label for="select-datasets">Sélectionnez un jeu de données</label>
-        <Multiselect
-          noOptionsText="Précisez ou élargissez votre recherche"
-          ref="selector"
-          class="fr-mt-1w fr-mb-2w"
-          placeholder="Cherchez un jeu de données"
-          name="select-datasets"
-          v-model="selectedDataset.id"
-          :filter-results="false"
-          :min-chars="1"
-          :resolve-on-load="false"
-          :delay="0"
-          :searchable="true"
-          :options="search"
-          v-if="!isEditDesc"
+      <div class="fr-mt-4v">
+        <DsfrAlert
+          v-if="isFormValidated && !errorMessage"
+          type="success"
+          title="Bouquet crée"
+          description="Votre bouquet a bien été crée."
         />
-        <DsfrInput v-else
-          class="fr-mt-1w fr-mb-2w"
-          :disabled="true"
-          v-model="selectedDataset.title"
+        <DsfrAlert
+          v-if="errorMessage"
+          type="warning"
+          :title="errorMessage"
         />
+      </div>
+
+      <form @submit.prevent="onSubmit()">
+        <div class="container">
+            <div>
+              Objectif du bouquet
+              <span class="required">&nbsp;*</span>
+            </div>
+            <button
+              @mouseover="showHowto = true"
+              @mouseout="showHowto = false"
+              @click="showHowto = !showHowto"
+              @blur="showHowto = false"
+            >
+              <VIcon
+                name="ri-question-fill"
+                color="var(--blue-france-sun-113-625)"
+                style="pointer-events: none;"
+              />
+            </button>
+            <p class="hint-on-demand" :class="{showHowto: showHowto}">Ajoutez ici l’ensemble des informations nécessaires à la compréhension, l’objectif et l’utilisation du bouquet. N’hésitez pas à indiquer la réglementation ou une documentation liée au bouquet.</p>
+          </div>
+        <div class="container">
+            <div class="fr-hint-text">
+              Utilisez du markdown pour mettre en forme votre texte
+            </div>
+            <button
+              @mouseover="showObjectif = true"
+              @mouseout="showObjectif = false"
+              @click="showObjectif = !showObjectif"
+              @blur="showObjectif = false"
+            >
+              <VIcon
+                name="ri-question-fill"
+                color="var(--blue-france-sun-113-625)"
+                style="pointer-events: none;"
+              />
+            </button>
+            <p class="hint-on-demand"  :class="{showObjectif: showObjectif}">
+              *simple astérisque pour italique*<br/>
+              **double astérisque pour gras**<br/>
+              # un dièse pour titre 1<br/>
+              ## deux dièses pour titre 2<br/>
+              *astérisque pour une liste<br/>
+              lien : [[https://exemple.fr]]
+          </p>
+          </div>
         <DsfrInput
           class="fr-mt-1w fr-mb-2w"
-          v-model="selectedDataset.description"
-          label="Description du jeu de données dans le bouquet"
-          placeholder="Pourquoi avez-vous ajouté ce jeu de données ?"
+          v-model="form.name"
+          :is-textarea="true"
+          placeholder="Mon bouquet"
+          :label-visible="true"
+        >
+          
+        </DsfrInput>
+      
+        <!-- <DsfrInput
+          label-class="container"
+          class="fr-mt-1w fr-mb-2w"
+          v-model="form.description"
+          label="Comment utiliser ce bouquet *"
+          placeholder="Ma description"
           :label-visible="true"
           :is-textarea="true"
-        />
-      </DsfrModal>
-      <div class="fr-table">
-        <table v-if="datasets.length">
-          <thead>
-            <tr>
-              <th scope="col">Titre</th>
-              <th scope="col">Organisation</th>
-              <th scope="col">Description</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="d in datasets">
-              <td>{{ d.dataset.title }}</td>
-              <td>{{ d.dataset.organization?.name }}</td>
-              <td>{{ d.description }}</td>
-              <td>
-                <div class="es__button-container">
-                  <DsfrButton
-                    :icon-only="true" icon="ri-delete-bin-line" size="sm"
-                    title="Supprimer"
-                    @click.stop.prevent="onDeleteDataset(d.dataset.id)"
-                  />
-                  <DsfrButton
-                    :icon-only="true" icon="ri-pencil-line" size="sm"
-                    title="Editer"
-                    @click.stop.prevent="onEditDataset(d.dataset)"
-                  />
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <DsfrButton type="submit" label="Enregistrer" />
-    </form>
+
+        >
+          <template v-slot:label>
+            <div>
+              Comment utiliser ce bouquet
+              <span class="required">&nbsp;*</span>
+            </div>
+            <button
+              @mouseover="showHowto = true"
+              @mouseout="showHowto = false"
+              @click="showHowto = !showHowto"
+              @blur="showHowto = false"
+            >
+              <VIcon
+                name="ri-question-fill"
+                color="var(--blue-france-sun-113-625)"
+                style="pointer-events: none;"
+              />
+            </button>
+            <DsfrAlert
+              type="info"
+              class="hint-on-demand"
+              :class="{showHowto: showHowto}"
+              description="Indice au survol"
+            />
+          </template>
+        </DsfrInput> -->
+
+        <DsfrButton label="Ajouter un jeu de données"
+          @click.stop.prevent="isModalOpen = true"
+          ref="modalOrigin" :secondary="true" />
+        <DsfrModal
+          ref="modal"
+          :opened="isModalOpen"
+          title="Ajouter un jeu de données"
+          @close="isModalOpen = false"
+          :origin="$refs.modalOrigin"
+          :actions="modalActions"
+        >
+          <label for="select-datasets">Sélectionnez un jeu de données</label>
+          <Multiselect
+            noOptionsText="Précisez ou élargissez votre recherche"
+            ref="selector"
+            class="fr-mt-1w fr-mb-2w"
+            placeholder="Cherchez un jeu de données"
+            name="select-datasets"
+            v-model="selectedDataset.id"
+            :filter-results="false"
+            :min-chars="1"
+            :resolve-on-load="false"
+            :delay="0"
+            :searchable="true"
+            :options="search"
+            v-if="!isEditDesc"
+          />
+          <DsfrInput v-else
+            class="fr-mt-1w fr-mb-2w"
+            :disabled="true"
+            v-model="selectedDataset.title"
+          />
+          <DsfrInput
+            class="fr-mt-1w fr-mb-2w"
+            v-model="selectedDataset.description"
+            label="Description du jeu de données dans le bouquet"
+            placeholder="Pourquoi avez-vous ajouté ce jeu de données ?"
+            :label-visible="true"
+            :is-textarea="true"
+          />
+        </DsfrModal>
+        <div class="fr-table">
+          <table v-if="datasets.length">
+            <thead>
+              <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Organisation</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="d in datasets">
+                <td>{{ d.dataset.title }}</td>
+                <td>{{ d.dataset.organization?.name }}</td>
+                <td>{{ d.description }}</td>
+                <td>
+                  <div class="es__button-container">
+                    <DsfrButton
+                      :icon-only="true" icon="ri-delete-bin-line" size="sm"
+                      title="Supprimer"
+                      @click.stop.prevent="onDeleteDataset(d.dataset.id)"
+                    />
+                    <DsfrButton
+                      :icon-only="true" icon="ri-pencil-line" size="sm"
+                      title="Editer"
+                      @click.stop.prevent="onEditDataset(d.dataset)"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <DsfrButton type="submit" label="Enregistrer" />
+      </form>
+    </div>
   </div>
 </template>
 
@@ -345,5 +344,26 @@ onMounted(() => {
   button:first-child {
     margin-right: 0.5em;
   }
+}
+.required {
+  color: red;
+} 
+:deep .container {
+  display: flex;
+  position: relative;
+} 
+.hint-on-demand {
+  background-color: var(--grey-1000-50);
+  position: absolute;
+  right: 0;
+  transform: translateY(1.5rem);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  width: 300px
+}
+.hint-on-demand.showObjectif,
+.hint-on-demand.showHowto {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 }
 </style>
