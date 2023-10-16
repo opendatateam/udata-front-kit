@@ -96,20 +96,59 @@ describe('deserialize', () => {
       expect(deserialized.theme).toBe(information['information:theme'])
       expect(deserialized.subTheme).toBe(information['information:sub-theme'])
     })
+
+    test('when params KO', async ({ store }) => {
+      const information = {
+        this: 'subject test',
+        wont: 'theme test',
+        fail: 'subTheme test'
+      }
+
+      const deserialized = store.deserialize({ extras: information })
+
+      expect(deserialized.subject).toBeNull()
+      expect(deserialized.theme).toBeNull()
+      expect(deserialized.theme).toBeNull()
+    })
   })
 
-  test('when params KO', async ({ store }) => {
-    const information = {
-      this: 'subject test',
-      wont: 'theme test',
-      fail: 'subTheme test'
-    }
+  describe('when store exists', () => {
+    beforeEach(async (context) => {
+      const store = useBouquetInformationStore()
+      const information = {
+        subject: 'subject test existing',
+        theme: 'theme test existing',
+        subTheme: 'subTheme test existing'
+      }
+      context.store = store.create(information)
+    })
 
-    const deserialized = store.deserialize({ extras: information })
+    test('when params OK', async ({ store }) => {
+      const information = {
+        'information:subject': 'subject test changed',
+        'information:theme': 'theme test changed',
+        'information:sub-theme': 'subTheme test changed'
+      }
 
-    expect(deserialized.subject).toBeNull()
-    expect(deserialized.theme).toBeNull()
-    expect(deserialized.subTheme).toBeNull()
+      const deserialized = store.deserialize({ extras: information })
+
+      expect(deserialized.subject).toBe(information['information:subject'])
+      expect(deserialized.theme).toBe(information['information:theme'])
+      expect(deserialized.subTheme).toBe(information['information:sub-theme'])
+    })
+
+    test('when params KO', async ({ store }) => {
+      const information = {
+        this: 'subject test',
+        wont: 'theme test',
+        fail: 'subTheme test'
+      }
+
+      const deserialized = store.deserialize({ extras: information })
+
+      expect(deserialized.subject).toBeNull
+      expect(deserialized.theme).toBeNull
+      expect(deserialized.subTheme).toBeNull
+    })
   })
-
 })
