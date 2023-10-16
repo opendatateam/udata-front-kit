@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia'
 
 const serializeInformation = (params) => {
   return {
@@ -18,7 +18,7 @@ const deserializeInformation = (params) => {
   }
 }
 
-const useBouquetInformationStore = defineStore("createBouquet-information", {
+const useBouquetInformationStore = defineStore('createBouquet-information', {
   state: () => ({
     subject: null,
     theme: null,
@@ -37,7 +37,7 @@ const useBouquetInformationStore = defineStore("createBouquet-information", {
       this.$state = deserializeInformation({
         extras: {
           ...serializeInformation(this.$state).extras,
-          ...params?.extras || {}
+          ...(params?.extras || {})
         }
       })
 

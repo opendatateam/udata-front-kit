@@ -15,7 +15,7 @@ describe('serializeInformation', () => {
       subTheme: 'subTheme'
     }
 
-    const {extras} = serializeInformation(information)
+    const { extras } = serializeInformation(information)
 
     expect(extras['information:subject']).toBe(information.subject)
     expect(extras['information:theme']).toBe(information.theme)
@@ -29,7 +29,7 @@ describe('serializeInformation', () => {
       fail: 'fail'
     }
 
-    const {extras} = serializeInformation(information)
+    const { extras } = serializeInformation(information)
 
     expect(extras.this).toBeUndefined()
     expect(extras['information:subject']).toBeNull()
@@ -83,7 +83,7 @@ describe('serialize', () => {
       subTheme: 'subTheme'
     }
 
-    const {extras} = store.serialize(information)
+    const { extras } = store.serialize(information)
 
     expect(extras['information:subject']).toBe(store.subject)
     expect(extras['information:theme']).toBe(information.theme)
@@ -95,10 +95,10 @@ describe('serialize', () => {
 
     const information = {
       this: 'this',
-      theme: 'theme',
+      theme: 'theme'
     }
 
-    const {extras} = store.serialize(information)
+    const { extras } = store.serialize(information)
 
     expect(extras['information:this']).toBeUndefined()
     expect(extras['information:subject']).toBe(store.subject)
@@ -137,7 +137,7 @@ describe('deserialize', () => {
     const params = {
       extras: {
         this: 'this',
-        'information:theme': 'theme',
+        'information:theme': 'theme'
       }
     }
 

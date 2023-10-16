@@ -3,7 +3,7 @@ import { beforeEach, expect, test, describe } from 'vitest'
 
 import { useBouquetDatauseStore } from '@/store/createBouquet-datauses'
 
-beforeEach(async(context) => {
+beforeEach(async (context) => {
   setActivePinia(createPinia())
   context.store = useBouquetDatauseStore()
 })
@@ -89,7 +89,7 @@ describe('deserialize', () => {
         }
       ]
 
-      const deserialized = store.deserialize({ extras: {datauses: datauses} })
+      const deserialized = store.deserialize({ extras: { datauses } })
 
       expect(deserialized[0].name).toBe(datauses[0].name)
       expect(deserialized[0].description).toBe(datauses[0].description)
@@ -111,7 +111,7 @@ describe('deserialize', () => {
         }
       ]
 
-      const deserialized = store.deserialize({ extras: { datauses: datauses } })
+      const deserialized = store.deserialize({ extras: { datauses } })
 
       expect(deserialized[0].name).toBe(datauses[0].name)
       expect(deserialized[0].description).toBe(datauses[0].description)
@@ -122,12 +122,14 @@ describe('deserialize', () => {
     })
 
     test('when params KO', async ({ store }) => {
-      const datauses = [{
-        this: 'name test',
-        wont: 'description test'
-      }]
+      const datauses = [
+        {
+          this: 'name test',
+          wont: 'description test'
+        }
+      ]
 
-      const deserialized = store.deserialize({ extras: { datauses: datauses } })
+      const deserialized = store.deserialize({ extras: { datauses } })
 
       expect(deserialized[0].name).toBeUndefined()
       expect(deserialized[0].description).toBeUndefined()
@@ -137,20 +139,24 @@ describe('deserialize', () => {
   describe('when store exists', () => {
     beforeEach(async (context) => {
       const store = useBouquetDatauseStore()
-      const datauses = [{
-        name: 'name test existing',
-        description: 'description test existing',
-      }]
+      const datauses = [
+        {
+          name: 'name test existing',
+          description: 'description test existing'
+        }
+      ]
       context.store = store.create(datauses)
     })
 
     test('when params OK and only one datause', async ({ store }) => {
-      const datauses = [{
-        name: 'subject test changed',
-        description: 'theme test changed'
-      }]
+      const datauses = [
+        {
+          name: 'subject test changed',
+          description: 'theme test changed'
+        }
+      ]
 
-      const deserialized = store.deserialize({ extras: { datauses: datauses } })
+      const deserialized = store.deserialize({ extras: { datauses } })
 
       expect(deserialized[0].name).toBe(datauses[0].name)
       expect(deserialized[0].description).toBe(datauses[0].description)
