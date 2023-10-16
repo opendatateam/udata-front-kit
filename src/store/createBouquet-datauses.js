@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-export const useBouquetDatauseStore = defineStore("createBouquet-datause", {
+export const useBouquetDatauseStore = defineStore("createBouquet-datauses", {
   state: () => ({
     name: null,
     description: null
@@ -28,6 +28,13 @@ export const useBouquetDatauseStore = defineStore("createBouquet-datause", {
       }
 
       return {...serializedPayload, ...payload}
+    },
+    deserialize(payload) {
+      let datauses = payload.extras.datauses
+      if(!datauses) return []
+    
+      datauses.map((item) => datauses.push(item))
+      return datauses
     }
   }
 })

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { useBouquetInformationStore } from "@/store/createBouquet-information"
-import { useBouquetDatauseStore } from "@/store/createBouquet-datause"
+import { useBouquetDatauseStore } from "@/store/createBouquet-datauses"
 
 export const createBouquetStore = (client) => {
   return defineStore ('createBouquet', {
