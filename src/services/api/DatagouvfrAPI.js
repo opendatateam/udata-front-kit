@@ -61,6 +61,10 @@ export default class DatagouvfrAPI {
   async makeRequestAndHandleResponse(url, method = 'get', params = {}) {
     return this.request(url, method, params)
       .catch((error) => {
+        if(error && error instanceof(TypeError)) {
+          throw error
+        }
+
         if (error && error.message) {
           return error.response
         }

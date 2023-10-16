@@ -14,6 +14,20 @@ export const useBouquetDatauseStore = defineStore("createBouquet-datause", {
       this.description = datause.description
 
       return this
+    },
+    serialize(payload) {
+      const serializedPayload = {
+        extras: {
+          datauses: [
+            {
+              name: this.name,
+              description: this.description
+            }
+          ]
+        }
+      }
+
+      return {...serializedPayload, ...payload}
     }
   }
 })

@@ -8,11 +8,30 @@ export const useBouquetInformationStore = defineStore("createBouquet-information
   }),
   actions: {
     create(response) {
-      this.subject = response.data.extras['information:subject']
-      this.theme = response.data.extras['information:theme']
-      this.subTheme = response.data.extras['information:sub-theme']
+      const information = this.serialize(response)
+      this.subject = information.subject
+      this.theme = information.theme
+      this.subTheme = information.subTheme
 
       return this
+    },
+    deserialize(payload) {
+      return {
+          subject: payload.data.extras['information:subject'],
+          theme: payload.data.extras['information:theme'],
+          subTheme: payload.data.extras['information:sub-theme']
+        }
+    },
+    serialize(payload) {
+      const serializedPayload = {
+        extras: {
+          'information:subject': this.subject,
+          'information:theme': this.theme,
+          'information:sub-theme': this.subThem
+        }
+      }
+
+      return {...serializedPayload, ...payload}
     }
   }
 })

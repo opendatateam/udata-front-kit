@@ -78,7 +78,7 @@ describe('add datause to bouquet', () => {
     context.store = store
   })
   
-  test('edit a bouquet', async({store}) => {
+  test('add datause to bouquet when there is no datause', async({store}) => {
     const bouquetDatause = {
       name: 'name test',
       description: 'description test'
@@ -88,5 +88,25 @@ describe('add datause to bouquet', () => {
     const datause = datauses[datauses.length - 1]
     expect (datause.name).toBe(bouquetDatause.name)
     expect (datause.description).toBe(bouquetDatause.description)
+  })
+
+  test('add datause to bouquet when there is a datause', async({store}) => {
+    const bouquetDatause1 = {
+      name: 'name test 1',
+      description: 'description test 1'
+    }
+    const bouquetDatause2 = {
+      name: 'name test 2',
+      description: 'description test 2'
+    }
+
+    await store.addDatause(bouquetDatause1)
+    const {data:{datauses}} = await store.addDatause(bouquetDatause2)
+    const datause1 = datauses[datauses.length - 2]
+    const datause2 = datauses[datauses.length - 1]
+    expect (datause1.name).toBe(bouquetDatause1.name)
+    expect (datause1.description).toBe(bouquetDatause1.description)
+    expect (datause2.name).toBe(bouquetDatause2.name)
+    expect (datause2.description).toBe(bouquetDatause2.description)
   })
 })
