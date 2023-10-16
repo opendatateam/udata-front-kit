@@ -7,8 +7,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.vue,.json --fix --ignore-path .gitignore",
-    "format": "prettier . --write"
+    "lint": "eslint src/store/createBouquet* src/store/__tests__/. --ext .js,.jsx,.cjs,.mjs,.vue,.json --fix --ignore-path .gitignore",
+    "format": "prettier src/store/createBouquet* src/store/__tests__/. --write"
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
