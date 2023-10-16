@@ -106,9 +106,9 @@ describe('deserialize', () => {
 
       const deserialized = store.deserialize({ extras: information })
 
-      expect(deserialized.subject).toBeNull()
-      expect(deserialized.theme).toBeNull()
-      expect(deserialized.theme).toBeNull()
+      expect(deserialized.subject).toBeUndefined()
+      expect(deserialized.theme).toBeUndefined()
+      expect(deserialized.theme).toBeUndefined()
     })
   })
 
@@ -146,9 +146,9 @@ describe('deserialize', () => {
 
       const deserialized = store.deserialize({ extras: information })
 
-      expect(deserialized.subject).toBeNull
-      expect(deserialized.theme).toBeNull
-      expect(deserialized.subTheme).toBeNull
+      expect(deserialized.subject).toBeUndefined()
+      expect(deserialized.theme).toBeUndefined()
+      expect(deserialized.subTheme).toBeUndefined()
     })
   })
 })

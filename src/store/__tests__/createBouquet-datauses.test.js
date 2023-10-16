@@ -111,7 +111,7 @@ describe('deserialize', () => {
         }
       ]
 
-      const deserialized = store.deserialize({ extras: {datauses: datauses} })
+      const deserialized = store.deserialize({ extras: { datauses: datauses } })
 
       expect(deserialized[0].name).toBe(datauses[0].name)
       expect(deserialized[0].description).toBe(datauses[0].description)
@@ -121,19 +121,17 @@ describe('deserialize', () => {
       expect(deserialized[2].description).toBe(datauses[2].description)
     })
 
-    // test('when params KO', async ({ store }) => {
-    //   const information = {
-    //     this: 'subject test',
-    //     wont: 'theme test',
-    //     fail: 'subTheme test'
-    //   }
+    test('when params KO', async ({ store }) => {
+      const datauses = [{
+        this: 'name test',
+        wont: 'description test'
+      }]
 
-    //   const deserialized = store.deserialize({ extras: information })
+      const deserialized = store.deserialize({ extras: { datauses: datauses } })
 
-    //   expect(deserialized.subject).toBeNull()
-    //   expect(deserialized.theme).toBeNull()
-    //   expect(deserialized.theme).toBeNull()
-    // })
+      expect(deserialized[0].name).toBeUndefined()
+      expect(deserialized[0].description).toBeUndefined()
+    })
   })
 
   // describe('when store exists', () => {
