@@ -1,154 +1,157 @@
 import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, expect, test, describe } from 'vitest'
 
-import { useBouquetInformationStore } from '@/store/createBouquet-information'
+import {
+  serializeInformation,
+  deserializeInformation,
+  useBouquetInformationStore
+} from '@/store/createBouquet-information'
 
-beforeEach(async(context) => {
+beforeEach(() => {
   setActivePinia(createPinia())
-  context.store = useBouquetInformationStore()
 })
 
 describe('serialize', () => {
   describe('when store does not exist', () => {
-    test('when params OK', async ({ store }) => {
+    test('when params OK', () => {
       const information = {
-        subject: 'subject test',
-        theme: 'theme test',
-        subTheme: 'subTheme test'
+        subject: 'subject',
+        theme: 'theme',
+        subTheme: 'subTheme'
       }
 
-      const {extras} = store.serialize({ information })
+      const {extras} = serializeInformation(information)
 
       expect(extras['information:subject']).toBe(information.subject)
       expect(extras['information:theme']).toBe(information.theme)
       expect(extras['information:sub-theme']).toBe(information.subTheme)
     })
 
-    test('when params KO', async ({ store }) => {
+    test('when params KO', () => {
       const information = {
-        this: 'subject test',
-        wont: 'theme test',
-        fail: 'subTheme test'
+        this: 'this',
+        wont: 'wont',
+        fail: 'fail'
       }
 
-      const {extras} = store.serialize({ information })
+      const {extras} = serializeInformation(information)
 
+      expect(extras.this).toBeUndefined()
       expect(extras['information:subject']).toBeNull()
-      expect(extras['information:theme']).toBeNull()
-      expect(extras['information:sub-theme']).toBeNull()
     })
   })
 
   describe('when store exists', () => {
     beforeEach(async (context) => {
-      setActivePinia(createPinia())
-      const store = useBouquetInformationStore()
-      const information = {
-        subject: 'subject test existing',
-        theme: 'theme test existing',
-        subTheme: 'subTheme test existing'
-      }
-      context.store = store.create(information)
+      context.store = useBouquetInformationStore()
     })
 
-    test('when params OK', async ({ store }) => {
+    test('when params OK', ({ store }) => {
+      store.subject = 'subject'
+
       const information = {
-        subject: 'subject test changed',
-        theme: 'theme test changed',
-        subTheme: 'subTheme test changed'
+        theme: 'theme',
+        subTheme: 'subTheme'
       }
 
-      const {extras} = store.serialize({ information })
+      const {extras} = store.serialize(information)
 
-      expect(extras['information:subject']).toBe(information.subject)
+      expect(extras['information:subject']).toBe(store.subject)
       expect(extras['information:theme']).toBe(information.theme)
       expect(extras['information:sub-theme']).toBe(information.subTheme)
     })
 
-    test('when params KO', async ({ store }) => {
+    test('when params KO', ({ store }) => {
+      store.subject = 'subject'
+
       const information = {
-        this: 'subject test',
-        wont: 'theme test',
-        fail: 'subTheme test'
+        this: 'this',
+        theme: 'theme',
       }
 
-      const {extras} = store.serialize({ information })
+      const {extras} = store.serialize(information)
 
+      expect(extras['information:this']).toBeUndefined()
       expect(extras['information:subject']).toBe(store.subject)
-      expect(extras['information:theme']).toBe(store.theme)
-      expect(extras['information:sub-theme']).toBe(store.subTheme)
+      expect(extras['information:theme']).toBe(information.theme)
+      expect(extras['information:sub-theme']).toBeNull()
     })
   })
 })
 
 describe('deserialize', () => {
   describe('when store does not exist', () => {
-    test('when params OK', async ({ store }) => {
-      const information = {
-        'information:subject': 'subject test',
-        'information:theme': 'theme test',
-        'information:sub-theme': 'subTheme test'
+    test('when params OK', () => {
+      const params = {
+        extras: {
+          'information:subject': 'subject',
+          'information:theme': 'theme',
+          'information:sub-theme': 'subTheme'
+        }
       }
 
-      const deserialized = store.deserialize({ extras: information })
+      const information = deserializeInformation(params)
 
-      expect(deserialized.subject).toBe(information['information:subject'])
-      expect(deserialized.theme).toBe(information['information:theme'])
-      expect(deserialized.subTheme).toBe(information['information:sub-theme'])
+      expect(information.subject).toBe(params.extras['information:subject'])
+      expect(information.theme).toBe(params.extras['information:theme'])
+      expect(information.subTheme).toBe(params.extras['information:sub-theme'])
     })
 
-    test('when params KO', async ({ store }) => {
-      const information = {
-        this: 'subject test',
-        wont: 'theme test',
-        fail: 'subTheme test'
+    test('when params KO', () => {
+      const params = {
+        extras: {
+          this: 'this',
+          wont: 'wont',
+          fail: 'fail'
+        }
       }
 
-      const deserialized = store.deserialize({ extras: information })
+      const information = deserializeInformation(params)
 
-      expect(deserialized.subject).toBeUndefined()
-      expect(deserialized.theme).toBeUndefined()
-      expect(deserialized.theme).toBeUndefined()
+      expect(information.this).toBeUndefined()
+      expect(information.subject).toBeNull()
     })
   })
 
   describe('when store exists', () => {
     beforeEach(async (context) => {
-      const store = useBouquetInformationStore()
-      const information = {
-        subject: 'subject test existing',
-        theme: 'theme test existing',
-        subTheme: 'subTheme test existing'
-      }
-      context.store = store.create(information)
+      context.store = useBouquetInformationStore()
     })
 
-    test('when params OK', async ({ store }) => {
-      const information = {
-        'information:subject': 'subject test changed',
-        'information:theme': 'theme test changed',
-        'information:sub-theme': 'subTheme test changed'
+    test('when params OK', ({ store }) => {
+      store.subject = 'old subject'
+
+      const params = {
+        extras: {
+          'information:subject': 'new subject',
+          'information:theme': 'theme',
+          'information:sub-theme': 'subTheme'
+        }
       }
 
-      const deserialized = store.deserialize({ extras: information })
+      const information = store.deserialize(params)
 
-      expect(deserialized.subject).toBe(information['information:subject'])
-      expect(deserialized.theme).toBe(information['information:theme'])
-      expect(deserialized.subTheme).toBe(information['information:sub-theme'])
+      expect(information.subject).toBe(params.extras['information:subject'])
+      expect(information.theme).toBe(params.extras['information:theme'])
+      expect(information.subTheme).toBe(params.extras['information:sub-theme'])
     })
 
-    test('when params KO', async ({ store }) => {
-      const information = {
-        this: 'subject test',
-        wont: 'theme test',
-        fail: 'subTheme test'
+    test('when params KO', ({ store }) => {
+      store.subject = 'subject'
+
+      const params = {
+        extras: {
+          this: 'this',
+          'information:theme': 'theme',
+        }
       }
 
-      const deserialized = store.deserialize({ extras: information })
+      const information = store.deserialize(params)
 
-      expect(deserialized.subject).toBeUndefined()
-      expect(deserialized.theme).toBeUndefined()
-      expect(deserialized.subTheme).toBeUndefined()
+      expect(information.this).toBeUndefined()
+      expect(information.subject).toBe('subject')
+      expect(information.theme).toBe('theme')
+      expect(information.subTheme).toBeNull()
     })
   })
 })
