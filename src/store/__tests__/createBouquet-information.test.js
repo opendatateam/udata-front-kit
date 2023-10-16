@@ -3,18 +3,13 @@ import { beforeEach, expect, test, describe } from 'vitest'
 
 import { useBouquetInformationStore } from '@/store/createBouquet-information'
 
+beforeEach(async(context) => {
+  setActivePinia(createPinia())
+  context.store = useBouquetInformationStore()
+})
+
 describe('serialize', () => {
-  beforeEach(async(context) => {
-    setActivePinia(createPinia())
-    context.store = useBouquetInformationStore()
-  })
-
   describe('when store does not exist', () => {
-    beforeEach(async (context) => {
-      setActivePinia(createPinia())
-      context.store = useBouquetInformationStore()
-    })
-
     test('when params OK', async ({ store }) => {
       const information = {
         subject: 'subject test',
@@ -84,4 +79,24 @@ describe('serialize', () => {
       expect(extras['information:sub-theme']).toBe(store.subTheme)
     })
   })
+})
+
+describe('deserialize', () => {
+  describe('when store does not exist', () => {
+    test('when params OK', async ({ store }) => {
+      const information = {
+        'information:subject': 'subject test',
+        'information:theme': 'theme test',
+        'information:sub-theme': 'subTheme test'
+      }
+
+      const deserialized = store.deserialize({ extras: information })
+
+      expect(deserialized.subject).toBe(information['information:subject'])
+      expect(deserialized.theme).toBe(information['information:theme'])
+      expect(deserialized.subTheme).toBe(information['information:sub-theme'])
+    })
+  })
+
+
 })
