@@ -7,7 +7,7 @@ export const useBouquetDatauseStore = defineStore("createBouquet-datauses", {
   }),
   actions: {
     create(response) {
-      const datauses = response.data.extras.datauses
+      const datauses = response.extras.datauses
       const datause = datauses[datauses.length - 1]
 
       this.name = datause.name
