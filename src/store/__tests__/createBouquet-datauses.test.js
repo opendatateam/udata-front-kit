@@ -1,203 +1,237 @@
 import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, expect, test, describe } from 'vitest'
+import { head, last } from 'lodash/fp/array'
 
-import { useBouquetDatauseStore } from '@/store/createBouquet-datauses'
+import { useBouquetDatauseStore } from '@/store/createBouquet-datause'
 
-beforeEach(async (context) => {
-  setActivePinia(createPinia())
-  context.store = useBouquetDatauseStore()
-})
+import {
+  serializeDatauses,
+  deserializeDatauses,
+  useBouquetDatausesStore
+} from '@/store/createBouquet-datauses'
 
-// describe('serialize', () => {
-//   describe('when store does not exist', () => {
-//     test('when params OK', async ({ store }) => {
-//       const datauses = {
-//         name: 'name test',
-//         description: 'description test'
-//       }
+describe('serializeDatauses', () => {
+  test('when params OK and one datause', () => {
+    const datauses = [
+      {
+        name: 'name',
+        description: 'description'
+      }
+    ]
 
-//       const {extras} = store.serialize({ datauses })
+    const { extras } = serializeDatauses(datauses)
 
-//       expect(extras['information:subject']).toBe(datause.subject)
-//       expect(extras['information:theme']).toBe(information.theme)
-//     })
-
-//     test('when params KO', async ({ store }) => {
-//       const information = {
-//         this: 'subject test',
-//         wont: 'theme test',
-//         fail: 'subTheme test'
-//       }
-
-//       const {extras} = store.serialize({ information })
-
-//       expect(extras['information:subject']).toBeNull()
-//       expect(extras['information:theme']).toBeNull()
-//       expect(extras['information:sub-theme']).toBeNull()
-//     })
-//   })
-
-//   describe('when store exists', () => {
-//     beforeEach(async (context) => {
-//       setActivePinia(createPinia())
-//       const store = useBouquetDatauseStore()
-//       const information = {
-//         subject: 'subject test existing',
-//         theme: 'theme test existing',
-//         subTheme: 'subTheme test existing'
-//       }
-//       context.store = store.create(information)
-//     })
-
-//     test('when params OK', async ({ store }) => {
-//       const information = {
-//         subject: 'subject test changed',
-//         theme: 'theme test changed',
-//         subTheme: 'subTheme test changed'
-//       }
-
-//       const {extras} = store.serialize({ information })
-
-//       expect(extras['information:subject']).toBe(information.subject)
-//       expect(extras['information:theme']).toBe(information.theme)
-//       expect(extras['information:sub-theme']).toBe(information.subTheme)
-//     })
-
-//     test('when params KO', async ({ store }) => {
-//       const information = {
-//         this: 'subject test',
-//         wont: 'theme test',
-//         fail: 'subTheme test'
-//       }
-
-//       const {extras} = store.serialize({ information })
-
-//       expect(extras['information:subject']).toBe(store.subject)
-//       expect(extras['information:theme']).toBe(store.theme)
-//       expect(extras['information:sub-theme']).toBe(store.subTheme)
-//     })
-//   })
-// })
-
-describe('deserialize', () => {
-  describe('when store does not exist', () => {
-    test('when params OK and only one datause', async ({ store }) => {
-      const datauses = [
-        {
-          name: 'name test',
-          description: 'description test'
-        }
-      ]
-
-      const deserialized = store.deserialize({ extras: { datauses } })
-
-      expect(deserialized[0].name).toBe(datauses[0].name)
-      expect(deserialized[0].description).toBe(datauses[0].description)
-    })
-
-    test('when params OK and many datauses', async ({ store }) => {
-      const datauses = [
-        {
-          name: 'name test',
-          description: 'description test'
-        },
-        {
-          name: 'name test 2',
-          description: 'description test 2'
-        },
-        {
-          name: 'name test 3',
-          description: 'description test 3'
-        }
-      ]
-
-      const deserialized = store.deserialize({ extras: { datauses } })
-
-      expect(deserialized[0].name).toBe(datauses[0].name)
-      expect(deserialized[0].description).toBe(datauses[0].description)
-      expect(deserialized[1].name).toBe(datauses[1].name)
-      expect(deserialized[1].description).toBe(datauses[1].description)
-      expect(deserialized[2].name).toBe(datauses[2].name)
-      expect(deserialized[2].description).toBe(datauses[2].description)
-    })
-
-    test('when params KO', async ({ store }) => {
-      const datauses = [
-        {
-          this: 'name test',
-          wont: 'description test'
-        }
-      ]
-
-      const deserialized = store.deserialize({ extras: { datauses } })
-
-      expect(deserialized[0].name).toBeUndefined()
-      expect(deserialized[0].description).toBeUndefined()
-    })
+    expect(last(extras.datauses).name).toBe(last(datauses).name)
+    expect(last(extras.datauses).description).toBe(last(datauses).description)
   })
 
-  describe('when store exists', () => {
-    beforeEach(async (context) => {
-      const store = useBouquetDatauseStore()
-      const datauses = [
-        {
-          name: 'name test existing',
-          description: 'description test existing'
-        }
-      ]
-      context.store = store.create(datauses)
-    })
+  test('when params OK and many datauses', () => {
+    const datauses = [
+      {
+        name: 'name 1',
+        description: 'description 1'
+      },
+      {
+        name: 'name 2',
+        description: 'description 2'
+      }
+    ]
 
-    test('when params OK and only one datause', async ({ store }) => {
-      const datauses = [
-        {
-          name: 'subject test changed',
-          description: 'theme test changed'
-        }
-      ]
+    const { extras } = serializeDatauses(datauses)
 
-      const deserialized = store.deserialize({ extras: { datauses } })
+    expect(last(extras.datauses).name).toBe(last(datauses).name)
+    expect(head(extras.datauses).name).toBe(head(datauses).name)
+  })
 
-      expect(deserialized[0].name).toBe(datauses[0].name)
-      expect(deserialized[0].description).toBe(datauses[0].description)
-    })
+  test('when params KO', () => {
+    const datauses = [
+      {
+        this: 'this',
+        wont: 'wont',
+        fail: 'fail'
+      }
+    ]
 
-    // test('when params OK and many datauses', async ({ store }) => {
-    //   const datauses = [
-    //     {
-    //       name: 'name test',
-    //       description: 'description test'
-    //     },
-    //     {
-    //       name: 'name test 2',
-    //       description: 'description test 2'
-    //     },
-    //     {
-    //       name: 'name test 3',
-    //       description: 'description test 3'
-    //     }
-    //   ]
+    const { extras } = serializeDatauses(datauses)
 
-    //   const deserialized = store.deserialize({ extras: { datauses: datauses } })
+    expect(last(extras.datauses).this).toBeUndefined()
+    expect(last(extras.datauses).name).toBeNull()
+  })
+})
 
-    //   expect(deserialized[0].name).toBe(datauses[0].name)
-    //   expect(deserialized[0].description).toBe(datauses[0].description)
-    //   expect(deserialized[1].name).toBe(datauses[1].name)
-    //   expect(deserialized[1].description).toBe(datauses[1].description)
-    //   expect(deserialized[2].name).toBe(datauses[2].name)
-    //   expect(deserialized[2].description).toBe(datauses[2].description)
-    // })
+describe('deserializeDatauses', () => {
+  test('when params OK and one datause', () => {
+    const params = {
+      extras: {
+        datauses: [
+          {
+            name: 'name',
+            description: 'description'
+          }
+        ]
+      }
+    }
 
-    // test('when params KO', async ({ store }) => {
-    //   const datauses = {
-    //     this: 'subject test',
-    //     wont: 'theme test'
-    //   }
+    const { datauses } = deserializeDatauses(params)
 
-    //   const deserialized = store.deserialize({ extras: datauses })
+    expect(last(datauses).name).toBe(last(params.extras.datauses).name)
+  })
 
-    //   expect(deserialized[0].name).toBeUndefined()
-    //   expect(deserialized[0].description).toBeUndefined()
-    // })
+  test('when params OK and many datauses', () => {
+    const params = {
+      extras: {
+        datauses: [
+          {
+            name: 'name 1',
+            description: 'description 1'
+          },
+          {
+            name: 'name 2',
+            description: 'description 2'
+          }
+        ]
+      }
+    }
+
+    const { datauses } = deserializeDatauses(params)
+
+    expect(last(datauses).name).toBe(last(params.extras.datauses).name)
+    expect(head(datauses).name).toBe(head(params.extras.datauses).name)
+  })
+
+  test('when params KO', () => {
+    const params = {
+      extras: {
+        this: 'this',
+        wont: 'wont',
+        fail: 'fail'
+      }
+    }
+
+    const { datauses } = deserializeDatauses(params)
+
+    expect(datauses).toEqual([])
+  })
+})
+
+describe('serialize', () => {
+  beforeEach(async (context) => {
+    setActivePinia(createPinia())
+    context.datause = useBouquetDatauseStore()
+    context.store = useBouquetDatausesStore()
+  })
+
+  test('when params OK and one datause', ({ datause, store }) => {
+    datause.name = 'name'
+    store.datauses = [datause]
+    const datauses = [{ description: 'description' }]
+
+    const { extras } = store.serialize(datauses)
+
+    expect(last(extras.datauses).name).toBe(last(store.datauses).name)
+    expect(last(extras.datauses).description).toBe(last(datauses).description)
+  })
+
+  test('when params OK and many datauses', ({ datause, store }) => {
+    datause.name = 'name 1'
+    store.datauses = [datause]
+
+    const datauses = [
+      { description: 'description 1' },
+      { name: 'name 2', description: 'description 2' }
+    ]
+
+    const { extras } = store.serialize(datauses)
+
+    expect(last(extras.datauses).name).toBe(last(datauses).name)
+    expect(head(extras.datauses).name).toBe(datause.name)
+  })
+
+  test('when params KO', ({ datause, store }) => {
+    datause.name = 'name 1'
+    store.datauses = [datause]
+    const datauses = [{ this: 'this' }]
+
+    const { extras } = store.serialize(datauses)
+
+    expect(last(extras.datauses).this).toBeUndefined()
+    expect(last(extras.datauses).name).toBe(datause.name)
+    expect(last(extras.datauses).description).toBeNull()
+  })
+})
+
+describe('deserialize', () => {
+  beforeEach(async (context) => {
+    setActivePinia(createPinia())
+    context.datause = useBouquetDatauseStore()
+    context.store = useBouquetDatausesStore()
+  })
+
+  test('when params OK and one datause', ({ datause, store }) => {
+    datause.name = 'old name'
+    store.datauses = [datause]
+
+    const params = {
+      extras: {
+        datauses: [
+          {
+            name: 'new name',
+            description: 'description'
+          }
+        ]
+      }
+    }
+
+    const { datauses } = store.deserialize(params)
+
+    expect(last(datauses).name).toBe(last(params.extras.datauses).name)
+  })
+
+  test('when params OK and many datauses', ({ datause, store }) => {
+    datause.name = 'old name'
+    store.datauses = [datause]
+
+    const params = {
+      extras: {
+        datauses: [
+          {
+            name: 'new name',
+            description: 'description'
+          },
+          {
+            name: 'name',
+            description: 'description'
+          }
+        ]
+      }
+    }
+
+    const { datauses } = store.deserialize(params)
+
+    expect(last(datauses).name).toBe(last(params.extras.datauses).name)
+    expect(head(datauses).name).toBe(head(params.extras.datauses).name)
+  })
+
+  test('when params KO', ({ datause, store }) => {
+    datause.name = 'old name'
+    store.datauses = [datause]
+
+    const params = {
+      this: 'this',
+      extras: {
+        that: 'that',
+        datauses: [
+          {
+            name: 'new name'
+          }
+        ]
+      }
+    }
+
+    const { datauses } = store.deserialize(params)
+
+    expect(last(datauses).this).toBeUndefined()
+    expect(last(datauses).name).toBe(last(params.extras.datauses).name)
+    expect(last(datauses).description).toBeNull()
   })
 })

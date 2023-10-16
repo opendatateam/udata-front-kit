@@ -16,12 +16,10 @@ describe('serializeDatause', () => {
       description: 'description'
     }
 
-    const {
-      extras: { datauses }
-    } = serializeDatause(datause)
+    const { extras } = serializeDatause(datause)
 
-    expect(last(datauses).name).toBe(datause.name)
-    expect(last(datauses).description).toBe(datause.description)
+    expect(last(extras.datauses).name).toBe(datause.name)
+    expect(last(extras.datauses).description).toBe(datause.description)
   })
 
   test('when params KO', () => {
@@ -31,12 +29,10 @@ describe('serializeDatause', () => {
       fail: 'fail'
     }
 
-    const {
-      extras: { datauses }
-    } = serializeDatause(datause)
+    const { extras } = serializeDatause(datause)
 
-    expect(last(datauses).this).toBeUndefined()
-    expect(last(datauses).name).toBeNull()
+    expect(last(extras.datauses).this).toBeUndefined()
+    expect(last(extras.datauses).name).toBeNull()
   })
 })
 
@@ -147,7 +143,7 @@ describe('deserialize', () => {
 
     const datause = store.deserialize(params)
 
-    expect(datause.name).toBe(store.name)
+    expect(datause.name).toBe(last(params.extras.datauses).name)
     expect(datause.description).toBe(last(params.extras.datauses).description)
   })
 
