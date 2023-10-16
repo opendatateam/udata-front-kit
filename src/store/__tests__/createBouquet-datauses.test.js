@@ -81,7 +81,7 @@ beforeEach(async(context) => {
 
 describe('deserialize', () => {
   describe('when store does not exist', () => {
-    test('when params OK', async ({ store }) => {
+    test('when params OK and only one datause', async ({ store }) => {
       const datauses = [
         {
           name: 'name test',
@@ -93,6 +93,32 @@ describe('deserialize', () => {
 
       expect(deserialized[0].name).toBe(datauses[0].name)
       expect(deserialized[0].description).toBe(datauses[0].description)
+    })
+
+    test('when params OK and many datauses', async ({ store }) => {
+      const datauses = [
+        {
+          name: 'name test',
+          description: 'description test'
+        },
+        {
+          name: 'name test 2',
+          description: 'description test 2'
+        },
+        {
+          name: 'name test 3',
+          description: 'description test 3'
+        }
+      ]
+
+      const deserialized = store.deserialize({ extras: {datauses: datauses} })
+
+      expect(deserialized[0].name).toBe(datauses[0].name)
+      expect(deserialized[0].description).toBe(datauses[0].description)
+      expect(deserialized[1].name).toBe(datauses[1].name)
+      expect(deserialized[1].description).toBe(datauses[1].description)
+      expect(deserialized[2].name).toBe(datauses[2].name)
+      expect(deserialized[2].description).toBe(datauses[2].description)
     })
 
     // test('when params KO', async ({ store }) => {
