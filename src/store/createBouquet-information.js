@@ -28,9 +28,9 @@ export const useBouquetInformationStore = defineStore("createBouquet-information
     },
     deserialize(payload) {
       return {
-          subject: payload.extras['information:subject'],
-          theme: payload.extras['information:theme'],
-          subTheme: payload.extras['information:sub-theme']
+          subject: payload.extras['information:subject'] || this.subject,
+          theme: payload.extras['information:theme'] || this.theme,
+          subTheme: payload.extras['information:sub-theme'] || this.subTheme
         }
     }
   }

@@ -98,5 +98,18 @@ describe('deserialize', () => {
     })
   })
 
+  test('when params KO', async ({ store }) => {
+    const information = {
+      this: 'subject test',
+      wont: 'theme test',
+      fail: 'subTheme test'
+    }
+
+    const deserialized = store.deserialize({ extras: information })
+
+    expect(deserialized.subject).toBeNull()
+    expect(deserialized.theme).toBeNull()
+    expect(deserialized.subTheme).toBeNull()
+  })
 
 })
