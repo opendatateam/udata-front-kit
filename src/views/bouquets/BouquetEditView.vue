@@ -1,4 +1,5 @@
 <script setup>
+import Tooltip from "@/components/Tooltip.vue"
 import { ref, onMounted } from "vue"
 import { useDatasetStore } from "../../store/DatasetStore"
 import { useBouquetStore } from "../../store/BouquetStore"
@@ -26,7 +27,8 @@ const showObjectif = ref()
 const showHowto = ref()
 const isFormValidated = ref(false);
 const errorMessage = ref();
-
+const steps= ref(["Première étape", "Deuxième étape", "Troisième étape",  "Quatrième étape"]) // To make dynamic
+const currentStep = ref(1) // To make dynamic
 const modalActions = [
   {
     label: "Valider",
@@ -150,6 +152,8 @@ onMounted(() => {
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <div class="fr-col-md-7">
+      <DsfrStepper :steps="steps" :currentStep="currentStep" />
+
       <h1 v-if="isCreate">Description du bouquet de données</h1>
       <h1 v-else>Modifier le bouquet {{ loadedBouquet.name }}</h1>
 
@@ -168,50 +172,17 @@ onMounted(() => {
       </div>
 
       <form @submit.prevent="onSubmit()">
-        <div class="container">
-          <div>
-            Objectif du bouquet
-            <span class="required">&nbsp;*</span>
-          </div>
-          <button
-            @mouseover="showHowto = true"
-            @mouseout="showHowto = false"
-            @click="showHowto = !showHowto"
-            @blur="showHowto = false"
-          >
-            <VIcon
-              name="ri-question-fill"
-              color="var(--blue-france-sun-113-625)"
-              style="pointer-events: none;"
-            />
-          </button>
-          <p class="hint-on-demand" :class="{showHowto: showHowto}">Ajoutez ici l’ensemble des informations nécessaires à la compréhension, l’objectif et l’utilisation du bouquet. N’hésitez pas à indiquer la réglementation ou une documentation liée au bouquet.</p>
-        </div>
-        <div class="container">
-          <div class="fr-hint-text">
-            Utilisez du markdown pour mettre en forme votre texte
-          </div>
-          <button
-            @mouseover="showObjectif = true"
-            @mouseout="showObjectif = false"
-            @click="showObjectif = !showObjectif"
-            @blur="showObjectif = false"
-          >
-            <VIcon
-              name="ri-question-fill"
-              color="var(--blue-france-sun-113-625)"
-              style="pointer-events: none;"
-            />
-          </button>
-          <p class="hint-on-demand" :class="{showObjectif: showObjectif}">
-            *simple astérisque pour italique*<br/>
-            **double astérisque pour gras**<br/>
-            # un dièse pour titre 1<br/>
-            ## deux dièses pour titre 2<br/>
-            *astérisque pour une liste<br/>
-            lien : [[https://exemple.fr]]
-          </p>
-        </div>
+        <Tooltip
+          title="Objectif du bouquet"
+          name="tooltip__objectif"
+          text="Ajoutez ici l’ensemble des informations nécessaires à la compréhension, l’objectif et l’utilisation du bouquet. N’hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
+        />
+        <Tooltip
+          title="Utilisez du markdown pour mettre en forme votre texte"
+          name="tooltip__markdown"
+          text="*simple astérisque pour italique*<br/> **double astérisque pour gras**<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
+        />
+
         <DsfrInput
           class="fr-mt-1w fr-mb-2w"
           v-model="form.name"
@@ -310,22 +281,19 @@ onMounted(() => {
 .required {
   color: red;
 } 
-:deep .container {
-  display: flex;
-  position: relative;
-} 
-.hint-on-demand {
-  background-color: var(--grey-1000-50);
-  position: absolute;
-  right: 0;
-  transform: translateY(1.5rem);
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  width: 300px
-}
-.hint-on-demand.showObjectif,
-.hint-on-demand.showHowto {
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
+
+:deep .tooltip {
+  &__objectif,
+  &__markdown {
+    display: block;
+  }
+
+  &__objectif {
+    left: 2.5rem;
+  }
+
+  &__markdown {
+    left: 46%;
+  }
 }
 </style>
