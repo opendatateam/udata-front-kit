@@ -1,120 +1,141 @@
 import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, expect, test, describe } from 'vitest'
+import { head, last } from 'lodash/fp/array'
 
 import { createBouquetStore } from '@/store/createBouquet'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 
+beforeEach(async (context) => {
+  setActivePinia(createPinia())
+  const client = new TopicsAPI()
+  const storeFactory = createBouquetStore(client)
+  context.store = storeFactory()
+})
+
 describe('create bouquet', () => {
-  beforeEach(async (context) => {
-    setActivePinia(createPinia())
-    const client = new TopicsAPI()
-    const storeFactory = createBouquetStore(client)
-    context.store = storeFactory()
+  test('when params OK', async ({ store }) => {
+    const params = {
+      name: 'name',
+      description: 'description',
+      tags: ['tag']
+    }
+
+    const { bouquet } = await store.create(params)
+
+    expect(bouquet.id).not.toBeNull()
+    expect(bouquet.name).toBe(params.name)
+    expect(bouquet.description).toBe(params.description)
+    expect(bouquet.tags).toStrictEqual(params.tags)
   })
 
-  test('create a bouquet', async ({ store }) => {
-    const bouquet = {
-      name: 'test',
-      description: 'test',
-      tags: ['test']
+  test('when params KO', async ({ store }) => {
+    const params = {
+      name: 'name',
+      tags: ['tag']
     }
-    const { data } = await store.create(bouquet)
-    expect(data.name).toBe(bouquet.name)
-    expect(data.description).toBe(bouquet.description)
-    expect(data.tags).toStrictEqual(bouquet.tags)
-  })
 
-  test('create a bouquet when description is not provided', async ({
-    store
-  }) => {
-    const bouquet = {
-      name: 'test',
-      tags: ['test']
-    }
-    const { error } = await store.create(bouquet)
+    const { error } = await store.create(params)
+
     expect(error).toBe('error')
   })
 })
 
 describe('add information to bouquet', () => {
-  beforeEach(async (context) => {
-    setActivePinia(createPinia())
-    const client = new TopicsAPI()
-    const storeFactory = createBouquetStore(client)
-    const store = storeFactory()
-    const bouquet = {
+  beforeEach(async ({ store }) => {
+    const params = {
       name: 'test',
       description: 'test',
       tags: ['test']
     }
-    await store.create(bouquet)
-    context.store = store
+    await store.create(params)
   })
 
-  test('edit a bouquet', async ({ store }) => {
-    const bouquetInformation = {
-      subject: 'subject test',
-      theme: 'theme test',
-      subTheme: 'subTheme test'
+  test('when params OK', async ({ store }) => {
+    const params = {
+      subject: 'subject',
+      theme: 'theme',
+      subTheme: 'subTheme'
     }
 
     const {
-      data: { information }
-    } = await store.addInformation(bouquetInformation)
-    expect(information.subject).toBe(bouquetInformation.subject)
-    expect(information.theme).toBe(bouquetInformation.theme)
-    expect(information.subTheme).toBe(bouquetInformation.subTheme)
+      bouquet: { information }
+    } = await store.addInformation(params)
+
+    expect(information.subject).toBe(params.subject)
+    expect(information.theme).toBe(params.theme)
+    expect(information.subTheme).toBe(params.subTheme)
   })
 })
 
 describe('add datause to bouquet', () => {
-  beforeEach(async (context) => {
-    setActivePinia(createPinia())
-    const client = new TopicsAPI()
-    const storeFactory = createBouquetStore(client)
-    const store = storeFactory()
-    const bouquet = {
-      name: 'test',
-      description: 'test',
-      tags: ['test']
+  beforeEach(async ({ store }) => {
+    const params = {
+      name: 'name',
+      description: 'description',
+      tags: ['tags']
     }
-    await store.create(bouquet)
-    context.store = store
+    await store.create(params)
   })
 
-  test('add datause to bouquet when there is no datause', async ({ store }) => {
-    const bouquetDatause = {
-      name: 'name test',
-      description: 'description test'
-    }
+  test('when params OK and one datause', async ({ store }) => {
+    const params = [
+      {
+        name: 'name',
+        description: 'description'
+      }
+    ]
 
     const {
-      data: { datauses }
-    } = await store.addDatause(bouquetDatause)
-    const datause = datauses[datauses.length - 1]
-    expect(datause.name).toBe(bouquetDatause.name)
-    expect(datause.description).toBe(bouquetDatause.description)
+      bouquet: {
+        datauses: { datauses }
+      }
+    } = await store.addDatause(params)
+
+    expect(last(datauses).name).toBe(last(params).name)
+    expect(last(datauses).description).toBe(last(params).description)
   })
 
-  test('add datause to bouquet when there is a datause', async ({ store }) => {
-    const bouquetDatause1 = {
-      name: 'name test 1',
-      description: 'description test 1'
-    }
-    const bouquetDatause2 = {
-      name: 'name test 2',
-      description: 'description test 2'
-    }
+  test('when params OK and many datauses', async ({ store }) => {
+    const params = [
+      {
+        name: 'name 1',
+        description: 'description 1'
+      },
+      {
+        name: 'name 2',
+        description: 'description 2'
+      }
+    ]
 
-    await store.addDatause(bouquetDatause1)
     const {
-      data: { datauses }
-    } = await store.addDatause(bouquetDatause2)
-    const datause1 = datauses[datauses.length - 2]
-    const datause2 = datauses[datauses.length - 1]
-    expect(datause1.name).toBe(bouquetDatause1.name)
-    expect(datause1.description).toBe(bouquetDatause1.description)
-    expect(datause2.name).toBe(bouquetDatause2.name)
-    expect(datause2.description).toBe(bouquetDatause2.description)
+      bouquet: {
+        datauses: { datauses }
+      }
+    } = await store.addDatause(params)
+
+    expect(last(datauses).name).toBe(last(params).name)
+    expect(head(datauses).name).toBe(head(params).name)
+  })
+
+  test('when params KO', async ({ store }) => {
+    const params = [
+      {
+        this: 'this',
+        that: 'that'
+      },
+      {
+        name: 'name 2',
+        description: 'description 2'
+      }
+    ]
+
+    const {
+      bouquet: {
+        datauses: { datauses }
+      }
+    } = await store.addDatause(params)
+
+    expect(last(datauses).name).toBe(last(params).name)
+    expect(head(datauses).name).toBeNull()
   })
 })
