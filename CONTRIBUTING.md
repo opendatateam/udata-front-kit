@@ -2,7 +2,7 @@ TL;DR:
 - Communication is in [French](https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006421209).
 - Code and code documentation are in [English (BR)](https://en.wikipedia.org/wiki/English_as_a_lingua_franca).
 - Code documentation is in the [JSDoc](https://jsdoc.app/) format.
-- Branches and commits follow [Conventional Commits](https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4).
+- Commits follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 - Code styling is progamatically enforced and follows [Standard](https://standardjs.com/).
 - Testing is tactical and is done with [Vutest](https://vutest.dev) and [Cypress](https://www.cypress.io/).
 - Pull requests, reviews, and merging, follow [GitHub Flow](https://guides.github.com/introduction/flow/).
