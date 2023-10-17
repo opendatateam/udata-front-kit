@@ -1,12 +1,12 @@
 <script setup>
 import { onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
-import { useBouquetStore } from "../../store/BouquetStore"
+import { useTopicStore } from "../../store/TopicStore"
 import { useUserStore } from "../../store/UserStore"
 import { useLoading } from "vue-loading-overlay"
 import Tile from "../../components/Tile.vue"
 
-const store = useBouquetStore()
+const store = useTopicStore()
 const userStore = useUserStore()
 const $loading = useLoading()
 const router = useRouter()
@@ -19,7 +19,7 @@ const goToCreate = () => {
 
 onMounted(() => {
   const loader = $loading.show()
-  store.loadBouquets().finally(() => loader.hide())
+  store.loadTopicsForUniverse().finally(() => loader.hide())
 })
 </script>
 
