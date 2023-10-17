@@ -2,12 +2,10 @@
 import { onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useTopicStore } from "../../store/TopicStore"
-import { useUserStore } from "../../store/UserStore"
 import { useLoading } from "vue-loading-overlay"
 import Tile from "../../components/Tile.vue"
 
 const store = useTopicStore()
-const userStore = useUserStore()
 const $loading = useLoading()
 const router = useRouter()
 
@@ -28,7 +26,6 @@ onMounted(() => {
     <div class="fr-grid-row fr-mb-1w">
       <DsfrButton
         class="fr-mb-1w"
-        v-if="userStore.isAdmin()"
         label="Ajouter un bouquet"
         icon="ri-add-circle-line"
         @click="goToCreate"
