@@ -1,9 +1,9 @@
 TL;DR:
 - Communication is in [French](https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006421209).
-- Code and documentation are in [English (BR)](https://en.wikipedia.org/wiki/English_as_a_lingua_franca).
-- Documentation is in the [JSDoc](https://jsdoc.app/) format.
+- Code and code documentation are in [English (BR)](https://en.wikipedia.org/wiki/English_as_a_lingua_franca).
+- Code documentation is in the [JSDoc](https://jsdoc.app/) format.
 - Branches and commits follow [Conventional Commits](https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4).
-- Code styling is imperative and follows [Standard](https://standardjs.com/).
+- Code styling is progamatically enforced and follows [Standard](https://standardjs.com/).
 - Testing is tactical and is done with [Vutest](https://vutest.dev) and [Cypress](https://www.cypress.io/).
 - Pull requests, reviews, and merging, follow [GitHub Flow](https://guides.github.com/introduction/flow/).
 - Change advertising follows [SemVer](http://semver.org/).
@@ -53,15 +53,9 @@ Examples:
 #### Major bump
 
 - Renaming or deprecating a component.
-- Breaking changes to a store's public interface.
-
-### Changelog
-
-Changelog is generated automatically based on commit and merge messages.
+- Breaking changes to a public interface.
 
 ## Error messages
-
-Ecosphères provides both an app for end users, and a template for developers.
 
 ### Great error messages
 
