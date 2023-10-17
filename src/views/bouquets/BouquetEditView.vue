@@ -157,8 +157,8 @@ onMounted(() => {
         <DsfrAlert
           v-if="isFormValidated && !errorMessage"
           type="success"
-          title="Bouquet crée"
-          description="Votre bouquet a bien été crée."
+          title="Bouquet créé"
+          description="Votre bouquet a bien été créé."
         />
         <DsfrAlert
           v-if="errorMessage"
@@ -169,94 +169,56 @@ onMounted(() => {
 
       <form @submit.prevent="onSubmit()">
         <div class="container">
-            <div>
-              Objectif du bouquet
-              <span class="required">&nbsp;*</span>
-            </div>
-            <button
-              @mouseover="showHowto = true"
-              @mouseout="showHowto = false"
-              @click="showHowto = !showHowto"
-              @blur="showHowto = false"
-            >
-              <VIcon
-                name="ri-question-fill"
-                color="var(--blue-france-sun-113-625)"
-                style="pointer-events: none;"
-              />
-            </button>
-            <p class="hint-on-demand" :class="{showHowto: showHowto}">Ajoutez ici l’ensemble des informations nécessaires à la compréhension, l’objectif et l’utilisation du bouquet. N’hésitez pas à indiquer la réglementation ou une documentation liée au bouquet.</p>
+          <div>
+            Objectif du bouquet
+            <span class="required">&nbsp;*</span>
           </div>
+          <button
+            @mouseover="showHowto = true"
+            @mouseout="showHowto = false"
+            @click="showHowto = !showHowto"
+            @blur="showHowto = false"
+          >
+            <VIcon
+              name="ri-question-fill"
+              color="var(--blue-france-sun-113-625)"
+              style="pointer-events: none;"
+            />
+          </button>
+          <p class="hint-on-demand" :class="{showHowto: showHowto}">Ajoutez ici l’ensemble des informations nécessaires à la compréhension, l’objectif et l’utilisation du bouquet. N’hésitez pas à indiquer la réglementation ou une documentation liée au bouquet.</p>
+        </div>
         <div class="container">
-            <div class="fr-hint-text">
-              Utilisez du markdown pour mettre en forme votre texte
-            </div>
-            <button
-              @mouseover="showObjectif = true"
-              @mouseout="showObjectif = false"
-              @click="showObjectif = !showObjectif"
-              @blur="showObjectif = false"
-            >
-              <VIcon
-                name="ri-question-fill"
-                color="var(--blue-france-sun-113-625)"
-                style="pointer-events: none;"
-              />
-            </button>
-            <p class="hint-on-demand"  :class="{showObjectif: showObjectif}">
-              *simple astérisque pour italique*<br/>
-              **double astérisque pour gras**<br/>
-              # un dièse pour titre 1<br/>
-              ## deux dièses pour titre 2<br/>
-              *astérisque pour une liste<br/>
-              lien : [[https://exemple.fr]]
-          </p>
+          <div class="fr-hint-text">
+            Utilisez du markdown pour mettre en forme votre texte
           </div>
+          <button
+            @mouseover="showObjectif = true"
+            @mouseout="showObjectif = false"
+            @click="showObjectif = !showObjectif"
+            @blur="showObjectif = false"
+          >
+            <VIcon
+              name="ri-question-fill"
+              color="var(--blue-france-sun-113-625)"
+              style="pointer-events: none;"
+            />
+          </button>
+          <p class="hint-on-demand" :class="{showObjectif: showObjectif}">
+            *simple astérisque pour italique*<br/>
+            **double astérisque pour gras**<br/>
+            # un dièse pour titre 1<br/>
+            ## deux dièses pour titre 2<br/>
+            *astérisque pour une liste<br/>
+            lien : [[https://exemple.fr]]
+          </p>
+        </div>
         <DsfrInput
           class="fr-mt-1w fr-mb-2w"
           v-model="form.name"
           :is-textarea="true"
           placeholder="Mon bouquet"
           :label-visible="true"
-        >
-          
-        </DsfrInput>
-      
-        <!-- <DsfrInput
-          label-class="container"
-          class="fr-mt-1w fr-mb-2w"
-          v-model="form.description"
-          label="Comment utiliser ce bouquet *"
-          placeholder="Ma description"
-          :label-visible="true"
-          :is-textarea="true"
-
-        >
-          <template v-slot:label>
-            <div>
-              Comment utiliser ce bouquet
-              <span class="required">&nbsp;*</span>
-            </div>
-            <button
-              @mouseover="showHowto = true"
-              @mouseout="showHowto = false"
-              @click="showHowto = !showHowto"
-              @blur="showHowto = false"
-            >
-              <VIcon
-                name="ri-question-fill"
-                color="var(--blue-france-sun-113-625)"
-                style="pointer-events: none;"
-              />
-            </button>
-            <DsfrAlert
-              type="info"
-              class="hint-on-demand"
-              :class="{showHowto: showHowto}"
-              description="Indice au survol"
-            />
-          </template>
-        </DsfrInput> -->
+        />
 
         <DsfrButton label="Ajouter un jeu de données"
           @click.stop.prevent="isModalOpen = true"
