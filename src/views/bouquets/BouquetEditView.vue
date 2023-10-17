@@ -23,8 +23,6 @@ const selector = ref(null)
 const loadedBouquet = ref({})
 const isModalOpen = ref(false)
 const isEditDesc = ref(false)
-const showObjectif = ref()
-const showHowto = ref()
 const isFormValidated = ref(false);
 const errorMessage = ref();
 const steps= ref(["Première étape", "Deuxième étape", "Troisième étape",  "Quatrième étape"]) // To make dynamic
@@ -175,7 +173,7 @@ onMounted(() => {
         <Tooltip
           title="Objectif du bouquet"
           name="tooltip__objectif"
-          text="Ajoutez ici l’ensemble des informations nécessaires à la compréhension, l’objectif et l’utilisation du bouquet. N’hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
+          text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
         />
         <Tooltip
           title="Utilisez du markdown pour mettre en forme votre texte"
