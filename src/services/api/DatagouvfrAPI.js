@@ -59,17 +59,15 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async makeRequestAndHandleResponse(url, method = 'get', params = {}) {
-    return this.request(url, method, params)
-      .catch((error) => {
-        if(error && error instanceof(TypeError)) {
-          throw error
-        }
-
-        if (error && error.message) {
-          return error.response
-        }
+    return this.request(url, method, params).catch((error) => {
+      if (error && error instanceof TypeError) {
+        throw error
       }
-    )
+
+      if (error && error.message) {
+        return error.response
+      }
+    })
   }
 
   /**
@@ -138,6 +136,19 @@ export default class DatagouvfrAPI {
       `${this.url()}/${entity_id}/`,
       'put',
       data
+    )
+  }
+
+  /**
+   * Delete an entity (DELETE)
+   *
+   * @param {string} entityId
+   * @returns {Promise}
+   */
+  async delete(entityId) {
+    return await this.makeRequestAndHandleResponse(
+      `${this.url()}/${entityId}/`,
+      'delete'
     )
   }
 }

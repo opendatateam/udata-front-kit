@@ -1,6 +1,6 @@
 import { head, last } from 'lodash/fp/array'
 import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, test } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { createBouquetStore } from '@/store/createBouquet'
@@ -9,7 +9,17 @@ beforeEach(async (context) => {
   setActivePinia(createPinia())
   const client = new TopicsAPI()
   const storeFactory = createBouquetStore(client)
+  context.client = client
   context.store = storeFactory()
+})
+
+afterEach(async ({ client, store }) => {
+  const id = store?.bouquet?.id
+
+  if (id) {
+    const respose = await client.delete(id)
+    expect(respose.status).toBe(204)
+  }
 })
 
 describe('create bouquet', () => {
