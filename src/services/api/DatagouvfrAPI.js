@@ -1,6 +1,6 @@
 import axios from "axios"
 import config from "@/config"
-// import { toast } from "vue3-toastify"
+import { toast } from "vue3-toastify"
 import { useLoading } from "vue-loading-overlay"
 import { useUserStore } from "../../store/UserStore"
 
@@ -60,9 +60,9 @@ export default class DatagouvfrAPI {
   async makeRequestAndHandleResponse (url, method = "get", params = {}) {
     const loader = $loading.show()
     return this.request(url, method, params).catch(error => {
-      // console.error(error)
       if (error && error.message) {
-        return error.response
+        toast(error.message, { type: "error", autoClose: false }) // TODO: Refacto to handle the error
+        // return error.response
       }
     }).finally(() => loader.hide())
   }
