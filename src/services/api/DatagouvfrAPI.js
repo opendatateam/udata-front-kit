@@ -62,7 +62,7 @@ export default class DatagouvfrAPI {
     return this.request(url, method, params).catch(error => {
       if (error && error.message) {
         toast(error.message, { type: "error", autoClose: false }) // TODO: Refacto to handle the error
-        // return error.response
+        return error.response
       }
     }).finally(() => loader.hide())
   }
