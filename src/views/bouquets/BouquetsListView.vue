@@ -1,13 +1,11 @@
 <script setup>
 import { onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
-import { useBouquetStore } from "../../store/BouquetStore"
-import { useUserStore } from "../../store/UserStore"
+import { useTopicStore } from "../../store/TopicStore"
 import { useLoading } from "vue-loading-overlay"
 import Tile from "../../components/Tile.vue"
 
-const store = useBouquetStore()
-const userStore = useUserStore()
+const store = useTopicStore()
 const $loading = useLoading()
 const router = useRouter()
 
@@ -19,7 +17,7 @@ const goToCreate = () => {
 
 onMounted(() => {
   const loader = $loading.show()
-  store.loadBouquets().finally(() => loader.hide())
+  store.loadTopicsForUniverse().finally(() => loader.hide())
 })
 </script>
 
@@ -28,7 +26,6 @@ onMounted(() => {
     <div class="fr-grid-row fr-mb-1w">
       <DsfrButton
         class="fr-mb-1w"
-        v-if="userStore.isAdmin()"
         label="Ajouter un bouquet"
         icon="ri-add-circle-line"
         @click="goToCreate"

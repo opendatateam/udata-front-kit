@@ -9,7 +9,7 @@ export default class OauthAPI {
    * @returns {string}
    */
   async token ({code, pkceCodeVerifier, clientId, clientSecret, redirectURI}) {
-    const url = `${config.datagouvfr_base_url}/oauth/token`
+    const url = `${config.datagouvfr.base_url}/oauth/token`
     const bodyFormData = new FormData()
     bodyFormData.append("grant_type", "authorization_code")
     bodyFormData.append("code", code)
@@ -37,7 +37,7 @@ export default class OauthAPI {
     bodyFormData.append("token", token)
     const response = await axios({
       method: "post",
-      url: `${config.datagouvfr_base_url}/oauth/revoke`,
+      url: `${config.datagouvfr.base_url}/oauth/revoke`,
       data: bodyFormData,
       headers: headers,
     })

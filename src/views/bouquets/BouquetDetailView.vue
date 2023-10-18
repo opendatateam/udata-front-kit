@@ -2,7 +2,7 @@
 import { onMounted, ref, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
-import { useBouquetStore } from "../../store/BouquetStore"
+import { useTopicStore } from "../../store/TopicStore"
 import { useDatasetStore } from "../../store/DatasetStore"
 import { useUserStore } from "../../store/UserStore"
 import { descriptionFromMarkdown } from "../../utils"
@@ -11,7 +11,7 @@ import Tile from "../../components/Tile.vue"
 
 const route = useRoute()
 const router = useRouter()
-const store = useBouquetStore()
+const store = useTopicStore()
 const userStore = useUserStore()
 const datasetStore = useDatasetStore()
 const bouquet = ref({})
@@ -22,6 +22,13 @@ const description = computed(() => descriptionFromMarkdown(bouquet))
 const goToEdit = () => {
   router.push({name: "bouquet_edit", params: { bid: bouquet.slug }},)
 }
+
+const canEdit = computed(() => {
+  return userStore.isAdmin() || (
+    userStore.$state.isLoggedIn &&
+    bouquet.value.owner?.id === userStore.$state.data?.id
+  )
+})
 
 onMounted(() => {
   store.load(route.params.bid).then(res => {
@@ -48,13 +55,13 @@ onMounted(() => {
           :description="d.description"
           :img="d.organization.logo"
           :is-markdown="true"
-          :notice="bouquet.extras[`${config.universe_name}:${d.id}:description`]"
+          :notice="bouquet.extras[`${config.universe.name}:${d.id}:description`]"
         />
       </li>
     </ul>
     <DsfrButton
       class="fr-mt-4w"
-      v-if="userStore.isAdmin()"
+      v-if="canEdit"
       label="Modifier le bouquet"
       icon="ri-pencil-line"
       @click="goToEdit"

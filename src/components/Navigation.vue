@@ -1,26 +1,17 @@
 <script setup>
-const navItems = [
-  {
-    "to": "/",
-    "text": "Accueil",
-  },
-  {
-    "to": "/datasets",
-    "text": "Jeux de données",
-  },
-  {
-    "to": "/organizations",
-    "text": "Organisations",
-  },
-  {
-    "to": "/bouquets",
-    "text": "Bouquets",
-  },
-  {
-    "to": "/about",
-    "text": "À propos",
-  },
-]
+import { computed } from "vue";
+import config from "@/config";
+
+const navItems = computed(() => {
+  let items = [];
+  config.website.menu_items.forEach((item) => {
+    items.push({
+      to: item.linkPage,
+      text: item.name,
+    });
+  });
+  return items;
+});
 </script>
 
 <template>

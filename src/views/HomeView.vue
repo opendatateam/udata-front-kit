@@ -1,26 +1,39 @@
 <script setup>
+import MarkdownIt from "markdown-it"
+
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 
+import config from "@/config"
+import HomeButtons from "../components/HomeButtons.vue"
+import HomeTopics from "../components/HomeTopics.vue"
+import HomeCharts from "../components/HomeCharts.vue"
+
 const router = useRouter()
 const query = ref("")
+const markdown = new MarkdownIt()
 
 // TODO: mutualize w/ App.vue
 const updateQuery = (q) => {
   query.value = q
 }
+
 const doSearch = () => {
-  router.push({name: "datasets", query: {q: query.value}})
+  router.push({ name: "datasets", query: { q: query.value } })
 }
+
+const homepageTitle = config.website.homepage_title
+const homepageSubTitle = config.website.homepage_subtitle
+const topics = config.website.list_highlighted_topics
+const buttons = config.website.home_buttons
+const showTopicChart = config.website.show_topic_charts
 </script>
 
 <template>
-  <div class="fr-container fr-mt-16w fr-mb-16w">
-    <h1>Ecosphères</h1>
+  <div class="fr-container fr-mt-8w fr-mb-16w">
+    <h1>{{ homepageTitle }}</h1>
     <div class="es__hero fr-mt-4w fr-mb-4w">
-      Explorez les données ouvertes et restreintes de la <strong>Transition écologique</strong>,
-      de la <strong>Cohésion des territoires</strong>, de la <strong>Transition énergétique</strong>
-      et de la <strong>Mer</strong>
+      <span v-html="markdown.render(homepageSubTitle)" />
     </div>
     <DsfrSearchBar
       button-text="Rechercher"
@@ -29,7 +42,12 @@ const doSearch = () => {
       @search="doSearch"
       @update:modelValue="updateQuery"
     />
+    <HomeButtons v-if="buttons" :buttons="buttons" />
+    <HomeTopics v-if="topics" :topics="topics" />
+    <HomeCharts v-if="showTopicChart" />
   </div>
+
+
 </template>
 
 <style scoped lang="scss">

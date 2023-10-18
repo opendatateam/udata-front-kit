@@ -9,6 +9,7 @@ import { useReuseStore } from "../../store/ReuseStore"
 import { useDiscussionStore } from "../../store/DiscussionStore"
 import { descriptionFromMarkdown } from "../../utils"
 import Tile from "../../components/Tile.vue"
+import ChartData from "../../components/ChartData.vue"
 
 const route = useRoute()
 const datasetId = route.params.did
@@ -29,6 +30,11 @@ onMounted(() => {
   datasetStore.load(datasetId)
 })
 
+const chartData = computed(() => {
+  if (!dataset.value?.extras) return
+  return dataset.value.extras["config:charts"]
+})
+
 const formatFileSize = (fileSize) => {
   if (!fileSize) return "Taille inconnue"
   return filesize(fileSize)
@@ -46,13 +52,19 @@ const files = computed(() => {
 })
 
 const tabs = computed(() => {
-  return [
-    {"title": "Fichiers", "tabId":"tab-0", "panelId":"tab-content-0"},
-    {"title": "Réutilisations", "tabId":"tab-1", "panelId":"tab-content-1"},
-    {"title": "Discussions", "tabId":"tab-2", "panelId":"tab-content-2"},
-    {"title": "Qualité", "tabId":"tab-3", "panelId":"tab-content-3"},
-    {"title": "Métadonnées", "tabId":"tab-4", "panelId":"tab-content-4"},
+  const _tabs = [
+    { title: "Fichiers", tabId: "tab-0", panelId: "tab-content-0" },
+    { title: "Réutilisations", tabId: "tab-1", panelId: "tab-content-1" },
+    { title: "Discussions", tabId: "tab-2", panelId: "tab-content-2" },
+    { title: "Qualité", tabId: "tab-3", panelId: "tab-content-3" },
+    { title: "Métadonnées", tabId: "tab-4", panelId: "tab-content-4" },
   ]
+  if (chartData.value) {
+    _tabs.push(
+      { title: "Visualisations", tabId: "tab-00", panelId: "tab-content-00" },
+    )
+  }
+  return _tabs
 })
 
 const description = computed(() => descriptionFromMarkdown(dataset))
@@ -235,6 +247,16 @@ watchEffect(() => {
         :selected="selectedTabIndex === 4"
       >
         <pre>{{ dataset }}</pre>
+      </DsfrTabContent>
+
+      <!-- Visualisations -->
+      <DsfrTabContent
+        panel-id="tab-content-00"
+        tab-id="tab-00"
+        :selected="selectedTabIndex === 5"
+        v-if="chartData"
+      >
+        <ChartData v-if="chartData" :chart-data="chartData" />
       </DsfrTabContent>
     </DsfrTabs>
   </div>

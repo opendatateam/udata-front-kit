@@ -1,21 +1,64 @@
 # config file for ecospheres-front
 
-# data.gouv.fr base URL
-datagouvfr_base_url: https://demo.data.gouv.fr
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 651479c317ad47b21e41a9d4
+  # pkce client secret, explicitely public
+  oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
 
-# "universe" topic id
-universe_topic_id: 65141cd780d73f98142e9265
+universe:
+  # "universe" topic id
+  topic_id: 65141cd780d73f98142e9265
+  # universe name, used as bouquets tag
+  name: ecospheres
 
-# universe name, used as bouquets tag
-universe_name: ecospheres
-
-# oauth settings
-datagouvfr_oauth_client_id: 651479c317ad47b21e41a9d4
-# pkce client secret, explicitely public
-datagouvfr_oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
-
-# display settings
-organizations_list_page_size: 9
+# UI customizations
+website:
+  title: "Ecosphères"
+  rf_title: "MINISTÈRES<br>
+      TRANSITION ÉCOLOGIQUE<br>
+      COHÉSION DES TERRITOIRES<br>
+      TRANSITION ÉNERGÉTIQUE<br>
+      MER"
+  # leave empty if not pertinent
+  logo_operator:
+  homepage_title: "Ecosphères"
+  homepage_subtitle: "Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**"
+  menu_items:
+    -
+      name: "Accueil"
+      id: "home"
+      linkPage: "/"
+      type: "component"
+    -
+      name: "Jeux de données"
+      id: "datasets"
+      linkPage: "/datasets"
+      type: "component"
+    -
+      name: "Organisations"
+      id: "organizations"
+      linkPage: "/organizations"
+      type: "component"
+    -
+      name: "Bouquets"
+      id: "bouquets"
+      linkPage: "/bouquets"
+      type: "component"
+    -
+      name: "À propos"
+      id: "about"
+      linkPage: "/about"
+      type: "page"
+      url: "https://gist.githubusercontent.com/geoffreyaldebert/f6198f2aa63b18783be7d7d3be0909a9/raw/7f979217a4c878225262eb654be3136bf1fe7157/about.md"
+  home_buttons:
+  show_topic_charts: false
+  list_highlighted_topics:
+  oauth_option: true
+  # display settings
+  organizations_list_page_size: 9
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
