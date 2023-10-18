@@ -1,5 +1,5 @@
 <script setup>
-  const props = defineProps(["title", "name","show", "text"])
+  const props = defineProps(["title", "name", "show", "text"])
 
 </script>
 
