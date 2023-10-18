@@ -1,16 +1,16 @@
 <script setup>
-import MarkdownIt from "markdown-it"
+import MarkdownIt from 'markdown-it'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-import { ref } from "vue"
-import { useRouter } from "vue-router"
+import config from '@/config'
 
-import config from "@/config"
-import HomeButtons from "../components/HomeButtons.vue"
-import HomeTopics from "../components/HomeTopics.vue"
-import HomeCharts from "../components/HomeCharts.vue"
+import HomeButtons from '../components/HomeButtons.vue'
+import HomeCharts from '../components/HomeCharts.vue'
+import HomeTopics from '../components/HomeTopics.vue'
 
 const router = useRouter()
-const query = ref("")
+const query = ref('')
 const markdown = new MarkdownIt()
 
 // TODO: mutualize w/ App.vue
@@ -19,7 +19,7 @@ const updateQuery = (q) => {
 }
 
 const doSearch = () => {
-  router.push({ name: "datasets", query: { q: query.value } })
+  router.push({ name: 'datasets', query: { q: query.value } })
 }
 
 const homepageTitle = config.website.homepage_title
@@ -46,8 +46,6 @@ const showTopicChart = config.website.show_topic_charts
     <HomeTopics v-if="topics" :topics="topics" />
     <HomeCharts v-if="showTopicChart" />
   </div>
-
-
 </template>
 
 <style scoped lang="scss">

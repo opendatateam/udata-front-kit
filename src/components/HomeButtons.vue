@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["buttons"])
+const props = defineProps(['buttons'])
 const buttons = props.buttons
 
 const goToPage = (page) => {
@@ -15,7 +15,7 @@ const goToPage = (page) => {
     >
       <div
         v-for="but in buttons"
-        v-bind:key="but.name"
+        :key="but.name"
         class="button-home"
         @click="goToPage(but.link)"
       >

@@ -1,23 +1,27 @@
-import axios from "axios"
-import config from "@/config"
-import { toast } from "vue3-toastify"
-import { useLoading } from "vue-loading-overlay"
-import { useUserStore } from "../../store/UserStore"
+import axios from 'axios'
+import { toast } from 'vue3-toastify'
+import { useLoading } from 'vue-loading-overlay'
+
+import config from '@/config'
+
+import { useUserStore } from '../../store/UserStore'
 
 const $loading = useLoading()
 const instance = axios.create()
 
 // inject token in requests if user is loggedIn
-instance.interceptors.request.use(config => {
-  const store = useUserStore()
-  if (store.$state.isLoggedIn) {
-    config.headers = {
-      Authorization: `Bearer ${store.$state.token}`
+instance.interceptors.request.use(
+  (config) => {
+    const store = useUserStore()
+    if (store.$state.isLoggedIn) {
+      config.headers = {
+        Authorization: `Bearer ${store.$state.token}`
+      }
     }
-  }
-  return config
-}, error => Promise.reject(error))
-
+    return config
+  },
+  (error) => Promise.reject(error)
+)
 
 /**
  * A composable wrapper around data.gouv.fr's API
@@ -29,10 +33,10 @@ instance.interceptors.request.use(config => {
  */
 export default class DatagouvfrAPI {
   base_url = `${config.datagouvfr.base_url}/api`
-  version = "1"
-  endpoint = ""
+  version = '1'
+  endpoint = ''
 
-  url () {
+  url() {
     return `${this.base_url}/${this.version}/${this.endpoint}`
   }
 
@@ -44,7 +48,7 @@ export default class DatagouvfrAPI {
    * @param {object} params
    * @returns
    */
-  async request (url, method = "get", params = {}) {
+  async request(url, method = 'get', params = {}) {
     const res = await instance[method](url, params)
     return res.data
   }
@@ -57,14 +61,16 @@ export default class DatagouvfrAPI {
    * @param {object} params
    * @returns {Promise}
    */
-  async makeRequestAndHandleResponse (url, method = "get", params = {}) {
+  async makeRequestAndHandleResponse(url, method = 'get', params = {}) {
     const loader = $loading.show()
-    return this.request(url, method, params).catch(error => {
-      if (error && error.message) {
-        toast(error.message, { type: "error", autoClose: false }) // TODO: Refacto to handle the error
-        return error.response
-      }
-    }).finally(() => loader.hide())
+    return this.request(url, method, params)
+      .catch((error) => {
+        if (error && error.message) {
+          toast(error.message, { type: 'error', autoClose: false }) // TODO: Refacto to handle the error
+          return error.response
+        }
+      })
+      .finally(() => loader.hide())
   }
 
   /**
@@ -73,7 +79,7 @@ export default class DatagouvfrAPI {
    * @param {string} entity_id
    * @returns {Promise}
    */
-  async get (entity_id) {
+  async get(entity_id) {
     const url = `${this.url()}/${entity_id}/`
     return await this.makeRequestAndHandleResponse(url)
   }
@@ -84,7 +90,7 @@ export default class DatagouvfrAPI {
    * @param {string} entity_id
    * @returns {Promise}
    */
-  async _get (entity_id) {
+  async _get(entity_id) {
     const url = `${this.url()}/${entity_id}/`
     return await this.request(url)
   }
@@ -94,7 +100,7 @@ export default class DatagouvfrAPI {
    *
    * @returns {Promise}
    */
-  async list () {
+  async list() {
     return await this.makeRequestAndHandleResponse(`${this.url()}/`)
   }
 
@@ -103,7 +109,7 @@ export default class DatagouvfrAPI {
    *
    * @returns {Promise}
    */
-  async _list () {
+  async _list() {
     return await this.request(`${this.url()}/`)
   }
 
@@ -113,8 +119,12 @@ export default class DatagouvfrAPI {
    * @param {object} data
    * @returns {Promise}
    */
-  async create (data) {
-    return await this.makeRequestAndHandleResponse(`${this.url()}/`, "post", data)
+  async create(data) {
+    return await this.makeRequestAndHandleResponse(
+      `${this.url()}/`,
+      'post',
+      data
+    )
   }
 
   /**
@@ -124,7 +134,11 @@ export default class DatagouvfrAPI {
    * @param {object} data
    * @returns {Promise}
    */
-  async update (entity_id, data) {
-    return await this.makeRequestAndHandleResponse(`${this.url()}/${entity_id}/`, "put", data)
+  async update(entity_id, data) {
+    return await this.makeRequestAndHandleResponse(
+      `${this.url()}/${entity_id}/`,
+      'put',
+      data
+    )
   }
 }

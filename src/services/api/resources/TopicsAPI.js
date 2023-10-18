@@ -1,5 +1,5 @@
-import DatagouvfrAPI from "../DatagouvfrAPI"
+import DatagouvfrAPI from '../DatagouvfrAPI'
 
 export default class TopicsAPI extends DatagouvfrAPI {
-  endpoint = "topics"
+  endpoint = 'topics'
 }

@@ -1,12 +1,13 @@
 <script setup>
-import { computed, ref, watchEffect, onBeforeUpdate } from "vue"
-import { pageStore } from "../store/PageStore"
-import MarkdownIt from "markdown-it"
+import MarkdownIt from 'markdown-it'
+import { computed, ref, watchEffect, onBeforeUpdate } from 'vue'
+
+import { pageStore } from '../store/PageStore'
 
 const markdown = new MarkdownIt()
 const store = pageStore()
 const content = computed(() => store.content)
-const props = defineProps(["url"])
+const props = defineProps(['url'])
 let url = props.url
 
 watchEffect(() => {
@@ -26,5 +27,4 @@ onBeforeUpdate(() => {
   </div>
 </template>
 
-<style>
-</style>
+<style></style>

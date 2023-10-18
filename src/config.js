@@ -1,3 +1,3 @@
-import config from "@siteConfig/config.yaml"
+import config from '@siteConfig/config.yaml'
 
 export default config

@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, computed } from "vue"
-import { useRouter } from "vue-router"
-import { useUserStore } from "../store/UserStore"
-import AuthService from "../services/AuthService"
+import { onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+import AuthService from '../services/AuthService'
+import { useUserStore } from '../store/UserStore'
 
 const router = useRouter()
 const store = useUserStore()
@@ -13,11 +14,11 @@ onMounted(() => {
   if (token.value) {
     auth.logout(token.value).then(() => {
       store.logout()
-      console.log("Logged out")
-      router.push({name: "home"})
+      console.log('Logged out')
+      router.push({ name: 'home' })
     })
   } else {
-    router.push({name: "home"})
+    router.push({ name: 'home' })
   }
 })
 </script>
