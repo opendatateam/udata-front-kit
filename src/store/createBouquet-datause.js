@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
 import { last } from 'lodash/fp/array'
+import { defineStore } from 'pinia'
 
 class NotImplementedError extends Error {
   constructor(message) {

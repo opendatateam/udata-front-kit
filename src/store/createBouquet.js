@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
-import {
-  serializeInformation,
-  useBouquetInformationStore
-} from '@/store/createBouquet-information'
+
 import {
   serializeDatauses,
   useBouquetDatausesStore
 } from '@/store/createBouquet-datauses'
+import {
+  serializeInformation,
+  useBouquetInformationStore
+} from '@/store/createBouquet-information'
 
 export const createBouquetStore = (client) => {
   return defineStore('createBouquet', {

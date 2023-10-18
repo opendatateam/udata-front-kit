@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia'
 import { merge } from 'lodash/fp/object'
+import { defineStore } from 'pinia'
 
 import {
-  serializeDatause,
-  deserializeDatause
+  deserializeDatause,
+  serializeDatause
 } from '@/store/createBouquet-datause'
 
 const serializeDatauses = (params) => {

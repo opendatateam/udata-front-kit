@@ -1,11 +1,11 @@
-import { setActivePinia, createPinia } from 'pinia'
-import { beforeEach, expect, test, describe } from 'vitest'
 import { last } from 'lodash/fp/array'
+import { createPinia, setActivePinia } from 'pinia'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 import {
   NotImplementedError,
-  serializeDatause,
   deserializeDatause,
+  serializeDatause,
   useBouquetDatauseStore
 } from '@/store/createBouquet-datause'
 

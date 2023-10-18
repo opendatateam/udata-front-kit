@@ -1,9 +1,9 @@
-import { setActivePinia, createPinia } from 'pinia'
-import { beforeEach, expect, test, describe } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 import {
-  serializeInformation,
   deserializeInformation,
+  serializeInformation,
   useBouquetInformationStore
 } from '@/store/createBouquet-information'
 
