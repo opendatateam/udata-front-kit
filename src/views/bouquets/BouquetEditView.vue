@@ -1,64 +1,48 @@
 <script setup>
 import Tooltip from "@/components/Tooltip.vue"
 import { ref, onMounted } from "vue"
-import { useDatasetStore } from "../../store/DatasetStore"
-import { useBouquetStore } from "../../store/BouquetStore"
+import { useTopicStore } from "../../store/TopicStore"
 import { useRouter, useRoute } from "vue-router"
 import config from "@/config"
 
-const datasetStore = useDatasetStore()
-const bouquetStore = useBouquetStore()
+const topicStore = useTopicStore()
 const router = useRouter()
 const route = useRoute()
 
 const isCreate = route.name === "bouquet_add"
 
 const form = ref({})
-const datasets = ref([])
-const selectedDataset = ref({})
 const loadedBouquet = ref({})
-const isEditDesc = ref(false)
 const isFormValidated = ref(false);
 const errorMessage = ref();
-const steps= ref([
+const steps = [
   "Description du bouquet de données", 
   "Informations du bouquet de données", 
   "Composition du bouquet",
   "Récapitulatif"
-])
+]
 const currentStep = ref(1)
-
-const extrasFromDatasets = () => {
-  const extras = {}
-  for (const dataset of datasets.value) {
-    extras[`${config.universe_name}:${dataset.dataset.id}:description`] = dataset.description
-  }
-  return extras
-}
 
 const onSubmit = async () => {
   let res
   const data = {
-    ...form.value,
-    datasets: datasets.value.map(d => d.dataset.id),
+    ...form.value
   }
-
   if (isCreate) {
-    res = await bouquetStore.create({
+    res = await topicStore.create({
       ...data,
-      tags: [config.universe_name],
-      extras: extrasFromDatasets(),
+      tags: [config.universe.name]
     })
   } else {
-    res = await bouquetStore.update(loadedBouquet.value.id, {
+    res = await topicStore.update(loadedBouquet.value.id, {
       ...data,
-      tags: loadedBouquet.value.tags,
-      extras: { ...loadedBouquet.value.extras, ...extrasFromDatasets()},
+      tags: loadedBouquet.value.tags
     })
   }
 
   isFormValidated.value = true;
 
+  console.log('res.status', res.status)
   if(res.status && res.status === 400) {
     errorMessage.value = "Merci de bien remplir les champs"
   }
@@ -67,16 +51,14 @@ const onSubmit = async () => {
       router.push({ name: "bouquet_detail", params: { bid: res.slug } })
     }, 1000)
   }
-  
 }
 
 onMounted(() => {
   if (!isCreate) {
-    bouquetStore.load(route.params.bid).then(data => {
+    topicStore.load(route.params.bid).then(data => {
       loadedBouquet.value = data
       form.value.name = data.name
       form.value.description = data.description
-      loadDatasets(data.datasets.map(d => d.id), data)
     })
   }
 })
