@@ -23,6 +23,13 @@ const goToEdit = () => {
   router.push({name: "bouquet_edit", params: { bid: bouquet.slug }},)
 }
 
+const canEdit = computed(() => {
+  return userStore.isAdmin() || (
+    userStore.$state.isLoggedIn &&
+    bouquet.value.owner?.id === userStore.$state.data?.id
+  )
+})
+
 onMounted(() => {
   store.load(route.params.bid).then(res => {
     bouquet.value = res
@@ -54,7 +61,7 @@ onMounted(() => {
     </ul>
     <DsfrButton
       class="fr-mt-4w"
-      v-if="userStore.isAdmin()"
+      v-if="canEdit"
       label="Modifier le bouquet"
       icon="ri-pencil-line"
       @click="goToEdit"
