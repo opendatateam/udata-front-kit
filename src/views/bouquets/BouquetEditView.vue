@@ -42,7 +42,6 @@ const onSubmit = async () => {
 
   isFormValidated.value = true;
 
-  console.log('res.status', res.status)
   if(res.status && res.status === 400) {
     errorMessage.value = "Merci de bien remplir les champs"
   }
