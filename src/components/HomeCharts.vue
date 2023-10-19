@@ -1,15 +1,17 @@
 <script setup>
-import { ref, onMounted } from "vue"
-import { useTopicStore } from "../store/TopicStore"
-import config from "@/config"
-import ChartData from "../components/ChartData.vue"
+import { ref, onMounted } from 'vue'
+
+import config from '@/config'
+
+import ChartData from '../components/ChartData.vue'
+import { useTopicStore } from '../store/TopicStore'
 
 const topicStore = useTopicStore()
 const chartData = ref([])
 
 onMounted(() => {
-  topicStore.load(config.universe.topic_id).then(topic => {
-    chartData.value = topic.extras["config:charts"] || []
+  topicStore.load(config.universe.topic_id).then((topic) => {
+    chartData.value = topic.extras['config:charts'] || []
   })
 })
 </script>

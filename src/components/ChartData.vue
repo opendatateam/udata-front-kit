@@ -1,13 +1,13 @@
 <script setup>
-import LineChart from "./LineChart.vue"
+import LineChart from './LineChart.vue'
 
-const props = defineProps(["chartData"])
+const props = defineProps(['chartData'])
 const chartData = props.chartData
 </script>
 
 <template>
   <div>
-    <div v-for="item in chartData" v-bind:key="item">
+    <div v-for="item in chartData" :key="item">
       <br /><br />
       <h2 style="text-align: left">{{ item.name }}</h2>
       <p style="text-align: left">{{ item.description }}</p>
@@ -22,7 +22,7 @@ const chartData = props.chartData
       >
         <div
           v-for="chart in item.charts"
-          v-bind:key="chart.url"
+          :key="chart.url"
           style="width: 40%"
         >
           <LineChart :dataurl="chart.url" />

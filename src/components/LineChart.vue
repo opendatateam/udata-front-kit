@@ -1,6 +1,4 @@
 <script setup>
-import { computed, watchEffect } from "vue"
-import { datavizStore } from "../store/DatavizStore"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,21 +8,24 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler,
-} from "chart.js"
-import { Line } from "vue-chartjs"
+  Filler
+} from 'chart.js'
+import { computed, watchEffect } from 'vue'
+import { Line } from 'vue-chartjs'
+
+import { datavizStore } from '../store/DatavizStore'
 
 const options = {
   plugins: {
     legend: {
-      display: false,
-    },
+      display: false
+    }
   },
   maintainAspectRatio: false,
   scales: {
     x: {
       grid: {
-        display: false,
+        display: false
       },
       ticks: {
         autoSkip: true,
@@ -34,25 +35,25 @@ const options = {
         callback: function (val, index) {
           return (
             this.getLabelForValue(val).toString().substring(8, 10) +
-            "/" +
+            '/' +
             this.getLabelForValue(val).toString().substring(5, 7) +
-            "/" +
+            '/' +
             this.getLabelForValue(val).toString().substring(0, 2)
           )
-        },
-      },
+        }
+      }
     },
 
     y: {
       border: {
-        dash: [3, 5],
+        dash: [3, 5]
       },
       grid: {},
       ticks: {
-        maxTicksLimit: 5,
-      },
-    },
-  },
+        maxTicksLimit: 5
+      }
+    }
+  }
 }
 
 ChartJS.register(
@@ -63,10 +64,10 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler,
+  Filler
 )
 
-const props = defineProps(["dataurl"])
+const props = defineProps(['dataurl'])
 const store = datavizStore()
 const formatedData = computed(() => store.formatedData)
 const chartName = computed(() => store.chartName)
@@ -88,7 +89,7 @@ watchEffect(() => {
     "
   >
     <h6 style="text-align: left">{{ chartName[props.dataurl] }}</h6>
-    <div style="height: 70%" v-if="formatedData[props.dataurl]">
+    <div v-if="formatedData[props.dataurl]" style="height: 70%">
       <Line
         :data="formatedData[props.dataurl]"
         :options="options"
@@ -97,7 +98,7 @@ watchEffect(() => {
     <div class="flex fr-mt-3v fr-mb-1v">
       <span
         class="legende_dash_line1"
-        v-bind:style="{ 'background-color': '#000091' }"
+        :style="{ 'background-color': '#000091' }"
       ></span>
       <p class="fr-text--sm fr-text--bold fr-ml-1v fr-mb-0">
         {{ chartUnit[props.dataurl] }}

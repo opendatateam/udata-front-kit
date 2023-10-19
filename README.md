@@ -29,6 +29,7 @@ npm run dev
 ```sh
 npm run build
 ```
+
 ### Test with [Vitest](https://vitest.dev/)
 
 ```sh

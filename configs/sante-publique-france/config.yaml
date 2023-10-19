@@ -16,59 +16,50 @@ universe:
 
 # UI customizations
 website:
-  title: "spf.data.gouv.fr"
-  rf_title: "MINISTERE<br>
-        DE LA SANTE<br>ET DE LA PREVENTION"
-  logo_operator: "https://static.data.gouv.fr/avatars/76/69d8ead7684d25a80c9fa97d943b06-100.png"
-  homepage_title: "Données Santé Publique France"
-  homepage_subtitle: "Portail des données publiques open data de santé SPF"
+  title: 'spf.data.gouv.fr'
+  rf_title: 'MINISTERE<br>
+    DE LA SANTE<br>ET DE LA PREVENTION'
+  logo_operator: 'https://static.data.gouv.fr/avatars/76/69d8ead7684d25a80c9fa97d943b06-100.png'
+  homepage_title: 'Données Santé Publique France'
+  homepage_subtitle: 'Portail des données publiques open data de santé SPF'
   menu_items:
-    -
-      name: "Accueil"
-      id: "home"
-      linkPage: "/"
-      type: "component"
-    -
-      name: "Jeux de données"
-      id: "datasets"
-      linkPage: "/datasets"
-      type: "component"
-    -
-      name: "C'est quoi SPF ?"
-      id: "infos"
-      linkPage: "/informations"
-      type: "page"
-      url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/about/ressources.md"
-    -
-      name: "Notice spéciale Covid"
-      id: "covid"
-      linkPage: "/covid"
-      type: "page"
-      url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/charter.md"
-    -
-      name: "L'open data en santé"
-      id: "opendatasante"
-      linkPage: "/opendatasante"
-      type: "page"
-      url: "https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/accessibility.md"
+    - name: 'Accueil'
+      id: 'home'
+      linkPage: '/'
+      type: 'component'
+    - name: 'Jeux de données'
+      id: 'datasets'
+      linkPage: '/datasets'
+      type: 'component'
+    - name: "C'est quoi SPF ?"
+      id: 'infos'
+      linkPage: '/informations'
+      type: 'page'
+      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/about/ressources.md'
+    - name: 'Notice spéciale Covid'
+      id: 'covid'
+      linkPage: '/covid'
+      type: 'page'
+      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/charter.md'
+    - name: "L'open data en santé"
+      id: 'opendatasante'
+      linkPage: '/opendatasante'
+      type: 'page'
+      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/accessibility.md'
   # img should be square
   home_buttons:
-    -
-      title: "C'est quoi Santé Publique France ?"
-      link: "/about"
-      img: "https://static.data.gouv.fr/avatars/76/69d8ead7684d25a80c9fa97d943b06-100.png"
-    -
-      title: "Voir les jeux de données récents"
-      link: "/datasets"
-      img: "https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d"
+    - title: "C'est quoi Santé Publique France ?"
+      link: '/about'
+      img: 'https://static.data.gouv.fr/avatars/76/69d8ead7684d25a80c9fa97d943b06-100.png'
+    - title: 'Voir les jeux de données récents'
+      link: '/datasets'
+      img: 'https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d'
   show_topic_charts: false
   list_highlighted_topics:
-    -
-      id: "651073475c52b0870ef79afa"
-      name: "Les données autour du coronavirus"
-    -
-      id: "65107350db5d6288fb10e240"
-      name: "Les données bactéries émergentes"
+    - id: '651073475c52b0870ef79afa'
+      name: 'Les données autour du coronavirus'
+    - id: '65107350db5d6288fb10e240'
+      name: 'Les données bactéries émergentes'
   oauth_option: false
   # display settings
   organizations_list_page_size: 9

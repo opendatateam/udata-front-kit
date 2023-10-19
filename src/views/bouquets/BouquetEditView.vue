@@ -1,25 +1,27 @@
 <script setup>
-import Tooltip from "@/components/Tooltip.vue"
-import { ref, onMounted } from "vue"
-import { useTopicStore } from "../../store/TopicStore"
-import { useRouter, useRoute } from "vue-router"
-import config from "@/config"
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+import Tooltip from '@/components/Tooltip.vue'
+import config from '@/config'
+
+import { useTopicStore } from '../../store/TopicStore'
 
 const topicStore = useTopicStore()
 const router = useRouter()
 const route = useRoute()
 
-const isCreate = route.name === "bouquet_add"
+const isCreate = route.name === 'bouquet_add'
 
 const form = ref({})
 const loadedBouquet = ref({})
-const isFormValidated = ref(false);
-const errorMessage = ref();
+const isFormValidated = ref(false)
+const errorMessage = ref()
 const steps = [
-  "Description du bouquet de données", 
-  "Informations du bouquet de données", 
-  "Composition du bouquet",
-  "Récapitulatif"
+  'Description du bouquet de données',
+  'Informations du bouquet de données',
+  'Composition du bouquet',
+  'Récapitulatif'
 ]
 const currentStep = ref(1)
 
@@ -40,21 +42,20 @@ const onSubmit = async () => {
     })
   }
 
-  isFormValidated.value = true;
+  isFormValidated.value = true
 
-  if(res.status && res.status === 400) {
-    errorMessage.value = "Merci de bien remplir les champs"
-  }
-  else {
+  if (res.status && res.status === 400) {
+    errorMessage.value = 'Merci de bien remplir les champs'
+  } else {
     setTimeout(() => {
-      router.push({ name: "bouquet_detail", params: { bid: res.slug } })
+      router.push({ name: 'bouquet_detail', params: { bid: res.slug } })
     }, 1000)
   }
 }
 
 onMounted(() => {
   if (!isCreate) {
-    topicStore.load(route.params.bid).then(data => {
+    topicStore.load(route.params.bid).then((data) => {
       loadedBouquet.value = data
       form.value.name = data.name
       form.value.description = data.description
@@ -67,7 +68,7 @@ onMounted(() => {
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-col-lg-7">
-        <DsfrStepper :steps="steps" :currentStep="currentStep" />
+        <DsfrStepper :steps="steps" :current-step="currentStep" />
 
         <div class="fr-mt-4v">
           <DsfrAlert
@@ -76,23 +77,19 @@ onMounted(() => {
             title="Bouquet créé"
             description="Votre bouquet a bien été créé."
           />
-          <DsfrAlert
-            v-if="errorMessage"
-            type="warning"
-            :title="errorMessage"
-          />
+          <DsfrAlert v-if="errorMessage" type="warning" :title="errorMessage" />
         </div>
 
         <form @submit.prevent="onSubmit()">
           <DsfrInput
-            class="fr-mt-1w fr-mb-4w"
             v-model="form.name"
+            class="fr-mt-1w fr-mb-4w"
             type="text"
             placeholder="Mon bouquet"
             :label-visible="true"
             label="Sujet du bouquet"
           />
-          
+
           <Tooltip
             title="Objectif du bouquet"
             name="tooltip__objectif"
@@ -104,13 +101,13 @@ onMounted(() => {
             text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
           />
           <DsfrInput
-            class="fr-mt-1w fr-mb-2w"
             v-model="form.description"
+            class="fr-mt-1w fr-mb-2w"
             placeholder="Ma description"
             :label-visible="true"
             :is-textarea="true"
           />
-          
+
           <DsfrButton class="fr-mt-4w" type="submit" label="Suivant" />
         </form>
       </div>
@@ -127,7 +124,7 @@ onMounted(() => {
 }
 .required {
   color: red;
-} 
+}
 
 :deep .tooltip {
   &__objectif,

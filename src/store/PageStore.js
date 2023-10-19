@@ -1,13 +1,13 @@
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia'
 
-export const pageStore = defineStore("getPage", {
+export const pageStore = defineStore('getPage', {
   state: () => ({
-    data: "",
+    data: ''
   }),
   getters: {
     content: (state) => {
-      return state.data || ""
-    },
+      return state.data || ''
+    }
   },
   actions: {
     async getPageFromUrl(url) {
@@ -15,5 +15,5 @@ export const pageStore = defineStore("getPage", {
       const res = await response.text()
       this.data = res
     }
-  },
+  }
 })

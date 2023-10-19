@@ -1,12 +1,14 @@
-import { defineStore } from "pinia"
-import TopicsAPI from "../services/api/resources/TopicsAPI"
-import config from "@/config"
+import { defineStore } from 'pinia'
+
+import config from '@/config'
+
+import TopicsAPI from '../services/api/resources/TopicsAPI'
 
 const topicsAPI = new TopicsAPI()
 
-export const useTopicStore = defineStore("topic", {
+export const useTopicStore = defineStore('topic', {
   state: () => ({
-    data: [],
+    data: []
   }),
   actions: {
     /**
@@ -14,10 +16,10 @@ export const useTopicStore = defineStore("topic", {
      *
      * @param {*} topics
      */
-    async loadTopicsFromList (topics) {
+    async loadTopicsFromList(topics) {
       this.data = []
       for (const topic of topics) {
-        let res = await topicsAPI.get(topic.id)
+        const res = await topicsAPI.get(topic.id)
         this.data.push(res)
       }
     },
@@ -27,10 +29,12 @@ export const useTopicStore = defineStore("topic", {
      * @param {Array} topics
      * @returns {Array}
      */
-    filter (topics) {
-      return topics.filter(topic => {
-        return topic.tags.includes(config.universe.name)
-          && topic.id !== config.universe.topic_id
+    filter(topics) {
+      return topics.filter((topic) => {
+        return (
+          topic.tags.includes(config.universe.name) &&
+          topic.id !== config.universe.topic_id
+        )
       })
     },
     /**
@@ -38,7 +42,7 @@ export const useTopicStore = defineStore("topic", {
      *
      * @returns {Array<object>}
      */
-    async loadTopicsForUniverse () {
+    async loadTopicsForUniverse() {
       if (this.data.length > 0) return this.data
       let response = await topicsAPI._list()
       this.data = this.filter(response.data)
@@ -54,8 +58,8 @@ export const useTopicStore = defineStore("topic", {
      * @param {string} slugOrId
      * @returns {object}
      */
-    get (slugOrId) {
-      return this.data.find(b => b.slug === slugOrId || b.id === slugOrId)
+    get(slugOrId) {
+      return this.data.find((b) => b.slug === slugOrId || b.id === slugOrId)
     },
     /**
      * Get a single topic from store or API
@@ -63,7 +67,7 @@ export const useTopicStore = defineStore("topic", {
      * @param {string} slugOrId
      * @returns {object}
      */
-    async load (slugOrId) {
+    async load(slugOrId) {
       const existing = this.get(slugOrId)
       if (existing) return existing
       return await topicsAPI.get(slugOrId)
@@ -74,7 +78,7 @@ export const useTopicStore = defineStore("topic", {
      * @param {object} topic
      * @returns {object}
      */
-    async create (topic) {
+    async create(topic) {
       const res = await topicsAPI.create(topic)
       this.data.push(res)
       return res
@@ -86,11 +90,11 @@ export const useTopicStore = defineStore("topic", {
      * @param {object} data
      * @returns {object}
      */
-    async update (topic_id, data) {
+    async update(topic_id, data) {
       const res = await topicsAPI.update(topic_id, data)
-      const idx = this.data.findIndex(b => b.id === topic_id)
+      const idx = this.data.findIndex((b) => b.id === topic_id)
       this.data[idx] = res
       return res
-    },
-  },
+    }
+  }
 })

@@ -1,7 +1,15 @@
 <script setup>
 import { computed } from 'vue'
 
-const props = defineProps(["title", "description", "img", "link", "altImg", "type", "externalLink"])
+const props = defineProps([
+  'title',
+  'description',
+  'img',
+  'link',
+  'altImg',
+  'type',
+  'externalLink'
+])
 
 const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
 </script>
@@ -15,18 +23,18 @@ const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
           <a v-if="externalLink" :href="externalLink">{{ title }}</a>
         </h6>
         <p class="fr-card__desc">
-          <text-clamp v-if="description" :auto-resize="true" :text="description" :max-lines="2" />
+          <text-clamp
+            v-if="description"
+            :auto-resize="true"
+            :text="description"
+            :max-lines="2"
+          />
         </p>
       </div>
     </div>
     <div class="fr-card__header">
       <div class="fr-card__img">
-        <img
-          v-if="img"
-          class="fr-responsive-img"
-          :src="img"
-          :alt="altImg"
-        >
+        <img v-if="img" class="fr-responsive-img" :src="img" :alt="altImg" />
       </div>
     </div>
   </div>
@@ -34,7 +42,7 @@ const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
 
 <style scoped lang="scss">
 .es-card--dataset {
-  .fr-card__header{
+  .fr-card__header {
     width: 20%;
     flex: 0 0 20%;
   }

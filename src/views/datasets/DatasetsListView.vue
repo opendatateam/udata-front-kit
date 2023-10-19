@@ -1,10 +1,12 @@
 <script setup>
-import { computed, onMounted, ref, watchEffect } from "vue"
-import { useRoute, onBeforeRouteUpdate } from "vue-router"
-import { useSearchStore } from "../../store/SearchStore"
-import { useTopicStore } from "../../store/TopicStore"
-import Tile from "../../components/Tile.vue"
-import config from "@/config"
+import { computed, onMounted, ref, watchEffect } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+
+import config from '@/config'
+
+import Tile from '../../components/Tile.vue'
+import { useSearchStore } from '../../store/SearchStore'
+import { useTopicStore } from '../../store/TopicStore'
 
 const route = useRoute()
 const store = useSearchStore()
@@ -21,12 +23,14 @@ const pages = computed(() => store.pagination)
 const topicsConf = config.website.list_highlighted_topics
 const topicOptions = computed(() => {
   if (!topicsConf?.length) return
-  const topics = topicStore.$state.data.filter(t => {
-    return topicsConf.map(st => st.id).includes(t.id)
-  }).map(t => {
-    return { value: t.id, text: t.name }
-  })
-  return [{ value: "", text: "Toutes les données" }, ...topics]
+  const topics = topicStore.$state.data
+    .filter((t) => {
+      return topicsConf.map((st) => st.id).includes(t.id)
+    })
+    .map((t) => {
+      return { value: t.id, text: t.name }
+    })
+  return [{ value: '', text: 'Toutes les données' }, ...topics]
 })
 
 const onSelectTopic = (topicId) => {
@@ -61,7 +65,7 @@ watchEffect(() => {
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <h2 v-if="query">Résultats de recherche pour "{{ query }}"</h2>
     <h2 v-else>Jeux de données</h2>
-    <div class="fr-mb-4w" v-if="query && datasets?.length === 0">
+    <div v-if="query && datasets?.length === 0" class="fr-mb-4w">
       Aucun résultat pour cette recherche.
     </div>
     <div class="fr-grid-row">

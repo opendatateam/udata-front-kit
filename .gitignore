@@ -1,6 +1,6 @@
 .env.local
 .idea
+TODO.md
 dist/
 node_modules/
 src/playground
-TODO.md
