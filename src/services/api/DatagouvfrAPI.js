@@ -60,9 +60,9 @@ export default class DatagouvfrAPI {
   async makeRequestAndHandleResponse (url, method = "get", params = {}) {
     const loader = $loading.show()
     return this.request(url, method, params).catch(error => {
-      console.error(error)
       if (error && error.message) {
-        toast(error.message, { type: "error", autoClose: false })
+        toast(error.message, { type: "error", autoClose: false }) // TODO: Refacto to handle the error
+        return error.response
       }
     }).finally(() => loader.hide())
   }
