@@ -1,14 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
+import CreateBouquetStep1 from "@/components/CreateBouquetStep1.vue"
+import CreateBouquetStep2 from "@/components/CreateBouquetStep2.vue"
 import Tooltip from '@/components/Tooltip.vue'
-import config from '@/config'
-
-import { useTopicStore } from '../../store/TopicStore'
+// import config from '@/config'
+import { useTopicStore } from '@/store/TopicStore'
 
 const topicStore = useTopicStore()
-const router = useRouter()
+// const router = useRouter()
 const route = useRoute()
 
 const isCreate = route.name === 'bouquet_add'
@@ -25,35 +25,44 @@ const steps = [
 ]
 const currentStep = ref(1)
 
-const onSubmit = async () => {
-  let res
-  const data = {
-    ...form.value
-  }
-  if (isCreate) {
-    res = await topicStore.create({
-      ...data,
-      tags: [config.universe.name]
-    })
-  } else {
-    res = await topicStore.update(loadedBouquet.value.id, {
-      ...data,
-      tags: loadedBouquet.value.tags
-    })
-  }
-
-  isFormValidated.value = true
-
-  if (res.status && res.status === 400) {
-    errorMessage.value = 'Merci de bien remplir les champs'
-  } else {
-    setTimeout(() => {
-      router.push({ name: 'bouquet_detail', params: { bid: res.slug } })
-    }, 1000)
+const nextStep = () => {
+  if (currentStep.value < steps.length) {
+    currentStep.value += 1;
+    console.log("steps.value.length", "steps.value.length")
+    console.log("currentStep.value", currentStep.value)
   }
 }
 
+// const onSubmit = async () => {
+//   let res
+//   const data = {
+//     ...form.value
+//   }
+//   if (isCreate) {
+//     res = await topicStore.create({
+//       ...data,
+//       tags: [config.universe.name]
+//     })
+//   } else {
+//     res = await topicStore.update(loadedBouquet.value.id, {
+//       ...data,
+//       tags: loadedBouquet.value.tags
+//     })
+//   }
+
+//   isFormValidated.value = true
+
+//   if (res.status && res.status === 400) {
+//     errorMessage.value = 'Merci de bien remplir les champs'
+//   } else {
+//     setTimeout(() => {
+//       router.push({ name: 'bouquet_detail', params: { bid: res.slug } })
+//     }, 1000)
+//   }
+// }
+
 onMounted(() => {
+  console.log('form.value', form.value)
   if (!isCreate) {
     topicStore.load(route.params.bid).then((data) => {
       loadedBouquet.value = data
@@ -69,49 +78,11 @@ onMounted(() => {
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-col-lg-7">
         <DsfrStepper :steps="steps" :current-step="currentStep" />
-
-        <div class="fr-mt-4v">
-          <DsfrAlert
-            v-if="isFormValidated && !errorMessage"
-            type="success"
-            title="Bouquet créé"
-            description="Votre bouquet a bien été créé."
-          />
-          <DsfrAlert v-if="errorMessage" type="warning" :title="errorMessage" />
-        </div>
-
-        <form @submit.prevent="onSubmit()">
-          <DsfrInput
-            v-model="form.name"
-            class="fr-mt-1w fr-mb-4w"
-            type="text"
-            placeholder="Mon bouquet"
-            :label-visible="true"
-            label="Sujet du bouquet"
-          />
-
-          <Tooltip
-            title="Objectif du bouquet"
-            name="tooltip__objectif"
-            text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
-          />
-          <Tooltip
-            title="Utilisez du markdown pour mettre en forme votre texte"
-            name="tooltip__markdown"
-            text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
-          />
-          <DsfrInput
-            v-model="form.description"
-            class="fr-mt-1w fr-mb-2w"
-            placeholder="Ma description"
-            :label-visible="true"
-            :is-textarea="true"
-          />
-
-          <DsfrButton class="fr-mt-4w" type="submit" label="Suivant" />
-        </form>
       </div>
     </div>
+        <create-bouquet-step1 v-if="currentStep === 1" :nextStep="nextStep" />
+        <create-bouquet-step2 v-else :nextStep="nextStep"/>
+
   </div>
 </template>
 
