@@ -40,12 +40,23 @@ onMounted(() => {
       .then((ds) => (datasets.value = ds))
   })
 })
+
 </script>
 
 <template>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <h1>{{ bouquet.name }}</h1>
     <div v-html="description"></div>
+    <div>
+      <div v-if="bouquet.extras && bouquet.extras.informations">
+        <div v-for="info in bouquet.extras.informations">
+          <h5>Thématique</h5>
+          <p>{{ info.theme }}</p>
+          <h5>Chantier</h5>
+          <p>{{ info['sub-theme'] }}</p>
+        </div>
+      </div>
+    </div>
 
     <h2 class="fr-mt-2w">Jeux de données</h2>
     <div v-if="!datasets.length">Pas de jeu de données dans ce bouquet.</div>
