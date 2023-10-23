@@ -116,6 +116,14 @@ const getOptionDefault = (theme) => {
   }
 }
 
+const validateAndMoveToStep2 = (newStep) => {
+  if (!form.value.name || !form.value.description) {
+    errorMessage.value = 'Merci de bien remplir les champs'
+  } else {
+    currentStep.value = newStep
+  }
+}
+
 const onSubmit = async () => {
   let res
   const data = {
@@ -220,7 +228,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <DsfrButton type="button" class="fr-mt-2w" label="Suivant" @click="currentStep= 2" />
+        <DsfrButton type="button" class="fr-mt-2w" label="Suivant" @click.prevent="validateAndMoveToStep2(2)" />
       </div>
     
       <div v-show="currentStep === 2">
