@@ -65,7 +65,7 @@ export default class DatagouvfrAPI {
       }
 
       if (error && error.message) {
-        return error.response
+        return { error: error.message }
       }
     })
   }

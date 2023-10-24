@@ -4,96 +4,101 @@ import {
   serializeDatauses,
   useBouquetDatausesStore
 } from '@/store/createBouquet-datauses'
-import {
-  serializeInformation,
-  useBouquetInformationStore
-} from '@/store/createBouquet-information'
+import { useBouquetInformationStore } from '@/store/createBouquet-information'
+
+class UnknownError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'UnknownError'
+  }
+}
 
 export const createBouquetStore = (client) => {
   return defineStore('createBouquet', {
     state: () => ({
-      bouquet: {
-        id: null,
-        name: null,
-        description: null,
-        tags: [],
-        information: null,
-        datauses: []
-      },
+      id: null,
+      name: null,
+      description: null,
+      tags: [],
+      information: useBouquetInformationStore(),
+      datauses: [],
       error: false
     }),
 
     actions: {
       async create(params) {
-        const { status, data } = await client.create(this.serialize(params))
+        const response = await client.create(this.serialize(params))
+        const { status, data, error } = response
 
         if (status === 201) {
           this.deserialize(data)
+        } else if (status === 400) {
+          this.error = error
         } else {
-          this.error = 'error'
+          throw new UnknownError(JSON.stringify(response))
         }
 
         return this
       },
 
       async addInformation(params) {
-        const { status, data } = await client.update(
-          this.bouquet.id,
+        const response = client.update(
+          this.id,
           this.serialize({ information: params })
         )
 
+        const { status, data, error } = response
+
         if (status === 200) {
           this.deserialize(data)
-        } else if (status === 400) {
-          this.error = 'error'
+        } else if (status === 400 || status === 404) {
+          this.error = error
         } else {
-          this.error = 'not found'
+          throw new UnknownError(JSON.stringify(response))
         }
 
         return this
       },
 
       async addDatause(params) {
-        const { status, data } = await client.update(
-          this.bouquet.id,
+        const response = await client.update(
+          this.id,
           this.serialize({ datauses: params })
         )
 
+        const { status, data, error } = response
+
         if (status === 200) {
           this.deserialize(data)
-        } else if (status === 400) {
-          this.error = 'error'
+        } else if (status === 400 || status === 404) {
+          this.error = error
         } else {
-          this.error = 'not found'
+          throw new UnknownError(JSON.stringify(response))
         }
 
         return this
       },
 
       serialize({ name, description, tags, information, datauses }) {
-        let params = {
-          name: name || this.bouquet.name,
-          description: description || this.bouquet.description,
-          tags: tags || this.bouquet.tags
+        return {
+          name: name || this.name,
+          description: description || this.description,
+          tags: tags || this.tags,
+          ...this.information.serialize(information),
+          ...serializeDatauses(datauses)
         }
-
-        if (information) {
-          params = { ...params, ...serializeInformation(information) }
-        }
-
-        if (datauses) {
-          params = { ...params, ...serializeDatauses(datauses) }
-        }
-
-        return params
       },
 
       deserialize({ id, name, description, tags, extras }) {
-        const information = useBouquetInformationStore()
-        const datauses = useBouquetDatausesStore()
-        this.$state.bouquet = { id, name, description, tags }
-        this.$state.bouquet.information = information.deserialize({ extras })
-        this.$state.bouquet.datauses = datauses.deserialize({ extras })
+        this.$state = {
+          id,
+          name,
+          description,
+          tags,
+          information: this.information.deserialize({ extras }),
+          datauses: useBouquetDatausesStore().deserialize({ extras })
+        }
+
         return this
       }
     }
