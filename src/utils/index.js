@@ -1,5 +1,6 @@
 import { marked } from 'marked'
 import { stripHtml } from 'string-strip-html'
+import { subThemes } from '@/config'
 
 /**
  * Parse description from markdown to HTML
@@ -21,4 +22,14 @@ export const descriptionFromMarkdown = (ref, attr = 'description') => {
 export const stripFromMarkdown = (value) => {
   const html = marked.parse(value, { mangle: false, headerIds: false })
   return stripHtml(html).result
+}
+
+/**
+ * Get sub-themes for a given main theme.
+ *
+ * @param {string} Subtheme
+ * @returns {Array}
+ */
+export function getSubThemes(Subtheme) {
+  return subThemes[Subtheme] || []
 }

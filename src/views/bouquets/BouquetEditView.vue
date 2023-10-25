@@ -1,17 +1,12 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useTopicStore } from '@/store/TopicStore'
-import { useDatasetStore } from "@/store/DatasetStore"
-import SearchAPI from "@/services/api/SearchAPI"
-import Multiselect from "@vueform/multiselect"
-import { thematiques, getOptions, getOptionDefault } from '@/constants/BouquetDataStep2.js'
 import Tooltip from '@/components/Tooltip.vue'
-import config from '@/config'
+import config, { thematiques, defaultOptions, selectedThematiqueDefault, selectedSubThemeDefault } from '@/config'
+import { getSubThemes } from '@/utils'
+import { useTopicStore } from '@/store/TopicStore'
 
 const topicStore = useTopicStore()
-const datasetStore = useDatasetStore()
-const searchAPI = new SearchAPI()
 const router = useRouter()
 const route = useRoute()
 
@@ -19,9 +14,6 @@ const isCreate = route.name === 'bouquet_add'
 
 const form = ref({})
 const loadedBouquet = ref({})
-const datasets = ref([])
-const selectedDataset = ref({})
-const selector = ref(null)
 const isFormValidated = ref(false)
 const errorMessage = ref()
 const steps = [
@@ -30,70 +22,112 @@ const steps = [
   'Composition du bouquet',
   'Récapitulatif'
 ]
-const selectedThematique = ref('Produire')
-const selectedSubTheme = ref('Nucléaire')
+// const thematiques = [
+//    'Produire',
+//    'Se nourrir',
+//    'Se loger',
+//    'Se déplacer',
+//    'Préserver',
+//    'Consommer',
+//    'Chantiers transverses'
+// ]
+// const selectedThematique = ref('Produire')
+// const selectedSubTheme = ref('Nucléaire')
+const selectedThematique = ref(selectedThematiqueDefault);
+const selectedSubTheme = ref(selectedSubThemeDefault)
 const currentStep = ref(1)
-const urlData = ref()
 
 const subThemes = computed(() => {
-  return getOptions(selectedThematique.value)
+  return getSubThemes(selectedThematique.value)
 })
 
-const loadDatasets = async (datasetIds, bouquet) => {
-  for (const datasetId of datasetIds) {
-    const dataset = await datasetStore.load(datasetId)
-    datasets.value.push({
-      dataset,
-      description: bouquet.extras[`${config.universe_name}:${dataset.id}:description`] || "",
-    })
+// const getOptions = (selectSubtheme) => {
+//   switch (selectSubtheme) {
+//     case 'Produire':
+//       return [
+//         'Nucléaire',
+//         'Tertiaire (incluant les bâtiments publics de l\'État et des collectivités, hors logement)',
+//         'Production d\'électricité décarbonée (hors nucléaire)',
+//         'Production d\'énergie décarbonnée (hors éléctricité)',
+//         'Prévention, gestion et valorisation des déchets',
+//         'Transport de marchandises, logistique, e-commerce',
+//         'Verdissement du secteur et des instruments financiers',
+//         'Décarbonation de l’industrie',
+//       ];
+//     case 'Se nourrir':
+//       return [
+//         'Alimentation',
+//         'Agriculture et pêche'
+//       ];
+//     case 'Se loger':
+//       return [
+//         'Construction et rénovation des logements',
+//         'Aménagements des villes'
+//       ];
+//     case 'Se déplacer':
+//       return [
+//         'Voitures et infrastructures routières',
+//         'Mobilité courte distance (hors voiture)',
+//         'Mobilité longue distance (avion, train)'
+//       ];
+//     case 'Préserver':
+//       return [
+//         'Eau',
+//         'Sols',
+//         'Océans et mers',
+//         'Forêt'
+//       ];
+//     case 'Consommer':
+//       return [
+//         'Consommation plus durable (ménages)',
+//         'Numérique responsable',
+//         'Achats durables (de l’État, des collectivités et des entreprises)'
+//       ];
+//     case 'Chantiers transverses':
+//       return [
+//         'Le financement qui permet de définir des trajectoires d’investissement crédibles et cohérentes',
+//         'La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins',
+//         'La transition des filières avec la gestion des emplois, des formations et des compétences',
+//         'Les données environnementales',
+//         'Les services publics exemplaires',
+//         'La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin',
+//         'La sobriété des usages et des ressources'
+//       ];
+//     default:
+//       return [];
+//   }
+// }
+
+// const getOptionDefault = (theme) => {
+//   switch (theme) {
+//     case 'Produire':
+//       return 'Nucléaire'
+//     case 'Se nourrir':
+//       return 'Alimentation'
+//     case 'Se loger':
+//       return 'Construction et rénovation des logements'
+//     case 'Se déplacer':
+//       return 'Voitures et infrastructures routières'
+//     case 'Préserver':
+//       return 'Eau'
+//     case 'Consommer':
+//       return 'Consommation plus durable (ménages)'
+//     case 'Chantiers transverses':
+//       return 'Le financement qui permet de définir des trajectoires d’investissement crédibles et cohérentes'
+//     default:
+//       return null
+//   }
+// }
+
+const getOptionDefault = (theme) => {
+  if (defaultOptions.hasOwnProperty(theme)) {
+    return defaultOptions[theme]
   }
+
+  return null
 }
 
-const search = async (query) => {
-  if (!query) return []
-  const results = await searchAPI._search(query, { page_size: 10 })
-  return results.data.map(r => {
-    return { value: r.id, label: r.title }
-  }).filter(r => !datasets.value.map(d => d.dataset.id).includes(r.value))
-}
-
-const onSubmitModal = async () => {
-  if (!selectedDataset.value.id) return
-  if (isEditDesc.value) {
-    const idx = datasets.value.findIndex(d => d.dataset.id === selectedDataset.value.id)
-    datasets.value[idx].description = selectedDataset.value.description
-  } else {
-    const dataset = await datasetStore.load(selectedDataset.value.id)
-    if (dataset) {
-      datasets.value.push({ dataset, description: selectedDataset.value.description })
-    }
-  }
-  selectedDataset.value = {}
-  isEditDesc.value = false
-}
-
-const onDeleteDataset = (datasetId) => {
-  datasets.value = datasets.value.filter(d => d.dataset.id !== datasetId)
-  delete loadedBouquet.value.extras[`${config.universe_name}:${datasetId}:description`]
-}
-
-const onEditDataset = (dataset) => {
-  isModalOpen.value = true
-  isEditDesc.value = true
-  selectedDataset.value.id = dataset.id
-  selectedDataset.value.title = dataset.title
-  selectedDataset.value.description = datasets.value.find(d => d.dataset.id === dataset.id).description
-}
-
-const extrasFromDatasets = () => {
-  const extras = {}
-  for (const dataset of datasets.value) {
-    extras[`${config.universe_name}:${dataset.dataset.id}:description`] = dataset.description
-  }
-  return extras
-}
-
-const validateAndMoveToStep = (newStep) => {
+const validateAndMoveToStep2 = (newStep) => {
   if (!form.value.name || !form.value.description) {
     errorMessage.value = 'Merci de bien remplir les champs'
   } else {
@@ -107,17 +141,10 @@ const onSubmit = async () => {
     ...form.value
   }
 
-  const informationsInExtras = {
+  const extras = {
     informations: [{
       'theme': selectedThematique.value,
       'sub-theme': selectedSubTheme.value
-    }]
-  };
-
-  const DatausesInExtras = {
-    datauses: [{
-      'name': libelle.value,
-      'description': raison.value
     }]
   };
 
@@ -125,13 +152,13 @@ const onSubmit = async () => {
     res = await topicStore.create({
       ...data,
       tags: [config.universe.name],
-      extras: { ...informationsInExtras, ...extrasFromDatasets(), ...DatausesInExtras }
+      extras: extras
     })
   } else { 
-      res = await topicStore.update(loadedBouquet.value.id, {
+    res = await topicStore.update(loadedBouquet.value.id, {
       ...data,
       tags: loadedBouquet.value.tags,
-      extras: { ...loadedBouquet.value.extras, ...informationsInExtras, ...extrasFromDatasets(), ...DatausesInExtras }
+      extras: { ...loadedBouquet.value.extras, ...extras}
     })
   }
 
@@ -153,8 +180,7 @@ onMounted(() => {
     topicStore.load(route.params.bid).then((data) => {
       loadedBouquet.value = data
       form.value.name = data.name
-      form.value.description = data.description,
-      loadDatasets(data.datasets.map(d => d.id), data)
+      form.value.description = data.description
     })
   }
 })
@@ -212,7 +238,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <DsfrButton type="button" class="fr-mt-2w" label="Suivant" @click.prevent="validateAndMoveToStep(2)" />
+        <DsfrButton type="button" class="fr-mt-2w" label="Suivant" @click.prevent="validateAndMoveToStep2(2)" />
       </div>
     
       <div v-show="currentStep === 2">
@@ -240,120 +266,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <DsfrButton type="button" class="fr-mt-2w" label="Suivant" @click.prevent="validateAndMoveToStep(3)" />
-      </div>
-
-      <div v-show="currentStep === 3">
-        <div class="fr-grid-row">
-            <div class="fr-col-12 fr-col-lg-6">
-              <label for="select-datasets">Sélectionnez un jeu de données</label>
-              {{ selectedDataset.id }}
-              <Multiselect
-                noOptionsText="Précisez ou élargissez votre recherche"
-                ref="selector"
-                class="fr-mt-1w fr-mb-2w"
-                placeholder="Cherchez un jeu de données"
-                name="select-datasets"
-                v-model="selectedDataset.id"
-                :filter-results="false"
-                :min-chars="1"
-                :resolve-on-load="false"
-                :delay="0"
-                :searchable="true"
-                :options="search"
-                v-if="!isEditDesc"
-              />
-              <DsfrButton label="Valider" @click.prevent="onSubmitModal()" :secondary="true" />
-            </div>
-
-            
-        </div>
-
-        <div class="fr-grid-row">
-            <div class="fr-col-lg-6">
-              <DsfrInput
-                  v-model="urlData"
-                  placeholder="Url vers le jeu de données souhaité"
-                  label="Vous ne trouvez pas la donnée dans éÉcosphères ?"
-                  :label-visible="true"
-                />
-            </div>
-            <div class="fr-col-lg-3">
-              <DsfrButton
-                  icon="ri-delete-bin-line"
-                  label="Ajouter la donnée"
-                  :secondary="true"
-                  @click.prevent="onDeleteDataset(d.dataset.id)"
-                />
-            </div>
-        </div>
-        <hr/>
-        <div class="fr-grid-row">
-            <div class="fr-col-lg-7">
-              <DsfrInput
-                  v-model="libelle"
-                  class="fr-mb-3w"
-                  label="Libellé de la donnée"
-                  :label-visible="true"
-                />
-
-                <DsfrInput
-                  v-model="raison"
-                  class="fr-mb-3w"
-                  label="Raison d'utilisation dans ce bouquet*"
-                  hint="Et ici l’indice permanent"
-                  :label-visible="true"
-                  :is-textare="true"
-                />
-            </div>
-          </div>
-      
-        <DsfrInput
-          class="fr-mt-1w fr-mb-2w"
-          v-model="selectedDataset.description"
-          label="Description du jeu de données dans le bouquet"
-          placeholder="Pourquoi avez-vous ajouté ce jeu de données ?"
-          :label-visible="true"
-        />
-        <!-- <DsfrButton type="button" class="fr-mt-2w" label="Ajouter un jeu de données" @click.prevent="onSubmitModal()" /> -->
-      <!-- </DsfrModal> -->
-      <h3>Données sélectionnées ({{ datasets.length }})</h3>
-      <div class="no-dataset fr-py-2 fr-px-3w" v-if="!datasets.length">
-        <p class="fr-m-0">Aucune donnée ajoutée</p>
-      </div>
-      <div v-else>
-        <!-- {{datasets}} -->
-        <DsfrAccordionsGroup>
-        <li v-for="d in datasets">
-          {{ d }}
-          <DsfrAccordion
-            :title="d.dataset.title"
-            :expanded-id="d.dataset.id"
-            @expand="d.dataset.id = $event"
-          >
-          <div>
-            {{ d.dataset.description }}
-          </div>
-          <DsfrButton
-            icon="ri-delete-bin-line"
-            label="Retirer de la section"
-            @click.stop.prevent="onDeleteDataset(d.dataset.id)"
-          />
-          <DsfrButton
-            icon="ri-pencil-line"
-            :iconRight="true"
-            :secondary="true"
-            label="Voir le catalogue source"
-            @click.stop.prevent="onEditDataset(d.dataset)"
-          />
-          
-          </DsfrAccordion>
-        </li>
-
-      </DsfrAccordionsGroup>
-      </div>
-
-        <DsfrButton type="submit" class="fr-mt-2w" label="Suivant" />
+          <DsfrButton type="submit" class="fr-mt-2w" label="Suivant" />
       </div>
     </form>
   </div>
@@ -393,9 +306,5 @@ onMounted(() => {
   &__markdown {
     left: 46%;
   }
-}
-
-.no-dataset {
-  border: 1px solid #ddd;
 }
 </style>
