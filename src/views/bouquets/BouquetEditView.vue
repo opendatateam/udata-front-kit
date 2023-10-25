@@ -39,6 +39,10 @@ const getOptionDefault = (theme) => {
   return null
 }
 
+const onThemeChanged = () => {
+  selectedSubTheme.value = getOptionDefault(selectedTheme.value);
+}
+
 const validateAndMoveToStep2 = (newStep) => {
   if (!form.value.name || !form.value.description) {
     errorMessage.value = 'Merci de bien remplir les champs'
@@ -66,7 +70,7 @@ const onSubmit = async () => {
       tags: [config.universe.name],
       extras: extras
     })
-  } else { 
+  } else {
     res = await topicStore.update(loadedBouquet.value.id, {
       ...data,
       tags: loadedBouquet.value.tags,
@@ -82,10 +86,6 @@ const onSubmit = async () => {
     }, 1000)
   }
 }
-
-watch(selectedTheme, (theme) => {
-  selectedSubTheme.value = getOptionDefault(theme)
-})
 
 onMounted(() => {
   if (!isCreate) {
@@ -164,6 +164,7 @@ onMounted(() => {
                       label="Thématique"
                       :options="thematiques"
                       :model-value="selectedTheme"
+                      @change="onThemeChanged"
                     />
                   </div>
                   <div class="fr-col-12 fr-col-sm-45">

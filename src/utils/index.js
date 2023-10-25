@@ -30,6 +30,6 @@ export const stripFromMarkdown = (value) => {
  * @param {string} Subtheme
  * @returns {Array}
  */
-export function getSubThemes(Subtheme) {
-  return subThemes[Subtheme] || []
+export function getSubThemes(subtheme) {
+  return subThemes[subtheme] || []
 }
