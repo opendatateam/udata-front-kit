@@ -52,6 +52,11 @@ website:
   show_topic_charts: false
   list_highlighted_topics:
   oauth_option: true
+  # display settings
+  organizations_list_page_size: 9
+
+# List of themes and sub themes for step 2
+themes:
   selectedThemeDefault: 'Produire'
   selectedSubThemeDefault: 'Nucléaire'
   thematiques:
@@ -99,7 +104,7 @@ website:
       - Les services publics exemplaires
       - La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - La sobriété des usages et des ressources
-  defaultOptions:
+  default_options:
     Produire: Nucléaire
     Se nourrir: Alimentation
     Se loger: Construction et rénovation des logements
@@ -107,8 +112,6 @@ website:
     Préserver: Eau
     Consommer: Consommation plus durable (ménages)
     Chantiers transverses: Le financement qui permet de définir des trajectoires d’investissement crédibles et cohérentes
-  # display settings
-  organizations_list_page_size: 9
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

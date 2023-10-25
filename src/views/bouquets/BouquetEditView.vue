@@ -23,8 +23,8 @@ const steps = [
   'Récapitulatif'
 ]
 
-const selectedTheme = ref(config.website.selectedThemeDefault);
-const selectedSubTheme = ref(config.website.selectedSubThemeDefault)
+const selectedTheme = ref(config.themes.selectedThemeDefault);
+const selectedSubTheme = ref(config.themes.selectedSubThemeDefault)
 const currentStep = ref(1)
 
 const subThemes = computed(() => {
@@ -32,8 +32,8 @@ const subThemes = computed(() => {
 })
 
 const getOptionDefault = (theme) => {
-  if (config.website.defaultOptions.hasOwnProperty(theme)) {
-    return config.website.defaultOptions[theme]
+  if (config.themes.default_options.hasOwnProperty(theme)) {
+    return config.themes.default_options[theme]
   }
 
   return null
@@ -162,7 +162,7 @@ onMounted(() => {
                     <DsfrSelect
                       v-model="selectedTheme"
                       label="Thématique"
-                      :options="config.website.thematiques"
+                      :options="config.themes.thematiques"
                       :model-value="selectedTheme"
                       @change="onThemeChanged"
                     />
