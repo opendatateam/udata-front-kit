@@ -47,8 +47,8 @@ onMounted(() => {
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <h1>{{ bouquet.name }}</h1>
     <div v-html="description"></div>
-    <div v-if="bouquet.extras?.informations">
-      <div v-for="info in bouquet.extras.informations">
+    <div v-if="bouquet.extras && bouquet.extras[`${config.universe.name}:informations`]">
+      <div v-for="info in bouquet.extras[`${config.universe.name}:informations`]">
         <h5>Thématique</h5>
         <p>{{ info.theme }}</p>
         <h5>Chantier</h5>

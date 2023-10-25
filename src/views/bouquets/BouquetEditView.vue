@@ -58,9 +58,9 @@ const onSubmit = async () => {
   }
 
   const extras = {
-    informations: [{
-      theme: `${config.universe.name}:${selectedTheme.value}`,
-      subtheme: `${config.universe.name}:${selectedSubTheme.value}`
+    [`${config.universe.name}:informations`]: [{
+      theme: selectedTheme.value,
+      subtheme: selectedSubTheme.value
     }]
   }
 
