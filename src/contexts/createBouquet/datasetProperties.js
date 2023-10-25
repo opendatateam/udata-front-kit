@@ -10,33 +10,29 @@
 
 /**
  * @typedef {object} DatasetPropertiesData
- * @property {string} name
- * @property {string|null} description
- * @property {DatasetPropertiesLinks} links
- */
-
-/**
- * @typedef {object} DatasetPropertiesLinks
- * @property {string} bouquet - The createBouquet's URI.
- * @property {string|null} dataset - The dataset's URI.
+ * @property {string?} title
+ * @property {string?} description
+ * @property {boolean?} available
+ * @property {string?} id
+ * @property {string?} uri
  */
 
 /**
  * Thrown when one or more properties are invalid.
  */
-class ValidationError extends Error {
-  /**
-   * @type {string}
-   */
-  name = this.constructor.name
-
+class ValueError extends Error {
   /**
    * @type {string}
    */
   message
 
   /**
-   * Create a {ValidationError}.
+   * @type {string}
+   */
+  name = this.constructor.name
+
+  /**
+   * Create a {ValueError}.
    *
    * @param {string} property
    */
@@ -47,47 +43,75 @@ class ValidationError extends Error {
   }
 }
 
+/**
+ * Metadata between a {Bouquet} and a {Dataset}.
+ */
 export default class DatasetProperties {
   /**
    * @type {string}
    */
-  bouquetURI
+  title
 
   /**
    * @type {string}
    */
-  name
+  description
+
+  /**
+   * @type {boolean}
+   */
+  available
 
   /**
    * @type {string|null}
    */
-  description = null
+  id = null
 
   /**
    * @type {string|null}
    */
-  datasetURI = null
+  uri = null
 
   /**
    * Create a {DatasetProperties}
    *
-   * @param {string} bouquetURI
-   * @param {string} name
-   * @param {string|null} description
-   * @param {string|null} datasetURI
+   * @param {DatasetPropertiesData} props
    */
-  constructor(bouquetURI, name, description, datasetURI) {
-    // TODO: localise or move to store.
-    if (!bouquetURI) throw new ValidationError('bouquetURI')
+  constructor({ title, available, description, id, uri }) {
+    this.title = title
+    this.description = description
+    this.available = available
+    this.id = id || this.id
+    this.uri = uri || this.uri
 
-    // TODO: localise or move to store.
-    if (!name) throw new ValidationError('name')
+    if (!this.title) {
+      throw new ValueError('title')
+    }
 
-    // FIXME: use a schema for casting/validation?
-    this.bouquetURI = bouquetURI
-    this.name = name
-    this.description = description || this.description
-    this.datasetURI = datasetURI || this.datasetURI
+    if (!this.description) {
+      throw new ValueError('description')
+    }
+
+    if (this.available == null) {
+      throw new ValueError('available')
+    }
+
+    if (this.id) {
+      this.uri = null
+    }
+
+    if (this.uri) {
+      this.id = null
+    }
+  }
+
+  /**
+   * Whether the dataset is missing or not.
+   *
+   * @returns {boolean}
+   */
+  get missing() {
+    return this.available && !this.id && !this.uri
   }
 
   /**
@@ -96,38 +120,27 @@ export default class DatasetProperties {
    * @returns {BouquetData}
    */
   serialize() {
-    return {
-      extras: {
-        datasets_properties: [
-          {
-            name: this.name,
-            description: this.description,
-            links: {
-              bouquet: this.bouquetURI,
-              dataset: this.datasetURI
-            }
-          }
-        ]
-      }
-    }
+    return { extras: { datasets_properties: [this.#toDict()] } }
   }
 
   /**
-   * Deserialize one or many {DatasetProperties}.
+   * Deserialize one or many {DatasetPropertiesData} into {DatasetProperties}.
    *
-   * @param {BouquetData} params
-   * @returns {array.<Information>}
+   * @param {BouquetData} data
+   * @returns {array.<BouquetScope>}
    */
   static deserialize({ extras: { datasets_properties } = [] }) {
-    return datasets_properties.map((properties) => {
-      const { name, description, links } = properties
-
-      return new DatasetProperties(
-        links?.bouquet,
-        name,
-        description,
-        links?.dataset
-      )
+    return datasets_properties.map((props) => {
+      return new DatasetProperties(props)
     })
+  }
+
+  /**
+   * @private
+   * @returns {DatasetPropertiesData}
+   */
+  #toDict() {
+    const { title, description, available, id, uri } = this
+    return { title, description, available, id, uri }
   }
 }

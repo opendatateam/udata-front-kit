@@ -1,82 +1,163 @@
+import { head, last } from 'lodash/fp/array'
 import { beforeEach, describe, expect, test } from 'vitest'
 
-import DomainModel from '@/contexts/createBouquet/datasetProperties'
+import DatasetProperties from '@/contexts/createBouquet/datasetProperties'
 
 beforeEach(async (context) => {
-  context.bouquetURI = 'https://machin.truc/bouquet/1'
-  context.name_ = 'name'
+  context.title = 'title'
   context.description = 'description'
-  context.datasetURI = 'https://machin.bidule/dataset/1'
+  context.id = '1'
+  context.uri = 'https://machin.truc/dataset/1'
 })
 
-test('serialize', ({ bouquetURI, name_, description }) => {
-  const domain = new DomainModel(bouquetURI, name_, description)
+describe('new', () => {
+  test('when data OK', ({ title, description }) => {
+    const datasetProperties = new DatasetProperties({
+      title,
+      description,
+      available: false
+    })
+
+    expect(datasetProperties.title).toEqual(title)
+    expect(datasetProperties.description).toEqual(description)
+    expect(datasetProperties.available).toBe(false)
+    expect(datasetProperties.id).toBeNull()
+    expect(datasetProperties.uri).toBeNull()
+    expect(datasetProperties.missing).toBe(false)
+  })
+
+  test('when not title', () => {
+    try {
+      new DatasetProperties({})
+    } catch (error) {
+      expect(error.message).toMatch(/title is required/)
+      expect(error.stack).toMatch(error.message)
+    }
+  })
+
+  test('when not description', ({ title }) => {
+    try {
+      new DatasetProperties({ title })
+    } catch (error) {
+      expect(error.message).toMatch(/description is required/)
+      expect(error.stack).toMatch(error.message)
+    }
+  })
+
+  test('when available undefined', ({ title, description }) => {
+    try {
+      new DatasetProperties({ title, description })
+    } catch (error) {
+      expect(error.message).toMatch(/available is required/)
+      expect(error.stack).toMatch(error.message)
+    }
+  })
+
+  test('when available but not id nor uri', ({ title, description }) => {
+    const datasetProperties = new DatasetProperties({
+      title,
+      description,
+      available: true
+    })
+
+    expect(datasetProperties.title).toEqual(title)
+    expect(datasetProperties.description).toEqual(description)
+    expect(datasetProperties.available).toBe(true)
+    expect(datasetProperties.id).toBeNull()
+    expect(datasetProperties.uri).toBeNull()
+    expect(datasetProperties.missing).toBe(true)
+  })
+
+  test('when both id and uri', ({ title, description, id, uri }) => {
+    const datasetProperties = new DatasetProperties({
+      title,
+      description,
+      available: true,
+      id,
+      uri
+    })
+
+    expect(datasetProperties.title).toEqual(title)
+    expect(datasetProperties.description).toEqual(description)
+    expect(datasetProperties.available).toBe(true)
+    expect(datasetProperties.id).toEqual(id)
+    expect(datasetProperties.uri).toBeNull()
+    expect(datasetProperties.missing).toBe(false)
+  })
+})
+
+test('serialize', ({ title, description }) => {
+  const datasetProperties = new DatasetProperties({
+    title,
+    description,
+    available: true
+  })
 
   const {
     extras: {
       datasets_properties: [data]
     }
-  } = domain.serialize()
+  } = datasetProperties.serialize()
 
-  expect(data.name).toEqual(name_)
+  expect(data.title).toEqual(title)
   expect(data.description).toEqual(description)
-  expect(data.links.bouquet).toEqual(bouquetURI)
-  expect(data.links.dataset).toBeNull()
+  expect(data.available).toBe(true)
+  expect(data.id).toBeNull()
+  expect(data.uri).toBeNull()
+  expect(data.missing).toBeUndefined()
 })
 
 describe('deserialize', () => {
-  test('when data OK and one dataset properties', ({
-    bouquetURI,
-    name_,
-    description,
-    datasetURI
-  }) => {
+  test('when one dataset properties', ({ title, description }) => {
     const data = {
       extras: {
         datasets_properties: [
           {
-            name: name_,
+            title,
             description,
-            links: { bouquet: bouquetURI, dataset: datasetURI }
+            available: true
           }
         ]
       }
     }
 
-    const [domain] = DomainModel.deserialize(data)
+    const [datasetProperties] = DatasetProperties.deserialize(data)
 
-    expect(domain.bouquetURI).toEqual(bouquetURI)
-    expect(domain.name).toEqual(name_)
-    expect(domain.description).toEqual(description)
-    expect(domain.datasetURI).toEqual(datasetURI)
+    expect(datasetProperties.title).toEqual(title)
+    expect(datasetProperties.description).toEqual(description)
+    expect(datasetProperties.available).toBe(true)
+    expect(datasetProperties.id).toBeNull()
+    expect(datasetProperties.uri).toBeNull()
+    expect(datasetProperties.missing).toBe(true)
   })
 
-  test('when data OK and many datasets properties', ({
-    bouquetURI,
-    name_,
-    description
-  }) => {
+  test('when many datasets properties', ({ title, description }) => {
     const data = {
       extras: {
         datasets_properties: [
           {
-            name: name_ + ' n-1',
+            title,
             description,
-            links: { bouquet: bouquetURI }
+            available: true
           },
           {
-            name: name_,
+            title: `${title} + 1`,
             description,
-            links: { bouquet: bouquetURI }
+            available: true
+          },
+          {
+            title: `${title} + 2`,
+            description,
+            available: true
           }
         ]
       }
     }
 
-    const [domain_head, domain_tail] = DomainModel.deserialize(data)
+    const datasets_properties = DatasetProperties.deserialize(data)
 
-    expect(domain_head.name).not.toEqual(name_)
-    expect(domain_tail.name).toEqual(name_)
+    expect(head(datasets_properties).title).toEqual(title)
+    expect(last(datasets_properties).title).toEqual(`${title} + 2`)
   })
 
   test('when data KO', ({ description }) => {
@@ -86,9 +167,9 @@ describe('deserialize', () => {
     }
 
     try {
-      DomainModel.deserialize(data)
+      DatasetProperties.deserialize(data)
     } catch (error) {
-      expect(error.message).toMatch(/bouquetURI is required/)
+      expect(error.message).toMatch(/title is required/)
       expect(error.stack).toMatch(error.message)
     }
   })
