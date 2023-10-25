@@ -2,7 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Tooltip from '@/components/Tooltip.vue'
-import config, { thematiques, defaultOptions, selectedThematiqueDefault, selectedSubThemeDefault } from '@/config'
+import config, { thematiques, defaultOptions, selectedThemeDefault, selectedSubThemeDefault } from '@/config'
 import { getSubThemes } from '@/utils'
 import { useTopicStore } from '@/store/TopicStore'
 
@@ -23,12 +23,12 @@ const steps = [
   'Récapitulatif'
 ]
 
-const selectedThematique = ref(selectedThematiqueDefault);
+const selectedTheme = ref(selectedThemeDefault);
 const selectedSubTheme = ref(selectedSubThemeDefault)
 const currentStep = ref(1)
 
 const subThemes = computed(() => {
-  return getSubThemes(selectedThematique.value)
+  return getSubThemes(selectedTheme.value)
 })
 
 const getOptionDefault = (theme) => {
@@ -55,7 +55,7 @@ const onSubmit = async () => {
 
   const extras = {
     informations: [{
-      'theme': selectedThematique.value,
+      'theme': selectedTheme.value,
       'sub-theme': selectedSubTheme.value
     }]
   };
@@ -83,7 +83,7 @@ const onSubmit = async () => {
   }
 }
 
-watch(selectedThematique, (theme) => {
+watch(selectedTheme, (theme) => {
   selectedSubTheme.value = getOptionDefault(theme)
 })
 
@@ -160,10 +160,10 @@ onMounted(() => {
                 <div class="fr-grid-row justify-between">
                   <div class="fr-col-12 fr-col-sm-45">
                     <DsfrSelect
-                      v-model="selectedThematique"
+                      v-model="selectedTheme"
                       label="Thématique"
                       :options="thematiques"
-                      :model-value="selectedThematique"
+                      :model-value="selectedTheme"
                     />
                   </div>
                   <div class="fr-col-12 fr-col-sm-45">

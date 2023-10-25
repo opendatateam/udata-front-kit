@@ -2,7 +2,7 @@ import config from '@siteConfig/config.yaml'
 
 export default config
 
-export const selectedThematiqueDefault = 'Produire'
+export const selectedThemeDefault = 'Produire'
 export const selectedSubThemeDefault = 'Nucléaire'
 
 export const thematiques = [
