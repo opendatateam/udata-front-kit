@@ -52,7 +52,7 @@ onMounted(() => {
         <h5>Thématique</h5>
         <p>{{ info.theme }}</p>
         <h5>Chantier</h5>
-        <p>{{ info['sub-theme'] }}</p>
+        <p>{{ info.subtheme }}</p>
       </div>
     </div>
 

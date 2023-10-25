@@ -1,6 +1,6 @@
 import { marked } from 'marked'
 import { stripHtml } from 'string-strip-html'
-import { subThemes } from '@/config'
+import config from '@/config'
 
 /**
  * Parse description from markdown to HTML
@@ -31,5 +31,5 @@ export const stripFromMarkdown = (value) => {
  * @returns {Array}
  */
 export function getSubThemes(subtheme) {
-  return subThemes[subtheme] || []
+  return config.website.subThemes[subtheme] || []
 }

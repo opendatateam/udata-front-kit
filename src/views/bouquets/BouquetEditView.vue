@@ -2,7 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Tooltip from '@/components/Tooltip.vue'
-import config, { thematiques, defaultOptions, selectedThemeDefault, selectedSubThemeDefault } from '@/config'
+import config from '@/config'
 import { getSubThemes } from '@/utils'
 import { useTopicStore } from '@/store/TopicStore'
 
@@ -23,8 +23,8 @@ const steps = [
   'Récapitulatif'
 ]
 
-const selectedTheme = ref(selectedThemeDefault);
-const selectedSubTheme = ref(selectedSubThemeDefault)
+const selectedTheme = ref(config.website.selectedThemeDefault);
+const selectedSubTheme = ref(config.website.selectedSubThemeDefault)
 const currentStep = ref(1)
 
 const subThemes = computed(() => {
@@ -32,8 +32,8 @@ const subThemes = computed(() => {
 })
 
 const getOptionDefault = (theme) => {
-  if (defaultOptions.hasOwnProperty(theme)) {
-    return defaultOptions[theme]
+  if (config.website.defaultOptions.hasOwnProperty(theme)) {
+    return config.website.defaultOptions[theme]
   }
 
   return null
@@ -162,7 +162,7 @@ onMounted(() => {
                     <DsfrSelect
                       v-model="selectedTheme"
                       label="Thématique"
-                      :options="thematiques"
+                      :options="config.website.thematiques"
                       :model-value="selectedTheme"
                       @change="onThemeChanged"
                     />
