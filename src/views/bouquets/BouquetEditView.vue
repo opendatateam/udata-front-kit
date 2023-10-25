@@ -55,10 +55,10 @@ const onSubmit = async () => {
 
   const extras = {
     informations: [{
-      'theme': selectedTheme.value,
-      'sub-theme': selectedSubTheme.value
+      theme: `${config.universe.name}:${selectedTheme.value}`,
+      subtheme: `${config.universe.name}:${selectedSubTheme.value}`
     }]
-  };
+  }
 
   if (isCreate) {
     res = await topicStore.create({
