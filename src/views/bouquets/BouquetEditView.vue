@@ -43,7 +43,7 @@ const onThemeChanged = () => {
   selectedSubTheme.value = getOptionDefault(selectedTheme.value);
 }
 
-const validateAndMoveToStep2 = (newStep) => {
+const validateAndMoveToStep = (newStep) => {
   if (!form.value.name || !form.value.description) {
     errorMessage.value = 'Merci de bien remplir les champs'
   } else {
@@ -150,7 +150,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <DsfrButton type="button" class="fr-mt-2w" label="Suivant" @click.prevent="validateAndMoveToStep2(2)" />
+        <DsfrButton type="button" class="fr-mt-2w" label="Suivant" @click.prevent="validateAndMoveToStep(2)" />
       </div>
     
       <div v-show="currentStep === 2">
