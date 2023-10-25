@@ -127,7 +127,7 @@ export default class DatasetProperties {
    * Deserialize one or many {DatasetPropertiesData} into {DatasetProperties}.
    *
    * @param {BouquetData} data
-   * @returns {array.<BouquetScope>}
+   * @returns {array.<Scope>}
    */
   static deserialize({ extras: { datasets_properties } = [] }) {
     return datasets_properties.map((props) => {

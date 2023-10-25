@@ -1,12 +1,18 @@
 /**
  * @typedef {object} BouquetData
- * @property {BouquetScopeData} extras
+ * @property {ScopeData} extras
  */
 
 /**
- * @typedef {object} BouquetScopeData
- * @property {string|null} scope:theme
- * @property {string|null} scope:sub-theme
+ * @typedef {object} ScopeData
+ * @property {string?} scope:theme
+ * @property {string?} scope:sub-theme
+ */
+
+/**
+ * @typedef {object} ScopeProps
+ * @property {string?} theme
+ * @property {string?} subTheme
  */
 
 /**
@@ -39,9 +45,9 @@ class ValueError extends Error {
  * Bounded use-context of a {Bouquet}.
  *
  * @note May well be pushed as a {Tag} in the future.
- * @note a {Bouquet} is a {Topic} with a {BouquetScope}.
+ * @note a {Bouquet} is a {Topic} with a {Scope}.
  */
-export default class BouquetScope {
+export default class Scope {
   /**
    * @type {string}
    */
@@ -53,12 +59,11 @@ export default class BouquetScope {
   subTheme
 
   /**
-   * Create a {BouquetScope}.
+   * Create a {Scope}.
    *
-   * @param {string} theme
-   * @param {string} subTheme
+   * @param {ScopeProps} props
    */
-  constructor(theme, subTheme) {
+  constructor({ theme, subTheme }) {
     this.theme = theme
     this.subTheme = subTheme
 
@@ -72,7 +77,7 @@ export default class BouquetScope {
   }
 
   /**
-   * Serialize the {BouquetScope}.
+   * Serialize the {Scope}.
    *
    * @returns {BouquetData}
    */
@@ -86,12 +91,15 @@ export default class BouquetScope {
   }
 
   /**
-   * Deserialize the {BouquetData} into a {BouquetScope}.
+   * Deserialize the {BouquetData} into a {Scope}.
    *
    * @param {BouquetData} data
-   * @returns {BouquetScope}
+   * @returns {Scope}
    */
   static deserialize({ extras }) {
-    return new BouquetScope(extras['scope:theme'], extras['scope:sub-theme'])
+    return new Scope({
+      theme: extras['scope:theme'],
+      subTheme: extras['scope:sub-theme']
+    })
   }
 }

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from 'vitest'
 
-import BouquetScope from '@/contexts/createBouquet/bouquetScope'
+import Scope from '@/contexts/createBouquet/scope'
 
 beforeEach((context) => {
   context.theme = 'theme'
@@ -8,9 +8,9 @@ beforeEach((context) => {
 })
 
 test('serialize', ({ theme, subTheme }) => {
-  const bouquetScope = new BouquetScope(theme, subTheme)
+  const scope = new Scope({ theme, subTheme })
 
-  const { extras: data } = bouquetScope.serialize()
+  const { extras: data } = scope.serialize()
 
   expect(data['scope:theme']).toEqual(theme)
   expect(data['scope:sub-theme']).toEqual(subTheme)
@@ -25,24 +25,22 @@ describe('deserialize', () => {
       }
     }
 
-    const bouquetScope = BouquetScope.deserialize(data)
+    const scope = Scope.deserialize(data)
 
-    expect(bouquetScope.theme).toEqual(theme)
-    expect(bouquetScope.subTheme).toEqual(subTheme)
+    expect(scope.theme).toEqual(theme)
+    expect(scope.subTheme).toEqual(subTheme)
   })
 
   test('when data KO', ({ theme }) => {
-    const that = 'that'
-
     const data = {
       extras: {
-        that,
+        that: 'that',
         'scope:theme': theme
       }
     }
 
     try {
-      BouquetScope.deserialize(data)
+      Scope.deserialize(data)
     } catch (error) {
       expect(error.message).toMatch(/subTheme is required/)
       expect(error.stack).toMatch(error.message)
