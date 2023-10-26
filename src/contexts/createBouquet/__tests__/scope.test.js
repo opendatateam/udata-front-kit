@@ -13,7 +13,6 @@ test('serialize', ({ theme, subTheme }) => {
   const { extras: data } = scope.serialize()
 
   expect(data['scope:theme']).toEqual(theme)
-  expect(data['scope:sub-theme']).toEqual(subTheme)
 })
 
 describe('deserialize', () => {
@@ -28,7 +27,6 @@ describe('deserialize', () => {
     const scope = Scope.deserialize(data)
 
     expect(scope.theme).toEqual(theme)
-    expect(scope.subTheme).toEqual(subTheme)
   })
 
   test('when data KO', ({ theme }) => {

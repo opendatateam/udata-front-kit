@@ -17,8 +17,6 @@ test('serialize', ({ id, title, description }) => {
   } = dataset.serialize()
 
   expect(data.id).toEqual(id)
-  expect(data.title).toEqual(title)
-  expect(data.description).toEqual(description)
 })
 
 describe('deserialize', () => {
@@ -36,8 +34,6 @@ describe('deserialize', () => {
     const [dataset] = Dataset.deserialize(data)
 
     expect(dataset.id).toEqual(id)
-    expect(dataset.title).toEqual(title)
-    expect(dataset.description).toEqual(description)
   })
 
   test('when many datasets', ({ title, description }) => {

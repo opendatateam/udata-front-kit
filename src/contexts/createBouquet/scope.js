@@ -11,8 +11,8 @@
 
 /**
  * @typedef {object} ScopeProps
- * @property {string?} theme
- * @property {string?} subTheme
+ * @property {string} theme
+ * @property {string} subTheme
  */
 
 /**

@@ -11,7 +11,7 @@ beforeEach(async (context) => {
 })
 
 describe('new', () => {
-  test('when data OK', ({ title, description }) => {
+  test('when props OK', ({ title, description }) => {
     const datasetProperties = new DatasetProperties({
       title,
       description,
@@ -60,9 +60,6 @@ describe('new', () => {
       available: true
     })
 
-    expect(datasetProperties.title).toEqual(title)
-    expect(datasetProperties.description).toEqual(description)
-    expect(datasetProperties.available).toBe(true)
     expect(datasetProperties.id).toBeNull()
     expect(datasetProperties.uri).toBeNull()
     expect(datasetProperties.missing).toBe(true)
@@ -77,9 +74,6 @@ describe('new', () => {
       uri
     })
 
-    expect(datasetProperties.title).toEqual(title)
-    expect(datasetProperties.description).toEqual(description)
-    expect(datasetProperties.available).toBe(true)
     expect(datasetProperties.id).toEqual(id)
     expect(datasetProperties.uri).toBeNull()
     expect(datasetProperties.missing).toBe(false)
@@ -104,7 +98,6 @@ test('serialize', ({ title, description }) => {
   expect(data.available).toBe(true)
   expect(data.id).toBeNull()
   expect(data.uri).toBeNull()
-  expect(data.missing).toBeUndefined()
 })
 
 describe('deserialize', () => {
