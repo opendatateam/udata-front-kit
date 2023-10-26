@@ -107,10 +107,15 @@ export default class DatagouvfrAPI {
   /**
    * List entities, without wrapper
    *
+   * @param {object?} filter
    * @returns {Promise}
    */
-  async _list() {
-    return await this.request(`${this.url()}/`)
+  async _list(filter) {
+    const url = new URL(`${this.url()}/`);
+    if (filter) {
+      url.search = new URLSearchParams(filter)
+    }
+    return await this.request(url)
   }
 
   /**
