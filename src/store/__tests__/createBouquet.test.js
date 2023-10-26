@@ -1,151 +1,213 @@
 import { head, last } from 'lodash/fp/array'
 import { createPinia, setActivePinia } from 'pinia'
-import { afterEach, beforeEach, describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 
-import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import Bouquet from '@/contexts/createBouquet/bouquet'
+import DatasetProperties from '@/contexts/createBouquet/datasetProperties'
+import Scope from '@/contexts/createBouquet/scope'
 import { createBouquetStore } from '@/store/createBouquet'
 
 beforeEach(async (context) => {
   setActivePinia(createPinia())
-  const client = new TopicsAPI()
-  const storeFactory = createBouquetStore(client)
+  const client = () => {}
+  const useBouquetStore = createBouquetStore(client)
   context.client = client
-  context.store = storeFactory()
+  context.store = useBouquetStore()
+  context.bouquet = new Bouquet({
+    title: 'title',
+    description: 'description',
+    tags: ['tag']
+  })
 })
 
-afterEach(async ({ client, store }) => {
-  const id = store?.bouquet?.id
+describe('create a bouquet', () => {
+  test('when params OK', async ({ client, store, bouquet }) => {
+    client.create = ({ name, description, tags }) => ({
+      status: 201,
+      data: { id: 'id', name, description, tags }
+    })
 
-  if (id) {
-    const respose = await client.delete(id)
-    expect(respose.status).toBe(204)
-  }
+    await store.create(bouquet)
+
+    expect(store.bouquet.id).not.toBeNull()
+    expect(store.bouquet.title).toEqual(bouquet.title)
+    expect(store.bouquet.description).toEqual(bouquet.description)
+    expect(store.bouquet.tags).toStrictEqual(bouquet.tags)
+  })
+
+  test('when params KO', async ({ client, store, bouquet }) => {
+    client.create = () => ({
+      status: 400,
+      error: 'error'
+    })
+
+    await store.create(bouquet)
+
+    expect(store.error).toEqual('error')
+  })
+
+  test('when something else', async ({ client, store, bouquet }) => {
+    client.create = () => ({
+      status: 418,
+      code: "I'm a teapot"
+    })
+
+    try {
+      await store.create(bouquet)
+    } catch (error) {
+      expect(error.message).toMatch("I'm a teapot")
+    }
+  })
 })
 
-describe('create bouquet', () => {
-  test('when params OK', async ({ store }) => {
-    const params = {
-      name: 'name',
+describe('add a scope to a bouquet', () => {
+  beforeEach(async (context) => {
+    const { store, bouquet } = context
+    store.bouquet = bouquet
+    store.bouquet.id = 'id'
+    context.scope = new Scope({ theme: 'theme', subTheme: 'sub-theme' })
+  })
+
+  test('when params OK', async ({ client, store, scope }) => {
+    client.update = (id, { name, description, tags, extras }) => ({
+      status: 200,
+      data: {
+        id,
+        name,
+        description,
+        tags,
+        extras: {
+          'scope:theme': extras['scope:theme'],
+          'scope:sub-theme': extras['scope:sub-theme']
+        }
+      }
+    })
+
+    await store.addScope(scope)
+
+    expect(store.bouquet.scope.theme).toBe(scope.theme)
+    expect(store.bouquet.scope.subTheme).toBe(scope.subTheme)
+  })
+
+  test('when params KO', async ({ client, store, scope }) => {
+    client.update = () => ({
+      status: 400,
+      error: 'error'
+    })
+
+    await store.addScope(scope)
+
+    expect(store.error).toEqual('error')
+  })
+
+  test('when not found', async ({ client, store, scope }) => {
+    client.update = () => ({
+      status: 404,
+      error: 'not found'
+    })
+
+    await store.addScope(scope)
+
+    expect(store.error).toEqual('not found')
+  })
+
+  test('when something else', async ({ client, store, scope }) => {
+    client.update = () => ({
+      status: 418,
+      code: "I'm a teapot"
+    })
+
+    try {
+      await store.addScope(scope)
+    } catch (error) {
+      expect(error.message).toMatch("I'm a teapot")
+    }
+  })
+})
+
+describe('add a dataset properties to a bouquet', () => {
+  beforeEach(async (context) => {
+    const { store, bouquet } = context
+    store.bouquet = bouquet
+    store.bouquet.id = 'id'
+    context.datasetProperties = new DatasetProperties({
+      title: 'title',
       description: 'description',
-      tags: ['tag']
+      available: true
+    })
+  })
+
+  test('when params OK', async ({ client, store, datasetProperties }) => {
+    client.update = (id, { name, description, tags, extras }) => ({
+      status: 200,
+      data: {
+        id,
+        name,
+        description,
+        tags,
+        extras
+      }
+    })
+
+    await store.addDatasetProperties(
+      new DatasetProperties({
+        ...datasetProperties,
+        title: `${datasetProperties.title} 1`
+      })
+    )
+
+    await store.addDatasetProperties(
+      new DatasetProperties({
+        ...datasetProperties,
+        title: `${datasetProperties.title} 2`
+      })
+    )
+
+    await store.addDatasetProperties(
+      new DatasetProperties({
+        ...datasetProperties,
+        title: `${datasetProperties.title} 3`
+      })
+    )
+
+    const { datasetsProperties: props } = store.bouquet
+
+    expect(head(props).title).toBe(`${datasetProperties.title} 1`)
+    expect(last(props).title).toBe(`${datasetProperties.title} 3`)
+  })
+
+  test('when params KO', async ({ client, store, datasetProperties }) => {
+    client.update = () => ({
+      status: 400,
+      error: 'error'
+    })
+
+    await store.addDatasetProperties(datasetProperties)
+
+    expect(store.error).toEqual('error')
+  })
+
+  test('when not found', async ({ client, store, datasetProperties }) => {
+    client.update = () => ({
+      status: 404,
+      error: 'not found'
+    })
+
+    await store.addDatasetProperties(datasetProperties)
+
+    expect(store.error).toEqual('not found')
+  })
+
+  test('when something else', async ({ client, store, datasetProperties }) => {
+    client.update = () => ({
+      status: 418,
+      code: "I'm a teapot"
+    })
+
+    try {
+      await store.addDatasetProperties(datasetProperties)
+    } catch (error) {
+      expect(error.message).toMatch("I'm a teapot")
     }
-
-    const { bouquet } = await store.create(params)
-
-    expect(bouquet.id).not.toBeNull()
-    expect(bouquet.name).toBe(params.name)
-    expect(bouquet.description).toBe(params.description)
-    expect(bouquet.tags).toStrictEqual(params.tags)
-  })
-
-  test('when params KO', async ({ store }) => {
-    const params = {
-      name: 'name',
-      tags: ['tag']
-    }
-
-    const { error } = await store.create(params)
-
-    expect(error).toBe('error')
-  })
-})
-
-describe('add information to bouquet', () => {
-  beforeEach(async ({ store }) => {
-    const params = {
-      name: 'test',
-      description: 'test',
-      tags: ['test']
-    }
-    await store.create(params)
-  })
-
-  test('when params OK', async ({ store }) => {
-    const params = {
-      subject: 'subject',
-      theme: 'theme',
-      subTheme: 'subTheme'
-    }
-
-    const {
-      bouquet: { information }
-    } = await store.addInformation(params)
-
-    expect(information.subject).toBe(params.subject)
-    expect(information.theme).toBe(params.theme)
-    expect(information.subTheme).toBe(params.subTheme)
-  })
-})
-
-describe('add datause to bouquet', () => {
-  beforeEach(async ({ store }) => {
-    const params = {
-      name: 'name',
-      description: 'description',
-      tags: ['tags']
-    }
-    await store.create(params)
-  })
-
-  test('when params OK and one datause', async ({ store }) => {
-    const params = [
-      {
-        name: 'name',
-        description: 'description'
-      }
-    ]
-
-    const {
-      bouquet: {
-        datauses: { datauses }
-      }
-    } = await store.addDatause(params)
-
-    expect(last(datauses).name).toBe(last(params).name)
-    expect(last(datauses).description).toBe(last(params).description)
-  })
-
-  test('when params OK and many datauses', async ({ store }) => {
-    const params = [
-      {
-        name: 'name 1',
-        description: 'description 1'
-      },
-      {
-        name: 'name 2',
-        description: 'description 2'
-      }
-    ]
-
-    const {
-      bouquet: {
-        datauses: { datauses }
-      }
-    } = await store.addDatause(params)
-
-    expect(last(datauses).name).toBe(last(params).name)
-    expect(head(datauses).name).toBe(head(params).name)
-  })
-
-  test('when params KO', async ({ store }) => {
-    const params = [
-      {
-        this: 'this',
-        that: 'that'
-      },
-      {
-        name: 'name 2',
-        description: 'description 2'
-      }
-    ]
-
-    const {
-      bouquet: {
-        datauses: { datauses }
-      }
-    } = await store.addDatause(params)
-
-    expect(last(datauses).name).toBe(last(params).name)
-    expect(head(datauses).name).toBeNull()
   })
 })

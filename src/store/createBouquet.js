@@ -1,105 +1,113 @@
-import { defineStore } from 'pinia'
+import { defineStore, StoreDefinition } from 'pinia'
 
-import {
-  serializeDatauses,
-  useBouquetDatausesStore
-} from '@/store/createBouquet-datauses'
-import { useBouquetInformationStore } from '@/store/createBouquet-information'
+import Bouquet from '@/contexts/createBouquet/bouquet'
 
+/**
+ * Thrown under uncertain circumstances.
+ */
 class UnknownError extends Error {
+  /**
+   * @type {string}
+   */
+  name = this.constructor.name
+
+  /**
+   * @type {string}
+   */
+  message
+
+  /**
+   * Create a {UnknownError}.
+   *
+   * @param {string} message
+   */
   constructor(message) {
     super(message)
-    this.name = 'UnknownError'
+    this.message = message
   }
 }
 
+/**
+ * @callback useBouquetStore
+ * @returns {StoreDefinition}
+ */
+
+/**
+ * Create a high-order function that creates a bouquet store.
+ *
+ * @param client
+ * @returns {useBouquetStore}
+ */
 export const createBouquetStore = (client) => {
   return defineStore('createBouquet', {
     state: () => ({
-      id: null,
-      name: null,
-      description: null,
-      tags: [],
-      information: useBouquetInformationStore(),
-      datauses: [],
+      bouquet: null,
       error: false
     }),
 
     actions: {
-      async create(params) {
-        const response = await client.create(this.serialize(params))
+      /**
+       * Create a bouquet.
+       *
+       * @param {Bouquet} bouquet
+       * @returns {Promise<Bouquet>}
+       */
+      async create(bouquet) {
+        const data = bouquet.serialize()
+        const response = await client.create(data)
+        return this.dispatch(response)
+      },
+
+      /**
+       * Add a {Scope} to a {Bouquet}.
+       *
+       * @param {Scope} scope
+       * @returns {Promise<Bouquet>}
+       */
+      async addScope(scope) {
+        this.bouquet.scope = scope
+        const { id, ...data } = this.bouquet.serialize()
+        const response = client.update(id, data)
+        return this.dispatch(response)
+      },
+
+      /**
+       * Add a {Scope} to a {Bouquet}.
+       *
+       * @param {DatasetProperties} datasetProperties
+       * @returns {Promise<Bouquet>}
+       */
+      async addDatasetProperties(datasetProperties) {
+        this.bouquet.datasetsProperties = [
+          ...this.bouquet.datasetsProperties,
+          datasetProperties
+        ]
+        const { id, ...data } = this.bouquet.serialize()
+        const response = client.update(id, data)
+        return this.dispatch(response)
+      },
+
+      /**
+       * Dispatch the response.
+       *
+       * @private
+       * @param {object} response
+       * @returns {this}
+       */
+      dispatch(response) {
         const { status, data, error } = response
 
-        if (status === 201) {
-          this.deserialize(data)
-        } else if (status === 400) {
+        if (status === 200 || status === 201) {
+          this.bouquet = Bouquet.deserialize(data)
+          return this
+        }
+
+        if (status === 400 || status === 404) {
           this.error = error
-        } else {
-          throw new UnknownError(JSON.stringify(response))
+          return this
         }
 
-        return this
-      },
-
-      async addInformation(params) {
-        const response = client.update(
-          this.id,
-          this.serialize({ information: params })
-        )
-
-        const { status, data, error } = response
-
-        if (status === 200) {
-          this.deserialize(data)
-        } else if (status === 400 || status === 404) {
-          this.error = error
-        } else {
-          throw new UnknownError(JSON.stringify(response))
-        }
-
-        return this
-      },
-
-      async addDatause(params) {
-        const response = await client.update(
-          this.id,
-          this.serialize({ datauses: params })
-        )
-
-        const { status, data, error } = response
-
-        if (status === 200) {
-          this.deserialize(data)
-        } else if (status === 400 || status === 404) {
-          this.error = error
-        } else {
-          throw new UnknownError(JSON.stringify(response))
-        }
-
-        return this
-      },
-
-      serialize({ name, description, tags, information, datauses }) {
-        return {
-          name: name || this.name,
-          description: description || this.description,
-          tags: tags || this.tags,
-          ...this.information.serialize(information),
-          ...serializeDatauses(datauses)
-        }
-      },
-
-      deserialize({ id, name, description, tags, extras }) {
-        this.$state = {
-          id,
-          name,
-          description,
-          tags,
-          information: this.information.deserialize({ extras }),
-          datauses: useBouquetDatausesStore().deserialize({ extras })
-        }
-
-        return this
+        throw new UnknownError(JSON.stringify(response))
       }
     }
   })

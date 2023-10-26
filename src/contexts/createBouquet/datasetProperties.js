@@ -120,7 +120,7 @@ export default class DatasetProperties {
    * @returns {BouquetData}
    */
   serialize() {
-    return { extras: { datasets_properties: [this.#toDict()] } }
+    return { extras: { datasets_properties: [this.toDict()] } }
   }
 
   /**
@@ -139,7 +139,7 @@ export default class DatasetProperties {
    * @private
    * @returns {DatasetPropertiesData}
    */
-  #toDict() {
+  toDict() {
     const { title, description, available, id, uri } = this
     return { title, description, available, id, uri }
   }

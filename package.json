@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
-    "@vue/reactivity": "^3.3.6",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.4.0",
     "chart.js": "^4.4.0",

@@ -30,7 +30,7 @@ import Scope from '@/contexts/createBouquet/scope'
  * @property {string} description
  * @property {array.<string>} tags
  * @property {Scope?} scope
- * @property {array.<DatasetProperties>?} datasets_properties
+ * @property {array.<DatasetProperties>?} datasetsProperties
  * @property {array.<Dataset>?} datasets
  * @property {boolean?} draft
  */
@@ -93,7 +93,7 @@ export default class Bouquet {
   /**
    * @type {array.<DatasetProperties>}
    */
-  datasets_properties = []
+  datasetsProperties = []
 
   /**
    * @type {array.<Dataset>}
@@ -116,7 +116,7 @@ export default class Bouquet {
     description,
     tags,
     scope,
-    datasets_properties,
+    datasetsProperties,
     datasets,
     draft
   }) {
@@ -125,7 +125,7 @@ export default class Bouquet {
     this.description = description
     this.tags = tags
     this.scope = scope || this.scope
-    this.datasets_properties = datasets_properties || this.datasets_properties
+    this.datasetsProperties = datasetsProperties || this.datasetsProperties
     this.datasets = datasets || this.datasets
     this.draft = draft == null ? this.draft : draft
 
@@ -175,17 +175,25 @@ export default class Bouquet {
       extras = merge(extras, this.scope.serialize().extras)
     }
 
-    if (!isEmpty(this.datasets_properties)) {
+    if (!isEmpty(this.datasetsProperties)) {
       extras = merge(extras, {
-        datasets_properties: this.datasets_properties.reduce((props, prop) => {
-          return [...props, ...prop.serialize().extras.datasets_properties]
+        datasets_properties: this.datasetsProperties.reduce((props, prop) => {
+          const {
+            extras: {
+              datasets_properties: [item]
+            }
+          } = prop.serialize()
+          return [...props, item]
         }, [])
       })
     }
 
     if (!isEmpty(this.datasets)) {
       datasets = this.datasets.reduce((props, prop) => {
-        return [...props, ...prop.serialize().datasets]
+        const {
+          datasets: [item]
+        } = prop.serialize()
+        return [...props, item]
       }, [])
     }
 
@@ -208,6 +216,7 @@ export default class Bouquet {
    */
   static deserialize(data) {
     const { id, name, description, tags, datasets, extras } = data
+
     const bouquet = new Bouquet({
       id,
       title: name,
@@ -221,7 +230,7 @@ export default class Bouquet {
     }
 
     if (extras?.datasets_properties) {
-      bouquet.datasets_properties = DatasetProperties.deserialize(data)
+      bouquet.datasetsProperties = DatasetProperties.deserialize(data)
     }
 
     if (!isEmpty(datasets)) {

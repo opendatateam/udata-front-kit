@@ -22,7 +22,7 @@ describe('new', () => {
     expect(bouquet.description).toEqual(description)
     expect(bouquet.tags).toStrictEqual(tags)
     expect(bouquet.scope).toBeNull()
-    expect(bouquet.datasets_properties).toStrictEqual([])
+    expect(bouquet.datasetsProperties).toStrictEqual([])
     expect(bouquet.datasets).toStrictEqual([])
     expect(bouquet.draft).toBe(true)
     expect(bouquet.published).toBe(false)
@@ -112,7 +112,7 @@ describe('serialize', () => {
       const title = 'title'
       const description = 'description'
 
-      bouquet.datasets_properties = [
+      bouquet.datasetsProperties = [
         new DatasetProperties({
           title,
           description,
@@ -135,7 +135,7 @@ describe('serialize', () => {
       const title = 'title'
       const description = 'description'
 
-      bouquet.datasets_properties = [
+      bouquet.datasetsProperties = [
         new DatasetProperties({
           title,
           description,
@@ -164,7 +164,7 @@ describe('serialize', () => {
       const title = 'title'
       const description = 'description'
 
-      bouquet.datasets_properties = [
+      bouquet.datasetsProperties = [
         new DatasetProperties({
           title,
           description,
@@ -222,7 +222,7 @@ describe('deserialize', () => {
     expect(bouquet.description).toEqual(description)
     expect(bouquet.tags).toStrictEqual(tags)
     expect(bouquet.scope).toBeNull()
-    expect(bouquet.datasets_properties).toStrictEqual([])
+    expect(bouquet.datasetsProperties).toStrictEqual([])
     expect(bouquet.datasets).toStrictEqual([])
     expect(bouquet.draft).toBe(true)
     expect(bouquet.published).toBe(false)
@@ -297,7 +297,7 @@ describe('deserialize', () => {
 
     const bouquet = Bouquet.deserialize(data)
     const { scope } = bouquet
-    const [datasetProperties] = bouquet.datasets_properties
+    const [datasetProperties] = bouquet.datasetsProperties
 
     expect(bouquet.id).toEqual(id)
     expect(scope.theme).toBe(theme)
@@ -338,7 +338,7 @@ describe('deserialize', () => {
 
     const bouquet = Bouquet.deserialize(data)
     const { scope } = bouquet
-    const datasetProperties = bouquet.datasets_properties
+    const datasetProperties = bouquet.datasetsProperties
 
     expect(bouquet.id).toEqual(id)
     expect(scope.theme).toBe(theme)
@@ -397,7 +397,7 @@ describe('deserialize', () => {
 
     const bouquet = Bouquet.deserialize(data)
     const { datasets, scope } = bouquet
-    const datasetProperties = bouquet.datasets_properties
+    const datasetProperties = bouquet.datasetsProperties
 
     expect(bouquet.id).toEqual(id)
     expect(scope.theme).toBe(theme)
