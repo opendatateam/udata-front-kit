@@ -3,16 +3,19 @@ import { getActivePinia } from 'pinia'
 
 import config from '@/config'
 
-const browser = () => typeof window !== 'undefined'
+const browser = typeof window !== 'undefined'
+const pinia = getActivePinia()
 
-if (browser()) {
+if (browser) {
   const { toast } = await import('vue3-toastify')
   const { useLoading } = await import('vue-loading-overlay')
   const $loading = useLoading()
 }
 
-if (getActivePinia()) {
-  const { useUserStore } = import('../../store/UserStore')
+if (pinia) {
+  const { storeToRefs } = await import('pinia')
+  const { useUserStore } = await import('../../store/UserStore')
+  const { isLoggedIn, token } = storeToRefs(useUserStore())
 }
 
 const instance = axios.create()
@@ -21,11 +24,9 @@ const instance = axios.create()
 instance.interceptors.request.use(
   (config) => {
     if (getActivePinia()) {
-      const store = useUserStore()
-
-      if (store.$state.isLoggedIn) {
+      if (isLoggedIn) {
         config.headers = {
-          Authorization: `Bearer ${store.$state.token}`
+          Authorization: `Bearer ${token}`
         }
       }
     }
@@ -78,14 +79,14 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async makeRequestAndHandleResponse(url, method = 'get', params = {}) {
-    if (browser()) {
+    if (browser) {
       const loader = $loading.show()
     }
 
     return this.request(url, method, params)
       .catch((error) => {
         if (error && error.message) {
-          if (browser()) {
+          if (browser) {
             // TODO: Refactor to handle the error
             toast(error.message, { type: 'error', autoClose: false })
           }
@@ -94,7 +95,7 @@ export default class DatagouvfrAPI {
         }
       })
       .finally(() => {
-        if (browser()) loader.hide()
+        if (browser) loader.hide()
       })
   }
 
