@@ -6,12 +6,16 @@ import config from '@/config'
 const browser = typeof window !== 'undefined'
 const pinia = getActivePinia()
 
+// TODO: Refactor once #92 is fixed.
+// https://github.com/ecolabdata/ecospheres-front/issues/92
 if (browser) {
   const { toast } = await import('vue3-toastify')
   const { useLoading } = await import('vue-loading-overlay')
   const $loading = useLoading()
 }
 
+// TODO: Refactor once #92 is fixed.
+// https://github.com/ecolabdata/ecospheres-front/issues/92
 if (pinia) {
   const { storeToRefs } = await import('pinia')
   const { useUserStore } = await import('../../store/UserStore')
@@ -175,9 +179,14 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async delete(entityId) {
-    return instance.delete(`${this.url()}/${entity_id}/`).then(
+    return instance.delete(`${this.url()}/${entityId}/`).then(
       (response) => response,
-      (error) => error.response
+      (error) => this.#handleError(error)
     )
+  }
+
+  #handleError({ response, message }) {
+    if (response) return { status: response.status }
+    return { message }
   }
 }
