@@ -1,10 +1,11 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
-import config from '@/config.js'
+import config from '@/config'
+import OrganizationsAPI from '@/services/api/resources/OrganizationsAPI'
+import { useUserStore } from '@/store/UserStore'
 
-import OrganizationsAPI from '../services/api/resources/OrganizationsAPI'
-
-const orgApi = new OrganizationsAPI()
+const { client } = storeToRefs(useUserStore())
+const orgApi = new OrganizationsAPI({ client })
 
 export const useOrganizationStore = defineStore('organization', {
   state: () => ({

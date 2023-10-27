@@ -1,10 +1,11 @@
+import axios from 'axios'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { afterEach, afterAll, beforeAll, test, expect } from 'vitest'
 
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
-const client = new DatagouvfrAPI({ endpoint: 'topics' })
+const client = new DatagouvfrAPI({ client: axios.create(), endpoint: 'topics' })
 const url = client.url()
 
 const server = setupServer(

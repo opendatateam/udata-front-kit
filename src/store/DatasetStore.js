@@ -1,8 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
-import DatasetsAPI from '../services/api/resources/DatasetsAPI'
+import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
+import { useUserStore } from '@/store/UserStore'
 
-const datasetsApi = new DatasetsAPI()
+const { client } = storeToRefs(useUserStore())
+const datasetsApi = new DatasetsAPI({ client })
 
 /**
  * An organization oriented and paginated store for datasets

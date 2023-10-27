@@ -1,8 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
-import SearchAPI from '../services/api/SearchAPI'
+import SearchAPI from '@/services/api/SearchAPI'
+import { useUserStore } from '@/store/UserStore'
 
-const searchAPI = new SearchAPI()
+const { client } = storeToRefs(useUserStore())
+const searchAPI = new SearchAPI({ client })
 const pageSize = 21
 
 export const useSearchStore = defineStore('search', {

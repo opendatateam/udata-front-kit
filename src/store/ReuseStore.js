@@ -1,8 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
-import ReusesAPI from '../services/api/resources/ReusesAPI'
+import ReusesAPI from '@/services/api/resources/ReusesAPI'
+import { useUserStore } from '@/store/UserStore'
 
-const reusesAPI = new ReusesAPI()
+const { client } = storeToRefs(useUserStore())
+const reusesAPI = new ReusesAPI({ client })
 
 export const useReuseStore = defineStore('reuse', {
   state: () => ({

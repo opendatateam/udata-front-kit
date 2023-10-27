@@ -1,14 +1,13 @@
+import axios from 'axios'
 import { defineStore } from 'pinia'
-
-// FIXME: we cant use UserAPI here (circular dep?)
-// maybe try to use the service that will use the API
 
 const STORAGE_KEY = 'token'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    isLoggedIn: false,
+    client: axios.create(),
     data: {},
+    isLoggedIn: false,
     token: undefined
   }),
   actions: {
@@ -17,26 +16,25 @@ export const useUserStore = defineStore('user', {
      */
     init() {
       const token = localStorage.getItem(STORAGE_KEY)
-      if (token) {
-        this.token = token
-        this.isLoggedIn = true
-      }
+      if (token) this.login(token)
     },
     /**
      * Store user info after login
      */
     login(token) {
+      this.client.defaults.headers.common['Authorization'] = `Bearer ${token}`
       this.isLoggedIn = true
       this.token = token
       localStorage.setItem(STORAGE_KEY, token)
     },
     /**
-     * Reflet logged-out state
+     * Reflect logged-out state
      */
     logout() {
+      this.client = axios.create()
+      this.data = {}
       this.isLoggedIn = false
       this.token = undefined
-      this.data = {}
       localStorage.removeItem(STORAGE_KEY)
     },
     /**

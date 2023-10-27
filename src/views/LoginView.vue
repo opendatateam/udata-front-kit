@@ -1,16 +1,18 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import AuthService from '../services/AuthService'
-import UserAPI from '../services/api/resources/UserAPI'
-import { useUserStore } from '../store/UserStore'
+import AuthService from '@/services/AuthService'
+import UserAPI from '@/services/api/resources/UserAPI'
+import { useUserStore } from '@/store/UserStore'
 
 const route = useRoute()
 const router = useRouter()
 const store = useUserStore()
 const auth = new AuthService()
-const api = new UserAPI()
+const { client } = storeToRefs(store)
+const api = new UserAPI({ client })
 
 onMounted(() => {
   if (!store.$state.isLoggedIn && !route.query.code) {

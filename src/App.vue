@@ -1,4 +1,5 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { ref, computed, onMounted } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 
@@ -10,8 +11,9 @@ import { useUserStore } from './store/UserStore'
 
 const router = useRouter()
 const query = ref('')
-const api = new UserAPI()
 const store = useUserStore()
+const { client } = storeToRefs(store)
+const api = new UserAPI({ client })
 
 const isLoggedIn = computed(() => store.$state.isLoggedIn)
 

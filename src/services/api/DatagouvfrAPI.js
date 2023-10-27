@@ -1,10 +1,6 @@
-import axios from 'axios'
-import { getActivePinia } from 'pinia'
-
 import config from '@/config'
 
 const browser = typeof window !== 'undefined'
-const pinia = getActivePinia()
 
 // TODO: Refactor once #92 is fixed.
 // https://github.com/ecolabdata/ecospheres-front/issues/92
@@ -13,32 +9,6 @@ if (browser) {
   const { useLoading } = await import('vue-loading-overlay')
   const $loading = useLoading()
 }
-
-// TODO: Refactor once #92 is fixed.
-// https://github.com/ecolabdata/ecospheres-front/issues/92
-if (pinia) {
-  const { storeToRefs } = await import('pinia')
-  const { useUserStore } = await import('../../store/UserStore')
-  const { isLoggedIn, token } = storeToRefs(useUserStore())
-}
-
-const instance = axios.create()
-
-// inject token in requests if user is loggedIn
-instance.interceptors.request.use(
-  (config) => {
-    if (getActivePinia()) {
-      if (isLoggedIn) {
-        config.headers = {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    }
-
-    return config
-  },
-  (error) => Promise.reject(error)
-)
 
 /**
  * A composable wrapper around data.gouv.fr's API
@@ -53,7 +23,8 @@ export default class DatagouvfrAPI {
   version = '1'
   endpoint = ''
 
-  constructor({ endpoint }) {
+  constructor({ client, endpoint }) {
+    this.client = client
     this.endpoint = endpoint || this.endpoint
   }
 
@@ -70,7 +41,7 @@ export default class DatagouvfrAPI {
    * @returns
    */
   async request(url, method = 'get', params = {}) {
-    const res = await instance[method](url, params)
+    const res = await this.client[method](url, params)
     return res.data
   }
 
@@ -179,7 +150,7 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async delete(entityId) {
-    return instance.delete(`${this.url()}/${entityId}/`).then(
+    return this.client.delete(`${this.url()}/${entityId}/`).then(
       (response) => response,
       (error) => this.#handleError(error)
     )
