@@ -18,6 +18,9 @@ instance.interceptors.request.use(
         Authorization: `Bearer ${store.$state.token}`
       }
     }
+    // FIXME: figure out another way to unset proxy for tests
+    // axios will use env proxy settings when set and we don't want proxy to interfere in tests
+    config.proxy = false
     return config
   },
   (error) => Promise.reject(error)
@@ -139,6 +142,14 @@ export default class DatagouvfrAPI {
       `${this.url()}/${entity_id}/`,
       'put',
       data
+    )
+  }
+
+  // Mauko's function to test
+  async delete(entity_id) {
+    return instance.delete(`${this.url()}/${entity_id}/`).then(
+      (response) => response,
+      (error) => error.response
     )
   }
 }
