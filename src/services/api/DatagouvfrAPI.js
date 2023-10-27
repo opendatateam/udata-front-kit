@@ -1,23 +1,35 @@
 import axios from 'axios'
-import { toast } from 'vue3-toastify'
-import { useLoading } from 'vue-loading-overlay'
+import { getActivePinia } from 'pinia'
 
 import config from '@/config'
 
-import { useUserStore } from '../../store/UserStore'
+const browser = () => typeof window !== 'undefined'
 
-const $loading = useLoading()
+if (browser()) {
+  const { toast } = await import('vue3-toastify')
+  const { useLoading } = await import('vue-loading-overlay')
+  const $loading = useLoading()
+}
+
+if (getActivePinia()) {
+  const { useUserStore } = import('../../store/UserStore')
+}
+
 const instance = axios.create()
 
 // inject token in requests if user is loggedIn
 instance.interceptors.request.use(
   (config) => {
-    const store = useUserStore()
-    if (store.$state.isLoggedIn) {
-      config.headers = {
-        Authorization: `Bearer ${store.$state.token}`
+    if (getActivePinia()) {
+      const store = useUserStore()
+
+      if (store.$state.isLoggedIn) {
+        config.headers = {
+          Authorization: `Bearer ${store.$state.token}`
+        }
       }
     }
+
     return config
   },
   (error) => Promise.reject(error)
@@ -35,6 +47,10 @@ export default class DatagouvfrAPI {
   base_url = `${config.datagouvfr.base_url}/api`
   version = '1'
   endpoint = ''
+
+  constructor({ endpoint }) {
+    this.endpoint = endpoint || this.endpoint
+  }
 
   url() {
     return `${this.base_url}/${this.version}/${this.endpoint}`
@@ -62,36 +78,45 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async makeRequestAndHandleResponse(url, method = 'get', params = {}) {
-    const loader = $loading.show()
+    if (browser()) {
+      const loader = $loading.show()
+    }
+
     return this.request(url, method, params)
       .catch((error) => {
         if (error && error.message) {
-          toast(error.message, { type: 'error', autoClose: false }) // TODO: Refacto to handle the error
+          if (browser()) {
+            // TODO: Refactor to handle the error
+            toast(error.message, { type: 'error', autoClose: false })
+          }
+
           return error.response
         }
       })
-      .finally(() => loader.hide())
+      .finally(() => {
+        if (browser()) loader.hide()
+      })
   }
 
   /**
    * Get an entity's detail from its id
    *
-   * @param {string} entity_id
+   * @param {string} entityId
    * @returns {Promise}
    */
-  async get(entity_id) {
-    const url = `${this.url()}/${entity_id}/`
+  async get(entityId) {
+    const url = `${this.url()}/${entityId}/`
     return await this.makeRequestAndHandleResponse(url)
   }
 
   /**
    * Get an entity's detail from its id, without wrapper
    *
-   * @param {string} entity_id
+   * @param {string} entityId
    * @returns {Promise}
    */
-  async _get(entity_id) {
-    const url = `${this.url()}/${entity_id}/`
+  async _get(entityId) {
+    const url = `${this.url()}/${entityId}/`
     return await this.request(url)
   }
 
@@ -130,15 +155,28 @@ export default class DatagouvfrAPI {
   /**
    * Update an entity (PUT)
    *
-   * @param {string} entity_id
+   * @param {string} entityId
    * @param {object} data
    * @returns {Promise}
    */
-  async update(entity_id, data) {
+  async update(entityId, data) {
     return await this.makeRequestAndHandleResponse(
-      `${this.url()}/${entity_id}/`,
+      `${this.url()}/${entityId}/`,
       'put',
       data
+    )
+  }
+
+  /**
+   * Delete an entity (DELETE)
+   *
+   * @param {string} entityId
+   * @returns {Promise}
+   */
+  async delete(entityId) {
+    return instance.delete(`${this.url()}/${entityId}/`).then(
+      (response) => response,
+      (error) => error.response
     )
   }
 }
