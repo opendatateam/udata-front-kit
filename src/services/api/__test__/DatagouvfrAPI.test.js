@@ -5,7 +5,7 @@ import { afterEach, afterAll, beforeAll, test, expect } from 'vitest'
 
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
-const client = new DatagouvfrAPI({ client: axios.create(), endpoint: 'topics' })
+const client = new DatagouvfrAPI({ client: axios.create(), endpoint: 'asdf' })
 const url = client.url()
 
 const server = setupServer(
