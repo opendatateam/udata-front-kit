@@ -102,22 +102,22 @@ export default class DatagouvfrAPI {
   /**
    * Get an entity's detail from its id
    *
-   * @param {string} entityId
+   * @param {string} entity_id
    * @returns {Promise}
    */
-  async get(entityId) {
-    const url = `${this.url()}/${entityId}/`
+  async get(entity_id) {
+    const url = `${this.url()}/${entity_id}/`
     return await this.makeRequestAndHandleResponse(url)
   }
 
   /**
    * Get an entity's detail from its id, without wrapper
    *
-   * @param {string} entityId
+   * @param {string} entity_id
    * @returns {Promise}
    */
-  async _get(entityId) {
-    const url = `${this.url()}/${entityId}/`
+  async _get(entity_id) {
+    const url = `${this.url()}/${entity_id}/`
     return await this.request(url)
   }
 
@@ -156,13 +156,13 @@ export default class DatagouvfrAPI {
   /**
    * Update an entity (PUT)
    *
-   * @param {string} entityId
+   * @param {string} entity_id
    * @param {object} data
    * @returns {Promise}
    */
-  async update(entityId, data) {
+  async update(entity_id, data) {
     return await this.makeRequestAndHandleResponse(
-      `${this.url()}/${entityId}/`,
+      `${this.url()}/${entity_id}/`,
       'put',
       data
     )
@@ -175,7 +175,7 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async delete(entityId) {
-    return instance.delete(`${this.url()}/${entityId}/`).then(
+    return instance.delete(`${this.url()}/${entity_id}/`).then(
       (response) => response,
       (error) => error.response
     )
