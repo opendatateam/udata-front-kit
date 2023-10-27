@@ -98,20 +98,25 @@ export default class DatagouvfrAPI {
   /**
    * List entities
    *
+   * @param {object} filter Optional filter argument, e.g. { tag: 'my_topic' }
    * @returns {Promise}
    */
-  async list() {
-    return await this.makeRequestAndHandleResponse(`${this.url()}/`)
+  async list(filter) {
+    const url = new URL(`${this.url()}/`)
+    if (filter) {
+      url.search = new URLSearchParams(filter)
+    }
+    return await this.makeRequestAndHandleResponse(url)
   }
 
   /**
    * List entities, without wrapper
    *
-   * @param {object?} filter
+   * @param {object} filter Optional filter argument, e.g. { tag: 'my_topic' }
    * @returns {Promise}
    */
   async _list(filter) {
-    const url = new URL(`${this.url()}/`);
+    const url = new URL(`${this.url()}/`)
     if (filter) {
       url.search = new URLSearchParams(filter)
     }
