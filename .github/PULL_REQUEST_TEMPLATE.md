@@ -1,48 +1,66 @@
-## _Feature proposal | Bug fix | Other_
+_En choisir un ou plusieurs, et supprimer le reste:_
 
-_Fixes / Relates to / Supercedes / Superceded by / Depends on / Depended upon by_ #XXX
+Fixes #XXX
+Closes #XXX
+Relates to #XXX
+Supercedes #XXX
+Superceded by #XXX
+Depends on #XXX
+Depended upon by #XXX
+
+_Choisir le titre qui correspond le mieux à votre proposition de modification:_
+
+## _Proposition de fonctionnalité | Correction d'un bug | Autre_
 
 ### Job story
 
-> Title : _title_
-> User: _user_
+### Job story
+
+> Titre : _titre de l'issue._
+> Utilisateur : _l'utilisateur à qui s'en beneficierait._
 >
-> When I _situation_,
-> I want to _motivation_,
-> so to _expected outcome_.
+> Quand je _ma situation_,
+> je veux _ma motivation_,
+> pour _le résultat attendu_.
 
-### Context or situation
+### Contexte ou situation
 
-_Write here._
+_Écrivez ici._
 
-### Problem encountered by users
+### Problème rencontré par les utilisateurs
 
-_Write here._
+_Écrivez ici._
 
-### Proposal of how to solve the problem
+### Problème rencontré par les utilisateurs
 
-_Write here. Add UI/UX elements if you have them._
+_Écrivez ici._
 
-### What changes
+### Proposition de solution au problème
 
-_Select one or more of the following._
+_Écrivez ici._
+
+_Ajoutez des éléments UI/UX si vous en avez._
+
+### Que change-t-il ?
+
+_Sélectionnez un ou plusieurs des éléments suivants:_.
 
 #### Breaking changes
 
-- _Some change that is not backward compatible 🎖._
+- 🎖 _Certains changements qui ne sont pas rétrocompatibles._
 
-#### New features
+#### Nouvelles fonctionnalités
 
-- _Some new feature 🤟._
+- 🤟 ♪ _Some new feature_ ♪.
 
-#### Technical changes
+#### Modifications techniques
 
-- _Any other technical change (bug fixing, refactoring...) 🛠._
+- 🛠 _Tout autre changement technique (correction d'un bug, refonte...)._
 
-#### Non-technical changes
+#### Changements non techniques
 
-- _Any other non-technical change (documentation, tests, types...) 📖._
+- 📖 _Tout autre changement non technique (documentation, tests, types...)._
 
-### Additional elements of these changeset
+### Éléments supplémentaires de ma proposition
 
-_Optional._
+_Comment tester, comment reviewer, etc. (optionnel)._
