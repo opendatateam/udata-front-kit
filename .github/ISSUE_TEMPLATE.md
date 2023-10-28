@@ -1,69 +1,72 @@
-## Feature request
+## Demande de fonctionnalité
 
 ### Job story
 
-> Title : _title_
-> User: _user_
+> Titre : _titre de l'issue._
+> Utilisateur : _l'utilisateur à qui s'en beneficierait._
 >
-> When I _situation_,
-> I want to _motivation_,
-> so to _expected outcome_.
+> Quand je _ma situation_,
+> je veux _ma motivation_,
+> pour _le résultat attendu_.
 
-### Context or situation
+### Contexte ou situation
 
-When I _do this_, I expect _that_ to happen.
+Lorsque je _fais ceci_,
+...
+je m'attends à ce que _cela_ se produise.
 
-### Problem encountered by users
+### Problème rencontré par les utilisateurs
 
-It doesn't.
+Ce n'est pas le cas.
+...
 
-### Proposal of how to solve the problem
+### Proposition de solution au problème
 
-> I see _this_,
-> And I do _that_,
-> And then _something_ happens.
+> Je vois _cela_,
+> Et je fais _cela_,
+> Et il se passe _quelque chose_.
 
-_Add image here if you have one._
+_Ajoutez une image ici si vous en avez une_.
 
-### Additional elements of my proposal
+### Éléments supplémentaires de ma proposition
 
-> Some
+> Scénario alternatif #1
+> Scénario alternatif #2
+> Scénario alternatif #3
+>
+> > Scénario alternatif #n
 
-> Additional
+### Définition of done
 
-> Likely scenarios
+- Une application de prévisualisation déployée où tester cette fonctionnalité
+- Une batterie des tests unitaires et d'intégration
 
-### Definition of done
-
-- A deployed preview app where to test the aforesaid
-- A test suite covering the aforesaid
-
-### Related OKR
+### OKR associé
 
 TODO.
 
 ---
 
-## Bug report
+## Rapport de bug
 
-### What I did
+### Ce que j'ai fait
 
-_Write here._
+_Écrivez ici._
 
-### What I expected to happen
+### Ce que je m'attendais à voir se produire
 
-_Write here._
+_Écrivez ici._
 
-### What actually happened
+### Ce qui s'est réellement passé
 
-_Write here._
+_Écrivez ici._
 
-### Data (or links to it) that can help you reproduce this issue
+### Données (ou liens vers ces données) qui peuvent vous aider à reproduire ce problème
 
-_Write here._
+_Écrivez ici._
 
 ---
 
-## Other
+## Autre
 
-_Write here._
+_Écrivez ici._
