@@ -8,7 +8,12 @@ const props = defineProps(['title', 'name', 'show', 'text'])
       {{ title }}
       <span class="required">&nbsp;*</span>
     </div>
-    <button @click.prevent="show = !show">
+    <button
+      @mouseover="show = true"
+      @mouseout="show = false"
+      @click.prevent="show = !show"
+      @blur="show = false"
+      >
       <VIcon
         name="ri-question-fill"
         color="var(--blue-france-sun-113-625)"

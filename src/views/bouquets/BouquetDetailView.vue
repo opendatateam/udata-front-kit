@@ -32,6 +32,7 @@ const canEdit = computed(() => {
   )
 })
 
+
 onMounted(() => {
   store.load(route.params.bid).then((res) => {
     bouquet.value = res
@@ -55,7 +56,30 @@ onMounted(() => {
         <p>{{ info.subtheme }}</p>
       </div>
     </div>
-
+    
+    <div v-if="bouquet.extras && bouquet.extras[`${config.universe.name}:datasets_properties`]">
+      <h3>Données utilisées ({{ bouquet.extras[`${config.universe.name}:datasets_properties`].length }})</h3>
+      <DsfrAccordionsGroup>
+        <li v-for="property in bouquet.extras[`${config.universe.name}:datasets_properties`]">
+          <DsfrAccordion
+            :title="property.name"
+            :expanded-id="property.id"
+            @expand="property.id = $event"
+          >
+            <div >
+              {{ property.description }}
+            </div>
+            <div class="button__wrapper">
+              <a
+                v-if="property.uri"
+                class="fr-btn fr-btn--secondary inline-flex"
+                :href="property.uri"
+              >Voir le catalogue source</a>
+            </div>
+          </DsfrAccordion>
+        </li>
+      </DsfrAccordionsGroup>
+    </div>
     <h2 class="fr-mt-2w">Jeux de données</h2>
     <div v-if="!datasets.length">Pas de jeu de données dans ce bouquet.</div>
     <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">

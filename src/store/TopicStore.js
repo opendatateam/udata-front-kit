@@ -95,6 +95,16 @@ export const useTopicStore = defineStore('topic', {
       const idx = this.data.findIndex((b) => b.id === topic_id)
       this.data[idx] = res
       return res
+    },
+    /**
+    * Delete an entity (DELETE)
+    *
+    * @param {string} entityId
+    * @returns {Promise}
+    */
+    async delete(entityId) {
+      return await this.makeRequestAndHandleResponse(
+      `${this.url()}/${entityId}/`,'delete')
     }
   }
 })
