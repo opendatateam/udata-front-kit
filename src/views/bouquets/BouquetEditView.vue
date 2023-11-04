@@ -66,29 +66,6 @@
     }).filter(r => !datasets.value.map(d => d.dataset.id).includes(r.value))
   }
 
-  const onSubmitDataset = async () => {
-    if (!selectedDataset.value.id) return
-      if (isEditDesc.value) {
-        const idx = datasets.value.findIndex(d => d.dataset.id === selectedDataset.value.id)
-        datasets.value[idx].description = selectedDataset.value.description
-      } else {
-        const dataset = await datasetStore.load(selectedDataset.value.id)
-        if (dataset) {
-          datasets.value.push({ dataset, description: selectedDataset.value.description })
-        }
-      }
-      selectedDataset.value = {}
-      isEditDesc.value = false
-  }
-
-  // const onEditDataset = (dataset) => {
-  //   isModalOpen.value = true
-  //   isEditDesc.value = true
-  //   selectedDataset.value.id = dataset.id
-  //   selectedDataset.value.title = dataset.title
-  //   selectedDataset.value.description = datasets.value.find(d => d.dataset.id === dataset.id).description
-  // }
-
   const extrasFromDatasets = () => {
     const extras = {}
     for (const dataset of datasets.value) {
@@ -107,14 +84,6 @@
   }
 
   let nextId = 0
-
-  const dataset = (libelle, raison, uri) => ({
-    name: libelle,
-    description: raison,
-    id: nextId,
-    uri: uri
-  })
-
   const addDatasetPropertysToExtras = async () => {
     const setUri = urlData.value ? urlData.value : null
 
@@ -125,13 +94,14 @@
         if (dataset) {
           datasets.value.push({ dataset, description: selectedDataset.value.description })
 
-          let getUrl  = datasets.value.map((url) => url.dataset.uri)
+          const getUrl = datasets.value.reduce((acc, url) => acc + url.dataset.uri, '')
+
           datasetProperty.value[`${config.universe.name}:datasets_properties`].push({
-              libelle: libelle.value,
-              raison: raison.value,
-              uri: getUrl,
-              datagouvId: selectedDataset.value.id,
-              id: selectedDataset.value.id
+            libelle: libelle.value,
+            raison: raison.value,
+            uri: getUrl,
+            datagouvId: selectedDataset.value.id,
+            id: selectedDataset.value.id
           })
         }
       } else {
@@ -148,10 +118,9 @@
     libelle.value = ''
     raison.value = ''
     urlData.value = ''
+    datasets.value =  []
     selectedDataset.value = {}
     isEditDesc.value = false
-    console.log('id', selectedDataset.value.id)
-          console.log('val', selectedDataset.value)
   }
 
   const onDeleteDataset = (datasetId) => {
@@ -159,7 +128,7 @@
     datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperty.value[`${config.universe.name}:datasets_properties`].filter((d) => d.id !== datasetId);
   }
   if (loadedBouquet.value.extras) {
-    delete loadedBouquet.value.extras[`${config.universe_name}:${datasetId}:description`];
+    delete loadedBouquet.value.extras[`${config.universe.name}:${datasetId}:description`];
   }
   }
 
@@ -200,21 +169,21 @@
   }
 
   const loadDatasets = async (datasetIds, bouquet) => {
-      for (const datasetId of datasetIds) {
-        const dataset = await datasetStore.load(datasetId)
-        datasets.value.push({
-          dataset,
-          description: bouquet.extras[`${config.universe.name}:${dataset.id}:description`] || "",
-        })
-      }
+    for (const datasetId of datasetIds) {
+      const dataset = await datasetStore.load(datasetId)
+      datasets.value.push({
+        dataset,
+        description: bouquet.extras[`${config.universe.name}:${dataset.id}:description`] || "",
+      })
     }
+  }
 
   onMounted(() => {
     if (!isCreate) {
       topicStore.load(route.params.bid).then((data) => {
         loadedBouquet.value = data
         form.value.name = data.name
-        form.value.description = data.description,
+        form.value.description = data.description
         loadDatasets(data.datasets.map(d => d.id), data)
       })
     }
@@ -290,18 +259,18 @@
                 <div class="fr-col-12 fr-col-sm-45">
                   <DsfrSelect
                     v-model="selectedTheme"
+                    default-unselected-text="Choisir une thématique"
                     label="Thématique"
                     :options="config.themes.thematiques"
-                    :model-value="selectedTheme"
                     @change="onThemeChanged"
                   />
                 </div>
                 <div class="fr-col-12 fr-col-sm-45">
                   <DsfrSelect
                     v-model="selectedSubTheme"
+                    default-unselected-text="Choisir un chantier"
                     label="Chantier"
                     :options="subThemes"
-                    :model-value="selectedSubTheme"
                   />
                 </div>
               </div>
