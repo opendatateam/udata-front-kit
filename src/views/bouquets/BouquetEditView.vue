@@ -6,7 +6,6 @@
   import SearchAPI from '../../services/api/SearchAPI'
   import config from '@/config'
   import Tooltip from '@/components/Tooltip.vue'
-  import { getSubThemes } from '@/utils'
   import Multiselect from '@vueform/multiselect'
 
   const searchAPI = new SearchAPI()
@@ -35,27 +34,34 @@
     'Récapitulatif'
   ]
 
-  const selectedTheme = ref(config.themes.selectedThemeDefault)
-  const selectedSubTheme = ref(config.themes.selectedSubThemeDefault)
+  const selectedTheme = ref(null);
+  const selectedSubTheme = ref(null)
   const currentStep = ref(1)
   const libelle = ref()
   const raison = ref()
   const urlData = ref()
 
+  const themes = computed(() => config.themes)
+
   const subThemes = computed(() => {
-    return getSubThemes(selectedTheme.value)
+    const theme = themes.value.find((t) => t.name === selectedTheme.value)
+    return theme ? theme.subthemes : []
   })
 
-  const getOptionDefault = (theme) => {
-    if (config.themes.default_options.hasOwnProperty(theme)) {
-      return config.themes.default_options[theme]
-    }
+  const themeOptions = computed(() => {
+    return themes.value.map((theme) => ({
+      text: theme.name
+    }))
+  })
 
-    return null
-  }
+  const subThemeOptions = computed(() => {
+    return subThemes.value.map((subTheme) => ({
+      text: subTheme.name
+    }))
+  })
 
   const onThemeChanged = () => {
-    selectedSubTheme.value = getOptionDefault(selectedTheme.value)
+    selectedSubTheme.value = null; 
   }
 
   const search = async (query) => {
@@ -136,7 +142,10 @@
     if (!form.value.name || !form.value.description) {
       errorMessage.value = 'Merci de bien remplir les champs'
     } else {
-      currentStep.value = newStep
+      isFormValidated.value = true
+      setTimeout(() => {
+        currentStep.value = newStep
+      }, 1000)
     }
   }
 
@@ -162,9 +171,7 @@
     if (res.status && res.status === 400) {
       errorMessage.value = 'Merci de bien remplir les champs'
     } else {
-      setTimeout(() => {
-        router.push({ name: 'bouquet_detail', params: { bid: res.slug } })
-      }, 1000)
+      router.push({ name: 'bouquet_detail', params: { bid: res.slug } })
     }
   }
 
@@ -254,27 +261,26 @@
       <div v-show="currentStep === 2">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-8">
-            <div>
               <div class="fr-grid-row justify-between">
                 <div class="fr-col-12 fr-col-sm-45">
                   <DsfrSelect
                     v-model="selectedTheme"
-                    default-unselected-text="Choisir une thématique"
+                    default-unselected-text="Toutes les données"
                     label="Thématique"
-                    :options="config.themes.thematiques"
-                    @change="onThemeChanged"
+                    :options="themeOptions"
+                    @update:model-value="onThemeChanged"
                   />
                 </div>
                 <div class="fr-col-12 fr-col-sm-45">
-                  <DsfrSelect
-                    v-model="selectedSubTheme"
-                    default-unselected-text="Choisir un chantier"
-                    label="Chantier"
-                    :options="subThemes"
-                  />
+                   <DsfrSelect
+                      v-model="selectedSubTheme"
+                      :disabled="!selectedTheme"
+                      default-unselected-text="Toutes les données"
+                      label="Chantier"
+                      :options="subThemeOptions"
+                    />
                 </div>
               </div>
-            </div>
           </div>
         </div>
         <DsfrButton
@@ -391,7 +397,6 @@
         />
         <DsfrButton type="submit" class="fr-mt-2w" label="Suivant" />
       </div>
-
     </form>
   </div>
 </template>

@@ -57,61 +57,44 @@ website:
 
 # List of themes and sub themes for step 2
 themes:
-  selectedThemeDefault: 'Produire'
-  selectedSubThemeDefault: 'Nucléaire'
-  thematiques:
-    - Produire
-    - Se nourrir
-    - Se loger
-    - Se déplacer
-    - Préserver
-    - Consommer
-    - Chantiers transverses
-  subThemes:
-    Produire:
-      - Nucléaire
-      - Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
-      - Production d'électricité décarbonée (hors nucléaire)
-      - Production d'énergie décarbonnée (hors électricité)
-      - Prévention, gestion et valorisation des déchets
-      - Transport de marchandises, logistique, e-commerce
-      - Verdissement du secteur et des instruments financiers
-      - Décarbonation de l’industrie
-    Se nourrir:
-      - Alimentation
-      - Agriculture et pêche
-    Se loger:
-      - Construction et rénovation des logements
-      - Aménagements des villes
-    Se déplacer:
-      - Voitures et infrastructures routières
-      - Mobilité courte distance (hors voiture)
-      - Mobilité longue distance (avion, train)
-    Préserver:
-      - Eau
-      - Sols
-      - Océans et mers
-      - Forêt
-    Consommer:
-      - Consommation plus durable (ménages)
-      - Numérique responsable
-      - Achats durables (de l’État, des collectivités et des entreprises)
-    Chantiers transverses:
-      - Le financement qui permet de définir des trajectoires d’investissement crédibles et cohérentes
-      - La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
-      - La transition des filières avec la gestion des emplois, des formations et des compétences
-      - Les données environnementales
-      - Les services publics exemplaires
-      - La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
-      - La sobriété des usages et des ressources
-  default_options:
-    Produire: Nucléaire
-    Se nourrir: Alimentation
-    Se loger: Construction et rénovation des logements
-    Se déplacer: Voitures et infrastructures routières
-    Préserver: Eau
-    Consommer: Consommation plus durable (ménages)
-    Chantiers transverses: Le financement qui permet de définir des trajectoires d’investissement crédibles et cohérentes
+  - name: Produire
+    subthemes:
+      - name: Nucléaire
+      - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
+      - name: Production d'électricité décarbonée (hors nucléaire)
+  - name: Se nourrir
+    subthemes:
+      - name: Alimentation
+      - name: Agriculture et pêche
+  - name: Se loger
+    subthemes:
+      - name: Construction et rénovation des logements
+      - name: Aménagements des villes
+  - name: Se déplacer
+    subthemes:
+      - name: Voitures et infrastructures routières
+      - name: Mobilité courte distance (hors voiture)
+      - name: Mobilité longue distance (avion, train)
+  - name: Préserver
+    subthemes:
+      - name: Eau
+      - name: Sols
+      - name: Océans et mers
+      - name: Forêt
+  - name: Consommer
+    subthemes:
+      - name: Consommation plus durable (ménages)
+      - name: Numérique responsable
+      - name: Achats durables (de l’État, des collectivités et des entreprises)
+  - name: Chantiers transverses
+    subthemes:
+      - name: Le financement qui permet de définir des trajectoires d’investissement crédibles et cohérentes
+      - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
+      - name: La transition des filières avec la gestion des emplois, des formations et des compétences
+      - name: Les données environnementales
+      - name: Les services publics exemplaires
+      - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
+      - name: La sobriété des usages et des ressources
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
