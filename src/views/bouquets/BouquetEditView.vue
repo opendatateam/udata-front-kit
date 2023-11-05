@@ -265,7 +265,7 @@
                 <div class="fr-col-12 fr-col-sm-45">
                   <DsfrSelect
                     v-model="selectedTheme"
-                    default-unselected-text="Toutes les données"
+                    default-unselected-text="Sélectionnez une thématique"
                     label="Thématique"
                     :options="themeOptions"
                     @update:model-value="onThemeChanged"
@@ -275,7 +275,7 @@
                    <DsfrSelect
                       v-model="selectedSubTheme"
                       :disabled="!selectedTheme"
-                      default-unselected-text="Toutes les données"
+                      default-unselected-text="Sélectionnez un chantier"
                       label="Chantier"
                       :options="subThemeOptions"
                     />
