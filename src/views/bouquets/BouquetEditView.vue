@@ -5,6 +5,7 @@
   import { useRouter, useRoute } from 'vue-router'
   import SearchAPI from '../../services/api/SearchAPI'
   import config from '@/config'
+  import { descriptionFromMarkdown } from '@/utils'
   import Tooltip from '@/components/Tooltip.vue'
   import Multiselect from '@vueform/multiselect'
 
@@ -25,21 +26,19 @@
     [`${config.universe.name}:datasets_properties`]: []
   })
   const isEditDesc = ref(false)
-  const isFormValidated = ref(false)
   const errorMessage = ref()
-  const steps = [
-    'Description du bouquet de données',
-    'Informations du bouquet de données',
-    'Composition du bouquet',
-    'Récapitulatif'
-  ]
-
   const selectedTheme = ref(null);
   const selectedSubTheme = ref(null)
   const currentStep = ref(1)
   const libelle = ref()
   const raison = ref()
   const urlData = ref()
+  const steps = [
+    'Description du bouquet de données',
+    'Informations du bouquet de données',
+    'Composition du bouquet',
+    'Récapitulatif'
+  ]
 
   const themes = computed(() => config.themes)
 
@@ -60,6 +59,12 @@
     }))
   })
 
+  const isDatasetPropertyEmpty = computed(() => {
+    return datasetProperty.value[`${config.universe.name}:datasets_properties`].length
+  })
+
+  const description = computed(() => descriptionFromMarkdown(form))
+
   const onThemeChanged = () => {
     selectedSubTheme.value = null; 
   }
@@ -78,15 +83,6 @@
       extras[`${config.universe.name}:${dataset.dataset.id}:description`] = dataset.description
     }
     return extras
-  }
-
-  const informationsInExtras = {
-    [`${config.universe.name}:informations`]: [
-      {
-        theme: selectedTheme.value,
-        subtheme: selectedSubTheme.value
-      }
-    ]
   }
 
   let nextId = 0
@@ -142,10 +138,7 @@
     if (!form.value.name || !form.value.description) {
       errorMessage.value = 'Merci de bien remplir les champs'
     } else {
-      isFormValidated.value = true
-      setTimeout(() => {
-        currentStep.value = newStep
-      }, 1000)
+      currentStep.value = newStep
     }
   }
 
@@ -154,6 +147,15 @@
     const data = {
       ...form.value
     }
+    const informationsInExtras = {
+      [`${config.universe.name}:informations`]: [
+        {
+          theme: selectedTheme.value,
+          subtheme: selectedSubTheme.value
+        }
+      ]
+    }
+
     if (isCreate) {
       res = await topicStore.create({
         ...data,
@@ -188,6 +190,7 @@
   onMounted(() => {
     if (!isCreate) {
       topicStore.load(route.params.bid).then((data) => {
+        // TODO: AFFICHER AU EDIT LES VALEURS INFORMATIONS, LIBELLE & RAISON
         loadedBouquet.value = data
         form.value.name = data.name
         form.value.description = data.description
@@ -210,12 +213,6 @@
           <div class="fr-col-12 fr-col-lg-7">
             <div>
               <div class="fr-mt-4v">
-                <DsfrAlert
-                  v-if="isFormValidated && !errorMessage"
-                  type="success"
-                  title="Bouquet créé"
-                  description="Votre bouquet a bien été créé."
-                />
                 <DsfrAlert
                   v-if="errorMessage"
                   type="warning"
@@ -254,6 +251,7 @@
           type="button"
           class="fr-mt-2w"
           label="Suivant"
+          :disabled="!form.name || !form.description"
           @click.prevent="validateAndMoveToStep(2)"
         />
       </div>
@@ -293,6 +291,7 @@
           type="button"
           class="fr-mt-2w"
           label="Suivant"
+          :disabled="!selectedSubTheme"
           @click.prevent="validateAndMoveToStep(3)"
         />
       </div>
@@ -320,11 +319,12 @@
         <div class="fr-grid-row align-center fr-mt-3w">
           <div class="fr-col-12 fr-col-lg-5">
             <Multiselect
-              noOptionsText="Précisez ou élargissez votre recherche"
               ref="selector"
+              v-model="selectedDataset.id"
+              no-options-text="Précisez ou élargissez votre recherche"
               placeholder="Rechercher une donnée dans Ecosphères"
               name="select-datasets"
-              v-model="selectedDataset.id"
+              :clear-on-select="true"
               :filter-results="false"
               :min-chars="1"
               :resolve-on-load="false"
@@ -347,20 +347,19 @@
           </div>
           <div class="fr-col-12 fr-col-lg-4 fr-ml-md-10w fr-mt-5w fr-m-lg-0">
             <DsfrButton
-            class=""
               label="Ajouter la donnée"
-              @click.prevent="addDatasetPropertysToExtras()"
               :secondary="true"
+              @click.prevent="addDatasetPropertysToExtras()"
             />
           </div>
         </div>
         <hr />
 
-        <h3>Données sélectionnées <span v-if="datasetProperty">({{ datasetProperty.length }})</span></h3>
-        <div class="no-dataset fr-py-2 fr-px-3w" v-if="!datasetProperty.length">
+        <h3>Données sélectionnées <span v-if="isDatasetPropertyEmpty">({{ isDatasetPropertyEmpty }})</span></h3>
+        <div v-if="!isDatasetPropertyEmpty" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
-        <div v-if="datasetProperty">
+        <div v-else>
           <DsfrAccordionsGroup>
             <li v-for="property in datasetProperty[`${config.universe.name}:datasets_properties`]">
               <DsfrAccordion
@@ -394,8 +393,83 @@
           label="Précédent"
           @click.prevent="validateAndMoveToStep(2)"
         />
-        <DsfrButton type="submit" class="fr-mt-2w" label="Suivant" />
+          <DsfrButton
+          type="button"
+          class="fr-mt-2w"
+          label="Suivant"
+          :disabled="!isDatasetPropertyEmpty"
+          @click.prevent="validateAndMoveToStep(4)"
+        />
       </div>
+
+      <div v-show="currentStep === 4">
+        <h4>Informations du bouquet 
+          <DsfrButton
+            :icon-only="true"
+            size="sm"
+            icon="ri-pencil-line"
+            title="Editer Étape 1"
+            :tertiary="true"
+            :no-outline="true"
+            @click.prevent="validateAndMoveToStep(1)"
+          />
+        </h4>
+
+        <p><strong>Sujet du bouquet</strong></p>
+        <p v-html="form.name" />
+        <p><strong>Thématique</strong></p>
+        <p v-html="selectedTheme" />
+        <p><strong>Chantier</strong></p>
+        <p v-html="selectedSubTheme" />
+        <hr/>
+
+        <h4>Description du bouquet</h4>
+        <p><strong>Objectif du bouquet</strong></p>
+        <p class="markdown__description" v-html="description" />
+        <hr/>
+
+      <h4>Composition du bouquet</h4>
+      <div v-if="isDatasetPropertyEmpty">
+        <DsfrAccordionsGroup>
+          <li v-for="property in datasetProperty[`${config.universe.name}:datasets_properties`]">
+            <DsfrAccordion
+              :title="property.libelle"
+              :expanded-id="property.id"
+              @expand="property.id = $event"
+            >
+              <div class="fr-mb-3w">
+                {{ property.raison }}
+              </div>
+              <div class="button__wrapper">
+                  <DsfrButton
+                    icon="ri-delete-bin-line"
+                    label="Retirer de la section"
+                    @click.stop.prevent="onDeleteDataset(property.id)"
+                    class="fr-mr-2w"
+                  />
+                  <a
+                    v-if="property.uri"
+                    class="fr-btn fr-btn--secondary inline-flex"
+                    :href="property.uri"
+                  >Voir le catalogue source</a>
+                </div>
+            </DsfrAccordion>
+          </li>
+          </DsfrAccordionsGroup>
+      </div>
+      <DsfrButton
+          type="button"
+          class="fr-mt-2w fr-mr-2w"
+          label="Précédent"
+          @click.prevent="validateAndMoveToStep(3)"
+        />
+      <DsfrButton
+        type="submit"
+        class="fr-mt-2w"
+        label="Terminer"
+      />
+      </div>
+      
     </form>
   </div>
 </template>
@@ -415,6 +489,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  text-align: center;
 }
 
 :deep .tooltip {
@@ -429,6 +504,19 @@
 
   &__markdown {
     left: 46%;
+  }
+}
+
+.markdown__description {
+  :deep a {
+    color: var(--text-action-high-blue-france);
+  }
+}
+
+.fr-accordions-group {
+  border: {
+    left: 1px solid var(--border-default-grey);
+    right: 1px solid var(--border-default-grey);
   }
 }
 </style>
