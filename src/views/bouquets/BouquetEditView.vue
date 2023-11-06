@@ -361,7 +361,6 @@
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
         <div v-if="datasetProperty">
-          {{ datasetProperty }}
           <DsfrAccordionsGroup>
             <li v-for="property in datasetProperty[`${config.universe.name}:datasets_properties`]">
               <DsfrAccordion
