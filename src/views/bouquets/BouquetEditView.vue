@@ -3,7 +3,7 @@
   import { useDatasetStore } from '@/store/DatasetStore'
   import { useTopicStore } from '@/store/TopicStore'
   import { useRouter, useRoute } from 'vue-router'
-  import SearchAPI from '../../services/api/SearchAPI'
+  import SearchAPI from '@/services/api/SearchAPI'
   import config from '@/config'
   import { descriptionFromMarkdown } from '@/utils'
   import Tooltip from '@/components/Tooltip.vue'
