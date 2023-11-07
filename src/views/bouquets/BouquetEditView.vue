@@ -128,7 +128,7 @@ const addDatasetPropertysToExtras = async () => {
           raison: raison.value,
           uri: setUri,
           datagouvId: null,
-          id: nextId++
+          id: `__internal__${nextId++}`
         }
       )
     }
