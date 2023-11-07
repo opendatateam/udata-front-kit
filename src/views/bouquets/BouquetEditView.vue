@@ -1,213 +1,257 @@
 <script setup>
-  import { ref, onMounted, computed } from 'vue'
-  import { useDatasetStore } from '@/store/DatasetStore'
-  import { useTopicStore } from '@/store/TopicStore'
-  import { useRouter, useRoute } from 'vue-router'
-  import SearchAPI from '@/services/api/SearchAPI'
-  import config from '@/config'
-  import { descriptionFromMarkdown } from '@/utils'
-  import Tooltip from '@/components/Tooltip.vue'
-  import Multiselect from '@vueform/multiselect'
+import Multiselect from '@vueform/multiselect'
+import { ref, onMounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-  const searchAPI = new SearchAPI()
-  const datasetStore = useDatasetStore()
-  const topicStore = useTopicStore()
-  const router = useRouter()
-  const route = useRoute()
+import Tooltip from '@/components/Tooltip.vue'
+import config from '@/config'
+import SearchAPI from '@/services/api/SearchAPI'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useTopicStore } from '@/store/TopicStore'
+import { descriptionFromMarkdown } from '@/utils'
 
-  const isCreate = route.name === 'bouquet_add'
+const searchAPI = new SearchAPI()
+const datasetStore = useDatasetStore()
+const topicStore = useTopicStore()
+const router = useRouter()
+const route = useRoute()
 
-  const form = ref({})
-  const datasets = ref([])
-  const selectedDataset = ref({})
-  const selector = ref(null)
-  const loadedBouquet = ref({})
-  const datasetProperty = ref({
-    [`${config.universe.name}:datasets_properties`]: []
+const isCreate = route.name === 'bouquet_add'
+
+const form = ref({})
+const datasets = ref([])
+const selectedDataset = ref({})
+const selector = ref(null)
+const loadedBouquet = ref({})
+const datasetProperty = ref({
+  [`${config.universe.name}:datasets_properties`]: []
+})
+const isEditDesc = ref(false)
+const errorMessage = ref()
+const selectedTheme = ref(null)
+const selectedSubTheme = ref(null)
+const currentStep = ref(1)
+const libelle = ref()
+const raison = ref()
+const urlData = ref()
+const steps = [
+  'Description du bouquet de données',
+  'Informations du bouquet de données',
+  'Composition du bouquet',
+  'Récapitulatif'
+]
+
+const themes = computed(() => config.themes)
+
+const subThemes = computed(() => {
+  const theme = themes.value.find((t) => t.name === selectedTheme.value)
+  return theme ? theme.subthemes : []
+})
+
+const themeOptions = computed(() => {
+  return themes.value.map((theme) => ({
+    text: theme.name
+  }))
+})
+
+const subThemeOptions = computed(() => {
+  return subThemes.value.map((subTheme) => ({
+    text: subTheme.name
+  }))
+})
+
+const isDatasetPropertyEmpty = computed(() => {
+  return datasetProperty.value[`${config.universe.name}:datasets_properties`]
+    .length
+})
+
+const description = computed(() => descriptionFromMarkdown(form))
+
+const onThemeChanged = () => {
+  selectedSubTheme.value = null
+}
+
+const search = async (query) => {
+  if (!query) return []
+  const results = await searchAPI._search(query, config.universe.topic_id, 1, {
+    page_size: 10
   })
-  const isEditDesc = ref(false)
-  const errorMessage = ref()
-  const selectedTheme = ref(null)
-  const selectedSubTheme = ref(null)
-  const currentStep = ref(1)
-  const libelle = ref()
-  const raison = ref()
-  const urlData = ref()
-  const steps = [
-    'Description du bouquet de données',
-    'Informations du bouquet de données',
-    'Composition du bouquet',
-    'Récapitulatif'
-  ]
-
-  const themes = computed(() => config.themes)
-
-  const subThemes = computed(() => {
-    const theme = themes.value.find((t) => t.name === selectedTheme.value)
-    return theme ? theme.subthemes : []
-  })
-
-  const themeOptions = computed(() => {
-    return themes.value.map((theme) => ({
-      text: theme.name
-    }))
-  })
-
-  const subThemeOptions = computed(() => {
-    return subThemes.value.map((subTheme) => ({
-      text: subTheme.name
-    }))
-  })
-
-  const isDatasetPropertyEmpty = computed(() => {
-    return datasetProperty.value[`${config.universe.name}:datasets_properties`].length
-  })
-
-  const description = computed(() => descriptionFromMarkdown(form))
-
-  const onThemeChanged = () => {
-    selectedSubTheme.value = null
-  }
-
-  const search = async (query) => {
-    if (!query) return []
-    const results = await searchAPI._search(query, config.universe.topic_id, 1,{ page_size: 10 })
-    return results.data.map(r => {
+  return results.data
+    .map((r) => {
       return { value: r.id, label: r.title, uri: r.uri }
-    }).filter(r => !datasets.value.map(d => d.dataset.id).includes(r.value))
+    })
+    .filter((r) => !datasets.value.map((d) => d.dataset.id).includes(r.value))
+}
+
+const extrasFromDatasets = () => {
+  const extras = {}
+  for (const dataset of datasets.value) {
+    extras[`${config.universe.name}:${dataset.dataset.id}:description`] =
+      dataset.description
   }
+  return extras
+}
 
-  const extrasFromDatasets = () => {
-    const extras = {}
-    for (const dataset of datasets.value) {
-      extras[`${config.universe.name}:${dataset.dataset.id}:description`] = dataset.description
-    }
-    return extras
-  }
+let nextId = 0
+const addDatasetPropertysToExtras = async () => {
+  const setUri = urlData.value ? urlData.value : null
 
-  let nextId = 0
-  const addDatasetPropertysToExtras = async () => {
-    const setUri = urlData.value ? urlData.value : null
-    
-    if (libelle.value && raison.value) {
-      if (selectedDataset.value.id) {
-        const dataset = await datasetStore.load(selectedDataset.value.id)
+  if (libelle.value && raison.value) {
+    if (selectedDataset.value.id) {
+      const dataset = await datasetStore.load(selectedDataset.value.id)
 
-        if (dataset) {
-          datasets.value.push({ dataset, description: selectedDataset.value.description })
+      if (dataset) {
+        datasets.value.push({
+          dataset,
+          description: selectedDataset.value.description
+        })
 
-          const getUrl = datasets.value.reduce((acc, url) => acc + url.dataset.uri, '')
+        const getUrl = datasets.value.reduce(
+          (acc, url) => acc + url.dataset.uri,
+          ''
+        )
 
-          datasetProperty.value[`${config.universe.name}:datasets_properties`].push({
-            libelle: libelle.value,
-            raison: raison.value,
-            uri: getUrl,
-            datagouvId: selectedDataset.value.id,
-            id: selectedDataset.value.id
-          })
-        }
-      } else {
-        datasetProperty.value[`${config.universe.name}:datasets_properties`].push({
+        datasetProperty.value[
+          `${config.universe.name}:datasets_properties`
+        ].push({
+          libelle: libelle.value,
+          raison: raison.value,
+          uri: getUrl,
+          datagouvId: selectedDataset.value.id,
+          id: selectedDataset.value.id
+        })
+      }
+    } else {
+      datasetProperty.value[`${config.universe.name}:datasets_properties`].push(
+        {
           libelle: libelle.value,
           raison: raison.value,
           uri: setUri,
           datagouvId: null,
           id: nextId++
-        })
-      }
+        }
+      )
     }
-
-    libelle.value = ''
-    raison.value = ''
-    urlData.value = ''
-    datasets.value =  []
-    selectedDataset.value = {}
-    isEditDesc.value = false
   }
 
-  const onDeleteDataset = (datasetId) => {
-    if (datasetProperty.value && datasetProperty.value[`${config.universe.name}:datasets_properties`]) {
-    datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperty.value[`${config.universe.name}:datasets_properties`].filter((d) => d.id !== datasetId)
+  libelle.value = ''
+  raison.value = ''
+  urlData.value = ''
+  datasets.value = []
+  selectedDataset.value = {}
+  isEditDesc.value = false
+}
+
+const onDeleteDataset = (datasetId) => {
+  if (
+    datasetProperty.value &&
+    datasetProperty.value[`${config.universe.name}:datasets_properties`]
+  ) {
+    datasetProperty.value[`${config.universe.name}:datasets_properties`] =
+      datasetProperty.value[
+        `${config.universe.name}:datasets_properties`
+      ].filter((d) => d.id !== datasetId)
   }
   if (loadedBouquet.value.extras) {
-    delete loadedBouquet.value.extras[`${config.universe.name}:${datasetId}:description`]
+    delete loadedBouquet.value.extras[
+      `${config.universe.name}:${datasetId}:description`
+    ]
   }
+}
+
+const validateAndMoveToStep = (newStep) => {
+  if (!form.value.name || !form.value.description) {
+    errorMessage.value = 'Merci de bien remplir les champs'
+  } else {
+    currentStep.value = newStep
+  }
+}
+
+const onSubmit = async () => {
+  let res
+  const data = {
+    ...form.value
+  }
+  const informationsInExtras = {
+    [`${config.universe.name}:informations`]: [
+      {
+        theme: selectedTheme.value,
+        subtheme: selectedSubTheme.value
+      }
+    ]
   }
 
-  const validateAndMoveToStep = (newStep) => {
-    if (!form.value.name || !form.value.description) {
-      errorMessage.value = 'Merci de bien remplir les champs'
-    } else {
-      currentStep.value = newStep
-    }
+  if (isCreate) {
+    res = await topicStore.create({
+      ...data,
+      tags: [config.universe.name],
+      extras: {
+        ...informationsInExtras,
+        ...datasetProperty.value,
+        ...extrasFromDatasets
+      }
+    })
+  } else {
+    res = await topicStore.update(loadedBouquet.value.id, {
+      ...data,
+      tags: loadedBouquet.value.tags,
+      extras: {
+        ...loadedBouquet.value.extras,
+        ...informationsInExtras,
+        ...datasetProperty.value,
+        ...extrasFromDatasets()
+      }
+    })
   }
 
-  const onSubmit = async () => {
-    let res
-    const data = {
-      ...form.value
-    }
-    const informationsInExtras = {
-      [`${config.universe.name}:informations`]: [
-        {
-          theme: selectedTheme.value,
-          subtheme: selectedSubTheme.value
+  if (res.status && res.status === 400) {
+    errorMessage.value = 'Merci de bien remplir les champs'
+  } else {
+    router.push({ name: 'bouquet_detail', params: { bid: res.slug } })
+  }
+}
+
+const loadDatasets = async (datasetIds, bouquet) => {
+  for (const datasetId of datasetIds) {
+    const dataset = await datasetStore.load(datasetId)
+    datasets.value.push({
+      dataset,
+      description:
+        bouquet.extras[`${config.universe.name}:${dataset.id}:description`] ||
+        ''
+    })
+  }
+}
+
+onMounted(() => {
+  if (!isCreate) {
+    topicStore.load(route.params.bid).then((data) => {
+      const datasetProperties = data.extras[
+        `${config.universe.name}:datasets_properties`
+      ].map((property) => {
+        return {
+          datagouvId: property.datagouvId,
+          libelle: property.libelle,
+          raison: property.raison,
+          uri: property.uri
         }
-      ]
-    }
-
-    if (isCreate) {
-      res = await topicStore.create({
-        ...data,
-        tags: [config.universe.name],
-        extras: { ...informationsInExtras, ...datasetProperty.value, ...extrasFromDatasets }
       })
-    } else {
-      res = await topicStore.update(loadedBouquet.value.id, {
-        ...data,
-        tags: loadedBouquet.value.tags,
-        extras: { ...loadedBouquet.value.extras, ...informationsInExtras, ...datasetProperty.value, ...extrasFromDatasets() }
-      })
-    }
-
-    if (res.status && res.status === 400) {
-      errorMessage.value = 'Merci de bien remplir les champs'
-    } else {
-      router.push({ name: 'bouquet_detail', params: { bid: res.slug } })
-    }
+      loadedBouquet.value = data
+      form.value.name = data.name
+      form.value.description = data.description
+      selectedTheme.value =
+        data.extras[`${config.universe.name}:informations`][0].theme
+      selectedSubTheme.value =
+        data.extras[`${config.universe.name}:informations`][0].subtheme
+      datasetProperty.value[`${config.universe.name}:datasets_properties`] =
+        datasetProperties
+      loadDatasets(
+        data.datasets.map((d) => d.id),
+        data
+      )
+    })
   }
-
-  const loadDatasets = async (datasetIds, bouquet) => {
-    for (const datasetId of datasetIds) {
-      const dataset = await datasetStore.load(datasetId)
-      datasets.value.push({
-        dataset,
-        description: bouquet.extras[`${config.universe.name}:${dataset.id}:description`] || "",
-      })
-    }
-  }
-
-  onMounted(() => {
-    if (!isCreate) {
-      topicStore.load(route.params.bid).then((data) => {
-        const datasetProperties = data.extras[`${config.universe.name}:datasets_properties`].map(property => {
-          return {
-            datagouvId: property.datagouvId,
-            libelle: property.libelle,
-            raison: property.raison,
-            uri: property.uri
-          }
-        })
-        loadedBouquet.value = data
-        form.value.name = data.name
-        form.value.description = data.description
-        selectedTheme.value = data.extras[`${config.universe.name}:informations`][0].theme
-        selectedSubTheme.value = data.extras[`${config.universe.name}:informations`][0].subtheme
-        datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperties
-        loadDatasets(data.datasets.map(d => d.id), data)
-      })
-    }
-  })
+})
 </script>
 
 <template>
@@ -269,26 +313,26 @@
       <div v-show="currentStep === 2">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-8">
-              <div class="fr-grid-row justify-between">
-                <div class="fr-col-12 fr-col-sm-45">
-                  <DsfrSelect
-                    v-model="selectedTheme"
-                    default-unselected-text="Sélectionnez une thématique"
-                    label="Thématique"
-                    :options="themeOptions"
-                    @update:model-value="onThemeChanged"
-                  />
-                </div>
-                <div class="fr-col-12 fr-col-sm-45">
-                   <DsfrSelect
-                      v-model="selectedSubTheme"
-                      :disabled="!selectedTheme"
-                      default-unselected-text="Sélectionnez un chantier"
-                      label="Chantier"
-                      :options="subThemeOptions"
-                    />
-                </div>
+            <div class="fr-grid-row justify-between">
+              <div class="fr-col-12 fr-col-sm-45">
+                <DsfrSelect
+                  v-model="selectedTheme"
+                  default-unselected-text="Sélectionnez une thématique"
+                  label="Thématique"
+                  :options="themeOptions"
+                  @update:model-value="onThemeChanged"
+                />
               </div>
+              <div class="fr-col-12 fr-col-sm-45">
+                <DsfrSelect
+                  v-model="selectedSubTheme"
+                  :disabled="!selectedTheme"
+                  default-unselected-text="Sélectionnez un chantier"
+                  label="Chantier"
+                  :options="subThemeOptions"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <DsfrButton
@@ -345,12 +389,14 @@
           </div>
         </div>
 
-        <h3 class="fr-mb-2w fr-mt-3w">Vous ne trouvez pas la donnée dans Écosphères ?</h3>
+        <h3 class="fr-mb-2w fr-mt-3w">
+          Vous ne trouvez pas la donnée dans Écosphères ?
+        </h3>
         <div class="fr-grid-row align-baseline fr-mb-4w">
           <div class="fr-col-12 fr-col-lg-5">
             <DsfrInput
               v-model="urlData"
-              placeholder= "Url vers le jeu de données souhaité"
+              placeholder="Url vers le jeu de données souhaité"
               :label-visible="true"
               class="fr-mb-md-1w"
             />
@@ -365,19 +411,28 @@
         </div>
         <hr />
 
-        <h3>Données sélectionnées <span v-if="isDatasetPropertyEmpty">({{ isDatasetPropertyEmpty }})</span></h3>
+        <h3>
+          Données sélectionnées
+          <span v-if="isDatasetPropertyEmpty"
+            >({{ isDatasetPropertyEmpty }})</span
+          >
+        </h3>
         <div v-if="!isDatasetPropertyEmpty" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
         <div v-else>
           <DsfrAccordionsGroup>
-            <li v-for="property in datasetProperty[`${config.universe.name}:datasets_properties`]">
+            <li
+              v-for="property in datasetProperty[
+                `${config.universe.name}:datasets_properties`
+              ]"
+            >
               <DsfrAccordion
                 :title="property.libelle"
                 :expanded-id="property.id"
                 @expand="property.id = $event"
               >
-                <div >
+                <div>
                   {{ property.raison }}
                 </div>
                 <div class="button__wrapper">
@@ -391,11 +446,12 @@
                     v-if="property.uri"
                     class="fr-btn fr-btn--secondary inline-flex"
                     :href="property.uri"
-                  >Voir le catalogue source</a>
+                    >Voir le catalogue source</a
+                  >
                 </div>
               </DsfrAccordion>
             </li>
-            </DsfrAccordionsGroup>
+          </DsfrAccordionsGroup>
         </div>
         <DsfrButton
           type="button"
@@ -403,7 +459,7 @@
           label="Précédent"
           @click.prevent="validateAndMoveToStep(2)"
         />
-          <DsfrButton
+        <DsfrButton
           type="button"
           class="fr-mt-2w"
           label="Suivant"
@@ -413,7 +469,8 @@
       </div>
 
       <div v-show="currentStep === 4">
-        <h4>Informations du bouquet 
+        <h4>
+          Informations du bouquet
           <DsfrButton
             :icon-only="true"
             size="sm"
@@ -431,26 +488,30 @@
         <p v-html="selectedTheme" />
         <p><strong>Chantier</strong></p>
         <p v-html="selectedSubTheme" />
-        <hr/>
+        <hr />
 
         <h4>Description du bouquet</h4>
         <p><strong>Objectif du bouquet</strong></p>
         <p class="markdown__description" v-html="description" />
-        <hr/>
+        <hr />
 
-      <h4>Composition du bouquet</h4>
-      <div v-if="isDatasetPropertyEmpty">
-        <DsfrAccordionsGroup>
-          <li v-for="property in datasetProperty[`${config.universe.name}:datasets_properties`]">
-            <DsfrAccordion
-              :title="property.libelle"
-              :expanded-id="property.id"
-              @expand="property.id = $event"
+        <h4>Composition du bouquet</h4>
+        <div v-if="isDatasetPropertyEmpty">
+          <DsfrAccordionsGroup>
+            <li
+              v-for="property in datasetProperty[
+                `${config.universe.name}:datasets_properties`
+              ]"
             >
-              <div class="fr-mb-3w">
-                {{ property.raison }}
-              </div>
-              <div class="button__wrapper">
+              <DsfrAccordion
+                :title="property.libelle"
+                :expanded-id="property.id"
+                @expand="property.id = $event"
+              >
+                <div class="fr-mb-3w">
+                  {{ property.raison }}
+                </div>
+                <div class="button__wrapper">
                   <DsfrButton
                     icon="ri-delete-bin-line"
                     label="Retirer de la section"
@@ -461,23 +522,20 @@
                     v-if="property.uri"
                     class="fr-btn fr-btn--secondary inline-flex"
                     :href="property.uri"
-                  >Voir le catalogue source</a>
+                    >Voir le catalogue source</a
+                  >
                 </div>
-            </DsfrAccordion>
-          </li>
+              </DsfrAccordion>
+            </li>
           </DsfrAccordionsGroup>
-      </div>
-      <DsfrButton
+        </div>
+        <DsfrButton
           type="button"
           class="fr-mt-2w fr-mr-2w"
           label="Précédent"
           @click.prevent="validateAndMoveToStep(3)"
         />
-      <DsfrButton
-        type="submit"
-        class="fr-mt-2w"
-        label="Terminer"
-      />
+        <DsfrButton type="submit" class="fr-mt-2w" label="Terminer" />
       </div>
     </form>
   </div>

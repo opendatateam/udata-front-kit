@@ -39,7 +39,6 @@ onMounted(() => {
       .then((ds) => (datasets.value = ds))
   })
 })
-
 </script>
 
 <template>
@@ -50,7 +49,9 @@ onMounted(() => {
         <DsfrTag
           v-if="bouquet.extras"
           class="fr-ml-3w"
-          :label="bouquet.extras[`${config.universe.name}:informations`][0].theme"
+          :label="
+            bouquet.extras[`${config.universe.name}:informations`][0].theme
+          "
         />
       </div>
       <DsfrButton
@@ -64,10 +65,24 @@ onMounted(() => {
       <h5><strong>Objectif du bouquet</strong></h5>
       <div v-html="description" />
 
-      <div v-if="bouquet.extras && bouquet.extras[`${config.universe.name}:datasets_properties`]">
-        <h5>Données utilisées ({{ bouquet.extras[`${config.universe.name}:datasets_properties`].length }})</h5>
+      <div
+        v-if="
+          bouquet.extras &&
+          bouquet.extras[`${config.universe.name}:datasets_properties`]
+        "
+      >
+        <h5>
+          Données utilisées ({{
+            bouquet.extras[`${config.universe.name}:datasets_properties`]
+              .length
+          }})
+        </h5>
         <DsfrAccordionsGroup>
-          <li v-for="property in bouquet.extras[`${config.universe.name}:datasets_properties`]">
+          <li
+            v-for="property in bouquet.extras[
+              `${config.universe.name}:datasets_properties`
+            ]"
+          >
             <DsfrAccordion
               :title="property.libelle"
               :expanded-id="property.id"
@@ -80,7 +95,8 @@ onMounted(() => {
                 v-if="property.uri"
                 class="fr-btn fr-btn--secondary block fr-ml-auto"
                 :href="property.uri"
-              >Voir le catalogue source</a>
+                >Voir le catalogue source</a
+              >
             </DsfrAccordion>
           </li>
         </DsfrAccordionsGroup>
