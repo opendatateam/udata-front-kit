@@ -27,7 +27,7 @@
   })
   const isEditDesc = ref(false)
   const errorMessage = ref()
-  const selectedTheme = ref(null);
+  const selectedTheme = ref(null)
   const selectedSubTheme = ref(null)
   const currentStep = ref(1)
   const libelle = ref()
@@ -66,7 +66,7 @@
   const description = computed(() => descriptionFromMarkdown(form))
 
   const onThemeChanged = () => {
-    selectedSubTheme.value = null; 
+    selectedSubTheme.value = null
   }
 
   const search = async (query) => {
@@ -88,7 +88,7 @@
   let nextId = 0
   const addDatasetPropertysToExtras = async () => {
     const setUri = urlData.value ? urlData.value : null
-
+    
     if (libelle.value && raison.value) {
       if (selectedDataset.value.id) {
         const dataset = await datasetStore.load(selectedDataset.value.id)
@@ -127,10 +127,10 @@
 
   const onDeleteDataset = (datasetId) => {
     if (datasetProperty.value && datasetProperty.value[`${config.universe.name}:datasets_properties`]) {
-    datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperty.value[`${config.universe.name}:datasets_properties`].filter((d) => d.id !== datasetId);
+    datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperty.value[`${config.universe.name}:datasets_properties`].filter((d) => d.id !== datasetId)
   }
   if (loadedBouquet.value.extras) {
-    delete loadedBouquet.value.extras[`${config.universe.name}:${datasetId}:description`];
+    delete loadedBouquet.value.extras[`${config.universe.name}:${datasetId}:description`]
   }
   }
 
@@ -190,10 +190,20 @@
   onMounted(() => {
     if (!isCreate) {
       topicStore.load(route.params.bid).then((data) => {
-        // TODO: AFFICHER AU EDIT LES VALEURS INFORMATIONS, LIBELLE & RAISON
+        const datasetProperties = data.extras[`${config.universe.name}:datasets_properties`].map(property => {
+          return {
+            datagouvId: property.datagouvId,
+            libelle: property.libelle,
+            raison: property.raison,
+            uri: property.uri
+          }
+        })
         loadedBouquet.value = data
         form.value.name = data.name
         form.value.description = data.description
+        selectedTheme.value = data.extras[`${config.universe.name}:informations`][0].theme
+        selectedSubTheme.value = data.extras[`${config.universe.name}:informations`][0].subtheme
+        datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperties
         loadDatasets(data.datasets.map(d => d.id), data)
       })
     }
@@ -469,7 +479,6 @@
         label="Terminer"
       />
       </div>
-      
     </form>
   </div>
 </template>
