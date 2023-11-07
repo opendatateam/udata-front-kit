@@ -18,9 +18,7 @@ instance.interceptors.request.use(
         Authorization: `Bearer ${store.$state.token}`
       }
     }
-    // FIXME: figure out another way to unset proxy for tests
-    // axios will use env proxy settings when set and we don't want proxy to interfere in tests
-    config.proxy = false
+
     return config
   },
   (error) => Promise.reject(error)
@@ -38,11 +36,13 @@ export default class DatagouvfrAPI {
   base_url = `${config.datagouvfr.base_url}/api`
   version = '1'
   endpoint = ''
+  http_client = instance
 
-  constructor({ baseUrl, version, endpoint }) {
+  constructor({ baseUrl, version, endpoint, http_client }) {
     this.base_url = baseUrl || this.base_url
     this.version = version || this.version
     this.endpoint = endpoint || this.endpoint
+    this.http_client = http_client || this.http_client
   }
 
   url() {
@@ -58,7 +58,7 @@ export default class DatagouvfrAPI {
    * @returns
    */
   async request(url, method = 'get', params = {}) {
-    const res = await instance[method](url, params)
+    const res = await this.http_client[method](url, params)
     return res.data
   }
 
@@ -158,7 +158,7 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async delete(entityId) {
-    return instance.delete(`${this.url()}/${entityId}/`).then(
+    return this.http_client.delete(`${this.url()}/${entityId}/`).then(
       (response) => response,
       (error) => this.#handleError(error)
     )

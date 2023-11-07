@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { createPinia, setActivePinia } from 'pinia'
@@ -36,7 +37,13 @@ beforeAll(() => {
 beforeEach(async (context) => {
   // FIXME: remove once API dependencies to stores are cleaned up
   setActivePinia(createPinia())
-  context.client = new DatagouvfrAPI({ baseUrl, endpoint })
+  const http_client = axios.create()
+  http_client.defaults.proxy = false
+  context.client = new DatagouvfrAPI({
+    baseUrl,
+    endpoint,
+    http_client
+  })
 })
 
 afterEach(() => {
