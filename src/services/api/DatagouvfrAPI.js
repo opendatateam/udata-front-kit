@@ -36,13 +36,13 @@ export default class DatagouvfrAPI {
   base_url = `${config.datagouvfr.base_url}/api`
   version = '1'
   endpoint = ''
-  http_client = instance
+  httpClient = instance
 
-  constructor({ baseUrl, version, endpoint, http_client }) {
+  constructor({ baseUrl, version, endpoint, httpClient }) {
     this.base_url = baseUrl || this.base_url
     this.version = version || this.version
     this.endpoint = endpoint || this.endpoint
-    this.http_client = http_client || this.http_client
+    this.httpClient = httpClient || this.httpClient
   }
 
   url() {
@@ -58,7 +58,7 @@ export default class DatagouvfrAPI {
    * @returns
    */
   async request(url, method = 'get', params = {}) {
-    const res = await this.http_client[method](url, params)
+    const res = await this.httpClient[method](url, params)
     return res.data
   }
 
@@ -158,7 +158,7 @@ export default class DatagouvfrAPI {
    * @returns {Promise}
    */
   async delete(entityId) {
-    return this.http_client.delete(`${this.url()}/${entityId}/`).then(
+    return this.httpClient.delete(`${this.url()}/${entityId}/`).then(
       (response) => response,
       (error) => this.#handleError(error)
     )

@@ -37,12 +37,12 @@ beforeAll(() => {
 beforeEach(async (context) => {
   // FIXME: remove once API dependencies to stores are cleaned up
   setActivePinia(createPinia())
-  const http_client = axios.create()
-  http_client.defaults.proxy = false
+  const httpClient = axios.create()
+  httpClient.defaults.proxy = false
   context.client = new DatagouvfrAPI({
     baseUrl,
     endpoint,
-    http_client
+    httpClient
   })
 })
 
