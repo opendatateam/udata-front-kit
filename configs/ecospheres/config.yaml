@@ -55,7 +55,7 @@ website:
   # display settings
   organizations_list_page_size: 9
 
-# List of themes and sub themes for step 2
+# For step 2 of bouquet creation
 themes:
   - name: Produire
     subthemes:
@@ -85,10 +85,10 @@ themes:
     subthemes:
       - name: Consommation plus durable (ménages)
       - name: Numérique responsable
-      - name: Achats durables (de l’État, des collectivités et des entreprises)
+      - name: Achats durables (de l'État, des collectivités et des entreprises)
   - name: Chantiers transverses
     subthemes:
-      - name: Le financement qui permet de définir des trajectoires d’investissement crédibles et cohérentes
+      - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
       - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
       - name: La transition des filières avec la gestion des emplois, des formations et des compétences
       - name: Les données environnementales
