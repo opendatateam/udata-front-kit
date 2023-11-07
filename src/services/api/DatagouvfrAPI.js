@@ -39,6 +39,12 @@ export default class DatagouvfrAPI {
   version = '1'
   endpoint = ''
 
+  constructor({ baseUrl, version, endpoint }) {
+    this.base_url = baseUrl || this.base_url
+    this.version = version || this.version
+    this.endpoint = endpoint || this.endpoint
+  }
+
   url() {
     return `${this.base_url}/${this.version}/${this.endpoint}`
   }
@@ -145,11 +151,21 @@ export default class DatagouvfrAPI {
     )
   }
 
-  // Mauko's function to test
-  async delete(entity_id) {
-    return instance.delete(`${this.url()}/${entity_id}/`).then(
+  /**
+   * Delete an entity (DELETE)
+   *
+   * @param {string} entityId
+   * @returns {Promise}
+   */
+  async delete(entityId) {
+    return instance.delete(`${this.url()}/${entityId}/`).then(
       (response) => response,
-      (error) => error.response
+      (error) => this.#handleError(error)
     )
+  }
+
+  #handleError({ response, message }) {
+    if (response) return { status: response.status }
+    return { message }
   }
 }
