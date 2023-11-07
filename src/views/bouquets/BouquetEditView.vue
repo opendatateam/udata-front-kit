@@ -384,8 +384,8 @@
                   <DsfrButton
                     icon="ri-delete-bin-line"
                     label="Retirer de la section"
-                    @click.stop.prevent="onDeleteDataset(property.id)"
                     class="fr-mr-2w"
+                    @click.stop.prevent="onDeleteDataset(property.id)"
                   />
                   <a
                     v-if="property.uri"
@@ -454,8 +454,8 @@
                   <DsfrButton
                     icon="ri-delete-bin-line"
                     label="Retirer de la section"
-                    @click.stop.prevent="onDeleteDataset(property.id)"
                     class="fr-mr-2w"
+                    @click.stop.prevent="onDeleteDataset(property.id)"
                   />
                   <a
                     v-if="property.uri"

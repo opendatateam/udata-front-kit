@@ -23,7 +23,7 @@ const goToCreate = () => {
   router.push({ name: 'bouquet_add' })
 }
 
-const canEdit = computed(() => {
+const canCreate = computed(() => {
   return (
     userStore.isAdmin() ||
     (userStore.$state.isLoggedIn &&
@@ -54,7 +54,7 @@ onMounted(() => {
         />
       </div>
       <DsfrButton
-        v-if="canEdit"
+        v-if="canCreate"
         label="Créer un bouquet"
         icon="ri-pencil-line"
         @click="goToCreate"
