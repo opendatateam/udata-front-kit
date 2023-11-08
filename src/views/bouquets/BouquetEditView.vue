@@ -40,6 +40,7 @@ const steps = [
   'Composition du bouquet de données"',
   'Récapitulatif'
 ]
+const getDataProperty = `${config.universe.name}:datasets_properties`
 
 const themes = computed(() => config.themes)
 
@@ -60,8 +61,8 @@ const subThemeOptions = computed(() => {
   }))
 })
 
-const isDatasetPropertyEmpty = computed(() => {
-  return datasetProperty.value[`${config.universe.name}:datasets_properties`]
+const isDataProperty = computed(() => {
+  return datasetProperty.value[getDataProperty]
     .length
 })
 
@@ -143,13 +144,13 @@ const addDatasetPropertysToExtras = async () => {
 const onDeleteDataset = (datasetId) => {
   if (
     datasetProperty.value &&
-    datasetProperty.value[`${config.universe.name}:datasets_properties`]
+    datasetProperty.value[getDataProperty]
   ) {
-    datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperty.value[`${config.universe.name}:datasets_properties`].filter((d) => d.id !== datasetId)
+    datasetProperty.value[getDataProperty] = datasetProperty.value[getDataProperty].filter((d) => d.id !== datasetId)
   }
 
   if (loadedBouquet.value && loadedBouquet.value.extras) {
-    delete loadedBouquet.value.extras[`${config.universe.name}:datasets_properties`];
+    delete loadedBouquet.value.extras[getDataProperty];
   }
 }
 
@@ -221,7 +222,7 @@ onMounted(() => {
   if (!isCreate) {
     topicStore.load(route.params.bid).then((data) => {
       const datasetProperties = data.extras[
-        `${config.universe.name}:datasets_properties`
+        getDataProperty
       ].map((property) => {
         return {
           id: property.id,
@@ -237,7 +238,7 @@ onMounted(() => {
         data.extras[`${config.universe.name}:informations`][0].theme
       selectedSubTheme.value =
         data.extras[`${config.universe.name}:informations`][0].subtheme
-      datasetProperty.value[`${config.universe.name}:datasets_properties`] =
+      datasetProperty.value[getDataProperty] =
         datasetProperties
       loadDatasets(
         data.datasets.map((d) => d.id),
@@ -407,11 +408,11 @@ onMounted(() => {
 
         <h3>
           Données sélectionnées
-          <span v-if="isDatasetPropertyEmpty"
-            >({{ isDatasetPropertyEmpty }})</span
+          <span v-if="isDataProperty"
+            >({{ isDataProperty }})</span
           >
         </h3>
-        <div v-if="!isDatasetPropertyEmpty" class="no-dataset fr-py-2 fr-px-3w">
+        <div v-if="!isDataProperty" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
         <div v-else>
@@ -457,7 +458,7 @@ onMounted(() => {
           type="button"
           class="fr-mt-2w"
           label="Suivant"
-          :disabled="!isDatasetPropertyEmpty"
+          :disabled="!isDataProperty"
           @click.prevent="validateAndMoveToStep(4)"
         />
       </div>
@@ -490,7 +491,7 @@ onMounted(() => {
         <hr />
 
         <h4>Composition du bouquet</h4>
-        <div v-if="isDatasetPropertyEmpty">
+        <div v-if="isDataProperty">
           <DsfrAccordionsGroup>
             <li
               v-for="property in datasetProperty[
