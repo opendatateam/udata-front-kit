@@ -7,10 +7,19 @@
             v-model:topicName="name"
             v-model:topicDescription="description"
         />
+
         <h1>Step 3 : Contenu </h1>
         <TopicContentFieldGroup 
           v-model:current-datasets="datasets"
         />         
+
+        <h1>Step 4 : Recap </h1>
+        <TopicFormRecap
+          :name="name"
+          :description="description"
+          :datasets="datasets"
+        />
+        
         <DsfrButton
           type="submit"
           label="Ajouter le bouquet"
