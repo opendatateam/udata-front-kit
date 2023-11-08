@@ -154,7 +154,7 @@ export default class DatagouvfrAPI {
   /**
    * Delete an entity (DELETE)
    *
-   * @param {string} entityId
+   * @param {string} entityId - A UUID entity id
    * @returns {Promise}
    */
   async delete(entityId) {

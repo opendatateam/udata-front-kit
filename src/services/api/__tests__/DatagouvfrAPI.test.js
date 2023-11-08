@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { createPinia, setActivePinia } from 'pinia'
 import { HttpResponse, http } from 'msw'
 import { setupServer } from 'msw/node'
+import { createPinia, setActivePinia } from 'pinia'
+import { v4 as uuid } from 'uuid'
 import {
   afterAll,
   afterEach,
@@ -14,18 +15,22 @@ import {
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 const baseUrl = 'https://example.lol'
-const endpoint = 'asdf1234'
+const version = '1234'
+const endpoint = 'asdf'
+const noContent = uuid()
+const notFound = uuid()
+const networkError = uuid()
 
 const server = setupServer(
-  http.delete(`${baseUrl}/1/${endpoint}/1`, () => {
+  http.delete(`${baseUrl}/${version}/${endpoint}/${noContent}/`, () => {
     return new HttpResponse(null, { status: 204 })
   }),
 
-  http.delete(`${baseUrl}/1/${endpoint}/2/`, () => {
+  http.delete(`${baseUrl}/${version}/${endpoint}/${notFound}`, () => {
     return new HttpResponse(null, { status: 404 })
   }),
 
-  http.delete(`${baseUrl}/1/${endpoint}/3/`, () => {
+  http.delete(`${baseUrl}/${version}/${endpoint}/${networkError}/`, () => {
     return HttpResponse.error()
   })
 )
@@ -41,6 +46,7 @@ beforeEach(async (context) => {
   httpClient.defaults.proxy = false
   context.client = new DatagouvfrAPI({
     baseUrl,
+    version,
     endpoint,
     httpClient
   })
@@ -54,17 +60,18 @@ afterAll(() => {
   server.close()
 })
 
-test('delete when 2XX', async ({ client }) => {
-  const { status } = await client.delete(1)
+test('delete when 204', async ({ client }) => {
+  const { status } = await client.delete(noContent)
   expect(status).toEqual(204)
 })
 
-test('delete when 4XX', async ({ client }) => {
-  const { status } = await client.delete(2)
+test('delete when 404', async ({ client }) => {
+  console.log(notFound)
+  const { status } = await client.delete(notFound)
   expect(status).toEqual(404)
 })
 
 test('delete something else', async ({ client }) => {
-  const { message } = await client.delete(3)
+  const { message } = await client.delete(networkError)
   expect(message).toMatch(/network error/i)
 })
