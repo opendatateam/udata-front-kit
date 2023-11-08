@@ -7,6 +7,10 @@
             v-model:topicName="name"
             v-model:topicDescription="description"
         />
+        <h1>Step 3 : Contenu </h1>
+        <TopicContentFieldGroup 
+          v-model:current-datasets="datasets"
+        />         
         <DsfrButton
           type="submit"
           label="Ajouter le bouquet"
@@ -18,11 +22,16 @@
   
 <script lang="ts">
   import TopicPropertiesFieldGroup from "./TopicPropertiesFieldGroup.vue";
+  import TopicContentFieldGroup from "./TopicContentFieldGroup.vue";
+  import TopicFormRecap from "./TopicFormRecap.vue";
+  import type { DatasetItem } from "../../../model";
   
   export default {
     name: "TopicForm",
     components: {
       TopicPropertiesFieldGroup: TopicPropertiesFieldGroup,
+      TopicContentFieldGroup: TopicContentFieldGroup,
+      TopicFormRecap: TopicFormRecap,
     },
     methods: {
       handleSubmit() {
@@ -39,11 +48,16 @@
         type: String,
         default: ''
       },
+      currentDatasets: {
+        type: Array<DatasetItem>,
+        default: [],
+      },
     },
     data() {
       return {
         name: this.currentName,
         description: this.currentDescription,
+        datasets: this.currentDatasets
       }
     },
   };
