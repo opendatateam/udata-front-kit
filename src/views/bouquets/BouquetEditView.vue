@@ -163,7 +163,6 @@ const validateAndMoveToStep = (newStep) => {
 }
 
 const onSubmit = async () => {
-  let res
   const data = {
     ...form.value
   }
@@ -176,6 +175,8 @@ const onSubmit = async () => {
     ]
   }
 
+  let res
+  
   if (isCreate) {
     res = await topicStore.create({
       ...data,
