@@ -145,15 +145,11 @@ const onDeleteDataset = (datasetId) => {
     datasetProperty.value &&
     datasetProperty.value[`${config.universe.name}:datasets_properties`]
   ) {
-    datasetProperty.value[`${config.universe.name}:datasets_properties`] =
-      datasetProperty.value[
-        `${config.universe.name}:datasets_properties`
-      ].filter((d) => d.id !== datasetId)
+    datasetProperty.value[`${config.universe.name}:datasets_properties`] = datasetProperty.value[`${config.universe.name}:datasets_properties`].filter((d) => d.id !== datasetId)
   }
-  if (loadedBouquet.value.extras) {
-    delete loadedBouquet.value.extras[
-      `${config.universe.name}:${datasetId}:description`
-    ]
+
+  if (loadedBouquet.value && loadedBouquet.value.extras) {
+    delete loadedBouquet.value.extras[`${config.universe.name}:datasets_properties`];
   }
 }
 
