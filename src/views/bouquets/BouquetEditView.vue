@@ -37,7 +37,7 @@ const urlData = ref()
 const steps = [
   'Description du bouquet de données',
   'Informations du bouquet de données',
-  'Composition du bouquet de données"',
+  'Composition du bouquet de données',
   'Récapitulatif'
 ]
 const getDataProperty = `${config.universe.name}:datasets_properties`
@@ -176,7 +176,7 @@ const onSubmit = async () => {
   }
 
   let res
-  
+
   if (isCreate) {
     res = await topicStore.create({
       ...data,
@@ -466,7 +466,7 @@ onMounted(() => {
 
       <div v-show="currentStep === 4">
         <h4>
-          Informations du bouquet
+          Description du bouquet de données
           <DsfrButton
             :icon-only="true"
             size="sm"
@@ -478,20 +478,30 @@ onMounted(() => {
           />
         </h4>
 
-        <p><strong>Sujet du bouquet</strong></p>
+        <p class="fr-mb-0"><strong>Sujet du bouquet</strong></p>
         <p v-html="form.name" />
-        <p><strong>Thématique</strong></p>
-        <p v-html="selectedTheme" />
-        <p><strong>Chantier</strong></p>
-        <p v-html="selectedSubTheme" />
-        <hr />
-
-        <h4>Description du bouquet</h4>
-        <p><strong>Objectif du bouquet</strong></p>
+        <p class="fr-mb-0"><strong>Objectif du bouquet</strong></p>
         <p class="markdown__description" v-html="description" />
         <hr />
 
-        <h4>Composition du bouquet</h4>
+        <h4>Information du bouquet de données
+          <DsfrButton
+            :icon-only="true"
+            size="sm"
+            icon="ri-pencil-line"
+            title="Editer Étape 1"
+            :tertiary="true"
+            :no-outline="true"
+            @click.prevent="validateAndMoveToStep(2)"
+          />
+        </h4>
+        <p class="fr-mb-0"><strong>Thématique</strong></p>
+        <p v-html="selectedTheme" />
+        <p class="fr-mb-0"><strong>Chantier</strong></p>
+        <p v-html="selectedSubTheme" />
+        <hr />
+
+        <h4>Composition du bouquet de données ({{ isDataProperty }})</h4>
         <div v-if="isDataProperty">
           <DsfrAccordionsGroup>
             <li
