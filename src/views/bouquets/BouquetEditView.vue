@@ -40,7 +40,7 @@ const steps = [
   'Composition du bouquet de données',
   'Récapitulatif'
 ]
-const getDataProperty = `${config.universe.name}:datasets_properties`
+const datasetsProperties = `${config.universe.name}:datasets_properties`
 
 const themes = computed(() => config.themes)
 
