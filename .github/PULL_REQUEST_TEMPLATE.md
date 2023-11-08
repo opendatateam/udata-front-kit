@@ -14,10 +14,8 @@ _Choisir le titre qui correspond le mieux à votre proposition de modification:_
 
 ### Job story
 
-### Job story
-
 > Titre : _titre de l'issue._
-> Utilisateur : _l'utilisateur à qui s'en beneficierait._
+> Utilisateur : _l'utilisateur qui en bénéficierait._
 >
 > Quand je _ma situation_,
 > je veux _ma motivation_,
