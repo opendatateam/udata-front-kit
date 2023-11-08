@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { http, HttpResponse } from 'msw'
-import { setupServer } from 'msw/node'
 import { createPinia, setActivePinia } from 'pinia'
+import { HttpResponse, http } from 'msw'
+import { setupServer } from 'msw/node'
 import {
-  afterEach,
   afterAll,
+  afterEach,
   beforeAll,
   beforeEach,
   expect,
