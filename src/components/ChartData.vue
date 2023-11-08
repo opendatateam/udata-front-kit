@@ -20,11 +20,7 @@ const chartData = props.chartData
           justify-content: center;
         "
       >
-        <div
-          v-for="chart in item.charts"
-          :key="chart.url"
-          style="width: 40%"
-        >
+        <div v-for="chart in item.charts" :key="chart.url" style="width: 40%">
           <LineChart :dataurl="chart.url" />
         </div>
       </div>

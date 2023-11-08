@@ -18,6 +18,7 @@ instance.interceptors.request.use(
         Authorization: `Bearer ${store.$state.token}`
       }
     }
+
     return config
   },
   (error) => Promise.reject(error)
@@ -35,6 +36,14 @@ export default class DatagouvfrAPI {
   base_url = `${config.datagouvfr.base_url}/api`
   version = '1'
   endpoint = ''
+  httpClient = instance
+
+  constructor({ baseUrl, version, endpoint, httpClient }) {
+    this.base_url = baseUrl || this.base_url
+    this.version = version || this.version
+    this.endpoint = endpoint || this.endpoint
+    this.httpClient = httpClient || this.httpClient
+  }
 
   url() {
     return `${this.base_url}/${this.version}/${this.endpoint}`
@@ -49,7 +58,7 @@ export default class DatagouvfrAPI {
    * @returns
    */
   async request(url, method = 'get', params = {}) {
-    const res = await instance[method](url, params)
+    const res = await this.httpClient[method](url, params)
     return res.data
   }
 
@@ -140,5 +149,23 @@ export default class DatagouvfrAPI {
       'put',
       data
     )
+  }
+
+  /**
+   * Delete an entity (DELETE)
+   *
+   * @param {string} entityId - A UUID entity id
+   * @returns {Promise}
+   */
+  async delete(entityId) {
+    return this.httpClient.delete(`${this.url()}/${entityId}/`).then(
+      (response) => response,
+      (error) => this.#handleError(error)
+    )
+  }
+
+  #handleError({ response, message }) {
+    if (response) return { status: response.status }
+    return { message }
   }
 }
