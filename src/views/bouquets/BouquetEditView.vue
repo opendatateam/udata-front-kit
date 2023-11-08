@@ -37,7 +37,7 @@ const urlData = ref()
 const steps = [
   'Description du bouquet de données',
   'Informations du bouquet de données',
-  'Composition du bouquet',
+  'Composition du bouquet de données"',
   'Récapitulatif'
 ]
 
@@ -117,7 +117,6 @@ const addDatasetPropertysToExtras = async () => {
           libelle: libelle.value,
           raison: raison.value,
           uri: getUrl,
-          datagouvId: selectedDataset.value.id,
           id: selectedDataset.value.id
         })
       }
@@ -127,7 +126,6 @@ const addDatasetPropertysToExtras = async () => {
           libelle: libelle.value,
           raison: raison.value,
           uri: setUri,
-          datagouvId: null,
           id: `__internal__${nextId++}`
         }
       )
@@ -230,7 +228,7 @@ onMounted(() => {
         `${config.universe.name}:datasets_properties`
       ].map((property) => {
         return {
-          datagouvId: property.datagouvId,
+          id: property.id,
           libelle: property.libelle,
           raison: property.raison,
           uri: property.uri
