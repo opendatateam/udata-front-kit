@@ -8,6 +8,7 @@ import config from '@/config'
 import HomeButtons from '../components/HomeButtons.vue'
 import HomeCharts from '../components/HomeCharts.vue'
 import HomeTopics from '../components/HomeTopics.vue'
+import TopicForm from '@/components/forms/topic/TopicForm.vue'
 
 const router = useRouter()
 const query = ref('')
@@ -32,6 +33,7 @@ const showTopicChart = config.website.show_topic_charts
 <template>
   <div class="fr-container fr-mt-8w fr-mb-16w">
     <h1>{{ homepageTitle }}</h1>
+    <TopicForm/>
     <div class="es__hero fr-mt-4w fr-mb-4w">
       <span v-html="markdown.render(homepageSubTitle)" />
     </div>
