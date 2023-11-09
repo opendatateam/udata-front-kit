@@ -30,12 +30,7 @@ export const useTopicStore = defineStore('topic', {
      * @returns {Array}
      */
     filter(topics) {
-      return topics.filter((topic) => {
-        return (
-          topic.tags.includes(config.universe.name) &&
-          topic.id !== config.universe.topic_id
-        )
-      })
+      return topics.filter((topic) => topic.id !== config.universe.topic_id)
     },
     /**
      * Load universe related topics from API
@@ -44,7 +39,7 @@ export const useTopicStore = defineStore('topic', {
      */
     async loadTopicsForUniverse() {
       if (this.data.length > 0) return this.data
-      let response = await topicsAPI._list()
+      let response = await topicsAPI._list({ page_size: 100, tag: config.universe.name })
       this.data = this.filter(response.data)
       while (response.next_page) {
         response = await topicsAPI.request(response.next_page)

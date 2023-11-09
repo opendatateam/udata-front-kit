@@ -107,19 +107,23 @@ export default class DatagouvfrAPI {
   /**
    * List entities
    *
+   * @param {object} [params]
    * @returns {Promise}
    */
-  async list() {
-    return await this.makeRequestAndHandleResponse(`${this.url()}/`)
+  async list(params = {}) {
+    const qs = new URLSearchParams(params).toString()
+    return await this.makeRequestAndHandleResponse(`${this.url()}/?${qs}`)
   }
 
   /**
    * List entities, without wrapper
    *
+   * @param {object} [params]
    * @returns {Promise}
    */
-  async _list() {
-    return await this.request(`${this.url()}/`)
+  async _list(params = {}) {
+    const qs = new URLSearchParams(params).toString()
+    return await this.request(`${this.url()}/?${qs}`)
   }
 
   /**
