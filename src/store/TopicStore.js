@@ -20,7 +20,7 @@ export const useTopicStore = defineStore('topic', {
       this.data = []
       for (const topic of topics) {
         const res = await topicsAPI.get(topic.id);
-        this.data.push(res)
+        this.data.push(res);
       }
     },
     /**

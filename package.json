@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.vue,.json --fix --ignore-path .gitignore",
-    "format": "prettier ./src --write",
+    "format": "prettier ./src",
     "prepare": "husky install"
   },
   "dependencies": {
