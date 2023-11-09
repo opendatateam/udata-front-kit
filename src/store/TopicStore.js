@@ -40,7 +40,10 @@ export const useTopicStore = defineStore('topic', {
      */
     async loadTopicsForUniverse() {
       if (this.data.length > 0) return this.data
-      let response = await topicsAPIv2._list({ page_size: 100, tag: config.universe.name })
+      let response = await topicsAPIv2._list({
+        page_size: 100,
+        tag: config.universe.name
+      })
       this.data = this.filter(response.data)
       while (response.next_page) {
         response = await topicsAPIv2.request(response.next_page)

@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -8,7 +9,6 @@ import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown } from '../../utils'
-import { useLoading } from 'vue-loading-overlay'
 
 const route = useRoute()
 const router = useRouter()
@@ -37,12 +37,10 @@ onMounted(() => {
   const loader = loading.show()
   store.load(route.params.bid).then((res) => {
     bouquet.value = res
-    datasetStore
-      .loadMultiple(res.datasets)
-      .then((ds) => {
-        datasets.value = ds
-        loader.hide()
-      })
+    datasetStore.loadMultiple(res.datasets).then((ds) => {
+      datasets.value = ds
+      loader.hide()
+    })
   })
 })
 </script>
