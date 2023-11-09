@@ -60,7 +60,7 @@ const subThemeOptions = computed(() => {
   }))
 })
 
-const DataPropertiesLength = computed(() => {
+const dataPropertiesLength = computed(() => {
   return datasetsProperties.value[datasetsPropertiesKey]
     .length
 })
@@ -406,11 +406,11 @@ onMounted(() => {
 
         <h3>
           Données sélectionnées
-          <span v-if="DataPropertiesLength"
-            >({{ DataPropertiesLength }})</span
+          <span v-if="dataPropertiesLength"
+            >({{ dataPropertiesLength }})</span
           >
         </h3>
-        <div v-if="!DataPropertiesLength" class="no-dataset fr-py-2 fr-px-3w">
+        <div v-if="!dataPropertiesLength" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
         <div v-else>
@@ -453,7 +453,7 @@ onMounted(() => {
           type="button"
           class="fr-mt-2w"
           label="Suivant"
-          :disabled="!DataPropertiesLength"
+          :disabled="!dataPropertiesLength"
           @click.prevent="validateAndMoveToStep(4)"
         />
       </div>
@@ -495,7 +495,7 @@ onMounted(() => {
         <p v-html="selectedSubTheme" />
         <hr />
 
-        <h4>Composition du bouquet de données ({{ DataPropertiesLength }})
+        <h4>Composition du bouquet de données ({{ dataPropertiesLength }})
           <DsfrButton
             :icon-only="true"
             size="sm"
@@ -506,7 +506,7 @@ onMounted(() => {
             @click.prevent="validateAndMoveToStep(3)"
           />
         </h4>
-        <div v-if="DataPropertiesLength">
+        <div v-if="dataPropertiesLength">
           <DsfrAccordionsGroup>
             <li v-for="datasetProperties in datasetsProperties[datasetsPropertiesKey]">
               <DsfrAccordion
