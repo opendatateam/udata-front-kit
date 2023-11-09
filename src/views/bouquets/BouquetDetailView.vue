@@ -95,7 +95,7 @@ onMounted(() => {
                 class="fr-btn fr-btn--secondary block fr-ml-auto"
                 :href="datasetProperties.uri"
                 target="_blank"
-                >Accéder à la donnée</a
+                >Accéder au catalogue</a
               >
             </DsfrAccordion>
           </li>

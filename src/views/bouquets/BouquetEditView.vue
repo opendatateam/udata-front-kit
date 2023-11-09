@@ -436,7 +436,7 @@ onMounted(() => {
                     class="fr-btn fr-btn--secondary inline-flex"
                     :href="datasetProperties.uri"
                     target="_blank"
-                    >Voir le catalogue source</a
+                    >Accéder au catalogue</a
                   >
                 </div>
               </DsfrAccordion>
@@ -523,7 +523,7 @@ onMounted(() => {
                     class="fr-btn fr-btn--secondary inline-flex"
                     :href="datasetProperties.uri"
                     target="_blank"
-                    >Accéder à la donnée</a
+                    >Accéder au catalogue</a
                   >
                 </div>
               </DsfrAccordion>
