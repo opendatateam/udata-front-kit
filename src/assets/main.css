@@ -1,3 +1,25 @@
 .multiselect {
   --ms-bg: var(--background-contrast-grey);
 }
+
+.fr-col-sm-45 {
+  flex: 0 0 45%;
+  max-width: 45%;
+  width: 45%;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-baseline {
+  align-items: baseline;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.block {
+  display: block;
+}

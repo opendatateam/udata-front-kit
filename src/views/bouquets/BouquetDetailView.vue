@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
 
-import Tile from '../../components/Tile.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
@@ -20,11 +19,11 @@ const datasets = ref([])
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
-const goToEdit = () => {
-  router.push({ name: 'bouquet_edit', params: { bid: bouquet.value.slug } })
+const goToCreate = () => {
+  router.push({ name: 'bouquet_add' })
 }
 
-const canEdit = computed(() => {
+const canCreate = computed(() => {
   return (
     userStore.isAdmin() ||
     (userStore.$state.isLoggedIn &&
@@ -44,31 +43,87 @@ onMounted(() => {
 
 <template>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
-    <h1>{{ bouquet.name }}</h1>
-    <div v-html="description"></div>
-
-    <h2 class="fr-mt-2w">Jeux de données</h2>
-    <div v-if="!datasets.length">Pas de jeu de données dans ce bouquet.</div>
-    <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-      <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
-        <Tile
-          :link="`/datasets/${d.slug}`"
-          :title="d.title"
-          :description="d.description"
-          :img="d.organization.logo"
-          :is-markdown="true"
-          :notice="
-            bouquet.extras[`${config.universe.name}:${d.id}:description`]
+    <div class="bouquet__header fr-mb-4w">
+      <div class="bouquet__header__left">
+        <h3 class="fr-m-0">{{ bouquet.name }}</h3>
+        <DsfrTag
+          v-if="bouquet.extras"
+          class="fr-ml-3w"
+          :label="
+            bouquet.extras[`${config.universe.name}:informations`][0].subtheme
           "
         />
-      </li>
-    </ul>
-    <DsfrButton
-      v-if="canEdit"
-      class="fr-mt-4w"
-      label="Modifier le bouquet"
-      icon="ri-pencil-line"
-      @click="goToEdit"
-    />
+      </div>
+      <DsfrButton
+        v-if="canCreate"
+        label="Créer un bouquet"
+        icon="ri-pencil-line"
+        @click="goToCreate"
+      />
+    </div>
+    <div class="bouquet__container fr-p-6w">
+      <h5><strong>Objectif du bouquet</strong></h5>
+      <div v-html="description" />
+      <div
+        v-if="
+          bouquet.extras &&
+          bouquet.extras[`${config.universe.name}:datasets_properties`]
+        "
+      >
+        <h5>
+          Données utilisées ({{
+            bouquet.extras[`${config.universe.name}:datasets_properties`]
+              .length
+          }})
+        </h5>
+        <DsfrAccordionsGroup>
+          <li
+            v-for="datasetProperties in bouquet.extras[
+              `${config.universe.name}:datasets_properties`
+            ]"
+          >
+            <DsfrAccordion
+              :title="datasetProperties.libelle"
+              :expanded-id="datasetProperties.id"
+              @expand="datasetProperties.id = $event"
+            >
+              <div class="fr-mb-3w">
+                {{ datasetProperties.raison }}
+              </div>
+              <a
+                v-if="datasetProperties.uri"
+                class="fr-btn fr-btn--secondary block fr-ml-auto"
+                :href="datasetProperties.uri"
+                target="_blank"
+                >Accéder au catalogue</a
+              >
+            </DsfrAccordion>
+          </li>
+        </DsfrAccordionsGroup>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.bouquet {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__left {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__container {
+    border: 1px solid var(--border-default-grey);
+
+    :deep a {
+      color: var(--text-action-high-blue-france);
+    }
+  }
+}
+</style>
