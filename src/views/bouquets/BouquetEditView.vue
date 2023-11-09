@@ -35,11 +35,39 @@ const currentStep = ref(1)
 const libelle = ref()
 const raison = ref()
 const urlData = ref()
+const selectedOption = ref()
 const steps = [
   'Description du bouquet de données',
   'Informations du bouquet de données',
   'Composition du bouquet de données',
   'Récapitulatif'
+]
+const radios = [{
+    label:'Valeur 1',choice:'1',hint:'Description 1',name:'Choix'
+  },
+  {
+    label:'Valeur 2',choice:'2',hint:'Description 2',name:'Choix'
+  },
+  {
+    label:'Valeur 3',choice:'3',name:'Choix'
+  }
+]
+
+const options = [
+  {
+    "label": "Valeur 1",
+    "value": 1,
+    "hint": "Description 1"
+  },
+  {
+    "label": "Valeur 2",
+    "value": 2,
+    "hint": "Description 2"
+  },
+  {
+    "label": "Valeur 3",
+    "value": 3
+  }
 ]
 
 const themes = computed(() => config.themes)
@@ -254,7 +282,7 @@ onMounted(() => {
       </div>
     </div>
     <form @submit.prevent="onSubmit()">
-      <div v-show="currentStep === 1">
+      <!-- <div v-show="currentStep === 1">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-7">
             <div>
@@ -340,29 +368,83 @@ onMounted(() => {
           :disabled="!selectedSubTheme"
           @click.prevent="validateAndMoveToStep(3)"
         />
-      </div>
+      </div> -->
 
-      <div v-show="currentStep === 3">
-        <div class="fr-grid-row fr-mb-5w">
-          <div class="fr-col-12 fr-col-lg-7">
+      <div>
+        <h4>Ajouter une donnée</h4>
+        <div class="fr-grid-row">
+          <div class="fr-col-12 fr-col-lg-4">
             <DsfrInput
               v-model="libelle"
               class="fr-mb-3w"
-              label="Libellé de la donnée"
+              label="Titre de la donnée"
               :label-visible="true"
+            />
+          </div>
+        </div>
+        <div class="fr-grid-row fr-mb-5w">
+          <div class="fr-col-12 fr-col-lg-7">
+            <Tooltip
+              title="Description"
+              name="tooltip__objectif"
+              text="Pas encore de texte définitif"
+            />
+            <Tooltip
+              title="Utilisez du markdown pour mettre en forme votre texte"
+              name="tooltip__markdown"
+              text="Pas encore de texte définitif"
             />
             <DsfrInput
               v-model="raison"
               class="fr-mb-3w"
-              label="Raison d'utilisation dans ce bouquet*"
-              hint="Indiquer l'utilité de la donnée pour ce bouquet"
-              :label-visible="true"
               :is-textarea="true"
             />
           </div>
         </div>
-        <hr />
-        <div class="fr-grid-row align-center fr-mt-3w">
+
+        <p>Ajouter une donnée</p>
+        <input id="choiceOne" v-model="selectedOption" type="radio" value="1">
+        <label for="choiceOne" class="fr-label">Écosphères</label>
+        <DsfrInput
+          v-if="selectedOption === '1'"
+          v-model="urlData"
+          placeholder="Url vers le jeu de données souhaité"
+          :label-visible="true"
+          class="fr-mb-md-1w"
+        />
+
+        <input id="choiceTwo" v-model="selectedOption" type="radio"  value="2">
+        <label for="choiceTwo" class="fr-label">URL</label>
+
+        <Multiselect
+          v-if="selectedOption === '2'"
+          ref="selector"
+          v-model="selectedDataset.id"
+          no-options-text="Précisez ou élargissez votre recherche"
+          placeholder="Rechercher une donnée dans Ecosphères"
+          name="select-datasets"
+          :clear-on-select="true"
+          :filter-results="false"
+          :min-chars="1"
+          :resolve-on-load="false"
+          :delay="0"
+          :searchable="true"
+          :options="search"
+        />
+
+        <input id="choiceThree" v-model="selectedOption" type="radio"  value="3">
+        <label for="choiceThree" class="fr-label">Je n'ai pas trouvé la donnée</label>
+
+        <input id="choiceFour" v-model="selectedOption" type="radio"  value="4">
+        <label for="choiceFour" class="fr-label">Je n'ai pas cherché la donnée</label>
+
+        <DsfrButton
+          label="Ajouter la donnée"
+          :secondary="true"
+          @click.prevent="addDatasetsPropertiesToExtras()"
+        />
+
+        <!-- <div class="fr-grid-row align-center fr-mt-3w">
           <div class="fr-col-12 fr-col-lg-5">
             <Multiselect
               ref="selector"
@@ -379,9 +461,9 @@ onMounted(() => {
               :options="search"
             />
           </div>
-        </div>
+        </div> -->
 
-        <h3 class="fr-mb-2w fr-mt-3w">
+        <!-- <h3 class="fr-mb-2w fr-mt-3w">
           Vous ne trouvez pas la donnée dans Écosphères ?
         </h3>
         <div class="fr-grid-row align-baseline fr-mb-4w">
@@ -401,12 +483,14 @@ onMounted(() => {
             />
           </div>
         </div>
-        <hr />
+        <hr /> -->
 
-        <h3>
-          Données sélectionnées
-          <span v-if="dataPropertiesLength">({{ dataPropertiesLength }})</span>
-        </h3>
+        <h4>
+          Composition du bouquet
+          <span v-if="dataPropertiesLength"
+            >({{ dataPropertiesLength }})</span
+          >
+        </h4>
         <div v-if="!dataPropertiesLength" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
