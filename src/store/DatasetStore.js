@@ -132,7 +132,7 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Load multiple datasets from API via a HATEOAS rel
      *
-     * @param {Object} rel - HATEOS rel for datasets
+     * @param {Object} rel - HATEOAS rel for datasets
      * @returns {Array<object>}
      */
     async loadMultiple(rel) {
@@ -147,10 +147,10 @@ export const useDatasetStore = defineStore('dataset', {
       return datasets
     },
     /**
-     * Load resources from the API via a HATEOS rel
+     * Load resources from the API via a HATEOAS rel
      *
      * @param {String} dataset_id
-     * @param {Object} rel - HATEOS rel for datasets
+     * @param {Object} rel - HATEOAS rel for datasets
      * @returns {Array<object>}
      */
     async loadResources(rel) {
