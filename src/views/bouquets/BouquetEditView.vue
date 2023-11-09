@@ -17,7 +17,7 @@ const router = useRouter()
 const route = useRoute()
 
 const isCreate = route.name === 'bouquet_add'
-const datasetProperties = `${config.universe.name}:datasets_properties`
+const datasetsPropertiesKey = `${config.universe.name}:datasets_properties`
 
 const form = ref({})
 const datasets = ref([])
@@ -25,7 +25,7 @@ const selectedDataset = ref({})
 const selector = ref(null)
 const loadedBouquet = ref({})
 const datasetsProperties = ref({
-  [datasetProperties]: []
+  [datasetsPropertiesKey]: []
 })
 const isEditDesc = ref(false)
 const errorMessage = ref()
@@ -61,8 +61,8 @@ const subThemeOptions = computed(() => {
   }))
 })
 
-const isDataProperty = computed(() => {
-  return datasetsProperties.value[datasetProperties]
+const isDataProperties = computed(() => {
+  return datasetsProperties.value[datasetsPropertiesKey]
     .length
 })
 
@@ -112,7 +112,7 @@ const addDatasetsPropertiesToExtras = async () => {
           ''
         )
 
-        datasetsProperties.value[datasetProperties].push({
+        datasetsProperties.value[datasetsPropertiesKey].push({
           libelle: libelle.value,
           raison: raison.value,
           uri: getUrl,
@@ -120,7 +120,7 @@ const addDatasetsPropertiesToExtras = async () => {
         })
       }
     } else {
-      datasetsProperties.value[datasetProperties].push(
+      datasetsProperties.value[datasetsPropertiesKey].push(
         {
           libelle: libelle.value,
           raison: raison.value,
@@ -142,13 +142,13 @@ const addDatasetsPropertiesToExtras = async () => {
 const onDeleteDataset = (datasetId) => {
   if (
     datasetsProperties.value &&
-    datasetsProperties.value[datasetProperties]
+    datasetsProperties.value[datasetsPropertiesKey]
   ) {
-    datasetsProperties.value[datasetProperties] = datasetsProperties.value[datasetProperties].filter((d) => d.id !== datasetId)
+    datasetsProperties.value[datasetsPropertiesKey] = datasetsProperties.value[datasetsPropertiesKey].filter((d) => d.id !== datasetId)
   }
 
   if (loadedBouquet.value && loadedBouquet.value.extras) {
-    delete loadedBouquet.value.extras[datasetProperties];
+    delete loadedBouquet.value.extras[datasetsPropertiesKey];
   }
 }
 
@@ -221,13 +221,13 @@ onMounted(() => {
   if (!isCreate) {
     topicStore.load(route.params.bid).then((data) => {
       const datasetsProperties = data.extras[
-        datasetProperties
-      ].map((property) => {
+        datasetsPropertiesKey
+      ].map((properties) => {
         return {
-          id: property.id,
-          libelle: property.libelle,
-          raison: property.raison,
-          uri: property.uri
+          id: properties.id,
+          libelle: properties.libelle,
+          raison: properties.raison,
+          uri: properties.uri
         }
       })
       loadedBouquet.value = data
@@ -237,7 +237,7 @@ onMounted(() => {
         data.extras[`${config.universe.name}:informations`][0].theme
       selectedSubTheme.value =
         data.extras[`${config.universe.name}:informations`][0].subtheme
-      datasetsProperties.value[datasetProperties] =
+      datasetsProperties.value[datasetsPropertiesKey] =
         datasetsProperties
       loadDatasets(
         data.datasets.map((d) => d.id),
@@ -407,39 +407,35 @@ onMounted(() => {
 
         <h3>
           Données sélectionnées
-          <span v-if="isDataProperty"
-            >({{ isDataProperty }})</span
+          <span v-if="isDataProperties"
+            >({{ isDataProperties }})</span
           >
         </h3>
-        <div v-if="!isDataProperty" class="no-dataset fr-py-2 fr-px-3w">
+        <div v-if="!isDataProperties" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
         <div v-else>
           <DsfrAccordionsGroup>
-            <li
-              v-for="property in datasetsProperties[
-                `${config.universe.name}:datasets_properties`
-              ]"
-            >
+            <li v-for="properties in datasetsProperties[datasetsPropertiesKey]">
               <DsfrAccordion
-                :title="property.libelle"
-                :expanded-id="property.id"
-                @expand="property.id = $event"
+                :title="properties.libelle"
+                :expanded-id="properties.id"
+                @expand="properties.id = $event"
               >
                 <div>
-                  {{ property.raison }}
+                  {{ properties.raison }}
                 </div>
                 <div class="button__wrapper">
                   <DsfrButton
                     icon="ri-delete-bin-line"
                     label="Retirer de la section"
                     class="fr-mr-2w"
-                    @click.stop.prevent="onDeleteDataset(property.id)"
+                    @click.stop.prevent="onDeleteDataset(properties.id)"
                   />
                   <a
-                    v-if="property.uri"
+                    v-if="properties.uri"
                     class="fr-btn fr-btn--secondary inline-flex"
-                    :href="property.uri"
+                    :href="properties.uri"
                     >Voir le catalogue source</a
                   >
                 </div>
@@ -457,7 +453,7 @@ onMounted(() => {
           type="button"
           class="fr-mt-2w"
           label="Suivant"
-          :disabled="!isDataProperty"
+          :disabled="!isDataProperties"
           @click.prevent="validateAndMoveToStep(4)"
         />
       </div>
@@ -499,7 +495,7 @@ onMounted(() => {
         <p v-html="selectedSubTheme" />
         <hr />
 
-        <h4>Composition du bouquet de données ({{ isDataProperty }})
+        <h4>Composition du bouquet de données ({{ isDataProperties }})
           <DsfrButton
             :icon-only="true"
             size="sm"
@@ -510,26 +506,22 @@ onMounted(() => {
             @click.prevent="validateAndMoveToStep(3)"
           />
         </h4>
-        <div v-if="isDataProperty">
+        <div v-if="isDataProperties">
           <DsfrAccordionsGroup>
-            <li
-              v-for="property in datasetsProperties[
-                `${config.universe.name}:datasets_properties`
-              ]"
-            >
+            <li v-for="properties in datasetsProperties[datasetsPropertiesKey]">
               <DsfrAccordion
-                :title="property.libelle"
-                :expanded-id="property.id"
-                @expand="property.id = $event"
+                :title="properties.libelle"
+                :expanded-id="properties.id"
+                @expand="properties.id = $event"
               >
                 <div class="fr-mb-3w">
-                  {{ property.raison }}
+                  {{ properties.raison }}
                 </div>
                 <div class="button__wrapper">
                   <a
-                    v-if="property.uri"
+                    v-if="properties.uri"
                     class="fr-btn fr-btn--secondary inline-flex"
-                    :href="property.uri"
+                    :href="properties.uri"
                     target="_blank"
                     >Accéder à la donnée</a
                   >
