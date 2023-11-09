@@ -97,14 +97,16 @@ export const useTopicStore = defineStore('topic', {
       return res
     },
     /**
-    * Delete an entity (DELETE)
-    *
-    * @param {string} entityId
-    * @returns {Promise}
-    */
+     * Delete an entity (DELETE)
+     *
+     * @param {string} entityId
+     * @returns {Promise}
+     */
     async delete(entityId) {
       return await this.makeRequestAndHandleResponse(
-      `${this.url()}/${entityId}/`,'delete')
+        `${this.url()}/${entityId}/`,
+        'delete'
+      )
     }
   }
 })
