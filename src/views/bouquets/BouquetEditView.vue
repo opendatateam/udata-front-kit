@@ -566,23 +566,25 @@ onMounted(() => {
   text-align: center;
 }
 
-:deep .tooltip {
-  &__objectif,
-  &__markdown {
-    display: block;
-  }
+:deep(*) {
+  .tooltip {
+    &__objectif,
+    &__markdown {
+      display: block;
+    }
 
-  &__objectif {
-    left: 2.5rem;
-  }
+    &__objectif {
+      left: 2.5rem;
+    }
 
-  &__markdown {
-    left: 46%;
+    &__markdown {
+      left: 46%;
+    }
   }
 }
 
 .markdown__description {
-  :deep a {
+  :deep(a) {
     color: var(--text-action-high-blue-france);
   }
 }

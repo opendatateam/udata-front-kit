@@ -121,7 +121,7 @@ onMounted(() => {
   &__container {
     border: 1px solid var(--border-default-grey);
 
-    :deep a {
+    :deep(a) {
       color: var(--text-action-high-blue-france);
     }
   }
