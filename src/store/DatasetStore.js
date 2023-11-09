@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import DatasetsAPI from '../services/api/resources/DatasetsAPI'
 
 const datasetsApi = new DatasetsAPI()
+const datasetsApiv2 = new DatasetsAPI({ version: 2 })
 
 /**
  * An organization oriented and paginated store for datasets
@@ -129,23 +130,37 @@ export const useDatasetStore = defineStore('dataset', {
       return this.addOrphan(dataset)
     },
     /**
-     * Load multiple datasets from store or API
+     * Load multiple datasets from API via a HATEOAS rel
      *
-     * @param {Array<string>} datasets_ids
+     * @param {Object} rel - HATEOS rel for datasets
      * @returns {Array<object>}
      */
-    async loadMultiple(datasets_ids) {
-      const datasets = []
-      for (const dataset_id of datasets_ids) {
-        const existing = this.get(dataset_id)
-        if (existing) {
-          datasets.push(existing)
-          continue
-        }
-        const dataset = await this.load(dataset_id)
-        datasets.push(dataset)
+    async loadMultiple(rel) {
+      let response = await datasetsApi.request(rel.href)
+      let datasets = response.data
+      this.addDatasets('orphan', response)
+      while (response.next_page) {
+        response = await datasetsApi.request(response.next_page)
+        datasets = [...datasets, ...response.data]
+        this.addDatasets('orphan', response)
       }
       return datasets
+    },
+    /**
+     * Load resources from the API via a HATEOS rel
+     *
+     * @param {String} dataset_id
+     * @param {Object} rel - HATEOS rel for datasets
+     * @returns {Array<object>}
+     */
+    async loadResources(rel) {
+      let response = await datasetsApiv2.request(rel.href)
+      let resources = response.data
+      while (response.next_page) {
+        response = await datasetsApiv2.request(response.next_page)
+        resources = [...resources, ...response.data]
+      }
+      return resources
     }
   }
 })

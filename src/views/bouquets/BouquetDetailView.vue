@@ -8,6 +8,7 @@ import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown } from '../../utils'
+import { useLoading } from 'vue-loading-overlay'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,6 +17,7 @@ const userStore = useUserStore()
 const datasetStore = useDatasetStore()
 const bouquet = ref({})
 const datasets = ref([])
+const loading = useLoading()
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
@@ -32,11 +34,15 @@ const canCreate = computed(() => {
 })
 
 onMounted(() => {
+  const loader = loading.show()
   store.load(route.params.bid).then((res) => {
     bouquet.value = res
     datasetStore
-      .loadMultiple(bouquet.value.datasets.map((d) => d.id))
-      .then((ds) => (datasets.value = ds))
+      .loadMultiple(res.datasets)
+      .then((ds) => {
+        datasets.value = ds
+        loader.hide()
+      })
   })
 })
 </script>

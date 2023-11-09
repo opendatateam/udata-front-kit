@@ -44,7 +44,12 @@ beforeEach(async (context) => {
   setActivePinia(createPinia())
   const httpClient = axios.create()
   httpClient.defaults.proxy = false
-  context.client = new DatagouvfrAPI(baseUrl, version, endpoint, httpClient)
+  context.client = new DatagouvfrAPI({
+    baseUrl,
+    version,
+    endpoint,
+    httpClient
+  })
 })
 
 afterEach(() => {

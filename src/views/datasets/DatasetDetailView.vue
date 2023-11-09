@@ -20,6 +20,7 @@ const discussionStore = useDiscussionStore()
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const discussionsPages = ref([])
 const reuses = ref([])
+const resources = ref([])
 const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
@@ -40,7 +41,7 @@ const formatFileSize = (fileSize) => {
 }
 
 const files = computed(() => {
-  return dataset.value?.resources?.map((resource) => {
+  return resources.value?.map((resource) => {
     return {
       title: resource.title || 'Fichier sans nom',
       format: resource.format,
@@ -83,11 +84,13 @@ const formatDate = (dateString) => {
 }
 
 // launch reuses and discussions fetch as soon as we have the technical id
-watchEffect(() => {
+watchEffect(async () => {
   if (!dataset.value.id) return
+  // fetch reuses
   reuseStore
     .loadReusesForDataset(dataset.value.id)
     .then((r) => (reuses.value = r))
+  // fetch discussions
   discussionStore
     .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
     .then((d) => {
@@ -97,6 +100,12 @@ watchEffect(() => {
           discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
       }
     })
+  // fetch ressources if need be
+  if (dataset.value.resources.rel) {
+    resources.value = await datasetStore.loadResources(dataset.value.resources)
+  } else {
+    resources.value = dataset.value.resources
+  }
 })
 </script>
 
@@ -132,6 +141,7 @@ watchEffect(() => {
     >
       <!-- Fichiers -->
       <DsfrTabContent
+        v-if="files"
         panel-id="tab-content-0"
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
