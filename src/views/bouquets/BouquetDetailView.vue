@@ -50,7 +50,7 @@ onMounted(() => {
           v-if="bouquet.extras"
           class="fr-ml-3w"
           :label="
-            bouquet.extras[`${config.universe.name}:informations`][0].theme
+            bouquet.extras[`${config.universe.name}:informations`][0].subtheme
           "
         />
       </div>
@@ -64,7 +64,6 @@ onMounted(() => {
     <div class="bouquet__container fr-p-6w">
       <h5><strong>Objectif du bouquet</strong></h5>
       <div v-html="description" />
-
       <div
         v-if="
           bouquet.extras &&
@@ -95,7 +94,8 @@ onMounted(() => {
                 v-if="property.uri"
                 class="fr-btn fr-btn--secondary block fr-ml-auto"
                 :href="property.uri"
-                >Voir le catalogue source</a
+                target="_blank"
+                >Accéder à la donnée</a
               >
             </DsfrAccordion>
           </li>
