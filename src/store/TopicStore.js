@@ -19,8 +19,8 @@ export const useTopicStore = defineStore('topic', {
     async loadTopicsFromList(topics) {
       this.data = []
       for (const topic of topics) {
-        const res = await topicsAPI.get(topic.id);
-        this.data.push(res);
+        const res = await topicsAPI.get(topic.id)
+        this.data.push(res)
       }
     },
     /**
@@ -86,13 +86,13 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Update a topic
      *
-     * @param {string} topic_id
+     * @param {string} topicId
      * @param {object} data
      * @returns {object}
      */
-    async update(topic_id, data) {
-      const res = await topicsAPI.update(topic_id, data)
-      const idx = this.data.findIndex((b) => b.id === topic_id)
+    async update(topicId, data) {
+      const res = await topicsAPI.update(topicId, data)
+      const idx = this.data.findIndex((b) => b.id === topicId)
       this.data[idx] = res
       return res
     },
