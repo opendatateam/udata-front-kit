@@ -32,16 +32,18 @@ const errorMessage = ref()
 const selectedTheme = ref(null)
 const selectedSubTheme = ref(null)
 const currentStep = ref(1)
-const libelle = ref()
-const raison = ref()
+const title = ref()
+const description = ref()
 const urlData = ref()
-const selectedOption = ref()
+const DatasetRetrievalOption = ref()
 const steps = [
   'Description du bouquet de données',
   'Informations du bouquet de données',
   'Composition du bouquet de données',
   'Récapitulatif'
 ]
+const missingData = 'Donnée manquante'
+const notFoundData = 'Donnée non disponible'
 
 const themes = computed(() => config.themes)
 
@@ -66,10 +68,14 @@ const dataPropertiesLength = computed(() => {
   return datasetsProperties.value[datasetsPropertiesKey].length
 })
 
-const description = computed(() => descriptionFromMarkdown(form))
+const markdownDescription = computed(() => descriptionFromMarkdown(form))
 
 const onThemeChanged = () => {
   selectedSubTheme.value = null
+}
+
+const goToPreviousPage = () => {
+  router.go(-1)
 }
 
 const search = async (query) => {
@@ -94,63 +100,63 @@ const extrasFromDatasets = () => {
 }
 
 let nextId = 0
+
+const availabilityEnum = {
+  MISSING: 'missing',
+  NOT_AVAILABLE: 'not available',
+  ECO_AVAILABLE: 'available',
+  URL_AVAILABLE: 'url available'
+}
+
 const addDatasetsPropertiesToExtras = async () => {
   const setUri = urlData.value ? urlData.value : null
-  if (libelle.value && raison.value) {
+  if (title.value && description.value) {
     if (selectedDataset.value.id) {
       const dataset = await datasetStore.load(selectedDataset.value.id)
-
       if (dataset) {
-        const getUrl = datasets.value.reduce(
-          (acc, url) => acc + url.dataset.page,
-          ''
-        )
-
-        datasetsProperties.value[datasetsPropertiesKey].push({
-          titre: libelle.value,
-          description: raison.value,
-          uri: getUrl,
-          id: selectedDataset.value.id,
-          available: true,
-          tag: ''
-        })
-
         datasets.value.push({
           dataset,
           description: selectedDataset.value.description
         })
+
+        datasetsProperties.value[datasetsPropertiesKey].push({
+          title: title.value,
+          description: description.value,
+          uri: dataset.page,
+          id: selectedDataset.value.id,
+          available: availabilityEnum.ECO_AVAILABLE
+        })
       }
     } else {
-      const checkSelectedOption = () => {
-        if (selectedOption.value === '3') {
-          return 'Donnée non disponible'
-        } else if (selectedOption.value === '4') {
-          return 'Donnée non manquante'
-        }
-        return ''
+      let availabilityLabel
+
+      switch (DatasetRetrievalOption.value) {
+        case availabilityEnum.MISSING:
+          availabilityLabel = availabilityEnum.MISSING
+          break
+        case availabilityEnum.NOT_AVAILABLE:
+          availabilityLabel = availabilityEnum.NOT_AVAILABLE
+          break
+        default:
+          availabilityLabel = availabilityEnum.URL_AVAILABLE
+          break
       }
 
       datasetsProperties.value[datasetsPropertiesKey].push({
-        titre: libelle.value,
-        description: raison.value,
+        title: title.value,
+        description: description.value,
         uri: setUri,
         id: `__internal__${nextId++}`,
-        available:
-          setUri !== null
-            ? true
-            : selectedOption.value === '3' || selectedOption.value === '4'
-            ? false
-            : null,
-        tag: checkSelectedOption()
+        available: availabilityLabel
       })
     }
   }
 
-  libelle.value = ''
-  raison.value = ''
+  title.value = ''
+  description.value = ''
   urlData.value = ''
   selectedDataset.value = {}
-  selectedOption.value = ''
+  DatasetRetrievalOption.value = ''
   isEditDesc.value = false
 }
 
@@ -236,10 +242,10 @@ const loadDatasets = async (datasetIds, bouquet) => {
   }
 }
 
-watch(selectedOption, (newValue) => {
-  if (newValue === '1') {
+watch(DatasetRetrievalOption, (newValue) => {
+  if (newValue === availabilityEnum.URL_AVAILABLE) {
     urlData.value = ''
-  } else if (newValue === '2') {
+  } else if (newValue === availabilityEnum.ECO_AVAILABLE) {
     selectedDataset.value.id = null
   }
 })
@@ -247,11 +253,11 @@ watch(selectedOption, (newValue) => {
 onMounted(() => {
   if (!isCreate) {
     topicStore.load(route.params.bid).then((data) => {
-      const datasetsProperties = data.extras[datasetsPropertiesKey].map(
+      const datasetProperties = data.extras[datasetsPropertiesKey].map(
         (datasetProperties) => {
           return {
             id: datasetProperties.id,
-            titre: datasetProperties.titre,
+            title: datasetProperties.title,
             description: datasetProperties.description,
             uri: datasetProperties.uri
           }
@@ -264,7 +270,7 @@ onMounted(() => {
         data.extras[`${config.universe.name}:informations`][0].theme
       selectedSubTheme.value =
         data.extras[`${config.universe.name}:informations`][0].subtheme
-      datasetsProperties.value[datasetsPropertiesKey] = datasetsProperties
+      datasetsProperties.value[datasetsPropertiesKey] = datasetProperties
       loadDatasets(
         data.datasets.map((d) => d.id),
         data
@@ -282,7 +288,7 @@ onMounted(() => {
       </div>
     </div>
     <form @submit.prevent="onSubmit()">
-      <div v-show="currentStep === 1">
+      <div v-show="currentStep === 1" class="step1">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-7">
             <div>
@@ -319,18 +325,26 @@ onMounted(() => {
                 :is-textarea="true"
               />
             </div>
+            <div class="fit fr-mt-3w fr-ml-auto">
+              <DsfrButton
+                type="button"
+                class="fr-mt-2w fr-mr-2w"
+                label="Précédent"
+                @click.prevent="goToPreviousPage"
+              />
+              <DsfrButton
+                type="button"
+                class="fr-mt-2w"
+                label="Suivant"
+                :disabled="!form.name || !form.description"
+                @click.prevent="validateAndMoveToStep(2)"
+              />
+            </div>
           </div>
         </div>
-        <DsfrButton
-          type="button"
-          class="fr-mt-2w"
-          label="Suivant"
-          :disabled="!form.name || !form.description"
-          @click.prevent="validateAndMoveToStep(2)"
-        />
       </div>
 
-      <div v-show="currentStep === 2">
+      <div v-show="currentStep === 2" class="step2">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-8">
             <div class="fr-grid-row justify-between">
@@ -353,29 +367,32 @@ onMounted(() => {
                 />
               </div>
             </div>
+            <div class="fit fr-mt-3w fr-ml-auto">
+              <DsfrButton
+                type="button"
+                class="fr-mt-2w fr-mr-2w"
+                :secondary="true"
+                label="Précédent"
+                @click.prevent="validateAndMoveToStep(1)"
+              />
+              <DsfrButton
+                type="button"
+                class="fr-mt-2w"
+                label="Suivant"
+                :disabled="!selectedSubTheme"
+                @click.prevent="validateAndMoveToStep(3)"
+              />
+            </div>
           </div>
         </div>
-        <DsfrButton
-          type="button"
-          class="fr-mt-2w fr-mr-2w"
-          label="Précédent"
-          @click.prevent="validateAndMoveToStep(1)"
-        />
-        <DsfrButton
-          type="button"
-          class="fr-mt-2w"
-          label="Suivant"
-          :disabled="!selectedSubTheme"
-          @click.prevent="validateAndMoveToStep(3)"
-        />
       </div>
 
-      <div v-show="currentStep === 3">
+      <div v-show="currentStep === 3" class="step3">
         <h4>Ajouter une donnée</h4>
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-4">
             <DsfrInput
-              v-model="libelle"
+              v-model="title"
               class="fr-mb-3w"
               label="Titre de la donnée"
               :label-visible="true"
@@ -386,34 +403,42 @@ onMounted(() => {
           <div class="fr-col-12 fr-col-lg-7">
             <Tooltip
               title="Description"
-              name="tooltip__objectif"
+              name="tooltip__description"
               text="Pas encore de texte définitif"
             />
             <Tooltip
               title="Utilisez du markdown pour mettre en forme votre texte"
-              name="tooltip__markdown"
+              name="tooltip__sub-description"
               text="Pas encore de texte définitif"
             />
-            <DsfrInput v-model="raison" class="fr-mb-3w" :is-textarea="true" />
+            <DsfrInput
+              v-model="description"
+              class="fr-mb-3w"
+              :is-textarea="true"
+            />
           </div>
         </div>
 
         <p><strong>Retrouver la donnée via</strong></p>
-        <h5>Retrouver la donnée via</h5>
         <div class="fr-grid-row fr-mb-3w">
           <div class="fr-col-12">
             <fieldset class="fr-fieldset">
               <div class="fr-fieldset__content" role="radiogroup">
+                {{ availabilityEnum.ECO_AVAILABLE }} --
+                {{ availabilityEnum.URL_AVAILABLE }}
                 <DsfrRadioButton
-                  v-model="selectedOption"
-                  value="1"
+                  v-model="DatasetRetrievalOption"
+                  :value="availabilityEnum.ECO_AVAILABLE"
                   label="Écosphères"
                   name="addData"
                 />
                 <div class="fr-grid-row">
                   <div class="fr-col-6">
                     <Multiselect
-                      v-if="selectedOption === '1'"
+                      v-if="
+                        DatasetRetrievalOption ===
+                        availabilityEnum.ECO_AVAILABLE
+                      "
                       ref="selector"
                       v-model="selectedDataset.id"
                       no-options-text="Précisez ou élargissez votre recherche"
@@ -430,15 +455,18 @@ onMounted(() => {
                   </div>
                 </div>
                 <DsfrRadioButton
-                  v-model="selectedOption"
-                  value="2"
+                  v-model="DatasetRetrievalOption"
+                  :value="availabilityEnum.URL_AVAILABLE"
                   label="URL"
                   name="addData"
                 />
                 <div class="fr-grid-row">
                   <div class="fr-col-4">
                     <DsfrInput
-                      v-if="selectedOption === '2'"
+                      v-if="
+                        DatasetRetrievalOption ===
+                        availabilityEnum.URL_AVAILABLE
+                      "
                       v-model="urlData"
                       placeholder="Url vers le jeu de données souhaité"
                       :label-visible="true"
@@ -447,14 +475,14 @@ onMounted(() => {
                   </div>
                 </div>
                 <DsfrRadioButton
-                  v-model="selectedOption"
-                  value="3"
+                  v-model="DatasetRetrievalOption"
+                  :value="availabilityEnum.MISSING"
                   label="Je n'ai pas trouvé la donnée"
                   name="addData"
                 />
                 <DsfrRadioButton
-                  v-model="selectedOption"
-                  value="4"
+                  v-model="DatasetRetrievalOption"
+                  :value="availabilityEnum.NOT_AVAILABLE"
                   label="Je n'ai pas cherché la donnée"
                   name="addData"
                 />
@@ -484,14 +512,26 @@ onMounted(() => {
               ]"
             >
               <DsfrAccordion
-                :title="datasetProperties.titre"
+                :title="datasetProperties.title"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
                 <DsfrTag
-                  v-if="datasetProperties.tag"
+                  v-if="
+                    datasetProperties.available !==
+                      availabilityEnum.URL_AVAILABLE &&
+                    datasetProperties.available !==
+                      availabilityEnum.ECO_AVAILABLE
+                  "
                   class="fr-mb-2w uppercase bold"
-                  :label="datasetProperties.tag"
+                  :label="`${
+                    datasetProperties.available ===
+                    availabilityEnum.NOT_AVAILABLE
+                      ? missingData
+                      : datasetProperties.available === availabilityEnum.MISSING
+                      ? notFoundData
+                      : null
+                  }`"
                 />
                 <div>
                   {{ datasetProperties.description }}
@@ -503,8 +543,21 @@ onMounted(() => {
                     class="fr-mr-2w"
                     @click.stop.prevent="onDeleteDataset(datasetProperties.id)"
                   />
+
                   <a
-                    v-if="datasetProperties.uri"
+                    v-if="
+                      datasetProperties.available !==
+                        availabilityEnum.URL_AVAILABLE &&
+                      datasetProperties.available !==
+                        availabilityEnum.ECO_AVAILABLE
+                    "
+                    class="fr-btn fr-btn--secondary inline-flex"
+                    :href="`mailto:${config.website.contact_email}`"
+                  >
+                    Aidez-nous à trouver la donnée</a
+                  >
+                  <a
+                    v-else
                     class="fr-btn fr-btn--secondary inline-flex"
                     :href="datasetProperties.uri"
                     target="_blank"
@@ -515,22 +568,25 @@ onMounted(() => {
             </li>
           </DsfrAccordionsGroup>
         </div>
-        <DsfrButton
-          type="button"
-          class="fr-mt-2w fr-mr-2w"
-          label="Précédent"
-          @click.prevent="validateAndMoveToStep(2)"
-        />
-        <DsfrButton
-          type="button"
-          class="fr-mt-2w"
-          label="Suivant"
-          :disabled="!dataPropertiesLength"
-          @click.prevent="validateAndMoveToStep(4)"
-        />
+        <div class="fit fr-mt-3w fr-ml-auto">
+          <DsfrButton
+            type="button"
+            class="fr-mt-2w fr-mr-2w"
+            :secondary="true"
+            label="Précédent"
+            @click.prevent="validateAndMoveToStep(2)"
+          />
+          <DsfrButton
+            type="button"
+            class="fr-mt-2w"
+            label="Suivant"
+            :disabled="!dataPropertiesLength"
+            @click.prevent="validateAndMoveToStep(4)"
+          />
+        </div>
       </div>
 
-      <div v-show="currentStep === 4">
+      <div v-show="currentStep === 4" class="step4">
         <h4>
           Description du bouquet de données
           <DsfrButton
@@ -547,7 +603,7 @@ onMounted(() => {
         <p class="fr-mb-0"><strong>Sujet du bouquet</strong></p>
         <p v-html="form.name" />
         <p class="fr-mb-0"><strong>Objectif du bouquet</strong></p>
-        <p class="markdown__description" v-html="description" />
+        <p class="markdown__description" v-html="markdownDescription" />
         <hr />
 
         <h4>
@@ -588,21 +644,45 @@ onMounted(() => {
               ]"
             >
               <DsfrAccordion
-                :title="datasetProperties.titre"
+                :title="datasetProperties.title"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
                 <DsfrTag
-                  v-if="datasetProperties.tag"
+                  v-if="
+                    datasetProperties.available !==
+                      availabilityEnum.URL_AVAILABLE &&
+                    datasetProperties.available !==
+                      availabilityEnum.ECO_AVAILABLE
+                  "
                   class="fr-mb-2w uppercase bold"
-                  :label="datasetProperties.tag"
+                  :label="`${
+                    datasetProperties.available ===
+                    availabilityEnum.NOT_AVAILABLE
+                      ? 'Donnée non disponible'
+                      : datasetProperties.available === availabilityEnum.MISSING
+                      ? 'Donnée manquante'
+                      : null
+                  }`"
                 />
                 <div class="fr-mb-3w">
                   {{ datasetProperties.description }}
                 </div>
                 <div class="button__wrapper">
                   <a
-                    v-if="datasetProperties.uri"
+                    v-if="
+                      datasetProperties.available !==
+                        availabilityEnum.URL_AVAILABLE &&
+                      datasetProperties.available !==
+                        availabilityEnum.ECO_AVAILABLE
+                    "
+                    class="fr-btn fr-btn--secondary inline-flex"
+                    :href="`mailto:${config.website.contact_email}`"
+                  >
+                    Aidez-nous à trouver la donnée</a
+                  >
+                  <a
+                    v-else
                     class="fr-btn fr-btn--secondary inline-flex"
                     :href="datasetProperties.uri"
                     target="_blank"
@@ -613,12 +693,20 @@ onMounted(() => {
             </li>
           </DsfrAccordionsGroup>
         </div>
-
-        <DsfrButton
-          type="submit"
-          class="block fr-mt-2w fr-ml-auto"
-          label="Publier"
-        />
+        <div class="fit fr-mt-3w fr-ml-auto">
+          <DsfrButton
+            type="button"
+            class="fr-mt-2w fr-mr-2w"
+            :secondary="true"
+            label="Précédent"
+            @click.prevent="validateAndMoveToStep(3)"
+          />
+          <DsfrButton
+            type="submit"
+            class="block fr-mt-2w fr-ml-auto"
+            label="Publier"
+          />
+        </div>
       </div>
     </form>
   </div>
@@ -643,18 +731,39 @@ onMounted(() => {
 }
 
 :deep(*) {
-  .tooltip {
-    &__objectif,
-    &__markdown {
-      display: block;
-    }
+  .step1 {
+    .tooltip {
+      &__objectif,
+      &__markdown {
+        display: block;
+        top: -12.5rem;
+      }
 
-    &__objectif {
-      left: 2.5rem;
-    }
+      &__objectif {
+        left: 2.5rem;
+      }
 
-    &__markdown {
-      left: 46%;
+      &__markdown {
+        left: 46%;
+      }
+    }
+  }
+
+  .step3 {
+    .tooltip {
+      &__description,
+      &__sub-description {
+        display: block;
+        top: -5rem;
+      }
+
+      &__description {
+        left: -1.8rem;
+      }
+
+      &__sub-description {
+        left: 46%;
+      }
     }
   }
 }
