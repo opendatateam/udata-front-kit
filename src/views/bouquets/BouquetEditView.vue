@@ -222,12 +222,12 @@ onMounted(() => {
     topicStore.load(route.params.bid).then((data) => {
       const datasetsProperties = data.extras[
         datasetsPropertiesKey
-      ].map((properties) => {
+      ].map((datasetProperties) => {
         return {
-          id: properties.id,
-          libelle: properties.libelle,
-          raison: properties.raison,
-          uri: properties.uri
+          id: datasetProperties.id,
+          libelle: datasetProperties.libelle,
+          raison: datasetProperties.raison,
+          uri: datasetProperties.uri
         }
       })
       loadedBouquet.value = data
@@ -416,26 +416,27 @@ onMounted(() => {
         </div>
         <div v-else>
           <DsfrAccordionsGroup>
-            <li v-for="properties in datasetsProperties[datasetsPropertiesKey]">
+            <li v-for="datasetProperties in datasetsProperties[datasetsPropertiesKey]">
               <DsfrAccordion
-                :title="properties.libelle"
-                :expanded-id="properties.id"
-                @expand="properties.id = $event"
+                :title="datasetProperties.libelle"
+                :expanded-id="datasetProperties.id"
+                @expand="datasetProperties.id = $event"
               >
                 <div>
-                  {{ properties.raison }}
+                  {{ datasetProperties.raison }}
                 </div>
                 <div class="button__wrapper">
                   <DsfrButton
                     icon="ri-delete-bin-line"
                     label="Retirer de la section"
                     class="fr-mr-2w"
-                    @click.stop.prevent="onDeleteDataset(properties.id)"
+                    @click.stop.prevent="onDeleteDataset(datasetProperties.id)"
                   />
                   <a
-                    v-if="properties.uri"
+                    v-if="datasetProperties.uri"
                     class="fr-btn fr-btn--secondary inline-flex"
-                    :href="properties.uri"
+                    :href="datasetProperties.uri"
+                    target="_blank"
                     >Voir le catalogue source</a
                   >
                 </div>
@@ -508,20 +509,20 @@ onMounted(() => {
         </h4>
         <div v-if="isDataProperties">
           <DsfrAccordionsGroup>
-            <li v-for="properties in datasetsProperties[datasetsPropertiesKey]">
+            <li v-for="datasetProperties in datasetsProperties[datasetsPropertiesKey]">
               <DsfrAccordion
-                :title="properties.libelle"
-                :expanded-id="properties.id"
-                @expand="properties.id = $event"
+                :title="datasetProperties.libelle"
+                :expanded-id="datasetProperties.id"
+                @expand="datasetProperties.id = $event"
               >
                 <div class="fr-mb-3w">
-                  {{ properties.raison }}
+                  {{ datasetProperties.raison }}
                 </div>
                 <div class="button__wrapper">
                   <a
-                    v-if="properties.uri"
+                    v-if="datasetProperties.uri"
                     class="fr-btn fr-btn--secondary inline-flex"
-                    :href="properties.uri"
+                    :href="datasetProperties.uri"
                     target="_blank"
                     >Accéder à la donnée</a
                   >

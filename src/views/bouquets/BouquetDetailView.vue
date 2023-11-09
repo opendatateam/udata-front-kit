@@ -78,22 +78,22 @@ onMounted(() => {
         </h5>
         <DsfrAccordionsGroup>
           <li
-            v-for="property in bouquet.extras[
+            v-for="datasetProperties in bouquet.extras[
               `${config.universe.name}:datasets_properties`
             ]"
           >
             <DsfrAccordion
-              :title="property.libelle"
-              :expanded-id="property.id"
-              @expand="property.id = $event"
+              :title="datasetProperties.libelle"
+              :expanded-id="datasetProperties.id"
+              @expand="datasetProperties.id = $event"
             >
               <div class="fr-mb-3w">
-                {{ property.raison }}
+                {{ datasetProperties.raison }}
               </div>
               <a
-                v-if="property.uri"
+                v-if="datasetProperties.uri"
                 class="fr-btn fr-btn--secondary block fr-ml-auto"
-                :href="property.uri"
+                :href="datasetProperties.uri"
                 target="_blank"
                 >Accéder à la donnée</a
               >
