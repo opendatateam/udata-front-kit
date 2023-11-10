@@ -86,25 +86,27 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Update a topic
      *
-     * @param {string} topic_id
+     * @param {string} topicId
      * @param {object} data
      * @returns {object}
      */
-    async update(topic_id, data) {
-      const res = await topicsAPI.update(topic_id, data)
-      const idx = this.data.findIndex((b) => b.id === topic_id)
+    async update(topicId, data) {
+      const res = await topicsAPI.update(topicId, data)
+      const idx = this.data.findIndex((b) => b.id === topicId)
       this.data[idx] = res
       return res
     },
     /**
-    * Delete an entity (DELETE)
-    *
-    * @param {string} entityId
-    * @returns {Promise}
-    */
+     * Delete an entity (DELETE)
+     *
+     * @param {string} entityId
+     * @returns {Promise}
+     */
     async delete(entityId) {
       return await this.makeRequestAndHandleResponse(
-      `${this.url()}/${entityId}/`,'delete')
+        `${this.url()}/${entityId}/`,
+        'delete'
+      )
     }
   }
 })

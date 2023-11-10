@@ -25,7 +25,8 @@ const selectedDataset = ref({})
 const selector = ref(null)
 const loadedBouquet = ref({})
 const datasetsProperties = ref({
-  [datasetsPropertiesKey]: []})
+  [datasetsPropertiesKey]: []
+})
 const isEditDesc = ref(false)
 const errorMessage = ref()
 const selectedTheme = ref(null)
@@ -61,8 +62,7 @@ const subThemeOptions = computed(() => {
 })
 
 const dataPropertiesLength = computed(() => {
-  return datasetsProperties.value[datasetsPropertiesKey]
-    .length
+  return datasetsProperties.value[datasetsPropertiesKey].length
 })
 
 const description = computed(() => descriptionFromMarkdown(form))
@@ -119,14 +119,12 @@ const addDatasetsPropertiesToExtras = async () => {
         })
       }
     } else {
-      datasetsProperties.value[datasetsPropertiesKey].push(
-        {
-          libelle: libelle.value,
-          raison: raison.value,
-          uri: setUri,
-          id: `__internal__${nextId++}`
-        }
-      )
+      datasetsProperties.value[datasetsPropertiesKey].push({
+        libelle: libelle.value,
+        raison: raison.value,
+        uri: setUri,
+        id: `__internal__${nextId++}`
+      })
     }
   }
 
@@ -143,11 +141,13 @@ const onDeleteDataset = (datasetId) => {
     datasetsProperties.value &&
     datasetsProperties.value[datasetsPropertiesKey]
   ) {
-    datasetsProperties.value[datasetsPropertiesKey] = datasetsProperties.value[datasetsPropertiesKey].filter((d) => d.id !== datasetId)
+    datasetsProperties.value[datasetsPropertiesKey] = datasetsProperties.value[
+      datasetsPropertiesKey
+    ].filter((d) => d.id !== datasetId)
   }
 
   if (loadedBouquet.value && loadedBouquet.value.extras) {
-    delete loadedBouquet.value.extras[datasetsPropertiesKey];
+    delete loadedBouquet.value.extras[datasetsPropertiesKey]
   }
 }
 
@@ -219,16 +219,16 @@ const loadDatasets = async (datasetIds, bouquet) => {
 onMounted(() => {
   if (!isCreate) {
     topicStore.load(route.params.bid).then((data) => {
-      const datasetsProperties = data.extras[
-        datasetsPropertiesKey
-      ].map((datasetProperties) => {
-        return {
-          id: datasetProperties.id,
-          libelle: datasetProperties.libelle,
-          raison: datasetProperties.raison,
-          uri: datasetProperties.uri
+      const datasetsProperties = data.extras[datasetsPropertiesKey].map(
+        (datasetProperties) => {
+          return {
+            id: datasetProperties.id,
+            libelle: datasetProperties.libelle,
+            raison: datasetProperties.raison,
+            uri: datasetProperties.uri
+          }
         }
-      })
+      )
       loadedBouquet.value = data
       form.value.name = data.name
       form.value.description = data.description
@@ -236,8 +236,7 @@ onMounted(() => {
         data.extras[`${config.universe.name}:informations`][0].theme
       selectedSubTheme.value =
         data.extras[`${config.universe.name}:informations`][0].subtheme
-      datasetsProperties.value[datasetsPropertiesKey] =
-        datasetsProperties
+      datasetsProperties.value[datasetsPropertiesKey] = datasetsProperties
       loadDatasets(
         data.datasets.map((d) => d.id),
         data
@@ -406,16 +405,18 @@ onMounted(() => {
 
         <h3>
           Données sélectionnées
-          <span v-if="dataPropertiesLength"
-            >({{ dataPropertiesLength }})</span
-          >
+          <span v-if="dataPropertiesLength">({{ dataPropertiesLength }})</span>
         </h3>
         <div v-if="!dataPropertiesLength" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
         </div>
         <div v-else>
           <DsfrAccordionsGroup>
-            <li v-for="datasetProperties in datasetsProperties[datasetsPropertiesKey]">
+            <li
+              v-for="datasetProperties in datasetsProperties[
+                datasetsPropertiesKey
+              ]"
+            >
               <DsfrAccordion
                 :title="datasetProperties.libelle"
                 :expanded-id="datasetProperties.id"
@@ -478,7 +479,8 @@ onMounted(() => {
         <p class="markdown__description" v-html="description" />
         <hr />
 
-        <h4>Information du bouquet de données
+        <h4>
+          Information du bouquet de données
           <DsfrButton
             :icon-only="true"
             size="sm"
@@ -495,7 +497,8 @@ onMounted(() => {
         <p v-html="selectedSubTheme" />
         <hr />
 
-        <h4>Composition du bouquet de données ({{ dataPropertiesLength }})
+        <h4>
+          Composition du bouquet de données ({{ dataPropertiesLength }})
           <DsfrButton
             :icon-only="true"
             size="sm"
@@ -508,7 +511,11 @@ onMounted(() => {
         </h4>
         <div v-if="dataPropertiesLength">
           <DsfrAccordionsGroup>
-            <li v-for="datasetProperties in datasetsProperties[datasetsPropertiesKey]">
+            <li
+              v-for="datasetProperties in datasetsProperties[
+                datasetsPropertiesKey
+              ]"
+            >
               <DsfrAccordion
                 :title="datasetProperties.libelle"
                 :expanded-id="datasetProperties.id"
@@ -531,7 +538,11 @@ onMounted(() => {
           </DsfrAccordionsGroup>
         </div>
 
-        <DsfrButton type="submit" class="block fr-mt-2w fr-ml-auto" label="Publier" />
+        <DsfrButton
+          type="submit"
+          class="block fr-mt-2w fr-ml-auto"
+          label="Publier"
+        />
       </div>
     </form>
   </div>

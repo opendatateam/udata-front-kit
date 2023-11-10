@@ -16,6 +16,8 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ```sh
 npm install
+# installs husky pre-commit hook
+npm run prepare
 ```
 
 ### Compile and Hot-Reload for Development

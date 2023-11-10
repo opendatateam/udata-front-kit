@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.vue,.json --fix --ignore-path .gitignore",
-    "format": "prettier . --write"
+    "format": "prettier ./src --write",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
@@ -39,6 +40,8 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-vue": "^9.11.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.2",
     "msw": "^2.0.0",
     "prettier": "^2.8.8",
     "prettier-config-standard": "^7.0.0",
@@ -46,5 +49,8 @@
     "uuid": "^9.0.1",
     "vite": "^4.3.9",
     "vitest": "^0.34.6"
+  },
+  "lint-staged": {
+    "*.{js,vue,json}": "prettier --write"
   }
 }

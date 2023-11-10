@@ -4,3 +4,4 @@ TODO.md
 dist/
 node_modules/
 src/playground
+.eslintcache
