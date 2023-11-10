@@ -7,8 +7,8 @@ import config from '@/config'
 
 import HomeButtons from '../components/HomeButtons.vue'
 import HomeCharts from '../components/HomeCharts.vue'
-import HomeTopics from '../components/HomeTopics.vue'
 import HomeThemes from '../components/HomeThemes.vue'
+import HomeTopics from '../components/HomeTopics.vue'
 
 const router = useRouter()
 const query = ref('')
@@ -43,7 +43,10 @@ const showTopicChart = config.website.show_topic_charts
       @search="doSearch"
       @update:modelValue="updateQuery"
     />
-    <HomeThemes className="home-tile-list" :selectedThemeName="this.$route.query.theme"/>
+    <HomeThemes
+      class-name="home-tile-list"
+      :selected-theme-name="$route.query.theme"
+    />
     <HomeButtons v-if="buttons" :buttons="buttons" />
     <HomeTopics v-if="topics" :topics="topics" />
     <HomeCharts v-if="showTopicChart" />
