@@ -58,35 +58,42 @@ website:
 # For step 2 of bouquet creation
 themes:
   - name: Produire
+    color: CAFCAE
     subthemes:
       - name: Nucléaire
       - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
       - name: Production d'électricité décarbonée (hors nucléaire)
   - name: Se nourrir
+    color: FDDCFA
     subthemes:
       - name: Alimentation
       - name: Agriculture et pêche
   - name: Se loger
+    color: FDE0D9
     subthemes:
       - name: Construction et rénovation des logements
       - name: Aménagements des villes
   - name: Se déplacer
+    color: FEEDC3
     subthemes:
       - name: Voitures et infrastructures routières
       - name: Mobilité courte distance (hors voiture)
       - name: Mobilité longue distance (avion, train)
   - name: Préserver
+    color: FCC0B8
     subthemes:
       - name: Eau
       - name: Sols
       - name: Océans et mers
       - name: Forêt
   - name: Consommer
+    color: D5F8FD
     subthemes:
       - name: Consommation plus durable (ménages)
       - name: Numérique responsable
       - name: Achats durables (de l'État, des collectivités et des entreprises)
   - name: Chantiers transverses
+    color: EAEEFE
     subthemes:
       - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
       - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
