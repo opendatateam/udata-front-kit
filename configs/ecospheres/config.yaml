@@ -52,8 +52,9 @@ website:
   show_topic_charts: false
   list_highlighted_topics:
   oauth_option: true
-  # display settings
-  organizations_list_page_size: 9
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 100
   contact_email: ecospheres@developpement-durable.gouv.fr
 
 # For step 2 of bouquet creation

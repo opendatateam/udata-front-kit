@@ -35,13 +35,16 @@ const canCreate = computed(() => {
 
 onMounted(() => {
   const loader = loading.show()
-  store.load(route.params.bid).then((res) => {
-    bouquet.value = res
-    datasetStore.loadMultiple(res.datasets).then((ds) => {
-      datasets.value = ds
-      loader.hide()
+  store
+    .load(route.params.bid)
+    .then((res) => {
+      bouquet.value = res
+      // FIXME: not used anymore in template below, change template or remove
+      return datasetStore.loadMultiple(res.datasets).then((ds) => {
+        datasets.value = ds
+      })
     })
-  })
+    .finally(() => loader.hide())
 })
 </script>
 
