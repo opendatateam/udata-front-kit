@@ -1,6 +1,6 @@
 <script setup>
 import Multiselect from '@vueform/multiselect'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 import Tooltip from '@/components/Tooltip.vue'
@@ -41,33 +41,6 @@ const steps = [
   'Informations du bouquet de données',
   'Composition du bouquet de données',
   'Récapitulatif'
-]
-const radios = [{
-    label:'Valeur 1',choice:'1',hint:'Description 1',name:'Choix'
-  },
-  {
-    label:'Valeur 2',choice:'2',hint:'Description 2',name:'Choix'
-  },
-  {
-    label:'Valeur 3',choice:'3',name:'Choix'
-  }
-]
-
-const options = [
-  {
-    "label": "Valeur 1",
-    "value": 1,
-    "hint": "Description 1"
-  },
-  {
-    "label": "Valeur 2",
-    "value": 2,
-    "hint": "Description 2"
-  },
-  {
-    "label": "Valeur 3",
-    "value": 3
-  }
 ]
 
 const themes = computed(() => config.themes)
@@ -123,35 +96,52 @@ const extrasFromDatasets = () => {
 let nextId = 0
 const addDatasetsPropertiesToExtras = async () => {
   const setUri = urlData.value ? urlData.value : null
-
   if (libelle.value && raison.value) {
     if (selectedDataset.value.id) {
       const dataset = await datasetStore.load(selectedDataset.value.id)
 
       if (dataset) {
-        datasets.value.push({
-          dataset,
-          description: selectedDataset.value.description
-        })
-
         const getUrl = datasets.value.reduce(
           (acc, url) => acc + url.dataset.page,
           ''
         )
 
         datasetsProperties.value[datasetsPropertiesKey].push({
-          libelle: libelle.value,
-          raison: raison.value,
+          titre: libelle.value,
+          description: raison.value,
           uri: getUrl,
-          id: selectedDataset.value.id
+          id: selectedDataset.value.id,
+          available: true,
+          tag: ''
+        })
+
+        datasets.value.push({
+          dataset,
+          description: selectedDataset.value.description
         })
       }
     } else {
+      const checkSelectedOption = () => {
+        if (selectedOption.value === '3') {
+          return 'Donnée non disponible'
+        } else if (selectedOption.value === '4') {
+          return 'Donnée non manquante'
+        }
+        return ''
+      }
+
       datasetsProperties.value[datasetsPropertiesKey].push({
-        libelle: libelle.value,
-        raison: raison.value,
+        titre: libelle.value,
+        description: raison.value,
         uri: setUri,
-        id: `__internal__${nextId++}`
+        id: `__internal__${nextId++}`,
+        available:
+          setUri !== null
+            ? true
+            : selectedOption.value === '3' || selectedOption.value === '4'
+            ? false
+            : null,
+        tag: checkSelectedOption()
       })
     }
   }
@@ -159,8 +149,8 @@ const addDatasetsPropertiesToExtras = async () => {
   libelle.value = ''
   raison.value = ''
   urlData.value = ''
-  datasets.value = []
   selectedDataset.value = {}
+  selectedOption.value = ''
   isEditDesc.value = false
 }
 
@@ -189,8 +179,10 @@ const validateAndMoveToStep = (newStep) => {
 
 const onSubmit = async () => {
   const data = {
-    ...form.value
+    ...form.value,
+    datasets: datasets.value.map((d) => d.dataset.id)
   }
+
   const informationsInExtras = {
     [`${config.universe.name}:informations`]: [
       {
@@ -244,6 +236,14 @@ const loadDatasets = async (datasetIds, bouquet) => {
   }
 }
 
+watch(selectedOption, (newValue) => {
+  if (newValue === '1') {
+    urlData.value = ''
+  } else if (newValue === '2') {
+    selectedDataset.value.id = null
+  }
+})
+
 onMounted(() => {
   if (!isCreate) {
     topicStore.load(route.params.bid).then((data) => {
@@ -251,8 +251,8 @@ onMounted(() => {
         (datasetProperties) => {
           return {
             id: datasetProperties.id,
-            libelle: datasetProperties.libelle,
-            raison: datasetProperties.raison,
+            titre: datasetProperties.titre,
+            description: datasetProperties.description,
             uri: datasetProperties.uri
           }
         }
@@ -282,7 +282,7 @@ onMounted(() => {
       </div>
     </div>
     <form @submit.prevent="onSubmit()">
-      <!-- <div v-show="currentStep === 1">
+      <div v-show="currentStep === 1">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-7">
             <div>
@@ -368,9 +368,9 @@ onMounted(() => {
           :disabled="!selectedSubTheme"
           @click.prevent="validateAndMoveToStep(3)"
         />
-      </div> -->
+      </div>
 
-      <div>
+      <div v-show="currentStep === 3">
         <h4>Ajouter une donnée</h4>
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-4">
@@ -394,102 +394,84 @@ onMounted(() => {
               name="tooltip__markdown"
               text="Pas encore de texte définitif"
             />
-            <DsfrInput
-              v-model="raison"
-              class="fr-mb-3w"
-              :is-textarea="true"
-            />
+            <DsfrInput v-model="raison" class="fr-mb-3w" :is-textarea="true" />
           </div>
         </div>
 
-        <p>Ajouter une donnée</p>
-        <input id="choiceOne" v-model="selectedOption" type="radio" value="1">
-        <label for="choiceOne" class="fr-label">Écosphères</label>
-        <DsfrInput
-          v-if="selectedOption === '1'"
-          v-model="urlData"
-          placeholder="Url vers le jeu de données souhaité"
-          :label-visible="true"
-          class="fr-mb-md-1w"
-        />
+        <p><strong>Retrouver la donnée via</strong></p>
+        <h5>Retrouver la donnée via</h5>
+        <div class="fr-grid-row fr-mb-3w">
+          <div class="fr-col-12">
+            <fieldset class="fr-fieldset">
+              <div class="fr-fieldset__content" role="radiogroup">
+                <DsfrRadioButton
+                  v-model="selectedOption"
+                  value="1"
+                  label="Écosphères"
+                  name="addData"
+                />
+                <div class="fr-grid-row">
+                  <div class="fr-col-6">
+                    <Multiselect
+                      v-if="selectedOption === '1'"
+                      ref="selector"
+                      v-model="selectedDataset.id"
+                      no-options-text="Précisez ou élargissez votre recherche"
+                      placeholder="Rechercher une donnée dans Ecosphères"
+                      name="select-datasets"
+                      :clear-on-select="true"
+                      :filter-results="false"
+                      :min-chars="1"
+                      :resolve-on-load="false"
+                      :delay="0"
+                      :searchable="true"
+                      :options="search"
+                    />
+                  </div>
+                </div>
+                <DsfrRadioButton
+                  v-model="selectedOption"
+                  value="2"
+                  label="URL"
+                  name="addData"
+                />
+                <div class="fr-grid-row">
+                  <div class="fr-col-4">
+                    <DsfrInput
+                      v-if="selectedOption === '2'"
+                      v-model="urlData"
+                      placeholder="Url vers le jeu de données souhaité"
+                      :label-visible="true"
+                      class="fr-mb-md-1w"
+                    />
+                  </div>
+                </div>
+                <DsfrRadioButton
+                  v-model="selectedOption"
+                  value="3"
+                  label="Je n'ai pas trouvé la donnée"
+                  name="addData"
+                />
+                <DsfrRadioButton
+                  v-model="selectedOption"
+                  value="4"
+                  label="Je n'ai pas cherché la donnée"
+                  name="addData"
+                />
+              </div>
+            </fieldset>
 
-        <input id="choiceTwo" v-model="selectedOption" type="radio"  value="2">
-        <label for="choiceTwo" class="fr-label">URL</label>
-
-        <Multiselect
-          v-if="selectedOption === '2'"
-          ref="selector"
-          v-model="selectedDataset.id"
-          no-options-text="Précisez ou élargissez votre recherche"
-          placeholder="Rechercher une donnée dans Ecosphères"
-          name="select-datasets"
-          :clear-on-select="true"
-          :filter-results="false"
-          :min-chars="1"
-          :resolve-on-load="false"
-          :delay="0"
-          :searchable="true"
-          :options="search"
-        />
-
-        <input id="choiceThree" v-model="selectedOption" type="radio"  value="3">
-        <label for="choiceThree" class="fr-label">Je n'ai pas trouvé la donnée</label>
-
-        <input id="choiceFour" v-model="selectedOption" type="radio"  value="4">
-        <label for="choiceFour" class="fr-label">Je n'ai pas cherché la donnée</label>
-
-        <DsfrButton
-          label="Ajouter la donnée"
-          :secondary="true"
-          @click.prevent="addDatasetsPropertiesToExtras()"
-        />
-
-        <!-- <div class="fr-grid-row align-center fr-mt-3w">
-          <div class="fr-col-12 fr-col-lg-5">
-            <Multiselect
-              ref="selector"
-              v-model="selectedDataset.id"
-              no-options-text="Précisez ou élargissez votre recherche"
-              placeholder="Rechercher une donnée dans Ecosphères"
-              name="select-datasets"
-              :clear-on-select="true"
-              :filter-results="false"
-              :min-chars="1"
-              :resolve-on-load="false"
-              :delay="0"
-              :searchable="true"
-              :options="search"
-            />
-          </div>
-        </div> -->
-
-        <!-- <h3 class="fr-mb-2w fr-mt-3w">
-          Vous ne trouvez pas la donnée dans Écosphères ?
-        </h3>
-        <div class="fr-grid-row align-baseline fr-mb-4w">
-          <div class="fr-col-12 fr-col-lg-5">
-            <DsfrInput
-              v-model="urlData"
-              placeholder="Url vers le jeu de données souhaité"
-              :label-visible="true"
-              class="fr-mb-md-1w"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-lg-4 fr-ml-md-10w fr-mt-5w fr-m-lg-0">
             <DsfrButton
               label="Ajouter la donnée"
-              :secondary="true"
               @click.prevent="addDatasetsPropertiesToExtras()"
             />
           </div>
         </div>
-        <hr /> -->
+        <hr />
 
         <h4>
           Composition du bouquet
-          <span v-if="dataPropertiesLength"
-            >({{ dataPropertiesLength }})</span
-          >
+          <span v-if="dataPropertiesLength">({{ dataPropertiesLength }})</span>
         </h4>
         <div v-if="!dataPropertiesLength" class="no-dataset fr-py-2 fr-px-3w">
           <p class="fr-m-0">Aucune donnée ajoutée</p>
@@ -502,12 +484,17 @@ onMounted(() => {
               ]"
             >
               <DsfrAccordion
-                :title="datasetProperties.libelle"
+                :title="datasetProperties.titre"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
+                <DsfrTag
+                  v-if="datasetProperties.tag"
+                  class="fr-mb-2w uppercase bold"
+                  :label="datasetProperties.tag"
+                />
                 <div>
-                  {{ datasetProperties.raison }}
+                  {{ datasetProperties.description }}
                 </div>
                 <div class="button__wrapper">
                   <DsfrButton
@@ -601,12 +588,17 @@ onMounted(() => {
               ]"
             >
               <DsfrAccordion
-                :title="datasetProperties.libelle"
+                :title="datasetProperties.titre"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
+                <DsfrTag
+                  v-if="datasetProperties.tag"
+                  class="fr-mb-2w uppercase bold"
+                  :label="datasetProperties.tag"
+                />
                 <div class="fr-mb-3w">
-                  {{ datasetProperties.raison }}
+                  {{ datasetProperties.description }}
                 </div>
                 <div class="button__wrapper">
                   <a

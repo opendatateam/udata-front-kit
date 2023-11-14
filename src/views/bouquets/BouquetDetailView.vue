@@ -83,12 +83,12 @@ onMounted(() => {
             ]"
           >
             <DsfrAccordion
-              :title="datasetProperties.libelle"
+              :title="datasetProperties.titre"
               :expanded-id="datasetProperties.id"
               @expand="datasetProperties.id = $event"
             >
               <div class="fr-mb-3w">
-                {{ datasetProperties.raison }}
+                {{ datasetProperties.description }}
               </div>
               <a
                 v-if="datasetProperties.uri"

@@ -91,7 +91,7 @@ themes:
     subthemes:
       - name: Voitures et infrastructures routières
       - name: Mobilité courte distance (hors voiture)
-      - name: Mobilité longue distance (avion, train)  
+      - name: Mobilité longue distance (avion, train)
   - name: Chantiers transverses
     color: EAEEFE
     subthemes:
