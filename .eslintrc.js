@@ -6,6 +6,8 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     '@vue/eslint-config-standard',
     'plugin:json/recommended',
+    'eslint:recommended', 
+    'plugin:@typescript-eslint/recommended',
     'standard',
     'prettier'
   ],
