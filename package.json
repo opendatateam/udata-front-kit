@@ -14,7 +14,7 @@
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
     "@vueform/multiselect": "^2.6.2",
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "chart.js": "^4.4.0",
     "filesize": "^10.0.7",
     "lodash": "^4.17.21",
