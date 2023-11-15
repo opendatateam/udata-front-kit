@@ -57,41 +57,41 @@ website:
 
 # For step 2 of bouquet creation
 themes:
+  - name: Se loger
+    color: 043574
+    subthemes:
+      - name: Construction et rénovation des logements
+      - name: Aménagements des villes
   - name: Produire
-    color: CAFCAE
+    color: 1E929E
     subthemes:
       - name: Nucléaire
       - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
       - name: Production d'électricité décarbonée (hors nucléaire)
   - name: Se nourrir
-    color: FDDCFA
+    color: 8AC6CD
     subthemes:
       - name: Alimentation
       - name: Agriculture et pêche
-  - name: Se loger
-    color: FDE0D9
+  - name: Consommer
+    color: A5BD0B
     subthemes:
-      - name: Construction et rénovation des logements
-      - name: Aménagements des villes
-  - name: Se déplacer
-    color: FEEDC3
-    subthemes:
-      - name: Voitures et infrastructures routières
-      - name: Mobilité courte distance (hors voiture)
-      - name: Mobilité longue distance (avion, train)
+      - name: Consommation plus durable (ménages)
+      - name: Numérique responsable
+      - name: Achats durables (de l'État, des collectivités et des entreprises)
   - name: Préserver
-    color: FCC0B8
+    color: BFD899
     subthemes:
       - name: Eau
       - name: Sols
       - name: Océans et mers
       - name: Forêt
-  - name: Consommer
-    color: D5F8FD
+  - name: Se déplacer
+    color: D6E099
     subthemes:
-      - name: Consommation plus durable (ménages)
-      - name: Numérique responsable
-      - name: Achats durables (de l'État, des collectivités et des entreprises)
+      - name: Voitures et infrastructures routières
+      - name: Mobilité courte distance (hors voiture)
+      - name: Mobilité longue distance (avion, train)  
   - name: Chantiers transverses
     color: EAEEFE
     subthemes:
