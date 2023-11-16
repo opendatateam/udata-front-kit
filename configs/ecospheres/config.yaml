@@ -54,6 +54,7 @@ website:
   oauth_option: true
   # display settings
   organizations_list_page_size: 9
+  contact_email: ecospheres@developpement-durable.gouv.fr
 
 # For step 2 of bouquet creation
 themes:
@@ -103,8 +104,6 @@ themes:
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
 
-# Mail to contact
-mail: ecospheres@developpement-durable.gouv.fr
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
