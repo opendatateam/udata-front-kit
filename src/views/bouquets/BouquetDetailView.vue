@@ -83,12 +83,12 @@ onMounted(() => {
             ]"
           >
             <DsfrAccordion
-              :title="datasetProperties.libelle"
+              :title="datasetProperties.title"
               :expanded-id="datasetProperties.id"
               @expand="datasetProperties.id = $event"
             >
               <div class="fr-mb-3w">
-                {{ datasetProperties.raison }}
+                {{ datasetProperties.description }}
               </div>
               <a
                 v-if="datasetProperties.uri"
@@ -121,7 +121,7 @@ onMounted(() => {
   &__container {
     border: 1px solid var(--border-default-grey);
 
-    :deep a {
+    :deep(a) {
       color: var(--text-action-high-blue-france);
     }
   }

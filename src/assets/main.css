@@ -8,6 +8,25 @@
   width: 45%;
 }
 
+.fit {
+  width: fit-content;
+}
+
+/* ELEMENT DISPLAY */
+.block {
+  display: block;
+}
+
+/* FONT CUSTOM */
+.uppercase {
+  text-transform: uppercase;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+/* ALIGNMENT */
 .justify-between {
   justify-content: space-between;
 }
@@ -18,10 +37,6 @@
 
 .align-center {
   align-items: center;
-}
-
-.block {
-  display: block;
 }
 
 .theme_without_breadcrumb {
