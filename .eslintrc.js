@@ -4,12 +4,11 @@ module.exports = {
   },
   extends: [
     '@vue/eslint-config-standard',
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
     'plugin:json/recommended',
     'plugin:vue/vue3-recommended',
     'prettier',
-    'standard'
+    'standard',
+    'standard-with-typescript'
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
