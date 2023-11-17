@@ -1,7 +1,8 @@
 .env.local
+.eslintcache
 .idea
 TODO.md
 dist/
 node_modules/
+shell.nix
 src/playground
-.eslintcache

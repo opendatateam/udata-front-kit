@@ -61,7 +61,6 @@ test('delete when 204', async ({ client }) => {
 })
 
 test('delete when 404', async ({ client }) => {
-  console.log(notFound)
   const { status } = await client.delete(notFound)
   expect(status).toEqual(404)
 })
