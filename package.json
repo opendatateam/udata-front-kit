@@ -32,12 +32,12 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.15",
     "@modyfi/vite-plugin-yaml": "^1.0.4",
-    "@rushstack/eslint-patch": "^1.2.0",
     "@trivago/prettier-plugin-sort-imports": "^1.4.4",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/eslint-config-standard": "^8.0.1",
+    "@vue/eslint-config-typescript": "^12.0.0",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard-with-typescript": "^39.1.1",
