@@ -7,14 +7,14 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.vue,.json --fix --ignore-path .gitignore",
-    "format": "prettier ./src --write",
+    "lint": "eslint . --ext .js,.ts,.vue,.json --fix --ignore-path .gitignore",
+    "format": "prettier . --write",
     "prepare": "husky install"
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^3.6.0",
     "@vueform/multiselect": "^2.6.2",
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "chart.js": "^4.4.0",
     "filesize": "^10.0.7",
     "lodash": "^4.17.21",
@@ -32,12 +32,15 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.15",
     "@modyfi/vite-plugin-yaml": "^1.0.4",
-    "@rushstack/eslint-patch": "^1.2.0",
     "@trivago/prettier-plugin-sort-imports": "^1.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/eslint-config-standard": "^8.0.1",
-    "eslint": "^8.39.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.1",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-vue": "^9.11.0",
     "husky": "^8.0.3",
@@ -46,11 +49,12 @@
     "prettier": "^2.8.8",
     "prettier-config-standard": "^7.0.0",
     "sass": "^1.63.6",
+    "typescript": "^5.2.2",
     "uuid": "^9.0.1",
     "vite": "^4.3.9",
     "vitest": "^0.34.6"
   },
   "lint-staged": {
-    "*.{js,vue,json}": "prettier --write"
+    "*.{js,ts,vue,json}": "prettier --write"
   }
 }
