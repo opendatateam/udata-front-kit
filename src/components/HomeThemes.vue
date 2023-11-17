@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedTheme === null">
+  <div className="theme_without_breadcrumb" v-if="selectedTheme === null">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
       <li v-for="theme in themeList" class="fr-col-12 fr-col-lg-4">
         <Tile
@@ -11,7 +11,7 @@
       </li>
     </ul>
   </div>
-  <div v-else>
+  <div className="theme_with_breadcrumb" v-else>
     <DsfrBreadcrumb class="home-selection-breadcrumb" :links="breadcrumbList" />
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
       <li
