@@ -20,7 +20,7 @@ module.exports = {
         'standard-with-typescript',
         'prettier'
       ],
-      files: ['*error.ts'],
+      files: ['*.ts'],
       parserOptions: {
         parser: '@typescript-eslint/parser',
         project: './tsconfig.dev.json',
