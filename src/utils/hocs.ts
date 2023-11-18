@@ -15,16 +15,18 @@ function withLoading<T>(fn: fn<T>): fn<T> {
   return async function (...args: any[]): Promise<T> {
     const loader: Loader = useLoading().show()
 
-    return fn(...args)
+    return await fn(...args)
       .then((response: T) => response)
       .catch((error) => error)
-      .finally(() => loader.hide())
+      .finally(() => {
+        loader.hide()
+      })
   }
 }
 
 function withToaster<T>(fn: fn<T>): fn<T> {
   return async function (...args: any[]): Promise<T> {
-    return fn(...args)
+    return await fn(...args)
       .then((response: T) => response)
       .catch((error) => {
         toast(error.message, { type: 'error', autoClose: false })
