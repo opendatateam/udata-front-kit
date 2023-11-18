@@ -2,12 +2,17 @@
  * @vitest-environment happy-dom
  */
 
-import { render } from '@testing-library/vue'
-import { expect, test } from 'vitest'
+import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
+import { test } from 'vitest'
 
-import Test from './test-item.vue'
+import TestItem from './test-item.vue'
 
-test('Test', () => {
-  const { baseElement } = render(Test)
-  expect(baseElement).toBe(document.body)
+test('ring the door', async () => {
+  render(TestItem)
+  screen.getByText('Knock, knock!')
+  const button = screen.getByText('Doorbell')
+  await fireEvent.click(button)
+  await waitFor(() => screen.getByText('Who’s there?'))
+  await fireEvent.click(button)
+  await waitFor(() => screen.getByText('Go away!'))
 })
