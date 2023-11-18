@@ -11,7 +11,7 @@ interface Loader {
   hide: () => void
 }
 
-function withLoading<T>(fn: fn<T>): fn<T> {
+function withLoader<T>(fn: fn<T>): fn<T> {
   return async function (...args: any[]): Promise<T> {
     const loader: Loader = useLoading().show()
 
@@ -35,4 +35,4 @@ function withToaster<T>(fn: fn<T>): fn<T> {
   }
 }
 
-export { withLoading, withToaster }
+export { withLoader, withToaster }
