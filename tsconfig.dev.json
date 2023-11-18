@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "types": ["vitest/globals"]
   },
   "extends": ["./tsconfig.json"]
 }
