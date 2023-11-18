@@ -18,6 +18,10 @@ export default defineConfig(({ mode }) => {
           new URL(`./configs/${env.CONFIG_NAME}`, import.meta.url)
         )
       }
+    },
+    test: {
+      environment: 'happy-dom',
+      globals: true
     }
   }
 })
