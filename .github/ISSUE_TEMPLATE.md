@@ -1,4 +1,4 @@
-_Remplissez ce template pour décrire votre problème ou votre demande de 
+_Remplissez ce template pour décrire votre problème ou votre demande de
 fonctionnalité. Supprimez le texte en italique avant de soumettre cette issue._
 
 ## Demande de fonctionnalité
@@ -9,7 +9,7 @@ _Ici, décrivez la situation de l’utilisateur, sa motivation et le résultat.
 La liste à jour des job stories est disponible [ici](https://github.com/ecolabdata/ecospheres-front/milestones).
 Si votre job story n’est pas dans cette liste, ajoutez-la ici._
 
-Utilisateur : _l’utilisateur qui en bénéficierait._
+Utilisateur : _l’utilisateur qui en bénéficierait._
 
 Quand je _ma situation_,
 je veux _ma motivation_,
@@ -18,7 +18,7 @@ pour _le résultat attendu_.
 ### Contexte ou situation
 
 _Ici, décrivez le contexte ou la situation de l’utilisateur en détail. Il est
-plus important de décrire ce que l’utilisateur essaie d’accomplir, que ses 
+plus important de décrire ce que l’utilisateur essaie d’accomplir, que ses
 caractéristiques sociodémographiques (personas, etc.)._
 
 Lorsque je _fais ceci_,
@@ -44,7 +44,7 @@ _Ajoutez une image ici si vous en avez une_.
 
 ### Éléments supplémentaires de ma proposition
 
-_D’autres choses qui peuvent se passer de manière alternative. Utilisez par 
+_D’autres choses qui peuvent se passer de manière alternative. Utilisez par
 exemple cette partie pour décrire de micro-interactions en cas d’erreurs, etc._
 
 - _Scénario alternatif #1_
@@ -98,6 +98,5 @@ _Écrivez ici toute information nous permettant de mieux traiter cette issue._
 
 ## Autre
 
-_Écrivez ici librement si votre demande ne s’agit ni d’une demande de 
+_Écrivez ici librement si votre demande ne s’agit ni d’une demande de
 fonctionnalité ni d’un rapport de bug._
-

@@ -1,4 +1,7 @@
-_En choisir un ou plusieurs, et supprimer le reste:_
+_Remplissez ce template pour décrire votre problème ou votre demande de
+fonctionnalité. Supprimez le texte en italique avant de soumettre cette issue._
+
+_De la liste suivante, choisissez un ou plusieurs cas, et supprimez le reste:_
 
 Fixes #XXX
 Closes #XXX
@@ -8,40 +11,52 @@ Superceded by #XXX
 Depends on #XXX
 Depended upon by #XXX
 
-_Choisir le titre qui correspond le mieux à votre proposition de modification:_
+_Trouvez le titre qui correspond le mieux à votre proposition :_
 
-## _Proposition de fonctionnalité | Correction d'un bug | Autre_
+## Proposition de fonctionnalité | Correction d'un bug | Autre
 
 ### Job story
 
-> Titre : _titre de l'issue._
-> Utilisateur : _l'utilisateur qui en bénéficierait._
->
-> Quand je _ma situation_,
-> je veux _ma motivation_,
-> pour _le résultat attendu_.
+_Ici, décrivez la situation de l’utilisateur, sa motivation et le résultat.
+La liste à jour des job stories est disponible [ici](https://github.com/ecolabdata/ecospheres-front/milestones).
+Si votre job story n’est pas dans cette liste, ajoutez-la ici._
+
+Utilisateur : _l’utilisateur qui en bénéficierait._
+
+Quand je _ma situation_,
+je veux _ma motivation_,
+pour _le résultat attendu_.
 
 ### Contexte ou situation
 
-_Écrivez ici._
+_Ici, décrivez le contexte ou la situation de l’utilisateur en détail. Il est
+plus important de décrire ce que l’utilisateur essaie d’accomplir, que ses
+caractéristiques sociodémographiques (personas, etc.)._
+
+Lorsque je _fais ceci_,
+je m’attends à ce que _cela_ se produise.
 
 ### Problème rencontré par les utilisateurs
 
-_Écrivez ici._
+_Ici, décrivez ce qui se passe actuellement et pourquoi cela ne fonctionne pas
+ou n’est pas idéal pour l’utilisateur._
 
-### Problème rencontré par les utilisateurs
-
-_Écrivez ici._
+Ce n’est pas le cas.
+Au fait, _ce qui se passe vraiment_.
 
 ### Proposition de solution au problème
 
-_Écrivez ici._
+_Ici, décrivez la solution proposée d’un point de vue de l’utilisateur._
+
+Je vois _ceci_,
+Et je fais _cela_,
+Et il se passe _quelque chose_.
 
 _Ajoutez des éléments UI/UX si vous en avez._
 
 ### Que change-t-il ?
 
-_Sélectionnez un ou plusieurs des éléments suivants:_.
+_Sélectionnez un ou plusieurs des éléments suivants, et supprimez le reste :_.
 
 #### Breaking changes
 
