@@ -1,46 +1,64 @@
-<script setup>
-import { onMounted, computed } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
-
-import Tile from '../../components/Tile.vue'
-import { useTopicStore } from '../../store/TopicStore'
-
-const store = useTopicStore()
-const $loading = useLoading()
-const router = useRouter()
-
-const bouquets = computed(() => store.$state.data)
-
-const goToCreate = () => {
-  router.push({ name: 'bouquet_add' })
-}
-
-onMounted(() => {
-  const loader = $loading.show()
-  store.loadTopicsForUniverse().finally(() => loader.hide())
-})
-</script>
-
 <template>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
-    <div class="fr-grid-row fr-mb-1w">
-      <DsfrButton
-        class="fr-mb-1w"
-        label="Ajouter un bouquet"
-        icon="ri-add-circle-line"
-        @click="goToCreate"
-      />
-    </div>
-    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
-      <li v-for="bouquet in bouquets" class="fr-col-12 fr-col-lg-4">
-        <Tile
-          :link="`/bouquets/${bouquet.slug}`"
-          :title="bouquet.name"
-          :description="bouquet.description"
-          :is-markdown="true"
+  <div className="fr-grid-row topicListView">
+    <nav className="fr-sidemenu fr-col-4" aria-labelledby="fr-sidemenu-title">
+      <div className="fr-sidemenu__inner">
+        <div className="fr-sidemenu__title" id="fr-sidemenu-title">Filtres</div>
+        <TopicSearch
+          v-model:themeName="themeName"
+          v-model:subthemeName="subthemeName"
         />
-      </li>
-    </ul>
+      </div>
+    </nav>
+    <div className="fr-col-8">
+      <DsfrBreadcrumb
+        class="home-selection-breadcrumb"
+        :links="breadcrumbList"
+      />
+      <TopicList :themeName="themeName" :subthemeName="subthemeName" />
+    </div>
   </div>
 </template>
+
+<script lang="ts">
+import TopicList from '../../components/TopicList.vue'
+import TopicSearch from '../../components/TopicSearch.vue'
+import type { BreadcrumbItem } from '../../model'
+import { NoOptionSelected } from '../../model'
+
+export default {
+  name: 'BouquetsListView',
+  components: {
+    TopicSearch: TopicSearch,
+    TopicList: TopicList
+  },
+  props: {
+    initThemeName: {
+      type: String,
+      default: NoOptionSelected
+    },
+    initSubthemeName: {
+      type: String,
+      default: NoOptionSelected
+    }
+  },
+  data() {
+    return {
+      themeName: this.initThemeName,
+      subthemeName: this.initSubthemeName
+    }
+  },
+  computed: {
+    breadcrumbList() {
+      const links: BreadcrumbItem[] = []
+      if (this.themeName !== NoOptionSelected) {
+        links.push({ text: 'Accueil', to: '/' })
+        links.push({ text: this.themeName, to: `/?theme=${this.themeName}` })
+        if (this.subthemeName !== NoOptionSelected) {
+          links.push({ text: this.subthemeName })
+        }
+      }
+      return links
+    }
+  }
+}
+</script>
