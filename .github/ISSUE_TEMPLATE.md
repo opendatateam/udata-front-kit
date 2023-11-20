@@ -57,15 +57,15 @@ exemple cette partie pour décrire de micro-interactions en cas d’erreurs, etc
 _Listez les éléments qui doivent être réalisés pour que cette fonctionnalité
 soit considérée comme terminée._
 
-- _L’utilisateur peut ... #1 (critère métier)_
-- _L’utilisateur peut ... #2_
-- _L’utilisateur peut ... #n_
-- Une application de prévisualisation déployée où tester cette fonctionnalité
-- Une batterie des tests unitaires et d’intégration déployés automatiquement
-- Une documentation et des type hints à jour et testés automatiquement
-- Du linting et du formatage du code vérifiés automatiquement
-- Accessibilité en accord avec la baseline accordée
-- Sécurité en accord avec la baseline accordée
+- [ ] _L’utilisateur peut ... #1 (critère métier)_
+- [ ] _L’utilisateur peut ... #2_
+- [ ] _L’utilisateur peut ... #n_
+- [ ] Une application de prévisualisation déployée où tester cette fonctionnalité
+- [ ] Une batterie des tests unitaires et d’intégration déployés automatiquement
+- [ ] Une documentation et des type hints à jour et testés automatiquement
+- [ ] Du linting et du formatage du code vérifiés automatiquement
+- [ ] Accessibilité en accord avec la baseline accordée
+- [ ] Sécurité en accord avec la baseline accordée
 
 ### OKR associé
 
