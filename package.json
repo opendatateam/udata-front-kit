@@ -7,6 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "test_single_run": "vitest run",
     "lint": "eslint . --ext .js,.ts,.vue,.json --fix --ignore-path .gitignore",
     "format": "prettier . --write",
     "prepare": "husky install"
