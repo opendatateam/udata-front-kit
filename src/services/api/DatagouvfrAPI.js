@@ -108,7 +108,7 @@ export default class DatagouvfrAPI {
   /**
    * List entities
    *
-   * @param {object} [params]
+   * @param {object} [queryParams]
    * @returns {Promise}
    */
   async list(queryParams = {}) {
@@ -119,7 +119,7 @@ export default class DatagouvfrAPI {
   /**
    * List entities, without wrapper
    *
-   * @param {object} [params]
+   * @param {object} [queryParams]
    * @returns {Promise}
    */
   async _list(queryParams = {}) {
