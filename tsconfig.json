@@ -8,5 +8,8 @@
     "strictNullChecks": true,
     "types": ["node"]
   },
-  "extends": ["@tsconfig/node20/tsconfig.json", "@vue/tsconfig/tsconfig.json"]
+  "extends": [
+    "@tsconfig/node18/tsconfig.json",
+    "@vue/tsconfig/tsconfig.dom.json"
+  ]
 }

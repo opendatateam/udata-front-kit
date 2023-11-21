@@ -11,7 +11,10 @@ module.exports = {
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: '@babel/eslint-parser'
+    parser: {
+      js: '@babel/eslint-parser',
+      ts: '@typescript-eslint/parser'
+    }
   },
   overrides: [
     {
@@ -27,5 +30,6 @@ module.exports = {
         tsconfigRootDir: __dirname
       }
     }
-  ]
+  ],
+  root: true
 }
