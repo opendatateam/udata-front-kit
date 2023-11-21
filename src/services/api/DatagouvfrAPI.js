@@ -38,7 +38,13 @@ export default class DatagouvfrAPI {
   endpoint = ''
   httpClient = instance
 
-  constructor(params) {
+    constructor(args = {}) {
+        const { baseUrl, version, endpoint, httpClient } = args
+        this.baseUrl = baseUrl ?? this.baseUrl;
+        this.version = version ?? this.version;
+        this.endpoint = endpoint ?? this.endpoint;
+        this.httpClient = httpClient ?? this.httpClient;
+    }
     this.base_url = params?.baseUrl || this.base_url
     this.version = params?.version || this.version
     this.endpoint = params?.endpoint || this.endpoint
