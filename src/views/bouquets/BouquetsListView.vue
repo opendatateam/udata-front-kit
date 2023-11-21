@@ -1,24 +1,23 @@
 <script setup>
-import { onMounted, computed } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
-import Tile from '../../components/Tile.vue'
-import { useTopicStore } from '../../store/TopicStore'
+import Tile from '@/components/Tile.vue'
+import { useLoader } from '@/composables/loader'
+import { useTopicStore } from '@/store/TopicStore'
 
-const store = useTopicStore()
-const $loading = useLoading()
 const router = useRouter()
 
-const bouquets = computed(() => store.$state.data)
+const store = useTopicStore()
+const bouquets = computed(() => store.data)
+const loadTopics = useLoader(store.loadTopicsForUniverse)
 
 const goToCreate = () => {
   router.push({ name: 'bouquet_add' })
 }
 
 onMounted(() => {
-  const loader = $loading.show()
-  store.loadTopicsForUniverse().finally(() => loader.hide())
+  loadTopics()
 })
 </script>
 

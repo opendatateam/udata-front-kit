@@ -1,6 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 import type { Ref } from 'vue'
+
+import { useLoader } from '@/composables/loader'
 
 const count: Ref<number> = ref(0)
 const data: Ref<string> = ref('Knock, knock!')
@@ -15,9 +17,12 @@ const wait: () => Promise<string> = () => {
 }
 
 const ring: () => Promise<string> = async () => {
-  return wait()
+  const loaded = useLoader(wait)
+
+  return loaded()
     .then((response: string) => (data.value = response))
     .catch((error: string) => (data.value = error))
+    .finally(() => (data.value = 'Police!'))
 }
 </script>
 <template>

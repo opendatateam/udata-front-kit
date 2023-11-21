@@ -2,17 +2,9 @@
  * @vitest-environment happy-dom
  */
 
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved
-} from '@testing-library/vue'
+import { cleanup, fireEvent, render, screen } from '@testing-library/vue'
 import { afterEach, test } from 'vitest'
 
-import TestItemWithLoader from './test-item-with-loader.vue'
 import TestItemWithToaster from './test-item-with-toaster.vue'
 import TestItem from './test-item.vue'
 
@@ -37,14 +29,4 @@ test('hook a toaster on error', async () => {
   await fireEvent.click(button)
   await screen.findByTestId('toast-content')
   screen.getByText('Go away!')
-})
-
-test('show and hide a loader', async () => {
-  render(TestItemWithLoader)
-  const button = screen.getByText('Doorbell')
-  await fireEvent.click(button)
-  const loader = screen.getByLabelText('Loading')
-  await waitForElementToBeRemoved(loader).then(() =>
-    screen.getByText('Police!')
-  )
 })
