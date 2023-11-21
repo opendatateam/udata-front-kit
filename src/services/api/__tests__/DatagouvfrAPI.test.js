@@ -20,6 +20,7 @@ const endpoint = 'asdf'
 const noContent = uuid()
 const notFound = uuid()
 const networkError = uuid()
+const entityId = uuid()
 
 const server = setupServer(
   http.delete(`${baseUrl}/${version}/${endpoint}/${noContent}/`, () => {
@@ -36,6 +37,10 @@ const server = setupServer(
 
   http.get(`${baseUrl}/${version}/${endpoint}/`, () => {
     return HttpResponse.json([], { status: 200 })
+  }),
+
+  http.get(`${baseUrl}/${version}/${endpoint}/${entityId}/`, () => {
+    return HttpResponse.json({ id: entityId }, { status: 200 })
   })
 )
 
@@ -82,4 +87,9 @@ test('delete something else', async ({ client }) => {
 test('raw list', async ({ client }) => {
   const res = await client._list()
   expect(Array.isArray(res)).toBeTruthy()
+})
+
+test('raw get', async ({ client }) => {
+  const res = await client._get(entityId)
+  expect(res.id).toEqual(entityId)
 })
