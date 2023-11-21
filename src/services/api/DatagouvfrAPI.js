@@ -116,8 +116,8 @@ export default class DatagouvfrAPI {
    * @param {object} [params]
    * @returns {Promise}
    */
-  async list(params = {}) {
-    const qs = new URLSearchParams(params).toString()
+  async list(queryParams = {}) {
+    const qs = new URLSearchParams(queryParams).toString()
     return await this.makeRequestAndHandleResponse(`${this.url()}/?${qs}`)
   }
 
@@ -127,8 +127,8 @@ export default class DatagouvfrAPI {
    * @param {object} [params]
    * @returns {Promise}
    */
-  async _list(params = {}) {
-    const qs = new URLSearchParams(params).toString()
+  async _list(queryParams = {}) {
+    const qs = new URLSearchParams(queryParams).toString()
     return await this.request(`${this.url()}/?${qs}`)
   }
 
