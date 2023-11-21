@@ -33,7 +33,7 @@ instance.interceptors.request.use(
  * e.g. OrganizationsAPI will declare `endpoint = organizations`.
  */
 export default class DatagouvfrAPI {
-  baseUrl = `${config.datagouvfr.baseUrl}/api`
+  baseUrl = `${config.datagouvfr.base_url}/api`
   version = '1'
   endpoint = ''
   httpClient = instance

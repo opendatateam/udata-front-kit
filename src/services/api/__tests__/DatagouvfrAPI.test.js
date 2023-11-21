@@ -32,6 +32,10 @@ const server = setupServer(
 
   http.delete(`${baseUrl}/${version}/${endpoint}/${networkError}/`, () => {
     return HttpResponse.error()
+  }),
+
+  http.get(`${baseUrl}/${version}/${endpoint}/`, () => {
+    return HttpResponse.json([], { status: 200 })
   })
 )
 
@@ -73,4 +77,9 @@ test('delete when 404', async ({ client }) => {
 test('delete something else', async ({ client }) => {
   const { message } = await client.delete(networkError)
   expect(message).toMatch(/network error/i)
+})
+
+test('raw list', async ({ client }) => {
+  const res = await client._list()
+  expect(Array.isArray(res)).toBeTruthy()
 })
