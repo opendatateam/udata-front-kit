@@ -41,7 +41,7 @@ interface Topic {
 }
 
 interface Dataset {
-  // to improve
+  // TODO --  add list of properties for Dataset
 }
 
 export const NoOptionSelected = 'no_option_selected'
