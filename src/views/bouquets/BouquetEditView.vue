@@ -424,8 +424,6 @@ onMounted(() => {
           <div class="fr-col-12">
             <fieldset class="fr-fieldset">
               <div class="fr-fieldset__content" role="radiogroup">
-                {{ availabilityEnum.ECO_AVAILABLE }} --
-                {{ availabilityEnum.URL_AVAILABLE }}
                 <DsfrRadioButton
                   v-model="DatasetRetrievalOption"
                   :value="availabilityEnum.ECO_AVAILABLE"
@@ -697,7 +695,6 @@ onMounted(() => {
           <DsfrButton
             type="button"
             class="fr-mt-2w fr-mr-2w"
-            :secondary="true"
             label="Précédent"
             @click.prevent="validateAndMoveToStep(3)"
           />
