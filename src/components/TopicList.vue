@@ -1,21 +1,22 @@
 <template>
   <DsfrAlert
+    class="dsfr_alert"
     v-if="bouquets.length === 0"
     type="info"
     title="Pas de résultat"
     description="Il n'y a pas encore de bouquets pour ces critères"
   />
   <p v-else>{{ numberOfResultMsg }}</p>
+  <div class="fr-grid-row fr-mb-1w">
+    <DsfrButton
+      class="fr-mb-1w"
+      label="Ajouter un bouquet"
+      icon="ri-add-circle-line"
+      @click="goToCreate"
+    />
+  </div>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
-      <li class="fr-col-12 fr-col-lg-6">
-        <Tile
-          className="actionTile"
-          @click="goToCreate"
-          link=""
-          title="Ajouter un bouquet"
-        />
-      </li>
       <li v-for="bouquet in bouquets" class="fr-col-12 fr-col-lg-6">
         <Tile
           :link="`/bouquets/${bouquet.slug}`"
