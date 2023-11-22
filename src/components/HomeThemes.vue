@@ -64,7 +64,7 @@ export default {
       return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
     },
     goToTopicList(subtheme: Subtheme): string {
-      return `/?theme=${this.selectedTheme.name}&subtheme=${subtheme.name}`
+      return `/bouquets/?theme=${this.selectedTheme.name}&subtheme=${subtheme.name}`
     },
     getThemeDescription(theme: Theme): string {
       const nbSubthemes = theme.subthemes.length
