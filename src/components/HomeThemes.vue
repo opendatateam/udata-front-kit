@@ -38,7 +38,7 @@ import Tile from './Tile.vue'
 export default {
   name: 'HomeThemes',
   components: {
-    Tile: Tile
+    Tile
   },
   props: {
     selectedThemeName: {

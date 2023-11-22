@@ -11,7 +11,10 @@ module.exports = {
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: '@babel/eslint-parser'
+    parser: {
+      js: '@babel/eslint-parser',
+      ts: '@typescript-eslint/parser'
+    }
   },
   overrides: [
     {
@@ -23,9 +26,10 @@ module.exports = {
       files: ['*.ts'],
       parserOptions: {
         parser: '@typescript-eslint/parser',
-        project: './tsconfig.eslint.json',
+        project: './tsconfig.dev.json',
         tsconfigRootDir: __dirname
       }
     }
-  ]
+  ],
+  root: true
 }

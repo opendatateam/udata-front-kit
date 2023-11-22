@@ -1,48 +1,79 @@
-## _Feature proposal | Bug fix | Other_
+_Remplissez ce template pour décrire votre problème ou votre demande de
+fonctionnalité. Supprimez le texte en italique avant de soumettre cette issue._
 
-_Fixes / Relates to / Supercedes / Superceded by / Depends on / Depended upon by_ #XXX
+_De la liste suivante, choisissez un ou plusieurs cas, et supprimez le reste:_
+
+Fixes #XXX
+Closes #XXX
+Relates to #XXX
+Supercedes #XXX
+Superceded by #XXX
+Depends on #XXX
+Depended upon by #XXX
+
+_Trouvez le titre qui correspond le mieux à votre proposition :_
+
+## Proposition de fonctionnalité | Correction d'un bug | Autre
 
 ### Job story
 
-> Title : _title_
-> User: _user_
->
-> When I _situation_,
-> I want to _motivation_,
-> so to _expected outcome_.
+_Ici, décrivez la situation de l'utilisateur, sa motivation et le résultat.
+La liste à jour des job stories est disponible [ici](https://github.com/ecolabdata/ecospheres-front/milestones).
+Si votre job story n'est pas dans cette liste, ajoutez-la ici._
 
-### Context or situation
+Utilisateur : _l'utilisateur qui en bénéficierait._
 
-_Write here._
+Quand je _ma situation_,
+je veux _ma motivation_,
+pour _le résultat attendu_.
 
-### Problem encountered by users
+### Contexte ou situation
 
-_Write here._
+_Ici, décrivez le contexte ou la situation de l'utilisateur en détail. Il est
+plus important de décrire ce que l'utilisateur essaie d'accomplir, que ses
+caractéristiques sociodémographiques (personas, etc.)._
 
-### Proposal of how to solve the problem
+Lorsque je _fais ceci_,
+je m'attends à ce que _cela_ se produise.
 
-_Write here. Add UI/UX elements if you have them._
+### Problème rencontré par les utilisateurs
 
-### What changes
+_Ici, décrivez ce qui se passe actuellement et pourquoi cela ne fonctionne pas
+ou n'est pas idéal pour l'utilisateur._
 
-_Select one or more of the following._
+Ce n'est pas le cas.
+Au fait, _ce qui se passe vraiment_.
+
+### Proposition de solution au problème
+
+_Ici, décrivez la solution proposée d'un point de vue de l'utilisateur._
+
+Je vois _ceci_,
+Et je fais _cela_,
+Et il se passe _quelque chose_.
+
+_Ajoutez des éléments UI/UX si vous en avez._
+
+### Qu'est-ce qui change ?
+
+_Sélectionnez un ou plusieurs des éléments suivants, et supprimez le reste :_.
 
 #### Breaking changes
 
-- _Some change that is not backward compatible 🎖._
+- 🎖 _Certains changements qui ne sont pas rétrocompatibles._
 
-#### New features
+#### Nouvelles fonctionnalités
 
-- _Some new feature 🤟._
+- 🤟 ♪ _Some new feature_ ♪.
 
-#### Technical changes
+#### Modifications techniques
 
-- _Any other technical change (bug fixing, refactoring...) 🛠._
+- 🛠 _Tout autre changement technique (correction d'un bug, refonte...)._
 
-#### Non-technical changes
+#### Changements non techniques
 
-- _Any other non-technical change (documentation, tests, types...) 📖._
+- 📖 _Tout autre changement non technique (documentation, tests, types...)._
 
-### Additional elements of these changeset
+### Éléments supplémentaires de ma proposition
 
-_Optional._
+_Comment tester, comment reviewer, etc. (optionnel)._

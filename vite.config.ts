@@ -8,6 +8,7 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    base: '/',
     plugins: [vue(), ViteYaml()],
     resolve: {
       alias: {
@@ -18,6 +19,9 @@ export default defineConfig(({ mode }) => {
         )
       }
     },
-    base: '/'
+    test: {
+      environment: 'happy-dom',
+      globals: true
+    }
   }
 })
