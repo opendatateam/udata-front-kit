@@ -68,7 +68,7 @@
 
 .actionTile {
   background: #000092;
-  a {
+  .fr-tile__link {
     color: white;
   }
 }
