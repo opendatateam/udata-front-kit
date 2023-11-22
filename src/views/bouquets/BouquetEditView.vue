@@ -4,6 +4,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 import Tooltip from '@/components/Tooltip.vue'
+import TopicForm from '@/components/forms/topic/TopicForm.vue'
 import config from '@/config'
 import SearchAPI from '@/services/api/SearchAPI'
 import { useDatasetStore } from '@/store/DatasetStore'
@@ -281,6 +282,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <TopicForm />
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-col-lg-7">

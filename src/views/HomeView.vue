@@ -3,7 +3,6 @@ import MarkdownIt from 'markdown-it'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import TopicForm from '@/components/forms/topic/TopicForm.vue'
 import config from '@/config'
 
 import HomeButtons from '../components/HomeButtons.vue'
@@ -34,7 +33,6 @@ const showTopicChart = config.website.show_topic_charts
 <template>
   <div class="fr-container fr-mt-8w fr-mb-16w">
     <h1>{{ homepageTitle }}</h1>
-    <TopicForm />
     <div class="es__hero fr-mt-4w fr-mb-4w">
       <span v-html="markdown.render(homepageSubTitle)" />
     </div>
