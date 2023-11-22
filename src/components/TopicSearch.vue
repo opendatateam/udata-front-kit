@@ -47,17 +47,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import config from '../config'
-import { NoOptionSelected, SelectOption } from '../model'
-import Tile from './Tile.vue'
+import Tile from '@/components/Tile.vue'
+import config from '@/config'
+import { NoOptionSelected } from '@/model'
+import type { SelectOption } from '@/model'
 
 export default defineComponent({
   name: 'TopicSearch',
   components: {
     Tile: Tile
-  },
-  created() {
-    this.NoOptionSelected = NoOptionSelected
   },
   props: {
     themeName: {
