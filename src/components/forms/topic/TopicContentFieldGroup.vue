@@ -5,8 +5,8 @@
         <div>
           <div class="fr-mt-1w">
             <h2>Données déjà sélectionnées</h2>
-            {{ this.datasets }}
-            <DatasetForTopicForm @addDataset="addDataset" />
+            {{ datasets }}
+            <DatasetPropertiesForm @addDataset="addDataset" />
           </div>
         </div>
       </div>
@@ -15,17 +15,17 @@
 </template>
 
 <script lang="ts">
-import { DatasetItem } from '../../../model'
-import DatasetForTopicForm from '../dataset/DatasetForTopicForm.vue'
+import DatasetPropertiesForm from '@/components/forms/dataset/DatasetPropertiesForm.vue'
+import type { DatasetProperties } from '@/model'
 
 export default {
   name: 'TopicContentFieldGroup',
   components: {
-    DatasetForTopicForm: DatasetForTopicForm
+    DatasetPropertiesForm: DatasetPropertiesForm
   },
   props: {
     currentDatasets: {
-      type: Array<DatasetItem>,
+      type: Array<DatasetProperties>,
       default: []
     }
   },
@@ -35,8 +35,8 @@ export default {
     }
   },
   methods: {
-    addDataset(datasetItem: DatasetItem) {
-      this.datasets.push(datasetItem)
+    addDataset(datasetProperties: DatasetProperties) {
+      this.datasets.push(datasetProperties)
       console.log(this.datasets[0])
       this.$emit('update:datasets', this.datasets)
     }

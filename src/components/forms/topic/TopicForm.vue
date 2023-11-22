@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import type { DatasetItem } from '../../../model'
+import type { DatasetProperties } from '../../../model'
 import TopicContentFieldGroup from './TopicContentFieldGroup.vue'
 import TopicFormRecap from './TopicFormRecap.vue'
 import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
@@ -51,7 +51,7 @@ export default {
       default: ''
     },
     currentDatasets: {
-      type: Array<DatasetItem>,
+      type: Array<DatasetProperties>,
       default: []
     }
   },

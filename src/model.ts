@@ -1,9 +1,8 @@
-interface DatasetItem {
+interface DatasetProperties {
   label: string
   purpose: string
 }
 
-export type { DatasetItem }
 interface Theme {
   name: string
   color: string
@@ -14,4 +13,4 @@ interface Subtheme {
   name: string
 }
 
-export type { Theme, Subtheme }
+export type { Theme, Subtheme, DatasetProperties }

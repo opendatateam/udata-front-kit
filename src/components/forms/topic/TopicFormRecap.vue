@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import type { DatasetItem } from '../../../model'
+import type { DatasetProperties } from '../../../model'
 import TopicContentFieldGroup from './TopicContentFieldGroup.vue'
 import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
 
@@ -32,7 +32,7 @@ export default {
       default: ''
     },
     datasets: {
-      type: Array<DatasetItem>,
+      type: Array<DatasetProperties>,
       default: []
     }
   }
