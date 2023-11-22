@@ -166,7 +166,6 @@ onMounted(() => {
               `${config.universe.name}:datasets_properties`
             ]"
           >
-            <!-- {{ datasetProperties }} -->
             <DsfrAccordion
               :title="datasetProperties.title"
               :id="datasetProperties.id"
@@ -191,13 +190,27 @@ onMounted(() => {
               <div class="fr-mb-3w">
                 {{ datasetProperties.description }}
               </div>
-              <a
-                v-if="datasetProperties.uri"
-                class="fr-btn fr-btn--secondary flex fr-ml-auto"
-                :href="datasetProperties.uri"
-                target="_blank"
-                >Accéder au catalogue</a
-              >
+              <div class="button__wrapper">
+                <a
+                  v-if="
+                    datasetProperties.available !==
+                      availabilityEnum.URL_AVAILABLE &&
+                    datasetProperties.available !==
+                      availabilityEnum.ECO_AVAILABLE
+                  "
+                  class="fr-btn fr-btn--secondary inline-flex"
+                  :href="`mailto:${config.website.contact_email}`"
+                >
+                  Aidez-nous à trouver la donnée</a
+                >
+                <a
+                  v-else
+                  class="fr-btn fr-btn--secondary inline-flex"
+                  :href="datasetProperties.uri"
+                  target="_blank"
+                  >Accéder au catalogue</a
+                >
+              </div>
             </DsfrAccordion>
           </li>
         </DsfrAccordionsGroup>
@@ -233,12 +246,6 @@ onMounted(() => {
     justify-content: space-between;
     flex-flow: wrap;
 
-    // @media (max-width: 640px) {
-    //   min-height: 100vh;
-    //   display: flex;
-    //   align-items: center;
-    // }
-
     &__left {
       display: flex;
       align-items: center;
@@ -257,7 +264,16 @@ onMounted(() => {
     :deep(a) {
       color: var(--text-action-high-blue-france);
     }
+
+    .button__wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      text-align: center;
+    }
   }
+
+
 }
 .btn-copy {
   display: block;
