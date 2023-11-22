@@ -108,6 +108,11 @@ const availabilityEnum = {
   URL_AVAILABLE: 'url available'
 }
 
+const goToDatasetPage = (id) => {
+  const url = config.website.menu_items.find((link) => link.linkPage === '/datasets')
+  return `${url.linkPage}/${id}`
+}
+
 const addDatasetsPropertiesToExtras = async () => {
   const setUri = urlData.value ? urlData.value : null
   if (title.value && description.value) {
@@ -122,7 +127,7 @@ const addDatasetsPropertiesToExtras = async () => {
         datasetsProperties.value[datasetsPropertiesKey].push({
           title: title.value,
           description: description.value,
-          uri: dataset.page,
+          uri: goToDatasetPage(selectedDataset.value.id),
           id: selectedDataset.value.id,
           available: availabilityEnum.ECO_AVAILABLE
         })
@@ -424,8 +429,6 @@ onMounted(() => {
           <div class="fr-col-12">
             <fieldset class="fr-fieldset">
               <div class="fr-fieldset__content" role="radiogroup">
-                {{ availabilityEnum.ECO_AVAILABLE }} --
-                {{ availabilityEnum.URL_AVAILABLE }}
                 <DsfrRadioButton
                   v-model="DatasetRetrievalOption"
                   :value="availabilityEnum.ECO_AVAILABLE"
@@ -513,6 +516,7 @@ onMounted(() => {
             >
               <DsfrAccordion
                 :title="datasetProperties.title"
+                :id="datasetProperties.id"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
@@ -645,6 +649,7 @@ onMounted(() => {
             >
               <DsfrAccordion
                 :title="datasetProperties.title"
+                :id="datasetProperties.id"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
@@ -697,7 +702,6 @@ onMounted(() => {
           <DsfrButton
             type="button"
             class="fr-mt-2w fr-mr-2w"
-            :secondary="true"
             label="Précédent"
             @click.prevent="validateAndMoveToStep(3)"
           />
