@@ -1,4 +1,5 @@
 <script setup>
+import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { onMounted, ref, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
@@ -9,7 +10,6 @@ import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown } from '../../utils'
-import { DsfrButton } from '@gouvminint/vue-dsfr'
 
 const route = useRoute()
 const router = useRouter()
@@ -26,8 +26,8 @@ const description = computed(() => descriptionFromMarkdown(bouquet))
 
 const breadcrumbLinks = ref([
   {
-    "to": "/",
-    "text": "Accueil"
+    to: '/',
+    text: 'Accueil'
   }
 ])
 const selectedTheme = ref('')
@@ -54,11 +54,13 @@ const copyUrl = () => {
 }
 
 const getThemeColor = (themeName) => {
-  const theme = config.themes.find(theme => theme.name === themeName)
-  return theme ? `#${parseInt(theme.color, 16).toString(16).padStart(6, '0')}` : 'transparent'
+  const theme = config.themes.find((theme) => theme.name === themeName)
+  return theme
+    ? `#${parseInt(theme.color, 16).toString(16).padStart(6, '0')}`
+    : 'transparent'
 }
 
-const getSelectedThemeColor = themed => {
+const getSelectedThemeColor = (themed) => {
   selectedTheme.value = themed
   return getThemeColor(selectedTheme.value)
 }
@@ -77,8 +79,10 @@ onMounted(() => {
     .load(route.params.bid)
     .then((res) => {
       bouquet.value = res
-      theme.value = bouquet.value.extras[`${config.universe.name}:informations`][0].theme
-      subtheme.value = bouquet.value.extras[`${config.universe.name}:informations`][0].subtheme
+      theme.value =
+        bouquet.value.extras[`${config.universe.name}:informations`][0].theme
+      subtheme.value =
+        bouquet.value.extras[`${config.universe.name}:informations`][0].subtheme
 
       breadcrumbLinks.value.push(
         {
@@ -110,7 +114,17 @@ onMounted(() => {
       :tertiary="true"
       :no-outline="true"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12H5.828Z"/></svg> 
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="currentColor"
+          d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12H5.828Z"
+        />
+      </svg>
       Revenir aux résultats
     </DsfrButton>
     <DsfrBreadcrumb :links="breadcrumbLinks" />
@@ -152,30 +166,28 @@ onMounted(() => {
               `${config.universe.name}:datasets_properties`
             ]"
           >
-          <!-- {{ datasetProperties }} -->
+            <!-- {{ datasetProperties }} -->
             <DsfrAccordion
               :title="datasetProperties.title"
               :id="datasetProperties.id"
               :expanded-id="datasetProperties.id"
               @expand="datasetProperties.id = $event"
             >
-            <DsfrTag
-                  v-if="
-                    datasetProperties.available !==
-                      availabilityEnum.URL_AVAILABLE &&
-                    datasetProperties.available !==
-                      availabilityEnum.ECO_AVAILABLE
-                  "
-                  class="fr-mb-2w uppercase bold"
-                  :label="`${
-                    datasetProperties.available ===
-                    availabilityEnum.NOT_AVAILABLE
-                      ? missingData
-                      : datasetProperties.available === availabilityEnum.MISSING
-                      ? notFoundData
-                      : null
-                  }`"
-                />
+              <DsfrTag
+                v-if="
+                  datasetProperties.available !==
+                    availabilityEnum.URL_AVAILABLE &&
+                  datasetProperties.available !== availabilityEnum.ECO_AVAILABLE
+                "
+                class="fr-mb-2w uppercase bold"
+                :label="`${
+                  datasetProperties.available === availabilityEnum.NOT_AVAILABLE
+                    ? missingData
+                    : datasetProperties.available === availabilityEnum.MISSING
+                    ? notFoundData
+                    : null
+                }`"
+              />
               <div class="fr-mb-3w">
                 {{ datasetProperties.description }}
               </div>
@@ -192,7 +204,12 @@ onMounted(() => {
       </div>
     </div>
 
-    <DsfrButton @click.prevent="copyUrl" icon="ri-copy" :inline="false" class="btn-copy fr-ml-auto">
+    <DsfrButton
+      @click.prevent="copyUrl"
+      icon="ri-copy"
+      :inline="false"
+      class="btn-copy fr-ml-auto"
+    >
       Copier l'url de la page
     </DsfrButton>
   </div>
@@ -243,6 +260,6 @@ onMounted(() => {
   }
 }
 .btn-copy {
-  display: block ;
+  display: block;
 }
 </style>
