@@ -36,7 +36,7 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Load universe related topics from API
      *
-     * @returns {Array<object>}
+     * @returns {Promise<object[]>}
      */
     async loadTopicsForUniverse() {
       if (this.data.length > 0) return this.data
