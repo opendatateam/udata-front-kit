@@ -32,17 +32,12 @@ const isEditDesc = ref(false)
 const errorMessage = ref()
 const selectedTheme = ref(null)
 const selectedSubTheme = ref(null)
-const currentStep = ref(1)
+const currentStep = ref(2)
 const title = ref()
 const description = ref()
 const urlData = ref()
 const DatasetRetrievalOption = ref()
-const steps = [
-  'Description du bouquet de données',
-  'Informations du bouquet de données',
-  'Composition du bouquet de données',
-  'Récapitulatif'
-]
+
 const missingData = 'Donnée manquante'
 const notFoundData = 'Donnée non disponible'
 
@@ -73,10 +68,6 @@ const markdownDescription = computed(() => descriptionFromMarkdown(form))
 
 const onThemeChanged = () => {
   selectedSubTheme.value = null
-}
-
-const goToPreviousPage = () => {
-  router.go(-1)
 }
 
 const search = async (query) => {
@@ -282,70 +273,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <TopicForm />
   <div class="fr-container fr-mt-4w fr-mb-4w">
-    <div class="fr-grid-row">
-      <div class="fr-col-12 fr-col-lg-7">
-        <DsfrStepper :steps="steps" :current-step="currentStep" />
-      </div>
-    </div>
+    <TopicForm />
     <form @submit.prevent="onSubmit()">
-      <div v-show="currentStep === 1" class="step1">
-        <div class="fr-grid-row">
-          <div class="fr-col-12 fr-col-lg-7">
-            <div>
-              <div class="fr-mt-4v">
-                <DsfrAlert
-                  v-if="errorMessage"
-                  type="warning"
-                  :title="errorMessage"
-                />
-              </div>
-              <DsfrInput
-                v-model="form.name"
-                class="fr-mt-1w fr-mb-4w"
-                type="text"
-                placeholder="Mon bouquet"
-                :label-visible="true"
-                label="Sujet du bouquet"
-              />
-              <Tooltip
-                title="Objectif du bouquet"
-                name="tooltip__objectif"
-                text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
-              />
-              <Tooltip
-                title="Utilisez du markdown pour mettre en forme votre texte"
-                name="tooltip__markdown"
-                text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
-              />
-              <DsfrInput
-                v-model="form.description"
-                class="fr-mt-1w"
-                placeholder="Ma description"
-                :label-visible="true"
-                :is-textarea="true"
-              />
-            </div>
-            <div class="fit fr-mt-3w fr-ml-auto">
-              <DsfrButton
-                type="button"
-                class="fr-mt-2w fr-mr-2w"
-                label="Précédent"
-                @click.prevent="goToPreviousPage"
-              />
-              <DsfrButton
-                type="button"
-                class="fr-mt-2w"
-                label="Suivant"
-                :disabled="!form.name || !form.description"
-                @click.prevent="validateAndMoveToStep(2)"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div v-show="currentStep === 2" class="step2">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-8">

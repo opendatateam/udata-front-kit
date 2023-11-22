@@ -9,6 +9,7 @@
               class="fr-input"
               type="text"
               id="topic_name"
+              placeholder="Mon bouquet"
               :value="topicName"
               @input="$emit('update:topicName', $event.target.value)"
             />
@@ -28,6 +29,7 @@
               class="fr-input"
               type="text"
               id="topic_description"
+              placeholder="Ma description"
               :value="topicDescription"
               @input="$emit('update:topicDescription', $event.target.value)"
             />
@@ -38,7 +40,7 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
 import Tooltip from '@/components/Tooltip.vue'
 
 export default {
