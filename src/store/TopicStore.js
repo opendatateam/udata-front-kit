@@ -5,6 +5,7 @@ import config from '@/config'
 import TopicsAPI from '../services/api/resources/TopicsAPI'
 
 const topicsAPI = new TopicsAPI()
+const topicsAPIv2 = new TopicsAPI({ version: 2 })
 
 export const useTopicStore = defineStore('topic', {
   state: () => ({
@@ -30,12 +31,7 @@ export const useTopicStore = defineStore('topic', {
      * @returns {Array}
      */
     filter(topics) {
-      return topics.filter((topic) => {
-        return (
-          topic.tags.includes(config.universe.name) &&
-          topic.id !== config.universe.topic_id
-        )
-      })
+      return topics.filter((topic) => topic.id !== config.universe.topic_id)
     },
     /**
      * Load universe related topics from API
@@ -44,10 +40,13 @@ export const useTopicStore = defineStore('topic', {
      */
     async loadTopicsForUniverse() {
       if (this.data.length > 0) return this.data
-      let response = await topicsAPI._list()
+      let response = await topicsAPIv2._list({
+        page_size: config.website.pagination_sizes.topics_list,
+        tag: config.universe.name
+      })
       this.data = this.filter(response.data)
       while (response.next_page) {
-        response = await topicsAPI.request(response.next_page)
+        response = await topicsAPIv2.request(response.next_page)
         this.data = [...this.data, ...this.filter(response.data)]
       }
       return this.data
@@ -70,7 +69,7 @@ export const useTopicStore = defineStore('topic', {
     async load(slugOrId) {
       const existing = this.get(slugOrId)
       if (existing) return existing
-      return await topicsAPI.get(slugOrId)
+      return await topicsAPIv2._get(slugOrId)
     },
     /**
      * Create a topic
