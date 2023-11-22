@@ -1,4 +1,5 @@
 <template>
+  <DsfrBreadcrumb class="home-selection-breadcrumb" :links="breadcrumbList" />
   <div className="fr-grid-row topicListView">
     <nav className="fr-sidemenu fr-col-4" aria-labelledby="fr-sidemenu-title">
       <div className="fr-sidemenu__inner">
@@ -10,10 +11,6 @@
       </div>
     </nav>
     <div className="fr-col-8">
-      <DsfrBreadcrumb
-        class="home-selection-breadcrumb"
-        :links="breadcrumbList"
-      />
       <TopicList :themeName="themeName" :subthemeName="subthemeName" />
     </div>
   </div>
@@ -47,12 +44,23 @@ export default {
       subthemeName: this.initSubthemeName
     }
   },
+  watch: {
+    '$route.query.subtheme'(newVal) {
+      this.subthemeName = newVal
+    },
+    '$route.query.theme'(newVal) {
+      this.themeName = newVal
+    }
+  },
   computed: {
     breadcrumbList() {
       const links: BreadcrumbItem[] = []
       if (this.themeName !== NoOptionSelected) {
         links.push({ text: 'Accueil', to: '/' })
-        links.push({ text: this.themeName, to: `/?theme=${this.themeName}` })
+        links.push({
+          text: this.themeName,
+          to: `/bouquets?theme=${this.themeName}`
+        })
         if (this.subthemeName !== NoOptionSelected) {
           links.push({ text: this.subthemeName })
         }

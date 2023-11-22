@@ -106,11 +106,16 @@ export default defineComponent({
   },
   methods: {
     switchTheme(event) {
-      this.$emit('update:subthemeName', NoOptionSelected)
-      this.$emit('update:themeName', event.target.value)
+      this.$router.push({
+        path: '/bouquets',
+        query: { theme: event.target.value, subtheme: NoOptionSelected }
+      })
     },
     switchSubtheme(event) {
-      this.$emit('update:subthemeName', event.target.value)
+      this.$router.push({
+        path: '/bouquets',
+        query: { theme: this.themeName, subtheme: event.target.value }
+      })
     }
   }
 })
