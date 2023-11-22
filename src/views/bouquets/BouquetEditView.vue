@@ -516,6 +516,7 @@ onMounted(() => {
             >
               <DsfrAccordion
                 :title="datasetProperties.title"
+                :id="datasetProperties.id"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
