@@ -8,6 +8,7 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    base: '/',
     plugins: [vue(), ViteYaml()],
     resolve: {
       alias: {
@@ -17,7 +18,6 @@ export default defineConfig(({ mode }) => {
           new URL(`./configs/${env.CONFIG_NAME}`, import.meta.url)
         )
       }
-    },
-    base: '/'
+    }
   }
 })

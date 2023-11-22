@@ -43,3 +43,15 @@ npm run test
 ```sh
 npm run lint
 ```
+
+### Type checks with [TSc](https://www.typescriptlang.org/docs/handbook/compiler-options.html/)
+
+```sh
+npm run hint
+```
+
+### Code formatting with [Prettier](https://prettier.io/)
+
+```sh
+npm run format
+```
