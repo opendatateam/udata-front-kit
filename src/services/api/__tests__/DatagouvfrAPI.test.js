@@ -20,6 +20,7 @@ const endpoint = 'asdf'
 const noContent = uuid()
 const notFound = uuid()
 const networkError = uuid()
+const entityId = uuid()
 
 const server = setupServer(
   http.delete(`${baseUrl}/${version}/${endpoint}/${noContent}/`, () => {
@@ -32,6 +33,14 @@ const server = setupServer(
 
   http.delete(`${baseUrl}/${version}/${endpoint}/${networkError}/`, () => {
     return HttpResponse.error()
+  }),
+
+  http.get(`${baseUrl}/${version}/${endpoint}/`, () => {
+    return HttpResponse.json([], { status: 200 })
+  }),
+
+  http.get(`${baseUrl}/${version}/${endpoint}/${entityId}/`, () => {
+    return HttpResponse.json({ id: entityId }, { status: 200 })
   })
 )
 
@@ -44,7 +53,12 @@ beforeEach(async (context) => {
   setActivePinia(createPinia())
   const httpClient = axios.create()
   httpClient.defaults.proxy = false
-  context.client = new DatagouvfrAPI(baseUrl, version, endpoint, httpClient)
+  context.client = new DatagouvfrAPI({
+    baseUrl,
+    version,
+    endpoint,
+    httpClient
+  })
 })
 
 afterEach(() => {
@@ -68,4 +82,14 @@ test('delete when 404', async ({ client }) => {
 test('delete something else', async ({ client }) => {
   const { message } = await client.delete(networkError)
   expect(message).toMatch(/network error/i)
+})
+
+test('raw list', async ({ client }) => {
+  const res = await client._list()
+  expect(Array.isArray(res)).toBeTruthy()
+})
+
+test('raw get', async ({ client }) => {
+  const res = await client._get(entityId)
+  expect(res.id).toEqual(entityId)
 })

@@ -33,20 +33,21 @@ instance.interceptors.request.use(
  * e.g. OrganizationsAPI will declare `endpoint = organizations`.
  */
 export default class DatagouvfrAPI {
-  base_url = `${config.datagouvfr.base_url}/api`
+  baseUrl = `${config.datagouvfr.base_url}/api`
   version = '1'
   endpoint = ''
   httpClient = instance
 
-  constructor(baseUrl, version, endpoint, httpClient) {
-    this.base_url = baseUrl || this.base_url
+  constructor(args = {}) {
+    const { baseUrl, version, endpoint, httpClient } = args
+    this.baseUrl = baseUrl || this.baseUrl
     this.version = version || this.version
     this.endpoint = endpoint || this.endpoint
     this.httpClient = httpClient || this.httpClient
   }
 
   url() {
-    return `${this.base_url}/${this.version}/${this.endpoint}`
+    return `${this.baseUrl}/${this.version}/${this.endpoint}`
   }
 
   /**
@@ -107,19 +108,23 @@ export default class DatagouvfrAPI {
   /**
    * List entities
    *
+   * @param {object} [queryParams]
    * @returns {Promise}
    */
-  async list() {
-    return await this.makeRequestAndHandleResponse(`${this.url()}/`)
+  async list(queryParams = {}) {
+    const qs = new URLSearchParams(queryParams).toString()
+    return await this.makeRequestAndHandleResponse(`${this.url()}/?${qs}`)
   }
 
   /**
    * List entities, without wrapper
    *
+   * @param {object} [queryParams]
    * @returns {Promise}
    */
-  async _list() {
-    return await this.request(`${this.url()}/`)
+  async _list(queryParams = {}) {
+    const qs = new URLSearchParams(queryParams).toString()
+    return await this.request(`${this.url()}/?${qs}`)
   }
 
   /**

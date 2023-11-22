@@ -24,7 +24,7 @@ export const useOrganizationStore = defineStore('organization', {
      * @returns {Array<object>}
      */
     getPagination() {
-      const pageSize = config.website.organizations_list_page_size
+      const pageSize = config.website.pagination_sizes.organizations_list
       const total = config.organizations.length
       const nbPages = Math.ceil(total / pageSize)
       return [...Array(nbPages).keys()].map((page) => {
@@ -53,7 +53,7 @@ export const useOrganizationStore = defineStore('organization', {
      * @returns {Array<object>}
      */
     async loadFromConfig(page = 1) {
-      const pageSize = config.website.organizations_list_page_size
+      const pageSize = config.website.pagination_sizes.organizations_list
       const paginated = config.organizations.slice(
         pageSize * (page - 1),
         pageSize * page
