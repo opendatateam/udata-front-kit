@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -16,6 +17,7 @@ const userStore = useUserStore()
 const datasetStore = useDatasetStore()
 const bouquet = ref({})
 const datasets = ref([])
+const loading = useLoading()
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
@@ -32,12 +34,17 @@ const canCreate = computed(() => {
 })
 
 onMounted(() => {
-  store.load(route.params.bid).then((res) => {
-    bouquet.value = res
-    datasetStore
-      .loadMultiple(bouquet.value.datasets.map((d) => d.id))
-      .then((ds) => (datasets.value = ds))
-  })
+  const loader = loading.show()
+  store
+    .load(route.params.bid)
+    .then((res) => {
+      bouquet.value = res
+      // FIXME: not used anymore in template below, change template or remove
+      return datasetStore.loadMultiple(res.datasets).then((ds) => {
+        datasets.value = ds
+      })
+    })
+    .finally(() => loader.hide())
 })
 </script>
 
@@ -83,12 +90,12 @@ onMounted(() => {
             ]"
           >
             <DsfrAccordion
-              :title="datasetProperties.libelle"
+              :title="datasetProperties.title"
               :expanded-id="datasetProperties.id"
               @expand="datasetProperties.id = $event"
             >
               <div class="fr-mb-3w">
-                {{ datasetProperties.raison }}
+                {{ datasetProperties.description }}
               </div>
               <a
                 v-if="datasetProperties.uri"
@@ -121,7 +128,7 @@ onMounted(() => {
   &__container {
     border: 1px solid var(--border-default-grey);
 
-    :deep a {
+    :deep(a) {
       color: var(--text-action-high-blue-france);
     }
   }

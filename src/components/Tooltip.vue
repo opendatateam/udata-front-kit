@@ -38,7 +38,6 @@ const props = defineProps(['title', 'name', 'show', 'text'])
   display: none;
   width: 300px;
   box-shadow: 0px -1px 6px 0px #00000040;
-  top: -12.5rem;
 
   &__arrow {
     width: 50px;

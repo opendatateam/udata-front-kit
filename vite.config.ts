@@ -3,24 +3,13 @@ import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
-import { createHtmlPlugin } from 'vite-plugin-html'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    plugins: [
-      vue(),
-      ViteYaml(),
-      createHtmlPlugin({
-        minify: true,
-        inject: {
-          data: {
-            title: env.WEBSITE_NAME
-          }
-        }
-      })
-    ],
+    base: '/',
+    plugins: [vue(), ViteYaml()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -30,6 +19,9 @@ export default defineConfig(({ mode }) => {
         )
       }
     },
-    base: '/'
+    test: {
+      environment: 'happy-dom',
+      globals: true
+    }
   }
 })
