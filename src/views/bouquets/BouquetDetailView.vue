@@ -87,11 +87,11 @@ onMounted(() => {
       breadcrumbLinks.value.push(
         {
           text: theme,
-          to: `/?theme=${theme.value}`
+          to: `/bouquets/?theme=${theme.value}`
         },
         {
           text: subtheme.value,
-          to: `/?theme=${theme.value}&subtheme=${subtheme.value}`
+          to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
         },
         {
           text: bouquet.value.name
@@ -108,8 +108,9 @@ onMounted(() => {
 
 <template>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+    <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-2w" />
     <DsfrButton
-      class="backToPage fr-pl-0"
+      class="backToPage fr-pl-0 fr-mb-2w"
       @click.prevent="goBack"
       :tertiary="true"
       :no-outline="true"
@@ -127,7 +128,6 @@ onMounted(() => {
       </svg>
       Revenir aux résultats
     </DsfrButton>
-    <DsfrBreadcrumb :links="breadcrumbLinks" />
     <div class="bouquet__header fr-mb-4w">
       <div class="bouquet__header__left">
         <h3 class="fr-mb-3w fr-mb-md-0 fr-mr-md-3w">{{ bouquet.name }}</h3>
@@ -272,8 +272,6 @@ onMounted(() => {
       text-align: center;
     }
   }
-
-
 }
 .btn-copy {
   display: block;
