@@ -8,4 +8,15 @@ interface Subtheme {
   name: string
 }
 
-export type { Theme, Subtheme }
+interface DiscussionRequest {
+  title: string,
+  comment: string,
+  subject: DiscussionSubject,
+}
+
+interface DiscussionSubject {
+  class: "Topic"
+  "id": string
+}
+
+export type { Theme, Subtheme, DiscussionRequest }

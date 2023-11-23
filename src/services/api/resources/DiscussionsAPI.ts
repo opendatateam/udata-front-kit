@@ -1,4 +1,5 @@
 import DatagouvfrAPI from '../DatagouvfrAPI'
+import type { DiscussionRequest } from '@/model'
 
 export default class DiscussionsAPI extends DatagouvfrAPI {
   endpoint = 'discussions'
@@ -13,5 +14,15 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
   async getDiscussions(dataset_id, page = 1) {
     const url = `${this.url()}/?for=${dataset_id}&page=${page}`
     return await this.makeRequestAndHandleResponse(url)
+  }
+
+  /**
+   * Create an discussion (POST)
+   *
+   * @param {object} data
+   * @returns {object}
+   */
+  async create(data: DiscussionRequest): Promise<DiscussionRequest> {
+    return await this.request(`${this.url()}/`, 'post', data)
   }
 }
