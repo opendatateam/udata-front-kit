@@ -17,6 +17,18 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
   }
 
   /**
+   * Base function for HTTP calls (without error handling)
+   *
+   * @param {string} url
+   * @param {string} method
+   * @param {object} params
+   * @returns {Promise}
+   */
+  async _request(url, method = 'get', params = {}) {
+    return await this.httpClient[method](url, params)
+  }
+
+  /**
    * Create an discussion (POST)
    *
    * @param {object} data

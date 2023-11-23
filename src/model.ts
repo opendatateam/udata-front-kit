@@ -19,4 +19,9 @@ interface DiscussionSubject {
   "id": string
 }
 
-export type { Theme, Subtheme, DiscussionRequest }
+interface DiscussionResponse {
+  status: 200
+  data: DiscussionRequest
+}
+
+export type { Theme, Subtheme, DiscussionResponse }
