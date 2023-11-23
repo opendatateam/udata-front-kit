@@ -8,20 +8,39 @@ interface Subtheme {
   name: string
 }
 
-interface DiscussionRequest {
-  title: string,
-  comment: string,
-  subject: DiscussionSubject,
+interface Request {
+  method: string
+  url: string
+  data?: Record<string, any>
+}
+
+interface Response {
+  status: number
+  data?: Record<string, any>
+  error?: { message: string }
+}
+
+interface DiscussionParams {
+  title: string
+  comment: string
+  subject: DiscussionSubject
 }
 
 interface DiscussionSubject {
-  class: "Topic"
-  "id": string
+  class: 'Topic'
+  id: string
 }
 
-interface DiscussionResponse {
-  status: 200
-  data: DiscussionRequest
+interface DiscussionResponse extends Response {
+  status: 200 | number
+  data?: Partial<DiscussionParams>
 }
 
-export type { Theme, Subtheme, DiscussionResponse }
+export type {
+  Theme,
+  Subtheme,
+  Request,
+  Response,
+  DiscussionParams,
+  DiscussionResponse
+}

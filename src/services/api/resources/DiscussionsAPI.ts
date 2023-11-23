@@ -1,5 +1,6 @@
+import type { DiscussionParams, DiscussionResponse } from '@/model'
+
 import DatagouvfrAPI from '../DatagouvfrAPI'
-import type { DiscussionRequest } from '@/model'
 
 export default class DiscussionsAPI extends DatagouvfrAPI {
   endpoint = 'discussions'
@@ -17,24 +18,12 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
   }
 
   /**
-   * Base function for HTTP calls (without error handling)
+   * Create a discussion (POST)
    *
-   * @param {string} url
-   * @param {string} method
-   * @param {object} params
-   * @returns {Promise}
+   * @param {DiscussionParams} data
+   * @returns {Promise<DiscussionResponse>}
    */
-  async _request(url, method = 'get', params = {}) {
-    return await this.httpClient[method](url, params)
-  }
-
-  /**
-   * Create an discussion (POST)
-   *
-   * @param {object} data
-   * @returns {object}
-   */
-  async create(data: DiscussionRequest): Promise<DiscussionRequest> {
-    return await this.request(`${this.url()}/`, 'post', data)
+  async create(data: DiscussionParams): Promise<DiscussionResponse> {
+    return await this._create(`${this.url()}/`, data)
   }
 }
