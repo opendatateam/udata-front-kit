@@ -58,18 +58,18 @@ const getTheme = (themeName) => {
   return theme
 }
 
+const convertToHex = (hex, color) => {
+  return hex ? `#${parseInt(hex, 16).toString(16).padStart(6, '0')}` : color
+}
+
 const getThemeColor = (themeName) => {
   const theme = getTheme(themeName)
-  return theme
-    ? `#${parseInt(theme.color, 16).toString(16).padStart(6, '0')}`
-    : 'transparent'
+  return convertToHex(theme ? theme.color : 'transparent')
 }
 
 const getTextColor = (themeName) => {
   const theme = getTheme(themeName)
-  return theme
-    ? `#${parseInt(theme.textColor, 16).toString(16).padStart(6, '0')}`
-    : '#000000b3'
+  return convertToHex(theme ? theme.textColor : '#000000b3')
 }
 
 const getSelectedThemeColor = (themed) => {
