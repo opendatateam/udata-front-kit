@@ -1,6 +1,35 @@
 interface DatasetProperties {
   label: string
   purpose: string
+  uri: string | null
+  availability: Availability
+}
+
+// alternative to enum to ensure that no other string is used for
+export class Availability {
+  static readonly MISSING = new Availability('MISSING')
+  static readonly NOT_AVAILABLE = new Availability('NOT_AVAILABLE')
+  static readonly ECO_AVAILABLE = new Availability('ECO_AVAILABLE')
+  static readonly URL_AVAILABLE = new Availability('URL_AVAILABLE')
+
+  // private to disallow creating other instances of this type
+  private constructor(private readonly value: string) {}
+
+  public isAvailable() {
+    for (const availability of [
+      Availability.URL_AVAILABLE,
+      Availability.ECO_AVAILABLE
+    ]) {
+      if (this.value == availability.value) {
+        return true
+      }
+    }
+    return false
+  }
+
+  toString() {
+    return this.value
+  }
 }
 
 interface Theme {

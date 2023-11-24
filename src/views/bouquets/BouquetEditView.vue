@@ -276,31 +276,7 @@ onMounted(() => {
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <TopicForm />
     <form @submit.prevent="onSubmit()">
-      <div v-show="currentStep === 2" class="step2">
-        <div class="fr-grid-row">
-          <div class="fr-col-12 fr-col-lg-8">
-            <div class="fr-grid-row justify-between"></div>
-            <div class="fit fr-mt-3w fr-ml-auto">
-              <DsfrButton
-                type="button"
-                class="fr-mt-2w fr-mr-2w"
-                :secondary="true"
-                label="Précédent"
-                @click.prevent="validateAndMoveToStep(1)"
-              />
-              <DsfrButton
-                type="button"
-                class="fr-mt-2w"
-                label="Suivant"
-                :disabled="!selectedSubTheme"
-                @click.prevent="validateAndMoveToStep(3)"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div v-show="currentStep === 3" class="step3">
+      <div class="step3">
         <h4>Ajouter une donnée</h4>
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-4">
@@ -409,78 +385,6 @@ onMounted(() => {
           </div>
         </div>
         <hr />
-
-        <h4>
-          Composition du bouquet
-          <span v-if="dataPropertiesLength">({{ dataPropertiesLength }})</span>
-        </h4>
-        <div v-if="!dataPropertiesLength" class="no-dataset fr-py-2 fr-px-3w">
-          <p class="fr-m-0">Aucune donnée ajoutée</p>
-        </div>
-        <div v-else>
-          <DsfrAccordionsGroup>
-            <li
-              v-for="datasetProperties in datasetsProperties[
-                datasetsPropertiesKey
-              ]"
-            >
-              <DsfrAccordion
-                :title="datasetProperties.title"
-                :expanded-id="datasetProperties.id"
-                @expand="datasetProperties.id = $event"
-              >
-                <DsfrTag
-                  v-if="
-                    datasetProperties.available !==
-                      availabilityEnum.URL_AVAILABLE &&
-                    datasetProperties.available !==
-                      availabilityEnum.ECO_AVAILABLE
-                  "
-                  class="fr-mb-2w uppercase bold"
-                  :label="`${
-                    datasetProperties.available ===
-                    availabilityEnum.NOT_AVAILABLE
-                      ? missingData
-                      : datasetProperties.available === availabilityEnum.MISSING
-                      ? notFoundData
-                      : null
-                  }`"
-                />
-                <div>
-                  {{ datasetProperties.description }}
-                </div>
-                <div class="button__wrapper">
-                  <DsfrButton
-                    icon="ri-delete-bin-line"
-                    label="Retirer de la section"
-                    class="fr-mr-2w"
-                    @click.stop.prevent="onDeleteDataset(datasetProperties.id)"
-                  />
-
-                  <a
-                    v-if="
-                      datasetProperties.available !==
-                        availabilityEnum.URL_AVAILABLE &&
-                      datasetProperties.available !==
-                        availabilityEnum.ECO_AVAILABLE
-                    "
-                    class="fr-btn fr-btn--secondary inline-flex"
-                    :href="`mailto:${config.website.contact_email}`"
-                  >
-                    Aidez-nous à trouver la donnée</a
-                  >
-                  <a
-                    v-else
-                    class="fr-btn fr-btn--secondary inline-flex"
-                    :href="datasetProperties.uri"
-                    target="_blank"
-                    >Accéder au catalogue</a
-                  >
-                </div>
-              </DsfrAccordion>
-            </li>
-          </DsfrAccordionsGroup>
-        </div>
         <div class="fit fr-mt-3w fr-ml-auto">
           <DsfrButton
             type="button"

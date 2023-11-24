@@ -4,8 +4,16 @@
       <div class="fr-col-12 fr-col-lg-7">
         <div>
           <div class="fr-mt-1w">
-            <h2>Données déjà sélectionnées</h2>
-            {{ datasets }}
+            <h4>{{ compositionTitle }}</h4>
+            <div
+              v-if="numberOfDatasets < 1"
+              class="no-dataset fr-py-2 fr-px-3w"
+            >
+              <p class="fr-m-0">Aucune donnée ajoutée</p>
+            </div>
+            <div v-else>
+              <DatasetList v-model:datasets="datasets" />
+            </div>
             <DatasetPropertiesForm @addDataset="addDataset" />
           </div>
         </div>
@@ -15,13 +23,15 @@
 </template>
 
 <script lang="ts">
+import DatasetList from '@/components/DatasetList.vue'
 import DatasetPropertiesForm from '@/components/forms/dataset/DatasetPropertiesForm.vue'
 import type { DatasetProperties } from '@/model'
 
 export default {
   name: 'TopicContentFieldGroup',
   components: {
-    DatasetPropertiesForm: DatasetPropertiesForm
+    DatasetPropertiesForm: DatasetPropertiesForm,
+    DatasetList: DatasetList
   },
   props: {
     currentDatasets: {
@@ -34,10 +44,20 @@ export default {
       datasets: this.currentDatasets
     }
   },
+  computed: {
+    numberOfDatasets(): number {
+      return this.datasets.length
+    },
+    compositionTitle(): string {
+      const title = ' Composition du bouquet'
+      return this.numberOfDatasets < 1
+        ? title
+        : title + `( ${this.numberOfDatasets} )`
+    }
+  },
   methods: {
     addDataset(datasetProperties: DatasetProperties) {
       this.datasets.push(datasetProperties)
-      console.log(this.datasets[0])
       this.$emit('update:datasets', this.datasets)
     }
   }

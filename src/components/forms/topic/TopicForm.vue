@@ -10,16 +10,23 @@
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
       </div>
       <TopicPropertiesFieldGroup
-        v-if="currentStep >= 1"
+        v-if="currentStep >= 0"
         @updateValidation="(isValid) => updateStepValidation(1, isValid)"
         v-model:topicName="topic.name"
         v-model:topicDescription="topic.description"
       />
+      <hr style="background: orange" />
       <TopicThemeFieldGroup
-        v-if="currentStep >= 2"
+        v-if="currentStep >= 0"
         @updateValidation="(isValid) => updateStepValidation(2, isValid)"
         v-model:theme="topic.theme"
         v-model:subtheme="topic.subtheme"
+      />
+      <hr style="background: orange" />
+      <TopicContentFieldGroup
+        v-if="currentStep >= 0"
+        @updateValidation="(isValid) => updateStepValidation(3, isValid)"
+        v-model:datasets="topic.datasetsProperties"
       />
       <div class="fit fr-mt-3w fr-ml-auto">
         <DsfrButton
@@ -46,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import type { DatasetProperties, Topic } from '@/model'
+import type { Topic } from '@/model'
 
 import TopicContentFieldGroup from './TopicContentFieldGroup.vue'
 import TopicFormRecap from './TopicFormRecap.vue'
@@ -67,20 +74,6 @@ export default {
     TopicThemeFieldGroup: TopicThemeFieldGroup,
     TopicContentFieldGroup: TopicContentFieldGroup,
     TopicFormRecap: TopicFormRecap
-  },
-  props: {
-    currentName: {
-      type: String,
-      default: ''
-    },
-    currentDescription: {
-      type: String,
-      default: ''
-    },
-    currentDatasets: {
-      type: Array<DatasetProperties>,
-      default: []
-    }
   },
   data(): TopicFormData {
     return {
