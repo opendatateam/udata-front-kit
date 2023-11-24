@@ -72,7 +72,6 @@ export default {
       return links
     },
     classDependingOnBreadcrumb() {
-      console.log(this.breadcrumbList.length)
       return this.breadcrumbList.length > 0
         ? 'with_breadcrumb'
         : 'without_breadcrumb'
