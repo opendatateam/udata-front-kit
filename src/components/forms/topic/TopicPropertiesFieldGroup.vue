@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import Tooltip from '@/components/Tooltip.vue'
+import Tooltip from '../../Tooltip.vue'
 
 export default {
   name: 'TopicPropertiesFieldGroup',
@@ -56,6 +56,19 @@ export default {
     topicDescription: {
       type: String,
       default: ''
+    }
+  },
+  watch: {
+    isValid(newValue) {
+      this.$emit('updateValidation', newValue)
+    }
+  },
+  computed: {
+    isValid() {
+      return this.topicName !== '' && this.topicDescription !== ''
+    },
+    errorMsg() {
+      return ''
     }
   }
 }

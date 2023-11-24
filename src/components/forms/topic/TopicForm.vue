@@ -10,9 +10,10 @@
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
       </div>
       <TopicPropertiesFieldGroup
+        v-if="currentStep === 1"
+        @updateValidation="(isValid) => updateStepValidation(1, isValid)"
         v-model:topicName="topicData.name"
         v-model:topicDescription="topicData.description"
-        declareFormAsValid="() => {console}"
       />
       <div class="fit fr-mt-3w fr-ml-auto">
         <DsfrButton
@@ -45,8 +46,8 @@ import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
 interface TopicFormData {
   topicData: Partial<Topic>
   currentStep: number
+  stepsValidation: [boolean, boolean, boolean]
   errorMsg: string | null
-  stepValidation: [boolean, boolean, boolean]
 }
 
 export default {
@@ -74,8 +75,8 @@ export default {
     return {
       topicData: {},
       currentStep: 1,
-      errorMsg: null,
-      stepValidation: [false, false, false]
+      stepsValidation: [false, false, false],
+      errorMsg: null
     }
   },
   computed: {
@@ -101,7 +102,10 @@ export default {
       )
     },
     isStepValid(step: number) {
-      return this.stepValidation[step - 1]
+      return this.stepsValidation[step - 1]
+    },
+    updateStepValidation(step: number, isValid: boolean) {
+      this.stepsValidation[step - 1] = isValid
     },
     goToNextStep() {
       this.currentStep++
