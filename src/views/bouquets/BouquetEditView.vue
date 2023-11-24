@@ -279,26 +279,7 @@ onMounted(() => {
       <div v-show="currentStep === 2" class="step2">
         <div class="fr-grid-row">
           <div class="fr-col-12 fr-col-lg-8">
-            <div class="fr-grid-row justify-between">
-              <div class="fr-col-12 fr-col-sm-45">
-                <DsfrSelect
-                  v-model="selectedTheme"
-                  default-unselected-text="Sélectionnez une thématique"
-                  label="Thématique"
-                  :options="themeOptions"
-                  @update:model-value="onThemeChanged"
-                />
-              </div>
-              <div class="fr-col-12 fr-col-sm-45">
-                <DsfrSelect
-                  v-model="selectedSubTheme"
-                  :disabled="!selectedTheme"
-                  default-unselected-text="Sélectionnez un chantier"
-                  label="Chantier"
-                  :options="subThemeOptions"
-                />
-              </div>
-            </div>
+            <div class="fr-grid-row justify-between"></div>
             <div class="fit fr-mt-3w fr-ml-auto">
               <DsfrButton
                 type="button"

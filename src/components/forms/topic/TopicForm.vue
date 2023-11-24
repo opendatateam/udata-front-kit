@@ -10,13 +10,20 @@
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
       </div>
       <TopicPropertiesFieldGroup
-        v-if="currentStep === 1"
+        v-if="currentStep >= 1"
         @updateValidation="(isValid) => updateStepValidation(1, isValid)"
-        v-model:topicName="topicData.name"
-        v-model:topicDescription="topicData.description"
+        v-model:topicName="topic.name"
+        v-model:topicDescription="topic.description"
+      />
+      <TopicThemeFieldGroup
+        v-if="currentStep >= 2"
+        @updateValidation="(isValid) => updateStepValidation(2, isValid)"
+        v-model:theme="topic.theme"
+        v-model:subtheme="topic.subtheme"
       />
       <div class="fit fr-mt-3w fr-ml-auto">
         <DsfrButton
+          v-if="currentStep > 1"
           type="button"
           class="fr-mt-2w fr-mr-2w"
           label="Précédent"
@@ -32,6 +39,8 @@
         />
         <DsfrButton v-else type="submit" label="Ajouter le bouquet" />
       </div>
+      <TopicFormRecap :topic="topic" />
+      {{ topic }}
     </form>
   </div>
 </template>
@@ -42,9 +51,10 @@ import type { DatasetProperties, Topic } from '@/model'
 import TopicContentFieldGroup from './TopicContentFieldGroup.vue'
 import TopicFormRecap from './TopicFormRecap.vue'
 import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
+import TopicThemeFieldGroup from './TopicThemeFieldGroup.vue'
 
 interface TopicFormData {
-  topicData: Partial<Topic>
+  topic: Partial<Topic>
   currentStep: number
   stepsValidation: [boolean, boolean, boolean]
   errorMsg: string | null
@@ -54,6 +64,7 @@ export default {
   name: 'TopicForm',
   components: {
     TopicPropertiesFieldGroup: TopicPropertiesFieldGroup,
+    TopicThemeFieldGroup: TopicThemeFieldGroup,
     TopicContentFieldGroup: TopicContentFieldGroup,
     TopicFormRecap: TopicFormRecap
   },
@@ -73,9 +84,9 @@ export default {
   },
   data(): TopicFormData {
     return {
-      topicData: {},
+      topic: {},
       currentStep: 1,
-      stepsValidation: [false, false, false],
+      stepsValidation: [false, true, false],
       errorMsg: null
     }
   },
@@ -91,14 +102,11 @@ export default {
   },
   methods: {
     goToPreviousPage() {
-      this.$router.go(-1)
+      this.currentStep--
     },
     handleSubmit() {
       alert(
-        'form submitted : ' +
-          this.topicData.name +
-          ' ' +
-          this.topicData.description
+        'form submitted : ' + this.topic.name + ' ' + this.topic.description
       )
     },
     isStepValid(step: number) {

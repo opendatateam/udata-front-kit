@@ -1,10 +1,12 @@
 <template>
   <div class="app">
-    <h3>Bouquet : {{ this.name }}</h3>
-    description : {{ this.description }}
+    <h3>Bouquet : {{ topic.name }}</h3>
+    <p>description : {{ topic.description }}</p>
+    <p>theme : {{ topic.theme }}</p>
+    <p>subtheme : {{ topic.subtheme }}</p>
     <p>contenu :</p>
     <ul>
-      <li v-for="dataset in datasets">
+      <li v-for="dataset in topic.datasetsProperties">
         {{ dataset.label }} - {{ dataset.purpose }}
       </li>
     </ul>
@@ -12,28 +14,16 @@
 </template>
 
 <script lang="ts">
-import type { DatasetProperties } from '../../../model'
-import TopicContentFieldGroup from './TopicContentFieldGroup.vue'
-import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
+import type { PropType } from 'vue'
+
+import type { Topic } from '@/model'
 
 export default {
-  name: 'TopicForm',
-  components: {
-    TopicPropertiesFieldGroup: TopicPropertiesFieldGroup,
-    TopicContentFieldGroup: TopicContentFieldGroup
-  },
+  name: 'TopicFormRecap',
   props: {
-    name: {
-      type: String,
+    topic: {
+      type: Object as PropType<Partial<Topic>>,
       default: ''
-    },
-    description: {
-      type: String,
-      default: ''
-    },
-    datasets: {
-      type: Array<DatasetProperties>,
-      default: []
     }
   }
 }

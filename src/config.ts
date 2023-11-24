@@ -3,9 +3,11 @@ import config from '@siteConfig/config.yaml'
 import type { SelectOption, Theme } from '@/model'
 
 class ConfigUtils {
+  config = config
+
   public static getThemeOptions() {
     const options: SelectOption[] = []
-    for (const theme of config.theme) {
+    for (const theme of config.themes) {
       options.push({
         value: theme.name,
         text: theme.name
