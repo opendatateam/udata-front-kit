@@ -53,11 +53,23 @@ const copyUrl = () => {
   navigator.clipboard.writeText(url)
 }
 
-const getThemeColor = (themeName) => {
+const getTheme = (themeName) => {
   const theme = config.themes.find((theme) => theme.name === themeName)
+  return theme
+}
+
+const getThemeColor = (themeName) => {
+  const theme = getTheme(themeName)
   return theme
     ? `#${parseInt(theme.color, 16).toString(16).padStart(6, '0')}`
     : 'transparent'
+}
+
+const getTextColor = (themeName) => {
+  const theme = getTheme(themeName)
+  return theme
+    ? `#${parseInt(theme.textColor, 16).toString(16).padStart(6, '0')}`
+    : '#000000b3'
 }
 
 const getSelectedThemeColor = (themed) => {
@@ -135,7 +147,10 @@ onMounted(() => {
           v-if="bouquet.extras"
           class="fr-mb-3w fr-mb-md-0 bold uppercase"
           :label="subtheme"
-          :style="{ backgroundColor: getSelectedThemeColor(theme) }"
+          :style="{
+            backgroundColor: getSelectedThemeColor(theme),
+            color: getTextColor(theme)
+          }"
         />
       </div>
       <DsfrButton
