@@ -25,6 +25,14 @@ interface BreadcrumbItem {
 }
 
 interface Topic {
+  name: string
+  description: string
+  theme: string | undefined
+  subtheme: string | undefined
+  datasetsProperties: DatasetProperties[]
+}
+
+interface BetaTopic {
   created_at: string
   datasets: Dataset[]
   description: string
@@ -56,6 +64,7 @@ export type {
   Subtheme,
   SelectOption,
   BreadcrumbItem,
+  BetaTopic,
   Topic,
   DatasetProperties
 }

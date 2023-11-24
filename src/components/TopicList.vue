@@ -33,7 +33,7 @@
 import { onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
-import type { Topic } from '../model'
+import type { BetaTopic } from '../model'
 import { NoOptionSelected } from '../model'
 import { useTopicStore } from '../store/TopicStore'
 import Tile from './Tile.vue'
@@ -64,12 +64,12 @@ export default {
     }
   },
   computed: {
-    bouquets(): Topic[] {
+    bouquets(): BetaTopic[] {
       const allTopics = useTopicStore().$state.data
       if (this.themeName === NoOptionSelected) {
         return allTopics
       }
-      const relevantTopics: Topic[] = []
+      const relevantTopics: BetaTopic[] = []
       if (this.subthemeName !== NoOptionSelected) {
         for (const topic of allTopics) {
           if (
@@ -97,7 +97,7 @@ export default {
     }
   },
   methods: {
-    isRelevant(topic: Topic, property: string, value): Boolean {
+    isRelevant(topic: BetaTopic, property: string, value: string): Boolean {
       const topicInformations: { subtheme: string; theme: string }[] =
         topic.extras['ecospheres:informations']
       if (topicInformations) {
