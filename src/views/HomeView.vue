@@ -29,6 +29,12 @@ const topics = config.website.list_highlighted_topics
 const buttons = config.website.home_buttons
 const showTopicChart = config.website.show_topic_charts
 const colorsBanner = config.website.home_banner_colors
+const searchConfig = config.website.search_bar
+const secondarySearchConfig = config.website.secondary_search
+
+const goToPage = (page) => {
+  window.location.href = page
+}
 </script>
 
 <template>
@@ -49,14 +55,28 @@ const colorsBanner = config.website.home_banner_colors
       <div class="subtitle fr-mt-4w fr-mb-4w">
         <span v-html="homepageSubTitle" />
       </div>
-      <div class="search-bar">
+      <div class="search-bar" v-if="searchConfig.display">
         <DsfrSearchBar
           button-text="Rechercher"
-          placeholder="Rechercher un jeu de données"
-          :large="true"
+          :placeholder="searchConfig.placeholder"
+          :large="false"
           @search="doSearch"
           @update:modelValue="updateQuery"
+          class="search-bar-input"
+          :style="
+            secondarySearchConfig.display
+              ? 'min-width: 80%;'
+              : 'min-width: 100%;'
+          "
         />
+        <div v-if="secondarySearchConfig.display" class="or-sep">ou</div>
+        <div
+          v-if="secondarySearchConfig.display"
+          @click="goToPage(secondarySearchConfig.link)"
+          class="button-search-guided"
+        >
+          {{ secondarySearchConfig.name }}
+        </div>
       </div>
     </div>
   </div>
@@ -73,6 +93,27 @@ const colorsBanner = config.website.home_banner_colors
 </template>
 
 <style scoped lang="scss">
+@media (min-width: 1180px) {
+  .search-bar {
+    display: flex;
+    width: 100%;
+  }
+  .or-sep {
+    max-width: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+@media (max-width: 1180px) {
+  .or-sep {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .button-search-guided {
+    margin-top: 10px;
+  }
+}
+
 .fr-container {
   text-align: center;
 }
@@ -100,5 +141,27 @@ const colorsBanner = config.website.home_banner_colors
   padding: 20px;
   background-color: white;
   border-radius: 10px;
+}
+.search-bar-input {
+  flex-wrap: nowrap;
+  height: 40px;
+}
+.button-search-guided {
+  background-color: #060091;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  font-weight: bold;
+  vertical-align: middle;
+  line-height: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+.button-search-guided:hover {
+  cursor: pointer;
+}
+.or-sep {
+  text-align: 'center';
+  line-height: 40px;
 }
 </style>
