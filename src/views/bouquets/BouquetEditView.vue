@@ -109,7 +109,9 @@ const availabilityEnum = {
 }
 
 const goToDatasetPage = (id) => {
-  const url = config.website.menu_items.find((link) => link.linkPage === '/datasets')
+  const url = config.website.menu_items.find(
+    (link) => link.linkPage === '/datasets'
+  )
   return `${url.linkPage}/${id}`
 }
 
@@ -286,7 +288,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
+  <div class="fr-container width-inherit fr-mt-4w fr-mb-4w">
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-col-lg-7">
         <DsfrStepper :steps="steps" :current-step="currentStep" />

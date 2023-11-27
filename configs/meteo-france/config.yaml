@@ -20,9 +20,9 @@ website:
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
   # leave empty if not pertinent
-  logo_operator: 'https://upload.wikimedia.org/wikipedia/fr/4/47/Logo_M%C3%A9t%C3%A9o_France_2016.svg'
-  homepage_title: 'Données météo'
-  homepage_subtitle: 'Portail des données publiques open data de Météo-France'
+  logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
+  homepage_title: 'La météo et le climat en Open Data'
+  homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat.<br />Vous y trouverez des données brutes téléchargeables et utilisable de manière libre et gratuite.'
   menu_items:
     - name: 'Accueil'
       id: 'home'
@@ -63,7 +63,11 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 100
+    topics_list: 100  
+  home_banner_colors:
+    - '#F7EED4'
+    - '#ECEEE6'
+    - '#E2EEF8'
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

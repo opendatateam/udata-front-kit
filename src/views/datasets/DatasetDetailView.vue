@@ -110,7 +110,7 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
     <div class="fr-grid-row">
       <div
         v-if="dataset.organization"

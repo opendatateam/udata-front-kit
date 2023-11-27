@@ -49,7 +49,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
     <div class="bouquet__header fr-mb-4w">
       <div class="bouquet__header__left">
         <h3 class="fr-m-0">{{ bouquet.name }}</h3>
