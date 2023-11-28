@@ -1,4 +1,7 @@
+import { i18n } from '@etalab/data.gouv.fr-components'
+import '@etalab/data.gouv.fr-components/dist/style.css'
 import '@gouvfr/dsfr/dist/dsfr.min.css'
+import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 // Import des styles du DSFR
 import '@gouvminint/vue-dsfr/styles'
@@ -23,6 +26,7 @@ const pinia = createPinia()
 app.use(router)
 app.use(VueDsfr, { icons: Object.values(icons) })
 app.use(pinia)
+app.use(i18n)
 
 app.use(TextClamp)
 app.use(LoadingPlugin)
