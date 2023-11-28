@@ -14,7 +14,7 @@
     "test_single_run": "vitest run",
     "lint": "eslint . --ext .js,.ts,.vue,.json --ignore-path .gitignore",
     "hint": "tsc --project tsconfig.dev.json",
-    "format": "prettier . --write",
+    "format": "prettier '**/*.{js,ts,vue,yml,yaml,json}' --write",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -68,6 +68,6 @@
     "vitest": "^0.34.6"
   },
   "lint-staged": {
-    "*": "prettier --write"
+    "*.{js,ts,vue,yml,yaml,json}": "prettier --write"
   }
 }
