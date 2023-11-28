@@ -7,12 +7,18 @@ import { resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
+interface Config {
+  website: {
+    title: string
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const configDir = `./configs/${env.CONFIG_NAME}`
   const configFileUrl = new URL(`${configDir}/config.yaml`, import.meta.url)
-  const config = load(readFileSync(configFileUrl))
+  const config = load(readFileSync(configFileUrl, 'utf-8')) as Config
   return {
     base: '/',
     plugins: [
