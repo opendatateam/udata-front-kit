@@ -3,5 +3,6 @@
     "noEmit": true,
     "types": ["vitest/globals"]
   },
-  "extends": ["./tsconfig.json"]
+  "extends": ["./tsconfig.json"],
+  "include": ["**/*.ts"]
 }
