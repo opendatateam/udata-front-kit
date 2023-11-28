@@ -1,4 +1,4 @@
-import { i18n } from '@etalab/data.gouv.fr-components'
+import { setupI18n } from '@etalab/data.gouv.fr-components'
 import '@etalab/data.gouv.fr-components/dist/style.css'
 import '@gouvfr/dsfr/dist/dsfr.min.css'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
@@ -22,6 +22,7 @@ import router from './router'
 
 const app = createApp(App)
 const pinia = createPinia()
+const i18n = setupI18n()
 
 app.use(router)
 app.use(VueDsfr, { icons: Object.values(icons) })
