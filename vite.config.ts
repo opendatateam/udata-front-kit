@@ -31,7 +31,8 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '@root': resolve(__dirname, './'),
-        '@siteConfig': fileURLToPath(new URL(configDir, import.meta.url))
+        '@siteConfig': fileURLToPath(new URL(configDir, import.meta.url)),
+        vue: 'vue/dist/vue.esm-bundler.js'
       }
     },
     test: {
