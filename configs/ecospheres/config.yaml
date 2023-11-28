@@ -25,7 +25,7 @@ website:
   # leave empty if not pertinent
   logo_operator:
   homepage_title: 'Ecosphères'
-  homepage_subtitle: 'Explorez les données ouvertes et restreintes de la <b>Transition écologique</b>, de la <b>Cohésion des territoires</b>, de la <b>Transition énergétique</b> et de la <b>Mer</b>'
+  homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
   menu_items:
     - name: 'Accueil'
       id: 'home'

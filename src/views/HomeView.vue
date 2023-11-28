@@ -47,7 +47,7 @@ const colorsBanner = config.website.home_banner_colors
     <div class="fr-container">
       <h1 class="main-title">{{ homepageTitle }}</h1>
       <div class="subtitle fr-mt-4w fr-mb-4w">
-        <span v-html="homepageSubTitle" />
+        <span v-html="markdown.render(homepageSubTitle)" />
       </div>
       <div class="search-bar">
         <DsfrSearchBar
