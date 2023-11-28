@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "experimentalDecorators": true,
+    "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
     },
