@@ -61,6 +61,7 @@ website:
 themes:
   - name: Se loger
     color: 043574
+    textColor: FFFFFF
     subthemes:
       - name: Construction et rénovation des logements
       - name: Aménagements des villes
