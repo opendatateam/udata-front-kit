@@ -3,7 +3,9 @@ import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'
 
 import config from '@/config'
+import type { Response } from '@/model'
 
+// FIXME: the client should not depend be aware of the store.
 import { useUserStore } from '../../store/UserStore'
 
 const $loading = useLoading()
@@ -21,7 +23,7 @@ instance.interceptors.request.use(
 
     return config
   },
-  (error) => Promise.reject(error)
+  async (error) => await Promise.reject(error)
 )
 
 /**
@@ -73,14 +75,16 @@ export default class DatagouvfrAPI {
    */
   async makeRequestAndHandleResponse(url, method = 'get', params = {}) {
     const loader = $loading.show()
-    return this.request(url, method, params)
+    return await this.request(url, method, params)
       .catch((error) => {
-        if (error && error.message) {
+        if (error?.message) {
           toast(error.message, { type: 'error', autoClose: false }) // TODO: Refacto to handle the error
           return error.response
         }
       })
-      .finally(() => loader.hide())
+      .finally(() => {
+        loader.hide()
+      })
   }
 
   /**
@@ -142,6 +146,23 @@ export default class DatagouvfrAPI {
   }
 
   /**
+   * Base function for HTTP calls (without error handling)
+   *
+   * @todo Remove this function once all API calls are all handled this way:
+   *       leaving the error handling to the caller (store).
+   *
+   * @param {string} url
+   * @param {object} data
+   * @returns {Promise<Response>}
+   */
+  async _create(url: string, data = {}): Promise<Response> {
+    return await this.httpClient.post(url, data).then(
+      (response) => response,
+      (error) => this.#handleError(error)
+    )
+  }
+
+  /**
    * Update an entity (PUT)
    *
    * @param {string} entity_id
@@ -160,17 +181,19 @@ export default class DatagouvfrAPI {
    * Delete an entity (DELETE)
    *
    * @param {string} entityId - A UUID entity id
-   * @returns {Promise}
+   * @returns {Promise<Response>}
    */
-  async delete(entityId) {
-    return this.httpClient.delete(`${this.url()}/${entityId}/`).then(
+  async delete(entityId: string): Promise<Response> {
+    return await this.httpClient.delete(`${this.url()}/${entityId}/`).then(
       (response) => response,
       (error) => this.#handleError(error)
     )
   }
 
-  #handleError({ response, message }) {
-    if (response) return { status: response.status }
-    return { message }
+  #handleError({ response, message }): Response {
+    return {
+      ...(response && { status: response.status }),
+      ...(message && { error: { message } })
+    }
   }
 }

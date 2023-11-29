@@ -80,8 +80,8 @@ test('delete when 404', async ({ client }) => {
 })
 
 test('delete something else', async ({ client }) => {
-  const { message } = await client.delete(networkError)
-  expect(message).toMatch(/network error/i)
+  const { error } = await client.delete(networkError)
+  expect(error.message).toMatch(/network error/i)
 })
 
 test('raw list', async ({ client }) => {
