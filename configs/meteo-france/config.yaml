@@ -19,6 +19,10 @@ website:
   title: 'meteo.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
+  service_logo: '../src/assets/logos/logometeo.svg'
+  badge: true
+  badge_text: 'BETA'
+  badge_style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator: 'https://upload.wikimedia.org/wikipedia/fr/4/47/Logo_M%C3%A9t%C3%A9o_France_2016.svg'
   homepage_title: 'Données météo'
