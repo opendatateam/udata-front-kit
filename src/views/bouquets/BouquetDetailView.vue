@@ -7,11 +7,13 @@ import { useRoute, useRouter } from 'vue-router'
 import config from '@/config'
 
 import DiscussionList from '../../components/DiscussionList.vue'
+import DiscussionsAPI from '../../services/api/resources/DiscussionsAPI'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown } from '../../utils'
 
+const discussionsAPI = new DiscussionsAPI()
 const route = useRoute()
 const router = useRouter()
 const store = useTopicStore()
@@ -95,11 +97,29 @@ const canCreate = computed(() => {
   )
 })
 
+const getTopicDiscussions = async (topicId) => {
+  discussions = await discussionsAPI.getDiscussions(topicId, page)
+  discussionsPages = computeDiscussionsPages(discussions)
+}
+
+const computeDiscussionsPages = (discussions) => {
+  if (!discussions.data) return []
+  const nbPages = Math.ceil(discussions.total / discussions.page_size)
+  return [...Array(nbPages).keys()].map((page) => {
+    page += 1
+    return {
+      label: page,
+      href: '#',
+      title: `Page ${page}`
+    }
+  })
+}
+
 onMounted(() => {
   const loader = loading.show()
   store
     .load(route.params.bid)
-    .then((res) => {
+    .then(async (res) => {
       bouquet.value = res
       theme.value =
         bouquet.value.extras[`${config.universe.name}:informations`][0].theme
@@ -119,6 +139,7 @@ onMounted(() => {
           text: bouquet.value.name
         }
       )
+      await getTopicDiscussions(bouquet.id)
       // FIXME: not used anymore in template below, change template or remove
       return datasetStore.loadMultiple(res.datasets).then((ds) => {
         datasets.value = ds
