@@ -18,7 +18,6 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@esbuild/linux-x64": "^0.19.8",
     "@gouvminint/vue-dsfr": "^3.6.0",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",
