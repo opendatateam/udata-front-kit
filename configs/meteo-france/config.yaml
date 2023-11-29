@@ -30,8 +30,8 @@ website:
       id: 'home'
       linkPage: '/'
       type: 'component'
-      display_menu: false
-    - name: 'Jeux de données'
+      display_menu: true
+    - name: 'Données'
       id: 'datasets'
       linkPage: '/datasets'
       type: 'component'
@@ -46,7 +46,7 @@ website:
       id: 'about'
       linkPage: '/about'
       type: 'page'
-      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/legal/charter.md'
+      url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/36d7b3b0784d07b36208b6e9f353454e6dd639be/gistfile1.txt'
       display_menu: true
   # img should be square
   home_buttons:
@@ -61,10 +61,10 @@ website:
       img: 'https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d'
   show_topic_charts: true
   list_highlighted_topics:
-    - id: '650db7d220cf97f7caaa3c78'
-      name: 'Données climatologiques'
-    - id: '650db7da501723ab94fbf426'
-      name: 'Changement climatique'
+    - id: '653a6eee7a6aa39deaec2de9'
+      name: 'Données climatologiques de base'
+    - id: '653a6f43e96894d0275c994c'
+      name: 'Données climatologique de référence pour le changement climatique'
   oauth_option: false
   # display settings
   pagination_sizes:
