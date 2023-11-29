@@ -1,4 +1,5 @@
 <script setup>
+import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
@@ -146,11 +147,13 @@ watchEffect(async () => {
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <DsfrFileDownloadList
-          class="fr-mt-4w"
-          :files="files"
-          title="Fichiers du jeu de données"
-        />
+        <div class="datagouv-components" v-if="selectedTabIndex === 0">
+          <ResourceAccordion
+            v-for="resource in dataset.resources"
+            :datasetId="datasetId"
+            :resource="resource"
+          />
+        </div>
       </DsfrTabContent>
 
       <!-- Réutilisations -->
