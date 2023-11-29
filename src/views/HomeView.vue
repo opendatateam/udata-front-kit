@@ -43,7 +43,10 @@ const showTopicChart = config.website.show_topic_charts
       @search="doSearch"
       @update:modelValue="updateQuery"
     />
-    <HomeThemes :selected-theme-name="$route.query.theme" />
+    <HomeThemes
+      v-if="config.themes"
+      :selected-theme-name="$route.query.theme"
+    />
     <HomeButtons v-if="buttons" :buttons="buttons" />
     <HomeTopics v-if="topics" :topics="topics" />
     <HomeCharts v-if="showTopicChart" />
