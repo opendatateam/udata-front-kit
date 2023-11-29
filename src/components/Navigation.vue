@@ -6,10 +6,12 @@ import config from '@/config'
 const navItems = computed(() => {
   const items = []
   config.website.menu_items.forEach((item) => {
-    items.push({
-      to: item.linkPage,
-      text: item.name
-    })
+    if (item.display_menu) {
+      items.push({
+        to: item.linkPage,
+        text: item.name
+      })
+    }
   })
   return items
 })
