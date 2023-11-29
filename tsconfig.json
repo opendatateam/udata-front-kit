@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "experimentalDecorators": true,
+    "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -11,5 +12,6 @@
   "extends": [
     "@tsconfig/node18/tsconfig.json",
     "@vue/tsconfig/tsconfig.dom.json"
-  ]
+  ],
+  "include": ["**/*.ts"]
 }
