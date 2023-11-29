@@ -67,6 +67,9 @@
     "vite": "^4.3.9",
     "vitest": "^0.34.6"
   },
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "^0.19.8"
+  },
   "lint-staged": {
     "*.{js,ts,vue,yml,yaml,json}": "prettier --write"
   }
