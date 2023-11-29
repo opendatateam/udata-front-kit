@@ -19,7 +19,7 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 nvm use
 
 # Do a clean install:
-npm cache verify && npm clean-install
+npm clean-install
 
 # Install Husky pre-commit hooks:
 npm run prepare
