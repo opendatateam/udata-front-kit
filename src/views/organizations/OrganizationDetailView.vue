@@ -51,7 +51,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
     <h1>{{ org.name }}</h1>
     <div v-html="description"></div>
 

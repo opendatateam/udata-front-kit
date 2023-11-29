@@ -28,21 +28,39 @@ const homepageSubTitle = config.website.homepage_subtitle
 const topics = config.website.list_highlighted_topics
 const buttons = config.website.home_buttons
 const showTopicChart = config.website.show_topic_charts
+const colorsBanner = config.website.home_banner_colors
 </script>
 
 <template>
-  <div class="fr-container fr-mt-8w fr-mb-16w">
-    <h1>{{ homepageTitle }}</h1>
-    <div class="es__hero fr-mt-4w fr-mb-4w">
-      <span v-html="markdown.render(homepageSubTitle)" />
+  <div
+    class="banner"
+    :style="
+      'background: linear-gradient(0.25turn, ' +
+      colorsBanner[0] +
+      ', ' +
+      colorsBanner[1] +
+      ', ' +
+      colorsBanner[2] +
+      ');'
+    "
+  >
+    <div class="fr-container">
+      <h1 class="main-title">{{ homepageTitle }}</h1>
+      <div class="subtitle fr-mt-4w fr-mb-4w">
+        <span v-html="markdown.render(homepageSubTitle)" />
+      </div>
+      <div class="search-bar">
+        <DsfrSearchBar
+          button-text="Rechercher"
+          placeholder="Rechercher un jeu de données"
+          :large="true"
+          @search="doSearch"
+          @update:modelValue="updateQuery"
+        />
+      </div>
     </div>
-    <DsfrSearchBar
-      button-text="Rechercher"
-      placeholder="Rechercher un jeu de données"
-      :large="true"
-      @search="doSearch"
-      @update:modelValue="updateQuery"
-    />
+  </div>
+  <div class="fr-container width-inherit">
     <HomeThemes
       v-if="config.themes"
       class-name="home-tile-list"
@@ -61,5 +79,26 @@ const showTopicChart = config.website.show_topic_charts
 .es__hero {
   font-size: 1.5rem;
   line-height: 1.5rem;
+}
+.banner {
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+.main-title {
+  text-align: left;
+  font-size: 48px;
+  line-height: 50px;
+  font-weight: bold;
+}
+.subtitle {
+  text-align: left;
+  font-size: 20px;
+  line-height: 28px;
+  font-style: italic;
+}
+.search-bar {
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
 }
 </style>

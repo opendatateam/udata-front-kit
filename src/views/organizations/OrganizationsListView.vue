@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li v-for="org in organizations" class="fr-col-12 fr-col-lg-4">
         <Tile
@@ -39,6 +39,7 @@ onMounted(() => {
     </ul>
   </div>
   <DsfrPagination
+    class="fr-container width-inherit"
     v-if="pages.length"
     :current-page="currentPage - 1"
     :pages="pages"

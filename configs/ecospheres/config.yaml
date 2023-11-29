@@ -61,6 +61,10 @@ website:
     organizations_list: 9
     topics_list: 100
   contact_email: ecospheres@developpement-durable.gouv.fr
+  home_banner_colors:
+    - '#D6E3A1'
+    - '#BFDCB7'
+    - '#A7D4CD'
 
 # For step 2 of bouquet creation
 themes:
