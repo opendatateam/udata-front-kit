@@ -15,7 +15,7 @@
       <li v-if="bouquets.length === 0" class="fr-col-12 fr-col-lg-6">
         <div class="fr-alert fr-alert--info" data-fr-js-alert-actionee="true">
           <h3 class="fr-alert__title">
-            Il n'y a pas encore de bouquet sur ce théme
+            Il n'y a pas encore de bouquet sur ce thème
           </h3>
           <p>
             N'hésitez pas à contribuer en
