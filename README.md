@@ -15,21 +15,13 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-# If you use nvm, install the node version specified in .nvmrc
-head .nvmrc | nvm install
+# If you use nvm:
 nvm use
 
-# Clone the repository
-git clone git@github.com:ecolabdata/ecospheres-front.git
-cd ecospheres-front
+# Do a clean install:
+npm cache verify && npm clean-install
 
-# Clean the cache
-npm cache --force clean
-
-# Do a clean install
-npm clean-install --force
-
-# Install Husky pre-commit hooks
+# Install Husky pre-commit hooks:
 npm run prepare
 ```
 
