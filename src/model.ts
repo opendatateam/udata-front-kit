@@ -8,4 +8,17 @@ interface Subtheme {
   name: string
 }
 
-export type { Theme, Subtheme }
+interface Discussion {
+  id: string
+  title: string
+  discussion: {
+    posted_by: {
+      first_name: string
+      last_name: string
+    }
+    posted_on: string
+    content: string
+  }[]
+}
+
+export type { Theme, Subtheme, Discussion }
