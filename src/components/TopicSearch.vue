@@ -47,8 +47,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+import type { SelectOption } from '@/model'
+
 import config from '../config'
-import { NoOptionSelected, SelectOption } from '../model'
+import { NoOptionSelected } from '../model'
 import Tile from './Tile.vue'
 
 export default defineComponent({
