@@ -3,10 +3,9 @@ TL;DR:
 - Communication is in [French](https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006421209).
 - Code and code documentation are in [English (BR)](https://en.wikipedia.org/wiki/English_as_a_lingua_franca).
 - Code documentation is in the [JSDoc](https://jsdoc.app/) format.
-- Any other documentation is in French and can be found in the [docs](docs).
 - Commits follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
-- Code styling is programmatically enforced and follows [Standard](https://standardjs.com/).
-- Testing is done with [Vitest](https://vutest.dev) and [Cypress](https://www.cypress.io/).
+- Code styling is progamatically enforced and follows [Standard](https://standardjs.com/).
+- Testing is done with [Vutest](https://vutest.dev) and [Cypress](https://www.cypress.io/).
 - Pull requests, reviews, and merging, follow [GitHub Flow](https://guides.github.com/introduction/flow/).
 - Change advertising follows [SemVer](http://semver.org/).
 
