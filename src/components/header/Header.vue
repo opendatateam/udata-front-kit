@@ -168,25 +168,31 @@ defineEmits<{
               </p>
             </div>
             <div v-if="serviceLogoSrc" class="fr-header__service">
-              <div class="fr-grid-row">
-                <img
-                  class="fr-responsive-img"
-                  :src="serviceLogoSrc"
-                  alt=""
-                  style="
-                    height: 35px;
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    margin-right: 0.75em;
-                    width: auto;
-                  "
-                />
-                <p v-if="showBadge" class="fr-header__service-title">
-                  <span :class="badgeCss" style="margin: 0.5em">{{
-                    badgeText
-                  }}</span>
-                </p>
-              </div>
+              <RouterLink
+                :to="homeTo"
+                :title="`Accueil - ${serviceTitle}`"
+                v-bind="$attrs"
+              >
+                <div class="fr-grid-row">
+                  <img
+                    class="fr-responsive-img"
+                    :src="serviceLogoSrc"
+                    alt=""
+                    style="
+                      height: 35px;
+                      margin-top: 0;
+                      margin-bottom: 0;
+                      margin-right: 0.75em;
+                      width: auto;
+                    "
+                  />
+                  <p v-if="showBadge" class="fr-header__service-title">
+                    <span :class="badgeCss" style="margin: 0.5em">{{
+                      badgeText
+                    }}</span>
+                  </p>
+                </div>
+              </RouterLink>
             </div>
           </div>
           <div class="fr-header__tools">
