@@ -22,6 +22,11 @@ website:
     COHÉSION DES TERRITOIRES<br>
     TRANSITION ÉNERGÉTIQUE<br>
     MER'
+  service_logo: 
+  badge:
+    display: 
+    text: 
+    style: 
   # leave empty if not pertinent
   logo_operator:
   homepage_title: 'Ecosphères'

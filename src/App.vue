@@ -73,9 +73,9 @@ const logotext = ref(config.website.rf_title)
 const servicetitle = ref(config.website.title)
 const logoOperator = ref(config.website.logo_operator)
 const logoService = ref(config.website.service_logo)
-const showBadge = ref(config.website.badge)
-const badgeText = ref(config.website.badge_text)
-const badgeStyle = ref(config.website.badge_style)
+const showBadge = ref(config.website.badge.display)
+const badgeText = ref(config.website.badge.text)
+const badgeStyle = ref(config.website.badge.style)
 </script>
 
 <template>
