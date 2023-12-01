@@ -47,7 +47,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import config, { ConfigUtils } from '@/config'
+import { ConfigUtils } from '@/config'
 import { NoOptionSelected } from '@/model'
 import type { SelectOption, Theme } from '@/model'
 

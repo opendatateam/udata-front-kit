@@ -1,19 +1,25 @@
 <template>
-  <DsfrAlert
-    class="dsfr_alert"
+  <div v-if="bouquets.length > 0">
+    <p>{{ numberOfResultMsg }}</p>
+    <div class="fr-grid-row fr-mb-1w">
+      <DsfrButton
+        class="fr-mb-1w"
+        label="Ajouter un bouquet"
+        icon="ri-add-circle-line"
+        @click="goToCreate"
+      />
+    </div>
+  </div>
+  <div
     v-if="bouquets.length === 0"
-    type="info"
-    title="Pas de résultat"
-    description="Il n'y a pas encore de bouquets pour ces critères"
-  />
-  <p v-else>{{ numberOfResultMsg }}</p>
-  <div class="fr-grid-row fr-mb-1w">
-    <DsfrButton
-      class="fr-mb-1w"
-      label="Ajouter un bouquet"
-      icon="ri-add-circle-line"
-      @click="goToCreate"
-    />
+    class="fr-alert fr-alert--info"
+    data-fr-js-alert-actionee="true"
+  >
+    <h3 class="fr-alert__title">Il n'y a pas encore de bouquet sur ce thème</h3>
+    <p>
+      N'hésitez pas à contribuer en
+      <a href="/admin/bouquets/add" target="_blank">en créant un</a>
+    </p>
   </div>
   <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
