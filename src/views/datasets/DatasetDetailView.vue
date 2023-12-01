@@ -5,6 +5,7 @@ import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
 import ChartData from '../../components/ChartData.vue'
+import DiscussionList from '../../components/DiscussionList.vue'
 import Tile from '../../components/Tile.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useDiscussionStore } from '../../store/DiscussionStore'
@@ -24,7 +25,6 @@ const reuses = ref([])
 const resources = ref([])
 const discussions = ref({})
 const discussionsPage = ref(1)
-const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 
 onMounted(() => {
@@ -75,14 +75,6 @@ const tabs = computed(() => {
 })
 
 const description = computed(() => descriptionFromMarkdown(dataset))
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('default', {
-    dateStyle: 'full',
-    timeStyle: 'short'
-  }).format(date)
-}
 
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
@@ -184,39 +176,10 @@ watchEffect(async () => {
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <h2 class="fr-mt-4w">Discussions</h2>
-        <div v-if="!discussions.data?.length">
-          Pas de discussion pour ce jeu de données.
-        </div>
-        <DsfrAccordionsGroup>
-          <li v-for="discussion in discussions.data">
-            <DsfrAccordion
-              :id="discussion.id"
-              :title="discussion.title"
-              :expanded-id="expandedDiscussion"
-              @expand="(id) => (expandedDiscussion = id)"
-            >
-              <template #default>
-                <ul class="es__comment__container">
-                  <li v-for="comment in discussion.discussion">
-                    <div class="es__comment__metadata fr-mb-1v">
-                      <span class="es__comment__author"
-                        >{{ comment.posted_by.first_name }}
-                        {{ comment.posted_by.last_name }}</span
-                      >
-                      <span class="es__comment__date fr-ml-1v"
-                        >le {{ formatDate(comment.posted_on) }}</span
-                      >
-                    </div>
-                    <div class="es__comment__content">
-                      {{ comment.content }}
-                    </div>
-                  </li>
-                </ul>
-              </template>
-            </DsfrAccordion>
-          </li>
-        </DsfrAccordionsGroup>
+        <DiscussionList
+          :discussions="discussions.data"
+          emptyMessage="Pas de discussion pour ce jeu de données."
+        />
         <DsfrPagination
           v-if="discussionsPages.length"
           class="fr-mt-2w"

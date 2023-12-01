@@ -6,12 +6,12 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
   /**
    * Get discussions for a dataset
    *
-   * @param {str} dataset_id
+   * @param {str} object_id
    * @param {number} page
    * @returns {object}
    */
-  async getDiscussions(dataset_id, page = 1) {
-    const url = `${this.url()}/?for=${dataset_id}&page=${page}`
+  async getDiscussions(object_id: string, page = 1) {
+    const url = `${this.url()}/?for=${object_id}&page=${page}`
     return await this.makeRequestAndHandleResponse(url)
   }
 }

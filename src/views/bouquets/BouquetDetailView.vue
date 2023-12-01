@@ -6,11 +6,14 @@ import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
 
+import DiscussionList from '../../components/DiscussionList.vue'
+import DiscussionsAPI from '../../services/api/resources/DiscussionsAPI'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown } from '../../utils'
 
+const discussionsAPI = new DiscussionsAPI()
 const route = useRoute()
 const router = useRouter()
 const store = useTopicStore()
@@ -21,6 +24,11 @@ const theme = ref()
 const subtheme = ref()
 const datasets = ref([])
 const loading = useLoading()
+
+const discussionsPages = ref([])
+const discussions = ref({})
+const discussionsPage = ref(1)
+const selectedTabIndex = 0
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
@@ -40,6 +48,10 @@ const availabilityEnum = {
 }
 const missingData = 'Donnée manquante'
 const notFoundData = 'Donnée non disponible'
+
+const tabs = [
+  { title: 'Discussions', tabId: 'tab-0', panelId: 'tab-content-0' }
+]
 
 const goToCreate = () => {
   router.push({ name: 'bouquet_add' })
@@ -85,11 +97,28 @@ const canCreate = computed(() => {
   )
 })
 
+const getTopicDiscussions = async (topicId, page) => {
+  discussions.value = await discussionsAPI.getDiscussions(topicId, page)
+}
+
+const computeDiscussionsPages = (discussions) => {
+  if (!discussions.data) return []
+  const nbPages = Math.ceil(discussions.total / discussions.page_size)
+  return [...Array(nbPages).keys()].map((page) => {
+    page += 1
+    return {
+      label: page,
+      href: '#',
+      title: `Page ${page}`
+    }
+  })
+}
+
 onMounted(() => {
   const loader = loading.show()
   store
     .load(route.params.bid)
-    .then((res) => {
+    .then(async (res) => {
       bouquet.value = res
       theme.value =
         bouquet.value.extras[`${config.universe.name}:informations`][0].theme
@@ -109,6 +138,10 @@ onMounted(() => {
           text: bouquet.value.name
         }
       )
+      if (bouquet) {
+        await getTopicDiscussions(bouquet.id)
+        discussionsPages.value = computeDiscussionsPages(discussions.value)
+      }
       // FIXME: not used anymore in template below, change template or remove
       return datasetStore.loadMultiple(res.datasets).then((ds) => {
         datasets.value = ds
@@ -231,6 +264,38 @@ onMounted(() => {
         </DsfrAccordionsGroup>
       </div>
     </div>
+
+    <DsfrTabs
+      class="fr-mt-2w"
+      tab-list-name="Groupes d'attributs du bouquet"
+      :tab-titles="tabs"
+      :initial-selected-index="0"
+      :selected-tab-index="selectedTabIndex"
+      @select-tab="(idx) => (selectedTabIndex = idx)"
+    >
+      <DsfrTabContent
+        panel-id="tab-content-0"
+        tab-id="tab-0"
+        :selected="selectedTabIndex === 0"
+      >
+        <DiscussionList
+          :discussions="discussions.data"
+          emptyMessage="Pas de discussion pour ce bouquet"
+        />
+        <DsfrPagination
+          v-if="discussionsPages.length"
+          class="fr-mt-2w"
+          :current-page="discussionsPage - 1"
+          :pages="discussionsPages"
+          @update:current-page="
+            (p) => {
+              discussionsPage = p + 1
+              getTopicDiscussions(bouquet.id, p + 1)
+            }
+          "
+        />
+      </DsfrTabContent>
+    </DsfrTabs>
 
     <DsfrButton
       @click.prevent="copyUrl"
