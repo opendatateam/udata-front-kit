@@ -14,7 +14,10 @@
             <div v-else>
               <DatasetList v-model:datasets="datasets" />
             </div>
-            <DatasetPropertiesForm @addDataset="addDataset" />
+            <DatasetPropertiesForm
+              @addDataset="addDataset"
+              :alreadySelectedDatasets="datasets"
+            />
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 <script setup>
-import Multiselect from '@vueform/multiselect'
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -68,18 +67,6 @@ const markdownDescription = computed(() => descriptionFromMarkdown(form))
 
 const onThemeChanged = () => {
   selectedSubTheme.value = null
-}
-
-const search = async (query) => {
-  if (!query) return []
-  const results = await searchAPI._search(query, config.universe.topic_id, 1, {
-    page_size: 10
-  })
-  return results.data
-    .map((r) => {
-      return { value: r.id, label: r.title, uri: r.uri }
-    })
-    .filter((r) => !datasets.value.map((d) => d.dataset.id).includes(r.value))
 }
 
 const extrasFromDatasets = () => {
@@ -315,80 +302,6 @@ onMounted(() => {
           </div>
         </div>
 
-        <p><strong>Retrouver la donnée via</strong></p>
-        <div class="fr-grid-row fr-mb-3w">
-          <div class="fr-col-12">
-            <fieldset class="fr-fieldset">
-              <div class="fr-fieldset__content" role="radiogroup">
-                <DsfrRadioButton
-                  v-model="DatasetRetrievalOption"
-                  :value="availabilityEnum.ECO_AVAILABLE"
-                  label="Écosphères"
-                  name="addData"
-                />
-                <div class="fr-grid-row">
-                  <div class="fr-col-6">
-                    <Multiselect
-                      v-if="
-                        DatasetRetrievalOption ===
-                        availabilityEnum.ECO_AVAILABLE
-                      "
-                      ref="selector"
-                      v-model="selectedDataset.id"
-                      no-options-text="Précisez ou élargissez votre recherche"
-                      placeholder="Rechercher une donnée dans Ecosphères"
-                      name="select-datasets"
-                      :clear-on-select="true"
-                      :filter-results="false"
-                      :min-chars="1"
-                      :resolve-on-load="false"
-                      :delay="0"
-                      :searchable="true"
-                      :options="search"
-                    />
-                  </div>
-                </div>
-                <DsfrRadioButton
-                  v-model="DatasetRetrievalOption"
-                  :value="availabilityEnum.URL_AVAILABLE"
-                  label="URL"
-                  name="addData"
-                />
-                <div class="fr-grid-row">
-                  <div class="fr-col-4">
-                    <DsfrInput
-                      v-if="
-                        DatasetRetrievalOption ===
-                        availabilityEnum.URL_AVAILABLE
-                      "
-                      v-model="urlData"
-                      placeholder="Url vers le jeu de données souhaité"
-                      :label-visible="true"
-                      class="fr-mb-md-1w"
-                    />
-                  </div>
-                </div>
-                <DsfrRadioButton
-                  v-model="DatasetRetrievalOption"
-                  :value="availabilityEnum.MISSING"
-                  label="Je n'ai pas trouvé la donnée"
-                  name="addData"
-                />
-                <DsfrRadioButton
-                  v-model="DatasetRetrievalOption"
-                  :value="availabilityEnum.NOT_AVAILABLE"
-                  label="Je n'ai pas cherché la donnée"
-                  name="addData"
-                />
-              </div>
-            </fieldset>
-
-            <DsfrButton
-              label="Ajouter la donnée"
-              @click.prevent="addDatasetsPropertiesToExtras()"
-            />
-          </div>
-        </div>
         <hr />
 
         <h4>

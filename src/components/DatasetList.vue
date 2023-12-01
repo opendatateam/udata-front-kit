@@ -1,11 +1,11 @@
 <template>
   <DsfrAccordionsGroup>
     <li v-for="(dataset, index) in datasets">
-      <DsfrAccordion :title="dataset.label" :expanded-id="index">
+      <DsfrAccordion :title="dataset.label" :expanded-id="index.toString()">
         <DsfrTag
-          v-if="!dataset.availability.isAvailable()"
+          v-if="!isAvailable(dataset)"
           class="fr-mb-2w uppercase bold"
-          :label="`${dataset.availability.toString()}`"
+          :label="`${dataset.availability}`"
         />
         <div>
           {{ dataset.purpose }}
@@ -18,7 +18,7 @@
             @click="remove(index)"
           />
           <a
-            v-if="!dataset.availability.isAvailable()"
+            v-if="!isAvailable(dataset)"
             class="fr-btn fr-btn--secondary inline-flex"
             :href="`mailto:${email}`"
           >
@@ -50,9 +50,6 @@ export default {
     }
   },
   computed: {
-    availability() {
-      return Availability
-    },
     email() {
       return config.website.contact_email
     }
@@ -61,6 +58,9 @@ export default {
     remove(index: number) {
       const updatedDatasets = this.datasets.splice(index, 1)
       this.$emit('update:datasets', updatedDatasets)
+    },
+    isAvailable(dataset: DatasetProperties): boolean {
+      return Availability.isAvailable(dataset.availability)
     }
   }
 }
