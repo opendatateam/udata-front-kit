@@ -26,7 +26,7 @@ const datasets = ref([])
 const loading = useLoading()
 
 const discussionsPages = ref([])
-const discussions = []
+const discussions = ref({})
 const discussionsPage = ref(1)
 const selectedTabIndex = 0
 
@@ -97,9 +97,8 @@ const canCreate = computed(() => {
   )
 })
 
-const getTopicDiscussions = async (topicId) => {
-  discussions = await discussionsAPI.getDiscussions(topicId, page)
-  discussionsPages = computeDiscussionsPages(discussions)
+const getTopicDiscussions = async (topicId, page) => {
+  discussions.value = await discussionsAPI.getDiscussions(topicId, page)
 }
 
 const computeDiscussionsPages = (discussions) => {
@@ -139,7 +138,10 @@ onMounted(() => {
           text: bouquet.value.name
         }
       )
-      await getTopicDiscussions(bouquet.id)
+      if (bouquet) {
+        await getTopicDiscussions(bouquet.id)
+        discussionsPages.value = computeDiscussionsPages(discussions.value)
+      }
       // FIXME: not used anymore in template below, change template or remove
       return datasetStore.loadMultiple(res.datasets).then((ds) => {
         datasets.value = ds
@@ -285,7 +287,12 @@ onMounted(() => {
           class="fr-mt-2w"
           :current-page="discussionsPage - 1"
           :pages="discussionsPages"
-          @update:current-page="(p) => (discussionsPage = p + 1)"
+          @update:current-page="
+            (p) => {
+              discussionsPage = p + 1
+              getTopicDiscussions(bouquet.id, p + 1)
+            }
+          "
         />
       </DsfrTabContent>
     </DsfrTabs>
