@@ -12,12 +12,13 @@
     "preview": "vite preview",
     "test": "vitest",
     "test_single_run": "vitest run",
-    "lint": "eslint . --ext .js,.ts,.vue,.json --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext .js,.ts,.vue,.json --ignore-path .gitignore",
     "hint": "tsc --project tsconfig.dev.json",
-    "format": "prettier . --write",
+    "format": "prettier '**/*.{js,ts,vue,yml,yaml,json}' --write",
     "prepare": "husky install"
   },
   "dependencies": {
+    "@etalab/data.gouv.fr-components": "^1.6.0",
     "@gouvminint/vue-dsfr": "^3.6.0",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",
@@ -28,6 +29,7 @@
     "marked": "^5.1.0",
     "pinia": "^2.1.4",
     "string-strip-html": "^13.4.3",
+    "vite-plugin-html": "^3.2.0",
     "vue": "^3.3.4",
     "vue-chartjs": "^5.2.0",
     "vue-loading-overlay": "^6.0.3",
@@ -41,6 +43,7 @@
     "@testing-library/vue": "^8.0.0",
     "@trivago/prettier-plugin-sort-imports": "^1.4.4",
     "@tsconfig/node18": "^18.2.2",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.9.1",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
@@ -66,6 +69,6 @@
     "vitest": "^0.34.6"
   },
   "lint-staged": {
-    "*.{js,ts,vue,json}": "prettier --write"
+    "*.{js,ts,vue,yml,yaml,json}": "prettier --write"
   }
 }

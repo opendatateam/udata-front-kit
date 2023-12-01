@@ -26,28 +26,40 @@ website:
   logo_operator:
   homepage_title: 'Ecosphères'
   homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
+  search_bar:
+    display: true
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name:
+    link:
   menu_items:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'
       type: 'component'
+      display_menu: true
     - name: 'Jeux de données'
       id: 'datasets'
       linkPage: '/datasets'
       type: 'component'
+      display_menu: true
     - name: 'Organisations'
       id: 'organizations'
       linkPage: '/organizations'
       type: 'component'
+      display_menu: true
     - name: 'Bouquets'
       id: 'bouquets'
       linkPage: '/bouquets'
       type: 'component'
+      display_menu: true
     - name: 'À propos'
       id: 'about'
       linkPage: '/about'
       type: 'page'
       url: 'https://gist.githubusercontent.com/geoffreyaldebert/f6198f2aa63b18783be7d7d3be0909a9/raw/7f979217a4c878225262eb654be3136bf1fe7157/about.md'
+      display_menu: true
   home_buttons:
   show_topic_charts: false
   list_highlighted_topics:
@@ -56,11 +68,16 @@ website:
     organizations_list: 9
     topics_list: 100
   contact_email: ecospheres@developpement-durable.gouv.fr
+  home_banner_colors:
+    - '#D6E3A1'
+    - '#BFDCB7'
+    - '#A7D4CD'
 
 # For step 2 of bouquet creation
 themes:
   - name: Se loger
     color: 043574
+    textColor: FFFFFF
     subthemes:
       - name: Construction et rénovation des logements
       - name: Aménagements des villes

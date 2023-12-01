@@ -62,7 +62,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
     <h2 v-if="query">Résultats de recherche pour "{{ query }}"</h2>
     <h2 v-else>Jeux de données</h2>
     <div v-if="query && datasets?.length === 0" class="fr-mb-4w">
@@ -95,6 +95,7 @@ watchEffect(() => {
     </div>
   </div>
   <DsfrPagination
+    class="fr-container width-inherit"
     v-if="pages.length"
     :current-page="currentPage - 1"
     :pages="pages"

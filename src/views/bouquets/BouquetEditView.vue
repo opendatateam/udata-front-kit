@@ -100,6 +100,13 @@ const availabilityEnum = {
   URL_AVAILABLE: 'url available'
 }
 
+const goToDatasetPage = (id) => {
+  const url = config.website.menu_items.find(
+    (link) => link.linkPage === '/datasets'
+  )
+  return `${url.linkPage}/${id}`
+}
+
 const addDatasetsPropertiesToExtras = async () => {
   const setUri = urlData.value ? urlData.value : null
   if (title.value && description.value) {
@@ -114,7 +121,7 @@ const addDatasetsPropertiesToExtras = async () => {
         datasetsProperties.value[datasetsPropertiesKey].push({
           title: title.value,
           description: description.value,
-          uri: dataset.page,
+          uri: goToDatasetPage(selectedDataset.value.id),
           id: selectedDataset.value.id,
           available: availabilityEnum.ECO_AVAILABLE
         })
@@ -313,8 +320,6 @@ onMounted(() => {
           <div class="fr-col-12">
             <fieldset class="fr-fieldset">
               <div class="fr-fieldset__content" role="radiogroup">
-                {{ availabilityEnum.ECO_AVAILABLE }} --
-                {{ availabilityEnum.URL_AVAILABLE }}
                 <DsfrRadioButton
                   v-model="DatasetRetrievalOption"
                   :value="availabilityEnum.ECO_AVAILABLE"
@@ -385,6 +390,78 @@ onMounted(() => {
           </div>
         </div>
         <hr />
+
+        <h4>
+          Composition du bouquet
+          <span v-if="dataPropertiesLength">({{ dataPropertiesLength }})</span>
+        </h4>
+        <div v-if="!dataPropertiesLength" class="no-dataset fr-py-2 fr-px-3w">
+          <p class="fr-m-0">Aucune donnée ajoutée</p>
+        </div>
+        <div v-else>
+          <DsfrAccordionsGroup>
+            <li
+              v-for="datasetProperties in datasetsProperties[
+                datasetsPropertiesKey
+              ]"
+            >
+              <DsfrAccordion
+                :title="datasetProperties.title"
+                :expanded-id="datasetProperties.id"
+                @expand="datasetProperties.id = $event"
+              >
+                <DsfrTag
+                  v-if="
+                    datasetProperties.available !==
+                      availabilityEnum.URL_AVAILABLE &&
+                    datasetProperties.available !==
+                      availabilityEnum.ECO_AVAILABLE
+                  "
+                  class="fr-mb-2w uppercase bold"
+                  :label="`${
+                    datasetProperties.available ===
+                    availabilityEnum.NOT_AVAILABLE
+                      ? missingData
+                      : datasetProperties.available === availabilityEnum.MISSING
+                      ? notFoundData
+                      : null
+                  }`"
+                />
+                <div>
+                  {{ datasetProperties.description }}
+                </div>
+                <div class="button__wrapper">
+                  <DsfrButton
+                    icon="ri-delete-bin-line"
+                    label="Retirer de la section"
+                    class="fr-mr-2w"
+                    @click.stop.prevent="onDeleteDataset(datasetProperties.id)"
+                  />
+
+                  <a
+                    v-if="
+                      datasetProperties.available !==
+                        availabilityEnum.URL_AVAILABLE &&
+                      datasetProperties.available !==
+                        availabilityEnum.ECO_AVAILABLE
+                    "
+                    class="fr-btn fr-btn--secondary inline-flex"
+                    :href="`mailto:${config.website.contact_email}`"
+                  >
+                    Aidez-nous à trouver la donnée</a
+                  >
+                  <a
+                    v-else
+                    class="fr-btn fr-btn--secondary inline-flex"
+                    :href="datasetProperties.uri"
+                    target="_blank"
+                    >Accéder au catalogue</a
+                  >
+                </div>
+              </DsfrAccordion>
+            </li>
+          </DsfrAccordionsGroup>
+        </div>
         <div class="fit fr-mt-3w fr-ml-auto">
           <DsfrButton
             type="button"
@@ -462,6 +539,7 @@ onMounted(() => {
             >
               <DsfrAccordion
                 :title="datasetProperties.title"
+                :id="datasetProperties.id"
                 :expanded-id="datasetProperties.id"
                 @expand="datasetProperties.id = $event"
               >
@@ -514,7 +592,6 @@ onMounted(() => {
           <DsfrButton
             type="button"
             class="fr-mt-2w fr-mr-2w"
-            :secondary="true"
             label="Précédent"
             @click.prevent="validateAndMoveToStep(3)"
           />

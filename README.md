@@ -15,8 +15,13 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-npm install
-# installs husky pre-commit hook
+# If you use nvm:
+nvm use
+
+# Do a clean install:
+npm clean-install
+
+# Install Husky pre-commit hooks:
 npm run prepare
 ```
 

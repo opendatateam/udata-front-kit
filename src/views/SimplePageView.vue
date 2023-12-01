@@ -21,7 +21,7 @@ onBeforeUpdate(() => {
 </script>
 
 <template>
-  <div>
+  <div class="fr-container width-inherit">
     <br /><br />
     <div v-html="markdown.render(content)" />
   </div>
