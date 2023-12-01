@@ -98,7 +98,9 @@ const canCreate = computed(() => {
 })
 
 const getTopicDiscussions = async (topicId, page) => {
-  discussions.value = await discussionsAPI.getDiscussions(topicId, page)
+  if (topicId) {
+    discussions.value = await discussionsAPI.getDiscussions(topicId, page)
+  }
 }
 
 const computeDiscussionsPages = (discussions) => {
@@ -138,10 +140,8 @@ onMounted(() => {
           text: bouquet.value.name
         }
       )
-      if (bouquet) {
-        await getTopicDiscussions(bouquet.id)
-        discussionsPages.value = computeDiscussionsPages(discussions.value)
-      }
+      await getTopicDiscussions(bouquet.value.id)
+      discussionsPages.value = computeDiscussionsPages(discussions.value)
       // FIXME: not used anymore in template below, change template or remove
       return datasetStore.loadMultiple(res.datasets).then((ds) => {
         datasets.value = ds
