@@ -1,7 +1,12 @@
 <template>
   <DsfrAccordionsGroup>
     <li v-for="(dataset, index) in datasets">
-      <DsfrAccordion :title="dataset.label" :expanded-id="index.toString()">
+      <DsfrAccordion
+        :title="dataset.label"
+        :id="index"
+        :expanded-id="isExpanded[index]"
+        @expand="isExpanded[index] = $event"
+      >
         <DsfrTag
           v-if="!isAvailable(dataset)"
           class="fr-mb-2w uppercase bold"
@@ -47,6 +52,11 @@ export default {
     datasets: {
       type: Array<DatasetProperties>,
       default: []
+    }
+  },
+  data() {
+    return {
+      isExpanded: this.datasets.map(() => null)
     }
   },
   computed: {
