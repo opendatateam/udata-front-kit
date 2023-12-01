@@ -24,7 +24,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="about">
+  <div class="fr-container width-inherit about">
     <h1>This is a logout page</h1>
   </div>
 </template>

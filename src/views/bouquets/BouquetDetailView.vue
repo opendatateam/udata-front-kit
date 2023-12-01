@@ -119,7 +119,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
     <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-2w" />
     <DsfrButton
       class="backToPage fr-pl-0 fr-mb-2w"

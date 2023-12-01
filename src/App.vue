@@ -90,6 +90,8 @@ const logoOperator = ref(config.website.logo_operator)
   <div class="fr-header__body">
     <div class="fr-container width-inherit">
       <Navigation />
+    </div>
+    <div>
       <RouterView />
     </div>
   </div>
