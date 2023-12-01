@@ -4,12 +4,12 @@
     {{ emptyMessage }}
   </div>
   <DsfrAccordionsGroup>
-    <li v-for="discussion in discussions">
+    <li v-for="(discussion, index) in discussions">
       <DsfrAccordion
-        :id="discussion.id"
+        :id="index"
         :title="discussion.title"
-        :expanded-id="expendedAccordion"
-        @expand="(id) => (expendedAccordion = id)"
+        :expanded-id="isExpanded[index]"
+        @expand="isExpanded[index] = $event"
       >
         <template #default>
           <ul class="es__comment__container">
@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      expendedAccordion: null
+      isExpanded: this.discussions.map(() => null)
     }
   },
   methods: {
