@@ -1,68 +1,114 @@
+import { isEmpty } from 'lodash/fp'
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
 
-import DiscussionsAPI from '../services/api/resources/DiscussionsAPI'
+import type { Response, Pagination, Discussion, Page, Data } from '@/model'
+import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
 
-const discussionsAPI = new DiscussionsAPI()
+const { getDiscussions } = new DiscussionsAPI()
 
-export const useDiscussionStore = defineStore('discussion', {
-  state: () => ({
-    data: {}
-  }),
-  actions: {
-    /**
-     * Get discussions for a subject from store.
-     *
-     * @param {string} subjectId
-     * @returns {Array<object>}
-     */
-    getDiscussionsForSubject(dataset_id, page = 1) {
-      if (!this.data[dataset_id]) return {}
-      return this.data[dataset_id].find((d) => d.page == page) || {}
-    },
-    /**
-     * Async function to trigger API fetch of discussions for a dataset
-     *
-     * @param {string} dataset_id
-     * @returns {Array<object>}
-     */
-    async loadDiscussionsForDataset(dataset_id, page = 1) {
-      const existing = this.getDiscussionsForSubject(dataset_id, page)
-      if (existing.data) return existing
-      const discussions = await discussionsAPI.getDiscussions({
-        subjectId: dataset_id,
-        page: page
-      })
-      this.addDiscussions(dataset_id, discussions)
-      return this.getDiscussionsForSubject(dataset_id, page)
-    },
-    /**
-     * Store the result of a discussions fetch operation for a dataset in store
-     *
-     * @param {string} dataset_id
-     * @param {Array<object>} res
-     */
-    addDiscussions(dataset_id, res) {
-      if (!res) return
-      this.data[dataset_id] = [...(this.data[dataset_id] || []), res]
-    },
-    /**
-     * Get a discussions pagination object for a given dataset, from store infos
-     *
-     * @param {str} dataset_id
-     * @returns {Array<object>}
-     */
-    getDiscussionsPaginationForDataset(dataset_id) {
-      const discussions = this.getDiscussionsForSubject(dataset_id)
-      if (!discussions.data) return []
-      const nbPages = Math.ceil(discussions.total / discussions.page_size)
-      return [...Array(nbPages).keys()].map((page) => {
-        page += 1
-        return {
-          label: page,
-          href: '#',
-          title: `Page ${page}`
-        }
-      })
-    }
+interface Args {
+  subjectId: string
+  page?: number
+  discussions?: Discussion[]
+}
+
+function useDiscussion() {
+  const data: Ref<Data<Discussion[]>> = ref<Data<Discussion[]>>({})
+  const pageSize: Ref<number> = ref<number>(1)
+  const discussionTotal: Ref<number> = ref<number>(0)
+
+  const pageRange: ComputedRef<number[]> = computed<number[]>(() => {
+    return [...Array(pageTotal).keys()].map((page) => page + 1)
+  })
+
+  const pageTotal: ComputedRef<number> = computed<number>(() => {
+    return Math.ceil(discussionTotal.value / pageSize.value)
+  })
+
+  /**
+   * Get discussions for a subject from store.
+   *
+   * @param {Args}
+   * @returns {Discussion[]}
+   */
+  function getDiscussionsForSubject({
+    subjectId,
+    page = 1
+  }: Args): Discussion[] {
+    const discussions: Page<Discussion[]> = data.value[subjectId]
+    if (isEmpty(discussions)) return []
+    return discussions[page] ?? []
   }
-})
+
+  /**
+   * Async function to trigger API fetch of discussions for a subject.
+   *
+   * @param {Args}
+   * @returns {Promise<Discussion[]>}
+   */
+  async function loadDiscussionsForSubject({
+    subjectId,
+    page = 1
+  }: Args): Promise<Discussion[]> {
+    const existing: Discussion[] = getDiscussionsForSubject({
+      subjectId,
+      page
+    })
+
+    if (!isEmpty(existing)) return existing
+
+    const { data }: Response<Discussion[]> = await getDiscussions({
+      subjectId,
+      page
+    })
+
+    pageSize.value = data?.page_size ?? pageSize.value
+    discussionTotal.value = data?.total ?? discussionTotal.value
+    const discussions: Discussion[] = data?.data ?? []
+    addDiscussions({ subjectId, page, discussions })
+    return getDiscussionsForSubject({ subjectId, page })
+  }
+
+  /**
+   * Store the result of a discussions' fetch operation for a subject in store.
+   *
+   * @param {Args}
+   */
+  function addDiscussions({ subjectId, page, discussions }: Args): void {
+    if (page === undefined) throw Error('Page is required!')
+    if (discussions === undefined) throw Error('Discussions is required!')
+    if (isEmpty(data.value[subjectId])) data.value[subjectId] = {}
+    data.value[subjectId][page] = discussions
+  }
+
+  /**
+   * Get a discussions' pagination object for a given subject from store.
+   *
+   * @param {Args}
+   * @returns {Pagination[]}
+   */
+  function getDiscussionsPaginationForSubject({
+    subjectId
+  }: Args): Pagination[] {
+    const discussions: Discussion[] = getDiscussionsForSubject({ subjectId })
+
+    if (!isEmpty(discussions)) return []
+
+    return pageRange.value.map((page) => {
+      return {
+        label: page,
+        href: '#',
+        title: `Page ${page}`
+      }
+    })
+  }
+
+  return {
+    loadDiscussionsForSubject,
+    getDiscussionsPaginationForSubject
+  }
+}
+
+export const useDiscussionStore = defineStore('discussion', useDiscussion)

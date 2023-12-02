@@ -99,7 +99,10 @@ const canCreate = computed(() => {
 
 const getTopicDiscussions = async (topicId, page) => {
   if (topicId) {
-    discussions.value = await discussionsAPI.getDiscussions(topicId, page)
+    discussions.value = await discussionsAPI.getDiscussions({
+      subjectId: topicId,
+      page
+    })
   }
 }
 
@@ -156,9 +159,9 @@ onMounted(() => {
     <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-2w" />
     <DsfrButton
       class="backToPage fr-pl-0 fr-mb-2w"
-      @click.prevent="goBack"
       :tertiary="true"
       :no-outline="true"
+      @click.prevent="goBack"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -215,8 +218,8 @@ onMounted(() => {
             ]"
           >
             <DsfrAccordion
-              :title="datasetProperties.title"
               :id="datasetProperties.id"
+              :title="datasetProperties.title"
               :expanded-id="datasetProperties.id"
               @expand="datasetProperties.id = $event"
             >
@@ -280,7 +283,7 @@ onMounted(() => {
       >
         <DiscussionList
           :discussions="discussions.data"
-          emptyMessage="Pas de discussion pour ce bouquet"
+          empty-message="Pas de discussion pour ce bouquet"
         />
         <DsfrPagination
           v-if="discussionsPages.length"
@@ -298,10 +301,10 @@ onMounted(() => {
     </DsfrTabs>
 
     <DsfrButton
-      @click.prevent="copyUrl"
       icon="ri-copy"
       :inline="false"
       class="btn-copy fr-ml-auto"
+      @click.prevent="copyUrl"
     >
       Copier l'url de la page
     </DsfrButton>

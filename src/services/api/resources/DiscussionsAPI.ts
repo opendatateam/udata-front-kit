@@ -1,17 +1,26 @@
+import type { Discussion, Response } from '@/model'
+
 import DatagouvfrAPI from '../DatagouvfrAPI'
+
+interface Args {
+  subjectId: string
+  page?: number
+}
 
 export default class DiscussionsAPI extends DatagouvfrAPI {
   endpoint = 'discussions'
 
   /**
-   * Get discussions for a dataset
+   * Get discussions for a subject.
    *
-   * @param {str} object_id
-   * @param {number} page
-   * @returns {object}
+   * @param {Args}
+   * @returns {Promise<Response<Discussion[]>>}
    */
-  async getDiscussions(object_id: string, page = 1) {
-    const url = `${this.url()}/?for=${object_id}&page=${page}`
+  getDiscussions = async ({
+    subjectId,
+    page = 1
+  }: Args): Promise<Response<Discussion[]>> => {
+    const url: string = `${this.url()}/?for=${subjectId}&page=${page}`
     return await this.makeRequestAndHandleResponse(url)
   }
 }
