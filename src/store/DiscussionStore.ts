@@ -10,12 +10,12 @@ export const useDiscussionStore = defineStore('discussion', {
   }),
   actions: {
     /**
-     * Get discussions for a dataset from store
+     * Get discussions for a subject from store.
      *
-     * @param {str} dataset_id
+     * @param {string} subjectId
      * @returns {Array<object>}
      */
-    getDiscussionsForDataset(dataset_id, page = 1) {
+    getDiscussionsForSubject(dataset_id, page = 1) {
       if (!this.data[dataset_id]) return {}
       return this.data[dataset_id].find((d) => d.page == page) || {}
     },
@@ -26,11 +26,14 @@ export const useDiscussionStore = defineStore('discussion', {
      * @returns {Array<object>}
      */
     async loadDiscussionsForDataset(dataset_id, page = 1) {
-      const existing = this.getDiscussionsForDataset(dataset_id, page)
+      const existing = this.getDiscussionsForSubject(dataset_id, page)
       if (existing.data) return existing
-      const discussions = await discussionsAPI.getDiscussions(dataset_id, page)
+      const discussions = await discussionsAPI.getDiscussions({
+        subjectId: dataset_id,
+        page: page
+      })
       this.addDiscussions(dataset_id, discussions)
-      return this.getDiscussionsForDataset(dataset_id, page)
+      return this.getDiscussionsForSubject(dataset_id, page)
     },
     /**
      * Store the result of a discussions fetch operation for a dataset in store
@@ -49,7 +52,7 @@ export const useDiscussionStore = defineStore('discussion', {
      * @returns {Array<object>}
      */
     getDiscussionsPaginationForDataset(dataset_id) {
-      const discussions = this.getDiscussionsForDataset(dataset_id)
+      const discussions = this.getDiscussionsForSubject(dataset_id)
       if (!discussions.data) return []
       const nbPages = Math.ceil(discussions.total / discussions.page_size)
       return [...Array(nbPages).keys()].map((page) => {
