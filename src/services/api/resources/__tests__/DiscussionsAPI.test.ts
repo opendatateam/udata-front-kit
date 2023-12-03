@@ -115,7 +115,7 @@ describe('Pagination /discussions', (): void => {
     const response = await client.list({ subjectId })
     const { data, status } = response as Response<Discussion[]>
     expect(status).toEqual(200)
-    expect(data.pageSize).toEqual(20)
+    expect(data?.pageSize).toEqual(20)
   })
 })
 
@@ -124,7 +124,7 @@ describe(' GET /discussions', (): void => {
     const subjectId = okList
     const response = await client.list({ subjectId })
     const { data, status } = response as Response<Discussion[]>
-    const { title } = last(data.data) as Discussion
+    const { title } = last(data?.data) as Discussion
     expect(status).toEqual(200)
     expect(title).toMatch(/mise à jour des ressources/i)
   })
@@ -135,7 +135,7 @@ describe(' GET /discussions', (): void => {
     const pageSize = 1
     const response = await client.list({ subjectId, page, pageSize })
     const { data, status } = response as Response<Discussion[]>
-    const { title } = last(data.data) as Discussion
+    const { title } = last(data?.data) as Discussion
     expect(status).toEqual(200)
     expect(title).toMatch(/archive corrompue/i)
   })
@@ -145,7 +145,7 @@ describe(' GET /discussions', (): void => {
     const response = await client.list({ subjectId })
     const { data, status } = response as Response<Discussion[]>
     expect(status).toEqual(200)
-    expect(data.data).toEqual([])
+    expect(data?.data).toEqual([])
   })
 
   test('w/o discussions + pagination', async ({ client }: P): R => {
@@ -162,7 +162,7 @@ describe(' GET /discussions', (): void => {
     const response = await client.list({ subjectId })
     const { error, status } = response as AppError
     expect(status).toEqual(500)
-    expect(error).toMatch(/internal Server Error/i)
+    expect(error).toMatch(/internal server error/i)
   })
 
   test('when something weird happens', async ({ client }: P): R => {

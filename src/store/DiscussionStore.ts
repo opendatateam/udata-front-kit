@@ -1,114 +1,122 @@
 import { isEmpty } from 'lodash/fp'
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type { Ref, ComputedRef } from 'vue'
+import { defineStore, storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
 
-import type { Response, Pagination, Discussion, Page, Data } from '@/model'
-import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
+import type { AppError, Page, Response } from '@/model/api'
+import type { Discussion, SubjectId } from '@/model/discussion'
+import { UnknownError } from '@/model/error'
+import type { DataByPage, DataByUUID } from '@/model/store'
+import { DiscussionsAPI } from '@/services/api/resources/DiscussionsAPI'
+import { usePaginationStore } from '@/store/PaginationStore'
 
-const { getDiscussions } = new DiscussionsAPI()
-
-interface Args {
-  subjectId: string
-  page?: number
-  discussions?: Discussion[]
+interface Params {
+  subjectId: SubjectId
+  page?: Page
 }
 
-function useDiscussion() {
-  const data: Ref<Data<Discussion[]>> = ref<Data<Discussion[]>>({})
-  const pageSize: Ref<number> = ref<number>(1)
-  const discussionTotal: Ref<number> = ref<number>(0)
+type PaginationStore = ReturnType<typeof usePaginationStore>
 
-  const pageRange: ComputedRef<number[]> = computed<number[]>(() => {
-    return [...Array(pageTotal).keys()].map((page) => page + 1)
-  })
+const useDiscussionStore = defineStore('discussion', () => {
+  const store: PaginationStore = usePaginationStore()
+  const client = ref(new DiscussionsAPI()) as Ref<DiscussionsAPI>
+  const data: Ref<DataByUUID<Discussion[]>> = ref({})
+  const error: Ref<boolean> = ref(false)
+  const errorMessage: Ref<string | null> = ref(null)
+  const page: Ref<Page> = ref(1)
+  const subjectId: Ref<SubjectId | undefined> = ref()
+  const { dataCount, dataPerPage, pagination } = storeToRefs(store)
 
-  const pageTotal: ComputedRef<number> = computed<number>(() => {
-    return Math.ceil(discussionTotal.value / pageSize.value)
+  /**
+   * Get discussions for a subject and a page from store.
+   */
+  const get: ComputedRef<Discussion[]> = computed(() => {
+    error.value = false
+    errorMessage.value = null
+    if (subjectId.value === undefined) return []
+    return data.value[subjectId.value]?.[page.value] ?? []
   })
 
   /**
-   * Get discussions for a subject from store.
-   *
-   * @param {Args}
-   * @returns {Discussion[]}
+   * Store the result of a discussions' fetch operation for a subject in store.
    */
-  function getDiscussionsForSubject({
-    subjectId,
-    page = 1
-  }: Args): Discussion[] {
-    const discussions: Page<Discussion[]> = data.value[subjectId]
-    if (isEmpty(discussions)) return []
-    return discussions[page] ?? []
+  function set({ items }: { items: Discussion[] }): Discussion[] {
+    if (subjectId.value === undefined) {
+      error.value = true
+      errorMessage.value = `The property 'subjectId' is required.`
+      return []
+    }
+
+    if (isEmpty(data.value[subjectId.value])) {
+      data.value[subjectId.value] = {} satisfies DataByPage<Discussion[]>
+    }
+
+    if (isEmpty(items)) {
+      data.value[subjectId.value][page.value] = [] satisfies Discussion[]
+      return get.value
+    }
+
+    data.value[subjectId.value][page.value] = items
+
+    return get.value
   }
 
   /**
    * Async function to trigger API fetch of discussions for a subject.
-   *
-   * @param {Args}
-   * @returns {Promise<Discussion[]>}
    */
-  async function loadDiscussionsForSubject({
-    subjectId,
-    page = 1
-  }: Args): Promise<Discussion[]> {
-    const existing: Discussion[] = getDiscussionsForSubject({
-      subjectId,
-      page
-    })
+  async function fetch(): Promise<Discussion[]> {
+    if (subjectId.value === undefined) {
+      error.value = true
+      errorMessage.value = `The property 'subjectId' is required.`
+      return []
+    }
 
-    if (!isEmpty(existing)) return existing
+    if (!isEmpty(get.value)) {
+      return get.value
+    }
 
-    const { data }: Response<Discussion[]> = await getDiscussions({
-      subjectId,
-      page
-    })
+    const params: Params = {
+      subjectId: subjectId.value,
+      page: page.value
+    }
 
-    pageSize.value = data?.page_size ?? pageSize.value
-    discussionTotal.value = data?.total ?? discussionTotal.value
-    const discussions: Discussion[] = data?.data ?? []
-    addDiscussions({ subjectId, page, discussions })
-    return getDiscussionsForSubject({ subjectId, page })
-  }
+    const response = await client.value.list(params)
+    const { status } = response
+    const { error: message } = response as AppError
+    const { data } = response as Response<Discussion[]>
 
-  /**
-   * Store the result of a discussions' fetch operation for a subject in store.
-   *
-   * @param {Args}
-   */
-  function addDiscussions({ subjectId, page, discussions }: Args): void {
-    if (page === undefined) throw Error('Page is required!')
-    if (discussions === undefined) throw Error('Discussions is required!')
-    if (isEmpty(data.value[subjectId])) data.value[subjectId] = {}
-    data.value[subjectId][page] = discussions
-  }
+    if (status === 200 && data !== undefined) {
+      error.value = false
+      errorMessage.value = null
+      page.value = data.page
+      dataCount.value = data.total
+      dataPerPage.value = data.pageSize
+      return set({ items: data.data })
+    }
 
-  /**
-   * Get a discussions' pagination object for a given subject from store.
-   *
-   * @param {Args}
-   * @returns {Pagination[]}
-   */
-  function getDiscussionsPaginationForSubject({
-    subjectId
-  }: Args): Pagination[] {
-    const discussions: Discussion[] = getDiscussionsForSubject({ subjectId })
+    if (status === 404 || status === 500) {
+      error.value = true
+      errorMessage.value = message
+      return []
+    }
 
-    if (!isEmpty(discussions)) return []
-
-    return pageRange.value.map((page) => {
-      return {
-        label: page,
-        href: '#',
-        title: `Page ${page}`
-      }
-    })
+    throw new UnknownError({ error: message })
   }
 
   return {
-    loadDiscussionsForSubject,
-    getDiscussionsPaginationForSubject
+    client,
+    data,
+    dataCount,
+    dataPerPage,
+    error,
+    errorMessage,
+    get,
+    fetch,
+    page,
+    pagination,
+    set,
+    subjectId
   }
-}
+})
 
-export const useDiscussionStore = defineStore('discussion', useDiscussion)
+export { useDiscussionStore }

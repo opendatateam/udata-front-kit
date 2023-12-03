@@ -1,12 +1,12 @@
 import type { SnakeCase } from '@/model/text'
 
 interface Response<T> {
-  data: Data<T>
+  data?: Data<T>
   status: number
 }
 
 interface ResponseParams<T> {
-  data: SnakeCase<Data<T>>
+  data?: SnakeCase<Data<T>>
   status: number
 }
 
@@ -25,8 +25,8 @@ interface DataParams<T> {
 }
 
 interface AppError {
-  status?: number | string
   error: string
+  status?: number | string
 }
 
 interface HttpError {

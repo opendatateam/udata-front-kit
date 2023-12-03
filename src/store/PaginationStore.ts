@@ -1,22 +1,34 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type { Ref, ComputedRef } from 'vue'
+import { computed, ref } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
 
 import type { Pagination } from '@/model/pagination'
 
 const usePaginationStore = defineStore('pagination', () => {
-  const dataCount: Ref<number> = ref<number>(0)
-  const dataPerPage: Ref<number> = ref<number>(20)
+  const dataCount: Ref<number> = ref(0)
+  const dataPerPage: Ref<number> = ref(20)
 
-  const pages: ComputedRef<number> = computed<number>(() => {
+  /**
+   * Calculate the number of pages.
+   * @returns {number}
+   */
+  const pages: ComputedRef<number> = computed(() => {
     return Math.ceil(dataCount.value / dataPerPage.value)
   })
 
-  const pagesToArray: ComputedRef<number[]> = computed<number[]>(() => {
+  /**
+   * Convert number of pages to array.
+   * @returns {number[]}
+   */
+  const pagesToArray: ComputedRef<number[]> = computed(() => {
     return [...Array(pages.value).keys()].map((page) => page + 1)
   })
 
-  const pagination: ComputedRef<Pagination[]> = computed<Pagination[]>(() => {
+  /**
+   * Create a collection of pagination objects.
+   * @returns {Pagination[]}
+   */
+  const pagination: ComputedRef<Pagination[]> = computed(() => {
     return pagesToArray.value.map((page) => {
       return {
         label: page,
