@@ -1,6 +1,6 @@
 interface User {
-  first_name: string
-  last_name: string
+  firstName: string
+  lastName: string
 }
 
 export type { User }

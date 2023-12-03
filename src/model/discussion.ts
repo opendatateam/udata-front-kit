@@ -1,15 +1,16 @@
 import type { User } from './user'
 
 interface Discussion {
-  discussion: {
-    content: string
-    posted_by: string
-    posted_on: string
-  }
+  discussion: Post[]
   id: string
   subject: Subject
   title: string
-  user: User
+}
+
+interface Post {
+  content: string
+  postedBy: User
+  postedOn: string
 }
 
 interface Subject {
@@ -19,4 +20,4 @@ interface Subject {
 
 type SubjectId = string
 
-export type { Discussion, SubjectId }
+export type { Discussion, Post, Subject, SubjectId }
