@@ -5,9 +5,9 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
+import { DiscussionsAPI } from '@/services/api/resources/DiscussionsAPI'
 
 import DiscussionList from '../../components/DiscussionList.vue'
-import DiscussionsAPI from '../../services/api/resources/DiscussionsAPI'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'

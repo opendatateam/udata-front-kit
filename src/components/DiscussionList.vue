@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import type { Discussion } from '../model'
+import type { Discussion } from '@/model/discussion'
 
 export default {
   name: 'DiscussionList',
