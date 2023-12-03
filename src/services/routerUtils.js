@@ -1,5 +1,6 @@
 import config from '@/config'
 
+import FormMF from '../custom/meteo/views/FormMF.vue'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
@@ -82,6 +83,12 @@ export default class RouterFetch {
           meta: { title: item.name },
           props: { url: item.url }
         })
+      } else if (item.type == 'custom') {
+        items.push({
+          path: item.linkPage,
+          name: item.id,
+          component: import(item.path)
+        })
       }
     })
 
@@ -102,7 +109,6 @@ export default class RouterFetch {
         component: LogoutView
       })
     }
-
     return items
   }
 }

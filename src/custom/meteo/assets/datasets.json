@@ -1,0 +1,74 @@
+{
+  "Données climatiques de base": {
+    "Données décadaires": {
+      "prod": "6569b4a48a4161faec6b2779",
+      "dev": "653a68f2c52ecb6d2e96fe3e",
+      "id": "DECAD",
+      "departement": true,
+      "periode": true
+    },
+    "Données horaires": {
+      "prod": "6569b4473bedf2e7abad3b72",
+      "dev": "653a68f2c52ecb6d2e96fe3f",
+      "id": "HOR",
+      "departement": true,
+      "period": true
+    },
+    "Données quotidiennes": {
+      "prod": "6569b51ae64326786e4e8e1a",
+      "dev": "653a68f2ba54993957fa00af",
+      "id": "QUOT",
+      "departement": true,
+      "periode": true
+    },
+    "Données mensuelles": {
+      "prod": "6569b3d7d193b4daf2b43edc",
+      "dev": "654c962a3b8186a2b5bbc995",
+      "id": "MENS",
+      "departement": true,
+      "periode": true
+    },
+    "Données minutes": {
+      "prod": "6569ad61106d1679c93cdf77",
+      "dev": "65649a720baab9dbf8f36731",
+      "id": "MIN",
+      "departement": true,
+      "periode": true
+    },
+    "Données décadaires agro": {
+      "prod": "6569af36ba0c3d2f9d4bf98c",
+      "dev": "65649a1b0baab9dbf8f36730",
+      "id": "DECADAGRO",
+      "departement": true,
+      "periode": true
+    }
+  },
+  "Données climatiques de référence pour le changement climatique": {
+    "Données SQR": {
+      "prod": "6569b00fe24fc9e1e482f74e",
+      "dev": "653a6afa18f9f98d2ffdadee",
+      "id": "SQR",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": ["RR", "TN", "TX"]
+    },
+    "Données SIM": {
+      "prod": "6569b27598256cc583c917a7",
+      "dev": "653a6afa18f9f98d2ffdaded",
+      "id": "SIM",
+      "departement": false,
+      "periode": true,
+      "indicateur": false
+    },
+    "Données LSH": {
+      "prod": "6569b2c4f1937611d4c8b1a3",
+      "dev": "653a6af9d161b2243d487e04",
+      "id": "DECADAGRO",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": ["IN", "RR", "TN", "TX"]
+    }
+  }
+}
