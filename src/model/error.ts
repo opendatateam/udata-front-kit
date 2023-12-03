@@ -7,11 +7,11 @@ class UnknownError extends Error {
 
   /**
    * Create an {UnknownError}.
-   * @param {string} message
+   * @param {string} error
    */
-  public constructor({ message }: { message: string }) {
-    super(message)
-    this.message = message
+  public constructor({ error }: { error: string }) {
+    super(error)
+    this.message = error
     Object.setPrototypeOf(this, new.target.prototype)
   }
 }
