@@ -1,7 +1,9 @@
 <script setup>
 import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, watchEffect } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute } from 'vue-router'
 
 import ChartData from '../../components/ChartData.vue'
@@ -12,20 +14,26 @@ import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown } from '../../utils'
 
+// setup loader
+const useLoader = useLoading()
+const loaderArgs = { canCancel: true }
+
 const route = useRoute()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
 const reuseStore = useReuseStore()
-const discussionStore = useDiscussionStore()
 
 const dataset = computed(() => datasetStore.get(datasetId) || {})
-const discussionsPages = ref([])
 const reuses = ref([])
 const resources = ref([])
-const discussions = ref([])
-const discussionsPage = ref(1)
 const selectedTabIndex = ref(0)
+
+// setup discussions store
+const discussionStore = useDiscussionStore()
+const { get: discussions } = storeToRefs(discussionStore)
+const { page: discussionsPage } = storeToRefs(discussionStore)
+const { pagination: discussionsPages } = storeToRefs(discussionStore)
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -76,6 +84,12 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
+const fetchDiscussions = async () => {
+  const loader = useLoader.show(loaderArgs)
+  discussionStore.setId({ id: dataset.value.id })
+  discussionStore.fetch().finally(() => loader.hide())
+}
+
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
   if (!dataset.value.id) return
@@ -83,15 +97,10 @@ watchEffect(async () => {
   reuseStore
     .loadReusesForDataset(dataset.value.id)
     .then((r) => (reuses.value = r))
+
   // fetch discussions
-  discussionStore.subjectId = dataset.value.id
-  discussionStore.page = discussionsPage.value
-  discussionStore.fetch().then((d) => {
-    discussions.value = d
-    if (!discussionsPages.value.length) {
-      discussionsPages.value = discussionStore.pagination
-    }
-  })
+  await fetchDiscussions()
+
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
     resources.value = await datasetStore.loadResources(dataset.value.resources)

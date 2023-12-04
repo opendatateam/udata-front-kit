@@ -38,6 +38,14 @@ const useDiscussionStore = defineStore('discussion', () => {
   })
 
   /**
+   * Set the subjectId property.
+   */
+  function setId({ id }: { id: string | string[] }): string {
+    subjectId.value = Array.isArray(id) ? id[0] : id
+    return subjectId.value
+  }
+
+  /**
    * Store the result of a discussions' fetch operation for a subject in store.
    */
   function set({ items }: { items: Discussion[] }): Discussion[] {
@@ -115,6 +123,7 @@ const useDiscussionStore = defineStore('discussion', () => {
     page,
     pagination,
     set,
+    setId,
     subjectId
   }
 })
