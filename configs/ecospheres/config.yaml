@@ -22,11 +22,11 @@ website:
     COHÉSION DES TERRITOIRES<br>
     TRANSITION ÉNERGÉTIQUE<br>
     MER'
-  service_logo: 
+  service_logo: '../src/custom/assets/ecospheres/logo.svg'
   badge:
-    display: 
-    text: 
-    style: 
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
   homepage_title: 'Ecosphères'
