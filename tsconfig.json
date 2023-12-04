@@ -7,7 +7,7 @@
       "@/*": ["./src/*"]
     },
     "strictNullChecks": true,
-    "types": ["node"]
+    "types": ["js-yaml", "node", "uuid"]
   },
   "extends": [
     "@tsconfig/node18/tsconfig.json",

@@ -85,12 +85,12 @@ watchEffect(async () => {
     .then((r) => (reuses.value = r))
   // fetch discussions
   discussionStore
-    .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
+    .loadDiscussionsForSubject(dataset.value.id, discussionsPage.value)
     .then((d) => {
       discussions.value = d
       if (!discussionsPage.value.length) {
         discussionsPages.value =
-          discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+          discussionStore.getDiscussionsPaginationForSubject(dataset.value.id)
       }
     })
   // fetch ressources if need be

@@ -29,8 +29,9 @@
 </template>
 
 <script lang="ts">
+import type { Subtheme, Theme } from '@/model/bouqet'
+
 import config from '../config'
-import type { Theme, Subtheme } from '../model'
 import Tile from './Tile.vue'
 
 export default {
