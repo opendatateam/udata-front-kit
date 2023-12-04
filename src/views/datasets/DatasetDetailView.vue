@@ -3,7 +3,6 @@ import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, watchEffect } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
 import { useRoute } from 'vue-router'
 
 import ChartData from '../../components/ChartData.vue'
@@ -13,10 +12,6 @@ import { useDatasetStore } from '../../store/DatasetStore'
 import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown } from '../../utils'
-
-// setup loader
-const useLoader = useLoading()
-const loaderArgs = { canCancel: true }
 
 const route = useRoute()
 const datasetId = route.params.did
@@ -84,12 +79,6 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const fetchDiscussions = async () => {
-  const loader = useLoader.show(loaderArgs)
-  discussionStore.setId({ id: dataset.value.id })
-  discussionStore.fetch().finally(() => loader.hide())
-}
-
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
   if (!dataset.value.id) return
@@ -99,7 +88,8 @@ watchEffect(async () => {
     .then((r) => (reuses.value = r))
 
   // fetch discussions
-  await fetchDiscussions()
+  discussionStore.setId({ id: dataset.value.id })
+  await discussionStore.fetch()
 
   // fetch ressources if need be
   if (dataset.value.resources.rel) {

@@ -1,11 +1,11 @@
 <script setup>
 import { DsfrButton } from '@gouvminint/vue-dsfr'
-import { onMounted, ref, computed } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
+import { storeToRefs } from 'pinia'
+import { onMounted, ref, computed, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
-import { DiscussionsAPI } from '@/services/api/resources/DiscussionsAPI'
+import { useDiscussionStore } from '@/store/DiscussionStore'
 
 import DiscussionList from '../../components/DiscussionList.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
@@ -13,7 +13,6 @@ import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown } from '../../utils'
 
-const discussionsAPI = new DiscussionsAPI()
 const route = useRoute()
 const router = useRouter()
 const store = useTopicStore()
@@ -23,12 +22,13 @@ const bouquet = ref({})
 const theme = ref()
 const subtheme = ref()
 const datasets = ref([])
-const loading = useLoading()
-
-const discussionsPages = ref([])
-const discussions = ref({})
-const discussionsPage = ref(1)
 const selectedTabIndex = 0
+
+// setup discussions store
+const discussionStore = useDiscussionStore()
+const { get: discussions } = storeToRefs(discussionStore)
+const { page: discussionsPage } = storeToRefs(discussionStore)
+const { pagination: discussionsPages } = storeToRefs(discussionStore)
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
@@ -97,60 +97,39 @@ const canCreate = computed(() => {
   )
 })
 
-const getTopicDiscussions = async (topicId, page) => {
-  if (topicId) {
-    discussions.value = await discussionsAPI.getDiscussions({
-      subjectId: topicId,
-      page
-    })
-  }
-}
-
-const computeDiscussionsPages = (discussions) => {
-  if (!discussions.data) return []
-  const nbPages = Math.ceil(discussions.total / discussions.page_size)
-  return [...Array(nbPages).keys()].map((page) => {
-    page += 1
-    return {
-      label: page,
-      href: '#',
-      title: `Page ${page}`
-    }
-  })
-}
-
 onMounted(() => {
-  const loader = loading.show()
-  store
-    .load(route.params.bid)
-    .then(async (res) => {
-      bouquet.value = res
-      theme.value =
-        bouquet.value.extras[`${config.universe.name}:informations`][0].theme
-      subtheme.value =
-        bouquet.value.extras[`${config.universe.name}:informations`][0].subtheme
+  store.load(route.params.bid).then(async (res) => {
+    bouquet.value = res
+    theme.value =
+      bouquet.value.extras[`${config.universe.name}:informations`][0].theme
+    subtheme.value =
+      bouquet.value.extras[`${config.universe.name}:informations`][0].subtheme
 
-      breadcrumbLinks.value.push(
-        {
-          text: theme,
-          to: `/bouquets/?theme=${theme.value}`
-        },
-        {
-          text: subtheme.value,
-          to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
-        },
-        {
-          text: bouquet.value.name
-        }
-      )
-      await getTopicDiscussions(bouquet.value.id)
-      discussionsPages.value = computeDiscussionsPages(discussions.value)
-      // FIXME: not used anymore in template below, change template or remove
-      return datasetStore.loadMultiple(res.datasets).then((ds) => {
-        datasets.value = ds
-      })
+    breadcrumbLinks.value.push(
+      {
+        text: theme,
+        to: `/bouquets/?theme=${theme.value}`
+      },
+      {
+        text: subtheme.value,
+        to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
+      },
+      {
+        text: bouquet.value.name
+      }
+    )
+    // FIXME: not used anymore in template below, change template or remove
+    return datasetStore.loadMultiple(res.datasets).then((ds) => {
+      datasets.value = ds
     })
-    .finally(() => loader.hide())
+  })
+})
+
+// fetch discussions
+watchEffect(async () => {
+  if (!bouquet.value.id) return
+  discussionStore.setId({ id: bouquet.value.id })
+  await discussionStore.fetch()
 })
 </script>
 
@@ -282,7 +261,7 @@ onMounted(() => {
         :selected="selectedTabIndex === 0"
       >
         <DiscussionList
-          :discussions="discussions.data"
+          :discussions="discussions"
           empty-message="Pas de discussion pour ce bouquet"
         />
         <DsfrPagination
@@ -293,7 +272,6 @@ onMounted(() => {
           @update:current-page="
             (p) => {
               discussionsPage = p + 1
-              getTopicDiscussions(bouquet.id, p + 1)
             }
           "
         />
