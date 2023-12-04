@@ -24,13 +24,13 @@ const onSelectDataPack = (pack) => {
 
   selectedDataPack.value = pack
   optionsDataset = Object.keys(datasetsIds[pack])
-  console.log(optionsDataset)
 }
 
 let selectedDataset = ref(null)
 let optionsDataset = ref([])
 
 const onSelectDataset = (dataset) => {
+  showLoader.value = true
   showDep.value = false
   showPeriod.value = false
   showIndicateur.value = false
@@ -49,15 +49,11 @@ const onSelectDataset = (dataset) => {
       return response.json()
     })
     .then((data) => {
-      console.log(selectedDataset.value['periode'])
       datasetResources = data['resources']
       if (selectedDataset.value['departement']) {
         showDep.value = true
       } else if (selectedDataset.value['id'] == 'SIM') {
-        console.log('ici')
-
         let res = datasetResources.map((a) => a.title)
-        console.log(res)
         res = res.map((a) =>
           a.split('SIM2_')[1].split('.')[0].replace('_', '-')
         )
@@ -69,6 +65,7 @@ const onSelectDataset = (dataset) => {
       } else if (selectedDataset.value['indicateur']) {
         showIndicateur.value = true
       }
+      showLoader.value = false
     })
 }
 
@@ -95,11 +92,8 @@ let showPeriod = ref(false)
 function onSelectPeriod(event) {
   selectedPeriod.value = event.target.value
   if (selectedDataset.value['id'] != 'SIM') {
-    console.log(datasetResources)
-    console.log(selectedDep.value)
     let res = datasetResources.map((a) => a.title)
     res = res.filter((r) => r.includes('departement_' + selectedDep.value))
-    console.log(filteredResources)
     filteredResources.value = res.filter((r) =>
       r.includes('periode_' + selectedPeriod.value)
     )
@@ -117,9 +111,7 @@ let showIndicateur = ref(false)
 
 function onSelectIndicateur(event) {
   selectedIndicateur.value = event.target.value
-  console.log('o')
   let res = datasetResources.map((a) => a.title)
-  console.log(res)
   filteredResources.value = res.filter((r) =>
     r.includes('_' + selectedIndicateur.value)
   )
@@ -128,12 +120,7 @@ function onSelectIndicateur(event) {
 let datasetResources = ref([])
 let filteredResources = ref([])
 
-async function fetchUsers(id) {
-  const response = await fetch('https://demo.data.gouv.fr/api/1/datasets/' + id)
-  const data = await response.json()
-  console.log(data['resources'])
-  datasetResources = data['resources']
-}
+const showLoader = ref(false)
 </script>
 
 <template>
@@ -197,18 +184,55 @@ async function fetchUsers(id) {
       </select>
     </div>
 
-    <div v-if="filteredResources.length > 0">Fichiers :</div>
+    <div v-if="filteredResources.length > 0">
+      <br />
+      <h3>Téléchargez les données</h3>
 
-    <div
-      class="datagouv-components"
-      v-for="item in datasetResources"
-      v-bind:key="item['id']"
-    >
-      <ResourceAccordion
-        v-if="filteredResources.includes(item['title'])"
-        :datasetId="selectedDataset['dev']"
-        :resource="item"
-      />
+      <br />
+      <h5>Fichiers</h5>
+      <div
+        class="datagouv-components"
+        v-for="item in datasetResources"
+        v-bind:key="item['id']"
+      >
+        <ResourceAccordion
+          v-if="
+            filteredResources.includes(item['title']) && item['type'] == 'main'
+          "
+          :datasetId="selectedDataset['dev']"
+          :resource="item"
+        />
+      </div>
+
+      <br />
+      <h5>Documentation</h5>
+      <div
+        class="datagouv-components"
+        v-for="item in datasetResources"
+        v-bind:key="item['id']"
+      >
+        <span v-if="['LSH', 'SQR'].includes(selectedDataset['id'])">
+          <ResourceAccordion
+            v-if="
+              item['title'].includes('_' + selectedIndicateur + '_') &&
+              item['type'] == 'documentation'
+            "
+            :datasetId="selectedDataset['dev']"
+            :resource="item"
+          />
+        </span>
+        <span v-else>
+          <ResourceAccordion
+            v-if="item['type'] == 'documentation'"
+            :datasetId="selectedDataset['dev']"
+            :resource="item"
+          />
+        </span>
+      </div>
+    </div>
+
+    <div v-if="showLoader">
+      <img src="../assets/loader.gif" width="50" />
     </div>
   </div>
 </template>
