@@ -23,7 +23,7 @@ const dataset = computed(() => datasetStore.get(datasetId) || {})
 const discussionsPages = ref([])
 const reuses = ref([])
 const resources = ref([])
-const discussions = ref({})
+const discussions = ref([])
 const discussionsPage = ref(1)
 const selectedTabIndex = ref(0)
 
@@ -84,15 +84,14 @@ watchEffect(async () => {
     .loadReusesForDataset(dataset.value.id)
     .then((r) => (reuses.value = r))
   // fetch discussions
-  discussionStore
-    .loadDiscussionsForSubject(dataset.value.id, discussionsPage.value)
-    .then((d) => {
-      discussions.value = d
-      if (!discussionsPage.value.length) {
-        discussionsPages.value =
-          discussionStore.getDiscussionsPaginationForSubject(dataset.value.id)
-      }
-    })
+  discussionStore.subjectId = dataset.value.id
+  discussionStore.page = discussionsPage.value
+  discussionStore.fetch().then((d) => {
+    discussions.value = d
+    if (!discussionsPages.value.length) {
+      discussionsPages.value = discussionStore.pagination
+    }
+  })
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
     resources.value = await datasetStore.loadResources(dataset.value.resources)
@@ -139,10 +138,10 @@ watchEffect(async () => {
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <div class="datagouv-components" v-if="selectedTabIndex === 0">
+        <div v-if="selectedTabIndex === 0" class="datagouv-components">
           <ResourceAccordion
             v-for="resource in dataset.resources"
-            :datasetId="datasetId"
+            :dataset-id="datasetId"
             :resource="resource"
           />
         </div>
@@ -177,8 +176,8 @@ watchEffect(async () => {
         :selected="selectedTabIndex === 2"
       >
         <DiscussionList
-          :discussions="discussions.data"
-          emptyMessage="Pas de discussion pour ce jeu de données."
+          :discussions="discussions"
+          empty-message="Pas de discussion pour ce jeu de données."
         />
         <DsfrPagination
           v-if="discussionsPages.length"

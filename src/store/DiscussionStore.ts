@@ -83,15 +83,15 @@ const useDiscussionStore = defineStore('discussion', () => {
     const response = await client.value.list(params)
     const { status } = response
     const { error: message } = response as AppError
-    const { data } = response as Response<Discussion[]>
+    const { data: body } = response as Response<Discussion[]>
 
-    if (status === 200 && data !== undefined) {
+    if (status === 200 && body !== undefined) {
       error.value = false
       errorMessage.value = null
-      page.value = data.page
-      dataCount.value = data.total
-      dataPerPage.value = data.pageSize
-      return set({ items: data.data })
+      page.value = body.page
+      dataCount.value = body.total
+      dataPerPage.value = body.pageSize
+      return set({ items: body.data })
     }
 
     if (status === 404 || status === 500) {
