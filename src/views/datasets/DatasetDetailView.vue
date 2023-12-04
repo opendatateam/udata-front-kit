@@ -149,7 +149,7 @@ watchEffect(async () => {
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
           <ResourceAccordion
-            v-for="resource in dataset.resources"
+            v-for="resource in resources"
             :datasetId="datasetId"
             :resource="resource"
           />
