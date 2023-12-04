@@ -41,9 +41,10 @@ const onSelectDataset = (dataset) => {
   filteredResources.value = []
 
   selectedDataset.value = datasetsIds[selectedDataPack.value][dataset]
-
   fetch(
-    'https://demo.data.gouv.fr/api/1/datasets/' + selectedDataset.value['dev']
+    config.datagouvfr.base_url +
+      '/api/1/datasets/' +
+      selectedDataset.value['dev']
   )
     .then((response) => {
       return response.json()
