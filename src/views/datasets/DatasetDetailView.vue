@@ -289,18 +289,6 @@ watchEffect(async () => {
 pre {
   white-space: pre-wrap;
 }
-ul.es__comment__container {
-  list-style-type: none;
-  padding-inline-start: 0.25rem;
-  li {
-    padding-bottom: 1.5rem;
-  }
-}
-.es__comment__metadata {
-  .es__comment__author {
-    font-weight: bold;
-  }
-}
 .es__organization__sidebar {
   text-align: center;
   width: 100%;

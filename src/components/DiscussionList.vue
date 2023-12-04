@@ -65,3 +65,18 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+ul.es__comment__container {
+  list-style-type: none;
+  padding-inline-start: 0.25rem;
+  li {
+    padding-bottom: 1.5rem;
+  }
+}
+.es__comment__metadata {
+  .es__comment__author {
+    font-weight: bold;
+  }
+}
+</style>
