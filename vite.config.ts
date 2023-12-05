@@ -6,6 +6,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import markdownRawPlugin from 'vite-raw-plugin'
 
 interface Config {
   website: {
@@ -24,6 +25,9 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       ViteYaml(),
+      markdownRawPlugin({
+        fileRegex: /\.md$/
+      }),
       createHtmlPlugin({
         minify: true,
         inject: {
@@ -44,7 +48,6 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'happy-dom',
       globals: true
-    },
-    assetsInclude: ['**/*.md']
+    }
   }
 })
