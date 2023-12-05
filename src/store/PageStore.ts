@@ -15,7 +15,7 @@ export const pageStore = defineStore('getPage', {
     }
   },
   actions: {
-    async getPageFromLocation(url: string) {
+    async getPageFromUrl(url: string) {
       const response = await fetch(url)
       const res = await response.text()
       this.data = res

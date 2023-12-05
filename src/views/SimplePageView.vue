@@ -16,7 +16,7 @@ const props = defineProps({
 
 watchEffect(async () => {
   if (!props.url) return
-  store.getPageFromLocation(props.url)
+  store.getPageFromUrl(props.url)
 })
 </script>
 
