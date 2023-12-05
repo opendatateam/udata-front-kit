@@ -26,9 +26,7 @@ const selectedTabIndex = ref(0)
 
 // setup discussions store
 const discussionStore = useDiscussionStore()
-const { get: discussions } = storeToRefs(discussionStore)
-const { page: discussionsPage } = storeToRefs(discussionStore)
-const { pagination: discussionsPages } = storeToRefs(discussionStore)
+const { get: discussions, page: discussionsPage, pagination: discussionsPages } = storeToRefs(discussionStore)
 
 onMounted(() => {
   datasetStore.load(datasetId)
