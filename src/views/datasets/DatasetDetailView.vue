@@ -84,6 +84,47 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
+const simpleDate = (dateString) => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('default', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }).format(date)
+}
+
+const cropString = (string) => {
+  if (string.length <= 40) {
+    return string
+  } else {
+    return string.slice(0, 40) + '...'
+  }
+}
+
+const reuseDescription = (r) => {
+  if (r.organization?.name) {
+    return (
+      'Publié le ' +
+        simpleDate(r.created_at) +
+        ' par ' +
+        r.organization?.name || r.owner.first_name + ' ' + r.owner.last_name
+    )
+  } else {
+    return (
+      'Publié le ' +
+      simpleDate(r.created_at) +
+      ' par ' +
+      r.owner.first_name +
+      ' ' +
+      r.owner.last_name
+    )
+  }
+}
+
+const getType = (type) => {
+  return reuseStore.getType('application')
+}
+
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
   if (!dataset.value.id) return
@@ -167,12 +208,23 @@ watchEffect(async () => {
           Pas de réutilisation pour ce jeu de données.
         </div>
         <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-          <li v-for="r in reuses" class="fr-col-12 fr-col-lg-6">
-            <Tile
+          <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
+            <!--<Tile
               :external-link="r.page"
               :title="r.title"
               :description="r.description"
               :img="r.organization?.logo || r.owner.avatar"
+            />-->
+            <DsfrCard
+              class="fr-enlarge-link"
+              :link="r.page"
+              :style="`max-width: 300px; max-height: 400px`"
+              :title="cropString(r.title)"
+              no-arrow="true"
+              :detail="getType(r.type)"
+              :description="reuseDescription(r)"
+              size="sm"
+              :imgSrc="r.organization?.logo || r.owner.avatar"
             />
           </li>
         </ul>
