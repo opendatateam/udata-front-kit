@@ -26,7 +26,6 @@ website:
   logo_operator:
   homepage_title: 'Ecosphères'
   homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
-  files_page_size: 6
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -68,6 +67,7 @@ website:
   pagination_sizes:
     organizations_list: 9
     topics_list: 100
+    files_list: 6
   contact_email: ecospheres@developpement-durable.gouv.fr
   home_banner_colors:
     - '#D6E3A1'

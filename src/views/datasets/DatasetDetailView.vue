@@ -31,7 +31,7 @@ const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 const currentPage = ref(1)
 const totalResults = ref(0)
-const pageSize = config.website.files_page_size
+const pageSize = config.website.pagination_sizes.files_list
 
 onMounted(() => {
   datasetStore.load(datasetId)
