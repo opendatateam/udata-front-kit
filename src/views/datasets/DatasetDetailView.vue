@@ -14,8 +14,6 @@ import { descriptionFromMarkdown } from '../../utils'
 
 const route = useRoute()
 const datasetId = route.params.did
-const DONT_SCROLL = false
-const loading = ref(true)
 
 const datasetStore = useDatasetStore()
 const reuseStore = useReuseStore()
@@ -29,8 +27,9 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
-let currentPage = ref(1)
-let totalResults = ref(0)
+const currentPage = ref(1)
+const totalResults = ref(0)
+const pageSize = ref(20)
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -81,36 +80,13 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const loadPage = (page = 1, scroll = false) => {
-  pageSize = 20
-  loading.value = true
-  if (scroll && top.value) {
-    top.value.scrollIntoView({ behavior: 'smooth' })
-  }
-  let fetchData = datasetStore.fetchDatasetResources(dataset.id, page, pageSize)
-
-  return fetchData
+const changePage = (page = 1) => {
+  currentPage.value = page
+  return datasetStore
+    .fetchDatasetResources(dataset.value.id, page, pageSize.value)
     .then((data) => {
-      console.log(data)
-      if (data.data) {
-        resources.value = data.data
-        totalResults.value = data.total
-      }
+      resources.value = data
     })
-    .catch(() => {
-      /*toast.error(
-        "Une ereur a eu lieu lors de l'affichage des ressources"
-      );
-      resources.value = [];*/
-    })
-    .finally(() => {
-      loading.value = false
-    })
-}
-
-const changePage = (index, scroll = true) => {
-  currentPage.value = index
-  return loadPage(index, scroll)
 }
 
 const formatDate = (dateString) => {
@@ -140,10 +116,12 @@ watchEffect(async () => {
     })
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
-    resources.value = await datasetStore.loadResources(dataset.value.resources)
-    let test = await datasetStore.getLength(dataset.value.resources)
-    totalResults = test.total
-    console.log(test.total)
+    let datas = await datasetStore.loadResources(
+      dataset.value.resources,
+      pageSize.value
+    )
+    resources.value = datas.data
+    totalResults.value = datas.total
   } else {
     resources.value = dataset.value.resources
   }
@@ -193,14 +171,14 @@ watchEffect(async () => {
             :datasetId="datasetId"
             :resource="resource"
           />
-          <!-- TODO: remettre le ! -->
           <p v-if="!totalResults">"No resources match your search."</p>
           <Pagination
             class="fr-mt-3w"
+            v-else-if="totalResults > pageSize"
             :page="currentPage"
-            page-size="20"
+            :page-size="pageSize"
             :total-results="totalResults"
-            :change-page="changePage"
+            @change="changePage"
           />
         </div>
       </DsfrTabContent>
