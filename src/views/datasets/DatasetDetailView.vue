@@ -26,6 +26,7 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
+const types = ref([])
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -121,8 +122,9 @@ const reuseDescription = (r) => {
   }
 }
 
-const getType = (type) => {
-  return reuseStore.getType('application')
+const getType = (id) => {
+  let type = types.value.find((t) => t.id == id)
+  return type.label
 }
 
 // launch reuses and discussions fetch as soon as we have the technical id
@@ -148,6 +150,7 @@ watchEffect(async () => {
   } else {
     resources.value = dataset.value.resources
   }
+  types.value = await reuseStore.getTypes()
 })
 </script>
 
@@ -216,11 +219,9 @@ watchEffect(async () => {
               :img="r.organization?.logo || r.owner.avatar"
             />-->
             <DsfrCard
-              class="fr-enlarge-link"
               :link="r.page"
               :style="`max-width: 300px; max-height: 400px`"
               :title="cropString(r.title)"
-              no-arrow="true"
               :detail="getType(r.type)"
               :description="reuseDescription(r)"
               size="sm"

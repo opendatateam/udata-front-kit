@@ -43,10 +43,8 @@ export const useReuseStore = defineStore('reuse', {
       this.data[dataset_id] = res
     },
 
-    async getType(id) {
-      let types = await reusesAPI.get('/types')
-      let type = types.find((t) => t.id == id)
-      return type.label
+    async getTypes() {
+      return await reusesAPI.get('/types')
     }
   }
 })
