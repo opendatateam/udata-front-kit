@@ -59,7 +59,7 @@ website:
       linkPage: '/about'
       type: 'page'
       display_menu: true
-      url: '../custom/ecospheres/pages/about.md'
+      url: '/ecospheres/pages/about.md'
   home_buttons:
   show_topic_charts: false
   list_highlighted_topics:

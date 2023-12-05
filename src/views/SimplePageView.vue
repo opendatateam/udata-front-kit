@@ -16,11 +16,7 @@ const props = defineProps({
 
 watchEffect(async () => {
   if (!props.url) return
-  if (props.url.indexOf('http') !== 0) {
-    store.getPageFromFile(props.url)
-  } else {
-    store.getPageFromLocation(props.url)
-  }
+  store.getPageFromLocation(props.url)
 })
 </script>
 
