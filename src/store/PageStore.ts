@@ -16,7 +16,7 @@ export const pageStore = defineStore('getPage', {
   },
   actions: {
     async getPageFromFile(path: string) {
-      const res = await import(/* @vite-ignore */ path)
+      const res = await import('./../../src/custom/ecospheres/pages/about.md')
       this.data = res.default
     },
     async getPageFromLocation(url: string) {

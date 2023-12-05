@@ -29,6 +29,7 @@
     "marked": "^5.1.0",
     "pinia": "^2.1.4",
     "string-strip-html": "^13.4.3",
+    "vite-plugin-dynamic-import": "^1.5.0",
     "vite-plugin-html": "^3.2.0",
     "vite-raw-plugin": "^1.0.2",
     "vue": "^3.3.4",

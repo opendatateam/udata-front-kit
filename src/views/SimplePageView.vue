@@ -2,7 +2,6 @@
 import MarkdownIt from 'markdown-it'
 import { computed, watchEffect } from 'vue'
 
-import mdContent from '../custom/ecospheres/pages/about.md'
 import { pageStore } from '../store/PageStore'
 
 const markdown = new MarkdownIt()
@@ -14,8 +13,6 @@ const props = defineProps({
     required: true
   }
 })
-
-console.log(mdContent)
 
 watchEffect(async () => {
   if (!props.url) return
