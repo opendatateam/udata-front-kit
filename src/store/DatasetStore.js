@@ -154,12 +154,34 @@ export const useDatasetStore = defineStore('dataset', {
      * @returns {Array<object>}
      */
     async loadResources(rel) {
-      let response = await datasetsApiv2.request(rel.href)
-      let resources = response.data
-      response = await datasetsApiv2.request(response.next_page)
-      resources = [...resources, ...response.data]
+      let url = new URL(rel.href)
+      var newValue = 20
+      url.searchParams.set('page_size', newValue)
+      let updatedUrl = url.toString()
 
-      return resources
+      let response = await datasetsApiv2.request(updatedUrl)
+      return response.data
+    },
+
+    async getLength(rel) {
+      let url = new URL(rel.href)
+      url.searchParams.delete('page')
+      url.searchParams.delete('page_size')
+      let updatedUrl = url.toString()
+      console.log(updatedUrl)
+      let response = await datasetsApiv2.request(updatedUrl)
+      return response
+    },
+
+    async fetchDatasetResources(datasetId, page, pageSize) {
+      return datasetsApiv2
+        .get('/datasets/' + datasetId + '/resources/', {
+          params: {
+            page: page,
+            page_size: pageSize
+          }
+        })
+        .then((resp) => resp.data)
     }
   }
 })

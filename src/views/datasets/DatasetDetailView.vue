@@ -1,5 +1,6 @@
 <script setup>
 import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
+import { Pagination } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
@@ -13,6 +14,8 @@ import { descriptionFromMarkdown } from '../../utils'
 
 const route = useRoute()
 const datasetId = route.params.did
+const DONT_SCROLL = false
+const loading = ref(true)
 
 const datasetStore = useDatasetStore()
 const reuseStore = useReuseStore()
@@ -26,6 +29,8 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
+let currentPage = ref(1)
+let totalResults = ref(0)
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -76,6 +81,38 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
+const loadPage = (page = 1, scroll = false) => {
+  pageSize = 20
+  loading.value = true
+  if (scroll && top.value) {
+    top.value.scrollIntoView({ behavior: 'smooth' })
+  }
+  let fetchData = datasetStore.fetchDatasetResources(dataset.id, page, pageSize)
+
+  return fetchData
+    .then((data) => {
+      console.log(data)
+      if (data.data) {
+        resources.value = data.data
+        totalResults.value = data.total
+      }
+    })
+    .catch(() => {
+      /*toast.error(
+        "Une ereur a eu lieu lors de l'affichage des ressources"
+      );
+      resources.value = [];*/
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+const changePage = (index, scroll = true) => {
+  currentPage.value = index
+  return loadPage(index, scroll)
+}
+
 const formatDate = (dateString) => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat('default', {
@@ -104,6 +141,9 @@ watchEffect(async () => {
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
     resources.value = await datasetStore.loadResources(dataset.value.resources)
+    let test = await datasetStore.getLength(dataset.value.resources)
+    totalResults = test.total
+    console.log(test.total)
   } else {
     resources.value = dataset.value.resources
   }
@@ -152,6 +192,15 @@ watchEffect(async () => {
             v-for="resource in resources"
             :datasetId="datasetId"
             :resource="resource"
+          />
+          <!-- TODO: remettre le ! -->
+          <p v-if="!totalResults">"No resources match your search."</p>
+          <Pagination
+            class="fr-mt-3w"
+            :page="currentPage"
+            page-size="20"
+            :total-results="totalResults"
+            :change-page="changePage"
           />
         </div>
       </DsfrTabContent>
