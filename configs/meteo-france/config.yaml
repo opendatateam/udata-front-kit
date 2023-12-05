@@ -19,7 +19,7 @@ website:
   title: 'meteo.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '../src/custom/assets/meteo-france/logo.svg'
+  service_logo: '/logos/meteo-france-logo.svg'
   badge:
     display: true
     text: 'BETA'

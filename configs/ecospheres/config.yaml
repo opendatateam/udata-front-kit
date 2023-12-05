@@ -22,7 +22,7 @@ website:
     COHÉSION DES TERRITOIRES<br>
     TRANSITION ÉNERGÉTIQUE<br>
     MER'
-  service_logo: '../src/custom/assets/ecospheres/logo.svg'
+  service_logo: '/logos/ecospheres-logo.svg'
   badge:
     display: true
     text: 'BETA'
