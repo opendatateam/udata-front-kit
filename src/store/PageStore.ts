@@ -16,7 +16,7 @@ export const pageStore = defineStore('getPage', {
   },
   actions: {
     async getPageFromFile(path: string) {
-      const res = await import(path)
+      const res = await import(/* @vite-ignore */ path)
       this.data = res.default
     },
     async getPageFromLocation(url: string) {
