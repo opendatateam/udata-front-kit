@@ -26,10 +26,11 @@ website:
   logo_operator:
   homepage_title: 'Ecosphères'
   homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
-  search_bar: 
+  files_page_size: 6
+  search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
-  secondary_search: 
+  secondary_search:
     display: false
     name:
     link:

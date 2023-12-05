@@ -5,6 +5,8 @@ import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
+import config from '@/config'
+
 import ChartData from '../../components/ChartData.vue'
 import Tile from '../../components/Tile.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
@@ -29,7 +31,7 @@ const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 const currentPage = ref(1)
 const totalResults = ref(0)
-const pageSize = ref(20)
+const pageSize = config.website.files_page_size
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -83,7 +85,7 @@ const description = computed(() => descriptionFromMarkdown(dataset))
 const changePage = (page = 1) => {
   currentPage.value = page
   return datasetStore
-    .fetchDatasetResources(dataset.value.id, page, pageSize.value)
+    .fetchDatasetResources(dataset.value.id, page, pageSize)
     .then((data) => {
       resources.value = data
     })
@@ -116,12 +118,12 @@ watchEffect(async () => {
     })
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
-    let datas = await datasetStore.loadResources(
+    const { data, total } = await datasetStore.loadResources(
       dataset.value.resources,
-      pageSize.value
+      pageSize
     )
-    resources.value = datas.data
-    totalResults.value = datas.total
+    resources.value = data
+    totalResults.value = total
   } else {
     resources.value = dataset.value.resources
   }
@@ -171,7 +173,9 @@ watchEffect(async () => {
             :datasetId="datasetId"
             :resource="resource"
           />
-          <p v-if="!totalResults">"No resources match your search."</p>
+          <p v-if="!totalResults">
+            Aucune ressource n'est associée à votre recherche.
+          </p>
           <Pagination
             class="fr-mt-3w"
             v-else-if="totalResults > pageSize"
