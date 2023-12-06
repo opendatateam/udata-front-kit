@@ -1,5 +1,8 @@
 <script setup>
-import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
+import {
+  ResourceAccordion,
+  OrganizationNameWithCertificate
+} from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
@@ -35,6 +38,12 @@ const chartData = computed(() => {
   if (!dataset.value?.extras) return
   return dataset.value.extras['config:charts']
 })
+
+const links = computed(() => [
+  { to: '/', text: 'Accueil' },
+  { to: '/datasets', text: 'Données' },
+  { text: dataset.value.title }
+])
 
 const formatFileSize = (fileSize) => {
   if (!fileSize) return 'Taille inconnue'
@@ -111,6 +120,9 @@ watchEffect(async () => {
 </script>
 
 <template>
+  <div class="fr-container fr-container--fluid fr-pl-2v">
+    <DsfrBreadcrumb class="fr-pl-2v" :links="links" />
+  </div>
   <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
     <div class="fr-grid-row">
       <div
