@@ -9,6 +9,7 @@
       <div class="fr-mt-4v">
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
       </div>
+      {{ $data }}
       <TopicPropertiesFieldGroup
         v-if="currentStep >= 0"
         @updateValidation="(isValid) => updateStepValidation(1, isValid)"
@@ -60,6 +61,8 @@ import TopicFormRecap from './TopicFormRecap.vue'
 import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
 import TopicThemeFieldGroup from './TopicThemeFieldGroup.vue'
 
+const NoValidationNeeded = true
+
 interface TopicFormData {
   topic: Partial<Topic>
   currentStep: number
@@ -79,7 +82,7 @@ export default {
     return {
       topic: {},
       currentStep: 1,
-      stepsValidation: [false, true, false],
+      stepsValidation: [false, NoValidationNeeded, NoValidationNeeded],
       errorMsg: null
     }
   },
