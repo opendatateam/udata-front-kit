@@ -1,3 +1,4 @@
+import config from '@/config'
 import type {
   AppError,
   Client,
@@ -30,7 +31,7 @@ type Return = Promise<Response<Discussion[]> | AppError>
 class DiscussionsAPI extends API {
   endpoint: string = 'discussions'
   page: number = 1
-  pageSize: number = 20
+  pageSize: number = config.website.pagination_sizes.discussions_list
 
   constructor(args: Args = {}) {
     super(args)
