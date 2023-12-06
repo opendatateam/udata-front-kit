@@ -2,9 +2,7 @@
   <div class="app">
     <form class="fr-col-12 fr-col-lg-7">
       <div class="fr-grid-row">
-        <div>
-          <DsfrStepper :steps="steps" :current-step="currentStep" />
-        </div>
+        <DsfrStepper :steps="steps" :current-step="currentStep" />
       </div>
       <div class="fr-mt-4v">
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
@@ -22,7 +20,7 @@
       />
       <TopicContentFieldGroup
         v-if="currentStep == 3"
-        v-model:datasets="topic.datasetsProperties"
+        :currentDatasets="topic.datasetsProperties"
       />
       <TopicFormRecap
         v-if="currentStep == 4"
@@ -78,7 +76,9 @@ export default {
   },
   data(): TopicFormData {
     return {
-      topic: {},
+      topic: {
+        datasetsProperties: []
+      },
       currentStep: 1,
       stepsValidation: [false, NoValidationNeeded, NoValidationNeeded],
       errorMsg: null

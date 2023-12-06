@@ -40,6 +40,7 @@ export default {
   components: {
     Tooltip: Tooltip
   },
+  emits: ['updateValidation', 'update:topicDescription', 'update:topicName'],
   props: {
     topicName: {
       type: String,
