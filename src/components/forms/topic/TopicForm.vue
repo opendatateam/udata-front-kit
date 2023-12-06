@@ -90,7 +90,7 @@ export default {
         'Description du bouquet de données',
         'Informations du bouquet de données',
         'Composition du bouquet de données',
-        'Récapitulatif'
+        'Récapitulatif du bouquet de données'
       ]
     }
   },
