@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <form @submit.prevent="handleSubmit" class="checkout-form">
+    <form class="checkout-form">
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-lg-7">
           <DsfrStepper :steps="steps" :current-step="currentStep" />
@@ -19,14 +19,12 @@
       <hr style="background: orange" />
       <TopicThemeFieldGroup
         v-if="currentStep >= 0"
-        @updateValidation="(isValid) => updateStepValidation(2, isValid)"
         v-model:theme="topic.theme"
         v-model:subtheme="topic.subtheme"
       />
       <hr style="background: orange" />
       <TopicContentFieldGroup
         v-if="currentStep >= 0"
-        @updateValidation="(isValid) => updateStepValidation(3, isValid)"
         v-model:datasets="topic.datasetsProperties"
       />
       <div class="fit fr-mt-3w fr-ml-auto">
@@ -45,7 +43,7 @@
           :disabled="!isStepValid(currentStep)"
           @click.prevent="goToNextStep()"
         />
-        <DsfrButton v-else type="submit" label="Ajouter le bouquet" />
+        <DsfrButton v-else @click="submitForm" label="Ajouter le bouquet" />
       </div>
       <TopicFormRecap :topic="topic" />
       {{ topic }}
@@ -100,9 +98,9 @@ export default {
     goToPreviousPage() {
       this.currentStep--
     },
-    handleSubmit() {
+    submitForm() {
       alert(
-        'form submitted : ' + this.topic.name + ' ' + this.topic.description
+        'form submitted now: ' + this.topic.name + ' ' + this.topic.description
       )
     },
     isStepValid(step: number) {
