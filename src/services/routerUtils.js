@@ -1,6 +1,5 @@
 import config from '@/config'
 
-import FormMF from '../custom/meteo/views/FormMF.vue'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
@@ -87,7 +86,7 @@ export default class RouterFetch {
         items.push({
           path: item.linkPage,
           name: item.id,
-          component: import(item.path)
+          component: import(item.path /* @vite-ignore */)
         })
       }
     })
