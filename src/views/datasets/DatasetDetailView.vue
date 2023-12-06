@@ -2,7 +2,9 @@
 import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, toValue, watchEffect, watch } from 'vue'
+import { toast } from 'vue3-toastify'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute } from 'vue-router'
 
 import ChartData from '../../components/ChartData.vue'
@@ -26,7 +28,20 @@ const selectedTabIndex = ref(0)
 
 // setup discussions store
 const discussionStore = useDiscussionStore()
-const { get: discussions, page: discussionsPage, pagination: discussionsPages } = storeToRefs(discussionStore)
+const {
+  getDiscussions,
+  discussionsPage,
+  discussionsPages,
+  error: discussionsError,
+  loading: discussionsLoading
+} = storeToRefs(discussionStore)
+
+// setup loader
+const loading = useLoading()
+const loadingParams = { canCancel: true, lockScroll: true }
+
+// setup toaster
+const errorParams = { type: 'error', autoClose: false }
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -77,6 +92,25 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
+watch(discussionsError, (after, before) => {
+  if (after && !before) {
+    const { errorValue } = discussionStore
+    discussionStore.loading = false
+    toast(errorValue, errorParams)
+  }
+})
+
+watch(discussionsLoading, (after, before) => {
+  if (after && !before) {
+    discussionStore.loader = loading.show(loadingParams)
+    return
+  }
+
+  if (!after && before) {
+    discussionStore.loader.hide()
+  }
+})
+
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
   if (!dataset.value.id) return
@@ -85,9 +119,11 @@ watchEffect(async () => {
     .loadReusesForDataset(dataset.value.id)
     .then((r) => (reuses.value = r))
 
-  // fetch discussions
-  discussionStore.setId({ id: dataset.value.id })
-  await discussionStore.fetch()
+  // fetch discussions if there are any
+  if (!toValue(discussionsLoading)) {
+    const subjectId = dataset.value.id
+    await discussionStore.fetchDiscussions({ subjectId })
+  }
 
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
@@ -173,7 +209,7 @@ watchEffect(async () => {
         :selected="selectedTabIndex === 2"
       >
         <DiscussionList
-          :discussions="discussions"
+          :discussions="getDiscussions"
           empty-message="Pas de discussion pour ce jeu de données."
         />
         <DsfrPagination

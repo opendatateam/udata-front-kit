@@ -1,7 +1,9 @@
 <script setup>
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref, computed, watchEffect } from 'vue'
+import { onMounted, ref, computed, watchEffect, watch } from 'vue'
+import { toast } from 'vue3-toastify'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -26,7 +28,20 @@ const selectedTabIndex = 0
 
 // setup discussions store
 const discussionStore = useDiscussionStore()
-const { get: discussions, page: discussionsPage, pagination: discussionsPages } = storeToRefs(discussionStore)
+const {
+  getDiscussions,
+  discussionsPage,
+  discussionsPages,
+  error: discussionsError,
+  loading: discussionsLoading
+} = storeToRefs(discussionStore)
+
+// setup loader
+const loading = useLoading()
+const loadingParams = { canCancel: true, lockScroll: true }
+
+// setup toaster
+const errorParams = { type: 'error', autoClose: false }
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
@@ -96,38 +111,61 @@ const canCreate = computed(() => {
 })
 
 onMounted(() => {
-  store.load(route.params.bid).then(async (res) => {
-    bouquet.value = res
-    theme.value =
-      bouquet.value.extras[`${config.universe.name}:informations`][0].theme
-    subtheme.value =
-      bouquet.value.extras[`${config.universe.name}:informations`][0].subtheme
+  const loader = loading.show()
+  store
+    .load(route.params.bid)
+    .then(async (res) => {
+      bouquet.value = res
+      theme.value =
+        bouquet.value.extras[`${config.universe.name}:informations`][0].theme
+      subtheme.value =
+        bouquet.value.extras[`${config.universe.name}:informations`][0].subtheme
 
-    breadcrumbLinks.value.push(
-      {
-        text: theme,
-        to: `/bouquets/?theme=${theme.value}`
-      },
-      {
-        text: subtheme.value,
-        to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
-      },
-      {
-        text: bouquet.value.name
-      }
-    )
-    // FIXME: not used anymore in template below, change template or remove
-    return datasetStore.loadMultiple(res.datasets).then((ds) => {
-      datasets.value = ds
+      breadcrumbLinks.value.push(
+        {
+          text: theme,
+          to: `/bouquets/?theme=${theme.value}`
+        },
+        {
+          text: subtheme.value,
+          to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
+        },
+        {
+          text: bouquet.value.name
+        }
+      )
+      // FIXME: not used anymore in template below, change template or remove
+      return datasetStore.loadMultiple(res.datasets).then((ds) => {
+        datasets.value = ds
+      })
     })
-  })
+    .finally(() => loader.hide())
 })
 
-// fetch discussions
+watch(discussionsError, (after, before) => {
+  if (after && !before) {
+    const { errorValue } = discussionStore
+    discussionStore.loading = false
+    toast(errorValue, errorParams)
+  }
+})
+
+watch(discussionsLoading, (after, before) => {
+  if (after && !before) {
+    discussionStore.loader = loading.show(loadingParams)
+    return
+  }
+
+  if (!after && before) {
+    discussionStore.loader.hide()
+  }
+})
+
+// fetch discussions if there are any
 watchEffect(async () => {
   if (!bouquet.value.id) return
-  discussionStore.setId({ id: bouquet.value.id })
-  await discussionStore.fetch()
+  const subjectId = bouquet.value.id
+  await discussionStore.fetchDiscussions({ subjectId })
 })
 </script>
 
@@ -259,7 +297,7 @@ watchEffect(async () => {
         :selected="selectedTabIndex === 0"
       >
         <DiscussionList
-          :discussions="discussions"
+          :discussions="getDiscussions"
           empty-message="Pas de discussion pour ce bouquet"
         />
         <DsfrPagination
