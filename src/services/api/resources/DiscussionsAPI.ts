@@ -1,9 +1,9 @@
-import type { AxiosInstance } from 'axios'
-
 import type {
   AppError,
+  Client,
   DataParams,
   Page,
+  Request,
   RequestError,
   Response,
   ResponseError
@@ -13,11 +13,11 @@ import API from '@/services/api/DatagouvfrAPI'
 import { handle } from '@/utils/errors'
 import { toCamel } from '@/utils/text'
 
-interface Attrs {
+interface Args {
   baseUrl?: string
   version?: string
   endpoint?: string
-  httpClient?: AxiosInstance
+  httpClient?: Client
 }
 
 interface Params {
@@ -29,9 +29,11 @@ interface Params {
 type Return = Promise<Response<Discussion[]> | AppError>
 
 class DiscussionsAPI extends API {
-  endpoint = 'discussions'
+  endpoint: string = 'discussions'
+  page: Page = 1
+  pageSize: number = 20
 
-  constructor(args: Attrs = {}) {
+  constructor(args: Args = {}) {
     super(args)
     this.endpoint = args.endpoint ?? this.endpoint
   }
@@ -41,13 +43,21 @@ class DiscussionsAPI extends API {
    */
   public readonly list = async ({
     subjectId,
-    page = 1,
-    pageSize = 20
+    page,
+    pageSize
   }: Params): Return => {
-    const baseUrl: string = this.url()
-    const query: string = `?for=${subjectId}&page=${page}&page_size=${pageSize}`
-    const url: string = `${baseUrl}/${query}`
-    const request = this.httpClient<DataParams<Discussion[]>>({ url })
+    page = page ?? this.page
+    pageSize = pageSize ?? this.pageSize
+    const snakeCased: Record<string, string> = {
+      for: subjectId,
+      page: String(page),
+      page_size: String(pageSize)
+    }
+    const params: string = new URLSearchParams(snakeCased).toString()
+    const url: string = `${this.url()}/?${params}`
+    const request: Request<Discussion[]> = this.httpClient<
+      DataParams<Discussion[]>
+    >({ url })
 
     return await request
       .then(
