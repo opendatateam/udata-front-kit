@@ -12,7 +12,10 @@
               <p class="fr-m-0">Aucune donnée ajoutée</p>
             </div>
             <div v-else>
-              <DatasetList v-model:datasets="datasets" />
+              <DatasetList
+                @removeDataset="removeDataset"
+                :datasets="datasets"
+              />
             </div>
             <DatasetPropertiesForm
               @addDataset="addDataset"
@@ -61,6 +64,10 @@ export default {
   methods: {
     addDataset(datasetProperties: DatasetProperties) {
       this.datasets.push(datasetProperties)
+      this.$emit('update:datasets', this.datasets)
+    },
+    removeDataset(index: number) {
+      this.datasets.splice(index, 1)
       this.$emit('update:datasets', this.datasets)
     }
   }
