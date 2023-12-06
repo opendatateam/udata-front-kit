@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { last } from 'lodash/fp'
 import { HttpResponse, http } from 'msw'
 import { setupServer } from 'msw/node'
 import { createPinia, setActivePinia } from 'pinia'
@@ -10,10 +11,14 @@ import {
   beforeEach,
   describe,
   expect,
-  test
+  test,
+  vi
 } from 'vitest'
+import { toValue } from 'vue'
 
+import type { Meta } from '@/model/api'
 import type { Discussion, Post, Subject, SubjectId } from '@/model/discussion'
+import type { Data } from '@/model/store'
 import type { User } from '@/model/user'
 import { DiscussionsAPI } from '@/services/api/resources/DiscussionsAPI'
 import { useDiscussionStore } from '@/store/DiscussionStore'
@@ -41,11 +46,20 @@ const discussion: Discussion = {
   title: 'Testing social bouquets'
 }
 
+const meta: Meta = {
+  page: 1,
+  pageSize: 20,
+  total: 1
+}
+
+const data: Data<Discussion[]> = { items: [discussion], meta }
+
 const baseUrl = 'https://example.lol'
 const version = '1234'
 const endpoint = 'asdf'
 
 const ok = subjectId
+const okTwo = uuid()
 const notFound = uuid()
 const serverError = undefined
 
@@ -53,10 +67,28 @@ const server = setupServer(
   http.get(`${baseUrl}/${version}/${endpoint}/`, ({ request }) => {
     const url = new URL(request.url)
     const subjectId = url.searchParams.get('for')
+    const page = url.searchParams.get('page')
 
     if (subjectId === ok) {
       return HttpResponse.json(
-        { data: [{ title: 'Mise à jour des ressources' }] },
+        {
+          data: [{ title: 'Mise à jour des ressources' }],
+          page: Number(page),
+          page_size: 1,
+          total: 2
+        },
+        { status: 200 }
+      )
+    }
+
+    if (subjectId === okTwo) {
+      return HttpResponse.json(
+        {
+          data: [{ title: 'Mise à jour des ressources' }],
+          page: Number(page),
+          page_size: 1,
+          total: 1
+        },
         { status: 200 }
       )
     }
@@ -95,6 +127,7 @@ beforeAll(() => {
 
 afterEach(() => {
   server.resetHandlers()
+  vi.restoreAllMocks()
 })
 
 afterAll(() => {
@@ -103,60 +136,106 @@ afterAll(() => {
 
 describe('list discussions for subject', (): void => {
   test('with discussions', ({ store }: P) => {
-    store.data[subject.id] = { [store.page]: [discussion] }
-    expect(store.get).toEqual([discussion])
+    store.discussions[subject.id] = { [meta.page]: data }
+    expect(store.getDiscussions).toEqual([discussion])
   })
 
   test('without discussions', ({ store }: P): void => {
-    expect(store.get).toEqual([])
+    expect(store.getDiscussions).toEqual([])
   })
 
   test('with pagination', ({ store }: P): void => {
-    store.data[subject.id] = { [store.page]: [discussion] }
-    store.page += 1
-    expect(store.get).toEqual([])
+    store.discussions[subject.id] = { [meta.page]: data }
+    store.discussionsPage += 1
+    expect(store.getDiscussions).toEqual([])
   })
 })
 
 describe('set discussions for subject', (): void => {
   test('with discussions', ({ store }: P): void => {
-    store.data[subject.id] = { [store.page]: [discussion] }
-    store.set({ items: [discussion] })
-    expect(store.get).toEqual([discussion])
+    store.discussions[subject.id] = { [meta.page]: data }
+    store.setDiscussions({ subjectId: subject.id, items: [discussion], meta })
+    expect(store.getDiscussions).toEqual([discussion])
   })
 
   test('without discussions', ({ store }: P): void => {
-    store.set({ items: [discussion] })
-    expect(store.get).toEqual([discussion])
+    store.setDiscussions({ subjectId: subject.id, items: [discussion], meta })
+    expect(store.getDiscussions).toEqual([discussion])
   })
 
   test('with pagination', ({ store }: P): void => {
-    store.set({ items: [discussion] })
-    store.page += 1
-    expect(store.get).toEqual([])
+    store.setDiscussions({ subjectId: subject.id, items: [discussion], meta })
+    store.discussionsPage += 1
+    expect(store.getDiscussions).toEqual([])
   })
 })
 
 describe('fetch discussions for subject', (): void => {
   test('with discussions', async ({ store }: P): R => {
-    store.subjectId = ok
-    await store.fetch()
-    expect(store.get).toEqual([{ title: 'Mise à jour des ressources' }])
+    await store.fetchDiscussions({ subjectId: ok })
+    const result = last(toValue(store.getDiscussions)) as Discussion
+    expect(result.title).toEqual('Mise à jour des ressources')
     expect(store.error).toBe(false)
-    expect(store.errorMessage).toBeNull()
   })
 
   test('without discussions', async ({ store }: P): R => {
-    store.subjectId = notFound
-    expect(await store.fetch()).toEqual([])
+    await store.fetchDiscussions({ subjectId: notFound })
     expect(store.error).toBe(true)
-    expect(store.errorMessage).toMatch(/the requested url/i)
+    expect(store.errorType).toEqual('404')
+    expect(store.errorValue).toMatch(/the requested url/i)
   })
 
   test('with server error', async ({ store }: P): R => {
-    store.subjectId = serverError
-    expect(await store.fetch()).toEqual([])
+    const subjectId = serverError as unknown as string
+    await store.fetchDiscussions({ subjectId })
     expect(store.error).toBe(true)
-    expect(store.errorMessage).toMatch(/'subjectId' is required/i)
+    expect(store.errorType).toEqual('ValueError')
+    expect(store.errorValue).toMatch(/subjectId/i)
+  })
+
+  test('with cache', async ({ store }: P): R => {
+    const client = vi.spyOn(store.client, 'list')
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage += 1
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage -= 1
+    await store.fetchDiscussions({ subjectId: ok })
+    expect(client).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('pagination', (): void => {
+  test('when ok', async ({ store }: P): R => {
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage += 1
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage -= 1
+    await store.fetchDiscussions({ subjectId: okTwo })
+    const pages = toValue(store.discussionsPages)
+    await store.fetchDiscussions({ subjectId: ok })
+    expect(toValue(store.discussionsPages)).not.toEqual(pages)
+  })
+
+  test('when not found', async ({ store }: P): R => {
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage += 1
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage -= 1
+    await store.fetchDiscussions({ subjectId: notFound })
+    const pages = toValue(store.discussionsPages)
+    await store.fetchDiscussions({ subjectId: ok })
+    expect(toValue(store.discussionsPages)).not.toEqual(pages)
+  })
+
+  test('when server error', async ({ store }: P): R => {
+    const subjectId = serverError as unknown as string
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage += 1
+    await store.fetchDiscussions({ subjectId: ok })
+    store.discussionsPage -= 1
+    await store.fetchDiscussions({ subjectId })
+    const pages = toValue(store.discussionsPages)
+    await store.fetchDiscussions({ subjectId: ok })
+    expect(toValue(store.discussionsPages)).not.toEqual(pages)
   })
 })
