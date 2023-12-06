@@ -20,13 +20,13 @@ interface DataParams<T> extends MetaParams {
 }
 
 interface Meta {
-  page: Page
+  page: number
   pageSize: number
   total: number
 }
 
 interface MetaParams {
-  page: Page
+  page: number
   page_size: number
   total: number
 }
@@ -60,8 +60,6 @@ interface DataError {
   message: string
 }
 
-type Page = number
-
 export type {
   AppError,
   Client,
@@ -69,7 +67,6 @@ export type {
   DataError,
   DataParams,
   Meta,
-  Page,
   Request,
   RequestError,
   Response,

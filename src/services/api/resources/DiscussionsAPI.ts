@@ -2,7 +2,6 @@ import type {
   AppError,
   Client,
   DataParams,
-  Page,
   Request,
   RequestError,
   Response,
@@ -22,7 +21,7 @@ interface Args {
 
 interface Params {
   subjectId: SubjectId
-  page?: Page
+  page?: number
   pageSize?: number
 }
 
@@ -30,7 +29,7 @@ type Return = Promise<Response<Discussion[]> | AppError>
 
 class DiscussionsAPI extends API {
   endpoint: string = 'discussions'
-  page: Page = 1
+  page: number = 1
   pageSize: number = 20
 
   constructor(args: Args = {}) {

@@ -1,8 +1,8 @@
-import type { Data as DataAPI, Meta, Page } from './api'
+import type { Data as DataAPI, Meta } from './api'
 
 type DataByUUID<T> = Record<string, DataByPage<T>>
 
-type DataByPage<T> = Record<Page, Data<T>>
+type DataByPage<T> = Record<number, Data<T>>
 
 interface Data<T> {
   items?: DataAPI<T>['data']

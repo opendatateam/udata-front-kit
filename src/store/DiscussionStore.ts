@@ -2,7 +2,7 @@ import { defineStore, storeToRefs } from 'pinia'
 import { computed, toValue, ref } from 'vue'
 import type { ComputedRef, Ref } from 'vue'
 
-import type { AppError, Meta, Page, Response } from '@/model/api'
+import type { AppError, Meta, Response } from '@/model/api'
 import type { Discussion, SubjectId } from '@/model/discussion'
 import type { Loader } from '@/model/loader'
 import type { Data, DataByPage, DataByUUID } from '@/model/store'
@@ -33,7 +33,7 @@ const useDiscussionStore = defineStore('discussion', () => {
   } = storeToRefs(usePaginationStore())
   const client = ref(new DiscussionsAPI()) as Ref<DiscussionsAPI>
   const discussions: Ref<DataByUUID<Discussion[]>> = ref({})
-  const discussionsPage: Ref<Page> = ref(1)
+  const discussionsPage: Ref<number> = ref(1)
   const error: Ref<boolean> = ref(false)
   const errorType: Ref<string | number | null | undefined> = ref(null)
   const errorValue: Ref<string | null> = ref(null)
