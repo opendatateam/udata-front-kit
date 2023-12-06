@@ -5,7 +5,6 @@ import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
 import ChartData from '../../components/ChartData.vue'
-import Tile from '../../components/Tile.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
@@ -212,15 +211,9 @@ watchEffect(async () => {
         </div>
         <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
           <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
-            <!--<Tile
-              :external-link="r.page"
-              :title="r.title"
-              :description="r.description"
-              :img="r.organization?.logo || r.owner.avatar"
-            />-->
             <DsfrCard
               :link="r.page"
-              :style="`max-width: 300px; max-height: 400px`"
+              :style="`max-width: 400px; max-height: 400px`"
               :title="cropString(r.title)"
               :detail="getType(r.type)"
               :description="reuseDescription(r)"
