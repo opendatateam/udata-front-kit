@@ -1,44 +1,42 @@
 <template>
-  <section class="fr-col-12 fr-col-lg-7">
-    <div class="fr-select-group fr-mt-1w">
-      <label class="fr-label" for="select_theme"> Thématiques </label>
-      <select class="fr-select" id="select_theme" @change="switchTheme($event)">
-        <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
-          Choisir une thématique
-        </option>
-        <option
-          v-for="option in themeOptions"
-          :value="option.value"
-          :selected="option.value === theme"
-        >
-          {{ option.text }}
-        </option>
-      </select>
-    </div>
-
-    <div class="fr-select-group fr-mt-1w">
-      <label class="fr-label" for="select_subtheme"> Chantiers </label>
-      <select
-        class="fr-select"
-        id="select_subtheme"
-        @change="switchSubtheme($event)"
+  <div class="fr-select-group fr-mt-1w">
+    <label class="fr-label" for="select_theme"> Thématiques </label>
+    <select class="fr-select" id="select_theme" @change="switchTheme($event)">
+      <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
+        Choisir une thématique
+      </option>
+      <option
+        v-for="option in themeOptions"
+        :value="option.value"
+        :selected="option.value === theme"
       >
-        <option
-          :value="NoOptionSelected"
-          :selected="subtheme == NoOptionSelected"
-        >
-          Choisir un chantier
-        </option>
-        <option
-          v-for="option in subthemeOptions"
-          v-bind:value="option.value"
-          :selected="option.value === subtheme"
-        >
-          {{ option.text }}
-        </option>
-      </select>
-    </div>
-  </section>
+        {{ option.text }}
+      </option>
+    </select>
+  </div>
+
+  <div class="fr-select-group fr-mt-1w">
+    <label class="fr-label" for="select_subtheme"> Chantiers </label>
+    <select
+      class="fr-select"
+      id="select_subtheme"
+      @change="switchSubtheme($event)"
+    >
+      <option
+        :value="NoOptionSelected"
+        :selected="subtheme == NoOptionSelected"
+      >
+        Choisir un chantier
+      </option>
+      <option
+        v-for="option in subthemeOptions"
+        v-bind:value="option.value"
+        :selected="option.value === subtheme"
+      >
+        {{ option.text }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script lang="ts">

@@ -1,8 +1,8 @@
 <template>
   <div class="app">
-    <form class="checkout-form">
+    <form class="fr-col-12 fr-col-lg-7">
       <div class="fr-grid-row">
-        <div class="fr-col-12 fr-col-lg-7">
+        <div>
           <DsfrStepper :steps="steps" :current-step="currentStep" />
         </div>
       </div>

@@ -1,18 +1,10 @@
 <template>
-  <section class="topicProperties">
-    <div class="fr-grid-row">
-      <div class="fr-col-12 fr-col-lg-7">
-        <div class="fr-mt-1w">
-          <h4>{{ getDatasetListTitle() }}</h4>
-          <DatasetList @removeDataset="removeDataset" :datasets="datasets" />
-          <DatasetPropertiesForm
-            @addDataset="addDataset"
-            :alreadySelectedDatasets="datasets"
-          />
-        </div>
-      </div>
-    </div>
-  </section>
+  <h4>{{ getDatasetListTitle() }}</h4>
+  <DatasetList @removeDataset="removeDataset" :datasets="datasets" />
+  <DatasetPropertiesForm
+    @addDataset="addDataset"
+    :alreadySelectedDatasets="datasets"
+  />
 </template>
 
 <script lang="ts">
