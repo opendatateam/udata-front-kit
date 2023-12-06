@@ -9,23 +9,25 @@
       <div class="fr-mt-4v">
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
       </div>
-      {{ $data }}
       <TopicPropertiesFieldGroup
-        v-if="currentStep >= 0"
+        v-if="currentStep == 1"
         @updateValidation="(isValid) => updateStepValidation(1, isValid)"
         v-model:topicName="topic.name"
         v-model:topicDescription="topic.description"
       />
-      <hr style="background: orange" />
       <TopicThemeFieldGroup
-        v-if="currentStep >= 0"
+        v-if="currentStep == 2"
         v-model:theme="topic.theme"
         v-model:subtheme="topic.subtheme"
       />
-      <hr style="background: orange" />
       <TopicContentFieldGroup
-        v-if="currentStep >= 0"
+        v-if="currentStep == 3"
         v-model:datasets="topic.datasetsProperties"
+      />
+      <TopicFormRecap
+        v-if="currentStep == 4"
+        @updateStep="(step) => (currentStep = step)"
+        :topic="topic"
       />
       <div class="fit fr-mt-3w fr-ml-auto">
         <DsfrButton
@@ -45,8 +47,6 @@
         />
         <DsfrButton v-else @click="submitForm" label="Ajouter le bouquet" />
       </div>
-      <TopicFormRecap :topic="topic" />
-      {{ topic }}
     </form>
   </div>
 </template>
