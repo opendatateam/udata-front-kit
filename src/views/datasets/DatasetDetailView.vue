@@ -29,6 +29,7 @@ const types = ref([])
 
 onMounted(() => {
   datasetStore.load(datasetId)
+  console.log(reuses)
 })
 
 const chartData = computed(() => {
@@ -218,7 +219,7 @@ watchEffect(async () => {
               :detail="getType(r.type)"
               :description="reuseDescription(r)"
               size="sm"
-              :imgSrc="r.organization?.logo || r.owner.avatar"
+              :imgSrc="r.image_thumbnail"
             />
           </li>
         </ul>
