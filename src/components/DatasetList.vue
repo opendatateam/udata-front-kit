@@ -3,9 +3,9 @@
     <li v-for="(dataset, index) in datasets">
       <DsfrAccordion
         :title="dataset.label"
-        :id="index"
-        :expanded-id="isExpanded[index]"
-        @expand="isExpanded[index] = $event"
+        :id="getAccordeonId(index)"
+        :expanded-id="isExpanded[getAccordeonId(index)]"
+        @expand="isExpanded[getAccordeonId(index)] = $event"
       >
         <DsfrTag
           v-if="!isAvailable(dataset)"
@@ -20,7 +20,7 @@
             icon="ri-delete-bin-line"
             label="Retirer de la section"
             class="fr-mr-2w"
-            @click="remove(index)"
+            @click.prevent="this.$emit('removeDataset', index)"
           />
           <a
             v-if="!isAvailable(dataset)"
@@ -48,6 +48,7 @@ import { type DatasetProperties, Availability } from '@/model'
 
 export default {
   name: 'DatasetList',
+  emits: ['removeDataset'],
   props: {
     datasets: {
       type: Array<DatasetProperties>,
@@ -56,7 +57,7 @@ export default {
   },
   data() {
     return {
-      isExpanded: this.datasets.map(() => null)
+      isExpanded: {}
     }
   },
   computed: {
@@ -65,9 +66,8 @@ export default {
     }
   },
   methods: {
-    remove(index: number) {
-      const updatedDatasets = this.datasets.splice(index, 1)
-      this.$emit('update:datasets', updatedDatasets)
+    getAccordeonId(index: number): string {
+      return `accordion_${index}`
     },
     isAvailable(dataset: DatasetProperties): boolean {
       return Availability.isAvailable(dataset.availability)
