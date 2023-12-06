@@ -18,7 +18,7 @@ import { toValue } from 'vue'
 
 import type { Meta } from '@/model/api'
 import type { Discussion, Post, Subject, SubjectId } from '@/model/discussion'
-import type { Data } from '@/model/store'
+import type { Cache } from '@/model/store'
 import type { User } from '@/model/user'
 import { DiscussionsAPI } from '@/services/api/resources/DiscussionsAPI'
 import { useDiscussionStore } from '@/store/DiscussionStore'
@@ -52,7 +52,7 @@ const meta: Meta = {
   total: 1
 }
 
-const data: Data<Discussion[]> = { items: [discussion], meta }
+const data: Cache<Discussion[]> = { items: [discussion], meta }
 
 const baseUrl = 'https://example.lol'
 const version = '1234'

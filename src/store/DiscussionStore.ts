@@ -5,7 +5,7 @@ import type { ComputedRef, Ref } from 'vue'
 import type { AppError, Meta, Response } from '@/model/api'
 import type { Discussion, SubjectId } from '@/model/discussion'
 import type { Loader } from '@/model/loader'
-import type { Data, DataByPage, DataByUUID } from '@/model/store'
+import type { Cache, CacheByPage, CacheByUUID } from '@/model/store'
 import { DiscussionsAPI } from '@/services/api/resources/DiscussionsAPI'
 import { usePaginationStore } from '@/store/PaginationStore'
 
@@ -32,7 +32,7 @@ const useDiscussionStore = defineStore('discussion', () => {
     pages: discussionsPages
   } = storeToRefs(usePaginationStore())
   const client = ref(new DiscussionsAPI()) as Ref<DiscussionsAPI>
-  const discussions: Ref<DataByUUID<Discussion[]>> = ref({})
+  const discussions: Ref<CacheByUUID<Discussion[]>> = ref({})
   const discussionsPage: Ref<number> = ref(1)
   const error: Ref<boolean> = ref(false)
   const errorType: Ref<string | number | null | undefined> = ref(null)
@@ -47,7 +47,7 @@ const useDiscussionStore = defineStore('discussion', () => {
   const getDiscussions: ComputedRef<Discussion[]> = computed(() => {
     resetError()
     if (toValue(subjectId) === undefined) return []
-    const data: Data<Discussion[]> | undefined = toValue(getData)
+    const data: Cache<Discussion[]> | undefined = toValue(getData)
     const items: Discussion[] | undefined = data?.items
     return items ?? []
   })
@@ -55,11 +55,11 @@ const useDiscussionStore = defineStore('discussion', () => {
   /**
    * Get data containing discussions and metadata.
    */
-  const getData: ComputedRef<Data<Discussion[]> | undefined> = computed(() => {
+  const getData: ComputedRef<Cache<Discussion[]> | undefined> = computed(() => {
     const id = toValue(subjectId)
     if (id === undefined) return
-    const byUUID: DataByUUID<Discussion[]> = toValue(discussions)
-    const byPage: DataByPage<Discussion[]> | undefined = byUUID[id]
+    const byUUID: CacheByUUID<Discussion[]> = toValue(discussions)
+    const byPage: CacheByPage<Discussion[]> | undefined = byUUID[id]
     return byPage?.[toValue(discussionsPage)]
   })
 
@@ -87,13 +87,13 @@ const useDiscussionStore = defineStore('discussion', () => {
     }
 
     const page: number = toValue(discussionsPage)
-    const data: DataByUUID<Discussion[]> = toValue(discussions)
+    const data: CacheByUUID<Discussion[]> = toValue(discussions)
 
     if (data[id] === undefined) {
-      discussions.value[id] = {} satisfies DataByPage<Discussion[]>
+      discussions.value[id] = {} satisfies CacheByPage<Discussion[]>
     }
 
-    discussions.value[id][page] = { items, meta } satisfies Data<Discussion[]>
+    discussions.value[id][page] = { items, meta } satisfies Cache<Discussion[]>
 
     resetError()
   }
@@ -119,7 +119,7 @@ const useDiscussionStore = defineStore('discussion', () => {
     }
 
     const page: number = toValue(discussionsPage)
-    const data: Data<Discussion[]> | undefined = toValue(getData)
+    const data: Cache<Discussion[]> | undefined = toValue(getData)
 
     if (data?.items !== undefined && data.meta !== undefined) {
       const { items, meta } = data
