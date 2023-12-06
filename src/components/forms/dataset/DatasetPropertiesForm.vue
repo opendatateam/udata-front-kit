@@ -121,6 +121,17 @@ export default {
       return Availability
     }
   },
+  watch: {
+    availability() {
+      this.uri = null
+      this.ecosphereId = null
+    },
+    ecosphereId(newId) {
+      if (newId !== null) {
+        this.uri = this.getDatasetPage(this.ecosphereId)
+      }
+    }
+  },
   methods: {
     initData() {
       return {
@@ -134,6 +145,12 @@ export default {
     handleSubmit() {
       this.$emit('addDataset', { ...this.$data })
       Object.assign(this.$data, this.initData())
+    },
+    getDatasetPage(id: string): string {
+      const url = config.website.menu_items.find(
+        (page) => page.id === 'datasets'
+      )
+      return `${url.linkPage}/${id}`
     },
     async ecospheresDatasetsOptions(query: string) {
       if (!query) return []
