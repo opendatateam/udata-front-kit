@@ -59,6 +59,10 @@
   }
 }
 
+.fr-fieldset {
+  margin: 30px 0;
+}
+
 .dsfr_alert {
   margin: 20px 0;
 }

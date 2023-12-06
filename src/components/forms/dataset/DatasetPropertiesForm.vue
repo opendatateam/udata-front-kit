@@ -1,13 +1,13 @@
 <template>
   <div class="app">
-    <form @submit.prevent="handleSubmit" class="checkout-form">
-      <h2>Ajout d'un dataset</h2>
+    <form @submit.prevent="handleSubmit">
+      <h5>Ajouter un jeu de données</h5>
 
       <div class="fr-mt-1w fr-mb-4w">
         <label class="fr-label" for="label">Libellé de la donnée</label>
         <input class="fr-input" type="text" id="label" v-model="label" />
       </div>
-      <div>
+      <div class="fr-mt-1w fr-mb-4w">
         <Tooltip
           title="Raison d'utilisation dans ce bouquet"
           name="tooltip__objectif"
@@ -20,72 +20,54 @@
         />
         <textarea class="fr-input" type="text" id="purpose" v-model="purpose" />
       </div>
-      <p><strong>Retrouver la donnée via</strong></p>
-      <div class="fr-grid-row fr-mb-3w">
-        <div class="fr-col-12">
-          <fieldset class="fr-fieldset">
-            <div class="fr-fieldset__content" role="radiogroup">
-              <DsfrRadioButton
-                v-model="availability"
-                :value="availabilityEnum.ECO_AVAILABLE"
-                label="Écosphères"
-                name="addData"
-              />
-              <div
-                class="fr-grid-row"
-                v-if="availability === availabilityEnum.ECO_AVAILABLE"
-              >
-                <div class="fr-col-6">
-                  <Multiselect
-                    ref="selector"
-                    v-model="ecosphereId"
-                    no-options-text="Précisez ou élargissez votre recherche"
-                    placeholder="Rechercher une donnée dans Ecosphères"
-                    name="select-datasets"
-                    :clear-on-select="true"
-                    :filter-results="false"
-                    :min-chars="1"
-                    :resolve-on-load="false"
-                    :delay="0"
-                    :searchable="true"
-                    :options="ecospheresDatasetsOptions"
-                  />
-                </div>
-              </div>
-              <DsfrRadioButton
-                v-model="availability"
-                :value="availabilityEnum.URL_AVAILABLE"
-                label="URL"
-                name="addData"
-              />
-              <div
-                class="fr-grid-row"
-                v-if="availability === availabilityEnum.URL_AVAILABLE"
-              >
-                <div class="fr-col-4">
-                  <DsfrInput
-                    v-model="uri"
-                    placeholder="Url vers le jeu de données souhaité"
-                    :label-visible="true"
-                    class="fr-mb-md-1w"
-                  />
-                </div>
-              </div>
-              <DsfrRadioButton
-                v-model="availability"
-                :value="availabilityEnum.MISSING"
-                label="Je n'ai pas trouvé la donnée"
-                name="addData"
-              />
-              <DsfrRadioButton
-                v-model="availability"
-                :value="availabilityEnum.NOT_AVAILABLE"
-                label="Je n'ai pas cherché la donnée"
-                name="addData"
-              />
-            </div>
-          </fieldset>
-        </div>
+      <div class="fr-mt-1w fr-mb-4w">
+        <label class="fr-label" for="source">Retrouver la donnée via</label>
+        <fieldset id="source" class="fr-fieldset">
+          <div class="fr-fieldset__content" role="radiogroup">
+            <DsfrRadioButton
+              v-model="availability"
+              :value="availabilityEnum.ECO_AVAILABLE"
+              label="Écosphères"
+            />
+            <Multiselect
+              v-if="availability === availabilityEnum.ECO_AVAILABLE"
+              ref="selector"
+              v-model="ecosphereId"
+              no-options-text="Précisez ou élargissez votre recherche"
+              placeholder="Rechercher une donnée dans Ecosphères"
+              name="select-datasets"
+              :clear-on-select="true"
+              :filter-results="false"
+              :min-chars="1"
+              :resolve-on-load="false"
+              :delay="0"
+              :searchable="true"
+              :options="ecospheresDatasetsOptions"
+            />
+            <DsfrRadioButton
+              v-model="availability"
+              :value="availabilityEnum.URL_AVAILABLE"
+              label="URL"
+            />
+            <DsfrInput
+              v-if="availability === availabilityEnum.URL_AVAILABLE"
+              v-model="uri"
+              placeholder="Url vers le jeu de données souhaité"
+              :label-visible="true"
+              class="fr-mb-md-1w"
+            />
+            <DsfrRadioButton
+              v-model="availability"
+              :value="availabilityEnum.MISSING"
+              label="Je n'ai pas trouvé la donnée"
+            />
+            <DsfrRadioButton
+              v-model="availability"
+              :value="availabilityEnum.NOT_AVAILABLE"
+              label="Je n'ai pas cherché la donnée"
+            />
+          </div>
+        </fieldset>
       </div>
       <DsfrButton type="submit" label="Ajouter la donnée" :secondary="true" />
     </form>
