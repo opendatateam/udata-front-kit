@@ -58,8 +58,8 @@ website:
       id: 'about'
       linkPage: '/about'
       type: 'page'
-      url: 'https://gist.githubusercontent.com/geoffreyaldebert/f6198f2aa63b18783be7d7d3be0909a9/raw/7f979217a4c878225262eb654be3136bf1fe7157/about.md'
       display_menu: true
+      url: '/ecospheres/pages/about.md'
   home_buttons:
   show_topic_charts: false
   list_highlighted_topics:
