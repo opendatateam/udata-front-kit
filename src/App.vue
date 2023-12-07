@@ -5,6 +5,7 @@ import { RouterView, useRouter } from 'vue-router'
 import config from '@/config'
 
 import Navigation from './components/Navigation.vue'
+import Header from './components/header/Header.vue'
 import UserAPI from './services/api/resources/UserAPI'
 import { useUserStore } from './store/UserStore'
 
@@ -71,10 +72,14 @@ onMounted(() => {
 const logotext = ref(config.website.rf_title)
 const servicetitle = ref(config.website.title)
 const logoOperator = ref(config.website.logo_operator)
+const logoService = ref(config.website.service_logo)
+const showBadge = ref(config.website.badge.display)
+const badgeText = ref(config.website.badge.text)
+const badgeStyle = ref(config.website.badge.style)
 </script>
 
 <template>
-  <DsfrHeader
+  <Header
     :service-title="servicetitle"
     service-description=""
     home-to="/"
@@ -83,6 +88,10 @@ const logoOperator = ref(config.website.logo_operator)
     :logo-text="logotext"
     :operator-img-src="logoOperator"
     :operator-img-style="{ height: '60px' }"
+    :service-logo-src="logoService"
+    :show-badge="showBadge"
+    :badge-text="badgeText"
+    :badge-style="badgeStyle"
     @search="doSearch"
     @update:modelValue="updateQuery"
   />

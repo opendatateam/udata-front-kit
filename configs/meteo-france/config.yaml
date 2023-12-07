@@ -19,6 +19,11 @@ website:
   title: 'meteo.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
+  service_logo: '/logos/meteo-france-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   homepage_title: 'La météo et le climat en Open Data'
