@@ -126,7 +126,7 @@ watchEffect(async () => {
     <DsfrBreadcrumb class="fr-pl-2v" :links="links" />
   </div>
   <div
-    class="fr-container width-inherit fr-container--fluid fr-mt-2w fr-mb-4w fr-p-2v"
+    class="fr-container datagouv-components width-inherit fr-container--fluid fr-mt-2w fr-mb-4w fr-p-2v"
   >
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-col-md-8 fr-p-1w">
