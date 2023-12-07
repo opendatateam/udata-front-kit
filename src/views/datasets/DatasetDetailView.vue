@@ -1,8 +1,11 @@
 <script setup>
 import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
+import { Pagination } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+
+import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
@@ -26,6 +29,9 @@ const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 const types = ref([])
+const currentPage = ref(1)
+const totalResults = ref(0)
+const pageSize = config.website.pagination_sizes.files_list
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -75,6 +81,15 @@ const tabs = computed(() => {
 })
 
 const description = computed(() => descriptionFromMarkdown(dataset))
+
+const changePage = (page = 1) => {
+  currentPage.value = page
+  return datasetStore
+    .fetchDatasetResources(dataset.value.id, page, pageSize)
+    .then((data) => {
+      resources.value = data
+    })
+}
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
@@ -145,7 +160,12 @@ watchEffect(async () => {
     })
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
-    resources.value = await datasetStore.loadResources(dataset.value.resources)
+    const { data, total } = await datasetStore.loadResources(
+      dataset.value.resources,
+      pageSize
+    )
+    resources.value = data
+    totalResults.value = total
   } else {
     resources.value = dataset.value.resources
   }
@@ -192,9 +212,20 @@ watchEffect(async () => {
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
           <ResourceAccordion
-            v-for="resource in dataset.resources"
+            v-for="resource in resources"
             :datasetId="datasetId"
             :resource="resource"
+          />
+          <p v-if="!totalResults">
+            Aucune ressource n'est associée à votre recherche.
+          </p>
+          <Pagination
+            class="fr-mt-3w"
+            v-else-if="totalResults > pageSize"
+            :page="currentPage"
+            :page-size="pageSize"
+            :total-results="totalResults"
+            @change="changePage"
           />
         </div>
       </DsfrTabContent>

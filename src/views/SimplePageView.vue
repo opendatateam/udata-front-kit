@@ -1,28 +1,29 @@
 <script setup>
 import MarkdownIt from 'markdown-it'
-import { computed, ref, watchEffect, onBeforeUpdate } from 'vue'
+import { computed, watchEffect } from 'vue'
 
 import { pageStore } from '../store/PageStore'
 
 const markdown = new MarkdownIt()
 const store = pageStore()
 const content = computed(() => store.content)
-const props = defineProps(['url'])
-let url = props.url
-
-watchEffect(() => {
-  store.getPageFromUrl(url)
+const props = defineProps({
+  url: {
+    type: String,
+    required: true
+  }
 })
 
-onBeforeUpdate(() => {
-  url = props.url
-  store.getPageFromUrl(url)
+watchEffect(async () => {
+  if (!props.url) return
+  store.getPageFromUrl(props.url)
 })
 </script>
 
 <template>
   <div class="fr-container width-inherit">
     <br /><br />
+    <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="markdown.render(content)" />
   </div>
 </template>

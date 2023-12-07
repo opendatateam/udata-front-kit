@@ -18,8 +18,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@etalab/data.gouv.fr-components": "^1.6.0",
     "@gouvminint/vue-dsfr": "^5.3.1",
+    "@etalab/data.gouv.fr-components": "^1.9.0",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",
@@ -44,6 +44,7 @@
     "@trivago/prettier-plugin-sort-imports": "^1.4.4",
     "@tsconfig/node18": "^18.2.2",
     "@types/js-yaml": "^4.0.9",
+    "@types/markdown-it": "^13.0.7",
     "@types/node": "^20.9.1",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",

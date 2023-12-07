@@ -22,7 +22,7 @@ website:
   # leave empty if not pertinent
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   homepage_title: 'La météo et le climat en Open Data'
-  homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat.<br />Vous y trouverez des données brutes téléchargeables et utilisable de manière libre et gratuite.'
+  homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -35,17 +35,17 @@ website:
       id: 'home'
       linkPage: '/'
       type: 'component'
-      display_menu: true
+      display_menu: false
     - name: 'Données'
       id: 'datasets'
       linkPage: '/datasets'
       type: 'component'
       display_menu: true
-    - name: 'Informations'
-      id: 'infos'
-      linkPage: '/informations'
-      type: 'page'
-      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/about/ressources.md'
+    - name: 'Recherche guidée'
+      id: 'FormMF'
+      linkPage: '/form'
+      type: 'custom'
+      path: '../custom/meteo/views/FormMF.vue'
       display_menu: true
     - name: 'A propos'
       id: 'about'
@@ -75,6 +75,7 @@ website:
   pagination_sizes:
     organizations_list: 9
     topics_list: 100
+    files_list: 6
   home_banner_colors:
     - '#F7EED4'
     - '#ECEEE6'

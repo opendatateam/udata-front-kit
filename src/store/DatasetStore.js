@@ -67,7 +67,7 @@ export const useDatasetStore = defineStore('dataset', {
     async loadDatasetsForOrg(org_id, page = 1, sort = '-created') {
       const existing = this.getDatasetsForOrg(org_id, page, sort)
       if (existing.data) return existing
-      const datasets = await datasetsApi.getDatasetsForOrganization(
+      const datasets = await datasetsApiv2.getDatasetsForOrganization(
         org_id,
         page,
         sort
@@ -125,7 +125,7 @@ export const useDatasetStore = defineStore('dataset', {
     async load(dataset_id) {
       const existing = this.get(dataset_id)
       if (existing) return existing
-      const dataset = await datasetsApi.get(dataset_id)
+      const dataset = await datasetsApiv2.get(dataset_id)
       if (!dataset) return
       return this.addOrphan(dataset)
     },
@@ -136,11 +136,11 @@ export const useDatasetStore = defineStore('dataset', {
      * @returns {Array<object>}
      */
     async loadMultiple(rel) {
-      let response = await datasetsApi.request(rel.href)
+      let response = await datasetsApiv2.request(rel.href)
       let datasets = response.data
       this.addDatasets('orphan', response)
       while (response.next_page) {
-        response = await datasetsApi.request(response.next_page)
+        response = await datasetsApiv2.request(response.next_page)
         datasets = [...datasets, ...response.data]
         this.addDatasets('orphan', response)
       }
@@ -153,14 +153,23 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {Object} rel - HATEOAS rel for datasets
      * @returns {Array<object>}
      */
-    async loadResources(rel) {
-      let response = await datasetsApiv2.request(rel.href)
-      let resources = response.data
-      while (response.next_page) {
-        response = await datasetsApiv2.request(response.next_page)
-        resources = [...resources, ...response.data]
-      }
-      return resources
+    async loadResources(rel, pageSize) {
+      let url = new URL(rel.href)
+      url.searchParams.set('page_size', pageSize)
+      let updatedUrl = url.toString()
+
+      let response = await datasetsApiv2.request(updatedUrl)
+      return response
+    },
+
+    async fetchDatasetResources(datasetId, page, pageSize) {
+      const response = await datasetsApiv2.get(`${datasetId}/resources/`, {
+        params: {
+          page: page,
+          page_size: pageSize
+        }
+      })
+      return response.data
     }
   }
 })
