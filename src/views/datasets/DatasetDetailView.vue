@@ -1,6 +1,9 @@
 <script setup>
-import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
-import { Pagination } from '@etalab/data.gouv.fr-components'
+import {
+  ResourceAccordion,
+  OrganizationNameWithCertificate,
+  Pagination
+} from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
@@ -28,6 +31,7 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
+const license = ref({})
 const types = ref([])
 const currentPage = ref(1)
 const totalResults = ref(0)
@@ -41,6 +45,12 @@ const chartData = computed(() => {
   if (!dataset.value?.extras) return
   return dataset.value.extras['config:charts']
 })
+
+const links = computed(() => [
+  { to: '/', text: 'Accueil' },
+  { to: '/datasets', text: 'Données' },
+  { text: dataset.value.title }
+])
 
 const formatFileSize = (fileSize) => {
   if (!fileSize) return 'Taille inconnue'
@@ -169,29 +179,51 @@ watchEffect(async () => {
   } else {
     resources.value = dataset.value.resources
   }
+  license.value = await datasetStore.getLicense(dataset.value.license)
   types.value = await reuseStore.getTypes()
 })
 </script>
 
 <template>
-  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container fr-container--fluid fr-pl-2v">
+    <DsfrBreadcrumb class="fr-pl-2v" :links="links" />
+  </div>
+  <div
+    class="fr-container datagouv-components width-inherit fr-container--fluid fr-mt-2w fr-mb-4w fr-p-2v"
+  >
     <div class="fr-grid-row">
-      <div
-        v-if="dataset.organization"
-        class="fr-col-md-4 es__organization__sidebar"
-      >
-        <div class="es__organization__sidebar__logo_container">
-          <img :src="dataset.organization.logo" />
-        </div>
-        <div class="es__organization__sidebar__metadata_container">
-          <h6>
-            <a href="">{{ dataset.organization.name }}</a>
-          </h6>
-        </div>
-      </div>
-      <div class="fr-col-md-8">
+      <div class="fr-col-12 fr-col-md-8 fr-p-1w">
         <h1>{{ dataset.title }}</h1>
         <div v-html="description"></div>
+      </div>
+      <div v-if="dataset.organization" class="fr-col-12 fr-col-md-4 fr-p-1w">
+        <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
+        <div class="fr-grid-row fr-grid-row--middle">
+          <div class="fr-col-auto">
+            <div class="border fr-p-1-5v fr-mr-1-5v">
+              <img :src="dataset.organization.logo" height="32" />
+            </div>
+          </div>
+          <p class="fr-col fr-m-0">
+            <a class="fr-link" :href="dataset.organization.page">
+              <OrganizationNameWithCertificate
+                :organization="dataset.organization"
+              />
+            </a>
+          </p>
+        </div>
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
+        <p>{{ formatDate(dataset.last_update) }}</p>
+        <div v-if="dataset.license">
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
+          <p class="fr-text--sm fr-mt-0 fr-mb-3v">
+            <code class="bg-alt-grey fr-px-1v text-grey-380">
+              <a :href="license.url">
+                {{ license.title }}
+              </a>
+            </code>
+          </p>
+        </div>
       </div>
     </div>
 
