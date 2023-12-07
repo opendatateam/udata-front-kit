@@ -22,6 +22,11 @@ website:
     COHÉSION DES TERRITOIRES<br>
     TRANSITION ÉNERGÉTIQUE<br>
     MER'
+  service_logo: '/logos/ecospheres-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
   homepage_title: 'Ecosphères'
@@ -67,6 +72,7 @@ website:
   pagination_sizes:
     organizations_list: 9
     topics_list: 100
+    files_list: 6
   contact_email: ecospheres@developpement-durable.gouv.fr
   home_banner_colors:
     - '#D6E3A1'

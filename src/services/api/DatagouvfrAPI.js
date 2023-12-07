@@ -89,9 +89,9 @@ export default class DatagouvfrAPI {
    * @param {string} entity_id
    * @returns {Promise}
    */
-  async get(entity_id) {
+  async get(entity_id, params) {
     const url = `${this.url()}/${entity_id}/`
-    return await this.makeRequestAndHandleResponse(url)
+    return await this.makeRequestAndHandleResponse(url, 'get', params)
   }
 
   /**

@@ -41,6 +41,10 @@ export const useReuseStore = defineStore('reuse', {
     addReuses(dataset_id, res) {
       if (!res) return
       this.data[dataset_id] = res
+    },
+
+    async getTypes() {
+      return await reusesAPI.get('/types')
     }
   }
 })

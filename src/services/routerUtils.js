@@ -82,6 +82,12 @@ export default class RouterFetch {
           meta: { title: item.name },
           props: { url: item.url }
         })
+      } else if (item.type == 'custom') {
+        items.push({
+          path: item.linkPage,
+          name: item.id,
+          component: import(item.path /* @vite-ignore */)
+        })
       }
     })
 
@@ -102,7 +108,6 @@ export default class RouterFetch {
         component: LogoutView
       })
     }
-
     return items
   }
 }
