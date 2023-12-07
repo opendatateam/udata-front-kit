@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedTheme === null" className="theme_without_breadcrumb">
+  <div className="without_breadcrumb" v-if="selectedTheme === null">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
       <li v-for="theme in themeList" class="fr-col-12 fr-col-lg-4">
         <Tile
@@ -11,20 +11,22 @@
       </li>
     </ul>
   </div>
-  <div v-else className="theme_with_breadcrumb">
-    <DsfrBreadcrumb class="home-selection-breadcrumb" :links="breadcrumbList" />
-    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
-      <li
-        v-for="subtheme in selectedTheme.subthemes"
-        class="fr-col-12 fr-col-lg-4"
-      >
-        <Tile
-          :style="getCustomBoxShadow(selectedTheme.color)"
-          :link="goToTopicList(subtheme)"
-          :title="subtheme.name"
-        />
-      </li>
-    </ul>
+  <div v-else>
+    <DsfrBreadcrumb class="breadcrumb" :links="breadcrumbList" />
+    <div class="with_breadcrumb">
+      <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
+        <li
+          v-for="subtheme in selectedTheme.subthemes"
+          class="fr-col-12 fr-col-lg-4"
+        >
+          <Tile
+            :style="getCustomBoxShadow(selectedTheme.color)"
+            :link="goToTopicList(subtheme)"
+            :title="subtheme.name"
+          />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -64,7 +66,7 @@ export default {
       return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
     },
     goToTopicList(subtheme: Subtheme): string {
-      return 'link to topic list' // TO DO redirect to search result once the page is created
+      return `/bouquets/?theme=${this.selectedTheme.name}&subtheme=${subtheme.name}`
     },
     getThemeDescription(theme: Theme): string {
       const nbSubthemes = theme.subthemes.length

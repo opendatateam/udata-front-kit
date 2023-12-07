@@ -83,7 +83,6 @@ const goToPage = (page) => {
   <div class="fr-container width-inherit">
     <HomeThemes
       v-if="config.themes"
-      class-name="home-tile-list"
       :selected-theme-name="$route.query.theme"
     />
     <HomeButtons v-if="buttons" :buttons="buttons" />

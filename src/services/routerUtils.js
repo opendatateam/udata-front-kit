@@ -42,7 +42,11 @@ export default class RouterFetch {
         items.push({
           path: item.linkPage,
           name: item.id,
-          component: BouquetsListView
+          component: BouquetsListView,
+          props: (route) => ({
+            initThemeName: route.query.theme,
+            initSubthemeName: route.query.subtheme
+          })
         })
         items.push({
           path: `${item.linkPage}/:bid`,
