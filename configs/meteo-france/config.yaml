@@ -60,21 +60,12 @@ website:
       display_menu: true
   # img should be square
   home_buttons:
-    - title: 'En savoir plus sur la démarche'
-      link: '/about'
-      img: 'https://static.data.gouv.fr/avatars/44/3f1d6b9eac45b2bca7ae9b2a80d812-100.jpg'
-    - title: 'Utiliser les API Météo-France'
-      link: 'https://portail-api.meteofrance.fr/devportal/apis'
-      img: 'https://static.data.gouv.fr/avatars/40/05f4e0291e4ad49a9321071c195cce-100.jpg'
-    - title: 'Voir les jeux de données récents'
-      link: '/datasets'
-      img: 'https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d'
   show_topic_charts: true
   list_highlighted_topics:
     - id: '653a6eee7a6aa39deaec2de9'
       name: 'Données climatologiques de base'
     - id: '653a6f43e96894d0275c994c'
-      name: 'Données climatologique de référence pour le changement climatique'
+      name: 'Données climatologiques de référence pour le changement climatique'
   oauth_option: false
   # display settings
   pagination_sizes:
