@@ -56,7 +56,7 @@ website:
       id: 'about'
       linkPage: '/about'
       type: 'page'
-      url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/36d7b3b0784d07b36208b6e9f353454e6dd639be/gistfile1.txt'
+      url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/7afdf99a23f45041e7e9eb391b65afeb6025e1cd/gistfile1.txt'
       display_menu: true
   # img should be square
   home_buttons:
