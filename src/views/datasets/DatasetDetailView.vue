@@ -8,7 +8,6 @@ import { useRoute } from 'vue-router'
 import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
-import Tile from '../../components/Tile.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
@@ -29,6 +28,7 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
+const types = ref([])
 const currentPage = ref(1)
 const totalResults = ref(0)
 const pageSize = config.website.pagination_sizes.files_list
@@ -99,6 +99,48 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
+const simpleDate = (dateString) => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('default', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }).format(date)
+}
+
+const cropString = (string) => {
+  if (string.length <= 40) {
+    return string
+  } else {
+    return string.slice(0, 40) + '...'
+  }
+}
+
+const reuseDescription = (r) => {
+  if (r.organization?.name) {
+    return (
+      'Publié le ' +
+        simpleDate(r.created_at) +
+        ' par ' +
+        r.organization?.name || r.owner.first_name + ' ' + r.owner.last_name
+    )
+  } else {
+    return (
+      'Publié le ' +
+      simpleDate(r.created_at) +
+      ' par ' +
+      r.owner.first_name +
+      ' ' +
+      r.owner.last_name
+    )
+  }
+}
+
+const getType = (id) => {
+  let type = types.value.find((t) => t.id == id)
+  return type.label
+}
+
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
   if (!dataset.value.id) return
@@ -127,6 +169,7 @@ watchEffect(async () => {
   } else {
     resources.value = dataset.value.resources
   }
+  types.value = await reuseStore.getTypes()
 })
 </script>
 
@@ -198,12 +241,17 @@ watchEffect(async () => {
           Pas de réutilisation pour ce jeu de données.
         </div>
         <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-          <li v-for="r in reuses" class="fr-col-12 fr-col-lg-6">
-            <Tile
-              :external-link="r.page"
-              :title="r.title"
-              :description="r.description"
-              :img="r.organization?.logo || r.owner.avatar"
+          <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
+            <DsfrCard
+              :link="r.page"
+              :style="`max-width: 400px; max-height: 400px`"
+              :title="cropString(r.title)"
+              :detail="getType(r.type)"
+              :description="reuseDescription(r)"
+              size="sm"
+              :imgSrc="
+                r.image_thumbnail || r.organization?.logo || r.owner.avatar
+              "
             />
           </li>
         </ul>
