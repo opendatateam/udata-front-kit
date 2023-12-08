@@ -70,7 +70,9 @@ const useDiscussionStore = defineStore('discussion', () => {
     if (id === undefined) {
       errorMsg({ type: 'ValueError', value: 'subjectId' })
       return
-    } else subjectId.value = id
+    }
+
+    subjectId.value = id
 
     if (items === undefined) {
       errorMsg({ type: 'ValueError', value: 'items' })
