@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    isValid() {
+    isValid(): boolean {
       return this.datasets.length > 0
     }
   },

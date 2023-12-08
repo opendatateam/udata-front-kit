@@ -9,19 +9,19 @@
       </div>
       <TopicPropertiesFieldGroup
         v-if="currentStep == 1"
-        @updateValidation="(isValid) => updateStepValidation(1, isValid)"
+        @updateValidation="(isValid: boolean) => updateStepValidation(1, isValid)"
         v-model:topicName="topic.name"
         v-model:topicDescription="topic.description"
       />
       <TopicThemeFieldGroup
         v-if="currentStep == 2"
-        @updateValidation="(isValid) => updateStepValidation(2, isValid)"
+        @updateValidation="(isValid: boolean) => updateStepValidation(2, isValid)"
         v-model:theme="topic.theme"
         v-model:subtheme="topic.subtheme"
       />
       <TopicContentFieldGroup
         v-if="currentStep == 3"
-        @updateValidation="(isValid) => updateStepValidation(3, isValid)"
+        @updateValidation="(isValid: boolean) => updateStepValidation(3, isValid)"
         :currentDatasets="topic.datasetsProperties"
       />
       <TopicFormRecap
