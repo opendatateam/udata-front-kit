@@ -133,7 +133,7 @@ const showLoader = ref(false)
       :options="optionsDataPack"
       @update:modelValue="onSelectDataPack"
     >
-      <template #label>Quelles thématique de données ?</template>
+      <template #label>Quelle thématique de données ?</template>
     </DsfrSelect>
 
     <DsfrSelect
