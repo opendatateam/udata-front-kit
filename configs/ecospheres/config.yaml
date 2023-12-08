@@ -23,7 +23,6 @@ website:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
-  show_quality_component: true
   # leave empty if not pertinent
   logo_operator:
   homepage_title: 'Les données de la transition écologique'
@@ -64,6 +63,8 @@ website:
       url: '/ecospheres/pages/about.md'
   home_buttons:
   show_topic_charts: false
+  show_quality_component: true
+  show_dataset_metadata_panel: true
   list_highlighted_topics:
   oauth_option: true
   pagination_sizes:
