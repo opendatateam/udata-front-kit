@@ -1,17 +1,15 @@
 <script setup>
 import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
-import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, toValue, watchEffect, watch } from 'vue'
-import { toast } from 'vue3-toastify'
-import { useLoading } from 'vue-loading-overlay'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+
+import { useDiscussion } from '@/composables/discussion'
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionList from '../../components/DiscussionList.vue'
 import Tile from '../../components/Tile.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
-import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown } from '../../utils'
 
@@ -27,21 +25,9 @@ const resources = ref([])
 const selectedTabIndex = ref(0)
 
 // setup discussions store
-const discussionStore = useDiscussionStore()
-const {
-  getDiscussions,
-  discussionsPage,
-  discussionsPages,
-  error: discussionsError,
-  loading: discussionsLoading
-} = storeToRefs(discussionStore)
-
-// setup loader
-const loading = useLoading()
-const loadingParams = { canCancel: true, lockScroll: true }
-
-// setup toaster
-const errorParams = { type: 'error', autoClose: false }
+const { getDiscussions, discussionsPage, discussionsPages } = useDiscussion(
+  () => dataset
+)
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -92,25 +78,6 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-watch(discussionsError, (after, before) => {
-  if (after && !before) {
-    const { errorValue } = discussionStore
-    discussionStore.loading = false
-    toast(errorValue, errorParams)
-  }
-})
-
-watch(discussionsLoading, (after, before) => {
-  if (after && !before) {
-    discussionStore.loader = loading.show(loadingParams)
-    return
-  }
-
-  if (!after && before) {
-    discussionStore.loader.hide()
-  }
-})
-
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
   if (!dataset.value.id) return
@@ -118,12 +85,6 @@ watchEffect(async () => {
   reuseStore
     .loadReusesForDataset(dataset.value.id)
     .then((r) => (reuses.value = r))
-
-  // fetch discussions if there are any
-  if (!toValue(discussionsLoading)) {
-    const subjectId = dataset.value.id
-    await discussionStore.fetchDiscussions({ subjectId })
-  }
 
   // fetch ressources if need be
   if (dataset.value.resources.rel) {

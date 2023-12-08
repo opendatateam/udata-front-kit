@@ -1,5 +1,7 @@
-interface ErrorParams {
-  type: string
+import type { ToastOptions } from 'vue3-toastify'
+
+interface ErrorParams extends ToastOptions {
+  type: 'error'
   autoClose: boolean
 }
 

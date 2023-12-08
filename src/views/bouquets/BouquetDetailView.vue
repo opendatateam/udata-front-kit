@@ -1,13 +1,11 @@
 <script setup>
 import { DsfrButton } from '@gouvminint/vue-dsfr'
-import { storeToRefs } from 'pinia'
-import { onMounted, ref, computed, watchEffect, watch } from 'vue'
-import { toast } from 'vue3-toastify'
+import { onMounted, ref, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
+import { useDiscussion } from '@/composables/discussion'
 import config from '@/config'
-import { useDiscussionStore } from '@/store/DiscussionStore'
 
 import DiscussionList from '../../components/DiscussionList.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
@@ -27,21 +25,13 @@ const datasets = ref([])
 const selectedTabIndex = 0
 
 // setup discussions store
-const discussionStore = useDiscussionStore()
-const {
-  getDiscussions,
-  discussionsPage,
-  discussionsPages,
-  error: discussionsError,
-  loading: discussionsLoading
-} = storeToRefs(discussionStore)
+const { getDiscussions, discussionsPage, discussionsPages } = useDiscussion(
+  () => bouquet
+)
 
 // setup loader
 const loading = useLoading()
 const loadingParams = { canCancel: true, lockScroll: true }
-
-// setup toaster
-const errorParams = { type: 'error', autoClose: false }
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
@@ -111,7 +101,7 @@ const canCreate = computed(() => {
 })
 
 onMounted(() => {
-  const loader = loading.show()
+  const loader = loading.show(loadingParams)
   store
     .load(route.params.bid)
     .then(async (res) => {
@@ -140,32 +130,6 @@ onMounted(() => {
       })
     })
     .finally(() => loader.hide())
-})
-
-watch(discussionsError, (after, before) => {
-  if (after && !before) {
-    const { errorValue } = discussionStore
-    discussionStore.loading = false
-    toast(errorValue, errorParams)
-  }
-})
-
-watch(discussionsLoading, (after, before) => {
-  if (after && !before) {
-    discussionStore.loader = loading.show(loadingParams)
-    return
-  }
-
-  if (!after && before) {
-    discussionStore.loader.hide()
-  }
-})
-
-// fetch discussions if there are any
-watchEffect(async () => {
-  if (!bouquet.value.id) return
-  const subjectId = bouquet.value.id
-  await discussionStore.fetchDiscussions({ subjectId })
 })
 </script>
 
