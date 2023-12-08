@@ -31,6 +31,16 @@ export default {
       datasets: this.currentDatasets
     }
   },
+  watch: {
+    isValid(newValue) {
+      this.$emit('updateValidation', newValue)
+    }
+  },
+  computed: {
+    isValid() {
+      return this.datasets.length > 0
+    }
+  },
   methods: {
     addDataset(datasetProperties: DatasetProperties) {
       this.datasets.push(datasetProperties)

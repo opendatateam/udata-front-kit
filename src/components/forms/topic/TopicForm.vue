@@ -21,6 +21,7 @@
       />
       <TopicContentFieldGroup
         v-if="currentStep == 3"
+        @updateValidation="(isValid) => updateStepValidation(3, isValid)"
         :currentDatasets="topic.datasetsProperties"
       />
       <TopicFormRecap
@@ -60,8 +61,6 @@ import TopicFormRecap from './TopicFormRecap.vue'
 import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
 import TopicThemeFieldGroup from './TopicThemeFieldGroup.vue'
 
-const NoValidationNeeded = true
-
 interface TopicFormData {
   topic: Partial<Topic>
   currentStep: number
@@ -83,7 +82,7 @@ export default {
         datasetsProperties: []
       },
       currentStep: 1,
-      stepsValidation: [false, false, NoValidationNeeded],
+      stepsValidation: [false, false, false],
       errorMsg: null
     }
   },
@@ -122,13 +121,28 @@ export default {
         }
       }
       return datasetsId
+    },
+    allStepAreValid(): boolean {
+      for (const step of this.stepsValidation) {
+        if (step === false) {
+          return false
+        }
+      }
+      return true
     }
   },
   methods: {
     goToPreviousPage() {
       this.currentStep--
     },
-    async submitForm() {
+    submitForm() {
+      if (this.allStepAreValid) {
+        this.createTopic()
+      } else {
+        this.errorMsg = 'Merci de bien remplir les champs' // TODO -- improve errorMsg (which step is faulty, what is the condition for it to be accepted)
+      }
+    },
+    async createTopic() {
       let response = await useTopicStore().create(this.topicCreationData)
       if (response.status && response.status === 400) {
         this.errorMsg = 'Merci de bien remplir les champs'
