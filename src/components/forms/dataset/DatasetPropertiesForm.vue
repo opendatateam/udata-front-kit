@@ -5,7 +5,7 @@
 
       <div class="fr-mt-1w fr-mb-4w">
         <label class="fr-label" for="label">Libellé de la donnée</label>
-        <input class="fr-input" type="text" id="label" v-model="label" />
+        <input class="fr-input" type="text" id="label" v-model="title" />
       </div>
       <div class="fr-mt-1w fr-mb-4w">
         <Tooltip
@@ -106,25 +106,22 @@ export default {
   watch: {
     availability() {
       this.uri = null
-      this.ecosphereId = null
+      this.id = null
     },
     id(newId) {
-      if (
-        newId !== NoId &&
-        this.availability === Availability.LOCAL_AVAILABLE
-      ) {
-        this.uri = this.getLocalDatasetPage(this.id)
+      if (newId && this.availability === Availability.LOCAL_AVAILABLE) {
+        this.uri = this.getLocalDatasetPage(newId)
       }
     }
   },
   methods: {
     initData(): DatasetProperties {
       return {
-        label: '',
+        title: '',
         purpose: '',
         availability: Availability.NOT_AVAILABLE,
         uri: null,
-        ecosphereId: null
+        id: null
       }
     },
     handleSubmit() {
@@ -149,7 +146,7 @@ export default {
       })
       return options.filter((option) => !this.alreadySelected(option.value))
     },
-    datasetToOption(dataset) {
+    datasetToOption(dataset: DatasetProperties) {
       return { value: dataset.id, label: dataset.title, uri: dataset.uri }
     },
     alreadySelected(id: string): boolean {

@@ -50,8 +50,10 @@
 </template>
 
 <script lang="ts">
-import type { Topic } from '@/model'
+import config from '@/config'
+import type { Topic, TopicCreationData } from '@/model'
 
+import { useTopicStore } from '../../../store/TopicStore'
 import TopicContentFieldGroup from './TopicContentFieldGroup.vue'
 import TopicFormRecap from './TopicFormRecap.vue'
 import TopicPropertiesFieldGroup from './TopicPropertiesFieldGroup.vue'
@@ -92,16 +94,47 @@ export default {
         'Composition du bouquet de données',
         'Récapitulatif du bouquet de données'
       ]
+    },
+    topicCreationData(): TopicCreationData {
+      return {
+        name: this.topic.name,
+        description: this.topic.description,
+        datatasets: this.datasetsId,
+        tags: [config.universe.name],
+        extras: {
+          [`${config.universe.name}:informations`]: [
+            {
+              theme: this.topic.theme,
+              subtheme: this.topic.subtheme
+            }
+          ],
+          [`${config.universe.name}:datasets_properties`]:
+            this.topic.datasetsProperties
+        }
+      }
+    },
+    datasetsId(): string[] {
+      const datasetsId: string[] = []
+      for (const dataset of this.topic.datasetsProperties) {
+        if (dataset.id !== null) {
+          datasetsId.push(dataset.id)
+        }
+      }
+      return datasetsId
     }
   },
   methods: {
     goToPreviousPage() {
       this.currentStep--
     },
-    submitForm() {
-      alert(
-        'form submitted now: ' + this.topic.name + ' ' + this.topic.description
-      )
+    async submitForm() {
+      let response = await useTopicStore().create(this.topicCreationData)
+      if (response.status && response.status === 400) {
+        this.errorMsg = 'Merci de bien remplir les champs'
+      } else {
+        alert(JSON.stringify(response))
+        //this.$router.push({ name: 'bouquet_detail', params: { bid: response.slug } })
+      }
     },
     isStepValid(step: number) {
       return this.stepsValidation[step - 1]

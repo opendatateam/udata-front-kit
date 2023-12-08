@@ -6,7 +6,7 @@
     <DsfrAccordionsGroup>
       <li v-for="(dataset, index) in datasets">
         <DsfrAccordion
-          :title="dataset.label"
+          :title="dataset.title"
           :id="getAccordeonId(index)"
           :expanded-id="isExpanded[getAccordeonId(index)]"
           @expand="isExpanded[getAccordeonId(index)] = $event"

@@ -1,5 +1,5 @@
 interface DatasetProperties {
-  label: string
+  title: string
   purpose: string
   uri: string | null
   id: string | null
@@ -49,17 +49,29 @@ interface Topic {
   datasetsProperties: DatasetProperties[]
 }
 
-interface BetaTopic {
-  created_at: string
-  datasets: BetaDataset[]
+interface TopicCreationData {
+  name: string
   description: string
-  extras: {
-    'ecospheres:datasets_properties': {}
-    'ecospheres:informations': { subtheme: string; theme: string }[]
-  }
+  datasets: string[] // list of ids (for the dataset which have one)
+  tags: string[]
+  extras: TopicExtras
+}
+
+interface TopicExtras {
+  ['ecospheres:informations']: {
+    theme: string
+    subtheme: string
+  }[]
+  ['ecospheres:datasets_properties']: DatasetProperties[]
+}
+
+interface BetaTopic {
+  name: string
+  description: string
+  created_at: string
+  extras: TopicExtras
   featured: boolean
   id: string
-  name: string
   organisation: any
   owner: any
   page: string
@@ -90,5 +102,6 @@ export type {
   BreadcrumbItem,
   BetaTopic,
   Topic,
-  DatasetProperties
+  DatasetProperties,
+  TopicCreationData
 }
