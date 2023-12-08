@@ -62,7 +62,9 @@ export default {
   },
   computed: {
     isValid() {
-      return true
+      return (
+        this.theme !== NoOptionSelected && this.subtheme !== NoOptionSelected
+      )
     },
     errorMsg() {
       return ''

@@ -15,6 +15,7 @@
       />
       <TopicThemeFieldGroup
         v-if="currentStep == 2"
+        @updateValidation="(isValid) => updateStepValidation(2, isValid)"
         v-model:theme="topic.theme"
         v-model:subtheme="topic.subtheme"
       />
@@ -82,7 +83,7 @@ export default {
         datasetsProperties: []
       },
       currentStep: 1,
-      stepsValidation: [false, NoValidationNeeded, NoValidationNeeded],
+      stepsValidation: [false, false, NoValidationNeeded],
       errorMsg: null
     }
   },
