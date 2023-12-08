@@ -16,12 +16,8 @@ universe:
 
 # UI customizations
 website:
-  title: 'Ecosphères'
-  rf_title: 'MINISTÈRES<br>
-    TRANSITION ÉCOLOGIQUE<br>
-    COHÉSION DES TERRITOIRES<br>
-    TRANSITION ÉNERGÉTIQUE<br>
-    MER'
+  title: 'ecologie.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/ecospheres-logo.svg'
   badge:
     display: true
@@ -30,7 +26,7 @@ website:
   show_quality_component: true
   # leave empty if not pertinent
   logo_operator:
-  homepage_title: 'Ecosphères'
+  homepage_title: 'Les données de la transition écologique'
   homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
   search_bar:
     display: true
