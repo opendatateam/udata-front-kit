@@ -99,7 +99,7 @@ export default {
       return {
         name: this.topic.name,
         description: this.topic.description,
-        datatasets: this.datasetsId,
+        datasets: this.datasetsId,
         tags: [config.universe.name],
         extras: {
           [`${config.universe.name}:informations`]: [
