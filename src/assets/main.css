@@ -18,6 +18,7 @@
 
 .multiselect {
   --ms-bg: var(--background-contrast-grey);
+  margin: 8px 0;
 }
 
 .fr-col-sm-45 {

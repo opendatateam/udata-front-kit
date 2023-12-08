@@ -30,33 +30,11 @@
               :value="availabilityEnum.LOCAL_AVAILABLE"
               label="Écosphères"
             />
-            <Multiselect
-              v-if="availability === availabilityEnum.LOCAL_AVAILABLE"
-              ref="selector"
-              v-model="id"
-              no-options-text="Précisez ou élargissez votre recherche"
-              placeholder="Rechercher une donnée dans Ecosphères"
-              name="select-datasets"
-              :clear-on-select="true"
-              :filter-results="false"
-              :min-chars="1"
-              :resolve-on-load="false"
-              :delay="0"
-              :searchable="true"
-              :options="ecospheresDatasetsOptions"
-            />
             <DsfrRadioButton
               v-model="availability"
               :name="availabilityEnum.URL_AVAILABLE"
               :value="availabilityEnum.URL_AVAILABLE"
               label="URL"
-            />
-            <DsfrInput
-              v-if="availability === availabilityEnum.URL_AVAILABLE"
-              v-model="uri"
-              placeholder="Url vers le jeu de données souhaité"
-              :label-visible="true"
-              class="fr-mb-md-1w"
             />
             <DsfrRadioButton
               v-model="availability"
@@ -72,8 +50,40 @@
             />
           </div>
         </fieldset>
+        <div v-if="isAvailable">
+          <label class="fr-label" for="link">Déclarer le chemin d'accés</label>
+          <Multiselect
+            v-if="availability === availabilityEnum.LOCAL_AVAILABLE"
+            id="link"
+            ref="selector"
+            v-model="id"
+            no-options-text="Précisez ou élargissez votre recherche"
+            placeholder="Rechercher une donnée dans Ecosphères"
+            name="select-datasets"
+            :clear-on-select="true"
+            :filter-results="false"
+            :min-chars="1"
+            :resolve-on-load="false"
+            :delay="0"
+            :searchable="true"
+            :options="ecospheresDatasetsOptions"
+          />
+          <DsfrInput
+            v-if="availability === availabilityEnum.URL_AVAILABLE"
+            id="link"
+            v-model="uri"
+            placeholder="Url vers le jeu de données souhaité"
+            :label-visible="true"
+            class="fr-mb-md-1w"
+          />
+        </div>
       </div>
-      <DsfrButton type="submit" label="Ajouter la donnée" :secondary="true" />
+      <DsfrButton
+        :disabled="!isValidDataset"
+        type="submit"
+        label="Ajouter ce jeu de données"
+        :secondary="true"
+      />
     </form>
   </div>
 </template>
@@ -105,6 +115,24 @@ export default {
   computed: {
     availabilityEnum() {
       return Availability
+    },
+    isValidDataset() {
+      return this.isValidEcosphereDataset && this.isValidUrlDataset
+    },
+    isValidEcosphereDataset(): boolean {
+      if (this.availability === Availability.LOCAL_AVAILABLE) {
+        return this.uri !== null && this.id !== null
+      }
+      return true
+    },
+    isValidUrlDataset(): boolean {
+      if (this.availability === Availability.URL_AVAILABLE) {
+        return this.uri !== null
+      }
+      return true
+    },
+    isAvailable(): boolean {
+      return Availability.isAvailable(this.availability)
     }
   },
   watch: {
