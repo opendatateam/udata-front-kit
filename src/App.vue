@@ -100,12 +100,7 @@ const badgeStyle = ref(config.website.badge.style)
     </template>
   </Header>
 
-  <div class="fr-header__body">
-    <div class="fr-container width-inherit"></div>
-    <div>
-      <RouterView />
-    </div>
-  </div>
+  <RouterView />
 
   <DsfrFooter class="fr-mt-8w" :mandatory-links="[]"></DsfrFooter>
 </template>

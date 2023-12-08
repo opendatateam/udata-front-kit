@@ -21,7 +21,7 @@
       <a href="/admin/bouquets/add" target="_blank">en créant un</a>
     </p>
   </div>
-  <div class="fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container fr-mt-4w fr-mb-4w">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
       <li v-for="bouquet in bouquets" class="fr-col-12 fr-col-lg-6">
         <Tile

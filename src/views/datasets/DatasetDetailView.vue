@@ -187,20 +187,18 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <div class="fr-container fr-container--fluid fr-pl-2v">
-    <DsfrBreadcrumb class="fr-pl-2v" :links="links" />
+  <div class="fr-container">
+    <DsfrBreadcrumb :links="links" />
   </div>
-  <div
-    class="fr-container datagouv-components width-inherit fr-container--fluid fr-mt-2w fr-mb-4w fr-p-2v"
-  >
-    <div class="fr-grid-row">
-      <div class="fr-col-12 fr-col-md-8 fr-p-1w">
+  <div class="fr-container datagouv-components fr-mb-4w">
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12 fr-col-md-8">
         <h1>{{ dataset.title }}</h1>
         <ReadMore max-height="600">
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <div v-if="dataset.organization" class="fr-col-12 fr-col-md-4 fr-p-1w">
+      <div v-if="dataset.organization" class="fr-col-12 fr-col-md-4">
         <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
         <div class="fr-grid-row fr-grid-row--middle">
           <div class="fr-col-auto">
