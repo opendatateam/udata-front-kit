@@ -28,6 +28,14 @@ module.exports = {
         parser: '@typescript-eslint/parser',
         project: './tsconfig.dev.json',
         tsconfigRootDir: __dirname
+      },
+      rules: {
+        '@typescript-eslint/no-misused-promises': [
+          'error',
+          {
+            checksVoidReturn: false
+          }
+        ]
       }
     }
   ],

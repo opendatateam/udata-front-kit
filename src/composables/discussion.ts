@@ -57,7 +57,6 @@ const useDiscussion = (subject: Subject): Return => {
   })
 
   // fetch discussions if there are any
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   watchEffect(async (): Promise<void> => {
     const subjectId = (toValue(subject()) as { id: string | undefined }).id
     if (subjectId === undefined) return
