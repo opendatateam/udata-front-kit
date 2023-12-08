@@ -228,7 +228,10 @@ watchEffect(async () => {
             </code>
           </p>
         </div>
-        <QualityComponent :quality="dataset.quality" />
+        <QualityComponent
+          v-if="config.website.show_quality_component"
+          :quality="dataset.quality"
+        />
       </div>
     </div>
 

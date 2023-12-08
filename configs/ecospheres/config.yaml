@@ -27,6 +27,7 @@ website:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
+  show_quality_component: true
   # leave empty if not pertinent
   logo_operator:
   homepage_title: 'Ecosphères'
