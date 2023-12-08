@@ -4,7 +4,8 @@ import {
   OrganizationNameWithCertificate,
   Pagination,
   QualityComponent,
-  ReadMore
+  ReadMore,
+  Well
 } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
@@ -38,6 +39,7 @@ const types = ref([])
 const currentPage = ref(1)
 const totalResults = ref(0)
 const pageSize = config.website.pagination_sizes.files_list
+const showDiscussions = config.website.show_dataset_discussions
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -301,46 +303,64 @@ watchEffect(async () => {
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <h2 class="fr-mt-4w">Discussions</h2>
-        <div v-if="!discussions.data?.length">
-          Pas de discussion pour ce jeu de données.
-        </div>
-        <DsfrAccordionsGroup>
-          <li v-for="discussion in discussions.data">
-            <DsfrAccordion
-              :id="discussion.id"
-              :title="discussion.title"
-              :expanded-id="expandedDiscussion"
-              @expand="(id) => (expandedDiscussion = id)"
-            >
-              <template #default>
-                <ul class="es__comment__container">
-                  <li v-for="comment in discussion.discussion">
-                    <div class="es__comment__metadata fr-mb-1v">
-                      <span class="es__comment__author"
-                        >{{ comment.posted_by.first_name }}
-                        {{ comment.posted_by.last_name }}</span
-                      >
-                      <span class="es__comment__date fr-ml-1v"
-                        >le {{ formatDate(comment.posted_on) }}</span
-                      >
-                    </div>
-                    <div class="es__comment__content">
-                      {{ comment.content }}
-                    </div>
-                  </li>
-                </ul>
-              </template>
-            </DsfrAccordion>
-          </li>
-        </DsfrAccordionsGroup>
-        <DsfrPagination
-          v-if="discussionsPages.length"
-          class="fr-mt-2w"
-          :current-page="discussionsPage - 1"
-          :pages="discussionsPages"
-          @update:current-page="(p) => (discussionsPage = p + 1)"
-        />
+        <Well color="blue-cumulus" weight="regular">
+          <div class="fr-grid-row fr-grid-row--gutters">
+            <div class="fr-col-12 fr-col-md-6">
+              <p class="fr-text--bold">Voir les discussions</p>
+              <p class="fr-text--alt fr-text--sm">
+                Vous avez une question sur ce jeu de données ? Rendez-vous sur
+                data.gouv.fr pour voir les discussions.
+              </p>
+            </div>
+            <div class="fr-col-12 fr-col-md-6">
+              <a href="data.gouv.fr" class="fr-btn" target="_blank">
+                Voir les discussions sur data.gouv.fr
+              </a>
+            </div>
+          </div>
+        </Well>
+        <template v-if="showDiscussions">
+          <h2 class="fr-mt-4w">Discussions</h2>
+          <div v-if="!discussions.data?.length">
+            Pas de discussion pour ce jeu de données.
+          </div>
+          <DsfrAccordionsGroup>
+            <li v-for="discussion in discussions.data">
+              <DsfrAccordion
+                :id="discussion.id"
+                :title="discussion.title"
+                :expanded-id="expandedDiscussion"
+                @expand="(id) => (expandedDiscussion = id)"
+              >
+                <template #default>
+                  <ul class="es__comment__container">
+                    <li v-for="comment in discussion.discussion">
+                      <div class="es__comment__metadata fr-mb-1v">
+                        <span class="es__comment__author"
+                          >{{ comment.posted_by.first_name }}
+                          {{ comment.posted_by.last_name }}</span
+                        >
+                        <span class="es__comment__date fr-ml-1v"
+                          >le {{ formatDate(comment.posted_on) }}</span
+                        >
+                      </div>
+                      <div class="es__comment__content">
+                        {{ comment.content }}
+                      </div>
+                    </li>
+                  </ul>
+                </template>
+              </DsfrAccordion>
+            </li>
+          </DsfrAccordionsGroup>
+          <DsfrPagination
+            v-if="discussionsPages.length"
+            class="fr-mt-2w"
+            :current-page="discussionsPage - 1"
+            :pages="discussionsPages"
+            @update:current-page="(p) => (discussionsPage = p + 1)"
+          />
+        </template>
       </DsfrTabContent>
 
       <!-- Qualité -->
