@@ -1,6 +1,10 @@
 <template>
   <h4>{{ getDatasetListTitle() }}</h4>
-  <DatasetList @removeDataset="removeDataset" :datasets="datasets" />
+  <DatasetList
+    class="fr-mt-4w fr-mb-4w"
+    @removeDataset="removeDataset"
+    :datasets="datasets"
+  />
   <DatasetPropertiesForm
     @addDataset="addDataset"
     :alreadySelectedDatasets="datasets"
