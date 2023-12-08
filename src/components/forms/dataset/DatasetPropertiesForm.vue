@@ -26,13 +26,13 @@
           <div class="fr-fieldset__content" role="radiogroup">
             <DsfrRadioButton
               v-model="availability"
-              :value="availabilityEnum.ECO_AVAILABLE"
+              :value="availabilityEnum.LOCAL_AVAILABLE"
               label="Écosphères"
             />
             <Multiselect
-              v-if="availability === availabilityEnum.ECO_AVAILABLE"
+              v-if="availability === availabilityEnum.LOCAL_AVAILABLE"
               ref="selector"
-              v-model="ecosphereId"
+              v-model="id"
               no-options-text="Précisez ou élargissez votre recherche"
               placeholder="Rechercher une donnée dans Ecosphères"
               name="select-datasets"
@@ -108,14 +108,17 @@ export default {
       this.uri = null
       this.ecosphereId = null
     },
-    ecosphereId(newId) {
-      if (newId !== null) {
-        this.uri = this.getDatasetPage(this.ecosphereId)
+    id(newId) {
+      if (
+        newId !== NoId &&
+        this.availability === Availability.LOCAL_AVAILABLE
+      ) {
+        this.uri = this.getLocalDatasetPage(this.id)
       }
     }
   },
   methods: {
-    initData() {
+    initData(): DatasetProperties {
       return {
         label: '',
         purpose: '',
@@ -128,7 +131,7 @@ export default {
       this.$emit('addDataset', { ...this.$data })
       Object.assign(this.$data, this.initData())
     },
-    getDatasetPage(id: string): string {
+    getLocalDatasetPage(id: string): string {
       const url = config.website.menu_items.find(
         (page) => page.id === 'datasets'
       )
@@ -151,7 +154,7 @@ export default {
     },
     alreadySelected(id: string): boolean {
       for (const selectedDataset of this.alreadySelectedDatasets) {
-        if (selectedDataset.ecosphereId === id) return true
+        if (selectedDataset.id === id) return true
       }
       return false
     }

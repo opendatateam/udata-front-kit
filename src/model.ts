@@ -2,20 +2,21 @@ interface DatasetProperties {
   label: string
   purpose: string
   uri: string | null
-  ecosphereId: string | null
+  id: string | null
   availability: string // must be one of Availability value
 }
 
-export class Availability {
+class Availability {
   static MISSING = 'MISSING'
   static NOT_AVAILABLE = 'NOT_AVAILABLE'
-  static ECO_AVAILABLE = 'ECO_AVAILABLE'
+  static LOCAL_AVAILABLE = 'LOCAL_AVAILABLE'
   static URL_AVAILABLE = 'URL_AVAILABLE'
 
   static isAvailable(availability: string) {
-    return [Availability.ECO_AVAILABLE, Availability.ECO_AVAILABLE].includes(
-      availability
-    )
+    return [
+      Availability.LOCAL_AVAILABLE,
+      Availability.LOCAL_AVAILABLE
+    ].includes(availability)
   }
 }
 
@@ -50,7 +51,7 @@ interface Topic {
 
 interface BetaTopic {
   created_at: string
-  datasets: Dataset[]
+  datasets: BetaDataset[]
   description: string
   extras: {
     'ecospheres:datasets_properties': {}
@@ -69,12 +70,19 @@ interface BetaTopic {
   uri: string
 }
 
-interface Dataset {
+interface BetaDataset {
+  create_at: string
+  frequency: string
+  last_modified: string
+  last_update: string
+
   // TODO --  add list of properties for Dataset
 }
 
 export const NoOptionSelected = 'no_option_selected'
+export const NoId = 'NO_ID'
 
+export { Availability }
 export type {
   Theme,
   Subtheme,

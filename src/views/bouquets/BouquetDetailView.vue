@@ -35,7 +35,7 @@ const url = window.location.href
 const availabilityEnum = {
   MISSING: 'missing',
   NOT_AVAILABLE: 'not available',
-  ECO_AVAILABLE: 'available',
+  LOCAL_AVAILABLE: 'available',
   URL_AVAILABLE: 'url available'
 }
 const missingData = 'Donnée manquante'
@@ -191,7 +191,8 @@ onMounted(() => {
                 v-if="
                   datasetProperties.available !==
                     availabilityEnum.URL_AVAILABLE &&
-                  datasetProperties.available !== availabilityEnum.ECO_AVAILABLE
+                  datasetProperties.available !==
+                    availabilityEnum.LOCAL_AVAILABLE
                 "
                 class="fr-mb-2w uppercase bold"
                 :label="`${
@@ -211,7 +212,7 @@ onMounted(() => {
                     datasetProperties.available !==
                       availabilityEnum.URL_AVAILABLE &&
                     datasetProperties.available !==
-                      availabilityEnum.ECO_AVAILABLE
+                      availabilityEnum.LOCAL_AVAILABLE
                   "
                   class="fr-btn fr-btn--secondary inline-flex"
                   :href="`mailto:${config.website.contact_email}`"
