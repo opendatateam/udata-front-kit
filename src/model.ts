@@ -13,10 +13,9 @@ class Availability {
   static URL_AVAILABLE = 'URL_AVAILABLE'
 
   static isAvailable(availability: string) {
-    return [
-      Availability.LOCAL_AVAILABLE,
-      Availability.LOCAL_AVAILABLE
-    ].includes(availability)
+    return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
+      availability
+    )
   }
 }
 
