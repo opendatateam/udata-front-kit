@@ -44,7 +44,7 @@ const onSelectDataset = (dataset) => {
   fetch(
     config.datagouvfr.base_url +
       '/api/1/datasets/' +
-      selectedDataset.value['dev']
+      selectedDataset.value[config.website.env]
   )
     .then((response) => {
       return response.json()
@@ -54,10 +54,9 @@ const onSelectDataset = (dataset) => {
       if (selectedDataset.value['departement']) {
         showDep.value = true
       } else if (selectedDataset.value['id'] == 'SIM') {
-        let res = datasetResources.map((a) => a.title)
-        res = res.map((a) =>
-          a.split('SIM2_')[1].split('.')[0].replace('_', '-')
-        )
+        let res = datasetResources.filter((item) => item.type == 'main')
+        res = res.map((a) => a.title)
+        res = res.map((a) => a.split('SIM2_')[1])
         res = [...new Set(res)]
         optionsPeriod.value = res
         showPeriod.value = true
@@ -101,7 +100,7 @@ function onSelectPeriod(event) {
   } else {
     let res = datasetResources.map((a) => a.title)
     filteredResources.value = res.filter((r) =>
-      r.includes(selectedPeriod.value.replace('-', '_'))
+      r.includes(selectedPeriod.value)
     )
   }
 }
@@ -127,7 +126,7 @@ const showLoader = ref(false)
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>Recherche guidée</h1>
-    <p>Utilisez ce formulaire pour trouver un fichier en particulier.</p>
+    <p>Utiliser ce formulaire pour trouver un fichier en particulier.</p>
     <DsfrSelect
       :model-value="selectedDataPack"
       :options="optionsDataPack"
@@ -189,7 +188,18 @@ const showLoader = ref(false)
     <div v-if="filteredResources.length > 0">
       <br />
       <h3>Téléchargez les données</h3>
-
+      Basé sur vos filtres, les fichiers correspondants sont présentés
+      ci-dessous. Si vous souhaitez consulter le jeu de données complet,
+      <a
+        :href="
+          'https://' +
+          config.website.title +
+          '/datasets/' +
+          selectedDataset[config.website.env]
+        "
+        >cliquez ici</a
+      >.
+      <br />
       <br />
       <h5>Fichiers</h5>
       <div
@@ -201,7 +211,7 @@ const showLoader = ref(false)
           v-if="
             filteredResources.includes(item['title']) && item['type'] == 'main'
           "
-          :datasetId="selectedDataset['dev']"
+          :datasetId="selectedDataset[config.website.env]"
           :resource="item"
         />
       </div>
@@ -219,14 +229,14 @@ const showLoader = ref(false)
               item['title'].includes('_' + selectedIndicateur + '_') &&
               item['type'] == 'documentation'
             "
-            :datasetId="selectedDataset['dev']"
+            :datasetId="selectedDataset[config.website.env]"
             :resource="item"
           />
         </span>
         <span v-else>
           <ResourceAccordion
             v-if="item['type'] == 'documentation'"
-            :datasetId="selectedDataset['dev']"
+            :datasetId="selectedDataset[config.website.env]"
             :resource="item"
           />
         </span>
