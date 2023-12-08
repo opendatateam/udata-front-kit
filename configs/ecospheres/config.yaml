@@ -44,14 +44,9 @@ website:
       linkPage: '/'
       type: 'component'
       display_menu: true
-    - name: 'Jeux de données'
+    - name: 'Données'
       id: 'datasets'
       linkPage: '/datasets'
-      type: 'component'
-      display_menu: true
-    - name: 'Organisations'
-      id: 'organizations'
-      linkPage: '/organizations'
       type: 'component'
       display_menu: true
     - name: 'Bouquets'
@@ -79,7 +74,6 @@ website:
     - '#BFDCB7'
     - '#A7D4CD'
 
-# For step 2 of bouquet creation
 themes:
   - name: Se loger
     color: 043574
@@ -128,6 +122,7 @@ themes:
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
 
+# FIXME: Obsolete. Kept as a reference used to populate our universe.
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
