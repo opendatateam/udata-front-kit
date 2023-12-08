@@ -16,12 +16,8 @@ universe:
 
 # UI customizations
 website:
-  title: 'Ecosphères'
-  rf_title: 'MINISTÈRES<br>
-    TRANSITION ÉCOLOGIQUE<br>
-    COHÉSION DES TERRITOIRES<br>
-    TRANSITION ÉNERGÉTIQUE<br>
-    MER'
+  title: 'ecologie.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/ecospheres-logo.svg'
   badge:
     display: true
@@ -29,8 +25,10 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-  homepage_title: 'Ecosphères'
-  homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
+  homepage_title: 'Les données de la transition écologique'
+  homepage_subtitle: |
+    ecologie.data.gouv.fr centralise et structure les données publiques relatives à la transition écologique et énergétique.\
+    Vous y trouverez des données brutes téléchargeable et utilisable de manière libre et gratuite.
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
