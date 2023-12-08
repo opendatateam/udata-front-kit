@@ -94,16 +94,13 @@ const badgeStyle = ref(config.website.badge.style)
     :badge-style="badgeStyle"
     @search="doSearch"
     @update:modelValue="updateQuery"
-  />
-
-  <div class="fr-header__body">
-    <div class="fr-container">
+  >
+    <template #mainnav>
       <Navigation />
-    </div>
-    <div>
-      <RouterView />
-    </div>
-  </div>
+    </template>
+  </Header>
+
+  <RouterView />
 
   <DsfrFooter class="fr-mt-8w" :mandatory-links="[]"></DsfrFooter>
 </template>

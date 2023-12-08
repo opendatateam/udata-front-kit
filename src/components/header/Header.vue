@@ -60,25 +60,21 @@ onUnmounted(() => {
   document.removeEventListener('keydown', onKeyDown)
 })
 
-const menuOpened = ref(false)
 const searchModalOpened = ref(false)
-const modalOpened = ref(false)
+const headerModalOpened = ref(false)
 
 const hideModal = () => {
-  modalOpened.value = false
-  menuOpened.value = false
+  headerModalOpened.value = false
   searchModalOpened.value = false
   document.getElementById('button-menu')?.focus()
 }
 const showMenu = () => {
-  modalOpened.value = true
-  menuOpened.value = true
+  headerModalOpened.value = true
   searchModalOpened.value = false
   document.getElementById('close-button')?.focus()
 }
 const showSearchModal = () => {
-  modalOpened.value = true
-  menuOpened.value = false
+  headerModalOpened.value = false
   searchModalOpened.value = true
 }
 const onQuickLinkClick = hideModal
@@ -199,7 +195,7 @@ defineEmits<{
             <div v-if="quickLinks?.length" class="fr-header__tools-links">
               <nav role="navigation">
                 <DsfrHeaderMenuLinks
-                  v-if="!menuOpened"
+                  v-if="!headerModalOpened"
                   :links="quickLinks"
                   :nav-aria-label="quickLinksAriaLabel"
                 />
@@ -218,12 +214,38 @@ defineEmits<{
           </div>
         </div>
         <div
-          v-if="
-            showSearch || isWithSlotNav || (quickLinks && quickLinks.length)
-          "
+          v-if="showSearch"
+          id="header-search"
+          class="fr-header__search fr-modal"
+          :class="{ 'fr-modal--opened': searchModalOpened }"
+          aria-label="Menu modal"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div class="fr-container">
+            <button
+              id="close-button"
+              class="fr-btn fr-btn--close"
+              aria-controls="header-navigation"
+              data-testid="close-modal-btn"
+              @click.prevent.stop="hideModal()"
+            >
+              Fermer
+            </button>
+            <DsfrSearchBar
+              v-if="searchModalOpened"
+              :model-value="modelValue"
+              :placeholder="placeholder"
+              @update:model-value="$emit('update:modelValue', $event)"
+              @search="$emit('search', $event)"
+            />
+          </div>
+        </div>
+        <div
+          v-if="isWithSlotNav || (quickLinks && quickLinks.length)"
           id="header-navigation"
           class="fr-header__menu fr-modal"
-          :class="{ 'fr-modal--opened': modalOpened }"
+          :class="{ 'fr-modal--opened': headerModalOpened }"
           aria-label="Menu modal"
           role="dialog"
           aria-modal="true"
@@ -239,40 +261,29 @@ defineEmits<{
               Fermer
             </button>
             <div class="fr-header__menu-links">
-              <nav role="navigation">
-                <DsfrHeaderMenuLinks
-                  v-if="menuOpened"
-                  role="navigation"
-                  :links="quickLinks"
-                  :nav-aria-label="quickLinksAriaLabel"
-                  @link-click="onQuickLinkClick"
-                />
-              </nav>
-            </div>
-            <template v-if="modalOpened">
-              <slot name="mainnav" :hidemodal="hideModal" />
-            </template>
-            <div
-              v-if="searchModalOpened"
-              class="flex justify-center items-center"
-            >
-              <DsfrSearchBar
-                :model-value="modelValue"
-                :placeholder="placeholder"
-                @update:model-value="$emit('update:modelValue', $event)"
-                @search="$emit('search', $event)"
+              <DsfrHeaderMenuLinks
+                v-if="headerModalOpened"
+                role="navigation"
+                :links="quickLinks"
+                :nav-aria-label="quickLinksAriaLabel"
+                @link-click="onQuickLinkClick"
               />
             </div>
+            <template v-if="headerModalOpened">
+              <slot name="mainnav" :hidemodal="hideModal" />
+            </template>
           </div>
         </div>
-        <div
-          v-if="isWithSlotNav && !modalOpened"
-          class="fr-hidden fr-unhidden-lg"
-        >
-          <!-- @slot Slot nommé mainnav pour le menu de navigation principal -->
-          <slot name="mainnav" :hidemodal="hideModal" />
-        </div>
         <slot />
+      </div>
+    </div>
+    <div
+      v-if="isWithSlotNav && !headerModalOpened && !searchModalOpened"
+      class="fr-hidden fr-unhidden-lg fr-header__menu"
+    >
+      <div class="fr-container">
+        <!-- @slot Slot nommé mainnav pour le menu de navigation principal -->
+        <slot name="mainnav" :hidemodal="hideModal" />
       </div>
     </div>
   </header>
