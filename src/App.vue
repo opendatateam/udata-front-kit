@@ -97,7 +97,7 @@ const badgeStyle = ref(config.website.badge.style)
   />
 
   <div class="fr-header__body">
-    <div class="fr-container width-inherit">
+    <div class="fr-container">
       <Navigation />
     </div>
     <div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container width-inherit about">
+  <div class="fr-container about">
     <h1>This is an about page</h1>
   </div>
 </template>

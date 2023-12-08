@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container width-inherit about">
+  <div class="fr-container about">
     <h1>This is a login page</h1>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container fr-mt-4w fr-mb-4w">
     <DsfrBreadcrumb class="breadcrumb" :links="breadcrumbList" />
     <div :class="classDependingOnBreadcrumb">
       <div className="fr-grid-row topicListView">
