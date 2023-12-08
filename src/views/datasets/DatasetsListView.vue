@@ -20,6 +20,7 @@ const selectedTopicId = ref(null)
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
+const title = config.website.title
 const topicsConf = config.website.list_highlighted_topics
 const topicOptions = computed(() => {
   if (!topicsConf?.length) return
@@ -62,9 +63,12 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
-    <h2 v-if="query">Résultats de recherche pour "{{ query }}"</h2>
-    <h2 v-else>Jeux de données</h2>
+  <div class="fr-container fr-mt-4w fr-mb-4w">
+    <h1>Jeux de données</h1>
+    <p v-if="query">Résultats de recherche pour "{{ query }}".</p>
+    <p v-else>
+      Rechercher parmi tous les jeux de données présents sur {{ title }}.
+    </p>
     <div v-if="query && datasets?.length === 0" class="fr-mb-4w">
       Aucun résultat pour cette recherche.
     </div>
@@ -95,7 +99,7 @@ watchEffect(() => {
     </div>
   </div>
   <DsfrPagination
-    class="fr-container width-inherit"
+    class="fr-container"
     v-if="pages.length"
     :current-page="currentPage - 1"
     :pages="pages"

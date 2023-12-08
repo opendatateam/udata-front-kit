@@ -97,7 +97,7 @@ defineEmits<{
 <template>
   <header role="banner" class="fr-header">
     <div class="fr-header__body">
-      <div class="fr-container width-inherit">
+      <div class="fr-container">
         <div class="fr-header__body-row">
           <div class="fr-header__brand fr-enlarge-link">
             <div class="fr-header__brand-top">

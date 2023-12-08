@@ -125,8 +125,9 @@ const showLoader = ref(false)
 </script>
 
 <template>
-  <div class="fr-container">
-    <br />
+  <div class="fr-container fr-mt-4w fr-mb-4w">
+    <h1>Recherche guidée</h1>
+    <p>Utilisez ce formulaire pour trouver un fichier en particulier.</p>
     <DsfrSelect
       :model-value="selectedDataPack"
       :options="optionsDataPack"

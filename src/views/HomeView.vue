@@ -80,7 +80,7 @@ const goToPage = (page) => {
       </div>
     </div>
   </div>
-  <div class="fr-container width-inherit">
+  <div class="fr-container">
     <HomeThemes
       v-if="config.themes"
       :selected-theme-name="$route.query.theme"
