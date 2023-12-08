@@ -2,7 +2,9 @@
 import {
   ResourceAccordion,
   OrganizationNameWithCertificate,
-  Pagination
+  Pagination,
+  QualityComponent,
+  ReadMore
 } from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
@@ -194,7 +196,9 @@ watchEffect(async () => {
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-col-md-8 fr-p-1w">
         <h1>{{ dataset.title }}</h1>
-        <div v-html="description"></div>
+        <ReadMore max-height="600">
+          <div v-html="description"></div>
+        </ReadMore>
       </div>
       <div v-if="dataset.organization" class="fr-col-12 fr-col-md-4 fr-p-1w">
         <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
@@ -224,6 +228,7 @@ watchEffect(async () => {
             </code>
           </p>
         </div>
+        <QualityComponent :quality="dataset.quality" />
       </div>
     </div>
 
