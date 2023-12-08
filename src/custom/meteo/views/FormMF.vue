@@ -44,7 +44,7 @@ const onSelectDataset = (dataset) => {
   fetch(
     config.datagouvfr.base_url +
       '/api/1/datasets/' +
-      selectedDataset.value['dev']
+      selectedDataset.value[config.website.env]
   )
     .then((response) => {
       return response.json()
@@ -188,7 +188,18 @@ const showLoader = ref(false)
     <div v-if="filteredResources.length > 0">
       <br />
       <h3>Téléchargez les données</h3>
-
+      Basé sur vos filtres, les fichiers correspondants sont présentés
+      ci-dessous. Si vous souhaitez consulter le jeu de données complet,
+      <a
+        :href="
+          'https://' +
+          config.website.title +
+          '/datasets/' +
+          selectedDataset[config.website.env]
+        "
+        >cliquez ici</a
+      >.
+      <br />
       <br />
       <h5>Fichiers</h5>
       <div
@@ -200,7 +211,7 @@ const showLoader = ref(false)
           v-if="
             filteredResources.includes(item['title']) && item['type'] == 'main'
           "
-          :datasetId="selectedDataset['dev']"
+          :datasetId="selectedDataset[config.website.env]"
           :resource="item"
         />
       </div>
@@ -218,14 +229,14 @@ const showLoader = ref(false)
               item['title'].includes('_' + selectedIndicateur + '_') &&
               item['type'] == 'documentation'
             "
-            :datasetId="selectedDataset['dev']"
+            :datasetId="selectedDataset[config.website.env]"
             :resource="item"
           />
         </span>
         <span v-else>
           <ResourceAccordion
             v-if="item['type'] == 'documentation'"
-            :datasetId="selectedDataset['dev']"
+            :datasetId="selectedDataset[config.website.env]"
             :resource="item"
           />
         </span>
