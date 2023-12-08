@@ -1,26 +1,33 @@
+import type { AxiosInstance, AxiosResponse } from 'axios'
+
 import type { SnakeCase } from '@/model/text'
+
+type Client = AxiosInstance
+
+type Request<T> = Promise<AxiosResponse<DataParams<T>>>
 
 interface Response<T> {
   data?: Data<T>
   status: number
 }
 
-interface ResponseParams<T> {
-  data?: SnakeCase<Data<T>>
-  status: number
+interface Data<T> extends Meta {
+  data: T
 }
 
-interface Data<T> {
-  data: T
-  page: Page
+interface DataParams<T> extends MetaParams {
+  data: SnakeCase<T>
+}
+
+interface Meta {
+  page: number
   pageSize: number
   total: number
 }
 
-interface DataParams<T> {
-  data: SnakeCase<T>
-  page: Page
-  pageSize: number
+interface MetaParams {
+  page: number
+  page_size: number
   total: number
 }
 
@@ -53,17 +60,15 @@ interface DataError {
   message: string
 }
 
-type Page = number
-
 export type {
   AppError,
+  Client,
   Data,
   DataError,
   DataParams,
-  HttpError,
-  Page,
+  Meta,
+  Request,
   RequestError,
   Response,
-  ResponseError,
-  ResponseParams
+  ResponseError
 }

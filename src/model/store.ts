@@ -1,7 +1,12 @@
-import type { Data, Page } from './api'
+import type { Data, Meta } from './api'
 
-type DataByUUID<T> = Record<string, DataByPage<T>>
+type CacheByUUID<T> = Record<string, CacheByPage<T>>
 
-type DataByPage<T> = Record<Page, Data<T>['data']>
+type CacheByPage<T> = Record<number, Cache<T>>
 
-export type { DataByUUID, DataByPage }
+interface Cache<T> {
+  items?: Data<T>['data']
+  meta?: Meta
+}
+
+export type { Cache, CacheByPage, CacheByUUID }

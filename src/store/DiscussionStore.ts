@@ -1,120 +1,206 @@
-import { isEmpty } from 'lodash/fp'
 import { defineStore, storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, toValue, ref } from 'vue'
 import type { ComputedRef, Ref } from 'vue'
 
-import type { AppError, Page, Response } from '@/model/api'
+import type { AppError, Meta, Response } from '@/model/api'
 import type { Discussion, SubjectId } from '@/model/discussion'
-import { UnknownError } from '@/model/error'
-import type { DataByPage, DataByUUID } from '@/model/store'
+import type { Loader } from '@/model/loader'
+import type { Cache, CacheByPage, CacheByUUID } from '@/model/store'
 import { DiscussionsAPI } from '@/services/api/resources/DiscussionsAPI'
 import { usePaginationStore } from '@/store/PaginationStore'
 
-interface Params {
-  subjectId: SubjectId
-  page?: Page
+interface SetParams extends FetchParams {
+  items: Discussion[]
+  meta: Meta
 }
 
-type PaginationStore = ReturnType<typeof usePaginationStore>
+interface FetchParams {
+  subjectId: SubjectId
+}
+
+interface ErrorMsgParams {
+  type: string | number | undefined
+  value: string
+}
+
+const metaError: Meta = { page: 1, pageSize: 0, total: 0 }
 
 const useDiscussionStore = defineStore('discussion', () => {
-  const store: PaginationStore = usePaginationStore()
+  const {
+    dataCount: discussionsCount,
+    dataPerPage: discussionsPerPage,
+    pages: discussionsPages
+  } = storeToRefs(usePaginationStore())
   const client = ref(new DiscussionsAPI()) as Ref<DiscussionsAPI>
-  const data: Ref<DataByUUID<Discussion[]>> = ref({})
+  const discussions: Ref<CacheByUUID<Discussion[]>> = ref({})
+  const discussionsPage: Ref<number> = ref(1)
   const error: Ref<boolean> = ref(false)
-  const errorMessage: Ref<string | null> = ref(null)
-  const page: Ref<Page> = ref(1)
+  const errorType: Ref<string | number | null | undefined> = ref(null)
+  const errorValue: Ref<string | null> = ref(null)
+  const loader: Ref<Loader | null> = ref(null)
+  const loading: Ref<boolean> = ref(false)
   const subjectId: Ref<SubjectId | undefined> = ref()
-  const { dataCount, dataPerPage, pagination } = storeToRefs(store)
 
   /**
    * Get discussions for a subject and a page from store.
    */
-  const get: ComputedRef<Discussion[]> = computed(() => {
-    error.value = false
-    errorMessage.value = null
-    if (subjectId.value === undefined) return []
-    return data.value[subjectId.value]?.[page.value] ?? []
+  const getDiscussions: ComputedRef<Discussion[]> = computed(() => {
+    resetError()
+    if (toValue(subjectId) === undefined) return []
+    const data: Cache<Discussion[]> | undefined = toValue(getData)
+    const items: Discussion[] | undefined = data?.items
+    return items ?? []
+  })
+
+  /**
+   * Get data containing discussions and metadata.
+   */
+  const getData: ComputedRef<Cache<Discussion[]> | undefined> = computed(() => {
+    const id = toValue(subjectId)
+    if (id === undefined) return
+    const byUUID: CacheByUUID<Discussion[]> = toValue(discussions)
+    const byPage: CacheByPage<Discussion[]> | undefined = byUUID[id]
+    return byPage?.[toValue(discussionsPage)]
   })
 
   /**
    * Store the result of a discussions' fetch operation for a subject in store.
    */
-  function set({ items }: { items: Discussion[] }): Discussion[] {
-    if (subjectId.value === undefined) {
-      error.value = true
-      errorMessage.value = `The property 'subjectId' is required.`
-      return []
+  function setDiscussions({ subjectId: id, items, meta }: SetParams): void {
+    if (id === undefined) {
+      errorMsg({ type: 'ValueError', value: 'subjectId' })
+      return
+    } else subjectId.value = id
+
+    if (items === undefined) {
+      errorMsg({ type: 'ValueError', value: 'items' })
+      return
     }
 
-    if (isEmpty(data.value[subjectId.value])) {
-      data.value[subjectId.value] = {} satisfies DataByPage<Discussion[]>
+    if (meta === undefined) {
+      errorMsg({ type: 'ValueError', value: 'meta' })
+      return
     }
 
-    if (isEmpty(items)) {
-      data.value[subjectId.value][page.value] = [] satisfies Discussion[]
-      return get.value
+    if (toValue(discussionsPage) !== meta.page) {
+      discussionsPage.value = meta.page
     }
 
-    data.value[subjectId.value][page.value] = items
+    const page: number = toValue(discussionsPage)
+    const data: CacheByUUID<Discussion[]> = toValue(discussions)
 
-    return get.value
+    if (data[id] === undefined) {
+      discussions.value[id] = {} satisfies CacheByPage<Discussion[]>
+    }
+
+    discussions.value[id][page] = { items, meta } satisfies Cache<Discussion[]>
+
+    resetError()
   }
 
   /**
    * Async function to trigger API fetch of discussions for a subject.
    */
-  async function fetch(): Promise<Discussion[]> {
-    if (subjectId.value === undefined) {
-      error.value = true
-      errorMessage.value = `The property 'subjectId' is required.`
-      return []
+  async function fetchDiscussions({
+    subjectId: id
+  }: FetchParams): Promise<void> {
+    loading.value = true
+
+    if (id === undefined) {
+      errorMsg({ type: 'ValueError', value: 'subjectId' })
+      paginate(metaError)
+      loading.value = false
+      return
     }
 
-    if (!isEmpty(get.value)) {
-      return get.value
+    if (toValue(subjectId) !== id) {
+      discussionsPage.value = 1
+      subjectId.value = id
     }
 
-    const params: Params = {
-      subjectId: subjectId.value,
-      page: page.value
+    const page: number = toValue(discussionsPage)
+    const data: Cache<Discussion[]> | undefined = toValue(getData)
+
+    if (data?.items !== undefined && data.meta !== undefined) {
+      const { items, meta } = data
+      setDiscussions({ subjectId: id, items, meta })
+      paginate(meta)
+      resetError()
+      loading.value = false
+      return
     }
 
-    const response = await client.value.list(params)
+    const request = toValue(client).list({ subjectId: id, page })
+    const response: Response<Discussion[]> | AppError = await request
     const { status } = response
     const { error: message } = response as AppError
-    const { data } = response as Response<Discussion[]>
+    const { data: body } = response as Response<Discussion[]>
 
-    if (status === 200 && data !== undefined) {
-      error.value = false
-      errorMessage.value = null
-      page.value = data.page
-      dataCount.value = data.total
-      dataPerPage.value = data.pageSize
-      return set({ items: data.data })
+    if (status === 200 && body !== undefined) {
+      const { data: items, page, total, pageSize } = body
+      const meta: Meta = { page, pageSize, total }
+      setDiscussions({ subjectId: id, items, meta })
+      paginate(meta)
+      resetError()
+      loading.value = false
+      return
     }
 
-    if (status === 404 || status === 500) {
-      error.value = true
-      errorMessage.value = message
-      return []
+    if (status === 404 || status === 500 || typeof status === 'string') {
+      errorMsg({ type: status.toString(), value: message })
+      paginate(metaError)
+      loading.value = false
+      return
     }
 
-    throw new UnknownError({ error: message })
+    errorMsg({ type: status, value: message })
+    paginate(metaError)
+    loading.value = false
+  }
+
+  /**
+   * Error message.
+   */
+  function errorMsg({ type, value }: ErrorMsgParams): void {
+    error.value = true
+    errorType.value = type
+    errorValue.value = value
+  }
+
+  /**
+   * Trigger the pagination.
+   */
+  function paginate({ page, pageSize, total }: Meta): void {
+    discussionsPage.value = page
+    discussionsPerPage.value = pageSize
+    discussionsCount.value = total
+  }
+  /**
+   * Reset contextual state.
+   */
+  function resetError(): void {
+    error.value = false
+    errorType.value = null
+    errorValue.value = null
   }
 
   return {
     client,
-    data,
-    dataCount,
-    dataPerPage,
+    discussions,
+    discussionsCount,
+    discussionsPage,
+    discussionsPages,
+    discussionsPerPage,
     error,
-    errorMessage,
-    get,
-    fetch,
-    page,
-    pagination,
-    set,
+    errorType,
+    errorValue,
+    fetchDiscussions,
+    getDiscussions,
+    loader,
+    loading,
+    paginate,
+    resetError,
+    setDiscussions,
     subjectId
   }
 })

@@ -26,10 +26,10 @@ website:
   logo_operator:
   homepage_title: 'Ecosphères'
   homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
-  search_bar: 
+  search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
-  secondary_search: 
+  secondary_search:
     display: false
     name:
     link:
@@ -65,6 +65,7 @@ website:
   list_highlighted_topics:
   oauth_option: true
   pagination_sizes:
+    discussions_list: 20
     organizations_list: 9
     topics_list: 100
   contact_email: ecospheres@developpement-durable.gouv.fr

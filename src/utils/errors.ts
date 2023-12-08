@@ -1,5 +1,4 @@
 import type { AppError, RequestError, ResponseError } from '@/model/api'
-import { UnknownError } from '@/model/error'
 
 type ErrorType = ResponseError | RequestError | Error
 
@@ -24,11 +23,7 @@ const handle = (error: ErrorType): AppError => {
     return { status: code, error: message }
   }
 
-  if (error.message !== undefined) {
-    throw new UnknownError({ error: error.message })
-  }
-
-  throw error
+  return { status: error.name, error: error.message }
 }
 
 export { handle }

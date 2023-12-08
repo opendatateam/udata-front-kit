@@ -6,7 +6,7 @@
   <DsfrAccordionsGroup>
     <li v-for="(discussion, index) in discussions">
       <DsfrAccordion
-        :id="index"
+        :id="index.toString()"
         :title="discussion.title"
         :expanded-id="isExpanded[index]"
         @expand="isExpanded[index] = $event"
@@ -16,11 +16,11 @@
             <li v-for="comment in discussion.discussion">
               <div class="es__comment__metadata fr-mb-1v">
                 <span class="es__comment__author"
-                  >{{ comment.posted_by.first_name }}
-                  {{ comment.posted_by.last_name }}</span
+                  >{{ comment.postedBy.firstName }}
+                  {{ comment.postedBy.lastName }}</span
                 >
                 <span class="es__comment__date fr-ml-1v"
-                  >le {{ formatDate(comment.posted_on) }}</span
+                  >le {{ formatDate(comment.postedOn) }}</span
                 >
               </div>
               <div class="es__comment__content">
@@ -65,3 +65,18 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+ul.es__comment__container {
+  list-style-type: none;
+  padding-inline-start: 0.25rem;
+  li {
+    padding-bottom: 1.5rem;
+  }
+}
+.es__comment__metadata {
+  .es__comment__author {
+    font-weight: bold;
+  }
+}
+</style>

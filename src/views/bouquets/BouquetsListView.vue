@@ -1,23 +1,38 @@
 <script setup>
 import { computed, onMounted } from 'vue'
+import { toast } from 'vue3-toastify'
+import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import Tile from '@/components/Tile.vue'
-import { useLoader } from '@/composables/loader'
 import { useTopicStore } from '@/store/TopicStore'
 
 const router = useRouter()
 
 const store = useTopicStore()
 const bouquets = computed(() => store.data)
-const loadTopics = useLoader(store.loadTopicsForUniverse)
+
+// setup loader
+const loading = useLoading()
+const loadingParams = { canCancel: true, lockScroll: true }
+
+// setup toaster
+const errorParams = { type: 'error', autoClose: false }
 
 const goToCreate = () => {
   router.push({ name: 'bouquet_add' })
 }
 
 onMounted(() => {
-  loadTopics()
+  const loader = loading.show(loadingParams)
+  store
+    .loadTopicsForUniverse()
+    .catch((error) => {
+      toast.error(error.message, errorParams)
+    })
+    .finally(() => {
+      loader.hide()
+    })
 })
 </script>
 
