@@ -54,10 +54,9 @@ const onSelectDataset = (dataset) => {
       if (selectedDataset.value['departement']) {
         showDep.value = true
       } else if (selectedDataset.value['id'] == 'SIM') {
-        let res = datasetResources.map((a) => a.title)
-        res = res.map((a) =>
-          a.split('SIM2_')[1].split('.')[0].replace('_', '-')
-        )
+        let res = datasetResources.filter((item) => item.type == 'main')
+        res = res.map((a) => a.title)
+        res = res.map((a) => a.split('SIM2_')[1])
         res = [...new Set(res)]
         optionsPeriod.value = res
         showPeriod.value = true
@@ -101,7 +100,7 @@ function onSelectPeriod(event) {
   } else {
     let res = datasetResources.map((a) => a.title)
     filteredResources.value = res.filter((r) =>
-      r.includes(selectedPeriod.value.replace('-', '_'))
+      r.includes(selectedPeriod.value)
     )
   }
 }
