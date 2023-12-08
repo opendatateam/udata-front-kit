@@ -94,12 +94,14 @@ const badgeStyle = ref(config.website.badge.style)
     :badge-style="badgeStyle"
     @search="doSearch"
     @update:modelValue="updateQuery"
-  />
+  >
+    <template #mainnav>
+      <Navigation />
+    </template>
+  </Header>
 
   <div class="fr-header__body">
-    <div class="fr-container width-inherit">
-      <Navigation />
-    </div>
+    <div class="fr-container width-inherit"></div>
     <div>
       <RouterView />
     </div>
