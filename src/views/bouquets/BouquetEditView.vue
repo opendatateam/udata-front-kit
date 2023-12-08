@@ -150,8 +150,10 @@ export default {
       if (response.status && response.status === 400) {
         this.errorMsg = 'Merci de bien remplir les champs'
       } else {
-        alert(JSON.stringify(response))
-        //this.$router.push({ name: 'bouquet_detail', params: { bid: response.slug } })
+        this.$router.push({
+          name: 'bouquet_detail',
+          params: { bid: response.slug }
+        })
       }
     },
     isStepValid(step: number) {
