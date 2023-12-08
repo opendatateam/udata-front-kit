@@ -66,9 +66,7 @@ watchEffect(() => {
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>Jeux de données</h1>
     <p v-if="query">Résultats de recherche pour "{{ query }}".</p>
-    <p v-else>
-      Rechercher parmi tous les jeux de données présents sur {{ title }}.
-    </p>
+    <p v-else>Parcourir tous les jeux de données présents sur {{ title }}.</p>
     <div v-if="query && datasets?.length === 0" class="fr-mb-4w">
       Aucun résultat pour cette recherche.
     </div>
