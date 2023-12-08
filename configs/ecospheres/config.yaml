@@ -26,9 +26,7 @@ website:
   # leave empty if not pertinent
   logo_operator:
   homepage_title: 'Les données de la transition écologique'
-  homepage_subtitle: |
-    ecologie.data.gouv.fr centralise et structure les données publiques relatives à la transition écologique et énergétique.\
-    Vous y trouverez des données brutes téléchargeable et utilisable de manière libre et gratuite.
+  homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
