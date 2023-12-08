@@ -45,7 +45,11 @@
           :disabled="!isStepValid(currentStep)"
           @click.prevent="goToNextStep()"
         />
-        <DsfrButton v-else @click="submitForm" label="Ajouter le bouquet" />
+        <DsfrButton
+          v-else
+          @click.prevent="submitForm"
+          label="Ajouter le bouquet"
+        />
       </div>
     </form>
   </div>
