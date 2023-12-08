@@ -26,6 +26,7 @@
           <div class="fr-fieldset__content" role="radiogroup">
             <DsfrRadioButton
               v-model="availability"
+              :name="availabilityEnum.LOCAL_AVAILABLE"
               :value="availabilityEnum.LOCAL_AVAILABLE"
               label="Écosphères"
             />
@@ -46,6 +47,7 @@
             />
             <DsfrRadioButton
               v-model="availability"
+              :name="availabilityEnum.URL_AVAILABLE"
               :value="availabilityEnum.URL_AVAILABLE"
               label="URL"
             />
@@ -58,11 +60,13 @@
             />
             <DsfrRadioButton
               v-model="availability"
+              :name="availabilityEnum.MISSING"
               :value="availabilityEnum.MISSING"
               label="Je n'ai pas trouvé la donnée"
             />
             <DsfrRadioButton
               v-model="availability"
+              :name="availabilityEnum.NOT_AVAILABLE"
               :value="availabilityEnum.NOT_AVAILABLE"
               label="Je n'ai pas cherché la donnée"
             />
