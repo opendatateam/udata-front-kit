@@ -1,11 +1,18 @@
 <script setup>
-import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
+import {
+  ResourceAccordion,
+  OrganizationNameWithCertificate,
+  Pagination,
+  QualityComponent,
+  ReadMore
+} from '@etalab/data.gouv.fr-components'
 import { filesize } from 'filesize'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
+import config from '@/config'
+
 import ChartData from '../../components/ChartData.vue'
-import Tile from '../../components/Tile.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
@@ -26,6 +33,11 @@ const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
+const license = ref({})
+const types = ref([])
+const currentPage = ref(1)
+const totalResults = ref(0)
+const pageSize = config.website.pagination_sizes.files_list
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -35,6 +47,12 @@ const chartData = computed(() => {
   if (!dataset.value?.extras) return
   return dataset.value.extras['config:charts']
 })
+
+const links = computed(() => [
+  { to: '/', text: 'Accueil' },
+  { to: '/datasets', text: 'Données' },
+  { text: dataset.value.title }
+])
 
 const formatFileSize = (fileSize) => {
   if (!fileSize) return 'Taille inconnue'
@@ -76,12 +94,63 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
+const changePage = (page = 1) => {
+  currentPage.value = page
+  return datasetStore
+    .fetchDatasetResources(dataset.value.id, page, pageSize)
+    .then((data) => {
+      resources.value = data
+    })
+}
+
 const formatDate = (dateString) => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat('default', {
     dateStyle: 'full',
     timeStyle: 'short'
   }).format(date)
+}
+
+const simpleDate = (dateString) => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('default', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }).format(date)
+}
+
+const cropString = (string) => {
+  if (string.length <= 40) {
+    return string
+  } else {
+    return string.slice(0, 40) + '...'
+  }
+}
+
+const reuseDescription = (r) => {
+  if (r.organization?.name) {
+    return (
+      'Publié le ' +
+        simpleDate(r.created_at) +
+        ' par ' +
+        r.organization?.name || r.owner.first_name + ' ' + r.owner.last_name
+    )
+  } else {
+    return (
+      'Publié le ' +
+      simpleDate(r.created_at) +
+      ' par ' +
+      r.owner.first_name +
+      ' ' +
+      r.owner.last_name
+    )
+  }
+}
+
+const getType = (id) => {
+  let type = types.value.find((t) => t.id == id)
+  return type.label
 }
 
 // launch reuses and discussions fetch as soon as we have the technical id
@@ -103,32 +172,66 @@ watchEffect(async () => {
     })
   // fetch ressources if need be
   if (dataset.value.resources.rel) {
-    resources.value = await datasetStore.loadResources(dataset.value.resources)
+    const { data, total } = await datasetStore.loadResources(
+      dataset.value.resources,
+      pageSize
+    )
+    resources.value = data
+    totalResults.value = total
   } else {
     resources.value = dataset.value.resources
   }
+  license.value = await datasetStore.getLicense(dataset.value.license)
+  types.value = await reuseStore.getTypes()
 })
 </script>
 
 <template>
-  <div class="fr-container width-inherit fr-container--fluid fr-mt-4w fr-mb-4w">
+  <div class="fr-container fr-container--fluid fr-pl-2v">
+    <DsfrBreadcrumb class="fr-pl-2v" :links="links" />
+  </div>
+  <div
+    class="fr-container datagouv-components width-inherit fr-container--fluid fr-mt-2w fr-mb-4w fr-p-2v"
+  >
     <div class="fr-grid-row">
-      <div
-        v-if="dataset.organization"
-        class="fr-col-md-4 es__organization__sidebar"
-      >
-        <div class="es__organization__sidebar__logo_container">
-          <img :src="dataset.organization.logo" />
-        </div>
-        <div class="es__organization__sidebar__metadata_container">
-          <h6>
-            <a href="">{{ dataset.organization.name }}</a>
-          </h6>
-        </div>
-      </div>
-      <div class="fr-col-md-8">
+      <div class="fr-col-12 fr-col-md-8 fr-p-1w">
         <h1>{{ dataset.title }}</h1>
-        <div v-html="description"></div>
+        <ReadMore max-height="600">
+          <div v-html="description"></div>
+        </ReadMore>
+      </div>
+      <div v-if="dataset.organization" class="fr-col-12 fr-col-md-4 fr-p-1w">
+        <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
+        <div class="fr-grid-row fr-grid-row--middle">
+          <div class="fr-col-auto">
+            <div class="border fr-p-1-5v fr-mr-1-5v">
+              <img :src="dataset.organization.logo" height="32" />
+            </div>
+          </div>
+          <p class="fr-col fr-m-0">
+            <a class="fr-link" :href="dataset.organization.page">
+              <OrganizationNameWithCertificate
+                :organization="dataset.organization"
+              />
+            </a>
+          </p>
+        </div>
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
+        <p>{{ formatDate(dataset.last_update) }}</p>
+        <div v-if="dataset.license">
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
+          <p class="fr-text--sm fr-mt-0 fr-mb-3v">
+            <code class="bg-alt-grey fr-px-1v text-grey-380">
+              <a :href="license.url">
+                {{ license.title }}
+              </a>
+            </code>
+          </p>
+        </div>
+        <QualityComponent
+          v-if="config.website.show_quality_component"
+          :quality="dataset.quality"
+        />
       </div>
     </div>
 
@@ -149,9 +252,20 @@ watchEffect(async () => {
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
           <ResourceAccordion
-            v-for="resource in dataset.resources"
+            v-for="resource in resources"
             :datasetId="datasetId"
             :resource="resource"
+          />
+          <p v-if="!totalResults">
+            Aucune ressource n'est associée à votre recherche.
+          </p>
+          <Pagination
+            class="fr-mt-3w"
+            v-else-if="totalResults > pageSize"
+            :page="currentPage"
+            :page-size="pageSize"
+            :total-results="totalResults"
+            @change="changePage"
           />
         </div>
       </DsfrTabContent>
@@ -167,12 +281,17 @@ watchEffect(async () => {
           Pas de réutilisation pour ce jeu de données.
         </div>
         <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-          <li v-for="r in reuses" class="fr-col-12 fr-col-lg-6">
-            <Tile
-              :external-link="r.page"
-              :title="r.title"
-              :description="r.description"
-              :img="r.organization?.logo || r.owner.avatar"
+          <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
+            <DsfrCard
+              :link="r.page"
+              :style="`max-width: 400px; max-height: 400px`"
+              :title="cropString(r.title)"
+              :detail="getType(r.type)"
+              :description="reuseDescription(r)"
+              size="sm"
+              :imgSrc="
+                r.image_thumbnail || r.organization?.logo || r.owner.avatar
+              "
             />
           </li>
         </ul>

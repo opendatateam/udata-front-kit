@@ -19,10 +19,16 @@ website:
   title: 'meteo.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
+  service_logo: '/logos/meteo-france-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  show_quality_component: true
   # leave empty if not pertinent
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   homepage_title: 'La météo et le climat en Open Data'
-  homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat.<br />Vous y trouverez des données brutes téléchargeables et utilisable de manière libre et gratuite.'
+  homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -35,46 +41,38 @@ website:
       id: 'home'
       linkPage: '/'
       type: 'component'
-      display_menu: true
+      display_menu: false
     - name: 'Données'
       id: 'datasets'
       linkPage: '/datasets'
       type: 'component'
       display_menu: true
-    - name: 'Informations'
-      id: 'infos'
-      linkPage: '/informations'
-      type: 'page'
-      url: 'https://raw.githubusercontent.com/etalab/datagouvfr-pages/master/pages/about/ressources.md'
+    - name: 'Recherche guidée'
+      id: 'FormMF'
+      linkPage: '/form'
+      type: 'custom'
+      path: '../custom/meteo/views/FormMF.vue'
       display_menu: true
     - name: 'A propos'
       id: 'about'
       linkPage: '/about'
       type: 'page'
-      url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/36d7b3b0784d07b36208b6e9f353454e6dd639be/gistfile1.txt'
+      url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/7afdf99a23f45041e7e9eb391b65afeb6025e1cd/gistfile1.txt'
       display_menu: true
   # img should be square
   home_buttons:
-    - title: 'En savoir plus sur la démarche'
-      link: '/about'
-      img: 'https://static.data.gouv.fr/avatars/44/3f1d6b9eac45b2bca7ae9b2a80d812-100.jpg'
-    - title: 'Utiliser les API Météo-France'
-      link: 'https://portail-api.meteofrance.fr/devportal/apis'
-      img: 'https://static.data.gouv.fr/avatars/40/05f4e0291e4ad49a9321071c195cce-100.jpg'
-    - title: 'Voir les jeux de données récents'
-      link: '/datasets'
-      img: 'https://transport.data.gouv.fr/images/icons/recently-added-datasets-cbc8b7a7d744618cfe4d97a32e5570ac.png?vsn=d'
   show_topic_charts: true
   list_highlighted_topics:
     - id: '653a6eee7a6aa39deaec2de9'
       name: 'Données climatologiques de base'
     - id: '653a6f43e96894d0275c994c'
-      name: 'Données climatologique de référence pour le changement climatique'
+      name: 'Données climatologiques de référence pour le changement climatique'
   oauth_option: false
   # display settings
   pagination_sizes:
     organizations_list: 9
     topics_list: 100
+    files_list: 6
   home_banner_colors:
     - '#F7EED4'
     - '#ECEEE6'
