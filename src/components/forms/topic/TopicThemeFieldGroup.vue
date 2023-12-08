@@ -1,6 +1,6 @@
 <template>
   <div class="fr-select-group fr-mt-1w">
-    <label class="fr-label" for="select_theme"> Thématiques </label>
+    <label class="fr-label" for="select_theme"> Thématique</label>
     <select class="fr-select" id="select_theme" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
         Choisir une thématique
@@ -16,10 +16,11 @@
   </div>
 
   <div class="fr-select-group fr-mt-1w">
-    <label class="fr-label" for="select_subtheme"> Chantiers </label>
+    <label class="fr-label" for="select_subtheme"> Chantier</label>
     <select
       class="fr-select"
       id="select_subtheme"
+      :disabled="theme === NoOptionSelected"
       @change="switchSubtheme($event)"
     >
       <option
