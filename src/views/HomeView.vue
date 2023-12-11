@@ -54,7 +54,7 @@ const goToPage = (page) => {
       <h1 class="main-title fr-mb-3v">
         {{ homepageTitle }}
       </h1>
-      <div class="subtitle fr-mb-4w">
+      <div class="subtitle fr-text--alt fr-mb-4w">
         <span v-html="markdown.render(homepageSubTitle)" />
       </div>
       <div class="search-bar" v-if="searchConfig.display">
