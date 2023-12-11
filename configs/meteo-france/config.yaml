@@ -62,6 +62,7 @@ website:
   home_buttons:
   show_topic_charts: true
   show_quality_component: true
+  show_dataset_metadata_panel: false
   show_dataset_discussions: false
   list_highlighted_topics:
     - id: '653a6eee7a6aa39deaec2de9'
@@ -78,6 +79,7 @@ website:
     - '#F7EED4'
     - '#ECEEE6'
     - '#E2EEF8'
+  env: 'dev'
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

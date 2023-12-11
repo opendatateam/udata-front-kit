@@ -81,9 +81,15 @@ const tabs = computed(() => {
     { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
     { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
     { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
-    { title: 'Qualité', tabId: 'tab-3', panelId: 'tab-content-3' },
-    { title: 'Métadonnées', tabId: 'tab-4', panelId: 'tab-content-4' }
+    { title: 'Qualité', tabId: 'tab-3', panelId: 'tab-content-3' }
   ]
+  if (config.website.show_dataset_metadata_panel) {
+    _tabs.push({
+      title: 'Métadonnées',
+      tabId: 'tab-4',
+      panelId: 'tab-content-4'
+    })
+  }
   if (chartData.value) {
     _tabs.push({
       title: 'Visualisations',
