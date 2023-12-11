@@ -50,11 +50,11 @@ const goToPage = (page) => {
       ');'
     "
   >
-    <div class="fr-container datagouv-components">
-      <h1 class="fr-display--xs text-align-left fr-mb-3v">
+    <div class="fr-container">
+      <h1 class="main-title fr-mb-3v">
         {{ homepageTitle }}
       </h1>
-      <div class="fr-text--lead fr-text--alt f-italic text-align-left fr-mb-4w">
+      <div class="subtitle fr-text--alt fr-mb-4w">
         <span v-html="markdown.render(homepageSubTitle)" />
       </div>
       <div class="search-bar" v-if="searchConfig.display">
@@ -138,6 +138,18 @@ const goToPage = (page) => {
   padding-top: 5%;
   padding-bottom: 5%;
   position: relative;
+}
+.main-title {
+  text-align: left;
+  font-size: 48px;
+  line-height: 50px;
+  font-weight: bold;
+}
+.subtitle {
+  text-align: left;
+  font-size: 20px;
+  line-height: 28px;
+  font-style: italic;
 }
 .search-bar {
   padding: 20px;
