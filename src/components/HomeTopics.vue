@@ -46,7 +46,7 @@ const goToPage = (page) => {
   min-width: 500px;
   width: 45%;
   height: 100%;
-  margin-left: 30px;
+  margin-right: 30px;
   margin-top: 30px;
   border: 1px solid #ebebeb;
   padding: 20px;
