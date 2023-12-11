@@ -44,7 +44,7 @@ export const useReuseStore = defineStore('reuse', {
     },
 
     async getTypes() {
-      return await reusesAPI.get('/types')
+      return await reusesAPI.get('types')
     }
   }
 })
