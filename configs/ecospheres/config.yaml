@@ -34,6 +34,21 @@ website:
     display: false
     name:
     link:
+  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'écologie."
+  footer_external_links:
+    - name: 'data.gouv.fr'
+      url: 'https://www.data.gouv.fr'
+    - name: 'gouvernement.fr'
+      url: 'https://www.gouvernement.fr'
+  footer_mandatory_links:
+    - name: 'Licences'
+      url: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - name: "Conditions générales d'utilisation"
+      url: 'https://www.data.gouv.fr/fr/terms/'
+    - name: 'Politique de confidentialité'
+      url: 'https://www.data.gouv.fr/fr/suivi/'
+    - name: 'Accessibilité : non conforme'
+      url: '/accessibility'
   menu_items:
     - name: 'Accueil'
       id: 'home'
