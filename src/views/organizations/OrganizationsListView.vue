@@ -31,7 +31,7 @@ onMounted(() => {
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>Organisations</h1>
-    <p>Rechercher parmi toutes les organisations présentes sur {{ title }}.</p>
+    <p>Parcourir toutes les organisations présentes sur {{ title }}.</p>
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li v-for="org in organizations" class="fr-col-12 fr-col-lg-4">
         <Tile
