@@ -154,14 +154,14 @@ export const useDatasetStore = defineStore('dataset', {
      * @returns {Promise<Array<{typeId: string, typeLabel: string, resources: Array<import("@etalab/data.gouv.fr-components").Resource>, total: number}>>}
      */
     async loadResources(rel, pageSize) {
-      let types = await datasetsApi.get('resource_types')
+      const types = await datasetsApi.get('resource_types')
       const resources = []
-      for (let type of types) {
-        let url = new URL(rel.href)
+      for (const type of types) {
+        const url = new URL(rel.href)
         url.searchParams.set('page_size', pageSize)
         url.searchParams.set('type', type.id)
-        let updatedUrl = url.toString()
-        let response = await datasetsApiv2.request(updatedUrl)
+        const updatedUrl = url.toString()
+        const response = await datasetsApiv2.request(updatedUrl)
         resources.push({
           currentPage: 1,
           resources: response.data,
@@ -185,7 +185,7 @@ export const useDatasetStore = defineStore('dataset', {
     },
 
     async getLicense(license) {
-      let response = await datasetsApi.get('licenses')
+      const response = await datasetsApi.get('licenses')
       return response.find((l) => l.id == license)
     }
   }
