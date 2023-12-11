@@ -92,10 +92,15 @@ const goToPage = (page) => {
 </template>
 
 <style scoped lang="scss">
-@media (min-width: 1180px) {
+@media (min-width: 1270px) {
   .search-bar {
     display: flex;
-    width: 100%;
+    position: absolute;
+    bottom: 0;
+    max-width: 78rem;
+    width: 90%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
   .or-sep {
     max-width: 30px;
@@ -111,10 +116,17 @@ const goToPage = (page) => {
   .button-search-guided {
     margin-top: 10px;
   }
+  .search-bar {
+    margin-left: 30px;
+    margin-right: 30px;
+    border-radius: 10px;
+  }
 }
 
 .fr-container {
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 .es__hero {
   font-size: 1.5rem;
@@ -123,6 +135,7 @@ const goToPage = (page) => {
 .banner {
   padding-top: 5%;
   padding-bottom: 5%;
+  position: relative;
 }
 .main-title {
   text-align: left;
@@ -139,7 +152,6 @@ const goToPage = (page) => {
 .search-bar {
   padding: 20px;
   background-color: white;
-  border-radius: 10px;
 }
 .search-bar-input {
   flex-wrap: nowrap;
