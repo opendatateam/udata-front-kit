@@ -52,7 +52,7 @@ const goToPage = (page) => {
   padding: 20px;
   text-align: left;
   min-height: 180px;
-  border-bottom: 3px solid #060091;
+  border-bottom: 3px solid #3557a2;
 }
 .topic-title {
   font-size: 18px;
