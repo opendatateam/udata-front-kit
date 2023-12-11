@@ -92,7 +92,7 @@ const goToPage = (page) => {
 </template>
 
 <style scoped lang="scss">
-@media (min-width: 1270px) {
+@media (min-width: 1248px) {
   .search-bar {
     display: flex;
     position: absolute;
