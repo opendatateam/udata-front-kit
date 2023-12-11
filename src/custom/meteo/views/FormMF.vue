@@ -12,10 +12,7 @@ const selectItems = ref([])
 let selectedDataPack = ref(null)
 const optionsDataPack = ref(Object.keys(datasetsIds))
 
-const links = computed(() => [
-  { to: '/', text: 'Accueil' },
-  { text: 'Recherche Guidée' }
-])
+const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
 
 const onSelectDataPack = (pack) => {
   selectedDataset.value = null

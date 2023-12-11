@@ -34,10 +34,7 @@ const topicOptions = computed(() => {
   return [{ value: '', text: 'Toutes les données' }, ...topics]
 })
 
-const links = computed(() => [
-  { to: '/', text: 'Accueil' },
-  { text: 'Données' }
-])
+const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
 const onSelectTopic = (topicId) => {
   selectedTopicId.value = topicId
