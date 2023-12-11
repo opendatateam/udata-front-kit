@@ -7,6 +7,7 @@ import {
   ReadMore
 } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watch } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute } from 'vue-router'
 
 import config from '@/config'
@@ -158,6 +159,7 @@ watch(
       })
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
+      const resourceLoader = useLoading().show()
       const allResources = await datasetStore.loadResources(
         dataset.value.resources,
         pageSize
@@ -165,6 +167,7 @@ watch(
       for (let typedResources of allResources) {
         resources.value[typedResources.typeId] = typedResources
       }
+      resourceLoader.hide()
     } else {
       resources.value = dataset.value.resources
     }
