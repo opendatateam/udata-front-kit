@@ -34,6 +34,8 @@ const topicOptions = computed(() => {
   return [{ value: '', text: 'Toutes les données' }, ...topics]
 })
 
+const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
+
 const onSelectTopic = (topicId) => {
   selectedTopicId.value = topicId
   currentPage.value = 1
@@ -63,6 +65,9 @@ watchEffect(() => {
 </script>
 
 <template>
+  <div class="fr-container">
+    <DsfrBreadcrumb :links="links" />
+  </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>Jeux de données</h1>
     <p v-if="query">Résultats de recherche pour "{{ query }}".</p>

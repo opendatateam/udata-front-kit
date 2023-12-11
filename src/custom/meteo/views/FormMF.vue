@@ -12,6 +12,8 @@ const selectItems = ref([])
 let selectedDataPack = ref(null)
 const optionsDataPack = ref(Object.keys(datasetsIds))
 
+const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
+
 const onSelectDataPack = (pack) => {
   selectedDataset.value = null
   showDep.value = false
@@ -124,6 +126,9 @@ const showLoader = ref(false)
 </script>
 
 <template>
+  <div class="fr-container">
+    <DsfrBreadcrumb :links="links" />
+  </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>Recherche guidée</h1>
     <p>Utiliser ce formulaire pour trouver un fichier en particulier.</p>
