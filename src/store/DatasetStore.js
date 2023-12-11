@@ -21,6 +21,7 @@ const datasetsApiv2 = new DatasetsAPI({ version: 2 })
 export const useDatasetStore = defineStore('dataset', {
   state: () => ({
     data: {},
+    resourceTypes: [],
     sort: null
   }),
   actions: {
@@ -154,9 +155,11 @@ export const useDatasetStore = defineStore('dataset', {
      * @returns {Promise<Array<{typeId: string, typeLabel: string, resources: Array<import("@etalab/data.gouv.fr-components").Resource>, total: number}>>}
      */
     async loadResources(rel, pageSize) {
-      const types = await datasetsApi.get('resource_types')
+      if (this.resourceTypes.length === 0) {
+        this.resourceTypes = await datasetsApi.get('resource_types')
+      }
       const resources = []
-      for (const type of types) {
+      for (const type of this.resourceTypes) {
         const url = new URL(rel.href)
         url.searchParams.set('page_size', pageSize)
         url.searchParams.set('type', type.id)
