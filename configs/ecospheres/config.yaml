@@ -65,6 +65,7 @@ website:
   show_topic_charts: false
   show_quality_component: true
   show_dataset_metadata_panel: true
+  show_dataset_discussions: true
   list_highlighted_topics:
   oauth_option: true
   pagination_sizes:
