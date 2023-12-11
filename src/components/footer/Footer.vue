@@ -9,6 +9,7 @@ import {
 } from 'vue'
 
 type DsfrFooterProps = {
+  operatorImgAlt?: string
   serviceLogoSrc?: string
   logoText?: string | string[]
   operatorImgSrc?: string
@@ -20,7 +21,7 @@ type DsfrFooterProps = {
 
 const props = withDefaults(defineProps<DsfrFooterProps>(), {
   logoText: () => 'Gouvernement',
-  operatorImgAlt: '',
+  operatorImgAlt: 'logo opérateur',
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
   serviceLogoSrc: '',
