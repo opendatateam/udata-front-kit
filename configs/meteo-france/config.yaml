@@ -25,29 +25,8 @@ website:
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
-
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
-  footer_external_links:
-    - name: 'data.gouv.fr'
-      url: 'https://www.data.gouv.fr'
-    - name: 'meteo.fr'
-      url: 'https://www.meteo.fr'
-    - name: 'gouvernement.fr'
-      url: 'https://www.gouvernement.fr'
-    - name: 'service-public.fr'
-      url: 'https://www.service-public.fr'
-  footer_mandatory_links:
-    - name: 'Licences'
-      url: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - name: "Conditions générales d'utilisation"
-      url: 'https://www.data.gouv.fr/fr/terms/'
-    - name: 'Politique de confidentialité'
-      url: 'https://www.data.gouv.fr/fr/suivi/'
-    - name: 'Accessibilité : non conforme'
-      url: '/accessibility'
-  logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   homepage_title: 'La météo et le climat en Open Data'
-  homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+  homepage_subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -96,6 +75,26 @@ website:
     - id: '653a6f43e96894d0275c994c'
       name: 'Données climatologiques de référence pour le changement climatique'
   oauth_option: false
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
+  footer_external_links:
+    - name: 'data.gouv.fr'
+      url: 'https://www.data.gouv.fr'
+    - name: 'meteo.fr'
+      url: 'https://www.meteo.fr'
+    - name: 'gouvernement.fr'
+      url: 'https://www.gouvernement.fr'
+    - name: 'service-public.fr'
+      url: 'https://www.service-public.fr'
+  footer_mandatory_links:
+    - name: 'Licences'
+      url: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - name: "Conditions générales d'utilisation"
+      url: 'https://www.data.gouv.fr/fr/terms/'
+    - name: 'Politique de confidentialité'
+      url: 'https://www.data.gouv.fr/fr/suivi/'
+    - name: 'Accessibilité : non conforme'
+      url: '/accessibility'
+  logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   # display settings
   pagination_sizes:
     organizations_list: 9

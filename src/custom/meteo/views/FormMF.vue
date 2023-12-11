@@ -177,7 +177,7 @@ const showLoader = ref(false)
     </div>
 
     <div class="select-classic" v-if="selectedDataset && showIndicateur">
-      <label>Quelle indicateur ?</label>
+      <label>Quel indicateur ?</label>
       <select class="fr-select" @change="onSelectIndicateur($event)">
         <option hidden>Choisir une option</option>
         <option
