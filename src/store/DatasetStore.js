@@ -149,32 +149,44 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Load resources from the API via a HATEOAS rel
      *
-     * @param {String} dataset_id
      * @param {Object} rel - HATEOAS rel for datasets
-     * @returns {Array<object>}
+     * @param {string} pageSize - page size
+     * @returns {Promise<Array<{typeId: string, typeLabel: string, resources: Array<import("@etalab/data.gouv.fr-components").Resource>, total: number}>>}
      */
     async loadResources(rel, pageSize) {
-      let url = new URL(rel.href)
-      url.searchParams.set('page_size', pageSize)
-      let updatedUrl = url.toString()
-
-      let response = await datasetsApiv2.request(updatedUrl)
-      return response
+      let types = await datasetsApi.get('resource_types')
+      const resources = []
+      for (let type of types) {
+        let url = new URL(rel.href)
+        url.searchParams.set('page_size', pageSize)
+        url.searchParams.set('type', type.id)
+        let updatedUrl = url.toString()
+        let response = await datasetsApiv2.request(updatedUrl)
+        resources.push({
+          currentPage: 1,
+          resources: response.data,
+          total: response.total,
+          typeId: type.id,
+          typeLabel: type.label
+        })
+      }
+      return resources
     },
 
-    async fetchDatasetResources(datasetId, page, pageSize) {
+    async fetchDatasetResources(datasetId, type, page, pageSize) {
       const response = await datasetsApiv2.get(`${datasetId}/resources/`, {
         params: {
-          page: page,
-          page_size: pageSize
+          page,
+          page_size: pageSize,
+          type
         }
       })
       return response.data
     },
-      
+
     async getLicense(license) {
       let response = await datasetsApi.get('/licenses/')
       return response.find((l) => l.id == license)
-    },
+    }
   }
 })

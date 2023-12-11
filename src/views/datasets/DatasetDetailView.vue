@@ -6,8 +6,7 @@ import {
   QualityComponent,
   ReadMore
 } from '@etalab/data.gouv.fr-components'
-import { filesize } from 'filesize'
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import config from '@/config'
@@ -28,7 +27,7 @@ const discussionStore = useDiscussionStore()
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const discussionsPages = ref([])
 const reuses = ref([])
-const resources = ref([])
+const resources = ref({})
 const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
@@ -36,7 +35,6 @@ const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
 const currentPage = ref(1)
-const totalResults = ref(0)
 const pageSize = config.website.pagination_sizes.files_list
 
 onMounted(() => {
@@ -53,26 +51,6 @@ const links = computed(() => [
   { to: '/datasets', text: 'Données' },
   { text: dataset.value.title }
 ])
-
-const formatFileSize = (fileSize) => {
-  if (!fileSize) return 'Taille inconnue'
-  return filesize(fileSize)
-}
-
-const files = computed(() => {
-  return resources.value?.map((resource) => {
-    return {
-      title: resource.title || 'Fichier sans nom',
-      format: resource.format,
-      size: formatFileSize(
-        resource.filesize ||
-          resource.extras['check:headers:content-length'] ||
-          resource.extras['analysis:content-length']
-      ),
-      href: resource.url
-    }
-  })
-})
 
 const tabs = computed(() => {
   const _tabs = [
@@ -100,12 +78,12 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (page = 1) => {
-  currentPage.value = page
+const changePage = (type, page = 1) => {
+  resources.value[type].currentPage = page
   return datasetStore
-    .fetchDatasetResources(dataset.value.id, page, pageSize)
+    .fetchDatasetResources(dataset.value.id, type, page, pageSize)
     .then((data) => {
-      resources.value = data
+      resources.value[type].resources = data
     })
 }
 
@@ -160,36 +138,41 @@ const getType = (id) => {
 }
 
 // launch reuses and discussions fetch as soon as we have the technical id
-watchEffect(async () => {
-  if (!dataset.value.id) return
-  // fetch reuses
-  reuseStore
-    .loadReusesForDataset(dataset.value.id)
-    .then((r) => (reuses.value = r))
-  // fetch discussions
-  discussionStore
-    .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
-    .then((d) => {
-      discussions.value = d
-      if (!discussionsPage.value.length) {
-        discussionsPages.value =
-          discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+watch(
+  dataset,
+  async () => {
+    if (!dataset.value.id) return
+    // fetch reuses
+    reuseStore
+      .loadReusesForDataset(dataset.value.id)
+      .then((r) => (reuses.value = r))
+    // fetch discussions
+    discussionStore
+      .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
+      .then((d) => {
+        discussions.value = d
+        if (!discussionsPage.value.length) {
+          discussionsPages.value =
+            discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+        }
+      })
+    // fetch ressources if need be
+    if (dataset.value.resources.rel) {
+      const allResources = await datasetStore.loadResources(
+        dataset.value.resources,
+        pageSize
+      )
+      for (let typedResources of allResources) {
+        resources.value[typedResources.typeId] = typedResources
       }
-    })
-  // fetch ressources if need be
-  if (dataset.value.resources.rel) {
-    const { data, total } = await datasetStore.loadResources(
-      dataset.value.resources,
-      pageSize
-    )
-    resources.value = data
-    totalResults.value = total
-  } else {
-    resources.value = dataset.value.resources
-  }
-  license.value = await datasetStore.getLicense(dataset.value.license)
-  types.value = await reuseStore.getTypes()
-})
+    } else {
+      resources.value = dataset.value.resources
+    }
+    license.value = await datasetStore.getLicense(dataset.value.license)
+    types.value = await reuseStore.getTypes()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -249,28 +232,32 @@ watchEffect(async () => {
     >
       <!-- Fichiers -->
       <DsfrTabContent
-        v-if="files"
+        v-if="resources"
         panel-id="tab-content-0"
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
-          <ResourceAccordion
-            v-for="resource in resources"
-            :datasetId="datasetId"
-            :resource="resource"
-          />
-          <p v-if="!totalResults">
-            Aucune ressource n'est associée à votre recherche.
-          </p>
-          <Pagination
-            class="fr-mt-3w"
-            v-else-if="totalResults > pageSize"
-            :page="currentPage"
-            :page-size="pageSize"
-            :total-results="totalResults"
-            @change="changePage"
-          />
+          <template v-for="typedResources in resources">
+            <template v-if="typedResources.total">
+              <h2 class="fr-mb-1v subtitle subtitle--uppercase">
+                {{ typedResources.typeLabel }}
+              </h2>
+              <ResourceAccordion
+                v-for="resource in typedResources.resources"
+                :datasetId="datasetId"
+                :resource="resource"
+              />
+              <Pagination
+                class="fr-my-3w"
+                v-if="typedResources.total > pageSize"
+                :page="typedResources.currentPage"
+                :page-size="pageSize"
+                :total-results="typedResources.total"
+                @change="(page) => changePage(typedResources.typeId, page)"
+              />
+            </template>
+          </template>
         </div>
       </DsfrTabContent>
 
