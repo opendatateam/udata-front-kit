@@ -66,11 +66,11 @@ website:
       url: '/meteo-france/pages/accessibility.md'
   mandatory_links:
     - label: 'Licences'
-      to: 'https://www.data.gouv.fr/fr/pages/legal/licences'
+      to: '//www.data.gouv.fr/fr/pages/legal/licences/'
     - label: "Conditions générales d'utilisation"
-      to: 'https://www.data.gouv.fr/fr/terms/'
+      to: '//www.data.gouv.fr/fr/terms/'
     - label: 'Politique de confidentialité'
-      to: 'https://www.data.gouv.fr/fr/suivi/'
+      to: '//www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   # img should be square
