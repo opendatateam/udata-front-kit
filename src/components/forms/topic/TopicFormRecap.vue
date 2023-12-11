@@ -15,7 +15,7 @@
   <p class="fr-mb-0"><strong>Sujet du bouquet</strong></p>
   <p v-html="topic.name" />
   <p class="fr-mb-0"><strong>Objectif du bouquet</strong></p>
-  <p class="markdown__description" v-html="topic.description" />
+  <p v-html="markdown(topic.description)" />
   <hr />
 
   <h4>
@@ -52,6 +52,7 @@
 </template>
 
 <script lang="ts">
+import MarkdownIt from 'markdown-it'
 import type { PropType } from 'vue'
 
 import type { Topic } from '@/model'
@@ -88,6 +89,9 @@ export default {
     },
     getDatasetListTitle() {
       return getDatasetListTitle(this.topic.datasetsProperties)
+    },
+    markdown(text: string) {
+      return MarkdownIt().render(text)
     }
   }
 }
