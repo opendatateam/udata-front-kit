@@ -161,17 +161,15 @@ const getType = (id) => {
   return type.label
 }
 
-const discussionWellTitle = computed(() =>
-  showDiscussions ? 'Participer aux discussions' : 'Voir les discussions'
-)
-const discussionWellDescription = computed(() =>
-  showDiscussions
-    ? 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour participer aux discussions.'
-    : 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
-)
+const discussionWellTitle = showDiscussions
+  ? 'Participer aux discussions'
+  : 'Voir les discussions'
+const discussionWellDescription = showDiscussions
+  ? 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour participer aux discussions.'
+  : 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
 
 const openDataGouvDiscussions = () =>
-  window.open(dataset.value.page + '#/discussions', 'datagouv-discussion')
+  window.open(`${dataset.value.page}#/discussions`, 'datagouv-discussion')
 
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
