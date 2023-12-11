@@ -1,14 +1,15 @@
 <script setup>
+import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watchEffect } from 'vue'
-import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 
 import config from '@/config'
 
-import Tile from '../../components/Tile.vue'
 import { useSearchStore } from '../../store/SearchStore'
 import { useTopicStore } from '../../store/TopicStore'
 
 const route = useRoute()
+const router = useRouter()
 const store = useSearchStore()
 const query = computed(() => route.query.q)
 const currentPage = ref(1)
@@ -41,10 +42,31 @@ const onSelectTopic = (topicId) => {
   currentPage.value = 1
 }
 
+const zIndex = (key) => {
+  return { zIndex: datasets.value.length - key }
+}
+
 // reset currentPage when query changes
 onBeforeRouteUpdate((to, from) => {
   currentPage.value = 1
 })
+
+const getDatasetPage = (id) => {
+  const url = router.resolve({ name: 'dataset_detail', params: { did: id } })
+  return url.href
+}
+
+const getOrganizationPage = (id) => {
+  try {
+    const url = router.resolve({
+      name: 'organization_detail',
+      params: { oid: id }
+    })
+    return url.href
+  } catch (e) {
+    return ''
+  }
+}
 
 onMounted(() => {
   if (topicsConf?.length) {
@@ -86,18 +108,17 @@ watchEffect(() => {
           <template #label>Thématiques</template>
         </DsfrSelect>
       </div>
-      <div :class="[topicsConf ? 'fr-col-md-9' : 'fr-col-md-12']">
-        <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-          <li v-for="d in datasets" class="fr-col-12 fr-col-lg-4">
-            <Tile
-              :link="`/datasets/${d.slug}`"
-              :title="d.title"
-              :description="d.description"
-              :img="d.organization?.logo"
-              :is-markdown="true"
-            />
-          </li>
-        </ul>
+      <div
+        class="datagouv-components"
+        :class="[topicsConf ? 'fr-col-md-9' : 'fr-col-md-12']"
+      >
+        <DatasetCard
+          v-for="(d, index) in datasets"
+          :style="zIndex(index)"
+          :dataset="d"
+          :datasetUrl="getDatasetPage(d.id)"
+          :organizationUrl="getOrganizationPage(d.organization.id)"
+        />
       </div>
     </div>
   </div>
