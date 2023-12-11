@@ -242,7 +242,7 @@ watch(
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
           <template v-for="typedResources in resources">
-            <template v-if="typedResources.total">
+            <div v-if="typedResources.total" class="fr-mb-4w">
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
                 {{ typedResources.typeLabel }}
               </h2>
@@ -252,14 +252,14 @@ watch(
                 :resource="resource"
               />
               <Pagination
-                class="fr-my-3w"
+                class="fr-mt-3w"
                 v-if="typedResources.total > pageSize"
                 :page="typedResources.currentPage"
                 :page-size="pageSize"
                 :total-results="typedResources.total"
                 @change="(page) => changePage(typedResources.typeId, page)"
               />
-            </template>
+            </div>
           </template>
         </div>
       </DsfrTabContent>
