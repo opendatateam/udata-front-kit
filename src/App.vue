@@ -103,7 +103,16 @@ const mandatoryLinks = ref(config.website.mandatory_links)
 
   <RouterView />
 
-  <DsfrFooter class="fr-mt-8w" :mandatory-links="mandatoryLinks"></DsfrFooter>
+  <DsfrFooter class="fr-mt-8w" :mandatory-links="mandatoryLinks">
+    <template v-slot:description>
+      <p class="fr-text--sm">
+        Ce site est une déclinaison thématique de
+        <a href="https://www.data.gouv.fr/">data.gouv.fr</a> sur les données
+        relatives à la météo et au climat réalisé en collaboration avec
+        Météo-France.
+      </p>
+    </template>
+  </DsfrFooter>
 </template>
 
 <!-- global styles -->
