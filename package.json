@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^5.3.1",
-    "@etalab/data.gouv.fr-components": "^1.10.1",
+    "@etalab/data.gouv.fr-components": "^1.11.1",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",
