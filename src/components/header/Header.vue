@@ -196,12 +196,19 @@ defineEmits<{
               <nav role="navigation">
                 <DsfrHeaderMenuLinks
                   v-if="!headerModalOpened"
+                  class="fr-pb-4w"
                   :links="quickLinks"
                   :nav-aria-label="quickLinksAriaLabel"
                 />
               </nav>
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
+              <DsfrButton
+                class="fr-ml-auto fr-mb-4v"
+                label="Donnez votre avis"
+                :secondary="true"
+                icon="ri-lightbulb-line"
+              />
               <DsfrSearchBar
                 :label="searchLabel"
                 :model-value="modelValue"
