@@ -135,7 +135,7 @@ const reuseDescription = (r) => {
 
 const getType = (id) => {
   let type = types.value.find((t) => t.id == id)
-  return type.label
+  return type?.label || ''
 }
 
 // launch reuses and discussions fetch as soon as we have the technical id
