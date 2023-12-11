@@ -65,16 +65,16 @@ export const useDatasetStore = defineStore('dataset', {
      * @param {string?} sort Sort order requested
      * @returns {Array<object>}
      */
-    async loadDatasetsForOrg(orgId, page = 1, sort = '-created') {
-      const existing = this.getDatasetsForOrg(orgId, page, sort)
+    async loadDatasetsForOrg(org_id, page = 1, sort = '-created') {
+      const existing = this.getDatasetsForOrg(org_id, page, sort)
       if (existing.data) return existing
       const datasets = await datasetsApiv2.getDatasetsForOrganization(
-        orgId,
+        org_id,
         page,
         sort
       )
-      this.addDatasets(orgId, datasets, sort)
-      return this.getDatasetsForOrg(orgId, page, sort)
+      this.addDatasets(org_id, datasets, sort)
+      return this.getDatasetsForOrg(org_id, page, sort)
     },
     /**
      * Store the result of a datasets fetch operation for an org in store
