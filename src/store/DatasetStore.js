@@ -185,7 +185,7 @@ export const useDatasetStore = defineStore('dataset', {
     },
 
     async getLicense(license) {
-      let response = await datasetsApi.get('/licenses/')
+      let response = await datasetsApi.get('licenses')
       return response.find((l) => l.id == license)
     }
   }
