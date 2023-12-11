@@ -58,6 +58,21 @@ website:
       type: 'page'
       url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/7afdf99a23f45041e7e9eb391b65afeb6025e1cd/gistfile1.txt'
       display_menu: true
+    - name: 'Accessibilité'
+      id: 'accessibility'
+      linkPage: '/accessibility'
+      type: 'page'
+      display_menu: false
+      url: '/meteo-france/pages/accessibility.md'
+  mandatory_links:
+    - label: 'Licences'
+      to: 'https://www.data.gouv.fr/fr/pages/legal/licences'
+    - label: "Conditions générales d'utilisation"
+      to: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      to: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
   # img should be square
   home_buttons:
   show_topic_charts: true

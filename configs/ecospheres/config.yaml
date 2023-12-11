@@ -61,6 +61,7 @@ website:
       type: 'page'
       display_menu: true
       url: '/ecospheres/pages/about.md'
+  mandatory_links: []
   home_buttons:
   show_topic_charts: false
   show_quality_component: true

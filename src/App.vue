@@ -76,6 +76,7 @@ const logoService = ref(config.website.service_logo)
 const showBadge = ref(config.website.badge.display)
 const badgeText = ref(config.website.badge.text)
 const badgeStyle = ref(config.website.badge.style)
+const mandatoryLinks = ref(config.website.mandatory_links)
 </script>
 
 <template>
@@ -102,7 +103,7 @@ const badgeStyle = ref(config.website.badge.style)
 
   <RouterView />
 
-  <DsfrFooter class="fr-mt-8w" :mandatory-links="[]"></DsfrFooter>
+  <DsfrFooter class="fr-mt-8w" :mandatory-links="mandatoryLinks"></DsfrFooter>
 </template>
 
 <!-- global styles -->
