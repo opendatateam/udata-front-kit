@@ -47,8 +47,6 @@ website:
       url: 'https://www.data.gouv.fr/fr/terms/'
     - name: 'Politique de confidentialité'
       url: 'https://www.data.gouv.fr/fr/suivi/'
-    - name: 'Accessibilité : non conforme'
-      url: '/accessibility'
   menu_items:
     - name: 'Accueil'
       id: 'home'
