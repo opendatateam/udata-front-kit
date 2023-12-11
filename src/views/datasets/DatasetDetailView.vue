@@ -39,6 +39,16 @@ const types = ref([])
 const currentPage = ref(1)
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.show_dataset_discussions
+const query = ref('')
+
+const updateQuery = (q) => {
+  query.value = q
+  changePage('main', 1)
+}
+
+const doSearch = () => {
+  changePage('main', 1)
+}
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -84,9 +94,10 @@ const description = computed(() => descriptionFromMarkdown(dataset))
 const changePage = (type, page = 1) => {
   resources.value[type].currentPage = page
   return datasetStore
-    .fetchDatasetResources(dataset.value.id, type, page, pageSize)
+    .fetchDatasetResources(dataset.value.id, type, page, pageSize, query.value)
     .then((data) => {
-      resources.value[type].resources = data
+      resources.value[type].resources = data['data']
+      resources.value[type].total = data['total']
     })
 }
 
@@ -258,6 +269,20 @@ watch(
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
                 {{ typedResources.typeLabel }}
               </h2>
+              <DsfrSearchBar
+                button-text="Rechercher"
+                placeholder="Rechercher"
+                :large="false"
+                class="search-bar"
+                @search="doSearch"
+                @update:modelValue="updateQuery"
+                v-if="
+                  typedResources.typeLabel != 'Documentation' &&
+                  (typedResources.total > 6 ||
+                    (typedResources.total <= 6 && query != ''))
+                "
+              />
+
               <ResourceAccordion
                 v-for="resource in typedResources.resources"
                 :datasetId="datasetId"
@@ -500,5 +525,9 @@ ul.es__comment__container {
 .es__quality {
   list-style-type: none;
   padding-inline-start: 0;
+}
+
+.search-bar {
+  margin-top: 15px;
 }
 </style>
