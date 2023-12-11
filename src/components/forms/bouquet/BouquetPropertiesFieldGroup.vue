@@ -1,13 +1,13 @@
 <template>
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="topic_name">Sujet du bouquet</label>
+    <label class="fr-label" for="bouquet_name">Sujet du bouquet</label>
     <input
       class="fr-input"
       type="text"
-      id="topic_name"
+      id="bouquet_name"
       placeholder="Mon bouquet"
-      :value="topicName"
-      @input="$emit('update:topicName', $event.target.value)"
+      :value="bouquetName"
+      @input="$emit('update:bouquetName', $event.target.value)"
     />
   </div>
   <div class="fr-mt-1w">
@@ -24,10 +24,10 @@
     <textarea
       class="fr-input"
       type="text"
-      id="topic_description"
+      id="bouquet_description"
       placeholder="Ma description"
-      :value="topicDescription"
-      @input="$emit('update:topicDescription', $event.target.value)"
+      :value="bouquetDescription"
+      @input="$emit('update:bouquetDescription', $event.target.value)"
     />
   </div>
 </template>
@@ -36,17 +36,21 @@
 import Tooltip from '../../Tooltip.vue'
 
 export default {
-  name: 'TopicPropertiesFieldGroup',
+  name: 'BouquetPropertiesFieldGroup',
   components: {
     Tooltip: Tooltip
   },
-  emits: ['updateValidation', 'update:topicDescription', 'update:topicName'],
+  emits: [
+    'updateValidation',
+    'update:bouquetDescription',
+    'update:bouquetName'
+  ],
   props: {
-    topicName: {
+    bouquetName: {
       type: String,
       default: ''
     },
-    topicDescription: {
+    bouquetDescription: {
       type: String,
       default: ''
     }
@@ -58,7 +62,7 @@ export default {
   },
   computed: {
     isValid() {
-      return this.topicName !== '' && this.topicDescription !== ''
+      return this.bouquetName !== '' && this.bouquetDescription !== ''
     },
     errorMsg() {
       return ''

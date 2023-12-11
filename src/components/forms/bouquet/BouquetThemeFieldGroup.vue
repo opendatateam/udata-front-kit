@@ -45,7 +45,7 @@ import { ConfigUtils } from '@/config'
 import { NoOptionSelected, type SelectOption, type Theme } from '@/model'
 
 export default {
-  name: 'TopicThemeFieldGroup',
+  name: 'BouquetThemeFieldGroup',
   props: {
     theme: {
       type: String,

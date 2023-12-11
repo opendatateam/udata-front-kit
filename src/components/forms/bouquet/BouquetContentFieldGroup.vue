@@ -19,7 +19,7 @@ import type { DatasetProperties } from '@/model'
 import { getDatasetListTitle } from '../../DatasetList.vue'
 
 export default {
-  name: 'TopicContentFieldGroup',
+  name: 'BouquetContentFieldGroup',
   components: {
     DatasetPropertiesForm: DatasetPropertiesForm,
     DatasetList: DatasetList

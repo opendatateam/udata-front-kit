@@ -40,7 +40,7 @@ interface BreadcrumbItem {
   to?: string
 }
 
-interface Topic {
+interface Bouquet {
   name: string
   description: string
   theme: string | undefined
@@ -48,7 +48,7 @@ interface Topic {
   datasetsProperties: DatasetProperties[]
 }
 
-interface TopicCreationData {
+interface BouquetCreationData {
   name: string
   description: string
   datasets: string[] // list of ids (for the dataset which have one)
@@ -64,7 +64,7 @@ interface TopicExtras {
   ['ecospheres:datasets_properties']: DatasetProperties[]
 }
 
-interface BetaTopic {
+interface Topic {
   name: string
   description: string
   created_at: string
@@ -99,8 +99,8 @@ export type {
   Subtheme,
   SelectOption,
   BreadcrumbItem,
-  BetaTopic,
   Topic,
+  Bouquet,
   DatasetProperties,
-  TopicCreationData
+  BouquetCreationData
 }

@@ -7,27 +7,27 @@
       <div class="fr-mt-4v">
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
       </div>
-      <TopicPropertiesFieldGroup
+      <BouquetPropertiesFieldGroup
         v-if="currentStep == 1"
         @updateValidation="(isValid: boolean) => updateStepValidation(1, isValid)"
-        v-model:topicName="topic.name"
-        v-model:topicDescription="topic.description"
+        v-model:bouquetName="bouquet.name"
+        v-model:bouquetDescription="bouquet.description"
       />
-      <TopicThemeFieldGroup
+      <BouquetThemeFieldGroup
         v-if="currentStep == 2"
         @updateValidation="(isValid: boolean) => updateStepValidation(2, isValid)"
-        v-model:theme="topic.theme"
-        v-model:subtheme="topic.subtheme"
+        v-model:theme="bouquet.theme"
+        v-model:subtheme="bouquet.subtheme"
       />
-      <TopicContentFieldGroup
+      <BouquetContentFieldGroup
         v-if="currentStep == 3"
         @updateValidation="(isValid: boolean) => updateStepValidation(3, isValid)"
-        :currentDatasets="topic.datasetsProperties"
+        :currentDatasets="bouquet.datasetsProperties"
       />
-      <TopicFormRecap
+      <BouquetFormRecap
         v-if="currentStep == 4"
-        @updateStep="(step) => (currentStep = step)"
-        :topic="topic"
+        @updateStep="(step: number) => (currentStep = step)"
+        :bouquet="bouquet"
       />
       <div class="fit fr-mt-3w fr-ml-auto">
         <DsfrButton
@@ -56,16 +56,16 @@
 </template>
 
 <script lang="ts">
-import TopicContentFieldGroup from '@/components/forms/topic/TopicContentFieldGroup.vue'
-import TopicFormRecap from '@/components/forms/topic/TopicFormRecap.vue'
-import TopicPropertiesFieldGroup from '@/components/forms/topic/TopicPropertiesFieldGroup.vue'
-import TopicThemeFieldGroup from '@/components/forms/topic/TopicThemeFieldGroup.vue'
+import BouquetContentFieldGroup from '@/components/forms/bouquet/BouquetContentFieldGroup.vue'
+import BouquetFormRecap from '@/components/forms/bouquet/BouquetFormRecap.vue'
+import BouquetPropertiesFieldGroup from '@/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
+import BouquetThemeFieldGroup from '@/components/forms/bouquet/BouquetThemeFieldGroup.vue'
 import config from '@/config'
-import type { Topic, TopicCreationData } from '@/model'
+import type { Bouquet, BouquetCreationData } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
 
-interface TopicFormData {
-  topic: Partial<Topic>
+interface BouquetFormData {
+  bouquet: Partial<Bouquet>
   currentStep: number
   stepsValidation: [boolean, boolean, boolean]
   errorMsg: string | null
@@ -74,14 +74,14 @@ interface TopicFormData {
 export default {
   name: 'BouquetEditView',
   components: {
-    TopicPropertiesFieldGroup: TopicPropertiesFieldGroup,
-    TopicThemeFieldGroup: TopicThemeFieldGroup,
-    TopicContentFieldGroup: TopicContentFieldGroup,
-    TopicFormRecap: TopicFormRecap
+    BouquetPropertiesFieldGroup: BouquetPropertiesFieldGroup,
+    BouquetThemeFieldGroup: BouquetThemeFieldGroup,
+    BouquetContentFieldGroup: BouquetContentFieldGroup,
+    BouquetFormRecap: BouquetFormRecap
   },
-  data(): TopicFormData {
+  data(): BouquetFormData {
     return {
-      topic: {
+      bouquet: {
         datasetsProperties: []
       },
       currentStep: 1,
@@ -98,27 +98,27 @@ export default {
         'Récapitulatif du bouquet de données'
       ]
     },
-    topicCreationData(): TopicCreationData {
+    bouquetCreationData(): BouquetCreationData {
       return {
-        name: this.topic.name,
-        description: this.topic.description,
+        name: this.bouquet.name,
+        description: this.bouquet.description,
         datasets: this.datasetsId,
         tags: [config.universe.name],
         extras: {
           [`${config.universe.name}:informations`]: [
             {
-              theme: this.topic.theme,
-              subtheme: this.topic.subtheme
+              theme: this.bouquet.theme,
+              subtheme: this.bouquet.subtheme
             }
           ],
           [`${config.universe.name}:datasets_properties`]:
-            this.topic.datasetsProperties
+            this.bouquet.datasetsProperties
         }
       }
     },
     datasetsId(): string[] {
       const datasetsId: string[] = []
-      for (const dataset of this.topic.datasetsProperties) {
+      for (const dataset of this.bouquet.datasetsProperties) {
         if (dataset.id !== null) {
           datasetsId.push(dataset.id)
         }
@@ -146,7 +146,7 @@ export default {
       }
     },
     async createTopic() {
-      let response = await useTopicStore().create(this.topicCreationData)
+      let response = await useTopicStore().create(this.bouquetCreationData)
       if (response.status && response.status === 400) {
         this.errorMsg = 'Merci de bien remplir les champs'
       } else {
