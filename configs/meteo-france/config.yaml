@@ -56,7 +56,7 @@ website:
       id: 'about'
       linkPage: '/about'
       type: 'page'
-      url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/7afdf99a23f45041e7e9eb391b65afeb6025e1cd/gistfile1.txt'
+      url: '/meteo-france/pages/about.md'
       display_menu: true
     - name: 'Accessibilité'
       id: 'accessibility'
