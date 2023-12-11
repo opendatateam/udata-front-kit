@@ -15,6 +15,12 @@ const datasetStore = useDatasetStore()
 
 const org = computed(() => orgStore.get(organizationId) || {})
 
+const links = computed(() => [
+  { to: '/', text: 'Accueil' },
+  { to: '/organizations', text: 'Organisations' },
+  { text: org.value.title }
+])
+
 const currentPage = ref(1)
 const pages = ref([])
 const datasets = ref({})
@@ -51,6 +57,9 @@ watchEffect(() => {
 </script>
 
 <template>
+  <div class="fr-container">
+    <DsfrBreadcrumb :links="links" />
+  </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>{{ org.name }}</h1>
     <div v-html="description"></div>

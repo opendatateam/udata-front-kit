@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import config from '@/config'
@@ -13,6 +13,11 @@ const $loading = useLoading()
 const currentPage = ref(1)
 const pages = store.getPagination()
 const organizations = ref([])
+
+const links = computed(() => [
+  { to: '/', text: 'Accueil' },
+  { text: 'Organisations' }
+])
 
 const title = config.website.title
 
@@ -29,6 +34,9 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="fr-container">
+    <DsfrBreadcrumb :links="links" />
+  </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>Organisations</h1>
     <p>Parcourir toutes les organisations présentes sur {{ title }}.</p>
