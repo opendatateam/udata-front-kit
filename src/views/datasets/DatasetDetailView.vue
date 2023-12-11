@@ -155,6 +155,18 @@ const getType = (id) => {
   return type.label
 }
 
+const discussionWellTitle = computed(() =>
+  showDiscussions ? 'Participer aux discussions' : 'Voir les discussions'
+)
+const discussionWellDescription = computed(() =>
+  showDiscussions
+    ? 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour participer aux discussions.'
+    : 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
+)
+
+const openDataGouvDiscussions = () =>
+  window.open(dataset.value.page + '#/discussions', 'datagouv-discussion')
+
 // launch reuses and discussions fetch as soon as we have the technical id
 watchEffect(async () => {
   if (!dataset.value.id) return
@@ -304,18 +316,20 @@ watchEffect(async () => {
         :selected="selectedTabIndex === 2"
       >
         <Well color="blue-cumulus" weight="regular">
-          <div class="fr-grid-row fr-grid-row--gutters">
-            <div class="fr-col-12 fr-col-md-6">
-              <p class="fr-text--bold">Voir les discussions</p>
-              <p class="fr-text--alt fr-text--sm">
-                Vous avez une question sur ce jeu de données ? Rendez-vous sur
-                data.gouv.fr pour voir les discussions.
+          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+            <div class="fr-col-12 fr-col-lg-8">
+              <p class="fr-text--bold fr-mb-0">{{ discussionWellTitle }}</p>
+              <p class="fr-text--alt fr-text--sm f-italic fr-m-0">
+                {{ discussionWellDescription }}
               </p>
             </div>
-            <div class="fr-col-12 fr-col-md-6">
-              <a href="data.gouv.fr" class="fr-btn" target="_blank">
-                Voir les discussions sur data.gouv.fr
-              </a>
+            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+              <DsfrButton
+                label="Voir les discussions sur data.gouv.fr"
+                icon="ri-external-link-line"
+                :icon-right="true"
+                @click="openDataGouvDiscussions"
+              />
             </div>
           </div>
         </Well>
