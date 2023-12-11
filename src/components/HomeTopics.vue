@@ -51,7 +51,7 @@ const goToPage = (page) => {
   border: 1px solid #ebebeb;
   padding: 20px;
   text-align: left;
-  min-height: 180px;
+  min-height: 190px;
   border-bottom: 3px solid #3557a2;
 }
 .topic-title {
