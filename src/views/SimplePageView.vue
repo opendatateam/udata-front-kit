@@ -21,7 +21,6 @@ const links = computed(() => [{ to: '/', text: 'Accueil' }, { text: title }])
 watchEffect(async () => {
   if (!props.url) return
   store.getPageFromUrl(props.url)
-  console.log(title)
 })
 </script>
 
