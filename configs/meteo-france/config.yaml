@@ -25,6 +25,26 @@ website:
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
+
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
+  footer_external_links:
+    - name: 'data.gouv.fr'
+      url: 'https://www.data.gouv.fr'
+    - name: 'meteo.fr'
+      url: 'https://www.meteo.fr'
+    - name: 'gouvernement.fr'
+      url: 'https://www.gouvernement.fr'
+    - name: 'service-public.fr'
+      url: 'https://www.service-public.fr'
+  footer_mandatory_links:
+    - name: 'Licences'
+      url: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - name: "Conditions générales d'utilisation"
+      url: 'https://www.data.gouv.fr/fr/terms/'
+    - name: 'Politique de confidentialité'
+      url: 'https://www.data.gouv.fr/fr/suivi/'
+    - name: 'Accessibilité : non conforme'
+      url: '/accessibility'
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   homepage_title: 'La météo et le climat en Open Data'
   homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
@@ -56,8 +76,14 @@ website:
       id: 'about'
       linkPage: '/about'
       type: 'page'
-      url: 'https://gist.githubusercontent.com/geoffreyaldebert/4e95103bff159c578db3941619fb9cfd/raw/7afdf99a23f45041e7e9eb391b65afeb6025e1cd/gistfile1.txt'
+      url: '/meteo-france/pages/about.md'
       display_menu: true
+    - name: 'Accessibilité'
+      id: 'accessibility'
+      linkPage: '/accessibility'
+      type: 'page'
+      display_menu: false
+      url: '/meteo-france/pages/accessibility.md'
   # img should be square
   home_buttons:
   show_topic_charts: true
