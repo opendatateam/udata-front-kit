@@ -1,5 +1,5 @@
 {
-  "Données climatiques de base": {
+  "Données climatologiques de base": {
     "Données décadaires": {
       "prod": "6569b4a48a4161faec6b2779",
       "dev": "653a68f2c52ecb6d2e96fe3e",
@@ -43,7 +43,7 @@
       "periode": true
     }
   },
-  "Données climatiques de référence pour le changement climatique": {
+  "Données climatologiques de référence pour le changement climatique": {
     "Données SQR": {
       "prod": "6569b00fe24fc9e1e482f74e",
       "dev": "653a6afa18f9f98d2ffdadee",

@@ -38,20 +38,28 @@ website:
     display: false
     name:
     link:
+  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'écologie."
+  footer_external_links:
+    - name: 'data.gouv.fr'
+      url: 'https://www.data.gouv.fr'
+    - name: 'gouvernement.fr'
+      url: 'https://www.gouvernement.fr'
+  footer_mandatory_links:
+    - name: 'Licences'
+      url: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - name: "Conditions générales d'utilisation"
+      url: 'https://www.data.gouv.fr/fr/terms/'
+    - name: 'Politique de confidentialité'
+      url: 'https://www.data.gouv.fr/fr/suivi/'
   menu_items:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'
       type: 'component'
       display_menu: true
-    - name: 'Jeux de données'
+    - name: 'Données'
       id: 'datasets'
       linkPage: '/datasets'
-      type: 'component'
-      display_menu: true
-    - name: 'Organisations'
-      id: 'organizations'
-      linkPage: '/organizations'
       type: 'component'
       display_menu: true
     - name: 'Bouquets'
@@ -81,8 +89,10 @@ website:
     - '#D6E3A1'
     - '#BFDCB7'
     - '#A7D4CD'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId:
 
-# For step 2 of bouquet creation
 themes:
   - name: Se loger
     color: 043574
@@ -131,6 +141,7 @@ themes:
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
 
+# FIXME: Obsolete. Kept as a reference used to populate our universe.
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

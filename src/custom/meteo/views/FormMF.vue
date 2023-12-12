@@ -11,6 +11,10 @@ const selectItems = ref([])
 
 let selectedDataPack = ref(null)
 const optionsDataPack = ref(Object.keys(datasetsIds))
+const datasetTitle = ref(null)
+const datasetSlug = ref(null)
+
+const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
 
 const onSelectDataPack = (pack) => {
   selectedDataset.value = null
@@ -50,6 +54,8 @@ const onSelectDataset = (dataset) => {
       return response.json()
     })
     .then((data) => {
+      datasetTitle.value = data['title']
+      datasetSlug.value = data['slug']
       datasetResources = data['resources']
       if (selectedDataset.value['departement']) {
         showDep.value = true
@@ -124,6 +130,9 @@ const showLoader = ref(false)
 </script>
 
 <template>
+  <div class="fr-container">
+    <DsfrBreadcrumb :links="links" />
+  </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <h1>Recherche guidée</h1>
     <p>Utiliser ce formulaire pour trouver un fichier en particulier.</p>
@@ -172,7 +181,7 @@ const showLoader = ref(false)
     </div>
 
     <div class="select-classic" v-if="selectedDataset && showIndicateur">
-      <label>Quelle indicateur ?</label>
+      <label>Quel indicateur ?</label>
       <select class="fr-select" @change="onSelectIndicateur($event)">
         <option hidden>Choisir une option</option>
         <option
@@ -190,14 +199,9 @@ const showLoader = ref(false)
       <h3>Téléchargez les données</h3>
       Basé sur vos filtres, les fichiers correspondants sont présentés
       ci-dessous. Si vous souhaitez consulter le jeu de données complet,
-      <a
-        :href="
-          'https://' +
-          config.website.title +
-          '/datasets/' +
-          selectedDataset[config.website.env]
-        "
-        >cliquez ici</a
+      <a :href="'https://' + config.website.title + '/datasets/' + datasetSlug"
+        >{{ datasetTitle }}
+        <span class="fr-icon-external-link-line" aria-hidden="true"></span></a
       >.
       <br />
       <br />

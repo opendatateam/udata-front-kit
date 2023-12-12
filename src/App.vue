@@ -5,6 +5,7 @@ import { RouterView, useRouter } from 'vue-router'
 import config from '@/config'
 
 import Navigation from './components/Navigation.vue'
+import Footer from './components/footer/Footer.vue'
 import Header from './components/header/Header.vue'
 import UserAPI from './services/api/resources/UserAPI'
 import { useUserStore } from './store/UserStore'
@@ -76,6 +77,9 @@ const logoService = ref(config.website.service_logo)
 const showBadge = ref(config.website.badge.display)
 const badgeText = ref(config.website.badge.text)
 const badgeStyle = ref(config.website.badge.style)
+const footerPhrase = ref(config.website.footer_phrase)
+const footerExternalLinks = ref(config.website.footer_external_links)
+const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
 </script>
 
 <template>
@@ -102,7 +106,15 @@ const badgeStyle = ref(config.website.badge.style)
 
   <RouterView />
 
-  <DsfrFooter class="fr-mt-8w" :mandatory-links="[]"></DsfrFooter>
+  <Footer
+    :logo-text="logotext"
+    :operator-img-src="logoOperator"
+    :operator-img-style="{ height: '80px', width: '80px' }"
+    :service-logo-src="logoService"
+    :footer-phrase="footerPhrase"
+    :footer-external-links="footerExternalLinks"
+    :footer-mandatory-links="footerMandatoryLinks"
+  />
 </template>
 
 <!-- global styles -->

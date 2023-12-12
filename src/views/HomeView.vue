@@ -51,8 +51,10 @@ const goToPage = (page) => {
     "
   >
     <div class="fr-container">
-      <h1 class="main-title">{{ homepageTitle }}</h1>
-      <div class="subtitle fr-mt-4w fr-mb-4w">
+      <h1 class="main-title fr-mb-3v">
+        {{ homepageTitle }}
+      </h1>
+      <div class="subtitle fr-text--alt fr-mb-4w">
         <span v-html="markdown.render(homepageSubTitle)" />
       </div>
       <div class="search-bar" v-if="searchConfig.display">
@@ -108,7 +110,7 @@ const goToPage = (page) => {
     margin-right: 20px;
   }
 }
-@media (max-width: 1180px) {
+@media (max-width: 1248px) {
   .or-sep {
     width: 100%;
     margin-top: 10px;
@@ -158,7 +160,7 @@ const goToPage = (page) => {
   height: 40px;
 }
 .button-search-guided {
-  background-color: #060091;
+  background-color: #3557a2;
   padding-left: 10px;
   padding-right: 10px;
   color: white;
@@ -170,6 +172,7 @@ const goToPage = (page) => {
 }
 .button-search-guided:hover {
   cursor: pointer;
+  background-color: #5982e0;
 }
 .or-sep {
   text-align: 'center';

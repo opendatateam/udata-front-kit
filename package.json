@@ -19,11 +19,10 @@
   },
   "dependencies": {
     "@gouvminint/vue-dsfr": "^5.3.1",
-    "@etalab/data.gouv.fr-components": "^1.11.1",
+    "@etalab/data.gouv.fr-components": "^1.11.2",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",
-    "filesize": "^10.0.7",
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.2",
     "marked": "^5.1.0",
@@ -33,6 +32,7 @@
     "vue": "^3.3.4",
     "vue-chartjs": "^5.2.0",
     "vue-loading-overlay": "^6.0.3",
+    "vue-matomo": "^4.2.0",
     "vue-router": "^4.2.2",
     "vue3-text-clamp": "^0.1.1",
     "vue3-toastify": "^0.1.11"
