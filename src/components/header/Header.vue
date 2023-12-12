@@ -64,15 +64,6 @@ onUnmounted(() => {
 
 const searchModalOpened = ref(false)
 const headerModalOpened = ref(false)
-const headerButton = {
-  display: config.website.header_button.display,
-  label: config.website.header_button.label,
-  link: config.website.header_button.link
-}
-
-const goToButtonLink = () => {
-  window.open(headerButton.link)
-}
 
 const hideModal = () => {
   headerModalOpened.value = false
@@ -214,14 +205,6 @@ defineEmits<{
               </nav>
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
-              <DsfrButton
-                v-if="headerButton.display"
-                class="fr-ml-auto fr-mb-4v"
-                :label="headerButton.label"
-                :secondary="true"
-                icon="ri-lightbulb-line"
-                @click.prevent="goToButtonLink()"
-              />
               <DsfrSearchBar
                 :label="searchLabel"
                 :model-value="modelValue"
