@@ -538,5 +538,5 @@ ul.es__comment__container {
   border-left: 2px solid #dddddd;
   padding-left: 10px;
   margin-bottom: 10px;
-
+}
 </style>
