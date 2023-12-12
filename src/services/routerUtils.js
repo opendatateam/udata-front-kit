@@ -11,6 +11,7 @@ import DatasetDetailView from '../views/datasets/DatasetDetailView.vue'
 import DatasetsListView from '../views/datasets/DatasetsListView.vue'
 import OrganizationDetailView from '../views/organizations/OrganizationDetailView.vue'
 import OrganizationsListView from '../views/organizations/OrganizationsListView.vue'
+import FormMF from '../custom/meteo/views/FormMF.vue'
 
 export default class RouterFetch {
   generateRouteItems() {
@@ -86,7 +87,7 @@ export default class RouterFetch {
         items.push({
           path: item.linkPage,
           name: item.id,
-          component: () => import(item.path /* @vite-ignore */)
+          component: FormMF
         })
       }
     })
