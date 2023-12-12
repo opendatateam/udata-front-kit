@@ -69,8 +69,7 @@ const tabs = computed(() => {
   const _tabs = [
     { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
     { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
-    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
-    { title: 'Qualité', tabId: 'tab-3', panelId: 'tab-content-3' }
+    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' }
   ]
   if (config.website.show_dataset_metadata_panel) {
     _tabs.push({
@@ -370,118 +369,69 @@ watch(
           <div v-if="!discussions.data?.length">
             Pas de discussion pour ce jeu de données.
           </div>
-          <DsfrAccordionsGroup>
-            <li v-for="discussion in discussions.data">
-              <DsfrAccordion
-                :id="discussion.id"
-                :title="discussion.title"
-                :expanded-id="expandedDiscussion"
-                @expand="(id) => (expandedDiscussion = id)"
-              >
-                <template #default>
-                  <ul class="es__comment__container">
-                    <li v-for="comment in discussion.discussion">
-                      <div class="es__comment__metadata fr-mb-1v">
-                        <span class="es__comment__author"
-                          >{{ comment.posted_by.first_name }}
-                          {{ comment.posted_by.last_name }}</span
-                        >
-                        <span class="es__comment__date fr-ml-1v"
-                          >le {{ formatDate(comment.posted_on) }}</span
-                        >
-                      </div>
-                      <div class="es__comment__content">
-                        {{ comment.content }}
-                      </div>
-                    </li>
-                  </ul>
-                </template>
-              </DsfrAccordion>
-            </li>
-          </DsfrAccordionsGroup>
-          <DsfrPagination
-            v-if="discussionsPages.length"
-            class="fr-mt-2w"
-            :current-page="discussionsPage - 1"
-            :pages="discussionsPages"
-            @update:current-page="(p) => (discussionsPage = p + 1)"
-          />
-        </template>
-      </DsfrTabContent>
 
-      <!-- Qualité -->
-      <DsfrTabContent
-        panel-id="tab-content-3"
-        tab-id="tab-3"
-        :selected="selectedTabIndex === 3"
-      >
-        <p>
-          Analyse de la qualité des métadonnées récupérées et exposées par
-          data.gouv.fr.
-        </p>
-        <ul v-if="dataset.quality" class="es__quality">
-          <li>
-            <span v-if="dataset.quality.dataset_description_quality">
-              <VIcon name="ri-check-line" /> Description des données renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Description des données non
-              renseignée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.resources_documentation">
-              <VIcon name="ri-check-line" /> Ressources documentées
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Ressources non documentées
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.license">
-              <VIcon name="ri-check-line" /> Licence renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Licence non renseignée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.update_fulfilled_in_time">
-              <VIcon name="ri-check-line" /> Fréquence de mise à jour respectée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Fréquence de mise à jour non
-              respectée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.has_open_format">
-              <VIcon name="ri-check-line" /> Formats de fichiers standards
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Formats de fichiers non
-              standards
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.temporal_coverage">
-              <VIcon name="ri-check-line" /> Couverture temporelle renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Couverture temporelle non
-              renseignée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.spatial">
-              <VIcon name="ri-check-line" /> Couverture spatiale renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Couverture spatiale non
-              renseignée
-            </span>
-          </li>
-        </ul>
+          <div>
+            <div class="discussion" v-for="discussion in discussions.data">
+              <div class="discussion-title">{{ discussion.title }}</div>
+              <div class="discussion-subtitle">
+                <div class="user-avatar">
+                  <img
+                    style="border-radius: 50%"
+                    :src="
+                      config.datagouvfr.base_url +
+                      '/api/1/avatars/' +
+                      discussion.discussion[0].posted_by.id +
+                      '/20'
+                    "
+                    width="20"
+                  />
+                </div>
+                <div class="user-name">
+                  {{ discussion.discussion[0].posted_by.first_name }}
+                  {{ discussion.discussion[0].posted_by.last_name }}
+                </div>
+                <div class="date-comment">
+                  - le {{ formatDate(discussion.discussion[0].posted_on) }}
+                </div>
+              </div>
+              <div class="comment">
+                {{ discussion.discussion[0].content }}
+              </div>
+              <span v-if="discussion.discussion.length > 1">
+                <div
+                  class="secondary-comment"
+                  v-for="comment in discussion.discussion.slice(1)"
+                  v-bind:key="comment.content"
+                >
+                  <div class="secondary-comment-content">
+                    {{ comment.content }}
+                  </div>
+                  <div class="discussion-subtitle">
+                    <div class="user-avatar">
+                      <img
+                        style="border-radius: 50%"
+                        :src="
+                          config.datagouvfr.base_url +
+                          '/api/1/avatars/' +
+                          comment.posted_by.id +
+                          '/20'
+                        "
+                        width="20"
+                      />
+                    </div>
+                    <div class="user-name">
+                      {{ comment.posted_by.first_name }}
+                      {{ comment.posted_by.last_name }}
+                    </div>
+                    <div class="comment">
+                      - le {{ formatDate(comment.posted_on) }}
+                    </div>
+                  </div>
+                </div>
+              </span>
+            </div>
+          </div>
+        </template>
       </DsfrTabContent>
 
       <!-- Métadonnées -->
@@ -543,4 +493,50 @@ ul.es__comment__container {
 .search-bar {
   margin-top: 15px;
 }
+
+.discussion {
+  margin-bottom: 50px;
+}
+
+.discussion-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.discussion-subtitle {
+  display: flex;
+}
+
+.user-avatar {
+  margin-right: 5px;
+}
+
+.user-name {
+  color: #3557a2;
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.comment-date {
+  color: #777777;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.comment {
+  font-size: 14px;
+}
+
+.secondary-comment {
+  margin-top: 10px;
+  padding-left: 10px;
+}
+
+.secondary-comment-content {
+  font-size: 14px;
+  border-left: 2px solid #dddddd;
+  padding-left: 10px;
+  margin-bottom: 10px;
+
 </style>

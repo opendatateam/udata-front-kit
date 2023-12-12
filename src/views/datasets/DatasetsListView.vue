@@ -97,29 +97,25 @@ watchEffect(() => {
     <div v-if="query && datasets?.length === 0" class="fr-mb-4w">
       Aucun résultat pour cette recherche.
     </div>
-    <div class="fr-grid-row">
-      <div v-if="topicsConf" class="fr-col-md-3 fr-pr-md-2w fr-mb-2w">
-        <DsfrSelect
-          :model-value="selectedTopicId"
-          :options="topicOptions"
-          default-unselected-text="Toutes les données"
-          @update:modelValue="onSelectTopic"
-        >
-          <template #label>Thématiques</template>
-        </DsfrSelect>
-      </div>
-      <div
-        class="datagouv-components"
-        :class="[topicsConf ? 'fr-col-md-9' : 'fr-col-md-12']"
+
+    <div v-if="topicsConf" class="fr-col-md-12 fr-pr-md-2w fr-mb-2w">
+      <DsfrSelect
+        :model-value="selectedTopicId"
+        :options="topicOptions"
+        default-unselected-text="Toutes les données"
+        @update:modelValue="onSelectTopic"
       >
-        <DatasetCard
-          v-for="(d, index) in datasets"
-          :style="zIndex(index)"
-          :dataset="d"
-          :datasetUrl="getDatasetPage(d.id)"
-          :organizationUrl="getOrganizationPage(d.organization.id)"
-        />
-      </div>
+        <template #label>Thématiques</template>
+      </DsfrSelect>
+    </div>
+    <div class="datagouv-components fr-col-md-12">
+      <DatasetCard
+        v-for="(d, index) in datasets"
+        :style="zIndex(index)"
+        :dataset="d"
+        :datasetUrl="getDatasetPage(d.id)"
+        :organizationUrl="getOrganizationPage(d.organization.id)"
+      />
     </div>
   </div>
   <DsfrPagination

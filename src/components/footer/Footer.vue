@@ -9,6 +9,7 @@ import {
 } from 'vue'
 
 type DsfrFooterProps = {
+  operatorImgAlt?: string
   serviceLogoSrc?: string
   logoText?: string | string[]
   operatorImgSrc?: string
@@ -20,7 +21,7 @@ type DsfrFooterProps = {
 
 const props = withDefaults(defineProps<DsfrFooterProps>(), {
   logoText: () => 'Gouvernement',
-  operatorImgAlt: '',
+  operatorImgAlt: 'logo opérateur',
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
   serviceLogoSrc: '',
@@ -138,7 +139,7 @@ const goToPage = (page) => {
 
 footer {
   margin-top: 100px;
-  border-top: 2px solid #050091;
+  border-top: 2px solid #3557a2;
   padding-top: 30px;
 }
 .footer-logo {
