@@ -99,8 +99,8 @@ const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
     @search="doSearch"
     @update:modelValue="updateQuery"
   >
-    <template #mainnav>
-      <Navigation />
+    <template #mainnav="{ hidemodal }">
+      <Navigation :on-click="hidemodal" />
     </template>
   </Header>
 
