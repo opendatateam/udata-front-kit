@@ -1,124 +1,185 @@
 <script lang="ts" setup>
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  ref,
-  useSlots,
-  type StyleValue
-} from 'vue'
+import { computed, type StyleValue } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
+
+export type DsfrFooterLinkProps =
+  | {
+      label: string
+      to: string | RouteLocationRaw
+    }
+  | {
+      label: string
+      href: string
+    }
 
 type DsfrFooterProps = {
-  operatorImgAlt?: string
-  serviceLogoSrc?: string
+  homeLink?: RouteLocationRaw
   logoText?: string | string[]
-  operatorImgSrc?: string
+  descText?: string
+  mandatoryLinks?: DsfrFooterLinkProps[]
+  ecosystemLinks?: { label: string; href: string }[]
+  operatorLinkText?: string
+  operatorTo?: RouteLocationRaw | undefined
   operatorImgStyle?: StyleValue
-  footerPhrase: string
-  footerExternalLinks: Array<{ name: string; url: string }>
-  footerMandatoryLinks: Array<{ name: string; url: string }>
+  operatorImgSrc?: string
+  operatorImgAlt?: string
+  licenceTo?: string
+  licenceLinkProps?: { href: string } | { to: RouteLocationRaw | undefined }
+  licenceText?: string
+  licenceName?: string
+  serviceLogoSrc?: string
+  serviceTitle?: string
 }
 
 const props = withDefaults(defineProps<DsfrFooterProps>(), {
-  logoText: () => 'Gouvernement',
-  operatorImgAlt: 'logo opérateur',
-  operatorImgSrc: '',
-  operatorImgStyle: () => ({}),
-  serviceLogoSrc: '',
-  footerPhrase: '',
-  footerExternalLinks: [],
-  footerMandatoryLinks: []
+  homeLink: '/',
+  logoText: () => ['République', 'Française'],
+  descText: undefined,
+  mandatoryLinks: () => [],
+  ecosystemLinks: () => [
+    {
+      label: 'legifrance.gouv.fr',
+      href: 'https://legifrance.gouv.fr'
+    },
+    {
+      label: 'gouvernement.fr',
+      href: 'https://gouvernement.fr'
+    },
+    {
+      label: 'service-public.fr',
+      href: 'https://service-public.fr'
+    },
+    {
+      label: 'data.gouv.fr',
+      href: 'https://data.gouv.fr'
+    }
+  ],
+  operatorLinkText: 'Revenir à l’accueil',
+  operatorTo: '/',
+  operatorImgStyle: undefined,
+  operatorImgSrc: undefined,
+  operatorImgAlt: '',
+  licenceText: 'Sauf mention contraire, tous les textes de ce site sont sous',
+  licenceTo:
+    'https://github.com/etalab/licence-ouverte/blob/master/LO.md#licence-ouverte-20open-licence-20',
+  licenceLinkProps: undefined,
+  licenceName: 'licence etalab-2.0',
+  serviceLogoSrc: undefined,
+  serviceTitle: ''
 })
 
-const slots = useSlots()
-const isWithSlotOperator = computed(
-  () => Boolean(slots.operator?.().length) || !!props.operatorImgSrc
-)
-
-const goToPage = (page) => {
-  window.location.href = page
+const isExternalLink = (
+  to: DsfrFooterLinkProps
+): to is {
+  label: string
+  href: string
+} => {
+  return to && 'href' in to
 }
+
+const aLicenceHref = computed(() => {
+  return props.licenceTo.startsWith('http') ? props.licenceTo : ''
+})
+const routerLinkLicenceTo = computed(() => {
+  return aLicenceHref.value ? '' : props.licenceTo
+})
 </script>
 
 <template>
-  <footer>
+  <footer id="footer" class="fr-footer" role="contentinfo">
     <div class="fr-container">
-      <div class="footer-top">
-        <div>
-          <div class="footer-logo">
-            <div class="footer-logo-child">
-              <DsfrLogo :logo-text="logoText" data-testid="header-logo" />
-            </div>
-            <div class="footer-logo-child" v-if="isWithSlotOperator">
-              <!-- @slot Slot nommé operator pour le logo opérateur. Sera dans `<div class="fr-header__operator">` -->
-              <slot name="operator">
-                <img
-                  v-if="operatorImgSrc"
-                  class="fr-responsive-img"
-                  :src="operatorImgSrc"
-                  :alt="operatorImgAlt"
-                  :style="operatorImgStyle"
-                />
-              </slot>
-            </div>
-            <div class="footer-logo-child">
-              <img
-                class="fr-responsive-img"
-                :src="serviceLogoSrc"
-                alt=""
-                style="
-                  height: 35px;
-                  vertical-align: middle;
-                  margin-right: 0.75em;
-                  width: auto;
-                "
-              />
-            </div>
-          </div>
+      <div class="fr-footer__body">
+        <div class="fr-footer__brand fr-enlarge-link">
+          <RouterLink :to="homeLink" title="Retour à l’accueil">
+            <DsfrLogo :logo-text="logoText" data-testid="header-logo" />
+          </RouterLink>
+
+          <RouterLink
+            v-if="operatorImgSrc"
+            class="fr-footer__brand-link"
+            :to="operatorTo"
+            :title="operatorLinkText"
+          >
+            <img
+              class="fr-footer__logo fr-responsive-img"
+              :style="[
+                typeof operatorImgStyle === 'string' ? operatorImgStyle : '',
+                {
+                  'margin-left': '0.5px',
+                  padding: '1rem',
+                  ...(typeof operatorImgStyle === 'object'
+                    ? operatorImgStyle
+                    : {}),
+                  'max-width': '12.5rem'
+                }
+              ]"
+              :src="operatorImgSrc"
+              :alt="operatorImgAlt"
+            />
+            <img
+              class="fr-responsive-img"
+              :src="serviceLogoSrc"
+              :alt="serviceTitle"
+            />
+          </RouterLink>
         </div>
-        <div>
-          <div class="footer-phrase-and-links">
-            <div>
-              <p class="footer-phrase">{{ footerPhrase }}</p>
-            </div>
-            <div class="external-links">
-              <div
-                class="external-link"
-                v-for="item in footerExternalLinks"
-                v-bind:key="item.name"
-                @click="goToPage(item.url)"
+        <div class="fr-footer__content">
+          <p class="fr-footer__content-desc">
+            <slot name="description">
+              {{ descText }}
+            </slot>
+          </p>
+          <ul class="fr-footer__content-list">
+            <li
+              class="fr-footer__content-item"
+              v-for="(item, index) in ecosystemLinks"
+              :key="index"
+            >
+              <a
+                class="fr-footer__content-link"
+                :href="item.href"
+                target="_blank"
               >
-                {{ item.name }}
-                <span
-                  class="fr-icon-external-link-line"
-                  aria-hidden="true"
-                ></span>
-              </div>
-            </div>
-          </div>
+                {{ item.label }}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="fr-container">
-        <div class="mandatory-links">
-          <div
-            class="mandatory-link"
-            v-for="item in footerMandatoryLinks"
-            v-bind:key="item.name"
-            @click="goToPage(item.url)"
+      <div class="fr-footer__bottom">
+        <div class="fr-footer__bottom-list">
+          <li
+            class="fr-footer__bottom-item"
+            v-for="(item, index) in mandatoryLinks"
+            :key="index"
           >
-            {{ item.name }}
-          </div>
+            <component
+              :is="isExternalLink(item) ? 'a' : 'RouterLink'"
+              class="fr-footer__bottom-link"
+              :to="isExternalLink(item) ? null : item.to"
+              :href="isExternalLink(item) ? item.href : item.to"
+              :target="isExternalLink(item) ? '_blank' : undefined"
+              rel="noopener noreferrer"
+            >
+              {{ item.label }}
+            </component>
+          </li>
         </div>
-        <br />
-        <div class="bottom-phrase">
-          Sauf mention contraire, tous les contenus de ce site sous sous
-          <a
-            href="https://github.com/etalab/licence-ouverte/blob/master/LO.md#licence-ouverte-20open-licence-20"
-            >Licence Ouverte 2.0</a
-          >
-          <span class="fr-icon-external-link-line" aria-hidden="true"></span>
+        <div class="fr-footer__bottom-copy">
+          <p>
+            {{ licenceText }}
+            <component
+              :is="aLicenceHref ? 'a' : 'RouterLink'"
+              class="fr-link-licence no-content-after"
+              :to="routerLinkLicenceTo"
+              :href="aLicenceHref ? aLicenceHref : routerLinkLicenceTo"
+              :target="aLicenceHref ? '_blank' : undefined"
+              rel="noopener noreferrer"
+              v-bind="licenceLinkProps"
+            >
+              {{ licenceName }}
+            </component>
+          </p>
         </div>
       </div>
     </div>
@@ -144,15 +205,6 @@ footer {
 }
 .footer-logo {
   display: flex;
-}
-
-.footer-logo-child {
-  margin-right: 50px;
-  line-height: 80px;
-}
-
-.footer-phrase {
-  font-size: 14px;
 }
 
 .external-links {
@@ -193,10 +245,5 @@ footer {
 .mandatory-link:hover {
   cursor: pointer;
   text-decoration: underline;
-}
-
-.bottom-phrase {
-  font-size: 12px;
-  padding-bottom: 30px;
 }
 </style>
