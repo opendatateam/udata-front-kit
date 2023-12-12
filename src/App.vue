@@ -18,19 +18,28 @@ const store = useUserStore()
 const isLoggedIn = computed(() => store.$state.isLoggedIn)
 
 const quickLinks = computed(() => {
-  if (!config.website.oauth_option) return
-  return [
-    {
-      label: isLoggedIn.value
-        ? `${store.$state.data.first_name} ${store.$state.data.last_name}`
-        : 'Se connecter',
-      icon: isLoggedIn.value
-        ? 'ri-logout-box-r-line'
-        : 'ri-account-circle-line',
-      to: isLoggedIn.value ? '/logout' : '/login',
-      iconRight: isLoggedIn.value
-    }
-  ]
+  const button = config.website.header_button
+
+  const headerButton = {
+    label: button.label,
+    icon: 'ri-lightbulb-line',
+    href: button.link
+  }
+
+  const userLink = {
+    label: isLoggedIn.value
+      ? `${store.$state.data.first_name} ${store.$state.data.last_name}`
+      : 'Se connecter',
+    icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
+    to: isLoggedIn.value ? '/logout' : '/login',
+    iconRight: isLoggedIn.value
+  }
+
+  if (!config.website.oauth_option) {
+    return button.display ? [headerButton] : []
+  }
+
+  return button.display ? [headerButton, userLink] : [userLink]
 })
 
 const updateQuery = (q) => {

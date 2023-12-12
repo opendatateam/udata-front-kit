@@ -27,6 +27,10 @@ website:
   logo_operator:
   homepage_title: 'Les données de la transition écologique'
   homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
+  header_button:
+    display: false
+    label:
+    link:
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'

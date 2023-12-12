@@ -8,6 +8,8 @@ import {
   type StyleValue
 } from 'vue'
 
+import config from '@/config'
+
 import type { DsfrHeaderMenuLinkProps } from './DSFRHeaderMenuLink.vue'
 
 type DsfrHeaderProps = {
@@ -196,6 +198,7 @@ defineEmits<{
               <nav role="navigation">
                 <DsfrHeaderMenuLinks
                   v-if="!headerModalOpened"
+                  class="fr-pb-4w"
                   :links="quickLinks"
                   :nav-aria-label="quickLinksAriaLabel"
                 />
