@@ -3,6 +3,13 @@ import { computed } from 'vue'
 
 import config from '@/config'
 
+const props = defineProps({
+  onClick: {
+    type: Function,
+    default: () => {}
+  }
+})
+
 const navItems = computed(() => {
   const items = []
   config.website.menu_items.forEach((item) => {
@@ -18,7 +25,15 @@ const navItems = computed(() => {
 </script>
 
 <template>
-  <DsfrNavigation :nav-items="navItems" />
+  <DsfrNavigation>
+    <DsfrNavigationItem v-for="(navItem, idx) of navItems" :key="idx">
+      <DsfrNavigationMenuLink
+        v-if="navItem.to && navItem.text"
+        v-bind="navItem"
+        @toggle-id="onClick"
+      />
+    </DsfrNavigationItem>
+  </DsfrNavigation>
 </template>
 
 <style scoped></style>

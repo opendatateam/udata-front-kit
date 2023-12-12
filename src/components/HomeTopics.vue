@@ -20,18 +20,17 @@ const goToPage = (page) => {
 </script>
 
 <template>
-  <div v-if="topicsData.length">
-    <br /><br />
-    <h2 class="section-title">THÉMATIQUES</h2>
-    <div style="display: flex; flex-flow: row wrap; margin: auto">
-      <div
-        v-for="topic in topicsData"
-        :key="topic.id"
-        class="topic-card"
-        @click="goToPage('/datasets?topic=' + topic.id)"
-      >
-        <div class="topic-title">{{ topic.name }}</div>
-        <div class="topic-description">{{ topic.description }}</div>
+  <div v-if="topicsData.length" class="datagouv-components fr-mt-5w">
+    <h2 class="subtitle subtitle--uppercase text-align-left">Thématiques</h2>
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div v-for="topic in topicsData" class="fr-col-12 fr-col-md-6">
+        <div
+          class="topic-card"
+          @click="goToPage('/datasets?topic=' + topic.id)"
+        >
+          <div class="topic-title">{{ topic.name }}</div>
+          <div class="topic-description">{{ topic.description }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -43,11 +42,7 @@ const goToPage = (page) => {
   font-size: 20px;
 }
 .topic-card {
-  min-width: 500px;
-  width: 45%;
   height: 100%;
-  margin-right: 30px;
-  margin-top: 30px;
   border: 1px solid #ebebeb;
   padding: 20px;
   text-align: left;
