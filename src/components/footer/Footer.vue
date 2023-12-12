@@ -138,7 +138,7 @@ const goToPage = (page) => {
 
 footer {
   margin-top: 100px;
-  border-top: 2px solid #050091;
+  border-top: 2px solid #3557a2;
   padding-top: 30px;
 }
 .footer-logo {

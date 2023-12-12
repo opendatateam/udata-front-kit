@@ -160,7 +160,7 @@ const goToPage = (page) => {
   height: 40px;
 }
 .button-search-guided {
-  background-color: #060091;
+  background-color: #3557a2;
   padding-left: 10px;
   padding-right: 10px;
   color: white;
@@ -172,6 +172,7 @@ const goToPage = (page) => {
 }
 .button-search-guided:hover {
   cursor: pointer;
+  background-color: #5982e0;
 }
 .or-sep {
   text-align: 'center';
