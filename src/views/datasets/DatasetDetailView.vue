@@ -283,9 +283,7 @@ watch(
                 "
                 v-if="
                   typedResources.typeId != 'documentation' &&
-                  (typedResources.total > pageSize ||
-                    (typedResources.total <= pageSize &&
-                      typedResources.query != ''))
+                  typedResources.totalWithoutFilter > pageSize
                 "
               />
               <span v-if="typedResources.resources.length != 0">
