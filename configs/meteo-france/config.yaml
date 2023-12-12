@@ -2,7 +2,7 @@
 
 datagouvfr:
   # data.gouv.fr base URL
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id:
   # pkce client secret, explicitely public
@@ -10,7 +10,7 @@ datagouvfr:
 
 universe:
   # "universe" topic id
-  topic_id: 650da7e9ac89b5a2ac75a11a # meteo-test
+  topic_id: 6571f222129681e83de11aa2
   # universe name, used as bouquets tag
   name: meteo-france
 
@@ -74,9 +74,9 @@ website:
   show_dataset_metadata_panel: false
   show_dataset_discussions: true
   list_highlighted_topics:
-    - id: '653a6eee7a6aa39deaec2de9'
+    - id: '6571f26dc009674feb726be9'
       name: 'Données climatologiques de base'
-    - id: '653a6f43e96894d0275c994c'
+    - id: '6571f2db0273fc306408f265'
       name: 'Données climatologiques de référence pour le changement climatique'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
