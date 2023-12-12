@@ -28,6 +28,10 @@ website:
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   homepage_title: 'La météo et le climat en Open Data'
   homepage_subtitle: 'meteo.data.gouv.fr centralise et structure les données publiques relatives à la météo et au climat. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+  header_button:
+    display: true
+    label: 'Donnez votre avis'
+    link: https://tally.so/r/wQ7y47
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
