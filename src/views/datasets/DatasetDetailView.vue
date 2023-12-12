@@ -339,15 +339,13 @@ watch(
               <div class="discussion-subtitle">
                 <div class="user-avatar">
                   <img
-                    v-if="!discussion.discussion[0].posted_by.avatar_thumbnail"
                     style="border-radius: 50%"
-                    src="../../assets/images/user.png"
-                    width="20"
-                  />
-                  <img
-                    v-if="discussion.discussion[0].posted_by.avatar_thumbnail"
-                    style="border-radius: 50%"
-                    :src="discussion.discussion[0].posted_by.avatar_thumbnail"
+                    :src="
+                      config.datagouvfr.base_url +
+                      '/api/1/avatars/' +
+                      discussion.discussion[0].posted_by.id +
+                      '/20'
+                    "
                     width="20"
                   />
                 </div>
@@ -374,20 +372,12 @@ watch(
                   <div class="discussion-subtitle">
                     <div class="user-avatar">
                       <img
-                        v-if="
-                          !discussion.discussion[0].posted_by.avatar_thumbnail
-                        "
-                        style="border-radius: 50%"
-                        src="../../assets/images/user.png"
-                        width="20"
-                      />
-                      <img
-                        v-if="
-                          discussion.discussion[0].posted_by.avatar_thumbnail
-                        "
                         style="border-radius: 50%"
                         :src="
-                          discussion.discussion[0].posted_by.avatar_thumbnail
+                          config.datagouvfr.base_url +
+                          '/api/1/avatars/' +
+                          comment.posted_by.id +
+                          '/20'
                         "
                         width="20"
                       />
