@@ -41,13 +41,13 @@ const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.show_dataset_discussions
 const query = ref('')
 
-const updateQuery = (q) => {
-  query.value = q
-  changePage('main', 1)
+const updateQuery = (q, typeId) => {
+  resources.value[typeId].query = q
+  changePage(typeId, 1, q)
 }
 
-const doSearch = () => {
-  changePage('main', 1)
+const doSearch = (typeId) => {
+  changePage(typeId, 1, resources.value[typeId].query)
 }
 
 onMounted(() => {
@@ -91,10 +91,11 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (type, page = 1) => {
+const changePage = (type, page = 1, query = '') => {
   resources.value[type].currentPage = page
+  resources.value[type].query = query
   return datasetStore
-    .fetchDatasetResources(dataset.value.id, type, page, pageSize, query.value)
+    .fetchDatasetResources(dataset.value.id, type, page, pageSize, query)
     .then((data) => {
       resources.value[type].resources = data['data']
       resources.value[type].total = data['total']
@@ -189,6 +190,8 @@ watch(
       )
       for (let typedResources of allResources) {
         resources.value[typedResources.typeId] = typedResources
+        resources.value[typedResources.typeId]['totalWithoutFilter'] =
+          typedResources.total
       }
       resourceLoader.hide()
     } else {
@@ -265,7 +268,7 @@ watch(
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
           <template v-for="typedResources in resources">
-            <div v-if="typedResources.total" class="fr-mb-4w">
+            <div v-if="typedResources.totalWithoutFilter" class="fr-mb-4w">
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
                 {{ typedResources.typeLabel }}
               </h2>
@@ -274,28 +277,40 @@ watch(
                 placeholder="Rechercher"
                 :large="false"
                 class="search-bar"
-                @search="doSearch"
-                @update:modelValue="updateQuery"
+                @search="() => doSearch(typedResources.typeId)"
+                @update:modelValue="
+                  (value) => updateQuery(value, typedResources.typeId)
+                "
                 v-if="
-                  typedResources.typeLabel != 'Documentation' &&
-                  (typedResources.total > 6 ||
-                    (typedResources.total <= 6 && query != ''))
+                  typedResources.typeId != 'documentation' &&
+                  (typedResources.total > pageSize ||
+                    (typedResources.total <= pageSize &&
+                      typedResources.query != ''))
                 "
               />
-
-              <ResourceAccordion
-                v-for="resource in typedResources.resources"
-                :datasetId="datasetId"
-                :resource="resource"
-              />
-              <Pagination
-                class="fr-mt-3w"
-                v-if="typedResources.total > pageSize"
-                :page="typedResources.currentPage"
-                :page-size="pageSize"
-                :total-results="typedResources.total"
-                @change="(page) => changePage(typedResources.typeId, page)"
-              />
+              <span v-if="typedResources.resources.length != 0">
+                <ResourceAccordion
+                  v-for="resource in typedResources.resources"
+                  :datasetId="datasetId"
+                  :resource="resource"
+                />
+                <Pagination
+                  class="fr-mt-3w"
+                  v-if="typedResources.total > pageSize"
+                  :page="typedResources.currentPage"
+                  :page-size="pageSize"
+                  :total-results="typedResources.total"
+                  @change="
+                    (page) =>
+                      changePage(
+                        typedResources.typeId,
+                        page,
+                        typedResources.query
+                      )
+                  "
+                />
+              </span>
+              <span v-else> <br />Aucun résultat pour votre recherche. </span>
             </div>
           </template>
         </div>
