@@ -117,7 +117,7 @@ const routerLinkLicenceTo = computed(() => {
               :alt="operatorImgAlt"
             />
             <img
-              class="fr-responsive-img"
+              class="fr-responsive-img fr-hidden fr-unhidden-sm"
               :src="serviceLogoSrc"
               :alt="serviceTitle"
             />
