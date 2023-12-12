@@ -118,7 +118,7 @@ const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
   <Footer
     :logo-text="logotext"
     :operator-img-src="logoOperator"
-    :operator-img-style="{ height: '92px' }"
+    :operator-img-style="{ height: '120px', width: '120px' }"
     :service-logo-src="logoService"
     :desc-text="footerPhrase"
     :ecosystem-links="footerExternalLinks"
