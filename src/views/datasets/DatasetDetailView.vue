@@ -39,6 +39,16 @@ const types = ref([])
 const currentPage = ref(1)
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.show_dataset_discussions
+const query = ref('')
+
+const updateQuery = (q, typeId) => {
+  resources.value[typeId].query = q
+  changePage(typeId, 1, q)
+}
+
+const doSearch = (typeId) => {
+  changePage(typeId, 1, resources.value[typeId].query)
+}
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -80,12 +90,14 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (type, page = 1) => {
+const changePage = (type, page = 1, query = '') => {
   resources.value[type].currentPage = page
+  resources.value[type].query = query
   return datasetStore
-    .fetchDatasetResources(dataset.value.id, type, page, pageSize)
+    .fetchDatasetResources(dataset.value.id, type, page, pageSize, query)
     .then((data) => {
-      resources.value[type].resources = data
+      resources.value[type].resources = data['data']
+      resources.value[type].total = data['total']
     })
 }
 
@@ -177,6 +189,8 @@ watch(
       )
       for (let typedResources of allResources) {
         resources.value[typedResources.typeId] = typedResources
+        resources.value[typedResources.typeId]['totalWithoutFilter'] =
+          typedResources.total
       }
       resourceLoader.hide()
     } else {
@@ -253,23 +267,47 @@ watch(
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
           <template v-for="typedResources in resources">
-            <div v-if="typedResources.total" class="fr-mb-4w">
+            <div v-if="typedResources.totalWithoutFilter" class="fr-mb-4w">
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
                 {{ typedResources.typeLabel }}
               </h2>
-              <ResourceAccordion
-                v-for="resource in typedResources.resources"
-                :datasetId="datasetId"
-                :resource="resource"
+              <DsfrSearchBar
+                button-text="Rechercher"
+                placeholder="Rechercher"
+                :large="false"
+                class="search-bar"
+                @search="() => doSearch(typedResources.typeId)"
+                @update:modelValue="
+                  (value) => updateQuery(value, typedResources.typeId)
+                "
+                v-if="
+                  typedResources.typeId != 'documentation' &&
+                  typedResources.totalWithoutFilter > pageSize
+                "
               />
-              <Pagination
-                class="fr-mt-3w"
-                v-if="typedResources.total > pageSize"
-                :page="typedResources.currentPage"
-                :page-size="pageSize"
-                :total-results="typedResources.total"
-                @change="(page) => changePage(typedResources.typeId, page)"
-              />
+              <span v-if="typedResources.resources.length != 0">
+                <ResourceAccordion
+                  v-for="resource in typedResources.resources"
+                  :datasetId="datasetId"
+                  :resource="resource"
+                />
+                <Pagination
+                  class="fr-mt-3w"
+                  v-if="typedResources.total > pageSize"
+                  :page="typedResources.currentPage"
+                  :page-size="pageSize"
+                  :total-results="typedResources.total"
+                  @change="
+                    (page) =>
+                      changePage(
+                        typedResources.typeId,
+                        page,
+                        typedResources.query
+                      )
+                  "
+                />
+              </span>
+              <span v-else> <br />Aucun résultat pour votre recherche. </span>
             </div>
           </template>
         </div>
@@ -450,6 +488,10 @@ ul.es__comment__container {
 .es__quality {
   list-style-type: none;
   padding-inline-start: 0;
+}
+
+.search-bar {
+  margin-top: 15px;
 }
 
 .discussion {

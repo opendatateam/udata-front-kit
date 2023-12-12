@@ -176,15 +176,16 @@ export const useDatasetStore = defineStore('dataset', {
       return resources
     },
 
-    async fetchDatasetResources(datasetId, type, page, pageSize) {
+    async fetchDatasetResources(datasetId, type, page, pageSize, query) {
       const response = await datasetsApiv2.get(`${datasetId}/resources/`, {
         params: {
           page,
           page_size: pageSize,
-          type
+          type,
+          q: query
         }
       })
-      return response.data
+      return { data: response.data, total: response.total }
     },
 
     async getLicense(license) {
