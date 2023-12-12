@@ -16,6 +16,16 @@
   --blue-france-850-200: var(--blue-cumulus-850-200);
 }
 
+@font-face {
+  font-weight: 600;
+  font-family: Spectral;
+  font-style: italic;
+  src: url("./fonts/Spectral-Italic.woff2") format("woff2"),
+      url("./fonts/Spectral-Italic.woff") format("woff");
+
+  font-display: swap;
+}
+
 .multiselect {
   --ms-bg: var(--background-contrast-grey);
   margin: 8px 0;

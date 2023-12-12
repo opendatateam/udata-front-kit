@@ -4,10 +4,11 @@ import {
   OrganizationNameWithCertificate,
   Pagination,
   QualityComponent,
-  ReadMore
+  ReadMore,
+  Well
 } from '@etalab/data.gouv.fr-components'
-import { filesize } from 'filesize'
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute } from 'vue-router'
 
 import config from '@/config'
@@ -28,7 +29,7 @@ const discussionStore = useDiscussionStore()
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const discussionsPages = ref([])
 const reuses = ref([])
-const resources = ref([])
+const resources = ref({})
 const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
@@ -36,8 +37,8 @@ const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
 const currentPage = ref(1)
-const totalResults = ref(0)
 const pageSize = config.website.pagination_sizes.files_list
+const showDiscussions = config.website.show_dataset_discussions
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -54,32 +55,11 @@ const links = computed(() => [
   { text: dataset.value.title }
 ])
 
-const formatFileSize = (fileSize) => {
-  if (!fileSize) return 'Taille inconnue'
-  return filesize(fileSize)
-}
-
-const files = computed(() => {
-  return resources.value?.map((resource) => {
-    return {
-      title: resource.title || 'Fichier sans nom',
-      format: resource.format,
-      size: formatFileSize(
-        resource.filesize ||
-          resource.extras['check:headers:content-length'] ||
-          resource.extras['analysis:content-length']
-      ),
-      href: resource.url
-    }
-  })
-})
-
 const tabs = computed(() => {
   const _tabs = [
     { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
     { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
-    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
-    { title: 'Qualité', tabId: 'tab-3', panelId: 'tab-content-3' }
+    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' }
   ]
   if (config.website.show_dataset_metadata_panel) {
     _tabs.push({
@@ -100,12 +80,12 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (page = 1) => {
-  currentPage.value = page
+const changePage = (type, page = 1) => {
+  resources.value[type].currentPage = page
   return datasetStore
-    .fetchDatasetResources(dataset.value.id, page, pageSize)
+    .fetchDatasetResources(dataset.value.id, type, page, pageSize)
     .then((data) => {
-      resources.value = data
+      resources.value[type].resources = data
     })
 }
 
@@ -156,40 +136,57 @@ const reuseDescription = (r) => {
 
 const getType = (id) => {
   let type = types.value.find((t) => t.id == id)
-  return type.label
+  return type?.label || ''
 }
 
+const discussionWellTitle = showDiscussions
+  ? 'Participer aux discussions'
+  : 'Voir les discussions'
+const discussionWellDescription = showDiscussions
+  ? 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour participer aux discussions.'
+  : 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
+
+const openDataGouvDiscussions = () =>
+  window.open(`${dataset.value.page}#/discussions`, 'datagouv-discussion')
+
 // launch reuses and discussions fetch as soon as we have the technical id
-watchEffect(async () => {
-  if (!dataset.value.id) return
-  // fetch reuses
-  reuseStore
-    .loadReusesForDataset(dataset.value.id)
-    .then((r) => (reuses.value = r))
-  // fetch discussions
-  discussionStore
-    .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
-    .then((d) => {
-      discussions.value = d
-      if (!discussionsPage.value.length) {
-        discussionsPages.value =
-          discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+watch(
+  dataset,
+  async () => {
+    if (!dataset.value.id) return
+    // fetch reuses
+    reuseStore
+      .loadReusesForDataset(dataset.value.id)
+      .then((r) => (reuses.value = r))
+    // fetch discussions
+    discussionStore
+      .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
+      .then((d) => {
+        discussions.value = d
+        if (!discussionsPage.value.length) {
+          discussionsPages.value =
+            discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
+        }
+      })
+    // fetch ressources if need be
+    if (dataset.value.resources.rel) {
+      const resourceLoader = useLoading().show()
+      const allResources = await datasetStore.loadResources(
+        dataset.value.resources,
+        pageSize
+      )
+      for (let typedResources of allResources) {
+        resources.value[typedResources.typeId] = typedResources
       }
-    })
-  // fetch ressources if need be
-  if (dataset.value.resources.rel) {
-    const { data, total } = await datasetStore.loadResources(
-      dataset.value.resources,
-      pageSize
-    )
-    resources.value = data
-    totalResults.value = total
-  } else {
-    resources.value = dataset.value.resources
-  }
-  license.value = await datasetStore.getLicense(dataset.value.license)
-  types.value = await reuseStore.getTypes()
-})
+      resourceLoader.hide()
+    } else {
+      resources.value = dataset.value.resources
+    }
+    license.value = await datasetStore.getLicense(dataset.value.license)
+    types.value = await reuseStore.getTypes()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -249,28 +246,32 @@ watchEffect(async () => {
     >
       <!-- Fichiers -->
       <DsfrTabContent
-        v-if="files"
+        v-if="resources"
         panel-id="tab-content-0"
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
-          <ResourceAccordion
-            v-for="resource in resources"
-            :datasetId="datasetId"
-            :resource="resource"
-          />
-          <p v-if="!totalResults">
-            Aucune ressource n'est associée à votre recherche.
-          </p>
-          <Pagination
-            class="fr-mt-3w"
-            v-else-if="totalResults > pageSize"
-            :page="currentPage"
-            :page-size="pageSize"
-            :total-results="totalResults"
-            @change="changePage"
-          />
+          <template v-for="typedResources in resources">
+            <div v-if="typedResources.total" class="fr-mb-4w">
+              <h2 class="fr-mb-1v subtitle subtitle--uppercase">
+                {{ typedResources.typeLabel }}
+              </h2>
+              <ResourceAccordion
+                v-for="resource in typedResources.resources"
+                :datasetId="datasetId"
+                :resource="resource"
+              />
+              <Pagination
+                class="fr-mt-3w"
+                v-if="typedResources.total > pageSize"
+                :page="typedResources.currentPage"
+                :page-size="pageSize"
+                :total-results="typedResources.total"
+                @change="(page) => changePage(typedResources.typeId, page)"
+              />
+            </div>
+          </template>
         </div>
       </DsfrTabContent>
 
@@ -307,121 +308,66 @@ watchEffect(async () => {
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <h2 class="fr-mt-4w">Discussions</h2>
-        <div v-if="!discussions.data?.length">
-          Pas de discussion pour ce jeu de données.
-        </div>
-        <DsfrAccordionsGroup>
-          <li v-for="discussion in discussions.data">
-            <DsfrAccordion
-              :id="discussion.id"
-              :title="discussion.title"
-              :expanded-id="expandedDiscussion"
-              @expand="(id) => (expandedDiscussion = id)"
-            >
-              <template #default>
-                <ul class="es__comment__container">
-                  <li v-for="comment in discussion.discussion">
-                    <div class="es__comment__metadata fr-mb-1v">
-                      <span class="es__comment__author"
-                        >{{ comment.posted_by.first_name }}
-                        {{ comment.posted_by.last_name }}</span
-                      >
-                      <span class="es__comment__date fr-ml-1v"
-                        >le {{ formatDate(comment.posted_on) }}</span
-                      >
-                    </div>
-                    <div class="es__comment__content">
-                      {{ comment.content }}
-                    </div>
-                  </li>
-                </ul>
-              </template>
-            </DsfrAccordion>
-          </li>
-        </DsfrAccordionsGroup>
-        <DsfrPagination
-          v-if="discussionsPages.length"
-          class="fr-mt-2w"
-          :current-page="discussionsPage - 1"
-          :pages="discussionsPages"
-          @update:current-page="(p) => (discussionsPage = p + 1)"
-        />
-      </DsfrTabContent>
-
-      <!-- Qualité -->
-      <DsfrTabContent
-        panel-id="tab-content-3"
-        tab-id="tab-3"
-        :selected="selectedTabIndex === 3"
-      >
-        <p>
-          Analyse de la qualité des métadonnées récupérées et exposées par
-          data.gouv.fr.
-        </p>
-        <ul v-if="dataset.quality" class="es__quality">
-          <li>
-            <span v-if="dataset.quality.dataset_description_quality">
-              <VIcon name="ri-check-line" /> Description des données renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Description des données non
-              renseignée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.resources_documentation">
-              <VIcon name="ri-check-line" /> Ressources documentées
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Ressources non documentées
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.license">
-              <VIcon name="ri-check-line" /> Licence renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Licence non renseignée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.update_fulfilled_in_time">
-              <VIcon name="ri-check-line" /> Fréquence de mise à jour respectée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Fréquence de mise à jour non
-              respectée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.has_open_format">
-              <VIcon name="ri-check-line" /> Formats de fichiers standards
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Formats de fichiers non
-              standards
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.temporal_coverage">
-              <VIcon name="ri-check-line" /> Couverture temporelle renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Couverture temporelle non
-              renseignée
-            </span>
-          </li>
-          <li>
-            <span v-if="dataset.quality.spatial">
-              <VIcon name="ri-check-line" /> Couverture spatiale renseignée
-            </span>
-            <span v-else>
-              <VIcon name="ri-close-circle-line" /> Couverture spatiale non
-              renseignée
-            </span>
-          </li>
-        </ul>
+        <Well color="blue-cumulus" weight="regular">
+          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+            <div class="fr-col-12 fr-col-lg-8">
+              <p class="fr-text--bold fr-mb-0">{{ discussionWellTitle }}</p>
+              <p class="fr-text--alt fr-text--sm f-italic fr-m-0">
+                {{ discussionWellDescription }}
+              </p>
+            </div>
+            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+              <DsfrButton
+                label="Voir les discussions sur data.gouv.fr"
+                icon="ri-external-link-line"
+                :icon-right="true"
+                @click="openDataGouvDiscussions"
+              />
+            </div>
+          </div>
+        </Well>
+        <template v-if="showDiscussions">
+          <h2 class="fr-mt-4w">Discussions</h2>
+          <div v-if="!discussions.data?.length">
+            Pas de discussion pour ce jeu de données.
+          </div>
+          <DsfrAccordionsGroup>
+            <li v-for="discussion in discussions.data">
+              <DsfrAccordion
+                :id="discussion.id"
+                :title="discussion.title"
+                :expanded-id="expandedDiscussion"
+                @expand="(id) => (expandedDiscussion = id)"
+              >
+                <template #default>
+                  <ul class="es__comment__container">
+                    <li v-for="comment in discussion.discussion">
+                      <div class="es__comment__metadata fr-mb-1v">
+                        <span class="es__comment__author"
+                          >{{ comment.posted_by.first_name }}
+                          {{ comment.posted_by.last_name }}</span
+                        >
+                        <span class="es__comment__date fr-ml-1v"
+                          >le {{ formatDate(comment.posted_on) }}</span
+                        >
+                      </div>
+                      <div class="es__comment__content">
+                        {{ comment.content }}
+                      </div>
+                    </li>
+                  </ul>
+                </template>
+              </DsfrAccordion>
+            </li>
+          </DsfrAccordionsGroup>
+          <DsfrPagination
+            v-if="discussionsPages.length"
+            class="fr-mt-2w"
+            :current-page="discussionsPage - 1"
+            :pages="discussionsPages"
+            @update:current-page="(p) => (discussionsPage = p + 1)"
+          />
+        </template>
       </DsfrTabContent>
 
       <!-- Métadonnées -->

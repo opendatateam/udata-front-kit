@@ -13,6 +13,9 @@ import TextClamp from 'vue3-text-clamp'
 import 'vue3-toastify/dist/index.css'
 import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
+import VueMatomo from 'vue-matomo'
+
+import config from '@/config'
 
 // Import (par défaut) de la bibliothèque
 import App from './App.vue'
@@ -28,6 +31,14 @@ app.use(router)
 app.use(VueDsfr, { icons: Object.values(icons) })
 app.use(pinia)
 app.use(i18n)
+if (config.website.matomo.siteId) {
+  app.use(VueMatomo, {
+    host: config.website.matomo.host,
+    siteId: config.website.matomo.siteId,
+    router: router,
+    debug: import.meta.env.DEV
+  })
+}
 
 app.use(TextClamp)
 app.use(LoadingPlugin)
