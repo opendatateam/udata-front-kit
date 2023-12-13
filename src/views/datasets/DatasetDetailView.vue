@@ -196,7 +196,7 @@ watch(
   <div class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
-        <h1>{{ dataset.title }}</h1>
+        <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <ReadMore max-height="600">
           <div v-html="description"></div>
         </ReadMore>

@@ -134,7 +134,7 @@ const showLoader = ref(false)
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container fr-mb-4w">
-    <h1>Recherche guidée</h1>
+    <h1 class="fr-mb-2v">Recherche guidée</h1>
     <p>Utiliser ce formulaire pour trouver un fichier en particulier.</p>
     <DsfrSelect
       :model-value="selectedDataPack"
