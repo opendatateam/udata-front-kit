@@ -191,7 +191,7 @@ watch(
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
