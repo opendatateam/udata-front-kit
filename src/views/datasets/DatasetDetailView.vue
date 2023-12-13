@@ -90,6 +90,16 @@ const changePage = (type, page = 1) => {
     })
 }
 
+const getUserAvatar = (post) => {
+  if (post.posted_by.avatar_thumbnail) {
+    return post.posted_by.avatar_thumbnail
+  } else {
+    return (
+      config.datagouvfr.base_url + '/api/1/avatars/' + post.posted_by.id + '/20'
+    )
+  }
+}
+
 const formatDate = (dateString) => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat('default', {
@@ -334,22 +344,17 @@ watch(
           </div>
 
           <div>
-            <div class="discussion" v-for="discussion in discussions.data">
+            <div class="fr-mb-6w" v-for="discussion in discussions.data">
               <div class="discussion-title">{{ discussion.title }}</div>
               <div class="discussion-subtitle">
-                <div class="user-avatar">
+                <div class="avatar fr-mr-1v">
                   <img
                     style="border-radius: 50%"
-                    :src="
-                      config.datagouvfr.base_url +
-                      '/api/1/avatars/' +
-                      discussion.discussion[0].posted_by.id +
-                      '/20'
-                    "
+                    :src="getUserAvatar(discussion.discussion[0])"
                     width="20"
                   />
                 </div>
-                <div class="user-name">
+                <div class="user-name fr-mb-md-1v">
                   {{ discussion.discussion[0].posted_by.first_name }}
                   {{ discussion.discussion[0].posted_by.last_name }}
                 </div>
@@ -362,7 +367,7 @@ watch(
               </div>
               <span v-if="discussion.discussion.length > 1">
                 <div
-                  class="secondary-comment"
+                  class="fr-mt-md-3v fr-pl-3v"
                   v-for="comment in discussion.discussion.slice(1)"
                   v-bind:key="comment.content"
                 >
@@ -370,19 +375,14 @@ watch(
                     {{ comment.content }}
                   </div>
                   <div class="discussion-subtitle">
-                    <div class="user-avatar">
+                    <div class="avatar fr-mr-1v">
                       <img
                         style="border-radius: 50%"
-                        :src="
-                          config.datagouvfr.base_url +
-                          '/api/1/avatars/' +
-                          comment.posted_by.id +
-                          '/20'
-                        "
+                        :src="getUserAvatar(comment)"
                         width="20"
                       />
                     </div>
-                    <div class="user-name">
+                    <div class="user-name fr-mb-md-1v">
                       {{ comment.posted_by.first_name }}
                       {{ comment.posted_by.last_name }}
                     </div>
@@ -528,10 +528,6 @@ ul.es__comment__container {
   padding-inline-start: 0;
 }
 
-.discussion {
-  margin-bottom: 50px;
-}
-
 .discussion-title {
   font-size: 18px;
   font-weight: bold;
@@ -542,14 +538,14 @@ ul.es__comment__container {
   display: flex;
 }
 
-.user-avatar {
-  margin-right: 5px;
-}
-
 .user-name {
   color: #3557a2;
-  margin-right: 5px;
   font-size: 14px;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
 }
 
 .comment-date {
@@ -560,11 +556,6 @@ ul.es__comment__container {
 
 .comment {
   font-size: 14px;
-}
-
-.secondary-comment {
-  margin-top: 10px;
-  padding-left: 10px;
 }
 
 .secondary-comment-content {
