@@ -22,7 +22,7 @@ const goToPage = (page) => {
 <template>
   <div v-if="topicsData.length">
     <br /><br />
-    <h2 class="section-title">THÉMATIQUES</h2>
+    <h2 class="section-title fr-mb-n1v">THÉMATIQUES</h2>
     <div style="display: flex; flex-flow: row wrap; margin: auto">
       <div
         v-for="topic in topicsData"

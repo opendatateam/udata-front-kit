@@ -191,9 +191,9 @@ watch(
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb :links="links" />
+    <DsfrBreadcrumb class="fr-mb-n1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-mb-4w">
+  <div class="fr-container datagouv-components fr-mt-2w fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
         <h1>{{ dataset.title }}</h1>

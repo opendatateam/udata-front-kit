@@ -54,7 +54,7 @@ const goToPage = (page) => {
       <h1 class="main-title fr-mb-3v">
         {{ homepageTitle }}
       </h1>
-      <div class="subtitle fr-text--alt fr-mb-4w">
+      <div class="subtitle fr-text--alt fr-mb-10w">
         <span v-html="markdown.render(homepageSubTitle)" />
       </div>
       <div class="search-bar" v-if="searchConfig.display">
@@ -143,13 +143,13 @@ const goToPage = (page) => {
   text-align: left;
   font-size: 48px;
   line-height: 50px;
-  font-weight: bold;
+  font-weight: 800;
 }
 .subtitle {
   text-align: left;
+  font-style: italic;
   font-size: 20px;
   line-height: 28px;
-  font-style: italic;
 }
 .search-bar {
   padding: 20px;
