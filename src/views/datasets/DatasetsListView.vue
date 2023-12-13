@@ -91,7 +91,7 @@ watchEffect(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container fr-mb-4w">
-    <h1>Jeux de données</h1>
+    <h1 class="fr-mb-2v">Jeux de données</h1>
     <p v-if="query">Résultats de recherche pour "{{ query }}".</p>
     <p v-else>Parcourir tous les jeux de données présents sur {{ title }}.</p>
     <div v-if="query && datasets?.length === 0" class="fr-mb-4w">
