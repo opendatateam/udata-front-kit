@@ -34,7 +34,7 @@ website:
     display: true
     name: 'Recherche guidée'
     link: '/form'
-  menu_items:
+  router_items:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'

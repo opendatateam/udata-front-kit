@@ -47,7 +47,7 @@ website:
       href: 'https://www.data.gouv.fr/fr/terms/'
     - label: 'Politique de confidentialité'
       href: 'https://www.data.gouv.fr/fr/suivi/'
-  menu_items:
+  router_items:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'
@@ -58,6 +58,11 @@ website:
       linkPage: '/datasets'
       type: 'component'
       display_menu: true
+    - name: 'Organisations'
+      id: 'organizations'
+      linkPage: '/organizations'
+      type: 'component'
+      display_menu: false
     - name: 'Bouquets'
       id: 'bouquets'
       linkPage: '/bouquets'
