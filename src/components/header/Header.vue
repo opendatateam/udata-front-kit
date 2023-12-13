@@ -8,8 +8,6 @@ import {
   type StyleValue
 } from 'vue'
 
-import config from '@/config'
-
 import type { DsfrHeaderMenuLinkProps } from './DSFRHeaderMenuLink.vue'
 
 type DsfrHeaderProps = {
