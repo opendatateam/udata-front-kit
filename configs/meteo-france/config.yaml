@@ -72,7 +72,7 @@ website:
   show_topic_charts: true
   show_quality_component: true
   show_dataset_metadata_panel: false
-  show_dataset_discussions: false
+  show_dataset_discussions: true
   list_highlighted_topics:
     - id: '653a6eee7a6aa39deaec2de9'
       name: 'Données climatologiques de base'
