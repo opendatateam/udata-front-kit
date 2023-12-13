@@ -27,6 +27,10 @@ website:
   # leave empty if not pertinent
   homepage_title: 'La météo et le climat en Open Data'
   homepage_subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+  header_button:
+    display: true
+    label: 'Donnez votre avis'
+    link: https://tally.so/r/wQ7y47
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
