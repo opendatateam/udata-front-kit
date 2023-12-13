@@ -58,6 +58,11 @@ website:
       linkPage: '/datasets'
       type: 'component'
       display_menu: true
+    - name: 'Organisations'
+      id: 'organizations'
+      linkPage: '/organizations'
+      type: 'component'
+      display_menu: false
     - name: 'Bouquets'
       id: 'bouquets'
       linkPage: '/bouquets'
