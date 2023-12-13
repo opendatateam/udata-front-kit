@@ -184,7 +184,7 @@ defineEmits<{
                   <img
                     class="fr-responsive-img"
                     :src="serviceLogoSrc"
-                    alt=""
+                    :alt="serviceTitle"
                     style="
                       height: 35px;
                       margin-top: 0;

@@ -18,19 +18,28 @@ const store = useUserStore()
 const isLoggedIn = computed(() => store.$state.isLoggedIn)
 
 const quickLinks = computed(() => {
-  if (!config.website.oauth_option) return
-  return [
-    {
-      label: isLoggedIn.value
-        ? `${store.$state.data.first_name} ${store.$state.data.last_name}`
-        : 'Se connecter',
-      icon: isLoggedIn.value
-        ? 'ri-logout-box-r-line'
-        : 'ri-account-circle-line',
-      to: isLoggedIn.value ? '/logout' : '/login',
-      iconRight: isLoggedIn.value
-    }
-  ]
+  const button = config.website.header_button
+
+  const headerButton = {
+    label: button.label,
+    icon: 'ri-lightbulb-line',
+    href: button.link
+  }
+
+  const userLink = {
+    label: isLoggedIn.value
+      ? `${store.$state.data.first_name} ${store.$state.data.last_name}`
+      : 'Se connecter',
+    icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
+    to: isLoggedIn.value ? '/logout' : '/login',
+    iconRight: isLoggedIn.value
+  }
+
+  if (!config.website.oauth_option) {
+    return button.display ? [headerButton] : []
+  }
+
+  return button.display ? [headerButton, userLink] : [userLink]
 })
 
 const updateQuery = (q) => {
@@ -99,8 +108,8 @@ const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
     @search="doSearch"
     @update:modelValue="updateQuery"
   >
-    <template #mainnav>
-      <Navigation />
+    <template #mainnav="{ hidemodal }">
+      <Navigation :on-click="hidemodal" />
     </template>
   </Header>
 
@@ -109,11 +118,11 @@ const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
   <Footer
     :logo-text="logotext"
     :operator-img-src="logoOperator"
-    :operator-img-style="{ height: '80px', width: '80px' }"
+    :operator-img-style="{ height: '92px', width: '92px' }"
     :service-logo-src="logoService"
-    :footer-phrase="footerPhrase"
-    :footer-external-links="footerExternalLinks"
-    :footer-mandatory-links="footerMandatoryLinks"
+    :desc-text="footerPhrase"
+    :ecosystem-links="footerExternalLinks"
+    :mandatory-links="footerMandatoryLinks"
   />
 </template>
 

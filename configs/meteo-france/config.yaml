@@ -38,7 +38,7 @@ website:
     display: true
     name: 'Recherche guidée'
     link: '/form'
-  menu_items:
+  router_items:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'
@@ -81,23 +81,23 @@ website:
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
-    - name: 'data.gouv.fr'
-      url: 'https://www.data.gouv.fr'
-    - name: 'meteo.fr'
-      url: 'https://www.meteo.fr'
-    - name: 'gouvernement.fr'
-      url: 'https://www.gouvernement.fr'
-    - name: 'service-public.fr'
-      url: 'https://www.service-public.fr'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+    - label: 'meteo.fr'
+      href: 'https://www.meteo.fr'
+    - label: 'gouvernement.fr'
+      href: 'https://www.gouvernement.fr'
+    - label: 'service-public.fr'
+      href: 'https://www.service-public.fr'
   footer_mandatory_links:
-    - name: 'Licences'
-      url: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - name: "Conditions générales d'utilisation"
-      url: 'https://www.data.gouv.fr/fr/terms/'
-    - name: 'Politique de confidentialité'
-      url: 'https://www.data.gouv.fr/fr/suivi/'
-    - name: 'Accessibilité : non conforme'
-      url: '/accessibility'
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   # display settings
   pagination_sizes:

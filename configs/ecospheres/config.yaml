@@ -40,18 +40,18 @@ website:
     link:
   footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'écologie."
   footer_external_links:
-    - name: 'data.gouv.fr'
-      url: 'https://www.data.gouv.fr'
-    - name: 'gouvernement.fr'
-      url: 'https://www.gouvernement.fr'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+    - label: 'gouvernement.fr'
+      href: 'https://www.gouvernement.fr'
   footer_mandatory_links:
-    - name: 'Licences'
-      url: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - name: "Conditions générales d'utilisation"
-      url: 'https://www.data.gouv.fr/fr/terms/'
-    - name: 'Politique de confidentialité'
-      url: 'https://www.data.gouv.fr/fr/suivi/'
-  menu_items:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+  router_items:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'
@@ -62,6 +62,11 @@ website:
       linkPage: '/datasets'
       type: 'component'
       display_menu: true
+    - name: 'Organisations'
+      id: 'organizations'
+      linkPage: '/organizations'
+      type: 'component'
+      display_menu: false
     - name: 'Bouquets'
       id: 'bouquets'
       linkPage: '/bouquets'
