@@ -12,7 +12,7 @@ const props = defineProps({
 
 const navItems = computed(() => {
   const items = []
-  config.website.menu_items.forEach((item) => {
+  config.website.router_items.forEach((item) => {
     if (item.display_menu) {
       items.push({
         to: item.linkPage,

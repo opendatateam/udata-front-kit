@@ -109,7 +109,7 @@ const availabilityEnum = {
 }
 
 const goToDatasetPage = (id) => {
-  const url = config.website.menu_items.find(
+  const url = config.website.router_items.find(
     (link) => link.linkPage === '/datasets'
   )
   return `${url.linkPage}/${id}`
