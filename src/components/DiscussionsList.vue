@@ -5,13 +5,12 @@ import { defineProps, ref, watchEffect } from 'vue'
 import config from '../config'
 import type { DiscussionResponse } from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
-import { formatDate, fromMarkdown } from '../utils'
-
-const discussionStore = useDiscussionStore()
+import { formatDate } from '../utils'
 
 const discussions: Ref<DiscussionResponse | null> = ref(null)
-const currentPage: Ref<number> = ref(1)
-const pages: Ref<object[]> = ref([])
+const discussionsPage: Ref<number> = ref(1)
+const discussionsPages: Ref<object[]> = ref([])
+const discussionStore = useDiscussionStore()
 
 const props = defineProps({
   subject: {
@@ -31,11 +30,11 @@ watchEffect(() => {
   const subjectId = props.subject.id
   if (!subjectId) return
   discussionStore
-    .loadDiscussionsForDataset(subjectId, currentPage.value)
+    .loadDiscussionsForDataset(subjectId, discussionsPage.value)
     .then((d) => {
       discussions.value = d
-      if (!pages.value.length) {
-        pages.value =
+      if (!discussionsPages.value.length) {
+        discussionsPages.value =
           discussionStore.getDiscussionsPaginationForDataset(subjectId)
       }
     })
@@ -70,21 +69,18 @@ watchEffect(() => {
           - le {{ formatDate(discussion.discussion[0].posted_on) }}
         </div>
       </div>
-      <!-- eslint-disable vue/no-v-html -->
-      <div
-        class="comment"
-        v-html="fromMarkdown(discussion.discussion[0].content)"
-      ></div>
-      <template v-if="discussion.discussion.length > 1">
+      <div class="comment">
+        {{ discussion.discussion[0].content }}
+      </div>
+      <span v-if="discussion.discussion.length > 1">
         <div
           v-for="comment in discussion.discussion.slice(1)"
           :key="comment.content"
           class="fr-mt-md-3v fr-pl-3v"
         >
-          <div
-            class="secondary-comment-content"
-            v-html="fromMarkdown(comment.content)"
-          ></div>
+          <div class="secondary-comment-content">
+            {{ comment.content }}
+          </div>
           <div class="discussion-subtitle">
             <div class="avatar fr-mr-1v">
               <img
@@ -100,15 +96,7 @@ watchEffect(() => {
             <div class="comment">- le {{ formatDate(comment.posted_on) }}</div>
           </div>
         </div>
-      </template>
-      <!-- eslint-enable vue/no-v-html -->
-    </div>
-    <div v-if="pages?.length > 1" class="fr-container">
-      <DsfrPagination
-        :current-page="currentPage - 1"
-        :pages="pages"
-        @update:current-page="(p: number) => (currentPage = p + 1)"
-      />
+      </span>
     </div>
   </div>
 </template>
@@ -119,31 +107,25 @@ watchEffect(() => {
   font-weight: bold;
   margin-bottom: 5px;
 }
-
 .discussion-subtitle {
   display: flex;
 }
-
 .user-name {
   color: #3557a2;
   font-size: 14px;
 }
-
 .avatar {
   display: flex;
   align-items: center;
 }
-
 .comment-date {
   color: #777777;
   font-style: italic;
   font-size: 14px;
 }
-
 .comment {
   font-size: 14px;
 }
-
 .secondary-comment-content {
   font-size: 14px;
   border-left: 2px solid #dddddd;
