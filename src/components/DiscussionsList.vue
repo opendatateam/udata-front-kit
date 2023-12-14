@@ -7,10 +7,11 @@ import type { DiscussionResponse } from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
 import { formatDate } from '../utils'
 
-const discussions: Ref<DiscussionResponse | null> = ref(null)
-const discussionsPage: Ref<number> = ref(1)
-const discussionsPages: Ref<object[]> = ref([])
 const discussionStore = useDiscussionStore()
+
+const discussions: Ref<DiscussionResponse | null> = ref(null)
+const currentPage: Ref<number> = ref(1)
+const pages: Ref<object[]> = ref([])
 
 const props = defineProps({
   subject: {
@@ -30,11 +31,11 @@ watchEffect(() => {
   const subjectId = props.subject.id
   if (!subjectId) return
   discussionStore
-    .loadDiscussionsForDataset(subjectId, discussionsPage.value)
+    .loadDiscussionsForDataset(subjectId, currentPage.value)
     .then((d) => {
       discussions.value = d
-      if (!discussionsPages.value.length) {
-        discussionsPages.value =
+      if (!pages.value.length) {
+        pages.value =
           discussionStore.getDiscussionsPaginationForDataset(subjectId)
       }
     })
@@ -97,6 +98,13 @@ watchEffect(() => {
           </div>
         </div>
       </span>
+    </div>
+    <div v-if="pages?.length > 1" class="fr-container">
+      <DsfrPagination
+        :current-page="currentPage - 1"
+        :pages="pages"
+        @update:current-page="(p: number) => (currentPage = p + 1)"
+      />
     </div>
   </div>
 </template>
