@@ -31,12 +31,12 @@ watchEffect(() => {
   const subjectId = props.subject.id
   if (!subjectId) return
   discussionStore
-    .loadDiscussionsForDataset(subjectId, currentPage.value)
+    .loadDiscussionsForSubject(subjectId, currentPage.value)
     .then((d) => {
       discussions.value = d
       if (!pages.value.length) {
         pages.value =
-          discussionStore.getDiscussionsPaginationForDataset(subjectId)
+          discussionStore.getDiscussionsPaginationForSubject(subjectId)
       }
     })
 })
