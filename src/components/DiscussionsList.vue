@@ -37,12 +37,12 @@ watchEffect(() => {
   const subjectId = props.subject.id
   if (!subjectId) return
   discussionStore
-    .loadDiscussionsForSubject(subjectId, currentPage.value)
+    .loadDiscussionsForDataset(subjectId, currentPage.value)
     .then((d) => {
       discussions.value = d
       if (!pages.value.length) {
         pages.value =
-          discussionStore.getDiscussionsPaginationForSubject(subjectId)
+          discussionStore.getDiscussionsPaginationForDataset(subjectId)
       }
     })
 })
@@ -51,8 +51,7 @@ watchEffect(() => {
 <template>
   <h2 class="fr-mt-4w">Discussions</h2>
   <div v-if="!discussions?.data?.length">
-    Pas de discussion pour ce
-    {{ props.subjectType === 'dataset' ? 'jeu de données' : 'bouquet' }}.
+    Pas de discussion pour ce jeu de données.
   </div>
   <div>
     <div
