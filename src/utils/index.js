@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { stripHtml } from 'string-strip-html'
 
@@ -8,8 +9,18 @@ import { stripHtml } from 'string-strip-html'
  */
 export const descriptionFromMarkdown = (ref, attr = 'description') => {
   if (ref.value?.description) {
-    return marked.parse(ref.value[attr], { mangle: false, headerIds: false })
+    return fromMarkdown(ref.value[attr])
   }
+}
+
+/**
+ * Parse markdown to HTML
+ *
+ * @param {string} value
+ */
+export const fromMarkdown = (value) => {
+  const parsed = marked.parse(value, { mangle: false, headerIds: false })
+  return DOMPurify.sanitize(parsed)
 }
 
 /**
