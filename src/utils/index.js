@@ -22,3 +22,15 @@ export const stripFromMarkdown = (value) => {
   const html = marked.parse(value, { mangle: false, headerIds: false })
   return stripHtml(html).result
 }
+
+/**
+ * Format date
+ *
+ */
+export const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('default', {
+    dateStyle: 'full',
+    timeStyle: 'short'
+  }).format(date)
+}
