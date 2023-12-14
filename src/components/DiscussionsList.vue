@@ -13,10 +13,16 @@ const discussions: Ref<DiscussionResponse | null> = ref(null)
 const currentPage: Ref<number> = ref(1)
 const pages: Ref<object[]> = ref([])
 
+type SubjectType = 'dataset' | 'topic'
+
 const props = defineProps({
   subject: {
     type: Object,
     required: true
+  },
+  subjectType: {
+    type: String as () => SubjectType,
+    default: 'dataset'
   }
 })
 
@@ -45,7 +51,8 @@ watchEffect(() => {
 <template>
   <h2 class="fr-mt-4w">Discussions</h2>
   <div v-if="!discussions?.data?.length">
-    Pas de discussion pour ce jeu de données.
+    Pas de discussion pour ce
+    {{ props.subjectType === 'dataset' ? 'jeu de données' : 'bouquet' }}.
   </div>
   <div>
     <div
