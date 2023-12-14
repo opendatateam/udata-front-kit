@@ -1,3 +1,5 @@
+import type { SubjectId } from '@/model/discussion'
+
 import DatagouvfrAPI from '../DatagouvfrAPI'
 
 export default class DiscussionsAPI extends DatagouvfrAPI {
@@ -5,13 +7,9 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
 
   /**
    * Get discussions for a dataset
-   *
-   * @param {str} dataset_id
-   * @param {number} page
-   * @returns {object}
    */
-  async getDiscussions(dataset_id, page = 1) {
-    const url = `${this.url()}/?for=${dataset_id}&page=${page}`
+  async getDiscussions(datasetId: SubjectId, page: number = 1): Promise<any> {
+    const url = `${this.url()}/?for=${datasetId}&page=${page}`
     return await this.makeRequestAndHandleResponse(url)
   }
 }
