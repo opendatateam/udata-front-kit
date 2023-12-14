@@ -8,7 +8,6 @@ import config from '@/config'
 
 import DiscussionsList from '../../components/DiscussionsList.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
-import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown } from '../../utils'
@@ -19,7 +18,6 @@ const router = useRouter()
 const store = useTopicStore()
 const userStore = useUserStore()
 const datasetStore = useDatasetStore()
-const discussionStore = useDiscussionStore()
 
 const bouquet = ref({})
 const theme = ref()
