@@ -1,5 +1,6 @@
+import type { User } from '@etalab/data.gouv.fr-components'
+
 import type { GenericResponse } from './api'
-import type { User } from './user'
 
 interface Discussion {
   discussion: Post[]
