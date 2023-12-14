@@ -70,18 +70,17 @@ watchEffect(() => {
           - le {{ formatDate(discussion.discussion[0].posted_on) }}
         </div>
       </div>
-      <!-- eslint-disable-next-line vue/no-v-html -->
+      <!-- eslint-disable vue/no-v-html -->
       <div
         class="comment"
         v-html="fromMarkdown(discussion.discussion[0].content)"
       ></div>
-      <span v-if="discussion.discussion.length > 1">
+      <template v-if="discussion.discussion.length > 1">
         <div
           v-for="comment in discussion.discussion.slice(1)"
           :key="comment.content"
           class="fr-mt-md-3v fr-pl-3v"
         >
-          <!-- eslint-disable-next-line vue/no-v-html -->
           <div
             class="secondary-comment-content"
             v-html="fromMarkdown(comment.content)"
@@ -101,7 +100,8 @@ watchEffect(() => {
             <div class="comment">- le {{ formatDate(comment.posted_on) }}</div>
           </div>
         </div>
-      </span>
+      </template>
+      <!-- eslint-enable vue/no-v-html -->
     </div>
     <div v-if="pages?.length > 1" class="fr-container">
       <DsfrPagination
