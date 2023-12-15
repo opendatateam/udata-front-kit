@@ -125,7 +125,6 @@ export const useDatasetStore = defineStore('dataset', {
      */
     async load(dataset_id) {
       const existing = this.get(dataset_id)
-      console.log(existing)
       if (existing) return existing
       const dataset = await datasetsApiv2.get(dataset_id)
       if (!dataset) return

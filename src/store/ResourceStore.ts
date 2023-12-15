@@ -35,7 +35,6 @@ export const useResourceStore = defineStore('resource', {
       datasetId: string,
       rel: { href: string }
     ): Promise<ResourceData[]> {
-      console.log(this.data, this.resourceTypes)
       if (datasetId in this.data) {
         return this.data[datasetId]
       }
