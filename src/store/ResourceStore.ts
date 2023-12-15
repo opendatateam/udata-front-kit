@@ -14,6 +14,7 @@ export interface ResourceData {
   currentPage: number
   resources: Resource[]
   total: number
+  totalWithoutFilter: number
   type: ResourceType
 }
 
@@ -49,6 +50,7 @@ export const useResourceStore = defineStore('resource', {
           currentPage: 1,
           resources: response.data,
           total: response.total,
+          totalWithoutFilter: response.total,
           type
         })
       }
