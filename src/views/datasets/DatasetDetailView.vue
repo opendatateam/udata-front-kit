@@ -247,17 +247,14 @@ watch(
                 {{ typedResources.typeLabel }}
               </h2>
               <DsfrSearchBar
+                v-if="typedResources.totalWithoutFilter > pageSize"
                 button-text="Rechercher"
                 placeholder="Rechercher"
                 :large="false"
                 class="search-bar"
                 @search="() => doSearch(typedResources.typeId)"
-                @update:modelValue="
+                @update:model-value="
                   (value) => updateQuery(value, typedResources.typeId)
-                "
-                v-if="
-                  typedResources.typeId != 'documentation' &&
-                  typedResources.totalWithoutFilter > pageSize
                 "
               />
               <span v-if="typedResources.resources.length != 0">
