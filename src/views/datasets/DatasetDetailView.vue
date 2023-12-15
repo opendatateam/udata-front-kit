@@ -32,7 +32,7 @@ const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
 const pageSize = config.website.pagination_sizes.files_list
-const showDiscussions = config.website.show_dataset_discussions
+const showDiscussions = config.website.discussions.dataset.display
 
 onMounted(() => {
   datasetStore.load(datasetId)

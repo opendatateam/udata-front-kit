@@ -13,10 +13,16 @@ const discussions: Ref<DiscussionResponse | null> = ref(null)
 const currentPage: Ref<number> = ref(1)
 const pages: Ref<object[]> = ref([])
 
+type SubjectType = 'dataset' | 'topic'
+
 const props = defineProps({
   subject: {
     type: Object,
     required: true
+  },
+  subjectType: {
+    type: String as () => SubjectType,
+    default: 'dataset'
   }
 })
 
@@ -31,12 +37,12 @@ watchEffect(() => {
   const subjectId = props.subject.id
   if (!subjectId) return
   discussionStore
-    .loadDiscussionsForDataset(subjectId, currentPage.value)
+    .loadDiscussionsForSubject(subjectId, currentPage.value)
     .then((d) => {
       discussions.value = d
       if (!pages.value.length) {
         pages.value =
-          discussionStore.getDiscussionsPaginationForDataset(subjectId)
+          discussionStore.getDiscussionsPaginationForSubject(subjectId)
       }
     })
 })

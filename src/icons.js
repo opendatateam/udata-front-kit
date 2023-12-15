@@ -2,5 +2,6 @@ export {
   RiLogoutBoxRLine,
   RiAddCircleLine,
   RiPencilLine,
-  RiLightbulbLine
+  RiLightbulbLine,
+  RiClipboardLine
 } from 'oh-vue-icons/icons/ri/index.js'

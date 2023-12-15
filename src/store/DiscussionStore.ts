@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 
-import type { GenericResponse as Response } from '@/model/api'
-import type { SubjectId } from '@/model/discussion'
+import type { SubjectId, DiscussionResponse } from '@/model/discussion'
 
 import DiscussionsAPI from '../services/api/resources/DiscussionsAPI'
 
@@ -9,45 +8,45 @@ const discussionsAPI = new DiscussionsAPI()
 
 export const useDiscussionStore = defineStore('discussion', {
   state: () => {
-    const data: Record<SubjectId, any[]> = {}
+    const data: Record<SubjectId, DiscussionResponse[]> = {}
     return { data }
   },
   actions: {
     /**
-     * Get discussions for a dataset from store
+     * Get discussions for a subject from store
      */
-    getDiscussionsForDataset(
-      datasetId: SubjectId,
+    getDiscussionsForSubject(
+      subjectId: SubjectId,
       page = 1
-    ): Response | undefined {
-      if (this.data[datasetId] === undefined) return
-      return this.data[datasetId].find((d) => d.page === page)
+    ): DiscussionResponse | undefined {
+      if (this.data[subjectId] === undefined) return
+      return this.data[subjectId].find((d) => d.page === page)
     },
     /**
-     * Async function to trigger API fetch of discussions for a dataset
+     * Async function to trigger API fetch of discussions for a subject
      */
-    async loadDiscussionsForDataset(
-      datasetId: SubjectId,
+    async loadDiscussionsForSubject(
+      subjectId: SubjectId,
       page = 1
-    ): Promise<Response | undefined> {
-      const existing = this.getDiscussionsForDataset(datasetId, page)
+    ): Promise<DiscussionResponse | undefined> {
+      const existing = this.getDiscussionsForSubject(subjectId, page)
       if (existing !== undefined) return existing
-      const discussions = await discussionsAPI.getDiscussions(datasetId, page)
-      this.addDiscussions(datasetId, discussions)
-      return this.getDiscussionsForDataset(datasetId, page)
+      const discussions = await discussionsAPI.getDiscussions(subjectId, page)
+      this.addDiscussions(subjectId, discussions)
+      return this.getDiscussionsForSubject(subjectId, page)
     },
     /**
      * Store the result of a discussions fetch operation for a dataset in store
      */
-    addDiscussions(datasetId: SubjectId, res: object[]) {
-      const existing = this.data[datasetId] ?? []
-      this.data[datasetId] = [...existing, res]
+    addDiscussions(subjectId: SubjectId, res: DiscussionResponse) {
+      const existing = this.data[subjectId] ?? []
+      this.data[subjectId] = [...existing, res]
     },
     /**
      * Get a discussions pagination object for a given dataset, from store infos
      */
-    getDiscussionsPaginationForDataset(datasetId: SubjectId): object[] {
-      const discussions = this.getDiscussionsForDataset(datasetId)
+    getDiscussionsPaginationForSubject(subjectId: SubjectId): object[] {
+      const discussions = this.getDiscussionsForSubject(subjectId)
       if (discussions === undefined) return []
       const nbPages = Math.ceil(discussions.total / discussions.page_size)
       return [...Array(nbPages).keys()].map((page) => {
