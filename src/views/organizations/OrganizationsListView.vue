@@ -35,10 +35,10 @@ onMounted(() => {
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
-    <h1>Organisations</h1>
+  <div class="fr-container fr-mb-4w">
+    <h1 class="fr-mb-2v">Organisations</h1>
     <p>Parcourir toutes les organisations présentes sur {{ title }}.</p>
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li v-for="org in organizations" class="fr-col-12 fr-col-lg-4">

@@ -14,31 +14,26 @@ import { useRoute } from 'vue-router'
 import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
+import DiscussionsList from '../../components/DiscussionsList.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
-import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
-import { descriptionFromMarkdown } from '../../utils'
+import { descriptionFromMarkdown, formatDate } from '../../utils'
 
 const route = useRoute()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
 const reuseStore = useReuseStore()
-const discussionStore = useDiscussionStore()
 
 const dataset = computed(() => datasetStore.get(datasetId) || {})
-const discussionsPages = ref([])
 const reuses = ref([])
 const resources = ref({})
-const discussions = ref({})
-const discussionsPage = ref(1)
-const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
-const currentPage = ref(1)
 const pageSize = config.website.pagination_sizes.files_list
-const showDiscussions = config.website.show_dataset_discussions
+const showDiscussions = config.website.discussions.dataset.display
+
 const query = ref('')
 
 const updateQuery = (q, typeId) => {
@@ -101,14 +96,6 @@ const changePage = (type, page = 1, query = '') => {
     })
 }
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('default', {
-    dateStyle: 'full',
-    timeStyle: 'short'
-  }).format(date)
-}
-
 const simpleDate = (dateString) => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat('default', {
@@ -147,7 +134,7 @@ const reuseDescription = (r) => {
 }
 
 const getType = (id) => {
-  let type = types.value.find((t) => t.id == id)
+  const type = types.value.find((t) => t.id === id)
   return type?.label || ''
 }
 
@@ -170,16 +157,6 @@ watch(
     reuseStore
       .loadReusesForDataset(dataset.value.id)
       .then((r) => (reuses.value = r))
-    // fetch discussions
-    discussionStore
-      .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
-      .then((d) => {
-        discussions.value = d
-        if (!discussionsPage.value.length) {
-          discussionsPages.value =
-            discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
-        }
-      })
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
       const resourceLoader = useLoading().show()
@@ -187,7 +164,7 @@ watch(
         dataset.value.resources,
         pageSize
       )
-      for (let typedResources of allResources) {
+      for (const typedResources of allResources) {
         resources.value[typedResources.typeId] = typedResources
         resources.value[typedResources.typeId]['totalWithoutFilter'] =
           typedResources.total
@@ -205,12 +182,12 @@ watch(
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
-        <h1>{{ dataset.title }}</h1>
+        <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <ReadMore max-height="600">
           <div v-html="description"></div>
         </ReadMore>
@@ -364,74 +341,7 @@ watch(
             </div>
           </div>
         </Well>
-        <template v-if="showDiscussions">
-          <h2 class="fr-mt-4w">Discussions</h2>
-          <div v-if="!discussions.data?.length">
-            Pas de discussion pour ce jeu de données.
-          </div>
-
-          <div>
-            <div class="discussion" v-for="discussion in discussions.data">
-              <div class="discussion-title">{{ discussion.title }}</div>
-              <div class="discussion-subtitle">
-                <div class="user-avatar">
-                  <img
-                    style="border-radius: 50%"
-                    :src="
-                      config.datagouvfr.base_url +
-                      '/api/1/avatars/' +
-                      discussion.discussion[0].posted_by.id +
-                      '/20'
-                    "
-                    width="20"
-                  />
-                </div>
-                <div class="user-name">
-                  {{ discussion.discussion[0].posted_by.first_name }}
-                  {{ discussion.discussion[0].posted_by.last_name }}
-                </div>
-                <div class="date-comment">
-                  - le {{ formatDate(discussion.discussion[0].posted_on) }}
-                </div>
-              </div>
-              <div class="comment">
-                {{ discussion.discussion[0].content }}
-              </div>
-              <span v-if="discussion.discussion.length > 1">
-                <div
-                  class="secondary-comment"
-                  v-for="comment in discussion.discussion.slice(1)"
-                  v-bind:key="comment.content"
-                >
-                  <div class="secondary-comment-content">
-                    {{ comment.content }}
-                  </div>
-                  <div class="discussion-subtitle">
-                    <div class="user-avatar">
-                      <img
-                        style="border-radius: 50%"
-                        :src="
-                          config.datagouvfr.base_url +
-                          '/api/1/avatars/' +
-                          comment.posted_by.id +
-                          '/20'
-                        "
-                        width="20"
-                      />
-                    </div>
-                    <div class="user-name">
-                      {{ comment.posted_by.first_name }}
-                      {{ comment.posted_by.last_name }}
-                    </div>
-                    <div class="comment">
-                      - le {{ formatDate(comment.posted_on) }}
-                    </div>
-                  </div>
-                </div>
-              </span>
-            </div>
-          </div>
-        </template>
+        <DiscussionsList v-if="showDiscussions" :subject="dataset" />
       </DsfrTabContent>
 
       <!-- Métadonnées -->
@@ -459,84 +369,5 @@ watch(
 <style scoped lang="scss">
 pre {
   white-space: pre-wrap;
-}
-ul.es__comment__container {
-  list-style-type: none;
-  padding-inline-start: 0.25rem;
-  li {
-    padding-bottom: 1.5rem;
-  }
-}
-.es__comment__metadata {
-  .es__comment__author {
-    font-weight: bold;
-  }
-}
-.es__organization__sidebar {
-  text-align: center;
-  width: 100%;
-  .es__organization__sidebar__metadata_container {
-    padding: 0 2rem;
-  }
-  .es__organization__sidebar__logo_container {
-    width: 100%;
-    img {
-      max-width: 250px;
-    }
-  }
-}
-.es__quality {
-  list-style-type: none;
-  padding-inline-start: 0;
-}
-
-.search-bar {
-  margin-top: 15px;
-}
-
-.discussion {
-  margin-bottom: 50px;
-}
-
-.discussion-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.discussion-subtitle {
-  display: flex;
-}
-
-.user-avatar {
-  margin-right: 5px;
-}
-
-.user-name {
-  color: #3557a2;
-  margin-right: 5px;
-  font-size: 14px;
-}
-
-.comment-date {
-  color: #777777;
-  font-style: italic;
-  font-size: 14px;
-}
-
-.comment {
-  font-size: 14px;
-}
-
-.secondary-comment {
-  margin-top: 10px;
-  padding-left: 10px;
-}
-
-.secondary-comment-content {
-  font-size: 14px;
-  border-left: 2px solid #dddddd;
-  padding-left: 10px;
-  margin-bottom: 10px;
 }
 </style>

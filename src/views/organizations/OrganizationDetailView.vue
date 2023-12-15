@@ -58,10 +58,10 @@ watchEffect(() => {
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
-    <h1>{{ org.name }}</h1>
+  <div class="fr-container fr-mb-4w">
+    <h1 class="fr-mb-2v">{{ org.name }}</h1>
     <div v-html="description"></div>
 
     <div class="w-100 fr-grid-row fr-grid-row--middle fr-mt-5v justify-end">
