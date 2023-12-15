@@ -1,3 +1,4 @@
+import type { Rel } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
 import config from '@/config'
@@ -31,10 +32,7 @@ export const useResourceStore = defineStore('resource', {
      * Load resources from the API via a HATEOAS rel
      *
      */
-    async loadResources(
-      datasetId: string,
-      rel: { href: string }
-    ): Promise<ResourceData[]> {
+    async loadResources(datasetId: string, rel: Rel): Promise<ResourceData[]> {
       if (datasetId in this.data) {
         return this.data[datasetId]
       }
