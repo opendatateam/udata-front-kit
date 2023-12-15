@@ -1,5 +1,5 @@
 <script setup>
-import { AppLink, DatasetCard } from '@etalab/data.gouv.fr-components'
+import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 
@@ -114,14 +114,7 @@ watchEffect(() => {
         :dataset="d"
         :datasetUrl="getDatasetPage(d.id)"
         :organizationUrl="getOrganizationPage(d.organization.id)"
-      >
-        <template #datasetUrl="{ dataset, datasetUrl }">
-          <AppLink :to="datasetUrl" class="text-grey-500">
-            {{ dataset.title }}
-            <small v-if="dataset.acronym">{{ dataset.acronym }}</small>
-          </AppLink>
-        </template>
-      </DatasetCard>
+      />
     </div>
   </div>
   <DsfrPagination
