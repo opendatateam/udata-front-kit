@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
   ResourceAccordion,
   OrganizationNameWithCertificate,
@@ -16,6 +16,7 @@ import config from '@/config'
 import ChartData from '../../components/ChartData.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useDiscussionStore } from '../../store/DiscussionStore'
+import { useResourceStore } from '../../store/ResourceStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown } from '../../utils'
 
@@ -23,20 +24,24 @@ const route = useRoute()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
+const resourceStore = useResourceStore()
 const reuseStore = useReuseStore()
 const discussionStore = useDiscussionStore()
 
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const discussionsPages = ref([])
 const reuses = ref([])
-const resources = ref({})
+
+const resources = ref<
+  Record<string, import('../../store/ResourceStore').ResourceData>
+>({})
+
 const discussions = ref({})
 const discussionsPage = ref(1)
 const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
-const currentPage = ref(1)
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.show_dataset_discussions
 
@@ -80,10 +85,10 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (type, page = 1) => {
+const changePage = (type: string, page = 1) => {
   resources.value[type].currentPage = page
-  return datasetStore
-    .fetchDatasetResources(dataset.value.id, type, page, pageSize)
+  return resourceStore
+    .fetchDatasetResources(dataset.value.id, type, page)
     .then((data) => {
       resources.value[type].resources = data
     })
@@ -181,12 +186,12 @@ watch(
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
       const resourceLoader = useLoading().show()
-      const allResources = await datasetStore.loadResources(
-        dataset.value.resources,
-        pageSize
+      const allResources = await resourceStore.loadResources(
+        dataset.value.id,
+        dataset.value.resources
       )
-      for (let typedResources of allResources) {
-        resources.value[typedResources.typeId] = typedResources
+      for (const typedResources of allResources) {
+        resources.value[typedResources.type.id] = typedResources
       }
       resourceLoader.hide()
     } else {
@@ -261,24 +266,29 @@ watch(
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <div class="datagouv-components" v-if="selectedTabIndex === 0">
+        <div v-if="selectedTabIndex === 0" class="datagouv-components">
           <template v-for="typedResources in resources">
-            <div v-if="typedResources.total" class="fr-mb-4w">
+            <div
+              v-if="typedResources.total"
+              :key="typedResources.type.id"
+              class="fr-mb-4w"
+            >
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
-                {{ typedResources.typeLabel }}
+                {{ typedResources.type.label }}
               </h2>
               <ResourceAccordion
                 v-for="resource in typedResources.resources"
-                :datasetId="datasetId"
+                :key="resource.id"
+                :dataset-id="datasetId"
                 :resource="resource"
               />
               <Pagination
-                class="fr-mt-3w"
                 v-if="typedResources.total > pageSize"
+                class="fr-mt-3w"
                 :page="typedResources.currentPage"
                 :page-size="pageSize"
                 :total-results="typedResources.total"
-                @change="(page) => changePage(typedResources.typeId, page)"
+                @change="(page) => changePage(typedResources.type.id, page)"
               />
             </div>
           </template>
