@@ -34,8 +34,6 @@ const types = ref([])
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.discussions.dataset.display
 
-const query = ref('')
-
 const updateQuery = (q, typeId) => {
   resources.value[typeId].query = q
   changePage(typeId, 1, q)
