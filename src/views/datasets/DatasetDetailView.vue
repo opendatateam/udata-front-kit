@@ -166,7 +166,7 @@ watch(
         dataset.value.resources
       )
       for (const typedResources of allResources) {
-        resources.value[typedResources.type.id] = typedResources
+        resources.value[typedResources.type.id] = { ...typedResources }
         resources.value[typedResources.type.id].totalWithoutFilter =
           typedResources.total
       }
