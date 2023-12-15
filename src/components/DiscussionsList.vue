@@ -1,17 +1,24 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { defineProps, ref, watchEffect } from 'vue'
+import { defineProps, ref, watchEffect, computed } from 'vue'
 
 import config from '../config'
 import type { DiscussionResponse } from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
 import { formatDate, fromMarkdown } from '../utils'
 
+interface DiscussionForm {
+  title: string
+  content: string
+}
+
 const discussionStore = useDiscussionStore()
 
 const discussions: Ref<DiscussionResponse | null> = ref(null)
 const currentPage: Ref<number> = ref(1)
 const pages: Ref<object[]> = ref([])
+const showDiscussionForm: Ref<boolean> = ref(false)
+const discussionForm: Ref<DiscussionForm> = ref({ title: '', content: '' })
 
 type SubjectType = 'dataset' | 'topic'
 
@@ -24,6 +31,10 @@ const props = defineProps({
     type: String as () => SubjectType,
     default: 'dataset'
   }
+})
+
+const allowDiscussionCreation = computed(() => {
+  return config.website.discussions[props.subjectType].create
 })
 
 const getUserAvatar = (post) => {
@@ -49,7 +60,56 @@ watchEffect(() => {
 </script>
 
 <template>
-  <h2 class="fr-mt-4w">Discussions</h2>
+  <div class="fr-grid-row fr-grid-row--middle">
+    <div class="fr-col">
+      <h2 class="fr-mt-4w">Discussions</h2>
+    </div>
+    <div v-if="allowDiscussionCreation" class="fr-col text-align-right">
+      <button
+        type="button"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
+        @click.stop.prevent="showDiscussionForm = true"
+      >
+        Démarrer une nouvelle discussion
+      </button>
+    </div>
+  </div>
+
+  <div v-if="showDiscussionForm" class="fr-mb-4w">
+    <form>
+      <div class="fr-input-group">
+        <label class="fr-label" for="discussion-title"> Titre * </label>
+        <input
+          id="discussion-title"
+          v-model="discussionForm.title"
+          required
+          class="fr-input"
+          name="title"
+        />
+      </div>
+      <div class="fr-input-group">
+        <label class="fr-label" for="discussion-message"> Message * </label>
+        <textarea
+          id="discussion-message"
+          v-model="discussionForm.content"
+          required
+          class="fr-input"
+          name="message"
+        ></textarea>
+      </div>
+      <div class="text-align-right">
+        <button
+          type="button"
+          class="fr-btn fr-btn--secondary fr-mr-1w"
+          @click.stop.prevent="showDiscussionForm = false"
+        >
+          Annuler
+        </button>
+        <button type="submit" class="fr-btn">Soumettre</button>
+      </div>
+    </form>
+  </div>
+
   <div v-if="!discussions?.data?.length">
     Pas de discussion pour ce jeu de données.
   </div>
