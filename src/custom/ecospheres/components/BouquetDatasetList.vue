@@ -70,7 +70,7 @@ export const getDatasetListTitle = function (
 }
 
 export default {
-  name: 'DatasetList',
+  name: 'BouquetDatasetList',
   emits: ['removeDataset'],
   props: {
     datasets: {

@@ -48,23 +48,22 @@
       @click.prevent="goToStep(3)"
     />
   </h4>
-  <DatasetList :datasets="bouquet.datasetsProperties" />
+  <BouquetDatasetList :datasets="bouquet.datasetsProperties" />
 </template>
 
 <script lang="ts">
 import MarkdownIt from 'markdown-it'
 import type { PropType } from 'vue'
 
+import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import { getDatasetListTitle } from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import type { Bouquet } from '@/model'
-
-import DatasetList from '../../DatasetList.vue'
-import { getDatasetListTitle } from '../../DatasetList.vue'
 
 export default {
   name: 'BouquetFormRecap',
   emits: ['updateStep'],
   components: {
-    DatasetList: DatasetList
+    BouquetDatasetList: BouquetDatasetList
   },
   props: {
     bouquet: {

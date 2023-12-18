@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import Tooltip from '../../Tooltip.vue'
+import Tooltip from '@/components/Tooltip.vue'
 
 export default {
   name: 'BouquetPropertiesFieldGroup',

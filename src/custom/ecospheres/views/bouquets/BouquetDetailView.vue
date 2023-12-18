@@ -5,12 +5,11 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
-
-import { Availability } from '../../model'
-import { useDatasetStore } from '../../store/DatasetStore'
-import { useTopicStore } from '../../store/TopicStore'
-import { useUserStore } from '../../store/UserStore'
-import { descriptionFromMarkdown } from '../../utils'
+import { Availability } from '@/model'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
+import { descriptionFromMarkdown } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()

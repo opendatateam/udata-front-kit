@@ -91,11 +91,10 @@
 <script lang="ts">
 import Multiselect from '@vueform/multiselect'
 
-import config from '../../../config'
-import type { DatasetProperties } from '../../../model'
-import { Availability } from '../../../model'
-import SearchAPI from '../../../services/api/SearchAPI'
-import Tooltip from '../../Tooltip.vue'
+import Tooltip from '@/components/Tooltip.vue'
+import config from '@/config'
+import { type DatasetProperties, Availability } from '@/model'
+import SearchAPI from '@/services/api/SearchAPI'
 
 export default {
   name: 'DatasetPropertiesForm',

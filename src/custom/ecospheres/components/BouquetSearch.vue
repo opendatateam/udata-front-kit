@@ -52,7 +52,7 @@ import { NoOptionSelected } from '@/model'
 import type { SelectOption, Theme } from '@/model'
 
 export default defineComponent({
-  name: 'TopicSearch',
+  name: 'BouquetSearch',
   props: {
     themeName: {
       type: String,

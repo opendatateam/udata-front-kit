@@ -1,6 +1,6 @@
 <template>
   <h4>{{ getDatasetListTitle() }}</h4>
-  <DatasetList
+  <BouquetDatasetList
     class="fr-mt-4w fr-mb-4w"
     @removeDataset="removeDataset"
     :datasets="datasets"
@@ -12,17 +12,17 @@
 </template>
 
 <script lang="ts">
-import DatasetList from '@/components/DatasetList.vue'
-import DatasetPropertiesForm from '@/components/forms/dataset/DatasetPropertiesForm.vue'
+import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import DatasetPropertiesForm from '@/custom/ecospheres/components/forms/dataset/DatasetPropertiesForm.vue'
 import type { DatasetProperties } from '@/model'
 
-import { getDatasetListTitle } from '../../DatasetList.vue'
+import { getDatasetListTitle } from '../../BouquetDatasetList.vue'
 
 export default {
   name: 'BouquetContentFieldGroup',
   components: {
     DatasetPropertiesForm: DatasetPropertiesForm,
-    DatasetList: DatasetList
+    BouquetDatasetList: BouquetDatasetList
   },
   props: {
     currentDatasets: {

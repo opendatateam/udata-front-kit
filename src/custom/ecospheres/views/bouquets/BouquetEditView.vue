@@ -56,11 +56,11 @@
 </template>
 
 <script lang="ts">
-import BouquetContentFieldGroup from '@/components/forms/bouquet/BouquetContentFieldGroup.vue'
-import BouquetFormRecap from '@/components/forms/bouquet/BouquetFormRecap.vue'
-import BouquetPropertiesFieldGroup from '@/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
-import BouquetThemeFieldGroup from '@/components/forms/bouquet/BouquetThemeFieldGroup.vue'
 import config from '@/config'
+import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetContentFieldGroup.vue'
+import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
+import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
+import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetThemeFieldGroup.vue'
 import type { Bouquet, BouquetCreationData } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
 
