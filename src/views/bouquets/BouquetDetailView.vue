@@ -250,7 +250,6 @@ onMounted(() => {
         v-if="showDiscussions"
         :subject="bouquet"
         subject-class="Topic"
-        class="fr-mt-8w"
       />
     </div>
   </div>

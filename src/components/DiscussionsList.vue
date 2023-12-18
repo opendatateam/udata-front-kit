@@ -7,7 +7,9 @@ import config from '../config'
 import type {
   DiscussionResponse,
   DiscussionForm,
-  SubjectClass
+  SubjectClass,
+  PostForm,
+  DiscussionId
 } from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
 import { useUserStore } from '../store/UserStore'
@@ -19,6 +21,7 @@ const userStore = useUserStore()
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
 const showDiscussionForm: Ref<boolean> = ref(false)
+const postFormId: Ref<DiscussionId | null> = ref(null)
 
 const props = defineProps({
   subject: {
@@ -40,6 +43,8 @@ const discussionForm: Ref<DiscussionForm> = ref({
   }
 })
 
+const postForm: Ref<PostForm> = ref({ comment: '' })
+
 const discussions: ComputedRef<DiscussionResponse> = computed(() => {
   return discussionStore.getDiscussionsForSubject(
     props.subject.id,
@@ -51,7 +56,10 @@ const pages: ComputedRef<object[]> = computed(() => {
 })
 
 const allowDiscussionCreation = computed(() => {
-  return config.website.discussions[props.subjectClass.toLowerCase()].create
+  return (
+    config.website.discussions[props.subjectClass.toLowerCase()].create &&
+    loggedIn
+  )
 })
 
 const getUserAvatar = (post) => {
@@ -62,11 +70,25 @@ const getUserAvatar = (post) => {
 }
 
 const createDiscussion = () => {
-  discussionStore.createDiscussion(discussionForm.value).then((_) => {
-    discussionForm.value.title = ''
-    discussionForm.value.comment = ''
-    showDiscussionForm.value = false
+  discussionStore.createDiscussion(discussionForm.value).then((d) => {
+    if (d !== undefined) {
+      discussionForm.value.title = ''
+      discussionForm.value.comment = ''
+      showDiscussionForm.value = false
+      currentPage.value = 1
+    }
   })
+}
+
+const createPost = (discussionId: DiscussionId) => {
+  discussionStore
+    .createPost(props.subject.id, discussionId, postForm.value)
+    .then((d) => {
+      if (d !== undefined) {
+        postForm.value.comment = ''
+        postFormId.value = null
+      }
+    })
 }
 
 watchEffect(() => {
@@ -84,10 +106,7 @@ watchEffect(() => {
     <div class="fr-col">
       <h2 class="fr-mt-4w">Discussions</h2>
     </div>
-    <div
-      v-if="allowDiscussionCreation && loggedIn"
-      class="fr-col text-align-right"
-    >
+    <div v-if="allowDiscussionCreation" class="fr-col text-align-right">
       <button
         type="button"
         class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
@@ -134,7 +153,8 @@ watchEffect(() => {
   </div>
 
   <div v-if="!discussions?.data?.length">
-    Pas de discussion pour ce jeu de données.
+    Pas de discussion pour ce
+    {{ props.subjectClass === 'Dataset' ? 'jeu de données' : 'bouquet' }}.
   </div>
   <div>
     <div
@@ -174,7 +194,7 @@ watchEffect(() => {
             class="secondary-comment-content"
             v-html="fromMarkdown(comment.content)"
           ></div>
-          <div class="discussion-subtitle">
+          <div class="discussion-subtitle fr-mb-2w">
             <div class="avatar fr-mr-1v">
               <img
                 style="border-radius: 50%"
@@ -191,6 +211,43 @@ watchEffect(() => {
         </div>
       </template>
       <!-- eslint-enable vue/no-v-html -->
+      <div v-if="allowDiscussionCreation" class="datagouv-components">
+        <button
+          v-if="postFormId !== discussion.id"
+          type="button"
+          class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-chat-3-line fr-btn--icon-left"
+          @click.stop.prevent="postFormId = discussion.id"
+        >
+          Répondre
+        </button>
+        <form
+          v-if="postFormId === discussion.id"
+          @submit.stop.prevent="createPost(discussion.id)"
+        >
+          <div class="fr-input-group">
+            <label class="fr-label" for="discussion-message">
+              Commentaire *
+            </label>
+            <textarea
+              id="discussion-message"
+              v-model="postForm.comment"
+              required
+              class="fr-input"
+              name="message"
+            ></textarea>
+          </div>
+          <div class="text-align-right">
+            <button
+              type="button"
+              class="fr-btn fr-btn--secondary fr-mr-1w"
+              @click.stop.prevent="postFormId = null"
+            >
+              Annuler
+            </button>
+            <button type="submit" class="fr-btn">Soumettre</button>
+          </div>
+        </form>
+      </div>
     </div>
     <div v-if="pages?.length > 1" class="fr-container">
       <DsfrPagination

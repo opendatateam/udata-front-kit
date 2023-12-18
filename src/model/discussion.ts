@@ -4,10 +4,12 @@ import type { GenericResponse } from './api'
 
 interface Discussion {
   discussion: Post[]
-  id: string
+  id: DiscussionId
   subject: Subject
   title: string
 }
+
+type DiscussionId = string
 
 interface DiscussionForm {
   title: string
@@ -19,6 +21,10 @@ interface Post {
   content: string
   posted_by: User
   posted_on: string
+}
+
+interface PostForm {
+  comment: string
 }
 
 interface Subject {
@@ -41,5 +47,7 @@ export type {
   SubjectId,
   SubjectClass,
   DiscussionResponse,
-  DiscussionForm
+  DiscussionForm,
+  PostForm,
+  DiscussionId
 }
