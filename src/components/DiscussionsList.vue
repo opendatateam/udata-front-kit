@@ -235,7 +235,10 @@ watchEffect(() => {
           v-if="postFormId !== discussion.id && loggedIn"
           type="button"
           class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-chat-3-line fr-btn--icon-left"
-          @click.stop.prevent="postFormId = discussion.id"
+          @click.stop.prevent="
+            postForm.comment = ''
+            postFormId = discussion.id
+          "
         >
           Répondre
         </button>
