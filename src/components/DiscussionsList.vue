@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia'
 import type { ComputedRef, Ref } from 'vue'
 import { defineProps, ref, watchEffect, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import config from '../config'
 import type {
@@ -14,6 +15,9 @@ import type {
 import { useDiscussionStore } from '../store/DiscussionStore'
 import { useUserStore } from '../store/UserStore'
 import { formatDate, fromMarkdown } from '../utils'
+
+const route = useRoute()
+const router = useRouter()
 
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
@@ -56,10 +60,7 @@ const pages: ComputedRef<object[]> = computed(() => {
 })
 
 const allowDiscussionCreation = computed(() => {
-  return (
-    config.website.discussions[props.subjectClass.toLowerCase()].create &&
-    loggedIn.value
-  )
+  return config.website.discussions[props.subjectClass.toLowerCase()].create
 })
 
 const getUserAvatar = (post) => {
@@ -67,6 +68,11 @@ const getUserAvatar = (post) => {
     return post.posted_by.avatar_thumbnail
   }
   return `${config.datagouvfr.base_url}/api/1/avatars/${post.posted_by.id}/20`
+}
+
+const triggerLogin = () => {
+  localStorage.setItem('lastPath', route.path)
+  router.push({ name: 'login' })
 }
 
 const createDiscussion = () => {
@@ -108,11 +114,20 @@ watchEffect(() => {
     </div>
     <div v-if="allowDiscussionCreation" class="fr-col text-align-right">
       <button
+        v-if="loggedIn"
         type="button"
         class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
         @click.stop.prevent="showDiscussionForm = true"
       >
         Démarrer une nouvelle discussion
+      </button>
+      <button
+        v-else
+        type="button"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-account-line fr-btn--icon-left"
+        @click.stop.prevent="triggerLogin()"
+      >
+        Connectez-vous pour démarrer une discussion
       </button>
     </div>
   </div>
@@ -213,12 +228,20 @@ watchEffect(() => {
       <!-- eslint-enable vue/no-v-html -->
       <div v-if="allowDiscussionCreation" class="datagouv-components">
         <button
-          v-if="postFormId !== discussion.id"
+          v-if="postFormId !== discussion.id && loggedIn"
           type="button"
           class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-chat-3-line fr-btn--icon-left"
           @click.stop.prevent="postFormId = discussion.id"
         >
           Répondre
+        </button>
+        <button
+          v-if="!loggedIn"
+          type="button"
+          class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-account-line fr-btn--icon-left"
+          @click.stop.prevent="triggerLogin()"
+        >
+          Connectez-vous pour répondre
         </button>
         <form
           v-if="postFormId === discussion.id"
