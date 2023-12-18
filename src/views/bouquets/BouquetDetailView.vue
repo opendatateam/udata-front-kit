@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
 
+import { Availability } from '../../model'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useTopicStore } from '../../store/TopicStore'
 import { useUserStore } from '../../store/UserStore'
@@ -32,12 +33,7 @@ const breadcrumbLinks = ref([
 ])
 const selectedTheme = ref('')
 const url = window.location.href
-const availabilityEnum = {
-  MISSING: 'missing',
-  NOT_AVAILABLE: 'not available',
-  LOCAL_AVAILABLE: 'available',
-  URL_AVAILABLE: 'url available'
-}
+
 const missingData = 'Donnée manquante'
 const notFoundData = 'Donnée non disponible'
 
@@ -189,16 +185,14 @@ onMounted(() => {
             >
               <DsfrTag
                 v-if="
-                  datasetProperties.available !==
-                    availabilityEnum.URL_AVAILABLE &&
-                  datasetProperties.available !==
-                    availabilityEnum.LOCAL_AVAILABLE
+                  datasetProperties.available !== Availability.URL_AVAILABLE &&
+                  datasetProperties.available !== Availability.LOCAL_AVAILABLE
                 "
                 class="fr-mb-2w uppercase bold"
                 :label="`${
-                  datasetProperties.available === availabilityEnum.NOT_AVAILABLE
+                  datasetProperties.available === Availability.NOT_AVAILABLE
                     ? missingData
-                    : datasetProperties.available === availabilityEnum.MISSING
+                    : datasetProperties.available === Availability.MISSING
                     ? notFoundData
                     : null
                 }`"
@@ -210,9 +204,8 @@ onMounted(() => {
                 <a
                   v-if="
                     datasetProperties.available !==
-                      availabilityEnum.URL_AVAILABLE &&
-                    datasetProperties.available !==
-                      availabilityEnum.LOCAL_AVAILABLE
+                      Availability.URL_AVAILABLE &&
+                    datasetProperties.available !== Availability.LOCAL_AVAILABLE
                   "
                   class="fr-btn fr-btn--secondary inline-flex"
                   :href="`mailto:${config.website.contact_email}`"

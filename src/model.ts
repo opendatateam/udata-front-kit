@@ -81,15 +81,6 @@ interface Topic {
   uri: string
 }
 
-interface BetaDataset {
-  create_at: string
-  frequency: string
-  last_modified: string
-  last_update: string
-
-  // TODO --  add list of properties for Dataset
-}
-
 export const NoOptionSelected = 'no_option_selected'
 export const NoId = 'NO_ID'
 
