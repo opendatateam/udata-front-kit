@@ -58,7 +58,7 @@ const pages: ComputedRef<object[]> = computed(() => {
 const allowDiscussionCreation = computed(() => {
   return (
     config.website.discussions[props.subjectClass.toLowerCase()].create &&
-    loggedIn
+    loggedIn.value
   )
 })
 
