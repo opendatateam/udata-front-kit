@@ -26,9 +26,9 @@ watchEffect(async () => {
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
+  <div class="fr-container fr-mb-4w">
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="markdown.render(content)" />
   </div>

@@ -15,7 +15,7 @@ import OrganizationsListView from '../views/organizations/OrganizationsListView.
 export default class RouterFetch {
   generateRouteItems() {
     const items = []
-    config.website.menu_items.forEach((item) => {
+    config.website.router_items.forEach((item) => {
       if (item.id === 'datasets') {
         items.push({
           path: item.linkPage,

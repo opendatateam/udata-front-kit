@@ -11,11 +11,15 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 
+import DiscussionsList from '../../components/DiscussionsList.vue'
+
 const route = useRoute()
 const router = useRouter()
+
 const store = useTopicStore()
 const userStore = useUserStore()
 const datasetStore = useDatasetStore()
+
 const bouquet = ref({})
 const theme = ref()
 const subtheme = ref()
@@ -35,6 +39,7 @@ const url = window.location.href
 
 const missingData = 'Donnée manquante'
 const notFoundData = 'Donnée non disponible'
+const showDiscussions = config.website.discussions.topic.display
 
 const goToCreate = () => {
   router.push({ name: 'bouquet_add' })
@@ -220,12 +225,18 @@ onMounted(() => {
 
     <DsfrButton
       @click.prevent="copyUrl"
-      icon="ri-copy"
+      icon="ri-clipboard-line"
       :inline="false"
       class="btn-copy fr-ml-auto"
     >
       Copier l'url de la page
     </DsfrButton>
+
+    <DiscussionsList
+      v-if="showDiscussions"
+      :subject="bouquet"
+      subject-type="topic"
+    />
   </div>
 </template>
 

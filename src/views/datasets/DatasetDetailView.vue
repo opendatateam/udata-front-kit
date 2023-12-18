@@ -14,31 +14,34 @@ import { useRoute } from 'vue-router'
 import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
+import DiscussionsList from '../../components/DiscussionsList.vue'
 import { useDatasetStore } from '../../store/DatasetStore'
-import { useDiscussionStore } from '../../store/DiscussionStore'
 import { useReuseStore } from '../../store/ReuseStore'
-import { descriptionFromMarkdown } from '../../utils'
+import { descriptionFromMarkdown, formatDate } from '../../utils'
 
 const route = useRoute()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
 const reuseStore = useReuseStore()
-const discussionStore = useDiscussionStore()
 
 const dataset = computed(() => datasetStore.get(datasetId) || {})
-const discussionsPages = ref([])
 const reuses = ref([])
 const resources = ref({})
-const discussions = ref({})
-const discussionsPage = ref(1)
-const expandedDiscussion = ref(null)
 const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
-const currentPage = ref(1)
 const pageSize = config.website.pagination_sizes.files_list
-const showDiscussions = config.website.show_dataset_discussions
+const showDiscussions = config.website.discussions.dataset.display
+
+const updateQuery = (q, typeId) => {
+  resources.value[typeId].query = q
+  changePage(typeId, 1, q)
+}
+
+const doSearch = (typeId) => {
+  changePage(typeId, 1, resources.value[typeId].query)
+}
 
 onMounted(() => {
   datasetStore.load(datasetId)
@@ -80,21 +83,15 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (type, page = 1) => {
+const changePage = (type, page = 1, query = '') => {
   resources.value[type].currentPage = page
+  resources.value[type].query = query
   return datasetStore
-    .fetchDatasetResources(dataset.value.id, type, page, pageSize)
+    .fetchDatasetResources(dataset.value.id, type, page, pageSize, query)
     .then((data) => {
-      resources.value[type].resources = data
+      resources.value[type].resources = data['data']
+      resources.value[type].total = data['total']
     })
-}
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('default', {
-    dateStyle: 'full',
-    timeStyle: 'short'
-  }).format(date)
 }
 
 const simpleDate = (dateString) => {
@@ -135,7 +132,7 @@ const reuseDescription = (r) => {
 }
 
 const getType = (id) => {
-  let type = types.value.find((t) => t.id == id)
+  const type = types.value.find((t) => t.id === id)
   return type?.label || ''
 }
 
@@ -158,16 +155,6 @@ watch(
     reuseStore
       .loadReusesForDataset(dataset.value.id)
       .then((r) => (reuses.value = r))
-    // fetch discussions
-    discussionStore
-      .loadDiscussionsForDataset(dataset.value.id, discussionsPage.value)
-      .then((d) => {
-        discussions.value = d
-        if (!discussionsPage.value.length) {
-          discussionsPages.value =
-            discussionStore.getDiscussionsPaginationForDataset(dataset.value.id)
-        }
-      })
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
       const resourceLoader = useLoading().show()
@@ -175,8 +162,10 @@ watch(
         dataset.value.resources,
         pageSize
       )
-      for (let typedResources of allResources) {
+      for (const typedResources of allResources) {
         resources.value[typedResources.typeId] = typedResources
+        resources.value[typedResources.typeId]['totalWithoutFilter'] =
+          typedResources.total
       }
       resourceLoader.hide()
     } else {
@@ -191,12 +180,12 @@ watch(
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
-        <h1>{{ dataset.title }}</h1>
+        <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <ReadMore max-height="600">
           <div v-html="description"></div>
         </ReadMore>
@@ -253,23 +242,44 @@ watch(
       >
         <div class="datagouv-components" v-if="selectedTabIndex === 0">
           <template v-for="typedResources in resources">
-            <div v-if="typedResources.total" class="fr-mb-4w">
+            <div v-if="typedResources.totalWithoutFilter" class="fr-mb-4w">
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
                 {{ typedResources.typeLabel }}
               </h2>
-              <ResourceAccordion
-                v-for="resource in typedResources.resources"
-                :datasetId="datasetId"
-                :resource="resource"
+              <DsfrSearchBar
+                v-if="typedResources.totalWithoutFilter > pageSize"
+                button-text="Rechercher"
+                placeholder="Rechercher"
+                :large="false"
+                class="search-bar"
+                @search="() => doSearch(typedResources.typeId)"
+                @update:model-value="
+                  (value) => updateQuery(value, typedResources.typeId)
+                "
               />
-              <Pagination
-                class="fr-mt-3w"
-                v-if="typedResources.total > pageSize"
-                :page="typedResources.currentPage"
-                :page-size="pageSize"
-                :total-results="typedResources.total"
-                @change="(page) => changePage(typedResources.typeId, page)"
-              />
+              <span v-if="typedResources.resources.length != 0">
+                <ResourceAccordion
+                  v-for="resource in typedResources.resources"
+                  :datasetId="datasetId"
+                  :resource="resource"
+                />
+                <Pagination
+                  class="fr-mt-3w"
+                  v-if="typedResources.total > pageSize"
+                  :page="typedResources.currentPage"
+                  :page-size="pageSize"
+                  :total-results="typedResources.total"
+                  @change="
+                    (page) =>
+                      changePage(
+                        typedResources.typeId,
+                        page,
+                        typedResources.query
+                      )
+                  "
+                />
+              </span>
+              <span v-else> <br />Aucun résultat pour votre recherche. </span>
             </div>
           </template>
         </div>
@@ -326,48 +336,7 @@ watch(
             </div>
           </div>
         </Well>
-        <template v-if="showDiscussions">
-          <h2 class="fr-mt-4w">Discussions</h2>
-          <div v-if="!discussions.data?.length">
-            Pas de discussion pour ce jeu de données.
-          </div>
-          <DsfrAccordionsGroup>
-            <li v-for="discussion in discussions.data">
-              <DsfrAccordion
-                :id="discussion.id"
-                :title="discussion.title"
-                :expanded-id="expandedDiscussion"
-                @expand="(id) => (expandedDiscussion = id)"
-              >
-                <template #default>
-                  <ul class="es__comment__container">
-                    <li v-for="comment in discussion.discussion">
-                      <div class="es__comment__metadata fr-mb-1v">
-                        <span class="es__comment__author"
-                          >{{ comment.posted_by.first_name }}
-                          {{ comment.posted_by.last_name }}</span
-                        >
-                        <span class="es__comment__date fr-ml-1v"
-                          >le {{ formatDate(comment.posted_on) }}</span
-                        >
-                      </div>
-                      <div class="es__comment__content">
-                        {{ comment.content }}
-                      </div>
-                    </li>
-                  </ul>
-                </template>
-              </DsfrAccordion>
-            </li>
-          </DsfrAccordionsGroup>
-          <DsfrPagination
-            v-if="discussionsPages.length"
-            class="fr-mt-2w"
-            :current-page="discussionsPage - 1"
-            :pages="discussionsPages"
-            @update:current-page="(p) => (discussionsPage = p + 1)"
-          />
-        </template>
+        <DiscussionsList v-if="showDiscussions" :subject="dataset" />
       </DsfrTabContent>
 
       <!-- Métadonnées -->
@@ -395,34 +364,5 @@ watch(
 <style scoped lang="scss">
 pre {
   white-space: pre-wrap;
-}
-ul.es__comment__container {
-  list-style-type: none;
-  padding-inline-start: 0.25rem;
-  li {
-    padding-bottom: 1.5rem;
-  }
-}
-.es__comment__metadata {
-  .es__comment__author {
-    font-weight: bold;
-  }
-}
-.es__organization__sidebar {
-  text-align: center;
-  width: 100%;
-  .es__organization__sidebar__metadata_container {
-    padding: 0 2rem;
-  }
-  .es__organization__sidebar__logo_container {
-    width: 100%;
-    img {
-      max-width: 250px;
-    }
-  }
-}
-.es__quality {
-  list-style-type: none;
-  padding-inline-start: 0;
 }
 </style>
