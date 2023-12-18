@@ -93,7 +93,11 @@ import Multiselect from '@vueform/multiselect'
 
 import Tooltip from '@/components/Tooltip.vue'
 import config from '@/config'
-import { type DatasetProperties, Availability } from '@/model'
+import {
+  type DatasetProperties,
+  Availability,
+  isAvailable as isAvailableTest
+} from '@/model'
 import SearchAPI from '@/services/api/SearchAPI'
 
 export default {
@@ -131,7 +135,7 @@ export default {
       return true
     },
     isAvailable(): boolean {
-      return Availability.isAvailable(this.availability)
+      return isAvailableTest(this.availability)
     }
   },
   watch: {

@@ -6,19 +6,18 @@ interface DatasetProperties {
   availability: string // must be one of Availability value
 }
 
-class Availability {
-  static MISSING = 'missing'
-  static NOT_AVAILABLE = 'not available'
-  static LOCAL_AVAILABLE = 'available'
-  static URL_AVAILABLE = 'url available'
-
-  static isAvailable(availability: string) {
-    return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
-      availability
-    )
-  }
+enum Availability {
+  MISSING = 'missing',
+  NOT_AVAILABLE = 'not available',
+  LOCAL_AVAILABLE = 'available',
+  URL_AVAILABLE = 'url available'
 }
 
+const isAvailable = (availability: Availability): Boolean => {
+  return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
+    availability
+  )
+}
 interface Theme {
   name: string
   color: string
@@ -84,7 +83,7 @@ interface Topic {
 export const NoOptionSelected = 'no_option_selected'
 export const NoId = 'NO_ID'
 
-export { Availability }
+export { Availability, isAvailable }
 export type {
   Theme,
   Subtheme,

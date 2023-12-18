@@ -49,7 +49,11 @@
 
 <script lang="ts">
 import config from '@/config'
-import { type DatasetProperties, Availability } from '@/model'
+import {
+  type DatasetProperties,
+  Availability,
+  isAvailable as isAvailableTest
+} from '@/model'
 
 export const getDatasetListTitle = function (
   datasets: DatasetProperties[]
@@ -96,7 +100,7 @@ export default {
       return `accordion_${index}`
     },
     isAvailable(dataset: DatasetProperties): boolean {
-      return Availability.isAvailable(dataset.availability)
+      return isAvailableTest(dataset.availability)
     }
   }
 }

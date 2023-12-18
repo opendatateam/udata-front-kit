@@ -5,7 +5,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
-import { Availability } from '@/model'
+import { Availability, isAvailable } from '@/model'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -183,7 +183,7 @@ onMounted(() => {
               @expand="datasetProperties.id = $event"
             >
               <DsfrTag
-                v-if="!Availability.isAvailable(datasetProperties.availability)"
+                v-if="!isAvailable(datasetProperties.availability)"
                 class="fr-mb-2w uppercase bold"
                 :label="`${
                   datasetProperties.availability === Availability.NOT_AVAILABLE
@@ -198,9 +198,7 @@ onMounted(() => {
               </div>
               <div class="button__wrapper">
                 <a
-                  v-if="
-                    !Availability.isAvailable(datasetProperties.availability)
-                  "
+                  v-if="!isAvailable(datasetProperties.availability)"
                   class="fr-btn fr-btn--secondary inline-flex"
                   :href="`mailto:${config.website.contact_email}`"
                 >
