@@ -7,10 +7,10 @@ interface DatasetProperties {
 }
 
 class Availability {
-  static MISSING = 'MISSING'
-  static NOT_AVAILABLE = 'NOT_AVAILABLE'
-  static LOCAL_AVAILABLE = 'LOCAL_AVAILABLE'
-  static URL_AVAILABLE = 'URL_AVAILABLE'
+  static MISSING = 'missing'
+  static NOT_AVAILABLE = 'not available'
+  static LOCAL_AVAILABLE = 'available'
+  static URL_AVAILABLE = 'url available'
 
   static isAvailable(availability: string) {
     return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(

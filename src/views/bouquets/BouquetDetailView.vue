@@ -184,17 +184,14 @@ onMounted(() => {
               @expand="datasetProperties.id = $event"
             >
               <DsfrTag
-                v-if="
-                  datasetProperties.available !== Availability.URL_AVAILABLE &&
-                  datasetProperties.available !== Availability.LOCAL_AVAILABLE
-                "
+                v-if="!Availability.isAvailable(datasetProperties.available)"
                 class="fr-mb-2w uppercase bold"
                 :label="`${
                   datasetProperties.available === Availability.NOT_AVAILABLE
                     ? missingData
                     : datasetProperties.available === Availability.MISSING
                     ? notFoundData
-                    : null
+                    : ''
                 }`"
               />
               <div class="fr-mb-3w">
@@ -202,11 +199,7 @@ onMounted(() => {
               </div>
               <div class="button__wrapper">
                 <a
-                  v-if="
-                    datasetProperties.available !==
-                      Availability.URL_AVAILABLE &&
-                    datasetProperties.available !== Availability.LOCAL_AVAILABLE
-                  "
+                  v-if="!Availability.isAvailable(datasetProperties.available)"
                   class="fr-btn fr-btn--secondary inline-flex"
                   :href="`mailto:${config.website.contact_email}`"
                 >
