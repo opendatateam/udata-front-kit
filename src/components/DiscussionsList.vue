@@ -1,40 +1,57 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import type { ComputedRef, Ref } from 'vue'
 import { defineProps, ref, watchEffect, computed } from 'vue'
 
 import config from '../config'
-import type { DiscussionResponse } from '../model/discussion'
+import type {
+  DiscussionResponse,
+  DiscussionForm,
+  SubjectClass
+} from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
+import { useUserStore } from '../store/UserStore'
 import { formatDate, fromMarkdown } from '../utils'
 
-interface DiscussionForm {
-  title: string
-  content: string
-}
-
 const discussionStore = useDiscussionStore()
+const userStore = useUserStore()
 
-const discussions: Ref<DiscussionResponse | null> = ref(null)
+const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
-const pages: Ref<object[]> = ref([])
 const showDiscussionForm: Ref<boolean> = ref(false)
-const discussionForm: Ref<DiscussionForm> = ref({ title: '', content: '' })
-
-type SubjectType = 'dataset' | 'topic'
 
 const props = defineProps({
   subject: {
     type: Object,
     required: true
   },
-  subjectType: {
-    type: String as () => SubjectType,
-    default: 'dataset'
+  subjectClass: {
+    type: String as () => SubjectClass,
+    default: 'Dataset'
   }
 })
 
+const discussionForm: Ref<DiscussionForm> = ref({
+  title: '',
+  comment: '',
+  subject: {
+    id: props.subject.id,
+    class: props.subjectClass
+  }
+})
+
+const discussions: ComputedRef<DiscussionResponse> = computed(() => {
+  return discussionStore.getDiscussionsForSubject(
+    props.subject.id,
+    currentPage.value
+  )
+})
+const pages: ComputedRef<object[]> = computed(() => {
+  return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
+})
+
 const allowDiscussionCreation = computed(() => {
-  return config.website.discussions[props.subjectType].create
+  return config.website.discussions[props.subjectClass.toLowerCase()].create
 })
 
 const getUserAvatar = (post) => {
@@ -44,27 +61,33 @@ const getUserAvatar = (post) => {
   return `${config.datagouvfr.base_url}/api/1/avatars/${post.posted_by.id}/20`
 }
 
+const createDiscussion = () => {
+  discussionStore.createDiscussion(discussionForm.value).then((_) => {
+    discussionForm.value.title = ''
+    discussionForm.value.comment = ''
+    showDiscussionForm.value = false
+  })
+}
+
 watchEffect(() => {
-  const subjectId = props.subject.id
-  if (!subjectId) return
-  discussionStore
-    .loadDiscussionsForSubject(subjectId, currentPage.value)
-    .then((d) => {
-      discussions.value = d
-      if (!pages.value.length) {
-        pages.value =
-          discussionStore.getDiscussionsPaginationForSubject(subjectId)
-      }
-    })
+  if (!props.subject.id) return
+  discussionStore.loadDiscussionsForSubject(props.subject.id, currentPage.value)
+  discussionForm.value.subject = {
+    id: props.subject.id,
+    class: props.subjectClass
+  }
 })
 </script>
 
 <template>
-  <div class="fr-grid-row fr-grid-row--middle">
+  <div class="fr-grid-row fr-grid-row--middle datagouv-components">
     <div class="fr-col">
       <h2 class="fr-mt-4w">Discussions</h2>
     </div>
-    <div v-if="allowDiscussionCreation" class="fr-col text-align-right">
+    <div
+      v-if="allowDiscussionCreation && loggedIn"
+      class="fr-col text-align-right"
+    >
       <button
         type="button"
         class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
@@ -76,7 +99,7 @@ watchEffect(() => {
   </div>
 
   <div v-if="showDiscussionForm" class="fr-mb-4w">
-    <form>
+    <form @submit.stop.prevent="createDiscussion()">
       <div class="fr-input-group">
         <label class="fr-label" for="discussion-title"> Titre * </label>
         <input
@@ -91,7 +114,7 @@ watchEffect(() => {
         <label class="fr-label" for="discussion-message"> Message * </label>
         <textarea
           id="discussion-message"
-          v-model="discussionForm.content"
+          v-model="discussionForm.comment"
           required
           class="fr-input"
           name="message"

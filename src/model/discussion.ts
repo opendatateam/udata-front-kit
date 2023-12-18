@@ -9,6 +9,12 @@ interface Discussion {
   title: string
 }
 
+interface DiscussionForm {
+  title: string
+  comment: string
+  subject: Subject
+}
+
 interface Post {
   content: string
   posted_by: User
@@ -16,9 +22,11 @@ interface Post {
 }
 
 interface Subject {
-  class: 'Dataset' | 'Topic'
+  class: SubjectClass
   id: SubjectId
 }
+
+type SubjectClass = 'Dataset' | 'Topic'
 
 type SubjectId = string
 
@@ -26,4 +34,12 @@ interface DiscussionResponse extends GenericResponse {
   data: Discussion[]
 }
 
-export type { Discussion, Post, Subject, SubjectId, DiscussionResponse }
+export type {
+  Discussion,
+  Post,
+  Subject,
+  SubjectId,
+  SubjectClass,
+  DiscussionResponse,
+  DiscussionForm
+}

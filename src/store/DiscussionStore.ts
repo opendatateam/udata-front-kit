@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 
-import type { SubjectId, DiscussionResponse } from '@/model/discussion'
+import type {
+  SubjectId,
+  DiscussionResponse,
+  DiscussionForm,
+  Discussion
+} from '@/model/discussion'
 
 import DiscussionsAPI from '../services/api/resources/DiscussionsAPI'
 
@@ -12,6 +17,26 @@ export const useDiscussionStore = defineStore('discussion', {
     return { data }
   },
   actions: {
+    /**
+     * Refresh discussions for a subject, by loading the first page
+     */
+    async reloadForSubject(subjectId: SubjectId) {
+      console.log('reloadForSubject', subjectId, this.data[subjectId])
+      if (this.data[subjectId] === undefined) return
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.data[subjectId]
+      return await this.loadDiscussionsForSubject(subjectId)
+    },
+    /**
+     * Add a discussion
+     */
+    async createDiscussion(
+      discussionForm: DiscussionForm
+    ): Promise<Discussion> {
+      const res = await discussionsAPI.create(discussionForm)
+      await this.reloadForSubject(discussionForm.subject.id)
+      return res
+    },
     /**
      * Get discussions for a subject from store
      */
