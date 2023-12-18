@@ -132,11 +132,31 @@ const reuseDescription = (r) => {
 }
 
 const getResourcesTitle = (typedResources) => {
-  if (
-    (typedResources.typeLabel == 'Fichier principal') &
-    (typedResources?.total > 1)
-  ) {
-    return typedResources.total + ' Fichiers principaux'
+  if (typedResources?.total > 1) {
+    let pluralName
+    switch (typedResources.typeId) {
+      case 'main':
+        pluralName = 'Fichiers principaux'
+        break
+      case 'documentation':
+        pluralName = 'Documentations'
+        break
+      case 'update':
+        pluralName = 'Mises à jour'
+        break
+      case 'api':
+        pluralName = 'APIs'
+        break
+      case 'code':
+        pluralName = 'Dépôts de code'
+        break
+      case 'other':
+        pluralName = 'Autres'
+        break
+      default:
+        pluralName = typedResources.typeLabel
+    }
+    return `${typedResources.total} ${pluralName}`
   } else {
     return typedResources.typeLabel
   }
