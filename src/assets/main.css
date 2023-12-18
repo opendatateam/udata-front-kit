@@ -95,3 +95,8 @@
 .dsfr_alert {
   margin: 20px 0;
 }
+
+textarea {
+  margin: 20px 0;
+  height: 250px;
+}
