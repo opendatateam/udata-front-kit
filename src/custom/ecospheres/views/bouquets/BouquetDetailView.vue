@@ -4,14 +4,13 @@ import { onMounted, ref, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
+import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
 import { Availability, isAvailable } from '@/model'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-
-import DiscussionsList from '../../components/DiscussionsList.vue'
 
 const route = useRoute()
 const router = useRouter()
