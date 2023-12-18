@@ -38,12 +38,10 @@ const props = defineProps({
   }
 })
 
-/* eslint-disable no-unused-vars */
-enum SubjectClassLabel {
-  Dataset = 'jeu de données',
-  Topic = 'bouquet'
+const subjectClassLabels = {
+  Dataset: 'jeu de données',
+  Topic: 'bouquet'
 }
-/* eslint-enable no-unused-vars */
 
 const discussionForm: Ref<DiscussionForm> = ref({
   title: '',
@@ -175,7 +173,7 @@ watchEffect(() => {
   </div>
 
   <div v-if="!discussions?.data?.length">
-    Pas de discussion pour ce {{ SubjectClassLabel[props.subjectClass] }}.
+    Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
   </div>
   <div>
     <div
