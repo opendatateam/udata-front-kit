@@ -132,7 +132,6 @@ const reuseDescription = (r) => {
 }
 
 const getResourcesTitle = (typedResources) => {
-  console.log(typedResources)
   if (
     (typedResources.typeLabel == 'Fichier principal') &
     (typedResources?.total > 1)
@@ -178,7 +177,6 @@ watch(
         resources.value[typedResources.typeId] = typedResources
         resources.value[typedResources.typeId]['totalWithoutFilter'] =
           typedResources.total
-        console.log(typedResources)
       }
       resourceLoader.hide()
     } else {
