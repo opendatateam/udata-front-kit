@@ -164,10 +164,7 @@ export default {
       Object.assign(this.$data, this.initData())
     },
     getLocalDatasetPage(id: string): string {
-      const url = config.website.menu_items.find(
-        (page) => page.id === 'datasets'
-      )
-      return `${url.linkPage}/${id}`
+      return `/datasets/${id}`
     },
     async ecospheresDatasetsOptions(query: string) {
       if (!query) return []
