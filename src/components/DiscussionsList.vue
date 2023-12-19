@@ -12,6 +12,7 @@ const discussionStore = useDiscussionStore()
 const discussions: Ref<DiscussionResponse | null> = ref(null)
 const currentPage: Ref<number> = ref(1)
 const pages: Ref<object[]> = ref([])
+const blankDiscussion = '/blank_state/discussion.svg'
 
 type SubjectType = 'dataset' | 'topic'
 
@@ -49,11 +50,21 @@ watchEffect(() => {
 </script>
 
 <template>
-  <h2 class="fr-mt-4w">Discussions</h2>
-  <div v-if="!discussions?.data?.length">
-    Pas de discussion pour ce jeu de données.
+  <div
+    v-if="!discussions?.data?.length"
+    class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
+  >
+    <img
+      class="fr-responsive-img"
+      :src="blankDiscussion"
+      style="height: 105px; width: 130px"
+    />
+    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+      Pas de discussion pour ce jeu de données.
+    </p>
   </div>
-  <div>
+  <div v-else>
+    <h2 class="fr-mt-4w">Discussions</h2>
     <div
       v-for="discussion in discussions?.data"
       :key="discussion.id"
