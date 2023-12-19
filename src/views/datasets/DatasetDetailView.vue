@@ -131,6 +131,37 @@ const reuseDescription = (r) => {
   }
 }
 
+const getResourcesTitle = (typedResources) => {
+  if (typedResources?.total > 1) {
+    let pluralName
+    switch (typedResources.typeId) {
+      case 'main':
+        pluralName = 'Fichiers principaux'
+        break
+      case 'documentation':
+        pluralName = 'Documentations'
+        break
+      case 'update':
+        pluralName = 'Mises à jour'
+        break
+      case 'api':
+        pluralName = 'APIs'
+        break
+      case 'code':
+        pluralName = 'Dépôts de code'
+        break
+      case 'other':
+        pluralName = 'Autres'
+        break
+      default:
+        pluralName = typedResources.typeLabel
+    }
+    return `${typedResources.total} ${pluralName}`
+  } else {
+    return typedResources.typeLabel
+  }
+}
+
 const getType = (id) => {
   const type = types.value.find((t) => t.id === id)
   return type?.label || ''
@@ -244,7 +275,7 @@ watch(
           <template v-for="typedResources in resources">
             <div v-if="typedResources.totalWithoutFilter" class="fr-mb-4w">
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
-                {{ typedResources.typeLabel }}
+                {{ getResourcesTitle(typedResources) }}
               </h2>
               <DsfrSearchBar
                 v-if="typedResources.totalWithoutFilter > pageSize"
