@@ -98,7 +98,7 @@ watchEffect(() => {
       Aucun résultat pour cette recherche.
     </div>
 
-    <div v-if="topicsConf" class="fr-col-md-12 fr-pr-md-2w fr-mb-2w">
+    <div v-if="topicsConf" class="fr-col-md-12 fr-mb-2w">
       <DsfrSelect
         :model-value="selectedTopicId"
         :options="topicOptions"
