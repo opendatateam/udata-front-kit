@@ -52,12 +52,12 @@
 </template>
 
 <script lang="ts">
-import MarkdownIt from 'markdown-it'
 import type { PropType } from 'vue'
 
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import { getDatasetListTitle } from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import type { Bouquet } from '@/model'
+import { fromMarkdown } from '@/utils/index'
 
 export default {
   name: 'BouquetFormRecap',
@@ -90,7 +90,7 @@ export default {
       return getDatasetListTitle(this.bouquet.datasetsProperties)
     },
     markdown(text: string) {
-      return MarkdownIt().render(text)
+      return fromMarkdown(text)
     }
   }
 }
