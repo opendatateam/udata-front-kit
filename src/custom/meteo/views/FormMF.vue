@@ -197,8 +197,10 @@ const showLoader = ref(false)
     <div v-if="filteredResources.length > 0">
       <br />
       <h3>Téléchargez les données</h3>
-      Basé sur vos filtres, les fichiers correspondants sont présentés
-      ci-dessous. Si vous souhaitez consulter le jeu de données complet,
+      <span
+        >Basé sur vos filtres, les fichiers correspondants sont présentés
+        ci-dessous.<br />Si vous souhaitez consulter le jeu de données complet,
+      </span>
       <a :href="'https://' + config.website.title + '/datasets/' + datasetSlug"
         >{{ datasetTitle }}
         <span class="fr-icon-external-link-line" aria-hidden="true"></span></a
