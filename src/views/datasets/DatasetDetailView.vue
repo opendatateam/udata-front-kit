@@ -15,8 +15,9 @@ import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
+import type { ResourceData } from '../../model/resource'
 import { useDatasetStore } from '../../store/DatasetStore'
-import { type ResourceData, useResourceStore } from '../../store/ResourceStore'
+import { useResourceStore } from '../../store/ResourceStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown, formatDate } from '../../utils'
 
@@ -134,10 +135,10 @@ const reuseDescription = (r) => {
   }
 }
 
-const getResourcesTitle = (typedResources) => {
+const getResourcesTitle = (typedResources: ResourceData) => {
   if (typedResources?.total > 1) {
     let pluralName
-    switch (typedResources.typeId) {
+    switch (typedResources.type.id) {
       case 'main':
         pluralName = 'Fichiers principaux'
         break

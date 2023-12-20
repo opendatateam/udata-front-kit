@@ -5,4 +5,12 @@ export interface ResourceType {
   label: string
 }
 
+export interface ResourceData {
+  currentPage: number
+  resources: Resource[]
+  total: number
+  totalWithoutFilter: number
+  type: ResourceType
+}
+
 export type { Resource }

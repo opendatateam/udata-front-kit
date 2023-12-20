@@ -3,20 +3,12 @@ import { defineStore } from 'pinia'
 
 import config from '@/config'
 
-import type { Resource, ResourceType } from '../model/resource'
+import type { Resource, ResourceData, ResourceType } from '../model/resource'
 import DatasetsAPI from '../services/api/resources/DatasetsAPI'
 
 const datasetsApi = new DatasetsAPI()
 const datasetsApiv2 = new DatasetsAPI({ version: 2 })
 const pageSize: number = config.website.pagination_sizes.files_list
-
-export interface ResourceData {
-  currentPage: number
-  resources: Resource[]
-  total: number
-  totalWithoutFilter: number
-  type: ResourceType
-}
 
 export interface RootState {
   data: Record<string, ResourceData[]>
