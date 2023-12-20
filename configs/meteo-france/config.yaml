@@ -55,6 +55,11 @@ website:
       type: 'custom'
       path: '../custom/meteo/views/FormMF.vue'
       display_menu: true
+    - name: 'Portail des API Météo-France'
+      id: 'portailapi'
+      linkPage: 'https://portail-api.meteofrance.fr/'
+      type: 'external'
+      display_menu: true
     - name: 'A propos'
       id: 'about'
       linkPage: '/about'
@@ -83,8 +88,8 @@ website:
   footer_external_links:
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
-    - label: 'meteo.fr'
-      href: 'https://www.meteo.fr'
+    - label: 'meteofrance.fr'
+      href: 'https://meteofrance.fr/'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
     - label: 'service-public.fr'
