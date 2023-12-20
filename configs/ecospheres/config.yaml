@@ -99,8 +99,10 @@ website:
   discussions:
     dataset:
       display: true
+      create: true
     topic:
       display: true
+      create: true
 
 themes:
   - name: Se loger

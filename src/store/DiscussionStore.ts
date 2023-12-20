@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 
-import type { SubjectId, DiscussionResponse } from '@/model/discussion'
+import type {
+  SubjectId,
+  DiscussionResponse,
+  DiscussionForm,
+  Discussion,
+  PostForm,
+  DiscussionId
+} from '@/model/discussion'
 
 import DiscussionsAPI from '../services/api/resources/DiscussionsAPI'
 
@@ -12,6 +19,45 @@ export const useDiscussionStore = defineStore('discussion', {
     return { data }
   },
   actions: {
+    /**
+     * Add a post to a discussion
+     */
+    async createPost(
+      subjectId: SubjectId,
+      discussionId: DiscussionId,
+      postForm: PostForm
+    ): Promise<Discussion | undefined> {
+      const discussion: Discussion | undefined =
+        await discussionsAPI.createPost(discussionId, postForm)
+      if (discussion === undefined) return
+      this.data[subjectId] = this.data[subjectId].map((dPage) => {
+        dPage.data = dPage.data.map((d) => {
+          return d.id === discussionId ? discussion : d
+        })
+        return dPage
+      })
+      return discussion
+    },
+    /**
+     * Refresh discussions for a subject, by loading the first page
+     */
+    async reloadForSubject(subjectId: SubjectId) {
+      if (this.data[subjectId] === undefined) return
+      // TODO: refactor data structure to comply with this rule
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.data[subjectId]
+      return await this.loadDiscussionsForSubject(subjectId)
+    },
+    /**
+     * Add a discussion
+     */
+    async createDiscussion(
+      discussionForm: DiscussionForm
+    ): Promise<Discussion> {
+      const discussion: Discussion = await discussionsAPI.create(discussionForm)
+      await this.reloadForSubject(discussionForm.subject.id)
+      return discussion
+    },
     /**
      * Get discussions for a subject from store
      */

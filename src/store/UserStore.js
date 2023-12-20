@@ -11,6 +11,11 @@ export const useUserStore = defineStore('user', {
     data: {},
     token: undefined
   }),
+  getters: {
+    loggedIn(state) {
+      return state.isLoggedIn
+    }
+  },
   actions: {
     /**
      * Init store from localStorage

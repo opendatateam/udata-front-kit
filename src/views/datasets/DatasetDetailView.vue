@@ -134,6 +134,37 @@ const reuseDescription = (r) => {
   }
 }
 
+const getResourcesTitle = (typedResources) => {
+  if (typedResources?.total > 1) {
+    let pluralName
+    switch (typedResources.typeId) {
+      case 'main':
+        pluralName = 'Fichiers principaux'
+        break
+      case 'documentation':
+        pluralName = 'Documentations'
+        break
+      case 'update':
+        pluralName = 'Mises à jour'
+        break
+      case 'api':
+        pluralName = 'APIs'
+        break
+      case 'code':
+        pluralName = 'Dépôts de code'
+        break
+      case 'other':
+        pluralName = 'Autres'
+        break
+      default:
+        pluralName = typedResources.typeLabel
+    }
+    return `${typedResources.total} ${pluralName}`
+  } else {
+    return typedResources.typeLabel
+  }
+}
+
 const getType = (id) => {
   const type = types.value.find((t) => t.id === id)
   return type?.label || ''
@@ -251,7 +282,7 @@ watch(
               class="fr-mb-4w"
             >
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
-                {{ typedResources.type.label }}
+                {{ getResourcesTitle(typedResources) }}
               </h2>
               <DsfrSearchBar
                 v-if="typedResources.totalWithoutFilter > pageSize"
@@ -326,7 +357,11 @@ watch(
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <Well color="blue-cumulus" weight="regular">
+        <Well
+          v-if="!config.website.discussions.dataset.create"
+          color="blue-cumulus"
+          weight="regular"
+        >
           <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
             <div class="fr-col-12 fr-col-lg-8">
               <p class="fr-text--bold fr-mb-0">{{ discussionWellTitle }}</p>
