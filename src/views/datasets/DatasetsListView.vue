@@ -56,15 +56,10 @@ const getDatasetPage = (id) => {
 }
 
 const getOrganizationPage = (id) => {
-  try {
-    const url = router.resolve({
-      name: 'organization_detail',
-      params: { oid: id }
-    })
-    return url.href
-  } catch (e) {
-    return ''
+  if (router.hasRoute('organization_detail')) {
+    return { name: 'organization_detail', params: { oid: id } }
   }
+  return ''
 }
 
 onMounted(() => {
