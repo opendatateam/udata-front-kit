@@ -245,11 +245,13 @@ onMounted(() => {
       Copier l'url de la page
     </DsfrButton>
 
-    <DiscussionsList
-      v-if="showDiscussions"
-      :subject="bouquet"
-      subject-type="topic"
-    />
+    <div class="fr-mt-8w">
+      <DiscussionsList
+        v-if="showDiscussions"
+        :subject="bouquet"
+        subject-class="Topic"
+      />
+    </div>
   </div>
 </template>
 

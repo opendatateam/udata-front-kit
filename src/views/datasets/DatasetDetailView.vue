@@ -349,7 +349,11 @@ watch(
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <Well color="blue-cumulus" weight="regular">
+        <Well
+          v-if="!config.website.discussions.dataset.create"
+          color="blue-cumulus"
+          weight="regular"
+        >
           <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
             <div class="fr-col-12 fr-col-lg-8">
               <p class="fr-text--bold fr-mb-0">{{ discussionWellTitle }}</p>
