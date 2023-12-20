@@ -55,11 +55,11 @@ website:
       type: 'custom'
       path: '../custom/meteo/views/FormMF.vue'
       display_menu: true
-    - name: 'Portail des API Météo-France'
-      id: 'portailapi'
-      linkPage: 'https://portail-api.meteofrance.fr/'
-      type: 'external'
-      display_menu: true
+    # - name: 'Portail des API Météo-France'
+    #   id: 'portailapi'
+    #   linkPage: 'https://portail-api.meteofrance.fr/'
+    #   type: 'external'
+    #   display_menu: true
     - name: 'A propos'
       id: 'about'
       linkPage: '/about'
@@ -86,14 +86,12 @@ website:
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
+    - label: 'meteofrance.com'
+      href: 'https://meteofrance.com/'
+    - label: 'Portail des API Météo-France'
+      href: 'https://portail-api.meteofrance.fr/'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
-    - label: 'meteofrance.fr'
-      href: 'https://meteofrance.fr/'
-    - label: 'gouvernement.fr'
-      href: 'https://www.gouvernement.fr'
-    - label: 'service-public.fr'
-      href: 'https://www.service-public.fr'
   footer_mandatory_links:
     - label: 'Licences'
       href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
