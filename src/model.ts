@@ -1,3 +1,23 @@
+interface DatasetProperties {
+  title: string
+  purpose: string
+  uri: string | null
+  id: string | null
+  availability: string // must be one of Availability value
+}
+
+enum Availability {
+  MISSING = 'missing',
+  NOT_AVAILABLE = 'not available',
+  LOCAL_AVAILABLE = 'available',
+  URL_AVAILABLE = 'url available'
+}
+
+const isAvailable = (availability: Availability): Boolean => {
+  return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
+    availability
+  )
+}
 interface Theme {
   name: string
   color: string
@@ -19,17 +39,37 @@ interface BreadcrumbItem {
   to?: string
 }
 
-interface Topic {
-  created_at: string
-  datasets: Dataset[]
+interface Bouquet {
+  name: string
   description: string
-  extras: {
-    'ecospheres:datasets_properties': {}
-    'ecospheres:informations': { subtheme: string; theme: string }[]
-  }
+  theme: string | undefined
+  subtheme: string | undefined
+  datasetsProperties: DatasetProperties[]
+}
+
+interface BouquetCreationData {
+  name: string
+  description: string
+  datasets: string[] // list of ids (for the dataset which have one)
+  tags: string[]
+  extras: TopicExtras
+}
+
+interface TopicExtras {
+  ['ecospheres:informations']: {
+    theme: string
+    subtheme: string
+  }[]
+  ['ecospheres:datasets_properties']: DatasetProperties[]
+}
+
+interface Topic {
+  name: string
+  description: string
+  created_at: string
+  extras: TopicExtras
   featured: boolean
   id: string
-  name: string
   organisation: any
   owner: any
   page: string
@@ -40,10 +80,17 @@ interface Topic {
   uri: string
 }
 
-interface Dataset {
-  // TODO --  add list of properties for Dataset
-}
-
 export const NoOptionSelected = 'no_option_selected'
+export const NoId = 'NO_ID'
 
-export type { Theme, Subtheme, SelectOption, BreadcrumbItem, Topic }
+export { Availability, isAvailable }
+export type {
+  Theme,
+  Subtheme,
+  SelectOption,
+  BreadcrumbItem,
+  Topic,
+  Bouquet,
+  DatasetProperties,
+  BouquetCreationData
+}

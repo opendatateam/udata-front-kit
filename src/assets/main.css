@@ -28,6 +28,7 @@
 
 .multiselect {
   --ms-bg: var(--background-contrast-grey);
+  margin: 8px 0;
 }
 
 .fr-col-sm-45 {
@@ -87,6 +88,15 @@
   }
 }
 
+.fr-fieldset {
+  margin: 30px 0;
+}
+
 .dsfr_alert {
   margin: 20px 0;
+}
+
+textarea {
+  margin: 20px 0;
+  height: 250px;
 }

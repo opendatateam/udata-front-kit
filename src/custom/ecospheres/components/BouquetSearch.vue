@@ -4,8 +4,8 @@
       <label class="fr-label" for="select_theme"> Thématiques </label>
       <select class="fr-select" id="select_theme" @change="switchTheme($event)">
         <option
-          :value="this.NoOptionSelected"
-          :selected="themeName == this.NoOptionSelected"
+          :value="NoOptionSelected"
+          :selected="themeName == NoOptionSelected"
         >
           Choisir une thématique
         </option>
@@ -27,8 +27,8 @@
         @change="switchSubtheme($event)"
       >
         <option
-          :value="this.NoOptionSelected"
-          :selected="subthemeName == this.NoOptionSelected"
+          :value="NoOptionSelected"
+          :selected="subthemeName == NoOptionSelected"
         >
           Choisir un chantier
         </option>
@@ -47,20 +47,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import type { SelectOption } from '@/model'
-
-import config from '../config'
-import { NoOptionSelected } from '../model'
-import Tile from './Tile.vue'
+import { ConfigUtils } from '@/config'
+import { NoOptionSelected } from '@/model'
+import type { SelectOption, Theme } from '@/model'
 
 export default defineComponent({
-  name: 'TopicSearch',
-  components: {
-    Tile: Tile
-  },
-  created() {
-    this.NoOptionSelected = NoOptionSelected
-  },
+  name: 'BouquetSearch',
   props: {
     themeName: {
       type: String,
@@ -72,38 +64,19 @@ export default defineComponent({
     }
   },
   computed: {
-    selectedTheme() {
-      for (const theme of this.themeList) {
-        if (theme.name === this.themeName) {
-          return theme
-        }
-      }
-      return null
-    },
-    themeList() {
-      return config.themes
+    selectedTheme(): Theme | null {
+      return ConfigUtils.getThemeByName(this.themeName)
     },
     themeOptions(): SelectOption[] {
-      const options: SelectOption[] = []
-      for (const theme of this.themeList) {
-        options.push({
-          value: theme.name,
-          text: theme.name
-        })
-      }
-      return options
+      return ConfigUtils.getThemeOptions()
     },
     subthemeOptions(): SelectOption[] {
-      const options: SelectOption[] = []
-      if (this.selectedTheme) {
-        for (const subtheme of this.selectedTheme.subthemes) {
-          options.push({
-            value: subtheme.name,
-            text: subtheme.name
-          })
-        }
-      }
-      return options
+      return this.selectedTheme
+        ? ConfigUtils.getSubthemeOptions(this.selectedTheme)
+        : []
+    },
+    NoOptionSelected() {
+      return NoOptionSelected
     }
   },
   methods: {

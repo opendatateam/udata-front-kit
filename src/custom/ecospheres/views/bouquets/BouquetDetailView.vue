@@ -4,13 +4,13 @@ import { onMounted, ref, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
+import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
-
-import DiscussionsList from '../../components/DiscussionsList.vue'
-import { useDatasetStore } from '../../store/DatasetStore'
-import { useTopicStore } from '../../store/TopicStore'
-import { useUserStore } from '../../store/UserStore'
-import { descriptionFromMarkdown } from '../../utils'
+import { Availability, isAvailable } from '@/model'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
+import { descriptionFromMarkdown } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()
@@ -35,12 +35,7 @@ const breadcrumbLinks = ref([
 ])
 const selectedTheme = ref('')
 const url = window.location.href
-const availabilityEnum = {
-  MISSING: 'missing',
-  NOT_AVAILABLE: 'not available',
-  ECO_AVAILABLE: 'available',
-  URL_AVAILABLE: 'url available'
-}
+
 const missingData = 'Donnée manquante'
 const notFoundData = 'Donnée non disponible'
 const showDiscussions = config.website.discussions.topic.display
@@ -192,18 +187,14 @@ onMounted(() => {
               @expand="datasetProperties.id = $event"
             >
               <DsfrTag
-                v-if="
-                  datasetProperties.available !==
-                    availabilityEnum.URL_AVAILABLE &&
-                  datasetProperties.available !== availabilityEnum.ECO_AVAILABLE
-                "
+                v-if="!isAvailable(datasetProperties.availability)"
                 class="fr-mb-2w uppercase bold"
                 :label="`${
-                  datasetProperties.available === availabilityEnum.NOT_AVAILABLE
+                  datasetProperties.availability === Availability.NOT_AVAILABLE
                     ? missingData
-                    : datasetProperties.available === availabilityEnum.MISSING
+                    : datasetProperties.availability === Availability.MISSING
                     ? notFoundData
-                    : null
+                    : ''
                 }`"
               />
               <div class="fr-mb-3w">
@@ -211,12 +202,7 @@ onMounted(() => {
               </div>
               <div class="button__wrapper">
                 <a
-                  v-if="
-                    datasetProperties.available !==
-                      availabilityEnum.URL_AVAILABLE &&
-                    datasetProperties.available !==
-                      availabilityEnum.ECO_AVAILABLE
-                  "
+                  v-if="!isAvailable(datasetProperties.availability)"
                   class="fr-btn fr-btn--secondary inline-flex"
                   :href="`mailto:${config.website.contact_email}`"
                 >
