@@ -39,13 +39,13 @@
 import { onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
-import type { Topic } from '../model'
-import { NoOptionSelected } from '../model'
-import { useTopicStore } from '../store/TopicStore'
-import Tile from './Tile.vue'
+import Tile from '@/components/Tile.vue'
+import type { Topic } from '@/model'
+import { NoOptionSelected } from '@/model'
+import { useTopicStore } from '@/store/TopicStore'
 
 export default {
-  name: 'TopicList',
+  name: 'BouquetList',
   components: {
     Tile: Tile
   },
@@ -103,7 +103,7 @@ export default {
     }
   },
   methods: {
-    isRelevant(topic: Topic, property: string, value): Boolean {
+    isRelevant(topic: Topic, property: string, value: string): Boolean {
       const topicInformations: { subtheme: string; theme: string }[] =
         topic.extras['ecospheres:informations']
       if (topicInformations) {

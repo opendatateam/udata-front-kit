@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-import config from '@/config.js'
+import config from '@/config'
 
 import OrganizationsAPI from '../services/api/resources/OrganizationsAPI'
 

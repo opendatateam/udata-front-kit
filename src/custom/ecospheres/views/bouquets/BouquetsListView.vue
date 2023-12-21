@@ -11,14 +11,14 @@
             <div className="fr-sidemenu__title" id="fr-sidemenu-title">
               Filtres
             </div>
-            <TopicSearch
+            <BouquetSearch
               v-model:themeName="themeName"
               v-model:subthemeName="subthemeName"
             />
           </div>
         </nav>
         <div className="fr-col-8">
-          <TopicList :themeName="themeName" :subthemeName="subthemeName" />
+          <BouquetList :themeName="themeName" :subthemeName="subthemeName" />
         </div>
       </div>
     </div>
@@ -26,16 +26,15 @@
 </template>
 
 <script lang="ts">
-import TopicList from '../../components/TopicList.vue'
-import TopicSearch from '../../components/TopicSearch.vue'
-import type { BreadcrumbItem } from '../../model'
-import { NoOptionSelected } from '../../model'
+import BouquetList from '@/custom/ecospheres/components/BouquetList.vue'
+import BouquetSearch from '@/custom/ecospheres/components/BouquetSearch.vue'
+import { type BreadcrumbItem, NoOptionSelected } from '@/model'
 
 export default {
   name: 'BouquetsListView',
   components: {
-    TopicSearch: TopicSearch,
-    TopicList: TopicList
+    BouquetSearch: BouquetSearch,
+    BouquetList: BouquetList
   },
   props: {
     initThemeName: {
