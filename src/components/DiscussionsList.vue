@@ -172,10 +172,21 @@ watchEffect(() => {
     </form>
   </div>
 
-  <div v-if="!discussions?.data?.length">
-    Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
+  <div
+    v-if="!discussions?.data?.length"
+    class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
+  >
+    <img
+      height="105"
+      width="130"
+      loading="lazy"
+      src="/blank_state/discussion.svg"
+    />
+    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+      Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
+    </p>
   </div>
-  <div>
+  <div v-else>
     <div
       v-for="discussion in discussions?.data"
       :key="discussion.id"
