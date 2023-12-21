@@ -343,25 +343,46 @@ watch(
         tab-id="tab-1"
         :selected="selectedTabIndex === 1"
       >
-        <h2 class="fr-mt-4w">Réutilisations</h2>
-        <div v-if="!reuses.length">
-          Pas de réutilisation pour ce jeu de données.
+        <div
+          v-if="!reuses.length"
+          class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
+        >
+          <img
+            height="105"
+            width="130"
+            loading="lazy"
+            src="/blank_state/reuse.svg"
+          />
+          <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+            Il n'y a pas encore de réutilisation pour ce jeu de données.
+          </p>
+          <p>
+            <a
+              class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
+              href="https://guides.data.gouv.fr/publier-des-donnees/guide-data.gouv.fr/reutilisations"
+            >
+              Qu'est-ce qu'une réutilisation ?
+            </a>
+          </p>
         </div>
-        <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-          <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
-            <DsfrCard
-              :link="r.page"
-              :style="`max-width: 400px; max-height: 400px`"
-              :title="cropString(r.title)"
-              :detail="getType(r.type)"
-              :description="reuseDescription(r)"
-              size="sm"
-              :imgSrc="
-                r.image_thumbnail || r.organization?.logo || r.owner.avatar
-              "
-            />
-          </li>
-        </ul>
+        <div v-else>
+          <h2 class="fr-mt-4w">Réutilisations</h2>
+          <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+            <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
+              <DsfrCard
+                :link="r.page"
+                :style="`max-width: 400px; max-height: 400px`"
+                :title="cropString(r.title)"
+                :detail="getType(r.type)"
+                :description="reuseDescription(r)"
+                size="sm"
+                :imgSrc="
+                  r.image_thumbnail || r.organization?.logo || r.owner.avatar
+                "
+              />
+            </li>
+          </ul>
+        </div>
       </DsfrTabContent>
 
       <!-- Discussions -->
