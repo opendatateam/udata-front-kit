@@ -1,7 +1,10 @@
 <script setup>
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 import config from '@/config'
+
+const route = useRoute()
 
 const props = defineProps({
   onClick: {
@@ -10,13 +13,21 @@ const props = defineProps({
   }
 })
 
+const isActive = (link) => {
+  return route.matched.some(({ path }) => {
+    if (path === '/') return link === path
+    return link.indexOf(path) === 0
+  })
+}
+
 const navItems = computed(() => {
   const items = []
   config.website.router_items.forEach((item) => {
     if (item.display_menu) {
       items.push({
         to: item.linkPage,
-        text: item.name
+        text: item.name,
+        'aria-current': isActive(item.linkPage) ? true : undefined
       })
     }
   })
@@ -30,10 +41,8 @@ const navItems = computed(() => {
       <DsfrNavigationMenuLink
         v-if="navItem.to && navItem.text"
         v-bind="navItem"
-        @toggle-id="onClick"
+        @toggle-id="props.onClick"
       />
     </DsfrNavigationItem>
   </DsfrNavigation>
 </template>
-
-<style scoped></style>

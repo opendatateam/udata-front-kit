@@ -18,7 +18,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@etalab/data.gouv.fr-components": "^1.11.8",
+    "@etalab/data.gouv.fr-components": "^1.11.9",
     "@gouvminint/vue-dsfr": "^5.3.1",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",
@@ -67,7 +67,7 @@
     "sass": "^1.63.6",
     "typescript": "^5.2.2",
     "uuid": "^9.0.1",
-    "vite": "^4.3.9",
+    "vite": "^4.5.1",
     "vitest": "^0.34.6"
   },
   "lint-staged": {

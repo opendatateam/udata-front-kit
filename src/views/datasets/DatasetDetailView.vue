@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
   ResourceAccordion,
   OrganizationNameWithCertificate,
@@ -15,7 +15,9 @@ import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
+import type { ResourceData } from '../../model/resource'
 import { useDatasetStore } from '../../store/DatasetStore'
+import { useResourceStore } from '../../store/ResourceStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown, formatDate } from '../../utils'
 
@@ -23,11 +25,13 @@ const route = useRoute()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
+const resourceStore = useResourceStore()
 const reuseStore = useReuseStore()
 
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const reuses = ref([])
-const resources = ref({})
+
+const resources = ref<Record<string, ResourceData>>({})
 const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
@@ -83,11 +87,11 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (type, page = 1, query = '') => {
+const changePage = (type: string, page = 1, query = '') => {
   resources.value[type].currentPage = page
   resources.value[type].query = query
-  return datasetStore
-    .fetchDatasetResources(dataset.value.id, type, page, pageSize, query)
+  return resourceStore
+    .fetchDatasetResources(dataset.value.id, type, page, query)
     .then((data) => {
       resources.value[type].resources = data['data']
       resources.value[type].total = data['total']
@@ -131,6 +135,37 @@ const reuseDescription = (r) => {
   }
 }
 
+const getResourcesTitle = (typedResources: ResourceData) => {
+  if (typedResources?.total > 1) {
+    let pluralName
+    switch (typedResources.type.id) {
+      case 'main':
+        pluralName = 'Fichiers principaux'
+        break
+      case 'documentation':
+        pluralName = 'Documentations'
+        break
+      case 'update':
+        pluralName = 'Mises à jour'
+        break
+      case 'api':
+        pluralName = 'APIs'
+        break
+      case 'code':
+        pluralName = 'Dépôts de code'
+        break
+      case 'other':
+        pluralName = 'Autres'
+        break
+      default:
+        pluralName = typedResources.typeLabel
+    }
+    return `${typedResources.total} ${pluralName}`
+  } else {
+    return typedResources.typeLabel
+  }
+}
+
 const getType = (id) => {
   const type = types.value.find((t) => t.id === id)
   return type?.label || ''
@@ -158,13 +193,13 @@ watch(
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
       const resourceLoader = useLoading().show()
-      const allResources = await datasetStore.loadResources(
-        dataset.value.resources,
-        pageSize
+      const allResources = await resourceStore.loadResources(
+        dataset.value.id,
+        dataset.value.resources
       )
       for (const typedResources of allResources) {
-        resources.value[typedResources.typeId] = typedResources
-        resources.value[typedResources.typeId]['totalWithoutFilter'] =
+        resources.value[typedResources.type.id] = { ...typedResources }
+        resources.value[typedResources.type.id].totalWithoutFilter =
           typedResources.total
       }
       resourceLoader.hide()
@@ -240,11 +275,15 @@ watch(
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <div class="datagouv-components" v-if="selectedTabIndex === 0">
+        <div v-if="selectedTabIndex === 0" class="datagouv-components">
           <template v-for="typedResources in resources">
-            <div v-if="typedResources.totalWithoutFilter" class="fr-mb-4w">
+            <div
+              v-if="typedResources.totalWithoutFilter"
+              :key="typedResources.type.id"
+              class="fr-mb-4w"
+            >
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
-                {{ typedResources.typeLabel }}
+                {{ getResourcesTitle(typedResources) }}
               </h2>
               <DsfrSearchBar
                 v-if="typedResources.totalWithoutFilter > pageSize"
@@ -252,15 +291,16 @@ watch(
                 placeholder="Rechercher"
                 :large="false"
                 class="search-bar"
-                @search="() => doSearch(typedResources.typeId)"
+                @search="() => doSearch(typedResources.type.id)"
                 @update:model-value="
-                  (value) => updateQuery(value, typedResources.typeId)
+                  (value) => updateQuery(value, typedResources.type.id)
                 "
               />
               <span v-if="typedResources.resources.length != 0">
                 <ResourceAccordion
                   v-for="resource in typedResources.resources"
-                  :datasetId="datasetId"
+                  :key="resource.id"
+                  :dataset-id="datasetId"
                   :resource="resource"
                 />
                 <Pagination
@@ -272,7 +312,7 @@ watch(
                   @change="
                     (page) =>
                       changePage(
-                        typedResources.typeId,
+                        typedResources.type.id,
                         page,
                         typedResources.query
                       )
@@ -291,25 +331,46 @@ watch(
         tab-id="tab-1"
         :selected="selectedTabIndex === 1"
       >
-        <h2 class="fr-mt-4w">Réutilisations</h2>
-        <div v-if="!reuses.length">
-          Pas de réutilisation pour ce jeu de données.
+        <div
+          v-if="!reuses.length"
+          class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
+        >
+          <img
+            height="105"
+            width="130"
+            loading="lazy"
+            src="/blank_state/reuse.svg"
+          />
+          <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+            Il n'y a pas encore de réutilisation pour ce jeu de données.
+          </p>
+          <p>
+            <a
+              class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
+              href="https://guides.data.gouv.fr/publier-des-donnees/guide-data.gouv.fr/reutilisations"
+            >
+              Qu'est-ce qu'une réutilisation ?
+            </a>
+          </p>
         </div>
-        <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-          <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
-            <DsfrCard
-              :link="r.page"
-              :style="`max-width: 400px; max-height: 400px`"
-              :title="cropString(r.title)"
-              :detail="getType(r.type)"
-              :description="reuseDescription(r)"
-              size="sm"
-              :imgSrc="
-                r.image_thumbnail || r.organization?.logo || r.owner.avatar
-              "
-            />
-          </li>
-        </ul>
+        <div v-else>
+          <h2 class="fr-mt-4w">Réutilisations</h2>
+          <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+            <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
+              <DsfrCard
+                :link="r.page"
+                :style="`max-width: 400px; max-height: 400px`"
+                :title="cropString(r.title)"
+                :detail="getType(r.type)"
+                :description="reuseDescription(r)"
+                size="sm"
+                :imgSrc="
+                  r.image_thumbnail || r.organization?.logo || r.owner.avatar
+                "
+              />
+            </li>
+          </ul>
+        </div>
       </DsfrTabContent>
 
       <!-- Discussions -->
@@ -318,7 +379,11 @@ watch(
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <Well color="blue-cumulus" weight="regular">
+        <Well
+          v-if="!config.website.discussions.dataset.create"
+          color="blue-cumulus"
+          weight="regular"
+        >
           <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
             <div class="fr-col-12 fr-col-lg-8">
               <p class="fr-text--bold fr-mb-0">{{ discussionWellTitle }}</p>

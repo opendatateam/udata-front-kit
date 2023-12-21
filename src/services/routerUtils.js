@@ -19,39 +19,50 @@ export default class RouterFetch {
       if (item.id === 'datasets') {
         items.push({
           path: item.linkPage,
-          name: item.id,
-          component: DatasetsListView
-        })
-        items.push({
-          path: `${item.linkPage}/:did`,
-          name: 'dataset_detail',
-          component: DatasetDetailView
+          children: [
+            {
+              path: '',
+              name: item.id,
+              component: DatasetsListView
+            },
+            {
+              path: ':did',
+              name: 'dataset_detail',
+              component: DatasetDetailView
+            }
+          ]
         })
       } else if (item.id === 'organizations') {
         items.push({
           path: item.linkPage,
-          name: item.id,
-          component: OrganizationsListView
-        })
-        items.push({
-          path: `${item.linkPage}/:oid`,
-          name: 'organization_detail',
-          component: OrganizationDetailView
+          children: [
+            {
+              path: '',
+              name: item.id,
+              component: OrganizationsListView
+            },
+            {
+              path: ':oid',
+              name: 'organization_detail',
+              component: OrganizationDetailView
+            }
+          ]
         })
       } else if (item.id === 'bouquets') {
         items.push({
           path: item.linkPage,
-          name: item.id,
-          component: BouquetsListView,
-          props: (route) => ({
-            initThemeName: route.query.theme,
-            initSubthemeName: route.query.subtheme
-          })
-        })
-        items.push({
-          path: `${item.linkPage}/:bid`,
-          name: 'bouquet_detail',
-          component: BouquetDetailView
+          children: [
+            {
+              path: '',
+              name: item.id,
+              component: BouquetsListView
+            },
+            {
+              path: ':bid',
+              name: 'bouquet_detail',
+              component: BouquetDetailView
+            }
+          ]
         })
 
         /** protected / admin route  **/
@@ -82,7 +93,7 @@ export default class RouterFetch {
           meta: { title: item.name },
           props: { url: item.url }
         })
-      } else if (item.type == 'custom') {
+      } else if (item.type === 'custom') {
         items.push({
           path: item.linkPage,
           name: item.id,

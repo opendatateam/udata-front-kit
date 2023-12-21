@@ -52,20 +52,14 @@ onBeforeRouteUpdate((to, from) => {
 })
 
 const getDatasetPage = (id) => {
-  const url = router.resolve({ name: 'dataset_detail', params: { did: id } })
-  return url.href
+  return { name: 'dataset_detail', params: { did: id } }
 }
 
 const getOrganizationPage = (id) => {
-  try {
-    const url = router.resolve({
-      name: 'organization_detail',
-      params: { oid: id }
-    })
-    return url.href
-  } catch (e) {
-    return ''
+  if (router.hasRoute('organization_detail')) {
+    return { name: 'organization_detail', params: { oid: id } }
   }
+  return ''
 }
 
 onMounted(() => {
@@ -98,7 +92,7 @@ watchEffect(() => {
       Aucun résultat pour cette recherche.
     </div>
 
-    <div v-if="topicsConf" class="fr-col-md-12 fr-pr-md-2w fr-mb-2w">
+    <div v-if="topicsConf" class="fr-col-md-12 fr-mb-2w">
       <DsfrSelect
         :model-value="selectedTopicId"
         :options="topicOptions"
