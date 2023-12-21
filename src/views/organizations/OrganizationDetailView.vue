@@ -65,6 +65,7 @@ watchEffect(() => {
   </div>
   <div class="fr-container fr-mb-4w">
     <h1 class="fr-mb-2v">{{ org.name }}</h1>
+    <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="description"></div>
 
     <div class="w-100 fr-grid-row fr-grid-row--middle fr-mt-5v justify-end">
