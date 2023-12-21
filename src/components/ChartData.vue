@@ -1,7 +1,12 @@
 <script setup>
 import LineChart from './LineChart.vue'
 
-const props = defineProps(['chartData'])
+const props = defineProps({
+  chartData: {
+    type: Array,
+    required: true
+  }
+})
 const chartData = props.chartData
 </script>
 
