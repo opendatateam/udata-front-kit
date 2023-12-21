@@ -10,15 +10,14 @@ const instance = axios.create()
 
 // inject token in requests if user is loggedIn
 instance.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const store = useUserStore()
     if (store.$state.isLoggedIn) {
       config.headers.Authorization = `Bearer ${store.$state.token}`
     }
-
     return config
   },
-  (error) => Promise.reject(error)
+  async (error) => await Promise.reject(error)
 )
 
 // FIXME: move types to models
@@ -49,9 +48,7 @@ interface RequestConfig {
 type ResponseDataPromise = Promise<AxiosResponse['data']>
 
 /**
- * A composable wrapper around data.gouv.fr's API
- *
- * Composable because HTTP methods wrapper return {ComposableFetchResult}
+ * A wrapper around data.gouv.fr's API
  *
  * This class must be subclassed to provide at least an `endpoint` attr,
  * e.g. OrganizationsAPI will declare `endpoint = organizations`.
