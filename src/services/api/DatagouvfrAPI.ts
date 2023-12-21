@@ -21,6 +21,7 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
+// FIXME: move types to models
 interface DatagouvfrAPIArgs {
   baseUrl?: string
   version?: number
@@ -57,7 +58,7 @@ type ResponseDataPromise = Promise<AxiosResponse['data']>
  */
 export default class DatagouvfrAPI {
   baseUrl = `${config.datagouvfr.base_url}/api`
-  version = '1'
+  version = 1
   endpoint = ''
   httpClient = instance
 
@@ -143,3 +144,5 @@ export default class DatagouvfrAPI {
     })
   }
 }
+
+export type { ResponseDataPromise }

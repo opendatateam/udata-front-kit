@@ -1,5 +1,5 @@
 import DatagouvfrAPI from '../DatagouvfrAPI'
-import type ResponseDataPromise from '../DatagouvfrAPI'
+import type { ResponseDataPromise as ResponseData } from '../DatagouvfrAPI'
 
 export default class DatasetsAPI extends DatagouvfrAPI {
   endpoint = 'datasets'
@@ -12,7 +12,7 @@ export default class DatasetsAPI extends DatagouvfrAPI {
     orgId: string,
     page: number = 1,
     sort: string = '-created'
-  ): Promise<ResponseDataPromise> {
+  ): Promise<ResponseData> {
     // WARNING: specify `-created` or another sort explicitely because default sort has a pagination issue
     const url = `${this.url()}/search/`
     return await this.request({
