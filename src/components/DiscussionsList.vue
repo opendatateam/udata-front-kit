@@ -14,7 +14,7 @@ import type {
 } from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
 import { useUserStore } from '../store/UserStore'
-import { formatDate, fromMarkdown } from '../utils'
+import { formatDate } from '../utils'
 
 const route = useRoute()
 const router = useRouter()
@@ -198,21 +198,18 @@ watchEffect(() => {
           - le {{ formatDate(discussion.discussion[0].posted_on) }}
         </div>
       </div>
-      <!-- eslint-disable vue/no-v-html -->
-      <div
-        class="comment"
-        v-html="fromMarkdown(discussion.discussion[0].content)"
-      ></div>
+      <div class="comment comment-text">
+        {{ discussion.discussion[0].content }}
+      </div>
       <template v-if="discussion.discussion.length > 1">
         <div
           v-for="comment in discussion.discussion.slice(1)"
           :key="comment.content"
           class="fr-mt-md-3v fr-pl-3v"
         >
-          <div
-            class="secondary-comment-content"
-            v-html="fromMarkdown(comment.content)"
-          ></div>
+          <div class="secondary-comment-content comment-text">
+            {{ comment.content }}
+          </div>
           <div class="discussion-subtitle fr-mb-2w">
             <div class="avatar fr-mr-1v">
               <img
@@ -229,7 +226,6 @@ watchEffect(() => {
           </div>
         </div>
       </template>
-      <!-- eslint-enable vue/no-v-html -->
       <div v-if="allowDiscussionCreation" class="datagouv-components">
         <button
           v-if="postFormId !== discussion.id && loggedIn"
@@ -327,5 +323,9 @@ watchEffect(() => {
   border-left: 2px solid #dddddd;
   padding-left: 10px;
   margin-bottom: 10px;
+}
+
+.comment-text {
+  white-space: pre-wrap;
 }
 </style>
