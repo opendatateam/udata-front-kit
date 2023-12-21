@@ -1,29 +1,71 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { defineProps, ref, watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
+import type { ComputedRef, Ref } from 'vue'
+import { defineProps, ref, watchEffect, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import config from '../config'
-import type { DiscussionResponse } from '../model/discussion'
+import type {
+  DiscussionResponse,
+  DiscussionForm,
+  SubjectClass,
+  PostForm,
+  DiscussionId
+} from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
+import { useUserStore } from '../store/UserStore'
 import { formatDate, fromMarkdown } from '../utils'
 
+const route = useRoute()
+const router = useRouter()
+
 const discussionStore = useDiscussionStore()
+const userStore = useUserStore()
 
-const discussions: Ref<DiscussionResponse | null> = ref(null)
+const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
-const pages: Ref<object[]> = ref([])
-
-type SubjectType = 'dataset' | 'topic'
+const showDiscussionForm: Ref<boolean> = ref(false)
+const postFormId: Ref<DiscussionId | null> = ref(null)
 
 const props = defineProps({
   subject: {
     type: Object,
     required: true
   },
-  subjectType: {
-    type: String as () => SubjectType,
-    default: 'dataset'
+  subjectClass: {
+    type: String as () => SubjectClass,
+    default: 'Dataset'
   }
+})
+
+const subjectClassLabels = {
+  Dataset: 'jeu de données',
+  Topic: 'bouquet'
+}
+
+const discussionForm: Ref<DiscussionForm> = ref({
+  title: '',
+  comment: '',
+  subject: {
+    id: props.subject.id,
+    class: props.subjectClass
+  }
+})
+
+const postForm: Ref<PostForm> = ref({ comment: '' })
+
+const discussions: ComputedRef<DiscussionResponse> = computed(() => {
+  return discussionStore.getDiscussionsForSubject(
+    props.subject.id,
+    currentPage.value
+  )
+})
+const pages: ComputedRef<object[]> = computed(() => {
+  return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
+})
+
+const allowDiscussionCreation = computed(() => {
+  return config.website.discussions[props.subjectClass.toLowerCase()].create
 })
 
 const getUserAvatar = (post) => {
@@ -33,22 +75,103 @@ const getUserAvatar = (post) => {
   return `${config.datagouvfr.base_url}/api/1/avatars/${post.posted_by.id}/20`
 }
 
-watchEffect(() => {
-  const subjectId = props.subject.id
-  if (!subjectId) return
+const triggerLogin = () => {
+  localStorage.setItem('lastPath', route.path)
+  router.push({ name: 'login' })
+}
+
+const createDiscussion = () => {
+  discussionStore.createDiscussion(discussionForm.value).then((d) => {
+    if (d !== undefined) {
+      discussionForm.value.title = ''
+      discussionForm.value.comment = ''
+      showDiscussionForm.value = false
+      currentPage.value = 1
+    }
+  })
+}
+
+const createPost = (discussionId: DiscussionId) => {
   discussionStore
-    .loadDiscussionsForSubject(subjectId, currentPage.value)
+    .createPost(props.subject.id, discussionId, postForm.value)
     .then((d) => {
-      discussions.value = d
-      if (!pages.value.length) {
-        pages.value =
-          discussionStore.getDiscussionsPaginationForSubject(subjectId)
+      if (d !== undefined) {
+        postForm.value.comment = ''
+        postFormId.value = null
       }
     })
+}
+
+watchEffect(() => {
+  if (!props.subject.id) return
+  discussionStore.loadDiscussionsForSubject(props.subject.id, currentPage.value)
+  discussionForm.value.subject = {
+    id: props.subject.id,
+    class: props.subjectClass
+  }
 })
 </script>
 
 <template>
+  <div class="fr-grid-row fr-grid-row--middle datagouv-components">
+    <div class="fr-col">
+      <h2 class="fr-mt-4w">Discussions</h2>
+    </div>
+    <div v-if="allowDiscussionCreation" class="fr-col text-align-right">
+      <button
+        v-if="loggedIn"
+        type="button"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
+        @click.stop.prevent="showDiscussionForm = true"
+      >
+        Démarrer une nouvelle discussion
+      </button>
+      <button
+        v-else
+        type="button"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-account-line fr-btn--icon-left"
+        @click.stop.prevent="triggerLogin()"
+      >
+        Connectez-vous pour démarrer une discussion
+      </button>
+    </div>
+  </div>
+
+  <div v-if="showDiscussionForm" class="fr-mb-4w">
+    <form @submit.stop.prevent="createDiscussion()">
+      <div class="fr-input-group">
+        <label class="fr-label" for="discussion-title"> Titre * </label>
+        <input
+          id="discussion-title"
+          v-model="discussionForm.title"
+          required
+          class="fr-input"
+          name="title"
+        />
+      </div>
+      <div class="fr-input-group">
+        <label class="fr-label" for="discussion-message"> Message * </label>
+        <textarea
+          id="discussion-message"
+          v-model="discussionForm.comment"
+          required
+          class="fr-input"
+          name="message"
+        ></textarea>
+      </div>
+      <div class="text-align-right">
+        <button
+          type="button"
+          class="fr-btn fr-btn--secondary fr-mr-1w"
+          @click.stop.prevent="showDiscussionForm = false"
+        >
+          Annuler
+        </button>
+        <button type="submit" class="fr-btn">Soumettre</button>
+      </div>
+    </form>
+  </div>
+
   <div
     v-if="!discussions?.data?.length"
     class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
@@ -64,7 +187,6 @@ watchEffect(() => {
     </p>
   </div>
   <div v-else>
-    <h2 class="fr-mt-4w">Discussions</h2>
     <div
       v-for="discussion in discussions?.data"
       :key="discussion.id"
@@ -102,7 +224,7 @@ watchEffect(() => {
             class="secondary-comment-content"
             v-html="fromMarkdown(comment.content)"
           ></div>
-          <div class="discussion-subtitle">
+          <div class="discussion-subtitle fr-mb-2w">
             <div class="avatar fr-mr-1v">
               <img
                 style="border-radius: 50%"
@@ -119,6 +241,56 @@ watchEffect(() => {
         </div>
       </template>
       <!-- eslint-enable vue/no-v-html -->
+      <div v-if="allowDiscussionCreation" class="datagouv-components">
+        <button
+          v-if="postFormId !== discussion.id && loggedIn"
+          type="button"
+          class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-chat-3-line fr-btn--icon-left"
+          @click.stop.prevent="
+            () => {
+              postForm.comment = ''
+              postFormId = discussion.id
+            }
+          "
+        >
+          Répondre
+        </button>
+        <button
+          v-if="!loggedIn"
+          type="button"
+          class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-account-line fr-btn--icon-left"
+          @click.stop.prevent="triggerLogin()"
+        >
+          Connectez-vous pour répondre
+        </button>
+        <form
+          v-if="postFormId === discussion.id"
+          @submit.stop.prevent="createPost(discussion.id)"
+        >
+          <div class="fr-input-group">
+            <label class="fr-label" for="discussion-message">
+              Commentaire *
+            </label>
+            <textarea
+              id="discussion-message"
+              v-model="postForm.comment"
+              required
+              class="fr-input"
+              name="message"
+            ></textarea>
+          </div>
+          <div class="text-align-right">
+            <button
+              type="button"
+              class="fr-btn fr-btn--secondary fr-mr-1w"
+              @click.stop.prevent="postFormId = null"
+            >
+              Annuler
+            </button>
+            <button type="submit" class="fr-btn">Soumettre</button>
+          </div>
+        </form>
+      </div>
     </div>
     <div v-if="pages?.length > 1" class="fr-container">
       <DsfrPagination
