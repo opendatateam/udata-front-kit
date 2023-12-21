@@ -28,6 +28,18 @@ const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const reuseStore = useReuseStore()
 
+/* FIXME:
+function useRouteParamsAsString() {
+  const route = useRoute();
+  const params = Object.fromEntries(
+    Object.entries(route.params).map(([key, value]) => [key, Array.isArray(value) ? value[0] : value])
+  );
+  return { ...route, params };
+}
+
+const route = useRouteParamsAsString();
+const datasetId = route.params.did;
+*/
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const reuses = ref([])
 

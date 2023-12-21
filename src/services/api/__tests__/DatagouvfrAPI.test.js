@@ -85,7 +85,7 @@ test('delete something else', async ({ client }) => {
 })
 
 test('raw list', async ({ client }) => {
-  const res = await client._list()
+  const res = await client.list()
   expect(Array.isArray(res)).toBeTruthy()
 })
 

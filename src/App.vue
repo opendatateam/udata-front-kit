@@ -62,7 +62,7 @@ onMounted(() => {
   store.init()
   if (isLoggedIn.value) {
     api
-      ._list()
+      .list()
       .then((data) => {
         store.storeInfo(data)
       })

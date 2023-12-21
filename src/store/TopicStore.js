@@ -40,7 +40,7 @@ export const useTopicStore = defineStore('topic', {
      */
     async loadTopicsForUniverse() {
       if (this.data.length > 0) return this.data
-      let response = await topicsAPIv2._list({
+      let response = await topicsAPIv2.list({
         page_size: config.website.pagination_sizes.topics_list,
         tag: config.universe.name
       })

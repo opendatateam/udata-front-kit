@@ -18,8 +18,14 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
     subjectId: SubjectId,
     page: number = 1
   ): Promise<DiscussionResponse> {
-    const url = `${this.url()}/?for=${subjectId}&page=${page}`
-    return await this.makeRequestAndHandleResponse(url)
+    return await this.request({
+      url: this.url(true),
+      method: 'get',
+      params: {
+        for: subjectId,
+        page
+      }
+    })
   }
 
   /**
@@ -30,6 +36,10 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
     postForm: PostForm
   ): Promise<Discussion> {
     const url = `${this.url()}/${discussionId}/`
-    return await this.makeRequestAndHandleResponse(url, 'post', postForm)
+    return await this.request({
+      url,
+      method: 'post',
+      data: postForm
+    })
   }
 }

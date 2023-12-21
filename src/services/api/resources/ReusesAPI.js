@@ -9,8 +9,13 @@ export default class ReusesAPI extends DatagouvfrAPI {
    * @param {str} dataset_id
    * @returns {object}
    */
-  async getReuses(dataset_id) {
-    const url = `${this.url()}/?dataset=${dataset_id}`
-    return await this.makeRequestAndHandleResponse(url)
+  async getReuses(datasetId) {
+    return this.request({
+      url: this.url(true),
+      method: 'get',
+      params: {
+        dataset: datasetId
+      }
+    })
   }
 }
