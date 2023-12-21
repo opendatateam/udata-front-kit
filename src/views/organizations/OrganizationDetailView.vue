@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watchEffect } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute } from 'vue-router'
 
 import Tile from '../../components/Tile.vue'
@@ -18,7 +19,7 @@ const org = computed(() => orgStore.get(organizationId) || {})
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
   { to: '/organizations', text: 'Organisations' },
-  { text: org.value.title }
+  { text: org.value.name }
 ])
 
 const currentPage = ref(1)
@@ -45,6 +46,7 @@ const description = computed(() => descriptionFromMarkdown(org))
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
   if (!org.value.id) return
+  const loader = useLoading().show()
   datasetStore
     .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
     .then((_datasets) => {
@@ -53,6 +55,7 @@ watchEffect(() => {
         pages.value = datasetStore.getDatasetsPaginationForOrg(org.value.id)
       }
     })
+    .finally(() => loader.hide())
 })
 </script>
 
@@ -77,7 +80,7 @@ watchEffect(() => {
             :model-value="selectedSort"
             :options="sorts"
             label=""
-            @update:modelValue="doSort"
+            @update:model-value="doSort"
           ></DsfrSelect>
         </div>
       </div>
@@ -88,7 +91,7 @@ watchEffect(() => {
       Pas de jeu de données pour cette organisation.
     </div>
     <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-      <li v-for="d in datasets.data" class="fr-col-12 fr-col-lg-4">
+      <li v-for="d in datasets.data" :key="d.id" class="fr-col-12 fr-col-lg-4">
         <Tile
           :link="`/datasets/${d.slug}`"
           :title="d.title"

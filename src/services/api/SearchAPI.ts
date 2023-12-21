@@ -12,7 +12,7 @@ const $loading = useLoading()
  * A wrapper around search engine API
  */
 export default class SearchAPI extends DatagouvfrAPI {
-  version = '2'
+  version = 2
   endpoint = 'datasets/search'
 
   // FIXME: why wrap Promise in Promise? Type it w/ Search anyway
