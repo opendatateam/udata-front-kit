@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
   ResourceAccordion,
   OrganizationNameWithCertificate,
@@ -15,7 +15,9 @@ import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
+import type { ResourceData } from '../../model/resource'
 import { useDatasetStore } from '../../store/DatasetStore'
+import { useResourceStore } from '../../store/ResourceStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown, formatDate } from '../../utils'
 
@@ -23,11 +25,13 @@ const route = useRoute()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
+const resourceStore = useResourceStore()
 const reuseStore = useReuseStore()
 
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const reuses = ref([])
-const resources = ref({})
+
+const resources = ref<Record<string, ResourceData>>({})
 const selectedTabIndex = ref(0)
 const license = ref({})
 const types = ref([])
@@ -83,11 +87,11 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
-const changePage = (type, page = 1, query = '') => {
+const changePage = (type: string, page = 1, query = '') => {
   resources.value[type].currentPage = page
   resources.value[type].query = query
-  return datasetStore
-    .fetchDatasetResources(dataset.value.id, type, page, pageSize, query)
+  return resourceStore
+    .fetchDatasetResources(dataset.value.id, type, page, query)
     .then((data) => {
       resources.value[type].resources = data['data']
       resources.value[type].total = data['total']
@@ -131,10 +135,10 @@ const reuseDescription = (r) => {
   }
 }
 
-const getResourcesTitle = (typedResources) => {
+const getResourcesTitle = (typedResources: ResourceData) => {
   if (typedResources?.total > 1) {
     let pluralName
-    switch (typedResources.typeId) {
+    switch (typedResources.type.id) {
       case 'main':
         pluralName = 'Fichiers principaux'
         break
@@ -189,13 +193,13 @@ watch(
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
       const resourceLoader = useLoading().show()
-      const allResources = await datasetStore.loadResources(
-        dataset.value.resources,
-        pageSize
+      const allResources = await resourceStore.loadResources(
+        dataset.value.id,
+        dataset.value.resources
       )
       for (const typedResources of allResources) {
-        resources.value[typedResources.typeId] = typedResources
-        resources.value[typedResources.typeId]['totalWithoutFilter'] =
+        resources.value[typedResources.type.id] = { ...typedResources }
+        resources.value[typedResources.type.id].totalWithoutFilter =
           typedResources.total
       }
       resourceLoader.hide()
@@ -271,9 +275,13 @@ watch(
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <div class="datagouv-components" v-if="selectedTabIndex === 0">
+        <div v-if="selectedTabIndex === 0" class="datagouv-components">
           <template v-for="typedResources in resources">
-            <div v-if="typedResources.totalWithoutFilter" class="fr-mb-4w">
+            <div
+              v-if="typedResources.totalWithoutFilter"
+              :key="typedResources.type.id"
+              class="fr-mb-4w"
+            >
               <h2 class="fr-mb-1v subtitle subtitle--uppercase">
                 {{ getResourcesTitle(typedResources) }}
               </h2>
@@ -283,15 +291,16 @@ watch(
                 placeholder="Rechercher"
                 :large="false"
                 class="search-bar"
-                @search="() => doSearch(typedResources.typeId)"
+                @search="() => doSearch(typedResources.type.id)"
                 @update:model-value="
-                  (value) => updateQuery(value, typedResources.typeId)
+                  (value) => updateQuery(value, typedResources.type.id)
                 "
               />
               <span v-if="typedResources.resources.length != 0">
                 <ResourceAccordion
                   v-for="resource in typedResources.resources"
-                  :datasetId="datasetId"
+                  :key="resource.id"
+                  :dataset-id="datasetId"
                   :resource="resource"
                 />
                 <Pagination
@@ -303,7 +312,7 @@ watch(
                   @change="
                     (page) =>
                       changePage(
-                        typedResources.typeId,
+                        typedResources.type.id,
                         page,
                         typedResources.query
                       )
