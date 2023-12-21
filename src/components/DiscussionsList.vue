@@ -183,7 +183,7 @@ watchEffect(() => {
       src="/blank_state/discussion.svg"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      Pas de discussion pour ce jeu de données.
+      Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
     </p>
   </div>
   <div v-else>
