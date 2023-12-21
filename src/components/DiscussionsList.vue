@@ -327,5 +327,6 @@ watchEffect(() => {
 
 .comment-text {
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 </style>
