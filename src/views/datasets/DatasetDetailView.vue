@@ -33,7 +33,6 @@ const license = ref({})
 const types = ref([])
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.discussions.dataset.display
-const blankReuse = '/blank_state/reuse.svg'
 
 const updateQuery = (q, typeId) => {
   resources.value[typeId].query = q
@@ -328,9 +327,10 @@ watch(
           class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
         >
           <img
-            class="fr-responsive-img"
-            :src="blankReuse"
-            style="height: 105px; width: 130px"
+            height="105"
+            width="130"
+            loading="lazy"
+            src="/blank_state/reuse.svg"
           />
           <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
             Il n'y a pas encore de réutilisation pour ce jeu de données.
