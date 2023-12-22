@@ -42,7 +42,6 @@ interface RequestConfig {
   method: HttpMethod
   params?: object
   data?: object
-  untoasted?: boolean
 }
 
 type URLParams = Record<string, string | number>
@@ -60,6 +59,7 @@ export default class DatagouvfrAPI {
   version = 1
   endpoint = ''
   httpClient = instance
+  toasted = true
 
   constructor(args: DatagouvfrAPIArgs = {}) {
     const { baseUrl, version, endpoint, httpClient } = args
@@ -85,13 +85,7 @@ export default class DatagouvfrAPI {
       params: config.params,
       data: config.data
     }).catch((error: AxiosError) => {
-      // FIXME: toast at the instance level?
-      // if (this.toasted) {}
-      if (
-        config.untoasted !== undefined &&
-        !config.untoasted &&
-        error.message !== undefined
-      ) {
+      if (this.toasted) {
         toast(error.message, { type: 'error', autoClose: false })
       }
       throw error
