@@ -46,7 +46,10 @@ export const useTopicStore = defineStore('topic', {
       })
       this.data = this.filter(response.data)
       while (response.next_page) {
-        response = await topicsAPIv2.request(response.next_page)
+        response = await topicsAPIv2.request({
+          url: response.next_page,
+          method: 'get'
+        })
         this.data = [...this.data, ...this.filter(response.data)]
       }
       return this.data
@@ -69,7 +72,7 @@ export const useTopicStore = defineStore('topic', {
     async load(slugOrId) {
       const existing = this.get(slugOrId)
       if (existing) return existing
-      return await topicsAPIv2._get(slugOrId)
+      return await topicsAPIv2.get(slugOrId)
     },
     /**
      * Create a topic
@@ -94,18 +97,6 @@ export const useTopicStore = defineStore('topic', {
       const idx = this.data.findIndex((b) => b.id === topicId)
       this.data[idx] = res
       return res
-    },
-    /**
-     * Delete an entity (DELETE)
-     *
-     * @param {string} entityId
-     * @returns {Promise}
-     */
-    async delete(entityId) {
-      return await this.makeRequestAndHandleResponse(
-        `${this.url()}/${entityId}/`,
-        'delete'
-      )
     }
   }
 })

@@ -1,5 +1,4 @@
-<script setup>
-import { DsfrButton } from '@gouvminint/vue-dsfr'
+<script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
@@ -53,11 +52,10 @@ const copyUrl = () => {
 }
 
 const getTheme = (themeName) => {
-  const theme = config.themes.find((theme) => theme.name === themeName)
-  return theme
+  return config.themes.find((theme) => theme.name === themeName)
 }
 
-const convertToHex = (hex, color) => {
+const convertToHex = (hex, color?) => {
   return hex ? `#${parseInt(hex, 16).toString(16).padStart(6, '0')}` : color
 }
 
@@ -122,9 +120,9 @@ onMounted(() => {
     <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-2w" />
     <DsfrButton
       class="backToPage fr-pl-0 fr-mb-2w"
-      @click.prevent="goBack"
       :tertiary="true"
       :no-outline="true"
+      @click.prevent="goBack"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -161,6 +159,7 @@ onMounted(() => {
     </div>
     <div class="bouquet__container fr-p-6w fr-mb-6w">
       <h5><strong>Objectif du bouquet</strong></h5>
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-html="description" />
       <div
         v-if="
@@ -176,13 +175,14 @@ onMounted(() => {
         </h5>
         <DsfrAccordionsGroup>
           <li
-            v-for="datasetProperties in bouquet.extras[
+            v-for="(datasetProperties, idx) in bouquet.extras[
               `${config.universe.name}:datasets_properties`
             ]"
+            :key="idx"
           >
             <DsfrAccordion
-              :title="datasetProperties.title"
               :id="datasetProperties.id"
+              :title="datasetProperties.title"
               :expanded-id="datasetProperties.id"
               @expand="datasetProperties.id = $event"
             >
@@ -223,10 +223,10 @@ onMounted(() => {
     </div>
 
     <DsfrButton
-      @click.prevent="copyUrl"
       icon="ri-clipboard-line"
       :inline="false"
       class="btn-copy fr-ml-auto"
+      @click.prevent="copyUrl"
     >
       Copier l'url de la page
     </DsfrButton>
