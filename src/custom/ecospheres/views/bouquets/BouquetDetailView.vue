@@ -6,7 +6,6 @@ import { useRoute, useRouter } from 'vue-router'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
 import { Availability, isAvailable } from '@/model'
-import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
@@ -16,12 +15,10 @@ const router = useRouter()
 
 const store = useTopicStore()
 const userStore = useUserStore()
-const datasetStore = useDatasetStore()
 
 const bouquet = ref({})
 const theme = ref()
 const subtheme = ref()
-const datasets = ref([])
 const loading = useLoading()
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
@@ -106,10 +103,6 @@ onMounted(() => {
           text: bouquet.value.name
         }
       )
-      // FIXME: not used anymore in template below, change template or remove
-      return datasetStore.loadMultiple(res.datasets).then((ds) => {
-        datasets.value = ds
-      })
     })
     .finally(() => loader.hide())
 })

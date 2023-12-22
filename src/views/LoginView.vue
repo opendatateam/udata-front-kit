@@ -39,6 +39,6 @@ onMounted(() => {
 
 <template>
   <div class="fr-container about">
-    <h1>This is a login page</h1>
+    <p>Connexion en cours...</p>
   </div>
 </template>

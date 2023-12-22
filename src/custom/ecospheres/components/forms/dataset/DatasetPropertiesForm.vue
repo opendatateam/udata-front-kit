@@ -168,8 +168,9 @@ export default {
     },
     async ecospheresDatasetsOptions(query: string) {
       if (!query) return []
+      // FIXME: wrong typing of search API (and probably others)
       const datasets = (
-        await new SearchAPI()._search(query, config.universe.topic_id, 1, {
+        await new SearchAPI().search(query, config.universe.topic_id, 1, {
           page_size: 10
         })
       ).data
