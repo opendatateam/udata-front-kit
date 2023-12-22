@@ -146,5 +146,3 @@ export default class DatagouvfrAPI {
     })
   }
 }
-
-export type { ResponseDataPromise }
