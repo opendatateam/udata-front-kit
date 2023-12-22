@@ -42,8 +42,10 @@ interface RequestConfig {
   method: HttpMethod
   params?: object
   data?: object
-  toasted?: boolean
+  untoasted?: boolean
 }
+
+type URLParams = Record<string, string | number>
 
 type ResponseDataPromise = Promise<AxiosResponse['data']>
 
@@ -83,7 +85,13 @@ export default class DatagouvfrAPI {
       params: config.params,
       data: config.data
     }).catch((error: AxiosError) => {
-      if (config.toasted === true && error.message !== undefined) {
+      // FIXME: toast at the instance level?
+      // if (this.toasted) {}
+      if (
+        config.untoasted !== undefined &&
+        !config.untoasted &&
+        error.message !== undefined
+      ) {
         toast(error.message, { type: 'error', autoClose: false })
       }
       throw error
@@ -94,7 +102,7 @@ export default class DatagouvfrAPI {
   /**
    * Get an entity's detail from its id
    */
-  async get(entityId: string, params?: object): ResponseDataPromise {
+  async get(entityId: string, params?: URLParams): ResponseDataPromise {
     const url = `${this.url()}/${entityId}/`
     return await this.request({ url, method: 'get', params })
   }
@@ -102,9 +110,12 @@ export default class DatagouvfrAPI {
   /**
    * List entities
    */
-  async list(queryParams: Record<string, string> = {}): ResponseDataPromise {
-    const qs = new URLSearchParams(queryParams).toString()
-    return await this.request({ url: `${this.url()}/?${qs}`, method: 'get' })
+  async list(params?: URLParams): ResponseDataPromise {
+    return await this.request({
+      url: this.url(true),
+      method: 'get',
+      params
+    })
   }
 
   /**

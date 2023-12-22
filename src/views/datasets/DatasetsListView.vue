@@ -1,6 +1,7 @@
 <script setup>
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watchEffect } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 
 import config from '@/config'
@@ -76,7 +77,10 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  store.search(query.value, selectedTopicId.value, currentPage.value)
+  const loader = useLoading().show()
+  store
+    .search(query.value, selectedTopicId.value, currentPage.value)
+    .finally(() => loader.hide())
 })
 </script>
 
