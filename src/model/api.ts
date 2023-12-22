@@ -1,5 +1,7 @@
+export type GenericData = object[]
+
 export interface GenericResponse {
-  data: object[]
+  data: GenericData
   page: number
   page_size: number
   next_page: string | null

@@ -13,7 +13,7 @@ enum Availability {
   URL_AVAILABLE = 'url available'
 }
 
-const isAvailable = (availability: Availability): Boolean => {
+const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
     availability
   )
@@ -56,10 +56,10 @@ interface BouquetCreationData {
 }
 
 interface TopicExtras {
-  ['ecospheres:informations']: {
+  ['ecospheres:informations']: Array<{
     theme: string
     subtheme: string
-  }[]
+  }>
   ['ecospheres:datasets_properties']: DatasetProperties[]
 }
 
