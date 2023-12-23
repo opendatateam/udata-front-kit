@@ -1,6 +1,5 @@
-import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
-
 import config from '@/config'
+import type { DatasetV2Response } from '@/model/dataset'
 
 import DatagouvfrAPI from './DatagouvfrAPI'
 
@@ -16,7 +15,7 @@ export default class SearchAPI extends DatagouvfrAPI {
     topic: string,
     page: number,
     args?: object
-  ): Promise<DatasetV2[]> {
+  ): Promise<DatasetV2Response> {
     return await this.list({
       topic: topic ?? config.universe.topic_id,
       page: page ?? 1,

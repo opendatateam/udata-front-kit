@@ -13,6 +13,7 @@ enum Availability {
   URL_AVAILABLE = 'url available'
 }
 
+// FIXME: no place for this
 const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
     availability

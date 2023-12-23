@@ -5,7 +5,7 @@
 
       <div class="fr-mt-1w fr-mb-4w">
         <label class="fr-label" for="label">Libellé de la donnée</label>
-        <input class="fr-input" type="text" id="label" v-model="title" />
+        <input id="label" v-model="title" class="fr-input" type="text" />
       </div>
       <div class="fr-mt-1w fr-mb-4w">
         <Tooltip
@@ -18,7 +18,7 @@
           name="tooltip__markdown"
           text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
         />
-        <textarea class="fr-input" type="text" id="purpose" v-model="purpose" />
+        <textarea id="purpose" v-model="purpose" class="fr-input" type="text" />
       </div>
       <div class="fr-mt-1w fr-mb-4w">
         <label class="fr-label" for="source">Retrouver la donnée via</label>
@@ -89,6 +89,7 @@
 </template>
 
 <script lang="ts">
+import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import Multiselect from '@vueform/multiselect'
 
 import Tooltip from '@/components/Tooltip.vue'
@@ -103,8 +104,8 @@ import SearchAPI from '@/services/api/SearchAPI'
 export default {
   name: 'DatasetPropertiesForm',
   components: {
-    Tooltip: Tooltip,
-    Multiselect: Multiselect
+    Tooltip,
+    Multiselect
   },
   props: {
     alreadySelectedDatasets: {
@@ -112,6 +113,7 @@ export default {
       default: []
     }
   },
+  emits: ['addDataset'],
   data(): DatasetProperties {
     return this.initData()
   },
@@ -168,7 +170,6 @@ export default {
     },
     async ecospheresDatasetsOptions(query: string) {
       if (!query) return []
-      // FIXME: wrong typing of search API (and probably others)
       const datasets = (
         await new SearchAPI().search(query, config.universe.topic_id, 1, {
           page_size: 10
@@ -179,7 +180,7 @@ export default {
       })
       return options.filter((option) => !this.alreadySelected(option.value))
     },
-    datasetToOption(dataset: DatasetProperties) {
+    datasetToOption(dataset: DatasetV2) {
       return { value: dataset.id, label: dataset.title, uri: dataset.uri }
     },
     alreadySelected(id: string): boolean {
