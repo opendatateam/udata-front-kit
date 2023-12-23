@@ -1,4 +1,4 @@
-import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2Response } from '@/model/dataset'
 
 import DatagouvfrAPI from '../DatagouvfrAPI'
 
@@ -12,7 +12,7 @@ export default class DatasetsAPI extends DatagouvfrAPI {
     orgId: string,
     page: number = 1,
     sort: string = '-created'
-  ): Promise<DatasetV2[]> {
+  ): Promise<DatasetV2Response> {
     // WARNING: specify `-created` or another sort explicitely because default sort has a pagination issue
     const url = `${this.url()}/search/`
     return await this.request({
