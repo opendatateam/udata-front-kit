@@ -1,9 +1,15 @@
 import axios from 'axios'
-import type { AxiosInstance, AxiosResponse, AxiosError } from 'axios'
 import { toast } from 'vue3-toastify'
 
 import config from '@/config'
 
+import type {
+  DatagouvfrAPIArgs,
+  AxiosResponseData,
+  RequestConfig,
+  AxiosError,
+  URLParams
+} from '../../model/api'
 import { useUserStore } from '../../store/UserStore'
 
 const instance = axios.create()
@@ -19,34 +25,6 @@ instance.interceptors.request.use(
   },
   async (error) => await Promise.reject(error)
 )
-
-// FIXME: move types to models
-interface DatagouvfrAPIArgs {
-  baseUrl?: string
-  version?: number
-  endpoint?: string
-  httpClient?: AxiosInstance
-}
-
-type HttpMethod =
-  | 'get'
-  | 'post'
-  | 'put'
-  | 'delete'
-  | 'patch'
-  | 'head'
-  | 'options'
-
-interface RequestConfig {
-  url: string
-  method: HttpMethod
-  params?: object
-  data?: object
-}
-
-type URLParams = Record<string, string | number>
-
-type ResponseDataPromise = Promise<AxiosResponse['data']>
 
 /**
  * A wrapper around data.gouv.fr's API
@@ -78,7 +56,7 @@ export default class DatagouvfrAPI {
   /**
    * Make a `method` request to URL and optionnaly attach a toaster to the error
    */
-  async request(config: RequestConfig): ResponseDataPromise {
+  async request(config: RequestConfig): Promise<AxiosResponseData> {
     const response = await this.httpClient({
       url: config.url,
       method: config.method,
@@ -96,7 +74,7 @@ export default class DatagouvfrAPI {
   /**
    * Get an entity's detail from its id
    */
-  async get(entityId: string, params?: URLParams): ResponseDataPromise {
+  async get(entityId: string, params?: URLParams): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
     return await this.request({ url, method: 'get', params })
   }
@@ -104,7 +82,7 @@ export default class DatagouvfrAPI {
   /**
    * List entities
    */
-  async list(params?: URLParams): ResponseDataPromise {
+  async list(params?: URLParams): Promise<AxiosResponseData> {
     return await this.request({
       url: this.url(true),
       method: 'get',
@@ -115,7 +93,7 @@ export default class DatagouvfrAPI {
   /**
    * Create an entity (POST)
    */
-  async create(data: object): ResponseDataPromise {
+  async create(data: object): Promise<AxiosResponseData> {
     return await this.request({
       url: this.url(true),
       method: 'post',
@@ -126,7 +104,7 @@ export default class DatagouvfrAPI {
   /**
    * Update an entity (PUT)
    */
-  async update(entityId: string, data: object): ResponseDataPromise {
+  async update(entityId: string, data: object): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
     return await this.request({
       url,
@@ -138,7 +116,7 @@ export default class DatagouvfrAPI {
   /**
    * Delete an entity (DELETE)
    */
-  async delete(entityId: string): ResponseDataPromise {
+  async delete(entityId: string): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
     return await this.request({
       url,

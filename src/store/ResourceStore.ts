@@ -59,12 +59,10 @@ export const useResourceStore = defineStore('resource', {
       q = ''
     ): Promise<{ data: Resource[]; total: number }> {
       const response = await datasetsApiv2.get(`${datasetId}/resources`, {
-        params: {
-          page,
-          page_size: pageSize,
-          type: typeId,
-          q
-        }
+        page,
+        page_size: pageSize,
+        type: typeId,
+        q
       })
       return { data: response.data, total: response.total }
     }
