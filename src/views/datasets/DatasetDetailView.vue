@@ -9,37 +9,25 @@ import {
 } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRoute } from 'vue-router'
 
 import config from '@/config'
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
 import type { ResourceData } from '../../model/resource'
+import { useRouteParamsAsString } from '../../router/utils'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useResourceStore } from '../../store/ResourceStore'
 import { useReuseStore } from '../../store/ReuseStore'
 import { descriptionFromMarkdown, formatDate } from '../../utils'
 
-const route = useRoute()
+const route = useRouteParamsAsString()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const reuseStore = useReuseStore()
 
-/* FIXME:
-function useRouteParamsAsString() {
-  const route = useRoute();
-  const params = Object.fromEntries(
-    Object.entries(route.params).map(([key, value]) => [key, Array.isArray(value) ? value[0] : value])
-  );
-  return { ...route, params };
-}
-
-const route = useRouteParamsAsString();
-const datasetId = route.params.did;
-*/
 const dataset = computed(() => datasetStore.get(datasetId) || {})
 const reuses = ref([])
 
