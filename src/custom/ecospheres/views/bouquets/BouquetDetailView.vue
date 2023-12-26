@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
@@ -52,7 +52,7 @@ const getTheme = (themeName) => {
   return config.themes.find((theme) => theme.name === themeName)
 }
 
-const convertToHex = (hex, color?) => {
+const convertToHex = (hex, color) => {
   return hex ? `#${parseInt(hex, 16).toString(16).padStart(6, '0')}` : color
 }
 
