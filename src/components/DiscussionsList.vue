@@ -10,7 +10,8 @@ import type {
   DiscussionForm,
   SubjectClass,
   PostForm,
-  DiscussionId
+  DiscussionId,
+  Post
 } from '../model/discussion'
 import { useDiscussionStore } from '../store/DiscussionStore'
 import { useUserStore } from '../store/UserStore'
@@ -54,12 +55,14 @@ const discussionForm: Ref<DiscussionForm> = ref({
 
 const postForm: Ref<PostForm> = ref({ comment: '' })
 
-const discussions: ComputedRef<DiscussionResponse> = computed(() => {
-  return discussionStore.getDiscussionsForSubject(
-    props.subject.id,
-    currentPage.value
-  )
-})
+const discussions: ComputedRef<DiscussionResponse | undefined> = computed(
+  () => {
+    return discussionStore.getDiscussionsForSubject(
+      props.subject.id,
+      currentPage.value
+    )
+  }
+)
 const pages: ComputedRef<object[]> = computed(() => {
   return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
 })
@@ -68,7 +71,7 @@ const allowDiscussionCreation = computed(() => {
   return config.website.discussions[props.subjectClass.toLowerCase()].create
 })
 
-const getUserAvatar = (post) => {
+const getUserAvatar = (post: Post) => {
   if (post.posted_by.avatar_thumbnail) {
     return post.posted_by.avatar_thumbnail
   }
