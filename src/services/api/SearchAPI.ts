@@ -1,4 +1,3 @@
-import config from '@/config'
 import type { DatasetV2Response } from '@/model/dataset'
 
 import DatagouvfrAPI from './DatagouvfrAPI'
@@ -17,9 +16,9 @@ export default class SearchAPI extends DatagouvfrAPI {
     args?: object
   ): Promise<DatasetV2Response> {
     return await this.list({
-      topic: topic ?? config.universe.topic_id,
+      topic,
+      q: query,
       page: page ?? 1,
-      q: query ?? '',
       ...args
     })
   }
