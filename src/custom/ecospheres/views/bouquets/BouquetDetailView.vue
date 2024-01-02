@@ -8,7 +8,7 @@ import config from '@/config'
 import { Availability, isAvailable } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { descriptionFromMarkdown } from '@/utils'
+import { descriptionFromMarkdown, fromMarkdown } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()
@@ -191,7 +191,8 @@ onMounted(() => {
                 }`"
               />
               <div class="fr-mb-3w">
-                {{ datasetProperties.description }}
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <span v-html="fromMarkdown(datasetProperties.purpose)"></span>
               </div>
               <div class="button__wrapper">
                 <a
