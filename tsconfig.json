@@ -13,5 +13,5 @@
     "@tsconfig/node18/tsconfig.json",
     "@vue/tsconfig/tsconfig.dom.json"
   ],
-  "include": ["**/*.ts"]
+  "include": ["src/**/*", "src/**/*.vue"]
 }

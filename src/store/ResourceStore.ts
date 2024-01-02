@@ -37,7 +37,10 @@ export const useResourceStore = defineStore('resource', {
         const url = new URL(rel.href)
         url.searchParams.set('page_size', pageSize.toFixed(0))
         url.searchParams.set('type', type.id)
-        const response = await datasetsApi.request(url.toString())
+        const response = await datasetsApi.request({
+          url: url.toString(),
+          method: 'get'
+        })
         this.data[datasetId].push({
           currentPage: 1,
           resources: response.data,
@@ -56,12 +59,10 @@ export const useResourceStore = defineStore('resource', {
       q = ''
     ): Promise<{ data: Resource[]; total: number }> {
       const response = await datasetsApiv2.get(`${datasetId}/resources`, {
-        params: {
-          page,
-          page_size: pageSize,
-          type: typeId,
-          q
-        }
+        page,
+        page_size: pageSize,
+        type: typeId,
+        q
       })
       return { data: response.data, total: response.total }
     }

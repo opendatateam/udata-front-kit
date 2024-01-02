@@ -1,23 +1,29 @@
 import axios from 'axios'
+import type { AxiosResponse } from 'axios'
 
 import config from '@/config'
+
+interface TokenParams {
+  code: string
+  pkceCodeVerifier: string
+  clientId: string
+  clientSecret: string
+  redirectURI: string
+}
 
 export default class OauthAPI {
   /**
    * Get a token after PKCE flow
-   *
-   * @param {object}
-   * @returns {string}
    */
-  async token({ code, pkceCodeVerifier, clientId, clientSecret, redirectURI }) {
+  async token(tokenConfig: TokenParams): Promise<string> {
     const url = `${config.datagouvfr.base_url}/oauth/token`
     const bodyFormData = new FormData()
     bodyFormData.append('grant_type', 'authorization_code')
-    bodyFormData.append('code', code)
-    bodyFormData.append('redirect_uri', redirectURI)
-    bodyFormData.append('client_id', clientId)
-    bodyFormData.append('client_secret', clientSecret)
-    bodyFormData.append('code_verifier', pkceCodeVerifier)
+    bodyFormData.append('code', tokenConfig.code)
+    bodyFormData.append('redirect_uri', tokenConfig.redirectURI)
+    bodyFormData.append('client_id', tokenConfig.clientId)
+    bodyFormData.append('client_secret', tokenConfig.clientSecret)
+    bodyFormData.append('code_verifier', tokenConfig.pkceCodeVerifier)
     const response = await axios({
       method: 'post',
       url,
@@ -28,12 +34,8 @@ export default class OauthAPI {
 
   /**
    * Logout API call
-   *
-   * @param {string} token
-   * @param {headers} object
-   * @returns {object}
    */
-  async logout(token, headers) {
+  async logout(token: string, headers: object): Promise<AxiosResponse> {
     const bodyFormData = new FormData()
     bodyFormData.append('token', token)
     const response = await axios({

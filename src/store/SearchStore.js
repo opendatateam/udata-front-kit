@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 
+import config from '@/config'
+
 import SearchAPI from '../services/api/SearchAPI'
 
 const searchAPI = new SearchAPI()
@@ -34,7 +36,12 @@ export const useSearchStore = defineStore('search', {
   actions: {
     async search(query, topic, page = 1) {
       const args = { page_size: pageSize, page }
-      const results = await searchAPI.search(query, topic, page, args)
+      const results = await searchAPI.search(
+        query,
+        topic || config.universe.topic_id,
+        page,
+        args
+      )
       this.data = results
     }
   }

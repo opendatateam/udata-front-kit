@@ -22,7 +22,7 @@ onMounted(() => {
     auth.retrieveToken(route.query.code, route.query.state).then((token) => {
       auth.cleanup()
       store.login(token)
-      api._list().then((data) => {
+      api.list().then((data) => {
         store.storeInfo(data)
       })
       const lastPath = localStorage.getItem('lastPath')
@@ -39,6 +39,6 @@ onMounted(() => {
 
 <template>
   <div class="fr-container about">
-    <h1>This is a login page</h1>
+    <p>Connexion en cours...</p>
   </div>
 </template>

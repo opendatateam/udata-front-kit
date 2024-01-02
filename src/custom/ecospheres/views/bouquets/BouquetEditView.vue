@@ -9,25 +9,25 @@
       </div>
       <BouquetPropertiesFieldGroup
         v-if="currentStep == 1"
-        @updateValidation="(isValid: boolean) => updateStepValidation(1, isValid)"
         v-model:bouquetName="bouquet.name"
         v-model:bouquetDescription="bouquet.description"
+        @update-validation="(isValid: boolean) => updateStepValidation(1, isValid)"
       />
       <BouquetThemeFieldGroup
         v-if="currentStep == 2"
-        @updateValidation="(isValid: boolean) => updateStepValidation(2, isValid)"
         v-model:theme="bouquet.theme"
         v-model:subtheme="bouquet.subtheme"
+        @update-validation="(isValid: boolean) => updateStepValidation(2, isValid)"
       />
       <BouquetContentFieldGroup
         v-if="currentStep == 3"
-        @updateValidation="(isValid: boolean) => updateStepValidation(3, isValid)"
-        :currentDatasets="bouquet.datasetsProperties"
+        :current-datasets="bouquet.datasetsProperties"
+        @update-validation="(isValid: boolean) => updateStepValidation(3, isValid)"
       />
       <BouquetFormRecap
         v-if="currentStep == 4"
-        @updateStep="(step: number) => (currentStep = step)"
         :bouquet="bouquet"
+        @update-step="(step: number) => (currentStep = step)"
       />
       <div class="fit fr-mt-3w fr-ml-auto">
         <DsfrButton
@@ -47,8 +47,8 @@
         />
         <DsfrButton
           v-else
-          @click.prevent="submitForm"
           label="Ajouter le bouquet"
+          @click.prevent="submitForm"
         />
       </div>
     </form>
@@ -74,10 +74,10 @@ interface BouquetFormData {
 export default {
   name: 'BouquetEditView',
   components: {
-    BouquetPropertiesFieldGroup: BouquetPropertiesFieldGroup,
-    BouquetThemeFieldGroup: BouquetThemeFieldGroup,
-    BouquetContentFieldGroup: BouquetContentFieldGroup,
-    BouquetFormRecap: BouquetFormRecap
+    BouquetPropertiesFieldGroup,
+    BouquetThemeFieldGroup,
+    BouquetContentFieldGroup,
+    BouquetFormRecap
   },
   data(): BouquetFormData {
     return {
@@ -146,7 +146,7 @@ export default {
       }
     },
     async createTopic() {
-      let response = await useTopicStore().create(this.bouquetCreationData)
+      const response = await useTopicStore().create(this.bouquetCreationData)
       if (response.status && response.status === 400) {
         this.errorMsg = 'Merci de bien remplir les champs'
       } else {

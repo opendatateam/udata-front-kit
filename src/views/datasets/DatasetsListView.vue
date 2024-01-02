@@ -1,6 +1,7 @@
 <script setup>
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watchEffect } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 
 import config from '@/config'
@@ -76,7 +77,10 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  store.search(query.value, selectedTopicId.value, currentPage.value)
+  const loader = useLoading().show()
+  store
+    .search(query.value, selectedTopicId.value, currentPage.value)
+    .finally(() => loader.hide())
 })
 </script>
 
@@ -97,7 +101,7 @@ watchEffect(() => {
         :model-value="selectedTopicId"
         :options="topicOptions"
         default-unselected-text="Toutes les données"
-        @update:modelValue="onSelectTopic"
+        @update:model-value="onSelectTopic"
       >
         <template #label>Thématiques</template>
       </DsfrSelect>
@@ -105,16 +109,17 @@ watchEffect(() => {
     <div class="datagouv-components fr-col-md-12">
       <DatasetCard
         v-for="(d, index) in datasets"
+        :key="d.id"
         :style="zIndex(index)"
         :dataset="d"
-        :datasetUrl="getDatasetPage(d.id)"
-        :organizationUrl="getOrganizationPage(d.organization.id)"
+        :dataset-url="getDatasetPage(d.id)"
+        :organization-url="getOrganizationPage(d.organization.id)"
       />
     </div>
   </div>
   <DsfrPagination
-    class="fr-container"
     v-if="pages.length"
+    class="fr-container"
     :current-page="currentPage - 1"
     :pages="pages"
     @update:current-page="(p) => (currentPage = p + 1)"
