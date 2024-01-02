@@ -1,9 +1,11 @@
+import type { Owned } from '@etalab/data.gouv.fr-components'
+
 interface DatasetProperties {
   title: string
   purpose: string
   uri: string | null
   id: string | null
-  availability: string // must be one of Availability value
+  availability: Availability
 }
 
 enum Availability {
@@ -23,6 +25,7 @@ interface Theme {
   name: string
   color: string
   subthemes: Subtheme[]
+  textColor?: string
 }
 
 interface Subtheme {
@@ -64,15 +67,13 @@ interface TopicExtras {
   ['ecospheres:datasets_properties']: DatasetProperties[]
 }
 
-interface Topic {
+type Topic = Owned & {
   name: string
   description: string
   created_at: string
   extras: TopicExtras
   featured: boolean
   id: string
-  organisation: any
-  owner: any
   page: string
   private: boolean
   reuses: []

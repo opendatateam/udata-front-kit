@@ -1,3 +1,4 @@
+import type { User } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
 // FIXME: we cant use UserAPI here (circular dep?)
@@ -5,11 +6,17 @@ import { defineStore } from 'pinia'
 
 const STORAGE_KEY = 'token'
 
+export interface RootState {
+  isLoggedIn: boolean
+  token: string | null
+  data: User | null
+}
+
 export const useUserStore = defineStore('user', {
-  state: () => ({
+  state: (): RootState => ({
     isLoggedIn: false,
-    data: {},
-    token: undefined
+    data: null,
+    token: null
   }),
   getters: {
     loggedIn(state) {
@@ -22,7 +29,7 @@ export const useUserStore = defineStore('user', {
      */
     init() {
       const token = localStorage.getItem(STORAGE_KEY)
-      if (token) {
+      if (token !== null) {
         this.token = token
         this.isLoggedIn = true
       }
@@ -30,7 +37,7 @@ export const useUserStore = defineStore('user', {
     /**
      * Store user info after login
      */
-    login(token) {
+    login(token: string) {
       this.isLoggedIn = true
       this.token = token
       localStorage.setItem(STORAGE_KEY, token)
@@ -40,14 +47,14 @@ export const useUserStore = defineStore('user', {
      */
     logout() {
       this.isLoggedIn = false
-      this.token = undefined
-      this.data = {}
+      this.token = null
+      this.data = null
       localStorage.removeItem(STORAGE_KEY)
     },
     /**
      * Store user infos
      */
-    storeInfo(data) {
+    storeInfo(data: User) {
       this.data = data
     },
     /**
