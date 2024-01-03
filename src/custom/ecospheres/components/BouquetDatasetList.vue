@@ -4,10 +4,10 @@
   </div>
   <div v-else>
     <DsfrAccordionsGroup>
-      <li v-for="(dataset, index) in datasets">
+      <li v-for="(dataset, index) in datasets" :key="index">
         <DsfrAccordion
-          :title="dataset.title"
           :id="getAccordeonId(index)"
+          :title="dataset.title"
           :expanded-id="isExpanded[getAccordeonId(index)]"
           @expand="isExpanded[getAccordeonId(index)] = $event"
         >
@@ -24,7 +24,7 @@
               icon="ri-delete-bin-line"
               label="Retirer de la section"
               class="fr-mr-2w"
-              @click.prevent="this.$emit('removeDataset', index)"
+              @click.prevent="$emit('removeDataset', index)"
             />
             <a
               v-if="!isAvailable(dataset)"
@@ -49,11 +49,7 @@
 
 <script lang="ts">
 import config from '@/config'
-import {
-  type DatasetProperties,
-  Availability,
-  isAvailable as isAvailableTest
-} from '@/model'
+import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
 
 export const getDatasetListTitle = function (
   datasets: DatasetProperties[]
@@ -75,16 +71,16 @@ export const getDatasetListTitle = function (
 
 export default {
   name: 'BouquetDatasetList',
-  emits: ['removeDataset'],
   props: {
     datasets: {
       type: Array<DatasetProperties>,
       default: []
     }
   },
+  emits: ['removeDataset'],
   data() {
     return {
-      isExpanded: {}
+      isExpanded: {} as { [key: string]: boolean }
     }
   },
   computed: {
