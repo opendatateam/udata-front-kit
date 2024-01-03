@@ -1,13 +1,17 @@
 <template>
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="bouquet_name">Sujet du bouquet</label>
+    <label class="fr-label" for="bouquet_name"
+      >Sujet du bouquet <span class="required">&nbsp;*</span></label
+    >
     <input
+      id="bouquet_name"
       class="fr-input"
       type="text"
-      id="bouquet_name"
       placeholder="Mon bouquet"
       :value="bouquetName"
-      @input="$emit('update:bouquetName', $event.target.value)"
+      @input="
+        $emit('update:bouquetName', ($event.target as HTMLInputElement)?.value)
+      "
     />
   </div>
   <div class="fr-mt-1w">
@@ -20,29 +24,24 @@
       pour mettre en forme votre texte
     </div>
     <textarea
+      id="bouquet_description"
       class="fr-input"
       type="text"
-      id="bouquet_description"
       placeholder="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
       :value="bouquetDescription"
-      @input="$emit('update:bouquetDescription', $event.target.value)"
+      @input="
+        $emit(
+          'update:bouquetDescription',
+          ($event.target as HTMLInputElement)?.value
+        )
+      "
     />
   </div>
 </template>
 
 <script lang="ts">
-import Tooltip from '@/components/Tooltip.vue'
-
 export default {
   name: 'BouquetPropertiesFieldGroup',
-  components: {
-    Tooltip: Tooltip
-  },
-  emits: [
-    'updateValidation',
-    'update:bouquetDescription',
-    'update:bouquetName'
-  ],
   props: {
     bouquetName: {
       type: String,
@@ -53,17 +52,22 @@ export default {
       default: ''
     }
   },
-  watch: {
-    isValid(newValue) {
-      this.$emit('updateValidation', newValue)
-    }
-  },
+  emits: [
+    'updateValidation',
+    'update:bouquetDescription',
+    'update:bouquetName'
+  ],
   computed: {
     isValid() {
       return this.bouquetName !== '' && this.bouquetDescription !== ''
     },
     errorMsg() {
       return ''
+    }
+  },
+  watch: {
+    isValid(newValue) {
+      this.$emit('updateValidation', newValue)
     }
   }
 }
