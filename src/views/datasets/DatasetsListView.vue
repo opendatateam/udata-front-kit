@@ -77,6 +77,7 @@ onMounted(() => {
   if (topicsConf?.length) {
     topicStore.loadTopicsFromList(topicsConf)
   }
+  query.value = originalQuery.value
 })
 
 // fill topic name when arriving on the page with a topic ID
