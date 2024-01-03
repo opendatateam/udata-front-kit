@@ -1,6 +1,13 @@
 <script setup>
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
-import { computed, onMounted, ref, watchEffect, watch } from 'vue'
+import {
+  computed,
+  onMounted,
+  ref,
+  watchEffect,
+  watch,
+  onBeforeMount
+} from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 
@@ -45,6 +52,7 @@ const onSelectTopic = (topicId) => {
 }
 
 const search = () => {
+  console.log(2)
   router.push({ path: '/datasets', query: { q: query.value } })
 }
 

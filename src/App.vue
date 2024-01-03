@@ -47,6 +47,7 @@ const updateQuery = (q) => {
 }
 
 const doSearch = () => {
+  console.log(1)
   router.push({ path: '/datasets', query: { q: query.value } })
 }
 
