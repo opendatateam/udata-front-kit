@@ -1,6 +1,6 @@
 <script setup>
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, watchEffect, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 
@@ -12,8 +12,9 @@ import { useTopicStore } from '../../store/TopicStore'
 const route = useRoute()
 const router = useRouter()
 const store = useSearchStore()
-const query = computed(() => route.query.q)
+const originalQuery = computed(() => route.query.q)
 const currentPage = ref(1)
+const query = ref()
 
 const topicStore = useTopicStore()
 const topic = computed(() => route.query.topic)
@@ -42,6 +43,15 @@ const onSelectTopic = (topicId) => {
   selectedTopicId.value = topicId
   currentPage.value = 1
 }
+
+const search = () => {
+  router.push({ path: '/datasets', query: { q: query.value } })
+}
+
+watch(
+  () => originalQuery.value,
+  (value) => (query.value = value)
+)
 
 const zIndex = (key) => {
   return { zIndex: datasets.value.length - key }
@@ -95,7 +105,15 @@ watchEffect(() => {
     <div v-if="query && datasets?.length === 0" class="fr-mb-4w">
       Aucun résultat pour cette recherche.
     </div>
-
+    <div class="fr-col-md-12 fr-mb-2w">
+      <DsfrSearchBar
+        label="Recherche"
+        placeholder="Rechercher des données"
+        v-model="query"
+        @update:model-value="search()"
+        @search="$emit('search', $event)"
+      />
+    </div>
     <div v-if="topicsConf" class="fr-col-md-12 fr-mb-2w">
       <DsfrSelect
         :model-value="selectedTopicId"
