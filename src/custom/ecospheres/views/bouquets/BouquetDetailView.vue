@@ -6,11 +6,13 @@ import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
-import { Availability, isAvailable, type Theme, type Topic } from '@/model'
+import { isAvailable, type Theme, type Topic } from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, fromMarkdown } from '@/utils'
+
+import BouquetDatasetAvailability from '../../components/BouquetDatasetAvailability.vue'
 
 const route = useRouteParamsAsString()
 const router = useRouter()
@@ -34,8 +36,6 @@ const breadcrumbLinks = ref([
 const selectedTheme = ref('')
 const url = window.location.href
 
-const missingData = 'Donnée manquante'
-const notFoundData = 'Donnée non disponible'
 const showDiscussions = config.website.discussions.topic.display
 
 const goToCreate = () => {
@@ -179,16 +179,8 @@ onMounted(() => {
               :expanded-id="datasetProperties.id"
               @expand="datasetProperties.id = $event"
             >
-              <DsfrTag
-                v-if="!isAvailable(datasetProperties.availability)"
-                class="fr-mb-2w uppercase bold"
-                :label="`${
-                  datasetProperties.availability === Availability.NOT_AVAILABLE
-                    ? missingData
-                    : datasetProperties.availability === Availability.MISSING
-                    ? notFoundData
-                    : ''
-                }`"
+              <BouquetDatasetAvailability
+                :dataset-properties="datasetProperties"
               />
               <div class="fr-mb-3w">
                 <!-- eslint-disable-next-line vue/no-v-html -->
