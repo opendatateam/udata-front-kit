@@ -28,7 +28,7 @@ const quickLinks = computed(() => {
 
   const userLink = {
     label: isLoggedIn.value
-      ? `${store.$state.data.first_name} ${store.$state.data.last_name}`
+      ? `${store.$state.data?.first_name} ${store.$state.data?.last_name}`
       : 'Se connecter',
     icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
     to: isLoggedIn.value ? '/logout' : '/login',
@@ -106,7 +106,7 @@ const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
     :badge-text="badgeText"
     :badge-style="badgeStyle"
     @search="doSearch"
-    @update:modelValue="updateQuery"
+    @update:model-value="updateQuery"
   >
     <template #mainnav="{ hidemodal }">
       <Navigation :on-click="hidemodal" />

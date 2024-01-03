@@ -19,6 +19,7 @@ export const descriptionFromMarkdown = (ref, attr = 'description') => {
  * @param {string} value
  */
 export const fromMarkdown = (value) => {
+  if (!value) return ''
   const parsed = marked.parse(value, { mangle: false, headerIds: false })
   return DOMPurify.sanitize(parsed)
 }

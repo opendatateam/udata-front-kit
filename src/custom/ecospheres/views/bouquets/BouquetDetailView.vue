@@ -1,22 +1,24 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
+import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
-import { Availability, isAvailable } from '@/model'
+import { Availability, isAvailable, type Theme, type Topic } from '@/model'
+import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { descriptionFromMarkdown } from '@/utils'
+import { descriptionFromMarkdown, fromMarkdown } from '@/utils'
 
-const route = useRoute()
+const route = useRouteParamsAsString()
 const router = useRouter()
 
 const store = useTopicStore()
 const userStore = useUserStore()
 
-const bouquet = ref({})
+const bouquet: Ref<Topic | null> = ref(null)
 const theme = ref()
 const subtheme = ref()
 const loading = useLoading()
@@ -48,25 +50,25 @@ const copyUrl = () => {
   navigator.clipboard.writeText(url)
 }
 
-const getTheme = (themeName) => {
-  return config.themes.find((theme) => theme.name === themeName)
+const getTheme = (themeName: string): Theme => {
+  return config.themes.find((theme: Theme) => theme.name === themeName)
 }
 
-const convertToHex = (hex, color) => {
-  return hex ? `#${parseInt(hex, 16).toString(16).padStart(6, '0')}` : color
+const convertToHex = (hex: string): string => {
+  return `#${parseInt(hex, 16).toString(16).padStart(6, '0')}`
 }
 
-const getThemeColor = (themeName) => {
+const getThemeColor = (themeName: string): string => {
   const theme = getTheme(themeName)
-  return convertToHex(theme ? theme.color : 'transparent')
+  return theme.color ? convertToHex(theme.color) : 'transparent'
 }
 
-const getTextColor = (themeName) => {
+const getTextColor = (themeName: string): string => {
   const theme = getTheme(themeName)
-  return convertToHex(theme ? theme.textColor : '#000000b3')
+  return theme.textColor ? convertToHex(theme.textColor) : '#000000b3'
 }
 
-const getSelectedThemeColor = (themed) => {
+const getSelectedThemeColor = (themed: string) => {
   selectedTheme.value = themed
   return getThemeColor(selectedTheme.value)
 }
@@ -75,7 +77,7 @@ const canCreate = computed(() => {
   return (
     userStore.isAdmin() ||
     (userStore.$state.isLoggedIn &&
-      bouquet.value.owner?.id === userStore.$state.data?.id)
+      bouquet.value?.owner?.id === userStore.$state.data?.id)
   )
 })
 
@@ -85,14 +87,13 @@ onMounted(() => {
     .load(route.params.bid)
     .then((res) => {
       bouquet.value = res
-      theme.value =
-        bouquet.value.extras[`${config.universe.name}:informations`][0].theme
+      theme.value = bouquet.value?.extras['ecospheres:informations'][0].theme
       subtheme.value =
-        bouquet.value.extras[`${config.universe.name}:informations`][0].subtheme
+        bouquet.value?.extras['ecospheres:informations'][0].subtheme
 
       breadcrumbLinks.value.push(
         {
-          text: theme,
+          text: theme.value,
           to: `/bouquets/?theme=${theme.value}`
         },
         {
@@ -100,7 +101,8 @@ onMounted(() => {
           to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
         },
         {
-          text: bouquet.value.name
+          to: '',
+          text: bouquet.value?.name ?? ''
         }
       )
     })
@@ -132,9 +134,9 @@ onMounted(() => {
     </DsfrButton>
     <div class="bouquet__header fr-mb-4w">
       <div class="bouquet__header__left">
-        <h3 class="fr-mb-3w fr-mb-md-0 fr-mr-md-3w">{{ bouquet.name }}</h3>
+        <h3 class="fr-mb-3w fr-mb-md-0 fr-mr-md-3w">{{ bouquet?.name }}</h3>
         <DsfrTag
-          v-if="bouquet.extras"
+          v-if="bouquet?.extras"
           class="fr-mb-3w fr-mb-md-0 bold uppercase"
           :label="subtheme"
           :style="{
@@ -156,20 +158,18 @@ onMounted(() => {
       <div v-html="description" />
       <div
         v-if="
-          bouquet.extras &&
-          bouquet.extras[`${config.universe.name}:datasets_properties`]
+          bouquet?.extras && bouquet.extras['ecospheres:datasets_properties']
         "
       >
         <h5>
           Données utilisées ({{
-            bouquet.extras[`${config.universe.name}:datasets_properties`]
-              .length
+            bouquet?.extras['ecospheres:datasets_properties'].length
           }})
         </h5>
         <DsfrAccordionsGroup>
           <li
-            v-for="(datasetProperties, idx) in bouquet.extras[
-              `${config.universe.name}:datasets_properties`
+            v-for="(datasetProperties, idx) in bouquet?.extras[
+              'ecospheres:datasets_properties'
             ]"
             :key="idx"
           >
@@ -191,7 +191,8 @@ onMounted(() => {
                 }`"
               />
               <div class="fr-mb-3w">
-                {{ datasetProperties.description }}
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <span v-html="fromMarkdown(datasetProperties.purpose)"></span>
               </div>
               <div class="button__wrapper">
                 <a
@@ -204,7 +205,7 @@ onMounted(() => {
                 <a
                   v-else
                   class="fr-btn fr-btn--secondary inline-flex"
-                  :href="datasetProperties.uri"
+                  :href="datasetProperties.uri ?? undefined"
                   target="_blank"
                   >Accéder au catalogue</a
                 >
@@ -226,7 +227,7 @@ onMounted(() => {
 
     <div class="fr-mt-8w">
       <DiscussionsList
-        v-if="showDiscussions"
+        v-if="showDiscussions && bouquet"
         :subject="bouquet"
         subject-class="Topic"
       />
