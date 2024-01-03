@@ -23,7 +23,11 @@
   </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
-      <li v-for="bouquet in bouquets" class="fr-col-12 fr-col-lg-6">
+      <li
+        v-for="bouquet in bouquets"
+        :key="bouquet.id"
+        class="fr-col-12 fr-col-lg-6"
+      >
         <Tile
           :link="`/bouquets/${bouquet.slug}`"
           :title="bouquet.name"
@@ -47,17 +51,7 @@ import { useTopicStore } from '@/store/TopicStore'
 export default {
   name: 'BouquetList',
   components: {
-    Tile: Tile
-  },
-  setup() {
-    onMounted(() => {
-      const loader = useLoading().show()
-      useTopicStore()
-        .loadTopicsForUniverse()
-        .finally(() => {
-          loader.hide()
-        })
-    })
+    Tile
   },
   props: {
     themeName: {
@@ -68,6 +62,16 @@ export default {
       type: String,
       default: NoOptionSelected
     }
+  },
+  setup() {
+    onMounted(() => {
+      const loader = useLoading().show()
+      useTopicStore()
+        .loadTopicsForUniverse()
+        .finally(() => {
+          loader.hide()
+        })
+    })
   },
   computed: {
     bouquets(): Topic[] {
@@ -104,7 +108,7 @@ export default {
   },
   methods: {
     isRelevant(topic: Topic, property: string, value: string): Boolean {
-      const topicInformations: { subtheme: string; theme: string }[] =
+      const topicInformations: { [key: string]: string }[] =
         topic.extras['ecospheres:informations']
       if (topicInformations) {
         for (const information of topicInformations) {
