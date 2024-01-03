@@ -69,7 +69,7 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Create a topic
      */
-    async create(topic: Topic): Promise<Topic> {
+    async create(topic: any): Promise<Topic> {
       const res = await topicsAPI.create(topic)
       this.data.push(res)
       return res
