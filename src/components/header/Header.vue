@@ -96,7 +96,6 @@ const emit = defineEmits<{
 }>()
 
 function search(payload: string) {
-  console.log(0)
   emit('search', payload)
   modelText.value = ''
 }
@@ -216,7 +215,7 @@ function search(payload: string) {
                 :placeholder="placeholder"
                 style="justify-content: flex-end"
                 @update:modelValue="$emit('update:modelValue', $event)"
-                @search="search($event)"
+                @search="search(modelText)"
               />
             </div>
           </div>
@@ -245,7 +244,7 @@ function search(payload: string) {
               v-model="modelText"
               :placeholder="placeholder"
               @update:model-value="$emit('update:modelValue', $event)"
-              @search="search($event)"
+              @search="search(modelText)"
             />
           </div>
         </div>

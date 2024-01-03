@@ -52,14 +52,8 @@ const onSelectTopic = (topicId) => {
 }
 
 const search = () => {
-  console.log(2)
   router.push({ path: '/datasets', query: { q: query.value } })
 }
-
-watch(
-  () => originalQuery.value,
-  (value) => (query.value = value)
-)
 
 const zIndex = (key) => {
   return { zIndex: datasets.value.length - key }
@@ -93,6 +87,11 @@ onMounted(() => {
 watchEffect(() => {
   if (!topic.value || !topicsConf) return
   selectedTopicId.value = topic.value
+})
+
+watchEffect(() => {
+  if (!originalQuery.value) return
+  query.value = originalQuery.value
 })
 
 watchEffect(() => {
