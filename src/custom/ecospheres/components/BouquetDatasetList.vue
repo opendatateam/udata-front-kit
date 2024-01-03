@@ -16,9 +16,8 @@
             class="fr-mb-2w uppercase bold"
             :label="`${dataset.availability}`"
           />
-          <div>
-            {{ dataset.purpose }}
-          </div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="markdown(dataset.purpose)"></div>
           <div class="button__wrapper">
             <DsfrButton
               icon="ri-delete-bin-line"
@@ -50,6 +49,7 @@
 <script lang="ts">
 import config from '@/config'
 import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
+import { fromMarkdown } from '@/utils'
 
 export const getDatasetListTitle = function (
   datasets: DatasetProperties[]
@@ -97,6 +97,9 @@ export default {
     },
     isAvailable(dataset: DatasetProperties): boolean {
       return isAvailableTest(dataset.availability)
+    },
+    markdown(value: string) {
+      return fromMarkdown(value)
     }
   }
 }
