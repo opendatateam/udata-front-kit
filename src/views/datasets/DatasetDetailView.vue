@@ -395,6 +395,7 @@ watch(
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
                 icon="ri-external-link-line"
+                size="sm"
                 :icon-right="true"
                 @click="openDataGouvDiscussions"
               />
