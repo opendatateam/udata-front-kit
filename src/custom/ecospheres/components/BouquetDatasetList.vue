@@ -11,11 +11,7 @@
           :expanded-id="isExpanded[getAccordeonId(index)]"
           @expand="isExpanded[getAccordeonId(index)] = $event"
         >
-          <DsfrTag
-            v-if="!isAvailable(dataset)"
-            class="fr-mb-2w uppercase bold"
-            :label="`${dataset.availability}`"
-          />
+          <BouquetDatasetAvailability :dataset-properties="dataset" />
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="markdown(dataset.purpose)"></div>
           <div class="button__wrapper">
@@ -51,6 +47,8 @@ import config from '@/config'
 import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
 import { fromMarkdown } from '@/utils'
 
+import BouquetDatasetAvailability from './BouquetDatasetAvailability.vue'
+
 export const getDatasetListTitle = function (
   datasets: DatasetProperties[]
 ): string {
@@ -71,6 +69,7 @@ export const getDatasetListTitle = function (
 
 export default {
   name: 'BouquetDatasetList',
+  components: { BouquetDatasetAvailability },
   props: {
     datasets: {
       type: Array<DatasetProperties>,
