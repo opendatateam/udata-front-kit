@@ -214,7 +214,7 @@ function search(payload: string) {
                 v-model="modelText"
                 :placeholder="placeholder"
                 style="justify-content: flex-end"
-                @update:modelValue="$emit('update:modelValue', $event)"
+                @update:model-value="$emit('update:modelValue', $event)"
                 @search="search(modelText)"
               />
             </div>
