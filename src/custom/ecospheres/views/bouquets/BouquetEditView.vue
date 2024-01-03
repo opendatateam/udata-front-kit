@@ -61,11 +61,11 @@ import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouqu
 import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
 import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
 import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetThemeFieldGroup.vue'
-import type { Bouquet, BouquetCreationData } from '@/model'
+import type { Bouquet, BouquetCreationData, DatasetProperties } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
 
 interface BouquetFormData {
-  bouquet: Partial<Bouquet>
+  bouquet: Partial<Bouquet> & { datasetsProperties: DatasetProperties[] }
   currentStep: number
   stepsValidation: [boolean, boolean, boolean]
   errorMsg: string | null
@@ -82,7 +82,7 @@ export default {
   data(): BouquetFormData {
     return {
       bouquet: {
-        datasetsProperties: []
+        datasetsProperties: [] as DatasetProperties[]
       },
       currentStep: 1,
       stepsValidation: [false, false, false],
@@ -99,26 +99,27 @@ export default {
       ]
     },
     bouquetCreationData(): BouquetCreationData {
+      // we coalesce to empty string to satisfy typing but empty strings should not be allowed
+      // by the various validation steps
       return {
-        name: this.bouquet.name,
-        description: this.bouquet.description,
+        name: this.bouquet.name ?? '',
+        description: this.bouquet.description ?? '',
         datasets: this.datasetsId,
         tags: [config.universe.name],
         extras: {
-          [`${config.universe.name}:informations`]: [
+          'ecospheres:informations': [
             {
-              theme: this.bouquet.theme,
-              subtheme: this.bouquet.subtheme
+              theme: this.bouquet.theme ?? '',
+              subtheme: this.bouquet.subtheme ?? ''
             }
           ],
-          [`${config.universe.name}:datasets_properties`]:
-            this.bouquet.datasetsProperties
+          'ecospheres:datasets_properties': this.bouquet.datasetsProperties
         }
       }
     },
     datasetsId(): string[] {
       const datasetsId: string[] = []
-      for (const dataset of this.bouquet.datasetsProperties) {
+      for (const dataset of this.bouquet.datasetsProperties ?? []) {
         if (dataset.id !== null) {
           datasetsId.push(dataset.id)
         }
@@ -146,15 +147,18 @@ export default {
       }
     },
     async createTopic() {
-      const response = await useTopicStore().create(this.bouquetCreationData)
-      if (response.status && response.status === 400) {
-        this.errorMsg = 'Merci de bien remplir les champs'
-      } else {
-        this.$router.push({
-          name: 'bouquet_detail',
-          params: { bid: response.slug }
+      useTopicStore()
+        .create(this.bouquetCreationData)
+        .then((response) => {
+          this.$router.push({
+            name: 'bouquet_detail',
+            params: { bid: response.slug }
+          })
         })
-      }
+        .catch((err) => {
+          console.error(err)
+          this.errorMsg = 'Merci de bien remplir les champs'
+        })
     },
     isStepValid(step: number) {
       return this.stepsValidation[step - 1]

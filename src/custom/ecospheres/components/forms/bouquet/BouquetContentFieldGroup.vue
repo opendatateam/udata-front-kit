@@ -2,12 +2,12 @@
   <h4>{{ getDatasetListTitle() }}</h4>
   <BouquetDatasetList
     class="fr-mt-4w fr-mb-4w"
-    @removeDataset="removeDataset"
     :datasets="datasets"
+    @remove-dataset="removeDataset"
   />
   <DatasetPropertiesForm
-    @addDataset="addDataset"
-    :alreadySelectedDatasets="datasets"
+    :already-selected-datasets="datasets"
+    @add-dataset="addDataset"
   />
 </template>
 
@@ -21,8 +21,8 @@ import { getDatasetListTitle } from '../../BouquetDatasetList.vue'
 export default {
   name: 'BouquetContentFieldGroup',
   components: {
-    DatasetPropertiesForm: DatasetPropertiesForm,
-    BouquetDatasetList: BouquetDatasetList
+    DatasetPropertiesForm,
+    BouquetDatasetList
   },
   props: {
     currentDatasets: {
@@ -30,19 +30,20 @@ export default {
       default: []
     }
   },
+  emits: ['updateValidation', 'update:datasets'],
   data() {
     return {
       datasets: this.currentDatasets
     }
   },
-  watch: {
-    isValid(newValue) {
-      this.$emit('updateValidation', newValue)
-    }
-  },
   computed: {
     isValid(): boolean {
       return this.datasets.length > 0
+    }
+  },
+  watch: {
+    isValid(newValue) {
+      this.$emit('updateValidation', newValue)
     }
   },
   methods: {
