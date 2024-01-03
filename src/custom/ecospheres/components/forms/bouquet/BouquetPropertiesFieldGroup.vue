@@ -59,7 +59,9 @@ export default {
   ],
   computed: {
     isValid() {
-      return this.bouquetName !== '' && this.bouquetDescription !== ''
+      return (
+        this.bouquetName.trim() !== '' && this.bouquetDescription.trim() !== ''
+      )
     },
     errorMsg() {
       return ''
