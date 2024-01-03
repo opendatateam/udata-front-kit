@@ -13,9 +13,10 @@
   </h4>
 
   <p class="fr-mb-0"><strong>Sujet du bouquet</strong></p>
-  <p v-html="bouquet.name" />
+  <p>{{ bouquet.name }}</p>
   <p class="fr-mb-0"><strong>Objectif du bouquet</strong></p>
-  <p v-html="markdown(bouquet.description)" />
+  <!-- eslint-disable-next-line vue/no-v-html -->
+  <p v-html="bouquet.description ? markdown(bouquet.description) : ''" />
   <hr />
 
   <h4>
@@ -31,9 +32,9 @@
     />
   </h4>
   <p class="fr-mb-0"><strong>Thématique</strong></p>
-  <p v-html="bouquet.theme" />
+  <p>{{ bouquet.theme }}</p>
   <p class="fr-mb-0"><strong>Chantier</strong></p>
-  <p v-html="bouquet.subtheme" />
+  <p>{{ bouquet.subtheme }}</p>
   <hr />
 
   <h4>
@@ -54,26 +55,25 @@
 <script lang="ts">
 import type { PropType } from 'vue'
 
-import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
-import { getDatasetListTitle } from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import * as BouquetDatasetListModule from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import type { Bouquet } from '@/model'
 import { fromMarkdown } from '@/utils/index'
 
 export default {
   name: 'BouquetFormRecap',
-  emits: ['updateStep'],
   components: {
-    BouquetDatasetList: BouquetDatasetList
+    BouquetDatasetList: BouquetDatasetListModule.default
   },
   props: {
     bouquet: {
       type: Object as PropType<Partial<Bouquet>>,
-      default: ''
+      default: () => ({})
     }
   },
+  emits: ['updateStep'],
   computed: {
     numberOfDatasets(): number {
-      return this.datasets.length
+      return this.bouquet?.datasetsProperties?.length ?? 0
     },
     compositionTitle(): string {
       const title = ' Composition du bouquet'
@@ -87,7 +87,11 @@ export default {
       this.$emit('updateStep', step)
     },
     getDatasetListTitle() {
-      return getDatasetListTitle(this.bouquet.datasetsProperties)
+      return this.bouquet.datasetsProperties
+        ? BouquetDatasetListModule.getDatasetListTitle(
+            this.bouquet.datasetsProperties
+          )
+        : ''
     },
     markdown(text: string) {
       return fromMarkdown(text)
