@@ -1,13 +1,7 @@
 <script setup>
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
-import {
-  computed,
-  onMounted,
-  ref,
-  watchEffect,
-  watch,
-  onBeforeMount
-} from 'vue'
+import debounce from 'lodash/debounce'
+import { computed, onMounted, ref, watchEffect, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 
@@ -22,6 +16,7 @@ const store = useSearchStore()
 const originalQuery = computed(() => route.query.q)
 const currentPage = ref(1)
 const query = ref()
+const loader = useLoading()
 
 const topicStore = useTopicStore()
 const topic = computed(() => route.query.topic)
@@ -94,12 +89,25 @@ watchEffect(() => {
   query.value = originalQuery.value
 })
 
-watchEffect(() => {
-  const loader = useLoading().show()
-  store
-    .search(query.value, selectedTopicId.value, currentPage.value)
-    .finally(() => loader.hide())
-})
+const delayedSearch = debounce(
+  (currentQuery, currentTopicId, currentPageValue) => {
+    const loadingInstance = loader.show()
+    store.search(currentQuery, currentTopicId, currentPageValue).finally(() => {
+      loadingInstance.hide()
+    })
+  },
+  400
+)
+
+watch(
+  [query, selectedTopicId, currentPage],
+  ([currentQuery, currentTopicId, currentPageValue]) => {
+    delayedSearch(currentQuery, currentTopicId, currentPageValue)
+  },
+  {
+    immediate: true
+  }
+)
 </script>
 
 <template>
