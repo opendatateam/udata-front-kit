@@ -1,7 +1,11 @@
 <template>
-  <div className="without_breadcrumb" v-if="selectedTheme === null">
+  <div v-if="selectedTheme === null" className="without_breadcrumb">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
-      <li v-for="theme in themeList" class="fr-col-12 fr-col-lg-4">
+      <li
+        v-for="theme in themeList"
+        :key="theme.name"
+        class="fr-col-12 fr-col-lg-4"
+      >
         <Tile
           :style="getCustomBoxShadow(theme.color)"
           :link="`/?theme=${theme.name}`"
@@ -17,6 +21,7 @@
       <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
         <li
           v-for="subtheme in selectedTheme.subthemes"
+          :key="subtheme.name"
           class="fr-col-12 fr-col-lg-4"
         >
           <Tile
@@ -42,7 +47,8 @@ export default {
   },
   props: {
     selectedThemeName: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -82,3 +88,18 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.without_breadcrumb {
+  margin: 128px 0 0;
+}
+
+.with_breadcrumb {
+  margin: 60px 0 0;
+}
+
+.breadcrumb {
+  margin-top: 40px;
+  text-align: left;
+}
+</style>
