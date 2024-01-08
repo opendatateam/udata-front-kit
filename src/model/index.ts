@@ -54,8 +54,12 @@ interface Bouquet {
 interface BouquetCreationData {
   name: string
   description: string
-  datasets: string[] // list of ids (for the dataset which have one)
+  private: boolean
   tags: string[]
+}
+
+interface BouquetEditionData extends BouquetCreationData {
+  datasets: string[] // list of ids (for the dataset which have one)
   extras: TopicExtras
 }
 
@@ -94,5 +98,6 @@ export type {
   Topic,
   Bouquet,
   DatasetProperties,
-  BouquetCreationData
+  BouquetCreationData,
+  BouquetEditionData
 }

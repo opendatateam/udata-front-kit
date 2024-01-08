@@ -1,4 +1,5 @@
 import config from '@/config'
+import BouquetAddView from '@/custom/ecospheres/views/bouquets/BouquetAddView.vue'
 import BouquetDetailView from '@/custom/ecospheres/views/bouquets/BouquetDetailView.vue'
 import BouquetEditView from '@/custom/ecospheres/views/bouquets/BouquetEditView.vue'
 import BouquetsListView from '@/custom/ecospheres/views/bouquets/BouquetsListView.vue'
@@ -69,7 +70,7 @@ export default class RouterFetch {
         items.push({
           path: `/admin/${item.id}/add`,
           name: 'bouquet_add',
-          component: BouquetEditView,
+          component: BouquetAddView,
           meta: { requiresAuth: true }
         })
         /** protected / admin route  **/

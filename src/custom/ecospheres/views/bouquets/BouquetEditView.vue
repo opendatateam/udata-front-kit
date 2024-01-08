@@ -26,13 +26,7 @@ const stepsValidation: Ref<[boolean, boolean, boolean]> = ref([
 ])
 const errorMsg: Ref<string | null> = ref(null)
 const bouquetId: Ref<string | null> = ref(null)
-
-const steps = [
-  'Description du bouquet de données',
-  'Informations du bouquet de données',
-  'Composition du bouquet de données',
-  'Récapitulatif du bouquet de données'
-]
+const steps = config.bouquets.steps
 
 const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
   // we coalesce to empty string to satisfy typing but empty strings should not be allowed
