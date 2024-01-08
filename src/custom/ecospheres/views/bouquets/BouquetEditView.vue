@@ -25,6 +25,7 @@ const stepsValidation: Ref<[boolean, boolean, boolean]> = ref([
   false
 ])
 const errorMsg: Ref<string | null> = ref(null)
+const bouquetId: Ref<string | null> = ref(null)
 
 const steps = [
   'Description du bouquet de données',
@@ -41,6 +42,9 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
     description: bouquet.value.description ?? '',
     datasets: datasetsId.value,
     tags: [config.universe.name],
+    private:
+      !allStepAreValid.value ||
+      currentStep.value <= stepsValidation.value.length,
     extras: {
       'ecospheres:informations': [
         {
@@ -76,30 +80,19 @@ const goToPreviousPage = () => {
   currentStep.value--
 }
 
-const submitForm = () => {
-  if (allStepAreValid.value) {
-    createTopic()
-  } else {
-    errorMsg.value = 'Merci de bien remplir les champs' // TODO -- improve errorMsg (which step is faulty, what is the condition for it to be accepted)
-  }
+const createTopic = async () => {
+  return useTopicStore().create(bouquetCreationData.value)
 }
 
-const createTopic = async () => {
-  useTopicStore()
-    .create(bouquetCreationData.value)
-    .then((response) => {
-      router.push({
-        name: 'bouquet_detail',
-        params: { bid: response.slug }
-      })
-    })
-    .catch((err) => {
-      console.error(err)
-      errorMsg.value = 'Merci de bien remplir les champs'
-    })
+const updateTopic = async () => {
+  if (bouquetId.value === null) {
+    throw Error('Trying to update topic without topic id')
+  }
+  return useTopicStore().update(bouquetId.value, bouquetCreationData.value)
 }
 
 const isStepValid = (step: number) => {
+  if (step > stepsValidation.value.length) return allStepAreValid.value
   return stepsValidation.value[step - 1]
 }
 
@@ -107,8 +100,29 @@ const updateStepValidation = (step: number, isValid: boolean) => {
   stepsValidation.value[step - 1] = isValid
 }
 
+// TODO: catch errors
 const goToNextStep = () => {
-  currentStep.value++
+  // this is a failsafe that should never be triggered
+  if (!isStepValid(currentStep.value)) {
+    throw Error(`Invalid step ${currentStep.value}, can not proceed`)
+  }
+  if (currentStep.value === 1) {
+    createTopic().then((response) => {
+      bouquetId.value = response.id
+      currentStep.value++
+    })
+  } else {
+    updateTopic().then((response) => {
+      if (currentStep.value > stepsValidation.value.length) {
+        router.push({
+          name: 'bouquet_detail',
+          params: { bid: response.slug }
+        })
+      } else {
+        currentStep.value++
+      }
+    })
+  }
 }
 </script>
 
@@ -152,17 +166,11 @@ const goToNextStep = () => {
           @click.prevent="goToPreviousPage"
         />
         <DsfrButton
-          v-if="currentStep < 4"
           type="button"
           class="fr-mt-2w"
           label="Suivant"
           :disabled="!isStepValid(currentStep)"
           @click.prevent="goToNextStep()"
-        />
-        <DsfrButton
-          v-else
-          label="Ajouter le bouquet"
-          @click.prevent="submitForm"
         />
       </div>
     </form>

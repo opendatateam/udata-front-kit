@@ -77,7 +77,7 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Update a topic
      */
-    async update(topicId: string, data: Topic): Promise<Topic> {
+    async update(topicId: string, data: any): Promise<Topic> {
       const res = await topicsAPI.update(topicId, data)
       const idx = this.data.findIndex((b) => b.id === topicId)
       this.data[idx] = res
