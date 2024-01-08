@@ -1,12 +1,13 @@
 <template>
   <div class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_theme"> Thématique</label>
-    <select class="fr-select" id="select_theme" @change="switchTheme($event)">
+    <select id="select_theme" class="fr-select" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
         Choisir une thématique
       </option>
       <option
         v-for="option in themeOptions"
+        :key="option.value"
         :value="option.value"
         :selected="option.value === theme"
       >
@@ -18,8 +19,8 @@
   <div class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_subtheme"> Chantier</label>
     <select
-      class="fr-select"
       id="select_subtheme"
+      class="fr-select"
       :disabled="theme === NoOptionSelected"
       @change="switchSubtheme($event)"
     >
@@ -31,7 +32,8 @@
       </option>
       <option
         v-for="option in subthemeOptions"
-        v-bind:value="option.value"
+        :key="option.value"
+        :value="option.value"
         :selected="option.value === subtheme"
       >
         {{ option.text }}
@@ -56,11 +58,7 @@ export default {
       default: NoOptionSelected
     }
   },
-  watch: {
-    isValid(newValue) {
-      this.$emit('updateValidation', newValue)
-    }
-  },
+  emits: ['updateValidation', 'update:theme', 'update:subtheme'],
   computed: {
     isValid() {
       return (
@@ -85,12 +83,17 @@ export default {
       return NoOptionSelected
     }
   },
+  watch: {
+    isValid(newValue) {
+      this.$emit('updateValidation', newValue)
+    }
+  },
   methods: {
-    switchTheme(event) {
-      this.$emit('update:theme', event.target.value)
+    switchTheme(event: Event) {
+      this.$emit('update:theme', (event.target as HTMLSelectElement).value)
     },
-    switchSubtheme(event) {
-      this.$emit('update:subtheme', event.target.value)
+    switchSubtheme(event: Event) {
+      this.$emit('update:subtheme', (event.target as HTMLSelectElement).value)
     }
   }
 }

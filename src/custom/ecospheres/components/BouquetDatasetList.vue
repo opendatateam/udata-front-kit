@@ -4,27 +4,22 @@
   </div>
   <div v-else>
     <DsfrAccordionsGroup>
-      <li v-for="(dataset, index) in datasets">
+      <li v-for="(dataset, index) in datasets" :key="index">
         <DsfrAccordion
-          :title="dataset.title"
           :id="getAccordeonId(index)"
+          :title="dataset.title"
           :expanded-id="isExpanded[getAccordeonId(index)]"
           @expand="isExpanded[getAccordeonId(index)] = $event"
         >
-          <DsfrTag
-            v-if="!isAvailable(dataset)"
-            class="fr-mb-2w uppercase bold"
-            :label="`${dataset.availability}`"
-          />
-          <div>
-            {{ dataset.purpose }}
-          </div>
+          <BouquetDatasetAvailability :dataset-properties="dataset" />
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="markdown(dataset.purpose)"></div>
           <div class="button__wrapper">
             <DsfrButton
               icon="ri-delete-bin-line"
               label="Retirer de la section"
               class="fr-mr-2w"
-              @click.prevent="this.$emit('removeDataset', index)"
+              @click.prevent="$emit('removeDataset', index)"
             />
             <a
               v-if="!isAvailable(dataset)"
@@ -49,11 +44,10 @@
 
 <script lang="ts">
 import config from '@/config'
-import {
-  type DatasetProperties,
-  Availability,
-  isAvailable as isAvailableTest
-} from '@/model'
+import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
+import { fromMarkdown } from '@/utils'
+
+import BouquetDatasetAvailability from './BouquetDatasetAvailability.vue'
 
 export const getDatasetListTitle = function (
   datasets: DatasetProperties[]
@@ -75,16 +69,17 @@ export const getDatasetListTitle = function (
 
 export default {
   name: 'BouquetDatasetList',
-  emits: ['removeDataset'],
+  components: { BouquetDatasetAvailability },
   props: {
     datasets: {
       type: Array<DatasetProperties>,
       default: []
     }
   },
+  emits: ['removeDataset'],
   data() {
     return {
-      isExpanded: {}
+      isExpanded: {} as { [key: string]: boolean }
     }
   },
   computed: {
@@ -101,6 +96,9 @@ export default {
     },
     isAvailable(dataset: DatasetProperties): boolean {
       return isAvailableTest(dataset.availability)
+    },
+    markdown(value: string) {
+      return fromMarkdown(value)
     }
   }
 }
