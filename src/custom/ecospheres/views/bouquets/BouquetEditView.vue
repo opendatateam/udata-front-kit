@@ -19,7 +19,7 @@ const router = useRouter()
 const bouquet: Ref<Partial<Bouquet>> = ref({})
 const currentStep: Ref<number> = ref(2)
 const stepsValidation: Ref<[boolean, boolean, boolean]> = ref([
-  true,
+  false,
   false,
   false
 ])
@@ -126,13 +126,26 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
   }
 }
 
-// TODO: choose the right step from loaded bouquet or read it from URL
+/**
+ * Depending on topic state, infer the step we should be on
+ */
+const inferStepFromTopic = (topic: Topic): number => {
+  if (topic.extras['ecospheres:datasets_properties']?.length > 0) {
+    return 4
+  } else if (topic.extras['ecospheres:informations'] !== undefined) {
+    return 3
+  } else {
+    return 2
+  }
+}
+
 onMounted(() => {
   const loader = useLoading().show()
   useTopicStore()
     .load(route.params.bid)
     .then((topic) => {
       bouquet.value = fillBouquetFromTopic(topic)
+      currentStep.value = inferStepFromTopic(topic)
     })
     .finally(() => loader.hide())
 })
