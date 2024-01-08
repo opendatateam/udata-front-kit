@@ -2,7 +2,7 @@
   <div className="filterForm">
     <div class="fr-select-group">
       <label class="fr-label" for="select_theme"> Thématiques </label>
-      <select class="fr-select" id="select_theme" @change="switchTheme($event)">
+      <select id="select_theme" class="fr-select" @change="switchTheme($event)">
         <option
           :value="NoOptionSelected"
           :selected="themeName == NoOptionSelected"
@@ -11,6 +11,7 @@
         </option>
         <option
           v-for="option in themeOptions"
+          :key="option.value"
           :value="option.value"
           :selected="option.value === themeName"
         >
@@ -22,8 +23,8 @@
     <div class="fr-select-group">
       <label class="fr-label" for="select_subtheme"> Chantiers </label>
       <select
-        class="fr-select"
         id="select_subtheme"
+        class="fr-select"
         @change="switchSubtheme($event)"
       >
         <option
@@ -34,7 +35,8 @@
         </option>
         <option
           v-for="option in subthemeOptions"
-          v-bind:value="option.value"
+          :key="option.value"
+          :value="option.value"
           :selected="option.value === subthemeName"
         >
           {{ option.text }}
@@ -80,16 +82,22 @@ export default defineComponent({
     }
   },
   methods: {
-    switchTheme(event) {
+    switchTheme(event: Event) {
       this.$router.push({
         path: '/bouquets',
-        query: { theme: event.target.value, subtheme: NoOptionSelected }
+        query: {
+          theme: (event.target as HTMLInputElement)?.value,
+          subtheme: NoOptionSelected
+        }
       })
     },
-    switchSubtheme(event) {
+    switchSubtheme(event: Event) {
       this.$router.push({
         path: '/bouquets',
-        query: { theme: this.themeName, subtheme: event.target.value }
+        query: {
+          theme: this.themeName,
+          subtheme: (event.target as HTMLInputElement)?.value
+        }
       })
     }
   }
