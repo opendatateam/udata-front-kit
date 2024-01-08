@@ -44,6 +44,7 @@ interface BreadcrumbItem {
 }
 
 interface Bouquet {
+  id: string
   name: string
   description: string
   theme: string | undefined

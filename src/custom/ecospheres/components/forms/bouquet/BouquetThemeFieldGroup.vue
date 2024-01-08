@@ -91,6 +91,7 @@ export default {
   methods: {
     switchTheme(event: Event) {
       this.$emit('update:theme', (event.target as HTMLSelectElement).value)
+      this.$emit('update:subtheme', NoOptionSelected)
     },
     switchSubtheme(event: Event) {
       this.$emit('update:subtheme', (event.target as HTMLSelectElement).value)

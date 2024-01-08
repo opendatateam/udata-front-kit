@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref, ComputedRef } from 'vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -8,24 +9,21 @@ import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouqu
 import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
 import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
 import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetThemeFieldGroup.vue'
-import type { Bouquet, BouquetCreationData, DatasetProperties } from '@/model'
+import type { Bouquet, BouquetCreationData, Topic } from '@/model'
+import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 
+const route = useRouteParamsAsString()
 const router = useRouter()
 
-const bouquet: Ref<
-  Partial<Bouquet> & { datasetsProperties: DatasetProperties[] }
-> = ref({
-  datasetsProperties: [] as DatasetProperties[]
-})
-const currentStep: Ref<number> = ref(1)
+const bouquet: Ref<Partial<Bouquet>> = ref({})
+const currentStep: Ref<number> = ref(2)
 const stepsValidation: Ref<[boolean, boolean, boolean]> = ref([
-  false,
+  true,
   false,
   false
 ])
 const errorMsg: Ref<string | null> = ref(null)
-const bouquetId: Ref<string | null> = ref(null)
 const steps = config.bouquets.steps
 
 const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
@@ -74,15 +72,11 @@ const goToPreviousPage = () => {
   currentStep.value--
 }
 
-const createTopic = async () => {
-  return useTopicStore().create(bouquetCreationData.value)
-}
-
 const updateTopic = async () => {
-  if (bouquetId.value === null) {
+  if (bouquet.value.id === undefined) {
     throw Error('Trying to update topic without topic id')
   }
-  return useTopicStore().update(bouquetId.value, bouquetCreationData.value)
+  return useTopicStore().update(bouquet.value.id, bouquetCreationData.value)
 }
 
 const isStepValid = (step: number) => {
@@ -100,24 +94,48 @@ const goToNextStep = () => {
   if (!isStepValid(currentStep.value)) {
     throw Error(`Invalid step ${currentStep.value}, can not proceed`)
   }
-  if (currentStep.value === 1) {
-    createTopic().then((response) => {
-      bouquetId.value = response.id
+  updateTopic().then((response) => {
+    if (currentStep.value > stepsValidation.value.length) {
+      router.push({
+        name: 'bouquet_detail',
+        params: { bid: response.slug }
+      })
+    } else {
       currentStep.value++
-    })
-  } else {
-    updateTopic().then((response) => {
-      if (currentStep.value > stepsValidation.value.length) {
-        router.push({
-          name: 'bouquet_detail',
-          params: { bid: response.slug }
-        })
-      } else {
-        currentStep.value++
-      }
-    })
+    }
+  })
+}
+
+const fillBouquetFromTopic = (topic: Topic): Bouquet => {
+  const getInfoFromExtras = (
+    info: 'theme' | 'subtheme',
+    topic: Topic
+  ): string | undefined => {
+    const key = 'ecospheres:informations'
+    if (topic.extras[key] !== undefined) {
+      return topic.extras[key][0][info]
+    }
+  }
+  return {
+    id: topic.id,
+    name: topic.name,
+    description: topic.description,
+    theme: getInfoFromExtras('theme', topic),
+    subtheme: getInfoFromExtras('subtheme', topic),
+    datasetsProperties: topic.extras['ecospheres:datasets_properties'] ?? []
   }
 }
+
+// TODO: choose the right step from loaded bouquet or read it from URL
+onMounted(() => {
+  const loader = useLoading().show()
+  useTopicStore()
+    .load(route.params.bid)
+    .then((topic) => {
+      bouquet.value = fillBouquetFromTopic(topic)
+    })
+    .finally(() => loader.hide())
+})
 </script>
 
 <template>
@@ -143,7 +161,7 @@ const goToNextStep = () => {
       />
       <BouquetContentFieldGroup
         v-if="currentStep == 3"
-        :current-datasets="bouquet.datasetsProperties"
+        v-model:current-datasets="bouquet.datasetsProperties"
         @update-validation="(isValid: boolean) => updateStepValidation(3, isValid)"
       />
       <BouquetFormRecap
