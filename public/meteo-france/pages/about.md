@@ -23,7 +23,7 @@ La plateforme sera ensuite progressivement enrichie de nouvelles données au cou
 
 ### Une api sera t-elle disponible ?
 
-Les API de Météo-France disponibles sur [ce portail](https://portail-api.meteofrance.fr/devportal/apis) seront bientôt référencées directement sur [meteo.data.gouv.fr](http://meteo.data.gouv.fr). 
+Les API de Météo-France disponibles sur [ce portail](https://portail-api.meteofrance.fr) seront bientôt référencées directement sur [meteo.data.gouv.fr](http://meteo.data.gouv.fr).
 
 ### **Un énième portail open data ?**
 
