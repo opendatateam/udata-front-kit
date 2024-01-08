@@ -1,3 +1,117 @@
+<script setup lang="ts">
+import type { Ref, ComputedRef } from 'vue'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+import config from '@/config'
+import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetContentFieldGroup.vue'
+import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
+import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
+import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetThemeFieldGroup.vue'
+import type { Bouquet, BouquetCreationData, DatasetProperties } from '@/model'
+import { useTopicStore } from '@/store/TopicStore'
+
+const router = useRouter()
+
+const bouquet: Ref<
+  Partial<Bouquet> & { datasetsProperties: DatasetProperties[] }
+> = ref({
+  datasetsProperties: [] as DatasetProperties[]
+})
+const currentStep: Ref<number> = ref(1)
+const stepsValidation: Ref<[boolean, boolean, boolean]> = ref([
+  false,
+  false,
+  false
+])
+const errorMsg: Ref<string | null> = ref(null)
+
+const steps = [
+  'Description du bouquet de données',
+  'Informations du bouquet de données',
+  'Composition du bouquet de données',
+  'Récapitulatif du bouquet de données'
+]
+
+const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
+  // we coalesce to empty string to satisfy typing but empty strings should not be allowed
+  // by the various validation steps
+  return {
+    name: bouquet.value.name ?? '',
+    description: bouquet.value.description ?? '',
+    datasets: datasetsId.value,
+    tags: [config.universe.name],
+    extras: {
+      'ecospheres:informations': [
+        {
+          theme: bouquet.value.theme ?? '',
+          subtheme: bouquet.value.subtheme ?? ''
+        }
+      ],
+      'ecospheres:datasets_properties': bouquet.value.datasetsProperties
+    }
+  }
+})
+
+const datasetsId: ComputedRef<string[]> = computed(() => {
+  const datasetsId: string[] = []
+  for (const dataset of bouquet.value.datasetsProperties ?? []) {
+    if (dataset.id !== null) {
+      datasetsId.push(dataset.id)
+    }
+  }
+  return datasetsId
+})
+
+const allStepAreValid: ComputedRef<boolean> = computed(() => {
+  for (const step of stepsValidation.value) {
+    if (step === false) {
+      return false
+    }
+  }
+  return true
+})
+
+const goToPreviousPage = () => {
+  currentStep.value--
+}
+
+const submitForm = () => {
+  if (allStepAreValid.value) {
+    createTopic()
+  } else {
+    errorMsg.value = 'Merci de bien remplir les champs' // TODO -- improve errorMsg (which step is faulty, what is the condition for it to be accepted)
+  }
+}
+
+const createTopic = async () => {
+  useTopicStore()
+    .create(bouquetCreationData.value)
+    .then((response) => {
+      router.push({
+        name: 'bouquet_detail',
+        params: { bid: response.slug }
+      })
+    })
+    .catch((err) => {
+      console.error(err)
+      errorMsg.value = 'Merci de bien remplir les champs'
+    })
+}
+
+const isStepValid = (step: number) => {
+  return stepsValidation.value[step - 1]
+}
+
+const updateStepValidation = (step: number, isValid: boolean) => {
+  stepsValidation.value[step - 1] = isValid
+}
+
+const goToNextStep = () => {
+  currentStep.value++
+}
+</script>
+
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <form class="fr-col-12 fr-col-lg-7">
@@ -54,121 +168,3 @@
     </form>
   </div>
 </template>
-
-<script lang="ts">
-import config from '@/config'
-import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetContentFieldGroup.vue'
-import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
-import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
-import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetThemeFieldGroup.vue'
-import type { Bouquet, BouquetCreationData, DatasetProperties } from '@/model'
-import { useTopicStore } from '@/store/TopicStore'
-
-interface BouquetFormData {
-  bouquet: Partial<Bouquet> & { datasetsProperties: DatasetProperties[] }
-  currentStep: number
-  stepsValidation: [boolean, boolean, boolean]
-  errorMsg: string | null
-}
-
-export default {
-  name: 'BouquetEditView',
-  components: {
-    BouquetPropertiesFieldGroup,
-    BouquetThemeFieldGroup,
-    BouquetContentFieldGroup,
-    BouquetFormRecap
-  },
-  data(): BouquetFormData {
-    return {
-      bouquet: {
-        datasetsProperties: [] as DatasetProperties[]
-      },
-      currentStep: 1,
-      stepsValidation: [false, false, false],
-      errorMsg: null
-    }
-  },
-  computed: {
-    steps() {
-      return [
-        'Description du bouquet de données',
-        'Informations du bouquet de données',
-        'Composition du bouquet de données',
-        'Récapitulatif du bouquet de données'
-      ]
-    },
-    bouquetCreationData(): BouquetCreationData {
-      // we coalesce to empty string to satisfy typing but empty strings should not be allowed
-      // by the various validation steps
-      return {
-        name: this.bouquet.name ?? '',
-        description: this.bouquet.description ?? '',
-        datasets: this.datasetsId,
-        tags: [config.universe.name],
-        extras: {
-          'ecospheres:informations': [
-            {
-              theme: this.bouquet.theme ?? '',
-              subtheme: this.bouquet.subtheme ?? ''
-            }
-          ],
-          'ecospheres:datasets_properties': this.bouquet.datasetsProperties
-        }
-      }
-    },
-    datasetsId(): string[] {
-      const datasetsId: string[] = []
-      for (const dataset of this.bouquet.datasetsProperties ?? []) {
-        if (dataset.id !== null) {
-          datasetsId.push(dataset.id)
-        }
-      }
-      return datasetsId
-    },
-    allStepAreValid(): boolean {
-      for (const step of this.stepsValidation) {
-        if (step === false) {
-          return false
-        }
-      }
-      return true
-    }
-  },
-  methods: {
-    goToPreviousPage() {
-      this.currentStep--
-    },
-    submitForm() {
-      if (this.allStepAreValid) {
-        this.createTopic()
-      } else {
-        this.errorMsg = 'Merci de bien remplir les champs' // TODO -- improve errorMsg (which step is faulty, what is the condition for it to be accepted)
-      }
-    },
-    async createTopic() {
-      useTopicStore()
-        .create(this.bouquetCreationData)
-        .then((response) => {
-          this.$router.push({
-            name: 'bouquet_detail',
-            params: { bid: response.slug }
-          })
-        })
-        .catch((err) => {
-          console.error(err)
-          this.errorMsg = 'Merci de bien remplir les champs'
-        })
-    },
-    isStepValid(step: number) {
-      return this.stepsValidation[step - 1]
-    },
-    updateStepValidation(step: number, isValid: boolean) {
-      this.stepsValidation[step - 1] = isValid
-    },
-    goToNextStep() {
-      this.currentStep++
-    }
-  }
-}
-</script>
