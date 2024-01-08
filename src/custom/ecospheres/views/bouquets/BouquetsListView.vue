@@ -8,57 +8,52 @@ import { type BreadcrumbItem, NoOptionSelected } from '@/model'
 
 const route = useRoute()
 
-const props = defineProps({
-  initThemeName: {
-    type: String,
-    default: NoOptionSelected
-  },
-  initSubthemeName: {
-    type: String,
-    default: NoOptionSelected
-  }
-})
-
-const themeName = ref(props.initThemeName)
-const subthemeName = ref(props.initSubthemeName)
+const themeName = ref(NoOptionSelected)
+const subthemeName = ref(NoOptionSelected)
 
 const subThemeQuery = computed(() => route.query.subtheme)
 const themeQuery = computed(() => route.query.theme)
 
-watch([subThemeQuery], (newVal) => {
-  subthemeName.value = newVal
-})
+watch(
+  [subThemeQuery],
+  (newVal) => {
+    subthemeName.value = newVal[0]?.toString() ?? NoOptionSelected
+  },
+  { immediate: true }
+)
 
-watch([themeQuery], (newVal) => {
-  themeName.value = newVal
-})
+watch(
+  [themeQuery],
+  (newVal) => {
+    themeName.value = newVal[0]?.toString() ?? NoOptionSelected
+  },
+  { immediate: true }
+)
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
-  if (themeName.value !== NoOptionSelected) {
-    links.push({ text: 'Accueil', to: '/' })
+  links.push({ text: 'Accueil', to: '/' })
+  links.push({ text: 'Bouquets', to: '/bouquets' })
+  if (themeName.value !== NoOptionSelected && themeName.value !== '') {
     links.push({
       text: themeName.value,
-      to: `/bouquets?theme=${themeName.value}`
+      to: `/bouquets?theme=${themeName.value}&subtheme=${NoOptionSelected}`
     })
-    if (subthemeName.value !== NoOptionSelected) {
+    if (subthemeName.value !== NoOptionSelected && subthemeName.value !== '') {
       links.push({ text: subthemeName.value })
     }
   }
   return links
 })
-
-const classDependingOnBreadcrumb = computed(() => {
-  return breadcrumbList.value.length > 0
-    ? 'with_breadcrumb'
-    : 'without_breadcrumb'
-})
 </script>
 
 <template>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
-    <DsfrBreadcrumb class="breadcrumb" :links="breadcrumbList" />
-    <div :class="classDependingOnBreadcrumb">
+  <div class="fr-container">
+    <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbList" />
+  </div>
+  <div class="fr-container fr-mb-4w">
+    <h1 class="fr-mb-2v">Bouquets</h1>
+    <div class="fr-mt-2w">
       <div className="fr-grid-row topicListView">
         <nav
           className="fr-sidemenu fr-col-4"
