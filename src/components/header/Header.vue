@@ -48,6 +48,8 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   badgeText: 'BETA'
 })
 
+const modelText = ref()
+
 const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
     hideModal()
@@ -88,10 +90,15 @@ const isWithSlotNav = computed(() => Boolean(slots.mainnav))
 const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
 
 // eslint-disable-next-line func-call-spacing
-defineEmits<{
+const emit = defineEmits<{
   (e: 'update:modelValue', payload: string): void
   (e: 'search', payload: string): void
 }>()
+
+function search(payload: string) {
+  emit('search', payload)
+  modelText.value = ''
+}
 </script>
 
 <template>
@@ -204,11 +211,11 @@ defineEmits<{
             <div v-if="showSearch" class="fr-header__search fr-modal">
               <DsfrSearchBar
                 :label="searchLabel"
-                :model-value="modelValue"
+                v-model="modelText"
                 :placeholder="placeholder"
                 style="justify-content: flex-end"
                 @update:model-value="$emit('update:modelValue', $event)"
-                @search="$emit('search', $event)"
+                @search="search(modelText)"
               />
             </div>
           </div>
@@ -234,10 +241,10 @@ defineEmits<{
             </button>
             <DsfrSearchBar
               v-if="searchModalOpened"
-              :model-value="modelValue"
+              v-model="modelText"
               :placeholder="placeholder"
               @update:model-value="$emit('update:modelValue', $event)"
-              @search="$emit('search', $event)"
+              @search="search(modelText)"
             />
           </div>
         </div>
