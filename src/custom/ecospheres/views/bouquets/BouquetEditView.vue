@@ -34,9 +34,7 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
     description: bouquet.value.description ?? '',
     datasets: datasetsId.value,
     tags: [config.universe.name],
-    private:
-      !allStepAreValid.value ||
-      currentStep.value <= stepsValidation.value.length,
+    private: currentStep.value <= stepsValidation.value.length,
     extras: {
       'ecospheres:informations': [
         {
