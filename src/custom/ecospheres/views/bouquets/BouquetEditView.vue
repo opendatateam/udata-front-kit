@@ -79,8 +79,8 @@ const updateTopic = async () => {
   return useTopicStore().update(bouquet.value.id, bouquetCreationData.value)
 }
 
-const isStepValid = (step: number) => {
-  if (step > stepsValidation.value.length) return allStepAreValid.value
+const isStepValid = (step: number): boolean => {
+  if (step > stepsValidation.value.length) return true
   return stepsValidation.value[step - 1]
 }
 
@@ -88,22 +88,21 @@ const updateStepValidation = (step: number, isValid: boolean) => {
   stepsValidation.value[step - 1] = isValid
 }
 
-// TODO: catch errors
 const goToNextStep = () => {
-  // this is a failsafe that should never be triggered
-  if (!isStepValid(currentStep.value)) {
-    throw Error(`Invalid step ${currentStep.value}, can not proceed`)
-  }
-  updateTopic().then((response) => {
-    if (currentStep.value > stepsValidation.value.length) {
-      router.push({
-        name: 'bouquet_detail',
-        params: { bid: response.slug }
-      })
-    } else {
-      currentStep.value++
-    }
-  })
+  updateTopic()
+    .then((response) => {
+      if (currentStep.value > stepsValidation.value.length) {
+        router.push({
+          name: 'bouquet_detail',
+          params: { bid: response.slug }
+        })
+      } else {
+        currentStep.value++
+      }
+    })
+    .catch((error) => {
+      errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
+    })
 }
 
 const fillBouquetFromTopic = (topic: Topic): Bouquet => {
@@ -193,7 +192,7 @@ onMounted(() => {
         <DsfrButton
           type="button"
           class="fr-mt-2w"
-          label="Suivant"
+          :label="currentStep === 4 ? 'Publier' : 'Suivant'"
           :disabled="!isStepValid(currentStep)"
           @click.prevent="goToNextStep()"
         />

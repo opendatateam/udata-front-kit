@@ -30,12 +30,16 @@ const createTopic = async () => {
 
 // TODO: catch errors
 const submit = () => {
-  createTopic().then((response) => {
-    router.push({
-      name: 'bouquet_edit',
-      params: { bid: response.id }
+  createTopic()
+    .then((response) => {
+      router.push({
+        name: 'bouquet_edit',
+        params: { bid: response.id }
+      })
     })
-  })
+    .catch((error) => {
+      errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
+    })
 }
 </script>
 
