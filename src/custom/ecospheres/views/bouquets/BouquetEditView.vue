@@ -57,15 +57,6 @@ const datasetsId: ComputedRef<string[]> = computed(() => {
   return datasetsId
 })
 
-const allStepAreValid: ComputedRef<boolean> = computed(() => {
-  for (const step of stepsValidation.value) {
-    if (step === false) {
-      return false
-    }
-  }
-  return true
-})
-
 const goToPreviousPage = () => {
   currentStep.value--
 }
