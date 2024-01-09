@@ -97,10 +97,7 @@ export default class RouterFetch {
         items.push({
           path: item.linkPage,
           name: item.id,
-          component: () =>
-            import(
-              `@/custom/${item.custom_folder}/views/${item.custom_component}.vue`
-            )
+          component: () => import(`../custom/${item.custom_component}.vue`)
         })
       }
     })
