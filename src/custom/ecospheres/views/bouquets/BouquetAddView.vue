@@ -28,7 +28,6 @@ const createTopic = async () => {
   return useTopicStore().create(bouquetCreationData.value)
 }
 
-// TODO: catch errors
 const submit = () => {
   createTopic()
     .then((response) => {
