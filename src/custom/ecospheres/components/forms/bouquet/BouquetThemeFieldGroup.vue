@@ -84,13 +84,17 @@ export default {
     }
   },
   watch: {
-    isValid(newValue) {
-      this.$emit('updateValidation', newValue)
+    isValid: {
+      handler(newValue) {
+        this.$emit('updateValidation', newValue)
+      },
+      immediate: true
     }
   },
   methods: {
     switchTheme(event: Event) {
       this.$emit('update:theme', (event.target as HTMLSelectElement).value)
+      this.$emit('update:subtheme', NoOptionSelected)
     },
     switchSubtheme(event: Event) {
       this.$emit('update:subtheme', (event.target as HTMLSelectElement).value)

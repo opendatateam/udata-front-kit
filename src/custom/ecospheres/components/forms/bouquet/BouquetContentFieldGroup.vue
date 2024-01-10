@@ -42,8 +42,11 @@ export default {
     }
   },
   watch: {
-    isValid(newValue) {
-      this.$emit('updateValidation', newValue)
+    isValid: {
+      handler(newValue) {
+        this.$emit('updateValidation', newValue)
+      },
+      immediate: true
     }
   },
   methods: {

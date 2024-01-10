@@ -152,6 +152,13 @@ themes:
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
 
+bouquets:
+  steps:
+    - Description du bouquet de données
+    - Informations du bouquet de données
+    - Composition du bouquet de données
+    - Récapitulatif du bouquet de données
+
 # FIXME: Obsolete. Kept as a reference used to populate our universe.
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
