@@ -113,7 +113,7 @@ onMounted(() => {
         class="fr-col-12 fr-col-lg-6"
       >
         <Tile
-          :link="`/bouquets/${bouquet.slug}`"
+          :link="`/bouquets/${bouquet.slug}?fromSearch=1`"
           :title="bouquet.name"
           :description="bouquet.description"
           :is-markdown="true"
