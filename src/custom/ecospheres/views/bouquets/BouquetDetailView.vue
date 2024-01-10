@@ -26,6 +26,7 @@ const subtheme = ref()
 const loading = useLoading()
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
+const showGoBack = computed(() => route.query.fromSearch !== undefined)
 
 const breadcrumbLinks = ref([
   {
@@ -38,8 +39,8 @@ const url = window.location.href
 
 const showDiscussions = config.website.discussions.topic.display
 
-const goToCreate = () => {
-  router.push({ name: 'bouquet_add' })
+const goToEdit = () => {
+  router.push({ name: 'bouquet_edit', params: { bid: bouquet.value?.id } })
 }
 
 const goBack = () => {
@@ -73,7 +74,7 @@ const getSelectedThemeColor = (themed: string) => {
   return getThemeColor(selectedTheme.value)
 }
 
-const canCreate = computed(() => {
+const canEdit = computed(() => {
   return (
     userStore.isAdmin() ||
     (userStore.$state.isLoggedIn &&
@@ -114,6 +115,7 @@ onMounted(() => {
   <div class="fr-container fr-mt-4w fr-mb-4w">
     <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-2w" />
     <DsfrButton
+      v-if="showGoBack"
       class="backToPage fr-pl-0 fr-mb-2w"
       :tertiary="true"
       :no-outline="true"
@@ -146,10 +148,10 @@ onMounted(() => {
         />
       </div>
       <DsfrButton
-        v-if="canCreate"
-        label="Créer un bouquet"
+        v-if="canEdit"
+        label="Editer le bouquet"
         icon="ri-pencil-line"
-        @click="goToCreate"
+        @click="goToEdit"
       />
     </div>
     <div class="bouquet__container fr-p-6w fr-mb-6w">
