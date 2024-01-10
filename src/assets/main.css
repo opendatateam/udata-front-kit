@@ -68,19 +68,6 @@
   align-items: center;
 }
 
-.without_breadcrumb {
-  margin: 128px 0 0;
-}
-
-.with_breadcrumb {
-  margin: 60px 0 0;
-}
-
-.breadcrumb {
-  margin-top: 40px;
-  text-align: left;
-}
-
 .actionTile {
   background: #000092;
   .fr-tile__link {
