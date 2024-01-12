@@ -67,6 +67,7 @@
     "sass": "^1.63.6",
     "typescript": "^5.2.2",
     "vite": "^4.5.1",
+    "vite-plugin-dynamic-import": "^1.5.0",
     "vitest": "^0.34.6"
   },
   "lint-staged": {
