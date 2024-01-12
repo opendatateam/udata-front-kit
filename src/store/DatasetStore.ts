@@ -1,8 +1,4 @@
-import type {
-  Dataset,
-  DatasetV2,
-  License
-} from '@etalab/data.gouv.fr-components'
+import type { DatasetV2, License } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
 import type { DatasetV2Response } from '@/model/dataset'
@@ -59,8 +55,8 @@ export const useDatasetStore = defineStore('dataset', {
      */
     getDatasetsForOrg(
       orgId: string,
-      page: number | undefined = 1,
-      sort: string | undefined = '-created'
+      page: number = 1,
+      sort: string = '-created'
     ) {
       if (this.sort !== sort) return undefined
       if (!this.data[orgId]) return undefined
@@ -71,8 +67,8 @@ export const useDatasetStore = defineStore('dataset', {
      */
     async loadDatasetsForOrg(
       orgId: string,
-      page: number | undefined = 1,
-      sort: string | undefined = '-created'
+      page: number = 1,
+      sort: string = '-created'
     ) {
       const existing = this.getDatasetsForOrg(orgId, page, sort)
       if (existing) return existing
@@ -138,9 +134,6 @@ export const useDatasetStore = defineStore('dataset', {
     },
     /**
      * Load multiple datasets from API via a HATEOAS rel
-     *
-     * @param {Object} rel - HATEOAS rel for datasets
-     * @returns {Array<object>}
      */
     async loadMultiple(rel: { href: string }): Promise<object> {
       let response = await datasetsApiv2.request({
