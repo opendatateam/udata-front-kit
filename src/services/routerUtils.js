@@ -98,7 +98,7 @@ export default class RouterFetch {
         items.push({
           path: item.linkPage,
           name: item.id,
-          component: () => import(item.path /* @vite-ignore */)
+          component: () => import(`../custom/${item.custom_component}.vue`)
         })
       }
     })

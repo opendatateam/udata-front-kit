@@ -53,7 +53,7 @@ website:
       id: 'FormMF'
       linkPage: '/form'
       type: 'custom'
-      path: '../custom/meteo/views/FormMF.vue'
+      custom_component: 'meteo/views/FormMF'
       display_menu: true
     # - name: 'Portail des API Météo-France'
     #   id: 'portailapi'
