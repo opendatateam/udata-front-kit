@@ -10,7 +10,7 @@ const datasetsApiv2 = new DatasetsAPI({ version: 2 })
 
 export interface RootState {
   data: Record<string, DatasetV2Response[]>
-  resourceTypes: Array<any>
+  resourceTypes: any[]
   sort: string | null
 }
 
@@ -39,7 +39,7 @@ export const useDatasetStore = defineStore('dataset', {
      */
     getDatasetsPaginationForOrg(orgId: string) {
       const datasets = this.getDatasetsForOrg(orgId)
-      if (!datasets) return []
+      if (datasets === undefined) return []
       const nbPages = Math.ceil(datasets.total / datasets.page_size)
       return [...Array(nbPages).keys()].map((page) => {
         page += 1
@@ -59,7 +59,7 @@ export const useDatasetStore = defineStore('dataset', {
       sort: string = '-created'
     ) {
       if (this.sort !== sort) return undefined
-      if (!this.data[orgId]) return undefined
+      if (this.data[orgId] === undefined) return undefined
       return this.data[orgId].find((d) => d.page === page)
     },
     /**
@@ -71,7 +71,7 @@ export const useDatasetStore = defineStore('dataset', {
       sort: string = '-created'
     ) {
       const existing = this.getDatasetsForOrg(orgId, page, sort)
-      if (existing) return existing
+      if (existing !== undefined) return existing
       const datasets = await datasetsApiv2.getDatasetsForOrganization(
         orgId,
         page,
@@ -85,7 +85,7 @@ export const useDatasetStore = defineStore('dataset', {
      */
     addDatasets(orgId: string, res: DatasetV2Response, sort: string | null) {
       // reset org data if another sort has been requested
-      if (!this.data[orgId]) this.data[orgId] = []
+      if (this.data[orgId] === undefined) this.data[orgId] = []
       if (this.sort !== sort) this.data[orgId] = []
       this.sort = sort
       this.data[orgId] = [...this.data[orgId], res]
@@ -112,11 +112,11 @@ export const useDatasetStore = defineStore('dataset', {
         '_orphan',
         {
           data: [dataset],
-          page: 0,
-          page_size: 0,
+          page: 1,
+          page_size: 1,
           next_page: null,
           previous_page: null,
-          total: 0
+          total: 1
         },
         null
       )
@@ -127,9 +127,9 @@ export const useDatasetStore = defineStore('dataset', {
      */
     async load(datasetId: string) {
       const existing = this.get(datasetId)
-      if (existing) return existing
+      if (existing !== undefined) return existing
       const dataset = await datasetsApiv2.get(datasetId)
-      if (!dataset) return
+      if (dataset !== undefined) return
       return this.addOrphan(dataset)
     },
     /**
@@ -142,7 +142,7 @@ export const useDatasetStore = defineStore('dataset', {
       })
       let datasets = response.data
       this.addDatasets('orphan', response, null)
-      while (response.next_page) {
+      while (response.next_page !== null) {
         response = await datasetsApiv2.request({
           url: response.next_page,
           method: 'get'
