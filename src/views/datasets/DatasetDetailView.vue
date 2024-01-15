@@ -70,17 +70,10 @@ const tabs = computed(() => {
     { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
     { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' }
   ]
-  if (config.website.show_dataset_metadata_panel) {
-    _tabs.push({
-      title: 'Métadonnées',
-      tabId: 'tab-3',
-      panelId: 'tab-content-3'
-    })
-  }
   _tabs.push({
     title: 'Informations',
-    tabId: 'tab-4',
-    panelId: 'tab-content-4'
+    tabId: 'tab-3',
+    panelId: 'tab-content-3'
   })
   if (chartData.value) {
     _tabs.push({
@@ -414,25 +407,12 @@ watch(
         <DiscussionsList v-if="showDiscussions" :subject="dataset" />
       </DsfrTabContent>
 
-      <!-- Métadonnées -->
-      <DsfrTabContent
-        v-if="config.website.show_dataset_metadata_panel"
-        panel-id="tab-content-3"
-        tab-id="tab-3"
-        :selected="selectedTabIndex === 3"
-      >
-        <pre>{{ dataset }}</pre>
-      </DsfrTabContent>
-
       <!-- Informations -->
       <DsfrTabContent
         v-if="dataset && license"
-        panel-id="tab-content-4"
-        tab-id="tab-4"
-        :selected="
-          selectedTabIndex ===
-          (config.website.show_dataset_metadata_panel ? 4 : 3)
-        "
+        panel-id="tab-content-3"
+        tab-id="tab-3"
+        :selected="selectedTabIndex === 3"
       >
         <h3>Informations</h3>
         <InformationPanel :dataset="dataset" :license="license" />

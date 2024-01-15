@@ -129,7 +129,7 @@ export const useDatasetStore = defineStore('dataset', {
       const existing = this.get(datasetId)
       if (existing !== undefined) return existing
       const dataset = await datasetsApiv2.get(datasetId)
-      if (dataset !== undefined) return
+      if (dataset === undefined) return
       return this.addOrphan(dataset)
     },
     /**
