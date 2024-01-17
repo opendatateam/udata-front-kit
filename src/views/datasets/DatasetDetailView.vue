@@ -414,7 +414,6 @@ watch(
         tab-id="tab-3"
         :selected="selectedTabIndex === 3"
       >
-        <h3>Informations</h3>
         <InformationPanel :dataset="dataset" :license="license" />
       </DsfrTabContent>
 
