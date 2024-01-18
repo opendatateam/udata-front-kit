@@ -29,6 +29,8 @@ const showTopicChart = config.website.show_topic_charts
 const colorsBanner = config.website.home_banner_colors
 const searchConfig = config.website.search_bar
 const secondarySearchConfig = config.website.secondary_search
+const textbelowbanner = config.website.homepage_text_below_hero
+const textbelowtopics = config.website.homepage_text_below_topics
 
 const goToPage = (page) => {
   window.location.href = page
@@ -81,11 +83,21 @@ const goToPage = (page) => {
       </div>
     </div>
   </div>
+  <div
+    class="fr-container hero-text"
+    v-if="textbelowbanner.display"
+    v-html="textbelowbanner.html"
+  ></div>
   <div class="fr-container">
     <HomeButtons v-if="buttons" :buttons="buttons" />
     <HomeTopics v-if="topics" :topics="topics" />
     <HomeCharts v-if="showTopicChart" />
   </div>
+  <div
+    class="fr-container hero-text"
+    v-if="textbelowtopics.display"
+    v-html="textbelowtopics.html"
+  ></div>
 </template>
 
 <style scoped lang="scss">
@@ -135,6 +147,11 @@ const goToPage = (page) => {
   font-size: 48px;
   line-height: 50px;
   font-weight: 800;
+}
+
+.hero-text {
+  margin-top: 30px;
+  text-align: left;
 }
 .subtitle {
   text-align: left;

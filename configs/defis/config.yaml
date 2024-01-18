@@ -1,0 +1,128 @@
+# config file for meteo-france
+
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://www.data.gouv.fr
+  # oauth settings
+  oauth_client_id:
+  # pkce client secret, explicitely public
+  oauth_client_secret:
+
+universe:
+  # "universe" topic id
+  topic_id: 6571f222129681e83de11aa2 # meteo-test
+  # universe name, used as bouquets tag
+  name: defis
+
+# UI customizations
+website:
+  title: 'defis.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>
+    FRANÇAISE'
+  service_logo: '/logos/defis-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+  homepage_title: 'Tous les défis proposés par data.gouv.fr'
+  homepage_subtitle: 'Retrouvez ici les défis autour de l analyse et de la valorisation de données publiques proposée par l équipe éditorial de data.gouv.fr.'
+  homepage_text_below_hero:
+    display: true
+    html: '<p>Coucou </p><a href="https://www.data.gouv.fr">Data'
+  homepage_text_below_topics:
+    display: true
+    html: '<p>Coucou </p><a href="https://www.data.gouv.fr">toto'
+  header_button:
+    display: false
+    label: 'Donnez votre avis'
+    link: https://tally.so/r/wQ7y47
+  search_bar:
+    display: false
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name:
+    link:
+  router_items:
+    - name: 'Accueil'
+      id: 'home'
+      linkPage: '/'
+      type: 'component'
+      display_menu: false
+    - name: 'Défis'
+      id: 'topics'
+      linkPage: '/topics'
+      type: 'component'
+      display_menu: true
+    - name: 'A propos'
+      id: 'about'
+      linkPage: '/about'
+      type: 'page'
+      display_menu: true
+      url: '/defis/pages/about.md'
+    - name: 'Accessibilité'
+      id: 'accessibility'
+      linkPage: '/accessibility'
+      type: 'page'
+      display_menu: false
+      url: '/defis/pages/accessibility.md'
+  # img should be square
+  home_buttons:
+  show_topic_charts: true
+  show_quality_component: true
+  show_dataset_metadata_panel: false
+  list_highlighted_topics:
+    - id: '65a92352ddd3d98e460e83f3'
+      name: 'Infrastructures cyclables'
+    - id: '65a92372953d21f206abb110'
+      name: 'Energie en France'
+    - id: '65a9237ed493a309fc872e4a'
+      name: 'Carte scolaire'
+    - id: '65a9238c202514467c0163d2'
+      name: 'Plan France Relance'
+    - id: '65a923a083cf5f728c9934b3'
+      name: 'Véhicules électriques'
+  url_highlighted_topics: 'topics'
+  oauth_option: false
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
+  footer_external_links:
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+    - label: 'Association Latitudes'
+      href: 'https://www.latitudes.cc/'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  logo_operator: ''
+  # display settings
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 100
+    files_list: 6
+  home_banner_colors:
+    - '#FFEE00'
+    - '#ECEEE6'
+    - '#00EEF8'
+  env: 'prod'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 292
+  discussions:
+    dataset:
+      display: true
+      create: false
+    topic:
+      display: false
+      create: false
+
+# list of organisations' ids that should be handled by the portal
+# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+# then Informations > ID at the bottom of the page
+organizations:
