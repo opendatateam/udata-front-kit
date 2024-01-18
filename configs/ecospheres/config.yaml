@@ -27,6 +27,12 @@ website:
   logo_operator:
   homepage_title: 'Les données de la transition écologique'
   homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
+  homepage_text_below_hero:
+    display: false
+    html:
+  homepage_text_below_topics:
+    display: false
+    html:
   header_button:
     display: false
     label:
@@ -83,6 +89,8 @@ website:
   show_quality_component: true
   show_dataset_metadata_panel: true
   list_highlighted_topics:
+  url_highlighted_topics:
+  type_highlighted_topics:
   oauth_option: true
   pagination_sizes:
     organizations_list: 9

@@ -27,6 +27,12 @@ website:
   # leave empty if not pertinent
   homepage_title: 'La météo et le climat en Open Data'
   homepage_subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+  homepage_text_below_hero:
+    display: false
+    html:
+  homepage_text_below_topics:
+    display: false
+    html:
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -82,6 +88,8 @@ website:
       name: 'Données climatologiques de base'
     - id: '6571f2db0273fc306408f265'
       name: 'Données climatologiques de référence pour le changement climatique'
+  url_highlighted_topics: 'datasets'
+  type_highlighted_topics: 'tile'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:

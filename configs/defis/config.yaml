@@ -84,6 +84,7 @@ website:
     - id: '65a923a083cf5f728c9934b3'
       name: 'Véhicules électriques'
   url_highlighted_topics: 'topics'
+  type_highlighted_topics: 'card'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
