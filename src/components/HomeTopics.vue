@@ -1,6 +1,8 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 
+import config from '@/config'
+
 import { useTopicStore } from '../store/TopicStore'
 
 const topicStore = useTopicStore()
@@ -17,6 +19,8 @@ onMounted(() => {
 const goToPage = (page) => {
   window.location.href = page
 }
+
+const url_highlighted_topics = config.website.url_highlighted_topics
 </script>
 
 <template>
@@ -26,10 +30,18 @@ const goToPage = (page) => {
       <div v-for="topic in topicsData" class="fr-col-12 fr-col-md-6">
         <div
           class="topic-card"
-          @click="goToPage('/datasets?topic=' + topic.id)"
+          @click="goToPage('/' + url_highlighted_topics + '?topic=' + topic.id)"
         >
           <div class="topic-title">{{ topic.name }}</div>
-          <div class="topic-description">{{ topic.description }}</div>
+          <div
+            v-if="
+              topic.extras && topic.extras['udata-front-kit:short_description']
+            "
+            class="topic-description"
+          >
+            {{ topic.extras['udata-front-kit:short_description'] }}
+          </div>
+          <div v-else class="topic-description">{{ topic.description }}</div>
         </div>
       </div>
     </div>
