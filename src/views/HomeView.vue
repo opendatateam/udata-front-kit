@@ -31,7 +31,7 @@ const showTopicChart = config.website.show_topic_charts
 const colorsBanner = config.website.home_banner_colors
 const searchConfig = config.website.search_bar
 const secondarySearchConfig = config.website.secondary_search
-const textBelowBanner = config.website.homepage_text_below_hero
+const textBelowHero = config.website.homepage_text_below_hero
 const textBelowTopics = config.website.homepage_text_below_topics
 
 const goToPage = (page) => {
@@ -86,8 +86,8 @@ const goToPage = (page) => {
   </div>
   <div
     class="fr-container hero-text"
-    v-if="textBelowBanner.display"
-    v-html="textBelowBanner.html"
+    v-if="textBelowHero.display"
+    v-html="textBelowHero.html"
   ></div>
   <div class="fr-container">
     <HomeThemes
