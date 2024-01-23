@@ -5,6 +5,7 @@ import { load } from 'js-yaml'
 import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
+import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 interface Config {
@@ -31,7 +32,8 @@ export default defineConfig(({ mode }) => {
             title: config.website.title
           }
         }
-      })
+      }),
+      dynamicImport()
     ],
     resolve: {
       alias: {

@@ -28,21 +28,27 @@ export const useTopicStore = defineStore('topic', {
       }
     },
     /**
-     * Filter a list of topics related to the current universe
+     * Filter a list of topics related to the current universe and private or not
      */
-    filter(topics: Topic[]) {
-      return topics.filter((topic) => topic.id !== config.universe.topic_id)
+    filter(topics: Topic[], withPrivate: boolean = false) {
+      return topics.filter((topic) => {
+        return topic.id !== config.universe.topic_id && withPrivate
+          ? true
+          : !topic.private
+      })
     },
     /**
      * Load universe related topics from API
      */
-    async loadTopicsForUniverse(): Promise<Topic[]> {
+    async loadTopicsForUniverse(
+      withPrivate: boolean = false
+    ): Promise<Topic[]> {
       if (this.data.length > 0) return this.data
       let response = await topicsAPIv2.list({
         page_size: config.website.pagination_sizes.topics_list,
         tag: config.universe.name
       })
-      this.data = this.filter(response.data)
+      this.data = this.filter(response.data, withPrivate)
       while (response.next_page !== null) {
         response = await topicsAPIv2.request({
           url: response.next_page,
@@ -77,7 +83,7 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Update a topic
      */
-    async update(topicId: string, data: Topic): Promise<Topic> {
+    async update(topicId: string, data: any): Promise<Topic> {
       const res = await topicsAPI.update(topicId, data)
       const idx = this.data.findIndex((b) => b.id === topicId)
       this.data[idx] = res

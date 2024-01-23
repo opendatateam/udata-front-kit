@@ -1,3 +1,87 @@
+<script setup lang="ts">
+import type { ComputedRef } from 'vue'
+import { onMounted, computed } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
+import { useRouter } from 'vue-router'
+
+import Tile from '@/components/Tile.vue'
+import type { Topic } from '@/model'
+import { NoOptionSelected } from '@/model'
+import { useTopicStore } from '@/store/TopicStore'
+
+const router = useRouter()
+
+const props = defineProps({
+  themeName: {
+    type: String,
+    default: NoOptionSelected
+  },
+  subthemeName: {
+    type: String,
+    default: NoOptionSelected
+  }
+})
+
+const bouquets: ComputedRef<Topic[]> = computed(() => {
+  const allTopics = useTopicStore().$state.data
+  if (props.themeName === NoOptionSelected) {
+    return allTopics
+  }
+  const relevantTopics: Topic[] = []
+  if (props.subthemeName !== NoOptionSelected) {
+    for (const topic of allTopics) {
+      if (
+        isRelevant(topic, 'subtheme', props.subthemeName) &&
+        isRelevant(topic, 'theme', props.themeName)
+      ) {
+        relevantTopics.push(topic)
+      }
+    }
+  } else if (props.themeName !== NoOptionSelected) {
+    for (const topic of allTopics) {
+      if (isRelevant(topic, 'theme', props.themeName)) {
+        relevantTopics.push(topic)
+      }
+    }
+  }
+  return relevantTopics
+})
+
+const numberOfResultMsg: ComputedRef<string> = computed(() => {
+  if (bouquets.value.length === 1) {
+    return '1 bouquet disponible'
+  } else {
+    return bouquets.value.length + ' bouquets disponibles'
+  }
+})
+
+const isRelevant = (topic: Topic, property: string, value: string): Boolean => {
+  const topicInformations: { [key: string]: string }[] =
+    topic.extras['ecospheres:informations']
+  if (topicInformations) {
+    for (const information of topicInformations) {
+      if (information[property] === value) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+const goToCreate = () => {
+  router.push({ name: 'bouquet_add' })
+}
+
+onMounted(() => {
+  const loader = useLoading().show()
+  useTopicStore()
+    .loadTopicsForUniverse()
+    .finally(() => {
+      loader.hide()
+    })
+})
+</script>
+
 <template>
   <div v-if="bouquets.length > 0">
     <p>{{ numberOfResultMsg }}</p>
@@ -29,7 +113,7 @@
         class="fr-col-12 fr-col-lg-6"
       >
         <Tile
-          :link="`/bouquets/${bouquet.slug}`"
+          :link="`/bouquets/${bouquet.slug}?fromSearch=1`"
           :title="bouquet.name"
           :description="bouquet.description"
           :is-markdown="true"
@@ -38,90 +122,3 @@
     </ul>
   </div>
 </template>
-
-<script lang="ts">
-import { onMounted } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
-
-import Tile from '@/components/Tile.vue'
-import type { Topic } from '@/model'
-import { NoOptionSelected } from '@/model'
-import { useTopicStore } from '@/store/TopicStore'
-
-export default {
-  name: 'BouquetList',
-  components: {
-    Tile
-  },
-  props: {
-    themeName: {
-      type: String,
-      default: NoOptionSelected
-    },
-    subthemeName: {
-      type: String,
-      default: NoOptionSelected
-    }
-  },
-  setup() {
-    onMounted(() => {
-      const loader = useLoading().show()
-      useTopicStore()
-        .loadTopicsForUniverse()
-        .finally(() => {
-          loader.hide()
-        })
-    })
-  },
-  computed: {
-    bouquets(): Topic[] {
-      const allTopics = useTopicStore().$state.data
-      if (this.themeName === NoOptionSelected) {
-        return allTopics
-      }
-      const relevantTopics: Topic[] = []
-      if (this.subthemeName !== NoOptionSelected) {
-        for (const topic of allTopics) {
-          if (
-            this.isRelevant(topic, 'subtheme', this.subthemeName) &&
-            this.isRelevant(topic, 'theme', this.themeName)
-          ) {
-            relevantTopics.push(topic)
-          }
-        }
-      } else if (this.themeName !== NoOptionSelected) {
-        for (const topic of allTopics) {
-          if (this.isRelevant(topic, 'theme', this.themeName)) {
-            relevantTopics.push(topic)
-          }
-        }
-      }
-      return relevantTopics
-    },
-    numberOfResultMsg(): string {
-      if (this.bouquets.length === 1) {
-        return '1 bouquet disponible'
-      } else {
-        return this.bouquets.length + ' bouquets disponibles'
-      }
-    }
-  },
-  methods: {
-    isRelevant(topic: Topic, property: string, value: string): Boolean {
-      const topicInformations: { [key: string]: string }[] =
-        topic.extras['ecospheres:informations']
-      if (topicInformations) {
-        for (const information of topicInformations) {
-          if (information[property] === value) {
-            return true
-          }
-        }
-      }
-      return false
-    },
-    goToCreate() {
-      this.$router.push({ name: 'bouquet_add' })
-    }
-  }
-}
-</script>
