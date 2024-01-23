@@ -1,5 +1,4 @@
 <script setup>
-import MarkdownIt from 'markdown-it'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -9,10 +8,10 @@ import HomeButtons from '../components/HomeButtons.vue'
 import HomeCharts from '../components/HomeCharts.vue'
 import HomeThemes from '../components/HomeThemes.vue'
 import HomeTopics from '../components/HomeTopics.vue'
+import { fromMarkdown } from '../utils'
 
 const router = useRouter()
 const query = ref('')
-const markdown = new MarkdownIt()
 
 // TODO: mutualize w/ App.vue
 const updateQuery = (q) => {
@@ -55,27 +54,28 @@ const goToPage = (page) => {
         {{ homepageTitle }}
       </h1>
       <div class="subtitle fr-text--alt fr-mb-10w">
-        <span v-html="markdown.render(homepageSubTitle)" />
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <span v-html="fromMarkdown(homepageSubTitle)" />
       </div>
-      <div class="search-bar" v-if="searchConfig.display">
+      <div v-if="searchConfig.display" class="search-bar">
         <DsfrSearchBar
           button-text="Rechercher"
-          :placeholder="searchConfig.placeholder"
-          :large="false"
-          @search="doSearch"
-          @update:modelValue="updateQuery"
           class="search-bar-input"
           :style="
             secondarySearchConfig.display
               ? 'min-width: 80%;'
               : 'min-width: 100%;'
           "
+          :placeholder="searchConfig.placeholder"
+          :large="false"
+          @search="doSearch"
+          @update:model-value="updateQuery"
         />
         <div v-if="secondarySearchConfig.display" class="or-sep">ou</div>
         <div
           v-if="secondarySearchConfig.display"
-          @click="goToPage(secondarySearchConfig.link)"
           class="button-search-guided"
+          @click="goToPage(secondarySearchConfig.link)"
         >
           {{ secondarySearchConfig.name }}
         </div>
@@ -129,10 +129,6 @@ const goToPage = (page) => {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-}
-.es__hero {
-  font-size: 1.5rem;
-  line-height: 1.5rem;
 }
 .banner {
   padding-top: 5%;
