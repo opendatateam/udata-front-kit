@@ -89,6 +89,7 @@ const badgeStyle = ref(config.website.badge.style)
 const footerPhrase = ref(config.website.footer_phrase)
 const footerExternalLinks = ref(config.website.footer_external_links)
 const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
+const headerSearch = ref(config.website.header_search)
 </script>
 
 <template>
@@ -105,6 +106,7 @@ const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
     :show-badge="showBadge"
     :badge-text="badgeText"
     :badge-style="badgeStyle"
+    :showSearch="headerSearch"
     @search="doSearch"
     @update:model-value="updateQuery"
   >
