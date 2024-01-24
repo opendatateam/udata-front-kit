@@ -25,18 +25,16 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-  homepage_title: 'Les données de la transition écologique'
-  homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
-  homepage_text_below_hero:
-    display: false
-    html:
-  homepage_text_below_topics:
-    display: false
-    html:
+  homepage:
+    title: 'Les données de la transition écologique'
+    subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
+    below_hero:
+    below_topics:
   header_button:
     display: false
     label:
     link:
+  header_search: true
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
