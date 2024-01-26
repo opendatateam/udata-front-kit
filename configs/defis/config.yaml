@@ -1,4 +1,4 @@
-# config file for meteo-france
+# config file for defis
 
 datagouvfr:
   # data.gouv.fr base URL
@@ -25,14 +25,31 @@ website:
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
-  homepage_title: 'Tous les défis proposés par data.gouv.fr'
-  homepage_subtitle: 'Retrouvez ici les défis autour de l analyse et de la valorisation de données publiques proposée par l équipe éditorial de data.gouv.fr.'
+  homepage_title: 'Apprendre avec l’open data'
+  homepage_subtitle: 'Se former et utiliser des données ouvertes pour répondre à des enjeux sociaux et environnementaux.'
   homepage_text_below_hero:
     display: true
-    html: '<p>Coucou </p><a href="https://www.data.gouv.fr">Data'
+    html: >-
+      <p>Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et
+          gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses,
+          des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation,
+          mobilités, etc.).</p>
+      <h4>Des défis open data</h4>
+      <p>La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de
+          développer vos compétences en réalisant des projets utiles à partir de données ouvertes.</p>
+      <p>Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou
+          apprendre à exploiter des données en travaillant sur des projets concrets, dans le cadre d’une
+          formation ou accompagnés des guides de data.gouv.fr.</p>
   homepage_text_below_topics:
     display: true
-    html: '<p>Coucou </p><a href="https://www.data.gouv.fr">toto'
+    html: >-
+      <h4>L&#39Open Data University</h4>
+      <p>Ces défis ont été développés dans le cadre de <a
+              href="https://www.opendatauniversity.org/">l’Open Data University</a>, un programme
+          d’enseignement à la réutilisation des données publiques porté par <a
+              href="https://www.latitudes.cc/">l&#39association Latitudes</a> et dont data.gouv.fr est
+          partenaire.</p>
+      <p><a href=/defis/pages/opendatauniversity>En savoir plus sur l’Open Data University.</a></p>
   header_button:
     display: false
     label: 'Donnez votre avis'
@@ -55,18 +72,24 @@ website:
       linkPage: '/topics'
       type: 'component'
       display_menu: true
-    - name: 'A propos'
-      id: 'about'
-      linkPage: '/about'
+    - name: 'Open Data University'
+      id: 'opendatauniversity'
+      linkPage: '/opendatauniversity'
       type: 'page'
       display_menu: true
-      url: '/defis/pages/about.md'
+      url: '/defis/pages/opendatauniversity.md'
     - name: 'Accessibilité'
       id: 'accessibility'
       linkPage: '/accessibility'
       type: 'page'
       display_menu: false
       url: '/defis/pages/accessibility.md'
+    - name: 'Guides'
+      id: 'guides'
+      linkPage: 'https://guides.data.gouv.fr/'
+      type: 'external'
+      display_menu: true
+      url: 'https://guides.data.gouv.fr/'
   # img should be square
   home_buttons:
   show_topic_charts: true
@@ -83,10 +106,16 @@ website:
       name: 'Plan France Relance'
     - id: '65a923a083cf5f728c9934b3'
       name: 'Véhicules électriques'
+    - id: '65b10aa72d0c187ecf296930'
+      name: 'Offre culturelle'
+    - id: '65b10beae24f409e31c547a5'
+      name: 'Changement climatique en France'
+    - id: '65b22219ffcf892bd066df76'
+      name: 'Elections'
   url_highlighted_topics: 'topics'
   type_highlighted_topics: 'card'
   oauth_option: false
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
+  footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
@@ -108,9 +137,9 @@ website:
     topics_list: 100
     files_list: 6
   home_banner_colors:
-    - '#FFEE00'
-    - '#ECEEE6'
-    - '#00EEF8'
+    - '#D6DAF7'
+    - '#DBA8A8'
+    - '#1258EB'
   env: 'prod'
   matomo:
     host: 'https://stats.data.gouv.fr'
