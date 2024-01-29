@@ -43,7 +43,7 @@ website:
       Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
 
 
-      [En savoir plus sur l’Open Data University.](/defis/pages/opendatauniversity)
+      [En savoir plus sur l’Open Data University.](/opendatauniversity)
   header_button:
     display: false
     label: 'Donnez votre avis'
