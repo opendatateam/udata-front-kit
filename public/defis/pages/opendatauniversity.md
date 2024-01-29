@@ -8,8 +8,8 @@ Il s’agit d’un **programme d’enseignement à la réutilisation de données
 * aux **étudiantes et étudiants** de travailler sur des projets réels et utiles, dont les résultats seront valorisés.
 
 L’ODU propose notamment :
-* **des webinaires sur l’open data**
-* **des projets open data cadrés**
+* **des webinaires sur l’open data** ;
+* **des projets open data cadrés** ;
 * **des ressources pédagogiques** : mentors, forum de discussion, concours inter-établissements, etc.
 
 Pour plus d’informations, [rendez-vous sur le site de l’Open Data University](https://www.opendatauniversity.org/).
@@ -20,3 +20,49 @@ L’Open Data University s’adresse aux **enseignantes, enseignants et responsa
 Le programme est entièrement gratuit. Pour participer au dispositif, il suffit de s’inscrire.
 
 **[Rejoindre l'Open Data University](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv)**
+
+## Foire aux questions (FAQ)
+
+##### Comment les projets sont-ils identifiés et structurés ?
+Les projets sont construits de manière collaborative entre Latitudes et les partenaires de l'Open Data University (Enedis, data.gouv.fr, etc.).
+
+Nous sommes attachés à identifier des thématiques qui ont du sens pour les étudiantes et étudiants : transition écologique, nouvelles mobilités, anticipation des crises, etc.
+
+Nous proposons des projets qui peuvent être réalisés par une diversité d’étudiantes et étudiants (niveaux d’études, discipline, durée du cours) : avec les enseignants, nous identifions les options possibles. Un même projet peut donc par exemple aboutir au développement d’une application, à une datavisualisation ou encore à un mémo de politiques publiques !
+
+Découvrir les défis pour la saison 2023-2024 :
+
+* Infrastructures cyclables
+* Énergie en France
+* Carte scolaire
+* Plan France Relance
+* Véhicules électriques
+* Offre culturelle
+* Changement climatique
+* Elections
+* Commerces en centre-ville
+* Impact Diagnostics de Performance Energétique
+
+##### Comment les résultats des projets vont-ils être présentés et valorisés ?
+Les résultats et enseignements liés aux projets seront bien sûr partagés ! L’ODU est une “université décentralisée” - c’est à dire que les projets sont réalisés au sein d’une diversité d’enseignements et d’établissements. Les résultats vont donc être multiples pour un seul et même projet, et leur inscription pédagogique sera différente selon le type d’enseignement, sa durée, les compétences acquises, le mode d’évaluation. Le point commun sera toujours le même : valoriser des données publiques ouvertes !
+
+Les étudiantes et étudiants pourront donc :
+* publier leur projet en réutilisations sur data.gouv.fr
+* éditorialiser leurs projets : présentation d’un cas d’usage, article réflexif, etc.
+
+Il est prévu de référencer les résultats sur les pages des projets ODU et d’organiser des événements entre établissements et avec des acteurs publics pour partager les enseignements.
+
+##### Je suis une administration publique, comment puis-je prendre part à l’ODU ?
+Bienvenue ! En tant qu’administration, vous pouvez :
+
+* Relayer le programme autour de vous : acteurs de l’enseignement supérieur et de la recherche, agents publics qui souhaiteraient mentorer des projets
+* Proposer des projets pour le semestre prochain : vous pouvez parcourir les projets déjà proposés et commencer à réfléchir à des sujets qui vous intéressent !
+* Soutenir le programme : en devenant partenaire ou finançant le programme, qui consolide petit à petit son modèle à moyen-long terme. 
+
+Contacter Latitudes : Vous pouvez écrire à l’équipe pour toute question : open-data-university@latitudes.cc
+
+##### J’ai une expertise tech, comment puis-je prendre part à l’ODU ?
+Bienvenue ! Le programme ODU accueille des mentors, notamment des expertes et experts en data, pour accompagner des étudiantes et étudiants dans leur projet. L’investissement peut être ponctuel ou en suivi plus régulier. Vous souhaitez devenir mentor ? Voici [le lien d’inscription](https://airtable.com/app3EKyPGxgEnB7Fw/shrWAHxi8EdHZEgt9).
+
+##### Comment l’open data devient-il un outil de formation essentiel dans l’enseignement supérieur ?
+L'équipe de data.gouv.fr a consacré [un article de blog](https://www.data.gouv.fr/fr/posts/comment-lopen-data-devient-un-outil-de-formation-essentiel-dans-lenseignement-superieur/) à ce sujet qui fournit quelques éléments de réponse. Nous vous invitons à le consulter.

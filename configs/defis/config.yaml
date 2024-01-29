@@ -38,8 +38,7 @@ website:
       <p>La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de
           développer vos compétences en réalisant des projets utiles à partir de données ouvertes.</p>
       <p>Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou
-          apprendre à exploiter des données en travaillant sur des projets concrets, dans le cadre d’une
-          formation ou accompagnés des guides de data.gouv.fr.</p>
+          apprendre à exploiter des données en travaillant sur des projets concrets.</p>
   homepage_text_below_topics:
     display: true
     html: >-
@@ -112,6 +111,10 @@ website:
       name: 'Changement climatique en France'
     - id: '65b22219ffcf892bd066df76'
       name: 'Elections'
+    - id: '65b76b8536f029909a82ca1c'
+      name: 'Commerces de centre-ville'
+    - id: '65b76f15d7874915c8e41298'
+      name: 'Impact Diagnostics de Performance Energétique'
   url_highlighted_topics: 'topics'
   type_highlighted_topics: 'card'
   oauth_option: false
