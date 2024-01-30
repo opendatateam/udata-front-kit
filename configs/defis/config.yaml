@@ -35,12 +35,15 @@ website:
 
       La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.
 
+      
       Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
     below_topics: >-
 
       ### L'Open Data University
 
       Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
+
+      Enseignantes, enseignants et responsables pédagogiques des établissements d'enseignement supérieur, [n'hésitez pas à vous inscrire pour intégrer le dispositif](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv) !
 
 
       [En savoir plus sur l’Open Data University.](/opendatauniversity)
@@ -96,16 +99,8 @@ website:
   show_quality_component: true
   show_dataset_metadata_panel: false
   list_highlighted_topics:
-    - id: '65a92352ddd3d98e460e83f3'
-      name: 'Infrastructures cyclables'
-    - id: '65a92372953d21f206abb110'
-      name: 'Energie en France'
-    - id: '65a9237ed493a309fc872e4a'
-      name: 'Carte scolaire'
-    - id: '65a9238c202514467c0163d2'
-      name: 'Plan France Relance'
-    - id: '65a923a083cf5f728c9934b3'
-      name: 'Véhicules électriques'
+    - id: '65b76f15d7874915c8e41298'
+      name: 'Impact Diagnostics de Performance Energétique'
     - id: '65b10aa72d0c187ecf296930'
       name: 'Offre culturelle'
     - id: '65b10beae24f409e31c547a5'
@@ -114,8 +109,16 @@ website:
       name: 'Elections'
     - id: '65b76b8536f029909a82ca1c'
       name: 'Commerces de centre-ville'
-    - id: '65b76f15d7874915c8e41298'
-      name: 'Impact Diagnostics de Performance Energétique'
+    - id: '65a92352ddd3d98e460e83f3'
+      name: 'Infrastructures cyclables'
+    - id: '65a92372953d21f206abb110'
+      name: 'Energie en France'
+    - id: '65a9237ed493a309fc872e4a'
+      name: 'Carte scolaire'
+    - id: '65a923a083cf5f728c9934b3'
+      name: 'Véhicules électriques'
+    - id: '65a9238c202514467c0163d2'
+      name: 'Plan France Relance'
   url_highlighted_topics: 'topics'
   type_highlighted_topics: 'card'
   oauth_option: false
