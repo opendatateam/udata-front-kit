@@ -21,6 +21,18 @@ Le programme est entièrement gratuit. Pour participer au dispositif, il suffit 
 
 **[Rejoindre l'Open Data University](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv)**
 
+## Quels sont les projets open data proposés ?
+Dans le cadre de l'Open Data University, 9 projets open data ont été conçus pour être intégrés dans des enseignements techniques :
+* [**Impact Diagnostics de Performance Énergétique**](https://defis.data.gouv.fr/topics?topic=65b76f15d7874915c8e41298) (proposé et porté par Enedis) ;
+* [**Offre culturelle**](https://defis.data.gouv.fr/topics?topic=65b10aa72d0c187ecf296930) ;
+* [**Changement climatique**](https://defis.data.gouv.fr/topics?topic=65b10beae24f409e31c547a5) ; 
+* [**Élections**](https://defis.data.gouv.fr/topics?topic=65b22219ffcf892bd066df76) ;
+* [**Commerces de centre-ville**](https://defis.data.gouv.fr/topics?topic=65b76b8536f029909a82ca1c) ;
+* [**Infrastructures cyclables**](https://defis.data.gouv.fr/topics?topic=65a92352ddd3d98e460e83f3) ;
+* [**Energie en France**](https://defis.data.gouv.fr/topics?topic=65a92372953d21f206abb110) ;
+* [**Carte scolaire**](https://defis.data.gouv.fr/topics?topic=65a9237ed493a309fc872e4a) ;
+* [**Véhicules électriques**](https://defis.data.gouv.fr/topics?topic=65a923a083cf5f728c9934b3).
+
 ## Foire aux questions (FAQ)
 
 ##### Comment les projets sont-ils identifiés et structurés ?
