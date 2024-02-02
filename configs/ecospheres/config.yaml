@@ -50,11 +50,11 @@ website:
       href: 'https://www.gouvernement.fr'
   footer_mandatory_links:
     - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
     - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
+      to: 'https://www.data.gouv.fr/fr/terms/'
     - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
+      to: 'https://www.data.gouv.fr/fr/suivi/'
   router_items:
     - name: 'Accueil'
       id: 'home'

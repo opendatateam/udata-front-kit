@@ -1,11 +1,10 @@
 <script setup>
-import MarkdownIt from 'markdown-it'
 import { computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { pageStore } from '../store/PageStore'
+import { fromMarkdown } from '../utils'
 
-const markdown = new MarkdownIt()
 const store = pageStore()
 const content = computed(() => store.content)
 const title = useRouter().currentRoute.value.meta.title
@@ -30,7 +29,7 @@ watchEffect(async () => {
   </div>
   <div class="fr-container fr-mb-4w">
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="markdown.render(content)" />
+    <div v-html="fromMarkdown(content)" />
   </div>
 </template>
 

@@ -99,11 +99,11 @@ website:
       href: 'https://www.data.gouv.fr'
   footer_mandatory_links:
     - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
     - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
+      to: 'https://www.data.gouv.fr/fr/terms/'
     - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
+      to: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'

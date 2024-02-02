@@ -5,7 +5,6 @@ import { RouterView, useRouter } from 'vue-router'
 import config from '@/config'
 
 import Navigation from './components/Navigation.vue'
-import Footer from './components/footer/Footer.vue'
 import Header from './components/header/Header.vue'
 import UserAPI from './services/api/resources/UserAPI'
 import { useUserStore } from './store/UserStore'
@@ -117,7 +116,8 @@ const headerSearch = ref(config.website.header_search)
 
   <RouterView />
 
-  <Footer
+  <DsfrFooter
+    class="fr-mt-16w"
     :logo-text="logotext"
     :operator-img-src="logoOperator"
     :operator-img-style="{ height: '92px', width: '92px' }"
