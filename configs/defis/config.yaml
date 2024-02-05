@@ -38,6 +38,8 @@ website:
 
       Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
     below_topics: >-
+      ### L'Open Data University
+
       Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
 
 
@@ -103,6 +105,8 @@ website:
       name: 'Offre culturelle'
     - id: '65b22219ffcf892bd066df76'
       name: 'Elections'
+    - id: '65b10beae24f409e31c547a5'
+      name: 'Changement climatique'
     - id: '65b76b8536f029909a82ca1c'
       name: 'Commerces de centre-ville'
     - id: '65a92352ddd3d98e460e83f3'
