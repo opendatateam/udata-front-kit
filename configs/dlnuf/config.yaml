@@ -1,0 +1,157 @@
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id:
+  # pkce client secret, explicitely public
+  oauth_client_secret:
+
+universe:
+  # "universe" topic id
+  topic_id: 65d47fd070159853a2f399bb # meteo-test
+  # universe name, used as bouquets tag
+  name: dlnuf
+
+# UI customizations
+website:
+  title: 'dlnuf.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>
+    FRANÇAISE'
+  service_logo: '/logos/meteo-france-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+
+  homepage:
+    title: 'Dites le nous une fois'
+    subtitle: 'phrase du dessous'
+    below_hero: >-
+      Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).  
+
+      ### Des défis open data
+
+      La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.  
+
+
+      Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
+    below_topics: >-
+      ### L'Open Data University
+
+      Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
+
+
+      Enseignantes, enseignants et responsables pédagogiques des établissements d'enseignement supérieur, [n'hésitez pas à vous inscrire pour intégrer le dispositif](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv) !
+
+
+      [En savoir plus sur l’Open Data University.](/opendatauniversity)
+  header_button:
+    display: true
+    label: 'Mon compte datapass'
+    link: https://datapass.api.gouv.fr/
+  search_bar:
+    display: false
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name: 'Recherche guidée'
+    link: '/form'
+  router_items:
+    - name: 'Accueil'
+      id: 'home'
+      linkPage: '/'
+      type: 'component'
+      display_menu: false
+    - name: 'Défis'
+      id: 'topics'
+      linkPage: '/topics'
+      type: 'component'
+      display_menu: true
+    - name: 'API et données'
+      id: 'datasets'
+      linkPage: '/datasets'
+      type: 'component'
+      display_menu: true
+    - name: 'A propos'
+      id: 'about'
+      linkPage: '/about'
+      type: 'page'
+      url: '/dlnuf/pages/about.md'
+      display_menu: true
+    - name: 'Accessibilité'
+      id: 'accessibility'
+      linkPage: '/accessibility'
+      type: 'page'
+      display_menu: false
+      url: '/dlnuf/pages/accessibility.md'
+    - name: 'Organisations'
+      id: 'organizations'
+      linkPage: '/organizations'
+      type: 'component'
+      display_menu: true
+  # img should be square
+  home_buttons:
+    - name: toto
+      link: https://toto.com
+      title: tutu
+      img: https://www.gitbook.com/cdn-cgi/image/width=256,dpr=2,height=40,fit=contain,format=auto/https%3A%2F%2F3786092575-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FnSrS1oz2N9yTlykjBxxZ%252Flogo%252F6aYHAmnUeCAW5cCPwnIy%252FLIGHT.png%3Falt%3Dmedia%26token%3D7ad63c1f-8c63-4ea0-bd5d-5655c9b7192b
+    - name: toto
+      link: https://toto.com
+      title: test
+      img: https://www.gitbook.com/cdn-cgi/image/width=256,dpr=2,height=40,fit=contain,format=auto/https%3A%2F%2F3786092575-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FnSrS1oz2N9yTlykjBxxZ%252Flogo%252F6aYHAmnUeCAW5cCPwnIy%252FLIGHT.png%3Falt%3Dmedia%26token%3D7ad63c1f-8c63-4ea0-bd5d-5655c9b7192b
+  show_topic_charts: true
+  show_quality_component: true
+  show_dataset_metadata_panel: false
+  list_highlighted_topics:
+    - id: '65d48848825a9cf9fc3d8f3a'
+      name: 'Marchés publics'
+  url_highlighted_topics: 'topics'
+  type_highlighted_topics: 'tile'
+  oauth_option: false
+  footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
+  footer_external_links:
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+    - label: 'Association Latitudes'
+      href: 'https://www.latitudes.cc/'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  logo_operator: ''
+  # display settings
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 100
+    files_list: 6
+  home_banner_colors:
+    - '#D6DAF7'
+    - '#DBA8A8'
+    - '#1258EB'
+  env: 'prod'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 292
+  discussions:
+    dataset:
+      display: true
+      create: false
+    topic:
+      display: false
+      create: false
+  organizations:
+    # list of organisations' ids that should be handled by the portal
+    # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+    # then Informations > ID at the bottom of the page
+    # DREAL Alsace
+    - 56ec3116c751df53e0cc7150
+    # DREAL Aquitaine
+    - 55bba52788ee387495a46ec1
+    # DREAL Auvergne
+    - 559c07ffc751df6d14390bd3
