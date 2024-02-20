@@ -61,25 +61,25 @@ const goToPage = (page) => {
           <span v-html="markdown.render(homepageSubTitle)" />
         </div>
       </div>
-      <div class="search-bar" v-if="searchConfig.display">
+      <div v-if="searchConfig.display" class="search-bar">
         <DsfrSearchBar
           button-text="Rechercher"
           :placeholder="searchConfig.placeholder"
           :large="false"
-          @search="doSearch"
-          @update:modelValue="updateQuery"
           class="search-bar-input"
           :style="
             secondarySearchConfig.display
               ? 'min-width: 80%;'
               : 'min-width: 100%;'
           "
+          @search="doSearch"
+          @update:model-value="updateQuery"
         />
         <div v-if="secondarySearchConfig.display" class="or-sep">ou</div>
         <div
           v-if="secondarySearchConfig.display"
-          @click="goToPage(secondarySearchConfig.link)"
           class="button-search-guided"
+          @click="goToPage(secondarySearchConfig.link)"
         >
           {{ secondarySearchConfig.name }}
         </div>
@@ -87,8 +87,8 @@ const goToPage = (page) => {
     </div>
   </div>
   <div
-    class="fr-container hero-text"
     v-if="belowHero"
+    class="fr-container hero-text"
     v-html="markdown.render(belowHero)"
   ></div>
   <div class="fr-container">
@@ -100,8 +100,8 @@ const goToPage = (page) => {
     <HomeCharts v-if="showTopicChart" />
   </div>
   <div
-    class="fr-container hero-text"
     v-if="belowTopics"
+    class="fr-container hero-text"
     v-html="markdown.render(belowTopics)"
   ></div>
 </template>

@@ -17,7 +17,7 @@ website:
   title: 'dlnuf.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/logos/meteo-france-logo.svg'
+  service_logo: '/logos/dlnuf.svg'
   badge:
     display: true
     text: 'BETA'
@@ -25,30 +25,38 @@ website:
   # leave empty if not pertinent
 
   homepage:
-    title: 'Dites le nous une fois'
-    subtitle: 'phrase du dessous 2'
+    title: 'Acteurs publics, simplifiez vos démarches !'
+    subtitle: 'Simpligiez les démarches des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâces aux API et aux données ! Vous gagnerez aussi du temps !' 
     below_hero: >-
-      Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).  
+      ## Les cas d'usages
 
-      ### Des défis open data
-
-      La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.  
-
-
-      Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
+      Simplifiez vos démarches, suivez nos cas d'usages et leur recommandations :
     below_topics: >-
-      ### L'Open Data University
-
-      Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
-
-
-      Enseignantes, enseignants et responsables pédagogiques des établissements d'enseignement supérieur, [n'hésitez pas à vous inscrire pour intégrer le dispositif](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv) !
+      ## Comment et pourquoi simplifier vos démarches ?
+      
+      Administrations et collectivités, en intégrant des API ou des données dans vos démarches et/ou votre système d’information :
 
 
-      [En savoir plus sur l’Open Data University.](/opendatauniversity)
+      - 🗄 **Vous accédez facilement aux données administratives de vos usagers**, qu'elles soient publiques ou protégées et provenant de [nombreux fournisseurs](/organizations) ;
+
+
+      - ⏰ **Vous accélérez le traitement des démarches car vos agents instructeurs** n’ont pas de vérifications supplémentaires à réaliser, les informations obtenues que nous vous recommandons sont certifiées 🔎 ;
+
+
+      - 🎢 **Vous augmentez le pourcentage des démarches finalisées** car vous faîtes gagner du temps à l’usager ;
+
+
+      - 🎯 **Vous participez activement à la simplification des démarches en mettant en place le « _[Dites-le-nous une fois](/dlnuf)_ »** : vous ne demandez plus à vos usagers une information qu’ils ont déjà donnée ou que l’administration connaît déjà. Vous vous mettez ainsi en conformité avec la législation et, plus particulièrement l’[Article L113-12 du Code des relations entre le public et l’administration](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037313155).
+
+
+      - 💌 **Vous réduisez le taux de non recours**, plus particulièrement si vous mettez en place des démarches proactives. [En savoir plus sur la proactivité](/proactivite).
+
+      
+      Pour en savoir plus, consultez nos [guides de la simplification](/guides).
+
   header_button:
     display: true
-    label: 'Mon compte datapass'
+    label: 'Compte Datapass'
     link: https://datapass.api.gouv.fr/
   search_bar:
     display: false
@@ -63,21 +71,21 @@ website:
       linkPage: '/'
       type: 'component'
       display_menu: false
-    - name: 'Défis'
+    - name: 'Cas d’usages'
       id: 'topics'
       linkPage: '/topics'
       type: 'component'
       display_menu: true
-    - name: 'API et données'
+    - name: 'Toutes les API & données utiles'
       id: 'datasets'
       linkPage: '/datasets'
       type: 'component'
       display_menu: true
-    - name: 'A propos'
-      id: 'about'
-      linkPage: '/about'
+    - name: 'Guides de la simplification'
+      id: 'guides'
+      linkPage: '/guides'
       type: 'page'
-      url: '/dlnuf/pages/about.md'
+      url: '/dlnuf/pages/guides.md'
       display_menu: true
     - name: 'Accessibilité'
       id: 'accessibility'
@@ -89,7 +97,7 @@ website:
       id: 'organizations'
       linkPage: '/organizations'
       type: 'component'
-      display_menu: true
+      display_menu: false
   # img should be square
   home_buttons:
     - name: toto
@@ -107,14 +115,16 @@ website:
     - id: '65d48848825a9cf9fc3d8f3a'
       name: 'Marchés publics'
   url_highlighted_topics: 'topics'
-  type_highlighted_topics: 'tile'
+  type_highlighted_topics: 'card' #card or tile
   oauth_option: false
-  footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
+  footer_phrase: 'Ce site permet aux administrations et collectivités territoriales de connaître les API et les données qui leur permettent de simplifier leurs démarches pour les particuliers, les entreprises et les associations.'
   footer_external_links:
+    - label: 'API Entreprise'
+      href: 'https://www.entreprise.api.gouv.fr'
+    - label: 'API Particulier'
+      href: 'https://www.particulier.api.gouv.fr'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
-    - label: 'Association Latitudes'
-      href: 'https://www.latitudes.cc/'
   footer_mandatory_links:
     - label: 'Licences'
       href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
@@ -145,13 +155,12 @@ website:
     topic:
       display: false
       create: false
-  organizations:
-    # list of organisations' ids that should be handled by the portal
-    # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
-    # then Informations > ID at the bottom of the page
-    # DREAL Alsace
-    - 56ec3116c751df53e0cc7150
-    # DREAL Aquitaine
-    - 55bba52788ee387495a46ec1
-    # DREAL Auvergne
-    - 559c07ffc751df6d14390bd3
+organizations:
+  # list of organisations' ids that should be handled by the portal
+  # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+  # then Informations > ID at the bottom of the page
+  # Dinum
+  - 57fe2a35c751df21e179df72
+  # Insee
+  - 534fff81a3a7292c64a77e5c
+  
