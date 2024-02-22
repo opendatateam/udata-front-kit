@@ -10,15 +10,19 @@
         <input id="label" v-model="title" class="fr-input" type="text" />
       </div>
       <div class="fr-mt-1w fr-mb-4w">
-        <Tooltip
-          title="Raison d'utilisation dans ce bouquet"
-          text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
-        />
-        <Tooltip
-          title="Utilisez du markdown pour mettre en forme votre texte"
-          text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
-          :optional="true"
-        />
+        <div class="container">
+          Raison d'utilisation dans ce bouquet
+          <span class="required">&nbsp;*</span>
+          <Tooltip
+            text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
+          />
+        </div>
+        <div class="container">
+          Utilisez du markdown pour mettre en forme votre texte
+          <Tooltip
+            text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
+          />
+        </div>
         <textarea id="purpose" v-model="purpose" class="fr-input" type="text" />
       </div>
       <div class="fr-mt-1w fr-mb-4w">
