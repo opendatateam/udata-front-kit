@@ -1,12 +1,12 @@
 <script setup>
-const props = defineProps(['title', 'name', 'show', 'text'])
+const props = defineProps(['title', 'name', 'show', 'text', 'optional'])
 </script>
 
 <template>
   <div class="container">
     <div>
       {{ title }}
-      <span class="required">&nbsp;*</span>
+      <span v-if="!props.optional" class="required">&nbsp;*</span>
     </div>
     <button
       @mouseover="show = true"
