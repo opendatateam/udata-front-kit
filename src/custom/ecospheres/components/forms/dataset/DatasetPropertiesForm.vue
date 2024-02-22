@@ -12,12 +12,10 @@
       <div class="fr-mt-1w fr-mb-4w">
         <Tooltip
           title="Raison d'utilisation dans ce bouquet"
-          name="tooltip__objectif"
           text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
         />
         <Tooltip
           title="Utilisez du markdown pour mettre en forme votre texte"
-          name="tooltip__markdown"
           text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
           :optional="true"
         />
@@ -95,7 +93,7 @@
 import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import Multiselect from '@vueform/multiselect'
 
-import Tooltip from '@/components/Tooltip.vue'
+import Tooltip from '@/components/TooltipWrapper.vue'
 import config from '@/config'
 import {
   type DatasetProperties,
