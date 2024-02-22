@@ -4,10 +4,6 @@ import 'tippy.js/themes/light.css'
 import { Tippy } from 'vue-tippy'
 
 defineProps({
-  title: {
-    type: String,
-    required: true
-  },
   text: {
     type: String,
     required: true
