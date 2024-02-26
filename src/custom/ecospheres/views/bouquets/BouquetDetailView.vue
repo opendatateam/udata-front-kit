@@ -24,6 +24,7 @@ const bouquet: Ref<Topic | null> = ref(null)
 const theme = ref()
 const subtheme = ref()
 const loading = useLoading()
+const isExpanded = ref({} as { [key: string]: boolean })
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 const showGoBack = computed(() => route.query.fromSearch !== undefined)
@@ -178,8 +179,8 @@ onMounted(() => {
             <DsfrAccordion
               :id="datasetProperties.id"
               :title="datasetProperties.title"
-              :expanded-id="datasetProperties.id"
-              @expand="datasetProperties.id = $event"
+              :expanded-id="isExpanded[idx]"
+              @expand="isExpanded[idx] = $event"
             >
               <BouquetDatasetAvailability
                 :dataset-properties="datasetProperties"
