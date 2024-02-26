@@ -20,14 +20,11 @@ describe('DatagouvfrAPI', () => {
   beforeEach(() => {
     // FIXME: remove once API dependencies to stores are cleaned up
     setActivePinia(createPinia())
-    const httpClient = axios.create()
-    httpClient.defaults.proxy = false
-    mock = new MockAdapter(httpClient, { onNoMatch: 'throwException' })
+    mock = new MockAdapter(axios, { onNoMatch: 'throwException' })
     api = new DatagouvfrAPI({
       baseUrl,
       version,
-      endpoint,
-      httpClient
+      endpoint
     })
   })
 

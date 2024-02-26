@@ -6,15 +6,13 @@ import config from '@/config'
 
 import Navigation from './components/Navigation.vue'
 import Header from './components/header/Header.vue'
-import UserAPI from './services/api/resources/UserAPI'
 import { useUserStore } from './store/UserStore'
 
 const router = useRouter()
 const query = ref('')
-const api = new UserAPI()
-const store = useUserStore()
+const userStore = useUserStore()
 
-const isLoggedIn = computed(() => store.$state.isLoggedIn)
+const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
 const quickLinks = computed(() => {
   const button = config.website.header_button
@@ -27,7 +25,7 @@ const quickLinks = computed(() => {
 
   const userLink = {
     label: isLoggedIn.value
-      ? `${store.$state.data?.first_name} ${store.$state.data?.last_name}`
+      ? `${userStore.$state.data?.first_name} ${userStore.$state.data?.last_name}`
       : 'Se connecter',
     icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
     to: isLoggedIn.value ? '/logout' : '/login',
@@ -49,33 +47,8 @@ const doSearch = () => {
   router.push({ path: '/datasets', query: { q: query.value } })
 }
 
-// protect authenticated routes
-router.beforeEach((to) => {
-  if (to.meta.requiresAuth && !store.$state.isLoggedIn) {
-    localStorage.setItem('lastPath', to.path)
-    router.push({ name: 'login' })
-  }
-})
-
 onMounted(() => {
-  store.init()
-  if (isLoggedIn.value) {
-    api
-      .list()
-      .then((data) => {
-        store.storeInfo(data)
-      })
-      .catch((err) => {
-        // profile info fetching has failed, we're probably using a bad token
-        // keep the current route and redirect to the login flow
-        if (err.response?.status === 401) {
-          store.logout()
-          localStorage.setItem('lastPath', router.currentRoute.value.path)
-          return router.push({ name: 'login' })
-        }
-        throw err
-      })
-  }
+  userStore.init()
 })
 
 const logotext = ref(config.website.rf_title)

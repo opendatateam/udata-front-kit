@@ -2,11 +2,10 @@ import type { User } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
 import type { WithOwned } from '@/model'
-
-// FIXME: we cant use UserAPI here (circular dep?)
-// maybe try to use the service that will use the API
+import UserAPI from '@/services/api/resources/UserAPI'
 
 const STORAGE_KEY = 'token'
+const userAPI = new UserAPI()
 
 export interface RootState {
   isLoggedIn: boolean
@@ -34,6 +33,24 @@ export const useUserStore = defineStore('user', {
       if (token !== null) {
         this.token = token
         this.isLoggedIn = true
+        userAPI
+          .list()
+          .then((data) => {
+            this.storeInfo(data)
+          })
+          .catch(async (err) => {
+            // profile info fetching has failed, we're probably using a bad token
+            // keep the current route and redirect to the login flow
+            if (err.response?.status === 401) {
+              this.logout()
+              localStorage.setItem(
+                'lastPath',
+                this.$router.currentRoute.value.path
+              )
+              return await this.$router.push({ name: 'login' })
+            }
+            throw err
+          })
       }
     },
     /**

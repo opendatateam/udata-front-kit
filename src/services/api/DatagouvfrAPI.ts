@@ -10,21 +10,6 @@ import type {
   AxiosError,
   URLParams
 } from '../../model/api'
-import { useUserStore } from '../../store/UserStore'
-
-const instance = axios.create()
-
-// inject token in requests if user is loggedIn
-instance.interceptors.request.use(
-  async (config) => {
-    const store = useUserStore()
-    if (store.$state.isLoggedIn) {
-      config.headers.Authorization = `Bearer ${store.$state.token}`
-    }
-    return config
-  },
-  async (error) => await Promise.reject(error)
-)
 
 /**
  * A wrapper around data.gouv.fr's API
@@ -36,15 +21,13 @@ export default class DatagouvfrAPI {
   baseUrl = `${config.datagouvfr.base_url}/api`
   version = 1
   endpoint = ''
-  httpClient = instance
   toasted = true
 
   constructor(args: DatagouvfrAPIArgs = {}) {
-    const { baseUrl, version, endpoint, httpClient } = args
+    const { baseUrl, version, endpoint } = args
     this.baseUrl = baseUrl ?? this.baseUrl
     this.version = version ?? this.version
     this.endpoint = endpoint ?? this.endpoint
-    this.httpClient = httpClient ?? this.httpClient
   }
 
   url(suffixed: boolean = false): string {
@@ -57,7 +40,7 @@ export default class DatagouvfrAPI {
    * Make a `method` request to URL and optionnaly attach a toaster to the error
    */
   async request(config: RequestConfig): Promise<AxiosResponseData> {
-    const response = await this.httpClient({
+    const response = await axios({
       url: config.url,
       method: config.method,
       params: config.params,

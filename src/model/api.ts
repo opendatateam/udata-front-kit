@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosResponse, AxiosError } from 'axios'
+import type { AxiosResponse, AxiosError } from 'axios'
 
 export type { AxiosError }
 
@@ -37,5 +37,4 @@ export interface DatagouvfrAPIArgs {
   baseUrl?: string
   version?: number
   endpoint?: string
-  httpClient?: AxiosInstance
 }
