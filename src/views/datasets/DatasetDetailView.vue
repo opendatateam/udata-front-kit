@@ -5,7 +5,9 @@ import {
   Pagination,
   QualityComponent,
   ReadMore,
-  Well
+  Well,
+  InformationPanel,
+  type License
 } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -28,12 +30,12 @@ const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const reuseStore = useReuseStore()
 
-const dataset = computed(() => datasetStore.get(datasetId) || {})
+const dataset = computed(() => datasetStore.get(datasetId))
 const reuses = ref([])
 
 const resources = ref<Record<string, ResourceData>>({})
 const selectedTabIndex = ref(0)
-const license = ref({})
+const license = ref<License>()
 const types = ref([])
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.discussions.dataset.display
@@ -59,7 +61,7 @@ const chartData = computed(() => {
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
   { to: '/datasets', text: 'Données' },
-  { text: dataset.value.title }
+  { text: dataset.value?.title }
 ])
 
 const tabs = computed(() => {
@@ -68,13 +70,11 @@ const tabs = computed(() => {
     { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
     { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' }
   ]
-  if (config.website.show_dataset_metadata_panel) {
-    _tabs.push({
-      title: 'Métadonnées',
-      tabId: 'tab-4',
-      panelId: 'tab-content-4'
-    })
-  }
+  _tabs.push({
+    title: 'Informations',
+    tabId: 'tab-3',
+    panelId: 'tab-content-3'
+  })
   if (chartData.value) {
     _tabs.push({
       title: 'Visualisations',
@@ -90,12 +90,14 @@ const description = computed(() => descriptionFromMarkdown(dataset))
 const changePage = (type: string, page = 1, query = '') => {
   resources.value[type].currentPage = page
   resources.value[type].query = query
-  return resourceStore
-    .fetchDatasetResources(dataset.value.id, type, page, query)
-    .then((data) => {
-      resources.value[type].resources = data['data']
-      resources.value[type].total = data['total']
-    })
+  if (dataset.value) {
+    return resourceStore
+      .fetchDatasetResources(dataset.value.id, type, page, query)
+      .then((data) => {
+        resources.value[type].resources = data['data']
+        resources.value[type].total = data['total']
+      })
+  }
 }
 
 const simpleDate = (dateString) => {
@@ -158,11 +160,11 @@ const getResourcesTitle = (typedResources: ResourceData) => {
         pluralName = 'Autres'
         break
       default:
-        pluralName = typedResources.typeLabel
+        pluralName = typedResources.type.label
     }
     return `${typedResources.total} ${pluralName}`
   } else {
-    return typedResources.typeLabel
+    return typedResources.type.label
   }
 }
 
@@ -179,13 +181,13 @@ const discussionWellDescription = showDiscussions
   : 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
 
 const openDataGouvDiscussions = () =>
-  window.open(`${dataset.value.page}#/discussions`, 'datagouv-discussion')
+  window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
 
 // launch reuses and discussions fetch as soon as we have the technical id
 watch(
   dataset,
   async () => {
-    if (!dataset.value.id) return
+    if (!dataset.value) return
     // fetch reuses
     reuseStore
       .loadReusesForDataset(dataset.value.id)
@@ -217,7 +219,7 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-mb-4w">
+  <div v-if="dataset" class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
@@ -243,7 +245,7 @@ watch(
         </div>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
         <p>{{ formatDate(dataset.last_update) }}</p>
-        <div v-if="dataset.license">
+        <div v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
           <p class="fr-text--sm fr-mt-0 fr-mb-3v">
             <code class="bg-alt-grey fr-px-1v text-grey-380">
@@ -405,13 +407,14 @@ watch(
         <DiscussionsList v-if="showDiscussions" :subject="dataset" />
       </DsfrTabContent>
 
-      <!-- Métadonnées -->
+      <!-- Informations -->
       <DsfrTabContent
-        panel-id="tab-content-4"
-        tab-id="tab-4"
-        :selected="selectedTabIndex === 4"
+        v-if="dataset && license"
+        panel-id="tab-content-3"
+        tab-id="tab-3"
+        :selected="selectedTabIndex === 3"
       >
-        <pre>{{ dataset }}</pre>
+        <InformationPanel :dataset="dataset" :license="license" />
       </DsfrTabContent>
 
       <!-- Visualisations -->
