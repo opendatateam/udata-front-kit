@@ -1,22 +1,46 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 
 import { stripFromMarkdown } from '../utils'
 
-const props = defineProps([
-  'title',
-  'description',
-  'img',
-  'link',
-  'type',
-  'externalLink',
-  'isMarkdown',
-  'notice'
-])
+const props = defineProps({
+  title: {
+    type: String,
+    required: true
+  },
+  link: {
+    type: String,
+    default: undefined
+  },
+  externalLink: {
+    type: String,
+    default: undefined
+  },
+  description: {
+    type: String,
+    default: undefined
+  },
+  img: {
+    type: String,
+    default: undefined
+  },
+  type: {
+    type: String,
+    default: undefined
+  },
+  isMarkdown: {
+    type: Boolean,
+    default: false
+  },
+  notice: {
+    type: String,
+    default: undefined
+  }
+})
 
 const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
 
-function strip(value) {
+function strip(value: string) {
   if (props.isMarkdown) {
     return stripFromMarkdown(value)
   }
@@ -36,7 +60,7 @@ function strip(value) {
         >
           {{ title }}
         </a>
-        <RouterLink v-else class="fr-tile__link" :to="link">
+        <RouterLink v-else class="fr-tile__link" :to="link || ''">
           {{ title }}
         </RouterLink>
       </h4>
