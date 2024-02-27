@@ -2,7 +2,7 @@
 import type { ComputedRef } from 'vue'
 import { watch, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
+import { useRouter, type RouteLocationRaw } from 'vue-router'
 
 import Tile from '@/components/Tile.vue'
 import type { Topic } from '@/model'
@@ -75,6 +75,18 @@ const goToCreate = () => {
   router.push({ name: 'bouquet_add' })
 }
 
+const computeLink = (bouquet: Topic): RouteLocationRaw => {
+  if (!bouquet.private) {
+    return {
+      name: 'bouquet_detail',
+      params: { bid: bouquet.slug },
+      query: { fromSearch: '1' }
+    }
+  } else {
+    return { name: 'bouquet_edit', params: { bid: bouquet.id } }
+  }
+}
+
 // launch topic fetch as soon as we have user infos
 watch(
   () => userStore.isInited,
@@ -120,10 +132,11 @@ watch(
         class="fr-col-12 fr-col-lg-6"
       >
         <Tile
-          :link="`/bouquets/${bouquet.slug}?fromSearch=1`"
+          :link="computeLink(bouquet)"
           :title="bouquet.name"
           :description="bouquet.description"
           :is-markdown="true"
+          :notice="bouquet.private ? 'Brouillon' : undefined"
         />
       </li>
     </ul>
