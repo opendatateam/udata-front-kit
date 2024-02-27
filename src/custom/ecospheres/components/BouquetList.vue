@@ -22,11 +22,16 @@ const props = defineProps({
   subthemeName: {
     type: String,
     default: NoOptionSelected
+  },
+  showDrafts: {
+    type: Boolean
   }
 })
 
 const bouquets: ComputedRef<Topic[]> = computed(() => {
-  const allTopics = useTopicStore().$state.data
+  const allTopics = useTopicStore().$state.data.filter((bouquet) => {
+    return !props.showDrafts ? !bouquet.private : true
+  })
   if (props.themeName === NoOptionSelected) {
     return allTopics
   }
