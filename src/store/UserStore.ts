@@ -1,4 +1,5 @@
 import type { User } from '@etalab/data.gouv.fr-components'
+import type { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
 
 import type { WithOwned } from '@/model'
@@ -8,16 +9,18 @@ const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
 
 export interface RootState {
+  isInited: boolean
   isLoggedIn: boolean
-  token: string | null
-  data: User | null
+  token: string | undefined
+  data: User | undefined
 }
 
 export const useUserStore = defineStore('user', {
   state: (): RootState => ({
+    isInited: false,
     isLoggedIn: false,
-    data: null,
-    token: null
+    data: undefined,
+    token: undefined
   }),
   getters: {
     loggedIn(state) {
@@ -27,31 +30,35 @@ export const useUserStore = defineStore('user', {
   actions: {
     /**
      * Init store from localStorage
+     * If we have a token, fetch user infos from API
      */
-    init() {
+    async init(): Promise<User | undefined> {
       const token = localStorage.getItem(STORAGE_KEY)
       if (token !== null) {
         this.token = token
         this.isLoggedIn = true
-        userAPI
-          .list()
-          .then((data) => {
-            this.storeInfo(data)
-          })
-          .catch(async (err) => {
-            // profile info fetching has failed, we're probably using a bad token
-            // keep the current route and redirect to the login flow
-            if (err.response?.status === 401) {
-              this.logout()
-              localStorage.setItem(
-                'lastPath',
-                this.$router.currentRoute.value.path
-              )
-              return await this.$router.push({ name: 'login' })
-            }
-            throw err
-          })
+        let userData: User | undefined
+        try {
+          userData = await userAPI.list()
+        } catch (err) {
+          // profile info fetching has failed, we're probably using a bad token
+          // keep the current route and redirect to the login flow
+          if ((err as AxiosError).response?.status === 401) {
+            this.logout()
+            localStorage.setItem(
+              'lastPath',
+              this.$router.currentRoute.value.path
+            )
+            await this.$router.push({ name: 'login' })
+          }
+          throw err
+        }
+        if (userData !== undefined) {
+          this.storeInfo(userData)
+        }
       }
+      this.isInited = true
+      return this.data
     },
     /**
      * Store user info after login
@@ -66,8 +73,8 @@ export const useUserStore = defineStore('user', {
      */
     logout() {
       this.isLoggedIn = false
-      this.token = null
-      this.data = null
+      this.token = undefined
+      this.data = undefined
       localStorage.removeItem(STORAGE_KEY)
     },
     /**
