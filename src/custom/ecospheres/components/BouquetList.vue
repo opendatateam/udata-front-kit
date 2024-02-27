@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComputedRef } from 'vue'
-import { onMounted, computed } from 'vue'
+import { watch, computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -8,8 +8,11 @@ import Tile from '@/components/Tile.vue'
 import type { Topic } from '@/model'
 import { NoOptionSelected } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 
 const router = useRouter()
+const userStore = useUserStore()
+const loader = useLoading().show()
 
 const props = defineProps({
   themeName: {
@@ -72,14 +75,18 @@ const goToCreate = () => {
   router.push({ name: 'bouquet_add' })
 }
 
-onMounted(() => {
-  const loader = useLoading().show()
-  useTopicStore()
-    .loadTopicsForUniverse()
-    .finally(() => {
+// launch topic fetch as soon as we have user infos
+watch(
+  () => userStore.isInited,
+  async (isInited) => {
+    if (isInited) {
+      const topicStore = useTopicStore()
+      await topicStore.loadTopicsForUniverse(userStore.isAdmin())
       loader.hide()
-    })
-})
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
