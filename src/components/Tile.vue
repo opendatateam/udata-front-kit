@@ -10,7 +10,7 @@ const props = defineProps({
     required: true
   },
   link: {
-    type: Object as PropType<RouteLocationRaw | string>,
+    type: [Object, String] as PropType<RouteLocationRaw | string>,
     default: undefined
   },
   externalLink: {
