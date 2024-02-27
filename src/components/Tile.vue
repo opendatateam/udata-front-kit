@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type PropType } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
 
 import { stripFromMarkdown } from '../utils'
 
@@ -9,7 +10,7 @@ const props = defineProps({
     required: true
   },
   link: {
-    type: String,
+    type: Object as PropType<RouteLocationRaw | string>,
     default: undefined
   },
   externalLink: {
