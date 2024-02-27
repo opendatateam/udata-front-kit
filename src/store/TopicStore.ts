@@ -88,6 +88,14 @@ export const useTopicStore = defineStore('topic', {
       const idx = this.data.findIndex((b) => b.id === topicId)
       this.data[idx] = res
       return res
+    },
+    /**
+     * Delete a topic
+     */
+    async delete(topicId: string) {
+      await topicsAPI.delete(topicId)
+      const idx = this.data.findIndex((b) => b.id === topicId)
+      this.data.splice(idx, 1)
     }
   }
 })

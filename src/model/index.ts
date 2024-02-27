@@ -1,5 +1,7 @@
 import type { Owned } from '@etalab/data.gouv.fr-components'
 
+type WithOwned<T> = T & Owned
+
 interface DatasetProperties {
   title: string
   purpose: string
@@ -43,7 +45,7 @@ interface BreadcrumbItem {
   to?: string
 }
 
-interface Bouquet {
+type Bouquet = Owned & {
   id: string
   name: string
   description: string
@@ -100,5 +102,6 @@ export type {
   Bouquet,
   DatasetProperties,
   BouquetCreationData,
-  BouquetEditionData
+  BouquetEditionData,
+  WithOwned
 }
