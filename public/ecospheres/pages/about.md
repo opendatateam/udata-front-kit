@@ -10,7 +10,8 @@ Il offre une découverte de bouquets de données propre à des cas d’usages.
 ecologie.data.gouv.fr s’adresse aux agents publics des les administrations centrales, services déconcentrés et aussi des collectivités territoriales oeuvrant à déployer une politiques publiques portée par le ministère de la transition écologique et de la cohésion des territoires. Des données brutes aussi accessibles permettent à la société civile, au secteur privé ou encore à l’administration de s’en emparer dans un but de réutilisation;
 
 
-Les données ouvertes : qu’est-ce que c’est ?
+# Les données ouvertes : qu’est-ce que c’est ?
+
 Les données ouvertes (open data) sont des données en accès libre, gratuites et facilement réutilisables par toutes et tous. Ces données peuvent être produites par l’administration, mais aussi par des acteurs privés ou encore des citoyens.
 
 
