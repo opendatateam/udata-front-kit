@@ -18,7 +18,6 @@ const route = useRouteParamsAsString()
 const router = useRouter()
 
 const store = useTopicStore()
-const userStore = useUserStore()
 
 const bouquet: Ref<Topic | null> = ref(null)
 const theme = ref()
@@ -76,11 +75,7 @@ const getSelectedThemeColor = (themed: string) => {
 }
 
 const canEdit = computed(() => {
-  return (
-    userStore.isAdmin() ||
-    (userStore.$state.isLoggedIn &&
-      bouquet.value?.owner?.id === userStore.$state.data?.id)
-  )
+  return useUserStore().hasEditPermissions(bouquet.value as Topic)
 })
 
 onMounted(() => {
@@ -150,6 +145,7 @@ onMounted(() => {
       </div>
       <DsfrButton
         v-if="canEdit"
+        size="md"
         label="Editer le bouquet"
         icon="ri-pencil-line"
         @click="goToEdit"

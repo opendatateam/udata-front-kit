@@ -1,6 +1,8 @@
 import type { User } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
+import type { WithOwned } from '@/model'
+
 // FIXME: we cant use UserAPI here (circular dep?)
 // maybe try to use the service that will use the API
 
@@ -62,6 +64,15 @@ export const useUserStore = defineStore('user', {
      */
     isAdmin() {
       return this.isLoggedIn && this.data?.roles?.includes('admin')
+    },
+    /**
+     * Has current user edit permissions on given object?
+     */
+    hasEditPermissions<T>(object: WithOwned<T> | null): boolean {
+      if (object === null) return false
+      if (!this.isLoggedIn) return false
+      if (this.isAdmin() === true) return true
+      return object.owner?.id === this.data?.id
     }
   }
 })
