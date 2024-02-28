@@ -10,11 +10,14 @@ const topicsAPIv2 = new TopicsAPI({ version: 2 })
 
 export interface RootState {
   data: Topic[]
+  isLoaded: boolean
 }
 
 export const useTopicStore = defineStore('topic', {
   state: (): RootState => ({
-    data: []
+    data: [],
+    // flag for initial/remote loading of data
+    isLoaded: false
   }),
   actions: {
     /**
@@ -43,7 +46,7 @@ export const useTopicStore = defineStore('topic', {
     async loadTopicsForUniverse(
       withPrivate: boolean = false
     ): Promise<Topic[]> {
-      if (this.data.length > 0) return this.data
+      if (this.isLoaded) return this.data
       let response = await topicsAPIv2.list({
         page_size: config.website.pagination_sizes.topics_list,
         tag: config.universe.name
@@ -54,8 +57,9 @@ export const useTopicStore = defineStore('topic', {
           url: response.next_page,
           method: 'get'
         })
-        this.data = [...this.data, ...this.filter(response.data)]
+        this.data = [...this.data, ...this.filter(response.data, withPrivate)]
       }
+      this.isLoaded = true
       return this.data
     },
     /**
