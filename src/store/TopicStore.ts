@@ -4,6 +4,7 @@ import config from '@/config'
 import type { Topic } from '@/model'
 
 import TopicsAPI from '../services/api/resources/TopicsAPI'
+import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
@@ -33,31 +34,32 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Filter a list of topics related to the current universe and private or not
      */
-    filter(topics: Topic[], withPrivate: boolean = false) {
+    filter(topics: Topic[]) {
+      const draftFilter = (topic: Topic): boolean => {
+        if (!topic.private) return true
+        return useUserStore().hasEditPermissions(topic)
+      }
       return topics.filter((topic) => {
-        return topic.id !== config.universe.topic_id && withPrivate
-          ? true
-          : !topic.private
+        return topic.id !== config.universe.topic_id && draftFilter(topic)
       })
     },
     /**
      * Load universe related topics from API
      */
-    async loadTopicsForUniverse(
-      withPrivate: boolean = false
-    ): Promise<Topic[]> {
+    async loadTopicsForUniverse(): Promise<Topic[]> {
       if (this.isLoaded) return this.data
       let response = await topicsAPIv2.list({
         page_size: config.website.pagination_sizes.topics_list,
         tag: config.universe.name
       })
-      this.data = this.filter(response.data, withPrivate)
+      await useUserStore().waitForStoreInit()
+      this.data = this.filter(response.data)
       while (response.next_page !== null) {
         response = await topicsAPIv2.request({
           url: response.next_page,
           method: 'get'
         })
-        this.data = [...this.data, ...this.filter(response.data, withPrivate)]
+        this.data = [...this.data, ...this.filter(response.data)]
       }
       this.isLoaded = true
       return this.data

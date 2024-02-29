@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComputedRef } from 'vue'
-import { watch, computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter, type RouteLocationRaw } from 'vue-router'
 
@@ -8,11 +8,8 @@ import Tile from '@/components/Tile.vue'
 import type { Topic } from '@/model'
 import { NoOptionSelected } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
-import { useUserStore } from '@/store/UserStore'
 
 const router = useRouter()
-const userStore = useUserStore()
-const loader = useLoading().show()
 
 const props = defineProps({
   themeName: {
@@ -92,18 +89,12 @@ const computeLink = (bouquet: Topic): RouteLocationRaw => {
   }
 }
 
-// launch topic fetch as soon as we have user infos
-watch(
-  () => userStore.isInited,
-  async (isInited) => {
-    if (isInited) {
-      const topicStore = useTopicStore()
-      await topicStore.loadTopicsForUniverse(userStore.isAdmin())
-      loader.hide()
-    }
-  },
-  { immediate: true }
-)
+onMounted(() => {
+  const loader = useLoading().show()
+  useTopicStore()
+    .loadTopicsForUniverse()
+    .then(() => loader.hide())
+})
 </script>
 
 <template>
