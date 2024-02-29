@@ -1,6 +1,7 @@
 import type { User } from '@etalab/data.gouv.fr-components'
 import type { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
+import { watch } from 'vue'
 
 import type { WithOwned } from '@/model'
 import UserAPI from '@/services/api/resources/UserAPI'
@@ -59,6 +60,27 @@ export const useUserStore = defineStore('user', {
       }
       this.isInited = true
       return this.data
+    },
+    /**
+     * Promise around isInited
+     */
+    async waitForStoreInit(): Promise<void> {
+      await new Promise<void>((resolve) => {
+        if (this.isInited) {
+          resolve()
+        } else {
+          const unwatch = watch(
+            () => this.isInited,
+            (isInited: boolean) => {
+              if (isInited) {
+                unwatch()
+                resolve()
+              }
+            },
+            { immediate: true }
+          )
+        }
+      })
     },
     /**
      * Store user info after login
