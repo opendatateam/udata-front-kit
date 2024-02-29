@@ -40,17 +40,19 @@ website:
     link:
   footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'écologie."
   footer_external_links:
+    - label: 'ecologie.gouv.fr'
+      href: 'https://ecologie.gouv.fr'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
   footer_mandatory_links:
-    - label: 'Licences'
-      to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
     - label: "Conditions générales d'utilisation"
-      to: 'https://www.data.gouv.fr/fr/terms/'
+      to: '/terms'
     - label: 'Politique de confidentialité'
       to: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
   router_items:
     - name: 'Accueil'
       id: 'home'
@@ -78,6 +80,18 @@ website:
       type: 'page'
       display_menu: true
       url: '/ecospheres/pages/about.md'
+    - name: 'Accessibilité'
+      id: 'accessibility'
+      linkPage: '/accessibility'
+      type: 'page'
+      display_menu: false
+      url: '/ecospheres/pages/accessibility.md'
+    - name: "Conditions générales d'utilisation"
+      id: 'terms'
+      linkPage: '/terms'
+      type: 'page'
+      display_menu: false
+      url: '/ecospheres/pages/terms.md'
   home_buttons:
   show_topic_charts: false
   show_quality_component: true
