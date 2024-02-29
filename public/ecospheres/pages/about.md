@@ -51,5 +51,5 @@ Celle-ci s’inscrit dans une démarche plus large de construction de biens comm
 ## Un retour, une question ?
 
 Vos retours sont bienvenus pour nous permettre d’améliorer la plateforme !
-Si vous avez une question qui porte sur les données vous pouvez vous adresser au **_Ministère de la Transition Ecologique_** en commentant le jeu de données ou le bouquet concernant votre demande (onglet discussion de la page de chaque jeu de donnée et bouquet ).
-Si vous avez une question spécifique sur le fonctionnement de la plateforme vous pouvez écrire à l’équipe [ecologie.data.gouv.fr](mailto:ecospheres@developpement-durable.gouv.fr)
+Si vous avez une question qui porte sur les données, vous pouvez vous adresser au propriétaire de la donnée en commentant le jeu de données ou le bouquet concernant votre demande (onglet discussion de la page de chaque jeu de donnée et bouquet).
+Si vous avez une question sur le fonctionnement de la plateforme, vous pouvez [écrire à l’équipe Ecosphères](mailto:ecospheres@developpement-durable.gouv.fr).
