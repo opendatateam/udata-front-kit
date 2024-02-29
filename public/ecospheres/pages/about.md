@@ -21,19 +21,19 @@ Les données ouvertes (open data) sont des données en accès libre, gratuites e
 ## Les données restreintes : qu’est ce que c’est ?
 Les données restreintes, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel.
 Quelles données sont mises à disposition ?
-Un travail sur les moissonnage de catalogue s’est lancé en 2022. Aujourd’hui plus de 80 000 jeux de données sont remontés sur **_ecologie.data.gouv_**.
+Un travail sur les moissonnage de catalogue a démarré en 2022. Aujourd’hui plus de 80 000 jeux de données sont remontés sur **_ecologie.data.gouv_**.
 
 On y trouve la présence de données provenant de
-- l’administration centrale
-- services déconcentrés
-- opérateurs de services publics
-- d’associations
-- groupements d’intérêts publics
+- administration centrale ;
+- services déconcentrés ; 
+- opérateurs de services publics; 
+- associations ; 
+- groupements d’intérêts publics.
 
 
 
 
-**_Ecologie.data.gouv.fr_** sera progressivement enrichi de nouveau bouquet de données répondant à des cas d’usages. Le catalogue moissonnera de nouvelles organisations et leurs données associés afin de compléter au mieux chaque bouquets de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création et la recherche de bouquets de données.
+**_Ecologie.data.gouv.fr_** sera progressivement enrichi de nouveau bouquet de données répondant à des cas d’usages. Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquets de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création et la recherche de bouquets de données.
 
 
 ## Un énième portail open data ?
