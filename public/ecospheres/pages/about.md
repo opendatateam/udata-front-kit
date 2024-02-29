@@ -33,7 +33,7 @@ On y trouve la présence de données provenant de
 
 
 
-**_Ecologie.data.gouv.fr_** sera progressivement enrichi de nouveau bouquet de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. 
+**_Ecologie.data.gouv.fr_** sera progressivement enrichi de nouveaux bouquets de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. 
 Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquets de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création et la recherche de bouquets de données.
 
 
