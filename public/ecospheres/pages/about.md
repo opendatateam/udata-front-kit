@@ -21,6 +21,7 @@ Les données ouvertes (open data) sont des données en accès libre, gratuites e
 ## Les données restreintes : qu'est ce que c'est ?
 
 Les données restreintes, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel.
+
 Quelles données sont mises à disposition ?
 Un travail sur les moissonnage de catalogue a démarré en 2022. Aujourd'hui plus de 80 000 jeux de données sont remontés sur **_ecologie.data.gouv_**.
 
