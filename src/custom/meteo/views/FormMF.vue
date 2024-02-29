@@ -3,6 +3,7 @@ import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
 import { computed, ref } from 'vue'
 
 import config from '@/config'
+import { fromMarkdown } from '@/utils'
 
 import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
@@ -70,6 +71,8 @@ const onSelectDataset = (dataset) => {
         selectedDep.value = 'No'
       } else if (selectedDataset.value['indicateur']) {
         showIndicateur.value = true
+      } else {
+        filteredResources.value = datasetResources.map((a) => a.title)
       }
       showLoader.value = false
     })
@@ -212,6 +215,29 @@ const showLoader = ref(false)
           ></span> </a
         >.
       </p>
+      <p>
+        Si vous souhaitez récupérer automatiquement les données, vous pouvez
+        appeler l'API data.gouv.fr et filtrer les résultats sur les ressources
+        et leurs noms.
+      </p>
+      <br />
+      <div>
+        <span class="code-api" v-if="selectedIndicateur">
+          {{
+            'https://www.data.gouv.fr/api/2/datasets/' +
+            datasetSlug +
+            '/resources/?q=' +
+            selectedIndicateur
+          }}
+        </span>
+        <span class="code-api" v-else>
+          {{
+            'https://www.data.gouv.fr/api/2/datasets/' +
+            datasetSlug +
+            '/resources/'
+          }}
+        </span>
+      </div>
       <br />
       <br />
       <h5>Fichiers</h5>
@@ -265,5 +291,11 @@ const showLoader = ref(false)
 <style scoped lang="scss">
 .select-classic {
   margin-bottom: 20px;
+}
+.code-api {
+  background-color: #ebebeb;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 5px;
 }
 </style>

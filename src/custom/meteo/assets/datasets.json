@@ -70,5 +70,258 @@
       "indicateur": true,
       "indicateursListe": ["IN", "RR", "TN", "TX"]
     }
+  },
+  "Données de prévision numérique du temps (PNT)": {
+    "Paquets Arome - Précision 0.01°": {
+      "dev": "65aade5a97e39e6c4cae5252",
+      "prod": "65bd1247a6238f16e864fa80",
+      "id": "AROME001",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": ["HP1", "SP1", "SP2", "SP3"]
+    },
+    "Paquets Arome - Précision 0.025°": {
+      "dev": "65aadec3dc9e969fd00e71e8",
+      "prod": "65bd12d7bfd26e26804204cb",
+      "id": "AROME0025",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "HP3",
+        "SP1",
+        "SP2",
+        "SP3",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4",
+        "IP5"
+      ]
+    },
+    "Paquets Arpege - Précision 0.1°": {
+      "dev": "65aaded8dc9e969fd00e71e9",
+      "prod": "65bd13b2eb9e79ab309f6e63",
+      "id": "ARPEGE01",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "SP1",
+        "SP2",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4"
+      ]
+    },
+    "Paquets Arpege - Précision 0.25°": {
+      "dev": "65aadeebdc9e969fd00e71ea",
+      "prod": "65bd13e557b26b467363b521",
+      "id": "ARPEGE025",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "SP1",
+        "SP2",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4"
+      ]
+    },
+    "Paquets Arome Outre-Mer - Antilles - Précision 0.025°": {
+      "dev": "65b68c862bb8441329433a31",
+      "prod": "65bd162b9dc0d31edfabc2b9",
+      "id": "AROMEOMANTILL",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "HP3",
+        "SP1",
+        "SP2",
+        "SP3",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4",
+        "IP5"
+      ]
+    },
+    "Paquets Arome Outre-Mer - Guyane - Précision 0.025°": {
+      "dev": "65b68c860053e6459a859cd0",
+      "prod": "65e0bd4b88e4fd88b989ba46",
+      "id": "AROMEOMGUYANE",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "HP3",
+        "SP1",
+        "SP2",
+        "SP3",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4",
+        "IP5"
+      ]
+    },
+    "Paquets Arome Outre-Mer - Réunion / Mayotte - Précision 0.025°": {
+      "dev": "65b68c860053e6459a859cd1",
+      "prod": "65bd1560c73941a5e0ec1891",
+      "id": "AROMEOMINDIEN",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "HP3",
+        "SP1",
+        "SP2",
+        "SP3",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4",
+        "IP5"
+      ]
+    },
+    "Paquets Arome Outre-Mer - Polynésie - Précision 0.025°": {
+      "dev": "65b68c870e237844c20fd503",
+      "prod": "65bd1509cc112e6a1458ab95",
+      "id": "AROMEOMPOLYN",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "HP3",
+        "SP1",
+        "SP2",
+        "SP3",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4",
+        "IP5"
+      ]
+    },
+    "Paquets Arome Outre-Mer - Nouvelle-Calédonie - Précision 0.025°": {
+      "dev": "65b68c870e237844c20fd504",
+      "prod": "65bd14cca6919e97e9699b09",
+      "id": "AROMEOMNCALED",
+      "departement": false,
+      "periode": false,
+      "indicateur": true,
+      "indicateursListe": [
+        "HP1",
+        "HP2",
+        "HP3",
+        "SP1",
+        "SP2",
+        "SP3",
+        "IP1",
+        "IP2",
+        "IP3",
+        "IP4",
+        "IP5"
+      ]
+    },
+    "Paquets Vague et Surcote - MFWAM - Précision 0.025°": {
+      "dev": "65b68c83b833790f93a4ab27",
+      "prod": "65bd1a505a5b412989a84ca7",
+      "id": "MFWAM0025",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - MFWAM - Précision 0.1°": {
+      "dev": "65b68c841a2bd22881b8e487",
+      "prod": "65bd1a2957e1cc7c9625e7b5",
+      "id": "MFWAM01",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - MFWAM - Précision 0.5°": {
+      "dev": "65b68c841a2bd22881b8e488",
+      "prod": "65bd19fe0d61026813636c33",
+      "id": "MFWAM05",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - WW3-MARO - Précision 0.1°": {
+      "dev": "65b68c852bb8441329433a30",
+      "prod": "65bd19226c4e3fcbf4948f99",
+      "id": "WW3MARO",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - WW3-MARP - Précision 0.1°": {
+      "dev": "65b68c840053e6459a859ccf",
+      "prod": "65bd19a20a9351d1cbe9a090",
+      "id": "WW3MARP",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - WW3-WARP - Précision 0.1°": {
+      "dev": "65b68c8580a75b6c6bae3d66",
+      "prod": "65bd197cd4222b0c96db759e",
+      "id": "WW3WARP",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - HYCOM2D-MARO - Précision 0.04°": {
+      "dev": "65b68c860e237844c20fd502",
+      "prod": "65bd17779ec6ae3f87a53348",
+      "id": "HYCOM2DMARO",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - HYCOM2D-MARP - Précision 0.04°": {
+      "dev": "65b68c8580a75b6c6bae3d67",
+      "prod": "65bd183c9ec6ae3f87a5334a",
+      "id": "HYCOM2DMARP",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - HYCOM2D-WARO - Précision 0.04°": {
+      "dev": "65b68c8545f1789c428c8907",
+      "prod": "65bd17b9775b5222832d67a4",
+      "id": "HYCOM2DWARO",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    },
+    "Paquets Vague et Surcote - HYCOM2D-WARP - Précision 0.04°": {
+      "dev": "65b68c850e237844c20fd501",
+      "prod": "65bd17fe9ec6ae3f87a53349",
+      "id": "HYCOM2DWARP",
+      "departement": false,
+      "periode": false,
+      "indicateur": false
+    }
   }
 }
