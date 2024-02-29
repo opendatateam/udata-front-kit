@@ -34,7 +34,7 @@ export default class AuthService {
    */
   async retrieveToken(code, state) {
     const storedState = localStorage.getItem('pkceState')
-    if (state != storedState) {
+    if (state !== storedState) {
       const error = `Unmatching states: ${state} vs ${storedState}`
       console.error(error)
       throw new Error(error)
@@ -107,11 +107,6 @@ export default class AuthService {
     return Array.from(array, (dec) => `0${dec.toString(16)}`.substr(-2)).join(
       ''
     )
-  }
-
-  createBasicAuthHeader() {
-    const headerStr = btoa(`${this.clientId}:${this.clientSecret}`)
-    return { Authorization: `Basic ${headerStr}` }
   }
 
   sha256(plain) {

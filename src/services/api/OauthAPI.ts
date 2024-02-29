@@ -36,9 +36,11 @@ export default class OauthAPI {
    * Logout API call
    */
   async logout(token: string, headers: object): Promise<AxiosResponse> {
+    // we're using a new axios instance because we don't want the default interceptor
+    const httpClient = axios.create()
     const bodyFormData = new FormData()
     bodyFormData.append('token', token)
-    const response = await axios({
+    const response = await httpClient({
       method: 'post',
       url: `${config.datagouvfr.base_url}/oauth/revoke`,
       data: bodyFormData,
