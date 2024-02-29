@@ -37,7 +37,7 @@ On y trouve la présence de données provenant de
 Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquets de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création et la recherche de bouquets de données.
 
 
-## Un énième portail open data ?
+## Un énième portail de données ?
 
 **_ecologie.data.gouv.fr_** n’est pas un nouveau portail open data. C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou  [transport.data.gouv.fr](transport.data.gouv.fr), par exemple. Toutes les données disponibles ici le sont dans les mêmes conditions sur **_data.gouv_**.
 
