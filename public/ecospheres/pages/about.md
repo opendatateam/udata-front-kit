@@ -25,7 +25,7 @@ Les données restreintes, contrairement aux données ouvertes, sont des informat
 Quelles données sont mises à disposition ?
 Un travail sur les moissonnage de catalogue a démarré en 2022. Aujourd'hui plus de 80 000 jeux de données sont remontés sur **_ecologie.data.gouv_**.
 
-On y trouve la présence de données provenant de
+On y trouve la présence de données provenant de : 
 - administration centrale ;
 - services déconcentrés ; 
 - opérateurs de services publics; 
