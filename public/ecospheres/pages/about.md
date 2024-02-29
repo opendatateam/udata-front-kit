@@ -33,7 +33,8 @@ On y trouve la présence de données provenant de
 
 
 
-**_Ecologie.data.gouv.fr_** sera progressivement enrichi de nouveau bouquet de données répondant à des cas d’usages. Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquets de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création et la recherche de bouquets de données.
+**_Ecologie.data.gouv.fr_** sera progressivement enrichi de nouveau bouquet de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. 
+Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquets de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création et la recherche de bouquets de données.
 
 
 ## Un énième portail open data ?
@@ -43,7 +44,7 @@ On y trouve la présence de données provenant de
 
 ## Qui est derrière cette plateforme ?
 
-Cette plateforme est le fruit d’une collaboration entre l’équipe **_Ecosphères_** du **_Ministère de la Transition Ecologique_** et l’équipe data.gouv de la Direction Interministérielle du Numérique.
+Cette plateforme est le fruit d’une collaboration entre l’équipe **_Ecosphères_** du **_Commissariat Général au Developpement Durable_** et l’équipe **_data.gouv.fr_** de la **_Direction Interministérielle du Numérique._**
 Celle-ci s’inscrit dans une démarche plus large de construction de biens communs numériques facilitant la création de plateformes thématiques exposant de la donnée publique.
 
 
