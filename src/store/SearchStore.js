@@ -34,13 +34,12 @@ export const useSearchStore = defineStore('search', {
     }
   },
   actions: {
-    async search(query, topic, page = 1) {
-      const args = { page_size: pageSize, page }
+    async search(query, topic, page = 1, args = {}) {
       const results = await searchAPI.search(
         query,
         topic || config.universe.topic_id,
         page,
-        args
+        { ...args, page_size: pageSize }
       )
       this.data = results
     }

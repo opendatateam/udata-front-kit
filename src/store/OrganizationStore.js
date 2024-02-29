@@ -15,7 +15,9 @@ export const useOrganizationStore = defineStore('organization', {
     //     "orgs": []
     //   }, ...
     // ]
-    data: []
+    data: [],
+    // holds a non paginated lightweight-formatted list of all orgs
+    flatData: []
   }),
   actions: {
     /**
@@ -62,7 +64,19 @@ export const useOrganizationStore = defineStore('organization', {
       return this.getForPage(page)
     },
     /**
-     * Load multiple organisations to store
+     * Load multiple organizations in a lightweight format without pagination
+     * Used for e.g. for filtering
+     */
+    async loadFromConfigFlat() {
+      if (this.flatData.length > 0) return this.flatData
+      const promises = config.organizations.map(async (orgId) => {
+        return await orgApi.get(orgId, undefined, { 'x-fields': 'id,name' })
+      })
+      this.flatData = await Promise.all(promises)
+      return this.flatData
+    },
+    /**
+     * Load multiple organizations to store
      *
      * @param {Array<string>} org_ids
      * @param {number} page

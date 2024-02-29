@@ -102,6 +102,8 @@ website:
     topic:
       display: true
       create: true
+  datasets:
+    organization_filter: true
 
 themes:
   - name: Se loger
@@ -235,10 +237,6 @@ organizations:
   - 5a3b9453c751df6eff05e7fa
   # Direction régionale de l'Environnement, de l'Aménagement et du Logement de Normandie
   - 57275bd288ee387fd5a19f12
-  # Direction régionale de l'environnement, de l'aménagement et du logement de Normandie
-  - 63eba3458d114d860873c025
-  # Direction régionale et interdépartementale de l’Environnement, de l’Aménagement et des Transports
-  - 63d925a8734ac3600a5e31af
   # La Direction Régionale de l’Environnement, de l’Aménagement et du Logement Provence-Alpes-Côte d’Azur
   - 622f1234df654f029b10e77c
 
@@ -325,8 +323,6 @@ organizations:
   - 5883d4c488ee3809bb9b81a5
   # DDT de la Moselle
   - 5883d3d088ee38061b9b81a9
-  # DDT des Vosges
-  - 63da19abc971ec2c34618720
 
   ## QUERY=direction+departementale+territoire
   # DIRECTION DEPARTEMENTALE DES TERRITOIRES DE SAONE-ET-LOIRE (71)
