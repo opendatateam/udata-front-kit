@@ -25,12 +25,34 @@ website:
   # leave empty if not pertinent
 
   homepage:
-    title: 'Acteurs publics, simplifiez vos démarches !'
+    title: 'Acteurs publics, utilisez la donnée pour simplifier les démarches 🧘 !'
     subtitle: 'Simpligiez les démarches des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâces aux API et aux données ! Vous gagnerez aussi du temps !' 
     below_hero: >-
-      ## Les cas d'usages
+      ## Améliorer les démarches administratives :
 
-      Simplifiez vos démarches, suivez nos cas d'usages et leur recommandations :
+      ### 👱 des particuliers
+      
+      Simplifiez les démarches des citoyens et facilitez l'instruction de leurs dossiers :
+      <br/>
+      [4 tuiles avec les 4 principales démarches]
+      <br/>
+      [Boutons Toutes les démarches des particuliers]
+
+      ### 💼 des entreprises
+
+      Simplifiez les démarches des entreprises et facilitez l'instruction de leurs dossiers :
+      <br/>
+      [4 tuiles avec les 4 principales démarches]
+      <br/>
+      [Boutons Toutes les démarches des entreprises]
+
+      ### 🎭 des associations
+
+      Simplifiez les démarches des associations et facilitez l'instruction de leurs dossiers :
+      <br/>
+      [4 tuiles avec les 4 principales démarches]
+      <br/>
+      [Boutons Toutes les démarches des associations]
     below_topics: >-
       ## Comment et pourquoi simplifier vos démarches ?
       
