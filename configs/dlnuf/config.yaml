@@ -98,16 +98,16 @@ website:
       linkPage: '/topics'
       type: 'component'
       display_menu: true
-    - name: 'Toutes les API & données utiles'
-      id: 'datasets'
-      linkPage: '/datasets'
-      type: 'component'
-      display_menu: true
     - name: 'Guides de la simplification'
       id: 'guides'
       linkPage: '/guides'
       type: 'page'
       url: '/dlnuf/pages/guides.md'
+      display_menu: true
+    - name: 'Toutes les API & données utiles'
+      id: 'datasets'
+      linkPage: '/datasets'
+      type: 'component'
       display_menu: true
     - name: 'Accessibilité'
       id: 'accessibility'
