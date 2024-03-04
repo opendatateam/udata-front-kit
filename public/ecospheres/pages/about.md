@@ -1,15 +1,15 @@
-# À propos de ecologie.data.gouv.fr
+# À propos de _ecologie_.**data.gouv**._fr_
 
 
-## Qu'est-ce que ecologie.data.gouv.fr ?
+## Qu'est-ce que _ecologie_.**data.gouv**._fr_ ?
 
-**_ecologie.data.gouv.fr_** est un catalogue de données qui centralise les données de la transition écologique. 
+_ecologie_.**data.gouv**._fr_ est un catalogue de données qui centralise les données de la transition écologique. 
 Il offre une découverte de bouquets de données propre à des cas d'usages.
 
 
 ## À qui s'adresse cette plateforme ?
 
-**_ecologie.data.gouv.fr_** s'adresse aux agents publics des les administrations centrales, services déconcentrés et aussi des collectivités territoriales oeuvrant à déployer une politiques publiques portée par le Ministère de la Transition écologique et de la Cohésion des territoires. 
+_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des les administrations centrales, services déconcentrés et aussi des collectivités territoriales oeuvrant à déployer une politiques publiques portée par le Ministère de la Transition écologique et de la Cohésion des territoires. 
 Les données brutes aussi accessibles permettent également à la société civile, au secteur privé ou encore à l'administration de s'en emparer dans un but de réutilisation.
 
 
@@ -35,13 +35,13 @@ On y trouve la présence de données provenant de :
 
 
 
-**_Ecologie.data.gouv.fr_** sera progressivement enrichi de nouveaux bouquets de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. 
+_ecologie_.**data.gouv**._fr_ sera progressivement enrichi de nouveaux bouquets de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. 
 Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquets de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création et la recherche de bouquets de données.
 
 
 ## Un énième portail de données ?
 
-**_ecologie.data.gouv.fr_** n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou [transport.data.gouv.fr](transport.data.gouv.fr), par exemple. Toutes les données disponibles ici le sont dans les mêmes conditions sur [data.gouv.fr](data.gouv.fr).
+_ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou [transport.data.gouv.fr](transport.data.gouv.fr), par exemple. Toutes les données disponibles ici le sont dans les mêmes conditions sur [data.gouv.fr](data.gouv.fr).
 
 
 ## Qui est derrière cette plateforme ?
@@ -54,4 +54,4 @@ Celle-ci s'inscrit dans une démarche plus large de construction de biens commun
 
 Vos retours sont bienvenus pour nous permettre d'améliorer la plateforme !
 Si vous avez une question qui porte sur les données, vous pouvez vous adresser au propriétaire de la donnée en commentant le jeu de données ou le bouquet concernant votre demande (onglet discussion de la page de chaque jeu de donnée et bouquet).
-Si vous avez une question sur le fonctionnement de la plateforme, vous pouvez [écrire à l'équipe Ecosphères](mailto:ecospheres@developpement-durable.gouv.fr).
+Si vous avez une question sur le fonctionnement de la plateforme, vous pouvez [écrire à l'équipe **_Ecosphères_**](mailto:ecospheres@developpement-durable.gouv.fr).
