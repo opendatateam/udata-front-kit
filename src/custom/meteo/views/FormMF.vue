@@ -248,7 +248,7 @@ const showLoader = ref(false)
       <h5>Fichiers</h5>
       <div
         class="datagouv-components"
-        v-for="item in datasetResources.slice(0, 2)"
+        v-for="item in datasetResources"
         v-bind:key="item['id']"
       >
         <ResourceAccordion
