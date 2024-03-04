@@ -15,6 +15,7 @@ const optionsDataPack = ref(Object.keys(datasetsIds))
 const datasetTitle = ref(null)
 const datasetSlug = ref(null)
 let indicateurWording = ref('Indicateur')
+let indicateurComplement = ref(' ')
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
 
@@ -195,10 +196,10 @@ const showLoader = ref(false)
         <option hidden>Choisir une option</option>
         <option
           v-for="item in selectedDataset['indicateursListe']"
-          v-bind:key="item"
-          :value="item"
+          v-bind:key="item['code']"
+          :value="item['code']"
         >
-          {{ indicateurWording }} {{ item }}
+          {{ indicateurWording }} {{ item['name'] }}
         </option>
       </select>
     </div>
@@ -253,7 +254,7 @@ const showLoader = ref(false)
       >
         <ResourceAccordion
           v-if="
-            item['title'] &&
+            item['id'] != 'b1d97b5b-cb0e-4991-90be-4c8a16a6c2a7' &&
             filteredResources.includes(item['title']) &&
             item['type'] == 'main'
           "

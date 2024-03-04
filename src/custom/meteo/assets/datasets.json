@@ -51,7 +51,20 @@
       "departement": false,
       "periode": false,
       "indicateur": true,
-      "indicateursListe": ["RR", "TN", "TX"]
+      "indicateursListe": [
+        {
+          "name": "RR",
+          "code": "RR"
+        },
+        {
+          "name": "TN",
+          "code": "TN"
+        },
+        {
+          "name": "TX",
+          "code": "TX"
+        }
+      ]
     },
     "Données SIM": {
       "prod": "6569b27598256cc583c917a7",
@@ -68,7 +81,24 @@
       "departement": false,
       "periode": false,
       "indicateur": true,
-      "indicateursListe": ["IN", "RR", "TN", "TX"]
+      "indicateursListe": [
+        {
+          "name": "IN",
+          "code": "IN"
+        },
+        {
+          "name": "RR",
+          "code": "RR"
+        },
+        {
+          "name": "TN",
+          "code": "TN"
+        },
+        {
+          "name": "TX",
+          "code": "TX"
+        }
+      ]
     }
   },
   "Données de prévision numérique du temps (PNT)": {
@@ -80,10 +110,22 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Surface SP1",
-        "Surface SP2",
-        "Surface SP3"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Surface SP3",
+          "code": "SP3"
+        }
       ]
     },
     "Paquets Arome - Résolution 0.025°": {
@@ -94,17 +136,50 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Hauteur HP3",
-        "Surface SP1",
-        "Surface SP2",
-        "Surface SP3",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4",
-        "Isobare IP5"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Hauteur HP3",
+          "code": "HP3"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Surface SP3",
+          "code": "SP3"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        },
+        {
+          "name": "Isobare IP5",
+          "code": "IP5"
+        }
       ]
     },
     "Paquets Arpege - Résolution 0.1°": {
@@ -115,14 +190,38 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Surface SP1",
-        "Surface SP2",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        }
       ]
     },
     "Paquets Arpege - Résolution 0.25°": {
@@ -133,14 +232,38 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Surface SP1",
-        "Surface SP2",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        }
       ]
     },
     "Paquets Arome Outre-Mer - Antilles - Résolution 0.025°": {
@@ -151,17 +274,50 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Hauteur HP3",
-        "Surface SP1",
-        "Surface SP2",
-        "Surface SP3",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4",
-        "Isobare IP5"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Hauteur HP3",
+          "code": "HP3"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Surface SP3",
+          "code": "SP3"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        },
+        {
+          "name": "Isobare IP5",
+          "code": "IP5"
+        }
       ]
     },
     "Paquets Arome Outre-Mer - Guyane - Résolution 0.025°": {
@@ -172,17 +328,50 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Hauteur HP3",
-        "Surface SP1",
-        "Surface SP2",
-        "Surface SP3",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4",
-        "Isobare IP5"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Hauteur HP3",
+          "code": "HP3"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Surface SP3",
+          "code": "SP3"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        },
+        {
+          "name": "Isobare IP5",
+          "code": "IP5"
+        }
       ]
     },
     "Paquets Arome Outre-Mer - Réunion / Mayotte - Résolution 0.025°": {
@@ -193,17 +382,50 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Hauteur HP3",
-        "Surface SP1",
-        "Surface SP2",
-        "Surface SP3",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4",
-        "Isobare IP5"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Hauteur HP3",
+          "code": "HP3"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Surface SP3",
+          "code": "SP3"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        },
+        {
+          "name": "Isobare IP5",
+          "code": "IP5"
+        }
       ]
     },
     "Paquets Arome Outre-Mer - Polynésie - Résolution 0.025°": {
@@ -214,17 +436,50 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Hauteur HP3",
-        "Surface SP1",
-        "Surface SP2",
-        "Surface SP3",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4",
-        "Isobare IP5"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Hauteur HP3",
+          "code": "HP3"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Surface SP3",
+          "code": "SP3"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        },
+        {
+          "name": "Isobare IP5",
+          "code": "IP5"
+        }
       ]
     },
     "Paquets Arome Outre-Mer - Nouvelle-Calédonie - Résolution 0.025°": {
@@ -235,17 +490,50 @@
       "periode": false,
       "indicateur": true,
       "indicateursListe": [
-        "Hauteur HP1",
-        "Hauteur HP2",
-        "Hauteur HP3",
-        "Surface SP1",
-        "Surface SP2",
-        "Surface SP3",
-        "Isobare IP1",
-        "Isobare IP2",
-        "Isobare IP3",
-        "Isobare IP4",
-        "Isobare IP5"
+        {
+          "name": "Hauteur HP1",
+          "code": "HP1"
+        },
+        {
+          "name": "Hauteur HP2",
+          "code": "HP2"
+        },
+        {
+          "name": "Hauteur HP3",
+          "code": "HP3"
+        },
+        {
+          "name": "Surface SP1",
+          "code": "SP1"
+        },
+        {
+          "name": "Surface SP2",
+          "code": "SP2"
+        },
+        {
+          "name": "Surface SP3",
+          "code": "SP3"
+        },
+        {
+          "name": "Isobare IP1",
+          "code": "IP1"
+        },
+        {
+          "name": "Isobare IP2",
+          "code": "IP2"
+        },
+        {
+          "name": "Isobare IP3",
+          "code": "IP3"
+        },
+        {
+          "name": "Isobare IP4",
+          "code": "IP4"
+        },
+        {
+          "name": "Isobare IP5",
+          "code": "IP5"
+        }
       ]
     },
     "Paquets Vague et Surcote - MFWAM - Résolution 0.025°": {
