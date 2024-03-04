@@ -14,6 +14,7 @@ let selectedDataPack = ref(null)
 const optionsDataPack = ref(Object.keys(datasetsIds))
 const datasetTitle = ref(null)
 const datasetSlug = ref(null)
+let indicateurWording = ref('Indicateur')
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
 
@@ -29,6 +30,11 @@ const onSelectDataPack = (pack) => {
 
   selectedDataPack.value = pack
   optionsDataset = Object.keys(datasetsIds[pack])
+  if (pack == 'Données de prévision numérique du temps (PNT)') {
+    indicateurWording.value = 'Regroupement'
+  } else {
+    indicateurWording.value = 'Indicateur'
+  }
 }
 
 let selectedDataset = ref(null)
@@ -184,7 +190,7 @@ const showLoader = ref(false)
     </div>
 
     <div class="select-classic" v-if="selectedDataset && showIndicateur">
-      <label>Quel indicateur ?</label>
+      <label>Quel {{ indicateurWording }} ?</label>
       <select class="fr-select" @change="onSelectIndicateur($event)">
         <option hidden>Choisir une option</option>
         <option
@@ -192,7 +198,7 @@ const showLoader = ref(false)
           v-bind:key="item"
           :value="item"
         >
-          Indicateur {{ item }}
+          {{ indicateurWording }} {{ item }}
         </option>
       </select>
     </div>
@@ -220,35 +226,36 @@ const showLoader = ref(false)
         appeler l'API data.gouv.fr et filtrer les résultats sur les ressources
         et leurs noms.
       </p>
-      <br />
       <div>
-        <span class="code-api" v-if="selectedIndicateur">
+        <div class="code-api" v-if="selectedIndicateur">
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
             datasetSlug +
             '/resources/?q=' +
             selectedIndicateur
           }}
-        </span>
-        <span class="code-api" v-else>
+        </div>
+        <div class="code-api" v-else>
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
             datasetSlug +
             '/resources/'
           }}
-        </span>
+        </div>
       </div>
       <br />
       <br />
       <h5>Fichiers</h5>
       <div
         class="datagouv-components"
-        v-for="item in datasetResources"
+        v-for="item in datasetResources.slice(0, 2)"
         v-bind:key="item['id']"
       >
         <ResourceAccordion
           v-if="
-            filteredResources.includes(item['title']) && item['type'] == 'main'
+            item['title'] &&
+            filteredResources.includes(item['title']) &&
+            item['type'] == 'main'
           "
           :datasetId="selectedDataset[config.website.env]"
           :resource="item"
@@ -293,6 +300,7 @@ const showLoader = ref(false)
   margin-bottom: 20px;
 }
 .code-api {
+  word-wrap: break-word;
   background-color: #ebebeb;
   padding: 20px;
   margin-top: 20px;
