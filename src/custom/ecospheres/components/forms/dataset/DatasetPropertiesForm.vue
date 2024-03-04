@@ -118,13 +118,16 @@ export default {
       default: []
     }
   },
-  emits: ['addDataset'],
+  emits: ['addDataset', 'update:isDirty'],
   data(): DatasetProperties {
     return this.initData()
   },
   computed: {
     availabilityEnum() {
       return Availability
+    },
+    isDirty() {
+      return !!this.title.trim() || !!this.purpose.trim()
     },
     hasMandatoryFields() {
       return !!this.title.trim() && !!this.purpose.trim()
@@ -153,6 +156,9 @@ export default {
     }
   },
   watch: {
+    isDirty() {
+      this.$emit('update:isDirty', this.isDirty)
+    },
     availability() {
       this.uri = null
       this.id = null
