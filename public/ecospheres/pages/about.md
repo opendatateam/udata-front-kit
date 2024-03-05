@@ -25,12 +25,12 @@ Les données restreintes, contrairement aux données ouvertes, sont des informat
 Quelles données sont mises à disposition ?
 Un travail sur les moissonnages de catalogues a démarré en 2022. Il a vocation à couvrir l'ensemble des données du pôle ministériel de la transition écologique.
 
-On y trouve la présence de données provenant de : 
-- administration centrale ;
-- services déconcentrés ; 
-- opérateurs de services publics; 
-- associations ; 
-- groupements d'intérêts publics.
+On y trouve la présence de données provenant : 
+- de l'administration centrale ;
+- de services déconcentrés ;
+- d'opérateurs de l'Etat ;
+- d'associations ;
+- de groupements d'intérêt public.
 
 
 
