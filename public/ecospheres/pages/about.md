@@ -41,7 +41,7 @@ Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux 
 
 ## Un énième portail de données ?
 
-_ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou [transport.data.gouv.fr](transport.data.gouv.fr), par exemple. Toutes les données disponibles ici le sont dans les mêmes conditions sur [data.gouv.fr](data.gouv.fr).
+_ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou [transport.data.gouv.fr](transport.data.gouv.fr). Toutes les données disponibles ici le sont dans les mêmes conditions sur [data.gouv.fr](data.gouv.fr).
 
 
 ## Qui est derrière cette plateforme ?
