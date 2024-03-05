@@ -23,7 +23,7 @@ Les données ouvertes (open data) sont des données en accès libre, gratuites e
 Les données restreintes, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel.
 
 Quelles données sont mises à disposition ?
-Un travail sur les moissonnages de catalogues a démarré en 2022. Il a vocation à couvrir l'ensemble des données du pôle ministèriel de la transition écologique.
+Un travail sur les moissonnages de catalogues a démarré en 2022. Il a vocation à couvrir l'ensemble des données du pôle ministériel de la transition écologique.
 
 On y trouve la présence de données provenant de : 
 - administration centrale ;
