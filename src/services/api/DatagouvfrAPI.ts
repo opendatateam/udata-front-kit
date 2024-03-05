@@ -40,12 +40,7 @@ export default class DatagouvfrAPI {
    * Make a `method` request to URL and optionnaly attach a toaster to the error
    */
   async request(config: RequestConfig): Promise<AxiosResponseData> {
-    const response = await axios({
-      url: config.url,
-      method: config.method,
-      params: config.params,
-      data: config.data
-    }).catch((error: AxiosError) => {
+    const response = await axios(config).catch((error: AxiosError) => {
       if (this.toasted) {
         toast(error.message, { type: 'error', autoClose: false })
       }
@@ -57,9 +52,13 @@ export default class DatagouvfrAPI {
   /**
    * Get an entity's detail from its id
    */
-  async get(entityId: string, params?: URLParams): Promise<AxiosResponseData> {
+  async get(
+    entityId: string,
+    params?: URLParams,
+    headers?: object
+  ): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
-    return await this.request({ url, method: 'get', params })
+    return await this.request({ url, method: 'get', params, headers })
   }
 
   /**

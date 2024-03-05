@@ -16,6 +16,7 @@ export interface RequestConfig {
   method: HttpMethod
   params?: object
   data?: object
+  headers?: object
 }
 
 export type URLParams = Record<string, string | number>
