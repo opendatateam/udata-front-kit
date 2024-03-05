@@ -2,7 +2,7 @@
 import type { ComputedRef } from 'vue'
 import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter, type RouteLocationRaw } from 'vue-router'
+import { useRouter, useRoute, type RouteLocationRaw } from 'vue-router'
 
 import Tile from '@/components/Tile.vue'
 import type { Topic } from '@/model'
@@ -10,6 +10,7 @@ import { NoOptionSelected } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
 
 const router = useRouter()
+const route = useRoute()
 
 const props = defineProps({
   themeName: {
@@ -74,7 +75,7 @@ const isRelevant = (topic: Topic, property: string, value: string): Boolean => {
 }
 
 const goToCreate = () => {
-  router.push({ name: 'bouquet_add' })
+  router.push({ name: 'bouquet_add', query: route.query })
 }
 
 const computeLink = (bouquet: Topic): RouteLocationRaw => {
@@ -117,7 +118,7 @@ onMounted(() => {
     <h3 class="fr-alert__title">Il n'y a pas encore de bouquet sur ce thème</h3>
     <p>
       N'hésitez pas à contribuer en
-      <a href="/admin/bouquets/add" target="_blank">en créant un</a>
+      <a href="#" @click.stop.prevent="goToCreate()">en créant un</a>
     </p>
   </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">

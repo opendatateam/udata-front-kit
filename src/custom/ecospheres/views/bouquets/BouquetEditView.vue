@@ -135,7 +135,12 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
  * Depending on topic state, infer the step we should be on
  */
 const inferStepFromTopic = (topic: Topic): number => {
-  if (topic.extras['ecospheres:datasets_properties']?.length > 0) {
+  // handle specific case where subtheme and theme are prefilled from creation
+  if (route.query?.fromAdd) {
+    // cleanup query string (clean bookmark link)
+    router.replace({ query: {} })
+    return 2
+  } else if (topic.extras['ecospheres:datasets_properties']?.length > 0) {
     return 4
   } else if (topic.extras['ecospheres:informations'] !== undefined) {
     return 3
