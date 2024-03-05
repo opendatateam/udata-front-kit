@@ -9,7 +9,7 @@ Il offre une découverte de bouquets de données propre à des cas d'usages.
 
 ## À qui s'adresse cette plateforme ?
 
-_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des les administrations centrales, services déconcentrés et aussi des collectivités territoriales oeuvrant à déployer une politiques publiques portée par le Ministère de la Transition écologique et de la Cohésion des territoires. 
+_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des administrations centrales, services déconcentrés et des collectivités territoriales oeuvrant à déployer une politiques publiques portée par le Ministère de la Transition écologique et de la Cohésion des territoires. 
 L'accès aux données brutes permet également à la société civile, au secteur privé ou encore à l'administration de s'en emparer dans un but de réutilisation.
 
 
