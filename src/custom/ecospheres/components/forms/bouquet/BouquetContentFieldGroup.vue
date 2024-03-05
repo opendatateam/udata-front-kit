@@ -6,6 +6,7 @@
     @remove-dataset="removeDataset"
   />
   <DatasetPropertiesForm
+    v-model:is-dirty="hasCurrentDatasetInput"
     :already-selected-datasets="datasets"
     @add-dataset="addDataset"
   />
@@ -33,12 +34,13 @@ export default {
   emits: ['updateValidation', 'update:datasets'],
   data() {
     return {
-      datasets: this.currentDatasets
+      datasets: this.currentDatasets,
+      hasCurrentDatasetInput: false
     }
   },
   computed: {
     isValid(): boolean {
-      return this.datasets.length > 0
+      return this.datasets.length > 0 && !this.hasCurrentDatasetInput
     }
   },
   watch: {
