@@ -34,6 +34,7 @@ website:
     display: true
     label: 'Donnez votre avis'
     link: https://tally.so/r/wLWrzp
+  header_search: true
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
