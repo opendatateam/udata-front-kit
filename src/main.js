@@ -1,14 +1,10 @@
-// Vue.js and related libraries
-
 import { setupI18n } from '@etalab/data.gouv.fr-components'
-// Project-specific styles and assets
 import '@etalab/data.gouv.fr-components/dist/style.css'
 import '@gouvfr/dsfr/dist/dsfr.min.css'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import '@gouvminint/vue-dsfr/styles'
 import '@vueform/multiselect/themes/default.css'
-// Third-party libraries
 import axios from 'axios'
 import { createPinia } from 'pinia'
 import { createApp, markRaw } from 'vue'
@@ -23,7 +19,6 @@ import config from '@/config'
 import App from './App.vue'
 import './assets/main.css'
 import * as icons from './icons.js'
-// Local imports
 import router from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
