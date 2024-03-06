@@ -33,7 +33,7 @@
               v-model="availability"
               :name="availabilityEnum.LOCAL_AVAILABLE"
               :value="availabilityEnum.LOCAL_AVAILABLE"
-              label="Écosphères"
+              label="ecologie.data.gouv.fr"
             />
             <DsfrRadioButton
               v-model="availability"
@@ -63,7 +63,7 @@
             ref="selector"
             v-model="id"
             no-options-text="Précisez ou élargissez votre recherche"
-            placeholder="Rechercher une donnée dans Ecosphères"
+            placeholder="Rechercher une donnée dans ecologie.data.gouv.fr"
             name="select-datasets"
             :clear-on-select="true"
             :filter-results="false"
