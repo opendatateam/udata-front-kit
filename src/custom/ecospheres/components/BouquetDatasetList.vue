@@ -16,6 +16,14 @@
           <div v-html="markdown(dataset.purpose)"></div>
           <div class="button__wrapper">
             <DsfrButton
+              v-if="isEdit"
+              icon="ri-pencil-line"
+              label="Éditer"
+              class="fr-mr-2w"
+              @click.prevent="editDataset(dataset, index)"
+            />
+            <DsfrButton
+              v-if="isEdit"
               icon="ri-delete-bin-line"
               label="Retirer de la section"
               class="fr-mr-2w"
@@ -39,6 +47,20 @@
         </DsfrAccordion>
       </li>
     </DsfrAccordionsGroup>
+    <DsfrModal
+      v-if="isEdit && isModalOpen && editedDataset.data"
+      size="lg"
+      title="Éditer le jeu de données"
+      :opened="isModalOpen"
+      :actions="modalActions"
+      @close="closeModal"
+    >
+      <DatasetPropertiesFields
+        v-model:dataset-properties="editedDataset.data"
+        :already-selected-datasets="datasets"
+        @update-validation="(isValid: boolean) => editedDataset.isValid = isValid"
+      />
+    </DsfrModal>
   </div>
 </template>
 
@@ -48,6 +70,7 @@ import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
 import { fromMarkdown } from '@/utils'
 
 import BouquetDatasetAvailability from './BouquetDatasetAvailability.vue'
+import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
 
 export const getDatasetListTitle = function (
   datasets: DatasetProperties[]
@@ -69,20 +92,50 @@ export const getDatasetListTitle = function (
 
 export default {
   name: 'BouquetDatasetList',
-  components: { BouquetDatasetAvailability },
+  components: { BouquetDatasetAvailability, DatasetPropertiesFields },
   props: {
     datasets: {
       type: Array<DatasetProperties>,
       default: []
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['removeDataset'],
+  emits: ['removeDataset', 'editDataset'],
   data() {
     return {
-      isExpanded: {} as { [key: string]: boolean }
+      isExpanded: {} as { [key: string]: boolean },
+      isModalOpen: false,
+      editedDataset: {
+        index: undefined as number | undefined,
+        data: undefined as DatasetProperties | undefined,
+        isValid: false
+      }
     }
   },
   computed: {
+    modalActions() {
+      return [
+        {
+          label: 'Valider',
+          disabled: !this.editedDataset.isValid,
+          onClick: ($event: PointerEvent) => {
+            $event.preventDefault()
+            this.$emit('editDataset', { ...this.editedDataset })
+            this.closeModal()
+          }
+        },
+        {
+          label: 'Annuler',
+          secondary: true,
+          onClick: () => {
+            this.closeModal()
+          }
+        }
+      ]
+    },
     email() {
       return config.website.contact_email
     },
@@ -99,6 +152,14 @@ export default {
     },
     markdown(value: string) {
       return fromMarkdown(value)
+    },
+    editDataset(dataset: DatasetProperties, index: number) {
+      // clone the object to enable cancellation
+      this.editedDataset = { index, data: { ...dataset }, isValid: false }
+      this.isModalOpen = true
+    },
+    closeModal() {
+      this.isModalOpen = false
     }
   }
 }

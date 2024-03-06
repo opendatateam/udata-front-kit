@@ -3,9 +3,11 @@
   <BouquetDatasetList
     class="fr-mt-4w fr-mb-4w"
     :datasets="datasets"
+    :is-edit="true"
     @remove-dataset="removeDataset"
+    @edit-dataset="editDataset"
   />
-  <DatasetPropertiesForm
+  <DatasetPropertiesAddForm
     v-model:is-dirty="hasCurrentDatasetInput"
     :already-selected-datasets="datasets"
     @add-dataset="addDataset"
@@ -14,7 +16,7 @@
 
 <script lang="ts">
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
-import DatasetPropertiesForm from '@/custom/ecospheres/components/forms/dataset/DatasetPropertiesForm.vue'
+import DatasetPropertiesAddForm from '@/custom/ecospheres/components/forms/dataset/DatasetPropertiesAddForm.vue'
 import type { DatasetProperties } from '@/model'
 
 import { getDatasetListTitle } from '../../BouquetDatasetList.vue'
@@ -22,7 +24,7 @@ import { getDatasetListTitle } from '../../BouquetDatasetList.vue'
 export default {
   name: 'BouquetContentFieldGroup',
   components: {
-    DatasetPropertiesForm,
+    DatasetPropertiesAddForm,
     BouquetDatasetList
   },
   props: {
@@ -58,6 +60,10 @@ export default {
     },
     removeDataset(index: number) {
       this.datasets.splice(index, 1)
+      this.$emit('update:datasets', this.datasets)
+    },
+    editDataset({ index, data }: { index: number; data: DatasetProperties }) {
+      this.datasets[index] = data
       this.$emit('update:datasets', this.datasets)
     },
     getDatasetListTitle() {
