@@ -1,17 +1,18 @@
+// Vue.js and related libraries
+
 import { setupI18n } from '@etalab/data.gouv.fr-components'
+// Project-specific styles and assets
 import '@etalab/data.gouv.fr-components/dist/style.css'
 import '@gouvfr/dsfr/dist/dsfr.min.css'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
-// Import des styles du DSFR
 import '@gouvminint/vue-dsfr/styles'
 import '@vueform/multiselect/themes/default.css'
-// api and user related stuf
+// Third-party libraries
 import axios from 'axios'
 import { createPinia } from 'pinia'
 import { createApp, markRaw } from 'vue'
 import TextClamp from 'vue3-text-clamp'
-// Import des styles globaux propre à VueDSFR
 import 'vue3-toastify/dist/index.css'
 import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
@@ -19,11 +20,12 @@ import VueMatomo from 'vue-matomo'
 
 import config from '@/config'
 
-// Import (par défaut) de la bibliothèque
 import App from './App.vue'
 import './assets/main.css'
 import * as icons from './icons.js'
+// Local imports
 import router from './router'
+import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
 
 const app = createApp(App)
@@ -70,7 +72,7 @@ axios.interceptors.request.use(
 router.beforeEach((to) => {
   const store = useUserStore()
   if (to.meta.requiresAuth && !store.$state.isLoggedIn) {
-    localStorage.setItem('lastPath', to.path)
+    LocalStorageService.setItem('lastRoute', to)
     router.push({ name: 'login' })
   }
 })
