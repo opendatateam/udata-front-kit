@@ -15,7 +15,8 @@ onMounted(() => {
     auth.logout(token.value).then(() => {
       store.logout()
       console.log('Logged out')
-      router.push({ name: 'home' })
+      // reload to clean up stores
+      location.reload()
     })
   } else {
     router.push({ name: 'home' })
