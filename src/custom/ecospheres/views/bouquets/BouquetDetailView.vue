@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {
+  ReadMore,
+  OrganizationNameWithCertificate
+} from '@etalab/data.gouv.fr-components'
 import { onMounted, ref, computed } from 'vue'
 import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -10,7 +14,8 @@ import { isAvailable, type Theme, type Topic } from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { descriptionFromMarkdown, fromMarkdown } from '@/utils'
+import { descriptionFromMarkdown, fromMarkdown, formatDate } from '@/utils'
+import { getOwnerAvatar } from '@/utils/avatar'
 
 import BouquetDatasetAvailability from '../../components/BouquetDatasetAvailability.vue'
 
@@ -108,53 +113,97 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
-    <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-2w" />
-    <DsfrButton
-      v-if="showGoBack"
-      class="backToPage fr-pl-0 fr-mb-2w"
-      :tertiary="true"
-      :no-outline="true"
-      @click.prevent="goBack"
+  <div class="fr-container">
+    <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
+  </div>
+  <DsfrButton
+    v-if="showGoBack"
+    class="backToPage fr-mb-2w"
+    :tertiary="true"
+    :no-outline="true"
+    @click.prevent="goBack"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12H5.828Z"
-        />
-      </svg>
-      Revenir aux résultats
-    </DsfrButton>
-    <div class="bouquet__header fr-mb-4w">
-      <div class="bouquet__header__left">
-        <h3 class="fr-mb-3w fr-mb-md-0 fr-mr-md-3w">{{ bouquet?.name }}</h3>
-        <DsfrTag
-          v-if="bouquet?.extras"
-          class="fr-mb-3w fr-mb-md-0 bold uppercase"
-          :label="subtheme"
-          :style="{
-            backgroundColor: getSelectedThemeColor(theme),
-            color: getTextColor(theme)
-          }"
+      <path
+        fill="currentColor"
+        d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12H5.828Z"
+      />
+    </svg>
+    Revenir aux résultats
+  </DsfrButton>
+  <div v-if="bouquet" class="fr-container datagouv-components fr-mb-4w">
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12 fr-col-md-8">
+        <div class="bouquet__header fr-mb-2v">
+          <h1 class="fr-mb-2v fr-mr-2v">{{ bouquet.name }}</h1>
+          <DsfrTag
+            v-if="bouquet?.extras"
+            class="fr-mb-2w fr-mb-md-0 bold uppercase"
+            :label="subtheme"
+            :style="{
+              backgroundColor: getSelectedThemeColor(theme),
+              color: getTextColor(theme)
+            }"
+          />
+        </div>
+        <ReadMore max-height="600">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="description"></div>
+        </ReadMore>
+      </div>
+      <div class="fr-col-12 fr-col-md-4">
+        <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
+        <div
+          v-if="bouquet.organization"
+          class="fr-grid-row fr-grid-row--middle"
+        >
+          <div class="fr-col-auto">
+            <div class="border fr-p-1-5v fr-mr-1-5v">
+              <img :src="bouquet.organization.logo" height="32" />
+            </div>
+          </div>
+          <p class="fr-col fr-m-0">
+            <a class="fr-link" :href="bouquet.organization.page">
+              <OrganizationNameWithCertificate
+                :organization="bouquet.organization"
+              />
+            </a>
+          </p>
+        </div>
+        <div v-else class="fr-grid-row fr-grid-row--middle">
+          <div class="fr-col-auto">
+            <div class="border fr-p-1-5v fr-mr-1-5v">
+              <img
+                style="margin-bottom: -6px"
+                :src="getOwnerAvatar(bouquet)"
+                height="32"
+              />
+            </div>
+          </div>
+          <p class="fr-col fr-m-0">
+            {{ bouquet.owner.first_name }} {{ bouquet.owner.last_name }}
+          </p>
+        </div>
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Date de création</h2>
+        <p>{{ formatDate(bouquet.created_at) }}</p>
+        <DsfrButton
+          v-if="canEdit"
+          size="md"
+          label="Editer le bouquet"
+          icon="ri-pencil-line"
+          @click="goToEdit"
         />
       </div>
-      <DsfrButton
-        v-if="canEdit"
-        size="md"
-        label="Editer le bouquet"
-        icon="ri-pencil-line"
-        @click="goToEdit"
-      />
     </div>
+  </div>
+
+  <div class="fr-container fr-mt-4w fr-mb-4w">
     <div class="bouquet__container fr-p-6w fr-mb-6w">
-      <h5><strong>Objectif du bouquet</strong></h5>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="description" />
       <div
         v-if="
           bouquet?.extras && bouquet.extras['ecospheres:datasets_properties']
@@ -237,23 +286,16 @@ onMounted(() => {
   }
 }
 
+.fr-tag {
+  color: rgba(0, 0, 0, 0.7);
+  border-radius: 0;
+}
+
 .bouquet {
   &__header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex-flow: wrap;
-
-    &__left {
-      display: flex;
-      align-items: center;
-      flex-flow: wrap;
-
-      .fr-tag {
-        color: rgba(0, 0, 0, 0.7);
-        border-radius: 0;
-      }
-    }
   }
 
   &__container {
