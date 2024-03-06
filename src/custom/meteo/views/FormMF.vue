@@ -67,7 +67,7 @@ const onSelectDataset = (dataset) => {
       datasetResources = data['resources']
       if (selectedDataset.value['departement']) {
         showDep.value = true
-      } else if (selectedDataset.value['id'] == 'SIM') {
+      } else if (selectedDataset.value['id'].startsWith('SIM')) {
         let res = datasetResources.filter((item) => item.type == 'main')
         res = res.map((a) => a.title)
         res = res.map((a) => a.split('SIM2_')[1])
@@ -107,7 +107,7 @@ let showPeriod = ref(false)
 
 function onSelectPeriod(event) {
   selectedPeriod.value = event.target.value
-  if (selectedDataset.value['id'] != 'SIM') {
+  if (!selectedDataset.value['id'].startsWith('SIM')) {
     let res = datasetResources.map((a) => a.title)
     res = res.filter((r) => r.includes('departement_' + selectedDep.value))
     filteredResources.value = res.filter((r) =>

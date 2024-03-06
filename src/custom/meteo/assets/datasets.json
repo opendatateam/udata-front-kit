@@ -66,10 +66,26 @@
         }
       ]
     },
-    "Données SIM": {
+    "Données SIM quotidiennes": {
       "prod": "6569b27598256cc583c917a7",
       "dev": "653a6afa18f9f98d2ffdaded",
-      "id": "SIM",
+      "id": "SIMQ",
+      "departement": false,
+      "periode": true,
+      "indicateur": false
+    },
+    "Données SIM décadaires": {
+      "prod": "65e04035010927c797072b29",
+      "dev": "65e04035010927c797072b29",
+      "id": "SIMD",
+      "departement": false,
+      "periode": true,
+      "indicateur": false
+    },
+    "Données SIM mensuelles": {
+      "prod": "65e040c50a5c6872ebebc711",
+      "dev": "65e040c50a5c6872ebebc711",
+      "id": "SIMM",
       "departement": false,
       "periode": true,
       "indicateur": false
