@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { ComputedRef } from 'vue'
-import { onMounted, computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute, type RouteLocationRaw } from 'vue-router'
 
 import Tile from '@/components/Tile.vue'
 import type { Topic } from '@/model'
@@ -10,6 +10,7 @@ import { NoOptionSelected } from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
 
 const router = useRouter()
+const route = useRoute()
 
 const props = defineProps({
   themeName: {
@@ -19,11 +20,16 @@ const props = defineProps({
   subthemeName: {
     type: String,
     default: NoOptionSelected
+  },
+  showDrafts: {
+    type: Boolean
   }
 })
 
 const bouquets: ComputedRef<Topic[]> = computed(() => {
-  const allTopics = useTopicStore().$state.data
+  const allTopics = useTopicStore().$state.data.filter((bouquet) => {
+    return !props.showDrafts ? !bouquet.private : true
+  })
   if (props.themeName === NoOptionSelected) {
     return allTopics
   }
@@ -69,16 +75,26 @@ const isRelevant = (topic: Topic, property: string, value: string): Boolean => {
 }
 
 const goToCreate = () => {
-  router.push({ name: 'bouquet_add' })
+  router.push({ name: 'bouquet_add', query: route.query })
+}
+
+const computeLink = (bouquet: Topic): RouteLocationRaw => {
+  if (!bouquet.private) {
+    return {
+      name: 'bouquet_detail',
+      params: { bid: bouquet.slug },
+      query: { fromSearch: '1' }
+    }
+  } else {
+    return { name: 'bouquet_edit', params: { bid: bouquet.id } }
+  }
 }
 
 onMounted(() => {
   const loader = useLoading().show()
   useTopicStore()
     .loadTopicsForUniverse()
-    .finally(() => {
-      loader.hide()
-    })
+    .then(() => loader.hide())
 })
 </script>
 
@@ -102,7 +118,7 @@ onMounted(() => {
     <h3 class="fr-alert__title">Il n'y a pas encore de bouquet sur ce thème</h3>
     <p>
       N'hésitez pas à contribuer en
-      <a href="/admin/bouquets/add" target="_blank">en créant un</a>
+      <a href="#" @click.stop.prevent="goToCreate()">en créant un</a>
     </p>
   </div>
   <div class="fr-container fr-mt-4w fr-mb-4w">
@@ -113,10 +129,11 @@ onMounted(() => {
         class="fr-col-12 fr-col-lg-6"
       >
         <Tile
-          :link="`/bouquets/${bouquet.slug}?fromSearch=1`"
+          :link="computeLink(bouquet)"
           :title="bouquet.name"
           :description="bouquet.description"
           :is-markdown="true"
+          :notice="bouquet.private ? 'Brouillon' : undefined"
         />
       </li>
     </ul>

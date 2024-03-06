@@ -10,6 +10,7 @@ const route = useRoute()
 
 const themeName = ref(NoOptionSelected)
 const subthemeName = ref(NoOptionSelected)
+const showDrafts = ref(false)
 
 const subThemeQuery = computed(() => route.query.subtheme)
 const themeQuery = computed(() => route.query.theme)
@@ -66,11 +67,16 @@ const breadcrumbList = computed(() => {
             <BouquetSearch
               v-model:themeName="themeName"
               v-model:subthemeName="subthemeName"
+              @update:show-drafts="(value) => (showDrafts = value)"
             />
           </div>
         </nav>
         <div className="fr-col-8">
-          <BouquetList :theme-name="themeName" :subtheme-name="subthemeName" />
+          <BouquetList
+            :theme-name="themeName"
+            :subtheme-name="subthemeName"
+            :show-drafts="showDrafts"
+          />
         </div>
       </div>
     </div>

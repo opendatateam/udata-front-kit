@@ -1,5 +1,11 @@
 <template>
   <div className="filterForm">
+    <DsfrCheckbox
+      v-model="showDrafts"
+      label="Afficher les brouillons"
+      name="show_drafts"
+    />
+
     <div class="fr-select-group">
       <label class="fr-label" for="select_theme"> Thématiques </label>
       <select id="select_theme" class="fr-select" @change="switchTheme($event)">
@@ -65,6 +71,12 @@ export default defineComponent({
       default: NoOptionSelected
     }
   },
+  emits: ['update:showDrafts'],
+  data: () => {
+    return {
+      showDrafts: false
+    }
+  },
   computed: {
     selectedTheme(): Theme | null {
       return ConfigUtils.getThemeByName(this.themeName)
@@ -79,6 +91,11 @@ export default defineComponent({
     },
     NoOptionSelected() {
       return NoOptionSelected
+    }
+  },
+  watch: {
+    showDrafts(newVal) {
+      this.$emit('update:showDrafts', newVal)
     }
   },
   methods: {

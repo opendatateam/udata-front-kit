@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosResponse, AxiosError } from 'axios'
+import type { AxiosResponse, AxiosError } from 'axios'
 
 export type { AxiosError }
 
@@ -16,6 +16,7 @@ export interface RequestConfig {
   method: HttpMethod
   params?: object
   data?: object
+  headers?: object
 }
 
 export type URLParams = Record<string, string | number>
@@ -37,5 +38,4 @@ export interface DatagouvfrAPIArgs {
   baseUrl?: string
   version?: number
   endpoint?: string
-  httpClient?: AxiosInstance
 }

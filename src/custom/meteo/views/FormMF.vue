@@ -3,6 +3,7 @@ import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
 import { computed, ref } from 'vue'
 
 import config from '@/config'
+import { fromMarkdown } from '@/utils'
 
 import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
@@ -13,6 +14,8 @@ let selectedDataPack = ref(null)
 const optionsDataPack = ref(Object.keys(datasetsIds))
 const datasetTitle = ref(null)
 const datasetSlug = ref(null)
+let indicateurWording = ref('Indicateur')
+let indicateurComplement = ref(' ')
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
 
@@ -28,6 +31,11 @@ const onSelectDataPack = (pack) => {
 
   selectedDataPack.value = pack
   optionsDataset = Object.keys(datasetsIds[pack])
+  if (pack == 'Données de prévision numérique du temps (PNT)') {
+    indicateurWording.value = 'Regroupement'
+  } else {
+    indicateurWording.value = 'Indicateur'
+  }
 }
 
 let selectedDataset = ref(null)
@@ -59,7 +67,7 @@ const onSelectDataset = (dataset) => {
       datasetResources = data['resources']
       if (selectedDataset.value['departement']) {
         showDep.value = true
-      } else if (selectedDataset.value['id'] == 'SIM') {
+      } else if (selectedDataset.value['id'].startsWith('SIM')) {
         let res = datasetResources.filter((item) => item.type == 'main')
         res = res.map((a) => a.title)
         res = res.map((a) => a.split('SIM2_')[1])
@@ -70,6 +78,8 @@ const onSelectDataset = (dataset) => {
         selectedDep.value = 'No'
       } else if (selectedDataset.value['indicateur']) {
         showIndicateur.value = true
+      } else {
+        filteredResources.value = datasetResources.map((a) => a.title)
       }
       showLoader.value = false
     })
@@ -97,7 +107,7 @@ let showPeriod = ref(false)
 
 function onSelectPeriod(event) {
   selectedPeriod.value = event.target.value
-  if (selectedDataset.value['id'] != 'SIM') {
+  if (!selectedDataset.value['id'].startsWith('SIM')) {
     let res = datasetResources.map((a) => a.title)
     res = res.filter((r) => r.includes('departement_' + selectedDep.value))
     filteredResources.value = res.filter((r) =>
@@ -181,15 +191,15 @@ const showLoader = ref(false)
     </div>
 
     <div class="select-classic" v-if="selectedDataset && showIndicateur">
-      <label>Quel indicateur ?</label>
+      <label>Quel {{ indicateurWording }} ?</label>
       <select class="fr-select" @change="onSelectIndicateur($event)">
         <option hidden>Choisir une option</option>
         <option
           v-for="item in selectedDataset['indicateursListe']"
-          v-bind:key="item"
-          :value="item"
+          v-bind:key="item['code']"
+          :value="item['code']"
         >
-          Indicateur {{ item }}
+          {{ indicateurWording }} {{ item['name'] }}
         </option>
       </select>
     </div>
@@ -212,6 +222,28 @@ const showLoader = ref(false)
           ></span> </a
         >.
       </p>
+      <p>
+        Si vous souhaitez récupérer automatiquement les données, vous pouvez
+        appeler l'API data.gouv.fr et filtrer les résultats sur les ressources
+        et leurs noms.
+      </p>
+      <div>
+        <div class="code-api" v-if="selectedIndicateur">
+          {{
+            'https://www.data.gouv.fr/api/2/datasets/' +
+            datasetSlug +
+            '/resources/?q=' +
+            selectedIndicateur
+          }}
+        </div>
+        <div class="code-api" v-else>
+          {{
+            'https://www.data.gouv.fr/api/2/datasets/' +
+            datasetSlug +
+            '/resources/'
+          }}
+        </div>
+      </div>
       <br />
       <br />
       <h5>Fichiers</h5>
@@ -222,7 +254,9 @@ const showLoader = ref(false)
       >
         <ResourceAccordion
           v-if="
-            filteredResources.includes(item['title']) && item['type'] == 'main'
+            item['id'] != 'b1d97b5b-cb0e-4991-90be-4c8a16a6c2a7' &&
+            filteredResources.includes(item['title']) &&
+            item['type'] == 'main'
           "
           :datasetId="selectedDataset[config.website.env]"
           :resource="item"
@@ -265,5 +299,12 @@ const showLoader = ref(false)
 <style scoped lang="scss">
 .select-classic {
   margin-bottom: 20px;
+}
+.code-api {
+  word-wrap: break-word;
+  background-color: #ebebeb;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 5px;
 }
 </style>

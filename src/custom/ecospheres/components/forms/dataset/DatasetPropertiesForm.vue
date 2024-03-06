@@ -4,20 +4,25 @@
       <h5>Ajouter un jeu de données</h5>
 
       <div class="fr-mt-1w fr-mb-4w">
-        <label class="fr-label" for="label">Libellé de la donnée</label>
+        <label class="fr-label" for="label"
+          >Libellé de la donnée <span class="required">&nbsp;*</span></label
+        >
         <input id="label" v-model="title" class="fr-input" type="text" />
       </div>
       <div class="fr-mt-1w fr-mb-4w">
-        <Tooltip
-          title="Raison d'utilisation dans ce bouquet"
-          name="tooltip__objectif"
-          text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
-        />
-        <Tooltip
-          title="Utilisez du markdown pour mettre en forme votre texte"
-          name="tooltip__markdown"
-          text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
-        />
+        <div class="container">
+          Raison d'utilisation dans ce bouquet
+          <span class="required">&nbsp;*</span>
+          <Tooltip
+            text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
+          />
+        </div>
+        <div class="container">
+          Utilisez du markdown pour mettre en forme votre texte
+          <Tooltip
+            text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
+          />
+        </div>
         <textarea id="purpose" v-model="purpose" class="fr-input" type="text" />
       </div>
       <div class="fr-mt-1w fr-mb-4w">
@@ -92,7 +97,7 @@
 import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import Multiselect from '@vueform/multiselect'
 
-import Tooltip from '@/components/Tooltip.vue'
+import Tooltip from '@/components/TooltipWrapper.vue'
 import config from '@/config'
 import {
   type DatasetProperties,
@@ -113,7 +118,7 @@ export default {
       default: []
     }
   },
-  emits: ['addDataset'],
+  emits: ['addDataset', 'update:isDirty'],
   data(): DatasetProperties {
     return this.initData()
   },
@@ -121,8 +126,18 @@ export default {
     availabilityEnum() {
       return Availability
     },
+    isDirty() {
+      return !!this.title.trim() || !!this.purpose.trim()
+    },
+    hasMandatoryFields() {
+      return !!this.title.trim() && !!this.purpose.trim()
+    },
     isValidDataset() {
-      return this.isValidEcosphereDataset && this.isValidUrlDataset
+      return (
+        this.hasMandatoryFields &&
+        this.isValidEcosphereDataset &&
+        this.isValidUrlDataset
+      )
     },
     isValidEcosphereDataset(): boolean {
       if (this.availability === Availability.LOCAL_AVAILABLE) {
@@ -141,6 +156,9 @@ export default {
     }
   },
   watch: {
+    isDirty() {
+      this.$emit('update:isDirty', this.isDirty)
+    },
     availability() {
       this.uri = null
       this.id = null

@@ -2,9 +2,10 @@
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import AuthService from '../services/AuthService'
-import UserAPI from '../services/api/resources/UserAPI'
-import { useUserStore } from '../store/UserStore'
+import AuthService from '@/services/AuthService'
+import LocalStorageService from '@/services/LocalStorageService'
+import UserAPI from '@/services/api/resources/UserAPI'
+import { useUserStore } from '@/store/UserStore'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,9 +26,9 @@ onMounted(() => {
       api.list().then((data) => {
         store.storeInfo(data)
       })
-      const lastPath = localStorage.getItem('lastPath')
-      const next = lastPath ? { path: lastPath } : { name: 'home' }
-      localStorage.removeItem('lastPath')
+      const lastRoute = LocalStorageService.getItem('lastRoute')
+      const next = lastRoute ?? { name: 'home' }
+      LocalStorageService.removeItem('lastRoute')
       router.push(next)
     })
   } else {

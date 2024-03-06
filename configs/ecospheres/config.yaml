@@ -31,10 +31,9 @@ website:
     below_hero:
     below_topics:
   header_button:
-    display: false
-    label:
-    link:
-  header_search: true
+    display: true
+    label: 'Donnez votre avis'
+    link: https://tally.so/r/wLWrzp
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -44,17 +43,19 @@ website:
     link:
   footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'écologie."
   footer_external_links:
+    - label: 'ecologie.gouv.fr'
+      href: 'https://ecologie.gouv.fr'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
   footer_mandatory_links:
-    - label: 'Licences'
-      to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
     - label: "Conditions générales d'utilisation"
-      to: 'https://www.data.gouv.fr/fr/terms/'
+      to: '/terms'
     - label: 'Politique de confidentialité'
       to: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
   router_items:
     - name: 'Accueil'
       id: 'home'
@@ -82,10 +83,21 @@ website:
       type: 'page'
       display_menu: true
       url: '/ecospheres/pages/about.md'
+    - name: 'Accessibilité'
+      id: 'accessibility'
+      linkPage: '/accessibility'
+      type: 'page'
+      display_menu: false
+      url: '/ecospheres/pages/accessibility.md'
+    - name: "Conditions générales d'utilisation"
+      id: 'terms'
+      linkPage: '/terms'
+      type: 'page'
+      display_menu: false
+      url: '/ecospheres/pages/terms.md'
   home_buttons:
   show_topic_charts: false
   show_quality_component: true
-  show_dataset_metadata_panel: true
   list_highlighted_topics:
   url_highlighted_topics:
   type_highlighted_topics:
@@ -101,7 +113,7 @@ website:
     - '#A7D4CD'
   matomo:
     host: 'https://stats.data.gouv.fr'
-    siteId:
+    siteId: 299
   discussions:
     dataset:
       display: true
@@ -109,6 +121,8 @@ website:
     topic:
       display: true
       create: true
+  datasets:
+    organization_filter: true
 
 themes:
   - name: Se loger
@@ -242,10 +256,6 @@ organizations:
   - 5a3b9453c751df6eff05e7fa
   # Direction régionale de l'Environnement, de l'Aménagement et du Logement de Normandie
   - 57275bd288ee387fd5a19f12
-  # Direction régionale de l'environnement, de l'aménagement et du logement de Normandie
-  - 63eba3458d114d860873c025
-  # Direction régionale et interdépartementale de l’Environnement, de l’Aménagement et des Transports
-  - 63d925a8734ac3600a5e31af
   # La Direction Régionale de l’Environnement, de l’Aménagement et du Logement Provence-Alpes-Côte d’Azur
   - 622f1234df654f029b10e77c
 
@@ -332,8 +342,6 @@ organizations:
   - 5883d4c488ee3809bb9b81a5
   # DDT de la Moselle
   - 5883d3d088ee38061b9b81a9
-  # DDT des Vosges
-  - 63da19abc971ec2c34618720
 
   ## QUERY=direction+departementale+territoire
   # DIRECTION DEPARTEMENTALE DES TERRITOIRES DE SAONE-ET-LOIRE (71)

@@ -12,6 +12,7 @@ import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet
 import type { Bouquet, BouquetCreationData, Topic } from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 
 const route = useRouteParamsAsString()
 const router = useRouter()
@@ -68,6 +69,20 @@ const updateTopic = async () => {
   return useTopicStore().update(bouquet.value.id, bouquetCreationData.value)
 }
 
+const canDelete = computed(() => {
+  return useUserStore().hasEditPermissions(bouquet.value as Bouquet)
+})
+
+const doDelete = async () => {
+  if (bouquet.value?.id === undefined) {
+    throw Error('Trying to delete topic without topic id')
+  }
+  if (window.confirm('Etes-vous sûr de vouloir supprimer ce bouquet ?')) {
+    await useTopicStore().delete(bouquet.value.id)
+    router.push({ name: 'bouquets' })
+  }
+}
+
 const isStepValid = (step: number): boolean => {
   if (step > stepsValidation.value.length) return true
   return stepsValidation.value[step - 1]
@@ -110,15 +125,22 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
     description: topic.description,
     theme: getInfoFromExtras('theme', topic),
     subtheme: getInfoFromExtras('subtheme', topic),
-    datasetsProperties: topic.extras['ecospheres:datasets_properties'] ?? []
-  }
+    datasetsProperties: topic.extras['ecospheres:datasets_properties'] ?? [],
+    owner: topic.owner,
+    organization: topic.organization
+  } as Bouquet
 }
 
 /**
  * Depending on topic state, infer the step we should be on
  */
 const inferStepFromTopic = (topic: Topic): number => {
-  if (topic.extras['ecospheres:datasets_properties']?.length > 0) {
+  // handle specific case where subtheme and theme are prefilled from creation
+  if (route.query?.fromAdd) {
+    // cleanup query string (clean bookmark link)
+    router.replace({ query: {} })
+    return 2
+  } else if (topic.extras['ecospheres:datasets_properties']?.length > 0) {
     return 4
   } else if (topic.extras['ecospheres:informations'] !== undefined) {
     return 3
@@ -170,11 +192,20 @@ onMounted(() => {
         :bouquet="bouquet"
         @update-step="(step: number) => (currentStep = step)"
       />
-      <div class="fit fr-mt-3w fr-ml-auto">
+      <div class="flex align-start fr-mt-3w">
+        <DsfrButton
+          v-if="canDelete"
+          type="button"
+          label="Supprimer le bouquet"
+          class="fr-mt-2w fr-mr-2w"
+          icon="ri-delete-bin-line"
+          secondary
+          @click="doDelete"
+        />
         <DsfrButton
           v-if="currentStep > 1"
           type="button"
-          class="fr-mt-2w fr-mr-2w"
+          class="fr-mt-2w fr-mr-2w fr-ml-auto"
           label="Précédent"
           @click.prevent="goToPreviousPage"
         />

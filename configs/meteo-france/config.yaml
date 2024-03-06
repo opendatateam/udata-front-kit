@@ -80,12 +80,13 @@ website:
   home_buttons:
   show_topic_charts: true
   show_quality_component: true
-  show_dataset_metadata_panel: false
   list_highlighted_topics:
     - id: '6571f26dc009674feb726be9'
       name: 'Données climatologiques de base'
     - id: '6571f2db0273fc306408f265'
       name: 'Données climatologiques de référence pour le changement climatique'
+    - id: '65e0c82c2da27c1dff5fa66f'
+      name: 'Données de Prévision Numérique du Temps (PNT)'
   url_highlighted_topics: 'datasets'
   type_highlighted_topics: 'tile'
   oauth_option: false
@@ -127,6 +128,8 @@ website:
     topic:
       display: false
       create: false
+  datasets:
+    organization_filter: false
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

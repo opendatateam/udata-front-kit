@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import type { Ref, ComputedRef } from 'vue'
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 import config from '@/config'
 import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
-import type { Bouquet, BouquetCreationData } from '@/model'
+import {
+  NoOptionSelected,
+  type Bouquet,
+  type BouquetCreationData
+} from '@/model'
 import { useTopicStore } from '@/store/TopicStore'
 
 const router = useRouter()
+const route = useRoute()
 
 const bouquet: Ref<Partial<Bouquet>> = ref({})
 const isStepValid: Ref<boolean> = ref(false)
@@ -20,7 +25,15 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
     name: bouquet.value.name ?? '',
     description: bouquet.value.description ?? '',
     tags: [config.universe.name],
-    private: true
+    private: true,
+    extras: {
+      'ecospheres:informations': [
+        {
+          theme: route.query.theme ?? NoOptionSelected,
+          subtheme: route.query.subtheme ?? NoOptionSelected
+        }
+      ]
+    }
   }
 })
 
@@ -33,7 +46,8 @@ const submit = () => {
     .then((response) => {
       router.push({
         name: 'bouquet_edit',
-        params: { bid: response.id }
+        params: { bid: response.id },
+        query: { fromAdd: '1' }
       })
     })
     .catch((error) => {

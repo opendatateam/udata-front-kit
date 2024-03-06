@@ -18,12 +18,12 @@ const route = useRouteParamsAsString()
 const router = useRouter()
 
 const store = useTopicStore()
-const userStore = useUserStore()
 
 const bouquet: Ref<Topic | null> = ref(null)
 const theme = ref()
 const subtheme = ref()
 const loading = useLoading()
+const isExpanded = ref({} as { [key: string]: boolean })
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 const showGoBack = computed(() => route.query.fromSearch !== undefined)
@@ -75,11 +75,7 @@ const getSelectedThemeColor = (themed: string) => {
 }
 
 const canEdit = computed(() => {
-  return (
-    userStore.isAdmin() ||
-    (userStore.$state.isLoggedIn &&
-      bouquet.value?.owner?.id === userStore.$state.data?.id)
-  )
+  return useUserStore().hasEditPermissions(bouquet.value as Topic)
 })
 
 onMounted(() => {
@@ -149,6 +145,7 @@ onMounted(() => {
       </div>
       <DsfrButton
         v-if="canEdit"
+        size="md"
         label="Editer le bouquet"
         icon="ri-pencil-line"
         @click="goToEdit"
@@ -178,8 +175,8 @@ onMounted(() => {
             <DsfrAccordion
               :id="datasetProperties.id"
               :title="datasetProperties.title"
-              :expanded-id="datasetProperties.id"
-              @expand="datasetProperties.id = $event"
+              :expanded-id="isExpanded[idx]"
+              @expand="isExpanded[idx] = $event"
             >
               <BouquetDatasetAvailability
                 :dataset-properties="datasetProperties"
