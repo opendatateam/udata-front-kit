@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import { watch } from 'vue'
 
 import type { WithOwned } from '@/model'
+import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
 
 const STORAGE_KEY = 'token'
@@ -46,9 +47,9 @@ export const useUserStore = defineStore('user', {
           // keep the current route and redirect to the login flow
           if ((err as AxiosError).response?.status === 401) {
             this.logout()
-            localStorage.setItem(
-              'lastPath',
-              this.$router.currentRoute.value.path
+            LocalStorageService.setItem(
+              'lastRoute',
+              this.$router.currentRoute.value
             )
             await this.$router.push({ name: 'login' })
           }

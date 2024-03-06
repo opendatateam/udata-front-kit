@@ -4,6 +4,8 @@ import type { ComputedRef, Ref } from 'vue'
 import { ref, watchEffect, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import LocalStorageService from '@/services/LocalStorageService'
+
 import config from '../config'
 import type {
   DiscussionResponse,
@@ -79,7 +81,7 @@ const getUserAvatar = (post: Post) => {
 }
 
 const triggerLogin = () => {
-  localStorage.setItem('lastPath', route.path)
+  LocalStorageService.setItem('lastRoute', route)
   router.push({ name: 'login' })
 }
 
