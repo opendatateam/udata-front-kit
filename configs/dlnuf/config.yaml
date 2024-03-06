@@ -25,10 +25,10 @@ website:
   # leave empty if not pertinent
 
   homepage:
-    title: 'Acteurs publics, utilisez la donnée pour simplifier les démarches 🧘 !'
-    subtitle: 'Simpligiez les démarches des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâces aux API et aux données ! Vous gagnerez aussi du temps !' 
+    title: 'Acteurs publics, utilisez la donnée pour simplifier vos services 🧘 !'
+    subtitle: 'Simpligiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâces aux API et aux données ! Vous gagnerez aussi du temps !' 
     below_hero: >-
-      ## Améliorer les démarches administratives :
+      ## Améliorer les services à destination :
 
       ### 👱 des particuliers
       
