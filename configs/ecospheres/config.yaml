@@ -108,7 +108,7 @@ website:
     - '#A7D4CD'
   matomo:
     host: 'https://stats.data.gouv.fr'
-    siteId: 299
+    siteId:
   discussions:
     dataset:
       display: true
