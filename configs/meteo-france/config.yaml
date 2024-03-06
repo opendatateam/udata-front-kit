@@ -29,7 +29,14 @@ website:
     title: 'La météo et le climat en Open Data'
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     below_hero:
-    below_topics:
+    below_topics: >-
+      **ACTUALITÉS**
+
+
+      Venez participer au hackathon organisé par la DINUM et Météo-France le 8 et 9 avril prochain. 🚀
+
+
+      [**En savoir plus**](/hackathon)
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -64,6 +71,12 @@ website:
     #   linkPage: 'https://portail-api.meteofrance.fr/'
     #   type: 'external'
     #   display_menu: true
+    - name: 'Hackathon le 8 et 9 avril 🚀'
+      id: 'hackathon'
+      linkPage: '/hackathon'
+      type: 'page'
+      url: '/meteo-france/pages/hackathon.md'
+      display_menu: true
     - name: 'A propos'
       id: 'about'
       linkPage: '/about'
