@@ -87,7 +87,7 @@ const goToPage = (page) => {
   <div
     class="fr-container hero-text"
     v-if="belowHero"
-    v-html="markdown.render(belowHero)"
+    v-html="fromMarkdown(belowHero)"
   ></div>
   <div class="fr-container">
     <HomeThemes
@@ -100,7 +100,7 @@ const goToPage = (page) => {
   <div
     class="fr-container hero-text"
     v-if="belowTopics"
-    v-html="markdown.render(belowTopics)"
+    v-html="fromMarkdown(belowTopics)"
   ></div>
 </template>
 
