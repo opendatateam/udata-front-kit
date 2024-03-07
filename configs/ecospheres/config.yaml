@@ -2,7 +2,7 @@
 
 datagouvfr:
   # data.gouv.fr base URL
-  base_url: https://data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: FIXME
   # pkce client secret, explicitely public
