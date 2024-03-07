@@ -10,9 +10,9 @@ datagouvfr:
 
 universe:
   # "universe" topic id
-  topic_id: 65e8b72312697599a60a35a7
+  topic_id: 65e9aa6cb5c809c30c70ee02
   # universe name, used as bouquets tag
-  name: ecospheres
+  name: univers-ecospheres
 
 # UI customizations
 website:
