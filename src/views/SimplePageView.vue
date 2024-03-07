@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -6,8 +6,9 @@ import { pageStore } from '../store/PageStore'
 import { fromMarkdown } from '../utils'
 
 const store = pageStore()
+const router = useRouter()
 const content = computed(() => store.content)
-const title = useRouter().currentRoute.value.meta.title
+const title = computed(() => router.currentRoute.value.meta.title)
 const props = defineProps({
   url: {
     type: String,
@@ -15,7 +16,10 @@ const props = defineProps({
   }
 })
 
-const links = computed(() => [{ to: '/', text: 'Accueil' }, { text: title }])
+const links = computed(() => [
+  { to: '/', text: 'Accueil' },
+  { text: title.value }
+])
 
 watchEffect(async () => {
   if (!props.url) return
