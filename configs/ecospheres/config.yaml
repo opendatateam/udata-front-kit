@@ -174,262 +174,111 @@ bouquets:
     - Composition du bouquet de données
     - Récapitulatif du bouquet de données
 
-# FIXME: Obsolete. Kept as a reference used to populate our universe.
-# list of organisations' ids that should be handled by the portal
-# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
-# then Informations > ID at the bottom of the page
 organizations:
-  # MTE
-  - 534fff8da3a7292c64a77eee
-  # MCT
-  - 534fff8fa3a7292c64a77f3d
-
-  # List below is generated with:
-  # (QUERY=...; \
-  #   echo -e "\n  ## QUERY=$QUERY"; \
-  #   curl -s 'https://www.data.gouv.fr/api/1/organizations/?q='$QUERY'&page=1&page_size=200' -H 'accept: application/json' | \
-  #   jq -r '.data | sort_by(.name)[] | "  # \(.name)", "  - \(.id)"'
-
-  ## QUERY=dreal
-  # DREAL Alsace
-  - 56ec3116c751df53e0cc7150
-  # DREAL Aquitaine
-  - 55bba52788ee387495a46ec1
-  # DREAL Auvergne
-  - 559c07ffc751df6d14390bd3
-  # DREAL Auvergne-Rhône-Alpes
-  - 5882a05d88ee3835c59b81a4
-  # DREAL Basse-Normandie
-  - 5891ae1888ee38533d9b81a4
-  # DREAL Bourgogne
-  - 5883828388ee3804429b81e2
-  # DREAL Bourgogne-Franche-Comté
-  - 5835d0a088ee3842afc65bb3
-  # DREAL Bretagne
-  - 55b2337888ee3814da3ca28a
-  # DREAL Centre-Val de Loire
-  - 55b23b0e88ee3839da3ca288
-  # DREAL Champagne-Ardenne
-  - 5891af2388ee38555b9b81a4
-  # DREAL Corse
-  - 5891a8fc88ee384a7c9b81a4
-  # DREAL Franche-Comté
-  - 558bf88dc751df2dc5a45424
-  # DREAL Grand Est
-  - 5883d10488ee3810d19b81e3
-  # DREAL Haute-Normandie
-  - 5891b3ac88ee385dbb9b81a4
-  # DREAL Hauts-de-France
-  - 5891a2f188ee3840059b81a4
-  # DREAL Languedoc-Roussillon
-  - 558bef88c751df1fd9a453b9
-  # DREAL Limousin
-  - 5891b5b088ee3861f79b81a4
-  # DREAL Lorraine
-  - 558a8198c751df760ba453c5
-  # DREAL Midi-Pyrénées
-  - 5891b70f88ee38642e9b81a4
-  # DREAL Nord-Pas-de-Calais
-  - 55b23c6688ee38213a3ca28c
-  # DREAL Nouvelle Aquitaine
-  - 584f145ec751df2062c0bb7e
-  # DREAL Occitanie
-  - 5891a64288ee3846279b81a4
-  # DREAL Pays de la Loire
-  - 568e9657c751df5a92c664bc
-  # DREAL Picardie
-  - 5891b8d288ee3868319b81a4
-  # DREAL Poitou-Charentes
-  - 559c0040c751df36b4390bd3
-  # DREAL Provence-Alpes-Côte d'Azur
-  - 5891ab1688ee384eb89b81a4
-  # DREAL Rhône-Alpes
-  - 5882a30c88ee38393a9b81a4
-
-  ## QUERY=direction+regionale+environnement
-  # Direction Régionale de l'Environnement de l'Aménagement et du Logement des Hauts de France
-  - 5a3b9453c751df6eff05e7fa
-  # Direction régionale de l'Environnement, de l'Aménagement et du Logement de Normandie
-  - 57275bd288ee387fd5a19f12
-  # La Direction Régionale de l’Environnement, de l’Aménagement et du Logement Provence-Alpes-Côte d’Azur
-  - 622f1234df654f029b10e77c
-
-  ## QUERY=deal
-  # DEAL Guadeloupe
-  - 5891f69f88ee385ad59b81a4
-  # DEAL Guyane
-  - 5891f76688ee385ccb9b81a4
-  # DEAL La Réunion
-  - 5891f43388ee3856789b81a4
-  # DEAL Martinique
-  - 5891f5d588ee385a8a9b81a4
-  # DEAL Mayotte
-  - 5891fc6f88ee3865899b81a4
-
-  ## QUERY=ddt
-  # DDT Aisne
-  - 58ad720388ee381d53318fb0
-  # DDT Ardennes
-  - 58adb51688ee381d3ba6d43e
-  # DDT Aveyron
-  - 58adbc9c88ee382998837258
-  # DDT Creuse
-  - 58aec33a88ee3859f5f21deb
-  # DDT Côte-d'Or
-  - 58aec19a88ee385837ea9abe
-  # DDT Deux-Sèvres
-  - 58aef40688ee382b0211f854
-  # DDT Dordogne
-  - 58aec3c288ee385bdf5d8a01
-  # DDT Drôme
-  - 58aed7b188ee38779b2b7560
-  # DDT Haute-Garonne
-  - 58aedcab88ee3803c23a38c8
-  # DDT Haute-Marne
-  - 58aeeba588ee381d127638ee
-  # DDT Haute-Vienne
-  - 58aef76b88ee3830af08f4d9
-  # DDT Hautes-Alpes
-  - 58adb1c088ee38170d451e0d
-  # DDT Hautes-Pyrénées
-  - 58aeee1688ee382134fb5212
-  # DDT Indre
-  - 58aee22388ee380d5cc08347
-  # DDT Indre-et-Loire
-  - 58aee39f88ee380f8e9f787d
-  # DDT Jura
-  - 58aee74c88ee38153f8b9c8c
-  # DDT Lot
-  - 58aee8f488ee38152cb276f1
-  # DDT Maine-et-Loire
-  - 58aeea3188ee3819199f6798
-  # DDT Mayenne
-  - 58aeebe988ee381cf48415f4
-  # DDT Nièvre
-  - 58aeed0f88ee381f26e6e756
-  # DDT Oise
-  - 58aeed8088ee3820e86bd1f3
-  # DDT Savoie
-  - 58aef31c88ee3821f6d0496a
-  # DDT Tarn
-  - 58aef48d88ee382cb41ab9c0
-  # DDT Tarn-et-Garonne
-  - 58aef50788ee382d101eb438
-  # DDT Territoire-de-Belfort
-  - 58aef7cd88ee3830ed5fc99a
-  # DDT Vaucluse
-  - 58aef6d188ee382d1749c425
-  # DDT Vienne
-  - 58aef73d88ee3830af08f4d8
-  # DDT Yonne
-  - 58aef7a188ee3830ed5fc999
-  # DDT Yvelines
-  - 58aef3cc88ee382ad7933d6d
-  # DDT de l'Ain
-  - 5883648088ee38358d9b81a4
-  # DDT de l'Ardèche
-  - 58837b3b88ee3861af9b81a7
-  # DDT de l'Isère
-  - 55ae6ba688ee386c843ca28b
-  # DDT de la Loire
-  - 58837d8588ee3861b29b81af
-  # DDT de la Meuse
-  - 5883d4c488ee3809bb9b81a5
-  # DDT de la Moselle
-  - 5883d3d088ee38061b9b81a9
-
-  ## QUERY=direction+departementale+territoire
-  # DIRECTION DEPARTEMENTALE DES TERRITOIRES DE SAONE-ET-LOIRE (71)
-  - 54215a0488ee38105beae3c5
-  # Direction Départementale des Territoire du Puy-de-Dôme
-  - 565f741788ee380296e72046
-  # Direction Départementale des Territoires d'Eure-et-Loir
-  - 55897427c751df54e9a453dd
-  # Direction Départementale des Territoires d'Indre-et-Loire
-  - 55ae43f488ee38443d3ca288
-  # Direction Départementale des Territoires de Charente
-  - 559c0165c751df414e390bd4
-  # Direction Départementale des Territoires de Haute-Savoie
-  - 56eed4d2c751df3308d6e93b
-  # Direction Départementale des Territoires de Haute-Saône
-  - 559d3913c751df33ec390bd7
-  # Direction Départementale des Territoires de Loir-et-Cher
-  - 558e9d43c751df75fea453d1
-  # Direction Départementale des Territoires de Lot-et-Garonne
-  - 558adf97c751df04a0a453df
-  # Direction Départementale des Territoires de Meurthe-et-Moselle
-  - 55883748c751df7971a453bc
-  # Direction Départementale des Territoires de Saône-et-Loire
-  - 558e9f93c751df2d9aa453d4
-  # Direction Départementale des Territoires de Seine-et-Marne
-  - 55887171c751df3f82a453c4
-  # Direction Départementale des Territoires de l'Allier
-  - 565f73c088ee385abfe72046
-  # Direction Départementale des Territoires de l'Ariège
-  - 5a3a749c88ee381cb7380f6e
-  # Direction Départementale des Territoires de l'Ariège
-  - 558bf578c751df2f9ea453ea
-  # Direction Départementale des Territoires de l'Aube
-  - 55896df6c751df54e9a453b9
-  # Direction Départementale des Territoires de l'Essonne
-  - 558adba9c751df04a0a453c1
-  # Direction Départementale des Territoires de l'Orne
-  - 558e9b15c751df2a26a453b9
-  # Direction Départementale des Territoires de la Corrèze
-  - 558bc11cc751df5bfda453ba
-  # Direction Départementale des Territoires de la Haute-Loire
-  - 565f746a88ee3802aee72046
-  # Direction Départementale des Territoires de la Lozère
-  - 558a7e80c751df627ca453b9
-  # Direction Départementale des Territoires de la Marne
-  - 558e9c3ec751df75fea453c7
-  # Direction Départementale des Territoires de la Meuse
-  - 5cb0433b8b4c410a59915675
-  # Direction Départementale des Territoires de la Sarthe
-  - 558e9e4ac751df2a26a453da
-  # Direction Départementale des Territoires des Alpes de Haute-Provence
-  - 558dc1c0c751df341aa453b9
-  # Direction Départementale des Territoires des Hautes-Alpes
-  - 5ac5cb0388ee38796b3a476b
-  # Direction Départementale des Territoires des Vosges
-  - 55886e4dc751df3f7aa453b9
-  # Direction Départementale des Territoires du Bas-Rhin (67)
-  - 5617abdc88ee386b8f628ef9
-  # Direction Départementale des Territoires du Cher
-  - 56eed43ec751df31e5d6e93b
-  # Direction Départementale des Territoires du Doubs
-  - 559d3813c751df392b390bd4
-  # Direction Départementale des Territoires du Gers
-  - 55896c18c751df5864a453b9
-  # Direction Départementale des Territoires du Haut-Rhin (68)
-  - 534fff70a3a7292c64a77dc9
-  # Direction Départementale des Territoires du Loiret
-  - 55b0f23788ee3838d73ca289
-  # Direction Départementale des Territoires du Rhône
-  - 58837e7e88ee3804429b81a7
-  # Direction Départementale des Territoires du Val d'Oise
-  - 558a7f99c751df760ba453bf
-  # Direction Départementale des Territoires et de la Mer d'Ille-et-Vilaine
-  - 56ec29b7c751df5240cc7140
-  # Direction Départementale des Territoires et de la Mer de Charente-Maritime
-  - 558bd745c751df3fffa453bd
-  # Direction Départementale des Territoires et de la Mer de Loire-Atlantique
-  - 5809b72788ee38380e13e4c7
-  # Direction Départementale des Territoires et de la Mer de l'Eure
-  - 58778ae0c751df7f29590451
-  # Direction Départementale des Territoires et de la Mer de l'Hérault
-  - 5acdd6e3c751df7b71dfb42b
-  # Direction Départementale des Territoires et de la Mer de la Somme
-  - 558a83dac751df039da453b9
-  # Direction Départementale des Territoires et de la Mer des Bouches-du-Rhône
-  - 558add63c751df7c4fa453c8
-  # Direction Départementale des Territoires et de la Mer des Landes
-  - 558ea2d6c751df3646a453cf
-  # Direction Départementale des Territoires et de la Mer des Pyrénées-Atlantiques
-  - 558ea37cc751df2a26a453fe
-  # Direction Départementale des Territoires et de la Mer du Calvados
-  - 558ea45bc751df2d9aa4541d
-  # Direction Départementale des Territoires et de la Mer du Var
-  - 558ad3e3c751df7c4fa453b9
-  # Direction Départementale et des Territoires du Cantal
-  - 558ad939c751df7c4fa453bc
+  - ademe
+  - agence-nationale-de-la-cohesion-des-territoires
+  - agence-nationale-de-lhabitat
+  - agence-ore-3
+  - centre-scientifique-et-technique-du-batiment
+  - ddt-ardennes
+  - ddt-aveyron
+  - ddt-cote-dor
+  - ddt-creuse
+  - ddt-de-la-loire
+  - ddt-de-la-meuse
+  - ddt-de-la-moselle
+  - ddt-de-lain
+  - ddt-de-lardeche
+  - ddt-de-meurthe-et-moselle
+  - ddt-des-vosges
+  - ddt-deux-sevres
+  - ddt-dordogne
+  - ddt-drome
+  - ddt-haute-garonne
+  - ddt-haute-vienne
+  - ddt-hautes-alpes
+  - ddt-hautes-pyrenees
+  - ddt-indre
+  - ddt-jura
+  - ddt-lot
+  - ddt-mayenne
+  - ddt-nievre
+  - ddt-oise
+  - ddt-savoie
+  - ddt-tarn
+  - ddt-tarn-et-garonne
+  - ddt-vienne
+  - ddt-yonne
+  - ddt-yvelines
+  - deal-guyane
+  - deal-martinique
+  - deal-reunion
+  - direction-departementale-des-territoire-du-puy-de-dome
+  - direction-departementale-des-territoires-de-haute-savoie
+  - direction-departementale-des-territoires-de-la-correze
+  - direction-departementale-des-territoires-de-la-haute-loire
+  - direction-departementale-des-territoires-de-la-lozere
+  - direction-departementale-des-territoires-de-la-marne
+  - direction-departementale-des-territoires-de-la-sarthe
+  - direction-departementale-des-territoires-de-lallier
+  - direction-departementale-des-territoires-de-lariege
+  - direction-departementale-des-territoires-de-laube
+  - direction-departementale-des-territoires-de-lessonne
+  - direction-departementale-des-territoires-de-lisere
+  - direction-departementale-des-territoires-de-loir-et-cher
+  - direction-departementale-des-territoires-de-lorne
+  - direction-departementale-des-territoires-de-lot-et-garonne
+  - direction-departementale-des-territoires-de-saone-et-loire
+  - direction-departementale-des-territoires-de-saone-et-loire-71
+  - direction-departementale-des-territoires-de-seine-et-marne
+  - direction-departementale-des-territoires-des-alpes-de-haute-provence
+  - direction-departementale-des-territoires-des-vosges
+  - direction-departementale-des-territoires-deure-et-loir
+  - direction-departementale-des-territoires-dindre-et-loire
+  - direction-departementale-des-territoires-du-bas-rhin-67
+  - direction-departementale-des-territoires-du-cher
+  - direction-departementale-des-territoires-du-doubs
+  - direction-departementale-des-territoires-du-haut-rhin-68
+  - direction-departementale-des-territoires-du-loiret
+  - direction-departementale-des-territoires-du-rhone-1
+  - direction-departementale-des-territoires-du-val-doise
+  - direction-departementale-des-territoires-et-de-la-mer-de-charente-maritime
+  - direction-departementale-des-territoires-et-de-la-mer-de-la-somme
+  - direction-departementale-des-territoires-et-de-la-mer-de-leure
+  - direction-departementale-des-territoires-et-de-la-mer-de-lherault
+  - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
+  - direction-departementale-des-territoires-et-de-la-mer-des-landes
+  - direction-departementale-des-territoires-et-de-la-mer-des-pyrenees-atlantiques
+  - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
+  - direction-departementale-des-territoires-et-de-la-mer-du-calvados
+  - direction-departementale-des-territoires-et-de-la-mer-du-var
+  - direction-departementale-et-des-territoires-du-cantal
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-franche-comte
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-laquitaine
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lorraine
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-centre-val-de-loire
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
+  - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
+  - direction-regionale-et-interdepartementale-de-lenvironnement-de-lamenagement-et-des-transports-1
+  - dreal-auvergne-rhone-alpes-1
+  - dreal-bourgogne
+  - dreal-champagne-ardenne
+  - dreal-haute-normandie
+  - dreal-midi-pyrenees
+  - dreal-nouvelle-aquitaine
+  - dreal-pays-de-la-loire-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-pays-de-la-loire
+  - dreal-provence-alpes-cote-dazur
+  - gip-bretagne-environnement
+  - grand-lyon
+  - institut-francais-de-recherche-pour-lexploitation-de-la-mer
+  - institut-national-de-l-information-geographique-et-forestiere
+  - institut-national-de-la-statistique-et-des-etudes-economiques-insee
+  - la-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-provence-alpes-cote-dazur
+  - meteo-france
+  - ministere-de-l-egalite-des-territoires-et-du-logement
+  - ministere-de-la-transition-ecologique
+  - open-data-reseaux-energies-1
+  - shom
