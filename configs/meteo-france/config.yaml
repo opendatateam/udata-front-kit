@@ -81,6 +81,8 @@ website:
       name: 'Données climatologiques de base'
     - id: '6571f2db0273fc306408f265'
       name: 'Données climatologiques de référence pour le changement climatique'
+    - id: '65e0c82c2da27c1dff5fa66f'
+      name: 'Données de Prévision Numérique du Temps (PNT)'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:

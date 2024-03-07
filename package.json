@@ -1,10 +1,10 @@
 {
-  "name": "ecospheres-front",
-  "version": "0.3.0",
+  "name": "udata-front-kit",
+  "version": "0.4.0",
   "private": true,
   "engines": {
-    "node": ">= 18.0.0",
-    "npm": ">= 9.0.0"
+    "node": ">= 20.0.0",
+    "npm": ">= 10.0.0"
   },
   "scripts": {
     "dev": "vite",
@@ -18,7 +18,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@etalab/data.gouv.fr-components": "^1.12.2",
+    "@etalab/data.gouv.fr-components": "^1.13.7",
     "@gouvminint/vue-dsfr": "^5.7.0",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",

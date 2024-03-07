@@ -1,6 +1,7 @@
 <template>
   <div className="filterForm">
     <DsfrCheckbox
+      v-if="userStore.isLoggedIn"
       v-model="showDrafts"
       label="Afficher les brouillons"
       name="show_drafts"
@@ -58,6 +59,7 @@ import { defineComponent } from 'vue'
 import { ConfigUtils } from '@/config'
 import { NoOptionSelected } from '@/model'
 import type { SelectOption, Theme } from '@/model'
+import { useUserStore } from '@/store/UserStore'
 
 export default defineComponent({
   name: 'BouquetSearch',
@@ -74,7 +76,8 @@ export default defineComponent({
   emits: ['update:showDrafts'],
   data: () => {
     return {
-      showDrafts: false
+      showDrafts: false,
+      userStore: useUserStore()
     }
   },
   computed: {

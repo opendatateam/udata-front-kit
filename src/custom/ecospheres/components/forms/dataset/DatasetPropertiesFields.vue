@@ -164,7 +164,7 @@ watch(
           v-model="datasetProperties.availability"
           :name="Availability.LOCAL_AVAILABLE"
           :value="Availability.LOCAL_AVAILABLE"
-          label="Écosphères"
+          label="ecologie.data.gouv.fr"
         />
         <DsfrRadioButton
           v-model="datasetProperties.availability"
@@ -194,7 +194,7 @@ watch(
         ref="selector"
         v-model="datasetProperties.id"
         no-options-text="Précisez ou élargissez votre recherche"
-        placeholder="Rechercher une donnée dans Ecosphères"
+        placeholder="Rechercher une donnée dans ecologie.data.gouv.fr"
         name="select-datasets"
         :clear-on-select="true"
         :filter-results="false"
