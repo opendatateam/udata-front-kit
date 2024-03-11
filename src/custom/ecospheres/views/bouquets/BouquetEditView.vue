@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import config from '@/config'
 import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetContentFieldGroup.vue'
 import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
+import BouquetInformationsFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetInformationsFieldGroup.vue'
 import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
 import {
   type Bouquet,
@@ -184,7 +185,7 @@ onMounted(() => {
         v-model:bouquetDescription="bouquet.description"
         @update-validation="(isValid: boolean) => updateStepValidation(1, isValid)"
       />
-      <BouquetThemeFieldGroup
+      <BouquetInformationsFieldGroup
         v-if="currentStep == 2"
         v-model:theme="bouquet.theme"
         v-model:subtheme="bouquet.subtheme"
