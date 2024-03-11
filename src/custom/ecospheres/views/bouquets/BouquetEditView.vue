@@ -8,8 +8,12 @@ import config from '@/config'
 import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetContentFieldGroup.vue'
 import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
 import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
-import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetThemeFieldGroup.vue'
-import type { Bouquet, BouquetCreationData, Topic } from '@/model'
+import {
+  type Bouquet,
+  type BouquetCreationData,
+  type Topic,
+  NoOptionSelected
+} from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -142,7 +146,11 @@ const inferStepFromTopic = (topic: Topic): number => {
     return 2
   } else if (topic.extras['ecospheres:datasets_properties']?.length > 0) {
     return 4
-  } else if (topic.extras['ecospheres:informations'] !== undefined) {
+  } else if (
+    topic.extras['ecospheres:informations'] !== undefined &&
+    topic.extras['ecospheres:informations'][0].theme !== NoOptionSelected &&
+    topic.extras['ecospheres:informations'][0].subtheme !== NoOptionSelected
+  ) {
     return 3
   } else {
     return 2
