@@ -4,48 +4,62 @@
   </div>
   <div v-else>
     <DsfrAccordionsGroup>
-      <li v-for="(dataset, index) in datasets" :key="index">
-        <DsfrAccordion
-          :id="getAccordeonId(index)"
-          :title="dataset.title"
-          :expanded-id="isExpanded[getAccordeonId(index)]"
-          @expand="isExpanded[getAccordeonId(index)] = $event"
-        >
-          <BouquetDatasetAvailability :dataset-properties="dataset" />
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="markdown(dataset.purpose)"></div>
-          <div class="button__wrapper">
-            <DsfrButton
-              v-if="isEdit"
-              icon="ri-pencil-line"
-              label="Éditer"
-              class="fr-mr-2w"
-              @click.prevent="editDataset(dataset, index)"
-            />
-            <DsfrButton
-              v-if="isEdit"
-              icon="ri-delete-bin-line"
-              label="Retirer de la section"
-              class="fr-mr-2w"
-              @click.prevent="$emit('removeDataset', index)"
-            />
-            <a
-              v-if="!isAvailable(dataset)"
-              class="fr-btn fr-btn--secondary inline-flex"
-              :href="`mailto:${email}`"
-            >
-              Aidez-nous à trouver la donnée</a
-            >
-            <a
-              v-if="dataset.uri"
-              class="fr-btn fr-btn--secondary inline-flex"
-              :href="dataset.uri"
-              target="_blank"
-              >Accéder au catalogue</a
-            >
-          </div>
-        </DsfrAccordion>
-      </li>
+      <!-- conditionnal draggable wrapper component -->
+      <component
+        :is="isEdit ? 'draggable' : 'div'"
+        :list="isEdit ? datasets : null"
+        :ghost-class="isEdit ? 'ghost' : null"
+      >
+        <li v-for="(dataset, index) in datasets" :key="index">
+          <DsfrAccordion
+            :id="getAccordeonId(index)"
+            :expanded-id="isExpanded[getAccordeonId(index)]"
+            :class="{ draggable: isEdit }"
+            @expand="isExpanded[getAccordeonId(index)] = $event"
+          >
+            <template #title>
+              <span v-if="!isEdit">{{ dataset.title }}</span>
+              <span v-else>
+                <VIcon name="ri-drag-move-2-fill" />
+                <span class="fr-ml-2w">{{ dataset.title }}</span>
+              </span>
+            </template>
+            <BouquetDatasetAvailability :dataset-properties="dataset" />
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="markdown(dataset.purpose)"></div>
+            <div class="button__wrapper">
+              <DsfrButton
+                v-if="isEdit"
+                icon="ri-pencil-line"
+                label="Éditer"
+                class="fr-mr-2w"
+                @click.prevent="editDataset(dataset, index)"
+              />
+              <DsfrButton
+                v-if="isEdit"
+                icon="ri-delete-bin-line"
+                label="Retirer de la section"
+                class="fr-mr-2w"
+                @click.prevent="$emit('removeDataset', index)"
+              />
+              <a
+                v-if="!isAvailable(dataset)"
+                class="fr-btn fr-btn--secondary inline-flex"
+                :href="`mailto:${email}`"
+              >
+                Aidez-nous à trouver la donnée</a
+              >
+              <a
+                v-if="dataset.uri"
+                class="fr-btn fr-btn--secondary inline-flex"
+                :href="dataset.uri"
+                target="_blank"
+                >Accéder au catalogue</a
+              >
+            </div>
+          </DsfrAccordion>
+        </li>
+      </component>
     </DsfrAccordionsGroup>
     <DsfrModal
       v-if="isEdit && isModalOpen && editedDataset.data"
@@ -65,6 +79,8 @@
 </template>
 
 <script lang="ts">
+import { VueDraggableNext } from 'vue-draggable-next'
+
 import config from '@/config'
 import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
 import { fromMarkdown } from '@/utils'
@@ -92,7 +108,11 @@ export const getDatasetListTitle = function (
 
 export default {
   name: 'BouquetDatasetList',
-  components: { BouquetDatasetAvailability, DatasetPropertiesFields },
+  components: {
+    BouquetDatasetAvailability,
+    DatasetPropertiesFields,
+    draggable: VueDraggableNext
+  },
   props: {
     datasets: {
       type: Array<DatasetProperties>,
@@ -164,3 +184,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.ghost {
+  background-color: #bbb;
+}
+</style>

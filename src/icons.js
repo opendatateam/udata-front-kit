@@ -3,5 +3,6 @@ export {
   RiAddCircleLine,
   RiPencilLine,
   RiLightbulbLine,
-  RiClipboardLine
+  RiClipboardLine,
+  RiDragMove2Fill
 } from 'oh-vue-icons/icons/ri/index.js'
