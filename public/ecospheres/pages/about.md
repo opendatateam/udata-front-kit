@@ -1,7 +1,7 @@
 # À propos de **ecologie.data.gouv.fr**
 
 
-## Qu'est-ce que **ecologie.data.gouv.fr** ?
+## Qu'est-ce que ecologie.data.gouv.fr ?
 
 _ecologie_.**data.gouv**._fr_ est un catalogue permettant la centralisation des données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. 
 Un bouquet est un ensemble de données contextualisées permettant de répondre à un cas d’usage lié à une politique publique.
@@ -9,7 +9,7 @@ Un bouquet est un ensemble de données contextualisées permettant de répondre 
 
 ## À qui s'adresse cette plateforme ?
 
-_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des administrations centrales, services déconcentrés et des collectivités territoriales oeuvrant à déployer les politiques publiques portées par le Ministère de la Transition écologique et de la Cohésion des territoires. 
+_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des administrations centrales, services déconcentrés et des collectivités territoriales oeuvrant à déployer les politiques publiques portées par le [Ministère de la Transition écologique et de la Cohésion des territoires](https://www.ecologie.gouv.fr/). 
 L'accès aux données brutes permet également à la société civile, au secteur privé ou encore à l'administration de s'en emparer dans un but de réutilisation.
 
 
@@ -47,8 +47,8 @@ De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la créa
 ## Un énième portail de données ?
 
 _ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données.
-C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou [transport.data.gouv.fr](transport.data.gouv.fr).
-Toutes les données disponibles ici le sont dans les mêmes conditions que sur [data.gouv.fr](data.gouv.fr).
+C’est une exposition thématique du catalogue de [data.gouv.fr](https://data.gouv.fr/) sur le modèle de [meteo.data.gouv.fr](https://meteo.data.gouv.fr/) ou [transport.data.gouv.fr](https://transport.data.gouv.fr/).
+Toutes les données disponibles ici le sont dans les mêmes conditions que sur [data.gouv.fr](https://data.gouv.fr/).
 
 
 ## Qui est derrière cette plateforme ?
