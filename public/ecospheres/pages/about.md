@@ -1,7 +1,7 @@
-# À propos de _ecologie_.**data.gouv**._fr_
+# À propos de **ecologie.data.gouv.fr**
 
 
-## Qu'est-ce que _ecologie_.**data.gouv**._fr_ ?
+## Qu'est-ce que **ecologie.data.gouv.fr** ?
 
 _ecologie_.**data.gouv**._fr_ est un catalogue permettant la centralisation des données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. 
 Un bouquet est un ensemble de données contextualisées permettant de répondre à un cas d’usage lié à une politique publique.
@@ -27,7 +27,7 @@ Les données restreintes, contrairement aux données ouvertes, sont des informat
 ## Quelles données sont mises à disposition ?
 
 Un travail sur les moissonnages de catalogues a démarré en 2022.
-Il a vocation à couvrir l'ensemble des données du pôle ministériel de la transition écologique.
+Il a vocation à couvrir l'ensemble des données cataloguées du pôle ministériel de la transition écologique.
 
 On y trouve la présence de données provenant : 
 - de l'administration centrale ;
