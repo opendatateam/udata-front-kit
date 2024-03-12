@@ -19,6 +19,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useSpatialCoverage } from '@/utils/spatial'
 
 const route = useRouteParamsAsString()
 const router = useRouter()
@@ -40,6 +41,7 @@ const breadcrumbLinks = ref([
   }
 ])
 const selectedTheme = ref('')
+const spatialCoverage = useSpatialCoverage(bouquet)
 
 const showDiscussions = config.website.discussions.topic.display
 
@@ -170,6 +172,10 @@ onMounted(() => {
         <p>{{ formatDate(bouquet.created_at) }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
         <p>{{ formatDate(bouquet.last_modified) }}</p>
+        <div v-if="spatialCoverage">
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
+          <p>{{ spatialCoverage.name }}</p>
+        </div>
         <DsfrButton
           v-if="canEdit"
           size="md"

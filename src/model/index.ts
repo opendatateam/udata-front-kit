@@ -1,5 +1,7 @@
 import type { Owned } from '@etalab/data.gouv.fr-components'
 
+import type { SpatialField } from './spatial'
+
 type WithOwned<T> = T & Owned
 
 interface DatasetProperties {
@@ -52,6 +54,7 @@ type Bouquet = Owned & {
   theme: string | undefined
   subtheme: string | undefined
   datasetsProperties: DatasetProperties[]
+  spatial: SpatialField | undefined
 }
 
 interface BouquetCreationData {
@@ -88,6 +91,7 @@ type Topic = Owned & {
   slug: string
   tags: string[]
   uri: string
+  spatial: SpatialField | undefined
 }
 
 export const NoOptionSelected = 'no_option_selected'

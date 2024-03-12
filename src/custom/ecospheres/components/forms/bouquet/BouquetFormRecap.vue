@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import type { PropType } from 'vue'
+
+import BouquetDatasetList, {
+  getDatasetListTitle
+} from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import type { Bouquet } from '@/model'
+import { fromMarkdown } from '@/utils/index'
+import { useSpatialCoverageFromField } from '@/utils/spatial'
+
+const props = defineProps({
+  bouquet: {
+    type: Object as PropType<Bouquet>,
+    default: () => ({})
+  }
+})
+
+const emit = defineEmits(['updateStep'])
+
+const spatialCoverage = useSpatialCoverageFromField(props.bouquet.spatial)
+
+const goToStep = (step: number) => {
+  emit('updateStep', step)
+}
+</script>
+
 <template>
   <h4>
     Description du bouquet de données
@@ -16,7 +42,7 @@
   <p>{{ bouquet.name }}</p>
   <p class="fr-mb-0"><strong>Objectif du bouquet</strong></p>
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <p v-html="bouquet.description ? markdown(bouquet.description) : ''" />
+  <p v-html="bouquet.description ? fromMarkdown(bouquet.description) : ''" />
   <hr />
 
   <h4>
@@ -35,10 +61,12 @@
   <p>{{ bouquet.theme }}</p>
   <p class="fr-mb-0"><strong>Chantier</strong></p>
   <p>{{ bouquet.subtheme }}</p>
+  <p class="fr-mb-0"><strong>Couverture territoriale</strong></p>
+  <p>{{ spatialCoverage ? spatialCoverage.name : 'Pas de couverture' }}</p>
   <hr />
 
-  <h4>
-    {{ getDatasetListTitle() }}
+  <h4 v-if="bouquet.datasetsProperties">
+    {{ getDatasetListTitle(bouquet.datasetsProperties) }}
     <DsfrButton
       :icon-only="true"
       size="sm"
@@ -51,51 +79,3 @@
   </h4>
   <BouquetDatasetList :datasets="bouquet.datasetsProperties" />
 </template>
-
-<script lang="ts">
-import type { PropType } from 'vue'
-
-import * as BouquetDatasetListModule from '@/custom/ecospheres/components/BouquetDatasetList.vue'
-import type { Bouquet } from '@/model'
-import { fromMarkdown } from '@/utils/index'
-
-export default {
-  name: 'BouquetFormRecap',
-  components: {
-    BouquetDatasetList: BouquetDatasetListModule.default
-  },
-  props: {
-    bouquet: {
-      type: Object as PropType<Partial<Bouquet>>,
-      default: () => ({})
-    }
-  },
-  emits: ['updateStep'],
-  computed: {
-    numberOfDatasets(): number {
-      return this.bouquet?.datasetsProperties?.length ?? 0
-    },
-    compositionTitle(): string {
-      const title = ' Composition du bouquet'
-      return this.numberOfDatasets < 1
-        ? title
-        : title + `( ${this.numberOfDatasets} )`
-    }
-  },
-  methods: {
-    goToStep(step: number) {
-      this.$emit('updateStep', step)
-    },
-    getDatasetListTitle() {
-      return this.bouquet.datasetsProperties
-        ? BouquetDatasetListModule.getDatasetListTitle(
-            this.bouquet.datasetsProperties
-          )
-        : ''
-    },
-    markdown(text: string) {
-      return fromMarkdown(text)
-    }
-  }
-}
-</script>
