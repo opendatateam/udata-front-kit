@@ -15,7 +15,8 @@ L'accès aux données brutes permet également à la société civile, au secteu
 
 ## Les données ouvertes : qu'est-ce que c'est ?
 
-Les données ouvertes (open data) sont des données en accès libre, gratuites et facilement réutilisables par toutes et tous. Ces données peuvent être produites par l'administration, mais aussi par des acteurs privés ou encore des citoyens.
+Les données ouvertes (open data) sont des données en accès libre, gratuites et facilement réutilisables par toutes et tous.
+Ces données peuvent être produites par l'administration, mais aussi par des acteurs privés ou encore des citoyens.
 
 
 ## Les données restreintes : qu'est ce que c'est ?
@@ -25,7 +26,8 @@ Les données restreintes, contrairement aux données ouvertes, sont des informat
 
 ## Quelles données sont mises à disposition ?
 
-Un travail sur les moissonnages de catalogues a démarré en 2022. Il a vocation à couvrir l'ensemble des données du pôle ministériel de la transition écologique.
+Un travail sur les moissonnages de catalogues a démarré en 2022.
+Il a vocation à couvrir l'ensemble des données du pôle ministériel de la transition écologique.
 
 On y trouve la présence de données provenant : 
 - de l'administration centrale ;
@@ -38,18 +40,21 @@ On y trouve la présence de données provenant :
 
 
 _ecologie_.**data.gouv**._fr_ sera progressivement enrichi de nouveaux bouquets de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. 
-Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquet de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création, la recherche et le suivi de bouquets de données.
+Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquet de données.
+De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création, la recherche et le suivi de bouquets de données.
 
 
 ## Un énième portail de données ?
 
-_ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou [transport.data.gouv.fr](transport.data.gouv.fr). Toutes les données disponibles ici le sont dans les mêmes conditions que sur [data.gouv.fr](data.gouv.fr).
+_ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données.
+C’est une exposition thématique du catalogue de [data.gouv.fr](data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](meteo.data.gouv.fr) ou [transport.data.gouv.fr](transport.data.gouv.fr).
+Toutes les données disponibles ici le sont dans les mêmes conditions que sur [data.gouv.fr](data.gouv.fr).
 
 
 ## Qui est derrière cette plateforme ?
 
-Cette plateforme est le fruit d'une collaboration entre l'équipe **_Ecosphères_** du **_Commissariat Général au Developpement Durable_** et l'équipe **_data.gouv.fr_** de la **_Direction Interministérielle du Numérique._**
-Celle-ci s'inscrit dans une démarche plus large de construction de biens communs numériques facilitant la création de plateformes thématiques exposant de la donnée publique.
+Cette plateforme est le fruit d'une collaboration entre l'équipe **_Ecosphères_** du [**_Commissariat général au développement durable_**](https://www.ecologie.gouv.fr/commissariat-general-au-developpement-durable-cgdd) et l'équipe **_data.gouv.fr_** de la [**_Direction interministérielle du numérique._**](https://www.numerique.gouv.fr/dinum/)
+Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de [plateformes thématiques exposant de la donnée publique](https://github.com/opendatateam/udata-front-kit).
 
 
 ## Un retour, une question ?
