@@ -1,4 +1,4 @@
-# À propos de **ecologie.data.gouv.fr**
+# À propos de ecologie.data.gouv.fr
 
 
 ## Qu'est-ce que ecologie.data.gouv.fr ?
