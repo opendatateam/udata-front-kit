@@ -3,9 +3,8 @@
 
 ## Qu'est-ce que _ecologie_.**data.gouv**._fr_ ?
 
-_ecologie_.**data.gouv**._fr_ est un catalogue de données qui centralise les données de la transition écologique. 
-Il offre une découverte de bouquets de données propre à des cas d'usages. 
-Un bouquet est un ensemble de données contextualisées qui permet d’agir de répondre à un cas d’usage lié à une politique publique.
+_ecologie_.**data.gouv**._fr_ est un catalogue permettant la centralisation des données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. 
+Un bouquet est un ensemble de données contextualisées permettant de répondre à un cas d’usage lié à une politique publique.
 
 
 ## À qui s'adresse cette plateforme ?
