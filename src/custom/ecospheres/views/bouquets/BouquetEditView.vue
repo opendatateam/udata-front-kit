@@ -49,7 +49,8 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
         }
       ],
       'ecospheres:datasets_properties': bouquet.value.datasetsProperties
-    }
+    },
+    spatial: bouquet.value.spatial
   }
 })
 
@@ -132,7 +133,8 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
     subtheme: getInfoFromExtras('subtheme', topic),
     datasetsProperties: topic.extras['ecospheres:datasets_properties'] ?? [],
     owner: topic.owner,
-    organization: topic.organization
+    organization: topic.organization,
+    spatial: topic.spatial
   } as Bouquet
 }
 
@@ -189,6 +191,7 @@ onMounted(() => {
         v-if="currentStep == 2"
         v-model:theme="bouquet.theme"
         v-model:subtheme="bouquet.subtheme"
+        v-model:spatial-field="bouquet.spatial"
         @update-validation="(isValid: boolean) => updateStepValidation(2, isValid)"
       />
       <BouquetContentFieldGroup
