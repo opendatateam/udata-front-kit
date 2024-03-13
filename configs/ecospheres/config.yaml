@@ -57,8 +57,9 @@ website:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'
-      type: 'component'
+      type: 'custom'
       display_menu: true
+      custom_component: 'ecospheres/views/HomeView'
     - name: 'Données'
       id: 'datasets'
       linkPage: '/datasets'
