@@ -7,10 +7,17 @@ import config from '@/config'
 import Navigation from './components/Navigation.vue'
 import Header from './components/header/Header.vue'
 import { useUserStore } from './store/UserStore'
+import { fromMarkdown } from './utils'
 
 const router = useRouter()
 const query = ref('')
 const userStore = useUserStore()
+const isNoticeClosed = ref(false)
+
+const noticeContent = computed(() => {
+  if (!config.website.notice?.display) return
+  return fromMarkdown(config.website.notice?.content)
+})
 
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
@@ -64,6 +71,14 @@ const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
 </script>
 
 <template>
+  <DsfrNotice
+    v-if="!isNoticeClosed && noticeContent"
+    :closeable="config.website.notice?.closeable ? true : null"
+    @close="isNoticeClosed = true"
+  >
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div v-html="noticeContent"></div>
+  </DsfrNotice>
   <Header
     :service-title="servicetitle"
     service-description=""
