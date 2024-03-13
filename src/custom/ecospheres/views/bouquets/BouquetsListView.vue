@@ -55,9 +55,9 @@ const breadcrumbList = computed(() => {
   <div class="fr-container fr-mb-4w">
     <h1 class="fr-mb-2v">Bouquets</h1>
     <div class="fr-mt-2w">
-      <div className="fr-grid-row topicListView">
+      <div className="fr-grid-row">
         <nav
-          className="fr-sidemenu fr-col-4"
+          className="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
           <div className="fr-sidemenu__inner">
@@ -71,7 +71,7 @@ const breadcrumbList = computed(() => {
             />
           </div>
         </nav>
-        <div className="fr-col-8">
+        <div className="fr-col">
           <BouquetList
             :theme-name="themeName"
             :subtheme-name="subthemeName"
@@ -82,3 +82,17 @@ const breadcrumbList = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped="true" lang="scss">
+@media (max-width: 768px) {
+  .fr-sidemenu {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 2em;
+    width: 100%;
+    .fr-sidemenu__title {
+      box-shadow: none;
+    }
+  }
+}
+</style>
