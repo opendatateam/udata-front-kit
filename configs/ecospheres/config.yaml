@@ -53,6 +53,10 @@ website:
       to: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
+  notice:
+    display: true
+    content: Notice avec un [lien beta](/beta) et du _style_
+    closeable: false
   router_items:
     - name: 'Accueil'
       id: 'home'
@@ -92,6 +96,12 @@ website:
       type: 'page'
       display_menu: false
       url: '/ecospheres/pages/terms.md'
+    - name: 'Beta'
+      id: 'beta'
+      linkPage: '/beta'
+      type: 'page'
+      display_menu: false
+      url: '/ecospheres/pages/beta.md'
   home_buttons:
   show_topic_charts: false
   show_quality_component: true
