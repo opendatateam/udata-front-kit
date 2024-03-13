@@ -17,7 +17,7 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, fromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 
-import BouquetDatasetAvailability from '../../components/BouquetDatasetAvailability.vue'
+import BouquetDatasetAccordionTitle from '../../components/BouquetDatasetAccordionTitle.vue'
 
 const route = useRouteParamsAsString()
 const router = useRouter()
@@ -223,13 +223,14 @@ onMounted(() => {
           >
             <DsfrAccordion
               :id="datasetProperties.id"
-              :title="datasetProperties.title"
               :expanded-id="isExpanded[idx]"
               @expand="isExpanded[idx] = $event"
             >
-              <BouquetDatasetAvailability
-                :dataset-properties="datasetProperties"
-              />
+              <template #title>
+                <BouquetDatasetAccordionTitle
+                  :dataset-properties="datasetProperties"
+                />
+              </template>
               <div class="fr-mb-3w">
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <span v-html="fromMarkdown(datasetProperties.purpose)"></span>
@@ -284,11 +285,6 @@ onMounted(() => {
     margin-right: 5px;
     vertical-align: middle;
   }
-}
-
-.fr-tag {
-  color: rgba(0, 0, 0, 0.7);
-  border-radius: 0;
 }
 
 .bouquet {

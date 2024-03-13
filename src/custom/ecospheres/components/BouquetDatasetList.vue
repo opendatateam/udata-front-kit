@@ -18,13 +18,11 @@
             @expand="isExpanded[getAccordeonId(index)] = $event"
           >
             <template #title>
-              <span v-if="!isEdit">{{ dataset.title }}</span>
-              <span v-else>
-                <VIcon name="ri-drag-move-2-fill" />
-                <span class="fr-ml-2w">{{ dataset.title }}</span>
-              </span>
+              <BouquetDatasetAccordionTitle
+                :dataset-properties="dataset"
+                :is-edit="isEdit"
+              />
             </template>
-            <BouquetDatasetAvailability :dataset-properties="dataset" />
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="markdown(dataset.purpose)"></div>
             <div class="button__wrapper">
@@ -85,7 +83,7 @@ import config from '@/config'
 import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
 import { fromMarkdown } from '@/utils'
 
-import BouquetDatasetAvailability from './BouquetDatasetAvailability.vue'
+import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
 
 export const getDatasetListTitle = function (
@@ -109,7 +107,7 @@ export const getDatasetListTitle = function (
 export default {
   name: 'BouquetDatasetList',
   components: {
-    BouquetDatasetAvailability,
+    BouquetDatasetAccordionTitle,
     DatasetPropertiesFields,
     draggable: VueDraggableNext
   },
