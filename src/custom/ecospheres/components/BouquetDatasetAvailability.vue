@@ -16,7 +16,7 @@ const props = defineProps({
 <template>
   <DsfrTag
     v-if="!isAvailable(props.datasetProperties.availability)"
-    class="fr-mb-2w uppercase bold"
+    class="uppercase bold"
     :label="`${
       props.datasetProperties.availability === Availability.NOT_AVAILABLE
         ? missingData
@@ -26,3 +26,12 @@ const props = defineProps({
     }`"
   />
 </template>
+
+<style lang="scss">
+.fr-tag {
+  font-size: 0.8rem;
+  color: #6e445a;
+  background-color: #fee7fc;
+  border-radius: 0;
+}
+</style>
