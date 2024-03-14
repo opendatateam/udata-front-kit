@@ -163,7 +163,7 @@ onMounted(() => {
 
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
-    <form class="fr-col-12 fr-col-lg-7">
+    <form class="fr-col-12 fr-col-xl-8">
       <div class="fr-grid-row">
         <DsfrStepper :steps="steps" :current-step="currentStep" />
       </div>
