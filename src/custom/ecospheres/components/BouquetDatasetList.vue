@@ -3,6 +3,15 @@
     <p>Ce bouquet ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
+    <div class="align-right fr-mb-1v small">
+      <a
+        v-if="expandedIds.length !== datasets.length"
+        href="#"
+        @click.stop.prevent="expandAll"
+        >Tout déplier</a
+      >
+      <a v-else href="#" @click.stop.prevent="collapseAll">Tout replier</a>
+    </div>
     <DsfrAccordionsGroup>
       <!-- conditionnal draggable wrapper component -->
       <component
@@ -124,7 +133,7 @@ export default {
   emits: ['removeDataset', 'editDataset'],
   data() {
     return {
-      isExpanded: {} as { [key: string]: boolean },
+      isExpanded: {} as { [key: string]: string },
       isModalOpen: false,
       editedDataset: {
         index: undefined as number | undefined,
@@ -134,6 +143,9 @@ export default {
     }
   },
   computed: {
+    expandedIds() {
+      return Object.keys(this.isExpanded).filter((k) => !!this.isExpanded[k])
+    },
     modalActions() {
       return [
         {
@@ -162,6 +174,14 @@ export default {
     }
   },
   methods: {
+    expandAll() {
+      for (const [idx] of this.datasets.entries()) {
+        this.isExpanded[this.getAccordeonId(idx)] = this.getAccordeonId(idx)
+      }
+    },
+    collapseAll() {
+      this.isExpanded = {}
+    },
     getAccordeonId(index: number): string {
       return `accordion_${index}`
     },
