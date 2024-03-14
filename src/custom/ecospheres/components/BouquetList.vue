@@ -79,15 +79,12 @@ const goToCreate = () => {
 }
 
 const computeLink = (bouquet: Topic): RouteLocationRaw => {
-  if (!bouquet.private) {
-    return {
-      name: 'bouquet_detail',
-      params: { bid: bouquet.slug },
-      query: { fromSearch: '1' }
-    }
-  } else {
-    return { name: 'bouquet_edit', params: { bid: bouquet.id } }
-  }
+  return bouquet.private
+    ? { name: 'bouquet_edit', params: { bid: bouquet.id } }
+    : {
+        name: 'bouquet_detail',
+        params: { bid: bouquet.slug }
+      }
 }
 
 onMounted(() => {
