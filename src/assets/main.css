@@ -87,3 +87,8 @@ textarea {
   margin: 20px 0;
   height: 250px;
 }
+
+/* overload datagouv-components */
+.datagouv-components h3.fr-accordion__title {
+  margin-bottom: 0;
+}

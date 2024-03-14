@@ -46,13 +46,6 @@ const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(bouquet.value as Topic)
 })
 
-const tabs = computed(() => {
-  return [
-    { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
-    { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' }
-  ]
-})
-
 const datasetsProperties = computed((): DatasetProperties[] => {
   return bouquet.value?.extras['ecospheres:datasets_properties'] ?? []
 })
@@ -207,9 +200,9 @@ onMounted(() => {
     </div>
 
     <DsfrTabs
-      class="fr-mt-2w bouquet-tabs"
+      class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du bouquet"
-      :tab-titles="tabs"
+      :tab-titles="[{ title: 'Données' }, { title: 'Discussions' }]"
       :initial-selected-index="0"
       :selected-tab-index="selectedTabIndex"
       @select-tab="(idx: number) => (selectedTabIndex = idx)"
@@ -226,7 +219,7 @@ onMounted(() => {
       <!-- Discussions -->
       <DsfrTabContent
         panel-id="tab-content-1"
-        tab-id="tab-2"
+        tab-id="tab-1"
         :selected="selectedTabIndex === 1"
       >
         <DiscussionsList
@@ -254,14 +247,6 @@ onMounted(() => {
     display: flex;
     align-items: center;
     flex-flow: wrap;
-  }
-}
-</style>
-
-<style lang="scss">
-.bouquet-tabs {
-  .datagouv-components h3 {
-    margin-bottom: 0;
   }
 }
 </style>
