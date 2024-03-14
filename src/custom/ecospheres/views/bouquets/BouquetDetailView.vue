@@ -33,6 +33,10 @@ const breadcrumbLinks = ref([
   {
     to: '/',
     text: 'Accueil'
+  },
+  {
+    to: { name: 'bouquets' },
+    text: 'Bouquets'
   }
 ])
 const selectedTheme = ref('')
@@ -40,7 +44,6 @@ const selectedTheme = ref('')
 const showDiscussions = config.website.discussions.topic.display
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
-const showGoBack = computed(() => route.query.fromSearch !== undefined)
 
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(bouquet.value as Topic)
@@ -52,10 +55,6 @@ const datasetsProperties = computed((): DatasetProperties[] => {
 
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: bouquet.value?.id } })
-}
-
-const goBack = () => {
-  router.go(-1)
 }
 
 const getTheme = (themeName: string): Theme => {
@@ -114,26 +113,6 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <DsfrButton
-    v-if="showGoBack"
-    class="backToPage fr-mb-2w"
-    :tertiary="true"
-    :no-outline="true"
-    @click.prevent="goBack"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill="currentColor"
-        d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12H5.828Z"
-      />
-    </svg>
-    Revenir aux résultats
-  </DsfrButton>
   <div v-if="bouquet" class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
@@ -233,15 +212,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.backToPage {
-  color: var(--text-action-high-blue-france);
-  text-decoration: none;
-
-  svg {
-    margin-right: 5px;
-    vertical-align: middle;
-  }
-}
 .bouquet {
   &__header {
     display: flex;
