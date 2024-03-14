@@ -10,29 +10,25 @@ import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
-import { isAvailable, type Theme, type Topic } from '@/model'
+import BouquetDatasetList, {
+  getDatasetListTitle
+} from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import type { Theme, Topic, DatasetProperties } from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { descriptionFromMarkdown, fromMarkdown, formatDate } from '@/utils'
+import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-
-import BouquetDatasetAccordionTitle from '../../components/BouquetDatasetAccordionTitle.vue'
 
 const route = useRouteParamsAsString()
 const router = useRouter()
-
 const store = useTopicStore()
+const loading = useLoading()
 
 const bouquet: Ref<Topic | null> = ref(null)
 const theme = ref()
 const subtheme = ref()
-const loading = useLoading()
-const isExpanded = ref({} as { [key: string]: boolean })
-
-const description = computed(() => descriptionFromMarkdown(bouquet))
-const showGoBack = computed(() => route.query.fromSearch !== undefined)
-
+const selectedTabIndex = ref(0)
 const breadcrumbLinks = ref([
   {
     to: '/',
@@ -40,9 +36,26 @@ const breadcrumbLinks = ref([
   }
 ])
 const selectedTheme = ref('')
-const url = window.location.href
 
 const showDiscussions = config.website.discussions.topic.display
+
+const description = computed(() => descriptionFromMarkdown(bouquet))
+const showGoBack = computed(() => route.query.fromSearch !== undefined)
+
+const canEdit = computed(() => {
+  return useUserStore().hasEditPermissions(bouquet.value as Topic)
+})
+
+const tabs = computed(() => {
+  return [
+    { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
+    { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' }
+  ]
+})
+
+const datasetsProperties = computed((): DatasetProperties[] => {
+  return bouquet.value?.extras['ecospheres:datasets_properties'] ?? []
+})
 
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: bouquet.value?.id } })
@@ -50,10 +63,6 @@ const goToEdit = () => {
 
 const goBack = () => {
   router.go(-1)
-}
-
-const copyUrl = () => {
-  navigator.clipboard.writeText(url)
 }
 
 const getTheme = (themeName: string): Theme => {
@@ -78,10 +87,6 @@ const getSelectedThemeColor = (themed: string) => {
   selectedTheme.value = themed
   return getThemeColor(selectedTheme.value)
 }
-
-const canEdit = computed(() => {
-  return useUserStore().hasEditPermissions(bouquet.value as Topic)
-})
 
 onMounted(() => {
   const loader = loading.show()
@@ -200,79 +205,37 @@ onMounted(() => {
         />
       </div>
     </div>
-  </div>
 
-  <div class="fr-container fr-mt-4w fr-mb-4w">
-    <div class="bouquet__container fr-p-6w fr-mb-6w">
-      <div
-        v-if="
-          bouquet?.extras && bouquet.extras['ecospheres:datasets_properties']
-        "
-      >
-        <h5>
-          Données utilisées ({{
-            bouquet?.extras['ecospheres:datasets_properties'].length
-          }})
-        </h5>
-        <DsfrAccordionsGroup>
-          <li
-            v-for="(datasetProperties, idx) in bouquet?.extras[
-              'ecospheres:datasets_properties'
-            ]"
-            :key="idx"
-          >
-            <DsfrAccordion
-              :id="datasetProperties.id"
-              :expanded-id="isExpanded[idx]"
-              @expand="isExpanded[idx] = $event"
-            >
-              <template #title>
-                <BouquetDatasetAccordionTitle
-                  :dataset-properties="datasetProperties"
-                />
-              </template>
-              <div class="fr-mb-3w">
-                <!-- eslint-disable-next-line vue/no-v-html -->
-                <span v-html="fromMarkdown(datasetProperties.purpose)"></span>
-              </div>
-              <div class="button__wrapper">
-                <a
-                  v-if="!isAvailable(datasetProperties.availability)"
-                  class="fr-btn fr-btn--secondary inline-flex"
-                  :href="`mailto:${config.website.contact_email}`"
-                >
-                  Aidez-nous à trouver la donnée</a
-                >
-                <a
-                  v-else
-                  class="fr-btn fr-btn--secondary inline-flex"
-                  :href="datasetProperties.uri ?? undefined"
-                  target="_blank"
-                  >Accéder au catalogue</a
-                >
-              </div>
-            </DsfrAccordion>
-          </li>
-        </DsfrAccordionsGroup>
-      </div>
-    </div>
-
-    <DsfrButton
-      icon="ri-clipboard-line"
-      :inline="false"
-      class="btn-copy fr-ml-auto"
-      @click.prevent="copyUrl"
+    <DsfrTabs
+      class="fr-mt-2w bouquet-tabs"
+      tab-list-name="Groupes d'attributs du bouquet"
+      :tab-titles="tabs"
+      :initial-selected-index="0"
+      :selected-tab-index="selectedTabIndex"
+      @select-tab="(idx: number) => (selectedTabIndex = idx)"
     >
-      Copier l'url de la page
-    </DsfrButton>
-
-    <div class="fr-mt-8w">
-      <DiscussionsList
-        v-if="showDiscussions && bouquet"
-        :subject="bouquet"
-        subject-class="Topic"
-      />
-    </div>
+      <!-- Jeux de données -->
+      <DsfrTabContent
+        panel-id="tab-content-0"
+        tab-id="tab-0"
+        :selected="selectedTabIndex === 0"
+      >
+        <h2>{{ getDatasetListTitle(datasetsProperties) }}</h2>
+        <BouquetDatasetList :datasets="datasetsProperties" />
+      </DsfrTabContent>
+      <!-- Discussions -->
+      <DsfrTabContent
+        panel-id="tab-content-1"
+        tab-id="tab-2"
+        :selected="selectedTabIndex === 1"
+      >
+        <DiscussionsList
+          v-if="showDiscussions && bouquet"
+          :subject="bouquet"
+          subject-class="Topic"
+        />
+      </DsfrTabContent>
+    </DsfrTabs>
   </div>
 </template>
 
@@ -286,30 +249,19 @@ onMounted(() => {
     vertical-align: middle;
   }
 }
-
 .bouquet {
   &__header {
     display: flex;
     align-items: center;
     flex-flow: wrap;
   }
-
-  &__container {
-    border: 1px solid var(--border-default-grey);
-
-    :deep(a) {
-      color: var(--text-action-high-blue-france);
-    }
-
-    .button__wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      text-align: center;
-    }
-  }
 }
-.btn-copy {
-  display: block;
+</style>
+
+<style lang="scss">
+.bouquet-tabs {
+  .datagouv-components h3 {
+    margin-bottom: 0;
+  }
 }
 </style>
