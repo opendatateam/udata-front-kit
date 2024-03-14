@@ -87,19 +87,19 @@ import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
 
 export const getDatasetListTitle = function (
-  datasets: DatasetProperties[]
+  datasets: DatasetProperties[],
+  title: string = 'Composition du bouquet'
 ): string {
-  const title = 'Composition du bouquet '
   const numberOfDatasets = datasets.length
   switch (numberOfDatasets) {
     case 0: {
       return title
     }
     case 1: {
-      return title + '( 1 jeu de données )'
+      return `${title} ( 1 jeu de données )`
     }
     default: {
-      return title + `( ${numberOfDatasets} jeux de données )`
+      return `${title} ( ${numberOfDatasets} jeux de données )`
     }
   }
 }
