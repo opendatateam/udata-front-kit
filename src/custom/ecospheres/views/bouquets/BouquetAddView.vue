@@ -58,7 +58,7 @@ const submit = () => {
 
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
-    <form class="fr-col-12 fr-col-xl-8">
+    <form>
       <div class="fr-grid-row">
         <DsfrStepper :steps="steps" :current-step="1" />
       </div>
