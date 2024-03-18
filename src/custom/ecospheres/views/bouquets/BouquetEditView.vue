@@ -202,20 +202,21 @@ onMounted(() => {
           secondary
           @click="doDelete"
         />
-        <DsfrButton
-          v-if="currentStep > 1"
-          type="button"
-          class="fr-mt-2w fr-mr-2w fr-ml-auto"
-          label="Précédent"
-          @click.prevent="goToPreviousPage"
-        />
-        <DsfrButton
-          type="button"
-          class="fr-mt-2w"
-          :label="currentStep === 4 ? 'Publier' : 'Suivant'"
-          :disabled="!isStepValid(currentStep)"
-          @click.prevent="goToNextStep()"
-        />
+        <div class="fr-ml-auto fr-mt-2w">
+          <DsfrButton
+            v-if="currentStep > 1"
+            type="button"
+            class="fr-mr-2w"
+            label="Précédent"
+            @click.prevent="goToPreviousPage"
+          />
+          <DsfrButton
+            type="button"
+            :label="currentStep === 4 ? 'Publier' : 'Suivant'"
+            :disabled="!isStepValid(currentStep)"
+            @click.prevent="goToNextStep()"
+          />
+        </div>
       </div>
     </form>
   </div>
