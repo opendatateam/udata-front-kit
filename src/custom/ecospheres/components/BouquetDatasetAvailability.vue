@@ -27,7 +27,7 @@ const props = defineProps({
   />
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .fr-tag {
   font-size: 0.8rem;
   color: #6e445a;
