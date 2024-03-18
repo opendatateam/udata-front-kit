@@ -96,7 +96,6 @@ watch(
 )
 
 watch(isAvailable, (newVal) => {
-  // FIXME: this was not the original check, verify it's OK
   if (!newVal) {
     datasetProperties.value.uri = null
     datasetProperties.value.id = null
@@ -215,3 +214,9 @@ watch(
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+textarea {
+  height: 150px;
+}
+</style>

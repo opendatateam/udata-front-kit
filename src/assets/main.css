@@ -41,6 +41,10 @@
   width: fit-content;
 }
 
+.small {
+  font-size: 0.8em;
+}
+
 /* ELEMENT DISPLAY */
 .block {
   display: block;
@@ -66,6 +70,10 @@
 
 .align-center {
   align-items: center;
+}
+
+.align-right {
+  text-align: right;
 }
 
 .actionTile {

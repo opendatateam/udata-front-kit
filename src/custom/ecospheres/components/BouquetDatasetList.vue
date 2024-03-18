@@ -3,6 +3,15 @@
     <p>Ce bouquet ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
+    <div class="align-right fr-mb-1v small">
+      <a
+        v-if="expandedIds.length !== datasets.length"
+        href="#"
+        @click.stop.prevent="expandAll"
+        >Tout déplier</a
+      >
+      <a v-else href="#" @click.stop.prevent="collapseAll">Tout replier</a>
+    </div>
     <DsfrAccordionsGroup>
       <!-- conditionnal draggable wrapper component -->
       <component
@@ -13,9 +22,9 @@
         <li v-for="(dataset, index) in datasets" :key="index">
           <DsfrAccordion
             :id="getAccordeonId(index)"
-            :expanded-id="isExpanded[getAccordeonId(index)]"
+            :expanded-id="expandStore[getAccordeonId(index)]"
             :class="{ draggable: isEdit }"
-            @expand="isExpanded[getAccordeonId(index)] = $event"
+            @expand="expandStore[getAccordeonId(index)] = $event"
           >
             <template #title>
               <BouquetDatasetAccordionTitle
@@ -124,7 +133,7 @@ export default {
   emits: ['removeDataset', 'editDataset'],
   data() {
     return {
-      isExpanded: {} as { [key: string]: boolean },
+      expandStore: {} as { [key: string]: string | null },
       isModalOpen: false,
       editedDataset: {
         index: undefined as number | undefined,
@@ -134,6 +143,9 @@ export default {
     }
   },
   computed: {
+    expandedIds() {
+      return Object.keys(this.expandStore).filter((k) => !!this.expandStore[k])
+    },
     modalActions() {
       return [
         {
@@ -162,6 +174,14 @@ export default {
     }
   },
   methods: {
+    expandAll() {
+      for (const [idx] of this.datasets.entries()) {
+        this.expandStore[this.getAccordeonId(idx)] = this.getAccordeonId(idx)
+      }
+    },
+    collapseAll() {
+      this.expandStore = {}
+    },
     getAccordeonId(index: number): string {
       return `accordion_${index}`
     },

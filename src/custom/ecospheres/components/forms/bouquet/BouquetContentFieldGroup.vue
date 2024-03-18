@@ -1,16 +1,16 @@
 <template>
   <h4>{{ getDatasetListTitle() }}</h4>
+  <DatasetPropertiesAddForm
+    v-model:is-dirty="hasCurrentDatasetInput"
+    :already-selected-datasets="datasets"
+    @add-dataset="addDataset"
+  />
   <BouquetDatasetList
     class="fr-mt-4w fr-mb-4w"
     :datasets="datasets"
     :is-edit="true"
     @remove-dataset="removeDataset"
     @edit-dataset="editDataset"
-  />
-  <DatasetPropertiesAddForm
-    v-model:is-dirty="hasCurrentDatasetInput"
-    :already-selected-datasets="datasets"
-    @add-dataset="addDataset"
   />
 </template>
 
