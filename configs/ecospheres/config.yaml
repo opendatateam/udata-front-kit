@@ -129,6 +129,7 @@ website:
       create: true
   datasets:
     organization_filter: true
+    add_to_bouquet: true
 
 themes:
   - name: Se loger

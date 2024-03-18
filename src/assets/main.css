@@ -14,6 +14,8 @@
   --blue-france-975-sun-113: var(--blue-cumulus-975-75);
   --blue-france-main-525: var(--blue-cumulus-main-526);
   --blue-france-850-200: var(--blue-cumulus-850-200);
+  /* toastify */
+  --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
 }
 
 @font-face {

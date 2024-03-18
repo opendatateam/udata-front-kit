@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { computed } from 'vue'
 
 import config from '@/config'
 import type { Topic } from '@/model'
@@ -20,6 +21,18 @@ export const useTopicStore = defineStore('topic', {
     // flag for initial/remote loading of data
     isLoaded: false
   }),
+  getters: {
+    // Computed property to get topics owned by the current user
+    userTopics: (state) => {
+      const userStore = useUserStore()
+      return computed(() => {
+        if (!userStore.isLoggedIn) return []
+        return state.data.filter(
+          (topic) => topic.owner?.id === userStore.data?.id
+        )
+      })
+    }
+  },
   actions: {
     /**
      * Load topics to store from a list of ids and API

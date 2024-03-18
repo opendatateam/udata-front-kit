@@ -3,7 +3,6 @@ import { type DatasetV2 } from '@etalab/data.gouv.fr-components'
 import Multiselect from '@vueform/multiselect'
 import { ref, computed, watch, type PropType } from 'vue'
 
-import Tooltip from '@/components/TooltipWrapper.vue'
 import config from '@/config'
 import {
   Availability,
@@ -11,6 +10,8 @@ import {
   type DatasetProperties
 } from '@/model'
 import SearchAPI from '@/services/api/SearchAPI'
+
+import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 
 const emit = defineEmits(['update:datasetProperties', 'updateValidation'])
 
@@ -123,38 +124,7 @@ watch(
 </script>
 
 <template>
-  <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="label"
-      >Libellé de la donnée <span class="required">&nbsp;*</span></label
-    >
-    <input
-      id="label"
-      v-model="datasetProperties.title"
-      class="fr-input"
-      type="text"
-    />
-  </div>
-  <div class="fr-mt-1w fr-mb-4w">
-    <div class="container">
-      Raison d'utilisation dans ce bouquet
-      <span class="required">&nbsp;*</span>
-      <Tooltip
-        text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
-      />
-    </div>
-    <div class="container">
-      Utilisez du markdown pour mettre en forme votre texte
-      <Tooltip
-        text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
-      />
-    </div>
-    <textarea
-      id="purpose"
-      v-model="datasetProperties.purpose"
-      class="fr-input"
-      type="text"
-    />
-  </div>
+  <DatasetPropertiesTextFields v-model:dataset-properties="datasetProperties" />
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="source">Retrouver la donnée via</label>
     <fieldset id="source" class="fr-fieldset">

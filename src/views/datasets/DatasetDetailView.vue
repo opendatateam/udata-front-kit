@@ -13,6 +13,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import config from '@/config'
+import DatasetAddToBouquetModal from '@/custom/ecospheres/components/datasets/DatasetAddToBouquetModal.vue'
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
@@ -21,6 +22,7 @@ import { useRouteParamsAsString } from '../../router/utils'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useResourceStore } from '../../store/ResourceStore'
 import { useReuseStore } from '../../store/ReuseStore'
+import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '../../utils'
 
 const route = useRouteParamsAsString()
@@ -29,6 +31,7 @@ const datasetId = route.params.did
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const reuseStore = useReuseStore()
+const userStore = useUserStore()
 
 const dataset = computed(() => datasetStore.get(datasetId))
 const reuses = ref([])
@@ -37,6 +40,8 @@ const resources = ref<Record<string, ResourceData>>({})
 const selectedTabIndex = ref(0)
 const license = ref<License>()
 const types = ref([])
+const showAddToBouquetModal = ref(false)
+
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.discussions.dataset.display
 
@@ -227,9 +232,12 @@ watch(
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <div v-if="dataset.organization" class="fr-col-12 fr-col-md-4">
+      <div class="fr-col-12 fr-col-md-4">
         <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
-        <div class="fr-grid-row fr-grid-row--middle">
+        <div
+          v-if="dataset.organization"
+          class="fr-grid-row fr-grid-row--middle"
+        >
           <div class="fr-col-auto">
             <div class="border fr-p-1-5v fr-mr-1-5v">
               <img :src="dataset.organization.logo" height="32" />
@@ -259,6 +267,22 @@ watch(
           v-if="config.website.show_quality_component"
           :quality="dataset.quality"
         />
+        <div
+          v-if="config.website.datasets.add_to_bouquet && userStore.isLoggedIn"
+        >
+          <DsfrButton
+            class="fr-mt-2w"
+            size="md"
+            label="Ajouter à un bouquet"
+            icon="ri-file-add-line"
+            @click="showAddToBouquetModal = true"
+          />
+          <DatasetAddToBouquetModal
+            v-if="showAddToBouquetModal"
+            v-model:show="showAddToBouquetModal"
+            :dataset="dataset"
+          />
+        </div>
       </div>
     </div>
 
