@@ -22,9 +22,9 @@
         <li v-for="(dataset, index) in datasets" :key="index">
           <DsfrAccordion
             :id="getAccordeonId(index)"
-            :expanded-id="isExpanded[getAccordeonId(index)]"
+            :expanded-id="expandStore[getAccordeonId(index)]"
             :class="{ draggable: isEdit }"
-            @expand="isExpanded[getAccordeonId(index)] = $event"
+            @expand="expandStore[getAccordeonId(index)] = $event"
           >
             <template #title>
               <BouquetDatasetAccordionTitle
@@ -133,7 +133,7 @@ export default {
   emits: ['removeDataset', 'editDataset'],
   data() {
     return {
-      isExpanded: {} as { [key: string]: string },
+      expandStore: {} as { [key: string]: string | null },
       isModalOpen: false,
       editedDataset: {
         index: undefined as number | undefined,
@@ -144,7 +144,7 @@ export default {
   },
   computed: {
     expandedIds() {
-      return Object.keys(this.isExpanded).filter((k) => !!this.isExpanded[k])
+      return Object.keys(this.expandStore).filter((k) => !!this.expandStore[k])
     },
     modalActions() {
       return [
@@ -176,11 +176,11 @@ export default {
   methods: {
     expandAll() {
       for (const [idx] of this.datasets.entries()) {
-        this.isExpanded[this.getAccordeonId(idx)] = this.getAccordeonId(idx)
+        this.expandStore[this.getAccordeonId(idx)] = this.getAccordeonId(idx)
       }
     },
     collapseAll() {
-      this.isExpanded = {}
+      this.expandStore = {}
     },
     getAccordeonId(index: number): string {
       return `accordion_${index}`
