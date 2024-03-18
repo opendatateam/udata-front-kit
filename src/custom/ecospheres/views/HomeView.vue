@@ -22,13 +22,13 @@ const searchConfig = config.website.search_bar
       <div class="fr-col">
         <h1>{{ homepageTitle }}</h1>
         <p>
-          <i>ecologie</i><strong>.data.gouv</strong><i>.fr</i> est un catalogue
-          de données qui centralise les données de la transition écologique.
+          <i>ecologie</i><strong>.data.gouv</strong><i>.fr</i> référence et
+          centralise les données de la transition écologique.
         </p>
         <p>
-          Il vise à vous aider à trouver les données utiles au déploiement de
-          politiques publiques portées par le ministère de la transition
-          écologique et de la cohésion des territoires.
+          Le catalogue rassemble les données utiles au déploiement des
+          politiques publiques portées par le Ministère de la Transition
+          écologique et de la Cohésion des territoires.
         </p>
       </div>
       <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
@@ -42,13 +42,9 @@ const searchConfig = config.website.search_bar
         <div class="fr-col">
           <h2>Bouquets de données</h2>
           <p>
-            Pour trouver les bonnes données, utiles à la mise en œuvre des
-            politiques publiques environnementales, les données sont rassemblées
-            sous forme de bouquets.
-          </p>
-          <p>
-            En constante évolution, le catalogue sera progressivement enrichi de
-            nouveaux bouquets de données.
+            Trouvez facilement toutes les données utiles à la mise en œuvre
+            d'une politique publique spécifique, organisées sous forme de
+            bouquets de données.
           </p>
           <DsfrButton secondary>
             <a
@@ -67,7 +63,7 @@ const searchConfig = config.website.search_bar
         </div>
       </div>
       <div class="fr-mt-10v">
-        <h6>Trouvez un bouquet en entrant par thématique</h6>
+        <h6>Trouvez un bouquet par thématique</h6>
         <HomeThemes v-if="config.themes" />
       </div>
     </div>
@@ -75,12 +71,8 @@ const searchConfig = config.website.search_bar
   <section v-if="searchConfig.display" class="fr-container fr-py-12v">
     <h2>Jeux de données</h2>
     <p>
-      Parcourez tous les jeux de données présents sur <i>ecologie</i
+      Recherchez parmi les données présentes sur <i>ecologie</i
       ><strong>.data.gouv</strong><i>.fr</i>.
-    </p>
-    <p>
-      Au fur et à mesure de son enrichissement, le catalogue moissonnera de
-      nouvelles données.
     </p>
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
