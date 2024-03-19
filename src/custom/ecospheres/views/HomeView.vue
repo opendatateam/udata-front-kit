@@ -42,9 +42,8 @@ const searchConfig = config.website.search_bar
         <div class="fr-col">
           <h2>Bouquets de données</h2>
           <p>
-            Trouvez facilement toutes les données utiles à la mise en œuvre
-            d'une politique publique spécifique, organisées sous forme de
-            bouquets de données.
+            Retrouvez les données utiles à la mise en œuvre d'une politique
+            publique spécifique sous forme de bouquets de données.
           </p>
           <DsfrButton secondary>
             <a
