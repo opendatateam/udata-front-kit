@@ -48,6 +48,12 @@ const updateDatasetProperties = (
         text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
       />
     </div>
+    <div class="container small">
+      Vous pouvez utiliser du markdown pour mettre en forme votre texte
+      <Tooltip
+        text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
+      />
+    </div>
     <textarea
       id="purpose"
       class="fr-input"
