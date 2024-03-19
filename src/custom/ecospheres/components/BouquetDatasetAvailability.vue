@@ -2,8 +2,7 @@
 import type { DatasetProperties } from '@/model'
 import { isAvailable, Availability } from '@/model'
 
-const missingData = 'Donnée manquante'
-const notFoundData = 'Donnée non disponible'
+const missingData = 'Non disponible'
 
 const props = defineProps({
   datasetProperties: {
@@ -17,13 +16,7 @@ const props = defineProps({
   <DsfrTag
     v-if="!isAvailable(props.datasetProperties.availability)"
     class="uppercase bold"
-    :label="`${
-      props.datasetProperties.availability === Availability.NOT_AVAILABLE
-        ? missingData
-        : props.datasetProperties.availability === Availability.MISSING
-        ? notFoundData
-        : ''
-    }`"
+    :label="missingData"
   />
 </template>
 
