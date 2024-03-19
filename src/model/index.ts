@@ -78,6 +78,7 @@ type Topic = Owned & {
   name: string
   description: string
   created_at: string
+  last_modified: string
   extras: TopicExtras
   featured: boolean
   id: string
