@@ -99,7 +99,7 @@ const submit = async () => {
     tags: bouquet.tags,
     extras: bouquet.extras
   })
-  toast('Jeu de données ajouté avec succès', { type: 'success' })
+  toast(`Jeu de données ajouté avec succès au bouquet "${bouquet.name}"`, { type: 'success' })
   closeModal()
 }
 
