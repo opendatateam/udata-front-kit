@@ -31,6 +31,13 @@ export const useTopicStore = defineStore('topic', {
           (topic) => topic.owner?.id === userStore.data?.id
         )
       })
+    },
+    sortedByLastModifiedDesc: (state) => {
+      return [...state.data].sort((a, b) => {
+        const dateA = new Date(a.last_modified)
+        const dateB = new Date(b.last_modified)
+        return dateB.getTime() - dateA.getTime()
+      })
     }
   },
   actions: {
