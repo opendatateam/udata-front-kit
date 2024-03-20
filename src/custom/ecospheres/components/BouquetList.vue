@@ -28,7 +28,7 @@ const props = defineProps({
 })
 
 const bouquets: ComputedRef<Topic[]> = computed(() => {
-  const allTopics = topicStore.sortedByLastModifiedDesc.filter((bouquet) => {
+  const allTopics = topicStore.sorted.filter((bouquet) => {
     return !props.showDrafts ? !bouquet.private : true
   })
   if (props.themeName === NoOptionSelected) {
@@ -95,15 +95,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="bouquets.length > 0">
-    <p>{{ numberOfResultMsg }}</p>
-    <div class="fr-grid-row fr-mb-1w">
-      <DsfrButton
-        class="fr-mb-1w"
-        label="Ajouter un bouquet"
-        icon="ri-add-circle-line"
-        @click="goToCreate"
-      />
+  <div
+    v-if="bouquets.length > 0"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+  >
+    <p class="fr-col-auto fr-my-0">{{ numberOfResultMsg }}</p>
+    <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+      <label for="sort-search" class="fr-col-auto fr-text--sm fr-m-0 fr-mr-1w"
+        >Trier par :</label
+      >
+      <div class="fr-col">
+        <DsfrSelect
+          v-model="topicStore.sort"
+          :options="[
+            { value: '-created_at', text: 'Les plus récemment créés' },
+            { value: '-last_modified', text: 'Les plus récemment modifiés' },
+            { value: 'name', text: 'Titre' }
+          ]"
+        ></DsfrSelect>
+      </div>
     </div>
   </div>
   <div
@@ -117,7 +127,7 @@ onMounted(() => {
       <a href="#" @click.stop.prevent="goToCreate()">en créant un</a>
     </p>
   </div>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
+  <div class="fr-container--fluid fr-mt-2w fr-mb-4w">
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
       <li
         v-for="bouquet in bouquets"
