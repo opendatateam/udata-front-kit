@@ -10,16 +10,20 @@ import { useUserStore } from './UserStore'
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
 
+type SortCriterions = '-created_at' | '-last_modified' | 'name'
+
 export interface RootState {
   data: Topic[]
   isLoaded: boolean
+  sort: SortCriterions
 }
 
 export const useTopicStore = defineStore('topic', {
   state: (): RootState => ({
     data: [],
     // flag for initial/remote loading of data
-    isLoaded: false
+    isLoaded: false,
+    sort: '-created_at'
   }),
   getters: {
     // Computed property to get topics owned by the current user sorted by last_modified
@@ -27,18 +31,33 @@ export const useTopicStore = defineStore('topic', {
       const userStore = useUserStore()
       return computed(() => {
         if (!userStore.isLoggedIn) return []
-        return this.sortedByLastModifiedDesc.filter(
+        return this.sortedByDateDesc('last_modified').filter(
           (topic: Topic) => topic.owner?.id === userStore.data?.id
         )
       })
     },
-    sortedByLastModifiedDesc: (state) => {
-      return [...state.data].sort((a, b) => {
-        const dateA = new Date(a.last_modified)
-        const dateB = new Date(b.last_modified)
-        return dateB.getTime() - dateA.getTime()
-      })
-    }
+    sorted(): Topic[] {
+      switch (this.sort) {
+        case '-created_at':
+          return this.sortedByDateDesc('created_at')
+        case '-last_modified':
+          return this.sortedByDateDesc('last_modified')
+        case 'name':
+          return [...this.data].sort((a, b) => {
+            return a.name.localeCompare(b.name)
+          })
+        default:
+          return this.data
+      }
+    },
+    sortedByDateDesc:
+      (state) => (attribute: 'created_at' | 'last_modified') => {
+        return [...state.data].sort((a, b) => {
+          const dateA = new Date(a[attribute])
+          const dateB = new Date(b[attribute])
+          return dateB.getTime() - dateA.getTime()
+        })
+      }
   },
   actions: {
     /**
