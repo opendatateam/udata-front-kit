@@ -166,8 +166,10 @@ onMounted(() => {
             {{ bouquet.owner.first_name }} {{ bouquet.owner.last_name }}
           </p>
         </div>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Date de création</h2>
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
         <p>{{ formatDate(bouquet.created_at) }}</p>
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
+        <p>{{ formatDate(bouquet.last_modified) }}</p>
         <DsfrButton
           v-if="canEdit"
           size="md"

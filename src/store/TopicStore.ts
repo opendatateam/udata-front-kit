@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed } from 'vue'
+import { computed, type ComputedRef } from 'vue'
 
 import config from '@/config'
 import type { Topic } from '@/model'
@@ -22,14 +22,21 @@ export const useTopicStore = defineStore('topic', {
     isLoaded: false
   }),
   getters: {
-    // Computed property to get topics owned by the current user
-    userTopics: (state) => {
+    // Computed property to get topics owned by the current user sorted by last_modified
+    userTopics(): ComputedRef<Topic[]> {
       const userStore = useUserStore()
       return computed(() => {
         if (!userStore.isLoggedIn) return []
-        return state.data.filter(
-          (topic) => topic.owner?.id === userStore.data?.id
+        return this.sortedByLastModifiedDesc.filter(
+          (topic: Topic) => topic.owner?.id === userStore.data?.id
         )
+      })
+    },
+    sortedByLastModifiedDesc: (state) => {
+      return [...state.data].sort((a, b) => {
+        const dateA = new Date(a.last_modified)
+        const dateB = new Date(b.last_modified)
+        return dateB.getTime() - dateA.getTime()
       })
     }
   },

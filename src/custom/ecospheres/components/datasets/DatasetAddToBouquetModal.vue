@@ -36,13 +36,7 @@ const datasetProperties = ref<DatasetProperties>({
 const selectedBouquetId = ref(null)
 
 const bouquetOptions = computed(() => {
-  // sort on a copy to avoid modifying bouquets.value in a computed property
-  const sortedBouquets = [...bouquets.value].sort((a, b) => {
-    return (
-      new Date(b.last_modified).getTime() - new Date(a.last_modified).getTime()
-    )
-  })
-  return sortedBouquets.map((bouquet) => {
+  return bouquets.value.map((bouquet) => {
     return {
       value: bouquet.id,
       text: bouquet.name,
@@ -99,7 +93,9 @@ const submit = async () => {
     tags: bouquet.tags,
     extras: bouquet.extras
   })
-  toast(`Jeu de données ajouté avec succès au bouquet "${bouquet.name}"`, { type: 'success' })
+  toast(`Jeu de données ajouté avec succès au bouquet "${bouquet.name}"`, {
+    type: 'success'
+  })
   closeModal()
 }
 

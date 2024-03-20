@@ -11,6 +11,7 @@ import { useTopicStore } from '@/store/TopicStore'
 
 const router = useRouter()
 const route = useRoute()
+const topicStore = useTopicStore()
 
 const props = defineProps({
   themeName: {
@@ -27,7 +28,7 @@ const props = defineProps({
 })
 
 const bouquets: ComputedRef<Topic[]> = computed(() => {
-  const allTopics = useTopicStore().$state.data.filter((bouquet) => {
+  const allTopics = topicStore.sortedByLastModifiedDesc.filter((bouquet) => {
     return !props.showDrafts ? !bouquet.private : true
   })
   if (props.themeName === NoOptionSelected) {
@@ -89,9 +90,7 @@ const computeLink = (bouquet: Topic): RouteLocationRaw => {
 
 onMounted(() => {
   const loader = useLoading().show()
-  useTopicStore()
-    .loadTopicsForUniverse()
-    .then(() => loader.hide())
+  topicStore.loadTopicsForUniverse().then(() => loader.hide())
 })
 </script>
 
