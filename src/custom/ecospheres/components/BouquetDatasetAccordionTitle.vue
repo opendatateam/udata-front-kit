@@ -18,7 +18,7 @@ defineProps({
 <template>
   <div class="title-container">
     <div>
-      <VIcon v-if="isEdit" name="ri-drag-move-2-fill" />
+      <VIcon v-if="isEdit" name="md-dragindicator" />
       <span :class="{ 'fr-ml-2w': isEdit }">{{ datasetProperties.title }}</span>
     </div>
     <BouquetDatasetAvailability
