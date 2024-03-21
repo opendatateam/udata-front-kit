@@ -54,8 +54,10 @@ website:
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   notice:
-    display: false
-    content: Notice avec un [lien beta](/beta) et du _style_
+    display: true
+    content: |-
+      ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
+      Les données sur cette plateforme doivent être considérées comme éphémères.  
     closeable: false
   router_items:
     - name: 'Accueil'
