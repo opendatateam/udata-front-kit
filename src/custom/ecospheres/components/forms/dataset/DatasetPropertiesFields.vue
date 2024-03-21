@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type DatasetV2 } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import Multiselect from '@vueform/multiselect'
-import { ref, computed, watch, type PropType } from 'vue'
+import { ref, computed, watch, type PropType, type Ref, onMounted } from 'vue'
 
 import config from '@/config'
 import {
@@ -10,6 +10,7 @@ import {
   type DatasetProperties
 } from '@/model'
 import SearchAPI from '@/services/api/SearchAPI'
+import { useDatasetStore } from '@/store/DatasetStore'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 
@@ -26,15 +27,14 @@ const props = defineProps({
   }
 })
 
-const datasetProperties = ref(props.datasetProperties)
+const datasetStore = useDatasetStore()
 
-const datasetToOption = (dataset: DatasetV2) => {
-  return { value: dataset.id, label: dataset.title, uri: dataset.uri }
-}
+const datasetProperties = ref(props.datasetProperties)
+const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const alreadySelected = (id: string): boolean => {
-  for (const selectedDataset of props.alreadySelectedDatasets) {
-    if (selectedDataset.id === id) return true
+  for (const alreadySelectedDataset of props.alreadySelectedDatasets) {
+    if (alreadySelectedDataset.id === id) return true
   }
   return false
 }
@@ -46,10 +46,7 @@ const ecospheresDatasetsOptions = async (query: string) => {
       page_size: 10
     })
   ).data
-  const options = datasets.map((dataset) => {
-    return datasetToOption(dataset)
-  })
-  return options.filter((option) => !alreadySelected(option.value))
+  return datasets.filter((dataset) => !alreadySelected(dataset.id))
 }
 
 const hasMandatoryFields = computed(() => {
@@ -88,6 +85,15 @@ const isAvailable = computed(() =>
   isAvailableTest(datasetProperties.value.availability)
 )
 
+const onSelectDataset = (value: DatasetV2) => {
+  datasetProperties.value.id = value.id
+}
+
+const onClearDataset = () => {
+  datasetProperties.value.uri = null
+  datasetProperties.value.id = null
+}
+
 watch(
   isValidDataset,
   (newValue) => {
@@ -121,6 +127,14 @@ watch(
     datasetProperties.value = newVal
   }
 )
+
+onMounted(() => {
+  if (props.datasetProperties.id) {
+    datasetStore.load(props.datasetProperties.id).then((dataset) => {
+      selectedDataset.value = dataset
+    })
+  }
+})
 </script>
 
 <template>
@@ -161,17 +175,23 @@ watch(
         v-if="datasetProperties.availability === Availability.LOCAL_AVAILABLE"
         id="link"
         ref="selector"
-        v-model="datasetProperties.id"
+        v-model="selectedDataset"
         no-options-text="Précisez ou élargissez votre recherche"
         placeholder="Rechercher une donnée dans ecologie.data.gouv.fr"
         name="select-datasets"
+        value-prop="id"
+        label="title"
+        autocomplete="off"
+        :object="true"
         :clear-on-select="true"
         :filter-results="false"
         :min-chars="1"
         :resolve-on-load="false"
-        :delay="0"
+        :delay="400"
         :searchable="true"
         :options="ecospheresDatasetsOptions"
+        @select="onSelectDataset"
+        @clear="onClearDataset"
       />
       <DsfrInput
         v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
