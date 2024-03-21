@@ -55,9 +55,7 @@ website:
       to: '/accessibility'
   notice:
     display: true
-    content: |-
-      ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
-      Les données sur cette plateforme doivent être considérées comme éphémères.  
+    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️  
     closeable: false
   router_items:
     - name: 'Accueil'
