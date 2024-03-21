@@ -6,7 +6,6 @@ import config from '@/config'
 
 import HomeButtons from '../components/HomeButtons.vue'
 import HomeCharts from '../components/HomeCharts.vue'
-import HomeThemes from '../components/HomeThemes.vue'
 import HomeTopics from '../components/HomeTopics.vue'
 import { fromMarkdown } from '../utils'
 
@@ -83,10 +82,6 @@ const goToPage = (page) => {
     </div>
   </div>
   <div class="fr-container">
-    <HomeThemes
-      v-if="config.themes"
-      :selected-theme-name="$route.query.theme"
-    />
     <HomeButtons v-if="buttons" :buttons="buttons" />
     <HomeTopics v-if="topics" :topics="topics" />
     <HomeCharts v-if="showTopicChart" />

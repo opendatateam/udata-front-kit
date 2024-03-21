@@ -14,6 +14,8 @@
   --blue-france-975-sun-113: var(--blue-cumulus-975-75);
   --blue-france-main-525: var(--blue-cumulus-main-526);
   --blue-france-850-200: var(--blue-cumulus-850-200);
+  /* toastify */
+  --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
 }
 
 @font-face {
@@ -39,6 +41,10 @@
 
 .fit {
   width: fit-content;
+}
+
+.small {
+  font-size: 0.8em;
 }
 
 /* ELEMENT DISPLAY */
@@ -68,6 +74,10 @@
   align-items: center;
 }
 
+.align-right {
+  text-align: right;
+}
+
 .actionTile {
   background: #000092;
   .fr-tile__link {
@@ -86,4 +96,9 @@
 textarea {
   margin: 20px 0;
   height: 250px;
+}
+
+/* overload datagouv-components */
+.datagouv-components h3.fr-accordion__title {
+  margin-bottom: 0;
 }

@@ -84,7 +84,11 @@ export default class RouterFetch {
         items.push({
           path: item.linkPage,
           name: item.id,
-          component: HomeView
+          component: () => {
+            return item.custom_component
+              ? import(`../custom/${item.custom_component}.vue`)
+              : Promise.resolve(HomeView)
+          }
         })
       } else if (item.type === 'page') {
         items.push({

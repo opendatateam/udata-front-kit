@@ -31,6 +31,7 @@
     "vite-plugin-html": "^3.2.0",
     "vue": "^3.4.11",
     "vue-chartjs": "^5.2.0",
+    "vue-draggable-next": "^2.2.1",
     "vue-loading-overlay": "^6.0.3",
     "vue-matomo": "^4.2.0",
     "vue-router": "^4.2.2",

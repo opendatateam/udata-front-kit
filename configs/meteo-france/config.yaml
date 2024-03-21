@@ -102,6 +102,10 @@ website:
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
+  notice:
+    display: false
+    content: Notice avec un [lien beta](/beta) et du _style_
+    closeable: false
   # display settings
   pagination_sizes:
     organizations_list: 9
@@ -124,6 +128,7 @@ website:
       create: false
   datasets:
     organization_filter: false
+    add_to_bouquet: false
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

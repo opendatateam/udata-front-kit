@@ -7,9 +7,14 @@ import { useRouter } from 'vue-router'
 import config from '@/config'
 import BouquetContentFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetContentFieldGroup.vue'
 import BouquetFormRecap from '@/custom/ecospheres/components/forms/bouquet/BouquetFormRecap.vue'
+import BouquetInformationsFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetInformationsFieldGroup.vue'
 import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetPropertiesFieldGroup.vue'
-import BouquetThemeFieldGroup from '@/custom/ecospheres/components/forms/bouquet/BouquetThemeFieldGroup.vue'
-import type { Bouquet, BouquetCreationData, Topic } from '@/model'
+import {
+  type Bouquet,
+  type BouquetCreationData,
+  type Topic,
+  NoOptionSelected
+} from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -44,7 +49,8 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
         }
       ],
       'ecospheres:datasets_properties': bouquet.value.datasetsProperties
-    }
+    },
+    spatial: bouquet.value.spatial
   }
 })
 
@@ -127,7 +133,8 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
     subtheme: getInfoFromExtras('subtheme', topic),
     datasetsProperties: topic.extras['ecospheres:datasets_properties'] ?? [],
     owner: topic.owner,
-    organization: topic.organization
+    organization: topic.organization,
+    spatial: topic.spatial
   } as Bouquet
 }
 
@@ -142,7 +149,11 @@ const inferStepFromTopic = (topic: Topic): number => {
     return 2
   } else if (topic.extras['ecospheres:datasets_properties']?.length > 0) {
     return 4
-  } else if (topic.extras['ecospheres:informations'] !== undefined) {
+  } else if (
+    topic.extras['ecospheres:informations'] !== undefined &&
+    topic.extras['ecospheres:informations'][0].theme !== NoOptionSelected &&
+    topic.extras['ecospheres:informations'][0].subtheme !== NoOptionSelected
+  ) {
     return 3
   } else {
     return 2
@@ -163,7 +174,7 @@ onMounted(() => {
 
 <template>
   <div class="fr-container fr-mt-4w fr-mb-4w">
-    <form class="fr-col-12 fr-col-lg-7">
+    <form>
       <div class="fr-grid-row">
         <DsfrStepper :steps="steps" :current-step="currentStep" />
       </div>
@@ -176,10 +187,11 @@ onMounted(() => {
         v-model:bouquetDescription="bouquet.description"
         @update-validation="(isValid: boolean) => updateStepValidation(1, isValid)"
       />
-      <BouquetThemeFieldGroup
+      <BouquetInformationsFieldGroup
         v-if="currentStep == 2"
         v-model:theme="bouquet.theme"
         v-model:subtheme="bouquet.subtheme"
+        v-model:spatial-field="bouquet.spatial"
         @update-validation="(isValid: boolean) => updateStepValidation(2, isValid)"
       />
       <BouquetContentFieldGroup
@@ -202,20 +214,21 @@ onMounted(() => {
           secondary
           @click="doDelete"
         />
-        <DsfrButton
-          v-if="currentStep > 1"
-          type="button"
-          class="fr-mt-2w fr-mr-2w fr-ml-auto"
-          label="Précédent"
-          @click.prevent="goToPreviousPage"
-        />
-        <DsfrButton
-          type="button"
-          class="fr-mt-2w"
-          :label="currentStep === 4 ? 'Publier' : 'Suivant'"
-          :disabled="!isStepValid(currentStep)"
-          @click.prevent="goToNextStep()"
-        />
+        <div class="fr-ml-auto fr-mt-2w">
+          <DsfrButton
+            v-if="currentStep > 1"
+            type="button"
+            class="fr-mr-2w"
+            label="Précédent"
+            @click.prevent="goToPreviousPage"
+          />
+          <DsfrButton
+            type="button"
+            :label="currentStep === 4 ? 'Publier' : 'Suivant'"
+            :disabled="!isStepValid(currentStep)"
+            @click.prevent="goToNextStep()"
+          />
+        </div>
       </div>
     </form>
   </div>

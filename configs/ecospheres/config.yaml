@@ -25,15 +25,15 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-  homepage_title: 'Les données de la transition écologique'
-  homepage_subtitle: 'Explorez les données ouvertes et restreintes de la **Transition écologique**, de la **Cohésion des territoires**, de la **Transition énergétique** et de la **Mer**'
+  homepage_title: 'La plateforme des données de la transition écologique'
+  homepage_subtitle:
   header_button:
     display: true
     label: 'Donnez votre avis'
     link: https://tally.so/r/wLWrzp
   search_bar:
     display: true
-    placeholder: 'Rechercher un jeu de données'
+    placeholder: Rechercher une donnée environnementale
   secondary_search:
     display: false
     name:
@@ -53,12 +53,17 @@ website:
       to: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
+  notice:
+    display: true
+    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
+    closeable: false
   router_items:
     - name: 'Accueil'
       id: 'home'
       linkPage: '/'
-      type: 'component'
+      type: 'custom'
       display_menu: true
+      custom_component: 'ecospheres/views/HomeView'
     - name: 'Données'
       id: 'datasets'
       linkPage: '/datasets'
@@ -92,6 +97,12 @@ website:
       type: 'page'
       display_menu: false
       url: '/ecospheres/pages/terms.md'
+    - name: 'Beta'
+      id: 'beta'
+      linkPage: '/beta'
+      type: 'page'
+      display_menu: false
+      url: '/ecospheres/pages/beta.md'
   home_buttons:
   show_topic_charts: false
   show_quality_component: true
@@ -118,6 +129,7 @@ website:
       create: true
   datasets:
     organization_filter: true
+    add_to_bouquet: true
 
 themes:
   - name: Se loger
@@ -180,94 +192,25 @@ organizations:
   - agence-nationale-de-lhabitat
   - agence-ore-3
   - centre-scientifique-et-technique-du-batiment
-  - ddt-ardennes
-  - ddt-aveyron
-  - ddt-cote-dor
-  - ddt-creuse
-  - ddt-de-la-loire
-  - ddt-de-la-meuse
-  - ddt-de-la-moselle
-  - ddt-de-lain
-  - ddt-de-lardeche
   - ddt-de-meurthe-et-moselle
   - ddt-des-vosges
-  - ddt-deux-sevres
-  - ddt-dordogne
-  - ddt-drome
-  - ddt-haute-garonne
-  - ddt-haute-vienne
-  - ddt-hautes-alpes
-  - ddt-hautes-pyrenees
-  - ddt-indre
   - ddt-jura
-  - ddt-lot
-  - ddt-mayenne
-  - ddt-nievre
-  - ddt-oise
-  - ddt-savoie
-  - ddt-tarn
-  - ddt-tarn-et-garonne
-  - ddt-vienne
-  - ddt-yonne
-  - ddt-yvelines
-  - deal-guyane
-  - deal-martinique
-  - deal-reunion
-  - direction-departementale-des-territoire-du-puy-de-dome
   - direction-departementale-des-territoires-de-haute-savoie
-  - direction-departementale-des-territoires-de-la-correze
-  - direction-departementale-des-territoires-de-la-haute-loire
-  - direction-departementale-des-territoires-de-la-lozere
-  - direction-departementale-des-territoires-de-la-marne
-  - direction-departementale-des-territoires-de-la-sarthe
-  - direction-departementale-des-territoires-de-lallier
-  - direction-departementale-des-territoires-de-lariege
-  - direction-departementale-des-territoires-de-laube
-  - direction-departementale-des-territoires-de-lessonne
-  - direction-departementale-des-territoires-de-lisere
-  - direction-departementale-des-territoires-de-loir-et-cher
-  - direction-departementale-des-territoires-de-lorne
-  - direction-departementale-des-territoires-de-lot-et-garonne
-  - direction-departementale-des-territoires-de-saone-et-loire
   - direction-departementale-des-territoires-de-saone-et-loire-71
-  - direction-departementale-des-territoires-de-seine-et-marne
-  - direction-departementale-des-territoires-des-alpes-de-haute-provence
-  - direction-departementale-des-territoires-des-vosges
-  - direction-departementale-des-territoires-deure-et-loir
-  - direction-departementale-des-territoires-dindre-et-loire
   - direction-departementale-des-territoires-du-bas-rhin-67
-  - direction-departementale-des-territoires-du-cher
   - direction-departementale-des-territoires-du-doubs
-  - direction-departementale-des-territoires-du-haut-rhin-68
-  - direction-departementale-des-territoires-du-loiret
   - direction-departementale-des-territoires-du-rhone-1
-  - direction-departementale-des-territoires-du-val-doise
-  - direction-departementale-des-territoires-et-de-la-mer-de-charente-maritime
-  - direction-departementale-des-territoires-et-de-la-mer-de-la-somme
-  - direction-departementale-des-territoires-et-de-la-mer-de-leure
   - direction-departementale-des-territoires-et-de-la-mer-de-lherault
   - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
-  - direction-departementale-des-territoires-et-de-la-mer-des-landes
-  - direction-departementale-des-territoires-et-de-la-mer-des-pyrenees-atlantiques
   - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
-  - direction-departementale-des-territoires-et-de-la-mer-du-calvados
-  - direction-departementale-des-territoires-et-de-la-mer-du-var
-  - direction-departementale-et-des-territoires-du-cantal
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-franche-comte
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-laquitaine
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lorraine
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-centre-val-de-loire
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
   - direction-regionale-et-interdepartementale-de-lenvironnement-de-lamenagement-et-des-transports-1
   - dreal-auvergne-rhone-alpes-1
-  - dreal-bourgogne
-  - dreal-champagne-ardenne
-  - dreal-haute-normandie
-  - dreal-midi-pyrenees
   - dreal-nouvelle-aquitaine
   - dreal-pays-de-la-loire-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-pays-de-la-loire
   - dreal-provence-alpes-cote-dazur

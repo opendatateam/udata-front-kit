@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import BouquetList from '@/custom/ecospheres/components/BouquetList.vue'
 import BouquetSearch from '@/custom/ecospheres/components/BouquetSearch.vue'
 import { type BreadcrumbItem, NoOptionSelected } from '@/model'
 
 const route = useRoute()
+const router = useRouter()
 
 const themeName = ref(NoOptionSelected)
 const subthemeName = ref(NoOptionSelected)
@@ -46,6 +47,10 @@ const breadcrumbList = computed(() => {
   }
   return links
 })
+
+const goToCreate = () => {
+  router.push({ name: 'bouquet_add', query: route.query })
+}
 </script>
 
 <template>
@@ -53,11 +58,24 @@ const breadcrumbList = computed(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbList" />
   </div>
   <div class="fr-container fr-mb-4w">
-    <h1 class="fr-mb-2v">Bouquets</h1>
+    <div
+      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+    >
+      <h1 class="fr-col-auto fr-mb-2v">Bouquets</h1>
+      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+        <DsfrButton
+          secondary
+          class="fr-mb-1w"
+          label="Ajouter un bouquet"
+          icon="ri-add-circle-line"
+          @click="goToCreate"
+        />
+      </div>
+    </div>
     <div class="fr-mt-2w">
-      <div className="fr-grid-row topicListView">
+      <div className="fr-grid-row">
         <nav
-          className="fr-sidemenu fr-col-4"
+          className="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
           <div className="fr-sidemenu__inner">
@@ -71,7 +89,7 @@ const breadcrumbList = computed(() => {
             />
           </div>
         </nav>
-        <div className="fr-col-8">
+        <div className="fr-col">
           <BouquetList
             :theme-name="themeName"
             :subtheme-name="subthemeName"
@@ -82,3 +100,17 @@ const breadcrumbList = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped="true" lang="scss">
+@media (max-width: 768px) {
+  .fr-sidemenu {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 2em;
+    width: 100%;
+    .fr-sidemenu__title {
+      box-shadow: none;
+    }
+  }
+}
+</style>
