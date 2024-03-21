@@ -54,7 +54,7 @@ website:
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   notice:
-    display: true
+    display: false
     content: Notice avec un [lien beta](/beta) et du _style_
     closeable: false
   router_items:
