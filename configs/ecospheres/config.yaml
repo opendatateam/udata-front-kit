@@ -55,7 +55,7 @@ website:
       to: '/accessibility'
   notice:
     display: true
-    content: Notice avec un [lien beta](/beta) et du _style_
+    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️  
     closeable: false
   router_items:
     - name: 'Accueil'
