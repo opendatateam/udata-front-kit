@@ -49,6 +49,7 @@ jobs:
             echo "ENV_FILE not set due to no specific keywords found in the commit message."
           fi
           echo "REPO_PUBLIC_URL=${{ github.server_url }}/${{ github.repository }}.git" >> $GITHUB_ENV
+          echo "BRANCH_NAME=ci-test" >> $GITHUB_ENV
           echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
       - name: clone scaffold repository
         shell: bash
@@ -57,5 +58,5 @@ jobs:
         shell: bash
         run: |
           RELEASE_VERSION="${GITHUB_SHA:0:8}"
-          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_PUBLIC_URL }} ${{ env.APP_NAME }} $RELEASE_VERSION $ENV_FILE
+          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_PUBLIC_URL }} ${{ env.APP_NAME }} $RELEASE_VERSION $BRANCH_NAME $ENV_FILE
         working-directory: ${{ env.SCAFFOLD_DIR }}
