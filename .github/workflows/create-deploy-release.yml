@@ -39,8 +39,10 @@ jobs:
           COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.sha }})
           if [[ "$COMMIT_MESSAGE" == *"[prod:meteo]"* ]]; then
             echo "ENV_FILE=.env.meteo" >> $GITHUB_ENV
+            echo "APP_NAME=meteo" >> $GITHUB_ENV
           elif [[ "$COMMIT_MESSAGE" == *"[prod:ecologie]"* ]]; then
             echo "ENV_FILE=.env.ecologie" >> $GITHUB_ENV
+            echo "APP_NAME=ecologie" >> $GITHUB_ENV
           else
             echo "ENV_FILE not set due to no specific keywords found in the commit message."
           fi
@@ -53,5 +55,5 @@ jobs:
         shell: bash
         run: |
           RELEASE_VERSION="${GITHUB_SHA:0:8}"
-          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_PUBLIC_URL }} ${{ vars.APP_NAME }} $RELEASE_VERSION $ENV_FILE
+          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_PUBLIC_URL }} ${{ env.APP_NAME }} $RELEASE_VERSION $ENV_FILE
         working-directory: ${{ env.SCAFFOLD_DIR }}
