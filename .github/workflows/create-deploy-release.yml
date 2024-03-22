@@ -1,0 +1,57 @@
+name: Create and deploy a new release
+run-name: create and deploy ${{ github.sha }}
+on:
+  push:
+    branches:
+      - ci-test
+jobs:
+  check-commit-message:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check-commit.outputs.should-run }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Check commit message
+        id: check-commit
+        run: |
+          COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})
+          if [[ "$COMMIT_MESSAGE" == *"[prod:meteo]"* ]]; then
+            echo "Setting output to true for meteo"
+            echo "should-run=true" >> $GITHUB_ENV
+          elif [[ "$COMMIT_MESSAGE" == *"[prod:ecologie]"* ]]; then
+            echo "Setting output to true for ecologie"
+            echo "should-run=true" >> $GITHUB_ENV
+          else
+            echo "No relevant commit message found, not running further jobs."
+            echo "should-run=false" >> $GITHUB_ENV
+          fi
+  trigger-gitlab-pipeline:
+    needs: check-commit-message
+    if: needs.check-commit-message.outputs.should-run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      GITLAB_API_TOKEN: ${{ secrets.GITLAB_API_TOKEN }}
+    steps:
+      - name: configure environment
+        shell: bash
+        run: |
+          COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.sha }})
+          if [[ "$COMMIT_MESSAGE" == *"[prod:meteo]"* ]]; then
+            echo "ENV_FILE=.env.meteo" >> $GITHUB_ENV
+          elif [[ "$COMMIT_MESSAGE" == *"[prod:ecologie]"* ]]; then
+            echo "ENV_FILE=.env.ecologie" >> $GITHUB_ENV
+          else
+            echo "ENV_FILE not set due to no specific keywords found in the commit message."
+          fi
+          echo "REPO_PUBLIC_URL=${{ github.server_url }}/${{ github.repository }}.git" >> $GITHUB_ENV
+          echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
+      - name: clone scaffold repository
+        shell: bash
+        run: git clone --depth 1 https://oauth2:$GITLAB_API_TOKEN@${{ vars.SCAFFOLD_REPO_PUBLIC_URL }} ${{ env.SCAFFOLD_DIR }}
+      - name: trigger Gitlab CI/CD pipeline
+        shell: bash
+        run: |
+          RELEASE_VERSION="${GITHUB_SHA:0:8}"
+          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_PUBLIC_URL }} ${{ vars.APP_NAME }} $RELEASE_VERSION $ENV_FILE
+        working-directory: ${{ env.SCAFFOLD_DIR }}
