@@ -18,17 +18,17 @@ jobs:
           COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})
           if [[ "$COMMIT_MESSAGE" == *"[prod:meteo]"* ]]; then
             echo "Setting output to true for meteo"
-            echo "should-run=true" >> $GITHUB_ENV
+            echo "::set-output name=should_run::true"
           elif [[ "$COMMIT_MESSAGE" == *"[prod:ecologie]"* ]]; then
             echo "Setting output to true for ecologie"
-            echo "should-run=true" >> $GITHUB_ENV
+            echo "::set-output name=should_run::true"
           else
             echo "No relevant commit message found, not running further jobs."
-            echo "should-run=false" >> $GITHUB_ENV
+            echo "::set-output name=should_run::false"
           fi
   trigger-gitlab-pipeline:
     needs: check-commit-message
-    if: needs.check-commit-message.outputs.should-run == 'true'
+    if: needs.check-commit-message.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     env:
       GITLAB_API_TOKEN: ${{ secrets.GITLAB_API_TOKEN }}
