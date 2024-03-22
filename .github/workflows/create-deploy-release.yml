@@ -8,7 +8,7 @@ jobs:
   check-commit-message:
     runs-on: ubuntu-latest
     outputs:
-      should-run: ${{ steps.check-commit.outputs.should-run }}
+      should_run: ${{ steps.condition_check.outputs.should_run }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,17 +18,17 @@ jobs:
           COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})
           if [[ "$COMMIT_MESSAGE" == *"[prod:meteo]"* ]]; then
             echo "Setting output to true for meteo"
-            echo "::set-output name=should_run::true"
+            echo "should_run=true" >> $GITHUB_ENV
           elif [[ "$COMMIT_MESSAGE" == *"[prod:ecologie]"* ]]; then
             echo "Setting output to true for ecologie"
-            echo "::set-output name=should_run::true"
+            echo "should_run=true" >> $GITHUB_ENV
           else
             echo "No relevant commit message found, not running further jobs."
-            echo "::set-output name=should_run::false"
+            echo "should_run=false" >> $GITHUB_ENV
           fi
   trigger-gitlab-pipeline:
     needs: check-commit-message
-    if: needs.check-commit-message.outputs.should_run == 'true'
+    if: ${{ needs.check-commit-message.outputs.should_run == 'true' }}
     runs-on: ubuntu-latest
     env:
       GITLAB_API_TOKEN: ${{ secrets.GITLAB_API_TOKEN }}
