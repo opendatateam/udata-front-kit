@@ -39,10 +39,10 @@ jobs:
           COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.sha }})
           if [[ "$COMMIT_MESSAGE" == *"[prod:meteo]"* ]]; then
             echo "ENV_FILE=.env.meteo" >> $GITHUB_ENV
-            echo "APP_NAME=meteo" >> $GITHUB_ENV
+            echo "APP_NAME=defis" >> $GITHUB_ENV
           elif [[ "$COMMIT_MESSAGE" == *"[prod:ecologie]"* ]]; then
             echo "ENV_FILE=.env.ecologie" >> $GITHUB_ENV
-            echo "APP_NAME=ecologie" >> $GITHUB_ENV
+            echo "APP_NAME=defis" >> $GITHUB_ENV
           else
             echo "ENV_FILE not set due to no specific keywords found in the commit message."
           fi
@@ -50,7 +50,7 @@ jobs:
           echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
       - name: clone scaffold repository
         shell: bash
-        run: git clone --depth 1 https://oauth2:$GITLAB_API_TOKEN@${{ vars.SCAFFOLD_REPO_PUBLIC_URL }} ${{ env.SCAFFOLD_DIR }}
+        run: git clone --depth 1 https://oauth2:$GITLAB_API_TOKEN@${{ vars.SCAFFOLD_REPO_PUBLIC_URL }} -b test-udata-front-kit ${{ env.SCAFFOLD_DIR }}
       - name: trigger Gitlab CI/CD pipeline
         shell: bash
         run: |
