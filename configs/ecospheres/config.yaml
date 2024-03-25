@@ -31,9 +31,9 @@ website:
     below_hero:
     below_topics:
   header_button:
-    display: false
-    label:
-    link:
+    display: true
+    label: 'Donnez votre avis'
+    link: https://tally.so/r/wLWrzp
   header_search: true
   search_bar:
     display: true

@@ -35,7 +35,7 @@ website:
 
       La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.
 
-      
+
       Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
     below_topics: >-
 
@@ -120,7 +120,7 @@ website:
     - id: '65a9238c202514467c0163d2'
       name: 'Plan France Relance'
   url_highlighted_topics: 'topics'
-  type_highlighted_topics: 'card'
+  type_highlighted_topics: 'tile'
   oauth_option: false
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
