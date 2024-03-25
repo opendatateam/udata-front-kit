@@ -15,12 +15,15 @@ jobs:
       - name: Check commit message
         id: check-commit
         run: |
-          COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})
-          if [[ "$COMMIT_MESSAGE" == *"[deploy:prod:meteo]"* || "$COMMIT_MESSAGE" == *"[deploy:prod:ecologie]"* || "$COMMIT_MESSAGE" == *"[deploy:demo:ecologie]"* || "$COMMIT_MESSAGE" == *"[deploy:prod:defis]"*]]; then
-            echo "::set-output name=should_run::true"
+          COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }}) 
+          if [[ "$COMMIT_MESSAGE" == *"[deploy:prod:meteo]"* || \
+                "$COMMIT_MESSAGE" == *"[deploy:prod:ecologie]"* || \
+                "$COMMIT_MESSAGE" == *"[deploy:demo:ecologie]"* || \
+                "$COMMIT_MESSAGE" == *"[deploy:prod:defis]"* ]]; then
+              echo "::set-output name=should_run::true"
           else
-            echo "No relevant commit message found, not running further jobs."
-            echo "::set-output name=should_run::false"
+              echo "No relevant commit message found, not running further jobs."
+              echo "::set-output name=should_run::false"
           fi
   trigger-gitlab-pipeline:
     needs: check-commit-message
