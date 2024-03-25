@@ -21,16 +21,16 @@ const doSearch = () => {
   router.push({ name: 'datasets', query: { q: query.value } })
 }
 
-const homepageTitle = config.website.homepage_title
-const homepageSubTitle = config.website.homepage_subtitle
+const homepageTitle = config.website.homepage.title
+const homepageSubTitle = config.website.homepage.subtitle
+const belowHero = config.website.homepage.below_hero
+const belowTopics = config.website.homepage.below_topics
 const topics = config.website.list_highlighted_topics
 const buttons = config.website.home_buttons
 const showTopicChart = config.website.show_topic_charts
 const colorsBanner = config.website.home_banner_colors
 const searchConfig = config.website.search_bar
 const secondarySearchConfig = config.website.secondary_search
-const textBelowHero = config.website.homepage_text_below_hero
-const textBelowTopics = config.website.homepage_text_below_topics
 
 const goToPage = (page) => {
   window.location.href = page
@@ -54,9 +54,10 @@ const goToPage = (page) => {
       <h1 class="main-title fr-mb-3v">
         {{ homepageTitle }}
       </h1>
-      <div class="subtitle fr-text--alt fr-mb-10w">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <span v-html="fromMarkdown(homepageSubTitle)" />
+      <div class="fr-mt-5w">
+        <div class="subtitle fr-text--alt fr-mb-10w">
+          <span v-html="markdown.render(homepageSubTitle)" />
+        </div>
       </div>
       <div v-if="searchConfig.display" class="search-bar">
         <DsfrSearchBar
@@ -85,8 +86,8 @@ const goToPage = (page) => {
   </div>
   <div
     class="fr-container hero-text"
-    v-if="textBelowHero.display"
-    v-html="textBelowHero.html"
+    v-if="belowHero"
+    v-html="markdown.render(belowHero)"
   ></div>
   <div class="fr-container">
     <HomeButtons v-if="buttons" :buttons="buttons" />
@@ -99,8 +100,8 @@ const goToPage = (page) => {
   </div>
   <div
     class="fr-container hero-text"
-    v-if="textBelowTopics.display"
-    v-html="textBelowTopics.html"
+    v-if="belowTopics"
+    v-html="markdown.render(belowTopics)"
   ></div>
 </template>
 
