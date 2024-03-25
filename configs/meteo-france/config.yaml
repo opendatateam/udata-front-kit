@@ -25,12 +25,16 @@ website:
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
-  homepage_title: 'La météo et le climat en Open Data'
-  homepage_subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+  homepage:
+    title: 'La météo et le climat en Open Data'
+    subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+    below_hero:
+    below_topics:
   header_button:
     display: true
     label: 'Donnez votre avis'
     link: https://tally.so/r/wQ7y47
+  header_search: true
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -83,6 +87,8 @@ website:
       name: 'Données climatologiques de référence pour le changement climatique'
     - id: '65e0c82c2da27c1dff5fa66f'
       name: 'Données de Prévision Numérique du Temps (PNT)'
+  url_highlighted_topics: 'datasets'
+  type_highlighted_topics: 'tile'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
