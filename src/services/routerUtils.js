@@ -12,6 +12,7 @@ import DatasetDetailView from '../views/datasets/DatasetDetailView.vue'
 import DatasetsListView from '../views/datasets/DatasetsListView.vue'
 import OrganizationDetailView from '../views/organizations/OrganizationDetailView.vue'
 import OrganizationsListView from '../views/organizations/OrganizationsListView.vue'
+import TopicsListView from '../views/topics/TopicsListView.vue'
 
 export default class RouterFetch {
   generateRouteItems() {
@@ -25,6 +26,22 @@ export default class RouterFetch {
               path: '',
               name: item.id,
               component: DatasetsListView
+            },
+            {
+              path: ':did',
+              name: 'dataset_detail',
+              component: DatasetDetailView
+            }
+          ]
+        })
+      } else if (item.id === 'topics') {
+        items.push({
+          path: item.linkPage,
+          children: [
+            {
+              path: '',
+              name: item.id,
+              component: TopicsListView
             },
             {
               path: ':did',
