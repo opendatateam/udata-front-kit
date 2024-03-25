@@ -29,8 +29,8 @@ const showTopicChart = config.website.show_topic_charts
 const colorsBanner = config.website.home_banner_colors
 const searchConfig = config.website.search_bar
 const secondarySearchConfig = config.website.secondary_search
-const textbelowbanner = config.website.homepage_text_below_hero
-const textbelowtopics = config.website.homepage_text_below_topics
+const textBelowBanner = config.website.homepage_text_below_hero
+const textBelowTopics = config.website.homepage_text_below_topics
 
 const goToPage = (page) => {
   window.location.href = page
@@ -85,18 +85,22 @@ const goToPage = (page) => {
   </div>
   <div
     class="fr-container hero-text"
-    v-if="textbelowbanner.display"
-    v-html="textbelowbanner.html"
+    v-if="textBelowBanner.display"
+    v-html="textBelowBanner.html"
   ></div>
   <div class="fr-container">
     <HomeButtons v-if="buttons" :buttons="buttons" />
+    <HomeThemes
+      v-if="config.themes"
+      :selected-theme-name="$route.query.theme"
+    />
     <HomeTopics v-if="topics" :topics="topics" />
     <HomeCharts v-if="showTopicChart" />
   </div>
   <div
     class="fr-container hero-text"
-    v-if="textbelowtopics.display"
-    v-html="textbelowtopics.html"
+    v-if="textBelowTopics.display"
+    v-html="textBelowTopics.html"
   ></div>
 </template>
 
