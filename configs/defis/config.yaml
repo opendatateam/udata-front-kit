@@ -1,4 +1,4 @@
-# config file for meteo-france
+# config file for defis
 
 datagouvfr:
   # data.gouv.fr base URL
@@ -25,18 +25,16 @@ website:
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
-  homepage_title: 'Tous les défis proposés par data.gouv.fr'
-  homepage_subtitle: 'Retrouvez ici les défis autour de l analyse et de la valorisation de données publiques proposée par l équipe éditorial de data.gouv.fr.'
-  homepage_text_below_hero:
-    display: true
-    html: '<p>Coucou </p><a href="https://www.data.gouv.fr">Data'
-  homepage_text_below_topics:
-    display: true
-    html: '<p>Coucou </p><a href="https://www.data.gouv.fr">toto'
+  homepage:
+    title: 'Tous les défis proposés par data.gouv.fr'
+    subtitle: 'Retrouvez ici les défis autour de l analyse et de la valorisation de données publiques proposée par l équipe éditorial de data.gouv.fr.'
+    below_hero: 'Coucou [Data](https://www.data.gouv.fr)'
+    below_topics: 'Coucou [Toto](https://www.data.gouv.fr)'
   header_button:
     display: false
     label: 'Donnez votre avis'
     link: https://tally.so/r/wQ7y47
+  header_search: false
   search_bar:
     display: false
     placeholder: 'Rechercher un jeu de données'
@@ -67,6 +65,11 @@ website:
       type: 'page'
       display_menu: false
       url: '/defis/pages/accessibility.md'
+    - name: 'datasets'
+      id: 'datasets'
+      linkPage: '/datasets'
+      type: 'component'
+      display_menu: false
   # img should be square
   home_buttons:
   show_topic_charts: true
@@ -84,7 +87,7 @@ website:
     - id: '65a923a083cf5f728c9934b3'
       name: 'Véhicules électriques'
   url_highlighted_topics: 'topics'
-  type_highlighted_topics: 'card'
+  type_highlighted_topics: 'tile'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:

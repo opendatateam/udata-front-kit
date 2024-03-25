@@ -25,18 +25,16 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-  homepage_title: 'La plateforme des données de la transition écologique'
-  homepage_subtitle:
-  homepage_text_below_hero:
-    display: false
-    html:
-  homepage_text_below_topics:
-    display: false
-    html:
+  homepage:
+    title: 'La plateforme des données de la transition écologique'
+    subtitle:
+    below_hero:
+    below_topics:
   header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wLWrzp
+    display: false
+    label:
+    link:
+  header_search: true
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
