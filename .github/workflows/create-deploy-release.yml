@@ -3,7 +3,7 @@ run-name: create and deploy ${{ github.sha }}
 on:
   push:
     branches:
-      - ci-test
+      - main
 jobs:
   check-commit-message:
     runs-on: ubuntu-latest
@@ -39,22 +39,17 @@ jobs:
         run: |
           COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.sha }})
           if [[ "$COMMIT_MESSAGE" == *"[deploy:prod:meteo]"* ]]; then
-            echo "ENV_FILE=.env.meteo" >> $GITHUB_ENV
             echo "APP_NAME=prod-meteo" >> $GITHUB_ENV
           elif [[ "$COMMIT_MESSAGE" == *"[deploy:prod:ecologie]"* ]]; then
-            echo "ENV_FILE=.env.ecologie" >> $GITHUB_ENV
             echo "APP_NAME=prod-ecologie" >> $GITHUB_ENV
           elif [[ "$COMMIT_MESSAGE" == *"[deploy:demo:ecologie]"* ]]; then
-            echo "ENV_FILE=.env.ecologie" >> $GITHUB_ENV
             echo "APP_NAME=demo-ecologie" >> $GITHUB_ENV
           elif [[ "$COMMIT_MESSAGE" == *"[deploy:prod:defis]"* ]]; then
-            echo "ENV_FILE=.env.defis" >> $GITHUB_ENV
             echo "APP_NAME=prod-defis" >> $GITHUB_ENV
           else
             echo "ENV_FILE not set due to no specific keywords found in the commit message."
           fi
           echo "REPO_PUBLIC_URL=${{ github.server_url }}/${{ github.repository }}.git" >> $GITHUB_ENV
-          echo "BRANCH_NAME=main" >> $GITHUB_ENV
           echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
       - name: clone scaffold repository
         shell: bash
@@ -63,5 +58,5 @@ jobs:
         shell: bash
         run: |
           RELEASE_VERSION="${GITHUB_SHA:0:8}"
-          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_PUBLIC_URL }} ${{ env.APP_NAME }} $RELEASE_VERSION ${{ env.BRANCH_NAME }} ${{ env.ENV_FILE }}
+          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_PUBLIC_URL }} ${{ env.APP_NAME }} $RELEASE_VERSION
         working-directory: ${{ env.SCAFFOLD_DIR }}
