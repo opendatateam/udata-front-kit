@@ -6,3 +6,5 @@ dist/
 node_modules/
 shell.nix
 src/playground
+.env
+.env.production
