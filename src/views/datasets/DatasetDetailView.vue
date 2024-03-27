@@ -433,12 +433,16 @@ watch(
 
       <!-- Informations -->
       <DsfrTabContent
-        v-if="dataset && license"
+        v-show="dataset && license"
         panel-id="tab-content-3"
         tab-id="tab-3"
         :selected="selectedTabIndex === 3"
       >
-        <InformationPanel :dataset="dataset" :license="license" />
+        <InformationPanel
+          v-if="dataset && license"
+          :dataset="dataset"
+          :license="license"
+        />
       </DsfrTabContent>
 
       <!-- Visualisations -->
