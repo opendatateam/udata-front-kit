@@ -42,11 +42,6 @@ export default class RouterFetch {
               path: '',
               name: item.id,
               component: TopicsListView
-            },
-            {
-              path: ':did',
-              name: 'dataset_detail',
-              component: DatasetDetailView
             }
           ]
         })

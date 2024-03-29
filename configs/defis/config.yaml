@@ -153,8 +153,8 @@ website:
     - '#1258EB'
   env: 'prod'
   matomo:
-    host: 'https://stats.data.gouv.fr'
-    siteId: 292
+    host:
+    siteId:
   discussions:
     dataset:
       display: true
