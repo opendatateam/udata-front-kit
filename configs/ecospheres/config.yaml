@@ -25,8 +25,12 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-  homepage_title: 'La plateforme des données de la transition écologique'
-  homepage_subtitle:
+  homepage:
+    title: 'La plateforme des données de la transition écologique'
+    subtitle:
+    below_hero:
+    below_topics:
+  header_search: true
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -55,7 +59,7 @@ website:
       to: '/accessibility'
   notice:
     display: true
-    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️  
+    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
     closeable: false
   router_items:
     - name: 'Accueil'
@@ -107,6 +111,8 @@ website:
   show_topic_charts: false
   show_quality_component: true
   list_highlighted_topics:
+  url_highlighted_topics:
+  type_highlighted_topics:
   oauth_option: true
   pagination_sizes:
     organizations_list: 9

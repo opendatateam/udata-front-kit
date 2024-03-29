@@ -21,8 +21,10 @@ const doSearch = () => {
   router.push({ name: 'datasets', query: { q: query.value } })
 }
 
-const homepageTitle = config.website.homepage_title
-const homepageSubTitle = config.website.homepage_subtitle
+const homepageTitle = config.website.homepage.title
+const homepageSubTitle = config.website.homepage.subtitle
+const belowHero = config.website.homepage.below_hero
+const belowTopics = config.website.homepage.below_topics
 const topics = config.website.list_highlighted_topics
 const buttons = config.website.home_buttons
 const showTopicChart = config.website.show_topic_charts
@@ -52,9 +54,10 @@ const goToPage = (page) => {
       <h1 class="main-title fr-mb-3v">
         {{ homepageTitle }}
       </h1>
-      <div class="subtitle fr-text--alt fr-mb-10w">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <span v-html="fromMarkdown(homepageSubTitle)" />
+      <div class="fr-mt-5w">
+        <div class="subtitle fr-text--alt fr-mb-10w">
+          <span v-html="fromMarkdown(homepageSubTitle)" />
+        </div>
       </div>
       <div v-if="searchConfig.display" class="search-bar">
         <DsfrSearchBar
@@ -81,11 +84,21 @@ const goToPage = (page) => {
       </div>
     </div>
   </div>
+  <div
+    class="fr-container hero-text"
+    v-if="belowHero"
+    v-html="fromMarkdown(belowHero)"
+  ></div>
   <div class="fr-container">
     <HomeButtons v-if="buttons" :buttons="buttons" />
     <HomeTopics v-if="topics" :topics="topics" />
     <HomeCharts v-if="showTopicChart" />
   </div>
+  <div
+    class="fr-container hero-text"
+    v-if="belowTopics"
+    v-html="fromMarkdown(belowTopics)"
+  ></div>
 </template>
 
 <style scoped lang="scss">
@@ -141,6 +154,10 @@ const goToPage = (page) => {
   font-style: italic;
   font-size: 20px;
   line-height: 28px;
+}
+.hero-text {
+  margin-top: 30px;
+  text-align: left;
 }
 .search-bar {
   padding: 20px;
