@@ -1,13 +1,12 @@
 name: Create and deploy a new release
 run-name: create and deploy ${{ github.sha }}
 on:
-  # TODO: enable workflow only on specific branch and commit message
-  never: # never trigger for now (testing)
-  #push:
-  #  branches:
-  #    - create-deploy-release
+  push:
+    branches:
+      - create-deploy-release
 jobs:
   trigger-gitlab-pipeline:
+    if: startsWith(github.event.head_commit.message, '[') # regexp not supported
     runs-on: ubuntu-latest
     env:
       # secrets to be defined
@@ -41,10 +40,7 @@ jobs:
       - name: check commit message
         shell: bash
         run: |
-          # TODO: disable hardcoded LAST_COMMIT_MESSAGE
-          #LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
-          # for testing
-          LAST_COMMIT_MESSAGE="[demo:defis:patch] (empty commit) trigger deployment"
+          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
 
           if [[ $LAST_COMMIT_MESSAGE =~ ^\[(${{ vars.ENVS }}):(${{ vars.APPS }}):(major|minor|patch)\] ]]; then
             ENV="${BASH_REMATCH[1]}"
@@ -71,6 +67,5 @@ jobs:
       - name: trigger Gitlab CI/CD pipeline
         shell: bash
         run: |
-          RELEASE_VERSION="${GITHUB_SHA:0:8}"
           ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_HTTPS_URL }} ${{ vars.APP_NAME }} $RELEASE_VERSION $ENV $VARS
         working-directory: ${{ env.SCAFFOLD_DIR }}
