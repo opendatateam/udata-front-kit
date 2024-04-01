@@ -6,7 +6,7 @@ on:
       - create-deploy-release
 jobs:
   trigger-gitlab-pipeline:
-    if: startsWith(github.event.head_commit.message, '[') # regexp not supported
+    #if: startsWith(github.event.head_commit.message, '[') # regexp not supported
     runs-on: ubuntu-latest
     env:
       # secrets to be defined
@@ -60,6 +60,7 @@ jobs:
       - name: create release
         shell: bash
         run: |
+          git fetch --tags
           RELEASE_VERSION=$(../${{ env.SCAFFOLD_DIR }}/scripts/bump_version.sh $VERSION_PART)
 
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
