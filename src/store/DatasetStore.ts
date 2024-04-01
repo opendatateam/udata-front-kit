@@ -195,7 +195,7 @@ export const useDatasetStore = defineStore('dataset', {
      * Fetch datasets by url and store them in an array.
      * @param {string[]} datasetIds - The list of dataset IDs to fetch.
      */
-    async loadDatasetsByUrl(url: string[]) {
+    async loadDatasetsByUrl(url: string) {
       let fetchedDatasets = []
       try {
         const response = await fetch(url)
