@@ -8,13 +8,15 @@
     />
 
     <div class="fr-select-group">
-      <label class="fr-label" for="select_theme"> Thématiques </label>
+      <label class="fr-label" for="select_theme">
+        {{ categoryThemeName }}
+      </label>
       <select id="select_theme" class="fr-select" @change="switchTheme($event)">
         <option
           :value="NoOptionSelected"
           :selected="themeName == NoOptionSelected"
         >
-          Choisir une thématique
+          {{ categoryThemePlaceholder }}
         </option>
         <option
           v-for="option in themeOptions"
@@ -28,7 +30,9 @@
     </div>
 
     <div class="fr-select-group">
-      <label class="fr-label" for="select_subtheme"> Chantiers </label>
+      <label class="fr-label" for="select_subtheme">
+        {{ categorySubThemeName }}
+      </label>
       <select
         id="select_subtheme"
         class="fr-select"
@@ -38,7 +42,7 @@
           :value="NoOptionSelected"
           :selected="subthemeName == NoOptionSelected"
         >
-          Choisir un chantier
+          {{ categorySubThemePlaceholder }}
         </option>
         <option
           v-for="option in subthemeOptions"
@@ -57,6 +61,7 @@
 import { defineComponent } from 'vue'
 
 import { ConfigUtils } from '@/config'
+import config from '@/config'
 import { NoOptionSelected } from '@/model'
 import type { SelectOption, Theme } from '@/model'
 import { useUserStore } from '@/store/UserStore'
@@ -77,8 +82,19 @@ export default defineComponent({
   data: () => {
     return {
       showDrafts: false,
-      userStore: useUserStore()
+      userStore: useUserStore(),
+      categoryThemeName: 'Thématiques',
+      categorySubThemeName: 'Chantiers',
+      categoryThemePlaceholder: 'Choisir une thématique',
+      categorySubThemePlaceholder: 'Choisir un chantier'
     }
+  },
+  mounted() {
+    console.log(config.bouquets.theme.name)
+    this.categoryThemeName = config.bouquets.theme.name
+    this.categorySubThemeName = config.bouquets.subtheme.name
+    this.categoryThemePlaceholder = config.bouquets.theme.placeholder
+    this.categorySubThemePlaceholder = config.bouquets.subtheme.placeholder
   },
   computed: {
     selectedTheme(): Theme | null {

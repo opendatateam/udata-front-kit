@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 
+import config from '@/config'
 import BouquetDatasetList, {
   getDatasetListTitle
 } from '@/custom/ecospheres/components/BouquetDatasetList.vue'
@@ -22,6 +23,9 @@ const spatialCoverage = useSpatialCoverageFromField(props.bouquet.spatial)
 const goToStep = (step: number) => {
   emit('updateStep', step)
 }
+
+const categoryThemeName = config.bouquets.theme.name
+const categorySubThemeName = config.bouquets.subtheme.name
 </script>
 
 <template>
@@ -57,9 +61,13 @@ const goToStep = (step: number) => {
       @click.prevent="goToStep(2)"
     />
   </h4>
-  <p class="fr-mb-0"><strong>Thématique</strong></p>
+  <p class="fr-mb-0">
+    <strong>{{ categoryThemeName }}</strong>
+  </p>
   <p>{{ bouquet.theme }}</p>
-  <p class="fr-mb-0"><strong>Chantier</strong></p>
+  <p class="fr-mb-0">
+    <strong>{{ categorySubThemeName }}</strong>
+  </p>
   <p>{{ bouquet.subtheme }}</p>
   <p class="fr-mb-0"><strong>Couverture territoriale</strong></p>
   <p>{{ spatialCoverage ? spatialCoverage.name : 'Pas de couverture' }}</p>

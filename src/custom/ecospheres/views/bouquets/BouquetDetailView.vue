@@ -8,6 +8,7 @@ import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import DatasetSimpleList from '@/components/DatasetSimpleList.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
 import BouquetDatasetList, {
@@ -44,6 +45,8 @@ const selectedTheme = ref('')
 const spatialCoverage = useSpatialCoverage(bouquet)
 
 const showDiscussions = config.website.discussions.topic.display
+const bouquetsType = config.bouquets.type
+const bouquetsDisplayAuthor = config.bouquets.display_author
 
 const description = computed(() => descriptionFromMarkdown(bouquet))
 
@@ -136,38 +139,40 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
-        <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
-        <div
-          v-if="bouquet.organization"
-          class="fr-grid-row fr-grid-row--middle"
-        >
-          <div class="fr-col-auto">
-            <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img :src="bouquet.organization.logo" height="32" />
+        <span v-if="bouquetsDisplayAuthor">
+          <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
+          <div
+            v-if="bouquet.organization"
+            class="fr-grid-row fr-grid-row--middle"
+          >
+            <div class="fr-col-auto">
+              <div class="border fr-p-1-5v fr-mr-1-5v">
+                <img :src="bouquet.organization.logo" height="32" />
+              </div>
             </div>
+            <p class="fr-col fr-m-0">
+              <a class="fr-link" :href="bouquet.organization.page">
+                <OrganizationNameWithCertificate
+                  :organization="bouquet.organization"
+                />
+              </a>
+            </p>
           </div>
-          <p class="fr-col fr-m-0">
-            <a class="fr-link" :href="bouquet.organization.page">
-              <OrganizationNameWithCertificate
-                :organization="bouquet.organization"
-              />
-            </a>
-          </p>
-        </div>
-        <div v-else class="fr-grid-row fr-grid-row--middle">
-          <div class="fr-col-auto">
-            <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img
-                style="margin-bottom: -6px"
-                :src="getOwnerAvatar(bouquet)"
-                height="32"
-              />
+          <div v-else class="fr-grid-row fr-grid-row--middle">
+            <div class="fr-col-auto">
+              <div class="border fr-p-1-5v fr-mr-1-5v">
+                <img
+                  style="margin-bottom: -6px"
+                  :src="getOwnerAvatar(bouquet)"
+                  height="32"
+                />
+              </div>
             </div>
+            <p class="fr-col fr-m-0">
+              {{ bouquet.owner.first_name }} {{ bouquet.owner.last_name }}
+            </p>
           </div>
-          <p class="fr-col fr-m-0">
-            {{ bouquet.owner.first_name }} {{ bouquet.owner.last_name }}
-          </p>
-        </div>
+        </span>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
         <p>{{ formatDate(bouquet.created_at) }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
@@ -196,12 +201,22 @@ onMounted(() => {
     >
       <!-- Jeux de données -->
       <DsfrTabContent
+        v-if="bouquetsType == 'custom'"
         panel-id="tab-content-0"
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
         <h2>{{ getDatasetListTitle(datasetsProperties) }}</h2>
         <BouquetDatasetList :datasets="datasetsProperties" />
+      </DsfrTabContent>
+      <!-- Jeux de données classique -->
+      <DsfrTabContent
+        v-if="bouquetsType == 'data.gouv.fr'"
+        panel-id="tab-content-0"
+        tab-id="tab-0"
+        :selected="selectedTabIndex === 0"
+      >
+        <DatasetSimpleList :url="bouquet.datasets.href" />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent

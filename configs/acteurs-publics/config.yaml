@@ -1,0 +1,307 @@
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id:
+  # pkce client secret, explicitely public
+  oauth_client_secret:
+
+universe:
+  # "universe" topic id
+  topic_id: 65141cd780d73f98142e9265 # meteo-test
+  # universe name, used as bouquets tag
+  name: acteurs-publics
+
+# UI customizations
+website:
+  title: 'acteurs-publics.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>
+    FRANÇAISE'
+  service_logo: '/logos/acteurs-publics-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+
+  homepage:
+    title: 'Acteurs publics, utilisez la donnée pour simplifier vos services 🧘 !'
+    subtitle: 'Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâces aux API et aux données ! Vous gagnerez aussi du temps !'
+    sections:
+      # - title: Section 1
+      #   content: >-
+      #     ## Améliorer les services à destination :
+
+      #     ### 👱 des particuliers
+
+      #     Simplifiez les démarches des citoyens et facilitez l'instruction de leurs dossiers :
+
+      #   sub_section_datasets:
+      #     title: "Jeux de données"
+      #     datasets:
+      #       - "5b7ffc618b4c4169d30727e0"
+      #       - "621df2954fa5a3b5a023e23c"
+      #   sub_section_cards:
+      #     title: "Thématiques"
+      #     cards:
+      #       - id: '65f170136c6ff1b1d0351081'
+      #         name: 'Marchés publics'
+      #         description: "list des marchés publics. list des marchés publics. list des marchés publics. list des marchés publics. "
+      #         url: 'https://www.google.com/'
+      #         image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_ecole4.png'
+      #       - id: '65f170136c6ff1b1d0351081'
+      #         name: 'Coucou nouveau'
+      #         description: "list des marchés publics. list des marchés publics. list des marchés publics. list des marchés publics."
+      #         url: 'bouquets/65f170136c6ff1b1d0351081'
+      #         image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_ecole4.png'
+      #   sub_section_tiles:
+      #     title: "Thématiques 2"
+      #     tiles:
+      #       - id: '65f170136c6ff1b1d0351081'
+      #         name: 'Marchés publics'
+      #         description: "list des marchés publics. list des marchés publics. list des marchés publics. list des marchés publics. "
+      #         url: 'https://www.google.com/'
+      #       - id: '65f170136c6ff1b1d0351081'
+      #         name: 'Coucou nouveau'
+      #         description: "list des marchés publics. list des marchés publics. list des marchés publics. list des marchés publics."
+      #         url: 'bouquets/65f170136c6ff1b1d0351081'
+      # sub_section_buttons:
+      #   - name: "Tout savoir sur les cas d'usages de particuliers"
+      #     url: "bouquets?theme=Administrations&subtheme=Particuliers"
+      #     class: "fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
+      - title:
+        content: >-
+          ## Améliorer les services à destination :
+
+          ### 👱 des particuliers
+
+          Simplifiez les démarches des citoyens et facilitez l'instruction de leurs dossiers :
+        sub_section_cards:
+          title:
+          cards:
+            - id: '660ac80b9e9351349f5c1f14'
+              name: 'Données boursières'
+              description: "Tout savoir sur les données pour l'obtention de bourse relatifs à un particulier."
+              url: 'bouquets/donnees-boursieres'
+              image_url: '/acteurs-publics/assets/boursier.png'
+            - id: '660ac8ab8fd1a813e28cecd2'
+              name: 'Etat civil'
+              description: "Accéder à l'état civil d'un citoyen dépendant de votre collectivité territoriale."
+              url: 'bouquets/etat-civil'
+              image_url: '/acteurs-publics/assets/passeport.png'
+            - id: '660ac92bc20e599f930bb9c2'
+              name: 'Scolarité'
+              description: "Accéder à l'ensemble des informations liées à la scolarité d'un administré de votre collectivité."
+              url: 'bouquets/scolarite'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_ecole4.png'
+        sub_section_buttons:
+          - name: "Tout savoir sur les cas d'usages de particuliers"
+            url: 'bouquets?theme=Administrations&subtheme=Particuliers'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+      - title:
+        content: >-
+          ### 💼 des entreprises
+
+          Simplifiez les démarches des entreprises et facilitez l'instruction de leurs dossiers :
+
+        sub_section_cards:
+          title:
+          cards:
+            - id: '5e6f426e634f417810ab794b'
+              name: 'Marchés publics'
+              description: 'Tout savoir sur les marchés publics passés par les collectivités.'
+              url: 'bouquets/marches-publics-1'
+              image_url: '/acteurs-publics/assets/marches.png'
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Données fiscales'
+              description: 'Accéder aux comptes et documents financiers des entreprises'
+              url: 'bouquets/65f170136c6ff1b1d0351081/'
+              image_url: '/acteurs-publics/assets/fiscales.png'
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Informations légales'
+              description: "Accéder à l'ensemble des informations légales des entreprises."
+              url: 'bouquets/65f170136c6ff1b1d0351081/'
+              image_url: '/acteurs-publics/assets/documents.png'
+      - title:
+        content: >-
+          ### 🎭 des associations
+
+          Simplifiez les démarches des associations et facilitez l'instruction de leurs dossiers :
+
+        sub_section_cards:
+          title:
+          cards:
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Documents associations'
+              description: "Tout savoir sur les documents d'une association."
+              url: 'bouquets/65f170136c6ff1b1d0351081/'
+              image_url: '/acteurs-publics/assets/documents.png'
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Dirigeants associatifs'
+              description: "Accéder à la liste des dirigeants d'une association."
+              url: 'bouquets/65f170136c6ff1b1d0351081/'
+              image_url: '/acteurs-publics/assets/dirigeants.png'
+      - title:
+        content: >-
+          ## Comment et pourquoi simplifier vos démarches ?
+
+          Administrations et collectivités, en intégrant des API ou des données dans vos démarches et/ou votre système d’information :
+
+
+          - 🗄 **Vous accédez facilement aux données administratives de vos usagers**, qu'elles soient publiques ou protégées et provenant de [nombreux fournisseurs](/organizations) ;
+
+
+          - ⏰ **Vous accélérez le traitement des démarches car vos agents instructeurs** n’ont pas de vérifications supplémentaires à réaliser, les informations obtenues que nous vous recommandons sont certifiées 🔎 ;
+
+
+          - 🎢 **Vous augmentez le pourcentage des démarches finalisées** car vous faîtes gagner du temps à l’usager ;
+
+
+          - 🎯 **Vous participez activement à la simplification des démarches en mettant en place le « _[Dites-le-nous une fois](/dlnuf)_ »** : vous ne demandez plus à vos usagers une information qu’ils ont déjà donnée ou que l’administration connaît déjà. Vous vous mettez ainsi en conformité avec la législation et, plus particulièrement l’[Article L113-12 du Code des relations entre le public et l’administration](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037313155).
+
+
+          - 💌 **Vous réduisez le taux de non recours**, plus particulièrement si vous mettez en place des démarches proactives. [En savoir plus sur la proactivité](/proactivite).
+
+
+          Pour en savoir plus, consultez nos [guides de la simplification](/guides).
+  header_button:
+    display: true
+    label: 'Compte Datapass'
+    link: https://datapass.api.gouv.fr/
+  search_bar:
+    display: false
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name: 'Recherche guidée'
+    link: '/form'
+  router_items:
+    - name: 'Accueil'
+      id: 'home'
+      linkPage: '/'
+      type: 'component'
+      display_menu: false
+    - name: 'Bouquets'
+      id: 'bouquets'
+      linkPage: '/bouquets'
+      type: 'component'
+      display_menu: true
+    - name: 'Guides de la simplification'
+      id: 'guides'
+      linkPage: '/guides'
+      type: 'page'
+      url: '/acteurs-publics/pages/guides.md'
+      display_menu: true
+    - name: 'Toutes les API & données utiles'
+      id: 'datasets'
+      linkPage: '/datasets'
+      type: 'component'
+      display_menu: true
+    - name: 'Accessibilité'
+      id: 'accessibility'
+      linkPage: '/accessibility'
+      type: 'page'
+      display_menu: false
+      url: '/acteurs-publics/pages/accessibility.md'
+    - name: 'Organisations'
+      id: 'organizations'
+      linkPage: '/organizations'
+      type: 'component'
+      display_menu: false
+  show_topic_charts: true
+  show_quality_component: true
+  show_dataset_metadata_panel: false
+  oauth_option: false
+  footer_phrase: 'Ce site permet aux administrations et collectivités territoriales de connaître les API et les données qui leur permettent de simplifier leurs démarches pour les particuliers, les entreprises et les associations.'
+  footer_external_links:
+    - label: 'API Entreprise'
+      href: 'https://www.entreprise.api.gouv.fr'
+    - label: 'API Particulier'
+      href: 'https://www.particulier.api.gouv.fr'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  logo_operator: ''
+  # display settings
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 100
+    files_list: 6
+  home_banner_colors:
+    - '#D6DAF7'
+    - '#DBA8A8'
+    - '#A25070'
+  env: 'dev'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 292
+  discussions:
+    dataset:
+      display: true
+      create: false
+    topic:
+      display: false
+      create: false
+  datasets:
+    organization_filter: false
+    add_to_bouquet: false
+organizations:
+  # list of organisations' ids that should be handled by the portal
+  # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+  # then Informations > ID at the bottom of the page
+  # # Dinum
+  # - 57fe2a35c751df21e179df72
+  # # Insee
+  # - 534fff81a3a7292c64a77e5c
+
+themes:
+  - name: Administrations
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Entreprises
+      - name: Associations
+      - name: Particuliers
+  - name: Communes
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Entreprises
+      - name: Associations
+      - name: Particuliers
+  - name: Départements
+    color: 1E929E
+    subthemes:
+      - name: Entreprises
+      - name: Associations
+      - name: Particuliers
+  - name: Régions
+    color: 1E929E
+    subthemes:
+      - name: Entreprises
+      - name: Associations
+      - name: Particuliers
+  - name: Opérateurs de l'État
+    color: 1E929E
+    subthemes:
+      - name: Entreprises
+      - name: Associations
+      - name: Particuliers
+bouquets:
+  steps:
+  type: 'data.gouv.fr' #data.gouv.fr or custom
+  display_author: false
+  theme:
+    name: Type d'organisation
+    placeholder: Choisir un type d'organisation
+  subtheme:
+    name: Usagers
+    placeholder: Choisir un type d'usager

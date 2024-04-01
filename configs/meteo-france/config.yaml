@@ -28,8 +28,33 @@ website:
   homepage:
     title: 'La météo et le climat en Open Data'
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
-    below_hero:
-    below_topics:
+    sections:
+      - title:
+        content: >-
+          ### Thématiques
+        sub_section_tiles:
+          title:
+          tiles:
+            - id: '6571f26dc009674feb726be9'
+              name: 'Données climatologiques de base'
+              description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
+              url: 'datasets?topic=6571f26dc009674feb726be9'
+            - id: '6571f2db0273fc306408f265'
+              name: 'Données climatologiques de référence pour le changement climatique'
+              description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
+              url: 'datasets?topic=6571f2db0273fc306408f265'
+            - id: '65e0c82c2da27c1dff5fa66f'
+              name: 'Données de Prévision Numérique du Temps (PNT)'
+              description: 'Accès en temps réel aux résultats des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
+              url: 'datasets?topic=65e0c82c2da27c1dff5fa66f'
+      - title:
+        content: >-
+          ### Actualités
+
+          Venez participer au hackathon organisé par la DINUM et Météo-France le 8 et 9 avril prochain. 🚀
+
+
+          [En savoir plus](hackathon)
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -58,6 +83,12 @@ website:
       linkPage: '/form'
       type: 'custom'
       custom_component: 'meteo/views/FormMF'
+      display_menu: true
+    - name: 'Hackathon le 8 et 9 avril 🚀'
+      id: 'hackathon'
+      linkPage: '/hackathon'
+      type: 'page'
+      url: '/meteo-france/pages/hackathon.md'
       display_menu: true
     # - name: 'Portail des API Météo-France'
     #   id: 'portailapi'

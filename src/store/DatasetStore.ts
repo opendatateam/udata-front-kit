@@ -12,6 +12,8 @@ export interface RootState {
   data: Record<string, DatasetV2Response[]>
   resourceTypes: any[]
   sort: string | null
+  customData: DatasetV2Response[]
+  datasetFromSpecificTopic: DatasetV2Response[]
 }
 
 /**
@@ -31,7 +33,9 @@ export const useDatasetStore = defineStore('dataset', {
   state: (): RootState => ({
     data: {},
     resourceTypes: [],
-    sort: null
+    sort: null,
+    customData: [],
+    datasetFromSpecificTopic: []
   }),
   actions: {
     /**
@@ -157,6 +161,58 @@ export const useDatasetStore = defineStore('dataset', {
       const response: License[] = await datasetsApi.get('licenses')
       const foundLicense = response.find((l) => l.id === license)
       return foundLicense
+    },
+
+    /**
+     * Fetch datasets by their IDs and store them in an array.
+     * @param {string[]} datasetIds - The list of dataset IDs to fetch.
+     */
+    async loadDatasetsByIds(datasetIds: string[]) {
+      let fetchedDatasets = []
+      for (const datasetId of datasetIds) {
+        try {
+          const dataset = await datasetsApiv2.get(datasetId)
+          if (dataset) {
+            fetchedDatasets.push(dataset)
+          }
+        } catch (error) {
+          console.error(`Error fetching dataset ${datasetId}:`, error)
+        }
+      }
+      this.addCustomDatasets(fetchedDatasets)
+
+      // Retourner les datasets récupérés si besoin
+      return fetchedDatasets
+    },
+    /**
+     * Store the result of a datasets fetch operation for an org in store
+     */
+    addCustomDatasets(fetchedDatasets: DatasetV2Response[]) {
+      this.customData = fetchedDatasets
+    },
+
+    /**
+     * Fetch datasets by url and store them in an array.
+     * @param {string[]} datasetIds - The list of dataset IDs to fetch.
+     */
+    async loadDatasetsByUrl(url: string[]) {
+      let fetchedDatasets = []
+      try {
+        const response = await fetch(url)
+        const data = await response.json()
+        fetchedDatasets = data.data
+      } catch (error) {
+        console.error(`Error fetching url ${url}:`, error)
+      }
+      this.addDatasetFromSpecificTopic(fetchedDatasets)
+      // Retourner les datasets récupérés si besoin
+      return fetchedDatasets
+    },
+    /**
+     * Store the result
+     */
+    addDatasetFromSpecificTopic(fetchedDatasets: DatasetV2Response[]) {
+      this.datasetFromSpecificTopic = fetchedDatasets
     }
   }
 })
