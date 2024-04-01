@@ -22,6 +22,7 @@ jobs:
           echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
 
           # configure the SSH deploy private key
+          mkdir ~/.ssh
           echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
