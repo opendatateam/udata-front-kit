@@ -7,6 +7,7 @@ import { type DatasetProperties, isAvailable } from '@/model'
 import { fromMarkdown } from '@/utils'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
+import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
 
 const props = defineProps({
@@ -139,12 +140,13 @@ const closeModal = () => {
                 Aidez-nous à trouver la donnée</a
               >
               <a
-                v-if="dataset.uri"
+                v-if="dataset.uri && !dataset.id"
                 class="fr-btn fr-btn--secondary inline-flex"
                 :href="dataset.uri"
                 target="_blank"
                 >Accéder au catalogue</a
               >
+              <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
             </div>
           </DsfrAccordion>
         </li>
