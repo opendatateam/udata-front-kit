@@ -63,14 +63,15 @@ jobs:
           echo "ENV=$ENV" >> $GITHUB_ENV
           echo "VARS=$VARS" >> $GITHUB_ENV
           echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
-        working-directory: $APP_NAME
+        working-directory: ${{ env.APP_NAME }}
       - name: create release
         shell: bash
         run: |
+          git fetch --tags
           RELEASE_VERSION=$(../${{ env.SCAFFOLD_DIR }}/scripts/bump_version.sh $VERSION_PART)
 
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-        working-directory: $APP_NAME
+        working-directory: ${{ env.APP_NAME }}
       - name: trigger Gitlab CI/CD pipeline
         shell: bash
         run: |
