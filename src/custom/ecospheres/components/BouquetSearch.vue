@@ -90,7 +90,6 @@ export default defineComponent({
     }
   },
   mounted() {
-    console.log(config.bouquets.theme.name)
     this.categoryThemeName = config.bouquets.theme.name
     this.categorySubThemeName = config.bouquets.subtheme.name
     this.categoryThemePlaceholder = config.bouquets.theme.placeholder
