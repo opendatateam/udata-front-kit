@@ -11,7 +11,7 @@ export default class SearchAPI extends DatagouvfrAPI {
 
   async search(
     query: string,
-    topic: string,
+    topic: string | null,
     page: number,
     args?: object
   ): Promise<DatasetV2Response> {
