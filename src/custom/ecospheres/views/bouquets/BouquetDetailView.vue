@@ -10,15 +10,14 @@ import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import config from '@/config'
-import BouquetDatasetList, {
-  getDatasetListTitle
-} from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import type { Theme, Topic, DatasetProperties } from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { getDatasetListTitle } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 
 const route = useRouteParamsAsString()

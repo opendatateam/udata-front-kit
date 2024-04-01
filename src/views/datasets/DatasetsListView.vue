@@ -1,7 +1,7 @@
 <script setup>
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import debounce from 'lodash/debounce'
-import { computed, onMounted, ref, watchEffect, watch, defineEmits } from 'vue'
+import { computed, onMounted, ref, watchEffect, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 

@@ -1,5 +1,87 @@
+<script setup lang="ts">
+import { computed, ref, type Ref } from 'vue'
+import { VueDraggableNext as draggable } from 'vue-draggable-next'
+
+import config from '@/config'
+import { type DatasetProperties, isAvailable } from '@/model'
+import { fromMarkdown } from '@/utils'
+
+import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
+import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
+
+const props = defineProps({
+  datasets: {
+    type: Array<DatasetProperties>,
+    default: []
+  },
+  isEdit: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emits = defineEmits(['removeDataset', 'editDataset'])
+
+const expandStore: Ref<{ [key: string]: string | null }> = ref({})
+const isModalOpen = ref(false)
+const editedDataset = ref({
+  index: undefined as number | undefined,
+  data: undefined as DatasetProperties | undefined,
+  isValid: false
+})
+
+const expandedIds = computed(() => {
+  return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
+})
+
+const modalActions = computed(() => {
+  return [
+    {
+      label: 'Valider',
+      disabled: !editedDataset.value.isValid,
+      onClick: ($event: PointerEvent) => {
+        $event.preventDefault()
+        emits('editDataset', { ...editedDataset.value })
+        closeModal()
+      }
+    },
+    {
+      label: 'Annuler',
+      secondary: true,
+      onClick: () => {
+        closeModal()
+      }
+    }
+  ]
+})
+
+const expandAll = () => {
+  for (const [idx] of props.datasets.entries()) {
+    expandStore.value[getAccordeonId(idx)] = getAccordeonId(idx)
+  }
+}
+
+const collapseAll = () => {
+  expandStore.value = {}
+}
+
+const getAccordeonId = (index: number): string => {
+  return `accordion_${index}`
+}
+
+const editDataset = (dataset: DatasetProperties, index: number) => {
+  // clone the object to enable cancellation
+  editedDataset.value = { index, data: { ...dataset }, isValid: false }
+  isModalOpen.value = true
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+}
+</script>
+
 <template>
-  <div v-if="numberOfDatasets < 1" class="no-dataset">
+  <div v-if="datasets.length < 1" class="no-dataset">
     <p>Ce bouquet ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
@@ -15,7 +97,7 @@
     <DsfrAccordionsGroup>
       <!-- conditionnal draggable wrapper component -->
       <component
-        :is="isEdit ? 'draggable' : 'div'"
+        :is="isEdit ? draggable : 'div'"
         :list="isEdit ? datasets : null"
         :ghost-class="isEdit ? 'ghost' : null"
       >
@@ -33,7 +115,7 @@
               />
             </template>
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="markdown(dataset.purpose)"></div>
+            <div v-html="fromMarkdown(dataset.purpose)"></div>
             <div class="button__wrapper">
               <DsfrButton
                 v-if="isEdit"
@@ -50,9 +132,9 @@
                 @click.prevent="$emit('removeDataset', index)"
               />
               <a
-                v-if="!isAvailable(dataset)"
+                v-if="!isAvailable(dataset.availability)"
                 class="fr-btn fr-btn--secondary inline-flex"
-                :href="`mailto:${email}`"
+                :href="`mailto:${config.website.contact_email}`"
               >
                 Aidez-nous à trouver la donnée</a
               >
@@ -84,124 +166,6 @@
     </DsfrModal>
   </div>
 </template>
-
-<script lang="ts">
-import { VueDraggableNext } from 'vue-draggable-next'
-
-import config from '@/config'
-import { type DatasetProperties, isAvailable as isAvailableTest } from '@/model'
-import { fromMarkdown } from '@/utils'
-
-import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
-import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
-
-export const getDatasetListTitle = function (
-  datasets: DatasetProperties[],
-  title: string = 'Composition du bouquet'
-): string {
-  const numberOfDatasets = datasets.length
-  switch (numberOfDatasets) {
-    case 0: {
-      return title
-    }
-    case 1: {
-      return `${title} ( 1 jeu de données )`
-    }
-    default: {
-      return `${title} ( ${numberOfDatasets} jeux de données )`
-    }
-  }
-}
-
-export default {
-  name: 'BouquetDatasetList',
-  components: {
-    BouquetDatasetAccordionTitle,
-    DatasetPropertiesFields,
-    draggable: VueDraggableNext
-  },
-  props: {
-    datasets: {
-      type: Array<DatasetProperties>,
-      default: []
-    },
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['removeDataset', 'editDataset'],
-  data() {
-    return {
-      expandStore: {} as { [key: string]: string | null },
-      isModalOpen: false,
-      editedDataset: {
-        index: undefined as number | undefined,
-        data: undefined as DatasetProperties | undefined,
-        isValid: false
-      }
-    }
-  },
-  computed: {
-    expandedIds() {
-      return Object.keys(this.expandStore).filter((k) => !!this.expandStore[k])
-    },
-    modalActions() {
-      return [
-        {
-          label: 'Valider',
-          disabled: !this.editedDataset.isValid,
-          onClick: ($event: PointerEvent) => {
-            $event.preventDefault()
-            this.$emit('editDataset', { ...this.editedDataset })
-            this.closeModal()
-          }
-        },
-        {
-          label: 'Annuler',
-          secondary: true,
-          onClick: () => {
-            this.closeModal()
-          }
-        }
-      ]
-    },
-    email() {
-      return config.website.contact_email
-    },
-    numberOfDatasets(): number {
-      return this.datasets.length
-    }
-  },
-  methods: {
-    expandAll() {
-      for (const [idx] of this.datasets.entries()) {
-        this.expandStore[this.getAccordeonId(idx)] = this.getAccordeonId(idx)
-      }
-    },
-    collapseAll() {
-      this.expandStore = {}
-    },
-    getAccordeonId(index: number): string {
-      return `accordion_${index}`
-    },
-    isAvailable(dataset: DatasetProperties): boolean {
-      return isAvailableTest(dataset.availability)
-    },
-    markdown(value: string) {
-      return fromMarkdown(value)
-    },
-    editDataset(dataset: DatasetProperties, index: number) {
-      // clone the object to enable cancellation
-      this.editedDataset = { index, data: { ...dataset }, isValid: false }
-      this.isModalOpen = true
-    },
-    closeModal() {
-      this.isModalOpen = false
-    }
-  }
-}
-</script>
 
 <style scoped lang="scss">
 .ghost {

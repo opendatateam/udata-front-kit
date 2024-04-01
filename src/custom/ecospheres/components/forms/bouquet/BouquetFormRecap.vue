@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 
-import BouquetDatasetList, {
-  getDatasetListTitle
-} from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import type { Bouquet } from '@/model'
+import { getDatasetListTitle } from '@/utils/bouquet'
 import { fromMarkdown } from '@/utils/index'
 import { useSpatialCoverageFromField } from '@/utils/spatial'
 
