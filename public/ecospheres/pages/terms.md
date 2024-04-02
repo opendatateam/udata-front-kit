@@ -6,7 +6,7 @@
 
 ### Éditeur <a href="#z1xuvpsz7tao" id="z1xuvpsz7tao"></a>
 
-_ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable.
+_ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable (CGDD).
 
 **Commissariat Général au Développement Durable**\
 Tour Séquoïa\
@@ -102,7 +102,9 @@ Le CGDD n’effectue pas de contrôle a priori sur les publications des autorit�
 
 **Contenus proposés par Etalab**
 
-Les contenus proposés par le CGDD sont sous [Licence Ouverte](https://github.com/etalab/licence-ouverte/blob/master/LO.md), à l’exception des logos et des représentations iconographiques et photographiques qui peuvent être régis par leurs licences propres.
+Les contenus proposés par le CGDD sont sous [Licence Ouverte](https://github.com/etalab/licence-ouverte/blob/master/LO.md), à l’exception des logos et des représentations iconographiques et photographiques qui peuvent être régis par leurs licences propres :
+
+- Illustrations de la page accueil : [Freepik](https://www.freepikcompany.com/legal#nav-freepik-agreement).
 
 Le code source de la plateforme est libre et disponible ici : [https://github.com/opendatateam/udata-front-kit](https://github.com/opendatateam/udata-front-kit)
 
