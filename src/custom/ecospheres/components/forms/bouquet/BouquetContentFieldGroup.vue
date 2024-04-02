@@ -18,8 +18,7 @@
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import DatasetPropertiesAddForm from '@/custom/ecospheres/components/forms/dataset/DatasetPropertiesAddForm.vue'
 import type { DatasetProperties } from '@/model'
-
-import { getDatasetListTitle } from '../../BouquetDatasetList.vue'
+import { getDatasetListTitle } from '@/utils/bouquet'
 
 export default {
   name: 'BouquetContentFieldGroup',
