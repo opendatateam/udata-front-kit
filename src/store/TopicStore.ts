@@ -66,7 +66,7 @@ export const useTopicStore = defineStore('topic', {
     async loadTopicsFromList(topics: Topic[]) {
       this.data = []
       for (const topic of topics) {
-        const res = await topicsAPI.get(topic.id)
+        const res = await topicsAPIv2.get(topic.id)
         this.data.push(res)
       }
     },

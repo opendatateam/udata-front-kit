@@ -9,6 +9,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
+import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
 import BouquetDatasetList, {
   getDatasetListTitle
@@ -189,7 +190,11 @@ onMounted(() => {
     <DsfrTabs
       class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du bouquet"
-      :tab-titles="[{ title: 'Données' }, { title: 'Discussions' }]"
+      :tab-titles="[
+        { title: 'Données' },
+        { title: 'Discussions' },
+        { title: 'Réutilisations' }
+      ]"
       :initial-selected-index="0"
       :selected-tab-index="selectedTabIndex"
       @select-tab="(idx: number) => (selectedTabIndex = idx)"
@@ -214,6 +219,14 @@ onMounted(() => {
           :subject="bouquet"
           subject-class="Topic"
         />
+      </DsfrTabContent>
+      <!-- Réutilisations -->
+      <DsfrTabContent
+        panel-id="tab-content-2"
+        tab-id="tab-2"
+        :selected="selectedTabIndex === 2"
+      >
+        <ReusesList model="topic" :object-id="bouquet.id" />
       </DsfrTabContent>
     </DsfrTabs>
   </div>
