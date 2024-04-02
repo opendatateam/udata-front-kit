@@ -59,7 +59,7 @@ website:
       to: '/accessibility'
   notice:
     display: true
-    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
+    content: Vous naviguez sur une version beta d'ecologie.data.gouv. En savoir plus sur [nos travaux en cours](https://ecospheres.gitbook.io/travaux-en-cours/).
     closeable: false
   router_items:
     - name: 'Accueil'
