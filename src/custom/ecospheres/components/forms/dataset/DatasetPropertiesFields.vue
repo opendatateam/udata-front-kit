@@ -3,7 +3,6 @@ import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import Multiselect from '@vueform/multiselect'
 import { ref, computed, watch, type PropType, type Ref, onMounted } from 'vue'
 
-import config from '@/config'
 import {
   Availability,
   isAvailable as isAvailableTest,
@@ -42,7 +41,7 @@ const alreadySelected = (id: string): boolean => {
 const ecospheresDatasetsOptions = async (query: string) => {
   if (!query) return []
   const datasets = (
-    await new SearchAPI().search(query, config.universe.topic_id, 1, {
+    await new SearchAPI().search(query, null, 1, {
       page_size: 10
     })
   ).data

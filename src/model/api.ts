@@ -19,7 +19,7 @@ export interface RequestConfig {
   headers?: object
 }
 
-export type URLParams = Record<string, string | number>
+export type URLParams = Record<string, string | number | null>
 
 export type AxiosResponseData = AxiosResponse['data']
 
