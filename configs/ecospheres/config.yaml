@@ -125,7 +125,7 @@ website:
     - '#A7D4CD'
   matomo:
     host: 'https://stats.data.gouv.fr'
-    siteId: 299
+    siteId:
   discussions:
     dataset:
       display: true
@@ -195,11 +195,13 @@ bouquets:
 organizations:
   - ademe
   - agence-nationale-de-la-cohesion-des-territoires
+  - agence-nationale-de-lhabitat
   - centre-scientifique-et-technique-du-batiment
   - ddt-de-la-loire
   - ddt-de-lain
   - ddt-de-lardeche
   - ddt-de-meurthe-et-moselle
+  - ddt-des-vosges
   - ddt-drome
   - ddt-jura
   - ddt-savoie
@@ -216,13 +218,13 @@ organizations:
   - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
   - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
   - direction-departementale-et-des-territoires-du-cantal
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-bretagne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-laquitaine
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
+  - direction-regionale-et-interdepartementale-de-lenvironnement-de-lamenagement-et-des-transports-1
   - dreal-auvergne-rhone-alpes-1
   - dreal-nouvelle-aquitaine
   - dreal-pays-de-la-loire-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-pays-de-la-loire
