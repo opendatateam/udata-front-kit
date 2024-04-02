@@ -45,7 +45,7 @@ const updateDatasetProperties = (
       Raison d'utilisation dans ce bouquet
       <span class="required">&nbsp;*</span>
       <Tooltip
-        text="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
+        text="Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est pas évidente. Vous pouvez également utiliser cet espace pour renseigner des problèmes liés à l'accès ou la qualité des données."
       />
     </div>
     <div class="container small">

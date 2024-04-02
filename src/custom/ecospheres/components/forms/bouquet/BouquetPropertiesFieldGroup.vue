@@ -27,7 +27,7 @@
       id="bouquet_description"
       class="fr-input"
       type="text"
-      placeholder="Ajoutez ici l'ensemble des informations nécessaires à la compréhension, l'objectif et l'utilisation du bouquet. N'hésitez pas à indiquer la réglementation ou une documentation liée au bouquet."
+      placeholder="Renseignez ici les informations nécessaires à la compréhension du bouquet : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l'organisme porteur du projet, etc."
       :value="bouquetDescription"
       @input="
         $emit(
