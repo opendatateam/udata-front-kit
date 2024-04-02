@@ -1,23 +1,46 @@
 <script setup lang="ts">
+import { onMounted, computed, type ComputedRef } from 'vue'
+
+import { useTopicStore } from '@/store/TopicStore'
+
 import config from '../config'
 import type { Theme } from '../model'
 import Tile from './Tile.vue'
+
+const topicStore = useTopicStore()
 
 const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
 }
 
-const getThemeDescription = (theme: Theme): string => {
-  const nbSubthemes = theme.subthemes.length
-  switch (nbSubthemes) {
+const getThemeDescription = (theme: Theme) => {
+  const nbBouquets = topicStore.data.filter((topic) => {
+    return (
+      !topic.private &&
+      topic.extras['ecospheres:informations'][0].theme === theme.name
+    )
+  }).length
+  switch (nbBouquets) {
     case 0:
-      return 'Pas de chantiers'
+      return 'Aucun bouquet'
     case 1:
-      return '1 chantier'
+      return '1 bouquet'
     default:
-      return nbSubthemes + ' chantiers'
+      return `${nbBouquets} bouquets`
   }
 }
+
+const themesWithDescriptions: ComputedRef<Array<[Theme, string]>> = computed(
+  () => {
+    return config.themes.map((theme: Theme) => {
+      return [theme, getThemeDescription(theme)]
+    })
+  }
+)
+
+onMounted(() => {
+  topicStore.loadTopicsForUniverse()
+})
 </script>
 
 <template>
@@ -26,7 +49,7 @@ const getThemeDescription = (theme: Theme): string => {
       class="fr-grid-row fr-grid-row--gutters es__tiles__list home-themes-tiles"
     >
       <li
-        v-for="theme in config.themes"
+        v-for="[theme, description] in themesWithDescriptions"
         :key="theme.name"
         class="fr-col-12 fr-col-lg-3"
       >
@@ -34,7 +57,7 @@ const getThemeDescription = (theme: Theme): string => {
           :style="getCustomBoxShadow(theme.color)"
           :link="{ name: 'bouquets', query: { theme: theme.name } }"
           :title="theme.name"
-          :description="getThemeDescription(theme)"
+          :description="description"
         />
       </li>
     </ul>
