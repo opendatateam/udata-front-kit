@@ -100,7 +100,7 @@ Le CGDD décline toute responsabilité en cas de dommage, quelle qu’en soit sa
 
 Le CGDD n’effectue pas de contrôle a priori sur les publications des autorités administratives ou des contributeurs sur la plateforme. Dès que le CGDD a connaissance de contenus illicites, le CGDD agit rapidement pour retirer ces données ou en rendre l’accès impossible. À cette fin, une procédure de signalement est mise en place sur la plateforme. Tout utilisateur peut signaler un contenu non conforme aux présentes conditions d’utilisation. Le CGDD se réserve notamment la possibilité de supprimer ou de rendre inaccessibles, sans préavis, les contributions sans lien avec l’activité de la plateforme, publiées aux fins d’entraver le bon fonctionnement de la plateforme, de publicité ou de promotion, de propagande ou de prosélytisme et toute contribution contrevenant aux lois et règlements en vigueur. Le CGDD se réserve également la possibilité de supprimer le profil d’un contributeur et de refuser que certaines personnes aient accès à la plateforme, en cas de violation des présentes conditions d’utilisation.
 
-**Contenus proposés par Etalab**
+**Contenus proposés par le CGDD**
 
 Les contenus proposés par le CGDD sont sous [Licence Ouverte](https://github.com/etalab/licence-ouverte/blob/master/LO.md), à l’exception des logos et des représentations iconographiques et photographiques qui peuvent être régis par leurs licences propres :
 
