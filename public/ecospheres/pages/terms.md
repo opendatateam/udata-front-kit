@@ -70,7 +70,7 @@ Le réutilisateur de telles données doit se conformer à la législation relati
 
 Les ressources des jeux de données sont soumises à la licence choisie par le contributeur publiant les données à partir de [data.gouv.fr](https://www.data.gouv.fr) et affichée sur la page de chaque jeu de données.
 
-**Publication de commentaire**
+**Publication de commentaires**
 
 Les discussions ont vocation à porter sur le jeu ou le bouquet de données publié. Les contributeurs ne publient pas de messages de nature publicitaire ou promotionnelle, à caractère raciste ou diffamatoire, grossier ou injurieux, agressif ou violent ou de façon générale qui contreviendrait aux bonnes mœurs, l’ordre public ou aux dispositions légales en vigueur.
 
