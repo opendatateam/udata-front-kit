@@ -1,5 +1,7 @@
 # CGU et Mentions Légales
 
+
+
 ## Mentions Légales <a href="#hw6xohju2xe8" id="hw6xohju2xe8"></a>
 
 ### Éditeur <a href="#z1xuvpsz7tao" id="z1xuvpsz7tao"></a>
