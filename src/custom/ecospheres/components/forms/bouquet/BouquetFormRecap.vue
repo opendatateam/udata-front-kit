@@ -2,6 +2,7 @@
 import type { PropType } from 'vue'
 
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
+import BouquetDatasetListExport from '@/custom/ecospheres/components/BouquetDatasetListExport.vue'
 import type { Bouquet } from '@/model'
 import { getDatasetListTitle } from '@/utils/bouquet'
 import { fromMarkdown } from '@/utils/index'
@@ -77,4 +78,8 @@ const goToStep = (step: number) => {
     />
   </h4>
   <BouquetDatasetList :datasets="bouquet.datasetsProperties" />
+  <BouquetDatasetListExport
+    :datasets="bouquet.datasetsProperties"
+    :filename="bouquet.id"
+  />
 </template>

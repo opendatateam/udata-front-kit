@@ -23,6 +23,8 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import { getDatasetListTitle } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 
+import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
+
 const route = useRouteParamsAsString()
 const router = useRouter()
 const store = useTopicStore()
@@ -234,6 +236,10 @@ onMounted(() => {
       >
         <h2>{{ getDatasetListTitle(datasetsProperties) }}</h2>
         <BouquetDatasetList :datasets="datasetsProperties" />
+        <BouquetDatasetListExport
+          :datasets="datasetsProperties"
+          :filename="bouquet.id"
+        />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent
