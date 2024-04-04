@@ -5,7 +5,10 @@ import { useRouter } from 'vue-router'
 import { ConfigUtils } from '@/config'
 import { NoOptionSelected } from '@/model'
 import type { SelectOption, Theme } from '@/model'
+import type { SpatialCoverage } from '@/model/spatial'
 import { useUserStore } from '@/store/UserStore'
+
+import SelectSpatialCoverage from './forms/SelectSpatialCoverage.vue'
 
 const props = defineProps({
   themeName: {
@@ -18,12 +21,13 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['update:showDrafts'])
+const emits = defineEmits(['update:showDrafts', 'update:geozone'])
 
 const userStore = useUserStore()
 const router = useRouter()
 
 const showDrafts = ref(false)
+
 const themeOptions = ConfigUtils.getThemeOptions()
 
 const selectedTheme: ComputedRef<Theme | null> = computed(() => {
@@ -54,6 +58,10 @@ const switchSubtheme = (event: Event) => {
       subtheme: (event.target as HTMLInputElement)?.value
     }
   })
+}
+
+const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
+  emits('update:geozone', spatialCoverage != null ? spatialCoverage.id : null)
 }
 
 watch(showDrafts, (newVal) => {
@@ -112,6 +120,16 @@ watch(showDrafts, (newVal) => {
           {{ option.text }}
         </option>
       </select>
+    </div>
+    <div class="fr-select-group">
+      <label class="fr-label" for="select_subtheme"
+        >Couverture territoriale</label
+      >
+      <SelectSpatialCoverage
+        placeholder="Rechercher"
+        :short="true"
+        @update:model-value="switchSpatialCoverage"
+      />
     </div>
   </div>
 </template>
