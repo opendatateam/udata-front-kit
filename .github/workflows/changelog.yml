@@ -1,0 +1,28 @@
+name: Generate and Commit Changelog
+
+on:
+  push:
+    branches:
+      # FIXME: remove
+      - changelog
+      - master
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: 'Generate PR changelog'
+        uses: heinrichreimer/action-github-changelog-generator@v2.4
+        with:
+          issues: false
+          output: CHANGELOG.md
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and push if it changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add CHANGELOG.md
+          git commit -m "Update Changelog [skip ci]" || echo "No changes to commit"
+          git push
