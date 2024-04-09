@@ -25,4 +25,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git add CHANGELOG.md
           git commit -m "Update Changelog [skip ci]" || echo "No changes to commit"
-          git push
+          git push origin ${{ github.ref }}
