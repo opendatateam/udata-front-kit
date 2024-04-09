@@ -15,7 +15,8 @@
     "lint": "eslint . --ext .js,.ts,.vue,.json --ignore-path .gitignore",
     "hint": "tsc --project tsconfig.dev.json",
     "format": "prettier '**/*.{js,ts,vue,yml,yaml,json}' --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "version": "conventional-changelog-cli -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "dependencies": {
     "@etalab/data.gouv.fr-components": "^1.13.8",
@@ -54,6 +55,8 @@
     "@vue/eslint-config-typescript": "^12.0.0",
     "@vue/tsconfig": "^0.4.0",
     "axios-mock-adapter": "^1.22.0",
+    "conventional-changelog-cli": "^4.1.0",
+    "conventional-recommended-bump": "^9.0.0",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard-with-typescript": "^39.1.1",
