@@ -124,7 +124,6 @@ watch(
     <label class="fr-label" for="select-spatial-coverage"
       >Couverture territoriale</label
     >
-    <!-- FIXME: NB could use v-model, but need update fn -->
     <SelectSpatialCoverage
       :value="spatialCoverage"
       @update:model-value="onUpdateSpatialCoverage"
