@@ -16,6 +16,7 @@ const geozone: Ref<string | null> = ref(null)
 
 const subThemeQuery = computed(() => route.query.subtheme)
 const themeQuery = computed(() => route.query.theme)
+const geozoneQuery = computed(() => route.query.geozone)
 
 watch(
   [subThemeQuery],
@@ -29,6 +30,14 @@ watch(
   [themeQuery],
   (newVal) => {
     themeName.value = newVal[0]?.toString() ?? NoOptionSelected
+  },
+  { immediate: true }
+)
+
+watch(
+  [geozoneQuery],
+  (newVal) => {
+    geozone.value = newVal[0]?.toString() ?? null
   },
   { immediate: true }
 )
@@ -86,8 +95,8 @@ const goToCreate = () => {
             <BouquetSearch
               v-model:themeName="themeName"
               v-model:subthemeName="subthemeName"
+              v-model:geozone="geozone"
               @update:show-drafts="(value) => (showDrafts = value)"
-              @update:geozone="(value) => (geozone = value)"
             />
           </div>
         </nav>
