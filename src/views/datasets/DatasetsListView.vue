@@ -3,7 +3,7 @@ import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import debounce from 'lodash/debounce'
 import { computed, onMounted, ref, watchEffect, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -15,7 +15,6 @@ defineEmits(['search'])
 const route = useRoute()
 const router = useRouter()
 const store = useSearchStore()
-const originalQuery = computed(() => route.query.q)
 const currentPage = ref(1)
 const query = ref()
 const loader = useLoading()
@@ -64,17 +63,16 @@ const onSelectOrganization = (orgId) => {
 }
 
 const search = () => {
-  router.push({ path: '/datasets', query: { q: query.value } })
+  router.push({ path: '/datasets', query: { q: query.value, page: 1 } })
+}
+
+const goToPage = (page) => {
+  router.push({ path: '/datasets', query: { q: query.value, page: page + 1 } })
 }
 
 const zIndex = (key) => {
   return { zIndex: datasets.value.length - key }
 }
-
-// reset currentPage when query changes
-onBeforeRouteUpdate((to, from) => {
-  currentPage.value = 1
-})
 
 const getDatasetPage = (id) => {
   return { name: 'dataset_detail', params: { did: id } }
@@ -95,8 +93,12 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  if (!originalQuery.value) return
-  query.value = originalQuery.value
+  if (route.query.q) {
+    query.value = route.query.q
+  }
+  if (route.query.page) {
+    currentPage.value = parseInt(route.query.page)
+  }
 })
 
 const delayedSearch = debounce(
@@ -136,7 +138,6 @@ onMounted(() => {
   if (hasOrganizationFilter) {
     useOrganizationStore().loadFromConfigFlat()
   }
-  query.value = originalQuery.value
 })
 </script>
 
@@ -196,6 +197,6 @@ onMounted(() => {
     class="fr-container"
     :current-page="currentPage - 1"
     :pages="pages"
-    @update:current-page="(p) => (currentPage = p + 1)"
+    @update:current-page="goToPage"
   />
 </template>
