@@ -5,6 +5,11 @@ interface RouteLocationParamsAsString
   params: Record<string, string>
 }
 
+interface RouteLocationQueryAsString
+  extends Omit<RouteLocationNormalizedLoaded, 'query'> {
+  query: Record<string, string>
+}
+
 /**
  * Exposes first element from route params that could contain an array
  * Warning: this will discard the other values if any
@@ -18,4 +23,19 @@ export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
     ])
   )
   return { ...route, params }
+}
+
+/**
+ * Exposes first element from route query that could contain an array
+ * Warning: this will discard the other values if any
+ */
+export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
+  const route = useRoute()
+  const query = Object.fromEntries(
+    Object.entries(route.query).map(([key, value]) => [
+      key,
+      Array.isArray(value) ? String(value[0]) : String(value)
+    ])
+  )
+  return { ...route, query }
 }

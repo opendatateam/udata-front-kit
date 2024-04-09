@@ -1,18 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import debounce from 'lodash/debounce'
-import { computed, onMounted, ref, watchEffect, watch } from 'vue'
+import { computed, onMounted, ref, watchEffect, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import config from '@/config'
+import type { TopicConf } from '@/model/config'
+import { useRouteQueryAsString } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
 
 defineEmits(['search'])
 
-const route = useRoute()
+const route = useRouteQueryAsString()
 const router = useRouter()
 const store = useSearchStore()
 const currentPage = ref(1)
@@ -21,14 +23,14 @@ const loader = useLoading()
 
 const topicStore = useTopicStore()
 const topic = computed(() => route.query.topic)
-const selectedTopicId = ref(null)
-const selectedOrganizationId = ref(null)
+const selectedTopicId: Ref<string | null> = ref(null)
+const selectedOrganizationId: Ref<string | null> = ref(null)
 
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
 const title = config.website.title
-const topicsConf = config.website.list_highlighted_topics
+const topicsConf = config.website.list_highlighted_topics as TopicConf[]
 const hasOrganizationFilter = config.website.datasets.organization_filter
 
 const topicOptions = computed(() => {
@@ -52,12 +54,12 @@ const organizationOptions = computed(() => [
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
-const onSelectTopic = (topicId) => {
+const onSelectTopic = (topicId: string) => {
   selectedTopicId.value = topicId
   currentPage.value = 1
 }
 
-const onSelectOrganization = (orgId) => {
+const onSelectOrganization = (orgId: string) => {
   selectedOrganizationId.value = orgId
   currentPage.value = 1
 }
@@ -66,19 +68,19 @@ const search = () => {
   router.push({ path: '/datasets', query: { q: query.value, page: 1 } })
 }
 
-const goToPage = (page) => {
+const goToPage = (page: number) => {
   router.push({ path: '/datasets', query: { q: query.value, page: page + 1 } })
 }
 
-const zIndex = (key) => {
+const zIndex = (key: number) => {
   return { zIndex: datasets.value.length - key }
 }
 
-const getDatasetPage = (id) => {
+const getDatasetPage = (id: string) => {
   return { name: 'dataset_detail', params: { did: id } }
 }
 
-const getOrganizationPage = (id) => {
+const getOrganizationPage = (id: string) => {
   if (router.hasRoute('organization_detail')) {
     return { name: 'organization_detail', params: { oid: id } }
   }
