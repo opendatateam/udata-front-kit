@@ -75,6 +75,10 @@ const updateTopic = async () => {
   return useTopicStore().update(bouquet.value.id, bouquetCreationData.value)
 }
 
+const onUpdateDatasets = () => {
+  updateTopic()
+}
+
 const canDelete = computed(() => {
   return useUserStore().hasEditPermissions(bouquet.value as Bouquet)
 })
@@ -198,6 +202,7 @@ onMounted(() => {
         v-if="currentStep == 3"
         v-model:current-datasets="bouquet.datasetsProperties"
         @update-validation="(isValid: boolean) => updateStepValidation(3, isValid)"
+        @update-datasets="onUpdateDatasets"
       />
       <BouquetFormRecap
         v-if="currentStep == 4"

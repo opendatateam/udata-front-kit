@@ -13,7 +13,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['updateValidation', 'update:datasets'])
+const emit = defineEmits(['updateValidation', 'updateDatasets'])
 
 const hasCurrentDatasetInput = ref(false)
 const datasets = ref(props.currentDatasets)
@@ -32,12 +32,16 @@ watch(
 
 const addDataset = (datasetProperties: DatasetProperties) => {
   datasets.value.push(datasetProperties)
-  emit('update:datasets', datasets.value)
+  emit('updateDatasets', datasets.value)
 }
 
 const removeDataset = (index: number) => {
   datasets.value.splice(index, 1)
-  emit('update:datasets', datasets.value)
+  emit('updateDatasets', datasets.value)
+}
+
+const reorderDatasets = () => {
+  emit('updateDatasets', datasets.value)
 }
 
 const editDataset = ({
@@ -48,7 +52,7 @@ const editDataset = ({
   data: DatasetProperties
 }) => {
   datasets.value[index] = data
-  emit('update:datasets', datasets.value)
+  emit('updateDatasets', datasets.value)
 }
 </script>
 
@@ -65,5 +69,6 @@ const editDataset = ({
     :is-edit="true"
     @remove-dataset="removeDataset"
     @edit-dataset="editDataset"
+    @reorder-datasets="reorderDatasets"
   />
 </template>
