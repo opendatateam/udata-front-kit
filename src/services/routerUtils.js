@@ -3,6 +3,7 @@ import BouquetAddView from '@/custom/ecospheres/views/bouquets/BouquetAddView.vu
 import BouquetDetailView from '@/custom/ecospheres/views/bouquets/BouquetDetailView.vue'
 import BouquetEditView from '@/custom/ecospheres/views/bouquets/BouquetEditView.vue'
 import BouquetsListView from '@/custom/ecospheres/views/bouquets/BouquetsListView.vue'
+import ChangelogView from '@/views/ChangelogView.vue'
 
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
@@ -136,6 +137,13 @@ export default class RouterFetch {
         component: LogoutView
       })
     }
+
+    items.push({
+      path: '/changelog',
+      name: 'changelog',
+      component: ChangelogView
+    })
+
     return items
   }
 }
