@@ -14,6 +14,11 @@ universe:
   # universe name, used as bouquets tag
   name: defis
 
+robots:
+  disallow:
+    - /
+  sitemap:
+
 # UI customizations
 website:
   title: 'defis.data.gouv.fr'

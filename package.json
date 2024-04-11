@@ -15,7 +15,8 @@
     "lint": "eslint . --ext .js,.ts,.vue,.json --ignore-path .gitignore",
     "hint": "tsc --project tsconfig.dev.json",
     "format": "prettier '**/*.{js,ts,vue,yml,yaml,json}' --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "generate-robots-txt": "node scripts/generate-robots-txt.mjs"
   },
   "dependencies": {
     "@etalab/data.gouv.fr-components": "^1.13.8",
