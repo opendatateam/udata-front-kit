@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import {
   ReadMore,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  excerpt
 } from '@etalab/data.gouv.fr-components'
+import { useHead } from '@unhead/vue'
 import { onMounted, ref, computed } from 'vue'
 import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -81,6 +83,32 @@ const getSelectedThemeColor = (themed: string) => {
   selectedTheme.value = themed
   return getThemeColor(selectedTheme.value)
 }
+
+const metaDescription = (): string | undefined => {
+  return excerpt(bouquet.value?.description ?? '')
+}
+
+const metaTitle = (): string => {
+  return `${bouquet.value?.name ?? ''} - ${config.website.title}`
+}
+
+const metaLink = (): string => {
+  const resolved = router.resolve({
+    name: 'bouquet_detail',
+    params: { bid: bouquet.value?.id }
+  })
+  return `${window.location.origin}${resolved.href}`
+}
+
+useHead({
+  title: metaTitle,
+  meta: [
+    { property: 'og:title', content: metaTitle },
+    { name: 'description', content: metaDescription },
+    { property: 'og:description', content: metaDescription }
+  ],
+  link: [{ rel: 'canonical', href: metaLink }]
+})
 
 onMounted(() => {
   const loader = loading.show()
