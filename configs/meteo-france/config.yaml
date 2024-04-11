@@ -21,7 +21,7 @@ website:
     FRANÇAISE'
   service_logo: '/logos/meteo-france-logo.svg'
   badge:
-    display: true
+    display: false
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
