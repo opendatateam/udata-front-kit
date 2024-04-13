@@ -28,14 +28,17 @@
 - fix\(bouquet\): addresse le loader infini [\#171](https://github.com/opendatateam/udata-front-kit/pull/171) ([bonjourmauko](https://github.com/bonjourmauko))
 - Fix DatagouvfrAPI constructor [\#147](https://github.com/opendatateam/udata-front-kit/pull/147) ([abulte](https://github.com/abulte))
 
+### Ecosphères
+
+- Fix demo org list [\#416](https://github.com/opendatateam/udata-front-kit/pull/416) ([streino](https://github.com/streino))
+- Mise à jour de la liste d'organisations au nouveau périmètre [\#413](https://github.com/opendatateam/udata-front-kit/pull/413) ([streino](https://github.com/streino))
+- Update CGU [\#412](https://github.com/opendatateam/udata-front-kit/pull/412) ([streino](https://github.com/streino))
+
 **Merged pull requests:**
 
 - Update config.yaml [\#426](https://github.com/opendatateam/udata-front-kit/pull/426) ([agarrone](https://github.com/agarrone))
 - chore\(deps-dev\): bump vite from 4.5.2 to 4.5.3 [\#419](https://github.com/opendatateam/udata-front-kit/pull/419) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Fix demo org list [\#416](https://github.com/opendatateam/udata-front-kit/pull/416) ([streino](https://github.com/streino))
 - Sync config main avec branche ecospheres-demo [\#415](https://github.com/opendatateam/udata-front-kit/pull/415) ([streino](https://github.com/streino))
-- Mise à jour de la liste d'organisations au nouveau périmètre [\#413](https://github.com/opendatateam/udata-front-kit/pull/413) ([streino](https://github.com/streino))
-- Update CGU [\#412](https://github.com/opendatateam/udata-front-kit/pull/412) ([streino](https://github.com/streino))
 - chore\(bouquet\): update form wording [\#411](https://github.com/opendatateam/udata-front-kit/pull/411) ([abulte](https://github.com/abulte))
 - Update data.gouv.fr-components [\#410](https://github.com/opendatateam/udata-front-kit/pull/410) ([nicolaskempf57](https://github.com/nicolaskempf57))
 - feat\(bouquet\): show reuses [\#408](https://github.com/opendatateam/udata-front-kit/pull/408) ([abulte](https://github.com/abulte))
