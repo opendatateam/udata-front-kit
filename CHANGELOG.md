@@ -23,12 +23,14 @@
 
 **Fixed bugs:**
 
+- fix\(bouquet\): show selected dataset on edit [\#394](https://github.com/opendatateam/udata-front-kit/pull/394) ([abulte](https://github.com/abulte))
 - fix\(home\): conditionnal HomeThemes [\#177](https://github.com/opendatateam/udata-front-kit/pull/177) ([abulte](https://github.com/abulte))
 - fix\(bouquet\): addresse le loader infini [\#171](https://github.com/opendatateam/udata-front-kit/pull/171) ([bonjourmauko](https://github.com/bonjourmauko))
 - Fix DatagouvfrAPI constructor [\#147](https://github.com/opendatateam/udata-front-kit/pull/147) ([abulte](https://github.com/abulte))
 
 **Merged pull requests:**
 
+- Update config.yaml [\#426](https://github.com/opendatateam/udata-front-kit/pull/426) ([agarrone](https://github.com/agarrone))
 - chore\(deps-dev\): bump vite from 4.5.2 to 4.5.3 [\#419](https://github.com/opendatateam/udata-front-kit/pull/419) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Fix demo org list [\#416](https://github.com/opendatateam/udata-front-kit/pull/416) ([streino](https://github.com/streino))
 - Sync config main avec branche ecospheres-demo [\#415](https://github.com/opendatateam/udata-front-kit/pull/415) ([streino](https://github.com/streino))
@@ -44,7 +46,6 @@
 - Add defis website [\#399](https://github.com/opendatateam/udata-front-kit/pull/399) ([geoffreyaldebert](https://github.com/geoffreyaldebert))
 - Mise à jour de la liste d'orgas Ecosphères [\#397](https://github.com/opendatateam/udata-front-kit/pull/397) ([streino](https://github.com/streino))
 - Top-notice de warning pour les environnements dev/demo ecologie.dgfr [\#396](https://github.com/opendatateam/udata-front-kit/pull/396) ([streino](https://github.com/streino))
-- fix\(bouquet\): show selected dataset on edit [\#394](https://github.com/opendatateam/udata-front-kit/pull/394) ([abulte](https://github.com/abulte))
 - feat\(bouquet\): spatial coverage [\#393](https://github.com/opendatateam/udata-front-kit/pull/393) ([abulte](https://github.com/abulte))
 - Change bouquet dataset list drag indicator [\#392](https://github.com/opendatateam/udata-front-kit/pull/392) ([streino](https://github.com/streino))
 - feat\(bouquets\): add sort on list [\#391](https://github.com/opendatateam/udata-front-kit/pull/391) ([abulte](https://github.com/abulte))
