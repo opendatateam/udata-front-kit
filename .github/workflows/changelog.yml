@@ -19,6 +19,13 @@ jobs:
           issues: false
           output: CHANGELOG.md
           token: ${{ secrets.GITHUB_TOKEN }}
+          addSections: >
+            {
+              "ecospheres": {
+                "prefix": "### Ecosphères",
+                "labels": ["ecospheres"]
+              }
+            }
       - name: Commit and push if it changed
         run: |
           git config --local user.email "action@github.com"
