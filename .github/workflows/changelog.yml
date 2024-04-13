@@ -22,7 +22,7 @@ jobs:
           addSections: >
             {
               "ecospheres": {
-                "prefix": "### Ecosphères",
+                "prefix": "**Ecosphères:**",
                 "labels": ["ecospheres"]
               }
             }
