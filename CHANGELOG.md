@@ -28,7 +28,7 @@
 - fix\(bouquet\): addresse le loader infini [\#171](https://github.com/opendatateam/udata-front-kit/pull/171) ([bonjourmauko](https://github.com/bonjourmauko))
 - Fix DatagouvfrAPI constructor [\#147](https://github.com/opendatateam/udata-front-kit/pull/147) ([abulte](https://github.com/abulte))
 
-### Ecosphères
+**Ecosphères:**
 
 - Fix demo org list [\#416](https://github.com/opendatateam/udata-front-kit/pull/416) ([streino](https://github.com/streino))
 - Mise à jour de la liste d'organisations au nouveau périmètre [\#413](https://github.com/opendatateam/udata-front-kit/pull/413) ([streino](https://github.com/streino))
