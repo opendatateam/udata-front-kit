@@ -67,52 +67,34 @@ website:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
     closeable: false
-  router_items:
-    - name: 'Accueil'
-      id: 'home'
-      linkPage: '/'
-      type: 'custom'
-      display_menu: true
-      custom_component: 'ecospheres/views/HomeView'
-    - name: 'Données'
-      id: 'datasets'
-      linkPage: '/datasets'
-      type: 'component'
-      display_menu: true
-    - name: 'Organisations'
-      id: 'organizations'
-      linkPage: '/organizations'
-      type: 'component'
-      display_menu: false
-    - name: 'Bouquets'
-      id: 'bouquets'
-      linkPage: '/bouquets'
-      type: 'component'
-      display_menu: true
-    - name: 'À propos'
-      id: 'about'
-      linkPage: '/about'
-      type: 'page'
-      display_menu: true
-      url: '/ecospheres/pages/about.md'
-    - name: 'Accessibilité'
-      id: 'accessibility'
-      linkPage: '/accessibility'
-      type: 'page'
-      display_menu: false
-      url: '/ecospheres/pages/accessibility.md'
-    - name: "Conditions générales d'utilisation"
-      id: 'terms'
-      linkPage: '/terms'
-      type: 'page'
-      display_menu: false
-      url: '/ecospheres/pages/terms.md'
-    - name: 'Beta'
-      id: 'beta'
-      linkPage: '/beta'
-      type: 'page'
-      display_menu: false
-      url: '/ecospheres/pages/beta.md'
+  menu:
+    - name: Accueil
+      path: /
+    - name: Données
+      path: /datasets
+    - name: Bouquets
+      path: /bouquets
+    - name: A propos
+      path: /about
+  router:
+    disable:
+      - topics
+    pages:
+      - name: 'À propos'
+        id: 'about'
+        linkPage: '/about'
+        display_menu: true
+        url: '/ecospheres/pages/about.md'
+      - name: 'Accessibilité'
+        id: 'accessibility'
+        linkPage: '/accessibility'
+        display_menu: false
+        url: '/ecospheres/pages/accessibility.md'
+      - name: "Conditions générales d'utilisation"
+        id: 'terms'
+        linkPage: '/terms'
+        display_menu: false
+        url: '/ecospheres/pages/terms.md'
   home_buttons:
   show_topic_charts: false
   show_quality_component: true

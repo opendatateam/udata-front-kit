@@ -21,17 +21,13 @@ const isActive = (link) => {
 }
 
 const navItems = computed(() => {
-  const items = []
-  config.website.router_items.forEach((item) => {
-    if (item.display_menu) {
-      items.push({
-        to: item.linkPage,
-        text: item.name,
-        'aria-current': isActive(item.linkPage) ? true : undefined
-      })
+  return (config.website.menu ?? []).map((item) => {
+    return {
+      to: item.path,
+      text: item.name,
+      'aria-current': isActive(item.path) ? true : undefined
     }
   })
-  return items
 })
 </script>
 

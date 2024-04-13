@@ -48,40 +48,26 @@ website:
     display: true
     name: 'Recherche guidée'
     link: '/form'
-  router_items:
-    - name: 'Accueil'
-      id: 'home'
-      linkPage: '/'
-      type: 'component'
-      display_menu: false
-    - name: 'Données'
-      id: 'datasets'
-      linkPage: '/datasets'
-      type: 'component'
-      display_menu: true
-    - name: 'Recherche guidée'
-      id: 'FormMF'
-      linkPage: '/form'
-      type: 'custom'
-      custom_component: 'meteo/views/FormMF'
-      display_menu: true
-    # - name: 'Portail des API Météo-France'
-    #   id: 'portailapi'
-    #   linkPage: 'https://portail-api.meteofrance.fr/'
-    #   type: 'external'
-    #   display_menu: true
-    - name: 'A propos'
-      id: 'about'
-      linkPage: '/about'
-      type: 'page'
-      url: '/meteo-france/pages/about.md'
-      display_menu: true
-    - name: 'Accessibilité'
-      id: 'accessibility'
-      linkPage: '/accessibility'
-      type: 'page'
-      display_menu: false
-      url: '/meteo-france/pages/accessibility.md'
+  menu:
+    - name: Données
+      path: /datasets
+    - name: Recherche guidée
+      path: /form
+    - name: A propos
+      path: /about
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    pages:
+      - name: 'A propos'
+        id: 'about'
+        linkPage: '/about'
+        url: '/meteo-france/pages/about.md'
+      - name: 'Accessibilité'
+        id: 'accessibility'
+        linkPage: '/accessibility'
+        url: '/meteo-france/pages/accessibility.md'
   # img should be square
   home_buttons:
   show_topic_charts: true

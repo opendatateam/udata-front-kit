@@ -65,40 +65,27 @@ website:
     display: false
     name:
     link:
-  router_items:
-    - name: 'Accueil'
-      id: 'home'
-      linkPage: '/'
-      type: 'component'
-      display_menu: false
-    - name: 'Défis'
-      id: 'topics'
-      linkPage: '/topics'
-      type: 'component'
-      display_menu: true
-    - name: 'Open Data University'
-      id: 'opendatauniversity'
-      linkPage: '/opendatauniversity'
-      type: 'page'
-      display_menu: true
-      url: '/defis/pages/opendatauniversity.md'
-    - name: 'Accessibilité'
-      id: 'accessibility'
-      linkPage: '/accessibility'
-      type: 'page'
-      display_menu: false
-      url: '/defis/pages/accessibility.md'
-    - name: 'datasets'
-      id: 'datasets'
-      linkPage: '/datasets'
-      type: 'component'
-      display_menu: false
-    - name: 'Guides'
-      id: 'guides'
-      linkPage: 'https://guides.data.gouv.fr/'
-      type: 'external'
-      display_menu: true
-      url: 'https://guides.data.gouv.fr/'
+  menu:
+    - name: Défis
+      path: /topics
+    - name: Open Data University
+      path: /opendatauniversity
+    - name: Guides
+      path: https://guides.data.gouv.fr/
+  router:
+    disable:
+      - organizations_routes
+    pages:
+      - name: 'Open Data University'
+        id: 'opendatauniversity'
+        linkPage: '/opendatauniversity'
+        display_menu: true
+        url: '/defis/pages/opendatauniversity.md'
+      - name: 'Accessibilité'
+        id: 'accessibility'
+        linkPage: '/accessibility'
+        display_menu: false
+        url: '/defis/pages/accessibility.md'
   # img should be square
   home_buttons:
   show_topic_charts: true
