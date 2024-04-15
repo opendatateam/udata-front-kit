@@ -30,6 +30,7 @@ website:
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     below_hero:
     below_topics:
+    meta_description:
   header_button:
     display: true
     label: 'Donnez votre avis'

@@ -20,6 +20,7 @@
   "dependencies": {
     "@etalab/data.gouv.fr-components": "^1.13.8",
     "@gouvminint/vue-dsfr": "^5.7.0",
+    "@unhead/vue": "^1.9.4",
     "@vueform/multiselect": "^2.6.2",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",

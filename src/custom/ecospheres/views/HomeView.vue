@@ -1,4 +1,5 @@
 <script setup>
+import { useHead } from '@unhead/vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -12,8 +13,21 @@ const doSearch = () => {
   router.push({ name: 'datasets', query: { q: query.value } })
 }
 
-const homepageTitle = config.website.homepage_title
+const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
+
+useHead({
+  title: config.website.title,
+  meta: [
+    { property: 'og:title', content: config.website.title },
+    { name: 'description', content: config.website.homepage.meta_description },
+    {
+      property: 'og:description',
+      content: config.website.homepage.meta_description
+    }
+  ],
+  link: [{ rel: 'canonical', href: window.location.origin }]
+})
 </script>
 
 <template>

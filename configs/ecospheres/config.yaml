@@ -30,6 +30,7 @@ website:
     subtitle:
     below_hero:
     below_topics:
+    meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
   header_search: true
   header_button:
     display: true

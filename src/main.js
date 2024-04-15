@@ -4,6 +4,7 @@ import '@gouvfr/dsfr/dist/dsfr.min.css'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import '@gouvminint/vue-dsfr/styles'
+import { createHead } from '@unhead/vue'
 import '@vueform/multiselect/themes/default.css'
 import axios from 'axios'
 import { createPinia } from 'pinia'
@@ -26,11 +27,13 @@ import { useUserStore } from './store/UserStore'
 const app = createApp(App)
 const pinia = createPinia()
 const i18n = setupI18n()
+const head = createHead()
 
 app.use(router)
 app.use(VueDsfr, { icons: Object.values(icons) })
 app.use(pinia)
 app.use(i18n)
+app.use(head)
 if (config.website.matomo.siteId) {
   app.use(VueMatomo, {
     host: config.website.matomo.host,
