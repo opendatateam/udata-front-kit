@@ -33,7 +33,8 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
           subtheme: route.query.subtheme ?? NoOptionSelected
         }
       ]
-    }
+    },
+    spatial: route.query.geozone ? { zones: [route.query.geozone] } : null
   }
 })
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BouquetList from '@/custom/ecospheres/components/BouquetList.vue'
@@ -12,9 +12,11 @@ const router = useRouter()
 const themeName = ref(NoOptionSelected)
 const subthemeName = ref(NoOptionSelected)
 const showDrafts = ref(false)
+const geozone: Ref<string | null> = ref(null)
 
 const subThemeQuery = computed(() => route.query.subtheme)
 const themeQuery = computed(() => route.query.theme)
+const geozoneQuery = computed(() => route.query.geozone)
 
 watch(
   [subThemeQuery],
@@ -28,6 +30,14 @@ watch(
   [themeQuery],
   (newVal) => {
     themeName.value = newVal[0]?.toString() ?? NoOptionSelected
+  },
+  { immediate: true }
+)
+
+watch(
+  [geozoneQuery],
+  (newVal) => {
+    geozone.value = newVal[0]?.toString() ?? null
   },
   { immediate: true }
 )
@@ -85,6 +95,7 @@ const goToCreate = () => {
             <BouquetSearch
               v-model:themeName="themeName"
               v-model:subthemeName="subthemeName"
+              v-model:geozone="geozone"
               @update:show-drafts="(value) => (showDrafts = value)"
             />
           </div>
@@ -94,6 +105,7 @@ const goToCreate = () => {
             :theme-name="themeName"
             :subtheme-name="subthemeName"
             :show-drafts="showDrafts"
+            :geozone="geozone"
           />
         </div>
       </div>
