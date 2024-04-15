@@ -185,30 +185,32 @@ onMounted(() => {
       <div class="fr-mt-4v">
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
       </div>
-      <BouquetPropertiesFieldGroup
-        v-if="currentStep == 1"
-        v-model:bouquetName="bouquet.name"
-        v-model:bouquetDescription="bouquet.description"
-        @update-validation="(isValid: boolean) => updateStepValidation(1, isValid)"
-      />
-      <BouquetInformationsFieldGroup
-        v-if="currentStep == 2"
-        v-model:theme="bouquet.theme"
-        v-model:subtheme="bouquet.subtheme"
-        v-model:spatial-field="bouquet.spatial"
-        @update-validation="(isValid: boolean) => updateStepValidation(2, isValid)"
-      />
-      <BouquetContentFieldGroup
-        v-if="currentStep == 3"
-        v-model:current-datasets="bouquet.datasetsProperties"
-        @update-validation="(isValid: boolean) => updateStepValidation(3, isValid)"
-        @update-datasets="onUpdateDatasets"
-      />
-      <BouquetFormRecap
-        v-if="currentStep == 4"
-        :bouquet="bouquet"
-        @update-step="(step: number) => (currentStep = step)"
-      />
+      <div v-if="bouquet.id">
+        <BouquetPropertiesFieldGroup
+          v-if="currentStep == 1"
+          v-model:bouquetName="bouquet.name"
+          v-model:bouquetDescription="bouquet.description"
+          @update-validation="(isValid: boolean) => updateStepValidation(1, isValid)"
+        />
+        <BouquetInformationsFieldGroup
+          v-if="currentStep == 2"
+          v-model:theme="bouquet.theme"
+          v-model:subtheme="bouquet.subtheme"
+          v-model:spatial-field="bouquet.spatial"
+          @update-validation="(isValid: boolean) => updateStepValidation(2, isValid)"
+        />
+        <BouquetContentFieldGroup
+          v-if="currentStep == 3"
+          v-model:current-datasets="bouquet.datasetsProperties"
+          @update-validation="(isValid: boolean) => updateStepValidation(3, isValid)"
+          @update-datasets="onUpdateDatasets"
+        />
+        <BouquetFormRecap
+          v-if="currentStep == 4"
+          :bouquet="bouquet as Bouquet"
+          @update-step="(step: number) => (currentStep = step)"
+        />
+      </div>
       <div class="flex align-start fr-mt-3w">
         <DsfrButton
           v-if="canDelete"

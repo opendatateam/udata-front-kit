@@ -1,11 +1,25 @@
 <script setup lang="ts">
-import { ref, computed, watch, type ComputedRef } from 'vue'
-import { useRouter } from 'vue-router'
+import {
+  ref,
+  computed,
+  watch,
+  watchEffect,
+  type ComputedRef,
+  type Ref,
+  type PropType
+} from 'vue'
+import { useRouter, type LocationQueryRaw } from 'vue-router'
 
 import { ConfigUtils } from '@/config'
 import { NoOptionSelected } from '@/model'
 import type { SelectOption, Theme } from '@/model'
+import type { SpatialCoverage } from '@/model/spatial'
+import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
+
+import SelectSpatialCoverage from './forms/SelectSpatialCoverage.vue'
+
+const spatialAPI = new SpatialAPI()
 
 const props = defineProps({
   themeName: {
@@ -15,15 +29,22 @@ const props = defineProps({
   subthemeName: {
     type: String,
     default: NoOptionSelected
+  },
+  geozone: {
+    type: String as PropType<string | null>,
+    default: null
   }
 })
 
-const emits = defineEmits(['update:showDrafts'])
+const emits = defineEmits(['update:showDrafts', 'update:geozone'])
 
 const userStore = useUserStore()
 const router = useRouter()
 
 const showDrafts = ref(false)
+const selectedGeozone: Ref<string | null> = ref(null)
+const selectedSpatialCoverage: Ref<SpatialCoverage | null> = ref(null)
+
 const themeOptions = ConfigUtils.getThemeOptions()
 
 const selectedTheme: ComputedRef<Theme | null> = computed(() => {
@@ -36,28 +57,53 @@ const subthemeOptions: ComputedRef<SelectOption[]> = computed(() => {
     : []
 })
 
+const computeQueryArgs = (
+  data: Record<string, string | null>
+): LocationQueryRaw => {
+  const query: LocationQueryRaw = {}
+  if (props.themeName) query.theme = props.themeName
+  if (props.subthemeName) query.subtheme = props.subthemeName
+  if (selectedGeozone.value) query.geozone = selectedGeozone.value
+  return { ...query, ...data }
+}
+
 const switchTheme = (event: Event) => {
   router.push({
     path: '/bouquets',
-    query: {
+    query: computeQueryArgs({
       theme: (event.target as HTMLInputElement)?.value,
       subtheme: NoOptionSelected
-    }
+    })
   })
 }
 
 const switchSubtheme = (event: Event) => {
   router.push({
     path: '/bouquets',
-    query: {
-      theme: props.themeName,
+    query: computeQueryArgs({
       subtheme: (event.target as HTMLInputElement)?.value
-    }
+    })
+  })
+}
+
+const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
+  selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
+  router.push({
+    path: '/bouquets',
+    query: computeQueryArgs({})
   })
 }
 
 watch(showDrafts, (newVal) => {
   emits('update:showDrafts', newVal)
+})
+
+watchEffect(() => {
+  if (props.geozone) {
+    spatialAPI
+      .getZone(props.geozone)
+      .then((zone) => (selectedSpatialCoverage.value = zone))
+  }
 })
 </script>
 
@@ -112,6 +158,17 @@ watch(showDrafts, (newVal) => {
           {{ option.text }}
         </option>
       </select>
+    </div>
+    <div class="fr-select-group">
+      <label class="fr-label" for="select_subtheme"
+        >Couverture territoriale</label
+      >
+      <SelectSpatialCoverage
+        placeholder="Rechercher"
+        :short="true"
+        :value="selectedSpatialCoverage"
+        @update:model-value="switchSpatialCoverage"
+      />
     </div>
   </div>
 </template>
