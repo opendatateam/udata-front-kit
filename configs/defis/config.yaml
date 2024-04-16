@@ -79,12 +79,10 @@ website:
       - name: 'Open Data University'
         id: 'opendatauniversity'
         linkPage: '/opendatauniversity'
-        display_menu: true
         url: '/defis/pages/opendatauniversity.md'
       - name: 'Accessibilité'
         id: 'accessibility'
         linkPage: '/accessibility'
-        display_menu: false
         url: '/defis/pages/accessibility.md'
   # img should be square
   home_buttons:

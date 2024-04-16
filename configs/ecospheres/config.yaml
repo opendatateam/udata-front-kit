@@ -83,17 +83,14 @@ website:
       - name: 'À propos'
         id: 'about'
         linkPage: '/about'
-        display_menu: true
         url: '/ecospheres/pages/about.md'
       - name: 'Accessibilité'
         id: 'accessibility'
         linkPage: '/accessibility'
-        display_menu: false
         url: '/ecospheres/pages/accessibility.md'
       - name: "Conditions générales d'utilisation"
         id: 'terms'
         linkPage: '/terms'
-        display_menu: false
         url: '/ecospheres/pages/terms.md'
   home_buttons:
   show_topic_charts: false
