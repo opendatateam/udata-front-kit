@@ -7,7 +7,7 @@ Verticales thématiques adossées à [data.gouv.fr](https://www.data.gouv.fr/).
 
 Chaque verticale est configurée dans un fichier `config.yaml` stocké sous [`configs/$verticale`](configs).
 
-La variable d'environnement `CONFIG_NAME` permet de définir la configuration utilisée au lancement de l'application.
+La variable d'environnement `VITE_SITE_ID` permet de définir la configuration utilisée au lancement de l'application.
 Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dérivés.
 
 
