@@ -69,13 +69,13 @@ website:
     closeable: false
   menu:
     - text: Accueil
-      path: /
+      to: /
     - text: Données
-      path: /datasets
+      to: /datasets
     - text: Bouquets
-      path: /bouquets
+      to: /bouquets
     - text: A propos
-      path: /about
+      to: /about
   router:
     disable:
       - topics

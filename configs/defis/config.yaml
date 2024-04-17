@@ -67,11 +67,11 @@ website:
     link:
   menu:
     - text: Défis
-      path: /topics
+      to: /topics
     - text: Open Data University
-      path: /opendatauniversity
+      to: /opendatauniversity
     - text: Guides
-      path: https://guides.data.gouv.fr/
+      to: https://guides.data.gouv.fr/
   router:
     disable:
       - organizations_routes

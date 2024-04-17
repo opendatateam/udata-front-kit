@@ -50,11 +50,11 @@ website:
     link: '/form'
   menu:
     - text: Données
-      path: /datasets
+      to: /datasets
     - text: Recherche guidée
-      path: /form
+      to: /form
     - text: A propos
-      path: /about
+      to: /about
   router:
     disable:
       - organizations_routes

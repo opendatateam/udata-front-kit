@@ -12,5 +12,5 @@ export interface PageConfig {
 
 export interface MenuConfig {
   text: string
-  path: string
+  to: string
 }

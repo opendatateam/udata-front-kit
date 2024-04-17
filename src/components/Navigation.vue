@@ -25,9 +25,8 @@ const navItems = computed(() => {
   const menuConfig: MenuConfig[] = config.website.menu ?? []
   return menuConfig.map((item) => {
     return {
-      to: item.path,
-      text: item.text,
-      'aria-current': isActive(item.path) ? true : undefined
+      ...item,
+      'aria-current': isActive(item.to) ? true : undefined
     }
   })
 })
