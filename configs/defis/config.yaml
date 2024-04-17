@@ -66,23 +66,23 @@ website:
     name:
     link:
   menu:
-    - name: Défis
+    - text: Défis
       path: /topics
-    - name: Open Data University
+    - text: Open Data University
       path: /opendatauniversity
-    - name: Guides
+    - text: Guides
       path: https://guides.data.gouv.fr/
   router:
     disable:
       - organizations_routes
     pages:
-      - name: 'Open Data University'
+      - title: 'Open Data University'
         id: 'opendatauniversity'
-        linkPage: '/opendatauniversity'
+        route: '/opendatauniversity'
         url: '/defis/pages/opendatauniversity.md'
-      - name: 'Accessibilité'
+      - title: 'Accessibilité'
         id: 'accessibility'
-        linkPage: '/accessibility'
+        route: '/accessibility'
         url: '/defis/pages/accessibility.md'
   # img should be square
   home_buttons:

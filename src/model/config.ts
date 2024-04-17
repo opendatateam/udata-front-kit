@@ -4,8 +4,13 @@ export interface TopicConf {
 }
 
 export interface PageConfig {
-  name: string
+  title: string
   id: string
-  linkPage: string
+  route: string
   url: string
+}
+
+export interface MenuConfig {
+  text: string
+  path: string
 }

@@ -71,12 +71,12 @@ const defaultRoutes: RouteRecordRaw[] = [
 // pages
 const pages = (config.website.router.pages ?? []).map((item: PageConfig) => {
   return {
-    path: item.linkPage,
+    path: item.route,
     name: item.id,
     component: SimplePageView,
     props: { url: item.url },
     meta: {
-      title: item.name
+      title: item.title
     }
   }
 })

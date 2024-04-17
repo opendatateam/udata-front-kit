@@ -68,29 +68,29 @@ website:
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
     closeable: false
   menu:
-    - name: Accueil
+    - text: Accueil
       path: /
-    - name: Données
+    - text: Données
       path: /datasets
-    - name: Bouquets
+    - text: Bouquets
       path: /bouquets
-    - name: A propos
+    - text: A propos
       path: /about
   router:
     disable:
       - topics
     pages:
-      - name: 'À propos'
+      - title: 'À propos'
         id: 'about'
-        linkPage: '/about'
+        route: '/about'
         url: '/ecospheres/pages/about.md'
-      - name: 'Accessibilité'
+      - title: 'Accessibilité'
         id: 'accessibility'
-        linkPage: '/accessibility'
+        route: '/accessibility'
         url: '/ecospheres/pages/accessibility.md'
-      - name: "Conditions générales d'utilisation"
+      - title: "Conditions générales d'utilisation"
         id: 'terms'
-        linkPage: '/terms'
+        route: '/terms'
         url: '/ecospheres/pages/terms.md'
   home_buttons:
   show_topic_charts: false
