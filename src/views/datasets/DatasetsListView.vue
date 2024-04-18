@@ -10,6 +10,7 @@ import type { TopicConf } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 
 defineEmits(['search'])
 const props = defineProps({
@@ -38,6 +39,7 @@ const localQuery = ref()
 const loader = useLoading()
 
 const topicStore = useTopicStore()
+const userStore = useUserStore()
 
 const selectedTopicId: Ref<string | null> = ref(null)
 const selectedOrganizationId: Ref<string | null> = ref(null)
@@ -183,7 +185,21 @@ onMounted(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container fr-mb-4w">
-    <h1 class="fr-mb-2v">Jeux de données</h1>
+    <div
+      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+    >
+      <h1 class="fr-col-auto fr-mb-2v">Jeux de données</h1>
+      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+        <a
+          v-if="userStore.isAdmin()"
+          :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
+          class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
+        >
+          <VIcon name="ri-file-download-line" class="fr-mr-1w" />
+          Exporter la liste des jeux de données
+        </a>
+      </div>
+    </div>
     <p v-if="query">Résultats de recherche pour "{{ query }}".</p>
     <p v-else>Parcourir tous les jeux de données présents sur {{ title }}.</p>
     <div class="fr-col-md-12 fr-mb-2w">
