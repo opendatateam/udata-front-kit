@@ -3,6 +3,7 @@ import { computed, type ComputedRef } from 'vue'
 
 import config from '@/config'
 import type { Topic } from '@/model'
+import type { TopicConf } from '@/model/config'
 
 import TopicsAPI from '../services/api/resources/TopicsAPI'
 import { useUserStore } from './UserStore'
@@ -63,7 +64,7 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Load topics to store from a list of ids and API
      */
-    async loadTopicsFromList(topics: Topic[]) {
+    async loadTopicsFromList(topics: TopicConf[]) {
       this.data = []
       for (const topic of topics) {
         const res = await topicsAPIv2.get(topic.id)

@@ -25,7 +25,13 @@ export default class RouterFetch {
             {
               path: '',
               name: item.id,
-              component: DatasetsListView
+              component: DatasetsListView,
+              props: (route) => ({
+                query: route.query.q,
+                page: route.query.page,
+                organization: route.query.organization,
+                topic: route.query.topic
+              })
             },
             {
               path: ':did',
