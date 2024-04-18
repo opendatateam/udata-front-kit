@@ -90,7 +90,8 @@ export const useTopicStore = defineStore('topic', {
       if (this.isLoaded) return this.data
       let response = await topicsAPIv2.list({
         page_size: config.website.pagination_sizes.topics_list,
-        tag: config.universe.name
+        tag: config.universe.name,
+        include_private: 'yes'
       })
       await useUserStore().waitForStoreInit()
       this.data = this.filter(response.data)
