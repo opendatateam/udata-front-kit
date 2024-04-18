@@ -115,6 +115,11 @@ const onSelectDataset = (dataset: string) => {
           selectedDep.value = 'No'
         } else if (selectedDataset.value?.indicateur) {
           showIndicateur.value = true
+        } else if (selectedDataset.value?.periode) {
+          showPeriod.value = true
+          optionsPeriod.value = datasetResources.value
+            .filter((item) => item.type == 'main')
+            .map((a) => a.title.split('_').pop() ?? a.title)
         } else {
           filteredResources.value = datasetResources.value.map((a) => a.title)
         }
@@ -197,7 +202,7 @@ function onSelectIndicateur(event: Event) {
       </select>
     </div>
 
-    <div v-if="selectedDep && showPeriod" class="select-classic">
+    <div v-if="(!showDep || selectedDep) && showPeriod" class="select-classic">
       <label>Quelle période ?</label>
       <select class="fr-select" @change="onSelectPeriod($event)">
         <option hidden>Choisir une option</option>
