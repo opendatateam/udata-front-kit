@@ -1,28 +1,44 @@
 <script setup lang="ts">
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import debounce from 'lodash/debounce'
-import { computed, onMounted, ref, watchEffect, watch, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import type { TopicConf } from '@/model/config'
-import { useRouteQueryAsString } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
 
 defineEmits(['search'])
+const props = defineProps({
+  query: {
+    type: String,
+    default: null
+  },
+  page: {
+    type: String,
+    default: null
+  },
+  organization: {
+    type: String,
+    default: null
+  },
+  topic: {
+    type: String,
+    default: null
+  }
+})
 
-const route = useRouteQueryAsString()
 const router = useRouter()
 const store = useSearchStore()
 const currentPage = ref(1)
-const query = ref()
+const localQuery = ref()
 const loader = useLoading()
 
 const topicStore = useTopicStore()
-const topic = computed(() => route.query.topic)
+
 const selectedTopicId: Ref<string | null> = ref(null)
 const selectedOrganizationId: Ref<string | null> = ref(null)
 
@@ -54,22 +70,46 @@ const organizationOptions = computed(() => [
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
+const computeUrlQuery = (
+  data: Record<string, string | number>
+): Record<string, string | number> => {
+  return {
+    page: currentPage.value,
+    ...(localQuery.value && { q: localQuery.value }),
+    ...(selectedOrganizationId.value && {
+      organization: selectedOrganizationId.value
+    }),
+    ...(selectedTopicId.value && { topic: selectedTopicId.value }),
+    ...data
+  }
+}
+
 const onSelectTopic = (topicId: string) => {
-  selectedTopicId.value = topicId
-  currentPage.value = 1
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({
+      page: 1,
+      topic: topicId
+    })
+  })
 }
 
 const onSelectOrganization = (orgId: string) => {
-  selectedOrganizationId.value = orgId
-  currentPage.value = 1
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({
+      page: 1,
+      organization: orgId
+    })
+  })
 }
 
 const search = () => {
-  router.push({ path: '/datasets', query: { q: query.value, page: 1 } })
+  router.push({ path: '/datasets', query: computeUrlQuery({ page: 1 }) })
 }
 
 const goToPage = (page: number) => {
-  router.push({ path: '/datasets', query: { q: query.value, page: page + 1 } })
+  router.push({ path: '/datasets', query: computeUrlQuery({ page: page + 1 }) })
 }
 
 const zIndex = (key: number) => {
@@ -87,21 +127,16 @@ const getOrganizationPage = (id: string) => {
   return ''
 }
 
-// fill topic name when arriving on the page with a topic ID
-// TODO: topicId is not updated when selecting a topic
-watchEffect(() => {
-  if (!topic.value || !topicsConf) return
-  selectedTopicId.value = topic.value
-})
-
-watchEffect(() => {
-  if (route.query.q) {
-    query.value = route.query.q
-  }
-  if (route.query.page) {
-    currentPage.value = parseInt(route.query.page)
-  }
-})
+watch(
+  props,
+  () => {
+    localQuery.value = props.query
+    currentPage.value = props.page ? parseInt(props.page) : 1
+    selectedOrganizationId.value = props.organization
+    selectedTopicId.value = props.topic
+  },
+  { immediate: true }
+)
 
 const delayedSearch = debounce(
   (currentQuery, currentTopicId, currentOrganizationId, currentPageValue) => {
@@ -119,7 +154,7 @@ const delayedSearch = debounce(
 )
 
 watch(
-  [query, selectedTopicId, selectedOrganizationId, currentPage],
+  [localQuery, selectedTopicId, selectedOrganizationId, currentPage],
   ([currentQuery, currentTopicId, currentOrganizationId, currentPageValue]) => {
     delayedSearch(
       currentQuery,
@@ -153,7 +188,7 @@ onMounted(() => {
     <p v-else>Parcourir tous les jeux de données présents sur {{ title }}.</p>
     <div class="fr-col-md-12 fr-mb-2w">
       <DsfrSearchBar
-        v-model="query"
+        v-model="localQuery"
         label="Recherche"
         placeholder="Rechercher des données"
         @update:model-value="search()"
