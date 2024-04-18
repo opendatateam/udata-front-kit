@@ -22,4 +22,5 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run test:single
-      - run: tsc --noEmit
+      - run: npx vue-tsc --version
+      - run: npx vue-tsc --noEmit

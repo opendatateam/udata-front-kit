@@ -8,7 +8,7 @@ import {
   type StyleValue
 } from 'vue'
 
-import type { DsfrHeaderMenuLinkProps } from './DSFRHeaderMenuLink.vue'
+import type { DsfrHeaderMenuLinkProps } from './DsfrHeaderMenuLink.vue'
 
 type DsfrHeaderProps = {
   serviceTitle?: string
