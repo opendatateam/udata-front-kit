@@ -1,25 +1,62 @@
 <script setup lang="ts">
 import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
-import { computed, ref } from 'vue'
+import type { Resource } from '@etalab/data.gouv.fr-components'
+import { ref, type Ref } from 'vue'
 
 import config from '@/config'
-import { fromMarkdown } from '@/utils'
 
 import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
 
-const selectItems = ref([])
+interface Indicateur {
+  name: string
+  code: string
+}
 
-let selectedDataPack = ref(null)
+interface Dataset {
+  prod: string
+  dev: string
+  id: string
+  departement: boolean
+  periode: boolean
+  indicateur?: boolean
+  indicateursListe?: Indicateur[]
+}
+
+type DatasetIds = {
+  [pack: string]: Record<string, Dataset>
+}
+
+const showLoader = ref(false)
+const datasetsIdsTyped: DatasetIds = datasetsIds
+
+const env: 'prod' | 'dev' = config.website.env
+
+const selectedDataPack: Ref<string | null> = ref(null)
 const optionsDataPack = ref(Object.keys(datasetsIds))
 const datasetTitle = ref(null)
 const datasetSlug = ref(null)
-let indicateurWording = ref('Indicateur')
-let indicateurComplement = ref(' ')
+const indicateurWording = ref('Indicateur')
+const selectedDataset: Ref<Dataset | null> = ref(null)
+const optionsDataset = ref<string[]>([])
+
+const datasetResources: Ref<Resource[]> = ref([])
+const filteredResources: Ref<string[]> = ref([])
+
+const selectedPeriod: Ref<string | null> = ref(null)
+const optionsPeriod: Ref<string[]> = ref([])
+const showPeriod = ref(false)
+
+const selectedDep: Ref<string | null> = ref(null)
+const optionsDeps = ref(deps)
+const showDep = ref(false)
+
+const selectedIndicateur: Ref<string | null> = ref(null)
+const showIndicateur = ref(false)
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
 
-const onSelectDataPack = (pack) => {
+const onSelectDataPack = (pack: string) => {
   selectedDataset.value = null
   showDep.value = false
   showPeriod.value = false
@@ -30,18 +67,15 @@ const onSelectDataPack = (pack) => {
   filteredResources.value = []
 
   selectedDataPack.value = pack
-  optionsDataset = Object.keys(datasetsIds[pack])
-  if (pack == 'Données de prévision numérique du temps (PNT)') {
+  optionsDataset.value = Object.keys(datasetsIdsTyped[pack])
+  if (pack === 'Données de prévision numérique du temps (PNT)') {
     indicateurWording.value = 'Regroupement'
   } else {
     indicateurWording.value = 'Indicateur'
   }
 }
 
-let selectedDataset = ref(null)
-let optionsDataset = ref([])
-
-const onSelectDataset = (dataset) => {
+const onSelectDataset = (dataset: string) => {
   showLoader.value = true
   showDep.value = false
   showPeriod.value = false
@@ -52,48 +86,53 @@ const onSelectDataset = (dataset) => {
 
   filteredResources.value = []
 
-  selectedDataset.value = datasetsIds[selectedDataPack.value][dataset]
-  fetch(
-    config.datagouvfr.base_url +
-      '/api/1/datasets/' +
-      selectedDataset.value[config.website.env]
-  )
-    .then((response) => {
-      return response.json()
-    })
-    .then((data) => {
-      datasetTitle.value = data['title']
-      datasetSlug.value = data['slug']
-      datasetResources = data['resources']
-      if (selectedDataset.value['departement']) {
-        showDep.value = true
-      } else if (selectedDataset.value['id'].startsWith('SIM')) {
-        let res = datasetResources.filter((item) => item.type == 'main')
-        res = res.map((a) => a.title)
-        res = res.map((a) => a.split('SIM2_')[1])
-        res = [...new Set(res)]
-        optionsPeriod.value = res
-        showPeriod.value = true
-
-        selectedDep.value = 'No'
-      } else if (selectedDataset.value['indicateur']) {
-        showIndicateur.value = true
-      } else {
-        filteredResources.value = datasetResources.map((a) => a.title)
-      }
-      showLoader.value = false
-    })
+  if (selectedDataPack.value) {
+    selectedDataset.value = datasetsIdsTyped[selectedDataPack.value][dataset]
+    // FIXME: use DatagouvfrAPI
+    fetch(
+      config.datagouvfr.base_url +
+        '/api/1/datasets/' +
+        selectedDataset.value[env]
+    )
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        datasetTitle.value = data.title
+        datasetSlug.value = data.slug
+        datasetResources.value = data.resources
+        if (selectedDataset.value?.departement) {
+          showDep.value = true
+        } else if (selectedDataset.value?.id.startsWith('SIM')) {
+          const mainResources = datasetResources.value.filter(
+            (item) => item.type === 'main'
+          )
+          let res = mainResources.map((a) => a.title)
+          res = res.map((a) => a.split('SIM2_')[1])
+          res = [...new Set(res)]
+          optionsPeriod.value = res
+          showPeriod.value = true
+          selectedDep.value = 'No'
+        } else if (selectedDataset.value?.indicateur) {
+          showIndicateur.value = true
+        } else if (selectedDataset.value?.periode) {
+          showPeriod.value = true
+          optionsPeriod.value = datasetResources.value
+            .filter((item) => item.type == 'main')
+            .map((a) => a.title.split('_').pop() ?? a.title)
+        } else {
+          filteredResources.value = datasetResources.value.map((a) => a.title)
+        }
+        showLoader.value = false
+      })
+  }
 }
 
-let selectedDep = ref(null)
-let optionsDeps = ref(deps)
-let showDep = ref(false)
-
-function onSelectDep(event) {
+function onSelectDep(event: Event) {
   optionsPeriod.value = []
   selectedPeriod.value = null
-  selectedDep.value = event.target.value
-  let res = datasetResources.map((a) => a.title)
+  selectedDep.value = (event.target as HTMLSelectElement).value
+  let res = datasetResources.value.map((a) => a.title)
   res = res.filter((r) => r.includes('departement_' + selectedDep.value))
   res = res.map((a) => a.split('_periode_')[1].split('_')[0].split('.')[0])
   res = [...new Set(res)]
@@ -101,42 +140,29 @@ function onSelectDep(event) {
   showPeriod.value = true
 }
 
-let selectedPeriod = ref(null)
-let optionsPeriod = ref([])
-let showPeriod = ref(false)
-
-function onSelectPeriod(event) {
-  selectedPeriod.value = event.target.value
-  if (!selectedDataset.value['id'].startsWith('SIM')) {
-    let res = datasetResources.map((a) => a.title)
+function onSelectPeriod(event: Event) {
+  selectedPeriod.value = (event.target as HTMLSelectElement).value
+  if (!selectedDataset.value?.id.startsWith('SIM')) {
+    let res = datasetResources.value.map((a) => a.title)
     res = res.filter((r) => r.includes('departement_' + selectedDep.value))
     filteredResources.value = res.filter((r) =>
       r.includes('periode_' + selectedPeriod.value)
     )
   } else {
-    let res = datasetResources.map((a) => a.title)
-    filteredResources.value = res.filter((r) =>
-      r.includes(selectedPeriod.value)
+    const res = datasetResources.value.map((a) => a.title)
+    filteredResources.value = res.filter(
+      (r) => selectedPeriod.value && r.includes(selectedPeriod.value)
     )
   }
 }
 
-let selectedIndicateur = ref(null)
-let optionsIndicateur = ref([])
-let showIndicateur = ref(false)
-
-function onSelectIndicateur(event) {
-  selectedIndicateur.value = event.target.value
-  let res = datasetResources.map((a) => a.title)
+function onSelectIndicateur(event: Event) {
+  selectedIndicateur.value = (event.target as HTMLSelectElement).value
+  const res = datasetResources.value.map((a) => a.title)
   filteredResources.value = res.filter((r) =>
     r.includes('_' + selectedIndicateur.value)
   )
 }
-
-let datasetResources = ref([])
-let filteredResources = ref([])
-
-const showLoader = ref(false)
 </script>
 
 <template>
@@ -149,7 +175,7 @@ const showLoader = ref(false)
     <DsfrSelect
       :model-value="selectedDataPack"
       :options="optionsDataPack"
-      @update:modelValue="onSelectDataPack"
+      @update:model-value="onSelectDataPack"
     >
       <template #label>Quelle thématique de données ?</template>
     </DsfrSelect>
@@ -157,7 +183,7 @@ const showLoader = ref(false)
     <DsfrSelect
       v-if="selectedDataPack"
       :options="optionsDataset"
-      @update:modelValue="onSelectDataset"
+      @update:model-value="onSelectDataset"
     >
       <template #label>Quelles données ?</template>
     </DsfrSelect>
@@ -168,7 +194,7 @@ const showLoader = ref(false)
         <option hidden>Choisir une option</option>
         <option
           v-for="dep in optionsDeps"
-          v-bind:key="dep['code']"
+          :key="dep['code']"
           :value="dep['code']"
         >
           {{ dep['name'] }} ({{ dep['code'] }})
@@ -176,27 +202,23 @@ const showLoader = ref(false)
       </select>
     </div>
 
-    <div class="select-classic" v-if="selectedDep && showPeriod">
+    <div v-if="(!showDep || selectedDep) && showPeriod" class="select-classic">
       <label>Quelle période ?</label>
       <select class="fr-select" @change="onSelectPeriod($event)">
         <option hidden>Choisir une option</option>
-        <option
-          v-for="period in optionsPeriod"
-          v-bind:key="period"
-          :value="period"
-        >
+        <option v-for="period in optionsPeriod" :key="period" :value="period">
           Période {{ period }}
         </option>
       </select>
     </div>
 
-    <div class="select-classic" v-if="selectedDataset && showIndicateur">
+    <div v-if="selectedDataset && showIndicateur" class="select-classic">
       <label>Quel {{ indicateurWording }} ?</label>
       <select class="fr-select" @change="onSelectIndicateur($event)">
         <option hidden>Choisir une option</option>
         <option
           v-for="item in selectedDataset['indicateursListe']"
-          v-bind:key="item['code']"
+          :key="item['code']"
           :value="item['code']"
         >
           {{ indicateurWording }} {{ item['name'] }}
@@ -248,17 +270,18 @@ const showLoader = ref(false)
       <br />
       <h5>Fichiers</h5>
       <div
-        class="datagouv-components"
         v-for="item in datasetResources"
-        v-bind:key="item['id']"
+        :key="item['id']"
+        class="datagouv-components"
       >
         <ResourceAccordion
           v-if="
+            selectedDataset &&
             item['id'] != 'b1d97b5b-cb0e-4991-90be-4c8a16a6c2a7' &&
             filteredResources.includes(item['title']) &&
             item['type'] == 'main'
           "
-          :datasetId="selectedDataset[config.website.env]"
+          :dataset-id="selectedDataset[env]"
           :resource="item"
         />
       </div>
@@ -266,24 +289,28 @@ const showLoader = ref(false)
       <br />
       <h5>Documentation</h5>
       <div
-        class="datagouv-components"
         v-for="item in datasetResources"
-        v-bind:key="item['id']"
+        :key="item['id']"
+        class="datagouv-components"
       >
-        <span v-if="['LSH', 'SQR'].includes(selectedDataset['id'])">
+        <span
+          v-if="
+            selectedDataset && ['LSH', 'SQR'].includes(selectedDataset['id'])
+          "
+        >
           <ResourceAccordion
             v-if="
               item['title'].includes('_' + selectedIndicateur + '_') &&
               item['type'] == 'documentation'
             "
-            :datasetId="selectedDataset[config.website.env]"
+            :dataset-id="selectedDataset[env]"
             :resource="item"
           />
         </span>
         <span v-else>
           <ResourceAccordion
-            v-if="item['type'] == 'documentation'"
-            :datasetId="selectedDataset[config.website.env]"
+            v-if="selectedDataset && item['type'] == 'documentation'"
+            :dataset-id="selectedDataset[env]"
             :resource="item"
           />
         </span>

@@ -12,7 +12,7 @@
       "dev": "653a68f2c52ecb6d2e96fe3f",
       "id": "HOR",
       "departement": true,
-      "period": true
+      "periode": true
     },
     "Données quotidiennes": {
       "prod": "6569b51ae64326786e4e8e1a",
@@ -115,6 +115,22 @@
           "code": "TX"
         }
       ]
+    },
+    "Données ETP spatialisées quotidiennes": {
+      "prod": "661d079b6357625e12013241",
+      "dev": "661d06b9852e185c7b180db0",
+      "id": "QUOT",
+      "departement": false,
+      "periode": true,
+      "indicateur": false
+    },
+    "Données ETP spatialisées décadaires": {
+      "prod": "661d0762109ece6f985e9857",
+      "dev": "661d0734eddf136314176ecd",
+      "id": "DECAD",
+      "departement": false,
+      "periode": true,
+      "indicateur": false
     }
   },
   "Données de prévision numérique du temps (PNT)": {
