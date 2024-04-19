@@ -142,17 +142,23 @@ function onSelectDep(event: Event) {
 
 function onSelectPeriod(event: Event) {
   selectedPeriod.value = (event.target as HTMLSelectElement).value
-  if (!selectedDataset.value?.id.startsWith('SIM')) {
-    let res = datasetResources.value.map((a) => a.title)
-    res = res.filter((r) => r.includes('departement_' + selectedDep.value))
-    filteredResources.value = res.filter((r) =>
-      r.includes('periode_' + selectedPeriod.value)
-    )
-  } else {
+  if (selectedDataset.value?.id.startsWith('SIM')) {
     const res = datasetResources.value.map((a) => a.title)
     filteredResources.value = res.filter(
       (r) => selectedPeriod.value && r.includes(selectedPeriod.value)
     )
+  } else {
+    if (selectedDataset.value?.departement) {
+      let res = datasetResources.value.map((a) => a.title)
+      res = res.filter((r) => r.includes('departement_' + selectedDep.value))
+      filteredResources.value = res.filter((r) =>
+        r.includes('periode_' + selectedPeriod.value)
+      )
+    } else {
+      filteredResources.value = datasetResources.value
+        .map((a) => a.title)
+        .filter((r) => r.includes(selectedPeriod.value ?? ''))
+    }
   }
 }
 
