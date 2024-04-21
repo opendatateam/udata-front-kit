@@ -73,31 +73,34 @@ website:
         content: >-
           ## Améliorer les services à destination :
 
-          ### 👱 des particuliers
+          ### 👱 Des particuliers
 
-          Simplifiez les démarches des citoyens et facilitez l'instruction de leurs dossiers :
+          Les jusitificatifs demandés aux familles (quotient familial, certificat de scolarité, etc.) pour de nombreuses démarches sont souvent déjà connus des services de l'État ! Utilisez les tuyaux informatiques (API) à votre disposition pour simplifier leurs démarches et accélérer votre instuction :
         sub_section_cards:
           title:
           cards:
             - id: '660ac80b9e9351349f5c1f14'
-              name: 'Données boursières'
-              description: "Tout savoir sur les données pour l'obtention de bourse relatifs à un particulier."
-              url: 'bouquets/donnees-boursieres'
-              image_url: '/acteurs-publics/assets/boursier.png'
+              name: 'Tarification cantine des collèges et lycées'
+              description: "Départements et régions, simplifiez les démarches des familles en calculant automatiquement le tarif de restauration scolaire des collégiens et lycéens"
+              url: 'cas-usages/tarification_cantine'
+              image_url: '/acteurs-publics/assets/tarification_cantine.jpg'
             - id: '660ac8ab8fd1a813e28cecd2'
-              name: 'Etat civil'
-              description: "Accéder à l'état civil d'un citoyen dépendant de votre collectivité territoriale."
-              url: 'bouquets/etat-civil'
-              image_url: '/acteurs-publics/assets/passeport.png'
+              name: 'Portail famille des communes'
+              description: "Communes et intercommunalités, simplifiez les démarches des familles en calculant automatiquement leur tarif de restauration scolaire, de crèches ou d'activités périscolaires ou municipales."
+              url: 'cas-usages/portail-famille'
+              image_url: '/acteurs-publics/assets/portail_famille.jpg'
             - id: '660ac92bc20e599f930bb9c2'
-              name: 'Scolarité'
-              description: "Accéder à l'ensemble des informations liées à la scolarité d'un administré de votre collectivité."
-              url: 'bouquets/scolarite'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_ecole4.png'
+              name: 'Tarification sociale et solidaire des transports'
+              description: "AOM, obtenez automatiquement les données nécessaires à l'attribution des tarifs réduits de transports collectifs."
+              url: 'cas-usages/tarification-transport'
+              image_url: '/acteurs-publics/assets/transport.jpg'
         sub_section_buttons:
-          - name: "Tout savoir sur les cas d'usages de particuliers"
-            url: 'bouquets?theme=Administrations&subtheme=Particuliers'
+          - name: "Tous les cas d'usages de particuliers"
+            url: 'cas-usages?theme=Administrations&subtheme=Particuliers'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: "Pas de service informatique ? Découvrir les solutions clé en main"
+            url: 'cas-usages?theme=Administrations&subtheme=Particuliers'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
           ### 💼 des entreprises
@@ -110,17 +113,17 @@ website:
             - id: '5e6f426e634f417810ab794b'
               name: 'Marchés publics'
               description: 'Tout savoir sur les marchés publics passés par les collectivités.'
-              url: 'bouquets/marches-publics-1'
+              url: 'cas-usages/marches-publics-1'
               image_url: '/acteurs-publics/assets/marches.png'
             - id: '65f170136c6ff1b1d0351081'
               name: 'Données fiscales'
               description: 'Accéder aux comptes et documents financiers des entreprises'
-              url: 'bouquets/65f170136c6ff1b1d0351081/'
+              url: 'cas-usages/65f170136c6ff1b1d0351081/'
               image_url: '/acteurs-publics/assets/fiscales.png'
             - id: '65f170136c6ff1b1d0351081'
               name: 'Informations légales'
               description: "Accéder à l'ensemble des informations légales des entreprises."
-              url: 'bouquets/65f170136c6ff1b1d0351081/'
+              url: 'cas-usages/65f170136c6ff1b1d0351081/'
               image_url: '/acteurs-publics/assets/documents.png'
       - title:
         content: >-
@@ -181,9 +184,9 @@ website:
       linkPage: '/'
       type: 'component'
       display_menu: false
-    - name: 'Bouquets'
-      id: 'bouquets'
-      linkPage: '/bouquets'
+    - name: 'Cas d’usages'
+      id: 'cas-usages'
+      linkPage: '/cas-usages'
       type: 'component'
       display_menu: true
     - name: 'Guides de la simplification'
