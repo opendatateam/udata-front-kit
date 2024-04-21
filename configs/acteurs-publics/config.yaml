@@ -82,24 +82,24 @@ website:
             - id: '660ac80b9e9351349f5c1f14'
               name: 'Tarification cantine des collèges et lycées'
               description: "Départements et régions, simplifiez les démarches des familles en calculant automatiquement le tarif de restauration scolaire des collégiens et lycéens"
-              url: 'cas-usages/tarification_cantine'
+              url: 'bouquets/tarification-cantine-des-colleges-et-lycees'
               image_url: '/acteurs-publics/assets/tarification_cantine.jpg'
             - id: '660ac8ab8fd1a813e28cecd2'
               name: 'Portail famille des communes'
               description: "Communes et intercommunalités, simplifiez les démarches des familles en calculant automatiquement leur tarif de restauration scolaire, de crèches ou d'activités périscolaires ou municipales."
-              url: 'cas-usages/portail-famille'
+              url: 'bouquets/portail-famille-des-communes'
               image_url: '/acteurs-publics/assets/portail_famille.jpg'
             - id: '660ac92bc20e599f930bb9c2'
               name: 'Tarification sociale et solidaire des transports'
               description: "AOM, obtenez automatiquement les données nécessaires à l'attribution des tarifs réduits de transports collectifs."
-              url: 'cas-usages/tarification-transport'
+              url: 'bouquets/tarification-sociale-et-solidaire-des-transports'
               image_url: '/acteurs-publics/assets/transport.jpg'
         sub_section_buttons:
           - name: "Tous les cas d'usages de particuliers"
-            url: 'cas-usages?theme=Administrations&subtheme=Particuliers'
+            url: 'bouquets?theme=Administrations&subtheme=Particuliers'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
           - name: "Pas de service informatique ? Découvrir les solutions clé en main"
-            url: 'cas-usages?theme=Administrations&subtheme=Particuliers'
+            url: 'bouquets?theme=Administrations&subtheme=Particuliers'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
@@ -113,17 +113,17 @@ website:
             - id: '5e6f426e634f417810ab794b'
               name: 'Marchés publics'
               description: 'Tout savoir sur les marchés publics passés par les collectivités.'
-              url: 'cas-usages/marches-publics-1'
+              url: 'bouquets/marches-publics-1'
               image_url: '/acteurs-publics/assets/marches.png'
             - id: '65f170136c6ff1b1d0351081'
               name: 'Données fiscales'
               description: 'Accéder aux comptes et documents financiers des entreprises'
-              url: 'cas-usages/65f170136c6ff1b1d0351081/'
+              url: 'bouquets/65f170136c6ff1b1d0351081/'
               image_url: '/acteurs-publics/assets/fiscales.png'
             - id: '65f170136c6ff1b1d0351081'
               name: 'Informations légales'
               description: "Accéder à l'ensemble des informations légales des entreprises."
-              url: 'cas-usages/65f170136c6ff1b1d0351081/'
+              url: 'bouquets/65f170136c6ff1b1d0351081/'
               image_url: '/acteurs-publics/assets/documents.png'
       - title:
         content: >-
@@ -144,6 +144,32 @@ website:
               description: "Accéder à la liste des dirigeants d'une association."
               url: 'bouquets/65f170136c6ff1b1d0351081/'
               image_url: '/acteurs-publics/assets/dirigeants.png'
+      - title:
+        content: >-
+          ## Quelque soient vos moyens techniques, une solution
+
+          Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non d'un service informatique ou d'un prestataire. 
+        
+          Pour chacun des cas d'usages, le niveau technique requis est spécifié :
+
+          - **Niveau 1** : Vous n'avez pas de service informatique. Il vous faut un service clé en main, facile à mettre en place par un agent non technique.
+
+          - **Niveau 2** : Vous n'avez pas de service informatique mais vous avez un prestataire (ou éditeur) qui s'occupe des intégrations.
+
+          - **Niveau 3** : Vous avez un service informatique. Vous pouvez intégrer des API ou des données dans vos démarches et/ou votre système d’information.
+
+        sub_section_cards:
+          title:
+          cards:
+            - name: 'Niveau 1 : Sans équipe technique ni éditeur'
+              description: "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique."
+              url: 'bouquets?theme=Administrations&subtheme=Particuliers'
+            - name: 'Niveau 2 : Avec éditeur'
+              description: "Les cas d'usages portés par des éditeurs qui s'occupent de l'intégrations."
+              url: 'bouquets?theme=Administrations&subtheme=Particuliers'
+            - name: 'Niveau 3 : Avec service informatique'
+              description: "Les cas d'usages que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d’information."
+              url: 'bouquets?theme=Administrations&subtheme=Particuliers'
       - title:
         content: >-
           ## Comment et pourquoi simplifier vos démarches ?
@@ -185,8 +211,8 @@ website:
       type: 'component'
       display_menu: false
     - name: 'Cas d’usages'
-      id: 'cas-usages'
-      linkPage: '/cas-usages'
+      id: 'bouquets'
+      linkPage: '/bouquets'
       type: 'component'
       display_menu: true
     - name: 'Guides de la simplification'
