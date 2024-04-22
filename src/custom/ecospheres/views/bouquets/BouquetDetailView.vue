@@ -14,7 +14,7 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
-import type { Theme, Topic, DatasetProperties } from '@/model'
+import type { Topic, DatasetProperties } from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -22,6 +22,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { getDatasetListTitle } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
+import { getThemeTextColor, getThemeColor } from '@/utils/theme'
 
 import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
 
@@ -44,7 +45,6 @@ const breadcrumbLinks = ref([
     text: 'Bouquets'
   }
 ])
-const selectedTheme = ref('')
 const spatialCoverage = useSpatialCoverage(bouquet)
 
 const showDiscussions = config.website.discussions.topic.display
@@ -61,29 +61,6 @@ const datasetsProperties = computed((): DatasetProperties[] => {
 
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: bouquet.value?.id } })
-}
-
-const getTheme = (themeName: string): Theme => {
-  return config.themes.find((theme: Theme) => theme.name === themeName)
-}
-
-const convertToHex = (hex: string): string => {
-  return `#${parseInt(hex, 16).toString(16).padStart(6, '0')}`
-}
-
-const getThemeColor = (themeName: string): string => {
-  const theme = getTheme(themeName)
-  return theme.color ? convertToHex(theme.color) : 'transparent'
-}
-
-const getTextColor = (themeName: string): string => {
-  const theme = getTheme(themeName)
-  return theme.textColor ? convertToHex(theme.textColor) : '#000000b3'
-}
-
-const getSelectedThemeColor = (themed: string) => {
-  selectedTheme.value = themed
-  return getThemeColor(selectedTheme.value)
 }
 
 const metaDescription = (): string | undefined => {
@@ -155,8 +132,8 @@ onMounted(() => {
             class="fr-mb-2w fr-mb-md-0 bold uppercase"
             :label="subtheme"
             :style="{
-              backgroundColor: getSelectedThemeColor(theme),
-              color: getTextColor(theme)
+              backgroundColor: getThemeColor(theme),
+              color: getThemeTextColor(theme)
             }"
           />
         </div>
