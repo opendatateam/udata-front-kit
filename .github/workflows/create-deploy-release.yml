@@ -11,7 +11,7 @@ jobs:
     env:
       # variables to be defined
       APP_NAME: ${{ vars.APP_NAME }}
-      SCAFFOLD_REPO_PUBLIC_URL: ${{ vars.SCAFFOLD_REPO_PUBLIC_URL }}
+      SCAFFOLD_REPO_SSH_URL: ${{ vars.SCAFFOLD_REPO_SSH_URL }}
       ENVS: ${{ vars.ENVS }}
       APPS: ${{ vars.APPS }}
 
@@ -32,6 +32,7 @@ jobs:
           echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
 
           # configure git
           git config --global user.email "root@data.gouv.fr"
@@ -43,7 +44,7 @@ jobs:
           git clone --quiet --depth 1 -b create-deploy-release ${{ env.REPO_SSH_URL }}
 
           # TODO: switch to main branch before merge
-          git clone --quiet --depth 1 -b add-env https://oauth2:$GITLAB_API_TOKEN@$SCAFFOLD_REPO_PUBLIC_URL ${{ env.SCAFFOLD_DIR }}
+          git clone --quiet --depth 1 -b add-env $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
       - name: check commit message
         shell: bash
         run: |
