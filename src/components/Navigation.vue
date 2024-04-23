@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import config from '@/config'
+import type { MenuConfig } from '@/model/config'
 
 const route = useRoute()
 
@@ -13,7 +14,7 @@ const props = defineProps({
   }
 })
 
-const isActive = (link) => {
+const isActive = (link: string) => {
   return route.matched.some(({ path }) => {
     if (path === '/') return link === path
     return link.indexOf(path) === 0
@@ -21,17 +22,13 @@ const isActive = (link) => {
 }
 
 const navItems = computed(() => {
-  const items = []
-  config.website.router_items.forEach((item) => {
-    if (item.display_menu) {
-      items.push({
-        to: item.linkPage,
-        text: item.name,
-        'aria-current': isActive(item.linkPage) ? true : undefined
-      })
+  const menuConfig: MenuConfig[] = config.website.menu ?? []
+  return menuConfig.map((item) => {
+    return {
+      ...item,
+      'aria-current': isActive(item.to) ? true : undefined
     }
   })
-  return items
 })
 </script>
 

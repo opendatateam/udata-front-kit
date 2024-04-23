@@ -48,40 +48,26 @@ website:
     display: true
     name: 'Recherche guidée'
     link: '/form'
-  router_items:
-    - name: 'Accueil'
-      id: 'home'
-      linkPage: '/'
-      type: 'component'
-      display_menu: false
-    - name: 'Données'
-      id: 'datasets'
-      linkPage: '/datasets'
-      type: 'component'
-      display_menu: true
-    - name: 'Recherche guidée'
-      id: 'FormMF'
-      linkPage: '/form'
-      type: 'custom'
-      custom_component: 'meteo/views/FormMF'
-      display_menu: true
-    # - name: 'Portail des API Météo-France'
-    #   id: 'portailapi'
-    #   linkPage: 'https://portail-api.meteofrance.fr/'
-    #   type: 'external'
-    #   display_menu: true
-    - name: 'A propos'
-      id: 'about'
-      linkPage: '/about'
-      type: 'page'
-      url: '/meteo-france/pages/about.md'
-      display_menu: true
-    - name: 'Accessibilité'
-      id: 'accessibility'
-      linkPage: '/accessibility'
-      type: 'page'
-      display_menu: false
-      url: '/meteo-france/pages/accessibility.md'
+  menu:
+    - text: Données
+      to: /datasets
+    - text: Recherche guidée
+      to: /form
+    - text: A propos
+      to: /about
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    pages:
+      - title: 'A propos'
+        id: 'about'
+        route: '/about'
+        url: '/meteo-france/pages/about.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/meteo-france/pages/accessibility.md'
   # img should be square
   home_buttons:
   show_topic_charts: true
@@ -106,11 +92,11 @@ website:
       href: 'https://www.data.gouv.fr'
   footer_mandatory_links:
     - label: 'Licences'
-      to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
     - label: "Conditions générales d'utilisation"
-      to: 'https://www.data.gouv.fr/fr/terms/'
+      href: 'https://www.data.gouv.fr/fr/terms/'
     - label: 'Politique de confidentialité'
-      to: 'https://www.data.gouv.fr/fr/suivi/'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'

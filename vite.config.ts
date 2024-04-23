@@ -17,7 +17,7 @@ interface Config {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const configDir = `./configs/${env.CONFIG_NAME}`
+  const configDir = `./configs/${env.VITE_SITE_ID}`
   const configFileUrl = new URL(`${configDir}/config.yaml`, import.meta.url)
   const config = load(readFileSync(configFileUrl, 'utf-8')) as Config
   return {
@@ -33,7 +33,16 @@ export default defineConfig(({ mode }) => {
           }
         }
       }),
-      dynamicImport()
+      dynamicImport({
+        onFiles(files, id) {
+          // include only the current site routes definition in the bundle
+          if (id.includes('/src/router/index.ts')) {
+            return files.filter((routeFile) =>
+              routeFile.includes(`custom/${env.VITE_SITE_ID}/routes.ts`)
+            )
+          }
+        }
+      })
     ],
     resolve: {
       alias: {
