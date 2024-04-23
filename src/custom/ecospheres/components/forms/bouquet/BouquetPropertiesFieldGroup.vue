@@ -1,3 +1,4 @@
+<!-- FIXME: refacto to composition -->
 <template>
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="bouquet_name"
