@@ -24,7 +24,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  'updateValidation',
+  'updateCompletion',
   'update:theme',
   'update:subtheme',
   'update:spatialField'
@@ -32,7 +32,7 @@ const emit = defineEmits([
 
 const spatialCoverage = useSpatialCoverageFromField(props.spatialField)
 
-const isValid = computed(() => {
+const isComplete = computed(() => {
   return props.theme !== NoOptionSelected && props.subtheme !== NoOptionSelected
 })
 
@@ -65,9 +65,9 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | null) => {
 }
 
 watch(
-  isValid,
+  isComplete,
   (newValue) => {
-    emit('updateValidation', newValue)
+    emit('updateCompletion', newValue)
   },
   { immediate: true }
 )
@@ -75,9 +75,7 @@ watch(
 
 <template>
   <div class="fr-select-group fr-mt-1w">
-    <label class="fr-label" for="select_theme"
-      >Thématique <span class="required">&nbsp;*</span></label
-    >
+    <label class="fr-label" for="select_theme">Thématique</label>
     <select id="select_theme" class="fr-select" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
         Choisir une thématique
@@ -94,9 +92,7 @@ watch(
   </div>
 
   <div class="fr-select-group fr-mt-1w">
-    <label class="fr-label" for="select_subtheme"
-      >Chantier <span class="required">&nbsp;*</span></label
-    >
+    <label class="fr-label" for="select_subtheme">Chantier</label>
     <select
       id="select_subtheme"
       class="fr-select"

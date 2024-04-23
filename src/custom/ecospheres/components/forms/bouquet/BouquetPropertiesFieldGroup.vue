@@ -1,4 +1,51 @@
-<!-- FIXME: refacto to composition -->
+<script setup lang="ts">
+import { computed, watch } from 'vue'
+
+const props = defineProps({
+  bouquetName: {
+    type: String,
+    default: ''
+  },
+  bouquetDescription: {
+    type: String,
+    default: ''
+  }
+})
+
+const emits = defineEmits([
+  'updateCompletion',
+  'updateValidation',
+  'update:bouquetDescription',
+  'update:bouquetName'
+])
+
+const isValid = computed(() => {
+  return props.bouquetName.trim() !== ''
+})
+
+const isComplete = computed(() => {
+  return (
+    props.bouquetName.trim() !== '' && props.bouquetDescription.trim() !== ''
+  )
+})
+
+watch(
+  isValid,
+  (newValue) => {
+    emits('updateValidation', newValue)
+  },
+  { immediate: true }
+)
+
+watch(
+  isComplete,
+  (newValue) => {
+    emits('updateCompletion', newValue)
+  },
+  { immediate: true }
+)
+</script>
+
 <template>
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="bouquet_name"
@@ -16,7 +63,7 @@
     />
   </div>
   <div class="fr-mt-1w">
-    <div>Objectif du bouquet <span class="required">&nbsp;*</span></div>
+    <div>Objectif du bouquet</div>
     <div>
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
@@ -39,42 +86,3 @@
     />
   </div>
 </template>
-
-<script lang="ts">
-export default {
-  name: 'BouquetPropertiesFieldGroup',
-  props: {
-    bouquetName: {
-      type: String,
-      default: ''
-    },
-    bouquetDescription: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: [
-    'updateValidation',
-    'update:bouquetDescription',
-    'update:bouquetName'
-  ],
-  computed: {
-    isValid() {
-      return (
-        this.bouquetName.trim() !== '' && this.bouquetDescription.trim() !== ''
-      )
-    },
-    errorMsg() {
-      return ''
-    }
-  },
-  watch: {
-    isValid: {
-      handler(newValue) {
-        this.$emit('updateValidation', newValue)
-      },
-      immediate: true
-    }
-  }
-}
-</script>

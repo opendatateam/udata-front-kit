@@ -28,10 +28,11 @@ const router = useRouter()
 // FIXME: use params to pre-fill bouquet
 const route = useRouteParamsAsString()
 
+const isMinimalValid: Ref<boolean> = ref(false)
 const title: Ref<string> = ref('Nouveau bouquet')
 const bouquet: Ref<Partial<Bouquet>> = ref({})
 const errorMsg: Ref<string | null> = ref(null)
-const stepsValidation: Ref<[boolean, boolean, boolean]> = ref([
+const stepsCompletion: Ref<[boolean, boolean, boolean]> = ref([
   false,
   false,
   false
@@ -65,6 +66,9 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
       ],
       'ecospheres:datasets_properties': bouquet.value.datasetsProperties
     },
+    // FIXME: bug on that, not always filled
+    // the route logic should probably be if (isCreate)
+    // maybe use props on the route for easier reactivity?
     spatial:
       bouquet.value.spatial ?? route.query.geozone
         ? { zones: [route.query.geozone] }
@@ -72,13 +76,19 @@ const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
   }
 })
 
-// FIXME: only name seems to be mandatory now
 const canSave: ComputedRef<boolean> = computed(() => {
-  return stepsValidation.value.slice(0, 2).every(Boolean)
+  return isMinimalValid.value
 })
 
 const canPublish: ComputedRef<boolean> = computed(() => {
-  return stepsValidation.value.every(Boolean)
+  return stepsCompletion.value.every(Boolean)
+})
+
+const completion: ComputedRef<number> = computed(() => {
+  return (
+    stepsCompletion.value.filter((v) => v === true).length /
+    stepsCompletion.value.length
+  )
 })
 
 const save = () => {
@@ -173,7 +183,6 @@ onMounted(() => {
       <div
         class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
       >
-        <!-- TODO: conditionnal on isCreate -->
         <h1 class="fr-col-auto fr-mb-2v">{{ title }}</h1>
         <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
           <DsfrButton
@@ -196,12 +205,19 @@ onMounted(() => {
           />
         </div>
       </div>
-      <div v-if="isCreate || bouquet.id" class="fr-mt-2w">
+      <div class="fr-col-md-5">
+        <div>Bouquet complété à {{ Math.round(completion * 100) }}%</div>
+        <progress style="width: 100%" max="100" :value="completion * 100">
+          {{ completion * 100 }}%
+        </progress>
+      </div>
+      <div v-if="isCreate || bouquet.id" class="fr-mt-4w">
         <h2>Description du bouquet de données</h2>
         <BouquetPropertiesFieldGroup
-          v-model:bouquetName="bouquet.name"
-          v-model:bouquetDescription="bouquet.description"
-          @update-validation="(isValid: boolean) => stepsValidation[0] = isValid"
+          v-model:bouquet-name="bouquet.name"
+          v-model:bouquet-description="bouquet.description"
+          @update-validation="(isValid: boolean) => isMinimalValid = isValid"
+          @update-completion="(isComplete: boolean) => stepsCompletion[0] = isComplete"
         />
         <hr />
         <h2>Informations du bouquet de données</h2>
@@ -209,11 +225,15 @@ onMounted(() => {
           v-model:theme="bouquet.theme"
           v-model:subtheme="bouquet.subtheme"
           v-model:spatial-field="bouquet.spatial"
-          @update-validation="(isValid: boolean) => stepsValidation[1] = isValid"
+          @update-completion="(isComplete: boolean) => stepsCompletion[1] = isComplete"
         />
         <hr />
         <h2>Composition du bouquet de données</h2>
-        <BouquetDatasetList :datasets="bouquet.datasetsProperties" />
+        <!-- TODO: update-completion event -->
+        <BouquetDatasetList
+          :datasets="bouquet.datasetsProperties"
+          @update-completion="(isComplete: boolean) => stepsCompletion[2] = isComplete"
+        />
       </div>
       <hr />
       <div
