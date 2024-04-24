@@ -146,7 +146,7 @@ onMounted(() => {
           v-model="datasetProperties.availability"
           :name="Availability.LOCAL_AVAILABLE"
           :value="Availability.LOCAL_AVAILABLE"
-          label="ecologie.data.gouv.fr"
+          label="data.gouv.fr"
         />
         <DsfrRadioButton
           v-model="datasetProperties.availability"
