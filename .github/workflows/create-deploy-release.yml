@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - create-deploy-release # TODO: switch to main branch before merge
+  create:
+    tags:
 jobs:
   trigger-gitlab-pipeline:
-    if: startsWith(github.event.head_commit.message, '[') # regexp not supported
+    if: |
+      (github.event_name == 'push' && startsWith(github.event.head_commit.message, '[')) ||
+      (github.event_name == 'create' && github.event.ref_type == 'tag' && startsWith(github.event.head_commit.message, '['))
     runs-on: ubuntu-latest
     env:
       # variables to be defined
@@ -45,36 +49,36 @@ jobs:
 
           # TODO: switch to main branch before merge
           git clone --quiet --depth 1 -b add-env $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
-      - name: check commit message
-        shell: bash
-        run: |
-          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
+      #- name: check commit message
+      #  shell: bash
+      #  run: |
+      #    LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
 
-          if [[ $LAST_COMMIT_MESSAGE =~ ^\[($ENVS):($APPS):(major|minor|patch)\] ]]; then
-            ENV="${BASH_REMATCH[1]}"
-            CONFIG_NAME="${BASH_REMATCH[2]}"
-            VERSION_PART="${BASH_REMATCH[3]}"
-          else
-            echo "error: invalid env, app and/or version part"
-            exit 1
-          fi
-          declare -a VARS
-          VARS+=("CONFIG_NAME=$CONFIG_NAME")
+      #    if [[ $LAST_COMMIT_MESSAGE =~ ^\[($ENVS):($APPS):(major|minor|patch)\] ]]; then
+      #      ENV="${BASH_REMATCH[1]}"
+      #      CONFIG_NAME="${BASH_REMATCH[2]}"
+      #      VERSION_PART="${BASH_REMATCH[3]}"
+      #    else
+      #      echo "error: invalid env, app and/or version part"
+      #      exit 1
+      #    fi
+      #    declare -a VARS
+      #    VARS+=("CONFIG_NAME=$CONFIG_NAME")
 
-          echo "ENV=$ENV" >> $GITHUB_ENV
-          echo "VARS=$VARS" >> $GITHUB_ENV
-          echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
-        working-directory: ${{ env.APP_NAME }}
-      - name: create release
-        shell: bash
-        run: |
-          git fetch --tags
-          RELEASE_VERSION=$(../${{ env.SCAFFOLD_DIR }}/scripts/bump_version.sh $VERSION_PART)
+      #    echo "ENV=$ENV" >> $GITHUB_ENV
+      #    echo "VARS=$VARS" >> $GITHUB_ENV
+      #    echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
+      #  working-directory: ${{ env.APP_NAME }}
+      #- name: create release
+      #  shell: bash
+      #  run: |
+      #    git fetch --tags
+      #    RELEASE_VERSION=$(../${{ env.SCAFFOLD_DIR }}/scripts/bump_version.sh $VERSION_PART)
 
-          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-        working-directory: ${{ env.APP_NAME }}
-      - name: trigger Gitlab CI/CD pipeline
-        shell: bash
-        run: |
-          ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_HTTPS_URL }} $APP_NAME $RELEASE_VERSION $ENV $VARS
-        working-directory: ${{ env.SCAFFOLD_DIR }}
+      #    echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+      #  working-directory: ${{ env.APP_NAME }}
+      #- name: trigger Gitlab CI/CD pipeline
+      #  shell: bash
+      #  run: |
+      #    ./scripts/gitlab-ci-pipeline.sh ${{ env.REPO_HTTPS_URL }} $APP_NAME $RELEASE_VERSION $ENV $VARS
+      #  working-directory: ${{ env.SCAFFOLD_DIR }}
