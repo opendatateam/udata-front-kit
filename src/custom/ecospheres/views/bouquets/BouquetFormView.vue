@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Ref, ComputedRef } from 'vue'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -12,7 +12,8 @@ import {
   NoOptionSelected,
   type Bouquet,
   type BouquetCreationData,
-  type Topic
+  type Topic,
+  type DatasetProperties
 } from '@/model'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
@@ -99,12 +100,44 @@ const save = () => {
   }
 }
 
+// TODO: maybe store a local version at first load and after each save
+// and restore it after cancel
+// right now we're autosaving the whole form when datasets list changes
 const cancel = () => {
   router.push({ name: 'bouquets' })
 }
 
 const publish = () => {
   console.log('publish!')
+}
+
+const goToDatasetAdd = () => {
+  router.push({
+    name: 'bouquet_dataset_add',
+    params: { bid: bouquet.value.id }
+  })
+}
+
+const removeDataset = (index: number) => {
+  if (bouquet.value.datasetsProperties === undefined) return
+  bouquet.value.datasetsProperties.splice(index, 1)
+  updateTopic()
+}
+
+const reorderDatasets = () => {
+  updateTopic()
+}
+
+const editDataset = ({
+  index,
+  data
+}: {
+  index: number
+  data: DatasetProperties
+}) => {
+  if (bouquet.value.datasetsProperties === undefined) return
+  bouquet.value.datasetsProperties[index] = data
+  updateTopic()
 }
 
 const createTopic = () => {
@@ -161,6 +194,13 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
     spatial: topic.spatial
   } as Bouquet
 }
+
+watch(bouquet, () => {
+  const hasDatasets =
+    bouquet.value.datasetsProperties !== undefined &&
+    bouquet.value.datasetsProperties.length > 0
+  stepsCompletion.value[2] = hasDatasets
+})
 
 onMounted(() => {
   if (props.isCreate) return
@@ -228,11 +268,28 @@ onMounted(() => {
           @update-completion="(isComplete: boolean) => stepsCompletion[1] = isComplete"
         />
         <hr />
-        <h2>Composition du bouquet de données</h2>
-        <!-- TODO: update-completion event -->
+        <div
+          class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+        >
+          <h2 class="fr-col-auto fr-mb-2v">
+            Composition du bouquet de données
+          </h2>
+          <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+            <DsfrButton
+              :disabled="!canSave"
+              class="fr-mb-1w fr-ml-1w"
+              label="Ajouter un jeu de données"
+              icon="ri-add-line"
+              @click.prevent="goToDatasetAdd"
+            />
+          </div>
+        </div>
         <BouquetDatasetList
+          :is-edit="true"
           :datasets="bouquet.datasetsProperties"
-          @update-completion="(isComplete: boolean) => stepsCompletion[2] = isComplete"
+          @remove-dataset="removeDataset"
+          @edit-dataset="editDataset"
+          @reorder-datasets="reorderDatasets"
         />
       </div>
       <hr />

@@ -16,6 +16,14 @@ export const routes = [
           )
       },
       {
+        path: ':bid/datasets/add',
+        name: 'bouquet_dataset_add',
+        component: async () =>
+          await import(
+            '@/custom/ecospheres/views/bouquets/BouquetDatasetAddView.vue'
+          )
+      },
+      {
         path: ':bid',
         name: 'bouquet_detail',
         component: async () =>
