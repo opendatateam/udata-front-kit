@@ -125,6 +125,13 @@ website:
               description: "Accéder à l'ensemble des informations légales des entreprises."
               url: 'bouquets/65f170136c6ff1b1d0351081/'
               image_url: '/acteurs-publics/assets/documents.png'
+        sub_section_buttons:
+          - name: "Tous les cas d'usages d’entreprises"
+            url: 'bouquets?theme=Administrations&subtheme=Entreprises'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: "Pas de service informatique ? Découvrir les solutions clé en main"
+            url: 'bouquets?theme=Administrations&subtheme=Entreprises'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
           ### 🎭 des associations
@@ -144,30 +151,37 @@ website:
               description: "Accéder à la liste des dirigeants d'une association."
               url: 'bouquets/65f170136c6ff1b1d0351081/'
               image_url: '/acteurs-publics/assets/dirigeants.png'
+        sub_section_buttons:
+          - name: "Tous les cas d'usages d’associations"
+            url: 'bouquets?theme=Administrations&subtheme=Associations'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: "Pas de service informatique ? Découvrir les solutions clé en main"
+            url: 'bouquets?theme=Administrations&subtheme=Associations'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
-          ## Quelque soient vos moyens techniques, une solution
+          ## Quelques soient vos moyens techniques, une solution
 
           Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non d'un service informatique ou d'un prestataire. 
         
-          Pour chacun des cas d'usages, le niveau technique requis est spécifié :
+          Pour chacun des cas d'usages, un indicateur vous permet de savoir quelles sont les possibilités d'intégration :
 
-          - **Niveau 1** : Vous n'avez pas de service informatique. Il vous faut un service clé en main, facile à mettre en place par un agent non technique.
+          - **Solution clé en main** : Une solution clé en main est disponible pour ce cas d'usage. Si vous n'avez pas ni service informatique ni compétences techniques, vous pouvez donc utiliser la solution clé en main pour couvrir le cas d'usage. 
 
-          - **Niveau 2** : Vous n'avez pas de service informatique mais vous avez un prestataire (ou éditeur) qui s'occupe des intégrations.
+          - **Solutions éditeurs** : Des éditeurs proposent des logiciels permettant de couvrir ce cas d'usage.
 
-          - **Niveau 3** : Vous avez un service informatique. Vous pouvez intégrer des API ou des données dans vos démarches et/ou votre système d’information.
+
 
         sub_section_cards:
           title:
           cards:
-            - name: 'Niveau 1 : Sans équipe technique ni éditeur'
+            - name: 'Vous n’avez ni équipe technique, ni éditeur'
               description: "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique."
               url: 'bouquets?theme=Administrations&subtheme=Particuliers'
-            - name: 'Niveau 2 : Avec éditeur'
-              description: "Les cas d'usages portés par des éditeurs qui s'occupent de l'intégrations."
+            - name: 'Vous passez par un éditeur'
+              description: "Les cas d'usages portés par des éditeurs qui s'occupent de l'intégration."
               url: 'bouquets?theme=Administrations&subtheme=Particuliers'
-            - name: 'Niveau 3 : Avec service informatique'
+            - name: 'Vous avez votre service informatique'
               description: "Les cas d'usages que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d’information."
               url: 'bouquets?theme=Administrations&subtheme=Particuliers'
       - title:
@@ -329,8 +343,9 @@ bouquets:
   type: 'data.gouv.fr' #data.gouv.fr or custom
   display_author: false
   theme:
-    name: Type d'organisation
+    name: "Vous êtes :"
     placeholder: Choisir un type d'organisation
   subtheme:
-    name: Usagers
+    name: "Votre service s'adresse à :"
     placeholder: Choisir un type d'usager
+## Ici il faut pouvoir ajouter un autre filtre qui indique les moyens d'intération disponibles (sans équipe tech sans éditeur | avec éditeur | autonome)
