@@ -2,6 +2,7 @@
 import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import Multiselect from '@vueform/multiselect'
 import { ref, computed, watch, type PropType, type Ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 import {
   Availability,
@@ -26,6 +27,7 @@ const props = defineProps({
   }
 })
 
+const router = useRouter()
 const datasetStore = useDatasetStore()
 
 const datasetProperties = ref(props.datasetProperties)
@@ -85,6 +87,7 @@ const isAvailable = computed(() =>
 )
 
 const onSelectDataset = (value: DatasetV2) => {
+  datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
   datasetProperties.value.id = value.id
 }
 
@@ -112,8 +115,13 @@ watch(
   datasetProperties,
   (newVal) => {
     if (newVal.id && newVal.availability === Availability.LOCAL_AVAILABLE) {
-      // FIXME: use router and slug?
-      datasetProperties.value.uri = `/datasets/${newVal.id}`
+      const resolved = router.resolve({
+        name: 'bouquet_detail',
+        params: { bid: newVal.id }
+      })
+      datasetProperties.value.uri = resolved.href
+    } else {
+      selectedDataset.value = undefined
     }
     emit('update:datasetProperties', newVal)
   },
@@ -137,22 +145,46 @@ onMounted(() => {
 </script>
 
 <template>
-  <DatasetPropertiesTextFields v-model:dataset-properties="datasetProperties" />
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="source">Retrouver la donnée via</label>
-    <fieldset id="source" class="fr-fieldset">
+    <label class="fr-label" for="link"
+      >Jeu de données
+      <span class="fr-hint-text"
+        >Rechercher un jeu de données dans data.gouv.fr</span
+      >
+    </label>
+    <Multiselect
+      id="link"
+      ref="selector"
+      v-model="selectedDataset"
+      no-options-text="Précisez ou élargissez votre recherche"
+      placeholder="Rechercher une donnée dans data.gouv.fr"
+      name="select-datasets"
+      value-prop="id"
+      label="title"
+      autocomplete="off"
+      :object="true"
+      :clear-on-select="true"
+      :filter-results="false"
+      :min-chars="1"
+      :resolve-on-load="false"
+      :delay="400"
+      :searchable="true"
+      :options="ecospheresDatasetsOptions"
+      @select="onSelectDataset"
+      @clear="onClearDataset"
+    />
+  </div>
+  <div v-if="!selectedDataset" class="fr-mt-4w">
+    <label class="fr-label" for="alt-source"
+      >Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?</label
+    >
+    <fieldset id="alt-source" class="fr-fieldset">
       <div class="fr-fieldset__content" role="radiogroup">
-        <DsfrRadioButton
-          v-model="datasetProperties.availability"
-          :name="Availability.LOCAL_AVAILABLE"
-          :value="Availability.LOCAL_AVAILABLE"
-          label="data.gouv.fr"
-        />
         <DsfrRadioButton
           v-model="datasetProperties.availability"
           :name="Availability.URL_AVAILABLE"
           :value="Availability.URL_AVAILABLE"
-          label="URL"
+          label="J'ajoute l'URL"
         />
         <DsfrRadioButton
           v-model="datasetProperties.availability"
@@ -168,39 +200,34 @@ onMounted(() => {
         />
       </div>
     </fieldset>
-    <div v-if="isAvailable">
-      <label class="fr-label" for="link">Déclarer le chemin d'accés</label>
-      <Multiselect
-        v-if="datasetProperties.availability === Availability.LOCAL_AVAILABLE"
-        id="link"
-        ref="selector"
-        v-model="selectedDataset"
-        no-options-text="Précisez ou élargissez votre recherche"
-        placeholder="Rechercher une donnée dans data.gouv.fr"
-        name="select-datasets"
-        value-prop="id"
-        label="title"
-        autocomplete="off"
-        :object="true"
-        :clear-on-select="true"
-        :filter-results="false"
-        :min-chars="1"
-        :resolve-on-load="false"
-        :delay="400"
-        :searchable="true"
-        :options="ecospheresDatasetsOptions"
-        @select="onSelectDataset"
-        @clear="onClearDataset"
-      />
+  </div>
+  <!-- step 2, when a dataset or a choice is selected -->
+  <div
+    v-if="
+      selectedDataset?.id ||
+      datasetProperties.availability !== Availability.LOCAL_AVAILABLE
+    "
+  >
+    <div
+      v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
+      class="fr-mt-1w fr-mb-4w"
+    >
+      <label class="fr-label" for="alt-link">
+        Déclarer le chemin d'accés vers le jeu de données<span class="required"
+          >&nbsp;*</span
+        >
+      </label>
       <DsfrInput
-        v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
-        id="link"
+        id="alt-link"
         v-model="datasetProperties.uri"
         placeholder="Url vers le jeu de données souhaité"
         :label-visible="true"
         class="fr-mb-md-1w"
       />
     </div>
+    <DatasetPropertiesTextFields
+      v-model:dataset-properties="datasetProperties"
+    />
   </div>
 </template>
 

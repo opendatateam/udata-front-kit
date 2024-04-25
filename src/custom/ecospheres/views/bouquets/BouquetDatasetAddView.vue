@@ -15,7 +15,7 @@ const initData = (): DatasetProperties => {
   return {
     title: '',
     purpose: '',
-    availability: Availability.NOT_AVAILABLE,
+    availability: Availability.LOCAL_AVAILABLE,
     uri: null,
     id: null
   }
