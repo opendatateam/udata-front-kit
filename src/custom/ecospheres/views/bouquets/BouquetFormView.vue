@@ -11,11 +11,11 @@ import BouquetPropertiesFieldGroup from '@/custom/ecospheres/components/forms/bo
 import {
   NoOptionSelected,
   type Bouquet,
-  type BouquetCreationData,
+  type BouquetEditionData,
   type Topic,
   type DatasetProperties
 } from '@/model'
-import { useRouteParamsAsString } from '@/router/utils'
+import { useRouteQueryAsString, useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 
 const props = defineProps({
@@ -26,8 +26,8 @@ const props = defineProps({
 })
 
 const router = useRouter()
-// FIXME: use params to pre-fill bouquet
-const route = useRouteParamsAsString()
+const routeParams = useRouteParamsAsString().params
+const routeQuery = useRouteQueryAsString().query
 
 const isMinimalValid: Ref<boolean> = ref(false)
 const title: Ref<string> = ref('Nouveau bouquet')
@@ -47,34 +47,6 @@ const datasetsId: ComputedRef<string[]> = computed(() => {
     }
   }
   return datasetsId
-})
-
-const bouquetCreationData: ComputedRef<BouquetCreationData> = computed(() => {
-  return {
-    name: bouquet.value.name ?? '',
-    description: bouquet.value.description ?? '',
-    datasets: datasetsId.value,
-    tags: [config.universe.name],
-    // TODO: make dynamic
-    private: true,
-    extras: {
-      'ecospheres:informations': [
-        {
-          theme: bouquet.value.theme ?? route.query.theme ?? NoOptionSelected,
-          subtheme:
-            bouquet.value.subtheme ?? route.query.subtheme ?? NoOptionSelected
-        }
-      ],
-      'ecospheres:datasets_properties': bouquet.value.datasetsProperties
-    },
-    // FIXME: bug on that, not always filled
-    // the route logic should probably be if (isCreate)
-    // maybe use props on the route for easier reactivity?
-    spatial:
-      bouquet.value.spatial ?? route.query.geozone
-        ? { zones: [route.query.geozone] }
-        : null
-  }
 })
 
 const canSave: ComputedRef<boolean> = computed(() => {
@@ -108,7 +80,15 @@ const cancel = () => {
 }
 
 const publish = () => {
-  console.log('publish!')
+  bouquet.value.private = false
+  updateTopic().then((response) => {
+    if (response) {
+      router.push({
+        name: 'bouquet_detail',
+        params: { bid: response.slug }
+      })
+    }
+  })
 }
 
 const goToDatasetAdd = () => {
@@ -142,7 +122,7 @@ const editDataset = ({
 
 const createTopic = () => {
   useTopicStore()
-    .create(bouquetCreationData.value)
+    .create(getBouquetEditionData())
     .then((response) => {
       router.push({
         name: 'bouquet_edit',
@@ -154,15 +134,16 @@ const createTopic = () => {
     })
 }
 
-const updateTopic = () => {
+const updateTopic = async () => {
   if (bouquet.value.id === undefined) {
     throw Error('Trying to update topic without topic id')
   }
   const loader = useLoading().show()
-  useTopicStore()
-    .update(bouquet.value.id, bouquetCreationData.value)
+  return useTopicStore()
+    .update(bouquet.value.id, getBouquetEditionData())
     .then((response) => {
       title.value = response.name
+      return response
     })
     .catch((error) => {
       errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
@@ -170,7 +151,26 @@ const updateTopic = () => {
     .finally(() => loader.hide())
 }
 
-// TODO: factorize with bouquetCreationData?
+const getBouquetEditionData = (): BouquetEditionData => {
+  return {
+    name: bouquet.value.name ?? '',
+    description: bouquet.value.description ?? '',
+    datasets: datasetsId.value,
+    tags: [config.universe.name],
+    private: bouquet.value.private ?? true,
+    extras: {
+      'ecospheres:informations': [
+        {
+          theme: bouquet.value.theme || NoOptionSelected,
+          subtheme: bouquet.value.subtheme || NoOptionSelected
+        }
+      ],
+      'ecospheres:datasets_properties': bouquet.value.datasetsProperties || []
+    },
+    spatial: bouquet.value.spatial
+  }
+}
+
 const fillBouquetFromTopic = (topic: Topic): Bouquet => {
   title.value = topic.name
   const getInfoFromExtras = (
@@ -191,7 +191,8 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
     datasetsProperties: topic.extras['ecospheres:datasets_properties'] ?? [],
     owner: topic.owner,
     organization: topic.organization,
-    spatial: topic.spatial
+    spatial: topic.spatial,
+    private: topic.private
   } as Bouquet
 }
 
@@ -203,14 +204,25 @@ watch(bouquet, () => {
 })
 
 onMounted(() => {
-  if (props.isCreate) return
-  const loader = useLoading().show()
-  useTopicStore()
-    .load(route.params.bid)
-    .then((topic) => {
-      bouquet.value = fillBouquetFromTopic(topic)
-    })
-    .finally(() => loader.hide())
+  // TODO: test those
+  // prefill bouquet info from query if create mode
+  if (props.isCreate) {
+    bouquet.value.theme = routeQuery.theme || NoOptionSelected
+    bouquet.value.subtheme = routeQuery.subtheme || NoOptionSelected
+    bouquet.value.spatial = routeQuery.geozone
+      ? { zones: [routeQuery.geozone] }
+      : undefined
+  }
+  // or load existing bouquet from API
+  else {
+    const loader = useLoading().show()
+    useTopicStore()
+      .load(routeParams.bid)
+      .then((topic) => {
+        bouquet.value = fillBouquetFromTopic(topic)
+      })
+      .finally(() => loader.hide())
+  }
 })
 </script>
 

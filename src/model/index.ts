@@ -55,6 +55,7 @@ type Bouquet = Owned & {
   subtheme: string | undefined
   datasetsProperties: DatasetProperties[]
   spatial: SpatialField | undefined
+  private: boolean
 }
 
 interface BouquetCreationData {
@@ -67,6 +68,7 @@ interface BouquetCreationData {
 interface BouquetEditionData extends BouquetCreationData {
   datasets: string[] // list of ids (for the dataset which have one)
   extras: TopicExtras
+  spatial: SpatialField | undefined
 }
 
 interface TopicExtras {
