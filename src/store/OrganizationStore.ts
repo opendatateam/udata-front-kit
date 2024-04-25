@@ -1,3 +1,4 @@
+import type { Organization } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
 import config from '@/config'
@@ -6,24 +7,29 @@ import OrganizationsAPI from '../services/api/resources/OrganizationsAPI'
 
 const orgApi = new OrganizationsAPI()
 
+interface LightweightOrganization {
+  id: string
+  name: string
+}
+
+interface PaginatedOrganizations {
+  page: number
+  orgs: Organization[]
+}
+
+interface RootState {
+  data: PaginatedOrganizations[]
+  flatData: LightweightOrganization[]
+}
+
 export const useOrganizationStore = defineStore('organization', {
-  state: () => ({
-    // holds a paginated list of orgs
-    // [
-    //   {
-    //     "page": 1,
-    //     "orgs": []
-    //   }, ...
-    // ]
+  state: (): RootState => ({
     data: [],
-    // holds a non paginated lightweight-formatted list of all orgs
     flatData: []
   }),
   actions: {
     /**
      * Get an organizations pagination object from config infos
-     *
-     * @returns {Array<object>}
      */
     getPagination() {
       const pageSize = config.website.pagination_sizes.organizations_list
@@ -40,19 +46,13 @@ export const useOrganizationStore = defineStore('organization', {
     },
     /**
      * Get orgs list for a given page from store
-     *
-     * @param {number} page
-     * @returns {Array<object>}
      */
     getForPage(page = 1) {
-      return this.data.find((d) => d.page === page)?.orgs || []
+      return this.data.find((d) => d.page === page)?.orgs ?? []
     },
     /**
      * Async function to trigger API fetch of orgs list for a page, using the config
      * and preserving the config file order
-     *
-     * @param {number} page
-     * @returns {Array<object>}
      */
     async loadFromConfig(page = 1) {
       const pageSize = config.website.pagination_sizes.organizations_list
@@ -69,7 +69,7 @@ export const useOrganizationStore = defineStore('organization', {
      */
     async loadFromConfigFlat() {
       if (this.flatData.length > 0) return this.flatData
-      const promises = config.organizations.map(async (orgId) => {
+      const promises = config.organizations.map(async (orgId: string) => {
         return await orgApi.get(orgId, undefined, { 'x-fields': 'id,name' })
       })
       this.flatData = await Promise.all(promises)
@@ -77,33 +77,29 @@ export const useOrganizationStore = defineStore('organization', {
     },
     /**
      * Load multiple organizations to store
-     *
-     * @param {Array<string>} org_ids
-     * @param {number} page
-     * @returns {Promise}
      */
-    async loadMultiple(orgIds, page) {
+    async loadMultiple(orgIds: string[], page: number) {
       for (const orgId of orgIds) {
         const existing = this.get(orgId)
-        if (existing) continue
+        if (existing !== undefined) continue
         try {
           const org = await orgApi.get(orgId)
           this.add(org, page)
         } catch (e) {
-          console.log(`Error fetching ${orgId}: ${e}`)
+          console.log(
+            `Error fetching ${orgId}: ${
+              e instanceof Error ? e.message : String(e)
+            }`
+          )
         }
       }
     },
     /**
      * Add an organization to the store
-     *
-     * @param {object} org
-     * @param {number} page
-     * @returns {object}
      */
-    add(org, page) {
+    add(org: Organization, page: number) {
       const existing = this.data.find((d) => d.page === page)
-      if (existing) {
+      if (existing !== undefined) {
         existing.orgs.push(org)
       } else {
         this.data.push({ page, orgs: [org] })
@@ -112,11 +108,8 @@ export const useOrganizationStore = defineStore('organization', {
     },
     /**
      * Get an org from store given its id
-     *
-     * @param {str} org_id
-     * @returns {object|undefined}
      */
-    get(orgId) {
+    get(orgId: string) {
       return this.data
         .map((d) => d.orgs)
         .flat()
@@ -124,14 +117,10 @@ export const useOrganizationStore = defineStore('organization', {
     },
     /**
      * Async function to trigger API fetch of an org if not known in store
-     *
-     * @param {string} org_id
-     * @param {number} page
-     * @returns {object|undefined}
      */
-    async load(orgId, page) {
+    async load(orgId: string, page: number) {
       const existing = this.get(orgId)
-      if (existing) return existing
+      if (existing !== undefined) return existing
       const org = await orgApi.get(orgId)
       return this.add(org, page)
     }

@@ -21,7 +21,7 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['removeDataset', 'editDataset'])
+const emits = defineEmits(['removeDataset', 'editDataset', 'reorderDatasets'])
 
 const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 const isModalOpen = ref(false)
@@ -101,6 +101,7 @@ const closeModal = () => {
         :is="isEdit ? draggable : 'div'"
         :list="isEdit ? datasets : null"
         :ghost-class="isEdit ? 'ghost' : null"
+        @change="isEdit ? emits('reorderDatasets') : null"
       >
         <li v-for="(dataset, index) in datasets" :key="index">
           <DsfrAccordion

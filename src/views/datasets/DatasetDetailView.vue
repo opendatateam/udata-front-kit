@@ -17,11 +17,11 @@ import DatasetAddToBouquetModal from '@/custom/ecospheres/components/datasets/Da
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
-import type { ResourceData } from '../../model/resource'
+import ReusesList from '../../components/ReusesList.vue'
+import type { ResourceDataWithQuery } from '../../model/resource'
 import { useRouteParamsAsString } from '../../router/utils'
 import { useDatasetStore } from '../../store/DatasetStore'
 import { useResourceStore } from '../../store/ResourceStore'
-import { useReuseStore } from '../../store/ReuseStore'
 import { useUserStore } from '../../store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '../../utils'
 
@@ -30,33 +30,26 @@ const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
-const reuseStore = useReuseStore()
 const userStore = useUserStore()
 
 const dataset = computed(() => datasetStore.get(datasetId))
-const reuses = ref([])
 
-const resources = ref<Record<string, ResourceData>>({})
+const resources = ref<Record<string, ResourceDataWithQuery>>({})
 const selectedTabIndex = ref(0)
 const license = ref<License>()
-const types = ref([])
 const showAddToBouquetModal = ref(false)
 
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.discussions.dataset.display
 
-const updateQuery = (q, typeId) => {
+const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
   changePage(typeId, 1, q)
 }
 
-const doSearch = (typeId) => {
+const doSearch = (typeId: string) => {
   changePage(typeId, 1, resources.value[typeId].query)
 }
-
-onMounted(() => {
-  datasetStore.load(datasetId)
-})
 
 const chartData = computed(() => {
   if (!dataset.value?.extras) return
@@ -99,50 +92,13 @@ const changePage = (type: string, page = 1, query = '') => {
     return resourceStore
       .fetchDatasetResources(dataset.value.id, type, page, query)
       .then((data) => {
-        resources.value[type].resources = data['data']
-        resources.value[type].total = data['total']
+        resources.value[type].resources = data.data
+        resources.value[type].total = data.total
       })
   }
 }
 
-const simpleDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('default', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  }).format(date)
-}
-
-const cropString = (string) => {
-  if (string.length <= 40) {
-    return string
-  } else {
-    return string.slice(0, 40) + '...'
-  }
-}
-
-const reuseDescription = (r) => {
-  if (r.organization?.name) {
-    return (
-      'Publié le ' +
-        simpleDate(r.created_at) +
-        ' par ' +
-        r.organization?.name || r.owner.first_name + ' ' + r.owner.last_name
-    )
-  } else {
-    return (
-      'Publié le ' +
-      simpleDate(r.created_at) +
-      ' par ' +
-      r.owner.first_name +
-      ' ' +
-      r.owner.last_name
-    )
-  }
-}
-
-const getResourcesTitle = (typedResources: ResourceData) => {
+const getResourcesTitle = (typedResources: ResourceDataWithQuery) => {
   if (typedResources?.total > 1) {
     let pluralName
     switch (typedResources.type.id) {
@@ -173,11 +129,6 @@ const getResourcesTitle = (typedResources: ResourceData) => {
   }
 }
 
-const getType = (id) => {
-  const type = types.value.find((t) => t.id === id)
-  return type?.label || ''
-}
-
 const discussionWellTitle = showDiscussions
   ? 'Participer aux discussions'
   : 'Voir les discussions'
@@ -193,17 +144,13 @@ watch(
   dataset,
   async () => {
     if (!dataset.value) return
-    // fetch reuses
-    reuseStore
-      .loadReusesForDataset(dataset.value.id)
-      .then((r) => (reuses.value = r))
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
       const resourceLoader = useLoading().show()
-      const allResources = await resourceStore.loadResources(
+      const allResources = (await resourceStore.loadResources(
         dataset.value.id,
         dataset.value.resources
-      )
+      )) as ResourceDataWithQuery[]
       for (const typedResources of allResources) {
         resources.value[typedResources.type.id] = { ...typedResources }
         resources.value[typedResources.type.id].totalWithoutFilter =
@@ -211,13 +158,16 @@ watch(
       }
       resourceLoader.hide()
     } else {
-      resources.value = dataset.value.resources
+      throw Error('Unsupported dataset.resources format')
     }
     license.value = await datasetStore.getLicense(dataset.value.license)
-    types.value = await reuseStore.getTypes()
   },
   { immediate: true }
 )
+
+onMounted(() => {
+  datasetStore.load(datasetId)
+})
 </script>
 
 <template>
@@ -229,6 +179,7 @@ watch(
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <ReadMore max-height="600">
+          <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
         </ReadMore>
       </div>
@@ -292,7 +243,7 @@ watch(
       :tab-titles="tabs"
       :initial-selected-index="0"
       :selected-tab-index="selectedTabIndex"
-      @select-tab="(idx) => (selectedTabIndex = idx)"
+      @select-tab="(idx: number) => (selectedTabIndex = idx)"
     >
       <!-- Fichiers -->
       <DsfrTabContent
@@ -319,7 +270,7 @@ watch(
                 class="search-bar"
                 @search="() => doSearch(typedResources.type.id)"
                 @update:model-value="
-                  (value) => updateQuery(value, typedResources.type.id)
+                  (value: string) => updateQuery(value, typedResources.type.id)
                 "
               />
               <span v-if="typedResources.resources.length != 0">
@@ -330,8 +281,8 @@ watch(
                   :resource="resource"
                 />
                 <Pagination
-                  class="fr-mt-3w"
                   v-if="typedResources.total > pageSize"
+                  class="fr-mt-3w"
                   :page="typedResources.currentPage"
                   :page-size="pageSize"
                   :total-results="typedResources.total"
@@ -357,46 +308,7 @@ watch(
         tab-id="tab-1"
         :selected="selectedTabIndex === 1"
       >
-        <div
-          v-if="!reuses.length"
-          class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
-        >
-          <img
-            height="105"
-            width="130"
-            loading="lazy"
-            src="/blank_state/reuse.svg"
-          />
-          <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-            Il n'y a pas encore de réutilisation pour ce jeu de données.
-          </p>
-          <p>
-            <a
-              class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
-              href="https://guides.data.gouv.fr/publier-des-donnees/guide-data.gouv.fr/reutilisations"
-            >
-              Qu'est-ce qu'une réutilisation ?
-            </a>
-          </p>
-        </div>
-        <div v-else>
-          <h2 class="fr-mt-4w">Réutilisations</h2>
-          <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-            <li v-for="r in reuses" class="fr-col-12 fr-col-md-6 fr-col-lg-3">
-              <DsfrCard
-                :link="r.page"
-                :style="`max-width: 400px; max-height: 400px`"
-                :title="cropString(r.title)"
-                :detail="getType(r.type)"
-                :description="reuseDescription(r)"
-                size="sm"
-                :imgSrc="
-                  r.image_thumbnail || r.organization?.logo || r.owner.avatar
-                "
-              />
-            </li>
-          </ul>
-        </div>
+        <ReusesList model="dataset" :object-id="dataset.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
@@ -457,9 +369,3 @@ watch(
     </DsfrTabs>
   </div>
 </template>
-
-<style scoped lang="scss">
-pre {
-  white-space: pre-wrap;
-}
-</style>
