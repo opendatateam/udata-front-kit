@@ -1,0 +1,28 @@
+name: Create and deploy a new release
+run-name: create and deploy ${{ github.sha }}
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  trigger-gitlab-pipeline:
+    runs-on: ubuntu-latest
+    env:
+      # variables to be defined
+      APP_NAME: ${{ vars.APP_NAME }}
+      SCAFFOLD_REPO_SSH_URL: ${{ vars.SCAFFOLD_REPO_SSH_URL }}
+      RELEASE_VERSION: ${{ github.ref }}
+      SCAFFOLD_DIR: "scaffold"
+
+      # secrets to be defined
+      GITLAB_API_TOKEN: ${{ secrets.GITLAB_API_TOKEN }}
+    steps:
+      - name: clone scaffold repository
+        shell: bash
+        run: |
+          git clone --quiet --depth 1 -b add-env $SCAFFOLD_REPO_SSH_URL $SCAFFOLD_DIR
+      - name: trigger Gitlab CI/CD pipeline
+        shell: bash
+        run: |
+          ./scripts/gitlab-ci-pipeline.sh $APP_NAME $RELEASE_VERSION
+        working-directory: ${{ env.SCAFFOLD_DIR }}
