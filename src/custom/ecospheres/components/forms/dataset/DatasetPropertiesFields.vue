@@ -89,6 +89,12 @@ const isAvailable = computed(() =>
 const onSelectDataset = (value: DatasetV2) => {
   datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
   datasetProperties.value.id = value.id
+  datasetProperties.value.title = value.title
+  const resolved = router.resolve({
+    name: 'bouquet_detail',
+    params: { bid: value.id }
+  })
+  datasetProperties.value.uri = resolved.href
 }
 
 const onClearDataset = () => {
@@ -112,17 +118,18 @@ watch(isAvailable, (newVal) => {
 })
 
 watch(
+  () => datasetProperties.value.availability,
+  (newVal, oldVal) => {
+    if (oldVal !== newVal && newVal !== Availability.LOCAL_AVAILABLE) {
+      selectedDataset.value = undefined
+      datasetProperties.value.title = ''
+    }
+  }
+)
+
+watch(
   datasetProperties,
   (newVal) => {
-    if (newVal.id && newVal.availability === Availability.LOCAL_AVAILABLE) {
-      const resolved = router.resolve({
-        name: 'bouquet_detail',
-        params: { bid: newVal.id }
-      })
-      datasetProperties.value.uri = resolved.href
-    } else {
-      selectedDataset.value = undefined
-    }
     emit('update:datasetProperties', newVal)
   },
   { deep: true }
