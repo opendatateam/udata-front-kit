@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const configDir = `./configs/${process.env.CONFIG_NAME}`
+const configDir = `./configs/${process.env.VITE_SITE_ID}`
 const configFile = `${configDir}/config.yaml`
 
 // Read the config file
