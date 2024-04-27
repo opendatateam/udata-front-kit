@@ -16,7 +16,9 @@ universe:
 
 robots:
   disallow:
-    - /
+    - /admin
+    - /datasets
+    - /organizations
   sitemap:
 
 # UI customizations
