@@ -39,10 +39,17 @@ export const stripFromMarkdown = (value) => {
  * Format date
  *
  */
-export const formatDate = (dateString) => {
+export const formatDate = (dateString, short = false) => {
   const date = new Date(dateString)
-  return new Intl.DateTimeFormat('default', {
-    dateStyle: 'full',
-    timeStyle: 'short'
-  }).format(date)
+  const params = short
+    ? {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      }
+    : {
+        dateStyle: 'full',
+        timeStyle: 'short'
+      }
+  return new Intl.DateTimeFormat('default', params).format(date)
 }

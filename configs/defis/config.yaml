@@ -14,6 +14,11 @@ universe:
   # universe name, used as bouquets tag
   name: defis
 
+robots:
+  disallow:
+    - /
+  sitemap:
+
 # UI customizations
 website:
   title: 'defis.data.gouv.fr'
@@ -29,11 +34,11 @@ website:
     title: 'Apprendre avec l’open data'
     subtitle: 'Se former et utiliser des données ouvertes pour répondre à des enjeux sociaux et environnementaux.'
     below_hero: >-
-      Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).  
+      Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).
 
       ### Des défis open data
 
-      La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.  
+      La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.
 
 
       Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
@@ -47,6 +52,7 @@ website:
 
 
       [En savoir plus sur l’Open Data University.](/opendatauniversity)
+    meta_description:
   header_button:
     display: false
     label: 'Donnez votre avis'
@@ -59,40 +65,25 @@ website:
     display: false
     name:
     link:
-  router_items:
-    - name: 'Accueil'
-      id: 'home'
-      linkPage: '/'
-      type: 'component'
-      display_menu: false
-    - name: 'Défis'
-      id: 'topics'
-      linkPage: '/topics'
-      type: 'component'
-      display_menu: true
-    - name: 'Open Data University'
-      id: 'opendatauniversity'
-      linkPage: '/opendatauniversity'
-      type: 'page'
-      display_menu: true
-      url: '/defis/pages/opendatauniversity.md'
-    - name: 'Accessibilité'
-      id: 'accessibility'
-      linkPage: '/accessibility'
-      type: 'page'
-      display_menu: false
-      url: '/defis/pages/accessibility.md'
-    - name: 'datasets'
-      id: 'datasets'
-      linkPage: '/datasets'
-      type: 'component'
-      display_menu: false
-    - name: 'Guides'
-      id: 'guides'
-      linkPage: 'https://guides.data.gouv.fr/'
-      type: 'external'
-      display_menu: true
-      url: 'https://guides.data.gouv.fr/'
+  menu:
+    - text: Défis
+      to: /topics
+    - text: Open Data University
+      to: /opendatauniversity
+    - text: Guides
+      to: https://guides.data.gouv.fr/
+  router:
+    disable:
+      - organizations_routes
+    pages:
+      - title: 'Open Data University'
+        id: 'opendatauniversity'
+        route: '/opendatauniversity'
+        url: '/defis/pages/opendatauniversity.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/defis/pages/accessibility.md'
   # img should be square
   home_buttons:
   show_topic_charts: true

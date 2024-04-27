@@ -14,6 +14,11 @@ universe:
   # universe name, used as bouquets tag
   name: univers-ecospheres
 
+robots:
+  disallow:
+    - /
+  sitemap:
+
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
@@ -30,6 +35,7 @@ website:
     subtitle:
     below_hero:
     below_topics:
+    meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
   header_search: true
   header_button:
     display: true
@@ -54,59 +60,38 @@ website:
     - label: "Conditions générales d'utilisation"
       to: '/terms'
     - label: 'Politique de confidentialité'
-      to: 'https://www.data.gouv.fr/fr/suivi/'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   notice:
     display: true
     content: Vous naviguez sur une version beta d'ecologie.data.gouv. En savoir plus sur [nos travaux en cours](https://ecospheres.gitbook.io/travaux-en-cours/).
     closeable: false
-  router_items:
-    - name: 'Accueil'
-      id: 'home'
-      linkPage: '/'
-      type: 'custom'
-      display_menu: true
-      custom_component: 'ecospheres/views/HomeView'
-    - name: 'Données'
-      id: 'datasets'
-      linkPage: '/datasets'
-      type: 'component'
-      display_menu: true
-    - name: 'Organisations'
-      id: 'organizations'
-      linkPage: '/organizations'
-      type: 'component'
-      display_menu: false
-    - name: 'Bouquets'
-      id: 'bouquets'
-      linkPage: '/bouquets'
-      type: 'component'
-      display_menu: true
-    - name: 'À propos'
-      id: 'about'
-      linkPage: '/about'
-      type: 'page'
-      display_menu: true
-      url: '/ecospheres/pages/about.md'
-    - name: 'Accessibilité'
-      id: 'accessibility'
-      linkPage: '/accessibility'
-      type: 'page'
-      display_menu: false
-      url: '/ecospheres/pages/accessibility.md'
-    - name: "Conditions générales d'utilisation"
-      id: 'terms'
-      linkPage: '/terms'
-      type: 'page'
-      display_menu: false
-      url: '/ecospheres/pages/terms.md'
-    - name: 'Beta'
-      id: 'beta'
-      linkPage: '/beta'
-      type: 'page'
-      display_menu: false
-      url: '/ecospheres/pages/beta.md'
+  menu:
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets
+    - text: Bouquets
+      to: /bouquets
+    - text: A propos
+      to: /about
+  router:
+    disable:
+      - topics
+    pages:
+      - title: 'À propos'
+        id: 'about'
+        route: '/about'
+        url: '/ecospheres/pages/about.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/ecospheres/pages/accessibility.md'
+      - title: "Conditions générales d'utilisation"
+        id: 'terms'
+        route: '/terms'
+        url: '/ecospheres/pages/terms.md'
   home_buttons:
   show_topic_charts: false
   show_quality_component: true

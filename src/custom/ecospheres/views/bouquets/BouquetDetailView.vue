@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import {
   ReadMore,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  excerpt
 } from '@etalab/data.gouv.fr-components'
+import { useHead } from '@unhead/vue'
 import { onMounted, ref, computed } from 'vue'
 import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
+import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import type { Theme, Topic, DatasetProperties } from '@/model'
@@ -19,6 +22,8 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { getDatasetListTitle } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
+
+import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
 
 const route = useRouteParamsAsString()
 const router = useRouter()
@@ -80,6 +85,32 @@ const getSelectedThemeColor = (themed: string) => {
   selectedTheme.value = themed
   return getThemeColor(selectedTheme.value)
 }
+
+const metaDescription = (): string | undefined => {
+  return excerpt(bouquet.value?.description ?? '')
+}
+
+const metaTitle = (): string => {
+  return `${bouquet.value?.name ?? ''} - ${config.website.title}`
+}
+
+const metaLink = (): string => {
+  const resolved = router.resolve({
+    name: 'bouquet_detail',
+    params: { bid: bouquet.value?.id }
+  })
+  return `${window.location.origin}${resolved.href}`
+}
+
+useHead({
+  title: metaTitle,
+  meta: [
+    { property: 'og:title', content: metaTitle },
+    { name: 'description', content: metaDescription },
+    { property: 'og:description', content: metaDescription }
+  ],
+  link: [{ rel: 'canonical', href: metaLink }]
+})
 
 onMounted(() => {
   const loader = loading.show()
@@ -188,7 +219,11 @@ onMounted(() => {
     <DsfrTabs
       class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du bouquet"
-      :tab-titles="[{ title: 'Données' }, { title: 'Discussions' }]"
+      :tab-titles="[
+        { title: 'Données' },
+        { title: 'Discussions' },
+        { title: 'Réutilisations' }
+      ]"
       :initial-selected-index="0"
       :selected-tab-index="selectedTabIndex"
       @select-tab="(idx: number) => (selectedTabIndex = idx)"
@@ -201,6 +236,10 @@ onMounted(() => {
       >
         <h2>{{ getDatasetListTitle(datasetsProperties) }}</h2>
         <BouquetDatasetList :datasets="datasetsProperties" />
+        <BouquetDatasetListExport
+          :datasets="datasetsProperties"
+          :filename="bouquet.id"
+        />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent
@@ -213,6 +252,14 @@ onMounted(() => {
           :subject="bouquet"
           subject-class="Topic"
         />
+      </DsfrTabContent>
+      <!-- Réutilisations -->
+      <DsfrTabContent
+        panel-id="tab-content-2"
+        tab-id="tab-2"
+        :selected="selectedTabIndex === 2"
+      >
+        <ReusesList model="topic" :object-id="bouquet.id" />
       </DsfrTabContent>
     </DsfrTabs>
   </div>

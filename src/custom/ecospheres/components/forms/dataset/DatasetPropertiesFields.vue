@@ -146,7 +146,7 @@ onMounted(() => {
           v-model="datasetProperties.availability"
           :name="Availability.LOCAL_AVAILABLE"
           :value="Availability.LOCAL_AVAILABLE"
-          label="ecologie.data.gouv.fr"
+          label="data.gouv.fr"
         />
         <DsfrRadioButton
           v-model="datasetProperties.availability"
@@ -176,7 +176,7 @@ onMounted(() => {
         ref="selector"
         v-model="selectedDataset"
         no-options-text="Précisez ou élargissez votre recherche"
-        placeholder="Rechercher une donnée dans ecologie.data.gouv.fr"
+        placeholder="Rechercher une donnée dans data.gouv.fr"
         name="select-datasets"
         value-prop="id"
         label="title"

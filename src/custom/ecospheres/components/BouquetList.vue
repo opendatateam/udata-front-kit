@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ComputedRef } from 'vue'
+import type { ComputedRef, PropType } from 'vue'
 import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute, type RouteLocationRaw } from 'vue-router'
@@ -24,13 +24,26 @@ const props = defineProps({
   },
   showDrafts: {
     type: Boolean
+  },
+  geozone: {
+    type: String as PropType<string | null>,
+    default: null
   }
 })
 
 const bouquets: ComputedRef<Topic[]> = computed(() => {
-  const allTopics = topicStore.sorted.filter((bouquet) => {
-    return !props.showDrafts ? !bouquet.private : true
-  })
+  const allTopics = topicStore.sorted
+    .filter((bouquet) => {
+      return !props.showDrafts ? !bouquet.private : true
+    })
+    .filter((bouquet) => {
+      if (props.geozone === null) return true
+      return (
+        bouquet.spatial?.zones &&
+        bouquet.spatial.zones.length > 0 &&
+        bouquet.spatial.zones.includes(props.geozone)
+      )
+    })
   if (props.themeName === NoOptionSelected) {
     return allTopics
   }

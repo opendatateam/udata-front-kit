@@ -1,4 +1,4 @@
-import type { Owned } from '@etalab/data.gouv.fr-components'
+import type { Owned, Rel } from '@etalab/data.gouv.fr-components'
 
 import type { SpatialField } from './spatial'
 
@@ -87,7 +87,8 @@ type Topic = Owned & {
   id: string
   page: string
   private: boolean
-  reuses: []
+  reuses: Rel
+  datasets: Rel
   slug: string
   tags: string[]
   uri: string

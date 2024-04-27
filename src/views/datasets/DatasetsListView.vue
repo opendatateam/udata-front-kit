@@ -1,35 +1,54 @@
-<script setup>
+<script setup lang="ts">
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
 import debounce from 'lodash/debounce'
-import { computed, onMounted, ref, watchEffect, watch } from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import config from '@/config'
+import type { TopicConf } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 
 defineEmits(['search'])
+const props = defineProps({
+  query: {
+    type: String,
+    default: null
+  },
+  page: {
+    type: String,
+    default: null
+  },
+  organization: {
+    type: String,
+    default: null
+  },
+  topic: {
+    type: String,
+    default: null
+  }
+})
 
-const route = useRoute()
 const router = useRouter()
 const store = useSearchStore()
-const originalQuery = computed(() => route.query.q)
 const currentPage = ref(1)
-const query = ref()
+const localQuery = ref()
 const loader = useLoading()
 
 const topicStore = useTopicStore()
-const topic = computed(() => route.query.topic)
-const selectedTopicId = ref(null)
-const selectedOrganizationId = ref(null)
+const userStore = useUserStore()
+
+const selectedTopicId: Ref<string | null> = ref(null)
+const selectedOrganizationId: Ref<string | null> = ref(null)
 
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
 const title = config.website.title
-const topicsConf = config.website.list_highlighted_topics
+const topicsConf = config.website.list_highlighted_topics as TopicConf[]
 const hasOrganizationFilter = config.website.datasets.organization_filter
 
 const topicOptions = computed(() => {
@@ -53,51 +72,73 @@ const organizationOptions = computed(() => [
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
-const onSelectTopic = (topicId) => {
-  selectedTopicId.value = topicId
-  currentPage.value = 1
+const computeUrlQuery = (
+  data: Record<string, string | number>
+): Record<string, string | number> => {
+  return {
+    page: currentPage.value,
+    ...(localQuery.value && { q: localQuery.value }),
+    ...(selectedOrganizationId.value && {
+      organization: selectedOrganizationId.value
+    }),
+    ...(selectedTopicId.value && { topic: selectedTopicId.value }),
+    ...data
+  }
 }
 
-const onSelectOrganization = (orgId) => {
-  selectedOrganizationId.value = orgId
-  currentPage.value = 1
+const onSelectTopic = (topicId: string) => {
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({
+      page: 1,
+      topic: topicId
+    })
+  })
+}
+
+const onSelectOrganization = (orgId: string) => {
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({
+      page: 1,
+      organization: orgId
+    })
+  })
 }
 
 const search = () => {
-  router.push({ path: '/datasets', query: { q: query.value } })
+  router.push({ path: '/datasets', query: computeUrlQuery({ page: 1 }) })
 }
 
-const zIndex = (key) => {
+const goToPage = (page: number) => {
+  router.push({ path: '/datasets', query: computeUrlQuery({ page: page + 1 }) })
+}
+
+const zIndex = (key: number) => {
   return { zIndex: datasets.value.length - key }
 }
 
-// reset currentPage when query changes
-onBeforeRouteUpdate((to, from) => {
-  currentPage.value = 1
-})
-
-const getDatasetPage = (id) => {
+const getDatasetPage = (id: string) => {
   return { name: 'dataset_detail', params: { did: id } }
 }
 
-const getOrganizationPage = (id) => {
+const getOrganizationPage = (id: string) => {
   if (router.hasRoute('organization_detail')) {
     return { name: 'organization_detail', params: { oid: id } }
   }
   return ''
 }
 
-// fill topic name when arriving on the page with a topic ID
-// TODO: topicId is not updated when selecting a topic
-watchEffect(() => {
-  if (!topic.value || !topicsConf) return
-  selectedTopicId.value = topic.value
-})
-
-watchEffect(() => {
-  if (!originalQuery.value) return
-  query.value = originalQuery.value
-})
+watch(
+  props,
+  () => {
+    localQuery.value = props.query
+    currentPage.value = props.page ? parseInt(props.page) : 1
+    selectedOrganizationId.value = props.organization
+    selectedTopicId.value = props.topic
+  },
+  { immediate: true }
+)
 
 const delayedSearch = debounce(
   (currentQuery, currentTopicId, currentOrganizationId, currentPageValue) => {
@@ -115,7 +156,7 @@ const delayedSearch = debounce(
 )
 
 watch(
-  [query, selectedTopicId, selectedOrganizationId, currentPage],
+  [localQuery, selectedTopicId, selectedOrganizationId, currentPage],
   ([currentQuery, currentTopicId, currentOrganizationId, currentPageValue]) => {
     delayedSearch(
       currentQuery,
@@ -136,7 +177,6 @@ onMounted(() => {
   if (hasOrganizationFilter) {
     useOrganizationStore().loadFromConfigFlat()
   }
-  query.value = originalQuery.value
 })
 </script>
 
@@ -145,12 +185,26 @@ onMounted(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container fr-mb-4w">
-    <h1 class="fr-mb-2v">Jeux de données</h1>
+    <div
+      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+    >
+      <h1 class="fr-col-auto fr-mb-2v">Jeux de données</h1>
+      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+        <a
+          v-if="userStore.isAdmin()"
+          :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
+          class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
+        >
+          <VIcon name="ri-file-download-line" class="fr-mr-1w" />
+          Exporter la liste des jeux de données
+        </a>
+      </div>
+    </div>
     <p v-if="query">Résultats de recherche pour "{{ query }}".</p>
     <p v-else>Parcourir tous les jeux de données présents sur {{ title }}.</p>
     <div class="fr-col-md-12 fr-mb-2w">
       <DsfrSearchBar
-        v-model="query"
+        v-model="localQuery"
         label="Recherche"
         placeholder="Rechercher des données"
         @update:model-value="search()"
@@ -196,6 +250,6 @@ onMounted(() => {
     class="fr-container"
     :current-page="currentPage - 1"
     :pages="pages"
-    @update:current-page="(p) => (currentPage = p + 1)"
+    @update:current-page="goToPage"
   />
 </template>
