@@ -30,6 +30,7 @@ const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
 const isMinimalValid: Ref<boolean> = ref(false)
+const isCreateInited: Ref<boolean> = ref(false)
 const title: Ref<string> = ref('Nouveau bouquet')
 const bouquet: Ref<Partial<Bouquet>> = ref({})
 const errorMsg: Ref<string | null> = ref(null)
@@ -124,6 +125,8 @@ const createTopic = () => {
   useTopicStore()
     .create(getBouquetEditionData())
     .then((response) => {
+      // we're not really changing route (same component), so fill value locally
+      bouquet.value = fillBouquetFromTopic(response)
       router.push({
         name: 'bouquet_edit',
         params: { bid: response.id }
@@ -204,7 +207,6 @@ watch(bouquet, () => {
 })
 
 onMounted(() => {
-  // TODO: test those
   // prefill bouquet info from query if create mode
   if (props.isCreate) {
     bouquet.value.theme = routeQuery.theme || NoOptionSelected
@@ -212,6 +214,7 @@ onMounted(() => {
     bouquet.value.spatial = routeQuery.geozone
       ? { zones: [routeQuery.geozone] }
       : undefined
+    isCreateInited.value = true
   }
   // or load existing bouquet from API
   else {
@@ -263,7 +266,8 @@ onMounted(() => {
           {{ completion * 100 }}%
         </progress>
       </div>
-      <div v-if="isCreate || bouquet.id" class="fr-mt-4w">
+      <div v-if="(isCreate && isCreateInited) || bouquet.id" class="fr-mt-4w">
+        <!-- FIXME: make description mandatory again -->
         <h2>Description du bouquet de données</h2>
         <BouquetPropertiesFieldGroup
           v-model:bouquet-name="bouquet.name"
