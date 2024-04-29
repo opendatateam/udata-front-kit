@@ -267,7 +267,6 @@ onMounted(() => {
         </progress>
       </div>
       <div v-if="(isCreate && isCreateInited) || bouquet.id" class="fr-mt-4w">
-        <!-- FIXME: make description mandatory again -->
         <h2>Description du bouquet de données</h2>
         <BouquetPropertiesFieldGroup
           v-model:bouquet-name="bouquet.name"
