@@ -20,7 +20,7 @@ const emits = defineEmits([
 ])
 
 const isValid = computed(() => {
-  return props.bouquetName.trim() !== ''
+  return isComplete.value
 })
 
 const isComplete = computed(() => {
@@ -63,7 +63,7 @@ watch(
     />
   </div>
   <div class="fr-mt-1w">
-    <div>Objectif du bouquet</div>
+    <div>Objectif du bouquet<span class="required">&nbsp;*</span></div>
     <div>
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
