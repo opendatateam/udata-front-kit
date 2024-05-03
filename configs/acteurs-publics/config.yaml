@@ -229,6 +229,12 @@ website:
       linkPage: '/bouquets'
       type: 'component'
       display_menu: true
+    - name: 'Les solutions'
+      id: 'guides'
+      linkPage: '/solutions'
+      type: 'page'
+      url: '/acteurs-publics/pages/solutions.md'
+      display_menu: true
     - name: 'Guides de la simplification'
       id: 'guides'
       linkPage: '/guides'
