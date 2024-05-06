@@ -147,6 +147,7 @@ const closeModal = () => {
                 target="_blank"
                 >Accéder au catalogue</a
               >
+              <!-- FIXME: does not refresh when changing dataset from edit modal -->
               <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
             </div>
           </DsfrAccordion>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
-import Multiselect from '@vueform/multiselect'
 import { ref, computed, watch, type PropType, type Ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -9,10 +8,10 @@ import {
   isAvailable as isAvailableTest,
   type DatasetProperties
 } from '@/model'
-import SearchAPI from '@/services/api/SearchAPI'
 import { useDatasetStore } from '@/store/DatasetStore'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
+import SelectDataset from './SelectDataset.vue'
 
 const emit = defineEmits(['update:datasetProperties', 'updateValidation'])
 
@@ -32,23 +31,6 @@ const datasetStore = useDatasetStore()
 
 const datasetProperties = ref(props.datasetProperties)
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
-
-const alreadySelected = (id: string): boolean => {
-  for (const alreadySelectedDataset of props.alreadySelectedDatasets) {
-    if (alreadySelectedDataset.id === id) return true
-  }
-  return false
-}
-
-const ecospheresDatasetsOptions = async (query: string) => {
-  if (!query) return []
-  const datasets = (
-    await new SearchAPI().search(query, null, 1, {
-      page_size: 10
-    })
-  ).data
-  return datasets.filter((dataset) => !alreadySelected(dataset.id))
-}
 
 const hasMandatoryFields = computed(() => {
   return (
@@ -159,26 +141,11 @@ onMounted(() => {
         >Rechercher un jeu de données dans data.gouv.fr</span
       >
     </label>
-    <Multiselect
-      id="link"
-      ref="selector"
+    <SelectDataset
       v-model="selectedDataset"
-      no-options-text="Précisez ou élargissez votre recherche"
-      placeholder="Rechercher une donnée dans data.gouv.fr"
-      name="select-datasets"
-      value-prop="id"
-      label="title"
-      autocomplete="off"
-      :object="true"
-      :clear-on-select="true"
-      :filter-results="false"
-      :min-chars="1"
-      :resolve-on-load="false"
-      :delay="400"
-      :searchable="true"
-      :options="ecospheresDatasetsOptions"
-      @select="onSelectDataset"
-      @clear="onClearDataset"
+      :already-selected-datasets="alreadySelectedDatasets"
+      @select-dataset="onSelectDataset"
+      @clear-dataset="onClearDataset"
     />
   </div>
   <div v-if="!selectedDataset" class="fr-mt-4w">
