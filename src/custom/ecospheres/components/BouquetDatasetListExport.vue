@@ -28,6 +28,7 @@ const doExport = async () => {
 <template>
   <div v-if="datasets.length > 0" class="flex align-start fr-mt-2w">
     <DsfrButton
+      size="sm"
       type="button"
       label="Exporter la liste des jeux de données"
       class="fr-mt-2w fr-ml-auto"

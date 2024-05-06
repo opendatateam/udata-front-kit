@@ -20,11 +20,8 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { getDatasetListTitle } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
-
-import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
 
 const route = useRouteParamsAsString()
 const router = useRouter()
@@ -211,11 +208,10 @@ onMounted(() => {
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <h2>{{ getDatasetListTitle(datasetsProperties) }}</h2>
-        <BouquetDatasetList :datasets="datasetsProperties" />
-        <BouquetDatasetListExport
+        <BouquetDatasetList
           :datasets="datasetsProperties"
-          :filename="bouquet.id"
+          :is-edit="canEdit"
+          :bouquet-id="bouquet.id"
         />
       </DsfrTabContent>
       <!-- Discussions -->

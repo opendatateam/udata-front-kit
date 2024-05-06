@@ -129,8 +129,7 @@ const updateTopic = async () => {
   return useTopicStore()
     .update(bouquet.value.id, getBouquetEditionData())
     .then((response) => {
-      title.value = response.name
-      return response
+      router.push({ name: 'bouquet_detail', params: { bid: response.slug } })
     })
     .catch((error) => {
       errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
@@ -217,6 +216,7 @@ onMounted(() => {
       >
         <h1 class="fr-col-auto fr-mb-2v">{{ title }}</h1>
         <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+          <!-- TODO: add delete button -->
           <DsfrButton
             secondary
             class="fr-mb-1w"
@@ -228,12 +228,6 @@ onMounted(() => {
             class="fr-mb-1w fr-ml-1w"
             label="Enregistrer"
             @click.prevent="save"
-          />
-          <DsfrButton
-            :disabled="!canSave"
-            class="fr-mb-1w fr-ml-1w"
-            label="Publier"
-            @click.prevent="publish"
           />
         </div>
       </div>
@@ -251,34 +245,9 @@ onMounted(() => {
           v-model:spatial-field="bouquet.spatial"
           @update-validation="(isValid: boolean) => stepsValidation[1] = isValid"
         />
-        <hr />
-        <div
-          class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-        >
-          <h2 class="fr-col-auto fr-mb-2v">
-            Composition du bouquet de données
-          </h2>
-          <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-            <DsfrButton
-              :disabled="!canSave"
-              class="fr-mb-1w fr-ml-1w"
-              label="Ajouter un jeu de données"
-              icon="ri-add-line"
-              @click.prevent="goToDatasetAdd"
-            />
-          </div>
-        </div>
-        <BouquetDatasetList
-          :is-edit="true"
-          :datasets="bouquet.datasetsProperties"
-          @remove-dataset="removeDataset"
-          @edit-dataset="editDataset"
-          @reorder-datasets="reorderDatasets"
-        />
       </div>
-      <hr />
       <div
-        class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-grid-row--right fr-pb-1w"
+        class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-grid-row--right fr-pb-1w fr-mt-4w"
       >
         <div class="fr-col-auto">
           <DsfrButton
@@ -292,12 +261,6 @@ onMounted(() => {
             class="fr-mb-1w fr-ml-1w"
             label="Enregistrer"
             @click.prevent="save"
-          />
-          <DsfrButton
-            :disabled="!canSave"
-            class="fr-mb-1w fr-ml-1w"
-            label="Publier"
-            @click.prevent="publish"
           />
         </div>
       </div>

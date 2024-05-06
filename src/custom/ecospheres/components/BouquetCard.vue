@@ -20,9 +20,10 @@ const subtheme: string =
 const nbData: number =
   props.bouquet.extras['ecospheres:datasets_properties']?.length ?? 0
 
-const bouquetLink: RouteLocationRaw = props.bouquet.private
-  ? { name: 'bouquet_edit', params: { bid: props.bouquet.id } }
-  : { name: 'bouquet_detail', params: { bid: props.bouquet.slug } }
+const bouquetLink: RouteLocationRaw = {
+  name: 'bouquet_detail',
+  params: { bid: props.bouquet.slug }
+}
 </script>
 
 <template>
