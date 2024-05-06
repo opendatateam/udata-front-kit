@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 
 import { ConfigUtils } from '@/config'
 import { NoOptionSelected, type SelectOption, type Theme } from '@/model'
@@ -24,17 +24,12 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  'updateCompletion',
   'update:theme',
   'update:subtheme',
   'update:spatialField'
 ])
 
 const spatialCoverage = useSpatialCoverageFromField(props.spatialField)
-
-const isComplete = computed(() => {
-  return props.theme !== NoOptionSelected && props.subtheme !== NoOptionSelected
-})
 
 const selectedTheme = computed((): Theme | null => {
   return ConfigUtils.getThemeByName(props.theme)
@@ -63,14 +58,6 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | null) => {
   const zones = value === null ? null : [value.id]
   emit('update:spatialField', { ...props.spatialField, zones } as SpatialField)
 }
-
-watch(
-  isComplete,
-  (newValue) => {
-    emit('updateCompletion', newValue)
-  },
-  { immediate: true }
-)
 </script>
 
 <template>

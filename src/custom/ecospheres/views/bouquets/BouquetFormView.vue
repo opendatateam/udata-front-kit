@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Ref, ComputedRef } from 'vue'
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -34,11 +34,6 @@ const isCreateInited: Ref<boolean> = ref(false)
 const title: Ref<string> = ref('Nouveau bouquet')
 const bouquet: Ref<Partial<Bouquet>> = ref({})
 const errorMsg: Ref<string | null> = ref(null)
-const stepsCompletion: Ref<[boolean, boolean, boolean]> = ref([
-  false,
-  false,
-  false
-])
 
 const datasetsId: ComputedRef<string[]> = computed(() => {
   const datasetsId: string[] = []
@@ -52,17 +47,6 @@ const datasetsId: ComputedRef<string[]> = computed(() => {
 
 const canSave: ComputedRef<boolean> = computed(() => {
   return isMinimalValid.value
-})
-
-const canPublish: ComputedRef<boolean> = computed(() => {
-  return stepsCompletion.value.every(Boolean)
-})
-
-const completion: ComputedRef<number> = computed(() => {
-  return (
-    stepsCompletion.value.filter((v) => v === true).length /
-    stepsCompletion.value.length
-  )
 })
 
 const save = () => {
@@ -199,13 +183,6 @@ const fillBouquetFromTopic = (topic: Topic): Bouquet => {
   } as Bouquet
 }
 
-watch(bouquet, () => {
-  const hasDatasets =
-    bouquet.value.datasetsProperties !== undefined &&
-    bouquet.value.datasetsProperties.length > 0
-  stepsCompletion.value[2] = hasDatasets
-})
-
 onMounted(() => {
   // prefill bouquet info from query if create mode
   if (props.isCreate) {
@@ -253,18 +230,11 @@ onMounted(() => {
             @click.prevent="save"
           />
           <DsfrButton
-            :disabled="!canPublish"
             class="fr-mb-1w fr-ml-1w"
             label="Publier"
             @click.prevent="publish"
           />
         </div>
-      </div>
-      <div class="fr-col-md-5">
-        <div>Bouquet complété à {{ Math.round(completion * 100) }}%</div>
-        <progress style="width: 100%" max="100" :value="completion * 100">
-          {{ completion * 100 }}%
-        </progress>
       </div>
       <div v-if="(isCreate && isCreateInited) || bouquet.id" class="fr-mt-4w">
         <h2>Description du bouquet de données</h2>
@@ -272,7 +242,6 @@ onMounted(() => {
           v-model:bouquet-name="bouquet.name"
           v-model:bouquet-description="bouquet.description"
           @update-validation="(isValid: boolean) => isMinimalValid = isValid"
-          @update-completion="(isComplete: boolean) => stepsCompletion[0] = isComplete"
         />
         <hr />
         <h2>Informations du bouquet de données</h2>
@@ -280,7 +249,6 @@ onMounted(() => {
           v-model:theme="bouquet.theme"
           v-model:subtheme="bouquet.subtheme"
           v-model:spatial-field="bouquet.spatial"
-          @update-completion="(isComplete: boolean) => stepsCompletion[1] = isComplete"
         />
         <hr />
         <div
@@ -325,7 +293,6 @@ onMounted(() => {
             @click.prevent="save"
           />
           <DsfrButton
-            :disabled="!canPublish"
             class="fr-mb-1w fr-ml-1w"
             label="Publier"
             @click.prevent="publish"

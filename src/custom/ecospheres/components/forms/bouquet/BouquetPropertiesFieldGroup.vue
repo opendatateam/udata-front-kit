@@ -13,7 +13,6 @@ const props = defineProps({
 })
 
 const emits = defineEmits([
-  'updateCompletion',
   'updateValidation',
   'update:bouquetDescription',
   'update:bouquetName'
@@ -33,14 +32,6 @@ watch(
   isValid,
   (newValue) => {
     emits('updateValidation', newValue)
-  },
-  { immediate: true }
-)
-
-watch(
-  isComplete,
-  (newValue) => {
-    emits('updateCompletion', newValue)
   },
   { immediate: true }
 )
