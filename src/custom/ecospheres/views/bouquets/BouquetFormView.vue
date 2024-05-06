@@ -29,7 +29,7 @@ const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
-const isMinimalValid: Ref<boolean> = ref(false)
+const stepsValidation: Ref<[boolean, boolean]> = ref([false, false])
 const isCreateInited: Ref<boolean> = ref(false)
 const title: Ref<string> = ref('Nouveau bouquet')
 const bouquet: Ref<Partial<Bouquet>> = ref({})
@@ -46,7 +46,7 @@ const datasetsId: ComputedRef<string[]> = computed(() => {
 })
 
 const canSave: ComputedRef<boolean> = computed(() => {
-  return isMinimalValid.value
+  return stepsValidation.value.every(Boolean)
 })
 
 const save = () => {
@@ -230,6 +230,7 @@ onMounted(() => {
             @click.prevent="save"
           />
           <DsfrButton
+            :disabled="!canSave"
             class="fr-mb-1w fr-ml-1w"
             label="Publier"
             @click.prevent="publish"
@@ -238,17 +239,17 @@ onMounted(() => {
       </div>
       <div v-if="(isCreate && isCreateInited) || bouquet.id" class="fr-mt-4w">
         <h2>Description du bouquet de données</h2>
+        <!-- TODO: only one component when layout is final -->
         <BouquetPropertiesFieldGroup
           v-model:bouquet-name="bouquet.name"
           v-model:bouquet-description="bouquet.description"
-          @update-validation="(isValid: boolean) => isMinimalValid = isValid"
+          @update-validation="(isValid: boolean) => stepsValidation[0] = isValid"
         />
-        <hr />
-        <h2>Informations du bouquet de données</h2>
         <BouquetInformationsFieldGroup
           v-model:theme="bouquet.theme"
           v-model:subtheme="bouquet.subtheme"
           v-model:spatial-field="bouquet.spatial"
+          @update-validation="(isValid: boolean) => stepsValidation[1] = isValid"
         />
         <hr />
         <div
@@ -293,6 +294,7 @@ onMounted(() => {
             @click.prevent="save"
           />
           <DsfrButton
+            :disabled="!canSave"
             class="fr-mb-1w fr-ml-1w"
             label="Publier"
             @click.prevent="publish"

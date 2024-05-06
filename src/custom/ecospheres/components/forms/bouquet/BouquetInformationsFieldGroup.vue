@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch, type ComputedRef } from 'vue'
 
 import { ConfigUtils } from '@/config'
 import { NoOptionSelected, type SelectOption, type Theme } from '@/model'
@@ -23,11 +23,16 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits([
+const emits = defineEmits([
+  'updateValidation',
   'update:theme',
   'update:subtheme',
   'update:spatialField'
 ])
+
+const isValid: ComputedRef<boolean> = computed(() => {
+  return props.theme !== NoOptionSelected && props.subtheme !== NoOptionSelected
+})
 
 const spatialCoverage = useSpatialCoverageFromField(props.spatialField)
 
@@ -46,23 +51,33 @@ const subthemeOptions = computed((): SelectOption[] => {
 })
 
 const switchTheme = (event: Event) => {
-  emit('update:theme', (event.target as HTMLSelectElement).value)
-  emit('update:subtheme', NoOptionSelected)
+  emits('update:theme', (event.target as HTMLSelectElement).value)
+  emits('update:subtheme', NoOptionSelected)
 }
 
 const switchSubtheme = (event: Event) => {
-  emit('update:subtheme', (event.target as HTMLSelectElement).value)
+  emits('update:subtheme', (event.target as HTMLSelectElement).value)
 }
 
 const onUpdateSpatialCoverage = (value: SpatialCoverage | null) => {
   const zones = value === null ? null : [value.id]
-  emit('update:spatialField', { ...props.spatialField, zones } as SpatialField)
+  emits('update:spatialField', { ...props.spatialField, zones } as SpatialField)
 }
+
+watch(
+  isValid,
+  (newValue) => {
+    emits('updateValidation', newValue)
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
   <div class="fr-select-group fr-mt-1w">
-    <label class="fr-label" for="select_theme">Thématique</label>
+    <label class="fr-label" for="select_theme"
+      >Thématique <span class="required">&nbsp;*</span></label
+    >
     <select id="select_theme" class="fr-select" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
         Choisir une thématique
@@ -79,7 +94,9 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | null) => {
   </div>
 
   <div class="fr-select-group fr-mt-1w">
-    <label class="fr-label" for="select_subtheme">Chantier</label>
+    <label class="fr-label" for="select_subtheme"
+      >Chantier <span class="required">&nbsp;*</span></label
+    >
     <select
       id="select_subtheme"
       class="fr-select"
