@@ -23,6 +23,8 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
 
+import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
+
 const route = useRouteParamsAsString()
 const router = useRouter()
 const store = useTopicStore()
@@ -208,10 +210,10 @@ onMounted(() => {
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <BouquetDatasetList
+        <BouquetDatasetList :datasets="datasetsProperties" :is-edit="canEdit" />
+        <BouquetDatasetListExport
           :datasets="datasetsProperties"
-          :is-edit="canEdit"
-          :bouquet-id="bouquet.id"
+          :filename="bouquet.id"
         />
       </DsfrTabContent>
       <!-- Discussions -->
@@ -232,6 +234,7 @@ onMounted(() => {
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
+        <!-- FIXME: fails when coming from bouquet add -->
         <ReusesList model="topic" :object-id="bouquet.id" />
       </DsfrTabContent>
     </DsfrTabs>

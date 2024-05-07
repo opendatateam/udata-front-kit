@@ -8,7 +8,6 @@ import { fromMarkdown } from '@/utils'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
-import BouquetDatasetListExport from './BouquetDatasetListExport.vue'
 import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
 
 const props = defineProps({
@@ -16,21 +15,23 @@ const props = defineProps({
     type: Array<DatasetProperties>,
     default: []
   },
-  bouquetId: {
-    type: String,
-    required: true
-  },
   isEdit: {
     type: Boolean,
     default: false
   }
 })
 
-const emits = defineEmits(['removeDataset', 'editDataset', 'reorderDatasets'])
+const emits = defineEmits([
+  'removeDataset',
+  'editDataset',
+  'reorderDatasets',
+  'updateDatasets'
+])
 
 const isReorder = ref(false)
 const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 const isModalOpen = ref(false)
+const localDatasets = ref([...props.datasets])
 const editedDataset = ref({
   index: undefined as number | undefined,
   data: undefined as DatasetProperties | undefined,
@@ -65,7 +66,7 @@ const modalActions = computed(() => {
 })
 
 const expandAll = () => {
-  for (const [idx] of props.datasets.entries()) {
+  for (const [idx] of localDatasets.value.entries()) {
     expandStore.value[getAccordeonId(idx)] = getAccordeonId(idx)
   }
 }
@@ -97,11 +98,11 @@ const saveOrder = () => {
   // bubble up or do it here?
   console.log('saveOrder')
   isReorder.value = false
+  emits('updateDatasets', localDatasets.value)
 }
 
 const cancelReorder = () => {
-  // TODO: handle revert somehow, keep previous order in local var?
-  console.log('cancelReorder')
+  localDatasets.value = [...props.datasets]
   isReorder.value = false
 }
 </script>
@@ -155,13 +156,13 @@ const cancelReorder = () => {
     </div>
   </div>
   <!-- Actual datasets list -->
-  <div v-if="datasets.length < 1" class="no-dataset">
+  <div v-if="localDatasets.length < 1" class="no-dataset">
     <p>Ce bouquet ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div class="align-right fr-mb-1v small">
       <a
-        v-if="expandedIds.length !== datasets.length"
+        v-if="expandedIds.length !== localDatasets.length"
         href="#"
         @click.stop.prevent="expandAll"
         >Tout déplier</a
@@ -172,11 +173,11 @@ const cancelReorder = () => {
       <!-- conditionnal draggable wrapper component -->
       <component
         :is="isReorder ? draggable : 'div'"
-        :list="isReorder ? datasets : null"
+        :list="isReorder ? localDatasets : null"
         :ghost-class="isReorder ? 'ghost' : null"
         @change="isReorder ? emits('reorderDatasets') : null"
       >
-        <li v-for="(dataset, index) in datasets" :key="index">
+        <li v-for="(dataset, index) in localDatasets" :key="index">
           <DsfrAccordion
             :id="getAccordeonId(index)"
             :expanded-id="expandStore[getAccordeonId(index)]"
@@ -231,9 +232,6 @@ const cancelReorder = () => {
     </DsfrAccordionsGroup>
   </div>
 
-  <!-- Export list button -->
-  <BouquetDatasetListExport :datasets="datasets" :filename="bouquetId" />
-
   <!-- add/edit modal -->
   <DsfrModal
     v-if="isEdit && isModalOpen && editedDataset.data"
@@ -245,7 +243,7 @@ const cancelReorder = () => {
   >
     <DatasetPropertiesFields
       v-model:dataset-properties="editedDataset.data"
-      :already-selected-datasets="datasets"
+      :already-selected-datasets="localDatasets"
       @update-validation="(isValid: boolean) => editedDataset.isValid = isValid"
     />
   </DsfrModal>
