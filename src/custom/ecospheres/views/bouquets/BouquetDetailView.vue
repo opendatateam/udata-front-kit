@@ -64,7 +64,6 @@ const onUpdateDatasets = () => {
     throw Error('Trying to update null topic')
   }
   const loader = useLoading().show()
-  console.log('onUpdateDatasets', datasetsProperties.value)
   store
     .update(topic.value.id, {
       // send the tags or they will be erased

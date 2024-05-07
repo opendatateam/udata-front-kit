@@ -3,7 +3,8 @@ import { computed, ref, defineModel, type Ref } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import config from '@/config'
-import { type DatasetProperties, isAvailable } from '@/model'
+import { type DatasetProperties, isAvailable, Availability } from '@/model'
+import type { DatasetModalData } from '@/model/dataset'
 import { fromMarkdown } from '@/utils'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
@@ -29,10 +30,9 @@ const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 const isModalOpen = ref(false)
 // make a copy for local reordering before save
 const originalDatasets = ref([...datasets.value])
-const editedDataset = ref({
-  index: undefined as number | undefined,
-  data: undefined as DatasetProperties | undefined,
-  isValid: false
+const modalData: Ref<DatasetModalData> = ref({
+  isValid: false,
+  mode: 'edit'
 })
 
 const expandedIds = computed(() => {
@@ -43,16 +43,10 @@ const modalActions = computed(() => {
   return [
     {
       label: 'Valider',
-      disabled: !editedDataset.value.isValid,
+      disabled: !modalData.value.isValid,
       onClick: ($event: PointerEvent) => {
         $event.preventDefault()
-        if (
-          editedDataset.value.index !== undefined &&
-          editedDataset.value.data !== undefined
-        ) {
-          datasets.value[editedDataset.value.index] = editedDataset.value.data
-        }
-        emits('updateDatasets')
+        submitModal(modalData.value)
         closeModal()
       }
     },
@@ -82,8 +76,40 @@ const getAccordeonId = (index: number): string => {
 
 const editDataset = (dataset: DatasetProperties, index: number) => {
   // clone the object to enable cancellation
-  editedDataset.value = { index, data: { ...dataset }, isValid: false }
+  modalData.value = {
+    index,
+    dataset: { ...dataset },
+    isValid: false,
+    mode: 'edit'
+  }
   isModalOpen.value = true
+}
+
+const addDataset = () => {
+  modalData.value = {
+    index: undefined,
+    dataset: {
+      title: '',
+      purpose: '',
+      availability: Availability.LOCAL_AVAILABLE,
+      uri: null,
+      id: null
+    },
+    isValid: false,
+    mode: 'create'
+  }
+  isModalOpen.value = true
+}
+
+const submitModal = (modalData: DatasetModalData) => {
+  if (modalData.dataset) {
+    if (modalData.mode === 'create') {
+      datasets.value.push(modalData.dataset)
+    } else if (modalData.mode === 'edit' && modalData.index) {
+      datasets.value[modalData.index] = modalData.dataset
+    }
+  }
+  emits('updateDatasets')
 }
 
 const removeDataset = (index: number) => {
@@ -95,10 +121,6 @@ const removeDataset = (index: number) => {
 
 const closeModal = () => {
   isModalOpen.value = false
-}
-
-const addDataset = () => {
-  console.log('addDataset')
 }
 
 const saveOrder = () => {
@@ -238,17 +260,21 @@ const cancelReorder = () => {
 
   <!-- add/edit modal -->
   <DsfrModal
-    v-if="isEdit && isModalOpen && editedDataset.data"
+    v-if="isEdit && isModalOpen && modalData.dataset"
     size="lg"
-    title="Éditer le jeu de données"
+    :title="
+      modalData.mode === 'edit'
+        ? 'Éditer le jeu de données'
+        : 'Ajouter un jeu de données'
+    "
     :opened="isModalOpen"
     :actions="modalActions"
     @close="closeModal"
   >
     <DatasetPropertiesFields
-      v-model:dataset-properties="editedDataset.data"
+      v-model:dataset-properties="modalData.dataset"
       :already-selected-datasets="datasets"
-      @update-validation="(isValid: boolean) => editedDataset.isValid = isValid"
+      @update-validation="(isValid: boolean) => modalData.isValid = isValid"
     />
   </DsfrModal>
 </template>

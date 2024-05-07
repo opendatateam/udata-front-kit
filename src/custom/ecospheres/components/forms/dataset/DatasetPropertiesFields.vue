@@ -71,7 +71,6 @@ const isAvailable = computed(() =>
 const onSelectDataset = (value: DatasetV2) => {
   datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
   datasetProperties.value.id = value.id
-  datasetProperties.value.title = value.title
   const resolved = router.resolve({
     name: 'bouquet_detail',
     params: { bid: value.id }
