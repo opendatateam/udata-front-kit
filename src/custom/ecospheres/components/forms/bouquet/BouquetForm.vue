@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { defineModel, computed, ref, onMounted, watch } from 'vue'
 
-import { ConfigUtils } from '@/config'
 import type { Topic, SelectOption, Theme } from '@/model'
 import { NoOptionSelected } from '@/model'
 import type { SpatialCoverage } from '@/model/spatial'
 import { useSpatialCoverageFromField } from '@/utils/spatial'
+import {
+  getThemeByName,
+  getThemeOptions,
+  getSubthemeOptions
+} from '@/utils/theme'
 
 import SelectSpatialCoverage from '../SelectSpatialCoverage.vue'
 
@@ -33,18 +37,17 @@ const isValid = computed(() => {
   )
 })
 
-const selectedTheme = computed((): Theme | null => {
-  return ConfigUtils.getThemeByName(theme.value)
+// TODO: use composable and mutualize with BouquetSearch?
+const selectedTheme = computed((): Theme | undefined => {
+  return getThemeByName(theme.value)
 })
 
 const themeOptions = computed((): SelectOption[] => {
-  return ConfigUtils.getThemeOptions()
+  return getThemeOptions()
 })
 
 const subthemeOptions = computed((): SelectOption[] => {
-  return selectedTheme.value
-    ? ConfigUtils.getSubthemeOptions(selectedTheme.value)
-    : []
+  return selectedTheme.value ? getSubthemeOptions(selectedTheme.value) : []
 })
 
 const switchTheme = (event: Event) => {
