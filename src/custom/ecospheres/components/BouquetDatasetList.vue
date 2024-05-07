@@ -27,7 +27,8 @@ const emits = defineEmits(['updateDatasets'])
 const isReorder = ref(false)
 const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 const isModalOpen = ref(false)
-const localDatasets = ref([...datasets.value])
+// make a copy for local reordering before save
+const originalDatasets = ref([...datasets.value])
 const editedDataset = ref({
   index: undefined as number | undefined,
   data: undefined as DatasetProperties | undefined,
@@ -45,9 +46,13 @@ const modalActions = computed(() => {
       disabled: !editedDataset.value.isValid,
       onClick: ($event: PointerEvent) => {
         $event.preventDefault()
-        // TODO: save dataset for real
-        // do it here or bubble up to detail view?
-        emits('editDataset', { ...editedDataset.value })
+        if (
+          editedDataset.value.index !== undefined &&
+          editedDataset.value.data !== undefined
+        ) {
+          datasets.value[editedDataset.value.index] = editedDataset.value.data
+        }
+        emits('updateDatasets')
         closeModal()
       }
     },
@@ -62,7 +67,7 @@ const modalActions = computed(() => {
 })
 
 const expandAll = () => {
-  for (const [idx] of localDatasets.value.entries()) {
+  for (const [idx] of datasets.value.entries()) {
     expandStore.value[getAccordeonId(idx)] = getAccordeonId(idx)
   }
 }
@@ -81,6 +86,13 @@ const editDataset = (dataset: DatasetProperties, index: number) => {
   isModalOpen.value = true
 }
 
+const removeDataset = (index: number) => {
+  if (window.confirm('Etes-vous sûr de vouloir retirer ce jeu de données ?')) {
+    datasets.value.splice(index, 1)
+    emits('updateDatasets')
+  }
+}
+
 const closeModal = () => {
   isModalOpen.value = false
 }
@@ -91,12 +103,11 @@ const addDataset = () => {
 
 const saveOrder = () => {
   isReorder.value = false
-  datasets.value = localDatasets.value
   emits('updateDatasets')
 }
 
 const cancelReorder = () => {
-  localDatasets.value = [...datasets.value]
+  datasets.value = [...originalDatasets.value]
   isReorder.value = false
 }
 </script>
@@ -110,7 +121,7 @@ const cancelReorder = () => {
     <h2 class="fr-col-auto fr-mb-2v">Composition du bouquet de données</h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
-        v-if="isEdit && localDatasets.length > 0"
+        v-if="isEdit && datasets.length > 0"
         secondary
         size="sm"
         class="fr-mb-1w"
@@ -150,13 +161,13 @@ const cancelReorder = () => {
     </div>
   </div>
   <!-- Actual datasets list -->
-  <div v-if="localDatasets.length < 1" class="no-dataset">
+  <div v-if="datasets.length < 1" class="no-dataset">
     <p>Ce bouquet ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div class="align-right fr-mb-1v small">
       <a
-        v-if="expandedIds.length !== localDatasets.length"
+        v-if="expandedIds.length !== datasets.length"
         href="#"
         @click.stop.prevent="expandAll"
         >Tout déplier</a
@@ -167,10 +178,10 @@ const cancelReorder = () => {
       <!-- conditionnal draggable wrapper component -->
       <component
         :is="isReorder ? draggable : 'div'"
-        :list="isReorder ? localDatasets : null"
+        :list="isReorder ? datasets : null"
         :ghost-class="isReorder ? 'ghost' : null"
       >
-        <li v-for="(dataset, index) in localDatasets" :key="index">
+        <li v-for="(dataset, index) in datasets" :key="index">
           <DsfrAccordion
             :id="getAccordeonId(index)"
             :expanded-id="expandStore[getAccordeonId(index)]"
@@ -187,9 +198,9 @@ const cancelReorder = () => {
             <div v-html="fromMarkdown(dataset.purpose)"></div>
             <!-- FIXME: does not refresh when changing dataset from edit modal -->
             <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
-            <div class="button__wrapper">
+            <div class="fr-grid-row">
               <DsfrButton
-                v-if="isEdit"
+                v-if="isEdit && !isReorder"
                 size="sm"
                 icon="ri-pencil-line"
                 label="Éditer"
@@ -197,12 +208,12 @@ const cancelReorder = () => {
                 @click.prevent="editDataset(dataset, index)"
               />
               <DsfrButton
-                v-if="isEdit"
+                v-if="isEdit && !isReorder"
                 size="sm"
                 icon="ri-delete-bin-line"
                 label="Retirer de la section"
                 class="fr-mr-2w"
-                @click.prevent="$emit('removeDataset', index)"
+                @click.prevent="removeDataset(index)"
               />
               <a
                 v-if="!isAvailable(dataset.availability)"
@@ -236,7 +247,7 @@ const cancelReorder = () => {
   >
     <DatasetPropertiesFields
       v-model:dataset-properties="editedDataset.data"
-      :already-selected-datasets="localDatasets"
+      :already-selected-datasets="datasets"
       @update-validation="(isValid: boolean) => editedDataset.isValid = isValid"
     />
   </DsfrModal>

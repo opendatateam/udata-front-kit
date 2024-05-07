@@ -78,7 +78,7 @@ onMounted(() => {
     </p>
     <p>
       <a
-        class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
         href="https://guides.data.gouv.fr/publier-des-donnees/guide-data.gouv.fr/reutilisations"
       >
         Qu'est-ce qu'une réutilisation ?
