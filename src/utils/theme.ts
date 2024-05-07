@@ -1,3 +1,5 @@
+import { ref, watchEffect, computed, type Ref, type ComputedRef } from 'vue'
+
 import config from '@/config'
 import type { SelectOption, Subtheme, Theme } from '@/model'
 
@@ -35,4 +37,35 @@ export const getSubthemeOptions = (theme: Theme): SelectOption[] => {
       text: subtheme.name
     }
   })
+}
+
+interface UseThemeOptionsReturn {
+  themeOptions: SelectOption[]
+  selectedTheme: Ref<Theme | undefined>
+  subthemeOptions: ComputedRef<SelectOption[]>
+}
+
+/**
+ * Handle theme and related subtheme options computing from a reactive theme name
+ */
+export function useThemeOptions(themeName: Ref<string>): UseThemeOptionsReturn {
+  const themeOptions = getThemeOptions()
+
+  const selectedTheme = ref<Theme | undefined>()
+
+  watchEffect(() => {
+    selectedTheme.value = getThemeByName(themeName.value)
+  })
+
+  const subthemeOptions = computed(() => {
+    return selectedTheme.value != null
+      ? getSubthemeOptions(selectedTheme.value)
+      : []
+  })
+
+  return {
+    themeOptions,
+    selectedTheme,
+    subthemeOptions
+  }
 }
