@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type Ref } from 'vue'
+import { computed, ref, defineModel, type Ref } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import config from '@/config'
@@ -10,28 +10,24 @@ import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import DatasetPropertiesFields from './forms/dataset/DatasetPropertiesFields.vue'
 
-const props = defineProps({
-  datasets: {
-    type: Array<DatasetProperties>,
-    default: []
-  },
+const datasets = defineModel({
+  type: Array<DatasetProperties>,
+  default: []
+})
+
+defineProps({
   isEdit: {
     type: Boolean,
     default: false
   }
 })
 
-const emits = defineEmits([
-  'removeDataset',
-  'editDataset',
-  'reorderDatasets',
-  'updateDatasets'
-])
+const emits = defineEmits(['updateDatasets'])
 
 const isReorder = ref(false)
 const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 const isModalOpen = ref(false)
-const localDatasets = ref([...props.datasets])
+const localDatasets = ref([...datasets.value])
 const editedDataset = ref({
   index: undefined as number | undefined,
   data: undefined as DatasetProperties | undefined,
@@ -94,15 +90,13 @@ const addDataset = () => {
 }
 
 const saveOrder = () => {
-  // TODO: save for real
-  // bubble up or do it here?
-  console.log('saveOrder')
   isReorder.value = false
-  emits('updateDatasets', localDatasets.value)
+  datasets.value = localDatasets.value
+  emits('updateDatasets')
 }
 
 const cancelReorder = () => {
-  localDatasets.value = [...props.datasets]
+  localDatasets.value = [...datasets.value]
   isReorder.value = false
 }
 </script>
@@ -116,7 +110,7 @@ const cancelReorder = () => {
     <h2 class="fr-col-auto fr-mb-2v">Composition du bouquet de données</h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
-        v-if="isEdit"
+        v-if="isEdit && localDatasets.length > 0"
         secondary
         size="sm"
         class="fr-mb-1w"
@@ -175,7 +169,6 @@ const cancelReorder = () => {
         :is="isReorder ? draggable : 'div'"
         :list="isReorder ? localDatasets : null"
         :ghost-class="isReorder ? 'ghost' : null"
-        @change="isReorder ? emits('reorderDatasets') : null"
       >
         <li v-for="(dataset, index) in localDatasets" :key="index">
           <DsfrAccordion

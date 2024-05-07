@@ -45,6 +45,7 @@ const breadcrumbLinks = ref([
   }
 ])
 const spatialCoverage = useSpatialCoverage(topic)
+const datasetsProperties: Ref<DatasetProperties[]> = ref([])
 
 const showDiscussions = config.website.discussions.topic.display
 
@@ -54,12 +55,29 @@ const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value as Topic)
 })
 
-const datasetsProperties = computed((): DatasetProperties[] => {
-  return topic.value?.extras['ecospheres:datasets_properties'] ?? []
-})
-
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
+}
+
+const onUpdateDatasets = () => {
+  if (topic.value == null) {
+    throw Error('Trying to update null topic')
+  }
+  const loader = useLoading().show()
+  console.log('onUpdateDatasets', datasetsProperties.value)
+  store
+    .update(topic.value.id, {
+      // send the tags or they will be erased
+      tags: topic.value.tags,
+      datasets: datasetsProperties.value
+        .filter((d) => d.id !== null)
+        .map((d) => d.id),
+      extras: {
+        ...topic.value.extras,
+        'ecospheres:datasets_properties': datasetsProperties.value
+      }
+    })
+    .finally(() => loader.hide())
 }
 
 const metaDescription = (): string | undefined => {
@@ -97,7 +115,8 @@ onMounted(() => {
       theme.value = topic.value?.extras['ecospheres:informations'][0].theme
       subtheme.value =
         topic.value?.extras['ecospheres:informations'][0].subtheme
-
+      datasetsProperties.value =
+        res.extras['ecospheres:datasets_properties'] ?? []
       breadcrumbLinks.value.push(
         {
           text: theme.value,
@@ -207,7 +226,11 @@ onMounted(() => {
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <BouquetDatasetList :datasets="datasetsProperties" :is-edit="canEdit" />
+        <BouquetDatasetList
+          v-model="datasetsProperties"
+          :is-edit="canEdit"
+          @update-datasets="onUpdateDatasets"
+        />
         <BouquetDatasetListExport
           :datasets="datasetsProperties"
           :filename="topic.id"
