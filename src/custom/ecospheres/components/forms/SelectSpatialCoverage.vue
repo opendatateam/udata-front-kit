@@ -96,3 +96,23 @@ onMounted(() => {
     </template>
   </Multiselect>
 </template>
+
+<style lang="scss">
+// /!\ style won't apply to .multiselect-option if style=scoped
+// so we're scoping manually with a parent class
+.multiselect-spatial-coverage {
+  .multiselect-options {
+    .multiselect-option {
+      flex-direction: column;
+      align-items: flex-start;
+      .code,
+      .level {
+        font-size: 0.8rem;
+      }
+      .level {
+        display: block;
+      }
+    }
+  }
+}
+</style>
