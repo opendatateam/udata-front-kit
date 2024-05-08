@@ -102,10 +102,10 @@ const addDataset = () => {
 }
 
 const submitModal = (modalData: DatasetModalData) => {
-  if (modalData.dataset) {
+  if (modalData.dataset !== undefined) {
     if (modalData.mode === 'create') {
       datasets.value.push(modalData.dataset)
-    } else if (modalData.mode === 'edit' && modalData.index) {
+    } else if (modalData.mode === 'edit' && modalData.index !== undefined) {
       datasets.value[modalData.index] = modalData.dataset
     }
   }
@@ -218,7 +218,6 @@ const cancelReorder = () => {
             </template>
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="fromMarkdown(dataset.purpose)"></div>
-            <!-- FIXME: does not refresh when changing dataset from edit modal -->
             <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
             <div class="fr-grid-row">
               <DsfrButton
