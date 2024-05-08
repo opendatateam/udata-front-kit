@@ -59,6 +59,18 @@ const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
 }
 
+const togglePublish = () => {
+  if (topic.value === null) return
+  topic.value.private = !topic.value.private
+  const loader = useLoading().show()
+  store
+    .update(topic.value.id, {
+      tags: topic.value.tags,
+      private: topic.value.private
+    })
+    .finally(() => loader.hide())
+}
+
 const onUpdateDatasets = () => {
   if (topic.value == null) {
     throw Error('Trying to update null topic')
@@ -160,6 +172,24 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
+        <div class="fr-mb-2w">
+          <DsfrButton
+            v-if="canEdit"
+            secondary
+            size="md"
+            label="Éditer"
+            icon="ri-pencil-line"
+            @click="goToEdit"
+          />
+          <DsfrButton
+            v-if="canEdit"
+            size="md"
+            :label="topic.private ? 'Publier' : 'Dépublier'"
+            icon="ri-eye-line"
+            class="fr-ml-1w"
+            @click="togglePublish"
+          />
+        </div>
         <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
         <div v-if="topic.organization" class="fr-grid-row fr-grid-row--middle">
           <div class="fr-col-auto">
@@ -197,13 +227,6 @@ onMounted(() => {
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
           <p>{{ spatialCoverage.name }}</p>
         </div>
-        <DsfrButton
-          v-if="canEdit"
-          size="md"
-          label="Editer le bouquet"
-          icon="ri-pencil-line"
-          @click="goToEdit"
-        />
       </div>
     </div>
 
