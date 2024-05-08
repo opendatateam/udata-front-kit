@@ -253,7 +253,6 @@ onMounted(() => {
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <!-- FIXME: fails when coming from bouquet add -->
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>

@@ -114,18 +114,22 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Get a single topic from store or API
      */
-    async load(slugOrId: string) {
+    async load(slugOrId: string): Promise<Topic> {
       const existing = this.get(slugOrId)
       if (existing !== undefined) return existing
-      return await topicsAPIv2.get(slugOrId)
+      const topic = await topicsAPIv2.get(slugOrId)
+      this.data.push(topic)
+      return topic
     },
     /**
      * Create a topic
      */
-    async create(topic: any): Promise<Topic> {
-      const res = await topicsAPI.create(topic)
-      this.data.push(res)
-      return res
+    async create(topicData: any): Promise<Topic> {
+      const res = await topicsAPI.create(topicData)
+      // get the v2 version (create res is v1) for storage
+      const topic = await topicsAPIv2.get(res.id)
+      this.data.push(topic)
+      return topic
     },
     /**
      * Update a topic
@@ -133,7 +137,9 @@ export const useTopicStore = defineStore('topic', {
     async update(topicId: string, data: any): Promise<Topic> {
       const res = await topicsAPI.update(topicId, data)
       const idx = this.data.findIndex((b) => b.id === topicId)
-      this.data[idx] = res
+      // do not apply reuses and datasets because they're in v1 format
+      const { reuses, datasets, ...remoteData } = res
+      this.data[idx] = { ...this.data[idx], ...remoteData }
       return res
     },
     /**
