@@ -4,7 +4,7 @@ import { defineModel, computed, ref, onMounted, watch } from 'vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
-import { useSpatialCoverageFromField } from '@/utils/spatial'
+import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
 import SelectSpatialCoverage from '../SelectSpatialCoverage.vue'
@@ -16,7 +16,7 @@ const topic = defineModel({
 
 const emits = defineEmits(['updateValidation'])
 
-const spatialCoverage = useSpatialCoverageFromField(topic.value.spatial)
+const spatialCoverage = useSpatialCoverage(topic)
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
@@ -46,8 +46,8 @@ const switchSubtheme = (event: Event) => {
   subtheme.value = (event.target as HTMLSelectElement).value
 }
 
-const onUpdateSpatialCoverage = (value: SpatialCoverage | null) => {
-  const zones = value === null ? null : [value.id]
+const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
+  const zones = value === undefined ? null : [value.id]
   topic.value.spatial = { ...topic.value.spatial, zones }
 }
 
@@ -161,7 +161,7 @@ onMounted(() => {
       >Couverture territoriale</label
     >
     <SelectSpatialCoverage
-      :value="spatialCoverage"
+      v-model="spatialCoverage"
       @update:model-value="onUpdateSpatialCoverage"
     />
   </div>
