@@ -47,30 +47,6 @@ interface BreadcrumbItem {
   to?: string
 }
 
-type Bouquet = Owned & {
-  id: string
-  name: string
-  description: string
-  theme: string | undefined
-  subtheme: string | undefined
-  datasetsProperties: DatasetProperties[]
-  spatial: SpatialField | undefined
-  private: boolean
-}
-
-interface BouquetCreationData {
-  name: string
-  description: string
-  private: boolean
-  tags: string[]
-}
-
-interface BouquetEditionData extends BouquetCreationData {
-  datasets: string[] // list of ids (for the dataset which have one)
-  extras: TopicExtras
-  spatial: SpatialField | undefined
-}
-
 interface TopicExtras {
   ['ecospheres:informations']: Array<{
     theme: string
@@ -107,9 +83,6 @@ export type {
   SelectOption,
   BreadcrumbItem,
   Topic,
-  Bouquet,
   DatasetProperties,
-  BouquetCreationData,
-  BouquetEditionData,
   WithOwned
 }
