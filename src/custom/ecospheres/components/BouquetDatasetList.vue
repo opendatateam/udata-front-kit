@@ -113,7 +113,11 @@ const submitModal = (modalData: DatasetModalData) => {
 }
 
 const removeDataset = (index: number) => {
-  if (window.confirm('Etes-vous sûr de vouloir retirer ce jeu de données ?')) {
+  if (
+    window.confirm(
+      'Etes-vous sûr de vouloir supprimer ce jeu de données du bouquet ?'
+    )
+  ) {
     datasets.value.splice(index, 1)
     emits('updateDatasets')
   }
@@ -222,22 +226,23 @@ const cancelReorder = () => {
             <div class="fr-grid-row">
               <DsfrButton
                 v-if="isEdit && !isReorder"
+                secondary
+                size="sm"
+                icon="ri-delete-bin-line"
+                label="Supprimer"
+                class="fr-mr-2w"
+                @click.prevent="removeDataset(index)"
+              />
+              <DsfrButton
+                v-if="isEdit && !isReorder"
                 size="sm"
                 icon="ri-pencil-line"
                 label="Éditer"
                 class="fr-mr-2w"
                 @click.prevent="editDataset(dataset, index)"
               />
-              <DsfrButton
-                v-if="isEdit && !isReorder"
-                size="sm"
-                icon="ri-delete-bin-line"
-                label="Retirer de la section"
-                class="fr-mr-2w"
-                @click.prevent="removeDataset(index)"
-              />
               <a
-                v-if="!isAvailable(dataset.availability)"
+                v-if="!isAvailable(dataset.availability) && !isEdit"
                 class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                 :href="`mailto:${config.website.contact_email}`"
               >
