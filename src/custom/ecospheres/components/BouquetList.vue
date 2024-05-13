@@ -4,8 +4,8 @@ import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute } from 'vue-router'
 
-import type { Topic } from '@/model'
-import { NoOptionSelected } from '@/model'
+import { NoOptionSelected } from '@/model/theme'
+import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 
 import BouquetCard from '../components/BouquetCard.vue'

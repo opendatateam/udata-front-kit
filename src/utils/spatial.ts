@@ -1,7 +1,7 @@
 import { ref, watch, type Ref } from 'vue'
 
-import type { Topic } from '@/model'
 import type { SpatialField, SpatialCoverage } from '@/model/spatial'
+import type { Topic } from '@/model/topic'
 import SpatialAPI from '@/services/api/SpatialAPI'
 
 export const getZoneFromSpatial = async (

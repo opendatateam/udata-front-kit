@@ -5,7 +5,7 @@ import { defineModel, ref, watch, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
-import type { DatasetProperties } from '@/model'
+import type { DatasetProperties } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchAPI'
 
 import DatasetCardForSelect from './DatasetCardForSelect.vue'

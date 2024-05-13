@@ -1,6 +1,6 @@
 import { Parser } from '@json2csv/plainjs'
 
-import type { DatasetProperties } from '@/model'
+import type { DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
 interface DatasetRow {

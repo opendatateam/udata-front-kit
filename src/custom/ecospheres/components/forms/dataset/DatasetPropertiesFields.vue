@@ -3,12 +3,9 @@ import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import { ref, computed, watch, type PropType, type Ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
-import {
-  Availability,
-  isAvailable as isAvailableTest,
-  type DatasetProperties
-} from '@/model'
+import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
+import { isAvailable as isAvailableTest } from '@/utils/topic'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'

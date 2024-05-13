@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DatasetProperties } from '@/model'
+import type { DatasetProperties } from '@/model/topic'
 
 import BouquetDatasetAvailability from './BouquetDatasetAvailability.vue'
 

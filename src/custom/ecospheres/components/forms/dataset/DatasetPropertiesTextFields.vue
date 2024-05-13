@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Tooltip from '@/components/TooltipWrapper.vue'
-import type { DatasetProperties } from '@/model'
+import type { DatasetProperties } from '@/model/topic'
 
 const props = defineProps({
   datasetProperties: {

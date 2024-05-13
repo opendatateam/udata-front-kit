@@ -5,7 +5,7 @@ import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'
 
 import Tooltip from '@/components/TooltipWrapper.vue'
-import { Availability, type DatasetProperties, type Topic } from '@/model'
+import { Availability, type DatasetProperties, type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 
 import DatasetPropertiesTextFields from '../forms/dataset/DatasetPropertiesTextFields.vue'

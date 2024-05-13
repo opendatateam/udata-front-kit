@@ -2,8 +2,8 @@
 import { ref, watch, watchEffect, toRef, type Ref, type PropType } from 'vue'
 import { useRouter, type LocationQueryRaw } from 'vue-router'
 
-import { NoOptionSelected } from '@/model'
 import type { SpatialCoverage } from '@/model/spatial'
+import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
 import { useThemeOptions } from '@/utils/theme'

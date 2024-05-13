@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineModel, computed, ref, onMounted, watch } from 'vue'
 
-import type { Topic } from '@/model'
-import { NoOptionSelected } from '@/model'
 import type { SpatialCoverage } from '@/model/spatial'
+import { NoOptionSelected } from '@/model/theme'
+import type { Topic } from '@/model/topic'
 import { useSpatialCoverageFromField } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 

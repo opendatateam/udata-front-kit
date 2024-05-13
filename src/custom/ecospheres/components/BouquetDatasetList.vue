@@ -3,9 +3,10 @@ import { computed, ref, defineModel, type Ref } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import config from '@/config'
-import { type DatasetProperties, isAvailable, Availability } from '@/model'
 import type { DatasetModalData } from '@/model/dataset'
+import { type DatasetProperties, Availability } from '@/model/topic'
 import { fromMarkdown } from '@/utils'
+import { isAvailable } from '@/utils/topic'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'

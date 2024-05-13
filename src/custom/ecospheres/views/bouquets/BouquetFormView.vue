@@ -4,7 +4,8 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
-import { NoOptionSelected, type Topic } from '@/model'
+import { NoOptionSelected } from '@/model/theme'
+import type { Topic } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 

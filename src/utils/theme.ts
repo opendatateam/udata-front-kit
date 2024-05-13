@@ -1,7 +1,7 @@
 import { ref, watchEffect, computed, type Ref, type ComputedRef } from 'vue'
 
 import config from '@/config'
-import type { SelectOption, Subtheme, Theme } from '@/model'
+import type { ThemeSelectOption, Subtheme, Theme } from '@/model/theme'
 
 const convertToHex = (hex: string): string => {
   return `#${parseInt(hex, 16).toString(16).padStart(6, '0')}`
@@ -21,7 +21,7 @@ export const getThemeTextColor = (themeName: string): string => {
   return theme?.textColor != null ? convertToHex(theme.textColor) : '#000000b3'
 }
 
-export const getThemeOptions = (): SelectOption[] => {
+export const getThemeOptions = (): ThemeSelectOption[] => {
   return config.themes.map((theme: Theme) => {
     return {
       value: theme.name,
@@ -30,7 +30,7 @@ export const getThemeOptions = (): SelectOption[] => {
   })
 }
 
-export const getSubthemeOptions = (theme: Theme): SelectOption[] => {
+export const getSubthemeOptions = (theme: Theme): ThemeSelectOption[] => {
   return theme.subthemes.map((subtheme: Subtheme) => {
     return {
       value: subtheme.name,
@@ -40,9 +40,9 @@ export const getSubthemeOptions = (theme: Theme): SelectOption[] => {
 }
 
 interface UseThemeOptionsReturn {
-  themeOptions: SelectOption[]
+  themeOptions: ThemeSelectOption[]
   selectedTheme: Ref<Theme | undefined>
-  subthemeOptions: ComputedRef<SelectOption[]>
+  subthemeOptions: ComputedRef<ThemeSelectOption[]>
 }
 
 /**

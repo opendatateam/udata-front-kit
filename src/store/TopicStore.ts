@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { computed, type ComputedRef } from 'vue'
 
 import config from '@/config'
-import type { Topic } from '@/model'
 import type { TopicConf } from '@/model/config'
+import type { Topic } from '@/model/topic'
 
 import TopicsAPI from '../services/api/resources/TopicsAPI'
 import { useUserStore } from './UserStore'

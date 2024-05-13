@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
 
-import type { Topic } from '@/model'
-import { NoOptionSelected } from '@/model'
+import { NoOptionSelected } from '@/model/theme'
+import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
