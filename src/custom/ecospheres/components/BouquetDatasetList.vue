@@ -285,13 +285,16 @@ const cancelReorder = () => {
   </DsfrModal>
 </template>
 
+<style lang="scss">
+.bouquet-dataset-modal {
+  h1 {
+    margin-bottom: 1rem;
+  }
+}
+</style>
+
 <style scoped lang="scss">
 .ghost {
   background-color: #bbb;
-}
-.bouquet-dataset-modal {
-  h1 {
-    margin-bottom: 0;
-  }
 }
 </style>
