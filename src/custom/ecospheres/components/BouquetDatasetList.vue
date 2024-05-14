@@ -267,6 +267,7 @@ const cancelReorder = () => {
   <DsfrModal
     v-if="isEdit && isModalOpen && modalData.dataset"
     size="lg"
+    class="bouquet-dataset-modal"
     :title="
       modalData.mode === 'edit'
         ? 'Éditer le jeu de données'
@@ -287,5 +288,10 @@ const cancelReorder = () => {
 <style scoped lang="scss">
 .ghost {
   background-color: #bbb;
+}
+.bouquet-dataset-modal {
+  h1 {
+    margin-bottom: 0;
+  }
 }
 </style>
