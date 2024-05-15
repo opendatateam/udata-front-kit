@@ -19,7 +19,7 @@ robots:
     - /admin
     - /datasets
     - /organizations
-  sitemap:
+  sitemap: https://ecospheres-sitemap.app.france.sh/sitemap.xml
 
 # UI customizations
 website:
