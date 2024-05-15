@@ -100,7 +100,6 @@ watch(
   (newVal, oldVal) => {
     if (oldVal !== newVal && newVal !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
-      datasetProperties.value.title = ''
     }
   }
 )
