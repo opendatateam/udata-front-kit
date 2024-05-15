@@ -25,7 +25,7 @@ const updateDatasetProperties = (
 <template>
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="label"
-      >Nom du jeu de données <span class="required">&nbsp;*</span></label
+      >Libellé du jeu de données <span class="required">&nbsp;*</span></label
     >
     <input
       id="label"

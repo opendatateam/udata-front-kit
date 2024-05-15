@@ -129,6 +129,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <DatasetPropertiesTextFields v-model:dataset-properties="datasetProperties" />
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="link"
       >Jeu de données
@@ -194,9 +195,6 @@ onMounted(() => {
         class="fr-mb-md-1w"
       />
     </div>
-    <DatasetPropertiesTextFields
-      v-model:dataset-properties="datasetProperties"
-    />
   </div>
 </template>
 
