@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import { debounce } from 'lodash'
-import { defineModel, ref, watch, type Ref } from 'vue'
+import { defineModel, ref, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
@@ -20,8 +20,6 @@ const props = defineProps({
     default: []
   }
 })
-
-const emits = defineEmits(['select-dataset', 'clear-dataset'])
 
 const isLoading = ref(false)
 const options: Ref<DatasetV2[]> = ref([])
@@ -51,14 +49,7 @@ const search = debounce(async (query: string) => {
 
 const clear = () => {
   selectedDataset.value = undefined
-  emits('clear-dataset')
 }
-
-watch(selectedDataset, () => {
-  if (selectedDataset.value !== undefined) {
-    emits('select-dataset', selectedDataset.value)
-  }
-})
 </script>
 
 <template>
@@ -82,7 +73,7 @@ watch(selectedDataset, () => {
     :hide-selected="true"
     @search-change="search"
   >
-    <template #caret>
+    <template #clear>
       <div
         v-if="selectedDataset"
         class="multiselect__clear"

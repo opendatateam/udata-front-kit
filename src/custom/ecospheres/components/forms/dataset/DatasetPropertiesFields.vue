@@ -65,19 +65,19 @@ const isAvailable = computed(() =>
   isAvailableTest(datasetProperties.value.availability)
 )
 
-const onSelectDataset = (value: DatasetV2) => {
-  datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
-  datasetProperties.value.id = value.id
-  const resolved = router.resolve({
-    name: 'bouquet_detail',
-    params: { bid: value.id }
-  })
-  datasetProperties.value.uri = resolved.href
-}
-
-const onClearDataset = () => {
-  datasetProperties.value.uri = null
-  datasetProperties.value.id = null
+const onSelectDataset = (value: DatasetV2 | undefined) => {
+  if (value === undefined) {
+    datasetProperties.value.uri = null
+    datasetProperties.value.id = null
+  } else {
+    datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
+    datasetProperties.value.id = value.id
+    const resolved = router.resolve({
+      name: 'bouquet_detail',
+      params: { bid: value.id }
+    })
+    datasetProperties.value.uri = resolved.href
+  }
 }
 
 watch(
@@ -140,8 +140,7 @@ onMounted(() => {
     <SelectDataset
       v-model="selectedDataset"
       :already-selected-datasets="alreadySelectedDatasets"
-      @select-dataset="onSelectDataset"
-      @clear-dataset="onClearDataset"
+      @update:model-value="onSelectDataset"
     />
   </div>
   <div v-if="!selectedDataset" class="fr-mt-4w">
