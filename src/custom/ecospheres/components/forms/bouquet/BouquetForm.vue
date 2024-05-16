@@ -23,8 +23,10 @@ const subtheme = ref(NoOptionSelected)
 
 const isValid = computed(() => {
   return (
-    topic.value.name?.trim() !== '' &&
-    topic.value.description?.trim() !== '' &&
+    topic.value.name &&
+    topic.value.name.trim() !== '' &&
+    topic.value.description &&
+    topic.value.description.trim() !== '' &&
     topic.value.extras &&
     topic.value.extras['ecospheres:informations'][0].theme !==
       NoOptionSelected &&
