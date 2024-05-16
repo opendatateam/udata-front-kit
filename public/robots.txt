@@ -2,3 +2,4 @@ User-agent: *
 Disallow: /admin
 Disallow: /datasets
 Disallow: /organizations
+Sitemap: https://ecospheres-sitemap.app.france.sh/sitemap.xml
