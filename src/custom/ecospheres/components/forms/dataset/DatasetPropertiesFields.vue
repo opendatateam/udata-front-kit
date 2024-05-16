@@ -183,7 +183,7 @@ onMounted(() => {
       class="fr-mt-1w fr-mb-4w"
     >
       <label class="fr-label" for="alt-link">
-        Déclarer le chemin d'accés vers le jeu de données<span class="required"
+        Déclarer le chemin d'accès vers le jeu de données<span class="required"
           >&nbsp;*</span
         >
       </label>
