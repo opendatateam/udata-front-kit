@@ -43,7 +43,7 @@ const expandedIds = computed(() => {
 const modalActions = computed(() => {
   return [
     {
-      label: 'Valider',
+      label: 'Enregistrer',
       disabled: !modalData.value.isValid,
       onClick: ($event: PointerEvent) => {
         $event.preventDefault()

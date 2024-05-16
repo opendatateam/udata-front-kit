@@ -56,7 +56,7 @@ const isValid = computed(() => {
 const modalActions = computed(() => {
   return [
     {
-      label: 'Valider',
+      label: 'Enregistrer',
       disabled: !isValid.value,
       onClick: () => submit()
     },
