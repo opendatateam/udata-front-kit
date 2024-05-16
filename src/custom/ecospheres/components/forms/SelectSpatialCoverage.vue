@@ -81,7 +81,7 @@ onMounted(() => {
     :hide-selected="false"
     @search-change="search"
   >
-    <template #clear>
+    <template #caret>
       <div
         v-if="selectedSpatialCoverage"
         class="multiselect__clear"
