@@ -148,7 +148,7 @@ const cancelReorder = () => {
     <h2 class="fr-col-auto fr-mb-2v">Composition du bouquet de données</h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
-        v-if="isEdit && datasets.length > 0"
+        v-if="isEdit && datasets.length >= 2"
         secondary
         size="sm"
         class="fr-mb-1w"
