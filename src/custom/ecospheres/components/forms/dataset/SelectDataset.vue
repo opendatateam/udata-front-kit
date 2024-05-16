@@ -73,7 +73,7 @@ const clear = () => {
     :hide-selected="true"
     @search-change="search"
   >
-    <template #clear>
+    <template #caret>
       <div
         v-if="selectedDataset"
         class="multiselect__clear"
