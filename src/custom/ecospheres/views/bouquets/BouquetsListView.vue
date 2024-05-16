@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import BouquetList from '@/custom/ecospheres/components/BouquetList.vue'
 import BouquetSearch from '@/custom/ecospheres/components/BouquetSearch.vue'
-import { type BreadcrumbItem, NoOptionSelected } from '@/model'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
+import { NoOptionSelected } from '@/model/theme'
 
 const route = useRoute()
 const router = useRouter()

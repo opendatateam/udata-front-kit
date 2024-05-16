@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DatasetProperties } from '@/model'
-import { isAvailable } from '@/model'
+import type { DatasetProperties } from '@/model/topic'
+import { isAvailable } from '@/utils/topic'
 
 const missingData = 'Non disponible'
 

@@ -29,14 +29,16 @@ export const routes = [
     path: `/admin/bouquets/add`,
     name: 'bouquet_add',
     component: async () =>
-      await import('@/custom/ecospheres/views/bouquets/BouquetAddView.vue'),
-    meta: { requiresAuth: true }
+      await import('@/custom/ecospheres/views/bouquets/BouquetFormView.vue'),
+    meta: { requiresAuth: true },
+    props: { isCreate: true }
   },
   {
     path: `/admin/bouquets/edit/:bid`,
     name: 'bouquet_edit',
     component: async () =>
-      await import('@/custom/ecospheres/views/bouquets/BouquetEditView.vue'),
-    meta: { requiresAuth: true }
+      await import('@/custom/ecospheres/views/bouquets/BouquetFormView.vue'),
+    meta: { requiresAuth: true },
+    props: { isCreate: false }
   }
 ]

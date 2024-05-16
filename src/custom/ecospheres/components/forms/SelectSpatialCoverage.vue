@@ -96,3 +96,21 @@ onMounted(() => {
     </template>
   </Multiselect>
 </template>
+
+<style lang="scss">
+.multiselect-spatial-coverage {
+  .multiselect-options {
+    .multiselect-option {
+      flex-direction: column;
+      align-items: flex-start;
+      .code,
+      .level {
+        font-size: 0.8rem;
+      }
+      .level {
+        display: block;
+      }
+    }
+  }
+}
+</style>

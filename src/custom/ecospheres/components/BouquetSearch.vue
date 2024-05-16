@@ -1,21 +1,12 @@
 <script setup lang="ts">
-import {
-  ref,
-  computed,
-  watch,
-  watchEffect,
-  type ComputedRef,
-  type Ref,
-  type PropType
-} from 'vue'
+import { ref, watch, watchEffect, toRef, type Ref, type PropType } from 'vue'
 import { useRouter, type LocationQueryRaw } from 'vue-router'
 
-import { ConfigUtils } from '@/config'
-import { NoOptionSelected } from '@/model'
-import type { SelectOption, Theme } from '@/model'
 import type { SpatialCoverage } from '@/model/spatial'
+import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
+import { useThemeOptions } from '@/utils/theme'
 
 import SelectSpatialCoverage from './forms/SelectSpatialCoverage.vue'
 
@@ -45,17 +36,8 @@ const showDrafts = ref(false)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | null> = ref(null)
 
-const themeOptions = ConfigUtils.getThemeOptions()
-
-const selectedTheme: ComputedRef<Theme | null> = computed(() => {
-  return ConfigUtils.getThemeByName(props.themeName)
-})
-
-const subthemeOptions: ComputedRef<SelectOption[]> = computed(() => {
-  return selectedTheme.value
-    ? ConfigUtils.getSubthemeOptions(selectedTheme.value)
-    : []
-})
+const themeNameRef = toRef(props, 'themeName')
+const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
 const computeQueryArgs = (
   data: Record<string, string | null>

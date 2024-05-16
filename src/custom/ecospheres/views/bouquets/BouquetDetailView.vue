@@ -14,14 +14,14 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
-import type { Theme, Topic, DatasetProperties } from '@/model'
+import type { Topic, DatasetProperties } from '@/model/topic'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { getDatasetListTitle } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
+import { getThemeTextColor, getThemeColor } from '@/utils/theme'
 
 import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
 
@@ -30,7 +30,7 @@ const router = useRouter()
 const store = useTopicStore()
 const loading = useLoading()
 
-const bouquet: Ref<Topic | null> = ref(null)
+const topic: Ref<Topic | null> = ref(null)
 const theme = ref()
 const subtheme = ref()
 const selectedTabIndex = ref(0)
@@ -44,60 +44,65 @@ const breadcrumbLinks = ref([
     text: 'Bouquets'
   }
 ])
-const selectedTheme = ref('')
-const spatialCoverage = useSpatialCoverage(bouquet)
+const spatialCoverage = useSpatialCoverage(topic)
+const datasetsProperties: Ref<DatasetProperties[]> = ref([])
 
 const showDiscussions = config.website.discussions.topic.display
 
-const description = computed(() => descriptionFromMarkdown(bouquet))
+const description = computed(() => descriptionFromMarkdown(topic))
 
 const canEdit = computed(() => {
-  return useUserStore().hasEditPermissions(bouquet.value as Topic)
-})
-
-const datasetsProperties = computed((): DatasetProperties[] => {
-  return bouquet.value?.extras['ecospheres:datasets_properties'] ?? []
+  return useUserStore().hasEditPermissions(topic.value as Topic)
 })
 
 const goToEdit = () => {
-  router.push({ name: 'bouquet_edit', params: { bid: bouquet.value?.id } })
+  router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
 }
 
-const getTheme = (themeName: string): Theme => {
-  return config.themes.find((theme: Theme) => theme.name === themeName)
+const togglePublish = () => {
+  if (topic.value === null) return
+  topic.value.private = !topic.value.private
+  const loader = useLoading().show()
+  store
+    .update(topic.value.id, {
+      tags: topic.value.tags,
+      private: topic.value.private
+    })
+    .finally(() => loader.hide())
 }
 
-const convertToHex = (hex: string): string => {
-  return `#${parseInt(hex, 16).toString(16).padStart(6, '0')}`
-}
-
-const getThemeColor = (themeName: string): string => {
-  const theme = getTheme(themeName)
-  return theme.color ? convertToHex(theme.color) : 'transparent'
-}
-
-const getTextColor = (themeName: string): string => {
-  const theme = getTheme(themeName)
-  return theme.textColor ? convertToHex(theme.textColor) : '#000000b3'
-}
-
-const getSelectedThemeColor = (themed: string) => {
-  selectedTheme.value = themed
-  return getThemeColor(selectedTheme.value)
+const onUpdateDatasets = () => {
+  if (topic.value == null) {
+    throw Error('Trying to update null topic')
+  }
+  const loader = useLoading().show()
+  store
+    .update(topic.value.id, {
+      // send the tags or they will be erased
+      tags: topic.value.tags,
+      datasets: datasetsProperties.value
+        .filter((d) => d.id !== null)
+        .map((d) => d.id),
+      extras: {
+        ...topic.value.extras,
+        'ecospheres:datasets_properties': datasetsProperties.value
+      }
+    })
+    .finally(() => loader.hide())
 }
 
 const metaDescription = (): string | undefined => {
-  return excerpt(bouquet.value?.description ?? '')
+  return excerpt(topic.value?.description ?? '')
 }
 
 const metaTitle = (): string => {
-  return `${bouquet.value?.name ?? ''} - ${config.website.title}`
+  return `${topic.value?.name ?? ''} - ${config.website.title}`
 }
 
 const metaLink = (): string => {
   const resolved = router.resolve({
     name: 'bouquet_detail',
-    params: { bid: bouquet.value?.id }
+    params: { bid: topic.value?.id }
   })
   return `${window.location.origin}${resolved.href}`
 }
@@ -117,11 +122,12 @@ onMounted(() => {
   store
     .load(route.params.bid)
     .then((res) => {
-      bouquet.value = res
-      theme.value = bouquet.value?.extras['ecospheres:informations'][0].theme
+      topic.value = res
+      theme.value = topic.value?.extras['ecospheres:informations'][0].theme
       subtheme.value =
-        bouquet.value?.extras['ecospheres:informations'][0].subtheme
-
+        topic.value?.extras['ecospheres:informations'][0].subtheme
+      datasetsProperties.value =
+        res.extras['ecospheres:datasets_properties'] ?? []
       breadcrumbLinks.value.push(
         {
           text: theme.value,
@@ -133,7 +139,7 @@ onMounted(() => {
         },
         {
           to: '',
-          text: bouquet.value?.name ?? ''
+          text: topic.value?.name ?? ''
         }
       )
     })
@@ -145,18 +151,18 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <div v-if="bouquet" class="fr-container datagouv-components fr-mb-4w">
+  <div v-if="topic" class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
         <div class="bouquet__header fr-mb-2v">
-          <h1 class="fr-mb-2v fr-mr-2v">{{ bouquet.name }}</h1>
+          <h1 class="fr-mb-2v fr-mr-2v">{{ topic.name }}</h1>
           <DsfrTag
-            v-if="bouquet?.extras"
+            v-if="topic?.extras"
             class="fr-mb-2w fr-mb-md-0 bold uppercase"
             :label="subtheme"
             :style="{
-              backgroundColor: getSelectedThemeColor(theme),
-              color: getTextColor(theme)
+              backgroundColor: getThemeColor(theme),
+              color: getThemeTextColor(theme)
             }"
           />
         </div>
@@ -166,20 +172,35 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
+        <div class="fr-mb-2w">
+          <DsfrButton
+            v-if="canEdit"
+            secondary
+            size="md"
+            label="Éditer"
+            icon="ri-pencil-line"
+            @click="goToEdit"
+          />
+          <DsfrButton
+            v-if="canEdit"
+            size="md"
+            :label="topic.private ? 'Publier' : 'Dépublier'"
+            icon="ri-eye-line"
+            class="fr-ml-1w"
+            @click="togglePublish"
+          />
+        </div>
         <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
-        <div
-          v-if="bouquet.organization"
-          class="fr-grid-row fr-grid-row--middle"
-        >
+        <div v-if="topic.organization" class="fr-grid-row fr-grid-row--middle">
           <div class="fr-col-auto">
             <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img :src="bouquet.organization.logo" height="32" />
+              <img :src="topic.organization.logo" height="32" />
             </div>
           </div>
           <p class="fr-col fr-m-0">
-            <a class="fr-link" :href="bouquet.organization.page">
+            <a class="fr-link" :href="topic.organization.page">
               <OrganizationNameWithCertificate
-                :organization="bouquet.organization"
+                :organization="topic.organization"
               />
             </a>
           </p>
@@ -189,30 +210,23 @@ onMounted(() => {
             <div class="border fr-p-1-5v fr-mr-1-5v">
               <img
                 style="margin-bottom: -6px"
-                :src="getOwnerAvatar(bouquet)"
+                :src="getOwnerAvatar(topic)"
                 height="32"
               />
             </div>
           </div>
           <p class="fr-col fr-m-0">
-            {{ bouquet.owner.first_name }} {{ bouquet.owner.last_name }}
+            {{ topic.owner.first_name }} {{ topic.owner.last_name }}
           </p>
         </div>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
-        <p>{{ formatDate(bouquet.created_at) }}</p>
+        <p>{{ formatDate(topic.created_at) }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <p>{{ formatDate(bouquet.last_modified) }}</p>
+        <p>{{ formatDate(topic.last_modified) }}</p>
         <div v-if="spatialCoverage">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
           <p>{{ spatialCoverage.name }}</p>
         </div>
-        <DsfrButton
-          v-if="canEdit"
-          size="md"
-          label="Editer le bouquet"
-          icon="ri-pencil-line"
-          @click="goToEdit"
-        />
       </div>
     </div>
 
@@ -234,11 +248,14 @@ onMounted(() => {
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <h2>{{ getDatasetListTitle(datasetsProperties) }}</h2>
-        <BouquetDatasetList :datasets="datasetsProperties" />
+        <BouquetDatasetList
+          v-model="datasetsProperties"
+          :is-edit="canEdit"
+          @update-datasets="onUpdateDatasets"
+        />
         <BouquetDatasetListExport
           :datasets="datasetsProperties"
-          :filename="bouquet.id"
+          :filename="topic.id"
         />
       </DsfrTabContent>
       <!-- Discussions -->
@@ -248,8 +265,8 @@ onMounted(() => {
         :selected="selectedTabIndex === 1"
       >
         <DiscussionsList
-          v-if="showDiscussions && bouquet"
-          :subject="bouquet"
+          v-if="showDiscussions && topic"
+          :subject="topic"
           subject-class="Topic"
         />
       </DsfrTabContent>
@@ -259,7 +276,7 @@ onMounted(() => {
         tab-id="tab-2"
         :selected="selectedTabIndex === 2"
       >
-        <ReusesList model="topic" :object-id="bouquet.id" />
+        <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>
   </div>

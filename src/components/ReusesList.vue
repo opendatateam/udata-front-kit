@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref, type PropType } from 'vue'
 
-import type { Topic } from '@/model'
 import { type Reuse, type ReuseType, ReuseModel } from '@/model/reuse'
+import type { Topic } from '@/model/topic'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
 import { useReuseStore } from '@/store/ReuseStore'
 import { useTopicStore } from '@/store/TopicStore'
@@ -78,7 +78,7 @@ onMounted(() => {
     </p>
     <p>
       <a
-        class="fr-btn fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-ml-1w"
         href="https://guides.data.gouv.fr/publier-des-donnees/guide-data.gouv.fr/reutilisations"
       >
         Qu'est-ce qu'une réutilisation ?

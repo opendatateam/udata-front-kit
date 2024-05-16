@@ -1,7 +1,7 @@
 import { ref, watch, type Ref } from 'vue'
 
-import type { Bouquet, Topic } from '@/model'
 import type { SpatialField, SpatialCoverage } from '@/model/spatial'
+import type { Topic } from '@/model/topic'
 import SpatialAPI from '@/services/api/SpatialAPI'
 
 export const getZoneFromSpatial = async (
@@ -16,7 +16,7 @@ export const getZoneFromSpatial = async (
 }
 
 export function useSpatialCoverage(
-  bouquet: Ref<Topic | Bouquet | null>
+  bouquet: Ref<Topic | null>
 ): Ref<SpatialCoverage | undefined> {
   const spatialCoverage = ref<SpatialCoverage | undefined>(undefined)
 
