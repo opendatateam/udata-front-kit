@@ -115,6 +115,11 @@ const goToCreate = () => {
 </template>
 
 <style scoped="true" lang="scss">
+// put above header (ground+500) so that multiselect floats above menu
+.fr-sidemenu {
+  z-index: calc(var(--ground) + 600);
+}
+
 @media (max-width: 768px) {
   .fr-sidemenu {
     margin-left: 0;
