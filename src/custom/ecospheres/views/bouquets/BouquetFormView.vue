@@ -77,8 +77,12 @@ const destroy = async () => {
     throw Error('Trying to delete topic without topic id')
   }
   if (window.confirm('Etes-vous sûr de vouloir supprimer ce bouquet ?')) {
-    await useTopicStore().delete(topic.value.id)
-    router.push({ name: 'bouquets' })
+    useTopicStore()
+      .delete(topic.value.id)
+      .then(() => router.push({ name: 'bouquets' }))
+      .catch((error) => {
+        errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
+      })
   }
 }
 
