@@ -82,7 +82,7 @@ watch(selectedDataset, () => {
     :hide-selected="true"
     @search-change="search"
   >
-    <template #clear>
+    <template #caret>
       <div
         v-if="selectedDataset"
         class="multiselect__clear"
@@ -125,7 +125,7 @@ watch(selectedDataset, () => {
 }
 .multiselect__clear {
   position: absolute;
-  right: 41px;
+  right: 15px;
   height: 40px;
   width: 40px;
   display: block;
