@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {
   type DatasetV2,
-  excerpt,
   useOwnerName,
   OrganizationNameWithCertificate
 } from '@etalab/data.gouv.fr-components'
 import { computed } from 'vue'
 
+import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 
 const props = defineProps({
@@ -53,7 +53,11 @@ const thumbnail = computed(() => {
         <p
           class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere"
         >
-          {{ excerpt(dataset.description, 160) }}
+          <text-clamp
+            :auto-resize="true"
+            :text="stripFromMarkdown(dataset.description)"
+            :max-lines="2"
+          />
         </p>
       </div>
     </div>
