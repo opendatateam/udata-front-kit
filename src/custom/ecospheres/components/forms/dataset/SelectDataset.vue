@@ -5,6 +5,7 @@ import { defineModel, ref, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
+import '@/assets/multiselect.css'
 import type { DatasetProperties } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchAPI'
 
@@ -89,58 +90,3 @@ const clear = () => {
     <template #noOptions> Précisez ou élargissez votre recherche </template>
   </Multiselect>
 </template>
-
-<style lang="scss">
-.multiselect__option,
-.multiselect__single {
-  white-space: normal;
-  h4 {
-    font-size: 1.2rem;
-  }
-}
-.multiselect__option--highlight {
-  background-color: var(--background-alt-grey-active);
-  color: var(--text-default-grey);
-}
-.multiselect__option--highlight::after {
-  background-color: var(--background-alt-grey-active);
-  color: var(--text-default-grey);
-}
-.multiselect__spinner::before,
-.multiselect__spinner::after {
-  border-color: var(--background-alt-grey-active) transparent transparent;
-  top: 60%;
-}
-.multiselect__select::before {
-  top: 80%;
-}
-.multiselect__clear {
-  position: absolute;
-  right: 15px;
-  height: 40px;
-  width: 40px;
-  display: block;
-  cursor: pointer;
-  z-index: 3;
-
-  &:before,
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 3px;
-    height: 16px;
-    background: #aaa;
-    top: 40%;
-    right: 4px;
-  }
-
-  &:before {
-    transform: rotate(45deg);
-  }
-
-  &:after {
-    transform: rotate(-45deg);
-  }
-}
-</style>

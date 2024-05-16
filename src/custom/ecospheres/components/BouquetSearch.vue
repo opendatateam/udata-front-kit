@@ -146,9 +146,9 @@ watchEffect(() => {
         >Couverture territoriale</label
       >
       <SelectSpatialCoverage
+        v-model="selectedSpatialCoverage"
         placeholder="Rechercher"
         :short="true"
-        :value="selectedSpatialCoverage"
         @update:model-value="switchSpatialCoverage"
       />
     </div>

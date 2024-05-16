@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import Multiselect from '@vueform/multiselect'
-import { onMounted, type PropType } from 'vue'
+import { debounce } from 'lodash'
+import { onMounted, ref, defineModel, type PropType, type Ref } from 'vue'
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.css'
 
+import '@/assets/multiselect.css'
 import type { SpatialCoverage, SpatialCoverageLevel } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useSpatialStore } from '@/store/SpatialStore'
+
+const selectedSpatialCoverage = defineModel({
+  type: Object as PropType<SpatialCoverage>
+})
 
 defineProps({
   modelValue: {
@@ -21,25 +28,30 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['update:modelValue'])
+const isLoading = ref(false)
 
-const spatialCoverageOptions = async (query: string) => {
-  if (!query) return []
-  return await new SpatialAPI().suggestZones(query, {
-    page_size: 10
-  })
-}
+const options: Ref<SpatialCoverage[]> = ref([])
 
 const getLevelById = (levelId: string): SpatialCoverageLevel | undefined => {
   return useSpatialStore().getLevelById(levelId)
 }
 
-const onSelectSpatialCoverage = (value: SpatialCoverage) => {
-  emits('update:modelValue', value)
-}
+const search = debounce(async (query: string) => {
+  isLoading.value = true
+  if (!query) {
+    options.value = []
+    isLoading.value = false
+    return
+  }
+  const zones = await new SpatialAPI().suggestZones(query, {
+    page_size: 10
+  })
+  options.value = zones
+  isLoading.value = false
+}, 400)
 
-const onClearSpatialCoverage = () => {
-  emits('update:modelValue', null)
+const clear = () => {
+  selectedSpatialCoverage.value = undefined
 }
 
 onMounted(() => {
@@ -49,68 +61,69 @@ onMounted(() => {
 
 <template>
   <Multiselect
-    id="link"
-    ref="selector"
-    :value="modelValue"
-    value-prop="id"
-    no-options-text="Précisez ou élargissez votre recherche"
+    id="select-spatial-coverage"
+    ref="multiselect"
+    v-model="selectedSpatialCoverage"
+    :options="options"
+    label="name"
+    track-by="id"
     :placeholder="placeholder"
-    name="select-spatial-coverage"
-    autocomplete="off"
-    class="multiselect-spatial-coverage"
-    :clear-on-select="true"
-    :filter-results="false"
-    :min-chars="1"
-    :resolve-on-load="false"
-    :delay="400"
+    :select-label="short ? '' : 'Entrée pour sélectionner'"
+    :deselect-label="short ? '' : 'Entrée pour supprimer'"
+    :multiple="false"
     :searchable="true"
-    :options="spatialCoverageOptions"
-    :object="true"
-    @select="onSelectSpatialCoverage"
-    @clear="onClearSpatialCoverage"
+    :internal-search="false"
+    :loading="isLoading"
+    :clear-on-select="true"
+    :close-on-select="true"
+    :max-height="600"
+    :show-no-results="false"
+    :hide-selected="false"
+    @search-change="search"
   >
-    <template #singlelabel="{ value }">
-      <div class="multiselect-single-label">
+    <template #caret>
+      <div
+        v-if="selectedSpatialCoverage"
+        class="multiselect__clear"
+        @mousedown.prevent.stop="clear"
+      ></div>
+    </template>
+    <template #singleLabel="slotProps">
+      <div>
         <span v-if="short">
-          {{ (value as SpatialCoverage).name }}
+          {{ slotProps.option.name }}
         </span>
         <span v-else>
-          {{ getLevelById((value as SpatialCoverage).level)?.name }} :
-          {{ (value as SpatialCoverage).name }} ({{
-            (value as SpatialCoverage).code
-          }})
+          {{ getLevelById(slotProps.option.level)?.name }} :
+          {{ slotProps.option.name }} ({{ slotProps.option.code }})
         </span>
       </div>
     </template>
-
-    <template #option="{ option }">
-      <div class="header">
-        <span class="name">{{ (option as SpatialCoverage).name }}</span>
-        <span class="code fr-ml-1v">{{
-          (option as SpatialCoverage).code
-        }}</span>
-      </div>
-      <div class="level">
-        {{ getLevelById((option as SpatialCoverage).level)?.name }}
+    <template #option="slotProps">
+      <div class="spatial-select-option">
+        <div class="header">
+          <span class="name">{{ slotProps.option.name }}</span>
+          <span class="code fr-ml-1v">{{ slotProps.option.code }}</span>
+        </div>
+        <div class="level">
+          {{ getLevelById(slotProps.option.level)?.name }}
+        </div>
       </div>
     </template>
+    <template #noOptions> Précisez ou élargissez votre recherche </template>
   </Multiselect>
 </template>
 
 <style lang="scss">
-.multiselect-spatial-coverage {
-  .multiselect-options {
-    .multiselect-option {
-      flex-direction: column;
-      align-items: flex-start;
-      .code,
-      .level {
-        font-size: 0.8rem;
-      }
-      .level {
-        display: block;
-      }
-    }
+.spatial-select-option {
+  flex-direction: column;
+  align-items: flex-start;
+  .code,
+  .level {
+    font-size: 0.8rem;
+  }
+  .level {
+    display: block;
   }
 }
 </style>
