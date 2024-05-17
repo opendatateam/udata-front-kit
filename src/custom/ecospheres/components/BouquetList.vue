@@ -2,12 +2,13 @@
 import type { ComputedRef, PropType } from 'vue'
 import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter, useRoute, type RouteLocationRaw } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
-import Tile from '@/components/Tile.vue'
-import type { Topic } from '@/model'
-import { NoOptionSelected } from '@/model'
+import { NoOptionSelected } from '@/model/theme'
+import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
+
+import BouquetCard from '../components/BouquetCard.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -92,15 +93,6 @@ const goToCreate = () => {
   router.push({ name: 'bouquet_add', query: route.query })
 }
 
-const computeLink = (bouquet: Topic): RouteLocationRaw => {
-  return bouquet.private
-    ? { name: 'bouquet_edit', params: { bid: bouquet.id } }
-    : {
-        name: 'bouquet_detail',
-        params: { bid: bouquet.slug }
-      }
-}
-
 onMounted(() => {
   const loader = useLoading().show()
   topicStore.loadTopicsForUniverse().then(() => loader.hide())
@@ -140,21 +132,23 @@ onMounted(() => {
       <a href="#" @click.stop.prevent="goToCreate()">en créant un</a>
     </p>
   </div>
-  <div class="fr-container--fluid fr-mt-2w fr-mb-4w">
-    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mt-1w">
-      <li
+  <div class="bouquets-list-container fr-container fr-mt-2w fr-mb-4w">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w">
+      <div
         v-for="bouquet in bouquets"
         :key="bouquet.id"
-        class="fr-col-12 fr-col-lg-6"
+        class="fr-col-md-6 fr-col-12"
       >
-        <Tile
-          :link="computeLink(bouquet)"
-          :title="bouquet.name"
-          :description="bouquet.description"
-          :is-markdown="true"
-          :notice="bouquet.private ? 'Brouillon' : undefined"
-        />
-      </li>
-    </ul>
+        <BouquetCard :bouquet="bouquet" />
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+// "revert" gutters — simpler than w/o gutters
+.bouquets-list-container {
+  padding-right: 0;
+  padding-left: 0;
+}
+</style>

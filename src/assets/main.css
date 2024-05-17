@@ -102,3 +102,8 @@ textarea {
 .datagouv-components h3.fr-accordion__title {
   margin-bottom: 0;
 }
+
+.datagouv-components .fr-tabs {
+  z-index: auto;
+  --ground: 1;
+}

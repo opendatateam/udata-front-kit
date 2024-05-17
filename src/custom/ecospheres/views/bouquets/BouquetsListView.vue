@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import BouquetList from '@/custom/ecospheres/components/BouquetList.vue'
 import BouquetSearch from '@/custom/ecospheres/components/BouquetSearch.vue'
-import { type BreadcrumbItem, NoOptionSelected } from '@/model'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
+import { NoOptionSelected } from '@/model/theme'
 
 const route = useRoute()
 const router = useRouter()
@@ -114,6 +115,11 @@ const goToCreate = () => {
 </template>
 
 <style scoped="true" lang="scss">
+// put above header (ground+500) so that multiselect floats above menu
+.fr-sidemenu {
+  z-index: calc(var(--ground) + 600);
+}
+
 @media (max-width: 768px) {
   .fr-sidemenu {
     margin-left: 0;

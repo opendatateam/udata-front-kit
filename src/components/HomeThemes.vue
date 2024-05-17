@@ -4,7 +4,7 @@ import { onMounted, computed, type ComputedRef } from 'vue'
 import { useTopicStore } from '@/store/TopicStore'
 
 import config from '../config'
-import type { Theme } from '../model'
+import type { Theme } from '../model/theme'
 import Tile from './Tile.vue'
 
 const topicStore = useTopicStore()

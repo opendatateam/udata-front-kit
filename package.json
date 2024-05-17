@@ -21,9 +21,8 @@
   "dependencies": {
     "@etalab/data.gouv.fr-components": "^1.13.8",
     "@gouvminint/vue-dsfr": "^5.13.0",
-    "@unhead/vue": "^1.9.4",
     "@json2csv/plainjs": "^7.0.6",
-    "@vueform/multiselect": "^2.6.2",
+    "@unhead/vue": "^1.9.4",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",
     "dompurify": "^3.0.6",
@@ -37,6 +36,7 @@
     "vue-draggable-next": "^2.2.1",
     "vue-loading-overlay": "^6.0.3",
     "vue-matomo": "^4.2.0",
+    "vue-multiselect": "^3.0.0",
     "vue-router": "^4.2.2",
     "vue-tippy": "^6.4.1",
     "vue3-text-clamp": "^0.1.1",
