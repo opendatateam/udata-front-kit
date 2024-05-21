@@ -10,8 +10,12 @@ const props = defineProps({
 
 const contactPoint = props.dataset.contact_point
 const accessRights = props.dataset.extras?.harvest?.['dct:accessRights']
+const provenance = (
+  props.dataset.extras?.harvest?.['dct:provenance'] || []
+).filter((p: string) => !!p)
 
-const hasExtendedInfo = !!accessRights || !!contactPoint
+const hasExtendedInfo =
+  !!accessRights || !!contactPoint || provenance.length > 0
 </script>
 
 <template>
@@ -35,6 +39,12 @@ const hasExtendedInfo = !!accessRights || !!contactPoint
               contactPoint.name
             }}</a>
           </p>
+        </div>
+        <div v-if="provenance.length" class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+          <h3 class="subtitle fr-mb-1v">Généalogie</h3>
+          <ul class="fr-text--sm fr-m-0 text-mention-grey">
+            <li v-for="p in provenance" :key="p">{{ p }}</li>
+          </ul>
         </div>
       </div>
     </div>
