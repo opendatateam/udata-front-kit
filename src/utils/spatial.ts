@@ -1,7 +1,7 @@
 import { ref, watch, type Ref } from 'vue'
 
-import type { Bouquet, Topic } from '@/model'
 import type { SpatialField, SpatialCoverage } from '@/model/spatial'
+import type { Topic } from '@/model/topic'
 import SpatialAPI from '@/services/api/SpatialAPI'
 
 export const getZoneFromSpatial = async (
@@ -16,15 +16,15 @@ export const getZoneFromSpatial = async (
 }
 
 export function useSpatialCoverage(
-  bouquet: Ref<Topic | Bouquet | null>
+  topic: Ref<Topic | null>
 ): Ref<SpatialCoverage | undefined> {
   const spatialCoverage = ref<SpatialCoverage | undefined>(undefined)
 
   watch(
-    bouquet,
-    async (newBouquet) => {
-      if (newBouquet?.spatial != null) {
-        const coverage = await getZoneFromSpatial(newBouquet.spatial)
+    topic,
+    async (newTopic) => {
+      if (newTopic?.spatial != null) {
+        const coverage = await getZoneFromSpatial(newTopic.spatial)
         spatialCoverage.value = coverage
       } else {
         spatialCoverage.value = undefined
@@ -32,26 +32,6 @@ export function useSpatialCoverage(
     },
     { immediate: true }
   )
-
-  return spatialCoverage
-}
-
-export function useSpatialCoverageFromField(
-  spatialField: SpatialField | undefined | null
-): Ref<SpatialCoverage | undefined> {
-  const spatialCoverage = ref<SpatialCoverage | undefined>(undefined)
-
-  if (spatialField != null) {
-    getZoneFromSpatial(spatialField)
-      .then((coverage) => {
-        spatialCoverage.value = coverage
-      })
-      .catch((error) => {
-        console.error('Failed to fetch coverage', error)
-      })
-  } else {
-    spatialCoverage.value = undefined
-  }
 
   return spatialCoverage
 }
