@@ -119,6 +119,7 @@ const removeDataset = (index: number) => {
       'Etes-vous sûr de vouloir supprimer ce jeu de données du bouquet ?'
     )
   ) {
+    delete expandStore.value[getAccordeonId(index)]
     datasets.value.splice(index, 1)
     emits('updateDatasets')
   }
@@ -137,6 +138,11 @@ const cancelReorder = () => {
   datasets.value = [...originalDatasets.value]
   isReorder.value = false
 }
+
+const triggerReorder = () => {
+  collapseAll()
+  isReorder.value = true
+}
 </script>
 
 <template>
@@ -154,7 +160,7 @@ const cancelReorder = () => {
         class="fr-mb-1w"
         label="Réorganiser la liste"
         icon="md-dragindicator"
-        @click.prevent="isReorder = true"
+        @click.prevent="triggerReorder"
       />
       <DsfrButton
         v-if="isEdit"
@@ -201,65 +207,79 @@ const cancelReorder = () => {
       >
       <a v-else href="#" @click.stop.prevent="collapseAll">Tout replier</a>
     </div>
-    <DsfrAccordionsGroup>
-      <!-- conditionnal draggable wrapper component -->
-      <component
-        :is="isReorder ? draggable : 'div'"
-        :list="isReorder ? datasets : null"
-        :ghost-class="isReorder ? 'ghost' : null"
-      >
-        <li v-for="(dataset, index) in datasets" :key="index">
-          <DsfrAccordion
-            :id="getAccordeonId(index)"
-            :expanded-id="expandStore[getAccordeonId(index)]"
-            :class="{ draggable: isEdit }"
-            @expand="expandStore[getAccordeonId(index)] = $event"
-          >
-            <template #title>
-              <BouquetDatasetAccordionTitle
-                :dataset-properties="dataset"
-                :is-edit="isReorder"
-              />
-            </template>
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="fromMarkdown(dataset.purpose)"></div>
-            <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
-            <div class="fr-grid-row">
-              <DsfrButton
-                v-if="isEdit && !isReorder"
-                secondary
-                size="sm"
-                icon="ri-delete-bin-line"
-                label="Supprimer"
-                class="fr-mr-2w"
-                @click.prevent="removeDataset(index)"
-              />
-              <DsfrButton
-                v-if="isEdit && !isReorder"
-                size="sm"
-                icon="ri-pencil-line"
-                label="Éditer"
-                class="fr-mr-2w"
-                @click.prevent="editDataset(dataset, index)"
-              />
-              <a
-                v-if="!isAvailable(dataset.availability) && !isEdit"
-                class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                :href="`mailto:${config.website.contact_email}`"
-              >
-                Aidez-nous à trouver la donnée</a
-              >
-              <a
-                v-if="dataset.uri && !dataset.id"
-                class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                :href="dataset.uri"
-                target="_blank"
-                >Accéder au catalogue</a
-              >
-            </div>
-          </DsfrAccordion>
-        </li>
-      </component>
+    <!-- Draggable list -->
+    <div v-if="isReorder">
+      <ul class="fr-accordions-group">
+        <draggable ghost-class="ghost" :list="datasets">
+          <li v-for="(dataset, index) in datasets" :key="index">
+            <section class="fr-accordion draggable">
+              <h3 class="fr-accordion__title">
+                <button
+                  class="fake__fr-accordion__btn fake__fr-accordion__btn__mq"
+                >
+                  <BouquetDatasetAccordionTitle
+                    :dataset-properties="dataset"
+                    :is-edit="true"
+                  />
+                </button>
+              </h3>
+            </section>
+          </li>
+        </draggable>
+      </ul>
+    </div>
+    <!-- Static list -->
+    <DsfrAccordionsGroup v-if="!isReorder">
+      <li v-for="(dataset, index) in datasets" :key="index">
+        <DsfrAccordion
+          :id="getAccordeonId(index)"
+          :expanded-id="expandStore[getAccordeonId(index)]"
+          @expand="expandStore[getAccordeonId(index)] = $event"
+        >
+          <template #title>
+            <BouquetDatasetAccordionTitle
+              :dataset-properties="dataset"
+              :is-edit="false"
+            />
+          </template>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="fromMarkdown(dataset.purpose)"></div>
+          <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
+          <div class="fr-grid-row">
+            <DsfrButton
+              v-if="isEdit && !isReorder"
+              secondary
+              size="sm"
+              icon="ri-delete-bin-line"
+              label="Supprimer"
+              class="fr-mr-2w"
+              @click.prevent="removeDataset(index)"
+            />
+            <DsfrButton
+              v-if="isEdit && !isReorder"
+              size="sm"
+              icon="ri-pencil-line"
+              label="Éditer"
+              class="fr-mr-2w"
+              @click.prevent="editDataset(dataset, index)"
+            />
+            <a
+              v-if="!isAvailable(dataset.availability) && !isEdit"
+              class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+              :href="`mailto:${config.website.contact_email}`"
+            >
+              Aidez-nous à trouver la donnée</a
+            >
+            <a
+              v-if="dataset.uri && !dataset.id"
+              class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+              :href="dataset.uri"
+              target="_blank"
+              >Accéder au catalogue</a
+            >
+          </div>
+        </DsfrAccordion>
+      </li>
     </DsfrAccordionsGroup>
   </div>
 
@@ -296,5 +316,28 @@ const cancelReorder = () => {
 <style scoped lang="scss">
 .ghost {
   background-color: #bbb;
+}
+
+@media (min-width: 48em) {
+  .fake__fr-accordion__btn.fake__fr-accordion__btn__mq {
+    padding: 0.75rem 1rem;
+  }
+}
+
+.fake__fr-accordion__btn {
+  cursor: grab;
+  align-items: center;
+  display: inline-flex;
+  flex-direction: row;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin: 0;
+  max-height: none;
+  max-width: 100%;
+  min-height: 3rem;
+  overflow: initial;
+  padding: 0.75rem 0;
+  text-align: left;
+  width: 100%;
 }
 </style>
