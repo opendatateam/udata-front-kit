@@ -124,6 +124,7 @@ website:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-ISO-19139
+    show_extended_information_panel: true
 
 themes:
   - name: Se loger
