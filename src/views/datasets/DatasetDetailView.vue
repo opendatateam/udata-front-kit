@@ -85,6 +85,13 @@ const tabs = computed(() => {
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
+const showHarvestQualityWarning = computed(() => {
+  const backend = dataset.value?.harvest?.backend
+  const warningBackends =
+    config.website.datasets.harvest_backends_quality_warning || []
+  return backend && warningBackends.includes(backend)
+})
+
 const changePage = (type: string, page = 1, query = '') => {
   resources.value[type].currentPage = page
   resources.value[type].query = query
@@ -218,6 +225,18 @@ onMounted(() => {
           v-if="config.website.show_quality_component"
           :quality="dataset.quality"
         />
+        <div
+          v-if="showHarvestQualityWarning"
+          class="text-mention-grey fr-text--sm fr-my-1v"
+        >
+          <span
+            class="fr-icon-warning-line fr-icon--sm"
+            aria-hidden="true"
+          ></span>
+          La qualité des métadonnées peut être trompeuse car les métadonnées de
+          la source originale peuvent avoir été perdues lors de leur
+          récupération. Nous travaillons actuellement à améliorer la situation.
+        </div>
         <div
           v-if="config.website.datasets.add_to_bouquet && userStore.isLoggedIn"
         >
