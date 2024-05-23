@@ -40,7 +40,7 @@ const thumbnail = computed(() => {
         </h4>
         <p
           v-if="dataset.organization || dataset.owner"
-          class="fr-m-0 fr-text--sm"
+          class="fr-m-0 fr-text--xs"
         >
           Par
           <template v-if="dataset.organization">
@@ -51,7 +51,7 @@ const thumbnail = computed(() => {
           <template v-else>{{ ownerName }}</template>
         </p>
         <p
-          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere"
+          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm"
         >
           <text-clamp
             :auto-resize="true"
@@ -63,3 +63,9 @@ const thumbnail = computed(() => {
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+h4 {
+  font-size: 1rem;
+}
+</style>

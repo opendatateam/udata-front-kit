@@ -73,8 +73,8 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
     datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
     datasetProperties.value.id = value.id
     const resolved = router.resolve({
-      name: 'bouquet_detail',
-      params: { bid: value.id }
+      name: 'dataset_detail',
+      params: { did: value.id }
     })
     datasetProperties.value.uri = resolved.href
   }
