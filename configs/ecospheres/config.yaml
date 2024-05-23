@@ -121,6 +121,9 @@ website:
   datasets:
     organization_filter: true
     add_to_bouquet: true
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning:
+      - CSW-ISO-19139
 
 themes:
   - name: Se loger
