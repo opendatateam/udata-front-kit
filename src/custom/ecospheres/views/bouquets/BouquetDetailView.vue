@@ -173,6 +173,7 @@ onMounted(() => {
       </div>
       <div class="fr-col-12 fr-col-md-4">
         <div class="fr-mb-2w">
+          <DsfrTag v-if="!canEdit && topic.private" label="Brouillon" />
           <DsfrButton
             v-if="canEdit"
             secondary
