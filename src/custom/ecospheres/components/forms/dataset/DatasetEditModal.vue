@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, defineModel, type Ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
 import { Availability, type DatasetProperties } from '@/model/topic'
+import { useDatasetStore } from '@/store/DatasetStore'
 
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
@@ -12,6 +15,8 @@ export interface DatasetEditModalType {
 }
 
 const emits = defineEmits(['submitModal'])
+
+const router = useRouter()
 
 const datasets = defineModel({
   type: Object as () => DatasetProperties[],
@@ -72,9 +77,35 @@ const addDataset = () => {
   isModalOpen.value = true
 }
 
-// move to parent
-const submitModal = (modalData: DatasetModalData) => {
+const submitModal = async (modalData: DatasetModalData) => {
   if (modalData.dataset !== undefined) {
+    // check if data.gouv.fr URL and update metadata if needed
+    if (
+      modalData.dataset.uri &&
+      modalData.dataset.availability !== Availability.LOCAL_AVAILABLE
+    ) {
+      const pattern = new RegExp(
+        `^${config.datagouvfr.base_url}(?:/.*)?/datasets/(?<datasetName>[a-zA-Z0-9_-]+)(?:/|#|$)`
+      )
+      const match = pattern.exec(modalData.dataset.uri)
+      if (match?.groups?.datasetName) {
+        // FIXME: check 404 on data.gouv.fr when CORS allows it and remove toast
+        try {
+          const dataset = await useDatasetStore().load(match.groups.datasetName)
+          if (dataset !== undefined) {
+            modalData.dataset.availability = Availability.LOCAL_AVAILABLE
+            const resolved = router.resolve({
+              name: 'dataset_detail',
+              params: { did: dataset.id }
+            })
+            modalData.dataset.uri = resolved.href
+            modalData.dataset.id = dataset.id
+          }
+        } catch (error) {
+          console.error('Error fetching dataset from data.gouv.fr', error)
+        }
+      }
+    }
     if (modalData.mode === 'create') {
       datasets.value.push(modalData.dataset)
     } else if (modalData.mode === 'edit' && modalData.index !== undefined) {
@@ -84,7 +115,6 @@ const submitModal = (modalData: DatasetModalData) => {
   emits('submitModal')
 }
 
-// call from parent
 const closeModal = () => {
   isModalOpen.value = false
 }
