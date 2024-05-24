@@ -162,9 +162,12 @@ website:
         content: >-
           ## Quelques soient vos moyens techniques, une solution
 
-          Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non d'un service informatique ou d'un prestataire. 
-        
+          <p class="fr-text--lg">
+          Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non d'un service informatique ou d'un prestataire.
+          <br/>
           Pour chacun des cas d'usages, un indicateur vous permet de savoir quelles sont les possibilités d'intégration :
+          </p> 
+          
 
           - **Solution clé en main** : Une solution clé en main est disponible pour ce cas d'usage. Si vous n'avez pas ni service informatique ni compétences techniques, vous pouvez donc utiliser la solution clé en main pour couvrir le cas d'usage. 
 
@@ -188,8 +191,9 @@ website:
         content: >-
           ## Comment et pourquoi simplifier vos démarches ?
 
+          <p class="fr-text--lg">
           Administrations et collectivités, en intégrant des API ou des données dans vos démarches et/ou votre système d’information :
-
+          </p>
 
           - 🗄 **Vous accédez facilement aux données administratives de vos usagers**, qu'elles soient publiques ou protégées et provenant de [nombreux fournisseurs](/organizations) ;
 
