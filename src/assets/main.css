@@ -102,3 +102,29 @@ textarea {
 .datagouv-components h3.fr-accordion__title {
   margin-bottom: 0;
 }
+
+/* STYLE SITE SIMPLIFICATION*/
+
+.simplification-h2 {
+  margin-top: 3rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.simplification-h2 span {
+  background-color: #D6DAF7;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  display: inline;
+}
+.simplification-h3 {
+  text-decoration: underline; 
+  text-decoration-line: underline; 
+  text-decoration-color: #D6DAF7; 
+  text-decoration-thickness: 0.5rem; 
+  text-underline-offset: 8px; 
+  margin-top: 2rem;
+}
+
+.simplification-bg-gray {
+  background-color: gray; 
+}
