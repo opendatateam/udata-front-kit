@@ -247,7 +247,7 @@ const triggerReorder = () => {
           <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
           <div class="fr-grid-row">
             <DsfrButton
-              v-if="isEdit && !isReorder"
+              v-if="isEdit"
               secondary
               size="sm"
               icon="ri-delete-bin-line"
@@ -256,7 +256,7 @@ const triggerReorder = () => {
               @click.prevent="removeDataset(index)"
             />
             <DsfrButton
-              v-if="isEdit && !isReorder"
+              v-if="isEdit"
               size="sm"
               icon="ri-pencil-line"
               label="Éditer"
