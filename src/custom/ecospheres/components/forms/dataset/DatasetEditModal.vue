@@ -82,7 +82,7 @@ const submitModal = async (modalData: DatasetModalData) => {
     // check if data.gouv.fr URL and update metadata if needed
     if (
       modalData.dataset.uri &&
-      modalData.dataset.availability !== Availability.LOCAL_AVAILABLE
+      modalData.dataset.availability === Availability.URL_AVAILABLE
     ) {
       const pattern = new RegExp(
         `^${config.datagouvfr.base_url}(?:/.*)?/datasets/(?<datasetName>[a-zA-Z0-9_-]+)(?:/|#|$)`
