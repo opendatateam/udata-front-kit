@@ -10,6 +10,7 @@ import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 
 import BouquetForm from '../../components/forms/bouquet/BouquetForm.vue'
+import BouquetOwnerForm from '../../components/forms/bouquet/BouquetOwnerForm.vue'
 
 const props = defineProps({
   isCreate: {
@@ -150,6 +151,10 @@ onMounted(() => {
           v-model="topic"
           @update-validation="(isValid: boolean) => canSave = isValid"
         />
+      </div>
+      <div class="fr-mt-4w">
+        <h2>Propriétaire du bouquet</h2>
+        <BouquetOwnerForm v-if="topic.id || isCreate" v-model="topic" />
       </div>
       <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
         <DsfrButton
