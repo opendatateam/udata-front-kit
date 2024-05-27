@@ -102,7 +102,10 @@ const submitModal = async (modalData: DatasetModalData) => {
             modalData.dataset.id = dataset.id
           }
         } catch (error) {
-          console.error('Error fetching dataset from data.gouv.fr', error)
+          console.error(
+            `Error fetching dataset from ${config.datagouvfr.base_url}`,
+            error
+          )
         }
       }
     }
