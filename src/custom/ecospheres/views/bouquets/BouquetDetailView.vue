@@ -154,11 +154,11 @@ onMounted(() => {
   <div v-if="topic" class="fr-container datagouv-components fr-mb-4w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
-        <div class="bouquet__header fr-mb-2v">
-          <h1 class="fr-mb-2v fr-mr-2v">{{ topic.name }}</h1>
+        <div class="bouquet__header fr-mb-4v">
+          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
           <DsfrTag
             v-if="topic?.extras"
-            class="fr-mb-2w fr-mb-md-0 bold uppercase"
+            class="fr-mb-1v bold uppercase"
             :label="subtheme"
             :style="{
               backgroundColor: getThemeColor(theme),
