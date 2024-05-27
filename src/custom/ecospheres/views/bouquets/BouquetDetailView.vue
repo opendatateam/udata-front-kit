@@ -52,7 +52,7 @@ const showDiscussions = config.website.discussions.topic.display
 const description = computed(() => descriptionFromMarkdown(topic))
 
 const canEdit = computed(() => {
-  return useUserStore().hasEditPermissions(topic.value as Topic)
+  return useUserStore().hasEditPermissions(topic.value)
 })
 
 const goToEdit = () => {
