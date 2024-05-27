@@ -11,6 +11,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
+import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
@@ -193,10 +194,8 @@ onMounted(() => {
         </div>
         <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
         <div v-if="topic.organization" class="fr-grid-row fr-grid-row--middle">
-          <div class="fr-col-auto">
-            <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img :src="topic.organization.logo" height="32" />
-            </div>
+          <div class="fr-col-auto fr-mr-1w">
+            <OrganizationLogo :object="topic" />
           </div>
           <p class="fr-col fr-m-0">
             <a class="fr-link" :href="topic.organization.page">
