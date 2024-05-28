@@ -105,7 +105,7 @@ watchEffect(() => {
           :value="NoOptionSelected"
           :selected="themeName == NoOptionSelected"
         >
-          Choisir une thématique
+          Toutes les thématiques
         </option>
         <option
           v-for="option in themeOptions"
@@ -129,7 +129,7 @@ watchEffect(() => {
           :value="NoOptionSelected"
           :selected="subthemeName == NoOptionSelected"
         >
-          Choisir un chantier
+          Tous les chantiers
         </option>
         <option
           v-for="option in subthemeOptions"
