@@ -39,7 +39,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container about">
-    <p>Connexion en cours...</p>
-  </div>
+  <div class="fr-container fr-mt-4w">Connexion en cours...</div>
 </template>

@@ -25,7 +25,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container about">
-    <h1>This is a logout page</h1>
-  </div>
+  <div class="fr-container fr-mt-4w">Déconnexion en cours...</div>
 </template>
