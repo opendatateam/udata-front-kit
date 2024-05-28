@@ -23,6 +23,7 @@ export interface TopicExtras {
     subtheme: string
   }>
   ['ecospheres:datasets_properties']: DatasetProperties[]
+  ['ecospheres:cloned_from']?: string
 }
 
 export type Topic = Owned & {
@@ -41,4 +42,9 @@ export type Topic = Owned & {
   tags: string[]
   uri: string
   spatial: SpatialField | undefined
+}
+
+export type TopicV1 = Topic & {
+  datasets: string[]
+  reuses: string[]
 }

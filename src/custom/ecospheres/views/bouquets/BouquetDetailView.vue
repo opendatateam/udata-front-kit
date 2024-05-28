@@ -55,9 +55,14 @@ const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
+const canClone = computed(() => useUserStore().isLoggedIn)
 
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
+}
+
+const goToClone = () => {
+  router.push({ name: 'bouquet_add', query: { clone: topic.value?.id } })
 }
 
 const togglePublish = () => {
@@ -174,23 +179,38 @@ onMounted(() => {
       </div>
       <div class="fr-col-12 fr-col-md-4">
         <div class="fr-mb-2w">
-          <DsfrTag v-if="!canEdit && topic.private" label="Brouillon" />
-          <DsfrButton
-            v-if="canEdit"
-            secondary
-            size="md"
-            label="Éditer"
-            icon="ri-pencil-line"
-            @click="goToEdit"
-          />
-          <DsfrButton
-            v-if="canEdit"
-            size="md"
-            :label="topic.private ? 'Publier' : 'Dépublier'"
-            icon="ri-eye-line"
-            class="fr-ml-1w"
-            @click="togglePublish"
-          />
+          <div v-if="!canEdit && topic.private" class="fr-mb-1w">
+            <DsfrTag label="Brouillon" />
+          </div>
+          <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+            <DsfrButton
+              v-if="canClone"
+              :secondary="canEdit"
+              size="md"
+              label="Cloner"
+              icon="ri-file-copy-2-line"
+              title="Cloner le bouquet"
+              class="fr-mb-1v fr-mr-1v"
+              @click="goToClone"
+            />
+            <DsfrButton
+              v-if="canEdit"
+              secondary
+              size="md"
+              label="Éditer"
+              icon="ri-pencil-line"
+              class="fr-mb-1v fr-mr-1v"
+              @click="goToEdit"
+            />
+            <DsfrButton
+              v-if="canEdit"
+              size="md"
+              :label="topic.private ? 'Publier' : 'Dépublier'"
+              icon="ri-eye-line"
+              class="fr-mb-1v"
+              @click="togglePublish"
+            />
+          </div>
         </div>
         <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
         <div v-if="topic.organization" class="fr-grid-row fr-grid-row--middle">

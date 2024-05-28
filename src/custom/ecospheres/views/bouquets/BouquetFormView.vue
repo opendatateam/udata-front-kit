@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
-import type { Topic } from '@/model/topic'
+import type { Topic, TopicV1 } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 
@@ -88,21 +88,40 @@ const destroy = async () => {
 }
 
 const cancel = () => {
-  if (props.isCreate) {
+  if (props.isCreate && routeQuery.clone === null) {
     router.push({ name: 'bouquets' })
   } else {
-    router.push({ name: 'bouquet_detail', params: { bid: topic.value.slug } })
+    router.push({
+      name: 'bouquet_detail',
+      params: {
+        bid: routeQuery.clone !== null ? routeQuery.clone : topic.value.slug
+      }
+    })
   }
 }
 
 onMounted(() => {
-  if (!props.isCreate) {
+  if (!props.isCreate || routeQuery.clone !== null) {
     const loader = useLoading().show()
     useTopicStore()
-      .load(routeParams.bid)
+      .load(routeQuery.clone || routeParams.bid)
       .then((remoteTopic) => {
         const { datasets, reuses, ...data } = remoteTopic
-        topic.value = data
+        if (routeQuery.clone !== null) {
+          // build a fonctionnal v1 (POST format) topic from clone source data
+          topic.value = {
+            ...data,
+            datasets: remoteTopic.extras['ecospheres:datasets_properties']
+              .filter((dp) => !!dp.id)
+              .map((dp) => dp.id),
+            extras: {
+              ...remoteTopic.extras,
+              'ecospheres:cloned_from': routeQuery.clone
+            }
+          } as TopicV1
+        } else {
+          topic.value = data
+        }
       })
       .finally(() => loader.hide())
   }
@@ -146,8 +165,9 @@ onMounted(() => {
       </div>
       <div class="fr-mt-4w">
         <h2>Description du bouquet de données</h2>
+        <!-- do not mount this component until we have valid topic data -->
         <BouquetForm
-          v-if="topic.id || isCreate"
+          v-if="topic.id || (isCreate && !routeQuery.clone)"
           v-model="topic"
           @update-validation="(isValid: boolean) => canSave = isValid"
         />
