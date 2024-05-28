@@ -18,6 +18,7 @@ import DatasetAddToBouquetModal from '@/custom/ecospheres/components/datasets/Da
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
 import ReusesList from '../../components/ReusesList.vue'
+import ExtendedInformationPanel from '../../components/datasets/ExtendedInformationPanel.vue'
 import type { ResourceDataWithQuery } from '../../model/resource'
 import { useRouteParamsAsString } from '../../router/utils'
 import { useDatasetStore } from '../../store/DatasetStore'
@@ -369,6 +370,12 @@ onMounted(() => {
         tab-id="tab-3"
         :selected="selectedTabIndex === 3"
       >
+        <ExtendedInformationPanel
+          v-if="
+            config.website.datasets.show_extended_information_panel && dataset
+          "
+          :dataset="dataset"
+        />
         <InformationPanel
           v-if="dataset && license"
           :dataset="dataset"
