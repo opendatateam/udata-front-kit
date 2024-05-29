@@ -5,7 +5,7 @@ import {
   excerpt
 } from '@etalab/data.gouv.fr-components'
 import { useHead } from '@unhead/vue'
-import { onMounted, ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
@@ -16,17 +16,23 @@ import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import type { Topic, DatasetProperties } from '@/model/topic'
-import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
+import { useClonedFrom } from '@/utils/topic'
 
 import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
 
-const route = useRouteParamsAsString()
+const props = defineProps({
+  bouquetId: {
+    type: String,
+    required: true
+  }
+})
+
 const router = useRouter()
 const store = useTopicStore()
 const loading = useLoading()
@@ -46,6 +52,7 @@ const breadcrumbLinks = ref([
   }
 ])
 const spatialCoverage = useSpatialCoverage(topic)
+const clonedFrom = useClonedFrom(topic)
 const datasetsProperties: Ref<DatasetProperties[]> = ref([])
 
 const showDiscussions = config.website.discussions.topic.display
@@ -123,34 +130,40 @@ useHead({
   link: [{ rel: 'canonical', href: metaLink }]
 })
 
-onMounted(() => {
-  const loader = loading.show()
-  store
-    .load(route.params.bid)
-    .then((res) => {
-      topic.value = res
-      theme.value = topic.value?.extras['ecospheres:informations'][0].theme
-      subtheme.value =
-        topic.value?.extras['ecospheres:informations'][0].subtheme
-      datasetsProperties.value =
-        res.extras['ecospheres:datasets_properties'] ?? []
-      breadcrumbLinks.value.push(
-        {
-          text: theme.value,
-          to: `/bouquets/?theme=${theme.value}`
-        },
-        {
-          text: subtheme.value,
-          to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
-        },
-        {
-          to: '',
-          text: topic.value?.name ?? ''
-        }
-      )
-    })
-    .finally(() => loader.hide())
-})
+watch(
+  () => props.bouquetId,
+  () => {
+    const loader = loading.show()
+    store
+      .load(props.bouquetId)
+      .then((res) => {
+        topic.value = res
+        // FIXME: use extras value directly when new schema is here or a composable
+        theme.value = topic.value?.extras['ecospheres:informations'][0].theme
+        subtheme.value =
+          topic.value?.extras['ecospheres:informations'][0].subtheme
+        datasetsProperties.value =
+          res.extras['ecospheres:datasets_properties'] ?? []
+        // FIXME: use computed from extras when new schema is here
+        breadcrumbLinks.value.push(
+          {
+            text: theme.value,
+            to: `/bouquets/?theme=${theme.value}`
+          },
+          {
+            text: subtheme.value,
+            to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
+          },
+          {
+            to: '',
+            text: topic.value?.name ?? ''
+          }
+        )
+      })
+      .finally(() => loader.hide())
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -246,6 +259,16 @@ onMounted(() => {
         <div v-if="spatialCoverage">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
           <p>{{ spatialCoverage.name }}</p>
+        </div>
+        <div v-if="clonedFrom">
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Cloné depuis</h2>
+          <p>
+            <RouterLink
+              :to="{ name: 'bouquet_detail', params: { bid: clonedFrom.slug } }"
+            >
+              {{ clonedFrom.name }}
+            </RouterLink>
+          </p>
         </div>
       </div>
     </div>

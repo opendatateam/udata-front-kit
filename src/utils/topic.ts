@@ -1,3 +1,5 @@
+import { ref, watch, type Ref } from 'vue'
+
 import {
   Availability,
   type Topic,
@@ -5,6 +7,7 @@ import {
   type TopicExtras,
   type TopicPostData
 } from '@/model/topic'
+import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 
 export const isAvailable = (availability: Availability): boolean => {
@@ -52,4 +55,30 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
     },
     spatial: undefined
   }
+}
+
+export function useClonedFrom(topic: Ref<Topic | null>): Ref<Topic | null> {
+  const clonedFrom = ref<Topic | null>(null)
+
+  watch(
+    topic,
+    async (newTopic) => {
+      // FIXME: catch 404 when possible from data.gouv.fr
+      if (topic.value?.extras?.ecospheres?.cloned_from != null) {
+        useTopicStore()
+          .load(topic.value.extras.ecospheres.cloned_from)
+          .then((res) => {
+            clonedFrom.value = res
+          })
+          .catch(() => {
+            clonedFrom.value = null
+          })
+      } else {
+        clonedFrom.value = null
+      }
+    },
+    { immediate: true }
+  )
+
+  return clonedFrom
 }
