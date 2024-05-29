@@ -65,9 +65,9 @@ export function useClonedFrom(topic: Ref<Topic | null>): Ref<Topic | null> {
     topic,
     async (newTopic) => {
       // FIXME: catch 404 when possible from data.gouv.fr
-      if (topic.value?.extras?.ecospheres?.cloned_from != null) {
+      if (newTopic?.extras?.ecospheres?.cloned_from != null) {
         useTopicStore()
-          .load(topic.value.extras.ecospheres.cloned_from)
+          .load(newTopic.extras.ecospheres.cloned_from)
           .then((res) => {
             clonedFrom.value = res
           })
