@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
-import type { Topic, TopicV1 } from '@/model/topic'
+import type { TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
-import { updateExtras } from '@/utils/topic'
+import { cloneTopic } from '@/utils/topic'
 
 import BouquetForm from '../../components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '../../components/forms/bouquet/BouquetOwnerForm.vue'
@@ -24,7 +24,7 @@ const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
-const topic: Ref<Partial<Topic>> = ref({
+const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
@@ -40,6 +40,15 @@ const topic: Ref<Partial<Topic>> = ref({
 })
 const errorMsg = ref('')
 const canSave = ref(false)
+
+const isReadyForForm = computed(() => {
+  // condition for form mouting based on topic data load: edit || create raw || create cloned
+  return (
+    topic.value.id ||
+    (props.isCreate && !routeQuery.clone) ||
+    (routeQuery.clone && topic.value.extras?.ecospheres?.cloned_from)
+  )
+})
 
 const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
   const loader = useLoading().show()
@@ -102,22 +111,16 @@ const cancel = () => {
 }
 
 onMounted(() => {
-  if (!props.isCreate || routeQuery.clone !== null) {
+  if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
     useTopicStore()
       .load(routeQuery.clone || routeParams.bid)
       .then((remoteTopic) => {
-        const { datasets, reuses, ...data } = remoteTopic
-        if (routeQuery.clone !== null) {
-          // build a fonctionnal v1 (POST format) topic from clone source data
-          topic.value = {
-            ...data,
-            datasets: remoteTopic.extras['ecospheres:datasets_properties']
-              .filter((dp) => !!dp.id)
-              .map((dp) => dp.id),
-            extras: updateExtras(remoteTopic, { cloned_from: routeQuery.clone })
-          } as TopicV1
+        if (routeQuery.clone != null) {
+          topic.value = cloneTopic(remoteTopic)
         } else {
+          // remove rels from TopicV2 for TopicPostData compatibility
+          const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
         }
       })
@@ -163,16 +166,15 @@ onMounted(() => {
       </div>
       <div class="fr-mt-4w">
         <h2>Description du bouquet de données</h2>
-        <!-- do not mount this component until we have valid topic data -->
         <BouquetForm
-          v-if="topic.id || (isCreate && !routeQuery.clone)"
+          v-if="isReadyForForm"
           v-model="topic"
           @update-validation="(isValid: boolean) => canSave = isValid"
         />
       </div>
       <div class="fr-mt-4w">
         <h2>Propriétaire du bouquet</h2>
-        <BouquetOwnerForm v-if="topic.id || isCreate" v-model="topic" />
+        <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
       </div>
       <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
         <DsfrButton
