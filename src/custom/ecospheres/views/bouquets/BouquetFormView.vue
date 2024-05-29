@@ -8,6 +8,7 @@ import { NoOptionSelected } from '@/model/theme'
 import type { Topic, TopicV1 } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
+import { updateExtras } from '@/utils/topic'
 
 import BouquetForm from '../../components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '../../components/forms/bouquet/BouquetOwnerForm.vue'
@@ -114,10 +115,7 @@ onMounted(() => {
             datasets: remoteTopic.extras['ecospheres:datasets_properties']
               .filter((dp) => !!dp.id)
               .map((dp) => dp.id),
-            extras: {
-              ...remoteTopic.extras,
-              'ecospheres:cloned_from': routeQuery.clone
-            }
+            extras: updateExtras(remoteTopic, { cloned_from: routeQuery.clone })
           } as TopicV1
         } else {
           topic.value = data

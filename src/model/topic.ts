@@ -17,13 +17,17 @@ export interface DatasetProperties {
   availability: Availability
 }
 
+export interface EcospheresTopicExtras {
+  cloned_from?: string
+}
+
 export interface TopicExtras {
   ['ecospheres:informations']: Array<{
     theme: string
     subtheme: string
   }>
   ['ecospheres:datasets_properties']: DatasetProperties[]
-  ['ecospheres:cloned_from']?: string
+  ecospheres?: EcospheresTopicExtras
 }
 
 export type Topic = Owned & {
