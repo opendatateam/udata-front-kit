@@ -36,6 +36,7 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
   const { id, slug, ...data } = topic
   return {
     ...data,
+    private: true,
     datasets: [],
     reuses: [],
     owner: useUserStore().data ?? null,
