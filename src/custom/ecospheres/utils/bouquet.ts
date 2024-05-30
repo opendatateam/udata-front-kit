@@ -6,7 +6,8 @@ import {
   type Topic,
   type EcospheresTopicExtras,
   type TopicExtras,
-  type TopicPostData
+  type TopicPostData,
+  type DatasetProperties
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -59,33 +60,9 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
   }
 }
 
-export function useClonedFrom(topic: Ref<Topic | null>): Ref<Topic | null> {
-  const clonedFrom = ref<Topic | null>(null)
-
-  watch(
-    topic,
-    async (newTopic) => {
-      // FIXME: catch 404 when possible from data.gouv.fr
-      if (newTopic?.extras?.ecospheres?.cloned_from != null) {
-        useTopicStore()
-          .load(newTopic.extras.ecospheres.cloned_from)
-          .then((res) => {
-            clonedFrom.value = res
-          })
-          .catch(() => {
-            clonedFrom.value = null
-          })
-      } else {
-        clonedFrom.value = null
-      }
-    },
-    { immediate: true }
-  )
-
-  return clonedFrom
-}
-
-export function useBreadcrumbLinks(
+export function useBreadcrumbLinksForTopic(
+  theme: Ref<string | undefined>,
+  subtheme: Ref<string | undefined>,
   topic: Ref<Topic | null>
 ): ComputedRef<BreadcrumbItem[]> {
   return computed(() => {
@@ -94,20 +71,54 @@ export function useBreadcrumbLinks(
       { to: { name: 'bouquets' }, text: 'Bouquets' }
     ]
 
-    const theme = topic.value?.extras['ecospheres:informations'][0].theme
-    const subtheme = topic.value?.extras['ecospheres:informations'][0].subtheme
-
-    if (theme !== undefined && subtheme !== undefined) {
+    if (theme.value !== undefined && subtheme.value !== undefined) {
       breadcrumbs.push(
-        { text: theme, to: `/bouquets/?theme=${theme}` },
+        { text: theme.value, to: `/bouquets/?theme=${theme.value}` },
         {
-          text: subtheme,
-          to: `/bouquets/?theme=${theme}&subtheme=${subtheme}`
-        },
-        { to: '', text: topic.value?.name ?? '' }
+          text: subtheme.value,
+          to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
+        }
       )
+    }
+
+    if (topic?.value != null) {
+      breadcrumbs.push({ to: '', text: topic.value.name ?? '' })
     }
 
     return breadcrumbs
   })
+}
+
+export function useExtras(topic: Ref<Topic | null>): {
+  theme: Ref<string | undefined>
+  subtheme: Ref<string | undefined>
+  datasetsProperties: Ref<DatasetProperties[]>
+  clonedFrom: Ref<Topic | null>
+} {
+  const theme: Ref<string | undefined> = ref()
+  const subtheme: Ref<string | undefined> = ref()
+  const datasetsProperties: Ref<DatasetProperties[]> = ref([])
+  const clonedFrom = ref<Topic | null>(null)
+
+  watch(topic, () => {
+    theme.value = topic.value?.extras['ecospheres:informations'][0].theme
+    subtheme.value = topic.value?.extras['ecospheres:informations'][0].subtheme
+    datasetsProperties.value =
+      topic.value?.extras['ecospheres:datasets_properties'] ?? []
+    // FIXME: catch 404 when possible from data.gouv.fr
+    if (topic.value?.extras?.ecospheres?.cloned_from != null) {
+      useTopicStore()
+        .load(topic.value?.extras.ecospheres.cloned_from)
+        .then((res) => {
+          clonedFrom.value = res
+        })
+        .catch(() => {
+          clonedFrom.value = null
+        })
+    } else {
+      clonedFrom.value = null
+    }
+  })
+
+  return { theme, subtheme, datasetsProperties, clonedFrom }
 }

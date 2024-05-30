@@ -16,10 +16,10 @@ import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import {
-  useClonedFrom,
-  useBreadcrumbLinks
+  useBreadcrumbLinksForTopic,
+  useExtras
 } from '@/custom/ecospheres/utils/bouquet'
-import type { Topic, DatasetProperties } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -41,12 +41,8 @@ const store = useTopicStore()
 const loading = useLoading()
 
 const topic: Ref<Topic | null> = ref(null)
-const theme = ref()
-const subtheme = ref()
 const selectedTabIndex = ref(0)
 const spatialCoverage = useSpatialCoverage(topic)
-const clonedFrom = useClonedFrom(topic)
-const datasetsProperties: Ref<DatasetProperties[]> = ref([])
 
 const showDiscussions = config.website.discussions.topic.display
 
@@ -55,7 +51,8 @@ const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
-const breadcrumbLinks = useBreadcrumbLinks(topic)
+const { theme, subtheme, datasetsProperties, clonedFrom } = useExtras(topic)
+const breadcrumbLinks = useBreadcrumbLinksForTopic(theme, subtheme, topic)
 
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
@@ -131,12 +128,6 @@ watch(
       .load(props.bouquetId)
       .then((res) => {
         topic.value = res
-        // FIXME: use extras value directly when new schema is here or a composable
-        theme.value = topic.value?.extras['ecospheres:informations'][0].theme
-        subtheme.value =
-          topic.value?.extras['ecospheres:informations'][0].subtheme
-        datasetsProperties.value =
-          res.extras['ecospheres:datasets_properties'] ?? []
       })
       .finally(() => loader.hide())
   },
@@ -154,7 +145,7 @@ watch(
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
           <DsfrTag
-            v-if="topic?.extras"
+            v-if="theme"
             class="fr-mb-1v bold uppercase"
             :label="subtheme"
             :style="{
