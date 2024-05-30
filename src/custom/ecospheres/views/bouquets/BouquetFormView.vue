@@ -98,13 +98,15 @@ const destroy = async () => {
 }
 
 const cancel = () => {
-  if (props.isCreate && routeQuery.clone === null) {
+  if (props.isCreate && routeQuery.clone == null) {
     router.push({ name: 'bouquets' })
+  } else if (props.isCreate && routeQuery.clone != null) {
+    router.go(-1)
   } else {
     router.push({
       name: 'bouquet_detail',
       params: {
-        bid: routeQuery.clone !== null ? routeQuery.clone : topic.value.slug
+        bid: topic.value.slug
       }
     })
   }
