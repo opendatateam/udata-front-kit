@@ -1,5 +1,6 @@
-import { ref, watch, type Ref } from 'vue'
+import { ref, watch, computed, type Ref, type ComputedRef } from 'vue'
 
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
   type Topic,
@@ -82,4 +83,31 @@ export function useClonedFrom(topic: Ref<Topic | null>): Ref<Topic | null> {
   )
 
   return clonedFrom
+}
+
+export function useBreadcrumbLinks(
+  topic: Ref<Topic | null>
+): ComputedRef<BreadcrumbItem[]> {
+  return computed(() => {
+    const breadcrumbs = [
+      { to: '/', text: 'Accueil' },
+      { to: { name: 'bouquets' }, text: 'Bouquets' }
+    ]
+
+    const theme = topic.value?.extras['ecospheres:informations'][0].theme
+    const subtheme = topic.value?.extras['ecospheres:informations'][0].subtheme
+
+    if (theme !== undefined && subtheme !== undefined) {
+      breadcrumbs.push(
+        { text: theme, to: `/bouquets/?theme=${theme}` },
+        {
+          text: subtheme,
+          to: `/bouquets/?theme=${theme}&subtheme=${subtheme}`
+        },
+        { to: '', text: topic.value?.name ?? '' }
+      )
+    }
+
+    return breadcrumbs
+  })
 }

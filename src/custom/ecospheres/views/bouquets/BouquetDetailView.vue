@@ -22,7 +22,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
-import { useClonedFrom } from '@/utils/topic'
+import { useClonedFrom, useBreadcrumbLinks } from '@/utils/topic'
 
 import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
 
@@ -41,16 +41,6 @@ const topic: Ref<Topic | null> = ref(null)
 const theme = ref()
 const subtheme = ref()
 const selectedTabIndex = ref(0)
-const breadcrumbLinks = ref([
-  {
-    to: '/',
-    text: 'Accueil'
-  },
-  {
-    to: { name: 'bouquets' },
-    text: 'Bouquets'
-  }
-])
 const spatialCoverage = useSpatialCoverage(topic)
 const clonedFrom = useClonedFrom(topic)
 const datasetsProperties: Ref<DatasetProperties[]> = ref([])
@@ -58,11 +48,11 @@ const datasetsProperties: Ref<DatasetProperties[]> = ref([])
 const showDiscussions = config.website.discussions.topic.display
 
 const description = computed(() => descriptionFromMarkdown(topic))
-
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
+const breadcrumbLinks = useBreadcrumbLinks(topic)
 
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
@@ -144,21 +134,6 @@ watch(
           topic.value?.extras['ecospheres:informations'][0].subtheme
         datasetsProperties.value =
           res.extras['ecospheres:datasets_properties'] ?? []
-        // FIXME: use computed from extras when new schema is here
-        breadcrumbLinks.value.push(
-          {
-            text: theme.value,
-            to: `/bouquets/?theme=${theme.value}`
-          },
-          {
-            text: subtheme.value,
-            to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
-          },
-          {
-            to: '',
-            text: topic.value?.name ?? ''
-          }
-        )
       })
       .finally(() => loader.hide())
   },
