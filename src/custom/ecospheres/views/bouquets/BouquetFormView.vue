@@ -4,11 +4,11 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
+import { cloneTopic } from '@/custom/ecospheres/utils/bouquet'
 import { NoOptionSelected } from '@/model/theme'
 import type { TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
-import { cloneTopic } from '@/utils/topic'
 
 import BouquetForm from '../../components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '../../components/forms/bouquet/BouquetOwnerForm.vue'

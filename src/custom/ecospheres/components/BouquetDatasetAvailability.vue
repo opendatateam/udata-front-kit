@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { isAvailable } from '@/custom/ecospheres/utils/bouquet'
 import type { DatasetProperties } from '@/model/topic'
-import { isAvailable } from '@/utils/topic'
 
 const missingData = 'Non disponible'
 
