@@ -17,12 +17,17 @@ export interface DatasetProperties {
   availability: Availability
 }
 
+export interface EcospheresTopicExtras {
+  cloned_from?: string
+}
+
 export interface TopicExtras {
   ['ecospheres:informations']: Array<{
     theme: string
     subtheme: string
   }>
   ['ecospheres:datasets_properties']: DatasetProperties[]
+  ecospheres?: EcospheresTopicExtras
 }
 
 export type Topic = Owned & {
@@ -41,4 +46,14 @@ export type Topic = Owned & {
   tags: string[]
   uri: string
   spatial: SpatialField | undefined
+}
+
+export type TopicPostData = Omit<
+  Topic,
+  'datasets' | 'reuses' | 'id' | 'slug'
+> & {
+  id?: string
+  slug?: string
+  datasets: string[]
+  reuses: string[]
 }

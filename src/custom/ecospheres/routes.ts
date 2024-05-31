@@ -1,3 +1,5 @@
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
+
 export const routes = [
   {
     path: '/',
@@ -18,6 +20,9 @@ export const routes = [
       {
         path: ':bid',
         name: 'bouquet_detail',
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          bouquetId: route.params.bid
+        }),
         component: async () =>
           await import(
             '@/custom/ecospheres/views/bouquets/BouquetDetailView.vue'
