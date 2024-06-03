@@ -2,6 +2,7 @@ import type { Organization } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
 import config from '@/config'
+import type { BaseParams } from '@/model/api'
 
 import OrganizationsAPI from '../services/api/resources/OrganizationsAPI'
 
@@ -121,10 +122,10 @@ export const useOrganizationStore = defineStore('organization', {
     /**
      * Async function to trigger API fetch of an org if not known in store
      */
-    async load(orgId: string, page: number) {
+    async load(orgId: string, page: number, params?: BaseParams) {
       const existing = this.get(orgId)
       if (existing !== undefined) return existing
-      const org = await orgApi.get({ entityId: orgId })
+      const org = await orgApi.get({ entityId: orgId, ...params })
       return this.add(org, page)
     }
   }
