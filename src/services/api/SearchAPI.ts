@@ -16,10 +16,12 @@ export default class SearchAPI extends DatagouvfrAPI {
     args?: object
   ): Promise<DatasetV2Response> {
     return await this.list({
-      topic,
-      q: query,
-      page: page ?? 1,
-      ...args
+      params: {
+        topic,
+        q: query,
+        page: page ?? 1,
+        ...args
+      }
     })
   }
 }

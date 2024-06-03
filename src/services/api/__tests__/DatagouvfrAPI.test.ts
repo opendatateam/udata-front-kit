@@ -37,7 +37,7 @@ describe('DatagouvfrAPI', () => {
     const entityData = { id: entityId, name: 'Test Entity' }
     mock.onGet(`${endpointUrl()}/${entityId}/`).reply(200, entityData)
 
-    const data = await api.get(entityId)
+    const data = await api.get({ entityId })
     expect(data).toEqual(entityData)
   })
 
@@ -48,7 +48,7 @@ describe('DatagouvfrAPI', () => {
     ]
     mock.onGet(endpointUrl(true)).reply(200, entitiesData)
 
-    const data = await api.list()
+    const data = await api.list({})
     expect(data).toEqual(entitiesData)
   })
 
@@ -56,7 +56,7 @@ describe('DatagouvfrAPI', () => {
     const newEntityData = { name: 'New Entity' }
     mock.onPost(endpointUrl(true)).reply(201, newEntityData)
 
-    const data = await api.create(newEntityData)
+    const data = await api.create({ data: newEntityData })
     expect(data).toEqual(newEntityData)
   })
 
@@ -65,7 +65,7 @@ describe('DatagouvfrAPI', () => {
     const updatedEntityData = { id: entityId, name: 'Updated Entity' }
     mock.onPut(`${endpointUrl()}/${entityId}/`).reply(200, updatedEntityData)
 
-    const data = await api.update(entityId, updatedEntityData)
+    const data = await api.update({ entityId, data: updatedEntityData })
     expect(data).toEqual(updatedEntityData)
   })
 
@@ -73,7 +73,7 @@ describe('DatagouvfrAPI', () => {
     const entityId = '123'
     mock.onDelete(`${endpointUrl()}/${entityId}/`).reply(204)
 
-    const data = await api.delete(entityId)
+    const data = await api.delete({ entityId })
     expect(data).toEqual(undefined)
   })
 })

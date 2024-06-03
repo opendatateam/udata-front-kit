@@ -105,14 +105,14 @@ export function useExtras(topic: Ref<Topic | null>): {
     subtheme.value = topic.value?.extras['ecospheres:informations'][0].subtheme
     datasetsProperties.value =
       topic.value?.extras['ecospheres:datasets_properties'] ?? []
-    // FIXME: catch 404 when possible from data.gouv.fr
     if (topic.value?.extras?.ecospheres?.cloned_from != null) {
       useTopicStore()
-        .load(topic.value?.extras.ecospheres.cloned_from)
+        .load(topic.value?.extras.ecospheres.cloned_from, { toasted: false })
         .then((res) => {
           clonedFrom.value = res
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error('Failed fetching cloned_from', err.response?.data)
           clonedFrom.value = null
         })
     } else {

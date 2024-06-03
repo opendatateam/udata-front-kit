@@ -89,9 +89,13 @@ const submitModal = async (modalData: DatasetModalData) => {
       )
       const match = pattern.exec(modalData.dataset.uri)
       if (match?.groups?.datasetName) {
-        // FIXME: check 404 on data.gouv.fr when CORS allows it and remove toast
         try {
-          const dataset = await useDatasetStore().load(match.groups.datasetName)
+          const dataset = await useDatasetStore().load(
+            match.groups.datasetName,
+            {
+              toasted: false
+            }
+          )
           if (dataset !== undefined) {
             modalData.dataset.availability = Availability.LOCAL_AVAILABLE
             const resolved = router.resolve({
