@@ -63,7 +63,7 @@ routerPromise
       }
     })
 
-    // redirect to 404 if configured
+    // redirect to 404 if configured for this request
     axios.interceptors.response.use(
       async (response) => {
         return response
