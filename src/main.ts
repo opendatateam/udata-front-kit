@@ -74,12 +74,12 @@ routerPromise
 
 // inject token in requests if user is loggedIn
 axios.interceptors.request.use(
-  async (config: InternalAxiosRequestConfig & CustomParams) => {
+  async (requestConfig: InternalAxiosRequestConfig & CustomParams) => {
     const store = useUserStore()
-    if (store.$state.isLoggedIn && config.authenticated === true) {
-      config.headers.Authorization = `Bearer ${store.$state.token}`
+    if (store.$state.isLoggedIn && requestConfig.authenticated === true) {
+      requestConfig.headers.Authorization = `Bearer ${store.$state.token}`
     }
-    return config
+    return requestConfig
   },
   async (error) => await Promise.reject(error)
 )
