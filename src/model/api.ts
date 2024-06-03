@@ -45,7 +45,7 @@ export interface RequestConfig extends CustomParams {
 
 export type URLParams = Record<string, string | number | null>
 
-interface BaseParams extends CustomParams {
+export interface BaseParams extends CustomParams {
   headers?: Record<string, unknown>
 }
 

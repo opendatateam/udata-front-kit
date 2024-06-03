@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, type ComputedRef } from 'vue'
 
 import config from '@/config'
+import type { BaseParams } from '@/model/api'
 import type { TopicConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 
@@ -116,10 +117,10 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Get a single topic from store or API
      */
-    async load(slugOrId: string): Promise<Topic> {
+    async load(slugOrId: string, params?: BaseParams): Promise<Topic> {
       const existing = this.get(slugOrId)
       if (existing !== undefined) return existing
-      const topic = await topicsAPIv2.get({ entityId: slugOrId })
+      const topic = await topicsAPIv2.get({ entityId: slugOrId, ...params })
       this.data.push(topic)
       return topic
     },
