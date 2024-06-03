@@ -105,7 +105,7 @@ const metaTitle = (): string => {
 const metaLink = (): string => {
   const resolved = router.resolve({
     name: 'bouquet_detail',
-    params: { bid: topic.value?.id }
+    params: { bid: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
 }
@@ -128,6 +128,12 @@ watch(
       .load(props.bouquetId)
       .then((res) => {
         topic.value = res
+        if (topic.value.slug !== props.bouquetId) {
+          router.push({
+            name: 'bouquet_detail',
+            params: { bid: topic.value.slug }
+          })
+        }
       })
       .finally(() => loader.hide())
   },
