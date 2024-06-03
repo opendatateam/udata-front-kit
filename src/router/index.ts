@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, type RouteLocationNormalizedLoaded, type RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteLocationNormalizedLoaded,
+  type RouteRecordRaw
+} from 'vue-router'
 
 import config from '@/config'
 import type { PageConfig } from '@/model/config'
@@ -62,6 +67,12 @@ const defaultRoutes: RouteRecordRaw[] = [
           await import('@/views/organizations/OrganizationDetailView.vue')
       }
     ]
+  },
+  // technical pages
+  {
+    path: '/404',
+    name: 'not_found',
+    component: async () => await import('@/views/NotFoundView.vue')
   }
 ].filter((route) => {
   if (route.name === undefined) return true

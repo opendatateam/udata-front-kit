@@ -125,7 +125,7 @@ watch(
   () => {
     const loader = loading.show()
     store
-      .load(props.bouquetId)
+      .load(props.bouquetId, { toasted: false, redirectNotFound: true })
       .then((res) => {
         topic.value = res
         if (topic.value.slug !== props.bouquetId) {
