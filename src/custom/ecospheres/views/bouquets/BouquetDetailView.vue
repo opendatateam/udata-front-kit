@@ -19,7 +19,7 @@ import {
   useBreadcrumbLinksForTopic,
   useExtras
 } from '@/custom/ecospheres/utils/bouquet'
-import type { Topic } from '@/model/topic'
+import { type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -84,11 +84,13 @@ const onUpdateDatasets = () => {
       // send the tags or they will be erased
       tags: topic.value.tags,
       datasets: datasetsProperties.value
-        .filter((d) => d.id !== null)
+        .filter((d) => d.id !== null && d.remoteDeleted !== true)
         .map((d) => d.id),
       extras: {
         ...topic.value.extras,
-        'ecospheres:datasets_properties': datasetsProperties.value
+        'ecospheres:datasets_properties': datasetsProperties.value.map(
+          ({ remoteDeleted, ...data }) => data
+        )
       }
     })
     .finally(() => loader.hide())

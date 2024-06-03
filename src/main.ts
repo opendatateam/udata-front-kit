@@ -24,6 +24,7 @@ import type { CustomParams } from './model/api'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
+import { isNotFoundError } from './utils/http'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -69,10 +70,7 @@ routerPromise
         return response
       },
       async (error) => {
-        if (
-          [404, 410].includes(error.response.status) &&
-          error.config.redirectNotFound === true
-        ) {
+        if (isNotFoundError(error) && error.config.redirectNotFound === true) {
           await router.push({ name: 'not_found' })
         }
         return await Promise.reject(error)

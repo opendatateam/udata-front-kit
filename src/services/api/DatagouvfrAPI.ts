@@ -15,6 +15,11 @@ import type {
   DeleteParams
 } from '../../model/api'
 
+export const toastError = (error: AxiosError): void => {
+  const msg = `${error.message} (${error.response?.status})`
+  toast(msg, { type: 'error', autoClose: false })
+}
+
 /**
  * A wrapper around data.gouv.fr's API
  *
@@ -46,7 +51,7 @@ export default class DatagouvfrAPI {
   async request(requestConfig: RequestConfig): Promise<AxiosResponseData> {
     const response = await axios(requestConfig).catch((error: AxiosError) => {
       if (this.toasted && requestConfig.toasted === true) {
-        toast(error.message, { type: 'error', autoClose: false })
+        toastError(error)
       }
       throw error
     })

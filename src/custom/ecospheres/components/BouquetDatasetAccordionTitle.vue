@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DatasetProperties } from '@/model/topic'
 
-import BouquetDatasetAvailability from './BouquetDatasetAvailability.vue'
+import { isAvailable } from '../utils/bouquet'
 
 defineProps({
   datasetProperties: {
@@ -21,9 +21,13 @@ defineProps({
       <VIcon v-if="isEdit" name="md-dragindicator" />
       <span :class="{ 'fr-ml-2w': isEdit }">{{ datasetProperties.title }}</span>
     </div>
-    <BouquetDatasetAvailability
-      class="fr-mr-2w"
-      :dataset-properties="datasetProperties"
+    <DsfrTag
+      v-if="
+        !isAvailable(datasetProperties.availability) ||
+        datasetProperties.remoteDeleted
+      "
+      class="uppercase bold fr-mr-2w"
+      label="Non disponible"
     />
   </div>
 </template>
@@ -34,5 +38,12 @@ defineProps({
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
+
+.fr-tag {
+  font-size: 0.8rem;
+  color: #6e445a;
+  background-color: #fee7fc;
+  border-radius: 0;
 }
 </style>
