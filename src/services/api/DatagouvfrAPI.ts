@@ -8,7 +8,11 @@ import type {
   AxiosResponseData,
   RequestConfig,
   AxiosError,
-  URLParams
+  GetParams,
+  UpdateParams,
+  ListParams,
+  CreateParams,
+  DeleteParams
 } from '../../model/api'
 
 /**
@@ -41,7 +45,7 @@ export default class DatagouvfrAPI {
    */
   async request(config: RequestConfig): Promise<AxiosResponseData> {
     const response = await axios(config).catch((error: AxiosError) => {
-      if (this.toasted) {
+      if (this.toasted && config.toasted === true) {
         toast(error.message, { type: 'error', autoClose: false })
       }
       throw error
@@ -52,57 +56,99 @@ export default class DatagouvfrAPI {
   /**
    * Get an entity's detail from its id
    */
-  async get(
-    entityId: string,
-    params?: URLParams,
-    headers?: object
-  ): Promise<AxiosResponseData> {
+  async get({
+    entityId,
+    params,
+    headers,
+    toasted = true,
+    authenticated = false
+  }: GetParams): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
-    return await this.request({ url, method: 'get', params, headers })
+    return await this.request({
+      url,
+      method: 'get',
+      params,
+      headers,
+      toasted,
+      authenticated
+    })
   }
 
   /**
    * List entities
    */
-  async list(params?: URLParams): Promise<AxiosResponseData> {
+  async list({
+    params,
+    headers,
+    toasted = true,
+    authenticated = false
+  }: ListParams): Promise<AxiosResponseData> {
     return await this.request({
       url: this.url(true),
       method: 'get',
-      params
+      params,
+      headers,
+      toasted,
+      authenticated
     })
   }
 
   /**
    * Create an entity (POST)
    */
-  async create(data: object): Promise<AxiosResponseData> {
+  async create({
+    data,
+    headers,
+    toasted = true,
+    authenticated = true
+  }: CreateParams): Promise<AxiosResponseData> {
     return await this.request({
       url: this.url(true),
       method: 'post',
-      data
+      data,
+      headers,
+      toasted,
+      authenticated
     })
   }
 
   /**
    * Update an entity (PUT)
    */
-  async update(entityId: string, data: object): Promise<AxiosResponseData> {
+  async update({
+    entityId,
+    data,
+    headers,
+    toasted = true,
+    authenticated = true
+  }: UpdateParams): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
     return await this.request({
       url,
       method: 'put',
-      data
+      data,
+      headers,
+      toasted,
+      authenticated
     })
   }
 
   /**
    * Delete an entity (DELETE)
    */
-  async delete(entityId: string): Promise<AxiosResponseData> {
+  async delete({
+    entityId,
+    headers,
+    toasted = true,
+    authenticated = true
+  }: DeleteParams): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
     return await this.request({
       url,
-      method: 'delete'
+      method: 'delete',
+      headers,
+      toasted,
+      authenticated
     })
   }
 }

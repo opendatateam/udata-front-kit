@@ -128,7 +128,7 @@ export const useDatasetStore = defineStore('dataset', {
     async load(datasetId: string) {
       const existing = this.get(datasetId)
       if (existing !== undefined) return existing
-      const dataset = await datasetsApiv2.get(datasetId)
+      const dataset = await datasetsApiv2.get({ entityId: datasetId })
       if (dataset === undefined) return
       return this.addOrphan(dataset)
     },
@@ -154,7 +154,9 @@ export const useDatasetStore = defineStore('dataset', {
     },
 
     async getLicense(license: string) {
-      const response: License[] = await datasetsApi.get('licenses')
+      const response: License[] = await datasetsApi.get({
+        entityId: 'licenses'
+      })
       const foundLicense = response.find((l) => l.id === license)
       return foundLicense
     }

@@ -70,7 +70,10 @@ export const useOrganizationStore = defineStore('organization', {
     async loadFromConfigFlat() {
       if (this.flatData.length > 0) return this.flatData
       const promises = config.organizations.map(async (orgId: string) => {
-        return await orgApi.get(orgId, undefined, { 'x-fields': 'id,name' })
+        return await orgApi.get({
+          entityId: orgId,
+          headers: { 'x-fields': 'id,name' }
+        })
       })
       this.flatData = await Promise.all(promises)
       return this.flatData
@@ -83,7 +86,7 @@ export const useOrganizationStore = defineStore('organization', {
         const existing = this.get(orgId)
         if (existing !== undefined) continue
         try {
-          const org = await orgApi.get(orgId)
+          const org = await orgApi.get({ entityId: orgId })
           this.add(org, page)
         } catch (e) {
           console.log(
@@ -121,7 +124,7 @@ export const useOrganizationStore = defineStore('organization', {
     async load(orgId: string, page: number) {
       const existing = this.get(orgId)
       if (existing !== undefined) return existing
-      const org = await orgApi.get(orgId)
+      const org = await orgApi.get({ entityId: orgId })
       return this.add(org, page)
     }
   }

@@ -6,6 +6,7 @@ import VueDsfr from '@gouvminint/vue-dsfr'
 import '@gouvminint/vue-dsfr/styles'
 import { createHead } from '@unhead/vue'
 import axios from 'axios'
+import type { InternalAxiosRequestConfig } from 'axios'
 import { createPinia } from 'pinia'
 import { createApp, markRaw } from 'vue'
 import TextClamp from 'vue3-text-clamp'
@@ -19,6 +20,7 @@ import config from '@/config'
 import App from './App.vue'
 import './assets/main.css'
 import * as icons from './icons.js'
+import type { CustomParams } from './model/api'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
@@ -72,9 +74,9 @@ routerPromise
 
 // inject token in requests if user is loggedIn
 axios.interceptors.request.use(
-  async (config) => {
+  async (config: InternalAxiosRequestConfig & CustomParams) => {
     const store = useUserStore()
-    if (store.$state.isLoggedIn) {
+    if (store.$state.isLoggedIn && config.authenticated === true) {
       config.headers.Authorization = `Bearer ${store.$state.token}`
     }
     return config

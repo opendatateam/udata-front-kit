@@ -11,16 +11,6 @@ export type HttpMethod =
   | 'head'
   | 'options'
 
-export interface RequestConfig {
-  url: string
-  method: HttpMethod
-  params?: object
-  data?: object
-  headers?: object
-}
-
-export type URLParams = Record<string, string | number | null>
-
 export type AxiosResponseData = AxiosResponse['data']
 
 export type GenericData = object[]
@@ -39,3 +29,40 @@ export interface DatagouvfrAPIArgs {
   version?: number
   endpoint?: string
 }
+
+export interface CustomParams {
+  toasted?: boolean
+  authenticated?: boolean
+}
+
+export interface RequestConfig extends CustomParams {
+  url: string
+  method: HttpMethod
+  params?: object
+  data?: object
+  headers?: object
+}
+
+export type URLParams = Record<string, string | number | null>
+
+interface BaseParams extends CustomParams {
+  headers?: Record<string, unknown>
+}
+
+interface EntityParam {
+  entityId: string
+}
+
+interface QueryParam {
+  params?: URLParams
+}
+
+interface DataParam {
+  data: object
+}
+
+export type GetParams = BaseParams & QueryParam & EntityParam
+export type ListParams = BaseParams & QueryParam
+export type CreateParams = BaseParams & DataParam
+export type UpdateParams = BaseParams & DataParam & EntityParam
+export type DeleteParams = BaseParams & EntityParam

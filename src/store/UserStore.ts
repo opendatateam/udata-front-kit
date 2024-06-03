@@ -41,7 +41,7 @@ export const useUserStore = defineStore('user', {
         this.isLoggedIn = true
         let userData: ExtendedUser | undefined
         try {
-          userData = await userAPI.list()
+          userData = await userAPI.list({ authenticated: true })
         } catch (err) {
           // profile info fetching has failed, we're probably using a bad token
           // keep the current route and redirect to the login flow

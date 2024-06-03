@@ -67,7 +67,7 @@ export const useTopicStore = defineStore('topic', {
     async loadTopicsFromList(topics: TopicConf[]) {
       this.data = []
       for (const topic of topics) {
-        const res = await topicsAPIv2.get(topic.id)
+        const res = await topicsAPIv2.get({ entityId: topic.id })
         this.data.push(res)
       }
     },
@@ -89,9 +89,11 @@ export const useTopicStore = defineStore('topic', {
     async loadTopicsForUniverse(): Promise<Topic[]> {
       if (this.isLoaded) return this.data
       let response = await topicsAPIv2.list({
-        page_size: config.website.pagination_sizes.topics_list,
-        tag: config.universe.name,
-        include_private: 'yes'
+        params: {
+          page_size: config.website.pagination_sizes.topics_list,
+          tag: config.universe.name,
+          include_private: 'yes'
+        }
       })
       await useUserStore().waitForStoreInit()
       this.data = this.filter(response.data)
@@ -117,17 +119,17 @@ export const useTopicStore = defineStore('topic', {
     async load(slugOrId: string): Promise<Topic> {
       const existing = this.get(slugOrId)
       if (existing !== undefined) return existing
-      const topic = await topicsAPIv2.get(slugOrId)
+      const topic = await topicsAPIv2.get({ entityId: slugOrId })
       this.data.push(topic)
       return topic
     },
     /**
      * Create a topic
      */
-    async create(topicData: any): Promise<Topic> {
-      const res = await topicsAPI.create(topicData)
+    async create(topicData: object): Promise<Topic> {
+      const res = await topicsAPI.create({ data: topicData })
       // get the v2 version (create res is v1) for storage
-      const topic = await topicsAPIv2.get(res.id)
+      const topic = await topicsAPIv2.get({ entityId: res.id })
       this.data.push(topic)
       return topic
     },
@@ -135,7 +137,7 @@ export const useTopicStore = defineStore('topic', {
      * Update a topic
      */
     async update(topicId: string, data: any): Promise<Topic> {
-      const res = await topicsAPI.update(topicId, data)
+      const res = await topicsAPI.update({ entityId: topicId, data })
       const idx = this.data.findIndex((b) => b.id === topicId)
       // do not apply reuses and datasets because they're in v1 format
       const { reuses, datasets, ...remoteData } = res
@@ -146,7 +148,7 @@ export const useTopicStore = defineStore('topic', {
      * Delete a topic
      */
     async delete(topicId: string) {
-      await topicsAPI.delete(topicId)
+      await topicsAPI.delete({ entityId: topicId })
       const idx = this.data.findIndex((b) => b.id === topicId)
       this.data.splice(idx, 1)
     }

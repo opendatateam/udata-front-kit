@@ -23,7 +23,7 @@ onMounted(() => {
     auth.retrieveToken(route.query.code, route.query.state).then((token) => {
       auth.cleanup()
       store.login(token)
-      api.list().then((data) => {
+      api.list({ authenticated: true }).then((data) => {
         store.storeInfo(data)
       })
       const lastRoute = LocalStorageService.getItem('lastRoute')
