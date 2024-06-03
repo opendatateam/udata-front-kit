@@ -1,6 +1,7 @@
 import type { DatasetV2, License } from '@etalab/data.gouv.fr-components'
 import { defineStore } from 'pinia'
 
+import type { BaseParams } from '@/model/api'
 import type { DatasetV2Response } from '@/model/dataset'
 
 import DatasetsAPI from '../services/api/resources/DatasetsAPI'
@@ -125,10 +126,13 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Async function to trigger API fetch of a dataset if not known in store
      */
-    async load(datasetId: string) {
+    async load(datasetId: string, params?: BaseParams) {
       const existing = this.get(datasetId)
       if (existing !== undefined) return existing
-      const dataset = await datasetsApiv2.get({ entityId: datasetId })
+      const dataset = await datasetsApiv2.get({
+        entityId: datasetId,
+        ...params
+      })
       if (dataset === undefined) return
       return this.addOrphan(dataset)
     },
