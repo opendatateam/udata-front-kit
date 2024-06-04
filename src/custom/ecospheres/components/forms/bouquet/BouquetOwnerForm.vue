@@ -12,7 +12,7 @@ const topic = defineModel({
 const userStore = useUserStore()
 
 const choice: Ref<'organization' | 'owner'> = ref(
-  topic.value.owner != null ? 'owner' : 'organization'
+  topic.value.organization != null ? 'organization' : 'owner'
 )
 const organizations = computed(() => userStore.data?.organizations || [])
 
