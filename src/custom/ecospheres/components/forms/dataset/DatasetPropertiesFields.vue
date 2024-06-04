@@ -155,6 +155,18 @@ onMounted(() => {
           :value="Availability.URL_AVAILABLE"
           label="J'ajoute l'URL"
         />
+        <div
+          v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
+          class="fr-mb-4w"
+        >
+          <DsfrInput
+            id="alt-link"
+            v-model="datasetProperties.uri"
+            placeholder="Url vers le jeu de données souhaité"
+            :label-visible="true"
+            class="fr-mb-md-1w"
+          />
+        </div>
         <DsfrRadioButton
           v-model="datasetProperties.availability"
           :name="Availability.MISSING"
@@ -169,31 +181,6 @@ onMounted(() => {
         />
       </div>
     </fieldset>
-  </div>
-  <!-- step 2, when a dataset or a choice is selected -->
-  <div
-    v-if="
-      selectedDataset?.id ||
-      datasetProperties.availability !== Availability.LOCAL_AVAILABLE
-    "
-  >
-    <div
-      v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
-      class="fr-mt-1w fr-mb-4w"
-    >
-      <label class="fr-label" for="alt-link">
-        Déclarer le chemin d'accès vers le jeu de données<span class="required"
-          >&nbsp;*</span
-        >
-      </label>
-      <DsfrInput
-        id="alt-link"
-        v-model="datasetProperties.uri"
-        placeholder="Url vers le jeu de données souhaité"
-        :label-visible="true"
-        class="fr-mb-md-1w"
-      />
-    </div>
   </div>
 </template>
 
