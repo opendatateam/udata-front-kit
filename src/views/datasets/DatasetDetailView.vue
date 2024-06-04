@@ -174,7 +174,7 @@ watch(
 )
 
 onMounted(() => {
-  datasetStore.load(datasetId)
+  datasetStore.load(datasetId, { toasted: false, redirectNotFound: true })
 })
 </script>
 

@@ -61,7 +61,8 @@ export default class DatagouvfrAPI {
     params,
     headers,
     toasted = true,
-    authenticated = false
+    authenticated = false,
+    redirectNotFound = false
   }: GetParams): Promise<AxiosResponseData> {
     const url = `${this.url()}/${entityId}/`
     return await this.request({
@@ -70,7 +71,8 @@ export default class DatagouvfrAPI {
       params,
       headers,
       toasted,
-      authenticated
+      authenticated,
+      redirectNotFound
     })
   }
 

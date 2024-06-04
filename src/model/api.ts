@@ -33,6 +33,7 @@ export interface DatagouvfrAPIArgs {
 export interface CustomParams {
   toasted?: boolean
   authenticated?: boolean
+  redirectNotFound?: boolean
 }
 
 export interface RequestConfig extends CustomParams {

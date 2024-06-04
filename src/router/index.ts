@@ -1,7 +1,13 @@
-import { createRouter, createWebHistory, type RouteLocationNormalizedLoaded, type RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteLocationNormalizedLoaded,
+  type RouteRecordRaw
+} from 'vue-router'
 
 import config from '@/config'
 import type { PageConfig } from '@/model/config'
+import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
 
 const disableRoutes: string[] = config.website.router.disable ?? []
@@ -62,6 +68,12 @@ const defaultRoutes: RouteRecordRaw[] = [
           await import('@/views/organizations/OrganizationDetailView.vue')
       }
     ]
+  },
+  // technical pages
+  {
+    path: '/404',
+    name: 'not_found',
+    component: NotFoundView
   }
 ].filter((route) => {
   if (route.name === undefined) return true
@@ -126,6 +138,11 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   })
   const routes = Array.from(routesMap.values())
   routes.push(...pages)
+  // catch all 404 (keep at the end of the list)
+  routes.push({
+    path: '/:pathMatch(.*)',
+    component: NotFoundView
+  })
   return createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,

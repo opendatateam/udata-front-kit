@@ -63,6 +63,19 @@ routerPromise
       }
     })
 
+    // redirect to 404 if configured for this request
+    axios.interceptors.response.use(
+      async (response) => {
+        return response
+      },
+      async (error) => {
+        if (error.config.redirectNotFound === true) {
+          await router.push({ name: 'not_found' })
+        }
+        return await Promise.reject(error)
+      }
+    )
+
     app.mount('#app')
   })
   .catch((error) => {
