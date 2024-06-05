@@ -45,7 +45,7 @@ export default class DatagouvfrAPI {
    */
   async request(requestConfig: RequestConfig): Promise<AxiosResponseData> {
     const response = await axios(requestConfig).catch((error: AxiosError) => {
-      if (this.toasted && config.toasted === true) {
+      if (this.toasted && requestConfig.toasted === true) {
         toast(error.message, { type: 'error', autoClose: false })
       }
       throw error
