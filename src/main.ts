@@ -69,7 +69,10 @@ routerPromise
         return response
       },
       async (error) => {
-        if (error.config.redirectNotFound === true) {
+        if (
+          [404, 410].includes(error.response.status) &&
+          error.config.redirectNotFound === true
+        ) {
           await router.push({ name: 'not_found' })
         }
         return await Promise.reject(error)
