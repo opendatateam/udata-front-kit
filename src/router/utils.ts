@@ -7,7 +7,7 @@ interface RouteLocationParamsAsString
 
 interface RouteLocationQueryAsString
   extends Omit<RouteLocationNormalizedLoaded, 'query'> {
-  query: Record<string, string | null>
+  query: Record<string, string | null | undefined>
 }
 
 /**

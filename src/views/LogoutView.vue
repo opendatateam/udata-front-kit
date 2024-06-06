@@ -2,6 +2,8 @@
 import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
+
 import AuthService from '../services/AuthService'
 import { useUserStore } from '../store/UserStore'
 
@@ -25,7 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container about">
-    <h1>This is a logout page</h1>
-  </div>
+  <GenericContainer class="fr-mt-4w">
+    Déconnexion en cours...
+  </GenericContainer>
 </template>

@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import AuthService from '@/services/AuthService'
 import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
@@ -23,7 +24,7 @@ onMounted(() => {
     auth.retrieveToken(route.query.code, route.query.state).then((token) => {
       auth.cleanup()
       store.login(token)
-      api.list().then((data) => {
+      api.list({ authenticated: true }).then((data) => {
         store.storeInfo(data)
       })
       const lastRoute = LocalStorageService.getItem('lastRoute')
@@ -39,7 +40,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container about">
-    <p>Connexion en cours...</p>
-  </div>
+  <GenericContainer class="fr-mt-4w">Connexion en cours...</GenericContainer>
 </template>

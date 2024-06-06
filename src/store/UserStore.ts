@@ -1,9 +1,9 @@
-import type { User } from '@etalab/data.gouv.fr-components'
 import type { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
 import { watch } from 'vue'
 
 import type { WithOwned } from '@/model'
+import type { ExtendedUser } from '@/model/user'
 import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
 
@@ -14,7 +14,7 @@ export interface RootState {
   isInited: boolean
   isLoggedIn: boolean
   token: string | undefined
-  data: User | undefined
+  data: ExtendedUser | undefined
 }
 
 export const useUserStore = defineStore('user', {
@@ -34,14 +34,14 @@ export const useUserStore = defineStore('user', {
      * Init store from localStorage
      * If we have a token, fetch user infos from API
      */
-    async init(): Promise<User | undefined> {
+    async init(): Promise<ExtendedUser | undefined> {
       const token = localStorage.getItem(STORAGE_KEY)
       if (token !== null) {
         this.token = token
         this.isLoggedIn = true
-        let userData: User | undefined
+        let userData: ExtendedUser | undefined
         try {
-          userData = await userAPI.list()
+          userData = await userAPI.list({ authenticated: true })
         } catch (err) {
           // profile info fetching has failed, we're probably using a bad token
           // keep the current route and redirect to the login flow
@@ -103,7 +103,7 @@ export const useUserStore = defineStore('user', {
     /**
      * Store user infos
      */
-    storeInfo(data: User) {
+    storeInfo(data: ExtendedUser) {
       this.data = data
     },
     /**
@@ -117,9 +117,16 @@ export const useUserStore = defineStore('user', {
      */
     hasEditPermissions<T>(object: WithOwned<T> | null): boolean {
       if (object === null) return false
-      if (!this.isLoggedIn) return false
+      if (!this.isLoggedIn || this.data === undefined) return false
       if (this.isAdmin() === true) return true
-      return object.owner?.id === this.data?.id
+      if (object.owner != null) {
+        return object.owner.id === this.data.id
+      } else if (object.organization != null) {
+        return this.data.organizations
+          .map((o) => o.id)
+          .includes(object.organization.id)
+      }
+      return false
     }
   }
 })

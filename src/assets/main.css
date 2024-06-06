@@ -107,3 +107,7 @@ textarea {
   z-index: auto;
   --ground: 1;
 }
+
+.datagouv-components h1 {
+  margin-bottom: 1.5rem;
+}

@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
+import { cloneTopic } from '@/custom/ecospheres/utils/bouquet'
 import { NoOptionSelected } from '@/model/theme'
-import type { Topic } from '@/model/topic'
+import type { TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 
 import BouquetForm from '../../components/forms/bouquet/BouquetForm.vue'
+import BouquetOwnerForm from '../../components/forms/bouquet/BouquetOwnerForm.vue'
 
 const props = defineProps({
   isCreate: {
@@ -22,7 +25,7 @@ const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
-const topic: Ref<Partial<Topic>> = ref({
+const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
@@ -38,6 +41,15 @@ const topic: Ref<Partial<Topic>> = ref({
 })
 const errorMsg = ref('')
 const canSave = ref(false)
+
+const isReadyForForm = computed(() => {
+  // condition for form mouting based on topic data load: edit || create raw || create cloned
+  return (
+    topic.value.id ||
+    (props.isCreate && !routeQuery.clone) ||
+    (routeQuery.clone && topic.value.extras?.ecospheres?.cloned_from)
+  )
+})
 
 const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
   const loader = useLoading().show()
@@ -88,20 +100,34 @@ const destroy = async () => {
 
 const cancel = () => {
   if (props.isCreate) {
-    router.push({ name: 'bouquets' })
+    if (routeQuery.clone == null) {
+      router.push({ name: 'bouquets' })
+    } else {
+      router.go(-1)
+    }
   } else {
-    router.push({ name: 'bouquet_detail', params: { bid: topic.value.slug } })
+    router.push({
+      name: 'bouquet_detail',
+      params: {
+        bid: topic.value.slug
+      }
+    })
   }
 }
 
 onMounted(() => {
-  if (!props.isCreate) {
+  if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
     useTopicStore()
-      .load(routeParams.bid)
+      .load(routeQuery.clone || routeParams.bid)
       .then((remoteTopic) => {
-        const { datasets, reuses, ...data } = remoteTopic
-        topic.value = data
+        if (routeQuery.clone != null) {
+          topic.value = cloneTopic(remoteTopic)
+        } else {
+          // remove rels from TopicV2 for TopicPostData compatibility
+          const { datasets, reuses, ...data } = remoteTopic
+          topic.value = data
+        }
       })
       .finally(() => loader.hide())
   }
@@ -109,7 +135,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
+  <GenericContainer class="fr-mt-4w">
     <form>
       <div class="fr-mt-4v">
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
@@ -146,10 +172,14 @@ onMounted(() => {
       <div class="fr-mt-4w">
         <h2>Description du bouquet de données</h2>
         <BouquetForm
-          v-if="topic.id || isCreate"
+          v-if="isReadyForForm"
           v-model="topic"
           @update-validation="(isValid: boolean) => canSave = isValid"
         />
+      </div>
+      <div class="fr-mt-4w">
+        <h2>Propriétaire du bouquet</h2>
+        <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
       </div>
       <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
         <DsfrButton
@@ -174,5 +204,5 @@ onMounted(() => {
         />
       </div>
     </form>
-  </div>
+  </GenericContainer>
 </template>

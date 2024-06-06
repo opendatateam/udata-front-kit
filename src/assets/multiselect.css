@@ -38,7 +38,7 @@
     width: 3px;
     height: 16px;
     background: #aaa;
-    top: 35%;
+    top: 30%;
     right: 4px;
   }
 
@@ -49,4 +49,14 @@
   &:after {
     transform: rotate(-45deg);
   }
+}
+.multiselect__tags {
+  padding: 8px 40px 0 15px;
+  font-size: 1rem;
+  & > .multiselect__single {
+    padding: 0;
+  }
+}
+.multiselect__input {
+  padding: 0;
 }
