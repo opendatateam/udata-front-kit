@@ -33,7 +33,7 @@ const props = defineProps({
 })
 
 const bouquets: ComputedRef<Topic[]> = computed(() => {
-  const allTopics = topicStore.sorted
+  return topicStore.sorted
     .filter((bouquet) => {
       return !props.showDrafts ? !bouquet.private : true
     })
@@ -45,27 +45,14 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
         bouquet.spatial.zones.includes(props.geozone)
       )
     })
-  if (props.themeName === NoOptionSelected) {
-    return allTopics
-  }
-  const relevantTopics: Topic[] = []
-  if (props.subthemeName !== NoOptionSelected) {
-    for (const topic of allTopics) {
-      if (
-        isRelevant(topic, 'subtheme', props.subthemeName) &&
-        isRelevant(topic, 'theme', props.themeName)
-      ) {
-        relevantTopics.push(topic)
-      }
-    }
-  } else if (props.themeName !== NoOptionSelected) {
-    for (const topic of allTopics) {
-      if (isRelevant(topic, 'theme', props.themeName)) {
-        relevantTopics.push(topic)
-      }
-    }
-  }
-  return relevantTopics
+    .filter((bouquet) => {
+      if (props.themeName === NoOptionSelected) return true
+      return bouquet.extras.ecospheres.theme === props.themeName
+    })
+    .filter((bouquet) => {
+      if (props.subthemeName === NoOptionSelected) return true
+      return bouquet.extras.ecospheres.subtheme === props.subthemeName
+    })
 })
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
@@ -75,19 +62,6 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
     return bouquets.value.length + ' bouquets disponibles'
   }
 })
-
-const isRelevant = (topic: Topic, property: string, value: string): Boolean => {
-  const topicInformations: { [key: string]: string }[] =
-    topic.extras['ecospheres:informations']
-  if (topicInformations) {
-    for (const information of topicInformations) {
-      if (information[property] === value) {
-        return true
-      }
-    }
-  }
-  return false
-}
 
 const goToCreate = () => {
   router.push({ name: 'bouquet_add', query: route.query })

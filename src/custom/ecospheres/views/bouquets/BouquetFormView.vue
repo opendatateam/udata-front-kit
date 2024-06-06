@@ -29,13 +29,11 @@ const topic: Ref<Partial<TopicPostData>> = ref({
   tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    'ecospheres:informations': [
-      {
-        theme: routeQuery.theme || NoOptionSelected,
-        subtheme: routeQuery.subtheme || NoOptionSelected
-      }
-    ],
-    'ecospheres:datasets_properties': []
+    ecospheres: {
+      theme: routeQuery.theme || NoOptionSelected,
+      subtheme: routeQuery.subtheme || NoOptionSelected,
+      datasets_properties: []
+    }
   }
 })
 const errorMsg = ref('')

@@ -17,7 +17,8 @@ import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import {
   useBreadcrumbLinksForTopic,
-  useExtras
+  useExtras,
+  updateEcospheresExtras
 } from '@/custom/ecospheres/utils/bouquet'
 import { type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
@@ -81,17 +82,16 @@ const onUpdateDatasets = () => {
   const loader = useLoading().show()
   store
     .update(topic.value.id, {
-      // send the tags or they will be erased
+      // send the tags or payload will be rejected
       tags: topic.value.tags,
       datasets: datasetsProperties.value
         .filter((d) => d.id !== null && d.remoteDeleted !== true)
         .map((d) => d.id),
-      extras: {
-        ...topic.value.extras,
-        'ecospheres:datasets_properties': datasetsProperties.value.map(
+      extras: updateEcospheresExtras(topic.value, {
+        datasets_properties: datasetsProperties.value.map(
           ({ remoteDeleted, ...data }) => data
         )
-      }
+      })
     })
     .finally(() => loader.hide())
 }
