@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import AuthService from '@/services/AuthService'
 import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
@@ -39,5 +40,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container fr-mt-4w">Connexion en cours...</div>
+  <GenericContainer class="fr-mt-4w">Connexion en cours...</GenericContainer>
 </template>

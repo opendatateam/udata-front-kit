@@ -2,6 +2,8 @@
 import { computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
+
 import { pageStore } from '../store/PageStore'
 import { fromMarkdown } from '../utils'
 
@@ -31,10 +33,8 @@ watchEffect(async () => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container fr-mb-4w">
+  <GenericContainer>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="fromMarkdown(content)" />
-  </div>
+  </GenericContainer>
 </template>
-
-<style></style>

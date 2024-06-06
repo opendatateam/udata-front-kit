@@ -12,6 +12,7 @@ import {
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import DatasetAddToBouquetModal from '@/custom/ecospheres/components/datasets/DatasetAddToBouquetModal.vue'
 
@@ -182,7 +183,7 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div v-if="dataset" class="fr-container datagouv-components fr-mb-4w">
+  <GenericContainer v-if="dataset">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
@@ -272,7 +273,7 @@ onMounted(() => {
         tab-id="tab-0"
         :selected="selectedTabIndex === 0"
       >
-        <div v-if="selectedTabIndex === 0" class="datagouv-components">
+        <div v-if="selectedTabIndex === 0">
           <template v-for="typedResources in resources">
             <div
               v-if="typedResources.totalWithoutFilter"
@@ -393,5 +394,5 @@ onMounted(() => {
         <ChartData v-if="chartData" :chart-data="chartData" />
       </DsfrTabContent>
     </DsfrTabs>
-  </div>
+  </GenericContainer>
 </template>
