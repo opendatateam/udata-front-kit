@@ -2,6 +2,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 
 import Tile from '../../components/Tile.vue'
@@ -37,11 +38,15 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container fr-mb-4w">
+  <GenericContainer>
     <h1 class="fr-mb-2v">Organisations</h1>
     <p>Parcourir toutes les organisations présentes sur {{ title }}.</p>
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-      <li v-for="org in organizations" class="fr-col-12 fr-col-lg-4">
+      <li
+        v-for="org in organizations"
+        :key="org.id"
+        class="fr-col-12 fr-col-lg-4"
+      >
         <Tile
           :link="`/organizations/${org.slug}`"
           :title="org.name"
@@ -51,10 +56,10 @@ onMounted(() => {
         />
       </li>
     </ul>
-  </div>
+  </GenericContainer>
   <DsfrPagination
-    class="fr-container"
     v-if="pages.length"
+    class="fr-container"
     :current-page="currentPage - 1"
     :pages="pages"
     @update:current-page="onUpdatePage"

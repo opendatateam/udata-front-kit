@@ -118,7 +118,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="fr-grid-row fr-grid-row--middle datagouv-components">
+  <div class="fr-grid-row fr-grid-row--middle">
     <div class="fr-col">
       <h2 class="fr-mt-4w">Discussions</h2>
     </div>
@@ -242,7 +242,7 @@ watchEffect(() => {
           </div>
         </div>
       </template>
-      <div v-if="allowDiscussionCreation" class="datagouv-components">
+      <div v-if="allowDiscussionCreation">
         <button
           v-if="postFormId !== discussion.id && loggedIn"
           type="button"

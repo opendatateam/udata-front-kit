@@ -2,6 +2,7 @@
 import { ref, watch, computed, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/custom/ecospheres/components/BouquetList.vue'
 import BouquetSearch from '@/custom/ecospheres/components/BouquetSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
@@ -68,7 +69,7 @@ const goToCreate = () => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbList" />
   </div>
-  <div class="fr-container fr-mb-4w">
+  <GenericContainer>
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
@@ -111,7 +112,7 @@ const goToCreate = () => {
         </div>
       </div>
     </div>
-  </div>
+  </GenericContainer>
 </template>
 
 <style scoped="true" lang="scss">
