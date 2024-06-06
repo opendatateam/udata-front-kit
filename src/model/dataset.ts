@@ -13,3 +13,13 @@ export interface DatasetModalData {
   isValid: boolean
   mode: 'edit' | 'create'
 }
+
+export interface ContactPoint {
+  id: string
+  name: string
+  email: string
+}
+
+export type ExtendedDatasetV2 = DatasetV2 & {
+  contact_point?: ContactPoint
+}

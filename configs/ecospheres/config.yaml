@@ -1,7 +1,7 @@
 # config file for ecospheres-front
 
 datagouvfr:
-  # data.gouv.fr base URL
+  # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 651479c317ad47b21e41a9d4
@@ -124,6 +124,7 @@ website:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-ISO-19139
+    show_extended_information_panel: true
 
 themes:
   - name: Se loger

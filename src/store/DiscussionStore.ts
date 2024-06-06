@@ -54,7 +54,9 @@ export const useDiscussionStore = defineStore('discussion', {
     async createDiscussion(
       discussionForm: DiscussionForm
     ): Promise<Discussion> {
-      const discussion: Discussion = await discussionsAPI.create(discussionForm)
+      const discussion: Discussion = await discussionsAPI.create({
+        data: discussionForm
+      })
       await this.reloadForSubject(discussionForm.subject.id)
       return discussion
     },

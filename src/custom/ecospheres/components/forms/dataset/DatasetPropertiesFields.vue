@@ -1,22 +1,30 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
-import { ref, computed, watch, type PropType, type Ref, onMounted } from 'vue'
+import {
+  ref,
+  computed,
+  watch,
+  type PropType,
+  type Ref,
+  onMounted,
+  defineModel
+} from 'vue'
 import { useRouter } from 'vue-router'
 
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
-import { isAvailable as isAvailableTest } from '@/utils/topic'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
-const emit = defineEmits(['update:datasetProperties', 'updateValidation'])
+const emit = defineEmits(['updateValidation'])
 
-const props = defineProps({
-  datasetProperties: {
-    type: Object as PropType<DatasetProperties>,
-    required: true
-  },
+const datasetProperties = defineModel({
+  type: Object as PropType<DatasetProperties>,
+  required: true
+})
+
+defineProps({
   alreadySelectedDatasets: {
     type: Array<DatasetProperties>,
     default: []
@@ -26,7 +34,6 @@ const props = defineProps({
 const router = useRouter()
 const datasetStore = useDatasetStore()
 
-const datasetProperties = ref(props.datasetProperties)
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const hasMandatoryFields = computed(() => {
@@ -38,6 +45,7 @@ const hasMandatoryFields = computed(() => {
 
 const isValidDataset = computed((): boolean => {
   return (
+    !datasetProperties.value.remoteDeleted &&
     hasMandatoryFields.value &&
     isValidEcosphereDataset.value &&
     isValidUrlDataset.value
@@ -61,10 +69,6 @@ const isValidUrlDataset = computed((): boolean => {
   return true
 })
 
-const isAvailable = computed(() =>
-  isAvailableTest(datasetProperties.value.availability)
-)
-
 const onSelectDataset = (value: DatasetV2 | undefined) => {
   if (value === undefined) {
     datasetProperties.value.uri = null
@@ -77,6 +81,7 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
       params: { did: value.id }
     })
     datasetProperties.value.uri = resolved.href
+    delete datasetProperties.value.remoteDeleted
   }
 }
 
@@ -88,40 +93,22 @@ watch(
   { immediate: true }
 )
 
-watch(isAvailable, (newVal) => {
-  if (!newVal) {
-    datasetProperties.value.uri = null
-    datasetProperties.value.id = null
-  }
-})
-
 watch(
   () => datasetProperties.value.availability,
-  (newVal, oldVal) => {
-    if (oldVal !== newVal && newVal !== Availability.LOCAL_AVAILABLE) {
+  (availability) => {
+    console.log('watch', availability)
+    if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
+      datasetProperties.value.uri = null
+      datasetProperties.value.id = null
     }
-  }
-)
-
-watch(
-  datasetProperties,
-  (newVal) => {
-    emit('update:datasetProperties', newVal)
-  },
-  { deep: true }
-)
-
-watch(
-  () => props.datasetProperties,
-  (newVal) => {
-    datasetProperties.value = newVal
+    delete datasetProperties.value.remoteDeleted
   }
 )
 
 onMounted(() => {
-  if (props.datasetProperties.id) {
-    datasetStore.load(props.datasetProperties.id).then((dataset) => {
+  if (datasetProperties.value.id && !datasetProperties.value.remoteDeleted) {
+    datasetStore.load(datasetProperties.value.id).then((dataset) => {
       selectedDataset.value = dataset
     })
   }
@@ -155,6 +142,18 @@ onMounted(() => {
           :value="Availability.URL_AVAILABLE"
           label="J'ajoute l'URL"
         />
+        <div
+          v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
+          class="fr-mb-4w"
+        >
+          <DsfrInput
+            id="alt-link"
+            v-model="datasetProperties.uri"
+            placeholder="Url vers le jeu de données souhaité"
+            :label-visible="true"
+            class="fr-mb-md-1w"
+          />
+        </div>
         <DsfrRadioButton
           v-model="datasetProperties.availability"
           :name="Availability.MISSING"
@@ -169,31 +168,6 @@ onMounted(() => {
         />
       </div>
     </fieldset>
-  </div>
-  <!-- step 2, when a dataset or a choice is selected -->
-  <div
-    v-if="
-      selectedDataset?.id ||
-      datasetProperties.availability !== Availability.LOCAL_AVAILABLE
-    "
-  >
-    <div
-      v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
-      class="fr-mt-1w fr-mb-4w"
-    >
-      <label class="fr-label" for="alt-link">
-        Déclarer le chemin d'accès vers le jeu de données<span class="required"
-          >&nbsp;*</span
-        >
-      </label>
-      <DsfrInput
-        id="alt-link"
-        v-model="datasetProperties.uri"
-        placeholder="Url vers le jeu de données souhaité"
-        :label-visible="true"
-        class="fr-mb-md-1w"
-      />
-    </div>
   </div>
 </template>
 

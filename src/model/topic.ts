@@ -15,6 +15,12 @@ export interface DatasetProperties {
   uri: string | null
   id: string | null
   availability: Availability
+  // this is a "local" property, not stored on data.gouv.fr
+  remoteDeleted?: boolean
+}
+
+export interface EcospheresTopicExtras {
+  cloned_from?: string
 }
 
 export interface TopicExtras {
@@ -23,6 +29,7 @@ export interface TopicExtras {
     subtheme: string
   }>
   ['ecospheres:datasets_properties']: DatasetProperties[]
+  ecospheres?: EcospheresTopicExtras
 }
 
 export type Topic = Owned & {
@@ -41,4 +48,14 @@ export type Topic = Owned & {
   tags: string[]
   uri: string
   spatial: SpatialField | undefined
+}
+
+export type TopicPostData = Omit<
+  Topic,
+  'datasets' | 'reuses' | 'id' | 'slug'
+> & {
+  id?: string
+  slug?: string
+  datasets: string[]
+  reuses: string[]
 }

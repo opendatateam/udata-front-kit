@@ -41,7 +41,7 @@ export const useReuseStore = defineStore('reuse', {
      * Get reuses types from the API
      */
     async getTypes(): Promise<ReuseType[]> {
-      return await reusesAPI.get('types')
+      return await reusesAPI.get({ entityId: 'types' })
     }
   }
 })

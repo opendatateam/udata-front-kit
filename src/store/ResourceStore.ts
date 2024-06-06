@@ -30,7 +30,9 @@ export const useResourceStore = defineStore('resource', {
         return this.data[datasetId]
       }
       if (this.resourceTypes.length === 0) {
-        this.resourceTypes = await datasetsApi.get('resource_types', {})
+        this.resourceTypes = await datasetsApi.get({
+          entityId: 'resource_types'
+        })
       }
       this.data[datasetId] = []
       for (const type of this.resourceTypes) {
@@ -58,11 +60,14 @@ export const useResourceStore = defineStore('resource', {
       page: number,
       q = ''
     ): Promise<{ data: Resource[]; total: number }> {
-      const response = await datasetsApiv2.get(`${datasetId}/resources`, {
-        page,
-        page_size: pageSize,
-        type: typeId,
-        q
+      const response = await datasetsApiv2.get({
+        entityId: `${datasetId}/resources`,
+        params: {
+          page,
+          page_size: pageSize,
+          type: typeId,
+          q
+        }
       })
       return { data: response.data, total: response.total }
     }

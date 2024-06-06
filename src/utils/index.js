@@ -2,6 +2,13 @@ import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { stripHtml } from 'string-strip-html'
 
+const markedOptions = {
+  gfm: true,
+  breaks: true,
+  mangle: false,
+  headerIds: false
+}
+
 /**
  * Parse description from markdown to HTML
  *
@@ -20,7 +27,7 @@ export const descriptionFromMarkdown = (ref, attr = 'description') => {
  */
 export const fromMarkdown = (value) => {
   if (!value) return ''
-  const parsed = marked.parse(value, { mangle: false, headerIds: false })
+  const parsed = marked.parse(value, markedOptions)
   return DOMPurify.sanitize(parsed)
 }
 
@@ -31,7 +38,7 @@ export const fromMarkdown = (value) => {
  * @returns {string}
  */
 export const stripFromMarkdown = (value) => {
-  const html = marked.parse(value, { mangle: false, headerIds: false })
+  const html = marked.parse(value, markedOptions)
   return stripHtml(html).result
 }
 
