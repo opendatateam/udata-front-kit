@@ -2,22 +2,24 @@
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id: 651479c317ad47b21e41a9d4
+  oauth_client_id: 65e9c33ee89b6256ad069a31
   # pkce client secret, explicitely public
-  oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
+  oauth_client_secret: tTD6KpvTo8uGnD1K8XMjrZN3pv0iwZZaIAYxkCga4jBFupeRdp
 
 universe:
   # "universe" topic id
-  topic_id: 65141cd780d73f98142e9265
+  topic_id: 65e9aa6cb5c809c30c70ee02
   # universe name, used as bouquets tag
-  name: ecospheres
+  name: univers-ecospheres
 
 robots:
   disallow:
-    - /
-  sitemap:
+    - /admin
+    - /datasets
+    - /organizations
+  sitemap: https://ecologie.data.gouv.fr/sitemap.xml
 
 # UI customizations
 website:
@@ -65,7 +67,7 @@ website:
       to: '/accessibility'
   notice:
     display: true
-    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
+    content: Vous naviguez sur une version beta d'ecologie.data.gouv. En savoir plus sur [nos travaux en cours](https://ecospheres.gitbook.io/travaux-en-cours/).
     closeable: false
   menu:
     - text: Accueil
@@ -110,7 +112,7 @@ website:
     - '#A7D4CD'
   matomo:
     host: 'https://stats.data.gouv.fr'
-    siteId:
+    siteId: 299
   discussions:
     dataset:
       display: true
@@ -177,11 +179,13 @@ themes:
 organizations:
   - ademe
   - agence-nationale-de-la-cohesion-des-territoires
+  - agence-nationale-de-lhabitat
   - centre-scientifique-et-technique-du-batiment
   - ddt-de-la-loire
   - ddt-de-lain
   - ddt-de-lardeche
   - ddt-de-meurthe-et-moselle
+  - ddt-des-vosges
   - ddt-drome
   - ddt-jura
   - ddt-savoie
@@ -198,13 +202,13 @@ organizations:
   - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
   - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
   - direction-departementale-et-des-territoires-du-cantal
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-bretagne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-laquitaine
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
+  - direction-regionale-et-interdepartementale-de-lenvironnement-de-lamenagement-et-des-transports-1
   - dreal-auvergne-rhone-alpes-1
   - dreal-nouvelle-aquitaine
   - dreal-pays-de-la-loire-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-pays-de-la-loire
