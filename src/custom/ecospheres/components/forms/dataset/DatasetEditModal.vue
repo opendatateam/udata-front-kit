@@ -144,7 +144,7 @@ defineExpose({ addDataset, editDataset })
     @close="closeModal"
   >
     <DatasetPropertiesFields
-      v-model:dataset-properties="modalData.dataset"
+      v-model="modalData.dataset"
       :already-selected-datasets="datasets"
       @update-validation="(isValid: boolean) => modalData.isValid = isValid"
     />

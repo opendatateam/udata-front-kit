@@ -15,6 +15,8 @@ export interface DatasetProperties {
   uri: string | null
   id: string | null
   availability: Availability
+  // this is a "local" property, not stored on data.gouv.fr
+  remoteDeleted?: boolean
 }
 
 export interface EcospheresTopicExtras {

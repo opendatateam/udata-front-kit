@@ -186,7 +186,7 @@ const triggerReorder = () => {
           </template>
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="fromMarkdown(dataset.purpose)"></div>
-          <BouquetDatasetCard v-if="dataset.id" :dataset-id="dataset.id" />
+          <BouquetDatasetCard v-if="dataset.id" :dataset-properties="dataset" />
           <div class="fr-grid-row">
             <DsfrButton
               v-if="isEdit"
