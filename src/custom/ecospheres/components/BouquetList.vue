@@ -102,7 +102,7 @@ onMounted(() => {
 <template>
   <div
     v-if="bouquets.length > 0"
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
   >
     <p class="fr-col-auto fr-my-0">{{ numberOfResultMsg }}</p>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
@@ -132,14 +132,14 @@ onMounted(() => {
       <a href="#" @click.stop.prevent="goToCreate()">en créant un</a>
     </p>
   </div>
-  <div class="bouquets-list-container fr-container fr-mt-2w fr-mb-4w">
+  <div class="bouquets-list-container fr-container fr-mb-4w border-top">
     <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w">
-      <div
-        v-for="bouquet in bouquets"
-        :key="bouquet.id"
-        class="fr-col-md-6 fr-col-12"
-      >
-        <BouquetCard :bouquet="bouquet" />
+      <div class="fr-col-12">
+        <BouquetCard
+          v-for="bouquet in bouquets"
+          :key="bouquet.id"
+          :bouquet="bouquet"
+        />
       </div>
     </div>
   </div>
