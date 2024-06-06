@@ -76,7 +76,6 @@ const goToCreate = () => {
       <h1 class="fr-col-auto fr-mb-2v">Bouquets</h1>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <DsfrButton
-          secondary
           class="fr-mb-1w"
           label="Ajouter un bouquet"
           icon="ri-add-circle-line"
