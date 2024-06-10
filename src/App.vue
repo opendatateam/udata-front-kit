@@ -102,7 +102,9 @@ const headerSearch = ref(config.website.header_search)
     </template>
   </Header>
 
-  <RouterView />
+  <div id="main">
+    <RouterView />
+  </div>
 
   <DsfrFooter
     class="fr-mt-16w"

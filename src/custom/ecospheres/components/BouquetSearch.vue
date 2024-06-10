@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, watchEffect, toRef, type Ref, type PropType } from 'vue'
-import { useRouter, type LocationQueryRaw } from 'vue-router'
+import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
@@ -24,20 +24,24 @@ const props = defineProps({
   geozone: {
     type: String as PropType<string | null>,
     default: null
+  },
+  showDrafts: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emits = defineEmits(['update:showDrafts', 'update:geozone'])
-
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 
-const showDrafts = ref(false)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | null> = ref(null)
 
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
+
+const localShowDrafts = ref(false)
 
 const computeQueryArgs = (
   data: Record<string, string | null>
@@ -46,6 +50,12 @@ const computeQueryArgs = (
   if (props.themeName) query.theme = props.themeName
   if (props.subthemeName) query.subtheme = props.subthemeName
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
+  if (localShowDrafts.value) {
+    query.drafts = 1
+  }
+  if (route.query.q) {
+    query.q = route.query.q
+  }
   return { ...query, ...data }
 }
 
@@ -55,7 +65,8 @@ const switchTheme = (event: Event) => {
     query: computeQueryArgs({
       theme: (event.target as HTMLInputElement)?.value,
       subtheme: NoOptionSelected
-    })
+    }),
+    hash: '#main'
   })
 }
 
@@ -64,7 +75,8 @@ const switchSubtheme = (event: Event) => {
     path: '/bouquets',
     query: computeQueryArgs({
       subtheme: (event.target as HTMLInputElement)?.value
-    })
+    }),
+    hash: '#main'
   })
 }
 
@@ -72,12 +84,17 @@ const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
   selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
   router.push({
     path: '/bouquets',
-    query: computeQueryArgs({})
+    query: computeQueryArgs({}),
+    hash: '#main'
   })
 }
 
-watch(showDrafts, (newVal) => {
-  emits('update:showDrafts', newVal)
+watch(localShowDrafts, () => {
+  router.push({
+    path: '/bouquets',
+    query: computeQueryArgs({}),
+    hash: '#main'
+  })
 })
 
 watchEffect(() => {
@@ -85,7 +102,11 @@ watchEffect(() => {
     spatialAPI
       .getZone(props.geozone)
       .then((zone) => (selectedSpatialCoverage.value = zone))
+  } else {
+    selectedSpatialCoverage.value = null
+    selectedGeozone.value = null
   }
+  localShowDrafts.value = props.showDrafts
 })
 </script>
 
@@ -93,7 +114,7 @@ watchEffect(() => {
   <div className="filterForm">
     <DsfrCheckbox
       v-if="userStore.isLoggedIn"
-      v-model="showDrafts"
+      v-model="localShowDrafts"
       label="Afficher les brouillons"
       name="show_drafts"
     />
