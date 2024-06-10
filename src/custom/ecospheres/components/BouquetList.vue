@@ -113,6 +113,7 @@ onMounted(() => {
       <div class="fr-col">
         <DsfrSelect
           v-model="topicStore.sort"
+          select-id="sort-search"
           :options="[
             { value: '-created_at', text: 'Les plus récemment créés' },
             { value: '-last_modified', text: 'Les plus récemment modifiés' },
