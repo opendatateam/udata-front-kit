@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, watchEffect, toRef, type Ref, type PropType } from 'vue'
+import { ref, watchEffect, toRef, type Ref, type PropType } from 'vue'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import type { SpatialCoverage } from '@/model/spatial'
@@ -44,7 +44,7 @@ const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (
-  data: Record<string, string | null>
+  data?: Record<string, string | null>
 ): LocationQueryRaw => {
   const query: LocationQueryRaw = {}
   if (props.themeName) query.theme = props.themeName
@@ -59,46 +59,39 @@ const computeQueryArgs = (
   return { ...query, ...data }
 }
 
-const switchTheme = (event: Event) => {
+const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: '/bouquets',
-    query: computeQueryArgs({
-      theme: (event.target as HTMLInputElement)?.value,
-      subtheme: NoOptionSelected
-    }),
+    query: computeQueryArgs(data),
     hash: '#main'
   })
 }
 
+const switchTheme = (event: Event) => {
+  navigate({
+    theme: (event.target as HTMLInputElement)?.value,
+    subtheme: NoOptionSelected
+  })
+}
+
 const switchSubtheme = (event: Event) => {
-  router.push({
-    path: '/bouquets',
-    query: computeQueryArgs({
-      subtheme: (event.target as HTMLInputElement)?.value
-    }),
-    hash: '#main'
+  navigate({
+    subtheme: (event.target as HTMLInputElement)?.value
   })
 }
 
 const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
   selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
-  router.push({
-    path: '/bouquets',
-    query: computeQueryArgs({}),
-    hash: '#main'
-  })
+  navigate()
 }
 
-watch(localShowDrafts, () => {
-  router.push({
-    path: '/bouquets',
-    query: computeQueryArgs({}),
-    hash: '#main'
-  })
-})
+const switchLocalShowDrafts = () => {
+  navigate()
+}
 
 watchEffect(() => {
   if (props.geozone) {
+    selectedGeozone.value = props.geozone
     spatialAPI
       .getZone(props.geozone)
       .then((zone) => (selectedSpatialCoverage.value = zone))
@@ -117,6 +110,7 @@ watchEffect(() => {
       v-model="localShowDrafts"
       label="Afficher les brouillons"
       name="show_drafts"
+      @update:model-value="switchLocalShowDrafts"
     />
 
     <div class="fr-select-group">
