@@ -48,17 +48,16 @@ onMounted(() => {
   userStore.init()
 })
 
-const logotext = ref(config.website.rf_title)
-const servicetitle = ref(config.website.title)
-const logoOperator = ref(config.website.logo_operator)
-const logoService = ref(config.website.service_logo)
-const showBadge = ref(config.website.badge.display)
-const badgeText = ref(config.website.badge.text)
-const badgeStyle = ref(config.website.badge.style)
-const footerPhrase = ref(config.website.footer_phrase)
-const footerExternalLinks = ref(config.website.footer_external_links)
-const footerMandatoryLinks = ref(config.website.footer_mandatory_links)
-const headerSearch = ref(config.website.header_search)
+const logotext = config.website.rf_title
+const servicetitle = config.website.title
+const logoOperator = config.website.logo_operator
+const logoService = config.website.service_logo
+const showBadge = config.website.badge.display
+const badgeText = config.website.badge.text
+const badgeStyle = config.website.badge.style
+const footerPhrase = config.website.footer_phrase
+const footerExternalLinks = config.website.footer_external_links
+const footerMandatoryLinks = config.website.footer_mandatory_links
 </script>
 
 <template>
@@ -75,7 +74,7 @@ const headerSearch = ref(config.website.header_search)
     service-description=""
     home-to="/"
     :quick-links="quickLinks"
-    :show-search="headerSearch"
+    :show-search="config.website.header_search.display"
     :logo-text="logotext"
     :operator-img-src="logoOperator"
     :operator-img-style="{ height: '60px', width: '60px' }"

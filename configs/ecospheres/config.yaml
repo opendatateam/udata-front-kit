@@ -36,11 +36,13 @@ website:
     below_hero:
     below_topics:
     meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
-  header_search: true
   header_button:
     display: true
     label: 'Donnez votre avis'
     link: https://tally.so/r/wLWrzp
+  header_search:
+    display: true
+    placeholder: Rechercher...
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale

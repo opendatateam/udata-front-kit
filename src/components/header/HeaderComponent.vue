@@ -21,7 +21,6 @@ type DsfrHeaderProps = {
   operatorImgAlt?: string
   operatorImgSrc?: string
   operatorImgStyle?: StyleValue
-  placeholder?: string
   quickLinks?: DsfrHeaderMenuLinkProps[]
   searchLabel?: string
   quickLinksAriaLabel?: string
@@ -41,7 +40,6 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
   serviceLogoSrc: '',
-  placeholder: 'Rechercher...',
   quickLinks: () => [],
   searchLabel: 'Recherche',
   quickLinksAriaLabel: 'Menu secondaire',
@@ -200,10 +198,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               </nav>
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
-              <HeaderSearch
-                :search-label="searchLabel"
-                :placeholder="placeholder"
-              />
+              <HeaderSearch :search-label="searchLabel" />
             </div>
           </div>
         </div>
@@ -229,7 +224,6 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
             <HeaderSearch
               v-if="searchModalOpened"
               :search-label="searchLabel"
-              :placeholder="placeholder"
               @search="hideModal(false)"
             />
           </div>

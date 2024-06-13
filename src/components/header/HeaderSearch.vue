@@ -2,14 +2,12 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import config from '@/config'
+
 const router = useRouter()
 
 defineProps({
   searchLabel: {
-    type: String,
-    required: true
-  },
-  placeholder: {
     type: String,
     required: true
   }
@@ -17,6 +15,7 @@ defineProps({
 
 const emits = defineEmits(['search'])
 
+const placeholder = config.website.header_search.placeholder
 const query = ref('')
 
 const doSearch = () => {
