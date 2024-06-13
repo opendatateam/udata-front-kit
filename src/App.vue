@@ -1,16 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { RouterView, useRouter } from 'vue-router'
+import { RouterView } from 'vue-router'
 
 import config from '@/config'
 
 import Navigation from './components/Navigation.vue'
-import Header from './components/header/Header.vue'
+import Header from './components/header/HeaderComponent.vue'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
 
-const router = useRouter()
-const query = ref('')
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
 
@@ -46,14 +44,6 @@ const quickLinks = computed(() => {
   return button.display ? [headerButton, userLink] : [userLink]
 })
 
-const updateQuery = (q) => {
-  query.value = q
-}
-
-const doSearch = () => {
-  router.push({ path: '/datasets', query: { q: query.value } })
-}
-
 onMounted(() => {
   userStore.init()
 })
@@ -85,7 +75,7 @@ const headerSearch = ref(config.website.header_search)
     service-description=""
     home-to="/"
     :quick-links="quickLinks"
-    :show-search="true"
+    :show-search="headerSearch"
     :logo-text="logotext"
     :operator-img-src="logoOperator"
     :operator-img-style="{ height: '60px', width: '60px' }"
@@ -93,9 +83,6 @@ const headerSearch = ref(config.website.header_search)
     :show-badge="showBadge"
     :badge-text="badgeText"
     :badge-style="badgeStyle"
-    :showSearch="headerSearch"
-    @search="doSearch"
-    @update:model-value="updateQuery"
   >
     <template #mainnav="{ hidemodal }">
       <Navigation :on-click="hidemodal" />
