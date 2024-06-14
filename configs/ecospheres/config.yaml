@@ -43,6 +43,11 @@ website:
   header_search:
     display: true
     placeholder: Rechercher...
+    dropdown:
+      - text: Rechercher {} dans les bouquets
+        route: bouquets
+      - text: Rechercher {} dans les jeux de données
+        route: datasets
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
