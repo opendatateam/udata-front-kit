@@ -55,6 +55,7 @@ const dropdownLabel = (text: string) => {
     @search="doSimpleSearch"
   />
   <Multiselect
+    v-else
     id="select-search"
     v-model="selectedMultiSearch"
     class="select-search"
