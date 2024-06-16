@@ -30,15 +30,15 @@ const doSimpleSearch = () => {
   emits('search')
 }
 
-const search = (value: string) => {
-  query.value = value
-}
-
 const doMultiSearch = (item: { text: string; route: string }) => {
   router.push({ name: item.route, query: { q: query.value } })
   selectedMultiSearch.value = undefined
   query.value = ''
   emits('search')
+}
+
+const onSearchChange = (value: string) => {
+  query.value = value
 }
 
 const dropdownLabel = (text: string) => {
@@ -73,7 +73,7 @@ const dropdownLabel = (text: string) => {
     :max-height="600"
     :show-no-results="false"
     :hide-selected="true"
-    @search-change="search"
+    @search-change="onSearchChange"
     @update:model-value="doMultiSearch"
   >
     <template #option="slotProps">
