@@ -42,7 +42,9 @@ const onSearchChange = (value: string) => {
 }
 
 const dropdownLabel = (text: string) => {
-  return DOMPurify.sanitize(text.replace('{}', `<i>${query.value}</i>`))
+  // &#8239; is "espace fine insécable"
+  const queryText = query.value ? `«&#8239;<i>${query.value}</i>&#8239;»` : ''
+  return DOMPurify.sanitize(text.replace('{}', queryText))
 }
 </script>
 

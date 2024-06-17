@@ -44,9 +44,9 @@ website:
     display: true
     placeholder: Rechercher...
     dropdown:
-      - text: Rechercher {} dans les bouquets
+      - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
-      - text: Rechercher {} dans les jeux de données
+      - text: Rechercher {} dans les <strong>jeux de données</strong>
         route: datasets
   search_bar:
     display: true
