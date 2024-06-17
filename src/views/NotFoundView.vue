@@ -23,7 +23,7 @@ if (route.name !== 'not_found') {
         <h1>Page non trouvée</h1>
         <p class="fr-text--sm fr-mb-3w">Erreur 404</p>
         <p class="fr-text--lead fr-mb-3w">
-          La page que vous cherchez est introuvable. Excusez-nous pour la gène
+          La page que vous cherchez est introuvable. Excusez-nous pour la gêne
           occasionnée.
         </p>
         <p class="fr-text--sm fr-mb-5w">
