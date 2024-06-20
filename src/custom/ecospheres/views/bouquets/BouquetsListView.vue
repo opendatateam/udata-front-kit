@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, type Ref } from 'vue'
+import { ref, computed, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -8,53 +8,52 @@ import BouquetSearch from '@/custom/ecospheres/components/BouquetSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 
-const route = useRoute()
 const router = useRouter()
+const route = useRoute()
 
-const themeName = ref(NoOptionSelected)
-const subthemeName = ref(NoOptionSelected)
+const props = defineProps({
+  query: {
+    type: String,
+    default: ''
+  },
+  theme: {
+    type: String,
+    default: NoOptionSelected
+  },
+  subtheme: {
+    type: String,
+    default: NoOptionSelected
+  },
+  geozone: {
+    type: String,
+    default: null
+  },
+  drafts: {
+    type: String,
+    default: null
+  }
+})
+
+const selectedTheme = ref(NoOptionSelected)
+const selectedSubtheme = ref(NoOptionSelected)
+const selectedGeozone: Ref<string | null> = ref(null)
+const selectedQuery = ref('')
 const showDrafts = ref(false)
-const geozone: Ref<string | null> = ref(null)
-
-const subThemeQuery = computed(() => route.query.subtheme)
-const themeQuery = computed(() => route.query.theme)
-const geozoneQuery = computed(() => route.query.geozone)
-
-watch(
-  [subThemeQuery],
-  (newVal) => {
-    subthemeName.value = newVal[0]?.toString() ?? NoOptionSelected
-  },
-  { immediate: true }
-)
-
-watch(
-  [themeQuery],
-  (newVal) => {
-    themeName.value = newVal[0]?.toString() ?? NoOptionSelected
-  },
-  { immediate: true }
-)
-
-watch(
-  [geozoneQuery],
-  (newVal) => {
-    geozone.value = newVal[0]?.toString() ?? null
-  },
-  { immediate: true }
-)
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
   links.push({ text: 'Accueil', to: '/' })
   links.push({ text: 'Bouquets', to: '/bouquets' })
-  if (themeName.value !== NoOptionSelected && themeName.value !== '') {
+  if (selectedTheme.value !== NoOptionSelected && selectedTheme.value !== '') {
     links.push({
-      text: themeName.value,
-      to: `/bouquets?theme=${themeName.value}&subtheme=${NoOptionSelected}`
+      text: selectedTheme.value,
+      to: `/bouquets?theme=${selectedTheme.value}&subtheme=${NoOptionSelected}`
     })
-    if (subthemeName.value !== NoOptionSelected && subthemeName.value !== '') {
-      links.push({ text: subthemeName.value })
+    if (
+      selectedSubtheme.value !== NoOptionSelected &&
+      selectedSubtheme.value !== ''
+    ) {
+      links.push({ text: selectedSubtheme.value })
     }
   }
   return links
@@ -63,6 +62,26 @@ const breadcrumbList = computed(() => {
 const goToCreate = () => {
   router.push({ name: 'bouquet_add', query: route.query })
 }
+
+const search = () => {
+  router.push({
+    name: 'bouquets',
+    query: { ...route.query, q: selectedQuery.value },
+    hash: '#main'
+  })
+}
+
+watch(
+  props,
+  () => {
+    selectedTheme.value = props.theme
+    selectedSubtheme.value = props.subtheme
+    selectedGeozone.value = props.geozone
+    selectedQuery.value = props.query
+    showDrafts.value = props.drafts === '1'
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -83,6 +102,14 @@ const goToCreate = () => {
         />
       </div>
     </div>
+    <div class="fr-col-md-12 fr-mb-2w">
+      <DsfrSearchBar
+        v-model="selectedQuery"
+        label="Rechercher"
+        placeholder="Rechercher un bouquet"
+        @update:model-value="search"
+      />
+    </div>
     <div class="fr-mt-2w">
       <div className="fr-grid-row">
         <nav
@@ -94,19 +121,20 @@ const goToCreate = () => {
               Filtres
             </div>
             <BouquetSearch
-              v-model:themeName="themeName"
-              v-model:subthemeName="subthemeName"
-              v-model:geozone="geozone"
-              @update:show-drafts="(value) => (showDrafts = value)"
+              :theme-name="selectedTheme"
+              :subtheme-name="selectedSubtheme"
+              :geozone="selectedGeozone"
+              :show-drafts="showDrafts"
             />
           </div>
         </nav>
         <div className="fr-col">
           <BouquetList
-            :theme-name="themeName"
-            :subtheme-name="subthemeName"
+            :theme-name="selectedTheme"
+            :subtheme-name="selectedSubtheme"
             :show-drafts="showDrafts"
             :geozone="geozone"
+            :query="selectedQuery"
           />
         </div>
       </div>

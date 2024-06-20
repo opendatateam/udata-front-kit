@@ -6,6 +6,8 @@ export {
   RiLightbulbLine,
   RiClipboardLine,
   RiFileAddLine,
-  RiFileCopy2Line
+  RiFileCopy2Line,
+  RiDatabase2Line,
+  RiMap2Line
 } from 'oh-vue-icons/icons/ri/index.js'
 export { MdDragindicator } from 'oh-vue-icons/icons/md/index.js'

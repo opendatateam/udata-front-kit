@@ -155,7 +155,7 @@ watch(
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
           <DsfrTag
             v-if="theme"
-            class="fr-mb-1v bold uppercase"
+            class="fr-mb-1v"
             :label="subtheme"
             :style="{
               backgroundColor: getThemeColor(theme),

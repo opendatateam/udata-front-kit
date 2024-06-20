@@ -135,6 +135,7 @@ themes:
       - name: Aménagements des villes
   - name: Produire
     color: 1E929E
+    textColor: FFFFFF
     subthemes:
       - name: Nucléaire
       - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
