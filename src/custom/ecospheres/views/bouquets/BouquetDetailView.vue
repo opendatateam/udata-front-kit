@@ -5,15 +5,16 @@ import {
   excerpt
 } from '@etalab/data.gouv.fr-components'
 import { useHead } from '@unhead/vue'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
-import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
+import DiscussionFocus from '@/components/discussions/DiscussionFocus.vue'
+import DiscussionsList from '@/components/discussions/DiscussionsList.vue'
 import config from '@/config'
 import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
 import {
@@ -38,12 +39,15 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const route = useRoute()
 const store = useTopicStore()
 const loading = useLoading()
 
 const topic: Ref<Topic | null> = ref(null)
 const selectedTabIndex = ref(0)
-const spatialCoverage = useSpatialCoverage(topic)
+const initialSelectedTabIndex = ref(0)
+const discussionId = ref()
+const tabs = ref()
 
 const showDiscussions = config.website.discussions.topic.display
 
@@ -53,8 +57,10 @@ const canEdit = computed(() => {
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
 const bouquetUrl = computed(() => window.location.href)
+
 const { theme, subtheme, datasetsProperties, clonedFrom } = useExtras(topic)
 const breadcrumbLinks = useBreadcrumbLinksForTopic(theme, subtheme, topic)
+const spatialCoverage = useSpatialCoverage(topic)
 
 const goToEdit = () => {
   router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
@@ -143,6 +149,24 @@ watch(
   },
   { immediate: true }
 )
+
+watch(tabs, () => {
+  if (tabs.value && discussionId.value) {
+    tabs.value.scrollIntoView({ behavior: 'smooth' })
+  }
+})
+
+watchEffect(() => {
+  if (!showDiscussions) return
+  const discussionIdMatch = route.hash.match(/^#discussion-([a-z0-9]+)$/)
+  if (discussionIdMatch) {
+    discussionId.value = discussionIdMatch[1]
+    initialSelectedTabIndex.value = 1
+    selectedTabIndex.value = 1
+  } else {
+    discussionId.value = undefined
+  }
+})
 </script>
 
 <template>
@@ -252,57 +276,66 @@ watch(
       </div>
     </div>
 
-    <DsfrTabs
-      class="fr-mt-2w"
-      tab-list-name="Groupes d'attributs du bouquet"
-      :tab-titles="[
-        { title: 'Données' },
-        { title: 'Discussions' },
-        { title: 'Réutilisations' }
-      ]"
-      :initial-selected-index="0"
-      :selected-tab-index="selectedTabIndex"
-      @select-tab="(idx: number) => (selectedTabIndex = idx)"
-    >
-      <!-- Jeux de données -->
-      <DsfrTabContent
-        panel-id="tab-content-0"
-        tab-id="tab-0"
-        :selected="selectedTabIndex === 0"
+    <div ref="tabs">
+      <DsfrTabs
+        class="fr-mt-2w"
+        tab-list-name="Groupes d'attributs du bouquet"
+        :tab-titles="[
+          { title: 'Données' },
+          { title: 'Discussions' },
+          { title: 'Réutilisations' }
+        ]"
+        :initial-selected-index="initialSelectedTabIndex"
+        :selected-tab-index="selectedTabIndex"
+        @select-tab="(idx: number) => (selectedTabIndex = idx)"
       >
-        <BouquetDatasetList
-          v-model="datasetsProperties"
-          :is-edit="canEdit"
-          @update-datasets="onUpdateDatasets"
-        />
-        <BouquetDatasetListExport
-          :datasets="datasetsProperties"
-          :filename="topic.id"
-        />
-      </DsfrTabContent>
-      <!-- Discussions -->
-      <DsfrTabContent
-        panel-id="tab-content-1"
-        tab-id="tab-1"
-        :selected="selectedTabIndex === 1"
-      >
-        <DiscussionsList
-          v-if="showDiscussions && topic"
-          :subject="topic"
-          :external-url="bouquetUrl"
-          model-name="bouquet"
-          subject-class="Topic"
-        />
-      </DsfrTabContent>
-      <!-- Réutilisations -->
-      <DsfrTabContent
-        panel-id="tab-content-2"
-        tab-id="tab-2"
-        :selected="selectedTabIndex === 2"
-      >
-        <ReusesList model="topic" :object-id="topic.id" />
-      </DsfrTabContent>
-    </DsfrTabs>
+        <!-- Jeux de données -->
+        <DsfrTabContent
+          panel-id="tab-content-0"
+          tab-id="tab-0"
+          :selected="selectedTabIndex === 0"
+        >
+          <BouquetDatasetList
+            v-model="datasetsProperties"
+            :is-edit="canEdit"
+            @update-datasets="onUpdateDatasets"
+          />
+          <BouquetDatasetListExport
+            :datasets="datasetsProperties"
+            :filename="topic.id"
+          />
+        </DsfrTabContent>
+        <!-- Discussions -->
+        <DsfrTabContent
+          v-if="showDiscussions"
+          panel-id="tab-content-1"
+          tab-id="tab-1"
+          :selected="selectedTabIndex === 1"
+        >
+          <DiscussionsList
+            v-if="topic && !discussionId"
+            :subject="topic"
+            :external-url="bouquetUrl"
+            model-name="bouquet"
+            subject-class="Topic"
+          />
+          <DiscussionFocus
+            v-if="topic && discussionId"
+            :subject="topic"
+            :discussion-id="discussionId"
+            subject-class="Topic"
+          />
+        </DsfrTabContent>
+        <!-- Réutilisations -->
+        <DsfrTabContent
+          panel-id="tab-content-2"
+          tab-id="tab-2"
+          :selected="selectedTabIndex === 2"
+        >
+          <ReusesList model="topic" :object-id="topic.id" />
+        </DsfrTabContent>
+      </DsfrTabs>
+    </div>
   </GenericContainer>
 </template>
 
