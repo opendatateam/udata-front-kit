@@ -52,6 +52,7 @@ const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
+const bouquetUrl = computed(() => window.location.href)
 const { theme, subtheme, datasetsProperties, clonedFrom } = useExtras(topic)
 const breadcrumbLinks = useBreadcrumbLinksForTopic(theme, subtheme, topic)
 
@@ -288,6 +289,8 @@ watch(
         <DiscussionsList
           v-if="showDiscussions && topic"
           :subject="topic"
+          :external-url="bouquetUrl"
+          model-name="bouquet"
           subject-class="Topic"
         />
       </DsfrTabContent>

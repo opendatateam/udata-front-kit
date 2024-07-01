@@ -15,6 +15,13 @@ interface DiscussionForm {
   title: string
   comment: string
   subject: Subject
+  extras?: {
+    notification: {
+      external_url: string
+      model_name: string
+    }
+    [key: string]: any
+  }
 }
 
 interface Post {

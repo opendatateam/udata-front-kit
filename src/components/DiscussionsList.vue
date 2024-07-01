@@ -38,6 +38,14 @@ const props = defineProps({
   subjectClass: {
     type: String as () => SubjectClass,
     default: 'Dataset'
+  },
+  externalUrl: {
+    type: String,
+    default: undefined
+  },
+  modelName: {
+    type: String,
+    default: undefined
   }
 })
 
@@ -86,6 +94,15 @@ const triggerLogin = () => {
 }
 
 const createDiscussion = () => {
+  if (props.externalUrl !== undefined && props.modelName !== undefined) {
+    discussionForm.value.extras = {
+      ...discussionForm.value.extras,
+      notification: {
+        external_url: props.externalUrl,
+        model_name: props.modelName
+      }
+    }
+  }
   discussionStore.createDiscussion(discussionForm.value).then((d) => {
     if (d !== undefined) {
       discussionForm.value.title = ''
