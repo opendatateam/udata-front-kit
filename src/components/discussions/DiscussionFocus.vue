@@ -33,7 +33,7 @@ const allowDiscussionCreation = computed(() => {
   return config.website.discussions[props.subjectClass.toLowerCase()].create
 })
 
-const onNoticeClose = () => {
+const seeAll = () => {
   router.push({ path: route.path, hash: '' })
 }
 
@@ -46,11 +46,11 @@ onMounted(() => {
 
 <template>
   <DsfrNotice
-    class="fr-mb-2w"
+    class="fr-mb-9v"
     type="info"
     title="Vous consultez une discussion spécifique sur ce jeu de données."
     :closeable="true"
-    @close="onNoticeClose"
+    @close="seeAll"
   />
   <DiscussionDetails
     v-if="discussion"
@@ -58,4 +58,12 @@ onMounted(() => {
     :subject-id="subject.id"
     :allow-discussion-comment="allowDiscussionCreation"
   />
+  <button
+    class="nav-link nav-link--no-icon text-decoration-none fr-link fr-mt-9v fr-link--icon-left fr-icon-arrow-right-s-line"
+    @click.stop.prevent="seeAll"
+  >
+    <span class="text-decoration-underline"
+      >Voir toutes les discussions sur ce jeu de données</span
+    >
+  </button>
 </template>
