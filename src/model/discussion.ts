@@ -41,6 +41,11 @@ interface Subject {
 
 type SubjectClass = 'Dataset' | 'Topic'
 
+enum SubjectClassLabels {
+  Dataset = 'jeu de données',
+  Topic = 'bouquet'
+}
+
 type SubjectId = string
 
 interface DiscussionResponse extends GenericResponse {
@@ -58,3 +63,5 @@ export type {
   PostForm,
   DiscussionId
 }
+
+export { SubjectClassLabels }

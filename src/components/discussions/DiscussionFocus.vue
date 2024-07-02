@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 
 import config from '@/config'
 import type { Discussion, SubjectClass } from '@/model/discussion'
+import { SubjectClassLabels } from '@/model/discussion'
 import { useDiscussionStore } from '@/store/DiscussionStore'
 
 import DiscussionDetails from './DiscussionDetails.vue'
@@ -63,7 +64,8 @@ onMounted(() => {
     @click.stop.prevent="seeAll"
   >
     <span class="text-decoration-underline"
-      >Voir toutes les discussions sur ce jeu de données</span
+      >Voir toutes les discussions sur ce
+      {{ SubjectClassLabels[props.subjectClass] }}</span
     >
   </button>
 </template>

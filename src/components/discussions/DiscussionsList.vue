@@ -10,6 +10,7 @@ import type {
   DiscussionForm,
   SubjectClass
 } from '@/model/discussion'
+import { SubjectClassLabels } from '@/model/discussion'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useUserStore } from '@/store/UserStore'
@@ -44,11 +45,6 @@ const props = defineProps({
     default: undefined
   }
 })
-
-const subjectClassLabels = {
-  Dataset: 'jeu de données',
-  Topic: 'bouquet'
-}
 
 const discussionForm: Ref<DiscussionForm> = ref({
   title: '',
@@ -181,7 +177,7 @@ watchEffect(() => {
       src="/blank_state/discussion.svg"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
+      Pas de discussion pour ce {{ SubjectClassLabels[props.subjectClass] }}.
     </p>
   </div>
   <div v-else>
