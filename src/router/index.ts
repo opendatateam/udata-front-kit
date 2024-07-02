@@ -147,7 +147,15 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
-      if (to.hash !== '') {
+      // if only hash changes without target hash, do nothing
+      if (
+        to.path === from.path &&
+        JSON.stringify(to.query) === JSON.stringify(from.query) &&
+        to.hash === ''
+      )
+        return
+      // discussion scroll is handled in discussion components
+      if (to.hash !== '' && !to.hash.startsWith('#discussion-')) {
         return {
           el: to.hash
         }

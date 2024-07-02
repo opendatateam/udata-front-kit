@@ -105,6 +105,12 @@ export const useDiscussionStore = defineStore('discussion', {
           title: `Page ${page}`
         }
       })
+    },
+    /**
+     * Get a single discussion from API
+     */
+    async getDiscussion(discussionId: string): Promise<Discussion> {
+      return await discussionsAPI.get({ entityId: discussionId })
     }
   }
 })

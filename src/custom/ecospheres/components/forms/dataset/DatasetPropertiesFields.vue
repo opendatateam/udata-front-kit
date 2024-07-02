@@ -96,7 +96,6 @@ watch(
 watch(
   () => datasetProperties.value.availability,
   (availability) => {
-    console.log('watch', availability)
     if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
       datasetProperties.value.uri = null

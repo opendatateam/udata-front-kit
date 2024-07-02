@@ -15,6 +15,13 @@ interface DiscussionForm {
   title: string
   comment: string
   subject: Subject
+  extras?: {
+    notification: {
+      external_url: string
+      model_name: string
+    }
+    [key: string]: any
+  }
 }
 
 interface Post {
@@ -34,6 +41,11 @@ interface Subject {
 
 type SubjectClass = 'Dataset' | 'Topic'
 
+enum SubjectClassLabels {
+  Dataset = 'jeu de données',
+  Topic = 'bouquet'
+}
+
 type SubjectId = string
 
 interface DiscussionResponse extends GenericResponse {
@@ -51,3 +63,5 @@ export type {
   PostForm,
   DiscussionId
 }
+
+export { SubjectClassLabels }
