@@ -5,6 +5,7 @@ import { useRouter, useRoute } from 'vue-router'
 import config from '@/config'
 import type { Discussion, SubjectClass } from '@/model/discussion'
 import { SubjectClassLabels } from '@/model/discussion'
+import LocalStorageService from '@/services/LocalStorageService'
 import { useDiscussionStore } from '@/store/DiscussionStore'
 
 import DiscussionDetails from './DiscussionDetails.vue'
@@ -38,6 +39,11 @@ const seeAll = () => {
   router.push({ path: route.path, hash: '' })
 }
 
+const triggerLogin = () => {
+  LocalStorageService.setItem('lastRoute', route)
+  router.push({ name: 'login' })
+}
+
 onMounted(() => {
   store.getDiscussion(props.discussionId).then((data) => {
     discussion.value = data
@@ -58,6 +64,7 @@ onMounted(() => {
     :discussion="discussion"
     :subject-id="subject.id"
     :allow-discussion-comment="allowDiscussionCreation"
+    @trigger-login="triggerLogin"
   />
   <button
     class="nav-link nav-link--no-icon text-decoration-none fr-link fr-mt-9v fr-link--icon-left fr-icon-arrow-right-s-line"
