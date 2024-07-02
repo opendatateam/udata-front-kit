@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { toast } from 'vue3-toastify'
 
 import config from '@/config'
+import { toastHttpError } from '@/utils/error'
 
 import type {
   DatagouvfrAPIArgs,
@@ -14,11 +14,6 @@ import type {
   CreateParams,
   DeleteParams
 } from '../../model/api'
-
-export const toastError = (error: AxiosError): void => {
-  const msg = `${error.message} (${error.response?.status})`
-  toast(msg, { type: 'error', autoClose: false })
-}
 
 /**
  * A wrapper around data.gouv.fr's API
@@ -51,7 +46,7 @@ export default class DatagouvfrAPI {
   async request(requestConfig: RequestConfig): Promise<AxiosResponseData> {
     const response = await axios(requestConfig).catch((error: AxiosError) => {
       if (this.toasted && requestConfig.toasted === true) {
-        toastError(error)
+        toastHttpError(error)
       }
       throw error
     })

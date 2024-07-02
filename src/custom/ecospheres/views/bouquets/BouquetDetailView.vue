@@ -11,6 +11,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
+import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import config from '@/config'
@@ -147,14 +148,14 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <div v-if="topic" class="fr-container datagouv-components fr-mb-4w">
+  <GenericContainer v-if="topic">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
           <DsfrTag
             v-if="theme"
-            class="fr-mb-1v bold uppercase"
+            class="fr-mb-1v"
             :label="subtheme"
             :style="{
               backgroundColor: getThemeColor(theme),
@@ -299,7 +300,7 @@ watch(
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>
-  </div>
+  </GenericContainer>
 </template>
 
 <style scoped lang="scss">

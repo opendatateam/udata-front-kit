@@ -5,6 +5,7 @@ import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import type { TopicConf } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -184,7 +185,7 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container fr-mb-4w">
+  <GenericContainer>
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
@@ -234,7 +235,7 @@ onMounted(() => {
     <div v-if="datasets?.length === 0" class="fr-mb-4w">
       Aucun résultat pour cette recherche.
     </div>
-    <div class="datagouv-components fr-col-md-12">
+    <div class="fr-col-md-12">
       <DatasetCard
         v-for="(d, index) in datasets"
         :key="d.id"
@@ -244,7 +245,7 @@ onMounted(() => {
         :organization-url="getOrganizationPage(d.organization?.id)"
       />
     </div>
-  </div>
+  </GenericContainer>
   <DsfrPagination
     v-if="pages.length"
     class="fr-container"

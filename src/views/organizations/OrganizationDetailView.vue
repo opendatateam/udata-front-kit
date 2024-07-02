@@ -3,6 +3,7 @@ import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
 import { computed, onMounted, ref, watchEffect, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import { useRouteParamsAsString } from '@/router/utils'
 
 import Tile from '../../components/Tile.vue'
@@ -65,7 +66,7 @@ watchEffect(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container fr-mb-4w">
+  <GenericContainer>
     <h1 class="fr-mb-2v">{{ org?.name }}</h1>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="description"></div>
@@ -103,9 +104,10 @@ watchEffect(() => {
         />
       </li>
     </ul>
-  </div>
+  </GenericContainer>
   <DsfrPagination
     v-if="pages.length"
+    class="fr-container"
     :current-page="currentPage - 1"
     :pages="pages"
     @update:current-page="(p: number) => (currentPage = p + 1)"

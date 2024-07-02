@@ -9,6 +9,7 @@ import {
 } from 'vue'
 
 import type { DsfrHeaderMenuLinkProps } from './DsfrHeaderMenuLink.vue'
+import HeaderSearch from './HeaderSearch.vue'
 
 type DsfrHeaderProps = {
   serviceTitle?: string
@@ -20,7 +21,6 @@ type DsfrHeaderProps = {
   operatorImgAlt?: string
   operatorImgSrc?: string
   operatorImgStyle?: StyleValue
-  placeholder?: string
   quickLinks?: DsfrHeaderMenuLinkProps[]
   searchLabel?: string
   quickLinksAriaLabel?: string
@@ -40,15 +40,13 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
   serviceLogoSrc: '',
-  placeholder: 'Rechercher...',
   quickLinks: () => [],
   searchLabel: 'Recherche',
   quickLinksAriaLabel: 'Menu secondaire',
   showBadge: false,
-  badgeText: 'BETA'
+  badgeText: 'BETA',
+  badgeStyle: ''
 })
-
-const modelText = ref()
 
 const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
@@ -65,10 +63,12 @@ onUnmounted(() => {
 const searchModalOpened = ref(false)
 const headerModalOpened = ref(false)
 
-const hideModal = () => {
+const hideModal = (focusButtonMenu: boolean = true) => {
   headerModalOpened.value = false
   searchModalOpened.value = false
-  document.getElementById('button-menu')?.focus()
+  if (focusButtonMenu) {
+    document.getElementById('button-menu')?.focus()
+  }
 }
 const showMenu = () => {
   headerModalOpened.value = true
@@ -88,17 +88,6 @@ const isWithSlotOperator = computed(
 const isWithSlotNav = computed(() => Boolean(slots.mainnav))
 
 const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
-
-// eslint-disable-next-line func-call-spacing
-const emit = defineEmits<{
-  (e: 'update:modelValue', payload: string): void
-  (e: 'search', payload: string): void
-}>()
-
-function search(payload: string) {
-  emit('search', payload)
-  modelText.value = ''
-}
 </script>
 
 <template>
@@ -209,14 +198,7 @@ function search(payload: string) {
               </nav>
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
-              <DsfrSearchBar
-                :label="searchLabel"
-                v-model="modelText"
-                :placeholder="placeholder"
-                style="justify-content: flex-end"
-                @update:model-value="$emit('update:modelValue', $event)"
-                @search="search(modelText)"
-              />
+              <HeaderSearch :search-label="searchLabel" />
             </div>
           </div>
         </div>
@@ -239,12 +221,10 @@ function search(payload: string) {
             >
               Fermer
             </button>
-            <DsfrSearchBar
+            <HeaderSearch
               v-if="searchModalOpened"
-              v-model="modelText"
-              :placeholder="placeholder"
-              @update:model-value="$emit('update:modelValue', $event)"
-              @search="search(modelText)"
+              :search-label="searchLabel"
+              @search="hideModal(false)"
             />
           </div>
         </div>

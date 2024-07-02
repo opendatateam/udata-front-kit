@@ -3,6 +3,7 @@ import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import { cloneTopic } from '@/custom/ecospheres/utils/bouquet'
 import { NoOptionSelected } from '@/model/theme'
@@ -132,7 +133,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container fr-mt-4w fr-mb-4w">
+  <GenericContainer class="fr-mt-4w">
     <form>
       <div class="fr-mt-4v">
         <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
@@ -201,5 +202,5 @@ onMounted(() => {
         />
       </div>
     </form>
-  </div>
+  </GenericContainer>
 </template>

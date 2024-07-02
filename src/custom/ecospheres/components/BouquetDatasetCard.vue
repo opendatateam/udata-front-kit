@@ -4,8 +4,8 @@ import { type DatasetV2 } from '@etalab/data.gouv.fr-components'
 import { ref, watch, toRef, type Ref } from 'vue'
 
 import { type DatasetProperties } from '@/model/topic'
-import { toastError } from '@/services/api/DatagouvfrAPI'
 import { useDatasetStore } from '@/store/DatasetStore'
+import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 
 const props = defineProps({
@@ -34,7 +34,7 @@ watch(
           if (isNotFoundError(err)) {
             datasetPropertiesRef.value.remoteDeleted = true
           } else {
-            toastError(err)
+            toastHttpError(err)
           }
         })
     }
