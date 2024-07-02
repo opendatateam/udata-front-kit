@@ -51,11 +51,11 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
     })
     .filter((bouquet) => {
       if (props.themeName === NoOptionSelected) return true
-      return isRelevant(bouquet, 'theme', props.themeName)
+      return bouquet.extras.ecospheres.theme === props.themeName
     })
     .filter((bouquet) => {
       if (props.subthemeName === NoOptionSelected) return true
-      return isRelevant(bouquet, 'subtheme', props.subthemeName)
+      return bouquet.extras.ecospheres.subtheme === props.subthemeName
     })
     .filter((bouquet) => {
       if (props.query === '') return true
@@ -70,19 +70,6 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
     return bouquets.value.length + ' bouquets disponibles'
   }
 })
-
-const isRelevant = (topic: Topic, property: string, value: string): Boolean => {
-  const topicInformations: { [key: string]: string }[] =
-    topic.extras['ecospheres:informations']
-  if (topicInformations) {
-    for (const information of topicInformations) {
-      if (information[property] === value) {
-        return true
-      }
-    }
-  }
-  return false
-}
 
 const goToCreate = () => {
   router.push({ name: 'bouquet_add', query: route.query })

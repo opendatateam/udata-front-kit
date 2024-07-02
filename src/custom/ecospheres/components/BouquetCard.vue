@@ -15,6 +15,8 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
+import { useExtras } from '../utils/bouquet'
+
 const props = defineProps({
   bouquet: {
     type: Object as () => Topic,
@@ -27,12 +29,9 @@ const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const theme: string = props.bouquet.extras['ecospheres:informations'][0].theme
-const subtheme: string =
-  props.bouquet.extras['ecospheres:informations'][0].subtheme
+const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
 
-const nbData: number =
-  props.bouquet.extras['ecospheres:datasets_properties']?.length ?? 0
+const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
   name: 'bouquet_detail',
@@ -70,7 +69,7 @@ const bouquetLink: RouteLocationRaw = {
           </RouterLink>
         </h4>
         <DsfrTag
-          v-if="subtheme !== NoOptionSelected"
+          v-if="theme && subtheme !== NoOptionSelected"
           :class="{
             'fr-card__detail': true,
             'fr-mt-1w': subtheme !== NoOptionSelected

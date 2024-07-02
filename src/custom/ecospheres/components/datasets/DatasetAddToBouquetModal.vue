@@ -69,8 +69,7 @@ const modalActions = computed(() => {
 })
 
 const isDatasetInBouquet = (bouquet: Topic): boolean => {
-  const datasetsProperties =
-    bouquet.extras['ecospheres:datasets_properties'] || []
+  const datasetsProperties = bouquet.extras.ecospheres.datasets_properties
   return datasetsProperties.some(
     (datasetProps) => datasetProps.id === props.dataset.id
   )
@@ -85,9 +84,9 @@ const submit = async () => {
     throw Error('Bouquet not in store')
   }
   const newDatasetsProperties =
-    bouquet.extras['ecospheres:datasets_properties'] || []
+    bouquet.extras.ecospheres.datasets_properties || []
   newDatasetsProperties.push(datasetProperties.value)
-  bouquet.extras['ecospheres:datasets_properties'] = newDatasetsProperties
+  bouquet.extras.ecospheres.datasets_properties = newDatasetsProperties
   await topicStore.update(bouquet.id, {
     id: bouquet.id,
     tags: bouquet.tags,

@@ -15,10 +15,7 @@ const getCustomBoxShadow = (color: string) => {
 
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {
-    return (
-      !topic.private &&
-      topic.extras['ecospheres:informations'][0].theme === theme.name
-    )
+    return !topic.private && topic.extras.ecospheres.theme === theme.name
   }).length
   switch (nbBouquets) {
     case 0:
