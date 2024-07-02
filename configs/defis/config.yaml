@@ -57,7 +57,8 @@ website:
     display: false
     label: 'Donnez votre avis'
     link: https://tally.so/r/wQ7y47
-  header_search: false
+  header_search:
+    display: false
   search_bar:
     display: false
     placeholder: 'Rechercher un jeu de données'

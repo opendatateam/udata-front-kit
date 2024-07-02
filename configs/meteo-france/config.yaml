@@ -40,7 +40,9 @@ website:
     display: true
     label: 'Donnez votre avis'
     link: https://tally.so/r/wQ7y47
-  header_search: true
+  header_search:
+    display: true
+    placeholder: Rechercher...
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'

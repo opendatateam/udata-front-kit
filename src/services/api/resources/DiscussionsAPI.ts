@@ -39,7 +39,8 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
     return await this.request({
       url,
       method: 'post',
-      data: postForm
+      data: postForm,
+      authenticated: true
     })
   }
 }

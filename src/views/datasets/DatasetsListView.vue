@@ -242,7 +242,7 @@ onMounted(() => {
         :style="zIndex(index)"
         :dataset="d"
         :dataset-url="getDatasetPage(d.id)"
-        :organization-url="getOrganizationPage(d.organization.id)"
+        :organization-url="getOrganizationPage(d.organization?.id)"
       />
     </div>
   </GenericContainer>

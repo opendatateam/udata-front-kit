@@ -2,7 +2,7 @@
 import type { ComputedRef, PropType } from 'vue'
 import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
@@ -29,11 +29,15 @@ const props = defineProps({
   geozone: {
     type: String as PropType<string | null>,
     default: null
+  },
+  query: {
+    type: String,
+    default: ''
   }
 })
 
 const bouquets: ComputedRef<Topic[]> = computed(() => {
-  const allTopics = topicStore.sorted
+  return topicStore.sorted
     .filter((bouquet) => {
       return !props.showDrafts ? !bouquet.private : true
     })
@@ -45,27 +49,18 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
         bouquet.spatial.zones.includes(props.geozone)
       )
     })
-  if (props.themeName === NoOptionSelected) {
-    return allTopics
-  }
-  const relevantTopics: Topic[] = []
-  if (props.subthemeName !== NoOptionSelected) {
-    for (const topic of allTopics) {
-      if (
-        isRelevant(topic, 'subtheme', props.subthemeName) &&
-        isRelevant(topic, 'theme', props.themeName)
-      ) {
-        relevantTopics.push(topic)
-      }
-    }
-  } else if (props.themeName !== NoOptionSelected) {
-    for (const topic of allTopics) {
-      if (isRelevant(topic, 'theme', props.themeName)) {
-        relevantTopics.push(topic)
-      }
-    }
-  }
-  return relevantTopics
+    .filter((bouquet) => {
+      if (props.themeName === NoOptionSelected) return true
+      return bouquet.extras.ecospheres.theme === props.themeName
+    })
+    .filter((bouquet) => {
+      if (props.subthemeName === NoOptionSelected) return true
+      return bouquet.extras.ecospheres.subtheme === props.subthemeName
+    })
+    .filter((bouquet) => {
+      if (props.query === '') return true
+      return bouquet.name.toLowerCase().includes(props.query.toLowerCase())
+    })
 })
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
@@ -76,21 +71,14 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
   }
 })
 
-const isRelevant = (topic: Topic, property: string, value: string): Boolean => {
-  const topicInformations: { [key: string]: string }[] =
-    topic.extras['ecospheres:informations']
-  if (topicInformations) {
-    for (const information of topicInformations) {
-      if (information[property] === value) {
-        return true
-      }
-    }
-  }
-  return false
-}
-
 const goToCreate = () => {
   router.push({ name: 'bouquet_add', query: route.query })
+}
+
+const clearFilters = () => {
+  const query: LocationQueryRaw = {}
+  if (route.query.drafts) query.drafts = route.query.drafts
+  router.push({ name: 'bouquets', hash: '#main', query })
 }
 
 onMounted(() => {
@@ -102,7 +90,7 @@ onMounted(() => {
 <template>
   <div
     v-if="bouquets.length > 0"
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
   >
     <p class="fr-col-auto fr-my-0">{{ numberOfResultMsg }}</p>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
@@ -112,6 +100,7 @@ onMounted(() => {
       <div class="fr-col">
         <DsfrSelect
           v-model="topicStore.sort"
+          select-id="sort-search"
           :options="[
             { value: '-created_at', text: 'Les plus récemment créés' },
             { value: '-last_modified', text: 'Les plus récemment modifiés' },
@@ -123,23 +112,51 @@ onMounted(() => {
   </div>
   <div
     v-if="bouquets.length === 0"
-    class="fr-alert fr-alert--info"
-    data-fr-js-alert-actionee="true"
+    class="fr-mt-2w rounded-xxs fr-p-3w fr-grid-row flex-direction-column bg-contrast-blue-cumulus"
   >
-    <h3 class="fr-alert__title">Il n'y a pas encore de bouquet sur ce thème</h3>
-    <p>
-      N'hésitez pas à contribuer en
-      <a href="#" @click.stop.prevent="goToCreate()">en créant un</a>
-    </p>
-  </div>
-  <div class="bouquets-list-container fr-container fr-mt-2w fr-mb-4w">
-    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w">
+    <div class="fr-col fr-grid-row fr-grid-row--gutters text-blue-400">
+      <div class="fr-col-auto">
+        <img
+          class="w-100"
+          src="/search/france_with_magnifying_glass.svg"
+          alt=""
+        />
+      </div>
       <div
-        v-for="bouquet in bouquets"
-        :key="bouquet.id"
-        class="fr-col-md-6 fr-col-12"
+        class="fr-col-12 fr-col-sm fr-grid-row flex-direction-column justify-between"
       >
-        <BouquetCard :bouquet="bouquet" />
+        <div class="fr-mb-1w">
+          <h2 class="fr-m-0 fr-mb-1w fr-text--bold fr-text--md">
+            Aucun résultat ne correspond à votre recherche
+          </h2>
+          <p class="fr-mt-1v fr-mb-3v">
+            Essayez de réinitialiser les filtres pour agrandir votre champ de
+            recherche.<br />
+            Vous pouvez aussi contribuer en créant un bouquet.
+          </p>
+        </div>
+        <div class="fr-grid-row fr-grid-row--undefined">
+          <button class="fr-btn" @click.stop.prevent="clearFilters">
+            Réinitialiser les filtres
+          </button>
+          <button
+            class="fr-btn fr-btn--secondary fr-ml-1w"
+            @click.stop.prevent="goToCreate"
+          >
+            Ajouter un bouquet
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bouquets-list-container fr-container fr-mb-4w border-top">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w">
+      <div class="fr-col-12">
+        <BouquetCard
+          v-for="bouquet in bouquets"
+          :key="bouquet.id"
+          :bouquet="bouquet"
+        />
       </div>
     </div>
   </div>
