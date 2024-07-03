@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineModel, computed, ref, onMounted, watch } from 'vue'
 
+import { updateEcospheresExtras } from '@/custom/ecospheres/utils/bouquet'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
@@ -28,10 +29,8 @@ const isValid = computed(() => {
     topic.value.description &&
     topic.value.description.trim() !== '' &&
     topic.value.extras &&
-    topic.value.extras['ecospheres:informations'][0].theme !==
-      NoOptionSelected &&
-    topic.value.extras['ecospheres:informations'][0].subtheme !==
-      NoOptionSelected
+    topic.value.extras.ecospheres.theme !== NoOptionSelected &&
+    topic.value.extras.ecospheres.subtheme !== NoOptionSelected
   )
 })
 
@@ -53,12 +52,10 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // sync theme and subtheme from local refs to topic
 watch([theme, subtheme], () => {
-  topic.value.extras['ecospheres:informations'] = [
-    {
-      theme: theme.value,
-      subtheme: subtheme.value
-    }
-  ]
+  topic.value.extras = updateEcospheresExtras(topic.value, {
+    theme: theme.value,
+    subtheme: subtheme.value
+  })
 })
 
 // sync validation state with parent component
@@ -72,8 +69,8 @@ watch(
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  theme.value = topic.value.extras['ecospheres:informations'][0].theme
-  subtheme.value = topic.value.extras['ecospheres:informations'][0].subtheme
+  theme.value = topic.value.extras.ecospheres.theme
+  subtheme.value = topic.value.extras.ecospheres.subtheme
 })
 </script>
 

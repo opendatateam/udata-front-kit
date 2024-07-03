@@ -15,7 +15,14 @@ export const routes = [
         component: async () =>
           await import(
             '@/custom/ecospheres/views/bouquets/BouquetsListView.vue'
-          )
+          ),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          query: route.query.q,
+          subtheme: route.query.subtheme,
+          theme: route.query.theme,
+          geozone: route.query.geozone,
+          drafts: route.query.drafts
+        })
       },
       {
         path: ':bid',

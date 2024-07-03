@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, watchEffect, toRef, type Ref, type PropType } from 'vue'
-import { useRouter, type LocationQueryRaw } from 'vue-router'
+import { ref, watchEffect, toRef, type Ref, type PropType } from 'vue'
+import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
@@ -24,68 +24,82 @@ const props = defineProps({
   geozone: {
     type: String as PropType<string | null>,
     default: null
+  },
+  showDrafts: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emits = defineEmits(['update:showDrafts', 'update:geozone'])
-
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 
-const showDrafts = ref(false)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | null> = ref(null)
 
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
+const localShowDrafts = ref(false)
+
 const computeQueryArgs = (
-  data: Record<string, string | null>
+  data?: Record<string, string | null>
 ): LocationQueryRaw => {
   const query: LocationQueryRaw = {}
   if (props.themeName) query.theme = props.themeName
   if (props.subthemeName) query.subtheme = props.subthemeName
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
+  if (localShowDrafts.value) {
+    query.drafts = 1
+  }
+  if (route.query.q) {
+    query.q = route.query.q
+  }
   return { ...query, ...data }
 }
 
-const switchTheme = (event: Event) => {
+const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: '/bouquets',
-    query: computeQueryArgs({
-      theme: (event.target as HTMLInputElement)?.value,
-      subtheme: NoOptionSelected
-    })
+    query: computeQueryArgs(data),
+    hash: '#main'
+  })
+}
+
+const switchTheme = (event: Event) => {
+  navigate({
+    theme: (event.target as HTMLInputElement)?.value,
+    subtheme: NoOptionSelected
   })
 }
 
 const switchSubtheme = (event: Event) => {
-  router.push({
-    path: '/bouquets',
-    query: computeQueryArgs({
-      subtheme: (event.target as HTMLInputElement)?.value
-    })
+  navigate({
+    subtheme: (event.target as HTMLInputElement)?.value
   })
 }
 
 const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
   selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
-  router.push({
-    path: '/bouquets',
-    query: computeQueryArgs({})
-  })
+  navigate()
 }
 
-watch(showDrafts, (newVal) => {
-  emits('update:showDrafts', newVal)
-})
+const switchLocalShowDrafts = () => {
+  navigate()
+}
 
 watchEffect(() => {
   if (props.geozone) {
+    selectedGeozone.value = props.geozone
     spatialAPI
       .getZone(props.geozone)
       .then((zone) => (selectedSpatialCoverage.value = zone))
+  } else {
+    selectedSpatialCoverage.value = null
+    selectedGeozone.value = null
   }
+  localShowDrafts.value = props.showDrafts
 })
 </script>
 
@@ -93,9 +107,10 @@ watchEffect(() => {
   <div className="filterForm">
     <DsfrCheckbox
       v-if="userStore.isLoggedIn"
-      v-model="showDrafts"
+      v-model="localShowDrafts"
       label="Afficher les brouillons"
       name="show_drafts"
+      @update:model-value="switchLocalShowDrafts"
     />
 
     <div class="fr-select-group">

@@ -1,10 +1,21 @@
 <script setup lang="ts">
+import {
+  useOwnerName,
+  formatRelativeIfRecentDate,
+  OrganizationNameWithCertificate
+} from '@etalab/data.gouv.fr-components'
+import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
+import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
+import { getOwnerAvatar } from '@/utils/avatar'
+import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
+
+import { useExtras } from '../utils/bouquet'
 
 const props = defineProps({
   bouquet: {
@@ -13,12 +24,14 @@ const props = defineProps({
   }
 })
 
-const theme: string = props.bouquet.extras['ecospheres:informations'][0].theme
-const subtheme: string =
-  props.bouquet.extras['ecospheres:informations'][0].subtheme
+const bouquetRef = toRef(props, 'bouquet')
+const spatialCoverage = useSpatialCoverage(bouquetRef)
 
-const nbData: number =
-  props.bouquet.extras['ecospheres:datasets_properties']?.length ?? 0
+const ownerName = useOwnerName(props.bouquet)
+
+const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
+
+const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
   name: 'bouquet_detail',
@@ -27,54 +40,87 @@ const bouquetLink: RouteLocationRaw = {
 </script>
 
 <template>
-  <div class="fr-card fr-enlarge-link bouquet-card">
-    <div class="fr-card__body">
-      <div class="fr-card__content">
-        <h3 class="fr-card__title">
-          <RouterLink class="fr-card__link" :to="bouquetLink">
+  <article class="fr-my-3w fr-p-3w border border-default-grey fr-enlarge-link">
+    <div
+      v-if="bouquet.private"
+      class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
+    >
+      <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
+    </div>
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
+      <div class="fr-col-auto">
+        <OrganizationLogo
+          v-if="bouquet.organization"
+          :size="64"
+          :object="bouquet"
+        />
+        <div v-else class="border fr-p-1-5v fr-mr-1-5v">
+          <img
+            style="margin-bottom: -6px"
+            :src="getOwnerAvatar(bouquet)"
+            height="64"
+          />
+        </div>
+      </div>
+      <div class="fr-col">
+        <h4 class="fr-mb-1v fr-grid-row">
+          <RouterLink :to="bouquetLink" class="text-grey-500">
             {{ bouquet.name }}
           </RouterLink>
-        </h3>
-        <p class="fr-card__desc">
+        </h4>
+        <DsfrTag
+          v-if="theme && subtheme !== NoOptionSelected"
+          :class="{
+            'fr-card__detail': true,
+            'fr-mt-1w': subtheme !== NoOptionSelected
+          }"
+          class="fr-mb-1w"
+          :label="subtheme"
+          :style="{
+            backgroundColor: getThemeColor(theme),
+            color: getThemeTextColor(theme)
+          }"
+        />
+        <p
+          v-if="bouquet.organization || bouquet.owner"
+          class="fr-m-0 fr-text--sm"
+        >
+          Par
+          <template v-if="bouquet.organization">
+            <OrganizationNameWithCertificate
+              :organization="bouquet.organization"
+            />
+          </template>
+          <template v-else>{{ ownerName }}</template>
+          — mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
+        </p>
+        <p
+          class="fr-mt-1w fr-mb-2w fr-hidden fr-unhidden-sm overflow-wrap-anywhere"
+        >
           <text-clamp
+            v-if="bouquet.description"
             :auto-resize="true"
             :text="stripFromMarkdown(bouquet.description)"
             :max-lines="3"
           />
         </p>
-        <div class="fr-card__start">
-          <DsfrTag
-            v-if="subtheme !== NoOptionSelected"
-            :class="{
-              'fr-card__detail': true,
-              'fr-mt-1w': subtheme !== NoOptionSelected
-            }"
-            class="fr-mb-2w bold uppercase"
-            :label="subtheme"
-            :style="{
-              backgroundColor: getThemeColor(theme),
-              color: getThemeTextColor(theme)
-            }"
-          />
-          <p v-if="bouquet.private" class="fr-card__detail">
-            <DsfrTag label="Brouillon" />
-          </p>
-        </div>
-        <div class="fr-card__end">
-          <p class="fr-card__detail">
+        <p class="fr-tag">
+          <VIcon name="ri-database-2-line" class="fr-mr-1v" />
+          <span class="fr-mr-1v">
             {{
               `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
             }}
-          </p>
-        </div>
+          </span>
+        </p>
+        <p v-if="spatialCoverage" class="fr-tag fr-ml-1w">
+          <VIcon name="ri-map-2-line" class="fr-mr-1v" />
+          <span class="fr-mr-1v">
+            {{ spatialCoverage.name }}
+          </span>
+        </p>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
-<style scoped lang="scss">
-.bouquet-card {
-  box-shadow: inset 0 0 0 1px var(--border-default-grey),
-    inset 0 -0.25rem 0 0 var(--border-plain-blue-france) !important;
-}
-</style>
+<style scoped lang="scss"></style>
