@@ -3,10 +3,9 @@ run-name: create and deploy ${{ github.sha }}
 on:
   push:
     branches:
-      - create-deploy-release # TODO: switch to main branch before merge
+      - '*'
 jobs:
   trigger-gitlab-pipeline:
-    if: startsWith(github.event.head_commit.message, '[') # regexp not supported
     runs-on: ubuntu-latest
     env:
       # variables to be defined
