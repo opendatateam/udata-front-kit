@@ -28,7 +28,7 @@ jobs:
           echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
 
           # configure the SSH deploy private key
-          mkdir ~/.ssh
+          mkdir -p ~/.ssh
           echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
@@ -37,6 +37,7 @@ jobs:
           # configure git
           git config --global user.email "root@data.gouv.fr"
           git config --global user.name "datagouv"
+
       - name: clone repositories
         shell: bash
         run: |
@@ -45,6 +46,7 @@ jobs:
 
           # TODO: switch to main branch before merge
           git clone --quiet --depth 1 -b add-env $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
+
       - name: check commit message
         shell: bash
         run: |
@@ -65,6 +67,7 @@ jobs:
           echo "VARS=$VARS" >> $GITHUB_ENV
           echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
         working-directory: ${{ env.APP_NAME }}
+
       - name: create release
         shell: bash
         run: |
