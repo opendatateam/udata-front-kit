@@ -28,13 +28,13 @@ export const useTopicStore = defineStore('topic', {
     sort: '-created_at'
   }),
   getters: {
-    // Computed property to get topics owned by the current user sorted by last_modified
-    userTopics(): ComputedRef<Topic[]> {
+    // Computed property to get topics writable by the current user sorted by last_modified
+    myTopics(): ComputedRef<Topic[]> {
       const userStore = useUserStore()
       return computed(() => {
         if (!userStore.isLoggedIn) return []
-        return this.sortedByDateDesc('last_modified').filter(
-          (topic: Topic) => topic.owner?.id === userStore.data?.id
+        return this.sortedByDateDesc('last_modified').filter((topic: Topic) =>
+          userStore.hasEditPermissions(topic)
         )
       })
     },

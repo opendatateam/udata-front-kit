@@ -25,7 +25,7 @@ const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
 
-const bouquets = topicStore.userTopics
+const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
   title: '',
   purpose: '',

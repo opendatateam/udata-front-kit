@@ -109,8 +109,8 @@ export const useUserStore = defineStore('user', {
     /**
      * Is the user logged-in and admin ?
      */
-    isAdmin() {
-      return this.isLoggedIn && this.data?.roles?.includes('admin')
+    isAdmin(): boolean {
+      return this.isLoggedIn && (this.data?.roles?.includes('admin') ?? false)
     },
     /**
      * Has current user edit permissions on given object?
@@ -118,7 +118,7 @@ export const useUserStore = defineStore('user', {
     hasEditPermissions<T>(object: WithOwned<T> | null): boolean {
       if (object === null) return false
       if (!this.isLoggedIn || this.data === undefined) return false
-      if (this.isAdmin() === true) return true
+      if (this.isAdmin()) return true
       if (object.owner != null) {
         return object.owner.id === this.data.id
       } else if (object.organization != null) {
