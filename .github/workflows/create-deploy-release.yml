@@ -41,11 +41,8 @@ jobs:
       - name: clone repositories
         shell: bash
         run: |
-          # TODO: switch to main branch before merge
           git clone --quiet --depth 1 -b create-deploy-release ${{ env.REPO_SSH_URL }}
-
-          # TODO: switch to main branch before merge
-          git clone --quiet --depth 1 -b add-env $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
+          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: check commit message
         shell: bash
