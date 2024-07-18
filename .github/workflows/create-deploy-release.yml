@@ -6,6 +6,8 @@ on:
       - '*'
 jobs:
   trigger-gitlab-pipeline:
+    if: |
+      startsWith(github.event.head_commit.message, '[')
     runs-on: ubuntu-latest
     env:
       # variables to be defined
