@@ -1,0 +1,84 @@
+name: Create and deploy a new release
+run-name: create and deploy ${{ github.sha }}
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  trigger-gitlab-pipeline:
+    if: |
+      startsWith(github.event.head_commit.message, '[')
+    runs-on: ubuntu-latest
+    env:
+      # variables to be defined
+      APP_NAME: ${{ vars.APP_NAME }}
+      SCAFFOLD_REPO_SSH_URL: ${{ vars.SCAFFOLD_REPO_SSH_URL }}
+      ENVS: ${{ vars.ENVS }}
+      APPS: ${{ vars.APPS }}
+
+      # secrets to be defined
+      GITLAB_API_TOKEN: ${{ secrets.GITLAB_API_TOKEN }}
+      DEPLOY_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+    steps:
+      - name: configure environment
+        shell: bash
+        run: |
+          # configure environment variables
+          echo "REPO_HTTPS_URL=${{ github.server_url }}/${{ github.repository }}.git" >> $GITHUB_ENV
+          echo "REPO_SSH_URL=git@github.com:${{ github.repository }}.git" >> $GITHUB_ENV
+          echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
+
+          # configure the SSH deploy private key
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
+
+          # configure git
+          git config --global user.email "root@data.gouv.fr"
+          git config --global user.name "datagouv"
+
+      - name: clone repositories
+        shell: bash
+        run: |
+          git clone --quiet --depth 1 -b create-deploy-release ${{ env.REPO_SSH_URL }}
+          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
+
+      - name: check commit message
+        shell: bash
+        run: |
+          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
+
+          if [[ $LAST_COMMIT_MESSAGE =~ ^\[($ENVS):($APPS):(major|minor|patch)\] ]]; then
+            ENV="${BASH_REMATCH[1]}"
+            CONFIG_NAME="${BASH_REMATCH[2]}"
+            VERSION_PART="${BASH_REMATCH[3]}"
+          else
+            echo "error: invalid env, app and/or version part"
+            exit 1
+          fi
+
+          echo "ENV=$ENV" >> $GITHUB_ENV
+          echo "CONFIG_NAME=$CONFIG_NAME" >> $GITHUB_ENV
+          echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
+        working-directory: ${{ env.APP_NAME }}
+
+      - name: create release
+        shell: bash
+        run: |
+          pattern="${CONFIG_NAME}-${ENV}-[0-9]+\.[0-9]+\.[0-9]+$"
+          tags=$(git ls-remote --tags origin | grep -Eo "refs/tags/${pattern}" | sed 's#refs/tags/##' || true)
+          if [ -n "$tags" ]; then
+              for tag in $tags; do git fetch origin tag $tag; done
+          fi
+          RELEASE_VERSION=$(../${{ env.SCAFFOLD_DIR }}/scripts/bump_version_non_semver.sh $CONFIG_NAME $ENV $VERSION_PART)
+
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+        working-directory: ${{ env.APP_NAME }}
+
+      - name: trigger Gitlab CI/CD pipeline
+        shell: bash
+        run: |
+          ./scripts/gitlab-ci-pipeline.sh $CONFIG_NAME $RELEASE_VERSION $ENV ""
+        working-directory: ${{ env.SCAFFOLD_DIR }}
