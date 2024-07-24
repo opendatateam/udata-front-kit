@@ -34,8 +34,15 @@ website:
     title: 'La météo et le climat en Open Data'
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     below_hero:
-    below_topics:
     meta_description:
+    below_topics: >-
+      **ACTUALITÉS**
+
+
+      Retours sur le hackathon du 8 et 9 avril dernier 🚀
+
+
+      [**En savoir plus**](/hackathon)
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -55,6 +62,8 @@ website:
       to: /datasets
     - text: Recherche guidée
       to: /form
+    - text: 'Hackathon le 8 et 9 avril 🚀'
+      to: /hackathon
     - text: A propos
       to: /about
   router:
@@ -70,6 +79,10 @@ website:
         id: 'accessibility'
         route: '/accessibility'
         url: '/meteo-france/pages/accessibility.md'
+      - title: 'Hackathon le 8 et 9 avril 🚀'
+        id: 'hackathon'
+        route: '/hackathon'
+        url: '/meteo-france/pages/hackathon.md'
   # img should be square
   home_buttons:
   show_topic_charts: true
