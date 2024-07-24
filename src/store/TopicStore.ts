@@ -16,6 +16,7 @@ type SortCriterions = '-created_at' | '-last_modified' | 'name'
 
 export interface RootState {
   data: Topic[]
+  dataWithoutUniverse: Topic[]
   isLoaded: boolean
   sort: SortCriterions
 }
@@ -23,6 +24,7 @@ export interface RootState {
 export const useTopicStore = defineStore('topic', {
   state: (): RootState => ({
     data: [],
+    dataWithoutUniverse: [],
     // flag for initial/remote loading of data
     isLoaded: false,
     sort: '-created_at'
@@ -67,9 +69,11 @@ export const useTopicStore = defineStore('topic', {
      */
     async loadTopicsFromList(topics: TopicConf[]) {
       this.data = []
+      this.dataWithoutUniverse = []
       for (const topic of topics) {
         const res = await topicsAPIv2.get({ entityId: topic.id })
         this.data.push(res)
+        this.dataWithoutUniverse.push(res)
       }
     },
     /**
