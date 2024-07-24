@@ -87,7 +87,9 @@ website:
         url: '/defis/pages/accessibility.md'
   # img should be square
   home_buttons:
-  show_topic_charts: true
+  topic_charts:
+    display: false
+    topic:
   show_quality_component: true
   show_dataset_metadata_panel: false
   list_highlighted_topics:

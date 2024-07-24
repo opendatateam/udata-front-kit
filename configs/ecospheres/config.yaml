@@ -100,7 +100,9 @@ website:
         route: '/terms'
         url: '/ecospheres/pages/terms.md'
   home_buttons:
-  show_topic_charts: false
+  topic_charts:
+    display: false
+    topic:
   show_quality_component: true
   list_highlighted_topics:
   url_highlighted_topics:

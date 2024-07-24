@@ -72,7 +72,9 @@ website:
         url: '/meteo-france/pages/accessibility.md'
   # img should be square
   home_buttons:
-  show_topic_charts: true
+  topic_charts:
+    display: false
+    topic:
   show_quality_component: true
   list_highlighted_topics:
     - id: '6571f26dc009674feb726be9'

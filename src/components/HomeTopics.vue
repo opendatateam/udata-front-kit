@@ -13,7 +13,7 @@ const props = defineProps(['topics'])
 const topics = props.topics
 const typeHighlightedTopics = config.website.type_highlighted_topics
 
-const topicsData = computed(() => topicStore.dataWithoutUniverse)
+const topicsData = computed(() => topicStore.data)
 
 onMounted(() => {
   topicStore.loadTopicsFromList(topics)

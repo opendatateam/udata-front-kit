@@ -10,7 +10,7 @@ const topicStore = useTopicStore()
 const chartData = ref([])
 
 onMounted(() => {
-  topicStore.load(config.universe.topic_id).then((topic) => {
+  topicStore.load(config.website.topic_charts.topic).then((topic) => {
     chartData.value = topic.extras['config:charts'] || []
   })
 })
