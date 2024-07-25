@@ -24,7 +24,7 @@ const selectedTopicId = ref(null)
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 const title = config.website.title
-const topicsConf = config.website.list_highlighted_topics
+const topicsConf = config.website.list_search_topics
 const topicsData = computed(() => {
   return topicStore.$state.data
 })

@@ -33,25 +33,84 @@ website:
   homepage:
     title: 'Apprendre avec l’open data'
     subtitle: 'Se former et utiliser des données ouvertes pour répondre à des enjeux sociaux et environnementaux.'
-    below_hero: >-
-      Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).
+    sections:
+      - title:
+        content: >-
 
-      ### Des défis open data
+          Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+      - title: Des défis open data
+        content: >-
 
-      La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.
-
-
-      Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
-    below_topics: >-
-      ### L'Open Data University
-
-      Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
-
-
-      Enseignantes, enseignants et responsables pédagogiques des établissements d'enseignement supérieur, [n'hésitez pas à vous inscrire pour intégrer le dispositif](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv) !
+          La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.
 
 
-      [En savoir plus sur l’Open Data University.](/opendatauniversity)
+          Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - id: '65b76f15d7874915c8e41298'
+              name: 'Impact Diagnostics de Performance Energétique'
+              description: 'Quel impact de la classe DPE sur les consommations énergétiques ? Défi porté par Enedis'
+              url: '/defis/65b76f15d7874915c8e41298/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_enedis4.png'
+            - id: '65b10aa72d0c187ecf296930'
+              name: 'Offre culturelle'
+              description: "Comment valoriser l'offre culturelle et favoriser l'accès à la culture ?"
+              url: '/defis/65b10aa72d0c187ecf296930/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_culture3.png'
+            - id: '65b22219ffcf892bd066df76'
+              name: 'Elections'
+              description: 'Quels liens entre vote et caractéristiques socio-démographiques ?'
+              url: '/defis/65b22219ffcf892bd066df76/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_elections3.png'
+            - id: '65b10beae24f409e31c547a5'
+              name: 'Changement climatique'
+              description: 'Quelle évolution du climat en France depuis le début du XXe siècle ?'
+              url: '/defis/65b10beae24f409e31c547a5/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_climat3.png'
+            - id: '65b76b8536f029909a82ca1c'
+              name: 'Commerces de centre-ville'
+              description: 'Quelle est la structure du tissu commercial ?'
+              url: '/defis/65b76b8536f029909a82ca1c/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_commerces3.png'
+            - id: '65a92352ddd3d98e460e83f3'
+              name: 'Infrastructures cyclables'
+              description: 'Quels liens entre accidentologie à vélo et infrastructures cyclables ?'
+              url: '/defis/65a92352ddd3d98e460e83f3/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_velo3.png'
+            - id: '65a92372953d21f206abb110'
+              name: 'Energie en France'
+              description: 'Quelles tensions énergétiques passées et futures en France ?'
+              url: '/defis/65a92372953d21f206abb110/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/energie3_odu.png'
+            - id: '65a9237ed493a309fc872e4a'
+              name: 'Carte scolaire'
+              description: 'Comment permettre de savoir dans quel établissement inscrire un enfant ?'
+              url: '/defis/65a9237ed493a309fc872e4a/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_ecole4.png'
+            - id: '65a923a083cf5f728c9934b3'
+              name: 'Véhicules électriques'
+              description: 'La répartition des infrastructures de recharge est-elle adaptée ?'
+              url: '/defis/65a923a083cf5f728c9934b3/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_voiture3.png'
+            - id: '65a9238c202514467c0163d2'
+              name: 'Plan France Relance'
+              description: "Quels impacts des aides distribués sur l'économie et la transition écologique ?"
+              url: '/defis/65a9238c202514467c0163d2/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_francerelance3.png'
+        sub_section_tiles:
+        sub_section_buttons:
     meta_description:
   header_button:
     display: false
@@ -67,8 +126,6 @@ website:
     name:
     link:
   menu:
-    - text: Défis
-      to: /topics
     - text: Open Data University
       to: /opendatauniversity
     - text: Guides
@@ -85,12 +142,9 @@ website:
         id: 'accessibility'
         route: '/accessibility'
         url: '/defis/pages/accessibility.md'
-  # img should be square
-  home_buttons:
-  show_topic_charts: true
   show_quality_component: true
   show_dataset_metadata_panel: false
-  list_highlighted_topics:
+  list_search_topics:
     - id: '65b76f15d7874915c8e41298'
       name: 'Impact Diagnostics de Performance Energétique'
     - id: '65b10aa72d0c187ecf296930'
@@ -111,8 +165,7 @@ website:
       name: 'Véhicules électriques'
     - id: '65a9238c202514467c0163d2'
       name: 'Plan France Relance'
-  url_highlighted_topics: 'topics'
-  type_highlighted_topics: 'card'
+  url_search_topics: 'defis'
   oauth_option: false
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:

@@ -126,7 +126,6 @@ async function loadRoutes(): Promise<RouteRecordRaw[]> {
 }
 
 const siteRoutesPromise = loadRoutes()
-
 // merge routes and give priority to siteRoutes for same path
 const routesMap = new Map()
 defaultRoutes.forEach((route) => {
