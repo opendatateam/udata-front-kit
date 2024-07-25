@@ -42,7 +42,7 @@ jobs:
       - name: clone repositories
         shell: bash
         run: |
-          git clone --quiet --depth 1 -b create-deploy-release ${{ env.REPO_SSH_URL }}
+          git clone --quiet --depth 1 ${{ env.REPO_SSH_URL }}
           git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: check commit message
