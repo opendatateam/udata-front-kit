@@ -109,6 +109,22 @@ website:
               description: "Quels impacts des aides distribués sur l'économie et la transition écologique ?"
               url: '/defis/65a9238c202514467c0163d2/'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_francerelance3.png'
+            - id: '66a0fdf41a40f23f40025444'
+              name: 'Accès au sport'
+              description: "Sport pour tous : Évaluer et améliorer l'égalité d'accès aux activités sportives en France"
+              url: 'defis/66a0fdf41a40f23f40025444/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-acces-au-sport.jpg'
+            - id: '66a0ffa8d8f03afc1d474a53'
+              name: 'JOP2024 et offre culturelle'
+              description: "Jeux Olympiques et Paralympiques : Enrichissez l'expérience et mettez en valeur l'offre culturelle"
+              url: 'defis/66a0ffa8d8f03afc1d474a53/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-jo-offre-culturelle.jpg'
+            - id: '66a10128a66990ed3d718a53'
+              name: 'JOP2024 et qualité de l’air'
+              description: "Jeux Olympiques et Paralympiques : enjeux de pollution de l'air dans le cadre d'une activité physique"
+              url: 'defis/66a10128a66990ed3d718a53/'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-jo-qualite-de-l%27air.jpg'
+
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
@@ -145,26 +161,6 @@ website:
   show_quality_component: true
   show_dataset_metadata_panel: false
   list_search_topics:
-    - id: '65b76f15d7874915c8e41298'
-      name: 'Impact Diagnostics de Performance Energétique'
-    - id: '65b10aa72d0c187ecf296930'
-      name: 'Offre culturelle'
-    - id: '65b22219ffcf892bd066df76'
-      name: 'Elections'
-    - id: '65b10beae24f409e31c547a5'
-      name: 'Changement climatique'
-    - id: '65b76b8536f029909a82ca1c'
-      name: 'Commerces de centre-ville'
-    - id: '65a92352ddd3d98e460e83f3'
-      name: 'Infrastructures cyclables'
-    - id: '65a92372953d21f206abb110'
-      name: 'Energie en France'
-    - id: '65a9237ed493a309fc872e4a'
-      name: 'Carte scolaire'
-    - id: '65a923a083cf5f728c9934b3'
-      name: 'Véhicules électriques'
-    - id: '65a9238c202514467c0163d2'
-      name: 'Plan France Relance'
   url_search_topics: 'defis'
   oauth_option: false
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
