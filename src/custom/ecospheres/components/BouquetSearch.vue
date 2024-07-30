@@ -35,8 +35,8 @@ const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
-const selectedGeozone: Ref<string | null> = ref(null)
-const selectedSpatialCoverage: Ref<SpatialCoverage | null> = ref(null)
+const selectedGeozone: Ref<string | undefined> = ref(undefined)
+const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
@@ -81,7 +81,8 @@ const switchSubtheme = (event: Event) => {
 }
 
 const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
-  selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
+  selectedGeozone.value =
+    spatialCoverage != null ? spatialCoverage.id : undefined
   navigate()
 }
 
@@ -96,8 +97,8 @@ watchEffect(() => {
       .getZone(props.geozone)
       .then((zone) => (selectedSpatialCoverage.value = zone))
   } else {
-    selectedSpatialCoverage.value = null
-    selectedGeozone.value = null
+    selectedSpatialCoverage.value = undefined
+    selectedGeozone.value = undefined
   }
   localShowDrafts.value = props.showDrafts
 })
