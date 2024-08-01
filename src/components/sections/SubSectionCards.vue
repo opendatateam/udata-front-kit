@@ -1,5 +1,5 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+defineProps({
   subsection: {
     type: Object,
     required: true
@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="datagouv-components fr-col-md-12">
+  <div>
     <h3 v-if="subsection.title">{{ subsection.title }}</h3>
     <div style="display: flex; flex-wrap: wrap">
       <div v-for="item in subsection.cards" v-bind:key="item">

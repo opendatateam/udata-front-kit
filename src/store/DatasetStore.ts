@@ -11,7 +11,6 @@ const datasetsApiv2 = new DatasetsAPI({ version: 2 })
 
 export interface RootState {
   data: Record<string, DatasetV2Response[]>
-  customData: DatasetV2Response[]
   resourceTypes: any[]
   sort: string | null
 }
@@ -32,7 +31,6 @@ export interface RootState {
 export const useDatasetStore = defineStore('dataset', {
   state: (): RootState => ({
     data: {},
-    customData: [],
     resourceTypes: [],
     sort: null
   }),
@@ -141,7 +139,7 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Load multiple datasets from API via a HATEOAS rel
      */
-    async loadMultiple(rel: { href: string }): Promise<object> {
+    async loadMultipleByRef(rel: { href: string }): Promise<object> {
       let response = await datasetsApiv2.request({
         url: rel.href,
         method: 'get'
@@ -159,18 +157,10 @@ export const useDatasetStore = defineStore('dataset', {
       return datasets
     },
 
-    async getLicense(license: string) {
-      const response: License[] = await datasetsApi.get({
-        entityId: 'licenses'
-      })
-      const foundLicense = response.find((l) => l.id === license)
-      return foundLicense
-    },
     /**
      * Fetch datasets by their IDs and store them in an array.
-     * @param {string[]} datasetIds - The list of dataset IDs to fetch.
      */
-    async loadDatasetsByIds(datasetIds: string[]) {
+    async loadMultipleByIds(datasetIds: string[]) {
       let fetchedDatasets = []
       for (const datasetId of datasetIds) {
         const dataset = await datasetsApiv2.get({
@@ -180,16 +170,15 @@ export const useDatasetStore = defineStore('dataset', {
           fetchedDatasets.push(dataset)
         }
       }
-      this.addCustomDatasets(fetchedDatasets)
-
-      // Retourner les datasets récupérés si besoin
       return fetchedDatasets
     },
-    /**
-     * Store the result of a datasets fetch operation for an org in store
-     */
-    addCustomDatasets(fetchedDatasets: DatasetV2Response[]) {
-      this.customData = fetchedDatasets
+
+    async getLicense(license: string) {
+      const response: License[] = await datasetsApi.get({
+        entityId: 'licenses'
+      })
+      const foundLicense = response.find((l) => l.id === license)
+      return foundLicense
     }
   }
 })

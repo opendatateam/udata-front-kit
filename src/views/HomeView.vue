@@ -85,22 +85,24 @@ const goToPage = (page) => {
     <div class="fr-container hero-text">
       <h4 v-if="item.title">{{ item.title }}</h4>
       <span v-html="fromMarkdown(item.content)"></span>
-      <SubSectionDatasets
-        v-if="item.sub_section_datasets"
-        :subsection="item.sub_section_datasets"
-      />
-      <SubSectionCards
-        v-if="item.sub_section_cards"
-        :subsection="item.sub_section_cards"
-      />
-      <SubSectionTiles
-        v-if="item.sub_section_tiles"
-        :subsection="item.sub_section_tiles"
-      />
-      <SubSectionButtons
-        v-if="item.sub_section_buttons"
-        :subsection="item.sub_section_buttons"
-      />
+      <div class="fr-mt-4w fr-col-md-12 datagouv-components">
+        <SubSectionDatasets
+          v-if="item.sub_section_datasets"
+          :subsection="item.sub_section_datasets"
+        />
+        <SubSectionCards
+          v-if="item.sub_section_cards"
+          :subsection="item.sub_section_cards"
+        />
+        <SubSectionTiles
+          v-if="item.sub_section_tiles"
+          :subsection="item.sub_section_tiles"
+        />
+        <SubSectionButtons
+          v-if="item.sub_section_buttons"
+          :subsection="item.sub_section_buttons"
+        />
+      </div>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+defineProps({
   subsection: {
     type: Object,
     required: true
@@ -12,17 +12,11 @@ const goToPage = (page) => {
 </script>
 
 <template>
-  <div class="datagouv-components fr-col-md-12">
-    <div class="subsection-buttons">
-      <div
-        v-for="item in subsection"
-        v-bind:key="item"
-        class="subsection-button"
-      >
-        <button @click="goToPage(item.url)" :class="item.class">
-          {{ item.name }}
-        </button>
-      </div>
+  <div class="subsection-buttons">
+    <div v-for="item in subsection" v-bind:key="item" class="subsection-button">
+      <button @click="goToPage(item.url)" :class="item.class">
+        {{ item.name }}
+      </button>
     </div>
   </div>
 </template>

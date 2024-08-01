@@ -1,4 +1,4 @@
-# config file for meteo-france
+# config file for simplification
 
 datagouvfr:
   # data.gouv.fr base URL
@@ -10,7 +10,7 @@ datagouvfr:
 
 universe:
   # "universe" topic id
-  topic_id: 65141cd780d73f98142e9265 # meteo-test
+  topic_id: 65141cd780d73f98142e9265
   # universe name, used as bouquets tag
   name: simplification
 

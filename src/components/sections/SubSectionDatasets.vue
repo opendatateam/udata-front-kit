@@ -1,5 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
+import { LoDashImplicitNumberArrayWrapper } from 'lodash'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -16,21 +17,22 @@ const props = defineProps({
 })
 
 const fetchedDatasets = ref([])
+
 const loadDatasets = async () => {
-  fetchedDatasets.value = await datasetStore.loadDatasetsByIds(
+  fetchedDatasets.value = await datasetStore.loadMultipleByIds(
     props.subsection.datasets
   )
 }
 
-const zIndex = (key) => {
+const zIndex = (key: LoDashImplicitNumberArrayWrapper) => {
   return { zIndex: fetchedDatasets.value.length - key }
 }
 
-const getDatasetPage = (id) => {
+const getDatasetPage = (id: string) => {
   return { name: 'dataset_detail', params: { did: id } }
 }
 
-const getOrganizationPage = (id) => {
+const getOrganizationPage = (id: string) => {
   if (router.hasRoute('organization_detail')) {
     return { name: 'organization_detail', params: { oid: id } }
   }
@@ -43,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="datagouv-components fr-col-md-12">
+  <div>
     <h3 v-if="subsection.title">{{ subsection.title }}</h3>
     <DatasetCard
       v-for="(d, index) in fetchedDatasets"
