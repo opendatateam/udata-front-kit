@@ -24,7 +24,7 @@ const loadDatasets = async () => {
   )
 }
 
-const zIndex = (key: LoDashImplicitNumberArrayWrapper) => {
+const zIndex = (key: number) => {
   return { zIndex: fetchedDatasets.value.length - key }
 }
 
