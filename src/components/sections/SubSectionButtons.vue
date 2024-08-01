@@ -6,7 +6,7 @@ defineProps({
   }
 })
 
-const goToPage = (page) => {
+const goToPage = (page: string) => {
   window.location.href = page
 }
 </script>

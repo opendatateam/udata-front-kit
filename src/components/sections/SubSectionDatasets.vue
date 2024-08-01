@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DatasetCard } from '@etalab/data.gouv.fr-components'
-import { LoDashImplicitNumberArrayWrapper } from 'lodash'
+import type { Dataset } from '@etalab/data.gouv.fr-components'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -16,7 +16,7 @@ const props = defineProps({
   }
 })
 
-const fetchedDatasets = ref([])
+const fetchedDatasets = ref<Dataset[]>([])
 
 const loadDatasets = async () => {
   fetchedDatasets.value = await datasetStore.loadMultipleByIds(
@@ -53,7 +53,7 @@ onMounted(() => {
       :style="zIndex(index)"
       :dataset="d"
       :dataset-url="getDatasetPage(d.id)"
-      :organization-url="getOrganizationPage(d.organization.id)"
+      :organization-url="getOrganizationPage(d.organization?.id ?? '')"
     />
   </div>
 </template>
