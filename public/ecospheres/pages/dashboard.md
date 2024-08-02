@@ -1,5 +1,5 @@
 <iframe
-    src="http://51.158.105.210:8088/superset/dashboard/12/?standalone=1"
+    src="https://ecospheres-catalog-superset.app.france.sh/superset/dashboard/2/?standalone=1"
     frameborder="0"
     width="100%"
     height="1200"
