@@ -33,8 +33,13 @@ website:
   homepage:
     title: 'La plateforme des données de la transition écologique'
     subtitle:
-    below_hero:
-    below_topics:
+    sections:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
     meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
   header_button:
     display: true
@@ -99,14 +104,9 @@ website:
         id: 'terms'
         route: '/terms'
         url: '/ecospheres/pages/terms.md'
-  home_buttons:
-  topic_charts:
-    display: false
-    topic:
   show_quality_component: true
-  list_highlighted_topics:
-  url_highlighted_topics:
-  type_highlighted_topics:
+  list_search_topics:
+  url_search_topics:
   oauth_option: true
   pagination_sizes:
     organizations_list: 9

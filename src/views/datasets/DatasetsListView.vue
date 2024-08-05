@@ -49,7 +49,7 @@ const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
 const title = config.website.title
-const topicsConf = config.website.list_highlighted_topics as TopicConf[]
+const topicsConf = config.website.list_search_topics as TopicConf[]
 const hasOrganizationFilter = config.website.datasets.organization_filter
 
 const topicOptions = computed(() => {

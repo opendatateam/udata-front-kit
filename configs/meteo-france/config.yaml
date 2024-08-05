@@ -33,16 +33,38 @@ website:
   homepage:
     title: 'La météo et le climat en Open Data'
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
-    below_hero:
+    sections:
+      - title: Thématiques
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+          title:
+          tiles:
+            - id: '6571f26dc009674feb726be9'
+              name: 'Données climatologiques de base'
+              description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
+              url: 'datasets?topic=6571f26dc009674feb726be9'
+            - id: '6571f2db0273fc306408f265'
+              name: 'Données climatologiques de référence pour le changement climatique'
+              description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
+              url: 'datasets?topic=6571f2db0273fc306408f265'
+            - id: '65e0c82c2da27c1dff5fa66f'
+              name: 'Données de Prévision Numérique du Temps (PNT)'
+              description: 'Accès en temps réel aux résultats des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
+              url: 'datasets?topic=65e0c82c2da27c1dff5fa66f'
+        sub_section_buttons:
+      - title: Actualités
+        content: >-
+          Retours sur le hackathon du 8 et 9 avril dernier 🚀
+
+
+          [En savoir plus](/hackathon)
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
     meta_description:
-    below_topics: >-
-      **ACTUALITÉS**
-
-
-      Retours sur le hackathon du 8 et 9 avril dernier 🚀
-
-
-      [**En savoir plus**](/hackathon)
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -83,21 +105,15 @@ website:
         id: 'hackathon'
         route: '/hackathon'
         url: '/meteo-france/pages/hackathon.md'
-  # img should be square
-  home_buttons:
-  topic_charts:
-    display: false
-    topic:
   show_quality_component: true
-  list_highlighted_topics:
+  list_search_topics:
     - id: '6571f26dc009674feb726be9'
       name: 'Données climatologiques de base'
     - id: '6571f2db0273fc306408f265'
       name: 'Données climatologiques de référence pour le changement climatique'
     - id: '65e0c82c2da27c1dff5fa66f'
       name: 'Données de Prévision Numérique du Temps (PNT)'
-  url_highlighted_topics: 'datasets'
-  type_highlighted_topics: 'tile'
+  url_search_topics: 'datasets'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
