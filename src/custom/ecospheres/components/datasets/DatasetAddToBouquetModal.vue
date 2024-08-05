@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2 } from '@datagouv/components'
 import { ref, onMounted, computed } from 'vue'
 import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'

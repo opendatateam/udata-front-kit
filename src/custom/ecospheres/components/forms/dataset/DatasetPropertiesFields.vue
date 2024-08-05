@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2 } from '@datagouv/components'
 import {
   ref,
   computed,
