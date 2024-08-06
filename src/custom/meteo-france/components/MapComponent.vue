@@ -5,36 +5,13 @@
 </template>
 
 <script lang="ts">
-import maplibregl, { StyleSpecification } from 'maplibre-gl'
+import maplibregl from 'maplibre-gl'
+import type { StyleSpecification } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 
 import styleVector from '../assets/style.json'
-
-interface Point {
-  type: string
-  geometry: {
-    type: string
-    coordinates: [number, number]
-  }
-  properties: {
-    NUM_POSTE: string
-    NOM_USUEL: string
-  }
-}
-
-interface MapOptions {
-  zoom: number
-  minx: number
-  miny: number
-  maxx: number
-  maxy: number
-}
-
-interface Station {
-  id: string
-  name: string
-}
+import type { FeatureCollection, Feature, MapOptions, Station } from '../types'
 
 export default defineComponent({
   name: 'MapComponent',
@@ -44,7 +21,7 @@ export default defineComponent({
       required: true
     },
     points: {
-      type: Array as () => Point[],
+      type: Object as () => FeatureCollection,
       required: true
     }
   },
@@ -83,7 +60,7 @@ export default defineComponent({
       }
     }
 
-    const onMarkerClick = (point: any) => {
+    const onMarkerClick = (point: Feature) => {
       if (point.properties && point.properties['NUM_POSTE']) {
         if (
           postes.value.some((item) => item.id === point.properties['NUM_POSTE'])
@@ -119,14 +96,14 @@ export default defineComponent({
         props.points.features &&
         props.points.features.length > 0
       ) {
-        props.points.features.forEach((point) => {
+        props.points.features.forEach((point: Feature) => {
           const markerElement = createCustomMarker('#AAAAAA')
           const marker = new maplibregl.Marker({ element: markerElement })
             .setLngLat([
               point.geometry.coordinates[0],
               point.geometry.coordinates[1]
             ])
-            .addTo(map)
+            .addTo(map!) // Non-null assertion here
           markers.push(marker)
           markerElement.addEventListener('click', () => {
             if (
@@ -164,7 +141,8 @@ export default defineComponent({
           })
 
           map.on('load', function () {
-            map.fitBounds(
+            map!.fitBounds(
+              // Non-null assertion here
               [
                 [newOptions.minx, newOptions.miny],
                 [newOptions.maxx, newOptions.maxy]
