@@ -26,6 +26,7 @@ jobs:
           # configure environment variables
           echo "REPO_HTTPS_URL=${{ github.server_url }}/${{ github.repository }}.git" >> $GITHUB_ENV
           echo "REPO_SSH_URL=git@github.com:${{ github.repository }}.git" >> $GITHUB_ENV
+          echo "REPO_CURRENT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
           echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
 
           # configure the SSH deploy private key
@@ -42,7 +43,7 @@ jobs:
       - name: clone repositories
         shell: bash
         run: |
-          git clone --quiet --depth 1 ${{ env.REPO_SSH_URL }}
+          git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
           git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: check commit message
