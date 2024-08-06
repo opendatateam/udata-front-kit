@@ -1,5 +1,5 @@
-import { setupI18n } from '@etalab/data.gouv.fr-components'
-import '@etalab/data.gouv.fr-components/dist/style.css'
+import { setupI18n } from '@datagouv/components'
+import '@datagouv/components/dist/style.css'
 import '@gouvfr/dsfr/dist/dsfr.min.css'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'

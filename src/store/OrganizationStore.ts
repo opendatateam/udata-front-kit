@@ -1,4 +1,4 @@
-import type { Organization } from '@etalab/data.gouv.fr-components'
+import type { Organization } from '@datagouv/components'
 import { defineStore } from 'pinia'
 
 import config from '@/config'

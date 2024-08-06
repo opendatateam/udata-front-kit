@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DatasetCard } from '@etalab/data.gouv.fr-components'
+import { DatasetCard } from '@datagouv/components'
 import debounce from 'lodash/debounce'
 import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'

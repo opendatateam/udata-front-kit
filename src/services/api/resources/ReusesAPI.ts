@@ -1,4 +1,4 @@
-import type { Rel } from '@etalab/data.gouv.fr-components'
+import type { Rel } from '@datagouv/components'
 
 import type { Reuse, ReuseResponse } from '@/model/reuse'
 

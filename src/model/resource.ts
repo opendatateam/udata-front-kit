@@ -1,4 +1,4 @@
-import type { Resource } from '@etalab/data.gouv.fr-components'
+import type { Resource } from '@datagouv/components'
 
 export interface ResourceType {
   id: string

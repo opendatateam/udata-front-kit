@@ -1,4 +1,4 @@
-import type { Owned } from '@etalab/data.gouv.fr-components'
+import type { Owned } from '@datagouv/components'
 
 import type { GenericResponse } from './api'
 

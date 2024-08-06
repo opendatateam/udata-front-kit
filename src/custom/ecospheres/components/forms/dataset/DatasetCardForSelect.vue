@@ -3,7 +3,7 @@ import {
   type DatasetV2,
   useOwnerName,
   OrganizationNameWithCertificate
-} from '@etalab/data.gouv.fr-components'
+} from '@datagouv/components'
 import { computed } from 'vue'
 
 import { stripFromMarkdown } from '@/utils'

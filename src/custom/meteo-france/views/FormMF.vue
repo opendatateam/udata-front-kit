@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ResourceAccordion } from '@etalab/data.gouv.fr-components'
-import type { Resource } from '@etalab/data.gouv.fr-components'
+import { ResourceAccordion } from '@datagouv/components'
+import type { Resource } from '@datagouv/components'
 import { ref, type Ref } from 'vue'
 
 import config from '@/config'
