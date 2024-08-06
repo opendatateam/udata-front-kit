@@ -11,26 +11,8 @@ import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
 import stations from '../assets/stations.json'
 import MapComponent from '../components/MapComponent.vue'
-
-interface Indicateur {
-  name: string
-  code: string
-}
-
-interface Dataset {
-  prod: string
-  dev: string
-  id: string
-  departement: boolean
-  periode: boolean
-  indicateur?: boolean
-  indicateursListe?: Indicateur[]
-}
-
-interface Station {
-  id: string
-  name: string
-}
+import ModalComponent from '../components/Modal.vue'
+import type { FeatureCollection, Dataset, Station } from '../types'
 
 type DatasetIds = {
   [pack: string]: Record<string, Dataset>
@@ -134,22 +116,6 @@ const onSelectDataset = (dataset: string) => {
   }
 }
 
-interface Feature {
-  type: string
-  geometry: {
-    type: string
-    coordinates: number[]
-  }
-  properties: {
-    [key: string]: any
-  }
-}
-
-interface FeatureCollection {
-  type: string
-  features: Feature[]
-}
-
 function filterGeoJSONByNumDep(
   geojson: FeatureCollection,
   numDepValue: string
@@ -169,10 +135,11 @@ function filterGeoJSONByNumDep(
 }
 
 function getCsv(url: string) {
-  window.open(url, '_blank')
+  showModal.value = true
+  window.location.href = url
 }
 
-function copyToClipboard(url) {
+function copyToClipboard(url: string) {
   navigator.clipboard.writeText(url)
   copyText.value = 'Lien copié !'
 }
@@ -238,11 +205,14 @@ const configDep = {
   maxy: 45.883269928025
 }
 const mapOptions = ref(configDep)
-const mapPoints = ref<null | FeatureCollection>(null)
+const mapPoints = ref<FeatureCollection>({
+  type: 'FeatureCollection',
+  features: []
+})
 
 const postes = ref<Station[]>([])
 
-const handlePostesUpdate = (newPostes) => {
+const handlePostesUpdate = (newPostes: Station[]) => {
   postes.value = newPostes
 }
 
@@ -253,6 +223,10 @@ const maxSlider = ref(100)
 const valuesSlider = ref([0, 100])
 
 const copyText = ref('Copier le lien URL direct du fichier CSV')
+const showModal = ref(false)
+const modalMessage = ref(
+  'Le lancement du téléchargement peut prendre un moment. Patientez svp...'
+)
 </script>
 
 <template>
@@ -324,14 +298,14 @@ const copyText = ref('Copier le lien URL direct du fichier CSV')
         ⚠️ Attention, vous devez sélectionner au moins une station ci-dessus.
       </div>
       <div v-if="postes.length > 0 && valuesSlider[1] - valuesSlider[0] <= 5">
-        <span v-if="selectedDataset.id == 'QUOT'">
+        <span v-if="selectedDataset && selectedDataset.id == 'QUOT'">
           <button
             type="button"
             class="fr-btn"
             @click="
               getCsv(
                 'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  selectedDataset.id.toLowerCase() +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
                   '_vent/' +
                   selectedDep +
                   '/csv/?num_postes=' +
@@ -352,7 +326,7 @@ const copyText = ref('Copier le lien URL direct du fichier CSV')
             @click="
               copyToClipboard(
                 'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  selectedDataset.id.toLowerCase() +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
                   '_vent/' +
                   selectedDep +
                   '/csv/?num_postes=' +
@@ -373,7 +347,7 @@ const copyText = ref('Copier le lien URL direct du fichier CSV')
             @click="
               getCsv(
                 'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  selectedDataset.id.toLowerCase() +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
                   '_autres/' +
                   selectedDep +
                   '/csv/?num_postes=' +
@@ -394,7 +368,7 @@ const copyText = ref('Copier le lien URL direct du fichier CSV')
             @click="
               copyToClipboard(
                 'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  selectedDataset.id.toLowerCase() +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
                   '_autres/' +
                   selectedDep +
                   '/csv/?num_postes=' +
@@ -416,7 +390,7 @@ const copyText = ref('Copier le lien URL direct du fichier CSV')
             @click="
               getCsv(
                 'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  selectedDataset.id.toLowerCase() +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
                   '/' +
                   selectedDep +
                   '/csv/?num_postes=' +
@@ -437,7 +411,7 @@ const copyText = ref('Copier le lien URL direct du fichier CSV')
             @click="
               copyToClipboard(
                 'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  selectedDataset.id.toLowerCase() +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
                   '/' +
                   selectedDep +
                   '/csv/?num_postes=' +
@@ -452,6 +426,11 @@ const copyText = ref('Copier le lien URL direct du fichier CSV')
             {{ copyText }}
           </button>
         </span>
+        <ModalComponent
+          :show="showModal"
+          :message="modalMessage"
+          @close="showModal = false"
+        />
       </div>
       <br /><br />
       <h4>Téléchargement par station</h4>
