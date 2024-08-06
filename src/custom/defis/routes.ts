@@ -8,9 +8,7 @@ export const routes = [
         path: '',
         name: 'bouquets',
         component: async () =>
-          await import(
-            '@/custom/ecospheres/views/bouquets/BouquetsListView.vue'
-          ),
+          await import('@/views/bouquets/BouquetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
           query: route.query.q
         })
@@ -22,9 +20,7 @@ export const routes = [
           bouquetId: route.params.bid
         }),
         component: async () =>
-          await import(
-            '@/custom/ecospheres/views/bouquets/BouquetDetailView.vue'
-          )
+          await import('@/views/bouquets/BouquetDetailView.vue')
       }
     ]
   }

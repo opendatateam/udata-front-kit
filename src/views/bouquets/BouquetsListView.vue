@@ -3,8 +3,8 @@ import { ref, computed, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import BouquetList from '@/custom/ecospheres/components/BouquetList.vue'
-import BouquetSearch from '@/custom/ecospheres/components/BouquetSearch.vue'
+import BouquetList from '@/components/bouquets/BouquetList.vue'
+import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 

@@ -12,10 +12,9 @@ import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useExtras } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
-
-import { useExtras } from '../utils/bouquet'
 
 const props = defineProps({
   bouquet: {

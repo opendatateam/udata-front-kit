@@ -2,13 +2,12 @@
 import { ref, watchEffect, toRef, type Ref, type PropType } from 'vue'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
+import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
 import { useThemeOptions } from '@/utils/theme'
-
-import SelectSpatialCoverage from './forms/SelectSpatialCoverage.vue'
 
 const spatialAPI = new SpatialAPI()
 

@@ -14,22 +14,21 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
+import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
+import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
 import config from '@/config'
-import BouquetDatasetList from '@/custom/ecospheres/components/BouquetDatasetList.vue'
-import {
-  useBreadcrumbLinksForTopic,
-  useExtras,
-  updateEcospheresExtras
-} from '@/custom/ecospheres/utils/bouquet'
 import { type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import {
+  useBreadcrumbLinksForTopic,
+  useExtras,
+  updateEcospheresExtras
+} from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
-
-import BouquetDatasetListExport from '../../components/BouquetDatasetListExport.vue'
 
 const props = defineProps({
   bouquetId: {

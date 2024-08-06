@@ -4,11 +4,10 @@ import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
+import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
-
-import BouquetCard from '../components/BouquetCard.vue'
 
 const router = useRouter()
 const route = useRoute()
