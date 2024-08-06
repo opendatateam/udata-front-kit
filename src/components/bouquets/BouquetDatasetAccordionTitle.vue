@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { DatasetProperties } from '@/model/topic'
-
-import { isAvailable } from '../utils/bouquet'
+import { isAvailable } from '@/utils/bouquet'
 
 defineProps({
   datasetProperties: {

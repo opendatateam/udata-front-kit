@@ -4,15 +4,14 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
+import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import config from '@/config'
-import { cloneTopic } from '@/custom/ecospheres/utils/bouquet'
 import { NoOptionSelected } from '@/model/theme'
 import type { TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
-
-import BouquetForm from '../../components/forms/bouquet/BouquetForm.vue'
-import BouquetOwnerForm from '../../components/forms/bouquet/BouquetOwnerForm.vue'
+import { cloneTopic } from '@/utils/bouquet'
 
 const props = defineProps({
   isCreate: {

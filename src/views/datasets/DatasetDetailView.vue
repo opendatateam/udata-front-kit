@@ -13,8 +13,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
 import config from '@/config'
-import DatasetAddToBouquetModal from '@/custom/ecospheres/components/datasets/DatasetAddToBouquetModal.vue'
 
 import ChartData from '../../components/ChartData.vue'
 import DiscussionsList from '../../components/DiscussionsList.vue'
