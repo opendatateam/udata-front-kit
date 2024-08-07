@@ -9,6 +9,7 @@ import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { TopicPostData } from '@/model/topic'
+import { type TopicExtrasToProcess } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { cloneTopic } from '@/utils/bouquet'
@@ -23,13 +24,13 @@ const props = defineProps({
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-
+const extrasToProcess = ref(config.website.topics.extrasToProcess)
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
-  tags: [config.universe.name],
+  tags: [config.website.topics.extrasToProcess],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    ecospheres: {
+    [extrasToProcess.value]: {
       theme: routeQuery.theme || NoOptionSelected,
       subtheme: routeQuery.subtheme || NoOptionSelected,
       datasets_properties: []
@@ -40,11 +41,14 @@ const errorMsg = ref('')
 const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
-  // condition for form mouting based on topic data load: edit || create raw || create cloned
+  const extrasProperty = extrasToProcess.value
+  const extras = topic.value?.extras?.[extrasProperty] as
+    | TopicExtrasToProcess
+    | undefined
   return (
-    topic.value.id ||
+    topic.value?.id ||
     (props.isCreate && !routeQuery.clone) ||
-    (routeQuery.clone && topic.value.extras?.ecospheres?.cloned_from)
+    (routeQuery.clone && extras?.cloned_from)
   )
 })
 
@@ -119,7 +123,7 @@ onMounted(() => {
       .load(routeQuery.clone || routeParams.bid)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(remoteTopic)
+          topic.value = cloneTopic(remoteTopic, extrasToProcess)
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic

@@ -1,8 +1,6 @@
 import axios from 'axios'
 
 import config from '@/config'
-import { toastHttpError } from '@/utils/error'
-
 import type {
   DatagouvfrAPIArgs,
   AxiosResponseData,
@@ -13,7 +11,8 @@ import type {
   ListParams,
   CreateParams,
   DeleteParams
-} from '../../model/api'
+} from '@/model/api'
+import { toastHttpError } from '@/utils/error'
 
 /**
  * A wrapper around data.gouv.fr's API

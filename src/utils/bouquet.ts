@@ -7,7 +7,7 @@ import {
   type TopicExtras,
   type TopicPostData,
   type DatasetProperties,
-  type EcospheresTopicExtras
+  type TopicExtrasToProcess
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -18,14 +18,15 @@ export const isAvailable = (availability: Availability): boolean => {
   )
 }
 
-export const updateEcospheresExtras = (
+export const updateTopicPropertiesExtras = (
   topic: Topic,
-  data: Partial<EcospheresTopicExtras>
+  data: Partial<TopicExtrasToProcess>,
+  extrasToProcess: string
 ): TopicExtras => {
   return {
     ...topic.extras,
-    ecospheres: {
-      ...topic.extras.ecospheres,
+    [extrasToProcess]: {
+      ...topic.extras[extrasToProcess],
       ...data
     }
   }
@@ -34,7 +35,10 @@ export const updateEcospheresExtras = (
 /**
  * Build a fonctionnal v1 (POST format) topic from clone source data
  */
-export const cloneTopic = (topic: Topic): TopicPostData => {
+export const cloneTopic = (
+  topic: Topic,
+  extrasToProcess: Ref<string>
+): TopicPostData => {
   const { id, slug, ...data } = topic
   return {
     ...data,
@@ -43,19 +47,23 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
     reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
-    extras: updateEcospheresExtras(topic, {
-      cloned_from: topic.id,
-      datasets_properties: topic.extras.ecospheres.datasets_properties.map(
-        (dp) => {
+    extras: updateTopicPropertiesExtras(
+      topic,
+      {
+        cloned_from: topic.id,
+        datasets_properties: topic.extras[
+          extrasToProcess.value
+        ].datasets_properties.map((dp) => {
           return {
             ...dp,
             id: null,
             uri: null,
             availability: Availability.NOT_AVAILABLE
           }
-        }
-      )
-    })
+        })
+      },
+      extrasToProcess.value
+    )
   }
 }
 
@@ -89,7 +97,10 @@ export function useBreadcrumbLinksForTopic(
   })
 }
 
-export function useExtras(topic: Ref<Topic | null>): {
+export function useExtras(
+  topic: Ref<Topic | null>,
+  extrasProperty: Ref<string>
+): {
   theme: Ref<string | undefined>
   subtheme: Ref<string | undefined>
   datasetsProperties: Ref<DatasetProperties[]>
@@ -101,23 +112,31 @@ export function useExtras(topic: Ref<Topic | null>): {
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
-    topic,
+    [topic, extrasProperty],
     () => {
-      theme.value = topic.value?.extras.ecospheres.theme
-      subtheme.value = topic.value?.extras.ecospheres.subtheme
-      datasetsProperties.value =
-        topic.value?.extras.ecospheres.datasets_properties ?? []
-      if (topic.value?.extras.ecospheres.cloned_from != null) {
-        useTopicStore()
-          .load(topic.value?.extras.ecospheres.cloned_from, { toasted: false })
-          .then((res) => {
-            clonedFrom.value = res
-          })
-          .catch((err) => {
-            console.error('Failed fetching cloned_from', err.response?.data)
-            clonedFrom.value = null
-          })
+      const extras = topic.value?.extras[extrasProperty.value]
+      if (extras) {
+        theme.value = extras.theme
+        subtheme.value = extras.subtheme
+        datasetsProperties.value = extras.datasets_properties ?? []
+
+        if (extras.cloned_from != null) {
+          useTopicStore()
+            .load(extras.cloned_from, { toasted: false })
+            .then((res) => {
+              clonedFrom.value = res
+            })
+            .catch((err) => {
+              console.error('Failed fetching cloned_from', err.response?.data)
+              clonedFrom.value = null
+            })
+        } else {
+          clonedFrom.value = null
+        }
       } else {
+        theme.value = undefined
+        subtheme.value = undefined
+        datasetsProperties.value = []
         clonedFrom.value = null
       }
     },

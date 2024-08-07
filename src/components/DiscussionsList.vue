@@ -4,9 +4,7 @@ import type { ComputedRef, Ref } from 'vue'
 import { ref, watchEffect, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import LocalStorageService from '@/services/LocalStorageService'
-
-import config from '../config'
+import config from '@/config'
 import type {
   DiscussionResponse,
   DiscussionForm,
@@ -14,10 +12,11 @@ import type {
   PostForm,
   DiscussionId,
   Post
-} from '../model/discussion'
-import { useDiscussionStore } from '../store/DiscussionStore'
-import { useUserStore } from '../store/UserStore'
-import { formatDate } from '../utils'
+} from '@/model/discussion'
+import LocalStorageService from '@/services/LocalStorageService'
+import { useDiscussionStore } from '@/store/DiscussionStore'
+import { useUserStore } from '@/store/UserStore'
+import { formatDate } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()

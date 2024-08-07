@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { defineModel, computed, ref, onMounted, watch } from 'vue'
 
+import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import config from '@/config'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
-import { updateEcospheresExtras } from '@/utils/bouquet'
+import { updateTopicPropertiesExtras } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
-
-import SelectSpatialCoverage from '../SelectSpatialCoverage.vue'
 
 const topic = defineModel({
   type: Object as () => Topic,
@@ -18,6 +18,8 @@ const topic = defineModel({
 const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
+
+const extrasToProcess = config.website.topics.extrasToProcess
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
@@ -29,8 +31,8 @@ const isValid = computed(() => {
     topic.value.description &&
     topic.value.description.trim() !== '' &&
     topic.value.extras &&
-    topic.value.extras.ecospheres.theme !== NoOptionSelected &&
-    topic.value.extras.ecospheres.subtheme !== NoOptionSelected
+    topic.value.extras[extrasToProcess].theme !== NoOptionSelected &&
+    topic.value.extras[extrasToProcess].subtheme !== NoOptionSelected
   )
 })
 
@@ -52,10 +54,14 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // sync theme and subtheme from local refs to topic
 watch([theme, subtheme], () => {
-  topic.value.extras = updateEcospheresExtras(topic.value, {
-    theme: theme.value,
-    subtheme: subtheme.value
-  })
+  topic.value.extras = updateTopicPropertiesExtras(
+    topic.value,
+    {
+      theme: theme.value,
+      subtheme: subtheme.value
+    },
+    extrasToProcess
+  )
 })
 
 // sync validation state with parent component
@@ -69,8 +75,8 @@ watch(
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  theme.value = topic.value.extras.ecospheres.theme
-  subtheme.value = topic.value.extras.ecospheres.subtheme
+  theme.value = topic.value.extras[extrasToProcess].theme
+  subtheme.value = topic.value.extras[extrasToProcess].subtheme
 })
 </script>
 

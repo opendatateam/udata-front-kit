@@ -11,6 +11,7 @@ import {
 } from 'vue'
 import { useRouter } from 'vue-router'
 
+import config from '@/config'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
@@ -18,6 +19,9 @@ import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
 const emit = defineEmits(['updateValidation'])
+const datasetEditorialization = ref(
+  config.website.topics.datasetEditorialization
+)
 
 const datasetProperties = defineModel({
   type: Object as PropType<DatasetProperties>,
@@ -44,12 +48,16 @@ const hasMandatoryFields = computed(() => {
 })
 
 const isValidDataset = computed((): boolean => {
-  return (
-    !datasetProperties.value.remoteDeleted &&
-    hasMandatoryFields.value &&
-    isValidEcosphereDataset.value &&
-    isValidUrlDataset.value
-  )
+  if (datasetEditorialization.value) {
+    return (
+      !datasetProperties.value.remoteDeleted &&
+      hasMandatoryFields.value &&
+      isValidEcosphereDataset.value &&
+      isValidUrlDataset.value
+    )
+  } else {
+    return isValidEcosphereDataset.value && isValidUrlDataset.value
+  }
 })
 
 const isValidEcosphereDataset = computed((): boolean => {
@@ -116,7 +124,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <DatasetPropertiesTextFields v-model:dataset-properties="datasetProperties" />
+  <DatasetPropertiesTextFields
+    v-model:dataset-properties="datasetProperties"
+    v-if="datasetEditorialization"
+  />
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="link"
       >Jeu de données
@@ -130,7 +141,7 @@ onMounted(() => {
       @update:model-value="onSelectDataset"
     />
   </div>
-  <div v-if="!selectedDataset" class="fr-mt-4w">
+  <div v-if="!selectedDataset && datasetEditorialization" class="fr-mt-4w">
     <label class="fr-label" for="alt-source"
       >Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?</label
     >

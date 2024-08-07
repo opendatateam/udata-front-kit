@@ -5,8 +5,8 @@ import config from '@/config'
 import type { BaseParams } from '@/model/api'
 import type { TopicConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
+import TopicsAPI from '@/services/api/resources/TopicsAPI'
 
-import TopicsAPI from '../services/api/resources/TopicsAPI'
 import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI()
@@ -92,7 +92,7 @@ export const useTopicStore = defineStore('topic', {
       let response = await topicsAPIv2.list({
         params: {
           page_size: config.website.pagination_sizes.topics_list,
-          tag: config.universe.name,
+          tag: config.website.topics.extrasToProcess,
           include_private: 'yes'
         }
       })

@@ -25,7 +25,7 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import {
   useBreadcrumbLinksForTopic,
   useExtras,
-  updateEcospheresExtras
+  updateTopicPropertiesExtras
 } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
@@ -58,13 +58,14 @@ let subtheme = ref<string | undefined>(undefined)
 let datasetsProperties = ref<DatasetProperties[]>([])
 let clonedFrom = ref<Topic | null>(null)
 
+const extrasToProcess = ref(config.website.topics.extrasToProcess)
 const useTheme = config.website.topics.useThemes
 const pageAllTopics = config.website.topics.pageAllTopics
 const displayMetadata = config.website.topics.displayMetadata
 const activateReadMore = config.website.topics.activateReadMore
 const datasetEditorialization = config.website.topics.datasetEditorialization
 
-let extras = useExtras(topic)
+let extras = useExtras(topic, extrasToProcess)
 datasetsProperties = extras.datasetsProperties
 clonedFrom = extras.clonedFrom
 
@@ -112,11 +113,15 @@ const onUpdateDatasets = () => {
       datasets: datasetsProperties.value
         .filter((d) => d.id !== null && d.remoteDeleted !== true)
         .map((d) => d.id),
-      extras: updateEcospheresExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ remoteDeleted, ...data }) => data
-        )
-      })
+      extras: updateTopicPropertiesExtras(
+        topic.value,
+        {
+          datasets_properties: datasetsProperties.value.map(
+            ({ remoteDeleted, ...data }) => data
+          )
+        },
+        extrasToProcess.value
+      )
     })
     .finally(() => loader.hide())
 }

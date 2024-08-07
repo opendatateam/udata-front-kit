@@ -5,6 +5,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
@@ -12,6 +13,8 @@ import { useTopicStore } from '@/store/TopicStore'
 const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
+
+const extrasToProcess = config.website.topics.extrasToProcess
 
 const props = defineProps({
   themeName: {
@@ -50,11 +53,11 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
     })
     .filter((bouquet) => {
       if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras.ecospheres.theme === props.themeName
+      return bouquet.extras[extrasToProcess].theme === props.themeName
     })
     .filter((bouquet) => {
       if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras.ecospheres.subtheme === props.subthemeName
+      return bouquet.extras[extrasToProcess].subtheme === props.subthemeName
     })
     .filter((bouquet) => {
       if (props.query === '') return true

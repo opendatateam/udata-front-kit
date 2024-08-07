@@ -4,10 +4,11 @@ import {
   formatRelativeIfRecentDate,
   OrganizationNameWithCertificate
 } from '@etalab/data.gouv.fr-components'
-import { toRef } from 'vue'
+import { toRef, ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
@@ -23,12 +24,17 @@ const props = defineProps({
   }
 })
 
+const extrasToProcess = ref(config.website.topics.extrasToProcess)
+
 const bouquetRef = toRef(props, 'bouquet')
 const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
+const { theme, subtheme, datasetsProperties } = useExtras(
+  bouquetRef,
+  extrasToProcess
+)
 
 const nbData: number = datasetsProperties.value.length
 

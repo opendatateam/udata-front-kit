@@ -3,8 +3,7 @@ import { defineStore } from 'pinia'
 
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
-
-import OrganizationsAPI from '../services/api/resources/OrganizationsAPI'
+import OrganizationsAPI from '@/services/api/resources/OrganizationsAPI'
 
 const orgApi = new OrganizationsAPI()
 

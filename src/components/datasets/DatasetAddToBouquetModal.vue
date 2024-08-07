@@ -6,6 +6,7 @@ import { useLoading } from 'vue-loading-overlay'
 
 import Tooltip from '@/components/TooltipWrapper.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
+import config from '@/config'
 import { Availability, type DatasetProperties, type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 
@@ -23,6 +24,11 @@ const props = defineProps({
 const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
+
+const extrasToProcess = config.website.topics.extrasToProcess
+const datasetEditorialization = ref(
+  config.website.topics.datasetEditorialization
+)
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -45,11 +51,15 @@ const bouquetOptions = computed(() => {
 })
 
 const isValid = computed(() => {
-  return (
-    datasetProperties.value.title.trim() !== '' &&
-    datasetProperties.value.purpose.trim() !== '' &&
-    !!selectedBouquetId.value
-  )
+  if (datasetEditorialization.value) {
+    return (
+      datasetProperties.value.title.trim() !== '' &&
+      datasetProperties.value.purpose.trim() !== '' &&
+      !!selectedBouquetId.value
+    )
+  } else {
+    return !!selectedBouquetId.value
+  }
 })
 
 const modalActions = computed(() => {
@@ -68,7 +78,7 @@ const modalActions = computed(() => {
 })
 
 const isDatasetInBouquet = (bouquet: Topic): boolean => {
-  const datasetsProperties = bouquet.extras.ecospheres.datasets_properties
+  const datasetsProperties = bouquet.extras[extrasToProcess].datasets_properties
   return datasetsProperties.some(
     (datasetProps) => datasetProps.id === props.dataset.id
   )
@@ -83,9 +93,9 @@ const submit = async () => {
     throw Error('Bouquet not in store')
   }
   const newDatasetsProperties =
-    bouquet.extras.ecospheres.datasets_properties || []
+    bouquet.extras[extrasToProcess].datasets_properties || []
   newDatasetsProperties.push(datasetProperties.value)
-  bouquet.extras.ecospheres.datasets_properties = newDatasetsProperties
+  bouquet.extras[extrasToProcess].datasets_properties = newDatasetsProperties
   await topicStore.update(bouquet.id, {
     id: bouquet.id,
     tags: bouquet.tags,
@@ -128,8 +138,10 @@ onMounted(() => {
         />
       </template>
     </DsfrSelect>
+
     <DatasetPropertiesTextFields
       v-model:dataset-properties="datasetProperties"
+      v-if="datasetEditorialization"
     />
   </DsfrModal>
 </template>

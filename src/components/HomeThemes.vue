@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { onMounted, computed, type ComputedRef } from 'vue'
 
+import config from '@/config'
+import type { Theme } from '@/model/theme'
 import { useTopicStore } from '@/store/TopicStore'
 
-import config from '../config'
-import type { Theme } from '../model/theme'
 import Tile from './Tile.vue'
 
 const topicStore = useTopicStore()
+const extrasToProcess = config.website.topics.extrasToProcess
 
 const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
@@ -15,7 +16,7 @@ const getCustomBoxShadow = (color: string) => {
 
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {
-    return !topic.private && topic.extras.ecospheres.theme === theme.name
+    return !topic.private && topic.extras[extrasToProcess].theme === theme.name
   }).length
   switch (nbBouquets) {
     case 0:

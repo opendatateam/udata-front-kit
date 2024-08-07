@@ -164,6 +164,7 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
+    extrasToProcess: 'tutu'
     useThemes: false
     pageAllTopics: false
     displayMetadata: false

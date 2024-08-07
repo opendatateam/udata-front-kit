@@ -135,6 +135,7 @@ website:
       - CSW-ISO-19139
     show_extended_information_panel: true
   topics:
+    extrasToProcess: 'ecospheres'
     useThemes: true
     pageAllTopics: true
     displayMetadata: true

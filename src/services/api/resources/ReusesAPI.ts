@@ -1,8 +1,7 @@
 import type { Rel } from '@etalab/data.gouv.fr-components'
 
 import type { Reuse, ReuseResponse } from '@/model/reuse'
-
-import DatagouvfrAPI from '../DatagouvfrAPI'
+import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 export default class ReusesAPI extends DatagouvfrAPI {
   endpoint = 'reuses'

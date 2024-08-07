@@ -1,5 +1,7 @@
 import type { Owned, Rel } from '@etalab/data.gouv.fr-components'
 
+import config from '@/config'
+
 import type { SpatialField } from './spatial'
 
 export enum Availability {
@@ -19,16 +21,21 @@ export interface DatasetProperties {
   remoteDeleted?: boolean
 }
 
-export interface EcospheresTopicExtras {
+export interface TopicExtrasToProcess {
   theme: string
   subtheme: string
   datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
 
-export interface TopicExtras {
-  ecospheres: EcospheresTopicExtras
+const extrasToProcess = config.website.topics.extrasToProcess as string
+
+interface BaseTopicExtras {
   [key: string]: any
+}
+
+type DynamicTopicExtras = BaseTopicExtras & {
+  [key in typeof extrasToProcess]: TopicExtrasToProcess
 }
 
 export type Topic = Owned & {
@@ -36,7 +43,7 @@ export type Topic = Owned & {
   description: string
   created_at: string
   last_modified: string
-  extras: TopicExtras
+  extras: DynamicTopicExtras
   featured: boolean
   id: string
   page: string
