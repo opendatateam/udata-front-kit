@@ -12,6 +12,7 @@ import type { TopicPostData } from '@/model/topic'
 import { type TopicExtrasToProcess } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 import { cloneTopic } from '@/utils/bouquet'
 
 const props = defineProps({
@@ -20,6 +21,9 @@ const props = defineProps({
     default: true
   }
 })
+
+const userStore = useUserStore()
+const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
 
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
@@ -137,17 +141,53 @@ onMounted(() => {
 
 <template>
   <GenericContainer class="fr-mt-4w">
-    <form>
-      <div class="fr-mt-4v">
-        <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
-      </div>
-      <div
-        class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-      >
-        <h1 class="fr-col-auto fr-mb-2v">
-          {{ isCreate ? 'Nouveau bouquet' : topic.name }}
-        </h1>
-        <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+    <div v-if="showAddBouquet">
+      <form>
+        <div class="fr-mt-4v">
+          <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
+        </div>
+        <div
+          class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+        >
+          <h1 class="fr-col-auto fr-mb-2v">
+            {{ isCreate ? 'Nouveau bouquet' : topic.name }}
+          </h1>
+          <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+            <DsfrButton
+              v-if="!isCreate"
+              secondary
+              class="fr-mb-1w"
+              label="Supprimer"
+              icon="ri-delete-bin-line"
+              @click.prevent="destroy"
+            />
+            <DsfrButton
+              secondary
+              class="fr-mb-1w fr-ml-1w"
+              label="Annuler"
+              @click.prevent="cancel"
+            />
+            <DsfrButton
+              :disabled="!canSave"
+              class="fr-mb-1w fr-ml-1w"
+              label="Enregistrer"
+              @click.prevent="save"
+            />
+          </div>
+        </div>
+        <div class="fr-mt-4w">
+          <h2>Description du bouquet de données</h2>
+          <BouquetForm
+            v-if="isReadyForForm"
+            v-model="topic"
+            @update-validation="(isValid: boolean) => canSave = isValid"
+          />
+        </div>
+        <div class="fr-mt-4w">
+          <h2>Propriétaire du bouquet</h2>
+          <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
+        </div>
+        <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
           <DsfrButton
             v-if="!isCreate"
             secondary
@@ -169,41 +209,8 @@ onMounted(() => {
             @click.prevent="save"
           />
         </div>
-      </div>
-      <div class="fr-mt-4w">
-        <h2>Description du bouquet de données</h2>
-        <BouquetForm
-          v-if="isReadyForForm"
-          v-model="topic"
-          @update-validation="(isValid: boolean) => canSave = isValid"
-        />
-      </div>
-      <div class="fr-mt-4w">
-        <h2>Propriétaire du bouquet</h2>
-        <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
-      </div>
-      <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
-        <DsfrButton
-          v-if="!isCreate"
-          secondary
-          class="fr-mb-1w"
-          label="Supprimer"
-          icon="ri-delete-bin-line"
-          @click.prevent="destroy"
-        />
-        <DsfrButton
-          secondary
-          class="fr-mb-1w fr-ml-1w"
-          label="Annuler"
-          @click.prevent="cancel"
-        />
-        <DsfrButton
-          :disabled="!canSave"
-          class="fr-mb-1w fr-ml-1w"
-          label="Enregistrer"
-          @click.prevent="save"
-        />
-      </div>
-    </form>
+      </form>
+    </div>
+    <div>Vous n'avez pas les droits pour ajouter un bouquet.</div>
   </GenericContainer>
 </template>

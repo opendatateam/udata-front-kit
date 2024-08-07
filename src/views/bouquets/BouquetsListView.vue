@@ -5,8 +5,10 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
+import { useUserStore } from '@/store/UserStore'
 
 const router = useRouter()
 const route = useRoute()
@@ -39,6 +41,9 @@ const selectedSubtheme = ref(NoOptionSelected)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const showDrafts = ref(false)
+
+const userStore = useUserStore()
+const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -93,7 +98,10 @@ watch(
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
       <h1 class="fr-col-auto fr-mb-2v">Bouquets</h1>
-      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+      <div
+        v-if="showAddBouquet"
+        class="fr-col-auto fr-grid-row fr-grid-row--middle"
+      >
         <DsfrButton
           class="fr-mb-1w"
           label="Ajouter un bouquet"

@@ -172,6 +172,10 @@ website:
     displayMetadata: false
     activateReadMore: false
     datasetEditorialization: false
+    scopeAddTopics:
+      all: false
+      authorizedUsers:
+        - 6230733357772160a4f77fbaxx
 themes:
   - name: Données climatologiques
     color: 043574

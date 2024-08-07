@@ -33,6 +33,8 @@ const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
 
+const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
+
 const dataset = computed(() => datasetStore.get(datasetId))
 
 const resources = ref<Record<string, ResourceDataWithQuery>>({})
@@ -239,7 +241,11 @@ onMounted(() => {
           récupération. Nous travaillons actuellement à améliorer la situation.
         </div>
         <div
-          v-if="config.website.datasets.add_to_bouquet && userStore.isLoggedIn"
+          v-if="
+            config.website.datasets.add_to_bouquet &&
+            userStore.isLoggedIn &&
+            showAddBouquet
+          "
         >
           <DsfrButton
             class="fr-mt-2w"

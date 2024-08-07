@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComputedRef, PropType } from 'vue'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
@@ -9,12 +9,16 @@ import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 
 const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
 
 const extrasToProcess = config.website.topics.extrasToProcess
+
+const userStore = useUserStore()
+const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
 
 const props = defineProps({
   themeName: {
@@ -144,6 +148,7 @@ onMounted(() => {
           <button
             class="fr-btn fr-btn--secondary fr-ml-1w"
             @click.stop.prevent="goToCreate"
+            v-if="showAddBouquet"
           >
             Ajouter un bouquet
           </button>
