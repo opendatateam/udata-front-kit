@@ -62,13 +62,14 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
 export function useBreadcrumbLinksForTopic(
   theme: Ref<string | undefined>,
   subtheme: Ref<string | undefined>,
-  topic: Ref<Topic | null>
+  topic: Ref<Topic | null>,
+  pageAllTopics: Ref<Boolean | null>
 ): ComputedRef<BreadcrumbItem[]> {
   return computed(() => {
-    const breadcrumbs = [
-      { to: '/', text: 'Accueil' },
-      { to: { name: 'bouquets' }, text: 'Bouquets' }
-    ]
+    const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+    if (pageAllTopics) {
+      breadcrumbs.push({ to: { name: 'bouquets' }, text: 'Bouquets' })
+    }
 
     if (theme.value !== undefined && subtheme.value !== undefined) {
       breadcrumbs.push(
