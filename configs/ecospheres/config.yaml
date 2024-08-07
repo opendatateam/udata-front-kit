@@ -139,6 +139,7 @@ website:
     pageAllTopics: true
     displayMetadata: true
     activateReadMore: true
+    datasetEditorialization: true
 themes:
   - name: Se loger
     color: 043574

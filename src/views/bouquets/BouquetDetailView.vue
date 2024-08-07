@@ -62,13 +62,15 @@ const useTheme = config.website.topics.useThemes
 const pageAllTopics = config.website.topics.pageAllTopics
 const displayMetadata = config.website.topics.displayMetadata
 const activateReadMore = config.website.topics.activateReadMore
+const datasetEditorialization = config.website.topics.datasetEditorialization
+
+let extras = useExtras(topic)
+datasetsProperties = extras.datasetsProperties
+clonedFrom = extras.clonedFrom
 
 if (useTheme) {
-  let extras = useExtras(topic)
   theme = extras.theme
   subtheme = extras.subtheme
-  datasetsProperties = extras.datasetsProperties
-  clonedFrom = extras.clonedFrom
 }
 
 const breadcrumbLinks = useBreadcrumbLinksForTopic(
@@ -314,6 +316,7 @@ watch(
         <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
+          :dataset-editorialization="datasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
         <BouquetDatasetListExport
