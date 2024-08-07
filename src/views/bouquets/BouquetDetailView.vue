@@ -61,6 +61,7 @@ let clonedFrom = ref<Topic | null>(null)
 const useTheme = config.website.topics.useThemes
 const pageAllTopics = config.website.topics.pageAllTopics
 const displayMetadata = config.website.topics.displayMetadata
+const activateReadMore = config.website.topics.activateReadMore
 
 if (useTheme) {
   let extras = useExtras(topic)
@@ -279,10 +280,16 @@ watch(
             }"
           />
         </div>
-        <ReadMore max-height="600">
+        <div v-if="activateReadMore">
+          <ReadMore max-height="600">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="description"></div>
+          </ReadMore>
+        </div>
+        <div v-else>
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
-        </ReadMore>
+        </div>
       </div>
     </div>
 
