@@ -82,7 +82,7 @@ const modalActions = computed(() => {
 const isDatasetInBouquet = (bouquet: Topic): boolean => {
   const datasetsProperties = bouquet.extras[extrasToProcess].datasets_properties
   return datasetsProperties.some(
-    (datasetProps) => datasetProps.id === props.dataset.id
+    (datasetProps: any) => datasetProps.id === props.dataset.id
   )
 }
 

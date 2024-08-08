@@ -34,7 +34,7 @@ interface BaseTopicExtras {
   [key: string]: any
 }
 
-type DynamicTopicExtras = BaseTopicExtras & {
+export type DynamicTopicExtras = BaseTopicExtras & {
   [key in typeof extrasToProcess]: TopicExtrasToProcess
 }
 

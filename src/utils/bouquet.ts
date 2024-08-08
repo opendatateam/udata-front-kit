@@ -5,7 +5,7 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
   type Topic,
-  type TopicExtras,
+  type DynamicTopicExtras,
   type TopicPostData,
   type DatasetProperties,
   type TopicExtrasToProcess
@@ -26,7 +26,7 @@ export const updateTopicPropertiesExtras = (
   topic: Topic,
   data: Partial<TopicExtrasToProcess>,
   extrasToProcess: string
-): TopicExtras => {
+): DynamicTopicExtras => {
   return {
     ...topic.extras,
     [extrasToProcess]: {
@@ -57,7 +57,7 @@ export const cloneTopic = (
         cloned_from: topic.id,
         datasets_properties: topic.extras[
           extrasToProcess.value
-        ].datasets_properties.map((dp) => {
+        ].datasets_properties.map((dp: any) => {
           return {
             ...dp,
             id: null,
@@ -80,7 +80,7 @@ export function useBreadcrumbLinksForTopic(
   return computed(() => {
     const breadcrumbs = [{ to: '/', text: 'Accueil' }]
     if (pageAllTopics) {
-      breadcrumbs.push({ to: { name: topicSlug }, text: `${topicName}s` })
+      breadcrumbs.push({ to: `/${topicSlug}`, text: `${topicName}s` })
     }
 
     if (theme.value !== undefined && subtheme.value !== undefined) {
