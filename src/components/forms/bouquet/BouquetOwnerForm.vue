@@ -17,7 +17,7 @@ const choice: Ref<'organization' | 'owner'> = ref(
 )
 const organizations = computed(() => userStore.data?.organizations || [])
 
-const topicName = ref(config.website.topics.topicName.name)
+const topicName = ref(config.website.topics.topic_name.name)
 
 const onSelectOrganization = (value: string) => {
   const idx = parseInt(value)

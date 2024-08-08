@@ -52,6 +52,9 @@ const title = config.website.title
 const topicsConf = config.website.list_search_topics as TopicConf[]
 const hasOrganizationFilter = config.website.datasets.organization_filter
 
+const mainTheme = ref(config.website.topics.themes.main_name)
+const secondaryTheme = ref(config.website.topics.themes.secondary_name)
+
 const topicOptions = computed(() => {
   if (!topicsConf?.length) return
   const topics = topicStore.$state.data
@@ -219,7 +222,7 @@ onMounted(() => {
         default-unselected-text="Toutes les données"
         @update:model-value="onSelectTopic"
       >
-        <template #label>Thématiques</template>
+        <template #label>{{ mainTheme }}s</template>
       </DsfrSelect>
     </div>
     <div v-if="hasOrganizationFilter" class="fr-col-md-12 fr-mb-2w">

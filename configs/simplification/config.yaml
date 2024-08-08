@@ -261,18 +261,21 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    topicName:
-      slug: bouquets
-      name: Bouquet
-    extrasToProcess: 'ecospheres'
-    useThemes: false
-    pageAllTopics: false
-    displayMetadata: false
-    activateReadMore: false
-    datasetEditorialization: false
-    scopeAddTopics:
+    topic_name:
+      slug: usecases
+      name: Cas d'usage
+    extras_to_process: 'ecospheres'
+    themes:
+      usage: true
+      main_name: Domaine
+      secondary_name: Sous-domaine
+    page_all_topics: false
+    display_metadata: false
+    activate_read_more: false
+    dataset_editorialization: false
+    scope_add_topics:
       all: false
-      authorizedUsers:
+      authorized_users:
         - 6230733357772160a4f77fba
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

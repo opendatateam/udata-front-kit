@@ -25,12 +25,12 @@ const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
 
-const extrasToProcess = config.website.topics.extrasToProcess
+const extrasToProcess = config.website.topics.extras_to_process
 const datasetEditorialization = ref(
-  config.website.topics.datasetEditorialization
+  config.website.topics.dataset_editorialization
 )
 
-const topicName = ref(config.website.topics.topicName.name)
+const topicName = ref(config.website.topics.topic_name.name)
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -126,10 +126,7 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    title="Ajouter le jeu de données à un "
-    +
-    {{
-    topicName}}
+    :title="'Ajouter le jeu de données à un ' + topicName"
     :opened="show"
     :actions="modalActions"
     @close="closeModal"
@@ -137,11 +134,7 @@ onMounted(() => {
     <DsfrSelect
       v-model="selectedBouquetId"
       :options="bouquetOptions"
-      default-unselected-text="Choisissez un "
-      +
-      {{
-      topicName
-      }}
+      :default-unselected-text="'Choisissez un ' + topicName"
     >
       <template #label>
         {{ topicName }} à associer <span class="required">&nbsp;*</span>

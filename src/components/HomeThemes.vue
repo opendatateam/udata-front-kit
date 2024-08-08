@@ -8,14 +8,14 @@ import { useTopicStore } from '@/store/TopicStore'
 import Tile from './Tile.vue'
 
 const topicStore = useTopicStore()
-const extrasToProcess = config.website.topics.extrasToProcess
+const extrasToProcess = config.website.topics.extras_to_process
 
 const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
 }
 
-const topicName = config.website.topics.topicName.name
-const topicSlug = ref(config.website.topics.topicName.slug)
+const topicName = config.website.topics.topic_name.name
+const topicSlug = ref(config.website.topics.topic_name.slug)
 
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {
@@ -23,9 +23,9 @@ const getThemeDescription = (theme: Theme) => {
   }).length
   switch (nbBouquets) {
     case 0:
-      return 'Aucun ' + topicName
+      return `Aucun  ${topicName}`
     case 1:
-      return '1 ' + topicName
+      return `1 ${topicName}`
     default:
       return `${nbBouquets} ${topicName}s`
   }

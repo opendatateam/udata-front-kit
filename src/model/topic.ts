@@ -28,7 +28,7 @@ export interface TopicExtrasToProcess {
   cloned_from?: string
 }
 
-const extrasToProcess = config.website.topics.extrasToProcess as string
+const extrasToProcess = config.website.topics.extras_to_process as string
 
 interface BaseTopicExtras {
   [key: string]: any

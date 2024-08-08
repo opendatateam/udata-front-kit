@@ -210,19 +210,22 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    topicName:
+    topic_name:
       slug: defis
       name: Défi
-    extrasToProcess: 'defis'
-    useThemes: false
-    pageAllTopics: false
-    displayMetadata: false
-    activateReadMore: false
-    datasetEditorialization: false
-    scopeAddTopics:
+    extras_to_process: 'defis'
+    themes:
+      usage: false
+      main_name: Thématique
+      secondary_name: Chantier
+    page_all_topics: false
+    display_metadata: false
+    activate_read_more: false
+    dataset_editorialization: false
+    scope_add_topics:
       all: false
-      authorizedUsers:
-        - 6230733357772160a4f77fba
+      authorized_users:
+        - 6230733357772160a4f77fbadd
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

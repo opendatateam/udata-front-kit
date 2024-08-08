@@ -20,7 +20,7 @@ import SelectDataset from './SelectDataset.vue'
 
 const emit = defineEmits(['updateValidation'])
 const datasetEditorialization = ref(
-  config.website.topics.datasetEditorialization
+  config.website.topics.dataset_editorialization
 )
 
 const datasetProperties = defineModel({

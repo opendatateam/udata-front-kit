@@ -19,11 +19,13 @@ const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
 
-const extrasToProcess = config.website.topics.extrasToProcess
-const useThemes = ref(config.website.topics.useThemes)
+const extrasToProcess = config.website.topics.extras_to_process
+const useThemes = ref(config.website.topics.themes.usage)
+const mainTheme = ref(config.website.topics.themes.main_name)
+const secondaryTheme = ref(config.website.topics.themes.secondary_name)
 
-const topicName = ref(config.website.topics.topicName.name)
-const topicSlug = ref(config.website.topics.topicName.slug)
+const topicName = ref(config.website.topics.topic_name.name)
+const topicSlug = ref(config.website.topics.topic_name.slug)
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
@@ -132,11 +134,11 @@ onMounted(() => {
   <!-- Theme -->
   <div class="fr-select-group fr-mt-1w" v-if="useThemes">
     <label class="fr-label" for="select_theme"
-      >Thématique <span class="required">&nbsp;*</span></label
+      >{{ mainTheme }} <span class="required">&nbsp;*</span></label
     >
     <select id="select_theme" class="fr-select" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
-        Choisir une thématique
+        Choisir une {{ mainTheme }}
       </option>
       <option
         v-for="option in themeOptions"
@@ -151,7 +153,7 @@ onMounted(() => {
   <!-- Subtheme -->
   <div class="fr-select-group fr-mt-1w" v-if="useThemes">
     <label class="fr-label" for="select_subtheme"
-      >Chantier <span class="required">&nbsp;*</span></label
+      >{{ secondaryTheme }} <span class="required">&nbsp;*</span></label
     >
     <select
       id="select_subtheme"
@@ -163,7 +165,7 @@ onMounted(() => {
         :value="NoOptionSelected"
         :selected="subtheme == NoOptionSelected"
       >
-        Choisir un chantier
+        Choisir un {{ secondaryTheme }}
       </option>
       <option
         v-for="option in subthemeOptions"

@@ -13,8 +13,8 @@ import {
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 
-const topicSlug = config.website.topics.topicName.slug
-const topicName = config.website.topics.topicName.name
+const topicSlug = config.website.topics.topic_name.slug
+const topicName = config.website.topics.topic_name.name
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(

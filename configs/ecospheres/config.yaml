@@ -135,18 +135,21 @@ website:
       - CSW-ISO-19139
     show_extended_information_panel: true
   topics:
-    topicName:
+    topic_name:
       slug: bouquets
       name: Bouquet
-    extrasToProcess: 'ecospheres'
-    useThemes: true
-    pageAllTopics: true
-    displayMetadata: true
-    activateReadMore: true
-    datasetEditorialization: true
-    scopeAddTopics:
+    extras_to_process: 'ecospheres'
+    themes:
+      usage: true
+      main_name: Thématique
+      secondary_name: Chantier
+    page_all_topics: true
+    display_metadata: true
+    activate_read_more: true
+    dataset_editorialization: true
+    scope_add_topics:
       all: true
-      authorizedUsers:
+      authorized_users:
 themes:
   - name: Se loger
     color: 043574

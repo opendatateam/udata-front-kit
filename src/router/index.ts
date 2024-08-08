@@ -10,7 +10,7 @@ import type { PageConfig } from '@/model/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
 
-const topicSlug = config.website.topics.topicName.slug
+const topicSlug = config.website.topics.topic_name.slug
 const disableRoutes: string[] = config.website.router.disable ?? []
 
 // common/default routes

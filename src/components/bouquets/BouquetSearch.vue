@@ -41,8 +41,10 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
-const topicName = config.website.topics.topicName.slug
-const useThemes = ref(config.website.topics.useThemes)
+const topicName = config.website.topics.topic_name.slug
+const useThemes = ref(config.website.topics.themes.usage)
+const mainTheme = ref(config.website.topics.themes.main_name)
+const secondaryTheme = ref(config.website.topics.themes.secondary_name)
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (
@@ -63,7 +65,7 @@ const computeQueryArgs = (
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    path: '/' + topicName,
+    path: `/${topicName}`,
     query: computeQueryArgs(data),
     hash: '#main'
   })
@@ -117,7 +119,7 @@ watchEffect(() => {
     />
     <div v-if="useThemes">
       <div class="fr-select-group">
-        <label class="fr-label" for="select_theme"> Thématiques </label>
+        <label class="fr-label" for="select_theme"> {{ mainTheme }}s </label>
         <select
           id="select_theme"
           class="fr-select"
@@ -127,7 +129,7 @@ watchEffect(() => {
             :value="NoOptionSelected"
             :selected="themeName == NoOptionSelected"
           >
-            Toutes les thématiques
+            Toutes les {{ mainTheme }}s
           </option>
           <option
             v-for="option in themeOptions"
@@ -140,7 +142,9 @@ watchEffect(() => {
         </select>
       </div>
       <div class="fr-select-group">
-        <label class="fr-label" for="select_subtheme"> Chantiers </label>
+        <label class="fr-label" for="select_subtheme">
+          {{ secondaryTheme }}s
+        </label>
         <select
           id="select_subtheme"
           class="fr-select"
@@ -150,7 +154,7 @@ watchEffect(() => {
             :value="NoOptionSelected"
             :selected="subthemeName == NoOptionSelected"
           >
-            Tous les chantiers
+            Tous les {{ secondaryTheme }}s
           </option>
           <option
             v-for="option in subthemeOptions"

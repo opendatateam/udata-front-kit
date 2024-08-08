@@ -92,7 +92,7 @@ export const useTopicStore = defineStore('topic', {
       let response = await topicsAPIv2.list({
         params: {
           page_size: config.website.pagination_sizes.topics_list,
-          tag: config.website.topics.extrasToProcess,
+          tag: config.website.topics.extras_to_process,
           include_private: 'yes'
         }
       })

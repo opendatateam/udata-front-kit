@@ -44,7 +44,7 @@ const showAddToBouquetModal = ref(false)
 
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.discussions.dataset.display
-const topicName = ref(config.website.topics.topicName.name)
+const topicName = ref(config.website.topics.topic_name.name)
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q

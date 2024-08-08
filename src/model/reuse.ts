@@ -4,7 +4,7 @@ import config from '@/config'
 
 import type { GenericResponse } from './api'
 
-const topicName = config.website.topics.topicName.name
+const topicName = config.website.topics.topic_name.name
 
 export type Reuse = Owned & {
   id: string

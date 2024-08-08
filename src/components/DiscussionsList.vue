@@ -24,7 +24,7 @@ const router = useRouter()
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const topicName = config.website.topics.topicName.name
+const topicName = config.website.topics.topic_name.name
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)

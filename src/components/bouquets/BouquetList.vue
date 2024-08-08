@@ -15,9 +15,9 @@ const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
 
-const extrasToProcess = config.website.topics.extrasToProcess
-const topicName = config.website.topics.topicName.name
-const topicSlug = config.website.topics.topicName.slug
+const extrasToProcess = config.website.topics.extras_to_process
+const topicName = config.website.topics.topic_name.name
+const topicSlug = config.website.topics.topic_name.slug
 
 const userStore = useUserStore()
 const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))

@@ -19,7 +19,7 @@ export interface RootState {
 }
 interface RoleTopic {
   all: boolean
-  authorizedUsers: Array<string>
+  authorized_users: Array<string>
 }
 
 export const useUserStore = defineStore('user', {
@@ -135,8 +135,9 @@ export const useUserStore = defineStore('user', {
     },
     updateShowAddBouquet() {
       const scopeAddTopics = ref<RoleTopic>(
-        config.website.topics.scopeAddTopics
+        config.website.topics.scope_add_topics
       )
+
       if (scopeAddTopics.value.all) {
         return true
       }
@@ -146,7 +147,7 @@ export const useUserStore = defineStore('user', {
           return true
         }
 
-        if (scopeAddTopics.value.authorizedUsers?.includes(this.data.id)) {
+        if (scopeAddTopics.value.authorized_users?.includes(this.data.id)) {
           return true
         }
       }

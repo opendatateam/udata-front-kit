@@ -10,8 +10,8 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
 
-const topicSlug = config.website.topics.topicName.slug
-const topicName = config.website.topics.topicName.name
+const topicSlug = config.website.topics.topic_name.slug
+const topicName = config.website.topics.topic_name.name
 
 const router = useRouter()
 const route = useRoute()
