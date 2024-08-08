@@ -8,8 +8,7 @@ import type {
   PostForm,
   DiscussionId
 } from '@/model/discussion'
-
-import DiscussionsAPI from '../services/api/resources/DiscussionsAPI'
+import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
 
 const discussionsAPI = new DiscussionsAPI()
 

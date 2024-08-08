@@ -1,14 +1,20 @@
 <script setup>
+import config from '@/config'
+
 const props = defineProps(['topicsData', 'urlHighlightedTopics'])
 const goToPage = (page) => {
   window.location.href = page
 }
+const mainTheme = ref(config.website.topics.themes.main_name)
+const secondaryTheme = ref(config.website.topics.themes.secondary_name)
 </script>
 
 <template>
   <div>
     <div v-if="topicsData.length" class="datagouv-components fr-mt-5w">
-      <h2 class="subtitle subtitle--uppercase text-align-left">Thématiques</h2>
+      <h2 class="subtitle subtitle--uppercase text-align-left">
+        {{ mainTheme }}s
+      </h2>
       <div class="fr-grid-row fr-grid-row--gutters">
         <div
           v-for="topic in topicsData"

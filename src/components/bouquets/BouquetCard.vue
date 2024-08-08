@@ -4,10 +4,11 @@ import {
   formatRelativeIfRecentDate,
   OrganizationNameWithCertificate
 } from '@etalab/data.gouv.fr-components'
-import { toRef } from 'vue'
+import { toRef, ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
@@ -16,6 +17,9 @@ import { useExtras } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
+const topicName = config.website.topics.topic_name.name
+const topicSlug = config.website.topics.topic_name.slug
+
 const props = defineProps({
   bouquet: {
     type: Object as () => Topic,
@@ -23,17 +27,22 @@ const props = defineProps({
   }
 })
 
-const bouquetRef = toRef(props, 'bouquet')
+const extrasToProcess = ref(config.website.topics.extras_to_process)
+
+const bouquetRef = toRef(props, topicName)
 const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
+const { theme, subtheme, datasetsProperties } = useExtras(
+  bouquetRef,
+  extrasToProcess
+)
 
 const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
-  name: 'bouquet_detail',
+  name: `${topicSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
 </script>

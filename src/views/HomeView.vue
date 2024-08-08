@@ -2,13 +2,12 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import SubSectionButtons from '@/components/sections/SubSectionButtons.vue'
+import SubSectionCards from '@/components/sections/SubSectionCards.vue'
+import SubSectionDatasets from '@/components/sections/SubSectionDatasets.vue'
+import SubSectionTiles from '@/components/sections/SubSectionTiles.vue'
 import config from '@/config'
-
-import SubSectionButtons from '../components/sections/SubSectionButtons.vue'
-import SubSectionCards from '../components/sections/SubSectionCards.vue'
-import SubSectionDatasets from '../components/sections/SubSectionDatasets.vue'
-import SubSectionTiles from '../components/sections/SubSectionTiles.vue'
-import { fromMarkdown } from '../utils'
+import { fromMarkdown } from '@/utils'
 
 const router = useRouter()
 const query = ref('')

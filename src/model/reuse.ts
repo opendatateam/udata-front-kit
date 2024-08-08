@@ -1,6 +1,10 @@
 import type { Owned } from '@etalab/data.gouv.fr-components'
 
+import config from '@/config'
+
 import type { GenericResponse } from './api'
+
+const topicName = config.website.topics.topic_name.name
 
 export type Reuse = Owned & {
   id: string
@@ -22,5 +26,5 @@ export interface ReuseType {
 
 export enum ReuseModel {
   dataset = 'jeu de donnée',
-  topic = 'bouquet'
+  topic = topicName
 }

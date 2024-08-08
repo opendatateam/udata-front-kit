@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 
 import config from '@/config'
-
-import SearchAPI from '../services/api/SearchAPI'
+import SearchAPI from '@/services/api/SearchAPI'
 
 const searchAPI = new SearchAPI()
 const pageSize = 21

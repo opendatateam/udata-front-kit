@@ -1,6 +1,5 @@
 import type { DatasetV2Response } from '@/model/dataset'
-
-import DatagouvfrAPI from '../DatagouvfrAPI'
+import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 export default class DatasetsAPI extends DatagouvfrAPI {
   endpoint = 'datasets'

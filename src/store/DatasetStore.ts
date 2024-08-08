@@ -3,8 +3,7 @@ import { defineStore } from 'pinia'
 
 import type { BaseParams } from '@/model/api'
 import type { DatasetV2Response } from '@/model/dataset'
-
-import DatasetsAPI from '../services/api/resources/DatasetsAPI'
+import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
 
 const datasetsApi = new DatasetsAPI()
 const datasetsApiv2 = new DatasetsAPI({ version: 2 })

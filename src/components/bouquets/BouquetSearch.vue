@@ -3,6 +3,7 @@ import { ref, watchEffect, toRef, type Ref, type PropType } from 'vue'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import config from '@/config'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
@@ -40,6 +41,10 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
+const topicName = config.website.topics.topic_name.slug
+const useThemes = ref(config.website.topics.themes.usage)
+const mainTheme = ref(config.website.topics.themes.main_name)
+const secondaryTheme = ref(config.website.topics.themes.secondary_name)
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (
@@ -60,7 +65,7 @@ const computeQueryArgs = (
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    path: '/bouquets',
+    path: `/${topicName}`,
     query: computeQueryArgs(data),
     hash: '#main'
   })
@@ -112,49 +117,55 @@ watchEffect(() => {
       name="show_drafts"
       @update:model-value="switchLocalShowDrafts"
     />
-
-    <div class="fr-select-group">
-      <label class="fr-label" for="select_theme"> Thématiques </label>
-      <select id="select_theme" class="fr-select" @change="switchTheme($event)">
-        <option
-          :value="NoOptionSelected"
-          :selected="themeName == NoOptionSelected"
+    <div v-if="useThemes">
+      <div class="fr-select-group">
+        <label class="fr-label" for="select_theme"> {{ mainTheme }}s </label>
+        <select
+          id="select_theme"
+          class="fr-select"
+          @change="switchTheme($event)"
         >
-          Toutes les thématiques
-        </option>
-        <option
-          v-for="option in themeOptions"
-          :key="option.value"
-          :value="option.value"
-          :selected="option.value === themeName"
+          <option
+            :value="NoOptionSelected"
+            :selected="themeName == NoOptionSelected"
+          >
+            Toutes les {{ mainTheme }}s
+          </option>
+          <option
+            v-for="option in themeOptions"
+            :key="option.value"
+            :value="option.value"
+            :selected="option.value === themeName"
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <div class="fr-select-group">
+        <label class="fr-label" for="select_subtheme">
+          {{ secondaryTheme }}s
+        </label>
+        <select
+          id="select_subtheme"
+          class="fr-select"
+          @change="switchSubtheme($event)"
         >
-          {{ option.text }}
-        </option>
-      </select>
-    </div>
-
-    <div class="fr-select-group">
-      <label class="fr-label" for="select_subtheme"> Chantiers </label>
-      <select
-        id="select_subtheme"
-        class="fr-select"
-        @change="switchSubtheme($event)"
-      >
-        <option
-          :value="NoOptionSelected"
-          :selected="subthemeName == NoOptionSelected"
-        >
-          Tous les chantiers
-        </option>
-        <option
-          v-for="option in subthemeOptions"
-          :key="option.value"
-          :value="option.value"
-          :selected="option.value === subthemeName"
-        >
-          {{ option.text }}
-        </option>
-      </select>
+          <option
+            :value="NoOptionSelected"
+            :selected="subthemeName == NoOptionSelected"
+          >
+            Tous les {{ secondaryTheme }}s
+          </option>
+          <option
+            v-for="option in subthemeOptions"
+            :key="option.value"
+            :value="option.value"
+            :selected="option.value === subthemeName"
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
     </div>
     <div class="fr-select-group">
       <label class="fr-label" for="select_subtheme"

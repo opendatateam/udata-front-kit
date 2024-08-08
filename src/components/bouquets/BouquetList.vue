@@ -1,17 +1,26 @@
 <script setup lang="ts">
 import type { ComputedRef, PropType } from 'vue'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 
 const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
+
+const extrasToProcess = config.website.topics.extras_to_process
+const topicName = config.website.topics.topic_name.name
+const topicSlug = config.website.topics.topic_name.slug
+
+const userStore = useUserStore()
+const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
 
 const props = defineProps({
   themeName: {
@@ -50,11 +59,11 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
     })
     .filter((bouquet) => {
       if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras.ecospheres.theme === props.themeName
+      return bouquet.extras[extrasToProcess].theme === props.themeName
     })
     .filter((bouquet) => {
       if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras.ecospheres.subtheme === props.subthemeName
+      return bouquet.extras[extrasToProcess].subtheme === props.subthemeName
     })
     .filter((bouquet) => {
       if (props.query === '') return true
@@ -64,20 +73,20 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (bouquets.value.length === 1) {
-    return '1 bouquet disponible'
+    return `1 ${topicName} disponible`
   } else {
-    return bouquets.value.length + ' bouquets disponibles'
+    return bouquets.value.length + ` ${topicName}s disponibles`
   }
 })
 
 const goToCreate = () => {
-  router.push({ name: 'bouquet_add', query: route.query })
+  router.push({ name: `${topicSlug}_add`, query: route.query })
 }
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: 'bouquets', hash: '#main', query })
+  router.push({ name: topicSlug, hash: '#main', query })
 }
 
 onMounted(() => {
@@ -131,7 +140,7 @@ onMounted(() => {
           <p class="fr-mt-1v fr-mb-3v">
             Essayez de réinitialiser les filtres pour agrandir votre champ de
             recherche.<br />
-            Vous pouvez aussi contribuer en créant un bouquet.
+            Vous pouvez aussi contribuer en créant un {{ topicName }}.
           </p>
         </div>
         <div class="fr-grid-row fr-grid-row--undefined">
@@ -141,8 +150,9 @@ onMounted(() => {
           <button
             class="fr-btn fr-btn--secondary fr-ml-1w"
             @click.stop.prevent="goToCreate"
+            v-if="showAddBouquet"
           >
-            Ajouter un bouquet
+            Ajouter un {{ topicName }}
           </button>
         </div>
       </div>

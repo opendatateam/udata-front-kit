@@ -17,7 +17,7 @@ import ReusesList from '@/components/ReusesList.vue'
 import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
 import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
 import config from '@/config'
-import { type Topic } from '@/model/topic'
+import { type Topic, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -25,7 +25,7 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import {
   useBreadcrumbLinksForTopic,
   useExtras,
-  updateEcospheresExtras
+  updateTopicPropertiesExtras
 } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
@@ -52,15 +52,48 @@ const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
-const { theme, subtheme, datasetsProperties, clonedFrom } = useExtras(topic)
-const breadcrumbLinks = useBreadcrumbLinksForTopic(theme, subtheme, topic)
+
+let theme = ref<string | undefined>(undefined)
+let subtheme = ref<string | undefined>(undefined)
+let datasetsProperties = ref<DatasetProperties[]>([])
+let clonedFrom = ref<Topic | null>(null)
+
+const extrasToProcess = ref(config.website.topics.extras_to_process)
+const useThemes = config.website.topics.themes.usage
+const pageAllTopics = config.website.topics.page_all_topics
+const displayMetadata = config.website.topics.display_metadata
+const activateReadMore = config.website.topics.activate_read_more
+const datasetEditorialization = config.website.topics.dataset_editorialization
+const topicSlug = ref(config.website.topics.topic_name.slug)
+
+let extras = useExtras(topic, extrasToProcess)
+datasetsProperties = extras.datasetsProperties
+clonedFrom = extras.clonedFrom
+
+if (useThemes) {
+  theme = extras.theme
+  subtheme = extras.subtheme
+}
+
+const breadcrumbLinks = useBreadcrumbLinksForTopic(
+  theme,
+  subtheme,
+  topic,
+  pageAllTopics
+)
 
 const goToEdit = () => {
-  router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
+  router.push({
+    name: `${topicSlug.value}_edit`,
+    params: { bid: topic.value?.id }
+  })
 }
 
 const goToClone = () => {
-  router.push({ name: 'bouquet_add', query: { clone: topic.value?.id } })
+  router.push({
+    name: `${topicSlug.value}_add`,
+    query: { clone: topic.value?.id }
+  })
 }
 
 const togglePublish = () => {
@@ -87,11 +120,15 @@ const onUpdateDatasets = () => {
       datasets: datasetsProperties.value
         .filter((d) => d.id !== null && d.remoteDeleted !== true)
         .map((d) => d.id),
-      extras: updateEcospheresExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ remoteDeleted, ...data }) => data
-        )
-      })
+      extras: updateTopicPropertiesExtras(
+        topic.value,
+        {
+          datasets_properties: datasetsProperties.value.map(
+            ({ remoteDeleted, ...data }) => data
+          )
+        },
+        extrasToProcess.value
+      )
     })
     .finally(() => loader.hide())
 }
@@ -106,7 +143,7 @@ const metaTitle = (): string => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: 'bouquet_detail',
+    name: `${topicSlug.value}_detail`,
     params: { bid: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
@@ -132,7 +169,7 @@ watch(
         topic.value = res
         if (topic.value.slug !== props.bouquetId) {
           router.push({
-            name: 'bouquet_detail',
+            name: `${topicSlug.value}_detail`,
             params: { bid: topic.value.slug }
           })
         }
@@ -148,26 +185,11 @@ watch(
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
   <GenericContainer v-if="topic">
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12 fr-col-md-8">
-        <div class="bouquet__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <DsfrTag
-            v-if="theme"
-            class="fr-mb-1v"
-            :label="subtheme"
-            :style="{
-              backgroundColor: getThemeColor(theme),
-              color: getThemeTextColor(theme)
-            }"
-          />
-        </div>
-        <ReadMore max-height="600">
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="description"></div>
-        </ReadMore>
-      </div>
-      <div class="fr-col-12 fr-col-md-4">
+    <div class="fr-grid-row fr-grid-row--gutters flex-reverse">
+      <div
+        class="fr-col-12"
+        :class="displayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'"
+      >
         <div class="fr-mb-2w">
           <div v-if="!canEdit && topic.private" class="fr-mb-1w">
             <DsfrTag label="Brouillon" />
@@ -202,50 +224,85 @@ watch(
             />
           </div>
         </div>
-        <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
-        <div v-if="topic.organization" class="fr-grid-row fr-grid-row--middle">
-          <div class="fr-col-auto fr-mr-1w">
-            <OrganizationLogo :object="topic" />
-          </div>
-          <p class="fr-col fr-m-0">
-            <a class="fr-link" :href="topic.organization.page">
-              <OrganizationNameWithCertificate
-                :organization="topic.organization"
-              />
-            </a>
-          </p>
-        </div>
-        <div v-else class="fr-grid-row fr-grid-row--middle">
-          <div class="fr-col-auto">
-            <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img
-                style="margin-bottom: -6px"
-                :src="getOwnerAvatar(topic)"
-                height="32"
-              />
+        <div v-if="displayMetadata">
+          <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
+          <div
+            v-if="topic.organization"
+            class="fr-grid-row fr-grid-row--middle"
+          >
+            <div class="fr-col-auto fr-mr-1w">
+              <OrganizationLogo :object="topic" />
             </div>
+            <p class="fr-col fr-m-0">
+              <a class="fr-link" :href="topic.organization.page">
+                <OrganizationNameWithCertificate
+                  :organization="topic.organization"
+                />
+              </a>
+            </p>
           </div>
-          <p class="fr-col fr-m-0">
-            {{ topic.owner.first_name }} {{ topic.owner.last_name }}
-          </p>
+          <div v-else class="fr-grid-row fr-grid-row--middle">
+            <div class="fr-col-auto">
+              <div class="border fr-p-1-5v fr-mr-1-5v">
+                <img
+                  style="margin-bottom: -6px"
+                  :src="getOwnerAvatar(topic)"
+                  height="32"
+                />
+              </div>
+            </div>
+            <p class="fr-col fr-m-0">
+              {{ topic.owner.first_name }} {{ topic.owner.last_name }}
+            </p>
+          </div>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
+          <p>{{ formatDate(topic.created_at) }}</p>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
+          <p>{{ formatDate(topic.last_modified) }}</p>
+          <div v-if="spatialCoverage">
+            <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
+            <p>{{ spatialCoverage.name }}</p>
+          </div>
+          <div v-if="clonedFrom">
+            <h2 class="subtitle fr-mt-3v fr-mb-1v">Cloné depuis</h2>
+            <p>
+              <RouterLink
+                :to="{
+                  name: `${topicSlug}_detail`,
+                  params: { bid: clonedFrom.slug }
+                }"
+              >
+                {{ clonedFrom.name }}
+              </RouterLink>
+            </p>
+          </div>
         </div>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
-        <p>{{ formatDate(topic.created_at) }}</p>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <p>{{ formatDate(topic.last_modified) }}</p>
-        <div v-if="spatialCoverage">
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
-          <p>{{ spatialCoverage.name }}</p>
+      </div>
+      <div
+        class="fr-col-12"
+        :class="displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
+      >
+        <div class="bouquet__header fr-mb-4v">
+          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
+          <DsfrTag
+            v-if="theme"
+            class="fr-mb-1v"
+            :label="subtheme"
+            :style="{
+              backgroundColor: getThemeColor(theme),
+              color: getThemeTextColor(theme)
+            }"
+          />
         </div>
-        <div v-if="clonedFrom">
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Cloné depuis</h2>
-          <p>
-            <RouterLink
-              :to="{ name: 'bouquet_detail', params: { bid: clonedFrom.slug } }"
-            >
-              {{ clonedFrom.name }}
-            </RouterLink>
-          </p>
+        <div v-if="activateReadMore">
+          <ReadMore max-height="600">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="description"></div>
+          </ReadMore>
+        </div>
+        <div v-else>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="description"></div>
         </div>
       </div>
     </div>
@@ -271,6 +328,7 @@ watch(
         <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
+          :dataset-editorialization="datasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
         <BouquetDatasetListExport
@@ -309,5 +367,9 @@ watch(
     align-items: center;
     flex-flow: wrap;
   }
+}
+.flex-reverse {
+  display: flex;
+  flex-direction: row-reverse;
 }
 </style>

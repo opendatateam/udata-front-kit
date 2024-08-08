@@ -1,7 +1,8 @@
 import type { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
-import { watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 
+import config from '@/config'
 import type { WithOwned } from '@/model'
 import type { ExtendedUser } from '@/model/user'
 import LocalStorageService from '@/services/LocalStorageService'
@@ -15,6 +16,10 @@ export interface RootState {
   isLoggedIn: boolean
   token: string | undefined
   data: ExtendedUser | undefined
+}
+interface RoleTopic {
+  all: boolean
+  authorized_users: Array<string>
 }
 
 export const useUserStore = defineStore('user', {
@@ -125,6 +130,26 @@ export const useUserStore = defineStore('user', {
         return this.data.organizations
           .map((o) => o.id)
           .includes(object.organization.id)
+      }
+      return false
+    },
+    updateShowAddBouquet() {
+      const scopeAddTopics = ref<RoleTopic>(
+        config.website.topics.scope_add_topics
+      )
+
+      if (scopeAddTopics.value.all) {
+        return true
+      }
+
+      if (this.isLoggedIn && this.data) {
+        if (this.data.roles?.includes('admin')) {
+          return true
+        }
+
+        if (scopeAddTopics.value.authorized_users?.includes(this.data.id)) {
+          return true
+        }
       }
       return false
     }
