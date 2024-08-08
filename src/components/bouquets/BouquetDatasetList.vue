@@ -37,6 +37,8 @@ const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 // make a copy for local reordering before save
 const originalDatasets = ref([...datasets.value])
 
+const topicName = ref(config.website.topics.topicName.name)
+
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
 })
@@ -58,7 +60,7 @@ const getAccordeonId = (index: number): string => {
 const removeDataset = (index: number) => {
   if (
     window.confirm(
-      'Etes-vous sûr de vouloir supprimer ce jeu de données du bouquet ?'
+      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicName.value} ?`
     )
   ) {
     delete expandStore.value[getAccordeonId(index)]
@@ -97,7 +99,9 @@ const triggerReorder = () => {
     v-if="!isReorder"
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
   >
-    <h2 class="fr-col-auto fr-mb-2v">Composition du bouquet de données</h2>
+    <h2 class="fr-col-auto fr-mb-2v">
+      Composition du {{ topicName }} de données
+    </h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
         v-if="isEdit && datasets.length >= 2"
@@ -141,7 +145,7 @@ const triggerReorder = () => {
   </div>
   <!-- Actual datasets list -->
   <div v-if="datasets.length < 1" class="no-dataset">
-    <p>Ce bouquet ne contient pas encore de jeux de données</p>
+    <p>Ce {{ topicName }} ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">

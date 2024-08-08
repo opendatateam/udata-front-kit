@@ -20,20 +20,33 @@ const emits = defineEmits(['updateValidation'])
 const spatialCoverage = useSpatialCoverage(topic)
 
 const extrasToProcess = config.website.topics.extrasToProcess
+const useThemes = ref(config.website.topics.useThemes)
+
+const topicName = ref(config.website.topics.topicName.name)
+const topicSlug = ref(config.website.topics.topicName.slug)
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
 
 const isValid = computed(() => {
-  return (
-    topic.value.name &&
-    topic.value.name.trim() !== '' &&
-    topic.value.description &&
-    topic.value.description.trim() !== '' &&
-    topic.value.extras &&
-    topic.value.extras[extrasToProcess].theme !== NoOptionSelected &&
-    topic.value.extras[extrasToProcess].subtheme !== NoOptionSelected
-  )
+  if (useThemes.value) {
+    return (
+      topic.value.name &&
+      topic.value.name.trim() !== '' &&
+      topic.value.description &&
+      topic.value.description.trim() !== '' &&
+      topic.value.extras &&
+      topic.value.extras[extrasToProcess].theme !== NoOptionSelected &&
+      topic.value.extras[extrasToProcess].subtheme !== NoOptionSelected
+    )
+  } else {
+    return (
+      topic.value.name &&
+      topic.value.name.trim() !== '' &&
+      topic.value.description &&
+      topic.value.description.trim() !== ''
+    )
+  }
 })
 
 const { themeOptions, subthemeOptions } = useThemeOptions(theme)
@@ -83,20 +96,20 @@ onMounted(() => {
 <template>
   <!-- Title -->
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="bouquet_name"
-      >Sujet du bouquet <span class="required">&nbsp;*</span></label
+    <label class="fr-label" :for="topicSlug + '_name'"
+      >Sujet du {{ topicName }} <span class="required">&nbsp;*</span></label
     >
     <input
-      id="bouquet_name"
+      :id="topicSlug + '_name'"
       v-model="topic.name"
       class="fr-input"
       type="text"
-      placeholder="Mon bouquet"
+      :placeholder="'Mon ' + topicName"
     />
   </div>
   <!-- Description -->
   <div class="fr-mt-1w">
-    <div>Objectif du bouquet<span class="required">&nbsp;*</span></div>
+    <div>Objectif du {{ topicName }}<span class="required">&nbsp;*</span></div>
     <div>
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
@@ -105,15 +118,19 @@ onMounted(() => {
       pour mettre en forme votre texte
     </div>
     <textarea
-      id="bouquet_description"
+      :id="topicSlug + '_description'"
       v-model="topic.description"
       class="fr-input"
       type="text"
-      placeholder="Renseignez ici les informations nécessaires à la compréhension du bouquet : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l'organisme porteur du projet, etc."
+      :placeholder="
+        'Renseignez ici les informations nécessaires à la compréhension du ' +
+        topicName +
+        ': politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l\'organisme porteur du projet, etc.'
+      "
     />
   </div>
   <!-- Theme -->
-  <div class="fr-select-group fr-mt-1w">
+  <div class="fr-select-group fr-mt-1w" v-if="useThemes">
     <label class="fr-label" for="select_theme"
       >Thématique <span class="required">&nbsp;*</span></label
     >
@@ -132,7 +149,7 @@ onMounted(() => {
     </select>
   </div>
   <!-- Subtheme -->
-  <div class="fr-select-group fr-mt-1w">
+  <div class="fr-select-group fr-mt-1w" v-if="useThemes">
     <label class="fr-label" for="select_subtheme"
       >Chantier <span class="required">&nbsp;*</span></label
     >

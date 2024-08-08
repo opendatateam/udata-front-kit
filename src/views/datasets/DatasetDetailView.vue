@@ -44,6 +44,7 @@ const showAddToBouquetModal = ref(false)
 
 const pageSize = config.website.pagination_sizes.files_list
 const showDiscussions = config.website.discussions.dataset.display
+const topicName = ref(config.website.topics.topicName.name)
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
@@ -250,7 +251,7 @@ onMounted(() => {
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            label="Ajouter à un bouquet"
+            :label="'Ajouter à un ' + topicName"
             icon="ri-file-add-line"
             @click="showAddToBouquetModal = true"
           />

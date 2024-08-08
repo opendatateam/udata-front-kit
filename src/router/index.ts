@@ -10,6 +10,7 @@ import type { PageConfig } from '@/model/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
 
+const topicSlug = config.website.topics.topicName.slug
 const disableRoutes: string[] = config.website.router.disable ?? []
 
 // common/default routes
@@ -64,11 +65,11 @@ const defaultRoutes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/bouquets',
+    path: `/${topicSlug}`,
     children: [
       {
         path: '',
-        name: 'bouquets',
+        name: `${topicSlug}`,
         component: async () =>
           await import('@/views/bouquets/BouquetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
@@ -81,7 +82,7 @@ const defaultRoutes: RouteRecordRaw[] = [
       },
       {
         path: ':bid',
-        name: 'bouquet_detail',
+        name: `${topicSlug}_detail`,
         props: (route: RouteLocationNormalizedLoaded) => ({
           bouquetId: route.params.bid
         }),
@@ -91,15 +92,15 @@ const defaultRoutes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: `/admin/bouquets/add`,
-    name: 'bouquet_add',
+    path: `/admin/${topicSlug}/add`,
+    name: `${topicSlug}_add`,
     component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
     meta: { requiresAuth: true },
     props: { isCreate: true }
   },
   {
-    path: `/admin/bouquets/edit/:bid`,
-    name: 'bouquet_edit',
+    path: `/admin/${topicSlug}/edit/:bid`,
+    name: `${topicSlug}_edit`,
     component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
     meta: { requiresAuth: true },
     props: { isCreate: false }

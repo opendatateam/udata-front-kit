@@ -17,6 +17,9 @@ import { useExtras } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
+const topicName = config.website.topics.topicName.name
+const topicSlug = config.website.topics.topicName.slug
+
 const props = defineProps({
   bouquet: {
     type: Object as () => Topic,
@@ -26,7 +29,7 @@ const props = defineProps({
 
 const extrasToProcess = ref(config.website.topics.extrasToProcess)
 
-const bouquetRef = toRef(props, 'bouquet')
+const bouquetRef = toRef(props, topicName)
 const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
@@ -39,7 +42,7 @@ const { theme, subtheme, datasetsProperties } = useExtras(
 const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
-  name: 'bouquet_detail',
+  name: `${topicSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
 </script>

@@ -30,6 +30,8 @@ const datasetEditorialization = ref(
   config.website.topics.datasetEditorialization
 )
 
+const topicName = ref(config.website.topics.topicName.name)
+
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
   title: '',
@@ -86,11 +88,11 @@ const isDatasetInBouquet = (bouquet: Topic): boolean => {
 
 const submit = async () => {
   if (selectedBouquetId.value === null) {
-    throw Error('Trying to attach to bouquet without id')
+    throw Error('Trying to attach to topic without id')
   }
   const bouquet = topicStore.get(selectedBouquetId.value)
   if (bouquet === undefined) {
-    throw Error('Bouquet not in store')
+    throw Error('Topic not in store')
   }
   const newDatasetsProperties =
     bouquet.extras[extrasToProcess].datasets_properties || []
@@ -101,9 +103,12 @@ const submit = async () => {
     tags: bouquet.tags,
     extras: bouquet.extras
   })
-  toast(`Jeu de données ajouté avec succès au bouquet "${bouquet.name}"`, {
-    type: 'success'
-  })
+  toast(
+    `Jeu de données ajouté avec succès au ${topicName.value} "${bouquet.name}"`,
+    {
+      type: 'success'
+    }
+  )
   closeModal()
 }
 
@@ -121,7 +126,10 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    title="Ajouter le jeu de données à un bouquet"
+    title="Ajouter le jeu de données à un "
+    +
+    {{
+    topicName}}
     :opened="show"
     :actions="modalActions"
     @close="closeModal"
@@ -129,12 +137,22 @@ onMounted(() => {
     <DsfrSelect
       v-model="selectedBouquetId"
       :options="bouquetOptions"
-      default-unselected-text="Choisissez un bouquet"
+      default-unselected-text="Choisissez un "
+      +
+      {{
+      topicName
+      }}
     >
       <template #label>
-        Bouquet à associer <span class="required">&nbsp;*</span>
+        {{ topicName }} à associer <span class="required">&nbsp;*</span>
         <Tooltip
-          text="Choisissez parmi les bouquets dont vous êtes l'auteur. Si un bouquet apparait désactivé, c'est que le jeu de données y est déjà associé."
+          :text="
+            'Choisissez parmi les ' +
+            topicName +
+            's dont vous êtes l\'auteur. Si un ' +
+            topicName +
+            ' apparait désactivé, c\'est que le jeu de données y est déjà associé.'
+          "
         />
       </template>
     </DsfrSelect>

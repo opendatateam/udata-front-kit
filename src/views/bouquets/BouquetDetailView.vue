@@ -64,6 +64,7 @@ const pageAllTopics = config.website.topics.pageAllTopics
 const displayMetadata = config.website.topics.displayMetadata
 const activateReadMore = config.website.topics.activateReadMore
 const datasetEditorialization = config.website.topics.datasetEditorialization
+const topicSlug = ref(config.website.topics.topicName.slug)
 
 let extras = useExtras(topic, extrasToProcess)
 datasetsProperties = extras.datasetsProperties
@@ -82,11 +83,17 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
 )
 
 const goToEdit = () => {
-  router.push({ name: 'bouquet_edit', params: { bid: topic.value?.id } })
+  router.push({
+    name: `${topicSlug.value}_edit`,
+    params: { bid: topic.value?.id }
+  })
 }
 
 const goToClone = () => {
-  router.push({ name: 'bouquet_add', query: { clone: topic.value?.id } })
+  router.push({
+    name: `${topicSlug.value}_add`,
+    query: { clone: topic.value?.id }
+  })
 }
 
 const togglePublish = () => {
@@ -136,7 +143,7 @@ const metaTitle = (): string => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: 'bouquet_detail',
+    name: `${topicSlug.value}_detail`,
     params: { bid: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
@@ -162,7 +169,7 @@ watch(
         topic.value = res
         if (topic.value.slug !== props.bouquetId) {
           router.push({
-            name: 'bouquet_detail',
+            name: `${topicSlug.value}_detail`,
             params: { bid: topic.value.slug }
           })
         }
@@ -261,7 +268,7 @@ watch(
             <p>
               <RouterLink
                 :to="{
-                  name: 'bouquet_detail',
+                  name: `${topicSlug}_detail`,
                   params: { bid: clonedFrom.slug }
                 }"
               >

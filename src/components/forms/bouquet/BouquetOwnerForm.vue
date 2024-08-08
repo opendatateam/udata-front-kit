@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineModel, computed, ref, watch, type Ref } from 'vue'
 
+import config from '@/config'
 import type { Topic } from '@/model/topic'
 import { useUserStore } from '@/store/UserStore'
 
@@ -15,6 +16,8 @@ const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
 )
 const organizations = computed(() => userStore.data?.organizations || [])
+
+const topicName = ref(config.website.topics.topicName.name)
 
 const onSelectOrganization = (value: string) => {
   const idx = parseInt(value)
@@ -33,7 +36,7 @@ watch(choice, () => {
 <template>
   <div>
     <label class="fr-label" for="owner"
-      >Choisissez si vous souhaitez gérer ce bouquet&nbsp;:</label
+      >Choisissez si vous souhaitez gérer ce {{ topicName }}&nbsp;:</label
     >
     <fieldset id="owner" class="fr-fieldset">
       <div class="fr-fieldset__content" role="radiogroup">

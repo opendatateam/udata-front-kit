@@ -29,6 +29,8 @@ const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 const extrasToProcess = ref(config.website.topics.extrasToProcess)
+const topicName = ref(config.website.topics.topicName.name)
+const topicSlug = ref(config.website.topics.topicName.slug)
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [config.website.topics.extrasToProcess],
@@ -60,7 +62,10 @@ const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
   const loader = useLoading().show()
   operation()
     .then((response) => {
-      router.push({ name: 'bouquet_detail', params: { bid: response.slug } })
+      router.push({
+        name: `${topicSlug.value}_detail`,
+        params: { bid: response.slug }
+      })
     })
     .catch((error) => {
       errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
@@ -93,10 +98,12 @@ const destroy = async () => {
   if (topic.value?.id === undefined) {
     throw Error('Trying to delete topic without topic id')
   }
-  if (window.confirm('Etes-vous sûr de vouloir supprimer ce bouquet ?')) {
+  if (
+    window.confirm(`Etes-vous sûr de vouloir supprimer ce ${topicName.value} ?`)
+  ) {
     useTopicStore()
       .delete(topic.value.id)
-      .then(() => router.push({ name: 'bouquets' }))
+      .then(() => router.push({ name: topicSlug.value }))
       .catch((error) => {
         errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
       })
@@ -106,13 +113,13 @@ const destroy = async () => {
 const cancel = () => {
   if (props.isCreate) {
     if (routeQuery.clone == null) {
-      router.push({ name: 'bouquets' })
+      router.push({ name: topicSlug.value })
     } else {
       router.go(-1)
     }
   } else {
     router.push({
-      name: 'bouquet_detail',
+      name: `${topicSlug.value}_detail`,
       params: {
         bid: topic.value.slug
       }
@@ -150,7 +157,7 @@ onMounted(() => {
           class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
         >
           <h1 class="fr-col-auto fr-mb-2v">
-            {{ isCreate ? 'Nouveau bouquet' : topic.name }}
+            {{ isCreate ? `Nouveau ${topicName}` : topic.name }}
           </h1>
           <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
             <DsfrButton
@@ -176,7 +183,7 @@ onMounted(() => {
           </div>
         </div>
         <div class="fr-mt-4w">
-          <h2>Description du bouquet de données</h2>
+          <h2>Description du {{ topicName }} de données</h2>
           <BouquetForm
             v-if="isReadyForForm"
             v-model="topic"
@@ -184,7 +191,7 @@ onMounted(() => {
           />
         </div>
         <div class="fr-mt-4w">
-          <h2>Propriétaire du bouquet</h2>
+          <h2>Propriétaire du {{ topicName }}</h2>
           <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
         </div>
         <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
@@ -211,6 +218,8 @@ onMounted(() => {
         </div>
       </form>
     </div>
-    <div>Vous n'avez pas les droits pour ajouter un bouquet.</div>
+    <div v-else>
+      Vous n'avez pas les droits pour ajouter un {{ topicName }}.
+    </div>
   </GenericContainer>
 </template>

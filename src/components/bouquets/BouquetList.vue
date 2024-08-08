@@ -16,6 +16,8 @@ const route = useRoute()
 const topicStore = useTopicStore()
 
 const extrasToProcess = config.website.topics.extrasToProcess
+const topicName = config.website.topics.topicName.name
+const topicSlug = config.website.topics.topicName.slug
 
 const userStore = useUserStore()
 const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
@@ -71,20 +73,20 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (bouquets.value.length === 1) {
-    return '1 bouquet disponible'
+    return `1 ${topicName} disponible`
   } else {
-    return bouquets.value.length + ' bouquets disponibles'
+    return bouquets.value.length + ` ${topicName}s disponibles`
   }
 })
 
 const goToCreate = () => {
-  router.push({ name: 'bouquet_add', query: route.query })
+  router.push({ name: `${topicSlug}_add`, query: route.query })
 }
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: 'bouquets', hash: '#main', query })
+  router.push({ name: topicSlug, hash: '#main', query })
 }
 
 onMounted(() => {
@@ -138,7 +140,7 @@ onMounted(() => {
           <p class="fr-mt-1v fr-mb-3v">
             Essayez de réinitialiser les filtres pour agrandir votre champ de
             recherche.<br />
-            Vous pouvez aussi contribuer en créant un bouquet.
+            Vous pouvez aussi contribuer en créant un {{ topicName }}.
           </p>
         </div>
         <div class="fr-grid-row fr-grid-row--undefined">
@@ -150,7 +152,7 @@ onMounted(() => {
             @click.stop.prevent="goToCreate"
             v-if="showAddBouquet"
           >
-            Ajouter un bouquet
+            Ajouter un {{ topicName }}
           </button>
         </div>
       </div>

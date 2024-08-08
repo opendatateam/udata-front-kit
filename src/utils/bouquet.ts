@@ -1,5 +1,6 @@
 import { ref, watch, computed, type Ref, type ComputedRef } from 'vue'
 
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
@@ -11,6 +12,9 @@ import {
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+
+const topicSlug = config.website.topics.topicName.slug
+const topicName = config.website.topics.topicName.name
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
@@ -76,15 +80,15 @@ export function useBreadcrumbLinksForTopic(
   return computed(() => {
     const breadcrumbs = [{ to: '/', text: 'Accueil' }]
     if (pageAllTopics) {
-      breadcrumbs.push({ to: { name: 'bouquets' }, text: 'Bouquets' })
+      breadcrumbs.push({ to: { name: topicSlug }, text: `${topicName}s` })
     }
 
     if (theme.value !== undefined && subtheme.value !== undefined) {
       breadcrumbs.push(
-        { text: theme.value, to: `/bouquets/?theme=${theme.value}` },
+        { text: theme.value, to: `/${topicSlug}/?theme=${theme.value}` },
         {
           text: subtheme.value,
-          to: `/bouquets/?theme=${theme.value}&subtheme=${subtheme.value}`
+          to: `/${topicSlug}/?theme=${theme.value}&subtheme=${subtheme.value}`
         }
       )
     }

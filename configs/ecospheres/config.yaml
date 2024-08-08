@@ -135,6 +135,9 @@ website:
       - CSW-ISO-19139
     show_extended_information_panel: true
   topics:
+    topicName:
+      slug: bouquets
+      name: Bouquet
     extrasToProcess: 'ecospheres'
     useThemes: true
     pageAllTopics: true

@@ -162,7 +162,7 @@ website:
   show_dataset_metadata_panel: false
   list_search_topics:
   url_search_topics: 'defis'
-  oauth_option: false
+  oauth_option: true
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
     - label: 'data.gouv.fr'
@@ -210,7 +210,10 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    extrasToProcess: 'ecospheres'
+    topicName:
+      slug: defis
+      name: Défi
+    extrasToProcess: 'defis'
     useThemes: false
     pageAllTopics: false
     displayMetadata: false
@@ -220,7 +223,6 @@ website:
       all: false
       authorizedUsers:
         - 6230733357772160a4f77fba
-
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

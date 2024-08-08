@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed, type ComputedRef } from 'vue'
+import { onMounted, computed, type ComputedRef, ref } from 'vue'
 
 import config from '@/config'
 import type { Theme } from '@/model/theme'
@@ -14,17 +14,20 @@ const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
 }
 
+const topicName = config.website.topics.topicName.name
+const topicSlug = ref(config.website.topics.topicName.slug)
+
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {
     return !topic.private && topic.extras[extrasToProcess].theme === theme.name
   }).length
   switch (nbBouquets) {
     case 0:
-      return 'Aucun bouquet'
+      return 'Aucun ' + topicName
     case 1:
-      return '1 bouquet'
+      return '1 ' + topicName
     default:
-      return `${nbBouquets} bouquets`
+      return `${nbBouquets} ${topicName}s`
   }
 }
 
@@ -53,7 +56,7 @@ onMounted(() => {
       >
         <Tile
           :style="getCustomBoxShadow(theme.color)"
-          :link="{ name: 'bouquets', query: { theme: theme.name } }"
+          :link="{ name: topicSlug, query: { theme: theme.name } }"
           :title="theme.name"
           :description="description"
         />

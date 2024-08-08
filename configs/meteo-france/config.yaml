@@ -166,6 +166,9 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
+    topicName:
+      slug: bouquets
+      name: Bouquet
     extrasToProcess: 'meteofrance'
     useThemes: false
     pageAllTopics: false
