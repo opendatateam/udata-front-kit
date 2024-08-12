@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DatasetCard } from '@etalab/data.gouv.fr-components'
-import type { Dataset } from '@etalab/data.gouv.fr-components'
+import { DatasetCard } from '@datagouv/components'
+import type { Dataset } from '@datagouv/components'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 

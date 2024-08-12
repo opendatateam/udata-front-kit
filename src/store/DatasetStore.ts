@@ -1,4 +1,4 @@
-import type { DatasetV2, License } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2, License } from '@datagouv/components'
 import { defineStore } from 'pinia'
 
 import type { BaseParams } from '@/model/api'

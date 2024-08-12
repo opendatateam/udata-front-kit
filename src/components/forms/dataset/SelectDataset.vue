@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2 } from '@datagouv/components'
 import { debounce } from 'lodash'
 import { defineModel, ref, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'

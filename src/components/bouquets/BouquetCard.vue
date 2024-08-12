@@ -3,7 +3,7 @@ import {
   useOwnerName,
   formatRelativeIfRecentDate,
   OrganizationNameWithCertificate
-} from '@etalab/data.gouv.fr-components'
+} from '@datagouv/components'
 import { toRef, ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 

@@ -8,7 +8,7 @@ import {
   Well,
   InformationPanel,
   type License
-} from '@etalab/data.gouv.fr-components'
+} from '@datagouv/components'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 

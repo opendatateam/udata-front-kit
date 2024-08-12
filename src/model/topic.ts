@@ -1,4 +1,4 @@
-import type { Owned, Rel } from '@etalab/data.gouv.fr-components'
+import type { Owned, Rel } from '@datagouv/components'
 
 import config from '@/config'
 
