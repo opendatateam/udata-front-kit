@@ -12,20 +12,19 @@ import {
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
+import ChartData from '@/components/ChartData.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import ReusesList from '@/components/ReusesList.vue'
+import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
+import DiscussionsList from '@/components/discussions/DiscussionsList.vue'
 import config from '@/config'
 import DatasetAddToBouquetModal from '@/custom/ecospheres/components/datasets/DatasetAddToBouquetModal.vue'
-
-import ChartData from '../../components/ChartData.vue'
-import DiscussionsList from '../../components/DiscussionsList.vue'
-import ReusesList from '../../components/ReusesList.vue'
-import ExtendedInformationPanel from '../../components/datasets/ExtendedInformationPanel.vue'
-import type { ResourceDataWithQuery } from '../../model/resource'
-import { useRouteParamsAsString } from '../../router/utils'
-import { useDatasetStore } from '../../store/DatasetStore'
-import { useResourceStore } from '../../store/ResourceStore'
-import { useUserStore } from '../../store/UserStore'
-import { descriptionFromMarkdown, formatDate } from '../../utils'
+import type { ResourceDataWithQuery } from '@/model/resource'
+import { useRouteParamsAsString } from '@/router/utils'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useResourceStore } from '@/store/ResourceStore'
+import { useUserStore } from '@/store/UserStore'
+import { descriptionFromMarkdown, formatDate } from '@/utils'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
