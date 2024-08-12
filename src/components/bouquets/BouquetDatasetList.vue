@@ -37,7 +37,7 @@ const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 // make a copy for local reordering before save
 const originalDatasets = ref([...datasets.value])
 
-const topicName = ref(config.website.topics.topic_name.name)
+const topicName = config.website.topics.topic_name.name
 
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])

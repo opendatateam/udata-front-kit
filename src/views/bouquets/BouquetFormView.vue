@@ -27,9 +27,9 @@ const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const extrasToProcess = ref(config.website.topics.extras_to_process)
-const topicName = ref(config.website.topics.topic_name.name)
-const topicSlug = ref(config.website.topics.topic_name.slug)
+const extrasToProcess = config.website.topics.extras_to_process
+const topicName = config.website.topics.topic_name.name
+const topicSlug = config.website.topics.topic_name.slug
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [extrasToProcess.value],

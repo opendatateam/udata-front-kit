@@ -20,12 +20,12 @@ const emits = defineEmits(['updateValidation'])
 const spatialCoverage = useSpatialCoverage(topic)
 
 const extrasToProcess = config.website.topics.extras_to_process
-const useThemes = ref(config.website.topics.themes.usage)
-const mainTheme = ref(config.website.topics.themes.main_name)
-const secondaryTheme = ref(config.website.topics.themes.secondary_name)
+const useThemes = config.website.topics.themes.usage
+const mainTheme = config.website.topics.themes.main_name
+const secondaryTheme = config.website.topics.themes.secondary_name
 
-const topicName = ref(config.website.topics.topic_name.name)
-const topicSlug = ref(config.website.topics.topic_name.slug)
+const topicName = config.website.topics.topic_name.name
+const topicSlug = config.website.topics.topic_name.slug
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)

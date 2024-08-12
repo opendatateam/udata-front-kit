@@ -4,7 +4,7 @@ import {
   formatRelativeIfRecentDate,
   OrganizationNameWithCertificate
 } from '@datagouv/components'
-import { toRef, ref } from 'vue'
+import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
@@ -27,7 +27,7 @@ const props = defineProps({
   }
 })
 
-const extrasToProcess = ref(config.website.topics.extras_to_process)
+const extrasToProcess = config.website.topics.extras_to_process
 
 const bouquetRef = toRef(props, topicName)
 const spatialCoverage = useSpatialCoverage(bouquetRef)

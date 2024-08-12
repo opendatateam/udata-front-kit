@@ -30,7 +30,7 @@ const datasetEditorialization = ref(
   config.website.topics.dataset_editorialization
 )
 
-const topicName = ref(config.website.topics.topic_name.name)
+const topicName = config.website.topics.topic_name.name
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({

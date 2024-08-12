@@ -52,8 +52,7 @@ const title = config.website.title
 const topicsConf = config.website.list_search_topics as TopicConf[]
 const hasOrganizationFilter = config.website.datasets.organization_filter
 
-const mainTheme = ref(config.website.topics.themes.main_name)
-const secondaryTheme = ref(config.website.topics.themes.secondary_name)
+const mainTheme = config.website.topics.themes.main_name
 
 const topicOptions = computed(() => {
   if (!topicsConf?.length) return

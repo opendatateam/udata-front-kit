@@ -58,13 +58,13 @@ let subtheme = ref<string | undefined>(undefined)
 let datasetsProperties = ref<DatasetProperties[]>([])
 let clonedFrom = ref<Topic | null>(null)
 
-const extrasToProcess = ref(config.website.topics.extras_to_process)
+const extrasToProcess = config.website.topics.extras_to_process
 const useThemes = config.website.topics.themes.usage
 const pageAllTopics = config.website.topics.page_all_topics
 const displayMetadata = config.website.topics.display_metadata
 const activateReadMore = config.website.topics.activate_read_more
 const datasetEditorialization = config.website.topics.dataset_editorialization
-const topicSlug = ref(config.website.topics.topic_name.slug)
+const topicSlug = config.website.topics.topic_name.slug
 
 let extras = useExtras(topic, extrasToProcess)
 datasetsProperties = extras.datasetsProperties

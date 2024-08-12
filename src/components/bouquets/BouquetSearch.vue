@@ -42,9 +42,9 @@ const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
 const topicName = config.website.topics.topic_name.slug
-const useThemes = ref(config.website.topics.themes.usage)
-const mainTheme = ref(config.website.topics.themes.main_name)
-const secondaryTheme = ref(config.website.topics.themes.secondary_name)
+const useThemes = config.website.topics.themes.usage
+const mainTheme = config.website.topics.themes.main_name
+const secondaryTheme = config.website.topics.themes.secondary_name
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (

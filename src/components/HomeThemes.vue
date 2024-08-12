@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed, type ComputedRef, ref } from 'vue'
+import { onMounted, computed, type ComputedRef } from 'vue'
 
 import config from '@/config'
 import type { Theme } from '@/model/theme'
@@ -15,7 +15,7 @@ const getCustomBoxShadow = (color: string) => {
 }
 
 const topicName = config.website.topics.topic_name.name
-const topicSlug = ref(config.website.topics.topic_name.slug)
+const topicSlug = config.website.topics.topic_name.slug
 
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {

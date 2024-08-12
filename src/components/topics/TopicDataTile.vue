@@ -1,12 +1,11 @@
 <script setup>
 import config from '@/config'
 
-const props = defineProps(['topicsData', 'urlHighlightedTopics'])
+defineProps(['topicsData', 'urlHighlightedTopics'])
 const goToPage = (page) => {
   window.location.href = page
 }
-const mainTheme = ref(config.website.topics.themes.main_name)
-const secondaryTheme = ref(config.website.topics.themes.secondary_name)
+const mainTheme = config.website.topics.themes.main_name
 </script>
 
 <template>
@@ -18,7 +17,7 @@ const secondaryTheme = ref(config.website.topics.themes.secondary_name)
       <div class="fr-grid-row fr-grid-row--gutters">
         <div
           v-for="topic in topicsData"
-          v-bind:key="topic.id"
+          :key="topic.id"
           class="fr-col-12 fr-col-md-6"
         >
           <div
