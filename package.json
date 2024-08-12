@@ -19,7 +19,7 @@
     "generate-robots-txt": "node scripts/generate-robots-txt.mjs"
   },
   "dependencies": {
-    "@etalab/data.gouv.fr-components": "^1.13.8",
+    "@datagouv/components": "^1.1.2",
     "@gouvminint/vue-dsfr": "^5.13.0",
     "@json2csv/plainjs": "^7.0.6",
     "@unhead/vue": "^1.9.4",

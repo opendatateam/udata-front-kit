@@ -1,3 +1,3 @@
-import type { Owned } from '@etalab/data.gouv.fr-components'
+import type { Owned } from '@datagouv/components'
 
 export type WithOwned<T> = T & Owned

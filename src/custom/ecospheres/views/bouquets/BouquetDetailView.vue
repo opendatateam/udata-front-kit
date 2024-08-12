@@ -3,7 +3,7 @@ import {
   ReadMore,
   OrganizationNameWithCertificate,
   excerpt
-} from '@etalab/data.gouv.fr-components'
+} from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import { ref, computed, watch } from 'vue'
 import type { Ref } from 'vue'
