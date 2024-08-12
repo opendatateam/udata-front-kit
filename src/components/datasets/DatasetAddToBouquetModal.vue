@@ -30,7 +30,7 @@ const datasetEditorialization = ref(
   config.website.topics.dataset_editorialization
 )
 
-const topicName = config.website.topics.topic_name.name
+const topicName = config.website.topics.topic_name.name as string
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -103,12 +103,9 @@ const submit = async () => {
     tags: bouquet.tags,
     extras: bouquet.extras
   })
-  toast(
-    `Jeu de données ajouté avec succès au ${topicName.value} "${bouquet.name}"`,
-    {
-      type: 'success'
-    }
-  )
+  toast(`Jeu de données ajouté avec succès au ${topicName} "${bouquet.name}"`, {
+    type: 'success'
+  })
   closeModal()
 }
 
@@ -151,8 +148,8 @@ onMounted(() => {
     </DsfrSelect>
 
     <DatasetPropertiesTextFields
-      v-model:dataset-properties="datasetProperties"
       v-if="datasetEditorialization"
+      v-model:dataset-properties="datasetProperties"
     />
   </DsfrModal>
 </template>

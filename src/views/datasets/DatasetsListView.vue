@@ -48,11 +48,12 @@ const selectedOrganizationId: Ref<string | null> = ref(null)
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
-const title = config.website.title
+const title = config.website.title as string
 const topicsConf = config.website.list_search_topics as TopicConf[]
-const hasOrganizationFilter = config.website.datasets.organization_filter
+const hasOrganizationFilter = config.website.datasets
+  .organization_filter as boolean
 
-const mainTheme = config.website.topics.themes.main_name
+const mainTheme = config.website.topics.themes.main_name as string
 
 const topicOptions = computed(() => {
   if (!topicsConf?.length) return

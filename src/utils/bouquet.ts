@@ -41,7 +41,7 @@ export const updateTopicPropertiesExtras = (
  */
 export const cloneTopic = (
   topic: Topic,
-  extrasToProcess: Ref<string>
+  extrasToProcess: string
 ): TopicPostData => {
   const { id, slug, ...data } = topic
   return {
@@ -56,7 +56,7 @@ export const cloneTopic = (
       {
         cloned_from: topic.id,
         datasets_properties: topic.extras[
-          extrasToProcess.value
+          extrasToProcess
         ].datasets_properties.map((dp: any) => {
           return {
             ...dp,
@@ -66,7 +66,7 @@ export const cloneTopic = (
           }
         })
       },
-      extrasToProcess.value
+      extrasToProcess
     )
   }
 }
@@ -75,11 +75,11 @@ export function useBreadcrumbLinksForTopic(
   theme: Ref<string | undefined>,
   subtheme: Ref<string | undefined>,
   topic: Ref<Topic | null>,
-  pageAllTopics: Ref<boolean | null>
+  pageAllTopics: boolean | null
 ): ComputedRef<BreadcrumbItem[]> {
   return computed(() => {
     const breadcrumbs = [{ to: '/', text: 'Accueil' }]
-    if (pageAllTopics.value === true) {
+    if (pageAllTopics === true) {
       breadcrumbs.push({ to: `/${topicSlug}`, text: `${topicName}s` })
     }
 

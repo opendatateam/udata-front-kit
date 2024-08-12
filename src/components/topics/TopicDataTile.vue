@@ -1,11 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import config from '@/config'
 
 defineProps(['topicsData', 'urlHighlightedTopics'])
-const goToPage = (page) => {
+
+const goToPage = (page: string) => {
   window.location.href = page
 }
-const mainTheme = config.website.topics.themes.main_name
+
+const mainTheme = config.website.topics.themes.main_name as string
 </script>
 
 <template>

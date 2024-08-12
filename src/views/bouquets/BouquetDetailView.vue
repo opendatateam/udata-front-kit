@@ -58,13 +58,14 @@ let subtheme = ref<string | undefined>(undefined)
 let datasetsProperties = ref<DatasetProperties[]>([])
 let clonedFrom = ref<Topic | null>(null)
 
-const extrasToProcess = config.website.topics.extras_to_process
-const useThemes = config.website.topics.themes.usage
-const pageAllTopics = config.website.topics.page_all_topics
-const displayMetadata = config.website.topics.display_metadata
-const activateReadMore = config.website.topics.activate_read_more
-const datasetEditorialization = config.website.topics.dataset_editorialization
-const topicSlug = config.website.topics.topic_name.slug
+const extrasToProcess = config.website.topics.extras_to_process as string
+const useThemes = config.website.topics.themes.usage as boolean
+const pageAllTopics = config.website.topics.page_all_topics as boolean
+const displayMetadata = config.website.topics.display_metadata as boolean
+const activateReadMore = config.website.topics.activate_read_more as boolean
+const datasetEditorialization = config.website.topics
+  .dataset_editorialization as boolean
+const topicSlug = config.website.topics.topic_name.slug as string
 
 let extras = useExtras(topic, extrasToProcess)
 datasetsProperties = extras.datasetsProperties
@@ -84,14 +85,14 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
 
 const goToEdit = () => {
   router.push({
-    name: `${topicSlug.value}_edit`,
+    name: `${topicSlug}_edit`,
     params: { bid: topic.value?.id }
   })
 }
 
 const goToClone = () => {
   router.push({
-    name: `${topicSlug.value}_add`,
+    name: `${topicSlug}_add`,
     query: { clone: topic.value?.id }
   })
 }
@@ -127,7 +128,7 @@ const onUpdateDatasets = () => {
             ({ remoteDeleted, ...data }) => data
           )
         },
-        extrasToProcess.value
+        extrasToProcess
       )
     })
     .finally(() => loader.hide())
@@ -143,7 +144,7 @@ const metaTitle = (): string => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: `${topicSlug.value}_detail`,
+    name: `${topicSlug}_detail`,
     params: { bid: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
@@ -169,7 +170,7 @@ watch(
         topic.value = res
         if (topic.value.slug !== props.bouquetId) {
           router.push({
-            name: `${topicSlug.value}_detail`,
+            name: `${topicSlug}_detail`,
             params: { bid: topic.value.slug }
           })
         }

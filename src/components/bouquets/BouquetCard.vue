@@ -17,8 +17,8 @@ import { useExtras } from '@/utils/bouquet'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
-const topicName = config.website.topics.topic_name.name
-const topicSlug = config.website.topics.topic_name.slug
+const topicSlug = config.website.topics.topic_name.slug as string
+const extrasToProcess = config.website.topics.extras_to_process as string
 
 const props = defineProps({
   bouquet: {
@@ -27,9 +27,7 @@ const props = defineProps({
   }
 })
 
-const extrasToProcess = config.website.topics.extras_to_process
-
-const bouquetRef = toRef(props, topicName)
+const bouquetRef = toRef(props, 'bouquet')
 const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)

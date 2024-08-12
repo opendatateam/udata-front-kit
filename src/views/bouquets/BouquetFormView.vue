@@ -27,15 +27,15 @@ const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const extrasToProcess = config.website.topics.extras_to_process
-const topicName = config.website.topics.topic_name.name
-const topicSlug = config.website.topics.topic_name.slug
+const extrasToProcess = config.website.topics.extras_to_process as string
+const topicName = config.website.topics.topic_name.name as string
+const topicSlug = config.website.topics.topic_name.slug as string
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
-  tags: [extrasToProcess.value],
+  tags: [extrasToProcess],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [extrasToProcess.value]: {
+    [extrasToProcess]: {
       theme: routeQuery.theme || NoOptionSelected,
       subtheme: routeQuery.subtheme || NoOptionSelected,
       datasets_properties: []
@@ -46,8 +46,7 @@ const errorMsg = ref('')
 const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
-  const extrasProperty = extrasToProcess.value
-  const extras = topic.value?.extras?.[extrasProperty] as
+  const extras = topic.value?.extras?.[extrasToProcess] as
     | TopicExtrasToProcess
     | undefined
   return (
@@ -62,7 +61,7 @@ const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
   operation()
     .then((response) => {
       router.push({
-        name: `${topicSlug.value}_detail`,
+        name: `${topicSlug}_detail`,
         params: { bid: response.slug }
       })
     })
@@ -97,12 +96,10 @@ const destroy = async () => {
   if (topic.value?.id === undefined) {
     throw Error('Trying to delete topic without topic id')
   }
-  if (
-    window.confirm(`Etes-vous sûr de vouloir supprimer ce ${topicName.value} ?`)
-  ) {
+  if (window.confirm(`Etes-vous sûr de vouloir supprimer ce ${topicName} ?`)) {
     useTopicStore()
       .delete(topic.value.id)
-      .then(() => router.push({ name: topicSlug.value }))
+      .then(() => router.push({ name: topicSlug }))
       .catch((error) => {
         errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
       })
@@ -112,13 +109,13 @@ const destroy = async () => {
 const cancel = () => {
   if (props.isCreate) {
     if (routeQuery.clone == null) {
-      router.push({ name: topicSlug.value })
+      router.push({ name: topicSlug })
     } else {
       router.go(-1)
     }
   } else {
     router.push({
-      name: `${topicSlug.value}_detail`,
+      name: `${topicSlug}_detail`,
       params: {
         bid: topic.value.slug
       }

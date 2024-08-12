@@ -41,10 +41,10 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
-const topicName = config.website.topics.topic_name.slug
-const useThemes = config.website.topics.themes.usage
-const mainTheme = config.website.topics.themes.main_name
-const secondaryTheme = config.website.topics.themes.secondary_name
+const topicName = config.website.topics.topic_name.slug as string
+const useThemes = config.website.topics.themes.usage as boolean
+const mainTheme = config.website.topics.themes.main_name as string
+const secondaryTheme = config.website.topics.themes.secondary_name as string
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (

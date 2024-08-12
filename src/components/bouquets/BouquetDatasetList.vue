@@ -37,7 +37,7 @@ const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 // make a copy for local reordering before save
 const originalDatasets = ref([...datasets.value])
 
-const topicName = config.website.topics.topic_name.name
+const topicName = config.website.topics.topic_name.name as string
 
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
@@ -60,7 +60,7 @@ const getAccordeonId = (index: number): string => {
 const removeDataset = (index: number) => {
   if (
     window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicName.value} ?`
+      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicName} ?`
     )
   ) {
     delete expandStore.value[getAccordeonId(index)]

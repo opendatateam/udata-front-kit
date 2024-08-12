@@ -42,9 +42,9 @@ const selectedTabIndex = ref(0)
 const license = ref<License>()
 const showAddToBouquetModal = ref(false)
 
-const pageSize = config.website.pagination_sizes.files_list
-const showDiscussions = config.website.discussions.dataset.display
-const topicName = config.website.topics.topic_name.name
+const pageSize = config.website.pagination_sizes.files_list as number
+const showDiscussions = config.website.discussions.dataset.display as boolean
+const topicName = config.website.topics.topic_name.name as string
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q

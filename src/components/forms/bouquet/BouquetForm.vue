@@ -19,19 +19,19 @@ const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
 
-const extrasToProcess = config.website.topics.extras_to_process
-const useThemes = config.website.topics.themes.usage
-const mainTheme = config.website.topics.themes.main_name
-const secondaryTheme = config.website.topics.themes.secondary_name
+const extrasToProcess = config.website.topics.extras_to_process as string
+const useThemes = config.website.topics.themes.usage as boolean
+const mainTheme = config.website.topics.themes.main_name as string
+const secondaryTheme = config.website.topics.themes.secondary_name as string
 
-const topicName = config.website.topics.topic_name.name
-const topicSlug = config.website.topics.topic_name.slug
+const topicName = config.website.topics.topic_name.name as string
+const topicSlug = config.website.topics.topic_name.slug as string
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
 
 const isValid = computed(() => {
-  if (useThemes.value) {
+  if (useThemes) {
     return (
       topic.value.name &&
       topic.value.name.trim() !== '' &&
@@ -132,7 +132,7 @@ onMounted(() => {
     />
   </div>
   <!-- Theme -->
-  <div class="fr-select-group fr-mt-1w" v-if="useThemes">
+  <div v-if="useThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_theme"
       >{{ mainTheme }} <span class="required">&nbsp;*</span></label
     >

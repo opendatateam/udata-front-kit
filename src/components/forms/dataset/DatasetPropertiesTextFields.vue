@@ -10,7 +10,7 @@ const props = defineProps({
   }
 })
 
-const topicName = config.website.topics.topic_name.name
+const topicName = config.website.topics.topic_name.name as string
 
 const emit = defineEmits(['update:datasetProperties'])
 
