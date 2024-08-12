@@ -75,11 +75,11 @@ export function useBreadcrumbLinksForTopic(
   theme: Ref<string | undefined>,
   subtheme: Ref<string | undefined>,
   topic: Ref<Topic | null>,
-  pageAllTopics: Ref<Boolean | null>
+  pageAllTopics: Ref<boolean | null>
 ): ComputedRef<BreadcrumbItem[]> {
   return computed(() => {
     const breadcrumbs = [{ to: '/', text: 'Accueil' }]
-    if (pageAllTopics) {
+    if (pageAllTopics.value === true) {
       breadcrumbs.push({ to: `/${topicSlug}`, text: `${topicName}s` })
     }
 
@@ -103,7 +103,7 @@ export function useBreadcrumbLinksForTopic(
 
 export function useExtras(
   topic: Ref<Topic | null>,
-  extrasProperty: Ref<string>
+  extrasProperty: string
 ): {
   theme: Ref<string | undefined>
   subtheme: Ref<string | undefined>
@@ -116,10 +116,10 @@ export function useExtras(
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
-    [topic, extrasProperty],
+    [topic],
     () => {
-      const extras = topic.value?.extras[extrasProperty.value]
-      if (extras) {
+      const extras = topic.value?.extras[extrasProperty]
+      if (extras != null) {
         theme.value = extras.theme
         subtheme.value = extras.subtheme
         datasetsProperties.value = extras.datasets_properties ?? []
