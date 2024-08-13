@@ -1,10 +1,11 @@
 import config from '@/config'
 import type { TopicsConf, ScopeAddTopicsConf } from '@/model/config'
+import type { SiteId } from '@/model/topic'
 
 interface TopicsConfNormalized {
   topicName: string
   topicSlug: string
-  extrasToProcess: string
+  extrasToProcess: SiteId
   useThemes: boolean
   mainTheme: string
   secondaryTheme: string

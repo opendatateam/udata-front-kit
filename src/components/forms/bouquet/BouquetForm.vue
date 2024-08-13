@@ -69,14 +69,10 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // sync theme and subtheme from local refs to topic
 watch([theme, subtheme], () => {
-  topic.value.extras = updateTopicPropertiesExtras(
-    topic.value,
-    {
-      theme: theme.value,
-      subtheme: subtheme.value
-    },
-    extrasToProcess
-  )
+  topic.value.extras = updateTopicPropertiesExtras(topic.value, {
+    theme: theme.value,
+    subtheme: subtheme.value
+  })
 })
 
 // sync validation state with parent component

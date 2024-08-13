@@ -4,10 +4,10 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
   type Topic,
-  type DynamicTopicExtras,
+  type TopicExtras,
   type TopicPostData,
   type DatasetProperties,
-  type TopicExtrasToProcess
+  type SiteTopicExtras
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -23,9 +23,8 @@ export const isAvailable = (availability: Availability): boolean => {
 
 export const updateTopicPropertiesExtras = (
   topic: Topic,
-  data: Partial<TopicExtrasToProcess>,
-  extrasToProcess: string
-): DynamicTopicExtras => {
+  data: Partial<SiteTopicExtras>
+): TopicExtras => {
   return {
     ...topic.extras,
     [extrasToProcess]: {
@@ -38,10 +37,7 @@ export const updateTopicPropertiesExtras = (
 /**
  * Build a fonctionnal v1 (POST format) topic from clone source data
  */
-export const cloneTopic = (
-  topic: Topic,
-  extrasToProcess: string
-): TopicPostData => {
+export const cloneTopic = (topic: Topic): TopicPostData => {
   const { id, slug, ...data } = topic
   return {
     ...data,
@@ -50,23 +46,19 @@ export const cloneTopic = (
     reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
-    extras: updateTopicPropertiesExtras(
-      topic,
-      {
-        cloned_from: topic.id,
-        datasets_properties: topic.extras[
-          extrasToProcess
-        ].datasets_properties.map((dp: any) => {
-          return {
-            ...dp,
-            id: null,
-            uri: null,
-            availability: Availability.NOT_AVAILABLE
-          }
-        })
-      },
-      extrasToProcess
-    )
+    extras: updateTopicPropertiesExtras(topic, {
+      cloned_from: topic.id,
+      datasets_properties: topic.extras[
+        extrasToProcess
+      ].datasets_properties.map((dp: any) => {
+        return {
+          ...dp,
+          id: null,
+          uri: null,
+          availability: Availability.NOT_AVAILABLE
+        }
+      })
+    })
   }
 }
 

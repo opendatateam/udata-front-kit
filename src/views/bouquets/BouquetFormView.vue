@@ -8,7 +8,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import { NoOptionSelected } from '@/model/theme'
-import type { TopicPostData, TopicExtrasToProcess } from '@/model/topic'
+import type { TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -45,9 +45,7 @@ const errorMsg = ref('')
 const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
-  const extras = topic.value?.extras?.[extrasToProcess] as
-    | TopicExtrasToProcess
-    | undefined
+  const extras = topic.value?.extras?.[extrasToProcess]
   return (
     topic.value?.id ||
     (props.isCreate && !routeQuery.clone) ||
@@ -129,7 +127,7 @@ onMounted(() => {
       .load(routeQuery.clone || routeParams.bid)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(remoteTopic, extrasToProcess)
+          topic.value = cloneTopic(remoteTopic)
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic

@@ -55,7 +55,6 @@ const canEdit = computed(() => {
 const canClone = computed(() => useUserStore().isLoggedIn)
 
 const {
-  extrasToProcess,
   pageAllTopics,
   displayMetadata,
   activateReadMore,
@@ -110,15 +109,11 @@ const onUpdateDatasets = () => {
       datasets: datasetsProperties.value
         .filter((d) => d.id !== null && d.remoteDeleted !== true)
         .map((d) => d.id),
-      extras: updateTopicPropertiesExtras(
-        topic.value,
-        {
-          datasets_properties: datasetsProperties.value.map(
-            ({ remoteDeleted, ...data }) => data
-          )
-        },
-        extrasToProcess
-      )
+      extras: updateTopicPropertiesExtras(topic.value, {
+        datasets_properties: datasetsProperties.value.map(
+          ({ remoteDeleted, ...data }) => data
+        )
+      })
     })
     .finally(() => loader.hide())
 }

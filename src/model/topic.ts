@@ -1,10 +1,10 @@
 import type { Owned, Rel } from '@datagouv/components'
 
-import { useTopicsConf } from '@/utils/config'
-
 import type { SpatialField } from './spatial'
 
-const { extrasToProcess } = useTopicsConf()
+// a placeholder for ecospheres, meteofrance...
+// values don't really matter, SiteId is used to cast the "real" config value
+export type SiteId = 'siteId'
 
 export enum Availability {
   MISSING = 'missing',
@@ -23,26 +23,21 @@ export interface DatasetProperties {
   remoteDeleted?: boolean
 }
 
-export interface TopicExtrasToProcess {
+export interface SiteTopicExtras {
   theme: string
   subtheme: string
   datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
 
-type BaseTopicExtras = Record<string, any>
-
-// FIXME: translates to [key in typeof string]
-export type DynamicTopicExtras = BaseTopicExtras & {
-  [key in typeof extrasToProcess]: TopicExtrasToProcess
-}
+export type TopicExtras = Record<SiteId, SiteTopicExtras>
 
 export type Topic = Owned & {
   name: string
   description: string
   created_at: string
   last_modified: string
-  extras: DynamicTopicExtras
+  extras: TopicExtras
   featured: boolean
   id: string
   page: string
