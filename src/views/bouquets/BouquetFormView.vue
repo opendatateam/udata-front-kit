@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
@@ -22,7 +23,7 @@ const props = defineProps({
 })
 
 const userStore = useUserStore()
-const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
+const { canAddBouquet } = storeToRefs(userStore)
 
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
@@ -142,7 +143,7 @@ onMounted(() => {
 
 <template>
   <GenericContainer class="fr-mt-4w">
-    <div v-if="showAddBouquet">
+    <div v-if="canAddBouquet">
       <form>
         <div class="fr-mt-4v">
           <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />

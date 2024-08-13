@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { ref, computed, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -45,7 +46,7 @@ const selectedQuery = ref('')
 const showDrafts = ref(false)
 
 const userStore = useUserStore()
-const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
+const { canAddBouquet } = storeToRefs(userStore)
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -101,7 +102,7 @@ watch(
     >
       <h1 class="fr-col-auto fr-mb-2v">{{ topicName }}s</h1>
       <div
-        v-if="showAddBouquet"
+        v-if="canAddBouquet"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <DsfrButton

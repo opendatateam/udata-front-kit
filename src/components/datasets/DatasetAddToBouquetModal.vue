@@ -8,6 +8,7 @@ import Tooltip from '@/components/TooltipWrapper.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
 import { Availability, type DatasetProperties, type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
+import { capitalize } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const props = defineProps({
@@ -129,7 +130,8 @@ onMounted(() => {
       :default-unselected-text="'Choisissez un ' + topicName"
     >
       <template #label>
-        {{ topicName }} à associer <span class="required">&nbsp;*</span>
+        {{ capitalize(topicName) }} à associer
+        <span class="required">&nbsp;*</span>
         <Tooltip
           :text="
             'Choisissez parmi les ' +

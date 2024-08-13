@@ -9,6 +9,7 @@ import {
   InformationPanel,
   type License
 } from '@datagouv/components'
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
@@ -33,8 +34,7 @@ const datasetId = route.params.did
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
-
-const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
+const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
@@ -245,8 +245,8 @@ onMounted(() => {
         <div
           v-if="
             config.website.datasets.add_to_bouquet &&
-            userStore.isLoggedIn &&
-            showAddBouquet
+            userStore.loggedIn &&
+            canAddBouquet
           "
         >
           <DsfrButton

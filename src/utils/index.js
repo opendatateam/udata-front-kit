@@ -60,3 +60,10 @@ export const formatDate = (dateString, short = false) => {
       }
   return new Intl.DateTimeFormat('default', params).format(date)
 }
+
+/**
+ * Capitalize first letter of string
+ */
+export const capitalize = (value) => {
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+}

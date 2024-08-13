@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import type { ComputedRef, PropType } from 'vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
@@ -18,7 +19,7 @@ const topicStore = useTopicStore()
 const { topicName, topicSlug, extrasToProcess } = useTopicsConf()
 
 const userStore = useUserStore()
-const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
+const { canAddBouquet } = storeToRefs(userStore)
 
 const props = defineProps({
   themeName: {
@@ -146,9 +147,9 @@ onMounted(() => {
             Réinitialiser les filtres
           </button>
           <button
+            v-if="canAddBouquet"
             class="fr-btn fr-btn--secondary fr-ml-1w"
             @click.stop.prevent="goToCreate"
-            v-if="showAddBouquet"
           >
             Ajouter un {{ topicName }}
           </button>

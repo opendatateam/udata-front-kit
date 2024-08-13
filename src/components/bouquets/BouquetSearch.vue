@@ -41,7 +41,7 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
-const { topicName, useThemes, mainTheme, secondaryTheme } = useTopicsConf()
+const { topicSlug, useThemes, mainTheme, secondaryTheme } = useTopicsConf()
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (
@@ -62,7 +62,7 @@ const computeQueryArgs = (
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    path: `/${topicName}`,
+    path: `/${topicSlug}`,
     query: computeQueryArgs(data),
     hash: '#main'
   })

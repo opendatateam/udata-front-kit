@@ -196,7 +196,7 @@ onMounted(() => {
       <h1 class="fr-col-auto fr-mb-2v">Jeux de données</h1>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <a
-          v-if="userStore.isAdmin()"
+          v-if="userStore.isAdmin"
           :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
           class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
         >
