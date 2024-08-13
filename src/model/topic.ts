@@ -30,10 +30,7 @@ export interface TopicExtrasToProcess {
   cloned_from?: string
 }
 
-// FIXME: linter error
-interface BaseTopicExtras {
-  [key: string]: any
-}
+type BaseTopicExtras = Record<string, any>
 
 // FIXME: translates to [key in typeof string]
 export type DynamicTopicExtras = BaseTopicExtras & {
