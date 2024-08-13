@@ -5,13 +5,12 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
-import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
-const topicSlug = config.website.topics.topic_name.slug
-const topicName = config.website.topics.topic_name.name
+const { topicSlug, topicName } = useTopicsConf()
 
 const router = useRouter()
 const route = useRoute()

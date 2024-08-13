@@ -2,11 +2,11 @@
 import { defineModel, computed, ref, onMounted, watch } from 'vue'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
-import config from '@/config'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { updateTopicPropertiesExtras } from '@/utils/bouquet'
+import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
@@ -18,14 +18,14 @@ const topic = defineModel({
 const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
-
-const extrasToProcess = config.website.topics.extras_to_process as string
-const useThemes = config.website.topics.themes.usage as boolean
-const mainTheme = config.website.topics.themes.main_name as string
-const secondaryTheme = config.website.topics.themes.secondary_name as string
-
-const topicName = config.website.topics.topic_name.name as string
-const topicSlug = config.website.topics.topic_name.slug as string
+const {
+  useThemes,
+  extrasToProcess,
+  mainTheme,
+  secondaryTheme,
+  topicName,
+  topicSlug
+} = useTopicsConf()
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
@@ -151,7 +151,7 @@ onMounted(() => {
     </select>
   </div>
   <!-- Subtheme -->
-  <div class="fr-select-group fr-mt-1w" v-if="useThemes">
+  <div v-if="useThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_subtheme"
       >{{ secondaryTheme }} <span class="required">&nbsp;*</span></label
     >

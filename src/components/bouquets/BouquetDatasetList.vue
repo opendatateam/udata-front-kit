@@ -9,6 +9,7 @@ import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
 import { fromMarkdown } from '@/utils'
 import { isAvailable } from '@/utils/bouquet'
+import { useTopicsConf } from '@/utils/config'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
@@ -37,7 +38,7 @@ const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 // make a copy for local reordering before save
 const originalDatasets = ref([...datasets.value])
 
-const topicName = config.website.topics.topic_name.name as string
+const { topicName } = useTopicsConf()
 
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])

@@ -4,14 +4,13 @@ import { onMounted, computed, type ComputedRef } from 'vue'
 import config from '@/config'
 import type { Theme } from '@/model/theme'
 import { useTopicStore } from '@/store/TopicStore'
+import { useTopicsConf } from '@/utils/config'
 
 import Tile from './Tile.vue'
 
 const topicStore = useTopicStore()
 
-const extrasToProcess = config.website.topics.extras_to_process as string
-const topicName = config.website.topics.topic_name.name as string
-const topicSlug = config.website.topics.topic_name.slug as string
+const { topicName, topicSlug, extrasToProcess } = useTopicsConf()
 
 const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`

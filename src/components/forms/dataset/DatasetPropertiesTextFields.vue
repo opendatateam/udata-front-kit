@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Tooltip from '@/components/TooltipWrapper.vue'
-import config from '@/config'
 import type { DatasetProperties } from '@/model/topic'
+import { useTopicsConf } from '@/utils/config'
 
 const props = defineProps({
   datasetProperties: {
@@ -10,7 +10,7 @@ const props = defineProps({
   }
 })
 
-const topicName = config.website.topics.topic_name.name as string
+const { topicName } = useTopicsConf()
 
 const emit = defineEmits(['update:datasetProperties'])
 

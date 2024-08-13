@@ -8,17 +8,16 @@ import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
+import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
-const topicSlug = config.website.topics.topic_name.slug as string
-const extrasToProcess = config.website.topics.extras_to_process as string
+const { topicSlug, extrasToProcess } = useTopicsConf()
 
 const props = defineProps({
   bouquet: {

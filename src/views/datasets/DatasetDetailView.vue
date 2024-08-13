@@ -25,6 +25,7 @@ import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
+import { useTopicsConf } from '@/utils/config'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -44,7 +45,7 @@ const showAddToBouquetModal = ref(false)
 
 const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
-const topicName = config.website.topics.topic_name.name as string
+const { topicName } = useTopicsConf()
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q

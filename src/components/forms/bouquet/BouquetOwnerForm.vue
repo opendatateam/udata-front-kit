@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineModel, computed, ref, watch, type Ref } from 'vue'
 
-import config from '@/config'
 import type { Topic } from '@/model/topic'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
 const topic = defineModel({
   type: Object as () => Topic,
@@ -11,13 +11,12 @@ const topic = defineModel({
 })
 
 const userStore = useUserStore()
+const { topicName } = useTopicsConf()
 
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
 )
 const organizations = computed(() => userStore.data?.organizations || [])
-
-const topicName = config.website.topics.topic_name.name as string
 
 const onSelectOrganization = (value: string) => {
   const idx = parseInt(value)

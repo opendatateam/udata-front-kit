@@ -7,10 +7,11 @@ import {
 
 import config from '@/config'
 import type { PageConfig } from '@/model/config'
+import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
 
-const topicSlug = config.website.topics.topic_name.slug
+const { topicSlug } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
 
 // common/default routes

@@ -1,12 +1,12 @@
 import type { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { watch } from 'vue'
 
-import config from '@/config'
 import type { WithOwned } from '@/model'
 import type { ExtendedUser } from '@/model/user'
 import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
+import { useTopicsConf } from '@/utils/config'
 
 const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
@@ -16,10 +16,6 @@ export interface RootState {
   isLoggedIn: boolean
   token: string | undefined
   data: ExtendedUser | undefined
-}
-interface RoleTopic {
-  all: boolean
-  authorized_users: Array<string>
 }
 
 export const useUserStore = defineStore('user', {
@@ -133,21 +129,22 @@ export const useUserStore = defineStore('user', {
       }
       return false
     },
+    // FIXME: use getter
     updateShowAddBouquet() {
-      const scopeAddTopics = ref<RoleTopic>(
-        config.website.topics.scope_add_topics
-      )
+      const { scopeAddTopics } = useTopicsConf()
 
-      if (scopeAddTopics.value.all) {
+      if (scopeAddTopics.all) {
         return true
       }
 
+      // FIXME: linter error
       if (this.isLoggedIn && this.data) {
+        // FIXME: linter error
         if (this.data.roles?.includes('admin')) {
           return true
         }
 
-        if (scopeAddTopics.value.authorized_users?.includes(this.data.id)) {
+        if (scopeAddTopics.authorized_users?.includes(this.data.id)) {
           return true
         }
       }

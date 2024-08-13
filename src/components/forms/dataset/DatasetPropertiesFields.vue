@@ -11,17 +11,14 @@ import {
 } from 'vue'
 import { useRouter } from 'vue-router'
 
-import config from '@/config'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
+import { useTopicsConf } from '@/utils/config'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
 const emit = defineEmits(['updateValidation'])
-const datasetEditorialization = ref(
-  config.website.topics.dataset_editorialization
-)
 
 const datasetProperties = defineModel({
   type: Object as PropType<DatasetProperties>,
@@ -37,6 +34,7 @@ defineProps({
 
 const router = useRouter()
 const datasetStore = useDatasetStore()
+const { datasetEditorialization } = useTopicsConf()
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
@@ -48,7 +46,7 @@ const hasMandatoryFields = computed(() => {
 })
 
 const isValidDataset = computed((): boolean => {
-  if (datasetEditorialization.value) {
+  if (datasetEditorialization) {
     return (
       !datasetProperties.value.remoteDeleted &&
       hasMandatoryFields.value &&
@@ -125,8 +123,8 @@ onMounted(() => {
 
 <template>
   <DatasetPropertiesTextFields
-    v-model:dataset-properties="datasetProperties"
     v-if="datasetEditorialization"
+    v-model:dataset-properties="datasetProperties"
   />
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="link"

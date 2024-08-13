@@ -3,11 +3,14 @@ import { computed, type ComputedRef } from 'vue'
 
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
-import type { TopicConf } from '@/model/config'
+import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import { useTopicsConf } from '@/utils/config'
 
 import { useUserStore } from './UserStore'
+
+const { extrasToProcess } = useTopicsConf()
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
@@ -65,7 +68,7 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Load topics to store from a list of ids and API
      */
-    async loadTopicsFromList(topics: TopicConf[]) {
+    async loadTopicsFromList(topics: TopicItemConf[]) {
       this.data = []
       for (const topic of topics) {
         const res = await topicsAPIv2.get({ entityId: topic.id })
@@ -92,7 +95,7 @@ export const useTopicStore = defineStore('topic', {
       let response = await topicsAPIv2.list({
         params: {
           page_size: config.website.pagination_sizes.topics_list,
-          tag: config.website.topics.extras_to_process,
+          tag: extrasToProcess,
           include_private: 'yes'
         }
       })

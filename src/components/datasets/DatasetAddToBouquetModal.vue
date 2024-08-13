@@ -6,9 +6,9 @@ import { useLoading } from 'vue-loading-overlay'
 
 import Tooltip from '@/components/TooltipWrapper.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
-import config from '@/config'
 import { Availability, type DatasetProperties, type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
+import { useTopicsConf } from '@/utils/config'
 
 const props = defineProps({
   show: {
@@ -25,12 +25,7 @@ const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
 
-const extrasToProcess = config.website.topics.extras_to_process
-const datasetEditorialization = ref(
-  config.website.topics.dataset_editorialization
-)
-
-const topicName = config.website.topics.topic_name.name as string
+const { topicName, extrasToProcess, datasetEditorialization } = useTopicsConf()
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -53,7 +48,7 @@ const bouquetOptions = computed(() => {
 })
 
 const isValid = computed(() => {
-  if (datasetEditorialization.value) {
+  if (datasetEditorialization) {
     return (
       datasetProperties.value.title.trim() !== '' &&
       datasetProperties.value.purpose.trim() !== '' &&

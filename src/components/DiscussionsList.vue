@@ -17,6 +17,7 @@ import LocalStorageService from '@/services/LocalStorageService'
 import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useUserStore } from '@/store/UserStore'
 import { formatDate } from '@/utils'
+import { useTopicsConf } from '@/utils/config'
 
 const route = useRoute()
 const router = useRouter()
@@ -24,7 +25,7 @@ const router = useRouter()
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const topicName = config.website.topics.topic_name.name
+const { topicName } = useTopicsConf()
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)

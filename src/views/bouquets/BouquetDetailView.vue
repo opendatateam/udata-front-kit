@@ -27,6 +27,7 @@ import {
   useExtras,
   updateTopicPropertiesExtras
 } from '@/utils/bouquet'
+import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeTextColor, getThemeColor } from '@/utils/theme'
 
@@ -58,15 +59,17 @@ let subtheme = ref<string | undefined>(undefined)
 let datasetsProperties = ref<DatasetProperties[]>([])
 let clonedFrom = ref<Topic | null>(null)
 
-const extrasToProcess = config.website.topics.extras_to_process as string
-const useThemes = config.website.topics.themes.usage as boolean
-const pageAllTopics = config.website.topics.page_all_topics as boolean
-const displayMetadata = config.website.topics.display_metadata as boolean
-const activateReadMore = config.website.topics.activate_read_more as boolean
-const datasetEditorialization = config.website.topics
-  .dataset_editorialization as boolean
-const topicSlug = config.website.topics.topic_name.slug as string
+const {
+  useThemes,
+  extrasToProcess,
+  pageAllTopics,
+  displayMetadata,
+  activateReadMore,
+  datasetEditorialization,
+  topicSlug
+} = useTopicsConf()
 
+// FIXME:
 let extras = useExtras(topic, extrasToProcess)
 datasetsProperties = extras.datasetsProperties
 clonedFrom = extras.clonedFrom

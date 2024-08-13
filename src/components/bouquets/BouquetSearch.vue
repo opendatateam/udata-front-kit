@@ -3,11 +3,11 @@ import { ref, watchEffect, toRef, type Ref, type PropType } from 'vue'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
-import config from '@/config'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 import { useThemeOptions } from '@/utils/theme'
 
 const spatialAPI = new SpatialAPI()
@@ -41,10 +41,7 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
-const topicName = config.website.topics.topic_name.slug as string
-const useThemes = config.website.topics.themes.usage as boolean
-const mainTheme = config.website.topics.themes.main_name as string
-const secondaryTheme = config.website.topics.themes.secondary_name as string
+const { topicName, useThemes, mainTheme, secondaryTheme } = useTopicsConf()
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (

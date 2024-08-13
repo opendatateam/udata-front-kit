@@ -6,13 +6,13 @@ import { useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
-import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { TopicPostData, TopicExtrasToProcess } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { cloneTopic } from '@/utils/bouquet'
+import { useTopicsConf } from '@/utils/config'
 
 const props = defineProps({
   isCreate: {
@@ -27,9 +27,7 @@ const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const extrasToProcess = config.website.topics.extras_to_process as string
-const topicName = config.website.topics.topic_name.name as string
-const topicSlug = config.website.topics.topic_name.slug as string
+const { topicName, topicSlug, extrasToProcess } = useTopicsConf()
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [extrasToProcess],

@@ -7,11 +7,12 @@ import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
-import type { TopicConf } from '@/model/config'
+import type { TopicItemConf } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
 defineEmits(['search'])
 const props = defineProps({
@@ -49,17 +50,17 @@ const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
 const title = config.website.title as string
-const topicsConf = config.website.list_search_topics as TopicConf[]
+const topicItems = config.website.list_search_topics as TopicItemConf[]
 const hasOrganizationFilter = config.website.datasets
   .organization_filter as boolean
 
-const mainTheme = config.website.topics.themes.main_name as string
+const { mainTheme } = useTopicsConf()
 
 const topicOptions = computed(() => {
-  if (!topicsConf?.length) return
+  if (!topicItems?.length) return
   const topics = topicStore.$state.data
     .filter((t) => {
-      return topicsConf.map((st) => st.id).includes(t.id)
+      return topicItems.map((st) => st.id).includes(t.id)
     })
     .map((t) => {
       return { value: t.id, text: t.name }
@@ -175,8 +176,8 @@ watch(
 )
 
 onMounted(() => {
-  if (topicsConf?.length) {
-    topicStore.loadTopicsFromList(topicsConf)
+  if (topicItems?.length) {
+    topicStore.loadTopicsFromList(topicItems)
   }
   if (hasOrganizationFilter) {
     useOrganizationStore().loadFromConfigFlat()
@@ -215,7 +216,7 @@ onMounted(() => {
         @search="$emit('search', $event)"
       />
     </div>
-    <div v-if="topicsConf" class="fr-col-md-12 fr-mb-2w">
+    <div v-if="topicItems" class="fr-col-md-12 fr-mb-2w">
       <DsfrSelect
         :model-value="selectedTopicId"
         :options="topicOptions"

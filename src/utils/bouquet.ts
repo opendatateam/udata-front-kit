@@ -1,6 +1,5 @@
 import { ref, watch, computed, type Ref, type ComputedRef } from 'vue'
 
-import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
@@ -12,9 +11,9 @@ import {
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
-const topicSlug = config.website.topics.topic_name.slug
-const topicName = config.website.topics.topic_name.name
+const { topicSlug, topicName } = useTopicsConf()
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(

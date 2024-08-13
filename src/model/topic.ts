@@ -1,8 +1,10 @@
 import type { Owned, Rel } from '@datagouv/components'
 
-import config from '@/config'
+import { useTopicsConf } from '@/utils/config'
 
 import type { SpatialField } from './spatial'
+
+const { extrasToProcess } = useTopicsConf()
 
 export enum Availability {
   MISSING = 'missing',
@@ -28,12 +30,12 @@ export interface TopicExtrasToProcess {
   cloned_from?: string
 }
 
-const extrasToProcess = config.website.topics.extras_to_process as string
-
+// FIXME: linter error
 interface BaseTopicExtras {
   [key: string]: any
 }
 
+// FIXME: translates to [key in typeof string]
 export type DynamicTopicExtras = BaseTopicExtras & {
   [key in typeof extrasToProcess]: TopicExtrasToProcess
 }

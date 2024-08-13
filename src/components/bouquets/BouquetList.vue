@@ -5,19 +5,17 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import BouquetCard from '@/components/bouquets/BouquetCard.vue'
-import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
 const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
 
-const extrasToProcess = config.website.topics.extras_to_process
-const topicName = config.website.topics.topic_name.name
-const topicSlug = config.website.topics.topic_name.slug
+const { topicName, topicSlug, extrasToProcess } = useTopicsConf()
 
 const userStore = useUserStore()
 const showAddBouquet = ref(computed(() => userStore.updateShowAddBouquet()))
