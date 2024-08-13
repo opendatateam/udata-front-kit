@@ -17,7 +17,7 @@ import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
-const { topicSlug, extrasToProcess } = useTopicsConf()
+const { topicSlug } = useTopicsConf()
 
 const props = defineProps({
   bouquet: {
@@ -31,10 +31,7 @@ const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const { theme, subtheme, datasetsProperties } = useExtras(
-  bouquetRef,
-  extrasToProcess
-)
+const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
 
 const nbData: number = datasetsProperties.value.length
 

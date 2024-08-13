@@ -137,7 +137,7 @@ website:
   topics:
     topic_name:
       slug: bouquets
-      name: Bouquet
+      name: bouquet
     extras_to_process: 'ecospheres'
     themes:
       usage: true

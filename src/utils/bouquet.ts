@@ -13,7 +13,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
-const { topicSlug, topicName } = useTopicsConf()
+const { topicSlug, topicName, extrasToProcess, useThemes } = useTopicsConf()
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
@@ -100,10 +100,7 @@ export function useBreadcrumbLinksForTopic(
   })
 }
 
-export function useExtras(
-  topic: Ref<Topic | null>,
-  extrasProperty: string
-): {
+export function useExtras(topic: Ref<Topic | null>): {
   theme: Ref<string | undefined>
   subtheme: Ref<string | undefined>
   datasetsProperties: Ref<DatasetProperties[]>
@@ -117,10 +114,10 @@ export function useExtras(
   watch(
     [topic],
     () => {
-      const extras = topic.value?.extras[extrasProperty]
+      const extras = topic.value?.extras[extrasToProcess]
       if (extras != null) {
-        theme.value = extras.theme
-        subtheme.value = extras.subtheme
+        theme.value = useThemes ? extras.theme : undefined
+        subtheme.value = useThemes ? extras.subtheme : undefined
         datasetsProperties.value = extras.datasets_properties ?? []
 
         if (extras.cloned_from != null) {

@@ -17,7 +17,7 @@ import ReusesList from '@/components/ReusesList.vue'
 import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
 import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
 import config from '@/config'
-import { type Topic, type DatasetProperties } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -54,13 +54,7 @@ const canEdit = computed(() => {
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
 
-let theme = ref<string | undefined>(undefined)
-let subtheme = ref<string | undefined>(undefined)
-let datasetsProperties = ref<DatasetProperties[]>([])
-let clonedFrom = ref<Topic | null>(null)
-
 const {
-  useThemes,
   extrasToProcess,
   pageAllTopics,
   displayMetadata,
@@ -69,15 +63,7 @@ const {
   topicSlug
 } = useTopicsConf()
 
-// FIXME:
-let extras = useExtras(topic, extrasToProcess)
-datasetsProperties = extras.datasetsProperties
-clonedFrom = extras.clonedFrom
-
-if (useThemes) {
-  theme = extras.theme
-  subtheme = extras.subtheme
-}
+const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(topic)
 
 const breadcrumbLinks = useBreadcrumbLinksForTopic(
   theme,
