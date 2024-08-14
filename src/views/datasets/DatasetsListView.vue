@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DatasetCard } from '@datagouv/components'
 import debounce from 'lodash/debounce'
-import { computed, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref, capitalize } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -223,7 +223,7 @@ onMounted(() => {
         default-unselected-text="Toutes les données"
         @update:model-value="onSelectTopic"
       >
-        <template #label>{{ topicsMainTheme }}s</template>
+        <template #label>{{ capitalize(topicsMainTheme) }}s</template>
       </DsfrSelect>
     </div>
     <div v-if="hasOrganizationFilter" class="fr-col-md-12 fr-mb-2w">

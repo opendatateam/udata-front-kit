@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineModel, computed, ref, onMounted, watch } from 'vue'
+import { defineModel, computed, ref, onMounted, watch, capitalize } from 'vue'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
@@ -130,7 +130,8 @@ onMounted(() => {
   <!-- Theme -->
   <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_theme"
-      >{{ topicsMainTheme }} <span class="required">&nbsp;*</span></label
+      >{{ capitalize(topicsMainTheme) }}
+      <span class="required">&nbsp;*</span></label
     >
     <select id="select_theme" class="fr-select" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
@@ -149,7 +150,8 @@ onMounted(() => {
   <!-- Subtheme -->
   <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_subtheme"
-      >{{ topicsSecondaryTheme }} <span class="required">&nbsp;*</span></label
+      >{{ capitalize(topicsSecondaryTheme) }}
+      <span class="required">&nbsp;*</span></label
     >
     <select
       id="select_subtheme"

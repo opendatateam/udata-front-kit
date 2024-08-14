@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref, watchEffect, toRef, type Ref, type PropType } from 'vue'
+import {
+  ref,
+  watchEffect,
+  toRef,
+  type Ref,
+  type PropType,
+  capitalize
+} from 'vue'
 import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
@@ -115,10 +122,10 @@ watchEffect(() => {
       name="show_drafts"
       @update:model-value="switchLocalShowDrafts"
     />
-    <div v-if="topicsUseThemes">
+    <template v-if="topicsUseThemes">
       <div class="fr-select-group">
         <label class="fr-label" for="select_theme">
-          {{ topicsMainTheme }}s
+          {{ capitalize(topicsMainTheme) }}s
         </label>
         <select
           id="select_theme"
@@ -143,7 +150,7 @@ watchEffect(() => {
       </div>
       <div class="fr-select-group">
         <label class="fr-label" for="select_subtheme">
-          {{ topicsSecondaryTheme }}s
+          {{ capitalize(topicsSecondaryTheme) }}s
         </label>
         <select
           id="select_subtheme"
@@ -166,7 +173,7 @@ watchEffect(() => {
           </option>
         </select>
       </div>
-    </div>
+    </template>
     <div class="fr-select-group">
       <label class="fr-label" for="select_subtheme"
         >Couverture territoriale</label

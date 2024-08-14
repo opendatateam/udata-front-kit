@@ -266,8 +266,8 @@ website:
     extras_key: 'ecospheres'
     themes:
       usage: true
-      main_name: Domaine
-      secondary_name: Sous-domaine
+      main_name: domaine
+      secondary_name: sous-domaine
     # include a list page with all topics
     list_all: false
     display_metadata: false

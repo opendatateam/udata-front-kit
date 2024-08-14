@@ -140,8 +140,8 @@ website:
     extras_key: 'ecospheres'
     themes:
       usage: true
-      main_name: Thématique
-      secondary_name: Chantier
+      main_name: thématique
+      secondary_name: chantier
     # include a list page with all topics
     list_all: true
     display_metadata: true
