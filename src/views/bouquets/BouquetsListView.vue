@@ -9,6 +9,7 @@ import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
+import { capitalize } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const { topicSlug, topicName } = useTopicsConf()
@@ -100,7 +101,7 @@ watch(
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
-      <h1 class="fr-col-auto fr-mb-2v">{{ topicName }}s</h1>
+      <h1 class="fr-col-auto fr-mb-2v">{{ capitalize(topicName) }}s</h1>
       <div
         v-if="canAddBouquet"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"

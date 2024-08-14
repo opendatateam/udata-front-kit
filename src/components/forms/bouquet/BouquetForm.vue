@@ -20,7 +20,7 @@ const emits = defineEmits(['updateValidation'])
 const spatialCoverage = useSpatialCoverage(topic)
 const {
   useThemes,
-  extrasToProcess,
+  topicExtrasKey,
   mainTheme,
   secondaryTheme,
   topicName,
@@ -38,8 +38,8 @@ const isValid = computed(() => {
       topic.value.description &&
       topic.value.description.trim() !== '' &&
       topic.value.extras &&
-      topic.value.extras[extrasToProcess].theme !== NoOptionSelected &&
-      topic.value.extras[extrasToProcess].subtheme !== NoOptionSelected
+      topic.value.extras[topicExtrasKey].theme !== NoOptionSelected &&
+      topic.value.extras[topicExtrasKey].subtheme !== NoOptionSelected
     )
   } else {
     return (
@@ -86,8 +86,8 @@ watch(
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  theme.value = topic.value.extras[extrasToProcess].theme
-  subtheme.value = topic.value.extras[extrasToProcess].subtheme
+  theme.value = topic.value.extras[topicExtrasKey].theme
+  subtheme.value = topic.value.extras[topicExtrasKey].subtheme
 })
 </script>
 

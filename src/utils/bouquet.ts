@@ -13,7 +13,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
-const { topicSlug, topicName, extrasToProcess, useThemes } = useTopicsConf()
+const { topicSlug, topicName, topicExtrasKey, useThemes } = useTopicsConf()
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
@@ -27,8 +27,8 @@ export const updateTopicPropertiesExtras = (
 ): TopicExtras => {
   return {
     ...topic.extras,
-    [extrasToProcess]: {
-      ...topic.extras[extrasToProcess],
+    [topicExtrasKey]: {
+      ...topic.extras[topicExtrasKey],
       ...data
     }
   }
@@ -48,16 +48,16 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
     owner: useUserStore().data ?? null,
     extras: updateTopicPropertiesExtras(topic, {
       cloned_from: topic.id,
-      datasets_properties: topic.extras[
-        extrasToProcess
-      ].datasets_properties.map((dp: any) => {
-        return {
-          ...dp,
-          id: null,
-          uri: null,
-          availability: Availability.NOT_AVAILABLE
+      datasets_properties: topic.extras[topicExtrasKey].datasets_properties.map(
+        (dp: any) => {
+          return {
+            ...dp,
+            id: null,
+            uri: null,
+            availability: Availability.NOT_AVAILABLE
+          }
         }
-      })
+      )
     })
   }
 }
@@ -106,7 +106,7 @@ export function useExtras(topic: Ref<Topic | null>): {
   watch(
     [topic],
     () => {
-      const extras = topic.value?.extras[extrasToProcess]
+      const extras = topic.value?.extras[topicExtrasKey]
       if (extras != null) {
         theme.value = useThemes ? extras.theme : undefined
         subtheme.value = useThemes ? extras.subtheme : undefined

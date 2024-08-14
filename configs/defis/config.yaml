@@ -213,7 +213,7 @@ website:
     topic_name:
       slug: defis
       name: Défi
-    extras_to_process: 'defis'
+    extras_key: 'defis'
     themes:
       usage: false
       main_name: Thématique

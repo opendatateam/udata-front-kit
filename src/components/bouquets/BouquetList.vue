@@ -16,7 +16,7 @@ const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
 
-const { topicName, topicSlug, extrasToProcess } = useTopicsConf()
+const { topicName, topicSlug, topicExtrasKey } = useTopicsConf()
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
@@ -58,11 +58,11 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
     })
     .filter((bouquet) => {
       if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras[extrasToProcess].theme === props.themeName
+      return bouquet.extras[topicExtrasKey].theme === props.themeName
     })
     .filter((bouquet) => {
       if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras[extrasToProcess].subtheme === props.subthemeName
+      return bouquet.extras[topicExtrasKey].subtheme === props.subthemeName
     })
     .filter((bouquet) => {
       if (props.query === '') return true

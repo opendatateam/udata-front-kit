@@ -5,7 +5,7 @@ import type { SiteId } from '@/model/topic'
 interface TopicsConfNormalized {
   topicName: string
   topicSlug: string
-  extrasToProcess: SiteId
+  topicExtrasKey: SiteId
   useThemes: boolean
   mainTheme: string
   secondaryTheme: string
@@ -19,16 +19,16 @@ interface TopicsConfNormalized {
 export const useTopicsConf = (): TopicsConfNormalized => {
   const topicsConf = config.website.topics as TopicsConf
   return {
-    topicName: config.website.topics.topic_name.name,
+    topicName: topicsConf.topic_name.name,
     topicSlug: topicsConf.topic_name.slug,
-    extrasToProcess: config.website.topics.extras_to_process,
-    useThemes: config.website.topics.themes.usage,
-    mainTheme: config.website.topics.themes.main_name,
-    secondaryTheme: config.website.topics.themes.secondary_name,
-    datasetEditorialization: config.website.topics.dataset_editorialization,
-    scopeAddTopics: config.website.topics.scope_add_topics,
-    pageAllTopics: config.website.topics.page_all_topics,
-    displayMetadata: config.website.topics.display_metadata,
-    activateReadMore: config.website.topics.activate_read_more
+    topicExtrasKey: topicsConf.extras_key,
+    useThemes: topicsConf.themes.usage,
+    mainTheme: topicsConf.themes.main_name,
+    secondaryTheme: topicsConf.themes.secondary_name,
+    datasetEditorialization: topicsConf.dataset_editorialization,
+    scopeAddTopics: topicsConf.scope_add_topics,
+    pageAllTopics: topicsConf.page_all_topics,
+    displayMetadata: topicsConf.display_metadata,
+    activateReadMore: topicsConf.activate_read_more
   }
 }

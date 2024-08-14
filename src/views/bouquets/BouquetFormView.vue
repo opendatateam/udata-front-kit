@@ -28,13 +28,13 @@ const { canAddBouquet } = storeToRefs(userStore)
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const { topicName, topicSlug, extrasToProcess } = useTopicsConf()
+const { topicName, topicSlug, topicExtrasKey } = useTopicsConf()
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
-  tags: [extrasToProcess],
+  tags: [topicExtrasKey],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [extrasToProcess]: {
+    [topicExtrasKey]: {
       theme: routeQuery.theme || NoOptionSelected,
       subtheme: routeQuery.subtheme || NoOptionSelected,
       datasets_properties: []
@@ -45,7 +45,7 @@ const errorMsg = ref('')
 const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
-  const extras = topic.value?.extras?.[extrasToProcess]
+  const extras = topic.value?.extras?.[topicExtrasKey]
   return (
     topic.value?.id ||
     (props.isCreate && !routeQuery.clone) ||

@@ -1,3 +1,5 @@
+import type { SiteId } from './topic'
+
 export interface ScopeAddTopicsConf {
   all: boolean
   authorized_users: string[]
@@ -8,7 +10,7 @@ export interface TopicsConf {
     slug: string
     name: string
   }
-  extras_to_process: string
+  extras_key: SiteId
   themes: {
     usage: boolean
     main_name: string

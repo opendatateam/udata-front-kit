@@ -10,7 +10,7 @@ import Tile from './Tile.vue'
 
 const topicStore = useTopicStore()
 
-const { topicName, topicSlug, extrasToProcess } = useTopicsConf()
+const { topicName, topicSlug, topicExtrasKey } = useTopicsConf()
 
 const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
@@ -18,7 +18,7 @@ const getCustomBoxShadow = (color: string) => {
 
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {
-    return !topic.private && topic.extras[extrasToProcess].theme === theme.name
+    return !topic.private && topic.extras[topicExtrasKey].theme === theme.name
   }).length
   switch (nbBouquets) {
     case 0:

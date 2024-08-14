@@ -10,7 +10,7 @@ import { useTopicsConf } from '@/utils/config'
 
 import { useUserStore } from './UserStore'
 
-const { extrasToProcess } = useTopicsConf()
+const { topicExtrasKey } = useTopicsConf()
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
@@ -95,7 +95,7 @@ export const useTopicStore = defineStore('topic', {
       let response = await topicsAPIv2.list({
         params: {
           page_size: config.website.pagination_sizes.topics_list,
-          tag: extrasToProcess,
+          tag: topicExtrasKey,
           include_private: 'yes'
         }
       })

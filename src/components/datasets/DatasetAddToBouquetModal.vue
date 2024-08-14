@@ -26,7 +26,7 @@ const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
 
-const { topicName, extrasToProcess, datasetEditorialization } = useTopicsConf()
+const { topicName, topicExtrasKey, datasetEditorialization } = useTopicsConf()
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -76,7 +76,7 @@ const modalActions = computed(() => {
 })
 
 const isDatasetInBouquet = (bouquet: Topic): boolean => {
-  const datasetsProperties = bouquet.extras[extrasToProcess].datasets_properties
+  const datasetsProperties = bouquet.extras[topicExtrasKey].datasets_properties
   return datasetsProperties.some(
     (datasetProps: any) => datasetProps.id === props.dataset.id
   )
@@ -91,9 +91,9 @@ const submit = async () => {
     throw Error('Topic not in store')
   }
   const newDatasetsProperties =
-    bouquet.extras[extrasToProcess].datasets_properties || []
+    bouquet.extras[topicExtrasKey].datasets_properties || []
   newDatasetsProperties.push(datasetProperties.value)
-  bouquet.extras[extrasToProcess].datasets_properties = newDatasetsProperties
+  bouquet.extras[topicExtrasKey].datasets_properties = newDatasetsProperties
   await topicStore.update(bouquet.id, {
     id: bouquet.id,
     tags: bouquet.tags,
