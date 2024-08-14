@@ -178,8 +178,8 @@ website:
     display_metadata: false
     activate_read_more: false
     dataset_editorialization: false
-    scope_add_topics:
-      all: false
+    can_add_topics:
+      everyone: false
       authorized_users:
         - 6230733357772160a4f77fbaxx
 themes:

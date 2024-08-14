@@ -1,5 +1,5 @@
 import config from '@/config'
-import type { TopicsConf, ScopeAddTopicsConf } from '@/model/config'
+import type { TopicsConf, CanAddTopicsConf } from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
 interface TopicsConfNormalized {
@@ -10,7 +10,7 @@ interface TopicsConfNormalized {
   topicsMainTheme: string
   topicsSecondaryTheme: string
   topicsDatasetEditorialization: boolean
-  scopeAddTopics: ScopeAddTopicsConf
+  topicsCanAdd: CanAddTopicsConf
   pageAllTopics: boolean
   topicsDisplayMetadata: boolean
   topicsActivateReadMore: boolean
@@ -26,7 +26,7 @@ export const useTopicsConf = (): TopicsConfNormalized => {
     topicsMainTheme: topicsConf.themes.main_name,
     topicsSecondaryTheme: topicsConf.themes.secondary_name,
     topicsDatasetEditorialization: topicsConf.dataset_editorialization,
-    scopeAddTopics: topicsConf.scope_add_topics,
+    topicsCanAdd: topicsConf.can_add_topics,
     pageAllTopics: topicsConf.page_all_topics,
     topicsDisplayMetadata: topicsConf.display_metadata,
     topicsActivateReadMore: topicsConf.activate_read_more

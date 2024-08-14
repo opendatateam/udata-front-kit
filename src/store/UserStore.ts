@@ -10,7 +10,7 @@ import { useTopicsConf } from '@/utils/config'
 
 const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
-const { scopeAddTopics } = useTopicsConf()
+const { topicsCanAdd } = useTopicsConf()
 
 export interface RootState {
   isInited: boolean
@@ -34,11 +34,11 @@ export const useUserStore = defineStore('user', {
       return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
     },
     canAddBouquet(state): boolean {
-      if (scopeAddTopics.all || this.isAdmin) {
+      if (topicsCanAdd.everyone || this.isAdmin) {
         return true
       }
       if (this.loggedIn && state.data != null) {
-        if (scopeAddTopics.authorized_users?.includes(state.data.id)) {
+        if (topicsCanAdd.authorized_users?.includes(state.data.id)) {
           return true
         }
       }

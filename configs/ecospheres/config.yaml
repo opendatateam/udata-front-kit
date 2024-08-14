@@ -147,8 +147,8 @@ website:
     display_metadata: true
     activate_read_more: true
     dataset_editorialization: true
-    scope_add_topics:
-      all: true
+    can_add_topics:
+      everyone: true
       authorized_users:
 themes:
   - name: Se loger

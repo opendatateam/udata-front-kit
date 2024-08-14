@@ -1,7 +1,7 @@
 import type { SiteId } from './topic'
 
-export interface ScopeAddTopicsConf {
-  all: boolean
+export interface CanAddTopicsConf {
+  everyone: boolean
   authorized_users: string[]
 }
 
@@ -20,7 +20,7 @@ export interface TopicsConf {
   display_metadata: boolean
   activate_read_more: boolean
   dataset_editorialization: boolean
-  scope_add_topics: ScopeAddTopicsConf
+  can_add_topics: CanAddTopicsConf
 }
 
 export interface TopicItemConf {
