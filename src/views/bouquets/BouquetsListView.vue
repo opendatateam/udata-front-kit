@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { ref, computed, watch, type Ref } from 'vue'
+import { ref, computed, watch, type Ref, capitalize } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -9,7 +9,6 @@ import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
-import { capitalize } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const { topicsSlug, topicsName } = useTopicsConf()

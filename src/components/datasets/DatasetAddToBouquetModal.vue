@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, capitalize } from 'vue'
 import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'
 
@@ -8,7 +8,6 @@ import Tooltip from '@/components/TooltipWrapper.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
 import { Availability, type DatasetProperties, type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
-import { capitalize } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const props = defineProps({

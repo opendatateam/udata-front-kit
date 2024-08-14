@@ -1,4 +1,11 @@
-import { ref, watch, computed, type Ref, type ComputedRef } from 'vue'
+import {
+  ref,
+  watch,
+  computed,
+  type Ref,
+  type ComputedRef,
+  capitalize
+} from 'vue'
 
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
@@ -11,7 +18,6 @@ import {
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { capitalize } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const { topicsSlug, topicsName, topicsExtrasKey, topicsUseThemes } =
