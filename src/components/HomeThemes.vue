@@ -10,7 +10,7 @@ import Tile from './Tile.vue'
 
 const topicStore = useTopicStore()
 
-const { topicName, topicSlug, topicExtrasKey } = useTopicsConf()
+const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
 
 const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
@@ -18,15 +18,15 @@ const getCustomBoxShadow = (color: string) => {
 
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {
-    return !topic.private && topic.extras[topicExtrasKey].theme === theme.name
+    return !topic.private && topic.extras[topicsExtrasKey].theme === theme.name
   }).length
   switch (nbBouquets) {
     case 0:
-      return `Aucun  ${topicName}`
+      return `Aucun  ${topicsName}`
     case 1:
-      return `1 ${topicName}`
+      return `1 ${topicsName}`
     default:
-      return `${nbBouquets} ${topicName}s`
+      return `${nbBouquets} ${topicsName}s`
   }
 }
 
@@ -55,7 +55,7 @@ onMounted(() => {
       >
         <Tile
           :style="getCustomBoxShadow(theme.color)"
-          :link="{ name: topicSlug, query: { theme: theme.name } }"
+          :link="{ name: topicsSlug, query: { theme: theme.name } }"
           :title="theme.name"
           :description="description"
         />

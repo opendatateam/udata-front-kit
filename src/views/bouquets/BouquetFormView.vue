@@ -28,13 +28,13 @@ const { canAddBouquet } = storeToRefs(userStore)
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const { topicName, topicSlug, topicExtrasKey } = useTopicsConf()
+const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
-  tags: [topicExtrasKey],
+  tags: [topicsExtrasKey],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [topicExtrasKey]: {
+    [topicsExtrasKey]: {
       theme: routeQuery.theme || NoOptionSelected,
       subtheme: routeQuery.subtheme || NoOptionSelected,
       datasets_properties: []
@@ -45,7 +45,7 @@ const errorMsg = ref('')
 const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
-  const extras = topic.value?.extras?.[topicExtrasKey]
+  const extras = topic.value?.extras?.[topicsExtrasKey]
   return (
     topic.value?.id ||
     (props.isCreate && !routeQuery.clone) ||
@@ -58,7 +58,7 @@ const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
   operation()
     .then((response) => {
       router.push({
-        name: `${topicSlug}_detail`,
+        name: `${topicsSlug}_detail`,
         params: { bid: response.slug }
       })
     })
@@ -93,10 +93,10 @@ const destroy = async () => {
   if (topic.value?.id === undefined) {
     throw Error('Trying to delete topic without topic id')
   }
-  if (window.confirm(`Etes-vous sûr de vouloir supprimer ce ${topicName} ?`)) {
+  if (window.confirm(`Etes-vous sûr de vouloir supprimer ce ${topicsName} ?`)) {
     useTopicStore()
       .delete(topic.value.id)
-      .then(() => router.push({ name: topicSlug }))
+      .then(() => router.push({ name: topicsSlug }))
       .catch((error) => {
         errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
       })
@@ -106,13 +106,13 @@ const destroy = async () => {
 const cancel = () => {
   if (props.isCreate) {
     if (routeQuery.clone == null) {
-      router.push({ name: topicSlug })
+      router.push({ name: topicsSlug })
     } else {
       router.go(-1)
     }
   } else {
     router.push({
-      name: `${topicSlug}_detail`,
+      name: `${topicsSlug}_detail`,
       params: {
         bid: topic.value.slug
       }
@@ -150,7 +150,7 @@ onMounted(() => {
           class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
         >
           <h1 class="fr-col-auto fr-mb-2v">
-            {{ isCreate ? `Nouveau ${topicName}` : topic.name }}
+            {{ isCreate ? `Nouveau ${topicsName}` : topic.name }}
           </h1>
           <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
             <DsfrButton
@@ -176,7 +176,7 @@ onMounted(() => {
           </div>
         </div>
         <div class="fr-mt-4w">
-          <h2>Description du {{ topicName }} de données</h2>
+          <h2>Description du {{ topicsName }} de données</h2>
           <BouquetForm
             v-if="isReadyForForm"
             v-model="topic"
@@ -184,7 +184,7 @@ onMounted(() => {
           />
         </div>
         <div class="fr-mt-4w">
-          <h2>Propriétaire du {{ topicName }}</h2>
+          <h2>Propriétaire du {{ topicsName }}</h2>
           <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
         </div>
         <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
@@ -212,7 +212,7 @@ onMounted(() => {
       </form>
     </div>
     <div v-else>
-      Vous n'avez pas les droits pour ajouter un {{ topicName }}.
+      Vous n'avez pas les droits pour ajouter un {{ topicsName }}.
     </div>
   </GenericContainer>
 </template>

@@ -4,7 +4,7 @@ import { useTopicsConf } from '@/utils/config'
 
 import type { GenericResponse } from './api'
 
-const { topicName } = useTopicsConf()
+const { topicsName } = useTopicsConf()
 
 export type Reuse = Owned & {
   id: string
@@ -27,5 +27,5 @@ export interface ReuseType {
 export enum ReuseModel {
   dataset = 'jeu de donnée',
   // FIXME:
-  topic = topicName as any
+  topic = topicsName as any
 }

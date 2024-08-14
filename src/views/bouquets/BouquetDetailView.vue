@@ -59,7 +59,7 @@ const {
   displayMetadata,
   activateReadMore,
   datasetEditorialization,
-  topicSlug
+  topicsSlug
 } = useTopicsConf()
 
 const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(topic)
@@ -73,14 +73,14 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
 
 const goToEdit = () => {
   router.push({
-    name: `${topicSlug}_edit`,
+    name: `${topicsSlug}_edit`,
     params: { bid: topic.value?.id }
   })
 }
 
 const goToClone = () => {
   router.push({
-    name: `${topicSlug}_add`,
+    name: `${topicsSlug}_add`,
     query: { clone: topic.value?.id }
   })
 }
@@ -128,7 +128,7 @@ const metaTitle = (): string => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: `${topicSlug}_detail`,
+    name: `${topicsSlug}_detail`,
     params: { bid: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
@@ -154,7 +154,7 @@ watch(
         topic.value = res
         if (topic.value.slug !== props.bouquetId) {
           router.push({
-            name: `${topicSlug}_detail`,
+            name: `${topicsSlug}_detail`,
             params: { bid: topic.value.slug }
           })
         }
@@ -253,7 +253,7 @@ watch(
             <p>
               <RouterLink
                 :to="{
-                  name: `${topicSlug}_detail`,
+                  name: `${topicsSlug}_detail`,
                   params: { bid: clonedFrom.slug }
                 }"
               >

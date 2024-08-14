@@ -16,7 +16,7 @@ const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
 
-const { topicName, topicSlug, topicExtrasKey } = useTopicsConf()
+const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
@@ -58,11 +58,11 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
     })
     .filter((bouquet) => {
       if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras[topicExtrasKey].theme === props.themeName
+      return bouquet.extras[topicsExtrasKey].theme === props.themeName
     })
     .filter((bouquet) => {
       if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras[topicExtrasKey].subtheme === props.subthemeName
+      return bouquet.extras[topicsExtrasKey].subtheme === props.subthemeName
     })
     .filter((bouquet) => {
       if (props.query === '') return true
@@ -72,20 +72,20 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (bouquets.value.length === 1) {
-    return `1 ${topicName} disponible`
+    return `1 ${topicsName} disponible`
   } else {
-    return bouquets.value.length + ` ${topicName}s disponibles`
+    return bouquets.value.length + ` ${topicsName}s disponibles`
   }
 })
 
 const goToCreate = () => {
-  router.push({ name: `${topicSlug}_add`, query: route.query })
+  router.push({ name: `${topicsSlug}_add`, query: route.query })
 }
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicSlug, hash: '#main', query })
+  router.push({ name: topicsSlug, hash: '#main', query })
 }
 
 onMounted(() => {
@@ -139,7 +139,7 @@ onMounted(() => {
           <p class="fr-mt-1v fr-mb-3v">
             Essayez de réinitialiser les filtres pour agrandir votre champ de
             recherche.<br />
-            Vous pouvez aussi contribuer en créant un {{ topicName }}.
+            Vous pouvez aussi contribuer en créant un {{ topicsName }}.
           </p>
         </div>
         <div class="fr-grid-row fr-grid-row--undefined">
@@ -151,7 +151,7 @@ onMounted(() => {
             class="fr-btn fr-btn--secondary fr-ml-1w"
             @click.stop.prevent="goToCreate"
           >
-            Ajouter un {{ topicName }}
+            Ajouter un {{ topicsName }}
           </button>
         </div>
       </div>

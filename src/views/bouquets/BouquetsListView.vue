@@ -12,7 +12,7 @@ import { useUserStore } from '@/store/UserStore'
 import { capitalize } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
-const { topicSlug, topicName } = useTopicsConf()
+const { topicsSlug, topicsName } = useTopicsConf()
 
 const router = useRouter()
 const route = useRoute()
@@ -52,11 +52,11 @@ const { canAddBouquet } = storeToRefs(userStore)
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
   links.push({ text: 'Accueil', to: '/' })
-  links.push({ text: `${topicName}s`, to: `/${topicSlug}` })
+  links.push({ text: `${topicsName}s`, to: `/${topicsSlug}` })
   if (selectedTheme.value !== NoOptionSelected && selectedTheme.value !== '') {
     links.push({
       text: selectedTheme.value,
-      to: `/${topicSlug}?theme=${selectedTheme.value}&subtheme=${NoOptionSelected}`
+      to: `/${topicsSlug}?theme=${selectedTheme.value}&subtheme=${NoOptionSelected}`
     })
     if (
       selectedSubtheme.value !== NoOptionSelected &&
@@ -69,12 +69,12 @@ const breadcrumbList = computed(() => {
 })
 
 const goToCreate = () => {
-  router.push({ name: `${topicSlug}_add`, query: route.query })
+  router.push({ name: `${topicsSlug}_add`, query: route.query })
 }
 
 const search = () => {
   router.push({
-    name: topicSlug,
+    name: topicsSlug,
     query: { ...route.query, q: selectedQuery.value },
     hash: '#main'
   })
@@ -101,14 +101,14 @@ watch(
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
-      <h1 class="fr-col-auto fr-mb-2v">{{ capitalize(topicName) }}s</h1>
+      <h1 class="fr-col-auto fr-mb-2v">{{ capitalize(topicsName) }}s</h1>
       <div
         v-if="canAddBouquet"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <DsfrButton
           class="fr-mb-1w"
-          :label="'Ajouter un ' + topicName"
+          :label="'Ajouter un ' + topicsName"
           icon="ri-add-circle-line"
           @click="goToCreate"
         />
@@ -118,7 +118,7 @@ watch(
       <DsfrSearchBar
         v-model="selectedQuery"
         label="Rechercher"
-        :placeholder="'Rechercher un ' + topicName"
+        :placeholder="'Rechercher un ' + topicsName"
         @update:model-value="search"
       />
     </div>

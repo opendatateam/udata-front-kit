@@ -54,7 +54,7 @@ const topicItems = config.website.list_search_topics as TopicItemConf[]
 const hasOrganizationFilter = config.website.datasets
   .organization_filter as boolean
 
-const { mainTheme } = useTopicsConf()
+const { topicsMainTheme } = useTopicsConf()
 
 const topicOptions = computed(() => {
   if (!topicItems?.length) return
@@ -223,7 +223,7 @@ onMounted(() => {
         default-unselected-text="Toutes les données"
         @update:model-value="onSelectTopic"
       >
-        <template #label>{{ mainTheme }}s</template>
+        <template #label>{{ topicsMainTheme }}s</template>
       </DsfrSelect>
     </div>
     <div v-if="hasOrganizationFilter" class="fr-col-md-12 fr-mb-2w">

@@ -41,7 +41,8 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
-const { topicSlug, useThemes, mainTheme, secondaryTheme } = useTopicsConf()
+const { topicsSlug, topicsUseThemes, topicsMainTheme, topicsSecondaryTheme } =
+  useTopicsConf()
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (
@@ -62,7 +63,7 @@ const computeQueryArgs = (
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    path: `/${topicSlug}`,
+    path: `/${topicsSlug}`,
     query: computeQueryArgs(data),
     hash: '#main'
   })
@@ -114,9 +115,11 @@ watchEffect(() => {
       name="show_drafts"
       @update:model-value="switchLocalShowDrafts"
     />
-    <div v-if="useThemes">
+    <div v-if="topicsUseThemes">
       <div class="fr-select-group">
-        <label class="fr-label" for="select_theme"> {{ mainTheme }}s </label>
+        <label class="fr-label" for="select_theme">
+          {{ topicsMainTheme }}s
+        </label>
         <select
           id="select_theme"
           class="fr-select"
@@ -126,7 +129,7 @@ watchEffect(() => {
             :value="NoOptionSelected"
             :selected="themeName == NoOptionSelected"
           >
-            Toutes les {{ mainTheme }}s
+            Toutes les {{ topicsMainTheme }}s
           </option>
           <option
             v-for="option in themeOptions"
@@ -140,7 +143,7 @@ watchEffect(() => {
       </div>
       <div class="fr-select-group">
         <label class="fr-label" for="select_subtheme">
-          {{ secondaryTheme }}s
+          {{ topicsSecondaryTheme }}s
         </label>
         <select
           id="select_subtheme"
@@ -151,7 +154,7 @@ watchEffect(() => {
             :value="NoOptionSelected"
             :selected="subthemeName == NoOptionSelected"
           >
-            Tous les {{ secondaryTheme }}s
+            Tous les {{ topicsSecondaryTheme }}s
           </option>
           <option
             v-for="option in subthemeOptions"

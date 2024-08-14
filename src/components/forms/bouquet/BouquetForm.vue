@@ -19,27 +19,27 @@ const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
 const {
-  useThemes,
-  topicExtrasKey,
-  mainTheme,
-  secondaryTheme,
-  topicName,
-  topicSlug
+  topicsUseThemes,
+  topicsExtrasKey,
+  topicsMainTheme,
+  topicsSecondaryTheme,
+  topicsName,
+  topicsSlug
 } = useTopicsConf()
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
 
 const isValid = computed(() => {
-  if (useThemes) {
+  if (topicsUseThemes) {
     return (
       topic.value.name &&
       topic.value.name.trim() !== '' &&
       topic.value.description &&
       topic.value.description.trim() !== '' &&
       topic.value.extras &&
-      topic.value.extras[topicExtrasKey].theme !== NoOptionSelected &&
-      topic.value.extras[topicExtrasKey].subtheme !== NoOptionSelected
+      topic.value.extras[topicsExtrasKey].theme !== NoOptionSelected &&
+      topic.value.extras[topicsExtrasKey].subtheme !== NoOptionSelected
     )
   } else {
     return (
@@ -86,28 +86,28 @@ watch(
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  theme.value = topic.value.extras[topicExtrasKey].theme
-  subtheme.value = topic.value.extras[topicExtrasKey].subtheme
+  theme.value = topic.value.extras[topicsExtrasKey].theme
+  subtheme.value = topic.value.extras[topicsExtrasKey].subtheme
 })
 </script>
 
 <template>
   <!-- Title -->
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" :for="topicSlug + '_name'"
-      >Sujet du {{ topicName }} <span class="required">&nbsp;*</span></label
+    <label class="fr-label" :for="topicsSlug + '_name'"
+      >Sujet du {{ topicsName }} <span class="required">&nbsp;*</span></label
     >
     <input
-      :id="topicSlug + '_name'"
+      :id="topicsSlug + '_name'"
       v-model="topic.name"
       class="fr-input"
       type="text"
-      :placeholder="'Mon ' + topicName"
+      :placeholder="'Mon ' + topicsName"
     />
   </div>
   <!-- Description -->
   <div class="fr-mt-1w">
-    <div>Objectif du {{ topicName }}<span class="required">&nbsp;*</span></div>
+    <div>Objectif du {{ topicsName }}<span class="required">&nbsp;*</span></div>
     <div>
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
@@ -116,25 +116,25 @@ onMounted(() => {
       pour mettre en forme votre texte
     </div>
     <textarea
-      :id="topicSlug + '_description'"
+      :id="topicsSlug + '_description'"
       v-model="topic.description"
       class="fr-input"
       type="text"
       :placeholder="
         'Renseignez ici les informations nécessaires à la compréhension du ' +
-        topicName +
+        topicsName +
         ': politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l\'organisme porteur du projet, etc.'
       "
     />
   </div>
   <!-- Theme -->
-  <div v-if="useThemes" class="fr-select-group fr-mt-1w">
+  <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_theme"
-      >{{ mainTheme }} <span class="required">&nbsp;*</span></label
+      >{{ topicsMainTheme }} <span class="required">&nbsp;*</span></label
     >
     <select id="select_theme" class="fr-select" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
-        Choisir une {{ mainTheme }}
+        Choisir une {{ topicsMainTheme }}
       </option>
       <option
         v-for="option in themeOptions"
@@ -147,9 +147,9 @@ onMounted(() => {
     </select>
   </div>
   <!-- Subtheme -->
-  <div v-if="useThemes" class="fr-select-group fr-mt-1w">
+  <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_subtheme"
-      >{{ secondaryTheme }} <span class="required">&nbsp;*</span></label
+      >{{ topicsSecondaryTheme }} <span class="required">&nbsp;*</span></label
     >
     <select
       id="select_subtheme"
@@ -161,7 +161,7 @@ onMounted(() => {
         :value="NoOptionSelected"
         :selected="subtheme == NoOptionSelected"
       >
-        Choisir un {{ secondaryTheme }}
+        Choisir un {{ topicsSecondaryTheme }}
       </option>
       <option
         v-for="option in subthemeOptions"

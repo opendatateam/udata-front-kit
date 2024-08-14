@@ -10,7 +10,7 @@ const props = defineProps({
   }
 })
 
-const { topicName } = useTopicsConf()
+const { topicsName } = useTopicsConf()
 
 const emit = defineEmits(['update:datasetProperties'])
 
@@ -45,7 +45,7 @@ const updateDatasetProperties = (
   </div>
   <div class="fr-mt-1w fr-mb-4w">
     <div class="container">
-      Raison d'utilisation dans ce {{ topicName }}
+      Raison d'utilisation dans ce {{ topicsName }}
       <span class="required">&nbsp;*</span>
       <Tooltip
         text="Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est pas évidente. Vous pouvez également utiliser cet espace pour renseigner des problèmes liés à l'accès ou la qualité des données."

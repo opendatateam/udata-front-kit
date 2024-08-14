@@ -13,7 +13,8 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
-const { topicSlug, topicName, topicExtrasKey, useThemes } = useTopicsConf()
+const { topicsSlug, topicsName, topicsExtrasKey, topicsUseThemes } =
+  useTopicsConf()
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
@@ -27,8 +28,8 @@ export const updateTopicPropertiesExtras = (
 ): TopicExtras => {
   return {
     ...topic.extras,
-    [topicExtrasKey]: {
-      ...topic.extras[topicExtrasKey],
+    [topicsExtrasKey]: {
+      ...topic.extras[topicsExtrasKey],
       ...data
     }
   }
@@ -48,16 +49,16 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
     owner: useUserStore().data ?? null,
     extras: updateTopicPropertiesExtras(topic, {
       cloned_from: topic.id,
-      datasets_properties: topic.extras[topicExtrasKey].datasets_properties.map(
-        (dp: any) => {
-          return {
-            ...dp,
-            id: null,
-            uri: null,
-            availability: Availability.NOT_AVAILABLE
-          }
+      datasets_properties: topic.extras[
+        topicsExtrasKey
+      ].datasets_properties.map((dp: any) => {
+        return {
+          ...dp,
+          id: null,
+          uri: null,
+          availability: Availability.NOT_AVAILABLE
         }
-      )
+      })
     })
   }
 }
@@ -71,15 +72,15 @@ export function useBreadcrumbLinksForTopic(
   return computed(() => {
     const breadcrumbs = [{ to: '/', text: 'Accueil' }]
     if (pageAllTopics === true) {
-      breadcrumbs.push({ to: `/${topicSlug}`, text: `${topicName}s` })
+      breadcrumbs.push({ to: `/${topicsSlug}`, text: `${topicsName}s` })
     }
 
     if (theme.value !== undefined && subtheme.value !== undefined) {
       breadcrumbs.push(
-        { text: theme.value, to: `/${topicSlug}/?theme=${theme.value}` },
+        { text: theme.value, to: `/${topicsSlug}/?theme=${theme.value}` },
         {
           text: subtheme.value,
-          to: `/${topicSlug}/?theme=${theme.value}&subtheme=${subtheme.value}`
+          to: `/${topicsSlug}/?theme=${theme.value}&subtheme=${subtheme.value}`
         }
       )
     }
@@ -106,10 +107,10 @@ export function useExtras(topic: Ref<Topic | null>): {
   watch(
     [topic],
     () => {
-      const extras = topic.value?.extras[topicExtrasKey]
+      const extras = topic.value?.extras[topicsExtrasKey]
       if (extras != null) {
-        theme.value = useThemes ? extras.theme : undefined
-        subtheme.value = useThemes ? extras.subtheme : undefined
+        theme.value = topicsUseThemes ? extras.theme : undefined
+        subtheme.value = topicsUseThemes ? extras.subtheme : undefined
         datasetsProperties.value = extras.datasets_properties ?? []
 
         if (extras.cloned_from != null) {

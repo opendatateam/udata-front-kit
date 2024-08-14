@@ -38,7 +38,7 @@ const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 // make a copy for local reordering before save
 const originalDatasets = ref([...datasets.value])
 
-const { topicName } = useTopicsConf()
+const { topicsName } = useTopicsConf()
 
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
@@ -61,7 +61,7 @@ const getAccordeonId = (index: number): string => {
 const removeDataset = (index: number) => {
   if (
     window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicName} ?`
+      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicsName} ?`
     )
   ) {
     delete expandStore.value[getAccordeonId(index)]
@@ -101,7 +101,7 @@ const triggerReorder = () => {
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
   >
     <h2 class="fr-col-auto fr-mb-2v">
-      Composition du {{ topicName }} de données
+      Composition du {{ topicsName }} de données
     </h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
@@ -146,7 +146,7 @@ const triggerReorder = () => {
   </div>
   <!-- Actual datasets list -->
   <div v-if="datasets.length < 1" class="no-dataset">
-    <p>Ce {{ topicName }} ne contient pas encore de jeux de données</p>
+    <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">

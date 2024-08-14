@@ -25,7 +25,7 @@ const router = useRouter()
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const { topicName } = useTopicsConf()
+const { topicsName } = useTopicsConf()
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
@@ -45,7 +45,7 @@ const props = defineProps({
 
 const subjectClassLabels = {
   Dataset: 'jeu de données',
-  Topic: topicName
+  Topic: topicsName
 }
 
 const discussionForm: Ref<DiscussionForm> = ref({

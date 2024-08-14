@@ -3,12 +3,12 @@ import type { TopicsConf, ScopeAddTopicsConf } from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
 interface TopicsConfNormalized {
-  topicName: string
-  topicSlug: string
-  topicExtrasKey: SiteId
-  useThemes: boolean
-  mainTheme: string
-  secondaryTheme: string
+  topicsName: string
+  topicsSlug: string
+  topicsExtrasKey: SiteId
+  topicsUseThemes: boolean
+  topicsMainTheme: string
+  topicsSecondaryTheme: string
   datasetEditorialization: boolean
   scopeAddTopics: ScopeAddTopicsConf
   pageAllTopics: boolean
@@ -19,12 +19,12 @@ interface TopicsConfNormalized {
 export const useTopicsConf = (): TopicsConfNormalized => {
   const topicsConf = config.website.topics as TopicsConf
   return {
-    topicName: topicsConf.topic_name.name,
-    topicSlug: topicsConf.topic_name.slug,
-    topicExtrasKey: topicsConf.extras_key,
-    useThemes: topicsConf.themes.usage,
-    mainTheme: topicsConf.themes.main_name,
-    secondaryTheme: topicsConf.themes.secondary_name,
+    topicsName: topicsConf.topic_name.name,
+    topicsSlug: topicsConf.topic_name.slug,
+    topicsExtrasKey: topicsConf.extras_key,
+    topicsUseThemes: topicsConf.themes.usage,
+    topicsMainTheme: topicsConf.themes.main_name,
+    topicsSecondaryTheme: topicsConf.themes.secondary_name,
     datasetEditorialization: topicsConf.dataset_editorialization,
     scopeAddTopics: topicsConf.scope_add_topics,
     pageAllTopics: topicsConf.page_all_topics,

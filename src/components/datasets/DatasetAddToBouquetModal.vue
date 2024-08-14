@@ -26,7 +26,7 @@ const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
 
-const { topicName, topicExtrasKey, datasetEditorialization } = useTopicsConf()
+const { topicsName, topicsExtrasKey, datasetEditorialization } = useTopicsConf()
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -76,7 +76,7 @@ const modalActions = computed(() => {
 })
 
 const isDatasetInBouquet = (bouquet: Topic): boolean => {
-  const datasetsProperties = bouquet.extras[topicExtrasKey].datasets_properties
+  const datasetsProperties = bouquet.extras[topicsExtrasKey].datasets_properties
   return datasetsProperties.some(
     (datasetProps: any) => datasetProps.id === props.dataset.id
   )
@@ -91,17 +91,20 @@ const submit = async () => {
     throw Error('Topic not in store')
   }
   const newDatasetsProperties =
-    bouquet.extras[topicExtrasKey].datasets_properties || []
+    bouquet.extras[topicsExtrasKey].datasets_properties || []
   newDatasetsProperties.push(datasetProperties.value)
-  bouquet.extras[topicExtrasKey].datasets_properties = newDatasetsProperties
+  bouquet.extras[topicsExtrasKey].datasets_properties = newDatasetsProperties
   await topicStore.update(bouquet.id, {
     id: bouquet.id,
     tags: bouquet.tags,
     extras: bouquet.extras
   })
-  toast(`Jeu de données ajouté avec succès au ${topicName} "${bouquet.name}"`, {
-    type: 'success'
-  })
+  toast(
+    `Jeu de données ajouté avec succès au ${topicsName} "${bouquet.name}"`,
+    {
+      type: 'success'
+    }
+  )
   closeModal()
 }
 
@@ -119,7 +122,7 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    :title="'Ajouter le jeu de données à un ' + topicName"
+    :title="'Ajouter le jeu de données à un ' + topicsName"
     :opened="show"
     :actions="modalActions"
     @close="closeModal"
@@ -127,17 +130,17 @@ onMounted(() => {
     <DsfrSelect
       v-model="selectedBouquetId"
       :options="bouquetOptions"
-      :default-unselected-text="'Choisissez un ' + topicName"
+      :default-unselected-text="'Choisissez un ' + topicsName"
     >
       <template #label>
-        {{ capitalize(topicName) }} à associer
+        {{ capitalize(topicsName) }} à associer
         <span class="required">&nbsp;*</span>
         <Tooltip
           :text="
             'Choisissez parmi les ' +
-            topicName +
+            topicsName +
             's dont vous êtes l\'auteur. Si un ' +
-            topicName +
+            topicsName +
             ' apparait désactivé, c\'est que le jeu de données y est déjà associé.'
           "
         />

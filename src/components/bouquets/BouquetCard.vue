@@ -17,7 +17,7 @@ import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
-const { topicSlug } = useTopicsConf()
+const { topicsSlug } = useTopicsConf()
 
 const props = defineProps({
   bouquet: {
@@ -36,7 +36,7 @@ const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
 const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
-  name: `${topicSlug}_detail`,
+  name: `${topicsSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
 </script>

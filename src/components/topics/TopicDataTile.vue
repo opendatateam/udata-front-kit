@@ -3,7 +3,7 @@ import { useTopicsConf } from '@/utils/config'
 
 defineProps(['topicsData', 'urlHighlightedTopics'])
 
-const { mainTheme } = useTopicsConf()
+const { topicsMainTheme } = useTopicsConf()
 
 const goToPage = (page: string) => {
   window.location.href = page
@@ -14,7 +14,7 @@ const goToPage = (page: string) => {
   <div>
     <div v-if="topicsData.length" class="datagouv-components fr-mt-5w">
       <h2 class="subtitle subtitle--uppercase text-align-left">
-        {{ mainTheme }}s
+        {{ topicsMainTheme }}s
       </h2>
       <div class="fr-grid-row fr-grid-row--gutters">
         <div
