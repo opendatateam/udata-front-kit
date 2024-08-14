@@ -55,7 +55,7 @@ const canEdit = computed(() => {
 const canClone = computed(() => useUserStore().isLoggedIn)
 
 const {
-  pageAllTopics,
+  topicsListAll,
   topicsDisplayMetadata,
   topicsActivateReadMore,
   topicsDatasetEditorialization,
@@ -68,7 +68,7 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
   theme,
   subtheme,
   topic,
-  pageAllTopics
+  topicsListAll
 )
 
 const goToEdit = () => {

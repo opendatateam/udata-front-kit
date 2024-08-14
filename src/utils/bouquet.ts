@@ -11,6 +11,7 @@ import {
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { capitalize } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const { topicsSlug, topicsName, topicsExtrasKey, topicsUseThemes } =
@@ -67,12 +68,15 @@ export function useBreadcrumbLinksForTopic(
   theme: Ref<string | undefined>,
   subtheme: Ref<string | undefined>,
   topic: Ref<Topic | null>,
-  pageAllTopics: boolean | null
+  topicsListAll: boolean | null
 ): ComputedRef<BreadcrumbItem[]> {
   return computed(() => {
     const breadcrumbs = [{ to: '/', text: 'Accueil' }]
-    if (pageAllTopics === true) {
-      breadcrumbs.push({ to: `/${topicsSlug}`, text: `${topicsName}s` })
+    if (topicsListAll === true) {
+      breadcrumbs.push({
+        to: `/${topicsSlug}`,
+        text: `${capitalize(topicsName)}s`
+      })
     }
 
     if (theme.value !== undefined && subtheme.value !== undefined) {

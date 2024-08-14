@@ -52,7 +52,7 @@ const { canAddBouquet } = storeToRefs(userStore)
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
   links.push({ text: 'Accueil', to: '/' })
-  links.push({ text: `${topicsName}s`, to: `/${topicsSlug}` })
+  links.push({ text: `${capitalize(topicsName)}s`, to: `/${topicsSlug}` })
   if (selectedTheme.value !== NoOptionSelected && selectedTheme.value !== '') {
     links.push({
       text: selectedTheme.value,

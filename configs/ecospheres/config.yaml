@@ -135,15 +135,15 @@ website:
       - CSW-ISO-19139
     show_extended_information_panel: true
   topics:
-    topic_name:
-      slug: bouquets
-      name: bouquet
+    slug: bouquets
+    name: bouquet
     extras_key: 'ecospheres'
     themes:
       usage: true
       main_name: Thématique
       secondary_name: Chantier
-    page_all_topics: true
+    # include a list page with all topics
+    list_all: true
     display_metadata: true
     activate_read_more: true
     dataset_editorialization: true

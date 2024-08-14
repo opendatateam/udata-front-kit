@@ -11,7 +11,7 @@ interface TopicsConfNormalized {
   topicsSecondaryTheme: string
   topicsDatasetEditorialization: boolean
   topicsCanAdd: CanAddTopicsConf
-  pageAllTopics: boolean
+  topicsListAll: boolean
   topicsDisplayMetadata: boolean
   topicsActivateReadMore: boolean
 }
@@ -19,15 +19,17 @@ interface TopicsConfNormalized {
 export const useTopicsConf = (): TopicsConfNormalized => {
   const topicsConf = config.website.topics as TopicsConf
   return {
-    topicsName: topicsConf.topic_name.name,
-    topicsSlug: topicsConf.topic_name.slug,
+    topicsName: topicsConf.name,
+    topicsSlug: topicsConf.slug,
     topicsExtrasKey: topicsConf.extras_key,
     topicsUseThemes: topicsConf.themes.usage,
     topicsMainTheme: topicsConf.themes.main_name,
     topicsSecondaryTheme: topicsConf.themes.secondary_name,
     topicsDatasetEditorialization: topicsConf.dataset_editorialization,
     topicsCanAdd: topicsConf.can_add_topics,
-    pageAllTopics: topicsConf.page_all_topics,
+    // FIXME: this applies only to breadcrumb on topic detail page
+    // apply it also to menu and routes...?
+    topicsListAll: topicsConf.list_all,
     topicsDisplayMetadata: topicsConf.display_metadata,
     topicsActivateReadMore: topicsConf.activate_read_more
   }
