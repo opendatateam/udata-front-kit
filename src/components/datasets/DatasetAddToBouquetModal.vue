@@ -26,7 +26,8 @@ const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
 
-const { topicsName, topicsExtrasKey, datasetEditorialization } = useTopicsConf()
+const { topicsName, topicsExtrasKey, topicsDatasetEditorialization } =
+  useTopicsConf()
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -49,7 +50,7 @@ const bouquetOptions = computed(() => {
 })
 
 const isValid = computed(() => {
-  if (datasetEditorialization) {
+  if (topicsDatasetEditorialization) {
     return (
       datasetProperties.value.title.trim() !== '' &&
       datasetProperties.value.purpose.trim() !== '' &&
@@ -148,7 +149,7 @@ onMounted(() => {
     </DsfrSelect>
 
     <DatasetPropertiesTextFields
-      v-if="datasetEditorialization"
+      v-if="topicsDatasetEditorialization"
       v-model:dataset-properties="datasetProperties"
     />
   </DsfrModal>

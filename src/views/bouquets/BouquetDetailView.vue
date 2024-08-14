@@ -56,9 +56,9 @@ const canClone = computed(() => useUserStore().isLoggedIn)
 
 const {
   pageAllTopics,
-  displayMetadata,
-  activateReadMore,
-  datasetEditorialization,
+  topicsDisplayMetadata,
+  topicsActivateReadMore,
+  topicsDatasetEditorialization,
   topicsSlug
 } = useTopicsConf()
 
@@ -173,7 +173,9 @@ watch(
     <div class="fr-grid-row fr-grid-row--gutters flex-reverse">
       <div
         class="fr-col-12"
-        :class="displayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'"
+        :class="
+          topicsDisplayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
+        "
       >
         <div class="fr-mb-2w">
           <div v-if="!canEdit && topic.private" class="fr-mb-1w">
@@ -209,7 +211,7 @@ watch(
             />
           </div>
         </div>
-        <div v-if="displayMetadata">
+        <div v-if="topicsDisplayMetadata">
           <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
           <div
             v-if="topic.organization"
@@ -265,7 +267,7 @@ watch(
       </div>
       <div
         class="fr-col-12"
-        :class="displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
+        :class="topicsDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
@@ -279,7 +281,7 @@ watch(
             }"
           />
         </div>
-        <div v-if="activateReadMore">
+        <div v-if="topicsActivateReadMore">
           <ReadMore max-height="600">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="description"></div>
@@ -313,7 +315,7 @@ watch(
         <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
-          :dataset-editorialization="datasetEditorialization"
+          :dataset-editorialization="topicsDatasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
         <BouquetDatasetListExport

@@ -34,7 +34,7 @@ defineProps({
 
 const router = useRouter()
 const datasetStore = useDatasetStore()
-const { datasetEditorialization } = useTopicsConf()
+const { topicsDatasetEditorialization } = useTopicsConf()
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
@@ -46,7 +46,7 @@ const hasMandatoryFields = computed(() => {
 })
 
 const isValidDataset = computed((): boolean => {
-  if (datasetEditorialization) {
+  if (topicsDatasetEditorialization) {
     return (
       !datasetProperties.value.remoteDeleted &&
       hasMandatoryFields.value &&
@@ -123,7 +123,7 @@ onMounted(() => {
 
 <template>
   <DatasetPropertiesTextFields
-    v-if="datasetEditorialization"
+    v-if="topicsDatasetEditorialization"
     v-model:dataset-properties="datasetProperties"
   />
   <div class="fr-mt-1w fr-mb-4w">
@@ -139,7 +139,10 @@ onMounted(() => {
       @update:model-value="onSelectDataset"
     />
   </div>
-  <div v-if="!selectedDataset && datasetEditorialization" class="fr-mt-4w">
+  <div
+    v-if="!selectedDataset && topicsDatasetEditorialization"
+    class="fr-mt-4w"
+  >
     <label class="fr-label" for="alt-source"
       >Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?</label
     >

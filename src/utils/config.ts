@@ -9,11 +9,11 @@ interface TopicsConfNormalized {
   topicsUseThemes: boolean
   topicsMainTheme: string
   topicsSecondaryTheme: string
-  datasetEditorialization: boolean
+  topicsDatasetEditorialization: boolean
   scopeAddTopics: ScopeAddTopicsConf
   pageAllTopics: boolean
-  displayMetadata: boolean
-  activateReadMore: boolean
+  topicsDisplayMetadata: boolean
+  topicsActivateReadMore: boolean
 }
 
 export const useTopicsConf = (): TopicsConfNormalized => {
@@ -25,10 +25,10 @@ export const useTopicsConf = (): TopicsConfNormalized => {
     topicsUseThemes: topicsConf.themes.usage,
     topicsMainTheme: topicsConf.themes.main_name,
     topicsSecondaryTheme: topicsConf.themes.secondary_name,
-    datasetEditorialization: topicsConf.dataset_editorialization,
+    topicsDatasetEditorialization: topicsConf.dataset_editorialization,
     scopeAddTopics: topicsConf.scope_add_topics,
     pageAllTopics: topicsConf.page_all_topics,
-    displayMetadata: topicsConf.display_metadata,
-    activateReadMore: topicsConf.activate_read_more
+    topicsDisplayMetadata: topicsConf.display_metadata,
+    topicsActivateReadMore: topicsConf.activate_read_more
   }
 }
