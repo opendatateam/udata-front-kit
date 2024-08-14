@@ -107,7 +107,7 @@ watch(
       >
         <DsfrButton
           class="fr-mb-1w"
-          :label="'Ajouter un ' + topicsName"
+          :label="`Ajouter un ${topicsName}`"
           icon="ri-add-circle-line"
           @click="goToCreate"
         />
@@ -117,7 +117,7 @@ watch(
       <DsfrSearchBar
         v-model="selectedQuery"
         label="Rechercher"
-        :placeholder="'Rechercher un ' + topicsName"
+        :placeholder="`Rechercher un ${topicsName}`"
         @update:model-value="search"
       />
     </div>

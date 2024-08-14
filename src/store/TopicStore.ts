@@ -6,11 +6,8 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { useTopicsConf } from '@/utils/config'
 
 import { useUserStore } from './UserStore'
-
-const { topicsExtrasKey } = useTopicsConf()
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
@@ -95,7 +92,7 @@ export const useTopicStore = defineStore('topic', {
       let response = await topicsAPIv2.list({
         params: {
           page_size: config.website.pagination_sizes.topics_list,
-          tag: topicsExtrasKey,
+          tag: config.universe.name,
           include_private: 'yes'
         }
       })

@@ -25,7 +25,7 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import {
   useBreadcrumbLinksForTopic,
   useExtras,
-  updateTopicPropertiesExtras
+  updateTopicExtras
 } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
@@ -109,7 +109,7 @@ const onUpdateDatasets = () => {
       datasets: datasetsProperties.value
         .filter((d) => d.id !== null && d.remoteDeleted !== true)
         .map((d) => d.id),
-      extras: updateTopicPropertiesExtras(topic.value, {
+      extras: updateTopicExtras(topic.value, {
         datasets_properties: datasetsProperties.value.map(
           ({ remoteDeleted, ...data }) => data
         )

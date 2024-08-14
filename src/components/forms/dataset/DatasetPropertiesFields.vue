@@ -38,7 +38,7 @@ const { topicsDatasetEditorialization } = useTopicsConf()
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
-const hasMandatoryFields = computed(() => {
+const hasEditorialization = computed(() => {
   return (
     !!datasetProperties.value.title.trim() &&
     !!datasetProperties.value.purpose.trim()
@@ -46,19 +46,17 @@ const hasMandatoryFields = computed(() => {
 })
 
 const isValidDataset = computed((): boolean => {
-  if (topicsDatasetEditorialization) {
-    return (
-      !datasetProperties.value.remoteDeleted &&
-      hasMandatoryFields.value &&
-      isValidEcosphereDataset.value &&
-      isValidUrlDataset.value
-    )
-  } else {
-    return isValidEcosphereDataset.value && isValidUrlDataset.value
-  }
+  const isValidWithoutEditorialization =
+    isValidCatalogDataset.value &&
+    isValidUrlDataset.value &&
+    !datasetProperties.value.remoteDeleted
+
+  if (!topicsDatasetEditorialization) return isValidWithoutEditorialization
+
+  return isValidWithoutEditorialization && hasEditorialization.value
 })
 
-const isValidEcosphereDataset = computed((): boolean => {
+const isValidCatalogDataset = computed((): boolean => {
   if (datasetProperties.value.availability === Availability.LOCAL_AVAILABLE) {
     return (
       datasetProperties.value.uri !== null &&
@@ -102,7 +100,6 @@ watch(
 watch(
   () => datasetProperties.value.availability,
   (availability) => {
-    console.log('watch', availability)
     if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
       datasetProperties.value.uri = null

@@ -5,7 +5,7 @@ import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
-import { updateTopicPropertiesExtras } from '@/utils/bouquet'
+import { updateTopicExtras } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
@@ -31,24 +31,20 @@ const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
 
 const isValid = computed(() => {
-  if (topicsUseThemes) {
-    return (
-      topic.value.name &&
-      topic.value.name.trim() !== '' &&
-      topic.value.description &&
-      topic.value.description.trim() !== '' &&
-      topic.value.extras &&
-      topic.value.extras[topicsExtrasKey].theme !== NoOptionSelected &&
-      topic.value.extras[topicsExtrasKey].subtheme !== NoOptionSelected
-    )
-  } else {
-    return (
-      topic.value.name &&
-      topic.value.name.trim() !== '' &&
-      topic.value.description &&
-      topic.value.description.trim() !== ''
-    )
-  }
+  const isValidWithoutThemes =
+    topic.value.name &&
+    topic.value.name.trim() !== '' &&
+    topic.value.description &&
+    topic.value.description.trim() !== ''
+
+  if (!topicsUseThemes) return isValidWithoutThemes
+
+  return (
+    isValidWithoutThemes &&
+    topic.value.extras &&
+    topic.value.extras[topicsExtrasKey].theme !== NoOptionSelected &&
+    topic.value.extras[topicsExtrasKey].subtheme !== NoOptionSelected
+  )
 })
 
 const { themeOptions, subthemeOptions } = useThemeOptions(theme)
@@ -69,7 +65,7 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // sync theme and subtheme from local refs to topic
 watch([theme, subtheme], () => {
-  topic.value.extras = updateTopicPropertiesExtras(topic.value, {
+  topic.value.extras = updateTopicExtras(topic.value, {
     theme: theme.value,
     subtheme: subtheme.value
   })
@@ -94,15 +90,15 @@ onMounted(() => {
 <template>
   <!-- Title -->
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" :for="topicsSlug + '_name'"
+    <label class="fr-label" :for="`${topicsSlug}_name`"
       >Sujet du {{ topicsName }} <span class="required">&nbsp;*</span></label
     >
     <input
-      :id="topicsSlug + '_name'"
+      :id="`${topicsSlug}_name`"
       v-model="topic.name"
       class="fr-input"
       type="text"
-      :placeholder="'Mon ' + topicsName"
+      :placeholder="`Mon ${topicsName}`"
     />
   </div>
   <!-- Description -->
@@ -116,15 +112,11 @@ onMounted(() => {
       pour mettre en forme votre texte
     </div>
     <textarea
-      :id="topicsSlug + '_description'"
+      :id="`${topicsSlug}_description`"
       v-model="topic.description"
       class="fr-input"
       type="text"
-      :placeholder="
-        'Renseignez ici les informations nécessaires à la compréhension du ' +
-        topicsName +
-        ': politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l\'organisme porteur du projet, etc.'
-      "
+      :placeholder="`Renseignez ici les informations nécessaires à la compréhension du ${topicsName} : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l\'organisme porteur du projet, etc.`"
     />
   </div>
   <!-- Theme -->

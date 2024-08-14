@@ -3,7 +3,7 @@ import type { Owned, Rel } from '@datagouv/components'
 import type { SpatialField } from './spatial'
 
 // a placeholder for ecospheres, meteofrance...
-// values don't really matter, SiteId is used to cast the "real" config value
+// value doesn't really matter, SiteId is used to cast the "real" config value
 export type SiteId = 'siteId'
 
 export enum Availability {

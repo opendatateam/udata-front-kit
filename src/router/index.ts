@@ -70,7 +70,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        name: `${topicsSlug}`,
+        name: topicsSlug,
         component: async () =>
           await import('@/views/bouquets/BouquetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({

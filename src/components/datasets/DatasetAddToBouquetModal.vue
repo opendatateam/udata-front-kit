@@ -78,7 +78,7 @@ const modalActions = computed(() => {
 const isDatasetInBouquet = (bouquet: Topic): boolean => {
   const datasetsProperties = bouquet.extras[topicsExtrasKey].datasets_properties
   return datasetsProperties.some(
-    (datasetProps: any) => datasetProps.id === props.dataset.id
+    (datasetProps) => datasetProps.id === props.dataset.id
   )
 }
 
@@ -122,7 +122,7 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    :title="'Ajouter le jeu de données à un ' + topicsName"
+    :title="`Ajouter le jeu de données à un ${topicsName}`"
     :opened="show"
     :actions="modalActions"
     @close="closeModal"
@@ -130,19 +130,13 @@ onMounted(() => {
     <DsfrSelect
       v-model="selectedBouquetId"
       :options="bouquetOptions"
-      :default-unselected-text="'Choisissez un ' + topicsName"
+      :default-unselected-text="`Choisissez un ${topicsName}`"
     >
       <template #label>
         {{ capitalize(topicsName) }} à associer
         <span class="required">&nbsp;*</span>
         <Tooltip
-          :text="
-            'Choisissez parmi les ' +
-            topicsName +
-            's dont vous êtes l\'auteur. Si un ' +
-            topicsName +
-            ' apparait désactivé, c\'est que le jeu de données y est déjà associé.'
-          "
+          :text="`Choisissez parmi les ${topicsName}s dont vous êtes l'auteur. Si un ${topicsName} apparait désactivé, c'est que le jeu de données y est déjà associé.`"
         />
       </template>
     </DsfrSelect>

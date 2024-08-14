@@ -252,7 +252,7 @@ onMounted(() => {
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            :label="'Ajouter à un ' + topicsName"
+            :label="`Ajouter à un ${topicsName}`"
             icon="ri-file-add-line"
             @click="showAddToBouquetModal = true"
           />

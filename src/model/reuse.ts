@@ -24,8 +24,8 @@ export interface ReuseType {
   label: string
 }
 
-export enum ReuseModel {
-  dataset = 'jeu de donnée',
-  // FIXME:
-  topic = topicsName as any
+// use a const instead of an interface to be compatible with topicsName as a variable
+export const ReuseModel = {
+  dataset: 'jeu de donnée',
+  topic: topicsName
 }

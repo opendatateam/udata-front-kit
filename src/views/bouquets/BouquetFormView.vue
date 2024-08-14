@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
+import config from '@/config'
 import { NoOptionSelected } from '@/model/theme'
 import type { TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
@@ -31,7 +32,7 @@ const routeQuery = useRouteQueryAsString().query
 const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
-  tags: [topicsExtrasKey],
+  tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
     [topicsExtrasKey]: {
@@ -46,8 +47,9 @@ const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
   const extras = topic.value?.extras?.[topicsExtrasKey]
+  // condition for form mouting based on topic data load: edit || create raw || create cloned
   return (
-    topic.value?.id ||
+    topic.value.id ||
     (props.isCreate && !routeQuery.clone) ||
     (routeQuery.clone && extras?.cloned_from)
   )

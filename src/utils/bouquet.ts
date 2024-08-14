@@ -29,7 +29,7 @@ export const isAvailable = (availability: Availability): boolean => {
   )
 }
 
-export const updateTopicPropertiesExtras = (
+export const updateTopicExtras = (
   topic: Topic,
   data: Partial<SiteTopicExtras>
 ): TopicExtras => {
@@ -54,11 +54,11 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
     reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
-    extras: updateTopicPropertiesExtras(topic, {
+    extras: updateTopicExtras(topic, {
       cloned_from: topic.id,
       datasets_properties: topic.extras[
         topicsExtrasKey
-      ].datasets_properties.map((dp: any) => {
+      ].datasets_properties.map((dp) => {
         return {
           ...dp,
           id: null,
@@ -115,7 +115,7 @@ export function useExtras(topic: Ref<Topic | null>): {
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
-    [topic],
+    topic,
     () => {
       const extras = topic.value?.extras[topicsExtrasKey]
       if (extras != null) {
