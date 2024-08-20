@@ -59,7 +59,8 @@ const {
   topicsDisplayMetadata,
   topicsActivateReadMore,
   topicsDatasetEditorialization,
-  topicsSlug
+  topicsSlug,
+  topicsName
 } = useTopicsConf()
 
 const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(topic)
@@ -296,7 +297,7 @@ watch(
 
     <DsfrTabs
       class="fr-mt-2w"
-      tab-list-name="Groupes d'attributs du bouquet"
+      :tab-list-name="`Groupes d'attributs du ${topicsName}`"
       :tab-titles="[
         { title: 'Données' },
         { title: 'Discussions' },
