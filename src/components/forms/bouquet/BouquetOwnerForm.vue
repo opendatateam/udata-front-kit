@@ -3,6 +3,7 @@ import { defineModel, computed, ref, watch, type Ref } from 'vue'
 
 import type { Topic } from '@/model/topic'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
 const topic = defineModel({
   type: Object as () => Topic,
@@ -10,6 +11,7 @@ const topic = defineModel({
 })
 
 const userStore = useUserStore()
+const { topicsName } = useTopicsConf()
 
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
@@ -33,7 +35,7 @@ watch(choice, () => {
 <template>
   <div>
     <label class="fr-label" for="owner"
-      >Choisissez si vous souhaitez gérer ce bouquet&nbsp;:</label
+      >Choisissez si vous souhaitez gérer ce {{ topicsName }}&nbsp;:</label
     >
     <fieldset id="owner" class="fr-fieldset">
       <div class="fr-fieldset__content" role="radiogroup">

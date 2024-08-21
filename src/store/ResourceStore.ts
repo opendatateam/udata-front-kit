@@ -2,9 +2,8 @@ import type { Rel } from '@datagouv/components'
 import { defineStore } from 'pinia'
 
 import config from '@/config'
-
-import type { Resource, ResourceData, ResourceType } from '../model/resource'
-import DatasetsAPI from '../services/api/resources/DatasetsAPI'
+import type { Resource, ResourceData, ResourceType } from '@/model/resource'
+import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
 
 const datasetsApi = new DatasetsAPI()
 const datasetsApiv2 = new DatasetsAPI({ version: 2 })

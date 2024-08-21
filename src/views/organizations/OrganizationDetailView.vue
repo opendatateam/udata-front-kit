@@ -4,12 +4,11 @@ import { computed, onMounted, ref, watchEffect, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import Tile from '@/components/Tile.vue'
 import { useRouteParamsAsString } from '@/router/utils'
-
-import Tile from '../../components/Tile.vue'
-import { useDatasetStore } from '../../store/DatasetStore'
-import { useOrganizationStore } from '../../store/OrganizationStore'
-import { descriptionFromMarkdown } from '../../utils'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useOrganizationStore } from '@/store/OrganizationStore'
+import { descriptionFromMarkdown } from '@/utils'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid

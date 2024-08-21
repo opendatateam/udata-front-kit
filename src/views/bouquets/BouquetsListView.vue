@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, watch, type Ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { ref, computed, watch, type Ref, capitalize } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -7,6 +8,10 @@ import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
+import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
+
+const { topicsSlug, topicsName } = useTopicsConf()
 
 const router = useRouter()
 const route = useRoute()
@@ -40,14 +45,17 @@ const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const showDrafts = ref(false)
 
+const userStore = useUserStore()
+const { canAddBouquet } = storeToRefs(userStore)
+
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
   links.push({ text: 'Accueil', to: '/' })
-  links.push({ text: 'Bouquets', to: '/bouquets' })
+  links.push({ text: `${capitalize(topicsName)}s`, to: `/${topicsSlug}` })
   if (selectedTheme.value !== NoOptionSelected && selectedTheme.value !== '') {
     links.push({
       text: selectedTheme.value,
-      to: `/bouquets?theme=${selectedTheme.value}&subtheme=${NoOptionSelected}`
+      to: `/${topicsSlug}?theme=${selectedTheme.value}&subtheme=${NoOptionSelected}`
     })
     if (
       selectedSubtheme.value !== NoOptionSelected &&
@@ -60,12 +68,12 @@ const breadcrumbList = computed(() => {
 })
 
 const goToCreate = () => {
-  router.push({ name: 'bouquet_add', query: route.query })
+  router.push({ name: `${topicsSlug}_add`, query: route.query })
 }
 
 const search = () => {
   router.push({
-    name: 'bouquets',
+    name: topicsSlug,
     query: { ...route.query, q: selectedQuery.value },
     hash: '#main'
   })
@@ -92,11 +100,14 @@ watch(
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
-      <h1 class="fr-col-auto fr-mb-2v">Bouquets</h1>
-      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+      <h1 class="fr-col-auto fr-mb-2v">{{ capitalize(topicsName) }}s</h1>
+      <div
+        v-if="canAddBouquet"
+        class="fr-col-auto fr-grid-row fr-grid-row--middle"
+      >
         <DsfrButton
           class="fr-mb-1w"
-          label="Ajouter un bouquet"
+          :label="`Ajouter un ${topicsName}`"
           icon="ri-add-circle-line"
           @click="goToCreate"
         />
@@ -106,7 +117,7 @@ watch(
       <DsfrSearchBar
         v-model="selectedQuery"
         label="Rechercher"
-        placeholder="Rechercher un bouquet"
+        :placeholder="`Rechercher un ${topicsName}`"
         @update:model-value="search"
       />
     </div>

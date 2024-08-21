@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import type { ComputedRef, PropType } from 'vue'
 import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -8,10 +9,17 @@ import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
 const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
+
+const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
+
+const userStore = useUserStore()
+const { canAddBouquet } = storeToRefs(userStore)
 
 const props = defineProps({
   themeName: {
@@ -50,11 +58,11 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
     })
     .filter((bouquet) => {
       if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras.ecospheres.theme === props.themeName
+      return bouquet.extras[topicsExtrasKey].theme === props.themeName
     })
     .filter((bouquet) => {
       if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras.ecospheres.subtheme === props.subthemeName
+      return bouquet.extras[topicsExtrasKey].subtheme === props.subthemeName
     })
     .filter((bouquet) => {
       if (props.query === '') return true
@@ -64,20 +72,20 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (bouquets.value.length === 1) {
-    return '1 bouquet disponible'
+    return `1 ${topicsName} disponible`
   } else {
-    return bouquets.value.length + ' bouquets disponibles'
+    return bouquets.value.length + ` ${topicsName}s disponibles`
   }
 })
 
 const goToCreate = () => {
-  router.push({ name: 'bouquet_add', query: route.query })
+  router.push({ name: `${topicsSlug}_add`, query: route.query })
 }
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: 'bouquets', hash: '#main', query })
+  router.push({ name: topicsSlug, hash: '#main', query })
 }
 
 onMounted(() => {
@@ -131,7 +139,7 @@ onMounted(() => {
           <p class="fr-mt-1v fr-mb-3v">
             Essayez de réinitialiser les filtres pour agrandir votre champ de
             recherche.<br />
-            Vous pouvez aussi contribuer en créant un bouquet.
+            Vous pouvez aussi contribuer en créant un {{ topicsName }}.
           </p>
         </div>
         <div class="fr-grid-row fr-grid-row--undefined">
@@ -139,10 +147,11 @@ onMounted(() => {
             Réinitialiser les filtres
           </button>
           <button
+            v-if="canAddBouquet"
             class="fr-btn fr-btn--secondary fr-ml-1w"
             @click.stop.prevent="goToCreate"
           >
-            Ajouter un bouquet
+            Ajouter un {{ topicsName }}
           </button>
         </div>
       </div>

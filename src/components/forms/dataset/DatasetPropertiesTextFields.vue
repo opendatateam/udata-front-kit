@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Tooltip from '@/components/TooltipWrapper.vue'
 import type { DatasetProperties } from '@/model/topic'
+import { useTopicsConf } from '@/utils/config'
 
 const props = defineProps({
   datasetProperties: {
@@ -8,6 +9,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const { topicsName } = useTopicsConf()
 
 const emit = defineEmits(['update:datasetProperties'])
 
@@ -42,7 +45,7 @@ const updateDatasetProperties = (
   </div>
   <div class="fr-mt-1w fr-mb-4w">
     <div class="container">
-      Raison d'utilisation dans ce bouquet
+      Raison d'utilisation dans ce {{ topicsName }}
       <span class="required">&nbsp;*</span>
       <Tooltip
         text="Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est pas évidente. Vous pouvez également utiliser cet espace pour renseigner des problèmes liés à l'accès ou la qualité des données."

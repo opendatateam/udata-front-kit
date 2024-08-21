@@ -139,10 +139,10 @@ website:
           Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non d'un service informatique ou d'un prestataire.
           <br/>
           Pour chacun des cas d'usages, un indicateur vous permet de savoir quelles sont les possibilités d'intégration :
-          </p> 
+          </p>
 
 
-          - **Solution clé en main** : Une solution clé en main est disponible pour ce cas d'usage. Si vous n'avez pas ni service informatique ni compétences techniques, vous pouvez donc utiliser la solution clé en main pour couvrir le cas d'usage. 
+          - **Solution clé en main** : Une solution clé en main est disponible pour ce cas d'usage. Si vous n'avez pas ni service informatique ni compétences techniques, vous pouvez donc utiliser la solution clé en main pour couvrir le cas d'usage.
 
           - **Solutions éditeurs** : Des éditeurs proposent des logiciels permettant de couvrir ce cas d'usage.
 
@@ -260,7 +260,23 @@ website:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
-
+  topics:
+    slug: usecases
+    name: cas d'usage
+    extras_key: 'ecospheres'
+    themes:
+      usage: true
+      main_name: domaine
+      secondary_name: sous-domaine
+    # include a list page with all topics
+    list_all: false
+    display_metadata: false
+    activate_read_more: false
+    dataset_editorialization: false
+    can_add_topics:
+      everyone: false
+      authorized_users:
+        - 6230733357772160a4f77fba
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

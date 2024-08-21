@@ -9,23 +9,24 @@ import {
   InformationPanel,
   type License
 } from '@datagouv/components'
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
+import ChartData from '@/components/ChartData.vue'
+import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
+import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import config from '@/config'
-
-import ChartData from '../../components/ChartData.vue'
-import DiscussionsList from '../../components/DiscussionsList.vue'
-import ReusesList from '../../components/ReusesList.vue'
-import ExtendedInformationPanel from '../../components/datasets/ExtendedInformationPanel.vue'
-import type { ResourceDataWithQuery } from '../../model/resource'
-import { useRouteParamsAsString } from '../../router/utils'
-import { useDatasetStore } from '../../store/DatasetStore'
-import { useResourceStore } from '../../store/ResourceStore'
-import { useUserStore } from '../../store/UserStore'
-import { descriptionFromMarkdown, formatDate } from '../../utils'
+import type { ResourceDataWithQuery } from '@/model/resource'
+import { useRouteParamsAsString } from '@/router/utils'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useResourceStore } from '@/store/ResourceStore'
+import { useUserStore } from '@/store/UserStore'
+import { descriptionFromMarkdown, formatDate } from '@/utils'
+import { useTopicsConf } from '@/utils/config'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -33,6 +34,7 @@ const datasetId = route.params.did
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
+const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
@@ -41,8 +43,9 @@ const selectedTabIndex = ref(0)
 const license = ref<License>()
 const showAddToBouquetModal = ref(false)
 
-const pageSize = config.website.pagination_sizes.files_list
-const showDiscussions = config.website.discussions.dataset.display
+const pageSize = config.website.pagination_sizes.files_list as number
+const showDiscussions = config.website.discussions.dataset.display as boolean
+const { topicsName } = useTopicsConf()
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
@@ -240,12 +243,16 @@ onMounted(() => {
           récupération. Nous travaillons actuellement à améliorer la situation.
         </div>
         <div
-          v-if="config.website.datasets.add_to_bouquet && userStore.isLoggedIn"
+          v-if="
+            config.website.datasets.add_to_bouquet &&
+            userStore.loggedIn &&
+            canAddBouquet
+          "
         >
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            label="Ajouter à un bouquet"
+            :label="`Ajouter à un ${topicsName}`"
             icon="ri-file-add-line"
             @click="showAddToBouquetModal = true"
           />

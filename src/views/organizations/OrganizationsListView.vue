@@ -3,10 +3,9 @@ import { computed, ref, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import Tile from '@/components/Tile.vue'
 import config from '@/config'
-
-import Tile from '../../components/Tile.vue'
-import { useOrganizationStore } from '../../store/OrganizationStore'
+import { useOrganizationStore } from '@/store/OrganizationStore'
 
 const store = useOrganizationStore()
 const $loading = useLoading()

@@ -134,7 +134,22 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
-
+  topics:
+    slug: bouquets
+    name: bouquet
+    extras_key: 'ecospheres'
+    themes:
+      usage: true
+      main_name: thématique
+      secondary_name: chantier
+    # include a list page with all topics
+    list_all: true
+    display_metadata: true
+    activate_read_more: true
+    dataset_editorialization: true
+    can_add_topics:
+      everyone: true
+      authorized_users:
 themes:
   - name: Se loger
     color: 043574

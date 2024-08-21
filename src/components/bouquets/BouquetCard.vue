@@ -13,8 +13,11 @@ import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
+import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { getThemeColor, getThemeTextColor } from '@/utils/theme'
+
+const { topicsSlug } = useTopicsConf()
 
 const props = defineProps({
   bouquet: {
@@ -33,7 +36,7 @@ const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
 const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
-  name: 'bouquet_detail',
+  name: `${topicsSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
 </script>

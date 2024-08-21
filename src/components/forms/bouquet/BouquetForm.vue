@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { defineModel, computed, ref, onMounted, watch } from 'vue'
+import { defineModel, computed, ref, onMounted, watch, capitalize } from 'vue'
 
+import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
-import { updateEcospheresExtras } from '@/utils/bouquet'
+import { updateTopicExtras } from '@/utils/bouquet'
+import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
-
-import SelectSpatialCoverage from '../SelectSpatialCoverage.vue'
 
 const topic = defineModel({
   type: Object as () => Topic,
@@ -18,19 +18,32 @@ const topic = defineModel({
 const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
+const {
+  topicsUseThemes,
+  topicsExtrasKey,
+  topicsMainTheme,
+  topicsSecondaryTheme,
+  topicsName,
+  topicsSlug
+} = useTopicsConf()
 
 const theme = ref(NoOptionSelected)
 const subtheme = ref(NoOptionSelected)
 
 const isValid = computed(() => {
-  return (
+  const isValidWithoutThemes =
     topic.value.name &&
     topic.value.name.trim() !== '' &&
     topic.value.description &&
-    topic.value.description.trim() !== '' &&
+    topic.value.description.trim() !== ''
+
+  if (!topicsUseThemes) return isValidWithoutThemes
+
+  return (
+    isValidWithoutThemes &&
     topic.value.extras &&
-    topic.value.extras.ecospheres.theme !== NoOptionSelected &&
-    topic.value.extras.ecospheres.subtheme !== NoOptionSelected
+    topic.value.extras[topicsExtrasKey].theme !== NoOptionSelected &&
+    topic.value.extras[topicsExtrasKey].subtheme !== NoOptionSelected
   )
 })
 
@@ -52,7 +65,7 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // sync theme and subtheme from local refs to topic
 watch([theme, subtheme], () => {
-  topic.value.extras = updateEcospheresExtras(topic.value, {
+  topic.value.extras = updateTopicExtras(topic.value, {
     theme: theme.value,
     subtheme: subtheme.value
   })
@@ -69,28 +82,28 @@ watch(
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  theme.value = topic.value.extras.ecospheres.theme
-  subtheme.value = topic.value.extras.ecospheres.subtheme
+  theme.value = topic.value.extras[topicsExtrasKey].theme
+  subtheme.value = topic.value.extras[topicsExtrasKey].subtheme
 })
 </script>
 
 <template>
   <!-- Title -->
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="bouquet_name"
-      >Sujet du bouquet <span class="required">&nbsp;*</span></label
+    <label class="fr-label" :for="`${topicsSlug}_name`"
+      >Sujet du {{ topicsName }} <span class="required">&nbsp;*</span></label
     >
     <input
-      id="bouquet_name"
+      :id="`${topicsSlug}_name`"
       v-model="topic.name"
       class="fr-input"
       type="text"
-      placeholder="Mon bouquet"
+      :placeholder="`Mon ${topicsName}`"
     />
   </div>
   <!-- Description -->
   <div class="fr-mt-1w">
-    <div>Objectif du bouquet<span class="required">&nbsp;*</span></div>
+    <div>Objectif du {{ topicsName }}<span class="required">&nbsp;*</span></div>
     <div>
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
@@ -99,21 +112,22 @@ onMounted(() => {
       pour mettre en forme votre texte
     </div>
     <textarea
-      id="bouquet_description"
+      :id="`${topicsSlug}_description`"
       v-model="topic.description"
       class="fr-input"
       type="text"
-      placeholder="Renseignez ici les informations nécessaires à la compréhension du bouquet : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l'organisme porteur du projet, etc."
+      :placeholder="`Renseignez ici les informations nécessaires à la compréhension du ${topicsName} : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l\'organisme porteur du projet, etc.`"
     />
   </div>
   <!-- Theme -->
-  <div class="fr-select-group fr-mt-1w">
+  <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_theme"
-      >Thématique <span class="required">&nbsp;*</span></label
+      >{{ capitalize(topicsMainTheme) }}
+      <span class="required">&nbsp;*</span></label
     >
     <select id="select_theme" class="fr-select" @change="switchTheme($event)">
       <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
-        Choisir une thématique
+        Choisir une {{ topicsMainTheme }}
       </option>
       <option
         v-for="option in themeOptions"
@@ -126,9 +140,10 @@ onMounted(() => {
     </select>
   </div>
   <!-- Subtheme -->
-  <div class="fr-select-group fr-mt-1w">
+  <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_subtheme"
-      >Chantier <span class="required">&nbsp;*</span></label
+      >{{ capitalize(topicsSecondaryTheme) }}
+      <span class="required">&nbsp;*</span></label
     >
     <select
       id="select_subtheme"
@@ -140,7 +155,7 @@ onMounted(() => {
         :value="NoOptionSelected"
         :selected="subtheme == NoOptionSelected"
       >
-        Choisir un chantier
+        Choisir un {{ topicsSecondaryTheme }}
       </option>
       <option
         v-for="option in subthemeOptions"

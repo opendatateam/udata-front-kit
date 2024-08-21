@@ -2,6 +2,10 @@ import type { Owned, Rel } from '@datagouv/components'
 
 import type { SpatialField } from './spatial'
 
+// a placeholder for ecospheres, meteofrance...
+// value doesn't really matter, SiteId is used to cast the "real" config value
+export type SiteId = 'siteId'
+
 export enum Availability {
   MISSING = 'missing',
   NOT_AVAILABLE = 'not available',
@@ -19,17 +23,14 @@ export interface DatasetProperties {
   remoteDeleted?: boolean
 }
 
-export interface EcospheresTopicExtras {
+export interface SiteTopicExtras {
   theme: string
   subtheme: string
   datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
 
-export interface TopicExtras {
-  ecospheres: EcospheresTopicExtras
-  [key: string]: any
-}
+export type TopicExtras = Record<SiteId, SiteTopicExtras>
 
 export type Topic = Owned & {
   name: string

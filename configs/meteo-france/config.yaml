@@ -82,6 +82,8 @@ website:
   menu:
     - text: Données
       to: /datasets
+    - text: Bouquets
+      to: /bouquets
     - text: Recherche guidée
       to: /form
     - text: 'Hackathon le 8 et 9 avril 🚀'
@@ -114,7 +116,7 @@ website:
     - id: '65e0c82c2da27c1dff5fa66f'
       name: 'Données de Prévision Numérique du Temps (PNT)'
   url_search_topics: 'datasets'
-  oauth_option: false
+  oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
     - label: 'meteofrance.com'
@@ -159,10 +161,43 @@ website:
       create: false
   datasets:
     organization_filter: false
-    add_to_bouquet: false
+    add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
+  topics:
+    slug: bouquets
+    name: bouquet
+    extras_key: 'meteofrance'
+    themes:
+      usage: false
+      main_name: thématique
+      secondary_name: chantier
+    # include a list page with all topics
+    list_all: false
+    display_metadata: false
+    activate_read_more: false
+    dataset_editorialization: false
+    can_add_topics:
+      everyone: false
+      authorized_users:
+        - 6230733357772160a4f77fbaxx
+themes:
+  - name: Données climatologiques
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Informations sur les stations
+      - name: Données climatologiques de base
+      - name: Références à la station
+      - name: Données de références pour le changement climatiques
+  - name: Données de prévision numérique du temps (PNT)
+    color: 1E929E
+    textColor: FFFFFF
+    subthemes:
+      - name: ARPEGE
+      - name: AROME
+      - name: Modèle de vague haute
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

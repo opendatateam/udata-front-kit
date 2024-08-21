@@ -5,8 +5,7 @@ import type {
   DiscussionResponse,
   DiscussionId
 } from '@/model/discussion'
-
-import DatagouvfrAPI from '../DatagouvfrAPI'
+import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 export default class DiscussionsAPI extends DatagouvfrAPI {
   endpoint = 'discussions'

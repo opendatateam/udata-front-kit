@@ -6,9 +6,11 @@ import type { WithOwned } from '@/model'
 import type { ExtendedUser } from '@/model/user'
 import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
+import { useTopicsConf } from '@/utils/config'
 
 const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
+const { topicsCanAdd } = useTopicsConf()
 
 export interface RootState {
   isInited: boolean
@@ -25,8 +27,22 @@ export const useUserStore = defineStore('user', {
     token: undefined
   }),
   getters: {
-    loggedIn(state) {
+    loggedIn(state): boolean {
       return state.isLoggedIn
+    },
+    isAdmin(): boolean {
+      return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
+    },
+    canAddBouquet(state): boolean {
+      if (topicsCanAdd.everyone || this.isAdmin) {
+        return true
+      }
+      if (this.loggedIn && state.data != null) {
+        if (topicsCanAdd.authorized_users?.includes(state.data.id)) {
+          return true
+        }
+      }
+      return false
     }
   },
   actions: {
@@ -107,18 +123,12 @@ export const useUserStore = defineStore('user', {
       this.data = data
     },
     /**
-     * Is the user logged-in and admin ?
-     */
-    isAdmin(): boolean {
-      return this.isLoggedIn && (this.data?.roles?.includes('admin') ?? false)
-    },
-    /**
      * Has current user edit permissions on given object?
      */
     hasEditPermissions<T>(object: WithOwned<T> | null): boolean {
       if (object === null) return false
-      if (!this.isLoggedIn || this.data === undefined) return false
-      if (this.isAdmin()) return true
+      if (!this.loggedIn || this.data === undefined) return false
+      if (this.isAdmin) return true
       if (object.owner != null) {
         return object.owner.id === this.data.id
       } else if (object.organization != null) {

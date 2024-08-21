@@ -13,6 +13,7 @@ import { useRouter } from 'vue-router'
 
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
+import { useTopicsConf } from '@/utils/config'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
@@ -33,10 +34,11 @@ defineProps({
 
 const router = useRouter()
 const datasetStore = useDatasetStore()
+const { topicsDatasetEditorialization } = useTopicsConf()
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
-const hasMandatoryFields = computed(() => {
+const hasEditorialization = computed(() => {
   return (
     !!datasetProperties.value.title.trim() &&
     !!datasetProperties.value.purpose.trim()
@@ -44,15 +46,17 @@ const hasMandatoryFields = computed(() => {
 })
 
 const isValidDataset = computed((): boolean => {
-  return (
-    !datasetProperties.value.remoteDeleted &&
-    hasMandatoryFields.value &&
-    isValidEcosphereDataset.value &&
-    isValidUrlDataset.value
-  )
+  const isValidWithoutEditorialization =
+    isValidCatalogDataset.value &&
+    isValidUrlDataset.value &&
+    !datasetProperties.value.remoteDeleted
+
+  if (!topicsDatasetEditorialization) return isValidWithoutEditorialization
+
+  return isValidWithoutEditorialization && hasEditorialization.value
 })
 
-const isValidEcosphereDataset = computed((): boolean => {
+const isValidCatalogDataset = computed((): boolean => {
   if (datasetProperties.value.availability === Availability.LOCAL_AVAILABLE) {
     return (
       datasetProperties.value.uri !== null &&
@@ -96,7 +100,6 @@ watch(
 watch(
   () => datasetProperties.value.availability,
   (availability) => {
-    console.log('watch', availability)
     if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
       datasetProperties.value.uri = null
@@ -116,7 +119,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <DatasetPropertiesTextFields v-model:dataset-properties="datasetProperties" />
+  <DatasetPropertiesTextFields
+    v-if="topicsDatasetEditorialization"
+    v-model:dataset-properties="datasetProperties"
+  />
   <div class="fr-mt-1w fr-mb-4w">
     <label class="fr-label" for="link"
       >Jeu de données
@@ -130,7 +136,10 @@ onMounted(() => {
       @update:model-value="onSelectDataset"
     />
   </div>
-  <div v-if="!selectedDataset" class="fr-mt-4w">
+  <div
+    v-if="!selectedDataset && topicsDatasetEditorialization"
+    class="fr-mt-4w"
+  >
     <label class="fr-label" for="alt-source"
       >Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?</label
     >
