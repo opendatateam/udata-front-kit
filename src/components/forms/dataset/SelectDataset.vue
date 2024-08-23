@@ -43,7 +43,7 @@ const search = debounce(async (query: string) => {
     await new SearchAPI().search(query, null, 1, {
       page_size: 10
     })
-  ).data.filter((dataset) => !alreadySelected(dataset.id))
+  ).data
   options.value = datasets
   isLoading.value = false
 }, 400)
@@ -69,7 +69,6 @@ const clear = () => {
     :loading="isLoading"
     :clear-on-select="true"
     :close-on-select="true"
-    :max-height="600"
     :show-no-results="false"
     :hide-selected="true"
     @search-change="search"
@@ -82,11 +81,33 @@ const clear = () => {
       ></div>
     </template>
     <template #singleLabel="slotProps">
+      <DsfrBadge
+        v-if="alreadySelected(slotProps.option.id)"
+        type="warning"
+        label="Déjà sélectionné"
+        small
+        class="dsfr-badge-warning"
+      />
       <DatasetCardForSelect :dataset="slotProps.option" />
     </template>
     <template #option="slotProps">
+      <DsfrBadge
+        v-if="alreadySelected(slotProps.option.id)"
+        type="warning"
+        label="Déjà sélectionné"
+        small
+        class="dsfr-badge-warning"
+      />
       <DatasetCardForSelect :dataset="slotProps.option" />
     </template>
     <template #noOptions> Précisez ou élargissez votre recherche </template>
   </Multiselect>
 </template>
+
+<style scoped>
+/* specificity override fix for badge icon */
+.dsfr-badge-warning.dsfr-badge-warning::before {
+  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--warning-fill.svg);
+  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--warning-fill.svg);
+}
+</style>
