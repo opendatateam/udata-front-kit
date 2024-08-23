@@ -7,6 +7,7 @@ import {
   ReadMore,
   Well,
   InformationPanel,
+  AppLink,
   type License
 } from '@datagouv/components'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -200,7 +201,7 @@ onMounted(() => {
         >
           <div class="fr-col-auto">
             <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img :src="dataset.organization.logo" height="32" />
+              <img :src="dataset.organization.logo" height="32" alt="" />
             </div>
           </div>
           <p class="fr-col fr-m-0">
@@ -210,6 +211,19 @@ onMounted(() => {
               />
             </a>
           </p>
+        </div>
+        <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">
+          <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
+            <p class="fr-grid-row fr-grid-row--middle fr-my-0">
+              Ce jeu de données provient d'un portail externe.
+              <AppLink
+                :to="dataset.harvest.remote_url"
+                target="_blank"
+                rel="noopener nofollow"
+                >Voir la source originale.</AppLink
+              >
+            </p>
+          </div>
         </div>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
         <p>{{ formatDate(dataset.last_update) }}</p>
