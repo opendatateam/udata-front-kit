@@ -81,23 +81,28 @@ const clear = () => {
       ></div>
     </template>
     <template #singleLabel="slotProps">
-      <DsfrBadge
-        v-if="alreadySelected(slotProps.option.id)"
-        type="warning"
-        label="Déjà sélectionné"
-        small
-        class="dsfr-badge-warning"
-      />
-      <DatasetCardForSelect :dataset="slotProps.option" />
+      <div class="fr-pt-2w">
+        <DsfrBadge
+          v-if="alreadySelected(slotProps.option.id)"
+          type="info"
+          label="Déjà utilisé dans ce bouquet"
+          small
+          ellipsis
+          class="absolute top-0 fr-mt-n4v dsfr-badge-info"
+        />
+        <DatasetCardForSelect :dataset="slotProps.option" />
+      </div>
     </template>
     <template #option="slotProps">
       <DsfrBadge
         v-if="alreadySelected(slotProps.option.id)"
-        type="warning"
-        label="Déjà sélectionné"
+        type="info"
+        label="Déjà utilisé dans ce bouquet"
         small
-        class="dsfr-badge-warning"
+        ellipsis
+        class="relative top-0 fr-mt-n4v fr-mb-2v dsfr-badge-info"
       />
+      {{ slotProps.option.archived }}
       <DatasetCardForSelect :dataset="slotProps.option" />
     </template>
     <template #noOptions> Précisez ou élargissez votre recherche </template>
