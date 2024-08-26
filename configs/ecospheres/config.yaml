@@ -16,7 +16,6 @@ universe:
 
 robots:
   disallow:
-    - /
   sitemap:
 
 # UI customizations
