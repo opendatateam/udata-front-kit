@@ -105,9 +105,13 @@ const clear = () => {
 </template>
 
 <style scoped>
-/* specificity override fix for badge icon */
-.dsfr-badge-warning.dsfr-badge-warning::before {
-  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--warning-fill.svg);
-  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--warning-fill.svg);
+:deep(.multiselect__option::after) {
+  padding: 0;
+  padding-top: 0.25rem;
+  position: relative;
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  background: none;
 }
 </style>
