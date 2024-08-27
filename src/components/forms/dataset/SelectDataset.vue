@@ -93,12 +93,12 @@ const clear = () => {
 
 <style scoped>
 :deep(.multiselect__option::after) {
-  padding: 0;
-  padding-top: 0.25rem;
-  position: relative;
-  display: block;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  background: none;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  block-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  inline-size: 1px;
 }
 </style>
