@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import type { DatasetProperties } from '@/model/topic'
-import { isAvailable } from '@/utils/bouquet'
+import { type DatasetV2 } from '@datagouv/components'
+import { ref, watch, toRef, type Ref } from 'vue'
 
-defineProps({
+import type { DatasetProperties } from '@/model/topic'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { isAvailable } from '@/utils/bouquet'
+import { toastHttpError } from '@/utils/error'
+import { isNotFoundError } from '@/utils/http'
+
+const props = defineProps({
   datasetProperties: {
     type: Object as () => DatasetProperties,
     required: true
@@ -12,6 +18,32 @@ defineProps({
     default: false
   }
 })
+const datasetPropertiesRef = toRef(props, 'datasetProperties')
+const dataset: Ref<DatasetV2 | undefined> = ref()
+
+watch(
+  datasetPropertiesRef,
+  () => {
+    if (
+      datasetPropertiesRef.value.id &&
+      !datasetPropertiesRef.value.remoteDeleted
+    ) {
+      useDatasetStore()
+        .load(datasetPropertiesRef.value.id, { toasted: false })
+        .then((d) => {
+          dataset.value = d
+        })
+        .catch((err) => {
+          if (isNotFoundError(err)) {
+            datasetPropertiesRef.value.remoteDeleted = true
+          } else {
+            toastHttpError(err)
+          }
+        })
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -23,7 +55,8 @@ defineProps({
     <DsfrTag
       v-if="
         !isAvailable(datasetProperties.availability) ||
-        datasetProperties.remoteDeleted
+        datasetProperties.remoteDeleted ||
+        !!dataset?.archived
       "
       class="uppercase bold fr-mr-2w"
       label="Non disponible"
