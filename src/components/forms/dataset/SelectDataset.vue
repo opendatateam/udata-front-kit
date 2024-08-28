@@ -90,3 +90,15 @@ const clear = () => {
     <template #noOptions> Précisez ou élargissez votre recherche </template>
   </Multiselect>
 </template>
+
+<style scoped>
+:deep(.multiselect__option::after) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  block-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  inline-size: 1px;
+}
+</style>
