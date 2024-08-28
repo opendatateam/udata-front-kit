@@ -110,6 +110,13 @@ const clear = () => {
 </template>
 
 <style scoped>
+.multiselect {
+  margin-top: 1rem;
+}
+.dsfr-badge-info.dsfr-badge-info::before {
+  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
+  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
+}
 :deep(.multiselect__option::after) {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
