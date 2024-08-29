@@ -81,29 +81,18 @@ const clear = () => {
       ></div>
     </template>
     <template #singleLabel="slotProps">
-      <div class="fr-pt-2w">
-        <DsfrBadge
-          v-if="alreadySelected(slotProps.option.id)"
-          type="info"
-          label="Déjà utilisé dans ce bouquet"
-          small
-          ellipsis
-          class="absolute top-0 fr-mt-n4v dsfr-badge-info"
-        />
-        <DatasetCardForSelect :dataset="slotProps.option" />
-      </div>
+      <DatasetCardForSelect
+        :dataset="slotProps.option"
+        :already-selected="alreadySelected(slotProps.option.id)"
+        badge-position="absolute"
+      />
     </template>
     <template #option="slotProps">
-      <DsfrBadge
-        v-if="alreadySelected(slotProps.option.id)"
-        type="info"
-        label="Déjà utilisé dans ce bouquet"
-        small
-        ellipsis
-        class="relative top-0 fr-mt-n4v fr-mb-2v dsfr-badge-info"
+      <DatasetCardForSelect
+        :dataset="slotProps.option"
+        :already-selected="alreadySelected(slotProps.option.id)"
+        badge-position="relative"
       />
-      {{ slotProps.option.archived }}
-      <DatasetCardForSelect :dataset="slotProps.option" />
     </template>
     <template #noOptions> Précisez ou élargissez votre recherche </template>
   </Multiselect>
@@ -112,10 +101,6 @@ const clear = () => {
 <style scoped>
 .multiselect {
   margin-top: 1rem;
-}
-.dsfr-badge-info.dsfr-badge-info::before {
-  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
-  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
 }
 :deep(.multiselect__option::after) {
   clip: rect(0 0 0 0);
