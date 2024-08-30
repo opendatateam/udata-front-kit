@@ -3,10 +3,6 @@
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://demo.data.gouv.fr
-  # oauth settings
-  oauth_client_id:
-  # pkce client secret, explicitely public
-  oauth_client_secret:
 
 universe:
   # "universe" topic id

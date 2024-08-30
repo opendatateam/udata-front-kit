@@ -3,10 +3,6 @@
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
-  # oauth settings
-  oauth_client_id: 651479c317ad47b21e41a9d4
-  # pkce client secret, explicitely public
-  oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
 
 universe:
   # "universe" topic id

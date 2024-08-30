@@ -3,10 +3,6 @@
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
-  # oauth settings
-  oauth_client_id:
-  # pkce client secret, explicitely public
-  oauth_client_secret:
 
 universe:
   # "universe" topic id
@@ -223,10 +219,10 @@ website:
     activate_read_more: false
     dataset_editorialization: false
     can_add_topics:
-      everyone: false
+      everyone: true
       authorized_users:
         - 6230733357772160a4f77fbadd
-# list of organisations' ids that should be handled by the portal
+themes:
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
 organizations:
