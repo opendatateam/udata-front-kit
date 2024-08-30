@@ -8,7 +8,10 @@ Verticales thématiques adossées à [data.gouv.fr](https://www.data.gouv.fr/).
 Chaque verticale est configurée dans un fichier `config.yaml` stocké sous [`configs/$verticale`](configs).
 
 La variable d'environnement `VITE_SITE_ID` permet de définir la configuration utilisée au lancement de l'application.
-Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dérivés.
+La variable d'environnement `VITE_OAUTH_CLIENT_ID` indique l'ID oauth (pas obligatoire si pas de besoin de login sur l'application)
+La variable d'environnement `VITE_OAUTH_CLIENT_KEY` indique la clé PKCE de l'oauth (pas obligatoire si pas de besoin de login sur l'application)
+
+Ces variables peuvent être définies dans le fichier [`.env`](.env) ou ses dérivés.
 
 
 ## Développement
