@@ -162,7 +162,7 @@ website:
   show_dataset_metadata_panel: false
   list_search_topics:
   url_search_topics: 'defis'
-  oauth_option: true
+  oauth_option: false
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
     - label: 'data.gouv.fr'
