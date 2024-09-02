@@ -1,0 +1,220 @@
+# config file for logistique.data.gouv.fr
+
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://www.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 66d1ecaa905edade7360af3e
+  # pkce client secret, explicitely public
+  oauth_client_secret: 9rPKKxaYjVwaojo7obY3IX9zHLQgVEewTOBI6YlF82Tx6vjx6Q
+
+universe:
+  # "universe" topic id
+  topic_id: 66d5caab2ef9e95fc1625446
+  # universe name, used as bouquets tag
+  name: logistique
+
+robots:
+  disallow:
+    - /
+  sitemap:
+
+# UI customizations
+website:
+  title: 'logistique.data.gouv.fr'
+  rf_title: 'MINISTÈRE<br>
+    DE LA TRANSITION<br>ECOLOGIQUE'
+  service_logo: '/logos/logistique-logo.svg'
+  badge:
+    display: false
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+  homepage:
+    title: 'Les données ouvertes de la logistique'
+    subtitle: 'logistique.data.gouv.fr centralise et structure les données publiques relatives à la logistique. Vous y trouverez des données brutes téléchargeable et utilisable de manière libre et gratuite.'
+    sections:
+      - title: Bouquets de données
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - name: 'Transport routier'
+              description: 'Statistiques et informations sur le transport de marchandises et de passagers par route, incluant infrastructures et flotte.'
+              url: 'bouquets/bouquet-de-donnees-du-transport-routier'
+              image_url: '/logistique/assets/routier.jpg'
+            - name: 'Transport ferroviaire'
+              description: "Données sur les services et les transports ferroviaires, incluant fret et passagers, ainsi que l'infrastructure ferroviaire et les véhicules"
+              url: 'bouquets/bouquet-de-donnees-du-transport-ferroviaire'
+              image_url: '/logistique/assets/ferroviaire.jpg'
+            - name: 'Transport fluvial'
+              description: 'Informations sur le transport de marchandises et de passagers par voies navigables intérieures, incluant infrastructures et flotte'
+              url: 'bouquets/bouquet-de-donnees-du-transport-fluvial'
+              image_url: '/logistique/assets/fluvial.jpg'
+            - name: 'Transport maritime'
+              description: 'Données sur le transport international et côtier de marchandises et de passagers, incluant ports et flotte maritime.'
+              url: 'bouquets/bouquet-de-donnees-du-transport-maritime'
+              image_url: '/logistique/assets/maritime.jpg'
+            - name: 'Transport aérien'
+              description: 'Statistiques sur le transport de marchandises et de passagers par avion, incluant aéroports, compagnies aériennes et flotte.'
+              url: 'bouquets/bouquet-de-donnees-du-transport-aerien'
+              image_url: '/logistique/assets/aerien.jpg'
+            - name: 'Immobilier logistique'
+              description: "Données sur l'immobilier dédié aux activités de logistique, incluant entrepôts, centres de distribution et infrastructures associées."
+              url: 'bouquets/bouquet-de-donnees-sur-limmobilier-logistique'
+              image_url: '/logistique/assets/immobilier.jpg'
+            - name: 'Filière agricole'
+              description: 'Données sur la filière agricole relatives aux activités de logistique.'
+              url: 'bouquets/bouquet-de-donnees-sur-la-filiere-agricole'
+              image_url: '/logistique/assets/agricole.jpg'
+            - name: 'Prévention des risques'
+              description: 'Données sur la prévention des risques relatives aux activités de logistique.'
+              url: 'bouquets/bouquet-de-donnees-sur-la-prevention-des-risques'
+              image_url: '/logistique/assets/risques.jpg'
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description:
+  header_button:
+    display: true
+    label: 'Donnez votre avis'
+    link:
+  header_search:
+    display: true
+    placeholder: Rechercher...
+  search_bar:
+    display: true
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name:
+    link:
+  menu:
+    - text: Accès aux données
+      to: /bouquets
+    - text: A propos
+      to: /about
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    pages:
+      - title: 'A propos'
+        id: 'about'
+        route: '/about'
+        url: '/logistique/pages/about.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/logistique/pages/accessibility.md'
+  show_quality_component: true
+  list_search_topics:
+  url_search_topics: 'datasets'
+  oauth_option: true
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
+  footer_external_links:
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  logo_operator:
+  notice:
+    display: false
+    content: Notice avec un [lien beta](/beta) et du _style_
+    closeable: false
+  # display settings
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 100
+    files_list: 6
+  home_banner_colors:
+    - '#D2EAF7'
+    - '#DBF3F8'
+    - '#DBF2F0'
+  env: 'prod'
+  matomo:
+    host:
+    siteId:
+  discussions:
+    dataset:
+      display: true
+      create: true
+    topic:
+      display: false
+      create: false
+  datasets:
+    organization_filter: false
+    add_to_bouquet: true
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel: false
+  topics:
+    slug: bouquets
+    name: bouquet de donnée
+    extras_key: 'logistique'
+    themes:
+      usage: true
+      main_name: catégorie
+      secondary_name: sous-catégorie
+    # include a list page with all topics
+    list_all: false
+    display_metadata: false
+    activate_read_more: false
+    dataset_editorialization: false
+    can_add_topics:
+      everyone: false
+      authorized_users:
+        - 6230733357772160a4f77fbaxx
+themes:
+  - name: Transport routier
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+  - name: Filière agricole
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+  - name: Immobilier logistique
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+  - name: Prévention des risques
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+  - name: Transport aérien
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+  - name: Transport ferroviaire
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+  - name: Transport fluvial
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+  - name: Transport maritime
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Données
+
+# list of organisations' ids that should be handled by the portal
+# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+# then Informations > ID at the bottom of the page
+organizations:
