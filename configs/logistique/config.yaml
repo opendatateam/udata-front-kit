@@ -32,7 +32,7 @@ website:
   # leave empty if not pertinent
   homepage:
     title: 'Les données ouvertes de la logistique'
-    subtitle: 'logistique.data.gouv.fr centralise et structure les données publiques relatives à la logistique. Vous y trouverez des données brutes téléchargeable et utilisable de manière libre et gratuite.'
+    subtitle: 'logistique.data.gouv.fr centralise et structure les données publiques relatives à la logistique. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite.'
     sections:
       - title: Bouquets de données
         content:
