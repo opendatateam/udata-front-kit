@@ -4,165 +4,149 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import maplibregl from 'maplibre-gl'
 import type { StyleSpecification } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 import styleVector from '../assets/style.json'
 import type { FeatureCollection, Feature, MapOptions, Station } from '../types'
 
-export default defineComponent({
-  name: 'MapComponent',
-  props: {
-    options: {
-      type: Object as () => MapOptions,
-      required: true
-    },
-    points: {
-      type: Object as () => FeatureCollection,
-      required: true
+const props = defineProps<{
+  options: MapOptions
+  points: FeatureCollection
+}>()
+
+const emit = defineEmits(['update:postes'])
+
+const mapContainer = ref<HTMLDivElement | null>(null)
+let map: maplibregl.Map | null = null
+const markers: maplibregl.Marker[] = []
+const postes = ref<Station[]>([])
+
+const initializeMap = () => {
+  if (mapContainer.value) {
+    map = new maplibregl.Map({
+      container: mapContainer.value,
+      style: styleVector as StyleSpecification,
+      zoom: props.options.zoom,
+      center: [
+        (props.options.minx + props.options.maxx) / 2,
+        (props.options.miny + props.options.maxy) / 2
+      ]
+    })
+
+    map.fitBounds(
+      [
+        [props.options.minx, props.options.miny],
+        [props.options.maxx, props.options.maxy]
+      ],
+      {
+        animate: false
+      }
+    )
+
+    map.on('load', () => {
+      addPointsToMap()
+    })
+  }
+}
+
+const onMarkerClick = (point: Feature) => {
+  if (point.properties && point.properties['NUM_POSTE']) {
+    if (
+      postes.value.some((item) => item.id === point.properties['NUM_POSTE'])
+    ) {
+      postes.value = postes.value.filter(
+        (item) => item.id !== point.properties['NUM_POSTE']
+      )
+    } else {
+      postes.value.push({
+        id: point.properties['NUM_POSTE'],
+        name: point.properties['NOM_USUEL']
+      })
     }
-  },
-  emits: ['update:postes'],
-  setup(props, { emit }) {
-    const mapContainer = ref<HTMLDivElement | null>(null)
-    let map: maplibregl.Map | null = null
-    const markers: maplibregl.Marker[] = []
-    const postes = ref<Station[]>([])
+    emit('update:postes', postes.value)
+  }
+}
 
-    const initializeMap = () => {
-      if (mapContainer.value) {
-        map = new maplibregl.Map({
-          container: mapContainer.value,
-          style: styleVector as StyleSpecification,
-          zoom: props.options.zoom,
-          center: [
-            (props.options.minx + props.options.maxx) / 2,
-            (props.options.miny + props.options.maxy) / 2
-          ]
-        })
+const createCustomMarker = (color: string) => {
+  const el = document.createElement('div')
+  el.className = 'custom-marker'
+  el.style.backgroundColor = color
+  el.style.width = '20px'
+  el.style.height = '20px'
+  el.style.borderRadius = '50%'
+  el.style.cursor = 'pointer'
+  return el
+}
 
-        map.fitBounds(
+const addPointsToMap = () => {
+  if (
+    map &&
+    props.points &&
+    props.points.features &&
+    props.points.features.length > 0
+  ) {
+    props.points.features.forEach((point: Feature) => {
+      const markerElement = createCustomMarker('#AAAAAA')
+      const marker = new maplibregl.Marker({ element: markerElement })
+        .setLngLat([
+          point.geometry.coordinates[0],
+          point.geometry.coordinates[1]
+        ])
+        .addTo(map!)
+      markers.push(marker)
+      markerElement.addEventListener('click', () => {
+        if (
+          postes.value.some((item) => item.id === point.properties['NUM_POSTE'])
+        ) {
+          markerElement.style.backgroundColor = '#AAAAAA'
+        } else {
+          markerElement.style.backgroundColor = '#3558A2'
+        }
+        onMarkerClick(point)
+      })
+    })
+  }
+}
+
+onMounted(() => {
+  initializeMap()
+})
+
+watch(
+  () => props.options,
+  (newOptions) => {
+    if (map) {
+      map.remove()
+      map = new maplibregl.Map({
+        container: mapContainer.value!,
+        style: styleVector as StyleSpecification,
+        zoom: newOptions.zoom,
+        center: [
+          (newOptions.minx + newOptions.maxx) / 2,
+          (newOptions.miny + newOptions.maxy) / 2
+        ]
+      })
+
+      map.on('load', () => {
+        map!.fitBounds(
           [
-            [props.options.minx, props.options.miny],
-            [props.options.maxx, props.options.maxy]
+            [newOptions.minx, newOptions.miny],
+            [newOptions.maxx, newOptions.maxy]
           ],
           {
             animate: false
           }
         )
 
-        map.on('load', function () {
-          addPointsToMap()
-        })
-      }
-    }
-
-    const onMarkerClick = (point: Feature) => {
-      if (point.properties && point.properties['NUM_POSTE']) {
-        if (
-          postes.value.some((item) => item.id === point.properties['NUM_POSTE'])
-        ) {
-          postes.value = postes.value.filter(
-            (item) => item.id !== point.properties['NUM_POSTE']
-          )
-        } else {
-          postes.value.push({
-            id: point.properties['NUM_POSTE'],
-            name: point.properties['NOM_USUEL']
-          })
-        }
-        emit('update:postes', postes.value)
-      }
-    }
-
-    const createCustomMarker = (color: string) => {
-      const el = document.createElement('div')
-      el.className = 'custom-marker'
-      el.style.backgroundColor = color
-      el.style.width = '20px'
-      el.style.height = '20px'
-      el.style.borderRadius = '50%'
-      el.style.cursor = 'pointer'
-      return el
-    }
-
-    const addPointsToMap = () => {
-      if (
-        map &&
-        props.points &&
-        props.points.features &&
-        props.points.features.length > 0
-      ) {
-        props.points.features.forEach((point: Feature) => {
-          const markerElement = createCustomMarker('#AAAAAA')
-          const marker = new maplibregl.Marker({ element: markerElement })
-            .setLngLat([
-              point.geometry.coordinates[0],
-              point.geometry.coordinates[1]
-            ])
-            .addTo(map!) // Non-null assertion here
-          markers.push(marker)
-          markerElement.addEventListener('click', () => {
-            if (
-              postes.value.some(
-                (item) => item.id === point.properties['NUM_POSTE']
-              )
-            ) {
-              markerElement.style.backgroundColor = '#AAAAAA'
-            } else {
-              markerElement.style.backgroundColor = '#3558A2'
-            }
-            onMarkerClick(point)
-          })
-        })
-      }
-    }
-
-    onMounted(() => {
-      initializeMap()
-    })
-
-    watch(
-      () => props.options,
-      (newOptions) => {
-        if (map) {
-          map.remove()
-          map = new maplibregl.Map({
-            container: mapContainer.value!,
-            style: styleVector as StyleSpecification,
-            zoom: newOptions.zoom,
-            center: [
-              (newOptions.minx + newOptions.maxx) / 2,
-              (newOptions.miny + newOptions.maxy) / 2
-            ]
-          })
-
-          map.on('load', function () {
-            map!.fitBounds(
-              // Non-null assertion here
-              [
-                [newOptions.minx, newOptions.miny],
-                [newOptions.maxx, newOptions.maxy]
-              ],
-              {
-                animate: false
-              }
-            )
-
-            addPointsToMap()
-          })
-        }
-      }
-    )
-
-    return {
-      mapContainer
+        addPointsToMap()
+      })
     }
   }
-})
+)
 </script>
 
 <style>

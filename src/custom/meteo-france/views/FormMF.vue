@@ -433,7 +433,7 @@ const modalMessage = ref(
         />
       </div>
       <br /><br />
-      <h4>Téléchargement par station</h4>
+      <h4>Téléchargement par période</h4>
       <p>
         Vous pouvez également télécharger les fichiers par grand groupes de
         période.
