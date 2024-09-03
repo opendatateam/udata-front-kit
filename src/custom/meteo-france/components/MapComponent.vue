@@ -83,12 +83,7 @@ const createCustomMarker = (color: string) => {
 }
 
 const addPointsToMap = () => {
-  if (
-    map &&
-    props.points &&
-    props.points.features &&
-    props.points.features.length > 0
-  ) {
+  if (map && props.points?.features?.length) {
     props.points.features.forEach((point: Feature) => {
       const markerElement = createCustomMarker('#AAAAAA')
       const marker = new maplibregl.Marker({ element: markerElement })
