@@ -102,6 +102,7 @@ const badgeClasse = computed(() => {
 .card:has(.fr-badge.absolute) {
   padding-top: 1rem;
 }
+/* FIXME https://github.com/datagouv/udata-front/issues/499 */
 .dsfr-badge-info.dsfr-badge-info::before {
   -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
   mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
