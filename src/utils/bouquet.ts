@@ -124,11 +124,21 @@ export function useExtras(topic: Ref<Topic | null>): {
         subtheme.value = topicsUseThemes ? extras.subtheme : undefined
         datasetsProperties.value = extras.datasets_properties ?? []
 
-        for (let dataset of datasetsProperties?.value) {
-          const id = dataset.id ?? null
+        for (const dataset of datasetsProperties.value) {
+          const id = dataset.id
           if (id) {
-            const archived = useDatasetStore().get(id)?.archived
-            dataset.archived = !!archived
+            useDatasetStore()
+              .load(id)
+              .then((res) => {
+                dataset.archived = !!res?.archived
+              })
+              .catch((err) => {
+                console.error(
+                  'Failed fetching archive status',
+                  err.response?.data
+                )
+                dataset.archived = undefined
+              })
           }
         }
 
