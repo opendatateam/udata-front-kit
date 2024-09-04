@@ -21,6 +21,7 @@ export interface DatasetProperties {
   availability: Availability
   // this is a "local" property, not stored on data.gouv.fr
   remoteDeleted?: boolean
+  archived?: boolean
 }
 
 export interface SiteTopicExtras {
