@@ -59,7 +59,7 @@ const badgeClasse = computed(() => {
       label="Déjà utilisé dans ce bouquet"
       small
       ellipsis
-      :class="[badgeClasse, 'dsfr-badge-info']"
+      :class="badgeClasse"
     />
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-auto">
@@ -101,11 +101,6 @@ const badgeClasse = computed(() => {
 <style scoped>
 .card:has(.fr-badge.absolute) {
   padding-top: 1rem;
-}
-/* FIXME https://github.com/datagouv/udata-front/issues/499 */
-.dsfr-badge-info.dsfr-badge-info::before {
-  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
-  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
 }
 h4 {
   font-size: 1rem;

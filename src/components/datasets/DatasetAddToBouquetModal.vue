@@ -42,8 +42,7 @@ const bouquetOptions = computed(() => {
   return bouquets.value.map((bouquet) => {
     return {
       value: bouquet.id,
-      text: bouquet.name,
-      alreadySelected: isDatasetInBouquet(bouquet)
+      text: bouquet.name
     }
   })
 })
@@ -75,13 +74,7 @@ const modalActions = computed(() => {
   ]
 })
 
-const isDatasetInBouquet = (bouquet: Topic): boolean => {
-  const datasetsProperties = bouquet.extras[topicsExtrasKey].datasets_properties
-  return datasetsProperties.some(
-    (datasetProps) => datasetProps.id === props.dataset.id
-  )
-}
-const isAlreadySelected = computed(() => {
+const isDatasetInBouquet = computed(() => {
   if (selectedBouquetId.value === null) {
     return false
   }
@@ -152,12 +145,12 @@ onMounted(() => {
       </template>
     </DsfrSelect>
     <DsfrBadge
-      v-if="isAlreadySelected"
+      v-if="isDatasetInBouquet"
       type="info"
       label="Déjà utilisé dans ce bouquet"
       small
       ellipsis
-      class="dsfr-badge-info fr-mb-2w"
+      class="fr-mb-2w"
     />
     <DatasetPropertiesTextFields
       v-if="topicsDatasetEditorialization"
@@ -167,13 +160,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.fr-select-group:has(+ .dsfr-badge-info) {
+.fr-select-group:has(+ .fr-badge) {
   margin-bottom: 0.5rem;
-}
-
-/* FIXME https://github.com/datagouv/udata-front/issues/499 */
-.dsfr-badge-info.dsfr-badge-info::before {
-  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
-  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
 }
 </style>
