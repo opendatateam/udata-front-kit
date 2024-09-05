@@ -18,6 +18,8 @@ const props = defineProps({
 const datasetPropertiesRef = toRef(props, 'datasetProperties')
 const dataset: Ref<DatasetV2 | undefined> = ref()
 
+const emit = defineEmits(['update:archiveStatus'])
+
 watch(
   datasetPropertiesRef,
   () => {

@@ -123,25 +123,6 @@ export function useExtras(topic: Ref<Topic | null>): {
         theme.value = topicsUseThemes ? extras.theme : undefined
         subtheme.value = topicsUseThemes ? extras.subtheme : undefined
         datasetsProperties.value = extras.datasets_properties ?? []
-
-        for (const dataset of datasetsProperties.value) {
-          const id = dataset.id
-          if (id) {
-            useDatasetStore()
-              .load(id)
-              .then((res) => {
-                dataset.archived = !!res?.archived
-              })
-              .catch((err) => {
-                console.error(
-                  'Failed fetching archive status',
-                  err.response?.data
-                )
-                dataset.archived = undefined
-              })
-          }
-        }
-
         if (extras.cloned_from != null) {
           useTopicStore()
             .load(extras.cloned_from, { toasted: false })
