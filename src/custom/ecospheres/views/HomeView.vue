@@ -22,11 +22,6 @@ useHead({
     { property: 'og:title', content: config.website.title },
     { name: 'description', content: config.website.homepage.meta_description },
     {
-      name: 'robots',
-      content:
-        config.website.env === 'prod' ? 'index, follow' : 'noindex, nofollow'
-    },
-    {
       property: 'og:description',
       content: config.website.homepage.meta_description
     }

@@ -149,12 +149,7 @@ useHead({
   meta: [
     { property: 'og:title', content: metaTitle },
     { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription },
-    {
-      name: 'robots',
-      content:
-        config.website.env === 'prod' ? 'index, follow' : 'noindex, nofollow'
-    }
+    { property: 'og:description', content: metaDescription }
   ],
   link: [{ rel: 'canonical', href: metaLink }]
 })
