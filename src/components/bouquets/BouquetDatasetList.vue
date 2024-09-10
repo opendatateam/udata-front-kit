@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, defineModel, type Ref } from 'vue'
+import { type DatasetV2 } from '@datagouv/components'
+import { computed, ref, defineModel, type Ref, onMounted } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import DatasetEditModal, {
@@ -7,9 +8,12 @@ import DatasetEditModal, {
 } from '@/components/forms/dataset/DatasetEditModal.vue'
 import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
+import { useDatasetStore } from '@/store/DatasetStore'
 import { fromMarkdown } from '@/utils'
 import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
+import { toastHttpError } from '@/utils/error'
+import { isNotFoundError } from '@/utils/http'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
@@ -70,6 +74,34 @@ const removeDataset = (index: number) => {
   }
 }
 
+const datasetsContent: Ref<DatasetV2[] | undefined> = ref([])
+
+// FIXME
+// order is not respected when API response is faster for a later call
+// Using splice() instead of push() ?
+const localDatasetProperties = () => {
+  datasets.value.forEach((datasetItem, index) => {
+    const id = datasetItem.id ?? null
+    if (id && !datasetItem.remoteDeleted) {
+      useDatasetStore()
+        .load(id, { toasted: false })
+        .then((d) => {
+          if (d) {
+            datasetsContent.value?.splice(index, 0, d)
+          }
+          datasetItem.archived = !!d?.archived
+        })
+        .catch((err) => {
+          if (isNotFoundError(err)) {
+            datasetItem.remoteDeleted = true
+          } else {
+            toastHttpError(err)
+          }
+        })
+    }
+  })
+}
+
 const saveOrder = () => {
   isReorder.value = false
   emits('updateDatasets')
@@ -92,6 +124,10 @@ const triggerReorder = () => {
   collapseAll()
   isReorder.value = true
 }
+
+onMounted(() => {
+  localDatasetProperties()
+})
 </script>
 
 <template>
@@ -197,8 +233,9 @@ const triggerReorder = () => {
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="fromMarkdown(dataset.purpose)"></div>
             <BouquetDatasetCard
-              v-if="dataset.id"
+              v-if="dataset.id && datasetsContent?.length"
               :dataset-properties="dataset"
+              :dataset-content="datasetsContent[index]"
             />
             <div class="fr-grid-row">
               <DsfrButton
@@ -239,7 +276,11 @@ const triggerReorder = () => {
     </div>
     <div v-else>
       <div v-for="(dataset, index) in datasets" :key="index">
-        <BouquetDatasetCard v-if="dataset.id" :dataset-properties="dataset" />
+        <BouquetDatasetCard
+          v-if="dataset.id && datasetsContent?.length"
+          :dataset-properties="dataset"
+          :dataset-content="datasetsContent[index]"
+        />
       </div>
     </div>
   </div>
