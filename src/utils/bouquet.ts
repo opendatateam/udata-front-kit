@@ -16,7 +16,6 @@ import {
   type DatasetProperties,
   type SiteTopicExtras
 } from '@/model/topic'
-import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
@@ -123,6 +122,7 @@ export function useExtras(topic: Ref<Topic | null>): {
         theme.value = topicsUseThemes ? extras.theme : undefined
         subtheme.value = topicsUseThemes ? extras.subtheme : undefined
         datasetsProperties.value = extras.datasets_properties ?? []
+
         if (extras.cloned_from != null) {
           useTopicStore()
             .load(extras.cloned_from, { toasted: false })
