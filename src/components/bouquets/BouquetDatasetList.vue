@@ -233,7 +233,7 @@ onMounted(() => {
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="fromMarkdown(dataset.purpose)"></div>
             <BouquetDatasetCard
-              v-if="dataset.id && !!datasetsContent.size"
+              v-if="dataset.id && !!datasetsContent.get(dataset.id)"
               :dataset-properties="dataset"
               :dataset-content="datasetsContent.get(dataset.id)"
             />
@@ -277,7 +277,7 @@ onMounted(() => {
     <div v-else>
       <div v-for="(dataset, index) in datasets" :key="index">
         <BouquetDatasetCard
-          v-if="dataset.id && !!datasetsContent.size"
+          v-if="dataset.id && !!datasetsContent.get(dataset.id)"
           :dataset-properties="dataset"
           :dataset-content="datasetsContent.get(dataset.id)"
         />
