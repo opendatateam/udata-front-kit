@@ -11,7 +11,7 @@ const props = defineProps({
     required: true
   },
   datasetContent: {
-    type: Object as () => Dataset | DatasetV2 | undefined,
+    type: Object as () => DatasetV2 | undefined,
     required: true
   }
 })

@@ -74,20 +74,20 @@ const removeDataset = (index: number) => {
   }
 }
 
-const datasetsContent: Ref<DatasetV2[] | undefined> = ref([])
+const datasetsContent = ref(new Map<string, DatasetV2>())
 
 // FIXME
 // order is not respected when API response is faster for a later call
 // Using splice() instead of push() ?
-const localDatasetProperties = () => {
-  datasets.value.forEach((datasetItem, index) => {
+const setLocalDatasetProperties = () => {
+  datasets.value.forEach((datasetItem) => {
     const id = datasetItem.id ?? null
     if (id && !datasetItem.remoteDeleted) {
       useDatasetStore()
         .load(id, { toasted: false })
         .then((d) => {
-          if (d) {
-            datasetsContent.value?.splice(index, 0, d)
+          if (d && id) {
+            datasetsContent.value.set(id, d)
           }
           datasetItem.archived = !!d?.archived
         })
@@ -126,7 +126,7 @@ const triggerReorder = () => {
 }
 
 onMounted(() => {
-  localDatasetProperties()
+  setLocalDatasetProperties()
 })
 </script>
 
@@ -233,9 +233,9 @@ onMounted(() => {
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="fromMarkdown(dataset.purpose)"></div>
             <BouquetDatasetCard
-              v-if="dataset.id && datasetsContent?.length"
+              v-if="dataset.id && !!datasetsContent.size"
               :dataset-properties="dataset"
-              :dataset-content="datasetsContent[index]"
+              :dataset-content="datasetsContent.get(dataset.id)"
             />
             <div class="fr-grid-row">
               <DsfrButton
@@ -277,9 +277,9 @@ onMounted(() => {
     <div v-else>
       <div v-for="(dataset, index) in datasets" :key="index">
         <BouquetDatasetCard
-          v-if="dataset.id && datasetsContent?.length"
+          v-if="dataset.id && !!datasetsContent.size"
           :dataset-properties="dataset"
-          :dataset-content="datasetsContent[index]"
+          :dataset-content="datasetsContent.get(dataset.id)"
         />
       </div>
     </div>

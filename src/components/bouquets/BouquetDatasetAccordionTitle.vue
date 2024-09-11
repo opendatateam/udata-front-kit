@@ -2,7 +2,7 @@
 import type { DatasetProperties } from '@/model/topic'
 import { isAvailable } from '@/utils/bouquet'
 
-const props = defineProps({
+defineProps({
   datasetProperties: {
     type: Object as () => DatasetProperties,
     required: true
