@@ -103,13 +103,22 @@ const onUpdateDatasets = () => {
     throw Error('Trying to update null topic')
   }
   const loader = useLoading().show()
+
+  // Deduplicate datasets ids in case of same DS used multiple times
+  // API rejects PUT if the same id is used more than once
+  const dedupedDatasets = [
+    ...new Set(
+      datasetsProperties.value
+        .filter((d) => d.id !== null && d.remoteDeleted !== true)
+        .map((d) => d.id)
+    )
+  ]
+
   store
     .update(topic.value.id, {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
-      datasets: datasetsProperties.value
-        .filter((d) => d.id !== null && d.remoteDeleted !== true)
-        .map((d) => d.id),
+      datasets: dedupedDatasets,
       extras: updateTopicExtras(topic.value, {
         datasets_properties: datasetsProperties.value.map(
           ({ remoteDeleted, ...data }) => data

@@ -43,7 +43,7 @@ const search = debounce(async (query: string) => {
     await new SearchAPI().search(query, null, 1, {
       page_size: 10
     })
-  ).data.filter((dataset) => !alreadySelected(dataset.id))
+  ).data
   options.value = datasets
   isLoading.value = false
 }, 400)
@@ -69,7 +69,6 @@ const clear = () => {
     :loading="isLoading"
     :clear-on-select="true"
     :close-on-select="true"
-    :max-height="600"
     :show-no-results="false"
     :hide-selected="true"
     @search-change="search"
@@ -82,16 +81,27 @@ const clear = () => {
       ></div>
     </template>
     <template #singleLabel="slotProps">
-      <DatasetCardForSelect :dataset="slotProps.option" />
+      <DatasetCardForSelect
+        :dataset="slotProps.option"
+        :already-selected="alreadySelected(slotProps.option.id)"
+        badge-position="absolute"
+      />
     </template>
     <template #option="slotProps">
-      <DatasetCardForSelect :dataset="slotProps.option" />
+      <DatasetCardForSelect
+        :dataset="slotProps.option"
+        :already-selected="alreadySelected(slotProps.option.id)"
+        badge-position="relative"
+      />
     </template>
     <template #noOptions> Précisez ou élargissez votre recherche </template>
   </Multiselect>
 </template>
 
 <style scoped>
+.multiselect {
+  margin-top: 1rem;
+}
 :deep(.multiselect__option::after) {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
