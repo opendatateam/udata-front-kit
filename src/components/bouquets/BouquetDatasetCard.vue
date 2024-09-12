@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DatasetCard } from '@datagouv/components'
-import type { Dataset, DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components'
 import { toRef } from 'vue'
 
 import { type DatasetProperties } from '@/model/topic'
@@ -11,7 +11,7 @@ const props = defineProps({
     required: true
   },
   datasetContent: {
-    type: Object as () => DatasetV2 | undefined,
+    type: Object as () => DatasetV2 | null,
     required: true
   }
 })

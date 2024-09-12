@@ -76,9 +76,6 @@ const removeDataset = (index: number) => {
 
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
-// FIXME
-// order is not respected when API response is faster for a later call
-// Using splice() instead of push() ?
 const setLocalDatasetProperties = () => {
   datasets.value.forEach((datasetItem) => {
     const id = datasetItem.id ?? null
@@ -233,9 +230,9 @@ onMounted(() => {
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="fromMarkdown(dataset.purpose)"></div>
             <BouquetDatasetCard
-              v-if="dataset.id && !!datasetsContent.get(dataset.id)"
+              v-if="dataset.id"
               :dataset-properties="dataset"
-              :dataset-content="datasetsContent.get(dataset.id)"
+              :dataset-content="datasetsContent.get(dataset.id) ?? null"
             />
             <div class="fr-grid-row">
               <DsfrButton
@@ -277,9 +274,9 @@ onMounted(() => {
     <div v-else>
       <div v-for="(dataset, index) in datasets" :key="index">
         <BouquetDatasetCard
-          v-if="dataset.id && !!datasetsContent.get(dataset.id)"
+          v-if="dataset.id"
           :dataset-properties="dataset"
-          :dataset-content="datasetsContent.get(dataset.id)"
+          :dataset-content="datasetsContent.get(dataset.id) ?? null"
         />
       </div>
     </div>
