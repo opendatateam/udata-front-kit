@@ -184,20 +184,24 @@ themes:
 
 organizations:
   - ademe
+  - agence-de-l-eau-rhone-mediterranee-et-corse
   - agence-nationale-de-la-cohesion-des-territoires
+  - agence-nationale-pour-la-renovation-urbaine
+  - agence-ore-3
+  - airparif-1
+  - atmo-bourgogne-franche-comte
+  - atmo-grand-est
+  - atmosud
+  - bureau-de-recherches-geologiques-et-minieres
   - centre-scientifique-et-technique-du-batiment
+  - cerema
+  - commission-de-regulation-de-lenergie
+  - datagrandest
   - ddt-creuse-1
-  - ddt-de-la-loire
-  - ddt-de-lain
-  - ddt-de-lardeche
   - ddt-de-meurthe-et-moselle
   - ddt-drome
   - ddt-jura
-  - ddt-savoie
-  - direction-departementale-des-territoire-du-puy-de-dome
   - direction-departementale-des-territoires-de-haute-savoie
-  - direction-departementale-des-territoires-de-la-haute-loire
-  - direction-departementale-des-territoires-de-lallier
   - direction-departementale-des-territoires-de-lisere
   - direction-departementale-des-territoires-de-saone-et-loire-71
   - direction-departementale-des-territoires-du-bas-rhin-67
@@ -214,15 +218,47 @@ organizations:
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
+  - do-terr-geo-centre
   - dreal-auvergne-rhone-alpes-1
   - dreal-limousin-1
   - dreal-nouvelle-aquitaine
   - dreal-pays-de-la-loire-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-pays-de-la-loire
   - dreal-provence-alpes-cote-dazur
+  - electricite-reseau-distribution-france
+  - equipe-transport-data-gouv-fr
+  - federation-des-parcs-naturels-regionaux-de-france
+  - fluo-grand-est
+  - gip-bretagne-environnement
+  - grdf
   - institut-francais-de-recherche-pour-lexploitation-de-la-mer
   - institut-national-de-l-information-geographique-et-forestiere
+  - irstea
+  - jvmalin
   - la-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-provence-alpes-cote-dazur
+  - ligair
   - meteo-france
   - ministere-de-l-egalite-des-territoires-et-du-logement
   - ministere-de-la-transition-ecologique
+  - morbihan-energies
+  - observatoire-de-recherche-montpellierain-de-lenvironnement
+  - office-national-des-forets
+  - oise-mobilite-syndicat-mixte-des-transports-collectifs-de-loise
+  - open-data-reseaux-energies-1
+  - parc-national-de-forets
+  - parc-national-des-cevennes
+  - parc-national-des-ecrins
+  - parc-naturel-regional-de-la-montagne-de-reims
+  - parc-naturel-regional-de-la-montagne-de-reims-1
+  - parc-naturel-regional-des-vosges-du-nord
+  - parc-naturel-regional-du-morvan
+  - parc-naturel-regional-du-vercors
+  - regie-autonome-des-transports-parisiens-ratp
+  - reseau-de-transport-delectricite
+  - section-cadastre-topographie-de-la-polynesie-francaise
   - shom
+  - sncf
+  - societe-du-grand-paris
+  - star
+  - syndicat-mixte-des-mobilites-de-laire-grenobloise
+  - systeme-d-information-sur-l-eau
+  - twisto
