@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Organization } from '@datagouv/components'
 import { debounce } from 'lodash'
-import { computed, defineModel, ref, watch, type Ref } from 'vue'
+import { computed, ref, watch, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
@@ -37,10 +37,9 @@ const radioOptions = [
   }
 ]
 const selectOptions = computed(() => {
-  const options = organizations.value.map((option, index) => {
+  return organizations.value.map((option, index) => {
     return { value: index, text: option.name }
   })
-  return options
 })
 
 const organizations = computed(() => userStore.data?.organizations || [])
@@ -91,8 +90,8 @@ watch(choice, () => {
 <template>
   <div>
     <DsfrRadioButtonSet
-      :required="true"
       v-model="choice"
+      :required="true"
       :options="radioOptions"
       :legend="`Choisissez si vous souhaitez gérer ce ${topicsName}&nbsp;:`"
     />
@@ -102,25 +101,26 @@ watch(choice, () => {
     >
       <div class="fr-fieldset__element">
         <DsfrSelect
-          v-model="selectedOwnOrganization"
-          label="Organisations dont vous faites partie."
-          defaultUnselectedText="Sélectionnez une ogranisation"
           id="ownerOrg"
+          v-model="selectedOwnOrganization"
+          label="Organisations dont vous faites partie&nbsp;:"
+          default-unselected-text="Sélectionnez une ogranisation"
           :options="selectOptions"
-          @update:modelValue="onSelectOwnOrganization()"
+          @update:model-value="onSelectOwnOrganization()"
         />
       </div>
       <div v-if="userStore.isAdmin" class="fr-fieldset__element">
         <label class="fr-mt-2v" for="any-org-select-bouquet"
-          >Cherchez une autre organisation.</label
+          >Cherchez une autre organisation&nbsp;:</label
         >
         <Multiselect
           id="any-org-select-bouquet"
           ref="multiselect"
           v-model="selectedAnyOrganization"
+          role="search"
           :options="options"
           track-by="id"
-          placeholder="Ex: Lyon Métropole"
+          placeholder="Ex: Ministère de la Transition Ecologique"
           select-label="Entrée pour sélectionner"
           :multiple="false"
           :searchable="true"
@@ -132,7 +132,6 @@ watch(choice, () => {
           :hide-selected="true"
           @search-change="search"
           @select="onSelectAnyOrganization()"
-          role="search"
         >
           <template #caret>
             <div
