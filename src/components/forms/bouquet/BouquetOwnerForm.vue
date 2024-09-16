@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Organization } from '@datagouv/components'
 import { debounce } from 'lodash'
-import { defineModel, computed, ref, watch, type Ref, onMounted } from 'vue'
+import { computed, defineModel, ref, watch, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
@@ -91,7 +91,7 @@ watch(choice, () => {
 <template>
   <div>
     <DsfrRadioButtonSet
-      required="true"
+      :required="true"
       v-model="choice"
       :options="radioOptions"
       :legend="`Choisissez si vous souhaitez gérer ce ${topicsName}&nbsp;:`"
@@ -110,12 +110,11 @@ watch(choice, () => {
           @update:modelValue="onSelectOwnOrganization()"
         />
       </div>
-      <div class="fr-fieldset__element">
+      <div v-if="userStore.isAdmin" class="fr-fieldset__element">
         <label class="fr-mt-2v" for="any-org-select-bouquet"
           >Cherchez une autre organisation.</label
         >
         <Multiselect
-          v-if="userStore.isAdmin"
           id="any-org-select-bouquet"
           ref="multiselect"
           v-model="selectedAnyOrganization"
