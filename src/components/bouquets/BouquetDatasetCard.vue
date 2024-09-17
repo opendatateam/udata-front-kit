@@ -12,6 +12,7 @@ const props = defineProps({
   },
   datasetContent: {
     type: Object as () => DatasetV2,
+    default: null,
     required: false
   }
 })
