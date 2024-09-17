@@ -11,7 +11,9 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 interface Config {
   website: {
     title: string
-    env: string
+  }
+  robots: {
+    meta: string
   }
 }
 
@@ -31,10 +33,7 @@ export default defineConfig(({ mode }) => {
         inject: {
           data: {
             title: config.website.title,
-            metaRobots:
-              config.website.env === 'prod'
-                ? 'index, follow'
-                : 'noindex, nofollow'
+            metaRobots: config.robots.meta
           }
         }
       }),

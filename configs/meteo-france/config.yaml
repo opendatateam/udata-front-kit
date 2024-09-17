@@ -16,8 +16,8 @@ universe:
 
 robots:
   disallow:
-    - /
   sitemap:
+  meta: 'index, follow'
 
 # UI customizations
 website:
