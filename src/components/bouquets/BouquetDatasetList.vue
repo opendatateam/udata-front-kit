@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type DatasetV2 } from '@datagouv/components'
-import { computed, ref, type Ref, onMounted } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import DatasetEditModal, {
@@ -41,6 +41,7 @@ const isReorder = ref(false)
 const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 // make a copy for local reordering before save
 const originalDatasets = ref([...datasetsProperties.value])
+const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { topicsName } = useTopicsConf()
 
@@ -76,8 +77,6 @@ const removeDataset = (index: number) => {
     emits('updateDatasets')
   }
 }
-
-const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const loadDatasetsContent = () => {
   datasetsProperties.value.forEach((datasetItem) => {
@@ -123,6 +122,11 @@ const editDataset = (dataset: DatasetProperties, index: number) => {
 const triggerReorder = () => {
   collapseAll()
   isReorder.value = true
+}
+
+const onDatasetEditModalSubmit = () => {
+  emits('updateDatasets')
+  loadDatasetsContent()
 }
 
 onMounted(() => {
@@ -290,7 +294,7 @@ onMounted(() => {
     v-if="isEdit"
     ref="modal"
     v-model="datasetsProperties"
-    @submit-modal="emits('updateDatasets'), loadDatasetsContent()"
+    @submit-modal="onDatasetEditModalSubmit"
   />
 </template>
 
