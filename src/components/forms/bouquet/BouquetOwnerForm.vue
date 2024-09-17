@@ -23,8 +23,25 @@ const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
 )
 
-const selectedAnyOrganization: Ref<Organization | undefined> = ref(undefined)
-const selectedOwnOrganization: Ref<string | undefined> = ref(undefined)
+const organizations = computed(() => userStore.data?.organizations || [])
+
+// checks if current owner is a user's org and return its id
+const ownOrganizationIndex = computed(() => {
+  return organizations.value.findIndex(
+    (org) => org.id === topic.value.organization?.id
+  )
+})
+// both models check the above index to determine the default owner to display
+const selectedAnyOrganization: Ref<Organization | undefined> = ref(
+  ownOrganizationIndex.value < 0 && !topic.value.owner
+    ? topic.value.organization
+    : undefined
+)
+const selectedOwnOrganization: Ref<number | string | undefined> = ref(
+  ownOrganizationIndex.value >= 0 && !topic.value.owner
+    ? ownOrganizationIndex.value
+    : undefined
+)
 
 const radioOptions = [
   {
@@ -41,8 +58,6 @@ const selectOptions = computed(() => {
     return { value: index, text: option.name }
   })
 })
-
-const organizations = computed(() => userStore.data?.organizations || [])
 
 const isLoading = ref(false)
 const options: Ref<Organization[]> = ref([])
@@ -61,7 +76,7 @@ const search = debounce(async (query: string) => {
 
 const onSelectOwnOrganization = () => {
   if (selectedOwnOrganization.value) {
-    const idx = parseInt(selectedOwnOrganization.value)
+    const idx = Number(selectedOwnOrganization.value)
     topic.value.organization = organizations.value[idx]
     topic.value.owner = null
     clear()
@@ -104,7 +119,7 @@ watch(choice, () => {
           id="ownerOrg"
           v-model="selectedOwnOrganization"
           label="Organisations dont vous faites partie&nbsp;:"
-          default-unselected-text="Sélectionnez une ogranisation"
+          default-unselected-text="Sélectionnez une organisation"
           :options="selectOptions"
           @update:model-value="onSelectOwnOrganization()"
         />
