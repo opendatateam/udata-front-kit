@@ -20,6 +20,9 @@ const defaultRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
+    meta: {
+      title: 'Accueil'
+    },
     component: async () => await import('@/views/HomeView.vue')
   },
   // datasets
@@ -29,6 +32,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'datasets',
+        meta: {
+          title: 'Données'
+        },
         component: async () =>
           await import('@/views/datasets/DatasetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
@@ -41,6 +47,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':did',
         name: 'dataset_detail',
+        meta: {
+          title: 'Données détails'
+        },
         component: async () =>
           await import('@/views/datasets/DatasetDetailView.vue')
       }
@@ -54,12 +63,19 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'organizations',
+        meta: {
+          title: 'Organisations'
+        },
         component: async () =>
           await import('@/views/organizations/OrganizationsListView.vue')
       },
       {
         path: ':oid',
         name: 'organization_detail',
+        meta: {
+          // FIXME
+          title: 'Organisations'
+        },
         component: async () =>
           await import('@/views/organizations/OrganizationDetailView.vue')
       }
@@ -71,6 +87,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: '',
         name: topicsSlug,
+        meta: {
+          title: topicsSlug
+        },
         component: async () =>
           await import('@/views/bouquets/BouquetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
@@ -84,6 +103,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':bid',
         name: `${topicsSlug}_detail`,
+        meta: {
+          title: `${topicsSlug} détails`
+        },
         props: (route: RouteLocationNormalizedLoaded) => ({
           bouquetId: route.params.bid
         }),
@@ -96,20 +118,23 @@ const defaultRoutes: RouteRecordRaw[] = [
     path: `/admin/${topicsSlug}/add`,
     name: `${topicsSlug}_add`,
     component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, title: 'Admin' },
     props: { isCreate: true }
   },
   {
     path: `/admin/${topicsSlug}/edit/:bid`,
     name: `${topicsSlug}_edit`,
     component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, title: 'Admin' },
     props: { isCreate: false }
   },
   // technical pages
   {
     path: '/404',
     name: 'not_found',
+    meta: {
+      title: 'Page introuvable'
+    },
     component: NotFoundView
   }
 ].filter((route) => {

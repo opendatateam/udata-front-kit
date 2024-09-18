@@ -1,16 +1,27 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { RouterView } from 'vue-router'
+import { useFocus, useTitle } from '@vueuse/core'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
 
 import config from '@/config'
 
+import LiveRegion, { type InfoToAnnounce } from './components/LiveRegion.vue'
 import Navigation from './components/Navigation.vue'
+import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
 import Header from './components/header/HeaderComponent.vue'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
 
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
+
+const skipLinks: SkipLinksProps['links'] = [
+  {
+    id: 'main',
+    text: 'Aller au contenu'
+  }
+]
+const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
   if (!config.website.notice?.display) return
@@ -58,9 +69,33 @@ const badgeStyle = config.website.badge.style
 const footerPhrase = config.website.footer_phrase
 const footerExternalLinks = config.website.footer_external_links
 const footerMandatoryLinks = config.website.footer_mandatory_links
+
+const route = useRoute()
+const skipLinksComp = ref<InstanceType<typeof SkipLinks> | null>(null)
+
+watch(
+  () => route.path,
+  () => {
+    // change page title
+    const pageTitle = (route.meta.title as string) ?? 'ecologie.data.gouv'
+    useTitle(pageTitle, {
+      titleTemplate: `%s | ${config.website.title}`
+    })
+    // announce page title to screen reader
+    liveInfos.value = [{ text: `Page : ${pageTitle}` }]
+    // focus skip link
+    if (skipLinksComp.value?.firstSkipLink) {
+      const { focused } = useFocus(skipLinksComp.value?.firstSkipLink[0])
+      focused.value = true
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
+  <SkipLinks ref="skipLinksComp" :links="skipLinks" />
+  <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="polite" />
   <DsfrNotice
     v-if="!isNoticeClosed && noticeContent"
     :closeable="config.website.notice?.closeable ? true : null"
@@ -88,9 +123,9 @@ const footerMandatoryLinks = config.website.footer_mandatory_links
     </template>
   </Header>
 
-  <div id="main">
+  <main id="main" role="main">
     <RouterView />
-  </div>
+  </main>
 
   <DsfrFooter
     class="fr-mt-16w"

@@ -64,6 +64,13 @@ routerPromise
       }
     })
 
+    // set title for each route/page
+    router.afterEach((to) => {
+      if (to.meta.title != null) {
+        document.title = to.meta.title as string
+      }
+    })
+
     // redirect to 404 if configured for this request
     axios.interceptors.response.use(
       async (response) => {

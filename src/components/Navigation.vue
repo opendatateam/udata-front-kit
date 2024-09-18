@@ -26,7 +26,7 @@ const navItems = computed(() => {
   return menuConfig.map((item) => {
     return {
       ...item,
-      'aria-current': isActive(item.to) ? true : undefined
+      'aria-current': isActive(item.to) ? 'page' : undefined
     }
   })
 })
