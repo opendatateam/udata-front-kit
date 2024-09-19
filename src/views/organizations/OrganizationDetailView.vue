@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { computed, onMounted, ref, watchEffect, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, watchEffect, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -29,8 +29,13 @@ const pages: Ref<object[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort = ref('-created')
 
+const setTitleValue: Function | undefined = inject('setTitleValue')
+
 onMounted(() => {
   orgStore.load(organizationId, -1, { toasted: false, redirectNotFound: true })
+  if (setTitleValue) {
+    setTitleValue(org.value?.name ?? undefined)
+  }
 })
 
 const sorts = [

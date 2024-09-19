@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import {
-  ResourceAccordion,
+  AppLink,
+  InformationPanel,
   OrganizationNameWithCertificate,
   Pagination,
   QualityComponent,
   ReadMore,
+  ResourceAccordion,
   Well,
-  InformationPanel,
-  AppLink,
   type License
 } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import ChartData from '@/components/ChartData.vue'
@@ -152,6 +152,8 @@ const discussionWellDescription = showDiscussions
 const openDataGouvDiscussions = () =>
   window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
 
+const setTitleValue: Function | undefined = inject('setTitleValue')
+
 // launch reuses and discussions fetch as soon as we have the technical id
 watch(
   dataset,
@@ -174,6 +176,9 @@ watch(
       throw Error('Unsupported dataset.resources format')
     }
     license.value = await datasetStore.getLicense(dataset.value.license)
+    if (setTitleValue) {
+      setTitleValue(dataset.value.title ?? undefined)
+    }
   },
   { immediate: true }
 )

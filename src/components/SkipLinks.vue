@@ -13,7 +13,7 @@ export type { SkipLinksProps }
 
 defineProps<SkipLinksProps>()
 
-// need an array because ref is an a loop
+// need an array because ref is in a loop
 const firstSkipLink = ref<HTMLAnchorElement[] | null>(null)
 
 defineExpose({
@@ -41,25 +41,36 @@ defineExpose({
 <style scoped>
 .skiplinks__list {
   padding: 6px;
+  block-size: 1px;
+  inline-size: 1px;
+  overflow: hidden;
   position: fixed;
+  margin: 0;
   top: 0;
   left: 20px;
   display: flex;
   flex-flow: row wrap;
   gap: 1rem;
-  block-size: 1px;
-  inline-size: 1px;
   -webkit-clip: rect(0 0 0 0);
   clip: rect(0 0 0 0);
-  overflow: hidden;
-  z-index: 99999;
   background-color: #fff;
+  z-index: 99999;
 }
-.skiplinks__list:focus-within {
+.skiplinks__list:focus-within:has(:focus-visible) {
   -webkit-clip: auto;
   clip: auto;
   overflow: visible;
   inline-size: auto;
   block-size: auto;
+}
+/* fallback for unsupported :has() */
+@supports not selector(:has(a, b)) {
+  .skiplinks__list:focus-within {
+    -webkit-clip: auto;
+    clip: auto;
+    overflow: visible;
+    inline-size: auto;
+    block-size: auto;
+  }
 }
 </style>

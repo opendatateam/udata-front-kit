@@ -33,7 +33,7 @@ const navItems = computed(() => {
 </script>
 
 <template>
-  <DsfrNavigation>
+  <DsfrNavigation id="main-nav">
     <DsfrNavigationItem v-for="(navItem, idx) of navItems" :key="idx">
       <DsfrNavigationMenuLink
         v-if="navItem.to && navItem.text"

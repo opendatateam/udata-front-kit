@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useFocus, useTitle } from '@vueuse/core'
-import { computed, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, onMounted, provide, ref, watch, type Ref } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 
 import config from '@/config'
@@ -17,8 +17,12 @@ const isNoticeClosed = ref(false)
 
 const skipLinks: SkipLinksProps['links'] = [
   {
-    id: 'main',
+    id: 'main-content',
     text: 'Aller au contenu'
+  },
+  {
+    id: 'main-nav',
+    text: 'Aller au menu principal'
   }
 ]
 const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
@@ -73,21 +77,32 @@ const footerMandatoryLinks = config.website.footer_mandatory_links
 const route = useRoute()
 const skipLinksComp = ref<InstanceType<typeof SkipLinks> | null>(null)
 
+const setAccessibilityProperties = (title: string | undefined) => {
+  useTitle(title, {
+    titleTemplate:
+      title !== config.website.title ? `%s | ${config.website.title}` : '%s'
+  })
+  // announce page title to screen reader
+  liveInfos.value = [{ text: `Page ${title}` }]
+  // focus skip link
+  if (skipLinksComp.value?.firstSkipLink) {
+    const { focused } = useFocus(skipLinksComp.value?.firstSkipLink[0])
+    focused.value = true
+  }
+}
+
+// change title on custom page title
+function setTitleValue(value: string) {
+  setAccessibilityProperties(value)
+}
+provide('setTitleValue', setTitleValue)
+
+// watch nav and update title
 watch(
   () => route.path,
   () => {
-    // change page title
-    const pageTitle = (route.meta.title as string) ?? 'ecologie.data.gouv'
-    useTitle(pageTitle, {
-      titleTemplate: `%s | ${config.website.title}`
-    })
-    // announce page title to screen reader
-    liveInfos.value = [{ text: `Page : ${pageTitle}` }]
-    // focus skip link
-    if (skipLinksComp.value?.firstSkipLink) {
-      const { focused } = useFocus(skipLinksComp.value?.firstSkipLink[0])
-      focused.value = true
-    }
+    const title = (route.meta.title as string) ?? config.website.title
+    setAccessibilityProperties(title)
   },
   { immediate: true }
 )
@@ -95,7 +110,7 @@ watch(
 
 <template>
   <SkipLinks ref="skipLinksComp" :links="skipLinks" />
-  <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="polite" />
+  <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
     v-if="!isNoticeClosed && noticeContent"
     :closeable="config.website.notice?.closeable ? true : null"
@@ -123,7 +138,7 @@ watch(
     </template>
   </Header>
 
-  <main id="main" role="main">
+  <main id="main-content" role="main">
     <RouterView />
   </main>
 

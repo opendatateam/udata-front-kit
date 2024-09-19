@@ -19,9 +19,9 @@ defineProps({
 </script>
 
 <template>
-  <ul id="sr-info" class="frr-only" :aria-live="ariaLiveMode" role="list">
-    <li v-for="(info, index) in infos" :key="index">{{ info.text }}</li>
-  </ul>
+  <div :aria-live="ariaLiveMode" role="status">
+    <ul id="sr-info" class="fr-s-only" role="list">
+      <li v-for="(info, index) in infos" :key="index">{{ info.text }}</li>
+    </ul>
+  </div>
 </template>
-
-<style></style>

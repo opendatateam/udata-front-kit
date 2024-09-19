@@ -5,7 +5,7 @@ import {
   excerpt
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, inject, onMounted } from 'vue'
 import type { Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
@@ -144,6 +144,8 @@ const metaLink = (): string => {
   return `${window.location.origin}${resolved.href}`
 }
 
+const setTitleValue: Function | undefined = inject('setTitleValue')
+
 useHead({
   title: metaTitle,
   meta: [
@@ -167,6 +169,9 @@ watch(
             name: `${topicsSlug}_detail`,
             params: { bid: topic.value.slug }
           })
+        }
+        if (setTitleValue) {
+          setTitleValue(topic.value.name ?? undefined)
         }
       })
       .finally(() => loader.hide())

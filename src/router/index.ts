@@ -11,7 +11,7 @@ import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
 
-const { topicsSlug } = useTopicsConf()
+const { topicsSlug, topicsName } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
 
 // common/default routes
@@ -47,9 +47,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':did',
         name: 'dataset_detail',
-        meta: {
-          title: 'Données détails'
-        },
         component: async () =>
           await import('@/views/datasets/DatasetDetailView.vue')
       }
@@ -88,7 +85,7 @@ const defaultRoutes: RouteRecordRaw[] = [
         path: '',
         name: topicsSlug,
         meta: {
-          title: topicsSlug
+          title: topicsName
         },
         component: async () =>
           await import('@/views/bouquets/BouquetsListView.vue'),
@@ -103,9 +100,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':bid',
         name: `${topicsSlug}_detail`,
-        meta: {
-          title: `${topicsSlug} détails`
-        },
         props: (route: RouteLocationNormalizedLoaded) => ({
           bouquetId: route.params.bid
         }),
