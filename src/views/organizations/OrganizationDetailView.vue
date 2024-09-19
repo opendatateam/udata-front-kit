@@ -32,10 +32,13 @@ const selectedSort = ref('-created')
 const setTitleValue: Function | undefined = inject('setTitleValue')
 
 onMounted(() => {
-  orgStore.load(organizationId, -1, { toasted: false, redirectNotFound: true })
-  if (setTitleValue) {
-    setTitleValue(org.value?.name ?? undefined)
-  }
+  orgStore
+    .load(organizationId, -1, { toasted: false, redirectNotFound: true })
+    .then(() => {
+      if (setTitleValue) {
+        setTitleValue(org.value?.name ?? undefined)
+      }
+    })
 })
 
 const sorts = [
@@ -62,7 +65,9 @@ watchEffect(() => {
         pages.value = datasetStore.getDatasetsPaginationForOrg(org.value?.id)
       }
     })
-    .finally(() => loader.hide())
+    .finally(() => {
+      loader.hide()
+    })
 })
 </script>
 

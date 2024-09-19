@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {
-  ReadMore,
   OrganizationNameWithCertificate,
+  ReadMore,
   excerpt
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
-import { ref, computed, watch, inject, onMounted } from 'vue'
 import type { Ref } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -23,13 +23,13 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import {
+  updateTopicExtras,
   useBreadcrumbLinksForTopic,
-  useExtras,
-  updateTopicExtras
+  useExtras
 } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { getThemeTextColor, getThemeColor } from '@/utils/theme'
+import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
 const props = defineProps({
   bouquetId: {
