@@ -103,7 +103,7 @@ website:
   list_search_topics:
   url_search_topics: 'datasets'
   oauth_option: true
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
   footer_external_links:
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
