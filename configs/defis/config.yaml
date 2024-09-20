@@ -221,9 +221,9 @@ website:
     topics_list: 100
     files_list: 6
   home_banner_colors:
-    - '#D6DAF7'
-    - '#DBA8A8'
-    - '#1258EB'
+    - '#DDE6FF'
+    - '#A1C7ED'
+    - '#6AB9B5'
   env: 'prod'
   matomo:
     host:
