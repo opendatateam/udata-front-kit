@@ -4,7 +4,7 @@
 
 La Direction Interministérielle du Numérique s’engage à rendre son service accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
 
-Cette déclaration d’accessibilité s’applique à meteo.data.gouv.fr (https://logistique.data.gouv.fr).
+Cette déclaration d’accessibilité s’applique à logistique.data.gouv.fr (https://logistique.data.gouv.fr).
 
 ## État de conformité
 
