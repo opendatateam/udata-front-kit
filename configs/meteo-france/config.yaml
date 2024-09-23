@@ -82,8 +82,6 @@ website:
   menu:
     - text: Données
       to: /datasets
-    - text: Bouquets
-      to: /bouquets
     - text: Recherche guidée
       to: /form
     - text: 'Hackathon le 8 et 9 avril 🚀'
@@ -166,13 +164,13 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    slug: bouquets
-    name: bouquet
-    extras_key: 'meteofrance'
+    slug: 'test'
+    name: 'test'
+    extras_key: 'test'
     themes:
       usage: false
-      main_name: thématique
-      secondary_name: chantier
+      main_name: 'Thématique'
+      secondary_name: 'test'
     # include a list page with all topics
     list_all: false
     display_metadata: false
@@ -181,23 +179,7 @@ website:
     can_add_topics:
       everyone: false
       authorized_users:
-        - 6230733357772160a4f77fbaxx
 themes:
-  - name: Données climatologiques
-    color: 043574
-    textColor: FFFFFF
-    subthemes:
-      - name: Informations sur les stations
-      - name: Données climatologiques de base
-      - name: Références à la station
-      - name: Données de références pour le changement climatiques
-  - name: Données de prévision numérique du temps (PNT)
-    color: 1E929E
-    textColor: FFFFFF
-    subthemes:
-      - name: ARPEGE
-      - name: AROME
-      - name: Modèle de vague haute
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
