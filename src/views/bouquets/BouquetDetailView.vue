@@ -6,7 +6,7 @@ import {
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -40,7 +40,6 @@ const props = defineProps({
 
 const router = useRouter()
 const store = useTopicStore()
-const loading = useLoading()
 
 const topic: Ref<Topic | null> = ref(null)
 const selectedTabIndex = ref(0)
@@ -71,6 +70,8 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
   topic,
   topicsListAll
 )
+
+const setTitleValue: Function | undefined = inject('setTitleValue')
 
 const goToEdit = () => {
   router.push({
@@ -144,8 +145,6 @@ const metaLink = (): string => {
   return `${window.location.origin}${resolved.href}`
 }
 
-const setTitleValue: Function | undefined = inject('setTitleValue')
-
 useHead({
   title: metaTitle,
   meta: [
@@ -156,28 +155,22 @@ useHead({
   link: [{ rel: 'canonical', href: metaLink }]
 })
 
-watch(
-  () => props.bouquetId,
-  () => {
-    const loader = loading.show()
-    store
-      .load(props.bouquetId, { toasted: false, redirectNotFound: true })
-      .then((res) => {
-        topic.value = res
-        if (topic.value.slug !== props.bouquetId) {
-          router.push({
-            name: `${topicsSlug}_detail`,
-            params: { bid: topic.value.slug }
-          })
-        }
-        if (setTitleValue) {
-          setTitleValue(topic.value.name ?? undefined)
-        }
-      })
-      .finally(() => loader.hide())
-  },
-  { immediate: true }
-)
+onMounted(() => {
+  store
+    .load(props.bouquetId, { toasted: false, redirectNotFound: true })
+    .then((res) => {
+      topic.value = res
+      if (topic.value.slug !== props.bouquetId) {
+        router.push({
+          name: `${topicsSlug}_detail`,
+          params: { bid: topic.value.slug }
+        })
+      }
+      if (setTitleValue) {
+        setTitleValue(topic.value?.name ?? undefined)
+      }
+    })
+})
 </script>
 
 <template>

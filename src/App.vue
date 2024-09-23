@@ -102,7 +102,10 @@ watch(
   () => route.path,
   () => {
     const title = (route.meta.title as string) ?? config.website.title
-    setAccessibilityProperties(title)
+    // don't set title if it's a custom one coming from the page
+    if ((route.meta.title as string) !== 'custom') {
+      setAccessibilityProperties(title)
+    }
   },
   { immediate: true }
 )

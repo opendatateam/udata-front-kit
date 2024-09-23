@@ -56,7 +56,9 @@ const description = computed(() => descriptionFromMarkdown(org))
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
   if (org.value?.id === undefined) return
-  const loader = useLoading().show()
+  const loader = useLoading().show({
+    enforceFocus: false
+  })
   datasetStore
     .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
     .then((res) => {

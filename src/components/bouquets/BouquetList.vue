@@ -89,7 +89,7 @@ const clearFilters = () => {
 }
 
 onMounted(() => {
-  const loader = useLoading().show()
+  const loader = useLoading().show({ enforceFocus: false })
   topicStore.loadTopicsForUniverse().then(() => loader.hide())
 })
 </script>

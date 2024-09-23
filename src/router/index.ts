@@ -47,6 +47,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':did',
         name: 'dataset_detail',
+        meta: {
+          title: 'custom'
+        },
         component: async () =>
           await import('@/views/datasets/DatasetDetailView.vue')
       }
@@ -70,8 +73,7 @@ const defaultRoutes: RouteRecordRaw[] = [
         path: ':oid',
         name: 'organization_detail',
         meta: {
-          // FIXME
-          title: 'Organisations'
+          title: 'custom'
         },
         component: async () =>
           await import('@/views/organizations/OrganizationDetailView.vue')
@@ -100,6 +102,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':bid',
         name: `${topicsSlug}_detail`,
+        meta: {
+          title: 'custom'
+        },
         props: (route: RouteLocationNormalizedLoaded) => ({
           bouquetId: route.params.bid
         }),

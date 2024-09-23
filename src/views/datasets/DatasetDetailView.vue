@@ -161,7 +161,7 @@ watch(
     if (!dataset.value) return
     // fetch ressources if need be
     if (dataset.value.resources.rel) {
-      const resourceLoader = useLoading().show()
+      const resourceLoader = useLoading().show({ enforceFocus: false })
       const allResources = (await resourceStore.loadResources(
         dataset.value.id,
         dataset.value.resources
@@ -176,15 +176,18 @@ watch(
       throw Error('Unsupported dataset.resources format')
     }
     license.value = await datasetStore.getLicense(dataset.value.license)
-    if (setTitleValue) {
-      setTitleValue(dataset.value.title ?? undefined)
-    }
   },
   { immediate: true }
 )
 
 onMounted(() => {
-  datasetStore.load(datasetId, { toasted: false, redirectNotFound: true })
+  datasetStore
+    .load(datasetId, { toasted: false, redirectNotFound: true })
+    .then(() => {
+      if (setTitleValue && dataset.value) {
+        setTitleValue(dataset.value.title ?? undefined)
+      }
+    })
 })
 </script>
 
