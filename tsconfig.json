@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "moduleResolution": "Bundler",
     "experimentalDecorators": true,
     "noEmit": true,
     "paths": {
