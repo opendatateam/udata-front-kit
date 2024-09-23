@@ -18,7 +18,7 @@ const props = defineProps<{
   points: FeatureCollection
 }>()
 
-const emit = defineEmits(['update:postes'])
+const emit = defineEmits(['update:postes', 'point-hover', 'point-out'])
 
 const mapContainer = ref<HTMLDivElement | null>(null)
 let map: maplibregl.Map | null = null
@@ -103,6 +103,13 @@ const addPointsToMap = () => {
         }
         onMarkerClick(point)
       })
+
+      markerElement.addEventListener('mouseover', () => {
+        emit('point-hover', point)
+      })
+      markerElement.addEventListener('mouseout', () => {
+        emit('point-out')
+      })
     })
   }
 }
@@ -137,6 +144,37 @@ watch(
           }
         )
 
+        addPointsToMap()
+      })
+    }
+  }
+)
+
+watch(
+  () => props.points,
+  (newPoints) => {
+    if (map) {
+      map.remove()
+      map = new maplibregl.Map({
+        container: mapContainer.value!,
+        style: styleVector as StyleSpecification,
+        zoom: props.options.zoom,
+        center: [
+          (props.options.minx + props.options.maxx) / 2,
+          (props.options.miny + props.options.maxy) / 2
+        ]
+      })
+
+      map.on('load', () => {
+        map!.fitBounds(
+          [
+            [props.options.minx, props.options.miny],
+            [props.options.maxx, props.options.maxy]
+          ],
+          {
+            animate: false
+          }
+        )
         addPointsToMap()
       })
     }

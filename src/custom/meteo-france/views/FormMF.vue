@@ -3,13 +3,12 @@ import { ResourceAccordion } from '@datagouv/components'
 import type { Resource } from '@datagouv/components'
 import Slider from '@vueform/slider'
 import '@vueform/slider/themes/default.css'
-import { ref, type Ref } from 'vue'
+import { ref, type Ref, onMounted } from 'vue'
 
 import config from '@/config'
 
 import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
-import stations from '../assets/stations.json'
 import MapComponent from '../components/MapComponent.vue'
 import ModalComponent from '../components/Modal.vue'
 import type { FeatureCollection, Dataset, Station } from '../types'
@@ -46,6 +45,11 @@ const selectedIndicateur: Ref<string | null> = ref(null)
 const showIndicateur = ref(false)
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Recherche Guidée' }]
+
+const stations: Ref<FeatureCollection> = ref({
+  type: 'FeatureCollection',
+  features: []
+})
 
 const onSelectDataPack = (pack: string) => {
   selectedDataset.value = null
@@ -115,18 +119,49 @@ const onSelectDataset = (dataset: string) => {
       })
   }
 }
+const hoveredPoint = ref(null)
+const mouseX = ref(0)
+const mouseY = ref(0)
 
-function filterGeoJSONByNumDep(
-  geojson: FeatureCollection,
-  numDepValue: string
-): FeatureCollection {
+function handlePointHover(feature) {
+  hoveredPoint.value = feature
+}
+
+function handlePointOut() {
+  hoveredPoint.value = null
+}
+
+function handleMouseMove(event: MouseEvent) {
+  mouseX.value = event.pageX + 10 // Offset the X position slightly to avoid overlap with cursor
+  mouseY.value = event.pageY + 10 // Offset the Y position slightly to avoid overlap with cursor
+}
+
+onMounted(() => {
+  window.addEventListener('mousemove', handleMouseMove) // Listen to mouse movements
+})
+
+async function fetchStationsGeoJSON(
+  depCode: string
+): Promise<FeatureCollection> {
+  const response = await fetch(
+    `https://object.data.gouv.fr/meteofrance/data/stations/stations_${depCode}.geojson`
+  )
+  const data: FeatureCollection = await response.json()
+  stations.value = data
+}
+
+function filterOpenStation() {
+  mapPoints.value = filterGeoJSONOpen(stations.value)
+}
+
+function filterGeoJSONOpen(geojson: FeatureCollection): FeatureCollection {
   const filteredGeoJSON: FeatureCollection = {
     type: 'FeatureCollection',
     features: []
   }
 
   geojson.features.forEach((feature) => {
-    if (feature.properties.NUM_DEP === numDepValue) {
+    if (!feature.properties.DATFERM) {
       filteredGeoJSON.features.push(feature)
     }
   })
@@ -144,7 +179,7 @@ function copyToClipboard(url: string) {
   copyText.value = 'Lien copié !'
 }
 
-function onSelectDep(event: Event) {
+async function onSelectDep(event: Event) {
   optionsPeriod.value = []
   selectedPeriod.value = null
   selectedDep.value = (event.target as HTMLSelectElement).value
@@ -158,7 +193,9 @@ function onSelectDep(event: Event) {
     for (let obj of deps) {
       if (obj.code === selectedDep.value) {
         mapOptions.value = obj
-        mapPoints.value = filterGeoJSONByNumDep(stations, selectedDep.value)
+        //mapPoints.value = filterGeoJSONByNumDep(stations, selectedDep.value)
+        await fetchStationsGeoJSON(selectedDep.value)
+        mapPoints.value = stations.value
         showCustomFilter.value = true
         const splitRanges = optionsPeriod.value.flatMap((range) =>
           range.split('-').map(Number)
@@ -195,6 +232,15 @@ function onSelectIndicateur(event: Event) {
   filteredResources.value = res.filter((r) =>
     r.includes('_' + selectedIndicateur.value)
   )
+}
+
+function convertDate(dateStr) {
+  const dateObj = new Date(dateStr)
+  const day = String(dateObj.getDate()).padStart(2, '0')
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0') // Months are zero-indexed
+  const year = dateObj.getFullYear()
+  const formattedDate = `${day}/${month}/${year}`
+  return formattedDate
 }
 
 const configDep = {
@@ -271,12 +317,46 @@ const modalMessage = ref(
         Sélectionner les stations désirées en cliquant sur les points de la
         carte
       </p>
+      <button type="button" class="fr-btn" @click="filterOpenStation()">
+        Filtrer sur les stations encore ouvertes aujourd'hui
+      </button>
       <MapComponent
         :options="mapOptions"
         :points="mapPoints"
         @update:postes="handlePostesUpdate"
+        @point-hover="handlePointHover"
+        @point-out="handlePointOut"
       />
+      <div
+        v-if="hoveredPoint"
+        class="hover-info"
+        :style="{ top: `${mouseY}px`, left: `${mouseX}px` }"
+      >
+        <div>
+          Station <b>{{ hoveredPoint.properties.NOM_USUEL }}</b>
+        </div>
+        <div>
+          N° Poste : <b>{{ hoveredPoint.properties.NUM_POSTE }}</b>
+        </div>
+        <div>
+          Commune :
+          <b
+            >{{ hoveredPoint.properties.COMMUNE }}
+            <span v-if="hoveredPoint.properties.LIEU_DIT"
+              >({{ hoveredPoint.properties.LIEU_DIT }})</span
+            ></b
+          >
+        </div>
+        <div>
+          Ouvert le : <b>{{ convertDate(hoveredPoint.properties.DATOUVR) }}</b>
+        </div>
+        <div v-if="hoveredPoint.properties.DATFERM">
+          Fermé le : <b>{{ convertDate(hoveredPoint.properties.DATFERM) }}</b>
+        </div>
+      </div>
+
       <br />
+
       <div v-if="postes.length > 0">
         Vous avez sélectionné les stations :
         <span v-for="item in postes">{{ item.name }} ; </span>
@@ -577,5 +657,17 @@ const modalMessage = ref(
   --slider-connect-bg: #3558a2;
   --slider-tooltip-bg: #3558a2;
   --slider-handle-ring-color: #3558a230;
+}
+
+.hover-info {
+  position: absolute;
+  background: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 300px;
+  font-size: 11px;
 }
 </style>
