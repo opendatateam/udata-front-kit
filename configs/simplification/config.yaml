@@ -17,7 +17,7 @@ universe:
 robots:
   disallow:
   sitemap:
-  meta: 'index, follow'
+  meta: 'noindex, nofollow'
 
 # UI customizations
 website:
