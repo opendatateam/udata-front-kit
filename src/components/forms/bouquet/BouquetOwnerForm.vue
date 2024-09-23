@@ -109,6 +109,7 @@ watch(choice, () => {
       :required="true"
       :options="radioOptions"
       :legend="`Choisissez si vous souhaitez gérer ce ${topicsName}&nbsp;:`"
+      name="owner"
     />
     <fieldset
       v-if="choice === 'organization'"
@@ -119,7 +120,7 @@ watch(choice, () => {
           id="ownerOrg"
           v-model="selectedOwnOrganization"
           label="Organisations dont vous faites partie&nbsp;:"
-          default-unselected-text="Sélectionnez une organisation"
+          default-unselected-text="--Sélectionnez une organisation--"
           :options="selectOptions"
           @update:model-value="onSelectOwnOrganization()"
         />

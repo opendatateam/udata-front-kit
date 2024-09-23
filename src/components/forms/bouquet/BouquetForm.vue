@@ -90,44 +90,59 @@ onMounted(() => {
 <template>
   <!-- Title -->
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" :for="`${topicsSlug}_name`"
-      >Sujet du {{ topicsName }} <span class="required">&nbsp;*</span></label
-    >
+    <label class="fr-label" :for="`${topicsSlug}_name`">
+      <span>Sujet du {{ topicsName }}&nbsp;*</span>
+    </label>
     <input
       :id="`${topicsSlug}_name`"
       v-model="topic.name"
       class="fr-input"
+      required
       type="text"
-      :placeholder="`Mon ${topicsName}`"
     />
   </div>
   <!-- Description -->
   <div class="fr-mt-1w">
-    <div>Objectif du {{ topicsName }}<span class="required">&nbsp;*</span></div>
-    <div>
+    <label :for="`${topicsSlug}_description`">
+      <span>Objectif du {{ topicsName }}&nbsp;*</span>
+    </label>
+    <p id="description-instructions" class="fr-mt-1v">
+      Renseignez ici les informations nécessaires à la compréhension du
+      {{ topicsName }}&nbsp;: politique publique et problématique à laquelle il
+      répond, lien vers toute méthodologie de traitement des données,
+      description de l'organisme porteur du projet, etc.<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
-        >markdown</a
+        >markdown (guide en anglais)</a
       >
-      pour mettre en forme votre texte
-    </div>
+      pour mettre en forme votre texte.
+    </p>
     <textarea
       :id="`${topicsSlug}_description`"
       v-model="topic.description"
       class="fr-input"
-      type="text"
-      :placeholder="`Renseignez ici les informations nécessaires à la compréhension du ${topicsName} : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l\'organisme porteur du projet, etc.`"
+      required
+      aria-describedby="description-instructions"
     />
   </div>
   <!-- Theme -->
   <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
-    <label class="fr-label" for="select_theme"
-      >{{ capitalize(topicsMainTheme) }}
-      <span class="required">&nbsp;*</span></label
+    <label class="fr-label" for="select_theme">
+      {{ capitalize(topicsMainTheme) }}&nbsp;*
+    </label>
+    <select
+      id="select_theme"
+      class="fr-select"
+      required
+      @change="switchTheme($event)"
     >
-    <select id="select_theme" class="fr-select" @change="switchTheme($event)">
-      <option :value="NoOptionSelected" :selected="theme == NoOptionSelected">
-        Choisir une {{ topicsMainTheme }}
+      <option
+        :value="NoOptionSelected"
+        :selected="theme == NoOptionSelected"
+        disabled
+        hidden
+      >
+        --Choisir une {{ topicsMainTheme }}--
       </option>
       <option
         v-for="option in themeOptions"
@@ -143,19 +158,24 @@ onMounted(() => {
   <div v-if="topicsUseThemes" class="fr-select-group fr-mt-1w">
     <label class="fr-label" for="select_subtheme"
       >{{ capitalize(topicsSecondaryTheme) }}
-      <span class="required">&nbsp;*</span></label
-    >
+      &nbsp;*
+    </label>
     <select
       id="select_subtheme"
       class="fr-select"
-      :disabled="theme === NoOptionSelected"
+      required
       @change="switchSubtheme($event)"
     >
       <option
         :value="NoOptionSelected"
         :selected="subtheme == NoOptionSelected"
+        disabled
+        hidden
       >
-        Choisir un {{ topicsSecondaryTheme }}
+        <span v-if="theme === NoOptionSelected"
+          >--Choisissez d'abord une {{ topicsMainTheme }}--</span
+        >
+        <span v-else>--Choisir un {{ topicsSecondaryTheme }}--</span>
       </option>
       <option
         v-for="option in subthemeOptions"
@@ -178,3 +198,9 @@ onMounted(() => {
     />
   </div>
 </template>
+
+<style scoped>
+label {
+  font-weight: bold;
+}
+</style>
