@@ -75,7 +75,7 @@ const search = () => {
   router.push({
     name: topicsSlug,
     query: { ...route.query, q: selectedQuery.value },
-    hash: '#main'
+    hash: '#main-content'
   })
 }
 

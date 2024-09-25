@@ -62,12 +62,10 @@ routerPromise
         LocalStorageService.setItem('lastRoute', to)
         void router.push({ name: 'login' })
       }
-    })
-
-    // set title for each route/page
-    router.afterEach((to) => {
       if (to.meta.title != null) {
         document.title = to.meta.title as string
+      } else if (process.env.NODE_ENV !== 'production') {
+        console.error('Route', to.path, ': aucun titre défini')
       }
     })
 

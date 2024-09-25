@@ -6,7 +6,7 @@ import {
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -40,12 +40,15 @@ const props = defineProps({
 
 const router = useRouter()
 const store = useTopicStore()
+const loading = useLoading()
 
 const topic: Ref<Topic | null> = ref(null)
 const selectedTabIndex = ref(0)
 const spatialCoverage = useSpatialCoverage(topic)
 
 const showDiscussions = config.website.discussions.topic.display
+
+const setTitleValue = inject('setTitleValue') as Function
 
 const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
@@ -70,8 +73,6 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
   topic,
   topicsListAll
 )
-
-const setTitleValue: Function | undefined = inject('setTitleValue')
 
 const goToEdit = () => {
   router.push({
@@ -155,22 +156,26 @@ useHead({
   link: [{ rel: 'canonical', href: metaLink }]
 })
 
-onMounted(() => {
-  store
-    .load(props.bouquetId, { toasted: false, redirectNotFound: true })
-    .then((res) => {
-      topic.value = res
-      if (topic.value.slug !== props.bouquetId) {
-        router.push({
-          name: `${topicsSlug}_detail`,
-          params: { bid: topic.value.slug }
-        })
-      }
-      if (setTitleValue) {
-        setTitleValue(topic.value?.name ?? undefined)
-      }
-    })
-})
+watch(
+  () => props.bouquetId,
+  () => {
+    const loader = loading.show()
+    store
+      .load(props.bouquetId, { toasted: false, redirectNotFound: true })
+      .then((res) => {
+        topic.value = res
+        if (topic.value.slug !== props.bouquetId) {
+          router.push({
+            name: `${topicsSlug}_detail`,
+            params: { bid: topic.value.slug }
+          })
+        }
+        setTitleValue(topic.value.name ?? undefined)
+      })
+      .finally(() => loader.hide())
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

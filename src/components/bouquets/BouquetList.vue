@@ -85,7 +85,7 @@ const goToCreate = () => {
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, hash: '#main', query })
+  router.push({ name: topicsSlug, hash: '#main-content', query })
 }
 
 onMounted(() => {

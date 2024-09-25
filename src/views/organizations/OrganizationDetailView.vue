@@ -29,15 +29,13 @@ const pages: Ref<object[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort = ref('-created')
 
-const setTitleValue: Function | undefined = inject('setTitleValue')
+const setTitleValue = inject('setTitleValue') as Function
 
 onMounted(() => {
   orgStore
     .load(organizationId, -1, { toasted: false, redirectNotFound: true })
     .then(() => {
-      if (setTitleValue) {
-        setTitleValue(org.value?.name ?? undefined)
-      }
+      setTitleValue(org.value?.name ?? undefined)
     })
 })
 

@@ -72,7 +72,7 @@ const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: `/${topicsSlug}`,
     query: computeQueryArgs(data),
-    hash: '#main'
+    hash: '#main-content'
   })
 }
 

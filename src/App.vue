@@ -92,7 +92,7 @@ const setAccessibilityProperties = (title: string | undefined) => {
 }
 
 // change title on custom page title
-function setTitleValue(value: string) {
+const setTitleValue: Function = (value: string) => {
   setAccessibilityProperties(value)
 }
 provide('setTitleValue', setTitleValue)
@@ -103,7 +103,7 @@ watch(
   () => {
     const title = (route.meta.title as string) ?? config.website.title
     // don't set title if it's a custom one coming from the page
-    if ((route.meta.title as string) !== 'custom') {
+    if ((route.meta.title as string) !== '__custom__') {
       setAccessibilityProperties(title)
     }
   },

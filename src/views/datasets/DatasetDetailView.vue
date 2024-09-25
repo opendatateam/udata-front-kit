@@ -48,6 +48,8 @@ const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
 const { topicsName } = useTopicsConf()
 
+const setTitleValue = inject('setTitleValue') as Function
+
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
   changePage(typeId, 1, q)
@@ -152,8 +154,6 @@ const discussionWellDescription = showDiscussions
 const openDataGouvDiscussions = () =>
   window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
 
-const setTitleValue: Function | undefined = inject('setTitleValue')
-
 // launch reuses and discussions fetch as soon as we have the technical id
 watch(
   dataset,
@@ -184,9 +184,7 @@ onMounted(() => {
   datasetStore
     .load(datasetId, { toasted: false, redirectNotFound: true })
     .then(() => {
-      if (setTitleValue && dataset.value) {
-        setTitleValue(dataset.value.title ?? undefined)
-      }
+      setTitleValue(dataset.value?.title ?? undefined)
     })
 })
 </script>
