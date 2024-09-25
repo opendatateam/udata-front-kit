@@ -180,7 +180,10 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+.fr-fieldset {
+  margin: 30px 0;
+}
 textarea {
   height: 150px;
 }
