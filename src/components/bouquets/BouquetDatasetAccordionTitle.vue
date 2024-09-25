@@ -23,7 +23,8 @@ defineProps({
     <DsfrTag
       v-if="
         !isAvailable(datasetProperties.availability) ||
-        datasetProperties.remoteDeleted
+        datasetProperties.remoteDeleted ||
+        datasetProperties.archived
       "
       class="uppercase bold fr-mr-2w"
       label="Non disponible"

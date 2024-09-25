@@ -121,7 +121,7 @@ const onUpdateDatasets = () => {
       datasets: dedupedDatasets,
       extras: updateTopicExtras(topic.value, {
         datasets_properties: datasetsProperties.value.map(
-          ({ remoteDeleted, ...data }) => data
+          ({ remoteDeleted, archived, ...data }) => data
         )
       })
     })
