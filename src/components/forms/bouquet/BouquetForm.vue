@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { required } from '@vee-validate/rules'
-import { useForm } from 'vee-validate'
+import { useForm, type ValidationErrors } from 'vee-validate'
 import { capitalize, onMounted, ref, type Ref } from 'vue'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
@@ -62,7 +62,12 @@ const [subtheme, subthemeAttrs] = defineField('subtheme')
 const isValid: Ref<boolean | undefined> = ref(undefined)
 const isSubmitted: Ref<boolean | undefined> = ref(undefined)
 
-const onValidSubmit = (validatedValues: any) => {
+const onValidSubmit = async (validatedValues: {
+  name: string
+  description: string
+  theme: string
+  subtheme: string
+}) => {
   // set form states
   isSubmitted.value = true
   isValid.value = true
@@ -75,7 +80,7 @@ const onValidSubmit = (validatedValues: any) => {
   emits('updateValidation', isValid.value)
 }
 
-function onInvalidSubmit({ errors }) {
+const onInvalidSubmit = ({ errors }: { errors: ValidationErrors }) => {
   // send invalid fields name
   formErrors.value = Object.keys(errors)
   isValid.value = false

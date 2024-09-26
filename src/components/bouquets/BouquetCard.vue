@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {
-  useOwnerName,
   formatRelativeIfRecentDate,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  useOwnerName
 } from '@datagouv/components'
 import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
@@ -124,5 +124,3 @@ const bouquetLink: RouteLocationRaw = {
     </div>
   </article>
 </template>
-
-<style scoped lang="scss"></style>

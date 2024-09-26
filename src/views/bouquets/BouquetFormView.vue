@@ -29,7 +29,13 @@ const { canAddBouquet } = storeToRefs(userStore)
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
+const {
+  topicsName,
+  topicsSlug,
+  topicsExtrasKey,
+  topicsMainTheme,
+  topicsSecondaryTheme
+} = useTopicsConf()
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [config.universe.name],
@@ -50,10 +56,10 @@ const formErrors: Ref<string[]> = ref([])
 const inputErrorMessages = new Map([
   ['name', 'Veuillez renseigner un sujet.'],
   ['description', 'La description ne doit pas être vide.'],
-  ['theme', 'Veuillez sélectionner une thématique.'],
-  ['subtheme', 'Veuillez sélectionner un chantier.']
+  ['theme', `Veuillez sélectionner une ${topicsMainTheme}.`],
+  ['subtheme', `Veuillez sélectionner un ${topicsSecondaryTheme}.`]
 ])
-// reorder the reveived input errors to match the form order
+// reorder the received input errors to match the form order
 const sortedinputErrors = computed(() =>
   Array.from(inputErrorMessages.keys()).filter((key) =>
     formErrors.value.includes(key)
@@ -158,18 +164,16 @@ onMounted(() => {
   }
 })
 
-const onSubmit = () => {
+const onSubmit = async () => {
   // reset error fields
   formErrors.value = []
-  formFields.value.onSubmit()
-  // wait a little for properties to compute then focus the error message or save
-  setTimeout(() => {
-    if (formErrors.value.length > 0) {
-      errorStatus.value.focus()
-    } else if (canSave.value) {
-      save()
-    }
-  }, 100)
+  await formFields.value.onSubmit()
+
+  if (formErrors.value.length > 0) {
+    errorStatus.value.focus()
+  } else if (canSave.value) {
+    save()
+  }
 }
 </script>
 
