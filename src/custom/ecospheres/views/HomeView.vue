@@ -17,7 +17,6 @@ const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
 
 useHead({
-  title: config.website.title,
   meta: [
     { property: 'og:title', content: config.website.title },
     { name: 'description', content: config.website.homepage.meta_description },

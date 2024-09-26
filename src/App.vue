@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useFocus, useTitle } from '@vueuse/core'
+import { useFocus } from '@vueuse/core'
 import { computed, onMounted, provide, ref, watch, type Ref } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 
@@ -77,11 +77,7 @@ const footerMandatoryLinks = config.website.footer_mandatory_links
 const route = useRoute()
 const skipLinksComp = ref<InstanceType<typeof SkipLinks> | null>(null)
 
-const setAccessibilityProperties = (title: string | undefined) => {
-  useTitle(title, {
-    titleTemplate:
-      title !== config.website.title ? `%s | ${config.website.title}` : '%s'
-  })
+const setAccessibilityProperties: Function = (title: string) => {
   // announce page title to screen reader
   liveInfos.value = [{ text: `Page ${title}` }]
   // focus skip link
@@ -92,18 +88,17 @@ const setAccessibilityProperties = (title: string | undefined) => {
 }
 
 // change title on custom page title
-const setTitleValue: Function = (value: string) => {
-  setAccessibilityProperties(value)
-}
-provide('setTitleValue', setTitleValue)
+// const setAccessibilityProperties: Function = (value: string) => {
+//   setAccessibilityProperties(value)
+// }
+provide('setAccessibilityProperties', setAccessibilityProperties)
 
 // watch route change and update title
 watch(
   () => route.path,
   () => {
-    const title = (route.meta.title as string) ?? config.website.title
-    // don't set the title if it's not defined in the router
     if (route.meta.title) {
+      const title = route.meta.title as string
       setAccessibilityProperties(title)
     }
   },

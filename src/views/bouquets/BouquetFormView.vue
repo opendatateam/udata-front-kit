@@ -44,7 +44,9 @@ const topic: Ref<Partial<TopicPostData>> = ref({
   }
 })
 
-const setTitleValue = inject('setTitleValue') as Function
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const errorMsg = ref('')
 const canSave = ref(false)
@@ -127,9 +129,12 @@ const cancel = () => {
 }
 
 const metaTitle = (): string => {
-  return topic.value.name
-    ? `Éditer le bouquet ${topic.value.name}`
-    : 'Éditer le bouquet'
+  if (topic.value.name && routeQuery.clone != null) {
+    return `Cloner le ${topicsName} ${topic.value.name} | ${config.website.title}`
+  } else if (topic.value.name) {
+    return `Éditer le ${topicsName} ${topic.value.name} | ${config.website.title}`
+  }
+  return `Éditer le ${topicsName} | ${config.website.title}`
 }
 
 useHead({
@@ -144,12 +149,17 @@ onMounted(() => {
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
+          setAccessibilityProperties(
+            `Cloner le ${topicsName} ${topic.value.name ?? ''}`
+          )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
+          setAccessibilityProperties(
+            `Éditer le ${topicsName} ${topic.value.name ?? ''}`
+          )
         }
-        setTitleValue(`Éditer le bouquet ${topic.value.name ?? ''}`)
       })
       .finally(() => loader.hide())
   }

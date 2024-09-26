@@ -48,7 +48,9 @@ const spatialCoverage = useSpatialCoverage(topic)
 
 const showDiscussions = config.website.discussions.topic.display
 
-const setTitleValue = inject('setTitleValue') as Function
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
@@ -135,7 +137,7 @@ const metaDescription = (): string | undefined => {
 }
 
 const metaTitle = (): string => {
-  return `${topic.value?.name ?? ''} - ${config.website.title}`
+  return `${topic.value?.name} | ${config.website.title}`
 }
 
 const metaLink = (): string => {
@@ -170,7 +172,7 @@ watch(
             params: { bid: topic.value.slug }
           })
         }
-        setTitleValue(topic.value.name ?? undefined)
+        setAccessibilityProperties(topic.value.name)
       })
       .finally(() => loader.hide())
   },

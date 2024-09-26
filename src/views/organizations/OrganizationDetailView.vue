@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
+import { useHead } from '@unhead/vue'
 import { computed, inject, onMounted, ref, watchEffect, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import Tile from '@/components/Tile.vue'
+import config from '@/config'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -29,13 +31,23 @@ const pages: Ref<object[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort = ref('-created')
 
-const setTitleValue = inject('setTitleValue') as Function
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
+
+const metaTitle = (): string => {
+  return `${org.value?.name} | ${config.website.title}`
+}
+
+useHead({
+  title: metaTitle
+})
 
 onMounted(() => {
   orgStore
     .load(organizationId, -1, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setTitleValue(org.value?.name ?? undefined)
+      setAccessibilityProperties(org.value?.name)
     })
 })
 

@@ -64,7 +64,8 @@ routerPromise
       }
       // set page title where needed
       if (to.meta.title != null) {
-        document.title = to.meta.title as string
+        document.title =
+          (to.meta.title as string) + ' | ' + config.website.title
       } else if (process.env.NODE_ENV !== 'production') {
         console.warn('Route', to.path, ': aucun titre défini dans le router')
       }

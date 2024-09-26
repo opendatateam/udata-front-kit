@@ -10,6 +10,7 @@ import {
   Well,
   type License
 } from '@datagouv/components'
+import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -48,7 +49,9 @@ const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
 const { topicsName } = useTopicsConf()
 
-const setTitleValue = inject('setTitleValue') as Function
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
@@ -154,6 +157,25 @@ const discussionWellDescription = showDiscussions
 const openDataGouvDiscussions = () =>
   window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
 
+const metaTitle = (): string => {
+  if (dataset.value?.title) {
+    return `${dataset.value.title} | ${config.website.title}`
+  }
+  return config.website.title
+}
+
+useHead({
+  title: metaTitle
+})
+
+onMounted(() => {
+  datasetStore
+    .load(datasetId, { toasted: false, redirectNotFound: true })
+    .then(() => {
+      setAccessibilityProperties(dataset.value?.title)
+    })
+})
+
 // launch reuses and discussions fetch as soon as we have the technical id
 watch(
   dataset,
@@ -179,14 +201,6 @@ watch(
   },
   { immediate: true }
 )
-
-onMounted(() => {
-  datasetStore
-    .load(datasetId, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      setTitleValue(dataset.value?.title ?? undefined)
-    })
-})
 </script>
 
 <template>
