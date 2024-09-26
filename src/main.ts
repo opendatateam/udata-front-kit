@@ -55,17 +55,18 @@ routerPromise
       store.$router = markRaw(router)
     })
 
-    // protect authenticated routes
     router.beforeEach((to) => {
+      // protect authenticated routes
       const store = useUserStore()
       if (to.meta.requiresAuth === true && !store.$state.isLoggedIn) {
         LocalStorageService.setItem('lastRoute', to)
         void router.push({ name: 'login' })
       }
+      // set page title where needed
       if (to.meta.title != null) {
         document.title = to.meta.title as string
       } else if (process.env.NODE_ENV !== 'production') {
-        console.error('Route', to.path, ': aucun titre défini')
+        console.warn('Route', to.path, ': aucun titre défini dans le router')
       }
     })
 

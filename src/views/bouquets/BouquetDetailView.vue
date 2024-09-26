@@ -159,7 +159,7 @@ useHead({
 watch(
   () => props.bouquetId,
   () => {
-    const loader = loading.show()
+    const loader = loading.show({ enforceFocus: false })
     store
       .load(props.bouquetId, { toasted: false, redirectNotFound: true })
       .then((res) => {

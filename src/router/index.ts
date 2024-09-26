@@ -14,7 +14,6 @@ import SimplePageView from '@/views/SimplePageView.vue'
 
 const { topicsSlug, topicsName } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
-const CUSTOM_TITLE = '__custom__'
 
 // common/default routes
 const defaultRoutes: RouteRecordRaw[] = [
@@ -49,9 +48,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':did',
         name: 'dataset_detail',
-        meta: {
-          title: CUSTOM_TITLE
-        },
         component: async () =>
           await import('@/views/datasets/DatasetDetailView.vue')
       }
@@ -74,9 +70,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':oid',
         name: 'organization_detail',
-        meta: {
-          title: CUSTOM_TITLE
-        },
         component: async () =>
           await import('@/views/organizations/OrganizationDetailView.vue')
       }
@@ -104,9 +97,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: ':bid',
         name: `${topicsSlug}_detail`,
-        meta: {
-          title: CUSTOM_TITLE
-        },
         props: (route: RouteLocationNormalizedLoaded) => ({
           bouquetId: route.params.bid
         }),
@@ -126,7 +116,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     path: `/admin/${topicsSlug}/edit/:bid`,
     name: `${topicsSlug}_edit`,
     component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-    meta: { requiresAuth: true, title: `Editer un ${topicsName}` },
+    meta: { requiresAuth: true, title: `Éditer le ${topicsName}` },
     props: { isCreate: false }
   },
   // technical pages

@@ -97,13 +97,13 @@ const setTitleValue: Function = (value: string) => {
 }
 provide('setTitleValue', setTitleValue)
 
-// watch nav and update title
+// watch route change and update title
 watch(
   () => route.path,
   () => {
     const title = (route.meta.title as string) ?? config.website.title
-    // don't set title if it's a custom one coming from the page
-    if ((route.meta.title as string) !== '__custom__') {
+    // don't set the title if it's not defined in the router
+    if (route.meta.title) {
       setAccessibilityProperties(title)
     }
   },
