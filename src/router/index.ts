@@ -116,7 +116,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     path: `/admin/${topicsSlug}/edit/:bid`,
     name: `${topicsSlug}_edit`,
     component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-    meta: { requiresAuth: true, title: `Éditer le ${topicsName}` },
+    meta: { requiresAuth: true },
     props: { isCreate: false }
   },
   // technical pages

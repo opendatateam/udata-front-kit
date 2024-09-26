@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -42,6 +43,9 @@ const topic: Ref<Partial<TopicPostData>> = ref({
     }
   }
 })
+
+const setTitleValue = inject('setTitleValue') as Function
+
 const errorMsg = ref('')
 const canSave = ref(false)
 
@@ -122,6 +126,16 @@ const cancel = () => {
   }
 }
 
+const metaTitle = (): string => {
+  return topic.value.name
+    ? `Éditer le bouquet ${topic.value.name}`
+    : 'Éditer le bouquet'
+}
+
+useHead({
+  title: metaTitle
+})
+
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
@@ -135,6 +149,7 @@ onMounted(() => {
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
         }
+        setTitleValue(`Éditer le bouquet ${topic.value.name ?? ''}`)
       })
       .finally(() => loader.hide())
   }
