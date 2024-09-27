@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { defineModel, computed, ref, watch, type Ref } from 'vue'
+import type { Organization } from '@datagouv/components'
+import { debounce } from 'lodash'
+import { computed, ref, watch, type Ref } from 'vue'
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.css'
 
+import '@/assets/multiselect.css'
 import type { Topic } from '@/model/topic'
+import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
@@ -16,12 +22,76 @@ const { topicsName } = useTopicsConf()
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
 )
+
 const organizations = computed(() => userStore.data?.organizations || [])
 
-const onSelectOrganization = (value: string) => {
-  const idx = parseInt(value)
-  topic.value.organization = organizations.value[idx]
-  topic.value.owner = null
+// checks if current owner is a user's org and return its id
+const ownOrganizationIndex = computed(() => {
+  return organizations.value.findIndex(
+    (org) => org.id === topic.value.organization?.id
+  )
+})
+// both models check the above index to determine the default owner to display
+const selectedAnyOrganization: Ref<Organization | undefined> = ref(
+  ownOrganizationIndex.value < 0 && !topic.value.owner
+    ? topic.value.organization
+    : undefined
+)
+const selectedOwnOrganization: Ref<number | string | undefined> = ref(
+  ownOrganizationIndex.value >= 0 && !topic.value.owner
+    ? ownOrganizationIndex.value
+    : undefined
+)
+
+const radioOptions = [
+  {
+    label: 'En votre propre nom',
+    value: 'owner'
+  },
+  {
+    label: "En tant qu'organisation",
+    value: 'organization'
+  }
+]
+const selectOptions = computed(() => {
+  return organizations.value.map((option, index) => {
+    return { value: index, text: option.name }
+  })
+})
+
+const isLoading = ref(false)
+const options: Ref<Organization[]> = ref([])
+
+const search = debounce(async (query: string) => {
+  isLoading.value = true
+  if (!query) {
+    options.value = []
+    isLoading.value = false
+    return
+  }
+  const organizations = await new SearchAPI().search(query, 10)
+  options.value = organizations
+  isLoading.value = false
+}, 400)
+
+const onSelectOwnOrganization = () => {
+  if (selectedOwnOrganization.value) {
+    const idx = Number(selectedOwnOrganization.value)
+    topic.value.organization = organizations.value[idx]
+    topic.value.owner = null
+    clear()
+  }
+}
+const onSelectAnyOrganization = () => {
+  if (selectedAnyOrganization.value) {
+    topic.value.organization = selectedAnyOrganization.value
+    topic.value.owner = null
+    selectedOwnOrganization.value = undefined
+  }
+}
+
+const clear = () => {
+  selectedAnyOrganization.value = undefined
 }
 
 watch(choice, () => {
@@ -34,47 +104,76 @@ watch(choice, () => {
 
 <template>
   <div>
-    <label class="fr-label" for="owner"
-      >Choisissez si vous souhaitez gérer ce {{ topicsName }}&nbsp;:</label
+    <DsfrRadioButtonSet
+      v-model="choice"
+      :required="true"
+      :options="radioOptions"
+      :legend="`Choisissez si vous souhaitez gérer ce ${topicsName}&nbsp;:`"
+    />
+    <fieldset
+      v-if="choice === 'organization'"
+      class="fr-fieldset organizations"
     >
-    <fieldset id="owner" class="fr-fieldset">
-      <div class="fr-fieldset__content" role="radiogroup">
-        <DsfrRadioButton
-          v-model="choice"
-          name="owner"
-          value="owner"
-          label="En votre propre nom"
+      <div class="fr-fieldset__element">
+        <DsfrSelect
+          id="ownerOrg"
+          v-model="selectedOwnOrganization"
+          label="Organisations dont vous faites partie&nbsp;:"
+          default-unselected-text="Sélectionnez une organisation"
+          :options="selectOptions"
+          @update:model-value="onSelectOwnOrganization()"
         />
-        <div>
-          <DsfrRadioButton
-            v-model="choice"
-            :disabled="organizations.length === 0"
-            name="organization"
-            value="organization"
-            label="En tant qu'organisation"
-          />
-          <div v-if="choice === 'organization'">
-            <select
-              class="fr-select"
-              @change="
-                onSelectOrganization(($event.target as HTMLInputElement)?.value)
-              "
-            >
-              <option selected disabled value="">
-                Choisissez une organisation
-              </option>
-              <option
-                v-for="(org, idx) in organizations"
-                :key="idx"
-                :selected="topic.organization?.id === org.id"
-                :value="idx"
-              >
-                {{ org.name }}
-              </option>
-            </select>
-          </div>
-        </div>
+      </div>
+      <div v-if="userStore.isAdmin" class="fr-fieldset__element">
+        <label class="fr-mt-2v" for="any-org-select-bouquet"
+          >Cherchez une autre organisation&nbsp;:</label
+        >
+        <Multiselect
+          id="any-org-select-bouquet"
+          ref="multiselect"
+          v-model="selectedAnyOrganization"
+          role="search"
+          :options="options"
+          track-by="id"
+          placeholder="Ex: Ministère de la Transition Ecologique"
+          select-label="Entrée pour sélectionner"
+          :multiple="false"
+          :searchable="true"
+          :internal-search="false"
+          :loading="isLoading"
+          :clear-on-select="true"
+          :close-on-select="true"
+          :show-no-results="false"
+          :hide-selected="true"
+          :limit="3"
+          :options-limit="100"
+          @search-change="search"
+          @select="onSelectAnyOrganization()"
+        >
+          <template #caret>
+            <div
+              v-if="selectedAnyOrganization"
+              class="multiselect__clear"
+              @mousedown.prevent.stop="clear"
+            ></div>
+          </template>
+          <template #singleLabel="slotProps">
+            {{ slotProps.option.name }}
+          </template>
+          <template #option="slotProps">
+            {{ slotProps.option.name }}
+          </template>
+          <template #noOptions>
+            Précisez ou élargissez votre recherche
+          </template>
+        </Multiselect>
       </div>
     </fieldset>
   </div>
 </template>
+
+<style scoped>
+.organizations {
+  gap: 1rem;
+}
+</style>
