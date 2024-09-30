@@ -204,7 +204,7 @@ onMounted(() => {
         >
           <div class="fr-col-auto">
             <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img :src="dataset.organization.logo" height="32" alt="" />
+              <img :src="dataset.organization.logo" alt="" height="32" />
             </div>
           </div>
           <p class="fr-col fr-m-0">

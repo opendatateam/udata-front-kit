@@ -75,7 +75,7 @@ function strip(value: string) {
       </p>
     </div>
     <div v-if="img" class="fr-tile__img">
-      <img :src="img" class="fr-responsive-img" alt="" />
+      <img :src="img" alt="" class="fr-responsive-img" />
     </div>
     <DsfrNotice v-if="notice" :title="notice" :closeable="false" />
   </div>

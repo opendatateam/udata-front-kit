@@ -1,7 +1,5 @@
 # CGU et Mentions Légales
 
-
-
 ## Mentions Légales <a href="#hw6xohju2xe8" id="hw6xohju2xe8"></a>
 
 ### Éditeur <a href="#z1xuvpsz7tao" id="z1xuvpsz7tao"></a>
@@ -36,11 +34,11 @@ _ecologie_.**data**.**gouv**._fr_ est une application web adossée à la platefo
 
 _ecologie_.**data**.**gouv**._fr_ permet :
 
-* la consultation de bouquets de données par tout utilisateur,
-* la publication de bouquets de données après identification à partir d’un compte [data.gouv.fr](https://www.data.gouv.fr),
-* une discussion autour des bouquets de données après identification à partir d’un compte [data.gouv.fr](https://www.data.gouv.fr),
-* la consultation ou le téléchargement des données de l’univers _ecologie_.**data**.**gouv**._fr_ par tout utilisateur,
-* une discussion autour des données après identification à partir d’un compte [data.gouv.fr](https://www.data.gouv.fr).
+- la consultation de bouquets de données par tout utilisateur,
+- la publication de bouquets de données après identification à partir d’un compte [data.gouv.fr](https://www.data.gouv.fr),
+- une discussion autour des bouquets de données après identification à partir d’un compte [data.gouv.fr](https://www.data.gouv.fr),
+- la consultation ou le téléchargement des données de l’univers _ecologie_.**data**.**gouv**._fr_ par tout utilisateur,
+- une discussion autour des données après identification à partir d’un compte [data.gouv.fr](https://www.data.gouv.fr).
 
 ### Responsabilités <a href="#id-67tbaoox6fy4" id="id-67tbaoox6fy4"></a>
 
@@ -132,10 +130,10 @@ En application de la loi n° 78-17 du 6 janvier 1978 relative à l’informatiqu
 
 ### Textes de références <a href="#pf9sop1e84xq" id="pf9sop1e84xq"></a>
 
-[Livre III du code des relations entre le public et l’administration](https://www.legifrance.gouv.fr/affichCode.do;jsessionid=2B8CFC0D49E08E4D1843153F6E476CA7.tpdila11v\_2?idSectionTA=LEGISCTA000031367685\&cidTexte=LEGITEXT000031366350\&dateTexte=20170808)
+[Livre III du code des relations entre le public et l’administration](https://www.legifrance.gouv.fr/affichCode.do;jsessionid=2B8CFC0D49E08E4D1843153F6E476CA7.tpdila11v_2?idSectionTA=LEGISCTA000031367685&cidTexte=LEGITEXT000031366350&dateTexte=20170808)
 
 [Loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés](https://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000000886460)
 
 [Loi n° 2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique](https://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000000801164)
 
-[Loi n° 2016-1321 du 7 octobre 2016 pour une République numérique](https://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000033202746\&categorieLien=id)
+[Loi n° 2016-1321 du 7 octobre 2016 pour une République numérique](https://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000033202746&categorieLien=id)

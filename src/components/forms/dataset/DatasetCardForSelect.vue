@@ -64,7 +64,7 @@ const badgeClasse = computed(() => {
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-auto">
         <div class="logo">
-          <img :src="thumbnail" width="60" height="60" alt="" />
+          <img :src="thumbnail" alt="" width="60" height="60" />
         </div>
       </div>
       <div class="fr-col">

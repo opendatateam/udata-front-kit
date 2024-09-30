@@ -124,9 +124,9 @@ onMounted(() => {
     <div class="fr-col fr-grid-row fr-grid-row--gutters text-blue-400">
       <div class="fr-col-auto">
         <img
-          class="w-100"
           src="/search/france_with_magnifying_glass.svg"
           alt=""
+          class="w-100"
         />
       </div>
       <div

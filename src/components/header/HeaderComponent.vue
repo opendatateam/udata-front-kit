@@ -105,9 +105,9 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                 <slot name="operator">
                   <img
                     v-if="operatorImgSrc"
-                    class="fr-responsive-img"
                     :src="operatorImgSrc"
                     :alt="operatorImgAlt"
+                    class="fr-responsive-img"
                     :style="operatorImgStyle"
                   />
                 </slot>
@@ -167,16 +167,9 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               >
                 <div class="fr-grid-row">
                   <img
-                    class="fr-responsive-img"
                     :src="serviceLogoSrc"
                     :alt="serviceTitle"
-                    style="
-                      height: 35px;
-                      margin-top: 0;
-                      margin-bottom: 0;
-                      margin-right: 0.75em;
-                      width: auto;
-                    "
+                    class="fr-responsive-img service-logo"
                   />
                   <p v-if="showBadge" class="fr-header__service-title">
                     <span :class="badgeCss" style="margin: 0.5em">{{
@@ -275,3 +268,13 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
     </div>
   </header>
 </template>
+
+<style scoped>
+.service-logo {
+  height: 35px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0.75em;
+  width: auto;
+}
+</style>
