@@ -1,8 +1,8 @@
 # CGU et Mentions Légales
 
-## Mentions Légales <a href="#hw6xohju2xe8" id="hw6xohju2xe8"></a>
+## Mentions Légales
 
-### Éditeur <a href="#z1xuvpsz7tao" id="z1xuvpsz7tao"></a>
+### Éditeur
 
 _ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable (CGDD).
 
@@ -15,7 +15,7 @@ Directeur de la publication : Le Commissaire Général au Développement Durable
 
 Contact : [ecospheres@developpement-durable.gouv.fr](mailto:ecospheres@developpement-durable.gouv.fr)
 
-### Prestataire d’hébergement <a href="#ma5csjcrufdh" id="ma5csjcrufdh"></a>
+### Prestataire d’hébergement
 
 Le site _ecologie_.**data**.**gouv**._fr_ est hébergé par la société OVH.
 
@@ -24,11 +24,11 @@ Code APE 2620Z\
 N° TVA : FR 22 424 761 419\
 Siège social : 2 rue Kellermann - 59100 Roubaix - France
 
-## Conditions générales d'utilisation <a href="#id-4u0dau5o20am" id="id-4u0dau5o20am"></a>
+## Conditions générales d'utilisation
 
 Le présent document a pour objet de régler les relations entre les différents intervenants sur le service. L'utilisation du service est libre, facultative et gratuite, sous réserve de l'acceptation et du respect des présentes conditions générales d’utilisation par l’utilisateur.
 
-### Présentation du service <a href="#id-8pt07w3ah79g" id="id-8pt07w3ah79g"></a>
+### Présentation du service
 
 _ecologie_.**data**.**gouv**._fr_ est une application web adossée à la plateforme [data.gouv.fr](https://www.data.gouv.fr). Son interface permet un accès centralisé aux données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. Un bouquet de données est un ensemble de données contextualisées répondant au besoin spécifique d’une politique publique.
 
@@ -40,7 +40,7 @@ _ecologie_.**data**.**gouv**._fr_ permet :
 - la consultation ou le téléchargement des données de l’univers _ecologie_.**data**.**gouv**._fr_ par tout utilisateur,
 - une discussion autour des données après identification à partir d’un compte [data.gouv.fr](https://www.data.gouv.fr).
 
-### Responsabilités <a href="#id-67tbaoox6fy4" id="id-67tbaoox6fy4"></a>
+### Responsabilités
 
 #### **Code de conduite et responsabilité des contributeurs**
 
@@ -128,7 +128,7 @@ L’historique de consultation de l’utilisateur n’est jamais rendu public, n
 
 En application de la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, l’utilisateur dispose d’un droit d’accès, de rectification et d’opposition auprès de l’opérateur de [data.gouv.fr](https://www.data.gouv.fr). Ce droit s’exerce par courriel adressé à contact@data.gouv.fr ou par voie postale à Mission Etalab, 20 avenue de Ségur, 75334 PARIS Cedex 07.
 
-### Textes de références <a href="#pf9sop1e84xq" id="pf9sop1e84xq"></a>
+### Textes de références
 
 [Livre III du code des relations entre le public et l’administration](https://www.legifrance.gouv.fr/affichCode.do;jsessionid=2B8CFC0D49E08E4D1843153F6E476CA7.tpdila11v_2?idSectionTA=LEGISCTA000031367685&cidTexte=LEGITEXT000031366350&dateTexte=20170808)
 
