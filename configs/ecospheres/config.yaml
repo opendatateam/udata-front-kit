@@ -20,6 +20,7 @@ robots:
     - /datasets
     - /organizations
   sitemap: https://ecologie.data.gouv.fr/sitemap.xml
+  meta: 'index, follow'
 
 # UI customizations
 website:
