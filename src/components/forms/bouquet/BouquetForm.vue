@@ -32,7 +32,7 @@ const {
 } = useTopicsConf()
 
 // Define values and validation rules for each field
-const { errors, defineField, handleSubmit } = useForm({
+const { values, errors, defineField, handleSubmit } = useForm({
   initialValues: {
     name: topic.value.name ?? '',
     description: topic.value.description ?? '',
@@ -184,7 +184,7 @@ onMounted(() => {
       "
     >
       <option value="" selected disabled hidden>
-        --Choisir une {{ topicsMainTheme }}--
+        Choisir une {{ topicsMainTheme }}
       </option>
       <option
         v-for="option in themeOptions"
@@ -210,6 +210,7 @@ onMounted(() => {
       id="input-subtheme"
       v-model="subtheme"
       v-bind="subthemeAttrs"
+      :disabled="!values.theme ? true : undefined"
       class="fr-select"
       :aria-invalid="errors.subtheme && isSubmitted ? true : undefined"
       :aria-describedby="
@@ -219,7 +220,7 @@ onMounted(() => {
       "
     >
       <option value="" selected disabled hidden>
-        --Choisir un {{ topicsSecondaryTheme }}--
+        Choisir un {{ topicsSecondaryTheme }}
       </option>
       <option
         v-for="option in subthemeOptions"
