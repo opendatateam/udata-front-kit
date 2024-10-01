@@ -242,9 +242,12 @@ watch(
             <div class="fr-col-auto">
               <div class="border fr-p-1-5v fr-mr-1-5v">
                 <img
-                  style="margin-bottom: -6px"
                   :src="getOwnerAvatar(topic)"
+                  alt=""
+                  loading="lazy"
+                  class="owner-avatar"
                   height="32"
+                  width="32"
                 />
               </div>
             </div>
@@ -253,9 +256,13 @@ watch(
             </p>
           </div>
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
-          <p>{{ formatDate(topic.created_at) }}</p>
+          <time :datetime="topic.created_at">{{
+            formatDate(topic.created_at)
+          }}</time>
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-          <p>{{ formatDate(topic.last_modified) }}</p>
+          <time :datetime="topic.last_modified">{{
+            formatDate(topic.last_modified)
+          }}</time>
           <div v-if="spatialCoverage">
             <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
             <p>{{ spatialCoverage.name }}</p>
@@ -368,5 +375,8 @@ watch(
 .flex-reverse {
   display: flex;
   flex-direction: row-reverse;
+}
+.owner-avatar {
+  margin-bottom: -6px;
 }
 </style>

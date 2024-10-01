@@ -105,9 +105,9 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                 <slot name="operator">
                   <img
                     v-if="operatorImgSrc"
-                    class="fr-responsive-img"
                     :src="operatorImgSrc"
                     :alt="operatorImgAlt"
+                    class="fr-responsive-img"
                     :style="operatorImgStyle"
                   />
                 </slot>
@@ -145,15 +145,12 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                 :title="`Accueil - ${serviceTitle}`"
                 v-bind="$attrs"
               >
-                <p
-                  class="fr-header__service-title"
-                  style="margin-right: 0.75em"
-                >
-                  {{ serviceTitle }}
+                <span class="fr-grid-row fr-header__service-title"
+                  >{{ serviceTitle }}
                   <span v-if="showBadge" :class="badgeCss">
                     {{ badgeText }}
                   </span>
-                </p>
+                </span>
               </RouterLink>
               <p v-if="serviceDescription" class="fr-header__service-tagline">
                 {{ serviceDescription }}
@@ -164,26 +161,15 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                 :to="homeTo"
                 :title="`Accueil - ${serviceTitle}`"
                 v-bind="$attrs"
+                class="fr-grid-row fr-header__service-title"
               >
-                <div class="fr-grid-row">
-                  <img
-                    class="fr-responsive-img"
-                    :src="serviceLogoSrc"
-                    :alt="serviceTitle"
-                    style="
-                      height: 35px;
-                      margin-top: 0;
-                      margin-bottom: 0;
-                      margin-right: 0.75em;
-                      width: auto;
-                    "
-                  />
-                  <p v-if="showBadge" class="fr-header__service-title">
-                    <span :class="badgeCss" style="margin: 0.5em">{{
-                      badgeText
-                    }}</span>
-                  </p>
-                </div>
+                <img
+                  :src="serviceLogoSrc"
+                  :alt="serviceTitle"
+                  class="fr-responsive-img service-logo"
+                />
+
+                <span v-if="showBadge" :class="badgeCss">{{ badgeText }}</span>
               </RouterLink>
             </div>
           </div>
@@ -275,3 +261,15 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
     </div>
   </header>
 </template>
+
+<style scoped>
+.service-logo {
+  height: 35px;
+  margin: 0;
+  width: auto;
+}
+.fr-header__service-title {
+  align-items: center;
+  gap: 0.25em;
+}
+</style>
