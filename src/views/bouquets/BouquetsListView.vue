@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
+import { useDebounceFn, useTitle } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { ref, computed, watch, type Ref, capitalize } from 'vue'
+import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
@@ -44,9 +47,14 @@ const selectedSubtheme = ref(NoOptionSelected)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const showDrafts = ref(false)
+const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -71,13 +79,29 @@ const goToCreate = () => {
   router.push({ name: `${topicsSlug}_add`, query: route.query })
 }
 
-const search = () => {
+const pageTitle = computed(() => {
+  if (selectedQuery.value) {
+    return `${route.meta.title} pour "${selectedQuery.value}"`
+  }
+  return route.meta.title
+})
+
+const search = useDebounceFn(() => {
   router.push({
     name: topicsSlug,
-    query: { ...route.query, q: selectedQuery.value },
-    hash: '#main-content'
+    query: { ...route.query, q: selectedQuery.value }
   })
-}
+
+  const searchResultsMessage = selectedQuery.value
+    ? bouquetListComp.value?.numberOfResultMsg
+    : undefined
+  useHead({ title: `${pageTitle.value} | ${config.website.title}` })
+  setAccessibilityProperties(pageTitle.value, false, [
+    {
+      text: searchResultsMessage
+    }
+  ])
+}, 900)
 
 watch(
   props,
@@ -141,6 +165,7 @@ watch(
         </nav>
         <div className="fr-col">
           <BouquetList
+            ref="bouquetListComp"
             :theme-name="selectedTheme"
             :subtheme-name="selectedSubtheme"
             :show-drafts="showDrafts"

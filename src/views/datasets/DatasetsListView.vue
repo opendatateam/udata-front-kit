@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { DatasetCard } from '@datagouv/components'
-import debounce from 'lodash/debounce'
-import { computed, onMounted, ref, watch, type Ref, capitalize } from 'vue'
+import { useDebounceFn, useTitle } from '@vueuse/core'
+import {
+  capitalize,
+  computed,
+  inject,
+  onMounted,
+  ref,
+  watch,
+  type Ref
+} from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
@@ -35,10 +43,13 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const route = useRoute()
 const store = useSearchStore()
 const currentPage = ref(1)
 const localQuery = ref()
 const loader = useLoading()
+
+const queryResults = ref<HTMLParagraphElement | null>(null)
 
 const topicStore = useTopicStore()
 const userStore = useUserStore()
@@ -55,6 +66,21 @@ const hasOrganizationFilter = config.website.datasets
   .organization_filter as boolean
 
 const { topicsMainTheme } = useTopicsConf()
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
+
+const pageTitle = computed(() => {
+  if (currentPage.value && localQuery.value) {
+    return `${route.meta.title} pour "${localQuery.value}" - page ${currentPage.value}`
+  } else if (currentPage.value) {
+    return `${route.meta.title} - page ${currentPage.value}`
+  } else if (localQuery.value) {
+    return `${route.meta.title} pour "${localQuery.value}"`
+  }
+  return document.title
+})
 
 const topicOptions = computed(() => {
   if (!topicItems?.length) return
@@ -145,7 +171,7 @@ watch(
   { immediate: true }
 )
 
-const delayedSearch = debounce(
+const delayedSearch = useDebounceFn(
   (currentQuery, currentTopicId, currentOrganizationId, currentPageValue) => {
     const loadingInstance = loader.show()
     const args = currentOrganizationId
@@ -154,10 +180,19 @@ const delayedSearch = debounce(
     store
       .search(currentQuery, currentTopicId, currentPageValue, args)
       .finally(() => {
+        const searchResultsMessage = localQuery.value
+          ? queryResults.value?.innerText
+          : undefined
+        useTitle(`${pageTitle.value} | ${title}`)
+        setAccessibilityProperties(pageTitle.value, false, [
+          {
+            text: searchResultsMessage
+          }
+        ])
         loadingInstance.hide()
       })
   },
-  400
+  900
 )
 
 watch(
@@ -205,8 +240,13 @@ onMounted(() => {
         </a>
       </div>
     </div>
-    <p v-if="query">Résultats de recherche pour "{{ query }}".</p>
-    <p v-else>Parcourir tous les jeux de données présents sur {{ title }}.</p>
+    <p v-show="query" ref="queryResults" tabindex="-1">
+      {{ datasets.length }} résultats de recherche pour "{{ query }}".
+    </p>
+    <p v-if="!query">
+      Parcourir tous les jeux de données présents sur {{ title }}.
+    </p>
+
     <div class="fr-col-md-12 fr-mb-2w">
       <DsfrSearchBar
         v-model="localQuery"

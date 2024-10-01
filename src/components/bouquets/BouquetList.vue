@@ -73,8 +73,10 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (bouquets.value.length === 1) {
     return `1 ${topicsName} disponible`
-  } else {
+  } else if (bouquets.value.length > 1) {
     return bouquets.value.length + ` ${topicsName}s disponibles`
+  } else {
+    return 'Aucun résultat ne correspond à votre recherche'
   }
 })
 
@@ -85,12 +87,16 @@ const goToCreate = () => {
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, hash: '#main-content', query })
+  router.push({ name: topicsSlug, query })
 }
 
 onMounted(() => {
   const loader = useLoading().show({ enforceFocus: false })
   topicStore.loadTopicsForUniverse().then(() => loader.hide())
+})
+
+defineExpose({
+  numberOfResultMsg
 })
 </script>
 

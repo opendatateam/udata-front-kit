@@ -77,20 +77,22 @@ const footerMandatoryLinks = config.website.footer_mandatory_links
 const route = useRoute()
 const skipLinksComp = ref<InstanceType<typeof SkipLinks> | null>(null)
 
-const setAccessibilityProperties: Function = (title: string) => {
+const setAccessibilityProperties: Function = (
+  title?: string,
+  focus: boolean = true,
+  messages: InfoToAnnounce[] = []
+) => {
   // announce page title to screen reader
-  liveInfos.value = [{ text: `Page ${title}` }]
+  if (title) {
+    liveInfos.value = [{ text: `Page ${title}` }, ...messages]
+  }
   // focus skip link
-  if (skipLinksComp.value?.firstSkipLink) {
+  if (focus && skipLinksComp.value?.firstSkipLink) {
     const { focused } = useFocus(skipLinksComp.value?.firstSkipLink[0])
     focused.value = true
   }
 }
 
-// change title on custom page title
-// const setAccessibilityProperties: Function = (value: string) => {
-//   setAccessibilityProperties(value)
-// }
 provide('setAccessibilityProperties', setAccessibilityProperties)
 
 // watch route change and update title
