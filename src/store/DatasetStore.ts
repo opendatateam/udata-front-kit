@@ -1,10 +1,9 @@
-import type { DatasetV2, License } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2, License } from '@datagouv/components'
 import { defineStore } from 'pinia'
 
 import type { BaseParams } from '@/model/api'
 import type { DatasetV2Response } from '@/model/dataset'
-
-import DatasetsAPI from '../services/api/resources/DatasetsAPI'
+import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
 
 const datasetsApi = new DatasetsAPI()
 const datasetsApiv2 = new DatasetsAPI({ version: 2 })
@@ -139,7 +138,7 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Load multiple datasets from API via a HATEOAS rel
      */
-    async loadMultiple(rel: { href: string }): Promise<object> {
+    async loadMultipleByRef(rel: { href: string }): Promise<object> {
       let response = await datasetsApiv2.request({
         url: rel.href,
         method: 'get'
@@ -155,6 +154,22 @@ export const useDatasetStore = defineStore('dataset', {
         this.addDatasets('orphan', response, null)
       }
       return datasets
+    },
+
+    /**
+     * Fetch datasets by their IDs and store them in an array.
+     */
+    async loadMultipleByIds(datasetIds: string[]) {
+      let fetchedDatasets = []
+      for (const datasetId of datasetIds) {
+        const dataset = await datasetsApiv2.get({
+          entityId: datasetId
+        })
+        if (dataset) {
+          fetchedDatasets.push(dataset)
+        }
+      }
+      return fetchedDatasets
     },
 
     async getLicense(license: string) {

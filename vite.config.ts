@@ -12,6 +12,9 @@ interface Config {
   website: {
     title: string
   }
+  robots: {
+    meta: string
+  }
 }
 
 // https://vitejs.dev/config/
@@ -29,7 +32,8 @@ export default defineConfig(({ mode }) => {
         minify: true,
         inject: {
           data: {
-            title: config.website.title
+            title: config.website.title,
+            metaRobots: config.robots.meta
           }
         }
       }),

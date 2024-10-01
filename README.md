@@ -16,9 +16,8 @@ Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dériv�
 ### Environnement recommandé
 
 [VSCode](https://code.visualstudio.com/)
-\+ [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (désactiver Vetur)
-\+ [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
+\+ [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+\+ [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
 ### Initialisation du projet
 

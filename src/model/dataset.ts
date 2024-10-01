@@ -1,4 +1,4 @@
-import type { DatasetV2 } from '@etalab/data.gouv.fr-components'
+import type { DatasetV2 } from '@datagouv/components'
 
 import type { GenericResponse } from './api'
 import type { DatasetProperties } from './topic'

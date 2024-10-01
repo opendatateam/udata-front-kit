@@ -6,3 +6,6 @@ dist/
 node_modules/
 shell.nix
 src/playground
+
+# vim swap files
+*.swp

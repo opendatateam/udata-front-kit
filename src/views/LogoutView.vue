@@ -3,9 +3,8 @@ import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-
-import AuthService from '../services/AuthService'
-import { useUserStore } from '../store/UserStore'
+import AuthService from '@/services/AuthService'
+import { useUserStore } from '@/store/UserStore'
 
 const router = useRouter()
 const store = useUserStore()

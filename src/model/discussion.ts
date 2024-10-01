@@ -1,4 +1,4 @@
-import type { User } from '@etalab/data.gouv.fr-components'
+import type { User } from '@datagouv/components'
 
 import type { GenericResponse } from './api'
 

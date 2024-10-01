@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { DatasetCard } from '@etalab/data.gouv.fr-components'
+import { DatasetCard } from '@datagouv/components'
 import debounce from 'lodash/debounce'
-import { computed, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref, capitalize } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
-import type { TopicConf } from '@/model/config'
+import type { TopicItemConf } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { useTopicsConf } from '@/utils/config'
 
 defineEmits(['search'])
 const props = defineProps({
@@ -48,15 +49,18 @@ const selectedOrganizationId: Ref<string | null> = ref(null)
 const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
-const title = config.website.title
-const topicsConf = config.website.list_highlighted_topics as TopicConf[]
-const hasOrganizationFilter = config.website.datasets.organization_filter
+const title = config.website.title as string
+const topicItems = config.website.list_search_topics as TopicItemConf[]
+const hasOrganizationFilter = config.website.datasets
+  .organization_filter as boolean
+
+const { topicsMainTheme } = useTopicsConf()
 
 const topicOptions = computed(() => {
-  if (!topicsConf?.length) return
+  if (!topicItems?.length) return
   const topics = topicStore.$state.data
     .filter((t) => {
-      return topicsConf.map((st) => st.id).includes(t.id)
+      return topicItems.map((st) => st.id).includes(t.id)
     })
     .map((t) => {
       return { value: t.id, text: t.name }
@@ -172,8 +176,8 @@ watch(
 )
 
 onMounted(() => {
-  if (topicsConf?.length) {
-    topicStore.loadTopicsFromList(topicsConf)
+  if (topicItems?.length) {
+    topicStore.loadTopicsFromList(topicItems)
   }
   if (hasOrganizationFilter) {
     useOrganizationStore().loadFromConfigFlat()
@@ -192,7 +196,7 @@ onMounted(() => {
       <h1 class="fr-col-auto fr-mb-2v">Jeux de données</h1>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <a
-          v-if="userStore.isAdmin()"
+          v-if="userStore.isAdmin"
           :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
           class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
         >
@@ -212,14 +216,14 @@ onMounted(() => {
         @search="$emit('search', $event)"
       />
     </div>
-    <div v-if="topicsConf" class="fr-col-md-12 fr-mb-2w">
+    <div v-if="topicItems" class="fr-col-md-12 fr-mb-2w">
       <DsfrSelect
         :model-value="selectedTopicId"
         :options="topicOptions"
         default-unselected-text="Toutes les données"
         @update:model-value="onSelectTopic"
       >
-        <template #label>Thématiques</template>
+        <template #label>{{ capitalize(topicsMainTheme) }}s</template>
       </DsfrSelect>
     </div>
     <div v-if="hasOrganizationFilter" class="fr-col-md-12 fr-mb-2w">

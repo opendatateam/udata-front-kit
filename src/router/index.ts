@@ -7,9 +7,11 @@ import {
 
 import config from '@/config'
 import type { PageConfig } from '@/model/config'
+import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
 
+const { topicsSlug } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
 
 // common/default routes
@@ -44,12 +46,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       }
     ]
   },
-  // topics
-  {
-    path: '/topics',
-    name: 'topics',
-    component: async () => await import('@/views/topics/TopicsListView.vue')
-  },
   // organizations
   {
     path: '/organizations',
@@ -68,6 +64,47 @@ const defaultRoutes: RouteRecordRaw[] = [
           await import('@/views/organizations/OrganizationDetailView.vue')
       }
     ]
+  },
+  {
+    path: `/${topicsSlug}`,
+    children: [
+      {
+        path: '',
+        name: topicsSlug,
+        component: async () =>
+          await import('@/views/bouquets/BouquetsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          query: route.query.q,
+          subtheme: route.query.subtheme,
+          theme: route.query.theme,
+          geozone: route.query.geozone,
+          drafts: route.query.drafts
+        })
+      },
+      {
+        path: ':bid',
+        name: `${topicsSlug}_detail`,
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          bouquetId: route.params.bid
+        }),
+        component: async () =>
+          await import('@/views/bouquets/BouquetDetailView.vue')
+      }
+    ]
+  },
+  {
+    path: `/admin/${topicsSlug}/add`,
+    name: `${topicsSlug}_add`,
+    component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
+    meta: { requiresAuth: true },
+    props: { isCreate: true }
+  },
+  {
+    path: `/admin/${topicsSlug}/edit/:bid`,
+    name: `${topicsSlug}_edit`,
+    component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
+    meta: { requiresAuth: true },
+    props: { isCreate: false }
   },
   // technical pages
   {
@@ -126,7 +163,6 @@ async function loadRoutes(): Promise<RouteRecordRaw[]> {
 }
 
 const siteRoutesPromise = loadRoutes()
-
 // merge routes and give priority to siteRoutes for same path
 const routesMap = new Map()
 defaultRoutes.forEach((route) => {

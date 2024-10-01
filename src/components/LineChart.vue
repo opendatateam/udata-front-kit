@@ -13,7 +13,7 @@ import {
 import { computed, watchEffect } from 'vue'
 import { Line } from 'vue-chartjs'
 
-import { datavizStore } from '../store/DatavizStore'
+import { datavizStore } from '@/store/DatavizStore'
 
 const options = {
   plugins: {

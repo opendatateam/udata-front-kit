@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { onMounted, computed, type ComputedRef } from 'vue'
 
+import config from '@/config'
+import type { Theme } from '@/model/theme'
 import { useTopicStore } from '@/store/TopicStore'
+import { useTopicsConf } from '@/utils/config'
 
-import config from '../config'
-import type { Theme } from '../model/theme'
 import Tile from './Tile.vue'
 
 const topicStore = useTopicStore()
+
+const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
 
 const getCustomBoxShadow = (color: string) => {
   return `box-shadow: rgb(221, 221, 221) 0px 0px 0px 1px inset, #${color} 0px -4px 0px 0px inset`
@@ -15,15 +18,15 @@ const getCustomBoxShadow = (color: string) => {
 
 const getThemeDescription = (theme: Theme) => {
   const nbBouquets = topicStore.data.filter((topic) => {
-    return !topic.private && topic.extras.ecospheres.theme === theme.name
+    return !topic.private && topic.extras[topicsExtrasKey].theme === theme.name
   }).length
   switch (nbBouquets) {
     case 0:
-      return 'Aucun bouquet'
+      return `Aucun  ${topicsName}`
     case 1:
-      return '1 bouquet'
+      return `1 ${topicsName}`
     default:
-      return `${nbBouquets} bouquets`
+      return `${nbBouquets} ${topicsName}s`
   }
 }
 
@@ -52,7 +55,7 @@ onMounted(() => {
       >
         <Tile
           :style="getCustomBoxShadow(theme.color)"
-          :link="{ name: 'bouquets', query: { theme: theme.name } }"
+          :link="{ name: topicsSlug, query: { theme: theme.name } }"
           :title="theme.name"
           :description="description"
         />

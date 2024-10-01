@@ -1,10 +1,9 @@
-import type { Organization } from '@etalab/data.gouv.fr-components'
+import type { Organization } from '@datagouv/components'
 import { defineStore } from 'pinia'
 
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
-
-import OrganizationsAPI from '../services/api/resources/OrganizationsAPI'
+import OrganizationsAPI from '@/services/api/resources/OrganizationsAPI'
 
 const orgApi = new OrganizationsAPI()
 
@@ -61,7 +60,7 @@ export const useOrganizationStore = defineStore('organization', {
         pageSize * (page - 1),
         pageSize * page
       )
-      await this.loadMultiple(paginated, page)
+      await this.loadMultipleByIds(paginated, page)
       return this.getForPage(page)
     },
     /**
@@ -82,7 +81,7 @@ export const useOrganizationStore = defineStore('organization', {
     /**
      * Load multiple organizations to store
      */
-    async loadMultiple(orgIds: string[], page: number) {
+    async loadMultipleByIds(orgIds: string[], page: number) {
       for (const orgId of orgIds) {
         const existing = this.get(orgId)
         if (existing !== undefined) continue

@@ -4,9 +4,7 @@ import type { ComputedRef, Ref } from 'vue'
 import { ref, watchEffect, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import LocalStorageService from '@/services/LocalStorageService'
-
-import config from '../config'
+import config from '@/config'
 import type {
   DiscussionResponse,
   DiscussionForm,
@@ -14,16 +12,20 @@ import type {
   PostForm,
   DiscussionId,
   Post
-} from '../model/discussion'
-import { useDiscussionStore } from '../store/DiscussionStore'
-import { useUserStore } from '../store/UserStore'
-import { formatDate } from '../utils'
+} from '@/model/discussion'
+import LocalStorageService from '@/services/LocalStorageService'
+import { useDiscussionStore } from '@/store/DiscussionStore'
+import { useUserStore } from '@/store/UserStore'
+import { formatDate } from '@/utils'
+import { useTopicsConf } from '@/utils/config'
 
 const route = useRoute()
 const router = useRouter()
 
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
+
+const { topicsName } = useTopicsConf()
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
@@ -43,7 +45,7 @@ const props = defineProps({
 
 const subjectClassLabels = {
   Dataset: 'jeu de données',
-  Topic: 'bouquet'
+  Topic: topicsName
 }
 
 const discussionForm: Ref<DiscussionForm> = ref({

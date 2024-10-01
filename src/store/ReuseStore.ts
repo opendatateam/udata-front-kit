@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 
 import type { Reuse, ReuseType } from '@/model/reuse'
-
-import ReusesAPI from '../services/api/resources/ReusesAPI'
+import ReusesAPI from '@/services/api/resources/ReusesAPI'
 
 const reusesAPI = new ReusesAPI()
 
