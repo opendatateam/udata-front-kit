@@ -126,7 +126,10 @@ onMounted(() => {
         <img
           src="/search/france_with_magnifying_glass.svg"
           alt=""
+          loading="lazy"
           class="w-100"
+          height="134"
+          width="124"
         />
       </div>
       <div

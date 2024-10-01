@@ -60,6 +60,7 @@ const bouquetLink: RouteLocationRaw = {
           <img
             :src="getOwnerAvatar(bouquet)"
             alt=""
+            loading="lazy"
             class="owner-avatar"
             height="64"
             width="64"

@@ -75,9 +75,9 @@ onMounted(() => {
     <img
       src="/blank_state/reuse.svg"
       alt=""
+      loading="lazy"
       height="105"
       width="130"
-      loading="lazy"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
       Il n'y a pas encore de réutilisation pour ce {{ ReuseModel[model] }}.

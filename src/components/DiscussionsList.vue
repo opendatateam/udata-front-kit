@@ -186,9 +186,9 @@ watchEffect(() => {
     <img
       src="/blank_state/discussion.svg"
       alt=""
+      loading="lazy"
       height="105"
       width="130"
-      loading="lazy"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
       Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
@@ -206,7 +206,9 @@ watchEffect(() => {
           <img
             :src="getUserAvatar(discussion.discussion[0])"
             alt=""
+            loading="lazy"
             width="20"
+            height="20"
           />
         </div>
         <div class="user-name">
@@ -234,7 +236,13 @@ watchEffect(() => {
           </p>
           <div class="discussion-subtitle fr-mb-2w">
             <div class="avatar fr-mr-1v">
-              <img :src="getUserAvatar(comment)" alt="" width="20" />
+              <img
+                :src="getUserAvatar(comment)"
+                alt=""
+                loading="lazy"
+                width="20"
+                height="20"
+              />
             </div>
             <div class="user-name fr-mb-md-1v">
               {{ comment.posted_by.first_name }}

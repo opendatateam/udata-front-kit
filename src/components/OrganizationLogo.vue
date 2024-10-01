@@ -40,7 +40,7 @@ const style = computed(() => {
 
 <template>
   <div class="logo" :style="style">
-    <img :src="logoSrc" alt="" :width="size" :height="size" />
+    <img :src="logoSrc" alt="" loading="lazy" :width="size" :height="size" />
   </div>
 </template>
 

@@ -50,9 +50,9 @@ useHead({
           <img
             src="../assets/home-global-schema.svg"
             alt=""
+            class="illustration"
             width="441"
             height="290"
-            class="illustration"
           />
         </div>
       </div>
@@ -79,9 +79,10 @@ useHead({
             <img
               src="../assets/home-bouquets-schema.svg"
               alt=""
+              loading="lazy"
+              class="illustration"
               width="441"
               height="290"
-              class="illustration"
             />
           </div>
         </div>

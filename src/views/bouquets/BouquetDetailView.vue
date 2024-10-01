@@ -244,9 +244,10 @@ watch(
                 <img
                   :src="getOwnerAvatar(topic)"
                   alt=""
+                  loading="lazy"
+                  class="owner-avatar"
                   height="32"
                   width="32"
-                  class="owner-avatar"
                 />
               </div>
             </div>
