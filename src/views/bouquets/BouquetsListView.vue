@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
 import { useDebounceFn, useTitle } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
@@ -86,21 +85,33 @@ const pageTitle = computed(() => {
   return route.meta.title
 })
 
-const search = useDebounceFn(() => {
-  router.push({
-    name: topicsSlug,
-    query: { ...route.query, q: selectedQuery.value }
-  })
+const searchResultsMessage = computed(() => {
+  return bouquetListComp.value?.numberOfResultMsg
+})
 
-  const searchResultsMessage = selectedQuery.value
-    ? bouquetListComp.value?.numberOfResultMsg
-    : undefined
-  useHead({ title: `${pageTitle.value} | ${config.website.title}` })
-  setAccessibilityProperties(pageTitle.value, false, [
-    {
-      text: searchResultsMessage
-    }
-  ])
+const setLiveResults = () => {
+  // only display the number of results if a query or filter exists
+  if (route.fullPath !== `/${topicsSlug}`) {
+    setAccessibilityProperties(pageTitle.value, false, [
+      {
+        text: searchResultsMessage
+      }
+    ])
+  } else {
+    setAccessibilityProperties(pageTitle.value, false)
+  }
+}
+
+const search = useDebounceFn(() => {
+  router
+    .push({
+      name: topicsSlug,
+      query: { ...route.query, q: selectedQuery.value }
+    })
+    .then(() => {
+      useTitle(`${pageTitle.value} | ${config.website.title}`)
+      setLiveResults()
+    })
 }, 900)
 
 watch(
@@ -160,6 +171,7 @@ watch(
               :subtheme-name="selectedSubtheme"
               :geozone="selectedGeozone"
               :show-drafts="showDrafts"
+              @vue:updated="setLiveResults"
             />
           </div>
         </nav>
@@ -171,6 +183,7 @@ watch(
             :show-drafts="showDrafts"
             :geozone="geozone"
             :query="selectedQuery"
+            @clear-filters="setLiveResults"
           />
         </div>
       </div>

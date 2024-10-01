@@ -71,8 +71,7 @@ const computeQueryArgs = (
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: `/${topicsSlug}`,
-    query: computeQueryArgs(data),
-    hash: '#main-content'
+    query: computeQueryArgs(data)
   })
 }
 
@@ -89,7 +88,9 @@ const switchSubtheme = (event: Event) => {
   })
 }
 
-const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
+const switchSpatialCoverage = (
+  spatialCoverage: SpatialCoverage | null | undefined
+) => {
   selectedGeozone.value =
     spatialCoverage != null ? spatialCoverage.id : undefined
   navigate()
@@ -182,7 +183,7 @@ watchEffect(() => {
         v-model="selectedSpatialCoverage"
         placeholder="Rechercher"
         :short="true"
-        @update:model-value="switchSpatialCoverage"
+        @update:spatial-coverage="switchSpatialCoverage"
       />
     </div>
   </div>

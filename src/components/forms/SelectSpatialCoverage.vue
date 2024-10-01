@@ -9,7 +9,7 @@ import type { SpatialCoverage, SpatialCoverageLevel } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useSpatialStore } from '@/store/SpatialStore'
 
-const selectedSpatialCoverage = defineModel({
+const selectedSpatialCoverage = defineModel('spatialCoverage', {
   type: Object as PropType<SpatialCoverage>
 })
 

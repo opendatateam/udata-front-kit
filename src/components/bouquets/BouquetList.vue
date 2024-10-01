@@ -43,6 +43,8 @@ const props = defineProps({
   }
 })
 
+const emits = defineEmits(['clearFilters'])
+
 const bouquets: ComputedRef<Topic[]> = computed(() => {
   return topicStore.sorted
     .filter((bouquet) => {
@@ -87,7 +89,9 @@ const goToCreate = () => {
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, query })
+  router.push({ name: topicsSlug, query }).then(() => {
+    emits('clearFilters')
+  })
 }
 
 onMounted(() => {
