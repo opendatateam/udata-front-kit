@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Tooltip from '@/components/TooltipWrapper.vue'
 import type { DatasetProperties } from '@/model/topic'
 import { useTopicsConf } from '@/utils/config'
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, defineModel, type Ref } from 'vue'
+import { computed, defineModel, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -141,6 +141,7 @@ defineExpose({ addDataset, editDataset })
     "
     :opened="isModalOpen"
     :actions="modalActions"
+    aria-modal="true"
     @close="closeModal"
   >
     <form novalidate>

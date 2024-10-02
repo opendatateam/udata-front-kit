@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { ref, onMounted, computed, capitalize } from 'vue'
+import { capitalize, computed, onMounted, ref } from 'vue'
 import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'
 
-import Tooltip from '@/components/TooltipWrapper.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
 import { Availability, type DatasetProperties, type Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
@@ -125,6 +124,7 @@ onMounted(() => {
     :title="`Ajouter le jeu de données à un de vos ${topicsName}s`"
     :opened="show"
     :actions="modalActions"
+    aria-modal="true"
     @close="closeModal"
   >
     <DsfrSelect
