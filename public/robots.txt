@@ -1,1 +1,5 @@
 User-agent: *
+Disallow: /admin
+Disallow: /datasets
+Disallow: /organizations
+Sitemap: https://ecologie.data.gouv.fr/sitemap.xml
