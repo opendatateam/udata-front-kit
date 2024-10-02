@@ -150,14 +150,14 @@ onMounted(() => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
           setAccessibilityProperties(
-            `Cloner le ${topicsName} ${topic.value.name ?? ''}`
+            `Cloner le ${topicsName} ${topic.value.name}`
           )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
           setAccessibilityProperties(
-            `Éditer le ${topicsName} ${topic.value.name ?? ''}`
+            `Éditer le ${topicsName} ${topic.value.name}`
           )
         }
       })

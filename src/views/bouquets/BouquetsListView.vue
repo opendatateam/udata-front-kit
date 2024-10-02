@@ -91,7 +91,7 @@ const searchResultsMessage = computed(() => {
 
 const setLiveResults = () => {
   // only display the number of results if a query or filter exists
-  if (route.fullPath !== `/${topicsSlug}`) {
+  if (route.fullPath !== route.path) {
     setAccessibilityProperties(pageTitle.value, false, [
       {
         text: searchResultsMessage
@@ -112,7 +112,7 @@ const search = useDebounceFn(() => {
       useTitle(`${pageTitle.value} | ${config.website.title}`)
       setLiveResults()
     })
-}, 900)
+}, 600)
 
 watch(
   props,

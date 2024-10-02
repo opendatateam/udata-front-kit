@@ -183,7 +183,7 @@ watchEffect(() => {
         v-model="selectedSpatialCoverage"
         placeholder="Rechercher"
         :short="true"
-        @update:spatial-coverage="switchSpatialCoverage"
+        @update:spatial-coverage-model="switchSpatialCoverage"
       />
     </div>
   </div>

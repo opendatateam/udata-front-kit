@@ -71,7 +71,7 @@ const setAccessibilityProperties = inject(
   'setAccessibilityProperties'
 ) as Function
 
-const pageTitle = computed(() => {
+const metaTitle = computed(() => {
   if (currentPage.value && localQuery.value) {
     return `${route.meta.title} pour "${localQuery.value}" - page ${currentPage.value}`
   } else if (currentPage.value) {
@@ -183,8 +183,8 @@ const delayedSearch = useDebounceFn(
         const searchResultsMessage = localQuery.value
           ? queryResults.value?.innerText
           : undefined
-        useTitle(`${pageTitle.value} | ${title}`)
-        setAccessibilityProperties(pageTitle.value, false, [
+        useTitle(`${metaTitle.value} | ${title}`)
+        setAccessibilityProperties(metaTitle.value, false, [
           {
             text: searchResultsMessage
           }
@@ -192,7 +192,7 @@ const delayedSearch = useDebounceFn(
         loadingInstance.hide()
       })
   },
-  900
+  600
 )
 
 watch(
