@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { debounce } from 'lodash'
-import { onMounted, ref, defineModel, type PropType, type Ref } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
+import { onMounted, ref, type PropType, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
@@ -36,7 +36,7 @@ const getLevelById = (levelId: string): SpatialCoverageLevel | undefined => {
   return useSpatialStore().getLevelById(levelId)
 }
 
-const search = debounce(async (query: string) => {
+const search = useDebounceFn(async (query: string) => {
   isLoading.value = true
   if (!query) {
     options.value = []
