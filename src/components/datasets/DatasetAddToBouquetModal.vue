@@ -122,25 +122,18 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    :title="`Ajouter le jeu de données à un ${topicsName}`"
+    :title="`Ajouter le jeu de données à un de vos ${topicsName}s`"
     :opened="show"
     :actions="modalActions"
     @close="closeModal"
   >
     <DsfrSelect
       v-model="selectedBouquetId"
+      :label="`${capitalize(topicsName)} à associer (obligatoire)`"
       :options="bouquetOptions"
       :default-unselected-text="`Choisissez un ${topicsName}`"
     >
-      <template #label>
-        {{ capitalize(topicsName) }} à associer
-        <span class="required">&nbsp;*</span>
-        <Tooltip
-          :text="`Choisissez parmi les ${topicsName}s dont vous êtes l'auteur. Si un ${topicsName} apparait désactivé, c'est que le jeu de données y est déjà associé.`"
-        />
-      </template>
     </DsfrSelect>
-
     <DatasetPropertiesTextFields
       v-if="topicsDatasetEditorialization"
       v-model:dataset-properties="datasetProperties"

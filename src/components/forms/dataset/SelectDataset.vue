@@ -64,7 +64,7 @@ const clear = () => {
     :options="options"
     label="title"
     track-by="id"
-    placeholder="ex: Admin Express"
+    placeholder=""
     select-label="Entrée pour sélectionner"
     :multiple="false"
     :searchable="true"

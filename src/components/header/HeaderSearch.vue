@@ -64,7 +64,7 @@ const dropdownLabel = (text: string) => {
     :options="dropdown"
     label="text"
     track-by="route"
-    :placeholder="placeholder"
+    placeholder=""
     select-label=""
     deselect-label=""
     :multiple="false"
