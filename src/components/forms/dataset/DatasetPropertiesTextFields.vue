@@ -26,12 +26,12 @@ const updateDatasetProperties = (
 </script>
 
 <template>
-  <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="label"
-      >Libellé du jeu de données <span class="required">&nbsp;*</span></label
+  <div class="fr-input-group">
+    <label class="fr-label" for="input-title"
+      >Libellé du jeu de données (obligatoire)</label
     >
     <input
-      id="label"
+      id="input-title"
       class="fr-input"
       type="text"
       :value="props.datasetProperties.title"
@@ -43,24 +43,15 @@ const updateDatasetProperties = (
       "
     />
   </div>
-  <div class="fr-mt-1w fr-mb-4w">
-    <div class="container">
-      Raison d'utilisation dans ce {{ topicsName }}
-      <span class="required">&nbsp;*</span>
-      <Tooltip
-        text="Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est pas évidente. Vous pouvez également utiliser cet espace pour renseigner des problèmes liés à l'accès ou la qualité des données."
-      />
-    </div>
-    <div class="container small">
-      Vous pouvez utiliser du markdown pour mettre en forme votre texte
-      <Tooltip
-        text="* simple astérisque pour italique *<br/> ** double astérisque pour gras **<br/> # un dièse pour titre 1<br/> ## deux dièses pour titre 2<br/> *  astérisque pour une liste<br/> lien : [[https://exemple.fr]]"
-      />
-    </div>
+  <div class="fr-input-group">
+    <label class="fr-label" for="input-purpose"
+      >Raison d'utilisation dans ce {{ topicsName }} (obligatoire)</label
+    >
     <textarea
-      id="purpose"
+      id="input-purpose"
       class="fr-input"
       type="text"
+      aria-describedby="purpose-instructions"
       :value="props.datasetProperties.purpose"
       @input="
         updateDatasetProperties(
@@ -69,11 +60,21 @@ const updateDatasetProperties = (
         )
       "
     />
+    <p id="purpose-instructions" class="fr-mt-1v">
+      Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est
+      pas évidente. Vous pouvez également utiliser cet espace pour renseigner
+      des problèmes liés à l'accès ou la qualité des données.<br />
+      Utilisez du
+      <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
+        ><span lang="en">markdown</span> (guide en anglais)</a
+      >
+      pour mettre en forme votre texte.
+    </p>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 textarea {
-  height: 150px;
+  min-height: 150px;
 }
 </style>

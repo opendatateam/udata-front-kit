@@ -143,18 +143,18 @@ defineExpose({ addDataset, editDataset })
     :actions="modalActions"
     @close="closeModal"
   >
-    <DatasetPropertiesFields
-      v-model="modalData.dataset"
-      :already-selected-datasets="datasets"
-      @update-validation="(isValid: boolean) => modalData.isValid = isValid"
-    />
+    <form novalidate>
+      <DatasetPropertiesFields
+        v-model="modalData.dataset"
+        :already-selected-datasets="datasets"
+        @update-validation="(isValid: boolean) => modalData.isValid = isValid"
+      />
+    </form>
   </DsfrModal>
 </template>
 
-<style lang="scss">
-.bouquet-dataset-modal {
-  h1 {
-    margin-bottom: 1rem;
-  }
+<style scoped>
+:deep(h1) {
+  margin-bottom: 1rem;
 }
 </style>

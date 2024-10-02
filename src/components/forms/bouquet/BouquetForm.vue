@@ -252,9 +252,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-label {
-  font-weight: bold;
-}
 textarea {
   min-height: 150px;
 }
