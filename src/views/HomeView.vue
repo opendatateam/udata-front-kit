@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import SubSectionButtons from '@/components/sections/SubSectionButtons.vue'
+import SubSectionCards from '@/components/sections/SubSectionCards.vue'
+import SubSectionDatasets from '@/components/sections/SubSectionDatasets.vue'
+import SubSectionTiles from '@/components/sections/SubSectionTiles.vue'
 import config from '@/config'
-
-import HomeButtons from '../components/HomeButtons.vue'
-import HomeCharts from '../components/HomeCharts.vue'
-import HomeTopics from '../components/HomeTopics.vue'
-import { fromMarkdown } from '../utils'
+import { fromMarkdown } from '@/utils'
 
 const router = useRouter()
 const query = ref('')
@@ -23,11 +23,7 @@ const doSearch = () => {
 
 const homepageTitle = config.website.homepage.title
 const homepageSubTitle = config.website.homepage.subtitle
-const belowHero = config.website.homepage.below_hero
-const belowTopics = config.website.homepage.below_topics
-const topics = config.website.list_highlighted_topics
-const buttons = config.website.home_buttons
-const showTopicChart = config.website.show_topic_charts
+const sectionsHomePage = config.website.homepage.sections
 const colorsBanner = config.website.home_banner_colors
 const searchConfig = config.website.search_bar
 const secondarySearchConfig = config.website.secondary_search
@@ -84,21 +80,30 @@ const goToPage = (page) => {
       </div>
     </div>
   </div>
-  <div
-    class="fr-container hero-text"
-    v-if="belowHero"
-    v-html="fromMarkdown(belowHero)"
-  ></div>
-  <div class="fr-container">
-    <HomeButtons v-if="buttons" :buttons="buttons" />
-    <HomeTopics v-if="topics" :topics="topics" />
-    <HomeCharts v-if="showTopicChart" />
+  <div v-for="item in sectionsHomePage" v-bind:key="item">
+    <div class="fr-container hero-text">
+      <h4 v-if="item.title">{{ item.title }}</h4>
+      <span v-html="fromMarkdown(item.content)"></span>
+      <div class="fr-mt-4w fr-col-md-12 datagouv-components">
+        <SubSectionDatasets
+          v-if="item.sub_section_datasets"
+          :subsection="item.sub_section_datasets"
+        />
+        <SubSectionCards
+          v-if="item.sub_section_cards"
+          :subsection="item.sub_section_cards"
+        />
+        <SubSectionTiles
+          v-if="item.sub_section_tiles"
+          :subsection="item.sub_section_tiles"
+        />
+        <SubSectionButtons
+          v-if="item.sub_section_buttons"
+          :subsection="item.sub_section_buttons"
+        />
+      </div>
+    </div>
   </div>
-  <div
-    class="fr-container hero-text"
-    v-if="belowTopics"
-    v-html="fromMarkdown(belowTopics)"
-  ></div>
 </template>
 
 <style scoped lang="scss">

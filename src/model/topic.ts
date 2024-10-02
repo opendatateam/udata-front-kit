@@ -1,6 +1,10 @@
-import type { Owned, Rel } from '@etalab/data.gouv.fr-components'
+import type { Owned, Rel } from '@datagouv/components'
 
 import type { SpatialField } from './spatial'
+
+// a placeholder for ecospheres, meteofrance...
+// value doesn't really matter, SiteId is used to cast the "real" config value
+export type SiteId = 'siteId'
 
 export enum Availability {
   MISSING = 'missing',
@@ -15,21 +19,19 @@ export interface DatasetProperties {
   uri: string | null
   id: string | null
   availability: Availability
-  // this is a "local" property, not stored on data.gouv.fr
+  // those are "local" properties, not stored on data.gouv.fr
   remoteDeleted?: boolean
+  archived?: boolean
 }
 
-export interface EcospheresTopicExtras {
+export interface SiteTopicExtras {
   theme: string
   subtheme: string
   datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
 
-export interface TopicExtras {
-  ecospheres: EcospheresTopicExtras
-  [key: string]: any
-}
+export type TopicExtras = Record<SiteId, SiteTopicExtras>
 
 export type Topic = Owned & {
   name: string

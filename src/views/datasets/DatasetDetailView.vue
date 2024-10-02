@@ -7,25 +7,27 @@ import {
   ReadMore,
   Well,
   InformationPanel,
+  AppLink,
   type License
-} from '@etalab/data.gouv.fr-components'
+} from '@datagouv/components'
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
+import ChartData from '@/components/ChartData.vue'
+import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import ReusesList from '@/components/ReusesList.vue'
+import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
+import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import config from '@/config'
-import DatasetAddToBouquetModal from '@/custom/ecospheres/components/datasets/DatasetAddToBouquetModal.vue'
-
-import ChartData from '../../components/ChartData.vue'
-import DiscussionsList from '../../components/DiscussionsList.vue'
-import ReusesList from '../../components/ReusesList.vue'
-import ExtendedInformationPanel from '../../components/datasets/ExtendedInformationPanel.vue'
-import type { ResourceDataWithQuery } from '../../model/resource'
-import { useRouteParamsAsString } from '../../router/utils'
-import { useDatasetStore } from '../../store/DatasetStore'
-import { useResourceStore } from '../../store/ResourceStore'
-import { useUserStore } from '../../store/UserStore'
-import { descriptionFromMarkdown, formatDate } from '../../utils'
+import type { ResourceDataWithQuery } from '@/model/resource'
+import { useRouteParamsAsString } from '@/router/utils'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useResourceStore } from '@/store/ResourceStore'
+import { useUserStore } from '@/store/UserStore'
+import { descriptionFromMarkdown, formatDate } from '@/utils'
+import { useTopicsConf } from '@/utils/config'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -33,6 +35,7 @@ const datasetId = route.params.did
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
+const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
@@ -41,8 +44,9 @@ const selectedTabIndex = ref(0)
 const license = ref<License>()
 const showAddToBouquetModal = ref(false)
 
-const pageSize = config.website.pagination_sizes.files_list
-const showDiscussions = config.website.discussions.dataset.display
+const pageSize = config.website.pagination_sizes.files_list as number
+const showDiscussions = config.website.discussions.dataset.display as boolean
+const { topicsName } = useTopicsConf()
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
@@ -200,7 +204,7 @@ onMounted(() => {
         >
           <div class="fr-col-auto">
             <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img :src="dataset.organization.logo" height="32" />
+              <img :src="dataset.organization.logo" height="32" alt="" />
             </div>
           </div>
           <p class="fr-col fr-m-0">
@@ -210,6 +214,19 @@ onMounted(() => {
               />
             </a>
           </p>
+        </div>
+        <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">
+          <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
+            <p class="fr-grid-row fr-grid-row--middle fr-my-0">
+              Ce jeu de données provient d'un portail externe.
+              <AppLink
+                :to="dataset.harvest.remote_url"
+                target="_blank"
+                rel="noopener nofollow"
+                >Voir la source originale.</AppLink
+              >
+            </p>
+          </div>
         </div>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
         <p>{{ formatDate(dataset.last_update) }}</p>
@@ -240,12 +257,16 @@ onMounted(() => {
           récupération. Nous travaillons actuellement à améliorer la situation.
         </div>
         <div
-          v-if="config.website.datasets.add_to_bouquet && userStore.isLoggedIn"
+          v-if="
+            config.website.datasets.add_to_bouquet &&
+            userStore.loggedIn &&
+            canAddBouquet
+          "
         >
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            label="Ajouter à un bouquet"
+            :label="`Ajouter à un ${topicsName}`"
             icon="ri-file-add-line"
             @click="showAddToBouquetModal = true"
           />

@@ -2,7 +2,7 @@
 import { computed, type PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
-import { stripFromMarkdown } from '../utils'
+import { stripFromMarkdown } from '@/utils'
 
 const props = defineProps({
   title: {
