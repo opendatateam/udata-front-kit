@@ -24,7 +24,7 @@ defineProps({
   },
   placeholder: {
     type: String,
-    default: 'Rechercher une couverture territoriale'
+    default: 'ex: Toulouse Métropole'
   }
 })
 
@@ -60,6 +60,9 @@ onMounted(() => {
 </script>
 
 <template>
+  <label class="fr-label" for="select-spatial-coverage"
+    >Couverture territoriale</label
+  >
   <Multiselect
     id="select-spatial-coverage"
     ref="multiselect"

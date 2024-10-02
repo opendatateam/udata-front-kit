@@ -89,7 +89,9 @@ const switchSubtheme = (event: Event) => {
   })
 }
 
-const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
+const switchSpatialCoverage = (
+  spatialCoverage: SpatialCoverage | null | undefined
+) => {
   selectedGeozone.value =
     spatialCoverage != null ? spatialCoverage.id : undefined
   navigate()
@@ -175,12 +177,8 @@ watchEffect(() => {
       </div>
     </template>
     <div class="fr-select-group">
-      <label class="fr-label" for="select_subtheme"
-        >Couverture territoriale</label
-      >
       <SelectSpatialCoverage
         v-model="selectedSpatialCoverage"
-        placeholder="Rechercher"
         :short="true"
         @update:model-value="switchSpatialCoverage"
       />

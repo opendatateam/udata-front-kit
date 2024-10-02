@@ -81,3 +81,6 @@
   padding: 0;
   background-color: transparent;
 }
+.multiselect__placeholder {
+  color: var(--text-default-grey);
+}
