@@ -177,6 +177,9 @@ watchEffect(() => {
       </div>
     </template>
     <div class="fr-select-group">
+      <label class="fr-label" for="select-spatial-coverage"
+        >Couverture territoriale</label
+      >
       <SelectSpatialCoverage
         v-model="selectedSpatialCoverage"
         :short="true"

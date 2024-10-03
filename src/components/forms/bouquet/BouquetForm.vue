@@ -59,7 +59,6 @@ const [description, descriptionAttrs] = defineField('description')
 const [theme, themeAttrs] = defineField('theme')
 const [subtheme, subthemeAttrs] = defineField('subtheme')
 
-const isValid: Ref<boolean | undefined> = ref(undefined)
 const isSubmitted: Ref<boolean | undefined> = ref(undefined)
 
 const onValidSubmit = async (validatedValues: {
@@ -70,20 +69,18 @@ const onValidSubmit = async (validatedValues: {
 }) => {
   // set form states
   isSubmitted.value = true
-  isValid.value = true
   // set topic values from validated fields
   topic.value.name = validatedValues.name
   topic.value.description = validatedValues.description
   topic.value.extras[topicsExtrasKey].theme = validatedValues.theme
   topic.value.extras[topicsExtrasKey].subtheme = validatedValues.subtheme
   // sync valid status with parent
-  emits('updateValidation', isValid.value)
+  emits('updateValidation', true)
 }
 
 const onInvalidSubmit = ({ errors }: { errors: ValidationErrors }) => {
   // send invalid fields name
   formErrors.value = Object.keys(errors)
-  isValid.value = false
   isSubmitted.value = true
 }
 
