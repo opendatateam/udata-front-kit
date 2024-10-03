@@ -136,42 +136,20 @@ export const useDatasetStore = defineStore('dataset', {
       return this.addOrphan(dataset)
     },
     /**
-     * Load multiple datasets from API via a HATEOAS rel
-     */
-    async loadMultipleByRef(rel: { href: string }): Promise<object> {
-      let response = await datasetsApiv2.request({
-        url: rel.href,
-        method: 'get'
-      })
-      let datasets = response.data
-      this.addDatasets('orphan', response, null)
-      while (response.next_page !== null) {
-        response = await datasetsApiv2.request({
-          url: response.next_page,
-          method: 'get'
-        })
-        datasets = [...datasets, ...response.data]
-        this.addDatasets('orphan', response, null)
-      }
-      return datasets
-    },
-
-    /**
      * Fetch datasets by their IDs and store them in an array.
      */
     async loadMultipleByIds(datasetIds: string[]) {
-      let fetchedDatasets = []
+      const fetchedDatasets = []
       for (const datasetId of datasetIds) {
         const dataset = await datasetsApiv2.get({
           entityId: datasetId
         })
-        if (dataset) {
+        if (dataset != null) {
           fetchedDatasets.push(dataset)
         }
       }
       return fetchedDatasets
     },
-
     async getLicense(license: string) {
       const response: License[] = await datasetsApi.get({
         entityId: 'licenses'
