@@ -6,7 +6,7 @@ import {
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, toRef, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -29,7 +29,7 @@ import {
 } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { getThemeColor, getThemeTextColor } from '@/utils/theme'
+import { useThemeOptions } from '@/utils/theme'
 
 const props = defineProps({
   bouquetId: {
@@ -54,21 +54,6 @@ const canEdit = computed(() => {
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
 
-const tagTheme = computed(() => {
-  if (theme.value) {
-    const textColor = getThemeTextColor(theme.value)
-    const bgColor = getThemeColor(theme.value)
-    return {
-      color: textColor,
-      background: bgColor
-    }
-  }
-  return {
-    color: '#000000b3',
-    background: 'transparent'
-  }
-})
-
 const {
   topicsListAll,
   topicsDisplayMetadata,
@@ -86,6 +71,11 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
   topic,
   topicsListAll
 )
+
+const themeName = computed(() => {
+  return theme.value as string
+})
+const { themeColors } = useThemeOptions(themeName)
 
 const goToEdit = () => {
   router.push({
@@ -387,7 +377,7 @@ watch(
   margin-bottom: -6px;
 }
 .card__tag {
-  color: v-bind('tagTheme.color');
-  background-color: v-bind('tagTheme.background');
+  color: v-bind('themeColors.color');
+  background-color: v-bind('themeColors.background');
 }
 </style>

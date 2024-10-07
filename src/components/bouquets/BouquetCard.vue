@@ -15,7 +15,7 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { getThemeColor, getThemeTextColor } from '@/utils/theme'
+import { useThemeOptions } from '@/utils/theme'
 
 const { topicsSlug } = useTopicsConf()
 
@@ -40,20 +40,10 @@ const bouquetLink: RouteLocationRaw = {
   params: { bid: props.bouquet.slug }
 }
 
-const tagTheme = computed(() => {
-  if (theme.value) {
-    const textColor = getThemeTextColor(theme.value)
-    const bgColor = getThemeColor(theme.value)
-    return {
-      color: textColor,
-      background: bgColor
-    }
-  }
-  return {
-    color: '#000000b3',
-    background: 'transparent'
-  }
+const themeName = computed(() => {
+  return theme.value as string
 })
+const { themeColors } = useThemeOptions(themeName)
 </script>
 
 <template>
@@ -147,7 +137,7 @@ const tagTheme = computed(() => {
   margin-bottom: -6px;
 }
 .card__tag {
-  color: v-bind('tagTheme.color');
-  background-color: v-bind('tagTheme.background');
+  color: v-bind('themeColors.color');
+  background-color: v-bind('themeColors.background');
 }
 </style>

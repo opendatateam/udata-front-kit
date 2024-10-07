@@ -1,7 +1,12 @@
-import { ref, watchEffect, computed, type Ref, type ComputedRef } from 'vue'
+import { computed, ref, watchEffect, type ComputedRef, type Ref } from 'vue'
 
 import config from '@/config'
-import type { ThemeSelectOption, Subtheme, Theme } from '@/model/theme'
+import type {
+  Subtheme,
+  Theme,
+  ThemeColors,
+  ThemeSelectOption
+} from '@/model/theme'
 
 export const getThemeByName = (themeName: string): Theme => {
   return config.themes.find((theme: Theme) => theme.name === themeName)
@@ -39,6 +44,7 @@ interface UseThemeOptionsReturn {
   themeOptions: ThemeSelectOption[]
   selectedTheme: Ref<Theme | undefined>
   subthemeOptions: ComputedRef<ThemeSelectOption[]>
+  themeColors: ComputedRef<ThemeColors>
 }
 
 /**
@@ -59,9 +65,25 @@ export function useThemeOptions(themeName: Ref<string>): UseThemeOptionsReturn {
       : []
   })
 
+  const themeColors = computed(() => {
+    if (selectedTheme.value != null) {
+      const textColor = getThemeTextColor(selectedTheme.value.name)
+      const bgColor = getThemeColor(selectedTheme.value.name)
+      return {
+        color: textColor,
+        background: bgColor
+      }
+    }
+    return {
+      color: '#000000b3',
+      background: 'transparent'
+    }
+  })
+
   return {
     themeOptions,
     selectedTheme,
-    subthemeOptions
+    subthemeOptions,
+    themeColors
   }
 }
