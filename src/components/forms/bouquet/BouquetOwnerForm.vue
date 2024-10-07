@@ -115,7 +115,7 @@ watch(choice, () => {
         id="ownerOrg"
         v-model="selectedOwnOrganization"
         label="Organisations dont vous faites partie&nbsp;:"
-        default-unselected-text="--Sélectionnez une organisation--"
+        default-unselected-text="Sélectionnez une organisation"
         :options="selectOptions"
         @update:model-value="onSelectOwnOrganization()"
       />

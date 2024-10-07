@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { required } from '@vee-validate/rules'
-import { useForm, type ValidationErrors } from 'vee-validate'
+import { useForm } from 'vee-validate'
 import { capitalize, onMounted, ref, type Ref } from 'vue'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
@@ -19,6 +19,13 @@ const formErrors = defineModel('formErrors', {
   type: Array,
   default: () => []
 })
+
+type FormErrors = {
+  name?: string
+  description?: string
+  theme?: string
+  subtheme?: string
+}
 
 const emits = defineEmits(['updateValidation'])
 
@@ -78,7 +85,7 @@ const onValidSubmit = async (validatedValues: {
   emits('updateValidation', true)
 }
 
-const onInvalidSubmit = ({ errors }: { errors: ValidationErrors }) => {
+const onInvalidSubmit = ({ errors }: { errors: FormErrors }) => {
   // send invalid fields name
   formErrors.value = Object.keys(errors)
   isSubmitted.value = true
@@ -153,7 +160,7 @@ onMounted(() => {
       <span class="fr-icon-warning-fill" aria-hidden="true"></span>
       La description ne doit pas être vide.
     </p>
-    <p id="description-instructions" class="fr-mt-1v">
+    <p id="description-instructions" class="fr-mt-1v fr-text--sm">
       Renseignez ici les informations nécessaires à la compréhension du
       {{ topicsName }}&nbsp;: politique publique et problématique à laquelle il
       répond, lien vers toute méthodologie de traitement des données,
@@ -179,6 +186,7 @@ onMounted(() => {
       :aria-describedby="
         errors.theme && isSubmitted ? 'errors-theme' : undefined
       "
+      @change="subtheme = ''"
     >
       <option value="" selected disabled hidden>
         Choisir une {{ topicsMainTheme }}
@@ -232,7 +240,7 @@ onMounted(() => {
       <span class="fr-icon-warning-fill" aria-hidden="true"></span>
       Veuillez sélectionner un chantier.
     </p>
-    <p v-if="theme === ''" id="subtheme-instructions">
+    <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">
       Choisissez d'abord une {{ topicsMainTheme }}
     </p>
   </div>
