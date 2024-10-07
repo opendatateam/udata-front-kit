@@ -50,7 +50,7 @@ const tagTheme = computed(() => {
     }
   }
   return {
-    color: '000000b3',
+    color: '#000000b3',
     background: 'transparent'
   }
 })
