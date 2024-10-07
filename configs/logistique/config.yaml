@@ -166,8 +166,8 @@ website:
         - 6230733357772160a4f77fbaxx
 themes:
   - name: Trafic
-    color: 043574
-    textColor: FFFFFF
+    color: '#043574'
+    textColor: '#FFFFFF'
     subthemes:
       - name: Transport routier
       - name: Transport aérien
@@ -175,8 +175,8 @@ themes:
       - name: Transport fluvial
       - name: Transport maritime
   - name: Filière
-    color: 043574
-    textColor: FFFFFF
+    color: '#043574'
+    textColor: '#FFFFFF'
     subthemes:
       - name: Filière agricole
       - name: Filière industrielle
@@ -186,23 +186,23 @@ themes:
       - name: Filière matériaux de construction
       - name: Filière matière premières
   - name: Immobilier logistique
-    color: 043574
-    textColor: FFFFFF
+    color: '#043574'
+    textColor: '#FFFFFF'
     subthemes:
       - name: Données
   - name: Environnementale
-    color: 043574
-    textColor: FFFFFF
+    color: '#043574'
+    textColor: '#FFFFFF'
     subthemes:
       - name: Données
   - name: Socio-économique
-    color: 043574
-    textColor: FFFFFF
+    color: '#043574'
+    textColor: '#FFFFFF'
     subthemes:
       - name: Données
   - name: Territoriale
-    color: 043574
-    textColor: FFFFFF
+    color: '#043574'
+    textColor: '#FFFFFF'
     subthemes:
       - name: Données
 

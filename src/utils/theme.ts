@@ -3,22 +3,18 @@ import { ref, watchEffect, computed, type Ref, type ComputedRef } from 'vue'
 import config from '@/config'
 import type { ThemeSelectOption, Subtheme, Theme } from '@/model/theme'
 
-const convertToHex = (hex: string): string => {
-  return `#${parseInt(hex, 16).toString(16).padStart(6, '0')}`
-}
-
-export const getThemeByName = (themeName: string): Theme | undefined => {
+export const getThemeByName = (themeName: string): Theme => {
   return config.themes.find((theme: Theme) => theme.name === themeName)
 }
 
 export const getThemeColor = (themeName: string): string => {
   const theme = getThemeByName(themeName)
-  return theme?.color != null ? convertToHex(theme.color) : 'transparent'
+  return theme.color ?? 'transparent'
 }
 
 export const getThemeTextColor = (themeName: string): string => {
   const theme = getThemeByName(themeName)
-  return theme?.textColor != null ? convertToHex(theme.textColor) : '#000000b3'
+  return theme.textColor ?? '#000000b3'
 }
 
 export const getThemeOptions = (): ThemeSelectOption[] => {

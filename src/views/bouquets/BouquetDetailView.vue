@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {
-  ReadMore,
   OrganizationNameWithCertificate,
+  ReadMore,
   excerpt
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
-import { ref, computed, watch } from 'vue'
 import type { Ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -23,13 +23,13 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import {
+  updateTopicExtras,
   useBreadcrumbLinksForTopic,
-  useExtras,
-  updateTopicExtras
+  useExtras
 } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { getThemeTextColor, getThemeColor } from '@/utils/theme'
+import { getThemeColor, getThemeTextColor } from '@/utils/theme'
 
 const props = defineProps({
   bouquetId: {
@@ -53,6 +53,21 @@ const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
+
+const tagTheme = computed(() => {
+  if (theme.value) {
+    const textColor = getThemeTextColor(theme.value)
+    const bgColor = getThemeColor(theme.value)
+    return {
+      color: textColor,
+      background: bgColor
+    }
+  }
+  return {
+    color: '000000b3',
+    background: 'transparent'
+  }
+})
 
 const {
   topicsListAll,
@@ -288,15 +303,7 @@ watch(
       >
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <DsfrTag
-            v-if="theme"
-            class="fr-mb-1v"
-            :label="subtheme"
-            :style="{
-              backgroundColor: getThemeColor(theme),
-              color: getThemeTextColor(theme)
-            }"
-          />
+          <DsfrTag v-if="theme" class="fr-mb-1v card__tag" :label="subtheme" />
         </div>
         <div v-if="topicsActivateReadMore">
           <ReadMore max-height="600">
@@ -378,5 +385,9 @@ watch(
 }
 .owner-avatar {
   margin-bottom: -6px;
+}
+.card__tag {
+  color: v-bind('tagTheme.color');
+  background-color: v-bind('tagTheme.background');
 }
 </style>

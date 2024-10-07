@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {
-  useOwnerName,
   formatRelativeIfRecentDate,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  useOwnerName
 } from '@datagouv/components'
-import { toRef } from 'vue'
+import { computed, toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
@@ -39,6 +39,21 @@ const bouquetLink: RouteLocationRaw = {
   name: `${topicsSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
+
+const tagTheme = computed(() => {
+  if (theme.value) {
+    const textColor = getThemeTextColor(theme.value)
+    const bgColor = getThemeColor(theme.value)
+    return {
+      color: textColor,
+      background: bgColor
+    }
+  }
+  return {
+    color: '000000b3',
+    background: 'transparent'
+  }
+})
 </script>
 
 <template>
@@ -75,16 +90,15 @@ const bouquetLink: RouteLocationRaw = {
         </h4>
         <DsfrTag
           v-if="theme && subtheme !== NoOptionSelected"
-          :class="{
-            'fr-card__detail': true,
-            'fr-mt-1w': subtheme !== NoOptionSelected
-          }"
-          class="fr-mb-1w"
+          :class="[
+            {
+              'fr-card__detail': true,
+              'fr-mt-1w': subtheme !== NoOptionSelected
+            },
+            'fr-mb-1w',
+            'card__tag'
+          ]"
           :label="subtheme"
-          :style="{
-            backgroundColor: getThemeColor(theme),
-            color: getThemeTextColor(theme)
-          }"
         />
         <p
           v-if="bouquet.organization || bouquet.owner"
@@ -131,5 +145,9 @@ const bouquetLink: RouteLocationRaw = {
 <style scoped>
 .owner-avatar {
   margin-bottom: -6px;
+}
+.card__tag {
+  color: v-bind('tagTheme.color');
+  background-color: v-bind('tagTheme.background');
 }
 </style>
