@@ -175,13 +175,11 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
           </div>
           <div class="fr-header__tools">
             <div v-if="quickLinks?.length" class="fr-header__tools-links">
-              <nav role="navigation">
-                <DsfrHeaderMenuLinks
-                  v-if="!headerModalOpened"
-                  :links="quickLinks"
-                  :nav-aria-label="quickLinksAriaLabel"
-                />
-              </nav>
+              <DsfrHeaderMenuLinks
+                v-if="!headerModalOpened"
+                :links="quickLinks"
+                :nav-aria-label="quickLinksAriaLabel"
+              />
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
               <HeaderSearch :search-label="searchLabel" />

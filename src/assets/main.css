@@ -98,6 +98,11 @@ textarea {
   height: 250px;
 }
 
+/* Remove list styles on ul, ol elements with a list role, which tells browsers the list still behave as a list even without default styles */
+:where(ol, ul)[role='list'] {
+  list-style: none;
+}
+
 /* overload datagouv-components */
 .datagouv-components h3.fr-accordion__title {
   margin-bottom: 0;

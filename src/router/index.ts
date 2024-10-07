@@ -1,3 +1,4 @@
+import { capitalize } from 'vue'
 import {
   createRouter,
   createWebHistory,
@@ -11,7 +12,7 @@ import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
 
-const { topicsSlug } = useTopicsConf()
+const { topicsSlug, topicsName } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
 
 // common/default routes
@@ -20,6 +21,9 @@ const defaultRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
+    meta: {
+      title: 'Accueil'
+    },
     component: async () => await import('@/views/HomeView.vue')
   },
   // datasets
@@ -29,6 +33,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'datasets',
+        meta: {
+          title: 'Données'
+        },
         component: async () =>
           await import('@/views/datasets/DatasetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
@@ -54,6 +61,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'organizations',
+        meta: {
+          title: 'Organisations'
+        },
         component: async () =>
           await import('@/views/organizations/OrganizationsListView.vue')
       },
@@ -71,6 +81,9 @@ const defaultRoutes: RouteRecordRaw[] = [
       {
         path: '',
         name: topicsSlug,
+        meta: {
+          title: capitalize(topicsName) + 's'
+        },
         component: async () =>
           await import('@/views/bouquets/BouquetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
@@ -110,6 +123,9 @@ const defaultRoutes: RouteRecordRaw[] = [
   {
     path: '/404',
     name: 'not_found',
+    meta: {
+      title: 'Page introuvable'
+    },
     component: NotFoundView
   }
 ].filter((route) => {
