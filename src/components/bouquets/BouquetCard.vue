@@ -58,9 +58,12 @@ const bouquetLink: RouteLocationRaw = {
         />
         <div v-else class="border fr-p-1-5v fr-mr-1-5v">
           <img
-            style="margin-bottom: -6px"
             :src="getOwnerAvatar(bouquet)"
+            alt=""
+            loading="lazy"
+            class="owner-avatar"
             height="64"
+            width="64"
           />
         </div>
       </div>
@@ -124,3 +127,9 @@ const bouquetLink: RouteLocationRaw = {
     </div>
   </article>
 </template>
+
+<style scoped>
+.owner-avatar {
+  margin-bottom: -6px;
+}
+</style>

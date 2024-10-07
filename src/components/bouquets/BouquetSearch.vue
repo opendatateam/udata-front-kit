@@ -71,8 +71,7 @@ const computeQueryArgs = (
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: `/${topicsSlug}`,
-    query: computeQueryArgs(data),
-    hash: '#main'
+    query: computeQueryArgs(data)
   })
 }
 
@@ -183,7 +182,7 @@ watchEffect(() => {
       <SelectSpatialCoverage
         v-model="selectedSpatialCoverage"
         :short="true"
-        @update:model-value="switchSpatialCoverage"
+        @update:spatial-coverage-model="switchSpatialCoverage"
       />
     </div>
   </div>

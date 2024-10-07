@@ -26,14 +26,14 @@ const navItems = computed(() => {
   return menuConfig.map((item) => {
     return {
       ...item,
-      'aria-current': isActive(item.to) ? true : undefined
+      'aria-current': isActive(item.to) ? 'page' : undefined
     }
   })
 })
 </script>
 
 <template>
-  <DsfrNavigation>
+  <DsfrNavigation id="main-nav">
     <DsfrNavigationItem v-for="(navItem, idx) of navItems" :key="idx">
       <DsfrNavigationMenuLink
         v-if="navItem.to && navItem.text"

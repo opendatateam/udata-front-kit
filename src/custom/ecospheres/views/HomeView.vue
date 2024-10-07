@@ -17,7 +17,6 @@ const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
 
 useHead({
-  title: config.website.title,
   meta: [
     { property: 'og:title', content: config.website.title },
     { name: 'description', content: config.website.homepage.meta_description },
@@ -47,7 +46,13 @@ useHead({
           </p>
         </div>
         <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
-          <img style="max-width: 100%" src="../assets/home-global-schema.svg" />
+          <img
+            src="../assets/home-global-schema.svg"
+            alt=""
+            class="illustration"
+            width="441"
+            height="290"
+          />
         </div>
       </div>
     </section>
@@ -71,8 +76,12 @@ useHead({
           </div>
           <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
             <img
-              style="max-width: 100%"
               src="../assets/home-bouquets-schema.svg"
+              alt=""
+              loading="lazy"
+              class="illustration"
+              width="441"
+              height="290"
             />
           </div>
         </div>
@@ -107,5 +116,8 @@ useHead({
 <style scoped lang="scss">
 .bouquets {
   background-color: #f6f6f6;
+}
+.illustration {
+  max-width: 100%;
 }
 </style>

@@ -18,7 +18,7 @@ const goToPage = (page: string) => {
       <div
         v-for="item in subsection.tiles"
         v-bind:key="item.id"
-        class="fr-col-12 fr-col-md-6"
+        :class="'fr-col-12 ' + subsection.class"
       >
         <div class="item-card" @click="goToPage(item.url)">
           <div class="item-title">{{ item.name }}</div>

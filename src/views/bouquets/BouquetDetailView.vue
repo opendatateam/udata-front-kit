@@ -6,7 +6,7 @@ import {
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -47,6 +47,10 @@ const selectedTabIndex = ref(0)
 const spatialCoverage = useSpatialCoverage(topic)
 
 const showDiscussions = config.website.discussions.topic.display
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
@@ -103,16 +107,25 @@ const onUpdateDatasets = () => {
     throw Error('Trying to update null topic')
   }
   const loader = useLoading().show()
+
+  // Deduplicate datasets ids in case of same DS used multiple times
+  // API rejects PUT if the same id is used more than once
+  const dedupedDatasets = [
+    ...new Set(
+      datasetsProperties.value
+        .filter((d) => d.id !== null && d.remoteDeleted !== true)
+        .map((d) => d.id)
+    )
+  ]
+
   store
     .update(topic.value.id, {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
-      datasets: datasetsProperties.value
-        .filter((d) => d.id !== null && d.remoteDeleted !== true)
-        .map((d) => d.id),
+      datasets: dedupedDatasets,
       extras: updateTopicExtras(topic.value, {
         datasets_properties: datasetsProperties.value.map(
-          ({ remoteDeleted, ...data }) => data
+          ({ remoteDeleted, archived, ...data }) => data
         )
       })
     })
@@ -124,7 +137,7 @@ const metaDescription = (): string | undefined => {
 }
 
 const metaTitle = (): string => {
-  return `${topic.value?.name ?? ''} - ${config.website.title}`
+  return `${topic.value?.name} | ${config.website.title}`
 }
 
 const metaLink = (): string => {
@@ -148,7 +161,7 @@ useHead({
 watch(
   () => props.bouquetId,
   () => {
-    const loader = loading.show()
+    const loader = loading.show({ enforceFocus: false })
     store
       .load(props.bouquetId, { toasted: false, redirectNotFound: true })
       .then((res) => {
@@ -159,6 +172,7 @@ watch(
             params: { bid: topic.value.slug }
           })
         }
+        setAccessibilityProperties(topic.value.name)
       })
       .finally(() => loader.hide())
   },
@@ -233,9 +247,12 @@ watch(
             <div class="fr-col-auto">
               <div class="border fr-p-1-5v fr-mr-1-5v">
                 <img
-                  style="margin-bottom: -6px"
                   :src="getOwnerAvatar(topic)"
+                  alt=""
+                  loading="lazy"
+                  class="owner-avatar"
                   height="32"
+                  width="32"
                 />
               </div>
             </div>
@@ -244,9 +261,13 @@ watch(
             </p>
           </div>
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
-          <p>{{ formatDate(topic.created_at) }}</p>
+          <time :datetime="topic.created_at">{{
+            formatDate(topic.created_at)
+          }}</time>
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-          <p>{{ formatDate(topic.last_modified) }}</p>
+          <time :datetime="topic.last_modified">{{
+            formatDate(topic.last_modified)
+          }}</time>
           <div v-if="spatialCoverage">
             <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
             <p>{{ spatialCoverage.name }}</p>
@@ -359,5 +380,8 @@ watch(
 .flex-reverse {
   display: flex;
   flex-direction: row-reverse;
+}
+.owner-avatar {
+  margin-bottom: -6px;
 }
 </style>

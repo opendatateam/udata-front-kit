@@ -184,10 +184,11 @@ watchEffect(() => {
     class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
   >
     <img
+      src="/blank_state/discussion.svg"
+      alt=""
+      loading="lazy"
       height="105"
       width="130"
-      loading="lazy"
-      src="/blank_state/discussion.svg"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
       Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
@@ -203,18 +204,23 @@ watchEffect(() => {
       <div class="discussion-subtitle">
         <div class="avatar fr-mr-1v">
           <img
-            style="border-radius: 50%"
             :src="getUserAvatar(discussion.discussion[0])"
+            alt=""
+            loading="lazy"
             width="20"
+            height="20"
           />
         </div>
-        <div class="user-name fr-mb-md-1v">
+        <div class="user-name">
           {{ discussion.discussion[0].posted_by.first_name }}
           {{ discussion.discussion[0].posted_by.last_name }}
         </div>
-        <div class="date-comment">
+        <time
+          :datetime="discussion.discussion[0].posted_on"
+          class="comment-date"
+        >
           - le {{ formatDate(discussion.discussion[0].posted_on) }}
-        </div>
+        </time>
       </div>
       <div class="comment comment-text">
         {{ discussion.discussion[0].content }}
@@ -225,22 +231,26 @@ watchEffect(() => {
           :key="comment.content"
           class="fr-mt-md-3v fr-pl-3v"
         >
-          <div class="secondary-comment-content comment-text">
+          <p class="secondary-comment-content comment-text">
             {{ comment.content }}
-          </div>
+          </p>
           <div class="discussion-subtitle fr-mb-2w">
             <div class="avatar fr-mr-1v">
               <img
-                style="border-radius: 50%"
                 :src="getUserAvatar(comment)"
+                alt=""
+                loading="lazy"
                 width="20"
+                height="20"
               />
             </div>
             <div class="user-name fr-mb-md-1v">
               {{ comment.posted_by.first_name }}
               {{ comment.posted_by.last_name }}
             </div>
-            <div class="comment">- le {{ formatDate(comment.posted_on) }}</div>
+            <time :datetime="comment.posted_on" class="comment-date">
+              - le {{ formatDate(comment.posted_on) }}
+            </time>
           </div>
         </div>
       </template>
@@ -305,9 +315,9 @@ watchEffect(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .discussion-title {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
   margin-bottom: 5px;
 }
@@ -318,26 +328,29 @@ watchEffect(() => {
 
 .user-name {
   color: #3557a2;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .avatar {
   display: flex;
   align-items: center;
 }
+.avatar > img {
+  border-radius: 50%;
+}
 
 .comment-date {
-  color: #777777;
+  color: #666;
   font-style: italic;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .comment {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .secondary-comment-content {
-  font-size: 14px;
+  font-size: 0.875rem;
   border-left: 2px solid #dddddd;
   padding-left: 10px;
   margin-bottom: 10px;

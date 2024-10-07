@@ -5,7 +5,7 @@ import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'
 
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
-import { Availability, type DatasetProperties, type Topic } from '@/model/topic'
+import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useTopicsConf } from '@/utils/config'
 
@@ -41,8 +41,7 @@ const bouquetOptions = computed(() => {
   return bouquets.value.map((bouquet) => {
     return {
       value: bouquet.id,
-      text: bouquet.name,
-      disabled: isDatasetInBouquet(bouquet)
+      text: bouquet.name
     }
   })
 })
@@ -74,12 +73,17 @@ const modalActions = computed(() => {
   ]
 })
 
-const isDatasetInBouquet = (bouquet: Topic): boolean => {
-  const datasetsProperties = bouquet.extras[topicsExtrasKey].datasets_properties
-  return datasetsProperties.some(
+const isDatasetInBouquet = computed(() => {
+  if (selectedBouquetId.value === null) {
+    return false
+  }
+  const selectedBouquet = topicStore.get(selectedBouquetId.value)
+  const datasetsProperties =
+    selectedBouquet?.extras[topicsExtrasKey].datasets_properties
+  return datasetsProperties?.some(
     (datasetProps) => datasetProps.id === props.dataset.id
   )
-}
+})
 
 const submit = async () => {
   if (selectedBouquetId.value === null) {
@@ -134,9 +138,23 @@ onMounted(() => {
       :default-unselected-text="`Choisissez un ${topicsName}`"
     >
     </DsfrSelect>
+    <DsfrBadge
+      v-if="isDatasetInBouquet"
+      type="info"
+      label="Déjà utilisé dans ce bouquet"
+      small
+      ellipsis
+      class="fr-mb-2w"
+    />
     <DatasetPropertiesTextFields
       v-if="topicsDatasetEditorialization"
       v-model:dataset-properties="datasetProperties"
     />
   </DsfrModal>
 </template>
+
+<style scoped>
+.fr-select-group:has(+ .fr-badge) {
+  margin-bottom: 0.5rem;
+}
+</style>

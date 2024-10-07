@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -48,6 +49,10 @@ const topic: Ref<Partial<TopicPostData>> = ref({
     }
   }
 })
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const formFields = ref()
 const errorStatus = ref()
@@ -146,6 +151,19 @@ const cancel = () => {
   }
 }
 
+const metaTitle = (): string => {
+  if (topic.value.name && routeQuery.clone != null) {
+    return `Cloner le ${topicsName} ${topic.value.name} | ${config.website.title}`
+  } else if (topic.value.name) {
+    return `Éditer le ${topicsName} ${topic.value.name} | ${config.website.title}`
+  }
+  return `Éditer le ${topicsName} | ${config.website.title}`
+}
+
+useHead({
+  title: metaTitle
+})
+
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
@@ -154,10 +172,16 @@ onMounted(() => {
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
+          setAccessibilityProperties(
+            `Cloner le ${topicsName} ${topic.value.name}`
+          )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
+          setAccessibilityProperties(
+            `Éditer le ${topicsName} ${topic.value.name}`
+          )
         }
       })
       .finally(() => loader.hide())

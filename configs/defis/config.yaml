@@ -5,8 +5,6 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id:
-  # pkce client secret, explicitely public
-  oauth_client_secret:
 
 universe:
   # "universe" topic id
@@ -16,8 +14,8 @@ universe:
 
 robots:
   disallow:
-    - /
   sitemap:
+  meta: 'noindex, nofollow'
 
 # UI customizations
 website:
@@ -32,27 +30,48 @@ website:
   # leave empty if not pertinent
   homepage:
     title: 'Apprendre avec l’open data'
-    subtitle: 'Se former et utiliser des données ouvertes pour répondre à des enjeux sociaux et environnementaux.'
+    subtitle: 'Utiliser les données publiques pour répondre à des enjeux sociaux et environnementaux.'
     sections:
       - title:
-        content: >-
-
-          Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).
+        content: Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).
+      - title: Des ressources pédagogiques
+        content: L’équipe de data.gouv.fr structure des ressources pédagogiques qui vous fournissent les éléments essentiels pour apprendre à exploiter des données ouvertes rapidement. Il s’agit d’une articulation de ressources externes et de contenus produits par data.gouv.fr.
         sub_section_datasets:
-        sub_section_cards:
         sub_section_tiles:
-        sub_section_buttons:
-      - title: Des défis open data
-        content: >-
+          title:
+          class: 'fr-col-md-4'
+          tiles:
+            - id: 'find'
+              name: 'Trouver des données'
+              description: 'Où rechercher des jeux de données'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/trouver-des-donnees'
+            - id: 'evaluate'
+              name: 'Evaluer la qualité des données'
+              description: "Comment s'informer sur un jeu de données"
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/prendre-connaissance-et-evaluer-la-qualite-de-donnees'
+            - id: 'get'
+              name: 'Récupérer des données'
+              description: 'Comment télécharger des données ou utiliser une API'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/recuperer-des-donnees'
+            - id: 'manipulate'
+              name: 'Manipuler des données'
+              description: 'Comment ouvrir, filtrer, nettoyer ou croiser des données'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/manipuler-des-donnees'
+            - id: 'analyze'
+              name: 'Analyser des données'
+              description: "Comment utiliser un tableur, python ou R pour l'analyse"
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/analyser-des-donnees'
+            - id: 'show'
+              name: 'Visualiser des données'
+              description: 'Comment créer des visualisations de données'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/visualiser-des-donnees'
 
+      - title: Des défis open data
+        content: >
           La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.
 
 
           Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
-        sub_section_datasets:
-        sub_section_cards:
-        sub_section_tiles:
-        sub_section_buttons:
       - title:
         content:
         sub_section_datasets:
@@ -127,6 +146,17 @@ website:
 
         sub_section_tiles:
         sub_section_buttons:
+      - title:
+        content: >-
+          ### L'Open Data University
+
+          Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
+
+
+          Enseignantes, enseignants et responsables pédagogiques des établissements d'enseignement supérieur, [n'hésitez pas à vous inscrire pour intégrer le dispositif](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv) !
+
+
+          [En savoir plus sur l’Open Data University.](/opendatauniversity)
     meta_description:
   header_button:
     display: false
@@ -162,7 +192,7 @@ website:
   show_dataset_metadata_panel: false
   list_search_topics:
   url_search_topics: 'defis'
-  oauth_option: true
+  oauth_option: false
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
     - label: 'data.gouv.fr'
@@ -189,9 +219,9 @@ website:
     topics_list: 100
     files_list: 6
   home_banner_colors:
-    - '#D6DAF7'
-    - '#DBA8A8'
-    - '#1258EB'
+    - '#DDE6FF'
+    - '#A1C7ED'
+    - '#6AB9B5'
   env: 'prod'
   matomo:
     host:

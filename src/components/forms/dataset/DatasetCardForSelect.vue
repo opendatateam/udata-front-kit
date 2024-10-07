@@ -13,6 +13,16 @@ const props = defineProps({
   dataset: {
     type: Object as () => DatasetV2,
     required: true
+  },
+  alreadySelected: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  badgePosition: {
+    type: String as () => 'relative' | 'absolute' | 'sr-only',
+    required: false,
+    default: 'relative'
   }
 })
 
@@ -23,14 +33,38 @@ const thumbnail = computed(() => {
     return props.dataset.organization.logo_thumbnail
   return getOwnerAvatar(props.dataset)
 })
+
+const badgeClasse = computed(() => {
+  let classes: string = ''
+  switch (props.badgePosition) {
+    case 'relative':
+      classes = 'relative fr-mb-2v'
+      break
+    case 'absolute':
+      classes = 'absolute top-0 fr-mt-n4v'
+      break
+    case 'sr-only':
+      classes = 'fr-sr-only'
+      break
+  }
+  return classes
+})
 </script>
 
 <template>
-  <div>
+  <div class="card">
+    <DsfrBadge
+      v-if="alreadySelected"
+      type="info"
+      label="Déjà utilisé dans ce bouquet"
+      small
+      ellipsis
+      :class="badgeClasse"
+    />
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-auto">
         <div class="logo">
-          <img :src="thumbnail" width="60" height="60" />
+          <img :src="thumbnail" alt="" loading="lazy" width="60" height="60" />
         </div>
       </div>
       <div class="fr-col">
@@ -64,7 +98,10 @@ const thumbnail = computed(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
+.card:has(.fr-badge.absolute) {
+  padding-top: 1rem;
+}
 h4 {
   font-size: 1rem;
 }

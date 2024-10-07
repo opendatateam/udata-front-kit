@@ -1,6 +1,4 @@
-import { size } from 'lodash'
-
-import type { OrganizationResponse } from '@/model/organization'
+import type { Organization } from '@datagouv/components'
 
 import DatagouvfrAPI from './DatagouvfrAPI'
 
@@ -8,15 +6,15 @@ import DatagouvfrAPI from './DatagouvfrAPI'
  * A wrapper around search engine API
  */
 export default class SearchAPI extends DatagouvfrAPI {
-  version = 2
-  endpoint = 'organizations/search'
+  version = 1
+  endpoint = 'organizations/suggest'
 
   async search(
     query: string,
     size: number,
-    page: number,
+    page?: number,
     args?: object
-  ): Promise<OrganizationResponse> {
+  ): Promise<Organization[]> {
     return await this.list({
       params: {
         q: query,

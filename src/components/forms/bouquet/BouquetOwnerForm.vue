@@ -69,7 +69,7 @@ const search = debounce(async (query: string) => {
     isLoading.value = false
     return
   }
-  const organizations = (await new SearchAPI().search(query, 10, 1)).data
+  const organizations = await new SearchAPI().search(query, 10)
   options.value = organizations
   isLoading.value = false
 }, 400)
@@ -141,6 +141,8 @@ watch(choice, () => {
           :close-on-select="true"
           :show-no-results="false"
           :hide-selected="true"
+          :limit="3"
+          :options-limit="100"
           @search-change="search"
           @select="onSelectAnyOrganization()"
         >
@@ -167,11 +169,6 @@ watch(choice, () => {
 </template>
 
 <style scoped>
-label,
-:deep(label:not(input + label)),
-:deep(legend) {
-  font-weight: bold;
-}
 .organizations {
   gap: 1rem;
 }
