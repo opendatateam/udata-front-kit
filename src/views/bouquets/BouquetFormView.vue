@@ -59,7 +59,7 @@ const inputErrorMessages = new Map([
   ['theme', `Veuillez sélectionner une ${topicsMainTheme}.`],
   ['subtheme', `Veuillez sélectionner un ${topicsSecondaryTheme}.`]
 ])
-// reorder the received input errors to match the form order
+// Filter out valid ipnuts. Needed to reorder the received input errors to match the form order
 const sortedinputErrors = computed(() =>
   Array.from(inputErrorMessages.keys()).filter((key) =>
     formErrors.value.includes(key)
