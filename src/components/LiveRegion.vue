@@ -20,7 +20,7 @@ defineProps({
 
 <template>
   <div :aria-live="ariaLiveMode" role="status">
-    <ul id="sr-info" class="fr-s-only" role="list">
+    <ul class="fr-sr-only" role="list">
       <li v-for="(info, index) in infos" :key="index">{{ info.text }}</li>
     </ul>
   </div>
