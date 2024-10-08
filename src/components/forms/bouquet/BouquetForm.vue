@@ -118,17 +118,13 @@ onMounted(() => {
 <template>
   <!-- Title -->
   <div class="fr-input-group">
-    <label class="fr-label" for="input-name">
-      <span>Sujet du {{ topicsName }} (obligatoire)</span>
-    </label>
-    <input
-      id="input-name"
+    <DsfrInput
       v-model="name"
       v-bind="nameAttrs"
-      class="fr-input"
-      type="text"
+      :label="`Sujet du ${topicsName} (obligatoire)`"
+      label-visible
       :aria-invalid="errors.name && isSubmitted ? true : undefined"
-      :aria-describedby="errors.name && isSubmitted ? 'errors-name' : undefined"
+      :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
     />
     <p v-if="errors.name && isSubmitted" id="errors-name" class="error">
       <span class="fr-icon-warning-fill" aria-hidden="true"></span>
@@ -137,16 +133,14 @@ onMounted(() => {
   </div>
   <!-- Description -->
   <div class="fr-input-group">
-    <label class="fr-label" for="input-description">
-      <span>Objectif du {{ topicsName }} (obligatoire)</span>
-    </label>
-    <textarea
-      id="input-description"
+    <DsfrInput
       v-model="description"
       v-bind="descriptionAttrs"
-      class="fr-input"
+      is-textarea
+      :label="`Objectif du ${topicsName} (obligatoire)`"
+      label-visible
       :aria-invalid="errors.description && isSubmitted ? true : undefined"
-      :aria-describedby="
+      :description-id="
         errors.description && isSubmitted
           ? 'errors-description description-instructions'
           : 'description-instructions'
@@ -257,7 +251,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-textarea {
+:deep(textarea) {
   min-height: 150px;
 }
 </style>
