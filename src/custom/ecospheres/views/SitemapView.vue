@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import GenericContainer from '@/components/GenericContainer.vue'
+
+const links = [{ to: '/', text: 'Accueil' }, { text: 'Plan du site' }]
+
 const routes = [
   {
     name: 'Accueil',
@@ -32,17 +36,21 @@ const routes = [
 </script>
 
 <template>
-  <section class="fr-container fr-py-12v sitemap">
-    <h1>Plan du site</h1>
-
-    <ul class="fr-mt-10v fr-p-0" role="list">
-      <li v-for="(link, index) of routes" :key="index" class="fr-mt-10v">
-        <h2>
-          <router-link :to="link.path">{{ link.name }}</router-link>
-        </h2>
-      </li>
-    </ul>
-  </section>
+  <div class="fr-container">
+    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  </div>
+  <GenericContainer>
+    <section class="sitemap">
+      <h1>Plan du site</h1>
+      <ul class="fr-mt-10v fr-p-0" role="list">
+        <li v-for="(link, index) of routes" :key="index" class="fr-mt-10v">
+          <h2>
+            <router-link :to="link.path">{{ link.name }}</router-link>
+          </h2>
+        </li>
+      </ul>
+    </section>
+  </GenericContainer>
 </template>
 
 <style scoped>

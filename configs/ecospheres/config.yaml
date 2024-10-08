@@ -67,6 +67,8 @@ website:
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
   footer_mandatory_links:
+    - label: 'Plan du site'
+      to: '/sitemap'
     - label: "Conditions générales d'utilisation"
       to: '/terms'
     - label: 'Politique de confidentialité'
