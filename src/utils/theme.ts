@@ -50,13 +50,17 @@ interface UseThemeOptionsReturn {
 /**
  * Handle theme and related subtheme options computing from a reactive theme name
  */
-export function useThemeOptions(themeName: Ref<string>): UseThemeOptionsReturn {
+export function useThemeOptions(
+  themeName: Ref<string | undefined>
+): UseThemeOptionsReturn {
   const themeOptions = getThemeOptions()
 
   const selectedTheme = ref<Theme | undefined>()
 
   watchEffect(() => {
-    selectedTheme.value = getThemeByName(themeName.value)
+    if (themeName.value !== undefined) {
+      selectedTheme.value = getThemeByName(themeName.value)
+    }
   })
 
   const subthemeOptions = computed(() => {

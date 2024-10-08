@@ -4,7 +4,7 @@ import {
   OrganizationNameWithCertificate,
   useOwnerName
 } from '@datagouv/components'
-import { computed, toRef } from 'vue'
+import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
@@ -40,10 +40,7 @@ const bouquetLink: RouteLocationRaw = {
   params: { bid: props.bouquet.slug }
 }
 
-const themeName = computed(() => {
-  return theme.value as string
-})
-const { themeColors } = useThemeOptions(themeName)
+const { themeColors } = useThemeOptions(theme)
 </script>
 
 <template>

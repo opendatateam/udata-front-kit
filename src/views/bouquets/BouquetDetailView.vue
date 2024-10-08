@@ -6,7 +6,7 @@ import {
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, ref, toRef, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -72,10 +72,7 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
   topicsListAll
 )
 
-const themeName = computed(() => {
-  return theme.value as string
-})
-const { themeColors } = useThemeOptions(themeName)
+const { themeColors } = useThemeOptions(theme)
 
 const goToEdit = () => {
   router.push({
