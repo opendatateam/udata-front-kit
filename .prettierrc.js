@@ -1,5 +1,3 @@
-const { merge } = require('lodash/fp/object')
-
 const prettierConfigStandard = require('prettier-config-standard')
 
 const prettierSortImports = {
@@ -7,4 +5,4 @@ const prettierSortImports = {
   importOrderSeparation: true
 }
 
-module.exports = merge(prettierConfigStandard, prettierSortImports)
+module.exports = { ...prettierConfigStandard, ...prettierSortImports }

@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { useDebounceFn, useTitle } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { ref, computed, watch, type Ref, capitalize } from 'vue'
+import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
@@ -44,9 +46,14 @@ const selectedSubtheme = ref(NoOptionSelected)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const showDrafts = ref(false)
+const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -71,13 +78,41 @@ const goToCreate = () => {
   router.push({ name: `${topicsSlug}_add`, query: route.query })
 }
 
-const search = () => {
-  router.push({
-    name: topicsSlug,
-    query: { ...route.query, q: selectedQuery.value },
-    hash: '#main'
-  })
+const pageTitle = computed(() => {
+  if (selectedQuery.value) {
+    return `${route.meta.title} pour "${selectedQuery.value}"`
+  }
+  return route.meta.title
+})
+
+const searchResultsMessage = computed(() => {
+  return bouquetListComp.value?.numberOfResultMsg
+})
+
+const setLiveResults = () => {
+  // only display the number of results if a query or filter exists
+  if (route.fullPath !== route.path) {
+    setAccessibilityProperties(pageTitle.value, false, [
+      {
+        text: searchResultsMessage
+      }
+    ])
+  } else {
+    setAccessibilityProperties(pageTitle.value, false)
+  }
 }
+
+const search = useDebounceFn(() => {
+  router
+    .push({
+      name: topicsSlug,
+      query: { ...route.query, q: selectedQuery.value }
+    })
+    .then(() => {
+      useTitle(`${pageTitle.value} | ${config.website.title}`)
+      setLiveResults()
+    })
+}, 600)
 
 watch(
   props,
@@ -136,16 +171,19 @@ watch(
               :subtheme-name="selectedSubtheme"
               :geozone="selectedGeozone"
               :show-drafts="showDrafts"
+              @vue:updated="setLiveResults"
             />
           </div>
         </nav>
         <div className="fr-col">
           <BouquetList
+            ref="bouquetListComp"
             :theme-name="selectedTheme"
             :subtheme-name="selectedSubtheme"
             :show-drafts="showDrafts"
             :geozone="geozone"
             :query="selectedQuery"
+            @clear-filters="setLiveResults"
           />
         </div>
       </div>

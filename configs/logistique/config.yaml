@@ -4,9 +4,8 @@ datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id: 66d1ecaa905edade7360af3e
-  # pkce client secret, explicitely public
-  oauth_client_secret: 9rPKKxaYjVwaojo7obY3IX9zHLQgVEewTOBI6YlF82Tx6vjx6Q
+  # FIXME:
+  oauth_client_id: CHANGE_ME_FOR_NO_SECRET_CLIENT_ID
 
 universe:
   # "universe" topic id

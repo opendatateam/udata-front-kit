@@ -6,7 +6,7 @@ import {
 } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -47,6 +47,10 @@ const selectedTabIndex = ref(0)
 const spatialCoverage = useSpatialCoverage(topic)
 
 const showDiscussions = config.website.discussions.topic.display
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
@@ -135,7 +139,7 @@ const metaDescription = (): string | undefined => {
 }
 
 const metaTitle = (): string => {
-  return `${topic.value?.name ?? ''} - ${config.website.title}`
+  return `${topic.value?.name} | ${config.website.title}`
 }
 
 const metaLink = (): string => {
@@ -159,7 +163,7 @@ useHead({
 watch(
   () => props.bouquetId,
   () => {
-    const loader = loading.show()
+    const loader = loading.show({ enforceFocus: false })
     store
       .load(props.bouquetId, { toasted: false, redirectNotFound: true })
       .then((res) => {
@@ -170,6 +174,7 @@ watch(
             params: { bid: topic.value.slug }
           })
         }
+        setAccessibilityProperties(topic.value.name)
       })
       .finally(() => loader.hide())
   },
