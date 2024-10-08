@@ -109,7 +109,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     path: `/admin/${topicsSlug}/add`,
     name: `${topicsSlug}_add`,
     component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-    meta: { requiresAuth: false },
+    meta: { requiresAuth: true },
     props: { isCreate: true }
   },
   {
