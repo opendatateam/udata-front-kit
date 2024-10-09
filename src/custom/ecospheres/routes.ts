@@ -6,13 +6,5 @@ export const routes = [
       title: 'Accueil'
     },
     component: async () => await import('./views/HomeView.vue')
-  },
-  {
-    path: '/sitemap',
-    name: 'Sitemap',
-    meta: {
-      title: 'Plan du site'
-    },
-    component: async () => await import('./views/SitemapView.vue')
   }
 ]

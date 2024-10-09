@@ -1,38 +1,19 @@
 <script lang="ts" setup>
 import GenericContainer from '@/components/GenericContainer.vue'
 
-const links = [{ to: '/', text: 'Accueil' }, { text: 'Plan du site' }]
+type SitemapConfig = {
+  name: string
+  path: string
+}[]
 
-const routes = [
-  {
-    name: 'Accueil',
-    path: '/'
-  },
-  {
-    name: 'Bouquets',
-    path: '/bouquets'
-  },
-  {
-    name: 'Jeux de données',
-    path: '/datasets'
-  },
-  {
-    name: 'Organisations',
-    path: '/organizations'
-  },
-  {
-    name: 'À propos',
-    path: '/about'
-  },
-  {
-    name: 'Conditions générales d’utilisation',
-    path: '/terms'
-  },
-  {
-    name: 'Accessibilité',
-    path: '/accessibility'
+defineProps({
+  sitemap: {
+    type: Object as () => SitemapConfig,
+    required: true
   }
-]
+})
+
+const links = [{ to: '/', text: 'Accueil' }, { text: 'Plan du site' }]
 </script>
 
 <template>
@@ -43,7 +24,7 @@ const routes = [
     <section class="sitemap">
       <h1>Plan du site</h1>
       <ul class="fr-mt-10v fr-p-0" role="list">
-        <li v-for="(link, index) of routes" :key="index" class="fr-mt-10v">
+        <li v-for="(link, index) of sitemap" :key="index" class="fr-mt-10v">
           <h2>
             <router-link :to="link.path">{{ link.name }}</router-link>
           </h2>
