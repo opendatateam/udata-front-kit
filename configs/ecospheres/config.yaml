@@ -150,6 +150,22 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Bouquets
+      path: /bouquets
+    - name: Jeux de données
+      path: /datasets
+    - name: Organisations
+      path: /organizations
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
+
 themes:
   - name: Se loger
     color: 043574
