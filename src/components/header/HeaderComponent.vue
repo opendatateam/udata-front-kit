@@ -21,6 +21,7 @@ type DsfrHeaderProps = {
   operatorImgAlt?: string
   operatorImgSrc?: string
   operatorImgStyle?: StyleValue
+  userName?: string
   quickLinks?: DsfrHeaderMenuLinkProps[]
   searchLabel?: string
   quickLinksAriaLabel?: string
@@ -40,6 +41,7 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
   serviceLogoSrc: '',
+  userName: undefined,
   quickLinks: () => [],
   searchLabel: 'Recherche',
   quickLinksAriaLabel: 'Menu secondaire',
@@ -120,23 +122,24 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                   v-if="showSearch"
                   class="fr-btn fr-btn--search"
                   aria-controls="header-search"
-                  aria-label="Recherche"
-                  title="Recherche"
+                  :aria-expanded="searchModalOpened"
                   :data-fr-opened="searchModalOpened"
                   @click.prevent.stop="showSearchModal()"
-                />
+                >
+                  <span class="fr-sr-only">Recherche</span>
+                </button>
                 <button
                   v-if="isWithSlotNav || quickLinks?.length"
                   id="button-menu"
                   class="fr-btn--menu fr-btn"
-                  :data-fr-opened="showMenu"
                   aria-controls="header-navigation"
-                  aria-haspopup="menu"
-                  aria-label="Menu"
-                  title="Menu"
+                  :aria-expanded="headerModalOpened"
+                  :data-fr-opened="headerModalOpened"
                   data-testid="open-menu-btn"
                   @click.prevent.stop="showMenu()"
-                />
+                >
+                  <span class="fr-sr-only">Menu</span>
+                </button>
               </div>
             </div>
             <div v-if="!serviceLogoSrc" class="fr-header__service">
@@ -174,10 +177,16 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
             </div>
           </div>
           <div class="fr-header__tools">
-            <div v-if="quickLinks?.length" class="fr-header__tools-links">
+            <div
+              v-if="userName || quickLinks?.length"
+              class="fr-header__tools-links"
+            >
+              <p v-if="userName" class="fr-py-1w">
+                {{ userName }}
+              </p>
               <nav role="navigation">
                 <DsfrHeaderMenuLinks
-                  v-if="!headerModalOpened"
+                  v-if="!headerModalOpened && quickLinks?.length"
                   :links="quickLinks"
                   :nav-aria-label="quickLinksAriaLabel"
                 />
@@ -215,7 +224,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
           </div>
         </div>
         <div
-          v-if="isWithSlotNav || (quickLinks && quickLinks.length)"
+          v-if="isWithSlotNav || userName || (quickLinks && quickLinks.length)"
           id="header-navigation"
           class="fr-header__menu fr-modal"
           :class="{ 'fr-modal--opened': headerModalOpened }"
@@ -234,8 +243,11 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               Fermer
             </button>
             <div class="fr-header__menu-links">
+              <p v-if="userName" class="fr-py-1w">
+                {{ userName }}
+              </p>
               <DsfrHeaderMenuLinks
-                v-if="headerModalOpened"
+                v-if="headerModalOpened && quickLinks?.length"
                 role="navigation"
                 :links="quickLinks"
                 :nav-aria-label="quickLinksAriaLabel"

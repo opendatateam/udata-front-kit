@@ -28,6 +28,10 @@
   font-display: swap;
 }
 
+body {
+  word-wrap: break-word;
+}
+
 .multiselect {
   --ms-bg: var(--background-contrast-grey);
   margin: 8px 0;
