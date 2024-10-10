@@ -29,7 +29,7 @@ import {
 } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { getThemeColor, getThemeTextColor } from '@/utils/theme'
+import { useThemeOptions } from '@/utils/theme'
 
 const props = defineProps({
   bouquetId: {
@@ -75,6 +75,8 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
   topic,
   topicsListAll
 )
+
+const { themeColors } = useThemeOptions(theme)
 
 const goToEdit = () => {
   router.push({
@@ -293,15 +295,7 @@ watch(
       >
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <DsfrTag
-            v-if="theme"
-            class="fr-mb-1v"
-            :label="subtheme"
-            :style="{
-              backgroundColor: getThemeColor(theme),
-              color: getThemeTextColor(theme)
-            }"
-          />
+          <DsfrTag v-if="theme" class="fr-mb-1v card__tag" :label="subtheme" />
         </div>
         <div v-if="topicsActivateReadMore">
           <ReadMore max-height="600">
@@ -383,5 +377,9 @@ watch(
 }
 .owner-avatar {
   margin-bottom: -6px;
+}
+.card__tag {
+  color: v-bind('themeColors.color');
+  background-color: v-bind('themeColors.background');
 }
 </style>

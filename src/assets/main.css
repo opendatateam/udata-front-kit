@@ -16,6 +16,8 @@
   --blue-france-850-200: var(--blue-cumulus-850-200);
   /* toastify */
   --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
+  /* DSFR contrast fix */
+  --blue-cumulus-sun-368-moon-732-hover--fix: #4170dc;
 }
 
 @font-face {
@@ -123,6 +125,17 @@ form .error-status {
 
 .datagouv-components h1 {
   margin-bottom: 1.5rem;
+}
+
+/* Button color contrast fix */
+.fr-btn:not(
+    .fr-btn--secondary,
+    .fr-btn--tertiary,
+    .fr-btn--tertiary-no-outline,
+    a.fr-btn
+  ),
+.fr-pagination__link[aria-current] {
+  --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
 }
 
 /* FIXME */

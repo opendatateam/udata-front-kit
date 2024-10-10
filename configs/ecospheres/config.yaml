@@ -150,44 +150,49 @@ website:
       authorized_users:
 themes:
   - name: Se loger
-    color: 043574
-    textColor: FFFFFF
+    color: 'var(--blue-ecume-sun-247-moon-675)'
+    textColor: 'var(--blue-ecume-975-75)'
     subthemes:
       - name: Construction et rénovation des logements
       - name: Aménagements des villes
   - name: Produire
-    color: 1E929E
-    textColor: FFFFFF
+    color: 'var(--green-archipel-sun-391-moon-716)'
+    textColor: 'var(--green-archipel-975-75)'
     subthemes:
       - name: Nucléaire
       - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
       - name: Production d'électricité décarbonée (hors nucléaire)
   - name: Se nourrir
-    color: 8AC6CD
+    color: 'var(--green-menthe-975-75)'
+    textColor: 'var(--green-menthe-sun-373-moon-652)'
     subthemes:
       - name: Alimentation
       - name: Agriculture et pêche
   - name: Consommer
-    color: A5BD0B
+    color: 'var(--green-emeraude-975-75)'
+    textColor: 'var(--green-emeraude-sun-425-moon-753)'
     subthemes:
       - name: Consommation plus durable (ménages)
       - name: Numérique responsable
       - name: Achats durables (de l'État, des collectivités et des entreprises)
   - name: Préserver
-    color: BFD899
+    color: 'var(--green-bourgeon-975-75)'
+    textColor: 'var(--green-bourgeon-sun-425-moon-759)'
     subthemes:
       - name: Eau
       - name: Sols
       - name: Océans et mers
       - name: Forêt
   - name: Se déplacer
-    color: D6E099
+    color: 'var(--green-tilleul-verveine-975-75)'
+    textColor: 'var(--green-tilleul-verveine-sun-418-moon-817)'
     subthemes:
       - name: Voitures et infrastructures routières
       - name: Mobilité courte distance (hors voiture)
       - name: Mobilité longue distance (avion, train)
   - name: Chantiers transverses
-    color: EAEEFE
+    color: 'var(--blue-ecume-975-75)'
+    textColor: 'var(--blue-ecume-sun-247-moon-675)'
     subthemes:
       - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
       - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
