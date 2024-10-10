@@ -167,6 +167,21 @@ if (config.website.oauth_option === true) {
   )
 }
 
+// sitemap
+if (config.website.sitemap != null) {
+  defaultRoutes.push({
+    path: '/sitemap',
+    name: 'Sitemap',
+    meta: {
+      title: 'Plan du site'
+    },
+    component: async () => await import('@/views/SitemapView.vue'),
+    props: () => ({
+      sitemap: config.website.sitemap
+    })
+  })
+}
+
 // custom routes from site-specific routes definition
 async function loadRoutes(): Promise<RouteRecordRaw[]> {
   const importedModule = await import(

@@ -1,24 +1,25 @@
-import { ref, watchEffect, computed, type Ref, type ComputedRef } from 'vue'
+import { computed, ref, watchEffect, type ComputedRef, type Ref } from 'vue'
 
 import config from '@/config'
-import type { ThemeSelectOption, Subtheme, Theme } from '@/model/theme'
+import type {
+  Subtheme,
+  Theme,
+  ThemeColors,
+  ThemeSelectOption
+} from '@/model/theme'
 
-const convertToHex = (hex: string): string => {
-  return `#${parseInt(hex, 16).toString(16).padStart(6, '0')}`
-}
-
-export const getThemeByName = (themeName: string): Theme | undefined => {
+export const getThemeByName = (themeName: string): Theme => {
   return config.themes.find((theme: Theme) => theme.name === themeName)
 }
 
 export const getThemeColor = (themeName: string): string => {
   const theme = getThemeByName(themeName)
-  return theme?.color != null ? convertToHex(theme.color) : 'transparent'
+  return theme.color ?? 'transparent'
 }
 
 export const getThemeTextColor = (themeName: string): string => {
   const theme = getThemeByName(themeName)
-  return theme?.textColor != null ? convertToHex(theme.textColor) : '#000000b3'
+  return theme.textColor ?? '#000000b3'
 }
 
 export const getThemeOptions = (): ThemeSelectOption[] => {
@@ -43,18 +44,23 @@ interface UseThemeOptionsReturn {
   themeOptions: ThemeSelectOption[]
   selectedTheme: Ref<Theme | undefined>
   subthemeOptions: ComputedRef<ThemeSelectOption[]>
+  themeColors: ComputedRef<ThemeColors>
 }
 
 /**
  * Handle theme and related subtheme options computing from a reactive theme name
  */
-export function useThemeOptions(themeName: Ref<string>): UseThemeOptionsReturn {
+export function useThemeOptions(
+  themeName: Ref<string | undefined>
+): UseThemeOptionsReturn {
   const themeOptions = getThemeOptions()
 
   const selectedTheme = ref<Theme | undefined>()
 
   watchEffect(() => {
-    selectedTheme.value = getThemeByName(themeName.value)
+    if (themeName.value !== undefined) {
+      selectedTheme.value = getThemeByName(themeName.value)
+    }
   })
 
   const subthemeOptions = computed(() => {
@@ -63,9 +69,25 @@ export function useThemeOptions(themeName: Ref<string>): UseThemeOptionsReturn {
       : []
   })
 
+  const themeColors = computed(() => {
+    if (selectedTheme.value != null) {
+      const textColor = getThemeTextColor(selectedTheme.value.name)
+      const bgColor = getThemeColor(selectedTheme.value.name)
+      return {
+        color: textColor,
+        background: bgColor
+      }
+    }
+    return {
+      color: '#000000b3',
+      background: 'transparent'
+    }
+  })
+
   return {
     themeOptions,
     selectedTheme,
-    subthemeOptions
+    subthemeOptions,
+    themeColors
   }
 }

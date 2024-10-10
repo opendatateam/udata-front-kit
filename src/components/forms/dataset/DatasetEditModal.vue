@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, defineModel, type Ref } from 'vue'
+import { computed, defineModel, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -140,13 +140,16 @@ defineExpose({ addDataset, editDataset })
         : 'Ajouter un jeu de données'
     "
     :opened="isModalOpen"
+    aria-modal="true"
     @close="closeModal"
   >
-    <DatasetPropertiesFields
-      v-model="modalData.dataset"
-      :already-selected-datasets="datasets"
-      @update-validation="(isValid: boolean) => modalData.isValid = isValid"
-    />
+    <form novalidate>
+      <DatasetPropertiesFields
+        v-model="modalData.dataset"
+        :already-selected-datasets="datasets"
+        @update-validation="(isValid: boolean) => modalData.isValid = isValid"
+      />
+    </form>
     <slot name="footer">
       <DsfrButtonGroup
         v-if="modalActions?.length"
@@ -158,10 +161,8 @@ defineExpose({ addDataset, editDataset })
   </DsfrModal>
 </template>
 
-<style lang="scss">
-.bouquet-dataset-modal {
-  h1 {
-    margin-bottom: 1rem;
-  }
+<style scoped>
+:deep(h1) {
+  margin-bottom: 1rem;
 }
 </style>
