@@ -14,6 +14,7 @@ export type DsfrHeaderMenuLinkProps = {
   onClick?: ($event: MouseEvent) => void
   to?: RouteLocationRaw
   href?: string
+  path?: string
 }
 
 const props = withDefaults(defineProps<DsfrHeaderMenuLinkProps>(), {

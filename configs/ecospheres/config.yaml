@@ -62,10 +62,13 @@ website:
   footer_external_links:
     - label: 'ecologie.gouv.fr'
       href: 'https://ecologie.gouv.fr'
+      title: 'ecologie.gouv.fr - nouvelle fenêtre'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
+      title: 'data.gouv.fr - nouvelle fenêtre'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
+      title: 'gouvernement.fr - nouvelle fenêtre'
   footer_mandatory_links:
     - label: 'Plan du site'
       to: '/sitemap'

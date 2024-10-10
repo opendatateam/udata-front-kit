@@ -34,6 +34,12 @@ const noticeContent = computed(() => {
 
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
+const userName = computed(() => {
+  if (isLoggedIn.value) {
+    return `${userStore.$state.data?.first_name} ${userStore.$state.data?.last_name}`
+  }
+  return undefined
+})
 const quickLinks = computed(() => {
   const button = config.website.header_button
 
@@ -43,20 +49,17 @@ const quickLinks = computed(() => {
     href: button.link
   }
 
-  const userLink = {
-    label: isLoggedIn.value
-      ? `${userStore.$state.data?.first_name} ${userStore.$state.data?.last_name}`
-      : 'Se connecter',
+  const logLink = {
+    label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
     icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
-    to: isLoggedIn.value ? '/logout' : '/login',
-    iconRight: isLoggedIn.value
+    to: isLoggedIn.value ? '/logout' : '/login'
   }
 
   if (!config.website.oauth_option) {
     return button.display ? [headerButton] : []
   }
 
-  return button.display ? [headerButton, userLink] : [userLink]
+  return button.display ? [headerButton, logLink] : [logLink]
 })
 
 onMounted(() => {
@@ -123,6 +126,7 @@ watch(
     :service-title="servicetitle"
     service-description=""
     home-to="/"
+    :user-name="userName"
     :quick-links="quickLinks"
     :show-search="config.website.header_search.display"
     :logo-text="logotext"
