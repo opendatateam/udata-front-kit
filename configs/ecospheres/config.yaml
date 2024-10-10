@@ -67,6 +67,8 @@ website:
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
   footer_mandatory_links:
+    - label: 'Plan du site'
+      to: '/sitemap'
     - label: "Conditions générales d'utilisation"
       to: '/terms'
     - label: 'Politique de confidentialité'
@@ -148,6 +150,22 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Bouquets
+      path: /bouquets
+    - name: Jeux de données
+      path: /datasets
+    - name: Organisations
+      path: /organizations
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
+
 themes:
   - name: Se loger
     color: 'var(--blue-ecume-sun-247-moon-675)'
