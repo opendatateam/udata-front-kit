@@ -74,9 +74,9 @@ const breadcrumbList = computed(() => {
   return links
 })
 
-const goToCreate = () => {
-  router.push({ name: `${topicsSlug}_add`, query: route.query })
-}
+const createUrl = computed(() => {
+  return { name: `${topicsSlug}_add`, query: route.query }
+})
 
 const pageTitle = computed(() => {
   if (selectedQuery.value) {
@@ -140,12 +140,10 @@ watch(
         v-if="canAddBouquet"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
-        <DsfrButton
-          class="fr-mb-1w"
-          :label="`Ajouter un ${topicsName}`"
-          icon="ri-add-circle-line"
-          @click="goToCreate"
-        />
+        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
+          <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
+          Ajouter un {{ topicsName }}
+        </router-link>
       </div>
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
@@ -163,9 +161,9 @@ watch(
           aria-labelledby="fr-sidemenu-title"
         >
           <div className="fr-sidemenu__inner">
-            <div id="fr-sidemenu-title" className="fr-sidemenu__title">
+            <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
-            </div>
+            </h2>
             <BouquetSearch
               :theme-name="selectedTheme"
               :subtheme-name="selectedSubtheme"

@@ -70,11 +70,11 @@ const { themeColors } = useThemeOptions(theme)
         </div>
       </div>
       <div class="fr-col">
-        <h4 class="fr-mb-1v fr-grid-row">
+        <h3 class="fr-mb-1v fr-grid-row h4">
           <RouterLink :to="bouquetLink" class="text-grey-500">
             {{ bouquet.name }}
           </RouterLink>
-        </h4>
+        </h3>
         <DsfrTag
           v-if="theme && subtheme !== NoOptionSelected"
           :class="[

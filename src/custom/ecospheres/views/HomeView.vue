@@ -86,7 +86,7 @@ useHead({
           </div>
         </div>
         <div class="fr-mt-10v">
-          <h6>Trouvez un bouquet par thématique</h6>
+          <h3>Trouvez un bouquet par thématique</h3>
           <HomeThemes v-if="config.themes" />
         </div>
       </div>

@@ -42,9 +42,9 @@ _ecologie_.**data**.**gouv**._fr_ permet :
 
 ### Responsabilités
 
-#### **Code de conduite et responsabilité des contributeurs**
+#### Code de conduite et responsabilité des contributeurs
 
-**Règles générales**
+##### Règles générales
 
 _ecologie_.**data**.**gouv**._fr_ diffuse des informations publiques et les données d’intérêt public publiées par les contributeurs qui peuvent être mises à disposition en téléchargement ou référencées par un lien.
 
@@ -56,7 +56,7 @@ Les contributeurs publiant un bouquet de données ou un jeu de données remonté
 
 Les contributeurs sont seuls responsables des contenus qu’ils publient directement depuis _ecologie_.**data**.**gouv**._fr_.
 
-**Données à caractère personnel**
+##### Données à caractère personnel
 
 Les jeux ou bouquets de données contenant des données à caractère personnel, c’est-à-dire des données, y compris non nominatives, permettant la ré-identification de personnes physiques, ne peuvent pas être diffusés par _ecologie_.**data**.**gouv**._fr_ sauf si les personnes concernées ont donné leur accord ou si une disposition législative ou le décret n° 2018-1117 du 10 décembre 2018 à l’article L. 312-1-2 du CRPA le permet.
 
@@ -64,23 +64,23 @@ Le contributeur publiant des jeux ou bouquets de données est responsable des je
 
 Le réutilisateur de telles données doit se conformer à la législation relative à la protection des données à caractère personnel en vigueur dans son territoire de résidence et respecter les stipulations pertinentes de la licence attachée à ces données.
 
-**Licences**
+##### Licences
 
 Les ressources des jeux de données sont soumises à la licence choisie par le contributeur publiant les données à partir de [data.gouv.fr](https://www.data.gouv.fr) et affichée sur la page de chaque jeu de données.
 
-**Publication de commentaires**
+##### Publication de commentaires
 
 Les discussions ont vocation à porter sur le jeu ou le bouquet de données publié. Les contributeurs ne publient pas de messages de nature publicitaire ou promotionnelle, à caractère raciste ou diffamatoire, grossier ou injurieux, agressif ou violent ou de façon générale qui contreviendrait aux bonnes mœurs, l’ordre public ou aux dispositions légales en vigueur.
 
 Les contributeurs publiant un commentaire dans une discussion cèdent leurs droits de propriété intellectuelle sur ceux-ci de façon non exclusive, à titre gracieux, pour le monde entier, pour toute la durée de ces droits.
 
-**Utilisation du formulaire de contact**
+##### Utilisation du formulaire de contact
 
 Le formulaire de contact permet de contacter l’équipe Écosphères et n’a pas pour objet de recevoir des demandes relatives à la situation individuelle d’un usager dans ses relations avec une autorité administrative. Elle n’est pas non plus un moyen direct de contacter un contributeur.
 
-#### **Engagements et responsabilité du CGDD**
+#### Engagements et responsabilité du CGDD
 
-**Qualité de service et facilités offertes**
+##### Qualité de service et facilités offertes
 
 Le CGDD grâce à l’appui opérationnel des équipes de [data.gouv.fr](https://www.data.gouv.fr) s’efforce de garantir la disponibilité de la plateforme 99,5 % du temps mensuel, apprécié au terme de chaque mois.
 
@@ -92,13 +92,13 @@ Le CGDD et l’équipe de [data.gouv.fr](https://www.data.gouv.fr) s’engagent 
 
 Le CGDD se réserve également la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire. L’indisponibilité de la plateforme ne donne droit à aucune indemnité.
 
-**Responsabilité du CGDD**
+##### Responsabilité du CGDD
 
 Le CGDD décline toute responsabilité en cas de dommage, quelle qu’en soit sa nature, résultant d'erreurs typographiques ou d’inexactitudes techniques, malgré tout le soin apporté par les équipes à la rédaction et la mise en ligne des de ces informations.
 
 Le CGDD n’effectue pas de contrôle a priori sur les publications des autorités administratives ou des contributeurs sur la plateforme. Dès que le CGDD a connaissance de contenus illicites, le CGDD agit rapidement pour retirer ces données ou en rendre l’accès impossible. À cette fin, une procédure de signalement est mise en place sur la plateforme. Tout utilisateur peut signaler un contenu non conforme aux présentes conditions d’utilisation. Le CGDD se réserve notamment la possibilité de supprimer ou de rendre inaccessibles, sans préavis, les contributions sans lien avec l’activité de la plateforme, publiées aux fins d’entraver le bon fonctionnement de la plateforme, de publicité ou de promotion, de propagande ou de prosélytisme et toute contribution contrevenant aux lois et règlements en vigueur. Le CGDD se réserve également la possibilité de supprimer le profil d’un contributeur et de refuser que certaines personnes aient accès à la plateforme, en cas de violation des présentes conditions d’utilisation.
 
-**Contenus proposés par le CGDD**
+##### Contenus proposés par le CGDD
 
 Les contenus proposés par le CGDD sont sous [Licence Ouverte](https://github.com/etalab/licence-ouverte/blob/master/LO.md), à l’exception des logos et des représentations iconographiques et photographiques qui peuvent être régis par leurs licences propres :
 
@@ -106,19 +106,19 @@ Les contenus proposés par le CGDD sont sous [Licence Ouverte](https://github.co
 
 Le code source de la plateforme est libre et disponible ici : [https://github.com/opendatateam/udata-front-kit](https://github.com/opendatateam/udata-front-kit)
 
-**Évolution des conditions d’utilisation**
+##### Évolution des conditions d’utilisation
 
 Les termes des présentes conditions d’utilisation peuvent être amendés à tout moment, sans préavis, en fonction des modifications apportées à la plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire.
 
-#### **Vie privée**
+#### Vie privée
 
-**Cookies**
+##### Cookies
 
 Le site dépose des cookies de mesure d’audience (nombre de visites, pages consultées), respectant les conditions d’exemption du consentement de l’internaute définies par la recommandation « Cookies » de la Commission nationale informatique et libertés (CNIL) ; il utilise Matomo, un outil libre, paramétré pour ce faire. Cela signifie, notamment, que ces cookies ne servent qu’à la production de statistiques anonymes et ne permettent pas de suivre la navigation de l’internaute sur d’autres sites.
 
 Le site dépose également des cookies de navigation, aux fins strictement techniques, qui ne sont pas conservés.
 
-**Données à caractère personnel**
+##### Données à caractère personnel
 
 La consultation des jeux ou bouquet de données (y compris leur téléchargement) ne nécessite pas de s’inscrire, ni de s’authentifier.
 

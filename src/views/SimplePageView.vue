@@ -34,6 +34,6 @@ watchEffect(async () => {
   </div>
   <GenericContainer>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="fromMarkdown(content)" />
+    <div class="editorial" v-html="fromMarkdown(content)" />
   </GenericContainer>
 </template>

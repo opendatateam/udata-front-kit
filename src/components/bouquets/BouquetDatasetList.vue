@@ -59,6 +59,14 @@ const collapseAll = () => {
   expandStore.value = {}
 }
 
+const toggleCollapse = () => {
+  if (expandedIds.value.length !== datasetsProperties.value.length) {
+    expandAll()
+  } else {
+    collapseAll()
+  }
+}
+
 const getAccordeonId = (index: number): string => {
   return `accordion_${index}`
 }
@@ -191,13 +199,16 @@ onMounted(() => {
   <div v-else>
     <div v-if="datasetEditorialization">
       <div class="align-right fr-mb-1v small">
-        <a
-          v-if="expandedIds.length !== datasetsProperties.length"
-          href="#"
-          @click.stop.prevent="expandAll"
-          >Tout déplier</a
-        >
-        <a v-else href="#" @click.stop.prevent="collapseAll">Tout replier</a>
+        <DsfrButton
+          size="sm"
+          class="fr-btn fr-btn--tertiary"
+          :label="
+            expandedIds.length !== datasetsProperties.length
+              ? 'Tout déplier'
+              : 'Tout replier'
+          "
+          @click.stop.prevent="toggleCollapse"
+        />
       </div>
       <!-- Draggable list -->
       <div v-if="isReorder">
