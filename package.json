@@ -25,6 +25,7 @@
     "@unhead/vue": "^1.9.4",
     "@vueuse/core": "^11.1.0",
     "@vee-validate/rules": "^4.13.2",
+    "@vueuse/integrations": "^11.1.0",
     "axios": "^1.7.7",
     "chart.js": "^4.4.0",
     "dompurify": "^3.0.6",

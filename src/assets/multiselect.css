@@ -70,8 +70,11 @@
   border-radius: 0.25rem 0.25rem 0 0;
   & > .multiselect__single {
     padding: 0;
-    background-color: var(--background-contrast-grey);
   }
+}
+.multiselect__tags:has(.multiselect__single) {
+  box-shadow: none;
+  background-color: #fff;
 }
 .multiselect__tags:focus-within {
   outline: 2px solid #0a76f6;
