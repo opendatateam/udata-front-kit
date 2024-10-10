@@ -184,13 +184,11 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               <p v-if="userName" class="fr-py-1w">
                 {{ userName }}
               </p>
-              <nav role="navigation">
-                <DsfrHeaderMenuLinks
-                  v-if="!headerModalOpened && quickLinks?.length"
-                  :links="quickLinks"
-                  :nav-aria-label="quickLinksAriaLabel"
-                />
-              </nav>
+              <DsfrHeaderMenuLinks
+                v-if="!headerModalOpened && quickLinks?.length"
+                :links="quickLinks"
+                :nav-aria-label="quickLinksAriaLabel"
+              />
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
               <HeaderSearch :search-label="searchLabel" />

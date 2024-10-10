@@ -1,16 +1,31 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { RouterView } from 'vue-router'
+import { useFocus } from '@vueuse/core'
+import { computed, onMounted, provide, ref, watch, type Ref } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
 
 import config from '@/config'
 
+import LiveRegion, { type InfoToAnnounce } from './components/LiveRegion.vue'
 import Navigation from './components/Navigation.vue'
+import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
 import Header from './components/header/HeaderComponent.vue'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
 
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
+
+const skipLinks: SkipLinksProps['links'] = [
+  {
+    id: 'main-content',
+    text: 'Aller au contenu'
+  },
+  {
+    id: 'main-nav',
+    text: 'Aller au menu principal'
+  }
+]
+const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
   if (!config.website.notice?.display) return
@@ -61,9 +76,44 @@ const badgeStyle = config.website.badge.style
 const footerPhrase = config.website.footer_phrase
 const footerExternalLinks = config.website.footer_external_links
 const footerMandatoryLinks = config.website.footer_mandatory_links
+
+const route = useRoute()
+const skipLinksComp = ref<InstanceType<typeof SkipLinks> | null>(null)
+
+const setAccessibilityProperties: Function = (
+  title?: string,
+  focus: boolean = true,
+  messages: InfoToAnnounce[] = []
+) => {
+  // announce page title to screen reader
+  if (title) {
+    liveInfos.value = [{ text: `Page ${title}` }, ...messages]
+  }
+  // focus skip link
+  if (focus && skipLinksComp.value?.firstSkipLink) {
+    const { focused } = useFocus(skipLinksComp.value?.firstSkipLink[0])
+    focused.value = true
+  }
+}
+
+provide('setAccessibilityProperties', setAccessibilityProperties)
+
+// watch route change and update title
+watch(
+  () => route.path,
+  () => {
+    if (route.meta.title) {
+      const title = route.meta.title as string
+      setAccessibilityProperties(title)
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
+  <SkipLinks ref="skipLinksComp" :links="skipLinks" />
+  <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
     v-if="!isNoticeClosed && noticeContent"
     :closeable="config.website.notice?.closeable ? true : null"
@@ -92,9 +142,9 @@ const footerMandatoryLinks = config.website.footer_mandatory_links
     </template>
   </Header>
 
-  <div id="main">
+  <main id="main-content" role="main">
     <RouterView />
-  </div>
+  </main>
 
   <DsfrFooter
     class="fr-mt-16w"

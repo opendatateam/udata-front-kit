@@ -17,7 +17,6 @@ const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
 
 useHead({
-  title: config.website.title,
   meta: [
     { property: 'og:title', content: config.website.title },
     { name: 'description', content: config.website.homepage.meta_description },
@@ -66,14 +65,14 @@ useHead({
               Retrouvez les données utiles à la mise en œuvre d'une politique
               publique spécifique sous forme de bouquets de données.
             </p>
-            <DsfrButton secondary>
-              <a
-                href="https://ecospheres.gitbook.io/doc/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Consulter la documentation</a
-              >
-            </DsfrButton>
+
+            <a
+              href="https://ecospheres.gitbook.io/doc/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="fr-btn fr-btn--secondary fr-btn--md inline-flex"
+              >Consulter la documentation</a
+            >
           </div>
           <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
             <img
