@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Organization } from '@datagouv/components'
-import { debounce } from 'lodash'
+import { useDebounceFn } from '@vueuse/core'
 import { computed, ref, watch, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
@@ -62,7 +62,7 @@ const selectOptions = computed(() => {
 const isLoading = ref(false)
 const options: Ref<Organization[]> = ref([])
 
-const search = debounce(async (query: string) => {
+const search = useDebounceFn(async (query: string) => {
   isLoading.value = true
   if (!query) {
     options.value = []
@@ -106,26 +106,22 @@ watch(choice, () => {
   <div>
     <DsfrRadioButtonSet
       v-model="choice"
-      :required="true"
       :options="radioOptions"
       :legend="`Choisissez si vous souhaitez gérer ce ${topicsName}&nbsp;:`"
+      name="owner"
     />
-    <fieldset
-      v-if="choice === 'organization'"
-      class="fr-fieldset organizations"
-    >
-      <div class="fr-fieldset__element">
-        <DsfrSelect
-          id="ownerOrg"
-          v-model="selectedOwnOrganization"
-          label="Organisations dont vous faites partie&nbsp;:"
-          default-unselected-text="Sélectionnez une organisation"
-          :options="selectOptions"
-          @update:model-value="onSelectOwnOrganization()"
-        />
-      </div>
-      <div v-if="userStore.isAdmin" class="fr-fieldset__element">
-        <label class="fr-mt-2v" for="any-org-select-bouquet"
+    <div v-if="choice === 'organization'" class="organizations">
+      <DsfrSelect
+        id="ownerOrg"
+        v-model="selectedOwnOrganization"
+        label="Organisations dont vous faites partie&nbsp;:"
+        default-unselected-text="Sélectionnez une organisation"
+        :options="selectOptions"
+        @update:model-value="onSelectOwnOrganization()"
+      />
+
+      <div v-if="userStore.isAdmin" class="fr-select-group">
+        <label class="fr-label fr-mt-2v" for="any-org-select-bouquet"
           >Cherchez une autre organisation&nbsp;:</label
         >
         <Multiselect
@@ -135,7 +131,7 @@ watch(choice, () => {
           role="search"
           :options="options"
           track-by="id"
-          placeholder="Ex: Ministère de la Transition Ecologique"
+          placeholder=""
           select-label="Entrée pour sélectionner"
           :multiple="false"
           :searchable="true"
@@ -168,7 +164,7 @@ watch(choice, () => {
           </template>
         </Multiselect>
       </div>
-    </fieldset>
+    </div>
   </div>
 </template>
 
