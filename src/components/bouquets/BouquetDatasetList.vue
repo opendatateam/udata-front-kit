@@ -48,6 +48,9 @@ const { topicsName } = useTopicsConf()
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
 })
+const isAllExpanded = computed(
+  () => expandedIds.value.length === datasetsProperties.value.length
+)
 
 const expandAll = () => {
   for (const [idx] of datasetsProperties.value.entries()) {
@@ -60,10 +63,10 @@ const collapseAll = () => {
 }
 
 const toggleCollapse = () => {
-  if (expandedIds.value.length !== datasetsProperties.value.length) {
-    expandAll()
-  } else {
+  if (isAllExpanded.value) {
     collapseAll()
+  } else {
+    expandAll()
   }
 }
 
@@ -202,11 +205,7 @@ onMounted(() => {
         <DsfrButton
           size="sm"
           class="fr-btn fr-btn--tertiary"
-          :label="
-            expandedIds.length !== datasetsProperties.length
-              ? 'Tout déplier'
-              : 'Tout replier'
-          "
+          :label="isAllExpanded ? 'Tout replier' : 'Tout déplier'"
           @click.stop.prevent="toggleCollapse"
         />
       </div>
