@@ -34,12 +34,7 @@ const noticeContent = computed(() => {
 
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
-const userName = computed(() => {
-  if (isLoggedIn.value) {
-    return `${userStore.$state.data?.first_name} ${userStore.$state.data?.last_name}`
-  }
-  return undefined
-})
+const userName = computed(() => userStore.userName)
 const quickLinks = computed(() => {
   const button = config.website.header_button
 
