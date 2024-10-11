@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { UseFocusTrap } from '@vueuse/integrations/useFocusTrap/component'
 import {
   computed,
   onMounted,
@@ -186,65 +187,69 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
             </div>
           </div>
         </div>
-        <div
-          v-if="showSearch"
-          id="header-search"
-          class="fr-header__search fr-modal"
-          :class="{ 'fr-modal--opened': searchModalOpened }"
-          aria-label="Menu modal"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div class="fr-container">
-            <button
-              id="close-button"
-              class="fr-btn fr-btn--close"
-              aria-controls="header-navigation"
-              data-testid="close-modal-btn"
-              @click.prevent.stop="hideModal()"
-            >
-              Fermer
-            </button>
-            <HeaderSearch
-              v-if="searchModalOpened"
-              :search-label="searchLabel"
-              @search="hideModal(false)"
-            />
-          </div>
-        </div>
-        <div
-          v-if="isWithSlotNav || (quickLinks && quickLinks.length)"
-          id="header-navigation"
-          class="fr-header__menu fr-modal"
-          :class="{ 'fr-modal--opened': headerModalOpened }"
-          aria-label="Menu modal"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div class="fr-container">
-            <button
-              id="close-button"
-              class="fr-btn fr-btn--close"
-              aria-controls="header-navigation"
-              data-testid="close-modal-btn"
-              @click.prevent.stop="hideModal()"
-            >
-              Fermer
-            </button>
-            <div class="fr-header__menu-links">
-              <DsfrHeaderMenuLinks
-                v-if="headerModalOpened"
-                role="navigation"
-                :links="quickLinks"
-                :nav-aria-label="quickLinksAriaLabel"
-                @link-click="onQuickLinkClick"
+
+        <UseFocusTrap v-if="searchModalOpened">
+          <div
+            v-if="showSearch"
+            id="header-search"
+            class="fr-header__search fr-modal"
+            :class="{ 'fr-modal--opened': searchModalOpened }"
+            aria-label="Menu modal"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div class="fr-container">
+              <button
+                id="close-button"
+                class="fr-btn fr-btn--close"
+                aria-controls="header-navigation"
+                data-testid="close-modal-btn"
+                @click.prevent.stop="hideModal()"
+              >
+                Fermer
+              </button>
+              <HeaderSearch
+                v-if="searchModalOpened"
+                :search-label="searchLabel"
+                @search="hideModal(false)"
               />
             </div>
-            <template v-if="headerModalOpened">
-              <slot name="mainnav" :hidemodal="hideModal" />
-            </template>
           </div>
-        </div>
+        </UseFocusTrap>
+        <UseFocusTrap v-if="headerModalOpened">
+          <div
+            id="header-navigation"
+            class="fr-header__menu fr-modal"
+            :class="{ 'fr-modal--opened': headerModalOpened }"
+            aria-label="Menu modal"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div class="fr-container">
+              <button
+                id="close-button"
+                class="fr-btn fr-btn--close"
+                aria-controls="header-navigation"
+                data-testid="close-modal-btn"
+                @click.prevent.stop="hideModal()"
+              >
+                Fermer
+              </button>
+              <div class="fr-header__menu-links">
+                <DsfrHeaderMenuLinks
+                  v-if="headerModalOpened"
+                  role="navigation"
+                  :links="quickLinks"
+                  :nav-aria-label="quickLinksAriaLabel"
+                  @link-click="onQuickLinkClick"
+                />
+              </div>
+              <template v-if="headerModalOpened">
+                <slot name="mainnav" :hidemodal="hideModal" />
+              </template>
+            </div>
+          </div>
+        </UseFocusTrap>
         <slot />
       </div>
     </div>
