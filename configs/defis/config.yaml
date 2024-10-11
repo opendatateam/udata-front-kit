@@ -4,7 +4,7 @@ datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id:
+  oauth_client_id: 670924ba96082fcc26ee3898
 
 universe:
   # "universe" topic id
@@ -78,21 +78,36 @@ website:
         sub_section_cards:
           title:
           cards:
+            - id: '6704d5262a223f0cbc866c68'
+              name: 'Diversité et inclusion en entreprise'
+              description: 'Quelle politique sur l’inclusion et la diversité au sein d’EDF SA ? Défi porté par EDF'
+              url: '/defis/diversite-et-inclusion-en-entreprise'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_EDF2.jpg'
+            - id: '6704d7a9120c998a2085f8bc'
+              name: 'Revitalisation des petites villes'
+              description: 'Comment représenter les spécificités d’une petite ville de demain ? Défi porté par la Banque des Territoires'
+              url: '/defis/revitalisation-des-petites-villes'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_PVD2.jpg'
             - id: '65b76f15d7874915c8e41298'
               name: 'Impact Diagnostics de Performance Energétique'
               description: 'Quel impact de la classe DPE sur les consommations énergétiques ? Défi porté par Enedis'
               url: '/defis/diagnostics-de-performance-energetique'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_enedis4.png'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Enedis.jpg'
             - id: '65b10aa72d0c187ecf296930'
               name: 'Offre culturelle'
               description: "Comment valoriser l'offre culturelle et favoriser l'accès à la culture ?"
               url: '/defis/offre-culturelle'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_culture3.png'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Culture.jpg'
             - id: '65b22219ffcf892bd066df76'
               name: 'Elections'
               description: 'Quels liens entre vote et caractéristiques socio-démographiques ?'
               url: '/defis/elections'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_elections3.png'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Elections.jpg'
+            - id: '65a923a083cf5f728c9934b3'
+              name: 'Véhicules électriques'
+              description: 'La répartition des infrastructures de recharge est-elle adaptée ?'
+              url: '/defis/vehicules-electriques'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Vehicules-electriques.jpg'
             - id: '65b10beae24f409e31c547a5'
               name: 'Changement climatique'
               description: 'Quelle évolution du climat en France depuis le début du XXe siècle ?'
@@ -118,11 +133,6 @@ website:
               description: 'Comment permettre de savoir dans quel établissement inscrire un enfant ?'
               url: '/defis/carte-scolaire'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_ecole4.png'
-            - id: '65a923a083cf5f728c9934b3'
-              name: 'Véhicules électriques'
-              description: 'La répartition des infrastructures de recharge est-elle adaptée ?'
-              url: '/defis/vehicules-electriques'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_voiture3.png'
             - id: '65a9238c202514467c0163d2'
               name: 'Plan France Relance'
               description: "Quels impacts des aides distribués sur l'économie et la transition écologique ?"
@@ -192,7 +202,7 @@ website:
   show_dataset_metadata_panel: false
   list_search_topics:
   url_search_topics: 'defis'
-  oauth_option: false
+  oauth_option: true
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
     - label: 'data.gouv.fr'
@@ -244,7 +254,7 @@ website:
     name: défi
     extras_key: 'defis'
     themes:
-      usage: false
+      usage: true
       main_name: thématique
       secondary_name: chantier
     # include a list page with all topics
@@ -255,7 +265,16 @@ website:
     can_add_topics:
       everyone: false
       authorized_users:
-        - 6230733357772160a4f77fbadd
+        - 5fda299e56f984a4b126afe1 #thanh-ha
+        - 5e6f426e634f417810ab794b #geoffrey
+themes:
+  - name: defis
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Saison 1
+      - name: Saison 2
+      - name: Saison 3
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
