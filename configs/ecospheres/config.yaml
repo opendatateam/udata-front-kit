@@ -4,9 +4,7 @@ datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
-  oauth_client_id: 651479c317ad47b21e41a9d4
-  # pkce client secret, explicitely public
-  oauth_client_secret: v4ohcEhC4vEq8SpOl7tOiEXZfW1JSej1QpsH4oec4Gn11hCxUF
+  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
 
 universe:
   # "universe" topic id
@@ -16,8 +14,8 @@ universe:
 
 robots:
   disallow:
-    - /
   sitemap:
+  meta: 'noindex, nofollow'
 
 # UI customizations
 website:
@@ -64,11 +62,16 @@ website:
   footer_external_links:
     - label: 'ecologie.gouv.fr'
       href: 'https://ecologie.gouv.fr'
+      title: 'ecologie.gouv.fr - nouvelle fenêtre'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
+      title: 'data.gouv.fr - nouvelle fenêtre'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
+      title: 'gouvernement.fr - nouvelle fenêtre'
   footer_mandatory_links:
+    - label: 'Plan du site'
+      to: '/sitemap'
     - label: "Conditions générales d'utilisation"
       to: '/terms'
     - label: 'Politique de confidentialité'
@@ -150,46 +153,67 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Bouquets
+      path: /bouquets
+    - name: Jeux de données
+      path: /datasets
+    - name: Organisations
+      path: /organizations
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
+
 themes:
   - name: Se loger
-    color: 043574
-    textColor: FFFFFF
+    color: 'var(--blue-ecume-sun-247-moon-675)'
+    textColor: 'var(--blue-ecume-975-75)'
     subthemes:
       - name: Construction et rénovation des logements
       - name: Aménagements des villes
   - name: Produire
-    color: 1E929E
-    textColor: FFFFFF
+    color: 'var(--green-archipel-sun-391-moon-716)'
+    textColor: 'var(--green-archipel-975-75)'
     subthemes:
       - name: Nucléaire
       - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
       - name: Production d'électricité décarbonée (hors nucléaire)
   - name: Se nourrir
-    color: 8AC6CD
+    color: 'var(--green-menthe-975-75)'
+    textColor: 'var(--green-menthe-sun-373-moon-652)'
     subthemes:
       - name: Alimentation
       - name: Agriculture et pêche
   - name: Consommer
-    color: A5BD0B
+    color: 'var(--green-emeraude-975-75)'
+    textColor: 'var(--green-emeraude-sun-425-moon-753)'
     subthemes:
       - name: Consommation plus durable (ménages)
       - name: Numérique responsable
       - name: Achats durables (de l'État, des collectivités et des entreprises)
   - name: Préserver
-    color: BFD899
+    color: 'var(--green-bourgeon-975-75)'
+    textColor: 'var(--green-bourgeon-sun-425-moon-759)'
     subthemes:
       - name: Eau
       - name: Sols
       - name: Océans et mers
       - name: Forêt
   - name: Se déplacer
-    color: D6E099
+    color: 'var(--green-tilleul-verveine-975-75)'
+    textColor: 'var(--green-tilleul-verveine-sun-418-moon-817)'
     subthemes:
       - name: Voitures et infrastructures routières
       - name: Mobilité courte distance (hors voiture)
       - name: Mobilité longue distance (avion, train)
   - name: Chantiers transverses
-    color: EAEEFE
+    color: 'var(--blue-ecume-975-75)'
+    textColor: 'var(--blue-ecume-sun-247-moon-675)'
     subthemes:
       - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
       - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
@@ -201,45 +225,137 @@ themes:
 
 organizations:
   - ademe
+  - agence-de-l-eau-rhone-mediterranee-et-corse
   - agence-nationale-de-la-cohesion-des-territoires
+  - agence-nationale-pour-la-renovation-urbaine
+  - agence-ore-3
+  - airparif-1
+  - atmo-bourgogne-franche-comte
+  - atmo-grand-est
+  - atmosud
+  - bureau-de-recherches-geologiques-et-minieres
   - centre-scientifique-et-technique-du-batiment
-  - ddt-creuse-1
+  - cerema
+  - commission-de-regulation-de-lenergie
+  - datagrandest
+  - ddt-aisne
+  - ddt-ardennes
+  - ddt-aveyron
+  - ddt-cote-dor
+  - ddt-creuse
   - ddt-de-la-loire
   - ddt-de-lain
   - ddt-de-lardeche
   - ddt-de-meurthe-et-moselle
+  - ddt-deux-sevres
   - ddt-drome
+  - ddt-haute-garonne
+  - ddt-haute-marne
+  - ddt-hautes-pyrenees
+  - ddt-indre
   - ddt-jura
+  - ddt-lot
+  - ddt-maine-et-loire
+  - ddt-mayenne
+  - ddt-nievre
   - ddt-savoie
+  - ddt-tarn
+  - ddt-tarn-et-garonne
+  - ddt-territoire-de-belfort
+  - ddt-vaucluse
+  - ddt-vienne
+  - ddt-yvelines
+  - deal-guadeloupe
   - direction-departementale-des-territoire-du-puy-de-dome
+  - direction-departementale-des-territoires-de-charente
+  - direction-departementale-des-territoires-de-haute-saone
   - direction-departementale-des-territoires-de-haute-savoie
+  - direction-departementale-des-territoires-de-la-correze
   - direction-departementale-des-territoires-de-la-haute-loire
+  - direction-departementale-des-territoires-de-la-lozere
+  - direction-departementale-des-territoires-de-la-marne
+  - direction-departementale-des-territoires-de-la-meuse
+  - direction-departementale-des-territoires-de-la-sarthe
   - direction-departementale-des-territoires-de-lallier
+  - direction-departementale-des-territoires-de-lariege
+  - direction-departementale-des-territoires-de-laube
+  - direction-departementale-des-territoires-de-lessonne
   - direction-departementale-des-territoires-de-lisere
-  - direction-departementale-des-territoires-de-saone-et-loire-71
+  - direction-departementale-des-territoires-de-loir-et-cher
+  - direction-departementale-des-territoires-de-lorne
+  - direction-departementale-des-territoires-de-saone-et-loire
+  - direction-departementale-des-territoires-de-seine-et-marne
+  - direction-departementale-des-territoires-des-alpes-de-haute-provence
+  - direction-departementale-des-territoires-des-hautes-alpes
+  - direction-departementale-des-territoires-des-vosges
+  - direction-departementale-des-territoires-deure-et-loir
+  - direction-departementale-des-territoires-dindre-et-loire
   - direction-departementale-des-territoires-du-bas-rhin-67
+  - direction-departementale-des-territoires-du-cher
   - direction-departementale-des-territoires-du-doubs
+  - direction-departementale-des-territoires-du-haut-rhin-68
+  - direction-departementale-des-territoires-du-loiret
   - direction-departementale-des-territoires-du-rhone-1
   - direction-departementale-des-territoires-du-val-doise
+  - direction-departementale-des-territoires-et-de-la-mer-de-charente-maritime
+  - direction-departementale-des-territoires-et-de-la-mer-de-la-somme
+  - direction-departementale-des-territoires-et-de-la-mer-de-leure
   - direction-departementale-des-territoires-et-de-la-mer-de-lherault
   - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
+  - direction-departementale-des-territoires-et-de-la-mer-des-bouches-du-rhone
+  - direction-departementale-des-territoires-et-de-la-mer-des-landes
+  - direction-departementale-des-territoires-et-de-la-mer-des-pyrenees-atlantiques
   - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-bretagne
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-laquitaine
+  - direction-departementale-des-territoires-et-de-la-mer-du-calvados
+  - direction-departementale-des-territoires-et-de-la-mer-du-var
+  - direction-departementale-et-des-territoires-du-cantal
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
+  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-centre-val-de-loire
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
+  - do-terr-geo-centre
   - dreal-auvergne-rhone-alpes-1
+  - dreal-grand-est
   - dreal-limousin-1
   - dreal-nouvelle-aquitaine
-  - dreal-pays-de-la-loire-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-pays-de-la-loire
   - dreal-provence-alpes-cote-dazur
+  - electricite-reseau-distribution-france
+  - equipe-transport-data-gouv-fr
+  - federation-des-parcs-naturels-regionaux-de-france
+  - fluo-grand-est
+  - gip-bretagne-environnement
+  - grdf
   - institut-francais-de-recherche-pour-lexploitation-de-la-mer
   - institut-national-de-l-information-geographique-et-forestiere
+  - irstea
+  - jvmalin
   - la-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-provence-alpes-cote-dazur
+  - ligair
   - meteo-france
   - ministere-de-l-egalite-des-territoires-et-du-logement
   - ministere-de-la-transition-ecologique
+  - morbihan-energies
+  - observatoire-de-recherche-montpellierain-de-lenvironnement
+  - office-national-des-forets
+  - oise-mobilite-syndicat-mixte-des-transports-collectifs-de-loise
+  - open-data-reseaux-energies-1
+  - parc-national-de-forets
+  - parc-national-des-cevennes
+  - parc-national-des-ecrins
+  - parc-naturel-regional-de-la-montagne-de-reims
+  - parc-naturel-regional-de-la-montagne-de-reims-1
+  - parc-naturel-regional-des-vosges-du-nord
+  - parc-naturel-regional-du-morvan
+  - parc-naturel-regional-du-vercors
+  - regie-autonome-des-transports-parisiens-ratp
+  - reseau-de-transport-delectricite
+  - section-cadastre-topographie-de-la-polynesie-francaise
   - shom
+  - sncf
+  - societe-du-grand-paris
+  - star
+  - syndicat-mixte-des-mobilites-de-laire-grenobloise
+  - systeme-d-information-sur-l-eau
+  - twisto

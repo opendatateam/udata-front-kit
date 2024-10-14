@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
 import {
-  ref,
   computed,
+  defineModel,
+  onMounted,
+  ref,
   watch,
   type PropType,
-  type Ref,
-  onMounted,
-  defineModel
+  type Ref
 } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -124,12 +124,6 @@ onMounted(() => {
     v-model:dataset-properties="datasetProperties"
   />
   <div class="fr-mt-1w fr-mb-4w">
-    <label class="fr-label" for="link"
-      >Jeu de données
-      <span class="fr-hint-text"
-        >Rechercher un jeu de données dans data.gouv.fr</span
-      >
-    </label>
     <SelectDataset
       v-model="selectedDataset"
       :already-selected-datasets="alreadySelectedDatasets"
@@ -140,47 +134,51 @@ onMounted(() => {
     v-if="!selectedDataset && topicsDatasetEditorialization"
     class="fr-mt-4w"
   >
-    <label class="fr-label" for="alt-source"
-      >Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?</label
-    >
     <fieldset id="alt-source" class="fr-fieldset">
-      <div class="fr-fieldset__content" role="radiogroup">
-        <DsfrRadioButton
-          v-model="datasetProperties.availability"
-          :name="Availability.URL_AVAILABLE"
-          :value="Availability.URL_AVAILABLE"
-          label="J'ajoute l'URL"
-        />
-        <div
-          v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
-          class="fr-mb-4w"
-        >
-          <DsfrInput
-            id="alt-link"
-            v-model="datasetProperties.uri"
-            placeholder="Url vers le jeu de données souhaité"
-            :label-visible="true"
-            class="fr-mb-md-1w"
-          />
-        </div>
-        <DsfrRadioButton
-          v-model="datasetProperties.availability"
-          :name="Availability.MISSING"
-          :value="Availability.MISSING"
-          label="Je n'ai pas trouvé la donnée"
-        />
-        <DsfrRadioButton
-          v-model="datasetProperties.availability"
-          :name="Availability.NOT_AVAILABLE"
-          :value="Availability.NOT_AVAILABLE"
-          label="Je n'ai pas cherché la donnée"
+      <legend
+        class="fr-fieldset__legend fr-fieldset__legend--regular"
+        for="alt-source"
+      >
+        Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
+      </legend>
+      <DsfrRadioButton
+        v-model="datasetProperties.availability"
+        name="source"
+        :value="Availability.URL_AVAILABLE"
+        label="J'ajoute l'URL"
+      />
+      <div
+        v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
+        class="fr-mb-4w fr-fieldset__element"
+      >
+        <DsfrInput
+          id="alt-link"
+          v-model="datasetProperties.uri"
+          label="Url vers le jeu de données souhaité (obligatoire)"
+          :label-visible="true"
+          class="fr-mb-md-1w fr-input"
         />
       </div>
+      <DsfrRadioButton
+        v-model="datasetProperties.availability"
+        name="source"
+        :value="Availability.MISSING"
+        label="Je n'ai pas trouvé la donnée"
+      />
+      <DsfrRadioButton
+        v-model="datasetProperties.availability"
+        name="source"
+        :value="Availability.NOT_AVAILABLE"
+        label="Je n'ai pas cherché la donnée"
+      />
     </fieldset>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+.fr-fieldset {
+  margin: 30px 0;
+}
 textarea {
   height: 150px;
 }

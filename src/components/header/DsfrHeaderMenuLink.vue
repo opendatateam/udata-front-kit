@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { OhVueIcon as VIcon } from 'oh-vue-icons'
-import { computed } from 'vue'
 import type { HTMLAttributes } from 'vue'
+import { computed } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 export type DsfrHeaderMenuLinkProps = {
@@ -14,6 +14,7 @@ export type DsfrHeaderMenuLinkProps = {
   onClick?: ($event: MouseEvent) => void
   to?: RouteLocationRaw
   href?: string
+  path?: string
 }
 
 const props = withDefaults(defineProps<DsfrHeaderMenuLinkProps>(), {

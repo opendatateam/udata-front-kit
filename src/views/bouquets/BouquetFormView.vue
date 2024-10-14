@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -29,7 +30,14 @@ const { canAddBouquet } = storeToRefs(userStore)
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
+const {
+  topicsName,
+  topicsSlug,
+  topicsExtrasKey,
+  topicsMainTheme,
+  topicsSecondaryTheme
+} = useTopicsConf()
+
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [config.universe.name],
@@ -42,6 +50,28 @@ const topic: Ref<Partial<TopicPostData>> = ref({
     }
   }
 })
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
+
+const formFields = ref()
+const errorStatus = ref()
+const formErrors: Ref<string[]> = ref([])
+// define error messages for form fields
+const inputErrorMessages = new Map([
+  ['name', 'Veuillez renseigner un sujet.'],
+  ['description', 'La description ne doit pas être vide.'],
+  ['theme', `Veuillez sélectionner une ${topicsMainTheme}.`],
+  ['subtheme', `Veuillez sélectionner un ${topicsSecondaryTheme}.`]
+])
+// Filter out valid ipnuts. Needed to reorder the received input errors to match the form order
+const sortedinputErrors = computed(() =>
+  Array.from(inputErrorMessages.keys()).filter((key) =>
+    formErrors.value.includes(key)
+  )
+)
+
 const errorMsg = ref('')
 const canSave = ref(false)
 
@@ -122,6 +152,19 @@ const cancel = () => {
   }
 }
 
+const metaTitle = (): string => {
+  if (topic.value.name && routeQuery.clone != null) {
+    return `Cloner le ${topicsName} ${topic.value.name} | ${config.website.title}`
+  } else if (topic.value.name) {
+    return `Éditer le ${topicsName} ${topic.value.name} | ${config.website.title}`
+  }
+  return `Ajouter un ${topicsName} | ${config.website.title}`
+}
+
+useHead({
+  title: metaTitle
+})
+
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
@@ -130,65 +173,88 @@ onMounted(() => {
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
+          setAccessibilityProperties(
+            `Cloner le ${topicsName} ${topic.value.name}`
+          )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
+          setAccessibilityProperties(
+            `Éditer le ${topicsName} ${topic.value.name}`
+          )
         }
       })
       .finally(() => loader.hide())
   }
 })
+
+const onSubmit = async () => {
+  // reset error fields
+  formErrors.value = []
+  await formFields.value.onSubmit()
+
+  if (formErrors.value.length > 0) {
+    errorStatus.value.focus()
+  } else if (canSave.value) {
+    save()
+  }
+}
 </script>
 
 <template>
   <GenericContainer class="fr-mt-4w">
     <div v-if="canAddBouquet">
-      <form>
-        <div class="fr-mt-4v">
-          <DsfrAlert v-if="errorMsg" type="warning" :title="errorMsg" />
-        </div>
+      <div v-if="errorMsg" class="fr-mt-4v">
+        <DsfrAlert type="warning" :title="errorMsg" />
+      </div>
+      <h1 class="fr-col-auto fr-mb-2v">
+        {{ isCreate ? `Nouveau ${topicsName}` : topic.name }}
+      </h1>
+      <form novalidate>
         <div
-          class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+          v-show="formErrors.length"
+          class="fr-my-4w fr-p-2w error-status"
+          role="group"
+          aria-labelledby="error-summary-title"
         >
-          <h1 class="fr-col-auto fr-mb-2v">
-            {{ isCreate ? `Nouveau ${topicsName}` : topic.name }}
-          </h1>
-          <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-            <DsfrButton
-              v-if="!isCreate"
-              secondary
-              class="fr-mb-1w"
-              label="Supprimer"
-              icon="ri-delete-bin-line"
-              @click.prevent="destroy"
-            />
-            <DsfrButton
-              secondary
-              class="fr-mb-1w fr-ml-1w"
-              label="Annuler"
-              @click.prevent="cancel"
-            />
-            <DsfrButton
-              :disabled="!canSave"
-              class="fr-mb-1w fr-ml-1w"
-              label="Enregistrer"
-              @click.prevent="save"
-            />
-          </div>
+          <h3 id="error-summary-title" ref="errorStatus" tabindex="-1">
+            Il y a {{ sortedinputErrors.length }} erreur<span
+              v-if="formErrors.length > 1"
+              >s</span
+            >
+            de saisie dans le formulaire.
+          </h3>
+          <ol>
+            <li
+              v-for="(error, index) in sortedinputErrors"
+              :key="index"
+              class="error"
+            >
+              <a :href="`#input-${error}`">{{
+                inputErrorMessages.get(error)
+              }}</a>
+            </li>
+          </ol>
         </div>
-        <div class="fr-mt-4w">
-          <h2>Description du {{ topicsName }} de données</h2>
+        <fieldset>
+          <legend class="fr-fieldset__legend fr-text--lead">
+            Description du {{ topicsName }} de données
+          </legend>
           <BouquetForm
             v-if="isReadyForForm"
+            ref="formFields"
             v-model="topic"
-            @update-validation="(isValid: boolean) => canSave = isValid"
+            v-model:form-errors="formErrors"
+            @update-validation="(isValid: boolean) => (canSave = isValid)"
           />
-        </div>
-        <div class="fr-mt-4w">
-          <h2>Propriétaire du {{ topicsName }}</h2>
+        </fieldset>
+        <fieldset>
+          <legend class="fr-fieldset__legend fr-text--lead">
+            Propriétaire du {{ topicsName }}
+          </legend>
           <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
-        </div>
+        </fieldset>
         <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
           <DsfrButton
             v-if="!isCreate"
@@ -205,10 +271,9 @@ onMounted(() => {
             @click.prevent="cancel"
           />
           <DsfrButton
-            :disabled="!canSave"
             class="fr-mb-1w fr-ml-1w"
             label="Enregistrer"
-            @click.prevent="save"
+            @click.prevent="onSubmit"
           />
         </div>
       </form>
@@ -218,3 +283,16 @@ onMounted(() => {
     </div>
   </GenericContainer>
 </template>
+
+<style scoped>
+fieldset,
+:deep(fieldset:not(fieldset fieldset)) {
+  padding: 0;
+  margin: 2rem 0 0;
+  border: none;
+}
+fieldset legend {
+  padding: 0;
+  margin-inline: 0;
+}
+</style>

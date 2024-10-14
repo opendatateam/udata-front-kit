@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
+  capitalize,
   ref,
-  watchEffect,
   toRef,
-  type Ref,
+  watchEffect,
   type PropType,
-  capitalize
+  type Ref
 } from 'vue'
-import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
@@ -71,8 +71,7 @@ const computeQueryArgs = (
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: `/${topicsSlug}`,
-    query: computeQueryArgs(data),
-    hash: '#main'
+    query: computeQueryArgs(data)
   })
 }
 
@@ -89,7 +88,9 @@ const switchSubtheme = (event: Event) => {
   })
 }
 
-const switchSpatialCoverage = (spatialCoverage: SpatialCoverage | null) => {
+const switchSpatialCoverage = (
+  spatialCoverage: SpatialCoverage | null | undefined
+) => {
   selectedGeozone.value =
     spatialCoverage != null ? spatialCoverage.id : undefined
   navigate()
@@ -175,14 +176,13 @@ watchEffect(() => {
       </div>
     </template>
     <div class="fr-select-group">
-      <label class="fr-label" for="select_subtheme"
+      <label class="fr-label" for="select-spatial-coverage"
         >Couverture territoriale</label
       >
       <SelectSpatialCoverage
         v-model="selectedSpatialCoverage"
-        placeholder="Rechercher"
         :short="true"
-        @update:model-value="switchSpatialCoverage"
+        @update:spatial-coverage-model="switchSpatialCoverage"
       />
     </div>
   </div>

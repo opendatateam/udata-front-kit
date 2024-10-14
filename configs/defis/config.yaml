@@ -4,9 +4,7 @@ datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id:
-  # pkce client secret, explicitely public
-  oauth_client_secret:
+  oauth_client_id: 670924ba96082fcc26ee3898
 
 universe:
   # "universe" topic id
@@ -16,8 +14,8 @@ universe:
 
 robots:
   disallow:
-    - /
   sitemap:
+  meta: 'noindex, nofollow'
 
 # UI customizations
 website:
@@ -32,48 +30,84 @@ website:
   # leave empty if not pertinent
   homepage:
     title: 'Apprendre avec l’open data'
-    subtitle: 'Se former et utiliser des données ouvertes pour répondre à des enjeux sociaux et environnementaux.'
+    subtitle: 'Utiliser les données publiques pour répondre à des enjeux sociaux et environnementaux.'
     sections:
       - title:
-        content: >-
-
-          Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).
+        content: Les données ouvertes (open data) sont des données brutes téléchargeables en accès libre et gratuit qui peuvent être utilisées par toutes et tous. Elles permettent de créer des analyses, des services ou des produits sur une diversité de sujets (santé, emploi, urbanisme, éducation, mobilités, etc.).
+      - title: Des ressources pédagogiques
+        content: L’équipe de data.gouv.fr structure des ressources pédagogiques qui vous fournissent les éléments essentiels pour apprendre à exploiter des données ouvertes rapidement. Il s’agit d’une articulation de ressources externes et de contenus produits par data.gouv.fr.
         sub_section_datasets:
-        sub_section_cards:
         sub_section_tiles:
-        sub_section_buttons:
-      - title: Des défis open data
-        content: >-
+          title:
+          class: 'fr-col-md-4'
+          tiles:
+            - id: 'find'
+              name: 'Trouver des données'
+              description: 'Où rechercher des jeux de données'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/trouver-des-donnees'
+            - id: 'evaluate'
+              name: 'Evaluer la qualité des données'
+              description: "Comment s'informer sur un jeu de données"
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/prendre-connaissance-et-evaluer-la-qualite-de-donnees'
+            - id: 'get'
+              name: 'Récupérer des données'
+              description: 'Comment télécharger des données ou utiliser une API'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/recuperer-des-donnees'
+            - id: 'manipulate'
+              name: 'Manipuler des données'
+              description: 'Comment ouvrir, filtrer, nettoyer ou croiser des données'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/manipuler-des-donnees'
+            - id: 'analyze'
+              name: 'Analyser des données'
+              description: "Comment utiliser un tableur, python ou R pour l'analyse"
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/analyser-des-donnees'
+            - id: 'show'
+              name: 'Visualiser des données'
+              description: 'Comment créer des visualisations de données'
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/visualiser-des-donnees'
 
+      - title: Des défis open data
+        content: >
           La communauté open data et l’équipe de data.gouv.fr vous proposent de mettre à contribution et de développer vos compétences en réalisant des projets utiles à partir de données ouvertes.
 
 
           Les défis proposés s’adressent notamment à toutes celles et ceux qui souhaitent s’exercer ou apprendre à exploiter des données en travaillant sur des projets concrets.
-        sub_section_datasets:
-        sub_section_cards:
-        sub_section_tiles:
-        sub_section_buttons:
       - title:
         content:
         sub_section_datasets:
         sub_section_cards:
           title:
           cards:
+            - id: '6704d5262a223f0cbc866c68'
+              name: 'Diversité et inclusion en entreprise'
+              description: 'Quelle politique sur l’inclusion et la diversité au sein d’EDF SA ? Défi porté par EDF'
+              url: '/defis/diversite-et-inclusion-en-entreprise'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_EDF2.jpg'
+            - id: '6704d7a9120c998a2085f8bc'
+              name: 'Revitalisation des petites villes'
+              description: 'Comment représenter les spécificités d’une petite ville de demain ? Défi porté par la Banque des Territoires'
+              url: '/defis/revitalisation-des-petites-villes'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_PVD2.jpg'
             - id: '65b76f15d7874915c8e41298'
               name: 'Impact Diagnostics de Performance Energétique'
               description: 'Quel impact de la classe DPE sur les consommations énergétiques ? Défi porté par Enedis'
               url: '/defis/diagnostics-de-performance-energetique'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_enedis4.png'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Enedis.jpg'
             - id: '65b10aa72d0c187ecf296930'
               name: 'Offre culturelle'
               description: "Comment valoriser l'offre culturelle et favoriser l'accès à la culture ?"
               url: '/defis/offre-culturelle'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_culture3.png'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Culture.jpg'
             - id: '65b22219ffcf892bd066df76'
               name: 'Elections'
               description: 'Quels liens entre vote et caractéristiques socio-démographiques ?'
               url: '/defis/elections'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_elections3.png'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Elections.jpg'
+            - id: '65a923a083cf5f728c9934b3'
+              name: 'Véhicules électriques'
+              description: 'La répartition des infrastructures de recharge est-elle adaptée ?'
+              url: '/defis/vehicules-electriques'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Vehicules-electriques.jpg'
             - id: '65b10beae24f409e31c547a5'
               name: 'Changement climatique'
               description: 'Quelle évolution du climat en France depuis le début du XXe siècle ?'
@@ -99,11 +133,6 @@ website:
               description: 'Comment permettre de savoir dans quel établissement inscrire un enfant ?'
               url: '/defis/carte-scolaire'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_ecole4.png'
-            - id: '65a923a083cf5f728c9934b3'
-              name: 'Véhicules électriques'
-              description: 'La répartition des infrastructures de recharge est-elle adaptée ?'
-              url: '/defis/vehicules-electriques'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/odu_voiture3.png'
             - id: '65a9238c202514467c0163d2'
               name: 'Plan France Relance'
               description: "Quels impacts des aides distribués sur l'économie et la transition écologique ?"
@@ -127,6 +156,17 @@ website:
 
         sub_section_tiles:
         sub_section_buttons:
+      - title:
+        content: >-
+          ### L'Open Data University
+
+          Ces défis ont été développés dans le cadre de [l’Open Data University](https://www.opendatauniversity.org/), un programme d’enseignement à la réutilisation des données publiques porté par [l'association Latitudes](https://www.latitudes.cc/) et dont data.gouv.fr est partenaire.
+
+
+          Enseignantes, enseignants et responsables pédagogiques des établissements d'enseignement supérieur, [n'hésitez pas à vous inscrire pour intégrer le dispositif](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv) !
+
+
+          [En savoir plus sur l’Open Data University.](/opendatauniversity)
     meta_description:
   header_button:
     display: false
@@ -162,7 +202,7 @@ website:
   show_dataset_metadata_panel: false
   list_search_topics:
   url_search_topics: 'defis'
-  oauth_option: false
+  oauth_option: true
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
     - label: 'data.gouv.fr'
@@ -189,9 +229,9 @@ website:
     topics_list: 100
     files_list: 6
   home_banner_colors:
-    - '#D6DAF7'
-    - '#DBA8A8'
-    - '#1258EB'
+    - '#DDE6FF'
+    - '#A1C7ED'
+    - '#6AB9B5'
   env: 'prod'
   matomo:
     host:
@@ -214,7 +254,7 @@ website:
     name: défi
     extras_key: 'defis'
     themes:
-      usage: false
+      usage: true
       main_name: thématique
       secondary_name: chantier
     # include a list page with all topics
@@ -225,7 +265,16 @@ website:
     can_add_topics:
       everyone: false
       authorized_users:
-        - 6230733357772160a4f77fbadd
+        - 5fda299e56f984a4b126afe1 #thanh-ha
+        - 5e6f426e634f417810ab794b #geoffrey
+themes:
+  - name: defis
+    color: 043574
+    textColor: FFFFFF
+    subthemes:
+      - name: Saison 1
+      - name: Saison 2
+      - name: Saison 3
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

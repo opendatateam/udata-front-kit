@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, defineModel, type Ref } from 'vue'
+import { type DatasetV2 } from '@datagouv/components'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import DatasetEditModal, {
@@ -7,14 +8,17 @@ import DatasetEditModal, {
 } from '@/components/forms/dataset/DatasetEditModal.vue'
 import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
+import { useDatasetStore } from '@/store/DatasetStore'
 import { fromMarkdown } from '@/utils'
 import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
+import { toastHttpError } from '@/utils/error'
+import { isNotFoundError } from '@/utils/http'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 
-const datasets = defineModel({
+const datasetsProperties = defineModel({
   type: Array<DatasetProperties>,
   default: []
 })
@@ -36,22 +40,34 @@ const modal: Ref<DatasetEditModalType | null> = ref(null)
 const isReorder = ref(false)
 const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 // make a copy for local reordering before save
-const originalDatasets = ref([...datasets.value])
+const originalDatasets = ref([...datasetsProperties.value])
+const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { topicsName } = useTopicsConf()
 
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
 })
+const isAllExpanded = computed(
+  () => expandedIds.value.length === datasetsProperties.value.length
+)
 
 const expandAll = () => {
-  for (const [idx] of datasets.value.entries()) {
+  for (const [idx] of datasetsProperties.value.entries()) {
     expandStore.value[getAccordeonId(idx)] = getAccordeonId(idx)
   }
 }
 
 const collapseAll = () => {
   expandStore.value = {}
+}
+
+const toggleCollapse = () => {
+  if (isAllExpanded.value) {
+    collapseAll()
+  } else {
+    expandAll()
+  }
 }
 
 const getAccordeonId = (index: number): string => {
@@ -65,9 +81,35 @@ const removeDataset = (index: number) => {
     )
   ) {
     delete expandStore.value[getAccordeonId(index)]
-    datasets.value.splice(index, 1)
+    if (datasetsProperties.value[index].id) {
+      datasetsContent.value.delete(datasetsProperties.value[index].id)
+    }
+    datasetsProperties.value.splice(index, 1)
     emits('updateDatasets')
   }
+}
+
+const loadDatasetsContent = () => {
+  datasetsProperties.value.forEach((datasetItem) => {
+    const id = datasetItem.id ?? null
+    if (id && !datasetsContent.value.has(id) && !datasetItem.remoteDeleted) {
+      useDatasetStore()
+        .load(id, { toasted: false })
+        .then((d) => {
+          if (d) {
+            datasetsContent.value.set(id, d)
+            datasetItem.archived = !!d?.archived
+          }
+        })
+        .catch((err) => {
+          if (isNotFoundError(err)) {
+            datasetItem.remoteDeleted = true
+          } else {
+            toastHttpError(err)
+          }
+        })
+    }
+  })
 }
 
 const saveOrder = () => {
@@ -76,7 +118,7 @@ const saveOrder = () => {
 }
 
 const cancelReorder = () => {
-  datasets.value = [...originalDatasets.value]
+  datasetsProperties.value = [...originalDatasets.value]
   isReorder.value = false
 }
 
@@ -92,6 +134,15 @@ const triggerReorder = () => {
   collapseAll()
   isReorder.value = true
 }
+
+const onDatasetEditModalSubmit = () => {
+  emits('updateDatasets')
+  loadDatasetsContent()
+}
+
+onMounted(() => {
+  loadDatasetsContent()
+})
 </script>
 
 <template>
@@ -105,7 +156,7 @@ const triggerReorder = () => {
     </h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
-        v-if="isEdit && datasets.length >= 2"
+        v-if="isEdit && datasetsProperties.length >= 2"
         secondary
         size="sm"
         class="fr-mb-1w"
@@ -145,25 +196,24 @@ const triggerReorder = () => {
     </div>
   </div>
   <!-- Actual datasets list -->
-  <div v-if="datasets.length < 1" class="no-dataset">
+  <div v-if="datasetsProperties.length < 1" class="no-dataset">
     <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">
       <div class="align-right fr-mb-1v small">
-        <a
-          v-if="expandedIds.length !== datasets.length"
-          href="#"
-          @click.stop.prevent="expandAll"
-          >Tout déplier</a
-        >
-        <a v-else href="#" @click.stop.prevent="collapseAll">Tout replier</a>
+        <DsfrButton
+          size="sm"
+          class="fr-btn fr-btn--tertiary"
+          :label="isAllExpanded ? 'Tout replier' : 'Tout déplier'"
+          @click.stop.prevent="toggleCollapse"
+        />
       </div>
       <!-- Draggable list -->
       <div v-if="isReorder">
         <ul class="fr-accordions-group">
-          <draggable ghost-class="ghost" :list="datasets">
-            <li v-for="(dataset, index) in datasets" :key="index">
+          <draggable ghost-class="ghost" :list="datasetsProperties">
+            <li v-for="(dataset, index) in datasetsProperties" :key="index">
               <section class="fr-accordion draggable">
                 <h3 class="fr-accordion__title">
                   <button
@@ -182,7 +232,7 @@ const triggerReorder = () => {
       </div>
       <!-- Static list -->
       <DsfrAccordionsGroup v-if="!isReorder">
-        <li v-for="(dataset, index) in datasets" :key="index">
+        <li v-for="(dataset, index) in datasetsProperties" :key="index">
           <DsfrAccordion
             :id="getAccordeonId(index)"
             :expanded-id="expandStore[getAccordeonId(index)]"
@@ -199,6 +249,7 @@ const triggerReorder = () => {
             <BouquetDatasetCard
               v-if="dataset.id"
               :dataset-properties="dataset"
+              :dataset-content="datasetsContent.get(dataset.id)"
             />
             <div class="fr-grid-row">
               <DsfrButton
@@ -238,8 +289,12 @@ const triggerReorder = () => {
       </DsfrAccordionsGroup>
     </div>
     <div v-else>
-      <div v-for="(dataset, index) in datasets" :key="index">
-        <BouquetDatasetCard v-if="dataset.id" :dataset-properties="dataset" />
+      <div v-for="(dataset, index) in datasetsProperties" :key="index">
+        <BouquetDatasetCard
+          v-if="dataset.id"
+          :dataset-properties="dataset"
+          :dataset-content="datasetsContent.get(dataset.id)"
+        />
       </div>
     </div>
   </div>
@@ -248,12 +303,12 @@ const triggerReorder = () => {
   <DatasetEditModal
     v-if="isEdit"
     ref="modal"
-    v-model="datasets"
-    @submit-modal="emits('updateDatasets')"
+    v-model="datasetsProperties"
+    @submit-modal="onDatasetEditModalSubmit"
   />
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .ghost {
   background-color: #bbb;
 }

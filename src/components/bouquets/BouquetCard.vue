@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {
-  useOwnerName,
   formatRelativeIfRecentDate,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  useOwnerName
 } from '@datagouv/components'
 import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
@@ -15,7 +15,7 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { getThemeColor, getThemeTextColor } from '@/utils/theme'
+import { useThemeOptions } from '@/utils/theme'
 
 const { topicsSlug } = useTopicsConf()
 
@@ -39,6 +39,8 @@ const bouquetLink: RouteLocationRaw = {
   name: `${topicsSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
+
+const { themeColors } = useThemeOptions(theme)
 </script>
 
 <template>
@@ -58,30 +60,32 @@ const bouquetLink: RouteLocationRaw = {
         />
         <div v-else class="border fr-p-1-5v fr-mr-1-5v">
           <img
-            style="margin-bottom: -6px"
             :src="getOwnerAvatar(bouquet)"
+            alt=""
+            loading="lazy"
+            class="owner-avatar"
             height="64"
+            width="64"
           />
         </div>
       </div>
       <div class="fr-col">
-        <h4 class="fr-mb-1v fr-grid-row">
+        <h3 class="fr-mb-1v fr-grid-row h4">
           <RouterLink :to="bouquetLink" class="text-grey-500">
             {{ bouquet.name }}
           </RouterLink>
-        </h4>
+        </h3>
         <DsfrTag
           v-if="theme && subtheme !== NoOptionSelected"
-          :class="{
-            'fr-card__detail': true,
-            'fr-mt-1w': subtheme !== NoOptionSelected
-          }"
-          class="fr-mb-1w"
+          :class="[
+            {
+              'fr-card__detail': true,
+              'fr-mt-1w': subtheme !== NoOptionSelected
+            },
+            'fr-mb-1w',
+            'card__tag'
+          ]"
           :label="subtheme"
-          :style="{
-            backgroundColor: getThemeColor(theme),
-            color: getThemeTextColor(theme)
-          }"
         />
         <p
           v-if="bouquet.organization || bouquet.owner"
@@ -125,4 +129,12 @@ const bouquetLink: RouteLocationRaw = {
   </article>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped>
+.owner-avatar {
+  margin-bottom: -6px;
+}
+.card__tag {
+  color: v-bind('themeColors.color');
+  background-color: v-bind('themeColors.background');
+}
+</style>

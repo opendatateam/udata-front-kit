@@ -40,11 +40,11 @@ const style = computed(() => {
 
 <template>
   <div class="logo" :style="style">
-    <img :src="logoSrc" :width="size" :height="size" />
+    <img :src="logoSrc" alt="" loading="lazy" :width="size" :height="size" />
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .logo {
   display: inline-block;
   background: white;

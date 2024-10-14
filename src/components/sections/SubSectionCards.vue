@@ -25,7 +25,7 @@ defineProps({
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .subsection-card {
   width: 350px;
   margin-right: 30px;

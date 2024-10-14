@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref, type PropType } from 'vue'
+import { onMounted, ref, type PropType, type Ref } from 'vue'
 
-import { type Reuse, type ReuseType, ReuseModel } from '@/model/reuse'
+import { ReuseModel, type Reuse, type ReuseType } from '@/model/reuse'
 import type { Topic } from '@/model/topic'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
 import { useReuseStore } from '@/store/ReuseStore'
@@ -72,7 +72,13 @@ onMounted(() => {
     v-if="!reuses.length"
     class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
   >
-    <img height="105" width="130" loading="lazy" src="/blank_state/reuse.svg" />
+    <img
+      src="/blank_state/reuse.svg"
+      alt=""
+      loading="lazy"
+      height="105"
+      width="130"
+    />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
       Il n'y a pas encore de réutilisation pour ce {{ ReuseModel[model] }}.
     </p>

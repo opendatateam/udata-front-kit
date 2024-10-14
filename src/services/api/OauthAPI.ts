@@ -1,5 +1,5 @@
-import axios from 'axios'
 import type { AxiosResponse } from 'axios'
+import axios from 'axios'
 
 import config from '@/config'
 
@@ -22,7 +22,6 @@ export default class OauthAPI {
     bodyFormData.append('code', tokenConfig.code)
     bodyFormData.append('redirect_uri', tokenConfig.redirectURI)
     bodyFormData.append('client_id', tokenConfig.clientId)
-    bodyFormData.append('client_secret', tokenConfig.clientSecret)
     bodyFormData.append('code_verifier', tokenConfig.pkceCodeVerifier)
     const response = await axios({
       method: 'post',
@@ -35,16 +34,16 @@ export default class OauthAPI {
   /**
    * Logout API call
    */
-  async logout(token: string, headers: object): Promise<AxiosResponse> {
+  async logout(token: string, clientId: string): Promise<AxiosResponse> {
     // we're using a new axios instance because we don't want the default interceptor
     const httpClient = axios.create()
     const bodyFormData = new FormData()
     bodyFormData.append('token', token)
+    bodyFormData.append('client_id', clientId)
     const response = await httpClient({
       method: 'post',
       url: `${config.datagouvfr.base_url}/oauth/revoke`,
-      data: bodyFormData,
-      headers
+      data: bodyFormData
     })
     return response
   }

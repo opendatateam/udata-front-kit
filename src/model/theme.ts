@@ -15,4 +15,9 @@ export interface ThemeSelectOption {
   disabled?: boolean
 }
 
+export interface ThemeColors {
+  color: string
+  background: string
+}
+
 export const NoOptionSelected = 'no_option_selected'

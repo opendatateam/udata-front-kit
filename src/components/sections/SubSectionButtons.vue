@@ -21,7 +21,7 @@ const goToPage = (page: string) => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .subsection-buttons {
   display: flex;
   flex-wrap: wrap;

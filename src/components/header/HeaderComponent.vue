@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { UseFocusTrap } from '@vueuse/integrations/useFocusTrap/component'
 import {
   computed,
   onMounted,
@@ -21,6 +22,7 @@ type DsfrHeaderProps = {
   operatorImgAlt?: string
   operatorImgSrc?: string
   operatorImgStyle?: StyleValue
+  userName?: string
   quickLinks?: DsfrHeaderMenuLinkProps[]
   searchLabel?: string
   quickLinksAriaLabel?: string
@@ -40,6 +42,7 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
   serviceLogoSrc: '',
+  userName: undefined,
   quickLinks: () => [],
   searchLabel: 'Recherche',
   quickLinksAriaLabel: 'Menu secondaire',
@@ -105,9 +108,9 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                 <slot name="operator">
                   <img
                     v-if="operatorImgSrc"
-                    class="fr-responsive-img"
                     :src="operatorImgSrc"
                     :alt="operatorImgAlt"
+                    class="fr-responsive-img"
                     :style="operatorImgStyle"
                   />
                 </slot>
@@ -120,40 +123,38 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                   v-if="showSearch"
                   class="fr-btn fr-btn--search"
                   aria-controls="header-search"
-                  aria-label="Recherche"
-                  title="Recherche"
+                  :aria-expanded="searchModalOpened"
                   :data-fr-opened="searchModalOpened"
                   @click.prevent.stop="showSearchModal()"
-                />
+                >
+                  <span class="fr-sr-only">Recherche</span>
+                </button>
                 <button
                   v-if="isWithSlotNav || quickLinks?.length"
                   id="button-menu"
                   class="fr-btn--menu fr-btn"
-                  :data-fr-opened="showMenu"
                   aria-controls="header-navigation"
-                  aria-haspopup="menu"
-                  aria-label="Menu"
-                  title="Menu"
+                  :aria-expanded="headerModalOpened"
+                  :data-fr-opened="headerModalOpened"
                   data-testid="open-menu-btn"
                   @click.prevent.stop="showMenu()"
-                />
+                >
+                  <span class="fr-sr-only">Menu</span>
+                </button>
               </div>
             </div>
             <div v-if="!serviceLogoSrc" class="fr-header__service">
               <RouterLink
                 :to="homeTo"
-                :title="`Accueil - ${serviceTitle}`"
+                :title="`Retour à l'accueil du site ${serviceTitle}`"
                 v-bind="$attrs"
               >
-                <p
-                  class="fr-header__service-title"
-                  style="margin-right: 0.75em"
-                >
-                  {{ serviceTitle }}
+                <span class="fr-grid-row fr-header__service-title"
+                  >{{ serviceTitle }}
                   <span v-if="showBadge" :class="badgeCss">
                     {{ badgeText }}
                   </span>
-                </p>
+                </span>
               </RouterLink>
               <p v-if="serviceDescription" class="fr-header__service-tagline">
                 {{ serviceDescription }}
@@ -162,105 +163,108 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
             <div v-if="serviceLogoSrc" class="fr-header__service">
               <RouterLink
                 :to="homeTo"
-                :title="`Accueil - ${serviceTitle}`"
+                :title="`Retour à l'accueil du site ${serviceTitle}`"
                 v-bind="$attrs"
+                class="fr-grid-row fr-header__service-title"
               >
-                <div class="fr-grid-row">
-                  <img
-                    class="fr-responsive-img"
-                    :src="serviceLogoSrc"
-                    :alt="serviceTitle"
-                    style="
-                      height: 35px;
-                      margin-top: 0;
-                      margin-bottom: 0;
-                      margin-right: 0.75em;
-                      width: auto;
-                    "
-                  />
-                  <p v-if="showBadge" class="fr-header__service-title">
-                    <span :class="badgeCss" style="margin: 0.5em">{{
-                      badgeText
-                    }}</span>
-                  </p>
-                </div>
+                <img
+                  :src="serviceLogoSrc"
+                  :alt="serviceTitle"
+                  class="fr-responsive-img service-logo"
+                />
+
+                <span v-if="showBadge" :class="badgeCss">{{ badgeText }}</span>
               </RouterLink>
             </div>
           </div>
           <div class="fr-header__tools">
-            <div v-if="quickLinks?.length" class="fr-header__tools-links">
-              <nav role="navigation">
-                <DsfrHeaderMenuLinks
-                  v-if="!headerModalOpened"
-                  :links="quickLinks"
-                  :nav-aria-label="quickLinksAriaLabel"
-                />
-              </nav>
+            <div
+              v-if="userName || quickLinks?.length"
+              class="fr-header__tools-links"
+            >
+              <p v-if="userName" class="fr-py-1w">
+                {{ userName }}
+              </p>
+              <DsfrHeaderMenuLinks
+                v-if="!headerModalOpened && quickLinks?.length"
+                :links="quickLinks"
+                :nav-aria-label="quickLinksAriaLabel"
+              />
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
               <HeaderSearch :search-label="searchLabel" />
             </div>
           </div>
         </div>
-        <div
-          v-if="showSearch"
-          id="header-search"
-          class="fr-header__search fr-modal"
-          :class="{ 'fr-modal--opened': searchModalOpened }"
-          aria-label="Menu modal"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div class="fr-container">
-            <button
-              id="close-button"
-              class="fr-btn fr-btn--close"
-              aria-controls="header-navigation"
-              data-testid="close-modal-btn"
-              @click.prevent.stop="hideModal()"
-            >
-              Fermer
-            </button>
-            <HeaderSearch
-              v-if="searchModalOpened"
-              :search-label="searchLabel"
-              @search="hideModal(false)"
-            />
-          </div>
-        </div>
-        <div
-          v-if="isWithSlotNav || (quickLinks && quickLinks.length)"
-          id="header-navigation"
-          class="fr-header__menu fr-modal"
-          :class="{ 'fr-modal--opened': headerModalOpened }"
-          aria-label="Menu modal"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div class="fr-container">
-            <button
-              id="close-button"
-              class="fr-btn fr-btn--close"
-              aria-controls="header-navigation"
-              data-testid="close-modal-btn"
-              @click.prevent.stop="hideModal()"
-            >
-              Fermer
-            </button>
-            <div class="fr-header__menu-links">
-              <DsfrHeaderMenuLinks
-                v-if="headerModalOpened"
-                role="navigation"
-                :links="quickLinks"
-                :nav-aria-label="quickLinksAriaLabel"
-                @link-click="onQuickLinkClick"
+
+        <UseFocusTrap v-if="searchModalOpened">
+          <div
+            v-if="showSearch"
+            id="header-search"
+            class="fr-header__search fr-modal"
+            :class="{ 'fr-modal--opened': searchModalOpened }"
+            aria-label="Menu modal"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div class="fr-container">
+              <button
+                id="close-button"
+                class="fr-btn fr-btn--close"
+                aria-controls="header-navigation"
+                data-testid="close-modal-btn"
+                @click.prevent.stop="hideModal()"
+              >
+                Fermer
+              </button>
+              <HeaderSearch
+                v-if="searchModalOpened"
+                :search-label="searchLabel"
+                @search="hideModal(false)"
               />
             </div>
-            <template v-if="headerModalOpened">
-              <slot name="mainnav" :hidemodal="hideModal" />
-            </template>
           </div>
-        </div>
+        </UseFocusTrap>
+        <UseFocusTrap v-if="headerModalOpened">
+          <div
+            v-if="
+              isWithSlotNav || userName || (quickLinks && quickLinks.length)
+            "
+            id="header-navigation"
+            class="fr-header__menu fr-modal"
+            :class="{ 'fr-modal--opened': headerModalOpened }"
+            aria-label="Fenêtre menu"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div class="fr-container">
+              <button
+                id="close-button"
+                class="fr-btn fr-btn--close"
+                aria-controls="header-navigation"
+                data-testid="close-modal-btn"
+                @click.prevent.stop="hideModal()"
+              >
+                Fermer
+              </button>
+              <div class="fr-header__menu-links">
+                <p v-if="userName" class="fr-py-1w">
+                  {{ userName }}
+                </p>
+                <DsfrHeaderMenuLinks
+                  v-if="headerModalOpened && quickLinks?.length"
+                  role="navigation"
+                  :links="quickLinks"
+                  :nav-aria-label="quickLinksAriaLabel"
+                  @link-click="onQuickLinkClick"
+                />
+              </div>
+              <template v-if="headerModalOpened">
+                <slot name="mainnav" :hidemodal="hideModal" />
+              </template>
+            </div>
+          </div>
+        </UseFocusTrap>
         <slot />
       </div>
     </div>
@@ -275,3 +279,15 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
     </div>
   </header>
 </template>
+
+<style scoped>
+.service-logo {
+  height: 35px;
+  margin: 0;
+  width: auto;
+}
+.fr-header__service-title {
+  align-items: center;
+  gap: 0.25em;
+}
+</style>
