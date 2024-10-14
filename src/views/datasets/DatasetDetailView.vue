@@ -331,7 +331,8 @@ watch(
               </h2>
               <DsfrSearchBar
                 v-if="typedResources.totalWithoutFilter > pageSize"
-                button-text="Rechercher un fichier"
+                label="Rechercher un fichier"
+                button-text="Rechercher"
                 placeholder=""
                 :large="false"
                 class="search-bar"
