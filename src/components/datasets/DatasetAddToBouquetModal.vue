@@ -61,14 +61,14 @@ const isValid = computed(() => {
 const modalActions = computed(() => {
   return [
     {
-      label: 'Enregistrer',
-      disabled: !isValid.value,
-      onClick: () => submit()
-    },
-    {
       label: 'Annuler',
       secondary: true,
       onClick: () => closeModal()
+    },
+    {
+      label: 'Enregistrer',
+      disabled: !isValid.value,
+      onClick: () => submit()
     }
   ]
 })
@@ -127,7 +127,6 @@ onMounted(() => {
     size="lg"
     :title="`Ajouter le jeu de données à un de vos ${topicsName}s`"
     :opened="show"
-    :actions="modalActions"
     aria-modal="true"
     @close="closeModal"
   >
@@ -150,6 +149,14 @@ onMounted(() => {
       v-if="topicsDatasetEditorialization"
       v-model:dataset-properties="datasetProperties"
     />
+    <slot name="footer">
+      <DsfrButtonGroup
+        v-if="modalActions?.length"
+        align="right"
+        :buttons="modalActions"
+        inline-layout-when="large"
+      />
+    </slot>
   </DsfrModal>
 </template>
 

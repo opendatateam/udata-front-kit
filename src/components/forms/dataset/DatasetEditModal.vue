@@ -32,18 +32,18 @@ const modalData: Ref<DatasetModalData> = ref({
 const modalActions = computed(() => {
   return [
     {
+      label: 'Annuler',
+      secondary: true,
+      onClick: () => {
+        closeModal()
+      }
+    },
+    {
       label: 'Enregistrer',
       disabled: !modalData.value.isValid,
       onClick: ($event: PointerEvent) => {
         $event.preventDefault()
         submitModal(modalData.value)
-        closeModal()
-      }
-    },
-    {
-      label: 'Annuler',
-      secondary: true,
-      onClick: () => {
         closeModal()
       }
     }
@@ -140,7 +140,6 @@ defineExpose({ addDataset, editDataset })
         : 'Ajouter un jeu de données'
     "
     :opened="isModalOpen"
-    :actions="modalActions"
     aria-modal="true"
     @close="closeModal"
   >
@@ -151,6 +150,14 @@ defineExpose({ addDataset, editDataset })
         @update-validation="(isValid: boolean) => modalData.isValid = isValid"
       />
     </form>
+    <slot name="footer">
+      <DsfrButtonGroup
+        v-if="modalActions?.length"
+        align="right"
+        :buttons="modalActions"
+        inline-layout-when="large"
+      />
+    </slot>
   </DsfrModal>
 </template>
 
