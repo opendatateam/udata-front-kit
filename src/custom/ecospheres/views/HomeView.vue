@@ -103,7 +103,8 @@ useHead({
             v-model="query"
             button-text="Rechercher"
             class="search-bar-input"
-            :placeholder="searchConfig.placeholder"
+            label="Rechercher une donnée environnementale"
+            placeholder=""
             :large="true"
             @search="doSearch"
           />

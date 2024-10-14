@@ -149,8 +149,9 @@ watch(
     <div class="fr-col-md-12 fr-mb-2w">
       <DsfrSearchBar
         v-model="selectedQuery"
-        label="Rechercher"
-        :placeholder="`Rechercher un ${topicsName}`"
+        label="Rechercher un bouquet"
+        button-text="Rechercher"
+        placeholder=""
         @update:model-value="search"
       />
     </div>

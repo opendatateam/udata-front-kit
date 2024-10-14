@@ -250,8 +250,9 @@ onMounted(() => {
     <div class="fr-col-md-12 fr-mb-2w">
       <DsfrSearchBar
         v-model="localQuery"
-        label="Recherche"
-        placeholder="Rechercher des données"
+        label="Rechercher des données"
+        button-text="Rechercher"
+        placeholder=""
         @update:model-value="search()"
         @search="$emit('search', $event)"
       />
