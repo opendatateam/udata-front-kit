@@ -21,11 +21,23 @@ const links = computed(() => [
 
 const title = config.website.title
 
+const props = defineProps({
+  query: {
+    type: String,
+    default: ''
+  }
+})
+
 async function onUpdatePage(page) {
   const loader = $loading.show()
   currentPage.value = page + 1
-  organizations.value = await store.loadFromConfig(currentPage.value)
+  organizations.value = await filterOrganizations(currentPage, props.query)
   loader.hide()
+}
+
+const filterOrganizations = async (currentPage, query) => {
+  if (!query) return await store.loadFromConfig(currentPage.value)
+  return await store.getByAcronym(query)
 }
 
 onMounted(() => {

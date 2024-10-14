@@ -65,7 +65,10 @@ const defaultRoutes: RouteRecordRaw[] = [
           title: 'Organisations'
         },
         component: async () =>
-          await import('@/views/organizations/OrganizationsListView.vue')
+          await import('@/views/organizations/OrganizationsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          query: route.query.q
+        })
       },
       {
         path: ':oid',
