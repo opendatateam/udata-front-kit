@@ -103,7 +103,8 @@ useHead({
             v-model="query"
             button-text="Rechercher"
             class="search-bar-input"
-            :placeholder="searchConfig.placeholder"
+            :label="searchConfig.placeholder"
+            placeholder=""
             :large="true"
             @search="doSearch"
           />
