@@ -112,6 +112,13 @@ form .error-status {
   border: 4px solid var(--background-flat-warning);
 }
 
+/* editorial (markdown) pages */
+.editorial h5 {
+  font-size: 1rem;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
 /* Remove list styles on ul, ol elements with a list role, which tells browsers the list still behave as a list even without default styles */
 :where(ol, ul)[role='list'] {
   list-style: none;

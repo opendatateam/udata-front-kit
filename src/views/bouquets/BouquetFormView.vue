@@ -157,7 +157,7 @@ const metaTitle = (): string => {
   } else if (topic.value.name) {
     return `Éditer le ${topicsName} ${topic.value.name} | ${config.website.title}`
   }
-  return `Éditer le ${topicsName} | ${config.website.title}`
+  return `Ajouter un ${topicsName} | ${config.website.title}`
 }
 
 useHead({

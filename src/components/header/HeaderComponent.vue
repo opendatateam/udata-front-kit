@@ -146,7 +146,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
             <div v-if="!serviceLogoSrc" class="fr-header__service">
               <RouterLink
                 :to="homeTo"
-                :title="`Accueil - ${serviceTitle}`"
+                :title="`Retour à l'accueil du site ${serviceTitle}`"
                 v-bind="$attrs"
               >
                 <span class="fr-grid-row fr-header__service-title"
@@ -163,7 +163,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
             <div v-if="serviceLogoSrc" class="fr-header__service">
               <RouterLink
                 :to="homeTo"
-                :title="`Accueil - ${serviceTitle}`"
+                :title="`Retour à l'accueil du site ${serviceTitle}`"
                 v-bind="$attrs"
                 class="fr-grid-row fr-header__service-title"
               >
