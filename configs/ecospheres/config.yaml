@@ -2,20 +2,23 @@
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  oauth_client_id: 66fa76d405b98d06ca73854a
 
 universe:
   # "universe" topic id
-  topic_id: 65141cd780d73f98142e9265
+  topic_id: 65e9aa6cb5c809c30c70ee02
   # universe name, used as bouquets tag
-  name: ecospheres
+  name: univers-ecospheres
 
 robots:
   disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
+    - /admin
+    - /datasets
+    - /organizations
+  sitemap: https://ecologie.data.gouv.fr/sitemap.xml
+  meta: 'index, follow'
 
 # UI customizations
 website:
@@ -80,7 +83,7 @@ website:
       to: '/accessibility'
   notice:
     display: true
-    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
+    content: Vous naviguez sur une version beta d'ecologie.data.gouv. En savoir plus sur [nos travaux en cours](https://ecospheres.gitbook.io/travaux-en-cours/).
     closeable: false
   menu:
     - text: Accueil
@@ -122,7 +125,7 @@ website:
     - '#A7D4CD'
   matomo:
     host: 'https://stats.data.gouv.fr'
-    siteId:
+    siteId: 299
   discussions:
     dataset:
       display: true
@@ -226,10 +229,13 @@ themes:
 organizations:
   - ademe
   - agence-de-l-eau-rhone-mediterranee-et-corse
+  - agence-de-leau-seine-normandie-1
   - agence-nationale-de-la-cohesion-des-territoires
+  - agence-nationale-de-lhabitat
   - agence-nationale-pour-la-renovation-urbaine
   - agence-ore-3
   - airparif-1
+  - atmo-auvergne-rhone-alpes
   - atmo-bourgogne-franche-comte
   - atmo-grand-est
   - atmosud
@@ -238,39 +244,36 @@ organizations:
   - cerema
   - commission-de-regulation-de-lenergie
   - datagrandest
-  - ddt-creuse-1
   - ddt-de-meurthe-et-moselle
-  - ddt-drome
+  - ddt-des-vosges
   - ddt-jura
-  - direction-departementale-des-territoires-de-haute-savoie
-  - direction-departementale-des-territoires-de-lisere
   - direction-departementale-des-territoires-de-saone-et-loire-71
   - direction-departementale-des-territoires-du-bas-rhin-67
   - direction-departementale-des-territoires-du-doubs
   - direction-departementale-des-territoires-du-rhone-1
-  - direction-departementale-des-territoires-du-val-doise
   - direction-departementale-des-territoires-et-de-la-mer-de-lherault
   - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
   - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-bretagne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-laquitaine
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
+  - direction-regionale-et-interdepartementale-de-lenvironnement-de-lamenagement-et-des-transports-1
   - do-terr-geo-centre
-  - dreal-auvergne-rhone-alpes-1
-  - dreal-limousin-1
   - dreal-nouvelle-aquitaine
   - dreal-pays-de-la-loire-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-pays-de-la-loire
   - dreal-provence-alpes-cote-dazur
   - electricite-reseau-distribution-france
+  - engie-mobilites-electriques
   - equipe-transport-data-gouv-fr
   - federation-des-parcs-naturels-regionaux-de-france
   - fluo-grand-est
+  - geo2france
   - gip-bretagne-environnement
   - grdf
+  - ile-de-france-mobilites
   - institut-francais-de-recherche-pour-lexploitation-de-la-mer
   - institut-national-de-l-information-geographique-et-forestiere
   - irstea
@@ -283,6 +286,7 @@ organizations:
   - morbihan-energies
   - observatoire-de-recherche-montpellierain-de-lenvironnement
   - office-national-des-forets
+  - office-public-de-lhabitat-des-landes
   - oise-mobilite-syndicat-mixte-des-transports-collectifs-de-loise
   - open-data-reseaux-energies-1
   - parc-national-de-forets
@@ -293,6 +297,8 @@ organizations:
   - parc-naturel-regional-des-vosges-du-nord
   - parc-naturel-regional-du-morvan
   - parc-naturel-regional-du-vercors
+  - parcs-nationaux-de-france
+  - parcs-naturels-regionaux-de-provence-alpes-cote-dazur
   - regie-autonome-des-transports-parisiens-ratp
   - reseau-de-transport-delectricite
   - section-cadastre-topographie-de-la-polynesie-francaise
@@ -300,6 +306,9 @@ organizations:
   - sncf
   - societe-du-grand-paris
   - star
+  - syndicat-mixte-des-milieux-aquatiques-et-des-rivieres-de-laude
   - syndicat-mixte-des-mobilites-de-laire-grenobloise
+  - syndicat-mixte-eptb-meurthe-madon
   - systeme-d-information-sur-l-eau
+  - systeme-dinformation-sur-la-biodiversite
   - twisto
