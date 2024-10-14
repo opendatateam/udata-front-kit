@@ -17,7 +17,6 @@ const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
 
 useHead({
-  title: config.website.title,
   meta: [
     { property: 'og:title', content: config.website.title },
     { name: 'description', content: config.website.homepage.meta_description },
@@ -47,7 +46,13 @@ useHead({
           </p>
         </div>
         <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
-          <img style="max-width: 100%" src="../assets/home-global-schema.svg" />
+          <img
+            src="../assets/home-global-schema.svg"
+            alt=""
+            class="illustration"
+            width="441"
+            height="290"
+          />
         </div>
       </div>
     </section>
@@ -60,24 +65,28 @@ useHead({
               Retrouvez les données utiles à la mise en œuvre d'une politique
               publique spécifique sous forme de bouquets de données.
             </p>
-            <DsfrButton secondary>
-              <a
-                href="https://ecospheres.gitbook.io/doc/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Consulter la documentation</a
-              >
-            </DsfrButton>
+
+            <a
+              href="https://ecospheres.gitbook.io/doc/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="fr-btn fr-btn--secondary fr-btn--md inline-flex"
+              >Consulter la documentation</a
+            >
           </div>
           <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
             <img
-              style="max-width: 100%"
               src="../assets/home-bouquets-schema.svg"
+              alt=""
+              loading="lazy"
+              class="illustration"
+              width="441"
+              height="290"
             />
           </div>
         </div>
         <div class="fr-mt-10v">
-          <h6>Trouvez un bouquet par thématique</h6>
+          <h3>Trouvez un bouquet par thématique</h3>
           <HomeThemes v-if="config.themes" />
         </div>
       </div>
@@ -94,7 +103,8 @@ useHead({
             v-model="query"
             button-text="Rechercher"
             class="search-bar-input"
-            :placeholder="searchConfig.placeholder"
+            :label="searchConfig.placeholder"
+            placeholder=""
             :large="true"
             @search="doSearch"
           />
@@ -107,5 +117,8 @@ useHead({
 <style scoped lang="scss">
 .bouquets {
   background-color: #f6f6f6;
+}
+.illustration {
+  max-width: 100%;
 }
 </style>

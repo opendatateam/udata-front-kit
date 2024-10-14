@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { ref, onMounted, computed, capitalize } from 'vue'
+import { capitalize, computed, onMounted, ref } from 'vue'
 import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'
 
-import Tooltip from '@/components/TooltipWrapper.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
@@ -62,14 +61,14 @@ const isValid = computed(() => {
 const modalActions = computed(() => {
   return [
     {
-      label: 'Enregistrer',
-      disabled: !isValid.value,
-      onClick: () => submit()
-    },
-    {
       label: 'Annuler',
       secondary: true,
       onClick: () => closeModal()
+    },
+    {
+      label: 'Enregistrer',
+      disabled: !isValid.value,
+      onClick: () => submit()
     }
   ]
 })
@@ -126,23 +125,17 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    :title="`Ajouter le jeu de données à un ${topicsName}`"
+    :title="`Ajouter le jeu de données à un de vos ${topicsName}s`"
     :opened="show"
-    :actions="modalActions"
+    aria-modal="true"
     @close="closeModal"
   >
     <DsfrSelect
       v-model="selectedBouquetId"
+      :label="`${capitalize(topicsName)} à associer (obligatoire)`"
       :options="bouquetOptions"
       :default-unselected-text="`Choisissez un ${topicsName}`"
     >
-      <template #label>
-        {{ capitalize(topicsName) }} à associer
-        <span class="required">&nbsp;*</span>
-        <Tooltip
-          :text="`Choisissez parmi les ${topicsName}s dont vous êtes l'auteur.`"
-        />
-      </template>
     </DsfrSelect>
     <DsfrBadge
       v-if="isDatasetInBouquet"
@@ -156,6 +149,14 @@ onMounted(() => {
       v-if="topicsDatasetEditorialization"
       v-model:dataset-properties="datasetProperties"
     />
+    <slot name="footer">
+      <DsfrButtonGroup
+        v-if="modalActions?.length"
+        align="right"
+        :buttons="modalActions"
+        inline-layout-when="large"
+      />
+    </slot>
   </DsfrModal>
 </template>
 

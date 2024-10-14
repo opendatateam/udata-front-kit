@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { computed, onMounted, ref, watchEffect, type Ref } from 'vue'
+import { useHead } from '@unhead/vue'
+import { computed, inject, onMounted, ref, watchEffect, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import Tile from '@/components/Tile.vue'
+import config from '@/config'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -29,8 +31,24 @@ const pages: Ref<object[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort = ref('-created')
 
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
+
+const metaTitle = (): string => {
+  return `${org.value?.name} | ${config.website.title}`
+}
+
+useHead({
+  title: metaTitle
+})
+
 onMounted(() => {
-  orgStore.load(organizationId, -1, { toasted: false, redirectNotFound: true })
+  orgStore
+    .load(organizationId, -1, { toasted: false, redirectNotFound: true })
+    .then(() => {
+      setAccessibilityProperties(org.value?.name)
+    })
 })
 
 const sorts = [
@@ -48,7 +66,9 @@ const description = computed(() => descriptionFromMarkdown(org))
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
   if (org.value?.id === undefined) return
-  const loader = useLoading().show()
+  const loader = useLoading().show({
+    enforceFocus: false
+  })
   datasetStore
     .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
     .then((res) => {
@@ -57,7 +77,9 @@ watchEffect(() => {
         pages.value = datasetStore.getDatasetsPaginationForOrg(org.value?.id)
       }
     })
-    .finally(() => loader.hide())
+    .finally(() => {
+      loader.hide()
+    })
 })
 </script>
 

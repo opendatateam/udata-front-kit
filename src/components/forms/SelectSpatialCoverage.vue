@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { debounce } from 'lodash'
-import { onMounted, ref, defineModel, type PropType, type Ref } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
+import { onMounted, ref, type PropType, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
@@ -9,7 +9,7 @@ import type { SpatialCoverage, SpatialCoverageLevel } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useSpatialStore } from '@/store/SpatialStore'
 
-const selectedSpatialCoverage = defineModel({
+const selectedSpatialCoverage = defineModel('spatialCoverageModel', {
   type: Object as PropType<SpatialCoverage>
 })
 
@@ -24,7 +24,7 @@ defineProps({
   },
   placeholder: {
     type: String,
-    default: 'Rechercher une couverture territoriale'
+    default: 'ex: Toulouse Métropole'
   }
 })
 
@@ -36,7 +36,7 @@ const getLevelById = (levelId: string): SpatialCoverageLevel | undefined => {
   return useSpatialStore().getLevelById(levelId)
 }
 
-const search = debounce(async (query: string) => {
+const search = useDebounceFn(async (query: string) => {
   isLoading.value = true
   if (!query) {
     options.value = []
@@ -67,7 +67,7 @@ onMounted(() => {
     :options="options"
     label="name"
     track-by="id"
-    :placeholder="placeholder"
+    placeholder=""
     :select-label="short ? '' : 'Entrée pour sélectionner'"
     :deselect-label="short ? '' : 'Entrée pour supprimer'"
     :multiple="false"
