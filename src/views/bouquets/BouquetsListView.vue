@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { useDebounceFn, useTitle } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { ref, computed, watch, type Ref, capitalize } from 'vue'
+import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
@@ -44,9 +46,14 @@ const selectedSubtheme = ref(NoOptionSelected)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const showDrafts = ref(false)
+const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
+
+const setAccessibilityProperties = inject(
+  'setAccessibilityProperties'
+) as Function
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -67,17 +74,45 @@ const breadcrumbList = computed(() => {
   return links
 })
 
-const goToCreate = () => {
-  router.push({ name: `${topicsSlug}_add`, query: route.query })
+const createUrl = computed(() => {
+  return { name: `${topicsSlug}_add`, query: route.query }
+})
+
+const pageTitle = computed(() => {
+  if (selectedQuery.value) {
+    return `${route.meta.title} pour "${selectedQuery.value}"`
+  }
+  return route.meta.title
+})
+
+const searchResultsMessage = computed(() => {
+  return bouquetListComp.value?.numberOfResultMsg
+})
+
+const setLiveResults = () => {
+  // only display the number of results if a query or filter exists
+  if (route.fullPath !== route.path) {
+    setAccessibilityProperties(pageTitle.value, false, [
+      {
+        text: searchResultsMessage
+      }
+    ])
+  } else {
+    setAccessibilityProperties(pageTitle.value, false)
+  }
 }
 
-const search = () => {
-  router.push({
-    name: topicsSlug,
-    query: { ...route.query, q: selectedQuery.value },
-    hash: '#main'
-  })
-}
+const search = useDebounceFn(() => {
+  router
+    .push({
+      name: topicsSlug,
+      query: { ...route.query, q: selectedQuery.value }
+    })
+    .then(() => {
+      useTitle(`${pageTitle.value} | ${config.website.title}`)
+      setLiveResults()
+    })
+}, 600)
 
 watch(
   props,
@@ -105,19 +140,18 @@ watch(
         v-if="canAddBouquet"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
-        <DsfrButton
-          class="fr-mb-1w"
-          :label="`Ajouter un ${topicsName}`"
-          icon="ri-add-circle-line"
-          @click="goToCreate"
-        />
+        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
+          <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
+          Ajouter un {{ topicsName }}
+        </router-link>
       </div>
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
       <DsfrSearchBar
         v-model="selectedQuery"
-        label="Rechercher"
-        :placeholder="`Rechercher un ${topicsName}`"
+        :label="`Rechercher un ${topicsName}`"
+        button-text="Rechercher"
+        placeholder=""
         @update:model-value="search"
       />
     </div>
@@ -128,24 +162,27 @@ watch(
           aria-labelledby="fr-sidemenu-title"
         >
           <div className="fr-sidemenu__inner">
-            <div id="fr-sidemenu-title" className="fr-sidemenu__title">
+            <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
-            </div>
+            </h2>
             <BouquetSearch
               :theme-name="selectedTheme"
               :subtheme-name="selectedSubtheme"
               :geozone="selectedGeozone"
               :show-drafts="showDrafts"
+              @vue:updated="setLiveResults"
             />
           </div>
         </nav>
         <div className="fr-col">
           <BouquetList
+            ref="bouquetListComp"
             :theme-name="selectedTheme"
             :subtheme-name="selectedSubtheme"
             :show-drafts="showDrafts"
             :geozone="geozone"
             :query="selectedQuery"
+            @clear-filters="setLiveResults"
           />
         </div>
       </div>

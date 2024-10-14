@@ -30,6 +30,11 @@ export const useUserStore = defineStore('user', {
     loggedIn(state): boolean {
       return state.isLoggedIn
     },
+    userName(): string | undefined {
+      return this.loggedIn
+        ? `${this.data?.first_name} ${this.data?.last_name}`
+        : undefined
+    },
     isAdmin(): boolean {
       return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
     },

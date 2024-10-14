@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { debounce } from 'lodash'
+import { useDebounceFn } from '@vueuse/core'
 import { defineModel, ref, type Ref } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
@@ -32,7 +32,7 @@ const alreadySelected = (id: string): boolean => {
   return false
 }
 
-const search = debounce(async (query: string) => {
+const search = useDebounceFn(async (query: string) => {
   isLoading.value = true
   if (!query) {
     options.value = []
@@ -54,6 +54,9 @@ const clear = () => {
 </script>
 
 <template>
+  <label class="fr-label fr-mt-2v" for="bouquet-select-dataset"
+    >Rechercher une donnée dans data.gouv.fr&nbsp;:</label
+  >
   <Multiselect
     id="bouquet-select-dataset"
     ref="multiselect"
@@ -61,7 +64,7 @@ const clear = () => {
     :options="options"
     label="title"
     track-by="id"
-    placeholder="Rechercher une donnée dans data.gouv.fr"
+    placeholder=""
     select-label="Entrée pour sélectionner"
     :multiple="false"
     :searchable="true"

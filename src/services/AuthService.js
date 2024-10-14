@@ -6,7 +6,6 @@ const api = new OauthAPI()
 
 export default class AuthService {
   constructor() {
-    this.clientSecret = config.datagouvfr.oauth_client_secret
     this.clientId = config.datagouvfr.oauth_client_id
     this.baseURL = config.datagouvfr.base_url
     this.redirectURI = `${window.location.origin}/login/callback`
@@ -44,21 +43,15 @@ export default class AuthService {
       code,
       pkceCodeVerifier,
       clientId: this.clientId,
-      clientSecret: this.clientSecret,
       redirectURI: this.redirectURI
     })
-  }
-
-  createBasicAuthHeader() {
-    const headerStr = btoa(`${this.clientId}:${this.clientSecret}`)
-    return { Authorization: `Basic ${headerStr}` }
   }
 
   /**
    * Logout remote procedure
    */
   async logout(token) {
-    return await api.logout(token, this.createBasicAuthHeader())
+    return await api.logout(token, this.clientId)
   }
 
   /**
