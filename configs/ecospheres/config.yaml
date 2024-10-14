@@ -62,11 +62,16 @@ website:
   footer_external_links:
     - label: 'ecologie.gouv.fr'
       href: 'https://ecologie.gouv.fr'
+      title: 'ecologie.gouv.fr - nouvelle fenêtre'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
+      title: 'data.gouv.fr - nouvelle fenêtre'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
+      title: 'gouvernement.fr - nouvelle fenêtre'
   footer_mandatory_links:
+    - label: 'Plan du site'
+      to: '/sitemap'
     - label: "Conditions générales d'utilisation"
       to: '/terms'
     - label: 'Politique de confidentialité'
@@ -148,6 +153,22 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Bouquets
+      path: /bouquets
+    - name: Jeux de données
+      path: /datasets
+    - name: Organisations
+      path: /organizations
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
+
 themes:
   - name: Se loger
     color: 'var(--blue-ecume-sun-247-moon-675)'

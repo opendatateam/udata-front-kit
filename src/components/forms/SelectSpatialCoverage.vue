@@ -24,7 +24,7 @@ defineProps({
   },
   placeholder: {
     type: String,
-    default: 'Rechercher une couverture territoriale'
+    default: 'ex: Toulouse Métropole'
   }
 })
 
@@ -67,7 +67,7 @@ onMounted(() => {
     :options="options"
     label="name"
     track-by="id"
-    :placeholder="placeholder"
+    placeholder=""
     :select-label="short ? '' : 'Entrée pour sélectionner'"
     :deselect-label="short ? '' : 'Entrée pour supprimer'"
     :multiple="false"

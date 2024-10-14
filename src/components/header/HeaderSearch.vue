@@ -56,47 +56,54 @@ const dropdownLabel = (text: string) => {
     :placeholder="placeholder"
     @search="doSimpleSearch"
   />
-  <Multiselect
-    v-else
-    id="select-search"
-    v-model="selectedMultiSearch"
-    class="select-search"
-    :options="dropdown"
-    label="text"
-    track-by="route"
-    :placeholder="placeholder"
-    select-label=""
-    deselect-label=""
-    :multiple="false"
-    :searchable="true"
-    :internal-search="false"
-    :clear-on-select="true"
-    :close-on-select="true"
-    :max-height="600"
-    :show-no-results="false"
-    :hide-selected="true"
-    @search-change="onSearchChange"
-    @update:model-value="doMultiSearch"
-  >
-    <template #option="slotProps">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <span v-html="dropdownLabel(slotProps.option.text)"></span>
-    </template>
-    <template #caret>
-      <button type="button" class="fr-btn fr-icon-search-line">
-        Rechercher
-      </button>
-    </template>
-  </Multiselect>
+
+  <div v-else>
+    <label id="search-label" for="select-search" class="fr-sr-only"
+      >Rechercher. Saisissez un mot clé puis choisissez une des options situés
+      après le champ pour lancer la recherche dans la rubrique souhaitée</label
+    >
+    <Multiselect
+      id="select-search"
+      v-model="selectedMultiSearch"
+      class="select-search"
+      :options="dropdown"
+      label="text"
+      track-by="route"
+      placeholder=""
+      select-label=""
+      deselect-label=""
+      aria-labelledby="search-label"
+      aria-owns=""
+      :multiple="false"
+      :searchable="true"
+      :internal-search="false"
+      :clear-on-select="true"
+      :close-on-select="true"
+      :max-height="600"
+      :show-no-results="false"
+      :hide-selected="true"
+      @search-change="onSearchChange"
+      @update:model-value="doMultiSearch"
+    >
+      <template #option="slotProps">
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <span v-html="dropdownLabel(slotProps.option.text)"></span>
+      </template>
+      <template #caret>
+        <span class="fr-icon-search-line search-icon"></span>
+      </template>
+    </Multiselect>
+  </div>
 </template>
 
 <style lang="scss">
 .select-search {
+  --icon-width: 24px;
+  position: relative;
   display: flex;
 
   .multiselect__tags {
     border: 0;
-    border-radius: 0.25rem 0 0;
     box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
     margin: 0;
     max-height: none;
@@ -112,20 +119,17 @@ const dropdownLabel = (text: string) => {
   .multiselect__single {
     background: var(--background-contrast-grey);
   }
-  input::placeholder,
-  .multiselect__placeholder {
-    font-style: italic;
-    color: #666666;
-  }
   input {
     padding-top: 4px;
+    margin-inline-start: var(--icon-width);
     width: 100%;
   }
-  button {
-    border-radius: 0 0.25rem 0 0;
-    min-height: 42px;
-    max-height: 42px;
-    order: 2;
+  .search-icon {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 10px;
+    translate: 0 -50%;
+    max-width: var(--icon-width);
   }
   .multiselect__content-wrapper {
     margin-top: 42px;
