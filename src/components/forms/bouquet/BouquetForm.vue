@@ -2,9 +2,6 @@
 import { required } from '@vee-validate/rules'
 import { useForm } from 'vee-validate'
 import { capitalize, onMounted, ref, type Ref } from 'vue'
-import { required } from '@vee-validate/rules'
-import { useForm } from 'vee-validate'
-import { capitalize, onMounted, ref, type Ref } from 'vue'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
