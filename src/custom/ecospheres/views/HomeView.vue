@@ -56,6 +56,52 @@ useHead({
         </div>
       </div>
     </section>
+    <section class="fr-container">
+      <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+        <li>
+          <DsfrCard
+            :no-arrow="true"
+            :title="'Explorer'"
+            :description="'Accédez à un ensemble de données environnementales'"
+            size="small"
+            :horizontal="true"
+            img-src="TODO"
+            alt-img="TODO"
+            :links-group="[
+              {
+                label: `Accéder aux données`,
+                to: `/datasets`
+              },
+              {
+                label: `Accéder aux bouquets`,
+                to: `/bouquets`
+              }
+            ]"
+          />
+        </li>
+        <li>
+          <DsfrCard
+            :no-arrow="true"
+            :title="'Contribuer'"
+            :description="'Participez à la centralisation et la structuration des données environnementales'"
+            size="small"
+            :horizontal="true"
+            img-src="TODO"
+            alt-img="TODO"
+            :links-group="[
+              {
+                label: `Ajouter des données`,
+                to: `https://www.data.gouv.fr/fr/pages/onboarding/producteurs/`
+              },
+              {
+                label: `Créer un bouquet`,
+                to: `/admin/bouquets/add`
+              }
+            ]"
+          />
+        </li>
+      </ul>
+    </section>
     <section class="fr-container--fluid bouquets">
       <div class="fr-container fr-py-12v">
         <div class="fr-grid-row fr-grid-row--gutters">
@@ -200,5 +246,22 @@ useHead({
   p {
     margin-bottom: 0;
   }
+}
+
+:deep(.fr-links-group) li {
+  display: block;
+}
+
+:deep(.fr-links-group) li a {
+  color: var(--text-action-high-blue-france);
+}
+
+:deep(.fr-links-group) li a::after {
+  content: ' →';
+}
+
+:deep(.fr-card__content) {
+  padding-left: 1rem;
+  padding-bottom: 0;
 }
 </style>
