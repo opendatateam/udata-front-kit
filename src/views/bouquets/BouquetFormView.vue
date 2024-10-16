@@ -9,8 +9,9 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import config from '@/config'
+import { AccessibilityPropertiesKey } from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
-import type { TopicPostData } from '@/model/topic'
+import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -38,7 +39,7 @@ const {
   topicsSecondaryTheme
 } = useTopicsConf()
 
-const topic: Ref<Partial<TopicPostData>> = ref({
+const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   private: true,
   tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
@@ -51,9 +52,7 @@ const topic: Ref<Partial<TopicPostData>> = ref({
   }
 })
 
-const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+const setAccessibilityProperties = inject(AccessibilityPropertiesKey)
 
 const formFields = ref()
 const errorStatus = ref()
@@ -85,7 +84,9 @@ const isReadyForForm = computed(() => {
   )
 })
 
-const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
+const handleTopicOperation = (
+  operation: (...args: unknown[]) => Promise<Topic>
+) => {
   const loader = useLoading().show()
   operation()
     .then((response) => {
@@ -173,16 +174,20 @@ onMounted(() => {
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
-          setAccessibilityProperties(
-            `Cloner le ${topicsName} ${topic.value.name}`
-          )
+          if (setAccessibilityProperties) {
+            setAccessibilityProperties(
+              `Cloner le ${topicsName} ${topic.value.name}`
+            )
+          }
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
-          setAccessibilityProperties(
-            `Éditer le ${topicsName} ${topic.value.name}`
-          )
+          if (setAccessibilityProperties) {
+            setAccessibilityProperties(
+              `Éditer le ${topicsName} ${topic.value.name}`
+            )
+          }
         }
       })
       .finally(() => loader.hide())

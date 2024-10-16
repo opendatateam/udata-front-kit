@@ -98,7 +98,7 @@ const loadDatasetsContent = () => {
         .then((d) => {
           if (d) {
             datasetsContent.value.set(id, d)
-            datasetItem.archived = !!d?.archived
+            datasetItem.remoteArchived = !!d.archived
           }
         })
         .catch((err) => {

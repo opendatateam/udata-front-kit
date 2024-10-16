@@ -7,6 +7,7 @@ import { useLoading } from 'vue-loading-overlay'
 import GenericContainer from '@/components/GenericContainer.vue'
 import Tile from '@/components/Tile.vue'
 import config from '@/config'
+import { AccessibilityPropertiesKey } from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -31,9 +32,7 @@ const pages: Ref<object[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort = ref('-created')
 
-const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+const setAccessibilityProperties = inject(AccessibilityPropertiesKey)
 
 const metaTitle = (): string => {
   return `${org.value?.name} | ${config.website.title}`
@@ -47,7 +46,9 @@ onMounted(() => {
   orgStore
     .load(organizationId, -1, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(org.value?.name)
+      if (setAccessibilityProperties) {
+        setAccessibilityProperties(org.value?.name)
+      }
     })
 })
 

@@ -9,6 +9,10 @@ import LiveRegion, { type InfoToAnnounce } from './components/LiveRegion.vue'
 import Navigation from './components/Navigation.vue'
 import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
 import Header from './components/header/HeaderComponent.vue'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from './model/injectionKeys'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
 
@@ -75,11 +79,11 @@ const footerMandatoryLinks = config.website.footer_mandatory_links
 const route = useRoute()
 const skipLinksComp = ref<InstanceType<typeof SkipLinks> | null>(null)
 
-const setAccessibilityProperties: Function = (
-  title?: string,
-  focus: boolean = true,
-  messages: InfoToAnnounce[] = []
-) => {
+const setAccessibilityProperties: AccessibilityPropertiesType = (
+  title,
+  focus = true,
+  messages = []
+): void => {
   // announce page title to screen reader
   if (title) {
     liveInfos.value = [{ text: `Page ${title}` }, ...messages]
@@ -91,7 +95,7 @@ const setAccessibilityProperties: Function = (
   }
 }
 
-provide('setAccessibilityProperties', setAccessibilityProperties)
+provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
 // watch route change and update title
 watch(
