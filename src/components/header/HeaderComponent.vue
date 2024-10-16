@@ -291,3 +291,9 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
   gap: 0.25em;
 }
 </style>
+
+<style>
+.fr-header__tools-links .fr-btns-group li .fr-btn {
+  padding-right: 0 !important;
+}
+</style>
