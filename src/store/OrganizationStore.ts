@@ -119,13 +119,6 @@ export const useOrganizationStore = defineStore('organization', {
         .find((o) => o.id === orgId || o.slug === orgId)
     },
     /**
-     * Get an org from store given its acronym
-     */
-    async getByAcronym(acronym: string) {
-      const orgs = await this.loadFromConfig()
-      return orgs.filter((org) => org.acronym?.toLowerCase() === acronym)
-    },
-    /**
      * Async function to trigger API fetch of an org if not known in store
      */
     async load(orgId: string, page: number, params?: BaseParams) {
