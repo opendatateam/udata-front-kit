@@ -7,7 +7,13 @@ import pluginVue from 'eslint-plugin-vue'
 export default [
   {
     name: 'app/files-to-lint',
-    files: ['**/*.{js,mjs,ts,mts,tsx,vue}']
+    files: ['**/*.{js,mjs,ts,mts,tsx,vue}'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { ignoreRestSiblings: true }
+      ]
+    }
   },
   {
     name: 'files-to-ignore',

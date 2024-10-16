@@ -24,7 +24,7 @@ defineProps({
       v-if="
         !isAvailable(datasetProperties.availability) ||
         datasetProperties.remoteDeleted ||
-        datasetProperties.archived
+        datasetProperties.remoteArchived
       "
       class="uppercase bold fr-mr-2w"
       label="Non disponible"

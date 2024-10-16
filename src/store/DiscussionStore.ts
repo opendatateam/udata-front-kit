@@ -43,7 +43,6 @@ export const useDiscussionStore = defineStore('discussion', {
     async reloadForSubject(subjectId: SubjectId) {
       if (this.data[subjectId] === undefined) return
       // TODO: refactor data structure to comply with this rule
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.data[subjectId]
       return await this.loadDiscussionsForSubject(subjectId)
     },

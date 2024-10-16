@@ -10,7 +10,7 @@ const datasetsApiv2 = new DatasetsAPI({ version: 2 })
 
 export interface RootState {
   data: Record<string, DatasetV2Response[]>
-  resourceTypes: any[]
+  resourceTypes: unknown[]
   sort: string | null
 }
 

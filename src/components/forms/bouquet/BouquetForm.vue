@@ -12,8 +12,7 @@ import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
 const topic = defineModel({
-  type: Object as () => Partial<TopicPostData> &
-    Pick<TopicPostData, 'name' | 'description' | 'extras'>,
+  type: Object as () => Partial<TopicPostData> & Pick<TopicPostData, 'extras'>,
   required: true
 })
 const formErrors = defineModel('formErrors', {

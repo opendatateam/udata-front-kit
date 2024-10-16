@@ -11,7 +11,7 @@ import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import config from '@/config'
 import { AccessibilityPropertiesKey } from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
-import type { TopicPostData } from '@/model/topic'
+import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -39,7 +39,7 @@ const {
   topicsSecondaryTheme
 } = useTopicsConf()
 
-const topic: Ref<Partial<TopicPostData>> = ref({
+const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   private: true,
   tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
@@ -84,7 +84,9 @@ const isReadyForForm = computed(() => {
   )
 })
 
-const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
+const handleTopicOperation = (
+  operation: (...args: unknown[]) => Promise<Topic>
+) => {
   const loader = useLoading().show()
   operation()
     .then((response) => {
