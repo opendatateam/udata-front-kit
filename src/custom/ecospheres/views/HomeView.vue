@@ -91,7 +91,7 @@ useHead({
             :links-group="[
               {
                 label: `Ajouter des données`,
-                to: `https://www.data.gouv.fr/fr/pages/onboarding/producteurs/`
+                link: `https://www.data.gouv.fr/fr/pages/onboarding/producteurs/`
               },
               {
                 label: `Créer un bouquet`,
