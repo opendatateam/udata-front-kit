@@ -51,8 +51,6 @@ website:
         route: bouquets
       - text: Rechercher {} dans les <strong>jeux de données</strong>
         route: datasets
-      - text: Rechercher {} dans les <strong>organisations</strong>
-        route: organizations
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
