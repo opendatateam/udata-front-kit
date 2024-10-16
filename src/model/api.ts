@@ -1,4 +1,4 @@
-import type { AxiosResponse, AxiosError } from 'axios'
+import type { AxiosError, AxiosResponse } from 'axios'
 
 export type { AxiosError }
 

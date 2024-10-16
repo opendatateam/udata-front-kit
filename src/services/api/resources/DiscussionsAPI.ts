@@ -1,9 +1,9 @@
 import type {
-  SubjectId,
-  PostForm,
   Discussion,
+  DiscussionId,
   DiscussionResponse,
-  DiscussionId
+  PostForm,
+  SubjectId
 } from '@/model/discussion'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 

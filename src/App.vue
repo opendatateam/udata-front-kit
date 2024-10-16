@@ -154,7 +154,7 @@ watch(
 </template>
 
 <!-- global styles -->
-<style lang="scss">
+<style>
 .es__tiles__list {
   list-style-type: none;
 }

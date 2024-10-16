@@ -32,7 +32,7 @@ defineProps({
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .title-container {
   display: flex;
   justify-content: space-between;

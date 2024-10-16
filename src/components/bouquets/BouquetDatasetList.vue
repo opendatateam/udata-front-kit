@@ -308,7 +308,7 @@ onMounted(() => {
   />
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .ghost {
   background-color: #bbb;
 }

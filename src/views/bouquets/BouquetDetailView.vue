@@ -363,14 +363,13 @@ watch(
   </GenericContainer>
 </template>
 
-<style scoped lang="scss">
-.bouquet {
-  &__header {
-    display: flex;
-    align-items: center;
-    flex-flow: wrap;
-  }
+<style scoped>
+.bouquet__header {
+  display: flex;
+  align-items: center;
+  flex-flow: wrap;
 }
+
 .flex-reverse {
   display: flex;
   flex-direction: row-reverse;

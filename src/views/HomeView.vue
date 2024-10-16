@@ -106,7 +106,7 @@ const goToPage = (page) => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 @media (min-width: 1248px) {
   .search-bar {
     display: flex;

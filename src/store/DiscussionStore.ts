@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 
 import type {
-  SubjectId,
-  DiscussionResponse,
-  DiscussionForm,
   Discussion,
+  DiscussionForm,
+  DiscussionId,
+  DiscussionResponse,
   PostForm,
-  DiscussionId
+  SubjectId
 } from '@/model/discussion'
 import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
 

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import type { ComputedRef, Ref } from 'vue'
-import { ref, watchEffect, computed } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
 import type {
-  DiscussionResponse,
   DiscussionForm,
-  SubjectClass,
-  PostForm,
   DiscussionId,
-  Post
+  DiscussionResponse,
+  Post,
+  PostForm,
+  SubjectClass
 } from '@/model/discussion'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useDiscussionStore } from '@/store/DiscussionStore'

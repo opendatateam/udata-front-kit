@@ -142,7 +142,10 @@ const search = () => {
 }
 
 const goToPage = (page: number) => {
-  router.push({ path: '/datasets', query: computeUrlQuery({ page: page + 1 }) })
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({ page: page + 1 })
+  })
 }
 
 const zIndex = (key: number) => {

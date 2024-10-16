@@ -37,6 +37,7 @@ const {
   topicsMainTheme,
   topicsSecondaryTheme
 } = useTopicsConf()
+
 const topic: Ref<Partial<TopicPostData>> = ref({
   private: true,
   tags: [config.universe.name],
@@ -245,7 +246,7 @@ const onSubmit = async () => {
             ref="formFields"
             v-model="topic"
             v-model:form-errors="formErrors"
-            @update-validation="(isValid: boolean) => canSave = isValid"
+            @update-validation="(isValid: boolean) => (canSave = isValid)"
           />
         </fieldset>
         <fieldset>

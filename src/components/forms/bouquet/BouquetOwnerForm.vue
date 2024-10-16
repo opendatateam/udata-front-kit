@@ -6,13 +6,13 @@ import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
 import '@/assets/multiselect.css'
-import type { Topic } from '@/model/topic'
+import type { TopicPostData } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
 const topic = defineModel({
-  type: Object as () => Topic,
+  type: Object as () => Partial<TopicPostData>,
   required: true
 })
 
@@ -32,15 +32,15 @@ const ownOrganizationIndex = computed(() => {
   )
 })
 // both models check the above index to determine the default owner to display
-const selectedAnyOrganization: Ref<Organization | undefined> = ref(
+const selectedAnyOrganization: Ref<Organization | null | undefined> = ref(
   ownOrganizationIndex.value < 0 && !topic.value.owner
     ? topic.value.organization
-    : undefined
+    : null
 )
-const selectedOwnOrganization: Ref<number | string | undefined> = ref(
+const selectedOwnOrganization: Ref<number | string | null> = ref(
   ownOrganizationIndex.value >= 0 && !topic.value.owner
     ? ownOrganizationIndex.value
-    : undefined
+    : null
 )
 
 const radioOptions = [
@@ -86,12 +86,12 @@ const onSelectAnyOrganization = () => {
   if (selectedAnyOrganization.value) {
     topic.value.organization = selectedAnyOrganization.value
     topic.value.owner = null
-    selectedOwnOrganization.value = undefined
+    selectedOwnOrganization.value = null
   }
 }
 
 const clear = () => {
-  selectedAnyOrganization.value = undefined
+  selectedAnyOrganization.value = null
 }
 
 watch(choice, () => {
@@ -151,7 +151,7 @@ watch(choice, () => {
               v-if="selectedAnyOrganization"
               class="multiselect__clear"
               @mousedown.prevent.stop="clear"
-            ></div>
+            />
           </template>
           <template #singleLabel="slotProps">
             {{ slotProps.option.name }}

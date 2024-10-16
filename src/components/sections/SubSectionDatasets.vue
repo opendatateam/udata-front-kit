@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { DatasetCard } from '@datagouv/components'
 import type { Dataset } from '@datagouv/components'
-import { ref, onMounted } from 'vue'
+import { DatasetCard } from '@datagouv/components'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useDatasetStore } from '@/store/DatasetStore'

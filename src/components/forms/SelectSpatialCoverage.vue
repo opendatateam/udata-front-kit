@@ -114,7 +114,7 @@ onMounted(() => {
   </Multiselect>
 </template>
 
-<style lang="scss">
+<style scoped>
 .spatial-select-option {
   flex-direction: column;
   align-items: flex-start;

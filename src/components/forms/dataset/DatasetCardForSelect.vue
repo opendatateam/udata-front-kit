@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {
   type DatasetV2,
-  useOwnerName,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  type Owned,
+  useOwnerName
 } from '@datagouv/components'
 import { computed } from 'vue'
 
@@ -26,12 +27,12 @@ const props = defineProps({
   }
 })
 
-const ownerName = useOwnerName(props.dataset)
+const ownerName = useOwnerName(props.dataset as Owned)
 
 const thumbnail = computed(() => {
   if (props.dataset.organization)
     return props.dataset.organization.logo_thumbnail
-  return getOwnerAvatar(props.dataset)
+  return getOwnerAvatar(props.dataset as Owned)
 })
 
 const badgeClasse = computed(() => {

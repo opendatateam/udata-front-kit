@@ -190,8 +190,8 @@ watch(
   </GenericContainer>
 </template>
 
-<style scoped="true" lang="scss">
-// put above header (ground+500) so that multiselect floats above menu
+<style scoped>
+/* put above header (ground+500) so that multiselect floats above menu */
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);
 }

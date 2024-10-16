@@ -6,13 +6,13 @@ import { capitalize, onMounted, ref, type Ref } from 'vue'
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
-import type { Topic } from '@/model/topic'
+import type { TopicPostData } from '@/model/topic'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
 const topic = defineModel({
-  type: Object as () => Topic,
+  type: Object as () => Partial<TopicPostData>,
   required: true
 })
 const formErrors = defineModel('formErrors', {
@@ -44,13 +44,13 @@ const { values, errors, defineField, handleSubmit } = useForm({
     name: topic.value.name ?? '',
     description: topic.value.description ?? '',
     theme:
-      topic.value.extras[topicsExtrasKey].theme === NoOptionSelected
+      topic.value.extras![topicsExtrasKey].theme === NoOptionSelected
         ? ''
-        : topic.value.extras[topicsExtrasKey].theme,
+        : topic.value.extras![topicsExtrasKey].theme,
     subtheme:
-      topic.value.extras[topicsExtrasKey].subtheme === NoOptionSelected
+      topic.value.extras![topicsExtrasKey].subtheme === NoOptionSelected
         ? ''
-        : topic.value.extras[topicsExtrasKey].subtheme
+        : topic.value.extras![topicsExtrasKey].subtheme
   },
   validationSchema: {
     name: required,
@@ -79,8 +79,8 @@ const onValidSubmit = async (validatedValues: {
   // set topic values from validated fields
   topic.value.name = validatedValues.name
   topic.value.description = validatedValues.description
-  topic.value.extras[topicsExtrasKey].theme = validatedValues.theme
-  topic.value.extras[topicsExtrasKey].subtheme = validatedValues.subtheme
+  topic.value.extras![topicsExtrasKey].theme = validatedValues.theme
+  topic.value.extras![topicsExtrasKey].subtheme = validatedValues.subtheme
   // sync valid status with parent
   emits('updateValidation', true)
 }
@@ -106,11 +106,11 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  if (topic.value.extras[topicsExtrasKey].theme !== NoOptionSelected) {
-    theme.value = topic.value.extras[topicsExtrasKey].theme
+  if (topic.value.extras![topicsExtrasKey].theme !== NoOptionSelected) {
+    theme.value = topic.value.extras![topicsExtrasKey].theme
   }
-  if (topic.value.extras[topicsExtrasKey].subtheme !== NoOptionSelected) {
-    subtheme.value = topic.value.extras[topicsExtrasKey].subtheme
+  if (topic.value.extras![topicsExtrasKey].subtheme !== NoOptionSelected) {
+    subtheme.value = topic.value.extras![topicsExtrasKey].subtheme
   }
 })
 </script>
@@ -127,7 +127,7 @@ onMounted(() => {
       :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
     />
     <p v-if="errors.name && isSubmitted" id="errors-name" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       Veuillez renseigner un sujet.
     </p>
   </div>
@@ -151,7 +151,7 @@ onMounted(() => {
       id="errors-description"
       class="error"
     >
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       La description ne doit pas être vide.
     </p>
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
@@ -195,7 +195,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.theme && isSubmitted" id="errors-theme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       Veuillez sélectionner une thématique.
     </p>
   </div>
@@ -231,7 +231,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.subtheme && isSubmitted" id="errors-subtheme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       Veuillez sélectionner un chantier.
     </p>
     <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">

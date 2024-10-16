@@ -1,13 +1,13 @@
 // icon search: https://oh-vue-icons.js.org/
+export { MdDragindicator } from 'oh-vue-icons/icons/md/index.js'
 export {
-  RiLogoutBoxRLine,
   RiAddCircleLine,
-  RiPencilLine,
-  RiLightbulbLine,
   RiClipboardLine,
+  RiDatabase2Line,
   RiFileAddLine,
   RiFileCopy2Line,
-  RiDatabase2Line,
-  RiMap2Line
+  RiLightbulbLine,
+  RiLogoutBoxRLine,
+  RiMap2Line,
+  RiPencilLine
 } from 'oh-vue-icons/icons/ri/index.js'
-export { MdDragindicator } from 'oh-vue-icons/icons/md/index.js'
