@@ -70,6 +70,7 @@ useHead({
             :horizontal="true"
             :img-src="explorerSvg"
             alt-img=""
+            class="explorer"
             :links-group="[
               {
                 label: `Accéder aux données`,
@@ -91,6 +92,7 @@ useHead({
             :horizontal="true"
             :img-src="contributeSvg"
             alt-img=""
+            class="contribute"
             :links-group="[
               {
                 label: `Ajouter des données`,
@@ -283,6 +285,38 @@ useHead({
   .fr-card__img img {
     object-fit: contain;
     object-position: bottom;
+  }
+}
+
+.explorer :deep(.fr-card__img img) {
+  object-position: -25px bottom;
+}
+
+@media (max-width: 768px) {
+  :deep(.fr-card__header) {
+    flex: 0 0 25%;
+  }
+
+  :deep(.fr-card__header .fr-card__img) {
+    height: 120px;
+    overflow: hidden;
+  }
+
+  :deep(.fr-card__header .fr-card__img img) {
+    object-position: left bottom;
+  }
+
+  .explorer :deep(.fr-card__img img) {
+    position: relative;
+    top: 25%;
+    left: 1rem;
+    height: 65%;
+  }
+
+  .contribute :deep(.fr-card__img img) {
+    position: relative;
+    left: 1rem;
+    height: 120%;
   }
 }
 </style>
