@@ -41,13 +41,15 @@ const quickLinks = computed(() => {
   const headerButton = {
     label: button.label,
     icon: 'ri-lightbulb-line',
-    href: button.link
+    href: button.link,
+    iconRight: true
   }
 
   const logLink = {
     label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
     icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
-    to: isLoggedIn.value ? '/logout' : '/login'
+    to: isLoggedIn.value ? '/logout' : '/login',
+    iconRight: true
   }
 
   if (!config.website.oauth_option) {
