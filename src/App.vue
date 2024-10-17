@@ -47,7 +47,7 @@ const quickLinks = computed(() => {
 
   const logLink = {
     label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
-    icon: 'ri-logout-box-r-line',
+    icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
     to: isLoggedIn.value ? '/logout' : '/login',
     iconRight: true
   }
