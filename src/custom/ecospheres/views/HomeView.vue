@@ -64,7 +64,7 @@ useHead({
             <ul class="fr-grid-row organize-data" role="list">
               <li class="fr-col-12 fr-col-lg-4">
                 <div class="fr-grid-row">
-                  <div class="fr-col-3">
+                  <div class="fr-col-md-3">
                     <img
                       src="../assets/sign-document.svg"
                       alt=""
@@ -73,7 +73,7 @@ useHead({
                       height="64"
                     />
                   </div>
-                  <div class="fr-col-9">
+                  <div class="fr-col-md-9">
                     <h3>Répondre aux besoins d'une politique publique</h3>
                     <p>
                       Des problématiques data sont identifiées en lien avec des
@@ -84,7 +84,7 @@ useHead({
               </li>
               <li class="fr-col-12 fr-col-lg-4">
                 <div class="fr-grid-row">
-                  <div class="fr-col-3">
+                  <div class="fr-col-md-3">
                     <img
                       src="../assets/binders.svg"
                       alt=""
@@ -93,7 +93,7 @@ useHead({
                       height="64"
                     />
                   </div>
-                  <div class="fr-col-9">
+                  <div class="fr-col-md-9">
                     <h3>Identifier les informations utiles</h3>
                     <p>
                       Les facteurs pertinents pour l'orientation de cette action
@@ -104,7 +104,7 @@ useHead({
               </li>
               <li class="fr-col-12 fr-col-lg-4">
                 <div class="fr-grid-row">
-                  <div class="fr-col-3">
+                  <div class="fr-col-md-3">
                     <img
                       src="../assets/document-add.svg"
                       alt=""
@@ -113,7 +113,7 @@ useHead({
                       height="64"
                     />
                   </div>
-                  <div class="fr-col-9">
+                  <div class="fr-col-md-9">
                     <h3>Centraliser les données territoriales</h3>
                     <p>
                       Les données territoriales sont collectées, regroupées et
@@ -165,14 +165,30 @@ useHead({
   background-color: white;
   padding: 32px 16px;
 
-  @media (min-width: 768px) {
-    li {
-      border-right: 1px solid var(--border-default-grey);
-    }
+  li {
+    border-right: 1px solid var(--border-default-grey);
   }
 
   li:last-child {
     border: none;
+  }
+
+  @media (max-width: 768px) {
+    h3 {
+      margin: 1rem 0 0.5rem;
+    }
+
+    li {
+      border-right: none;
+      border-bottom: 1px solid var(--border-default-grey);
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    li:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
   }
 
   h4 {
