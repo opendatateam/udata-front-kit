@@ -70,6 +70,7 @@ const dropdownLabel = (text: string) => {
       label="text"
       track-by="route"
       placeholder=""
+      title="Rechercher nico"
       select-label=""
       deselect-label=""
       aria-labelledby="search-label"
@@ -91,6 +92,9 @@ const dropdownLabel = (text: string) => {
       </template>
       <template #caret>
         <span class="fr-icon-search-line search-icon"></span>
+      </template>
+      <template #placeholder>
+        <span aria-hidden class="visible-label">Rechercher</span>
       </template>
     </Multiselect>
   </div>
@@ -130,6 +134,9 @@ const dropdownLabel = (text: string) => {
     inset-inline-start: 10px;
     translate: 0 -50%;
     max-width: var(--icon-width);
+  }
+  .visible-label {
+    margin-left: var(--icon-width);
   }
   .multiselect__content-wrapper {
     margin-top: 42px;
