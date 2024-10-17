@@ -88,7 +88,10 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
 ): void => {
   // announce page title to screen reader
   if (title) {
-    liveInfos.value = [{ text: `Page ${title}` }, ...messages]
+    liveInfos.value = [
+      { text: `Page ${title} | ${config.website.title}` },
+      ...messages
+    ]
   }
   // focus skip link
   if (focus && skipLinksComp.value?.firstSkipLink) {
