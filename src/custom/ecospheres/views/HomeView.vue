@@ -71,7 +71,6 @@ useHead({
                       class="illustration fr-mx-auto block"
                       width="64"
                       height="64"
-                      aria-hidden="true"
                     />
                   </div>
                   <div class="fr-col-9">
@@ -92,7 +91,6 @@ useHead({
                       class="illustration fr-mx-auto block"
                       width="64"
                       height="64"
-                      aria-hidden="true"
                     />
                   </div>
                   <div class="fr-col-9">
@@ -113,7 +111,6 @@ useHead({
                       class="illustration fr-mx-auto block"
                       width="64"
                       height="64"
-                      aria-hidden="true"
                     />
                   </div>
                   <div class="fr-col-9">
