@@ -59,14 +59,16 @@ useHead({
     <section class="fr-container">
       <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-py-12v">
         <li class="fr-col-lg-6">
+          <!-- le ratio de l'image (33%, 40% ou 50%) (prop imgRatio, de type string) qui peut prendre plusieurs valeurs:
+              md, medium, large, lg, sm, small.-->
           <DsfrCard
             :no-arrow="true"
             :title="'Explorer'"
             :description="'Accédez à un ensemble de données environnementales'"
             size="small"
             :horizontal="true"
-            img-src="TODO"
-            alt-img="TODO"
+            img-src="src/custom/ecospheres/assets/explorer.svg"
+            alt-img=""
             :links-group="[
               {
                 label: `Accéder aux données`,
@@ -86,8 +88,8 @@ useHead({
             :description="'Participez à la centralisation et la structuration des données environnementales'"
             size="small"
             :horizontal="true"
-            img-src="TODO"
-            alt-img="TODO"
+            img-src="src/custom/ecospheres/assets/contribuer.svg"
+            alt-img=""
             :links-group="[
               {
                 label: `Ajouter des données`,
@@ -199,7 +201,7 @@ useHead({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .bouquets {
   background-color: #f6f6f6;
 }
@@ -248,20 +250,38 @@ useHead({
   }
 }
 
-:deep(.fr-links-group) li {
-  display: block;
-}
+:deep(.fr-links-group) {
+  li {
+    display: block;
+  }
 
-:deep(.fr-links-group) li a {
-  color: var(--text-action-high-blue-france);
-}
+  li a {
+    color: var(--text-action-high-blue-france);
+  }
 
-:deep(.fr-links-group) li a::after {
-  content: ' →';
+  li a::after {
+    content: ' →';
+  }
+
+  .fr-link {
+    /* Overide style for external link */
+    font-size: inherit;
+    margin: inherit;
+    vertical-align: inherit;
+  }
 }
 
 :deep(.fr-card__content) {
   padding-left: 1rem;
   padding-bottom: 0;
+}
+
+:deep(.fr-card__header) {
+  flex: 0 0 33%;
+
+  .fr-card__img img {
+    object-fit: contain;
+    object-position: bottom;
+  }
 }
 </style>
