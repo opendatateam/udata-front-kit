@@ -6,6 +6,9 @@ import { useRouter } from 'vue-router'
 import HomeThemes from '@/components/HomeThemes.vue'
 import config from '@/config'
 
+import contributeSvg from '../assets/contribuer.svg'
+import explorerSvg from '../assets/explorer.svg'
+
 const query = ref('')
 const router = useRouter()
 
@@ -59,15 +62,13 @@ useHead({
     <section class="fr-container">
       <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-py-12v">
         <li class="fr-col-lg-6">
-          <!-- le ratio de l'image (33%, 40% ou 50%) (prop imgRatio, de type string) qui peut prendre plusieurs valeurs:
-              md, medium, large, lg, sm, small.-->
           <DsfrCard
             :no-arrow="true"
             :title="'Explorer'"
             :description="'Accédez à un ensemble de données environnementales'"
             size="small"
             :horizontal="true"
-            img-src="src/custom/ecospheres/assets/explorer.svg"
+            :img-src="explorerSvg"
             alt-img=""
             :links-group="[
               {
@@ -88,7 +89,7 @@ useHead({
             :description="'Participez à la centralisation et la structuration des données environnementales'"
             size="small"
             :horizontal="true"
-            img-src="src/custom/ecospheres/assets/contribuer.svg"
+            :img-src="contributeSvg"
             alt-img=""
             :links-group="[
               {
