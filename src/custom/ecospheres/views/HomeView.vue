@@ -170,7 +170,7 @@ useHead({
 
   @media (min-width: 768px) {
     li {
-      border-right: 1px solid #ebebeb;
+      border-right: 1px solid var(--border-default-grey);
     }
   }
 
