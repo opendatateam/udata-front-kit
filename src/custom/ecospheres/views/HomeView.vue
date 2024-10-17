@@ -75,7 +75,7 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-9">
-                    <h4>Répondre aux besoins d'une politique publique</h4>
+                    <h3>Répondre aux besoins d'une politique publique</h3>
                     <p>
                       Des problématiques data sont identifiées en lien avec des
                       services métiers
@@ -96,7 +96,7 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-9">
-                    <h4>Identifier les informations utiles</h4>
+                    <h3>Identifier les informations utiles</h3>
                     <p>
                       Les facteurs pertinents pour l'orientation de cette action
                       sont définis
@@ -117,7 +117,7 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-9">
-                    <h4>Centraliser les données territoriales</h4>
+                    <h3>Centraliser les données territoriales</h3>
                     <p>
                       Les données territoriales sont collectées, regroupées et
                       reliées aux facteurs correspondants
