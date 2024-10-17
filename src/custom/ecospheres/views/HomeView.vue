@@ -166,7 +166,7 @@ useHead({
 }
 .organize-data {
   background-color: white;
-  padding: 40px 15px 20px;
+  padding: 32px 16px;
 
   @media (min-width: 768px) {
     li {
