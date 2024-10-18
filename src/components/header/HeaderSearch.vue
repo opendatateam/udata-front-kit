@@ -70,7 +70,6 @@ const dropdownLabel = (text: string) => {
       label="text"
       track-by="route"
       placeholder=""
-      title="Rechercher nico"
       select-label=""
       deselect-label=""
       aria-labelledby="search-label"
@@ -94,7 +93,7 @@ const dropdownLabel = (text: string) => {
         <span class="fr-icon-search-line search-icon"></span>
       </template>
       <template #placeholder>
-        <span aria-hidden class="visible-label">Rechercher</span>
+        <span aria-hidden="true" class="visible-label">Rechercher</span>
       </template>
     </Multiselect>
   </div>
