@@ -9,7 +9,10 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import config from '@/config'
-import { AccessibilityPropertiesKey } from '@/model/injectionKeys'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
@@ -52,7 +55,9 @@ const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   }
 })
 
-const setAccessibilityProperties = inject(AccessibilityPropertiesKey)
+const setAccessibilityProperties = inject(
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const formFields = ref()
 const errorStatus = ref()
@@ -174,20 +179,17 @@ onMounted(() => {
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
-          if (setAccessibilityProperties) {
-            setAccessibilityProperties(
-              `Cloner le ${topicsName} ${topic.value.name}`
-            )
-          }
+          setAccessibilityProperties(
+            `Cloner le ${topicsName} ${topic.value.name}`
+          )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
-          if (setAccessibilityProperties) {
-            setAccessibilityProperties(
-              `Éditer le ${topicsName} ${topic.value.name}`
-            )
-          }
+
+          setAccessibilityProperties(
+            `Éditer le ${topicsName} ${topic.value.name}`
+          )
         }
       })
       .finally(() => loader.hide())

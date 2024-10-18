@@ -9,7 +9,10 @@ import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
 import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import { AccessibilityPropertiesKey } from '@/model/injectionKeys'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
@@ -52,7 +55,9 @@ const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-const setAccessibilityProperties = inject(AccessibilityPropertiesKey)
+const setAccessibilityProperties = inject(
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -81,7 +86,7 @@ const pageTitle = computed(() => {
   if (selectedQuery.value) {
     return `${route.meta.title} pour "${selectedQuery.value}"`
   }
-  return `${route.meta.title}`
+  return route.meta.title
 })
 
 const searchResultsMessage = computed(() => {
@@ -91,17 +96,13 @@ const searchResultsMessage = computed(() => {
 const setLiveResults = () => {
   // only display the number of results if a query or filter exists
   if (route.fullPath !== route.path) {
-    if (setAccessibilityProperties) {
-      setAccessibilityProperties(pageTitle.value, false, [
-        {
-          text: searchResultsMessage.value
-        }
-      ])
-    }
+    setAccessibilityProperties(pageTitle.value, false, [
+      {
+        text: searchResultsMessage.value
+      }
+    ])
   } else {
-    if (setAccessibilityProperties) {
-      setAccessibilityProperties(pageTitle.value, false)
-    }
+    setAccessibilityProperties(pageTitle.value, false)
   }
 }
 

@@ -16,7 +16,10 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import type { TopicItemConf } from '@/model/config'
-import { AccessibilityPropertiesKey } from '@/model/injectionKeys'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
@@ -68,7 +71,9 @@ const hasOrganizationFilter = config.website.datasets
 
 const { topicsMainTheme } = useTopicsConf()
 
-const setAccessibilityProperties = inject(AccessibilityPropertiesKey)
+const setAccessibilityProperties = inject(
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const metaTitle = computed(() => {
   if (currentPage.value && localQuery.value) {
@@ -186,13 +191,11 @@ const delayedSearch = useDebounceFn(
           ? queryResults.value.innerText
           : ''
         useTitle(`${metaTitle.value} | ${title}`)
-        if (setAccessibilityProperties) {
-          setAccessibilityProperties(metaTitle.value, false, [
-            {
-              text: searchResultsMessage
-            }
-          ])
-        }
+        setAccessibilityProperties(metaTitle.value, false, [
+          {
+            text: searchResultsMessage
+          }
+        ])
         loadingInstance.hide()
       })
   },

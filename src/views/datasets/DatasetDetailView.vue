@@ -21,7 +21,10 @@ import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import config from '@/config'
-import { AccessibilityPropertiesKey } from '@/model/injectionKeys'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import type { ResourceDataWithQuery } from '@/model/resource'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
@@ -49,7 +52,9 @@ const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
 const { topicsName } = useTopicsConf()
 
-const setAccessibilityProperties = inject(AccessibilityPropertiesKey)
+const setAccessibilityProperties = inject(
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
@@ -158,9 +163,7 @@ onMounted(() => {
   datasetStore
     .load(datasetId, { toasted: false, redirectNotFound: true })
     .then(() => {
-      if (setAccessibilityProperties) {
-        setAccessibilityProperties(dataset.value?.title)
-      }
+      setAccessibilityProperties(dataset.value?.title)
     })
 })
 

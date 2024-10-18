@@ -102,7 +102,7 @@ watch(
   () => route.path,
   () => {
     if (route.meta.title) {
-      const title = route.meta.title as string
+      const title = route.meta.title
       setAccessibilityProperties(title)
     }
   },
