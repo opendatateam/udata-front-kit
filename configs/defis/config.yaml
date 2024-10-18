@@ -93,6 +93,11 @@ website:
               description: 'Quel impact de la classe DPE sur les consommations énergétiques ? Défi porté par Enedis'
               url: '/defis/diagnostics-de-performance-energetique'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Enedis.jpg'
+            - id: '6710e8d60f12d58334949614'
+              name: 'Les Françaises et Français face à l’information'
+              description: 'Comment qualifier l’offre et l’évolution des modes de "consommation" de l’information ?'
+              url: '/defis/les-francaises-et-francais-face-a-linformation'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Saison3_Information2.jpg'
             - id: '65b10aa72d0c187ecf296930'
               name: 'Offre culturelle'
               description: "Comment valoriser l'offre culturelle et favoriser l'accès à la culture ?"
