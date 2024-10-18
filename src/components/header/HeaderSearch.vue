@@ -96,7 +96,7 @@ const dropdownLabel = (text: string) => {
   </div>
 </template>
 
-<style lang="scss">
+<style scoped>
 .select-search {
   --icon-width: 24px;
   position: relative;

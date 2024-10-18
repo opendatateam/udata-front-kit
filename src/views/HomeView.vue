@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -13,7 +13,7 @@ const router = useRouter()
 const query = ref('')
 
 // TODO: mutualize w/ App.vue
-const updateQuery = (q) => {
+const updateQuery = (q: string) => {
   query.value = q
 }
 
@@ -28,12 +28,13 @@ const colorsBanner = config.website.home_banner_colors
 const searchConfig = config.website.search_bar
 const secondarySearchConfig = config.website.secondary_search
 
-const goToPage = (page) => {
+const goToPage = (page: string) => {
   window.location.href = page
 }
 </script>
 
 <template>
+  <!-- eslint-disable vue/no-v-html -->
   <div
     class="banner"
     :style="
@@ -80,7 +81,7 @@ const goToPage = (page) => {
       </div>
     </div>
   </div>
-  <div v-for="item in sectionsHomePage" v-bind:key="item">
+  <div v-for="item in sectionsHomePage" :key="item">
     <div class="fr-container hero-text">
       <h4 v-if="item.title">{{ item.title }}</h4>
       <span v-html="fromMarkdown(item.content)"></span>
@@ -106,7 +107,7 @@ const goToPage = (page) => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 @media (min-width: 1248px) {
   .search-bar {
     display: flex;

@@ -1,17 +1,14 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "experimentalDecorators": true,
-    "noEmit": true,
-    "paths": {
-      "@/*": ["./src/*"]
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
     },
-    "strictNullChecks": true,
-    "types": ["node"]
-  },
-  "extends": [
-    "@tsconfig/node18/tsconfig.json",
-    "@vue/tsconfig/tsconfig.dom.json"
-  ],
-  "include": ["src/**/*", "src/**/*.vue"]
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.vitest.json"
+    }
+  ]
 }

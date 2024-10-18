@@ -137,7 +137,7 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Update a topic
      */
-    async update(topicId: string, data: any): Promise<Topic> {
+    async update(topicId: string, data: object): Promise<Topic> {
       const res = await topicsAPI.update({ entityId: topicId, data })
       const idx = this.data.findIndex((b) => b.id === topicId)
       // do not apply reuses and datasets because they're in v1 format

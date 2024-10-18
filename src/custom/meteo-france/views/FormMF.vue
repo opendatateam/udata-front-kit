@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ResourceAccordion } from '@datagouv/components'
 import type { Resource } from '@datagouv/components'
+import { ResourceAccordion } from '@datagouv/components'
 import { ref, type Ref } from 'vue'
 
 import config from '@/config'
@@ -318,7 +318,7 @@ function onSelectIndicateur(event: Event) {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .select-classic {
   margin-bottom: 20px;
 }

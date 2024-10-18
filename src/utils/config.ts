@@ -1,5 +1,5 @@
 import config from '@/config'
-import type { TopicsConf, CanAddTopicsConf } from '@/model/config'
+import type { CanAddTopicsConf, TopicsConf } from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
 interface TopicsConfNormalized {

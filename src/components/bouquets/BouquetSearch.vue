@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
+  capitalize,
   ref,
-  watchEffect,
   toRef,
-  type Ref,
+  watchEffect,
   type PropType,
-  capitalize
+  type Ref
 } from 'vue'
-import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'

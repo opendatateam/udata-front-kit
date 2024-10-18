@@ -8,7 +8,7 @@ export const pageStore = defineStore('getPage', {
   state: () =>
     ({
       data: ''
-    } satisfies RootState),
+    }) satisfies RootState,
   getters: {
     content: (state) => {
       return state.data

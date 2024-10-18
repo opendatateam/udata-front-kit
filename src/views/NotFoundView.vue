@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Ovoid from '@gouvfr/dsfr/dist/artwork/background/ovoid.svg'
 import TechnicalError from '@gouvfr/dsfr/dist/artwork/pictograms/system/technical-error.svg'
 import { useRoute, useRouter } from 'vue-router'

@@ -1,18 +1,19 @@
-<script setup>
-import { computed, ref, onMounted } from 'vue'
+<script setup lang="ts">
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import Tile from '@/components/Tile.vue'
 import config from '@/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
+import type { Organization } from '@datagouv/components'
 
 const store = useOrganizationStore()
 const $loading = useLoading()
 
 const currentPage = ref(1)
 const pages = store.getPagination()
-const organizations = ref([])
+const organizations: Ref<Organization[]> = ref([])
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
@@ -21,7 +22,7 @@ const links = computed(() => [
 
 const title = config.website.title
 
-async function onUpdatePage(page) {
+async function onUpdatePage(page: number) {
   const loader = $loading.show()
   currentPage.value = page + 1
   organizations.value = await store.loadFromConfig(currentPage.value)
