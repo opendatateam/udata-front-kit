@@ -39,14 +39,6 @@ const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
-const metaTitle = (): string => {
-  return `${org.value?.name} | ${config.website.title}`
-}
-
-useHead({
-  title: metaTitle
-})
-
 onMounted(() => {
   orgStore
     .load(organizationId, -1, { toasted: false, redirectNotFound: true })
