@@ -64,8 +64,7 @@ routerPromise
       }
       // set page title where needed
       if (to.meta.title != null) {
-        document.title =
-          (to.meta.title as string) + ' | ' + config.website.title
+        document.title = to.meta.title + ' | ' + config.website.title
       }
     })
 

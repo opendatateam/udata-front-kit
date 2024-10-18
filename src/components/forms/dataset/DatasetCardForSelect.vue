@@ -1,8 +1,8 @@
 <script setup lang="ts">
+// FIXME
+import type { DatasetV2Fix } from '@/model/DatasetV2Fix'
 import {
-  type DatasetV2,
   OrganizationNameWithCertificate,
-  type Owned,
   useOwnerName
 } from '@datagouv/components'
 import { computed } from 'vue'
@@ -12,7 +12,7 @@ import { getOwnerAvatar } from '@/utils/avatar'
 
 const props = defineProps({
   dataset: {
-    type: Object as () => DatasetV2,
+    type: Object as () => DatasetV2Fix,
     required: true
   },
   alreadySelected: {
@@ -27,12 +27,12 @@ const props = defineProps({
   }
 })
 
-const ownerName = useOwnerName(props.dataset as Owned)
+const ownerName = useOwnerName(props.dataset)
 
 const thumbnail = computed(() => {
   if (props.dataset.organization)
     return props.dataset.organization.logo_thumbnail
-  return getOwnerAvatar(props.dataset as Owned)
+  return getOwnerAvatar(props.dataset)
 })
 
 const badgeClasse = computed(() => {

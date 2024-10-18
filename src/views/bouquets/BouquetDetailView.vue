@@ -17,6 +17,10 @@ import ReusesList from '@/components/ReusesList.vue'
 import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
 import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
 import config from '@/config'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -49,8 +53,8 @@ const spatialCoverage = useSpatialCoverage(topic)
 const showDiscussions = config.website.discussions.topic.display
 
 const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
@@ -127,7 +131,7 @@ const onUpdateDatasets = () => {
       datasets: dedupedDatasets,
       extras: updateTopicExtras(topic.value, {
         datasets_properties: datasetsProperties.value.map(
-          ({ remoteDeleted, archived, ...data }) => data
+          ({ remoteDeleted, remoteArchived, ...data }) => data
         )
       })
     })

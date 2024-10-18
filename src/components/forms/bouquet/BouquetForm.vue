@@ -12,7 +12,7 @@ import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
 const topic = defineModel({
-  type: Object as () => Partial<TopicPostData>,
+  type: Object as () => Partial<TopicPostData> & Pick<TopicPostData, 'extras'>,
   required: true
 })
 const formErrors = defineModel('formErrors', {
@@ -44,13 +44,13 @@ const { values, errors, defineField, handleSubmit } = useForm({
     name: topic.value.name ?? '',
     description: topic.value.description ?? '',
     theme:
-      topic.value.extras![topicsExtrasKey].theme === NoOptionSelected
+      topic.value.extras[topicsExtrasKey].theme === NoOptionSelected
         ? ''
-        : topic.value.extras![topicsExtrasKey].theme,
+        : topic.value.extras[topicsExtrasKey].theme,
     subtheme:
-      topic.value.extras![topicsExtrasKey].subtheme === NoOptionSelected
+      topic.value.extras[topicsExtrasKey].subtheme === NoOptionSelected
         ? ''
-        : topic.value.extras![topicsExtrasKey].subtheme
+        : topic.value.extras[topicsExtrasKey].subtheme
   },
   validationSchema: {
     name: required,
@@ -79,8 +79,8 @@ const onValidSubmit = async (validatedValues: {
   // set topic values from validated fields
   topic.value.name = validatedValues.name
   topic.value.description = validatedValues.description
-  topic.value.extras![topicsExtrasKey].theme = validatedValues.theme
-  topic.value.extras![topicsExtrasKey].subtheme = validatedValues.subtheme
+  topic.value.extras[topicsExtrasKey].theme = validatedValues.theme
+  topic.value.extras[topicsExtrasKey].subtheme = validatedValues.subtheme
   // sync valid status with parent
   emits('updateValidation', true)
 }
@@ -106,11 +106,11 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  if (topic.value.extras![topicsExtrasKey].theme !== NoOptionSelected) {
-    theme.value = topic.value.extras![topicsExtrasKey].theme
+  if (topic.value.extras[topicsExtrasKey].theme !== NoOptionSelected) {
+    theme.value = topic.value.extras[topicsExtrasKey].theme
   }
-  if (topic.value.extras![topicsExtrasKey].subtheme !== NoOptionSelected) {
-    subtheme.value = topic.value.extras![topicsExtrasKey].subtheme
+  if (topic.value.extras[topicsExtrasKey].subtheme !== NoOptionSelected) {
+    subtheme.value = topic.value.extras[topicsExtrasKey].subtheme
   }
 })
 </script>
