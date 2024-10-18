@@ -143,7 +143,7 @@ const metaDescription = (): string | undefined => {
 }
 
 const metaTitle = computed(() => {
-  return `${topic.value?.name}`
+  return topic.value?.name
 })
 
 const metaLink = (): string => {
