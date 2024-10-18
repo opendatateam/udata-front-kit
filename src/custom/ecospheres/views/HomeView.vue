@@ -163,17 +163,18 @@ useHead({
 }
 .organize-data {
   background-color: white;
-  padding: 32px 16px;
+  padding: 32px 0;
 
   li {
     border-right: 1px solid var(--border-default-grey);
+    padding-right: 1rem;
   }
 
   li:last-child {
     border: none;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     h3 {
       margin: 1rem 0 0.5rem;
     }
