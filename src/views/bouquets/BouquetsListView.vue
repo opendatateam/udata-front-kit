@@ -142,10 +142,7 @@ watch(
         v-if="canAddBouquet"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
-        <router-link
-          :to="{ name: `${topicsSlug}_add`, query: route.query }"
-          class="fr-btn fr-mb-1w"
-        >
+        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
           <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
           Ajouter un {{ topicsName }}
         </router-link>

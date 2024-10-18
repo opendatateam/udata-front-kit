@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -157,7 +157,7 @@ const cancel = () => {
   }
 }
 
-const metaTitle = computed((): string => {
+const metaTitle = computed(() => {
   if (topic.value.name && routeQuery.clone != null) {
     return `Cloner le ${topicsName} ${topic.value.name}`
   } else if (topic.value.name) {
@@ -179,13 +179,18 @@ onMounted(() => {
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
         }
-        setAccessibilityProperties(metaTitle.value)
       })
       .finally(() => loader.hide())
-  } else {
-    setAccessibilityProperties(metaTitle.value)
   }
 })
+
+watch(
+  metaTitle,
+  () => {
+    setAccessibilityProperties(metaTitle.value)
+  },
+  { immediate: true }
+)
 
 const onSubmit = async () => {
   // reset error fields
