@@ -142,9 +142,9 @@ const metaDescription = (): string | undefined => {
   return excerpt(topic.value?.description ?? '')
 }
 
-const metaTitle = (): string => {
-  return `${topic.value?.name} | ${config.website.title}`
-}
+const metaTitle = computed(() => {
+  return `${topic.value?.name}`
+})
 
 const metaLink = (): string => {
   const resolved = router.resolve({
@@ -155,9 +155,11 @@ const metaLink = (): string => {
 }
 
 useHead({
-  title: metaTitle,
   meta: [
-    { property: 'og:title', content: metaTitle },
+    {
+      property: 'og:title',
+      content: () => `${metaTitle.value} | ${config.website.title}`
+    },
     { name: 'description', content: metaDescription },
     { property: 'og:description', content: metaDescription }
   ],
@@ -178,7 +180,7 @@ watch(
             params: { bid: topic.value.slug }
           })
         }
-        setAccessibilityProperties(topic.value.name)
+        setAccessibilityProperties(metaTitle.value)
       })
       .finally(() => loader.hide())
   },

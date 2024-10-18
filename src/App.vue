@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useFocus } from '@vueuse/core'
+import { useFocus, useTitle } from '@vueuse/core'
 import { computed, onMounted, provide, ref, watch, type Ref } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 
@@ -84,6 +84,7 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
   focus = true,
   messages = []
 ): void => {
+  useTitle(`${title} | ${config.website.title}`)
   // announce page title to screen reader
   if (title) {
     liveInfos.value = [
