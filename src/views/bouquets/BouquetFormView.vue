@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -158,17 +157,13 @@ const cancel = () => {
   }
 }
 
-const metaTitle = (): string => {
+const metaTitle = computed((): string => {
   if (topic.value.name && routeQuery.clone != null) {
-    return `Cloner le ${topicsName} ${topic.value.name} | ${config.website.title}`
+    return `Cloner le ${topicsName} ${topic.value.name}`
   } else if (topic.value.name) {
-    return `Éditer le ${topicsName} ${topic.value.name} | ${config.website.title}`
+    return `Éditer le ${topicsName} ${topic.value.name}`
   }
-  return `Ajouter un ${topicsName} | ${config.website.title}`
-}
-
-useHead({
-  title: metaTitle
+  return `Ajouter un ${topicsName}`
 })
 
 onMounted(() => {
@@ -179,20 +174,16 @@ onMounted(() => {
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
-          setAccessibilityProperties(
-            `Cloner le ${topicsName} ${topic.value.name}`
-          )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
-
-          setAccessibilityProperties(
-            `Éditer le ${topicsName} ${topic.value.name}`
-          )
         }
+        setAccessibilityProperties(metaTitle.value)
       })
       .finally(() => loader.hide())
+  } else {
+    setAccessibilityProperties(metaTitle.value)
   }
 })
 
