@@ -6,6 +6,7 @@ import 'vue-multiselect/dist/vue-multiselect.css'
 import { useRouter } from 'vue-router'
 
 import '@/assets/multiselect.css'
+import MultiselectSearch from '@/components/forms/MultiselectSearch.vue'
 import config from '@/config'
 
 const router = useRouter()
@@ -62,6 +63,12 @@ const dropdownLabel = (text: string) => {
       >Rechercher. Saisissez un mot clé puis choisissez une des options situés
       après le champ pour lancer la recherche dans la rubrique souhaitée</label
     >
+    <MultiselectSearch
+      :dropdown="dropdown"
+      :query="query"
+      :on-search-change="onSearchChange"
+      :do-multi-search="doMultiSearch"
+    />
     <Multiselect
       id="select-search"
       v-model="selectedMultiSearch"
