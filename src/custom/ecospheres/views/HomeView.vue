@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import HomeThemes from '@/components/HomeThemes.vue'
-import Search from '@/components/Search.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
 
 import contributeSvg from '../assets/contribuer.svg'
@@ -38,7 +38,7 @@ useHead({
     <section class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <h1 class="main-title-v2" v-html="homepageTitle"></h1>
-      <Search
+      <SearchComponent
         search-label="Recherche"
         placeholder="Aménagement des villes dans les jeux de données"
       />
