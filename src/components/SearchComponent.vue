@@ -141,6 +141,10 @@ const dropdownLabel = (text: string) => {
     margin-inline-start: var(--icon-width);
     font-style: italic;
     color: var(--text-mention-grey);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
   }
   ::placeholder {
     font-style: italic;
