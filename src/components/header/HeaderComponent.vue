@@ -9,7 +9,7 @@ import {
   type StyleValue
 } from 'vue'
 
-import Search from '../Search.vue'
+import SearchComponent from '../SearchComponent.vue'
 import type { DsfrHeaderMenuLinkProps } from './DsfrHeaderMenuLink.vue'
 
 type DsfrHeaderProps = {
@@ -192,7 +192,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               />
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
-              <Search :search-label="searchLabel" />
+              <SearchComponent :search-label="searchLabel" />
             </div>
           </div>
         </div>
@@ -217,7 +217,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               >
                 Fermer
               </button>
-              <Search
+              <SearchComponent
                 v-if="searchModalOpened"
                 :search-label="searchLabel"
                 @search="hideModal(false)"
