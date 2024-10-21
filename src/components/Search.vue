@@ -134,5 +134,8 @@ const dropdownLabel = (text: string) => {
   .multiselect__content-wrapper {
     margin-top: 42px;
   }
+  .multiselect__placeholder {
+    margin-inline-start: var(--icon-width);
+  }
 }
 </style>
