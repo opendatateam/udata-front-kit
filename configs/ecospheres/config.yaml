@@ -29,7 +29,7 @@ website:
   # leave empty if not pertinent
   logo_operator:
   homepage:
-    title: 'La plateforme des données de la transition écologique'
+    title: 'Le&nbsp;catalogue des&nbsp;données&nbsp;de<br /> la <span class="highlight">transition écologique</span>'
     subtitle:
     sections:
       - title:
