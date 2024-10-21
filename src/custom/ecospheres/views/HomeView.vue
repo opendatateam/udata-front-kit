@@ -53,29 +53,8 @@ useHead({
 <template>
   <div class="datagouv-components">
     <section class="fr-container fr-py-12v">
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col">
-          <h1>{{ homepageTitle }}</h1>
-          <p>
-            <i>ecologie</i><strong>.data.gouv</strong><i>.fr</i> référence et
-            centralise les données de la transition écologique.
-          </p>
-          <p>
-            Le catalogue rassemble les données utiles au déploiement des
-            politiques publiques portées par le Ministère de la Transition
-            écologique et de la Cohésion des territoires.
-          </p>
-        </div>
-        <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
-          <img
-            src="../assets/home-global-schema.svg"
-            alt=""
-            class="illustration"
-            width="441"
-            height="290"
-          />
-        </div>
-      </div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <h1 class="main-title-v2" v-html="homepageTitle"></h1>
     </section>
     <section class="fr-container">
       <ul class="fr-grid-row fr-grid-row--gutters fr-py-12v" role="list">
@@ -379,5 +358,25 @@ useHead({
 
 :deep(.fr-accordion.active .fr-accordion__btn:after) {
   content: url('../assets/arrow-up.svg');
+}
+
+.main-title-v2 {
+  text-align: center;
+  font-size: 64px;
+
+  :deep(.highlight) {
+    color: #000091;
+  }
+
+  @media (max-width: 996px) {
+    :deep(br) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    text-align: inherit;
+    font-size: 22px;
+  }
 }
 </style>
