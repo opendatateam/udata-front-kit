@@ -60,8 +60,8 @@ useHead({
       </div>
     </section>
     <section class="fr-container">
-      <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-py-12v">
-        <li class="fr-col-lg-6">
+      <ul class="fr-grid-row fr-grid-row--gutters fr-py-12v" role="list">
+        <li class="fr-col-12 fr-col-md-6">
           <DsfrCard
             :no-arrow="true"
             :title="'Explorer'"
@@ -83,7 +83,7 @@ useHead({
             ]"
           />
         </li>
-        <li class="fr-col-lg-6">
+        <li class="fr-col-12 fr-col-md-6">
           <DsfrCard
             :no-arrow="true"
             :title="'Contribuer'"
