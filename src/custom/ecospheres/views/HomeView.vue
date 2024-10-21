@@ -56,7 +56,10 @@ useHead({
     <section class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <h1 class="main-title-v2" v-html="homepageTitle"></h1>
-      <Search search-label="Recherche" />
+      <Search
+        search-label="Recherche"
+        placeholder="Aménagement des villes dans les jeux de données"
+      />
     </section>
     <section class="fr-container">
       <ul class="fr-grid-row fr-grid-row--gutters fr-py-12v" role="list">

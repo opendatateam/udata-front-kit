@@ -14,12 +14,15 @@ defineProps({
   searchLabel: {
     type: String,
     required: true
+  },
+  placeholder: {
+    type: String,
+    default: ''
   }
 })
 
 const emits = defineEmits(['search'])
 
-const placeholder = config.website.header_search.placeholder
 const dropdown = config.website.header_search.dropdown
 const query = ref('')
 const selectedMultiSearch = ref()
@@ -69,7 +72,7 @@ const dropdownLabel = (text: string) => {
       :options="dropdown"
       label="text"
       track-by="route"
-      placeholder=""
+      :placeholder="placeholder"
       select-label=""
       deselect-label=""
       aria-labelledby="search-label"
@@ -117,6 +120,12 @@ const dropdownLabel = (text: string) => {
   }
   .multiselect__placeholder {
     margin-inline-start: var(--icon-width);
+    font-style: italic;
+    color: var(--text-mention-grey);
+  }
+  ::placeholder {
+    font-style: italic;
+    color: var(--text-mention-grey);
   }
 }
 :deep(.multiselect__tags) {
