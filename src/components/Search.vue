@@ -115,6 +115,9 @@ const dropdownLabel = (text: string) => {
   .visible-label {
     margin-left: var(--icon-width);
   }
+  .multiselect__placeholder {
+    margin-inline-start: var(--icon-width);
+  }
 }
 :deep(.multiselect__tags) {
   border: 0;
