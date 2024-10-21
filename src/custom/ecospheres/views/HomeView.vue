@@ -3,8 +3,7 @@ import { useHead } from '@unhead/vue'
 import type { ComputedRef } from 'vue'
 import { computed, onMounted, ref } from 'vue'
 
-import BouquetCardHome from '@/components/bouquets/BouquetCardHome.vue'
-import Search from '@/components/Search.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
 import type { Topic } from '@/model/topic'
 
@@ -56,7 +55,7 @@ useHead({
     <section class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <h1 class="main-title-v2" v-html="homepageTitle"></h1>
-      <Search
+      <SearchComponent
         search-label="Recherche"
         placeholder="Aménagement des villes dans les jeux de données"
       />
