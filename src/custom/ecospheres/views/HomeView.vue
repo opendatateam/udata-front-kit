@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import HomeThemes from '@/components/HomeThemes.vue'
+import HeaderSearch from '@/components/header/HeaderSearch.vue'
 import config from '@/config'
 
 import contributeSvg from '../assets/contribuer.svg'
@@ -37,6 +38,7 @@ useHead({
     <section class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <h1 class="main-title-v2" v-html="homepageTitle"></h1>
+      <HeaderSearch />
     </section>
     <section class="fr-container">
       <ul class="fr-grid-row fr-grid-row--gutters fr-py-12v" role="list">
