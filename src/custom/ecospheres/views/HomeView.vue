@@ -175,6 +175,8 @@ useHead({
   }
 
   @media (max-width: 992px) {
+    padding: 16px;
+
     h3 {
       margin: 1rem 0 0.5rem;
     }
