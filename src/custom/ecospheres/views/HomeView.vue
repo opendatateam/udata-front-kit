@@ -24,6 +24,18 @@ const activeAccordion = ref<string>()
 const setActiveAccordion = (id: string) => {
   activeAccordion.value = id
 }
+const faqAccordionContents = [
+  {
+    id: 'faq_accordion_1',
+    title: "Qu'est-ce que ecologie.data.gouv.fr ?",
+    content: `<p>ecologie.data.gouv.fr est un catalogue permettant la centralisation des données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. <br/> Un bouquet est un ensemble de données contextualisées permettant de répondre à un cas d’usage lié à une politique publique. </p>`
+  },
+  {
+    id: 'faq_accordion_2',
+    title: "À qui s'adresse cette plateforme ?",
+    content: 'WIP'
+  }
+]
 
 useHead({
   meta: [
@@ -200,31 +212,31 @@ useHead({
         </li>
       </ul>
     </section>
-    <section class="fr-container fr-py-12v">
-      <DsfrAccordionsGroup v-model="activeAccordion">
-        <DsfrAccordion
-          id="faq_accordion_1"
-          title="Titre 1"
-          :expanded-id="activeAccordion"
-          @expand="setActiveAccordion($event)"
-        >
-          Contenu de l’accordéon 1
-        </DsfrAccordion>
-        <DsfrAccordion
-          id="faq_accordion_2"
-          title="Titre 2"
-          :expanded-id="activeAccordion"
-          @expand="setActiveAccordion($event)"
-        >
-          Contenu de l’accordéon 2
-        </DsfrAccordion>
-      </DsfrAccordionsGroup>
+    <section class="fr-container--fluid faq">
+      <div class="fr-container fr-py-12v faq">
+        <h2>Foire aux questions</h2>
+        <DsfrAccordionsGroup v-model="activeAccordion">
+          <DsfrAccordion
+            v-for="accordion in faqAccordionContents"
+            :id="accordion.id"
+            :key="accordion.id"
+            :title="accordion.title"
+            :expanded-id="activeAccordion"
+            :class="{ active: activeAccordion == accordion.id }"
+            @expand="setActiveAccordion($event)"
+          >
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="accordion.content"></div>
+          </DsfrAccordion>
+        </DsfrAccordionsGroup>
+      </div>
     </section>
   </div>
 </template>
 
 <style scoped>
-.bouquets {
+.bouquets,
+.faq {
   background-color: #f6f6f6;
 }
 .illustration {
@@ -340,6 +352,23 @@ useHead({
     position: relative;
     left: 1rem;
     height: 120%;
+  }
+}
+.faq {
+  :deep(.fr-accordions-group) {
+    .fr-accordion.active {
+      .fr-accordion__title,
+      .fr-accordion__title button:hover {
+        background-color: var(--blue-france-925-125);
+      }
+    }
+    .fr-accordion__title span {
+      color: #000091; /*var(--blue-france-975-sun-113) not working*/
+    }
+    .fr-collapse {
+      background-color: white;
+      margin: 0;
+    }
   }
 }
 </style>
