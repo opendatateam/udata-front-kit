@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 import HomeThemes from '@/components/HomeThemes.vue'
 import config from '@/config'
@@ -9,15 +8,12 @@ import config from '@/config'
 import contributeSvg from '../assets/contribuer.svg'
 import explorerSvg from '../assets/explorer.svg'
 
-const query = ref('')
-const router = useRouter()
-
-const doSearch = () => {
-  router.push({ name: 'datasets', query: { q: query.value } })
-}
-
 const homepageTitle = config.website.homepage.title
-const searchConfig = config.website.search_bar
+
+const activeAccordion = ref<string>()
+const setActiveAccordion = (id) => {
+  activeAccordion.value = id
+}
 
 useHead({
   meta: [
@@ -181,25 +177,25 @@ useHead({
         </div>
       </div>
     </section>
-    <section v-if="searchConfig.display" class="fr-container fr-py-12v">
-      <h2>Jeux de données</h2>
-      <p>
-        Recherchez parmi les données présentes sur <i>ecologie</i
-        ><strong>.data.gouv</strong><i>.fr</i>.
-      </p>
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12 fr-col-md-8">
-          <DsfrSearchBar
-            v-model="query"
-            button-text="Rechercher"
-            class="search-bar-input"
-            :label="searchConfig.placeholder"
-            placeholder=""
-            :large="true"
-            @search="doSearch"
-          />
-        </div>
-      </div>
+    <section class="fr-container fr-py-12v">
+      <DsfrAccordionsGroup v-model="activeAccordion">
+        <DsfrAccordion
+          id="faq_accordion_1"
+          title="Titre 1"
+          :expanded-id="activeAccordion"
+          @expand="setActiveAccordion($event)"
+        >
+          Contenu de l’accordéon 1
+        </DsfrAccordion>
+        <DsfrAccordion
+          id="faq_accordion_2"
+          title="Titre 2"
+          :expanded-id="activeAccordion"
+          @expand="setActiveAccordion($event)"
+        >
+          Contenu de l’accordéon 2
+        </DsfrAccordion>
+      </DsfrAccordionsGroup>
     </section>
   </div>
 </template>
