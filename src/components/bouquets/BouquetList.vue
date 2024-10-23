@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia'
 import type { ComputedRef, PropType } from 'vue'
 import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter, useRoute, type LocationQueryRaw } from 'vue-router'
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import { NoOptionSelected } from '@/model/theme'
@@ -183,8 +183,8 @@ defineExpose({
   </div>
 </template>
 
-<style scoped lang="scss">
-// "revert" gutters — simpler than w/o gutters
+<style scoped>
+/* "revert" gutters — simpler than w/o gutters */
 .bouquets-list-container {
   padding-right: 0;
   padding-left: 0;

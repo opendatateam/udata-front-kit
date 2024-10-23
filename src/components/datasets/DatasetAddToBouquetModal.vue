@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
 import { capitalize, computed, onMounted, ref } from 'vue'
-import { toast } from 'vue3-toastify'
 import { useLoading } from 'vue-loading-overlay'
+import { toast } from 'vue3-toastify'
 
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
 import { Availability, type DatasetProperties } from '@/model/topic'

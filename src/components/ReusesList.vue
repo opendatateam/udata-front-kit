@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref, type PropType } from 'vue'
+import { onMounted, ref, type PropType, type Ref } from 'vue'
 
-import { type Reuse, type ReuseType, ReuseModel } from '@/model/reuse'
+import { ReuseModel, type Reuse, type ReuseType } from '@/model/reuse'
 import type { Topic } from '@/model/topic'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
 import { useReuseStore } from '@/store/ReuseStore'
