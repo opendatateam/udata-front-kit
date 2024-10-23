@@ -1,20 +1,20 @@
 import {
+  capitalize,
+  computed,
   ref,
   watch,
-  computed,
-  type Ref,
   type ComputedRef,
-  capitalize
+  type Ref
 } from 'vue'
 
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
+  type DatasetProperties,
+  type SiteTopicExtras,
   type Topic,
   type TopicExtras,
-  type TopicPostData,
-  type DatasetProperties,
-  type SiteTopicExtras
+  type TopicPostData
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
