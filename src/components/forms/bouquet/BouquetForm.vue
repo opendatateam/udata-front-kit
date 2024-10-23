@@ -6,13 +6,13 @@ import { capitalize, onMounted, ref, type Ref } from 'vue'
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
-import type { Topic } from '@/model/topic'
+import type { TopicPostData } from '@/model/topic'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
 const topic = defineModel({
-  type: Object as () => Topic,
+  type: Object as () => Partial<TopicPostData> & Pick<TopicPostData, 'extras'>,
   required: true
 })
 const formErrors = defineModel('formErrors', {
@@ -127,7 +127,7 @@ onMounted(() => {
       :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
     />
     <p v-if="errors.name && isSubmitted" id="errors-name" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       Veuillez renseigner un sujet.
     </p>
   </div>
@@ -151,7 +151,7 @@ onMounted(() => {
       id="errors-description"
       class="error"
     >
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       La description ne doit pas être vide.
     </p>
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
@@ -195,7 +195,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.theme && isSubmitted" id="errors-theme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       Veuillez sélectionner une thématique.
     </p>
   </div>
@@ -231,7 +231,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.subtheme && isSubmitted" id="errors-subtheme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true"></span>
+      <span class="fr-icon-error-fill" aria-hidden="true" />
       Veuillez sélectionner un chantier.
     </p>
     <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">
