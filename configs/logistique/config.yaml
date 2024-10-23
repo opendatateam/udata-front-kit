@@ -157,7 +157,7 @@ website:
     list_all: false
     display_metadata: false
     activate_read_more: false
-    dataset_editorialization: false
+    dataset_editorialization: true
     can_add_topics:
       everyone: false
       authorized_users:
