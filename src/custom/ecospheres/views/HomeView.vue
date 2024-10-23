@@ -60,29 +60,68 @@ useHead({
       <div class="fr-container fr-py-12v">
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col">
-            <h2>Bouquets de données</h2>
-            <p>
-              Retrouvez les données utiles à la mise en œuvre d'une politique
-              publique spécifique sous forme de bouquets de données.
-            </p>
-
-            <a
-              href="https://ecospheres.gitbook.io/doc/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="fr-btn fr-btn--secondary fr-btn--md inline-flex"
-              >Consulter la documentation</a
-            >
-          </div>
-          <div class="fr-col-md-6 fr-hidden fr-unhidden-md fr-grid-row--center">
-            <img
-              src="../assets/home-bouquets-schema.svg"
-              alt=""
-              loading="lazy"
-              class="illustration"
-              width="441"
-              height="290"
-            />
+            <ul class="fr-grid-row organize-data" role="list">
+              <li class="fr-col-12 fr-col-lg-4">
+                <div class="fr-grid-row">
+                  <div class="fr-col-md-3">
+                    <img
+                      src="../assets/sign-document.svg"
+                      alt=""
+                      class="illustration fr-mx-auto block"
+                      width="64"
+                      height="64"
+                    />
+                  </div>
+                  <div class="fr-col-md-9">
+                    <h3>Répondre aux besoins d'une politique publique</h3>
+                    <p>
+                      Des problématiques data sont identifiées en lien avec des
+                      services métiers
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="fr-col-12 fr-col-lg-4">
+                <div class="fr-grid-row">
+                  <div class="fr-col-md-3">
+                    <img
+                      src="../assets/binders.svg"
+                      alt=""
+                      class="illustration fr-mx-auto block"
+                      width="64"
+                      height="64"
+                    />
+                  </div>
+                  <div class="fr-col-md-9">
+                    <h3>Identifier les informations utiles</h3>
+                    <p>
+                      Les facteurs pertinents pour l'orientation de cette action
+                      sont définis
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="fr-col-12 fr-col-lg-4">
+                <div class="fr-grid-row">
+                  <div class="fr-col-md-3">
+                    <img
+                      src="../assets/document-add.svg"
+                      alt=""
+                      class="illustration fr-mx-auto block"
+                      width="64"
+                      height="64"
+                    />
+                  </div>
+                  <div class="fr-col-md-9">
+                    <h3>Centraliser les données territoriales</h3>
+                    <p>
+                      Les données territoriales sont collectées, regroupées et
+                      reliées aux facteurs correspondants
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="fr-mt-10v">
@@ -120,5 +159,46 @@ useHead({
 }
 .illustration {
   max-width: 100%;
+}
+.organize-data {
+  background-color: white;
+  padding: 32px 0;
+
+  li {
+    border-right: 1px solid var(--border-default-grey);
+    padding-right: 1rem;
+  }
+
+  li:last-child {
+    border: none;
+  }
+
+  @media (max-width: 992px) {
+    padding: 16px;
+
+    h3 {
+      margin: 1rem 0 0.5rem;
+    }
+
+    li {
+      border-right: none;
+      border-bottom: 1px solid var(--border-default-grey);
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    li:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  h4 {
+    margin-top: 5px;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
 }
 </style>
