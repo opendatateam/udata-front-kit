@@ -52,7 +52,6 @@ useHead({
             class="illustration"
             width="441"
             height="290"
-            aria-hidden="true"
           />
         </div>
       </div>
