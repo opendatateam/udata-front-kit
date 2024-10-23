@@ -64,8 +64,8 @@ useHead({
         <li class="fr-col-12 fr-col-md-6">
           <DsfrCard
             :no-arrow="true"
-            :title="'Explorer'"
-            :description="'Accédez à un ensemble de données environnementales'"
+            title="Explorer"
+            description="Accédez à un ensemble de données environnementales"
             size="small"
             :horizontal="true"
             :img-src="explorerSvg"
@@ -73,12 +73,12 @@ useHead({
             class="explorer"
             :links-group="[
               {
-                label: `Accéder aux données`,
-                to: `/datasets`
+                label: 'Accéder aux données',
+                to: '/datasets'
               },
               {
-                label: `Accéder aux bouquets`,
-                to: `/bouquets`
+                label: 'Accéder aux bouquets',
+                to: '/bouquets'
               }
             ]"
           />
@@ -86,8 +86,8 @@ useHead({
         <li class="fr-col-12 fr-col-md-6">
           <DsfrCard
             :no-arrow="true"
-            :title="'Contribuer'"
-            :description="'Participez à la centralisation et la structuration des données environnementales'"
+            title="Contribuer"
+            description="Participez à la centralisation et la structuration des données environnementales"
             size="small"
             :horizontal="true"
             :img-src="contributeSvg"
@@ -95,12 +95,12 @@ useHead({
             class="contribute"
             :links-group="[
               {
-                label: `Ajouter des données`,
-                link: `https://www.data.gouv.fr/fr/pages/onboarding/producteurs/`
+                label: 'Ajouter des données',
+                link: 'https://www.data.gouv.fr/fr/pages/onboarding/producteurs/'
               },
               {
-                label: `Créer un bouquet`,
-                to: `/admin/bouquets/add`
+                label: 'Créer un bouquet',
+                to: '/admin/bouquets/add'
               }
             ]"
           />
