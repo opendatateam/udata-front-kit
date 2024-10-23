@@ -58,7 +58,7 @@ website:
     display: false
     name:
     link:
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'écologie."
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la transition écologique et énergétique réalisé en collaboration avec le Ministère de la Transition écologique et de la Cohésion des territoires.'
   footer_external_links:
     - label: 'ecologie.gouv.fr'
       href: 'https://ecologie.gouv.fr'
