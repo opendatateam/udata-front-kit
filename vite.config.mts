@@ -7,6 +7,7 @@ import { resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 interface Config {
   website: {
@@ -27,6 +28,7 @@ export default defineConfig(({ mode }) => {
     base: '/',
     plugins: [
       vue(),
+      vueDevTools(),
       ViteYaml(),
       createHtmlPlugin({
         minify: true,

@@ -42,12 +42,12 @@ interface DiscussionResponse extends GenericResponse {
 
 export type {
   Discussion,
-  Post,
-  Subject,
-  SubjectId,
-  SubjectClass,
-  DiscussionResponse,
   DiscussionForm,
+  DiscussionId,
+  DiscussionResponse,
+  Post,
   PostForm,
-  DiscussionId
+  Subject,
+  SubjectClass,
+  SubjectId
 }
