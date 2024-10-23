@@ -204,7 +204,7 @@ useHead({
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .bouquets {
   background-color: #f6f6f6;
 }
