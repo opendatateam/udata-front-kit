@@ -5,15 +5,15 @@ import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import '@gouvminint/vue-dsfr/styles'
 import { createHead } from '@unhead/vue'
-import axios from 'axios'
 import type { InternalAxiosRequestConfig } from 'axios'
+import axios from 'axios'
 import { createPinia } from 'pinia'
 import { createApp, markRaw } from 'vue'
-import TextClamp from 'vue3-text-clamp'
-import 'vue3-toastify/dist/index.css'
 import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
 import VueMatomo from 'vue-matomo'
+import TextClamp from 'vue3-text-clamp'
+import 'vue3-toastify/dist/index.css'
 
 import config from '@/config'
 
@@ -64,8 +64,7 @@ routerPromise
       }
       // set page title where needed
       if (to.meta.title != null) {
-        document.title =
-          (to.meta.title as string) + ' | ' + config.website.title
+        document.title = to.meta.title + ' | ' + config.website.title
       }
     })
 

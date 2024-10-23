@@ -9,8 +9,12 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import config from '@/config'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
-import type { TopicPostData } from '@/model/topic'
+import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -37,7 +41,8 @@ const {
   topicsMainTheme,
   topicsSecondaryTheme
 } = useTopicsConf()
-const topic: Ref<Partial<TopicPostData>> = ref({
+
+const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   private: true,
   tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
@@ -51,8 +56,8 @@ const topic: Ref<Partial<TopicPostData>> = ref({
 })
 
 const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const formFields = ref()
 const errorStatus = ref()
@@ -84,7 +89,9 @@ const isReadyForForm = computed(() => {
   )
 })
 
-const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
+const handleTopicOperation = (
+  operation: (...args: unknown[]) => Promise<Topic>
+) => {
   const loader = useLoading().show()
   operation()
     .then((response) => {
@@ -179,6 +186,7 @@ onMounted(() => {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
+
           setAccessibilityProperties(
             `Éditer le ${topicsName} ${topic.value.name}`
           )
@@ -245,7 +253,7 @@ const onSubmit = async () => {
             ref="formFields"
             v-model="topic"
             v-model:form-errors="formErrors"
-            @update-validation="(isValid: boolean) => canSave = isValid"
+            @update-validation="(isValid: boolean) => (canSave = isValid)"
           />
         </fieldset>
         <fieldset>

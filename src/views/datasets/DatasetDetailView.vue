@@ -15,13 +15,16 @@ import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
-import ChartData from '@/components/ChartData.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import config from '@/config'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import type { ResourceDataWithQuery } from '@/model/resource'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
@@ -50,8 +53,8 @@ const showDiscussions = config.website.discussions.dataset.display as boolean
 const { topicsName } = useTopicsConf()
 
 const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const updateQuery = (q: string, typeId: string) => {
   resources.value[typeId].query = q
@@ -61,11 +64,6 @@ const updateQuery = (q: string, typeId: string) => {
 const doSearch = (typeId: string) => {
   changePage(typeId, 1, resources.value[typeId].query)
 }
-
-const chartData = computed(() => {
-  if (!dataset.value?.extras) return
-  return dataset.value.extras['config:charts']
-})
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
@@ -84,13 +82,6 @@ const tabs = computed(() => {
     tabId: 'tab-3',
     panelId: 'tab-content-3'
   })
-  if (chartData.value) {
-    _tabs.push({
-      title: 'Visualisations',
-      tabId: 'tab-00',
-      panelId: 'tab-content-00'
-    })
-  }
   return _tabs
 })
 
@@ -429,16 +420,6 @@ watch(
           :dataset="dataset"
           :license="license"
         />
-      </DsfrTabContent>
-
-      <!-- Visualisations -->
-      <DsfrTabContent
-        v-if="chartData"
-        panel-id="tab-content-00"
-        tab-id="tab-00"
-        :selected="selectedTabIndex === 5"
-      >
-        <ChartData v-if="chartData" :chart-data="chartData" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
