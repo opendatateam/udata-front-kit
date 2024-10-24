@@ -22,6 +22,7 @@ type DsfrHeaderProps = {
   operatorImgAlt?: string
   operatorImgSrc?: string
   operatorImgStyle?: StyleValue
+  operatorLogoHeader?: boolean
   userName?: string
   quickLinks?: DsfrHeaderMenuLinkProps[]
   searchLabel?: string
@@ -41,6 +42,7 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   operatorImgAlt: '',
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
+  operatorLogoHeader: true,
   serviceLogoSrc: '',
   userName: undefined,
   quickLinks: () => [],
@@ -103,7 +105,10 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               <div class="fr-header__logo">
                 <DsfrLogo :logo-text="logoText" data-testid="header-logo" />
               </div>
-              <div v-if="isWithSlotOperator" class="fr-header__operator">
+              <div
+                v-if="isWithSlotOperator && operatorLogoHeader"
+                class="fr-header__operator"
+              >
                 <!-- @slot Slot nommé operator pour le logo opérateur. Sera dans `<div class="fr-header__operator">` -->
                 <slot name="operator">
                   <img
