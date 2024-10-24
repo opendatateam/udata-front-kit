@@ -6,6 +6,9 @@ import { useRouter } from 'vue-router'
 import HomeThemes from '@/components/HomeThemes.vue'
 import config from '@/config'
 
+import contributeSvg from '../assets/contribuer.svg'
+import explorerSvg from '../assets/explorer.svg'
+
 const query = ref('')
 const router = useRouter()
 
@@ -55,6 +58,54 @@ useHead({
           />
         </div>
       </div>
+    </section>
+    <section class="fr-container">
+      <ul class="fr-grid-row fr-grid-row--gutters fr-py-12v" role="list">
+        <li class="fr-col-12 fr-col-md-6">
+          <DsfrCard
+            :no-arrow="true"
+            title="Explorer"
+            description="Accédez à un ensemble de données environnementales"
+            size="small"
+            :horizontal="true"
+            :img-src="explorerSvg"
+            alt-img=""
+            class="explorer"
+            :links-group="[
+              {
+                label: 'Accéder aux données',
+                to: '/datasets'
+              },
+              {
+                label: 'Accéder aux bouquets',
+                to: '/bouquets'
+              }
+            ]"
+          />
+        </li>
+        <li class="fr-col-12 fr-col-md-6">
+          <DsfrCard
+            :no-arrow="true"
+            title="Contribuer"
+            description="Participez à la centralisation et la structuration des données environnementales"
+            size="small"
+            :horizontal="true"
+            :img-src="contributeSvg"
+            alt-img=""
+            class="contribute"
+            :links-group="[
+              {
+                label: 'Ajouter des données',
+                link: 'https://www.data.gouv.fr/fr/pages/onboarding/producteurs/'
+              },
+              {
+                label: 'Créer un bouquet',
+                to: '/admin/bouquets/add'
+              }
+            ]"
+          />
+        </li>
+      </ul>
     </section>
     <section class="fr-container--fluid bouquets">
       <div class="fr-container fr-py-12v">
@@ -199,6 +250,73 @@ useHead({
 
   p {
     margin-bottom: 0;
+  }
+}
+
+:deep(.fr-links-group) {
+  li {
+    display: block;
+  }
+
+  li a {
+    color: var(--text-action-high-blue-france);
+  }
+
+  li a::after {
+    content: ' →';
+  }
+
+  .fr-link {
+    /* Overide style for external link */
+    font-size: inherit;
+    margin: inherit;
+    vertical-align: inherit;
+  }
+}
+
+:deep(.fr-card__content) {
+  padding-left: 1rem;
+  padding-bottom: 0;
+}
+
+:deep(.fr-card__header) {
+  flex: 0 0 33%;
+
+  .fr-card__img img {
+    object-fit: contain;
+    object-position: bottom;
+  }
+}
+
+.explorer :deep(.fr-card__img img) {
+  object-position: -25px bottom;
+}
+
+@media (max-width: 768px) {
+  :deep(.fr-card__header) {
+    flex: 0 0 25%;
+  }
+
+  :deep(.fr-card__header .fr-card__img) {
+    height: 120px;
+    overflow: hidden;
+  }
+
+  :deep(.fr-card__header .fr-card__img img) {
+    object-position: left bottom;
+  }
+
+  .explorer :deep(.fr-card__img img) {
+    position: relative;
+    top: 25%;
+    left: 1rem;
+    height: 65%;
+  }
+
+  .contribute :deep(.fr-card__img img) {
+    position: relative;
+    left: 1rem;
+    height: 120%;
   }
 }
 </style>
