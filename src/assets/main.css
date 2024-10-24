@@ -141,6 +141,8 @@ form .error-status {
 
 /* Button color contrast fix */
 .fr-btn:not(
+    .fr-btn--close,
+    .fr-btn--menu,
     .fr-btn--secondary,
     .fr-btn--tertiary,
     .fr-btn--tertiary-no-outline,

@@ -10,7 +10,6 @@ import {
   Well,
   type License
 } from '@datagouv/components'
-import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -147,17 +146,6 @@ const discussionWellDescription = showDiscussions
 
 const openDataGouvDiscussions = () =>
   window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
-
-const metaTitle = (): string => {
-  if (dataset.value?.title) {
-    return `${dataset.value.title} | ${config.website.title}`
-  }
-  return config.website.title
-}
-
-useHead({
-  title: metaTitle
-})
 
 onMounted(() => {
   datasetStore

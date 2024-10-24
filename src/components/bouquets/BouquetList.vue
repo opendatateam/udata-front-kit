@@ -160,6 +160,7 @@ defineExpose({
             Réinitialiser les filtres
           </button>
           <router-link
+            v-if="canAddBouquet"
             :to="createUrl"
             class="fr-btn fr-btn--secondary fr-ml-1w"
           >
