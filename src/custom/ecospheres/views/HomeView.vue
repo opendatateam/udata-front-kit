@@ -35,7 +35,7 @@ useHead({
 
 <template>
   <div class="datagouv-components">
-    <section class="fr-container fr-py-12v">
+    <section class="fr-container fr-pt-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <h1 class="main-title-v2" v-html="homepageTitle"></h1>
       <SearchComponent
