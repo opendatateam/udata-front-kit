@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { ref } from 'vue'
+import type { ComputedRef } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import HomeThemes from '@/components/HomeThemes.vue'
 import config from '@/config'
+
+import { useTopicStore } from '@/store/TopicStore'
 
 import contributeSvg from '../assets/contribuer.svg'
 import explorerSvg from '../assets/explorer.svg'
@@ -18,6 +20,12 @@ const doSearch = () => {
 
 const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
+const topicStore = useTopicStore()
+const lastTopics: ComputedRef<Topic[]> = computed(() => {
+  return topicStore.sorted.slice(0, 3)
+})
+
+onMounted(() => topicStore.loadTopicsForUniverse())
 
 useHead({
   meta: [
@@ -181,8 +189,7 @@ useHead({
           </div>
         </div>
         <div class="fr-mt-10v">
-          <h3>Trouvez un bouquet par thématique</h3>
-          <HomeThemes v-if="config.themes" />
+          <h3>Les bouquets à découvrir</h3>
         </div>
       </div>
     </section>
