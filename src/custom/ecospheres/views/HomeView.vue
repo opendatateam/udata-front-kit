@@ -344,4 +344,13 @@ useHead({
     }
   }
 }
+:deep(.fr-accordion__btn:after) {
+  content: url('../assets/arrow-down.svg');
+  background-color: inherit;
+  mask-image: inherit;
+}
+
+:deep(.fr-accordion.active .fr-accordion__btn:after) {
+  content: url('../assets/arrow-up.svg');
+}
 </style>
