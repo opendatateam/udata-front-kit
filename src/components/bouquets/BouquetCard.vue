@@ -56,7 +56,9 @@ const { themeColors } = useThemeOptions(theme)
           :label="subtheme"
         />
       </div>
-      <div class="fr-col-auto">
+    </div>
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
+      <div class="fr-col-3">
         <OrganizationLogo
           v-if="bouquet.organization"
           :size="64"
@@ -73,7 +75,7 @@ const { themeColors } = useThemeOptions(theme)
           />
         </div>
       </div>
-      <div class="fr-col-12">
+      <div class="fr-col-9">
         <h3 class="fr-mb-1v fr-grid-row h4">
           <RouterLink :to="bouquetLink" class="text-grey-500">
             {{ bouquet.name }}
@@ -90,7 +92,23 @@ const { themeColors } = useThemeOptions(theme)
             />
           </template>
           <template v-else>{{ ownerName }}</template>
-          — mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
+        </p>
+      </div>
+    </div>
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
+      <div class="fr-col-12">
+        <p
+          v-if="bouquet.organization || bouquet.owner"
+          class="fr-m-0 fr-text--sm flex align-start"
+        >
+          <img
+            src="../../custom/ecospheres/assets/time.svg"
+            alt=""
+            class="fr-mr-1v"
+            width="20"
+            height="20"
+          />
+          mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
         </p>
         <p class="fr-tag">
           <VIcon name="ri-database-2-line" class="fr-mr-1v" />
