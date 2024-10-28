@@ -104,13 +104,17 @@ const dropdownLabel = (text: string) => {
   --icon-width: 24px;
   position: relative;
   display: flex;
-}
-.search-icon {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 10px;
-  translate: 0 -50%;
-  max-width: var(--icon-width);
+
+  .search-icon {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 10px;
+    translate: 0 -50%;
+    max-width: var(--icon-width);
+  }
+  .visible-label {
+    margin-left: var(--icon-width);
+  }
 }
 :deep(.multiselect__tags) {
   border: 0;
@@ -133,9 +137,6 @@ const dropdownLabel = (text: string) => {
   padding-top: 4px;
   margin-inline-start: var(--icon-width);
   width: 100%;
-}
-.visible-label {
-  margin-left: var(--icon-width);
 }
 :deep(.multiselect__content-wrapper) {
   margin-top: 42px;
