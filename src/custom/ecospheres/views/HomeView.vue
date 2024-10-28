@@ -22,9 +22,9 @@ const doSearch = () => {
 const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
 const topicStore = useTopicStore()
-const lastTopics: ComputedRef<Topic[]> = computed(() => {
-  return topicStore.sorted.slice(0, 3)
-})
+const lastTopics: ComputedRef<Topic[]> = computed(() =>
+  topicStore.sorted.filter((bouquet) => !bouquet.private).slice(0, 3)
+)
 
 onMounted(() => topicStore.loadTopicsForUniverse())
 
