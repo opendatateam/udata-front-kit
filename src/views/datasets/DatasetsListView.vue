@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DatasetCard } from '@datagouv/components'
-import { useDebounceFn, useTitle } from '@vueuse/core'
+import { useDebounceFn } from '@vueuse/core'
 import {
   capitalize,
   computed,
@@ -190,7 +190,6 @@ const delayedSearch = useDebounceFn(
         const searchResultsMessage = queryResults.value
           ? queryResults.value.innerText
           : ''
-        useTitle(`${metaTitle.value} | ${title}`)
         setAccessibilityProperties(metaTitle.value, false, [
           {
             text: searchResultsMessage
