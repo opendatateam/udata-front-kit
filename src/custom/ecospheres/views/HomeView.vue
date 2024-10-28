@@ -118,6 +118,7 @@ useHead({
     </section>
     <section class="fr-container--fluid bouquets">
       <div class="fr-container fr-py-12v">
+        <h2>Les bouquets : organiser la donnée selon les usages</h2>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col">
             <h2>
@@ -192,14 +193,16 @@ useHead({
       </div>
     </section>
     <section class="fr-container fr-py-12v">
-      <div class="fr-mt-10v">
-        <h3>Les bouquets à découvrir</h3>
-        <ul class="fr-grid-row fr-grid-row--gutters" role="list">
-          <li class="fr-col-md-4" v-for="topic in lastTopics" :key="topic.id">
-            <BouquetCard :bouquet="topic" />
-          </li>
-        </ul>
-      </div>
+      <h2>Les bouquets à découvrir</h2>
+      <ul class="fr-grid-row fr-grid-row--gutters" role="list">
+        <li
+          v-for="topic in lastTopics"
+          :key="topic.id"
+          class="fr-col-12 fr-col-lg-4"
+        >
+          <BouquetCard :bouquet="topic" />
+        </li>
+      </ul>
     </section>
     <section v-if="searchConfig.display" class="fr-container fr-py-12v">
       <h2>Jeux de données</h2>
