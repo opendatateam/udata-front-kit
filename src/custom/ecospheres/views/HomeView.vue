@@ -4,6 +4,7 @@ import type { ComputedRef } from 'vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import config from '@/config'
 
 import { useTopicStore } from '@/store/TopicStore'
@@ -188,9 +189,16 @@ useHead({
             </ul>
           </div>
         </div>
-        <div class="fr-mt-10v">
-          <h3>Les bouquets à découvrir</h3>
-        </div>
+      </div>
+    </section>
+    <section class="fr-container fr-py-12v">
+      <div class="fr-mt-10v">
+        <h3>Les bouquets à découvrir</h3>
+        <ul class="fr-grid-row fr-grid-row--gutters" role="list">
+          <li class="fr-col-md-4" v-for="topic in lastTopics" :key="topic.id">
+            <BouquetCard :bouquet="topic" />
+          </li>
+        </ul>
       </div>
     </section>
     <section v-if="searchConfig.display" class="fr-container fr-py-12v">
