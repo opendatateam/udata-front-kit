@@ -29,7 +29,7 @@ const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
+const { theme, datasetsProperties } = useExtras(bouquetRef)
 
 const nbData: number = datasetsProperties.value.length
 
@@ -55,7 +55,7 @@ const { themeColors } = useThemeOptions(theme)
       <div class="fr-col-12">
         <DsfrTag
           class="fr-card__detail fr-mt-1w fr-mb-1w card__tag"
-          :label="subtheme"
+          :label="theme"
         />
       </div>
     </div>
