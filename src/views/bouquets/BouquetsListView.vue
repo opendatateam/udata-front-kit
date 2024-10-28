@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDebounceFn, useTitle } from '@vueuse/core'
+import { useDebounceFn } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -7,7 +7,6 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
-import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
@@ -113,7 +112,6 @@ const search = useDebounceFn(() => {
       query: { ...route.query, q: selectedQuery.value }
     })
     .then(() => {
-      useTitle(`${pageTitle.value} | ${config.website.title}`)
       setLiveResults()
     })
 }, 600)
