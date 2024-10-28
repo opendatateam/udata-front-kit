@@ -43,7 +43,7 @@ const { themeColors } = useThemeOptions(theme)
 
 <template>
   <article
-    class="fr-my-3w fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link"
+    class="fr-my-md-3w fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link"
   >
     <div
       v-if="bouquet.private"
