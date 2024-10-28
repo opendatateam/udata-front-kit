@@ -105,28 +105,6 @@ const dropdownLabel = (text: string) => {
   position: relative;
   display: flex;
 
-  .multiselect__tags {
-    border: 0;
-    box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
-    margin: 0;
-    max-height: none;
-    --hover: var(--background-contrast-grey-hover);
-    --active: var(--background-contrast-grey-active);
-    background-color: var(--background-contrast-grey);
-    padding: 6px 40px 0 15px;
-    min-height: 42px;
-    width: 100%;
-    order: 1;
-  }
-  .multiselect__input,
-  .multiselect__single {
-    background: var(--background-contrast-grey);
-  }
-  input {
-    padding-top: 4px;
-    margin-inline-start: var(--icon-width);
-    width: 100%;
-  }
   .search-icon {
     position: absolute;
     inset-block-start: 50%;
@@ -137,8 +115,30 @@ const dropdownLabel = (text: string) => {
   .visible-label {
     margin-left: var(--icon-width);
   }
-  .multiselect__content-wrapper {
-    margin-top: 42px;
-  }
+}
+:deep(.multiselect__tags) {
+  border: 0;
+  box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
+  margin: 0;
+  max-height: none;
+  --hover: var(--background-contrast-grey-hover);
+  --active: var(--background-contrast-grey-active);
+  background-color: var(--background-contrast-grey);
+  padding: 6px 40px 0 15px;
+  min-height: 42px;
+  width: 100%;
+  order: 1;
+}
+:deep(.multiselect__input),
+:deep(.multiselect__single) {
+  background: var(--background-contrast-grey);
+}
+.select-search :deep(input) {
+  padding-top: 4px;
+  margin-inline-start: var(--icon-width);
+  width: 100%;
+}
+:deep(.multiselect__content-wrapper) {
+  margin-top: 42px;
 }
 </style>
