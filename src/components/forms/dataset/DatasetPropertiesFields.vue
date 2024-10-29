@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
 import {
-  ref,
   computed,
+  defineModel,
+  onMounted,
+  ref,
   watch,
   type PropType,
-  type Ref,
-  onMounted,
-  defineModel
+  type Ref
 } from 'vue'
 import { useRouter } from 'vue-router'
 

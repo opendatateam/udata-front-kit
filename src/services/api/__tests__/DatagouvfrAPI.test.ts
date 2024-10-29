@@ -1,7 +1,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { setActivePinia, createPinia } from 'pinia'
-import { describe, beforeEach, afterEach, it, expect } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 

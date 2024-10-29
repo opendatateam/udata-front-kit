@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDebounceFn, useTitle } from '@vueuse/core'
+import { useDebounceFn } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -7,8 +7,11 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
-import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
@@ -52,8 +55,8 @@ const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
 const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -86,7 +89,7 @@ const pageTitle = computed(() => {
 })
 
 const searchResultsMessage = computed(() => {
-  return bouquetListComp.value?.numberOfResultMsg
+  return bouquetListComp.value ? bouquetListComp.value.numberOfResultMsg : ''
 })
 
 const setLiveResults = () => {
@@ -94,7 +97,7 @@ const setLiveResults = () => {
   if (route.fullPath !== route.path) {
     setAccessibilityProperties(pageTitle.value, false, [
       {
-        text: searchResultsMessage
+        text: searchResultsMessage.value
       }
     ])
   } else {
@@ -109,7 +112,6 @@ const search = useDebounceFn(() => {
       query: { ...route.query, q: selectedQuery.value }
     })
     .then(() => {
-      useTitle(`${pageTitle.value} | ${config.website.title}`)
       setLiveResults()
     })
 }, 600)
@@ -190,8 +192,8 @@ watch(
   </GenericContainer>
 </template>
 
-<style scoped="true" lang="scss">
-// put above header (ground+500) so that multiselect floats above menu
+<style scoped>
+/* put above header (ground+500) so that multiselect floats above menu */
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);
 }

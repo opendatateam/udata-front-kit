@@ -13,15 +13,15 @@ const goToPage = (page: string) => {
 
 <template>
   <div class="subsection-buttons">
-    <div v-for="item in subsection" v-bind:key="item" class="subsection-button">
-      <button @click="goToPage(item.url)" :class="item.class">
+    <div v-for="item in subsection" :key="item" class="subsection-button">
+      <button :class="item.class" @click="goToPage(item.url)">
         {{ item.name }}
       </button>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .subsection-buttons {
   display: flex;
   flex-wrap: wrap;

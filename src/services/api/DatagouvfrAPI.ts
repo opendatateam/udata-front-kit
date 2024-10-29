@@ -2,15 +2,15 @@ import axios from 'axios'
 
 import config from '@/config'
 import type {
-  DatagouvfrAPIArgs,
-  AxiosResponseData,
-  RequestConfig,
   AxiosError,
-  GetParams,
-  UpdateParams,
-  ListParams,
+  AxiosResponseData,
   CreateParams,
-  DeleteParams
+  DatagouvfrAPIArgs,
+  DeleteParams,
+  GetParams,
+  ListParams,
+  RequestConfig,
+  UpdateParams
 } from '@/model/api'
 import { toastHttpError } from '@/utils/error'
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useHead } from '@unhead/vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -114,7 +114,7 @@ useHead({
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .bouquets {
   background-color: #f6f6f6;
 }

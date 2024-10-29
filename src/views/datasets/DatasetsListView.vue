@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DatasetCard } from '@datagouv/components'
-import { useDebounceFn, useTitle } from '@vueuse/core'
+import { useDebounceFn } from '@vueuse/core'
 import {
   capitalize,
   computed,
@@ -16,6 +16,10 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import type { TopicItemConf } from '@/model/config'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
@@ -68,8 +72,8 @@ const hasOrganizationFilter = config.website.datasets
 const { topicsMainTheme } = useTopicsConf()
 
 const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const metaTitle = computed(() => {
   if (currentPage.value && localQuery.value) {
@@ -142,7 +146,10 @@ const search = () => {
 }
 
 const goToPage = (page: number) => {
-  router.push({ path: '/datasets', query: computeUrlQuery({ page: page + 1 }) })
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({ page: page + 1 })
+  })
 }
 
 const zIndex = (key: number) => {
@@ -180,10 +187,9 @@ const delayedSearch = useDebounceFn(
     store
       .search(currentQuery, currentTopicId, currentPageValue, args)
       .finally(() => {
-        const searchResultsMessage = localQuery.value
-          ? queryResults.value?.innerText
-          : undefined
-        useTitle(`${metaTitle.value} | ${title}`)
+        const searchResultsMessage = queryResults.value
+          ? queryResults.value.innerText
+          : ''
         setAccessibilityProperties(metaTitle.value, false, [
           {
             text: searchResultsMessage

@@ -5,8 +5,7 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   # FIXME:
-  oauth_client_id: CHANGE_ME_FOR_NO_SECRET_CLIENT_ID
-
+  oauth_client_id: 6709257a89f70088a223eba3
 universe:
   # "universe" topic id
   topic_id: 66d5caab2ef9e95fc1625446
@@ -158,11 +157,11 @@ website:
     list_all: false
     display_metadata: false
     activate_read_more: false
-    dataset_editorialization: false
+    dataset_editorialization: true
     can_add_topics:
       everyone: false
       authorized_users:
-        - 6230733357772160a4f77fbaxx
+        - 57d0546ec751df5cda97bae5
 themes:
   - name: Trafic
     color: '#043574'

@@ -7,6 +7,10 @@ import { useLoading } from 'vue-loading-overlay'
 import GenericContainer from '@/components/GenericContainer.vue'
 import Tile from '@/components/Tile.vue'
 import config from '@/config'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -32,16 +36,8 @@ const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort = ref('-created')
 
 const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
-
-const metaTitle = (): string => {
-  return `${org.value?.name} | ${config.website.title}`
-}
-
-useHead({
-  title: metaTitle
-})
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 onMounted(() => {
   orgStore

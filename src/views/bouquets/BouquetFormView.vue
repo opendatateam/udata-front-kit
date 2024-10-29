@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
-import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -9,8 +8,12 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
 import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
 import config from '@/config'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
-import type { TopicPostData } from '@/model/topic'
+import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -37,7 +40,8 @@ const {
   topicsMainTheme,
   topicsSecondaryTheme
 } = useTopicsConf()
-const topic: Ref<Partial<TopicPostData>> = ref({
+
+const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   private: true,
   tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
@@ -51,8 +55,8 @@ const topic: Ref<Partial<TopicPostData>> = ref({
 })
 
 const setAccessibilityProperties = inject(
-  'setAccessibilityProperties'
-) as Function
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
 
 const formFields = ref()
 const errorStatus = ref()
@@ -84,7 +88,9 @@ const isReadyForForm = computed(() => {
   )
 })
 
-const handleTopicOperation = (operation: (...args: any[]) => Promise<any>) => {
+const handleTopicOperation = (
+  operation: (...args: unknown[]) => Promise<Topic>
+) => {
   const loader = useLoading().show()
   operation()
     .then((response) => {
@@ -151,17 +157,13 @@ const cancel = () => {
   }
 }
 
-const metaTitle = (): string => {
+const metaTitle = computed(() => {
   if (topic.value.name && routeQuery.clone != null) {
-    return `Cloner le ${topicsName} ${topic.value.name} | ${config.website.title}`
+    return `Cloner le ${topicsName} ${topic.value.name}`
   } else if (topic.value.name) {
-    return `Éditer le ${topicsName} ${topic.value.name} | ${config.website.title}`
+    return `Éditer le ${topicsName} ${topic.value.name}`
   }
-  return `Ajouter un ${topicsName} | ${config.website.title}`
-}
-
-useHead({
-  title: metaTitle
+  return `Ajouter un ${topicsName}`
 })
 
 onMounted(() => {
@@ -172,21 +174,23 @@ onMounted(() => {
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
-          setAccessibilityProperties(
-            `Cloner le ${topicsName} ${topic.value.name}`
-          )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
-          setAccessibilityProperties(
-            `Éditer le ${topicsName} ${topic.value.name}`
-          )
         }
       })
       .finally(() => loader.hide())
   }
 })
+
+watch(
+  metaTitle,
+  () => {
+    setAccessibilityProperties(metaTitle.value)
+  },
+  { immediate: true }
+)
 
 const onSubmit = async () => {
   // reset error fields
@@ -245,7 +249,7 @@ const onSubmit = async () => {
             ref="formFields"
             v-model="topic"
             v-model:form-errors="formErrors"
-            @update-validation="(isValid: boolean) => canSave = isValid"
+            @update-validation="(isValid: boolean) => (canSave = isValid)"
           />
         </fieldset>
         <fieldset>
