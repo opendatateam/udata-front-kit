@@ -24,7 +24,7 @@ defineProps({
       v-if="
         !isAvailable(datasetProperties.availability) ||
         datasetProperties.remoteDeleted ||
-        datasetProperties.archived
+        datasetProperties.remoteArchived
       "
       class="uppercase bold fr-mr-2w"
       label="Non disponible"
@@ -32,7 +32,7 @@ defineProps({
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .title-container {
   display: flex;
   justify-content: space-between;
