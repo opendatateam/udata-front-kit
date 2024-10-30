@@ -27,8 +27,9 @@ website:
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
-  logo_operator: '/logos/ecospheres-logo.svg'
-  logo_operator_in_header: false
+  logo_operator:
+    src: '/logos/ecospheres-logo.svg'
+    show_in_header: false
   homepage:
     title: 'La plateforme des données de la transition écologique'
     subtitle:

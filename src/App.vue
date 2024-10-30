@@ -69,8 +69,8 @@ onMounted(() => {
 
 const logotext = config.website.rf_title
 const servicetitle = config.website.title
-const logoOperator = config.website.logo_operator
-const logoOperatorInHeader = config.website.logo_operator_in_header
+const logoOperator = config.website.logo_operator.src
+const showLogoOperatorInHeader = config.website.logo_operator.show_in_header
 const logoService = config.website.service_logo
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
@@ -137,7 +137,7 @@ watch(
     :show-search="config.website.header_search.display"
     :logo-text="logotext"
     :operator-img-src="logoOperator"
-    :operator-logo-header="logoOperatorInHeader"
+    :show-operator-logo="showLogoOperatorInHeader"
     :operator-img-style="{ height: '60px' }"
     :service-logo-src="logoService"
     :show-badge="showBadge"
