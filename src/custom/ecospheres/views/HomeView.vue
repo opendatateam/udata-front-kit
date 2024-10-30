@@ -308,19 +308,12 @@ useHead({
   text-align: center;
   font-size: 64px;
 
-  :deep(.highlight) {
-    color: #000091;
-  }
-
-  @media (max-width: 996px) {
-    :deep(br) {
-      display: none;
-    }
-  }
-
   @media (max-width: 768px) {
     text-align: inherit;
     font-size: 22px;
   }
+}
+.main-title-v2 :deep(.highlight) {
+  color: #000091;
 }
 </style>
