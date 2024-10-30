@@ -17,7 +17,6 @@ const doSearch = () => {
   router.push({ name: 'datasets', query: { q: query.value } })
 }
 
-const homepageTitle = config.website.homepage.title
 const searchConfig = config.website.search_bar
 
 useHead({
@@ -36,10 +35,12 @@ useHead({
 <template>
   <div class="datagouv-components">
     <section class="fr-container fr-pt-12v">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <h1 class="main-title-v2" v-html="homepageTitle"></h1>
+      <h1 class="main-title-v2">
+        Le&nbsp;catalogue des&nbsp;données&nbsp;de
+        <br />
+        la <span class="highlight">transition écologique</span>
+      </h1>
       <SearchComponent
-        search-label="Recherche"
         placeholder="Aménagement des villes dans les jeux de données"
       />
     </section>
