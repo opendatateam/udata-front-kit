@@ -58,6 +58,7 @@ useHead({
         la <span class="highlight">transition écologique</span>
       </h1>
       <SearchComponent
+        class="big-search"
         placeholder="Aménagement des villes dans les jeux de données"
       />
     </section>
@@ -376,5 +377,10 @@ useHead({
 }
 .main-title-v2 :deep(.highlight) {
   color: #000091;
+}
+
+.big-search {
+  max-width: 792px;
+  margin: 0 auto;
 }
 </style>
