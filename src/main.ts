@@ -1,9 +1,13 @@
-import { setupI18n } from '@datagouv/components'
+// import '@gouvfr/dsfr/dist/dsfr.min.css'
+
+import '@gouvfr/dsfr/dist/component/component.main.min.css' // Styles de tous les composants du DSFR
+import '@gouvfr/dsfr/dist/core/core.main.min.css' // Le CSS minimal du DSFR
+import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires : les composants de VueDsfr en ont besoin
+
 import '@datagouv/components/dist/style.css'
-import '@gouvfr/dsfr/dist/dsfr.min.css'
-import '@gouvfr/dsfr/dist/utility/utility.min.css'
-import VueDsfr from '@gouvminint/vue-dsfr'
-import '@gouvminint/vue-dsfr/styles'
+import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
+
+import { setupI18n } from '@datagouv/components'
 import { createHead } from '@unhead/vue'
 import type { InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
@@ -19,7 +23,6 @@ import config from '@/config'
 
 import App from './App.vue'
 import './assets/main.css'
-import * as icons from './icons.js'
 import type { CustomParams } from './model/api'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
@@ -34,7 +37,6 @@ const head = createHead()
 routerPromise
   .then((router) => {
     app.use(router)
-    app.use(VueDsfr, { icons: Object.values(icons) })
     app.use(pinia)
     app.use(i18n)
     app.use(head)

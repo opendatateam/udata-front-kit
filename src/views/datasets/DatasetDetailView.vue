@@ -70,7 +70,7 @@ const links = computed(() => [
   { text: dataset.value?.title }
 ])
 
-const tabs = computed(() => {
+const tabTitles = computed(() => {
   const _tabs = [
     { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
     { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
@@ -83,6 +83,25 @@ const tabs = computed(() => {
   })
   return _tabs
 })
+
+const activeTab = ref(0)
+
+const selectPrevious = async () => {
+  const newIndex =
+    activeTab.value === 0 ? tabTitles.value.length - 1 : activeTab.value - 1
+  activeTab.value = newIndex
+}
+const selectNext = async () => {
+  const newIndex =
+    activeTab.value === tabTitles.value.length - 1 ? 0 : activeTab.value + 1
+  activeTab.value = newIndex
+}
+const selectFirst = async () => {
+  activeTab.value = 0
+}
+const selectLast = async () => {
+  activeTab.value = tabTitles.value.length - 1
+}
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
@@ -284,20 +303,28 @@ watch(
     </div>
 
     <DsfrTabs
+      v-model="activeTab"
       class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du jeu de données"
-      :tab-titles="tabs"
-      :initial-selected-index="0"
-      :selected-tab-index="selectedTabIndex"
-      @select-tab="(idx: number) => (selectedTabIndex = idx)"
+      :tab-titles="tabTitles"
     >
+      <template #tab-items>
+        <DsfrTabItem
+          v-for="(tab, index) of tabTitles"
+          :key="tab.tabId"
+          :tab-id="tab.tabId"
+          :panel-id="tab.panelId"
+          @click="activeTab = index"
+          @next="selectNext()"
+          @previous="selectPrevious()"
+          @first="selectFirst()"
+          @last="selectLast()"
+        >
+          {{ tab.title }}
+        </DsfrTabItem>
+      </template>
       <!-- Fichiers -->
-      <DsfrTabContent
-        v-if="resources"
-        panel-id="tab-content-0"
-        tab-id="tab-0"
-        :selected="selectedTabIndex === 0"
-      >
+      <DsfrTabContent v-if="resources" panel-id="tab-content-0" tab-id="tab-0">
         <div v-if="selectedTabIndex === 0">
           <template v-for="typedResources in resources">
             <div
@@ -350,20 +377,12 @@ watch(
       </DsfrTabContent>
 
       <!-- Réutilisations -->
-      <DsfrTabContent
-        panel-id="tab-content-1"
-        tab-id="tab-1"
-        :selected="selectedTabIndex === 1"
-      >
+      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
         <ReusesList model="dataset" :object-id="dataset.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent
-        panel-id="tab-content-2"
-        tab-id="tab-2"
-        :selected="selectedTabIndex === 2"
-      >
+      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
         <Well
           v-if="!config.website.discussions.dataset.create"
           color="blue-cumulus"
@@ -395,7 +414,6 @@ watch(
         v-show="dataset && license"
         panel-id="tab-content-3"
         tab-id="tab-3"
-        :selected="selectedTabIndex === 3"
       >
         <ExtendedInformationPanel
           v-if="

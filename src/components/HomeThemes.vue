@@ -68,10 +68,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-:deep(.fr-tile__body) {
+/* :deep(.fr-tile__body) {
   align-items: flex-start;
   box-shadow:
     rgb(221, 221, 221) 0px 0px 0px 1px inset,
     var(--themeColor, var(--blue-cumulus-sun-368-moon-732)) 0px -4px 0px 0px inset;
-}
+} */
 </style>

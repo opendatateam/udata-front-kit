@@ -45,6 +45,8 @@ const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { topicsName } = useTopicsConf()
 
+const activeAccordion: Ref<number> = ref(-1)
+
 const expandedIds = computed(() => {
   return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
 })
@@ -161,7 +163,7 @@ onMounted(() => {
         size="sm"
         class="fr-mb-1w"
         label="Réorganiser la liste"
-        icon="md-dragindicator"
+        icon="ic:baseline-drag-indicator"
         @click.prevent="triggerReorder"
       />
       <DsfrButton
@@ -231,8 +233,8 @@ onMounted(() => {
         </ul>
       </div>
       <!-- Static list -->
-      <DsfrAccordionsGroup v-if="!isReorder">
-        <li v-for="(dataset, index) in datasetsProperties" :key="index">
+      <DsfrAccordionsGroup v-if="!isReorder" v-model="activeAccordion">
+        <template v-for="(dataset, index) in datasetsProperties" :key="index">
           <DsfrAccordion
             :id="getAccordeonId(index)"
             :expanded-id="expandStore[getAccordeonId(index)]"
@@ -285,7 +287,7 @@ onMounted(() => {
               >
             </div>
           </DsfrAccordion>
-        </li>
+        </template>
       </DsfrAccordionsGroup>
     </div>
     <div v-else>
