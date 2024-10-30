@@ -34,7 +34,7 @@ website:
       width: '40px'
       height: '219px'
   homepage:
-    title: 'Le&nbsp;catalogue des&nbsp;données&nbsp;de<br /> la <span class="highlight">transition écologique</span>'
+    title: ''
     subtitle:
     sections:
       - title:

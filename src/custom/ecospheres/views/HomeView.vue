@@ -12,7 +12,6 @@ import { useTopicStore } from '@/store/TopicStore'
 import contributeSvg from '../assets/contribuer.svg'
 import explorerSvg from '../assets/explorer.svg'
 
-const homepageTitle = config.website.homepage.title
 const topicStore = useTopicStore()
 const lastTopics: ComputedRef<Topic[]> = computed(() =>
   topicStore.sorted.filter((bouquet) => !bouquet.private).slice(0, 3)
@@ -53,10 +52,12 @@ useHead({
 <template>
   <div class="datagouv-components">
     <section class="fr-container fr-pt-12v">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <h1 class="main-title-v2" v-html="homepageTitle"></h1>
+      <h1 class="main-title-v2">
+        Le&nbsp;catalogue des&nbsp;données&nbsp;de
+        <br />
+        la <span class="highlight">transition écologique</span>
+      </h1>
       <SearchComponent
-        search-label="Recherche"
         placeholder="Aménagement des villes dans les jeux de données"
       />
     </section>
