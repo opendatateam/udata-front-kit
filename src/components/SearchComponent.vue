@@ -96,7 +96,7 @@ const dropdownLabel = (text: string) => {
         <span class="fr-icon-search-line search-icon"></span>
       </template>
       <template #placeholder>
-        <span aria-hidden="true" class="visible-label">Rechercher</span>
+        <span aria-hidden="true" class="visible-label">{{ placeholder }}</span>
       </template>
     </Multiselect>
   </div>
