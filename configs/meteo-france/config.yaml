@@ -132,7 +132,8 @@ website:
       href: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
-  logo_operator: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
+  logo_operator:
+    src: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
   notice:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_
