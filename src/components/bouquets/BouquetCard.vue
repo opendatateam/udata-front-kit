@@ -134,6 +134,7 @@ const { themeColors } = useThemeOptions(theme)
 <style scoped>
 .owner-avatar {
   margin-bottom: -6px;
+  display: inline-block;
 }
 .card__tag {
   color: v-bind('themeColors.color');
