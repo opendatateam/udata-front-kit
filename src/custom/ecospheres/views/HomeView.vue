@@ -198,7 +198,7 @@ useHead({
         <li
           v-for="topic in lastTopics"
           :key="topic.id"
-          class="fr-col-12 fr-col-lg-4"
+          class="fr-col-12 fr-col-xl-4"
         >
           <BouquetCard :bouquet="topic" />
         </li>
