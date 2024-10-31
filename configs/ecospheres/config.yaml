@@ -34,7 +34,7 @@ website:
       width: '40px'
       height: '219px'
   homepage:
-    title: ''
+    title:
     subtitle:
     sections:
       - title:

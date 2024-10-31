@@ -60,6 +60,7 @@ useHead({
       <SearchComponent
         class="big-search"
         placeholder="Aménagement des villes dans les jeux de données"
+        search-label="Aménagement des villes dans les jeux de données"
       />
     </section>
     <section class="fr-container">
@@ -368,7 +369,7 @@ useHead({
 
 .main-title-v2 {
   text-align: center;
-  font-size: 64px;
+  font-size: 4rem;
 
   @media (max-width: 768px) {
     text-align: inherit;
