@@ -148,5 +148,6 @@ const { themeColors } = useThemeOptions(theme)
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
+  line-height: inherit;
 }
 </style>
