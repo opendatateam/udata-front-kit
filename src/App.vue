@@ -69,8 +69,12 @@ onMounted(() => {
 
 const logotext = config.website.rf_title
 const servicetitle = config.website.title
-const logoOperator = config.website.logo_operator.src
-const showLogoOperatorInHeader = config.website.logo_operator.show_in_header
+const logoOperator = config.website.logo_operator?.src
+const showLogoOperatorInHeader = config.website.logo_operator?.show_in_header
+const logoOperatorHeaderWidth = config.website.logo_operator?.header?.width
+const logoOperatorHeaderHeight = config.website.logo_operator?.header?.height
+const logoOperatorFooterWidth = config.website.logo_operator?.footer?.width
+const logoOperatorFooterHeight = config.website.logo_operator?.footer?.height
 const logoService = config.website.service_logo
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
@@ -138,7 +142,10 @@ watch(
     :logo-text="logotext"
     :operator-img-src="logoOperator"
     :show-operator-logo="showLogoOperatorInHeader"
-    :operator-img-style="{ height: '60px' }"
+    :operator-img-style="{
+      height: logoOperatorHeaderWidth,
+      width: logoOperatorHeaderHeight
+    }"
     :service-logo-src="logoService"
     :show-badge="showBadge"
     :badge-text="badgeText"
@@ -157,7 +164,10 @@ watch(
     class="fr-mt-16w"
     :logo-text="logotext"
     :operator-img-src="logoOperator"
-    :operator-img-style="{ height: '92px' }"
+    :operator-img-style="{
+      height: logoOperatorFooterWidth,
+      width: logoOperatorFooterHeight
+    }"
     :service-logo-src="logoService"
     :desc-text="footerPhrase"
     :ecosystem-links="footerExternalLinks"
@@ -172,5 +182,9 @@ watch(
 }
 .justify-end {
   justify-content: flex-end;
+}
+
+.fr-footer__brand-link {
+  box-sizing: content-box;
 }
 </style>
