@@ -29,7 +29,7 @@ website:
   # leave empty if not pertinent
   logo_operator:
   homepage:
-    title: ''
+    title:
     subtitle:
     sections:
       - title:
