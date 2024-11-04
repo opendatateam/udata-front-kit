@@ -111,6 +111,10 @@ useHead({
       <div class="fr-container fr-py-12v">
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col">
+            <h2>
+              Les bouquets : pourquoi orchestrer des ensembles de données par
+              usage ?
+            </h2>
             <ul class="fr-grid-row organize-data" role="list">
               <li class="fr-col-12 fr-col-lg-4">
                 <div class="fr-grid-row">
