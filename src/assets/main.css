@@ -151,11 +151,3 @@ form .error-status {
 .fr-pagination__link[aria-current] {
   --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
 }
-
-/* FIXME */
-
-/* https://github.com/datagouv/udata-front/issues/499 */
-.fr-badge.fr-badge--info.fr-badge--info::before {
-  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
-  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
-}
