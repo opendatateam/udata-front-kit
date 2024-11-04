@@ -4,7 +4,7 @@ import type { ComputedRef } from 'vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import BouquetCardHome from '@/components/bouquets/BouquetCardHome.vue'
 import config from '@/config'
 
 import { useTopicStore } from '@/store/TopicStore'
@@ -195,7 +195,7 @@ useHead({
           :key="topic.id"
           class="fr-col-12 fr-col-xl-4"
         >
-          <BouquetCard :bouquet="topic" />
+          <BouquetCardHome :bouquet="topic" />
         </li>
       </ul>
     </section>
