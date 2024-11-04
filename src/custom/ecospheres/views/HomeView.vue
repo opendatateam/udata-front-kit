@@ -313,7 +313,7 @@ useHead({
 
   @media (max-width: 768px) {
     text-align: inherit;
-    font-size: 22px;
+    font-size: 1.375rem;
   }
 }
 .main-title-v2 :deep(.highlight) {
