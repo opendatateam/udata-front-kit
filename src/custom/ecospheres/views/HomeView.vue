@@ -309,11 +309,10 @@ useHead({
 
 .main-title-v2 {
   text-align: center;
-  font-size: 4rem;
+  font-size: clamp(1.375rem, 0.4698rem + 4.5259vw, 4rem);
 
   @media (max-width: 768px) {
     text-align: inherit;
-    font-size: 1.375rem;
   }
 }
 .main-title-v2 :deep(.highlight) {
