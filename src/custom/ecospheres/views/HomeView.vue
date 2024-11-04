@@ -40,11 +40,17 @@ useHead({
         <br />
         la <span class="highlight">transition écologique</span>
       </h1>
-      <SearchComponent
-        class="big-search"
-        placeholder="Aménagement des villes dans les jeux de données"
-        search-label="Aménagement des villes dans les jeux de données"
-      />
+      <div class="big-search">
+        <SearchComponent
+          id="big-select-search"
+          placeholder="Rechercher"
+          search-label="Rechercher"
+        />
+        <p for="select-search">
+          Exemple : "Itinéraires fraîcheur" dans les bouquets ou "Horaires des
+          TGV" dans les données
+        </p>
+      </div>
     </section>
     <section class="fr-container">
       <ul class="fr-grid-row fr-grid-row--gutters fr-py-12v" role="list">

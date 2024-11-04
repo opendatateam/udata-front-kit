@@ -18,6 +18,10 @@ defineProps({
   placeholder: {
     type: String,
     default: ''
+  },
+  id: {
+    type: String,
+    default: 'select-search'
   }
 })
 
@@ -61,12 +65,12 @@ const dropdownLabel = (text: string) => {
   />
 
   <div v-else>
-    <label id="search-label" for="select-search" class="fr-sr-only"
-      >Rechercher. Saisissez un mot clé puis choisissez une des options situés
+    <label :id="id" for="select-search" class="fr-sr-only">
+      Rechercher. Saisissez un mot clé puis choisissez une des options situés
       après le champ pour lancer la recherche dans la rubrique souhaitée</label
     >
     <Multiselect
-      id="select-search"
+      :id="id"
       v-model="selectedMultiSearch"
       class="select-search"
       :options="dropdown"
