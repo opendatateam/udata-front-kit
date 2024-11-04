@@ -121,7 +121,7 @@ watch(
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
     v-if="!isNoticeClosed && noticeContent"
-    :closeable="config.website.notice?.closeable ? true : null"
+    :closeable="config.website.notice?.closeable ? true : undefined"
     @close="isNoticeClosed = true"
   >
     <!-- eslint-disable-next-line vue/no-v-html -->

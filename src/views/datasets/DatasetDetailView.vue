@@ -86,23 +86,6 @@ const tabTitles = computed(() => {
 
 const activeTab = ref(0)
 
-const selectPrevious = async () => {
-  const newIndex =
-    activeTab.value === 0 ? tabTitles.value.length - 1 : activeTab.value - 1
-  activeTab.value = newIndex
-}
-const selectNext = async () => {
-  const newIndex =
-    activeTab.value === tabTitles.value.length - 1 ? 0 : activeTab.value + 1
-  activeTab.value = newIndex
-}
-const selectFirst = async () => {
-  activeTab.value = 0
-}
-const selectLast = async () => {
-  activeTab.value = tabTitles.value.length - 1
-}
-
 const description = computed(() => descriptionFromMarkdown(dataset))
 
 const showHarvestQualityWarning = computed(() => {
@@ -308,21 +291,6 @@ watch(
       tab-list-name="Groupes d'attributs du jeu de données"
       :tab-titles="tabTitles"
     >
-      <template #tab-items>
-        <DsfrTabItem
-          v-for="(tab, index) of tabTitles"
-          :key="tab.tabId"
-          :tab-id="tab.tabId"
-          :panel-id="tab.panelId"
-          @click="activeTab = index"
-          @next="selectNext()"
-          @previous="selectPrevious()"
-          @first="selectFirst()"
-          @last="selectLast()"
-        >
-          {{ tab.title }}
-        </DsfrTabItem>
-      </template>
       <!-- Fichiers -->
       <DsfrTabContent v-if="resources" panel-id="tab-content-0" tab-id="tab-0">
         <div v-if="selectedTabIndex === 0">

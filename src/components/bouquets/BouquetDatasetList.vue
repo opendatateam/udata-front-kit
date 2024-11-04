@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type DatasetV2 } from '@datagouv/components'
-import { computed, onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import DatasetEditModal, {
@@ -46,31 +46,6 @@ const datasetsContent = ref(new Map<string, DatasetV2>())
 const { topicsName } = useTopicsConf()
 
 const activeAccordion: Ref<number> = ref(-1)
-
-const expandedIds = computed(() => {
-  return Object.keys(expandStore.value).filter((k) => !!expandStore.value[k])
-})
-const isAllExpanded = computed(
-  () => expandedIds.value.length === datasetsProperties.value.length
-)
-
-const expandAll = () => {
-  for (const [idx] of datasetsProperties.value.entries()) {
-    expandStore.value[getAccordeonId(idx)] = getAccordeonId(idx)
-  }
-}
-
-const collapseAll = () => {
-  expandStore.value = {}
-}
-
-const toggleCollapse = () => {
-  if (isAllExpanded.value) {
-    collapseAll()
-  } else {
-    expandAll()
-  }
-}
 
 const getAccordeonId = (index: number): string => {
   return `accordion_${index}`
@@ -133,7 +108,6 @@ const editDataset = (dataset: DatasetProperties, index: number) => {
 }
 
 const triggerReorder = () => {
-  collapseAll()
   isReorder.value = true
 }
 
@@ -203,14 +177,6 @@ onMounted(() => {
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">
-      <div class="align-right fr-mb-1v small">
-        <DsfrButton
-          size="sm"
-          class="fr-btn fr-btn--tertiary"
-          :label="isAllExpanded ? 'Tout replier' : 'Tout déplier'"
-          @click.stop.prevent="toggleCollapse"
-        />
-      </div>
       <!-- Draggable list -->
       <div v-if="isReorder">
         <ul class="fr-accordions-group">

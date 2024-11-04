@@ -88,23 +88,6 @@ const tabTitles = [
 ]
 const activeTab = ref(0)
 
-const selectPrevious = async () => {
-  const newIndex =
-    activeTab.value === 0 ? tabTitles.length - 1 : activeTab.value - 1
-  activeTab.value = newIndex
-}
-const selectNext = async () => {
-  const newIndex =
-    activeTab.value === tabTitles.length - 1 ? 0 : activeTab.value + 1
-  activeTab.value = newIndex
-}
-const selectFirst = async () => {
-  activeTab.value = 0
-}
-const selectLast = async () => {
-  activeTab.value = tabTitles.length - 1
-}
-
 const goToEdit = () => {
   router.push({
     name: `${topicsSlug}_edit`,
@@ -342,23 +325,9 @@ watch(
     <DsfrTabs
       v-model="activeTab"
       class="fr-mt-2w"
+      :tab-titles="tabTitles"
       :tab-list-name="`Groupes d'attributs du ${topicsName}`"
     >
-      <template #tab-items>
-        <DsfrTabItem
-          v-for="(tab, index) of tabTitles"
-          :key="tab.tabId"
-          :tab-id="tab.tabId"
-          :panel-id="tab.panelId"
-          @click="activeTab = index"
-          @next="selectNext()"
-          @previous="selectPrevious()"
-          @first="selectFirst()"
-          @last="selectLast()"
-        >
-          {{ tab.title }}
-        </DsfrTabItem>
-      </template>
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
         <BouquetDatasetList

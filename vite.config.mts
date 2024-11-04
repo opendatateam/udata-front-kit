@@ -52,7 +52,7 @@ export default defineConfig(({ mode }) => {
         dts: './src/auto-imports.d.ts',
         eslintrc: {
           enabled: true,
-          filepath: './.eslintrc-auto-import.json',
+          filepath: './eslintrc-auto-import.mjs',
           globalsPropValue: true
         }
       }),

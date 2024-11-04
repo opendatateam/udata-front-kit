@@ -1,11 +1,9 @@
-// import '@gouvfr/dsfr/dist/dsfr.min.css'
-
 import '@gouvfr/dsfr/dist/component/component.main.min.css' // Styles de tous les composants du DSFR
 import '@gouvfr/dsfr/dist/core/core.main.min.css' // Le CSS minimal du DSFR
 import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires : les composants de VueDsfr en ont besoin
+import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import '@datagouv/components/dist/style.css'
-import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import { setupI18n } from '@datagouv/components'
 import { createHead } from '@unhead/vue'
