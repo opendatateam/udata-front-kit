@@ -130,8 +130,9 @@ useHead({
                   <div class="fr-col-md-9">
                     <h3>Répondre aux besoins d'une politique publique</h3>
                     <p>
-                      Des problématiques data sont identifiées en lien avec des
-                      services métiers
+                      Des problématiques liées à l'usage de la donnée sont
+                      identifiées sur des thématiques de la transition
+                      écologique telles que l’énergie ou le transport.
                     </p>
                   </div>
                 </div>
@@ -150,8 +151,8 @@ useHead({
                   <div class="fr-col-md-9">
                     <h3>Identifier les informations utiles</h3>
                     <p>
-                      Les facteurs pertinents pour l'orientation de cette action
-                      sont définis
+                      Les différentes typologies de données nécessaires pour les
+                      services spécialistes de ces politiques sont définies.
                     </p>
                   </div>
                 </div>
@@ -171,7 +172,7 @@ useHead({
                     <h3>Centraliser les données territoriales</h3>
                     <p>
                       Les données territoriales sont collectées, regroupées et
-                      reliées aux facteurs correspondants
+                      catégorisées par cas d’usage sous la forme de bouquets.
                     </p>
                   </div>
                 </div>
