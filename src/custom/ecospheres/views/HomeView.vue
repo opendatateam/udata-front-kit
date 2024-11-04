@@ -53,9 +53,9 @@ useHead({
   <div class="datagouv-components">
     <section class="fr-container fr-pt-12v">
       <h1 class="main-title-v2">
-        Le&nbsp;catalogue des&nbsp;données&nbsp;de
+        Le&nbsp;catalogue des&nbsp;données
         <br />
-        la <span class="highlight">transition écologique</span>
+        pour la <span class="highlight">transition écologique</span>
       </h1>
       <div class="big-search">
         <SearchComponent
