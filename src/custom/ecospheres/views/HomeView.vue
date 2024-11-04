@@ -65,7 +65,7 @@ useHead({
           <DsfrCard
             :no-arrow="true"
             title="Explorer"
-            description="Accédez à un ensemble de données environnementales"
+            description="Accédez à un ensemble de données liées à la transition écologique"
             size="small"
             :horizontal="true"
             :img-src="explorerSvg"
@@ -87,7 +87,7 @@ useHead({
           <DsfrCard
             :no-arrow="true"
             title="Contribuer"
-            description="Participez à la centralisation et la structuration des données environnementales"
+            description="Participez à la centralisation et à la structuration des données de la transition écologique"
             size="small"
             :horizontal="true"
             :img-src="contributeSvg"
