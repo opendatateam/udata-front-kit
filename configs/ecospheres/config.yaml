@@ -89,8 +89,6 @@ website:
       to: /datasets
     - text: Bouquets
       to: /bouquets
-    - text: Organisations
-      to: /organizations
     - text: A propos
       to: /about
   router:
