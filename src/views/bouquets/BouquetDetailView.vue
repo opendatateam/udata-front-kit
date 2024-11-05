@@ -322,6 +322,8 @@ watch(
       </div>
     </div>
 
+    <DisclosureWidget />
+
     <DsfrTabs
       v-model="activeTab"
       class="fr-mt-2w"

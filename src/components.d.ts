@@ -21,6 +21,7 @@ declare module 'vue' {
     DatasetEditModal: typeof import('./components/forms/dataset/DatasetEditModal.vue')['default']
     DatasetPropertiesFields: typeof import('./components/forms/dataset/DatasetPropertiesFields.vue')['default']
     DatasetPropertiesTextFields: typeof import('./components/forms/dataset/DatasetPropertiesTextFields.vue')['default']
+    DisclosureWidget: typeof import('./components/DisclosureWidget.vue')['default']
     DiscussionsList: typeof import('./components/DiscussionsList.vue')['default']
     DsfrAccordion: typeof import('@gouvminint/vue-dsfr')['DsfrAccordion']
     DsfrAccordionsGroup: typeof import('@gouvminint/vue-dsfr')['DsfrAccordionsGroup']
