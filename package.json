@@ -20,8 +20,9 @@
     "generate-robots-txt": "node scripts/generate-robots-txt.mjs"
   },
   "dependencies": {
-    "@datagouv/components": "1.1.2",
-    "@gouvminint/vue-dsfr": "5.13.0",
+    "@datagouv/components": "^1.5.0",
+    "@gouvfr/dsfr": "^1.11.2",
+    "@gouvminint/vue-dsfr": "^7.1.0",
     "@json2csv/plainjs": "^7.0.6",
     "@unhead/vue": "^1.11.10",
     "@vee-validate/rules": "^4.13.2",
@@ -70,6 +71,8 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "~5.6.3",
     "typescript-eslint": "^8.10.0",
+    "unplugin-auto-import": "^0.18.3",
+    "unplugin-vue-components": "^0.27.4",
     "vite": "^5.4.9",
     "vite-plugin-dynamic-import": "^1.6.0",
     "vite-plugin-vue-devtools": "^7.5.2",
@@ -77,6 +80,6 @@
     "vue-tsc": "^2.1.6"
   },
   "lint-staged": {
-    "*.{js,ts,mjs,mts,vue,yml,yaml,json}": "prettier --write"
+    "*.{js,ts,mjs,mts,vue,yml,yaml,json,md,css}": "prettier --write"
   }
 }

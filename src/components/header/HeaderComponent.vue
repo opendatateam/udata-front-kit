@@ -182,7 +182,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               v-if="userName || quickLinks?.length"
               class="fr-header__tools-links"
             >
-              <p v-if="userName" class="fr-py-1w">
+              <p v-if="userName" class="fr-py-1w fr-text--sm">
                 {{ userName }}
               </p>
               <DsfrHeaderMenuLinks
@@ -289,5 +289,8 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
 .fr-header__service-title {
   align-items: center;
   gap: 0.25em;
+}
+:deep(.fr-header__tools-links) {
+  align-items: baseline;
 }
 </style>
