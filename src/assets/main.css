@@ -18,6 +18,12 @@
   --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
   /* DSFR contrast fix */
   --blue-cumulus-sun-368-moon-732-hover--fix: #516fb3;
+
+  /*
+  progressive enhanced height: auto transition
+  https://caniuse.com/mdn-css_properties_interpolate-size
+  */
+  interpolate-size: allow-keywords;
 }
 
 @font-face {

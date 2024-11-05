@@ -21,6 +21,7 @@ const toggleDisclosure = () => {
         aria-controls="disclosure-content"
         @click.prevent="toggleDisclosure"
       >
+        <span class="fr-sr-only">ouvrir le regroupement</span>
         <span>{{ groupName }}</span>
         <span class="disclosure__btn disclosure__marker">
           <svg
@@ -42,7 +43,7 @@ const toggleDisclosure = () => {
       </button>
       <div class="disclosure__actions">
         <button class="disclosure__btn">
-          <span class="fr-sr-only">éditer le regroupement</span>
+          <span class="fr-sr-only">éditer le regroupement {{ groupName }}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -60,7 +61,9 @@ const toggleDisclosure = () => {
           </svg>
         </button>
         <button class="disclosure__btn">
-          <span class="fr-sr-only">supprimer le regroupement</span>
+          <span class="fr-sr-only"
+            >supprimer le regroupement {{ groupName }}</span
+          >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"
@@ -81,17 +84,26 @@ const toggleDisclosure = () => {
     </div>
     <div
       id="disclosure-content"
-      class="disclosure__content"
-      :hidden="!isDisclosureOpen"
+      :class="[{ isVisible: isDisclosureOpen }, 'disclosure__content']"
     >
       <p>disclosed content</p>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat, et
+        incidunt? Id voluptatibus porro dolorum consequatur. Asperiores qui
+        itaque, odio illum quam blanditiis eos eveniet laudantium fuga libero
+        perspiciatis molestiae sunt dolore dicta dolores consequatur animi
+        tenetur unde quos reprehenderit soluta nam. Voluptatum, praesentium
+        quod. Accusantium fugit cumque dolore nam.
+      </p>
     </div>
   </div>
 </template>
 
 <style scoped>
 .disclosure {
+  --padding-base: 1rem;
   margin-block: 40px;
+  overflow: hidden;
 }
 .disclosure__header,
 .disclosure__trigger,
@@ -100,16 +112,21 @@ const toggleDisclosure = () => {
   flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: calc(var(--padding-base) / 2);
 }
 .disclosure__trigger,
 .disclosure__actions {
   flex-wrap: nowrap;
 }
+.disclosure__header {
+  padding-inline-end: var(--padding-base);
+  border-block-end: 1px solid var(--border-default-grey);
+}
 .disclosure__trigger {
-  padding-block: 10px;
-  padding-inline: 8px;
+  padding-block: 12px;
+  padding-inline: var(--padding-base) calc(var(--padding-base) / 2);
   flex-grow: 1;
+  font-weight: bold;
 }
 .disclosure__btn {
   block-size: 32px;
@@ -123,7 +140,23 @@ const toggleDisclosure = () => {
   rotate: 0deg;
   transition: rotate 0.4s ease;
 }
-.disclosure__trigger[aria-expanded='true'] .disclosure__marker svg {
+.disclosure__content {
+  padding: var(--padding-base);
+  block-size: 0;
+  visibility: hidden;
+}
+@supports (interpolate-size: allow-keywords) {
+  .disclosure__content {
+    transition:
+      height 0.4s ease,
+      visibility 0.4s;
+  }
+}
+.disclosure__content.isVisible {
+  block-size: auto;
+  visibility: visible;
+}
+.disclosure__trigger[aria-expanded='true'] .disclosure__marker > svg {
   rotate: 180deg;
 }
 </style>
