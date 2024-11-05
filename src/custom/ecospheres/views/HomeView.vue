@@ -277,6 +277,10 @@ useHead({
 :deep(.fr-card__content) {
   padding-left: 1rem;
   padding-bottom: 0;
+
+  .fr-card__desc {
+    font-size: 1rem;
+  }
 }
 
 :deep(.fr-card__header) {
