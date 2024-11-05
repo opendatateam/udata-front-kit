@@ -73,13 +73,13 @@ npm run format
 - `@gouvfr/dsfr` // nécessaire pour les deux précédentes
 - `@vueuse/core` // collection d'utilitaires `vue` (`useTitle`)
   - `@vueuse/integrations` // intégration supplémentaires de vueuse (`focustrap`)
-- `unplugin-auto-import` - `vite.config.mts` // auto-import d'API `vue` (`ref`, `computed`…) et `vue-dsfr`
-- `unplugin-vue-components` - `vite.config.mts` // auto-import des composants custom et `vue-dsfr`
+- `unplugin-auto-import` - `vite.config.mts` // auto-import d'API `vue` (`ref`, `computed`…) et `vue-dsfr` ([d'après ce tutoriel](https://vue-ds.fr/guide/pour-commencer#avoir-un-bundle-optimise-et-une-dx-optimale))
+- `unplugin-vue-components` - `vite.config.mts` // auto-import des composants custom et `vue-dsfr` ([idem](https://vue-ds.fr/guide/pour-commencer#avoir-un-bundle-optimise-et-une-dx-optimale))
 - `vee-validate` // validation de formulaire
   - `@vee-validate/rules` // collection de règles de validation
 - `@unhead/vue` // SEO (en gros)
 
-### Code formatting
+### Formatage et validation du code
 
 - `eslint` - `eslint.config.mjs`
   - `typescript-eslint`
