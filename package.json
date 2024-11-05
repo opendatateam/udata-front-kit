@@ -80,6 +80,6 @@
     "vue-tsc": "^2.1.6"
   },
   "lint-staged": {
-    "*.{js,ts,mjs,mts,vue,yml,yaml,json}": "prettier --write"
+    "*.{js,ts,mjs,mts,vue,yml,yaml,json,md,css}": "prettier --write"
   }
 }

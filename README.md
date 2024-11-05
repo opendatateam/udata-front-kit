@@ -2,14 +2,12 @@
 
 Verticales thématiques adossées à [data.gouv.fr](https://www.data.gouv.fr/).
 
-
 ## Configuration
 
 Chaque verticale est configurée dans un fichier `config.yaml` stocké sous [`configs/$verticale`](configs).
 
 La variable d'environnement `VITE_SITE_ID` permet de définir la configuration utilisée au lancement de l'application.
 Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dérivés.
-
 
 ## Développement
 
@@ -66,9 +64,33 @@ npm run hint
 npm run format
 ```
 
+## Librairies et plugins utilisés
+
+### Librairies
+
+- `@datagouv/components` // composants provenant de data.gouv.fr
+- `@gouvminint/vue-dsfr` // intégration `vue` de composants issus du DSFR
+- `@gouvfr/dsfr` // nécessaire pour les deux précédentes
+- `@vueuse/core` // collection d'utilitaires `vue` (`useTitle`)
+  - `@vueuse/integrations` // intégration supplémentaires de vueuse (`focustrap`)
+- `unplugin-auto-import` - `vite.config.mts` // auto-import d'API `vue` (`ref`, `computed`…) et `vue-dsfr`
+- `unplugin-vue-components` - `vite.config.mts` // auto-import des composants custom et `vue-dsfr`
+- `vee-validate` // validation de formulaire
+  - `@vee-validate/rules` // collection de règles de validation
+- `@unhead/vue` // SEO (en gros)
+
+### Code formatting
+
+- `eslint` - `eslint.config.mjs`
+  - `typescript-eslint`
+  - `eslint-plugin-json`
+  - `eslint-plugin-vue`
+- `prettier` - `.prettierrc.mjs`
+  - `prettier-plugin-organize-imports` // organise et/ou supprime les imports des fichiers
+
+À chaque `git commit`, `husky` lance `lint-staged` qui formate les fichiers "staged" avec `prettier`.
 
 ## Auteurs
 
 - data.gouv.fr, Direction interministérielle du numérique.
 - Ecolab, Commissariat général au développement durable, Ministère de la transition écologique.
-
