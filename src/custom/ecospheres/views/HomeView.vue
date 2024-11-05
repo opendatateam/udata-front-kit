@@ -4,6 +4,7 @@ import type { ComputedRef } from 'vue'
 import { computed, onMounted, ref } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
+import BouquetCardHome from '@/components/bouquets/BouquetCardHome.vue'
 import config from '@/config'
 import type { Topic } from '@/model/topic'
 
