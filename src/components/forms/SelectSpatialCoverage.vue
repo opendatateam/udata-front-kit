@@ -28,6 +28,8 @@ defineProps({
   }
 })
 
+defineEmits(['update:model-value'])
+
 const isLoading = ref(false)
 
 const options: Ref<SpatialCoverage[]> = ref([])
@@ -63,7 +65,7 @@ onMounted(() => {
   <Multiselect
     id="select-spatial-coverage"
     ref="multiselect"
-    v-model="selectedSpatialCoverage"
+    :model-value="selectedSpatialCoverage"
     :options="options"
     label="name"
     track-by="id"
@@ -79,6 +81,7 @@ onMounted(() => {
     :max-height="600"
     :show-no-results="false"
     :hide-selected="false"
+    @update:model-value="$emit('update:model-value', $event)"
     @search-change="search"
   >
     <template #caret>
