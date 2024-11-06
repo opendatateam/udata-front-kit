@@ -151,3 +151,9 @@ form .error-status {
 .fr-pagination__link[aria-current] {
   --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
 }
+
+/* DSFR search bar fix */
+
+.datagouv-components .fr-search-bar .fr-btn {
+  border-radius: 0 0.25rem 0 0;
+}
