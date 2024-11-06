@@ -28,7 +28,7 @@ defineProps({
   }
 })
 
-defineEmits(['update:model-value'])
+defineEmits(['update:spatial-coverage-model'])
 
 const isLoading = ref(false)
 
@@ -81,7 +81,7 @@ onMounted(() => {
     :max-height="600"
     :show-no-results="false"
     :hide-selected="false"
-    @update:model-value="$emit('update:model-value', $event)"
+    @update:model-value="$emit('update:spatial-coverage-model', $event)"
     @search-change="search"
   >
     <template #caret>
