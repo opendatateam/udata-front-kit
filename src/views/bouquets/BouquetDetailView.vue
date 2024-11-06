@@ -47,7 +47,6 @@ const store = useTopicStore()
 const loading = useLoading()
 
 const topic: Ref<Topic | null> = ref(null)
-const selectedTabIndex = ref(0)
 const spatialCoverage = useSpatialCoverage(topic)
 
 const showDiscussions = config.website.discussions.topic.display
@@ -81,6 +80,13 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
 )
 
 const { themeColors } = useThemeOptions(theme)
+
+const tabTitles = [
+  { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
+  { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' },
+  { title: 'Réutilisations', tabId: 'tab-2', panelId: 'tab-content-2' }
+]
+const activeTab = ref(0)
 
 const goToEdit = () => {
   router.push({
@@ -317,23 +323,13 @@ watch(
     </div>
 
     <DsfrTabs
+      v-model="activeTab"
       class="fr-mt-2w"
+      :tab-titles="tabTitles"
       :tab-list-name="`Groupes d'attributs du ${topicsName}`"
-      :tab-titles="[
-        { title: 'Données' },
-        { title: 'Discussions' },
-        { title: 'Réutilisations' }
-      ]"
-      :initial-selected-index="0"
-      :selected-tab-index="selectedTabIndex"
-      @select-tab="(idx: number) => (selectedTabIndex = idx)"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent
-        panel-id="tab-content-0"
-        tab-id="tab-0"
-        :selected="selectedTabIndex === 0"
-      >
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
         <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
@@ -346,11 +342,7 @@ watch(
         />
       </DsfrTabContent>
       <!-- Discussions -->
-      <DsfrTabContent
-        panel-id="tab-content-1"
-        tab-id="tab-1"
-        :selected="selectedTabIndex === 1"
-      >
+      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
         <DiscussionsList
           v-if="showDiscussions && topic"
           :subject="topic"
@@ -358,11 +350,7 @@ watch(
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent
-        panel-id="tab-content-2"
-        tab-id="tab-2"
-        :selected="selectedTabIndex === 2"
-      >
+      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>

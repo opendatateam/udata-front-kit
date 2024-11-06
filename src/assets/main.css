@@ -152,10 +152,8 @@ form .error-status {
   --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
 }
 
-/* FIXME */
+/* DSFR search bar fix */
 
-/* https://github.com/datagouv/udata-front/issues/499 */
-.fr-badge.fr-badge--info.fr-badge--info::before {
-  -webkit-mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
-  mask-image: url(/node_modules/@gouvfr/dsfr/dist/icons/system/fr--info-fill.svg);
+.datagouv-components .fr-search-bar .fr-btn {
+  border-radius: 0 0.25rem 0 0;
 }

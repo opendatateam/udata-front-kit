@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { useFocus, useTitle } from '@vueuse/core'
-import { computed, onMounted, provide, ref, watch, type Ref } from 'vue'
-import { RouterView, useRoute } from 'vue-router'
 
 import config from '@/config'
 
-import LiveRegion, { type InfoToAnnounce } from './components/LiveRegion.vue'
-import Navigation from './components/Navigation.vue'
+import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
-import Header from './components/header/HeaderComponent.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -119,13 +115,13 @@ watch(
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
     v-if="!isNoticeClosed && noticeContent"
-    :closeable="config.website.notice?.closeable ? true : null"
+    :closeable="config.website.notice?.closeable ? true : undefined"
     @close="isNoticeClosed = true"
   >
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="noticeContent"></div>
   </DsfrNotice>
-  <Header
+  <HeaderComponent
     :service-title="servicetitle"
     service-description=""
     home-to="/"
@@ -143,7 +139,7 @@ watch(
     <template #mainnav="{ hidemodal }">
       <Navigation :on-click="hidemodal" />
     </template>
-  </Header>
+  </HeaderComponent>
 
   <main id="main-content" role="main">
     <RouterView />
