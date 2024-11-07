@@ -70,7 +70,9 @@ const faqAccordionContents = [
   },
   {
     title: 'Quelles données sont accessibles depuis ecologie.data.gouv.fr ?',
-    content: `WIP content`
+    content: `<p>Les données présentées sur ${faqEcologieDataGouvHtml} sont une sélection du catalogue de données moissonnées ou publiées dans ${faqDataGouvHtml}. Elles sont produites par des organisations dont les données ont un intérêt en lien avec la transition écologique, ou qui sont en lien avec le ${faqMinisterLink}.</p>
+
+<p>Lors de la création d'un bouquet de données, il est également possible d’inclure des jeux de données provenant de l'ensemble du catalogue de data.gouv.fr, permettant ainsi d’ajouter des données pertinentes pour une thématique, même si elles sont produites par des organisations non référencées sur ${faqEcologieDataGouvHtml}.</p>`
   },
   {
     title:
