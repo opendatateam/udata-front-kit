@@ -24,17 +24,21 @@ const activeAccordion = ref<string>()
 const setActiveAccordion = (id: string) => {
   activeAccordion.value = id
 }
+const faqEcologieDataGouvHtml = `<span class="fr-text--italic">ecologie.<span class="fr-text--bold">data.gouv</span>.fr</span>`
+const faqDataGouvHtml = `<span class="fr-text--italic"><span class="fr-text--bold">data.gouv</span>.fr</span>`
 const faqAccordionContents = [
   {
     id: 'faq_accordion_1',
     title: "Qu'est-ce que ecologie.data.gouv.fr ?",
-    content: `<span class="fr-text--italic">ecologie.<span class="fr-text--bold">data.gouv</span>.fr</span> est la plateforme publique mettant à disposition les données relatives à la transition écologique. Elle permet de rendre accessible au public des informations fiables et structurées, issues des institutions publiques et des acteurs privés. L'objectif est de rassembler les données utiles au déploiement des politiques publiques portées par le <a href="https://www.ecologie.gouv.fr/" class="fr-link target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a> dans des secteurs comme l'environnement, l'énergie, le transport et le logement.`
+    content: `${faqEcologieDataGouvHtml} est la plateforme publique mettant à disposition les données relatives à la transition écologique. Elle permet de rendre accessible au public des informations fiables et structurées, issues des institutions publiques et des acteurs privés. L'objectif est de rassembler les données utiles au déploiement des politiques publiques portées par le <a href="https://www.ecologie.gouv.fr/" class="fr-link target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a> dans des secteurs comme l'environnement, l'énergie, le transport et le logement.`
   },
   {
     id: 'faq_accordion_2',
     title:
       'Quel est le lien entre le lien ecologie.data.gouv.fr et data.gouv.fr ?',
-    content: 'WIP'
+    content: `<p>${faqEcologieDataGouvHtml} est une verticale thématique de ${faqDataGouvHtml}, la plateforme nationale de données, dédiée aux thématiques liées à la transition écologique.</p>
+<p>Bien que présentant des contenus éditoriaux et des fonctionnalités spécifiques, les deux plateformes partagent le même catalogue, auquel nous contribuons avec les données du pôle ministériel <a href="https://www.ecologie.gouv.fr/" target="_blank" class="fr-link">ecologie.gouv.fr</a>. Toute modification sur ${faqDataGouvHtml} est donc immédiatement visible sur ${faqEcologieDataGouvHtml}, et inversement.</p>
+<p>${faqEcologieDataGouvHtml} fait partie d'un écosystème naissant de verticales thématiques construites à partir d'un <a href="https://github.com/opendatateam/udata-front-kit" target="_blank">commun numérique</a> porté et co-développé par le CGDD et la DINUM.</p>`
   },
   {
     id: 'faq_accordion_X',
