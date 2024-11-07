@@ -32,8 +32,46 @@ const faqAccordionContents = [
   },
   {
     id: 'faq_accordion_2',
-    title: "À qui s'adresse cette plateforme ?",
+    title:
+      'Quel est le lien entre le lien ecologie.data.gouv.fr et data.gouv.fr ?',
     content: 'WIP'
+  },
+  {
+    id: 'faq_accordion_X',
+    title: "À qui s'adresse cette plateforme ?",
+    content: 'WIP content'
+  },
+  {
+    id: 'faq_accordion_X',
+    title: "Qu'est-ce que le concept de bouquet ?",
+    content: 'WIP content'
+  },
+  {
+    id: 'faq_accordion_X',
+    title: 'Quelles données sont accessibles depuis ecologie.data.gouv.fr ?',
+    content: 'WIP content'
+  },
+  {
+    id: 'faq_accordion_X',
+    title:
+      'Comment rendre disponible un jeu de données sur ecologie.data.gouv.fr ?',
+    content: 'WIP content'
+  },
+  {
+    id: 'faq_accordion_X',
+    title:
+      "Je ne trouve pas le jeu de données dont j'ai besoin lors de la création d'un bouquet ?",
+    content: 'WIP content'
+  },
+  {
+    id: 'faq_accordion_X',
+    title: `Je ne trouve pas un jeu de données dans l'onglet "Données" ?`,
+    content: 'WIP content'
+  },
+  {
+    id: 'faq_accordion_X',
+    title: 'Un retour, une question ?',
+    content: 'WIP content'
   }
 ]
 
