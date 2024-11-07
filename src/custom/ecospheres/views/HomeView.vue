@@ -28,7 +28,7 @@ const faqAccordionContents = [
   {
     id: 'faq_accordion_1',
     title: "Qu'est-ce que ecologie.data.gouv.fr ?",
-    content: `<p>ecologie.data.gouv.fr est un catalogue permettant la centralisation des données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. <br/> Un bouquet est un ensemble de données contextualisées permettant de répondre à un cas d’usage lié à une politique publique. </p>`
+    content: `<span class="fr-text--italic">ecologie.<span class="fr-text--bold">data.gouv</span>.fr</span> est la plateforme publique mettant à disposition les données relatives à la transition écologique. Elle permet de rendre accessible au public des informations fiables et structurées, issues des institutions publiques et des acteurs privés. L'objectif est de rassembler les données utiles au déploiement des politiques publiques portées par le <a href="https://www.ecologie.gouv.fr/" class="fr-link target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a> dans des secteurs comme l'environnement, l'énergie, le transport et le logement.`
   },
   {
     id: 'faq_accordion_2',
