@@ -87,15 +87,15 @@ const faqAccordionContents = [
   {
     title:
       "Je ne trouve pas le jeu de données dont j'ai besoin lors de la création d'un bouquet ?",
-    content: `WIP content`
+    content: `<p>Pour qu'un jeu de données puisse être ajouté à un bouquet, il est nécessaire qu'il soit au préalable présent dans le catalogue ${faqDataGouvHtml}. Si il est bien présent sur ${faqDataGouvHtml} mais que vous ne le retrouvez pas malgré tout lors de la création d'un bouquet, veuillez nous contacter.</p>`
   },
   {
     title: `Je ne trouve pas un jeu de données dans l'onglet "Données" ?`,
-    content: `WIP content`
+    content: `Pour qu'un jeu de données soit présent dans l'onglet "Données", il est nécessaire que le jeu de données soit publié sur ${faqDataGouvHtml} et que l'organisation le produisant soit référencée par ${faqEcologieDataGouvHtml} et . Si vous souhaitez que votre organisation soit référencée sur ${faqEcologieDataGouvHtml}, veuillez nous contacter.`
   },
   {
     title: 'Un retour, une question ?',
-    content: `WIP content`
+    content: `Si vous avez une question ou souhaitez faire part de vos retours, vous pouvez contacter l'équipe d'${faqEcologieDataGouvHtml} via le formulaire de contact disponible sur le site. L'équipe est également à votre disposition pour répondre à vos suggestions`
   }
 ]
 
