@@ -52,7 +52,9 @@ const faqAccordionContents = [
   },
   {
     title: "Qu'est-ce que le concept de bouquet ?",
-    content: `WIP content`
+    content: `<p>Le guichet unique de la donnée est un point d’accès centralisé permettant de regrouper et de simplifier l’accès aux données d’intérêt public.</p>
+
+<p>${faqEcologieDataGouvHtml} centralise les données utiles au déploiement des politiques liées à la transition écologique, en les rendant accessibles et facilement réutilisables pour tous les acteurs, administrations, décideurs publics, citoyens ou chercheurs. La plateforme propose aux utilisateurs un portail unique pour consulter et exploiter des informations provenant de différentes sources institutionnelles, facilitant ainsi la recherche de données et renforçant la transparence.</p>`
   },
   {
     title: 'Quelles données sont accessibles depuis ecologie.data.gouv.fr ?',
