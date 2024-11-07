@@ -244,8 +244,8 @@ onMounted(() => {
       >Couverture territoriale (facultatif)</label
     >
     <SelectSpatialCoverage
-      v-model="spatialCoverage"
-      @update:model-value="onUpdateSpatialCoverage"
+      v-model:spatial-coverage-model="spatialCoverage"
+      @update:spatial-coverage-model="onUpdateSpatialCoverage"
     />
   </div>
 </template>
