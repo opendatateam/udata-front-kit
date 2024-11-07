@@ -26,11 +26,12 @@ const setActiveAccordion = (id: string) => {
 }
 const faqEcologieDataGouvHtml = `<span class="fr-text--italic">ecologie.<span class="fr-text--bold">data.gouv</span>.fr</span>`
 const faqDataGouvHtml = `<span class="fr-text--italic"><span class="fr-text--bold">data.gouv</span>.fr</span>`
+const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link" target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a>`
 const faqAccordionContents = [
   {
     id: 'faq_accordion_1',
     title: "Qu'est-ce que ecologie.data.gouv.fr ?",
-    content: `${faqEcologieDataGouvHtml} est la plateforme publique mettant à disposition les données relatives à la transition écologique. Elle permet de rendre accessible au public des informations fiables et structurées, issues des institutions publiques et des acteurs privés. L'objectif est de rassembler les données utiles au déploiement des politiques publiques portées par le <a href="https://www.ecologie.gouv.fr/" class="fr-link target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a> dans des secteurs comme l'environnement, l'énergie, le transport et le logement.`
+    content: `<p>${faqEcologieDataGouvHtml} est la plateforme publique mettant à disposition les données relatives à la transition écologique. Elle permet de rendre accessible au public des informations fiables et structurées, issues des institutions publiques et des acteurs privés. L'objectif est de rassembler les données utiles au déploiement des politiques publiques portées par le ${faqMinisterLink} dans des secteurs comme l'environnement, l'énergie, le transport et le logement.</p>`
   },
   {
     id: 'faq_accordion_2',
@@ -41,39 +42,46 @@ const faqAccordionContents = [
 <p>${faqEcologieDataGouvHtml} fait partie d'un écosystème naissant de verticales thématiques construites à partir d'un <a href="https://github.com/opendatateam/udata-front-kit" target="_blank">commun numérique</a> porté et co-développé par le CGDD et la DINUM.</p>`
   },
   {
-    id: 'faq_accordion_X',
+    id: 'faq_accordion_3',
     title: "À qui s'adresse cette plateforme ?",
-    content: 'WIP content'
+    content: `<p>${faqEcologieDataGouvHtml} s'adresse principalement :</p>
+<ul>
+<li>aux producteurs de données souhaitant ouvrir et valoriser leurs données en lien avec la transition écologique</li>
+<li>aux utilisateurs de données œuvrant à déployer les politiques publiques portées par le ${faqMinisterLink}</li>
+<li>mais aussi à tout citoyen curieux souhaitant découvrir des données en lien avec les enjeux écologiques.</li>
+</ul>
+<p>Grâce à une approche par cas d'usage, la plateforme propose un accès structuré à des données environnementales organisées autour de problématiques précises, facilitant ainsi leur réutilisation et adaptation sur différents territoires.</p>
+`
   },
   {
-    id: 'faq_accordion_X',
+    id: 'faq_accordion_4',
     title: "Qu'est-ce que le concept de bouquet ?",
     content: 'WIP content'
   },
   {
-    id: 'faq_accordion_X',
+    id: 'faq_accordion_5',
     title: 'Quelles données sont accessibles depuis ecologie.data.gouv.fr ?',
     content: 'WIP content'
   },
   {
-    id: 'faq_accordion_X',
+    id: 'faq_accordion_6',
     title:
       'Comment rendre disponible un jeu de données sur ecologie.data.gouv.fr ?',
     content: 'WIP content'
   },
   {
-    id: 'faq_accordion_X',
+    id: 'faq_accordion_7',
     title:
       "Je ne trouve pas le jeu de données dont j'ai besoin lors de la création d'un bouquet ?",
     content: 'WIP content'
   },
   {
-    id: 'faq_accordion_X',
+    id: 'faq_accordion_8',
     title: `Je ne trouve pas un jeu de données dans l'onglet "Données" ?`,
     content: 'WIP content'
   },
   {
-    id: 'faq_accordion_X',
+    id: 'faq_accordion_9',
     title: 'Un retour, une question ?',
     content: 'WIP content'
   }
