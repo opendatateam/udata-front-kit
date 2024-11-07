@@ -188,6 +188,7 @@ useHead({
           <BouquetCardHome :bouquet="topic" />
         </li>
       </ul>
+      <p><a href="/bouquets" class="fr-link">Voir tous les bouquets</a></p>
     </section>
     <section class="fr-container--fluid faq">
       <div class="fr-container fr-py-12v faq">
