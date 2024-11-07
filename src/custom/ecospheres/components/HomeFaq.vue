@@ -87,7 +87,7 @@ const faqAccordionContents = [
       :key="`faq_accordion_6${index}`"
       :title="accordion.title"
       :expanded-id="activeAccordion"
-      :class="{ active: activeAccordion == accordion.id }"
+      :class="{ active: activeAccordion == index }"
       @expand="setActiveAccordion($event)"
     >
       <!-- eslint-disable-next-line vue/no-v-html -->

@@ -321,13 +321,10 @@ useHead({
 .faq {
   :deep(.fr-accordions-group) {
     .fr-accordion.active {
-      .fr-accordion__title,
-      .fr-accordion__title button:hover {
+      .fr-accordion__title button {
         background-color: var(--blue-france-925-125);
+        color: #000091;
       }
-    }
-    .fr-accordion__title span {
-      color: #000091; /*var(--blue-france-975-sun-113) not working*/
     }
     .fr-collapse {
       background-color: white;
