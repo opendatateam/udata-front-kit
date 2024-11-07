@@ -29,12 +29,10 @@ const faqDataGouvHtml = `<span class="fr-text--italic"><span class="fr-text--bol
 const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link" target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a>`
 const faqAccordionContents = [
   {
-    id: 'faq_accordion_1',
     title: "Qu'est-ce que ecologie.data.gouv.fr ?",
     content: `<p>${faqEcologieDataGouvHtml} est la plateforme publique mettant à disposition les données relatives à la transition écologique. Elle permet de rendre accessible au public des informations fiables et structurées, issues des institutions publiques et des acteurs privés. L'objectif est de rassembler les données utiles au déploiement des politiques publiques portées par le ${faqMinisterLink} dans des secteurs comme l'environnement, l'énergie, le transport et le logement.</p>`
   },
   {
-    id: 'faq_accordion_2',
     title:
       'Quel est le lien entre le lien ecologie.data.gouv.fr et data.gouv.fr ?',
     content: `<p>${faqEcologieDataGouvHtml} est une verticale thématique de ${faqDataGouvHtml}, la plateforme nationale de données, dédiée aux thématiques liées à la transition écologique.</p>
@@ -42,7 +40,6 @@ const faqAccordionContents = [
 <p>${faqEcologieDataGouvHtml} fait partie d'un écosystème naissant de verticales thématiques construites à partir d'un <a href="https://github.com/opendatateam/udata-front-kit" target="_blank">commun numérique</a> porté et co-développé par le CGDD et la DINUM.</p>`
   },
   {
-    id: 'faq_accordion_3',
     title: "À qui s'adresse cette plateforme ?",
     content: `<p>${faqEcologieDataGouvHtml} s'adresse principalement :</p>
 <ul>
@@ -54,36 +51,30 @@ const faqAccordionContents = [
 `
   },
   {
-    id: 'faq_accordion_4',
     title: "Qu'est-ce que le concept de bouquet ?",
-    content: 'WIP content'
+    content: `WIP content`
   },
   {
-    id: 'faq_accordion_5',
     title: 'Quelles données sont accessibles depuis ecologie.data.gouv.fr ?',
-    content: 'WIP content'
+    content: `WIP content`
   },
   {
-    id: 'faq_accordion_6',
     title:
       'Comment rendre disponible un jeu de données sur ecologie.data.gouv.fr ?',
-    content: 'WIP content'
+    content: `WIP content`
   },
   {
-    id: 'faq_accordion_7',
     title:
       "Je ne trouve pas le jeu de données dont j'ai besoin lors de la création d'un bouquet ?",
-    content: 'WIP content'
+    content: `WIP content`
   },
   {
-    id: 'faq_accordion_8',
     title: `Je ne trouve pas un jeu de données dans l'onglet "Données" ?`,
-    content: 'WIP content'
+    content: `WIP content`
   },
   {
-    id: 'faq_accordion_9',
     title: 'Un retour, une question ?',
-    content: 'WIP content'
+    content: `WIP content`
   }
 ]
 
@@ -260,9 +251,9 @@ useHead({
         <h2>Foire aux questions</h2>
         <DsfrAccordionsGroup v-model="activeAccordion">
           <DsfrAccordion
-            v-for="accordion in faqAccordionContents"
+            v-for="(accordion, index) in faqAccordionContents"
             :id="accordion.id"
-            :key="accordion.id"
+            :key="`faq_accordion_6${index}`"
             :title="accordion.title"
             :expanded-id="activeAccordion"
             :class="{ active: activeAccordion == accordion.id }"
