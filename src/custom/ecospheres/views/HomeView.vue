@@ -77,7 +77,12 @@ const faqAccordionContents = [
   {
     title:
       'Comment rendre disponible un jeu de données sur ecologie.data.gouv.fr ?',
-    content: `WIP content`
+    content: `<p>Pour rendre disponible un jeu de données sur ${faqEcologieDataGouvHtml}, il est nécessaire de les publier via ${faqDataGouvHtml}, en utilisant les méthodes standards : vous pouvez passer par le parcours de publication web, l’API de ${faqDataGouvHtml}, ou par un processus de moissonnage. Vous trouverez des informations détaillées sur la publication dans le <a href="https://guides.data.gouv.fr/guide-data.gouv.fr/jeux-de-donnees/publier-un-jeu-de-donnees" class="fr-link" target="_blank">guide de data.gouv.fr</a> et les étapes pour <a href="https://www.data.gouv.fr/fr/pages/onboarding/producteurs/" class="fr-link" target="_blank">devenir producteur de données</a>.</p>
+
+<p>Pour mettre en place un moissonnage spécifique, veuillez nous contacter directement afin que nous vous aidions à configurer les paramètres nécessaires pour que vos flux de données soient correctement synchronisés.</p>
+
+<p>Une fois publiées sur ${faqDataGouvHtml}, vos données peuvent être intégrées dans un bouquet de données. Si vous souhaitez que votre jeu de données soit également directement accessible depuis l’onglet "Données" du site, veuillez nous contacter afin de référencer votre organisation.</p>
+`
   },
   {
     title:
