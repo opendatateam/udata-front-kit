@@ -84,7 +84,7 @@ const faqAccordionContents = [
     <DsfrAccordion
       v-for="(accordion, index) in faqAccordionContents"
       :id="accordion.id"
-      :key="`faq_accordion_6${index}`"
+      :key="`faq_accordion_${index}`"
       :title="accordion.title"
       :expanded-id="activeAccordion"
       :class="{ active: activeAccordion == index }"
@@ -95,3 +95,24 @@ const faqAccordionContents = [
     </DsfrAccordion>
   </DsfrAccordionsGroup>
 </template>
+
+<style scoped>
+.fr-accordion.active :deep(.fr-accordion__title button) {
+  background-color: var(--blue-france-925-125);
+  color: #000091;
+}
+:deep(.fr-collapse) {
+  background-color: white;
+  margin: 0;
+}
+
+:deep(.fr-accordion__btn:after) {
+  content: url('../assets/arrow-down.svg');
+  background-color: inherit;
+  mask-image: inherit;
+}
+
+:deep(.fr-accordion.active .fr-accordion__btn:after) {
+  content: url('../assets/arrow-up.svg');
+}
+</style>

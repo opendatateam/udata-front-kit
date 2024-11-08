@@ -336,30 +336,6 @@ useHead({
     height: 120%;
   }
 }
-.faq {
-  :deep(.fr-accordions-group) {
-    .fr-accordion.active {
-      .fr-accordion__title button {
-        background-color: var(--blue-france-925-125);
-        color: #000091;
-      }
-    }
-    .fr-collapse {
-      background-color: white;
-      margin: 0;
-    }
-  }
-}
-:deep(.fr-accordion__btn:after) {
-  content: url('../assets/arrow-down.svg');
-  background-color: inherit;
-  mask-image: inherit;
-}
-
-:deep(.fr-accordion.active .fr-accordion__btn:after) {
-  content: url('../assets/arrow-up.svg');
-}
-
 .main-title-v2 {
   text-align: center;
   font-size: clamp(1.375rem, 0.4698rem + 4.5259vw, 4rem);
