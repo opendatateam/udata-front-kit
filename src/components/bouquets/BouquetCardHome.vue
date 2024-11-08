@@ -101,15 +101,9 @@ const { themeColors } = useThemeOptions(theme)
       <div class="fr-col-12">
         <p
           v-if="bouquet.organization || bouquet.owner"
-          class="fr-m-0 fr-text--sm flex align-start fr-pt-3v"
+          class="fr-m-0 fr-text--sm flex align-center fr-pt-3v"
         >
-          <img
-            src="../../custom/ecospheres/assets/time.svg"
-            alt=""
-            class="fr-mr-1v"
-            width="20"
-            height="20"
-          />
+          <VIcon name="ri:time-line" class="fr-mr-1v text-grey-380" />
           mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
         </p>
         <p class="fr-tag fr-mt-2v">
