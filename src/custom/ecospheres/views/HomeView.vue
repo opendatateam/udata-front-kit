@@ -54,8 +54,8 @@ useHead({
         </p>
       </div>
     </section>
-    <section class="fr-container">
-      <ul class="fr-grid-row fr-grid-row--gutters fr-py-12v" role="list">
+    <section class="fr-container explore-contribute fr-px-0">
+      <ul class="fr-grid-row fr-grid-row--gutters fr-pb-12v" role="list">
         <li class="fr-col-12 fr-col-md-6">
           <DsfrCard
             :no-arrow="true"
@@ -103,7 +103,7 @@ useHead({
       </ul>
     </section>
     <section class="fr-container--fluid bouquets">
-      <div class="fr-container fr-py-12v">
+      <div class="fr-container fr-py-16v">
         <h2>
           Les bouquets : pourquoi orchestrer des ensembles de données par usage
           ?
@@ -191,7 +191,7 @@ useHead({
       <p><a href="/bouquets" class="fr-link">Voir tous les bouquets</a></p>
     </section>
     <section class="fr-container--fluid faq">
-      <div class="fr-container fr-py-12v faq">
+      <div class="fr-container fr-py-16v faq">
         <h2>Foire aux questions</h2>
         <HomeFaq />
       </div>
@@ -277,6 +277,16 @@ useHead({
   .fr-card__desc {
     font-size: 1rem;
   }
+}
+:deep(.fr-card--sm .fr-card__footer) {
+  padding: 0 0 2rem;
+}
+
+.explore-contribute :deep(.fr-card__body) {
+  padding-left: 1.5rem;
+}
+.explore-contribute .fr-grid-row--gutters .fr-col-12 {
+  padding: 1.75rem;
 }
 
 :deep(.fr-card__header) {
