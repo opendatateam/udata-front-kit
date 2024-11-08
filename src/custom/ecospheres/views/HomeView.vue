@@ -188,7 +188,13 @@ useHead({
           <BouquetCardHome :bouquet="topic" />
         </li>
       </ul>
-      <p><a href="/bouquets" class="fr-link">Voir tous les bouquets</a></p>
+      <p class="fr-m-0">
+        <a
+          href="/bouquets"
+          class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+          >Voir tous les bouquets</a
+        >
+      </p>
     </section>
     <section class="fr-container--fluid faq">
       <div class="fr-container fr-py-16v faq">
@@ -260,6 +266,7 @@ useHead({
 
   li a::after {
     content: ' →';
+    margin-left: 0.5rem;
   }
 
   .fr-link {
