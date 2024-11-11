@@ -76,7 +76,7 @@ website:
       to: '/terms'
     - label: 'Politique de confidentialité'
       href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
+    - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
   notice:
     display: true
