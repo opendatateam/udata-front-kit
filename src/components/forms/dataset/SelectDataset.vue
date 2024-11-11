@@ -2,14 +2,14 @@
 import type { DatasetV2 } from '@datagouv/components'
 import { useDebounceFn } from '@vueuse/core'
 import { defineModel, ref, type Ref } from 'vue'
-import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
+
+import NewMultiselect from '@vueform/multiselect'
+import '@vueform/multiselect/themes/default.css'
 
 import '@/assets/multiselect.css'
 import type { DatasetProperties } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchAPI'
-
-import DatasetCardForSelect from './DatasetCardForSelect.vue'
 
 const selectedDataset = defineModel({
   type: Object as () => DatasetV2
@@ -54,10 +54,12 @@ const clear = () => {
 </script>
 
 <template>
-  <label class="fr-label fr-mt-2v" for="bouquet-select-dataset"
-    >Rechercher une donnée dans data.gouv.fr&nbsp;:</label
-  >
-  <Multiselect
+  <label class="fr-label fr-mb-2v" for="bouquet-select-dataset">
+    Jeu de données (facultatif)<br /><span class="fr-text--sm"
+      >Rechercher un jeu de données dans data.gouv.fr</span
+    >
+  </label>
+  <!-- <Multiselect
     id="bouquet-select-dataset"
     ref="multiselect"
     v-model="selectedDataset"
@@ -98,13 +100,56 @@ const clear = () => {
       />
     </template>
     <template #noOptions> Précisez ou élargissez votre recherche </template>
-  </Multiselect>
+  </Multiselect> -->
+
+  <!--
+  almost working
+  'options.value is not a function' from multiselect
+  loader never disappears even when all else works
+   -->
+  <NewMultiselect
+    id="input-regroupement"
+    ref="newSelect"
+    v-model="selectedDataset"
+    :object="true"
+    value-prop="id"
+    label="title"
+    track-by="title"
+    :filter-results="false"
+    :min-chars="3"
+    :clear-on-search="true"
+    :delay="0"
+    :options="options"
+    :resolve-on-load="false"
+    :searchable="true"
+    :limit="5"
+    :strict="false"
+    no-results-text="Aucun regroupement existant"
+    :clear-on-blur="false"
+    placeholder=""
+    @search-change="search"
+  >
+    <template #singlelabel="{ value }">
+      <div class="multiselect-single-label fr-py-2w">
+        <DatasetCardForSelect
+          :dataset="value"
+          :already-selected="alreadySelected(value.id)"
+          badge-position="absolute"
+        />
+      </div>
+    </template>
+    <template #option="{ option }">
+      <DatasetCardForSelect
+        :dataset="option"
+        :already-selected="alreadySelected(option.id)"
+        badge-position="relative"
+      />
+    </template>
+    <template #nooptions> Précisez ou élargissez votre recherche </template>
+  </NewMultiselect>
 </template>
 
 <style scoped>
-.multiselect {
-  margin-top: 1rem;
-}
 :deep(.multiselect__option::after) {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -113,5 +158,12 @@ const clear = () => {
   position: absolute;
   white-space: nowrap;
   inline-size: 1px;
+}
+.multiselect {
+  --ms-max-height: 400px;
+}
+.multiselect-single-label {
+  position: relative;
+  margin-inline-end: auto;
 }
 </style>

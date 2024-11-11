@@ -107,21 +107,37 @@ export function useExtras(topic: Ref<Topic | null>): {
   theme: Ref<string | undefined>
   subtheme: Ref<string | undefined>
   datasetsProperties: Ref<DatasetProperties[]>
+  datasetsGroups: Ref<Map<string, DatasetProperties[]>>
   clonedFrom: Ref<Topic | null>
 } {
   const theme: Ref<string | undefined> = ref()
   const subtheme: Ref<string | undefined> = ref()
   const datasetsProperties: Ref<DatasetProperties[]> = ref([])
+  const datasetsGroups: Ref<Map<string, DatasetProperties[]>> = ref(new Map())
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
     topic,
-    () => {
+    async () => {
       const extras = topic.value?.extras[topicsExtrasKey]
       if (extras != null) {
         theme.value = topicsUseThemes ? extras.theme : undefined
         subtheme.value = topicsUseThemes ? extras.subtheme : undefined
         datasetsProperties.value = extras.datasets_properties ?? []
+
+        if (datasetsProperties.value) {
+          datasetsProperties.value.forEach((dataset) => {
+            const group = dataset.group ?? 'noGroup'
+            // Check if the map already contains the key (group)
+            if (!datasetsGroups.value.has(group)) {
+              // If not, create a new entry with the group as the key and an array containing the id
+              datasetsGroups.value.set(group, [dataset])
+            } else {
+              // If it already exists, push the id to the array for that group
+              datasetsGroups.value.get(group)?.push(dataset)
+            }
+          })
+        }
 
         if (extras.cloned_from != null) {
           useTopicStore()
@@ -146,5 +162,5 @@ export function useExtras(topic: Ref<Topic | null>): {
     { immediate: true }
   )
 
-  return { theme, subtheme, datasetsProperties, clonedFrom }
+  return { theme, subtheme, datasetsProperties, datasetsGroups, clonedFrom }
 }

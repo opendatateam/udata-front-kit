@@ -70,7 +70,8 @@ const {
   topicsName
 } = useTopicsConf()
 
-const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(topic)
+const { datasetsProperties, datasetsGroups, clonedFrom, theme, subtheme } =
+  useExtras(topic)
 
 const breadcrumbLinks = useBreadcrumbLinksForTopic(
   theme,
@@ -321,6 +322,18 @@ watch(
         </div>
       </div>
     </div>
+
+    <DisclosureWidget
+      v-for="[group, datasets] in datasetsGroups"
+      :key="group"
+      :group-name="group"
+    >
+      <ul>
+        <li v-for="(dataset, index) in datasets" :key="index">
+          {{ dataset.title }}
+        </li>
+      </ul>
+    </DisclosureWidget>
 
     <DsfrTabs
       v-model="activeTab"
