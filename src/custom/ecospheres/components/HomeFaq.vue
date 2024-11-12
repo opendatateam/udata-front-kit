@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const activeAccordion = ref<string>()
-const setActiveAccordion = (id: string) => {
-  activeAccordion.value = id
-}
+const activeAccordion = ref<number>()
 const faqEcologieDataGouvHtml = `<span class="f-italic">ecologie.<span class="fr-text--bold">data.gouv</span>.fr</span>`
 const faqDataGouvHtml = `<span class="f-italic"><span class="fr-text--bold">data.gouv</span>.fr</span>`
 const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link" target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a>`
@@ -83,12 +80,9 @@ const faqAccordionContents = [
   <DsfrAccordionsGroup v-model="activeAccordion">
     <DsfrAccordion
       v-for="(accordion, index) in faqAccordionContents"
-      :id="accordion.id"
       :key="`faq_accordion_${index}`"
       :title="accordion.title"
-      :expanded-id="activeAccordion"
-      :class="{ active: activeAccordion == index }"
-      @expand="setActiveAccordion($event)"
+      :class="{ active: activeAccordion === index }"
     >
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-html="accordion.content"></div>
