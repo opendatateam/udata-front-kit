@@ -179,4 +179,7 @@ watch(
 .fr-footer__brand-link {
   box-sizing: content-box;
 }
+.fr-footer__logo {
+  max-width: 100%;
+}
 </style>
