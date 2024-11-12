@@ -60,13 +60,13 @@ const { themeColors } = useThemeOptions(theme)
       </div>
     </div>
     <div class="fr-grid-row fr-pt-2v">
-      <div class="fr-col-3">
+      <div class="fr-col-12 fr-col-sm-3">
         <OrganizationLogo
           v-if="bouquet.organization"
           :size="64"
           :object="bouquet"
         />
-        <div v-else class="border fr-p-1-5v fr-mr-1-5v">
+        <div v-else class="border fr-p-1-5v fr-mr-1-5v" style="width: 77px">
           <img
             :src="getOwnerAvatar(bouquet)"
             alt=""
@@ -77,7 +77,7 @@ const { themeColors } = useThemeOptions(theme)
           />
         </div>
       </div>
-      <div class="fr-col-9 fr-pl-2v">
+      <div class="fr-col-12 fr-col-sm-9 fr-pl-2v">
         <h3 class="fr-mb-1v fr-grid-row h4">
           <RouterLink :to="bouquetLink" class="text-grey-500">
             {{ bouquet.name }}
