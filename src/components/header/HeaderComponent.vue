@@ -197,7 +197,10 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               />
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
-              <SearchComponent :search-label="searchLabel" />
+              <SearchComponent
+                id="header-select-search"
+                :search-label="searchLabel"
+              />
             </div>
           </div>
         </div>
@@ -224,6 +227,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               </button>
               <SearchComponent
                 v-if="searchModalOpened"
+                id="header-select-search-modal"
                 :search-label="searchLabel"
                 @search="hideModal(false)"
               />

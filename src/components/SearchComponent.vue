@@ -21,7 +21,7 @@ defineProps({
   },
   id: {
     type: String,
-    default: 'select-search'
+    required: true
   }
 })
 
