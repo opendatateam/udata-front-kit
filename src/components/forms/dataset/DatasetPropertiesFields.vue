@@ -1,28 +1,32 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import {
-  computed,
-  defineModel,
-  onMounted,
-  ref,
-  watch,
-  type PropType,
-  type Ref
-} from 'vue'
+import { computed, onMounted, ref, watch, type PropType, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { Availability, type DatasetProperties } from '@/model/topic'
+import {
+  Availability,
+  type DatasetProperties,
+  type DatasetsGroups
+} from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicsConf } from '@/utils/config'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
+import Multiselect from '@vueform/multiselect'
+import '@vueform/multiselect/themes/default.css'
+
 const emit = defineEmits(['updateValidation'])
 
 const datasetProperties = defineModel({
   type: Object as PropType<DatasetProperties>,
   required: true
+})
+
+const datasetsGroups = defineModel('groups-model', {
+  type: Object as () => DatasetsGroups,
+  default: []
 })
 
 defineProps({
@@ -89,6 +93,58 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
   }
 }
 
+const initialGroup = datasetProperties.value.group || 'Sans regroupement'
+const groupValue = ref<string>(initialGroup)
+
+const groupOptions = ref(Array.from(datasetsGroups.value, ([key]) => key))
+
+const onSelectGroup = (option: string) => {
+  datasetProperties.value.group = option
+}
+
+const updateDatasetGroup = (
+  oldKey: string = initialGroup,
+  newKey: string = datasetProperties.value.group || 'Sans regroupement',
+  item: DatasetProperties = datasetProperties.value
+) => {
+  const sourceArray = datasetsGroups.value.get(oldKey)
+
+  if (!sourceArray) {
+    console.log(`Invalid key: ${oldKey}`)
+    return
+  }
+
+  if (sourceArray.length <= 1) {
+    // Delete the key if there was only 1 item or if empty
+    datasetsGroups.value.delete(oldKey)
+    console.log(`deleted ${oldKey}`)
+  } else {
+    // Remove the item from the old array
+    datasetsGroups.value.set(
+      oldKey,
+      sourceArray.filter((el) => el.id !== item.id)
+    )
+    console.log(`Removed ${item.id} from ${oldKey}`)
+  }
+
+  // Check if the targetKey exists in the Map
+  if (!datasetsGroups.value.has(newKey)) {
+    datasetsGroups.value.set(newKey, [])
+    console.log(`Created ${newKey} with an empty array.`)
+  }
+
+  const targetArray = datasetsGroups.value.get(newKey)
+  // Add the item to the new array
+  if (targetArray && !targetArray.includes(item)) {
+    targetArray.push(item)
+    console.log(`added ${item} to ${newKey}`)
+  }
+}
+
+defineExpose({
+  updateDatasetGroup
+})
+
 watch(
   isValidDataset,
   (newValue) => {
@@ -129,6 +185,37 @@ onMounted(() => {
       :already-selected-datasets="alreadySelectedDatasets"
       @update:model-value="onSelectDataset"
     />
+  </div>
+  <div class="fr-input-group">
+    <label for="input-regroupement">Regroupement (facultatif)</label>
+    <p id="regroupement-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
+      Rechercher ou créer un regroupement. Un regroupement contient un ou
+      plusieurs jeux de données.
+    </p>
+    <Multiselect
+      id="input-regroupement"
+      v-model="groupValue"
+      :options="groupOptions"
+      :searchable="true"
+      :limit="5"
+      :strict="false"
+      no-options-text="Il n'y a pas encore de regroupement dans ce bouquet."
+      no-results-text="Aucun regroupement existant."
+      :create-option="true"
+      name="select"
+      placeholder=""
+      :aria="{
+        'aria-describedby': 'regroupement-description'
+      }"
+      @select="onSelectGroup"
+    >
+      <template #option="{ option }">
+        <p v-if="option.__CREATE__">
+          Ajouter "{{ option.label }}" comme regroupement
+        </p>
+        <p v-else>{{ option.label }}</p>
+      </template>
+    </Multiselect>
   </div>
   <div
     v-if="!selectedDataset && topicsDatasetEditorialization"

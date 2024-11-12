@@ -11,6 +11,7 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
   type DatasetProperties,
+  type DatasetsGroups,
   type SiteTopicExtras,
   type Topic,
   type TopicExtras,
@@ -107,13 +108,13 @@ export function useExtras(topic: Ref<Topic | null>): {
   theme: Ref<string | undefined>
   subtheme: Ref<string | undefined>
   datasetsProperties: Ref<DatasetProperties[]>
-  datasetsGroups: Ref<Map<string, DatasetProperties[]>>
+  datasetsGroups: Ref<DatasetsGroups>
   clonedFrom: Ref<Topic | null>
 } {
   const theme: Ref<string | undefined> = ref()
   const subtheme: Ref<string | undefined> = ref()
   const datasetsProperties: Ref<DatasetProperties[]> = ref([])
-  const datasetsGroups: Ref<Map<string, DatasetProperties[]>> = ref(new Map())
+  const datasetsGroups: Ref<DatasetsGroups> = ref(new Map())
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
@@ -127,7 +128,7 @@ export function useExtras(topic: Ref<Topic | null>): {
 
         if (datasetsProperties.value) {
           datasetsProperties.value.forEach((dataset) => {
-            const group = dataset.group ?? 'noGroup'
+            const group = dataset.group ?? 'Sans regroupement'
             // Check if the map already contains the key (group)
             if (!datasetsGroups.value.has(group)) {
               // If not, create a new entry with the group as the key and an array containing the id
@@ -161,6 +162,26 @@ export function useExtras(topic: Ref<Topic | null>): {
     },
     { immediate: true }
   )
+
+  // watch(
+  //   datasetsGroups,
+  //   () => {
+  //     if (datasetsProperties.value) {
+  //       datasetsProperties.value.forEach((dataset) => {
+  //         const group = dataset.group ?? 'Sans regroupement'
+  //         // Check if the map already contains the key (group)
+  //         if (!datasetsGroups.value.has(group)) {
+  //           // If not, create a new entry with the group as the key and an array containing the id
+  //           datasetsGroups.value.set(group, [dataset])
+  //         } else {
+  //           // If it already exists, push the id to the array for that group
+  //           datasetsGroups.value.get(group)?.push(dataset)
+  //         }
+  //       })
+  //     }
+  //   },
+  //   { immediate: true }
+  // )
 
   return { theme, subtheme, datasetsProperties, datasetsGroups, clonedFrom }
 }

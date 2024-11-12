@@ -4,7 +4,11 @@ import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
-import { Availability, type DatasetProperties } from '@/model/topic'
+import {
+  Availability,
+  type DatasetProperties,
+  type DatasetsGroups
+} from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
@@ -22,12 +26,18 @@ const datasets = defineModel({
   type: Object as () => DatasetProperties[],
   required: true
 })
+const datasetsGroups = defineModel('groups-model', {
+  type: Object as () => DatasetsGroups,
+  default: []
+})
 
 const isModalOpen = ref(false)
 const modalData: Ref<DatasetModalData> = ref({
   isValid: false,
   mode: 'edit'
 })
+
+const datasetPropertiesFields = useTemplateRef('datasetPropertiesFields')
 
 const modalActions = computed(() => {
   return [
@@ -44,6 +54,7 @@ const modalActions = computed(() => {
       onClick: ($event: PointerEvent) => {
         $event.preventDefault()
         submitModal(modalData.value)
+        datasetPropertiesFields.value?.updateDatasetGroup()
         closeModal()
       }
     }
@@ -69,7 +80,8 @@ const addDataset = () => {
       purpose: '',
       availability: Availability.LOCAL_AVAILABLE,
       uri: null,
-      id: null
+      id: null,
+      group: 'Sans regroupement'
     },
     isValid: false,
     mode: 'create'
@@ -145,7 +157,9 @@ defineExpose({ addDataset, editDataset })
   >
     <form novalidate>
       <DatasetPropertiesFields
+        ref="datasetPropertiesFields"
         v-model="modalData.dataset"
+        v-model:groups-model="datasetsGroups"
         :already-selected-datasets="datasets"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />

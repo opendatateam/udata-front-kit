@@ -25,6 +25,8 @@ export interface DatasetProperties {
   remoteArchived?: boolean
 }
 
+export type DatasetsGroups = Map<string, DatasetProperties[]>
+
 export interface SiteTopicExtras {
   theme: string
   subtheme: string

@@ -323,18 +323,6 @@ watch(
       </div>
     </div>
 
-    <DisclosureWidget
-      v-for="[group, datasets] in datasetsGroups"
-      :key="group"
-      :group-name="group"
-    >
-      <ul>
-        <li v-for="(dataset, index) in datasets" :key="index">
-          {{ dataset.title }}
-        </li>
-      </ul>
-    </DisclosureWidget>
-
     <DsfrTabs
       v-model="activeTab"
       class="fr-mt-2w"
@@ -345,6 +333,7 @@ watch(
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
         <BouquetDatasetList
           v-model="datasetsProperties"
+          v-model:groups-model="datasetsGroups"
           :is-edit="canEdit"
           :dataset-editorialization="topicsDatasetEditorialization"
           @update-datasets="onUpdateDatasets"

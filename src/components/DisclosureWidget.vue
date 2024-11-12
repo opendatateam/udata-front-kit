@@ -2,8 +2,7 @@
 defineProps({
   groupName: {
     type: String,
-    required: true,
-    default: 'Regroupement XXX'
+    required: true
   }
 })
 const isDisclosureOpen: Ref<boolean> = ref(false)
@@ -41,7 +40,7 @@ const toggleDisclosure = () => {
           </svg>
         </span>
       </button>
-      <div class="disclosure__actions">
+      <div v-if="groupName !== 'Sans regroupemen'" class="disclosure__actions">
         <button class="disclosure__btn">
           <span class="fr-sr-only">éditer le regroupement {{ groupName }}</span>
           <svg
@@ -111,7 +110,6 @@ const toggleDisclosure = () => {
   flex-wrap: nowrap;
 }
 .disclosure__header {
-  padding-inline-end: var(--padding-base);
   border-block-end: 1px solid var(--border-default-grey);
 }
 .disclosure__trigger {
@@ -131,6 +129,9 @@ const toggleDisclosure = () => {
 .disclosure__marker svg {
   rotate: 0deg;
   transition: rotate 0.4s ease;
+}
+.disclosure__actions {
+  gap: var(--padding-base);
 }
 .disclosure__content {
   padding: var(--padding-base);
