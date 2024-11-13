@@ -27,11 +27,6 @@ const datasetsGroups = defineModel('groups-model', {
 })
 
 defineProps({
-  // datasetsGroups: {
-  //   type: Object as () => DatasetsGroups,
-  //   requried: true,
-  //   default: () => null
-  // },
   isEdit: {
     type: Boolean,
     default: false
@@ -183,28 +178,6 @@ onMounted(() => {
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">
-      <!-- Draggable list -->
-      <!-- <div v-if="isReorder">
-        <ul class="fr-accordions-group">
-          <draggable ghost-class="ghost" :list="datasetsProperties">
-            <li v-for="(dataset, index) in datasetsProperties" :key="index">
-              <section class="fr-accordion draggable">
-                <h3 class="fr-accordion__title">
-                  <button
-                    class="fake__fr-accordion__btn fake__fr-accordion__btn__mq"
-                  >
-                    <BouquetDatasetAccordionTitle
-                      :dataset-properties="dataset"
-                      :is-edit="true"
-                    />
-                  </button>
-                </h3>
-              </section>
-            </li>
-          </draggable>
-        </ul>
-      </div> -->
-      <!-- Static list -->
       <div v-if="!isReorder">
         <DisclosureWidget
           v-for="[group, datasets] in datasetsGroups"

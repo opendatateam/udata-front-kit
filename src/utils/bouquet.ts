@@ -108,13 +108,18 @@ export function useExtras(topic: Ref<Topic | null>): {
   theme: Ref<string | undefined>
   subtheme: Ref<string | undefined>
   datasetsProperties: Ref<DatasetProperties[]>
-  datasetsGroups: Ref<DatasetsGroups>
+  // datasetsGroups: Ref<DatasetsGroups>
+  groupedDatasets: ComputedRef
   clonedFrom: Ref<Topic | null>
+  updateGroup: (
+    datasetToUpdate: DatasetProperties,
+    newGroup: string | undefined
+  ) => void
 } {
   const theme: Ref<string | undefined> = ref()
   const subtheme: Ref<string | undefined> = ref()
   const datasetsProperties: Ref<DatasetProperties[]> = ref([])
-  const datasetsGroups: Ref<DatasetsGroups> = ref(new Map())
+  // const datasetsGroups: Ref<DatasetsGroups> = ref(new Map())
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
@@ -125,20 +130,6 @@ export function useExtras(topic: Ref<Topic | null>): {
         theme.value = topicsUseThemes ? extras.theme : undefined
         subtheme.value = topicsUseThemes ? extras.subtheme : undefined
         datasetsProperties.value = extras.datasets_properties ?? []
-
-        if (datasetsProperties.value) {
-          datasetsProperties.value.forEach((dataset) => {
-            const group = dataset.group ?? 'Sans regroupement'
-            // Check if the map already contains the key (group)
-            if (!datasetsGroups.value.has(group)) {
-              // If not, create a new entry with the group as the key and an array containing the id
-              datasetsGroups.value.set(group, [dataset])
-            } else {
-              // If it already exists, push the id to the array for that group
-              datasetsGroups.value.get(group)?.push(dataset)
-            }
-          })
-        }
 
         if (extras.cloned_from != null) {
           useTopicStore()
@@ -163,25 +154,40 @@ export function useExtras(topic: Ref<Topic | null>): {
     { immediate: true }
   )
 
-  // watch(
-  //   datasetsGroups,
-  //   () => {
-  //     if (datasetsProperties.value) {
-  //       datasetsProperties.value.forEach((dataset) => {
-  //         const group = dataset.group ?? 'Sans regroupement'
-  //         // Check if the map already contains the key (group)
-  //         if (!datasetsGroups.value.has(group)) {
-  //           // If not, create a new entry with the group as the key and an array containing the id
-  //           datasetsGroups.value.set(group, [dataset])
-  //         } else {
-  //           // If it already exists, push the id to the array for that group
-  //           datasetsGroups.value.get(group)?.push(dataset)
-  //         }
-  //       })
-  //     }
-  //   },
-  //   { immediate: true }
-  // )
+  // Create a Map to store datasets grouped by their group
+  const groupedDatasets = computed(() => {
+    const datasetsGroups: Ref<DatasetsGroups> = ref(new Map())
 
-  return { theme, subtheme, datasetsProperties, datasetsGroups, clonedFrom }
+    // Loop through the datasets and group them by the 'group' property
+    datasetsProperties.value.forEach((dataset) => {
+      if (!dataset.group) {
+        dataset.group = 'Sans regroupement' // Default group
+      }
+
+      if (!datasetsGroups.value.has(dataset.group)) {
+        datasetsGroups.value.set(dataset.group, [])
+      }
+
+      datasetsGroups.value.get(dataset.group)?.push(dataset)
+    })
+
+    return datasetsGroups.value
+  })
+
+  // Method to update the group of a specific dataset
+  const updateGroup = (
+    datasetToUpdate: DatasetProperties,
+    newGroup: string | undefined
+  ) => {
+    datasetToUpdate.group = newGroup || 'Sans regroupement'
+  }
+
+  return {
+    theme,
+    subtheme,
+    datasetsProperties,
+    clonedFrom,
+    groupedDatasets,
+    updateGroup
+  }
 }

@@ -98,62 +98,62 @@ const groupValue = ref<string>(initialGroup)
 
 const groupOptions = ref(Array.from(datasetsGroups.value, ([key]) => key))
 
-const onSelectGroup = (option: string) => {
-  datasetProperties.value.group = option
-}
+// const onSelectGroup = (option: string) => {
+//   datasetProperties.value.group = option
+// }
 
-const onClearGroup = () => {
-  groupValue.value = 'Sans regroupement'
-  datasetProperties.value.group = 'Sans regroupement'
-}
+// const onClearGroup = () => {
+//   groupValue.value = 'Sans regroupement'
+//   datasetProperties.value.group = 'Sans regroupement'
+// }
 
-const updateDatasetGroup = (
-  oldKey: string = initialGroup,
-  newKey: string = datasetProperties.value.group || 'Sans regroupement',
-  item: DatasetProperties = datasetProperties.value
-) => {
-  const sourceArray = datasetsGroups.value.get(oldKey)
+// const updateDatasetGroup = (
+//   oldKey: string = initialGroup,
+//   newKey: string = datasetProperties.value.group || 'Sans regroupement',
+//   item: DatasetProperties = datasetProperties.value
+// ) => {
+//   const sourceArray = datasetsGroups.value.get(oldKey)
 
-  if (!sourceArray) {
-    console.log(`Invalid key: ${oldKey}`)
-    return
-  }
+//   if (!sourceArray) {
+//     console.log(`Invalid key: ${oldKey}`)
+//     return
+//   }
 
-  console.log()
+//   console.log()
 
-  // check if item was in the sourceArray (needed for default nogroup state)
-  if (sourceArray.some((el) => el.id === item.id)) {
-    // Remove the item from the old array
-    datasetsGroups.value.set(
-      oldKey,
-      sourceArray.filter((el) => el.id !== item.id)
-    )
-    console.log(`Removed ${item.id} from ${oldKey}`)
+//   // check if item was in the sourceArray (needed for default nogroup state)
+//   if (sourceArray.some((el) => el.id === item.id)) {
+//     // Remove the item from the old array
+//     datasetsGroups.value.set(
+//       oldKey,
+//       sourceArray.filter((el) => el.id !== item.id)
+//     )
+//     console.log(`Removed ${item.id} from ${oldKey}`)
 
-    if (sourceArray.length <= 1) {
-      // Delete the key if array is empty or if item was the only element
-      datasetsGroups.value.delete(oldKey)
-      console.log(`deleted ${oldKey}`)
-    }
-  }
+//     if (sourceArray.length <= 1) {
+//       // Delete the key if array is empty or if item was the only element
+//       datasetsGroups.value.delete(oldKey)
+//       console.log(`deleted ${oldKey}`)
+//     }
+//   }
 
-  // Check if the targetKey exists in the Map
-  if (!datasetsGroups.value.has(newKey)) {
-    datasetsGroups.value.set(newKey, [])
-    console.log(`Created ${newKey} with an empty array.`)
-  }
+//   // Check if the targetKey exists in the Map
+//   if (!datasetsGroups.value.has(newKey)) {
+//     datasetsGroups.value.set(newKey, [])
+//     console.log(`Created ${newKey} with an empty array.`)
+//   }
 
-  const targetArray = datasetsGroups.value.get(newKey)
-  // Add the item to the new array
-  if (targetArray && !targetArray.includes(item)) {
-    targetArray.push(item)
-    console.log(`added ${item} to ${newKey}`)
-  }
-}
+//   const targetArray = datasetsGroups.value.get(newKey)
+//   // Add the item to the new array
+//   if (targetArray && !targetArray.includes(item)) {
+//     targetArray.push(item)
+//     console.log(`added ${item} to ${newKey}`)
+//   }
+// }
 
-defineExpose({
-  updateDatasetGroup
-})
+// defineExpose({
+//   updateDatasetGroup
+// })
 
 watch(
   isValidDataset,
@@ -217,8 +217,6 @@ onMounted(() => {
       :aria="{
         'aria-describedby': 'regroupement-description'
       }"
-      @select="onSelectGroup"
-      @clear="onClearGroup"
     >
       <template #option="{ option }">
         <p v-if="option.__CREATE__">

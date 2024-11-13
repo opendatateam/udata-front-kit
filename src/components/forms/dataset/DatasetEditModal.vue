@@ -54,7 +54,7 @@ const modalActions = computed(() => {
       onClick: ($event: PointerEvent) => {
         $event.preventDefault()
         submitModal(modalData.value)
-        datasetPropertiesFields.value?.updateDatasetGroup()
+        // datasetPropertiesFields.value?.updateDatasetGroup()
         closeModal()
       }
     }

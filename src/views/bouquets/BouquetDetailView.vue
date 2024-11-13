@@ -70,8 +70,14 @@ const {
   topicsName
 } = useTopicsConf()
 
-const { datasetsProperties, datasetsGroups, clonedFrom, theme, subtheme } =
-  useExtras(topic)
+const {
+  datasetsProperties,
+  groupedDatasets,
+  clonedFrom,
+  theme,
+  subtheme,
+  updateGroup
+} = useExtras(topic)
 
 const breadcrumbLinks = useBreadcrumbLinksForTopic(
   theme,
@@ -333,7 +339,7 @@ watch(
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
         <BouquetDatasetList
           v-model="datasetsProperties"
-          v-model:groups-model="datasetsGroups"
+          v-model:groups-model="groupedDatasets"
           :is-edit="canEdit"
           :dataset-editorialization="topicsDatasetEditorialization"
           @update-datasets="onUpdateDatasets"
