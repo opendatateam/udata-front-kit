@@ -102,6 +102,11 @@ const onSelectGroup = (option: string) => {
   datasetProperties.value.group = option
 }
 
+const onClearGroup = () => {
+  groupValue.value = 'Sans regroupement'
+  datasetProperties.value.group = 'Sans regroupement'
+}
+
 const updateDatasetGroup = (
   oldKey: string = initialGroup,
   newKey: string = datasetProperties.value.group || 'Sans regroupement',
@@ -114,17 +119,22 @@ const updateDatasetGroup = (
     return
   }
 
-  if (sourceArray.length <= 1) {
-    // Delete the key if there was only 1 item or if empty
-    datasetsGroups.value.delete(oldKey)
-    console.log(`deleted ${oldKey}`)
-  } else {
+  console.log()
+
+  // check if item was in the sourceArray (needed for default nogroup state)
+  if (sourceArray.some((el) => el.id === item.id)) {
     // Remove the item from the old array
     datasetsGroups.value.set(
       oldKey,
       sourceArray.filter((el) => el.id !== item.id)
     )
     console.log(`Removed ${item.id} from ${oldKey}`)
+
+    if (sourceArray.length <= 1) {
+      // Delete the key if array is empty or if item was the only element
+      datasetsGroups.value.delete(oldKey)
+      console.log(`deleted ${oldKey}`)
+    }
   }
 
   // Check if the targetKey exists in the Map
@@ -208,6 +218,7 @@ onMounted(() => {
         'aria-describedby': 'regroupement-description'
       }"
       @select="onSelectGroup"
+      @clear="onClearGroup"
     >
       <template #option="{ option }">
         <p v-if="option.__CREATE__">
