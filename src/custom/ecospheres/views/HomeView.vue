@@ -48,7 +48,7 @@ useHead({
           placeholder="Rechercher"
           search-label="Rechercher"
         />
-        <p for="select-search" class="text-grey-300 fr-text--sm">
+        <p class="text-grey-300 fr-text--sm">
           Exemple : "Itinéraires fraîcheur" dans les bouquets ou "Horaires des
           TGV" dans les données
         </p>
