@@ -99,10 +99,7 @@ const { themeColors } = useThemeOptions(theme)
     </div>
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
       <div class="fr-col-12">
-        <p
-          v-if="bouquet.organization || bouquet.owner"
-          class="fr-m-0 fr-text--sm flex align-center fr-pt-3v"
-        >
+        <p class="fr-m-0 fr-text--sm flex align-center fr-pt-3v">
           <VIcon name="ri:time-line" class="fr-mr-1v text-grey-380" />
           mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
         </p>
