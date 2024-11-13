@@ -265,6 +265,18 @@ organizations:
   - ddt-vaucluse
   - ddt-vienne
   - ddt-yvelines
+  - ddtm-alpes-maritimes
+  - ddtm-aude
+  - ddtm-corse-du-sud
+  - ddtm-cotes-darmor
+  - ddtm-finistere
+  - ddtm-gard
+  - ddtm-gironde
+  - ddtm-haute-corse
+  - ddtm-morbihan
+  - ddtm-pas-de-calais
+  - ddtm-pyrenees-orientales
+  - ddtm-vendee
   - deal-guadeloupe
   - direction-departementale-des-territoire-du-puy-de-dome
   - direction-departementale-des-territoires-de-charente
@@ -309,16 +321,11 @@ organizations:
   - direction-departementale-des-territoires-et-de-la-mer-du-calvados
   - direction-departementale-des-territoires-et-de-la-mer-du-var
   - direction-departementale-et-des-territoires-du-cantal
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-centre-val-de-loire
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
   - do-terr-geo-centre
-  - dreal-auvergne-rhone-alpes-1
   - dreal-grand-est
-  - dreal-limousin-1
   - dreal-nouvelle-aquitaine
   - dreal-provence-alpes-cote-dazur
   - electricite-reseau-distribution-france
@@ -331,7 +338,6 @@ organizations:
   - institut-national-de-l-information-geographique-et-forestiere
   - irstea
   - jvmalin
-  - la-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-provence-alpes-cote-dazur
   - ligair
   - meteo-france
   - ministere-de-l-egalite-des-territoires-et-du-logement
