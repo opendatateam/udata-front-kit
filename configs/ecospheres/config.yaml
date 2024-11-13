@@ -244,32 +244,94 @@ organizations:
   - cerema
   - commission-de-regulation-de-lenergie
   - datagrandest
+  - ddt-aisne
+  - ddt-ardennes
+  - ddt-aveyron
+  - ddt-cote-dor
+  - ddt-creuse
+  - ddt-de-la-loire
+  - ddt-de-la-meuse
+  - ddt-de-lain
+  - ddt-de-lardeche
   - ddt-de-meurthe-et-moselle
-  - ddt-des-vosges
+  - ddt-deux-sevres
+  - ddt-drome
+  - ddt-haute-garonne
+  - ddt-haute-marne
+  - ddt-hautes-alpes
+  - ddt-hautes-pyrenees
+  - ddt-indre
   - ddt-jura
-  - direction-departementale-des-territoires-de-saone-et-loire-71
+  - ddt-lot
+  - ddt-maine-et-loire
+  - ddt-mayenne
+  - ddt-nievre
+  - ddt-savoie
+  - ddt-tarn
+  - ddt-tarn-et-garonne
+  - ddt-territoire-de-belfort
+  - ddt-vaucluse
+  - ddt-vienne
+  - ddt-yvelines
+  - ddtm-alpes-maritimes
+  - ddtm-aude
+  - ddtm-corse-du-sud
+  - ddtm-cotes-darmor
+  - ddtm-finistere
+  - ddtm-gard
+  - ddtm-gironde
+  - ddtm-haute-corse
+  - ddtm-herault
+  - ddtm-morbihan
+  - ddtm-pas-de-calais
+  - ddtm-pyrenees-orientales
+  - ddtm-vendee
+  - deal-guadeloupe
+  - direction-departementale-des-territoire-du-puy-de-dome
+  - direction-departementale-des-territoires-de-charente
+  - direction-departementale-des-territoires-de-haute-saone
+  - direction-departementale-des-territoires-de-haute-savoie
+  - direction-departementale-des-territoires-de-la-correze
+  - direction-departementale-des-territoires-de-la-haute-loire
+  - direction-departementale-des-territoires-de-la-lozere
+  - direction-departementale-des-territoires-de-la-marne
+  - direction-departementale-des-territoires-de-la-sarthe
+  - direction-departementale-des-territoires-de-lallier
+  - direction-departementale-des-territoires-de-lariege
+  - direction-departementale-des-territoires-de-laube
+  - direction-departementale-des-territoires-de-lessonne
+  - direction-departementale-des-territoires-de-lisere
+  - direction-departementale-des-territoires-de-loir-et-cher
+  - direction-departementale-des-territoires-de-lorne
+  - direction-departementale-des-territoires-de-saone-et-loire
+  - direction-departementale-des-territoires-de-seine-et-marne
+  - direction-departementale-des-territoires-des-alpes-de-haute-provence
+  - direction-departementale-des-territoires-des-vosges
+  - direction-departementale-des-territoires-deure-et-loir
+  - direction-departementale-des-territoires-dindre-et-loire
   - direction-departementale-des-territoires-du-bas-rhin-67
   - direction-departementale-des-territoires-du-cher
   - direction-departementale-des-territoires-du-doubs
   - direction-departementale-des-territoires-du-haut-rhin-68
   - direction-departementale-des-territoires-du-loiret
   - direction-departementale-des-territoires-du-rhone-1
-  - direction-departementale-des-territoires-et-de-la-mer-de-lherault
+  - direction-departementale-des-territoires-du-val-doise
+  - direction-departementale-des-territoires-et-de-la-mer-de-charente-maritime
+  - direction-departementale-des-territoires-et-de-la-mer-de-la-somme
+  - direction-departementale-des-territoires-et-de-la-mer-de-leure
   - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
   - direction-departementale-des-territoires-et-de-la-mer-des-bouches-du-rhone
   - direction-departementale-des-territoires-et-de-la-mer-des-landes
   - direction-departementale-des-territoires-et-de-la-mer-des-pyrenees-atlantiques
   - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-laquitaine
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
+  - direction-departementale-des-territoires-et-de-la-mer-du-calvados
+  - direction-departementale-des-territoires-et-de-la-mer-du-var
+  - direction-departementale-et-des-territoires-du-cantal
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-centre-val-de-loire
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
-  - direction-regionale-et-interdepartementale-de-lenvironnement-de-lamenagement-et-des-transports-1
   - do-terr-geo-centre
-  - dreal-nouvelle-aquitaine
+  - dreal-grand-est
   - dreal-provence-alpes-cote-dazur
   - electricite-reseau-distribution-france
   - engie-mobilites-electriques
@@ -284,7 +346,6 @@ organizations:
   - institut-national-de-l-information-geographique-et-forestiere
   - irstea
   - jvmalin
-  - la-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-provence-alpes-cote-dazur
   - ligair
   - meteo-france
   - ministere-de-l-egalite-des-territoires-et-du-logement
