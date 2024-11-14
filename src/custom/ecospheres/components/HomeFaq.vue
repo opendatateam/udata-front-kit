@@ -44,6 +44,8 @@ const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link"
         <a
           href="https://github.com/opendatateam/udata-front-kit"
           target="_blank"
+          rel="noreferrer noopener"
+          title="commun numérique - nouvelle fenêtre"
           class="fr-link"
           >commun numérique</a
         >
@@ -154,6 +156,8 @@ const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link"
           href="https://guides.data.gouv.fr/guide-data.gouv.fr/jeux-de-donnees/publier-un-jeu-de-donnees"
           class="fr-link"
           target="_blank"
+          rel="noreferrer noopener"
+          title="commun numérique - nouvelle fenêtre"
           >guide de data.gouv.fr</a
         >
         et les étapes pour
@@ -161,6 +165,8 @@ const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link"
           href="https://www.data.gouv.fr/fr/pages/onboarding/producteurs/"
           class="fr-link"
           target="_blank"
+          rel="noreferrer noopener"
+          title="commun numérique - nouvelle fenêtre"
           >devenir producteur de données</a
         >.
       </p>
