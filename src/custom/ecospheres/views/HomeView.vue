@@ -39,7 +39,7 @@ useHead({
   <div class="datagouv-components">
     <section class="fr-container fr-pt-12v">
       <h1 class="main-title-v2">
-        Le&nbsp;catalogue des&nbsp;données
+        Le catalogue des données
         <br />
         pour la <span class="highlight">transition écologique</span>
       </h1>
@@ -50,8 +50,8 @@ useHead({
           search-label="Rechercher"
         />
         <p class="text-grey-300 fr-text--sm">
-          Exemple : "Itinéraires fraîcheur" dans les bouquets ou "Horaires des
-          TGV" dans les données
+          Exemple&nbsp;: "&nbsp;Itinéraires fraîcheur&nbsp;" dans les bouquets
+          ou "&nbsp;Horaires des TGV&nbsp;" dans les données
         </p>
       </div>
     </section>
@@ -106,7 +106,7 @@ useHead({
     <section class="fr-container--fluid bouquets">
       <div class="fr-container fr-py-16v">
         <h2>
-          Bouquets de données : articuler politiques publiques et données
+          Bouquets de données&nbsp;: articuler politiques publiques et données
           territoriales
         </h2>
         <div class="fr-grid-row fr-grid-row--gutters">
@@ -126,10 +126,10 @@ useHead({
                   <div class="fr-col-md-9">
                     <h3>Documenter un besoin</h3>
                     <p>
-                      Quels enjeux cherche-t-on à soutenir ? Quels sont les
-                      acteurs concernés ? Un bouquet de données est créé au nom
-                      d’un utilisateur ou d’une organisation. Tous les membres
-                      d’une organisation peuvent éditer le bouquet.
+                      Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
+                      acteurs concernés&nbsp;? Un bouquet de données est créé au
+                      nom d’un utilisateur ou d’une organisation. Tous les
+                      membres d’une organisation peuvent éditer le bouquet.
                     </p>
                   </div>
                 </div>
@@ -149,7 +149,7 @@ useHead({
                     <h3>Lister les informations utiles</h3>
                     <p>
                       Quelles sont les informations géographiques ou les
-                      indicateurs pertinents ? Les bouquets de données
+                      indicateurs pertinents&nbsp;? Les bouquets de données
                       permettent de renseigner les informations souhaitées
                       indépendamment de l’existence des données.
                     </p>
@@ -171,9 +171,9 @@ useHead({
                     <h3>Associer les données disponibles</h3>
                     <p>
                       Les données existantes satisfont-elles les besoins du cas
-                      d’usage ? L’association peut se faire dans sa forme la
-                      plus interopérable via une donnée cataloguée sur data.gouv
-                      ou le renseignement d’un URL.
+                      d’usage&nbsp;? L’association peut se faire dans sa forme
+                      la plus interopérable via une donnée cataloguée sur
+                      data.gouv ou le renseignement d’un URL.
                     </p>
                   </div>
                 </div>
@@ -224,7 +224,7 @@ useHead({
 }
 .organize-data {
   background-color: white;
-  padding: 32px 0;
+  padding: 2rem 0;
 
   li {
     border-right: 1px solid var(--border-default-grey);
