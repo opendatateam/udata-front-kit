@@ -206,7 +206,7 @@ const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link"
 <style scoped>
 :deep(.fr-accordion__btn[aria-expanded='true']),
 :deep(.fr-accordion__btn:hover) {
-  background-color: var(--blue-france-925-125);
+  background-color: #e3e3fd;
   color: #000091;
 }
 :deep(.fr-collapse) {
