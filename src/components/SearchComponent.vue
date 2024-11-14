@@ -79,7 +79,7 @@ const dropdownLabel = (text: string) => {
       :placeholder="placeholder"
       select-label=""
       deselect-label=""
-      :aria-labelledby="id + '-label'"
+      :aria-labelledby="`${id}-label`"
       aria-owns=""
       :multiple="false"
       :searchable="true"
