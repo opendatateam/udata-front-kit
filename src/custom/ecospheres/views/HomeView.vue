@@ -124,7 +124,7 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-md-9">
-                    <h3>Documenter un besoin</h3>
+                    <h3>Documenter un besoin</h3>
                     <p>
                       Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
                       acteurs concernés&nbsp;? Un bouquet de données est créé au
