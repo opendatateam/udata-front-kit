@@ -9,6 +9,7 @@ import {
   type StyleValue
 } from 'vue'
 
+import config from '@/config'
 import SearchComponent from '../SearchComponent.vue'
 import type { DsfrHeaderMenuLinkProps } from './DsfrHeaderMenuLink.vue'
 
@@ -52,6 +53,7 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   badgeText: 'BETA',
   badgeStyle: ''
 })
+const dropdown = config.website.header_search.dropdown
 
 const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
@@ -200,6 +202,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               <SearchComponent
                 id="header-select-search"
                 :search-label="searchLabel"
+                :dropdown="dropdown"
               />
             </div>
           </div>

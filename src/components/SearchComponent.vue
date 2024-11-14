@@ -6,11 +6,10 @@ import 'vue-multiselect/dist/vue-multiselect.css'
 import { useRouter } from 'vue-router'
 
 import '@/assets/multiselect.css'
-import config from '@/config'
 
 const router = useRouter()
 
-defineProps({
+const props = defineProps({
   searchLabel: {
     type: String,
     required: true
@@ -22,17 +21,33 @@ defineProps({
   id: {
     type: String,
     required: true
+  },
+  dropdown: {
+    type: Array,
+    default: () => []
+  },
+  searchNamespace: {
+    type: String,
+    default: () => ''
   }
+})
+
+const selectedQuery = defineModel({
+  type: String,
+  required: false,
+  default: ''
 })
 
 const emits = defineEmits(['search'])
 
-const dropdown = config.website.header_search.dropdown
 const query = ref('')
 const selectedMultiSearch = ref()
 
 const doSimpleSearch = () => {
-  router.push({ path: '/datasets', query: { q: query.value } })
+  router.push({
+    path: props.searchNamespace || router.resolve({ name: 'datasets' }).href,
+    query: { q: query.value }
+  })
   query.value = ''
   emits('search')
 }
@@ -57,8 +72,8 @@ const dropdownLabel = (text: string) => {
 
 <template>
   <DsfrSearchBar
-    v-if="!dropdown"
-    v-model="query"
+    v-if="!dropdown.length"
+    v-model="selectedQuery"
     :label="searchLabel"
     :placeholder="placeholder"
     @search="doSimpleSearch"
@@ -160,5 +175,30 @@ const dropdownLabel = (text: string) => {
 }
 :deep(.multiselect__content-wrapper) {
   margin-top: 42px;
+}
+
+/** dsfr **/
+
+.fr-search-bar {
+  flex-direction: row-reverse;
+}
+
+:deep(.fr-search-bar .fr-btn) {
+  border: 1px solid red;
+}
+
+.fr-search-bar :deep(.fr-btn) {
+  border-bottom: 2px solid var(--border-action-high-blue-france);
+  background-color: var(--background-contrast-grey);
+  color: #35495e;
+}
+
+.datagouv-components .fr-btn {
+  background-color: red;
+  border: 1px solid red;
+}
+:deep(.datagouv-components .fr-btn) {
+  background-color: red;
+  border: 1px solid red;
 }
 </style>

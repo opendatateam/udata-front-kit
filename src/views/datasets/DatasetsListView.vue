@@ -254,11 +254,11 @@ onMounted(() => {
     </p>
 
     <div class="fr-col-md-12 fr-mb-2w">
-      <DsfrSearchBar
+      <SearchComponent
+        id="big-select-search"
         v-model="localQuery"
-        label="Rechercher des données"
-        button-text="Rechercher"
-        placeholder=""
+        search-label="Rechercher"
+        :search-namespace="router.resolve({ name: 'datasets' }).href"
         @update:model-value="search()"
         @search="$emit('search', $event)"
       />
