@@ -116,7 +116,7 @@ export function useExtras(topic: Ref<Topic | null>): {
 
   watch(
     topic,
-    async () => {
+    () => {
       const extras = topic.value?.extras[topicsExtrasKey]
       if (extras != null) {
         theme.value = topicsUseThemes ? extras.theme : undefined
@@ -146,10 +146,5 @@ export function useExtras(topic: Ref<Topic | null>): {
     { immediate: true }
   )
 
-  return {
-    theme,
-    subtheme,
-    datasetsProperties,
-    clonedFrom
-  }
+  return { theme, subtheme, datasetsProperties, clonedFrom }
 }
