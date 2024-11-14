@@ -46,30 +46,33 @@ const { topicsName } = useTopicsConf()
 
 const { groupedDatasets } = useGroups(datasetsProperties)
 
-const removeDataset = (group: string | undefined | null, id: string) => {
+const getDatasetIndex = (group: string | undefined | null, index: number) => {
+  // get all datasets from group
+  const groupItems = groupedDatasets.value.get(group ?? 'Sans regroupement')
+
+  if (groupItems) {
+    // find the right dataset index (to handle duplicates)
+    const datasetToDeleteIndex = datasetsProperties.value.findIndex(
+      (item) => item === groupItems[index]
+    )
+    return datasetToDeleteIndex
+  }
+  return -1
+}
+
+const removeDataset = (group: string | undefined | null, index: number) => {
   if (
     window.confirm(
       `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicsName} ?`
     )
   ) {
-    if (group) {
-      const groupItems = groupedDatasets.value.get(group)
+    const datasetToDeleteIndex = getDatasetIndex(group, index)
 
-      if (groupItems) {
-        const index = datasetsProperties.value.findIndex(
-          (item) => item.id === groupItems.id
-        )
-        if (index !== -1) {
-          datasetsProperties.value.splice(index, 1)
-        }
-      }
+    if (datasetToDeleteIndex !== -1) {
+      datasetsProperties.value.splice(datasetToDeleteIndex, 1)
     }
-    //   if (datasetsProperties.value[index].id) {
-    //     datasetsContent.value.delete(datasetsProperties.value[index].id)
-    //   }
-    //   datasetsProperties.value.splice(index, 1)
-    //   emits('updateDatasets')
   }
+  emits('updateDatasets')
 }
 
 const loadDatasetsContent = () => {
@@ -109,8 +112,12 @@ const addDataset = () => {
   modal.value?.addDataset()
 }
 
-const editDataset = (dataset: DatasetProperties, index: number) => {
-  modal.value?.editDataset(dataset, index)
+const editDataset = (
+  dataset: DatasetProperties,
+  index: number,
+  group: string
+) => {
+  modal.value?.editDataset(dataset, getDatasetIndex(group, index))
 }
 
 const triggerReorder = () => {
@@ -204,7 +211,7 @@ onMounted(() => {
                     icon="ri-delete-bin-line"
                     label="Supprimer"
                     class="fr-mr-2w"
-                    @click.prevent="removeDataset(group, dataset.id)"
+                    @click.prevent="removeDataset(group, index)"
                   />
                   <DsfrButton
                     v-if="isEdit"
@@ -212,7 +219,7 @@ onMounted(() => {
                     icon="ri-pencil-line"
                     label="Éditer"
                     class="fr-mr-2w"
-                    @click.prevent="editDataset(dataset, index)"
+                    @click.prevent="editDataset(dataset, index, group)"
                   />
                   <a
                     v-if="!isAvailable(dataset.availability) && !isEdit"

@@ -12,7 +12,6 @@ import {
 import { useDatasetStore } from '@/store/DatasetStore'
 
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
-import { useGroups } from '@/utils/bouquetGroups'
 
 export interface DatasetEditModalType {
   addDataset: () => void
@@ -78,7 +77,8 @@ const addDataset = () => {
       purpose: '',
       availability: Availability.LOCAL_AVAILABLE,
       uri: null,
-      id: null
+      id: null,
+      group: undefined
     },
     isValid: false,
     mode: 'create'
