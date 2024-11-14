@@ -2,26 +2,18 @@
 import type { DatasetProperties } from '@/model/topic'
 import { useTopicsConf } from '@/utils/config'
 
-const props = defineProps({
-  datasetProperties: {
-    type: Object as () => DatasetProperties,
-    required: true
-  }
+// const props = defineProps({
+//   datasetProperties: {
+//     type: Object as () => DatasetProperties,
+//     required: true
+//   }
+// })
+const datasetProperties = defineModel('datasetProperties-model', {
+  type: Object as () => DatasetProperties,
+  default: {}
 })
 
 const { topicsName } = useTopicsConf()
-
-const emit = defineEmits(['update:datasetProperties'])
-
-const updateDatasetProperties = (
-  field: keyof DatasetProperties,
-  value: string
-) => {
-  emit('update:datasetProperties', {
-    ...props.datasetProperties,
-    [field]: value
-  })
-}
 </script>
 
 <template>
@@ -31,15 +23,9 @@ const updateDatasetProperties = (
     >
     <input
       id="input-title"
+      v-model="datasetProperties.title"
       class="fr-input"
       type="text"
-      :value="props.datasetProperties.title"
-      @input="
-        updateDatasetProperties(
-          'title',
-          ($event.target as HTMLInputElement).value
-        )
-      "
     />
   </div>
   <div class="fr-input-group">
@@ -58,16 +44,10 @@ const updateDatasetProperties = (
     </p>
     <textarea
       id="input-purpose"
+      v-model="datasetProperties.purpose"
       class="fr-input"
       type="text"
       aria-describedby="purpose-description"
-      :value="props.datasetProperties.purpose"
-      @input="
-        updateDatasetProperties(
-          'purpose',
-          ($event.target as HTMLTextAreaElement).value
-        )
-      "
     />
   </div>
 </template>

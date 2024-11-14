@@ -12,6 +12,7 @@ import {
 import { useDatasetStore } from '@/store/DatasetStore'
 
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
+import { useGroups } from '@/utils/bouquetGroups'
 
 export interface DatasetEditModalType {
   addDataset: () => void
@@ -37,8 +38,6 @@ const modalData: Ref<DatasetModalData> = ref({
   mode: 'edit'
 })
 
-const datasetPropertiesFields = useTemplateRef('datasetPropertiesFields')
-
 const modalActions = computed(() => {
   return [
     {
@@ -54,7 +53,6 @@ const modalActions = computed(() => {
       onClick: ($event: PointerEvent) => {
         $event.preventDefault()
         submitModal(modalData.value)
-        // datasetPropertiesFields.value?.updateDatasetGroup()
         closeModal()
       }
     }
@@ -80,8 +78,7 @@ const addDataset = () => {
       purpose: '',
       availability: Availability.LOCAL_AVAILABLE,
       uri: null,
-      id: null,
-      group: 'Sans regroupement'
+      id: null
     },
     isValid: false,
     mode: 'create'
@@ -157,7 +154,6 @@ defineExpose({ addDataset, editDataset })
   >
     <form novalidate>
       <DatasetPropertiesFields
-        ref="datasetPropertiesFields"
         v-model="modalData.dataset"
         v-model:groups-model="datasetsGroups"
         :already-selected-datasets="datasets"

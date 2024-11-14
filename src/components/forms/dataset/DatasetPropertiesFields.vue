@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { computed, onMounted, ref, watch, type PropType, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import {
@@ -17,11 +17,11 @@ import SelectDataset from './SelectDataset.vue'
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
-const emit = defineEmits(['updateValidation'])
+const emit = defineEmits(['updateValidation', 'update:datasetProperties'])
 
 const datasetProperties = defineModel({
-  type: Object as PropType<DatasetProperties>,
-  required: true
+  type: Object as () => DatasetProperties,
+  default: {}
 })
 
 const datasetsGroups = defineModel('groups-model', {
@@ -93,67 +93,7 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
   }
 }
 
-const initialGroup = datasetProperties.value.group || 'Sans regroupement'
-const groupValue = ref<string>(initialGroup)
-
 const groupOptions = ref(Array.from(datasetsGroups.value, ([key]) => key))
-
-// const onSelectGroup = (option: string) => {
-//   datasetProperties.value.group = option
-// }
-
-// const onClearGroup = () => {
-//   groupValue.value = 'Sans regroupement'
-//   datasetProperties.value.group = 'Sans regroupement'
-// }
-
-// const updateDatasetGroup = (
-//   oldKey: string = initialGroup,
-//   newKey: string = datasetProperties.value.group || 'Sans regroupement',
-//   item: DatasetProperties = datasetProperties.value
-// ) => {
-//   const sourceArray = datasetsGroups.value.get(oldKey)
-
-//   if (!sourceArray) {
-//     console.log(`Invalid key: ${oldKey}`)
-//     return
-//   }
-
-//   console.log()
-
-//   // check if item was in the sourceArray (needed for default nogroup state)
-//   if (sourceArray.some((el) => el.id === item.id)) {
-//     // Remove the item from the old array
-//     datasetsGroups.value.set(
-//       oldKey,
-//       sourceArray.filter((el) => el.id !== item.id)
-//     )
-//     console.log(`Removed ${item.id} from ${oldKey}`)
-
-//     if (sourceArray.length <= 1) {
-//       // Delete the key if array is empty or if item was the only element
-//       datasetsGroups.value.delete(oldKey)
-//       console.log(`deleted ${oldKey}`)
-//     }
-//   }
-
-//   // Check if the targetKey exists in the Map
-//   if (!datasetsGroups.value.has(newKey)) {
-//     datasetsGroups.value.set(newKey, [])
-//     console.log(`Created ${newKey} with an empty array.`)
-//   }
-
-//   const targetArray = datasetsGroups.value.get(newKey)
-//   // Add the item to the new array
-//   if (targetArray && !targetArray.includes(item)) {
-//     targetArray.push(item)
-//     console.log(`added ${item} to ${newKey}`)
-//   }
-// }
-
-// defineExpose({
-//   updateDatasetGroup
-// })
 
 watch(
   isValidDataset,
@@ -187,7 +127,7 @@ onMounted(() => {
 <template>
   <DatasetPropertiesTextFields
     v-if="topicsDatasetEditorialization"
-    v-model:dataset-properties="datasetProperties"
+    v-model:dataset-properties-model="datasetProperties"
   />
   <div class="fr-mt-1w fr-mb-4w">
     <SelectDataset
@@ -204,7 +144,7 @@ onMounted(() => {
     </p>
     <Multiselect
       id="input-regroupement"
-      v-model="groupValue"
+      v-model="datasetProperties.group"
       :options="groupOptions"
       :searchable="true"
       :limit="5"
