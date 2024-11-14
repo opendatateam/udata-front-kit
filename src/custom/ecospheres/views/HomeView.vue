@@ -336,6 +336,7 @@ useHead({
 
   :deep(.fr-card__header .fr-card__img img) {
     object-position: left bottom;
+    transform: inherit;
   }
 
   .explorer :deep(.fr-card__img img) {
