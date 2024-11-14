@@ -77,8 +77,7 @@ const addDataset = () => {
       purpose: '',
       availability: Availability.LOCAL_AVAILABLE,
       uri: null,
-      id: null,
-      group: undefined
+      id: null
     },
     isValid: false,
     mode: 'create'

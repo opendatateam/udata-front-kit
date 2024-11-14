@@ -2,12 +2,6 @@
 import type { DatasetProperties } from '@/model/topic'
 import { useTopicsConf } from '@/utils/config'
 
-// const props = defineProps({
-//   datasetProperties: {
-//     type: Object as () => DatasetProperties,
-//     required: true
-//   }
-// })
 const datasetProperties = defineModel('datasetProperties-model', {
   type: Object as () => DatasetProperties,
   default: {}
