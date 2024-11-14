@@ -65,7 +65,7 @@ const dropdownLabel = (text: string) => {
   />
 
   <div v-else>
-    <label :id="id + '-label'" :for="id" class="fr-sr-only">
+    <label :id="`${id}-label`" :for="id" class="fr-sr-only">
       Rechercher. Saisissez un mot clé puis choisissez une des options situés
       après le champ pour lancer la recherche dans la rubrique souhaitée</label
     >

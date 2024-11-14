@@ -15,6 +15,7 @@ import contributeSvg from '../assets/contribuer.svg'
 import explorerSvg from '../assets/explorer.svg'
 
 const topicStore = useTopicStore()
+const router = useRouter()
 const lastTopics: ComputedRef<Topic[]> = computed(() =>
   topicStore.sorted.filter((bouquet) => !bouquet.private).slice(0, 3)
 )
@@ -69,11 +70,11 @@ useHead({
             :links-group="[
               {
                 label: 'Accéder aux données',
-                to: '/datasets'
+                to: router.resolve({ name: 'datasets' }).href
               },
               {
                 label: 'Accéder aux bouquets',
-                to: '/bouquets'
+                to: router.resolve({ name: 'bouquets' }).href
               }
             ]"
           />
@@ -95,7 +96,7 @@ useHead({
               },
               {
                 label: 'Créer un bouquet',
-                to: '/admin/bouquets/add'
+                to: router.resolve({ name: 'bouquets_add' }).href
               }
             ]"
           />
@@ -189,11 +190,14 @@ useHead({
         </li>
       </ul>
       <p class="fr-m-0">
-        <a
-          href="/bouquets"
+        <RouterLink
+          :to="{
+            name: 'bouquets'
+          }"
           class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
-          >Voir tous les bouquets</a
         >
+          Voir tous les bouquets
+        </RouterLink>
       </p>
     </section>
     <section class="fr-container--fluid faq">
