@@ -61,7 +61,7 @@ useHead({
           <DsfrCard
             :no-arrow="true"
             title="Explorer"
-            description="Accédez à un ensemble de données liées à la transition écologique."
+            description="Accéder aux données des services et opérateurs de l’État et d’une sélection d’organisations publiant des données utiles aux politiques du ministère en charge des territoires, de l’écologie et du logement."
             size="small"
             :horizontal="true"
             :img-src="explorerSvg"
@@ -69,11 +69,11 @@ useHead({
             class="explorer"
             :links-group="[
               {
-                label: 'Accéder aux données',
+                label: 'Parcourir les données',
                 to: router.resolve({ name: 'datasets' }).href
               },
               {
-                label: 'Accéder aux bouquets',
+                label: 'Découvrir des usages',
                 to: router.resolve({ name: 'bouquets' }).href
               }
             ]"
@@ -83,7 +83,7 @@ useHead({
           <DsfrCard
             :no-arrow="true"
             title="Contribuer"
-            description="Participez à la centralisation et à la structuration des données de la transition écologique."
+            description="Participez au référencement et à l’articulation des données utiles à l’appui des politiques publiques grâce aux fonctionnalités de catalogage de data.gouv et du concept de bouquet de données."
             size="small"
             :horizontal="true"
             :img-src="contributeSvg"
@@ -91,11 +91,11 @@ useHead({
             class="contribute"
             :links-group="[
               {
-                label: 'Ajouter des données',
+                label: 'Publier des données',
                 link: 'https://www.data.gouv.fr/fr/pages/onboarding/producteurs/'
               },
               {
-                label: 'Créer un bouquet',
+                label: 'Partager des usages',
                 to: router.resolve({ name: 'bouquets_add' }).href
               }
             ]"
@@ -106,8 +106,8 @@ useHead({
     <section class="fr-container--fluid bouquets">
       <div class="fr-container fr-py-16v">
         <h2>
-          Les bouquets : pourquoi orchestrer des ensembles de données par usage
-          ?
+          Bouquets de données : articuler politiques publiques et données
+          territoriales
         </h2>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col">
@@ -124,11 +124,12 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-md-9">
-                    <h3>Répondre aux besoins d'une politique publique</h3>
+                    <h3>Documenter un besoin</h3>
                     <p>
-                      Des problématiques liées à l'usage de la donnée sont
-                      identifiées sur des thématiques de la transition
-                      écologique telles que l’énergie ou le transport.
+                      Quels enjeux cherche-t-on à soutenir ? Quels sont les
+                      acteurs concernés ? Un bouquet de données est créé au nom
+                      d’un utilisateur ou d’une organisation. Tous les membres
+                      d’une organisation peuvent éditer le bouquet.
                     </p>
                   </div>
                 </div>
@@ -145,10 +146,12 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-md-9">
-                    <h3>Identifier les informations utiles</h3>
+                    <h3>Lister les informations utiles</h3>
                     <p>
-                      Les différentes typologies de données nécessaires pour les
-                      services spécialistes de ces politiques sont définies.
+                      Quelles sont les informations géographiques ou les
+                      indicateurs pertinents ? Les bouquets de données
+                      permettent de renseigner les informations souhaitées
+                      indépendamment de l’existence des données.
                     </p>
                   </div>
                 </div>
@@ -165,10 +168,12 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-md-9">
-                    <h3>Centraliser les données territoriales</h3>
+                    <h3>Associer les données disponibles</h3>
                     <p>
-                      Les données territoriales sont collectées, regroupées et
-                      catégorisées par cas d’usage sous la forme de bouquets.
+                      Les données existantes satisfont-elles les besoins du cas
+                      d’usage ? L’association peut se faire dans sa forme la
+                      plus interopérable via une donnée cataloguée sur data.gouv
+                      ou le renseignement d’un URL.
                     </p>
                   </div>
                 </div>
@@ -196,7 +201,7 @@ useHead({
           }"
           class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
         >
-          Voir tous les bouquets
+          Voir les bouquets
         </RouterLink>
       </p>
     </section>
@@ -311,8 +316,12 @@ useHead({
   }
 }
 
+.explorer :deep(.fr-card__img) {
+  overflow: hidden;
+}
 .explorer :deep(.fr-card__img img) {
-  object-position: -25px bottom;
+  object-position: -25px 65%;
+  transform: scale(1.3);
 }
 
 @media (max-width: 768px) {
