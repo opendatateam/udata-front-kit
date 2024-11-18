@@ -2,7 +2,7 @@
 const activeAccordion = ref<number>()
 const faqEcologieDataGouvHtml = `<span class="f-italic">ecologie.<span class="fr-text--bold">data.gouv</span>.fr</span>`
 const faqDataGouvHtml = `<span class="f-italic"><span class="fr-text--bold">data.gouv</span>.fr</span>`
-const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link" target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a>`
+const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link" rel="noreferrer noopener" title="Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques - nouvelle fenêtre" target="_blank">Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a>`
 </script>
 
 <template>
@@ -32,7 +32,12 @@ const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link"
         Bien que présentant des contenus éditoriaux et des fonctionnalités
         spécifiques, les deux plateformes partagent le même catalogue, auquel
         nous contribuons avec les données du pôle ministériel
-        <a href="https://www.ecologie.gouv.fr/" target="_blank" class="fr-link"
+        <a
+          href="https://www.ecologie.gouv.fr/"
+          target="_blank"
+          class="fr-link"
+          rel="noreferrer noopener"
+          title="ecologie.gouv.fr - nouvelle fenêtre"
           >ecologie.gouv.fr</a
         >. Toute modification sur <span v-html="faqDataGouvHtml" /> est donc
         immédiatement visible sur <span v-html="faqEcologieDataGouvHtml" />, et
@@ -157,7 +162,7 @@ const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link"
           class="fr-link"
           target="_blank"
           rel="noreferrer noopener"
-          title="commun numérique - nouvelle fenêtre"
+          title="guide de data.gouv.fr  - nouvelle fenêtre"
           >guide de data.gouv.fr</a
         >
         et les étapes pour
@@ -166,7 +171,7 @@ const faqMinisterLink = `<a href="https://www.ecologie.gouv.fr/" class="fr-link"
           class="fr-link"
           target="_blank"
           rel="noreferrer noopener"
-          title="commun numérique - nouvelle fenêtre"
+          title="devenir producteur de données - nouvelle fenêtre"
           >devenir producteur de données</a
         >.
       </p>
