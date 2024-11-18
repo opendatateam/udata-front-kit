@@ -38,29 +38,33 @@ website:
         sub_section_cards:
           title:
           cards:
-            - name: 'Trafic'
-              description: 'Statistiques et informations sur le trafic routier, fluvial, maritime, ferroviaire et aérien.'
-              url: 'bouquets?theme=Trafic'
-              image_url: '/logistique/assets/intermodal.jpg'
-            - name: 'Environnement'
-              description: "Données offrant une base pour réaliser des études approfondies sur l'impact environnemental de la logistique."
-              url: 'bouquets?theme=Environnementale'
-              image_url: '/logistique/assets/environnement.jpg'
             - name: 'Immobilier logistique'
-              description: "Données sur l'immobilier dédié aux activités de logistique, incluant les différentes infrastructures associées."
+              description: "Données sur l'immobilier dédié aux activités de logistique (bâti, entrepôts, stockage, etc.)."
               url: 'bouquets?theme=Immobilier+logistique'
               image_url: '/logistique/assets/immobilier.jpg'
-            - name: 'Socio économie'
+            - name: 'Infrastructure'
+              description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
+              url: 'bouquets?theme=Infrastructure'
+              image_url: '/logistique/assets/infra.jpg'
+            - name: 'Trafic'
+              description: 'Données sur le flux des activités de logistique (trafic routier, fluvial, maritime, ferroviaire et aérien).'
+              url: 'bouquets?theme=Trafic'
+              image_url: '/logistique/assets/trafic.jpg'
+            - name: 'Environnement'
+              description: "Données offrant une base pour réaliser des études approfondies sur l'impact environnemental de la logistique."
+              url: 'bouquets?theme=Environnement'
+              image_url: '/logistique/assets/environnement.jpg'
+            - name: 'Socio-économique'
               description: 'Bases essentielles pour étudier les interactions entre les dimensions sociales et économiques de la logistique.'
               url: 'bouquets?theme=Socio-économique'
               image_url: '/logistique/assets/socio.jpg'
             - name: 'Territoires'
               description: "Données permettant l'étude des interactions entre la logistique et l'aménagement des territoires."
-              url: 'bouquets?theme=Territoriale'
+              url: 'bouquets?theme=Territoires'
               image_url: '/logistique/assets/territorial.jpg'
-            - name: 'Filières économiques'
+            - name: 'Filières'
               description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
-              url: 'bouquets?theme=Filière'
+              url: 'bouquets?theme=Filières'
               image_url: '/logistique/assets/risques.jpg'
         sub_section_tiles:
         sub_section_buttons:
@@ -163,6 +167,14 @@ website:
       authorized_users:
         - 57d0546ec751df5cda97bae5
 themes:
+  - name: Immobilier logistique
+    color: '#043574'
+    textColor: '#FFFFFF'
+    subthemes:
+      - name: Données
+  - name: Infrastructure
+    color: '#043574'
+    textColor: '#FFFFFF'
   - name: Trafic
     color: '#043574'
     textColor: '#FFFFFF'
@@ -172,7 +184,7 @@ themes:
       - name: Transport ferroviaire
       - name: Transport fluvial
       - name: Transport maritime
-  - name: Filière
+  - name: Filières
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
@@ -183,12 +195,7 @@ themes:
       - name: Filière commerce
       - name: Filière matériaux de construction
       - name: Filière matière premières
-  - name: Immobilier logistique
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Données
-  - name: Environnementale
+  - name: Environnement
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
@@ -198,7 +205,7 @@ themes:
     textColor: '#FFFFFF'
     subthemes:
       - name: Données
-  - name: Territoriale
+  - name: Territoires
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
