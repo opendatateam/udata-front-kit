@@ -90,8 +90,8 @@ website:
     - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
   notice:
-    display: true
-    content: Vous naviguez sur une version beta d'ecologie.data.gouv. En savoir plus sur [nos travaux en cours](https://ecospheres.gitbook.io/travaux-en-cours/).
+    display: false
+    content: Vous naviguez sur une version beta d'ecologie.data.gouv.
     closeable: false
   menu:
     - text: Accueil
