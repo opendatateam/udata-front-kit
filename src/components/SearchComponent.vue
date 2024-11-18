@@ -177,28 +177,15 @@ const dropdownLabel = (text: string) => {
   margin-top: 42px;
 }
 
-/** dsfr **/
+/** dsfr component (simple search) **/
 
 .fr-search-bar {
   flex-direction: row-reverse;
-}
-
-:deep(.fr-search-bar .fr-btn) {
-  border: 1px solid red;
 }
 
 .fr-search-bar :deep(.fr-btn) {
   border-bottom: 2px solid var(--border-action-high-blue-france);
   background-color: var(--background-contrast-grey);
   color: #35495e;
-}
-
-.datagouv-components .fr-btn {
-  background-color: red;
-  border: 1px solid red;
-}
-:deep(.datagouv-components .fr-btn) {
-  background-color: red;
-  border: 1px solid red;
 }
 </style>
