@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BouquetCard: typeof import('./components/bouquets/BouquetCard.vue')['default']
+    BouquetCardHome: typeof import('./components/bouquets/BouquetCardHome.vue')['default']
     BouquetDatasetAccordionTitle: typeof import('./components/bouquets/BouquetDatasetAccordionTitle.vue')['default']
     BouquetDatasetCard: typeof import('./components/bouquets/BouquetDatasetCard.vue')['default']
     BouquetDatasetList: typeof import('./components/bouquets/BouquetDatasetList.vue')['default']
@@ -61,6 +62,7 @@ declare module 'vue' {
     ReusesList: typeof import('./components/ReusesList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchComponent: typeof import('./components/SearchComponent.vue')['default']
     SelectDataset: typeof import('./components/forms/dataset/SelectDataset.vue')['default']
     SelectSpatialCoverage: typeof import('./components/forms/SelectSpatialCoverage.vue')['default']
     SkipLinks: typeof import('./components/SkipLinks.vue')['default']

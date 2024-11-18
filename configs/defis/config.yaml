@@ -223,7 +223,7 @@ website:
       href: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
-  logo_operator: ''
+  logo_operator:
   notice:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_

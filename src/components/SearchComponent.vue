@@ -14,12 +14,19 @@ defineProps({
   searchLabel: {
     type: String,
     required: true
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  },
+  id: {
+    type: String,
+    required: true
   }
 })
 
 const emits = defineEmits(['search'])
 
-const placeholder = config.website.header_search.placeholder
 const dropdown = config.website.header_search.dropdown
 const query = ref('')
 const selectedMultiSearch = ref()
@@ -58,21 +65,21 @@ const dropdownLabel = (text: string) => {
   />
 
   <div v-else>
-    <label id="search-label" for="select-search" class="fr-sr-only"
-      >Rechercher. Saisissez un mot clé puis choisissez une des options situés
+    <label :id="`${id}-label`" :for="id" class="fr-sr-only">
+      Rechercher. Saisissez un mot clé puis choisissez une des options situés
       après le champ pour lancer la recherche dans la rubrique souhaitée</label
     >
     <Multiselect
-      id="select-search"
+      :id="id"
       v-model="selectedMultiSearch"
       class="select-search"
       :options="dropdown"
       label="text"
       track-by="route"
-      placeholder=""
+      :placeholder="placeholder"
       select-label=""
       deselect-label=""
-      aria-labelledby="search-label"
+      :aria-labelledby="`${id}-label`"
       aria-owns=""
       :multiple="false"
       :searchable="true"
@@ -93,7 +100,7 @@ const dropdownLabel = (text: string) => {
         <span class="fr-icon-search-line search-icon"></span>
       </template>
       <template #placeholder>
-        <span aria-hidden="true" class="visible-label">Rechercher</span>
+        <span aria-hidden="true" class="visible-label">{{ placeholder }}</span>
       </template>
     </Multiselect>
   </div>
@@ -114,6 +121,19 @@ const dropdownLabel = (text: string) => {
   }
   .visible-label {
     margin-left: var(--icon-width);
+  }
+  .multiselect__placeholder {
+    margin-inline-start: var(--icon-width);
+    font-style: italic;
+    color: var(--text-mention-grey);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+  }
+  ::placeholder {
+    font-style: italic;
+    color: var(--text-mention-grey);
   }
 }
 :deep(.multiselect__tags) {

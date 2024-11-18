@@ -9,8 +9,8 @@ import {
   type StyleValue
 } from 'vue'
 
+import SearchComponent from '../SearchComponent.vue'
 import type { DsfrHeaderMenuLinkProps } from './DsfrHeaderMenuLink.vue'
-import HeaderSearch from './HeaderSearch.vue'
 
 type DsfrHeaderProps = {
   serviceTitle?: string
@@ -22,6 +22,7 @@ type DsfrHeaderProps = {
   operatorImgAlt?: string
   operatorImgSrc?: string
   operatorImgStyle?: StyleValue
+  showOperatorLogo?: boolean
   userName?: string
   quickLinks?: DsfrHeaderMenuLinkProps[]
   searchLabel?: string
@@ -41,6 +42,7 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   operatorImgAlt: '',
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
+  showOperatorLogo: true,
   serviceLogoSrc: '',
   userName: undefined,
   quickLinks: () => [],
@@ -103,7 +105,10 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               <div class="fr-header__logo">
                 <DsfrLogo :logo-text="logoText" data-testid="header-logo" />
               </div>
-              <div v-if="isWithSlotOperator" class="fr-header__operator">
+              <div
+                v-if="isWithSlotOperator && showOperatorLogo"
+                class="fr-header__operator"
+              >
                 <!-- @slot Slot nommé operator pour le logo opérateur. Sera dans `<div class="fr-header__operator">` -->
                 <slot name="operator">
                   <img
@@ -192,7 +197,10 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               />
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
-              <HeaderSearch :search-label="searchLabel" />
+              <SearchComponent
+                id="header-select-search"
+                :search-label="searchLabel"
+              />
             </div>
           </div>
         </div>
@@ -217,8 +225,9 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               >
                 Fermer
               </button>
-              <HeaderSearch
+              <SearchComponent
                 v-if="searchModalOpened"
+                id="header-select-search-modal"
                 :search-label="searchLabel"
                 @search="hideModal(false)"
               />
