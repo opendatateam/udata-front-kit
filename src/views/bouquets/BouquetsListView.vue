@@ -150,7 +150,6 @@ watch(
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
-        id="big-select-search"
         v-model="selectedQuery"
         search-label="Rechercher"
         :search-namespace="router.resolve({ name: 'bouquets' }).href"

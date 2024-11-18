@@ -255,7 +255,6 @@ onMounted(() => {
 
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
-        id="big-select-search"
         v-model="localQuery"
         search-label="Rechercher"
         :search-namespace="router.resolve({ name: 'datasets' }).href"
