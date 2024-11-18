@@ -1,6 +1,6 @@
 import { Parser } from '@json2csv/plainjs'
 
-import type { DatasetProperties } from '@/model/topic'
+import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
 interface DatasetRow {
@@ -36,6 +36,7 @@ export const exportDatasets = async (
         availability: datasetProperties.availability,
         uri: datasetProperties.uri
       }
+
       try {
         const remoteDataset =
           datasetProperties.id != null
@@ -49,17 +50,20 @@ export const exportDatasets = async (
         row.description = remoteDataset.description
         row.last_update = remoteDataset.last_update
         row.organization = remoteDataset.organization?.name
-
-        return row
       } catch (error) {
         console.error(
           `Unable to load datasetProperties: ${datasetProperties.id}`,
           error
         )
+        row.availability = Availability.REMOTE_DELETED
+        row.uri = null
+      } finally {
+        return row
       }
     })
   )
   const parser = new Parser({ fields: headers })
   const csv = parser.parse(rows)
+
   return new Blob([csv], { type: 'text/csv;charset=utf-8;' })
 }
