@@ -124,7 +124,7 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-md-9">
-                    <h3>Documenter un<br />besoin</h3>
+                    <h3>Documenter un besoin</h3>
                     <p>
                       Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
                       acteurs concernés&nbsp;? Un bouquet de données est créé au
@@ -146,7 +146,7 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-md-9">
-                    <h3>Lister les informations<br />utiles</h3>
+                    <h3>Lister les informations utiles</h3>
                     <p>
                       Quelles sont les informations géographiques ou les
                       indicateurs pertinents&nbsp;? Les bouquets de données
@@ -168,7 +168,7 @@ useHead({
                     />
                   </div>
                   <div class="fr-col-md-9">
-                    <h3>Associer les données<br />disponibles</h3>
+                    <h3>Associer les données disponibles</h3>
                     <p>
                       Les données existantes satisfont-elles les besoins du cas
                       d’usage&nbsp;? L’association peut se faire dans sa forme
