@@ -17,7 +17,14 @@ export default [
   },
   {
     name: 'files-to-ignore',
-    ignores: ['.gitignore', '**/dist/**', '**/dist-ssr/**', '**/coverage/**']
+    ignores: [
+      '.gitignore',
+      '**/dist/**',
+      '**/dist-ssr/**',
+      '**/coverage/**',
+      '**/*.d.ts',
+      'eslintrc-auto-import.mjs'
+    ]
   },
   eslintConfigPrettier,
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/themes/light.css'
 import { Tippy } from 'vue-tippy'

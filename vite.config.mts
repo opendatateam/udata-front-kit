@@ -9,6 +9,13 @@ import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
+import {
+  vueDsfrAutoimportPreset,
+  vueDsfrComponentResolver
+} from '@gouvminint/vue-dsfr'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+
 interface Config {
   website: {
     title: string
@@ -29,6 +36,36 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       vueDevTools(),
+      AutoImport({
+        include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
+        imports: [
+          // @ts-expect-error TS2322
+          'vue',
+          // @ts-expect-error TS2322
+          'vue-router',
+          // @ts-expect-error TS2322
+          'vitest',
+          // @ts-expect-error TS2322
+          vueDsfrAutoimportPreset // Autoimport des composables de VueDsfr
+        ],
+        vueTemplate: true,
+        dts: './src/auto-imports.d.ts',
+        eslintrc: {
+          enabled: true,
+          filepath: './eslintrc-auto-import.mjs',
+          globalsPropValue: true
+        }
+      }),
+      // Autoimport des composants utilisés dans les templates
+      Components({
+        extensions: ['vue'],
+        dirs: ['src/components'], // Autoimport de vos composants qui sont dans le dossier `src/components`
+        include: [/\.vue$/, /\.vue\?vue/],
+        dts: './src/components.d.ts',
+        resolvers: [
+          vueDsfrComponentResolver // Autoimport des composants de VueDsfr dans les templates
+        ]
+      }),
       ViteYaml(),
       createHtmlPlugin({
         minify: true,
