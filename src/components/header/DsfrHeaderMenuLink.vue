@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { OhVueIcon as VIcon } from 'oh-vue-icons'
 import type { HTMLAttributes } from 'vue'
 import { computed } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'

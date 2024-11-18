@@ -28,8 +28,13 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
+    src: '/logos/ecospheres-logo.svg'
+    show_in_header: false
+    footer:
+      width: '40px'
+      height: '219px'
   homepage:
-    title: 'La plateforme des données de la transition écologique'
+    title:
     subtitle:
     sections:
       - title:
@@ -47,10 +52,10 @@ website:
     display: true
     placeholder: Rechercher...
     dropdown:
-      - text: Rechercher {} dans les <strong>bouquets</strong>
-        route: bouquets
       - text: Rechercher {} dans les <strong>jeux de données</strong>
         route: datasets
+      - text: Rechercher {} dans les <strong>bouquets</strong>
+        route: bouquets
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
@@ -58,14 +63,17 @@ website:
     display: false
     name:
     link:
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'écologie."
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la transition écologique et énergétique, réalisé par le Ministère de la Transition écologique, de l’Énergie, du Climat et de la Prévention des risques.'
   footer_external_links:
-    - label: 'ecologie.gouv.fr'
-      href: 'https://ecologie.gouv.fr'
-      title: 'ecologie.gouv.fr - nouvelle fenêtre'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
       title: 'data.gouv.fr - nouvelle fenêtre'
+    - label: 'legifrance.gouv.fr'
+      href: 'https://www.legifrance.gouv.fr/'
+      title: 'legifrance - nouvelle fenêtre'
+    - label: 'ecologie.gouv.fr'
+      href: 'https://ecologie.gouv.fr'
+      title: 'ecologie.gouv.fr - nouvelle fenêtre'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
       title: 'gouvernement.fr - nouvelle fenêtre'
@@ -76,7 +84,7 @@ website:
       to: '/terms'
     - label: 'Politique de confidentialité'
       href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
+    - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
   notice:
     display: true
@@ -89,6 +97,8 @@ website:
       to: /datasets
     - text: Bouquets
       to: /bouquets
+    - text: Organisations
+      to: /organizations
     - text: A propos
       to: /about
   router:
@@ -265,6 +275,18 @@ organizations:
   - ddt-vaucluse
   - ddt-vienne
   - ddt-yvelines
+  - ddtm-alpes-maritimes
+  - ddtm-aude
+  - ddtm-corse-du-sud
+  - ddtm-cotes-darmor
+  - ddtm-finistere
+  - ddtm-gard
+  - ddtm-gironde
+  - ddtm-haute-corse
+  - ddtm-morbihan
+  - ddtm-pas-de-calais
+  - ddtm-pyrenees-orientales
+  - ddtm-vendee
   - deal-guadeloupe
   - direction-departementale-des-territoire-du-puy-de-dome
   - direction-departementale-des-territoires-de-charente
@@ -309,16 +331,11 @@ organizations:
   - direction-departementale-des-territoires-et-de-la-mer-du-calvados
   - direction-departementale-des-territoires-et-de-la-mer-du-var
   - direction-departementale-et-des-territoires-du-cantal
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-lauvergne
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
   - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-centre-val-de-loire
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-languedoc-roussillon
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-poitou-charentes
   - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
   - do-terr-geo-centre
-  - dreal-auvergne-rhone-alpes-1
   - dreal-grand-est
-  - dreal-limousin-1
   - dreal-nouvelle-aquitaine
   - dreal-provence-alpes-cote-dazur
   - electricite-reseau-distribution-france
@@ -331,7 +348,6 @@ organizations:
   - institut-national-de-l-information-geographique-et-forestiere
   - irstea
   - jvmalin
-  - la-direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-provence-alpes-cote-dazur
   - ligair
   - meteo-france
   - ministere-de-l-egalite-des-territoires-et-du-logement
