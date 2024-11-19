@@ -58,10 +58,6 @@ website:
               description: 'Bases essentielles pour étudier les interactions entre les dimensions sociales et économiques de la logistique.'
               url: 'bouquets?theme=Socio-économique'
               image_url: '/logistique/assets/socio.jpg'
-            - name: 'Territoires'
-              description: "Données permettant l'étude des interactions entre la logistique et l'aménagement des territoires."
-              url: 'bouquets?theme=Territoires'
-              image_url: '/logistique/assets/territorial.jpg'
             - name: 'Filières'
               description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
               url: 'bouquets?theme=Filières'
