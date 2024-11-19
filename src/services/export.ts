@@ -37,29 +37,26 @@ export const exportDatasets = async (
         uri: datasetProperties.uri
       }
 
-      try {
-        const remoteDataset =
-          datasetProperties.id != null
-            ? await store.load(datasetProperties.id, { toasted: false })
-            : null
+      const remoteDataset =
+        datasetProperties.id != null
+          ? await store
+              .load(datasetProperties.id, { toasted: false })
+              .catch(() => {
+                row.availability = Availability.REMOTE_DELETED
 
-        if (remoteDataset == null) return row
+                return row
+              })
+          : null
 
-        row.title = remoteDataset.title
-        row.uri = remoteDataset.page
-        row.description = remoteDataset.description
-        row.last_update = remoteDataset.last_update
-        row.organization = remoteDataset.organization?.name
-      } catch (error) {
-        console.error(
-          `Unable to load datasetProperties: ${datasetProperties.id}`,
-          error
-        )
-        row.availability = Availability.REMOTE_DELETED
-        row.uri = null
-      } finally {
-        return row
-      }
+      if (remoteDataset == null) return row
+
+      row.title = remoteDataset.title
+      row.uri = remoteDataset.page
+      row.description = remoteDataset.description
+      row.last_update = remoteDataset.last_update
+      row.organization = remoteDataset.organization?.name
+
+      return row
     })
   )
   const parser = new Parser({ fields: headers })
