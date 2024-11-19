@@ -234,9 +234,6 @@ watch(
             </p>
           </div>
         </div>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <p>{{ formatDate(dataset.last_update) }}</p>
-
         <template v-if="dataset.harvest">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Publication</h2>
           <p>{{ formatDate(dataset.harvest?.created_at) }}</p>
