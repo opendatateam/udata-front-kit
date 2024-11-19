@@ -64,6 +64,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SelectDataset: typeof import('./components/forms/dataset/SelectDataset.vue')['default']
     SelectSpatialCoverage: typeof import('./components/forms/SelectSpatialCoverage.vue')['default']
+    SelectTopicGroup: typeof import('./components/forms/SelectTopicGroup.vue')['default']
     SkipLinks: typeof import('./components/SkipLinks.vue')['default']
     SubSectionButtons: typeof import('./components/sections/SubSectionButtons.vue')['default']
     SubSectionCards: typeof import('./components/sections/SubSectionCards.vue')['default']

@@ -11,8 +11,6 @@ import { useTopicsConf } from '@/utils/config'
 
 import { useExtras } from '@/utils/bouquet'
 import { useGroups } from '@/utils/bouquetGroups'
-import Multiselect from '@vueform/multiselect'
-import '@vueform/multiselect/themes/default.css'
 
 const props = defineProps({
   show: {
@@ -96,11 +94,7 @@ const isDatasetInBouquet = computed(() => {
   )
 })
 
-const { groupedDatasets } = useGroups(datasetsProperties)
-
-const groupOptions = computed(() =>
-  Array.from(groupedDatasets.value, ([key]) => key)
-)
+const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
 
 const submit = async () => {
   if (selectedBouquetId.value === null) {
@@ -172,29 +166,10 @@ onMounted(() => {
         Rechercher ou créer un regroupement. Un regroupement contient un ou
         plusieurs jeux de données.
       </p>
-      <Multiselect
-        id="input-regroupement"
-        v-model="datasetProperties.group"
-        :options="groupOptions"
-        :searchable="true"
-        :limit="5"
-        :strict="false"
-        no-options-text="Il n'y a pas encore de regroupement dans ce bouquet."
-        no-results-text="Aucun regroupement existant."
-        :create-option="true"
-        name="select"
-        placeholder=""
-        :aria="{
-          'aria-describedby': 'regroupement-description'
-        }"
-      >
-        <template #option="{ option }">
-          <p v-if="option.__CREATE__">
-            Ajouter "{{ option.label }}" comme regroupement
-          </p>
-          <p v-else>{{ option.label }}</p>
-        </template>
-      </Multiselect>
+      <SelectTopicGroup
+        v-model:properties-model="datasetProperties"
+        v-model:groups-model="datasetsGroups"
+      />
     </div>
     <slot name="footer">
       <DsfrButtonGroup
