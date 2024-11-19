@@ -141,8 +141,8 @@ website:
       display: true
       create: true
     topic:
-      display: false
-      create: false
+      display: true
+      create: true
   datasets:
     organization_filter: false
     add_to_bouquet: true
