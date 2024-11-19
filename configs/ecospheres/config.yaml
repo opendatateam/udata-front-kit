@@ -338,6 +338,8 @@ organizations:
   - dreal-grand-est
   - dreal-nouvelle-aquitaine
   - dreal-provence-alpes-cote-dazur
+  - edf-systemes-energetiques-insulaires
+  - electricite-de-france
   - electricite-reseau-distribution-france
   - equipe-transport-data-gouv-fr
   - federation-des-parcs-naturels-regionaux-de-france
@@ -353,6 +355,7 @@ organizations:
   - ministere-de-l-egalite-des-territoires-et-du-logement
   - ministere-de-la-transition-ecologique
   - morbihan-energies
+  - museum-national-dhistoire-naturelle
   - observatoire-de-recherche-montpellierain-de-lenvironnement
   - office-national-des-forets
   - oise-mobilite-syndicat-mixte-des-transports-collectifs-de-loise

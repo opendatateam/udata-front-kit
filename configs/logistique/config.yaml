@@ -141,8 +141,8 @@ website:
       display: true
       create: true
     topic:
-      display: false
-      create: false
+      display: true
+      create: true
   datasets:
     organization_filter: false
     add_to_bouquet: true
@@ -171,14 +171,17 @@ themes:
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
-      - name: Données
+      - name: Général
   - name: Infrastructure
     color: '#043574'
     textColor: '#FFFFFF'
+    subthemes:
+      - name: Général
   - name: Trafic
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
+      - name: Général
       - name: Transport routier
       - name: Transport aérien
       - name: Transport ferroviaire
@@ -188,6 +191,7 @@ themes:
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
+      - name: Général
       - name: Filière agricole
       - name: Filière industrielle
       - name: Filière énergétique
@@ -199,17 +203,12 @@ themes:
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
-      - name: Données
+      - name: Général
   - name: Socio-économique
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
-      - name: Données
-  - name: Territoires
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Données
+      - name: Général
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
