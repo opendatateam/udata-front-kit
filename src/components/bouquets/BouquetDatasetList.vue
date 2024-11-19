@@ -37,28 +37,11 @@ defineProps({
 const emits = defineEmits(['updateDatasets'])
 
 const modal: Ref<DatasetEditModalType | null> = ref(null)
-const isReorder = ref(false)
-// make a copy for local reordering before save
-const originalDatasets = ref([...datasetsProperties.value])
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { topicsName } = useTopicsConf()
 
-const { groupedDatasets } = useGroups(datasetsProperties)
-
-const getDatasetIndex = (group: string | undefined | null, index: number) => {
-  // get all datasets from group
-  const groupItems = groupedDatasets.value.get(group ?? 'Sans regroupement')
-
-  if (groupItems) {
-    // find the right dataset index (to handle duplicates)
-    const datasetToDeleteIndex = datasetsProperties.value.findIndex(
-      (item) => item === groupItems[index]
-    )
-    return datasetToDeleteIndex
-  }
-  return -1
-}
+const { groupedDatasets, getDatasetIndex } = useGroups(datasetsProperties)
 
 const removeDataset = (group: string | undefined | null, index: number) => {
   if (
@@ -98,16 +81,6 @@ const loadDatasetsContent = () => {
   })
 }
 
-const saveOrder = () => {
-  isReorder.value = false
-  emits('updateDatasets')
-}
-
-const cancelReorder = () => {
-  datasetsProperties.value = [...originalDatasets.value]
-  isReorder.value = false
-}
-
 const addDataset = () => {
   modal.value?.addDataset()
 }
@@ -118,10 +91,6 @@ const editDataset = (
   group: string
 ) => {
   modal.value?.editDataset(dataset, getDatasetIndex(group, index))
-}
-
-const triggerReorder = () => {
-  isReorder.value = true
 }
 
 const onDatasetEditModalSubmit = () => {
@@ -137,7 +106,6 @@ onMounted(() => {
 <template>
   <!-- Header and buttons -->
   <div
-    v-if="!isReorder"
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
   >
     <h2 class="fr-col-auto fr-mb-2v">
@@ -151,7 +119,6 @@ onMounted(() => {
         class="fr-mb-1w"
         label="Réorganiser la liste"
         icon="ic:baseline-drag-indicator"
-        @click.prevent="triggerReorder"
       />
       <DsfrButton
         v-if="isEdit"
@@ -163,34 +130,13 @@ onMounted(() => {
       />
     </div>
   </div>
-  <div
-    v-else
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-  >
-    <h2 class="fr-col-auto fr-mb-2v">Réorganiser la liste</h2>
-    <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-      <DsfrButton
-        secondary
-        size="sm"
-        class="fr-mb-1w"
-        label="Annuler"
-        @click.prevent="cancelReorder"
-      />
-      <DsfrButton
-        size="sm"
-        class="fr-mb-1w fr-ml-1w"
-        label="Enregister"
-        @click.prevent="saveOrder"
-      />
-    </div>
-  </div>
   <!-- Actual datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset">
     <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">
-      <div v-if="!isReorder">
+      <div>
         <template v-for="[group, datasets] in groupedDatasets" :key="group">
           <DisclosureWidget v-if="datasets.length" :group-name="group">
             <ul role="list">

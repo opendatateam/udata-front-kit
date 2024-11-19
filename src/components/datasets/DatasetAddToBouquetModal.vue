@@ -9,6 +9,7 @@ import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useTopicsConf } from '@/utils/config'
 
+import { useExtras } from '@/utils/bouquet'
 import { useGroups } from '@/utils/bouquetGroups'
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
@@ -39,7 +40,7 @@ const datasetProperties = ref<DatasetProperties>({
   uri: `/datasets/${props.dataset.id}`,
   availability: Availability.LOCAL_AVAILABLE
 })
-const selectedBouquetId = ref(null)
+const selectedBouquetId: Ref<string | null> = ref(null)
 
 const bouquetOptions = computed(() => {
   return bouquets.value.map((bouquet) => {
@@ -77,50 +78,29 @@ const modalActions = computed(() => {
   ]
 })
 
-const isDatasetInBouquet = computed(() => {
+const selectedBouquet = computed(() => {
   if (selectedBouquetId.value === null) {
+    return null
+  }
+  return topicStore.get(selectedBouquetId.value)
+})
+
+const { datasetsProperties } = useExtras(selectedBouquet)
+
+const isDatasetInBouquet = computed(() => {
+  if (!selectedBouquetId.value) {
     return false
   }
-  const selectedBouquet = topicStore.get(selectedBouquetId.value)
-  const datasetsProperties =
-    selectedBouquet?.extras[topicsExtrasKey].datasets_properties
-  return datasetsProperties?.some(
+  return datasetsProperties.value.some(
     (datasetProps) => datasetProps.id === props.dataset.id
   )
 })
 
-const selectedBouquetDatasetsProperties = computed(() => {
-  if (selectedBouquetId.value === null) {
-    return []
-  }
-  const selectedBouquet = topicStore.get(selectedBouquetId.value)
-  if (selectedBouquet) {
-    const datasetsProperties =
-      selectedBouquet.extras[topicsExtrasKey].datasets_properties
+const { groupedDatasets } = useGroups(datasetsProperties)
 
-    return datasetsProperties
-  }
-  return []
-})
-
-// instantiate the composable as null
-const useGroupsInstance = ref<ReturnType<typeof useGroups> | null>(null)
-
-// load the composable with the datasetsProperties from the selected bouquet
-const loadGroups = () => {
-  useGroupsInstance.value = useGroups(
-    ref(selectedBouquetDatasetsProperties.value)
-  )
-}
-// call the exported computed from the composable
-const groupedDatasets = computed(() => useGroupsInstance.value?.groupedDatasets)
-// create the group options based on the composable
-const groupOptions = computed(() => {
-  if (useGroupsInstance.value) {
-    return Array.from(groupedDatasets.value, ([key]) => key)
-  }
-  return []
-})
+const groupOptions = computed(() =>
+  Array.from(groupedDatasets.value, ([key]) => key)
+)
 
 const submit = async () => {
   if (selectedBouquetId.value === null) {
@@ -172,7 +152,6 @@ onMounted(() => {
       :label="`${capitalize(topicsName)} à associer (obligatoire)`"
       :options="bouquetOptions"
       :default-unselected-text="`Choisissez un ${topicsName}`"
-      @update:model-value="loadGroups"
     >
     </DsfrSelect>
     <DsfrBadge

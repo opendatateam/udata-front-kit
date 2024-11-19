@@ -4,12 +4,17 @@ import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
 export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   groupedDatasets: ComputedRef
-  deleteEmptyGroups: () => void
+  getDatasetIndex: (
+    group: string | undefined | null,
+    indexInGroup: number
+  ) => number
 } {
+  const noGroup = 'Sans regroupement'
+
   const groupedDatasets = computed(() => {
     const datasetsGroups: Ref<DatasetsGroups> = ref(new Map())
     // create the key for empty group
-    const noGroup = 'Sans regroupement'
+
     datasetsGroups.value.set(noGroup, [])
 
     // Loop through the datasets and group them by the 'group' property
@@ -29,18 +34,25 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
 
     return datasetsGroups.value
   })
+  const getDatasetIndex = (
+    group: string | undefined | null,
+    indexInGroup: number
+  ) => {
+    // get all datasets from group
+    const groupItems = groupedDatasets.value.get(group ?? noGroup)
 
-  const deleteEmptyGroups = () => {
-    // check for empty groups and delete them
-    for (const [key, value] of groupedDatasets.value) {
-      if (value.length === 0) {
-        groupedDatasets.value.delete(key)
-      }
+    if (groupItems) {
+      // find the right dataset index (to handle duplicates)
+      const datasetIndex = datasetsProperties.value.findIndex(
+        (item) => item === groupItems[indexInGroup]
+      )
+      return datasetIndex
     }
+    return -1
   }
 
   return {
     groupedDatasets,
-    deleteEmptyGroups
+    getDatasetIndex
   }
 }
