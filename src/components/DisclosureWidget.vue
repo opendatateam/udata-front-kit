@@ -1,14 +1,54 @@
 <script lang="ts" setup>
-defineProps({
+import { getRandomId } from '@gouvminint/vue-dsfr'
+
+const props = defineProps({
   groupName: {
     type: String,
     required: true
   }
 })
+
+const newGroupName: Ref<string> = ref(props.groupName)
+
+const emit = defineEmits<{
+  (e: 'editGroupName', oldGroupeName: string, newGroupeName: string): void
+}>()
+
 const isDisclosureOpen: Ref<boolean> = ref(false)
 const toggleDisclosure = () => {
   isDisclosureOpen.value = !isDisclosureOpen.value
 }
+const widgetID = getRandomId('disclosure')
+
+const opened = ref(false)
+const title = 'Titre de la modale'
+
+const openEditModal = () => {
+  opened.value = true
+}
+
+const onValidateEdit = () => {
+  if (newGroupName.value && props.groupName !== newGroupName.value) {
+    emit('editGroupName', props.groupName, newGroupName.value)
+  }
+}
+
+const actions = [
+  {
+    label: 'Annuler',
+    tertiary: true,
+    onClick() {
+      opened.value = false
+    }
+  },
+  {
+    label: 'Valider',
+    onClick() {
+      onValidateEdit()
+      opened.value = false
+    }
+  }
+]
 </script>
 
 <template>
@@ -17,7 +57,7 @@ const toggleDisclosure = () => {
       <button
         class="disclosure__trigger"
         :aria-expanded="isDisclosureOpen"
-        aria-controls="disclosure-content"
+        :aria-controls="widgetID"
         @click.prevent="toggleDisclosure"
       >
         <span class="fr-sr-only">ouvrir le regroupement</span>
@@ -40,9 +80,11 @@ const toggleDisclosure = () => {
           </svg>
         </span>
       </button>
-      <div v-if="groupName !== 'Sans regroupemen'" class="disclosure__actions">
-        <button class="disclosure__btn">
-          <span class="fr-sr-only">éditer le regroupement {{ groupName }}</span>
+      <div v-if="groupName !== 'Sans regroupement'" class="disclosure__actions">
+        <button class="disclosure__btn" @click="openEditModal">
+          <span class="fr-sr-only fr-text--sm"
+            >éditer le regroupement {{ groupName }}</span
+          >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -60,7 +102,7 @@ const toggleDisclosure = () => {
           </svg>
         </button>
         <button class="disclosure__btn">
-          <span class="fr-sr-only"
+          <span class="fr-sr-only fr-text--sm"
             >supprimer le regroupement {{ groupName }}</span
           >
           <svg
@@ -82,11 +124,38 @@ const toggleDisclosure = () => {
       </div>
     </div>
     <div
-      id="disclosure-content"
+      :id="widgetID"
       :class="[{ isVisible: isDisclosureOpen }, 'disclosure__content']"
     >
       <slot />
     </div>
+    <DsfrModal
+      v-model:opened="opened"
+      :title="title"
+      class="modal-edit"
+      @close="opened = false"
+      @keyup.enter="onValidateEdit"
+    >
+      <div class="fr-input-group">
+        <label class="fr-label" :for="`name-input-${widgetID}`"
+          >Nom du regroupement</label
+        >
+        <input
+          :id="`name-input-${widgetID}`"
+          v-model="newGroupName"
+          class="fr-input"
+          type="text"
+        />
+      </div>
+
+      <slot name="footer">
+        <DsfrButtonGroup
+          align="right"
+          :buttons="actions"
+          inline-layout-when="large"
+        />
+      </slot>
+    </DsfrModal>
   </div>
 </template>
 
@@ -94,7 +163,6 @@ const toggleDisclosure = () => {
 .disclosure {
   --padding-base: 1rem;
   margin-block: 40px;
-  overflow: hidden;
 }
 .disclosure__header,
 .disclosure__trigger,
@@ -151,5 +219,12 @@ const toggleDisclosure = () => {
 }
 .disclosure__trigger[aria-expanded='true'] .disclosure__marker > svg {
   rotate: 180deg;
+}
+
+/* MODAL */
+.modal-edit form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 </style>

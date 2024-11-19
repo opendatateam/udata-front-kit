@@ -8,6 +8,7 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     group: string | undefined | null,
     indexInGroup: number
   ) => number
+  renameGroup: (oldGroupName: string, newGroupName: string) => void
 } {
   const noGroup = 'Sans regroupement'
 
@@ -51,8 +52,28 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     return -1
   }
 
+  const renameGroup = (oldGroupName: string, newGroupName: string) => {
+    // get all datasets from the old group in groupedDatasets
+    const oldGroupItems = groupedDatasets.value.get(oldGroupName ?? null)
+
+    if (oldGroupItems) {
+      // find the datasets with the old group property in datasetsProperties
+      const matchingDatasets = datasetsProperties.value.filter((dataset) => {
+        return oldGroupItems.some(
+          (groupItem) =>
+            groupItem.id === dataset.id && groupItem.group === dataset.group
+        )
+      })
+      if (matchingDatasets) {
+        // update the group property to the new group
+        matchingDatasets.forEach((dataset) => (dataset.group = newGroupName))
+      }
+    }
+  }
+
   return {
     groupedDatasets,
-    getDatasetIndex
+    getDatasetIndex,
+    renameGroup
   }
 }

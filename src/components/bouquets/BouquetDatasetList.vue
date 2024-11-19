@@ -41,7 +41,8 @@ const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { topicsName } = useTopicsConf()
 
-const { groupedDatasets, getDatasetIndex } = useGroups(datasetsProperties)
+const { groupedDatasets, getDatasetIndex, renameGroup } =
+  useGroups(datasetsProperties)
 
 const removeDataset = (group: string | undefined | null, index: number) => {
   if (
@@ -55,6 +56,11 @@ const removeDataset = (group: string | undefined | null, index: number) => {
       datasetsProperties.value.splice(datasetToDeleteIndex, 1)
     }
   }
+  emits('updateDatasets')
+}
+
+const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
+  renameGroup(oldGroupName, newGroupName)
   emits('updateDatasets')
 }
 
@@ -138,7 +144,11 @@ onMounted(() => {
     <div v-if="datasetEditorialization">
       <div>
         <template v-for="[group, datasets] in groupedDatasets" :key="group">
-          <DisclosureWidget v-if="datasets.length" :group-name="group">
+          <DisclosureWidget
+            v-if="datasets.length"
+            :group-name="group"
+            @edit-group-name="handleRenameGroup"
+          >
             <ul role="list">
               <li v-for="(dataset, index) in datasets" :key="index">
                 <h3>{{ dataset.title }}</h3>

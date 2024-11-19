@@ -49,7 +49,7 @@ const modalActions = computed(() => {
     {
       label: 'Enregistrer',
       disabled: !modalData.value.isValid,
-      onClick: ($event: PointerEvent) => {
+      onClick: ($event: MouseEvent) => {
         $event.preventDefault()
         submitModal(modalData.value)
         closeModal()
