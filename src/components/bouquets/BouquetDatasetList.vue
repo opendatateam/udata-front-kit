@@ -119,14 +119,6 @@ onMounted(() => {
     </h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
-        v-if="isEdit && datasetsProperties.length >= 2"
-        secondary
-        size="sm"
-        class="fr-mb-1w"
-        label="Réorganiser la liste"
-        icon="ic:baseline-drag-indicator"
-      />
-      <DsfrButton
         v-if="isEdit"
         size="sm"
         class="fr-mb-1w fr-ml-1w"

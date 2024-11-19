@@ -8,7 +8,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BouquetCard: typeof import('./components/bouquets/BouquetCard.vue')['default']
-    BouquetDatasetAccordionTitle: typeof import('./components/bouquets/BouquetDatasetAccordionTitle.vue')['default']
     BouquetDatasetCard: typeof import('./components/bouquets/BouquetDatasetCard.vue')['default']
     BouquetDatasetList: typeof import('./components/bouquets/BouquetDatasetList.vue')['default']
     BouquetDatasetListExport: typeof import('./components/bouquets/BouquetDatasetListExport.vue')['default']
@@ -23,8 +22,6 @@ declare module 'vue' {
     DatasetPropertiesTextFields: typeof import('./components/forms/dataset/DatasetPropertiesTextFields.vue')['default']
     DisclosureWidget: typeof import('./components/DisclosureWidget.vue')['default']
     DiscussionsList: typeof import('./components/DiscussionsList.vue')['default']
-    DsfrAccordion: typeof import('@gouvminint/vue-dsfr')['DsfrAccordion']
-    DsfrAccordionsGroup: typeof import('@gouvminint/vue-dsfr')['DsfrAccordionsGroup']
     DsfrAlert: typeof import('@gouvminint/vue-dsfr')['DsfrAlert']
     DsfrBadge: typeof import('@gouvminint/vue-dsfr')['DsfrBadge']
     DsfrBreadcrumb: typeof import('@gouvminint/vue-dsfr')['DsfrBreadcrumb']
@@ -38,7 +35,6 @@ declare module 'vue' {
     DsfrInput: typeof import('@gouvminint/vue-dsfr')['DsfrInput']
     DsfrLogo: typeof import('@gouvminint/vue-dsfr')['DsfrLogo']
     DsfrModal: typeof import('@gouvminint/vue-dsfr')['DsfrModal']
-    DsfrMultiselect: typeof import('@gouvminint/vue-dsfr')['DsfrMultiselect']
     DsfrNavigation: typeof import('@gouvminint/vue-dsfr')['DsfrNavigation']
     DsfrNavigationItem: typeof import('@gouvminint/vue-dsfr')['DsfrNavigationItem']
     DsfrNavigationMenuLink: typeof import('@gouvminint/vue-dsfr')['DsfrNavigationMenuLink']
