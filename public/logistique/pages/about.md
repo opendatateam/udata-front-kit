@@ -8,15 +8,15 @@ Documents de référence sur la logistique.
 
 <div style="display: flex; flex-wrap: wrap;">
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Atlas des plateformes multimodales</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.logistique-grandest.fr/transporter/multimodal/" target="_blank">Atlas des plateformes multimodales</a></p>
         <p>Une cartographie des infrastructures logistiques multimodales dans le Grand Est, incluant détails géographiques et caractéristiques techniques​.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Études sur la logistique en Île-de-France</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.drieat.ile-de-france.developpement-durable.gouv.fr/la-logistique-urbaine-en-ile-de-france-apercu-des-a12859.html" target="_blank">Études sur la logistique en Île-de-France</a></p>
         <p>Analyse détaillée des flux de fret et logistique en Île-de-France, avec focus sur l'efficacité environnementale​.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Observatoire du fret et de la logistique Île-de-France</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/ofelif/" target="_blank">Observatoire du fret et de la logistique Île-de-France</a></p>
         <p>Rapport de préfiguration pour structurer et améliorer la connaissance du secteur logistique francilien​.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
@@ -24,11 +24,11 @@ Documents de référence sur la logistique.
         <p>Un guide pour harmoniser les règles de livraison en milieu urbain, produit par les Ateliers Régionaux de la Logistique​​.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Tableau de bord Transports / énergie-climat</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.airpl.org/emissions-climat/tableau-de-bord" target="_blank">Tableau de bord Transports / énergie-climat</a></p>
         <p>Données sur la consommation d’énergie et émissions de gaz à effet de serre dans les transports en Pays de la Loire.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Diagnostic logistique et fret Grand Est</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="http://www.observatoire-transports-bretagne.fr/" target="_blank">Diagnostic logistique et fret Grand Est</a></p>
         <p>Étude détaillée des réalités et enjeux logistiques dans le Grand Est, incluant statistiques et analyses approfondies.</p>
     </div>
 </div>
@@ -37,32 +37,29 @@ Documents de référence sur la logistique.
 
 # Observatoire régionaux
 
-Observatoire logistique de la logistique
-
-
 <div style="display: flex; flex-wrap: wrap;">
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">ORT&L Grand Est</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ortl-grandest.fr/" target="_blank">ORT&L Grand Est</a></p>
         <p>Observatoire Régional Transports & Logistique du Grand Est, qui propose des études et publications statistiques sur les transports et la logistique dans la région​.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Observatoire Régional du fret et de la logistique Île-de-France</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/ofelif/" target="_blank">Observatoire Régional du fret et de la logistique Île-de-France</a></p>
         <p>Actuellement en phase de préfiguration, cet observatoire vise à améliorer la connaissance du secteur pour éclairer les décisions.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">ORTM Pays de la Loire</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.observatoire-transports.pays-de-la-loire.developpement-durable.gouv.fr/" target="_blank">ORTM Pays de la Loire</a></p>
         <p>Observatoire régional des transports et de la mobilité dans les Pays de la Loire, offrant des données et des ressources sur les infrastructures et la logistique dans la région​.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Institut Paris Région</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/" target="_blank">Institut Paris Région</a></p>
         <p>Offre une analyse approfondie de la logistique en Île-de-France, en se concentrant sur les aspects économiques, environnementaux et d’aménagement territorial​.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Ateliers Régionaux de la Logistique (ARL) - Région Sud</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ort-paca.fr/arl/" target="_blank">Ateliers Régionaux de la Logistique (ARL) - Région Sud</a></p>
         <p>Un projet visant à renforcer la performance économique et environnementale de la filière logistique en région Sud.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Observatoire Régional du fret et de la logistique Bretagne</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.logistique-grandest.fr/" target="_blank">Observatoire Régional du fret et de la logistique Bretagne</a></p>
         <p>Étude détaillée des réalités et enjeux logistiques en Bretagne, incluant statistiques et analyses approfondies.</p>
     </div>
 </div>
