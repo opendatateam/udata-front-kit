@@ -45,7 +45,7 @@ website:
             - name: 'Infrastructure'
               description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
               url: 'bouquets?theme=Infrastructure'
-              image_url: '/logistique/assets/infra.jpg'              
+              image_url: '/logistique/assets/infra.jpg'
             - name: 'Trafic'
               description: 'Données sur le flux des activités de logistique (trafic routier, fluvial, maritime, ferroviaire et aérien).'
               url: 'bouquets?theme=Trafic'
