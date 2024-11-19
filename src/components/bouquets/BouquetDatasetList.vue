@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { type DatasetV2 } from '@datagouv/components'
 import { onMounted, ref, type Ref } from 'vue'
-import { VueDraggableNext as draggable } from 'vue-draggable-next'
 
 import DatasetEditModal, {
   type DatasetEditModalType
@@ -15,7 +14,8 @@ import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 
-import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
+import { useGroups } from '@/utils/bouquetGroups'
+import DisclosureWidget from '../DisclosureWidget.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 
 const datasetsProperties = defineModel({
@@ -37,33 +37,31 @@ defineProps({
 const emits = defineEmits(['updateDatasets'])
 
 const modal: Ref<DatasetEditModalType | null> = ref(null)
-const isReorder = ref(false)
-const expandStore: Ref<{ [key: string]: string | null }> = ref({})
-// make a copy for local reordering before save
-const originalDatasets = ref([...datasetsProperties.value])
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { topicsName } = useTopicsConf()
 
-const activeAccordion: Ref<number> = ref(-1)
+const { groupedDatasets, getDatasetIndex, renameGroup } =
+  useGroups(datasetsProperties)
 
-const getAccordeonId = (index: number): string => {
-  return `accordion_${index}`
-}
-
-const removeDataset = (index: number) => {
+const removeDataset = (group: string | undefined | null, index: number) => {
   if (
     window.confirm(
       `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicsName} ?`
     )
   ) {
-    delete expandStore.value[getAccordeonId(index)]
-    if (datasetsProperties.value[index].id) {
-      datasetsContent.value.delete(datasetsProperties.value[index].id)
+    const datasetToDeleteIndex = getDatasetIndex(group, index)
+
+    if (datasetToDeleteIndex !== -1) {
+      datasetsProperties.value.splice(datasetToDeleteIndex, 1)
     }
-    datasetsProperties.value.splice(index, 1)
-    emits('updateDatasets')
   }
+  emits('updateDatasets')
+}
+
+const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
+  renameGroup(oldGroupName, newGroupName)
+  emits('updateDatasets')
 }
 
 const loadDatasetsContent = () => {
@@ -89,26 +87,16 @@ const loadDatasetsContent = () => {
   })
 }
 
-const saveOrder = () => {
-  isReorder.value = false
-  emits('updateDatasets')
-}
-
-const cancelReorder = () => {
-  datasetsProperties.value = [...originalDatasets.value]
-  isReorder.value = false
-}
-
 const addDataset = () => {
   modal.value?.addDataset()
 }
 
-const editDataset = (dataset: DatasetProperties, index: number) => {
-  modal.value?.editDataset(dataset, index)
-}
-
-const triggerReorder = () => {
-  isReorder.value = true
+const editDataset = (
+  dataset: DatasetProperties,
+  index: number,
+  group: string
+) => {
+  modal.value?.editDataset(dataset, getDatasetIndex(group, index))
 }
 
 const onDatasetEditModalSubmit = () => {
@@ -124,7 +112,6 @@ onMounted(() => {
 <template>
   <!-- Header and buttons -->
   <div
-    v-if="!isReorder"
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
   >
     <h2 class="fr-col-auto fr-mb-2v">
@@ -138,7 +125,6 @@ onMounted(() => {
         class="fr-mb-1w"
         label="Réorganiser la liste"
         icon="ic:baseline-drag-indicator"
-        @click.prevent="triggerReorder"
       />
       <DsfrButton
         v-if="isEdit"
@@ -150,111 +136,67 @@ onMounted(() => {
       />
     </div>
   </div>
-  <div
-    v-else
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-  >
-    <h2 class="fr-col-auto fr-mb-2v">Réorganiser la liste</h2>
-    <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-      <DsfrButton
-        secondary
-        size="sm"
-        class="fr-mb-1w"
-        label="Annuler"
-        @click.prevent="cancelReorder"
-      />
-      <DsfrButton
-        size="sm"
-        class="fr-mb-1w fr-ml-1w"
-        label="Enregister"
-        @click.prevent="saveOrder"
-      />
-    </div>
-  </div>
   <!-- Actual datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset">
     <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">
-      <!-- Draggable list -->
-      <div v-if="isReorder">
-        <ul class="fr-accordions-group">
-          <draggable ghost-class="ghost" :list="datasetsProperties">
-            <li v-for="(dataset, index) in datasetsProperties" :key="index">
-              <section class="fr-accordion draggable">
-                <h3 class="fr-accordion__title">
-                  <button
-                    class="fake__fr-accordion__btn fake__fr-accordion__btn__mq"
-                  >
-                    <BouquetDatasetAccordionTitle
-                      :dataset-properties="dataset"
-                      :is-edit="true"
-                    />
-                  </button>
-                </h3>
-              </section>
-            </li>
-          </draggable>
-        </ul>
-      </div>
-      <!-- Static list -->
-      <DsfrAccordionsGroup v-if="!isReorder" v-model="activeAccordion">
-        <template v-for="(dataset, index) in datasetsProperties" :key="index">
-          <DsfrAccordion
-            :id="getAccordeonId(index)"
-            :expanded-id="expandStore[getAccordeonId(index)]"
-            @expand="expandStore[getAccordeonId(index)] = $event"
+      <div>
+        <template v-for="[group, datasets] in groupedDatasets" :key="group">
+          <DisclosureWidget
+            v-if="datasets.length"
+            :group-name="group"
+            @edit-group-name="handleRenameGroup"
           >
-            <template #title>
-              <BouquetDatasetAccordionTitle
-                :dataset-properties="dataset"
-                :is-edit="false"
-              />
-            </template>
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="fromMarkdown(dataset.purpose)"></div>
-            <BouquetDatasetCard
-              v-if="dataset.id"
-              :dataset-properties="dataset"
-              :dataset-content="datasetsContent.get(dataset.id)"
-            />
-            <div class="fr-grid-row">
-              <DsfrButton
-                v-if="isEdit"
-                secondary
-                size="sm"
-                icon="ri-delete-bin-line"
-                label="Supprimer"
-                class="fr-mr-2w"
-                @click.prevent="removeDataset(index)"
-              />
-              <DsfrButton
-                v-if="isEdit"
-                size="sm"
-                icon="ri-pencil-line"
-                label="Éditer"
-                class="fr-mr-2w"
-                @click.prevent="editDataset(dataset, index)"
-              />
-              <a
-                v-if="!isAvailable(dataset.availability) && !isEdit"
-                class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                :href="`mailto:${config.website.contact_email}`"
-              >
-                Aidez-nous à trouver la donnée</a
-              >
-              <a
-                v-if="dataset.uri && !dataset.id"
-                class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                :href="dataset.uri"
-                target="_blank"
-                >Accéder au catalogue</a
-              >
-            </div>
-          </DsfrAccordion>
+            <ul role="list">
+              <li v-for="(dataset, index) in datasets" :key="index">
+                <h3>{{ dataset.title }}</h3>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div v-html="fromMarkdown(dataset.purpose)"></div>
+                <BouquetDatasetCard
+                  v-if="dataset.id"
+                  :dataset-properties="dataset"
+                  :dataset-content="datasetsContent.get(dataset.id)"
+                />
+                <div class="fr-grid-row">
+                  <DsfrButton
+                    v-if="isEdit"
+                    secondary
+                    size="sm"
+                    icon="ri-delete-bin-line"
+                    label="Supprimer"
+                    class="fr-mr-2w"
+                    @click.prevent="removeDataset(group, index)"
+                  />
+                  <DsfrButton
+                    v-if="isEdit"
+                    size="sm"
+                    icon="ri-pencil-line"
+                    label="Éditer"
+                    class="fr-mr-2w"
+                    @click.prevent="editDataset(dataset, index, group)"
+                  />
+                  <a
+                    v-if="!isAvailable(dataset.availability) && !isEdit"
+                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    :href="`mailto:${config.website.contact_email}`"
+                  >
+                    Aidez-nous à trouver la donnée</a
+                  >
+                  <a
+                    v-if="dataset.uri && !dataset.id"
+                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    :href="dataset.uri"
+                    target="_blank"
+                    >Accéder au catalogue</a
+                  >
+                </div>
+              </li>
+            </ul>
+          </DisclosureWidget>
         </template>
-      </DsfrAccordionsGroup>
+      </div>
     </div>
     <div v-else>
       <div v-for="(dataset, index) in datasetsProperties" :key="index">
@@ -272,6 +214,7 @@ onMounted(() => {
     v-if="isEdit"
     ref="modal"
     v-model="datasetsProperties"
+    v-model:groups-model="groupedDatasets"
     @submit-modal="onDatasetEditModalSubmit"
   />
 </template>

@@ -1,28 +1,29 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import {
-  computed,
-  defineModel,
-  onMounted,
-  ref,
-  watch,
-  type PropType,
-  type Ref
-} from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { Availability, type DatasetProperties } from '@/model/topic'
+import {
+  Availability,
+  type DatasetProperties,
+  type DatasetsGroups
+} from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicsConf } from '@/utils/config'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
-const emit = defineEmits(['updateValidation'])
+const emit = defineEmits(['updateValidation', 'update:datasetProperties'])
 
 const datasetProperties = defineModel({
-  type: Object as PropType<DatasetProperties>,
-  required: true
+  type: Object as () => DatasetProperties,
+  default: {}
+})
+
+const datasetsGroups = defineModel('groups-model', {
+  type: Object as () => DatasetsGroups,
+  default: []
 })
 
 defineProps({
@@ -121,13 +122,25 @@ onMounted(() => {
 <template>
   <DatasetPropertiesTextFields
     v-if="topicsDatasetEditorialization"
-    v-model:dataset-properties="datasetProperties"
+    v-model:dataset-properties-model="datasetProperties"
   />
   <div class="fr-mt-1w fr-mb-4w">
     <SelectDataset
       v-model="selectedDataset"
       :already-selected-datasets="alreadySelectedDatasets"
       @update:model-value="onSelectDataset"
+    />
+  </div>
+  <div class="fr-input-group">
+    <label for="input-regroupement">Regroupement (facultatif)</label>
+    <p id="regroupement-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
+      Rechercher ou créer un regroupement. Un regroupement contient un ou
+      plusieurs jeux de données.
+    </p>
+
+    <SelectTopicGroup
+      v-model:properties-model="datasetProperties"
+      v-model:groups-model="datasetsGroups"
     />
   </div>
   <div
