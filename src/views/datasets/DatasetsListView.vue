@@ -255,8 +255,10 @@ onMounted(() => {
 
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
+        id="search-bouquet"
         v-model="localQuery"
         search-label="Rechercher"
+        label="Rechercher des données"
         :search-namespace="router.resolve({ name: 'datasets' }).href"
         @update:model-value="search()"
         @search="$emit('search', $event)"

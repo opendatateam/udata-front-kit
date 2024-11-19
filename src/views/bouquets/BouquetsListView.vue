@@ -150,9 +150,11 @@ watch(
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
+        id="search-bouquet"
         v-model="selectedQuery"
         search-label="Rechercher"
-        :search-namespace="router.resolve({ name: 'bouquets' }).href"
+        :label="`Rechercher un ${topicsName}`"
+        :search-endpoint="router.resolve({ name: 'bouquets' }).href"
         @update:model-value="search"
       />
     </div>
