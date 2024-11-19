@@ -26,9 +26,9 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  searchNamespace: {
+  searchEndpoint: {
     type: String,
-    default: () => ''
+    default: () => null
   }
 })
 
@@ -45,7 +45,7 @@ const selectedMultiSearch = ref()
 
 const doSimpleSearch = () => {
   router.push({
-    path: props.searchNamespace || router.resolve({ name: 'datasets' }).href,
+    path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
     query: { q: query.value }
   })
   query.value = ''

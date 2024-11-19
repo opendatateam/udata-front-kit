@@ -259,7 +259,7 @@ onMounted(() => {
         v-model="localQuery"
         search-label="Rechercher"
         label="Rechercher des données"
-        :search-namespace="router.resolve({ name: 'datasets' }).href"
+        :search-endpoint="router.resolve({ name: 'datasets' }).href"
         @update:model-value="search()"
         @search="$emit('search', $event)"
       />
