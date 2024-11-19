@@ -2,37 +2,6 @@
 
 logistique.data.gouv.fr est une plateforme publique de partage de données ouvertes liées à la logistique en France, facilitant l'accès aux informations pour améliorer l'efficacité et la transparence du secteur.
 
-# Documents de références
-
-Documents de référence sur la logistique.
-
-<div style="display: flex; flex-wrap: wrap;">
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.logistique-grandest.fr/transporter/multimodal/" target="_blank">Atlas des plateformes multimodales</a></p>
-        <p>Une cartographie des infrastructures logistiques multimodales dans le Grand Est, incluant détails géographiques et caractéristiques techniques​.</p>
-    </div>
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.drieat.ile-de-france.developpement-durable.gouv.fr/la-logistique-urbaine-en-ile-de-france-apercu-des-a12859.html" target="_blank">Études sur la logistique en Île-de-France</a></p>
-        <p>Analyse détaillée des flux de fret et logistique en Île-de-France, avec focus sur l'efficacité environnementale​.</p>
-    </div>
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/ofelif/" target="_blank">Observatoire du fret et de la logistique Île-de-France</a></p>
-        <p>Rapport de préfiguration pour structurer et améliorer la connaissance du secteur logistique francilien​.</p>
-    </div>
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Guide des réglementations de la logistique</p>
-        <p>Un guide pour harmoniser les règles de livraison en milieu urbain, produit par les Ateliers Régionaux de la Logistique​​.</p>
-    </div>
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.airpl.org/emissions-climat/tableau-de-bord" target="_blank">Tableau de bord Transports / énergie-climat</a></p>
-        <p>Données sur la consommation d’énergie et émissions de gaz à effet de serre dans les transports en Pays de la Loire.</p>
-    </div>
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="http://www.observatoire-transports-bretagne.fr/" target="_blank">Diagnostic logistique et fret Grand Est</a></p>
-        <p>Étude détaillée des réalités et enjeux logistiques dans le Grand Est, incluant statistiques et analyses approfondies.</p>
-    </div>
-</div>
-
 <br />
 
 # Observatoire régionaux
@@ -64,6 +33,36 @@ Documents de référence sur la logistique.
     </div>
 </div>
 
+<br />
+
+# Documents de références
+
+<div style="display: flex; flex-wrap: wrap;">
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.logistique-grandest.fr/transporter/multimodal/" target="_blank">Atlas des plateformes multimodales</a></p>
+        <p>Une cartographie des infrastructures logistiques multimodales dans le Grand Est, incluant détails géographiques et caractéristiques techniques​.</p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.drieat.ile-de-france.developpement-durable.gouv.fr/la-logistique-urbaine-en-ile-de-france-apercu-des-a12859.html" target="_blank">Études sur la logistique en Île-de-France</a></p>
+        <p>Analyse détaillée des flux de fret et logistique en Île-de-France, avec focus sur l'efficacité environnementale​.</p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/ofelif/" target="_blank">Observatoire du fret et de la logistique Île-de-France</a></p>
+        <p>Rapport de préfiguration pour structurer et améliorer la connaissance du secteur logistique francilien​.</p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;">Guide des réglementations de la logistique</p>
+        <p>Un guide pour harmoniser les règles de livraison en milieu urbain, produit par les Ateliers Régionaux de la Logistique​​.</p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.airpl.org/emissions-climat/tableau-de-bord" target="_blank">Tableau de bord Transports / énergie-climat</a></p>
+        <p>Données sur la consommation d’énergie et émissions de gaz à effet de serre dans les transports en Pays de la Loire.</p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="http://www.observatoire-transports-bretagne.fr/" target="_blank">Diagnostic logistique et fret Grand Est</a></p>
+        <p>Étude détaillée des réalités et enjeux logistiques dans le Grand Est, incluant statistiques et analyses approfondies.</p>
+    </div>
+</div>
 
 ### **Qu’est-ce que [logistique.data.gouv.fr](http://logistique.data.gouv.fr/) ?**
 
