@@ -238,17 +238,17 @@ watch(
         <p>{{ formatDate(dataset.last_update) }}</p>
 
         <template v-if="dataset.harvest">
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Publication :</h2>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Publication</h2>
           <p>{{ formatDate(dataset.harvest?.created_at) }}</p>
 
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière modification :</h2>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière modification</h2>
           <p>{{ formatDate(dataset.harvest?.modified_at) }}</p>
         </template>
         <template v-else>
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Création :</h2>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
           <p>{{ formatDate(dataset.created_at) }}</p>
 
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour :</h2>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
           <p>{{ formatDate(dataset.last_modified) }}</p>
         </template>
         <div v-if="license">
