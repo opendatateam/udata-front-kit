@@ -43,7 +43,8 @@ const emits = defineEmits(['search'])
 const query = ref('')
 const selectedMultiSearch = ref()
 
-const doSimpleSearch = () => {
+const doSimpleSearch = (event) => {
+  query.value = event
   router.push({
     path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
     query: { q: query.value }
@@ -76,7 +77,7 @@ const dropdownLabel = (text: string) => {
     v-model="selectedQuery"
     :label="searchLabel"
     :placeholder="placeholder"
-    @search="doSimpleSearch"
+    @search="doSimpleSearch($event)"
   />
 
   <div v-else>
