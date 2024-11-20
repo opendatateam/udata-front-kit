@@ -75,6 +75,11 @@ const onValidateEdit = () => {
 const onDelete = () => {
   emit('deleteGroup', props.groupName)
 }
+const resetForm = () => {
+  opened.value = false
+  newGroupName.value = props.groupName
+  inputErrors.value = []
+}
 
 const actions = computed(() => {
   return [
@@ -82,10 +87,7 @@ const actions = computed(() => {
       label: 'Annuler',
       tertiary: true,
       onClick() {
-        opened.value = false
-        // reset form
-        newGroupName.value = props.groupName
-        inputErrors.value = []
+        resetForm()
       }
     },
     {
@@ -183,8 +185,7 @@ const actions = computed(() => {
       :class="['modal-group', `modal-${modalType}`]"
       :style="{ '--modal-confirm-button-bg': `var(${modalContent.color})` }"
       size="lg"
-      @close="opened = false"
-      @keyup.enter="modalContent.action"
+      @close="resetForm"
     >
       <div v-if="modalType === 'edit'" class="form fr-input-group">
         <DsfrInput

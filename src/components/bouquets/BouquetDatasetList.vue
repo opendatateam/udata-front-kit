@@ -150,6 +150,15 @@ onMounted(() => {
                   {{ dataset.title }}
                 </h3>
                 <div class="dataset__actions">
+                  <DsfrTag
+                    v-if="
+                      !isAvailable(dataset.availability) ||
+                      dataset.remoteDeleted ||
+                      dataset.remoteArchived
+                    "
+                    class="uppercase bold fr-text--xs fr-mr-2w"
+                    label="Non disponible"
+                  />
                   <DsfrButton
                     v-if="isEdit"
                     size="sm"
@@ -252,5 +261,10 @@ onMounted(() => {
 .dataset__actions button {
   inline-size: 32px;
   block-size: 32px;
+}
+.fr-tag {
+  color: var(--purple-glycine-sun-319-moon-630, #6e445a);
+  background-color: var(--purple-glycine-950-100, #fee7fc);
+  border-radius: 0;
 }
 </style>
