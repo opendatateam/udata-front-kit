@@ -26,19 +26,13 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: 'BIENVENUE sur le hackathon data gouv'
-    subtitle: 'C est une page de description'
+    title:
+    subtitle:
     sections:
-      - title: Hackathon données alimentaires
+      - title:
         content:
         sub_section_datasets:
         sub_section_cards:
-          title:
-          cards:
-            - name: 'Hackathon données alimentaires'
-              description: 'tout le monde a travaillé sauf Etalab'
-              url: '/hackathons/hackathon-donnees-alimentaires'
-              image_url: '/logistique/assets/immobilier.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
@@ -114,9 +108,6 @@ website:
     topics_list: 100
     files_list: 6
   home_banner_colors:
-    - '#D2EAF7'
-    - '#DBF3F8'
-    - '#DBF2F0'
   env: 'prod'
   matomo:
     host:
