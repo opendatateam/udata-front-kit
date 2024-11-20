@@ -12,6 +12,7 @@ const newGroupName: Ref<string> = ref(props.groupName)
 
 const emit = defineEmits<{
   (e: 'editGroupName', oldGroupeName: string, newGroupeName: string): void
+  (e: 'deleteGroup', groupeName: string): void
 }>()
 
 const isDisclosureOpen: Ref<boolean> = ref(false)
@@ -30,6 +31,12 @@ const openEditModal = () => {
 const onValidateEdit = () => {
   if (newGroupName.value && props.groupName !== newGroupName.value) {
     emit('editGroupName', props.groupName, newGroupName.value)
+  }
+}
+
+const onDelete = () => {
+  if (props.groupName) {
+    emit('deleteGroup', props.groupName)
   }
 }
 
@@ -101,7 +108,7 @@ const actions = [
             />
           </svg>
         </button>
-        <button class="disclosure__btn">
+        <button class="disclosure__btn" @click="onDelete">
           <span class="fr-sr-only fr-text--sm"
             >supprimer le regroupement {{ groupName }}</span
           >

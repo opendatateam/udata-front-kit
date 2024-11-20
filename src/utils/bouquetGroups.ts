@@ -4,11 +4,10 @@ import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
 export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   groupedDatasets: ComputedRef
-  getDatasetIndex: (
-    group: string | undefined | null,
-    indexInGroup: number
-  ) => number
+  getDatasetIndex: (group: string, indexInGroup: number) => number
+  removeDatasetFromGroup: (group: string, index: number) => DatasetProperties[]
   renameGroup: (oldGroupName: string, newGroupName: string) => void
+  deleteGroup: (groupName: string) => DatasetProperties[]
 } {
   const noGroup = 'Sans regroupement'
 
@@ -35,10 +34,7 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
 
     return datasetsGroups.value
   })
-  const getDatasetIndex = (
-    group: string | undefined | null,
-    indexInGroup: number
-  ) => {
+  const getDatasetIndex = (group: string, indexInGroup: number) => {
     // get all datasets from group
     const groupItems = groupedDatasets.value.get(group ?? noGroup)
 
@@ -50,6 +46,19 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
       return datasetIndex
     }
     return -1
+  }
+
+  const removeDatasetFromGroup = (group: string, index: number) => {
+    if (
+      window.confirm(`Etes-vous sûr de vouloir supprimer ce jeu de données ?`)
+    ) {
+      const datasetToDeleteIndex = getDatasetIndex(group, index)
+
+      if (datasetToDeleteIndex !== -1) {
+        return datasetsProperties.value.splice(datasetToDeleteIndex, 1)
+      }
+    }
+    return datasetsProperties.value
   }
 
   const renameGroup = (oldGroupName: string, newGroupName: string) => {
@@ -71,9 +80,34 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     }
   }
 
+  const deleteGroup = (groupName: string) => {
+    // get all datasets from the old group in groupedDatasets
+    const groupItems = groupedDatasets.value.get(groupName ?? null)
+
+    if (groupItems) {
+      if (
+        window.confirm(`Etes-vous sûr de vouloir supprimer ce regroupement ?`)
+      ) {
+        // filter the datasetsProperties to exclude the items from the group to delete
+        const updatedDatasetsProperties = datasetsProperties.value.filter(
+          (dataset) => {
+            return groupItems.find(
+              (groupItem) =>
+                groupItem.id !== dataset.id && groupItem.group !== dataset.group
+            )
+          }
+        )
+        return updatedDatasetsProperties
+      }
+    }
+    return datasetsProperties.value
+  }
+
   return {
     groupedDatasets,
     getDatasetIndex,
-    renameGroup
+    removeDatasetFromGroup,
+    renameGroup,
+    deleteGroup
   }
 }

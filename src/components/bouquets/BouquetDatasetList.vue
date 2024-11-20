@@ -41,26 +41,26 @@ const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { topicsName } = useTopicsConf()
 
-const { groupedDatasets, getDatasetIndex, renameGroup } =
-  useGroups(datasetsProperties)
+const {
+  groupedDatasets,
+  getDatasetIndex,
+  removeDatasetFromGroup,
+  renameGroup,
+  deleteGroup
+} = useGroups(datasetsProperties)
 
-const removeDataset = (group: string | undefined | null, index: number) => {
-  if (
-    window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicsName} ?`
-    )
-  ) {
-    const datasetToDeleteIndex = getDatasetIndex(group, index)
-
-    if (datasetToDeleteIndex !== -1) {
-      datasetsProperties.value.splice(datasetToDeleteIndex, 1)
-    }
-  }
+const removeDataset = (group: string, index: number) => {
+  removeDatasetFromGroup(group, index)
   emits('updateDatasets')
 }
 
 const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
   renameGroup(oldGroupName, newGroupName)
+  emits('updateDatasets')
+}
+
+const handleDeleteGroup = (groupName: string) => {
+  datasetsProperties.value = deleteGroup(groupName)
   emits('updateDatasets')
 }
 
@@ -140,6 +140,7 @@ onMounted(() => {
             v-if="datasets.length"
             :group-name="group"
             @edit-group-name="handleRenameGroup"
+            @delete-group="handleDeleteGroup"
           >
             <ul role="list">
               <li v-for="(dataset, index) in datasets" :key="index">
