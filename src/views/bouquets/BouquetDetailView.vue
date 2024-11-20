@@ -329,7 +329,7 @@ watch(
       :tab-list-name="`Groupes d'attributs du ${topicsName}`"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
         <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"

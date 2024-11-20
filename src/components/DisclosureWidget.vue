@@ -1,14 +1,20 @@
 <script lang="ts" setup>
+import type { DatasetProperties } from '@/model/topic'
 import { getRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
   groupName: {
     type: String,
     required: true
+  },
+  allGroups: {
+    type: Object as () => Map<string, DatasetProperties>,
+    required: true
   }
 })
 
 const newGroupName: Ref<string> = ref(props.groupName)
+const inputErrors: Ref<string[]> = ref([])
 
 const emit = defineEmits<{
   (e: 'editGroupName', oldGroupeName: string, newGroupeName: string): void
@@ -22,53 +28,87 @@ const toggleDisclosure = () => {
 const widgetID = getRandomId('disclosure')
 
 const opened = ref(false)
-const title = 'Titre de la modale'
+const modalType = ref('')
+const modalContent = computed(() => {
+  let modalFields = {
+    title: '',
+    confirmLabel: '',
+    color: '',
+    action: () => {}
+  }
+  switch (modalType.value) {
+    case 'edit':
+      modalFields = {
+        title: `Renommer le regroupement ${props.groupName}`,
+        confirmLabel: 'Valider',
+        color: '',
+        action: onValidateEdit
+      }
+      break
+    case 'delete':
+      modalFields = {
+        title: `Supprimer le regroupement ${props.groupName}`,
+        confirmLabel: 'Supprimer',
+        color: '--background-flat-error',
+        action: onDelete
+      }
+      break
+  }
+  return modalFields
+})
 
-const openEditModal = () => {
+const openModal = (type: string) => {
+  modalType.value = type
   opened.value = true
 }
 
 const onValidateEdit = () => {
-  if (newGroupName.value && props.groupName !== newGroupName.value) {
+  // check if new group name already exists
+  if (props.allGroups.has(newGroupName.value)) {
+    inputErrors.value.push('Ce nom de regroupement existe déjà.')
+  } else if (newGroupName.value && props.groupName !== newGroupName.value) {
     emit('editGroupName', props.groupName, newGroupName.value)
+    opened.value = false
   }
 }
 
 const onDelete = () => {
-  if (props.groupName) {
-    emit('deleteGroup', props.groupName)
-  }
+  emit('deleteGroup', props.groupName)
 }
 
-const actions = [
-  {
-    label: 'Annuler',
-    tertiary: true,
-    onClick() {
-      opened.value = false
+const actions = computed(() => {
+  return [
+    {
+      label: 'Annuler',
+      tertiary: true,
+      onClick() {
+        opened.value = false
+        // reset form
+        newGroupName.value = props.groupName
+        inputErrors.value = []
+      }
+    },
+    {
+      label: modalContent.value.confirmLabel,
+      onClick() {
+        modalContent.value.action()
+      }
     }
-  },
-  {
-    label: 'Valider',
-    onClick() {
-      onValidateEdit()
-      opened.value = false
-    }
-  }
-]
+  ]
+})
 </script>
 
 <template>
   <div class="disclosure">
     <div class="disclosure__header">
       <button
-        class="disclosure__trigger"
+        class="disclosure__trigger fr-py-3v"
         :aria-expanded="isDisclosureOpen"
         :aria-controls="widgetID"
         @click.prevent="toggleDisclosure"
       >
         <span class="fr-sr-only">ouvrir le regroupement</span>
-        <span>{{ groupName }}</span>
+        <span class="disclosure__name fr-text--lg">{{ groupName }}</span>
         <span class="disclosure__btn disclosure__marker">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +128,7 @@ const actions = [
         </span>
       </button>
       <div v-if="groupName !== 'Sans regroupement'" class="disclosure__actions">
-        <button class="disclosure__btn" @click="openEditModal">
+        <button class="disclosure__btn" @click="openModal('edit')">
           <span class="fr-sr-only fr-text--sm"
             >éditer le regroupement {{ groupName }}</span
           >
@@ -108,7 +148,7 @@ const actions = [
             />
           </svg>
         </button>
-        <button class="disclosure__btn" @click="onDelete">
+        <button class="disclosure__btn" @click="openModal('delete')">
           <span class="fr-sr-only fr-text--sm"
             >supprimer le regroupement {{ groupName }}</span
           >
@@ -131,6 +171,7 @@ const actions = [
       </div>
     </div>
     <div
+      v-show="isDisclosureOpen"
       :id="widgetID"
       :class="[{ isVisible: isDisclosureOpen }, 'disclosure__content']"
     >
@@ -138,21 +179,38 @@ const actions = [
     </div>
     <DsfrModal
       v-model:opened="opened"
-      :title="title"
-      class="modal-edit"
+      :title="modalContent.title"
+      :class="['modal-group', `modal-${modalType}`]"
+      :style="{ '--modal-confirm-button-bg': `var(${modalContent.color})` }"
+      size="lg"
       @close="opened = false"
-      @keyup.enter="onValidateEdit"
+      @keyup.enter="modalContent.action"
     >
-      <div class="fr-input-group">
-        <label class="fr-label" :for="`name-input-${widgetID}`"
-          >Nom du regroupement</label
-        >
-        <input
-          :id="`name-input-${widgetID}`"
+      <div v-if="modalType === 'edit'" class="form fr-input-group">
+        <DsfrInput
           v-model="newGroupName"
-          class="fr-input"
-          type="text"
+          label="Nom du regroupement"
+          label-visible
+          :aria-invalid="inputErrors.length ? true : undefined"
+          :description-id="inputErrors.length ? 'errors-name' : undefined"
         />
+        <div v-if="inputErrors.length" id="errors-name" class="error">
+          <p v-for="(error, index) in inputErrors" :key="index">
+            <span class="fr-icon-error-fill" aria-hidden="true" />
+            {{ error }}
+          </p>
+        </div>
+      </div>
+
+      <div v-else-if="modalType === 'delete'">
+        <p>
+          Ce regroupement contient un ou plusieurs jeux de données. En
+          confirmant la suppression,
+          <strong>
+            tous les jeux de données associés seront retirés du bouquet.
+          </strong>
+        </p>
+        <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>
       </div>
 
       <slot name="footer">
@@ -169,7 +227,6 @@ const actions = [
 <style scoped>
 .disclosure {
   --padding-base: 1rem;
-  margin-block: 40px;
 }
 .disclosure__header,
 .disclosure__trigger,
@@ -185,13 +242,16 @@ const actions = [
   flex-wrap: nowrap;
 }
 .disclosure__header {
+  --text-spacing: 0;
   border-block-end: 1px solid var(--border-default-grey);
 }
 .disclosure__trigger {
-  padding-block: 12px;
+  /* half padding on right to harmonize with other icons */
   padding-inline: var(--padding-base) calc(var(--padding-base) / 2);
   flex-grow: 1;
-  font-weight: bold;
+}
+.disclosure__name {
+  font-weight: 500;
 }
 .disclosure__btn {
   block-size: 32px;
@@ -208,30 +268,24 @@ const actions = [
 .disclosure__actions {
   gap: var(--padding-base);
 }
-.disclosure__content {
-  padding: var(--padding-base);
-  block-size: 0;
-  visibility: hidden;
-}
-@supports (interpolate-size: allow-keywords) {
-  .disclosure__content {
-    transition:
-      height 0.4s ease,
-      visibility 0.4s;
-  }
-}
 .disclosure__content.isVisible {
-  block-size: auto;
-  visibility: visible;
+  padding: var(--padding-base);
 }
 .disclosure__trigger[aria-expanded='true'] .disclosure__marker > svg {
   rotate: 180deg;
 }
 
 /* MODAL */
-.modal-edit form {
+.modal-group :deep(h1) {
+  font-size: clamp(1.375rem, 1.3319rem + 0.2155vw, 1.5rem);
+}
+.modal-group form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.modal-delete :deep(.fr-btns-group :last-child button) {
+  background-color: var(--modal-confirm-button-bg);
 }
 </style>

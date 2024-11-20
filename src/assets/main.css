@@ -99,21 +99,22 @@ body {
 
 /* form */
 
-form textarea {
+:is(form, .form) textarea {
   resize: vertical;
 }
 
-form :where(input, textarea, fieldset, select)[aria-invalid='true'] {
+:is(form, .form)
+  :where(input, textarea, fieldset, select)[aria-invalid='true'] {
   border: 2px solid var(--border-plain-error);
 }
-form .error {
+:is(form, .form) .error {
   margin-block-start: 0.5rem;
   color: var(--text-default-error);
 }
-form .error-status {
+:is(form, .form) .error-status {
   border: 4px solid var(--background-flat-warning);
 }
-form .fr-text--sm {
+:is(form, .form) .fr-text--sm {
   color: var(--text-mention-grey);
 }
 

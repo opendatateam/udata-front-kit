@@ -6,6 +6,7 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   groupedDatasets: ComputedRef
   getDatasetIndex: (group: string, indexInGroup: number) => number
   removeDatasetFromGroup: (group: string, index: number) => DatasetProperties[]
+  groupAlreadyExists: (groupName: string) => boolean
   renameGroup: (oldGroupName: string, newGroupName: string) => void
   deleteGroup: (groupName: string) => DatasetProperties[]
 } {
@@ -61,11 +62,16 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     return datasetsProperties.value
   }
 
+  const groupAlreadyExists = (groupName: string) => {
+    return groupedDatasets.value.has(groupName)
+  }
+
   const renameGroup = (oldGroupName: string, newGroupName: string) => {
+    const errors: Ref<string[]> = ref([])
     // get all datasets from the old group in groupedDatasets
     const oldGroupItems = groupedDatasets.value.get(oldGroupName ?? null)
 
-    if (oldGroupItems) {
+    if (!groupAlreadyExists(newGroupName) && oldGroupItems) {
       // find the datasets with the old group property in datasetsProperties
       const matchingDatasets = datasetsProperties.value.filter((dataset) => {
         return oldGroupItems.some(
@@ -78,6 +84,7 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
         matchingDatasets.forEach((dataset) => (dataset.group = newGroupName))
       }
     }
+    return errors
   }
 
   const deleteGroup = (groupName: string) => {
@@ -85,20 +92,16 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     const groupItems = groupedDatasets.value.get(groupName ?? null)
 
     if (groupItems) {
-      if (
-        window.confirm(`Etes-vous sûr de vouloir supprimer ce regroupement ?`)
-      ) {
-        // filter the datasetsProperties to exclude the items from the group to delete
-        const updatedDatasetsProperties = datasetsProperties.value.filter(
-          (dataset) => {
-            return groupItems.find(
-              (groupItem) =>
-                groupItem.id !== dataset.id && groupItem.group !== dataset.group
-            )
-          }
-        )
-        return updatedDatasetsProperties
-      }
+      // filter the datasetsProperties to exclude the items from the group to delete
+      const updatedDatasetsProperties = datasetsProperties.value.filter(
+        (dataset) => {
+          return groupItems.find(
+            (groupItem) =>
+              groupItem.id !== dataset.id && groupItem.group !== dataset.group
+          )
+        }
+      )
+      return updatedDatasetsProperties
     }
     return datasetsProperties.value
   }
@@ -107,6 +110,7 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     groupedDatasets,
     getDatasetIndex,
     removeDatasetFromGroup,
+    groupAlreadyExists,
     renameGroup,
     deleteGroup
   }

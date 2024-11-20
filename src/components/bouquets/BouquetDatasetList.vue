@@ -49,7 +49,7 @@ const {
   deleteGroup
 } = useGroups(datasetsProperties)
 
-const removeDataset = (group: string, index: number) => {
+const handleRemoveDataset = (group: string, index: number) => {
   removeDatasetFromGroup(group, index)
   emits('updateDatasets')
 }
@@ -111,17 +111,14 @@ onMounted(() => {
 
 <template>
   <!-- Header and buttons -->
-  <div
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-  >
-    <h2 class="fr-col-auto fr-mb-2v">
+  <div class="fr-grid-row fr-grid-row--middle justify-between">
+    <h2 class="fr-col-auto fr-m-0 fr-p-0">
       Composition du {{ topicsName }} de données
     </h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
         v-if="isEdit"
         size="sm"
-        class="fr-mb-1w fr-ml-1w"
         label="Ajouter un jeu de données"
         icon="ri-add-line"
         @click.prevent="addDataset"
@@ -132,19 +129,48 @@ onMounted(() => {
   <div v-if="datasetsProperties.length < 1" class="no-dataset">
     <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
-  <div v-else>
-    <div v-if="datasetEditorialization">
-      <div>
-        <template v-for="[group, datasets] in groupedDatasets" :key="group">
-          <DisclosureWidget
-            v-if="datasets.length"
-            :group-name="group"
-            @edit-group-name="handleRenameGroup"
-            @delete-group="handleDeleteGroup"
-          >
-            <ul role="list">
-              <li v-for="(dataset, index) in datasets" :key="index">
-                <h3>{{ dataset.title }}</h3>
+  <template v-else>
+    <div v-if="datasetEditorialization" class="groups fr-mt-10v">
+      <template v-for="[group, datasets] in groupedDatasets" :key="group">
+        <DisclosureWidget
+          v-if="datasets.length"
+          :group-name="group"
+          :all-groups="groupedDatasets"
+          @edit-group-name="handleRenameGroup"
+          @delete-group="handleDeleteGroup"
+        >
+          <ul role="list" class="groups__list">
+            <li
+              v-for="(dataset, index) in datasets"
+              :key="index"
+              class="dataset fr-p-0"
+            >
+              <div class="dataset__header fr-px-2w fr-py-3v">
+                <h3 class="dataset__title fr-text--md">
+                  {{ dataset.title }}
+                </h3>
+                <div class="dataset__actions">
+                  <DsfrButton
+                    v-if="isEdit"
+                    size="sm"
+                    icon="ri-pencil-line"
+                    label="Éditer"
+                    tertiary
+                    icon-only
+                    @click.prevent="editDataset(dataset, index, group)"
+                  />
+                  <DsfrButton
+                    v-if="isEdit"
+                    size="sm"
+                    icon="ri-delete-bin-line"
+                    label="Supprimer"
+                    tertiary
+                    icon-only
+                    @click.prevent="handleRemoveDataset(group, index)"
+                  />
+                </div>
+              </div>
+              <div class="dataset__content fr-px-2w fr-pt-2w fr-pb-1w">
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(dataset.purpose)"></div>
                 <BouquetDatasetCard
@@ -153,23 +179,6 @@ onMounted(() => {
                   :dataset-content="datasetsContent.get(dataset.id)"
                 />
                 <div class="fr-grid-row">
-                  <DsfrButton
-                    v-if="isEdit"
-                    secondary
-                    size="sm"
-                    icon="ri-delete-bin-line"
-                    label="Supprimer"
-                    class="fr-mr-2w"
-                    @click.prevent="removeDataset(group, index)"
-                  />
-                  <DsfrButton
-                    v-if="isEdit"
-                    size="sm"
-                    icon="ri-pencil-line"
-                    label="Éditer"
-                    class="fr-mr-2w"
-                    @click.prevent="editDataset(dataset, index, group)"
-                  />
                   <a
                     v-if="!isAvailable(dataset.availability) && !isEdit"
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
@@ -185,11 +194,11 @@ onMounted(() => {
                     >Accéder au catalogue</a
                   >
                 </div>
-              </li>
-            </ul>
-          </DisclosureWidget>
-        </template>
-      </div>
+              </div>
+            </li>
+          </ul>
+        </DisclosureWidget>
+      </template>
     </div>
     <div v-else>
       <div v-for="(dataset, index) in datasetsProperties" :key="index">
@@ -200,7 +209,7 @@ onMounted(() => {
         />
       </div>
     </div>
-  </div>
+  </template>
 
   <!-- add/edit modal -->
   <DatasetEditModal
@@ -213,30 +222,35 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.ghost {
-  background-color: #bbb;
+.groups,
+.groups__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-
-@media (min-width: 48em) {
-  .fake__fr-accordion__btn.fake__fr-accordion__btn__mq {
-    padding: 0.75rem 1rem;
-  }
-}
-
-.fake__fr-accordion__btn {
-  cursor: grab;
-  align-items: center;
-  display: inline-flex;
-  flex-direction: row;
-  font-size: 1rem;
-  line-height: 1.5rem;
+.groups__list,
+.dataset__title {
+  padding: 0;
   margin: 0;
-  max-height: none;
-  max-width: 100%;
-  min-height: 3rem;
-  overflow: initial;
-  padding: 0.75rem 0;
-  text-align: left;
-  width: 100%;
+}
+.dataset__header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: var(--background-default-grey-hover);
+}
+.dataset__title {
+  font-weight: 500;
+}
+.dataset__actions {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+}
+.dataset__actions button {
+  inline-size: 32px;
+  block-size: 32px;
 }
 </style>
