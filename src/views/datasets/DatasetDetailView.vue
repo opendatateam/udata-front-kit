@@ -259,7 +259,7 @@ watch(
           <p>{{ formatDate(dataset.created_at) }}</p>
 
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-          <p>{{ formatDate(dataset.last_modified) }}</p>
+          <p>{{ formatDate(dataset.last_update) }}</p>
         </template>
         <div v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
