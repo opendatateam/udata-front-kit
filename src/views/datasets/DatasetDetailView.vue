@@ -239,7 +239,7 @@ watch(
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Publication</h2>
           <p>
             {{
-              dataset.harvest?.created_at
+              dataset.harvest.created_at
                 ? formatDate(dataset.harvest.created_at)
                 : NOT_AVAILABLE_DATE
             }}
@@ -248,7 +248,7 @@ watch(
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière modification</h2>
           <p>
             {{
-              dataset.harvest?.modified_at
+              dataset.harvest.modified_at
                 ? formatDate(dataset.harvest.modified_at)
                 : NOT_AVAILABLE_DATE
             }}
@@ -256,22 +256,10 @@ watch(
         </template>
         <template v-else>
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
-          <p>
-            {{
-              dataset.created_at
-                ? formatDate(dataset.created_at)
-                : NOT_AVAILABLE_DATE
-            }}
-          </p>
+          <p>{{ formatDate(dataset.created_at) }}</p>
 
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-          <p>
-            {{
-              dataset.last_modified
-                ? formatDate(dataset.last_modified)
-                : NOT_AVAILABLE_DATE
-            }}
-          </p>
+          <p>{{ formatDate(dataset.last_modified) }}</p>
         </template>
         <div v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
