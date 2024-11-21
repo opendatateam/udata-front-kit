@@ -130,84 +130,65 @@ onMounted(() => {
     <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
   <template v-else>
-    <div v-if="datasetEditorialization" class="groups fr-mt-10v">
-      <template v-for="[group, datasets] in groupedDatasets" :key="group">
-        <DisclosureWidget
-          v-if="datasets.length"
-          :group-name="group"
-          :all-groups="groupedDatasets"
-          @edit-group-name="handleRenameGroup"
-          @delete-group="handleDeleteGroup"
-        >
-          <ul role="list" class="groups__list">
-            <li
-              v-for="(dataset, index) in datasets"
-              :key="index"
-              class="dataset fr-p-0"
-            >
-              <div class="dataset__header fr-px-2w fr-py-3v">
-                <h3 class="dataset__title fr-text--md">
-                  {{ dataset.title }}
-                </h3>
-                <div class="dataset__actions">
-                  <DsfrTag
-                    v-if="
-                      !isAvailable(dataset.availability) ||
-                      dataset.remoteDeleted ||
-                      dataset.remoteArchived
-                    "
-                    class="uppercase bold fr-text--xs fr-mr-2w"
-                    label="Non disponible"
-                  />
-                  <DsfrButton
-                    v-if="isEdit"
-                    size="sm"
-                    icon="ri-pencil-line"
-                    label="Éditer"
-                    tertiary
-                    icon-only
-                    @click.prevent="editDataset(dataset, index, group)"
-                  />
-                  <DsfrButton
-                    v-if="isEdit"
-                    size="sm"
-                    icon="ri-delete-bin-line"
-                    label="Supprimer"
-                    tertiary
-                    icon-only
-                    @click.prevent="handleRemoveDataset(group, index)"
-                  />
-                </div>
+    <div v-if="datasetEditorialization" class="fr-mt-10v">
+      <ul role="list" class="groups fr-m-0 fr-p-0">
+        <li v-for="[group, datasets] in groupedDatasets" :key="group">
+          <DisclosureWidget
+            v-if="datasets.length"
+            :group-name="group"
+            :all-groups="groupedDatasets"
+            :datasets-properties="datasets"
+            @edit-group-name="handleRenameGroup"
+            @delete-group="handleDeleteGroup"
+          >
+            <template #datasetActions="{ dataset, index }">
+              <DsfrButton
+                v-if="isEdit"
+                size="sm"
+                icon="ri-pencil-line"
+                label="Éditer"
+                tertiary
+                icon-only
+                @click.prevent="editDataset(dataset, index, group)"
+              />
+              <DsfrButton
+                v-if="isEdit"
+                size="sm"
+                icon="ri-delete-bin-line"
+                label="Supprimer"
+                tertiary
+                icon-only
+                @click.prevent="handleRemoveDataset(group, index)"
+              />
+            </template>
+            <template #datasetContent="{ dataset }">
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div v-html="fromMarkdown(dataset.purpose)"></div>
+              <BouquetDatasetCard
+                v-if="dataset.id"
+                :dataset-properties="dataset"
+                :dataset-content="datasetsContent.get(dataset.id)"
+              />
+              <div class="fr-grid-row">
+                <a
+                  v-if="!isAvailable(dataset.availability) && !isEdit"
+                  class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                  :href="`mailto:${config.website.contact_email}`"
+                >
+                  Aidez-nous à trouver la donnée</a
+                >
+                <a
+                  v-if="dataset.uri && !dataset.id"
+                  class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                  :href="dataset.uri"
+                  target="_blank"
+                  >Accéder au catalogue</a
+                >
               </div>
-              <div class="dataset__content fr-px-2w fr-pt-2w fr-pb-1w">
-                <!-- eslint-disable-next-line vue/no-v-html -->
-                <div v-html="fromMarkdown(dataset.purpose)"></div>
-                <BouquetDatasetCard
-                  v-if="dataset.id"
-                  :dataset-properties="dataset"
-                  :dataset-content="datasetsContent.get(dataset.id)"
-                />
-                <div class="fr-grid-row">
-                  <a
-                    v-if="!isAvailable(dataset.availability) && !isEdit"
-                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                    :href="`mailto:${config.website.contact_email}`"
-                  >
-                    Aidez-nous à trouver la donnée</a
-                  >
-                  <a
-                    v-if="dataset.uri && !dataset.id"
-                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                    :href="dataset.uri"
-                    target="_blank"
-                    >Accéder au catalogue</a
-                  >
-                </div>
-              </div>
-            </li>
-          </ul>
-        </DisclosureWidget>
-      </template>
+            </template>
+          </DisclosureWidget>
+        </li>
+      </ul>
     </div>
     <div v-else>
       <div v-for="(dataset, index) in datasetsProperties" :key="index">
@@ -231,40 +212,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.groups,
-.groups__list {
+.groups {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-.groups__list,
-.dataset__title {
-  padding: 0;
-  margin: 0;
-}
-.dataset__header {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  background: var(--background-default-grey-hover);
-}
-.dataset__title {
-  font-weight: 500;
-}
-.dataset__actions {
-  display: flex;
-  flex-flow: row wrap;
-  gap: 0.5rem;
-}
-.dataset__actions button {
-  inline-size: 32px;
-  block-size: 32px;
-}
-.fr-tag {
-  color: var(--purple-glycine-sun-319-moon-630, #6e445a);
-  background-color: var(--purple-glycine-950-100, #fee7fc);
-  border-radius: 0;
 }
 </style>

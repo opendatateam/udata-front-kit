@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { DatasetProperties } from '@/model/topic'
+import { isAvailable } from '@/utils/bouquet'
 import { getRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
@@ -10,6 +11,14 @@ const props = defineProps({
   allGroups: {
     type: Object as () => Map<string, DatasetProperties>,
     required: true
+  },
+  datasetsProperties: {
+    type: Object as () => DatasetProperties[],
+    required: true
+  },
+  headingLevel: {
+    type: String,
+    default: 'h3'
   }
 })
 
@@ -177,7 +186,32 @@ const actions = computed(() => {
       :id="widgetID"
       :class="[{ isVisible: isDisclosureOpen }, 'disclosure__content']"
     >
-      <slot />
+      <ul role="list" class="fr-m-0 fr-p-0">
+        <li v-for="(dataset, index) in datasetsProperties" :key="index">
+          <div class="dataset__header fr-px-2w fr-py-3v">
+            <slot name="datasetTitle">
+              <component :is="headingLevel" class="dataset__title fr-text--md">
+                {{ dataset.title }}
+              </component>
+            </slot>
+            <div v-if="$slots.datasetActions" class="dataset__actions">
+              <DsfrTag
+                v-if="
+                  !isAvailable(dataset.availability) ||
+                  dataset.remoteDeleted ||
+                  dataset.remoteArchived
+                "
+                class="uppercase bold fr-text--xs fr-mr-2w"
+                label="Non disponible"
+              />
+              <slot name="datasetActions" :dataset="dataset" :index="index" />
+            </div>
+          </div>
+          <div v-if="$slots.datasetContent" class="dataset__content">
+            <slot name="datasetContent" :dataset="dataset" />
+          </div>
+        </li>
+      </ul>
     </div>
     <DsfrModal
       v-model:opened="opened"
@@ -228,19 +262,23 @@ const actions = computed(() => {
 <style scoped>
 .disclosure {
   --padding-base: 1rem;
+  --icon-size: 32px;
+  container-type: inline-size;
+  container-name: disclosure;
 }
 .disclosure__header,
 .disclosure__trigger,
-.disclosure__actions {
+.disclosure__actions,
+.dataset__actions {
   display: flex;
-  flex-flow: row wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: calc(var(--padding-base) / 2);
 }
-.disclosure__trigger,
-.disclosure__actions {
-  flex-wrap: nowrap;
+
+.disclosure__header {
+  flex-flow: row wrap;
 }
 .disclosure__header {
   --text-spacing: 0;
@@ -250,13 +288,19 @@ const actions = computed(() => {
   /* half padding on right to harmonize with other icons */
   padding-inline: var(--padding-base) calc(var(--padding-base) / 2);
   flex-grow: 1;
+  text-align: left;
 }
 .disclosure__name {
+  flex: 1 1 auto;
   font-weight: 500;
 }
+.disclosure__btn,
+.dataset__actions :where(button, :deep(button)) {
+  block-size: var(--icon-size);
+  inline-size: var(--icon-size);
+}
 .disclosure__btn {
-  block-size: 32px;
-  inline-size: 32px;
+  flex: 0 0 var(--icon-size);
   display: grid;
   place-content: center;
   border: 1px solid grey;
@@ -266,14 +310,54 @@ const actions = computed(() => {
   rotate: 0deg;
   transition: rotate 0.4s ease;
 }
-.disclosure__actions {
-  gap: var(--padding-base);
+.disclosure__actions,
+.dataset__actions {
+  margin-inline-start: auto;
 }
 .disclosure__content.isVisible {
-  padding: var(--padding-base);
+  padding-block: var(--padding-base);
 }
 .disclosure__trigger[aria-expanded='true'] .disclosure__marker > svg {
   rotate: 180deg;
+}
+
+/* DATASETS */
+.dataset__title {
+  padding: 0;
+  margin: 0;
+}
+.dataset__header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: var(--background-default-grey-hover);
+}
+
+.dataset__title {
+  font-weight: 500;
+}
+.fr-tag {
+  color: var(--purple-glycine-sun-319-moon-630, #6e445a);
+  background-color: var(--purple-glycine-950-100, #fee7fc);
+  border-radius: 0;
+}
+.dataset__content {
+  padding-block: var(--padding-base) calc(var(--padding-base) / 2);
+}
+
+/* DESKTOP styles */
+@container disclosure (width >= 26rem) {
+  .disclosure__content.isVisible {
+    padding-inline: var(--padding-base);
+  }
+  .disclosure__actions {
+    gap: var(--padding-base);
+  }
+  .dataset__content {
+    padding-inline: var(--padding-base);
+  }
 }
 
 /* MODAL */
