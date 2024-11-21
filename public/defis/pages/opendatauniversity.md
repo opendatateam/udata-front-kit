@@ -22,7 +22,7 @@ Le programme est entièrement gratuit. Pour participer au dispositif, il suffit 
 **[Rejoindre l'Open Data University](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv)**
 
 ## Quels sont les projets open data proposés ?
-Dans le cadre de l'Open Data University, 9 projets open data ont été conçus pour être intégrés dans des enseignements techniques :
+Dans le cadre de l'Open Data University, 8 projets open data ont été conçus pour être intégrés dans des enseignements techniques :
 * [**Diversité et Inclusion en entreprise**](https://defis.data.gouv.fr/defis/diversite-et-inclusion-en-entreprise)
 * [**Revitalisation des petites villes**](https://defis.data.gouv.fr/defis/revitalisation-des-petites-villes)
 * [**Les Françaises et les Français face à l'information**](https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation)
