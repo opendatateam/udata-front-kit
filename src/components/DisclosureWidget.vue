@@ -213,47 +213,49 @@ const actions = computed(() => {
         </li>
       </ul>
     </div>
-    <DsfrModal
-      v-model:opened="opened"
-      :title="modalContent.title"
-      :class="['modal-group', `modal-${modalType}`]"
-      :style="{ '--modal-confirm-button-bg': `var(${modalContent.color})` }"
-      size="lg"
-      @close="resetForm"
-    >
-      <div v-if="modalType === 'edit'" class="form fr-input-group">
-        <DsfrInput
-          v-model="newGroupName"
-          label="Nom du regroupement"
-          label-visible
-          :aria-invalid="inputErrors.length ? true : undefined"
-          :description-id="inputErrors.length ? 'errors-name' : undefined"
-        />
-        <div v-if="inputErrors.length" id="errors-name" class="error">
-          <p v-for="(error, index) in inputErrors" :key="index">
-            <span class="fr-icon-error-fill" aria-hidden="true" />
-            {{ error }}
-          </p>
+    <Teleport to="body">
+      <DsfrModal
+        v-model:opened="opened"
+        :title="modalContent.title"
+        :class="['modal-group', `modal-${modalType}`]"
+        :style="{ '--modal-confirm-button-bg': `var(${modalContent.color})` }"
+        size="lg"
+        @close="resetForm"
+      >
+        <div v-if="modalType === 'edit'" class="form fr-input-group">
+          <DsfrInput
+            v-model="newGroupName"
+            label="Nom du regroupement"
+            label-visible
+            :aria-invalid="inputErrors.length ? true : undefined"
+            :description-id="inputErrors.length ? 'errors-name' : undefined"
+          />
+          <div v-if="inputErrors.length" id="errors-name" class="error">
+            <p v-for="(error, index) in inputErrors" :key="index">
+              <span class="fr-icon-error-fill" aria-hidden="true" />
+              {{ error }}
+            </p>
+          </div>
         </div>
-      </div>
-      <div v-else-if="modalType === 'delete'">
-        <p>
-          Ce regroupement contient un ou plusieurs jeux de données. En
-          confirmant la suppression,
-          <strong>
-            tous les jeux de données associés seront retirés du bouquet.
-          </strong>
-        </p>
-        <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>
-      </div>
-      <slot name="footer">
-        <DsfrButtonGroup
-          align="right"
-          :buttons="actions"
-          inline-layout-when="large"
-        />
-      </slot>
-    </DsfrModal>
+        <div v-else-if="modalType === 'delete'">
+          <p>
+            Ce regroupement contient un ou plusieurs jeux de données. En
+            confirmant la suppression,
+            <strong>
+              tous les jeux de données associés seront retirés du bouquet.
+            </strong>
+          </p>
+          <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>
+        </div>
+        <slot name="footer">
+          <DsfrButtonGroup
+            align="right"
+            :buttons="actions"
+            inline-layout-when="large"
+          />
+        </slot>
+      </DsfrModal>
+    </Teleport>
   </div>
 </template>
 
