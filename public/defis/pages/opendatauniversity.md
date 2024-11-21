@@ -41,19 +41,6 @@ Nous sommes attachés à identifier des thématiques qui ont du sens pour les é
 
 Nous proposons des projets qui peuvent être réalisés par une diversité d’étudiantes et étudiants (niveaux d’études, discipline, durée du cours) : avec les enseignants, nous identifions les options possibles. Un même projet peut donc par exemple aboutir au développement d’une application, à une datavisualisation ou encore à un mémo de politiques publiques !
 
-Découvrir les défis pour la saison 2023-2024 :
-
-* Infrastructures cyclables
-* Énergie en France
-* Carte scolaire
-* Plan France Relance
-* Véhicules électriques
-* Offre culturelle
-* Changement climatique
-* Elections
-* Commerces en centre-ville
-* Impact Diagnostics de Performance Energétique
-
 ##### Comment les résultats des projets vont-ils être présentés et valorisés ?
 Les résultats et enseignements liés aux projets seront bien sûr partagés ! L’ODU est une “université décentralisée” - c’est à dire que les projets sont réalisés au sein d’une diversité d’enseignements et d’établissements. Les résultats vont donc être multiples pour un seul et même projet, et leur inscription pédagogique sera différente selon le type d’enseignement, sa durée, les compétences acquises, le mode d’évaluation. Le point commun sera toujours le même : valoriser des données publiques ouvertes !
 
