@@ -156,10 +156,6 @@ onMounted(() => {
       ellipsis
       class="fr-mb-2w"
     />
-    <DatasetPropertiesTextFields
-      v-if="topicsDatasetEditorialization"
-      v-model:dataset-properties-model="datasetProperties"
-    />
     <div class="fr-input-group">
       <label for="input-regroupement">Regroupement (facultatif)</label>
       <p id="regroupement-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
@@ -171,6 +167,10 @@ onMounted(() => {
         v-model:groups-model="datasetsGroups"
       />
     </div>
+    <DatasetPropertiesTextFields
+      v-if="topicsDatasetEditorialization"
+      v-model:dataset-properties-model="datasetProperties"
+    />
     <slot name="footer">
       <DsfrButtonGroup
         v-if="modalActions?.length"

@@ -236,7 +236,6 @@ const actions = computed(() => {
           </p>
         </div>
       </div>
-
       <div v-else-if="modalType === 'delete'">
         <p>
           Ce regroupement contient un ou plusieurs jeux de données. En
@@ -247,7 +246,6 @@ const actions = computed(() => {
         </p>
         <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>
       </div>
-
       <slot name="footer">
         <DsfrButtonGroup
           align="right"

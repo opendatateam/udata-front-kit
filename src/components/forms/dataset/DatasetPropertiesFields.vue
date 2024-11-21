@@ -131,18 +131,6 @@ onMounted(() => {
       @update:model-value="onSelectDataset"
     />
   </div>
-  <div class="fr-input-group">
-    <label for="input-regroupement">Regroupement (facultatif)</label>
-    <p id="regroupement-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
-      Rechercher ou créer un regroupement. Un regroupement contient un ou
-      plusieurs jeux de données.
-    </p>
-
-    <SelectTopicGroup
-      v-model:properties-model="datasetProperties"
-      v-model:groups-model="datasetsGroups"
-    />
-  </div>
   <div
     v-if="!selectedDataset && topicsDatasetEditorialization"
     class="fr-mt-4w"
@@ -185,6 +173,18 @@ onMounted(() => {
         label="Je n'ai pas cherché la donnée"
       />
     </fieldset>
+  </div>
+  <div class="fr-input-group">
+    <label for="input-regroupement">Regroupement (facultatif)</label>
+    <p id="regroupement-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
+      Rechercher ou créer un regroupement. Un regroupement contient un ou
+      plusieurs jeux de données.
+    </p>
+
+    <SelectTopicGroup
+      v-model:properties-model="datasetProperties"
+      v-model:groups-model="datasetsGroups"
+    />
   </div>
 </template>
 
