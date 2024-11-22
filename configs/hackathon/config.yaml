@@ -1,0 +1,155 @@
+# config file for hackathon.data.gouv.fr
+
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://www.data.gouv.fr
+  # oauth settings
+  # FIXME:
+  oauth_client_id: 673cbedb47b01e3f79eea45c
+universe:
+  # "universe" topic id
+  topic_id: 66d5caab2ef9e95fc1625446
+  # universe name, used as bouquets tag
+  name: hackathon
+robots:
+  disallow:
+  sitemap:
+  meta: 'noindex, nofollow'
+# UI customizations
+website:
+  title: 'hackathon.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
+  service_logo: '/logos/hackathon-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+  homepage:
+    title:
+    subtitle:
+    sections:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description:
+  header_button:
+    display: false
+    label: 'Donnez votre avis'
+    link:
+  header_search:
+    display: false
+    placeholder: Rechercher...
+  search_bar:
+    display: false
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name:
+    link:
+  menu:
+    - text: Accès aux données
+      to: /hackathons/hackathon-donnees-alimentaires
+    - text: A propos du hackathon
+      to: '/a-propos-du-hackathon'
+    - text: Avant le hackathon
+      to: '/avant-le-hackathon'
+    - text: Pendant le hackathon
+      to: '/pendant-le-hackathon'
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    pages:
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/hackathon/pages/accessibility.md'
+      - title: 'A propos du hackathon'
+        id: 'a-propos-du-hackathon'
+        route: '/a-propos-du-hackathon'
+        url: '/hackathon/pages/a-propos-du-hackathon.md'
+      - title: 'Avant le hackathon'
+        id: 'avant-le-hackathon'
+        route: '/avant-le-hackathon'
+        url: '/hackathon/pages/avant-le-hackathon.md'
+      - title: 'Pendant le hackathon'
+        id: 'pendant-le-hackathon'
+        route: '/pendant-le-hackathon'
+        url: '/hackathon/pages/pendant-le-hackathon.md'
+  show_quality_component: true
+  list_search_topics:
+  url_search_topics: 'datasets'
+  oauth_option: true
+  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr permettant de lister les jeux de données utilisés dans le cadre d'événement de type hackathon par l'équipe data.gouv.fr ou ses partenaires."
+  footer_external_links:
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  logo_operator:
+  notice:
+    display: false
+    content: Notice avec un [lien beta](/beta) et du _style_
+    closeable: false
+  # display settings
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 100
+    files_list: 6
+  home_banner_colors:
+  env: 'prod'
+  matomo:
+    host:
+    siteId:
+  discussions:
+    dataset:
+      display: true
+      create: true
+    topic:
+      display: true
+      create: true
+  datasets:
+    organization_filter: false
+    add_to_bouquet: true
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel: false
+  topics:
+    slug: hackathons
+    name: hackathon
+    extras_key: 'hackathon'
+    themes:
+      usage: true
+      main_name: catégorie
+      secondary_name: sous-catégorie
+    # include a list page with all topics
+    list_all: false
+    display_metadata: false
+    activate_read_more: true
+    dataset_editorialization: true
+    can_add_topics:
+      everyone: false
+      authorized_users:
+        - 5e6f426e634f417810ab794b
+        - 5dee373f6f44416a83fbd907
+themes:
+  - name: Données alimentaires
+    color: '#043574'
+    textColor: '#FFFFFF'
+    subthemes:
+      - name: Général
+# list of organisations' ids that should be handled by the portal
+# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+# then Informations > ID at the bottom of the page
+organizations:
