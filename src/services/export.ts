@@ -2,6 +2,8 @@ import { Parser } from '@json2csv/plainjs'
 
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
+import { toastHttpError } from '@/utils/error'
+import { isNotFoundError } from '@/utils/http'
 
 interface DatasetRow {
   label: string
@@ -41,8 +43,13 @@ export const exportDatasets = async (
         datasetProperties.id != null
           ? await store
               .load(datasetProperties.id, { toasted: false })
-              .catch(() => {
-                row.availability = Availability.REMOTE_DELETED
+              .catch((error) => {
+                if (isNotFoundError(error)) {
+                  console.log(error)
+                  row.availability = Availability.REMOTE_DELETED
+                } else {
+                  toastHttpError(error)
+                }
 
                 return row
               })
