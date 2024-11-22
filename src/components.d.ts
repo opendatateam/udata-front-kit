@@ -71,6 +71,7 @@ declare module 'vue' {
     SubSectionDatasets: typeof import('./components/sections/SubSectionDatasets.vue')['default']
     SubSectionTiles: typeof import('./components/sections/SubSectionTiles.vue')['default']
     Tile: typeof import('./components/Tile.vue')['default']
+    TileComponent: typeof import('./components/TileComponent.vue')['default']
     TooltipWrapper: typeof import('./components/TooltipWrapper.vue')['default']
     VIcon: typeof import('@gouvminint/vue-dsfr')['VIcon']
   }
