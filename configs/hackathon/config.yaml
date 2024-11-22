@@ -21,7 +21,7 @@ website:
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/hackathon-logo.svg'
   badge:
-    display: false
+    display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent

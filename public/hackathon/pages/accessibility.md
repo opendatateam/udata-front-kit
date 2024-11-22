@@ -4,15 +4,15 @@
 
 La Direction Interministérielle du Numérique s’engage à rendre son service accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
 
-Cette déclaration d’accessibilité s’applique à logistique.data.gouv.fr (https://logistique.data.gouv.fr).
+Cette déclaration d’accessibilité s’applique à hackathon.data.gouv.fr (https://hackathon.data.gouv.fr).
 
 ## État de conformité
 
-logistique.data.gouv.fr est non conforme avec le RGAA. Le site n’a encore pas été audité.
+hackathon.data.gouv.fr est non conforme avec le RGAA. Le site n’a encore pas été audité.
 
 ## Amélioration et contact
 
-Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de logistique.data.gouv.fr pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
+Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de hackathon.data.gouv.fr pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
 
     Formulaire de contact : https://support.data.gouv.fr/
     Adresse : DINUM, Ségur, Paris
