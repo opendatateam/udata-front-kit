@@ -4,7 +4,7 @@ import type { ComputedRef } from 'vue'
 import { computed, onMounted } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
-import BouquetCardHome from '@/components/bouquets/BouquetCardHome.vue'
+import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import config from '@/config'
 import HomeFaq from '@/custom/ecospheres/components/HomeFaq.vue'
 import type { Topic } from '@/model/topic'
@@ -191,7 +191,7 @@ useHead({
           :key="topic.id"
           class="fr-col-12 fr-col-xl-4"
         >
-          <BouquetCardHome :bouquet="topic" />
+          <BouquetCard :bouquet="topic" />
         </li>
       </ul>
       <p class="fr-m-0">
