@@ -53,12 +53,8 @@ website:
   menu:
     - text: Accès aux données
       to: /hackathons/hackathon-donnees-alimentaires
-    - text: A propos du hackathon
-      to: '/a-propos-du-hackathon'
-    - text: Avant le hackathon
-      to: '/avant-le-hackathon'
-    - text: Pendant le hackathon
-      to: '/pendant-le-hackathon'
+    - text: Guide du hackathon
+      to: 'https://documentation.beta.numerique.gouv.fr/s/e44ffbcc-9b7d-4dbc-bcf3-b6ea6daef89e/doc/guide-du-hackathon-alimentaire-cwxNzDZqc5'
   router:
     disable:
       - organizations_routes
