@@ -185,7 +185,7 @@ useHead({
     </section>
     <section class="fr-container fr-py-12v">
       <h2>Les bouquets à découvrir</h2>
-      <ul class="fr-grid-row fr-grid-row--gutters" role="list">
+      <ul class="fr-grid-row fr-grid-row--gutters fr-mb-2w" role="list">
         <li
           v-for="topic in lastTopics"
           :key="topic.id"

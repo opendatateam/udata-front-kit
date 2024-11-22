@@ -43,7 +43,7 @@ const { themeColors } = useThemeOptions(theme)
 
 <template>
   <article
-    class="fr-my-md-3w fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link"
+    class="fr-my-1w fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link"
   >
     <div
       v-if="bouquet.private"
@@ -60,7 +60,7 @@ const { themeColors } = useThemeOptions(theme)
       </div>
     </div>
     <div class="fr-grid-row fr-pt-2v">
-      <div class="fr-col-12 fr-col-sm-3">
+      <div class="fr-col-12 fr-col-sm-3 bouquet-card-col-logo">
         <OrganizationLogo
           v-if="bouquet.organization"
           :size="64"
@@ -140,5 +140,9 @@ const { themeColors } = useThemeOptions(theme)
   text-overflow: ellipsis;
   display: block;
   line-height: inherit;
+}
+
+.bouquet-card-col-logo {
+  max-width: 6.25rem;
 }
 </style>

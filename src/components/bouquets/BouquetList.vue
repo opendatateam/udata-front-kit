@@ -171,15 +171,11 @@ defineExpose({
     </div>
   </div>
   <div class="bouquets-list-container fr-container fr-mb-4w border-top">
-    <div class="">
-      <div class="">
-        <ul class="" role="list">
-          <li v-for="bouquet in bouquets" :key="bouquet.id" class="fr-col-12">
-            <BouquetCardHome :bouquet="bouquet" />
-          </li>
-        </ul>
-      </div>
-    </div>
+    <ul class="fr-mt-3w fr-pl-0" role="list">
+      <li v-for="bouquet in bouquets" :key="bouquet.id" class="fr-col-12">
+        <BouquetCardHome :bouquet="bouquet" />
+      </li>
+    </ul>
   </div>
 </template>
 

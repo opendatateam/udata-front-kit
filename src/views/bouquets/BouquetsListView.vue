@@ -176,7 +176,7 @@ watch(
             />
           </div>
         </nav>
-        <div className="fr-col-8">
+        <div className="fr-col-12 fr-col-md-8">
           <BouquetList
             ref="bouquetListComp"
             :theme-name="selectedTheme"
