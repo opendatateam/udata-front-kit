@@ -51,36 +51,24 @@ function strip(value: string) {
 </script>
 
 <template>
-  <div class="fr-tile-v2">
-    <div class="fr-grid-row fr-grid-row--middle">
+  <div class="fr-tile-v2 border">
+    <div class="fr-grid-row fr-grid-row--middle fr-mb-8v">
       <div class="fr-col-auto">
         <div v-if="img" class="fr-tile__img border fr-p-3v fr-m-0">
-          <img
-            :src="img"
-            alt=""
-            loading="lazy"
-            class="fr-responsive-img"
-            style="max-width: 100%; max-height: 100%"
-          />
+          <img :src="img" alt="" loading="lazy" class="fr-responsive-img" />
         </div>
       </div>
       <div class="fr-col fr-px-3v">
-        <h4 class="">
+        <h4 class="fr-title-v2__title">
           <a
             v-if="externalLink"
             class="fr-tile__link"
-            style="outline-width: 0"
             target="_blank"
             :href="externalLink"
           >
             {{ title }}
           </a>
-          <RouterLink
-            v-else
-            class="fr-tile__link"
-            style="outline-width: 0; background-image: none"
-            :to="link || ''"
-          >
+          <RouterLink v-else class="fr-tile__link" :to="link || ''">
             {{ title }}
           </RouterLink>
         </h4>
@@ -97,7 +85,7 @@ function strip(value: string) {
         />
       </p>
     </div>
-    <div v-if="tags" class="fr-mb-8v">
+    <div v-if="tags">
       <template v-for="(tag, index) in tags" :key="index">
         <DsfrTag
           class="fr-card__detail fr-mt-1w fr-mb-1w card__tag"
@@ -111,8 +99,13 @@ function strip(value: string) {
 
 <style scoped>
 .fr-tile-v2 {
-  border-bottom: 4px solid var(--border-active-blue-france);
+  padding: 2rem;
+  box-shadow: 0px 4px 0px var(--border-active-blue-france);
   height: 100%;
+}
+
+.fr-title-v2__title a {
+  background-image: none;
 }
 
 .card__tag {
