@@ -21,6 +21,10 @@ const props = defineProps({
   bouquet: {
     type: Object as () => Topic,
     required: true
+  },
+  hideDescription: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -97,7 +101,10 @@ const { themeColors } = useThemeOptions(theme)
         </p>
       </div>
     </div>
-    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
+    <div v-if="!hideDescription" class="fr-grid-row description fr-mt-3v">
+      <p class="fr-mb-1v">{{ bouquet.description }}</p>
+    </div>
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <p class="fr-m-0 fr-text--sm flex align-center fr-pt-3v">
           <VIcon name="ri:time-line" class="fr-mr-1v text-grey-380" />
@@ -144,5 +151,13 @@ const { themeColors } = useThemeOptions(theme)
 
 .bouquet-card-col-logo {
   max-width: 6.25rem;
+}
+
+.description p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 </style>
