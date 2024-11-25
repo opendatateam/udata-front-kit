@@ -26,14 +26,26 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title:
-    subtitle:
+    title: Hackathon données alimentaires
+    subtitle: sous-titre du hackathon
     sections:
-      - title:
-        content:
+      - title: Titre de la section
+        content: contenu de la section
         sub_section_datasets:
         sub_section_cards:
         sub_section_tiles:
+          title:
+          class: 'fr-col-md-6'
+          tiles:
+            - id: 'find'
+              name: 'Voir les données'
+              description: 'Voir la liste des jeux de données'
+              url: '/hackathons/les-donnees-du-hackathon-donnees-alimentaires'
+            - id: 'evaluate'
+              name: 'Evaluer la qualité des données'
+              description: "Comment s'informer sur un jeu de données"
+              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/prendre-connaissance-et-evaluer-la-qualite-de-donnees'
+
         sub_section_buttons:
     meta_description:
   header_button:
@@ -104,6 +116,9 @@ website:
     topics_list: 100
     files_list: 6
   home_banner_colors:
+    - '#D2EAF7'
+    - '#DBF3F8'
+    - '#DBF2F0'
   env: 'prod'
   matomo:
     host:
