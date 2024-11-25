@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, type PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import { stripFromMarkdown } from '@/utils'
@@ -43,8 +42,6 @@ const props = defineProps({
   }
 })
 
-const typeClass = computed(() => !!props.type && `es-card--${props.type}`)
-
 function strip(value: string) {
   if (props.isMarkdown) {
     return stripFromMarkdown(value)
@@ -54,21 +51,43 @@ function strip(value: string) {
 </script>
 
 <template>
-  <div :class="['fr-tile', 'fr-enlarge-link', typeClass]">
-    <div class="fr-tile__body">
-      <h4 class="">
-        <a
-          v-if="externalLink"
-          class="fr-tile__link"
-          target="_blank"
-          :href="externalLink"
-        >
-          {{ title }}
-        </a>
-        <RouterLink v-else class="fr-tile__link" :to="link || ''">
-          {{ title }}
-        </RouterLink>
-      </h4>
+  <div class="fr-tile-v2">
+    <div class="fr-grid-row fr-grid-row--middle">
+      <div class="fr-col-auto">
+        <div v-if="img" class="fr-tile__img border fr-p-3v fr-m-0">
+          <img
+            :src="img"
+            alt=""
+            loading="lazy"
+            class="fr-responsive-img"
+            style="max-width: 100%; max-height: 100%"
+          />
+        </div>
+      </div>
+      <div class="fr-col fr-px-3v">
+        <h4 class="">
+          <a
+            v-if="externalLink"
+            class="fr-tile__link"
+            style="outline-width: 0"
+            target="_blank"
+            :href="externalLink"
+          >
+            {{ title }}
+          </a>
+          <RouterLink
+            v-else
+            class="fr-tile__link"
+            style="outline-width: 0; background-image: none"
+            :to="link || ''"
+          >
+            {{ title }}
+          </RouterLink>
+        </h4>
+      </div>
+    </div>
+
+    <div class="fr-tile-v2__body">
       <p v-if="description" class="fr-tile__desc">
         <text-clamp
           v-if="description"
@@ -78,10 +97,7 @@ function strip(value: string) {
         />
       </p>
     </div>
-    <div v-if="img" class="fr-tile__img">
-      <img :src="img" alt="" loading="lazy" class="fr-responsive-img" />
-    </div>
-    <div v-if="tags">
+    <div v-if="tags" class="fr-mb-8v">
       <template v-for="(tag, index) in tags" :key="index">
         <DsfrTag
           class="fr-card__detail fr-mt-1w fr-mb-1w card__tag"
@@ -94,8 +110,9 @@ function strip(value: string) {
 </template>
 
 <style scoped>
-.fr-tile {
+.fr-tile-v2 {
   border-bottom: 4px solid var(--border-active-blue-france);
+  height: 100%;
 }
 
 .card__tag {
