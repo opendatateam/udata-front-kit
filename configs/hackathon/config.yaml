@@ -27,10 +27,10 @@ website:
   # leave empty if not pertinent
   homepage:
     title: Hackathon données alimentaires
-    subtitle: sous-titre du hackathon
+    subtitle: Bienvenue sur le site du hackathon organisé par la direction interministérielle du numérique (DINUM) et le ministère de l’Agriculture, de la Souveraineté alimentaire et de la Forêt, en partenariat avec Open Food Facts et FranceAgrimer.
     sections:
-      - title: Titre de la section
-        content: contenu de la section
+      - title:
+        content:
         sub_section_datasets:
         sub_section_cards:
         sub_section_tiles:
@@ -39,12 +39,12 @@ website:
           tiles:
             - id: 'find'
               name: 'Voir les données'
-              description: 'Voir la liste des jeux de données'
+              description: 'Découvrez une sélection de données liées à l’alimentation pour vous aider dans vos recherches. Elle n’est pas exhaustive et vous pouvez bien sûr utiliser d’autres données ouvertes.'
               url: '/hackathons/les-donnees-du-hackathon-donnees-alimentaires'
-            - id: 'evaluate'
-              name: 'Evaluer la qualité des données'
-              description: "Comment s'informer sur un jeu de données"
-              url: 'https://guides.data.gouv.fr/reutiliser-des-donnees/guide-traitement-et-analyse-de-donnees/prendre-connaissance-et-evaluer-la-qualite-de-donnees'
+            - id: 'guide'
+              name: 'Guide du hackathon'
+              description: 'Voir le guide qui a pour vocation de vous accompagner au Hackathon Données Alimentaires pendant toute la durée de l’événement avec des informations, des ressources et des bonnes pratiques.'
+              url: 'https://documentation.beta.numerique.gouv.fr/s/e44ffbcc-9b7d-4dbc-bcf3-b6ea6daef89e/doc/guide-du-hackathon-alimentaire-cwxNzDZqc5'
 
         sub_section_buttons:
     meta_description:
@@ -63,7 +63,7 @@ website:
     name:
     link:
   menu:
-    - text: Accès aux données
+    - text: Voir les données
       to: /hackathons/hackathon-donnees-alimentaires
     - text: Guide du hackathon
       to: 'https://documentation.beta.numerique.gouv.fr/s/e44ffbcc-9b7d-4dbc-bcf3-b6ea6daef89e/doc/guide-du-hackathon-alimentaire-cwxNzDZqc5'
@@ -116,9 +116,9 @@ website:
     topics_list: 100
     files_list: 6
   home_banner_colors:
-    - '#D2EAF7'
-    - '#DBF3F8'
-    - '#DBF2F0'
+    - '#D8E3A0'
+    - '#BFDCB7'
+    - '#A7D5CD'
   env: 'prod'
   matomo:
     host:
