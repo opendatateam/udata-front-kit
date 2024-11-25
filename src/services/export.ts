@@ -45,7 +45,6 @@ export const exportDatasets = async (
               .load(datasetProperties.id, { toasted: false })
               .catch((error) => {
                 if (isNotFoundError(error)) {
-                  console.log(error)
                   row.availability = Availability.REMOTE_DELETED
                 } else {
                   toastHttpError(error)
