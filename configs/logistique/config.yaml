@@ -32,8 +32,8 @@ website:
     title: 'Les données ouvertes de la logistique'
     subtitle: 'logistique.data.gouv.fr centralise et structure les données publiques relatives à la logistique. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite.'
     sections:
-      - title: Bouquets de données
-        content:
+      - title: Des bouquets de données pour articuler politiques publiques et données territoriales 
+        content: "Créez un bouquet pour inventorier les données utiles à un cas d'usage : une politique publique sur un territoire"
         sub_section_datasets:
         sub_section_cards:
           title:
@@ -58,10 +58,6 @@ website:
               description: 'Bases essentielles pour étudier les interactions entre les dimensions sociales et économiques de la logistique.'
               url: 'bouquets?theme=Socio-économique'
               image_url: '/logistique/assets/socio.jpg'
-            - name: 'Territoires'
-              description: "Données permettant l'étude des interactions entre la logistique et l'aménagement des territoires."
-              url: 'bouquets?theme=Territoires'
-              image_url: '/logistique/assets/territorial.jpg'
             - name: 'Filières'
               description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
               url: 'bouquets?theme=Filières'
