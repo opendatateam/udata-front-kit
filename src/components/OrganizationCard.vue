@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import { stripFromMarkdown } from '@/utils'
@@ -31,10 +32,6 @@ const props = defineProps({
   isMarkdown: {
     type: Boolean,
     default: false
-  },
-  notice: {
-    type: String,
-    default: undefined
   },
   tags: {
     type: Array,
@@ -93,7 +90,6 @@ function strip(value: string) {
         </DsfrTag>
       </template>
     </div>
-    <DsfrNotice v-if="notice" :title="notice" :closeable="false" />
   </div>
 </template>
 
