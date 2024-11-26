@@ -10,9 +10,10 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import IndicatorList from '../../components/indicators/IndicatorList.vue'
+import IndicatorSearch from '../../components/indicators/IndicatorSearch.vue'
 
-const router = useRouter()
 const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   query: {
@@ -75,11 +76,11 @@ const setLiveResults = () => {
 
 /* a11y end */
 
-const search = useDebounceFn(() => {
+const search = useDebounceFn((query) => {
   router
     .push({
       name: 'indicators',
-      query: { ...route.query, q: selectedQuery.value }
+      query: { ...route.query, q: query }
     })
     .then(() => {
       setLiveResults()
@@ -109,7 +110,6 @@ watch(
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
       <DsfrSearchBar
-        v-model="selectedQuery"
         label="Rechercher un indicateur"
         button-text="Rechercher"
         placeholder=""
@@ -126,11 +126,11 @@ watch(
             <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <!-- <IndicatorSearch
-              :theme-name="selectedTheme"
+            <IndicatorSearch
+              :theme="selectedTheme"
               :geozone="selectedGeozone"
               @vue:updated="setLiveResults"
-            /> -->
+            />
           </div>
         </nav>
         <div className="fr-col">
