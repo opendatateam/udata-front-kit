@@ -241,12 +241,40 @@ indicators:
   filters:
     - name: 'Thématique FNV'
       id: theme
+      values:
+        - id: mieux-se-deplacer
+          name: Mieux se déplacer
+        - id: autre
+          name: Autre
+        - id: mieux-produire
+          name: Mieux produire
     - name: 'Enjeu FNV'
       id: enjeu
+      values:
+        - id: sante
+          name: Santé
+        - id: attenuation
+          name: Atténuation
+        - id: biodiversite
+          name: Biodiversité
     - name: 'Famille'
       id: famille
+      values:
+        - id: energie
+          name: Energie
+        - id: agriculture
+          name: Agriculture
+        - id: transport
+          name: Transport
     - name: 'Sous famille'
       id: sous-famille
+      values:
+        - id: biogaz
+          name: Biogaz
+        - id: electricite
+          name: Electricité
+        - id: chaleur-et-froid
+          name: Chaleur et froid
 
 organizations:
   - ademe

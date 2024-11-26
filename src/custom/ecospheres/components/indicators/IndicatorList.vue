@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useDebounceFn } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { computed, watch, type ComputedRef, type PropType } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -47,24 +46,13 @@ const clearFilters = () => {
   })
 }
 
-const executeQuery = (args: typeof props) => {
+const executeQuery = async (args: typeof props) => {
   const loader = useLoading().show({ enforceFocus: false })
   return store.query(args).finally(() => loader.hide())
 }
 
-const debouncedQuery = useDebounceFn(executeQuery, 300)
-
-// launch search on props changes
-watch(
-  () => props.query,
-  () => debouncedQuery(props),
-  { immediate: true }
-)
-watch(
-  () => [props.theme, props.geozone],
-  () => executeQuery(props),
-  { immediate: true }
-)
+// launch search on props (~route.query) changes
+watch(props, () => executeQuery(props), { immediate: true, deep: true })
 
 defineExpose({
   numberOfResultMsg
