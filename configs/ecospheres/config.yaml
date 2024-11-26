@@ -99,6 +99,8 @@ website:
       to: /bouquets
     - text: Organisations
       to: /organizations
+    - text: Indicateurs
+      to: /indicators
     - text: A propos
       to: /about
   router:
@@ -232,6 +234,19 @@ themes:
       - name: Les services publics exemplaires
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
+
+indicators:
+  organization_id: 673dafb02cf54cfb2ccbd118
+  global_tag_prefix: ecospheres-indicateurs
+  filters:
+    - name: 'Thématique FNV'
+      id: theme
+    - name: 'Enjeu FNV'
+      id: enjeu
+    - name: 'Famille'
+      id: famille
+    - name: 'Sous famille'
+      id: sous-famille
 
 organizations:
   - ademe

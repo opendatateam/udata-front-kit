@@ -1,3 +1,5 @@
+import { type RouteLocationNormalizedLoaded } from 'vue-router'
+
 export const routes = [
   {
     path: '/',
@@ -6,5 +8,19 @@ export const routes = [
       title: 'Accueil'
     },
     component: async () => await import('./views/HomeView.vue')
+  },
+  {
+    path: '/indicators',
+    name: 'indicators',
+    meta: {
+      title: 'Indicateurs'
+    },
+    props: (route: RouteLocationNormalizedLoaded) => ({
+      query: route.query.q,
+      theme: route.query.theme,
+      geozone: route.query.geozone
+    }),
+    component: async () =>
+      await import('./views/indicators/IndicatorsListView.vue')
   }
 ]
