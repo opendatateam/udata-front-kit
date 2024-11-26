@@ -14,6 +14,11 @@ import type {
 } from '@/model/api'
 import { toastHttpError } from '@/utils/error'
 
+// build queries like tag=1&tag=2 for arrays instead of tag[]=1&tag[]=2
+axios.defaults.paramsSerializer = {
+  indexes: null
+}
+
 /**
  * A wrapper around data.gouv.fr's API
  *
