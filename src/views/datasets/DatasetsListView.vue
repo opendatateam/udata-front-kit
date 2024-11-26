@@ -62,6 +62,7 @@ const selectedTopicId: Ref<string | null> = ref(null)
 const selectedOrganizationId: Ref<string | null> = ref(null)
 
 const datasets = computed(() => store.datasets)
+const total = computed(() => store.total)
 const pages = computed(() => store.pagination)
 
 const title = config.website.title as string
@@ -247,7 +248,7 @@ onMounted(() => {
       </div>
     </div>
     <p v-show="query" ref="queryResults" tabindex="-1">
-      {{ datasets.length }} résultats de recherche pour "{{ query }}".
+      {{ total }} résultats de recherche pour "{{ query }}".
     </p>
     <p v-if="!query">
       Parcourir tous les jeux de données présents sur {{ title }}.
