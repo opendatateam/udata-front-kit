@@ -46,7 +46,7 @@ onMounted(() => {
         :key="org.id"
         class="fr-col-12 fr-col-lg-4"
       >
-        <TileComponent
+        <OrganizationCard
           :link="`/organizations/${org.slug}`"
           :title="org.name"
           :description="org.description"

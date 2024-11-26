@@ -58,6 +58,7 @@ declare module 'vue' {
     HomeThemes: typeof import('./components/HomeThemes.vue')['default']
     LiveRegion: typeof import('./components/LiveRegion.vue')['default']
     Navigation: typeof import('./components/Navigation.vue')['default']
+    OrganizationCard: typeof import('./components/OrganizationCard.vue')['default']
     OrganizationLogo: typeof import('./components/OrganizationLogo.vue')['default']
     ReusesList: typeof import('./components/ReusesList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
