@@ -52,7 +52,7 @@ onMounted(() => {
           :description="org.description"
           :img="org.logo"
           :is-markdown="true"
-          :tags="[`${org.metrics.datasets} jeux de données`]"
+          :tags="[`<strong>${org.metrics.datasets}</strong> jeux de données`]"
         />
       </li>
     </ul>

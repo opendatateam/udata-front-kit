@@ -87,10 +87,10 @@ function strip(value: string) {
     </div>
     <div v-if="tags">
       <template v-for="(tag, index) in tags" :key="index">
-        <DsfrTag
-          class="fr-card__detail fr-mt-1w fr-mb-1w card__tag"
-          :label="tag"
-        />
+        <DsfrTag class="fr-card__detail fr-mt-1w fr-mb-1w card__tag">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span v-html="tag" />
+        </DsfrTag>
       </template>
     </div>
     <DsfrNotice v-if="notice" :title="notice" :closeable="false" />
