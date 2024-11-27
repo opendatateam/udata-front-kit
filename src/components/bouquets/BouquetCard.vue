@@ -9,6 +9,7 @@ import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import type { Topic } from '@/model/topic'
+import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
@@ -102,7 +103,7 @@ const { themeColors } = useThemeOptions(theme)
       </div>
     </div>
     <div v-if="!hideDescription" class="fr-grid-row description fr-mt-3v">
-      <p class="fr-mb-1v">{{ bouquet.description }}</p>
+      <p class="fr-mb-1v">{{ stripFromMarkdown(bouquet.description) }}</p>
     </div>
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
