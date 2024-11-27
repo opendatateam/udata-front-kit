@@ -30,7 +30,7 @@ const props = defineProps({
     default: null
   },
   sort: {
-    type: String,
+    type: String as PropType<string | null>,
     default: null
   }
 })
