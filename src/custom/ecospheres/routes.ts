@@ -18,7 +18,8 @@ export const routes = [
     props: (route: RouteLocationNormalizedLoaded) => ({
       query: route.query.q,
       theme: route.query.theme,
-      geozone: route.query.geozone
+      geozone: route.query.geozone,
+      page: route.query.page
     }),
     component: async () =>
       await import('./views/indicators/IndicatorsListView.vue')

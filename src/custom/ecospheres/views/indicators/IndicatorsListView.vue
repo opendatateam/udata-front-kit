@@ -27,6 +27,10 @@ const props = defineProps({
   geozone: {
     type: String,
     default: null
+  },
+  page: {
+    type: String,
+    default: null
   }
 })
 
@@ -34,6 +38,7 @@ const selectedTheme: Ref<string | null> = ref(null)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const indicatorListComp = ref<InstanceType<typeof IndicatorList> | null>(null)
+const currentPage = ref(1)
 
 /* a11y start */
 
@@ -93,6 +98,7 @@ watch(
     selectedTheme.value = props.theme
     selectedGeozone.value = props.geozone
     selectedQuery.value = props.query
+    currentPage.value = props.page ? parseInt(props.page) : 1
   },
   { immediate: true }
 )
@@ -139,6 +145,7 @@ watch(
             :theme="selectedTheme"
             :geozone="geozone"
             :query="selectedQuery"
+            :page="currentPage"
             @clear-filters="setLiveResults"
           />
         </div>

@@ -6,9 +6,11 @@ import type { Indicator, IndicatorFilters } from '../model/indicator'
 import { getTagsQuery } from '../utils/indicator'
 
 const searchApi = new SearchAPI()
+const PAGE_SIZE = 20
 
 export interface RootState {
   indicators: Indicator[]
+  total: number
 }
 
 interface QueryArgs extends IndicatorFilters {
@@ -18,19 +20,34 @@ interface QueryArgs extends IndicatorFilters {
 
 export const useIndicatorStore = defineStore('indicator', {
   state: (): RootState => ({
-    indicators: []
+    indicators: [],
+    total: 0
   }),
   actions: {
-    // FIXME: handle pagination
     async query(args: QueryArgs) {
       const { query, theme, ...queryArgs } = args
       const tag = getTagsQuery({ theme: theme })
       const results = await searchApi.search(query, null, 1, {
         organization: config.indicators.organization_id,
+        page_size: PAGE_SIZE,
         tag,
         ...queryArgs
       })
       this.indicators = results.data
+      this.total = results.total
+    }
+  },
+  getters: {
+    pagination() {
+      const nbPages = Math.ceil(this.total / PAGE_SIZE)
+      return [...Array(nbPages).keys()].map((page) => {
+        page += 1
+        return {
+          label: page.toString(),
+          href: '#',
+          title: `Page ${page}`
+        }
+      })
     }
   }
 })
