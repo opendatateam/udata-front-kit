@@ -64,7 +64,7 @@ const { themeColors } = useThemeOptions(theme)
         />
       </div>
     </div>
-    <div class="fr-grid-row fr-pt-2v">
+    <div class="fr-grid-row fr-pt-2v align-center flex-nowrap">
       <div class="fr-col-12 fr-col-sm-2 bouquet-card-col-logo">
         <OrganizationLogo
           v-if="bouquet.organization"
@@ -82,7 +82,9 @@ const { themeColors } = useThemeOptions(theme)
           />
         </div>
       </div>
-      <div class="fr-col-12 fr-col-sm-10 fr-pl-2v">
+      <div
+        class="fr-col-12 fr-col-sm-10 fr-pl-2v overflow-hidden flex-1-1-auto"
+      >
         <h3 class="fr-mb-1v fr-grid-row h4">
           <RouterLink :to="bouquetLink" class="text-grey-500">
             {{ bouquet.name }}
@@ -105,27 +107,28 @@ const { themeColors } = useThemeOptions(theme)
     <div v-if="!hideDescription" class="fr-grid-row description fr-mt-3v">
       <p class="fr-mb-1v">{{ stripFromMarkdown(bouquet.description) }}</p>
     </div>
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
-        <p class="fr-m-0 fr-text--sm flex align-center fr-pt-3v text-grey-380">
-          <VIcon name="ri:time-line" class="fr-mr-1v text-grey-380" />
-          Mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
-        </p>
-        <p class="fr-tag fr-mt-2v">
-          <VIcon name="ri-database-2-line" class="fr-mr-1v" />
-          <span class="fr-mr-1v">
-            {{
-              `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
-            }}
-          </span>
-        </p>
-        <p v-if="spatialCoverage" class="fr-tag fr-ml-1w">
-          <VIcon name="ri-map-2-line" class="fr-mr-1v" />
-          <span class="fr-mr-1v">
-            {{ spatialCoverage.name }}
-          </span>
-        </p>
-      </div>
+
+    <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
+      <VIcon name="ri:time-line" class="fr-mr-1v text-grey-380" />
+      Mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
+    </p>
+
+    <div class="fr-grid-row">
+      <span class="fr-tag fr-mr-2v fr-mb-2v">
+        <VIcon name="ri-database-2-line" class="fr-mr-1v" />
+        <span class="fr-mr-1v">
+          {{
+            `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
+          }}
+        </span>
+      </span>
+
+      <span v-if="spatialCoverage" class="fr-tag fr-mb-2v">
+        <VIcon name="ri-map-2-line" class="fr-mr-1v" />
+        <span class="fr-mr-1v">
+          {{ spatialCoverage.name }}
+        </span>
+      </span>
     </div>
   </article>
 </template>
