@@ -191,7 +191,7 @@ useHead({
           :key="topic.id"
           class="fr-col-12 fr-col-xl-4"
         >
-          <BouquetCard :bouquet="topic" hide-description="True" />
+          <BouquetCard :bouquet="topic" :hide-description="true" />
         </li>
       </ul>
       <p class="fr-m-0">
