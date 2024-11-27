@@ -2,11 +2,12 @@
 import { storeToRefs } from 'pinia'
 import { computed, watch, type ComputedRef, type PropType } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter, type LocationQueryRaw } from 'vue-router'
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 import { useIndicatorStore } from '../../store/IndicatorStore'
 
 import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 
+const route = useRoute()
 const router = useRouter()
 const store = useIndicatorStore()
 
@@ -22,12 +23,16 @@ const props = defineProps({
   query: {
     type: String,
     default: ''
+  },
+  page: {
+    type: Number,
+    default: null
   }
 })
 
 const emits = defineEmits(['clearFilters'])
 
-const { indicators } = storeToRefs(store)
+const { indicators, pagination } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (indicators.value.length === 1) {
@@ -49,6 +54,13 @@ const clearFilters = () => {
 const executeQuery = async (args: typeof props) => {
   const loader = useLoading().show({ enforceFocus: false })
   return store.query(args).finally(() => loader.hide())
+}
+
+const goToPage = (page: number) => {
+  router.push({
+    name: 'indicators',
+    query: { ...route.query, page: page + 1 }
+  })
 }
 
 // launch search on props (~route.query) changes
@@ -129,6 +141,13 @@ defineExpose({
       </div>
     </div>
   </div>
+  <DsfrPagination
+    v-if="pagination.length"
+    class="fr-container"
+    :current-page="page - 1"
+    :pages="pagination"
+    @update:current-page="goToPage"
+  />
 </template>
 
 <style scoped>
