@@ -19,7 +19,8 @@ export const routes = [
       query: route.query.q,
       theme: route.query.theme,
       geozone: route.query.geozone,
-      page: route.query.page
+      page: route.query.page,
+      sort: route.query.sort
     }),
     component: async () =>
       await import('./views/indicators/IndicatorsListView.vue')
