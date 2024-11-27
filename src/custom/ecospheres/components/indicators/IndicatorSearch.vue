@@ -4,9 +4,9 @@ import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
-import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useFilterConf } from '../../utils/config'
+import SelectComponent from '../SelectComponent.vue'
 
 const spatialAPI = new SpatialAPI()
 
@@ -46,12 +46,8 @@ const navigate = (data?: Record<string, string | null>) => {
   })
 }
 
-const switchTheme = (event: Event) => {
-  const value = (event.target as HTMLInputElement)?.value
-  navigate({
-    // FIXME: remove theme from route.query if null (works but not pretty)
-    theme: value !== NoOptionSelected ? value : null
-  })
+const switchTheme = (value: string | null) => {
+  navigate({ theme: value })
 }
 
 const switchSpatialCoverage = (
@@ -78,23 +74,13 @@ watchEffect(() => {
 <template>
   <div className="filterForm">
     <div class="fr-select-group">
-      <label class="fr-label" for="select_theme"> Thématique </label>
-      <select id="select_theme" class="fr-select" @change="switchTheme($event)">
-        <option
-          :value="NoOptionSelected"
-          :selected="theme === NoOptionSelected"
-        >
-          Toutes les thématiques
-        </option>
-        <option
-          v-for="option in themeConf.values"
-          :key="option.id"
-          :value="option.id"
-          :selected="option.id === theme"
-        >
-          {{ option.name }}
-        </option>
-      </select>
+      <label class="fr-label" for="select-theme">Thématique</label>
+      <SelectComponent
+        id="select-theme"
+        default-option="Toutes les thématiques"
+        :options="themeConf.values"
+        @update:model-value="switchTheme"
+      />
     </div>
     <div class="fr-select-group">
       <label class="fr-label" for="select-spatial-coverage"

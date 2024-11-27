@@ -6,6 +6,7 @@ import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 import { useIndicatorStore } from '../../store/IndicatorStore'
 
 import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import SelectComponent from '../SelectComponent.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -26,6 +27,10 @@ const props = defineProps({
   },
   page: {
     type: Number,
+    default: null
+  },
+  sort: {
+    type: String,
     default: null
   }
 })
@@ -63,6 +68,13 @@ const goToPage = (page: number) => {
   })
 }
 
+const doSort = (value: string | null) => {
+  router.push({
+    name: 'indicators',
+    query: { ...route.query, sort: value }
+  })
+}
+
 // launch search on props (~route.query) changes
 watch(props, () => executeQuery(props), { immediate: true, deep: true })
 
@@ -82,16 +94,15 @@ defineExpose({
         >Trier par :</label
       >
       <div class="fr-col">
-        <!-- TODO: find out possible sorts on the API -->
-        <!-- <DsfrSelect
-          v-model="topicStore.sort"
-          select-id="sort-search"
+        <SelectComponent
+          id="sort-search"
+          default-option="Pertinence"
           :options="[
-            { value: '-created_at', text: 'Les plus récemment créés' },
-            { value: '-last_modified', text: 'Les plus récemment modifiés' },
-            { value: 'name', text: 'Titre' }
+            { id: '-created', name: 'Les plus récemment créés' },
+            { id: '-last_update', name: 'Les plus récemment modifiés' }
           ]"
-        ></DsfrSelect> -->
+          @update:model-value="doSort"
+        />
       </div>
     </div>
   </div>
