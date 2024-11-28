@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import config from '@/config'
 import SearchAPI from '@/services/api/SearchAPI'
 import type { Indicator, IndicatorFilters } from '../model/indicator'
-import { getTagsQuery } from '../utils/indicator'
+import { useTagsQuery } from '../utils/indicator'
 
 const searchApi = new SearchAPI()
 const PAGE_SIZE = 20
@@ -26,7 +26,7 @@ export const useIndicatorStore = defineStore('indicator', {
   actions: {
     async query(args: QueryArgs) {
       const { query, theme, ...queryArgs } = args
-      const tag = getTagsQuery({ theme: theme })
+      const tag = useTagsQuery({ theme: theme })
       const results = await searchApi.search(query, null, 1, {
         organization: config.indicators.organization_id,
         page_size: PAGE_SIZE,

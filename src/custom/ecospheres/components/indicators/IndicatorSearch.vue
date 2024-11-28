@@ -74,7 +74,7 @@ watchEffect(() => {
 <template>
   <div className="filterForm">
     <div class="fr-select-group">
-      <label class="fr-label" for="select-theme">Thématique</label>
+      <label class="fr-label" for="select-theme">{{ themeConf.name }}</label>
       <SelectComponent
         id="select-theme"
         default-option="Toutes les thématiques"
