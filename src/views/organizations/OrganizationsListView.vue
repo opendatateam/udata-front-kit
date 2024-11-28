@@ -31,6 +31,9 @@ async function onUpdatePage(page: number) {
 const isCertified = (org: object): boolean =>
   org.badges.some((badge) => badge.kind === 'certified')
 
+const isPublicService = (org: object): boolean =>
+  org.badges.some((badge) => badge.kind === 'public-service')
+
 onMounted(() => {
   onUpdatePage(0)
 })
@@ -56,7 +59,8 @@ onMounted(() => {
           :img="org.logo"
           :is-markdown="true"
           :tags="[`<strong>${org.metrics.datasets}</strong> jeux de données`]"
-          :certified="isCertified(org)"
+          :is-certified="isCertified(org)"
+          :is-public-service="isPublicService(org)"
         />
       </li>
     </ul>

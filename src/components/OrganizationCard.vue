@@ -37,7 +37,11 @@ const props = defineProps({
     type: Array,
     default: undefined
   },
-  certified: {
+  isCertified: {
+    type: Boolean,
+    default: false
+  },
+  isPublicService: {
     type: Boolean,
     default: false
   }
