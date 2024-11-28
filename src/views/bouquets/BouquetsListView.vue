@@ -152,8 +152,9 @@ watch(
       <SearchComponent
         id="search-bouquet"
         v-model="selectedQuery"
-        :search-label="`Rechercher un ${topicsName}`"
-        :label="`Rechercher un ${topicsName}`"
+        :is-filter="true"
+        :search-label="`Filtrer les ${topicsName}s`"
+        :label="`Filtrer les ${topicsName}s`"
         :search-endpoint="router.resolve({ name: 'bouquets' }).href"
         @update:model-value="search"
       />

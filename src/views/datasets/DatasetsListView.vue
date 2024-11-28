@@ -257,8 +257,9 @@ onMounted(() => {
       <SearchComponent
         id="search-bouquet"
         v-model="localQuery"
-        search-label="Rechercher des données"
-        label="Rechercher des données"
+        :is-filter="true"
+        search-label="Filtrer des données"
+        label="Filtrer des données"
         :search-endpoint="router.resolve({ name: 'datasets' }).href"
         @update:model-value="search()"
         @search="$emit('search', $event)"

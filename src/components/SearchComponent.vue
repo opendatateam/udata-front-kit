@@ -22,6 +22,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  isFilter: {
+    type: Boolean,
+    default: false
+  },
   dropdown: {
     type: Array,
     default: () => []
@@ -43,7 +47,7 @@ const emits = defineEmits(['search'])
 const query = ref('')
 const selectedMultiSearch = ref()
 
-const doSimpleSearch = (event) => {
+const doSimpleSearch = (event: string) => {
   query.value = event
   router.push({
     path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
@@ -72,11 +76,24 @@ const dropdownLabel = (text: string) => {
 </script>
 
 <template>
-  <DsfrSearchBar
-    v-if="!dropdown.length"
+  <DsfrInputGroup
+    v-if="isFilter"
+    :id="id"
     v-model="selectedQuery"
     :label="searchLabel"
-    :placeholder="placeholder"
+    class="filter-input"
+    label-visible
+  >
+    <template #before-input>
+      <span class="fr-icon-search-line search-icon" aria-hidden></span>
+    </template>
+  </DsfrInputGroup>
+
+  <DsfrSearchBar
+    v-else-if="!dropdown.length"
+    v-model="selectedQuery"
+    :label="searchLabel"
+    placeholder=""
     @search="doSimpleSearch($event)"
   />
 
@@ -92,7 +109,7 @@ const dropdownLabel = (text: string) => {
       :options="dropdown"
       label="text"
       track-by="route"
-      :placeholder="placeholder"
+      placeholder=""
       select-label=""
       deselect-label=""
       :aria-labelledby="`${id}-label`"
@@ -123,69 +140,71 @@ const dropdownLabel = (text: string) => {
 </template>
 
 <style scoped>
-.select-search {
+:global(:root) {
   --icon-width: 24px;
+}
+
+:deep(.filter-input) {
+  padding-inline-start: calc(var(--icon-width) + 1rem);
+}
+.select-search {
   position: relative;
   display: flex;
+}
+.visible-label {
+  margin-inline-start: var(--icon-width);
+}
 
-  .search-icon {
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 10px;
-    translate: 0 -50%;
-    max-width: var(--icon-width);
-  }
-  .visible-label {
-    margin-left: var(--icon-width);
-  }
-  .multiselect__placeholder {
-    margin-inline-start: var(--icon-width);
-    font-style: italic;
-    color: var(--text-mention-grey);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
-    overflow: hidden;
-  }
-  ::placeholder {
-    font-style: italic;
-    color: var(--text-mention-grey);
-  }
+:deep(.multiselect__placeholder) {
+  margin: 0;
+  font-style: italic;
+  color: var(--text-mention-grey);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  inline-size: 100%;
+  overflow: hidden;
+}
+::placeholder {
+  font-style: italic;
+  color: var(--text-mention-grey);
+}
+
+.search-icon {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 10px;
+  translate: 0 -10px;
+  max-inline-size: var(--icon-width);
 }
 :deep(.multiselect__tags) {
   border: 0;
   box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
   margin: 0;
-  max-height: none;
+  max-block-size: none;
   --hover: var(--background-contrast-grey-hover);
   --active: var(--background-contrast-grey-active);
   background-color: var(--background-contrast-grey);
   padding: 6px 40px 0 15px;
-  min-height: 42px;
-  width: 100%;
-  order: 1;
+  min-inline-size: 42px;
+  inline-size: 100%;
 }
 :deep(.multiselect__input),
 :deep(.multiselect__single) {
   background: var(--background-contrast-grey);
 }
 .select-search :deep(input) {
-  padding-top: 4px;
+  padding-block-start: 4px;
   margin-inline-start: var(--icon-width);
-  width: 100%;
+  inline-size: 100%;
 }
 :deep(.multiselect__content-wrapper) {
-  margin-top: 42px;
+  margin-block-start: 42px;
 }
 
 /** dsfr component (simple search) **/
 
-.fr-search-bar {
-  flex-direction: row-reverse;
-}
-
 .fr-search-bar :deep(.fr-btn) {
-  border-bottom: 2px solid var(--border-action-high-blue-france);
+  border-block-end: 2px solid var(--border-action-high-blue-france);
   background-color: var(--background-contrast-grey);
   color: #35495e;
 }

@@ -203,6 +203,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                 id="header-select-search"
                 :search-label="searchLabel"
                 :dropdown="dropdown"
+                placeholder="Rechercher"
               />
             </div>
           </div>
@@ -232,6 +233,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
                 v-if="searchModalOpened"
                 id="header-select-search-modal"
                 :search-label="searchLabel"
+                placeholder="Rechercher"
                 @search="hideModal(false)"
               />
             </div>
