@@ -36,6 +36,10 @@ const props = defineProps({
   tags: {
     type: Array,
     default: undefined
+  },
+  certified: {
+    type: Boolean,
+    default: false
   }
 })
 
