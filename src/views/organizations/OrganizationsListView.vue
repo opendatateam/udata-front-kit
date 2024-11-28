@@ -52,16 +52,7 @@ onMounted(() => {
         :key="org.id"
         class="fr-col-12 fr-col-lg-4"
       >
-        <OrganizationCard
-          :link="`/organizations/${org.slug}`"
-          :title="org.name"
-          :description="org.description"
-          :img="org.logo"
-          :is-markdown="true"
-          :tags="[`<strong>${org.metrics.datasets}</strong> jeux de données`]"
-          :is-certified="isCertified(org)"
-          :is-public-service="isPublicService(org)"
-        />
+        <OrganizationCard :organization="org" />
       </li>
     </ul>
   </GenericContainer>

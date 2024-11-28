@@ -1,88 +1,50 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
-
 import { stripFromMarkdown } from '@/utils'
 
 const props = defineProps({
-  title: {
-    type: String,
+  organization: {
+    type: Object,
     required: true
-  },
-  link: {
-    type: [Object, String] as PropType<RouteLocationRaw | string>,
-    default: undefined
-  },
-  externalLink: {
-    type: String,
-    default: undefined
-  },
-  description: {
-    type: String,
-    default: undefined
-  },
-  img: {
-    type: String,
-    default: undefined
-  },
-  type: {
-    type: String,
-    default: undefined
-  },
-  isMarkdown: {
-    type: Boolean,
-    default: false
-  },
-  tags: {
-    type: Array,
-    default: undefined
-  },
-  isCertified: {
-    type: Boolean,
-    default: false
-  },
-  isPublicService: {
-    type: Boolean,
-    default: false
   }
 })
 
-function strip(value: string) {
-  if (props.isMarkdown) {
-    return stripFromMarkdown(value)
-  }
-  return value
-}
+const isCertified = (): boolean =>
+  props.organization.badges.some((badge) => badge.kind === 'certified')
+
+const isPublicService = (): boolean =>
+  props.organization.badges.some((badge) => badge.kind === 'public-service')
 </script>
 
 <template>
   <div class="fr-tile-v2 border">
     <div class="fr-grid-row fr-grid-row--middle fr-mb-8v">
       <div class="fr-col-auto">
-        <div v-if="img" class="fr-tile__img border fr-p-3v fr-m-0">
-          <img :src="img" alt="" loading="lazy" class="fr-responsive-img" />
+        <div
+          v-if="organization.logo"
+          class="fr-tile__img border fr-p-3v fr-m-0"
+        >
+          <img
+            :src="organization.logo"
+            loading="lazy"
+            class="fr-responsive-img"
+          />
         </div>
       </div>
       <div class="fr-col fr-px-3v">
         <h4 class="fr-title-v2__title">
           <VIcon
-            v-if="isPublicService"
+            v-if="isPublicService()"
             name="ri-bank-line"
             class="fr-mr-1v badge"
           />
-          <a
-            v-if="externalLink"
+          <RouterLink
             class="fr-tile__link"
-            target="_blank"
-            :href="externalLink"
+            :to="`/organizations/${organization.slug}` || ''"
           >
-            {{ title }}
-          </a>
-          <RouterLink v-else class="fr-tile__link" :to="link || ''">
-            {{ title }}
+            {{ organization.name }}
           </RouterLink>
           <VIcon
-            v-if="isCertified"
+            v-if="isCertified()"
             name="ri-checkbox-circle-line"
             class="fr-ml-1v badge"
           />
@@ -90,23 +52,22 @@ function strip(value: string) {
       </div>
     </div>
 
-    <div class="fr-tile-v2__body">
-      <p v-if="description" class="fr-tile__desc">
+    <div v-if="organization.description" class="fr-tile-v2__body">
+      <p class="fr-tile__desc">
         <text-clamp
-          v-if="description"
           :auto-resize="true"
-          :text="strip(description)"
+          :text="stripFromMarkdown(organization.description)"
           :max-lines="3"
         />
       </p>
     </div>
-    <div v-if="tags">
-      <template v-for="(tag, index) in tags" :key="index">
-        <DsfrTag class="fr-card__detail fr-mt-1w fr-mb-1w card__tag">
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <span v-html="tag" />
-        </DsfrTag>
-      </template>
+    <div>
+      <DsfrTag class="fr-card__detail fr-mt-1w fr-mb-1w card__tag">
+        <span
+          ><strong>{{ organization.metrics.datasets }}</strong> jeux de
+          données</span
+        >
+      </DsfrTag>
     </div>
   </div>
 </template>
