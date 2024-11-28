@@ -241,8 +241,7 @@ indicators:
   filters:
     - name: Thématique
       id: theme
-      color: 'var(--green-menthe-975-75)'
-      textColor: 'var(--green-menthe-sun-373-moon-652)'
+      color: green-menthe
       values:
         - id: mieux-se-deplacer
           name: Mieux se déplacer
@@ -252,8 +251,7 @@ indicators:
           name: Mieux produire
     - name: Enjeu
       id: enjeu
-      color: 'var(--blue-ecume-975-75)'
-      textColor: 'var(--blue-ecume-sun-247-moon-675)'
+      color: blue-ecume
       values:
         - id: sante
           name: Santé
@@ -261,8 +259,9 @@ indicators:
           name: Atténuation
         - id: biodiversite
           name: Biodiversité
-    - name: 'Famille'
+    - name: Famille
       id: famille
+      color: green-tilleul
       values:
         - id: energie
           name: Energie
@@ -270,8 +269,9 @@ indicators:
           name: Agriculture
         - id: transport
           name: Transport
-    - name: 'Sous famille'
+    - name: Sous famille
       id: sous-famille
+      color: green-bourgeon
       values:
         - id: biogaz
           name: Biogaz

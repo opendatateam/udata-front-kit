@@ -45,6 +45,7 @@ const selectedQuery = ref('')
 const indicatorListComp = ref<InstanceType<typeof IndicatorList> | null>(null)
 const selectedPage = ref(1)
 
+/* TODO: factorize w/ BouquetsListView */
 /* a11y start */
 
 const setAccessibilityProperties = inject(
@@ -162,6 +163,7 @@ watch(
 </template>
 
 <style scoped>
+/* TODO: factorize w/ BouquetsListView */
 /* put above header (ground+500) so that multiselect floats above menu */
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);

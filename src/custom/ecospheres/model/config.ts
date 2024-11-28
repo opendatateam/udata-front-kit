@@ -3,6 +3,7 @@ import { type IndicatorFilters } from './indicator'
 export interface FilterConf {
   id: keyof IndicatorFilters
   name: string
+  color: string
   values: {
     id: string
     name: string

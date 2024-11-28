@@ -5,8 +5,8 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 import { useIndicatorStore } from '../../store/IndicatorStore'
 
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import SelectComponent from '../SelectComponent.vue'
+import IndicatorCard from './IndicatorCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -142,14 +142,12 @@ defineExpose({
     </div>
   </div>
   <div class="indicators-list-container fr-container fr-mb-4w border-top">
-    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w">
-      <div class="fr-col-12">
-        <BouquetCard
-          v-for="indicator in indicators"
-          :key="indicator.id"
-          :bouquet="indicator"
-        />
-      </div>
+    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w fr-mt-2w">
+      <IndicatorCard
+        v-for="indicator in indicators"
+        :key="indicator.id"
+        :indicator="indicator"
+      />
     </div>
   </div>
   <DsfrPagination
