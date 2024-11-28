@@ -65,6 +65,11 @@ function strip(value: string) {
       </div>
       <div class="fr-col fr-px-3v">
         <h4 class="fr-title-v2__title">
+          <VIcon
+            v-if="isPublicService"
+            name="ri-bank-line"
+            class="fr-mr-1v badge"
+          />
           <a
             v-if="externalLink"
             class="fr-tile__link"
@@ -76,6 +81,11 @@ function strip(value: string) {
           <RouterLink v-else class="fr-tile__link" :to="link || ''">
             {{ title }}
           </RouterLink>
+          <VIcon
+            v-if="isCertified"
+            name="ri-checkbox-circle-line"
+            class="fr-ml-1v badge"
+          />
         </h4>
       </div>
     </div>
@@ -110,6 +120,11 @@ function strip(value: string) {
 
 .fr-title-v2__title a {
   background-image: none;
+}
+
+.fr-title-v2__title .badge {
+  color: var(--blue-france-sun-113-625);
+  width: 0.9rem;
 }
 
 .card__tag {
