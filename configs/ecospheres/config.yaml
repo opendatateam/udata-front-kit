@@ -239,8 +239,10 @@ indicators:
   organization_id: 673dafb02cf54cfb2ccbd118
   global_tag_prefix: ecospheres-indicateurs
   filters:
-    - name: 'Thématique FNV'
+    - name: Thématique
       id: theme
+      color: 'var(--green-menthe-975-75)'
+      textColor: 'var(--green-menthe-sun-373-moon-652)'
       values:
         - id: mieux-se-deplacer
           name: Mieux se déplacer
@@ -248,8 +250,10 @@ indicators:
           name: Autre
         - id: mieux-produire
           name: Mieux produire
-    - name: 'Enjeu FNV'
+    - name: Enjeu
       id: enjeu
+      color: 'var(--blue-ecume-975-75)'
+      textColor: 'var(--blue-ecume-sun-247-moon-675)'
       values:
         - id: sante
           name: Santé
