@@ -23,13 +23,13 @@ const props = withDefaults(defineProps<Props>(), { query: '' })
 
 const emits = defineEmits(['clearFilters'])
 
-const { indicators, pagination } = storeToRefs(store)
+const { indicators, pagination, total } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
-  if (indicators.value.length === 1) {
+  if (total.value === 1) {
     return '1 indicateur disponible'
-  } else if (indicators.value.length > 1) {
-    return `${indicators.value.length} indicateurs disponibles`
+  } else if (total.value > 1) {
+    return `${total.value} indicateurs disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
