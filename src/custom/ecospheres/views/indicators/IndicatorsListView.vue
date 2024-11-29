@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { computed, inject, ref, watch, type Ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -11,39 +11,20 @@ import {
 } from '@/model/injectionKeys'
 import IndicatorList from '../../components/indicators/IndicatorList.vue'
 import IndicatorSearch from '../../components/indicators/IndicatorSearch.vue'
+import type { IndicatorFilters } from '../../model/indicator'
 
 const route = useRoute()
 const router = useRouter()
 
-const props = defineProps({
-  query: {
-    type: String,
-    default: ''
-  },
-  theme: {
-    type: String,
-    default: null
-  },
-  geozone: {
-    type: String,
-    default: null
-  },
-  page: {
-    type: String,
-    default: null
-  },
-  sort: {
-    type: String,
-    default: null
-  }
-})
+type Props = IndicatorFilters & {
+  query: string
+  page: string | null
+  sort: string | null
+  geozone: string | null
+}
+const props = withDefaults(defineProps<Props>(), { query: '' })
 
-const selectedTheme: Ref<string | null> = ref(null)
-const selectedGeozone: Ref<string | null> = ref(null)
-const selectedSort: Ref<string | null> = ref(null)
-const selectedQuery = ref('')
 const indicatorListComp = ref<InstanceType<typeof IndicatorList> | null>(null)
-const selectedPage = ref(1)
 
 /* TODO: factorize w/ BouquetsListView */
 /* a11y start */
@@ -60,8 +41,8 @@ const breadcrumbList = computed(() => {
 })
 
 const pageTitle = computed(() => {
-  if (selectedQuery.value) {
-    return `${route.meta.title} pour "${selectedQuery.value}"`
+  if (props.query) {
+    return `${route.meta.title} pour "${props.query}"`
   }
   return route.meta.title
 })
@@ -97,18 +78,6 @@ const search = useDebounceFn((query) => {
       setLiveResults()
     })
 }, 600)
-
-watch(
-  props,
-  () => {
-    selectedTheme.value = props.theme
-    selectedGeozone.value = props.geozone
-    selectedQuery.value = props.query
-    selectedPage.value = props.page ? parseInt(props.page) : 1
-    selectedSort.value = props.sort
-  },
-  { immediate: true }
-)
 </script>
 
 <template>
@@ -122,6 +91,7 @@ watch(
       <h1 class="fr-col-auto fr-mb-2v">Indicateurs</h1>
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
+      <!-- FIXME: sync query from url on refresh/visit -->
       <DsfrSearchBar
         label="Rechercher un indicateur"
         button-text="Rechercher"
@@ -140,8 +110,9 @@ watch(
               Filtres
             </h2>
             <IndicatorSearch
-              :theme="selectedTheme"
-              :geozone="selectedGeozone"
+              :theme="props.theme"
+              :enjeu="props.enjeu"
+              :geozone="props.geozone"
               @vue:updated="setLiveResults"
             />
           </div>
@@ -149,11 +120,12 @@ watch(
         <div className="fr-col">
           <IndicatorList
             ref="indicatorListComp"
-            :theme="selectedTheme"
-            :geozone="geozone"
-            :query="selectedQuery"
-            :page="selectedPage"
-            :sort="selectedSort"
+            :theme="props.theme"
+            :enjeu="props.enjeu"
+            :geozone="props.geozone"
+            :query="props.query"
+            :page="props.page ? parseInt(props.page) : 1"
+            :sort="props.sort"
             @clear-filters="setLiveResults"
           />
         </div>

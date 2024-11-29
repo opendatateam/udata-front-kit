@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, watch, type ComputedRef, type PropType } from 'vue'
+import { computed, watch, type ComputedRef } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
+import type { IndicatorFilters } from '../../model/indicator'
 import { useIndicatorStore } from '../../store/IndicatorStore'
 
 import SelectComponent from '../SelectComponent.vue'
@@ -12,28 +13,13 @@ const route = useRoute()
 const router = useRouter()
 const store = useIndicatorStore()
 
-const props = defineProps({
-  theme: {
-    type: String as PropType<string | null>,
-    default: null
-  },
-  geozone: {
-    type: String as PropType<string | null>,
-    default: null
-  },
-  query: {
-    type: String,
-    default: ''
-  },
-  page: {
-    type: Number,
-    default: null
-  },
-  sort: {
-    type: String as PropType<string | null>,
-    default: null
-  }
-})
+type Props = IndicatorFilters & {
+  query: string
+  page: number
+  sort: string | null
+  geozone: string | null
+}
+const props = withDefaults(defineProps<Props>(), { query: '' })
 
 const emits = defineEmits(['clearFilters'])
 

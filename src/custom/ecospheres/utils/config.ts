@@ -1,6 +1,16 @@
 import config from '@/config'
 import type { FilterConf, IndicatorsConf } from '../model/config'
-import type { IndicatorFilters } from '../model/indicator'
+import { type IndicatorFilters, FILTER_KEYS } from '../model/indicator'
+
+export const useFiltersConf = () => {
+  return FILTER_KEYS.reduce(
+    (acc, key) => ({
+      ...acc,
+      [key]: useFilterConf(key)
+    }),
+    {} as Record<keyof IndicatorFilters, FilterConf>
+  )
+}
 
 export const useFilterConf = (filter: keyof IndicatorFilters): FilterConf => {
   const indicatorsConf = config.indicators as IndicatorsConf

@@ -6,7 +6,7 @@ import type { Indicator, IndicatorFilters } from '../model/indicator'
 import { useTagsQuery } from '../utils/indicator'
 
 const searchApi = new SearchAPI()
-const PAGE_SIZE = 20
+const PAGE_SIZE = 2
 
 export interface RootState {
   indicators: Indicator[]
@@ -25,13 +25,13 @@ export const useIndicatorStore = defineStore('indicator', {
   }),
   actions: {
     async query(args: QueryArgs) {
-      const { query, theme, ...queryArgs } = args
-      const tag = useTagsQuery({ theme: theme })
+      const { query, ...queryArgs } = args
+      const { extraArgs, tag } = useTagsQuery(queryArgs)
       const results = await searchApi.search(query, null, 1, {
         organization: config.indicators.organization_id,
         page_size: PAGE_SIZE,
         tag,
-        ...queryArgs
+        ...extraArgs
       })
       this.indicators = results.data
       this.total = results.total
