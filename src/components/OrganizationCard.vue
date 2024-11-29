@@ -9,10 +9,14 @@ const props = defineProps({
 })
 
 const isCertified = (): boolean =>
-  props.organization.badges.some((badge) => badge.kind === 'certified')
+  props.organization.badges.some(
+    (badge: { kind: string }) => badge.kind === 'certified'
+  )
 
 const isPublicService = (): boolean =>
-  props.organization.badges.some((badge) => badge.kind === 'public-service')
+  props.organization.badges.some(
+    (badge: { kind: string }) => badge.kind === 'public-service'
+  )
 </script>
 
 <template>
