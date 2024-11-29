@@ -27,7 +27,7 @@ website:
   # leave empty if not pertinent
   homepage:
     title: Hackathon données alimentaires
-    subtitle: Bienvenue sur le site du hackathon organisé par la direction interministérielle du numérique (DINUM) et le ministère de l’Agriculture, de la Souveraineté alimentaire et de la Forêt, en partenariat avec Open Food Facts et FranceAgrimer.
+    subtitle: Bienvenue sur le site du hackathon organisé par la direction interministérielle du numérique (DINUM) et le ministère de l’Agriculture, de la Souveraineté alimentaire et de la Forêt, en partenariat avec Open Food Facts et FranceAgriMer.
     sections:
       - title:
         content:
