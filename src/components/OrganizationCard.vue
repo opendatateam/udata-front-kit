@@ -93,7 +93,8 @@ const isPublicService = (): boolean =>
 }
 
 .card__tag {
-  background-color: red;
-  background-color: var(--background-contrast-info);
+  background-color: var(--background-action-low-blue-france);
+  color: var(--text-action-high-blue-france);
+  font-size: 0.875rem;
 }
 </style>
