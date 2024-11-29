@@ -11,17 +11,27 @@ const indicatorsConf = config.indicators as IndicatorsConf
 const tagPrefix = indicatorsConf.global_tag_prefix
 const filters = indicatorsConf.filters
 
+interface QueryArgs extends IndicatorFilters {
+  [key: string]: string | null
+}
+
 /**
- * Build an array of normalized tags from query components
+ * Build an array of normalized tags from query components and clean the original QueryArgs
  */
-export const useTagsQuery = (query: IndicatorFilters): Array<string> => {
+export const useTagsQuery = (
+  query: QueryArgs
+): { tag: Array<string>; extraArgs: QueryArgs } => {
   const queryArray = []
   for (const filter of filters) {
     if (query[filter.id] != null) {
       queryArray.push(`${tagPrefix}-${filter.id}-${query[filter.id]}`)
     }
+    delete query[filter.id]
   }
-  return queryArray
+  return {
+    tag: queryArray,
+    extraArgs: query
+  }
 }
 
 /**

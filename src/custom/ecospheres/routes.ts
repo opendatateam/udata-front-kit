@@ -1,4 +1,5 @@
 import { type RouteLocationNormalizedLoaded } from 'vue-router'
+import { FILTER_KEYS } from './model/indicator'
 
 export const routes = [
   {
@@ -15,13 +16,22 @@ export const routes = [
     meta: {
       title: 'Indicateurs'
     },
-    props: (route: RouteLocationNormalizedLoaded) => ({
-      query: route.query.q,
-      theme: route.query.theme,
-      geozone: route.query.geozone,
-      page: route.query.page,
-      sort: route.query.sort
-    }),
+    props: (route: RouteLocationNormalizedLoaded) => {
+      const filterProps = FILTER_KEYS.reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: route.query[key] || null
+        }),
+        {}
+      )
+      return {
+        query: route.query.q,
+        geozone: route.query.geozone || null,
+        page: route.query.page || null,
+        sort: route.query.sort || null,
+        ...filterProps
+      }
+    },
     component: async () =>
       await import('./views/indicators/IndicatorsListView.vue')
   }
