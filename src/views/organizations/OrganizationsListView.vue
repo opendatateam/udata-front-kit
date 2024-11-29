@@ -28,12 +28,6 @@ async function onUpdatePage(page: number) {
   loader.hide()
 }
 
-const isCertified = (org: object): boolean =>
-  org.badges.some((badge) => badge.kind === 'certified')
-
-const isPublicService = (org: object): boolean =>
-  org.badges.some((badge) => badge.kind === 'public-service')
-
 onMounted(() => {
   onUpdatePage(0)
 })
