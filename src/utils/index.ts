@@ -12,8 +12,6 @@ const markedOptions = {
 
 /**
  * Parse description from markdown to HTML
- *
- * @param {ref} ref
  */
 export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
   if (ref.value?.description) {
@@ -24,18 +22,20 @@ export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
 /**
  * Parse markdown to HTML
  */
-export const fromMarkdown = async (value: string) => {
+export const fromMarkdown = (value: string) => {
   if (!value) return ''
-  const parsed = await marked.parse(value, markedOptions)
-  return DOMPurify.sanitize(parsed)
+  const parsed = marked.parse(value, markedOptions)
+  // type cast to string because we don't use async mode of marked
+  return DOMPurify.sanitize(parsed as string)
 }
 
 /**
  * Strip HTML tags from markdown
  */
-export const stripFromMarkdown = async (value: string) => {
-  const html = await marked.parse(value, markedOptions)
-  return stripHtml(html).result
+export const stripFromMarkdown = (value: string) => {
+  const html = marked.parse(value, markedOptions)
+  // type cast to string because we don't use async mode of marked
+  return stripHtml(html as string).result
 }
 
 /**

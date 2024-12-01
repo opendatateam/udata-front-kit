@@ -58,24 +58,28 @@ function doSort(sort: string | number) {
 const description = computed(() => descriptionFromMarkdown(org))
 
 // we need the technical id to fetch the datasets and thus pagination
-watch(org, () => {
-  if (org.value?.id === undefined) return
-  breadcrumbLinks.value.push({ text: org.value.name })
-  const loader = useLoading().show({
-    enforceFocus: false
-  })
-  datasetStore
-    .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
-    .then((res) => {
-      datasets.value = res?.data
-      if (!pages.value.length && org.value?.id) {
-        pages.value = datasetStore.getDatasetsPaginationForOrg(org.value?.id)
-      }
+watch(
+  () => org.value?.id,
+  () => {
+    if (org.value?.id === undefined) return
+    breadcrumbLinks.value.push({ text: org.value.name })
+    const loader = useLoading().show({
+      enforceFocus: false
     })
-    .finally(() => {
-      loader.hide()
-    })
-})
+    datasetStore
+      .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
+      .then((res) => {
+        datasets.value = res?.data
+        if (!pages.value.length && org.value?.id) {
+          pages.value = datasetStore.getDatasetsPaginationForOrg(org.value?.id)
+        }
+      })
+      .finally(() => {
+        loader.hide()
+      })
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
