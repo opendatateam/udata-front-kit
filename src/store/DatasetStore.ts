@@ -44,7 +44,7 @@ export const useDatasetStore = defineStore('dataset', {
       return [...Array(nbPages).keys()].map((page) => {
         page += 1
         return {
-          label: page,
+          label: page.toString(),
           href: '#',
           title: `Page ${page}`
         }

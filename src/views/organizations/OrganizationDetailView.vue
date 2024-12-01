@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { useHead } from '@unhead/vue'
-import { computed, inject, onMounted, ref, watchEffect, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import Tile from '@/components/Tile.vue'
-import config from '@/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -24,14 +23,13 @@ const datasetStore = useDatasetStore()
 
 const org = computed(() => orgStore.get(organizationId))
 
-const links = computed(() => [
+const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
-  { to: '/organizations', text: 'Organisations' },
-  { text: org.value?.name }
+  { to: '/organizations', text: 'Organisations' }
 ])
 
 const currentPage = ref(1)
-const pages: Ref<object[]> = ref([])
+const pages: Ref<{ label: string; href: string; title: string }[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort = ref('-created')
 
@@ -52,16 +50,17 @@ const sorts = [
   { value: 'title', text: 'Titre' }
 ]
 
-function doSort(sort: string) {
+function doSort(sort: string | number) {
   currentPage.value = 1
-  selectedSort.value = sort
+  selectedSort.value = sort.toString()
 }
 
 const description = computed(() => descriptionFromMarkdown(org))
 
 // we need the technical id to fetch the datasets and thus pagination
-watchEffect(() => {
+watch(org, () => {
   if (org.value?.id === undefined) return
+  breadcrumbLinks.value.push({ text: org.value.name })
   const loader = useLoading().show({
     enforceFocus: false
   })
@@ -81,7 +80,7 @@ watchEffect(() => {
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
   <GenericContainer>
     <h1 class="fr-mb-2v">{{ org?.name }}</h1>

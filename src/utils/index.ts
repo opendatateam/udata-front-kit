@@ -1,6 +1,7 @@
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { stripHtml } from 'string-strip-html'
+import type { Ref } from 'vue'
 
 const markedOptions = {
   gfm: true,
@@ -14,7 +15,7 @@ const markedOptions = {
  *
  * @param {ref} ref
  */
-export const descriptionFromMarkdown = (ref, attr = 'description') => {
+export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
   if (ref.value?.description) {
     return fromMarkdown(ref.value[attr])
   }
@@ -22,23 +23,18 @@ export const descriptionFromMarkdown = (ref, attr = 'description') => {
 
 /**
  * Parse markdown to HTML
- *
- * @param {string} value
  */
-export const fromMarkdown = (value) => {
+export const fromMarkdown = async (value: string) => {
   if (!value) return ''
-  const parsed = marked.parse(value, markedOptions)
+  const parsed = await marked.parse(value, markedOptions)
   return DOMPurify.sanitize(parsed)
 }
 
 /**
  * Strip HTML tags from markdown
- *
- * @param {string} value
- * @returns {string}
  */
-export const stripFromMarkdown = (value) => {
-  const html = marked.parse(value, markedOptions)
+export const stripFromMarkdown = async (value: string) => {
+  const html = await marked.parse(value, markedOptions)
   return stripHtml(html).result
 }
 
@@ -46,9 +42,9 @@ export const stripFromMarkdown = (value) => {
  * Format date
  *
  */
-export const formatDate = (dateString, short = false) => {
+export const formatDate = (dateString: string, short = false) => {
   const date = new Date(dateString)
-  const params = short
+  const params: Intl.DateTimeFormatOptions = short
     ? {
         day: 'numeric',
         month: 'short',
