@@ -91,10 +91,10 @@ const dropdownLabel = (text: string) => {
 
   <DsfrSearchBar
     v-else-if="!dropdown.length"
-    v-model="selectedQuery"
+    v-model="query"
     :label="searchLabel"
-    placeholder=""
-    @search="doSimpleSearch($event)"
+    :placeholder="placeholder"
+    @search="doSimpleSearch"
   />
 
   <div v-else>
@@ -193,19 +193,10 @@ const dropdownLabel = (text: string) => {
   background: var(--background-contrast-grey);
 }
 .select-search :deep(input) {
-  padding-block-start: 4px;
   margin-inline-start: var(--icon-width);
   inline-size: 100%;
 }
 :deep(.multiselect__content-wrapper) {
-  margin-block-start: 42px;
-}
-
-/** dsfr component (simple search) **/
-
-.fr-search-bar :deep(.fr-btn) {
-  border-block-end: 2px solid var(--border-action-high-blue-france);
-  background-color: var(--background-contrast-grey);
-  color: #35495e;
+  margin-block-start: 40px;
 }
 </style>
