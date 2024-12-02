@@ -108,6 +108,7 @@ watchEffect(() => {
         <!-- TODO: add "pertinence" when custom SelectComponent has landed -->
         <div class="fr-col">
           <DsfrSelect
+            select-id="sort-search"
             :model-value="selectedSort"
             :options="sorts"
             label=""
