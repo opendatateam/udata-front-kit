@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { computed, inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
+import { useAccessibilityProperties } from '@/utils/a11y'
 import IndicatorList from '../../components/indicators/IndicatorList.vue'
 import IndicatorSearch from '../../components/indicators/IndicatorSearch.vue'
 import type { IndicatorFilters } from '../../model/indicator'
@@ -25,13 +22,10 @@ type Props = IndicatorFilters & {
 const props = withDefaults(defineProps<Props>(), { query: '' })
 
 const indicatorListComp = ref<InstanceType<typeof IndicatorList> | null>(null)
-
-/* TODO: factorize w/ BouquetsListView */
-/* a11y start */
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
+const searchResultsMessage = computed(
+  () => indicatorListComp.value?.numberOfResultMsg || ''
+)
+useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
@@ -40,43 +34,11 @@ const breadcrumbList = computed(() => {
   return links
 })
 
-const pageTitle = computed(() => {
-  if (props.query) {
-    return `${route.meta.title} pour "${props.query}"`
-  }
-  return route.meta.title
-})
-
-const searchResultsMessage = computed(() => {
-  return indicatorListComp.value
-    ? indicatorListComp.value.numberOfResultMsg
-    : ''
-})
-
-const setLiveResults = () => {
-  // only display the number of results if a query or filter exists
-  if (route.fullPath !== route.path) {
-    setAccessibilityProperties(pageTitle.value, false, [
-      {
-        text: searchResultsMessage.value
-      }
-    ])
-  } else {
-    setAccessibilityProperties(pageTitle.value, false)
-  }
-}
-
-/* a11y end */
-
 const search = useDebounceFn((query) => {
-  router
-    .push({
-      name: 'indicators',
-      query: { ...route.query, q: query }
-    })
-    .then(() => {
-      setLiveResults()
-    })
+  router.push({
+    name: 'indicators',
+    query: { ...route.query, q: query }
+  })
 }, 600)
 </script>
 
@@ -113,7 +75,6 @@ const search = useDebounceFn((query) => {
               :theme="props.theme"
               :enjeu="props.enjeu"
               :geozone="props.geozone"
-              @vue:updated="setLiveResults"
             />
           </div>
         </nav>
@@ -126,7 +87,6 @@ const search = useDebounceFn((query) => {
             :query="props.query"
             :page="props.page ? parseInt(props.page) : 1"
             :sort="props.sort"
-            @clear-filters="setLiveResults"
           />
         </div>
       </div>
