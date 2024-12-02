@@ -6,7 +6,7 @@ import type { Indicator, IndicatorFilters } from '../model/indicator'
 import { useTagsQuery } from '../utils/indicator'
 
 const searchApi = new SearchAPI()
-const PAGE_SIZE = 2
+const PAGE_SIZE = 20
 
 export interface RootState {
   indicators: Indicator[]

@@ -53,8 +53,9 @@ const search = useDebounceFn((query) => {
       <h1 class="fr-col-auto fr-mb-2v">Indicateurs</h1>
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
-      <!-- FIXME: sync query from url on refresh/visit -->
+      <!-- FIXME: migrate to SearchComponent -->
       <DsfrSearchBar
+        :model-value="props.query"
         label="Rechercher un indicateur"
         button-text="Rechercher"
         placeholder=""
@@ -95,7 +96,6 @@ const search = useDebounceFn((query) => {
 </template>
 
 <style scoped>
-/* TODO: factorize w/ BouquetsListView */
 /* put above header (ground+500) so that multiselect floats above menu */
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);
