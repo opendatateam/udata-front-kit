@@ -99,6 +99,7 @@ website:
       to: /bouquets
     - text: Organisations
       to: /organizations
+    # FIXME: remove before merge for draft version
     - text: Indicateurs
       to: /indicators
     - text: A propos
@@ -259,26 +260,6 @@ indicators:
           name: Atténuation
         - id: biodiversite
           name: Biodiversité
-    - name: Famille
-      id: famille
-      color: green-tilleul
-      values:
-        - id: energie
-          name: Energie
-        - id: agriculture
-          name: Agriculture
-        - id: transport
-          name: Transport
-    - name: Sous famille
-      id: sous-famille
-      color: green-bourgeon
-      values:
-        - id: biogaz
-          name: Biogaz
-        - id: electricite
-          name: Electricité
-        - id: chaleur-et-froid
-          name: Chaleur et froid
 
 organizations:
   - ademe
