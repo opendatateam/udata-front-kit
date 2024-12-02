@@ -44,7 +44,7 @@ website:
             - id: 'guide'
               name: 'Guide du hackathon'
               description: 'Voir le guide qui a pour vocation de vous accompagner au Hackathon Données Alimentaires pendant toute la durée de l’événement avec des informations, des ressources et des bonnes pratiques.'
-              url: 'https://documentation.beta.numerique.gouv.fr/s/e44ffbcc-9b7d-4dbc-bcf3-b6ea6daef89e/doc/guide-du-hackathon-alimentaire-cwxNzDZqc5'
+              url: 'https://docs.numerique.gouv.fr/docs/e6589294-9422-4292-a823-54401106c841/'
 
         sub_section_buttons:
     meta_description:
@@ -66,7 +66,7 @@ website:
     - text: Voir les données
       to: /hackathons/hackathon-donnees-alimentaires
     - text: Guide du hackathon
-      to: 'https://documentation.beta.numerique.gouv.fr/s/e44ffbcc-9b7d-4dbc-bcf3-b6ea6daef89e/doc/guide-du-hackathon-alimentaire-cwxNzDZqc5'
+      to: 'https://docs.numerique.gouv.fr/docs/e6589294-9422-4292-a823-54401106c841/'
   router:
     disable:
       - organizations_routes
