@@ -12,7 +12,6 @@ export default class DatasetsAPI extends DatagouvfrAPI {
     page?: number,
     sort?: string
   ): Promise<DatasetV2Response> {
-    // WARNING: specify `-created` or another sort explicitely because default sort has a pagination issue
     const url = `${this.url()}/search/`
     return await this.request({
       url,
