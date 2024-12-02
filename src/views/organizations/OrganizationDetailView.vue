@@ -122,7 +122,7 @@ watchEffect(() => {
     <div v-if="!datasets?.length">
       Pas de jeu de données pour cette organisation.
     </div>
-    <ul v-else class="fr-grid-row fr-grid-row--gutters" role="list">
+    <ul v-else class="fr-px-0" role="list">
       <li v-for="d in datasets" :key="d.id" class="fr-col-md-12 fr-py-0">
         <DatasetCard
           :dataset="d"
