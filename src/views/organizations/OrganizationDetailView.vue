@@ -122,11 +122,8 @@ watchEffect(() => {
     <div v-if="!datasets?.length">
       Pas de jeu de données pour cette organisation.
     </div>
-    <div
-      v-else
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-    >
-      <div class="fr-col-md-12">
+    <ul v-else class="fr-grid-row fr-grid-row--gutters">
+      <li class="fr-col-md-12">
         <DatasetCard
           v-for="d in datasets"
           :key="d.id"
@@ -137,8 +134,8 @@ watchEffect(() => {
             params: { oid: d.organization?.id }
           }"
         />
-      </div>
-    </div>
+      </li>
+    </ul>
   </GenericContainer>
   <DsfrPagination
     v-if="pages.length"
