@@ -17,6 +17,9 @@ export const useSearchStore = defineStore('search', {
     datasets: (state) => {
       return state.data.data || []
     },
+    total: (state) => {
+      return state.data.total
+    },
     pagination: (state) => {
       if (!state.data) return []
       if (!state.data.total && !state.data.page_size) return []
