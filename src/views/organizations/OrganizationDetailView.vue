@@ -4,7 +4,6 @@ import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import Tile from '@/components/Tile.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
@@ -14,6 +13,7 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
+import { DatasetCard } from '@datagouv/components'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
@@ -31,7 +31,7 @@ const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
 const currentPage = ref(1)
 const pages: Ref<{ label: string; href: string; title: string }[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
-const selectedSort = ref('-created')
+const selectedSort: Ref<string | undefined> = ref(undefined)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -47,7 +47,7 @@ onMounted(() => {
 
 const sorts = [
   { value: '-created', text: 'Les plus récemment créés' },
-  { value: 'title', text: 'Titre' }
+  { value: '-last_update', text: 'Les plus récemment modifiés' }
 ]
 
 function doSort(sort: string | number) {
@@ -57,29 +57,35 @@ function doSort(sort: string | number) {
 
 const description = computed(() => descriptionFromMarkdown(org))
 
-// we need the technical id to fetch the datasets and thus pagination
+// TODO: make this a composable "breadcrumbForObject"
+// fill in the last breadcrumb when organization is ready
 watch(
-  () => org.value?.id,
+  () => org.value?.name,
   () => {
-    if (org.value?.id === undefined) return
+    if (org.value?.name === undefined) return
     breadcrumbLinks.value.push({ text: org.value.name })
-    const loader = useLoading().show({
-      enforceFocus: false
-    })
-    datasetStore
-      .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
-      .then((res) => {
-        datasets.value = res?.data
-        if (!pages.value.length && org.value?.id) {
-          pages.value = datasetStore.getDatasetsPaginationForOrg(org.value?.id)
-        }
-      })
-      .finally(() => {
-        loader.hide()
-      })
   },
   { immediate: true }
 )
+
+// we need the technical id to fetch the datasets and thus pagination
+watchEffect(() => {
+  if (org.value?.id === undefined) return
+  const loader = useLoading().show({
+    enforceFocus: false
+  })
+  datasetStore
+    .loadDatasetsForOrg(org.value.id, currentPage.value, selectedSort.value)
+    .then((res) => {
+      datasets.value = res?.data
+      if (!pages.value.length && org.value?.id) {
+        pages.value = datasetStore.getDatasetsPaginationForOrg(org.value?.id)
+      }
+    })
+    .finally(() => {
+      loader.hide()
+    })
+})
 </script>
 
 <template>
@@ -99,6 +105,7 @@ watch(
         >
           Trier par :
         </label>
+        <!-- TODO: add "pertinence" when custom SelectComponent has landed -->
         <div class="fr-col">
           <DsfrSelect
             :model-value="selectedSort"
@@ -114,16 +121,23 @@ watch(
     <div v-if="!datasets?.length">
       Pas de jeu de données pour cette organisation.
     </div>
-    <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-      <li v-for="d in datasets" :key="d.id" class="fr-col-12 fr-col-lg-4">
-        <Tile
-          :link="`/datasets/${d.slug}`"
-          :title="d.title"
-          :description="d.description"
-          :img="d.organization?.logo"
+    <div
+      v-else
+      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
+    >
+      <div class="fr-col-md-12">
+        <DatasetCard
+          v-for="d in datasets"
+          :key="d.id"
+          :dataset="d"
+          :dataset-url="{ name: 'dataset_detail', params: { did: d.id } }"
+          :organization-url="{
+            name: 'organization_detail',
+            params: { oid: d.organization?.id }
+          }"
         />
-      </li>
-    </ul>
+      </div>
+    </div>
   </GenericContainer>
   <DsfrPagination
     v-if="pages.length"

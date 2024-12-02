@@ -8,10 +8,10 @@ import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
 const datasetsApi = new DatasetsAPI()
 const datasetsApiv2 = new DatasetsAPI({ version: 2 })
 
-export interface RootState {
+interface RootState {
   data: Record<string, DatasetV2Response[]>
   resourceTypes: unknown[]
-  sort: string | null
+  sort: string | undefined
 }
 
 /**
@@ -31,7 +31,7 @@ export const useDatasetStore = defineStore('dataset', {
   state: (): RootState => ({
     data: {},
     resourceTypes: [],
-    sort: null
+    sort: undefined
   }),
   actions: {
     /**
@@ -53,11 +53,7 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Get datasets from store for an org and a page
      */
-    getDatasetsForOrg(
-      orgId: string,
-      page: number = 1,
-      sort: string = '-created'
-    ) {
+    getDatasetsForOrg(orgId: string, page: number = 1, sort?: string) {
       if (this.sort !== sort) return undefined
       if (this.data[orgId] === undefined) return undefined
       return this.data[orgId].find((d) => d.page === page)
@@ -65,11 +61,7 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Async function to trigger API fetch of an org's datasets if not known in store
      */
-    async loadDatasetsForOrg(
-      orgId: string,
-      page: number = 1,
-      sort: string = '-created'
-    ) {
+    async loadDatasetsForOrg(orgId: string, page: number = 1, sort?: string) {
       const existing = this.getDatasetsForOrg(orgId, page, sort)
       if (existing !== undefined) return existing
       const datasets = await datasetsApiv2.getDatasetsForOrganization(
@@ -83,7 +75,7 @@ export const useDatasetStore = defineStore('dataset', {
     /**
      * Store the result of a datasets fetch operation for an org in store
      */
-    addDatasets(orgId: string, res: DatasetV2Response, sort: string | null) {
+    addDatasets(orgId: string, res: DatasetV2Response, sort?: string) {
       // reset org data if another sort has been requested
       if (this.data[orgId] === undefined) this.data[orgId] = []
       if (this.sort !== sort) this.data[orgId] = []
@@ -118,7 +110,7 @@ export const useDatasetStore = defineStore('dataset', {
           previous_page: null,
           total: 1
         },
-        null
+        undefined
       )
       return dataset
     },
