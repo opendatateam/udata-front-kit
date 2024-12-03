@@ -33,6 +33,7 @@ useHead({
   ],
   link: [{ rel: 'canonical', href: window.location.origin }]
 })
+const dropdown = config.website.header_search.dropdown
 </script>
 
 <template>
@@ -48,6 +49,7 @@ useHead({
           id="big-select-search"
           placeholder="Rechercher"
           search-label="Rechercher"
+          :dropdown="dropdown"
         />
         <p class="text-grey-300 fr-text--sm">
           Exemple&nbsp;: "&nbsp;Itinéraires fraîcheur&nbsp;" dans les bouquets

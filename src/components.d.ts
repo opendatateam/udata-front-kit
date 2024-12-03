@@ -36,6 +36,7 @@ declare module 'vue' {
     DsfrHeaderMenuLink: typeof import('./components/header/DsfrHeaderMenuLink.vue')['default']
     DsfrHeaderMenuLinks: typeof import('@gouvminint/vue-dsfr')['DsfrHeaderMenuLinks']
     DsfrInput: typeof import('@gouvminint/vue-dsfr')['DsfrInput']
+    DsfrInputGroup: typeof import('@gouvminint/vue-dsfr')['DsfrInputGroup']
     DsfrLogo: typeof import('@gouvminint/vue-dsfr')['DsfrLogo']
     DsfrModal: typeof import('@gouvminint/vue-dsfr')['DsfrModal']
     DsfrNavigation: typeof import('@gouvminint/vue-dsfr')['DsfrNavigation']
