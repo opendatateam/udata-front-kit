@@ -9,3 +9,6 @@ src/playground
 
 # vim swap files
 *.swp
+
+# auto generated file from
+components.d.ts
