@@ -180,7 +180,7 @@ watchEffect(() => {
         >Couverture territoriale</label
       >
       <SelectSpatialCoverage
-        v-model="selectedSpatialCoverage"
+        v-model:spatial-coverage-model="selectedSpatialCoverage"
         :short="true"
         @update:spatial-coverage-model="switchSpatialCoverage"
       />
