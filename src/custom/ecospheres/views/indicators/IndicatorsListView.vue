@@ -7,7 +7,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import IndicatorList from '../../components/indicators/IndicatorList.vue'
 import IndicatorSearch from '../../components/indicators/IndicatorSearch.vue'
-import type { IndicatorFilters } from '../../model/indicator'
+import { FILTER_KEYS, type IndicatorFilters } from '../../model/indicator'
 import { useAccessibilityProperties } from '../../utils/a11y'
 
 const route = useRoute()
@@ -20,6 +20,17 @@ type Props = IndicatorFilters & {
   geozone: string | null
 }
 const props = withDefaults(defineProps<Props>(), { query: '' })
+// map props.{filter} to a list of props for child components in v-bind
+// equivalent to :enjeu="props.enjeu" for every filter
+const filtersProps = computed(() => {
+  return FILTER_KEYS.reduce(
+    (acc, key) => ({
+      ...acc,
+      [key]: props[key]
+    }),
+    {} as IndicatorFilters
+  )
+})
 
 const indicatorListComp = ref<InstanceType<typeof IndicatorList> | null>(null)
 const searchResultsMessage = computed(
@@ -72,18 +83,13 @@ const search = useDebounceFn((query) => {
             <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <IndicatorSearch
-              :theme="props.theme"
-              :enjeu="props.enjeu"
-              :geozone="props.geozone"
-            />
+            <IndicatorSearch v-bind="filtersProps" :geozone="props.geozone" />
           </div>
         </nav>
         <div className="fr-col">
           <IndicatorList
             ref="indicatorListComp"
-            :theme="props.theme"
-            :enjeu="props.enjeu"
+            v-bind="filtersProps"
             :geozone="props.geozone"
             :query="props.query"
             :page="props.page ? parseInt(props.page) : 1"
