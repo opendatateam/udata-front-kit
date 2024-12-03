@@ -21,7 +21,7 @@ type Props = IndicatorFilters & {
 }
 const props = withDefaults(defineProps<Props>(), { query: '' })
 // map props.{filter} to a list of props for child components in v-bind
-// equivalent to :enjeu="props.enjeu" for every filter
+// v-bind="filtersProps" is equivalent to :{filter}="props.{filter}" for every filter
 const filtersProps = computed(() => {
   return FILTER_KEYS.reduce(
     (acc, key) => ({
