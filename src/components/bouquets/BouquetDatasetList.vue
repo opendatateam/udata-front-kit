@@ -61,7 +61,7 @@ const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
 
 const handleDeleteGroup = (groupName: string) => {
   datasetsProperties.value = deleteGroup(groupName)
-  emits('updateDatasets')
+  // emits('updateDatasets')
 }
 
 const loadDatasetsContent = () => {
@@ -111,8 +111,10 @@ onMounted(() => {
 
 <template>
   <!-- Header and buttons -->
-  <div class="fr-grid-row fr-grid-row--middle justify-between">
-    <h2 class="fr-col-auto fr-m-0 fr-p-0">
+  <div
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between"
+  >
+    <h2 class="fr-col-auto fr-m-0">
       Composition du {{ topicsName }} de données
     </h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">

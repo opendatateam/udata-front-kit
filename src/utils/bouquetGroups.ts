@@ -2,6 +2,8 @@ import { type ComputedRef, type Ref } from 'vue'
 
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
+export const noGroup = 'Sans regroupement'
+
 export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   groupedDatasets: ComputedRef
   getDatasetIndex: (group: string, indexInGroup: number) => number
@@ -10,8 +12,6 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   renameGroup: (oldGroupName: string, newGroupName: string) => void
   deleteGroup: (groupName: string) => DatasetProperties[]
 } {
-  const noGroup = 'Sans regroupement'
-
   const groupedDatasets = computed(() => {
     const datasetsGroups: Ref<DatasetsGroups> = ref(new Map())
     // create the key for empty group
@@ -33,7 +33,30 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
       }
     })
 
-    return datasetsGroups.value
+    // get all entries within nogroup if any exists
+    const noGroupEntries: DatasetProperties[] | undefined =
+      datasetsGroups.value.has(noGroup)
+        ? datasetsGroups.value.get(noGroup)
+        : undefined
+
+    // create a new Map without nogroup
+    const filteredGroups: DatasetsGroups = new Map(
+      [...datasetsGroups.value].filter(([key]) => key !== noGroup)
+    )
+
+    // Alphabetically sort the keys with nogroup at the end
+    const sortedEntries = Array.from(filteredGroups.entries()).sort(
+      ([keyA], [keyB]) => {
+        return keyA.toString().localeCompare(keyB.toString())
+      }
+    )
+
+    // Add the nogroup to the end of the sorted array
+    if (noGroupEntries) {
+      sortedEntries.push([noGroup, noGroupEntries])
+    }
+
+    return new Map(sortedEntries)
   })
   const getDatasetIndex = (group: string, indexInGroup: number) => {
     // get all datasets from group
@@ -76,7 +99,8 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
       const matchingDatasets = datasetsProperties.value.filter((dataset) => {
         return oldGroupItems.some(
           (groupItem) =>
-            groupItem.id === dataset.id && groupItem.group === dataset.group
+            groupItem.title === dataset.title &&
+            groupItem.group === dataset.group
         )
       })
       if (matchingDatasets) {
@@ -92,17 +116,19 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     const groupItems = groupedDatasets.value.get(groupName ?? null)
 
     if (groupItems) {
-      // filter the datasetsProperties to exclude the items from the group to delete
+      // exclude the items of the group to delete from datasetsProperties
       const updatedDatasetsProperties = datasetsProperties.value.filter(
         (dataset) => {
           return groupItems.find(
             (groupItem) =>
-              groupItem.id !== dataset.id && groupItem.group !== dataset.group
+              groupItem.title !== dataset.title &&
+              groupItem.group !== dataset.group
           )
         }
       )
       return updatedDatasetsProperties
     }
+
     return datasetsProperties.value
   }
 

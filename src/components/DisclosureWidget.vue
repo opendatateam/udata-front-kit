@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { DatasetProperties } from '@/model/topic'
 import { isAvailable } from '@/utils/bouquet'
+import { noGroup } from '@/utils/bouquetGroups'
 import { getRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
@@ -25,12 +26,14 @@ const props = defineProps({
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
 
+const isDisclosure = computed(() => props.groupName !== noGroup)
+
 const emit = defineEmits<{
   (e: 'editGroupName', oldGroupeName: string, newGroupeName: string): void
   (e: 'deleteGroup', groupeName: string): void
 }>()
 
-const isDisclosureOpen: Ref<boolean> = ref(false)
+const isDisclosureOpen: Ref<boolean> = ref(!isDisclosure.value)
 const toggleDisclosure = () => {
   isDisclosureOpen.value = !isDisclosureOpen.value
 }
@@ -112,74 +115,79 @@ const actions = computed(() => {
 <template>
   <div class="disclosure">
     <div class="disclosure__header">
-      <button
-        class="disclosure__trigger fr-py-3v"
-        :aria-expanded="isDisclosureOpen"
-        :aria-controls="widgetID"
-        @click.prevent="toggleDisclosure"
-      >
-        <span class="fr-sr-only">ouvrir le regroupement</span>
-        <span class="disclosure__name fr-text--lg">{{ groupName }}</span>
-        <span class="disclosure__btn disclosure__marker">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="none"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-          >
-            <path
-              fill="#3458A2"
-              fill-rule="evenodd"
-              d="m8 7.219-3.3 3.3-.942-.943L8 5.333l4.243 4.243-.943.943-3.3-3.3Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </span>
-      </button>
-      <div v-if="groupName !== 'Sans regroupement'" class="disclosure__actions">
-        <button class="disclosure__btn" @click="openModal('edit')">
-          <span class="fr-sr-only fr-text--sm"
-            >éditer le regroupement {{ groupName }}</span
-          >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="none"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-          >
-            <path
-              fill="#3458A2"
-              fill-rule="evenodd"
-              d="m4.276 10.667 6.761-6.762-.942-.942-6.762 6.761v.943h.943ZM4.829 12H2V9.171l7.623-7.623c.26-.26.683-.26.943 0l1.886 1.886c.26.26.26.682 0 .943L4.829 12ZM2 13.333h12v1.334H2v-1.334Z"
-              clip-rule="evenodd"
-            />
-          </svg>
+      <template v-if="isDisclosure">
+        <button
+          class="disclosure__trigger"
+          :aria-expanded="isDisclosureOpen"
+          :aria-controls="widgetID"
+          @click.prevent="toggleDisclosure"
+        >
+          <span class="disclosure__btn disclosure__marker">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+            >
+              <path
+                fill="#3458A2"
+                fill-rule="evenodd"
+                d="m8 7.219-3.3 3.3-.942-.943L8 5.333l4.243 4.243-.943.943-3.3-3.3Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <span class="fr-sr-only">ouvrir le regroupement</span>
+          <span class="disclosure__name fr-text--lg">{{ groupName }}</span>
         </button>
-        <button class="disclosure__btn" @click="openModal('delete')">
-          <span class="fr-sr-only fr-text--sm"
-            >supprimer le regroupement {{ groupName }}</span
-          >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            fill="none"
-            viewBox="0 0 32 32"
-            aria-hidden="true"
-          >
-            <path
-              fill="#3458A2"
-              fill-rule="evenodd"
-              d="M12.665 10.667V9.334h6.667v1.333h3.333V12h-1.333v10a.667.667 0 0 1-.667.667h-9.333a.667.667 0 0 1-.667-.667V12H9.332v-1.333h3.333ZM12 12v9.334h8V12h-8Zm2 2h1.333v5.334H14V14Zm2.666 0H18v5.334h-1.334V14Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
+        <div class="disclosure__actions">
+          <button class="disclosure__btn" @click="openModal('edit')">
+            <span class="fr-sr-only fr-text--sm"
+              >éditer le regroupement {{ groupName }}</span
+            >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+            >
+              <path
+                fill="#3458A2"
+                fill-rule="evenodd"
+                d="m4.276 10.667 6.761-6.762-.942-.942-6.762 6.761v.943h.943ZM4.829 12H2V9.171l7.623-7.623c.26-.26.683-.26.943 0l1.886 1.886c.26.26.26.682 0 .943L4.829 12ZM2 13.333h12v1.334H2v-1.334Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <button class="disclosure__btn" @click="openModal('delete')">
+            <span class="fr-sr-only fr-text--sm"
+              >supprimer le regroupement {{ groupName }}</span
+            >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              fill="none"
+              viewBox="0 0 32 32"
+              aria-hidden="true"
+            >
+              <path
+                fill="#3458A2"
+                fill-rule="evenodd"
+                d="M12.665 10.667V9.334h6.667v1.333h3.333V12h-1.333v10a.667.667 0 0 1-.667.667h-9.333a.667.667 0 0 1-.667-.667V12H9.332v-1.333h3.333ZM12 12v9.334h8V12h-8Z_na2h1.333v5.334H14V14Zm2.666 0H18v5.334h-1.334V14Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </template>
+      <p v-else class="simple__name fr-text--lg">
+        {{ groupName }}
+      </p>
     </div>
     <div
       v-show="isDisclosureOpen"
@@ -190,7 +198,7 @@ const actions = computed(() => {
         <li v-for="(dataset, index) in datasetsProperties" :key="index">
           <div class="dataset__header fr-px-2w fr-py-3v">
             <slot name="datasetTitle">
-              <component :is="headingLevel" class="dataset__title fr-text--md">
+              <component :is="headingLevel" class="dataset__title">
                 {{ dataset.title }}
               </component>
             </slot>
@@ -229,6 +237,7 @@ const actions = computed(() => {
             label-visible
             :aria-invalid="inputErrors.length ? true : undefined"
             :description-id="inputErrors.length ? 'errors-name' : undefined"
+            @keypress.prevent.enter="onValidateEdit"
           />
           <div v-if="inputErrors.length" id="errors-name" class="error">
             <p v-for="(error, index) in inputErrors" :key="index">
@@ -278,32 +287,37 @@ const actions = computed(() => {
 }
 
 .disclosure__header {
-  flex-flow: row wrap;
+  flex-wrap: wrap;
+  gap: 0;
 }
 .disclosure__header {
   --text-spacing: 0;
   border-block-end: 1px solid var(--border-default-grey);
 }
-.disclosure__trigger {
-  /* half padding on right to harmonize with other icons */
-  padding-inline: var(--padding-base) calc(var(--padding-base) / 2);
+.disclosure__trigger,
+.simple__name {
+  padding: calc(var(--padding-base) / 2);
   flex-grow: 1;
+  align-items: start;
   text-align: left;
 }
-.disclosure__name {
+.disclosure__name,
+.simple__name {
   flex: 1 1 auto;
+  align-self: center;
   font-weight: 500;
 }
 .disclosure__btn,
 .dataset__actions :where(button, :deep(button)) {
   block-size: var(--icon-size);
   inline-size: var(--icon-size);
+  box-shadow: inset 0 0 0 1px var(--blue-cumulus-sun-368-moon-732);
 }
 .disclosure__btn {
   flex: 0 0 var(--icon-size);
   display: grid;
   place-content: center;
-  border: 1px solid grey;
+  /* border: 1px solid var(--blue-cumulus-sun-368-moon-732); */
   border-radius: 40px;
 }
 .disclosure__marker svg {
@@ -314,30 +328,39 @@ const actions = computed(() => {
 .dataset__actions {
   margin-inline-start: auto;
 }
+.disclosure__actions {
+  padding-block: calc(var(--padding-base) / 2);
+  padding-inline: calc(var(--padding-base) / 2) var(--padding-base);
+}
 .disclosure__content.isVisible {
   padding-block: var(--padding-base);
+}
+.disclosure__content ul > li + li {
+  margin-block-start: var(--padding-base);
+}
+.disclosure__content ul > li {
+  background: var(--background-default-grey-hover);
 }
 .disclosure__trigger[aria-expanded='true'] .disclosure__marker > svg {
   rotate: 180deg;
 }
 
 /* DATASETS */
-.dataset__title {
-  padding: 0;
-  margin: 0;
-}
 .dataset__header {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  background: var(--background-default-grey-hover);
+  background: var(--background-action-low-blue-france);
+}
+.dataset__title {
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.1rem;
 }
 
-.dataset__title {
-  font-weight: 500;
-}
 .fr-tag {
   color: var(--purple-glycine-sun-319-moon-630, #6e445a);
   background-color: var(--purple-glycine-950-100, #fee7fc);
@@ -345,12 +368,18 @@ const actions = computed(() => {
 }
 .dataset__content {
   padding-block: var(--padding-base) calc(var(--padding-base) / 2);
+  padding-inline: calc(var(--padding-base) / 2);
 }
 
 /* DESKTOP styles */
-@container disclosure (width >= 26rem) {
+@container disclosure (width >= 42rem) {
   .disclosure__content.isVisible {
     padding-inline: var(--padding-base);
+  }
+  .disclosure__trigger {
+    /* half padding on right to harmonize with other icons */
+    padding-inline: var(--padding-base) calc(var(--padding-base) / 2);
+    padding-block: calc(var(--padding-base) * 0.75);
   }
   .disclosure__actions {
     gap: var(--padding-base);

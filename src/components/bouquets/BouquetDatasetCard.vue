@@ -46,3 +46,10 @@ const datasetPropertiesRef = toRef(props, 'datasetProperties')
     </div>
   </DsfrAlert>
 </template>
+
+<style scoped>
+/* fix overflow from "mis à jour" text in DatasetCard */
+:deep(h4 + div) {
+  flex-wrap: wrap;
+}
+</style>
