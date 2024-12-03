@@ -128,13 +128,15 @@ defineExpose({
     </div>
   </div>
   <div class="indicators-list-container fr-container fr-mb-4w border-top">
-    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w fr-mt-2w">
-      <IndicatorCard
+    <ul class="fr-grid-row fr-grid-row--gutters fr-mb-1w fr-mt-2w" role="list">
+      <li
         v-for="indicator in indicators"
         :key="indicator.id"
-        :indicator="indicator"
-      />
-    </div>
+        class="fr-col-md-6 fr-col-md"
+      >
+        <IndicatorCard :indicator="indicator" />
+      </li>
+    </ul>
   </div>
   <DsfrPagination
     v-if="pagination.length"
