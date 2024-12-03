@@ -12,6 +12,7 @@ interface DatasetRow {
   description?: string
   last_update?: string
   organization?: string
+  group?: string
 }
 
 export const exportDatasets = async (
@@ -26,7 +27,8 @@ export const exportDatasets = async (
     'title',
     'description',
     'last_update',
-    'organization'
+    'organization',
+    'group'
   ]
   const rows = await Promise.all(
     datasets.map(async (datasetProperties) => {
@@ -34,7 +36,8 @@ export const exportDatasets = async (
         label: datasetProperties.title,
         label_description: datasetProperties.purpose,
         availability: datasetProperties.availability,
-        uri: datasetProperties.uri
+        uri: datasetProperties.uri,
+        group: datasetProperties.group
       }
       const remoteDataset =
         datasetProperties.id != null
