@@ -149,11 +149,13 @@ watch(
       </div>
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
-      <DsfrSearchBar
+      <SearchComponent
+        id="search-bouquet"
         v-model="selectedQuery"
-        :label="`Rechercher un ${topicsName}`"
-        button-text="Rechercher"
-        placeholder=""
+        :is-filter="true"
+        :search-label="`Filtrer les ${topicsName}s`"
+        :label="`Filtrer les ${topicsName}s`"
+        :search-endpoint="router.resolve({ name: 'bouquets' }).href"
         @update:model-value="search"
       />
     </div>

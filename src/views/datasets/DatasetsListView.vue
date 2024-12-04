@@ -255,11 +255,13 @@ onMounted(() => {
     </p>
 
     <div class="fr-col-md-12 fr-mb-2w">
-      <DsfrSearchBar
+      <SearchComponent
+        id="search-bouquet"
         v-model="localQuery"
-        label="Rechercher des données"
-        button-text="Rechercher"
-        placeholder=""
+        :is-filter="true"
+        search-label="Filtrer des données"
+        label="Filtrer des données"
+        :search-endpoint="router.resolve({ name: 'datasets' }).href"
         @update:model-value="search()"
         @search="$emit('search', $event)"
       />
