@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { DatasetProperties } from '@/model/topic'
 import { isAvailable } from '@/utils/bouquet'
-import { noGroup } from '@/utils/bouquetGroups'
+import { NO_GROUP } from '@/utils/bouquetGroups'
 import { getRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
@@ -26,7 +26,7 @@ const props = defineProps({
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
 
-const isDisclosure = computed(() => props.groupName !== noGroup)
+const isDisclosure = computed(() => props.groupName !== NO_GROUP)
 
 const emit = defineEmits<{
   (e: 'editGroupName', oldGroupeName: string, newGroupeName: string): void
@@ -172,13 +172,13 @@ const actions = computed(() => {
               width="32"
               height="32"
               fill="none"
-              viewBox="0 0 32 32"
               aria-hidden="true"
+              viewBox="0 0 32 32"
             >
               <path
                 fill="#3458A2"
                 fill-rule="evenodd"
-                d="M12.665 10.667V9.334h6.667v1.333h3.333V12h-1.333v10a.667.667 0 0 1-.667.667h-9.333a.667.667 0 0 1-.667-.667V12H9.332v-1.333h3.333ZM12 12v9.334h8V12h-8Z_na2h1.333v5.334H14V14Zm2.666 0H18v5.334h-1.334V14Z"
+                d="M12.665 10.667V9.334h6.667v1.333h3.333V12h-1.333v10a.667.667 0 0 1-.667.667h-9.333a.667.667 0 0 1-.667-.667V12H9.332v-1.333h3.333ZM12 12v9.334h8V12h-8Z"
                 clip-rule="evenodd"
               />
             </svg>

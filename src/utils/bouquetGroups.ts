@@ -2,65 +2,46 @@ import { type ComputedRef, type Ref } from 'vue'
 
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
-export const noGroup = 'Sans regroupement'
+export const NO_GROUP = 'Sans regroupement'
 
 export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
-  groupedDatasets: ComputedRef
+  groupedDatasets: ComputedRef<DatasetsGroups>
   getDatasetIndex: (group: string, indexInGroup: number) => number
   removeDatasetFromGroup: (group: string, index: number) => DatasetProperties[]
-  groupAlreadyExists: (groupName: string) => boolean
+  groupExists: (groupName: string) => boolean
   renameGroup: (oldGroupName: string, newGroupName: string) => void
   deleteGroup: (groupName: string) => DatasetProperties[]
 } {
   const groupedDatasets = computed(() => {
-    const datasetsGroups: Ref<DatasetsGroups> = ref(new Map())
-    // create the key for empty group
-
-    datasetsGroups.value.set(noGroup, [])
-
-    // Loop through the datasets and group them by the 'group' property
-    datasetsProperties.value.forEach((dataset) => {
-      if (dataset.group) {
-        if (!datasetsGroups.value.has(dataset.group)) {
-          // create the key for new a group with an empty array
-          datasetsGroups.value.set(dataset.group, [])
-        }
-        // push the dataset to the array of its group
-        datasetsGroups.value.get(dataset.group)?.push(dataset)
-      } else {
-        // push datasets without group to the empty key
-        datasetsGroups.value.get(noGroup)?.push(dataset)
+    // Group datasets by their group property
+    const groupedMap = datasetsProperties.value.reduce((acc, dataset) => {
+      const groupKey = dataset.group || NO_GROUP
+      if (!acc.has(groupKey)) {
+        acc.set(groupKey, [])
       }
-    })
+      acc.get(groupKey)?.push(dataset)
+      return acc
+    }, new Map<string, DatasetProperties[]>())
 
-    // get all entries within nogroup if any exists
-    const noGroupEntries: DatasetProperties[] | undefined =
-      datasetsGroups.value.has(noGroup)
-        ? datasetsGroups.value.get(noGroup)
-        : undefined
+    // Extract and remove NO_GROUP entries
+    const noGroupEntries = groupedMap.get(NO_GROUP)
+    groupedMap.delete(NO_GROUP)
 
-    // create a new Map without nogroup
-    const filteredGroups: DatasetsGroups = new Map(
-      [...datasetsGroups.value].filter(([key]) => key !== noGroup)
+    // Sort groups alphabetically
+    const sortedEntries = Array.from(groupedMap.entries()).sort(
+      ([keyA], [keyB]) => keyA.localeCompare(keyB)
     )
 
-    // Alphabetically sort the keys with nogroup at the end
-    const sortedEntries = Array.from(filteredGroups.entries()).sort(
-      ([keyA], [keyB]) => {
-        return keyA.toString().localeCompare(keyB.toString())
-      }
-    )
-
-    // Add the nogroup to the end of the sorted array
-    if (noGroupEntries) {
-      sortedEntries.push([noGroup, noGroupEntries])
+    // Add noGroup entries at the end if they exist
+    if (noGroupEntries?.length) {
+      sortedEntries.push([NO_GROUP, noGroupEntries])
     }
 
     return new Map(sortedEntries)
   })
   const getDatasetIndex = (group: string, indexInGroup: number) => {
     // get all datasets from group
-    const groupItems = groupedDatasets.value.get(group ?? noGroup)
+    const groupItems = groupedDatasets.value.get(group ?? NO_GROUP)
 
     if (groupItems) {
       // find the right dataset index (to handle duplicates)
@@ -85,16 +66,15 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     return datasetsProperties.value
   }
 
-  const groupAlreadyExists = (groupName: string) => {
+  const groupExists = (groupName: string) => {
     return groupedDatasets.value.has(groupName)
   }
 
   const renameGroup = (oldGroupName: string, newGroupName: string) => {
-    const errors: Ref<string[]> = ref([])
     // get all datasets from the old group in groupedDatasets
-    const oldGroupItems = groupedDatasets.value.get(oldGroupName ?? null)
+    const oldGroupItems = groupedDatasets.value.get(oldGroupName)
 
-    if (!groupAlreadyExists(newGroupName) && oldGroupItems) {
+    if (!groupExists(newGroupName) && oldGroupItems) {
       // find the datasets with the old group property in datasetsProperties
       const matchingDatasets = datasetsProperties.value.filter((dataset) => {
         return oldGroupItems.some(
@@ -108,35 +88,19 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
         matchingDatasets.forEach((dataset) => (dataset.group = newGroupName))
       }
     }
-    return errors
   }
 
   const deleteGroup = (groupName: string) => {
-    // get all datasets from the old group in groupedDatasets
-    const groupItems = groupedDatasets.value.get(groupName ?? null)
-
-    if (groupItems) {
-      // exclude the items of the group to delete from datasetsProperties
-      const updatedDatasetsProperties = datasetsProperties.value.filter(
-        (dataset) => {
-          return groupItems.find(
-            (groupItem) =>
-              groupItem.title !== dataset.title &&
-              groupItem.group !== dataset.group
-          )
-        }
-      )
-      return updatedDatasetsProperties
-    }
-
-    return datasetsProperties.value
+    return datasetsProperties.value.filter(
+      (dataset) => dataset.group !== groupName
+    )
   }
 
   return {
     groupedDatasets,
     getDatasetIndex,
     removeDatasetFromGroup,
-    groupAlreadyExists,
+    groupExists,
     renameGroup,
     deleteGroup
   }
