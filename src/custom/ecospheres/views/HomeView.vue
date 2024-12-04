@@ -4,7 +4,7 @@ import type { ComputedRef } from 'vue'
 import { computed, onMounted } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
-import BouquetCardHome from '@/components/bouquets/BouquetCardHome.vue'
+import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import config from '@/config'
 import HomeFaq from '@/custom/ecospheres/components/HomeFaq.vue'
 import type { Topic } from '@/model/topic'
@@ -187,13 +187,13 @@ const dropdown = config.website.header_search.dropdown
     </section>
     <section class="fr-container fr-py-12v">
       <h2>Les bouquets à découvrir</h2>
-      <ul class="fr-grid-row fr-grid-row--gutters" role="list">
+      <ul class="fr-grid-row fr-grid-row--gutters fr-mb-2w" role="list">
         <li
           v-for="topic in lastTopics"
           :key="topic.id"
           class="fr-col-12 fr-col-xl-4"
         >
-          <BouquetCardHome :bouquet="topic" />
+          <BouquetCard :bouquet="topic" :hide-description="true" />
         </li>
       </ul>
       <p class="fr-m-0">
