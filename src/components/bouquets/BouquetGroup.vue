@@ -27,6 +27,9 @@ const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
 
 const isDisclosure = computed(() => props.groupName !== NO_GROUP)
+const isNoGroupAlone = computed(() => {
+  return props.allGroups.size === 1 && props.allGroups.has(NO_GROUP)
+})
 
 const emit = defineEmits<{
   (e: 'editGroupName', oldGroupeName: string, newGroupeName: string): void
@@ -114,7 +117,7 @@ const actions = computed(() => {
 
 <template>
   <div class="disclosure">
-    <div class="disclosure__header">
+    <div v-if="!isNoGroupAlone" class="disclosure__header">
       <template v-if="isDisclosure">
         <button
           class="disclosure__trigger"
