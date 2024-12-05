@@ -55,7 +55,7 @@ const handleRemoveDataset = (group: string, index: number) => {
 }
 
 const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
-  renameGroup(oldGroupName, newGroupName)
+  datasetsProperties.value = renameGroup(oldGroupName, newGroupName)
   emits('updateDatasets')
 }
 

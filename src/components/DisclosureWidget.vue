@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetProperties } from '@/model/topic'
+import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 import { isAvailable } from '@/utils/bouquet'
 import { NO_GROUP } from '@/utils/bouquetGroups'
 import { getRandomId } from '@gouvminint/vue-dsfr'
@@ -10,7 +10,7 @@ const props = defineProps({
     required: true
   },
   allGroups: {
-    type: Object as () => Map<string, DatasetProperties>,
+    type: Object as () => DatasetsGroups,
     required: true
   },
   datasetsProperties: {

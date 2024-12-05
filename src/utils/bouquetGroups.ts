@@ -9,7 +9,10 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   getDatasetIndex: (group: string, indexInGroup: number) => number
   removeDatasetFromGroup: (group: string, index: number) => DatasetProperties[]
   groupExists: (groupName: string) => boolean
-  renameGroup: (oldGroupName: string, newGroupName: string) => void
+  renameGroup: (
+    oldGroupName: string,
+    newGroupName: string
+  ) => DatasetProperties[]
   deleteGroup: (groupName: string) => DatasetProperties[]
 } {
   const groupedDatasets = computed(() => {
@@ -75,19 +78,25 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     const oldGroupItems = groupedDatasets.value.get(oldGroupName)
 
     if (!groupExists(newGroupName) && oldGroupItems) {
-      // find the datasets with the old group property in datasetsProperties
-      const matchingDatasets = datasetsProperties.value.filter((dataset) => {
-        return oldGroupItems.some(
+      // Return a new array with updated group names for matching datasets
+      return datasetsProperties.value.map((dataset) => {
+        const isInOldGroup = oldGroupItems.some(
           (groupItem) =>
             groupItem.title === dataset.title &&
             groupItem.group === dataset.group
         )
+
+        if (isInOldGroup) {
+          return {
+            ...dataset,
+            group: newGroupName
+          }
+        }
+        return dataset
       })
-      if (matchingDatasets) {
-        // update the group property to the new group
-        matchingDatasets.forEach((dataset) => (dataset.group = newGroupName))
-      }
     }
+
+    return datasetsProperties.value
   }
 
   const deleteGroup = (groupName: string) => {
