@@ -46,7 +46,7 @@ onMounted(() => {
         :key="org.id"
         class="fr-col-12 fr-col-lg-4"
       >
-        <OrganizationCard :organization="org" />
+        <OrganizationCard :organization="org" heading-level="h2" />
       </li>
     </ul>
   </GenericContainer>

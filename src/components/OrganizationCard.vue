@@ -5,6 +5,10 @@ const props = defineProps({
   organization: {
     type: Object,
     required: true
+  },
+  headingLevel: {
+    type: String as () => 'h2' | 'h3' | 'h4' | 'h5',
+    required: true
   }
 })
 
@@ -33,13 +37,14 @@ const isPublicService = (): boolean =>
           >
             <img
               :src="organization.logo"
+              alt=""
               loading="lazy"
               class="fr-responsive-img"
             />
           </div>
         </div>
         <div class="fr-col fr-px-3v">
-          <h4 class="fr-title-v2__title">
+          <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
             <VIcon
               v-if="isPublicService()"
               name="ri-bank-line"
@@ -51,7 +56,7 @@ const isPublicService = (): boolean =>
               name="ri-checkbox-circle-line"
               class="fr-ml-1v badge"
             />
-          </h4>
+          </component>
         </div>
       </div>
 
