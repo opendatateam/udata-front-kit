@@ -99,6 +99,9 @@ website:
       to: /bouquets
     - text: Organisations
       to: /organizations
+    # FIXME: remove before merge for draft version
+    - text: Indicateurs
+      to: /indicators
     - text: A propos
       to: /about
   router:
@@ -232,6 +235,31 @@ themes:
       - name: Les services publics exemplaires
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
+
+indicators:
+  organization_id: 673dafb02cf54cfb2ccbd118
+  global_tag_prefix: ecospheres-indicateurs
+  filters:
+    - name: Thématique
+      id: theme
+      color: green-menthe
+      values:
+        - id: mieux-se-deplacer
+          name: Mieux se déplacer
+        - id: autre
+          name: Autre
+        - id: mieux-produire
+          name: Mieux produire
+    - name: Enjeu
+      id: enjeu
+      color: blue-ecume
+      values:
+        - id: sante
+          name: Santé
+        - id: attenuation
+          name: Atténuation
+        - id: biodiversite
+          name: Biodiversité
 
 organizations:
   - ademe
