@@ -3,7 +3,6 @@ import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import Tile from '@/components/Tile.vue'
 import config from '@/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import type { Organization } from '@datagouv/components'
@@ -47,13 +46,7 @@ onMounted(() => {
         :key="org.id"
         class="fr-col-12 fr-col-lg-4"
       >
-        <Tile
-          :link="`/organizations/${org.slug}`"
-          :title="org.name"
-          :description="org.description"
-          :img="org.logo"
-          :is-markdown="true"
-        />
+        <OrganizationCard :organization="org" heading-level="h2" />
       </li>
     </ul>
   </GenericContainer>
