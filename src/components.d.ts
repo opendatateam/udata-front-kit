@@ -21,7 +21,7 @@ declare module 'vue' {
     DatasetPropertiesFields: typeof import('./components/forms/dataset/DatasetPropertiesFields.vue')['default']
     DatasetPropertiesTextFields: typeof import('./components/forms/dataset/DatasetPropertiesTextFields.vue')['default']
     DisclosureContent: typeof import('./components/DisclosureContent.vue')['default']
-    DisclosureWidget: typeof import('./components/DisclosureWidget.vue')['default']
+    DisclosureWidget: typeof import('./components/bouquets/BouquetGroup.vue')['default']
     DiscussionsList: typeof import('./components/DiscussionsList.vue')['default']
     DsfrAlert: typeof import('@gouvminint/vue-dsfr')['DsfrAlert']
     DsfrBadge: typeof import('@gouvminint/vue-dsfr')['DsfrBadge']

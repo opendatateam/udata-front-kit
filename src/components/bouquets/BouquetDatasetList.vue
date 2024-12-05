@@ -15,8 +15,8 @@ import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 
 import { useGroups } from '@/utils/bouquetGroups'
-import DisclosureWidget from '../DisclosureWidget.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
+import BouquetGroup from './BouquetGroup.vue'
 
 const datasetsProperties = defineModel({
   type: Array<DatasetProperties>,
@@ -135,7 +135,7 @@ onMounted(() => {
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
         <li v-for="[group, datasets] in groupedDatasets" :key="group">
-          <DisclosureWidget
+          <BouquetGroup
             v-if="datasets.length"
             :group-name="group"
             :all-groups="groupedDatasets"
@@ -188,7 +188,7 @@ onMounted(() => {
                 >
               </div>
             </template>
-          </DisclosureWidget>
+          </BouquetGroup>
         </li>
       </ul>
     </div>
