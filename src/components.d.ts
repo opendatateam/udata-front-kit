@@ -28,6 +28,7 @@ declare module 'vue' {
     DsfrButton: typeof import('@gouvminint/vue-dsfr')['DsfrButton']
     DsfrButtonGroup: typeof import('@gouvminint/vue-dsfr')['DsfrButtonGroup']
     DsfrCard: typeof import('@gouvminint/vue-dsfr')['DsfrCard']
+    DsfrCheckbox: typeof import('@gouvminint/vue-dsfr')['DsfrCheckbox']
     DsfrFooter: typeof import('@gouvminint/vue-dsfr')['DsfrFooter']
     DsfrHeaderMenuLink: typeof import('./components/header/DsfrHeaderMenuLink.vue')['default']
     DsfrHeaderMenuLinks: typeof import('@gouvminint/vue-dsfr')['DsfrHeaderMenuLinks']
@@ -67,5 +68,6 @@ declare module 'vue' {
     SubSectionTiles: typeof import('./components/sections/SubSectionTiles.vue')['default']
     Tile: typeof import('./components/Tile.vue')['default']
     TooltipWrapper: typeof import('./components/TooltipWrapper.vue')['default']
+    VIcon: typeof import('@gouvminint/vue-dsfr')['VIcon']
   }
 }

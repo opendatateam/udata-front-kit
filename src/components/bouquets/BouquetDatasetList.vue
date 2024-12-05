@@ -128,7 +128,7 @@ onMounted(() => {
     </div>
   </div>
   <!-- Actual datasets list -->
-  <div v-if="datasetsProperties.length < 1" class="no-dataset">
+  <div v-if="datasetsProperties.length < 1" class="no-dataset fr-mt-2w">
     <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
   <template v-else>
