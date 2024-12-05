@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
 import { useDebounceFn } from '@vueuse/core'
-import { defineModel, ref, type Ref } from 'vue'
+import { defineModel, ref } from 'vue'
 import 'vue-multiselect/dist/vue-multiselect.css'
 
 import NewMultiselect from '@vueform/multiselect'
@@ -23,7 +23,6 @@ const props = defineProps({
 })
 
 const isLoading = ref(false)
-const options: Ref<DatasetV2[]> = ref([])
 
 const alreadySelected = (id: string): boolean => {
   for (const alreadySelectedDataset of props.alreadySelectedDatasets) {
@@ -35,17 +34,20 @@ const alreadySelected = (id: string): boolean => {
 const search = useDebounceFn(async (query: string) => {
   isLoading.value = true
   if (!query) {
-    options.value = []
     isLoading.value = false
     return
   }
-  const datasets = (
-    await new SearchAPI().search(query, null, 1, {
-      page_size: 10
-    })
-  ).data
-  options.value = datasets
-  isLoading.value = false
+  try {
+    return (
+      await new SearchAPI().search(query, null, 1, {
+        page_size: 10
+      })
+    ).data
+  } catch (error) {
+    console.error('Search error', error)
+  } finally {
+    isLoading.value = false
+  }
 }, 400)
 
 const clear = () => {
@@ -59,54 +61,6 @@ const clear = () => {
       >Rechercher un jeu de données dans data.gouv.fr</span
     >
   </label>
-  <!-- <Multiselect
-    id="bouquet-select-dataset"
-    ref="multiselect"
-    v-model="selectedDataset"
-    :options="options"
-    label="title"
-    track-by="id"
-    placeholder=""
-    select-label="Entrée pour sélectionner"
-    :multiple="false"
-    :searchable="true"
-    :internal-search="false"
-    :loading="isLoading"
-    :clear-on-select="true"
-    :close-on-select="true"
-    :show-no-results="false"
-    :hide-selected="true"
-    @search-change="search"
-  >
-    <template #caret>
-      <div
-        v-if="selectedDataset"
-        class="multiselect__clear"
-        @mousedown.prevent.stop="clear"
-      ></div>
-    </template>
-    <template #singleLabel="slotProps">
-      <DatasetCardForSelect
-        :dataset="slotProps.option"
-        :already-selected="alreadySelected(slotProps.option.id)"
-        badge-position="absolute"
-      />
-    </template>
-    <template #option="slotProps">
-      <DatasetCardForSelect
-        :dataset="slotProps.option"
-        :already-selected="alreadySelected(slotProps.option.id)"
-        badge-position="relative"
-      />
-    </template>
-    <template #noOptions> Précisez ou élargissez votre recherche </template>
-  </Multiselect> -->
-
-  <!--
-  almost working
-  'options.value is not a function' from multiselect
-  loader never disappears even when all else works
-   -->
   <NewMultiselect
     id="input-regroupement"
     ref="newSelect"
@@ -119,7 +73,7 @@ const clear = () => {
     :min-chars="3"
     :clear-on-search="true"
     :delay="0"
-    :options="options"
+    :options="search"
     :resolve-on-load="false"
     :searchable="true"
     :limit="5"
@@ -127,7 +81,6 @@ const clear = () => {
     no-results-text="Aucun regroupement existant"
     :clear-on-blur="false"
     placeholder=""
-    @search-change="search"
   >
     <template #singlelabel="{ value }">
       <div class="multiselect-single-label fr-py-2w">
@@ -144,6 +97,17 @@ const clear = () => {
         :already-selected="alreadySelected(option.id)"
         badge-position="relative"
       />
+    </template>
+    <template #clear>
+      <button
+        class="multiselect-clear"
+        @click="clear"
+        @keydown.enter="clear"
+        @keydown.space="clear"
+      >
+        <span class="fr-sr-only">Supprimer la sélection</span>
+        <span aria-hidden class="multiselect-clear-icon"></span>
+      </button>
     </template>
     <template #nooptions> Précisez ou élargissez votre recherche </template>
   </NewMultiselect>
