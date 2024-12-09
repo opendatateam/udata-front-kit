@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DsfrButtonProps } from '@gouvminint/vue-dsfr'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -19,6 +20,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { cloneTopic } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
+import { useRemixIconProp } from '@/utils/icon'
 
 const props = defineProps({
   isCreate: {
@@ -264,7 +266,7 @@ const onSubmit = async () => {
             secondary
             class="fr-mb-1w"
             label="Supprimer"
-            icon="ri-delete-bin-line"
+            :icon="useRemixIconProp<DsfrButtonProps>('delete-bin-line')"
             @click.prevent="destroy"
           />
           <DsfrButton
