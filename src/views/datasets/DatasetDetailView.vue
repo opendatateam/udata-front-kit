@@ -10,6 +10,7 @@ import {
   Well,
   type License
 } from '@datagouv/components'
+import type { DsfrButtonProps } from '@gouvminint/vue-dsfr'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -31,6 +32,7 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
+import { useRemixIconProp } from '@/utils/icon'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -273,7 +275,7 @@ watch(
             class="fr-mt-2w"
             size="md"
             :label="`Ajouter à un ${topicsName}`"
-            icon="ri-file-add-line"
+            :icon="useRemixIconProp<DsfrButtonProps>('file-add-line')"
             @click="showAddToBouquetModal = true"
           />
           <DatasetAddToBouquetModal
@@ -366,7 +368,7 @@ watch(
             <div class="fr-col-12 fr-col-lg-4 text-align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
-                icon="ri-external-link-line"
+                :icon="useRemixIconProp<DsfrButtonProps>('external-link-line')"
                 size="sm"
                 :icon-right="true"
                 @click="openDataGouvDiscussions"

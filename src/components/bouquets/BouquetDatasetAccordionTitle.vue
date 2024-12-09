@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DatasetProperties } from '@/model/topic'
 import { isAvailable } from '@/utils/bouquet'
+import { useRemixIconData } from '@/utils/icon'
 
 defineProps({
   datasetProperties: {
@@ -17,7 +18,7 @@ defineProps({
 <template>
   <div class="title-container">
     <div>
-      <VIcon v-if="isEdit" name="ic:baseline-drag-indicator" />
+      <VIcon v-if="isEdit" :icon="useRemixIconData('draggable')" />
       <span :class="{ 'fr-ml-2w': isEdit }">{{ datasetProperties.title }}</span>
     </div>
     <DsfrTag

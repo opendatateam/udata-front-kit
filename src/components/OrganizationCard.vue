@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { stripFromMarkdown } from '@/utils'
+import { useRemixIconData } from '@/utils/icon'
 
 const props = defineProps({
   organization: {
@@ -47,13 +48,13 @@ const isPublicService = (): boolean =>
           <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
             <VIcon
               v-if="isPublicService()"
-              name="ri-bank-line"
+              :icon="useRemixIconData('bank-line')"
               class="fr-mr-1v badge"
             />
             {{ organization.name }}
             <VIcon
               v-if="isCertified()"
-              name="ri-checkbox-circle-line"
+              :icon="useRemixIconData('checkbox-circle-line')"
               class="fr-ml-1v badge"
             />
           </component>

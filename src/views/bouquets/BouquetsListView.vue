@@ -15,6 +15,7 @@ import {
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
+import { useRemixIconData } from '@/utils/icon'
 
 const { topicsSlug, topicsName } = useTopicsConf()
 
@@ -143,7 +144,7 @@ watch(
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-          <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
+          <VIcon :icon="useRemixIconData('add-circle-line')" class="fr-mr-1v" />
           Ajouter un {{ topicsName }}
         </router-link>
       </div>
