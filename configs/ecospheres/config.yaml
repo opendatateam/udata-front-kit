@@ -233,5 +233,4 @@ themes:
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
 
-# FIXME: use main branch link when available
-organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/feat/org-api/dist/organizations-demo.json
+organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
