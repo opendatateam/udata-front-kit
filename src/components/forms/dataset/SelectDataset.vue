@@ -130,4 +130,7 @@ const clear = () => {
   position: relative;
   margin-inline-end: auto;
 }
+.multiselect:has(.fr-badge.absolute) {
+  margin-top: 1.5rem;
+}
 </style>

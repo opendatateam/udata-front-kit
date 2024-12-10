@@ -165,6 +165,7 @@ defineExpose({ addDataset, editDataset })
         align="right"
         :buttons="modalActions"
         inline-layout-when="large"
+        class="fr-mt-4w"
       />
     </slot>
   </DsfrModal>

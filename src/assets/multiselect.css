@@ -51,9 +51,11 @@
     transform: rotate(-45deg);
   }
 }
-.multiselect,
-.multiselect-wrapper {
+.multiselect {
   --ms-bg: var(--background-contrast-grey);
+}
+.multiselect:has(.multiselect-single-label .card) {
+  --ms-bg: var(--background-default-grey);
 }
 .multiselect-wrapper {
   --ms-radius: 0.25rem 0.25rem 0 0;
