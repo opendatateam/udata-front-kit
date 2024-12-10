@@ -31,7 +31,7 @@ const datasetPropertiesRef = toRef(props, 'datasetProperties')
       params: { did: datasetContent.id }
     }"
     :show-description="false"
-    class="fr-m-0"
+    class="dataset-card fr-m-0"
   />
   <DsfrAlert
     v-if="datasetProperties.remoteDeleted"
@@ -51,5 +51,8 @@ const datasetPropertiesRef = toRef(props, 'datasetProperties')
 /* fix overflow from "mis à jour" text in DatasetCard */
 :deep(h4 + div) {
   flex-wrap: wrap;
+}
+.dataset-card {
+  background-color: var(--background-default-grey, #fff);
 }
 </style>

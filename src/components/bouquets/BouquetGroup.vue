@@ -320,8 +320,10 @@ const actions = computed(() => {
   flex: 0 0 var(--icon-size);
   display: grid;
   place-content: center;
-  /* border: 1px solid var(--blue-cumulus-sun-368-moon-732); */
   border-radius: 40px;
+}
+.disclosure__marker {
+  box-shadow: none;
 }
 .disclosure__marker svg {
   rotate: 0deg;
@@ -342,7 +344,7 @@ const actions = computed(() => {
   margin-block-start: var(--padding-base);
 }
 .disclosure__content ul > li {
-  background: var(--background-default-grey-hover);
+  background: var(--background-alt-grey, #f6f6f6);
 }
 .disclosure__trigger[aria-expanded='true'] .disclosure__marker > svg {
   rotate: 180deg;
@@ -355,7 +357,10 @@ const actions = computed(() => {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  background: var(--background-action-low-blue-france);
+  background: var(
+    --light-decisions-background-background-alt-blue-france,
+    #f5f5fe
+  );
 }
 .dataset__title {
   padding: 0;
