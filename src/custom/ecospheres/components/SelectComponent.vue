@@ -5,51 +5,33 @@ type SelectOption = {
   name: string
 }
 
-const NoOptionSelected = 'default'
+const selectedOption = defineModel({
+  type: String as () => string | null,
+  default: null
+})
 
 defineProps({
-  modelValue: {
-    type: String as PropType<string | null>,
-    default: null
-  },
   options: {
     type: Object as PropType<SelectOption[]>,
+    required: true
+  },
+  id: {
+    type: String,
     required: true
   },
   defaultOption: {
     type: String,
     default: 'Tous'
-  },
-  id: {
-    type: String,
-    required: true
   }
 })
-
-const emit = defineEmits<{
-  'update:modelValue': [value: string | null]
-}>()
-
-const handleChange = (event: Event) => {
-  const value = (event.target as HTMLInputElement)?.value
-  emit('update:modelValue', value === NoOptionSelected ? null : value)
-}
 </script>
 
 <template>
-  <select :id="id" class="fr-select" @change="handleChange">
-    <option
-      :value="NoOptionSelected"
-      :selected="modelValue === NoOptionSelected"
-    >
+  <select :id="id" v-model="selectedOption" class="fr-select">
+    <option :value="null">
       {{ defaultOption }}
     </option>
-    <option
-      v-for="option in options"
-      :key="option.id"
-      :value="option.id"
-      :selected="option.id === modelValue"
-    >
+    <option v-for="option in options" :key="option.id" :value="option.id">
       {{ option.name }}
     </option>
   </select>
