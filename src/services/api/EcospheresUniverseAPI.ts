@@ -8,7 +8,7 @@ import type {
 import { toastHttpError } from '@/utils/error'
 import axios from 'axios'
 
-export default class CustomOrganizationsAPI {
+export default class EcospheresUniverseAPI {
   baseUrl: string
   toasted: boolean
 
