@@ -57,12 +57,27 @@ const search = useDebounceFn((query) => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbList" />
   </div>
-  <GenericContainer>
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-    >
-      <h1 class="fr-col-auto fr-mb-2v">Indicateurs</h1>
+  <div class="fr-container datagouv-components fr-my-2w">
+    <h1>Indicateurs territoriaux</h1>
+  </div>
+  <section class="fr-container--fluid hero datagouv-components">
+    <div class="fr-container fr-py-12v">
+      <h2>Les indicateurs territoriaux, qu’est-ce que c’est&nbsp;?</h2>
+      <p>
+        Les indicateurs territoriaux sont des outils statistiques et analytiques
+        qui permettent d’évaluer et de mesurer divers aspects d’un territoire
+        donné. Ces indicateurs aident à comprendre les dynamiques locales, à
+        identifier des problématiques spécifiques, et à orienter les décisions
+        publiques et les politiques de développement.
+      </p>
+      <p class="fr-mb-0">
+        Ils sont essentiels pour un diagnostic territorial et pour le suivi des
+        évolutions dans le temps.
+      </p>
     </div>
+  </section>
+  <GenericContainer class="fr-mt-4w">
+    <h2>Catalogues d'indicateurs</h2>
     <div class="fr-col-md-12 fr-mb-2w">
       <!-- FIXME: migrate to SearchComponent -->
       <DsfrSearchBar
@@ -102,6 +117,10 @@ const search = useDebounceFn((query) => {
 </template>
 
 <style scoped>
+.hero {
+  background: #f3f3f3;
+}
+
 /* put above header (ground+500) so that multiselect floats above menu */
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);
