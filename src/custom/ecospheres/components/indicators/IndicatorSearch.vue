@@ -70,7 +70,7 @@ watchEffect(() => {
       />
     </div>
     <div class="fr-select-group">
-      <label class="fr-label" for="select-theme">{{
+      <label class="fr-label" for="select-enjeu">{{
         filtersConf.enjeu.name
       }}</label>
       <SelectComponent
