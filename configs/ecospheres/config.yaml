@@ -248,6 +248,7 @@ organizations:
   - atmo-auvergne-rhone-alpes
   - atmo-bourgogne-franche-comte
   - atmo-grand-est
+  - atmo-occitanie
   - atmosud
   - bureau-de-recherches-geologiques-et-minieres
   - centre-scientifique-et-technique-du-batiment
@@ -356,6 +357,7 @@ organizations:
   - ile-de-france-mobilites
   - institut-francais-de-recherche-pour-lexploitation-de-la-mer
   - institut-national-de-l-information-geographique-et-forestiere
+  - institut-national-de-lenvironnement-industriel-et-des-risques
   - irstea
   - jvmalin
   - ligair
@@ -379,6 +381,7 @@ organizations:
   - parc-naturel-regional-du-vercors
   - parcs-nationaux-de-france
   - parcs-naturels-regionaux-de-provence-alpes-cote-dazur
+  - referentiel-national-des-batiments
   - regie-autonome-des-transports-parisiens-ratp
   - reseau-de-transport-delectricite
   - section-cadastre-topographie-de-la-polynesie-francaise
