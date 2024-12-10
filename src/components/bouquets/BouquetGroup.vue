@@ -30,6 +30,23 @@ const isDisclosure = computed(() => props.groupName !== NO_GROUP)
 const isNoGroupAlone = computed(() => {
   return props.allGroups.size === 1 && props.allGroups.has(NO_GROUP)
 })
+const factorsInGroup = computed(() => {
+  const factors = props.allGroups.get(props.groupName)?.length
+
+  let factorsLabel = ''
+  switch (factors) {
+    case 0:
+      factorsLabel = 'Aucun facteur'
+      break
+    case 1:
+      factorsLabel = '1 facteur'
+      break
+    default:
+      factorsLabel = `${factors} facteurs`
+      break
+  }
+  return factorsLabel
+})
 
 const emit = defineEmits<{
   (e: 'editGroupName', oldGroupeName: string, newGroupeName: string): void
@@ -143,7 +160,10 @@ const actions = computed(() => {
             </svg>
           </span>
           <span class="fr-sr-only">ouvrir le regroupement</span>
-          <span class="disclosure__name fr-text--lg">{{ groupName }}</span>
+          <span class="disclosure__name fr-text--lg">
+            {{ groupName }}
+            <DsfrTag class="fr-text--xs" small :label="factorsInGroup" />
+          </span>
         </button>
         <div class="disclosure__actions">
           <button class="disclosure__btn" @click="openModal('edit')">
@@ -190,6 +210,7 @@ const actions = computed(() => {
       </template>
       <p v-else class="simple__name fr-text--lg">
         {{ groupName }}
+        <DsfrTag class="fr-text--xs" small :label="factorsInGroup" />
       </p>
     </div>
     <div
@@ -350,6 +371,19 @@ const actions = computed(() => {
   rotate: 180deg;
 }
 
+.disclosure__header .fr-tag {
+  /* can't use custom properties because of the cumulus theme. */
+  font-weight: 400;
+  vertical-align: baseline;
+  color: #000091;
+  background-color: #e3e3fd;
+}
+.disclosure__content .fr-tag {
+  color: var(--purple-glycine-sun-319-moon-630, #6e445a);
+  background-color: var(--purple-glycine-950-100, #fee7fc);
+  border-radius: 0;
+}
+
 /* DATASETS */
 .dataset__header {
   display: flex;
@@ -369,11 +403,6 @@ const actions = computed(() => {
   font-size: 1.1rem;
 }
 
-.fr-tag {
-  color: var(--purple-glycine-sun-319-moon-630, #6e445a);
-  background-color: var(--purple-glycine-950-100, #fee7fc);
-  border-radius: 0;
-}
 .dataset__content {
   padding-block: var(--padding-base) calc(var(--padding-base) / 2);
   padding-inline: calc(var(--padding-base) / 2);
