@@ -14,7 +14,9 @@ import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { fromMarkdown } from '@/utils/index'
 
+import { fromMarkdown } from '@/utils'
 import { useGroups } from '@/utils/bouquetGroups'
+import { useDebounceFn } from '@vueuse/core'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import BouquetGroup from './BouquetGroup.vue'
 
@@ -87,6 +89,33 @@ const loadDatasetsContent = () => {
   })
 }
 
+// create a copy of the original DatasetProperties
+const originalDatasets = ref<DatasetProperties[]>([])
+const isFiltering = ref(false)
+
+const filterDatasetsProperties = useDebounceFn((value: string) => {
+  isFiltering.value = true
+  // reset filter if no value
+  if (!value) {
+    datasetsProperties.value = [...originalDatasets.value]
+    isFiltering.value = false
+    return
+  }
+  const searchValue = value.toLowerCase()
+  // search the query inside title and description
+  datasetsProperties.value = originalDatasets.value.filter((dataset) => {
+    return (
+      dataset.title.toLowerCase().includes(searchValue) ||
+      (dataset.purpose && dataset.purpose.toLowerCase().includes(searchValue))
+    )
+  })
+}, 600)
+
+// Store original datasets list
+onMounted(() => {
+  originalDatasets.value = [...datasetsProperties.value]
+})
+
 const addDataset = () => {
   modal.value?.addDataset()
 }
@@ -117,6 +146,13 @@ onMounted(() => {
     <h2 class="fr-col-auto fr-m-0">
       Composition du {{ topicsName }} de données
     </h2>
+    <SearchComponent
+      id="filter-factors"
+      :is-filter="true"
+      search-label="Filtrer les facteurs"
+      :label-visible="false"
+      @update:model-value="filterDatasetsProperties"
+    />
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
         v-if="isEdit"
@@ -129,7 +165,8 @@ onMounted(() => {
   </div>
   <!-- Datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset fr-mt-2w">
-    <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
+    <p v-if="isFiltering">Aucun facteur trouvé pour cette recherche.</p>
+    <p v-else>Ce {{ topicsName }} ne contient pas encore de facteur.</p>
   </div>
   <template v-else>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
@@ -218,5 +255,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+:deep(.fr-input-group) {
+  margin-inline-start: auto;
 }
 </style>
