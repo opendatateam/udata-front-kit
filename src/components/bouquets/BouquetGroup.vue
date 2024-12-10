@@ -137,6 +137,7 @@ const actions = computed(() => {
     <div v-if="!isNoGroupAlone" class="disclosure__header">
       <template v-if="isDisclosure">
         <button
+          :id="`${groupName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
           class="disclosure__trigger fr-icon-arrow-right-s-line"
           :aria-expanded="isDisclosureOpen"
           :aria-controls="widgetID"
@@ -167,7 +168,11 @@ const actions = computed(() => {
           />
         </div>
       </template>
-      <p v-else class="simple__name fr-text--lg">
+      <p
+        v-else
+        :id="`${groupName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
+        class="simple__name fr-text--lg"
+      >
         {{ groupName }}
         <DsfrTag class="fr-text--xs" small :label="factorsInGroup" />
       </p>

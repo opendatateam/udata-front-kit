@@ -14,8 +14,8 @@ import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { fromMarkdown } from '@/utils/index'
 
-import { fromMarkdown } from '@/utils'
 import { useGroups } from '@/utils/bouquetGroups'
+import { fromMarkdown } from '@/utils/index'
 import { useDebounceFn } from '@vueuse/core'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import BouquetGroup from './BouquetGroup.vue'
@@ -140,9 +140,7 @@ onMounted(() => {
 
 <template>
   <!-- Header and buttons -->
-  <div
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between"
-  >
+  <div class="list-header fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
       Composition du {{ topicsName }} de données
     </h2>
@@ -169,6 +167,17 @@ onMounted(() => {
     <p v-else>Ce {{ topicsName }} ne contient pas encore de facteur.</p>
   </div>
   <template v-else>
+    <details class="fr-mt-2w">
+      <summary class="fr-py-3v fr-px-2w">Sommaire</summary>
+      <ul role="list">
+        <li v-for="[group] in groupedDatasets" :key="group">
+          <a
+            :href="`#${group.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
+            >{{ group }}</a
+          >
+        </li>
+      </ul>
+    </details>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
         <li v-for="[group, datasets] in groupedDatasets" :key="group">
@@ -251,6 +260,33 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.list-header {
+  gap: 1rem;
+}
+details {
+  border-block: 1px solid var(--border-default-grey, #ddd);
+  color: #000091;
+}
+details[open] {
+  padding-block-end: 0.75rem;
+}
+summary {
+  font-weight: 500;
+  background-color: var(--background-alt-grey, #f6f6f6);
+}
+details li {
+  margin-block-start: 1rem;
+}
+details summary::marker,
+:is(::-webkit-details-marker) {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16' aria-hidden='true' %3E%3Cpath fill='%233458A2' fill-rule='evenodd' d='m8 7.219-3.3 3.3-.942-.943L8 5.333l4.243 4.243-.943.943-3.3-3.3Z' clip-rule='evenodd' /%3E%3C/svg%3E")
+    ' ';
+}
+details[open] summary::marker {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16' aria-hidden='true' transform='rotate(180)' %3E%3Cpath fill='%233458A2' fill-rule='evenodd' d='m8 7.219-3.3 3.3-.942-.943L8 5.333l4.243 4.243-.943.943-3.3-3.3Z' clip-rule='evenodd' /%3E%3C/svg%3E")
+    ' ';
+}
+
 .groups {
   display: flex;
   flex-direction: column;
