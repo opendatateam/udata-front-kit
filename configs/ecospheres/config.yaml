@@ -97,11 +97,11 @@ website:
       to: /datasets
     - text: Bouquets
       to: /bouquets
+    # TODO: enable when ready
+    # - text: Indicateurs
+    #   to: /indicators
     - text: Organisations
       to: /organizations
-    # FIXME: remove before merge for draft version
-    - text: Indicateurs
-      to: /indicators
     - text: A propos
       to: /about
   router:

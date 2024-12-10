@@ -50,14 +50,16 @@ const executeQuery = async (args: typeof props) => {
 const goToPage = (page: number) => {
   router.push({
     name: 'indicators',
-    query: { ...route.query, page: page + 1 }
+    query: { ...route.query, page: page + 1 },
+    hash: '#indicators-list'
   })
 }
 
 const doSort = (value: string | null) => {
   router.push({
     name: 'indicators',
-    query: { ...route.query, sort: value }
+    query: { ...route.query, sort: value },
+    hash: '#indicators-list'
   })
 }
 

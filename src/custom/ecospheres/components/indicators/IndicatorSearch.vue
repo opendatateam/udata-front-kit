@@ -27,7 +27,8 @@ const filtersConf = useFiltersConf()
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
     name: 'indicators',
-    query: { ...route.query, ...data }
+    query: { ...route.query, ...data },
+    hash: '#indicators-list'
   })
 }
 

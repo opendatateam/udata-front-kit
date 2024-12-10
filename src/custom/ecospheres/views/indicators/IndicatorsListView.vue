@@ -48,7 +48,8 @@ const breadcrumbList = computed(() => {
 const search = useDebounceFn((query) => {
   router.push({
     name: 'indicators',
-    query: { ...route.query, q: query }
+    query: { ...route.query, q: query },
+    hash: '#indicators-list'
   })
 }, 600)
 </script>
@@ -76,15 +77,15 @@ const search = useDebounceFn((query) => {
       </p>
     </div>
   </section>
-  <GenericContainer class="fr-mt-4w">
+  <GenericContainer id="indicators-list" class="fr-mt-4w">
     <h2>Catalogues d'indicateurs</h2>
     <div class="fr-col-md-12 fr-mb-2w">
-      <!-- FIXME: migrate to SearchComponent -->
-      <DsfrSearchBar
+      <SearchComponent
+        id="search-bouquet"
         :model-value="props.query"
+        :is-filter="true"
+        search-label="Rechercher un indicateur"
         label="Rechercher un indicateur"
-        button-text="Rechercher"
-        placeholder=""
         @update:model-value="search"
       />
     </div>
