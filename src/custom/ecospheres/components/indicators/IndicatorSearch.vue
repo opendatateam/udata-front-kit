@@ -74,7 +74,7 @@ watchEffect(() => {
         filtersConf.enjeu.name
       }}</label>
       <SelectComponent
-        id="select-theme"
+        id="select-enjeu"
         default-option="Tous les enjeux"
         :options="filtersConf.enjeu.values"
         :model-value="props.enjeu"
