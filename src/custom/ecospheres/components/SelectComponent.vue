@@ -1,5 +1,7 @@
 <!-- a select component with a selectable null value (default) -->
 <script setup lang="ts">
+import { getRandomId } from '@gouvminint/vue-dsfr'
+
 type SelectOption = {
   id: string
   name: string
@@ -15,19 +17,26 @@ defineProps({
     type: Object as PropType<SelectOption[]>,
     required: true
   },
-  id: {
+  label: {
     type: String,
     required: true
+  },
+  labelClass: {
+    type: Array,
+    default: () => ['fr-label']
   },
   defaultOption: {
     type: String,
     default: 'Tous'
   }
 })
+
+const id = getRandomId('select')
 </script>
 
 <template>
-  <select :id="id" v-model="selectedOption" class="fr-select">
+  <label :class="labelClass" :for="id">{{ label }}</label>
+  <select :id="id" v-model="selectedOption" class="fr-select fr-col">
     <option :value="null">
       {{ defaultOption }}
     </option>

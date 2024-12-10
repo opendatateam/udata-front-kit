@@ -76,20 +76,16 @@ defineExpose({
   >
     <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-      <label for="sort-search" class="fr-col-auto fr-text--sm fr-m-0 fr-mr-1w"
-        >Trier par :</label
-      >
-      <div class="fr-col">
-        <SelectComponent
-          id="sort-search"
-          default-option="Pertinence"
-          :options="[
-            { id: '-created', name: 'Les plus récemment créés' },
-            { id: '-last_update', name: 'Les plus récemment modifiés' }
-          ]"
-          @update:model-value="doSort"
-        />
-      </div>
+      <SelectComponent
+        label="Trier par :"
+        default-option="Pertinence"
+        :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
+        :options="[
+          { id: '-created', name: 'Les plus récemment créés' },
+          { id: '-last_update', name: 'Les plus récemment modifiés' }
+        ]"
+        @update:model-value="doSort"
+      />
     </div>
   </div>
   <div

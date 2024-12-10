@@ -58,24 +58,18 @@ watchEffect(() => {
 <template>
   <div className="filterForm">
     <div class="fr-select-group">
-      <label class="fr-label" for="select-theme">{{
-        filtersConf.theme.name
-      }}</label>
       <SelectComponent
-        id="select-theme"
         default-option="Toutes les thématiques"
+        :label="filtersConf.theme.name"
         :options="filtersConf.theme.values"
         :model-value="props.theme"
         @update:model-value="(value) => switchFilter('theme', value)"
       />
     </div>
     <div class="fr-select-group">
-      <label class="fr-label" for="select-enjeu">{{
-        filtersConf.enjeu.name
-      }}</label>
       <SelectComponent
-        id="select-enjeu"
         default-option="Tous les enjeux"
+        :label="filtersConf.enjeu.name"
         :options="filtersConf.enjeu.values"
         :model-value="props.enjeu"
         @update:model-value="(value) => switchFilter('enjeu', value)"
