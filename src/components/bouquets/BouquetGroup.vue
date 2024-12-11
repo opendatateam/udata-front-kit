@@ -36,13 +36,13 @@ const factorsInGroup = computed(() => {
   let factorsLabel = ''
   switch (factors) {
     case 0:
-      factorsLabel = 'Aucun facteur'
+      factorsLabel = 'Aucun donnée'
       break
     case 1:
-      factorsLabel = '1 facteur'
+      factorsLabel = '1 donnée'
       break
     default:
-      factorsLabel = `${factors} facteurs`
+      factorsLabel = `${factors} données`
       break
   }
   return factorsLabel
