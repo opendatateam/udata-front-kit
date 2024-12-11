@@ -3,11 +3,11 @@ import { defineStore } from 'pinia'
 
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
-import EcospheresUniverseAPI from '@/services/api/EcospheresUniverseAPI'
+import CustomOrganizationsAPI from '@/services/api/CustomOrganizationsAPI'
 import OrganizationsAPI from '@/services/api/resources/OrganizationsAPI'
 
 const orgApi = new OrganizationsAPI()
-const esOrgApi = new EcospheresUniverseAPI()
+const customOrgApi = new CustomOrganizationsAPI()
 
 interface LightweightOrganization {
   id: string
@@ -56,7 +56,7 @@ export const useOrganizationStore = defineStore('organization', {
      */
     async loadFromConfigFlat() {
       if (this.flatData.length > 0) return this.flatData
-      this.flatData = await esOrgApi.list()
+      this.flatData = await customOrgApi.list()
       return this.flatData
     },
     /**
