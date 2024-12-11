@@ -162,6 +162,7 @@ website:
       everyone: false
       authorized_users:
         - 57d0546ec751df5cda97bae5
+        - 67472f1af45dab8162c3cb41
 themes:
   - name: Immobilier logistique
     color: '#043574'
