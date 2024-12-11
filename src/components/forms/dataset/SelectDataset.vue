@@ -78,9 +78,9 @@ const clear = () => {
     :searchable="true"
     :limit="5"
     :strict="false"
-    no-results-text="Aucun regroupement existant"
     :clear-on-blur="false"
     placeholder=""
+    no-options-text="Aucun jeu de données trouvé, précisez ou élargissez votre recherche."
   >
     <template #singlelabel="{ value }">
       <div class="multiselect-single-label fr-py-2w">
@@ -109,7 +109,6 @@ const clear = () => {
         <span aria-hidden class="multiselect-clear-icon"></span>
       </button>
     </template>
-    <template #nooptions> Précisez ou élargissez votre recherche </template>
   </NewMultiselect>
 </template>
 
