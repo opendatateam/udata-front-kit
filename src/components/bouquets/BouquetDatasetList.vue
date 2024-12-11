@@ -8,11 +8,11 @@ import DatasetEditModal, {
 import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
-import { fromMarkdown } from '@/utils'
 import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
+import { fromMarkdown } from '@/utils/index'
 
 import { useGroups } from '@/utils/bouquetGroups'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
@@ -127,7 +127,7 @@ onMounted(() => {
       />
     </div>
   </div>
-  <!-- Actual datasets list -->
+  <!-- Datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset fr-mt-2w">
     <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
   </div>
@@ -147,20 +147,20 @@ onMounted(() => {
               <DsfrButton
                 v-if="isEdit"
                 size="sm"
-                icon="ri-pencil-line"
+                icon="fr-icon-edit-line"
                 label="Éditer"
                 tertiary
                 icon-only
-                @click.prevent="editDataset(dataset, index, group)"
+                :on-click="() => editDataset(dataset, index, group)"
               />
               <DsfrButton
                 v-if="isEdit"
                 size="sm"
-                icon="ri-delete-bin-line"
+                icon="fr-icon-delete-line"
                 label="Supprimer"
                 tertiary
                 icon-only
-                @click.prevent="handleRemoveDataset(group, index)"
+                :on-click="() => handleRemoveDataset(group, index)"
               />
             </template>
             <template #datasetContent="{ dataset }">

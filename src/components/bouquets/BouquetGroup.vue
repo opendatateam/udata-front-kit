@@ -137,75 +137,34 @@ const actions = computed(() => {
     <div v-if="!isNoGroupAlone" class="disclosure__header">
       <template v-if="isDisclosure">
         <button
-          class="disclosure__trigger"
+          class="disclosure__trigger fr-icon-arrow-right-s-line"
           :aria-expanded="isDisclosureOpen"
           :aria-controls="widgetID"
           @click.prevent="toggleDisclosure"
         >
-          <span class="disclosure__btn disclosure__marker">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="none"
-              viewBox="0 0 16 16"
-              aria-hidden="true"
-            >
-              <path
-                fill="#3458A2"
-                fill-rule="evenodd"
-                d="m8 7.219-3.3 3.3-.942-.943L8 5.333l4.243 4.243-.943.943-3.3-3.3Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </span>
           <span class="fr-sr-only">ouvrir le regroupement</span>
-          <span class="disclosure__name fr-text--lg">
+          <span class="disclosure__name">
             {{ groupName }}
             <DsfrTag class="fr-text--xs" small :label="factorsInGroup" />
           </span>
         </button>
         <div class="disclosure__actions">
-          <button class="disclosure__btn" @click="openModal('edit')">
-            <span class="fr-sr-only fr-text--sm"
-              >éditer le regroupement {{ groupName }}</span
-            >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="none"
-              viewBox="0 0 16 16"
-              aria-hidden="true"
-            >
-              <path
-                fill="#3458A2"
-                fill-rule="evenodd"
-                d="m4.276 10.667 6.761-6.762-.942-.942-6.762 6.761v.943h.943ZM4.829 12H2V9.171l7.623-7.623c.26-.26.683-.26.943 0l1.886 1.886c.26.26.26.682 0 .943L4.829 12ZM2 13.333h12v1.334H2v-1.334Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-          <button class="disclosure__btn" @click="openModal('delete')">
-            <span class="fr-sr-only fr-text--sm"
-              >supprimer le regroupement {{ groupName }}</span
-            >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              fill="none"
-              aria-hidden="true"
-              viewBox="0 0 32 32"
-            >
-              <path
-                fill="#3458A2"
-                fill-rule="evenodd"
-                d="M12.665 10.667V9.334h6.667v1.333h3.333V12h-1.333v10a.667.667 0 0 1-.667.667h-9.333a.667.667 0 0 1-.667-.667V12H9.332v-1.333h3.333ZM12 12v9.334h8V12h-8Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
+          <DsfrButton
+            :label="`éditer le regroupement ${groupName}`"
+            icon="fr-icon-edit-line"
+            icon-only
+            secondary
+            size="sm"
+            :on-click="() => openModal('edit')"
+          />
+          <DsfrButton
+            :label="`supprimer le regroupement ${groupName}`"
+            icon="fr-icon-delete-line"
+            icon-only
+            secondary
+            size="sm"
+            :on-click="() => openModal('delete')"
+          />
         </div>
       </template>
       <p v-else class="simple__name fr-text--lg">
@@ -295,7 +254,6 @@ const actions = computed(() => {
 <style scoped>
 .disclosure {
   --padding-base: 1rem;
-  --icon-size: 32px;
   container-type: inline-size;
   container-name: disclosure;
 }
@@ -325,31 +283,27 @@ const actions = computed(() => {
   align-items: start;
   text-align: left;
 }
+.disclosure__name {
+  font-size: 1.125rem;
+}
 .disclosure__name,
 .simple__name {
   flex: 1 1 auto;
   align-self: center;
   font-weight: 500;
 }
-.disclosure__btn,
-.dataset__actions :where(button, :deep(button)) {
-  block-size: var(--icon-size);
-  inline-size: var(--icon-size);
-  box-shadow: inset 0 0 0 1px var(--blue-cumulus-sun-368-moon-732);
-}
-.disclosure__btn {
-  flex: 0 0 var(--icon-size);
-  display: grid;
-  place-content: center;
-  border-radius: 40px;
-}
-.disclosure__marker {
-  box-shadow: none;
-}
-.disclosure__marker svg {
+
+.disclosure__trigger::before {
+  --icon-size: 1rem;
+  /* needed for long title on mobile */
+  margin-block-start: 1ex;
   rotate: 0deg;
   transition: rotate 0.4s ease;
 }
+.disclosure__trigger[aria-expanded='true']::before {
+  rotate: 90deg;
+}
+
 .disclosure__actions,
 .dataset__actions {
   margin-inline-start: auto;
@@ -366,9 +320,6 @@ const actions = computed(() => {
 }
 .disclosure__content ul > li {
   background: var(--background-alt-grey, #f6f6f6);
-}
-.disclosure__trigger[aria-expanded='true'] .disclosure__marker > svg {
-  rotate: 180deg;
 }
 
 .disclosure__header .fr-tag {
@@ -417,6 +368,10 @@ const actions = computed(() => {
     /* half padding on right to harmonize with other icons */
     padding-inline: var(--padding-base) calc(var(--padding-base) / 2);
     padding-block: calc(var(--padding-base) * 0.75);
+    align-items: center;
+  }
+  .disclosure__trigger::before {
+    margin-block-start: 0;
   }
   .disclosure__actions {
     gap: var(--padding-base);
