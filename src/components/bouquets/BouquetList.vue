@@ -11,6 +11,7 @@ import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
+import { useRemixIconData } from '@/utils/icon'
 
 const router = useRouter()
 const route = useRoute()
@@ -164,7 +165,10 @@ defineExpose({
             :to="createUrl"
             class="fr-btn fr-btn--secondary fr-ml-1w"
           >
-            <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
+            <VIcon
+              :icon="useRemixIconData('add-circle-line')"
+              class="fr-mr-1v"
+            />
             Ajouter un {{ topicsName }}
           </router-link>
         </div>

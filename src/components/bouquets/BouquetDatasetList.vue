@@ -14,7 +14,9 @@ import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
+import { useRemixIconProp } from '@/utils/icon'
 
+import type { DsfrButtonProps } from '@gouvminint/vue-dsfr'
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 
@@ -137,7 +139,7 @@ onMounted(() => {
         size="sm"
         class="fr-mb-1w"
         label="Réorganiser la liste"
-        icon="ic:baseline-drag-indicator"
+        :icon="useRemixIconProp<DsfrButtonProps>('draggable')"
         @click.prevent="triggerReorder"
       />
       <DsfrButton
@@ -145,7 +147,7 @@ onMounted(() => {
         size="sm"
         class="fr-mb-1w fr-ml-1w"
         label="Ajouter un jeu de données"
-        icon="ri-add-line"
+        :icon="useRemixIconProp<DsfrButtonProps>('add-line')"
         @click.prevent="addDataset"
       />
     </div>
@@ -224,7 +226,7 @@ onMounted(() => {
                 v-if="isEdit"
                 secondary
                 size="sm"
-                icon="ri-delete-bin-line"
+                :icon="useRemixIconProp<DsfrButtonProps>('delete-bin-line')"
                 label="Supprimer"
                 class="fr-mr-2w"
                 @click.prevent="removeDataset(index)"
@@ -232,7 +234,7 @@ onMounted(() => {
               <DsfrButton
                 v-if="isEdit"
                 size="sm"
-                icon="ri-pencil-line"
+                :icon="useRemixIconProp<DsfrButtonProps>('pencil-line')"
                 label="Éditer"
                 class="fr-mr-2w"
                 @click.prevent="editDataset(dataset, index)"
