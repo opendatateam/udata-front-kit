@@ -50,7 +50,7 @@ const {
 } = useGroups(datasetsProperties)
 
 const handleRemoveDataset = (group: string, index: number) => {
-  removeDatasetFromGroup(group, index)
+  datasetsProperties.value = removeDatasetFromGroup(group, index)
   emits('updateDatasets')
 }
 

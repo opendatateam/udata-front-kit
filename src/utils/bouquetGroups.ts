@@ -57,16 +57,21 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   }
 
   const removeDatasetFromGroup = (group: string, index: number) => {
-    if (
-      window.confirm(`Etes-vous sûr de vouloir supprimer ce jeu de données ?`)
-    ) {
-      const datasetToDeleteIndex = getDatasetIndex(group, index)
+    const datasetToDeleteIndex = getDatasetIndex(group, index)
 
-      if (datasetToDeleteIndex !== -1) {
-        return datasetsProperties.value.splice(datasetToDeleteIndex, 1)
-      }
+    if (datasetToDeleteIndex === -1) {
+      return datasetsProperties.value
     }
-    return datasetsProperties.value
+
+    const confirmMessage =
+      'Etes-vous sûr de vouloir supprimer ce jeu de données ?'
+    if (!window.confirm(confirmMessage)) {
+      return datasetsProperties.value
+    }
+
+    return datasetsProperties.value.filter(
+      (_, index) => index !== datasetToDeleteIndex
+    )
   }
 
   const groupExists = (groupName: string) => {
@@ -74,29 +79,16 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   }
 
   const renameGroup = (oldGroupName: string, newGroupName: string) => {
-    // get all datasets from the old group in groupedDatasets
-    const oldGroupItems = groupedDatasets.value.get(oldGroupName)
-
-    if (!groupExists(newGroupName) && oldGroupItems) {
-      // Return a new array with updated group names for matching datasets
-      return datasetsProperties.value.map((dataset) => {
-        const isInOldGroup = oldGroupItems.some(
-          (groupItem) =>
-            groupItem.title === dataset.title &&
-            groupItem.group === dataset.group
-        )
-
-        if (isInOldGroup) {
-          return {
-            ...dataset,
-            group: newGroupName
-          }
-        }
-        return dataset
-      })
+    // Skip if new group already exists or old group is empty
+    if (groupExists(newGroupName) || !groupedDatasets.value.has(oldGroupName)) {
+      return datasetsProperties.value
     }
-
-    return datasetsProperties.value
+    const data = datasetsProperties.value.map((dataset) =>
+      dataset.group === oldGroupName
+        ? { ...dataset, group: newGroupName }
+        : dataset
+    )
+    return data
   }
 
   const deleteGroup = (groupName: string) => {
