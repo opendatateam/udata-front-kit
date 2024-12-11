@@ -14,10 +14,6 @@ const selectedSpatialCoverage = defineModel('spatialCoverageModel', {
 })
 
 defineProps({
-  modelValue: {
-    type: Object as PropType<SpatialCoverage>,
-    default: undefined
-  },
   short: {
     type: Boolean,
     default: false
