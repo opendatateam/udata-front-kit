@@ -10,7 +10,8 @@ export enum Availability {
   MISSING = 'missing',
   NOT_AVAILABLE = 'not available',
   LOCAL_AVAILABLE = 'available',
-  URL_AVAILABLE = 'url available'
+  URL_AVAILABLE = 'url available',
+  REMOTE_DELETED = 'remote deleted'
 }
 
 export interface DatasetProperties {

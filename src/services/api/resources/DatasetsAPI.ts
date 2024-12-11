@@ -9,10 +9,9 @@ export default class DatasetsAPI extends DatagouvfrAPI {
    */
   async getDatasetsForOrganization(
     orgId: string,
-    page: number = 1,
-    sort: string = '-created'
+    page?: number,
+    sort?: string
   ): Promise<DatasetV2Response> {
-    // WARNING: specify `-created` or another sort explicitely because default sort has a pagination issue
     const url = `${this.url()}/search/`
     return await this.request({
       url,

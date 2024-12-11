@@ -41,13 +41,15 @@ const quickLinks = computed(() => {
   const headerButton = {
     label: button.label,
     icon: 'ri-lightbulb-line',
-    href: button.link
+    href: button.link,
+    iconRight: true
   }
 
   const logLink = {
     label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
     icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
-    to: isLoggedIn.value ? '/logout' : '/login'
+    to: isLoggedIn.value ? '/logout' : '/login',
+    iconRight: true
   }
 
   if (!config.website.oauth_option) {
@@ -63,7 +65,8 @@ onMounted(() => {
 
 const logotext = config.website.rf_title
 const servicetitle = config.website.title
-const logoOperator = config.website.logo_operator
+const logoOperator = config.website.logo_operator?.src
+const showLogoOperatorInHeader = config.website.logo_operator?.show_in_header
 const logoService = config.website.service_logo
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
@@ -130,7 +133,11 @@ watch(
     :show-search="config.website.header_search.display"
     :logo-text="logotext"
     :operator-img-src="logoOperator"
-    :operator-img-style="{ height: '60px', width: '60px' }"
+    :show-operator-logo="showLogoOperatorInHeader"
+    :operator-img-style="{
+      height: config.website.logo_operator?.header?.width,
+      width: config.website.logo_operator?.header?.height
+    }"
     :service-logo-src="logoService"
     :show-badge="showBadge"
     :badge-text="badgeText"
@@ -149,7 +156,10 @@ watch(
     class="fr-mt-16w"
     :logo-text="logotext"
     :operator-img-src="logoOperator"
-    :operator-img-style="{ height: '92px', width: '92px' }"
+    :operator-img-style="{
+      height: config.website.logo_operator?.footer?.width,
+      width: config.website.logo_operator?.footer?.height
+    }"
     :service-logo-src="logoService"
     :desc-text="footerPhrase"
     :ecosystem-links="footerExternalLinks"
@@ -164,5 +174,12 @@ watch(
 }
 .justify-end {
   justify-content: flex-end;
+}
+
+.fr-footer__brand-link {
+  box-sizing: content-box;
+}
+.fr-footer__logo {
+  max-width: 100%;
 }
 </style>

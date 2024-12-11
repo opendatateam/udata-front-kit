@@ -6,26 +6,53 @@ import 'vue-multiselect/dist/vue-multiselect.css'
 import { useRouter } from 'vue-router'
 
 import '@/assets/multiselect.css'
-import config from '@/config'
 
 const router = useRouter()
 
-defineProps({
+const props = defineProps({
   searchLabel: {
     type: String,
     required: true
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  },
+  id: {
+    type: String,
+    required: true
+  },
+  isFilter: {
+    type: Boolean,
+    default: false
+  },
+  dropdown: {
+    type: Array,
+    default: () => []
+  },
+  searchEndpoint: {
+    type: String,
+    default: () => null
   }
+})
+
+const selectedQuery = defineModel({
+  type: String,
+  required: false,
+  default: ''
 })
 
 const emits = defineEmits(['search'])
 
-const placeholder = config.website.header_search.placeholder
-const dropdown = config.website.header_search.dropdown
 const query = ref('')
 const selectedMultiSearch = ref()
 
-const doSimpleSearch = () => {
-  router.push({ path: '/datasets', query: { q: query.value } })
+const doSimpleSearch = (event: string) => {
+  query.value = event
+  router.push({
+    path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
+    query: { q: query.value }
+  })
   query.value = ''
   emits('search')
 }
@@ -49,8 +76,21 @@ const dropdownLabel = (text: string) => {
 </script>
 
 <template>
+  <DsfrInputGroup
+    v-if="isFilter"
+    :id="id"
+    v-model="selectedQuery"
+    :label="searchLabel"
+    class="filter-input"
+    label-visible
+  >
+    <template #before-input>
+      <span class="fr-icon-search-line search-icon" aria-hidden></span>
+    </template>
+  </DsfrInputGroup>
+
   <DsfrSearchBar
-    v-if="!dropdown"
+    v-else-if="!dropdown.length"
     v-model="query"
     :label="searchLabel"
     :placeholder="placeholder"
@@ -58,12 +98,12 @@ const dropdownLabel = (text: string) => {
   />
 
   <div v-else>
-    <label id="search-label" for="select-search" class="fr-sr-only"
-      >Rechercher. Saisissez un mot clé puis choisissez une des options situés
+    <label :id="`${id}-label`" :for="id" class="fr-sr-only">
+      Rechercher. Saisissez un mot clé puis choisissez une des options situés
       après le champ pour lancer la recherche dans la rubrique souhaitée</label
     >
     <Multiselect
-      id="select-search"
+      :id="id"
       v-model="selectedMultiSearch"
       class="select-search"
       :options="dropdown"
@@ -72,7 +112,7 @@ const dropdownLabel = (text: string) => {
       placeholder=""
       select-label=""
       deselect-label=""
-      aria-labelledby="search-label"
+      :aria-labelledby="`${id}-label`"
       aria-owns=""
       :multiple="false"
       :searchable="true"
@@ -93,52 +133,70 @@ const dropdownLabel = (text: string) => {
         <span class="fr-icon-search-line search-icon"></span>
       </template>
       <template #placeholder>
-        <span aria-hidden="true" class="visible-label">Rechercher</span>
+        <span aria-hidden="true" class="visible-label">{{ placeholder }}</span>
       </template>
     </Multiselect>
   </div>
 </template>
 
 <style scoped>
-.select-search {
+:global(:root) {
   --icon-width: 24px;
+}
+
+:deep(.filter-input) {
+  padding-inline-start: calc(var(--icon-width) + 1rem);
+}
+.select-search {
   position: relative;
   display: flex;
+}
+.visible-label {
+  margin-inline-start: var(--icon-width);
+}
 
-  .search-icon {
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 10px;
-    translate: 0 -50%;
-    max-width: var(--icon-width);
-  }
-  .visible-label {
-    margin-left: var(--icon-width);
-  }
+:deep(.multiselect__placeholder) {
+  margin: 0;
+  font-style: italic;
+  color: var(--text-mention-grey);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  inline-size: 100%;
+  overflow: hidden;
+}
+::placeholder {
+  font-style: italic;
+  color: var(--text-mention-grey);
+}
+
+.search-icon {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 10px;
+  translate: 0 -10px;
+  max-inline-size: var(--icon-width);
 }
 :deep(.multiselect__tags) {
   border: 0;
   box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
   margin: 0;
-  max-height: none;
+  max-block-size: none;
   --hover: var(--background-contrast-grey-hover);
   --active: var(--background-contrast-grey-active);
   background-color: var(--background-contrast-grey);
   padding: 6px 40px 0 15px;
-  min-height: 42px;
-  width: 100%;
-  order: 1;
+  min-inline-size: 42px;
+  inline-size: 100%;
 }
 :deep(.multiselect__input),
 :deep(.multiselect__single) {
   background: var(--background-contrast-grey);
 }
 .select-search :deep(input) {
-  padding-top: 4px;
   margin-inline-start: var(--icon-width);
-  width: 100%;
+  inline-size: 100%;
 }
 :deep(.multiselect__content-wrapper) {
-  margin-top: 42px;
+  margin-block-start: 40px;
 }
 </style>

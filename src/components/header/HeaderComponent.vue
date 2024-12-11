@@ -9,8 +9,9 @@ import {
   type StyleValue
 } from 'vue'
 
+import config from '@/config'
+import SearchComponent from '../SearchComponent.vue'
 import type { DsfrHeaderMenuLinkProps } from './DsfrHeaderMenuLink.vue'
-import HeaderSearch from './HeaderSearch.vue'
 
 type DsfrHeaderProps = {
   serviceTitle?: string
@@ -22,6 +23,7 @@ type DsfrHeaderProps = {
   operatorImgAlt?: string
   operatorImgSrc?: string
   operatorImgStyle?: StyleValue
+  showOperatorLogo?: boolean
   userName?: string
   quickLinks?: DsfrHeaderMenuLinkProps[]
   searchLabel?: string
@@ -41,6 +43,7 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   operatorImgAlt: '',
   operatorImgSrc: '',
   operatorImgStyle: () => ({}),
+  showOperatorLogo: true,
   serviceLogoSrc: '',
   userName: undefined,
   quickLinks: () => [],
@@ -50,6 +53,7 @@ const props = withDefaults(defineProps<DsfrHeaderProps>(), {
   badgeText: 'BETA',
   badgeStyle: ''
 })
+const dropdown = config.website.header_search.dropdown
 
 const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
@@ -103,7 +107,10 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               <div class="fr-header__logo">
                 <DsfrLogo :logo-text="logoText" data-testid="header-logo" />
               </div>
-              <div v-if="isWithSlotOperator" class="fr-header__operator">
+              <div
+                v-if="isWithSlotOperator && showOperatorLogo"
+                class="fr-header__operator"
+              >
                 <!-- @slot Slot nommé operator pour le logo opérateur. Sera dans `<div class="fr-header__operator">` -->
                 <slot name="operator">
                   <img
@@ -182,7 +189,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               v-if="userName || quickLinks?.length"
               class="fr-header__tools-links"
             >
-              <p v-if="userName" class="fr-py-1w fr-text--sm">
+              <p v-if="userName" class="fr-py-1w fr-mr-2v fr-text--sm">
                 {{ userName }}
               </p>
               <DsfrHeaderMenuLinks
@@ -192,7 +199,12 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               />
             </div>
             <div v-if="showSearch" class="fr-header__search fr-modal">
-              <HeaderSearch :search-label="searchLabel" />
+              <SearchComponent
+                id="header-select-search"
+                :search-label="searchLabel"
+                :dropdown="dropdown"
+                placeholder="Rechercher"
+              />
             </div>
           </div>
         </div>
@@ -217,9 +229,11 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
               >
                 Fermer
               </button>
-              <HeaderSearch
+              <SearchComponent
                 v-if="searchModalOpened"
+                id="header-select-search-modal"
                 :search-label="searchLabel"
+                placeholder="Rechercher"
                 @search="hideModal(false)"
               />
             </div>
@@ -291,6 +305,6 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
   gap: 0.25em;
 }
 :deep(.fr-header__tools-links) {
-  align-items: baseline;
+  align-items: center;
 }
 </style>
