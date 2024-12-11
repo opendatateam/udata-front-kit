@@ -26,8 +26,8 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: Hackathon données alimentaires
-    subtitle: Bienvenue sur le site du hackathon organisé par la direction interministérielle du numérique (DINUM) et le ministère de l’Agriculture, de la Souveraineté alimentaire et de la Forêt, en partenariat avec Open Food Facts et FranceAgriMer.
+    title: Hackathons DINUM
+    subtitle: Bienvenue sur le site des hackathons organisés par la direction interministérielle du numérique (DINUM).
     sections:
       - title:
         content:
@@ -38,11 +38,11 @@ website:
           class: 'fr-col-md-6'
           tiles:
             - id: 'find'
-              name: 'Voir les données'
-              description: 'Découvrez une sélection de données liées à l’alimentation pour vous aider dans vos recherches. Elle n’est pas exhaustive et vous pouvez bien sûr utiliser d’autres données ouvertes.'
-              url: '/hackathons/les-donnees-du-hackathon-donnees-alimentaires'
+              name: 'Voir les hackathons'
+              description: 'Retrouvez les instructions, données et résultats des hackathons organisés avec nos partenaires.'
+              url: '/hackathons/'
             - id: 'guide'
-              name: 'Guide du hackathon'
+              name: 'Guide du dernier hackathon'
               description: 'Voir le guide qui a pour vocation de vous accompagner au Hackathon Données Alimentaires pendant toute la durée de l’événement avec des informations, des ressources et des bonnes pratiques.'
               url: 'https://docs.numerique.gouv.fr/docs/e6589294-9422-4292-a823-54401106c841/'
 
@@ -63,9 +63,9 @@ website:
     name:
     link:
   menu:
-    - text: Voir les données
-      to: /hackathons/hackathon-donnees-alimentaires
-    - text: Guide du hackathon
+    - text: Voir les hackathons
+      to: /hackathons/
+    - text: Guide du dernier hackathon
       to: 'https://docs.numerique.gouv.fr/docs/e6589294-9422-4292-a823-54401106c841/'
   router:
     disable:
