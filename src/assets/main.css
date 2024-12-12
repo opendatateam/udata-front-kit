@@ -60,6 +60,18 @@ body {
   display: block;
 }
 
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-1-1-auto {
+  flex: 1 1 auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
 /* FONT CUSTOM */
 .uppercase {
   text-transform: uppercase;

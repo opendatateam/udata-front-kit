@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
@@ -11,7 +12,7 @@ const store = useOrganizationStore()
 const $loading = useLoading()
 
 const currentPage = ref(1)
-const pages = store.getPagination()
+const { pagination } = storeToRefs(store)
 const organizations: Ref<Organization[]> = ref([])
 
 const links = computed(() => [
@@ -51,10 +52,10 @@ onMounted(() => {
     </ul>
   </GenericContainer>
   <DsfrPagination
-    v-if="pages.length"
+    v-if="pagination.length"
     class="fr-container"
     :current-page="currentPage - 1"
-    :pages="pages"
+    :pages="pagination"
     @update:current-page="onUpdatePage"
   />
 </template>
