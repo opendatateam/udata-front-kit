@@ -25,7 +25,6 @@ import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
-import { useRemixIconData } from '@/utils/icon'
 
 defineEmits(['search'])
 const props = defineProps({
@@ -243,10 +242,7 @@ onMounted(() => {
           :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
           class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
         >
-          <VIcon
-            :icon="useRemixIconData('file-download-line')"
-            class="fr-mr-1w"
-          />
+          <VIconCustom name="file-download" class="fr-mr-1w" align="middle" />
           Exporter la liste des jeux de données
         </a>
       </div>

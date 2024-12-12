@@ -14,7 +14,6 @@ import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
-import { useRemixIconData } from '@/utils/icon'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
@@ -112,7 +111,13 @@ const { themeColors } = useThemeOptions(theme)
           />
         </p>
         <p class="fr-tag">
-          <VIcon :icon="useRemixIconData('database-2-line')" class="fr-mr-1v" />
+          <VIconCustom
+            name="database"
+            icon-style="line"
+            class="fr-mr-1v"
+            size="lg"
+            align="text-top"
+          />
           <span class="fr-mr-1v">
             {{
               `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
@@ -120,7 +125,12 @@ const { themeColors } = useThemeOptions(theme)
           </span>
         </p>
         <p v-if="spatialCoverage" class="fr-tag fr-ml-1w">
-          <VIcon :icon="useRemixIconData('map-2-line')" class="fr-mr-1v" />
+          <VIconCustom
+            name="road-map"
+            class="fr-mr-1v"
+            size="lg"
+            align="text-top"
+          />
           <span class="fr-mr-1v">
             {{ spatialCoverage.name }}
           </span>
