@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { useHead } from '@unhead/vue'
-import { computed, inject, onMounted, ref, watchEffect, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import Tile from '@/components/Tile.vue'
-import config from '@/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -15,6 +13,7 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
+import { DatasetCard } from '@datagouv/components'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
@@ -24,16 +23,15 @@ const datasetStore = useDatasetStore()
 
 const org = computed(() => orgStore.get(organizationId))
 
-const links = computed(() => [
+const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
-  { to: '/organizations', text: 'Organisations' },
-  { text: org.value?.name }
+  { to: '/organizations', text: 'Organisations' }
 ])
 
 const currentPage = ref(1)
-const pages: Ref<object[]> = ref([])
+const pages: Ref<{ label: string; href: string; title: string }[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
-const selectedSort = ref('-created')
+const selectedSort: Ref<string | undefined> = ref(undefined)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -49,15 +47,26 @@ onMounted(() => {
 
 const sorts = [
   { value: '-created', text: 'Les plus récemment créés' },
-  { value: 'title', text: 'Titre' }
+  { value: '-last_update', text: 'Les plus récemment modifiés' }
 ]
 
-function doSort(sort: string) {
+function doSort(sort: string | number) {
   currentPage.value = 1
-  selectedSort.value = sort
+  selectedSort.value = sort.toString()
 }
 
 const description = computed(() => descriptionFromMarkdown(org))
+
+// TODO: make this a composable "breadcrumbForObject"
+// fill in the last breadcrumb when organization is ready
+watch(
+  () => org.value?.name,
+  () => {
+    if (org.value?.name === undefined) return
+    breadcrumbLinks.value.push({ text: org.value.name })
+  },
+  { immediate: true }
+)
 
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
@@ -81,7 +90,7 @@ watchEffect(() => {
 
 <template>
   <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
   <GenericContainer>
     <h1 class="fr-mb-2v">{{ org?.name }}</h1>
@@ -96,8 +105,10 @@ watchEffect(() => {
         >
           Trier par :
         </label>
+        <!-- TODO: add "pertinence" when custom SelectComponent has landed -->
         <div class="fr-col">
           <DsfrSelect
+            select-id="sort-search"
             :model-value="selectedSort"
             :options="sorts"
             label=""
@@ -111,13 +122,15 @@ watchEffect(() => {
     <div v-if="!datasets?.length">
       Pas de jeu de données pour cette organisation.
     </div>
-    <ul v-else class="fr-grid-row fr-grid-row--gutters es__tiles__list">
-      <li v-for="d in datasets" :key="d.id" class="fr-col-12 fr-col-lg-4">
-        <Tile
-          :link="`/datasets/${d.slug}`"
-          :title="d.title"
-          :description="d.description"
-          :img="d.organization?.logo"
+    <ul v-else class="fr-px-0" role="list">
+      <li v-for="d in datasets" :key="d.id" class="fr-col-md-12 fr-py-0">
+        <DatasetCard
+          :dataset="d"
+          :dataset-url="{ name: 'dataset_detail', params: { did: d.id } }"
+          :organization-url="{
+            name: 'organization_detail',
+            params: { oid: d.organization?.id }
+          }"
         />
       </li>
     </ul>

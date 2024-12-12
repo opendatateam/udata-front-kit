@@ -83,7 +83,7 @@ const getUserAvatar = (post: Post) => {
 }
 
 const triggerLogin = () => {
-  LocalStorageService.setItem('lastRoute', route)
+  LocalStorageService.setItem('lastRoute', route.fullPath)
   router.push({ name: 'login' })
 }
 

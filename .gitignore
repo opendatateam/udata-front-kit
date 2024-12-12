@@ -9,3 +9,6 @@ src/playground
 
 # vim swap files
 *.swp
+
+# auto generated file from unplugin-vue-components
+components.d.ts

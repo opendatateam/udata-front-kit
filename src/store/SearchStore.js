@@ -4,7 +4,7 @@ import config from '@/config'
 import SearchAPI from '@/services/api/SearchAPI'
 
 const searchAPI = new SearchAPI()
-const pageSize = 21
+const pageSize = 20
 
 export const useSearchStore = defineStore('search', {
   state: () => ({
@@ -17,11 +17,14 @@ export const useSearchStore = defineStore('search', {
     datasets: (state) => {
       return state.data.data || []
     },
+    total: (state) => {
+      return state.data.total
+    },
     pagination: (state) => {
       if (!state.data) return []
       if (!state.data.total && !state.data.page_size) return []
       return [
-        ...Array(Math.round(state.data.total / state.data.page_size)).keys()
+        ...Array(Math.ceil(state.data.total / state.data.page_size)).keys()
       ].map((page) => {
         page += 1
         return {
