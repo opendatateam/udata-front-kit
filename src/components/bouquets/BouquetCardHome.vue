@@ -12,7 +12,6 @@ import type { Topic } from '@/model/topic'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
-import { useRemixIconData } from '@/utils/icon'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
@@ -101,14 +100,11 @@ const { themeColors } = useThemeOptions(theme)
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
       <div class="fr-col-12">
         <p class="fr-m-0 fr-text--sm flex align-center fr-pt-3v">
-          <VIcon
-            :icon="useRemixIconData('time-line')"
-            class="fr-mr-1v text-grey-380"
-          />
+          <span class="fr-icon-time-line fr-mr-1v text-grey-380"></span>
           mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
         </p>
         <p class="fr-tag fr-mt-2v">
-          <VIcon :icon="useRemixIconData('database-2-line')" class="fr-mr-1v" />
+          <span class="fr-icon-database-line fr-mr-1v"></span>
           <span class="fr-mr-1v">
             {{
               `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
@@ -116,7 +112,7 @@ const { themeColors } = useThemeOptions(theme)
           </span>
         </p>
         <p v-if="spatialCoverage" class="fr-tag fr-ml-1w">
-          <VIcon :icon="useRemixIconData('map-2-line')" class="fr-mr-1v" />
+          <span class="fr-icon-road-map-line fr-mr-1v"></span>
           <span class="fr-mr-1v">
             {{ spatialCoverage.name }}
           </span>
@@ -144,5 +140,9 @@ const { themeColors } = useThemeOptions(theme)
   text-overflow: ellipsis;
   display: block;
   line-height: inherit;
+}
+
+.fr-icon-time-line::before {
+  --icon-size: 1.25rem;
 }
 </style>
