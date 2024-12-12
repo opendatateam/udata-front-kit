@@ -20,10 +20,13 @@ export interface DatasetProperties {
   uri: string | null
   id: string | null
   availability: Availability
+  group?: string
   // those are "local" properties, not stored on data.gouv.fr
   remoteDeleted?: boolean
   remoteArchived?: boolean
 }
+
+export type DatasetsGroups = Map<string, DatasetProperties[]>
 
 export interface SiteTopicExtras {
   theme: string
