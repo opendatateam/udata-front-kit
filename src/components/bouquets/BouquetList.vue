@@ -5,7 +5,6 @@ import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
@@ -172,15 +171,11 @@ defineExpose({
     </div>
   </div>
   <div class="bouquets-list-container fr-container fr-mb-4w border-top">
-    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w">
-      <div class="fr-col-12">
-        <BouquetCard
-          v-for="bouquet in bouquets"
-          :key="bouquet.id"
-          :bouquet="bouquet"
-        />
-      </div>
-    </div>
+    <ul class="fr-mt-3w fr-pl-0" role="list">
+      <li v-for="bouquet in bouquets" :key="bouquet.id" class="fr-col-12">
+        <BouquetCard :bouquet="bouquet" />
+      </li>
+    </ul>
   </div>
 </template>
 

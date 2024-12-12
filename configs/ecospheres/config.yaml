@@ -100,6 +100,9 @@ website:
       to: /datasets
     - text: Bouquets
       to: /bouquets
+    # TODO: enable when ready
+    # - text: Indicateurs
+    #   to: /indicators
     - text: Organisations
       to: /organizations
     - text: A propos
