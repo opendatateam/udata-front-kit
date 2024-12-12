@@ -1159,10 +1159,10 @@
     "name": "Andorre et Monaco",
     "centroid": [4.235850, 43.021708],
     "center": [4.235850, 43.021708],
-    "zoom": 5,
-    "minx": 164,
-    "miny": -19,
-    "maxx": 169,
-    "maxy": -23
+    "zoom": 4,
+    "minx": 3.2,
+    "miny": 41.5,
+    "maxx": 5.8,
+    "maxy": 44.5
   }
 ]
