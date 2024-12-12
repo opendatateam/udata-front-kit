@@ -164,7 +164,7 @@ defineExpose({
             :to="createUrl"
             class="fr-btn fr-btn--secondary fr-ml-1w"
           >
-            <span class="fr-icon-add-circle-line fr-mr-1v"></span>
+            <VIconCustom name="add-circle" icon-style="line" class="fr-mr-1v" />
             Ajouter un {{ topicsName }}
           </router-link>
         </div>

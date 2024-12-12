@@ -111,7 +111,13 @@ const { themeColors } = useThemeOptions(theme)
           />
         </p>
         <p class="fr-tag">
-          <span class="fr-icon-database-line fr-mr-1v"></span>
+          <VIconCustom
+            name="database"
+            icon-style="line"
+            class="fr-mr-1v"
+            size="lg"
+            align="text-top"
+          />
           <span class="fr-mr-1v">
             {{
               `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
@@ -119,7 +125,12 @@ const { themeColors } = useThemeOptions(theme)
           </span>
         </p>
         <p v-if="spatialCoverage" class="fr-tag fr-ml-1w">
-          <span class="fr-icon-road-map-line fr-mr-1v"></span>
+          <VIconCustom
+            name="road-map"
+            class="fr-mr-1v"
+            size="lg"
+            align="text-top"
+          />
           <span class="fr-mr-1v">
             {{ spatialCoverage.name }}
           </span>

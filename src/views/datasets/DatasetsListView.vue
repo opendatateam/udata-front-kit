@@ -242,7 +242,7 @@ onMounted(() => {
           :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
           class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
         >
-          <span class="fr-icon-file-download-line fr-mr-1w"></span>
+          <VIconCustom name="file-download" class="fr-mr-1w" align="middle" />
           Exporter la liste des jeux de données
         </a>
       </div>
@@ -308,10 +308,3 @@ onMounted(() => {
     @update:current-page="goToPage"
   />
 </template>
-
-<style scoped>
-.fr-icon-file-download-line::before {
-  --icon-size: 1.25rem;
-  vertical-align: middle;
-}
-</style>

@@ -254,10 +254,7 @@ watch(
           v-if="showHarvestQualityWarning"
           class="text-mention-grey fr-text--sm fr-my-1v"
         >
-          <span
-            class="fr-icon-warning-line fr-icon--sm"
-            aria-hidden="true"
-          ></span>
+          <VIconCustom name="warning" class="fr-icon--sm" />
           La qualité des métadonnées peut être trompeuse car les métadonnées de
           la source originale peuvent avoir été perdues lors de leur
           récupération. Nous travaillons actuellement à améliorer la situation.

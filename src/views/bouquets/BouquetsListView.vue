@@ -143,7 +143,7 @@ watch(
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-          <span class="fr-icon-add-circle-line fr-mr-1v"></span>
+          <VIconCustom name="add-circle" class="fr-mr-1w" align="middle" />
           Ajouter un {{ topicsName }}
         </router-link>
       </div>
@@ -195,10 +195,6 @@ watch(
 </template>
 
 <style scoped>
-.fr-icon-add-circle-line::before {
-  --icon-size: 1.25rem;
-  vertical-align: middle;
-}
 /* put above header (ground+500) so that multiselect floats above menu */
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);
