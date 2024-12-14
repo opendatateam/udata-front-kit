@@ -2,15 +2,17 @@
 import type { Organization } from '@datagouv/components'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, ref, watch, type Ref } from 'vue'
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.css'
+import { useRoute } from 'vue-router'
 
-import Multiselect from '@vueform/multiselect'
-import '@vueform/multiselect/themes/default.css'
-
+import '@/assets/multiselect.css'
 import type { TopicPostData } from '@/model/topic'
-import { useCurrentPageConf } from '@/router/utils'
 import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
-import { debounceWait } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
+
+const route = useRoute()
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData>,
@@ -18,7 +20,9 @@ const topic = defineModel({
 })
 
 const userStore = useUserStore()
-const { pageConf } = useCurrentPageConf()
+const { searchPageName } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
@@ -61,21 +65,19 @@ const selectOptions = computed(() => {
 })
 
 const isLoading = ref(false)
+const options: Ref<Organization[]> = ref([])
 
 const search = useDebounceFn(async (query: string) => {
   isLoading.value = true
   if (!query) {
+    options.value = []
     isLoading.value = false
     return
   }
-  try {
-    return await new SearchAPI().search(query, 10)
-  } catch (error) {
-    console.error('Search error', error)
-  } finally {
-    isLoading.value = false
-  }
-}, debounceWait)
+  const organizations = await new SearchAPI().search(query, 10)
+  options.value = organizations
+  isLoading.value = false
+}, 400)
 
 const onSelectOwnOrganization = () => {
   if (selectedOwnOrganization.value) {
@@ -94,7 +96,7 @@ const onSelectAnyOrganization = () => {
 }
 
 const clear = () => {
-  selectedAnyOrganization.value = undefined
+  selectedAnyOrganization.value = null
 }
 
 watch(choice, () => {
@@ -110,10 +112,10 @@ watch(choice, () => {
     <DsfrRadioButtonSet
       v-model="choice"
       :options="radioOptions"
-      :legend="`Choisissez si vous souhaitez gérer ce ${pageConf.labels.singular}&nbsp;:`"
+      :legend="`Choisissez si vous souhaitez gérer ce ${searchPageName}&nbsp;:`"
       name="owner"
     />
-    <div v-if="choice === 'organization'" class="flex-gap">
+    <div v-if="choice === 'organization'" class="organizations">
       <DsfrSelect
         id="ownerOrg"
         v-model="selectedOwnOrganization"
@@ -124,59 +126,46 @@ watch(choice, () => {
       />
 
       <div v-if="userStore.isAdmin" class="fr-select-group">
-        <label class="fr-label fr-mt-2v" for="any-org-select-topic"
+        <label class="fr-label fr-mt-2v" for="any-org-select-bouquet"
           >Cherchez une autre organisation&nbsp;:</label
         >
         <Multiselect
-          id="any-org-select-topic"
+          id="any-org-select-bouquet"
+          ref="multiselect"
           v-model="selectedAnyOrganization"
           role="search"
-          :object="true"
-          value-prop="id"
-          label="title"
-          track-by="title"
-          class="fr-input-wrap"
-          :filter-results="false"
-          :min-chars="3"
-          :clear-on-search="true"
-          :delay="0"
-          :options="search"
+          :options="options"
+          track-by="id"
           placeholder=""
-          :resolve-on-load="false"
+          select-label="Entrée pour sélectionner"
+          :multiple="false"
           :searchable="true"
-          :limit="10"
-          :strict="false"
-          :clear-on-blur="false"
-          :allow-absent="true"
-          no-options-text="Aucune organisation trouvée, précisez ou élargissez votre recherche."
-          :aria="{
-            // useless or unsupported yet https://github.com/vueform/multiselect/issues/436
-            'aria-labelledby': null,
-            'aria-multiselectable': null,
-            'aria-placeholder': null
-          }"
+          :internal-search="false"
+          :loading="isLoading"
+          :clear-on-select="true"
+          :close-on-select="true"
+          :show-no-results="false"
+          :hide-selected="true"
+          :limit="3"
+          :options-limit="100"
+          @search-change="search"
           @select="onSelectAnyOrganization()"
         >
-          <template #clear>
-            <button
-              class="multiselect-clear"
-              @click="clear"
-              @keydown.prevent.enter="clear"
-              @keydown.prevent.space="clear"
-            >
-              <span class="fr-sr-only">Supprimer la sélection</span>
-              <span aria-hidden class="multiselect-clear-icon"></span>
-            </button>
+          <template #caret>
+            <div
+              v-if="selectedAnyOrganization"
+              class="multiselect__clear"
+              @mousedown.prevent.stop="clear"
+            />
           </template>
-
-          <template #singlelabel="{ value }">
-            <div class="multiselect-single-label fr-py-2w">
-              {{ value.name }}
-            </div>
+          <template #singleLabel="slotProps">
+            {{ slotProps.option.name }}
           </template>
-
-          <template #option="{ option }">
-            <div class="spatial-select-option">{{ option.name }}</div>
+          <template #option="slotProps">
+            {{ slotProps.option.name }}
+          </template>
+          <template #noOptions>
+            Précisez ou élargissez votre recherche
           </template>
         </Multiselect>
       </div>
@@ -185,7 +174,7 @@ watch(choice, () => {
 </template>
 
 <style scoped>
-.flex-gap {
-  --gap: 1rem;
+.organizations {
+  gap: 1rem;
 }
 </style>

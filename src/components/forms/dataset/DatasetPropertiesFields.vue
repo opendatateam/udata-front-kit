@@ -1,62 +1,50 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { computed, onMounted, ref, watch, type Ref } from 'vue'
-import { useRouter } from 'vue-router'
-
 import {
-  Availability,
-  type DatasetProperties,
-  type DatasetsGroups
-} from '@/model/topic'
-import { useCurrentPageConf } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { useForm } from '@/utils/form'
+  computed,
+  defineModel,
+  onMounted,
+  ref,
+  watch,
+  type PropType,
+  type Ref
+} from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+import { Availability, type DatasetProperties } from '@/model/topic'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useSearchPagesConfig } from '@/utils/config'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
-const emit = defineEmits(['updateValidation', 'update:datasetProperties'])
+const emit = defineEmits(['updateValidation'])
 
 const datasetProperties = defineModel({
-  type: Object as () => DatasetProperties,
-  default: {}
+  type: Object as PropType<DatasetProperties>,
+  required: true
 })
 
-const datasetsGroups = defineModel('groups-model', {
-  type: Object as () => DatasetsGroups,
-  default: []
-})
-
-const formErrors = defineModel('errors-model', {
-  type: Array<string>,
-  default: []
-})
-
-const props = defineProps({
+defineProps({
   alreadySelectedDatasets: {
     type: Array<DatasetProperties>,
     default: []
-  },
-  datasetEditorialization: {
-    type: Boolean,
-    default: false
   }
 })
 
+const route = useRoute()
 const router = useRouter()
 const datasetStore = useDatasetStore()
-const { pageConf } = useCurrentPageConf()
-const { getErrorMessage } = useForm(formErrors, pageConf.labels.singular)
+const { searchPageDatasetEditorialization } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const hasEditorialization = computed(() => {
   return (
     !!datasetProperties.value.title.trim() &&
-    !!datasetProperties.value.purpose?.trim() &&
-    (datasetProperties.value.group
-      ? datasetProperties.value.group.trim().length < 100
-      : true)
+    !!datasetProperties.value.purpose.trim()
   )
 })
 
@@ -66,7 +54,7 @@ const isValidDataset = computed((): boolean => {
     isValidUrlDataset.value &&
     !datasetProperties.value.remoteDeleted
 
-  if (!props.datasetEditorialization) return isValidWithoutEditorialization
+  if (!searchPageDatasetEditorialization) return isValidWithoutEditorialization
 
   return isValidWithoutEditorialization && hasEditorialization.value
 })
@@ -96,8 +84,8 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
     datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
     datasetProperties.value.id = value.id
     const resolved = router.resolve({
-      name: 'datasets_detail',
-      params: { item_id: value.id }
+      name: 'dataset_detail',
+      params: { did: value.id }
     })
     datasetProperties.value.uri = resolved.href
     delete datasetProperties.value.remoteDeleted
@@ -135,101 +123,64 @@ onMounted(() => {
 
 <template>
   <DatasetPropertiesTextFields
-    v-if="datasetEditorialization"
-    v-model:dataset-properties-model="datasetProperties"
-    :error-title="getErrorMessage('title')"
-    :error-purpose="getErrorMessage('purpose')"
+    v-if="searchPageDatasetEditorialization"
+    v-model:dataset-properties="datasetProperties"
   />
-  <div id="input-availability" tabindex="-1">
-    <div class="fr-mt-1w fr-mb-4w">
-      <SelectDataset
-        v-model="selectedDataset"
-        :already-selected-datasets="alreadySelectedDatasets"
-        :is-invalid="formErrors.includes('availability')"
-        @update:model-value="onSelectDataset"
-      />
-    </div>
-    <div v-if="!selectedDataset && datasetEditorialization" class="fr-mt-4w">
-      <fieldset
-        class="fr-fieldset availability"
-        role="radiogroup"
-        aria-errormessage="errors-availability"
-        :aria-invalid="formErrors.includes('availability') ? true : undefined"
-      >
-        <legend class="fr-fieldset__legend fr-fieldset__legend--regular">
-          Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
-        </legend>
-        <DsfrRadioButton
-          v-model="datasetProperties.availability"
-          name="source"
-          :value="Availability.URL_AVAILABLE"
-          label="J'ajoute l'URL"
-        />
-        <div
-          v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
-          class="fr-mb-4w fr-fieldset__element"
-        >
-          <DsfrInput
-            id="input-availabilityUrl"
-            v-model="datasetProperties.uri"
-            label="Url vers le jeu de données souhaité (obligatoire)"
-            :label-visible="true"
-            class="fr-mb-md-1w fr-input"
-            aria-errormessage="errors-availabilityUrl"
-            :aria-invalid="
-              formErrors.includes('availabilityUrl') ? true : undefined
-            "
-          />
-          <ErrorMessage
-            v-if="!!getErrorMessage('availabilityUrl')"
-            input-name="availabilityUrl"
-            :error-message="getErrorMessage('availabilityUrl')"
-          />
-        </div>
-        <DsfrRadioButton
-          v-model="datasetProperties.availability"
-          name="source"
-          :value="Availability.MISSING"
-          label="Je n'ai pas trouvé la donnée"
-        />
-        <DsfrRadioButton
-          v-model="datasetProperties.availability"
-          name="source"
-          :value="Availability.NOT_AVAILABLE"
-          label="Je n'ai pas cherché la donnée"
-        />
-      </fieldset>
-    </div>
-    <ErrorMessage
-      v-if="!!getErrorMessage('availability')"
-      :error-message="getErrorMessage('availability')"
-      input-name="availability"
+  <div class="fr-mt-1w fr-mb-4w">
+    <SelectDataset
+      v-model="selectedDataset"
+      :already-selected-datasets="alreadySelectedDatasets"
+      @update:model-value="onSelectDataset"
     />
   </div>
-  <div class="fr-input-group">
-    <SelectTopicGroup
-      v-model:properties-model="datasetProperties"
-      v-model:groups-model="datasetsGroups"
-      label="Regroupement"
-      description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
-      :error-message="getErrorMessage('group')"
-    />
+  <div
+    v-if="!selectedDataset && searchPageDatasetEditorialization"
+    class="fr-mt-4w"
+  >
+    <fieldset id="alt-source" class="fr-fieldset">
+      <legend
+        class="fr-fieldset__legend fr-fieldset__legend--regular"
+        for="alt-source"
+      >
+        Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
+      </legend>
+      <DsfrRadioButton
+        v-model="datasetProperties.availability"
+        name="source"
+        :value="Availability.URL_AVAILABLE"
+        label="J'ajoute l'URL"
+      />
+      <div
+        v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
+        class="fr-mb-4w fr-fieldset__element"
+      >
+        <DsfrInput
+          id="alt-link"
+          v-model="datasetProperties.uri"
+          label="Url vers le jeu de données souhaité (obligatoire)"
+          :label-visible="true"
+          class="fr-mb-md-1w fr-input"
+        />
+      </div>
+      <DsfrRadioButton
+        v-model="datasetProperties.availability"
+        name="source"
+        :value="Availability.MISSING"
+        label="Je n'ai pas trouvé la donnée"
+      />
+      <DsfrRadioButton
+        v-model="datasetProperties.availability"
+        name="source"
+        :value="Availability.NOT_AVAILABLE"
+        label="Je n'ai pas cherché la donnée"
+      />
+    </fieldset>
   </div>
 </template>
 
 <style scoped>
 .fr-fieldset {
   margin: 30px 0;
-}
-.fr-fieldset.availability[aria-invalid='true'] {
-  border: none;
-  outline: 2px solid var(--border-plain-error);
-}
-#input-availability:focus {
-  outline-style: solid;
-}
-fieldset legend {
-  inline-size: fit-content;
 }
 textarea {
   height: 150px;

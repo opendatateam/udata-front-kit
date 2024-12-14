@@ -19,3 +19,9 @@ export interface ReuseType {
   id: string
   label: string
 }
+
+// use a const instead of an interface to be compatible with topicsName as a variable
+export const ReuseModel = {
+  dataset: 'jeu de donnée',
+  topic: 'test' // to fix
+}

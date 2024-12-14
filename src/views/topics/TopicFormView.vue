@@ -1,63 +1,49 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import ErrorSummary from '@/components/forms/ErrorSummary.vue'
-import TopicForm from '@/components/forms/topic/TopicForm.vue'
-import TopicOwnerForm from '@/components/forms/topic/TopicOwnerForm.vue'
+import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
+import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
+import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
+import { NoOptionSelected } from '@/model/theme'
 import type { Topic, TopicPostData } from '@/model/topic'
-import type { TopicPageRouterConf } from '@/router/model'
-import {
-  useCurrentPageConf,
-  useRouteParamsAsString,
-  useRouteQueryAsString
-} from '@/router/utils'
+import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { useSiteId } from '@/utils/config'
-import { useTagsQuery } from '@/utils/tags'
-import { cloneTopic } from '@/utils/topic'
-import { useUniverseQuery } from '@/utils/universe'
+import { cloneTopic } from '@/utils/bouquet'
+import { useSearchPagesConfig } from '@/utils/config'
 
-interface Props extends TopicPageRouterConf {
-  isCreate: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  isCreate: true
+const props = defineProps({
+  isCreate: {
+    type: Boolean,
+    default: true
+  }
 })
 
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
+const route = useRoute()
 const router = useRouter()
-const { pageKey, pageConf } = useCurrentPageConf()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
-// populate tags from filters in query string
-const { tags: selectedTags } = useTagsQuery(
-  pageKey || 'topics',
-  routeQuery,
-  true
-)
-const { tagsWithUniverse } = useUniverseQuery(pageKey, selectedTags)
+const { searchPageName, searchPageSlug, searchPageExtrasKey } =
+  useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
-const topic: Ref<
-  Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
-> = ref({
+const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   private: true,
-  tags: tagsWithUniverse,
+  tags: [config.universe.name],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [useSiteId()]: {
+    [searchPageExtrasKey]: {
+      theme: routeQuery.theme || NoOptionSelected,
+      subtheme: routeQuery.subtheme || NoOptionSelected,
       datasets_properties: []
     }
   }
@@ -68,28 +54,27 @@ const setAccessibilityProperties = inject(
 ) as AccessibilityPropertiesType
 
 const formFields = ref()
-const errorSummary = ref()
+const errorStatus = ref()
 const formErrors: Ref<string[]> = ref([])
 // define error messages for form fields
-const filtersMessages = pageConf.filters
-  .filter((f) => f.form != null)
-  .map((f): [string, string] => [f.id, `Le champ "${f.name}" est obligatoire.`])
 const inputErrorMessages = new Map([
   ['name', 'Veuillez renseigner un sujet.'],
-  ['description', 'La description ne doit pas être vide.'],
-  ...filtersMessages
+  ['description', 'La description ne doit pas être vide.']
+  // ['theme', `Veuillez sélectionner une ${topicsMainTheme}.`],
+  // ['subtheme', `Veuillez sélectionner un ${topicsSecondaryTheme}.`]
 ])
 // Filter out valid ipnuts. Needed to reorder the received input errors to match the form order
-const sortedErrors = computed(() =>
+const sortedinputErrors = computed(() =>
   Array.from(inputErrorMessages.keys()).filter((key) =>
     formErrors.value.includes(key)
   )
 )
 
 const errorMsg = ref('')
+const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
-  const extras = topic.value?.extras?.[useSiteId()]
+  const extras = topic.value?.extras?.[searchPageExtrasKey]
   // condition for form mouting based on topic data load: edit || create raw || create cloned
   return (
     topic.value.id ||
@@ -105,8 +90,8 @@ const handleTopicOperation = (
   operation()
     .then((response) => {
       router.push({
-        name: `${pageKey}_detail`,
-        params: { item_id: response.slug }
+        name: `${searchPageSlug}_detail`,
+        params: { bid: response.slug }
       })
     })
     .catch((error) => {
@@ -141,13 +126,11 @@ const destroy = async () => {
     throw Error('Trying to delete topic without topic id')
   }
   if (
-    window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce ${pageConf.labels.singular} ?`
-    )
+    window.confirm(`Etes-vous sûr de vouloir supprimer ce ${searchPageName} ?`)
   ) {
     useTopicStore()
       .delete(topic.value.id)
-      .then(() => router.push({ name: pageKey }))
+      .then(() => router.push({ name: searchPageSlug }))
       .catch((error) => {
         errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
       })
@@ -157,130 +140,137 @@ const destroy = async () => {
 const cancel = () => {
   if (props.isCreate) {
     if (routeQuery.clone == null) {
-      router.push({ name: pageKey })
+      router.push({ name: searchPageSlug })
     } else {
-      router.push({
-        name: `${pageKey}_detail`,
-        params: {
-          item_id: routeQuery.clone
-        }
-      })
+      router.go(-1)
     }
   } else {
     router.push({
-      name: `${pageKey}_detail`,
+      name: `${searchPageSlug}_detail`,
       params: {
-        item_id: topic.value.slug
+        bid: topic.value.slug
       }
     })
   }
 }
 
-const onSubmit = async () => {
-  await formFields.value.onSubmit()
-  if (formErrors.value.length > 0) {
-    setTimeout(() => {
-      errorSummary.value.$el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      })
-      errorSummary.value.$el.focus()
-    }, 0)
-  } else {
-    save()
+const metaTitle = computed(() => {
+  if (topic.value.name && routeQuery.clone != null) {
+    return `Cloner le ${searchPageName} ${topic.value.name}`
+  } else if (topic.value.name) {
+    return `Éditer le ${searchPageName} ${topic.value.name}`
   }
-}
-
-const setMetaTitle = () => {
-  let metaTitle
-  if (props.isCreate && routeQuery.clone != null) {
-    metaTitle = `Cloner le ${pageConf.labels.singular} ${topic.value.name}`
-  } else if (!props.isCreate) {
-    metaTitle = `Éditer le ${pageConf.labels.singular} ${topic.value.name}`
-  } else {
-    metaTitle = `Ajouter un ${pageConf.labels.singular}`
-  }
-  setAccessibilityProperties(metaTitle)
-}
+  return `Ajouter un ${searchPageName}`
+})
 
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
     useTopicStore()
-      .load(routeQuery.clone || routeParams.item_id)
+      .load(routeQuery.clone || routeParams.bid)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(
-            remoteTopic,
-            routeQuery['keep-datasets'] === '1'
-          )
+          topic.value = cloneTopic(remoteTopic)
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
-          // FIXME: remove datasets and reuses after API is migrated to elements
-          const { datasets, reuses, elements, ...data } = remoteTopic
+          const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
         }
-        setMetaTitle()
       })
       .finally(() => loader.hide())
   }
 })
+
+watch(
+  metaTitle,
+  () => {
+    setAccessibilityProperties(metaTitle.value)
+  },
+  { immediate: true }
+)
+
+const onSubmit = async () => {
+  // reset error fields
+  formErrors.value = []
+  await formFields.value.onSubmit()
+
+  if (formErrors.value.length > 0) {
+    errorStatus.value.focus()
+  } else if (canSave.value) {
+    save()
+  }
+}
 </script>
 
 <template>
   <GenericContainer class="fr-mt-4w">
-    <div v-if="canAddTopic">
+    <div v-if="userStore.canAddBouquet(searchPageSlug)">
       <div v-if="errorMsg" class="fr-mt-4v">
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>
       <h1 class="fr-col-auto fr-mb-2v">
-        {{ isCreate ? `Nouveau ${pageConf.labels.singular}` : topic.name }}
+        {{ isCreate ? `Nouveau ${searchPageName}` : topic.name }}
       </h1>
-      <form novalidate @submit.prevent>
-        <ErrorSummary
+      <form novalidate>
+        <div
           v-show="formErrors.length"
-          ref="errorSummary"
-          :form-error-messages-map="inputErrorMessages"
-          :form-errors="sortedErrors"
-          heading-level="h3"
-        />
+          class="fr-my-4w fr-p-2w error-status"
+          role="group"
+          aria-labelledby="error-summary-title"
+        >
+          <h3 id="error-summary-title" ref="errorStatus" tabindex="-1">
+            Il y a {{ sortedinputErrors.length }} erreur<span
+              v-if="formErrors.length > 1"
+              >s</span
+            >
+            de saisie dans le formulaire.
+          </h3>
+          <ol>
+            <li
+              v-for="(error, index) in sortedinputErrors"
+              :key="index"
+              class="error"
+            >
+              <a :href="`#input-${error}`">{{
+                inputErrorMessages.get(error)
+              }}</a>
+            </li>
+          </ol>
+        </div>
         <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
-            Description du {{ pageConf.labels.extended }}
+            Description du {{ searchPageName }} de données
           </legend>
-          <TopicForm
+          <BouquetForm
             v-if="isReadyForForm"
             ref="formFields"
             v-model="topic"
             v-model:form-errors="formErrors"
-            :form-error-messages-map="inputErrorMessages"
+            @update-validation="(isValid: boolean) => (canSave = isValid)"
           />
         </fieldset>
-        <fieldset v-if="isCreate">
+        <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
-            Propriétaire du {{ pageConf.labels.extended }}
+            Propriétaire du {{ searchPageName }}
           </legend>
-          <TopicOwnerForm v-if="isReadyForForm" v-model="topic" />
+          <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
         </fieldset>
         <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
           <DsfrButton
             v-if="!isCreate"
-            type="button"
             secondary
             class="fr-mb-1w"
             label="Supprimer"
-            icon="fr-icon-delete-bin-line"
+            icon="ri-delete-bin-line"
             @click.prevent="destroy"
           />
           <DsfrButton
-            type="button"
             secondary
             class="fr-mb-1w fr-ml-1w"
             label="Annuler"
             @click.prevent="cancel"
           />
           <DsfrButton
-            type="button"
             class="fr-mb-1w fr-ml-1w"
             label="Enregistrer"
             @click.prevent="onSubmit"
@@ -289,7 +279,7 @@ onMounted(() => {
       </form>
     </div>
     <div v-else>
-      Vous n'avez pas les droits pour ajouter un {{ pageConf.labels.singular }}.
+      Vous n'avez pas les droits pour ajouter un {{ searchPageName }}.
     </div>
   </GenericContainer>
 </template>

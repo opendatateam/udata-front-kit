@@ -13,11 +13,11 @@ import type {
   PostForm,
   SubjectClass
 } from '@/model/discussion'
-import { useCurrentPageConf } from '@/router/utils'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useUserStore } from '@/store/UserStore'
 import { formatDate } from '@/utils'
+import { useSearchPagesConfig } from '@/utils/config'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,7 +25,9 @@ const router = useRouter()
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const { pageConf } = useCurrentPageConf()
+const { searchPageName } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
@@ -40,12 +42,13 @@ const props = defineProps({
   subjectClass: {
     type: String as () => SubjectClass,
     default: 'Dataset'
-  },
-  emptyMessage: {
-    type: String,
-    default: 'Pas de discussion pour ce jeu de données.'
   }
 })
+
+const subjectClassLabels = {
+  Dataset: 'jeu de données',
+  Topic: searchPageName
+}
 
 const discussionForm: Ref<DiscussionForm> = ref({
   title: '',
@@ -66,11 +69,13 @@ const discussions: ComputedRef<DiscussionResponse | undefined> = computed(
     )
   }
 )
-const pages = computed(() => {
+const pages: ComputedRef<object[]> = computed(() => {
   return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
 })
 
-const allowDiscussionCreation = pageConf.discussions.create
+const allowDiscussionCreation = computed(() => {
+  return config.website.discussions[props.subjectClass.toLowerCase()].create
+})
 
 const getUserAvatar = (post: Post) => {
   if (post.posted_by.avatar_thumbnail) {
@@ -192,7 +197,7 @@ watchEffect(() => {
       width="130"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      {{ emptyMessage }}
+      Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
     </p>
   </div>
   <div v-else class="fr-mt-4w">

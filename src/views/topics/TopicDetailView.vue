@@ -1,50 +1,56 @@
 <script setup lang="ts">
-import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
+import {
+  OrganizationNameWithCertificate,
+  ReadMore,
+  excerpt
+} from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
 import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
-import TagComponent from '@/components/TagComponent.vue'
-import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
-import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
+import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
+import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
-import type { TopicPageRouterConf } from '@/router/model'
-import {
-  useCurrentPageConf,
-  useRouteMeta,
-  useRouteParamsAsString
-} from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import {
+  updateTopicExtras,
+  useBreadcrumbLinksForTopic,
+  useExtras
+} from '@/utils/bouquet'
+import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useTagsByRef } from '@/utils/tags'
-import { updateTopicExtras, useExtras } from '@/utils/topic'
+import { useThemeOptions } from '@/utils/theme'
 
-const props = defineProps<TopicPageRouterConf>()
+const props = defineProps({
+  bouquetId: {
+    type: String,
+    required: true
+  }
+})
 
+const route = useRoute()
 const router = useRouter()
-const meta = useRouteMeta()
-const { params } = useRouteParamsAsString()
 const store = useTopicStore()
 const loading = useLoading()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
-const showCloneModal = ref(false)
-const cloneKeepDatasets = ref(false)
+
+const showDiscussions = config.website.discussions.topic.display
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -54,25 +60,30 @@ const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
-const isAdmin = computed(() => useUserStore().isAdmin)
+const canClone = computed(() => useUserStore().isLoggedIn)
 
-const { pageKey, pageConf } = useCurrentPageConf()
-const showDiscussions = pageConf.discussions.display
-const tags = useTagsByRef(pageKey, topic)
+const {
+  searchPageListAll,
+  searchPageDisplayMetadata,
+  searchPageActivateReadMore,
+  searchPageDatasetEditorialization,
+  searchPageSlug,
+  searchPageName,
+  searchPageExtrasKey
+} = useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
-const { datasetsProperties, clonedFrom } = useExtras(topic)
+const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(topic)
 
-const breadcrumbLinks = computed(() => {
-  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
-  if (pageConf.list_all === true) {
-    breadcrumbs.push({
-      to: `/${meta.pageKey || 'topics'}`,
-      text: pageConf.breadcrumb_title || pageConf.title
-    })
-  }
-  breadcrumbs.push({ to: '', text: topic.value?.name ?? '' })
-  return breadcrumbs
-})
+const breadcrumbLinks = useBreadcrumbLinksForTopic(
+  theme,
+  subtheme,
+  topic,
+  searchPageListAll,
+  searchPageSlug,
+  searchPageName
+)
+
+const { themeColors } = useThemeOptions(theme)
 
 const tabTitles = [
   { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
@@ -81,40 +92,17 @@ const tabTitles = [
 ]
 const activeTab = ref(0)
 
-const cloneModalActions = [
-  {
-    label: 'Conserver les liens',
-    onClick() {
-      cloneKeepDatasets.value = true
-      showCloneModal.value = false
-      goToClone()
-    }
-  },
-  {
-    label: 'Supprimer les liens',
-    secondary: true,
-    onClick() {
-      cloneKeepDatasets.value = false
-      showCloneModal.value = false
-      goToClone()
-    }
-  }
-]
-
 const goToEdit = () => {
   router.push({
-    name: `${pageKey}_edit`,
-    params: { item_id: topic.value?.id }
+    name: `${searchPageSlug}_edit`,
+    params: { bid: topic.value?.id }
   })
 }
 
 const goToClone = () => {
   router.push({
-    name: `${pageKey}_add`,
-    query: {
-      clone: topic.value?.id,
-      'keep-datasets': cloneKeepDatasets.value ? '1' : '0'
-    }
+    name: `${searchPageSlug}_add`,
+    query: { clone: topic.value?.id }
   })
 }
 
@@ -126,18 +114,6 @@ const togglePublish = () => {
     .update(topic.value.id, {
       tags: topic.value.tags,
       private: topic.value.private
-    })
-    .finally(() => loader.hide())
-}
-
-const toggleFeatured = () => {
-  if (topic.value === null) return
-  topic.value.featured = !topic.value.featured
-  const loader = useLoading().show()
-  store
-    .update(topic.value.id, {
-      tags: topic.value.tags,
-      featured: topic.value.featured
     })
     .finally(() => loader.hide())
 }
@@ -163,17 +139,21 @@ const onUpdateDatasets = () => {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
       datasets: dedupedDatasets,
-      extras: updateTopicExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
-        )
-      })
+      extras: updateTopicExtras(
+        topic.value,
+        {
+          datasets_properties: datasetsProperties.value.map(
+            ({ remoteDeleted, remoteArchived, ...data }) => data
+          )
+        },
+        searchPageExtrasKey
+      )
     })
     .finally(() => loader.hide())
 }
 
 const metaDescription = (): string | undefined => {
-  return topic.value?.description ?? ''
+  return excerpt(topic.value?.description ?? '')
 }
 
 const metaTitle = computed(() => {
@@ -182,8 +162,8 @@ const metaTitle = computed(() => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: `${pageKey}_detail`,
-    params: { item_id: topic.value?.slug }
+    name: `${searchPageSlug}_detail`,
+    params: { bid: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
 }
@@ -201,17 +181,17 @@ useHead({
 })
 
 watch(
-  () => params.item_id,
+  () => props.bouquetId,
   () => {
     const loader = loading.show({ enforceFocus: false })
     store
-      .load(params.item_id, { toasted: false, redirectNotFound: true })
+      .load(props.bouquetId, { toasted: false, redirectNotFound: true })
       .then((res) => {
         topic.value = res
-        if (topic.value.slug !== params.item_id) {
+        if (topic.value.slug !== props.bouquetId) {
           router.push({
-            name: `${pageKey}_detail`,
-            params: { item_id: topic.value.slug }
+            name: `${searchPageSlug}_detail`,
+            params: { bid: topic.value.slug }
           })
         }
         setAccessibilityProperties(metaTitle.value)
@@ -227,81 +207,36 @@ watch(
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
   <GenericContainer v-if="topic">
-    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters">
-      <div
-        class="fr-col-12"
-        :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
-      >
-        <div class="topic__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <ul v-if="tags.length > 0" class="fr-badges-group">
-            <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-              <TagComponent :tag="t" />
-            </li>
-          </ul>
-        </div>
-        <div v-if="props.enableReadMore">
-          <ReadMore max-height="600">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="description" />
-          </ReadMore>
-        </div>
-        <div v-else>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="description" />
-        </div>
-      </div>
+    <div class="fr-grid-row fr-grid-row--gutters flex-reverse">
       <div
         class="fr-col-12"
         :class="
-          props.displayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
+          searchPageDisplayMetadata
+            ? 'fr-col-md-4'
+            : 'fr-col-md-12 flex-reverse'
         "
       >
         <div class="fr-mb-2w">
           <div v-if="!canEdit && topic.private" class="fr-mb-1w">
             <DsfrTag label="Brouillon" />
           </div>
-          <div
-            class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
-          >
+          <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
             <DsfrButton
-              secondary
+              v-if="canClone"
+              :secondary="canEdit"
               size="md"
               label="Cloner"
-              icon="fr-icon-git-merge-line"
-              :title="`Cloner le ${pageConf.labels.singular}`"
-              @click="showCloneModal = true"
+              icon="ri-file-copy-2-line"
+              title="Cloner le bouquet"
+              class="fr-mb-1v fr-mr-1v"
+              @click="goToClone"
             />
-            <DsfrModal
-              v-model:opened="showCloneModal"
-              title="Cloner en conservant les jeux de données&nbsp;?"
-              :is-alert="false"
-              :actions="cloneModalActions"
-              @close="showCloneModal = false"
-            >
-              <template #default>
-                <p>
-                  Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du {{ pageConf.labels.singular }} que vous souhaitez
-                  cloner.
-                </p>
-                <p>
-                  Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au {{ pageConf.labels.singular }} cloné,
-                  mais leurs libellés et raisons d'utilisation seront conservés.
-                </p>
-                <p>
-                  Voulez-vous conserver les liens vers les jeux de
-                  données&nbsp;?
-                </p>
-              </template>
-            </DsfrModal>
             <DsfrButton
               v-if="canEdit"
               secondary
               size="md"
               label="Éditer"
-              icon="fr-icon-pencil-line"
+              icon="ri-pencil-line"
               class="fr-mb-1v fr-mr-1v"
               @click="goToEdit"
             />
@@ -309,28 +244,13 @@ watch(
               v-if="canEdit"
               size="md"
               :label="topic.private ? 'Publier' : 'Dépublier'"
-              :icon="
-                topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
-              "
+              icon="ri-eye-line"
               class="fr-mb-1v"
               @click="togglePublish"
             />
-            <DsfrButton
-              v-if="isAdmin"
-              secondary
-              size="md"
-              :label="
-                topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'
-              "
-              :icon="
-                topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
-              "
-              class="fr-mb-1v"
-              @click="toggleFeatured"
-            />
           </div>
         </div>
-        <div v-if="props.displayMetadata">
+        <div v-if="searchPageDisplayMetadata">
           <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
           <div
             v-if="topic.organization"
@@ -381,8 +301,8 @@ watch(
             <p>
               <RouterLink
                 :to="{
-                  name: `${pageKey}_detail`,
-                  params: { item_id: clonedFrom.slug }
+                  name: `${searchPageSlug}_detail`,
+                  params: { bid: clonedFrom.slug }
                 }"
               >
                 {{ clonedFrom.name }}
@@ -391,23 +311,42 @@ watch(
           </div>
         </div>
       </div>
+      <div
+        class="fr-col-12"
+        :class="searchPageDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
+      >
+        <div class="bouquet__header fr-mb-4v">
+          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
+          <DsfrTag v-if="theme" class="fr-mb-1v card__tag" :label="subtheme" />
+        </div>
+        <div v-if="searchPageActivateReadMore">
+          <ReadMore max-height="600">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="description"></div>
+          </ReadMore>
+        </div>
+        <div v-else>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="description"></div>
+        </div>
+      </div>
     </div>
 
     <DsfrTabs
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
+      :tab-list-name="`Groupes d'attributs du ${searchPageName}`"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
-        <TopicDatasetList
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+        <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
-          :dataset-editorialization="props.datasetEditorialization"
+          :dataset-editorialization="searchPageDatasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
-        <TopicDatasetListExport
+        <BouquetDatasetListExport
           :datasets="datasetsProperties"
           :filename="topic.id"
         />
@@ -418,7 +357,6 @@ watch(
           v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
@@ -430,7 +368,7 @@ watch(
 </template>
 
 <style scoped>
-.topic__header {
+.bouquet__header {
   display: flex;
   align-items: center;
   flex-flow: wrap;
@@ -443,13 +381,8 @@ watch(
 .owner-avatar {
   margin-bottom: -6px;
 }
-/*
-FIXME: magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
-*/
-:deep(.fr-tabs) {
-  height: auto;
-}
-:deep(.fr-tabs)::before {
-  height: calc(var(--tabs-height) - 47px);
+.card__tag {
+  color: v-bind('themeColors.color');
+  background-color: v-bind('themeColors.background');
 }
 </style>

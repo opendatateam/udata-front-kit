@@ -1,9 +1,16 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { capitalize } from 'vue'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteLocationNormalizedLoaded,
+  type RouteRecordRaw
+} from 'vue-router'
 
 import config from '@/config'
-import type { StaticPageConfig } from '@/model/config'
+import type { PageConfig } from '@/model/config'
+import { getAllSearchPagesConfig } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
-import StaticPageView from '@/views/StaticPageView.vue'
+import SimplePageView from '@/views/SimplePageView.vue'
 
 const disableRoutes: string[] = config.website.router.disable ?? []
 
@@ -17,6 +24,33 @@ const defaultRoutes: RouteRecordRaw[] = [
       title: 'Accueil'
     },
     component: async () => await import('@/views/HomeView.vue')
+  },
+  // datasets
+  {
+    path: '/datasets',
+    children: [
+      {
+        path: '',
+        name: 'datasets',
+        meta: {
+          title: 'Données'
+        },
+        component: async () =>
+          await import('@/views/datasets/DatasetsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          query: route.query.q,
+          page: route.query.page,
+          organization: route.query.organization,
+          topic: route.query.topic
+        })
+      },
+      {
+        path: ':did',
+        name: 'dataset_detail',
+        component: async () =>
+          await import('@/views/datasets/DatasetDetailView.vue')
+      }
+    ]
   },
   // organizations
   {
@@ -49,25 +83,72 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: NotFoundView
   }
-].filter((route) => {
-  if (route.name === undefined) return true
-  return !disableRoutes.includes(route.name)
+]
+
+// search pages
+getAllSearchPagesConfig().forEach((searchPage) => {
+  defaultRoutes.push(
+    {
+      path: `/${searchPage.searchPageSlug}`,
+      children: [
+        {
+          path: '',
+          name: searchPage.searchPageSlug,
+          meta: {
+            title: capitalize(searchPage.searchPageName) + 's'
+          },
+          component: async () =>
+            await import('@/views/bouquets/BouquetsListView.vue'),
+          props: (route: RouteLocationNormalizedLoaded) => ({
+            query: route.query.q,
+            subtheme: route.query.subtheme,
+            theme: route.query.theme,
+            geozone: route.query.geozone,
+            drafts: route.query.drafts
+          })
+        },
+        {
+          path: ':bid',
+          name: `${searchPage.searchPageSlug}_detail`,
+          props: (route: RouteLocationNormalizedLoaded) => ({
+            bouquetId: route.params.bid
+          }),
+          component: async () =>
+            await import('@/views/bouquets/BouquetDetailView.vue')
+        }
+      ]
+    },
+    {
+      path: `/admin/${searchPage.searchPageSlug}/add`,
+      name: `${searchPage.searchPageSlug}_add`,
+      component: async () =>
+        await import('@/views/bouquets/BouquetFormView.vue'),
+      meta: { requiresAuth: true },
+      props: { isCreate: true }
+    },
+    {
+      path: `/admin/${searchPage.searchPageSlug}/edit/:bid`,
+      name: `${searchPage.searchPageSlug}_edit`,
+      component: async () =>
+        await import('@/views/bouquets/BouquetFormView.vue'),
+      meta: { requiresAuth: true },
+      props: { isCreate: false }
+    }
+  )
 })
 
-// static pages
-const pages = (config.website.router.static_pages ?? []).map(
-  (item: StaticPageConfig) => {
-    return {
-      path: item.route,
-      name: item.id,
-      component: StaticPageView,
-      props: { url: item.url },
-      meta: {
-        title: item.title
-      }
+// pages
+const pages = (config.website.router.pages ?? []).map((item: PageConfig) => {
+  return {
+    path: item.route,
+    name: item.id,
+    component: SimplePageView,
+    props: { url: item.url },
+    meta: {
+      title: item.title
     }
   }
-)
+})
 
 // oauth
 if (config.website.oauth_option === true) {
