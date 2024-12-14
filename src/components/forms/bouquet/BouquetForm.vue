@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { required } from '@vee-validate/rules'
 import { useForm } from 'vee-validate'
-import { capitalize, onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import type { TopicPostData } from '@/model/topic'
-import { useTopicsConf } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
+
+const route = useRoute()
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData> & Pick<TopicPostData, 'extras'>,
@@ -30,13 +33,10 @@ type FormErrors = {
 const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
-const {
-  topicsUseThemes,
-  topicsExtrasKey,
-  topicsMainTheme,
-  topicsSecondaryTheme,
-  topicsName
-} = useTopicsConf()
+
+const { searchPageExtrasKey, searchPageName } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 // Define values and validation rules for each field
 const { values, errors, defineField, handleSubmit } = useForm({
@@ -44,13 +44,13 @@ const { values, errors, defineField, handleSubmit } = useForm({
     name: topic.value.name ?? '',
     description: topic.value.description ?? '',
     theme:
-      topic.value.extras[topicsExtrasKey].theme === NoOptionSelected
+      topic.value.extras[searchPageExtrasKey].theme === NoOptionSelected
         ? ''
-        : topic.value.extras[topicsExtrasKey].theme,
+        : topic.value.extras[searchPageExtrasKey].theme,
     subtheme:
-      topic.value.extras[topicsExtrasKey].subtheme === NoOptionSelected
+      topic.value.extras[searchPageExtrasKey].subtheme === NoOptionSelected
         ? ''
-        : topic.value.extras[topicsExtrasKey].subtheme
+        : topic.value.extras[searchPageExtrasKey].subtheme
   },
   validationSchema: {
     name: required,
@@ -79,8 +79,8 @@ const onValidSubmit = async (validatedValues: {
   // set topic values from validated fields
   topic.value.name = validatedValues.name
   topic.value.description = validatedValues.description
-  topic.value.extras[topicsExtrasKey].theme = validatedValues.theme
-  topic.value.extras[topicsExtrasKey].subtheme = validatedValues.subtheme
+  topic.value.extras[searchPageExtrasKey].theme = validatedValues.theme
+  topic.value.extras[searchPageExtrasKey].subtheme = validatedValues.subtheme
   // sync valid status with parent
   emits('updateValidation', true)
 }
@@ -106,11 +106,11 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 // initialize theme and subtheme from topic values, if any
 onMounted(() => {
-  if (topic.value.extras[topicsExtrasKey].theme !== NoOptionSelected) {
-    theme.value = topic.value.extras[topicsExtrasKey].theme
+  if (topic.value.extras[searchPageExtrasKey].theme !== NoOptionSelected) {
+    theme.value = topic.value.extras[searchPageExtrasKey].theme
   }
-  if (topic.value.extras[topicsExtrasKey].subtheme !== NoOptionSelected) {
-    subtheme.value = topic.value.extras[topicsExtrasKey].subtheme
+  if (topic.value.extras[searchPageExtrasKey].subtheme !== NoOptionSelected) {
+    subtheme.value = topic.value.extras[searchPageExtrasKey].subtheme
   }
 })
 </script>
@@ -121,7 +121,7 @@ onMounted(() => {
     <DsfrInput
       v-model="name"
       v-bind="nameAttrs"
-      :label="`Sujet du ${topicsName} (obligatoire)`"
+      :label="`Sujet du ${searchPageName} (obligatoire)`"
       label-visible
       :aria-invalid="errors.name && isSubmitted ? true : undefined"
       :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
@@ -137,7 +137,7 @@ onMounted(() => {
       v-model="description"
       v-bind="descriptionAttrs"
       is-textarea
-      :label="`Objectif du ${topicsName} (obligatoire)`"
+      :label="`Objectif du ${searchPageName} (obligatoire)`"
       label-visible
       :aria-invalid="errors.description && isSubmitted ? true : undefined"
       :description-id="
@@ -156,8 +156,8 @@ onMounted(() => {
     </p>
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
       Renseignez ici les informations nécessaires à la compréhension du
-      {{ topicsName }}&nbsp;: politique publique et problématique à laquelle il
-      répond, lien vers toute méthodologie de traitement des données,
+      {{ searchPageName }}&nbsp;: politique publique et problématique à laquelle
+      il répond, lien vers toute méthodologie de traitement des données,
       description de l'organisme porteur du projet, etc.<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
@@ -167,7 +167,7 @@ onMounted(() => {
     </p>
   </div>
   <!-- Theme -->
-  <div v-if="topicsUseThemes" class="fr-select-group fr-input-group">
+  <!-- <div v-if="topicsUseThemes" class="fr-select-group fr-input-group">
     <label class="fr-label" for="input-theme">
       {{ capitalize(topicsMainTheme) }} (obligatoire)
     </label>
@@ -198,9 +198,9 @@ onMounted(() => {
       <span class="fr-icon-error-fill" aria-hidden="true" />
       Veuillez sélectionner une thématique.
     </p>
-  </div>
+  </div> -->
   <!-- Subtheme -->
-  <div v-if="topicsUseThemes" class="fr-select-group">
+  <!-- <div v-if="topicsUseThemes" class="fr-select-group">
     <label class="fr-label" for="input-subtheme"
       >{{ capitalize(topicsSecondaryTheme) }}
       (obligatoire)
@@ -237,7 +237,7 @@ onMounted(() => {
     <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">
       Choisissez d'abord une {{ topicsMainTheme }}
     </p>
-  </div>
+  </div> -->
   <!-- Spatial coverage -->
   <div class="fr-select-group">
     <label class="fr-label" for="select-spatial-coverage"

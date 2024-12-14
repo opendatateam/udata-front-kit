@@ -6,17 +6,21 @@ import {
 } from '@datagouv/components'
 import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
-import { useTopicsConf } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
-const { topicsSlug } = useTopicsConf()
+const route = useRoute()
+const { searchPageSlug, searchPageExtrasKey } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 const props = defineProps({
   bouquet: {
@@ -34,12 +38,15 @@ const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
+const { theme, subtheme, datasetsProperties } = useExtras(
+  bouquetRef,
+  searchPageExtrasKey
+)
 
 const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
-  name: `${topicsSlug}_detail`,
+  name: `${searchPageSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
 

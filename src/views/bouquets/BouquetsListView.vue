@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { storeToRefs } from 'pinia'
 import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -14,12 +13,13 @@ import {
 } from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
-
-const { topicsSlug, topicsName } = useTopicsConf()
+import { useSearchPagesConfig } from '@/utils/config'
 
 const router = useRouter()
 const route = useRoute()
+const { searchPageSlug, searchPageName } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 const props = defineProps({
   query: {
@@ -52,7 +52,6 @@ const showDrafts = ref(false)
 const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
 
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -61,11 +60,14 @@ const setAccessibilityProperties = inject(
 const breadcrumbList = computed(() => {
   const links: BreadcrumbItem[] = []
   links.push({ text: 'Accueil', to: '/' })
-  links.push({ text: `${capitalize(topicsName)}s`, to: `/${topicsSlug}` })
+  links.push({
+    text: `${capitalize(searchPageName)}s`,
+    to: `/${searchPageSlug}`
+  })
   if (selectedTheme.value !== NoOptionSelected && selectedTheme.value !== '') {
     links.push({
       text: selectedTheme.value,
-      to: `/${topicsSlug}?theme=${selectedTheme.value}&subtheme=${NoOptionSelected}`
+      to: `/${searchPageSlug}?theme=${selectedTheme.value}&subtheme=${NoOptionSelected}`
     })
     if (
       selectedSubtheme.value !== NoOptionSelected &&
@@ -78,7 +80,7 @@ const breadcrumbList = computed(() => {
 })
 
 const createUrl = computed(() => {
-  return { name: `${topicsSlug}_add`, query: route.query }
+  return { name: `${searchPageSlug}_add`, query: route.query }
 })
 
 const pageTitle = computed(() => {
@@ -108,7 +110,7 @@ const setLiveResults = () => {
 const search = useDebounceFn(() => {
   router
     .push({
-      name: topicsSlug,
+      name: searchPageSlug,
       query: { ...route.query, q: selectedQuery.value }
     })
     .then(() => {
@@ -137,14 +139,14 @@ watch(
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
-      <h1 class="fr-col-auto fr-mb-2v">{{ capitalize(topicsName) }}s</h1>
+      <h1 class="fr-col-auto fr-mb-2v">{{ capitalize(searchPageName) }}s</h1>
       <div
-        v-if="canAddBouquet"
+        v-if="userStore.canAddBouquet(searchPageSlug)"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
           <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
-          Ajouter un {{ topicsName }}
+          Ajouter un {{ searchPageName }}
         </router-link>
       </div>
     </div>
@@ -153,9 +155,9 @@ watch(
         id="search-bouquet"
         v-model="selectedQuery"
         :is-filter="true"
-        :search-label="`Filtrer les ${topicsName}s`"
-        :label="`Filtrer les ${topicsName}s`"
-        :search-endpoint="router.resolve({ name: 'bouquets' }).href"
+        :search-label="`Filtrer les ${searchPageName}s`"
+        :label="`Filtrer les ${searchPageName}s`"
+        :search-endpoint="router.resolve({ name: searchPageName }).href"
         @update:model-value="search"
       />
     </div>

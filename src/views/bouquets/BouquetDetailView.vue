@@ -8,7 +8,7 @@ import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
 import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -31,7 +31,7 @@ import {
   useBreadcrumbLinksForTopic,
   useExtras
 } from '@/utils/bouquet'
-import { useTopicsConf } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
@@ -42,6 +42,7 @@ const props = defineProps({
   }
 })
 
+const route = useRoute()
 const router = useRouter()
 const store = useTopicStore()
 const loading = useLoading()
@@ -62,13 +63,14 @@ const canEdit = computed(() => {
 const canClone = computed(() => useUserStore().isLoggedIn)
 
 const {
-  topicsListAll,
-  topicsDisplayMetadata,
-  topicsActivateReadMore,
-  topicsDatasetEditorialization,
-  topicsSlug,
-  topicsName
-} = useTopicsConf()
+  searchPageListAll,
+  searchPageDisplayMetadata,
+  searchPageActivateReadMore,
+  searchPageDatasetEditorialization,
+  searchPageSlug,
+  searchPageName,
+  searchPageExtrasKey
+} = useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
 const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(topic)
 
@@ -76,7 +78,9 @@ const breadcrumbLinks = useBreadcrumbLinksForTopic(
   theme,
   subtheme,
   topic,
-  topicsListAll
+  searchPageListAll,
+  searchPageSlug,
+  searchPageName
 )
 
 const { themeColors } = useThemeOptions(theme)
@@ -90,14 +94,14 @@ const activeTab = ref(0)
 
 const goToEdit = () => {
   router.push({
-    name: `${topicsSlug}_edit`,
+    name: `${searchPageSlug}_edit`,
     params: { bid: topic.value?.id }
   })
 }
 
 const goToClone = () => {
   router.push({
-    name: `${topicsSlug}_add`,
+    name: `${searchPageSlug}_add`,
     query: { clone: topic.value?.id }
   })
 }
@@ -135,11 +139,15 @@ const onUpdateDatasets = () => {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
       datasets: dedupedDatasets,
-      extras: updateTopicExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ remoteDeleted, remoteArchived, ...data }) => data
-        )
-      })
+      extras: updateTopicExtras(
+        topic.value,
+        {
+          datasets_properties: datasetsProperties.value.map(
+            ({ remoteDeleted, remoteArchived, ...data }) => data
+          )
+        },
+        searchPageExtrasKey
+      )
     })
     .finally(() => loader.hide())
 }
@@ -154,7 +162,7 @@ const metaTitle = computed(() => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: `${topicsSlug}_detail`,
+    name: `${searchPageSlug}_detail`,
     params: { bid: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
@@ -182,7 +190,7 @@ watch(
         topic.value = res
         if (topic.value.slug !== props.bouquetId) {
           router.push({
-            name: `${topicsSlug}_detail`,
+            name: `${searchPageSlug}_detail`,
             params: { bid: topic.value.slug }
           })
         }
@@ -203,7 +211,9 @@ watch(
       <div
         class="fr-col-12"
         :class="
-          topicsDisplayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
+          searchPageDisplayMetadata
+            ? 'fr-col-md-4'
+            : 'fr-col-md-12 flex-reverse'
         "
       >
         <div class="fr-mb-2w">
@@ -240,7 +250,7 @@ watch(
             />
           </div>
         </div>
-        <div v-if="topicsDisplayMetadata">
+        <div v-if="searchPageDisplayMetadata">
           <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
           <div
             v-if="topic.organization"
@@ -291,7 +301,7 @@ watch(
             <p>
               <RouterLink
                 :to="{
-                  name: `${topicsSlug}_detail`,
+                  name: `${searchPageSlug}_detail`,
                   params: { bid: clonedFrom.slug }
                 }"
               >
@@ -303,13 +313,13 @@ watch(
       </div>
       <div
         class="fr-col-12"
-        :class="topicsDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
+        :class="searchPageDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
           <DsfrTag v-if="theme" class="fr-mb-1v card__tag" :label="subtheme" />
         </div>
-        <div v-if="topicsActivateReadMore">
+        <div v-if="searchPageActivateReadMore">
           <ReadMore max-height="600">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="description"></div>
@@ -326,14 +336,14 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${topicsName}`"
+      :tab-list-name="`Groupes d'attributs du ${searchPageName}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
         <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
-          :dataset-editorialization="topicsDatasetEditorialization"
+          :dataset-editorialization="searchPageDatasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
         <BouquetDatasetListExport

@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  capitalize,
-  ref,
-  toRef,
-  watchEffect,
-  type PropType,
-  type Ref
-} from 'vue'
+import { ref, toRef, watchEffect, type PropType, type Ref } from 'vue'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
@@ -14,7 +7,7 @@ import type { SpatialCoverage } from '@/model/spatial'
 import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
 import { useThemeOptions } from '@/utils/theme'
 
 const spatialAPI = new SpatialAPI()
@@ -48,8 +41,9 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const themeNameRef = toRef(props, 'themeName')
 const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
 
-const { topicsSlug, topicsUseThemes, topicsMainTheme, topicsSecondaryTheme } =
-  useTopicsConf()
+const { searchPageSlug } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 const localShowDrafts = ref(false)
 
 const computeQueryArgs = (
@@ -70,7 +64,7 @@ const computeQueryArgs = (
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    path: `/${topicsSlug}`,
+    path: `/${searchPageSlug}`,
     query: computeQueryArgs(data)
   })
 }
@@ -123,7 +117,7 @@ watchEffect(() => {
       name="show_drafts"
       @update:model-value="switchLocalShowDrafts"
     />
-    <template v-if="topicsUseThemes">
+    <!-- <template v-if="topicsUseThemes">
       <div class="fr-select-group">
         <label class="fr-label" for="select_theme">
           {{ capitalize(topicsMainTheme) }}s
@@ -174,7 +168,7 @@ watchEffect(() => {
           </option>
         </select>
       </div>
-    </template>
+    </template> -->
     <div class="fr-select-group">
       <label class="fr-label" for="select-spatial-coverage"
         >Couverture territoriale</label

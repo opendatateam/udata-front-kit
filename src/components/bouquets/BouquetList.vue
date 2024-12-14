@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import type { ComputedRef, PropType } from 'vue'
 import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -9,16 +8,16 @@ import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
 
 const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
 
-const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
+const { searchPageName, searchPageSlug, searchPageExtrasKey } =
+  useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
 
 const props = defineProps({
   themeName: {
@@ -59,11 +58,11 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
     })
     .filter((bouquet) => {
       if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras[topicsExtrasKey].theme === props.themeName
+      return bouquet.extras[searchPageExtrasKey].theme === props.themeName
     })
     .filter((bouquet) => {
       if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras[topicsExtrasKey].subtheme === props.subthemeName
+      return bouquet.extras[searchPageExtrasKey].subtheme === props.subthemeName
     })
     .filter((bouquet) => {
       if (props.query === '') return true
@@ -73,22 +72,22 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (bouquets.value.length === 1) {
-    return `1 ${topicsName} disponible`
+    return `1 ${searchPageName} disponible`
   } else if (bouquets.value.length > 1) {
-    return bouquets.value.length + ` ${topicsName}s disponibles`
+    return bouquets.value.length + ` ${searchPageName}s disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
 })
 
 const createUrl = computed(() => {
-  return { name: `${topicsSlug}_add`, query: route.query }
+  return { name: `${searchPageSlug}_add`, query: route.query }
 })
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, query }).then(() => {
+  router.push({ name: searchPageSlug, query }).then(() => {
     emits('clearFilters')
   })
 }
@@ -151,7 +150,7 @@ defineExpose({
           <p class="fr-mt-1v fr-mb-3v">
             Essayez de réinitialiser les filtres pour agrandir votre champ de
             recherche.<br />
-            Vous pouvez aussi contribuer en créant un {{ topicsName }}.
+            Vous pouvez aussi contribuer en créant un {{ searchPageName }}.
           </p>
         </div>
         <div class="fr-grid-row fr-grid-row--undefined">
@@ -159,12 +158,12 @@ defineExpose({
             Réinitialiser les filtres
           </button>
           <router-link
-            v-if="canAddBouquet"
+            v-if="userStore.canAddBouquet(searchPageSlug)"
             :to="createUrl"
             class="fr-btn fr-btn--secondary fr-ml-1w"
           >
             <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
-            Ajouter un {{ topicsName }}
+            Ajouter un {{ searchPageName }}
           </router-link>
         </div>
       </div>

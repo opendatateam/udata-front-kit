@@ -10,7 +10,6 @@ import {
   Well,
   type License
 } from '@datagouv/components'
-import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
@@ -30,7 +29,7 @@ import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
-import { useTopicsConf } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -38,7 +37,6 @@ const datasetId = route.params.did
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
@@ -49,7 +47,10 @@ const showAddToBouquetModal = ref(false)
 
 const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
-const { topicsName } = useTopicsConf()
+
+const { searchPageName, searchPageSlug } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -266,13 +267,13 @@ watch(
           v-if="
             config.website.datasets.add_to_bouquet &&
             userStore.loggedIn &&
-            canAddBouquet
+            userStore.canAddBouquet(searchPageSlug)
           "
         >
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            :label="`Ajouter à un ${topicsName}`"
+            :label="`Ajouter à un ${searchPageName}`"
             icon="ri-file-add-line"
             @click="showAddToBouquetModal = true"
           />

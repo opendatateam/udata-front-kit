@@ -2,6 +2,7 @@
 import { type DatasetV2 } from '@datagouv/components'
 import { onMounted, ref, type Ref } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
+import { useRoute } from 'vue-router'
 
 import DatasetEditModal, {
   type DatasetEditModalType
@@ -11,12 +12,14 @@ import { type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { fromMarkdown } from '@/utils'
 import { isAvailable } from '@/utils/bouquet'
-import { useTopicsConf } from '@/utils/config'
+import { useSearchPagesConfig } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 
 import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
+
+const route = useRoute()
 
 const datasetsProperties = defineModel({
   type: Array<DatasetProperties>,
@@ -43,7 +46,9 @@ const expandStore: Ref<{ [key: string]: string | null }> = ref({})
 const originalDatasets = ref([...datasetsProperties.value])
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
-const { topicsName } = useTopicsConf()
+const { searchPageName } = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
 
 const activeAccordion: Ref<number> = ref(-1)
 
@@ -54,7 +59,7 @@ const getAccordeonId = (index: number): string => {
 const removeDataset = (index: number) => {
   if (
     window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${topicsName} ?`
+      `Etes-vous sûr de vouloir supprimer ce jeu de données du ${searchPageName} ?`
     )
   ) {
     delete expandStore.value[getAccordeonId(index)]
@@ -128,7 +133,7 @@ onMounted(() => {
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
   >
     <h2 class="fr-col-auto fr-mb-2v">
-      Composition du {{ topicsName }} de données
+      Composition du {{ searchPageName }} de données
     </h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
@@ -173,7 +178,7 @@ onMounted(() => {
   </div>
   <!-- Actual datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset">
-    <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
+    <p>Ce {{ searchPageName }} ne contient pas encore de jeux de données</p>
   </div>
   <div v-else>
     <div v-if="datasetEditorialization">
