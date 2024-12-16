@@ -3,13 +3,16 @@ import { defineStore } from 'pinia'
 
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
+import CustomOrganizationsAPI from '@/services/api/CustomOrganizationsAPI'
 import OrganizationsAPI from '@/services/api/resources/OrganizationsAPI'
 
 const orgApi = new OrganizationsAPI()
+const customOrgApi = new CustomOrganizationsAPI()
 
 interface LightweightOrganization {
   id: string
   name: string
+  slug: string
 }
 
 interface PaginatedOrganizations {
@@ -29,22 +32,6 @@ export const useOrganizationStore = defineStore('organization', {
   }),
   actions: {
     /**
-     * Get an organizations pagination object from config infos
-     */
-    getPagination() {
-      const pageSize = config.website.pagination_sizes.organizations_list
-      const total = config.organizations.length
-      const nbPages = Math.ceil(total / pageSize)
-      return [...Array(nbPages).keys()].map((page) => {
-        page += 1
-        return {
-          label: page,
-          href: '#',
-          title: `Page ${page}`
-        }
-      })
-    },
-    /**
      * Get orgs list for a given page from store
      */
     getForPage(page = 1) {
@@ -55,11 +42,11 @@ export const useOrganizationStore = defineStore('organization', {
      * and preserving the config file order
      */
     async loadFromConfig(page = 1) {
+      const orgsList = await this.loadFromConfigFlat()
       const pageSize = config.website.pagination_sizes.organizations_list
-      const paginated = config.organizations.slice(
-        pageSize * (page - 1),
-        pageSize * page
-      )
+      const paginated = orgsList
+        .slice(pageSize * (page - 1), pageSize * page)
+        .map((org) => org.id)
       await this.loadMultipleByIds(paginated, page)
       return this.getForPage(page)
     },
@@ -69,13 +56,7 @@ export const useOrganizationStore = defineStore('organization', {
      */
     async loadFromConfigFlat() {
       if (this.flatData.length > 0) return this.flatData
-      const promises = config.organizations.map(async (orgId: string) => {
-        return await orgApi.get({
-          entityId: orgId,
-          headers: { 'x-fields': 'id,name' }
-        })
-      })
-      this.flatData = await Promise.all(promises)
+      this.flatData = await customOrgApi.list()
       return this.flatData
     },
     /**
@@ -126,6 +107,21 @@ export const useOrganizationStore = defineStore('organization', {
       if (existing !== undefined) return existing
       const org = await orgApi.get({ entityId: orgId, ...params })
       return this.add(org, page)
+    }
+  },
+  getters: {
+    pagination: (state) => {
+      const pageSize = config.website.pagination_sizes.organizations_list
+      const total = state.flatData.length
+      const nbPages = Math.ceil(total / pageSize)
+      return [...Array(nbPages).keys()].map((page) => {
+        page += 1
+        return {
+          label: page.toString(),
+          href: '#',
+          title: `Page ${page}`
+        }
+      })
     }
   }
 })
