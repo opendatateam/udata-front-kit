@@ -23,7 +23,6 @@ import {
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
-import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
 defineEmits(['search'])
@@ -56,7 +55,6 @@ const loader = useLoading()
 const queryResults = ref<HTMLParagraphElement | null>(null)
 
 const topicStore = useTopicStore()
-const userStore = useUserStore()
 
 const selectedTopicId: Ref<string | null> = ref(null)
 const selectedOrganizationId: Ref<string | null> = ref(null)
@@ -236,7 +234,8 @@ onMounted(() => {
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
     >
       <h1 class="fr-col-auto fr-mb-2v">Jeux de données</h1>
-      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+      <!-- FIXME: https://github.com/ecolabdata/ecospheres/issues/472 -->
+      <!-- <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <a
           v-if="userStore.isAdmin"
           :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
@@ -245,7 +244,7 @@ onMounted(() => {
           <VIcon name="ri-file-download-line" class="fr-mr-1w" />
           Exporter la liste des jeux de données
         </a>
-      </div>
+      </div> -->
     </div>
     <p v-show="query" ref="queryResults" tabindex="-1">
       {{ total }} résultats de recherche pour "{{ query }}".
