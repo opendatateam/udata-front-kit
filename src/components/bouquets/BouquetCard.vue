@@ -110,7 +110,7 @@ const { themeColors } = useThemeOptions(theme)
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
       <VIconCustom
-        icon="time-line"
+        name="time-line"
         class="fr-mr-1w text-grey-380 fr-icon--sm"
       />
       Mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
@@ -119,7 +119,7 @@ const { themeColors } = useThemeOptions(theme)
     <div class="fr-grid-row">
       <span class="fr-tag fr-mr-2v fr-mb-2v">
         <VIconCustom
-          icon="database-line"
+          name="database-line"
           class="fr-mr-1v"
           size="lg"
           align="text-top"
@@ -133,7 +133,7 @@ const { themeColors } = useThemeOptions(theme)
 
       <span v-if="spatialCoverage" class="fr-tag fr-mb-2v">
         <VIconCustom
-          icon="road-map-line"
+          name="road-map-line"
           class="fr-mr-1v"
           size="lg"
           align="text-top"

@@ -243,7 +243,7 @@ onMounted(() => {
           class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
         >
           <VIconCustom
-            icon="file-download-line"
+            name="file-download-line"
             class="fr-mr-1w"
             align="middle"
           />

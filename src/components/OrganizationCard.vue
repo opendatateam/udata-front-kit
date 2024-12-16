@@ -47,13 +47,13 @@ const isPublicService = (): boolean =>
           <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
             <VIconCustom
               v-if="isPublicService()"
-              icon="bank-line"
+              name="bank-line"
               class="fr-icon--sm fr-mr-1v badge"
             />
             {{ organization.name }}
             <VIconCustom
               v-if="isCertified()"
-              icon="checkbox-circle-line"
+              name="checkbox-circle-line"
               class="fr-icon--sm fr-mr-1v badge"
             />
           </component>
