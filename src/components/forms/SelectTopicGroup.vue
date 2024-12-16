@@ -48,10 +48,10 @@ const trimGroupName = (groupName: string) => {
     @select="trimGroupName"
   >
     <template #option="{ option }">
-      <p v-if="option.__CREATE__">
+      <span v-if="option.__CREATE__">
         Ajouter "{{ option.label }}" comme regroupement
-      </p>
-      <p v-else>{{ option.label }}</p>
+      </span>
+      <span v-else>{{ option.label }}</span>
     </template>
 
     <template #clear>
