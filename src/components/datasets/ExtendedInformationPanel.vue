@@ -21,29 +21,25 @@ const hasExtendedInfo = !!contactPoint || !!dcatExtras || !!uri
     v-if="hasExtendedInfo"
     class="fr-pb-3w border-bottom border-default-grey"
   >
-    <div class="fr-text--sm fr-m-0">
-      <div class="fr-grid-row metadata-list">
-        <ExtendedInformationPanelItem
-          v-if="uri"
-          :items="[uri]"
-          title="Identifiant de ressource unique"
-        />
-        <ExtendedInformationPanelItem
-          :items="dcatExtras.accessRights"
-          title="Conditions d'accès et d'utilisation"
-        />
-        <ExtendedInformationPanelItem
-          :items="dcatExtras.provenance"
-          title="Généalogie"
-        />
-        <div v-if="contactPoint">
-          <h3 class="subtitle fr-mb-2v">Point de contact</h3>
-          <p class="fr-text--sm fr-m-0">
-            <a :href="`mailto:${contactPoint.email}`">{{
-              contactPoint.name
-            }}</a>
-          </p>
-        </div>
+    <div class="metadata-list fr-text--sm fr-m-0">
+      <ExtendedInformationPanelItem
+        v-if="uri"
+        :items="[uri]"
+        title="Identifiant de ressource unique"
+      />
+      <ExtendedInformationPanelItem
+        :items="dcatExtras.accessRights"
+        title="Conditions d'accès et d'utilisation"
+      />
+      <ExtendedInformationPanelItem
+        :items="dcatExtras.provenance"
+        title="Généalogie"
+      />
+      <div v-if="contactPoint">
+        <h3 class="subtitle fr-mb-2v">Point de contact</h3>
+        <p class="fr-text--sm fr-m-0">
+          <a :href="`mailto:${contactPoint.email}`">{{ contactPoint.name }}</a>
+        </p>
       </div>
     </div>
   </div>
