@@ -47,7 +47,7 @@ const search = useDebounceFn(async (query: string) => {
   } finally {
     isLoading.value = false
   }
-}, 400)
+}, 600)
 
 const clear = () => {
   selectedDataset.value = undefined
