@@ -11,7 +11,6 @@ import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import { NoOptionSelected } from '@/model/theme'
 import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
@@ -48,8 +47,6 @@ const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
     [searchPageExtrasKey]: {
-      theme: routeQuery.theme || NoOptionSelected,
-      subtheme: routeQuery.subtheme || NoOptionSelected,
       datasets_properties: []
     }
   }
@@ -66,8 +63,6 @@ const formErrors: Ref<string[]> = ref([])
 const inputErrorMessages = new Map([
   ['name', 'Veuillez renseigner un sujet.'],
   ['description', 'La description ne doit pas être vide.']
-  // ['theme', `Veuillez sélectionner une ${topicsMainTheme}.`],
-  // ['subtheme', `Veuillez sélectionner un ${topicsSecondaryTheme}.`]
 ])
 // Filter out valid ipnuts. Needed to reorder the received input errors to match the form order
 const sortedinputErrors = computed(() =>

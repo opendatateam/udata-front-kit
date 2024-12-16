@@ -7,11 +7,21 @@ import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
 
 const datasetsApi = new DatasetsAPI()
 const datasetsApiv2 = new DatasetsAPI({ version: 2 })
+const PAGE_SIZE = 20
 
 interface RootState {
   data: Record<string, DatasetV2Response[]>
   resourceTypes: unknown[]
   sort: string | undefined
+  datasets: DatasetV2[]
+  total: number
+}
+
+interface QueryArgs {
+  query: string
+  organization?: string
+  geozone: string | null
+  tags: string[]
 }
 
 /**
@@ -31,7 +41,9 @@ export const useDatasetStore = defineStore('dataset', {
   state: (): RootState => ({
     data: {},
     resourceTypes: [],
-    sort: undefined
+    sort: undefined,
+    datasets: [],
+    total: 0
   }),
   actions: {
     /**
@@ -148,6 +160,37 @@ export const useDatasetStore = defineStore('dataset', {
       })
       const foundLicense = response.find((l) => l.id === license)
       return foundLicense
+    },
+    async query(args: QueryArgs) {
+      let query = args.query
+      let params: {
+        page_size?: number
+        organization?: string
+        tag?: string[]
+      } = {}
+      params.page_size = PAGE_SIZE
+      if (args.organization) {
+        params.organization = args.organization
+      }
+      if (args.tags) {
+        params.tag = args.tags
+      }
+      const results = await datasetsApi.search(query, undefined, 1, params)
+      this.datasets = results.data
+      this.total = results.total
+    }
+  },
+  getters: {
+    pagination() {
+      const nbPages = Math.ceil(this.total / PAGE_SIZE)
+      return [...Array(nbPages).keys()].map((page) => {
+        page += 1
+        return {
+          label: page.toString(),
+          href: '#',
+          title: `Page ${page}`
+        }
+      })
     }
   }
 })

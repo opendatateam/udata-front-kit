@@ -16,7 +16,7 @@ import { useLoading } from 'vue-loading-overlay'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
-import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
+// import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import config from '@/config'
 import {
@@ -29,7 +29,7 @@ import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
-import { useSearchPagesConfig } from '@/utils/config'
+// import { useSearchPagesConfig } from '@/utils/config'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -48,9 +48,9 @@ const showAddToTopicModal = ref(false)
 const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
 
-const { searchPageName, searchPageSlug } = useSearchPagesConfig(
-  route.path.replace('/admin', '').split('/')[1]
-)
+// const { searchPageName, searchPageSlug } = useSearchPagesConfig(
+//   route.path.replace('/admin', '').split('/')[1]
+// )
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -263,7 +263,7 @@ watch(
           la source originale peuvent avoir été perdues lors de leur
           récupération. Nous travaillons actuellement à améliorer la situation.
         </div>
-        <div
+        <!-- <div
           v-if="
             config.website.datasets.add_to_topic &&
             userStore.loggedIn &&
@@ -282,7 +282,7 @@ watch(
             v-model:show="showAddToTopicModal"
             :dataset="dataset"
           />
-        </div>
+        </div> -->
       </div>
     </div>
 

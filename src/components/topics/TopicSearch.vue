@@ -37,6 +37,7 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 const searchPageName = ref<string>('')
 const searchPageSlug = ref<string>('')
 const searchPageFilters = ref<FilterConf[]>([])
+const searchPageType = ref<string>('')
 
 const config = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
@@ -44,6 +45,7 @@ const config = useSearchPagesConfig(
 searchPageName.value = config.searchPageName
 searchPageSlug.value = config.searchPageSlug
 searchPageFilters.value = config.searchPageFilters
+searchPageType.value = config.searchPageType
 
 const currentFilters = ref<Record<string, string>>({})
 
@@ -129,6 +131,12 @@ watch(
       searchPageName.value = config.searchPageName
       searchPageSlug.value = config.searchPageSlug
       searchPageFilters.value = config.searchPageFilters
+      searchPageType.value = config.searchPageType
+      if (searchPageFilters.value) {
+        searchPageFilters.value.forEach((item) => {
+          currentFilters.value[item.tag] = ''
+        })
+      }
     }
   }
 )
@@ -151,7 +159,7 @@ const filteredSearchPageFilters = computed(() => {
 <template>
   <div className="filterForm">
     <DsfrCheckbox
-      v-if="userStore.isLoggedIn"
+      v-if="userStore.isLoggedIn && searchPageType == 'topics'"
       v-model="localShowDrafts"
       label="Afficher les brouillons"
       name="show_drafts"

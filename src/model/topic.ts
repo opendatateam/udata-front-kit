@@ -26,8 +26,6 @@ export interface DatasetProperties {
 }
 
 export interface SiteTopicExtras {
-  theme: string
-  subtheme: string
   datasets_properties: DatasetProperties[]
   cloned_from?: string
 }

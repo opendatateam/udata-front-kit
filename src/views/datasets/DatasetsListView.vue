@@ -255,18 +255,6 @@ onMounted(() => {
         @search="$emit('search', $event)"
       />
     </div>
-    <!--
-    <div v-if="topicItems" class="fr-col-md-12 fr-mb-2w">
-      <DsfrSelect
-        :model-value="selectedTopicId"
-        :options="topicOptions"
-        default-unselected-text="Toutes les données"
-        @update:model-value="onSelectTopic"
-      >
-        <template #label>{{ capitalize(topicsMainTheme) }}s</template>
-      </DsfrSelect>
-    </div>
-    -->
     <div v-if="hasOrganizationFilter" class="fr-col-md-12 fr-mb-2w">
       <DsfrSelect
         :model-value="selectedOrganizationId"
