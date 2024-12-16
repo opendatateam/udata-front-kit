@@ -112,7 +112,7 @@ const { themeColors } = useThemeOptions(theme)
         </p>
         <p class="fr-tag">
           <VIconCustom
-            name="database-line"
+            icon="database-line"
             class="fr-mr-1v"
             size="lg"
             align="text-top"
@@ -125,7 +125,7 @@ const { themeColors } = useThemeOptions(theme)
         </p>
         <p v-if="spatialCoverage" class="fr-tag fr-ml-1w">
           <VIconCustom
-            name="road-map-line"
+            icon="road-map-line"
             class="fr-mr-1v"
             size="lg"
             align="text-top"

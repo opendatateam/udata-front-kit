@@ -127,7 +127,7 @@ onMounted(() => {
       :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
     />
     <p v-if="errors.name && isSubmitted" id="errors-name" class="error">
-      <VIconCustom name="error-fill" />
+      <VIconCustom icon="error-fill" />
       Veuillez renseigner un sujet.
     </p>
   </div>
@@ -151,7 +151,7 @@ onMounted(() => {
       id="errors-description"
       class="error"
     >
-      <VIconCustom name="error-fill" />
+      <VIconCustom icon="error-fill" />
       La description ne doit pas être vide.
     </p>
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
@@ -195,7 +195,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.theme && isSubmitted" id="errors-theme" class="error">
-      <VIconCustom name="error-fill" />
+      <VIconCustom icon="error-fill" />
       Veuillez sélectionner une thématique.
     </p>
   </div>
@@ -231,7 +231,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.subtheme && isSubmitted" id="errors-subtheme" class="error">
-      <VIconCustom name="error-fill" />
+      <VIconCustom icon="error-fill" />
       Veuillez sélectionner un chantier.
     </p>
     <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">

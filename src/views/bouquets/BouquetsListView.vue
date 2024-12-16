@@ -143,7 +143,7 @@ watch(
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-          <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
+          <VIconCustom icon="add-circle-line" class="fr-mr-1w" align="middle" />
           Ajouter un {{ topicsName }}
         </router-link>
       </div>

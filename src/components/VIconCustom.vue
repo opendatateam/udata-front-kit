@@ -2,7 +2,7 @@
 import type { Property } from 'csstype'
 
 defineProps({
-  name: {
+  icon: {
     type: String,
     required: true
   },
@@ -19,7 +19,7 @@ defineProps({
 
 <template>
   <span
-    :class="`fr-icon-custom fr-icon-${name} ${small ? 'sm' : ''}${align ? 'align' : ''}`"
+    :class="`fr-icon-custom fr-icon-${icon} ${small ? 'sm' : ''}${align ? 'align' : ''}`"
     aria-hidden="true"
   ></span>
 </template>
