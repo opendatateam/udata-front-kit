@@ -12,9 +12,9 @@ import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { useExtras } from '@/utils/bouquet'
 import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
+import { useExtras } from '@/utils/topic'
 
 const route = useRoute()
 const { searchPageSlug, searchPageExtrasKey } = useSearchPagesConfig(
@@ -22,7 +22,7 @@ const { searchPageSlug, searchPageExtrasKey } = useSearchPagesConfig(
 )
 
 const props = defineProps({
-  bouquet: {
+  topic: {
     type: Object as () => Topic,
     required: true
   },
@@ -32,18 +32,18 @@ const props = defineProps({
   }
 })
 
-const bouquetRef = toRef(props, 'bouquet')
-const spatialCoverage = useSpatialCoverage(bouquetRef)
+const topicRef = toRef(props, 'topic')
+const spatialCoverage = useSpatialCoverage(topicRef)
 
-const ownerName = useOwnerName(props.bouquet)
+const ownerName = useOwnerName(props.topic)
 
-const { datasetsProperties } = useExtras(bouquetRef, searchPageExtrasKey)
+const { datasetsProperties } = useExtras(topicRef, searchPageExtrasKey)
 
 const nbData: number = datasetsProperties.value.length
 
-const bouquetLink: RouteLocationRaw = {
+const topicLink: RouteLocationRaw = {
   name: `${searchPageSlug}_detail`,
-  params: { bid: props.bouquet.slug }
+  params: { bid: props.topic.slug }
 }
 </script>
 
@@ -52,21 +52,21 @@ const bouquetLink: RouteLocationRaw = {
     class="fr-my-1w fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link"
   >
     <div
-      v-if="bouquet.private"
+      v-if="topic.private"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
     </div>
     <div class="fr-grid-row fr-pt-2v align-center flex-nowrap">
-      <div class="fr-col-12 fr-col-sm-2 bouquet-card-col-logo">
+      <div class="fr-col-12 fr-col-sm-2 topic-card-col-logo">
         <OrganizationLogo
-          v-if="bouquet.organization"
+          v-if="topic.organization"
           :size="43"
-          :object="bouquet"
+          :object="topic"
         />
         <div v-else class="border fr-p-1-5v fr-mr-1-5v inline-block">
           <img
-            :src="getOwnerAvatar(bouquet)"
+            :src="getOwnerAvatar(topic)"
             alt=""
             loading="lazy"
             class="owner-avatar"
@@ -79,18 +79,15 @@ const bouquetLink: RouteLocationRaw = {
         class="fr-col-12 fr-col-sm-10 fr-pl-2v overflow-hidden flex-1-1-auto"
       >
         <h3 class="fr-mb-1v fr-grid-row h4">
-          <RouterLink :to="bouquetLink" class="text-grey-500">
-            {{ bouquet.name }}
+          <RouterLink :to="topicLink" class="text-grey-500">
+            {{ topic.name }}
           </RouterLink>
         </h3>
-        <p
-          v-if="bouquet.organization || bouquet.owner"
-          class="fr-m-0 fr-text--sm"
-        >
+        <p v-if="topic.organization || topic.owner" class="fr-m-0 fr-text--sm">
           Par
-          <template v-if="bouquet.organization">
+          <template v-if="topic.organization">
             <OrganizationNameWithCertificate
-              :organization="bouquet.organization"
+              :organization="topic.organization"
             />
           </template>
           <template v-else>{{ ownerName }}</template>
@@ -98,12 +95,12 @@ const bouquetLink: RouteLocationRaw = {
       </div>
     </div>
     <div v-if="!hideDescription" class="fr-grid-row description fr-mt-3v">
-      <p class="fr-mb-1v">{{ stripFromMarkdown(bouquet.description) }}</p>
+      <p class="fr-mb-1v">{{ stripFromMarkdown(topic.description) }}</p>
     </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
       <VIcon name="ri:time-line" class="fr-mr-1v text-grey-380" />
-      Mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
+      Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
 
     <div class="fr-grid-row">
@@ -142,7 +139,7 @@ const bouquetLink: RouteLocationRaw = {
   line-height: inherit;
 }
 
-.bouquet-card-col-logo {
+.topic-card-col-logo {
   max-width: 4.25rem;
 }
 

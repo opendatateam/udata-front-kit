@@ -44,30 +44,30 @@ const props = defineProps({
 
 const emits = defineEmits(['clearFilters'])
 
-const bouquets: ComputedRef<Topic[]> = computed(() => {
+const topics: ComputedRef<Topic[]> = computed(() => {
   return topicStore.sorted
-    .filter((bouquet) => {
-      return !props.showDrafts ? !bouquet.private : true
+    .filter((topic) => {
+      return !props.showDrafts ? !topic.private : true
     })
-    .filter((bouquet) => {
+    .filter((topic) => {
       if (props.geozone === null) return true
       return (
-        bouquet.spatial?.zones &&
-        bouquet.spatial.zones.length > 0 &&
-        bouquet.spatial.zones.includes(props.geozone)
+        topic.spatial?.zones &&
+        topic.spatial.zones.length > 0 &&
+        topic.spatial.zones.includes(props.geozone)
       )
     })
-    .filter((bouquet) => {
+    .filter((topic) => {
       if (props.query === '') return true
-      return bouquet.name.toLowerCase().includes(props.query.toLowerCase())
+      return topic.name.toLowerCase().includes(props.query.toLowerCase())
     })
 })
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
-  if (bouquets.value.length === 1) {
+  if (topics.value.length === 1) {
     return `1 ${searchPageLabelTitle.value} disponible`
-  } else if (bouquets.value.length > 1) {
-    return bouquets.value.length + ` ${searchPageLabelTitle.value} disponibles`
+  } else if (topics.value.length > 1) {
+    return topics.value.length + ` ${searchPageLabelTitle.value} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -126,7 +126,7 @@ watch(
 
 <template>
   <div
-    v-if="bouquets.length > 0"
+    v-if="topics.length > 0"
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
   >
     <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
@@ -148,7 +148,7 @@ watch(
     </div>
   </div>
   <div
-    v-if="bouquets.length === 0"
+    v-if="topics.length === 0"
     class="fr-mt-2w rounded-xxs fr-p-3w fr-grid-row flex-direction-column bg-contrast-blue-cumulus"
   >
     <div class="fr-col fr-grid-row fr-grid-row--gutters text-blue-400">
@@ -180,7 +180,7 @@ watch(
             Réinitialiser les filtres
           </button>
           <router-link
-            v-if="userStore.canAddBouquet(searchPageSlug)"
+            v-if="userStore.canAddTopic(searchPageSlug)"
             :to="createUrl"
             class="fr-btn fr-btn--secondary fr-ml-1w"
           >
@@ -191,10 +191,10 @@ watch(
       </div>
     </div>
   </div>
-  <div class="bouquets-list-container fr-container fr-mb-4w border-top">
+  <div class="topics-list-container fr-container fr-mb-4w border-top">
     <ul class="fr-mt-3w fr-pl-0" role="list">
-      <li v-for="bouquet in bouquets" :key="bouquet.id" class="fr-col-12">
-        <BouquetCard :bouquet="bouquet" />
+      <li v-for="topic in topics" :key="topic.id" class="fr-col-12">
+        <TopicCard :topic="topic" />
       </li>
     </ul>
   </div>
@@ -202,7 +202,7 @@ watch(
 
 <style scoped>
 /* "revert" gutters — simpler than w/o gutters */
-.bouquets-list-container {
+.topics-list-container {
   padding-right: 0;
   padding-left: 0;
 }

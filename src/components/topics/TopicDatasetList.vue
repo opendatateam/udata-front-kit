@@ -11,13 +11,13 @@ import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { fromMarkdown } from '@/utils'
-import { isAvailable } from '@/utils/bouquet'
 import { useSearchPagesConfig } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
+import { isAvailable } from '@/utils/topic'
 
-import BouquetDatasetAccordionTitle from './BouquetDatasetAccordionTitle.vue'
-import BouquetDatasetCard from './BouquetDatasetCard.vue'
+import TopicDatasetAccordionTitle from './TopicDatasetAccordionTitle.vue'
+import TopicDatasetCard from './TopicDatasetCard.vue'
 
 const route = useRoute()
 
@@ -192,7 +192,7 @@ onMounted(() => {
                   <button
                     class="fake__fr-accordion__btn fake__fr-accordion__btn__mq"
                   >
-                    <BouquetDatasetAccordionTitle
+                    <TopicDatasetAccordionTitle
                       :dataset-properties="dataset"
                       :is-edit="true"
                     />
@@ -212,14 +212,14 @@ onMounted(() => {
             @expand="expandStore[getAccordeonId(index)] = $event"
           >
             <template #title>
-              <BouquetDatasetAccordionTitle
+              <TopicDatasetAccordionTitle
                 :dataset-properties="dataset"
                 :is-edit="false"
               />
             </template>
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="fromMarkdown(dataset.purpose)"></div>
-            <BouquetDatasetCard
+            <TopicDatasetCard
               v-if="dataset.id"
               :dataset-properties="dataset"
               :dataset-content="datasetsContent.get(dataset.id)"
@@ -263,7 +263,7 @@ onMounted(() => {
     </div>
     <div v-else>
       <div v-for="(dataset, index) in datasetsProperties" :key="index">
-        <BouquetDatasetCard
+        <TopicDatasetCard
           v-if="dataset.id"
           :dataset-properties="dataset"
           :dataset-content="datasetsContent.get(dataset.id)"

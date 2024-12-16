@@ -21,18 +21,18 @@ const getThemeColor = (theme: Theme) => {
 }
 
 const getThemeDescription = (theme: Theme) => {
-  const nbBouquets = topicStore.data.filter((topic) => {
+  const nbTopics = topicStore.data.filter((topic) => {
     return (
       !topic.private && topic.extras[searchPageExtrasKey].theme === theme.name
     )
   }).length
-  switch (nbBouquets) {
+  switch (nbTopics) {
     case 0:
       return `Aucun  ${searchPageName}`
     case 1:
       return `1 ${searchPageName}`
     default:
-      return `${nbBouquets} ${searchPageName}s`
+      return `${nbTopics} ${searchPageName}s`
   }
 }
 

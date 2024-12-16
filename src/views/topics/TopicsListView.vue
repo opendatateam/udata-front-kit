@@ -4,8 +4,8 @@ import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import BouquetList from '@/components/bouquets/BouquetList.vue'
-import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
+import TopicList from '@/components/topics/TopicList.vue'
+import TopicSearch from '@/components/topics/TopicSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
@@ -48,7 +48,7 @@ const props = defineProps({
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const showDrafts = ref(false)
-const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
+const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
 
 const userStore = useUserStore()
 
@@ -78,7 +78,7 @@ const pageTitle = computed(() => {
 })
 
 const searchResultsMessage = computed(() => {
-  return bouquetListComp.value ? bouquetListComp.value.numberOfResultMsg : ''
+  return topicListComp.value ? topicListComp.value.numberOfResultMsg : ''
 })
 
 const setLiveResults = () => {
@@ -143,7 +143,7 @@ watch(
         {{ capitalize(searchPageLabelTitle) }}
       </h1>
       <div
-        v-if="userStore.canAddBouquet(searchPageSlug)"
+        v-if="userStore.canAddTopic(searchPageSlug)"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
@@ -154,7 +154,7 @@ watch(
     </div>
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
-        id="search-bouquet"
+        id="search-topic"
         v-model="selectedQuery"
         :is-filter="true"
         :search-label="`Filtrer les ${searchPageLabelTitle}`"
@@ -173,7 +173,7 @@ watch(
             <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <BouquetSearch
+            <TopicSearch
               :geozone="selectedGeozone"
               :show-drafts="showDrafts"
               @vue:updated="setLiveResults"
@@ -181,8 +181,8 @@ watch(
           </div>
         </nav>
         <div className="fr-col-12 fr-col-md-8">
-          <BouquetList
-            ref="bouquetListComp"
+          <TopicList
+            ref="topicListComp"
             :show-drafts="showDrafts"
             :geozone="geozone"
             :query="selectedQuery"

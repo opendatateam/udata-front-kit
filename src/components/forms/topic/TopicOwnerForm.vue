@@ -126,11 +126,11 @@ watch(choice, () => {
       />
 
       <div v-if="userStore.isAdmin" class="fr-select-group">
-        <label class="fr-label fr-mt-2v" for="any-org-select-bouquet"
+        <label class="fr-label fr-mt-2v" for="any-org-select-topic"
           >Cherchez une autre organisation&nbsp;:</label
         >
         <Multiselect
-          id="any-org-select-bouquet"
+          id="any-org-select-topic"
           ref="multiselect"
           v-model="selectedAnyOrganization"
           role="search"
