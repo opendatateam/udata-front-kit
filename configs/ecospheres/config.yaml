@@ -240,3 +240,28 @@ themes:
       - name: La sobriété des usages et des ressources
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-prod.json
+
+indicators:
+  organization_id: 673dafb02cf54cfb2ccbd118
+  global_tag_prefix: ecospheres-indicateurs
+  filters:
+    - name: Thématique
+      id: theme
+      color: green-menthe
+      values:
+        - id: mieux-se-deplacer
+          name: Mieux se déplacer
+        - id: autre
+          name: Autre
+        - id: mieux-produire
+          name: Mieux produire
+    - name: Enjeu
+      id: enjeu
+      color: blue-ecume
+      values:
+        - id: sante
+          name: Santé
+        - id: attenuation
+          name: Atténuation
+        - id: biodiversite
+          name: Biodiversité
