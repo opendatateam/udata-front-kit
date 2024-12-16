@@ -21,6 +21,7 @@ const hasExtendedInfo = !!contactPoint || !!dcatExtras || !!uri
     v-if="hasExtendedInfo"
     class="fr-pb-3w border-bottom border-default-grey"
   >
+    <h2 class="fr-sr-only">Informations étendues</h2>
     <div class="metadata-list fr-text--sm fr-m-0">
       <ExtendedInformationPanelItem
         v-if="uri"
