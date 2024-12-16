@@ -17,7 +17,7 @@ defineProps({
 <template>
   <div class="title-container">
     <div>
-      <VIconCustom name="drag-move-2" class="fr-icon--sm" />
+      <VIconCustom v-if="isEdit" name="drag-move-2-line" class="fr-icon--sm" />
       <span :class="{ 'fr-ml-2w': isEdit }">{{ datasetProperties.title }}</span>
     </div>
     <DsfrTag

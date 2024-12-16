@@ -242,7 +242,11 @@ onMounted(() => {
           :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
           class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
         >
-          <VIconCustom name="file-download" class="fr-mr-1w" align="middle" />
+          <VIconCustom
+            name="file-download-line"
+            class="fr-mr-1w"
+            align="middle"
+          />
           Exporter la liste des jeux de données
         </a>
       </div>

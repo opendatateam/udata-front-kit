@@ -216,7 +216,7 @@ watch(
               :secondary="canEdit"
               size="md"
               label="Cloner"
-              icon="fr-icon-file-add-line"
+              icon="fr-icon-git-merge-line"
               title="Cloner le bouquet"
               class="fr-mb-1v fr-mr-1v"
               @click="goToClone"

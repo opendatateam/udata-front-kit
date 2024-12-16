@@ -6,10 +6,6 @@ defineProps({
     type: String,
     required: true
   },
-  iconStyle: {
-    type: String as () => 'line' | 'fill',
-    default: 'line'
-  },
   small: {
     type: Boolean,
     default: false
@@ -23,7 +19,7 @@ defineProps({
 
 <template>
   <span
-    :class="`fr-icon-custom fr-icon-${name}-${iconStyle} ${small ? 'sm' : ''}${align ? 'align' : ''}`"
+    :class="`fr-icon-custom fr-icon-${name} ${small ? 'sm' : ''}${align ? 'align' : ''}`"
     aria-hidden="true"
   ></span>
 </template>
