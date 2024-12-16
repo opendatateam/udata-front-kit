@@ -30,7 +30,8 @@ const topicStore = useTopicStore()
 const {
   searchPageName,
   searchPageExtrasKey,
-  searchPageDatasetEditorialization
+  searchPageDatasetEditorialization,
+  searchPageSlug
 } = useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
 const bouquets = topicStore.myTopics
@@ -124,7 +125,7 @@ const closeModal = () => {
 
 onMounted(() => {
   const loading = loader.show()
-  topicStore.loadTopicsForUniverse().then(() => loading.hide())
+  topicStore.loadTopicsForUniverse([searchPageSlug]).then(() => loading.hide())
 })
 </script>
 

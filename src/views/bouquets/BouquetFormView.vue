@@ -33,12 +33,18 @@ const router = useRouter()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
-const { searchPageName, searchPageSlug, searchPageExtrasKey } =
-  useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
+const {
+  searchPageName,
+  searchPageSlug,
+  searchPageExtrasKey,
+  searchPageLabelAddPageTitle,
+  searchPageLabelAddSubtitle,
+  searchPageLabelOwner
+} = useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
 const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   private: true,
-  tags: [config.universe.name],
+  tags: [config.universe.name, searchPageSlug],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
     [searchPageExtrasKey]: {
@@ -209,7 +215,7 @@ const onSubmit = async () => {
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>
       <h1 class="fr-col-auto fr-mb-2v">
-        {{ isCreate ? `Nouveau ${searchPageName}` : topic.name }}
+        {{ isCreate ? `${searchPageLabelAddPageTitle}` : topic.name }}
       </h1>
       <form novalidate>
         <div
@@ -239,7 +245,7 @@ const onSubmit = async () => {
         </div>
         <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
-            Description du {{ searchPageName }} de données
+            {{ searchPageLabelAddSubtitle }}
           </legend>
           <BouquetForm
             v-if="isReadyForForm"
@@ -251,7 +257,7 @@ const onSubmit = async () => {
         </fieldset>
         <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
-            Propriétaire du {{ searchPageName }}
+            {{ searchPageLabelOwner }}
           </legend>
           <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
         </fieldset>

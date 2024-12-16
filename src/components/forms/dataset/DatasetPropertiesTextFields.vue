@@ -12,7 +12,7 @@ const props = defineProps({
 
 const route = useRoute()
 
-const { searchPageName } = useSearchPagesConfig(
+const { searchPageLabelTitle } = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
 )
 
@@ -49,7 +49,8 @@ const updateDatasetProperties = (
   </div>
   <div class="fr-input-group">
     <label class="fr-label" for="input-purpose"
-      >Raison d'utilisation dans ce {{ searchPageName }} (obligatoire)</label
+      >Raison d'utilisation dans ce
+      {{ searchPageLabelTitle }} (obligatoire)</label
     >
     <textarea
       id="input-purpose"

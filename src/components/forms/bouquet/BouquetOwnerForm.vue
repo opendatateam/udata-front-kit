@@ -20,7 +20,7 @@ const topic = defineModel({
 })
 
 const userStore = useUserStore()
-const { searchPageName } = useSearchPagesConfig(
+const { searchPageName, searchPageLabelTitle } = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
 )
 
@@ -112,7 +112,7 @@ watch(choice, () => {
     <DsfrRadioButtonSet
       v-model="choice"
       :options="radioOptions"
-      :legend="`Choisissez si vous souhaitez gérer ce ${searchPageName}&nbsp;:`"
+      :legend="`Choisissez si vous souhaitez gérer ce ${searchPageLabelTitle}&nbsp;:`"
       name="owner"
     />
     <div v-if="choice === 'organization'" class="organizations">

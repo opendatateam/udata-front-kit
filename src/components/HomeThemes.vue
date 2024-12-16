@@ -45,7 +45,7 @@ const themesWithDescriptions: ComputedRef<Array<[Theme, string]>> = computed(
 )
 
 onMounted(() => {
-  topicStore.loadTopicsForUniverse()
+  topicStore.loadTopicsForUniverse([searchPageSlug])
 })
 </script>
 

@@ -1,5 +1,5 @@
 import config from '@/config'
-import type { CanAddElementConf, SearchConf } from '@/model/config'
+import type { CanAddElementConf, FilterConf, SearchConf } from '@/model/config'
 import type { SiteId } from '@/model/topic'
 interface SearchPageConfNormalized {
   searchPageName: string
@@ -11,6 +11,17 @@ interface SearchPageConfNormalized {
   searchPageListAll: boolean
   searchPageDisplayMetadata: boolean
   searchPageActivateReadMore: boolean
+  searchPageFilters: FilterConf[]
+  searchPageLabelTitle: string
+  searchPageLabelBarTitle: string
+  searchPageLabelResults: string
+  searchPageLabelAddButton: string
+  searchPageLabelAddPageTitle: string
+  searchPageLabelAddSubtitle: string
+  searchPageLabelSubject: string
+  searchPageLabelDescriptionTitle: string
+  searchPageLabelDescriptionInfo: string
+  searchPageLabelOwner: string
 }
 
 export const useSearchPagesConfig = (
@@ -28,7 +39,18 @@ export const useSearchPagesConfig = (
     searchPageCanAdd: searchPageConf.can_add,
     searchPageListAll: searchPageConf.list_all,
     searchPageDisplayMetadata: searchPageConf.display_metadata,
-    searchPageActivateReadMore: searchPageConf.activate_read_more
+    searchPageActivateReadMore: searchPageConf.activate_read_more,
+    searchPageFilters: searchPageConf.filters,
+    searchPageLabelTitle: searchPageConf.labels.search_page_title,
+    searchPageLabelBarTitle: searchPageConf.labels.search_bar_title,
+    searchPageLabelResults: searchPageConf.labels.search_results,
+    searchPageLabelAddButton: searchPageConf.labels.add_button,
+    searchPageLabelAddPageTitle: searchPageConf.labels.add_title,
+    searchPageLabelAddSubtitle: searchPageConf.labels.add_subtitle,
+    searchPageLabelSubject: searchPageConf.labels.subject,
+    searchPageLabelDescriptionTitle: searchPageConf.labels.description_title,
+    searchPageLabelDescriptionInfo: searchPageConf.labels.description_info,
+    searchPageLabelOwner: searchPageConf.labels.owner
   }
 }
 

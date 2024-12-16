@@ -72,7 +72,10 @@ const {
   searchPageExtrasKey
 } = useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
-const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(topic)
+const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(
+  topic,
+  searchPageExtrasKey
+)
 
 const breadcrumbLinks = useBreadcrumbLinksForTopic(
   theme,
