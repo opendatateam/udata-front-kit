@@ -5,8 +5,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import DatasetList from '@/components/datasets/DatasetList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import SearchFilter from '@/components/SearchFilter.vue'
 import TopicList from '@/components/topics/TopicList.vue'
-import TopicSearch from '@/components/topics/TopicSearch.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
@@ -157,83 +157,86 @@ watch(
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbList" />
-  </div>
-  <GenericContainer>
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-    >
-      <h1 class="fr-col-auto fr-mb-2v">
-        {{ capitalize(searchPageLabelTitle) }}
-      </h1>
+  <div v-if="searchPageSlug">
+    <div class="fr-container">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbList" />
+    </div>
+    <GenericContainer>
       <div
-        v-if="
-          userStore.canAddTopic(searchPageSlug) && searchPageType != 'datasets'
-        "
-        class="fr-col-auto fr-grid-row fr-grid-row--middle"
+        class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
       >
-        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-          <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
-          {{ searchPageLabelAddButton }}
-        </router-link>
-      </div>
-    </div>
-    <div class="fr-col-md-12 fr-mb-2w">
-      <SearchComponent
-        id="search-topic"
-        v-model="selectedQuery"
-        :is-filter="true"
-        :search-label="`Filtrer les ${searchPageLabelTitle}`"
-        :label="`Filtrer les ${searchPageLabelTitle}`"
-        :search-endpoint="router.resolve({ name: searchPageName }).href"
-        @update:model-value="search"
-      />
-    </div>
-    <div class="fr-mt-2w">
-      <div className="fr-grid-row">
-        <nav
-          className="fr-sidemenu fr-col-md-4"
-          aria-labelledby="fr-sidemenu-title"
+        <h1 class="fr-col-auto fr-mb-2v">
+          {{ capitalize(searchPageLabelTitle) }}
+        </h1>
+        <div
+          v-if="
+            userStore.canAddTopic(searchPageSlug) &&
+            searchPageType != 'datasets'
+          "
+          class="fr-col-auto fr-grid-row fr-grid-row--middle"
         >
-          <div className="fr-sidemenu__inner">
-            <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
-              Filtres
-            </h2>
-            <TopicSearch
-              :geozone="selectedGeozone"
-              :show-drafts="showDrafts"
-              :tags="tags"
-              @vue:updated="setLiveResults"
-            />
-          </div>
-        </nav>
-        <div className="fr-col-12 fr-col-md-8">
-          <span v-if="searchPageType == 'topics'">
-            <TopicList
-              ref="listComp"
-              :show-drafts="showDrafts"
-              :organization="searchPageConfigTypeOrganization"
-              :tags="tags"
-              :geozone="geozone"
-              :query="selectedQuery"
-              @clear-filters="setLiveResults"
-            />
-          </span>
-          <span v-if="searchPageType == 'datasets'">
-            <DatasetList
-              ref="listComp"
-              :geozone="geozone"
-              :organization="searchPageConfigTypeOrganization"
-              :tags="tags"
-              :query="selectedQuery"
-              @clear-filters="setLiveResults"
-            />
-          </span>
+          <router-link :to="createUrl" class="fr-btn fr-mb-1w">
+            <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
+            {{ searchPageLabelAddButton }}
+          </router-link>
         </div>
       </div>
-    </div>
-  </GenericContainer>
+      <div class="fr-col-md-12 fr-mb-2w">
+        <SearchComponent
+          id="search-topic"
+          v-model="selectedQuery"
+          :is-filter="true"
+          :search-label="`Filtrer les ${searchPageLabelTitle}`"
+          :label="`Filtrer les ${searchPageLabelTitle}`"
+          :search-endpoint="router.resolve({ name: searchPageName }).href"
+          @update:model-value="search"
+        />
+      </div>
+      <div class="fr-mt-2w">
+        <div className="fr-grid-row">
+          <nav
+            className="fr-sidemenu fr-col-md-4"
+            aria-labelledby="fr-sidemenu-title"
+          >
+            <div className="fr-sidemenu__inner">
+              <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
+                Filtres
+              </h2>
+              <SearchFilter
+                :geozone="selectedGeozone"
+                :show-drafts="showDrafts"
+                :tags="tags"
+                @vue:updated="setLiveResults"
+              />
+            </div>
+          </nav>
+          <div className="fr-col-12 fr-col-md-8">
+            <span v-if="searchPageType == 'topics'">
+              <TopicList
+                ref="listComp"
+                :show-drafts="showDrafts"
+                :organization="searchPageConfigTypeOrganization"
+                :tags="tags"
+                :geozone="geozone"
+                :query="selectedQuery"
+                @clear-filters="setLiveResults"
+              />
+            </span>
+            <span v-if="searchPageType == 'datasets'">
+              <DatasetList
+                ref="listComp"
+                :geozone="geozone"
+                :organization="searchPageConfigTypeOrganization"
+                :tags="tags"
+                :query="selectedQuery"
+                @clear-filters="setLiveResults"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+    </GenericContainer>
+  </div>
 </template>
 
 <style scoped>
