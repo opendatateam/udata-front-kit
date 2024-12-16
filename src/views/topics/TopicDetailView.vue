@@ -28,7 +28,6 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useThemeOptions } from '@/utils/theme'
 import {
   updateTopicExtras,
   useBreadcrumbLinksForTopic,
@@ -72,21 +71,14 @@ const {
   searchPageExtrasKey
 } = useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
 
-const { datasetsProperties, clonedFrom, theme, subtheme } = useExtras(
-  topic,
-  searchPageExtrasKey
-)
+const { datasetsProperties, clonedFrom } = useExtras(topic, searchPageExtrasKey)
 
 const breadcrumbLinks = useBreadcrumbLinksForTopic(
-  theme,
-  subtheme,
   topic,
   searchPageListAll,
   searchPageSlug,
   searchPageName
 )
-
-const { themeColors } = useThemeOptions(theme)
 
 const tabTitles = [
   { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
@@ -318,10 +310,6 @@ watch(
         class="fr-col-12"
         :class="searchPageDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
-        <div class="topic__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <DsfrTag v-if="theme" class="fr-mb-1v card__tag" :label="subtheme" />
-        </div>
         <div v-if="searchPageActivateReadMore">
           <ReadMore max-height="600">
             <!-- eslint-disable-next-line vue/no-v-html -->
@@ -383,9 +371,5 @@ watch(
 }
 .owner-avatar {
   margin-bottom: -6px;
-}
-.card__tag {
-  color: v-bind('themeColors.color');
-  background-color: v-bind('themeColors.background');
 }
 </style>

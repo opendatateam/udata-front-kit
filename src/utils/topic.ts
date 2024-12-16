@@ -76,8 +76,6 @@ export const cloneTopic = (
 }
 
 export function useBreadcrumbLinksForTopic(
-  theme: Ref<string | undefined>,
-  subtheme: Ref<string | undefined>,
   topic: Ref<Topic | null>,
   topicsListAll: boolean | null,
   searchPageSlug: string,
@@ -92,16 +90,6 @@ export function useBreadcrumbLinksForTopic(
       })
     }
 
-    if (theme.value !== undefined && subtheme.value !== undefined) {
-      breadcrumbs.push(
-        { text: theme.value, to: `/${searchPageSlug}/?theme=${theme.value}` },
-        {
-          text: subtheme.value,
-          to: `/${searchPageName}/?theme=${theme.value}&subtheme=${subtheme.value}`
-        }
-      )
-    }
-
     if (topic?.value != null) {
       breadcrumbs.push({ to: '', text: topic.value.name ?? '' })
     }
@@ -114,13 +102,9 @@ export function useExtras(
   topic: Ref<Topic | null>,
   searchPageExtrasKey: SiteId
 ): {
-  theme: Ref<string | undefined>
-  subtheme: Ref<string | undefined>
   datasetsProperties: Ref<DatasetProperties[]>
   clonedFrom: Ref<Topic | null>
 } {
-  const theme: Ref<string | undefined> = ref()
-  const subtheme: Ref<string | undefined> = ref()
   const datasetsProperties: Ref<DatasetProperties[]> = ref([])
   const clonedFrom = ref<Topic | null>(null)
 
@@ -145,8 +129,6 @@ export function useExtras(
           clonedFrom.value = null
         }
       } else {
-        theme.value = undefined
-        subtheme.value = undefined
         datasetsProperties.value = []
         clonedFrom.value = null
       }
@@ -154,5 +136,5 @@ export function useExtras(
     { immediate: true }
   )
 
-  return { theme, subtheme, datasetsProperties, clonedFrom }
+  return { datasetsProperties, clonedFrom }
 }

@@ -29,10 +29,17 @@ export interface LabelConf {
   description_info: string
   owner: string
 }
+
+export interface ConfigTypeConf {
+  organization: string
+  topic: string
+  card: string
+}
 export interface SearchConf {
   name: string
   slug: string
   type: string
+  config_type: ConfigTypeConf
   organizations: Array<string>
   extras_key: SiteId
   list_all: boolean

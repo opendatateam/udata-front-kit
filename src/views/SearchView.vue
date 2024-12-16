@@ -3,6 +3,7 @@ import { useDebounceFn } from '@vueuse/core'
 import { capitalize, computed, inject, ref, watch, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import DatasetList from '@/components/datasets/DatasetList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import TopicList from '@/components/topics/TopicList.vue'
 import TopicSearch from '@/components/topics/TopicSearch.vue'
@@ -17,10 +18,21 @@ import { useSearchPagesConfig } from '@/utils/config'
 const router = useRouter()
 const route = useRoute()
 
+let tags = ref<string[]>([])
+
+if (route.query.tags) {
+  tags.value = route.query.tags?.toString().split(',')
+} else {
+  tags.value = []
+}
+
 const searchPageName = ref<string>('')
 const searchPageSlug = ref<string>('')
 const searchPageLabelTitle = ref<string>('')
 const searchPageLabelAddButton = ref<string>('')
+const searchPageType = ref<string>('')
+const searchPageConfigTypeOrganization = ref<string>('')
+const searchPageConfigTypeTopic = ref<string>('')
 
 const config = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
@@ -29,6 +41,9 @@ searchPageName.value = config.searchPageName
 searchPageSlug.value = config.searchPageSlug
 searchPageLabelTitle.value = config.searchPageLabelTitle
 searchPageLabelAddButton.value = config.searchPageLabelAddButton
+searchPageType.value = config.searchPageType
+searchPageConfigTypeOrganization.value = config.searchPageConfigTypeOrganization
+searchPageConfigTypeTopic.value = config.searchPageConfigTypeTopic
 
 const props = defineProps({
   query: {
@@ -48,7 +63,7 @@ const props = defineProps({
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const showDrafts = ref(false)
-const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
+const listComp = ref<any | null>(null)
 
 const userStore = useUserStore()
 
@@ -78,7 +93,7 @@ const pageTitle = computed(() => {
 })
 
 const searchResultsMessage = computed(() => {
-  return topicListComp.value ? topicListComp.value.numberOfResultMsg : ''
+  return listComp.value ? listComp.value.numberOfResultMsg : ''
 })
 
 const setLiveResults = () => {
@@ -126,6 +141,16 @@ watch(
       searchPageSlug.value = config.searchPageSlug
       searchPageLabelTitle.value = config.searchPageLabelTitle
       searchPageLabelAddButton.value = config.searchPageLabelAddButton
+      searchPageType.value = config.searchPageType
+      searchPageConfigTypeOrganization.value =
+        config.searchPageConfigTypeOrganization
+      searchPageConfigTypeTopic.value = config.searchPageConfigTypeTopic
+
+      if (route.query.tags) {
+        tags.value = route.query.tags?.toString().split(',')
+      } else {
+        tags.value = []
+      }
     }
   }
 )
@@ -143,7 +168,9 @@ watch(
         {{ capitalize(searchPageLabelTitle) }}
       </h1>
       <div
-        v-if="userStore.canAddTopic(searchPageSlug)"
+        v-if="
+          userStore.canAddTopic(searchPageSlug) && searchPageType != 'datasets'
+        "
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
@@ -176,18 +203,33 @@ watch(
             <TopicSearch
               :geozone="selectedGeozone"
               :show-drafts="showDrafts"
+              :tags="tags"
               @vue:updated="setLiveResults"
             />
           </div>
         </nav>
         <div className="fr-col-12 fr-col-md-8">
-          <TopicList
-            ref="topicListComp"
-            :show-drafts="showDrafts"
-            :geozone="geozone"
-            :query="selectedQuery"
-            @clear-filters="setLiveResults"
-          />
+          <span v-if="searchPageType == 'topics'">
+            <TopicList
+              ref="listComp"
+              :show-drafts="showDrafts"
+              :organization="searchPageConfigTypeOrganization"
+              :tags="tags"
+              :geozone="geozone"
+              :query="selectedQuery"
+              @clear-filters="setLiveResults"
+            />
+          </span>
+          <span v-if="searchPageType == 'datasets'">
+            <DatasetList
+              ref="listComp"
+              :geozone="geozone"
+              :organization="searchPageConfigTypeOrganization"
+              :tags="tags"
+              :query="selectedQuery"
+              @clear-filters="setLiveResults"
+            />
+          </span>
         </div>
       </div>
     </div>

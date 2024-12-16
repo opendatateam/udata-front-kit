@@ -1,115 +1,94 @@
 <script setup lang="ts">
-import NoResults from '@/components/NoResults.vue'
-import { useCurrentPageConf } from '@/router/utils'
-import { useSearchStore } from '@/store/DatasetSearchStore'
-import { DatasetCard } from '@datagouv/components'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useSearchPagesConfig } from '@/utils/config'
 import { storeToRefs } from 'pinia'
+import { computed, ref, watch, type ComputedRef } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
-const emits = defineEmits(['clearFilters'])
+import SelectComponent from '@/components/SelectComponent.vue'
+import IndicatorCard from '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
+import { DatasetCard } from '@datagouv/components'
 
-const props = defineProps({
-  query: {
-    type: String,
-    default: ''
-  },
-  page: {
-    type: String,
-    required: true
-  }
-})
-
-const router = useRouter()
 const route = useRoute()
+const router = useRouter()
+const store = useDatasetStore()
 
-const store = useSearchStore()
-const { meta, pageConf } = useCurrentPageConf()
-const { datasets, pagination, total, maxTotal } = storeToRefs(store)
-
-const numberOfResultMsg: ComputedRef<string> = computed(() => {
-  if (total.value === 1) {
-    return `1 ${pageConf.labels.singular} disponible`
-  } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} ${pageConf.labels.plural} disponibles`
-  } else {
-    return 'Aucun résultat ne correspond à votre recherche'
-  }
-})
-
-const getDatasetPage = (id: string) => {
-  return { name: 'datasets_detail', params: { item_id: id } }
+const zIndex = (key: number) => {
+  return { zIndex: datasets.value.length - key }
 }
 
-const getOrganizationPage = (id: string | undefined) => {
+const getDatasetPage = (id: string) => {
+  return { name: 'dataset_detail', params: { did: id } }
+}
+
+const getOrganizationPage = (id: string) => {
   if (router.hasRoute('organization_detail')) {
     return { name: 'organization_detail', params: { oid: id } }
   }
   return ''
 }
 
+const searchPageConfigTypeCard = ref<string>('')
+const config = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
+searchPageConfigTypeCard.value = config.searchPageConfigTypeCard
+
+type Props = {
+  query: string
+  page: number
+  sort: string | null
+  organization: string | null
+  geozone: string | null
+  tags: string[]
+}
+const props = withDefaults(defineProps<Props>(), { query: '' })
+
+const emits = defineEmits(['clearFilters'])
+
+const { datasets, pagination, total } = storeToRefs(store)
+
+const numberOfResultMsg: ComputedRef<string> = computed(() => {
+  if (total.value === 1) {
+    return '1 indicateur disponible'
+  } else if (total.value > 1) {
+    return `${total.value} indicateurs disponibles`
+  } else {
+    return 'Aucun résultat ne correspond à votre recherche'
+  }
+})
+
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  router.push({ name: route.name, query, hash: '#list' }).then(() => {
+  router.push({ name: 'datasets', query }).then(() => {
     emits('clearFilters')
   })
 }
 
+const executeQuery = async (args: typeof props) => {
+  const loader = useLoading().show({ enforceFocus: false })
+  return store.query(args).finally(() => loader.hide())
+}
+
 const goToPage = (page: number) => {
   router.push({
-    name: route.name,
+    name: 'datasets',
     query: { ...route.query, page: page + 1 },
-    hash: '#list'
+    hash: '#datasets-list'
   })
 }
 
 const doSort = (value: string | null) => {
   router.push({
-    name: route.name,
+    name: 'datasets',
     query: { ...route.query, sort: value },
-    hash: '#list'
+    hash: '#datasets-list'
   })
 }
 
-const executeQuery = async () => {
-  const loader = useLoading().show({ enforceFocus: false })
-  // get filters parameters from route
-  const filtersArgs = pageConf.filters.reduce(
-    (acc, item) => {
-      const value = route.query[item.id]
-      const singleton = Array.isArray(value) ? value[0] : value
-      if (singleton) {
-        acc[item.id] = singleton
-      }
-      return acc
-    },
-    {} as Record<string, string>
-  )
-  return store
-    .query({ ...route.query, ...props, ...filtersArgs }, meta.pageKey)
-    .finally(() => loader.hide())
-}
-
-// load custom card component from router, or fallback to default
-const CardComponent = computed(() => {
-  const componentLoader = meta?.cardComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return DatasetCard
-})
-
-// launch search on route.query changes
-watch(
-  () => route.query,
-  () => executeQuery(),
-  { immediate: true, deep: true }
-)
+// launch search on props (~route.query) changes
+watch(props, () => executeQuery(props), { immediate: true, deep: true })
 
 defineExpose({
   numberOfResultMsg
@@ -117,58 +96,98 @@ defineExpose({
 </script>
 
 <template>
-  <template v-if="datasets.length > 0">
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
-    >
-      <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
-      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-        <SelectComponent
-          label="Trier par :"
-          default-option="Pertinence"
-          :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
-          :options="[
-            { id: '-created', name: 'Les plus récemment créés' },
-            { id: '-last_update', name: 'Les plus récemment modifiés' }
-          ]"
-          @update:model-value="doSort"
+  <div
+    v-if="datasets.length > 0"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
+  >
+    <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
+    <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+      <SelectComponent
+        label="Trier par :"
+        default-option="Pertinence"
+        :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
+        :options="[
+          { id: '-created', name: 'Les plus récemment créés' },
+          { id: '-last_update', name: 'Les plus récemment modifiés' }
+        ]"
+        @update:model-value="doSort"
+      />
+    </div>
+  </div>
+  <div
+    v-if="datasets.length === 0"
+    class="fr-mt-2w rounded-xxs fr-p-3w fr-grid-row flex-direction-column bg-contrast-blue-cumulus"
+  >
+    <div class="fr-col fr-grid-row fr-grid-row--gutters text-blue-400">
+      <div class="fr-col-auto">
+        <img
+          src="/search/france_with_magnifying_glass.svg"
+          alt=""
+          loading="lazy"
+          class="w-100"
+          height="134"
+          width="124"
         />
       </div>
+      <div
+        class="fr-col-12 fr-col-sm fr-grid-row flex-direction-column justify-between"
+      >
+        <div class="fr-mb-1w">
+          <h2 class="fr-m-0 fr-mb-1w fr-text--bold fr-text--md">
+            Aucun résultat ne correspond à votre recherche
+          </h2>
+          <p class="fr-mt-1v fr-mb-3v">
+            Essayez de réinitialiser les filtres pour agrandir votre champ de
+            recherche.
+          </p>
+        </div>
+        <div class="fr-grid-row fr-grid-row--undefined">
+          <button class="fr-btn" @click.stop.prevent="clearFilters">
+            Réinitialiser les filtres
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="fr-mb-4w border-top">
-      <ul class="fr-grid-row fr-grid-row--gutters fr-mt-2w fr-pl-0" role="list">
+  </div>
+  <span v-if="searchPageConfigTypeCard == 'indicators'">
+    <div class="indicators-list-container fr-container fr-mb-4w border-top">
+      <ul
+        class="fr-grid-row fr-grid-row--gutters fr-mb-1w fr-mt-2w"
+        role="list"
+      >
         <li
           v-for="dataset in datasets"
           :key="dataset.id"
-          :class="[meta.cardClass || 'fr-col-12', 'dataset-card-container']"
+          class="fr-col-md-6 fr-col-md"
         >
-          <CardComponent
-            :key="dataset.id"
-            :dataset="dataset"
-            :dataset-url="getDatasetPage(dataset.id)"
-            :organization-url="getOrganizationPage(dataset.organization?.id)"
-            class="dataset-card"
-          />
+          <IndicatorCard :indicator="dataset" />
         </li>
       </ul>
     </div>
-    <DsfrPagination
-      v-if="pagination.length"
-      :current-page="parseInt(page) - 1"
-      :pages="pagination"
-      @update:current-page="goToPage"
+  </span>
+  <span v-else>
+    <DatasetCard
+      v-for="(d, index) in datasets"
+      :key="d.id"
+      :style="zIndex(index)"
+      :dataset="d"
+      :dataset-url="getDatasetPage(d.id)"
+      :organization-url="getOrganizationPage(d.organization?.id ?? '')"
     />
-  </template>
-  <NoResults v-else :clear-filters="clearFilters" />
+  </span>
+  <DsfrPagination
+    v-if="pagination.length"
+    class="fr-container"
+    :current-page="page - 1"
+    :pages="pagination"
+    @update:current-page="goToPage"
+  />
 </template>
 
 <style scoped>
-.dataset-card {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-.dataset-card-container {
-  width: 100%;
+/* "revert" gutters — simpler than w/o gutters */
+.indicators-list-container {
+  padding-right: 0;
+  padding-left: 0;
 }
 </style>

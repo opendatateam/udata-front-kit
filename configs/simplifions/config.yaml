@@ -61,7 +61,8 @@ website:
       - name: usecases
         slug: usecases
         type: topics
-        organizations:
+        config_type:
+          organization:
         extras_key: usecases
         list_all: true
         display_metadata: true
@@ -116,8 +117,11 @@ website:
                 tag: company
       - name: hackathons
         slug: hackathons
-        type: topics
-        organizations:
+        type: datasets
+        config_type:
+          organization: 673dafb02cf54cfb2ccbd118
+          topic:
+          card: indicators
         extras_key: hackathons
         list_all: true
         display_metadata: true
@@ -127,16 +131,26 @@ website:
           everyone: true
           authorized_users:
         labels:
-          search_page_title: hackathons
-          search_bar_title: Filtrer les hackathons
-          search_results: cas disponibles
-          add_button: Ajouter un hackathon
-          add_title: Nouveau hackathon
-          add_subtitle: Description du hackathon
-          subject: Sujet du hackathon
-          description_title: Objectif du hackathon
-          description_info: 'Renseignez ici les informations nécessaires à la compréhension du hackathon'
-          owner: Propriétaire du hackathon
+          search_page_title: indicateurs
+          search_bar_title: Filtrer les indicateurs
+          search_results: indicateurs disponibles
+          add_button: Ajouter un indicateur
+          add_title: Nouvel indicateur
+          add_subtitle: Description de l'indicateur
+          subject: Sujet de l'indicateur
+          description_title: Objectif de l'indicateur
+          description_info: "Renseignez ici les informations nécessaires à la compréhension de l'indicateur"
+          owner: Propriétaire de l'indicateur
+        filters:
+          - name: Type de structures
+            tag: structure
+            values:
+              - name: Administrations
+                tag: 'ecospheres-indicateurs-sous-famille-emissions'
+              - name: Citoyens
+                tag: citizen
+              - name: Entreprises
+                tag: company
 
   header_search:
     display: true
@@ -254,61 +268,6 @@ website:
       path: /terms
     - name: Accessibilité
       path: /accessibility
-
-themes:
-  - name: Se loger
-    color: 'var(--blue-ecume-sun-247-moon-675)'
-    textColor: 'var(--blue-ecume-975-75)'
-    subthemes:
-      - name: Construction et rénovation des logements
-      - name: Aménagements des villes
-  - name: Produire
-    color: 'var(--green-archipel-sun-391-moon-716)'
-    textColor: 'var(--green-archipel-975-75)'
-    subthemes:
-      - name: Nucléaire
-      - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
-      - name: Production d'électricité décarbonée (hors nucléaire)
-  - name: Se nourrir
-    color: 'var(--green-menthe-975-75)'
-    textColor: 'var(--green-menthe-sun-373-moon-652)'
-    subthemes:
-      - name: Alimentation
-      - name: Agriculture et pêche
-  - name: Consommer
-    color: 'var(--green-emeraude-975-75)'
-    textColor: 'var(--green-emeraude-sun-425-moon-753)'
-    subthemes:
-      - name: Consommation plus durable (ménages)
-      - name: Numérique responsable
-      - name: Achats durables (de l'État, des collectivités et des entreprises)
-  - name: Préserver
-    color: 'var(--green-bourgeon-975-75)'
-    textColor: 'var(--green-bourgeon-sun-425-moon-759)'
-    subthemes:
-      - name: Eau
-      - name: Sols
-      - name: Océans et mers
-      - name: Forêt
-  - name: Se déplacer
-    color: 'var(--green-tilleul-verveine-975-75)'
-    textColor: 'var(--green-tilleul-verveine-sun-418-moon-817)'
-    subthemes:
-      - name: Voitures et infrastructures routières
-      - name: Mobilité courte distance (hors voiture)
-      - name: Mobilité longue distance (avion, train)
-  - name: Chantiers transverses
-    color: 'var(--blue-ecume-975-75)'
-    textColor: 'var(--blue-ecume-sun-247-moon-675)'
-    subthemes:
-      - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
-      - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
-      - name: La transition des filières avec la gestion des emplois, des formations et des compétences
-      - name: Les données environnementales
-      - name: Les services publics exemplaires
-      - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
-      - name: La sobriété des usages et des ressources
-
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
 indicators:

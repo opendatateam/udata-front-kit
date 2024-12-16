@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ComputedRef, PropType } from 'vue'
+import type { ComputedRef } from 'vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
@@ -28,19 +28,14 @@ searchPageLabelTitle.value = config.searchPageLabelTitle
 
 const userStore = useUserStore()
 
-const props = defineProps({
-  showDrafts: {
-    type: Boolean
-  },
-  geozone: {
-    type: String as PropType<string | null>,
-    default: null
-  },
-  query: {
-    type: String,
-    default: ''
-  }
-})
+type Props = {
+  showDrafts: boolean
+  geozone: string | null
+  query: string
+  organization: string
+  tags: string[]
+}
+const props = withDefaults(defineProps<Props>(), {})
 
 const emits = defineEmits(['clearFilters'])
 
@@ -88,7 +83,7 @@ const clearFilters = () => {
 onMounted(() => {
   const loader = useLoading().show({ enforceFocus: false })
   topicStore
-    .loadTopicsForUniverse([searchPageSlug.value])
+    .loadTopicsForUniverse([searchPageSlug.value], props.organization)
     .then(() => loader.hide())
 })
 
@@ -97,14 +92,13 @@ defineExpose({
 })
 
 const updateTopics = () => {
-  let tags = [searchPageSlug.value]
+  let initTags = [searchPageSlug.value]
   const loader = useLoading().show({ enforceFocus: false })
   topicStore.isLoaded = false
-  if (route.query.tags) {
-    let filteredTags = route.query.tags.toString().split(',')
-    tags = [...tags, ...filteredTags]
-  }
-  topicStore.loadTopicsForUniverse(tags).then(() => loader.hide())
+  let tags = [...props.tags, ...initTags]
+  topicStore
+    .loadTopicsForUniverse(tags, props.organization)
+    .then(() => loader.hide())
 }
 
 watch(

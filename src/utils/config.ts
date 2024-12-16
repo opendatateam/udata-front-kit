@@ -5,6 +5,9 @@ interface SearchPageConfNormalized {
   searchPageName: string
   searchPageSlug: string
   searchPageType: string
+  searchPageConfigTypeOrganization: string
+  searchPageConfigTypeTopic: string
+  searchPageConfigTypeCard: string
   searchPageExtrasKey: SiteId
   searchPageDatasetEditorialization: boolean
   searchPageCanAdd: CanAddElementConf
@@ -34,6 +37,9 @@ export const useSearchPagesConfig = (
     searchPageName: searchPageConf.name,
     searchPageSlug: searchPageConf.slug,
     searchPageType: searchPageConf.type,
+    searchPageConfigTypeOrganization: searchPageConf.config_type.organization,
+    searchPageConfigTypeTopic: searchPageConf.config_type.topic,
+    searchPageConfigTypeCard: searchPageConf.config_type.card,
     searchPageExtrasKey: searchPageConf.extras_key,
     searchPageDatasetEditorialization: searchPageConf.dataset_editorialization,
     searchPageCanAdd: searchPageConf.can_add,

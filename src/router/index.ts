@@ -97,12 +97,9 @@ getAllSearchPagesConfig().forEach((searchPage) => {
           meta: {
             title: capitalize(searchPage.searchPageName) + 's'
           },
-          component: async () =>
-            await import('@/views/topics/TopicsListView.vue'),
+          component: async () => await import('@/views/SearchView.vue'),
           props: (route: RouteLocationNormalizedLoaded) => ({
             query: route.query.q,
-            subtheme: route.query.subtheme,
-            theme: route.query.theme,
             geozone: route.query.geozone,
             drafts: route.query.drafts
           })
