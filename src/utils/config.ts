@@ -30,9 +30,12 @@ interface SearchPageConfNormalized {
 export const useSearchPagesConfig = (
   value: string
 ): SearchPageConfNormalized => {
-  const searchPageConf = config.website.search_config.pages.find(
+  let searchPageConf = config.website.search_config.pages.find(
     (page: SearchConf) => page.slug === value
   ) as SearchConf
+  if (!searchPageConf) {
+    searchPageConf = config.website.search_config.pages[0]
+  }
   return {
     searchPageName: searchPageConf.name,
     searchPageSlug: searchPageConf.slug,

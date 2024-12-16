@@ -122,7 +122,7 @@ watchEffect(() => {
 })
 
 watch(
-  () => route.fullPath,
+  () => route.path,
   () => {
     const config = useSearchPagesConfig(
       route.path.replace('/admin', '').split('/')[1]

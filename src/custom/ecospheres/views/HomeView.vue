@@ -4,7 +4,7 @@ import type { ComputedRef } from 'vue'
 import { computed, onMounted } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import TopicCard from '@/components/topics/TopicCard.vue'
 import config from '@/config'
 import HomeFaq from '@/custom/ecospheres/components/HomeFaq.vue'
 import type { Topic } from '@/model/topic'
@@ -17,10 +17,10 @@ import explorerSvg from '../assets/explorer.svg'
 const topicStore = useTopicStore()
 const router = useRouter()
 const lastTopics: ComputedRef<Topic[]> = computed(() =>
-  topicStore.sorted.filter((bouquet) => !bouquet.private).slice(0, 3)
+  topicStore.sorted.filter((topic) => !topic.private).slice(0, 3)
 )
 
-onMounted(() => topicStore.loadTopicsForUniverse())
+onMounted(() => topicStore.loadTopicsForUniverse(['bouquets']))
 
 useHead({
   meta: [
@@ -193,7 +193,11 @@ const dropdown = config.website.header_search.dropdown
           :key="topic.id"
           class="fr-col-12 fr-col-xl-4"
         >
-          <BouquetCard :bouquet="topic" :hide-description="true" />
+          <TopicCard
+            :topic="topic"
+            topicSlug="bouquets"
+            :hide-description="true"
+          />
         </li>
       </ul>
       <p class="fr-m-0">

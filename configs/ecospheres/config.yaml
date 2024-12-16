@@ -48,58 +48,6 @@ website:
     display: true
     label: 'Donnez votre avis'
     link: https://tally.so/r/wLWrzp
-  search_config:
-    header_search:
-      display: true
-      placeholder: Rechercher...
-      dropdown:
-        - text: Rechercher {} dans les <strong>jeux de données</strong>
-          route: datasets
-        - text: Rechercher {} dans les <strong>bouquets</strong>
-          route: bouquets
-      pages:
-        - name: bouquet
-          slug: bouquets
-          type: topics
-          organizations:
-          extras_key: ecospheres
-          add: true
-          labels:
-            search_page_title: Bouquets
-            search_bar_title: Filtrer les bouquets
-            search_results: bouquets disponibles
-            add_button: Ajouter un bouquet
-            add_title: Nouveau bouquet
-            add_subtitle: Description du bouquet de données
-            subject: Sujet du bouquet
-            description_title: Objectif du bouquet
-            description_info: "Renseignez ici les informations nécessaires à la compréhension du bouquet : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l'organisme porteur du projet, etc."
-            owner: Propriétaire du bouquet
-          filters:
-            - labels:
-                name: Thématiques
-                all: Toutes les thématiques
-              second_level:
-                display: true
-                name: Chantier
-                all: Tous les chantiers
-              values:
-                - name: Se loger
-                  values:
-                    - name: test
-                    - name: test2
-                - name: Se produire
-                  values:
-                    - name: test3
-                    - name: test4
-              childs:
-                - name: chantier
-          themes:
-            usage: true
-            main_name: thématique
-            secondary_name: chantier
-        - name:
-
   header_search:
     display: true
     placeholder: Rechercher...
@@ -149,9 +97,8 @@ website:
       to: /datasets
     - text: Bouquets
       to: /bouquets
-    # TODO: enable when ready
-    # - text: Indicateurs
-    #   to: /indicators
+    - text: Indicateurs
+      to: /indicators
     - text: Organisations
       to: /organizations
     - text: A propos
@@ -202,22 +149,6 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
-  topics:
-    slug: bouquets
-    name: bouquet
-    extras_key: 'ecospheres'
-    themes:
-      usage: true
-      main_name: thématique
-      secondary_name: chantier
-    # include a list page with all topics
-    list_all: true
-    display_metadata: true
-    activate_read_more: true
-    dataset_editorialization: true
-    can_add_topics:
-      everyone: true
-      authorized_users:
   sitemap:
     - name: Accueil
       path: /
@@ -233,84 +164,173 @@ website:
       path: /terms
     - name: Accessibilité
       path: /accessibility
-
-themes:
-  - name: Se loger
-    color: 'var(--blue-ecume-sun-247-moon-675)'
-    textColor: 'var(--blue-ecume-975-75)'
-    subthemes:
-      - name: Construction et rénovation des logements
-      - name: Aménagements des villes
-  - name: Produire
-    color: 'var(--green-archipel-sun-391-moon-716)'
-    textColor: 'var(--green-archipel-975-75)'
-    subthemes:
-      - name: Nucléaire
-      - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
-      - name: Production d'électricité décarbonée (hors nucléaire)
-  - name: Se nourrir
-    color: 'var(--green-menthe-975-75)'
-    textColor: 'var(--green-menthe-sun-373-moon-652)'
-    subthemes:
-      - name: Alimentation
-      - name: Agriculture et pêche
-  - name: Consommer
-    color: 'var(--green-emeraude-975-75)'
-    textColor: 'var(--green-emeraude-sun-425-moon-753)'
-    subthemes:
-      - name: Consommation plus durable (ménages)
-      - name: Numérique responsable
-      - name: Achats durables (de l'État, des collectivités et des entreprises)
-  - name: Préserver
-    color: 'var(--green-bourgeon-975-75)'
-    textColor: 'var(--green-bourgeon-sun-425-moon-759)'
-    subthemes:
-      - name: Eau
-      - name: Sols
-      - name: Océans et mers
-      - name: Forêt
-  - name: Se déplacer
-    color: 'var(--green-tilleul-verveine-975-75)'
-    textColor: 'var(--green-tilleul-verveine-sun-418-moon-817)'
-    subthemes:
-      - name: Voitures et infrastructures routières
-      - name: Mobilité courte distance (hors voiture)
-      - name: Mobilité longue distance (avion, train)
-  - name: Chantiers transverses
-    color: 'var(--blue-ecume-975-75)'
-    textColor: 'var(--blue-ecume-sun-247-moon-675)'
-    subthemes:
-      - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
-      - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
-      - name: La transition des filières avec la gestion des emplois, des formations et des compétences
-      - name: Les données environnementales
-      - name: Les services publics exemplaires
-      - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
-      - name: La sobriété des usages et des ressources
-
+  search_config:
+    header_search:
+      display: true
+      placeholder: Rechercher...
+      dropdown:
+        - text: Rechercher {} dans les <strong>jeux de données</strong>
+          route: datasets
+        - text: Rechercher {} dans les <strong>bouquets</strong>
+          route: bouquets
+    pages:
+      - name: bouquets
+        slug: bouquets
+        type: topics
+        config_type:
+          organization:
+        extras_key: ecospheres
+        list_all: true
+        display_metadata: true
+        activate_read_more: true
+        dataset_editorialization: true
+        can_add:
+          everyone: true
+          authorized_users:
+        labels:
+          search_page_title: bouquets
+          search_bar_title: Filtrer les bouquets
+          search_results: bouquets disponibles
+          add_button: Ajouter un bouquet
+          add_title: Nouveau bouquet
+          add_subtitle: Description du bouquet
+          subject: Sujet du bouquet
+          description_title: Objectif du bouquet
+          description_info: "Renseignez ici les informations nécessaires à la compréhension du bouquet : politique publique et problématique à laquelle il répond, lien vers toute méthodologie de traitement des données, description de l'organisme porteur du projet, etc."
+          owner: Propriétaire du bouquet
+        filters:
+          - name: Thematiques
+            tag: theme
+            values:
+              - name: Se loger
+                tag: ecospheres-se-loger
+              - name: Produire
+                tag: ecospheres-produire
+              - name: Se nourrir
+                tag: ecospheres-se-nourrir
+              - name: Consommer
+                tag: ecospheres-consommer
+              - name: Préserver
+                tag: ecospheres-preserver
+              - name: Se déplacer
+                tag: ecospheres-se-deplacer
+              - name: Chantiers transverses
+                tag: ecospheres-chantiers-transverses
+          - name: Sous-Thématiques
+            tag: subtheme
+            condition_on: theme
+            values:
+              - name: Construction et rénovation des logements
+                tag: ecospheres-construction-et-renovation-des-logements
+                condition_on: ecospheres-se-loger
+              - name: Aménagements des villes
+                tag: ecospheres-amenagements-des-villes
+                condition_on: ecospheres-se-loger
+              - name: Nucléaire
+                tag: ecospheres-nucleaire
+                condition_on: ecospheres-produire
+              - name: Nucléaire
+                tag: ecospheres-nucleaire
+                condition_on: ecospheres-produire
+              - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
+                tag: ecospheres-tertiaire-incluant-les-batiments-publics-de-l-etat-et-des-collectivités-hors-logement
+                condition_on: ecospheres-produire
+              - name: Production d'électricité décarbonée (hors nucléaire)
+                tag: ecospheres-production-d-electricite-decarbonee-hors-nucleaire
+                condition_on: ecospheres-produire
+              - name: Alimentation
+                tag: ecospheres-alimentation
+                condition_on: ecospheres-se-nourrir
+              - name: Agriculture et pêche
+                tag: ecospheres-agriculture-et-peche
+                condition_on: ecospheres-se-nourrir
+              - name: Consommation plus durable (ménages)
+                tag: ecospheres-consommation-plus-durable-menages
+                condition_on: ecospheres-consommer
+              - name: Numérique responsable
+                tag: ecospheres-numerique-responsable
+                condition_on: ecospheres-consommer
+              - name: Achats durables (de l'État, des collectivités et des entreprises)
+                tag: ecospheres-achats-durables-de-l-etat-des-collectivites-et-des-entreprises
+                condition_on: ecospheres-consommer
+              - name: Eau
+                tag: ecospheres-eau
+                condition_on: ecospheres-preserver
+              - name: Sols
+                tag: ecospheres-sols
+                condition_on: ecospheres-preserver
+              - name: Océans et mers
+                tag: ecospheres-oceans-et-mers
+                condition_on: ecospheres-preserver
+              - name: Forêt
+                tag: ecospheres-foret
+                condition_on: ecospheres-preserver
+              - name: Voitures et infrastructures routières
+                tag: ecospheres-voitures-et-infrastructures-routieres
+                condition_on: ecospheres-se-deplacer
+              - name: Mobilité courte distance (hors voiture)
+                tag: ecospheres-mobilite-courte-distance-hors-voiture
+                condition_on: ecospheres-se-deplacer
+              - name: Mobilité longue distance (avion, train)
+                tag: ecospheres-mobilite-longue-distance-avion-train
+                condition_on: ecospheres-se-deplacer
+              - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
+                tag: ecospheres-le-financement-qui-permet-de-definir-des-trajectoires-d-investissement-credibles-et-coherentes
+                condition_on: ecospheres-chantiers-transverses
+              - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
+                tag: ecospheres-la-planification-et-la-differenciation-territoriale-selon-les-caracteristiques-et-les-specificites-de-chaque-territoire-incluant-les-territoires-ultra-marins
+                condition_on: ecospheres-chantiers-transverses
+              - name: La transition des filières avec la gestion des emplois, des formations et des compétences
+                tag: ecospheres-la-transition-des-filieres-avec-la-gestion-des-emplois-des-formations-et-des-competences
+                condition_on: ecospheres-chantiers-transverses
+              - name: Les données environnementales
+                tag: ecospheres-les-donnees-environnementales
+                condition_on: ecospheres-chantiers-transverses
+              - name: Les services publics exemplaires
+                tag: ecospheres-les-services-publics-exemplaires
+                condition_on: ecospheres-chantiers-transverses
+              - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
+                tag: ecospheres-la-transition-juste-et-les-mesures-d-accompagnement-pour-ne-laisser-personne-au-bord-du-chemin
+                condition_on: ecospheres-chantiers-transverses
+              - name: La sobriété des usages et des ressources
+                tag: ecospheres-la-sobriete-des-usages-et-des-ressources
+                condition_on: ecospheres-chantiers-transverses
+      - name: indicators
+        slug: indicators
+        type: datasets
+        config_type:
+          organization: 673dafb02cf54cfb2ccbd118
+          topic:
+          card: indicators
+        extras_key: ecospheres
+        list_all: true
+        display_metadata: true
+        activate_read_more: true
+        dataset_editorialization: true
+        can_add:
+          everyone: true
+          authorized_users:
+        labels:
+          search_page_title: indicateurs
+          search_bar_title: Filtrer les indicateurs
+          search_results: indicateurs disponibles
+        filters:
+          - name: Thématique
+            tag: theme
+            values:
+              - name: Mieux se déplacer
+                tag: ecospheres-indicateurs-theme--mieux-se-deplacer
+              - name: Mieux produire
+                tag: ecospheres-indicateurs-theme-mieux-produire
+              - name: Autre
+                tag: ecospheres-indicateurs-theme-autre
+          - name: Enjeu
+            tag: enjeu
+            values:
+              - name: Santé
+                tag: ecospheres-indicateurs-enjeu-sante
+              - name: Atténuation
+                tag: ecospheres-indicateurs-enjeu-attenuation
+              - name: Biodiversité
+                tag: ecospheres-indicateurs-enjeu-biodiversite
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
-
-indicators:
-  organization_id: 673dafb02cf54cfb2ccbd118
-  global_tag_prefix: ecospheres-indicateurs
-  filters:
-    - name: Thématique
-      id: theme
-      color: green-menthe
-      values:
-        - id: mieux-se-deplacer
-          name: Mieux se déplacer
-        - id: autre
-          name: Autre
-        - id: mieux-produire
-          name: Mieux produire
-    - name: Enjeu
-      id: enjeu
-      color: blue-ecume
-      values:
-        - id: sante
-          name: Santé
-        - id: attenuation
-          name: Atténuation
-        - id: biodiversite
-          name: Biodiversité
