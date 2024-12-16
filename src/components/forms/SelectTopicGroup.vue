@@ -16,6 +16,14 @@ const datasetsGroups = defineModel('groups-model', {
 const groupOptions = computed(() =>
   Array.from(datasetsGroups.value, ([key]) => key)
 )
+const clear = () => {
+  datasetProperties.value.group = undefined
+}
+
+const trimGroupName = (groupName: string) => {
+  // prevents spaces at the beginning and end of the group name
+  datasetProperties.value.group = groupName.trim()
+}
 </script>
 
 <template>
@@ -29,11 +37,15 @@ const groupOptions = computed(() =>
     no-options-text="Il n'y a pas encore de regroupement dans ce bouquet."
     no-results-text="Aucun regroupement existant."
     :create-option="true"
-    name="select"
     placeholder=""
     :aria="{
-      'aria-describedby': 'regroupement-description'
+      'aria-describedby': 'regroupement-description',
+      // useless or unsupported https://github.com/vueform/multiselect/issues/436
+      'aria-labelledby': null,
+      'aria-multiselectable': null,
+      'aria-placeholder': null
     }"
+    @select="trimGroupName"
   >
     <template #option="{ option }">
       <p v-if="option.__CREATE__">
@@ -41,7 +53,17 @@ const groupOptions = computed(() =>
       </p>
       <p v-else>{{ option.label }}</p>
     </template>
+
+    <template #clear>
+      <button
+        class="multiselect-clear"
+        @click="clear"
+        @keydown.enter="clear"
+        @keydown.space="clear"
+      >
+        <span class="fr-sr-only">Supprimer la sélection</span>
+        <span aria-hidden class="multiselect-clear-icon"></span>
+      </button>
+    </template>
   </Multiselect>
 </template>
-
-<style scoped></style>

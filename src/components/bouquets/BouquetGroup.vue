@@ -96,9 +96,13 @@ const openModal = (type: string) => {
 
 const onValidateEdit = () => {
   // check if new group name already exists
-  if (props.allGroups.has(newGroupName.value)) {
+  if (
+    props.allGroups.has(newGroupName.value.trim()) ||
+    props.groupName.trim() === newGroupName.value.trim()
+  ) {
+    inputErrors.value = []
     inputErrors.value.push('Ce nom de regroupement existe déjà.')
-  } else if (newGroupName.value && props.groupName !== newGroupName.value) {
+  } else if (newGroupName.value) {
     emit('editGroupName', props.groupName, newGroupName.value)
     opened.value = false
   }

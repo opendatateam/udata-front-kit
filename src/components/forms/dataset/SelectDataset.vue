@@ -2,9 +2,8 @@
 import type { DatasetV2 } from '@datagouv/components'
 import { useDebounceFn } from '@vueuse/core'
 import { defineModel, ref } from 'vue'
-import 'vue-multiselect/dist/vue-multiselect.css'
 
-import NewMultiselect from '@vueform/multiselect'
+import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
 import '@/assets/multiselect.css'
@@ -56,14 +55,14 @@ const clear = () => {
 </script>
 
 <template>
-  <label class="fr-label fr-mb-2v" for="bouquet-select-dataset">
-    Jeu de données (facultatif)<br /><span class="fr-text--sm"
-      >Rechercher un jeu de données dans data.gouv.fr</span
-    >
+  <label class="fr-label fr-mb-2v" for="input-dataset">
+    Jeu de données (facultatif)
   </label>
-  <NewMultiselect
-    id="input-regroupement"
-    ref="newSelect"
+  <p id="dataset-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
+    Rechercher un jeu de données dans data.gouv.fr
+  </p>
+  <Multiselect
+    id="input-dataset"
     v-model="selectedDataset"
     :object="true"
     value-prop="id"
@@ -81,6 +80,13 @@ const clear = () => {
     :clear-on-blur="false"
     placeholder=""
     no-options-text="Aucun jeu de données trouvé, précisez ou élargissez votre recherche."
+    :aria="{
+      'aria-describedby': 'dataset-description',
+      // useless or unsupported https://github.com/vueform/multiselect/issues/436
+      'aria-labelledby': null,
+      'aria-multiselectable': null,
+      'aria-placeholder': null
+    }"
   >
     <template #singlelabel="{ value }">
       <div class="multiselect-single-label fr-py-2w">
@@ -109,7 +115,7 @@ const clear = () => {
         <span aria-hidden class="multiselect-clear-icon"></span>
       </button>
     </template>
-  </NewMultiselect>
+  </Multiselect>
 </template>
 
 <style scoped>
