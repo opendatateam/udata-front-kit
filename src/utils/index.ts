@@ -22,9 +22,10 @@ export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
 /**
  * Parse markdown to HTML
  */
-export const fromMarkdown = (value: string) => {
+export const fromMarkdown = (value: string, inline: boolean = false) => {
   if (!value) return ''
-  const parsed = marked.parse(value, markedOptions)
+  const fn = inline ? marked.parseInline : marked.parse
+  const parsed = fn(value, markedOptions)
   // type cast to string because we don't use async mode of marked
   return DOMPurify.sanitize(parsed as string)
 }
