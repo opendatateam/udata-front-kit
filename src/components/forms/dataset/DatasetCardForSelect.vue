@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
-import { OrganizationNameWithCertificate } from '@datagouv/components'
+// FIXME
+import type { DatasetV2Fix } from '@/model/DatasetV2Fix'
+import {
+  OrganizationNameWithCertificate,
+  useOwnerName
+} from '@datagouv/components'
 import { computed } from 'vue'
 
-import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { useOwnerName } from '@/utils/dataset'
-
-const { pageConf } = useCurrentPageConf()
 
 const props = defineProps({
   dataset: {
-    type: Object as () => DatasetV2,
+    type: Object as () => DatasetV2Fix,
     required: true
   },
   alreadySelected: {
@@ -57,7 +57,7 @@ const badgeClasse = computed(() => {
     <DsfrBadge
       v-if="alreadySelected"
       type="info"
-      :label="`Déjà utilisé dans ce ${pageConf.labels.singular}`"
+      label="Déjà utilisé dans ce topic"
       small
       ellipsis
       :class="badgeClasse"
@@ -75,8 +75,9 @@ const badgeClasse = computed(() => {
         </h4>
         <p
           v-if="dataset.organization || dataset.owner"
-          class="fr-m-0 fr-text--xs org--fix"
+          class="fr-m-0 fr-text--xs"
         >
+          Par
           <template v-if="dataset.organization">
             <OrganizationNameWithCertificate
               :organization="dataset.organization"
@@ -99,6 +100,9 @@ const badgeClasse = computed(() => {
 </template>
 
 <style scoped>
+.card:has(.fr-badge.absolute) {
+  padding-top: 1rem;
+}
 h4 {
   font-size: 1rem;
 }

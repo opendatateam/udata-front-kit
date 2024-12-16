@@ -4,8 +4,8 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
-import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
+import TopicForm from '@/components/forms/topic/TopicForm.vue'
+import TopicOwnerForm from '@/components/forms/topic/TopicOwnerForm.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -16,8 +16,8 @@ import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { cloneTopic } from '@/utils/bouquet'
 import { useSearchPagesConfig } from '@/utils/config'
+import { cloneTopic } from '@/utils/topic'
 
 const props = defineProps({
   isCreate: {
@@ -210,7 +210,7 @@ const onSubmit = async () => {
 
 <template>
   <GenericContainer class="fr-mt-4w">
-    <div v-if="userStore.canAddBouquet(searchPageSlug)">
+    <div v-if="userStore.canAddTopic(searchPageSlug)">
       <div v-if="errorMsg" class="fr-mt-4v">
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>
@@ -247,7 +247,7 @@ const onSubmit = async () => {
           <legend class="fr-fieldset__legend fr-text--lead">
             {{ searchPageLabelAddSubtitle }}
           </legend>
-          <BouquetForm
+          <TopicForm
             v-if="isReadyForForm"
             ref="formFields"
             v-model="topic"
@@ -259,7 +259,7 @@ const onSubmit = async () => {
           <legend class="fr-fieldset__legend fr-text--lead">
             {{ searchPageLabelOwner }}
           </legend>
-          <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
+          <TopicOwnerForm v-if="isReadyForForm" v-model="topic" />
         </fieldset>
         <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
           <DsfrButton

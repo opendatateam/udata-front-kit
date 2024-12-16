@@ -98,7 +98,7 @@ getAllSearchPagesConfig().forEach((searchPage) => {
             title: capitalize(searchPage.searchPageName) + 's'
           },
           component: async () =>
-            await import('@/views/bouquets/BouquetsListView.vue'),
+            await import('@/views/topics/TopicsListView.vue'),
           props: (route: RouteLocationNormalizedLoaded) => ({
             query: route.query.q,
             subtheme: route.query.subtheme,
@@ -111,26 +111,24 @@ getAllSearchPagesConfig().forEach((searchPage) => {
           path: ':bid',
           name: `${searchPage.searchPageSlug}_detail`,
           props: (route: RouteLocationNormalizedLoaded) => ({
-            bouquetId: route.params.bid
+            topicId: route.params.bid
           }),
           component: async () =>
-            await import('@/views/bouquets/BouquetDetailView.vue')
+            await import('@/views/topics/TopicDetailView.vue')
         }
       ]
     },
     {
       path: `/admin/${searchPage.searchPageSlug}/add`,
       name: `${searchPage.searchPageSlug}_add`,
-      component: async () =>
-        await import('@/views/bouquets/BouquetFormView.vue'),
+      component: async () => await import('@/views/topics/TopicFormView.vue'),
       meta: { requiresAuth: true },
       props: { isCreate: true }
     },
     {
       path: `/admin/${searchPage.searchPageSlug}/edit/:bid`,
       name: `${searchPage.searchPageSlug}_edit`,
-      component: async () =>
-        await import('@/views/bouquets/BouquetFormView.vue'),
+      component: async () => await import('@/views/topics/TopicFormView.vue'),
       meta: { requiresAuth: true },
       props: { isCreate: false }
     }

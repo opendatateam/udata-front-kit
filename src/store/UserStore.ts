@@ -130,7 +130,7 @@ export const useUserStore = defineStore('user', {
       }
       return false
     },
-    canAddBouquet(searchPageSlug: string): boolean {
+    canAddTopic(searchPageSlug: string): boolean {
       const { searchPageCanAdd } = useSearchPagesConfig(searchPageSlug)
       if (searchPageCanAdd.everyone || this.isAdmin) {
         return true

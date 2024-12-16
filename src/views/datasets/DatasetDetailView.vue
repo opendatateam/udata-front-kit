@@ -16,7 +16,7 @@ import { useLoading } from 'vue-loading-overlay'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
-import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
+import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import config from '@/config'
 import {
@@ -43,7 +43,7 @@ const dataset = computed(() => datasetStore.get(datasetId))
 const resources = ref<Record<string, ResourceDataWithQuery>>({})
 const selectedTabIndex = ref(0)
 const license = ref<License>()
-const showAddToBouquetModal = ref(false)
+const showAddToTopicModal = ref(false)
 
 const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
@@ -265,9 +265,9 @@ watch(
         </div>
         <div
           v-if="
-            config.website.datasets.add_to_bouquet &&
+            config.website.datasets.add_to_topic &&
             userStore.loggedIn &&
-            userStore.canAddBouquet(searchPageSlug)
+            userStore.canAddTopic(searchPageSlug)
           "
         >
           <DsfrButton
@@ -275,11 +275,11 @@ watch(
             size="md"
             :label="`Ajouter à un ${searchPageName}`"
             icon="ri-file-add-line"
-            @click="showAddToBouquetModal = true"
+            @click="showAddToTopicModal = true"
           />
-          <DatasetAddToBouquetModal
-            v-if="showAddToBouquetModal"
-            v-model:show="showAddToBouquetModal"
+          <DatasetAddToTopicModal
+            v-if="showAddToTopicModal"
+            v-model:show="showAddToTopicModal"
             :dataset="dataset"
           />
         </div>

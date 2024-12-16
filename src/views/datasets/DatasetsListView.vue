@@ -245,7 +245,7 @@ onMounted(() => {
 
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
-        id="search-bouquet"
+        id="search-topic"
         v-model="localQuery"
         :is-filter="true"
         search-label="Filtrer des données"

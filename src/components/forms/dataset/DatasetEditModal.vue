@@ -1,18 +1,12 @@
 <script setup lang="ts">
-import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
-import { computed, ref, type Ref } from 'vue'
+import { computed, defineModel, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
-import {
-  Availability,
-  type DatasetProperties,
-  type DatasetsGroups
-} from '@/model/topic'
-import { useCurrentPageConf } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { useForm, type AllowedInput } from '@/utils/form'
+import { Availability, type DatasetProperties } from '@/model/topic'
+import { useDatasetStore } from '@/store/DatasetStore'
+
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
 export interface DatasetEditModalType {
@@ -23,21 +17,10 @@ export interface DatasetEditModalType {
 const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
-const { pageConf } = useCurrentPageConf()
 
 const datasets = defineModel({
   type: Object as () => DatasetProperties[],
   required: true
-})
-const datasetsGroups = defineModel('groups-model', {
-  type: Object as () => DatasetsGroups,
-  default: []
-})
-defineProps({
-  datasetEditorialization: {
-    type: Boolean,
-    default: false
-  }
 })
 
 const isModalOpen = ref(false)
@@ -46,64 +29,26 @@ const modalData: Ref<DatasetModalData> = ref({
   mode: 'edit'
 })
 
-const formErrors: Ref<AllowedInput[]> = ref([])
-
-const validateFields = () => {
-  if (!modalData.value.dataset?.title.trim()) {
-    formErrors.value.push('title')
-  }
-  if (!modalData.value.dataset?.purpose?.trim()) {
-    formErrors.value.push('purpose')
-  }
-  if (
-    modalData.value.dataset?.group &&
-    modalData.value.dataset?.group.trim().length > 100
-  ) {
-    formErrors.value.push('group')
-  }
-  if (
-    !modalData.value.dataset?.uri &&
-    modalData.value.dataset?.availability === Availability.LOCAL_AVAILABLE
-  ) {
-    formErrors.value.push('availability')
-  }
-  if (
-    !modalData.value.dataset?.uri &&
-    modalData.value.dataset?.availability === Availability.URL_AVAILABLE
-  ) {
-    formErrors.value.push('availabilityUrl')
-  }
-}
-
-const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
+const modalActions = computed(() => {
   return [
     {
       label: 'Annuler',
-      type: 'button',
       secondary: true,
       onClick: () => {
-        onCancel()
+        closeModal()
       }
     },
     {
       label: 'Enregistrer',
-      type: 'button',
-      onClick: ($event: MouseEvent) => {
+      disabled: !modalData.value.isValid,
+      onClick: ($event: PointerEvent) => {
         $event.preventDefault()
-        handleSubmit()
+        submitModal(modalData.value)
+        closeModal()
       }
     }
   ]
 })
-
-const errorSummary = useTemplateRef('errorSummary')
-
-const onCancel = () => {
-  // reset error fields
-  formErrors.value = []
-  isSubmitted.value = false
-  closeModal()
-}
 
 const editDataset = (dataset: DatasetProperties, index: number) => {
   // clone the object to enable cancellation
@@ -132,7 +77,7 @@ const addDataset = () => {
   isModalOpen.value = true
 }
 
-const submit = async (modalData: DatasetModalData) => {
+const submitModal = async (modalData: DatasetModalData) => {
   if (modalData.dataset !== undefined) {
     // check if data.gouv.fr URL and update metadata if needed
     if (
@@ -154,8 +99,8 @@ const submit = async (modalData: DatasetModalData) => {
           if (dataset !== undefined) {
             modalData.dataset.availability = Availability.LOCAL_AVAILABLE
             const resolved = router.resolve({
-              name: 'datasets_detail',
-              params: { item_id: dataset.id }
+              name: 'dataset_detail',
+              params: { did: dataset.id }
             })
             modalData.dataset.uri = resolved.href
             modalData.dataset.id = dataset.id
@@ -175,15 +120,7 @@ const submit = async (modalData: DatasetModalData) => {
     }
   }
   emits('submitModal')
-  closeModal()
 }
-
-const { formErrorMessagesMap, sortedErrors, isSubmitted, handleSubmit } =
-  useForm(formErrors, pageConf.labels.singular, {
-    validateFields,
-    onSuccess: () => submit(modalData.value),
-    errorSummaryRef: errorSummary
-  })
 
 const closeModal = () => {
   isModalOpen.value = false
@@ -196,7 +133,7 @@ defineExpose({ addDataset, editDataset })
   <DsfrModal
     v-if="isModalOpen && modalData.dataset"
     size="lg"
-    class="form"
+    class="topic-dataset-modal"
     :title="
       modalData.mode === 'edit'
         ? 'Éditer le jeu de données'
@@ -204,21 +141,11 @@ defineExpose({ addDataset, editDataset })
     "
     :opened="isModalOpen"
     aria-modal="true"
-    @close="onCancel"
+    @close="closeModal"
   >
-    <ErrorSummary
-      v-show="formErrors.length"
-      ref="errorSummary"
-      :form-error-messages-map
-      :form-errors="sortedErrors"
-      heading-level="h3"
-    />
     <form novalidate>
       <DatasetPropertiesFields
         v-model="modalData.dataset"
-        v-model:groups-model="datasetsGroups"
-        v-model:errors-model="formErrors"
-        :dataset-editorialization
         :already-selected-datasets="datasets"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />
@@ -229,7 +156,6 @@ defineExpose({ addDataset, editDataset })
         align="right"
         :buttons="modalActions"
         inline-layout-when="large"
-        class="fr-mt-4w"
       />
     </slot>
   </DsfrModal>
