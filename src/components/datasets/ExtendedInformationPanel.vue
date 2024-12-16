@@ -46,7 +46,7 @@ const hasExtendedInfo = !!contactPoint || !!dcatExtras || !!uri
 </template>
 
 <style scoped>
-.metadata-list > *:last-child {
+.metadata-list > :last-child {
   margin-bottom: 0 !important;
 }
 </style>
