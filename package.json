@@ -23,8 +23,6 @@
     "@datagouv/components": "^1.5.0",
     "@gouvfr/dsfr": "^1.11.2",
     "@gouvminint/vue-dsfr": "^7.1.0",
-    "@iconify-json/ri": "^1.2.3",
-    "@iconify/utils": "^2.2.0",
     "@json2csv/plainjs": "^7.0.6",
     "@unhead/vue": "^1.11.10",
     "@vee-validate/rules": "^4.13.2",
