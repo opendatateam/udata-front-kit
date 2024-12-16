@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { stripFromMarkdown } from '@/utils'
-import { useRemixIconData } from '@/utils/icon'
 
 const props = defineProps({
   organization: {
@@ -46,16 +45,16 @@ const isPublicService = (): boolean =>
         </div>
         <div class="fr-col fr-px-3v">
           <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
-            <VIcon
+            <VIconCustom
               v-if="isPublicService()"
-              :icon="useRemixIconData('bank-line')"
-              class="fr-mr-1v badge"
+              icon="bank-line"
+              class="fr-icon--sm fr-mr-1v badge"
             />
             {{ organization.name }}
-            <VIcon
+            <VIconCustom
               v-if="isCertified()"
-              :icon="useRemixIconData('checkbox-circle-line')"
-              class="fr-ml-1v badge"
+              icon="checkbox-circle-line"
+              class="fr-icon--sm fr-mr-1v badge"
             />
           </component>
         </div>
@@ -95,7 +94,6 @@ const isPublicService = (): boolean =>
 
 .fr-title-v2__title .badge {
   color: var(--blue-france-sun-113-625);
-  width: 0.9rem;
 }
 
 .card__tag {

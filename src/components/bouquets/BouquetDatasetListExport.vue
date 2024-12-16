@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { DatasetProperties } from '@/model/topic'
 import { exportDatasets } from '@/services/export'
-import { useRemixIconProp } from '@/utils/icon'
-import type { DsfrButtonProps } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
   filename: {
@@ -33,7 +31,7 @@ const doExport = async () => {
       type="button"
       label="Exporter la liste des jeux de données"
       class="fr-mt-2w fr-ml-auto"
-      :icon="useRemixIconProp<DsfrButtonProps>('file-download-line')"
+      icon="fr-icon-file-download-line"
       secondary
       @click.prevent="doExport"
     />

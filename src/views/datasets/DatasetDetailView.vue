@@ -10,7 +10,6 @@ import {
   Well,
   type License
 } from '@datagouv/components'
-import type { DsfrButtonProps } from '@gouvminint/vue-dsfr'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -32,7 +31,6 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
-import { useRemixIconProp } from '@/utils/icon'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -256,10 +254,7 @@ watch(
           v-if="showHarvestQualityWarning"
           class="text-mention-grey fr-text--sm fr-my-1v"
         >
-          <span
-            class="fr-icon-warning-line fr-icon--sm"
-            aria-hidden="true"
-          ></span>
+          <VIconCustom icon="warning-line" class="fr-icon--sm" />
           La qualité des métadonnées peut être trompeuse car les métadonnées de
           la source originale peuvent avoir été perdues lors de leur
           récupération. Nous travaillons actuellement à améliorer la situation.
@@ -275,7 +270,7 @@ watch(
             class="fr-mt-2w"
             size="md"
             :label="`Ajouter à un ${topicsName}`"
-            :icon="useRemixIconProp<DsfrButtonProps>('file-add-line')"
+            icon="fr-icon-file-add-line"
             @click="showAddToBouquetModal = true"
           />
           <DatasetAddToBouquetModal
@@ -368,7 +363,7 @@ watch(
             <div class="fr-col-12 fr-col-lg-4 text-align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
-                :icon="useRemixIconProp<DsfrButtonProps>('external-link-line')"
+                icon="fr-icon-external-link-line"
                 size="sm"
                 :icon-right="true"
                 @click="openDataGouvDiscussions"

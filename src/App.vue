@@ -3,7 +3,6 @@ import { useFocus, useTitle } from '@vueuse/core'
 
 import config from '@/config'
 
-import { type DsfrHeaderMenuLinkProps } from './components/header/DsfrHeaderMenuLink.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
 import {
@@ -12,7 +11,6 @@ import {
 } from './model/injectionKeys'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
-import { useRemixIconProp } from './utils/icon'
 
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
@@ -42,7 +40,7 @@ const quickLinks = computed(() => {
 
   const headerButton = {
     label: button.label,
-    icon: useRemixIconProp<DsfrHeaderMenuLinkProps>('lightbulb-line'),
+    icon: 'fr-icon-lightbulb-line',
     href: button.link,
     iconRight: true
   }
@@ -50,8 +48,8 @@ const quickLinks = computed(() => {
   const logLink = {
     label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
     icon: isLoggedIn.value
-      ? useRemixIconProp<DsfrHeaderMenuLinkProps>('logout-box-r-line')
-      : useRemixIconProp<DsfrHeaderMenuLinkProps>('account-circle-line'),
+      ? 'fr-icon-logout-box-r-line'
+      : 'fr-icon-account-circle-line',
     to: isLoggedIn.value ? '/logout' : '/login',
     iconRight: true
   }

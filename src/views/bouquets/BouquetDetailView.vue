@@ -4,7 +4,6 @@ import {
   ReadMore,
   excerpt
 } from '@datagouv/components'
-import type { DsfrButtonProps } from '@gouvminint/vue-dsfr'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
 import { computed, inject, ref, watch } from 'vue'
@@ -33,7 +32,6 @@ import {
   useExtras
 } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
-import { useRemixIconProp } from '@/utils/icon'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useThemeOptions } from '@/utils/theme'
 
@@ -218,7 +216,7 @@ watch(
               :secondary="canEdit"
               size="md"
               label="Cloner"
-              :icon="useRemixIconProp<DsfrButtonProps>('file-copy-2-line')"
+              icon="fr-icon-git-merge-line"
               title="Cloner le bouquet"
               class="fr-mb-1v fr-mr-1v"
               @click="goToClone"
@@ -228,7 +226,7 @@ watch(
               secondary
               size="md"
               label="Éditer"
-              :icon="useRemixIconProp<DsfrButtonProps>('pencil-line')"
+              icon="fr-icon-pencil-line"
               class="fr-mb-1v fr-mr-1v"
               @click="goToEdit"
             />
@@ -236,7 +234,9 @@ watch(
               v-if="canEdit"
               size="md"
               :label="topic.private ? 'Publier' : 'Dépublier'"
-              :icon="useRemixIconProp<DsfrButtonProps>('eye-line')"
+              :icon="
+                topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
+              "
               class="fr-mb-1v"
               @click="togglePublish"
             />
