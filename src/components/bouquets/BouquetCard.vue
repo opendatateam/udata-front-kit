@@ -109,13 +109,21 @@ const { themeColors } = useThemeOptions(theme)
     </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
-      <VIcon name="ri:time-line" class="fr-mr-1v text-grey-380" />
+      <VIconCustom
+        name="time-line"
+        class="fr-mr-1w text-grey-380 fr-icon--sm"
+      />
       Mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
     </p>
 
     <div class="fr-grid-row">
       <span class="fr-tag fr-mr-2v fr-mb-2v">
-        <VIcon name="ri-database-2-line" class="fr-mr-1v" />
+        <VIconCustom
+          name="database-line"
+          class="fr-mr-1v"
+          size="lg"
+          align="text-top"
+        />
         <span class="fr-mr-1v">
           {{
             `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
@@ -124,7 +132,12 @@ const { themeColors } = useThemeOptions(theme)
       </span>
 
       <span v-if="spatialCoverage" class="fr-tag fr-mb-2v">
-        <VIcon name="ri-map-2-line" class="fr-mr-1v" />
+        <VIconCustom
+          name="road-map-line"
+          class="fr-mr-1v"
+          size="lg"
+          align="text-top"
+        />
         <span class="fr-mr-1v">
           {{ spatialCoverage.name }}
         </span>

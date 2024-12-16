@@ -137,7 +137,7 @@ onMounted(() => {
         size="sm"
         class="fr-mb-1w"
         label="Réorganiser la liste"
-        icon="ic:baseline-drag-indicator"
+        icon="fr-icon-drag-move-2-line"
         @click.prevent="triggerReorder"
       />
       <DsfrButton
@@ -145,7 +145,7 @@ onMounted(() => {
         size="sm"
         class="fr-mb-1w fr-ml-1w"
         label="Ajouter un jeu de données"
-        icon="ri-add-line"
+        icon="fr-icon-add-line"
         @click.prevent="addDataset"
       />
     </div>
@@ -224,7 +224,7 @@ onMounted(() => {
                 v-if="isEdit"
                 secondary
                 size="sm"
-                icon="ri-delete-bin-line"
+                icon="fr-icon-delete-bin-line"
                 label="Supprimer"
                 class="fr-mr-2w"
                 @click.prevent="removeDataset(index)"
@@ -232,7 +232,7 @@ onMounted(() => {
               <DsfrButton
                 v-if="isEdit"
                 size="sm"
-                icon="ri-pencil-line"
+                icon="fr-icon-pencil-line"
                 label="Éditer"
                 class="fr-mr-2w"
                 @click.prevent="editDataset(dataset, index)"
