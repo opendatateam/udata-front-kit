@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import config from '@/config'
 import { required } from '@vee-validate/rules'
 import { useForm } from 'vee-validate'
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import type { FilterConf } from '@/model/config'
 import type { SpatialCoverage } from '@/model/spatial'
-import { NoOptionSelected } from '@/model/theme'
 import type { TopicPostData } from '@/model/topic'
 import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useThemeOptions } from '@/utils/theme'
 
 const route = useRoute()
 
@@ -26,61 +26,104 @@ const formErrors = defineModel('formErrors', {
 type FormErrors = {
   name?: string
   description?: string
-  theme?: string
-  subtheme?: string
+} & {
+  [K in keyof typeof currentFilters.value]?: string
 }
 
 const emits = defineEmits(['updateValidation'])
 
 const spatialCoverage = useSpatialCoverage(topic)
 
-const { searchPageExtrasKey, searchPageName } = useSearchPagesConfig(
+const searchPageName = ref<string>('')
+const searchPageSlug = ref<string>('')
+const searchPageExtrasKey = ref<string>('')
+const searchPageFilters = ref<FilterConf[]>([])
+const searchPageLabelSubject = ref<string>('')
+const searchPageLabelDescriptionTitle = ref<string>('')
+const searchPageLabelDescriptionInfo = ref<string>('')
+
+const configSearchPage = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
 )
+searchPageName.value = configSearchPage.searchPageName
+searchPageSlug.value = configSearchPage.searchPageSlug
+searchPageExtrasKey.value = configSearchPage.searchPageExtrasKey
+searchPageFilters.value = configSearchPage.searchPageFilters
+searchPageLabelSubject.value = configSearchPage.searchPageLabelSubject
+searchPageLabelDescriptionTitle.value =
+  configSearchPage.searchPageLabelDescriptionTitle
+searchPageLabelDescriptionInfo.value =
+  configSearchPage.searchPageLabelDescriptionInfo
+
+const currentFilters = ref<Record<string, string>>({})
+
+if (searchPageFilters.value) {
+  searchPageFilters.value.forEach((item) => {
+    currentFilters.value[item.tag] = ''
+  })
+}
+
+Object.keys(currentFilters.value).forEach((key) => {
+  if (searchPageFilters.value) {
+    searchPageFilters.value.forEach((spf) => {
+      if (spf.tag === key) {
+        spf.values.forEach((val) => {
+          if (topic.value.tags?.includes(val.tag)) {
+            currentFilters.value[key] = val.tag
+          }
+          if (route.query.tags) {
+            if (route.query.tags.toString().split(',').includes(val.tag)) {
+              currentFilters.value[key] = val.tag
+            }
+          }
+        })
+      }
+    })
+  }
+})
 
 // Define values and validation rules for each field
-const { values, errors, defineField, handleSubmit } = useForm({
+const { values, errors, defineField, handleSubmit, setValues } = useForm({
   initialValues: {
     name: topic.value.name ?? '',
     description: topic.value.description ?? '',
-    theme:
-      topic.value.extras[searchPageExtrasKey].theme === NoOptionSelected
-        ? ''
-        : topic.value.extras[searchPageExtrasKey].theme,
-    subtheme:
-      topic.value.extras[searchPageExtrasKey].subtheme === NoOptionSelected
-        ? ''
-        : topic.value.extras[searchPageExtrasKey].subtheme
+    ...currentFilters.value
   },
   validationSchema: {
     name: required,
     description: required,
-    theme: required,
-    subtheme: required
+    ...Object.keys(currentFilters.value).reduce((schema, key) => {
+      schema[key] = required
+      return schema
+    }, {})
   }
 })
 
 // create fields value binding
 const [name, nameAttrs] = defineField('name')
 const [description, descriptionAttrs] = defineField('description')
-const [theme, themeAttrs] = defineField('theme')
-const [subtheme, subthemeAttrs] = defineField('subtheme')
 
 const isSubmitted: Ref<boolean | undefined> = ref(undefined)
 
-const onValidSubmit = async (validatedValues: {
-  name: string
-  description: string
-  theme: string
-  subtheme: string
-}) => {
+const onValidSubmit = async (
+  validatedValues: {
+    name: string
+    description: string
+  } & Record<string, string>
+) => {
   // set form states
   isSubmitted.value = true
   // set topic values from validated fields
   topic.value.name = validatedValues.name
   topic.value.description = validatedValues.description
-  topic.value.extras[searchPageExtrasKey].theme = validatedValues.theme
-  topic.value.extras[searchPageExtrasKey].subtheme = validatedValues.subtheme
+  // set topic tags for filters
+  let tags: string[] = []
+  Object.keys(currentFilters.value).forEach((key) => {
+    tags.push(validatedValues[key])
+  })
+  tags.push(searchPageSlug.value)
+  tags.push(config.universe.name)
+  topic.value.tags = tags
   // sync valid status with parent
   emits('updateValidation', true)
 }
@@ -97,31 +140,59 @@ defineExpose({
   onSubmit
 })
 
-const { themeOptions, subthemeOptions } = useThemeOptions(theme)
-
 const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
   const zones = value === undefined ? null : [value.id]
   topic.value.spatial = { ...topic.value.spatial, zones }
 }
 
-// initialize theme and subtheme from topic values, if any
-onMounted(() => {
-  if (topic.value.extras[searchPageExtrasKey].theme !== NoOptionSelected) {
-    theme.value = topic.value.extras[searchPageExtrasKey].theme
+onMounted(() => {})
+
+const updateCurrentFilters = (tag: string, event: Event) => {
+  const target = event.target as HTMLSelectElement
+  const newValue = target.value
+
+  // Update the reactive `currentFilters`
+  currentFilters.value[tag] = newValue
+
+  // Update dependent filters if any condition exists
+  if (searchPageFilters.value) {
+    searchPageFilters.value.forEach((spf) => {
+      if (spf.condition_on && spf.condition_on === tag) {
+        currentFilters.value[spf.tag] = '' // Reset dependent filters
+      }
+    })
   }
-  if (topic.value.extras[searchPageExtrasKey].subtheme !== NoOptionSelected) {
-    subtheme.value = topic.value.extras[searchPageExtrasKey].subtheme
-  }
+
+  // Use `setValues` to update the form values
+  setValues({
+    ...values,
+    ...currentFilters.value
+  })
+}
+
+const filteredSearchPageFilters = computed(() => {
+  if (!searchPageFilters.value) return
+  return searchPageFilters.value.map((spf) => ({
+    ...spf,
+    values:
+      spf.condition_on && spf.condition_on in currentFilters.value
+        ? spf.values.filter(
+            (option) =>
+              currentFilters.value[spf.condition_on] === option.condition_on
+          )
+        : spf.values
+  }))
 })
 </script>
 
 <template>
+  {{ route.query.tags }}
   <!-- Title -->
   <div class="fr-input-group">
     <DsfrInput
       v-model="name"
       v-bind="nameAttrs"
-      :label="`Sujet du ${searchPageName} (obligatoire)`"
+      :label="`${searchPageLabelSubject} (obligatoire)`"
       label-visible
       :aria-invalid="errors.name && isSubmitted ? true : undefined"
       :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
@@ -137,7 +208,7 @@ onMounted(() => {
       v-model="description"
       v-bind="descriptionAttrs"
       is-textarea
-      :label="`Objectif du ${searchPageName} (obligatoire)`"
+      :label="`${searchPageLabelDescriptionTitle} (obligatoire)`"
       label-visible
       :aria-invalid="errors.description && isSubmitted ? true : undefined"
       :description-id="
@@ -155,10 +226,7 @@ onMounted(() => {
       La description ne doit pas être vide.
     </p>
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
-      Renseignez ici les informations nécessaires à la compréhension du
-      {{ searchPageName }}&nbsp;: politique publique et problématique à laquelle
-      il répond, lien vers toute méthodologie de traitement des données,
-      description de l'organisme porteur du projet, etc.<br />
+      {{ searchPageLabelDescriptionInfo }}<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
         ><span lang="en">markdown</span> (guide en anglais)</a
@@ -166,78 +234,45 @@ onMounted(() => {
       pour mettre en forme votre texte.
     </p>
   </div>
-  <!-- Theme -->
-  <!-- <div v-if="topicsUseThemes" class="fr-select-group fr-input-group">
-    <label class="fr-label" for="input-theme">
-      {{ capitalize(topicsMainTheme) }} (obligatoire)
-    </label>
-    <select
-      id="input-theme"
-      v-model="theme"
-      v-bind="themeAttrs"
-      class="fr-select"
-      :aria-invalid="errors.theme && isSubmitted ? true : undefined"
-      :aria-describedby="
-        errors.theme && isSubmitted ? 'errors-theme' : undefined
-      "
-      @change="subtheme = ''"
-    >
-      <option value="" selected disabled hidden>
-        Choisir une {{ topicsMainTheme }}
-      </option>
-      <option
-        v-for="option in themeOptions"
-        :key="option.value"
-        :value="option.value"
-        :selected="option.value === theme"
+  <div v-bind:key="filter.tag" v-for="filter in filteredSearchPageFilters">
+    <br />
+    <div class="fr-select-group fr-input-group">
+      <label class="fr-label" :for="`select_${filter.tag}`">
+        {{ filter.name }}
+      </label>
+      <select
+        :id="`input-${filter.tag}`"
+        class="fr-select"
+        :aria-invalid="errors[filter.tag] && isSubmitted ? true : undefined"
+        :aria-describedby="
+          errors[filter.tag] && isSubmitted ? `errors-${filter.tag}` : undefined
+        "
+        @change="updateCurrentFilters(filter.tag, $event)"
       >
-        {{ option.text }}
-      </option>
-    </select>
-    <p v-if="errors.theme && isSubmitted" id="errors-theme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true" />
-      Veuillez sélectionner une thématique.
-    </p>
-  </div> -->
-  <!-- Subtheme -->
-  <!-- <div v-if="topicsUseThemes" class="fr-select-group">
-    <label class="fr-label" for="input-subtheme"
-      >{{ capitalize(topicsSecondaryTheme) }}
-      (obligatoire)
-    </label>
-    <select
-      id="input-subtheme"
-      v-model="subtheme"
-      v-bind="subthemeAttrs"
-      :disabled="!values.theme ? true : undefined"
-      class="fr-select"
-      :aria-invalid="errors.subtheme && isSubmitted ? true : undefined"
-      :aria-describedby="
-        errors.subtheme && isSubmitted
-          ? 'errors-subtheme subtheme-instructions'
-          : 'subtheme-instructions'
-      "
-    >
-      <option value="" selected disabled hidden>
-        Choisir un {{ topicsSecondaryTheme }}
-      </option>
-      <option
-        v-for="option in subthemeOptions"
-        :key="option.value"
-        :value="option.value"
-        :selected="option.value === subtheme"
+        <option value="" selected disabled hidden>
+          Sélectionner une option
+        </option>
+        <option
+          v-for="option in filter.values"
+          :key="option.tag"
+          :value="option.tag"
+          :selected="option.tag === currentFilters[filter.tag]"
+        >
+          {{ option.name }}
+        </option>
+      </select>
+      <p
+        v-if="errors[filter.tag] && isSubmitted"
+        :id="`errors-${filter.tag}`"
+        class="error"
       >
-        {{ option.text }}
-      </option>
-    </select>
-    <p v-if="errors.subtheme && isSubmitted" id="errors-subtheme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true" />
-      Veuillez sélectionner un chantier.
-    </p>
-    <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">
-      Choisissez d'abord une {{ topicsMainTheme }}
-    </p>
-  </div> -->
+        <span class="fr-icon-error-fill" aria-hidden="true" />
+        Veuillez remplir le champs de sélection.
+      </p>
+    </div>
+  </div>
+
+  <br />
   <!-- Spatial coverage -->
   <div class="fr-select-group">
     <label class="fr-label" for="select-spatial-coverage"

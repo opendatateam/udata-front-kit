@@ -1,26 +1,22 @@
 <script setup lang="ts">
-import { ref, toRef, watchEffect, type PropType, type Ref } from 'vue'
+import { computed, ref, watch, watchEffect, type PropType, type Ref } from 'vue'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import type { FilterConf } from '@/model/config'
 import type { SpatialCoverage } from '@/model/spatial'
-import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
 import { useSearchPagesConfig } from '@/utils/config'
-import { useThemeOptions } from '@/utils/theme'
+
+interface Filter {
+  filter: string
+  value: string
+}
 
 const spatialAPI = new SpatialAPI()
 
 const props = defineProps({
-  themeName: {
-    type: String,
-    default: NoOptionSelected
-  },
-  subthemeName: {
-    type: String,
-    default: NoOptionSelected
-  },
   geozone: {
     type: String as PropType<string | null>,
     default: null
@@ -38,20 +34,29 @@ const route = useRoute()
 const selectedGeozone: Ref<string | undefined> = ref(undefined)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
-const themeNameRef = toRef(props, 'themeName')
-const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
+const searchPageName = ref<string>('')
+const searchPageSlug = ref<string>('')
+const searchPageFilters = ref<FilterConf[]>([])
 
-const { searchPageSlug } = useSearchPagesConfig(
+const config = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
 )
+searchPageName.value = config.searchPageName
+searchPageSlug.value = config.searchPageSlug
+searchPageFilters.value = config.searchPageFilters
+
+const currentFilters = ref<Record<string, string>>({})
+
+if (searchPageFilters.value) {
+  searchPageFilters.value.forEach((item) => {
+    currentFilters.value[item.tag] = ''
+  })
+}
+
 const localShowDrafts = ref(false)
 
-const computeQueryArgs = (
-  data?: Record<string, string | null>
-): LocationQueryRaw => {
+const computeQueryArgs = (): LocationQueryRaw => {
   const query: LocationQueryRaw = {}
-  if (props.themeName) query.theme = props.themeName
-  if (props.subthemeName) query.subtheme = props.subthemeName
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
   if (localShowDrafts.value) {
     query.drafts = 1
@@ -59,27 +64,34 @@ const computeQueryArgs = (
   if (route.query.q) {
     query.q = route.query.q
   }
-  return { ...query, ...data }
+  let tags = Object.entries(currentFilters.value)
+    .map(([key, value]) => value)
+    .filter((value) => value != '')
+    .join(',')
+  if (tags) {
+    query.tags = tags
+  }
+  return query
 }
 
-const navigate = (data?: Record<string, string | null>) => {
+const navigate = () => {
   router.push({
-    path: `/${searchPageSlug}`,
-    query: computeQueryArgs(data)
+    path: `/${searchPageSlug.value}`,
+    query: computeQueryArgs()
   })
 }
 
-const switchTheme = (event: Event) => {
-  navigate({
-    theme: (event.target as HTMLInputElement)?.value,
-    subtheme: NoOptionSelected
-  })
-}
-
-const switchSubtheme = (event: Event) => {
-  navigate({
-    subtheme: (event.target as HTMLInputElement)?.value
-  })
+const updateCurrentFilters = (tag: string, event: Event) => {
+  const target = event.target as HTMLSelectElement
+  currentFilters.value[tag] = target.value
+  if (searchPageFilters.value) {
+    searchPageFilters.value.forEach((spf) => {
+      if (spf.condition_on && spf.condition_on == tag) {
+        currentFilters.value[spf.tag] = ''
+      }
+    })
+  }
+  navigate()
 }
 
 const switchSpatialCoverage = (
@@ -106,6 +118,34 @@ watchEffect(() => {
   }
   localShowDrafts.value = props.showDrafts
 })
+
+watch(
+  () => route.fullPath,
+  () => {
+    const config = useSearchPagesConfig(
+      route.path.replace('/admin', '').split('/')[1]
+    )
+    if (config) {
+      searchPageName.value = config.searchPageName
+      searchPageSlug.value = config.searchPageSlug
+      searchPageFilters.value = config.searchPageFilters
+    }
+  }
+)
+
+const filteredSearchPageFilters = computed(() => {
+  if (!searchPageFilters.value) return
+  return searchPageFilters.value.map((spf) => ({
+    ...spf,
+    values:
+      spf.condition_on && spf.condition_on in currentFilters.value
+        ? spf.values.filter(
+            (option) =>
+              currentFilters.value[spf.condition_on] === option.condition_on
+          )
+        : spf.values
+  }))
+})
 </script>
 
 <template>
@@ -117,58 +157,27 @@ watchEffect(() => {
       name="show_drafts"
       @update:model-value="switchLocalShowDrafts"
     />
-    <!-- <template v-if="topicsUseThemes">
+    <div v-bind:key="filter.name" v-for="filter in filteredSearchPageFilters">
       <div class="fr-select-group">
-        <label class="fr-label" for="select_theme">
-          {{ capitalize(topicsMainTheme) }}s
+        <label class="fr-label" :for="`select_${filter.tag}`">
+          {{ filter.name }}
         </label>
         <select
-          id="select_theme"
+          :id="`select_${filter.tag}`"
           class="fr-select"
-          @change="switchTheme($event)"
+          @change="updateCurrentFilters(filter.tag, $event)"
         >
+          <option value="">Toutes les {{ filter.name }}</option>
           <option
-            :value="NoOptionSelected"
-            :selected="themeName == NoOptionSelected"
+            v-for="option in filter.values"
+            :key="option.tag"
+            :value="option.tag"
           >
-            Toutes les {{ topicsMainTheme }}s
-          </option>
-          <option
-            v-for="option in themeOptions"
-            :key="option.value"
-            :value="option.value"
-            :selected="option.value === themeName"
-          >
-            {{ option.text }}
+            {{ option.name }}
           </option>
         </select>
       </div>
-      <div class="fr-select-group">
-        <label class="fr-label" for="select_subtheme">
-          {{ capitalize(topicsSecondaryTheme) }}s
-        </label>
-        <select
-          id="select_subtheme"
-          class="fr-select"
-          @change="switchSubtheme($event)"
-        >
-          <option
-            :value="NoOptionSelected"
-            :selected="subthemeName == NoOptionSelected"
-          >
-            Tous les {{ topicsSecondaryTheme }}s
-          </option>
-          <option
-            v-for="option in subthemeOptions"
-            :key="option.value"
-            :value="option.value"
-            :selected="option.value === subthemeName"
-          >
-            {{ option.text }}
-          </option>
-        </select>
-      </div>
-    </template> -->
+    </div>
     <div class="fr-select-group">
       <label class="fr-label" for="select-spatial-coverage"
         >Couverture territoriale</label
@@ -181,3 +190,9 @@ watchEffect(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.fr-select-group {
+  margin-bottom: 20px;
+}
+</style>

@@ -10,7 +10,7 @@ universe:
   # "universe" topic id
   topic_id: 65141cd780d73f98142e9265
   # universe name, used as bouquets tag
-  name: ecospheres
+  name: simplifions
 
 robots:
   disallow:
@@ -71,7 +71,7 @@ website:
           everyone: true
           authorized_users:
         labels:
-          search_page_title: Cas d'usages
+          search_page_title: cas d'usages
           search_bar_title: Filtrer les cas d'usages
           search_results: cas disponibles
           add_button: Ajouter un cas d'usage
@@ -82,22 +82,38 @@ website:
           description_info: "Renseignez ici les informations nécessaires à la compréhension du cas d'usage"
           owner: Propriétaire du cas d'usage
         filters:
-          - labels:
-              name: Toto
-              all: Tous les Toto
-            second_level:
-              display: true
-              name: Tutu
-              all: Tous les Tutu
+          - name: Thematiques
+            tag: theme
             values:
-              - name: Se loger toto
-                values:
-                  - name: test
-                  - name: test2
-              - name: Se produire toto
-                values:
-                  - name: test3
-                  - name: test4
+              - name: Se loger
+                tag: se-loger
+              - name: Se Nourrir
+                tag: se-nourrir
+          - name: Sous-Thématiques
+            tag: subtheme
+            condition_on: theme
+            values:
+              - name: Test 1
+                tag: test1
+                condition_on: se-loger
+              - name: Test 2
+                tag: test2
+                condition_on: se-loger
+              - name: Test 3
+                tag: test3
+                condition_on: se-nourrir
+              - name: Test 4
+                tag: test4
+                condition_on: se-nourrir
+          - name: Type de structures
+            tag: structure
+            values:
+              - name: Administrations
+                tag: admin
+              - name: Citoyens
+                tag: citizen
+              - name: Entreprises
+                tag: company
       - name: hackathons
         slug: hackathons
         type: topics
@@ -121,23 +137,6 @@ website:
           description_title: Objectif du hackathon
           description_info: 'Renseignez ici les informations nécessaires à la compréhension du hackathon'
           owner: Propriétaire du hackathon
-        filters:
-          - labels:
-              name: Toto
-              all: Tous les Toto
-            second_level:
-              display: true
-              name: Tutu
-              all: Tous les Tutu
-            values:
-              - name: Se loger toto
-                values:
-                  - name: test
-                  - name: test2
-              - name: Se produire toto
-                values:
-                  - name: test3
-                  - name: test4
 
   header_search:
     display: true
@@ -186,13 +185,14 @@ website:
       to: /
     - text: Données
       to: /datasets
-    # TODO: enable when ready
-    # - text: Indicateurs
-    #   to: /indicators
     - text: Organisations
       to: /organizations
     - text: A propos
       to: /about
+    - text: Hack
+      to: /hackathons
+    - text: UC
+      to: /usecases
   router:
     disable:
       - topics

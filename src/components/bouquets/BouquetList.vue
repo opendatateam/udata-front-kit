@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { ComputedRef, PropType } from 'vue'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
-import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -12,22 +11,24 @@ import { useSearchPagesConfig } from '@/utils/config'
 
 const router = useRouter()
 const route = useRoute()
-const topicStore = useTopicStore()
+let topicStore = useTopicStore()
 
-const { searchPageName, searchPageSlug, searchPageExtrasKey } =
-  useSearchPagesConfig(route.path.replace('/admin', '').split('/')[1])
+const searchPageName = ref<string>('')
+const searchPageSlug = ref<string>('')
+const searchPageExtrasKey = ref<string>('')
+const searchPageLabelTitle = ref<string>('')
+
+const config = useSearchPagesConfig(
+  route.path.replace('/admin', '').split('/')[1]
+)
+searchPageName.value = config.searchPageName
+searchPageSlug.value = config.searchPageSlug
+searchPageExtrasKey.value = config.searchPageExtrasKey
+searchPageLabelTitle.value = config.searchPageLabelTitle
 
 const userStore = useUserStore()
 
 const props = defineProps({
-  themeName: {
-    type: String,
-    default: NoOptionSelected
-  },
-  subthemeName: {
-    type: String,
-    default: NoOptionSelected
-  },
   showDrafts: {
     type: Boolean
   },
@@ -57,14 +58,6 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
       )
     })
     .filter((bouquet) => {
-      if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras[searchPageExtrasKey].theme === props.themeName
-    })
-    .filter((bouquet) => {
-      if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras[searchPageExtrasKey].subtheme === props.subthemeName
-    })
-    .filter((bouquet) => {
       if (props.query === '') return true
       return bouquet.name.toLowerCase().includes(props.query.toLowerCase())
     })
@@ -72,34 +65,63 @@ const bouquets: ComputedRef<Topic[]> = computed(() => {
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (bouquets.value.length === 1) {
-    return `1 ${searchPageName} disponible`
+    return `1 ${searchPageLabelTitle.value} disponible`
   } else if (bouquets.value.length > 1) {
-    return bouquets.value.length + ` ${searchPageName}s disponibles`
+    return bouquets.value.length + ` ${searchPageLabelTitle.value} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
 })
 
 const createUrl = computed(() => {
-  return { name: `${searchPageSlug}_add`, query: route.query }
+  return { name: `${searchPageSlug.value}_add`, query: route.query }
 })
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: searchPageSlug, query }).then(() => {
+  router.push({ name: searchPageSlug.value, query }).then(() => {
     emits('clearFilters')
   })
 }
 
 onMounted(() => {
   const loader = useLoading().show({ enforceFocus: false })
-  topicStore.loadTopicsForUniverse().then(() => loader.hide())
+  topicStore
+    .loadTopicsForUniverse([searchPageSlug.value])
+    .then(() => loader.hide())
 })
 
 defineExpose({
   numberOfResultMsg
 })
+
+const updateTopics = () => {
+  let tags = [searchPageSlug.value]
+  const loader = useLoading().show({ enforceFocus: false })
+  topicStore.isLoaded = false
+  if (route.query.tags) {
+    let filteredTags = route.query.tags.toString().split(',')
+    tags = [...tags, ...filteredTags]
+  }
+  topicStore.loadTopicsForUniverse(tags).then(() => loader.hide())
+}
+
+watch(
+  () => route.fullPath,
+  () => {
+    const config = useSearchPagesConfig(
+      route.path.replace('/admin', '').split('/')[1]
+    )
+    if (config) {
+      searchPageName.value = config.searchPageName
+      searchPageSlug.value = config.searchPageSlug
+      searchPageExtrasKey.value = config.searchPageExtrasKey
+      searchPageLabelTitle.value = config.searchPageLabelTitle
+      updateTopics()
+    }
+  }
+)
 </script>
 
 <template>

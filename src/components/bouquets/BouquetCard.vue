@@ -15,7 +15,6 @@ import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
 import { useSearchPagesConfig } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useThemeOptions } from '@/utils/theme'
 
 const route = useRoute()
 const { searchPageSlug, searchPageExtrasKey } = useSearchPagesConfig(
@@ -38,10 +37,7 @@ const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const { theme, subtheme, datasetsProperties } = useExtras(
-  bouquetRef,
-  searchPageExtrasKey
-)
+const { datasetsProperties } = useExtras(bouquetRef, searchPageExtrasKey)
 
 const nbData: number = datasetsProperties.value.length
 
@@ -49,8 +45,6 @@ const bouquetLink: RouteLocationRaw = {
   name: `${searchPageSlug}_detail`,
   params: { bid: props.bouquet.slug }
 }
-
-const { themeColors } = useThemeOptions(theme)
 </script>
 
 <template>
@@ -62,14 +56,6 @@ const { themeColors } = useThemeOptions(theme)
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
-    </div>
-    <div class="fr-grid-row">
-      <div class="fr-col-12">
-        <DsfrTag
-          class="fr-card__detail fr-mt-1w fr-mb-1w card__tag"
-          :label="subtheme"
-        />
-      </div>
     </div>
     <div class="fr-grid-row fr-pt-2v align-center flex-nowrap">
       <div class="fr-col-12 fr-col-sm-2 bouquet-card-col-logo">
@@ -144,10 +130,6 @@ const { themeColors } = useThemeOptions(theme)
 .owner-avatar {
   margin-bottom: -6px;
   display: inline-block;
-}
-.card__tag {
-  color: v-bind('themeColors.color');
-  background-color: v-bind('themeColors.background');
 }
 
 .fr-card__detail,
