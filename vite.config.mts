@@ -104,9 +104,9 @@ export default defineConfig(({ mode }) => {
       // this makes sure we don't make unintended API calls to third-parties (looking at you iconify)
       // ⚠️ this won't be applied on prod or other environments
       headers: {
-        'Content-Security-Policy': ["connect-src 'self' *.data.gouv.fr"].join(
-          '; '
-        )
+        'Content-Security-Policy': [
+          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com"
+        ].join('; ')
       }
     }
   }
