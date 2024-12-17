@@ -12,6 +12,7 @@ export interface FilterValueConf {
 }
 export interface FilterConf {
   name: string
+  disable_all_option?: boolean
   tag: string
   condition_on?: string
   values: FilterValueConf[]

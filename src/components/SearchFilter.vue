@@ -175,7 +175,9 @@ const filteredSearchPageFilters = computed(() => {
           class="fr-select"
           @change="updateCurrentFilters(filter.tag, $event)"
         >
-          <option value="">Toutes les {{ filter.name }}</option>
+          <option v-if="!filter.disable_all_option" value="">
+            Toutes les {{ filter.name }}
+          </option>
           <option
             v-for="option in filter.values"
             :key="option.tag"

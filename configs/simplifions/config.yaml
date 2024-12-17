@@ -1,4 +1,4 @@
-# config file for ecospheres-front
+# config file for simplifions
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
@@ -21,29 +21,178 @@ robots:
 website:
   title: 'toto.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/ecospheres-logo.svg'
+  service_logo: '/logos/simplification-logo.svg'
   badge:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-    src: '/logos/ecospheres-logo.svg'
+    src: '/logos/simplification-logo.svg'
     show_in_header: false
     footer:
       width: '40px'
       height: '219px'
   homepage:
-    title: coucou toto
-    subtitle: subtitle toto
+    title: 'Acteurs publics, utilisez la donnée pour simplifier vos services 🧘 !'
+    subtitle: 'Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâces aux API et aux données ! Vous gagnerez aussi du temps !'
     sections:
-      - title: salut toto
-        content: content toto
+      - title:
+        content: >-
+          ## Améliorer les services à destination :
+
+          ### 👱 Des particuliers
+
+          Les jusitificatifs demandés aux familles (quotient familial, certificat de scolarité, etc.) pour de nombreuses démarches sont souvent déjà connus des services de l'État ! Utilisez les tuyaux informatiques (API) à votre disposition pour simplifier leurs démarches et accélérer votre instuction :
+        sub_section_datasets:
+        #     title: "Jeux de données"
+        #     datasets:
+        #       - "5b7ffc618b4c4169d30727e0"
+        #       - "621df2954fa5a3b5a023e23c"
+        sub_section_cards:
+          title:
+          cards:
+            - id: '660ac80b9e9351349f5c1f14'
+              name: 'Tarification cantine des collèges et lycées'
+              description: 'Départements et régions, simplifiez les démarches des familles en calculant automatiquement le tarif de restauration scolaire des collégiens et lycéens'
+              url: 'cas-d-usages/tarification-cantine-des-colleges-et-lycees'
+              image_url: '/simplifions/assets/tarification_cantine.jpg'
+            - id: '660ac8ab8fd1a813e28cecd2'
+              name: 'Portail famille des communes'
+              description: "Communes et intercommunalités, simplifiez les démarches des familles en calculant automatiquement leur tarif de restauration scolaire, de crèches ou d'activités périscolaires ou municipales."
+              url: 'cas-d-usages/portail-famille-des-communes'
+              image_url: '/simplifions/assets/portail_famille.jpg'
+            - id: '660ac92bc20e599f930bb9c2'
+              name: 'Tarification sociale et solidaire des transports'
+              description: "AOM, obtenez automatiquement les données nécessaires à l'attribution des tarifs réduits de transports collectifs."
+              url: 'cas-d-usages/tarification-sociale-et-solidaire-des-transports'
+              image_url: '/simplifions/assets/transport.jpg'
+        sub_section_tiles:
+        sub_section_buttons:
+          - name: "Tous les cas d'usages de particuliers"
+            url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
+            url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
+      - title:
+        content: >-
+          ### 💼 des entreprises
+
+          Simplifiez les démarches des entreprises et facilitez l'instruction de leurs dossiers :
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - id: '5e6f426e634f417810ab794b'
+              name: 'Marchés publics'
+              description: 'Tout savoir sur les marchés publics passés par les collectivités.'
+              url: 'cas-d-usages/marches-publics-1'
+              image_url: '/simplifions/assets/marches.png'
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Données fiscales'
+              description: 'Accéder aux comptes et documents financiers des entreprises'
+              url: 'cas-d-usages/65f170136c6ff1b1d0351081/'
+              image_url: '/simplifions/assets/fiscales.png'
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Informations légales'
+              description: "Accéder à l'ensemble des informations légales des entreprises."
+              url: 'cas-d-usages/65f170136c6ff1b1d0351081/'
+              image_url: '/simplifions/assets/documents.png'
+        sub_section_tiles:
+        sub_section_buttons:
+          - name: "Tous les cas d'usages d’entreprises"
+            url: 'cas-d-usages?theme=Administrations&subtheme=Entreprises'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
+            url: 'cas-d-usages?theme=Administrations&subtheme=Entreprises'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
+      - title:
+        content: >-
+          ### 🎭 des associations
+
+          Simplifiez les démarches des associations et facilitez l'instruction de leurs dossiers :
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Documents associations'
+              description: "Tout savoir sur les documents d'une association."
+              url: 'cas-d-usages/65f170136c6ff1b1d0351081/'
+              image_url: '/simplifions/assets/documents.png'
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Dirigeants associatifs'
+              description: "Accéder à la liste des dirigeants d'une association."
+              url: 'cas-d-usages/65f170136c6ff1b1d0351081/'
+              image_url: '/simplifions/assets/dirigeants.png'
+        sub_section_tiles:
+        sub_section_buttons:
+          - name: "Tous les cas d'usages d’associations"
+            url: 'cas-d-usages?theme=Administrations&subtheme=Associations'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
+            url: 'cas-d-usages?theme=Administrations&subtheme=Associations'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
+      - title:
+        content: >-
+          ## Quelques soient vos moyens techniques, une solution
+
+          <p class="fr-text--lg">
+          Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non d'un service informatique ou d'un prestataire.
+          <br/>
+          Pour chacun des cas d'usages, un indicateur vous permet de savoir quelles sont les possibilités d'intégration :
+          </p>
+
+
+          - **Solution clé en main** : Une solution clé en main est disponible pour ce cas d'usage. Si vous n'avez pas ni service informatique ni compétences techniques, vous pouvez donc utiliser la solution clé en main pour couvrir le cas d'usage.
+
+          - **Solutions éditeurs** : Des éditeurs proposent des logiciels permettant de couvrir ce cas d'usage.
+
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - name: 'Vous n’avez ni équipe technique, ni éditeur'
+              description: "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique."
+              url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+            - name: 'Vous passez par un éditeur'
+              description: "Les cas d'usages portés par des éditeurs qui s'occupent de l'intégration."
+              url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+            - name: 'Vous avez votre service informatique'
+              description: "Les cas d'usages que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d’information."
+              url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+        sub_section_tiles:
+        sub_section_buttons:
+      - title:
+        content: >-
+          ## Comment et pourquoi simplifier vos démarches ?
+
+          <p class="fr-text--lg">
+          Administrations et collectivités, en intégrant des API ou des données dans vos démarches et/ou votre système d’information :
+          </p>
+
+          - 🗄 **Vous accédez facilement aux données administratives de vos usagers**, qu'elles soient publiques ou protégées et provenant de [nombreux fournisseurs](/organizations) ;
+
+
+          - ⏰ **Vous accélérez le traitement des démarches car vos agents instructeurs** n’ont pas de vérifications supplémentaires à réaliser, les informations obtenues que nous vous recommandons sont certifiées 🔎 ;
+
+
+          - 🎢 **Vous augmentez le pourcentage des démarches finalisées** car vous faîtes gagner du temps à l’usager ;
+
+
+          - 🎯 **Vous participez activement à la simplification des démarches en mettant en place le « _[Dites-le-nous une fois](/dlnuf)_ »** : vous ne demandez plus à vos usagers une information qu’ils ont déjà donnée ou que l’administration connaît déjà. Vous vous mettez ainsi en conformité avec la législation et, plus particulièrement l’[Article L113-12 du Code des relations entre le public et l’administration](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037313155).
+
+
+          - 💌 **Vous réduisez le taux de non recours**, plus particulièrement si vous mettez en place des démarches proactives. [En savoir plus sur la proactivité](/proactivite).
+
+
+          Pour en savoir plus, consultez nos [guides de la simplification](/guides).
         sub_section_datasets:
         sub_section_cards:
         sub_section_tiles:
         sub_section_buttons:
-    meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
+    meta_description: simplifions.data.gouv.fr référence et centralise les données de la transition écologique.
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -55,18 +204,18 @@ website:
       dropdown:
         - text: Rechercher {} dans les <strong>jeux de données</strong>
           route: datasets
-        - text: Rechercher {} dans les <strong>bouquets</strong>
-          route: bouquets
+        - text: Rechercher {} dans les <strong>cas d'usages</strong>
+          route: cas-d-usages
     pages:
-      - name: usecases
-        slug: usecases
+      - name: cas-d-usages
+        slug: cas-d-usages
         type: topics
         config_type:
           organization:
-        extras_key: usecases
+        extras_key: cas-d-usages
         list_all: true
-        display_metadata: true
-        activate_read_more: true
+        display_metadata: false
+        activate_read_more: false
         dataset_editorialization: true
         can_add:
           everyone: true
@@ -83,46 +232,64 @@ website:
           description_info: "Renseignez ici les informations nécessaires à la compréhension du cas d'usage"
           owner: Propriétaire du cas d'usage
         filters:
-          - name: Thematiques
-            tag: theme
-            values:
-              - name: Se loger
-                tag: se-loger
-              - name: Se Nourrir
-                tag: se-nourrir
-          - name: Sous-Thématiques
-            tag: subtheme
-            condition_on: theme
-            values:
-              - name: Test 1
-                tag: test1
-                condition_on: se-loger
-              - name: Test 2
-                tag: test2
-                condition_on: se-loger
-              - name: Test 3
-                tag: test3
-                condition_on: se-nourrir
-              - name: Test 4
-                tag: test4
-                condition_on: se-nourrir
-          - name: Type de structures
+          - name: A destination de
+            disable_all_option: true
             tag: structure
             values:
-              - name: Administrations
-                tag: admin
-              - name: Citoyens
-                tag: citizen
+              - name: Tous les types d'administrations
+                tag: simplification-structure-toutes-administrations
+              - name: Communes
+                tag: simplification-structure-communes
+              - name: Départements
+                tag: simplification-structure-departements
+              - name: Régions
+                tag: simplification-structure-regions
+              - name: Administrations centrales
+                tag: simplification-structure-administrations-centrales
+          - name: Pour simplifier les démarches de
+            disable_all_option: true
+            tag: users
+            values:
+              - name: Tous les usagers
+                tag: simplification-users-tous-usagers
+              - name: Particuliers
+                tag: simplification-users-particuliers
               - name: Entreprises
-                tag: company
-      - name: hackathons
-        slug: hackathons
-        type: datasets
+                tag: simplification-users-entreprises
+              - name: Associations
+                tag: simplification-users-associations
+              - name: Administrations
+                tag: simplification-users-administrations
+          - name: Moyens disponibles pour la mise en œuvre
+            disable_all_option: true
+            tag: budget
+            values:
+              - name: Tous les types de ressources
+                tag: simplification-budget-tous-types-ressources
+              - name: Aucun développement, ni budget
+                tag: simplification-budget-aucun-developpement
+              - name: Avec des moyens techniques
+                tag: simplification-budget-moyens-techniques
+              - name: Avec une solution éditeur
+                tag: simplification-budget-solution-editeur
+          - name: Type de simplification possible
+            tag: simplification
+            values:
+              - name: Proactivité
+                tag: simplification-simplification-proactivite
+              - name: Dîtes-le nous une fois
+                tag: simplification-simplification-dlnuf
+              - name: Portail de données pour les agents
+                tag: simplification-simplification-portail-donnees-agents
+              - name: Pré-remplissage des données
+                tag: simplification-budget-pre-remplissage-donnees
+      - name: solutions
+        slug: solutions
+        type: topics
         config_type:
-          organization: 673dafb02cf54cfb2ccbd118
+          organization:
           topic:
-          card: indicators
-        extras_key: hackathons
+        extras_key: solutions
         list_all: true
         display_metadata: true
         activate_read_more: true
@@ -131,27 +298,17 @@ website:
           everyone: true
           authorized_users:
         labels:
-          search_page_title: indicateurs
-          search_bar_title: Filtrer les indicateurs
-          search_results: indicateurs disponibles
-          add_button: Ajouter un indicateur
-          add_title: Nouvel indicateur
-          add_subtitle: Description de l'indicateur
-          subject: Sujet de l'indicateur
-          description_title: Objectif de l'indicateur
-          description_info: "Renseignez ici les informations nécessaires à la compréhension de l'indicateur"
-          owner: Propriétaire de l'indicateur
+          search_page_title: solutions
+          search_bar_title: Filtrer les solutions
+          search_results: solutions disponibles
+          add_button: Ajouter une solution
+          add_title: Nouvelle solution
+          add_subtitle: Description de la solution
+          subject: Sujet de la solution
+          description_title: Description de la solution
+          description_info: 'Renseignez ici les informations nécessaires à la compréhension de la solution'
+          owner: Propriétaire data.gouv.fr
         filters:
-          - name: Type de structures
-            tag: structure
-            values:
-              - name: Administrations
-                tag: 'ecospheres-indicateurs-sous-famille-emissions'
-              - name: Citoyens
-                tag: citizen
-              - name: Entreprises
-                tag: company
-
   header_search:
     display: true
     placeholder: Rechercher...
@@ -197,16 +354,14 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Données
-      to: /datasets
-    - text: Organisations
-      to: /organizations
+    - text: Cas d'usages
+      to: /cas-d-usages
+    - text: Solutions
+      to: /solutions
+    - text: Guide pour la simplification
+      to: /dlnuf
     - text: A propos
       to: /about
-    - text: Hack
-      to: /hackathons
-    - text: UC
-      to: /usecases
   router:
     disable:
       - topics
@@ -214,15 +369,19 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/ecospheres/pages/about.md'
+        url: '/simplifions/pages/about.md'
+      - title: 'Guide pour la simplification'
+        id: 'dlnuf'
+        route: '/dlnuf'
+        url: '/simplifions/pages/dlnuf.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/ecospheres/pages/accessibility.md'
+        url: '/simplifions/pages/accessibility.md'
       - title: "Conditions générales d'utilisation"
         id: 'terms'
         route: '/terms'
-        url: '/ecospheres/pages/terms.md'
+        url: '/simplifions/pages/terms.md'
   show_quality_component: true
   list_search_topics:
   url_search_topics:
@@ -231,7 +390,7 @@ website:
     organizations_list: 9
     topics_list: 100
     files_list: 6
-  contact_email: ecospheres@developpement-durable.gouv.fr
+  contact_email: contact@api.gouv.fr
   home_banner_colors:
     - '#D6E3A1'
     - '#BFDCB7'
@@ -247,17 +406,18 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: true
-    add_to_bouquet: true
+    organization_filter: false
+    add_to_bouquet: false
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
-      - CSW-ISO-19139
-    show_extended_information_panel: true
+    show_extended_information_panel:
   sitemap:
     - name: Accueil
       path: /
-    - name: Bouquets
-      path: /bouquets
+    - name: Cas d'usages
+      path: /cas-d-usages
+    - name: Solutions
+      path: /solutions
     - name: Jeux de données
       path: /datasets
     - name: Organisations
@@ -268,4 +428,4 @@ website:
       path: /terms
     - name: Accessibilité
       path: /accessibility
-organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
+organizations:
