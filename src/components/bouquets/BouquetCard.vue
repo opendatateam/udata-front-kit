@@ -56,7 +56,7 @@ const { themeColors } = useThemeOptions(theme)
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
     </div>
-    <div class="fr-grid-row">
+    <div v-if="subtheme" class="fr-grid-row">
       <div class="fr-col-12">
         <DsfrTag
           class="fr-card__detail fr-mt-1w fr-mb-1w card__tag"
