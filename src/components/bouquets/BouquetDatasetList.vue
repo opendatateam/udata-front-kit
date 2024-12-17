@@ -12,7 +12,6 @@ import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
-import { fromMarkdown } from '@/utils/index'
 
 import { fromMarkdown } from '@/utils'
 import { useGroups } from '@/utils/bouquetGroups'
@@ -147,9 +146,10 @@ onMounted(() => {
       Composition du {{ topicsName }} de données
     </h2>
     <SearchComponent
+      v-if="datasetEditorialization"
       id="filter-factors"
       :is-filter="true"
-      search-label="Filtrer les facteurs"
+      search-label="Filtrer les données"
       :label-visible="false"
       @update:model-value="filterDatasetsProperties"
     />
@@ -165,8 +165,8 @@ onMounted(() => {
   </div>
   <!-- Datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset fr-mt-2w">
-    <p v-if="isFiltering">Aucun facteur trouvé pour cette recherche.</p>
-    <p v-else>Ce {{ topicsName }} ne contient pas encore de facteur.</p>
+    <p v-if="isFiltering">Aucune donnée trouvé pour cette recherche.</p>
+    <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
   </div>
   <template v-else>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
