@@ -77,9 +77,6 @@ website:
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
       title: 'gouvernement.fr - nouvelle fenêtre'
-    - label: 'Statistiques'
-      href: 'https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/indicateurs-ecospheres/?standalone=2'
-      title: 'Statistiques - nouvelle fenêtre'
   footer_mandatory_links:
     - label: 'Plan du site'
       to: '/sitemap'
@@ -89,6 +86,8 @@ website:
       href: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
+    - label: 'Statistiques'
+      href: 'https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/indicateurs-ecospheres/?standalone=2'
   notice:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
