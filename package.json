@@ -41,7 +41,6 @@
     "vue-matomo": "^4.2.0",
     "vue-multiselect": "^3.1.0",
     "vue-router": "^4.4.5",
-    "vue-tippy": "^6.5.0",
     "vue3-text-clamp": "^0.1.2",
     "vue3-toastify": "^0.2.3"
   },

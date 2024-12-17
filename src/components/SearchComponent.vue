@@ -85,7 +85,7 @@ const dropdownLabel = (text: string) => {
     label-visible
   >
     <template #before-input>
-      <span class="fr-icon-search-line search-icon" aria-hidden></span>
+      <VIconCustom name="search-line" class="search-icon" />
     </template>
   </DsfrInputGroup>
 
@@ -130,7 +130,7 @@ const dropdownLabel = (text: string) => {
         <span v-html="dropdownLabel(slotProps.option.text)"></span>
       </template>
       <template #caret>
-        <span class="fr-icon-search-line search-icon"></span>
+        <VIconCustom name="search-line" class="search-icon" />
       </template>
       <template #placeholder>
         <span aria-hidden="true" class="visible-label">{{ placeholder }}</span>

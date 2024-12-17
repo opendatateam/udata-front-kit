@@ -254,10 +254,7 @@ watch(
           v-if="showHarvestQualityWarning"
           class="text-mention-grey fr-text--sm fr-my-1v"
         >
-          <span
-            class="fr-icon-warning-line fr-icon--sm"
-            aria-hidden="true"
-          ></span>
+          <VIconCustom name="warning-line" class="fr-icon--sm" />
           La qualité des métadonnées peut être trompeuse car les métadonnées de
           la source originale peuvent avoir été perdues lors de leur
           récupération. Nous travaillons actuellement à améliorer la situation.
@@ -273,7 +270,7 @@ watch(
             class="fr-mt-2w"
             size="md"
             :label="`Ajouter à un ${topicsName}`"
-            icon="ri-file-add-line"
+            icon="fr-icon-file-add-line"
             @click="showAddToBouquetModal = true"
           />
           <DatasetAddToBouquetModal
@@ -366,7 +363,7 @@ watch(
             <div class="fr-col-12 fr-col-lg-4 text-align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
-                icon="ri-external-link-line"
+                icon="fr-icon-external-link-line"
                 size="sm"
                 :icon-right="true"
                 @click="openDataGouvDiscussions"

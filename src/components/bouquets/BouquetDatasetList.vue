@@ -122,7 +122,7 @@ onMounted(() => {
         v-if="isEdit"
         size="sm"
         label="Ajouter un jeu de données"
-        icon="ri-add-line"
+        icon="fr-icon-add-line"
         @click.prevent="addDataset"
       />
     </div>

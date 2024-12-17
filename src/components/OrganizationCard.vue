@@ -45,16 +45,16 @@ const isPublicService = (): boolean =>
         </div>
         <div class="fr-col fr-px-3v">
           <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
-            <VIcon
+            <VIconCustom
               v-if="isPublicService()"
-              name="ri-bank-line"
-              class="fr-mr-1v badge"
+              name="bank-line"
+              class="fr-icon--sm fr-mr-1v badge"
             />
             {{ organization.name }}
-            <VIcon
+            <VIconCustom
               v-if="isCertified()"
-              name="ri-checkbox-circle-line"
-              class="fr-ml-1v badge"
+              name="checkbox-circle-line"
+              class="fr-icon--sm fr-mr-1v badge"
             />
           </component>
         </div>
@@ -94,7 +94,6 @@ const isPublicService = (): boolean =>
 
 .fr-title-v2__title .badge {
   color: var(--blue-france-sun-113-625);
-  width: 0.9rem;
 }
 
 .card__tag {
