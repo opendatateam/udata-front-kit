@@ -18,9 +18,18 @@
   border-color: var(--background-alt-grey-active) transparent transparent;
   top: 60%;
 }
+.multiselect__select {
+  --data-uri-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23161616' d='m12 13.1 5-4.9 1.4 1.4-6.4 6.3-6.4-6.4L7 8.1l5 5z'/%3E%3C/svg%3E");
+  background-image: var(--data-uri-svg);
+  background-position: calc(100% - 1rem) 50%;
+  background-repeat: no-repeat;
+  background-size: 1rem 1rem;
+  .multiselect--active & {
+    transform: none;
+  }
+}
 .multiselect__select::before {
-  top: 80%;
-  border-top-color: var(--border-plain-grey);
+  content: unset;
 }
 .multiselect__clear {
   position: absolute;
