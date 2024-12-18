@@ -85,7 +85,7 @@ const dropdown = config.website.header_search.dropdown
           <DsfrCard
             :no-arrow="true"
             title="Contribuer"
-            description="Participez au référencement et à l’articulation des données utiles à l’appui des politiques publiques grâce aux fonctionnalités de catalogage de data.gouv et au concept de bouquet de données."
+            description="Participez au référencement et à l’articulation des données utiles à l’appui des politiques publiques grâce aux fonctionnalités de catalogage de data.gouv.fr et au concept de bouquet de données."
             size="small"
             :horizontal="true"
             :img-src="contributeSvg"
@@ -175,7 +175,7 @@ const dropdown = config.website.header_search.dropdown
                       Les données existantes satisfont-elles les besoins du cas
                       d’usage&nbsp;? L’association peut se faire dans sa forme
                       la plus interopérable via une donnée cataloguée sur
-                      data.gouv ou le renseignement d’un URL.
+                      data.gouv.fr ou le renseignement d’un URL.
                     </p>
                   </div>
                 </div>

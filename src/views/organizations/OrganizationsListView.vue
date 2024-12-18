@@ -20,7 +20,7 @@ const links = computed(() => [
   { text: 'Organisations' }
 ])
 
-const title = config.website.title
+const title: string = config.website.formatted_title
 
 async function onUpdatePage(page: number) {
   const loader = $loading.show()
@@ -40,7 +40,10 @@ onMounted(() => {
   </div>
   <GenericContainer>
     <h1 class="fr-mb-2v">Organisations</h1>
-    <p>Parcourir toutes les organisations présentes sur {{ title }}.</p>
+    <p>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      Parcourir toutes les organisations présentes sur <span v-html="title" />.
+    </p>
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li
         v-for="org in organizations"
