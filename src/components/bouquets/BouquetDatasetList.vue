@@ -15,7 +15,6 @@ import { isNotFoundError } from '@/utils/http'
 import { fromMarkdown } from '@/utils/index'
 
 import { NO_GROUP, useGroups } from '@/utils/bouquetGroups'
-import { fromMarkdown } from '@/utils/index'
 import { useDebounceFn } from '@vueuse/core'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import BouquetGroup from './BouquetGroup.vue'
