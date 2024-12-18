@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 import { isAvailable } from '@/utils/bouquet'
-import { NO_GROUP } from '@/utils/bouquetGroups'
+import { NO_GROUP, useGroups } from '@/utils/bouquetGroups'
 import { getRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
@@ -23,13 +23,12 @@ const props = defineProps({
   }
 })
 
+const { isOnlyNoGroup } = useGroups(toRef(props.datasetsProperties))
+
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
 
 const isDisclosure = computed(() => props.groupName !== NO_GROUP)
-const isNoGroupAlone = computed(() => {
-  return props.allGroups.size === 1 && props.allGroups.has(NO_GROUP)
-})
 const factorsInGroup = computed(() => {
   const factors = props.allGroups.get(props.groupName)?.length
 
@@ -138,9 +137,10 @@ const actions = computed(() => {
 
 <template>
   <div class="disclosure">
-    <div v-if="!isNoGroupAlone" class="disclosure__header">
+    <div v-if="!isOnlyNoGroup()" class="disclosure__header">
       <template v-if="isDisclosure">
         <button
+          :id="`${groupName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
           class="disclosure__trigger fr-icon-arrow-right-s-line"
           :aria-expanded="isDisclosureOpen"
           :aria-controls="widgetID"
@@ -171,7 +171,11 @@ const actions = computed(() => {
           />
         </div>
       </template>
-      <p v-else class="simple__name fr-text--lg">
+      <p
+        v-else
+        :id="`${groupName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
+        class="simple__name fr-text--lg"
+      >
         {{ groupName }}
         <DsfrTag class="fr-text--xs" small :label="factorsInGroup" />
       </p>
