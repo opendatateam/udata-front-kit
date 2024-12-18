@@ -4,12 +4,15 @@ import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
 export const NO_GROUP = 'Sans regroupement'
 
+export const isOnlyNoGroup = (groups: DatasetsGroups) => {
+  return groups.has(NO_GROUP) && groups.size === 1
+}
+
 export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   groupedDatasets: ComputedRef<DatasetsGroups>
   getDatasetIndex: (group: string, indexInGroup: number) => number
   removeDatasetFromGroup: (group: string, index: number) => DatasetProperties[]
   groupExists: (groupName: string) => boolean
-  isOnlyNoGroup: () => boolean
   renameGroup: (
     oldGroupName: string,
     newGroupName: string
@@ -79,12 +82,6 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     return groupedDatasets.value.has(groupName)
   }
 
-  const isOnlyNoGroup = () => {
-    return (
-      groupedDatasets.value.has(NO_GROUP) && groupedDatasets.value.size === 1
-    )
-  }
-
   const renameGroup = (oldGroupName: string, newGroupName: string) => {
     // Skip if new group already exists or old group is empty
     if (groupExists(newGroupName) || !groupedDatasets.value.has(oldGroupName)) {
@@ -109,7 +106,6 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     getDatasetIndex,
     removeDatasetFromGroup,
     groupExists,
-    isOnlyNoGroup,
     renameGroup,
     deleteGroup
   }

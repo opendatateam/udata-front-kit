@@ -13,8 +13,8 @@ import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 
-import { fromMarkdown } from '@/utils'
-import { useGroups } from '@/utils/bouquetGroups'
+import { basicSlugify, fromMarkdown } from '@/utils'
+import { isOnlyNoGroup, useGroups } from '@/utils/bouquetGroups'
 import { useDebounceFn } from '@vueuse/core'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import BouquetGroup from './BouquetGroup.vue'
@@ -46,7 +46,6 @@ const {
   groupedDatasets,
   getDatasetIndex,
   removeDatasetFromGroup,
-  isOnlyNoGroup,
   renameGroup,
   deleteGroup
 } = useGroups(datasetsProperties)
@@ -168,14 +167,11 @@ onMounted(() => {
     <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
   </div>
   <template v-else>
-    <details v-if="!isOnlyNoGroup()" class="fr-mt-2w">
+    <details v-if="!isOnlyNoGroup(groupedDatasets)" class="fr-mt-2w">
       <summary class="fr-py-3v fr-px-2w">Sommaire</summary>
       <ul role="list">
         <li v-for="[group] in groupedDatasets" :key="group">
-          <a
-            :href="`#${group.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
-            >{{ group }}</a
-          >
+          <a :href="`#${basicSlugify(group)}-summary`">{{ group }}</a>
         </li>
       </ul>
     </details>

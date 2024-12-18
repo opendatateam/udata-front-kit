@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import { basicSlugify } from '@/utils'
 import { isAvailable } from '@/utils/bouquet'
-import { NO_GROUP, useGroups } from '@/utils/bouquetGroups'
+import { NO_GROUP, isOnlyNoGroup } from '@/utils/bouquetGroups'
 import { getRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
@@ -22,8 +23,6 @@ const props = defineProps({
     default: 'h3'
   }
 })
-
-const { isOnlyNoGroup } = useGroups(toRef(props.datasetsProperties))
 
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
@@ -137,10 +136,10 @@ const actions = computed(() => {
 
 <template>
   <div class="disclosure">
-    <div v-if="!isOnlyNoGroup()" class="disclosure__header">
+    <div v-if="!isOnlyNoGroup(allGroups)" class="disclosure__header">
       <template v-if="isDisclosure">
         <button
-          :id="`${groupName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
+          :id="`${basicSlugify(groupName)}-summary`"
           class="disclosure__trigger fr-icon-arrow-right-s-line"
           :aria-expanded="isDisclosureOpen"
           :aria-controls="widgetID"
@@ -173,7 +172,7 @@ const actions = computed(() => {
       </template>
       <p
         v-else
-        :id="`${groupName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-summary`"
+        :id="`${basicSlugify(groupName)}-summary`"
         class="simple__name fr-text--lg"
       >
         {{ groupName }}
