@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import config from '@/config'
+
 const activeAccordion = ref<number>()
-const faqEcologieDataGouvHtml = '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
+const faqEcologieDataGouvHtml: string = config.website.formatted_title
 const faqDataGouvHtml = '<b>data.gouv</b><i>.fr</i>'
 const faqMinisterLink =
   "<a href='https://www.ecologie.gouv.fr/' class='fr-link' rel='noreferrer noopener' title='Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques - nouvelle fenêtre' target='_blank'>Ministère de la Transition écologique, de l'Énergie, du Climat et de la Prévention des risques</a>"
