@@ -14,7 +14,7 @@ import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { fromMarkdown } from '@/utils/index'
 
-import { useGroups } from '@/utils/bouquetGroups'
+import { NO_GROUP, useGroups } from '@/utils/bouquetGroups'
 import { fromMarkdown } from '@/utils/index'
 import { useDebounceFn } from '@vueuse/core'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
@@ -167,7 +167,10 @@ onMounted(() => {
     <p v-else>Ce {{ topicsName }} ne contient pas encore de facteur.</p>
   </div>
   <template v-else>
-    <details class="fr-mt-2w">
+    <details
+      v-if="!(groupedDatasets.has(NO_GROUP) && groupedDatasets.size === 1)"
+      class="fr-mt-2w"
+    >
       <summary class="fr-py-3v fr-px-2w">Sommaire</summary>
       <ul role="list">
         <li v-for="[group] in groupedDatasets" :key="group">
