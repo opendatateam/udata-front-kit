@@ -107,8 +107,12 @@ const onValidateEdit = () => {
     props.groupName.trim() === newGroupName.value.trim()
   ) {
     inputErrors.value.push('Ce nom de regroupement existe déjà.')
-  } else if (newGroupName.value.length > 100) {
+  } // check if new group name is more than 100 characters
+  else if (newGroupName.value.trim().length > 100) {
     inputErrors.value.push('Ce nom de regroupement est trop long.')
+  } // check if new group name is empty
+  else if (!newGroupName.value.trim().length) {
+    inputErrors.value.push('Le nom du regroupement ne peut pas être vide.')
   } else if (newGroupName.value) {
     emit('editGroupName', props.groupName, newGroupName.value.trim())
     opened.value = false
@@ -242,7 +246,7 @@ const actions = computed(() => {
             id="input-requirements"
             :class="{ 'error fr-text--bold': newGroupName.length > 100 }"
             >100 caractères maximum&nbsp;:
-            {{ newGroupName.length }}&nbsp;/&nbsp;100</small
+            {{ newGroupName.trim().length }}&nbsp;/&nbsp;100</small
           >
           <div v-if="inputErrors.length" id="errors-name" class="error">
             <p v-for="(error, index) in inputErrors" :key="index">
