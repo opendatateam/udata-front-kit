@@ -175,7 +175,7 @@ const dropdown = config.website.header_search.dropdown
                       Les données existantes satisfont-elles les besoins du cas
                       d’usage&nbsp;? L’association peut se faire dans sa forme
                       la plus interopérable via une donnée cataloguée sur
-                      data.gouv.fr ou le renseignement d’un URL.
+                      <b>data.gouv</b><i>.fr</i> ou le renseignement d’un URL.
                     </p>
                   </div>
                 </div>
