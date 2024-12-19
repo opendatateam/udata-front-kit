@@ -14,8 +14,11 @@ import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 
 import { basicSlugify, fromMarkdown } from '@/utils'
-import { isOnlyNoGroup, useGroups } from '@/utils/bouquetGroups'
-import { useDebounceFn } from '@vueuse/core'
+import {
+  isOnlyNoGroup,
+  useDatasetFilter,
+  useGroups
+} from '@/utils/bouquetGroups'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import BouquetGroup from './BouquetGroup.vue'
 
@@ -49,6 +52,9 @@ const {
   renameGroup,
   deleteGroup
 } = useGroups(datasetsProperties)
+
+const { isFiltering, filterDatasetsProperties, initializeFilter } =
+  useDatasetFilter(datasetsProperties)
 
 const handleRemoveDataset = (group: string, index: number) => {
   datasetsProperties.value = removeDatasetFromGroup(group, index)
@@ -88,33 +94,6 @@ const loadDatasetsContent = () => {
   })
 }
 
-// create a copy of the original DatasetProperties
-const originalDatasets = ref<DatasetProperties[]>([])
-const isFiltering = ref(false)
-
-const filterDatasetsProperties = useDebounceFn((value: string) => {
-  isFiltering.value = true
-  // reset filter if no value
-  if (!value) {
-    datasetsProperties.value = [...originalDatasets.value]
-    isFiltering.value = false
-    return
-  }
-  const searchValue = value.toLowerCase()
-  // search the query inside title and description
-  datasetsProperties.value = originalDatasets.value.filter((dataset) => {
-    return (
-      dataset.title.toLowerCase().includes(searchValue) ||
-      (dataset.purpose && dataset.purpose.toLowerCase().includes(searchValue))
-    )
-  })
-}, 600)
-
-// Store original datasets list
-onMounted(() => {
-  originalDatasets.value = [...datasetsProperties.value]
-})
-
 const addDataset = () => {
   modal.value?.addDataset()
 }
@@ -134,6 +113,7 @@ const onDatasetEditModalSubmit = () => {
 
 onMounted(() => {
   loadDatasetsContent()
+  initializeFilter()
 })
 </script>
 
