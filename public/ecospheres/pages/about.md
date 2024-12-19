@@ -7,7 +7,7 @@ Un bouquet est un ensemble de données contextualisées permettant de répondre 
 
 ## À qui s'adresse cette plateforme ?
 
-_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des administrations centrales, services déconcentrés et des collectivités territoriales oeuvrant à déployer les politiques publiques portées par le [Ministère de la Transition écologique et de la Cohésion des territoires](https://www.ecologie.gouv.fr/).
+_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des administrations centrales, services déconcentrés et des collectivités territoriales oeuvrant à déployer les politiques publiques portées par le [Ministère de la Transition écologique, de l’Énergie, du Climat et de la Prévention des risques](https://www.ecologie.gouv.fr/).
 L'accès aux données brutes permet également à la société civile, au secteur privé ou encore à l'administration de s'en emparer dans un but de réutilisation.
 
 ## Les données ouvertes : qu'est-ce que c'est ?

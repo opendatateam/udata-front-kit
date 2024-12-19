@@ -18,6 +18,7 @@ robots:
 # UI customizations
 website:
   title: 'hackathon.data.gouv.fr'
+  formatted_title: '<i>hackathon.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/hackathon-logo.svg'
   badge:
