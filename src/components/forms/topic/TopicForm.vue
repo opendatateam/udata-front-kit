@@ -41,6 +41,7 @@ const searchPageFilters = ref<FilterConf[]>([])
 const searchPageLabelSubject = ref<string>('')
 const searchPageLabelDescriptionTitle = ref<string>('')
 const searchPageLabelDescriptionInfo = ref<string>('')
+const searchPageGeozones = ref<boolean>(false)
 
 const configSearchPage = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
@@ -54,12 +55,13 @@ searchPageLabelDescriptionTitle.value =
   configSearchPage.searchPageLabelDescriptionTitle
 searchPageLabelDescriptionInfo.value =
   configSearchPage.searchPageLabelDescriptionInfo
+searchPageGeozones.value = configSearchPage.searchPageGeozones
 
-const currentFilters = ref<Record<string, string>>({})
+const currentFilters = ref<Record<string, string[]>>({})
 
 if (searchPageFilters.value) {
   searchPageFilters.value.forEach((item) => {
-    currentFilters.value[item.tag] = ''
+    currentFilters.value[item.tag] = []
   })
 }
 
@@ -69,11 +71,11 @@ Object.keys(currentFilters.value).forEach((key) => {
       if (spf.tag === key) {
         spf.values.forEach((val) => {
           if (topic.value.tags?.includes(val.tag)) {
-            currentFilters.value[key] = val.tag
+            currentFilters.value[key].push(val.tag)
           }
           if (route.query.tags) {
             if (route.query.tags.toString().split(',').includes(val.tag)) {
-              currentFilters.value[key] = val.tag
+              currentFilters.value[key].push(val.tag)
             }
           }
         })
@@ -91,11 +93,7 @@ const { values, errors, defineField, handleSubmit, setValues } = useForm({
   },
   validationSchema: {
     name: required,
-    description: required,
-    ...Object.keys(currentFilters.value).reduce((schema, key) => {
-      schema[key] = required
-      return schema
-    }, {})
+    description: required
   }
 })
 
@@ -119,7 +117,7 @@ const onValidSubmit = async (
   // set topic tags for filters
   let tags: string[] = []
   Object.keys(currentFilters.value).forEach((key) => {
-    tags.push(validatedValues[key])
+    tags = [...tags, ...currentFilters.value[key]]
   })
   tags.push(searchPageSlug.value)
   tags.push(config.universe.name)
@@ -147,18 +145,38 @@ const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
 
 onMounted(() => {})
 
+const handleCheckboxes = (tag: string, value: string, event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.checked) {
+    currentFilters.value[tag].push(value)
+    if (searchPageFilters.value) {
+      searchPageFilters.value.forEach((spf) => {
+        if (spf.condition_on && spf.condition_on == tag) {
+          currentFilters.value[spf.tag] = []
+        }
+      })
+    }
+  } else {
+    if (currentFilters.value[tag].includes(value)) {
+      currentFilters.value[tag] = currentFilters.value[tag].filter(
+        (item) => item !== value
+      )
+    }
+  }
+}
+
 const updateCurrentFilters = (tag: string, event: Event) => {
   const target = event.target as HTMLSelectElement
   const newValue = target.value
 
   // Update the reactive `currentFilters`
-  currentFilters.value[tag] = newValue
+  currentFilters.value[tag] = [newValue]
 
   // Update dependent filters if any condition exists
   if (searchPageFilters.value) {
     searchPageFilters.value.forEach((spf) => {
       if (spf.condition_on && spf.condition_on === tag) {
-        currentFilters.value[spf.tag] = '' // Reset dependent filters
+        currentFilters.value[spf.tag] = [] // Reset dependent filters
       }
     })
   }
@@ -176,9 +194,8 @@ const filteredSearchPageFilters = computed(() => {
     ...spf,
     values:
       spf.condition_on && spf.condition_on in currentFilters.value
-        ? spf.values.filter(
-            (option) =>
-              currentFilters.value[spf.condition_on] === option.condition_on
+        ? spf.values.filter((option) =>
+            currentFilters.value[spf.condition_on].includes(option.condition_on)
           )
         : spf.values
   }))
@@ -186,7 +203,6 @@ const filteredSearchPageFilters = computed(() => {
 </script>
 
 <template>
-  {{ route.query.tags }}
   <!-- Title -->
   <div class="fr-input-group">
     <DsfrInput
@@ -236,45 +252,77 @@ const filteredSearchPageFilters = computed(() => {
   </div>
   <div v-bind:key="filter.tag" v-for="filter in filteredSearchPageFilters">
     <br />
-    <div class="fr-select-group fr-input-group">
-      <label class="fr-label" :for="`select_${filter.tag}`">
-        {{ filter.name }}
-      </label>
-      <select
-        :id="`input-${filter.tag}`"
-        class="fr-select"
-        :aria-invalid="errors[filter.tag] && isSubmitted ? true : undefined"
-        :aria-describedby="
-          errors[filter.tag] && isSubmitted ? `errors-${filter.tag}` : undefined
-        "
-        @change="updateCurrentFilters(filter.tag, $event)"
-      >
-        <option value="" selected disabled hidden>
-          Sélectionner une option
-        </option>
-        <option
+    <div v-if="!filter.edit_multiple">
+      <div class="fr-select-group fr-input-group">
+        <label class="fr-label" :for="`select_${filter.tag}`">
+          {{ filter.name }}
+        </label>
+        <select
+          :id="`input-${filter.tag}`"
+          class="fr-select"
+          :aria-invalid="errors[filter.tag] && isSubmitted ? true : undefined"
+          :aria-describedby="
+            errors[filter.tag] && isSubmitted
+              ? `errors-${filter.tag}`
+              : undefined
+          "
+          @change="updateCurrentFilters(filter.tag, $event)"
+        >
+          <option value="" selected disabled hidden>
+            Sélectionner une option
+          </option>
+          <option
+            v-for="option in filter.values"
+            :key="option.tag"
+            :value="option.tag"
+            :selected="currentFilters[filter.tag].includes(option.tag)"
+          >
+            {{ option.name }}
+          </option>
+        </select>
+        <p
+          v-if="errors[filter.tag] && isSubmitted"
+          :id="`errors-${filter.tag}`"
+          class="error"
+        >
+          <span class="fr-icon-error-fill" aria-hidden="true" />
+          Veuillez remplir le champs de sélection.
+        </p>
+      </div>
+    </div>
+    <div v-else>
+      <div class="fr-fieldset__element">
+        <div class="fr-checkbox-label">
+          <label class="fr-label" :for="`select_${filter.tag}`">
+            {{ filter.name }}
+          </label>
+        </div>
+        <br />
+        <div
           v-for="option in filter.values"
           :key="option.tag"
           :value="option.tag"
-          :selected="option.tag === currentFilters[filter.tag]"
+          class="fr-checkbox-group"
         >
-          {{ option.name }}
-        </option>
-      </select>
-      <p
-        v-if="errors[filter.tag] && isSubmitted"
-        :id="`errors-${filter.tag}`"
-        class="error"
-      >
-        <span class="fr-icon-error-fill" aria-hidden="true" />
-        Veuillez remplir le champs de sélection.
-      </p>
+          <input
+            :name="`checkboxes-${option.tag}`"
+            :id="`checkboxes-${option.tag}`"
+            type="checkbox"
+            :aria-describedby="`checkboxes--${option.tag}-messages`"
+            :checked="currentFilters[filter.tag].includes(option.tag)"
+            @change="handleCheckboxes(filter.tag, option.tag, $event)"
+          />
+          <label class="fr-label" :for="`checkboxes-${option.tag}`">
+            {{ option.name }}
+          </label>
+        </div>
+      </div>
     </div>
   </div>
 
   <br />
   <!-- Spatial coverage -->
-  <div class="fr-select-group">
+  <div class="fr-select-group" v-if="searchPageGeozones">
     <label class="fr-label" for="select-spatial-coverage"
       >Couverture territoriale (facultatif)</label
     >
@@ -288,5 +336,8 @@ const filteredSearchPageFilters = computed(() => {
 <style scoped>
 :deep(textarea) {
   min-height: 150px;
+}
+.fr-checkbox-group {
+  margin-bottom: 10px;
 }
 </style>

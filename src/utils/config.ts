@@ -10,6 +10,7 @@ interface SearchPageConfNormalized {
   searchPageConfigTypeCard: string
   searchPageExtrasKey: SiteId
   searchPageDatasetEditorialization: boolean
+  searchPageGeozones: boolean
   searchPageCanAdd: CanAddElementConf
   searchPageListAll: boolean
   searchPageDisplayMetadata: boolean
@@ -45,6 +46,7 @@ export const useSearchPagesConfig = (
     searchPageConfigTypeCard: searchPageConf.config_type.card,
     searchPageExtrasKey: searchPageConf.extras_key,
     searchPageDatasetEditorialization: searchPageConf.dataset_editorialization,
+    searchPageGeozones: searchPageConf.searchPageGeozones,
     searchPageCanAdd: searchPageConf.can_add,
     searchPageListAll: searchPageConf.list_all,
     searchPageDisplayMetadata: searchPageConf.display_metadata,

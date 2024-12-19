@@ -70,10 +70,10 @@ website:
         sub_section_tiles:
         sub_section_buttons:
           - name: "Tous les cas d'usages de particuliers"
-            url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+            url: 'cas-d-usages?tags=spf-users-particuliers'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
           - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
-            url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+            url: 'cas-d-usages?tags=spf-users-particuliers,spf-budget-aucun-developpement'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
@@ -102,10 +102,10 @@ website:
         sub_section_tiles:
         sub_section_buttons:
           - name: "Tous les cas d'usages d’entreprises"
-            url: 'cas-d-usages?theme=Administrations&subtheme=Entreprises'
+            url: 'cas-d-usages?tags=spf-users-entreprises'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
           - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
-            url: 'cas-d-usages?theme=Administrations&subtheme=Entreprises'
+            url: 'cas-d-usages?tags=spf-users-entreprises,spf-budget-aucun-developpement'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
@@ -129,10 +129,10 @@ website:
         sub_section_tiles:
         sub_section_buttons:
           - name: "Tous les cas d'usages d’associations"
-            url: 'cas-d-usages?theme=Administrations&subtheme=Associations'
+            url: 'cas-d-usages?tags=spf-users-associations'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
           - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
-            url: 'cas-d-usages?theme=Administrations&subtheme=Associations'
+            url: 'cas-d-usages?tags=spf-users-associations,spf-budget-aucun-developpement'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
@@ -155,13 +155,13 @@ website:
           cards:
             - name: 'Vous n’avez ni équipe technique, ni éditeur'
               description: "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique."
-              url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+              url: 'cas-d-usages?tags=spf-budget-aucun-developpement'
             - name: 'Vous passez par un éditeur'
               description: "Les cas d'usages portés par des éditeurs qui s'occupent de l'intégration."
-              url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+              url: 'cas-d-usages?tags=spf-budget-solution-editeur'
             - name: 'Vous avez votre service informatique'
               description: "Les cas d'usages que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d’information."
-              url: 'cas-d-usages?theme=Administrations&subtheme=Particuliers'
+              url: 'cas-d-usages?tags=spf-budget-moyens-techniques'
         sub_section_tiles:
         sub_section_buttons:
       - title:
@@ -212,11 +212,13 @@ website:
         type: topics
         config_type:
           organization:
+          card: customTopics
         extras_key: cas-d-usages
         list_all: true
         display_metadata: false
         activate_read_more: false
         dataset_editorialization: true
+        geozones: false
         can_add:
           everyone: true
           authorized_users:
@@ -232,57 +234,60 @@ website:
           description_info: "Renseignez ici les informations nécessaires à la compréhension du cas d'usage"
           owner: Propriétaire du cas d'usage
         filters:
-          - name: A destination de
-            disable_all_option: true
+          - name: 'A destination de :'
             tag: structure
+            label_for_all: Tous les types d'administrations
+            edit_multiple: true
+            filter_multiple: false
             values:
-              - name: Tous les types d'administrations
-                tag: simplification-structure-toutes-administrations
               - name: Communes
-                tag: simplification-structure-communes
+                tag: spf-structure-communes
               - name: Départements
-                tag: simplification-structure-departements
+                tag: spf-structure-departements
               - name: Régions
-                tag: simplification-structure-regions
+                tag: spf-structure-regions
               - name: Administrations centrales
-                tag: simplification-structure-administrations-centrales
-          - name: Pour simplifier les démarches de
-            disable_all_option: true
+                tag: spf-structure-administrations-centrales
+          - name: 'Pour simplifier les démarches de :'
             tag: users
+            label_for_all: Tous les usagers
+            edit_multiple: true
+            filter_multiple: false
             values:
-              - name: Tous les usagers
-                tag: simplification-users-tous-usagers
               - name: Particuliers
-                tag: simplification-users-particuliers
+                tag: spf-users-particuliers
               - name: Entreprises
-                tag: simplification-users-entreprises
+                tag: spf-users-entreprises
               - name: Associations
-                tag: simplification-users-associations
+                tag: spf-users-associations
               - name: Administrations
-                tag: simplification-users-administrations
-          - name: Moyens disponibles pour la mise en œuvre
-            disable_all_option: true
+                tag: spf-users-administrations
+          - name: 'Moyens disponibles pour la mise en œuvre : '
             tag: budget
+            label_for_all: Tous les types de ressources
+            edit_multiple: true
+            filter_multiple: false
             values:
-              - name: Tous les types de ressources
-                tag: simplification-budget-tous-types-ressources
               - name: Aucun développement, ni budget
-                tag: simplification-budget-aucun-developpement
+                tag: spf-budget-aucun-developpement
               - name: Avec des moyens techniques
-                tag: simplification-budget-moyens-techniques
+                tag: spf-budget-moyens-techniques
               - name: Avec une solution éditeur
-                tag: simplification-budget-solution-editeur
-          - name: Type de simplification possible
+                tag: spf-budget-solution-editeur
+          - name: 'Type de simplification possible : '
             tag: simplification
+            label_for_all: Tous les types de ressources
+            edit_multiple: true
+            filter_multiple: true
             values:
               - name: Proactivité
-                tag: simplification-simplification-proactivite
+                tag: spf-simplification-proactivite
               - name: Dîtes-le nous une fois
-                tag: simplification-simplification-dlnuf
+                tag: spf-simplification-dlnuf
               - name: Portail de données pour les agents
-                tag: simplification-simplification-portail-donnees-agents
+                tag: spf-simplification-portail-donnees-agents
               - name: Pré-remplissage des données
-                tag: simplification-budget-pre-remplissage-donnees
+                tag: spf-budget-pre-remplissage-donnees
       - name: solutions
         slug: solutions
         type: topics
@@ -294,6 +299,7 @@ website:
         display_metadata: true
         activate_read_more: true
         dataset_editorialization: true
+        geozones: false
         can_add:
           everyone: true
           authorized_users:
@@ -309,22 +315,87 @@ website:
           description_info: 'Renseignez ici les informations nécessaires à la compréhension de la solution'
           owner: Propriétaire data.gouv.fr
         filters:
+          - name: 'Dans le cadre de :'
+            tag: cadre
+            label_for_all: Tous les cas d'usages
+            edit_multiple: true
+            filter_multiple: false
+            values:
+              - name: Marchés publics
+                tag: spf-cadre-marches-publics
+              - name: Aides publiques
+                tag: spf-cadre-aides-publiques
+              - name: Tarification sociale et solidaire
+                tag: spf-cadre-tarification-sociale-solidaire
+              - name: Tarification transport
+                tag: spf-cadre-tarification-transport
+          - name: 'Pour simplifier les démarches de :'
+            tag: demarches
+            label_for_all: Tous les usagers
+            edit_multiple: true
+            filter_multiple: false
+            values:
+              - name: Particuliers
+                tag: spf-demarches-particuliers
+              - name: Entreprises
+                tag: spf-demarches-entreprises
+              - name: Associations
+                tag: spf-demarches-associations
+              - name: Administrations
+                tag: spf-demarches-administrations
+          - name: 'A destination de :'
+            tag: destination
+            label_for_all: Tous les types d'administrations
+            edit_multiple: true
+            filter_multiple: false
+            values:
+              - name: Communes
+                tag: spf-destination-communes
+              - name: Départements
+                tag: spf-destination-departements
+              - name: Régions
+                tag: spf-destination-regions
+              - name: Administrations centrales
+                tag: spf-destination-administrations-centrales
+              - name: Opérateurs
+                tag: spf-destination-operateurs
+          - name: 'Moyens disponibles pour la mise en œuvre :'
+            tag: moyens
+            label_for_all: Tous les types de ressources
+            edit_multiple: true
+            filter_multiple: false
+            values:
+              - name: Aucun développement, ni budget
+                tag: spf-moyens-aucun
+              - name: Avec des moyens techniques
+                tag: spf-moyens-techniques
+              - name: Avec une solution éditeur
+                tag: spf-moyens-editeur
+          - name: 'Type de solutions :'
+            tag: type-solutions
+            label_for_all: Tous les types de solutions
+            edit_multiple: true
+            filter_multiple: true
+            values:
+              - name: Avec accès à des données protégées
+                tag: spf-solution-donnees-protegees
+              - name: Gratuite
+                tag: spf-solution-gratuite
   header_search:
     display: true
     placeholder: Rechercher...
     dropdown:
-      - text: Rechercher {} dans les <strong>jeux de données</strong>
-        route: datasets
-      - text: Rechercher {} dans les <strong>bouquets</strong>
-        route: bouquets
+      - text: Rechercher {} dans les <strong>cas d'usages</strong>
+        route: cas-d-usages
+      - text: Rechercher {} dans les <strong>solutions</strong>
+        route: solutions
   search_bar:
-    display: true
-    placeholder: Rechercher une donnée environnementale
+    display: false
   secondary_search:
     display: false
     name:
     link:
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la transition écologique et énergétique, réalisé par le Ministère de la Transition écologique, de l’Énergie, du Climat et de la Prévention des risques.'
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à simplification administrative et à la circulation des données.'
   footer_external_links:
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
@@ -332,9 +403,6 @@ website:
     - label: 'legifrance.gouv.fr'
       href: 'https://www.legifrance.gouv.fr/'
       title: 'legifrance - nouvelle fenêtre'
-    - label: 'ecologie.gouv.fr'
-      href: 'https://ecologie.gouv.fr'
-      title: 'ecologie.gouv.fr - nouvelle fenêtre'
     - label: 'gouvernement.fr'
       href: 'https://www.gouvernement.fr'
       title: 'gouvernement.fr - nouvelle fenêtre'
@@ -349,7 +417,7 @@ website:
       to: '/accessibility'
   notice:
     display: true
-    content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
+    content: ⚠️ Vous naviguez sur une version de développement de simplifions.data.gouv.fr ⚠️
     closeable: false
   menu:
     - text: Accueil
