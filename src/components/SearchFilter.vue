@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, watch, watchEffect, type PropType, type Ref } from 'vue'
+import {
+  computed,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+  type PropType,
+  type Ref
+} from 'vue'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
@@ -24,6 +32,10 @@ const props = defineProps({
   showDrafts: {
     type: Boolean,
     default: false
+  },
+  tags: {
+    type: Array<String>,
+    default: []
   }
 })
 
@@ -38,6 +50,7 @@ const searchPageName = ref<string>('')
 const searchPageSlug = ref<string>('')
 const searchPageFilters = ref<FilterConf[]>([])
 const searchPageType = ref<string>('')
+const searchPageGeozones = ref<boolean>(false)
 
 const config = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
@@ -46,6 +59,7 @@ searchPageName.value = config.searchPageName
 searchPageSlug.value = config.searchPageSlug
 searchPageFilters.value = config.searchPageFilters
 searchPageType.value = config.searchPageType
+searchPageGeozones.value = config.searchPageGeozones
 
 const currentFilters = ref<Record<string, string>>({})
 
@@ -96,6 +110,25 @@ const updateCurrentFilters = (tag: string, event: Event) => {
   navigate()
 }
 
+const handleCheckboxes = (tag: string, value: string, event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.checked) {
+    currentFilters.value[tag] = value
+    if (searchPageFilters.value) {
+      searchPageFilters.value.forEach((spf) => {
+        if (spf.condition_on && spf.condition_on == tag) {
+          currentFilters.value[spf.tag] = ''
+        }
+      })
+    }
+  } else {
+    if (tag in currentFilters.value) {
+      delete currentFilters.value[tag]
+    }
+  }
+  navigate()
+}
+
 const switchSpatialCoverage = (
   spatialCoverage: SpatialCoverage | null | undefined
 ) => {
@@ -132,6 +165,7 @@ watch(
       searchPageSlug.value = config.searchPageSlug
       searchPageFilters.value = config.searchPageFilters
       searchPageType.value = config.searchPageType
+      searchPageGeozones.value = config.searchPageGeozones
       if (searchPageFilters.value) {
         searchPageFilters.value.forEach((item) => {
           currentFilters.value[item.tag] = ''
@@ -154,6 +188,20 @@ const filteredSearchPageFilters = computed(() => {
         : spf.values
   }))
 })
+
+onMounted(() => {
+  searchPageFilters.value.forEach((spf) => {
+    spf.values.forEach((val) => {
+      if (props.tags.includes(val.tag)) {
+        if (!spf.filter_multiple) {
+          currentFilters.value[spf.tag] = val.tag
+        } else {
+          currentFilters.value[`checkboxes-${val.tag}`] = val.tag
+        }
+      }
+    })
+  })
+})
 </script>
 
 <template>
@@ -166,7 +214,7 @@ const filteredSearchPageFilters = computed(() => {
       @update:model-value="switchLocalShowDrafts"
     />
     <div v-bind:key="filter.name" v-for="filter in filteredSearchPageFilters">
-      <div class="fr-select-group">
+      <div v-if="!filter.filter_multiple" class="fr-select-group">
         <label class="fr-label" :for="`select_${filter.tag}`">
           {{ filter.name }}
         </label>
@@ -175,20 +223,59 @@ const filteredSearchPageFilters = computed(() => {
           class="fr-select"
           @change="updateCurrentFilters(filter.tag, $event)"
         >
-          <option v-if="!filter.disable_all_option" value="">
-            Toutes les {{ filter.name }}
+          <option v-if="filter.label_for_all" value="">
+            {{ filter.label_for_all }}
           </option>
           <option
             v-for="option in filter.values"
             :key="option.tag"
             :value="option.tag"
+            :selected="currentFilters[filter.tag] === option.tag ? true : false"
           >
             {{ option.name }}
           </option>
         </select>
       </div>
+      <div v-else>
+        <div class="fr-fieldset__element">
+          <div class="fr-checkbox-label">
+            <label class="fr-label" :for="`select_${filter.tag}`">
+              {{ filter.name }}
+            </label>
+          </div>
+          <div
+            v-for="option in filter.values"
+            :key="option.tag"
+            :value="option.tag"
+            class="fr-checkbox-group"
+          >
+            <input
+              :name="`checkboxes-${option.tag}`"
+              :id="`checkboxes-${option.tag}`"
+              type="checkbox"
+              :checked="
+                currentFilters[`checkboxes-${option.tag}`] === option.tag
+                  ? true
+                  : false
+              "
+              :aria-describedby="`checkboxes--${option.tag}-messages`"
+              @change="
+                handleCheckboxes(`checkboxes-${option.tag}`, option.tag, $event)
+              "
+            />
+            <label class="fr-label" :for="`checkboxes-${option.tag}`">
+              {{ option.name }}
+            </label>
+          </div>
+        </div>
+        <div
+          class="fr-messages-group"
+          id="checkboxes-messages"
+          aria-live="assertive"
+        ></div>
+      </div>
     </div>
-    <div class="fr-select-group">
+    <div class="fr-select-group" v-if="searchPageGeozones">
       <label class="fr-label" for="select-spatial-coverage"
         >Couverture territoriale</label
       >
@@ -204,5 +291,11 @@ const filteredSearchPageFilters = computed(() => {
 <style scoped>
 .fr-select-group {
   margin-bottom: 20px;
+}
+.fr-checkbox-group {
+  margin-bottom: 10px;
+}
+.fr-checkbox-label {
+  margin-bottom: 10px;
 }
 </style>

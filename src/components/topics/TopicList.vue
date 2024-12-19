@@ -4,6 +4,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
+import CustomTopicCard from '@/custom/simplifions/components/CustomTopicCard.vue'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -17,6 +18,7 @@ const searchPageName = ref<string>('')
 const searchPageSlug = ref<string>('')
 const searchPageExtrasKey = ref<string>('')
 const searchPageLabelTitle = ref<string>('')
+const searchPageConfigTypeCard = ref<string>('')
 
 const config = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
@@ -25,6 +27,7 @@ searchPageName.value = config.searchPageName
 searchPageSlug.value = config.searchPageSlug
 searchPageExtrasKey.value = config.searchPageExtrasKey
 searchPageLabelTitle.value = config.searchPageLabelTitle
+searchPageConfigTypeCard.value = config.searchPageConfigTypeCard
 
 const userStore = useUserStore()
 
@@ -81,10 +84,7 @@ const clearFilters = () => {
 }
 
 onMounted(() => {
-  const loader = useLoading().show({ enforceFocus: false })
-  topicStore
-    .loadTopicsForUniverse([searchPageSlug.value], props.organization)
-    .then(() => loader.hide())
+  updateTopics()
 })
 
 defineExpose({
@@ -185,9 +185,32 @@ watch(
       </div>
     </div>
   </div>
-  <div class="topics-list-container fr-container fr-mb-4w border-top">
-    <ul class="fr-mt-3w fr-pl-0" role="list">
-      <li v-for="topic in topics" :key="topic.id" class="fr-col-12">
+  <div
+    v-if="searchPageConfigTypeCard"
+    class="topics-list-container fr-container fr-mb-4w border-top"
+  >
+    <ul class="fr-grid-row fr-gap-4w fr-mt-3w fr-pl-0" role="list">
+      <li
+        v-for="topic in topics"
+        :key="topic.id"
+        class="fr-col-12 fr-col-md-6 topic-card"
+      >
+        <div v-if="searchPageConfigTypeCard">
+          <CustomTopicCard :topic="topic" />
+        </div>
+        <div v-else>
+          <TopicCard :topic="topic" />
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div v-else class="topics-list-container fr-container fr-mb-4w border-top">
+    <ul class="fr-grid-row fr-mt-3w fr-pl-0" role="list">
+      <li
+        v-for="topic in topics"
+        :key="topic.id"
+        class="fr-col-12 fr-col-md-6 fr-p-2"
+      >
         <TopicCard :topic="topic" />
       </li>
     </ul>
@@ -199,5 +222,8 @@ watch(
 .topics-list-container {
   padding-right: 0;
   padding-left: 0;
+}
+.topic-card {
+  padding-right: 20px;
 }
 </style>
