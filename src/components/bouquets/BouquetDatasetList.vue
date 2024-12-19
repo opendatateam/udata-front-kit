@@ -143,7 +143,7 @@ onMounted(() => {
   </div>
   <!-- Datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset fr-mt-2w">
-    <p v-if="isFiltering">Aucune donnée trouvé pour cette recherche.</p>
+    <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
     <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
   </div>
   <template v-else>

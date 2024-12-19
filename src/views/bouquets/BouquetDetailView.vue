@@ -382,7 +382,7 @@ watch(
   background-color: v-bind('themeColors.background');
 }
 /*
-FIX ME magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
+FIXME: magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
 */
 :deep(.fr-tabs) {
   height: auto;
