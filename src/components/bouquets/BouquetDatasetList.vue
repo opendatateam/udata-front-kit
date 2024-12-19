@@ -12,9 +12,13 @@ import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
-import { fromMarkdown } from '@/utils/index'
 
-import { useGroups } from '@/utils/bouquetGroups'
+import { basicSlugify, fromMarkdown } from '@/utils'
+import {
+  isOnlyNoGroup,
+  useDatasetFilter,
+  useGroups
+} from '@/utils/bouquetGroups'
 import BouquetDatasetCard from './BouquetDatasetCard.vue'
 import BouquetGroup from './BouquetGroup.vue'
 
@@ -48,6 +52,9 @@ const {
   renameGroup,
   deleteGroup
 } = useGroups(datasetsProperties)
+
+const { isFiltering, filterDatasetsProperties, initializeFilter } =
+  useDatasetFilter(datasetsProperties)
 
 const handleRemoveDataset = (group: string, index: number) => {
   datasetsProperties.value = removeDatasetFromGroup(group, index)
@@ -106,17 +113,24 @@ const onDatasetEditModalSubmit = () => {
 
 onMounted(() => {
   loadDatasetsContent()
+  initializeFilter()
 })
 </script>
 
 <template>
   <!-- Header and buttons -->
-  <div
-    class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between"
-  >
+  <div class="list-header fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
       Composition du {{ topicsName }} de données
     </h2>
+    <SearchComponent
+      v-if="datasetEditorialization"
+      id="filter-factors"
+      :is-filter="true"
+      search-label="Filtrer les données"
+      :label-visible="false"
+      @update:model-value="filterDatasetsProperties"
+    />
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
         v-if="isEdit"
@@ -129,9 +143,18 @@ onMounted(() => {
   </div>
   <!-- Datasets list -->
   <div v-if="datasetsProperties.length < 1" class="no-dataset fr-mt-2w">
-    <p>Ce {{ topicsName }} ne contient pas encore de jeux de données</p>
+    <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
+    <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
   </div>
   <template v-else>
+    <details v-if="!isOnlyNoGroup(groupedDatasets)" class="fr-mt-2w">
+      <summary class="fr-py-3v fr-px-2w">Sommaire</summary>
+      <ul role="list">
+        <li v-for="[group] in groupedDatasets" :key="group">
+          <a :href="`#${basicSlugify(group)}-summary`">{{ group }}</a>
+        </li>
+      </ul>
+    </details>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
         <li v-for="[group, datasets] in groupedDatasets" :key="group">
@@ -213,9 +236,38 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.list-header {
+  gap: 1rem;
+}
+details {
+  border-block: 1px solid var(--border-default-grey, #ddd);
+  color: #000091;
+}
+details[open] {
+  padding-block-end: 0.75rem;
+}
+summary {
+  font-weight: 500;
+  background-color: var(--background-alt-grey, #f6f6f6);
+}
+details li {
+  margin-block-start: 1rem;
+}
+details summary::marker,
+:is(::-webkit-details-marker) {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16' aria-hidden='true' transform='rotate(90)' %3E%3Cpath fill='%233458A2' fill-rule='evenodd' d='m8 7.219-3.3 3.3-.942-.943L8 5.333l4.243 4.243-.943.943-3.3-3.3Z' clip-rule='evenodd' /%3E%3C/svg%3E")
+    ' ';
+}
+details[open] summary::marker {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16' aria-hidden='true' transform='rotate(180)' %3E%3Cpath fill='%233458A2' fill-rule='evenodd' d='m8 7.219-3.3 3.3-.942-.943L8 5.333l4.243 4.243-.943.943-3.3-3.3Z' clip-rule='evenodd' /%3E%3C/svg%3E")
+    ' ';
+}
 .groups {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+:deep(.fr-input-group) {
+  margin-inline-start: auto;
 }
 </style>

@@ -1,8 +1,13 @@
-import { type ComputedRef, type Ref } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
+import { type ComputedRef, type Ref, ref } from 'vue'
 
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
 export const NO_GROUP = 'Sans regroupement'
+
+export const isOnlyNoGroup = (groups: DatasetsGroups) => {
+  return groups.has(NO_GROUP) && groups.size === 1
+}
 
 export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
   groupedDatasets: ComputedRef<DatasetsGroups>
@@ -104,5 +109,39 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     groupExists,
     renameGroup,
     deleteGroup
+  }
+}
+
+export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
+  const originalDatasets = ref<DatasetProperties[]>([])
+  const isFiltering = ref(false)
+
+  const filterDatasetsProperties = useDebounceFn((value: string) => {
+    isFiltering.value = true
+    // reset filter if no value
+    if (!value) {
+      datasetsProperties.value = [...originalDatasets.value]
+      isFiltering.value = false
+      return
+    }
+    const searchValue = value.toLowerCase()
+    // search the query inside title and description
+    datasetsProperties.value = originalDatasets.value.filter((dataset) => {
+      return (
+        dataset.title.toLowerCase().includes(searchValue) ||
+        (dataset.purpose && dataset.purpose.toLowerCase().includes(searchValue))
+      )
+    })
+  }, 600)
+
+  // Store original datasets list
+  const initializeFilter = () => {
+    originalDatasets.value = [...datasetsProperties.value]
+  }
+
+  return {
+    isFiltering,
+    filterDatasetsProperties,
+    initializeFilter
   }
 }
