@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
-import { NO_GROUP } from '@/utils/bouquetGroups'
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
@@ -33,12 +32,6 @@ const groupOptions = computed(() =>
   Array.from(datasetsGroups.value, ([key]) => key)
 )
 
-const setNoGroupValue = () => {
-  if (!datasetProperties.value.group) {
-    datasetProperties.value.group = NO_GROUP
-  }
-}
-
 const clear = () => {
   datasetProperties.value.group = undefined
 }
@@ -47,10 +40,6 @@ const trimGroupName = (groupName: string) => {
   // prevents spaces at the beginning and end of the group name
   datasetProperties.value.group = groupName.trim()
 }
-
-onMounted(() => {
-  setNoGroupValue()
-})
 </script>
 
 <template>
