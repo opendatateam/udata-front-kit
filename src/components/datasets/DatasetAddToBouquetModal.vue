@@ -9,6 +9,9 @@ import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useTopicsConf } from '@/utils/config'
 
+import { useExtras } from '@/utils/bouquet'
+import { useGroups } from '@/utils/bouquetGroups'
+
 const props = defineProps({
   show: {
     type: Boolean,
@@ -35,7 +38,7 @@ const datasetProperties = ref<DatasetProperties>({
   uri: `/datasets/${props.dataset.id}`,
   availability: Availability.LOCAL_AVAILABLE
 })
-const selectedBouquetId = ref(null)
+const selectedBouquetId: Ref<string | null> = ref(null)
 
 const bouquetOptions = computed(() => {
   return bouquets.value.map((bouquet) => {
@@ -49,9 +52,12 @@ const bouquetOptions = computed(() => {
 const isValid = computed(() => {
   if (topicsDatasetEditorialization) {
     return (
-      datasetProperties.value.title.trim() !== '' &&
-      datasetProperties.value.purpose.trim() !== '' &&
-      !!selectedBouquetId.value
+      !!datasetProperties.value.title.trim() &&
+      !!datasetProperties.value.purpose.trim() &&
+      !!selectedBouquetId.value &&
+      (datasetProperties.value.group
+        ? datasetProperties.value.group.trim().length < 100
+        : true)
     )
   } else {
     return !!selectedBouquetId.value
@@ -73,17 +79,25 @@ const modalActions = computed(() => {
   ]
 })
 
-const isDatasetInBouquet = computed(() => {
+const selectedBouquet = computed(() => {
   if (selectedBouquetId.value === null) {
+    return null
+  }
+  return topicStore.get(selectedBouquetId.value)
+})
+
+const { datasetsProperties } = useExtras(selectedBouquet)
+
+const isDatasetInBouquet = computed(() => {
+  if (!selectedBouquetId.value) {
     return false
   }
-  const selectedBouquet = topicStore.get(selectedBouquetId.value)
-  const datasetsProperties =
-    selectedBouquet?.extras[topicsExtrasKey].datasets_properties
-  return datasetsProperties?.some(
+  return datasetsProperties.value.some(
     (datasetProps) => datasetProps.id === props.dataset.id
   )
 })
+
+const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
 
 const submit = async () => {
   if (selectedBouquetId.value === null) {
@@ -145,9 +159,17 @@ onMounted(() => {
       ellipsis
       class="fr-mb-2w"
     />
+    <div class="fr-input-group">
+      <SelectTopicGroup
+        v-model:properties-model="datasetProperties"
+        v-model:groups-model="datasetsGroups"
+        label="Regroupement"
+        description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
+      />
+    </div>
     <DatasetPropertiesTextFields
       v-if="topicsDatasetEditorialization"
-      v-model:dataset-properties="datasetProperties"
+      v-model:dataset-properties-model="datasetProperties"
     />
     <slot name="footer">
       <DsfrButtonGroup

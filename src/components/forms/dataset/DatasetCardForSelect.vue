@@ -100,9 +100,6 @@ const badgeClasse = computed(() => {
 </template>
 
 <style scoped>
-.card:has(.fr-badge.absolute) {
-  padding-top: 1rem;
-}
 h4 {
   font-size: 1rem;
 }

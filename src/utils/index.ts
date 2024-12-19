@@ -41,7 +41,6 @@ export const stripFromMarkdown = (value: string) => {
 
 /**
  * Format date
- *
  */
 export const formatDate = (dateString: string, short = false) => {
   const date = new Date(dateString)
@@ -56,4 +55,11 @@ export const formatDate = (dateString: string, short = false) => {
         timeStyle: 'short'
       }
   return new Intl.DateTimeFormat('default', params).format(date)
+}
+
+/**
+ * Basic slugify function. Deletes special characters like numbers or diacritics instead of converting them.
+ */
+export const basicSlugify = (value: string) => {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, '-')
 }
