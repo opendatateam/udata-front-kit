@@ -61,7 +61,7 @@ const topicLink: RouteLocationRaw = {
           <div class="title-topic">{{ topic.name }}</div>
           <div class="author-topic">
             <template v-if="topic.organization">
-              Par<OrganizationNameWithCertificate
+              <OrganizationNameWithCertificate
                 :organization="topic.organization"
               />
             </template>
