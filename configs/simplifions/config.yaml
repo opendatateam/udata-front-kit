@@ -19,7 +19,7 @@ robots:
 
 # UI customizations
 website:
-  title: 'toto.data.gouv.fr'
+  title: 'simplifions.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/simplification-logo.svg'
   badge:
