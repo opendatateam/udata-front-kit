@@ -208,6 +208,6 @@ const dropdownLabel = (text: string) => {
   inline-size: 100%;
 }
 :deep(.multiselect__content-wrapper) {
-  margin-block-start: 40px;
+  inset-block-start: 100%;
 }
 </style>
