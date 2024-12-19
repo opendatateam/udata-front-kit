@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import { NO_GROUP } from '@/utils/bouquetGroups'
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
@@ -13,9 +14,31 @@ const datasetsGroups = defineModel('groups-model', {
   default: []
 })
 
+defineProps({
+  label: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    default: undefined
+  },
+  required: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const groupOptions = computed(() =>
   Array.from(datasetsGroups.value, ([key]) => key)
 )
+
+const setNoGroupValue = () => {
+  if (!datasetProperties.value.group) {
+    datasetProperties.value.group = NO_GROUP
+  }
+}
+
 const clear = () => {
   datasetProperties.value.group = undefined
 }
@@ -24,11 +47,26 @@ const trimGroupName = (groupName: string) => {
   // prevents spaces at the beginning and end of the group name
   datasetProperties.value.group = groupName.trim()
 }
+
+onMounted(() => {
+  setNoGroupValue()
+})
 </script>
 
 <template>
+  <label for="regroupement-input">
+    {{ label }}
+    (<span v-if="required">obligatoire</span><span v-else>facultatif</span>)
+  </label>
+  <p
+    v-if="description"
+    id="regroupement-description"
+    class="fr-mt-1v fr-mb-2v fr-text--sm"
+  >
+    {{ description }}
+  </p>
   <Multiselect
-    id="input-regroupement"
+    id="regroupement-input"
     v-model="datasetProperties.group"
     :options="groupOptions"
     :searchable="true"

@@ -42,7 +42,10 @@ const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 const hasEditorialization = computed(() => {
   return (
     !!datasetProperties.value.title.trim() &&
-    !!datasetProperties.value.purpose.trim()
+    !!datasetProperties.value.purpose.trim() &&
+    (datasetProperties.value.group
+      ? datasetProperties.value.group.trim().length < 100
+      : true)
   )
 })
 
@@ -175,15 +178,11 @@ onMounted(() => {
     </fieldset>
   </div>
   <div class="fr-input-group">
-    <label for="input-regroupement">Regroupement (facultatif)</label>
-    <p id="regroupement-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
-      Rechercher ou créer un regroupement. Un regroupement contient un ou
-      plusieurs jeux de données.
-    </p>
-
     <SelectTopicGroup
       v-model:properties-model="datasetProperties"
       v-model:groups-model="datasetsGroups"
+      label="Regroupement"
+      description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
     />
   </div>
 </template>

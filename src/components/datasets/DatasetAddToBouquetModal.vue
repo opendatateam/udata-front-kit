@@ -52,9 +52,12 @@ const bouquetOptions = computed(() => {
 const isValid = computed(() => {
   if (topicsDatasetEditorialization) {
     return (
-      datasetProperties.value.title.trim() !== '' &&
-      datasetProperties.value.purpose.trim() !== '' &&
-      !!selectedBouquetId.value
+      !!datasetProperties.value.title.trim() &&
+      !!datasetProperties.value.purpose.trim() &&
+      !!selectedBouquetId.value &&
+      (datasetProperties.value.group
+        ? datasetProperties.value.group.trim().length < 100
+        : true)
     )
   } else {
     return !!selectedBouquetId.value
@@ -157,14 +160,11 @@ onMounted(() => {
       class="fr-mb-2w"
     />
     <div class="fr-input-group">
-      <label for="input-regroupement">Regroupement (facultatif)</label>
-      <p id="regroupement-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
-        Rechercher ou créer un regroupement. Un regroupement contient un ou
-        plusieurs jeux de données.
-      </p>
       <SelectTopicGroup
         v-model:properties-model="datasetProperties"
         v-model:groups-model="datasetsGroups"
+        label="Regroupement"
+        description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
       />
     </div>
     <DatasetPropertiesTextFields

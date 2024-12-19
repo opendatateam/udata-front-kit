@@ -20,6 +20,10 @@ const props = defineProps({
   headingLevel: {
     type: String,
     default: 'h3'
+  },
+  isEdit: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -54,6 +58,7 @@ const emit = defineEmits<{
 }>()
 
 const isDisclosureOpen: Ref<boolean> = ref(!isDisclosure.value)
+
 const toggleDisclosure = () => {
   isDisclosureOpen.value = !isDisclosureOpen.value
 }
@@ -71,7 +76,7 @@ const modalContent = computed(() => {
   switch (modalType.value) {
     case 'edit':
       modalFields = {
-        title: `Renommer le regroupement ${props.groupName}`,
+        title: `Renommer le regroupement ${props.groupName}.`,
         confirmLabel: 'Valider',
         color: '',
         action: onValidateEdit
@@ -79,7 +84,7 @@ const modalContent = computed(() => {
       break
     case 'delete':
       modalFields = {
-        title: `Supprimer le regroupement ${props.groupName}`,
+        title: `Supprimer le regroupement ${props.groupName}.`,
         confirmLabel: 'Supprimer',
         color: '--background-flat-error',
         action: onDelete
@@ -95,15 +100,17 @@ const openModal = (type: string) => {
 }
 
 const onValidateEdit = () => {
+  inputErrors.value = []
   // check if new group name already exists
   if (
     props.allGroups.has(newGroupName.value.trim()) ||
     props.groupName.trim() === newGroupName.value.trim()
   ) {
-    inputErrors.value = []
     inputErrors.value.push('Ce nom de regroupement existe déjà.')
+  } else if (newGroupName.value.length > 100) {
+    inputErrors.value.push('Ce nom de regroupement est trop long.')
   } else if (newGroupName.value) {
-    emit('editGroupName', props.groupName, newGroupName.value)
+    emit('editGroupName', props.groupName, newGroupName.value.trim())
     opened.value = false
   }
 }
@@ -152,7 +159,7 @@ const actions = computed(() => {
             <DsfrTag class="fr-text--xs" small :label="factorsInGroup" />
           </span>
         </button>
-        <div class="disclosure__actions">
+        <div v-if="isEdit" class="disclosure__actions">
           <DsfrButton
             :label="`éditer le regroupement ${groupName}`"
             icon="fr-icon-edit-line"
@@ -222,10 +229,21 @@ const actions = computed(() => {
             v-model="newGroupName"
             label="Nom du regroupement"
             label-visible
+            maxlength="100"
             :aria-invalid="inputErrors.length ? true : undefined"
-            :description-id="inputErrors.length ? 'errors-name' : undefined"
+            :description-id="
+              inputErrors.length
+                ? 'input-requirements errors-name'
+                : 'input-requirements'
+            "
             @keypress.prevent.enter="onValidateEdit"
           />
+          <small
+            id="input-requirements"
+            :class="{ 'error fr-text--bold': newGroupName.length > 100 }"
+            >100 caractères maximum&nbsp;:
+            {{ newGroupName.length }}&nbsp;/&nbsp;100</small
+          >
           <div v-if="inputErrors.length" id="errors-name" class="error">
             <p v-for="(error, index) in inputErrors" :key="index">
               <span class="fr-icon-error-fill" aria-hidden="true" />

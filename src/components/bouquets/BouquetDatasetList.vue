@@ -140,12 +140,12 @@ onMounted(() => {
             :group-name="group"
             :all-groups="groupedDatasets"
             :datasets-properties="datasets"
+            :is-edit="isEdit"
             @edit-group-name="handleRenameGroup"
             @delete-group="handleDeleteGroup"
           >
-            <template #datasetActions="{ dataset, index }">
+            <template v-if="isEdit" #datasetActions="{ dataset, index }">
               <DsfrButton
-                v-if="isEdit"
                 size="sm"
                 icon="fr-icon-edit-line"
                 label="Éditer"
@@ -154,7 +154,6 @@ onMounted(() => {
                 :on-click="() => editDataset(dataset, index, group)"
               />
               <DsfrButton
-                v-if="isEdit"
                 size="sm"
                 icon="fr-icon-delete-line"
                 label="Supprimer"
