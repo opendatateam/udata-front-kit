@@ -53,8 +53,10 @@ const {
   deleteGroup
 } = useGroups(datasetsProperties)
 
-const { isFiltering, filterDatasetsProperties, initializeFilter } =
+const { isFiltering, filterDatasetsProperties, filteredDatasets } =
   useDatasetFilter(datasetsProperties)
+
+const { groupedDatasets: filteredResults } = useGroups(filteredDatasets)
 
 const handleRemoveDataset = (group: string, index: number) => {
   datasetsProperties.value = removeDatasetFromGroup(group, index)
@@ -113,7 +115,6 @@ const onDatasetEditModalSubmit = () => {
 
 onMounted(() => {
   loadDatasetsContent()
-  initializeFilter()
 })
 </script>
 
@@ -142,22 +143,25 @@ onMounted(() => {
     </div>
   </div>
   <!-- Datasets list -->
-  <div v-if="datasetsProperties.length < 1" class="no-dataset fr-mt-2w">
+  <div v-if="filteredResults.size < 1" class="no-dataset fr-mt-2w">
     <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
     <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
   </div>
   <template v-else>
-    <details v-if="!isOnlyNoGroup(groupedDatasets)" class="fr-mt-2w">
+    <details
+      v-if="!isOnlyNoGroup(filteredResults) && !!filteredResults.size"
+      class="fr-mt-2w"
+    >
       <summary class="fr-py-3v fr-px-2w">Sommaire</summary>
       <ul role="list">
-        <li v-for="[group] in groupedDatasets" :key="group">
+        <li v-for="[group] in filteredResults" :key="group">
           <a :href="`#${basicSlugify(group)}-summary`">{{ group }}</a>
         </li>
       </ul>
     </details>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
-        <li v-for="[group, datasets] in groupedDatasets" :key="group">
+        <li v-for="[group, datasets] in filteredResults" :key="group">
           <BouquetGroup
             v-if="datasets.length"
             :group-name="group"

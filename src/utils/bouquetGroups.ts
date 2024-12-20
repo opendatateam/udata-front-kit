@@ -113,35 +113,30 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
 }
 
 export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
-  const originalDatasets = ref<DatasetProperties[]>([])
-  const isFiltering = ref(false)
+  const searchQuery = ref('')
+  const isFiltering = computed(() => !!searchQuery.value)
 
-  const filterDatasetsProperties = useDebounceFn((value: string) => {
-    isFiltering.value = true
-    // reset filter if no value
-    if (!value) {
-      datasetsProperties.value = [...originalDatasets.value]
-      isFiltering.value = false
-      return
-    }
-    const searchValue = value.toLowerCase()
-    // search the query inside title and description
-    datasetsProperties.value = originalDatasets.value.filter((dataset) => {
+  // filter datasets but keep the original values
+  const filteredDatasets = computed(() => {
+    if (!searchQuery.value) return datasetsProperties.value
+
+    const searchValue = searchQuery.value.toLowerCase()
+    return datasetsProperties.value.filter((dataset) => {
       return (
         dataset.title.toLowerCase().includes(searchValue) ||
         (dataset.purpose && dataset.purpose.toLowerCase().includes(searchValue))
       )
     })
-  }, 600)
+  })
 
-  // Store original datasets list
-  const initializeFilter = () => {
-    originalDatasets.value = [...datasetsProperties.value]
-  }
+  // apply search query
+  const filterDatasetsProperties = useDebounceFn((value: string) => {
+    searchQuery.value = value
+  }, 600)
 
   return {
     isFiltering,
     filterDatasetsProperties,
-    initializeFilter
+    filteredDatasets
   }
 }
