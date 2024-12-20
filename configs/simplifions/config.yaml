@@ -145,13 +145,13 @@ website:
           cards:
             - name: 'Vous n’avez ni équipe technique, ni éditeur'
               description: "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique."
-              url: 'solutions?tags=spf-budget-aucun-developpement'
+              url: 'solutions?tags=spf-moyens-aucun'
             - name: 'Vous passez par un éditeur'
               description: "Les cas d'usages portés par des éditeurs qui s'occupent de l'intégration."
-              url: 'solutions?tags=spf-budget-solution-editeur'
+              url: 'solutions?tags=spf-moyens-editeur'
             - name: 'Vous avez votre service informatique'
               description: "Les cas d'usages que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d’information."
-              url: 'solutions?tags=spf-budget-moyens-techniques'
+              url: 'solutions?tags=spf-moyens-techniques'
         sub_section_tiles:
         sub_section_buttons:
       - title:
