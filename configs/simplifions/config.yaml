@@ -21,14 +21,14 @@ robots:
 website:
   title: 'simplifions.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/simplification-logo.svg'
+  service_logo: '/logos/simplifions-logo.svg'
   badge:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-    src: '/logos/simplification-logo.svg'
+    src: '/logos/simplifions-logo.svg'
     show_in_header: false
     footer:
       width: '40px'
