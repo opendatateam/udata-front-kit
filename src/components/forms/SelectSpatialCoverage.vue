@@ -60,6 +60,7 @@ onMounted(() => {
     id="select-spatial-coverage"
     ref="multiselect"
     v-model="selectedSpatialCoverage"
+    class="fr-input-wrap"
     :options="options"
     label="name"
     track-by="id"
