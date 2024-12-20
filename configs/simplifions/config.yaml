@@ -234,7 +234,7 @@ website:
           description_info: "Renseignez ici les informations nécessaires à la compréhension du cas d'usage"
           owner: Propriétaire du cas d'usage
         filters:
-          - name: 'A destination de :'
+          - name: 'À destination de :'
             tag: structure
             label_for_all: Tous les types d'administrations
             edit_multiple: true
@@ -248,6 +248,10 @@ website:
                 tag: spf-structure-regions
               - name: Administrations centrales
                 tag: spf-structure-administrations-centrales
+              - name: Opérateurs de l'État
+                tag: spf-operateur-etat
+              - name: Autres
+                tag: spf-autres
           - name: 'Pour simplifier les démarches de :'
             tag: users
             label_for_all: Tous les usagers
@@ -260,8 +264,8 @@ website:
                 tag: spf-users-entreprises
               - name: Associations
                 tag: spf-users-associations
-              - name: Administrations
-                tag: spf-users-administrations
+              - name: Agents publics
+                tag: spf-users-agents-publics
           - name: 'Moyens disponibles pour la mise en œuvre : '
             tag: budget
             label_for_all: Tous les types de ressources
@@ -274,20 +278,18 @@ website:
                 tag: spf-budget-moyens-techniques
               - name: Avec une solution éditeur
                 tag: spf-budget-solution-editeur
-          - name: 'Type de simplification possible : '
+          - name: 'Type de simplification des démarches : '
             tag: simplification
             label_for_all: Tous les types de ressources
             edit_multiple: true
             filter_multiple: true
             values:
-              - name: Proactivité
+              - name: Proactivité | l'usager n'a plus de démarche à faire
                 tag: spf-simplification-proactivite
-              - name: Dîtes-le nous une fois
+              - name: Dîtes-le nous une fois | l'usager n'a plus à fournir de justificatifs
                 tag: spf-simplification-dlnuf
-              - name: Portail de données pour les agents
+              - name: Portail de données | l'usager ou l'agent trouve l'information
                 tag: spf-simplification-portail-donnees-agents
-              - name: Pré-remplissage des données
-                tag: spf-budget-pre-remplissage-donnees
       - name: solutions
         slug: solutions
         type: topics
@@ -323,27 +325,11 @@ website:
             values:
               - name: Marchés publics
                 tag: spf-cadre-marches-publics
-              - name: Aides publiques
+              - name: Aides publiques entreprises
                 tag: spf-cadre-aides-publiques
-              - name: Tarification sociale et solidaire
+              - name: Tarification sociale/solidaire
                 tag: spf-cadre-tarification-sociale-solidaire
-              - name: Tarification transport
-                tag: spf-cadre-tarification-transport
-          - name: 'Pour simplifier les démarches de :'
-            tag: demarches
-            label_for_all: Tous les usagers
-            edit_multiple: true
-            filter_multiple: false
-            values:
-              - name: Particuliers
-                tag: spf-demarches-particuliers
-              - name: Entreprises
-                tag: spf-demarches-entreprises
-              - name: Associations
-                tag: spf-demarches-associations
-              - name: Administrations
-                tag: spf-demarches-administrations
-          - name: 'A destination de :'
+          - name: 'À destination de :'
             tag: destination
             label_for_all: Tous les types d'administrations
             edit_multiple: true
@@ -357,8 +343,24 @@ website:
                 tag: spf-destination-regions
               - name: Administrations centrales
                 tag: spf-destination-administrations-centrales
-              - name: Opérateurs
-                tag: spf-destination-operateurs
+              - name: Opérateurs de l'État
+                tag: spf-operateur-etat
+              - name: Autres
+                tag: spf-autres
+          - name: 'Pour simplifier les démarches de :'
+            tag: demarches
+            label_for_all: Tous les usagers
+            edit_multiple: true
+            filter_multiple: false
+            values:
+              - name: Particuliers
+                tag: spf-demarches-particuliers
+              - name: Entreprises
+                tag: spf-demarches-entreprises
+              - name: Associations
+                tag: spf-demarches-associations
+              - name: Agents publics
+                tag: spf-users-agents-publics
           - name: 'Moyens disponibles pour la mise en œuvre :'
             tag: moyens
             label_for_all: Tous les types de ressources
@@ -381,6 +383,18 @@ website:
                 tag: spf-solution-donnees-protegees
               - name: Gratuite
                 tag: spf-solution-gratuite
+          - name: 'Type de simplification des démarches : '
+            tag: simplification
+            label_for_all: Tous les types de ressources
+            edit_multiple: true
+            filter_multiple: true
+            values:
+              - name: Proactivité | l'usager n'a plus de démarche à faire
+                tag: spf-simplification-proactivite
+              - name: Dîtes-le nous une fois | l'usager n'a plus à fournir de justificatifs
+                tag: spf-simplification-dlnuf
+              - name: Portail de données | l'usager ou l'agent trouve l'information
+                tag: spf-simplification-portail-donnees-agents
   header_search:
     display: true
     placeholder: Rechercher...
