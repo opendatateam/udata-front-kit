@@ -20,6 +20,7 @@ robots:
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
+  formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/ecospheres-logo.svg'
   badge:
@@ -78,6 +79,8 @@ website:
       href: 'https://www.gouvernement.fr'
       title: 'gouvernement.fr - nouvelle fenêtre'
   footer_mandatory_links:
+    - label: 'Contact'
+      href: 'https://tally.so/r/m61AqO'
     - label: 'Plan du site'
       to: '/sitemap'
     - label: "Conditions générales d'utilisation"

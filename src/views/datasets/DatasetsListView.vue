@@ -63,7 +63,7 @@ const datasets = computed(() => store.datasets)
 const total = computed(() => store.total)
 const pages = computed(() => store.pagination)
 
-const title = config.website.title as string
+const title: string = config.website.formatted_title
 const topicItems = config.website.list_search_topics as TopicItemConf[]
 const hasOrganizationFilter = config.website.datasets
   .organization_filter as boolean
@@ -254,7 +254,8 @@ onMounted(() => {
       {{ total }} résultats de recherche pour "{{ query }}".
     </p>
     <p v-if="!query">
-      Parcourir tous les jeux de données présents sur {{ title }}.
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      Parcourir tous les jeux de données présents sur <span v-html="title" />.
     </p>
 
     <div class="fr-col-md-12 fr-mb-2w">
