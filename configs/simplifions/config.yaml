@@ -297,7 +297,7 @@ website:
         extras_key: solutions
         list_all: true
         display_metadata: true
-        activate_read_more: true
+        activate_read_more: false
         dataset_editorialization: true
         geozones: false
         can_add:
