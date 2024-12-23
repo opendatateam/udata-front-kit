@@ -63,7 +63,7 @@ const dropdown = config.website.header_search.dropdown
           <DsfrCard
             :no-arrow="true"
             title="Explorer"
-            description="Accéder aux données des services et opérateurs de l’État et d’une sélection d’organisations publiant des données utiles aux politiques du ministère en charge des territoires, de l’écologie et du logement."
+            description="Accéder aux données des services et opérateurs de l’État et d’une sélection d’organisations publiant des données utiles aux politiques du Ministère en charge de l&rsquo;environnement."
             size="small"
             :horizontal="true"
             :img-src="explorerSvg"
