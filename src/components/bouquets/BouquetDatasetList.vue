@@ -53,8 +53,12 @@ const {
   deleteGroup
 } = useGroups(datasetsProperties)
 
-const { isFiltering, filterDatasetsProperties, filteredDatasets } =
-  useDatasetFilter(datasetsProperties)
+const {
+  isFiltering,
+  filterDatasetsProperties,
+  filteredDatasets,
+  isGroupOnlyHidden
+} = useDatasetFilter(datasetsProperties)
 
 const { groupedDatasets: filteredResults } = useGroups(filteredDatasets)
 
@@ -163,9 +167,9 @@ onMounted(() => {
       <ul role="list" class="groups fr-m-0 fr-p-0">
         <li v-for="[group, datasets] in filteredResults" :key="group">
           <BouquetGroup
-            v-if="datasets.length"
+            v-if="datasets.length && !isGroupOnlyHidden(group)"
             :group-name="group"
-            :all-groups="groupedDatasets"
+            :all-groups="filteredResults"
             :datasets-properties="datasets"
             :is-edit="isEdit"
             @edit-group-name="handleRenameGroup"

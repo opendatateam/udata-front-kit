@@ -33,7 +33,9 @@ const inputErrors: Ref<string[]> = ref([])
 
 const isDisclosure = computed(() => props.groupName !== NO_GROUP)
 const factorsInGroup = computed(() => {
-  const factors = props.allGroups.get(props.groupName)?.length
+  const factors = props.allGroups
+    .get(props.groupName)
+    ?.filter((factor) => !factor.isHidden).length
 
   let factorsLabel = ''
   switch (factors) {
@@ -196,7 +198,11 @@ const actions = computed(() => {
       :class="[{ isVisible: isDisclosureOpen }, 'disclosure__content']"
     >
       <ul role="list" class="fr-m-0 fr-p-0">
-        <li v-for="(dataset, index) in datasetsProperties" :key="index">
+        <li
+          v-for="(dataset, index) in datasetsProperties"
+          v-show="!dataset.isHidden"
+          :key="index"
+        >
           <div class="dataset__header fr-px-2w fr-py-3v">
             <slot name="datasetTitle">
               <component :is="headingLevel" class="dataset__title">

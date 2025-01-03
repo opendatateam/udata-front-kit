@@ -121,13 +121,27 @@ export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
     if (!searchQuery.value) return datasetsProperties.value
 
     const searchValue = searchQuery.value.toLowerCase()
-    return datasetsProperties.value.filter((dataset) => {
-      return (
+
+    return datasetsProperties.value.map((dataset) => ({
+      ...dataset,
+      isHidden: !(
         dataset.title.toLowerCase().includes(searchValue) ||
         (dataset.purpose && dataset.purpose.toLowerCase().includes(searchValue))
       )
-    })
+    }))
   })
+
+  // Check if a specific group only contains hidden datasets
+  const isGroupOnlyHidden = (groupName: string) => {
+    if (groupName === NO_GROUP) {
+      return filteredDatasets.value
+        .filter((dataset) => !dataset.group)
+        .every((dataset) => dataset.isHidden)
+    }
+    return filteredDatasets.value
+      .filter((dataset) => dataset.group === groupName)
+      .every((dataset) => dataset.isHidden)
+  }
 
   // apply search query
   const filterDatasetsProperties = useDebounceFn((value: string) => {
@@ -137,6 +151,7 @@ export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
   return {
     isFiltering,
     filterDatasetsProperties,
-    filteredDatasets
+    filteredDatasets,
+    isGroupOnlyHidden
   }
 }

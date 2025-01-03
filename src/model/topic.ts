@@ -22,6 +22,7 @@ export interface DatasetProperties {
   availability: Availability
   group?: string
   // those are "local" properties, not stored on data.gouv.fr
+  isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
 }
