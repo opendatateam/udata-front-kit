@@ -158,7 +158,11 @@ onMounted(() => {
     >
       <summary class="fr-py-3v fr-px-2w">Sommaire</summary>
       <ul role="list">
-        <li v-for="[group] in filteredResults" :key="group">
+        <li
+          v-for="[group] in filteredResults"
+          v-show="!isGroupOnlyHidden(group)"
+          :key="group"
+        >
           <a :href="`#${basicSlugify(group)}-summary`">{{ group }}</a>
         </li>
       </ul>
