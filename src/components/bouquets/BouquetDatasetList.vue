@@ -169,7 +169,12 @@ onMounted(() => {
     </details>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
-        <li v-for="[group, datasets] in filteredResults" :key="group">
+        <!-- checking twice to avoid empty li and to reduce dom size -->
+        <li
+          v-for="[group, datasets] in filteredResults"
+          v-show="datasets.length && !isGroupOnlyHidden(group)"
+          :key="group"
+        >
           <BouquetGroup
             v-if="datasets.length && !isGroupOnlyHidden(group)"
             :group-name="group"
