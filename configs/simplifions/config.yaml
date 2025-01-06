@@ -207,7 +207,7 @@ website:
         list_all: true
         display_metadata: false
         activate_read_more: false
-        dataset_editorialization: true
+        dataset_editorialization: false
         geozones: false
         can_add:
           everyone: true
@@ -290,7 +290,7 @@ website:
         list_all: true
         display_metadata: true
         activate_read_more: false
-        dataset_editorialization: true
+        dataset_editorialization: false
         geozones: false
         can_add:
           everyone: true
@@ -365,6 +365,18 @@ website:
                 tag: spf-moyens-editeur
           - name: 'Type de solutions :'
             tag: type-solutions
+            label_for_all: Tous les types de solutions
+            edit_multiple: true
+            filter_multiple: true
+            values:
+              - name: API
+                tag: spf-solution-api
+              - name: Formulaire en ligne
+                tag: spf-solution-formulaire-en-ligne
+              - name: Portail de données
+                tag: spf-solution-portail-de-donnees
+          - name: 'Caractéristiques :'
+            tag: caracteristiques
             label_for_all: Tous les types de solutions
             edit_multiple: true
             filter_multiple: true
