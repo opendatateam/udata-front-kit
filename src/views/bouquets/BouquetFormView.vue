@@ -12,7 +12,6 @@ import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import { NoOptionSelected } from '@/model/theme'
 import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
@@ -43,12 +42,14 @@ const {
 
 const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
   private: true,
-  tags: [config.universe.name],
+  // FIXME: compute from routeQuery with prefix and subprefix
+  tags: [
+    config.universe.name,
+    ...[routeQuery.theme, routeQuery.subtheme].filter((v) => !!v)
+  ],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
     [topicsExtrasKey]: {
-      theme: routeQuery.theme || NoOptionSelected,
-      subtheme: routeQuery.subtheme || NoOptionSelected,
       datasets_properties: []
     }
   }
