@@ -38,7 +38,7 @@ const resourceStore = useResourceStore()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-const dataset = computed(() => datasetStore.get(indicatorId))
+const indicator = computed(() => datasetStore.get(indicatorId))
 
 const resources = ref<Record<string, ResourceDataWithQuery>>({})
 const selectedTabIndex = ref(0)
@@ -54,7 +54,7 @@ const setAccessibilityProperties = inject(
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
   { to: '/datasets', text: 'Données' },
-  { text: dataset.value?.title || '' }
+  { text: indicator.value?.title || '' }
 ])
 
 const tabTitles = computed(() => {
@@ -73,10 +73,10 @@ const tabTitles = computed(() => {
 
 const activeTab = ref(0)
 
-const description = computed(() => descriptionFromMarkdown(dataset))
+const description = computed(() => descriptionFromMarkdown(indicator))
 
 const showHarvestQualityWarning = computed(() => {
-  const backend = dataset.value?.harvest?.backend
+  const backend = indicator.value?.harvest?.backend
   const warningBackends =
     config.website.datasets.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
@@ -86,21 +86,21 @@ onMounted(() => {
   datasetStore
     .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(dataset.value?.title)
+      setAccessibilityProperties(indicator.value?.title)
     })
 })
 
 // launch reuses and discussions fetch as soon as we have the technical id
 watch(
-  dataset,
+  indicator,
   async () => {
-    if (!dataset.value) return
+    if (!indicator.value) return
     // fetch ressources if need be
-    if (dataset.value.resources.rel) {
+    if (indicator.value.resources.rel) {
       const resourceLoader = useLoading().show({ enforceFocus: false })
       const allResources = (await resourceStore.loadResources(
-        dataset.value.id,
-        dataset.value.resources
+        indicator.value.id,
+        indicator.value.resources
       )) as ResourceDataWithQuery[]
       for (const typedResources of allResources) {
         resources.value[typedResources.type.id] = { ...typedResources }
@@ -109,9 +109,9 @@ watch(
       }
       resourceLoader.hide()
     } else {
-      throw Error('Unsupported dataset.resources format')
+      throw Error('Unsupported indicator.resources format')
     }
-    license.value = await datasetStore.getLicense(dataset.value.license)
+    license.value = await datasetStore.getLicense(indicator.value.license)
   },
   { immediate: true }
 )
@@ -121,10 +121,10 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="dataset">
+  <GenericContainer v-if="indicator">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
-        <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
+        <h1 class="fr-mb-2v">{{ indicator.title }}</h1>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
@@ -133,13 +133,13 @@ watch(
       <div class="fr-col-12 fr-col-md-4">
         <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
         <div
-          v-if="dataset.organization"
+          v-if="indicator.organization"
           class="fr-grid-row fr-grid-row--middle"
         >
           <div class="fr-col-auto">
             <div class="border fr-p-1-5v fr-mr-1-5v">
               <img
-                :src="dataset.organization.logo"
+                :src="indicator.organization.logo"
                 alt=""
                 loading="lazy"
                 height="32"
@@ -147,19 +147,19 @@ watch(
             </div>
           </div>
           <p class="fr-col fr-m-0">
-            <a class="fr-link" :href="dataset.organization.page">
+            <a class="fr-link" :href="indicator.organization.page">
               <OrganizationNameWithCertificate
-                :organization="dataset.organization"
+                :organization="indicator.organization"
               />
             </a>
           </p>
         </div>
-        <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">
+        <div v-if="indicator.harvest?.remote_url" class="fr-my-3v fr-text--sm">
           <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
             <p class="fr-grid-row fr-grid-row--middle fr-my-0">
               Ce jeu de données provient d'un portail externe.
               <AppLink
-                :to="dataset.harvest.remote_url"
+                :to="indicator.harvest.remote_url"
                 target="_blank"
                 rel="noopener nofollow"
                 >Voir la source originale.</AppLink
@@ -168,7 +168,7 @@ watch(
           </div>
         </div>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <p>{{ formatDate(dataset.last_update) }}</p>
+        <p>{{ formatDate(indicator.last_update) }}</p>
         <div v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
           <p class="fr-text--sm fr-mt-0 fr-mb-3v">
@@ -181,7 +181,7 @@ watch(
         </div>
         <QualityComponent
           v-if="config.website.show_quality_component"
-          :quality="dataset.quality"
+          :quality="indicator.quality"
         />
         <div
           v-if="showHarvestQualityWarning"
@@ -209,7 +209,7 @@ watch(
           <DatasetAddToBouquetModal
             v-if="showAddToBouquetModal"
             v-model:show="showAddToBouquetModal"
-            :dataset="dataset"
+            :dataset="indicator"
           />
         </div>
       </div>
@@ -230,29 +230,29 @@ watch(
 
       <!-- Réutilisations -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
-        <ReusesList model="dataset" :object-id="dataset.id" />
+        <ReusesList model="dataset" :object-id="indicator.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <DiscussionsList :subject="dataset" />
+        <DiscussionsList :subject="indicator" />
       </DsfrTabContent>
 
       <!-- Informations -->
       <DsfrTabContent
-        v-show="dataset && license"
+        v-show="indicator && license"
         panel-id="tab-content-3"
         tab-id="tab-3"
       >
         <ExtendedInformationPanel
           v-if="
-            config.website.datasets.show_extended_information_panel && dataset
+            config.website.datasets.show_extended_information_panel && indicator
           "
-          :dataset="dataset"
+          :dataset="indicator"
         />
         <InformationPanel
-          v-if="dataset && license"
-          :dataset="dataset"
+          v-if="indicator && license"
+          :dataset="indicator"
           :license="license"
         />
       </DsfrTabContent>
