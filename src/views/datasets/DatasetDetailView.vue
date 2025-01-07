@@ -10,7 +10,6 @@ import {
 } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, watch } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -23,10 +22,8 @@ import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import type { ResourceDataWithQuery } from '@/model/resource'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
-import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
@@ -35,13 +32,11 @@ const route = useRouteParamsAsString()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
-const resourceStore = useResourceStore()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
-const resources = ref<Record<string, ResourceDataWithQuery>>({})
 const selectedTabIndex = ref(0)
 const license = ref<License>()
 const showAddToBouquetModal = ref(false)
@@ -102,27 +97,10 @@ onMounted(() => {
     })
 })
 
-// launch reuses and discussions fetch as soon as we have the technical id
 watch(
   dataset,
   async () => {
     if (!dataset.value) return
-    // fetch ressources if need be
-    if (dataset.value.resources.rel) {
-      const resourceLoader = useLoading().show({ enforceFocus: false })
-      const allResources = (await resourceStore.loadResources(
-        dataset.value.id,
-        dataset.value.resources
-      )) as ResourceDataWithQuery[]
-      for (const typedResources of allResources) {
-        resources.value[typedResources.type.id] = { ...typedResources }
-        resources.value[typedResources.type.id].totalWithoutFilter =
-          typedResources.total
-      }
-      resourceLoader.hide()
-    } else {
-      throw Error('Unsupported dataset.resources format')
-    }
     license.value = await datasetStore.getLicense(dataset.value.license)
   },
   { immediate: true }
@@ -234,9 +212,13 @@ watch(
       :tab-titles="tabTitles"
     >
       <!-- Fichiers -->
-      <DsfrTabContent v-if="resources" panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent
+        v-if="dataset.resources.total"
+        panel-id="tab-content-0"
+        tab-id="tab-0"
+      >
         <div v-if="selectedTabIndex === 0">
-          <ResourcesList :resources="resources" :dataset-id="datasetId" />
+          <ResourcesList :dataset="dataset" />
         </div>
       </DsfrTabContent>
 

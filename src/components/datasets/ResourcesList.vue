@@ -1,27 +1,25 @@
 <script setup lang="ts">
 import config from '@/config'
-import { type ResourceDataWithQuery } from '@/model/resource'
+import type { ResourceData } from '@/model/resource'
 import { useResourceStore } from '@/store/ResourceStore'
 import { Pagination, ResourceAccordion } from '@datagouv/components'
-import { toRef } from 'vue'
+import type { DatasetV2 } from '@datagouv/components/ts'
+import { useLoading } from 'vue-loading-overlay'
 
 const pageSize = config.website.pagination_sizes.files_list as number
 
 const props = defineProps({
-  datasetId: {
-    type: String,
-    required: true
-  },
-  resources: {
-    type: Object as () => Record<string, ResourceDataWithQuery>,
+  dataset: {
+    type: Object as () => DatasetV2,
     required: true
   }
 })
 
-const localResources = toRef(props, 'resources')
 const resourceStore = useResourceStore()
+const resources = ref<Record<string, ResourceData>>({})
+const queries = ref<Record<string, string>>({})
 
-const getResourcesTitle = (typedResources: ResourceDataWithQuery) => {
+const getResourcesTitle = (typedResources: ResourceData) => {
   if (typedResources?.total > 1) {
     let pluralName
     switch (typedResources.type.id) {
@@ -53,28 +51,45 @@ const getResourcesTitle = (typedResources: ResourceDataWithQuery) => {
 }
 
 const updateQuery = (q: string, typeId: string) => {
-  localResources.value[typeId].query = q
+  queries.value[typeId] = q
   changePage(typeId, 1, q)
 }
 
 const doSearch = (typeId: string) => {
-  changePage(typeId, 1, localResources.value[typeId].query)
+  changePage(typeId, 1, queries.value[typeId])
 }
 
-const changePage = (type: string, page = 1, query = '') => {
-  localResources.value[type].currentPage = page
-  localResources.value[type].query = query
-  return resourceStore
-    .fetchDatasetResources(props.datasetId, type, page, query)
-    .then((data) => {
-      localResources.value[type].resources = data.data
-      localResources.value[type].total = data.total
-    })
+const changePage = async (type: string, page = 1, query = '') => {
+  resources.value[type].currentPage = page
+  queries.value[type] = query
+  const data = await resourceStore.fetchDatasetResources(
+    props.dataset.id,
+    type,
+    page,
+    query
+  )
+  resources.value[type].resources = data.data
+  resources.value[type].total = data.total
 }
+
+onMounted(async () => {
+  // fetch ressources
+  const resourceLoader = useLoading().show({ enforceFocus: false })
+  const allResources = await resourceStore.loadResources(
+    props.dataset.id,
+    props.dataset.resources
+  )
+  for (const typedResources of allResources) {
+    resources.value[typedResources.type.id] = { ...typedResources }
+    resources.value[typedResources.type.id].totalWithoutFilter =
+      typedResources.total
+  }
+  resourceLoader.hide()
+})
 </script>
 
 <template>
-  <template v-for="typedResources in localResources">
+  <template v-for="typedResources in resources">
     <div
       v-if="typedResources.totalWithoutFilter"
       :key="typedResources.type.id"
@@ -99,7 +114,7 @@ const changePage = (type: string, page = 1, query = '') => {
         <ResourceAccordion
           v-for="resource in typedResources.resources"
           :key="resource.id"
-          :dataset-id="datasetId"
+          :dataset-id="dataset.id"
           :resource="resource"
         />
         <Pagination
@@ -110,7 +125,11 @@ const changePage = (type: string, page = 1, query = '') => {
           :total-results="typedResources.total"
           @change="
             (page) =>
-              changePage(typedResources.type.id, page, typedResources.query)
+              changePage(
+                typedResources.type.id,
+                page,
+                queries[typedResources.type.id]
+              )
           "
         />
       </span>
