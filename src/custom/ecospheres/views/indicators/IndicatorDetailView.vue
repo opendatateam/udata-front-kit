@@ -5,7 +5,6 @@ import {
   OrganizationNameWithCertificate,
   QualityComponent,
   ReadMore,
-  Well,
   type License
 } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
@@ -46,7 +45,6 @@ const selectedTabIndex = ref(0)
 const license = ref<License>()
 const showAddToBouquetModal = ref(false)
 
-const showDiscussions = config.website.discussions.dataset.display as boolean
 const { topicsName } = useTopicsConf()
 
 const setAccessibilityProperties = inject(
@@ -83,16 +81,6 @@ const showHarvestQualityWarning = computed(() => {
     config.website.datasets.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
 })
-
-const discussionWellTitle = showDiscussions
-  ? 'Participer aux discussions'
-  : 'Voir les discussions'
-const discussionWellDescription = showDiscussions
-  ? 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour participer aux discussions.'
-  : 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
-
-const openDataGouvDiscussions = () =>
-  window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
 
 onMounted(() => {
   datasetStore
@@ -247,30 +235,7 @@ watch(
 
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <Well
-          v-if="!config.website.discussions.dataset.create"
-          color="blue-cumulus"
-          weight="regular"
-        >
-          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
-            <div class="fr-col-12 fr-col-lg-8">
-              <p class="fr-text--bold fr-mb-0">{{ discussionWellTitle }}</p>
-              <p class="fr-text--alt fr-text--sm f-italic fr-m-0">
-                {{ discussionWellDescription }}
-              </p>
-            </div>
-            <div class="fr-col-12 fr-col-lg-4 text-align-right">
-              <DsfrButton
-                label="Voir les discussions sur data.gouv.fr"
-                icon="fr-icon-external-link-line"
-                size="sm"
-                :icon-right="true"
-                @click="openDataGouvDiscussions"
-              />
-            </div>
-          </div>
-        </Well>
-        <DiscussionsList v-if="showDiscussions" :subject="dataset" />
+        <DiscussionsList :subject="dataset" />
       </DsfrTabContent>
 
       <!-- Informations -->
