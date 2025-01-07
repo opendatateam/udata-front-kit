@@ -264,3 +264,27 @@ indicators:
           name: Atténuation
         - id: biodiversite
           name: Biodiversité
+    - name: Levier
+      id: levier
+      color: green-archipel
+      values:
+        - id: gestion-forets
+          name: Gestion des forêts et produits bois
+        - id: fertilisation
+          name: Changements de pratiques de fertilisation azotée
+        - id: elevage
+          name: Elevage durable
+        - id: haies
+          name: Gestion des haies
+    - name: Secteur
+      id: secteur
+      color: purple-glycine
+      values:
+        - id: agriculture
+          name: Agriculture, Forêts et Sols
+        - id: alimentation
+          name: Alimentation
+        - id: batiment
+          name: Bâtiment
+        - id: dechets
+          name: Déchets

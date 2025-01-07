@@ -77,6 +77,24 @@ watchEffect(() => {
       />
     </div>
     <div class="fr-select-group">
+      <SelectComponent
+        default-option="Tous les secteurs"
+        :label="filtersConf.secteur.name"
+        :options="filtersConf.secteur.values"
+        :model-value="props.secteur"
+        @update:model-value="(value) => switchFilter('secteur', value)"
+      />
+    </div>
+    <div class="fr-select-group">
+      <SelectComponent
+        default-option="Tous les leviers"
+        :label="filtersConf.levier.name"
+        :options="filtersConf.levier.values"
+        :model-value="props.levier"
+        @update:model-value="(value) => switchFilter('levier', value)"
+      />
+    </div>
+    <div class="fr-select-group">
       <label class="fr-label" for="select-spatial-coverage"
         >Couverture territoriale</label
       >

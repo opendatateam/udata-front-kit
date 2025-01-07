@@ -64,6 +64,7 @@ export const useTags = (indicator: Indicator): ComputedRef<IndicatorTag[]> => {
   })
 }
 
+// FIXME: some tag have multiple values (e.g. enjeux), use useTags with a filter instead
 export const useTag = (
   indicator: Indicator | undefined,
   type: string
