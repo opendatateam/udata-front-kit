@@ -5,11 +5,10 @@ import {
   OrganizationNameWithCertificate,
   QualityComponent,
   ReadMore,
-  Well,
-  type License
+  Well
 } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -27,6 +26,7 @@ import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
+import { useLicense } from '@/utils/dataset'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
@@ -38,7 +38,6 @@ const { canAddBouquet } = storeToRefs(userStore)
 const dataset = computed(() => datasetStore.get(datasetId))
 
 const selectedTabIndex = ref(0)
-const license = ref<License>()
 const showAddToBouquetModal = ref(false)
 
 const showDiscussions = config.website.discussions.dataset.display as boolean
@@ -71,6 +70,7 @@ const tabTitles = computed(() => {
 const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(dataset))
+const license = useLicense(dataset)
 
 const showHarvestQualityWarning = computed(() => {
   const backend = dataset.value?.harvest?.backend
@@ -96,15 +96,6 @@ onMounted(() => {
       setAccessibilityProperties(dataset.value?.title)
     })
 })
-
-watch(
-  dataset,
-  async () => {
-    if (!dataset.value) return
-    license.value = await datasetStore.getLicense(dataset.value.license)
-  },
-  { immediate: true }
-)
 </script>
 
 <template>
