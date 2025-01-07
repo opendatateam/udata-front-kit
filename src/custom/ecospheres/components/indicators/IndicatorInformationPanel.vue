@@ -1,24 +1,48 @@
+<script setup lang="ts">
+import type { DatasetV2 } from '@datagouv/components'
+import { useTag } from '../../utils/indicator'
+import InformationPanelItem from './informations/InformationPanelItem.vue'
+import InformationPanelSection from './informations/InformationPanelSection.vue'
+
+defineProps({
+  indicator: {
+    type: Object as () => DatasetV2,
+    required: true
+  }
+})
+</script>
+
 <template>
-  <!-- TODO: split in subcomponents with slots, markup mayhem -->
-  <div class="fr-py-3w fr-mb-3w border-bottom border-default-grey">
-    <h2 class="subtitle subtitle--uppercase">Informations étendues</h2>
-    <div class="fr-text--sm fr-m-0">
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
-          <h3 class="subtitle fr-mb-1v">Conditions d'accès et d'utilisation</h3>
-          <p class="fr-text--sm fr-m-0 text-mention-grey">Coucou</p>
-        </div>
-        <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
-          <h3 class="subtitle fr-mb-1v">Point de contact</h3>
-          <p class="fr-text--sm fr-m-0 text-mention-grey">
-            alexandre@datagouv.fr
-          </p>
-        </div>
-        <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
-          <h3 class="subtitle fr-mb-1v">Généalogie</h3>
-          <p class="fr-text--sm fr-m-0 text-mention-grey">Old</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <InformationPanelSection title="Catégorisation">
+    <template #description
+      >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
+      gravida.</template
+    >
+    <InformationPanelItem
+      title="Thématique"
+      :value="useTag(indicator, 'theme').value?.value"
+    />
+    <InformationPanelItem
+      title="Levier"
+      :value="useTag(indicator, 'levier').value?.value"
+    />
+    <InformationPanelItem
+      title="Enjeu"
+      :value="useTag(indicator, 'enjeu').value?.value"
+    />
+    <InformationPanelItem
+      title="Chantier"
+      :value="useTag(indicator, 'chantier').value?.value"
+    />
+    <InformationPanelItem
+      title="Secteur"
+      :value="useTag(indicator, 'secteur').value?.value"
+    />
+  </InformationPanelSection>
 </template>
+
+<style scoped>
+:deep(.subtitle) {
+  font-size: 1rem;
+}
+</style>

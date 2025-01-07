@@ -107,7 +107,7 @@ onMounted(() => {
     >
       <!-- Informations -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
-        <IndicatorInformationPanel />
+        <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Fichiers -->
