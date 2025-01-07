@@ -12,27 +12,38 @@ export const routes = [
   },
   {
     path: '/indicators',
-    name: 'indicators',
-    meta: {
-      title: 'Indicateurs'
-    },
-    props: (route: RouteLocationNormalizedLoaded) => {
-      const filterProps = FILTER_KEYS.reduce(
-        (acc, key) => ({
-          ...acc,
-          [key]: route.query[key] || null
-        }),
-        {}
-      )
-      return {
-        query: route.query.q,
-        geozone: route.query.geozone || null,
-        page: route.query.page || null,
-        sort: route.query.sort || null,
-        ...filterProps
+    children: [
+      {
+        path: '',
+        name: 'indicators',
+        meta: {
+          title: 'Indicateurs'
+        },
+        component: async () =>
+          await import('./views/indicators/IndicatorsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => {
+          const filterProps = FILTER_KEYS.reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: route.query[key] || null
+            }),
+            {}
+          )
+          return {
+            query: route.query.q,
+            geozone: route.query.geozone || null,
+            page: route.query.page || null,
+            sort: route.query.sort || null,
+            ...filterProps
+          }
+        }
+      },
+      {
+        path: ':iid',
+        name: 'indicator_detail',
+        component: async () =>
+          await import('./views/indicators/IndicatorDetailView.vue')
       }
-    },
-    component: async () =>
-      await import('./views/indicators/IndicatorsListView.vue')
+    ]
   }
 ]

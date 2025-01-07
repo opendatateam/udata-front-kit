@@ -26,7 +26,7 @@ const tags = useTags(props.indicator)
         </ul>
         <h3 class="fr-card__title fr-mb-1w">
           <RouterLink
-            :to="{ name: 'dataset_detail', params: { did: indicator.id } }"
+            :to="{ name: 'indicator_detail', params: { iid: indicator.id } }"
             >{{ indicator.title }}</RouterLink
           >
         </h3>

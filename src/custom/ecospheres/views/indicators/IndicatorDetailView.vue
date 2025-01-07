@@ -32,14 +32,14 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const route = useRouteParamsAsString()
-const datasetId = route.params.did
+const indicatorId = route.params.iid
 
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-const dataset = computed(() => datasetStore.get(datasetId))
+const dataset = computed(() => datasetStore.get(indicatorId))
 
 const resources = ref<Record<string, ResourceDataWithQuery>>({})
 const selectedTabIndex = ref(0)
@@ -96,7 +96,7 @@ const openDataGouvDiscussions = () =>
 
 onMounted(() => {
   datasetStore
-    .load(datasetId, { toasted: false, redirectNotFound: true })
+    .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(dataset.value?.title)
     })
@@ -236,7 +236,7 @@ watch(
       <!-- Fichiers -->
       <DsfrTabContent v-if="resources" panel-id="tab-content-0" tab-id="tab-0">
         <div v-if="selectedTabIndex === 0">
-          <ResourcesList :resources="resources" :dataset-id="datasetId" />
+          <ResourcesList :resources="resources" :dataset-id="indicatorId" />
         </div>
       </DsfrTabContent>
 
