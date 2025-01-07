@@ -53,19 +53,12 @@ const links = computed(() => [
   { text: dataset.value?.title || '' }
 ])
 
-const tabTitles = computed(() => {
-  const _tabs = [
-    { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-    { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
-    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' }
-  ]
-  _tabs.push({
-    title: 'Informations',
-    tabId: 'tab-3',
-    panelId: 'tab-content-3'
-  })
-  return _tabs
-})
+const tabTitles = [
+  { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
+  { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
+  { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
+  { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
+]
 
 const activeTab = ref(0)
 
@@ -247,11 +240,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent
-        v-show="dataset && license"
-        panel-id="tab-content-3"
-        tab-id="tab-3"
-      >
+      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
         <ExtendedInformationPanel
           v-if="
             config.website.datasets.show_extended_information_panel && dataset

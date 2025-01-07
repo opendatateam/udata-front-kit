@@ -38,19 +38,18 @@ const links = computed(() => [
   { text: indicator.value?.title || '' }
 ])
 
-const tabTitles = computed(() => {
-  const _tabs = [
-    { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-    { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
-    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' }
-  ]
-  _tabs.push({
-    title: 'Informations',
-    tabId: 'tab-3',
-    panelId: 'tab-content-3'
-  })
-  return _tabs
-})
+const tabTitles = [
+  { title: 'Informations', tabId: 'tab-0', panelId: 'tab-content-0' },
+  { title: 'Fichiers et API', tabId: 'tab-1', panelId: 'tab-content-1' },
+  {
+    title: 'Réutilisations et bouquets',
+    tabId: 'tab-2',
+    panelId: 'tab-content-2'
+  },
+  { title: 'Discussions', tabId: 'tab-3', panelId: 'tab-content-3' },
+  { title: 'Sources', tabId: 'tab-4', panelId: 'tab-content-4' },
+  { title: 'Métadonnées', tabId: 'tab-5', panelId: 'tab-content-5' }
+]
 
 const activeTab = ref(0)
 
@@ -105,11 +104,38 @@ onMounted(() => {
       tab-list-name="Groupes d'attributs du jeu de données"
       :tab-titles="tabTitles"
     >
+      <!-- Informations -->
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+        <div class="fr-py-3w fr-mb-3w border-bottom border-default-grey">
+          <h2 class="subtitle subtitle--uppercase">Informations étendues</h2>
+          <div class="fr-text--sm fr-m-0">
+            <div class="fr-grid-row fr-grid-row--gutters">
+              <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                <h3 class="subtitle fr-mb-1v">
+                  Conditions d'accès et d'utilisation
+                </h3>
+                <p class="fr-text--sm fr-m-0 text-mention-grey">Coucou</p>
+              </div>
+              <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                <h3 class="subtitle fr-mb-1v">Point de contact</h3>
+                <p class="fr-text--sm fr-m-0 text-mention-grey">
+                  alexandre@datagouv.fr
+                </p>
+              </div>
+              <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+                <h3 class="subtitle fr-mb-1v">Généalogie</h3>
+                <p class="fr-text--sm fr-m-0 text-mention-grey">Old</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </DsfrTabContent>
+
       <!-- Fichiers -->
       <DsfrTabContent
         v-if="indicator.resources.total"
-        panel-id="tab-content-0"
-        tab-id="tab-0"
+        panel-id="tab-content-1"
+        tab-id="tab-1"
       >
         <div v-if="selectedTabIndex === 0">
           <ResourcesList :dataset="indicator" />
@@ -117,21 +143,22 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
         <ReusesList model="dataset" :object-id="indicator.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
         <DiscussionsList :subject="indicator" />
       </DsfrTabContent>
 
-      <!-- Informations -->
-      <DsfrTabContent
-        v-show="indicator"
-        panel-id="tab-content-3"
-        tab-id="tab-3"
-      >
+      <!-- Sources -->
+      <DsfrTabContent panel-id="tab-content-4" tab-id="tab-4">
+        Sources
+      </DsfrTabContent>
+
+      <!-- Métadonnées -->
+      <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
         <InformationPanel
           v-if="indicator && license"
           :dataset="indicator"
