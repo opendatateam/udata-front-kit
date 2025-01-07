@@ -56,7 +56,7 @@ const setAccessibilityProperties = inject(
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
   { to: '/datasets', text: 'Données' },
-  { text: dataset.value?.title }
+  { text: dataset.value?.title || '' }
 ])
 
 const tabTitles = computed(() => {
