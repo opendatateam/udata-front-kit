@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     required: true
@@ -7,13 +7,22 @@ defineProps({
   value: {
     type: String,
     default: '-'
+  },
+  isRow: {
+    type: Boolean,
+    default: false
   }
 })
+
+const _class = props.isRow
+  ? ['fr-col-12']
+  : ['fr-col-12', 'fr-col-sm-6', 'fr-col-md-4']
 </script>
 
 <template>
-  <div class="fr-col-12 fr-col-sm-6 fr-col-md-4">
+  <div :class="_class">
     <h3 class="subtitle fr-mb-2v">{{ title }}</h3>
-    <p class="fr-m-0">{{ value }}</p>
+    <slot v-if="$slots.default"></slot>
+    <p v-else class="fr-m-0">{{ value }}</p>
   </div>
 </template>

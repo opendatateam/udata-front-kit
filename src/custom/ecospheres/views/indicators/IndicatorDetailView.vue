@@ -14,9 +14,11 @@ import {
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
-import { descriptionFromMarkdown, formatDate } from '@/utils'
+import { descriptionFromMarkdown } from '@/utils'
 import { useLicense } from '@/utils/dataset'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
+import IndicatorTag from '../../components/indicators/IndicatorTag.vue'
+import { useTag } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.iid
@@ -80,8 +82,14 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <p>{{ formatDate(indicator.last_update) }}</p>
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Thématique</h2>
+        <IndicatorTag :tag="useTag(indicator, 'theme').value" />
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Chantier</h2>
+        <IndicatorTag :tag="useTag(indicator, 'chantier').value" />
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
+        <IndicatorTag :tag="useTag(indicator, 'maille').value" />
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
+        <IndicatorTag :tag="useTag(indicator, 'unite').value" />
         <div v-if="userStore.loggedIn">
           <DsfrButton
             class="fr-mt-2w"

@@ -2,6 +2,7 @@
 import { stripFromMarkdown } from '@/utils'
 import type { Indicator } from '../../model/indicator'
 import { useTags } from '../../utils/indicator'
+import IndicatorTag from './IndicatorTag.vue'
 
 const props = defineProps({
   indicator: {
@@ -19,9 +20,7 @@ const tags = useTags(props.indicator)
       <div class="fr-card__content">
         <ul class="fr-badges-group fr-mb-1w">
           <li v-for="tag in tags" :key="`${tag.type}-${tag.value}`">
-            <p :class="['fr-badge', `fr-badge--${tag.color}`]">
-              {{ tag.value }}
-            </p>
+            <IndicatorTag :tag="tag" />
           </li>
         </ul>
         <h3 class="fr-card__title fr-mb-1w">

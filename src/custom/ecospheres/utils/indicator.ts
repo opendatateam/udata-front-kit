@@ -65,10 +65,11 @@ export const useTags = (indicator: Indicator): ComputedRef<IndicatorTag[]> => {
 }
 
 export const useTag = (
-  indicator: Indicator,
+  indicator: Indicator | undefined,
   type: string
 ): ComputedRef<IndicatorTag | undefined> => {
   return computed(() => {
+    if (!indicator) return
     return useTags(indicator).value.find((tag) => tag.type === type)
   })
 }
