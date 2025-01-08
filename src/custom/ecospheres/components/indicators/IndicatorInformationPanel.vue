@@ -37,10 +37,10 @@ const spatialCoverage = useSpatialCoverage(indicator)
       title="Enjeu"
       :value="useTag(indicator, 'enjeu').value?.value"
     />
-    <InformationPanelItem
+    <!-- <InformationPanelItem
       title="Chantier"
       :value="useTag(indicator, 'chantier').value?.value"
-    />
+    /> -->
     <InformationPanelItem
       title="Secteur"
       :value="useTag(indicator, 'secteur').value?.value"

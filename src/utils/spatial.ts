@@ -43,7 +43,7 @@ export function useSpatialCoverage(
 }
 
 export const useSpatialGranularity = (
-  dataset: DatasetV2
+  dataset: Ref<DatasetV2 | undefined>
 ): Ref<SpatialCoverageLevel | undefined> => {
   const level = ref<SpatialCoverageLevel | undefined>(undefined)
   const store = useSpatialStore()
@@ -51,8 +51,8 @@ export const useSpatialGranularity = (
   watch(
     dataset,
     () => {
-      if (dataset.spatial?.granularity) {
-        level.value = store.getLevelById(dataset.spatial.granularity)
+      if (dataset.value?.spatial?.granularity) {
+        level.value = store.getLevelById(dataset.value.spatial.granularity)
       }
     },
     { immediate: true }

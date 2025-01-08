@@ -59,6 +59,7 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 const license = useLicense(indicator)
+const spatialGranularity = useSpatialGranularity(indicator)
 
 onMounted(() => {
   datasetStore
@@ -84,11 +85,12 @@ onMounted(() => {
       </div>
       <div class="fr-col-12 fr-col-md-4">
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Thématique</h2>
+        <!-- TODO: move useTag logic to component and use a computed ref for argument -->
         <IndicatorTag :tag="useTag(indicator, 'theme').value" />
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Chantier</h2>
-        <IndicatorTag :tag="useTag(indicator, 'chantier').value" />
+        <!-- <h2 class="subtitle fr-mt-3v fr-mb-1v">Chantier</h2>
+        <IndicatorTag :tag="useTag(indicator, 'chantier').value" /> -->
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
-        <p>{{ useSpatialGranularity(indicator).value?.name }}</p>
+        <p>{{ spatialGranularity?.name || '-' }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
         <IndicatorTag :tag="useTag(indicator, 'unite').value" />
         <div v-if="userStore.loggedIn">
