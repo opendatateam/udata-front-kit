@@ -458,6 +458,10 @@ website:
         id: 'dlnuf'
         route: '/dlnuf'
         url: '/simplifions/pages/dlnuf.md'
+      - title: Simplifier le sourcing des marchés publics avec API Entreprise
+        id: '/api-entreprise_cas-usage_marches_public_sourcing'
+        route: '/api-entreprise_cas-usage_marches_public_sourcing'
+        url: '/simplifions/pages/api-entreprise_cas-usage_marches_public_sourcing.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
