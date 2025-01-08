@@ -1,8 +1,13 @@
 import { ref, watch, type Ref } from 'vue'
 
-import type { SpatialCoverage, SpatialField } from '@/model/spatial'
+import type {
+  SpatialCoverage,
+  SpatialCoverageLevel,
+  SpatialField
+} from '@/model/spatial'
 import type { Topic, TopicPostData } from '@/model/topic'
 import SpatialAPI from '@/services/api/SpatialAPI'
+import { useSpatialStore } from '@/store/SpatialStore'
 import type { DatasetV2 } from '@datagouv/components'
 
 export const getZoneFromSpatial = async (
@@ -35,4 +40,22 @@ export function useSpatialCoverage(
   )
 
   return spatialCoverage
+}
+
+export const useSpatialGranularity = (
+  dataset: DatasetV2
+): Ref<SpatialCoverageLevel | undefined> => {
+  const level = ref<SpatialCoverageLevel | undefined>(undefined)
+  const store = useSpatialStore()
+  store.loadLevels()
+  watch(
+    dataset,
+    () => {
+      if (dataset.spatial?.granularity) {
+        level.value = store.getLevelById(dataset.spatial.granularity)
+      }
+    },
+    { immediate: true }
+  )
+  return level
 }

@@ -16,6 +16,7 @@ import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useLicense } from '@/utils/dataset'
+import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorTag from '../../components/indicators/IndicatorTag.vue'
 import { useTag } from '../../utils/indicator'
@@ -87,7 +88,7 @@ onMounted(() => {
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Chantier</h2>
         <IndicatorTag :tag="useTag(indicator, 'chantier').value" />
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
-        <IndicatorTag :tag="useTag(indicator, 'maille').value" />
+        <p>{{ useSpatialGranularity(indicator).value?.name }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
         <IndicatorTag :tag="useTag(indicator, 'unite').value" />
         <div v-if="userStore.loggedIn">
