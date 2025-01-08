@@ -288,3 +288,12 @@ indicators:
           name: Bâtiment
         - id: dechets
           name: Déchets
+    - name: Producteur source
+      # no - or  _ allowed here (won't play nice with tag or props)
+      id: producteur
+      color: orange-terre-battue
+      values:
+        - id: sdes
+          name: Services des données et études statistiques
+        - id: geovelo
+          name: Géovelo
