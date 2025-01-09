@@ -50,9 +50,8 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
     <InformationPanelItem title="Unité" :value="unite" />
     <InformationPanelItem title="Mailles" :value="mailles.join(', ')" />
 
-    <template v-for="(values, axis) in axes" :key="axis">
-      <InformationPanelItem title="Axe" :value="axis" />
-      <InformationPanelItem title="Valeurs de l'axe">
+    <template v-for="(values, axis, index) in axes" :key="axis">
+      <InformationPanelItem :title="`Axe n°${index + 1} - ${axis}`">
         <ul>
           <li v-for="value in values" :key="value">{{ value }}</li>
         </ul>
