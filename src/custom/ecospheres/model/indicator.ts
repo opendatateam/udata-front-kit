@@ -3,6 +3,9 @@ import type { DatasetV2 } from '@datagouv/components'
 export type IndicatorExtras = DatasetV2['extras'] & {
   unite: string
   mailles_geographiques: string[]
+  axes: {
+    [key: string]: string[]
+  }
 }
 
 export type Indicator = DatasetV2 & {

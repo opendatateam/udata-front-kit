@@ -17,7 +17,7 @@ const props = defineProps({
 
 const indicator = toRef(props, 'indicator')
 const spatialCoverage = useSpatialCoverage(indicator)
-const { unite, mailles } = useIndicatorExtras(indicator)
+const { unite, mailles, axes } = useIndicatorExtras(indicator)
 </script>
 
 <template>
@@ -49,16 +49,15 @@ const { unite, mailles } = useIndicatorExtras(indicator)
     >
     <InformationPanelItem title="Unité" :value="unite" />
     <InformationPanelItem title="Mailles" :value="mailles.join(', ')" />
-    <!-- TODO: get from extras -->
-    <InformationPanelItem title="Axes" />
-    <InformationPanelItem title="Valeur des axes">
-      <ul>
-        <li>xxx</li>
-        <li>xxx</li>
-        <li>xxx</li>
-        <li>xxx</li>
-      </ul>
-    </InformationPanelItem>
+
+    <template v-for="(values, axis) in axes" :key="axis">
+      <InformationPanelItem title="Axe" :value="axis" />
+      <InformationPanelItem title="Valeurs de l'axe">
+        <ul>
+          <li v-for="value in values" :key="value">{{ value }}</li>
+        </ul>
+      </InformationPanelItem>
+    </template>
   </InformationPanelSection>
 
   <!-- Couverture -->

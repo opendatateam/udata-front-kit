@@ -76,6 +76,7 @@ export const useTags = (
 export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const unite: Ref<string | undefined> = ref()
   const mailles: Ref<string[]> = ref([])
+  const axes: Ref<Record<string, string[]>> = ref({})
 
   const store = useSpatialStore()
   store.loadLevels()
@@ -89,6 +90,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
         mailles.value = (extras.mailles_geographiques || []).map(
           (m: string) => store.getLevelById(m)?.name
         )
+        axes.value = extras.axes
       }
     },
     { immediate: true }
@@ -96,6 +98,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
 
   return {
     unite,
-    mailles
+    mailles,
+    axes
   }
 }
