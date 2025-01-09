@@ -36,14 +36,19 @@ export const useTagsQuery = (
 
 /**
  * Extract and denormalize tags from an indicator
+ * TODO: make it more readable
  */
-export const useTags = (indicator: Indicator): ComputedRef<IndicatorTag[]> => {
+export const useTags = (
+  indicator: Indicator | undefined,
+  type?: string
+): ComputedRef<IndicatorTag[]> => {
   return computed(() => {
     return (
-      indicator.tags
+      indicator?.tags
         ?.map((tag) => {
           if (tag.startsWith(tagPrefix)) {
             for (const filter of filters) {
+              if (type && type !== filter.id) continue
               const filterPrefix = `${tagPrefix}-${filter.id}-`
               if (tag.startsWith(filterPrefix)) {
                 const value = tag.replace(filterPrefix, '')
@@ -61,16 +66,5 @@ export const useTags = (indicator: Indicator): ComputedRef<IndicatorTag[]> => {
         })
         .filter((v) => !!v) || []
     )
-  })
-}
-
-// FIXME: some tag have multiple values (e.g. enjeux), use useTags with a filter instead
-export const useTag = (
-  indicator: Indicator | undefined,
-  type: string
-): ComputedRef<IndicatorTag | undefined> => {
-  return computed(() => {
-    if (!indicator) return
-    return useTags(indicator).value.find((tag) => tag.type === type)
   })
 }

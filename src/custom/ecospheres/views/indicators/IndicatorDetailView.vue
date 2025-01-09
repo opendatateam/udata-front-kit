@@ -18,8 +18,7 @@ import { descriptionFromMarkdown } from '@/utils'
 import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
-import IndicatorTag from '../../components/indicators/IndicatorTag.vue'
-import { useTag } from '../../utils/indicator'
+import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.iid
@@ -85,14 +84,12 @@ onMounted(() => {
       </div>
       <div class="fr-col-12 fr-col-md-4">
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Thématique</h2>
-        <!-- TODO: move useTag logic to component and use a computed ref for argument -->
-        <IndicatorTag :tag="useTag(indicator, 'theme').value" />
-        <!-- <h2 class="subtitle fr-mt-3v fr-mb-1v">Chantier</h2>
-        <IndicatorTag :tag="useTag(indicator, 'chantier').value" /> -->
+        <IndicatorTags :indicator="indicator" type="theme" />
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
         <p>{{ spatialGranularity?.name || '-' }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
-        <IndicatorTag :tag="useTag(indicator, 'unite').value" />
+        <!-- TODO: use extra for this one -->
+        <!-- <IndicatorTag :tag="useTag(indicator, 'unite').value" /> -->
         <div v-if="userStore.loggedIn">
           <DsfrButton
             class="fr-mt-2w"

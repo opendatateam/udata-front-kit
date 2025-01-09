@@ -3,7 +3,7 @@ import { formatDate } from '@/utils'
 import { useSpatialCoverage } from '@/utils/spatial'
 import type { DatasetV2 } from '@datagouv/components'
 import { toRef } from 'vue'
-import { useTag } from '../../utils/indicator'
+import IndicatorTags from './IndicatorTags.vue'
 import InformationPanelItem from './informations/InformationPanelItem.vue'
 import InformationPanelSection from './informations/InformationPanelSection.vue'
 
@@ -25,26 +25,18 @@ const spatialCoverage = useSpatialCoverage(indicator)
       >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
       gravida.</template
     >
-    <InformationPanelItem
-      title="Thématique"
-      :value="useTag(indicator, 'theme').value?.value"
-    />
-    <InformationPanelItem
-      title="Levier"
-      :value="useTag(indicator, 'levier').value?.value"
-    />
-    <InformationPanelItem
-      title="Enjeu"
-      :value="useTag(indicator, 'enjeu').value?.value"
-    />
-    <!-- <InformationPanelItem
-      title="Chantier"
-      :value="useTag(indicator, 'chantier').value?.value"
-    /> -->
-    <InformationPanelItem
-      title="Secteur"
-      :value="useTag(indicator, 'secteur').value?.value"
-    />
+    <InformationPanelItem title="Thématique">
+      <IndicatorTags :indicator="indicator" type="theme" />
+    </InformationPanelItem>
+    <InformationPanelItem title="Levier">
+      <IndicatorTags :indicator="indicator" type="levier" />
+    </InformationPanelItem>
+    <InformationPanelItem title="Enjeu">
+      <IndicatorTags :indicator="indicator" type="enjeu" />
+    </InformationPanelItem>
+    <InformationPanelItem title="Secteur">
+      <IndicatorTags :indicator="indicator" type="secteur" />
+    </InformationPanelItem>
   </InformationPanelSection>
 
   <!-- Métadonnées -->
@@ -53,18 +45,10 @@ const spatialCoverage = useSpatialCoverage(indicator)
       >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
       gravida.</template
     >
-    <InformationPanelItem
-      title="Unité"
-      :value="useTag(indicator, 'unite').value?.value"
-    />
-    <InformationPanelItem
-      title="Mailles"
-      :value="useTag(indicator, 'maille').value?.value"
-    />
-    <InformationPanelItem
-      title="Axes"
-      :value="useTag(indicator, 'axes').value?.value"
-    />
+    <!-- TODO: get from extras -->
+    <InformationPanelItem title="Unité" />
+    <InformationPanelItem title="Mailles" />
+    <InformationPanelItem title="Axes" />
     <InformationPanelItem title="Valeur des axes">
       <ul>
         <li>xxx</li>
