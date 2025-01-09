@@ -42,18 +42,24 @@ export function useSpatialCoverage(
   return spatialCoverage
 }
 
+export const getGranularityFromSpatial = async (
+  spatial: SpatialField | undefined | null
+): Promise<SpatialCoverageLevel | undefined> => {
+  const store = useSpatialStore()
+  if (spatial?.granularity) {
+    await store.loadLevels()
+    return store.getLevelById(spatial.granularity)
+  }
+}
+
 export const useSpatialGranularity = (
   dataset: Ref<DatasetV2 | undefined>
 ): Ref<SpatialCoverageLevel | undefined> => {
   const level = ref<SpatialCoverageLevel | undefined>(undefined)
-  const store = useSpatialStore()
-  store.loadLevels()
   watch(
     dataset,
-    () => {
-      if (dataset.value?.spatial?.granularity) {
-        level.value = store.getLevelById(dataset.value.spatial.granularity)
-      }
+    async () => {
+      level.value = await getGranularityFromSpatial(dataset.value?.spatial)
     },
     { immediate: true }
   )

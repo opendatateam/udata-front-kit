@@ -18,6 +18,7 @@ type Props = IndicatorFilters & {
   page: number
   sort: string | null
   geozone: string | null
+  granularity: string | null
 }
 const props = withDefaults(defineProps<Props>(), { query: '' })
 

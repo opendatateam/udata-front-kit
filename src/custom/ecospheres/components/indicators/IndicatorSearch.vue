@@ -3,6 +3,7 @@ import { ref, watchEffect, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import SelectSpatialGranularity from '@/custom/ecospheres/components/indicators/SelectSpatialGranularity.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import type { IndicatorFilters } from '../../model/indicator'
@@ -13,6 +14,7 @@ const spatialAPI = new SpatialAPI()
 
 type Props = IndicatorFilters & {
   geozone: string | null
+  granularity: string | null
 }
 const props = defineProps<Props>()
 
@@ -41,6 +43,12 @@ const switchSpatialCoverage = (
 ) => {
   selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
   navigate({ geozone: selectedGeozone.value })
+}
+
+const switchSpatialGranularity = (
+  spatialCoverageGranularity: string | null
+) => {
+  navigate({ granularity: spatialCoverageGranularity })
 }
 
 watchEffect(() => {
@@ -101,6 +109,12 @@ watchEffect(() => {
         :options="filtersConf.producteur.values"
         :model-value="props.producteur"
         @update:model-value="(value) => switchFilter('producteur', value)"
+      />
+    </div>
+    <div class="fr-select-group">
+      <SelectSpatialGranularity
+        :model-value="props.granularity"
+        @update:model-value="switchSpatialGranularity"
       />
     </div>
     <div class="fr-select-group">

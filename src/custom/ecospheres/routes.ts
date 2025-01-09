@@ -32,6 +32,7 @@ export const routes = [
           return {
             query: route.query.q,
             geozone: route.query.geozone || null,
+            granularity: route.query.granularity || null,
             page: route.query.page || null,
             sort: route.query.sort || null,
             ...filterProps
