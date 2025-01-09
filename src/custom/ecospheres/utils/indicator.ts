@@ -36,38 +36,39 @@ export const useTagsQuery = (
 
 /**
  * Extract and denormalize tags from an indicator
- * TODO: make it more readable
  */
 export const useTags = (
-  indicator: Indicator | undefined,
+  indicator?: Indicator,
   type?: string,
   exclude?: string[]
 ): ComputedRef<IndicatorTag[]> => {
   return computed(() => {
-    return (
-      indicator?.tags
-        ?.map((tag) => {
-          if (tag.startsWith(tagPrefix)) {
-            for (const filter of filters) {
-              if (type && type !== filter.id) continue
-              if (exclude?.includes(filter.id)) continue
-              const filterPrefix = `${tagPrefix}-${filter.id}-`
-              if (tag.startsWith(filterPrefix)) {
-                const value = tag.replace(filterPrefix, '')
-                const filterValue = filter.values.find((v) => v.id === value)
-                if (filterValue) {
-                  return {
-                    color: filter.color,
-                    value: filterValue.name,
-                    type: filter.id
-                  }
-                }
-              }
-            }
-          }
-        })
-        .filter((v) => !!v) || []
-    )
+    const tags: IndicatorTag[] = []
+
+    for (const tag of indicator?.tags || []) {
+      if (!tag.startsWith(tagPrefix)) continue
+
+      for (const filter of filters) {
+        if (type && type !== filter.id) continue
+        if (exclude?.includes(filter.id)) continue
+
+        const filterPrefix = `${tagPrefix}-${filter.id}-`
+        if (!tag.startsWith(filterPrefix)) continue
+
+        const value = tag.replace(filterPrefix, '')
+        const matchingValue = filter.values.find((v) => v.id === value)
+
+        if (matchingValue) {
+          tags.push({
+            color: filter.color,
+            value: matchingValue.name,
+            type: filter.id
+          })
+        }
+      }
+    }
+
+    return tags
   })
 }
 
