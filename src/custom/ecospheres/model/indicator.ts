@@ -25,7 +25,8 @@ export const FILTER_KEYS = [
   'enjeu',
   'secteur',
   'levier',
-  'producteur'
+  'producteur',
+  'usage'
 ] as const
 
 export type IndicatorFilters = {
@@ -34,6 +35,7 @@ export type IndicatorFilters = {
   secteur: string | null
   levier: string | null
   producteur: string | null
+  usage: string | null
 }
 
 export interface IndicatorTag {

@@ -112,6 +112,15 @@ watchEffect(() => {
       />
     </div>
     <div class="fr-select-group">
+      <SelectComponent
+        default-option="Tous les usages"
+        :label="filtersConf.usage.name"
+        :options="filtersConf.usage.values"
+        :model-value="props.usage"
+        @update:model-value="(value) => switchFilter('usage', value)"
+      />
+    </div>
+    <div class="fr-select-group">
       <SelectSpatialGranularity
         :model-value="props.granularity"
         @update:model-value="switchSpatialGranularity"

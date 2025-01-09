@@ -297,3 +297,11 @@ indicators:
           name: Services des données et études statistiques
         - id: geovelo
           name: Géovelo
+    - name: Usage
+      id: usage
+      color: brown-caramel
+      values:
+        - id: usage-1
+          name: Premier usage
+        - id: usage-2
+          name: Second usage
