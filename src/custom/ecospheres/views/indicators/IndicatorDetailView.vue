@@ -85,7 +85,7 @@ onMounted(() => {
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <div class="fr-col-12 fr-col-md-4">
+      <div class="fr-col-12 fr-col-md-4 fr-mb-4w">
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Thématique</h2>
         <IndicatorTags :indicator="indicator" type="theme" />
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Levier</h2>
