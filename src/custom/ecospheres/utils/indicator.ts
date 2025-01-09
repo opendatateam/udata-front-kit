@@ -40,7 +40,8 @@ export const useTagsQuery = (
  */
 export const useTags = (
   indicator: Indicator | undefined,
-  type?: string
+  type?: string,
+  exclude?: string[]
 ): ComputedRef<IndicatorTag[]> => {
   return computed(() => {
     return (
@@ -49,6 +50,7 @@ export const useTags = (
           if (tag.startsWith(tagPrefix)) {
             for (const filter of filters) {
               if (type && type !== filter.id) continue
+              if (exclude?.includes(filter.id)) continue
               const filterPrefix = `${tagPrefix}-${filter.id}-`
               if (tag.startsWith(filterPrefix)) {
                 const value = tag.replace(filterPrefix, '')

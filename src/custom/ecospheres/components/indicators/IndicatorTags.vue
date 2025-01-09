@@ -2,6 +2,8 @@
 import type { DatasetV2 } from '@datagouv/components'
 import { useTags } from '../../utils/indicator'
 
+const EXCLUDE_TAGS = ['producteur']
+
 const props = defineProps({
   indicator: {
     type: Object as () => DatasetV2 | undefined,
@@ -13,7 +15,7 @@ const props = defineProps({
   }
 })
 
-const tags = useTags(props.indicator, props.type)
+const tags = useTags(props.indicator, props.type, EXCLUDE_TAGS)
 </script>
 
 <template>
