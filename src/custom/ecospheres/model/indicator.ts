@@ -1,11 +1,17 @@
 import type { DatasetV2 } from '@datagouv/components'
 
+export interface IndicatorExtrasCalcul {
+  responsable: string
+  methode: string
+}
+
 export type IndicatorExtras = DatasetV2['extras'] & {
   unite: string
   mailles_geographiques: string[]
   axes: {
     [key: string]: string[]
   }
+  calcul: IndicatorExtrasCalcul
 }
 
 export type Indicator = DatasetV2 & {

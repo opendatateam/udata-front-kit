@@ -17,7 +17,7 @@ const props = defineProps({
 
 const indicator = toRef(props, 'indicator')
 const spatialCoverage = useSpatialCoverage(indicator)
-const { unite, mailles, axes } = useIndicatorExtras(indicator)
+const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
 </script>
 
 <template>
@@ -92,8 +92,16 @@ const { unite, mailles, axes } = useIndicatorExtras(indicator)
       >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
       gravida.</template
     >
-    <InformationPanelItem title="Responsable calcul" :is-row="true" />
-    <InformationPanelItem title="Méthode calcul" :is-row="true" />
+    <InformationPanelItem
+      title="Responsable calcul"
+      :is-row="true"
+      :value="calcul?.responsable"
+    />
+    <InformationPanelItem
+      title="Méthode calcul"
+      :is-row="true"
+      :value="calcul?.methode"
+    />
   </InformationPanelSection>
 </template>
 

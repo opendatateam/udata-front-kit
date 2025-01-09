@@ -4,6 +4,7 @@ import type { ComputedRef } from 'vue'
 import type { IndicatorsConf } from '../model/config'
 import type {
   Indicator,
+  IndicatorExtrasCalcul,
   IndicatorFilters,
   IndicatorTag
 } from '../model/indicator'
@@ -77,6 +78,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const unite: Ref<string | undefined> = ref()
   const mailles: Ref<string[]> = ref([])
   const axes: Ref<Record<string, string[]>> = ref({})
+  const calcul: Ref<IndicatorExtrasCalcul | undefined> = ref()
 
   const store = useSpatialStore()
   store.loadLevels()
@@ -91,6 +93,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
           (m: string) => store.getLevelById(m)?.name
         )
         axes.value = extras.axes
+        calcul.value = extras.calcul
       }
     },
     { immediate: true }
@@ -99,6 +102,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   return {
     unite,
     mailles,
-    axes
+    axes,
+    calcul
   }
 }
