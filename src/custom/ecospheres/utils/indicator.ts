@@ -1,4 +1,5 @@
 import config from '@/config'
+import { useSpatialStore } from '@/store/SpatialStore'
 import type { ComputedRef } from 'vue'
 import type { IndicatorsConf } from '../model/config'
 import type {
@@ -74,6 +75,10 @@ export const useTags = (
 
 export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const unite: Ref<string | undefined> = ref()
+  const mailles: Ref<string[]> = ref([])
+
+  const store = useSpatialStore()
+  store.loadLevels()
 
   watch(
     indicator,
@@ -81,12 +86,16 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
       const extras = indicator.value?.extras?.['ecospheres-indicateurs']
       if (extras) {
         unite.value = extras.unite
+        mailles.value = (extras.mailles_geographiques || []).map(
+          (m: string) => store.getLevelById(m)?.name
+        )
       }
     },
     { immediate: true }
   )
 
   return {
-    unite
+    unite,
+    mailles
   }
 }
