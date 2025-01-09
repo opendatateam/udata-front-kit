@@ -100,6 +100,7 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
       title="Méthode calcul"
       :is-row="true"
       :value="calcul?.methode"
+      :is-markdown="true"
     />
   </InformationPanelSection>
 </template>
