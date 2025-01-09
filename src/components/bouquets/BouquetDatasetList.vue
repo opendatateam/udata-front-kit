@@ -112,6 +112,11 @@ const editDataset = (
   modal.value?.editDataset(dataset, getDatasetIndex(group, index))
 }
 
+const noFactors = computed(() => {
+  const datasets = [...filteredResults.value.values()]
+  return datasets.every((dataset) => dataset.every((item) => item.isHidden))
+})
+
 const onDatasetEditModalSubmit = () => {
   emits('updateDatasets')
   loadDatasetsContent()
@@ -147,13 +152,16 @@ onMounted(() => {
     </div>
   </div>
   <!-- Datasets list -->
-  <div v-if="filteredResults.size < 1" class="no-dataset fr-mt-2w">
+  <div v-if="filteredResults.size < 1 || noFactors" class="no-dataset fr-mt-2w">
     <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
     <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
   </div>
   <template v-else>
     <details
-      v-if="!isOnlyNoGroup(filteredResults) && !!filteredResults.size"
+      v-if="
+        (!isOnlyNoGroup(filteredResults) && !!filteredResults.size) ||
+        !noFactors
+      "
       class="fr-mt-2w"
     >
       <summary class="fr-py-3v fr-px-2w">Sommaire</summary>

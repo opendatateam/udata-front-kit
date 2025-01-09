@@ -209,7 +209,7 @@ const actions = computed(() => {
                 {{ dataset.title }}
               </component>
             </slot>
-            <div v-if="$slots.datasetActions" class="dataset__actions">
+            <div class="dataset__actions">
               <DsfrTag
                 v-if="
                   !isAvailable(dataset.availability) ||

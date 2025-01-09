@@ -116,7 +116,7 @@ export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
   const searchQuery = ref('')
   const isFiltering = computed(() => !!searchQuery.value)
 
-  // filter datasets but keep the original values
+  // add a property to hide the datasets on filtering
   const filteredDatasets = computed(() => {
     if (!searchQuery.value) return datasetsProperties.value
 
@@ -133,13 +133,9 @@ export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
 
   // Check if a specific group only contains hidden datasets
   const isGroupOnlyHidden = (groupName: string) => {
-    if (groupName === NO_GROUP) {
-      return filteredDatasets.value
-        .filter((dataset) => !dataset.group)
-        .every((dataset) => dataset.isHidden)
-    }
+    const filterGroupName = groupName === NO_GROUP ? undefined : groupName
     return filteredDatasets.value
-      .filter((dataset) => dataset.group === groupName)
+      .filter((dataset) => dataset.group === filterGroupName)
       .every((dataset) => dataset.isHidden)
   }
 
