@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils'
 import { useSpatialCoverage } from '@/utils/spatial'
-import type { DatasetV2 } from '@datagouv/components'
 import { toRef } from 'vue'
+import type { Indicator } from '../../model/indicator'
 import { useIndicatorExtras } from '../../utils/indicator'
 import IndicatorTags from './IndicatorTags.vue'
 import InformationPanelItem from './informations/InformationPanelItem.vue'
@@ -10,7 +10,7 @@ import InformationPanelSection from './informations/InformationPanelSection.vue'
 
 const props = defineProps({
   indicator: {
-    type: Object as () => DatasetV2,
+    type: Object as () => Indicator,
     required: true
   }
 })
@@ -48,8 +48,8 @@ const { unite, mailles } = useIndicatorExtras(indicator)
       gravida.</template
     >
     <InformationPanelItem title="Unité" :value="unite" />
-    <!-- TODO: get from extras -->
     <InformationPanelItem title="Mailles" :value="mailles.join(', ')" />
+    <!-- TODO: get from extras -->
     <InformationPanelItem title="Axes" />
     <InformationPanelItem title="Valeur des axes">
       <ul>

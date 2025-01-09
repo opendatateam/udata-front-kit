@@ -19,6 +19,7 @@ import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
+import type { Indicator } from '../../model/indicator'
 import { useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
@@ -27,7 +28,7 @@ const indicatorId = route.params.iid
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
-const indicator = computed(() => datasetStore.get(indicatorId))
+const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 const { unite } = useIndicatorExtras(indicator)
 
 const selectedTabIndex = ref(0)

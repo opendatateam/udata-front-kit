@@ -1,7 +1,8 @@
 import type { DatasetV2 } from '@datagouv/components'
 
-export type IndicatorExtras = {
-  [key: string]: string
+export type IndicatorExtras = DatasetV2['extras'] & {
+  unite: string
+  mailles_geographiques: string[]
 }
 
 export type Indicator = DatasetV2 & {

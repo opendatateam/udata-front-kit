@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
+import type { Indicator } from '../../model/indicator'
 import { useTags } from '../../utils/indicator'
 
 const EXCLUDE_TAGS = ['producteur']
 
 const props = defineProps({
   indicator: {
-    type: Object as () => DatasetV2 | undefined,
+    type: Object as () => Indicator | undefined,
     required: true
   },
   type: {
