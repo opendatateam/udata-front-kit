@@ -19,6 +19,7 @@ import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
+import { useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.iid
@@ -27,6 +28,7 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId))
+const { unite } = useIndicatorExtras(indicator)
 
 const selectedTabIndex = ref(0)
 const showAddToBouquetModal = ref(false)
@@ -88,8 +90,7 @@ onMounted(() => {
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
         <p>{{ spatialGranularity?.name || '-' }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
-        <!-- TODO: use extra for this one -->
-        <!-- <IndicatorTag :tag="useTag(indicator, 'unite').value" /> -->
+        <p>{{ unite || '-' }}</p>
         <div v-if="userStore.loggedIn">
           <DsfrButton
             class="fr-mt-2w"

@@ -3,6 +3,7 @@ import { formatDate } from '@/utils'
 import { useSpatialCoverage } from '@/utils/spatial'
 import type { DatasetV2 } from '@datagouv/components'
 import { toRef } from 'vue'
+import { useIndicatorExtras } from '../../utils/indicator'
 import IndicatorTags from './IndicatorTags.vue'
 import InformationPanelItem from './informations/InformationPanelItem.vue'
 import InformationPanelSection from './informations/InformationPanelSection.vue'
@@ -16,6 +17,7 @@ const props = defineProps({
 
 const indicator = toRef(props, 'indicator')
 const spatialCoverage = useSpatialCoverage(indicator)
+const { unite } = useIndicatorExtras(indicator)
 </script>
 
 <template>
@@ -46,7 +48,7 @@ const spatialCoverage = useSpatialCoverage(indicator)
       gravida.</template
     >
     <!-- TODO: get from extras -->
-    <InformationPanelItem title="Unité" />
+    <InformationPanelItem title="Unité" :value="unite" />
     <InformationPanelItem title="Mailles" />
     <InformationPanelItem title="Axes" />
     <InformationPanelItem title="Valeur des axes">

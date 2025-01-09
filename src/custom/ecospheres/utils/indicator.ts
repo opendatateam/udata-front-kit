@@ -68,3 +68,22 @@ export const useTags = (
     )
   })
 }
+
+export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
+  const unite: Ref<string | undefined> = ref()
+
+  watch(
+    indicator,
+    () => {
+      const extras = indicator.value?.extras?.['ecospheres-indicateurs']
+      if (extras) {
+        unite.value = extras.unite
+      }
+    },
+    { immediate: true }
+  )
+
+  return {
+    unite
+  }
+}
