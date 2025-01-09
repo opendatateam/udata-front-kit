@@ -30,14 +30,14 @@ const { unite } = useIndicatorExtras(indicator)
     <InformationPanelItem title="Thématique">
       <IndicatorTags :indicator="indicator" type="theme" />
     </InformationPanelItem>
-    <InformationPanelItem title="Levier">
-      <IndicatorTags :indicator="indicator" type="levier" />
-    </InformationPanelItem>
-    <InformationPanelItem title="Enjeu">
+    <InformationPanelItem title="Enjeux">
       <IndicatorTags :indicator="indicator" type="enjeu" />
     </InformationPanelItem>
     <InformationPanelItem title="Secteur">
       <IndicatorTags :indicator="indicator" type="secteur" />
+    </InformationPanelItem>
+    <InformationPanelItem title="Levier">
+      <IndicatorTags :indicator="indicator" type="levier" />
     </InformationPanelItem>
   </InformationPanelSection>
 

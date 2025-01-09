@@ -87,6 +87,8 @@ onMounted(() => {
       <div class="fr-col-12 fr-col-md-4">
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Thématique</h2>
         <IndicatorTags :indicator="indicator" type="theme" />
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Levier</h2>
+        <IndicatorTags :indicator="indicator" type="levier" />
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
         <p>{{ spatialGranularity?.name || '-' }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
