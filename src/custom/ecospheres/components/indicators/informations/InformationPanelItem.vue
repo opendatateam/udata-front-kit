@@ -14,9 +14,7 @@ const props = defineProps({
   }
 })
 
-const _class = props.isRow
-  ? ['fr-col-12']
-  : ['fr-col-12', 'fr-col-sm-6', 'fr-col-md-4']
+const _class = props.isRow ? ['fr-col-12'] : ['fr-col-12', 'fr-col-sm-6']
 </script>
 
 <template>

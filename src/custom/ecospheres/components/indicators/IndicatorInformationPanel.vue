@@ -47,8 +47,8 @@ const { unite } = useIndicatorExtras(indicator)
       >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
       gravida.</template
     >
-    <!-- TODO: get from extras -->
     <InformationPanelItem title="Unité" :value="unite" />
+    <!-- TODO: get from extras -->
     <InformationPanelItem title="Mailles" />
     <InformationPanelItem title="Axes" />
     <InformationPanelItem title="Valeur des axes">
