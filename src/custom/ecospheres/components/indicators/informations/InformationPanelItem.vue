@@ -24,15 +24,21 @@ const _class = props.isRow ? ['fr-col-12'] : ['fr-col-12', 'fr-col-sm-6']
 </script>
 
 <template>
+  <!-- eslint-disable vue/no-v-html -->
   <div :class="_class">
     <h3 class="subtitle fr-mb-2v">{{ title }}</h3>
     <slot v-if="$slots.default"></slot>
-    <!-- eslint-disable-next-line vue/no-v-html -->
     <div
       v-else-if="isMarkdown"
-      class="fr-m-0"
+      class="fr-m-0 markdown"
       v-html="fromMarkdown(value)"
     ></div>
     <p v-else class="fr-m-0">{{ value }}</p>
   </div>
 </template>
+
+<style scoped>
+:deep(.markdown > p) {
+  margin-block-end: 0.5em;
+}
+</style>
