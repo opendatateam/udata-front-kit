@@ -6,12 +6,16 @@ export interface IndicatorExtrasCalcul {
 }
 
 export type IndicatorExtras = DatasetV2['extras'] & {
+  id: string
   unite: string
   mailles_geographiques: string[]
   axes: {
     [key: string]: string[]
   }
   calcul: IndicatorExtrasCalcul
+  api: {
+    noms_cubes: string[]
+  }
 }
 
 export type Indicator = DatasetV2 & {

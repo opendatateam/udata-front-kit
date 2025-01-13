@@ -19,6 +19,8 @@ import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
+import InformationPanelItem from '../../components/indicators/informations/InformationPanelItem.vue'
+import InformationPanelSection from '../../components/indicators/informations/InformationPanelSection.vue'
 import type { Indicator } from '../../model/indicator'
 import { useIndicatorExtras } from '../../utils/indicator'
 
@@ -29,9 +31,8 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
-const { unite } = useIndicatorExtras(indicator)
+const { unite, axes, cubes, internalId } = useIndicatorExtras(indicator)
 
-const selectedTabIndex = ref(0)
 const showAddToBouquetModal = ref(false)
 
 const setAccessibilityProperties = inject(
@@ -128,9 +129,25 @@ onMounted(() => {
         panel-id="tab-content-1"
         tab-id="tab-1"
       >
-        <div v-if="selectedTabIndex === 0">
-          <ResourcesList :dataset="indicator" />
-        </div>
+        <ResourcesList :dataset="indicator" />
+        <InformationPanelSection title="Documentation utilisation API">
+          <template #description
+            >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
+            gravida.</template
+          >
+          <InformationPanelItem
+            title="Nom cubes API"
+            :value="cubes.join(', ')"
+          />
+          <InformationPanelItem title="Id indicateur" :value="internalId" />
+          <template v-for="(values, axis, index) in axes" :key="axis">
+            <InformationPanelItem :title="`Axe n°${index + 1} - ${axis}`">
+              <ul>
+                <li v-for="value in values" :key="value">{{ value }}</li>
+              </ul>
+            </InformationPanelItem>
+          </template>
+        </InformationPanelSection>
       </DsfrTabContent>
 
       <!-- Réutilisations -->
@@ -159,3 +176,9 @@ onMounted(() => {
     </DsfrTabs>
   </GenericContainer>
 </template>
+
+<style scoped>
+:deep(.subtitle) {
+  font-size: 1rem;
+}
+</style>

@@ -4,6 +4,7 @@ import type { ComputedRef } from 'vue'
 import type { IndicatorsConf } from '../model/config'
 import type {
   Indicator,
+  IndicatorExtras,
   IndicatorExtrasCalcul,
   IndicatorFilters,
   IndicatorTag
@@ -76,8 +77,10 @@ export const useTags = (
 
 export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const unite: Ref<string | undefined> = ref()
+  const internalId: Ref<string | undefined> = ref()
   const mailles: Ref<string[]> = ref([])
   const axes: Ref<Record<string, string[]>> = ref({})
+  const cubes: Ref<string[]> = ref([])
   const calcul: Ref<IndicatorExtrasCalcul | undefined> = ref()
 
   const store = useSpatialStore()
@@ -86,14 +89,17 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   watch(
     indicator,
     () => {
-      const extras = indicator.value?.extras?.['ecospheres-indicateurs']
+      const extras: IndicatorExtras =
+        indicator.value?.extras?.['ecospheres-indicateurs']
       if (extras) {
         unite.value = extras.unite
-        mailles.value = (extras.mailles_geographiques || []).map(
-          (m: string) => store.getLevelById(m)?.name
-        )
+        mailles.value = (extras.mailles_geographiques || [])
+          .map((m: string) => store.getLevelById(m)?.name)
+          .filter((v) => v !== undefined)
         axes.value = extras.axes
         calcul.value = extras.calcul
+        cubes.value = extras.api.noms_cubes
+        internalId.value = extras.id
       }
     },
     { immediate: true }
@@ -103,6 +109,8 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
     unite,
     mailles,
     axes,
-    calcul
+    calcul,
+    cubes,
+    internalId
   }
 }

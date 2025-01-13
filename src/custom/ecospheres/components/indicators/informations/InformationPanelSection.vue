@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="fr-py-3w fr-mb-3w border-bottom border-default-grey">
+  <div class="fr-py-2w fr-mb-3w border-bottom border-default-grey">
     <h2 class="subtitle subtitle--uppercase">{{ title }}</h2>
     <p><slot name="description"></slot></p>
     <div class="fr-m-0">
