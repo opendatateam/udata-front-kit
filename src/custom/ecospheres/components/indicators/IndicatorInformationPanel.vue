@@ -24,12 +24,10 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
   <!-- Catégorisation -->
   <InformationPanelSection title="Catégorisation">
     <template #description
-      >Les catégories ci-dessous permettent de mieux qualifier les politiques
-      publiques de transition écologique que l'indicateur cherche à suivre. En
-      particulier ceci peut permettre d'identifier les enjeux, thématiques et
-      donc les leviers d'actions associés. Les catégories utilisées sont celles
-      proposées par la planification écologique nationale France Nation
-      Verte.</template
+      >Les informations ci-dessous permettent de mieux qualifier les politiques
+      publiques de transition écologique que l'indicateur cherche à suivre. Les
+      catégories proposées sont celle de la planification écologique France
+      Nation Verte.</template
     >
     <InformationPanelItem title="Thématique">
       <IndicatorTags :indicator="indicator" type="theme" />

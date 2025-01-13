@@ -150,8 +150,9 @@ onMounted(() => {
 
       <!-- Métadonnées -->
       <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
+        <!-- FIXME: won't show again when going back to list and selecting another indicator -->
         <InformationPanel
-          v-if="indicator && license"
+          v-if="license"
           :dataset="indicator"
           :license="license"
         />
