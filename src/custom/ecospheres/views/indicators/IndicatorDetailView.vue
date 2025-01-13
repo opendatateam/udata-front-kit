@@ -18,6 +18,7 @@ import { descriptionFromMarkdown } from '@/utils'
 import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
+import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import InformationPanelItem from '../../components/indicators/informations/InformationPanelItem.vue'
 import InformationPanelSection from '../../components/indicators/informations/InformationPanelSection.vue'
@@ -162,7 +163,7 @@ onMounted(() => {
 
       <!-- Sources -->
       <DsfrTabContent panel-id="tab-content-4" tab-id="tab-4">
-        Sources
+        <IndicatorSourcesList :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Métadonnées -->

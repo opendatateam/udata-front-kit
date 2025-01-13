@@ -106,9 +106,3 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
     />
   </InformationPanelSection>
 </template>
-
-<style scoped>
-:deep(.subtitle) {
-  font-size: 1rem;
-}
-</style>

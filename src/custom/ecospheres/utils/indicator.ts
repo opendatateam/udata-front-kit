@@ -6,6 +6,7 @@ import type {
   Indicator,
   IndicatorExtras,
   IndicatorExtrasCalcul,
+  IndicatorExtrasSource,
   IndicatorFilters,
   IndicatorTag
 } from '../model/indicator'
@@ -82,6 +83,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const axes: Ref<Record<string, string[]>> = ref({})
   const cubes: Ref<string[]> = ref([])
   const calcul: Ref<IndicatorExtrasCalcul | undefined> = ref()
+  const sources: Ref<IndicatorExtrasSource[]> = ref([])
 
   const store = useSpatialStore()
   store.loadLevels()
@@ -100,6 +102,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
         calcul.value = extras.calcul
         cubes.value = extras.api.noms_cubes
         internalId.value = extras.id
+        sources.value = extras.sources
       }
     },
     { immediate: true }
@@ -111,6 +114,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
     axes,
     calcul,
     cubes,
-    internalId
+    internalId,
+    sources
   }
 }

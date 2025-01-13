@@ -5,6 +5,15 @@ export interface IndicatorExtrasCalcul {
   methode: string
 }
 
+export interface IndicatorExtrasSource {
+  nom: string
+  url: string
+  description: string
+  producteur: string
+  distributeur: string
+  plage_temporelle: string
+}
+
 export type IndicatorExtras = DatasetV2['extras'] & {
   id: string
   unite: string
@@ -16,6 +25,7 @@ export type IndicatorExtras = DatasetV2['extras'] & {
   api: {
     noms_cubes: string[]
   }
+  sources: IndicatorExtrasSource[]
 }
 
 export type Indicator = DatasetV2 & {
