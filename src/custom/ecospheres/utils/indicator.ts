@@ -101,7 +101,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
         axes.value = extras.axes
         calcul.value = extras.calcul
         cubes.value = extras.api.noms_cubes
-        internalId.value = extras.id
+        internalId.value = extras.api.id
         sources.value = extras.sources
       }
     },
