@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fromMarkdown } from '@/utils'
+import { formatDate, fromMarkdown } from '@/utils'
 import { toRef } from 'vue'
 import type { Indicator } from '../../model/indicator'
 import { useIndicatorExtras } from '../../utils/indicator'
@@ -33,9 +33,12 @@ const { sources } = useIndicatorExtras(indicatorRef)
       <InformationPanelItem title="Distributeur" :value="source.distributeur" />
       <InformationPanelItem title="Producteur" :value="source.producteur" />
       <InformationPanelItem
+        v-if="indicator.temporal_coverage"
         title="Plage temporelle"
-        :value="source.plage_temporelle"
-      />
+      >
+        {{ formatDate(source.plage_temporelle.start, true) }} -
+        {{ formatDate(source.plage_temporelle.end, true) }}
+      </InformationPanelItem>
     </InformationPanelSection>
   </template>
 </template>

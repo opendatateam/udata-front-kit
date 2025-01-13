@@ -11,7 +11,10 @@ export interface IndicatorExtrasSource {
   description: string
   producteur: string
   distributeur: string
-  plage_temporelle: string
+  plage_temporelle: {
+    start: string
+    end: string
+  }
 }
 
 export type IndicatorExtras = DatasetV2['extras'] & {
