@@ -20,9 +20,12 @@ const { api, axes } = useIndicatorExtras(indicator)
 
 <template>
   <InformationPanelSection title="Documentation utilisation API">
-    <template #description>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="fromMarkdown(api?.description || '')"></div>
+    <template #description-below>
+      <div class="fr-mt-1w">
+        <h3 class="subtitle fr-mb-2v">Documentation</h3>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <div v-html="fromMarkdown(api?.description || '')"></div>
+      </div>
     </template>
     <InformationPanelItem
       title="Nom cubes API"

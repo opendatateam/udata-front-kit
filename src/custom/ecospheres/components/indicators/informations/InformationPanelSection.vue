@@ -16,5 +16,6 @@ defineProps({
         <slot></slot>
       </div>
     </div>
+    <slot name="description-below"></slot>
   </div>
 </template>

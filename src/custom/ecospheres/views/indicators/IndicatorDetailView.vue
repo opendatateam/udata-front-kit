@@ -140,7 +140,7 @@ onMounted(() => {
 
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
-        <DiscussionsList :subject="indicator" />
+        <DiscussionsList :subject="indicator" subject-class="Indicator" />
       </DsfrTabContent>
 
       <!-- Sources -->

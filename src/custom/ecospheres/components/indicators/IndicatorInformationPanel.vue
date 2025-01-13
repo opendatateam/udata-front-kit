@@ -29,11 +29,11 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
       catégories proposées sont celle de la planification écologique France
       Nation Verte.</template
     >
-    <InformationPanelItem title="Thématique">
-      <IndicatorTags :indicator="indicator" type="theme" />
-    </InformationPanelItem>
     <InformationPanelItem title="Enjeux">
       <IndicatorTags :indicator="indicator" type="enjeu" />
+    </InformationPanelItem>
+    <InformationPanelItem title="Thématique">
+      <IndicatorTags :indicator="indicator" type="theme" />
     </InformationPanelItem>
     <InformationPanelItem title="Secteur">
       <IndicatorTags :indicator="indicator" type="secteur" />
@@ -72,12 +72,12 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
       {{ formatDate(indicator.temporal_coverage.end, true) }}
     </InformationPanelItem>
     <InformationPanelItem
-      title="Couverture géographique"
-      :value="spatialCoverage?.name"
-    />
-    <InformationPanelItem
       title="Date de mise à jour"
       :value="formatDate(indicator.last_update)"
+    />
+    <InformationPanelItem
+      title="Couverture géographique"
+      :value="spatialCoverage?.name"
     />
   </InformationPanelSection>
 

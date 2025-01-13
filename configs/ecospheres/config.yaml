@@ -144,6 +144,9 @@ website:
     topic:
       display: true
       create: true
+    indicator:
+      display: true
+      create: true
   datasets:
     organization_filter: true
     add_to_bouquet: true
