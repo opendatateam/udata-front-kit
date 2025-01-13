@@ -55,7 +55,7 @@ const tabTitles = [
   },
   { title: 'Discussions', tabId: 'tab-3', panelId: 'tab-content-3' },
   { title: 'Sources', tabId: 'tab-4', panelId: 'tab-content-4' },
-  { title: 'Métadonnées', tabId: 'tab-5', panelId: 'tab-content-5' }
+  { title: 'Détails techniques', tabId: 'tab-5', panelId: 'tab-content-5' }
 ]
 
 const activeTab = ref(0)

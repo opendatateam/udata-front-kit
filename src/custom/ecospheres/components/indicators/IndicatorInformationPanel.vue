@@ -24,8 +24,12 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
   <!-- Catégorisation -->
   <InformationPanelSection title="Catégorisation">
     <template #description
-      >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
-      gravida.</template
+      >Les catégories ci-dessous permettent de mieux qualifier les politiques
+      publiques de transition écologique que l'indicateur cherche à suivre. En
+      particulier ceci peut permettre d'identifier les enjeux, thématiques et
+      donc les leviers d'actions associés. Les catégories utilisées sont celles
+      proposées par la planification écologique nationale France Nation
+      Verte.</template
     >
     <InformationPanelItem title="Thématique">
       <IndicatorTags :indicator="indicator" type="theme" />
@@ -43,10 +47,6 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
 
   <!-- Métadonnées -->
   <InformationPanelSection title="Métadonnées">
-    <template #description
-      >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
-      gravida.</template
-    >
     <InformationPanelItem title="Unité" :value="unite" />
     <InformationPanelItem title="Mailles" :value="mailles.join(', ')" />
 
@@ -61,10 +61,6 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
 
   <!-- Couverture -->
   <InformationPanelSection title="Couverture">
-    <template #description
-      >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
-      gravida.</template
-    >
     <InformationPanelItem
       v-if="indicator.temporal_coverage"
       title="Couverture temporelle"
@@ -90,8 +86,9 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
   <!-- Informations calcul -->
   <InformationPanelSection title="Informations calcul">
     <template #description
-      >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
-      gravida.</template
+      >Nous documentons les hypothèses de traitement utilisées pour le calcul
+      des indicateurs dans la section Méthode de Calcul. L'équipe en charge de
+      leur application est indiquée dans le champ Responsable Calcul.</template
     >
     <InformationPanelItem
       title="Responsable calcul"
