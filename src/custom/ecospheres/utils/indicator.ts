@@ -79,7 +79,6 @@ export const useTags = (
 
 export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const unite: Ref<string | undefined> = ref()
-  const internalId: Ref<string | undefined> = ref()
   const mailles: Ref<string[]> = ref([])
   const axes: Ref<Record<string, string[]>> = ref({})
   const calcul: Ref<IndicatorExtrasCalcul | undefined> = ref()
@@ -102,7 +101,6 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
         axes.value = extras.axes
         calcul.value = extras.calcul
         api.value = extras.api
-        internalId.value = extras.api.id
         sources.value = extras.sources
       }
     },
@@ -115,7 +113,6 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
     axes,
     calcul,
     api,
-    internalId,
     sources
   }
 }

@@ -14,14 +14,13 @@ import {
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
-import { descriptionFromMarkdown, fromMarkdown } from '@/utils'
+import { descriptionFromMarkdown } from '@/utils'
 import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
+import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
-import InformationPanelItem from '../../components/indicators/informations/InformationPanelItem.vue'
-import InformationPanelSection from '../../components/indicators/informations/InformationPanelSection.vue'
 import type { Indicator } from '../../model/indicator'
 import { useIndicatorExtras } from '../../utils/indicator'
 
@@ -32,7 +31,7 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
-const { unite, axes, api, internalId } = useIndicatorExtras(indicator)
+const { unite } = useIndicatorExtras(indicator)
 
 const showAddToBouquetModal = ref(false)
 
@@ -131,24 +130,7 @@ onMounted(() => {
         tab-id="tab-1"
       >
         <ResourcesList :dataset="indicator" />
-        <InformationPanelSection title="Documentation utilisation API">
-          <template #description>
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="fromMarkdown(api?.description || '')"></div>
-          </template>
-          <InformationPanelItem
-            title="Nom cubes API"
-            :value="api?.noms_cubes.join(', ')"
-          />
-          <InformationPanelItem title="Id indicateur" :value="internalId" />
-          <template v-for="(values, axis, index) in axes" :key="axis">
-            <InformationPanelItem :title="`Axe n°${index + 1} - ${axis}`">
-              <ul>
-                <li v-for="value in values" :key="value">{{ value }}</li>
-              </ul>
-            </InformationPanelItem>
-          </template>
-        </InformationPanelSection>
+        <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Réutilisations -->

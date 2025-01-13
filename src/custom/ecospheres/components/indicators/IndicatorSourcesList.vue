@@ -13,9 +13,9 @@ const props = defineProps({
   }
 })
 
-const indicatorRef = toRef(props, 'indicator')
+const indicator = toRef(props, 'indicator')
 
-const { sources } = useIndicatorExtras(indicatorRef)
+const { sources } = useIndicatorExtras(indicator)
 </script>
 
 <template>
