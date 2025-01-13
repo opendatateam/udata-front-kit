@@ -49,7 +49,7 @@ const tabTitles = [
   { title: 'Informations', tabId: 'tab-0', panelId: 'tab-content-0' },
   { title: 'Fichiers et API', tabId: 'tab-1', panelId: 'tab-content-1' },
   {
-    title: 'Réutilisations et bouquets',
+    title: 'Réutilisations',
     tabId: 'tab-2',
     panelId: 'tab-content-2'
   },
