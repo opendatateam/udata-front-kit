@@ -14,7 +14,7 @@ import {
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
-import { descriptionFromMarkdown } from '@/utils'
+import { descriptionFromMarkdown, fromMarkdown } from '@/utils'
 import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
@@ -32,7 +32,7 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
-const { unite, axes, cubes, internalId } = useIndicatorExtras(indicator)
+const { unite, axes, api, internalId } = useIndicatorExtras(indicator)
 
 const showAddToBouquetModal = ref(false)
 
@@ -132,13 +132,13 @@ onMounted(() => {
       >
         <ResourcesList :dataset="indicator" />
         <InformationPanelSection title="Documentation utilisation API">
-          <template #description
-            >Senectus et rutrum tempus enim. Laoreet blandit at lacus elementum
-            gravida.</template
-          >
+          <template #description>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="fromMarkdown(api?.description || '')"></div>
+          </template>
           <InformationPanelItem
             title="Nom cubes API"
-            :value="cubes.join(', ')"
+            :value="api?.noms_cubes.join(', ')"
           />
           <InformationPanelItem title="Id indicateur" :value="internalId" />
           <template v-for="(values, axis, index) in axes" :key="axis">

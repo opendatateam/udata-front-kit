@@ -17,6 +17,12 @@ export interface IndicatorExtrasSource {
   }
 }
 
+export interface IndicatorsExtrasApi {
+  id: string
+  description: string
+  noms_cubes: string[]
+}
+
 export type IndicatorExtras = DatasetV2['extras'] & {
   unite: string
   mailles_geographiques: string[]
@@ -24,10 +30,7 @@ export type IndicatorExtras = DatasetV2['extras'] & {
     [key: string]: string[]
   }
   calcul: IndicatorExtrasCalcul
-  api: {
-    id: string
-    noms_cubes: string[]
-  }
+  api: IndicatorsExtrasApi
   sources: IndicatorExtrasSource[]
 }
 
