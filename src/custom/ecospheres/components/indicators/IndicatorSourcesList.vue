@@ -19,14 +19,13 @@ const { sources } = useIndicatorExtras(indicator)
 </script>
 
 <template>
-  <h2 class="subtitle subtitle--uppercase">Sources</h2>
   <template v-for="source in sources" :key="source.url">
+    <h2 class="subtitle subtitle--uppercase">{{ source.nom }}</h2>
     <InformationPanelSection>
       <template #description>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="fromMarkdown(source.description)"></div>
       </template>
-      <InformationPanelItem title="Nom" :value="source.nom" />
       <InformationPanelItem title="URL source">
         <a :href="source.url" target="_blank">{{ source.url }}</a>
       </InformationPanelItem>
