@@ -57,6 +57,7 @@ const {
   isFiltering,
   filterDatasetsProperties,
   filteredDatasets,
+  isAllGroupsHidden,
   isGroupOnlyHidden
 } = useDatasetFilter(datasetsProperties)
 
@@ -100,6 +101,18 @@ const loadDatasetsContent = () => {
   })
 }
 
+const showTOC = computed(() => {
+  /* 
+  hide the table of content if "NoGroup" is the only group and results are not 0
+  or
+  hide if all factors (datasetProperties) are hidden by the filter
+  */
+  return (
+    (!isOnlyNoGroup(filteredResults.value) && !!filteredResults.value.size) ||
+    !isAllGroupsHidden
+  )
+})
+
 const addDataset = () => {
   modal.value?.addDataset()
 }
@@ -111,11 +124,6 @@ const editDataset = (
 ) => {
   modal.value?.editDataset(dataset, getDatasetIndex(group, index))
 }
-
-const noFactors = computed(() => {
-  const datasets = [...filteredResults.value.values()]
-  return datasets.every((dataset) => dataset.every((item) => item.isHidden))
-})
 
 const onDatasetEditModalSubmit = () => {
   emits('updateDatasets')
@@ -152,18 +160,15 @@ onMounted(() => {
     </div>
   </div>
   <!-- Datasets list -->
-  <div v-if="filteredResults.size < 1 || noFactors" class="no-dataset fr-mt-2w">
+  <div
+    v-if="filteredResults.size < 1 || isAllGroupsHidden"
+    class="no-dataset fr-mt-2w"
+  >
     <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
     <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
   </div>
   <template v-else>
-    <details
-      v-if="
-        (!isOnlyNoGroup(filteredResults) && !!filteredResults.size) ||
-        !noFactors
-      "
-      class="fr-mt-2w"
-    >
+    <details v-if="showTOC" class="fr-mt-2w">
       <summary class="fr-py-3v fr-px-2w">Sommaire</summary>
       <ul role="list">
         <li

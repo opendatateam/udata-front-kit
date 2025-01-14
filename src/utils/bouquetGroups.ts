@@ -131,6 +131,11 @@ export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
     }))
   })
 
+  // Check if all groups only contain hidden datasets
+  const isAllGroupsHidden = computed(() => {
+    return filteredDatasets.value.every((dataset) => dataset.isHidden)
+  })
+
   // Check if a specific group only contains hidden datasets
   const isGroupOnlyHidden = (groupName: string) => {
     const filterGroupName = groupName === NO_GROUP ? undefined : groupName
@@ -148,6 +153,7 @@ export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
     isFiltering,
     filterDatasetsProperties,
     filteredDatasets,
+    isAllGroupsHidden,
     isGroupOnlyHidden
   }
 }

@@ -192,6 +192,9 @@ const actions = computed(() => {
         <DsfrTag class="fr-text--xs" small :label="factorsInGroup" />
       </p>
     </div>
+    <div v-else class="disclosure__header">
+      <DsfrTag class="fr-text--xs only-tag" small :label="factorsInGroup" />
+    </div>
     <div
       v-show="isDisclosureOpen"
       :id="widgetID"
@@ -304,12 +307,13 @@ const actions = computed(() => {
 }
 
 .disclosure__header {
+  --text-spacing: 0;
   flex-wrap: wrap;
   gap: 0;
-}
-.disclosure__header {
-  --text-spacing: 0;
   border-block-end: 1px solid var(--border-default-grey);
+}
+.disclosure__header:has(.only-tag) {
+  padding: calc(var(--padding-base) / 2);
 }
 .disclosure__trigger,
 .simple__name {
