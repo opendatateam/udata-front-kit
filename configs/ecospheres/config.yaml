@@ -152,6 +152,12 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
+    banner:
+      title: Les jeux de données, qu’est-ce que c’est&nbsp;?
+      content: |
+        Les jeux de données sont des outils statistiques et analytiques qui permettent d’évaluer et de mesurer divers aspects d’un territoire donné. Ces indicateurs aident à comprendre les dynamiques locales, à identifier des problématiques spécifiques, et à orienter les décisions publiques et les politiques de développement.
+
+        Ils sont essentiels pour un diagnostic territorial et pour le suivi des évolutions dans le temps.
   topics:
     slug: bouquets
     name: bouquet
@@ -168,6 +174,12 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
+    banner:
+      title: Les bouquets, qu’est-ce que c’est&nbsp;?
+      content: |
+        Les bouquets sont des outils statistiques et analytiques qui permettent d’évaluer et de mesurer divers aspects d’un territoire donné. Ces indicateurs aident à comprendre les dynamiques locales, à identifier des problématiques spécifiques, et à orienter les décisions publiques et les politiques de développement.
+
+        Ils sont essentiels pour un diagnostic territorial et pour le suivi des évolutions dans le temps.
   sitemap:
     - name: Accueil
       path: /
