@@ -98,6 +98,16 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'happy-dom',
       globals: true
+    },
+    server: {
+      // this is a dev CSP, restricting outbound requests to *.data.gouv.fr
+      // this makes sure we don't make unintended API calls to third-parties (looking at you iconify)
+      // ⚠️ this won't be applied on prod or other environments
+      headers: {
+        'Content-Security-Policy': [
+          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com"
+        ].join('; ')
+      }
     }
   }
 })

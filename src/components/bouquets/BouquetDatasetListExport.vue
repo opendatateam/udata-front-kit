@@ -31,7 +31,7 @@ const doExport = async () => {
       type="button"
       label="Exporter la liste des jeux de données"
       class="fr-mt-2w fr-ml-auto"
-      icon="ri-file-download-line"
+      icon="fr-icon-file-download-line"
       secondary
       @click.prevent="doExport"
     />

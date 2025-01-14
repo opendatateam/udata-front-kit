@@ -264,7 +264,7 @@ const onSubmit = async () => {
             secondary
             class="fr-mb-1w"
             label="Supprimer"
-            icon="ri-delete-bin-line"
+            icon="fr-icon-delete-bin-line"
             @click.prevent="destroy"
           />
           <DsfrButton
