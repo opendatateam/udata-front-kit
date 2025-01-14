@@ -6,10 +6,14 @@ export const useLicense = (
 ): Ref<License | undefined> => {
   const datasetStore = useDatasetStore()
   const license = ref<License | undefined>(undefined)
-  watch(dataset, async () => {
-    if (dataset.value) {
-      license.value = await datasetStore.getLicense(dataset.value.license)
-    }
-  })
+  watch(
+    dataset,
+    async () => {
+      if (dataset.value) {
+        license.value = await datasetStore.getLicense(dataset.value.license)
+      }
+    },
+    { immediate: true }
+  )
   return license
 }
