@@ -177,66 +177,62 @@ onMounted(() => {
     </details>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
-        <!-- checking twice to avoid empty li and to reduce dom size -->
-        <li
-          v-for="[group, datasets] in filteredResults"
-          v-show="datasets.length && !isGroupOnlyHidden(group)"
-          :key="group"
-        >
-          <BouquetGroup
-            v-if="datasets.length && !isGroupOnlyHidden(group)"
-            :group-name="group"
-            :all-groups="filteredResults"
-            :datasets-properties="datasets"
-            :is-edit="isEdit"
-            @edit-group-name="handleRenameGroup"
-            @delete-group="handleDeleteGroup"
-          >
-            <template v-if="isEdit" #datasetActions="{ dataset, index }">
-              <DsfrButton
-                size="sm"
-                icon="fr-icon-edit-line"
-                label="Éditer"
-                tertiary
-                icon-only
-                :on-click="() => editDataset(dataset, index, group)"
-              />
-              <DsfrButton
-                size="sm"
-                icon="fr-icon-delete-line"
-                label="Supprimer"
-                tertiary
-                icon-only
-                :on-click="() => handleRemoveDataset(group, index)"
-              />
-            </template>
-            <template #datasetContent="{ dataset }">
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <div v-html="fromMarkdown(dataset.purpose)"></div>
-              <BouquetDatasetCard
-                v-if="dataset.id"
-                :dataset-properties="dataset"
-                :dataset-content="datasetsContent.get(dataset.id)"
-              />
-              <div class="fr-grid-row">
-                <a
-                  v-if="!isAvailable(dataset.availability) && !isEdit"
-                  class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                  :href="`mailto:${config.website.contact_email}`"
-                >
-                  Aidez-nous à trouver la donnée</a
-                >
-                <a
-                  v-if="dataset.uri && !dataset.id"
-                  class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                  :href="dataset.uri"
-                  target="_blank"
-                  >Accéder au catalogue</a
-                >
-              </div>
-            </template>
-          </BouquetGroup>
-        </li>
+        <template v-for="[group, datasets] in filteredResults" :key="group">
+          <li v-if="datasets.length && !isGroupOnlyHidden(group)">
+            <BouquetGroup
+              :group-name="group"
+              :all-groups="filteredResults"
+              :datasets-properties="datasets"
+              :is-edit="isEdit"
+              @edit-group-name="handleRenameGroup"
+              @delete-group="handleDeleteGroup"
+            >
+              <template v-if="isEdit" #datasetActions="{ dataset, index }">
+                <DsfrButton
+                  size="sm"
+                  icon="fr-icon-edit-line"
+                  label="Éditer"
+                  tertiary
+                  icon-only
+                  :on-click="() => editDataset(dataset, index, group)"
+                />
+                <DsfrButton
+                  size="sm"
+                  icon="fr-icon-delete-line"
+                  label="Supprimer"
+                  tertiary
+                  icon-only
+                  :on-click="() => handleRemoveDataset(group, index)"
+                />
+              </template>
+              <template #datasetContent="{ dataset }">
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div v-html="fromMarkdown(dataset.purpose)"></div>
+                <BouquetDatasetCard
+                  v-if="dataset.id"
+                  :dataset-properties="dataset"
+                  :dataset-content="datasetsContent.get(dataset.id)"
+                />
+                <div class="fr-grid-row">
+                  <a
+                    v-if="!isAvailable(dataset.availability) && !isEdit"
+                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    :href="`mailto:${config.website.contact_email}`"
+                  >
+                    Aidez-nous à trouver la donnée</a
+                  >
+                  <a
+                    v-if="dataset.uri && !dataset.id"
+                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    :href="dataset.uri"
+                    target="_blank"
+                    >Accéder au catalogue</a
+                  >
+                </div>
+              </template>
+            </BouquetGroup>
+          </li>
+        </template>
       </ul>
     </div>
     <div v-else>
