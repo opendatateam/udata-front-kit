@@ -21,8 +21,7 @@ const datasetPropertiesRef = toRef(props, 'datasetProperties')
 </script>
 
 <template>
-  <!-- Using :key ensures that the component is recreated when dataset changes
-       otherwise, we have a persistence on the thumbnail -->
+  <!-- Using :key ensures that the component is recreated when dataset changes otherwise, we have a persistence on the thumbnail -->
   <DatasetCard
     v-if="datasetContent"
     :key="datasetContent.id"
@@ -31,7 +30,8 @@ const datasetPropertiesRef = toRef(props, 'datasetProperties')
       name: 'dataset_detail',
       params: { did: datasetContent.id }
     }"
-    :show-metrics="false"
+    :show-description="false"
+    class="dataset-card fr-m-0"
   />
   <DsfrAlert
     v-if="datasetProperties.remoteDeleted"
@@ -46,3 +46,13 @@ const datasetPropertiesRef = toRef(props, 'datasetProperties')
     </div>
   </DsfrAlert>
 </template>
+
+<style scoped>
+/* fix overflow from "mis à jour" text in DatasetCard */
+:deep(h4 + div) {
+  flex-wrap: wrap;
+}
+.dataset-card {
+  background-color: var(--background-default-grey, #fff);
+}
+</style>

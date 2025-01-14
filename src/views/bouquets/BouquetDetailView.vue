@@ -137,7 +137,7 @@ const onUpdateDatasets = () => {
       datasets: dedupedDatasets,
       extras: updateTopicExtras(topic.value, {
         datasets_properties: datasetsProperties.value.map(
-          ({ remoteDeleted, remoteArchived, ...data }) => data
+          ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
         )
       })
     })
@@ -199,7 +199,26 @@ watch(
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
   <GenericContainer v-if="topic">
-    <div class="fr-grid-row fr-grid-row--gutters flex-reverse">
+    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters">
+      <div
+        class="fr-col-12"
+        :class="topicsDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
+      >
+        <div class="bouquet__header fr-mb-4v">
+          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
+          <DsfrTag v-if="theme" class="fr-mb-1v card__tag" :label="subtheme" />
+        </div>
+        <div v-if="topicsActivateReadMore">
+          <ReadMore max-height="600">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="description" />
+          </ReadMore>
+        </div>
+        <div v-else>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="description" />
+        </div>
+      </div>
       <div
         class="fr-col-12"
         :class="
@@ -210,7 +229,9 @@ watch(
           <div v-if="!canEdit && topic.private" class="fr-mb-1w">
             <DsfrTag label="Brouillon" />
           </div>
-          <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+          <div
+            class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle bouquet-actions"
+          >
             <DsfrButton
               v-if="canClone"
               :secondary="canEdit"
@@ -218,7 +239,6 @@ watch(
               label="Cloner"
               icon="fr-icon-git-merge-line"
               title="Cloner le bouquet"
-              class="fr-mb-1v fr-mr-1v"
               @click="goToClone"
             />
             <DsfrButton
@@ -303,25 +323,6 @@ watch(
           </div>
         </div>
       </div>
-      <div
-        class="fr-col-12"
-        :class="topicsDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
-      >
-        <div class="bouquet__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <DsfrTag v-if="theme" class="fr-mb-1v card__tag" :label="subtheme" />
-        </div>
-        <div v-if="topicsActivateReadMore">
-          <ReadMore max-height="600">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="description"></div>
-          </ReadMore>
-        </div>
-        <div v-else>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="description"></div>
-        </div>
-      </div>
     </div>
 
     <DsfrTabs
@@ -331,7 +332,7 @@ watch(
       :tab-list-name="`Groupes d'attributs du ${topicsName}`"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
         <BouquetDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
@@ -365,6 +366,9 @@ watch(
   align-items: center;
   flex-flow: wrap;
 }
+.bouquet-actions {
+  gap: 0.5rem;
+}
 
 .flex-reverse {
   display: flex;
@@ -376,5 +380,14 @@ watch(
 .card__tag {
   color: v-bind('themeColors.color');
   background-color: v-bind('themeColors.background');
+}
+/*
+FIXME: magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
+*/
+:deep(.fr-tabs) {
+  height: auto;
+}
+:deep(.fr-tabs)::before {
+  height: calc(var(--tabs-height) - 47px);
 }
 </style>
