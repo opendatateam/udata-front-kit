@@ -220,9 +220,9 @@ const faqMinisterLink =
       <p>
         Il est également possible de pré-remplir un bouquet en spécifiant les
         données utiles, même si ces dernières ne sont pas encore identifiées ou
-        disponibles sur <span v-html="faqDataGouvHtml" /> Si vous ne trouvez pas
-        votre jeu de données sur la plateforme alors qu’il est bien référencé
-        sur <span v-html="faqDataGouvHtml" />, n’hésitez pas à
+        disponibles sur <span v-html="faqDataGouvHtml" />. Si vous ne trouvez
+        pas votre jeu de données sur la plateforme alors qu’il est bien
+        référencé sur <span v-html="faqDataGouvHtml" />, n’hésitez pas à
         <a href="https://tally.so/r/m61AqO" rel="noopener noreferer"
           >nous contacter</a
         >
