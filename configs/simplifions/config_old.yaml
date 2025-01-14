@@ -34,80 +34,110 @@ website:
       width: '40px'
       height: '219px'
   homepage:
-    title: 'Acteurs publics, utilisez la donnée pour simplifier vos services !'
-    subtitle: |+
-        <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-content-media__img fr-col-lg-2 fr-col-4">
-            <img class="fr-responsive-img" src="/simplifions/assets/accueil-image-ecosystem.png" alt="Capture d'écran du swagger API Entreprise" style="display: block; width: 100%; height: auto; border-radius: 4px;" />
-        </div>
-        <div  class="fr-col-lg-8 fr-col-12" style="font-family: Marianne,arial,sans-serif !important; font-style: normal;">
-          <p class="fr-text--lead"> Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données ! Vous gagnerez aussi du temps !</p>
-
-          <a class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg" href="/cas-d-usages">Tous les cas d'usages</a> <a class="fr-btn fr-btn--secondary fr-btn--lg fr-mt-1v " href="/solutions">Toutes les solutions</a>
-        </div>
-        </div>
+    title: 'Acteurs publics, utilisez la donnée pour simplifier vos services 🧘 !'
+    subtitle: 'Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâces aux API et aux données ! Vous gagnerez aussi du temps !'
     sections:
       - title:
         content: >-
-          <h2 class="fr-h1 fr-my-5w" style="color: black; text-align: center;">Améliorer les services à destination :</h2>
+          ## Améliorer les services à destination :
 
-          <p class="fr-text--lg" style="text-align: center;">
-          Le portail <i>simplifions.data.gouv.fr</i> vous accompagne pour simplifier, avec de la donnée, les démarches des citoyens.<br/>Retrouvez tous les cas d'usages selon le public concerné :
-          </p>
+          ### 👱 Des particuliers
 
-          <div class="fr-grid-row fr-grid-row--gutters">
-          <div class="fr-col-12 fr-col-lg-4">
-            <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-sourcing">
-            <div class="fr-tile__body">
-              <div class="fr-tile__content">
-              <h3 class="fr-tile__title fr-h3">
-                <a href="/cas-d-usages?tags=spf-users-particuliers">Des particuliers<br/>👱</a>
-              </h3>
-              <p class="fr-tile__detail fr-h6">Tous les cas d'usages concernant les particuliers</p>
-              </div>
-            </div>
-            </div>
-          </div>
-
-          <div class="fr-col-12 fr-col-lg-4">
-            <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-sourcing">
-            <div class="fr-tile__body">
-              <div class="fr-tile__content">
-              <h3 class="fr-tile__title fr-h3">
-                <a href="/cas-d-usages?tags=spf-users-entreprises">Des entreprises<br/>💼</a>
-              </h3>
-              <p class="fr-tile__detail fr-h6">Tous les cas d'usages concernant les entreprises</p>
-              </div>
-            </div>
-            </div>
-          </div>
-
-          <div class="fr-col-12 fr-col-lg-4">
-            <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-sourcing">
-            <div class="fr-tile__body">
-              <div class="fr-tile__content">
-              <h3 class="fr-tile__title fr-h3">
-                <a href="/cas-d-usages?tags=spf-users-particuliers">Des associations<br/>🎭</a>
-              </h3>
-              <p class="fr-tile__detail fr-h6">Tous les cas d'usages concernant les associations</p>
-              </div>
-            </div>
-            </div>
-          </div>
-          </div>
+          Les jusitificatifs demandés aux familles (quotient familial, certificat de scolarité, etc.) pour de nombreuses démarches sont souvent déjà connus des services de l'État ! Utilisez les tuyaux informatiques (API) à votre disposition pour simplifier leurs démarches et accélérer votre instuction :
+        sub_section_datasets:
+        #     title: "Jeux de données"
+        #     datasets:
+        #       - "5b7ffc618b4c4169d30727e0"
+        #       - "621df2954fa5a3b5a023e23c"
+        sub_section_cards:
+          title:
+          cards:
+            - id: '660ac80b9e9351349f5c1f14'
+              name: 'Tarification cantine des primaires, collèges et lycées'
+              description: 'Collectivités, calculez automatiquement le tarif de restauration scolaire des élèves en prenant en compte les ressources des familles.'
+              url: 'cas-d-usages/tarification-cantine-du-primaire-colleges-et-lycees'
+              image_url: '/simplifions/assets/tarification_cantine.jpg'
+            - id: '660ac8ab8fd1a813e28cecd2'
+              name: 'Portail famille des communes'
+              description: "Communes et intercommunalités, simplifiez les démarches des familles en calculant automatiquement leur tarif de restauration scolaire, de crèches ou d'activités périscolaires ou municipales."
+              url: 'cas-d-usages/portail-famille-des-communes'
+              image_url: '/simplifions/assets/portail_famille.jpg'
+            - id: '660ac92bc20e599f930bb9c2'
+              name: 'Tarification sociale et solidaire des transports'
+              description: "AOM, obtenez automatiquement les données nécessaires à l'attribution des tarifs réduits de transports collectifs."
+              url: 'cas-d-usages/tarification-sociale-et-solidaire-des-transports'
+              image_url: '/simplifions/assets/transport.jpg'
+        sub_section_tiles:
         sub_section_buttons:
-          - name: "Tous les cas d'usages"
-            url: 'cas-d-usages'
+          - name: "Tous les cas d'usages de particuliers"
+            url: 'cas-d-usages?tags=spf-users-particuliers'
             class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
+            url: 'cas-d-usages?tags=spf-users-particuliers,spf-budget-aucun-developpement'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
       - title:
         content: >-
-          <h2 class="fr-h1 fr-my-5w" style="color: black; text-align: center;">Quelques soient vos ressources, il existe des solutions !</h2>
+          ### 💼 des entreprises
+
+          Simplifiez les démarches des entreprises et facilitez l'instruction de leurs dossiers :
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - id: '5e6f426e634f417810ab794b'
+              name: 'Marchés publics'
+              description: 'Administrations, facilitez les démarches marchés publics des opérateurs économiques et de vos agents.'
+              url: 'cas-d-usages/marches-publics-introduction'
+              image_url: '/simplifions/assets/marches.png'
+        sub_section_tiles:
+        sub_section_buttons:
+          - name: "Tous les cas d'usages d’entreprises"
+            url: 'cas-d-usages?tags=spf-users-entreprises'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
+            url: 'cas-d-usages?tags=spf-users-entreprises,spf-budget-aucun-developpement'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
+      - title:
+        content: >-
+          ### 🎭 des associations
+
+          Simplifiez les démarches des associations et facilitez l'instruction de leurs dossiers :
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - id: '65f170136c6ff1b1d0351081'
+              name: 'Subventions de fonctionnement des associations'
+              description: "Faciliter la saisie et l'instruction du formulaire unique de demande."
+              url: 'cas-d-usages/subventions-de-fonctionnement-des-associations'
+              image_url: '/simplifions/assets/documents.png'
+            - id: '5e6f426e634f417810ab794b'
+              name: 'Marchés publics'
+              description: 'Administrations, facilitez les démarches marchés publics des opérateurs économiques et de vos agents.'
+              url: 'cas-d-usages/marches-publics-introduction'
+              image_url: '/simplifions/assets/marches.png'
+        sub_section_tiles:
+        sub_section_buttons:
+          - name: "Tous les cas d'usages d’associations"
+            url: 'cas-d-usages?tags=spf-users-associations'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          - name: 'Pas de service informatique ? Découvrir les solutions clé en main'
+            url: 'cas-d-usages?tags=spf-users-associations,spf-budget-aucun-developpement'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill fr-btn--secondary'
+      - title:
+        content: >-
+          ## Quelques soient vos moyens techniques, une solution
 
           <p class="fr-text--lg">
           Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non d'un service informatique ou d'un prestataire.
           <br/>
           Pour chacun des cas d'usages, un indicateur vous permet de savoir quelles sont les possibilités d'intégration :
           </p>
+
+
+          - **Solution clé en main** : Une solution clé en main est disponible pour ce cas d'usage. Si vous n'avez pas ni service informatique ni compétences techniques, vous pouvez donc utiliser la solution clé en main pour couvrir le cas d'usage.
+
+          - **Solutions éditeurs** : Des éditeurs proposent des logiciels permettant de couvrir ce cas d'usage.
 
         sub_section_datasets:
         sub_section_cards:
