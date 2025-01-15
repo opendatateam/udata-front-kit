@@ -10,12 +10,12 @@ defineProps({
 <template>
   <div class="fr-py-2w fr-mb-3w border-bottom border-default-grey">
     <h2 v-if="title" class="subtitle subtitle--uppercase">{{ title }}</h2>
-    <p><slot name="description"></slot></p>
+    <p><slot name="description" /></p>
     <div class="fr-m-0">
       <div class="fr-grid-row fr-grid-row--gutters">
-        <slot></slot>
+        <slot />
       </div>
     </div>
-    <slot name="description-below"></slot>
+    <slot name="description-below" />
   </div>
 </template>
