@@ -3,6 +3,7 @@ import { ref, watchEffect, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import SelectSpatialGranularity from '@/custom/ecospheres/components/indicators/SelectSpatialGranularity.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import type { IndicatorFilters } from '../../model/indicator'
@@ -13,6 +14,7 @@ const spatialAPI = new SpatialAPI()
 
 type Props = IndicatorFilters & {
   geozone: string | null
+  granularity: string | null
 }
 const props = defineProps<Props>()
 
@@ -43,6 +45,12 @@ const switchSpatialCoverage = (
   navigate({ geozone: selectedGeozone.value })
 }
 
+const switchSpatialGranularity = (
+  spatialCoverageGranularity: string | null
+) => {
+  navigate({ granularity: spatialCoverageGranularity })
+}
+
 watchEffect(() => {
   if (props.geozone) {
     selectedGeozone.value = props.geozone
@@ -60,6 +68,15 @@ watchEffect(() => {
   <div className="filterForm">
     <div class="fr-select-group">
       <SelectComponent
+        default-option="Tous les enjeux"
+        :label="filtersConf.enjeu.name"
+        :options="filtersConf.enjeu.values"
+        :model-value="props.enjeu"
+        @update:model-value="(value) => switchFilter('enjeu', value)"
+      />
+    </div>
+    <div class="fr-select-group">
+      <SelectComponent
         default-option="Toutes les thématiques"
         :label="filtersConf.theme.name"
         :options="filtersConf.theme.values"
@@ -69,11 +86,44 @@ watchEffect(() => {
     </div>
     <div class="fr-select-group">
       <SelectComponent
-        default-option="Tous les enjeux"
-        :label="filtersConf.enjeu.name"
-        :options="filtersConf.enjeu.values"
-        :model-value="props.enjeu"
-        @update:model-value="(value) => switchFilter('enjeu', value)"
+        default-option="Tous les secteurs"
+        :label="filtersConf.secteur.name"
+        :options="filtersConf.secteur.values"
+        :model-value="props.secteur"
+        @update:model-value="(value) => switchFilter('secteur', value)"
+      />
+    </div>
+    <div class="fr-select-group">
+      <SelectComponent
+        default-option="Tous les leviers"
+        :label="filtersConf.levier.name"
+        :options="filtersConf.levier.values"
+        :model-value="props.levier"
+        @update:model-value="(value) => switchFilter('levier', value)"
+      />
+    </div>
+    <div class="fr-select-group">
+      <SelectComponent
+        default-option="Tous les producteurs"
+        :label="filtersConf.producteur.name"
+        :options="filtersConf.producteur.values"
+        :model-value="props.producteur"
+        @update:model-value="(value) => switchFilter('producteur', value)"
+      />
+    </div>
+    <div class="fr-select-group">
+      <SelectComponent
+        default-option="Tous les usages"
+        :label="filtersConf.usage.name"
+        :options="filtersConf.usage.values"
+        :model-value="props.usage"
+        @update:model-value="(value) => switchFilter('usage', value)"
+      />
+    </div>
+    <div class="fr-select-group">
+      <SelectSpatialGranularity
+        :model-value="props.granularity"
+        @update:model-value="switchSpatialGranularity"
       />
     </div>
     <div class="fr-select-group">

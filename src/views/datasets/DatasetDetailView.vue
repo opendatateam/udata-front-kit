@@ -3,51 +3,43 @@ import {
   AppLink,
   InformationPanel,
   OrganizationNameWithCertificate,
-  Pagination,
   QualityComponent,
   ReadMore,
-  ResourceAccordion,
-  Well,
-  type License
+  Well
 } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
-import { computed, inject, onMounted, ref, watch } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
+import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
+import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import type { ResourceDataWithQuery } from '@/model/resource'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
-import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
+import { useLicense } from '@/utils/dataset'
 
 const route = useRouteParamsAsString()
 const datasetId = route.params.did
 
 const datasetStore = useDatasetStore()
-const resourceStore = useResourceStore()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
-const resources = ref<Record<string, ResourceDataWithQuery>>({})
 const selectedTabIndex = ref(0)
-const license = ref<License>()
 const showAddToBouquetModal = ref(false)
 
-const pageSize = config.website.pagination_sizes.files_list as number
 const showDiscussions = config.website.discussions.dataset.display as boolean
 const { topicsName } = useTopicsConf()
 
@@ -55,38 +47,23 @@ const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
-const updateQuery = (q: string, typeId: string) => {
-  resources.value[typeId].query = q
-  changePage(typeId, 1, q)
-}
-
-const doSearch = (typeId: string) => {
-  changePage(typeId, 1, resources.value[typeId].query)
-}
-
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
   { to: '/datasets', text: 'Données' },
-  { text: dataset.value?.title }
+  { text: dataset.value?.title || '' }
 ])
 
-const tabTitles = computed(() => {
-  const _tabs = [
-    { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-    { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
-    { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' }
-  ]
-  _tabs.push({
-    title: 'Informations',
-    tabId: 'tab-3',
-    panelId: 'tab-content-3'
-  })
-  return _tabs
-})
+const tabTitles = [
+  { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
+  { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
+  { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
+  { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
+]
 
 const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(dataset))
+const license = useLicense(dataset)
 
 const showHarvestQualityWarning = computed(() => {
   const backend = dataset.value?.harvest?.backend
@@ -94,50 +71,6 @@ const showHarvestQualityWarning = computed(() => {
     config.website.datasets.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
 })
-
-const changePage = (type: string, page = 1, query = '') => {
-  resources.value[type].currentPage = page
-  resources.value[type].query = query
-  if (dataset.value) {
-    return resourceStore
-      .fetchDatasetResources(dataset.value.id, type, page, query)
-      .then((data) => {
-        resources.value[type].resources = data.data
-        resources.value[type].total = data.total
-      })
-  }
-}
-
-const getResourcesTitle = (typedResources: ResourceDataWithQuery) => {
-  if (typedResources?.total > 1) {
-    let pluralName
-    switch (typedResources.type.id) {
-      case 'main':
-        pluralName = 'Fichiers principaux'
-        break
-      case 'documentation':
-        pluralName = 'Documentations'
-        break
-      case 'update':
-        pluralName = 'Mises à jour'
-        break
-      case 'api':
-        pluralName = 'APIs'
-        break
-      case 'code':
-        pluralName = 'Dépôts de code'
-        break
-      case 'other':
-        pluralName = 'Autres'
-        break
-      default:
-        pluralName = typedResources.type.label
-    }
-    return `${typedResources.total} ${pluralName}`
-  } else {
-    return typedResources.type.label
-  }
-}
 
 const discussionWellTitle = showDiscussions
   ? 'Participer aux discussions'
@@ -156,32 +89,6 @@ onMounted(() => {
       setAccessibilityProperties(dataset.value?.title)
     })
 })
-
-// launch reuses and discussions fetch as soon as we have the technical id
-watch(
-  dataset,
-  async () => {
-    if (!dataset.value) return
-    // fetch ressources if need be
-    if (dataset.value.resources.rel) {
-      const resourceLoader = useLoading().show({ enforceFocus: false })
-      const allResources = (await resourceStore.loadResources(
-        dataset.value.id,
-        dataset.value.resources
-      )) as ResourceDataWithQuery[]
-      for (const typedResources of allResources) {
-        resources.value[typedResources.type.id] = { ...typedResources }
-        resources.value[typedResources.type.id].totalWithoutFilter =
-          typedResources.total
-      }
-      resourceLoader.hide()
-    } else {
-      throw Error('Unsupported dataset.resources format')
-    }
-    license.value = await datasetStore.getLicense(dataset.value.license)
-  },
-  { immediate: true }
-)
 </script>
 
 <template>
@@ -289,55 +196,13 @@ watch(
       :tab-titles="tabTitles"
     >
       <!-- Fichiers -->
-      <DsfrTabContent v-if="resources" panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent
+        v-if="dataset.resources.total"
+        panel-id="tab-content-0"
+        tab-id="tab-0"
+      >
         <div v-if="selectedTabIndex === 0">
-          <template v-for="typedResources in resources">
-            <div
-              v-if="typedResources.totalWithoutFilter"
-              :key="typedResources.type.id"
-              class="fr-mb-4w"
-            >
-              <h2 class="fr-mb-1v subtitle subtitle--uppercase">
-                {{ getResourcesTitle(typedResources) }}
-              </h2>
-              <DsfrSearchBar
-                v-if="typedResources.totalWithoutFilter > pageSize"
-                label="Rechercher un fichier"
-                button-text="Rechercher"
-                placeholder=""
-                :large="false"
-                class="search-bar"
-                @search="() => doSearch(typedResources.type.id)"
-                @update:model-value="
-                  (value: string) => updateQuery(value, typedResources.type.id)
-                "
-              />
-              <span v-if="typedResources.resources.length != 0">
-                <ResourceAccordion
-                  v-for="resource in typedResources.resources"
-                  :key="resource.id"
-                  :dataset-id="datasetId"
-                  :resource="resource"
-                />
-                <Pagination
-                  v-if="typedResources.total > pageSize"
-                  class="fr-mt-3w"
-                  :page="typedResources.currentPage"
-                  :page-size="pageSize"
-                  :total-results="typedResources.total"
-                  @change="
-                    (page) =>
-                      changePage(
-                        typedResources.type.id,
-                        page,
-                        typedResources.query
-                      )
-                  "
-                />
-              </span>
-              <span v-else> <br />Aucun résultat pour votre recherche. </span>
-            </div>
-          </template>
+          <ResourcesList :dataset="dataset" />
         </div>
       </DsfrTabContent>
 
@@ -375,11 +240,7 @@ watch(
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent
-        v-show="dataset && license"
-        panel-id="tab-content-3"
-        tab-id="tab-3"
-      >
+      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
         <ExtendedInformationPanel
           v-if="
             config.website.datasets.show_extended_information_panel && dataset

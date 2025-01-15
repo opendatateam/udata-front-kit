@@ -18,6 +18,7 @@ type Props = IndicatorFilters & {
   page: number
   sort: string | null
   geozone: string | null
+  granularity: string | null
 }
 const props = withDefaults(defineProps<Props>(), { query: '' })
 
@@ -37,9 +38,11 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  router.push({ name: 'indicators', query }).then(() => {
-    emits('clearFilters')
-  })
+  router
+    .push({ name: 'indicators', query, hash: '#indicators-list' })
+    .then(() => {
+      emits('clearFilters')
+    })
 }
 
 const executeQuery = async (args: typeof props) => {

@@ -18,6 +18,7 @@ type Props = IndicatorFilters & {
   page: string | null
   sort: string | null
   geozone: string | null
+  granularity: string | null
 }
 const props = withDefaults(defineProps<Props>(), { query: '' })
 // map props.{filter} to a list of props for child components in v-bind
@@ -99,7 +100,11 @@ const search = useDebounceFn((query) => {
             <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <IndicatorSearch v-bind="filtersProps" :geozone="props.geozone" />
+            <IndicatorSearch
+              v-bind="filtersProps"
+              :geozone="props.geozone"
+              :granularity="props.granularity"
+            />
           </div>
         </nav>
         <div className="fr-col">
@@ -107,6 +112,7 @@ const search = useDebounceFn((query) => {
             ref="indicatorListComp"
             v-bind="filtersProps"
             :geozone="props.geozone"
+            :granularity="props.granularity"
             :query="props.query"
             :page="props.page ? parseInt(props.page) : 1"
             :sort="props.sort"
