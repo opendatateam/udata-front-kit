@@ -32,12 +32,14 @@ const { api, axes } = useIndicatorExtras(indicator)
       :value="api?.noms_cubes.join(', ')"
     />
     <InformationPanelItem title="Id indicateur" :value="api?.id" />
-    <template v-for="(values, axis, index) in axes" :key="axis">
-      <InformationPanelItem :title="`Axe n°${index + 1} - ${axis}`">
-        <ul>
-          <li v-for="value in values" :key="value">{{ value }}</li>
-        </ul>
-      </InformationPanelItem>
-    </template>
+    <InformationPanelItem
+      v-for="(values, axis, index) in axes"
+      :key="axis"
+      :title="`Axe n°${index + 1} - ${axis}`"
+    >
+      <ul>
+        <li v-for="value in values" :key="value">{{ value }}</li>
+      </ul>
+    </InformationPanelItem>
   </InformationPanelSection>
 </template>

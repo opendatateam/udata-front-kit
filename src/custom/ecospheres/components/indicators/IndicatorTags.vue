@@ -23,14 +23,12 @@ const tags = useTags(props.indicator, props.type, EXCLUDE_TAGS)
 </script>
 
 <template>
-  <template v-if="tags.length > 0">
-    <ul class="fr-badges-group fr-mb-1w">
-      <li v-for="t in tags" :key="`${t.type}-${t.value}`">
-        <p :class="['fr-badge', `fr-badge--${t.color}`]">
-          {{ t.value }}
-        </p>
-      </li>
-    </ul>
-  </template>
+  <ul v-if="tags.length > 0" class="fr-badges-group fr-mb-1w">
+    <li v-for="t in tags" :key="`${t.type}-${t.value}`">
+      <p :class="['fr-badge', `fr-badge--${t.color}`]">
+        {{ t.value }}
+      </p>
+    </li>
+  </ul>
   <p v-else-if="showDefaultValue" class="fr-mb-0">{{ UNFILLED_LABEL }}</p>
 </template>
