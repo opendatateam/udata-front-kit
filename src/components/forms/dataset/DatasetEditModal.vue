@@ -4,7 +4,11 @@ import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
-import { Availability, type DatasetProperties } from '@/model/topic'
+import {
+  Availability,
+  type DatasetProperties,
+  type DatasetsGroups
+} from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
@@ -21,6 +25,10 @@ const router = useRouter()
 const datasets = defineModel({
   type: Object as () => DatasetProperties[],
   required: true
+})
+const datasetsGroups = defineModel('groups-model', {
+  type: Object as () => DatasetsGroups,
+  default: []
 })
 
 const isModalOpen = ref(false)
@@ -41,7 +49,7 @@ const modalActions = computed(() => {
     {
       label: 'Enregistrer',
       disabled: !modalData.value.isValid,
-      onClick: ($event: PointerEvent) => {
+      onClick: ($event: MouseEvent) => {
         $event.preventDefault()
         submitModal(modalData.value)
         closeModal()
@@ -146,6 +154,7 @@ defineExpose({ addDataset, editDataset })
     <form novalidate>
       <DatasetPropertiesFields
         v-model="modalData.dataset"
+        v-model:groups-model="datasetsGroups"
         :already-selected-datasets="datasets"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />
@@ -156,6 +165,7 @@ defineExpose({ addDataset, editDataset })
         align="right"
         :buttons="modalActions"
         inline-layout-when="large"
+        class="fr-mt-4w"
       />
     </slot>
   </DsfrModal>
