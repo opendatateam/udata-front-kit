@@ -12,7 +12,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import {
   vueDsfrAutoimportPreset,
   vueDsfrComponentResolver
-} from '@gouvminint/vue-dsfr'
+} from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
@@ -58,8 +58,8 @@ export default defineConfig(({ mode }) => {
       }),
       // Autoimport des composants utilisés dans les templates
       Components({
-        extensions: ['vue'],
-        dirs: ['src/components'], // Autoimport de vos composants qui sont dans le dossier `src/components`
+        dirs: ['src/components', 'src/custom/**/components'], // Autoimport des composants
+        deep: true,
         include: [/\.vue$/, /\.vue\?vue/],
         dts: './src/components.d.ts',
         resolvers: [

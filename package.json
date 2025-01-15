@@ -22,7 +22,7 @@
   "dependencies": {
     "@datagouv/components": "^2.0.4",
     "@gouvfr/dsfr": "1.11.2",
-    "@gouvminint/vue-dsfr": "^7.2.0",
+    "@gouvminint/vue-dsfr": "^8.1.0",
     "@json2csv/plainjs": "^7.0.6",
     "@unhead/vue": "^1.11.14",
     "@vee-validate/rules": "^4.15.0",
@@ -49,7 +49,6 @@
     "@eslint/js": "^9.17.0",
     "@testing-library/vue": "^8.1.0",
     "@tsconfig/node20": "^20.1.4",
-    "@types/dompurify": "^3.2.0",
     "@types/js-yaml": "^4.0.9",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.10.2",
