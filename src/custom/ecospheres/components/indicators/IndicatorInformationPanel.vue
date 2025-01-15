@@ -3,7 +3,7 @@ import { formatDate } from '@/utils'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { toRef } from 'vue'
 import type { Indicator } from '../../model/indicator'
-import { useIndicatorExtras } from '../../utils/indicator'
+import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 import IndicatorTags from './IndicatorTags.vue'
 import InformationPanelItem from './informations/InformationPanelItem.vue'
 import InformationPanelSection from './informations/InformationPanelSection.vue'
@@ -46,7 +46,10 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
   <!-- Métadonnées -->
   <InformationPanelSection title="Métadonnées">
     <InformationPanelItem title="Unité" :value="unite" />
-    <InformationPanelItem title="Mailles" :value="mailles.join(', ')" />
+    <InformationPanelItem
+      title="Mailles"
+      :value="mailles.length ? mailles.join(', ') : UNFILLED_LABEL"
+    />
 
     <template v-for="(values, axis, index) in axes" :key="axis">
       <InformationPanelItem :title="`Axe n°${index + 1} - ${axis}`">
