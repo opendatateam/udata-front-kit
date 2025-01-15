@@ -149,7 +149,7 @@ website:
                 <h3 class="fr-card__title">
                   Vous passez par un éditeur
                 </h3>
-                <p class="fr-card__desc">Les cas d'usages portés par des éditeurs qui s'occupent de l'intégration.</p>
+                <p class="fr-card__desc">Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.</p>
                 </div>
                 <div class="fr-card__footer">
                 <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
@@ -181,7 +181,7 @@ website:
                 <h3 class="fr-card__title">
                   Vous avez votre service informatique
                 </h3>
-                <p class="fr-card__desc">Les cas d'usages que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d’information.</p>
+                <p class="fr-card__desc">Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d’information.</p>
                 </div>
                 <div class="fr-card__footer">
                 <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
