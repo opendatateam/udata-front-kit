@@ -8,8 +8,6 @@ const selectedGranularity = defineModel({
   default: null
 })
 
-defineEmits(['update:model-value'])
-
 const options: Ref<SpatialCoverageLevel[]> = ref([])
 
 onMounted(() => {
@@ -23,10 +21,9 @@ onMounted(() => {
 
 <template>
   <SelectComponent
-    :model-value="selectedGranularity"
+    v-model="selectedGranularity"
     default-option="Toutes les mailles"
     label="Maille minimale"
     :options="options"
-    @update:model-value="(value) => $emit('update:model-value', value)"
   />
 </template>
