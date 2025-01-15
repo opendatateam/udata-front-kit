@@ -22,7 +22,7 @@ import IndicatorInformationPanel from '../../components/indicators/IndicatorInfo
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
-import { useIndicatorExtras } from '../../utils/indicator'
+import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.iid
@@ -92,9 +92,9 @@ onMounted(() => {
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Levier</h2>
         <IndicatorTags :indicator="indicator" type="levier" />
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
-        <p>{{ spatialGranularity?.name || '-' }}</p>
+        <p>{{ spatialGranularity?.name || UNFILLED_LABEL }}</p>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
-        <p>{{ unite || '-' }}</p>
+        <p>{{ unite || UNFILLED_LABEL }}</p>
         <div v-if="userStore.loggedIn">
           <DsfrButton
             class="fr-mt-2w"

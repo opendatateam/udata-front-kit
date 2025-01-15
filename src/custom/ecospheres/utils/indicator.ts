@@ -16,6 +16,8 @@ const indicatorsConf = config.indicators as IndicatorsConf
 const tagPrefix = indicatorsConf.global_tag_prefix
 const filters = indicatorsConf.filters
 
+export const UNFILLED_LABEL = 'Non renseigné'
+
 interface QueryArgs extends IndicatorFilters {
   [key: string]: string | null
 }

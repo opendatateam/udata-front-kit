@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { fromMarkdown } from '@/utils'
+import { UNFILLED_LABEL } from '../../../utils/indicator'
 
 const props = defineProps({
   title: {
@@ -8,7 +9,7 @@ const props = defineProps({
   },
   value: {
     type: String,
-    default: '-'
+    default: UNFILLED_LABEL
   },
   isRow: {
     type: Boolean,

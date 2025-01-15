@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Indicator } from '../../model/indicator'
-import { useTags } from '../../utils/indicator'
+import { UNFILLED_LABEL, useTags } from '../../utils/indicator'
 
 const EXCLUDE_TAGS = ['producteur', 'usage']
 
@@ -12,6 +12,10 @@ const props = defineProps({
   type: {
     type: String,
     default: undefined
+  },
+  showDefaultValue: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -28,5 +32,5 @@ const tags = useTags(props.indicator, props.type, EXCLUDE_TAGS)
       </li>
     </ul>
   </template>
-  <p v-else class="fr-mb-0">-</p>
+  <p v-else-if="showDefaultValue" class="fr-mb-0">{{ UNFILLED_LABEL }}</p>
 </template>

@@ -15,7 +15,7 @@ defineProps({
   <div class="fr-card fr-enlarge-link">
     <div class="fr-card__body">
       <div class="fr-card__content">
-        <IndicatorTags :indicator="indicator" />
+        <IndicatorTags :indicator="indicator" :show-default-value="false" />
         <h3 class="fr-card__title fr-mb-1w">
           <RouterLink
             :to="{ name: 'indicator_detail', params: { iid: indicator.id } }"
