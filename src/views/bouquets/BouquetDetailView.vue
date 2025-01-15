@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  OrganizationNameWithCertificate,
-  ReadMore,
-  excerpt
-} from '@datagouv/components'
+import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
 import { computed, inject, ref, watch } from 'vue'
@@ -145,7 +141,7 @@ const onUpdateDatasets = () => {
 }
 
 const metaDescription = (): string | undefined => {
-  return excerpt(topic.value?.description ?? '')
+  return topic.value?.description ?? ''
 }
 
 const metaTitle = computed(() => {

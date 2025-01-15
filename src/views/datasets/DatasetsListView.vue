@@ -254,7 +254,8 @@ onMounted(() => {
       {{ total }} résultats de recherche pour "{{ query }}".
     </p>
     <p v-if="!query && !banner">
-      Parcourir tous les jeux de données présents sur {{ title }}.
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      Parcourir tous les jeux de données présents sur <span v-html="title" />.
     </p>
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent

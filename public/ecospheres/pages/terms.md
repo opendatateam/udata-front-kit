@@ -4,7 +4,7 @@
 
 ### Éditeur
 
-_ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable (CGDD).
+_ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge de l&rsquo;environnement, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable (CGDD).
 
 **Commissariat Général au Développement Durable**\
 Tour Séquoïa\
