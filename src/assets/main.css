@@ -203,3 +203,10 @@ body {
 .datagouv-components .fr-search-bar .fr-btn {
   border-radius: 0 0.25rem 0 0;
 }
+
+.hero-banner {
+  background: #f3f3f3;
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
