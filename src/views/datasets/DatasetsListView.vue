@@ -143,7 +143,11 @@ const onSelectOrganization = (orgId: string) => {
 }
 
 const search = () => {
-  router.push({ path: '/datasets', query: computeUrlQuery({ page: 1 }) })
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({ page: 1 }),
+    hash: '#datasets-list'
+  })
 }
 
 const goToPage = (page: number) => {
@@ -245,7 +249,7 @@ onMounted(() => {
       <div v-html="fromMarkdown(banner.content)" />
     </div>
   </section>
-  <GenericContainer>
+  <GenericContainer id="datasets-list">
     <p v-show="query" ref="queryResults" tabindex="-1">
       {{ total }} résultats de recherche pour "{{ query }}".
     </p>
