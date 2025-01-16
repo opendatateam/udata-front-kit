@@ -26,6 +26,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  labelVisible: {
+    type: Boolean,
+    default: true
+  },
   dropdown: {
     type: Array,
     default: () => []
@@ -82,10 +86,11 @@ const dropdownLabel = (text: string) => {
     v-model="selectedQuery"
     :label="searchLabel"
     class="filter-input"
-    label-visible
+    :label-visible="labelVisible"
+    :placeholder="!labelVisible ? searchLabel : undefined"
   >
     <template #before-input>
-      <span class="fr-icon-search-line search-icon" aria-hidden></span>
+      <VIconCustom name="search-line" class="search-icon" />
     </template>
   </DsfrInputGroup>
 
@@ -130,7 +135,7 @@ const dropdownLabel = (text: string) => {
         <span v-html="dropdownLabel(slotProps.option.text)"></span>
       </template>
       <template #caret>
-        <span class="fr-icon-search-line search-icon"></span>
+        <VIconCustom name="search-line" class="search-icon" />
       </template>
       <template #placeholder>
         <span aria-hidden="true" class="visible-label">{{ placeholder }}</span>
@@ -144,6 +149,12 @@ const dropdownLabel = (text: string) => {
   --icon-width: 24px;
 }
 
+.fr-input-group {
+  margin: 0;
+}
+:deep(.fr-label.invisible + .filter-input) {
+  margin: 0;
+}
 :deep(.filter-input) {
   padding-inline-start: calc(var(--icon-width) + 1rem);
 }

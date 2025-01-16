@@ -20,6 +20,7 @@ robots:
 # UI customizations
 website:
   title: 'logistique.data.gouv.fr'
+  formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
   service_logo: '/logos/logistique-logo.svg'
@@ -32,7 +33,7 @@ website:
     title: 'Les données ouvertes de la logistique'
     subtitle: 'logistique.data.gouv.fr centralise et structure les données publiques relatives à la logistique. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite.'
     sections:
-      - title: Des bouquets de données pour articuler politiques publiques et données territoriales 
+      - title: Des bouquets de données pour articuler politiques publiques et données territoriales
         content: "Créez un bouquet pour inventorier les données utiles à un cas d'usage : une politique publique sur un territoire"
         sub_section_datasets:
         sub_section_cards:
@@ -130,8 +131,8 @@ website:
     - '#DBF2F0'
   env: 'prod'
   matomo:
-    host:
-    siteId:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 308
   discussions:
     dataset:
       display: true

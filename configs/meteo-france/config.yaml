@@ -20,6 +20,7 @@ robots:
 # UI customizations
 website:
   title: 'meteo.data.gouv.fr'
+  formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
   service_logo: '/logos/meteo-france-logo.svg'

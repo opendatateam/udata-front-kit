@@ -103,7 +103,7 @@ export function useBreadcrumbLinksForTopic(
   })
 }
 
-export function useExtras(topic: Ref<Topic | null>): {
+export function useExtras(topic: Ref<Topic | null | undefined>): {
   theme: Ref<string | undefined>
   subtheme: Ref<string | undefined>
   datasetsProperties: Ref<DatasetProperties[]>
