@@ -22,9 +22,10 @@ export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
 /**
  * Parse markdown to HTML
  */
-export const fromMarkdown = (value: string) => {
+export const fromMarkdown = (value: string, inline: boolean = false) => {
   if (!value) return ''
-  const parsed = marked.parse(value, markedOptions)
+  const fn = inline ? marked.parseInline : marked.parse
+  const parsed = fn(value, markedOptions)
   // type cast to string because we don't use async mode of marked
   return DOMPurify.sanitize(parsed as string)
 }
@@ -40,7 +41,6 @@ export const stripFromMarkdown = (value: string) => {
 
 /**
  * Format date
- *
  */
 export const formatDate = (dateString: string, short = false) => {
   const date = new Date(dateString)
@@ -55,4 +55,11 @@ export const formatDate = (dateString: string, short = false) => {
         timeStyle: 'short'
       }
   return new Intl.DateTimeFormat('default', params).format(date)
+}
+
+/**
+ * Basic slugify function. Deletes special characters like numbers or diacritics instead of converting them.
+ */
+export const basicSlugify = (value: string) => {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, '-')
 }

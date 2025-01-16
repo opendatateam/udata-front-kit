@@ -18,6 +18,7 @@ type Props = IndicatorFilters & {
   page: string | null
   sort: string | null
   geozone: string | null
+  granularity: string | null
 }
 const props = withDefaults(defineProps<Props>(), { query: '' })
 // map props.{filter} to a list of props for child components in v-bind
@@ -61,7 +62,7 @@ const search = useDebounceFn((query) => {
   <div class="fr-container datagouv-components fr-my-2w">
     <h1>Indicateurs territoriaux</h1>
   </div>
-  <section class="fr-container--fluid hero datagouv-components">
+  <section class="fr-container--fluid hero-banner datagouv-components">
     <div class="fr-container fr-py-12v">
       <h2>Les indicateurs territoriaux, qu’est-ce que c’est&nbsp;?</h2>
       <p>
@@ -71,7 +72,7 @@ const search = useDebounceFn((query) => {
         identifier des problématiques spécifiques, et à orienter les décisions
         publiques et les politiques de développement.
       </p>
-      <p class="fr-mb-0">
+      <p>
         Ils sont essentiels pour un diagnostic territorial et pour le suivi des
         évolutions dans le temps.
       </p>
@@ -99,7 +100,11 @@ const search = useDebounceFn((query) => {
             <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <IndicatorSearch v-bind="filtersProps" :geozone="props.geozone" />
+            <IndicatorSearch
+              v-bind="filtersProps"
+              :geozone="props.geozone"
+              :granularity="props.granularity"
+            />
           </div>
         </nav>
         <div className="fr-col">
@@ -107,6 +112,7 @@ const search = useDebounceFn((query) => {
             ref="indicatorListComp"
             v-bind="filtersProps"
             :geozone="props.geozone"
+            :granularity="props.granularity"
             :query="props.query"
             :page="props.page ? parseInt(props.page) : 1"
             :sort="props.sort"
@@ -118,10 +124,6 @@ const search = useDebounceFn((query) => {
 </template>
 
 <style scoped>
-.hero {
-  background: #f3f3f3;
-}
-
 /* put above header (ground+500) so that multiselect floats above menu */
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);

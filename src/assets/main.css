@@ -18,6 +18,12 @@
   --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
   /* DSFR contrast fix */
   --blue-cumulus-sun-368-moon-732-hover--fix: #516fb3;
+
+  /*
+  progressively enhanced height: auto transition
+  https://caniuse.com/mdn-css_properties_interpolate-size
+  */
+  interpolate-size: allow-keywords;
 }
 
 @font-face {
@@ -33,11 +39,6 @@
 
 body {
   word-wrap: break-word;
-}
-
-.multiselect {
-  --ms-bg: var(--background-contrast-grey);
-  margin: 8px 0;
 }
 
 .fr-col-sm-45 {
@@ -110,19 +111,23 @@ body {
 
 /* form */
 
-form textarea {
+:is(form, .form) textarea {
   resize: vertical;
 }
 
-form :where(input, textarea, fieldset, select)[aria-invalid='true'] {
+:is(form, .form)
+  :where(input, textarea, fieldset, select)[aria-invalid='true'] {
   border: 2px solid var(--border-plain-error);
 }
-form .error {
+:is(form, .form) .error {
   margin-block-start: 0.5rem;
   color: var(--text-default-error);
 }
-form .error-status {
+:is(form, .form) .error-status {
   border: 4px solid var(--background-flat-warning);
+}
+:is(form, .form) .fr-text--sm {
+  color: var(--text-mention-grey);
 }
 
 /* editorial (markdown) pages */
@@ -197,4 +202,11 @@ form .error-status {
 
 .datagouv-components .fr-search-bar .fr-btn {
   border-radius: 0 0.25rem 0 0;
+}
+
+.hero-banner {
+  background: #f3f3f3;
+  p:last-child {
+    margin-bottom: 0;
+  }
 }

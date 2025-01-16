@@ -20,6 +20,7 @@ robots:
 # UI customizations
 website:
   title: 'logistique.data.gouv.fr'
+  formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
   service_logo: '/logos/logistique-logo.svg'
@@ -130,8 +131,8 @@ website:
     - '#DBF2F0'
   env: 'prod'
   matomo:
-    host:
-    siteId:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 308
   discussions:
     dataset:
       display: true

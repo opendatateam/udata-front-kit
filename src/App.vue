@@ -40,14 +40,16 @@ const quickLinks = computed(() => {
 
   const headerButton = {
     label: button.label,
-    icon: 'ri-lightbulb-line',
+    icon: 'fr-icon-lightbulb-line',
     href: button.link,
     iconRight: true
   }
 
   const logLink = {
     label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
-    icon: isLoggedIn.value ? 'ri-logout-box-r-line' : 'ri-account-circle-line',
+    icon: isLoggedIn.value
+      ? 'fr-icon-logout-box-r-line'
+      : 'fr-icon-account-circle-line',
     to: isLoggedIn.value ? '/logout' : '/login',
     iconRight: true
   }

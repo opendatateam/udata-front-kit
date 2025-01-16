@@ -163,7 +163,7 @@ defineExpose({
             :to="createUrl"
             class="fr-btn fr-btn--secondary fr-ml-1w"
           >
-            <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
+            <VIconCustom name="add-circle-line" class="fr-mr-1v" />
             Ajouter un {{ topicsName }}
           </router-link>
         </div>

@@ -23,7 +23,7 @@ import {
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
-import { useUserStore } from '@/store/UserStore'
+import { fromMarkdown } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 defineEmits(['search'])
@@ -56,7 +56,6 @@ const loader = useLoading()
 const queryResults = ref<HTMLParagraphElement | null>(null)
 
 const topicStore = useTopicStore()
-const userStore = useUserStore()
 
 const selectedTopicId: Ref<string | null> = ref(null)
 const selectedOrganizationId: Ref<string | null> = ref(null)
@@ -66,6 +65,7 @@ const total = computed(() => store.total)
 const pages = computed(() => store.pagination)
 
 const title = config.website.title as string
+const banner = config.website.datasets.banner
 const topicItems = config.website.list_search_topics as TopicItemConf[]
 const hasOrganizationFilter = config.website.datasets
   .organization_filter as boolean
@@ -143,7 +143,11 @@ const onSelectOrganization = (orgId: string) => {
 }
 
 const search = () => {
-  router.push({ path: '/datasets', query: computeUrlQuery({ page: 1 }) })
+  router.push({
+    path: '/datasets',
+    query: computeUrlQuery({ page: 1 }),
+    hash: '#datasets-list'
+  })
 }
 
 const goToPage = (page: number) => {
@@ -231,29 +235,28 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer>
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-    >
-      <h1 class="fr-col-auto fr-mb-2v">Jeux de données</h1>
-      <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-        <a
-          v-if="userStore.isAdmin"
-          :href="`${config.datagouvfr.base_url}/fr/datasets.csv?topic=${config.universe.topic_id}`"
-          class="fr-btn fr-btn--secondary fr-btn--md inline-flex fr-mb-1w fr-ml-2w"
-        >
-          <VIcon name="ri-file-download-line" class="fr-mr-1w" />
-          Exporter la liste des jeux de données
-        </a>
-      </div>
+  <div class="fr-container datagouv-components fr-my-2v">
+    <h1>Jeux de données</h1>
+  </div>
+  <section
+    v-if="banner"
+    class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
+  >
+    <div class="fr-container fr-py-12v">
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <h2 v-html="banner.title" />
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-html="fromMarkdown(banner.content)" />
     </div>
+  </section>
+  <GenericContainer id="datasets-list">
     <p v-show="query" ref="queryResults" tabindex="-1">
       {{ total }} résultats de recherche pour "{{ query }}".
     </p>
-    <p v-if="!query">
-      Parcourir tous les jeux de données présents sur {{ title }}.
+    <p v-if="!query && !banner">
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      Parcourir tous les jeux de données présents sur <span v-html="title" />.
     </p>
-
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
         id="search-bouquet"
