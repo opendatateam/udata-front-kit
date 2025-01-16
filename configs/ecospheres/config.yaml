@@ -158,9 +158,7 @@ website:
     banner:
       title: Un guichet unique pour l’accès aux données environnementales
       content: |
-        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, le CGDD oeuvre à la centralisation de toutes les données utiles à l’appui des politiques publiques du pôle ministériel.
-
-        <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental. Néanmoins, toute donnée publiée dans l’univers <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, le CGDD oeuvre à la centralisation de toutes les données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental. Néanmoins, toute donnée publiée sur <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
   topics:
     slug: bouquets
     name: bouquet
@@ -178,11 +176,9 @@ website:
       everyone: true
       authorized_users:
     banner:
-      title: Les bouquets, qu’est-ce que c’est&nbsp;?
+      title: Cataloguer les usages des données territoriales
       content: |
-        Les bouquets sont des outils statistiques et analytiques qui permettent d’évaluer et de mesurer divers aspects d’un territoire donné. Ces indicateurs aident à comprendre les dynamiques locales, à identifier des problématiques spécifiques, et à orienter les décisions publiques et les politiques de développement.
-
-        Ils sont essentiels pour un diagnostic territorial et pour le suivi des évolutions dans le temps.
+        Le module de bouquet offre aux acteurs du développement durable un cadre pérenne et collaboratif pour documenter et valoriser les données qu'ils utilisent. Les bouquets permettent de partager des méthodologies, de valoriser des initiatives locales avec un potentiel d’extension nationale, ou encore de signaler des besoins en matière d’accès ou de standardisation des données. Les bouquets sont conçus pour s’enrichir au fil du temps : de nouvelles données peuvent y être ajoutées à mesure qu’elles sont publiées ou identifiées, garantissant ainsi une réponse toujours plus complète et adaptée aux thématiques abordées. Toute donnée présente sur <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
   sitemap:
     - name: Accueil
       path: /
