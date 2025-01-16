@@ -1,6 +1,6 @@
-# À propos de ecologie.data.gouv.fr
+# À propos de _ecologie_.**data.gouv**._fr_
 
-## Qu'est-ce que ecologie.data.gouv.fr ?
+## Qu'est-ce que _ecologie_.**data.gouv**._fr_ ?
 
 _ecologie_.**data.gouv**._fr_ est un catalogue permettant la centralisation des données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. Un bouquet est un ensemble de données contextualisées permettant de répondre à un cas d’usage lié à une politique publique.
 
@@ -28,15 +28,17 @@ On y trouve la présence de données provenant&nbsp;:
 - d'associations ;
 - de groupements d'intérêt public.
 
+Un [gestionnaire de patrimoine](https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/gestionnaire-patrimoine-prod/?standalone=2) a été mis en place pour permettre de visualiser le patrimoine d'une organisation moissonnée par [**data.gouv**._fr_](https://data.gouv.fr/). Il s'adresse principalement aux gestionnaires de catalogue et administrateurs de données locales, et a pour objectif de faciliter l'identification d'éventuels problèmes de qualité des métadonnées.
+
 _ecologie_.**data.gouv**._fr_ sera progressivement enrichi de nouveaux bouquets de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquet de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création, la recherche et le suivi de bouquets de données.
 
 ## Un énième portail de données ?
 
-_ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de [data.gouv.fr](https://data.gouv.fr/) sur le modèle de [meteo.data.gouv.fr](https://meteo.data.gouv.fr/) ou [transport.data.gouv.fr](https://transport.data.gouv.fr/). Toutes les données disponibles ici le sont dans les mêmes conditions que sur [data.gouv.fr](https://data.gouv.fr/).
+_ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de [**data.gouv**._fr_](https://data.gouv.fr/) sur le modèle de [meteo.data.gouv.fr](https://meteo.data.gouv.fr/) ou [transport.data.gouv.fr](https://transport.data.gouv.fr/). Toutes les données disponibles ici le sont dans les mêmes conditions que sur [**data.gouv**._fr_](https://data.gouv.fr/).
 
 ## Qui est derrière cette plateforme ?
 
-Cette plateforme est le fruit d'une collaboration entre l'équipe **_Ecosphères_** du [**_Commissariat général au développement durable_**](https://www.ecologie.gouv.fr/commissariat-general-au-developpement-durable-cgdd) et l'équipe **_data.gouv.fr_** de la [**_Direction interministérielle du numérique._**](https://www.numerique.gouv.fr/dinum/) Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de [plateformes thématiques exposant de la donnée publique](https://github.com/opendatateam/udata-front-kit).
+Cette plateforme est le fruit d'une collaboration entre l'équipe **_Ecosphères_** du [**_Commissariat général au développement durable_**](https://www.ecologie.gouv.fr/commissariat-general-au-developpement-durable-cgdd) et l'équipe **data.gouv**._fr_ de la [**_Direction interministérielle du numérique._**](https://www.numerique.gouv.fr/dinum/) Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de [plateformes thématiques exposant de la donnée publique](https://github.com/opendatateam/udata-front-kit).
 
 ## Un retour, une question ?
 
