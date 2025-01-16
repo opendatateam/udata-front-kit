@@ -28,9 +28,9 @@ On y trouve la présence de données provenant&nbsp;:
 - d'associations ;
 - de groupements d'intérêt public.
 
-Un [gestionnaire de patrimoine](https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/gestionnaire-patrimoine-prod/?standalone=2) a été mis en place pour permettre de visualiser le patrimoine d'une organisation moissonnée par [**data.gouv**._fr_](https://data.gouv.fr/). Il s'adresse principalement aux gestionnaires de catalogue et administrateurs de données locales, et a pour objectif de faciliter l'identification d'éventuels problèmes de qualité des métadonnées.
-
 _ecologie_.**data.gouv**._fr_ sera progressivement enrichi de nouveaux bouquets de données répondant à des cas d'usages liés aux politiques publiques prioritaires du gouvernement. Le catalogue moissonnera de nouvelles organisations afin de compléter au mieux chaque bouquet de données. De nouvelles fonctionnalités feront leur apparition en 2024 facilitant la création, la recherche et le suivi de bouquets de données.
+
+Un [gestionnaire de patrimoine](https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/gestionnaire-patrimoine-prod/?standalone=2) a été mis en place pour permettre de visualiser le patrimoine d'une organisation moissonnée par [**data.gouv**._fr_](https://data.gouv.fr/). Il s'adresse principalement aux gestionnaires de catalogue et administrateurs de données locales, et a pour objectif de faciliter l'identification d'éventuels problèmes de qualité des métadonnées.
 
 ## Un énième portail de données ?
 
