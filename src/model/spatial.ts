@@ -14,7 +14,7 @@ export interface SpatialCoverageLevel {
 export interface SpatialField {
   geom?: string | null
   zones?: string[] | string | null
-  granulariy?: string | null
+  granularity?: string | null
 }
 
 export interface SpatialCoverageResponse {

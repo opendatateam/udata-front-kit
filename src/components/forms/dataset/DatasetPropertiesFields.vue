@@ -1,28 +1,29 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import {
-  computed,
-  defineModel,
-  onMounted,
-  ref,
-  watch,
-  type PropType,
-  type Ref
-} from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { Availability, type DatasetProperties } from '@/model/topic'
+import {
+  Availability,
+  type DatasetProperties,
+  type DatasetsGroups
+} from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicsConf } from '@/utils/config'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
-const emit = defineEmits(['updateValidation'])
+const emit = defineEmits(['updateValidation', 'update:datasetProperties'])
 
 const datasetProperties = defineModel({
-  type: Object as PropType<DatasetProperties>,
-  required: true
+  type: Object as () => DatasetProperties,
+  default: {}
+})
+
+const datasetsGroups = defineModel('groups-model', {
+  type: Object as () => DatasetsGroups,
+  default: []
 })
 
 defineProps({
@@ -41,7 +42,10 @@ const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 const hasEditorialization = computed(() => {
   return (
     !!datasetProperties.value.title.trim() &&
-    !!datasetProperties.value.purpose.trim()
+    !!datasetProperties.value.purpose.trim() &&
+    (datasetProperties.value.group
+      ? datasetProperties.value.group.trim().length < 100
+      : true)
   )
 })
 
@@ -121,7 +125,7 @@ onMounted(() => {
 <template>
   <DatasetPropertiesTextFields
     v-if="topicsDatasetEditorialization"
-    v-model:dataset-properties="datasetProperties"
+    v-model:dataset-properties-model="datasetProperties"
   />
   <div class="fr-mt-1w fr-mb-4w">
     <SelectDataset
@@ -172,6 +176,14 @@ onMounted(() => {
         label="Je n'ai pas cherché la donnée"
       />
     </fieldset>
+  </div>
+  <div class="fr-input-group">
+    <SelectTopicGroup
+      v-model:properties-model="datasetProperties"
+      v-model:groups-model="datasetsGroups"
+      label="Regroupement"
+      description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
+    />
   </div>
 </template>
 

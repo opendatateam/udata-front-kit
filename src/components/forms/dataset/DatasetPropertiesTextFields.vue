@@ -2,26 +2,12 @@
 import type { DatasetProperties } from '@/model/topic'
 import { useTopicsConf } from '@/utils/config'
 
-const props = defineProps({
-  datasetProperties: {
-    type: Object as () => DatasetProperties,
-    required: true
-  }
+const datasetProperties = defineModel('datasetProperties-model', {
+  type: Object as () => DatasetProperties,
+  default: {}
 })
 
 const { topicsName } = useTopicsConf()
-
-const emit = defineEmits(['update:datasetProperties'])
-
-const updateDatasetProperties = (
-  field: keyof DatasetProperties,
-  value: string
-) => {
-  emit('update:datasetProperties', {
-    ...props.datasetProperties,
-    [field]: value
-  })
-}
 </script>
 
 <template>
@@ -31,35 +17,16 @@ const updateDatasetProperties = (
     >
     <input
       id="input-title"
+      v-model="datasetProperties.title"
       class="fr-input"
       type="text"
-      :value="props.datasetProperties.title"
-      @input="
-        updateDatasetProperties(
-          'title',
-          ($event.target as HTMLInputElement).value
-        )
-      "
     />
   </div>
   <div class="fr-input-group">
     <label class="fr-label" for="input-purpose"
       >Raison d'utilisation dans ce {{ topicsName }} (obligatoire)</label
     >
-    <textarea
-      id="input-purpose"
-      class="fr-input"
-      type="text"
-      aria-describedby="purpose-instructions"
-      :value="props.datasetProperties.purpose"
-      @input="
-        updateDatasetProperties(
-          'purpose',
-          ($event.target as HTMLTextAreaElement).value
-        )
-      "
-    />
-    <p id="purpose-instructions" class="fr-mt-1v">
+    <p id="purpose-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est
       pas évidente. Vous pouvez également utiliser cet espace pour renseigner
       des problèmes liés à l'accès ou la qualité des données.<br />
@@ -69,6 +36,13 @@ const updateDatasetProperties = (
       >
       pour mettre en forme votre texte.
     </p>
+    <textarea
+      id="input-purpose"
+      v-model="datasetProperties.purpose"
+      class="fr-input"
+      type="text"
+      aria-describedby="purpose-description"
+    />
   </div>
 </template>
 

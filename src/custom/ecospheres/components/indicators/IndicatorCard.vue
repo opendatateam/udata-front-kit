@@ -1,32 +1,24 @@
 <script setup lang="ts">
 import { stripFromMarkdown } from '@/utils'
 import type { Indicator } from '../../model/indicator'
-import { useTags } from '../../utils/indicator'
+import IndicatorTags from './IndicatorTags.vue'
 
-const props = defineProps({
+defineProps({
   indicator: {
     type: Object as PropType<Indicator>,
     required: true
   }
 })
-
-const tags = useTags(props.indicator)
 </script>
 
 <template>
   <div class="fr-card fr-enlarge-link">
     <div class="fr-card__body">
       <div class="fr-card__content">
-        <ul class="fr-badges-group fr-mb-1w">
-          <li v-for="tag in tags" :key="`${tag.type}-${tag.value}`">
-            <p :class="['fr-badge', `fr-badge--${tag.color}`]">
-              {{ tag.value }}
-            </p>
-          </li>
-        </ul>
+        <IndicatorTags :indicator="indicator" :show-default-value="false" />
         <h3 class="fr-card__title fr-mb-1w">
           <RouterLink
-            :to="{ name: 'dataset_detail', params: { did: indicator.id } }"
+            :to="{ name: 'indicator_detail', params: { iid: indicator.id } }"
             >{{ indicator.title }}</RouterLink
           >
         </h3>
