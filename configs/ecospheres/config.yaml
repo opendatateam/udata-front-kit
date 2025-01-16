@@ -156,11 +156,11 @@ website:
       - CSW-ISO-19139
     show_extended_information_panel: true
     banner:
-      title: Les jeux de données, qu’est-ce que c’est&nbsp;?
+      title: Un guichet unique pour l’accès aux données environnementales
       content: |
-        Les jeux de données sont des outils statistiques et analytiques qui permettent d’évaluer et de mesurer divers aspects d’un territoire donné. Ces indicateurs aident à comprendre les dynamiques locales, à identifier des problématiques spécifiques, et à orienter les décisions publiques et les politiques de développement.
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, le CGDD oeuvre à la centralisation de toutes les données utiles à l’appui des politiques publiques du pôle ministériel.
 
-        Ils sont essentiels pour un diagnostic territorial et pour le suivi des évolutions dans le temps.
+        <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental. Néanmoins, toute donnée publiée dans l’univers <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
   topics:
     slug: bouquets
     name: bouquet
