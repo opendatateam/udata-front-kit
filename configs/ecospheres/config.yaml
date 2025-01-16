@@ -242,7 +242,7 @@ themes:
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-prod.json
 
 indicators:
-  organization_id: 673dafb02cf54cfb2ccbd118
+  organization_id: 67884b4da4fca9c97bbef479
   global_tag_prefix: ecospheres-indicateurs
   filters:
     - name: Thématique
