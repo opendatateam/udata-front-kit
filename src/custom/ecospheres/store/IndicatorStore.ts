@@ -33,7 +33,7 @@ export const useIndicatorStore = defineStore('indicator', {
         tag,
         ...extraArgs
       })
-      this.indicators = results.data
+      this.indicators = results.data as Indicator[]
       this.total = results.total
     }
   },

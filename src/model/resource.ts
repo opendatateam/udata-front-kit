@@ -13,8 +13,4 @@ export interface ResourceData {
   type: ResourceType
 }
 
-export interface ResourceDataWithQuery extends ResourceData {
-  query: string
-}
-
 export type { Resource }
