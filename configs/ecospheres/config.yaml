@@ -158,6 +158,10 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
+    banner:
+      title: Un guichet unique pour l’accès aux données environnementales
+      content: |
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, le CGDD oeuvre à la centralisation de toutes les données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental. Néanmoins, toute donnée publiée sur <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
   topics:
     slug: bouquets
     name: bouquet
@@ -174,6 +178,10 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
+    banner:
+      title: Cataloguer les usages des données territoriales
+      content: |
+        Le module de bouquet offre aux acteurs du développement durable un cadre pérenne et collaboratif pour documenter et valoriser les données qu'ils utilisent. Les bouquets permettent de partager des méthodologies, de valoriser des initiatives locales avec un potentiel d’extension nationale, ou encore de signaler des besoins en matière d’accès ou de standardisation des données. Les bouquets sont conçus pour s’enrichir au fil du temps : de nouvelles données peuvent y être ajoutées à mesure qu’elles sont publiées ou identifiées, garantissant ainsi une réponse toujours plus complète et adaptée aux thématiques abordées. Toute donnée présente sur <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
   sitemap:
     - name: Accueil
       path: /

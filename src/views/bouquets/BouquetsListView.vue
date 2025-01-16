@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import BouquetList from '@/components/bouquets/BouquetList.vue'
 import BouquetSearch from '@/components/bouquets/BouquetSearch.vue'
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
@@ -14,6 +15,7 @@ import {
 } from '@/model/injectionKeys'
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
+import { fromMarkdown } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
 const { topicsSlug, topicsName } = useTopicsConf()
@@ -44,6 +46,7 @@ const props = defineProps({
   }
 })
 
+const banner = config.website.topics.banner
 const selectedTheme = ref(NoOptionSelected)
 const selectedSubtheme = ref(NoOptionSelected)
 const selectedGeozone: Ref<string | null> = ref(null)
@@ -109,7 +112,8 @@ const search = useDebounceFn(() => {
   router
     .push({
       name: topicsSlug,
-      query: { ...route.query, q: selectedQuery.value }
+      query: { ...route.query, q: selectedQuery.value },
+      hash: '#bouquets-list'
     })
     .then(() => {
       setLiveResults()
@@ -133,11 +137,9 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbList" />
   </div>
-  <GenericContainer>
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-1w"
-    >
-      <h1 class="fr-col-auto fr-mb-2v">{{ capitalize(topicsName) }}s</h1>
+  <div class="fr-container datagouv-components fr-my-2v">
+    <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
+      <h1 class="fr-mb-0">{{ capitalize(topicsName) }}s</h1>
       <div
         v-if="canAddBouquet"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
@@ -148,6 +150,19 @@ watch(
         </router-link>
       </div>
     </div>
+  </div>
+  <section
+    v-if="banner"
+    class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
+  >
+    <div class="fr-container fr-py-12v">
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <h2 v-html="banner.title" />
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-html="fromMarkdown(banner.content)" />
+    </div>
+  </section>
+  <GenericContainer id="bouquets-list">
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
         id="search-bouquet"
