@@ -245,6 +245,9 @@ const faqMinisterLink =
 </template>
 
 <style scoped>
+:deep(.fr-accordion .fr-collapse) {
+  padding-inline: clamp(0.5rem, 0.3276rem + 0.8621vw, 1rem);
+}
 :deep(.fr-accordion__btn) {
   color: #000091;
 }

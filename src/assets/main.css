@@ -210,3 +210,9 @@ body {
     margin-bottom: 0;
   }
 }
+
+/* Flex gap utility (missing from DSFR) */
+
+.flex-gap {
+  gap: var(--gap, 0.5rem);
+}

@@ -207,8 +207,8 @@ const dropdown = config.website.header_search.dropdown
         </RouterLink>
       </p>
     </section>
-    <section class="fr-container--fluid faq">
-      <div class="fr-container fr-py-16v faq">
+    <section class="fr-container--fluid fr-py-16v faq">
+      <div class="fr-container">
         <h2>Foire aux questions</h2>
         <HomeFaq />
       </div>

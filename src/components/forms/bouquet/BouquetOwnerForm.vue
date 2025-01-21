@@ -110,7 +110,7 @@ watch(choice, () => {
       :legend="`Choisissez si vous souhaitez gérer ce ${topicsName}&nbsp;:`"
       name="owner"
     />
-    <div v-if="choice === 'organization'" class="organizations">
+    <div v-if="choice === 'organization'" class="flex-gap">
       <DsfrSelect
         id="ownerOrg"
         v-model="selectedOwnOrganization"
@@ -169,7 +169,7 @@ watch(choice, () => {
 </template>
 
 <style scoped>
-.organizations {
-  gap: 1rem;
+.flex-gap {
+  --gap: 1rem;
 }
 </style>
