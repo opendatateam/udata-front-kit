@@ -107,6 +107,7 @@ const clear = () => {
     </template>
     <template #clear>
       <button
+        type="button"
         class="multiselect-clear"
         @click="clear"
         @keydown.enter="clear"
@@ -120,15 +121,6 @@ const clear = () => {
 </template>
 
 <style scoped>
-:deep(.multiselect__option::after) {
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  block-size: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  inline-size: 1px;
-}
 .multiselect {
   --ms-max-height: 400px;
 }

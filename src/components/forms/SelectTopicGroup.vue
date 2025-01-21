@@ -85,6 +85,7 @@ const trimGroupName = (groupName: string) => {
 
     <template #clear>
       <button
+        type="button"
         class="multiselect-clear"
         @click="clear"
         @keydown.enter="clear"

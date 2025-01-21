@@ -145,18 +145,6 @@ const clear = () => {
       @search-change="onSearchChange"
       @update:model-value="doMultiSearch"
     >
-      <template #clear>
-        <button
-          class="multiselect-clear"
-          @click="clear"
-          @keydown.enter="clear"
-          @keydown.space="clear"
-        >
-          <span class="fr-sr-only">Supprimer la sélection</span>
-          <span aria-hidden class="multiselect-clear-icon"></span>
-        </button>
-      </template>
-
       <template #singlelabel>
         <div class="multiselect-single-label fr-py-2w">
           {{ query }}
@@ -200,15 +188,6 @@ const clear = () => {
   margin-inline-start: var(--icon-width);
 }
 
-:deep(.multiselect__placeholder) {
-  margin: 0;
-  font-style: italic;
-  color: var(--text-mention-grey);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  inline-size: 100%;
-  overflow: hidden;
-}
 ::placeholder {
   font-style: italic;
   color: var(--text-mention-grey);
@@ -220,25 +199,5 @@ const clear = () => {
   inset-inline-start: 10px;
   translate: 0 -10px;
   max-inline-size: var(--icon-width);
-}
-:deep(.multiselect__tags) {
-  border: 0;
-  box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
-  margin: 0;
-  max-block-size: none;
-  --hover: var(--background-contrast-grey-hover);
-  --active: var(--background-contrast-grey-active);
-  background-color: var(--background-contrast-grey);
-  padding: 6px 40px 0 15px;
-  min-inline-size: 42px;
-  inline-size: 100%;
-}
-:deep(.multiselect__input),
-:deep(.multiselect__single) {
-  background: var(--background-contrast-grey);
-}
-
-:deep(.multiselect__content-wrapper) {
-  margin-block-start: 40px;
 }
 </style>
