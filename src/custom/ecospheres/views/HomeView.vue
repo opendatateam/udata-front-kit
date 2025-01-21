@@ -111,73 +111,64 @@ const dropdown = config.website.header_search.dropdown
           Bouquets de données&nbsp;: articuler politiques publiques et données
           territoriales
         </h2>
-        <div class="fr-grid-row fr-grid-row--gutters">
-          <div class="fr-col">
-            <ul class="fr-grid-row organize-data" role="list">
-              <li class="fr-col-12 fr-col-lg-4">
-                <div class="fr-grid-row">
-                  <div class="fr-col-md-3">
-                    <img
-                      src="../assets/sign-document.svg"
-                      alt=""
-                      class="illustration fr-mx-auto block"
-                      width="64"
-                      height="64"
-                    />
-                  </div>
-                  <div class="fr-col-md-9">
-                    <h3>Documenter un besoin</h3>
-                    <p>
-                      Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
-                      acteurs concernés&nbsp;? Un bouquet de données est créé au
-                      nom d’un utilisateur ou d’une organisation. Tous les
-                      membres d’une organisation peuvent éditer le bouquet.
-                    </p>
-                  </div>
+
+        <div class="bg-white fr-py-4w">
+          <div class="bg-grey">
+            <ul class="fr-grid-row flex-gap organize-data" role="list">
+              <li class="fr-grid-row">
+                <img
+                  src="../assets/sign-document.svg"
+                  alt=""
+                  class="illustration"
+                  width="64"
+                  height="64"
+                />
+                <div>
+                  <h3>Documenter un besoin</h3>
+                  <p>
+                    Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
+                    acteurs concernés&nbsp;? Un bouquet de données est créé au
+                    nom d’un utilisateur ou d’une organisation. Tous les membres
+                    d’une organisation peuvent éditer le bouquet.
+                  </p>
                 </div>
               </li>
-              <li class="fr-col-12 fr-col-lg-4">
-                <div class="fr-grid-row">
-                  <div class="fr-col-md-3">
-                    <img
-                      src="../assets/binders.svg"
-                      alt=""
-                      class="illustration fr-mx-auto block"
-                      width="64"
-                      height="64"
-                    />
-                  </div>
-                  <div class="fr-col-md-9">
-                    <h3>Lister les informations utiles</h3>
-                    <p>
-                      Quelles sont les informations géographiques ou les
-                      indicateurs pertinents&nbsp;? Les bouquets de données
-                      permettent de renseigner les informations souhaitées
-                      indépendamment de l’existence des données.
-                    </p>
-                  </div>
+
+              <li class="fr-grid-row">
+                <img
+                  src="../assets/binders.svg"
+                  alt=""
+                  class="illustration"
+                  width="64"
+                  height="64"
+                />
+                <div>
+                  <h3>Lister les informations utiles</h3>
+                  <p>
+                    Quelles sont les informations géographiques ou les
+                    indicateurs pertinents&nbsp;? Les bouquets de données
+                    permettent de renseigner les informations souhaitées
+                    indépendamment de l’existence des données.
+                  </p>
                 </div>
               </li>
-              <li class="fr-col-12 fr-col-lg-4">
-                <div class="fr-grid-row">
-                  <div class="fr-col-md-3">
-                    <img
-                      src="../assets/document-add.svg"
-                      alt=""
-                      class="illustration fr-mx-auto block"
-                      width="64"
-                      height="64"
-                    />
-                  </div>
-                  <div class="fr-col-md-9">
-                    <h3>Associer les données disponibles</h3>
-                    <p>
-                      Les données existantes satisfont-elles les besoins du cas
-                      d’usage&nbsp;? L’association peut se faire dans sa forme
-                      la plus interopérable via une donnée cataloguée sur
-                      <b>data.gouv</b><i>.fr</i> ou le renseignement d’un URL.
-                    </p>
-                  </div>
+
+              <li class="fr-grid-row">
+                <img
+                  src="../assets/document-add.svg"
+                  alt=""
+                  class="illustration"
+                  width="64"
+                  height="64"
+                />
+                <div>
+                  <h3>Associer les données disponibles</h3>
+                  <p>
+                    Les données existantes satisfont-elles les besoins du cas
+                    d’usage&nbsp;? L’association peut se faire dans sa forme la
+                    plus interopérable via une donnée cataloguée sur
+                    <b>data.gouv</b><i>.fr</i> ou le renseignement d’un URL.
+                  </p>
                 </div>
               </li>
             </ul>
@@ -217,46 +208,33 @@ const dropdown = config.website.header_search.dropdown
 </template>
 
 <style scoped>
+.bouquets {
+  --gap: 2px;
+  h3 {
+    margin-block-end: 0.5rem;
+  }
+}
+
+.bg-grey {
+  background-color: var(--border-default-grey);
+}
 .bouquets,
 .faq {
   background-color: #f6f6f6;
 }
-.illustration {
-  max-width: 100%;
-}
-.organize-data {
+.organize-data li {
+  padding: 1rem;
+  flex: 1 1 33%;
+  align-content: start;
+  gap: 1rem;
   background-color: white;
-  padding: 2rem 0;
 
-  li {
-    border-right: 1px solid var(--border-default-grey);
-    padding-right: 1rem;
+  & > :first-child {
+    flex: 0 0 64px;
   }
-
-  li:last-child {
-    border: none;
-  }
-
-  @media (max-width: 992px) {
-    & {
-      padding: 1rem;
-    }
-
-    h3 {
-      margin: 1rem 0 0.5rem;
-    }
-
-    li {
-      border-right: none;
-      border-bottom: 1px solid var(--border-default-grey);
-      padding-bottom: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    li:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0;
-    }
+  & > :last-child {
+    flex: 1 1 60%;
+    min-inline-size: 24ch;
   }
 
   h4 {
