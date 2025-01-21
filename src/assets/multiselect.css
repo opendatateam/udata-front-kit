@@ -55,6 +55,7 @@
 }
 .multiselect:has(.multiselect-single-label .card) {
   --ms-bg: var(--background-default-grey);
+  border: 1px solid var(--background-contrast-grey);
 }
 .multiselect-wrapper {
   --ms-radius: 0.25rem 0.25rem 0 0;

@@ -121,9 +121,6 @@ const clear = () => {
 </template>
 
 <style scoped>
-.multiselect {
-  --ms-max-height: 400px;
-}
 .multiselect-single-label {
   position: relative;
   margin-inline-end: auto;
