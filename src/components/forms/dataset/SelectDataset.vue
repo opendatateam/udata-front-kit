@@ -64,6 +64,7 @@ const clear = () => {
   <Multiselect
     id="input-dataset"
     v-model="selectedDataset"
+    role="search"
     :object="true"
     value-prop="id"
     label="title"

@@ -26,7 +26,7 @@
     "@json2csv/plainjs": "^7.0.6",
     "@unhead/vue": "^1.11.18",
     "@vee-validate/rules": "^4.15.0",
-    "@vueform/multiselect": "^2.6.10",
+    "@vueform/multiselect": "^2.6.11",
     "@vueuse/core": "^12.4.0",
     "@vueuse/integrations": "^12.4.0",
     "axios": "^1.7.9",

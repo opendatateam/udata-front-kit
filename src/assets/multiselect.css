@@ -18,19 +18,7 @@
   border-color: var(--background-alt-grey-active) transparent transparent;
   top: 60%;
 }
-.multiselect__select {
-  --data-uri-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23161616' d='m12 13.1 5-4.9 1.4 1.4-6.4 6.3-6.4-6.4L7 8.1l5 5z'/%3E%3C/svg%3E");
-  background-image: var(--data-uri-svg);
-  background-position: calc(100% - 1rem) 50%;
-  background-repeat: no-repeat;
-  background-size: 1rem 1rem;
-  .multiselect--active & {
-    transform: none;
-  }
-}
-.multiselect__select::before {
-  content: unset;
-}
+
 .multiselect__clear {
   position: absolute;
   right: 15px;
@@ -62,6 +50,50 @@
 }
 .multiselect {
   --ms-bg: var(--background-contrast-grey);
+  --ms-spinner-color: var(--blue-cumulus-sun-368-moon-732);
+  --ms-option-bg-selected: var(--blue-cumulus-sun-368-moon-732);
+  --ms-option-bg-pointed: var(--blue-cumulus-sun-368-moon-732);
+  --ms-option-color-pointed: var(--background-contrast-grey);
+  --ms-option-bg-selected-pointed: var(--blue-cumulus-sun-368-moon-732-hover);
+  &&,
+  &&.is-active {
+    border: none;
+    box-shadow: none;
+  }
+  .multiselect-caret {
+    --ms-px: 1rem;
+    --data-uri-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23161616' d='m12 13.1 5-4.9 1.4 1.4-6.4 6.3-6.4-6.4L7 8.1l5 5z'/%3E%3C/svg%3E");
+    -webkit-mask-image: var(--data-uri-svg);
+    mask-image: var(--data-uri-svg);
+    width: 1.1rem;
+    transition: none;
+  }
+  .multiselect-caret.is-open {
+    transform: none;
+    transition: none;
+  }
+  .multiselect-option {
+    padding: 0;
+    position: relative;
+
+    button {
+      --hover-tint: inherit;
+      padding: var(--ms-option-py, 0.5rem) var(--ms-option-px, 0.75rem);
+      block-size: 100%;
+      inline-size: 100%;
+      text-align: left;
+
+      &:focus {
+        outline-offset: -4px;
+      }
+    }
+
+    &.is-pointed {
+      button:focus {
+        outline-color: var(--background-default-grey);
+      }
+    }
+  }
 }
 .multiselect:has(.multiselect-single-label .card) {
   --ms-bg: var(--background-default-grey);
