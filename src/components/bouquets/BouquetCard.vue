@@ -47,9 +47,7 @@ const { themeColors } = useThemeOptions(theme)
 </script>
 
 <template>
-  <article
-    class="fr-my-1w fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link"
-  >
+  <article class="fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link">
     <div
       v-if="bouquet.private"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"

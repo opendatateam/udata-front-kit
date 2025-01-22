@@ -112,7 +112,7 @@ const dropdown = config.website.header_search.dropdown
           territoriales
         </h2>
 
-        <div class="bg-white fr-py-4w">
+        <div class="bg-white border fr-py-4w">
           <div class="bg-grey">
             <ul class="fr-grid-row flex-gap organize-data" role="list">
               <li class="fr-grid-row">
@@ -178,12 +178,8 @@ const dropdown = config.website.header_search.dropdown
     </section>
     <section class="fr-container fr-py-12v">
       <h2>Les bouquets à découvrir</h2>
-      <ul class="fr-grid-row fr-grid-row--gutters fr-mb-2w" role="list">
-        <li
-          v-for="topic in lastTopics"
-          :key="topic.id"
-          class="fr-col-12 fr-col-xl-4"
-        >
+      <ul class="fr-grid-row discover fr-mb-2w" role="list">
+        <li v-for="topic in lastTopics" :key="topic.id">
           <BouquetCard :bouquet="topic" :hide-description="true" />
         </li>
       </ul>
@@ -244,6 +240,18 @@ const dropdown = config.website.header_search.dropdown
   p {
     margin-bottom: 0;
   }
+}
+.discover {
+  gap: 1.5rem;
+
+  & > li {
+    flex: 1 1 30%;
+    min-inline-size: 24ch;
+  }
+}
+
+.discover :deep(article) {
+  block-size: 100%;
 }
 
 :deep(.fr-links-group) {
