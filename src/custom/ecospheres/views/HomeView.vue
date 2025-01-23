@@ -73,16 +73,16 @@ const dropdown = config.website.header_search.dropdown
                   }"
                   class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
                 >
-                  Parcourir les données
-                </RouterLink>
+                  Parcourir les données</RouterLink
+                >
                 <RouterLink
                   :to="{
                     name: 'bouquets'
                   }"
                   class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
                 >
-                  Découvrir des usages
-                </RouterLink>
+                  Découvrir des usages</RouterLink
+                >
               </div>
             </div>
           </div>
@@ -116,8 +116,8 @@ const dropdown = config.website.header_search.dropdown
                   }"
                   class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
                 >
-                  Partager des usages
-                </RouterLink>
+                  Partager des usages</RouterLink
+                >
               </div>
             </div>
           </div>
@@ -325,6 +325,39 @@ const dropdown = config.website.header_search.dropdown
   & > :last-child {
     grid-row: 3 / 4;
     grid-column: wrapper;
+  }
+
+  .fr-link {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    background-image: none;
+    &::after {
+      opacity: 0;
+      translate: -8px;
+      transition-property: opacity, translate;
+      transition-duration: 0.4s;
+      transition-timing-function: ease,
+        linear(
+          0,
+          0.402 7.4%,
+          0.711 15.3%,
+          0.929 23.7%,
+          1.008 28.2%,
+          1.067 33%,
+          1.099 36.9%,
+          1.12 41%,
+          1.13 45.4%,
+          1.13 50.1%,
+          1.111 58.5%,
+          1.019 83.2%,
+          1.004 91.3%,
+          1
+        );
+    }
+    &:hover::after {
+      opacity: 1;
+      translate: 0;
+    }
   }
 }
 
