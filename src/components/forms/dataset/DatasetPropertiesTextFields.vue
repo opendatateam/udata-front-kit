@@ -15,11 +15,16 @@ const { topicsName } = useTopicsConf()
     <label class="fr-label" for="input-title"
       >Libellé du jeu de données (obligatoire)</label
     >
+    <p id="title-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
+      Décrivez l'indicateur ou l'objet géographique correspondant. Par
+      exemple&nbsp;: "&nbsp;Taux d'imperméabilisation des sols&nbsp;"
+    </p>
     <input
       id="input-title"
       v-model="datasetProperties.title"
       class="fr-input"
       type="text"
+      aria-describedby="title-description"
     />
   </div>
   <div class="fr-input-group">
