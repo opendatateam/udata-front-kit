@@ -11,9 +11,6 @@ import type { Topic } from '@/model/topic'
 
 import { useTopicStore } from '@/store/TopicStore'
 
-import contributeSvg from '../assets/contribuer.svg'
-import explorerSvg from '../assets/explorer.svg'
-
 const topicStore = useTopicStore()
 const router = useRouter()
 const lastTopics: ComputedRef<Topic[]> = computed(() =>
@@ -57,51 +54,73 @@ const dropdown = config.website.header_search.dropdown
         </p>
       </div>
     </section>
-    <section class="fr-container explore-contribute fr-px-0">
-      <ul class="fr-grid-row fr-grid-row--gutters fr-pb-12v" role="list">
-        <li class="fr-col-12 fr-col-md-6">
-          <DsfrCard
-            :no-arrow="true"
-            title="Explorer"
-            description="Accéder aux données des services et opérateurs de l’État et d’une sélection d’organisations publiant des données utiles aux politiques du Ministère en charge de l&rsquo;environnement."
-            size="small"
-            :horizontal="true"
-            :img-src="explorerSvg"
-            alt-img=""
-            class="explorer"
-            :links-group="[
-              {
-                label: 'Parcourir les données',
-                to: router.resolve({ name: 'datasets' }).href
-              },
-              {
-                label: 'Découvrir des usages',
-                to: router.resolve({ name: 'bouquets' }).href
-              }
-            ]"
-          />
+    <section class="fr-container explore-contribute fr-mt-10v">
+      <ul class="fr-grid-row flex-gap fr-pb-12v" role="list">
+        <li class="card-container border">
+          <div class="home-card">
+            <img src="../assets/explorer.svg" alt="" width="234" height="160" />
+            <div class="card__content">
+              <h2 class="h3">Explorer</h2>
+              <p>
+                Accéder aux données des services et opérateurs de l’État et
+                d’une sélection d’organisations publiant des données utiles aux
+                politiques du Ministère en charge de l&rsquo;environnement.
+              </p>
+              <div class="card__links">
+                <RouterLink
+                  :to="{
+                    name: 'datasets'
+                  }"
+                  class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+                >
+                  Parcourir les données
+                </RouterLink>
+                <RouterLink
+                  :to="{
+                    name: 'bouquets'
+                  }"
+                  class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+                >
+                  Découvrir des usages
+                </RouterLink>
+              </div>
+            </div>
+          </div>
         </li>
-        <li class="fr-col-12 fr-col-md-6">
-          <DsfrCard
-            :no-arrow="true"
-            title="Contribuer"
-            description="Participez au référencement et à l’articulation des données utiles à l’appui des politiques publiques grâce aux fonctionnalités de catalogage de data.gouv.fr et au concept de bouquet de données."
-            size="small"
-            :horizontal="true"
-            :img-src="contributeSvg"
-            alt-img=""
-            class="contribute"
-            :links-group="[
-              {
-                label: 'Publier des données',
-                link: 'https://www.data.gouv.fr/fr/pages/onboarding/producteurs/'
-              },
-              {
-                label: 'Partager des usages',
-                to: router.resolve({ name: 'bouquets_add' }).href
-              }
-            ]"
-          />
+
+        <li class="card-container border">
+          <div class="home-card">
+            <img
+              src="../assets/contribuer.svg"
+              alt=""
+              width="188"
+              height="273"
+            />
+            <div class="card__content">
+              <h2 class="h3">Contribuer</h2>
+              <p>
+                Participez au référencement et à l’articulation des données
+                utiles à l’appui des politiques publiques grâce aux
+                fonctionnalités de catalogage de data.gouv.fr et au concept de
+                bouquet de données.
+              </p>
+              <div class="card__links">
+                <a
+                  href="https://www.data.gouv.fr/fr/pages/onboarding/producteurs/"
+                  class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+                  >Publier des données</a
+                >
+                <RouterLink
+                  :to="{
+                    name: 'bouquets_add'
+                  }"
+                  class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+                >
+                  Partager des usages
+                </RouterLink>
+              </div>
+            </div>
+          </div>
         </li>
       </ul>
     </section>
@@ -276,70 +295,72 @@ const dropdown = config.website.header_search.dropdown
   }
 }
 
-:deep(.fr-card__content) {
-  padding-left: 1rem;
-  padding-bottom: 0;
+.explore-contribute {
+  --gap: clamp(1.5rem, 0.7241rem + 3.8793vw, 3.75rem);
+}
 
-  .fr-card__desc {
-    font-size: 1rem;
+.card-container {
+  padding: 0;
+  flex: 1 1 30ch;
+  container-type: inline-size;
+  container-name: card;
+}
+.home-card {
+  display: grid;
+  grid-template-columns: [full-start] auto [wrapper-start] 1fr 2fr [wrapper-end] auto [full-end];
+  grid-template-rows: [full-start] auto [wrapper-start] 60px 1fr [wrapper-end] auto [full-end];
+  gap: 1.5rem;
+  block-size: 100%;
+
+  & > :first-child {
+    grid-row: 2 / 3;
+    grid-column: wrapper;
+    max-block-size: 60px;
+    max-inline-size: 85px;
+    object-fit: cover;
+    object-position: center;
+  }
+  & > :last-child {
+    grid-row: 3 / 4;
+    grid-column: wrapper;
   }
 }
-:deep(.fr-card--sm .fr-card__footer) {
-  padding: 0 0 2rem;
-}
 
-.explore-contribute :deep(.fr-card__body) {
-  padding-left: 1.5rem;
-}
-.explore-contribute .fr-grid-row--gutters .fr-col-12 {
-  padding: 1.75rem;
-}
-
-:deep(.fr-card__header) {
-  flex: 0 0 33%;
-
-  .fr-card__img img {
-    object-fit: contain;
-    object-position: bottom;
+@container card (inline-size > 50ch) {
+  .home-card {
+    & > :first-child {
+      grid-row: full;
+      grid-column: 1 / 3;
+      max-block-size: initial;
+      max-inline-size: 188px;
+      object-position: bottom right;
+      align-self: end;
+    }
+    & > :last-child {
+      grid-row: wrapper;
+      grid-column: 3 / 4;
+    }
   }
 }
 
-.explorer :deep(.fr-card__img) {
-  overflow: hidden;
+.card__content > * {
+  margin: 0;
 }
-.explorer :deep(.fr-card__img img) {
-  object-position: -25px 65%;
-  transform: scale(1.3);
+.card__content h2 {
+  margin-block-end: -0.25rem;
 }
 
-@media (max-width: 768px) {
-  :deep(.fr-card__header) {
-    flex: 0 0 25%;
-  }
-
-  :deep(.fr-card__header .fr-card__img) {
-    height: 120px;
-    overflow: hidden;
-  }
-
-  :deep(.fr-card__header .fr-card__img img) {
-    object-position: left bottom;
-    transform: inherit;
-  }
-
-  .explorer :deep(.fr-card__img img) {
-    position: relative;
-    top: 25%;
-    left: 1rem;
-    height: 65%;
-  }
-
-  .contribute :deep(.fr-card__img img) {
-    position: relative;
-    left: 1rem;
-    height: 120%;
-  }
+.card__content,
+.card__links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: start;
 }
+.card__links {
+  margin-block-start: auto;
+}
+
 .main-title-v2 {
   text-align: center;
   font-size: clamp(1.375rem, 0.4698rem + 4.5259vw, 4rem);
