@@ -95,9 +95,19 @@ const isWithSlotOperator = computed(
 const isWithSlotNav = computed(() => Boolean(slots.mainnav))
 
 const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
+
+// Header migration
 </script>
 
 <template>
+  <DsfrHeader
+    :logo-text
+    :service-title
+    :service-description
+    :home-to
+    :quick-links
+  />
+
   <header role="banner" class="fr-header">
     <div class="fr-header__body">
       <div class="fr-container">
