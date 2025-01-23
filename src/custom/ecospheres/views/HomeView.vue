@@ -48,9 +48,9 @@ const dropdown = config.website.header_search.dropdown
           search-label="Rechercher"
           :dropdown="dropdown"
         />
-        <p class="text-grey-300 fr-text--sm">
-          Exemple&nbsp;: "&nbsp;Itinéraires fraîcheur&nbsp;" dans les bouquets
-          ou "&nbsp;Horaires des TGV&nbsp;" dans les données
+        <p class="text-grey-300 fr-text--sm fr-mt-1v">
+          Exemple&nbsp;: «&nbsp;Itinéraires fraîcheur&nbsp;» dans les bouquets
+          ou «&nbsp;Horaires des TGV&nbsp;» dans les données
         </p>
       </div>
     </section>
@@ -101,8 +101,8 @@ const dropdown = config.website.header_search.dropdown
               <p>
                 Participez au référencement et à l’articulation des données
                 utiles à l’appui des politiques publiques grâce aux
-                fonctionnalités de catalogage de data.gouv.fr et au concept de
-                bouquet de données.
+                fonctionnalités de catalogage et au concept de bouquet de
+                données.
               </p>
               <div class="card__links">
                 <a
@@ -131,64 +131,64 @@ const dropdown = config.website.header_search.dropdown
           territoriales
         </h2>
 
-        <div class="bg-white border fr-py-4w">
+        <div class="bg-white border fr-py-3w fr-px-2w">
           <div class="bg-grey">
             <ul class="fr-grid-row flex-gap organize-data" role="list">
               <li class="fr-grid-row">
-                <img
-                  src="../assets/sign-document.svg"
-                  alt=""
-                  class="illustration"
-                  width="64"
-                  height="64"
-                />
                 <div>
+                  <img
+                    src="../assets/sign-document.svg"
+                    alt=""
+                    class="illustration"
+                    width="64"
+                    height="64"
+                  />
                   <h3>Documenter un besoin</h3>
-                  <p>
-                    Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
-                    acteurs concernés&nbsp;? Un bouquet de données est créé au
-                    nom d’un utilisateur ou d’une organisation. Tous les membres
-                    d’une organisation peuvent éditer le bouquet.
-                  </p>
                 </div>
+                <p>
+                  Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
+                  acteurs concernés&nbsp;? Un bouquet de données est créé au nom
+                  d’un utilisateur ou d’une organisation. Tous les membres d’une
+                  organisation peuvent éditer le bouquet.
+                </p>
               </li>
 
               <li class="fr-grid-row">
-                <img
-                  src="../assets/binders.svg"
-                  alt=""
-                  class="illustration"
-                  width="64"
-                  height="64"
-                />
                 <div>
+                  <img
+                    src="../assets/binders.svg"
+                    alt=""
+                    class="illustration"
+                    width="64"
+                    height="64"
+                  />
                   <h3>Lister les informations utiles</h3>
-                  <p>
-                    Quelles sont les informations géographiques ou les
-                    indicateurs pertinents&nbsp;? Les bouquets de données
-                    permettent de renseigner les informations souhaitées
-                    indépendamment de l’existence des données.
-                  </p>
                 </div>
+                <p>
+                  Quelles sont les informations géographiques ou les indicateurs
+                  pertinents&nbsp;? Les bouquets de données permettent de
+                  renseigner les informations souhaitées indépendamment de
+                  l’existence des données.
+                </p>
               </li>
 
               <li class="fr-grid-row">
-                <img
-                  src="../assets/document-add.svg"
-                  alt=""
-                  class="illustration"
-                  width="64"
-                  height="64"
-                />
                 <div>
-                  <h3>Associer les données disponibles</h3>
-                  <p>
-                    Les données existantes satisfont-elles les besoins du cas
-                    d’usage&nbsp;? L’association peut se faire dans sa forme la
-                    plus interopérable via une donnée cataloguée sur
-                    <b>data.gouv</b><i>.fr</i> ou le renseignement d’un URL.
-                  </p>
+                  <img
+                    src="../assets/document-add.svg"
+                    alt=""
+                    class="illustration"
+                    width="64"
+                    height="64"
+                  />
+                  <h3>Associer les données</h3>
                 </div>
+                <p>
+                  Les données existantes satisfont-elles les besoins du cas
+                  d’usage&nbsp;? L’association peut se faire dans sa forme la
+                  plus interopérable via une donnée cataloguée sur
+                  <b>data.gouv</b><i>.fr</i> ou le renseignement d’un URL.
+                </p>
               </li>
             </ul>
           </div>
@@ -226,7 +226,8 @@ const dropdown = config.website.header_search.dropdown
 .bouquets {
   --gap: 2px;
   h3 {
-    margin-block-end: 0.5rem;
+    margin-block-end: 0;
+    flex: 1 1 15ch;
   }
 }
 
@@ -239,17 +240,18 @@ const dropdown = config.website.header_search.dropdown
 }
 .organize-data li {
   padding: 1rem;
-  flex: 1 1 33%;
+  flex-direction: column;
   align-content: start;
   gap: 1rem;
+  flex: 1 1 33%;
+  min-inline-size: 20ch;
   background-color: white;
 
   & > :first-child {
-    flex: 0 0 64px;
-  }
-  & > :last-child {
-    flex: 1 1 60%;
-    min-inline-size: 24ch;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   h4 {
@@ -329,11 +331,11 @@ const dropdown = config.website.header_search.dropdown
 @container card (inline-size > 50ch) {
   .home-card {
     & > :first-child {
-      grid-row: full;
+      grid-row: wrapper;
       grid-column: 1 / 3;
-      max-block-size: initial;
+      max-block-size: 200px;
       max-inline-size: 188px;
-      object-position: bottom right;
+      object-position: top right;
       align-self: end;
     }
     & > :last-child {
@@ -370,7 +372,7 @@ const dropdown = config.website.header_search.dropdown
   }
 }
 .main-title-v2 :deep(.highlight) {
-  color: #000091;
+  color: var(--blue-france-sun-113);
 }
 
 .big-search {
