@@ -186,7 +186,7 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.datagouv-components :where(.fr-link, a) {
+.datagouv-components :where(.fr-link, a:not(.fr-btn)) {
   color: var(--blue-france-sun-113);
 }
 
