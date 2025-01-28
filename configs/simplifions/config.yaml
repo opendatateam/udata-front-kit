@@ -496,7 +496,7 @@ website:
     - text: Solutions
       to: /solutions
     - text: Guide pour la simplification
-      to: /dlnuf
+      to: /guides-simplification
     - text: A propos
       to: /about
   router:
@@ -508,9 +508,9 @@ website:
         route: '/about'
         url: '/simplifions/pages/about.md'
       - title: 'Guide pour la simplification'
-        id: 'dlnuf'
-        route: '/dlnuf'
-        url: '/simplifions/pages/dlnuf.md'
+        id: 'guides-simplification'
+        route: '/guides-simplification'
+        url: '/simplifions/pages/guides-simplification.md'
       - title: Simplifier le sourcing des marchés publics avec API Entreprise
         id: '/api-entreprise_cas-usage_marches_public_sourcing'
         route: '/api-entreprise_cas-usage_marches_public_sourcing'
