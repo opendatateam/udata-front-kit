@@ -327,11 +327,11 @@ website:
             edit_multiple: true
             filter_multiple: true
             values:
-              - name: Proactivité | l'usager n'a plus de démarche à faire
+              - name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
                 tag: spf-simplification-proactivite
-              - name: Dîtes-le nous une fois | l'usager n'a plus à fournir de justificatifs
+              - name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
                 tag: spf-simplification-dlnuf
-              - name: Portail de données | l'usager ou l'agent trouve l'information
+              - name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
                 tag: spf-simplification-portail-donnees-agents
       - name: solutions
         slug: solutions
@@ -444,11 +444,11 @@ website:
             edit_multiple: true
             filter_multiple: true
             values:
-              - name: Proactivité | l'usager n'a plus de démarche à faire
+              - name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
                 tag: spf-simplification-proactivite
-              - name: Dîtes-le nous une fois | l'usager n'a plus à fournir de justificatifs
+              - name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
                 tag: spf-simplification-dlnuf
-              - name: Portail de données | l'usager ou l'agent trouve l'information
+              - name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
                 tag: spf-simplification-portail-donnees-agents
   header_search:
     display: true
