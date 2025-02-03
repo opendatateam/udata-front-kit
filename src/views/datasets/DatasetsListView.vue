@@ -64,6 +64,8 @@ const datasets = computed(() => store.datasets)
 const total = computed(() => store.total)
 const pages = computed(() => store.pagination)
 
+const debounceWait: number = config.website.default_debounce_wait ?? 600
+
 const title = config.website.title as string
 const banner = config.website.datasets.banner
 const topicItems = config.website.list_search_topics as TopicItemConf[]
@@ -203,7 +205,7 @@ const delayedSearch = useDebounceFn(
         loadingInstance.hide()
       })
   },
-  600
+  debounceWait
 )
 
 watch(

@@ -9,6 +9,10 @@ import type { SpatialCoverage, SpatialCoverageLevel } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useSpatialStore } from '@/store/SpatialStore'
 
+import config from '@/config'
+
+const debounceWait: number = config.website.default_debounce_wait ?? 600
+
 const selectedSpatialCoverage = defineModel('spatialCoverageModel', {
   type: Object as PropType<SpatialCoverage>
 })
@@ -41,7 +45,7 @@ const search = useDebounceFn(async (query: string) => {
   } finally {
     isLoading.value = false
   }
-}, 600)
+}, debounceWait)
 
 const clear = () => {
   selectedSpatialCoverage.value = undefined
@@ -74,7 +78,7 @@ onMounted(() => {
     :strict="false"
     :clear-on-blur="false"
     :allow-absent="true"
-    no-options-text="Aucune couverture spatiale trouvée, précisez ou élargissez votre recherche."
+    no-options-text="Aucune couverture territoriale trouvée, précisez ou élargissez votre recherche."
     :aria="{
       // useless or unsupported yet https://github.com/vueform/multiselect/issues/436
       'aria-labelledby': null,

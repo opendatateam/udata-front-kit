@@ -10,6 +10,10 @@ import IndicatorSearch from '../../components/indicators/IndicatorSearch.vue'
 import { FILTER_KEYS, type IndicatorFilters } from '../../model/indicator'
 import { useAccessibilityProperties } from '../../utils/a11y'
 
+import config from '@/config'
+
+const debounceWait: number = config.website.default_debounce_wait ?? 600
+
 const route = useRoute()
 const router = useRouter()
 
@@ -52,7 +56,7 @@ const search = useDebounceFn((query) => {
     query: { ...route.query, q: query },
     hash: '#indicators-list'
   })
-}, 600)
+}, debounceWait)
 </script>
 
 <template>

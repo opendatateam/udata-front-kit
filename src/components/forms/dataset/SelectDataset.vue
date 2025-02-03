@@ -10,6 +10,10 @@ import '@/assets/multiselect.css'
 import type { DatasetProperties } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchAPI'
 
+import config from '@/config'
+
+const debounceWait: number = config.website.default_debounce_wait ?? 600
+
 const selectedDataset = defineModel({
   type: Object as () => DatasetV2
 })
@@ -47,7 +51,7 @@ const search = useDebounceFn(async (query: string) => {
   } finally {
     isLoading.value = false
   }
-}, 600)
+}, debounceWait)
 
 const clear = () => {
   selectedDataset.value = undefined

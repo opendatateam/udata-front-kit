@@ -18,6 +18,8 @@ import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
 
+const debounceWait: number = config.website.default_debounce_wait ?? 600
+
 const { topicsSlug, topicsName } = useTopicsConf()
 
 const router = useRouter()
@@ -118,7 +120,7 @@ const search = useDebounceFn(() => {
     .then(() => {
       setLiveResults()
     })
-}, 600)
+}, debounceWait)
 
 watch(
   props,

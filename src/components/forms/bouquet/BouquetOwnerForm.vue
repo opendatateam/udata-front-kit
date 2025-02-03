@@ -11,6 +11,10 @@ import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
+import config from '@/config'
+
+const debounceWait: number = config.website.default_debounce_wait ?? 600
+
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData>,
   required: true
@@ -74,7 +78,7 @@ const search = useDebounceFn(async (query: string) => {
   } finally {
     isLoading.value = false
   }
-}, 600)
+}, debounceWait)
 
 const onSelectOwnOrganization = () => {
   if (selectedOwnOrganization.value) {
