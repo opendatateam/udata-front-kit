@@ -5,7 +5,7 @@ const activeAccordion = ref<number>()
 const faqEcologieDataGouvHtml: string = config.website.formatted_title
 const faqDataGouvHtml = '<b>data.gouv</b><i>.fr</i>'
 const faqMinisterLink =
-  "<a href='https://www.ecologie.gouv.fr/' class='fr-link' rel='noreferrer noopener' title='Ministère en charge de l&rsquo;environnement - nouvelle fenêtre' target='_blank'>Ministère en charge de l&rsquo;environnement</a>"
+  "<a href='https://www.ecologie.gouv.fr/' class='fr-link' rel='noreferrer noopener' title='Ministère en charge de l&rsquo;environnement - nouvelle fenêtre' target='_blank'>ministère en charge de l&rsquo;environnement</a>"
 </script>
 
 <template>

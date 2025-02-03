@@ -64,7 +64,7 @@ const dropdown = config.website.header_search.dropdown
               <p>
                 Accéder aux données des services et opérateurs de l’État et
                 d’une sélection d’organisations publiant des données utiles aux
-                politiques du Ministère en charge de l&rsquo;environnement.
+                politiques du ministère en charge de l&rsquo;environnement.
               </p>
               <div class="card__links">
                 <RouterLink
