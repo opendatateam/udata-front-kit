@@ -5,7 +5,7 @@ const activeAccordion = ref<number>()
 const faqEcologieDataGouvHtml: string = config.website.formatted_title
 const faqDataGouvHtml = '<b>data.gouv</b><i>.fr</i>'
 const faqMinisterLink =
-  "<a href='https://www.ecologie.gouv.fr/' class='fr-link' rel='noreferrer noopener' title='Ministère en charge de l&rsquo;environnement - nouvelle fenêtre' target='_blank'>Ministère en charge de l&rsquo;environnement</a>"
+  "<a href='https://www.ecologie.gouv.fr/' class='fr-link' rel='noreferrer noopener' title='Ministère en charge de l&rsquo;environnement - nouvelle fenêtre' target='_blank'>ministère en charge de l&rsquo;environnement</a>"
 </script>
 
 <template>
@@ -245,6 +245,9 @@ const faqMinisterLink =
 </template>
 
 <style scoped>
+:deep(.fr-accordion .fr-collapse) {
+  padding-inline: clamp(0.5rem, 0.3276rem + 0.8621vw, 1rem);
+}
 :deep(.fr-accordion__btn) {
   color: #000091;
 }
