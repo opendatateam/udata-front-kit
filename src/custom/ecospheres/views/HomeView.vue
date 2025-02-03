@@ -12,7 +12,6 @@ import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 
 const topicStore = useTopicStore()
-const router = useRouter()
 const lastTopics: ComputedRef<Topic[]> = computed(() =>
   topicStore.sorted.filter((bouquet) => !bouquet.private).slice(0, 3)
 )
@@ -126,10 +125,7 @@ const dropdown = config.website.header_search.dropdown
     </section>
     <section class="fr-container--fluid bouquets">
       <div class="fr-container fr-py-16v">
-        <h2>
-          Bouquets de données&nbsp;: articuler politiques publiques et données
-          territoriales
-        </h2>
+        <h2>Cataloguer les usages grâce aux bouquets</h2>
 
         <div class="bg-white border fr-py-3w fr-px-2w">
           <div class="bg-grey">
@@ -308,39 +304,35 @@ const dropdown = config.website.header_search.dropdown
   container-name: card;
 }
 .home-card {
-  display: grid;
-  grid-template-columns: [full-start] auto [wrapper-start] 1fr 2fr [wrapper-end] auto [full-end];
-  grid-template-rows: [full-start] auto [wrapper-start] 60px 1fr [wrapper-end] auto [full-end];
+  padding: clamp(1rem, 0.4286rem + 2.8571cqi, 1.5rem);
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
   block-size: 100%;
 
+  .card__content {
+    block-size: 100%;
+  }
+
   & > :first-child {
-    grid-row: 2 / 3;
-    grid-column: wrapper;
     max-block-size: 60px;
     max-inline-size: 85px;
     object-fit: cover;
     object-position: center;
   }
-  & > :last-child {
-    grid-row: 3 / 4;
-    grid-column: wrapper;
-  }
 }
 
 @container card (inline-size > 50ch) {
   .home-card {
+    padding-inline-start: 0;
+    flex-direction: row;
+
     & > :first-child {
-      grid-row: wrapper;
-      grid-column: 1 / 3;
+      flex: 1 0 188px;
+      align-self: end;
       max-block-size: 200px;
       max-inline-size: 188px;
       object-position: top right;
-      align-self: end;
-    }
-    & > :last-child {
-      grid-row: wrapper;
-      grid-column: 3 / 4;
     }
   }
 }
