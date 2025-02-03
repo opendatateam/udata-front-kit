@@ -1,14 +1,14 @@
 # config file for meteo-france
 
 datagouvfr:
-  # data.gouv.fr base URL
+  # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id:
+  oauth_client_id: 676452675336109a436f8f73
 
 universe:
   # "universe" topic id
-  topic_id: 6571f222129681e83de11aa2 # meteo-test
+  topic_id: 6571f222129681e83de11aa2
   # universe name, used as bouquets tag
   name: meteo-france
 
@@ -25,36 +25,44 @@ website:
   service_logo: '/logos/meteo-france-logo.svg'
   badge:
     display: false
-    text: 'BETA'
-    style: 'blue-cumulus'
+    text:
+    style:
   # leave empty if not pertinent
+  logo_operator:
+    src: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
+    header:
+      width: '60px'
+      height: '60px'
+    footer:
+      width: '92px'
+      height: '92px'
   homepage:
     title: 'La météo et le climat en Open Data'
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     sections:
-      - title: Thématiques
+      - title: Bouquets de données
         content:
         sub_section_datasets:
         sub_section_cards:
-        sub_section_tiles:
           title:
-          tiles:
-            - id: '6571f26dc009674feb726be9'
-              name: 'Données climatologiques de base'
+          cards:
+            - name: 'Données climatologiques (par station et spatialisées)'
               description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
-              url: 'datasets?topic=6571f26dc009674feb726be9'
-            - id: '6571f2db0273fc306408f265'
-              name: 'Données climatologiques de référence pour le changement climatique'
+              url: 'datasets?tags=climatologique-base'
+              image_url: '/meteo-france/assets/climatologie.png'
+            - name: 'Données de référence pour le changement climatique'
               description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
-              url: 'datasets?topic=6571f2db0273fc306408f265'
-            - id: '65e0c82c2da27c1dff5fa66f'
-              name: 'Données de Prévision Numérique du Temps (PNT)'
-              description: 'Accès en temps réel aux résultats des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
-              url: 'datasets?topic=65e0c82c2da27c1dff5fa66f'
+              url: 'datasets?tags=climatologique-changement-climatique'
+              image_url: '/meteo-france/assets/changement.png'
+            - name: 'Données de Prévision Numérique du Temps (PNT)'
+              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
+              url: 'datasets?tags=pnt'
+              image_url: '/meteo-france/assets/pnt.png'
+        sub_section_tiles:
         sub_section_buttons:
       - title: Actualités
         content: >-
-          Retours sur le hackathon du 8 et 9 avril dernier 🚀
+          Retours sur le hackathon 2024 🚀
 
 
           [En savoir plus](/hackathon)
@@ -62,7 +70,6 @@ website:
         sub_section_cards:
         sub_section_tiles:
         sub_section_buttons:
-    meta_description:
   header_button:
     display: true
     label: 'Donnez votre avis'
@@ -77,14 +84,132 @@ website:
     display: true
     name: 'Recherche guidée'
     link: '/form'
+  search_config:
+    header_search:
+      display: true
+      placeholder: Rechercher...
+      dropdown:
+        - text: Rechercher {} dans les <strong>jeux de données</strong>
+          route: datasets
+    pages:
+      - name: datasets
+        slug: datasets
+        type: datasets
+        config_type:
+          organization:
+          card:
+        extras_key:
+        list_all:
+        display_metadata:
+        activate_read_more:
+        dataset_editorialization:
+        default_tag: 'meteodatagouvfr'
+        geozones: false
+        can_add:
+          everyone: false
+          authorized_users:
+        labels:
+          search_page_title: jeux de données
+          search_bar_title: Filtrer les jeux de données
+          search_results: jeux de données
+          add_button:
+          add_title:
+          add_subtitle:
+          subject:
+          description_title:
+          description_info:
+          owner:
+        filters:
+          - name: 'Catégories'
+            tag: category
+            label_for_all: Toutes les catégories
+            edit_multiple: false
+            filter_multiple: false
+            values:
+              - name: Données climatologiques de base
+                tag: climatologique-base
+              - name: Données climatologiques de référence pour le changement climatique
+                tag: climatologique-changement-climatique
+              - name: Données de Prévision Numérique du Temps (PNT)
+                tag: pnt
+              - name: Informations sur les stations
+                tag: stations
+          - name: 'Sous-catégories'
+            tag: subcategory
+            condition_on: category
+            label_for_all: Toutes les sous-thématiques
+            edit_multiple: true
+            filter_multiple: false
+            values:
+              - name: Stations du réseau Météo-France
+                tag: stations-mf
+                condition_on: stations
+              - name: Stations complémentaires
+                tag: stations-complementaires
+                condition_on: stations
+              - name: Fiches de poste (par département)
+                tag: fiches-postes-dep
+                condition_on: stations
+              - name: Fiches de postes réseau complémentaire (par département)
+                tag: fiches-postes-complementaire-dep
+                condition_on: stations
+              - name: Informations réseau
+                tag: infos-reseau
+                condition_on: stations
+              - name: Données à la station du réseau Météo-France
+                tag: climatologique-base-donnees-stations-mf
+                condition_on: climatologique-base
+              - name: Données stations complémentaires
+                tag: climatologique-base-donnees-stations-complementaires
+                condition_on: climatologique-base
+              - name: Données spatialisées
+                tag: climatologique-base-donnees-spatialisees
+                condition_on: climatologique-base
+              - name: Données à la station
+                tag: climatologique-changement-climatique-donnees-station
+                condition_on: climatologique-changement-climatique
+              - name: Données spatialisées
+                tag: climatologique-changement-climatique-donnees-spatialisees
+                condition_on: climatologique-changement-climatique
+              - name: Modèle ARPEGE
+                tag: pnt-arpege
+                condition_on: pnt
+              - name: Modèle AROME Métropole
+                tag: pnt-arome-metropole
+                condition_on: pnt
+              - name: Modèle AROME Outre-Mer
+                tag: pnt-arome-outre-mer
+                condition_on: pnt
+              - name: Modèle de vagues et surcote
+                tag: pnt-vague-surcote
+                condition_on: pnt
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
+  footer_external_links:
+    - label: 'meteofrance.com'
+      href: 'https://meteofrance.com/'
+    - label: 'Portail des API Météo-France'
+      href: 'https://portail-api.meteofrance.fr/'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  notice:
+    display: false
+    content: ⚠️ Vous naviguez sur une version de développement de meteo.data.gouv.fr ⚠️
+    closeable: false
   menu:
     - text: Données
       to: /datasets
-    - text: Bouquets
-      to: /bouquets
     - text: Recherche guidée
       to: /form
-    - text: 'Hackathon le 8 et 9 avril 🚀'
+    - text: 'Hackathon 2024 🚀'
       to: /hackathon
     - text: A propos
       to: /about
@@ -115,45 +240,15 @@ website:
       name: 'Données de Prévision Numérique du Temps (PNT)'
   url_search_topics: 'datasets'
   oauth_option: true
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
-  footer_external_links:
-    - label: 'meteofrance.com'
-      href: 'https://meteofrance.com/'
-    - label: 'Portail des API Météo-France'
-      href: 'https://portail-api.meteofrance.fr/'
-    - label: 'data.gouv.fr'
-      href: 'https://www.data.gouv.fr'
-  footer_mandatory_links:
-    - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
-    - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
-      to: '/accessibility'
-  logo_operator:
-    src: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
-    header:
-      width: '60px'
-      height: '60px'
-    footer:
-      width: '92px'
-      height: '92px'
-  notice:
-    display: false
-    content: Notice avec un [lien beta](/beta) et du _style_
-    closeable: false
-  # display settings
   pagination_sizes:
     organizations_list: 9
     topics_list: 100
     files_list: 6
+  contact_email: datagouv@datagouv.gouv.fr
   home_banner_colors:
     - '#F7EED4'
     - '#ECEEE6'
     - '#E2EEF8'
-  env: 'prod'
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 292
@@ -166,45 +261,19 @@ website:
       create: false
   datasets:
     organization_filter: false
-    add_to_bouquet: true
+    add_to_bouquet: false
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
-    show_extended_information_panel: false
-  topics:
-    slug: bouquets
-    name: bouquet
-    extras_key: 'meteofrance'
-    themes:
-      usage: false
-      main_name: thématique
-      secondary_name: chantier
-    # include a list page with all topics
-    list_all: false
-    display_metadata: false
-    activate_read_more: false
-    dataset_editorialization: false
-    can_add_topics:
-      everyone: false
-      authorized_users:
-        - 6230733357772160a4f77fbaxx
-themes:
-  - name: Données climatologiques
-    color: 043574
-    textColor: FFFFFF
-    subthemes:
-      - name: Informations sur les stations
-      - name: Données climatologiques de base
-      - name: Références à la station
-      - name: Données de références pour le changement climatiques
-  - name: Données de prévision numérique du temps (PNT)
-    color: 1E929E
-    textColor: FFFFFF
-    subthemes:
-      - name: ARPEGE
-      - name: AROME
-      - name: Modèle de vague haute
-
-# list of organisations' ids that should be handled by the portal
-# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
-# then Informations > ID at the bottom of the page
+    show_extended_information_panel:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Jeux de données
+      path: /datasets
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
 organizations:
