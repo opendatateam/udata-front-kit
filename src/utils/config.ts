@@ -14,6 +14,7 @@ interface SearchPageConfNormalized {
   searchPageCanAdd: CanAddElementConf
   searchPageListAll: boolean
   searchPageDisplayMetadata: boolean
+  searchPageDefaultTag: string
   searchPageActivateReadMore: boolean
   searchPageFilters: FilterConf[]
   searchPageLabelTitle: string
@@ -50,6 +51,7 @@ export const useSearchPagesConfig = (
     searchPageCanAdd: searchPageConf.can_add,
     searchPageListAll: searchPageConf.list_all,
     searchPageDisplayMetadata: searchPageConf.display_metadata,
+    searchPageDefaultTag: searchPageConf.default_tag,
     searchPageActivateReadMore: searchPageConf.activate_read_more,
     searchPageFilters: searchPageConf.filters,
     searchPageLabelTitle: searchPageConf.labels.search_page_title,
