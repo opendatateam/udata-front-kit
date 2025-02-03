@@ -249,6 +249,7 @@ website:
     - '#F7EED4'
     - '#ECEEE6'
     - '#E2EEF8'
+  env: 'prod'
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 292

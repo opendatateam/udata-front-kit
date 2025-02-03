@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import config from '@/config'
 import type { Resource } from '@datagouv/components'
 import { ResourceAccordion } from '@datagouv/components'
 import Slider from '@vueform/slider'
 import '@vueform/slider/themes/default.css'
 import { onMounted, ref, type Ref } from 'vue'
+
+import config from '@/config'
+
 import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
 import MapComponent from '../components/MapComponent.vue'
-import ModalComponent from '../components/MeteoFormModal.vue'
-import type { Dataset, Feature, FeatureCollection, Station } from '../types'
+import ModalComponent from '../components/Modal.vue'
+import type { Dataset, FeatureCollection, Station } from '../types'
 
 type DatasetIds = {
   [pack: string]: Record<string, Dataset>
@@ -49,7 +51,7 @@ const stations: Ref<FeatureCollection> = ref({
   features: []
 })
 
-const onSelectDataPack = (pack: string | number) => {
+const onSelectDataPack = (pack: string) => {
   selectedDataset.value = null
   showDep.value = false
   showPeriod.value = false
@@ -60,7 +62,7 @@ const onSelectDataPack = (pack: string | number) => {
   showCustomFilter.value = false
   filteredResources.value = []
 
-  selectedDataPack.value = String(pack)
+  selectedDataPack.value = pack
   optionsDataset.value = Object.keys(datasetsIdsTyped[pack])
   if (pack === 'Données de prévision numérique du temps (PNT)') {
     indicateurWording.value = 'Regroupement'
@@ -69,7 +71,7 @@ const onSelectDataPack = (pack: string | number) => {
   }
 }
 
-const onSelectDataset = (dataset: string | number) => {
+const onSelectDataset = (dataset: string) => {
   showLoader.value = true
   showDep.value = false
   showPeriod.value = false
@@ -117,11 +119,11 @@ const onSelectDataset = (dataset: string | number) => {
       })
   }
 }
-const hoveredPoint: Ref<Feature | null> = ref(null)
+const hoveredPoint = ref(null)
 const mouseX = ref(0)
 const mouseY = ref(0)
 
-function handlePointHover(feature: Feature) {
+function handlePointHover(feature) {
   hoveredPoint.value = feature
 }
 
@@ -138,7 +140,9 @@ onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove) // Listen to mouse movements
 })
 
-async function fetchStationsGeoJSON(depCode: string) {
+async function fetchStationsGeoJSON(
+  depCode: string
+): Promise<FeatureCollection> {
   const response = await fetch(
     `https://object.data.gouv.fr/meteofrance/data/stations/stations_${depCode}.geojson`
   )
@@ -148,26 +152,21 @@ async function fetchStationsGeoJSON(depCode: string) {
 
 function filterOpenStation() {
   mapPoints.value = filterGeoJSONOpen(stations.value)
-  isMapFiltered.value = !isMapFiltered.value
 }
 
 function filterGeoJSONOpen(geojson: FeatureCollection): FeatureCollection {
-  if (isMapFiltered.value) {
-    return geojson
-  } else {
-    const filteredGeoJSON: FeatureCollection = {
-      type: 'FeatureCollection',
-      features: []
-    }
-
-    geojson.features.forEach((feature) => {
-      if (!feature.properties.DATFERM) {
-        filteredGeoJSON.features.push(feature)
-      }
-    })
-
-    return filteredGeoJSON
+  const filteredGeoJSON: FeatureCollection = {
+    type: 'FeatureCollection',
+    features: []
   }
+
+  geojson.features.forEach((feature) => {
+    if (!feature.properties.DATFERM) {
+      filteredGeoJSON.features.push(feature)
+    }
+  })
+
+  return filteredGeoJSON
 }
 
 function getCsv(url: string) {
@@ -191,7 +190,7 @@ async function onSelectDep(event: Event) {
   optionsPeriod.value = res
   showPeriod.value = true
   if (selectedDataPack.value == 'Données climatologiques de base') {
-    for (const obj of deps) {
+    for (let obj of deps) {
       if (obj.code === selectedDep.value) {
         mapOptions.value = obj
         //mapPoints.value = filterGeoJSONByNumDep(stations, selectedDep.value)
@@ -235,9 +234,8 @@ function onSelectIndicateur(event: Event) {
   )
 }
 
-function convertDate(dateStr: string | number | boolean | null) {
-  if (!dateStr) return ''
-  const dateObj = new Date(String(dateStr))
+function convertDate(dateStr) {
+  const dateObj = new Date(dateStr)
   const day = String(dateObj.getDate()).padStart(2, '0')
   const month = String(dateObj.getMonth() + 1).padStart(2, '0') // Months are zero-indexed
   const year = dateObj.getFullYear()
@@ -265,7 +263,6 @@ const handlePostesUpdate = (newPostes: Station[]) => {
 }
 
 const showCustomFilter = ref(false)
-const isMapFiltered = ref(false)
 
 const minSlider = ref(0)
 const maxSlider = ref(100)
@@ -276,14 +273,6 @@ const showModal = ref(false)
 const modalMessage = ref(
   'Le lancement du téléchargement peut prendre un moment. Patientez svp...'
 )
-
-const getAPIUrl = (endpoint: string) => {
-  const datasetId = selectedDataset.value
-    ? selectedDataset.value.id.toLowerCase()
-    : ''
-  const postesQuery = postes.value.map((post) => post.id).join(',')
-  return `https://meteo-api.data.gouv.fr/api/clim/base_${datasetId}${endpoint}/${selectedDep.value}/csv/?num_postes=${postesQuery}&anneemin=${valuesSlider.value[0]}&anneemax=${valuesSlider.value[1]}`
-}
 </script>
 
 <template>
@@ -309,7 +298,7 @@ const getAPIUrl = (endpoint: string) => {
       <template #label>Quelles données ?</template>
     </DsfrSelect>
 
-    <div v-if="selectedDataset && showDep" class="select-classic">
+    <div class="select-classic" v-if="selectedDataset && showDep">
       <label>Quel département ?</label>
       <select class="fr-select" @change="onSelectDep($event)">
         <option hidden>Choisir une option</option>
@@ -329,11 +318,7 @@ const getAPIUrl = (endpoint: string) => {
         carte
       </p>
       <button type="button" class="fr-btn" @click="filterOpenStation()">
-        {{
-          isMapFiltered
-            ? 'Voir toutes les stations'
-            : "Filtrer sur les stations encore ouvertes aujourd'hui"
-        }}
+        Filtrer sur les stations encore ouvertes aujourd'hui
       </button>
       <MapComponent
         :options="mapOptions"
@@ -374,14 +359,14 @@ const getAPIUrl = (endpoint: string) => {
 
       <div v-if="postes.length > 0">
         Vous avez sélectionné les stations :
-        <span v-for="item in postes" :key="item.id">{{ item.name }} ; </span>
+        <span v-for="item in postes">{{ item.name }} ; </span>
       </div>
       <br />
       <p>Sélectionner la période (5 ans maximum) :</p>
       <Slider
-        v-model="valuesSlider"
         :min="minSlider"
         :max="maxSlider"
+        v-model="valuesSlider"
         class="slider-dsfr"
       />
       <br />
@@ -412,13 +397,26 @@ const getAPIUrl = (endpoint: string) => {
               )
             "
           >
-            Télécharger les données "Précipitations-Température-Vent" en CSV
+            Télécharger les données "Vent" en CSV
           </button>
           &nbsp;&nbsp;
           <button
             type="button"
             class="fr-btn fr-btn--secondary"
-            @click="copyToClipboard(getAPIUrl('_vent'))"
+            @click="
+              copyToClipboard(
+                'https://meteo-api.data.gouv.fr/api/clim/base_' +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
+                  '_vent/' +
+                  selectedDep +
+                  '/csv/?num_postes=' +
+                  postes.map((post) => post.id).join(',') +
+                  '&anneemin=' +
+                  valuesSlider[0] +
+                  '&anneemax=' +
+                  valuesSlider[1]
+              )
+            "
           >
             {{ copyText }}
           </button>
@@ -426,7 +424,20 @@ const getAPIUrl = (endpoint: string) => {
           <button
             type="button"
             class="fr-btn"
-            @click="getCsv(getAPIUrl('_autres'))"
+            @click="
+              getCsv(
+                'https://meteo-api.data.gouv.fr/api/clim/base_' +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
+                  '_autres/' +
+                  selectedDep +
+                  '/csv/?num_postes=' +
+                  postes.map((post) => post.id).join(',') +
+                  '&anneemin=' +
+                  valuesSlider[0] +
+                  '&anneemax=' +
+                  valuesSlider[1]
+              )
+            "
           >
             Télécharger les données "Autres paramètres" en CSV
           </button>
@@ -434,20 +445,63 @@ const getAPIUrl = (endpoint: string) => {
           <button
             type="button"
             class="fr-btn fr-btn--secondary"
-            @click="copyToClipboard(getAPIUrl('_autres'))"
+            @click="
+              copyToClipboard(
+                'https://meteo-api.data.gouv.fr/api/clim/base_' +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
+                  '_autres/' +
+                  selectedDep +
+                  '/csv/?num_postes=' +
+                  postes.map((post) => post.id).join(',') +
+                  '&anneemin=' +
+                  valuesSlider[0] +
+                  '&anneemax=' +
+                  valuesSlider[1]
+              )
+            "
           >
             {{ copyText }}
           </button>
         </span>
         <span v-else>
-          <button type="button" class="fr-btn" @click="getCsv(getAPIUrl(''))">
+          <button
+            type="button"
+            class="fr-btn"
+            @click="
+              getCsv(
+                'https://meteo-api.data.gouv.fr/api/clim/base_' +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
+                  '/' +
+                  selectedDep +
+                  '/csv/?num_postes=' +
+                  postes.map((post) => post.id).join(',') +
+                  '&anneemin=' +
+                  valuesSlider[0] +
+                  '&anneemax=' +
+                  valuesSlider[1]
+              )
+            "
+          >
             Télécharger les données en CSV
           </button>
           &nbsp;&nbsp;
           <button
             type="button"
             class="fr-btn fr-btn--secondary"
-            @click="copyToClipboard(getAPIUrl(''))"
+            @click="
+              copyToClipboard(
+                'https://meteo-api.data.gouv.fr/api/clim/base_' +
+                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
+                  '/' +
+                  selectedDep +
+                  '/csv/?num_postes=' +
+                  postes.map((post) => post.id).join(',') +
+                  '&anneemin=' +
+                  valuesSlider[0] +
+                  '&anneemax=' +
+                  valuesSlider[1]
+              )
+            "
           >
             {{ copyText }}
           </button>
@@ -514,7 +568,7 @@ const getAPIUrl = (endpoint: string) => {
         et leurs noms.
       </p>
       <div>
-        <div v-if="selectedIndicateur" class="code-api">
+        <div class="code-api" v-if="selectedIndicateur">
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
             datasetSlug +
@@ -522,7 +576,7 @@ const getAPIUrl = (endpoint: string) => {
             selectedIndicateur
           }}
         </div>
-        <div v-else class="code-api">
+        <div class="code-api" v-else>
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
             datasetSlug +
@@ -587,7 +641,7 @@ const getAPIUrl = (endpoint: string) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .select-classic {
   margin-bottom: 20px;
 }
