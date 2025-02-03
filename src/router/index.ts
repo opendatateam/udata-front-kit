@@ -87,34 +87,44 @@ const defaultRoutes: RouteRecordRaw[] = [
 
 // search pages
 getAllSearchPagesConfig().forEach((searchPage) => {
-  defaultRoutes.push(
-    {
-      path: `/${searchPage.searchPageSlug}`,
-      children: [
-        {
-          path: '',
-          name: searchPage.searchPageSlug,
-          meta: {
-            title: capitalize(searchPage.searchPageName) + 's'
-          },
-          component: async () => await import('@/views/SearchView.vue'),
-          props: (route: RouteLocationNormalizedLoaded) => ({
-            query: route.query.q,
-            geozone: route.query.geozone,
-            drafts: route.query.drafts
-          })
+  let searchRoute = {
+    path: `/${searchPage.searchPageSlug}`,
+    children: [
+      {
+        path: '',
+        name: searchPage.searchPageSlug,
+        meta: {
+          title: capitalize(searchPage.searchPageName) + 's'
         },
-        {
-          path: ':bid',
-          name: `${searchPage.searchPageSlug}_detail`,
-          props: (route: RouteLocationNormalizedLoaded) => ({
-            topicId: route.params.bid
-          }),
-          component: async () =>
-            await import('@/views/topics/TopicDetailView.vue')
-        }
-      ]
-    },
+        component: async () => await import('@/views/SearchView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          query: route.query.q,
+          geozone: route.query.geozone,
+          drafts: route.query.drafts
+        })
+      }
+    ]
+  }
+  if (searchPage.searchPageType == 'topics') {
+    searchRoute.children.push({
+      path: ':bid',
+      name: `${searchPage.searchPageSlug}_detail`,
+      props: (route: RouteLocationNormalizedLoaded) => ({
+        topicId: route.params.bid
+      }),
+      component: async () => await import('@/views/topics/TopicDetailView.vue')
+    })
+  }
+  if (searchPage.searchPageType == 'datasets') {
+    searchRoute.children.push({
+      path: ':did',
+      name: 'dataset_detail',
+      component: async () =>
+        await import('@/views/datasets/DatasetDetailView.vue')
+    })
+  }
+  defaultRoutes.push(searchRoute)
+  defaultRoutes.push(
     {
       path: `/admin/${searchPage.searchPageSlug}/add`,
       name: `${searchPage.searchPageSlug}_add`,

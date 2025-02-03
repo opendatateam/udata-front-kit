@@ -18,14 +18,6 @@ import { useSearchPagesConfig } from '@/utils/config'
 const router = useRouter()
 const route = useRoute()
 
-let tags = ref<string[]>([])
-
-if (route.query.tags) {
-  tags.value = route.query.tags?.toString().split(',')
-} else {
-  tags.value = []
-}
-
 const searchPageName = ref<string>('')
 const searchPageSlug = ref<string>('')
 const searchPageLabelTitle = ref<string>('')
@@ -33,6 +25,7 @@ const searchPageLabelAddButton = ref<string>('')
 const searchPageType = ref<string>('')
 const searchPageConfigTypeOrganization = ref<string>('')
 const searchPageConfigTypeTopic = ref<string>('')
+const searchPageDefaultTag = ref<string>('')
 
 const config = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
@@ -44,6 +37,18 @@ searchPageLabelAddButton.value = config.searchPageLabelAddButton
 searchPageType.value = config.searchPageType
 searchPageConfigTypeOrganization.value = config.searchPageConfigTypeOrganization
 searchPageConfigTypeTopic.value = config.searchPageConfigTypeTopic
+searchPageDefaultTag.value = config.searchPageDefaultTag
+
+let tags = ref<string[]>([])
+
+if (route.query.tags) {
+  tags.value = route.query.tags?.toString().split(',')
+} else {
+  tags.value = []
+}
+if (searchPageDefaultTag) {
+  tags.value.push(searchPageDefaultTag.value)
+}
 
 const props = defineProps({
   query: {
@@ -150,6 +155,9 @@ watch(
         tags.value = route.query.tags?.toString().split(',')
       } else {
         tags.value = []
+      }
+      if (searchPageDefaultTag) {
+        tags.value.push(searchPageDefaultTag.value)
       }
     }
   }

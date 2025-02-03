@@ -30,10 +30,12 @@ const getOrganizationPage = (id: string) => {
 }
 
 const searchPageConfigTypeCard = ref<string>('')
+const searchPageLabelTitle = ref<string>('')
 const config = useSearchPagesConfig(
   route.path.replace('/admin', '').split('/')[1]
 )
 searchPageConfigTypeCard.value = config.searchPageConfigTypeCard
+searchPageLabelTitle.value = config.searchPageLabelTitle
 
 type Props = {
   query: string
@@ -51,9 +53,9 @@ const { datasets, pagination, total } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return '1 indicateur disponible'
+    return `1 ${searchPageLabelTitle.value} disponible`
   } else if (total.value > 1) {
-    return `${total.value} indicateurs disponibles`
+    return `${total.value} ${searchPageLabelTitle.value} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
