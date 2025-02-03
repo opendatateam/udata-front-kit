@@ -252,7 +252,7 @@ const onSubmit = async () => {
             @update-validation="(isValid: boolean) => (canSave = isValid)"
           />
         </fieldset>
-        <fieldset>
+        <fieldset v-if="isCreate">
           <legend class="fr-fieldset__legend fr-text--lead">
             Propriétaire du {{ topicsName }}
           </legend>
