@@ -134,7 +134,7 @@ const clear = () => {
       :clear-on-search="true"
       :clear-on-blur="true"
       :close-on-select="true"
-      placeholder=""
+      placeholder="Rechercher"
       aria-owns=""
       :aria="{
         'aria-describedby': `${id}-description`,
@@ -174,7 +174,9 @@ const clear = () => {
 :deep(.fr-label.invisible + .filter-input) {
   margin: 0;
 }
-:deep(.filter-input) {
+:deep(.filter-input),
+.select-search :deep(input),
+:deep(.multiselect-placeholder) {
   padding-inline-start: calc(var(--icon-width) + 1rem);
 }
 .select-search {
@@ -188,7 +190,7 @@ const clear = () => {
   margin-inline-start: var(--icon-width);
 }
 
-::placeholder {
+:deep(.multiselect-placeholder) {
   font-style: italic;
   color: var(--text-mention-grey);
 }
