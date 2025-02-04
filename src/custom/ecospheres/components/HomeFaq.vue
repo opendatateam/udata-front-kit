@@ -246,6 +246,10 @@ const faqMinisterLink =
 
 <style scoped>
 :deep(.fr-accordion .fr-collapse) {
+  /* 
+  Fluid padding. Maths from:
+  https://utopia.fyi/space/calculator?c=320,8,1.2,1248,16,1.25,5,2,&s=0.75%7C0.5%7C0.25,1.5%7C2%7C3%7C4%7C6,s-l&g=s,l,xl,12
+  */
   padding-inline: clamp(0.5rem, 0.3276rem + 0.8621vw, 1rem);
 }
 :deep(.fr-accordion__btn) {

@@ -154,7 +154,7 @@ defineExpose({
             Vous pouvez aussi contribuer en créant un {{ topicsName }}.
           </p>
         </div>
-        <div class="fr-grid-row fr-grid-row--undefined">
+        <div class="fr-grid-row">
           <button class="fr-btn" @click.stop.prevent="clearFilters">
             Réinitialiser les filtres
           </button>

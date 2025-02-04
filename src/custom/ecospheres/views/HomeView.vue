@@ -123,7 +123,7 @@ const dropdown = config.website.header_search.dropdown
         </li>
       </ul>
     </section>
-    <section class="fr-container--fluid bouquets">
+    <section class="fr-container--fluid bouquets bg-grey">
       <div class="fr-container fr-py-16v">
         <h2>Cataloguer les usages grâce aux bouquets</h2>
 
@@ -191,29 +191,29 @@ const dropdown = config.website.header_search.dropdown
         </div>
       </div>
     </section>
-    <section class="fr-container fr-py-12v">
-      <h2>Les bouquets à découvrir</h2>
-      <ul class="fr-grid-row discover fr-mb-2w" role="list">
-        <li v-for="topic in lastTopics" :key="topic.id">
-          <BouquetCard :bouquet="topic" :hide-description="true" />
-        </li>
-      </ul>
-      <p class="fr-m-0">
-        <RouterLink
-          :to="{
-            name: 'bouquets'
-          }"
-          class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
-        >
-          Voir les bouquets
-        </RouterLink>
-      </p>
-    </section>
-    <section class="fr-container--fluid fr-py-16v faq">
+    <section class="fr-container--fluid fr-py-12v bg-grey">
       <div class="fr-container">
-        <h2>Foire aux questions</h2>
-        <HomeFaq />
+        <h2>Les bouquets à découvrir</h2>
+        <ul class="fr-grid-row discover fr-mb-2w" role="list">
+          <li v-for="topic in lastTopics" :key="topic.id">
+            <BouquetCard :bouquet="topic" :hide-description="true" />
+          </li>
+        </ul>
+        <p class="fr-m-0">
+          <RouterLink
+            :to="{
+              name: 'bouquets'
+            }"
+            class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+          >
+            Voir les bouquets
+          </RouterLink>
+        </p>
       </div>
+    </section>
+    <section class="fr-container fr-py-16v faq">
+      <h2>Foire aux questions</h2>
+      <HomeFaq />
     </section>
   </div>
 </template>
@@ -228,11 +228,11 @@ const dropdown = config.website.header_search.dropdown
 }
 
 .bg-grey {
-  background-color: var(--border-default-grey);
+  background-color: var(--background-alt-grey);
 }
-.bouquets,
+
 .faq {
-  background-color: #f6f6f6;
+  background-color: var(--background-default-grey);
 }
 .organize-data li {
   padding: 1rem;
@@ -294,6 +294,7 @@ const dropdown = config.website.header_search.dropdown
 }
 
 .explore-contribute {
+  /* Fluid gap. Maths from: https://utopia.fyi/space/calculator/ */
   --gap: clamp(1.5rem, 0.7241rem + 3.8793vw, 3.75rem);
 }
 
@@ -304,6 +305,7 @@ const dropdown = config.website.header_search.dropdown
   container-name: card;
 }
 .home-card {
+  /* Fluid padding. Maths from: https://utopia.fyi/space/calculator/ */
   padding: clamp(1rem, 0.4286rem + 2.8571cqi, 1.5rem);
   display: flex;
   flex-direction: column;
@@ -357,6 +359,7 @@ const dropdown = config.website.header_search.dropdown
 
 .main-title-v2 {
   text-align: center;
+  /* Fluid font-size. Maths from: https://utopia.fyi/type/calculator/ */
   font-size: clamp(1.375rem, 0.4698rem + 4.5259vw, 4rem);
 
   @media (max-width: 768px) {

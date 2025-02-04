@@ -144,6 +144,9 @@ const { themeColors } = useThemeOptions(theme)
 </template>
 
 <style scoped>
+article {
+  background-color: var(--background-default-grey);
+}
 .owner-info {
   --gap: 0.75rem;
   .fr-text--sm {
