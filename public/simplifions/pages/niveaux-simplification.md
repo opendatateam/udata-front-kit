@@ -33,7 +33,7 @@ Une première étape pour simplifier les démarches des usagers consiste à **re
 
 Les solutions de niveau 1 reférencées sur ce site sont fréquemment des portails d'accès aux données ou des annuaires.
 
-<a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-portail-donnees-agents">Cas d'usages de niveau 1 ⭐️</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-portail-donnees-agents"> Solutions de niveau 1 ⭐️</a>
+<a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-acces-facile">Cas d'usages de niveau 1 ⭐️</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-acces-facile"> Solutions de niveau 1 ⭐️</a>
 
 
 <h2 id="niveau-2-dlnuf" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">⭐️⭐️ Dîtes-le-nous une fois</h2>

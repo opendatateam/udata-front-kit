@@ -244,10 +244,10 @@ website:
                   <div class="fr-card__footer">
                   <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
                     <li>
-                    <a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-portail-donnees-agents">Cas d'usages</a>
+                    <a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-acces-facile">Cas d'usages</a>
                     </li>
                     <li>
-                    <a class="fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-portail-donnees-agents">Solutions</a>
+                    <a class="fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-acces-facile">Solutions</a>
                     </li>
                   </ul>
                 </div>
@@ -447,7 +447,7 @@ website:
               - name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
                 tag: spf-simplification-dlnuf
               - name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
-                tag: spf-simplification-portail-donnees-agents
+                tag: spf-simplification-acces-facile
       - name: solutions
         slug: solutions
         type: topics
@@ -537,12 +537,16 @@ website:
             edit_multiple: true
             filter_multiple: true
             values:
-              - name: API
-                tag: spf-solution-api
               - name: Formulaire en ligne
                 tag: spf-solution-formulaire-en-ligne
               - name: Portail de données
                 tag: spf-solution-portail-de-donnees
+              - name: Annuaire
+                tag: spf-solution-annuaire
+              - name: Bouquet d'API
+                tag: spf-solution-api
+              - name: Hub d'échange
+                tag: spf-solution-hub
           - name: 'Caractéristiques :'
             tag: caracteristiques
             label_for_all: Tous les types de solutions
@@ -564,7 +568,7 @@ website:
               - name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
                 tag: spf-simplification-dlnuf
               - name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
-                tag: spf-simplification-portail-donnees-agents
+                tag: spf-simplification-acces-facile
   header_search:
     display: true
     placeholder: Rechercher...
