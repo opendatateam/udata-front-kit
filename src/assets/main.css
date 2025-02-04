@@ -224,9 +224,9 @@ body {
 .org--fix .inline-flex {
   gap: 0.25rem;
 }
-/* sometimes the first span is empty, remove gap */
-.org--fix .inline-flex:has(span:empty) {
-  gap: 0;
+/* sometimes the first span is empty, hide it */
+.org--fix .inline-flex span:first-of-type:empty {
+  display: none;
 }
 
 /* Flex gap utility (missing from DSFR) */
