@@ -185,6 +185,7 @@ const clear = () => {
 }
 .select-search :deep(input) {
   padding-inline-start: calc(var(--icon-width) + 1rem);
+  box-shadow: inset 0 -2px 0 0 var(--blue-france-sun-113);
 }
 .visible-label {
   margin-inline-start: var(--icon-width);
