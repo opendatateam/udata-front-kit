@@ -24,7 +24,7 @@ const isPublicService = (): boolean =>
 </script>
 
 <template>
-  <div class="fr-tile-v2 border">
+  <div class="fr-tile-v2 fr-enlarge-link border">
     <div class="fr-grid-row fr-grid-row--middle fr-mb-8v">
       <div class="fr-col-auto">
         <div
@@ -84,7 +84,6 @@ const isPublicService = (): boolean =>
 <style scoped>
 .fr-tile-v2 {
   padding: 2rem;
-  position: relative;
   box-shadow: 0px 4px 0px var(--border-active-blue-france);
   height: 100%;
 }
@@ -98,12 +97,6 @@ const isPublicService = (): boolean =>
 
 .fr-tile__link {
   color: var(--text-default-grey);
-  background-image: none;
-}
-.fr-tile__link::after {
-  content: '';
-  position: absolute;
-  inset: 0;
 }
 
 .fr-title-v2__title .badge {
