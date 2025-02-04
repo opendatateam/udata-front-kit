@@ -123,8 +123,8 @@ const dropdown = config.website.header_search.dropdown
         </li>
       </ul>
     </section>
-    <section class="fr-container--fluid bouquets bg-grey">
-      <div class="fr-container fr-py-16v">
+    <section class="fr-container--fluid bg-grey fr-py-16v">
+      <div class="fr-container bouquets">
         <h2>Cataloguer les usages grâce aux bouquets</h2>
 
         <div class="bg-white border fr-py-3w fr-px-2w">
@@ -190,8 +190,11 @@ const dropdown = config.website.header_search.dropdown
           </div>
         </div>
       </div>
-    </section>
-    <section class="fr-container--fluid fr-py-12v bg-grey">
+
+      <div class="fr-container fr-my-10v">
+        <div class="border"></div>
+      </div>
+
       <div class="fr-container">
         <h2>Les bouquets à découvrir</h2>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
