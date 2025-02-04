@@ -226,7 +226,7 @@ website:
           <h2 class="fr-h1 fr-mt-15w fr-mb-5w" style="color: black; text-align: center;">La simplification en 3 niveaux</h2>
 
           <p class="fr-text--lg" style="text-align: center;">
-          Il y a <a href="/guides-simplification">plusieurs niveaux de simplification</a> avec un effet positif croissant pour les usagers finaux. Pour chaque cas d'usage et solution référencés sur <i>simplifions.data.gouv.fr</i>, le ou les niveaux de simplification sont systématiquement indiqués :
+          Il y a <a href="/niveaux-simplification">plusieurs niveaux de simplification</a> avec un effet positif croissant pour les usagers finaux. Pour chaque cas d'usage et solution référencés sur <i>simplifions.data.gouv.fr</i>, le ou les niveaux de simplification sont systématiquement indiqués :
           </p>
 
           <div class="fr-grid-row fr-grid-row--gutters">
@@ -320,7 +320,7 @@ website:
           </div>
         sub_section_buttons:
           - name: "En savoir plus sur les niveaux de simplification"
-            url: '/guides-simplification'
+            url: '/niveaux-simplification'
             class: 'fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
       - title:
         content: >-
@@ -610,9 +610,7 @@ website:
       to: /cas-d-usages
     - text: Solutions
       to: /solutions
-    - text: Guide pour la simplification
-      to: /guides-simplification
-    - text: A propos
+    - text: À propos
       to: /about
   router:
     disable:
@@ -623,9 +621,9 @@ website:
         route: '/about'
         url: '/simplifions/pages/about.md'
       - title: 'Guide pour la simplification'
-        id: 'guides-simplification'
-        route: '/guides-simplification'
-        url: '/simplifions/pages/guides-simplification.md'
+        id: 'niveaux-simplification'
+        route: '/niveaux-simplification'
+        url: '/simplifions/pages/niveaux-simplification.md'
       - title: Simplifier le sourcing des marchés publics avec API Entreprise
         id: '/api-entreprise_cas-usage_marches_public_sourcing'
         route: '/api-entreprise_cas-usage_marches_public_sourcing'
