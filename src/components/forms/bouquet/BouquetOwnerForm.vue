@@ -9,11 +9,7 @@ import '@vueform/multiselect/themes/default.css'
 import type { TopicPostData } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
-
-import config from '@/config'
-
-const debounceWait: number = config.website.default_debounce_wait ?? 600
+import { debounceWait, useTopicsConf } from '@/utils/config'
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData>,

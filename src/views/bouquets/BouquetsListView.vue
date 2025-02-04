@@ -16,9 +16,7 @@ import {
 import { NoOptionSelected } from '@/model/theme'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
-import { useTopicsConf } from '@/utils/config'
-
-const debounceWait: number = config.website.default_debounce_wait ?? 600
+import { debounceWait, useTopicsConf } from '@/utils/config'
 
 const { topicsSlug, topicsName } = useTopicsConf()
 

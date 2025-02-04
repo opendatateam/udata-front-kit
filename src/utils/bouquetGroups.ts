@@ -3,9 +3,7 @@ import { type ComputedRef, type Ref, ref } from 'vue'
 
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
-import config from '@/config'
-
-const debounceWait: number = config.website.default_debounce_wait ?? 600
+import { debounceWait } from '@/utils/config'
 
 export const NO_GROUP = 'Sans regroupement'
 

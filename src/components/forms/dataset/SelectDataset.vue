@@ -7,12 +7,10 @@ import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
 import '@/assets/multiselect.css'
+
 import type { DatasetProperties } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchAPI'
-
-import config from '@/config'
-
-const debounceWait: number = config.website.default_debounce_wait ?? 600
+import { debounceWait } from '@/utils/config'
 
 const selectedDataset = defineModel({
   type: Object as () => DatasetV2

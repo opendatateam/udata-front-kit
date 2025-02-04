@@ -24,7 +24,7 @@ import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { fromMarkdown } from '@/utils'
-import { useTopicsConf } from '@/utils/config'
+import { debounceWait, useTopicsConf } from '@/utils/config'
 
 defineEmits(['search'])
 const props = defineProps({
@@ -63,8 +63,6 @@ const selectedOrganizationId: Ref<string | null> = ref(null)
 const datasets = computed(() => store.datasets)
 const total = computed(() => store.total)
 const pages = computed(() => store.pagination)
-
-const debounceWait: number = config.website.default_debounce_wait ?? 600
 
 const title = config.website.title as string
 const banner = config.website.datasets.banner

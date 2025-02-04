@@ -9,9 +9,7 @@ import type { SpatialCoverage, SpatialCoverageLevel } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useSpatialStore } from '@/store/SpatialStore'
 
-import config from '@/config'
-
-const debounceWait: number = config.website.default_debounce_wait ?? 600
+import { debounceWait } from '@/utils/config'
 
 const selectedSpatialCoverage = defineModel('spatialCoverageModel', {
   type: Object as PropType<SpatialCoverage>
