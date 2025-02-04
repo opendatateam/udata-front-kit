@@ -191,6 +191,7 @@ const badgeCss = 'fr-badge fr-badge--sm fr-badge--' + props.badgeStyle
             >
               <p v-if="userName" class="fr-py-1w fr-mr-2v fr-text--sm">
                 {{ userName }}
+                <VIconCustom name="account-circle-line" />
               </p>
               <DsfrHeaderMenuLinks
                 v-if="!headerModalOpened && quickLinks?.length"
