@@ -204,7 +204,6 @@ body {
 }
 
 /* DSFR search bar fix */
-
 .datagouv-components .fr-search-bar .fr-btn {
   border-radius: 0 0.25rem 0 0;
 }
@@ -216,8 +215,21 @@ body {
   }
 }
 
-/* Flex gap utility (missing from DSFR) */
+/* DSFR org name in card fix */
+/* remove default margins */
+.org--fix div.fr-mx-1v {
+  margin: 0 !important;
+}
+/* gap to add margins when needed */
+.org--fix .inline-flex {
+  gap: 0.25rem;
+}
+/* sometimes the first span is empty, remove gap */
+.org--fix .inline-flex:has(span:empty) {
+  gap: 0;
+}
 
+/* Flex gap utility (missing from DSFR) */
 .flex-gap {
   gap: var(--gap, 0.5rem);
 }

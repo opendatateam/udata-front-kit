@@ -89,9 +89,8 @@ const { themeColors } = useThemeOptions(theme)
         </h3>
         <p
           v-if="bouquet.organization || bouquet.owner"
-          class="fr-m-0 fr-text--sm"
+          class="fr-m-0 fr-text--sm org--fix"
         >
-          <span class="fr-sr-only">Par</span>
           <template v-if="bouquet.organization">
             <OrganizationNameWithCertificate
               :organization="bouquet.organization"
