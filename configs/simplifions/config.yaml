@@ -226,7 +226,7 @@ website:
         content: >-
           <h2 class="fr-h1 fr-mt-15w fr-mb-5w" style="color: black; text-align: center;">Pourquoi simplifier vos démarches avec la donnée ?</h2>
 
-          <p class="fr-text--lead">
+          <p class="fr-text--lg" style="text-align: center;">
           Administrations et collectivités, en intégrant des API ou des données dans vos démarches et/ou votre système d’information, de nombreux avantages s'offrent à vous et vos usagers :
           </p>
 
