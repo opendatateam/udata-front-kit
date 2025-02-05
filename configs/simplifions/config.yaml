@@ -43,7 +43,7 @@ website:
         <div  class="fr-col-lg-8 fr-col-12" style="font-family: Marianne,arial,sans-serif !important; font-style: normal;">
           <p class="fr-text--lead"> Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données ! Vous gagnerez aussi du temps !</p>
 
-          <a class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg" href="/cas-d-usages">Tous les cas d'usages</a> <a class="fr-btn fr-btn--secondary fr-btn--lg fr-mt-1v " href="/solutions">Toutes les solutions</a>
+          <a class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg" href="/cas-d-usages">Tous les cas d'usages</a> 
         </div>
         </div>
     sections:
@@ -616,8 +616,6 @@ website:
       to: /
     - text: Cas d'usages
       to: /cas-d-usages
-    - text: Solutions
-      to: /solutions
     - text: À propos
       to: /about
   router:
