@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { useTags } from '@/utils/tags'
 import type { Indicator } from '../../model/indicator'
-import { UNFILLED_LABEL, useTags } from '../../utils/indicator'
+import { UNFILLED_LABEL } from '../../utils/indicator'
 
 const EXCLUDE_TAGS = ['producteur', 'usage']
 
@@ -19,7 +20,7 @@ const props = defineProps({
   }
 })
 
-const tags = useTags(props.indicator, props.type, EXCLUDE_TAGS)
+const tags = useTags('indicators', props.indicator, props.type, EXCLUDE_TAGS)
 </script>
 
 <template>
