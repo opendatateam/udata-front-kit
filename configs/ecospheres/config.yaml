@@ -200,38 +200,6 @@ website:
     - name: Accessibilité
       path: /accessibility
 
-# TODO: use mutualize with extras_key (call it `site_id`)
-global_tag_prefix: ecospheres
-filters:
-  - name: Thématique
-    id: theme
-    has_children: true
-    # TODO: useless, not displayed as badge
-    color: green-menthe
-    values:
-      - id: se-loger
-        name: Se loger
-      - id: produire
-        name: Produire
-  - name: Chantier
-    id: chantier
-    color: vert-emeraude
-    values:
-      # Se loger
-      - id: construction-renovation-logements
-        name: Construction et rénovation des logements
-        parent: se-loger
-      - id: amenagements-villes
-        name: Aménagements des villes
-        parent: se-loger
-      # Produire
-      - id: nucleaire
-        name: Nucléaire
-        parent: produire
-      - id: tertiaire
-        name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
-        parent: produire
-
 themes:
   - name: Se loger
     color: 'var(--blue-ecume-sun-247-moon-675)'
@@ -287,6 +255,39 @@ themes:
       - name: La sobriété des usages et des ressources
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
+
+topics:
+  # TODO: use mutualize with extras_key (call it `site_id`)
+  global_tag_prefix: ecospheres
+  filters:
+    - name: Thématique
+      id: theme
+      has_children: true
+      # TODO: useless, not displayed as badge
+      color: green-menthe
+      values:
+        - id: se-loger
+          name: Se loger
+        - id: produire
+          name: Produire
+    - name: Chantier
+      id: chantier
+      color: green-archipel
+      values:
+        # Se loger
+        - id: construction-renovation-logements
+          name: Construction et rénovation des logements
+          parent: se-loger
+        - id: amenagements-villes
+          name: Aménagements des villes
+          parent: se-loger
+        # Produire
+        - id: nucleaire
+          name: Nucléaire
+          parent: produire
+        - id: tertiaire
+          name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
+          parent: produire
 
 indicators:
   organization_id: 672b5425a62a44ddee8815bd
