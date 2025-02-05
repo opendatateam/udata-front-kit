@@ -87,10 +87,13 @@ export function useBreadcrumbLinksForTopic(
 
     if (theme.value !== undefined && subtheme.value !== undefined) {
       breadcrumbs.push(
-        { text: theme.value?.value, to: `/${topicsSlug}/?theme=${theme}` },
+        {
+          text: theme.value?.value,
+          to: `/${topicsSlug}/?theme=${theme.value.value}`
+        },
         {
           text: subtheme.value?.value,
-          to: `/${topicsSlug}/?theme=${theme}&subtheme=${subtheme}`
+          to: `/${topicsSlug}/?theme=${theme.value.value}&subtheme=${subtheme.value.value}`
         }
       )
     }
