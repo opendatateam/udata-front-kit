@@ -10,6 +10,7 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
+import TagComponent from '@/components/TagComponent.vue'
 import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
 import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
 import config from '@/config'
@@ -202,12 +203,7 @@ watch(
       >
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <p
-            v-if="theme && chantier"
-            :class="['fr-badge', `fr-badge--${chantier.color}`]"
-          >
-            {{ chantier.value }}
-          </p>
+          <TagComponent :tag="chantier" />
         </div>
         <div v-if="topicsActivateReadMore">
           <ReadMore max-height="600">
