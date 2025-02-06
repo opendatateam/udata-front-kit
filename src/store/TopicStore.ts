@@ -6,6 +6,7 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import { type QueryArgs, useTagsQuery } from '@/utils/tags'
 
 import { useUserStore } from './UserStore'
 
@@ -15,6 +16,9 @@ const topicsAPIv2 = new TopicsAPI({ version: 2 })
 type SortCriterions = '-created_at' | '-last_modified' | 'name'
 
 export interface RootState {
+  // FIXME: merge with data
+  topics: Topic[]
+  total: number
   data: Topic[]
   isLoaded: boolean
   sort: SortCriterions
@@ -22,6 +26,8 @@ export interface RootState {
 
 export const useTopicStore = defineStore('topic', {
   state: (): RootState => ({
+    topics: [],
+    total: 0,
     data: [],
     // flag for initial/remote loading of data
     isLoaded: false,
@@ -62,6 +68,19 @@ export const useTopicStore = defineStore('topic', {
       }
   },
   actions: {
+    async query(args: QueryArgs) {
+      const { query, ...queryArgs } = args
+      const { extraArgs, tag } = useTagsQuery('topics', queryArgs)
+      const results = await topicsAPIv2.list({
+        params: {
+          q: query,
+          tag: [config.universe.name, ...tag],
+          ...extraArgs
+        }
+      })
+      this.topics = results.data
+      this.total = results.total
+    },
     /**
      * Load topics to store from a list of ids and API
      */

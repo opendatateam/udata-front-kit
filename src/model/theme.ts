@@ -9,12 +9,6 @@ export interface Subtheme {
   name: string
 }
 
-export interface ThemeSelectOption {
-  value: string
-  text: string
-  disabled?: boolean
-}
-
 export interface ThemeColors {
   color: string
   background: string
