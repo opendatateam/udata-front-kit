@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import type { ComputedRef, PropType } from 'vue'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
-import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -15,7 +14,7 @@ const router = useRouter()
 const route = useRoute()
 const topicStore = useTopicStore()
 
-const { topicsName, topicsSlug, topicsExtrasKey } = useTopicsConf()
+const { topicsName, topicsSlug } = useTopicsConf()
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
@@ -23,11 +22,11 @@ const { canAddBouquet } = storeToRefs(userStore)
 const props = defineProps({
   themeName: {
     type: String,
-    default: NoOptionSelected
+    default: null
   },
   subthemeName: {
     type: String,
-    default: NoOptionSelected
+    default: null
   },
   showDrafts: {
     type: Boolean
@@ -44,38 +43,14 @@ const props = defineProps({
 
 const emits = defineEmits(['clearFilters'])
 
-const bouquets: ComputedRef<Topic[]> = computed(() => {
-  return topicStore.sorted
-    .filter((bouquet) => {
-      return !props.showDrafts ? !bouquet.private : true
-    })
-    .filter((bouquet) => {
-      if (props.geozone === null) return true
-      return (
-        bouquet.spatial?.zones &&
-        bouquet.spatial.zones.length > 0 &&
-        bouquet.spatial.zones.includes(props.geozone)
-      )
-    })
-    .filter((bouquet) => {
-      if (props.themeName === NoOptionSelected) return true
-      return bouquet.extras[topicsExtrasKey].theme === props.themeName
-    })
-    .filter((bouquet) => {
-      if (props.subthemeName === NoOptionSelected) return true
-      return bouquet.extras[topicsExtrasKey].subtheme === props.subthemeName
-    })
-    .filter((bouquet) => {
-      if (props.query === '') return true
-      return bouquet.name.toLowerCase().includes(props.query.toLowerCase())
-    })
-})
+const bouquets: ComputedRef<Topic[]> = computed(() => topicStore.topics)
+const nbBouquets: ComputedRef<number> = computed(() => topicStore.total)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
-  if (bouquets.value.length === 1) {
+  if (nbBouquets.value === 1) {
     return `1 ${topicsName} disponible`
-  } else if (bouquets.value.length > 1) {
-    return bouquets.value.length + ` ${topicsName}s disponibles`
+  } else if (nbBouquets.value > 1) {
+    return nbBouquets.value + ` ${topicsName}s disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -88,15 +63,29 @@ const createUrl = computed(() => {
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, query }).then(() => {
+  router.push({ name: topicsSlug, query, hash: '#bouquets-list' }).then(() => {
     emits('clearFilters')
   })
 }
 
-onMounted(() => {
+const executeQuery = async (args: typeof props) => {
   const loader = useLoading().show({ enforceFocus: false })
-  topicStore.loadTopicsForUniverse().then(() => loader.hide())
-})
+  const { showDrafts, themeName, subthemeName, ...cleanArgs } = args
+  const queryArgs = {
+    // TODO: move this conversion at the props level or something more generic
+    // the problem is that the subtheme/theme names/keys are configurable
+    // maybe we should be we should be fully explicit for props/filters like in indicators
+    // or just call them theme and subtheme everywhere (including config file)
+    theme: themeName,
+    chantier: subthemeName,
+    ...cleanArgs,
+    ...(showDrafts && { include_private: 'yes' })
+  }
+  return topicStore.query(queryArgs).finally(() => loader.hide())
+}
+
+// launch search on props (~route.query) changes
+watch(props, () => executeQuery(props), { immediate: true, deep: true })
 
 defineExpose({
   numberOfResultMsg
@@ -105,7 +94,7 @@ defineExpose({
 
 <template>
   <div
-    v-if="bouquets.length > 0"
+    v-if="nbBouquets > 0"
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
   >
     <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
@@ -127,7 +116,7 @@ defineExpose({
     </div>
   </div>
   <div
-    v-if="bouquets.length === 0"
+    v-if="nbBouquets === 0"
     class="fr-mt-2w rounded-xxs fr-p-3w fr-grid-row flex-direction-column bg-contrast-blue-cumulus"
   >
     <div class="fr-col fr-grid-row fr-grid-row--gutters text-blue-400">

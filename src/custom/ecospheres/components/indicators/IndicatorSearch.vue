@@ -3,12 +3,12 @@ import { ref, watchEffect, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import SelectSpatialGranularity from '@/custom/ecospheres/components/indicators/SelectSpatialGranularity.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import type { IndicatorFilters } from '../../model/indicator'
 import { useFiltersConf } from '../../utils/config'
-import SelectComponent from '../SelectComponent.vue'
 
 const spatialAPI = new SpatialAPI()
 

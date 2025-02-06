@@ -13,6 +13,7 @@ import { useTopicStore } from '@/store/TopicStore'
 
 const topicStore = useTopicStore()
 const lastTopics: ComputedRef<Topic[]> = computed(() =>
+  // FIXME: move to new store
   topicStore.sorted.filter((bouquet) => !bouquet.private).slice(0, 3)
 )
 

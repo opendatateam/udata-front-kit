@@ -262,7 +262,7 @@ topics:
   filters:
     - name: Thématique
       id: theme
-      has_children: true
+      child: chantier
       # TODO: useless, not displayed as badge
       color: green-menthe
       values:

@@ -31,6 +31,7 @@ const props = defineProps({
 })
 
 const bouquetRef = toRef(props, 'bouquet')
+// TODO: add cache to avoid refetching this every time
 const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)

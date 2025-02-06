@@ -1,5 +1,8 @@
 import config from '@/config'
-import type { ResolvedTag } from '@/model/tag'
+import type { ResolvedTag, TagSelectOption } from '@/model/tag'
+import type { ComputedRef, Ref } from 'vue'
+
+type ObjectTypes = 'topics' | 'indicators'
 
 interface HasTags {
   tags: string[] | null
@@ -12,9 +15,11 @@ export interface FilterConf {
   id: string
   name: string
   color: string
+  child?: string
   values: {
     id: string
     name: string
+    parent?: string
   }[]
 }
 
@@ -62,7 +67,7 @@ export const useTags = <T extends HasTags>(
 }
 
 export const useTag = <T extends HasTags>(
-  objectType: 'topics' | 'indicators',
+  objectType: ObjectTypes,
   object: Ref<T | undefined | null>,
   filterId: string
 ): ComputedRef<ResolvedTag | undefined> => {
@@ -70,4 +75,76 @@ export const useTag = <T extends HasTags>(
     const tags = useTags(objectType, object.value, filterId)
     return tags.value[0]
   })
+}
+
+export const getTagOptions = (
+  objectType: ObjectTypes,
+  filterId: string,
+  parentTag?: string
+): TagSelectOption[] => {
+  const filter = getFilterConf(objectType, filterId)
+  if (!filter) return []
+  return filter.values.filter((value) => {
+    if (!parentTag) return true
+    return value.parent === parentTag
+  })
+}
+
+export const getFilterConf = (
+  objectType: ObjectTypes,
+  filterId: string
+): FilterConf | undefined => {
+  // TODO: get properly typed from config wrapper
+  const filters: FilterConf[] = config[objectType].filters
+  return filters.find((filter) => filter.id === filterId)
+}
+
+export const useTagOptions = (
+  objectType: ObjectTypes,
+  tagName: Ref<string | undefined>,
+  tagType: string
+): {
+  tagOptions: TagSelectOption[]
+  subTagOptions: ComputedRef<TagSelectOption[]>
+} => {
+  const tagOptions = getTagOptions(objectType, tagType)
+
+  const subTagOptions = computed(() => {
+    if (!tagName) return []
+    const filter = getFilterConf(objectType, tagType)
+    if (!filter || !filter.child) return []
+    return getTagOptions(objectType, filter.child, tagName.value)
+  })
+
+  return {
+    tagOptions,
+    subTagOptions
+  }
+}
+
+export interface QueryArgs {
+  [key: string]: string | null
+}
+
+/**
+ * Build an array of normalized tags from query components and clean the original QueryArgs
+ */
+export const useTagsQuery = (
+  objectType: ObjectTypes,
+  query: QueryArgs
+): { tag: Array<string>; extraArgs: QueryArgs } => {
+  // TODO: get properly typed from config wrapper
+  const filters: FilterConf[] = config[objectType].filters
+  const tagPrefix: string = config[objectType].global_tag_prefix
+  const queryArray = []
+  for (const filter of filters) {
+    if (query[filter.id] != null) {
+      queryArray.push(`${tagPrefix}-${filter.id}-${query[filter.id]}`)
+    }
+    delete query[filter.id]
+  }
+  return {
+    tag: queryArray,
+    extraArgs: query
+  }
 }
