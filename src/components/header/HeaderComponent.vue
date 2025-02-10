@@ -3,10 +3,12 @@ import config from '@/config'
 import type { DsfrHeaderProps } from '@gouvminint/vue-dsfr'
 import Navigation from '../Navigation.vue'
 import SearchComponent from '../SearchComponent.vue'
-// import type { DsfrHeaderMenuLinkProps } from './DsfrHeaderMenuLink.vue'
 
-interface Props {
+type Props = {
   userName: string | undefined
+  logoOperatorHeight: string | undefined
+  logoOperatorWidth: string | undefined
+  customSearch: boolean
 }
 
 withDefaults(defineProps<DsfrHeaderProps & Props>(), {
@@ -14,17 +16,16 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgStyle: () => ({}),
   searchLabel: 'Recherche',
   quickLinks: () => [],
-  showSearch: config.website.header_search.display
+  showSearch: config.website.header_search.display,
+  customSearch: false
 })
 
 const logoText = config.website.rf_title
 const serviceTitle = config.website.title
 const serviceLogo = config.website.service_logo
 const logoOperator = config.website.logo_operator?.src
-const logoOperatorHeight = config.website.logo_operator?.header?.height
-const logoOperatorWidth = config.website.logo_operator?.header?.width
-const showLogoOperatorInHeader = config.website.logo_operator?.show_in_header
-const logoService = config.website.service_logo
+const showLogoOperatorInHeader =
+  config.website.logo_operator?.show_in_header ?? true
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
 const badgeStyle = config.website.badge.style
@@ -36,15 +37,14 @@ const dropdown = config.website.header_search.dropdown
     home-to="/"
     :logo-text
     :service-title="serviceLogo ? undefined : serviceTitle"
-    :service-logo-src="showLogoOperatorInHeader ? undefined : logoService"
     :operator-img-src="showLogoOperatorInHeader ?? logoOperator"
     :operator-img-alt
     :operator-img-style
     service-description=""
     :quick-links
-    :show-search
+    :show-search="showSearch && !customSearch"
   >
-    <!-- needed because of title style + badge -->
+    <!-- needed because of logo + badge -->
     <template #operator>
       <img
         v-if="showLogoOperatorInHeader && logoOperator"
@@ -77,8 +77,9 @@ const dropdown = config.website.header_search.dropdown
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="!showSearch"
+        v-if="customSearch"
         id="header-select-search"
+        class="custom-search"
         :search-label="searchLabel"
         :dropdown="dropdown"
         placeholder="Rechercher"
@@ -101,23 +102,30 @@ const dropdown = config.website.header_search.dropdown
 }
 :deep(.fr-header__brand-top) {
   flex-wrap: wrap;
+  justify-content: center;
 
   .fr-header__operator {
     display: flex;
     align-items: center;
     gap: 1rem;
-    order: 3;
   }
-  .fr-header__navbar {
-    order: 2;
+
+  @media (max-width: 62em) {
+    .fr-header__operator {
+      align-self: center;
+      order: 3;
+    }
+    .fr-header__navbar {
+      order: 2;
+    }
   }
 }
 :deep(.fr-header__tools-links) {
   flex-wrap: wrap;
   align-items: center;
 
-  & > :last-child {
-    flex: 1 0 50%;
+  & > :last-child.custom-search {
+    flex: 1 0 auto;
     max-inline-size: min(24rem, 100%);
   }
 }

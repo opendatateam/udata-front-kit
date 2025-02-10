@@ -68,6 +68,8 @@ onMounted(() => {
 const logoService = config.website.service_logo
 const logoText = config.website.rf_title
 const logoOperator = config.website.logo_operator?.src
+const logoOperatorHeight = config.website.logo_operator?.header?.height
+const logoOperatorWidth = config.website.logo_operator?.header?.width
 const footerPhrase = config.website.footer_phrase
 const footerExternalLinks = config.website.footer_external_links
 const footerMandatoryLinks = config.website.footer_mandatory_links
@@ -121,7 +123,13 @@ watch(
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="noticeContent"></div>
   </DsfrNotice>
-  <HeaderComponent :user-name="userName" :quick-links="quickLinks" />
+  <HeaderComponent
+    :user-name="userName"
+    :quick-links="quickLinks"
+    :logo-operator-height
+    :logo-operator-width
+    :custom-search="true"
+  />
 
   <main id="main-content" role="main">
     <RouterView />
@@ -132,8 +140,8 @@ watch(
     :logo-text="logoText"
     :operator-img-src="logoOperator"
     :operator-img-style="{
-      height: config.website.logo_operator?.footer?.width,
-      width: config.website.logo_operator?.footer?.height
+      height: logoOperatorHeight,
+      width: logoOperatorWidth
     }"
     :service-logo-src="logoService"
     :desc-text="footerPhrase"
