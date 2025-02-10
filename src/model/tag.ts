@@ -5,7 +5,8 @@ export interface TagSelectOption {
 }
 
 export interface ResolvedTag {
-  color: string
-  value: string
+  id: string
+  name: string
   type: string
+  color: string
 }

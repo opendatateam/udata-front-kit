@@ -86,16 +86,16 @@ export function useBreadcrumbLinksForTopic(
     }
 
     if (theme.value !== undefined && subtheme.value !== undefined) {
-      const themeValue = theme.value.value
-      const subthemeValue = subtheme.value.value
+      const themeName = theme.value.name
+      const subthemeName = subtheme.value.name
       breadcrumbs.push(
         {
-          text: themeValue,
-          to: `/${topicsSlug}/?theme=${themeValue}`
+          text: themeName,
+          to: `/${topicsSlug}/?theme=${themeName}`
         },
         {
-          text: subthemeValue,
-          to: `/${topicsSlug}/?theme=${themeValue}&subtheme=${subthemeValue}`
+          text: subthemeName,
+          to: `/${topicsSlug}/?theme=${themeName}&subtheme=${subthemeName}`
         }
       )
     }

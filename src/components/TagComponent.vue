@@ -11,6 +11,6 @@ defineProps({
 
 <template>
   <p v-if="tag" :class="['fr-badge', `fr-badge--${tag.color}`]">
-    {{ tag.value }}
+    {{ tag.name }}
   </p>
 </template>

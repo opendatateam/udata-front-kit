@@ -55,8 +55,9 @@ export const useTags = <T extends HasTags>(
         if (matchingValue) {
           tags.push({
             color: filter.color,
-            value: matchingValue.name,
-            type: filter.id
+            name: matchingValue.name,
+            type: filter.id,
+            id: matchingValue.id
           })
         }
       }
@@ -80,13 +81,13 @@ export const useTag = <T extends HasTags>(
 export const getTagOptions = (
   objectType: ObjectTypes,
   filterId: string,
-  parentTag?: string
+  parentTagId?: string
 ): TagSelectOption[] => {
   const filter = getFilterConf(objectType, filterId)
   if (!filter) return []
   return filter.values.filter((value) => {
-    if (!parentTag) return true
-    return value.parent === parentTag
+    if (!parentTagId) return true
+    return value.parent === parentTagId
   })
 }
 
@@ -101,7 +102,7 @@ export const getFilterConf = (
 
 export const useTagOptions = (
   objectType: ObjectTypes,
-  tagName: Ref<string | undefined>,
+  tagId: Ref<string | undefined>,
   tagType: string
 ): {
   tagOptions: TagSelectOption[]
@@ -110,10 +111,10 @@ export const useTagOptions = (
   const tagOptions = getTagOptions(objectType, tagType)
 
   const subTagOptions = computed(() => {
-    if (!tagName) return []
+    if (!tagId) return []
     const filter = getFilterConf(objectType, tagType)
     if (!filter || !filter.child) return []
-    return getTagOptions(objectType, filter.child, tagName.value)
+    return getTagOptions(objectType, filter.child, tagId.value)
   })
 
   return {
@@ -146,5 +147,22 @@ export const useTagsQuery = (
   return {
     tag: queryArray,
     extraArgs: query
+  }
+}
+
+export const useTagFromId = (
+  objectType: ObjectTypes,
+  filterId: string,
+  tagId: string
+): ResolvedTag | null => {
+  const filter = getFilterConf(objectType, filterId)
+  if (!filter) return null
+  const tag = filter.values.find((v) => v.id === tagId)
+  if (!tag) return null
+  return {
+    color: filter.color,
+    type: filter.id,
+    name: tag.name,
+    id: tag.id
   }
 }

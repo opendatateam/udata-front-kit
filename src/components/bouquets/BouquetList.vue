@@ -20,11 +20,11 @@ const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
 const props = defineProps({
-  themeName: {
+  themeId: {
     type: String,
     default: null
   },
-  subthemeName: {
+  subthemeId: {
     type: String,
     default: null
   },
@@ -70,14 +70,14 @@ const clearFilters = () => {
 
 const executeQuery = async (args: typeof props) => {
   const loader = useLoading().show({ enforceFocus: false })
-  const { showDrafts, themeName, subthemeName, ...cleanArgs } = args
+  const { showDrafts, themeId, subthemeId, ...cleanArgs } = args
   const queryArgs = {
-    // TODO: move this conversion at the props level or something more generic
+    // FIXME: move this conversion at the props level or something more generic
     // the problem is that the subtheme/theme names/keys are configurable
     // maybe we should be we should be fully explicit for props/filters like in indicators
     // or just call them theme and subtheme everywhere (including config file)
-    theme: themeName,
-    chantier: subthemeName,
+    theme: themeId,
+    chantier: subthemeId,
     ...cleanArgs,
     ...(showDrafts && { include_private: 'yes' })
   }
