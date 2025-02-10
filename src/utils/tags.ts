@@ -127,6 +127,15 @@ export interface QueryArgs {
   [key: string]: string | null
 }
 
+export const useTagSlug = (
+  objectType: ObjectTypes,
+  filterId: string,
+  tagId?: string
+): string => {
+  const tagPrefix: string = config[objectType].global_tag_prefix
+  return `${tagPrefix}-${filterId}-${tagId || ''}`
+}
+
 /**
  * Build an array of normalized tags from query components and clean the original QueryArgs
  */
@@ -136,11 +145,11 @@ export const useTagsQuery = (
 ): { tag: Array<string>; extraArgs: QueryArgs } => {
   // TODO: get properly typed from config wrapper
   const filters: FilterConf[] = config[objectType].filters
-  const tagPrefix: string = config[objectType].global_tag_prefix
   const queryArray = []
   for (const filter of filters) {
-    if (query[filter.id] != null) {
-      queryArray.push(`${tagPrefix}-${filter.id}-${query[filter.id]}`)
+    const queryFilter = query[filter.id]
+    if (queryFilter != null) {
+      queryArray.push(useTagSlug(objectType, filter.id, queryFilter))
     }
     delete query[filter.id]
   }
