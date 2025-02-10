@@ -20,11 +20,11 @@ import { useTagOptions } from '@/utils/tags'
 const spatialAPI = new SpatialAPI()
 
 const props = defineProps({
-  themeName: {
+  themeId: {
     type: String,
     default: null
   },
-  subthemeName: {
+  subthemeId: {
     type: String,
     default: null
   },
@@ -45,9 +45,9 @@ const route = useRoute()
 const selectedGeozone: Ref<string | undefined> = ref(undefined)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
-const themeNameRef = toRef(props, 'themeName')
+const themeIdRef = toRef(props, 'themeId')
 const { tagOptions: themeOptions, subTagOptions: subthemeOptions } =
-  useTagOptions('topics', themeNameRef, 'theme')
+  useTagOptions('topics', themeIdRef, 'theme')
 
 const { topicsSlug, topicsUseThemes, topicsMainTheme, topicsSecondaryTheme } =
   useTopicsConf()
@@ -57,8 +57,8 @@ const computeQueryArgs = (
   data?: Record<string, string | null>
 ): LocationQueryRaw => {
   const query: LocationQueryRaw = {}
-  if (props.themeName) query.theme = props.themeName
-  if (props.subthemeName) query.subtheme = props.subthemeName
+  if (props.themeId) query.theme = props.themeId
+  if (props.subthemeId) query.subtheme = props.subthemeId
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
   if (localShowDrafts.value) {
     query.drafts = 1
@@ -132,16 +132,16 @@ watchEffect(() => {
           :default-option="`Toutes les ${topicsMainTheme}s`"
           :label="capitalize(topicsMainTheme)"
           :options="themeOptions"
-          :model-value="props.themeName"
+          :model-value="props.themeId"
           @update:model-value="(value) => switchTheme(value)"
         />
       </div>
       <div class="fr-select-group">
         <SelectComponent
-          :default-option="`Touts les ${topicsSecondaryTheme}s`"
+          :default-option="`Tous les ${topicsSecondaryTheme}s`"
           :label="capitalize(topicsSecondaryTheme)"
           :options="subthemeOptions"
-          :model-value="props.subthemeName"
+          :model-value="props.subthemeId"
           @update:model-value="(value) => switchSubtheme(value)"
         />
       </div>
