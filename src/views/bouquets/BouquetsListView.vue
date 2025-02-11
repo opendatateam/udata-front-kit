@@ -48,6 +48,10 @@ const props = defineProps({
   page: {
     type: String,
     default: null
+  },
+  sort: {
+    type: String,
+    required: true
   }
 })
 
@@ -204,6 +208,7 @@ watch(
             :geozone="geozone"
             :query="selectedQuery"
             :page="props.page ? props.page : '1'"
+            :sort="props.sort"
             @clear-filters="setLiveResults"
           />
         </div>
