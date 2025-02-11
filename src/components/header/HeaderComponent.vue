@@ -74,6 +74,7 @@ const dropdown = config.website.header_search.dropdown
     <template v-if="userName" #before-quick-links>
       <p class="fr-py-1w fr-mr-2v fr-text--sm">
         {{ userName }}
+        <VIconCustom name="account-circle-line" />
       </p>
     </template>
 
