@@ -41,6 +41,10 @@ const props = defineProps({
   page: {
     type: String,
     default: '1'
+  },
+  sort: {
+    type: String,
+    required: true
   }
 })
 
@@ -98,6 +102,14 @@ const goToPage = (page: number) => {
   })
 }
 
+const doSort = (value: string | null) => {
+  router.push({
+    name: topicsSlug,
+    query: { ...route.query, sort: value },
+    hash: '#bouquets-list'
+  })
+}
+
 // launch search on props (~route.query) changes
 watch(props, () => executeQuery(props), { immediate: true, deep: true })
 
@@ -113,20 +125,17 @@ defineExpose({
   >
     <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-      <label for="sort-search" class="fr-col-auto fr-text--sm fr-m-0 fr-mr-1w"
-        >Trier par :</label
-      >
-      <div class="fr-col">
-        <DsfrSelect
-          v-model="topicStore.sort"
-          select-id="sort-search"
-          :options="[
-            { value: '-created_at', text: 'Les plus récemment créés' },
-            { value: '-last_modified', text: 'Les plus récemment modifiés' },
-            { value: 'name', text: 'Titre' }
-          ]"
-        ></DsfrSelect>
-      </div>
+      <SelectComponent
+        :model-value="sort"
+        label="Trier par :"
+        :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
+        :options="[
+          { id: '-last_modified', name: 'Les plus récemment modifiés' },
+          { id: '-created', name: 'Les plus récemment créés' },
+          { id: 'name', name: 'Titre' }
+        ]"
+        @update:model-value="doSort"
+      />
     </div>
   </div>
   <div

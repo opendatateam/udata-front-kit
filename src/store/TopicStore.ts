@@ -37,6 +37,8 @@ export const useTopicStore = defineStore('topic', {
   }),
   getters: {
     // Computed property to get topics writable by the current user sorted by last_modified
+    // FIXME: this one might be tough to migrate to data.gouv.fr API
+    // but we don't need pagination or filters, so maybe just load everything?
     myTopics(): ComputedRef<Topic[]> {
       const userStore = useUserStore()
       return computed(() => {
@@ -45,20 +47,6 @@ export const useTopicStore = defineStore('topic', {
           userStore.hasEditPermissions(topic)
         )
       })
-    },
-    sorted(): Topic[] {
-      switch (this.sort) {
-        case '-created_at':
-          return this.sortedByDateDesc('created_at')
-        case '-last_modified':
-          return this.sortedByDateDesc('last_modified')
-        case 'name':
-          return [...this.data].sort((a, b) => {
-            return a.name.localeCompare(b.name)
-          })
-        default:
-          return this.data
-      }
     },
     sortedByDateDesc:
       (state) => (attribute: 'created_at' | 'last_modified') => {

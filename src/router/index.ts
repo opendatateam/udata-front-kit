@@ -92,7 +92,8 @@ const defaultRoutes: RouteRecordRaw[] = [
           theme: route.query.theme || null,
           geozone: route.query.geozone || null,
           drafts: route.query.drafts,
-          page: route.query.page || null
+          page: route.query.page || null,
+          sort: route.query.sort || '-last_modified'
         })
       },
       {
