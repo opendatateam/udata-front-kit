@@ -24,8 +24,12 @@ const { topicsName } = useTopicsConf()
       v-model="datasetProperties.title"
       class="fr-input"
       type="text"
-      aria-describedby="title-description"
+      aria-describedby="errors-title title-description"
+      :aria-invalid="!!$slots.errorTitle"
     />
+    <p v-if="$slots.errorTitle" id="errors-title" class="error">
+      <VIconCustom name="error-fill" />&nbsp;<slot name="errorTitle" />
+    </p>
   </div>
   <div class="fr-input-group">
     <label class="fr-label" for="input-purpose"
@@ -46,8 +50,12 @@ const { topicsName } = useTopicsConf()
       v-model="datasetProperties.purpose"
       class="fr-input"
       type="text"
-      aria-describedby="purpose-description"
+      aria-describedby="errors-purpose purpose-description"
+      :aria-invalid="!!$slots.errorPurpose"
     />
+    <p v-if="$slots.errorPurpose" id="errors-purpose" class="error">
+      <VIconCustom name="error-fill" />&nbsp;<slot name="errorPurpose" />
+    </p>
   </div>
 </template>
 
