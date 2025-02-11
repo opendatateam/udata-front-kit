@@ -44,6 +44,10 @@ const props = defineProps({
   drafts: {
     type: String,
     default: null
+  },
+  page: {
+    type: String,
+    default: null
   }
 })
 
@@ -199,6 +203,7 @@ watch(
             :show-drafts="showDrafts"
             :geozone="geozone"
             :query="selectedQuery"
+            :page="props.page ? props.page : '1'"
             @clear-filters="setLiveResults"
           />
         </div>
