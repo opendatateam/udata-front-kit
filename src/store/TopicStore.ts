@@ -10,6 +10,8 @@ import { type QueryArgs, useTagsQuery } from '@/utils/tags'
 
 import { useUserStore } from './UserStore'
 
+const PAGE_SIZE = 20
+
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
 
@@ -65,7 +67,18 @@ export const useTopicStore = defineStore('topic', {
           const dateB = new Date(b[attribute])
           return dateB.getTime() - dateA.getTime()
         })
-      }
+      },
+    pagination() {
+      const nbPages = Math.ceil(this.total / PAGE_SIZE)
+      return [...Array(nbPages).keys()].map((page) => {
+        page += 1
+        return {
+          label: page.toString(),
+          href: '#',
+          title: `Page ${page}`
+        }
+      })
+    }
   },
   actions: {
     async query(args: QueryArgs) {
@@ -75,6 +88,7 @@ export const useTopicStore = defineStore('topic', {
         params: {
           q: query,
           tag: [config.universe.name, ...tag],
+          page_size: PAGE_SIZE,
           ...extraArgs
         }
       })
@@ -97,6 +111,7 @@ export const useTopicStore = defineStore('topic', {
     filter(topics: Topic[]) {
       const draftFilter = (topic: Topic): boolean => {
         if (!topic.private) return true
+        // FIXME: migrate to data.gouv.fr API
         return useUserStore().hasEditPermissions(topic)
       }
       return topics.filter((topic) => {

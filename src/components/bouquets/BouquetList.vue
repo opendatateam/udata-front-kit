@@ -5,7 +5,6 @@ import { computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
-import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
@@ -38,13 +37,20 @@ const props = defineProps({
   query: {
     type: String,
     default: ''
+  },
+  page: {
+    type: String,
+    default: '1'
   }
 })
 
 const emits = defineEmits(['clearFilters'])
 
-const bouquets: ComputedRef<Topic[]> = computed(() => topicStore.topics)
-const nbBouquets: ComputedRef<number> = computed(() => topicStore.total)
+const {
+  topics: bouquets,
+  pagination,
+  total: nbBouquets
+} = storeToRefs(topicStore)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (nbBouquets.value === 1) {
@@ -82,6 +88,14 @@ const executeQuery = async (args: typeof props) => {
     ...(showDrafts && { include_private: 'yes' })
   }
   return topicStore.query(queryArgs).finally(() => loader.hide())
+}
+
+const goToPage = (page: number) => {
+  router.push({
+    name: topicsSlug,
+    query: { ...route.query, page: page + 1 },
+    hash: '#bouquets-list'
+  })
 }
 
 // launch search on props (~route.query) changes
@@ -166,6 +180,13 @@ defineExpose({
       </li>
     </ul>
   </div>
+  <DsfrPagination
+    v-if="pagination.length"
+    class="fr-container"
+    :current-page="parseInt(page) - 1"
+    :pages="pagination"
+    @update:current-page="goToPage"
+  />
 </template>
 
 <style scoped>
