@@ -11,7 +11,6 @@ import { useTopicsConf } from '@/utils/config'
 
 import { useExtras } from '@/utils/bouquet'
 import { useGroups } from '@/utils/bouquetGroups'
-import { templateRef } from '@vueuse/core'
 
 const props = defineProps({
   show: {
@@ -84,14 +83,7 @@ const sortedinputErrors = computed(() =>
 
 const isValid = computed(() => {
   if (topicsDatasetEditorialization) {
-    return (
-      !!datasetProperties.value.title.trim() &&
-      !!datasetProperties.value.purpose.trim() &&
-      !!selectedBouquetId.value &&
-      (datasetProperties.value.group
-        ? datasetProperties.value.group.trim().length < 100
-        : true)
-    )
+    return !formErrors.value.length
   } else {
     return !!selectedBouquetId.value
   }
@@ -111,7 +103,7 @@ const modalActions = computed(() => {
   ]
 })
 
-const errorStatus = templateRef('errorStatus')
+const errorStatus = useTemplateRef('errorStatus')
 const isSubmitted: Ref<boolean> = ref(false)
 
 const onSubmit = () => {
@@ -122,7 +114,7 @@ const onSubmit = () => {
   validateFields()
 
   if (formErrors.value.length > 0) {
-    errorStatus.value.focus()
+    errorStatus.value?.focus()
   } else if (isValid.value) {
     isSubmitted.value = false
     submit()
