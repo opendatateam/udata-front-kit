@@ -46,21 +46,23 @@ const dropdown = config.website.header_search.dropdown
   >
     <!-- needed because of logo + badge -->
     <template #operator>
-      <img
-        v-if="showLogoOperatorInHeader && logoOperator"
-        class="fr-responsive-img operator-logo"
-        :src="logoOperator"
-        alt=""
-        :style="operatorImgStyle"
-        :height="logoOperatorHeight"
-        :width="logoOperatorWidth"
-      />
-      <img
-        v-if="serviceLogo"
-        class="fr-responsive-img service-logo"
-        :src="serviceLogo"
-        :alt="serviceTitle"
-      />
+      <div v-if="showLogoOperatorInHeader && logoOperator">
+        <img
+          class="fr-responsive-img operator-logo"
+          :src="logoOperator"
+          alt=""
+          :style="operatorImgStyle"
+          :height="logoOperatorHeight"
+          :width="logoOperatorWidth"
+        />
+      </div>
+      <div v-if="serviceLogo">
+        <img
+          class="fr-responsive-img service-logo"
+          :src="serviceLogo"
+          :alt="serviceTitle"
+        />
+      </div>
       <span
         v-if="showBadge"
         :class="`fr-badge fr-badge--sm fr-badge--${badgeStyle}`"
@@ -102,7 +104,6 @@ const dropdown = config.website.header_search.dropdown
 }
 :deep(.fr-header__brand-top) {
   flex-wrap: wrap;
-  justify-content: center;
 
   .fr-header__operator {
     display: flex;
@@ -112,10 +113,13 @@ const dropdown = config.website.header_search.dropdown
 
   @media (max-width: 62em) {
     .fr-header__operator {
-      align-self: center;
+      padding-top: 0;
+      flex: 1 1 100%;
       order: 3;
     }
     .fr-header__navbar {
+      margin-right: 0;
+      align-self: center;
       order: 2;
     }
   }
