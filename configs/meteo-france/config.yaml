@@ -135,7 +135,6 @@ website:
       to: '/accessibility'
   logo_operator:
     src: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
-    show_in_header: true
     header:
       width: '60px'
       height: '60px'
