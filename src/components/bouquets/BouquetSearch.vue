@@ -47,7 +47,7 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
 const themeIdRef = toRef(props, 'themeId')
 const { tagOptions: themeOptions, subTagOptions: subthemeOptions } =
-  useTagOptions('topics', themeIdRef, 'theme')
+  useTagOptions('bouquets', themeIdRef, 'theme')
 
 const { topicsSlug, topicsUseThemes, topicsMainTheme, topicsSecondaryTheme } =
   useTopicsConf()

@@ -68,12 +68,12 @@ const {
 } = useTopicsConf()
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)
-const theme = useTag('topics', topic, 'theme')
-const chantier = useTag('topics', topic, 'chantier')
+const theme = useTag('bouquets', topic, 'theme')
+const subtheme = useTag('bouquets', topic, 'subtheme')
 
 const breadcrumbLinks = useBreadcrumbLinksForTopic(
   theme,
-  chantier,
+  subtheme,
   topic,
   topicsListAll
 )
@@ -203,7 +203,7 @@ watch(
       >
         <div class="bouquet__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <TagComponent :tag="chantier" />
+          <TagComponent :tag="subtheme" />
         </div>
         <div v-if="topicsActivateReadMore">
           <ReadMore max-height="600">

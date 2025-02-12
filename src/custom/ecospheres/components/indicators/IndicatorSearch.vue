@@ -8,7 +8,7 @@ import SelectSpatialGranularity from '@/custom/ecospheres/components/indicators/
 import type { SpatialCoverage } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import type { IndicatorFilters } from '../../model/indicator'
-import { useFiltersConf } from '../../utils/config'
+import { useIndicatorsFiltersConf } from '../../utils/config'
 
 const spatialAPI = new SpatialAPI()
 
@@ -24,7 +24,7 @@ const route = useRoute()
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
-const filtersConf = useFiltersConf()
+const filtersConf = useIndicatorsFiltersConf()
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({

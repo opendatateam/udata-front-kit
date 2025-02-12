@@ -51,7 +51,7 @@ export const useTopicStore = defineStore('topic', {
   actions: {
     async query(args: QueryArgs): Promise<Topic[]> {
       const { query, ...queryArgs } = args
-      const { extraArgs, tag } = useTagsQuery('topics', queryArgs)
+      const { extraArgs, tag } = useTagsQuery('bouquets', queryArgs)
       const results = await topicsAPIv2.list({
         params: {
           q: query,

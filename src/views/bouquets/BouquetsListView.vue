@@ -129,8 +129,12 @@ const search = useDebounceFn(() => {
 watch(
   props,
   () => {
-    selectedTheme.value = useTagFromId('topics', 'theme', props.theme)
-    selectedSubtheme.value = useTagFromId('topics', 'chantier', props.subtheme)
+    selectedTheme.value = useTagFromId('bouquets', 'theme', props.theme)
+    selectedSubtheme.value = useTagFromId(
+      'bouquets',
+      'subtheme',
+      props.subtheme
+    )
     selectedGeozone.value = props.geozone
     selectedQuery.value = props.query
     showDrafts.value = props.drafts === '1'

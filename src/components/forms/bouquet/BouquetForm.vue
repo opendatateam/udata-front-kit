@@ -33,8 +33,8 @@ const spatialCoverage = useSpatialCoverage(topic)
 const { topicsUseThemes, topicsMainTheme, topicsSecondaryTheme, topicsName } =
   useTopicsConf()
 
-const initialTheme = useTag('topics', topic, 'theme')
-const initialSubtheme = useTag('topics', topic, 'chantier')
+const initialTheme = useTag('bouquets', topic, 'theme')
+const initialSubtheme = useTag('bouquets', topic, 'subtheme')
 
 // Define values and validation rules for each field
 const { values, errors, defineField, handleSubmit } = useForm({
@@ -74,11 +74,11 @@ const onValidSubmit = async (validatedValues: {
   topic.value.tags = [
     ...topic.value.tags.filter(
       (tag) =>
-        !tag.startsWith(useTagSlug('topics', 'theme')) &&
-        !tag.startsWith(useTagSlug('topics', 'chantier'))
+        !tag.startsWith(useTagSlug('bouquets', 'theme')) &&
+        !tag.startsWith(useTagSlug('bouquets', 'subtheme'))
     ),
-    useTagSlug('topics', 'theme', validatedValues.theme),
-    useTagSlug('topics', 'chantier', validatedValues.subtheme)
+    useTagSlug('bouquets', 'theme', validatedValues.theme),
+    useTagSlug('bouquets', 'subtheme', validatedValues.subtheme)
   ]
   // sync valid status with parent
   emits('updateValidation', true)
@@ -97,7 +97,7 @@ defineExpose({
 })
 
 const { tagOptions: themeOptions, subTagOptions: subthemeOptions } =
-  useTagOptions('topics', theme, 'theme')
+  useTagOptions('bouquets', theme, 'theme')
 
 const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
   const zones = value === undefined ? null : [value.id]
