@@ -203,8 +203,7 @@ website:
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
 topics:
-  # TODO: use mutualize with extras_key (call it `site_id`)
-  global_tag_prefix: ecospheres
+  tag_prefix: ecospheres
   filters:
     - name: Thématique
       id: theme
@@ -226,7 +225,7 @@ topics:
         - id: chantiers-transverses
           name: Chantiers transverses
     - name: Chantier
-      id: chantier
+      id: subtheme
       color: green-archipel
       values:
         - id: construction-et-renovation-des-logements
@@ -314,7 +313,7 @@ topics:
 
 indicators:
   organization_id: 672b5425a62a44ddee8815bd
-  global_tag_prefix: ecospheres-indicateurs
+  tag_prefix: ecospheres-indicateurs
   filters:
     - name: Thématique
       id: theme
