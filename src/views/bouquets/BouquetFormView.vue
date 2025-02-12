@@ -245,6 +245,7 @@ const onSubmit = async () => {
           <legend class="fr-fieldset__legend fr-text--lead">
             Description du {{ topicsName }} de données
           </legend>
+          <!-- FIXME: type error -->
           <BouquetForm
             v-if="isReadyForForm"
             ref="formFields"

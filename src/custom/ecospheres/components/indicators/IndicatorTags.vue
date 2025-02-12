@@ -26,7 +26,7 @@ const tags = useTags('indicators', props.indicator, props.type, EXCLUDE_TAGS)
 
 <template>
   <ul v-if="tags.length > 0" class="fr-badges-group fr-mb-1w">
-    <li v-for="t in tags" :key="`${t.type}-${t.value}`">
+    <li v-for="t in tags" :key="`${t.type}-${t.id}`">
       <TagComponent :tag="t" />
     </li>
   </ul>
