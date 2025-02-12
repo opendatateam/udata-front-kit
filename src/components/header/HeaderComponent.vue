@@ -114,8 +114,8 @@ const dropdown = config.website.header_search.dropdown
 
   @media (max-width: 62em) {
     .fr-header__operator {
-      padding-top: 0;
       flex: 1 1 100%;
+      padding-top: 0;
       order: 3;
     }
     .fr-header__navbar {
@@ -129,9 +129,22 @@ const dropdown = config.website.header_search.dropdown
   flex-wrap: wrap;
   align-items: center;
 
+  & > nav {
+    flex: 1 0 100%;
+  }
+
   & > :last-child.custom-search {
-    flex: 1 0 auto;
+    flex: 1 0 100%;
     max-inline-size: min(24rem, 100%);
+  }
+
+  .custom-search .fr-btn {
+    background-color: var(--background-action-high-blue-france);
+    color: var(--text-inverted-blue-france);
+
+    &:hover {
+      background-color: var(--hover-tint);
+    }
   }
 }
 </style>
