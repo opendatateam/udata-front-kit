@@ -33,7 +33,7 @@ export const useTags = <T extends HasTags>(
   exclude?: string[]
 ): ComputedRef<ResolvedTag[]> => {
   // TODO: get properly typed from config wrapper
-  const tagPrefix: string = config[objectType].global_tag_prefix
+  const tagPrefix: string = config[objectType].tag_prefix
   const filters: FilterConf[] = config[objectType].filters
 
   return computed(() => {
@@ -132,7 +132,7 @@ export const useTagSlug = (
   filterId: string,
   tagId?: string
 ): string => {
-  const tagPrefix: string = config[objectType].global_tag_prefix
+  const tagPrefix: string = config[objectType].tag_prefix
   return `${tagPrefix}-${filterId}-${tagId || ''}`
 }
 

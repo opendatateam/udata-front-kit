@@ -11,7 +11,7 @@ export interface FilterConf {
 }
 
 export interface IndicatorsConf {
-  global_tag_prefix: string
+  tag_prefix: string
   organization_id: string
   filters: FilterConf[]
 }
