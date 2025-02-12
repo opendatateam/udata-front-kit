@@ -86,6 +86,7 @@ const executeQuery = async (args: typeof props) => {
     // the problem is that the subtheme/theme names/keys are configurable
     // maybe we should be we should be fully explicit for props/filters like in indicators
     // or just call them theme and subtheme everywhere (including config file)
+    // or extract them from the config file website.topics.themes.(sub)theme_id
     theme: themeId,
     chantier: subthemeId,
     ...cleanArgs,
