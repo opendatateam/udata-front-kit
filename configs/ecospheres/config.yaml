@@ -135,7 +135,7 @@ website:
   default_debounce_wait: 600
   pagination_sizes:
     organizations_list: 9
-    topics_list: 100
+    topics_list: 20
     files_list: 6
   contact_email: ecospheres@developpement-durable.gouv.fr
   home_banner_colors:
