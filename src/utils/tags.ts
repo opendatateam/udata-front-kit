@@ -1,40 +1,24 @@
-import config from '@/config'
+import type { FilterItemConf, Filters } from '@/model/config'
 import type { ResolvedTag, TagSelectOption } from '@/model/tag'
 import type { ComputedRef, Ref } from 'vue'
-
-type ObjectTypes = 'topics' | 'indicators'
+import { useFiltersConf } from './config'
 
 interface HasTags {
   tags: string[] | null
-}
-
-// FIXME: mutualize with indicators
-// should we drop IndicatorFilters niceties for more flexibility?
-export interface FilterConf {
-  // id: keyof IndicatorFilters
-  id: string
-  name: string
-  color: string
-  child?: string
-  values: {
-    id: string
-    name: string
-    parent?: string
-  }[]
 }
 
 /**
  * Extract and denormalize tags from an object
  */
 export const useTags = <T extends HasTags>(
-  objectType: 'topics' | 'indicators',
+  objectType: Filters,
   object: T | undefined | null,
   filterId?: string,
   exclude?: string[]
 ): ComputedRef<ResolvedTag[]> => {
-  // TODO: get properly typed from config wrapper
-  const tagPrefix: string = config[objectType].tag_prefix
-  const filters: FilterConf[] = config[objectType].filters
+  const filtersConf = useFiltersConf(objectType)
+  const tagPrefix = filtersConf.tag_prefix
+  const filters = filtersConf.items
 
   return computed(() => {
     const tags: ResolvedTag[] = []
@@ -68,7 +52,7 @@ export const useTags = <T extends HasTags>(
 }
 
 export const useTag = <T extends HasTags>(
-  objectType: ObjectTypes,
+  objectType: Filters,
   object: Ref<T | undefined | null>,
   filterId: string
 ): ComputedRef<ResolvedTag | undefined> => {
@@ -79,7 +63,7 @@ export const useTag = <T extends HasTags>(
 }
 
 export const getTagOptions = (
-  objectType: ObjectTypes,
+  objectType: Filters,
   filterId: string,
   parentTagId?: string
 ): TagSelectOption[] => {
@@ -92,16 +76,15 @@ export const getTagOptions = (
 }
 
 export const getFilterConf = (
-  objectType: ObjectTypes,
+  objectType: Filters,
   filterId: string
-): FilterConf | undefined => {
-  // TODO: get properly typed from config wrapper
-  const filters: FilterConf[] = config[objectType].filters
-  return filters.find((filter) => filter.id === filterId)
+): FilterItemConf | undefined => {
+  const filtersConf = useFiltersConf(objectType)
+  return filtersConf.items.find((filter) => filter.id === filterId)
 }
 
 export const useTagOptions = (
-  objectType: ObjectTypes,
+  objectType: Filters,
   tagId: Ref<string | undefined>,
   tagType: string
 ): {
@@ -128,23 +111,23 @@ export interface QueryArgs {
 }
 
 export const useTagSlug = (
-  objectType: ObjectTypes,
+  objectType: Filters,
   filterId: string,
   tagId?: string
 ): string => {
-  const tagPrefix: string = config[objectType].tag_prefix
-  return `${tagPrefix}-${filterId}-${tagId || ''}`
+  const filtersConf = useFiltersConf(objectType)
+  return `${filtersConf.tag_prefix}-${filterId}-${tagId || ''}`
 }
 
 /**
  * Build an array of normalized tags from query components and clean the original QueryArgs
  */
 export const useTagsQuery = (
-  objectType: ObjectTypes,
+  objectType: Filters,
   query: QueryArgs
 ): { tag: Array<string>; extraArgs: QueryArgs } => {
-  // TODO: get properly typed from config wrapper
-  const filters: FilterConf[] = config[objectType].filters
+  const filtersConf = useFiltersConf(objectType)
+  const filters = filtersConf.items
   const queryArray = []
   for (const filter of filters) {
     const queryFilter = query[filter.id]
@@ -160,7 +143,7 @@ export const useTagsQuery = (
 }
 
 export const useTagFromId = (
-  objectType: ObjectTypes,
+  objectType: Filters,
   filterId: string,
   tagId: string
 ): ResolvedTag | null => {

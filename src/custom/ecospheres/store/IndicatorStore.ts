@@ -28,7 +28,7 @@ export const useIndicatorStore = defineStore('indicator', {
       const { query, ...queryArgs } = args
       const { extraArgs, tag } = useTagsQuery('indicators', queryArgs)
       const results = await searchApi.search(query, null, 1, {
-        organization: config.indicators.organization_id,
+        organization: config.universe.indicators.organization_id,
         page_size: PAGE_SIZE,
         tag,
         ...extraArgs

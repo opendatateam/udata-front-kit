@@ -45,7 +45,7 @@ const bouquetLink: RouteLocationRaw = {
   params: { bid: props.bouquet.slug }
 }
 
-const chantier = useTag('topics', bouquetRef, 'chantier')
+const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
 </script>
 
 <template>
@@ -56,9 +56,9 @@ const chantier = useTag('topics', bouquetRef, 'chantier')
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
     </div>
-    <div v-if="chantier" class="fr-grid-row">
+    <div v-if="subtheme" class="fr-grid-row">
       <div class="fr-col-12">
-        <TagComponent :tag="chantier" />
+        <TagComponent :tag="subtheme" />
       </div>
     </div>
     <div
