@@ -195,8 +195,8 @@ watch(
               Filtres
             </h2>
             <BouquetSearch
-              :theme-id="selectedTheme?.id"
-              :subtheme-id="selectedSubtheme?.id"
+              :theme="selectedTheme?.id"
+              :subtheme="selectedSubtheme?.id"
               :geozone="selectedGeozone"
               :show-drafts="showDrafts"
               @vue:updated="setLiveResults"
@@ -206,8 +206,8 @@ watch(
         <div className="fr-col-12 fr-col-md-8">
           <BouquetList
             ref="bouquetListComp"
-            :theme-id="selectedTheme?.id"
-            :subtheme-id="selectedSubtheme?.id"
+            :theme="selectedTheme?.id"
+            :subtheme="selectedSubtheme?.id"
             :show-drafts="showDrafts"
             :geozone="geozone"
             :query="selectedQuery"

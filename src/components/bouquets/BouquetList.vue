@@ -18,12 +18,13 @@ const { topicsName, topicsSlug } = useTopicsConf()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
+// TODO: use BouquetQueryArgs here for typing (migrate include_drafts)
 const props = defineProps({
-  themeId: {
+  theme: {
     type: String,
     default: null
   },
-  subthemeId: {
+  subtheme: {
     type: String,
     default: null
   },
@@ -80,17 +81,10 @@ const clearFilters = () => {
 
 const executeQuery = async (args: typeof props) => {
   const loader = useLoading().show({ enforceFocus: false })
-  const { showDrafts, themeId, subthemeId, ...cleanArgs } = args
+  const { showDrafts, ...cleanArgs } = args
   const queryArgs = {
-    // FIXME: move this conversion at the props level or something more generic
-    // the problem is that the subtheme/theme names/keys are configurable
-    // maybe we should be we should be fully explicit for props/filters like in indicators
-    // or just call them theme and subtheme everywhere (including config file)
-    // or extract them from the config file website.topics.themes.(sub)theme_id
-    // FIXME: rename themeId and subthemeId to theme and subtheme in props
-    theme: themeId,
-    subtheme: subthemeId,
     ...cleanArgs,
+    // TODO: maybe handle this through a prop of the same name
     ...(showDrafts && { include_private: 'yes' })
   }
   return topicStore.query(queryArgs).finally(() => loader.hide())
