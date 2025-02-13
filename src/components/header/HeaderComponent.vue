@@ -20,6 +20,16 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   customSearch: false
 })
 
+// DsfrHeader does not expose the hidemodal function, so we do this to close the modal after a custom search.
+const headerRef = useTemplateRef('headerRef')
+
+const closeModal = () => {
+  const closeButton = headerRef.value?.$el.querySelector('#close-button')
+  if (closeButton) {
+    ;(closeButton as HTMLButtonElement).click()
+  }
+}
+
 const logoText = config.website.rf_title
 const serviceTitle = config.website.title
 const serviceLogo = config.website.service_logo
@@ -34,6 +44,7 @@ const dropdown = config.website.header_search.dropdown
 
 <template>
   <DsfrHeader
+    ref="headerRef"
     home-to="/"
     :logo-text
     :service-title="serviceLogo ? undefined : serviceTitle"
@@ -79,6 +90,7 @@ const dropdown = config.website.header_search.dropdown
         :search-label="searchLabel"
         :dropdown="dropdown"
         placeholder="Rechercher"
+        @search="closeModal"
       />
     </template>
 

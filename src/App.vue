@@ -66,7 +66,11 @@ const quickLinks = computed(() => {
     return button.display ? [headerButton] : []
   }
 
-  return button.display ? [userProfile, headerButton, logLink] : [logLink]
+  if (isLoggedIn.value) {
+    return button.display ? [userProfile, headerButton, logLink] : [logLink]
+  }
+
+  return button.display ? [headerButton, logLink] : [logLink]
 })
 
 onMounted(() => {
