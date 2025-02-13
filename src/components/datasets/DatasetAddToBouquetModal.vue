@@ -13,6 +13,8 @@ import { useExtras } from '@/utils/bouquet'
 import { useGroups } from '@/utils/bouquetGroups'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 
+import { useForm, type FormErrorMessage } from '@/utils/form'
+
 const props = defineProps({
   show: {
     type: Boolean,
@@ -50,13 +52,24 @@ const bouquetOptions = computed(() => {
   })
 })
 
-const inputErrorMessages = new Map([
-  ['bouquetId', `Veuillez sélectionner un ${topicsName}.`],
-  ['group', `Le groupe est limité à 100 caractères.`],
-  ['title', 'Veuillez renseigner un libellé.'],
-  ['purpose', "La raison d'utilisation ne doit pas être vide."]
-])
+const errorMessages: FormErrorMessage[] = [
+  {
+    inputName: 'bouquetId',
+    message: `Veuillez sélectionner un ${topicsName}.`
+  },
+  { inputName: 'group', message: `Le groupe est limité à 100 caractères.` },
+  { inputName: 'title', message: 'Veuillez renseigner un libellé.' },
+  {
+    inputName: 'purpose',
+    message: "La raison d'utilisation ne doit pas être vide."
+  }
+]
 const formErrors: Ref<string[]> = ref([])
+
+const { formErrorMessagesMap, sortedErrors } = useForm(
+  errorMessages,
+  formErrors
+)
 
 const validateFields = () => {
   if (!datasetProperties.value.title.trim()) {
@@ -75,12 +88,6 @@ const validateFields = () => {
     formErrors.value.push('group')
   }
 }
-
-const sortedinputErrors = computed(() =>
-  Array.from(inputErrorMessages.keys()).filter((key) =>
-    formErrors.value.includes(key)
-  )
-)
 
 const isValid = computed(() => {
   if (topicsDatasetEditorialization) {
@@ -104,19 +111,28 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   ]
 })
 
-const errorStatus = useTemplateRef('errorStatus')
+const errorSummary = useTemplateRef('errorSummary')
 const isSubmitted: Ref<boolean> = ref(false)
 
-const onSubmit = () => {
+const onSubmit = async () => {
   // reset error fields
   formErrors.value = []
   isSubmitted.value = true
 
+  // check input fields
   validateFields()
 
+  // handle error summary
   if (formErrors.value.length > 0) {
-    errorStatus.value?.focus()
-  } else if (isValid.value) {
+    const errorSummaryTitle: HTMLHeadingElement | undefined | null =
+      errorSummary.value?.$el.querySelector('#error-summary-title')
+    if (errorSummaryTitle) {
+      await nextTick()
+      errorSummaryTitle.focus()
+    }
+  }
+  // submit if no error
+  else if (isValid.value) {
     isSubmitted.value = false
     submit()
   }
@@ -188,29 +204,13 @@ onMounted(() => {
     class="form"
     @close="closeModal"
   >
-    <div
+    <ErrorSummary
       v-show="formErrors.length"
-      class="fr-my-4w fr-p-2w error-status"
-      role="group"
-      aria-labelledby="error-summary-title"
-    >
-      <h3 id="error-summary-title" ref="errorStatus" tabindex="-1">
-        Il y a {{ sortedinputErrors.length }} erreur<span
-          v-if="formErrors.length > 1"
-          >s</span
-        >
-        de saisie dans le formulaire.
-      </h3>
-      <ol>
-        <li
-          v-for="(error, index) in sortedinputErrors"
-          :key="index"
-          class="error"
-        >
-          <a :href="`#input-${error}`">{{ inputErrorMessages.get(error) }}</a>
-        </li>
-      </ol>
-    </div>
+      ref="errorSummary"
+      :form-error-messages-map
+      :form-errors="sortedErrors"
+      heading-level="h3"
+    />
     <DsfrSelect
       id="input-bouquetId"
       v-model="selectedBouquetId"
@@ -228,7 +228,7 @@ onMounted(() => {
       class="error"
     >
       <VIconCustom name="error-fill" />
-      {{ inputErrorMessages.get('bouquetId') }}
+      {{ formErrorMessagesMap.get('bouquetId') }}
     </p>
     <DsfrBadge
       v-if="isDatasetInBouquet"
@@ -240,14 +240,13 @@ onMounted(() => {
     />
     <div class="fr-input-group">
       <SelectTopicGroup
-        id="input-group"
         v-model:properties-model="datasetProperties"
         v-model:groups-model="datasetsGroups"
         label="Regroupement"
         description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
       >
         <template v-if="formErrors.includes('group')" #errorGroup>
-          {{ inputErrorMessages.get('group') }}
+          {{ formErrorMessagesMap.get('group') }}
         </template>
       </SelectTopicGroup>
     </div>
@@ -256,10 +255,10 @@ onMounted(() => {
       v-model:dataset-properties-model="datasetProperties"
     >
       <template v-if="formErrors.includes('title')" #errorTitle>
-        {{ inputErrorMessages.get('title') }}
+        {{ formErrorMessagesMap.get('title') }}
       </template>
       <template v-if="formErrors.includes('purpose')" #errorPurpose>
-        {{ inputErrorMessages.get('purpose') }}
+        {{ formErrorMessagesMap.get('purpose') }}
       </template>
     </DatasetPropertiesTextFields>
 
