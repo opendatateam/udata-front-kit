@@ -20,11 +20,11 @@ import { useTagOptions } from '@/utils/tags'
 const spatialAPI = new SpatialAPI()
 
 const props = defineProps({
-  themeId: {
+  theme: {
     type: String,
     default: null
   },
-  subthemeId: {
+  subtheme: {
     type: String,
     default: null
   },
@@ -45,7 +45,7 @@ const route = useRoute()
 const selectedGeozone: Ref<string | undefined> = ref(undefined)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
-const themeIdRef = toRef(props, 'themeId')
+const themeIdRef = toRef(props, 'theme')
 const { tagOptions: themeOptions, subTagOptions: subthemeOptions } =
   useTagOptions('bouquets', themeIdRef, 'theme')
 
@@ -57,8 +57,8 @@ const computeQueryArgs = (
   data?: Record<string, string | null>
 ): LocationQueryRaw => {
   const query: LocationQueryRaw = {}
-  if (props.themeId) query.theme = props.themeId
-  if (props.subthemeId) query.subtheme = props.subthemeId
+  if (props.theme) query.theme = props.theme
+  if (props.subtheme) query.subtheme = props.subtheme
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
   if (localShowDrafts.value) {
     query.drafts = 1
@@ -132,7 +132,7 @@ watchEffect(() => {
           :default-option="`Toutes les ${topicsMainTheme}s`"
           :label="capitalize(topicsMainTheme)"
           :options="themeOptions"
-          :model-value="props.themeId"
+          :model-value="props.theme"
           @update:model-value="(value) => switchTheme(value)"
         />
       </div>
@@ -141,7 +141,7 @@ watchEffect(() => {
           :default-option="`Tous les ${topicsSecondaryTheme}s`"
           :label="capitalize(topicsSecondaryTheme)"
           :options="subthemeOptions"
-          :model-value="props.subthemeId"
+          :model-value="props.subtheme"
           @update:model-value="(value) => switchSubtheme(value)"
         />
       </div>

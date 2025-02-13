@@ -6,12 +6,22 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { type QueryArgs, useTagsQuery } from '@/utils/tags'
+import { useTagsQuery } from '@/utils/tags'
 
 import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
+
+interface BouquetQueryArgs {
+  query: string | null
+  theme: string | null
+  subtheme: string | null
+  include_private?: string
+  geozone: string | null
+  page: string
+  sort: string
+}
 
 export interface RootState {
   topics: Topic[]
@@ -49,7 +59,7 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: QueryArgs): Promise<Topic[]> {
+    async query(args: BouquetQueryArgs): Promise<Topic[]> {
       const { query, ...queryArgs } = args
       const { extraArgs, tag } = useTagsQuery('bouquets', queryArgs)
       const results = await topicsAPIv2.list({
