@@ -38,6 +38,14 @@ const userName = computed(() => userStore.userName)
 const quickLinks = computed(() => {
   const button = config.website.header_button
 
+  const userProfile = {
+    button: true,
+    disabled: true,
+    label: isLoggedIn.value ? userName.value : undefined,
+    icon: 'fr-icon-account-circle-line',
+    iconRight: true
+  }
+
   const headerButton = {
     label: button.label,
     icon: 'fr-icon-lightbulb-line',
@@ -58,7 +66,7 @@ const quickLinks = computed(() => {
     return button.display ? [headerButton] : []
   }
 
-  return button.display ? [headerButton, logLink] : [logLink]
+  return button.display ? [userProfile, headerButton, logLink] : [logLink]
 })
 
 onMounted(() => {

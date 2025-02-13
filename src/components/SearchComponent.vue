@@ -11,6 +11,11 @@ import '@/assets/multiselect.css'
 
 const router = useRouter()
 
+interface DropdownItem {
+  text: string
+  route: string
+}
+
 const props = defineProps({
   searchLabel: {
     type: String,
@@ -33,7 +38,7 @@ const props = defineProps({
     default: true
   },
   dropdown: {
-    type: Array,
+    type: Array as () => DropdownItem[],
     default: () => []
   },
   searchEndpoint: {
@@ -64,7 +69,7 @@ const doSimpleSearch = (event: string) => {
   emits('search')
 }
 
-const doMultiSearch = (item: { text: string; route: string }) => {
+const doMultiSearch = (item: DropdownItem) => {
   router.push({ name: item.route, query: { q: query.value } })
   clear()
   query.value = ''
@@ -143,7 +148,7 @@ const clear = () => {
         'aria-placeholder': null
       }"
       @search-change="onSearchChange"
-      @update:model-value="doMultiSearch"
+      @select="doMultiSearch"
     >
       <template #singlelabel>
         <div class="multiselect-single-label fr-py-2w">
