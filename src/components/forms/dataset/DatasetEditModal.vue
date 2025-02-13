@@ -11,6 +11,7 @@ import {
 } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
+import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
 export interface DatasetEditModalType {
@@ -37,7 +38,7 @@ const modalData: Ref<DatasetModalData> = ref({
   mode: 'edit'
 })
 
-const modalActions = computed(() => {
+const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   return [
     {
       label: 'Annuler',

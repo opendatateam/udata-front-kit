@@ -11,6 +11,7 @@ import { useTopicsConf } from '@/utils/config'
 
 import { useExtras } from '@/utils/bouquet'
 import { useGroups } from '@/utils/bouquetGroups'
+import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({
   show: {
@@ -89,7 +90,7 @@ const isValid = computed(() => {
   }
 })
 
-const modalActions = computed(() => {
+const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   return [
     {
       label: 'Annuler',
