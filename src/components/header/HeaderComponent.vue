@@ -24,9 +24,13 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
 const headerRef = useTemplateRef('headerRef')
 
 const closeModal = () => {
-  const closeButton = headerRef.value?.$el.querySelector('#close-button')
+  const closeButton: HTMLButtonElement | undefined | null =
+    headerRef.value?.$el.querySelector('#close-button')
   if (closeButton) {
-    ;(closeButton as HTMLButtonElement).click()
+    // we need a timeout because of a '@keydown.enter' in DsfrSearchBar preventing the click to happen
+    setTimeout(() => {
+      closeButton.click()
+    }, 50)
   }
 }
 
@@ -90,7 +94,7 @@ const dropdown = config.website.header_search.dropdown ?? undefined
         :search-label="searchLabel"
         :dropdown="dropdown"
         placeholder="Rechercher"
-        @search="closeModal"
+        @do-search="closeModal"
       />
     </template>
 

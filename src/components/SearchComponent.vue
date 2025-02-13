@@ -53,7 +53,7 @@ const selectedQuery = defineModel({
   default: ''
 })
 
-const emits = defineEmits(['search'])
+const emits = defineEmits(['doSearch'])
 
 const query = ref('')
 const selectedMultiSearch = ref()
@@ -66,14 +66,14 @@ const doSimpleSearch = (event: string) => {
     query: { q: query.value }
   })
   query.value = ''
-  emits('search')
+  emits('doSearch')
 }
 
 const doMultiSearch = (item: DropdownItem) => {
   router.push({ name: item.route, query: { q: query.value } })
   clear()
   query.value = ''
-  emits('search')
+  emits('doSearch')
 }
 
 const onSearchChange = (value: string) => {
