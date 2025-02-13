@@ -39,7 +39,7 @@ const showLogoOperatorInHeader =
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
 const badgeStyle = config.website.badge.style
-const dropdown = config.website.header_search.dropdown
+const dropdown = config.website.header_search.dropdown ?? undefined
 </script>
 
 <template>
@@ -142,14 +142,13 @@ const dropdown = config.website.header_search.dropdown
     flex: 1 0 100%;
     max-inline-size: min(24rem, 100%);
   }
+}
+:deep(.custom-search) input + .fr-btn {
+  background-color: var(--background-action-high-blue-france);
+  color: var(--text-inverted-blue-france);
 
-  .custom-search .fr-btn {
-    background-color: var(--background-action-high-blue-france);
-    color: var(--text-inverted-blue-france);
-
-    &:hover {
-      background-color: var(--hover-tint);
-    }
+  &:hover {
+    background-color: var(--hover-tint);
   }
 }
 </style>
