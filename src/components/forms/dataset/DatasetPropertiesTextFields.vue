@@ -7,6 +7,17 @@ const datasetProperties = defineModel('datasetProperties-model', {
   default: {}
 })
 
+defineProps({
+  errorTitle: {
+    type: String,
+    default: ''
+  },
+  errorPurpose: {
+    type: String,
+    default: ''
+  }
+})
+
 const { topicsName } = useTopicsConf()
 </script>
 
@@ -25,11 +36,13 @@ const { topicsName } = useTopicsConf()
       class="fr-input"
       type="text"
       aria-describedby="errors-title title-description"
-      :aria-invalid="!!$slots.errorTitle"
+      :aria-invalid="!!errorTitle"
     />
-    <p v-if="$slots.errorTitle" id="errors-title" class="error">
-      <VIconCustom name="error-fill" />&nbsp;<slot name="errorTitle" />
-    </p>
+    <ErrorMessage
+      v-if="errorTitle"
+      input-name="title"
+      :error-message="errorTitle"
+    />
   </div>
   <div class="fr-input-group">
     <label class="fr-label" for="input-purpose"
@@ -51,11 +64,13 @@ const { topicsName } = useTopicsConf()
       class="fr-input"
       type="text"
       aria-describedby="errors-purpose purpose-description"
-      :aria-invalid="!!$slots.errorPurpose"
+      :aria-invalid="!!errorPurpose"
     />
-    <p v-if="$slots.errorPurpose" id="errors-purpose" class="error">
-      <VIconCustom name="error-fill" />&nbsp;<slot name="errorPurpose" />
-    </p>
+    <ErrorMessage
+      v-if="errorPurpose"
+      input-name="purpose"
+      :error-message="errorPurpose"
+    />
   </div>
 </template>
 

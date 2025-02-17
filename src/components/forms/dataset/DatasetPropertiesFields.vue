@@ -10,6 +10,7 @@ import {
 } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useTopicsConf } from '@/utils/config'
+import { useForm } from '@/utils/form'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
@@ -26,6 +27,11 @@ const datasetsGroups = defineModel('groups-model', {
   default: []
 })
 
+const formErrors = defineModel('errors-model', {
+  type: Array<string>,
+  default: []
+})
+
 defineProps({
   alreadySelectedDatasets: {
     type: Array<DatasetProperties>,
@@ -36,6 +42,7 @@ defineProps({
 const router = useRouter()
 const datasetStore = useDatasetStore()
 const { topicsDatasetEditorialization } = useTopicsConf()
+const { getErrorMessage } = useForm(formErrors)
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
@@ -126,6 +133,8 @@ onMounted(() => {
   <DatasetPropertiesTextFields
     v-if="topicsDatasetEditorialization"
     v-model:dataset-properties-model="datasetProperties"
+    :error-title="getErrorMessage('title')"
+    :error-purpose="getErrorMessage('purpose')"
   />
   <div class="fr-mt-1w fr-mb-4w">
     <SelectDataset
@@ -183,6 +192,7 @@ onMounted(() => {
       v-model:groups-model="datasetsGroups"
       label="Regroupement"
       description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
+      :error-message="getErrorMessage('group')"
     />
   </div>
 </template>

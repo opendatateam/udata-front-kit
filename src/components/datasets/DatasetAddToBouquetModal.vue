@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { capitalize, computed, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { toast } from 'vue3-toastify'
 
+import ErrorMessage from '@/components/forms/ErrorMessage.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
@@ -13,7 +14,7 @@ import { useExtras } from '@/utils/bouquet'
 import { useGroups } from '@/utils/bouquetGroups'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 
-import { useForm, type FormErrorMessage } from '@/utils/form'
+import { useForm } from '@/utils/form'
 
 const props = defineProps({
   show: {
@@ -52,24 +53,10 @@ const bouquetOptions = computed(() => {
   })
 })
 
-const errorMessages: FormErrorMessage[] = [
-  {
-    inputName: 'bouquetId',
-    message: `Veuillez sélectionner un ${topicsName}.`
-  },
-  { inputName: 'group', message: `Le groupe est limité à 100 caractères.` },
-  { inputName: 'title', message: 'Veuillez renseigner un libellé.' },
-  {
-    inputName: 'purpose',
-    message: "La raison d'utilisation ne doit pas être vide."
-  }
-]
 const formErrors: Ref<string[]> = ref([])
 
-const { formErrorMessagesMap, sortedErrors } = useForm(
-  errorMessages,
-  formErrors
-)
+const { formErrorMessagesMap, sortedErrors, getErrorMessage } =
+  useForm(formErrors)
 
 const validateFields = () => {
   if (!datasetProperties.value.title.trim()) {
@@ -222,14 +209,12 @@ onMounted(() => {
       "
       aria-describedby="errors-bouquetId"
     />
-    <p
-      v-if="formErrors.includes('bouquetId')"
-      id="errors-bouquetId"
-      class="error"
-    >
-      <VIconCustom name="error-fill" />
-      {{ formErrorMessagesMap.get('bouquetId') }}
-    </p>
+    <ErrorMessage
+      v-if="!!getErrorMessage('bouquetId')"
+      input-name="bouquetId"
+      :error-message="getErrorMessage('bouquetId')"
+    />
+
     <DsfrBadge
       v-if="isDatasetInBouquet"
       type="info"
@@ -244,23 +229,15 @@ onMounted(() => {
         v-model:groups-model="datasetsGroups"
         label="Regroupement"
         description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
-      >
-        <template v-if="formErrors.includes('group')" #errorGroup>
-          {{ formErrorMessagesMap.get('group') }}
-        </template>
-      </SelectTopicGroup>
+        :error-message="getErrorMessage('group')"
+      />
     </div>
     <DatasetPropertiesTextFields
       v-if="topicsDatasetEditorialization"
       v-model:dataset-properties-model="datasetProperties"
-    >
-      <template v-if="formErrors.includes('title')" #errorTitle>
-        {{ formErrorMessagesMap.get('title') }}
-      </template>
-      <template v-if="formErrors.includes('purpose')" #errorPurpose>
-        {{ formErrorMessagesMap.get('purpose') }}
-      </template>
-    </DatasetPropertiesTextFields>
+      :error-title="getErrorMessage('title')"
+      :error-purpose="getErrorMessage('purpose')"
+    />
 
     <slot name="footer">
       <DsfrButtonGroup
@@ -277,7 +254,7 @@ onMounted(() => {
 .fr-select-group:has(+ .fr-badge) {
   margin-bottom: 0.5rem;
 }
-:deep(.fr-select-group:has(+ #errors-name)) {
+:deep(.fr-select-group:has(+ #errors-bouquetId)) {
   margin-bottom: 0;
 }
 </style>

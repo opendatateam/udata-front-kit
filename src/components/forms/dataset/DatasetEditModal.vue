@@ -11,6 +11,7 @@ import {
 } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
+import { useForm } from '@/utils/form'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
@@ -38,6 +39,25 @@ const modalData: Ref<DatasetModalData> = ref({
   mode: 'edit'
 })
 
+const formErrors: Ref<string[]> = ref([])
+
+const { formErrorMessagesMap, sortedErrors } = useForm(formErrors)
+
+const validateFields = () => {
+  if (!modalData.value.dataset?.title.trim()) {
+    formErrors.value.push('title')
+  }
+  if (!modalData.value.dataset?.purpose.trim()) {
+    formErrors.value.push('purpose')
+  }
+  if (
+    modalData.value.dataset?.group &&
+    modalData.value.dataset?.group.trim().length > 100
+  ) {
+    formErrors.value.push('group')
+  }
+}
+
 const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   return [
     {
@@ -45,21 +65,54 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
       type: 'button',
       secondary: true,
       onClick: () => {
-        closeModal()
+        onCancel()
       }
     },
     {
       label: 'Enregistrer',
       type: 'button',
-      disabled: !modalData.value.isValid,
       onClick: ($event: MouseEvent) => {
         $event.preventDefault()
-        submitModal(modalData.value)
-        closeModal()
+        onSubmit()
       }
     }
   ]
 })
+
+const errorSummary = useTemplateRef('errorSummary')
+const isSubmitted: Ref<boolean> = ref(false)
+
+const onCancel = () => {
+  // reset error fields
+  formErrors.value = []
+  isSubmitted.value = false
+  closeModal()
+}
+
+const onSubmit = async () => {
+  // reset error fields
+  formErrors.value = []
+  isSubmitted.value = true
+
+  // check input fields
+  validateFields()
+
+  // handle error summary
+  if (formErrors.value.length > 0) {
+    const errorSummaryTitle: HTMLHeadingElement | undefined | null =
+      errorSummary.value?.$el.querySelector('#error-summary-title')
+    if (errorSummaryTitle) {
+      await nextTick()
+      errorSummaryTitle.focus()
+    }
+  }
+  // submit if no error
+  else {
+    isSubmitted.value = false
+    submitModal(modalData.value)
+    closeModal()
+  }
+}
 
 const editDataset = (dataset: DatasetProperties, index: number) => {
   // clone the object to enable cancellation
@@ -144,7 +197,7 @@ defineExpose({ addDataset, editDataset })
   <DsfrModal
     v-if="isModalOpen && modalData.dataset"
     size="lg"
-    class="bouquet-dataset-modal"
+    class="bouquet-dataset-modal form"
     :title="
       modalData.mode === 'edit'
         ? 'Éditer le jeu de données'
@@ -154,10 +207,18 @@ defineExpose({ addDataset, editDataset })
     aria-modal="true"
     @close="closeModal"
   >
+    <ErrorSummary
+      v-show="formErrors.length"
+      ref="errorSummary"
+      :form-error-messages-map
+      :form-errors="sortedErrors"
+      heading-level="h3"
+    />
     <form novalidate>
       <DatasetPropertiesFields
         v-model="modalData.dataset"
         v-model:groups-model="datasetsGroups"
+        v-model:errors-model="formErrors"
         :already-selected-datasets="datasets"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />

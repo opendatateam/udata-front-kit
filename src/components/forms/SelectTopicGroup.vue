@@ -3,6 +3,7 @@ import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
+import ErrorMessage from './ErrorMessage.vue'
 
 const datasetProperties = defineModel('properties-model', {
   type: Object as () => DatasetProperties,
@@ -27,9 +28,9 @@ defineProps({
     type: Boolean,
     default: false
   },
-  isErrored: {
-    type: Boolean,
-    defautl: false
+  errorMessage: {
+    type: String,
+    default: ''
   }
 })
 
@@ -77,7 +78,7 @@ const trimGroupName = (groupName: string) => {
       'aria-labelledby': null,
       'aria-multiselectable': null,
       'aria-placeholder': null,
-      'aria-invalid': `${!!$slots.errorGroup}`
+      'aria-invalid': `${!!errorMessage}`
     }"
     @select="trimGroupName"
   >
@@ -101,7 +102,9 @@ const trimGroupName = (groupName: string) => {
       </button>
     </template>
   </Multiselect>
-  <p v-if="$slots.errorGroup" id="errors-group" class="error">
-    <VIconCustom name="error-fill" />&nbsp;<slot name="errorGroup" />
-  </p>
+  <ErrorMessage
+    v-if="errorMessage"
+    input-name="group"
+    :error-message="errorMessage"
+  />
 </template>
