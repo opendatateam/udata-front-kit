@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useFocus, useTitle } from '@vueuse/core'
+import { useTitle } from '@vueuse/core'
 
 import config from '@/config'
 
@@ -87,7 +87,8 @@ const footerExternalLinks = config.website.footer_external_links
 const footerMandatoryLinks = config.website.footer_mandatory_links
 
 const route = useRoute()
-const skipLinksComp = ref<InstanceType<typeof SkipLinks> | null>(null)
+const skipLinksComp =
+  useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
 
 const setAccessibilityProperties: AccessibilityPropertiesType = (
   title,
@@ -102,10 +103,9 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
       ...messages
     ]
   }
-  // focus skip link
-  if (focus && skipLinksComp.value?.firstSkipLink) {
-    const { focused } = useFocus(skipLinksComp.value?.firstSkipLink[0])
-    focused.value = true
+  // focus skip link container
+  if (focus && skipLinksComp.value?.skipLinkList) {
+    skipLinksComp.value.skipLinkList.focus()
   }
 }
 
