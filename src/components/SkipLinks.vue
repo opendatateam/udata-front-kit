@@ -11,7 +11,7 @@ export type { SkipLinksProps }
 
 defineProps<SkipLinksProps>()
 
-const skipLinkList = useTemplateRef<HTMLUListElement>('skipLinkList')
+const skipLinkList = useTemplateRef<HTMLElement>('skipLinkList')
 
 defineExpose({
   skipLinkList
