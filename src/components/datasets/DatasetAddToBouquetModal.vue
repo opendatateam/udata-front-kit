@@ -55,9 +55,6 @@ const bouquetOptions = computed(() => {
 
 const formErrors: Ref<string[]> = ref([])
 
-const { formErrorMessagesMap, sortedErrors, getErrorMessage } =
-  useForm(formErrors)
-
 const validateFields = () => {
   if (!datasetProperties.value.title.trim()) {
     formErrors.value.push('title')
@@ -93,37 +90,12 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
     },
     {
       label: 'Enregistrer',
-      onClick: () => onSubmit()
+      onClick: () => handleSubmit()
     }
   ]
 })
 
 const errorSummary = useTemplateRef('errorSummary')
-const isSubmitted: Ref<boolean> = ref(false)
-
-const onSubmit = async () => {
-  // reset error fields
-  formErrors.value = []
-  isSubmitted.value = true
-
-  // check input fields
-  validateFields()
-
-  // handle error summary
-  if (formErrors.value.length > 0) {
-    const errorSummaryTitle: HTMLHeadingElement | undefined | null =
-      errorSummary.value?.$el.querySelector('#error-summary-title')
-    if (errorSummaryTitle) {
-      await nextTick()
-      errorSummaryTitle.focus()
-    }
-  }
-  // submit if no error
-  else if (isValid.value) {
-    isSubmitted.value = false
-    submit()
-  }
-}
 
 const selectedBouquet = computed(() => {
   if (selectedBouquetId.value === null) {
@@ -170,6 +142,19 @@ const submit = async () => {
   )
   closeModal()
 }
+
+const {
+  formErrorMessagesMap,
+  sortedErrors,
+  getErrorMessage,
+  isSubmitted,
+  handleSubmit
+} = useForm(formErrors, {
+  validateFields,
+  onSuccess: submit,
+  errorSummaryRef: errorSummary,
+  isValid
+})
 
 const closeModal = () => {
   emit('update:show', false)

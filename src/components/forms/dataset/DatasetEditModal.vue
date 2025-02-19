@@ -41,8 +41,6 @@ const modalData: Ref<DatasetModalData> = ref({
 
 const formErrors: Ref<string[]> = ref([])
 
-const { formErrorMessagesMap, sortedErrors } = useForm(formErrors)
-
 const validateFields = () => {
   if (!modalData.value.dataset?.title.trim()) {
     formErrors.value.push('title')
@@ -73,45 +71,19 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
       type: 'button',
       onClick: ($event: MouseEvent) => {
         $event.preventDefault()
-        onSubmit()
+        handleSubmit()
       }
     }
   ]
 })
 
 const errorSummary = useTemplateRef('errorSummary')
-const isSubmitted: Ref<boolean> = ref(false)
 
 const onCancel = () => {
   // reset error fields
   formErrors.value = []
   isSubmitted.value = false
   closeModal()
-}
-
-const onSubmit = async () => {
-  // reset error fields
-  formErrors.value = []
-  isSubmitted.value = true
-
-  // check input fields
-  validateFields()
-
-  // handle error summary
-  if (formErrors.value.length > 0) {
-    const errorSummaryTitle: HTMLHeadingElement | undefined | null =
-      errorSummary.value?.$el.querySelector('#error-summary-title')
-    if (errorSummaryTitle) {
-      await nextTick()
-      errorSummaryTitle.focus()
-    }
-  }
-  // submit if no error
-  else {
-    isSubmitted.value = false
-    submitModal(modalData.value)
-    closeModal()
-  }
 }
 
 const editDataset = (dataset: DatasetProperties, index: number) => {
@@ -141,7 +113,7 @@ const addDataset = () => {
   isModalOpen.value = true
 }
 
-const submitModal = async (modalData: DatasetModalData) => {
+const submit = async (modalData: DatasetModalData) => {
   if (modalData.dataset !== undefined) {
     // check if data.gouv.fr URL and update metadata if needed
     if (
@@ -184,7 +156,15 @@ const submitModal = async (modalData: DatasetModalData) => {
     }
   }
   emits('submitModal')
+  closeModal()
 }
+
+const { formErrorMessagesMap, sortedErrors, isSubmitted, handleSubmit } =
+  useForm(formErrors, {
+    validateFields,
+    onSuccess: () => submit(modalData.value),
+    errorSummaryRef: errorSummary
+  })
 
 const closeModal = () => {
   isModalOpen.value = false
