@@ -77,16 +77,16 @@ const navigate = (data?: Record<string, string | null>) => {
   })
 }
 
-const switchTheme = (value: string | null) => {
+const switchTheme = (value: string | null | undefined) => {
   navigate({
-    theme: value,
+    theme: value || null,
     subtheme: null
   })
 }
 
-const switchSubtheme = (value: string | null) => {
+const switchSubtheme = (value: string | null | undefined) => {
   navigate({
-    subtheme: value
+    subtheme: value || null
   })
 }
 
