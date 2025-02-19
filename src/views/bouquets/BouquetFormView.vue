@@ -18,6 +18,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { cloneTopic } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
+import { useTagSlug } from '@/utils/tags'
 
 const props = defineProps({
   isCreate: {
@@ -40,15 +41,21 @@ const {
   topicsSecondaryTheme
 } = useTopicsConf()
 
+// populate tags from theme and subtheme in query string
+const selectedTags = [
+  routeQuery.theme
+    ? useTagSlug('bouquets', 'theme', routeQuery.theme || undefined)
+    : undefined,
+  routeQuery.subtheme
+    ? useTagSlug('bouquets', 'subtheme', routeQuery.subtheme || undefined)
+    : undefined
+]
+
 const topic: Ref<
   Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
 > = ref({
   private: true,
-  // FIXME: compute from routeQuery with prefix and subprefix
-  tags: [
-    config.universe.name,
-    ...[routeQuery.theme, routeQuery.subtheme].filter((v) => !!v)
-  ],
+  tags: [config.universe.name, ...selectedTags.filter((v) => !!v)],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
     [topicsExtrasKey]: {
@@ -178,7 +185,6 @@ onMounted(() => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
         } else {
-          // FIXME: still needed?
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
