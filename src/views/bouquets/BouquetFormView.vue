@@ -40,7 +40,9 @@ const {
   topicsSecondaryTheme
 } = useTopicsConf()
 
-const topic: Ref<Partial<TopicPostData> & Pick<TopicPostData, 'extras'>> = ref({
+const topic: Ref<
+  Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
+> = ref({
   private: true,
   // FIXME: compute from routeQuery with prefix and subprefix
   tags: [
@@ -176,6 +178,7 @@ onMounted(() => {
         if (routeQuery.clone != null) {
           topic.value = cloneTopic(remoteTopic)
         } else {
+          // FIXME: still needed?
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic
           topic.value = data
@@ -245,7 +248,6 @@ const onSubmit = async () => {
           <legend class="fr-fieldset__legend fr-text--lead">
             Description du {{ topicsName }} de données
           </legend>
-          <!-- FIXME: type error -->
           <BouquetForm
             v-if="isReadyForForm"
             ref="formFields"
