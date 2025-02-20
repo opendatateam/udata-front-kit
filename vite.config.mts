@@ -34,6 +34,7 @@ export default defineConfig(({ mode }) => {
   return {
     base: '/',
     plugins: [
+      vueDevTools(),
       vue({
         template: {
           compilerOptions: {
@@ -41,7 +42,6 @@ export default defineConfig(({ mode }) => {
           }
         }
       }),
-      vueDevTools(),
       AutoImport({
         include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
         imports: [
