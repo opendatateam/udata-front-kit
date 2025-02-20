@@ -37,6 +37,7 @@ const i18n = setupI18n()
 const head = createHead()
 
 app.use(datagouv, {
+  name: 'data.gouv.fr',
   baseUrl: config.datagouvfr.base_url,
   apiBase: config.datagouvfr.base_url,
   staticUrl: 'https://static.data.gouv.fr' // TODO add to config?
