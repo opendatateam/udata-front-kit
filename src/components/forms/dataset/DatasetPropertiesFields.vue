@@ -136,73 +136,74 @@ onMounted(() => {
     :error-title="getErrorMessage('title')"
     :error-purpose="getErrorMessage('purpose')"
   />
-  <div class="fr-mt-1w fr-mb-4w">
-    <SelectDataset
-      v-model="selectedDataset"
-      :already-selected-datasets="alreadySelectedDatasets"
-      @update:model-value="onSelectDataset"
-    />
-  </div>
-  <div
-    v-if="!selectedDataset && topicsDatasetEditorialization"
-    class="fr-mt-4w"
-  >
-    <fieldset
-      id="input-availability"
-      tabindex="-1"
-      class="fr-fieldset"
-      role="radiogroup"
-      aria-errormessage="errors-availability"
-      :aria-invalid="formErrors.includes('availability') ? true : undefined"
+  <div id="input-availability" tabindex="-1">
+    <div class="fr-mt-1w fr-mb-4w">
+      <SelectDataset
+        v-model="selectedDataset"
+        :already-selected-datasets="alreadySelectedDatasets"
+        :is-invalid="formErrors.includes('availability')"
+        @update:model-value="onSelectDataset"
+      />
+    </div>
+    <div
+      v-if="!selectedDataset && topicsDatasetEditorialization"
+      class="fr-mt-4w"
     >
-      <legend class="fr-fieldset__legend fr-fieldset__legend--regular">
-        Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
-      </legend>
-      <DsfrRadioButton
-        v-model="datasetProperties.availability"
-        name="source"
-        :value="Availability.URL_AVAILABLE"
-        label="J'ajoute l'URL"
-      />
-      <div
-        v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
-        class="fr-mb-4w fr-fieldset__element"
+      <fieldset
+        class="fr-fieldset availability"
+        role="radiogroup"
+        aria-errormessage="errors-availability"
+        :aria-invalid="formErrors.includes('availability') ? true : undefined"
       >
-        <DsfrInput
-          id="input-availabilityUrl"
-          v-model="datasetProperties.uri"
-          label="Url vers le jeu de données souhaité (obligatoire)"
-          :label-visible="true"
-          class="fr-mb-md-1w fr-input"
-          aria-errormessage="errors-availabilityUrl"
-          :aria-invalid="
-            formErrors.includes('availabilityUrl') ? true : undefined
-          "
+        <legend class="fr-fieldset__legend fr-fieldset__legend--regular">
+          Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
+        </legend>
+        <DsfrRadioButton
+          v-model="datasetProperties.availability"
+          name="source"
+          :value="Availability.URL_AVAILABLE"
+          label="J'ajoute l'URL"
         />
-        <ErrorMessage
-          v-if="!!getErrorMessage('availabilityUrl')"
-          input-name="availabilityUrl"
-          :error-message="getErrorMessage('availabilityUrl')"
+        <div
+          v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
+          class="fr-mb-4w fr-fieldset__element"
+        >
+          <DsfrInput
+            id="input-availabilityUrl"
+            v-model="datasetProperties.uri"
+            label="Url vers le jeu de données souhaité (obligatoire)"
+            :label-visible="true"
+            class="fr-mb-md-1w fr-input"
+            aria-errormessage="errors-availabilityUrl"
+            :aria-invalid="
+              formErrors.includes('availabilityUrl') ? true : undefined
+            "
+          />
+          <ErrorMessage
+            v-if="!!getErrorMessage('availabilityUrl')"
+            input-name="availabilityUrl"
+            :error-message="getErrorMessage('availabilityUrl')"
+          />
+        </div>
+        <DsfrRadioButton
+          v-model="datasetProperties.availability"
+          name="source"
+          :value="Availability.MISSING"
+          label="Je n'ai pas trouvé la donnée"
         />
-      </div>
-      <DsfrRadioButton
-        v-model="datasetProperties.availability"
-        name="source"
-        :value="Availability.MISSING"
-        label="Je n'ai pas trouvé la donnée"
-      />
-      <DsfrRadioButton
-        v-model="datasetProperties.availability"
-        name="source"
-        :value="Availability.NOT_AVAILABLE"
-        label="Je n'ai pas cherché la donnée"
-      />
-      <ErrorMessage
-        v-if="!!getErrorMessage('availability')"
-        :error-message="getErrorMessage('availability')"
-        input-name="availability"
-      />
-    </fieldset>
+        <DsfrRadioButton
+          v-model="datasetProperties.availability"
+          name="source"
+          :value="Availability.NOT_AVAILABLE"
+          label="Je n'ai pas cherché la donnée"
+        />
+      </fieldset>
+    </div>
+    <ErrorMessage
+      v-if="!!getErrorMessage('availability')"
+      :error-message="getErrorMessage('availability')"
+      input-name="availability"
+    />
   </div>
   <div class="fr-input-group">
     <SelectTopicGroup
@@ -219,7 +220,11 @@ onMounted(() => {
 .fr-fieldset {
   margin: 30px 0;
 }
-.fr-fieldset:focus {
+.fr-fieldset.availability[aria-invalid='true'] {
+  border: none;
+  outline: 2px solid var(--border-plain-error);
+}
+#input-availability:focus {
   outline-style: solid;
 }
 fieldset legend {

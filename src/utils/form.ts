@@ -27,7 +27,7 @@ const errorMessages = [
   },
   {
     inputName: 'availability',
-    message: 'La disponibilité doit être renseignée.'
+    message: 'Un jeu de données ou une disponibilité doit être sélectionné.'
   },
   {
     inputName: 'availabilityUrl',
