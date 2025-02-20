@@ -9,16 +9,17 @@ const props = defineProps({
   }
 })
 
-const contactPoints = props.dataset.contact_points
 const dcatExtras: Record<string, string[] | undefined> | undefined =
   props.dataset.extras?.dcat
 const uri: string | undefined = props.dataset.harvest?.uri
 
-const formattedContactPoints = contactPoints.map((contactPoint) => {
-  return contactPoint.email
-    ? `<a href="mailto:${contactPoint.email}">${contactPoint.name}</a>`
-    : contactPoint.name
-})
+const contactPoints = props.dataset.contact_points
+  .filter((contactPoint) => contactPoint.role === 'contact')
+  .map((contactPoint) => {
+    return contactPoint.email
+      ? `<a href="mailto:${contactPoint.email}">${contactPoint.name}</a>`
+      : contactPoint.name
+  })
 
 const hasExtendedInfo = contactPoints.length > 0 || !!dcatExtras || !!uri
 </script>
@@ -44,7 +45,7 @@ const hasExtendedInfo = contactPoints.length > 0 || !!dcatExtras || !!uri
         title="Généalogie"
       />
       <ExtendedInformationPanelItem
-        :items="formattedContactPoints"
+        :items="contactPoints"
         title="Points de contact"
       />
     </div>
