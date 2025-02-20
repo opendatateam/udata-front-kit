@@ -9,8 +9,7 @@ const props = defineProps({
   }
 })
 
-const dcatExtras: Record<string, string[] | undefined> | undefined =
-  props.dataset.extras?.dcat
+const dcatExtras = props.dataset.extras?.dcat
 const uri: string | undefined = props.dataset.harvest?.uri
 
 const contactPoints = props.dataset.contact_points

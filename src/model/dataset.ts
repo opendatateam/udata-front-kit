@@ -23,4 +23,8 @@ interface ContactPoint {
 
 export type ExtendedDatasetV2 = DatasetV2 & {
   contact_points: ContactPoint[]
+  extras: {
+    [key: string]: unknown
+    dcat?: Record<string, string[] | undefined>
+  }
 }
