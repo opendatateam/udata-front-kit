@@ -28,14 +28,15 @@ const { topicsName } = useTopicsConf()
     >
     <p id="title-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Décrivez l'indicateur ou l'objet géographique correspondant. Par
-      exemple&nbsp;: "&nbsp;Taux d'imperméabilisation des sols&nbsp;"
+      exemple&nbsp;: «&nbsp;Taux d'imperméabilisation des sols&nbsp;»
     </p>
     <input
       id="input-title"
       v-model="datasetProperties.title"
       class="fr-input"
       type="text"
-      aria-describedby="errors-title title-description"
+      aria-describedby="title-description"
+      aria-errormessage="errors-title"
       :aria-invalid="!!errorTitle"
     />
     <ErrorMessage
@@ -63,7 +64,8 @@ const { topicsName } = useTopicsConf()
       v-model="datasetProperties.purpose"
       class="fr-input"
       type="text"
-      aria-describedby="errors-purpose purpose-description"
+      aria-describedby="purpose-description"
+      aria-errormessage="errors-purpose"
       :aria-invalid="!!errorPurpose"
     />
     <ErrorMessage

@@ -16,11 +16,22 @@ const errorMessages = [
     inputName: 'bouquetId',
     message: `Veuillez sélectionner un ${topicsName}.`
   },
-  { inputName: 'group', message: `Le groupe est limité à 100 caractères.` },
-  { inputName: 'title', message: 'Veuillez renseigner un libellé.' },
+  {
+    inputName: 'group',
+    message: 'Le nom du regroupement est limité à 100 caractères.'
+  },
+  { inputName: 'title', message: 'Le libellé doit être renseigné.' },
   {
     inputName: 'purpose',
     message: "La raison d'utilisation ne doit pas être vide."
+  },
+  {
+    inputName: 'availability',
+    message: 'La disponibilité doit être renseignée.'
+  },
+  {
+    inputName: 'availabilityUrl',
+    message: 'Une URL doit être renseignée.'
   }
 ] as const
 

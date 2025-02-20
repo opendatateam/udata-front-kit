@@ -147,11 +147,15 @@ onMounted(() => {
     v-if="!selectedDataset && topicsDatasetEditorialization"
     class="fr-mt-4w"
   >
-    <fieldset id="alt-source" class="fr-fieldset">
-      <legend
-        class="fr-fieldset__legend fr-fieldset__legend--regular"
-        for="alt-source"
-      >
+    <fieldset
+      id="input-availability"
+      tabindex="-1"
+      class="fr-fieldset"
+      role="radiogroup"
+      aria-errormessage="errors-availability"
+      :aria-invalid="formErrors.includes('availability') ? true : undefined"
+    >
+      <legend class="fr-fieldset__legend fr-fieldset__legend--regular">
         Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
       </legend>
       <DsfrRadioButton
@@ -165,11 +169,20 @@ onMounted(() => {
         class="fr-mb-4w fr-fieldset__element"
       >
         <DsfrInput
-          id="alt-link"
+          id="input-availabilityUrl"
           v-model="datasetProperties.uri"
           label="Url vers le jeu de données souhaité (obligatoire)"
           :label-visible="true"
           class="fr-mb-md-1w fr-input"
+          aria-errormessage="errors-availabilityUrl"
+          :aria-invalid="
+            formErrors.includes('availabilityUrl') ? true : undefined
+          "
+        />
+        <ErrorMessage
+          v-if="!!getErrorMessage('availabilityUrl')"
+          input-name="availabilityUrl"
+          :error-message="getErrorMessage('availabilityUrl')"
         />
       </div>
       <DsfrRadioButton
@@ -183,6 +196,11 @@ onMounted(() => {
         name="source"
         :value="Availability.NOT_AVAILABLE"
         label="Je n'ai pas cherché la donnée"
+      />
+      <ErrorMessage
+        v-if="!!getErrorMessage('availability')"
+        :error-message="getErrorMessage('availability')"
+        input-name="availability"
       />
     </fieldset>
   </div>
@@ -200,6 +218,12 @@ onMounted(() => {
 <style scoped>
 .fr-fieldset {
   margin: 30px 0;
+}
+.fr-fieldset:focus {
+  outline-style: solid;
+}
+fieldset legend {
+  inline-size: fit-content;
 }
 textarea {
   height: 150px;

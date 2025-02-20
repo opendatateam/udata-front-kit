@@ -11,7 +11,7 @@ import {
 } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
 
-import { useForm } from '@/utils/form'
+import { useForm, type AllowedInput } from '@/utils/form'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
@@ -39,7 +39,7 @@ const modalData: Ref<DatasetModalData> = ref({
   mode: 'edit'
 })
 
-const formErrors: Ref<string[]> = ref([])
+const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
   if (!modalData.value.dataset?.title.trim()) {
@@ -53,6 +53,18 @@ const validateFields = () => {
     modalData.value.dataset?.group.trim().length > 100
   ) {
     formErrors.value.push('group')
+  }
+  if (
+    !modalData.value.dataset?.uri &&
+    modalData.value.dataset?.availability === Availability.LOCAL_AVAILABLE
+  ) {
+    formErrors.value.push('availability')
+  }
+  if (
+    !modalData.value.dataset?.uri &&
+    modalData.value.dataset?.availability === Availability.URL_AVAILABLE
+  ) {
+    formErrors.value.push('availabilityUrl')
   }
 }
 
@@ -185,7 +197,7 @@ defineExpose({ addDataset, editDataset })
     "
     :opened="isModalOpen"
     aria-modal="true"
-    @close="closeModal"
+    @close="onCancel"
   >
     <ErrorSummary
       v-show="formErrors.length"

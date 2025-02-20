@@ -192,7 +192,7 @@ onMounted(() => {
       :aria-invalid="
         formErrors.includes('bouquetId') && isSubmitted ? true : undefined
       "
-      aria-describedby="errors-bouquetId"
+      aria-errormessage="errors-bouquetId"
     />
     <ErrorMessage
       v-if="!!getErrorMessage('bouquetId')"

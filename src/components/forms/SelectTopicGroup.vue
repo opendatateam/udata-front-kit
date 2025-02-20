@@ -73,7 +73,8 @@ const trimGroupName = (groupName: string) => {
     :create-option="true"
     placeholder=""
     :aria="{
-      'aria-describedby': 'errors-group regroupement-description',
+      'aria-describedby': 'regroupement-description',
+      'aria-errormessage': 'errors-group',
       // useless or unsupported https://github.com/vueform/multiselect/issues/436
       'aria-labelledby': null,
       'aria-multiselectable': null,
