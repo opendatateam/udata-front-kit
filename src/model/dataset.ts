@@ -14,12 +14,13 @@ export interface DatasetModalData {
   mode: 'edit' | 'create'
 }
 
-export interface ContactPoint {
-  id: string
+interface ContactPoint {
   name: string
-  email: string
+  email?: string
+  contact_form?: string
+  role: string
 }
 
 export type ExtendedDatasetV2 = DatasetV2 & {
-  contact_point?: ContactPoint
+  contact_points: ContactPoint[]
 }
