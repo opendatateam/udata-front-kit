@@ -120,13 +120,10 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   }
 }
 
-// FIXME: use only tagPrefix when test data are OK
 export const isIndicator = (
   dataset: Ref<DatasetV2 | undefined>
 ): ComputedRef<boolean> => {
   return computed(() => {
-    return (
-      dataset.value?.tags?.some((tag) => tag.startsWith(tagPrefix)) || false
-    )
+    return dataset.value?.tags?.includes(tagPrefix) || false
   })
 }
