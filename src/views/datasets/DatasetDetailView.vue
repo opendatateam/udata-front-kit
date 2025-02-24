@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { AppLink, QualityComponent, ReadMore, Well } from '@datagouv/components'
+import { QualityComponent } from '@datagouv/components'
 import {
   DatasetInformationPanel,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  ReadMore,
+  SimpleBanner
 } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref } from 'vue'
@@ -113,7 +115,7 @@ onMounted(() => {
                 :src="dataset.organization.logo"
                 alt=""
                 loading="lazy"
-                height="32"
+                width="32px"
               />
             </div>
           </div>
@@ -129,12 +131,13 @@ onMounted(() => {
           <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
             <p class="fr-grid-row fr-grid-row--middle fr-my-0">
               Ce jeu de données provient d'un portail externe.
-              <AppLink
-                :to="dataset.harvest.remote_url"
+              <a
+                :href="dataset.harvest.remote_url"
                 target="_blank"
                 rel="noopener nofollow"
-                >Voir la source originale.</AppLink
               >
+                Voir la source originale.
+              </a>
             </p>
           </div>
         </div>
@@ -210,10 +213,9 @@ onMounted(() => {
 
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <Well
-          v-if="!config.website.discussions.dataset.create"
-          color="blue-cumulus"
-          weight="regular"
+        <SimpleBanner
+          v-if="!config.website.discussions.dataset.create || true"
+          type="primary"
         >
           <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
             <div class="fr-col-12 fr-col-lg-8">
@@ -232,7 +234,7 @@ onMounted(() => {
               />
             </div>
           </div>
-        </Well>
+        </SimpleBanner>
         <DiscussionsList v-if="showDiscussions" :subject="dataset" />
       </DsfrTabContent>
 

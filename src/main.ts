@@ -36,13 +36,6 @@ const pinia = createPinia()
 const i18n = setupI18n()
 const head = createHead()
 
-app.use(datagouv, {
-  name: 'data.gouv.fr',
-  baseUrl: config.datagouvfr.base_url,
-  apiBase: config.datagouvfr.base_url,
-  staticUrl: 'https://static.data.gouv.fr' // TODO add to config?
-})
-
 routerPromise
   .then((router) => {
     app.use(router)
@@ -51,6 +44,14 @@ routerPromise
     app.use(head)
     app.use(TextClamp)
     app.use(LoadingPlugin)
+
+    app.use(datagouv, {
+      name: 'data.gouv.fr',
+      baseUrl: config.datagouvfr.base_url,
+      apiBase: config.datagouvfr.base_url,
+      staticUrl: 'https://static.data.gouv.fr', // TODO add to config?
+      i18n
+    })
 
     if (config.website.matomo.siteId != null) {
       app.use(VueMatomo, {
