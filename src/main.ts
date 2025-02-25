@@ -22,6 +22,7 @@ import 'vue3-toastify/dist/index.css'
 
 import config from '@/config'
 
+import { datagouv } from '@datagouv/components-next'
 import App from './App.vue'
 import './assets/main.css'
 import type { CustomParams } from './model/api'
@@ -43,6 +44,14 @@ routerPromise
     app.use(head)
     app.use(TextClamp)
     app.use(LoadingPlugin)
+
+    app.use(datagouv, {
+      name: 'data.gouv.fr',
+      baseUrl: config.datagouvfr.base_url,
+      apiBase: config.datagouvfr.base_url,
+      staticUrl: 'https://static.data.gouv.fr', // TODO add to config?
+      i18n
+    })
 
     if (config.website.matomo.siteId != null) {
       app.use(VueMatomo, {
