@@ -2,9 +2,11 @@
 import config from '@/config'
 import type { ResourceData } from '@/model/resource'
 import { useResourceStore } from '@/store/ResourceStore'
-import { ResourceAccordion } from '@datagouv/components'
-import { Pagination } from '@datagouv/components-next'
-import type { DatasetV2 } from '@datagouv/components/ts'
+import {
+  Pagination,
+  ResourceAccordion,
+  type DatasetV2
+} from '@datagouv/components-next'
 import { useLoading } from 'vue-loading-overlay'
 
 const pageSize = config.website.pagination_sizes.files_list as number

@@ -47,6 +47,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.26.5",
     "@eslint/js": "^9.18.0",
+    "@intlify/cli": "^0.13.1",
     "@testing-library/vue": "^8.1.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/js-yaml": "^4.0.9",

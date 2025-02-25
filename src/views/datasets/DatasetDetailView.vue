@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { QualityComponent } from '@datagouv/components'
 import {
   DatasetInformationPanel,
+  DatasetQuality,
   OrganizationNameWithCertificate,
   ReadMore,
   SimpleBanner
@@ -153,7 +153,7 @@ onMounted(() => {
             </code>
           </p>
         </div>
-        <QualityComponent
+        <DatasetQuality
           v-if="config.website.show_quality_component"
           :quality="dataset.quality"
         />

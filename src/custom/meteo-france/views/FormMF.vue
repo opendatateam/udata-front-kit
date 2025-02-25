@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ResourceAccordion } from '@datagouv/components'
-import type { Resource } from '@datagouv/components-next'
+import { ResourceAccordion, type Resource } from '@datagouv/components-next'
 import { ref, type Ref } from 'vue'
 
 import config from '@/config'
