@@ -316,7 +316,7 @@ indicators:
       name: Transport de voyageurs
     - id: transverse
       name: Transverse
-  - name: Levier FNV
+  - name: Levier
     id: levier
     color: green-archipel
     values:
