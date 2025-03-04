@@ -13,6 +13,7 @@ import { computed, inject, onMounted, ref } from 'vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
+import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
@@ -105,7 +106,7 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
-        <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
+        <h2 id="producer" class="subtitle fr-mb-1v">Éditeur</h2>
         <div
           v-if="dataset.organization"
           class="fr-grid-row fr-grid-row--middle"
@@ -128,6 +129,10 @@ onMounted(() => {
             </a>
           </p>
         </div>
+        <template v-if="dataset.contact_points.length">
+          <h2 id="producer" class="subtitle fr-mb-1v fr-mt-3v">Attributions</h2>
+          <ContactPoints :contact-points="dataset.contact_points" />
+        </template>
         <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">
           <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
             <p class="fr-grid-row fr-grid-row--middle fr-my-0">
@@ -143,7 +148,7 @@ onMounted(() => {
         </div>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
         <p>{{ formatDate(dataset.last_update) }}</p>
-        <div v-if="license">
+        <template v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
           <p class="fr-text--sm fr-mt-0 fr-mb-3v">
             <code class="bg-alt-grey fr-px-1v text-grey-380">
@@ -152,7 +157,7 @@ onMounted(() => {
               </a>
             </code>
           </p>
-        </div>
+        </template>
         <QualityComponent
           v-if="config.website.show_quality_component"
           :quality="dataset.quality"
