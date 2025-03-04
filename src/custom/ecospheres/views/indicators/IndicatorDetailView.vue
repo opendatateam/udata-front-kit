@@ -125,22 +125,10 @@ onMounted(() => {
 
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
-        <ResourcesList v-if="indicator.resources.total" :dataset="indicator" />
-        <div
-          v-else
-          class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
-        >
-          <img
-            src="/blank_state/file.svg"
-            alt=""
-            loading="lazy"
-            height="105"
-            width="130"
-          />
-          <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-            Il n'y a pas encore de fichier pour cet indicateur.
-          </p>
-        </div>
+        <ResourcesList
+          :dataset="indicator"
+          no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
+        />
         <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
