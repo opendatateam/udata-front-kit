@@ -138,7 +138,7 @@ onMounted(() => {
             width="130"
           />
           <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-            Il n'y a pas encore de fichier pour ce jeu de données.
+            Il n'y a pas encore de fichier pour cet indicateur.
           </p>
         </div>
         <IndicatorAPIDocumentation :indicator="indicator" />
