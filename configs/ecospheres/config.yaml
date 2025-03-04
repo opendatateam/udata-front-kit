@@ -260,7 +260,7 @@ indicators:
   organization_id: 67c57c2f1a418addfc94d38a
   global_tag_prefix: ecospheres-indicateurs
   filters:
-  - name: Thématique FNV
+  - name: Thématique
     id: theme
     color: green-menthe
     values:
@@ -278,7 +278,7 @@ indicators:
       name: Mieux se loger
     - id: mieux-se-nourrir
       name: Mieux se nourrir
-  - name: Enjeu FNV
+  - name: Enjeu
     id: enjeu
     color: blue-ecume
     values:
