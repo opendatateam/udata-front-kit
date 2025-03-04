@@ -124,12 +124,23 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Fichiers -->
-      <DsfrTabContent
-        v-if="indicator.resources.total"
-        panel-id="tab-content-1"
-        tab-id="tab-1"
-      >
-        <ResourcesList :dataset="indicator" />
+      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+        <ResourcesList v-if="indicator.resources.total" :dataset="indicator" />
+        <div
+          v-else
+          class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
+        >
+          <img
+            src="/blank_state/file.svg"
+            alt=""
+            loading="lazy"
+            height="105"
+            width="130"
+          />
+          <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+            Il n'y a pas encore de fichier pour ce jeu de données.
+          </p>
+        </div>
         <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 

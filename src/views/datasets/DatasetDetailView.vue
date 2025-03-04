@@ -37,7 +37,6 @@ const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
-const selectedTabIndex = ref(0)
 const showAddToBouquetModal = ref(false)
 
 const showDiscussions = config.website.discussions.dataset.display as boolean
@@ -196,13 +195,22 @@ onMounted(() => {
       :tab-titles="tabTitles"
     >
       <!-- Fichiers -->
-      <DsfrTabContent
-        v-if="dataset.resources.total"
-        panel-id="tab-content-0"
-        tab-id="tab-0"
-      >
-        <div v-if="selectedTabIndex === 0">
-          <ResourcesList :dataset="dataset" />
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+        <ResourcesList v-if="dataset.resources.total" :dataset="dataset" />
+        <div
+          v-else
+          class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
+        >
+          <img
+            src="/blank_state/file.svg"
+            alt=""
+            loading="lazy"
+            height="105"
+            width="130"
+          />
+          <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+            Il n'y a pas encore de fichier pour ce jeu de données.
+          </p>
         </div>
       </DsfrTabContent>
 
