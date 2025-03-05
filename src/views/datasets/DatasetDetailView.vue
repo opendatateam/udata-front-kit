@@ -109,7 +109,10 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
-        <h2 id="producer" class="subtitle fr-mb-1v">Éditeur</h2>
+        <h2 id="producer" class="subtitle fr-mb-1v">
+          <span v-if="dataset.contact_points.length">Éditeur</span>
+          <span v-else>Producteur</span>
+        </h2>
         <div
           v-if="dataset.organization"
           class="fr-grid-row fr-grid-row--middle"
