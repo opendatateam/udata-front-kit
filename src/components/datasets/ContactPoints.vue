@@ -39,7 +39,6 @@ onMounted(() => {
     class="fr-text--sm fr-mt-0 fr-mb-1w fr-grid-row no-wrap fr-grid-row--middle"
   >
     <a
-      v-if="contactPoint.email"
       :href="getLink(contactPoint)"
       rel="ugc nofollow noopener"
       target="_blank"
