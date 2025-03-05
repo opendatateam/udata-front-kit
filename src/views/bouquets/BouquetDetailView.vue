@@ -44,6 +44,8 @@ const loading = useLoading()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
+const showCloneModal = ref(false)
+const cloneKeepDatasets = ref(false)
 
 const showDiscussions = config.website.discussions.topic.display
 
@@ -84,6 +86,26 @@ const tabTitles = [
 ]
 const activeTab = ref(0)
 
+const cloneModalActions = [
+  {
+    label: 'Conserver les liens',
+    onClick() {
+      cloneKeepDatasets.value = true
+      showCloneModal.value = false
+      goToClone()
+    }
+  },
+  {
+    label: 'Supprimer les liens',
+    secondary: true,
+    onClick() {
+      cloneKeepDatasets.value = false
+      showCloneModal.value = false
+      goToClone()
+    }
+  }
+]
+
 const goToEdit = () => {
   router.push({
     name: `${topicsSlug}_edit`,
@@ -94,7 +116,10 @@ const goToEdit = () => {
 const goToClone = () => {
   router.push({
     name: `${topicsSlug}_add`,
-    query: { clone: topic.value?.id }
+    query: {
+      clone: topic.value?.id,
+      'keep-datasets': cloneKeepDatasets.value ? '1' : '0'
+    }
   })
 }
 
@@ -235,8 +260,31 @@ watch(
               label="Cloner"
               icon="fr-icon-git-merge-line"
               title="Cloner le bouquet"
-              @click="goToClone"
+              @click="showCloneModal = true"
             />
+            <DsfrModal
+              v-model:opened="showCloneModal"
+              title="Cloner en conservant les jeux de données&nbsp;?"
+              :is-alert="false"
+              :actions="cloneModalActions"
+              @close="showCloneModal = false"
+            >
+              <template #default>
+                <p>
+                  Vous pouvez choisir de conserver les liens vers les jeux de
+                  données du bouquet que vous souhaitez cloner.
+                </p>
+                <p>
+                  Si vous ne conservez pas les liens, les jeux de données ne
+                  seront pas ajoutés au nouveau bouquet, mais leurs libellés et
+                  raisons d'utilisation seront conservés.
+                </p>
+                <p>
+                  Voulez-vous conserver les liens vers les jeux de
+                  données&nbsp;?
+                </p>
+              </template>
+            </DsfrModal>
             <DsfrButton
               v-if="canEdit"
               secondary

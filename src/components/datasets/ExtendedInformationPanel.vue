@@ -12,15 +12,7 @@ const props = defineProps({
 const dcatExtras = props.dataset.extras?.dcat
 const uri: string | undefined = props.dataset.harvest?.uri
 
-const contactPoints = props.dataset.contact_points
-  .filter((contactPoint) => contactPoint.role === 'contact')
-  .map((contactPoint) => {
-    return contactPoint.email
-      ? `<a href="mailto:${contactPoint.email}">${contactPoint.name}</a>`
-      : contactPoint.name
-  })
-
-const hasExtendedInfo = contactPoints.length > 0 || !!dcatExtras || !!uri
+const hasExtendedInfo = !!dcatExtras || !!uri
 </script>
 
 <template>
@@ -42,10 +34,6 @@ const hasExtendedInfo = contactPoints.length > 0 || !!dcatExtras || !!uri
       <ExtendedInformationPanelItem
         :items="dcatExtras?.provenance"
         title="Généalogie"
-      />
-      <ExtendedInformationPanelItem
-        :items="contactPoints"
-        title="Points de contact"
       />
     </div>
   </div>
