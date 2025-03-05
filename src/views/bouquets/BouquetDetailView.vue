@@ -277,7 +277,7 @@ watch(
                 <p>
                   Si vous ne conservez pas les liens, les jeux de données ne
                   seront pas ajoutés au nouveau bouquet, mais leurs libellés et
-                  leurs raisons d'utilisation seront conservés.
+                  raisons d'utilisation seront conservés.
                 </p>
                 <p>
                   Voulez-vous conserver les liens vers les jeux de
