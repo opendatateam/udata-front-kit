@@ -173,6 +173,7 @@ website:
       secondary_name: chantier
     # include a list page with all topics
     list_all: true
+    show_drafts_by_default: true
     display_metadata: true
     activate_read_more: true
     dataset_editorialization: true
