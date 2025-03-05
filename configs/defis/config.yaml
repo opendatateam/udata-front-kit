@@ -266,6 +266,7 @@ website:
       secondary_name: chantier
     # include a list page with all topics
     list_all: false
+    show_drafts_by_default: false
     display_metadata: false
     activate_read_more: false
     dataset_editorialization: false
