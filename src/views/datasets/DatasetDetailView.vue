@@ -37,7 +37,6 @@ const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
-const selectedTabIndex = ref(0)
 const showAddToBouquetModal = ref(false)
 
 const showDiscussions = config.website.discussions.dataset.display as boolean
@@ -196,14 +195,8 @@ onMounted(() => {
       :tab-titles="tabTitles"
     >
       <!-- Fichiers -->
-      <DsfrTabContent
-        v-if="dataset.resources.total"
-        panel-id="tab-content-0"
-        tab-id="tab-0"
-      >
-        <div v-if="selectedTabIndex === 0">
-          <ResourcesList :dataset="dataset" />
-        </div>
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+        <ResourcesList :dataset="dataset" />
       </DsfrTabContent>
 
       <!-- Réutilisations -->
