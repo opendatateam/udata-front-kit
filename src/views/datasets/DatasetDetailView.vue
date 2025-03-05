@@ -18,6 +18,7 @@ import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetM
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
+import type { ExtendedDatasetV2 } from '@/model/dataset'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -36,7 +37,8 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-const dataset = computed(() => datasetStore.get(datasetId))
+// FIXME: remove ExtendedDatasetV2 type cast when @datagouv/components >= 2.0.6 (contact_points)
+const dataset = computed(() => datasetStore.get(datasetId) as ExtendedDatasetV2)
 
 const selectedTabIndex = ref(0)
 const showAddToBouquetModal = ref(false)
@@ -130,7 +132,9 @@ onMounted(() => {
           </p>
         </div>
         <template v-if="dataset.contact_points.length">
-          <h2 id="producer" class="subtitle fr-mb-1v fr-mt-3v">Attributions</h2>
+          <h2 id="attributions" class="subtitle fr-mb-1v fr-mt-3v">
+            Attributions
+          </h2>
           <ContactPoints :contact-points="dataset.contact_points" />
         </template>
         <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ContactPoint } from '@/model/contactPoint'
+import type { ContactPoint } from '@/model/dataset'
 import { useContactPointStore } from '@/store/ContactPointStore'
 import { storeToRefs } from 'pinia'
 
