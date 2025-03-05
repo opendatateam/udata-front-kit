@@ -12,6 +12,7 @@ import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
@@ -113,16 +114,7 @@ onMounted(() => {
           v-if="dataset.organization"
           class="fr-grid-row fr-grid-row--middle"
         >
-          <div class="fr-col-auto">
-            <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img
-                :src="dataset.organization.logo"
-                alt=""
-                loading="lazy"
-                height="32"
-              />
-            </div>
-          </div>
+          <OrganizationLogo :object="dataset" :size="32" class="fr-mr-1-5v" />
           <p class="fr-col fr-m-0">
             <a class="fr-link" :href="dataset.organization.page">
               <OrganizationNameWithCertificate
