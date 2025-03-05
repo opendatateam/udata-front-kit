@@ -71,11 +71,8 @@ const search = useDebounceFn((query) => {
         qui permettent d’évaluer et de mesurer divers aspects d’un territoire
         donné. Ces indicateurs aident à comprendre les dynamiques locales, à
         identifier des problématiques spécifiques, et à orienter les décisions
-        publiques et les politiques de développement.
-      </p>
-      <p>
-        Ils sont essentiels pour un diagnostic territorial et pour le suivi des
-        évolutions dans le temps.
+        publiques et les politiques de développement. Ils sont essentiels pour
+        un diagnostic territorial et pour le suivi des évolutions dans le temps.
       </p>
     </div>
   </section>
