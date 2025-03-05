@@ -14,7 +14,8 @@ export interface DatasetModalData {
   mode: 'edit' | 'create'
 }
 
-interface ContactPoint {
+export interface ContactPoint {
+  id: string
   name: string
   email?: string
   contact_form?: string
@@ -22,6 +23,7 @@ interface ContactPoint {
 }
 
 export type ExtendedDatasetV2 = DatasetV2 & {
+  // FIXME: remove when @datagouv/components >= 2.0.6
   contact_points: ContactPoint[]
   extras: {
     [key: string]: unknown
