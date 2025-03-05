@@ -93,7 +93,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <template v-if="resources.length">
+  <template v-if="dataset.resources.total">
     <template v-for="typedResources in resources">
       <div
         v-if="typedResources.totalWithoutFilter"
