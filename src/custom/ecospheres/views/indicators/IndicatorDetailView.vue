@@ -124,12 +124,11 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Fichiers -->
-      <DsfrTabContent
-        v-if="indicator.resources.total"
-        panel-id="tab-content-1"
-        tab-id="tab-1"
-      >
-        <ResourcesList :dataset="indicator" />
+      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+        <ResourcesList
+          :dataset="indicator"
+          no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
+        />
         <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 

@@ -2,8 +2,8 @@
 import config from '@/config'
 import type { ResourceData } from '@/model/resource'
 import { useResourceStore } from '@/store/ResourceStore'
+import type { DatasetV2 } from '@datagouv/components'
 import { Pagination, ResourceAccordion } from '@datagouv/components'
-import type { DatasetV2 } from '@datagouv/components/ts'
 import { useLoading } from 'vue-loading-overlay'
 
 const pageSize = config.website.pagination_sizes.files_list as number
@@ -12,6 +12,10 @@ const props = defineProps({
   dataset: {
     type: Object as () => DatasetV2,
     required: true
+  },
+  noFileMessage: {
+    type: String,
+    default: "Il n'y a pas encore de fichier pour ce jeu de données."
   }
 })
 
@@ -89,51 +93,68 @@ onMounted(async () => {
 </script>
 
 <template>
-  <template v-for="typedResources in resources">
-    <div
-      v-if="typedResources.totalWithoutFilter"
-      :key="typedResources.type.id"
-      class="fr-mb-4w"
-    >
-      <h2 class="fr-mb-1v subtitle subtitle--uppercase">
-        {{ getResourcesTitle(typedResources) }}
-      </h2>
-      <DsfrSearchBar
-        v-if="typedResources.totalWithoutFilter > pageSize"
-        label="Rechercher un fichier"
-        button-text="Rechercher"
-        placeholder=""
-        :large="false"
-        class="search-bar"
-        @search="() => doSearch(typedResources.type.id)"
-        @update:model-value="
-          (value: string) => updateQuery(value, typedResources.type.id)
-        "
-      />
-      <span v-if="typedResources.resources.length != 0">
-        <ResourceAccordion
-          v-for="resource in typedResources.resources"
-          :key="resource.id"
-          :dataset-id="dataset.id"
-          :resource="resource"
-        />
-        <Pagination
-          v-if="typedResources.total > pageSize"
-          class="fr-mt-3w"
-          :page="typedResources.currentPage"
-          :page-size="pageSize"
-          :total-results="typedResources.total"
-          @change="
-            (page) =>
-              changePage(
-                typedResources.type.id,
-                page,
-                queries[typedResources.type.id]
-              )
+  <template v-if="dataset.resources.total">
+    <template v-for="typedResources in resources">
+      <div
+        v-if="typedResources.totalWithoutFilter"
+        :key="typedResources.type.id"
+        class="fr-mb-4w"
+      >
+        <h2 class="fr-mb-1v subtitle subtitle--uppercase">
+          {{ getResourcesTitle(typedResources) }}
+        </h2>
+        <DsfrSearchBar
+          v-if="typedResources.totalWithoutFilter > pageSize"
+          label="Rechercher un fichier"
+          button-text="Rechercher"
+          placeholder=""
+          :large="false"
+          class="search-bar"
+          @search="() => doSearch(typedResources.type.id)"
+          @update:model-value="
+            (value: string) => updateQuery(value, typedResources.type.id)
           "
         />
-      </span>
-      <span v-else> <br />Aucun résultat pour votre recherche. </span>
-    </div>
+        <span v-if="typedResources.resources.length != 0">
+          <ResourceAccordion
+            v-for="resource in typedResources.resources"
+            :key="resource.id"
+            :dataset-id="dataset.id"
+            :resource="resource"
+          />
+          <Pagination
+            v-if="typedResources.total > pageSize"
+            class="fr-mt-3w"
+            :page="typedResources.currentPage"
+            :page-size="pageSize"
+            :total-results="typedResources.total"
+            @change="
+              (page) =>
+                changePage(
+                  typedResources.type.id,
+                  page,
+                  queries[typedResources.type.id]
+                )
+            "
+          />
+        </span>
+        <span v-else> <br />Aucun résultat pour votre recherche. </span>
+      </div>
+    </template>
   </template>
+  <div
+    v-else
+    class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
+  >
+    <img
+      src="/blank_state/file.svg"
+      alt=""
+      loading="lazy"
+      height="105"
+      width="130"
+    />
+    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
+      {{ noFileMessage }}
+    </p>
+  </div>
 </template>

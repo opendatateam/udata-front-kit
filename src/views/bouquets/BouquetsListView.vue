@@ -18,7 +18,7 @@ import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { debounceWait, useTopicsConf } from '@/utils/config'
 
-const { topicsSlug, topicsName } = useTopicsConf()
+const { topicsSlug, topicsName, topicsShowDraftsByDefault } = useTopicsConf()
 
 const router = useRouter()
 const route = useRoute()
@@ -127,7 +127,9 @@ watch(
     selectedSubtheme.value = props.subtheme
     selectedGeozone.value = props.geozone
     selectedQuery.value = props.query
-    showDrafts.value = props.drafts === '1'
+    showDrafts.value =
+      props.drafts === '1' ||
+      (topicsShowDraftsByDefault && props.drafts !== '0')
   },
   { immediate: true }
 )
@@ -169,7 +171,6 @@ watch(
         v-model="selectedQuery"
         :is-filter="true"
         :search-label="`Filtrer les ${topicsName}s`"
-        :label="`Filtrer les ${topicsName}s`"
         :search-endpoint="router.resolve({ name: topicsSlug }).href"
         @update:model-value="search"
       />
