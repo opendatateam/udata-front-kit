@@ -294,7 +294,7 @@ details[open] summary::marker {
   flex-direction: column;
   gap: 1rem;
 }
-:deep(.fr-input-group) {
+:deep(search) {
   margin-inline-start: auto;
 }
 </style>
