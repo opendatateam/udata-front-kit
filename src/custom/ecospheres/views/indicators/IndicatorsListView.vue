@@ -81,6 +81,11 @@ const search = useDebounceFn((query) => {
         d'accéder aux données structurées. Plusieurs bouquets permettent de
         regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
       </p>
+      <p>
+        Cette première version constitue une base évolutive, appelée à
+        s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par
+        les acteurs partenaires.
+      </p>
     </div>
   </section>
   <GenericContainer id="indicators-list" class="fr-mt-4w">
