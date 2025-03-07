@@ -65,14 +65,26 @@ const search = useDebounceFn((query) => {
   </div>
   <section class="fr-container--fluid hero-banner datagouv-components">
     <div class="fr-container fr-py-12v">
-      <h2>Les indicateurs territoriaux, qu’est-ce que c’est&nbsp;?</h2>
+      <h2>
+        Accéder aux indicateurs de référence pour la transition écologique des
+        territoires
+      </h2>
       <p>
-        Les indicateurs territoriaux sont des outils statistiques et analytiques
-        qui permettent d’évaluer et de mesurer divers aspects d’un territoire
-        donné. Ces indicateurs aident à comprendre les dynamiques locales, à
-        identifier des problématiques spécifiques, et à orienter les décisions
-        publiques et les politiques de développement. Ils sont essentiels pour
-        un diagnostic territorial et pour le suivi des évolutions dans le temps.
+        L'Ecolab du Commissariat Général au Développement Durable met en place
+        un hub d'indicateurs territoriaux, en co-construction avec les
+        directions générales, les établissements publics et les services
+        déconcentrés des ministères concernés, pour accompagner les territoires
+        dans le suivi de leurs politiques publiques de transition écologique.
+        Ces indicateurs sont référencés par thématiques et enjeux
+        environnementaux de la planification écologique. Chaque fiche détaille
+        la définition, les sources, le calcul des indicateurs et permet
+        d'accéder aux données structurées. Plusieurs bouquets permettent de
+        regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
+      </p>
+      <p>
+        Cette première version constitue une base évolutive, appelée à
+        s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par
+        les acteurs partenaires.
       </p>
     </div>
   </section>
