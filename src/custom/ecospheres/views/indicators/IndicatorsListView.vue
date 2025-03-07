@@ -72,7 +72,7 @@ const search = useDebounceFn((query) => {
       <p>
         L'Ecolab du Commissariat Général au Développement Durable met en place
         un hub d'indicateurs territoriaux, en co-construction avec les
-        Directions Générales, les Établissements publics et les services
+        directions générales, les établissements publics et les services
         déconcentrés des ministères concernés, pour accompagner les territoires
         dans le suivi de leurs politiques publiques de transition écologique.
         Ces indicateurs sont référencés par thématiques et enjeux
