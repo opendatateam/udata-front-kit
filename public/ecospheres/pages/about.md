@@ -40,7 +40,7 @@ _ecologie_.**data.gouv**._fr_ n’est pas un nouveau portail de données. C’es
 
 ## Qui est derrière cette plateforme ?
 
-Cette plateforme est le fruit d'une collaboration entre l'Ecolab du [**_Commissariat général au développement durable_**](https://www.ecologie.gouv.fr/commissariat-general-au-developpement-durable-cgdd) et l'équipe **data.gouv**._fr_ de la [**_Direction interministérielle du numérique._**](https://www.numerique.gouv.fr/dinum/) Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de [plateformes thématiques exposant de la donnée publique](https://github.com/opendatateam/udata-front-kit).
+Cette plateforme est le fruit d'une collaboration entre l'Ecolab du [_Commissariat général au développement durable_](https://www.ecologie.gouv.fr/commissariat-general-au-developpement-durable-cgdd) et l'équipe **data.gouv**._fr_ de la [_Direction interministérielle du numérique._](https://www.numerique.gouv.fr/dinum/) Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de [plateformes thématiques exposant de la donnée publique](https://github.com/opendatateam/udata-front-kit).
 
 ## Un retour, une question ?
 
