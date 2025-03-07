@@ -109,7 +109,7 @@ website:
       to: /bouquets
     - text: Organisations
       to: /organizations
-    - text: A propos
+    - text: À propos
       to: /about
   router:
     disable:
@@ -165,7 +165,9 @@ website:
     banner:
       title: Un guichet unique pour l’accès aux données environnementales
       content: |
-        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, le CGDD oeuvre à la centralisation de toutes les données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental. Néanmoins, toute donnée publiée sur <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
+
+        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
   topics:
     slug: bouquets
     name: bouquet
@@ -184,9 +186,11 @@ website:
       everyone: true
       authorized_users:
     banner:
-      title: Cataloguer les usages des données territoriales
+      title: Mettre en commun les usages des données et des indicateurs territoriaux
       content: |
-        Le module de bouquet offre aux acteurs du développement durable un cadre pérenne et collaboratif pour documenter et valoriser les données qu'ils utilisent. Les bouquets permettent de partager des méthodologies, de valoriser des initiatives locales avec un potentiel d’extension nationale, ou encore de signaler des besoins en matière d’accès ou de standardisation des données. Les bouquets sont conçus pour s’enrichir au fil du temps : de nouvelles données peuvent y être ajoutées à mesure qu’elles sont publiées ou identifiées, garantissant ainsi une réponse toujours plus complète et adaptée aux thématiques abordées. Toute donnée présente sur <b>data.gouv</b><i>.fr</i> peut être associée à un bouquet.
+        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
+
+        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
   sitemap:
     - name: Accueil
       path: /
@@ -323,96 +327,34 @@ indicators:
       id: levier
       color: green-archipel
       values:
-        - id: 2-roues-elec-efficacite
-          name: 2 roues (élec&efficacité)
-        - id: bio-carburants
-          name: Bio-carburants
         - id: biogaz
           name: Biogaz
-        - id: bus-et-cars-decarbones
-          name: Bus et cars décarbonés
-        - id: batiments-machines-agricoles
-          name: Bâtiments & Machines agricoles
-        - id: captage-de-methane-dans-les-isdnd
-          name: Captage de méthane dans les ISDND
-        - id: changement-chaudieres-fioul-renovation-residentiel
-          name: Changement chaudières fioul + rénovation (résidentiel)
-        - id: changement-chaudieres-fioul-renovation-tertiaire
-          name: Changement chaudières fioul + rénovation (tertiaire)
-        - id: changement-chaudieres-gaz-renovation-residentiel
-          name: Changement chaudières gaz + rénovation (résidentiel)
-        - id: changement-chaudieres-gaz-renovation-tertiaire
-          name: Changement chaudières gaz + rénovation (tertiaire)
         - id: changements-de-pratiques-de-fertilisation-azotee
           name: Changements de pratiques de fertilisation azotée
         - id: covoiturage
           name: Covoiturage
-        - id: desimpermeabilisation-des-sols
-          name: Désimperméabilisation des sols
         - id: developpement-de-lagriculture-biologique-et-de-hve
           name: Développement de l'agriculture biologique et de HVE
-        - id: efficacite-des-aeronefs
-          name: Efficacité des aéronefs
         - id: efficacite-et-sobriete-logistique
           name: Efficacité et sobriété logistique
-        - id: efficacite-energetique-des-vehicules-prives
-          name: Efficacité énergétique des véhicules privés
-        - id: electricite-renouvelable
-          name: Electricité renouvelable
-        - id: elevage-durable
-          name: Elevage durable
-        - id: fret-decarbone-et-multimodalite
-          name: Fret décarboné et multimodalité
-        - id: gaz-fluores-residentiel
-          name: Gaz fluorés résidentiel
-        - id: gaz-fluores-tertiaire
-          name: Gaz fluorés tertiaire
-        - id: gestion-des-forets-et-produits-bois
-          name: Gestion des forêts et produits bois
-        - id: gestion-des-haies
-          name: Gestion des haies
         - id: gestion-des-prairies
           name: Gestion des prairies
-        - id: industrie-diffuse
-          name: Industrie diffuse
-        - id: moindre-stockage-en-decharge
-          name: Moindre stockage en décharge
-        - id: nucleaire
-          name: Nucléaire
         - id: pratiques-stockantes
           name: Pratiques stockantes
-        - id: protection-des-zones-de-captage-deau
-          name: Protection des zones de captage d'eau
         - id: prevention-des-dechets
           name: Prévention des déchets
-        - id: respect-degalim-pour-la-restauration-collective
-          name: Respect d'Egalim pour la restauration collective
-        - id: restauration-des-habitats-naturels
-          name: Restauration des habitats naturels
-        - id: reduction-de-lusage-des-produits-phytosanitaires
-          name: Réduction de l'usage des produits phytosanitaires
         - id: reduction-des-deplacements
           name: Réduction des déplacements
         - id: renovation-hors-changement-chaudieres
           name: Rénovation (hors changement chaudières)
-        - id: reseaux-de-chaleur-decarbones
-          name: Réseaux de chaleur décarbonés
-        - id: resorption-des-points-noirs-prioritaires-de-continuite-ecologique
-          name: Résorption des points noirs prioritaires de continuité écologique
-        - id: saf
-          name: SAF
         - id: sobriete-dans-lutilisation-de-la-ressource-en-eau
           name: Sobriété dans l'utilisation de la ressource en eau
         - id: sobriete-des-batiments-residentiel
           name: Sobriété des bâtiments (résidentiel)
-        - id: sobriete-des-batiments-tertiaire
-          name: Sobriété des bâtiments (tertiaire)
         - id: sobriete-fonciere
           name: Sobriété foncière
         - id: surface-en-aire-protegee
           name: Surface en aire protégée
-        - id: top-50-sites-industriels
-          name: Top 50 sites industriels
         - id: transports-en-commun
           name: Transports en commun
         - id: valorisation-matiere-des-dechets
