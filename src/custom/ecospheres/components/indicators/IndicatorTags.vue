@@ -2,7 +2,7 @@
 import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useTags } from '../../utils/indicator'
 
-const EXCLUDE_TAGS = ['producteur', 'usage']
+const EXCLUDE_TAGS = ['usage']
 
 const props = defineProps({
   indicator: {

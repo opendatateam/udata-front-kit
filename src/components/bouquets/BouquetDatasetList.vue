@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { type DatasetV2 } from '@datagouv/components'
 import { onMounted, ref, type Ref } from 'vue'
+
+import type { DatasetV2 } from '@datagouv/components'
 
 import DatasetEditModal, {
   type DatasetEditModalType
@@ -102,7 +103,7 @@ const loadDatasetsContent = () => {
 }
 
 const showTOC = computed(() => {
-  /* 
+  /*
   hide the table of content if "NoGroup" is the only group and results are not 0
   or
   hide if all factors (datasetProperties) are hidden by the filter
@@ -293,7 +294,7 @@ details[open] summary::marker {
   flex-direction: column;
   gap: 1rem;
 }
-:deep(.fr-input-group) {
+:deep(search) {
   margin-inline-start: auto;
 }
 </style>

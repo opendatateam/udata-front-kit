@@ -1,5 +1,6 @@
 import config from '@/config'
 import { useSpatialStore } from '@/store/SpatialStore'
+import type { DatasetV2 } from '@datagouv/components'
 import type { ComputedRef } from 'vue'
 import type { IndicatorsConf } from '../model/config'
 import type {
@@ -117,4 +118,12 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
     api,
     sources
   }
+}
+
+export const isIndicator = (
+  dataset: Ref<DatasetV2 | undefined>
+): ComputedRef<boolean> => {
+  return computed(() => {
+    return dataset.value?.tags?.includes(tagPrefix) || false
+  })
 }
