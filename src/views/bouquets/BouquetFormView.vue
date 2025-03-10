@@ -183,7 +183,10 @@ onMounted(() => {
       .load(routeQuery.clone || routeParams.bid)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(remoteTopic)
+          topic.value = cloneTopic(
+            remoteTopic,
+            routeQuery['keep-datasets'] === '1'
+          )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
           const { datasets, reuses, ...data } = remoteTopic

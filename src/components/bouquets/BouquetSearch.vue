@@ -60,9 +60,7 @@ const computeQueryArgs = (
   if (props.theme) query.theme = props.theme
   if (props.subtheme) query.subtheme = props.subtheme
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
-  if (localShowDrafts.value) {
-    query.drafts = 1
-  }
+  query.drafts = localShowDrafts.value ? '1' : '0'
   if (route.query.q) {
     query.q = route.query.q
   }

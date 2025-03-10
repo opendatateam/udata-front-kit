@@ -9,11 +9,10 @@ const props = defineProps({
   }
 })
 
-const contactPoint = props.dataset.contact_point
 const dcatExtras = props.dataset.extras?.dcat
-const uri = props.dataset.harvest?.uri
+const uri: string | undefined = props.dataset.harvest?.uri
 
-const hasExtendedInfo = !!contactPoint || !!dcatExtras || !!uri
+const hasExtendedInfo = !!dcatExtras || !!uri
 </script>
 
 <template>
@@ -29,19 +28,13 @@ const hasExtendedInfo = !!contactPoint || !!dcatExtras || !!uri
         title="Identifiant de ressource unique"
       />
       <ExtendedInformationPanelItem
-        :items="dcatExtras.accessRights"
+        :items="dcatExtras?.accessRights"
         title="Conditions d'accès et d'utilisation"
       />
       <ExtendedInformationPanelItem
-        :items="dcatExtras.provenance"
+        :items="dcatExtras?.provenance"
         title="Généalogie"
       />
-      <div v-if="contactPoint">
-        <h3 class="subtitle fr-mb-2v">Point de contact</h3>
-        <p class="fr-text--sm fr-m-0">
-          <a :href="`mailto:${contactPoint.email}`">{{ contactPoint.name }}</a>
-        </p>
-      </div>
     </div>
   </div>
 </template>

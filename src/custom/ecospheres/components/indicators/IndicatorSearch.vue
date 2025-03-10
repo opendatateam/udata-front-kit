@@ -104,15 +104,6 @@ watchEffect(() => {
     </div>
     <div class="fr-select-group">
       <SelectComponent
-        default-option="Tous les producteurs"
-        :label="filtersConf.producteur.name"
-        :options="filtersConf.producteur.values"
-        :model-value="props.producteur"
-        @update:model-value="(value) => switchFilter('producteur', value)"
-      />
-    </div>
-    <div class="fr-select-group">
-      <SelectComponent
         default-option="Tous les usages"
         :label="filtersConf.usage.name"
         :options="filtersConf.usage.values"

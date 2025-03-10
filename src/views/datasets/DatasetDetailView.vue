@@ -12,7 +12,9 @@ import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
+import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
@@ -37,7 +39,6 @@ const { canAddBouquet } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
-const selectedTabIndex = ref(0)
 const showAddToBouquetModal = ref(false)
 
 const showDiscussions = config.website.discussions.dataset.display as boolean
@@ -105,21 +106,15 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
-        <h2 id="producer" class="subtitle fr-mb-1v">Producteur</h2>
+        <h2 id="producer" class="subtitle fr-mb-1v">
+          <span v-if="dataset.contact_points.length">Éditeur</span>
+          <span v-else>Producteur</span>
+        </h2>
         <div
           v-if="dataset.organization"
           class="fr-grid-row fr-grid-row--middle"
         >
-          <div class="fr-col-auto">
-            <div class="border fr-p-1-5v fr-mr-1-5v">
-              <img
-                :src="dataset.organization.logo"
-                alt=""
-                loading="lazy"
-                height="32"
-              />
-            </div>
-          </div>
+          <OrganizationLogo :object="dataset" :size="32" class="fr-mr-1-5v" />
           <p class="fr-col fr-m-0">
             <a class="fr-link" :href="dataset.organization.page">
               <OrganizationNameWithCertificate
@@ -128,6 +123,12 @@ onMounted(() => {
             </a>
           </p>
         </div>
+        <template v-if="dataset.contact_points.length">
+          <h2 id="attributions" class="subtitle fr-mb-1v fr-mt-3v">
+            Attributions
+          </h2>
+          <ContactPoints :contact-points="dataset.contact_points" />
+        </template>
         <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">
           <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
             <p class="fr-grid-row fr-grid-row--middle fr-my-0">
@@ -143,7 +144,7 @@ onMounted(() => {
         </div>
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
         <p>{{ formatDate(dataset.last_update) }}</p>
-        <div v-if="license">
+        <template v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
           <p class="fr-text--sm fr-mt-0 fr-mb-3v">
             <code class="bg-alt-grey fr-px-1v text-grey-380">
@@ -152,7 +153,7 @@ onMounted(() => {
               </a>
             </code>
           </p>
-        </div>
+        </template>
         <QualityComponent
           v-if="config.website.show_quality_component"
           :quality="dataset.quality"
@@ -196,14 +197,8 @@ onMounted(() => {
       :tab-titles="tabTitles"
     >
       <!-- Fichiers -->
-      <DsfrTabContent
-        v-if="dataset.resources.total"
-        panel-id="tab-content-0"
-        tab-id="tab-0"
-      >
-        <div v-if="selectedTabIndex === 0">
-          <ResourcesList :dataset="dataset" />
-        </div>
+      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+        <ResourcesList :dataset="dataset" />
       </DsfrTabContent>
 
       <!-- Réutilisations -->

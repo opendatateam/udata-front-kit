@@ -19,6 +19,7 @@ export interface TopicsConf {
   activate_read_more: boolean
   dataset_editorialization: boolean
   can_add_topics: CanAddTopicsConf
+  show_drafts_by_default: boolean
 }
 
 export interface TopicItemConf {

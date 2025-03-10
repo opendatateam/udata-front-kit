@@ -45,12 +45,19 @@ export const updateTopicExtras = (
 /**
  * Build a fonctionnal v1 (POST format) topic from clone source data
  */
-export const cloneTopic = (topic: Topic): TopicPostData => {
+export const cloneTopic = (
+  topic: Topic,
+  keepDatasets: boolean = false
+): TopicPostData => {
   const { id, slug, ...data } = topic
   return {
     ...data,
     private: true,
-    datasets: [],
+    datasets: keepDatasets
+      ? topic.extras[topicsExtrasKey].datasets_properties
+          .map((dp) => dp.id)
+          .filter((id) => id != null)
+      : [],
     reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
@@ -61,9 +68,11 @@ export const cloneTopic = (topic: Topic): TopicPostData => {
       ].datasets_properties.map((dp) => {
         return {
           ...dp,
-          id: null,
-          uri: null,
-          availability: Availability.NOT_AVAILABLE
+          id: keepDatasets ? dp.id : null,
+          uri: keepDatasets ? dp.uri : null,
+          availability: keepDatasets
+            ? dp.availability
+            : Availability.NOT_AVAILABLE
         }
       })
     })

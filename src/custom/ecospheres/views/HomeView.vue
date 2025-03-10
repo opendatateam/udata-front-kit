@@ -95,7 +95,7 @@ const dropdown = config.website.header_search.dropdown
             <div class="card__content">
               <h2 class="h3">Contribuer</h2>
               <p>
-                Participez au référencement et à l’articulation des données
+                Participer au référencement et à l’articulation des données
                 utiles à l’appui des politiques publiques grâce aux
                 fonctionnalités de catalogage et au concept de bouquet de
                 données.

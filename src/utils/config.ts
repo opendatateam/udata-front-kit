@@ -19,6 +19,7 @@ interface TopicsConfNormalized {
   topicsListAll: boolean
   topicsDisplayMetadata: boolean
   topicsActivateReadMore: boolean
+  topicsShowDraftsByDefault: boolean
 }
 
 export const useTopicsConf = (): TopicsConfNormalized => {
@@ -32,6 +33,7 @@ export const useTopicsConf = (): TopicsConfNormalized => {
     topicsSecondaryTheme: topicsConf.themes.secondary_name,
     topicsDatasetEditorialization: topicsConf.dataset_editorialization,
     topicsCanAdd: topicsConf.can_add_topics,
+    topicsShowDraftsByDefault: topicsConf.show_drafts_by_default,
     // FIXME: this applies only to breadcrumb on topic detail page
     // apply it also to menu and routes...?
     topicsListAll: topicsConf.list_all,
