@@ -19,7 +19,6 @@ import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetM
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
-import type { ExtendedDatasetV2 } from '@/model/dataset'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -38,8 +37,7 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-// FIXME: remove ExtendedDatasetV2 type cast when @datagouv/components >= 2.0.6 (contact_points)
-const dataset = computed(() => datasetStore.get(datasetId) as ExtendedDatasetV2)
+const dataset = computed(() => datasetStore.get(datasetId))
 
 const showAddToBouquetModal = ref(false)
 
