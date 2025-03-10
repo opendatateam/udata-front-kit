@@ -68,7 +68,8 @@ export const useTopicStore = defineStore('topic', {
           tag: [config.universe.name, ...tag],
           page_size: config.website.pagination_sizes.topics_list,
           ...extraArgs
-        }
+        },
+        authenticated: true
       })
       this.topics = results.data
       this.total = results.total
