@@ -14,3 +14,19 @@ defineProps({
     {{ tag.name }}
   </p>
 </template>
+
+<style scoped>
+.fr-badge {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: inherit;
+  text-transform: none;
+  font-size: 0.75rem;
+  border-radius: 1rem;
+  padding: 0.25rem 0.75rem;
+  font-weight: 400;
+}
+</style>

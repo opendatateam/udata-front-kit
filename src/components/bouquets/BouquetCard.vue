@@ -58,7 +58,7 @@ const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
     </div>
     <div v-if="subtheme" class="fr-grid-row">
       <div class="fr-col-12">
-        <TagComponent :tag="subtheme" />
+        <TagComponent :tag="subtheme" class="fr-mt-1w fr-mb-1w" />
       </div>
     </div>
     <div
