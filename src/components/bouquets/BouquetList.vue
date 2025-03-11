@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import type { ComputedRef, PropType } from 'vue'
+import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
+import type { TopicsQueryArgs } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
@@ -18,36 +19,7 @@ const { topicsName, topicsSlug } = useTopicsConf()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-// TODO: use BouquetQueryArgs here for typing (migrate include_drafts)
-const props = defineProps({
-  theme: {
-    type: String,
-    default: null
-  },
-  subtheme: {
-    type: String,
-    default: null
-  },
-  showDrafts: {
-    type: Boolean
-  },
-  geozone: {
-    type: String as PropType<string | null>,
-    default: null
-  },
-  query: {
-    type: String,
-    default: ''
-  },
-  page: {
-    type: String,
-    default: '1'
-  },
-  sort: {
-    type: String,
-    required: true
-  }
-})
+const props = defineProps<TopicsQueryArgs>()
 
 const emits = defineEmits(['clearFilters'])
 
@@ -81,13 +53,7 @@ const clearFilters = () => {
 
 const executeQuery = async (args: typeof props) => {
   const loader = useLoading().show({ enforceFocus: false })
-  const { showDrafts, ...cleanArgs } = args
-  const queryArgs = {
-    ...cleanArgs,
-    // TODO: maybe handle this through a prop of the same name
-    ...(showDrafts && { include_private: 'yes' })
-  }
-  return topicStore.query(queryArgs).finally(() => loader.hide())
+  return topicStore.query(args).finally(() => loader.hide())
 }
 
 const goToPage = (page: number) => {
@@ -188,7 +154,7 @@ defineExpose({
   <DsfrPagination
     v-if="pagination.length"
     class="fr-container"
-    :current-page="parseInt(page) - 1"
+    :current-page="parseInt(page || '1') - 1"
     :pages="pagination"
     @update:current-page="goToPage"
   />

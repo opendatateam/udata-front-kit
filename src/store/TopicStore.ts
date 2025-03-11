@@ -4,7 +4,7 @@ import { computed, type ComputedRef } from 'vue'
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
-import type { Topic } from '@/model/topic'
+import type { Topic, TopicsQueryArgs } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { useTagsQuery } from '@/utils/tags'
 
@@ -12,16 +12,6 @@ import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
-
-interface BouquetQueryArgs {
-  query: string | null
-  theme: string | null
-  subtheme: string | null
-  include_private?: string
-  geozone: string | null
-  page: string
-  sort: string
-}
 
 export interface RootState {
   topics: Topic[]
@@ -59,14 +49,16 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: BouquetQueryArgs): Promise<Topic[]> {
-      const { query, ...queryArgs } = args
+    async query(args: TopicsQueryArgs): Promise<Topic[]> {
+      const { query, include_private, ...queryArgs } = args
       const { extraArgs, tag } = useTagsQuery('bouquets', queryArgs)
       const results = await topicsAPIv2.list({
         params: {
           q: query,
           tag: [config.universe.name, ...tag],
           page_size: config.website.pagination_sizes.topics_list,
+          // remove include_private if not set to 1, API will interpret presence a truthy
+          ...(include_private === '1' ? { include_private } : {}),
           ...extraArgs
         },
         authenticated: true

@@ -14,6 +14,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { ResolvedTag } from '@/model/tag'
+import type { TopicsQueryArgs } from '@/model/topic'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { debounceWait, useTopicsConf } from '@/utils/config'
@@ -24,44 +25,15 @@ const { topicsSlug, topicsName, topicsShowDraftsByDefault } = useTopicsConf()
 const router = useRouter()
 const route = useRoute()
 
-const props = defineProps({
-  query: {
-    type: String,
-    default: ''
-  },
-  theme: {
-    type: String,
-    default: null
-  },
-  subtheme: {
-    type: String,
-    default: null
-  },
-  geozone: {
-    type: String,
-    default: null
-  },
-  drafts: {
-    type: String,
-    default: null
-  },
-  page: {
-    type: String,
-    default: null
-  },
-  sort: {
-    type: String,
-    required: true
-  }
-})
+const props = defineProps<TopicsQueryArgs>()
 
 const banner = config.website.topics.banner
 const selectedTheme: Ref<ResolvedTag | null> = ref(null)
 const selectedSubtheme: Ref<ResolvedTag | null> = ref(null)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
-const showDrafts = ref(false)
 const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
+const includePrivate = ref('0')
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
@@ -126,6 +98,7 @@ const search = useDebounceFn(() => {
     })
 }, debounceWait)
 
+// TODO: could be much simpler here, no?
 watch(
   props,
   () => {
@@ -136,10 +109,13 @@ watch(
       props.subtheme
     )
     selectedGeozone.value = props.geozone
-    selectedQuery.value = props.query
-    showDrafts.value =
-      props.drafts === '1' ||
-      (topicsShowDraftsByDefault && props.drafts !== '0')
+    selectedQuery.value = props.query || ''
+    includePrivate.value =
+      props.include_private != null
+        ? props.include_private
+        : topicsShowDraftsByDefault
+          ? '1'
+          : '0'
   },
   { immediate: true }
 )
@@ -199,7 +175,7 @@ watch(
               :theme="selectedTheme?.id"
               :subtheme="selectedSubtheme?.id"
               :geozone="selectedGeozone"
-              :show-drafts="showDrafts"
+              :include_private="includePrivate"
               @vue:updated="setLiveResults"
             />
           </div>
@@ -207,9 +183,9 @@ watch(
         <div className="fr-col-12 fr-col-md-8">
           <BouquetList
             ref="bouquetListComp"
-            :theme="selectedTheme?.id"
-            :subtheme="selectedSubtheme?.id"
-            :show-drafts="showDrafts"
+            :theme="selectedTheme?.id || null"
+            :subtheme="selectedSubtheme?.id || null"
+            :include_private="includePrivate"
             :geozone="geozone"
             :query="selectedQuery"
             :page="props.page ? props.page : '1'"

@@ -63,3 +63,13 @@ export type TopicPostData = Omit<
   datasets: string[]
   reuses: string[]
 }
+
+export interface TopicsQueryArgs {
+  query: string | null
+  theme: string | null
+  subtheme: string | null
+  include_private?: string
+  geozone: string | null
+  page: string | null
+  sort: string
+}

@@ -32,9 +32,10 @@ const props = defineProps({
     type: String as PropType<string | null>,
     default: null
   },
-  showDrafts: {
-    type: Boolean,
-    default: false
+  // eslint-disable-next-line vue/prop-name-casing
+  include_private: {
+    type: String as PropType<string | null>,
+    default: null
   }
 })
 
@@ -53,6 +54,7 @@ const { topicsSlug, topicsUseThemes, topicsMainTheme, topicsSecondaryTheme } =
   useTopicsConf()
 const localShowDrafts = ref(false)
 
+// TODO: be smarter here, reuse what's on props when possible
 const computeQueryArgs = (
   data?: Record<string, string | null>
 ): LocationQueryRaw => {
@@ -60,7 +62,7 @@ const computeQueryArgs = (
   if (props.theme) query.theme = props.theme
   if (props.subtheme) query.subtheme = props.subtheme
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
-  query.drafts = localShowDrafts.value ? '1' : '0'
+  query.include_private = localShowDrafts.value ? '1' : '0'
   if (route.query.q) {
     query.q = route.query.q
   }
@@ -110,7 +112,7 @@ watchEffect(() => {
     selectedSpatialCoverage.value = undefined
     selectedGeozone.value = undefined
   }
-  localShowDrafts.value = props.showDrafts
+  localShowDrafts.value = props.include_private === '1'
 })
 </script>
 

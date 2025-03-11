@@ -145,7 +145,7 @@ export const useTagsQuery = (
 export const useTagFromId = (
   objectType: Filters,
   filterId: string,
-  tagId: string
+  tagId: string | null
 ): ResolvedTag | null => {
   const filter = getFilterConf(objectType, filterId)
   if (!filter) return null
