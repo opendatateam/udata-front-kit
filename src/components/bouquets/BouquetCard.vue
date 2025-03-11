@@ -44,6 +44,7 @@ const bouquetLink: RouteLocationRaw = {
   params: { bid: props.bouquet.slug }
 }
 
+const theme = useTag('bouquets', bouquetRef, 'theme')
 const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
 </script>
 
@@ -57,7 +58,14 @@ const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
     </div>
     <div v-if="subtheme" class="fr-grid-row">
       <div class="fr-col-12">
-        <TagComponent :tag="subtheme" class="fr-mt-1w fr-mb-1w" />
+        <ul class="fr-badges-group fr-mb-1w fr-mt-1w">
+          <li>
+            <TagComponent :tag="theme" />
+          </li>
+          <li>
+            <TagComponent :tag="subtheme" />
+          </li>
+        </ul>
       </div>
     </div>
     <div
