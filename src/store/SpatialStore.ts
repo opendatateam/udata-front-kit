@@ -8,7 +8,8 @@ const api = new SpatialAPI()
 export const useSpatialStore = defineStore('spatial', {
   state: () => ({
     levels: [] as SpatialCoverageLevel[],
-    zones: {} as Record<string, SpatialCoverage>
+    zones: {} as Record<string, SpatialCoverage>,
+    pendingZoneRequests: new Map<string, Promise<SpatialCoverage>>()
   }),
   actions: {
     async loadLevels(): Promise<SpatialCoverageLevel[]> {
@@ -21,9 +22,21 @@ export const useSpatialStore = defineStore('spatial', {
     },
     async loadZone(zoneId: string): Promise<SpatialCoverage> {
       if (this.zones[zoneId]) return this.zones[zoneId]
-      const zone = await api.getZone(zoneId)
-      this.zones[zoneId] = zone
-      return zone
+      const pendingRequest = this.pendingZoneRequests.get(zoneId)
+      if (pendingRequest) return pendingRequest
+      const request = api
+        .getZone(zoneId)
+        .then((zone) => {
+          this.zones[zoneId] = zone
+          this.pendingZoneRequests.delete(zoneId)
+          return zone
+        })
+        .catch((error) => {
+          this.pendingZoneRequests.delete(zoneId)
+          throw error
+        })
+      this.pendingZoneRequests.set(zoneId, request)
+      return request
     }
   }
 })
