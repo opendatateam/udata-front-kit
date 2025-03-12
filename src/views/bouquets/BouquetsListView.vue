@@ -30,7 +30,6 @@ const props = defineProps<TopicsQueryArgs>()
 const banner = config.website.topics.banner
 const selectedTheme: Ref<ResolvedTag | null> = ref(null)
 const selectedSubtheme: Ref<ResolvedTag | null> = ref(null)
-const selectedGeozone: Ref<string | null> = ref(null)
 const selectedQuery = ref('')
 const bouquetListComp = ref<InstanceType<typeof BouquetList> | null>(null)
 const includePrivate = ref('0')
@@ -98,7 +97,6 @@ const search = useDebounceFn(() => {
     })
 }, debounceWait)
 
-// TODO: could be much simpler here, no?
 watch(
   props,
   () => {
@@ -108,8 +106,8 @@ watch(
       'subtheme',
       props.subtheme
     )
-    selectedGeozone.value = props.geozone
     selectedQuery.value = props.query || ''
+    // show drafts by default if config enables it
     includePrivate.value =
       props.include_private != null
         ? props.include_private
@@ -174,7 +172,7 @@ watch(
             <BouquetSearch
               :theme="selectedTheme?.id"
               :subtheme="selectedSubtheme?.id"
-              :geozone="selectedGeozone"
+              :geozone="props.geozone"
               :include_private="includePrivate"
               @vue:updated="setLiveResults"
             />
