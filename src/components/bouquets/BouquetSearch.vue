@@ -7,7 +7,7 @@ import {
   type PropType,
   type Ref
 } from 'vue'
-import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import SelectComponent from '@/components/SelectComponent.vue'
@@ -43,7 +43,7 @@ const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
-const selectedGeozone: Ref<string | undefined> = ref(undefined)
+const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
 const themeIdRef = toRef(props, 'theme')
@@ -54,25 +54,10 @@ const { topicsSlug, topicsUseThemes, topicsMainTheme, topicsSecondaryTheme } =
   useTopicsConf()
 const localShowDrafts = ref(false)
 
-// TODO: be smarter here, reuse what's on props when possible
-const computeQueryArgs = (
-  data?: Record<string, string | null>
-): LocationQueryRaw => {
-  const query: LocationQueryRaw = {}
-  if (props.theme) query.theme = props.theme
-  if (props.subtheme) query.subtheme = props.subtheme
-  if (selectedGeozone.value) query.geozone = selectedGeozone.value
-  query.include_private = localShowDrafts.value ? '1' : '0'
-  if (route.query.q) {
-    query.q = route.query.q
-  }
-  return { ...query, ...data }
-}
-
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: `/${topicsSlug}`,
-    query: computeQueryArgs(data),
+    query: { ...route.query, ...data },
     hash: '#bouquets-list'
   })
 }
@@ -93,13 +78,12 @@ const switchSubtheme = (value: string | null | undefined) => {
 const switchSpatialCoverage = (
   spatialCoverage: SpatialCoverage | null | undefined
 ) => {
-  selectedGeozone.value =
-    spatialCoverage != null ? spatialCoverage.id : undefined
-  navigate()
+  selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
+  navigate({ geozone: selectedGeozone.value })
 }
 
 const switchLocalShowDrafts = () => {
-  navigate()
+  navigate({ include_private: localShowDrafts.value ? '1' : '0' })
 }
 
 watchEffect(() => {
@@ -110,7 +94,7 @@ watchEffect(() => {
       .then((zone) => (selectedSpatialCoverage.value = zone))
   } else {
     selectedSpatialCoverage.value = undefined
-    selectedGeozone.value = undefined
+    selectedGeozone.value = null
   }
   localShowDrafts.value = props.include_private === '1'
 })
