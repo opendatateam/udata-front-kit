@@ -208,6 +208,20 @@ website:
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
+# Configuration format for filters:
+#
+# filters:
+#   {object_type}:              # object type to filter on
+#     tag_prefix: {string}      # prefix for tags on data.gouv.fr
+#     items:                    # list of filters for this {object_type}
+#       - name: {string}        # name of the filter ⚠️ needs to be unique across all items
+#         id: {string}          # id of the filter
+#         child: {string?}      # id of the child filter (optional)
+#         color: {string}       # color of the filter's tag
+#         values:               # list of values for this filter
+#           - id: {string}      # id of the value ⚠️ needs to be unique across the filter item
+#             name: {string}    # name of the value
+#             parent: {string?} # id of the parent filter value (optional)
 filters:
   bouquets:
     tag_prefix: ecospheres
