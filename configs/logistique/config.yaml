@@ -67,7 +67,7 @@ website:
         sub_section_buttons:
     meta_description:
   header_button:
-    display: true
+    display: false
     label: 'Donnez votre avis'
     link:
   header_search:
