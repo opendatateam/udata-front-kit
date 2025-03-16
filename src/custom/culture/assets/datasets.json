@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Liste des édifices labellisés « Architecture contemporaine remarquable » (ACR) ",
+    "resource_id": "80b6ac20-41b1-400c-8860-af201ff7dcb6",
+    "column_dep": "Numero_departement",
+    "coordinates_xy": "Coordonnees",
+    "coordinates_x": null,
+    "coordinates_y": null
+  },
+  {
+    "name": "Liste des festivals en France",
+    "resource_id": "47ac11c2-8a00-46a7-9fa8-9b802643f975",
+    "column_dep": "Code Insee commune",
+    "coordinates_xy": "Géocodage xy",
+    "coordinates_x": null,
+    "coordinates_y": null
+  },
+  {
+    "name": "Immeubles protégés au titre des Monuments Historiques ",
+    "resource_id": "3a52af4a-f9da-4dcc-8110-b07774dfb3bc",
+    "column_dep": "Departement_format_numerique",
+    "coordinates_xy": "coordonnees_au_format_WGS84",
+    "coordinates_x": null,
+    "coordinates_y": null
+  },
+  {
+    "name": "Liste et localisation des Musées de France",
+    "resource_id": "1796dfc3-fa33-4539-a14b-199eaa7a7b4a",
+    "column_dep": "Code Postal",
+    "coordinates_xy": null,
+    "coordinates_x": "Longitude",
+    "coordinates_y": "Latitude"
+  },
+  {
+    "name": " Liste des jardins remarquables",
+    "resource_id": "49a648e5-ef47-41fe-aa18-9323a811c2c7",
+    "column_dep": "Code Postal",
+    "coordinates_xy": null,
+    "coordinates_x": "Longitude",
+    "coordinates_y": "Latitude"
+  }
+]

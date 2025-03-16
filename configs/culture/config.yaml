@@ -1,0 +1,212 @@
+# config file for culture.data.gouv.fr
+
+datagouvfr:
+  # data.gouv.fr base URL (use www subdomain on prod)
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 67d700352f7cb2b10e10087f
+
+universe:
+  # "universe" topic id
+  topic_id: 6571f222129681e83de11aa2
+  # universe name, used as bouquets tag
+  name: culture
+
+robots:
+  disallow:
+  sitemap:
+  meta: 'noindex, nofollow'
+
+# UI customizations
+website:
+  title: 'culture.data.gouv.fr'
+  rf_title: 'MINISTÈRE<br>
+    DE LA CULTURE'
+  service_logo:
+  badge:
+    display: false
+    text:
+    style:
+  # leave empty if not pertinent
+  logo_operator:
+    src:
+    header:
+      width: '60px'
+      height: '60px'
+    footer:
+      width: '92px'
+      height: '92px'
+  homepage:
+    title: 'Les données ouvertes du ministère de la Culture '
+    subtitle: 'culture.data.gouv.fr vise à référencer, héberger et diffuser les données publiques relatives à la culture en France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+    sections:
+      - title: Données par thématiques
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - name: 'Les bases de données patrimoniales du ministère'
+              description: 'Découvrez la liste des bases de référence du ministère'
+              url: 'datasets?tags=base-patrimoniales'
+              image_url: '/culture/assets/patrimoine.png'
+            - name: "Données du cinéma et de l'audiovisuel"
+              description: "Découvrez la liste des données du domaine de l'audiovisuel"
+              url: 'datasets?tags=audiovisuel'
+              image_url: '/culture/assets/audiovisuel.png'
+            - name: 'Données relatives aux musées'
+              description: 'Découvrez la liste des données issues des musées français'
+              url: 'datasets?tags=musee'
+              image_url: '/culture/assets/musee.png'
+        sub_section_tiles:
+        sub_section_buttons:
+      - title: Actualités
+        content: >-
+          [En savoir plus sur la démarche](/demarche)
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+  header_button:
+    display: true
+    label: 'Donnez votre avis'
+    link: https://tally.so/r/wQ7y47
+  header_search:
+    display: true
+    placeholder: Rechercher...
+  search_bar:
+    display: true
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+  search_config:
+    header_search:
+      display: true
+      placeholder: Rechercher...
+      dropdown:
+        - text: Rechercher {} dans les <strong>jeux de données</strong>
+          route: datasets
+    pages:
+      - name: datasets
+        slug: datasets
+        type: datasets
+        config_type:
+          organization:
+          card:
+        extras_key:
+        list_all:
+        display_metadata:
+        activate_read_more:
+        dataset_editorialization:
+        default_tag: 'culturedatagouvfr'
+        geozones: false
+        can_add:
+          everyone: false
+          authorized_users:
+        labels:
+          search_page_title: jeux de données
+          search_bar_title: Filtrer les jeux de données
+          search_results: jeux de données
+          add_button:
+          add_title:
+          add_subtitle:
+          subject:
+          description_title:
+          description_info:
+          owner:
+        filters:
+          - name: 'Catégories'
+            tag: category
+            label_for_all: Toutes les catégories
+            edit_multiple: false
+            filter_multiple: false
+            values:
+              - name: Bases patrimoniales
+                tag: base-patrimoniales
+              - name: Domaine de l'audiovisuel
+                tag: audiovisuel
+              - name: Données des musées
+                tag: musee
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la culture en collaboration avec la DINUM.'
+  footer_external_links:
+    - label: 'culture.gouv.fr'
+      href: 'https://www.culture.gouv.fr/'
+    - label: 'Portail des API Météo-France'
+      href: 'https://portail-api.meteofrance.fr/'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  notice:
+    display: false
+    content: ⚠️ Vous naviguez sur une version de développement de culture.data.gouv.fr ⚠️
+    closeable: false
+  menu:
+    - text: Toutes les données
+      to: /datasets
+    - text: 'La démarche'
+      to: /demarche
+    - text: 'Cartes'
+      to: '/maps'
+    - text: A propos
+      to: /about
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    pages:
+      - title: 'A propos'
+        id: 'about'
+        route: '/about'
+        url: '/culture/pages/about.md'
+      - title: 'La démarche'
+        id: 'demarche'
+        route: '/demarche'
+        url: '/culture/pages/demarche.md'
+  show_quality_component: true
+  list_search_topics:
+  url_search_topics: 'datasets'
+  oauth_option: true
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 100
+    files_list: 6
+  contact_email: datagouv@datagouv.gouv.fr
+  home_banner_colors:
+    - '#f6f6f6'
+    - '#e3e3fd'
+    - '#019FE3'
+  env: 'prod'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 292
+  discussions:
+    dataset:
+      display: true
+      create: false
+    topic:
+      display: false
+      create: false
+  datasets:
+    organization_filter: false
+    add_to_bouquet: false
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Jeux de données
+      path: /datasets
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+organizations:
