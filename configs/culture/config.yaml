@@ -4,7 +4,7 @@ datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
-  oauth_client_id: 67d700352f7cb2b10e10087f
+  oauth_client_id: 67d81089bb81157439f7cb4a
 
 universe:
   # "universe" topic id
