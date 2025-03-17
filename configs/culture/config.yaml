@@ -37,7 +37,7 @@ website:
       width: '92px'
       height: '92px'
   homepage:
-    title: 'Les données ouvertes du ministère de la Culture '
+    title: 'Les données ouvertes de la Culture '
     subtitle: 'culture.data.gouv.fr vise à référencer, héberger et diffuser les données publiques relatives à la culture en France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     sections:
       - title: Données par thématiques
