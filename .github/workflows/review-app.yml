@@ -73,7 +73,6 @@ jobs:
           environment: ecospheres-preview
           initial-status: in_progress
           transient-environment: true
-          ref: ${{ github.ref }}
 
       - name: Push to dokku
         uses: dokku/github-action@master
