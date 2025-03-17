@@ -1,4 +1,4 @@
-FROM node:21 as builder
+FROM node:21 AS builder
 
 WORKDIR /app
 
