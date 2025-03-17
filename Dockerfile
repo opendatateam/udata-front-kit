@@ -13,4 +13,4 @@ RUN echo "$(date)" && \
 
 FROM nginx:alpine-slim
 
-COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/dist /usr/share/nginx/html
