@@ -29,7 +29,6 @@ jobs:
           token: ${{ github.token }}
           environment: ecospheres-preview
           initial-status: in_progress
-          ref: ${{ github.event.pull_request.head.sha }}
           transient-environment: true
 
       - name: Create and push the review app
@@ -73,7 +72,6 @@ jobs:
           token: ${{ github.token }}
           environment: ecospheres-preview
           initial-status: in_progress
-          ref: ${{ github.event.pull_request.head.sha }}
           transient-environment: true
 
       - name: Push to dokku
@@ -112,7 +110,6 @@ jobs:
           token: ${{ github.token }}
           environment: ecospheres-preview
           initial-status: in_progress
-          ref: ${{ github.event.pull_request.head.sha }}
           transient-environment: true
           description: 'Deactivating review app'
 
