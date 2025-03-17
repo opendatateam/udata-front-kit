@@ -39,6 +39,16 @@ jobs:
           review_app_name: deploy-preview-${{ github.event.pull_request.number }}--ecospheres
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
 
+      - name: Enable SSL with Let's Encrypt
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.REVIEW_APP_SSH_HOST }}
+          username: dokku
+          key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            dokku letsencrypt:enable deploy-preview-${{ github.event.pull_request.number }}--ecospheres
+
       - name: Update deployment status
         if: always()
         uses: chrnorm/deployment-status@v2
