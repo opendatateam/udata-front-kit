@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
 import { useDebounceFn } from '@vueuse/core'
-import { defineModel, ref } from 'vue'
+import { ref } from 'vue'
 
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
