@@ -47,7 +47,7 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            dokku letsencrypt:enable deploy-preview-${{ github.event.pull_request.number }}--ecospheres
+            letsencrypt:enable deploy-preview-${{ github.event.pull_request.number }}--ecospheres
 
       - name: Update deployment status
         if: always()
