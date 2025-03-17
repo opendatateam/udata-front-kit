@@ -38,6 +38,7 @@ jobs:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
           review_app_name: deploy-preview-${{ github.event.pull_request.number }}--ecospheres
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          branch: 'main'
 
       - name: Enable SSL with Let's Encrypt
         uses: appleboy/ssh-action@v1.0.0
