@@ -94,7 +94,7 @@ getAllSearchPagesConfig().forEach((searchPage) => {
         path: '',
         name: searchPage.searchPageSlug,
         meta: {
-          title: capitalize(searchPage.searchPageName) + 's'
+          title: capitalize(searchPage.searchPageName)
         },
         component: async () => await import('@/views/SearchView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
