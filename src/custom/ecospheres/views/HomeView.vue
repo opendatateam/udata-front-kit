@@ -36,7 +36,7 @@ const dropdown = config.website.header_search.dropdown
   <div class="datagouv-components">
     <section class="fr-container fr-pt-12v">
       <h1 class="main-title-v2">
-        FIXME: Le catalogue des données
+        FIXME: number2 Le catalogue des données
         <br />
         pour la <span class="highlight">transition écologique</span>
       </h1>

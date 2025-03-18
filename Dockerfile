@@ -20,5 +20,6 @@ RUN echo 'server { \
     location / { \
         root /usr/share/nginx/html; \
         try_files $uri $uri/ /index.html; \
+        add_header Cache-Control "public,max-age=0,must-revalidate"; \
     } \
 }' > /etc/nginx/conf.d/default.conf
