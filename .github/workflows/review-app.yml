@@ -36,9 +36,7 @@ jobs:
           transient-environment: true
 
       - name: Create the review app
-        # if: github.event.action == 'opened'
-        # FIXME:
-        if: always()
+        if: github.event.action == 'opened'
         uses: dokku/github-action@master
         with:
           command: review-apps:create
