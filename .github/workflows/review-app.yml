@@ -46,7 +46,7 @@ jobs:
           # omitting this will prevent the app from being built (which is what we want)
           # branch: 'main'
 
-      - name: Set site id as env var
+      - name: Set site id as build arg
         if: always()
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -55,7 +55,7 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            config:set deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }} VITE_SITE_ID=${{ matrix.site }} --no-restart
+            docker-options:add deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }} build "--build-arg VITE_SITE_ID=${{ matrix.site }}"
 
       - name: Push to dokku
         if: github.event.action != 'closed'

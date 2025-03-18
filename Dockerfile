@@ -6,6 +6,10 @@ COPY ./ /app
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
+ARG VITE_SIDE_ID
+# only set the environment variable if the build arg was provided
+ENV VITE_SIDE_ID=${VITE_SIDE_ID:-}
+
 RUN npm install
 RUN echo "$(date)" && \
     export $(cat /app/*.env | xargs) && \
