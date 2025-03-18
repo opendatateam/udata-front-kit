@@ -65,6 +65,7 @@ jobs:
           review_app_name: deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           git_push_flags: '--force'
+          branch: 'main'
 
       - name: Enable SSL with Let's Encrypt
         if: github.event.action == 'opened'
