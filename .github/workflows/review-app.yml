@@ -7,6 +7,12 @@ on: pull_request
 jobs:
   handle_review_app:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        site:
+          - ecospheres
+          - meteo-france
+          - logistique
     permissions:
       deployments: write
     if: github.event_name == 'pull_request'
@@ -27,7 +33,7 @@ jobs:
         id: deployment
         with:
           token: ${{ github.token }}
-          environment: ecospheres-preview
+          environment: ${{ matrix.site }}-preview
           initial-status: in_progress
           transient-environment: true
 
@@ -37,16 +43,28 @@ jobs:
         with:
           command: review-apps:create
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--ecospheres
+          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
-          branch: 'main'
+          # omitting this will prevent the app from being built (which is what we want)
+          # branch: 'main'
+
+      - name: Set site id as env var
+        if: always()
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.REVIEW_APP_SSH_HOST }}
+          username: dokku
+          key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            config:set deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }} VITE_SITE_ID=${{ matrix.site }} --no-restart
 
       - name: Push to dokku
-        if: github.event.action != 'opened' && github.event.action != 'closed'
+        if: github.event.action != 'closed'
         uses: dokku/github-action@master
         with:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--ecospheres
+          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           git_push_flags: '--force'
 
@@ -59,7 +77,7 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            letsencrypt:enable deploy-preview-${{ github.event.pull_request.number }}--ecospheres
+            letsencrypt:enable deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
 
       - name: Destroy the review app
         if: github.event.action == 'closed'
@@ -67,7 +85,7 @@ jobs:
         with:
           command: review-apps:destroy
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--ecospheres
+          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
 
       - name: Update deployment status
@@ -75,7 +93,7 @@ jobs:
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ github.token }}
-          environment-url: https://deploy-preview-${{ github.event.pull_request.number }}--ecospheres.sandbox.data.developpement-durable.gouv.fr
+          environment-url: https://deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}.sandbox.data.developpement-durable.gouv.fr
           state: ${{ job.status == 'success' && 'success' || 'failure' }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
