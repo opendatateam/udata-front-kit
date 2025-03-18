@@ -7,6 +7,9 @@ on: pull_request
 jobs:
   handle_review_app:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.site }}
+      cancel-in-progress: true
     strategy:
       matrix:
         site:
@@ -17,11 +20,6 @@ jobs:
       deployments: write
     if: github.event_name == 'pull_request'
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Cloning repo
         uses: actions/checkout@v4
         with:
@@ -37,8 +35,10 @@ jobs:
           initial-status: in_progress
           transient-environment: true
 
-      - name: Create and push the review app
-        if: github.event.action == 'opened'
+      - name: Create the review app
+        # if: github.event.action == 'opened'
+        # FIXME:
+        if: always()
         uses: dokku/github-action@master
         with:
           command: review-apps:create
