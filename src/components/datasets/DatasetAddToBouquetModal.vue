@@ -118,7 +118,7 @@ const isDatasetInBouquet = computed(() => {
 const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
 
 const submit = async () => {
-  if (selectedBouquetId.value === null || selectedBouquet.value === null) {
+  if (selectedBouquet.value === null) {
     throw Error('Trying to attach to topic without id')
   }
   const newDatasetsProperties =
