@@ -20,6 +20,7 @@ robots:
 # UI customizations
 website:
   title: 'simplification.data.gouv.fr'
+  formatted_title: '<i>simplification.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
   service_logo: '/logos/simplification-logo.svg'
@@ -232,6 +233,8 @@ website:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_
     closeable: false
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
   # display settings
   pagination_sizes:
     organizations_list: 9
@@ -268,6 +271,7 @@ website:
       secondary_name: sous-domaine
     # include a list page with all topics
     list_all: false
+    show_drafts_by_default: false
     display_metadata: false
     activate_read_more: false
     dataset_editorialization: false

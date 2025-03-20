@@ -62,7 +62,7 @@ routerPromise
       // protect authenticated routes
       const store = useUserStore()
       if (to.meta.requiresAuth === true && !store.$state.isLoggedIn) {
-        LocalStorageService.setItem('lastRoute', to)
+        LocalStorageService.setItem('lastRoute', to.fullPath)
         void router.push({ name: 'login' })
       }
       // set page title where needed

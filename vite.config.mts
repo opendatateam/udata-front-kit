@@ -1,9 +1,9 @@
-import ViteYaml from '@modyfi/vite-plugin-yaml'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
 import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
+import ViteYaml from 'unplugin-yaml/vite'
 import { defineConfig, loadEnv } from 'vite'
 import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
@@ -12,7 +12,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import {
   vueDsfrAutoimportPreset,
   vueDsfrComponentResolver
-} from '@gouvminint/vue-dsfr'
+} from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
@@ -34,8 +34,14 @@ export default defineConfig(({ mode }) => {
   return {
     base: '/',
     plugins: [
-      vue(),
       vueDevTools(),
+      vue({
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => ['search'].includes(tag)
+          }
+        }
+      }),
       AutoImport({
         include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
         imports: [
@@ -58,8 +64,8 @@ export default defineConfig(({ mode }) => {
       }),
       // Autoimport des composants utilisés dans les templates
       Components({
-        extensions: ['vue'],
-        dirs: ['src/components'], // Autoimport de vos composants qui sont dans le dossier `src/components`
+        dirs: ['src/components', 'src/custom/**/components'], // Autoimport des composants
+        deep: true,
         include: [/\.vue$/, /\.vue\?vue/],
         dts: './src/components.d.ts',
         resolvers: [
@@ -98,6 +104,16 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'happy-dom',
       globals: true
+    },
+    server: {
+      // this is a dev CSP, restricting outbound requests to *.data.gouv.fr
+      // this makes sure we don't make unintended API calls to third-parties (looking at you iconify)
+      // ⚠️ this won't be applied on prod or other environments
+      headers: {
+        'Content-Security-Policy': [
+          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com"
+        ].join('; ')
+      }
     }
   }
 })

@@ -20,11 +20,12 @@ robots:
 # UI customizations
 website:
   title: 'logistique.data.gouv.fr'
+  formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
   service_logo: '/logos/logistique-logo.svg'
   badge:
-    display: false
+    display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
@@ -32,8 +33,8 @@ website:
     title: 'Les données ouvertes de la logistique'
     subtitle: 'logistique.data.gouv.fr centralise et structure les données publiques relatives à la logistique. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite.'
     sections:
-      - title: Bouquets de données
-        content:
+      - title: Des bouquets de données pour articuler politiques publiques et données territoriales
+        content: "Créez un bouquet pour inventorier les données utiles à un cas d'usage : une politique publique sur un territoire"
         sub_section_datasets:
         sub_section_cards:
           title:
@@ -45,7 +46,7 @@ website:
             - name: 'Infrastructure'
               description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
               url: 'bouquets?theme=Infrastructure'
-              image_url: '/logistique/assets/infra.jpg'              
+              image_url: '/logistique/assets/infra.jpg'
             - name: 'Trafic'
               description: 'Données sur le flux des activités de logistique (trafic routier, fluvial, maritime, ferroviaire et aérien).'
               url: 'bouquets?theme=Trafic'
@@ -58,10 +59,6 @@ website:
               description: 'Bases essentielles pour étudier les interactions entre les dimensions sociales et économiques de la logistique.'
               url: 'bouquets?theme=Socio-économique'
               image_url: '/logistique/assets/socio.jpg'
-            - name: 'Territoires'
-              description: "Données permettant l'étude des interactions entre la logistique et l'aménagement des territoires."
-              url: 'bouquets?theme=Territoires'
-              image_url: '/logistique/assets/territorial.jpg'
             - name: 'Filières'
               description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
               url: 'bouquets?theme=Filières'
@@ -123,6 +120,8 @@ website:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_
     closeable: false
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
   # display settings
   pagination_sizes:
     organizations_list: 9
@@ -134,15 +133,15 @@ website:
     - '#DBF2F0'
   env: 'prod'
   matomo:
-    host:
-    siteId:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 308
   discussions:
     dataset:
       display: true
       create: true
     topic:
-      display: false
-      create: false
+      display: true
+      create: true
   datasets:
     organization_filter: false
     add_to_bouquet: true
@@ -159,26 +158,28 @@ website:
       secondary_name: sous-catégorie
     # include a list page with all topics
     list_all: false
+    show_drafts_by_default: false
     display_metadata: false
     activate_read_more: false
     dataset_editorialization: true
     can_add_topics:
-      everyone: false
-      authorized_users:
-        - 57d0546ec751df5cda97bae5
+      everyone: yes
 themes:
   - name: Immobilier logistique
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
-      - name: Données  
+      - name: Général
   - name: Infrastructure
     color: '#043574'
     textColor: '#FFFFFF'
+    subthemes:
+      - name: Général
   - name: Trafic
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
+      - name: Général
       - name: Transport routier
       - name: Transport aérien
       - name: Transport ferroviaire
@@ -188,6 +189,7 @@ themes:
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
+      - name: Général
       - name: Filière agricole
       - name: Filière industrielle
       - name: Filière énergétique
@@ -199,17 +201,12 @@ themes:
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
-      - name: Données
+      - name: Général
   - name: Socio-économique
     color: '#043574'
     textColor: '#FFFFFF'
     subthemes:
-      - name: Données
-  - name: Territoires
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Données
+      - name: Général
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

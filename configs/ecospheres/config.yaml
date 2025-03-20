@@ -20,6 +20,7 @@ robots:
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
+  formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/ecospheres-logo.svg'
   badge:
@@ -63,7 +64,7 @@ website:
     display: false
     name:
     link:
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la transition écologique et énergétique, réalisé par le Ministère de la Transition écologique, de l’Énergie, du Climat et de la Prévention des risques.'
+  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la transition écologique et énergétique, réalisé par le ministère en charge de l'environnement"
   footer_external_links:
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
@@ -78,6 +79,8 @@ website:
       href: 'https://www.gouvernement.fr'
       title: 'gouvernement.fr - nouvelle fenêtre'
   footer_mandatory_links:
+    - label: 'Contact'
+      href: 'https://tally.so/r/m61AqO'
     - label: 'Plan du site'
       to: '/sitemap'
     - label: "Conditions générales d'utilisation"
@@ -86,6 +89,8 @@ website:
       href: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
+    - label: 'Statistiques'
+      href: 'https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/indicateurs-ecospheres/?standalone=2'
   notice:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
@@ -95,11 +100,13 @@ website:
       to: /
     - text: Données
       to: /datasets
+    - text: Indicateurs
+      to: /indicators
     - text: Bouquets
       to: /bouquets
     - text: Organisations
       to: /organizations
-    - text: A propos
+    - text: À propos
       to: /about
   router:
     disable:
@@ -121,6 +128,8 @@ website:
   list_search_topics:
   url_search_topics:
   oauth_option: true
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
   pagination_sizes:
     organizations_list: 9
     topics_list: 100
@@ -140,6 +149,9 @@ website:
     topic:
       display: true
       create: true
+    indicator:
+      display: true
+      create: true
   datasets:
     organization_filter: true
     add_to_bouquet: true
@@ -147,6 +159,12 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
+    banner:
+      title: Un guichet unique pour l’accès aux données environnementales
+      content: |
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
+
+        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
   topics:
     slug: bouquets
     name: bouquet
@@ -157,12 +175,19 @@ website:
       secondary_name: chantier
     # include a list page with all topics
     list_all: true
+    show_drafts_by_default: true
     display_metadata: true
     activate_read_more: true
     dataset_editorialization: true
     can_add_topics:
       everyone: true
       authorized_users:
+    banner:
+      title: Mettre en commun les usages des données et des indicateurs territoriaux
+      content: |
+        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
+
+        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
   sitemap:
     - name: Accueil
       path: /
@@ -233,148 +258,117 @@ themes:
       - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
       - name: La sobriété des usages et des ressources
 
-organizations:
-  - ademe
-  - agence-de-l-eau-rhone-mediterranee-et-corse
-  - agence-nationale-de-la-cohesion-des-territoires
-  - agence-nationale-pour-la-renovation-urbaine
-  - agence-ore-3
-  - airparif-1
-  - atmo-bourgogne-franche-comte
-  - atmo-grand-est
-  - atmosud
-  - bureau-de-recherches-geologiques-et-minieres
-  - centre-scientifique-et-technique-du-batiment
-  - cerema
-  - commission-de-regulation-de-lenergie
-  - datagrandest
-  - ddt-aisne
-  - ddt-ardennes
-  - ddt-aveyron
-  - ddt-cote-dor
-  - ddt-creuse
-  - ddt-de-la-loire
-  - ddt-de-lain
-  - ddt-de-lardeche
-  - ddt-de-meurthe-et-moselle
-  - ddt-deux-sevres
-  - ddt-drome
-  - ddt-haute-garonne
-  - ddt-haute-marne
-  - ddt-hautes-pyrenees
-  - ddt-indre
-  - ddt-jura
-  - ddt-lot
-  - ddt-maine-et-loire
-  - ddt-mayenne
-  - ddt-nievre
-  - ddt-savoie
-  - ddt-tarn
-  - ddt-tarn-et-garonne
-  - ddt-territoire-de-belfort
-  - ddt-vaucluse
-  - ddt-vienne
-  - ddt-yvelines
-  - ddtm-alpes-maritimes
-  - ddtm-aude
-  - ddtm-corse-du-sud
-  - ddtm-cotes-darmor
-  - ddtm-finistere
-  - ddtm-gard
-  - ddtm-gironde
-  - ddtm-haute-corse
-  - ddtm-morbihan
-  - ddtm-pas-de-calais
-  - ddtm-pyrenees-orientales
-  - ddtm-vendee
-  - deal-guadeloupe
-  - direction-departementale-des-territoire-du-puy-de-dome
-  - direction-departementale-des-territoires-de-charente
-  - direction-departementale-des-territoires-de-haute-saone
-  - direction-departementale-des-territoires-de-haute-savoie
-  - direction-departementale-des-territoires-de-la-correze
-  - direction-departementale-des-territoires-de-la-haute-loire
-  - direction-departementale-des-territoires-de-la-lozere
-  - direction-departementale-des-territoires-de-la-marne
-  - direction-departementale-des-territoires-de-la-meuse
-  - direction-departementale-des-territoires-de-la-sarthe
-  - direction-departementale-des-territoires-de-lallier
-  - direction-departementale-des-territoires-de-lariege
-  - direction-departementale-des-territoires-de-laube
-  - direction-departementale-des-territoires-de-lessonne
-  - direction-departementale-des-territoires-de-lisere
-  - direction-departementale-des-territoires-de-loir-et-cher
-  - direction-departementale-des-territoires-de-lorne
-  - direction-departementale-des-territoires-de-saone-et-loire
-  - direction-departementale-des-territoires-de-seine-et-marne
-  - direction-departementale-des-territoires-des-alpes-de-haute-provence
-  - direction-departementale-des-territoires-des-hautes-alpes
-  - direction-departementale-des-territoires-des-vosges
-  - direction-departementale-des-territoires-deure-et-loir
-  - direction-departementale-des-territoires-dindre-et-loire
-  - direction-departementale-des-territoires-du-bas-rhin-67
-  - direction-departementale-des-territoires-du-cher
-  - direction-departementale-des-territoires-du-doubs
-  - direction-departementale-des-territoires-du-haut-rhin-68
-  - direction-departementale-des-territoires-du-loiret
-  - direction-departementale-des-territoires-du-rhone-1
-  - direction-departementale-des-territoires-du-val-doise
-  - direction-departementale-des-territoires-et-de-la-mer-de-charente-maritime
-  - direction-departementale-des-territoires-et-de-la-mer-de-la-somme
-  - direction-departementale-des-territoires-et-de-la-mer-de-leure
-  - direction-departementale-des-territoires-et-de-la-mer-de-lherault
-  - direction-departementale-des-territoires-et-de-la-mer-de-loire-atlantique
-  - direction-departementale-des-territoires-et-de-la-mer-des-bouches-du-rhone
-  - direction-departementale-des-territoires-et-de-la-mer-des-landes
-  - direction-departementale-des-territoires-et-de-la-mer-des-pyrenees-atlantiques
-  - direction-departementale-des-territoires-et-de-la-mer-dille-et-vilaine
-  - direction-departementale-des-territoires-et-de-la-mer-du-calvados
-  - direction-departementale-des-territoires-et-de-la-mer-du-var
-  - direction-departementale-et-des-territoires-du-cantal
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-de-normandie
-  - direction-regionale-de-lenvironnement-de-lamenagement-et-du-logement-du-centre-val-de-loire
-  - direction-regionale-de-lenvironnement-et-du-logement-bourgogne-franche-comte
-  - do-terr-geo-centre
-  - dreal-grand-est
-  - dreal-nouvelle-aquitaine
-  - dreal-provence-alpes-cote-dazur
-  - edf-systemes-energetiques-insulaires
-  - electricite-de-france
-  - electricite-reseau-distribution-france
-  - equipe-transport-data-gouv-fr
-  - federation-des-parcs-naturels-regionaux-de-france
-  - fluo-grand-est
-  - gip-bretagne-environnement
-  - grdf
-  - institut-francais-de-recherche-pour-lexploitation-de-la-mer
-  - institut-national-de-l-information-geographique-et-forestiere
-  - irstea
-  - jvmalin
-  - ligair
-  - meteo-france
-  - ministere-de-l-egalite-des-territoires-et-du-logement
-  - ministere-de-la-transition-ecologique
-  - morbihan-energies
-  - museum-national-dhistoire-naturelle
-  - observatoire-de-recherche-montpellierain-de-lenvironnement
-  - office-national-des-forets
-  - oise-mobilite-syndicat-mixte-des-transports-collectifs-de-loise
-  - open-data-reseaux-energies-1
-  - parc-national-de-forets
-  - parc-national-des-cevennes
-  - parc-national-des-ecrins
-  - parc-naturel-regional-de-la-montagne-de-reims
-  - parc-naturel-regional-de-la-montagne-de-reims-1
-  - parc-naturel-regional-des-vosges-du-nord
-  - parc-naturel-regional-du-morvan
-  - parc-naturel-regional-du-vercors
-  - regie-autonome-des-transports-parisiens-ratp
-  - reseau-de-transport-delectricite
-  - section-cadastre-topographie-de-la-polynesie-francaise
-  - shom
-  - sncf
-  - societe-du-grand-paris
-  - star
-  - syndicat-mixte-des-mobilites-de-laire-grenobloise
-  - systeme-d-information-sur-l-eau
-  - twisto
+organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
+
+indicators:
+  organization_id: 67c57c2f1a418addfc94d38a
+  global_tag_prefix: ecospheres-indicateurs
+  filters:
+    - name: Thématique
+      id: theme
+      color: green-menthe
+      values:
+        - id: autre
+          name: Autre
+        - id: mieux-consommer
+          name: Mieux consommer
+        - id: mieux-produire
+          name: Mieux produire
+        - id: mieux-preserver-valoriser-ecosystemes
+          name: Mieux préserver et valoriser nos ecosystèmes
+        - id: mieux-se-deplacer
+          name: Mieux se déplacer
+        - id: mieux-se-loger
+          name: Mieux se loger
+        - id: mieux-se-nourrir
+          name: Mieux se nourrir
+    - name: Enjeu
+      id: enjeu
+      color: blue-ecume
+      values:
+        - id: adaptation-climat
+          name: Adaptation climat
+        - id: attenuation-climat
+          name: Atténuation climat
+        - id: biodiversite
+          name: Biodiversité
+        - id: ressources
+          name: Ressources
+        - id: sante
+          name: Santé
+    - name: Secteur
+      id: secteur
+      color: purple-glycine
+      values:
+        - id: agriculture-forets-sols
+          name: Agriculture, Forêts et Sols
+        - id: alimentation
+          name: Alimentation
+        - id: batiment
+          name: Bâtiment
+        - id: dechets
+          name: Déchets
+        - id: eau
+          name: Eau
+        - id: energie
+          name: Energie
+        - id: industrie
+          name: Industrie
+        - id: transport-marchandises
+          name: Transport de marchandises
+        - id: transport-voyageurs
+          name: Transport de voyageurs
+        - id: transverse
+          name: Transverse
+    - name: Levier
+      id: levier
+      color: green-archipel
+      values:
+        - id: biogaz
+          name: Biogaz
+        - id: changements-de-pratiques-de-fertilisation-azotee
+          name: Changements de pratiques de fertilisation azotée
+        - id: covoiturage
+          name: Covoiturage
+        - id: developpement-de-lagriculture-biologique-et-de-hve
+          name: Développement de l'agriculture biologique et de HVE
+        - id: efficacite-et-sobriete-logistique
+          name: Efficacité et sobriété logistique
+        - id: gestion-des-prairies
+          name: Gestion des prairies
+        - id: pratiques-stockantes
+          name: Pratiques stockantes
+        - id: prevention-des-dechets
+          name: Prévention des déchets
+        - id: reduction-des-deplacements
+          name: Réduction des déplacements
+        - id: renovation-hors-changement-chaudieres
+          name: Rénovation (hors changement chaudières)
+        - id: sobriete-dans-lutilisation-de-la-ressource-en-eau
+          name: Sobriété dans l'utilisation de la ressource en eau
+        - id: sobriete-des-batiments-residentiel
+          name: Sobriété des bâtiments (résidentiel)
+        - id: sobriete-fonciere
+          name: Sobriété foncière
+        - id: surface-en-aire-protegee
+          name: Surface en aire protégée
+        - id: transports-en-commun
+          name: Transports en commun
+        - id: valorisation-matiere-des-dechets
+          name: Valorisation matière des déchets
+        - id: vehicules-electriques
+          name: Véhicules électriques
+        - id: velo
+          name: Vélo
+    - name: Cas d'usage
+      id: usage
+      color: yellow-tournesol-main-731
+      values:
+        - id: tdb-mobilite-durable
+          name: Indicateurs Tableau de bord de mobilité Durable
+        - id: territoires-en-transitions
+          name:
+            Indicateurs du programme Territoire Engagé de l'ADEME (Territoires en
+            Transitions)
+        - id: cop-region
+          name: Indicateurs de planification écologique régionale (COPs)

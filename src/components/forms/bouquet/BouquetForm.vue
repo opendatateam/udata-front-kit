@@ -119,6 +119,7 @@ onMounted(() => {
   <!-- Title -->
   <div class="fr-input-group">
     <DsfrInput
+      id="input-name"
       v-model="name"
       v-bind="nameAttrs"
       :label="`Sujet du ${topicsName} (obligatoire)`"
@@ -127,13 +128,14 @@ onMounted(() => {
       :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
     />
     <p v-if="errors.name && isSubmitted" id="errors-name" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true" />
+      <VIconCustom name="error-fill" />
       Veuillez renseigner un sujet.
     </p>
   </div>
   <!-- Description -->
   <div class="fr-input-group">
     <DsfrInput
+      id="input-description"
       v-model="description"
       v-bind="descriptionAttrs"
       is-textarea
@@ -151,7 +153,7 @@ onMounted(() => {
       id="errors-description"
       class="error"
     >
-      <span class="fr-icon-error-fill" aria-hidden="true" />
+      <VIconCustom name="error-fill" />
       La description ne doit pas être vide.
     </p>
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
@@ -177,9 +179,7 @@ onMounted(() => {
       v-bind="themeAttrs"
       class="fr-select"
       :aria-invalid="errors.theme && isSubmitted ? true : undefined"
-      :aria-describedby="
-        errors.theme && isSubmitted ? 'errors-theme' : undefined
-      "
+      aria-errormessage="errors-theme"
       @change="subtheme = ''"
     >
       <option value="" selected disabled hidden>
@@ -195,7 +195,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.theme && isSubmitted" id="errors-theme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true" />
+      <VIconCustom name="error-fill" />
       Veuillez sélectionner une thématique.
     </p>
   </div>
@@ -212,11 +212,8 @@ onMounted(() => {
       :disabled="!values.theme ? true : undefined"
       class="fr-select"
       :aria-invalid="errors.subtheme && isSubmitted ? true : undefined"
-      :aria-describedby="
-        errors.subtheme && isSubmitted
-          ? 'errors-subtheme subtheme-instructions'
-          : 'subtheme-instructions'
-      "
+      aria-describedby="subtheme-instructions"
+      aria-errormessage="errors-subtheme"
     >
       <option value="" selected disabled hidden>
         Choisir un {{ topicsSecondaryTheme }}
@@ -231,7 +228,7 @@ onMounted(() => {
       </option>
     </select>
     <p v-if="errors.subtheme && isSubmitted" id="errors-subtheme" class="error">
-      <span class="fr-icon-error-fill" aria-hidden="true" />
+      <VIconCustom name="error-fill" />
       Veuillez sélectionner un chantier.
     </p>
     <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">

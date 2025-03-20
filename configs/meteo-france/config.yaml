@@ -20,6 +20,7 @@ robots:
 # UI customizations
 website:
   title: 'meteo.data.gouv.fr'
+  formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
   service_logo: '/logos/meteo-france-logo.svg'
@@ -37,6 +38,7 @@ website:
         sub_section_datasets:
         sub_section_cards:
         sub_section_tiles:
+          class: fr-col-md-6
           title:
           tiles:
             - id: '6571f26dc009674feb726be9'
@@ -144,6 +146,8 @@ website:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_
     closeable: false
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
   # display settings
   pagination_sizes:
     organizations_list: 9
@@ -180,6 +184,7 @@ website:
       secondary_name: chantier
     # include a list page with all topics
     list_all: false
+    show_drafts_by_default: false
     display_metadata: false
     activate_read_more: false
     dataset_editorialization: false

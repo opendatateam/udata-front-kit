@@ -1,7 +1,9 @@
 import { Parser } from '@json2csv/plainjs'
 
-import type { DatasetProperties } from '@/model/topic'
+import { Availability, type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/DatasetStore'
+import { toastHttpError } from '@/utils/error'
+import { isNotFoundError } from '@/utils/http'
 
 interface DatasetRow {
   label: string
@@ -12,6 +14,7 @@ interface DatasetRow {
   description?: string
   last_update?: string
   organization?: string
+  group?: string
 }
 
 export const exportDatasets = async (
@@ -26,7 +29,8 @@ export const exportDatasets = async (
     'title',
     'description',
     'last_update',
-    'organization'
+    'organization',
+    'group'
   ]
   const rows = await Promise.all(
     datasets.map(async (datasetProperties) => {
@@ -34,23 +38,38 @@ export const exportDatasets = async (
         label: datasetProperties.title,
         label_description: datasetProperties.purpose,
         availability: datasetProperties.availability,
-        uri: datasetProperties.uri
+        uri: datasetProperties.uri,
+        group: datasetProperties.group
       }
+
       const remoteDataset =
         datasetProperties.id != null
-          ? await store.load(datasetProperties.id)
+          ? await store
+              .load(datasetProperties.id, { toasted: false })
+              .catch((error) => {
+                if (isNotFoundError(error)) {
+                  row.availability = Availability.REMOTE_DELETED
+                } else {
+                  toastHttpError(error)
+                }
+
+                return row
+              })
           : null
-      if (remoteDataset != null) {
-        row.title = remoteDataset.title
-        row.uri = remoteDataset.page
-        row.description = remoteDataset.description
-        row.last_update = remoteDataset.last_update
-        row.organization = remoteDataset.organization?.name
-      }
+
+      if (remoteDataset == null) return row
+
+      row.title = remoteDataset.title
+      row.uri = remoteDataset.page
+      row.description = remoteDataset.description
+      row.last_update = remoteDataset.last_update
+      row.organization = remoteDataset.organization?.name
+
       return row
     })
   )
   const parser = new Parser({ fields: headers })
   const csv = parser.parse(rows)
+
   return new Blob([csv], { type: 'text/csv;charset=utf-8;' })
 }

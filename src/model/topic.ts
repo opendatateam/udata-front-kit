@@ -10,7 +10,8 @@ export enum Availability {
   MISSING = 'missing',
   NOT_AVAILABLE = 'not available',
   LOCAL_AVAILABLE = 'available',
-  URL_AVAILABLE = 'url available'
+  URL_AVAILABLE = 'url available',
+  REMOTE_DELETED = 'remote deleted'
 }
 
 export interface DatasetProperties {
@@ -19,10 +20,14 @@ export interface DatasetProperties {
   uri: string | null
   id: string | null
   availability: Availability
+  group?: string
   // those are "local" properties, not stored on data.gouv.fr
+  isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
 }
+
+export type DatasetsGroups = Map<string, DatasetProperties[]>
 
 export interface SiteTopicExtras {
   theme: string

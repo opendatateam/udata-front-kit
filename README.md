@@ -93,4 +93,4 @@ npm run format
 ## Auteurs
 
 - data.gouv.fr, Direction interministérielle du numérique.
-- Ecolab, Commissariat général au développement durable, Ministère de la transition écologique.
+- Ecolab, Commissariat général au développement durable, Ministère en charge de l&rsquo;environnement.

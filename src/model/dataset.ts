@@ -17,9 +17,14 @@ export interface DatasetModalData {
 export interface ContactPoint {
   id: string
   name: string
-  email: string
+  email?: string
+  contact_form?: string
+  role: string
 }
 
 export type ExtendedDatasetV2 = DatasetV2 & {
-  contact_point?: ContactPoint
+  extras: {
+    [key: string]: unknown
+    dcat?: Record<string, string[] | undefined>
+  }
 }

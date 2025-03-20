@@ -59,9 +59,7 @@ const computeQueryArgs = (
   if (props.themeName) query.theme = props.themeName
   if (props.subthemeName) query.subtheme = props.subthemeName
   if (selectedGeozone.value) query.geozone = selectedGeozone.value
-  if (localShowDrafts.value) {
-    query.drafts = 1
-  }
+  query.drafts = localShowDrafts.value ? '1' : '0'
   if (route.query.q) {
     query.q = route.query.q
   }
@@ -180,7 +178,7 @@ watchEffect(() => {
         >Couverture territoriale</label
       >
       <SelectSpatialCoverage
-        v-model="selectedSpatialCoverage"
+        v-model:spatial-coverage-model="selectedSpatialCoverage"
         :short="true"
         @update:spatial-coverage-model="switchSpatialCoverage"
       />

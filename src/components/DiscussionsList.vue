@@ -45,7 +45,8 @@ const props = defineProps({
 
 const subjectClassLabels = {
   Dataset: 'jeu de données',
-  Topic: topicsName
+  Topic: topicsName,
+  Indicator: 'indicateur'
 }
 
 const discussionForm: Ref<DiscussionForm> = ref({
@@ -83,7 +84,7 @@ const getUserAvatar = (post: Post) => {
 }
 
 const triggerLogin = () => {
-  LocalStorageService.setItem('lastRoute', route)
+  LocalStorageService.setItem('lastRoute', route.fullPath)
   router.push({ name: 'login' })
 }
 
@@ -195,7 +196,9 @@ watchEffect(() => {
       width="130"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      Pas de discussion pour ce {{ subjectClassLabels[props.subjectClass] }}.
+      Pas de discussion pour
+      {{ props.subjectClass === 'Indicator' ? 'cet' : 'ce' }}
+      {{ subjectClassLabels[props.subjectClass] }}.
     </p>
   </div>
   <div v-else class="fr-mt-4w">

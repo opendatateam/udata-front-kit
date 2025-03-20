@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
-import { capitalize, computed, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { toast } from 'vue3-toastify'
 
+import ErrorMessage from '@/components/forms/ErrorMessage.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useTopicsConf } from '@/utils/config'
+
+import { useExtras } from '@/utils/bouquet'
+import { useGroups } from '@/utils/bouquetGroups'
+import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
+
+import { useForm } from '@/utils/form'
 
 const props = defineProps({
   show: {
@@ -35,7 +42,7 @@ const datasetProperties = ref<DatasetProperties>({
   uri: `/datasets/${props.dataset.id}`,
   availability: Availability.LOCAL_AVAILABLE
 })
-const selectedBouquetId = ref(null)
+const selectedBouquetId: Ref<string | null> = ref(null)
 
 const bouquetOptions = computed(() => {
   return bouquets.value.map((bouquet) => {
@@ -46,19 +53,35 @@ const bouquetOptions = computed(() => {
   })
 })
 
+const formErrors: Ref<string[]> = ref([])
+
+const validateFields = () => {
+  if (!datasetProperties.value.title.trim()) {
+    formErrors.value.push('title')
+  }
+  if (!datasetProperties.value.purpose.trim()) {
+    formErrors.value.push('purpose')
+  }
+  if (!selectedBouquetId.value) {
+    formErrors.value.push('bouquetId')
+  }
+  if (
+    datasetProperties.value.group &&
+    datasetProperties.value.group.trim().length > 100
+  ) {
+    formErrors.value.push('group')
+  }
+}
+
 const isValid = computed(() => {
   if (topicsDatasetEditorialization) {
-    return (
-      datasetProperties.value.title.trim() !== '' &&
-      datasetProperties.value.purpose.trim() !== '' &&
-      !!selectedBouquetId.value
-    )
+    return !formErrors.value.length
   } else {
     return !!selectedBouquetId.value
   }
 })
 
-const modalActions = computed(() => {
+const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   return [
     {
       label: 'Annuler',
@@ -67,23 +90,32 @@ const modalActions = computed(() => {
     },
     {
       label: 'Enregistrer',
-      disabled: !isValid.value,
-      onClick: () => submit()
+      onClick: () => handleSubmit()
     }
   ]
 })
 
-const isDatasetInBouquet = computed(() => {
+const errorSummary = useTemplateRef('errorSummary')
+
+const selectedBouquet = computed(() => {
   if (selectedBouquetId.value === null) {
+    return null
+  }
+  return topicStore.get(selectedBouquetId.value)
+})
+
+const { datasetsProperties } = useExtras(selectedBouquet)
+
+const isDatasetInBouquet = computed(() => {
+  if (!selectedBouquetId.value) {
     return false
   }
-  const selectedBouquet = topicStore.get(selectedBouquetId.value)
-  const datasetsProperties =
-    selectedBouquet?.extras[topicsExtrasKey].datasets_properties
-  return datasetsProperties?.some(
+  return datasetsProperties.value.some(
     (datasetProps) => datasetProps.id === props.dataset.id
   )
 })
+
+const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
 
 const submit = async () => {
   if (selectedBouquetId.value === null) {
@@ -111,6 +143,19 @@ const submit = async () => {
   closeModal()
 }
 
+const {
+  formErrorMessagesMap,
+  sortedErrors,
+  getErrorMessage,
+  isSubmitted,
+  handleSubmit
+} = useForm(formErrors, {
+  validateFields,
+  onSuccess: submit,
+  errorSummaryRef: errorSummary,
+  isValid
+})
+
 const closeModal = () => {
   emit('update:show', false)
 }
@@ -128,15 +173,33 @@ onMounted(() => {
     :title="`Ajouter le jeu de données à un de vos ${topicsName}s`"
     :opened="show"
     aria-modal="true"
+    class="form"
     @close="closeModal"
   >
+    <ErrorSummary
+      v-show="formErrors.length"
+      ref="errorSummary"
+      :form-error-messages-map
+      :form-errors="sortedErrors"
+      heading-level="h3"
+    />
     <DsfrSelect
+      id="input-bouquetId"
       v-model="selectedBouquetId"
       :label="`${capitalize(topicsName)} à associer (obligatoire)`"
       :options="bouquetOptions"
       :default-unselected-text="`Choisissez un ${topicsName}`"
-    >
-    </DsfrSelect>
+      :aria-invalid="
+        formErrors.includes('bouquetId') && isSubmitted ? true : undefined
+      "
+      aria-errormessage="errors-bouquetId"
+    />
+    <ErrorMessage
+      v-if="!!getErrorMessage('bouquetId')"
+      input-name="bouquetId"
+      :error-message="getErrorMessage('bouquetId')"
+    />
+
     <DsfrBadge
       v-if="isDatasetInBouquet"
       type="info"
@@ -145,10 +208,22 @@ onMounted(() => {
       ellipsis
       class="fr-mb-2w"
     />
+    <div class="fr-input-group">
+      <SelectTopicGroup
+        v-model:properties-model="datasetProperties"
+        v-model:groups-model="datasetsGroups"
+        label="Regroupement"
+        description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
+        :error-message="getErrorMessage('group')"
+      />
+    </div>
     <DatasetPropertiesTextFields
       v-if="topicsDatasetEditorialization"
-      v-model:dataset-properties="datasetProperties"
+      v-model:dataset-properties-model="datasetProperties"
+      :error-title="getErrorMessage('title')"
+      :error-purpose="getErrorMessage('purpose')"
     />
+
     <slot name="footer">
       <DsfrButtonGroup
         v-if="modalActions?.length"
@@ -163,5 +238,8 @@ onMounted(() => {
 <style scoped>
 .fr-select-group:has(+ .fr-badge) {
   margin-bottom: 0.5rem;
+}
+:deep(.fr-select-group:has(+ #errors-bouquetId)) {
+  margin-bottom: 0;
 }
 </style>

@@ -5,7 +5,6 @@ import { computed, onMounted } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
 import { NoOptionSelected } from '@/model/theme'
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
@@ -155,7 +154,7 @@ defineExpose({
             Vous pouvez aussi contribuer en créant un {{ topicsName }}.
           </p>
         </div>
-        <div class="fr-grid-row fr-grid-row--undefined">
+        <div class="fr-grid-row">
           <button class="fr-btn" @click.stop.prevent="clearFilters">
             Réinitialiser les filtres
           </button>
@@ -164,30 +163,24 @@ defineExpose({
             :to="createUrl"
             class="fr-btn fr-btn--secondary fr-ml-1w"
           >
-            <VIcon name="ri-add-circle-line" class="fr-mr-1v" />
+            <VIconCustom name="add-circle-line" class="fr-mr-1v" />
             Ajouter un {{ topicsName }}
           </router-link>
         </div>
       </div>
     </div>
   </div>
-  <div class="bouquets-list-container fr-container fr-mb-4w border-top">
-    <div class="fr-grid-row fr-grid-row--gutters fr-mb-1w">
-      <div class="fr-col-12">
-        <BouquetCard
-          v-for="bouquet in bouquets"
-          :key="bouquet.id"
-          :bouquet="bouquet"
-        />
-      </div>
-    </div>
+  <div class="fr-mb-4w border-top">
+    <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
+      <li v-for="bouquet in bouquets" :key="bouquet.id" class="fr-col-12">
+        <BouquetCard :bouquet="bouquet" />
+      </li>
+    </ul>
   </div>
 </template>
 
 <style scoped>
-/* "revert" gutters — simpler than w/o gutters */
-.bouquets-list-container {
-  padding-right: 0;
-  padding-left: 0;
+.fr-grid-row {
+  --gap: 1rem;
 }
 </style>
