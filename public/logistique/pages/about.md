@@ -1,4 +1,4 @@
-# **_À propos de logistique.data.gouv.fr_**
+# ***À propos de logistique.data.gouv.fr***
 
 logistique.data.gouv.fr est une plateforme publique de partage de données ouvertes liées à la logistique en France, facilitant l'accès aux informations pour améliorer l'efficacité et la transparence du secteur.
 
