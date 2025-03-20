@@ -98,10 +98,10 @@ const errorSummary = useTemplateRef('errorSummary')
 const selectedBouquet: Ref<Topic | null> = ref(null)
 
 watch(selectedBouquetId, async () => {
-  if (selectedBouquetId.value === null) {
-    return null
-  }
-  selectedBouquet.value = await topicStore.load(selectedBouquetId.value)
+  selectedBouquet.value =
+    selectedBouquetId.value === null
+      ? null
+      : await topicStore.load(selectedBouquetId.value)
 })
 
 const { datasetsProperties } = useExtras(selectedBouquet)
