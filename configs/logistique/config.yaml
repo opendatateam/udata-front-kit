@@ -150,7 +150,7 @@ website:
     show_extended_information_panel: false
   topics:
     slug: bouquets
-    name: bouquet de donnée
+    name: bouquet
     extras_key: 'logistique'
     themes:
       usage: true
