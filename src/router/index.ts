@@ -87,11 +87,13 @@ const defaultRoutes: RouteRecordRaw[] = [
         component: async () =>
           await import('@/views/bouquets/BouquetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
-          query: route.query.q,
-          subtheme: route.query.subtheme,
-          theme: route.query.theme,
-          geozone: route.query.geozone,
-          drafts: route.query.drafts
+          query: route.query.q || null,
+          subtheme: route.query.subtheme || null,
+          theme: route.query.theme || null,
+          geozone: route.query.geozone || null,
+          include_private: route.query.include_private,
+          page: route.query.page || null,
+          sort: route.query.sort || '-last_modified'
         })
       },
       {

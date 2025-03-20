@@ -8,13 +8,14 @@ import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useExtras } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useThemeOptions } from '@/utils/theme'
+import { useTag } from '@/utils/tags'
 
 const { topicsSlug } = useTopicsConf()
 
@@ -34,7 +35,7 @@ const spatialCoverage = useSpatialCoverage(bouquetRef)
 
 const ownerName = useOwnerName(props.bouquet)
 
-const { theme, subtheme, datasetsProperties } = useExtras(bouquetRef)
+const { datasetsProperties } = useExtras(bouquetRef)
 
 const nbData: number = datasetsProperties.value.length
 
@@ -43,7 +44,8 @@ const bouquetLink: RouteLocationRaw = {
   params: { bid: props.bouquet.slug }
 }
 
-const { themeColors } = useThemeOptions(theme)
+const theme = useTag('bouquets', bouquetRef, 'theme')
+const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
 </script>
 
 <template>
@@ -56,10 +58,14 @@ const { themeColors } = useThemeOptions(theme)
     </div>
     <div v-if="subtheme" class="fr-grid-row">
       <div class="fr-col-12">
-        <DsfrTag
-          class="fr-card__detail fr-mt-1w fr-mb-1w card__tag"
-          :label="subtheme"
-        />
+        <ul class="fr-badges-group fr-mb-1w fr-mt-1w">
+          <li>
+            <TagComponent :tag="theme" />
+          </li>
+          <li>
+            <TagComponent :tag="subtheme" />
+          </li>
+        </ul>
       </div>
     </div>
     <div
@@ -157,10 +163,6 @@ article {
 }
 .owner-avatar {
   background-color: #fff;
-}
-.card__tag {
-  color: v-bind('themeColors.color');
-  background-color: v-bind('themeColors.background');
 }
 
 .fr-card__detail,
