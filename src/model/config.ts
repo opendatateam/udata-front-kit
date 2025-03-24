@@ -50,10 +50,11 @@ export interface FilterItemConf {
   id: string
   child?: string
   color: string
+  default_option: string
   values: FilterItemValueConf[]
 }
 
-export type Filters = 'bouquets' | 'indicators'
+export type Filters = 'bouquets' | 'indicators' | 'datasets'
 
 export type FiltersConf = {
   [K in Filters]: {

@@ -213,3 +213,74 @@ themes:
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
 organizations:
+
+filters:
+  datasets:
+    tag_prefix:
+    # TODO: document and migrate in ecospheres
+    universe_tag: meteodatagouvfr
+    items:
+      - name: Catégories
+        default_option: Toutes les catégories
+        id: category
+        child: subcategory
+        color: noop
+        values:
+          - id: climatologique-base
+            name: Données climatologiques de base
+          - id: climatologique-changement-climatique
+            name: Données climatologiques de référence pour le changement climatique
+          - id: pnt
+            name: Données de Prévision Numérique du Temps (PNT)
+          - id: stations
+            name: Informations sur les stations
+      - name: Sous-catégories
+        default_option: Toutes les sous-catégories
+        id: subcategory
+        color: noop
+        values:
+          # parent-category: stations
+          - name: Stations du réseau Météo-France
+            id: stations-mf
+            parent: stations
+          - name: Stations complémentaires
+            id: stations-complementaires
+            parent: stations
+          - name: Fiches de poste (par département)
+            id: fiches-postes-dep
+            parent: stations
+          - name: Fiches de postes réseau complémentaire (par département)
+            id: fiches-postes-complementaire-dep
+            parent: stations
+          - name: Informations réseau
+            id: infos-reseau
+            parent: stations
+          # parent-category: climatologique-base
+          - name: Données à la station du réseau Météo-France
+            id: climatologique-base-donnees-stations-mf
+            parent: climatologique-base
+          - name: Données stations complémentaires
+            id: climatologique-base-donnees-stations-complementaires
+            parent: climatologique-base
+          - name: Données spatialisées
+            id: climatologique-base-donnees-spatialisees
+            parent: climatologique-base
+          - name: Données à la station
+            id: climatologique-changement-climatique-donnees-station
+            parent: climatologique-changement-climatique
+          - name: Données spatialisées
+            id: climatologique-changement-climatique-donnees-spatialisees
+            parent: climatologique-changement-climatique
+          # parent-category: pnt
+          - name: Modèle ARPEGE
+            id: pnt-arpege
+            parent: pnt
+          - name: Modèle AROME Métropole
+            id: pnt-arome-metropole
+            parent: pnt
+          - name: Modèle AROME Outre-Mer
+            id: pnt-arome-outre-mer
+            parent: pnt
+          - name: Modèle de vagues et surcote
+            id: pnt-vague-surcote
+            parent: pnt
