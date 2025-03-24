@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, inject, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetSearch from '@/components/datasets/DatasetSearch.vue'
 import config from '@/config'
-import type { TopicItemConf } from '@/model/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useSearchStore } from '@/store/SearchStore'
-import { useTopicStore } from '@/store/TopicStore'
 import { fromMarkdown } from '@/utils'
 import { debounceWait } from '@/utils/config'
 
@@ -44,7 +41,6 @@ const store = useSearchStore()
 const currentPage = ref(1)
 const localQuery = ref()
 const loader = useLoading()
-const topicStore = useTopicStore()
 
 const queryResults = ref<HTMLParagraphElement | null>(null)
 
@@ -55,9 +51,6 @@ const datasets = computed(() => store.datasets)
 const pages = computed(() => store.pagination)
 
 const banner = config.website.datasets.banner
-const topicItems = config.website.list_search_topics as TopicItemConf[]
-const hasOrganizationFilter = config.website.datasets
-  .organization_filter as boolean
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -74,13 +67,6 @@ const metaTitle = computed(() => {
   return document.title
 })
 
-const organizationOptions = computed(() => [
-  { value: '', text: 'Toutes les organisations' },
-  ...useOrganizationStore().flatData.map((org) => {
-    return { value: org.id, text: org.name }
-  })
-])
-
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
 const computeUrlQuery = (
@@ -95,16 +81,6 @@ const computeUrlQuery = (
     ...(selectedTopicId.value && { topic: selectedTopicId.value }),
     ...data
   }
-}
-
-const onSelectOrganization = (orgId: string | number) => {
-  router.push({
-    path: '/datasets',
-    query: computeUrlQuery({
-      page: 1,
-      organization: orgId
-    })
-  })
 }
 
 const search = () => {
@@ -170,15 +146,6 @@ watch(
     immediate: true
   }
 )
-
-onMounted(() => {
-  if (topicItems?.length) {
-    topicStore.loadTopicsFromList(topicItems)
-  }
-  if (hasOrganizationFilter) {
-    useOrganizationStore().loadFromConfigFlat()
-  }
-})
 </script>
 
 <template>
