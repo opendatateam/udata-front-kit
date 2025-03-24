@@ -9,7 +9,7 @@ import {
   type DatasetProperties,
   type DatasetsGroups
 } from '@/model/topic'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 
 import { useForm, type AllowedInput } from '@/utils/form'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'

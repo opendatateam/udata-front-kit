@@ -8,7 +8,7 @@ import {
   type DatasetProperties,
   type DatasetsGroups
 } from '@/model/topic'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicsConf } from '@/utils/config'
 import { useForm } from '@/utils/form'
 

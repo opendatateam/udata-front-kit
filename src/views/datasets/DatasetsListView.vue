@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { computed, inject, ref, watch, type Ref } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import DatasetList from '@/components/datasets/DatasetList.vue'
 import DatasetSearch from '@/components/datasets/DatasetSearch.vue'
 import config from '@/config'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
-import { useSearchStore } from '@/store/SearchStore'
 import { fromMarkdown } from '@/utils'
+import { useAccessibilityProperties } from '@/utils/a11y'
 import { debounceWait } from '@/utils/config'
 
 defineEmits(['search'])
@@ -37,118 +33,28 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
-const store = useSearchStore()
-const currentPage = ref(1)
-const localQuery = ref()
-const loader = useLoading()
 
-const queryResults = ref<HTMLParagraphElement | null>(null)
-
-const selectedTopicId: Ref<string | null> = ref(null)
-const selectedOrganizationId: Ref<string | null> = ref(null)
-
-const datasets = computed(() => store.datasets)
-const pages = computed(() => store.pagination)
+const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
+const searchResultsMessage = computed(
+  () => datasetListComp.value?.numberOfResultMsg || ''
+)
+useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const banner = config.website.datasets.banner
 
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
-
-const metaTitle = computed(() => {
-  if (currentPage.value && localQuery.value) {
-    return `${route.meta.title} pour "${localQuery.value}" - page ${currentPage.value}`
-  } else if (currentPage.value) {
-    return `${route.meta.title} - page ${currentPage.value}`
-  } else if (localQuery.value) {
-    return `${route.meta.title} pour "${localQuery.value}"`
-  }
-  return document.title
-})
-
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
-const computeUrlQuery = (
-  data: Record<string, string | number>
-): Record<string, string | number> => {
-  return {
-    page: currentPage.value,
-    ...(localQuery.value && { q: localQuery.value }),
-    ...(selectedOrganizationId.value && {
-      organization: selectedOrganizationId.value
-    }),
-    ...(selectedTopicId.value && { topic: selectedTopicId.value }),
-    ...data
-  }
-}
-
-const search = () => {
+const search = useDebounceFn((query) => {
   router.push({
-    path: '/datasets',
-    query: computeUrlQuery({ page: 1 }),
+    name: 'datasets',
+    query: { ...route.query, q: query },
     hash: '#datasets-list'
   })
-}
-
-const goToPage = (page: number) => {
-  router.push({
-    path: '/datasets',
-    query: computeUrlQuery({ page: page + 1 })
-  })
-}
-
-watch(
-  props,
-  () => {
-    localQuery.value = props.query
-    currentPage.value = props.page ? parseInt(props.page) : 1
-    selectedOrganizationId.value = props.organization
-    selectedTopicId.value = props.topic
-  },
-  { immediate: true }
-)
-
-const delayedSearch = useDebounceFn(
-  (currentQuery, currentTopicId, currentOrganizationId, currentPageValue) => {
-    const loadingInstance = loader.show()
-    const args = currentOrganizationId
-      ? { organization: currentOrganizationId }
-      : {}
-    store
-      .search(currentQuery, currentTopicId, currentPageValue, args)
-      .finally(() => {
-        const searchResultsMessage = queryResults.value
-          ? queryResults.value.innerText
-          : ''
-        setAccessibilityProperties(metaTitle.value, false, [
-          {
-            text: searchResultsMessage
-          }
-        ])
-        loadingInstance.hide()
-      })
-  },
-  debounceWait
-)
-
-watch(
-  [localQuery, selectedTopicId, selectedOrganizationId, currentPage],
-  ([currentQuery, currentTopicId, currentOrganizationId, currentPageValue]) => {
-    delayedSearch(
-      currentQuery,
-      currentTopicId,
-      currentOrganizationId,
-      currentPageValue
-    )
-  },
-  {
-    immediate: true
-  }
-)
+}, debounceWait)
 </script>
 
 <template>
+  <!-- FIXME: use layout from (Indicators|Bouquets)ListView -->
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
@@ -191,16 +97,13 @@ watch(
           </div>
         </nav>
         <div className="fr-col">
-          <DatasetList ref="datasetListComp" :datasets="datasets" />
+          <DatasetList
+            ref="datasetListComp"
+            :query="props.query"
+            :page="props.page ? parseInt(props.page) : 1"
+          />
         </div>
       </div>
     </div>
   </GenericContainer>
-  <DsfrPagination
-    v-if="pages.length"
-    class="fr-container"
-    :current-page="currentPage - 1"
-    :pages="pages"
-    @update:current-page="goToPage"
-  />
 </template>

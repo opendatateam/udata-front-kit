@@ -24,7 +24,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
