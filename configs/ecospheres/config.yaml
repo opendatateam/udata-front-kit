@@ -219,7 +219,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #         child: {string?}      # id of the child filter (optional)
 #         color: {string}       # color of the filter's tag
 #         values:               # list of values for this filter
-#           - id: {string}      # id of the value ⚠️ needs to be unique across the filter item
+#           - id: {string}      # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}    # name of the value
 #             parent: {string?} # id of the parent filter value (optional)
 filters:
