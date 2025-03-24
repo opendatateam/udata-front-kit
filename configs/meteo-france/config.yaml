@@ -8,7 +8,7 @@ datagouvfr:
 
 universe:
   # "universe" topic id
-  topic_id: 6571f222129681e83de11aa2 # meteo-test
+  topic_id:
   # universe name, used as bouquets tag
   name: meteo-france
 

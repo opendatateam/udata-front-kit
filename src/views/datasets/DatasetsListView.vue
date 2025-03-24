@@ -19,7 +19,7 @@ const props = defineProps({
   },
   page: {
     type: String,
-    default: null
+    default: '1'
   },
   organization: {
     type: String,
@@ -100,7 +100,7 @@ const search = useDebounceFn((query) => {
           <DatasetList
             ref="datasetListComp"
             :query="props.query"
-            :page="props.page ? parseInt(props.page) : 1"
+            :page="props.page"
           />
         </div>
       </div>

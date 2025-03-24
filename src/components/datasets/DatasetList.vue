@@ -1,20 +1,19 @@
 <script setup lang="ts">
-// TODO: search should be done here, based on dynamic props
-
 import { useSearchStore } from '@/store/SearchStore'
 import { DatasetCard } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
+import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 const emits = defineEmits(['clearFilters'])
 
-defineProps({
+const props = defineProps({
   query: {
     type: String,
     default: ''
   },
   page: {
-    type: Number,
+    type: String,
     required: true
   }
 })
@@ -34,11 +33,6 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
     return 'Aucun résultat ne correspond à votre recherche'
   }
 })
-
-// FIXME:
-// const zIndex = (key: number) => {
-//   return { zIndex: datasets.length - key }
-// }
 
 const getDatasetPage = (id: string) => {
   return { name: 'dataset_detail', params: { did: id } }
@@ -73,6 +67,15 @@ const doSort = (value: string | null) => {
     hash: '#datasets-list'
   })
 }
+
+const executeQuery = async (args: typeof props) => {
+  const loader = useLoading().show({ enforceFocus: false })
+  // async search(query, topic, page = 1, args = {}) {
+  return store.query(args).finally(() => loader.hide())
+}
+
+// launch search on props (~route.query) changes
+watch(props, () => executeQuery(props), { immediate: true, deep: true })
 
 defineExpose({
   numberOfResultMsg
@@ -141,6 +144,7 @@ defineExpose({
           :dataset="dataset"
           :dataset-url="getDatasetPage(dataset.id)"
           :organization-url="getOrganizationPage(dataset.organization?.id)"
+          class="dataset-card"
         />
       </li>
     </ul>
@@ -148,8 +152,15 @@ defineExpose({
   <DsfrPagination
     v-if="pagination.length"
     class="fr-container"
-    :current-page="page - 1"
+    :current-page="parseInt(page) - 1"
     :pages="pagination"
     @update:current-page="goToPage"
   />
 </template>
+
+<style scoped>
+.dataset-card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+</style>
