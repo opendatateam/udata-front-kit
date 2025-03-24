@@ -7,34 +7,35 @@ import {
   type PropType,
   type Ref
 } from 'vue'
-import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import type { SpatialCoverage } from '@/model/spatial'
-import { NoOptionSelected } from '@/model/theme'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
-import { useThemeOptions } from '@/utils/theme'
+import { useTagOptions } from '@/utils/tags'
 
 const spatialAPI = new SpatialAPI()
 
 const props = defineProps({
-  themeName: {
+  theme: {
     type: String,
-    default: NoOptionSelected
+    default: null
   },
-  subthemeName: {
+  subtheme: {
     type: String,
-    default: NoOptionSelected
+    default: null
   },
   geozone: {
     type: String as PropType<string | null>,
     default: null
   },
-  showDrafts: {
-    type: Boolean,
-    default: false
+  // eslint-disable-next-line vue/prop-name-casing
+  include_private: {
+    type: String as PropType<string | null>,
+    default: null
   }
 })
 
@@ -42,60 +43,47 @@ const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
-const selectedGeozone: Ref<string | undefined> = ref(undefined)
+const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
-const themeNameRef = toRef(props, 'themeName')
-const { themeOptions, subthemeOptions } = useThemeOptions(themeNameRef)
+const themeIdRef = toRef(props, 'theme')
+const { tagOptions: themeOptions, subTagOptions: subthemeOptions } =
+  useTagOptions('bouquets', themeIdRef, 'theme')
 
 const { topicsSlug, topicsUseThemes, topicsMainTheme, topicsSecondaryTheme } =
   useTopicsConf()
 const localShowDrafts = ref(false)
 
-const computeQueryArgs = (
-  data?: Record<string, string | null>
-): LocationQueryRaw => {
-  const query: LocationQueryRaw = {}
-  if (props.themeName) query.theme = props.themeName
-  if (props.subthemeName) query.subtheme = props.subthemeName
-  if (selectedGeozone.value) query.geozone = selectedGeozone.value
-  query.drafts = localShowDrafts.value ? '1' : '0'
-  if (route.query.q) {
-    query.q = route.query.q
-  }
-  return { ...query, ...data }
-}
-
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
     path: `/${topicsSlug}`,
-    query: computeQueryArgs(data)
+    query: { ...route.query, ...data },
+    hash: '#bouquets-list'
   })
 }
 
-const switchTheme = (event: Event) => {
+const switchTheme = (value: string | null | undefined) => {
   navigate({
-    theme: (event.target as HTMLInputElement)?.value,
-    subtheme: NoOptionSelected
+    theme: value || null,
+    subtheme: null
   })
 }
 
-const switchSubtheme = (event: Event) => {
+const switchSubtheme = (value: string | null | undefined) => {
   navigate({
-    subtheme: (event.target as HTMLInputElement)?.value
+    subtheme: value || null
   })
 }
 
 const switchSpatialCoverage = (
   spatialCoverage: SpatialCoverage | null | undefined
 ) => {
-  selectedGeozone.value =
-    spatialCoverage != null ? spatialCoverage.id : undefined
-  navigate()
+  selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
+  navigate({ geozone: selectedGeozone.value })
 }
 
 const switchLocalShowDrafts = () => {
-  navigate()
+  navigate({ include_private: localShowDrafts.value ? '1' : '0' })
 }
 
 watchEffect(() => {
@@ -106,9 +94,9 @@ watchEffect(() => {
       .then((zone) => (selectedSpatialCoverage.value = zone))
   } else {
     selectedSpatialCoverage.value = undefined
-    selectedGeozone.value = undefined
+    selectedGeozone.value = null
   }
-  localShowDrafts.value = props.showDrafts
+  localShowDrafts.value = props.include_private === '1'
 })
 </script>
 
@@ -117,60 +105,29 @@ watchEffect(() => {
     <DsfrCheckbox
       v-if="userStore.isLoggedIn"
       v-model="localShowDrafts"
+      value="y"
       label="Afficher les brouillons"
       name="show_drafts"
       @update:model-value="switchLocalShowDrafts"
     />
     <template v-if="topicsUseThemes">
       <div class="fr-select-group">
-        <label class="fr-label" for="select_theme">
-          {{ capitalize(topicsMainTheme) }}s
-        </label>
-        <select
-          id="select_theme"
-          class="fr-select"
-          @change="switchTheme($event)"
-        >
-          <option
-            :value="NoOptionSelected"
-            :selected="themeName == NoOptionSelected"
-          >
-            Toutes les {{ topicsMainTheme }}s
-          </option>
-          <option
-            v-for="option in themeOptions"
-            :key="option.value"
-            :value="option.value"
-            :selected="option.value === themeName"
-          >
-            {{ option.text }}
-          </option>
-        </select>
+        <SelectComponent
+          :default-option="`Toutes les ${topicsMainTheme}s`"
+          :label="capitalize(topicsMainTheme)"
+          :options="themeOptions"
+          :model-value="props.theme"
+          @update:model-value="(value) => switchTheme(value)"
+        />
       </div>
       <div class="fr-select-group">
-        <label class="fr-label" for="select_subtheme">
-          {{ capitalize(topicsSecondaryTheme) }}s
-        </label>
-        <select
-          id="select_subtheme"
-          class="fr-select"
-          @change="switchSubtheme($event)"
-        >
-          <option
-            :value="NoOptionSelected"
-            :selected="subthemeName == NoOptionSelected"
-          >
-            Tous les {{ topicsSecondaryTheme }}s
-          </option>
-          <option
-            v-for="option in subthemeOptions"
-            :key="option.value"
-            :value="option.value"
-            :selected="option.value === subthemeName"
-          >
-            {{ option.text }}
-          </option>
-        </select>
+        <SelectComponent
+          :default-option="`Tous les ${topicsSecondaryTheme}s`"
+          :label="capitalize(topicsSecondaryTheme)"
+          :options="subthemeOptions"
+          :model-value="props.subtheme"
+          @update:model-value="(value) => switchSubtheme(value)"
+        />
       </div>
     </template>
     <div class="fr-select-group">
