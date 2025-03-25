@@ -64,11 +64,10 @@ const FiltersComponent = computed(() => {
 </script>
 
 <template>
-  <!-- FIXME: use layout from (Indicators|Bouquets)ListView -->
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-my-2v">
+  <div class="fr-container datagouv-components fr-my-2w">
     <h1>Jeux de données</h1>
   </div>
   <section
