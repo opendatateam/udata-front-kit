@@ -7,6 +7,8 @@ import { useTagsQuery } from '@/utils/tags'
 import type { DatasetV2 } from '@datagouv/components'
 
 const PAGE_SIZE = 20
+// max search window for elasticsearch on data.gouv.fr
+const ES_MAX_TOTAL = 10000
 const searchAPI = new SearchAPI()
 const filtersConf = useFiltersConf('datasets')
 
@@ -40,13 +42,12 @@ export const useSearchStore = defineStore('search', {
           }
         }
       )
-    }
+    },
+    maxTotal: () => ES_MAX_TOTAL
   },
   actions: {
     async query(args: QueryArgs) {
       const { query, ...queryArgs } = args
-      // FIXME: handle case where no tag_prefix (and no filter.id prefix either)
-      // or even better, make the change on meteo to have a tag_prefix
       const { extraArgs, tag } = useTagsQuery('datasets', queryArgs)
       const results = await searchAPI.search(
         query,

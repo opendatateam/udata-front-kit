@@ -24,13 +24,13 @@ const route = useRoute()
 
 const store = useSearchStore()
 const filtersConf = useFiltersConf('datasets')
-const { datasets, pagination, total } = storeToRefs(store)
+const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
     return '1 jeu de données disponible'
   } else if (total.value > 1) {
-    return `${total.value} jeux de données disponibles`
+    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} jeux de données disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
