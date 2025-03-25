@@ -165,12 +165,14 @@ website:
 # cf configs/ecospheres/config.yaml for filters config format details
 filters:
   bouquets:
+    universe_tag:
     tag_prefix: logistique
     items:
       - name: Catégorie
         id: theme
         child: subtheme
         color: green-bourgeon
+        use_tag_prefix: true
         values:
           - id: immobilier-logistique
             name: Immobilier logistique
@@ -187,6 +189,7 @@ filters:
       - name: Sous-catégorie
         id: subtheme
         color: blue-ecume
+        use_tag_prefix: true
         values:
           # immobilier-logistique
           - id: immobilier-logistique-general

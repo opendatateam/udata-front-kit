@@ -208,17 +208,19 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 # Configuration format for filters:
 #
 # filters:
-#   {object_type}:              # object type to filter on
-#     tag_prefix: {string}      # prefix for tags on data.gouv.fr
-#     items:                    # list of filters for this {object_type}
-#       - name: {string}        # name of the filter ⚠️ needs to be unique across all items
-#         id: {string}          # id of the filter
-#         child: {string?}      # id of the child filter (optional)
-#         color: {string}       # color of the filter's tag
-#         values:               # list of values for this filter
-#           - id: {string}      # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
-#             name: {string}    # name of the value
-#             parent: {string?} # id of the parent filter value (optional)
+#   {object_type}:               # object type to filter on
+#     universe_tag: {string}     # used to define a "universe" on a given {object_type}, through a tag
+#     tag_prefix: {string}       # prefix for tags on data.gouv.fr
+#     items:                     # list of filters for this {object_type}
+#       - name: {string}         # name of the filter ⚠️ needs to be unique across all items
+#         id: {string}           # id of the filter
+#         child: {string?}       # id of the child filter (optional)
+#         color: {string}        # color of the filter's tag
+#         use_tag_prefix: {bool} # whether to use {tag_prefix}-{item.id} when building value tag
+#         values:                # list of values for this filter
+#           - id: {string}       # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}     # name of the value
+#             parent: {string?}  # id of the parent filter value (optional)
 filters:
   # DATASETS (dummy)
   datasets:
@@ -227,12 +229,14 @@ filters:
     items: []
   # BOUQUETS
   bouquets:
+    universe_tag:
     tag_prefix: ecospheres
     items:
       - name: Thématique
         id: theme
         child: subtheme
         color: noop
+        use_tag_prefix: true
         values:
           - id: se-loger
             name: Se loger
@@ -251,6 +255,7 @@ filters:
       - name: Chantier
         id: subtheme
         color: green-archipel
+        use_tag_prefix: true
         values:
           # parent theme: se-loger
           - id: construction-et-renovation-des-logements

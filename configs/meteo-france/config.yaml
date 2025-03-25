@@ -205,10 +205,10 @@ themes:
 # then Informations > ID at the bottom of the page
 organizations:
 
+# cf configs/ecospheres/config.yaml for filters config format details
 filters:
   datasets:
     tag_prefix:
-    # TODO: document and migrate in ecospheres (see whats what w/ indicators)
     universe_tag: meteodatagouvfr
     items:
       - name: Catégories
@@ -216,7 +216,6 @@ filters:
         id: category
         child: subcategory
         color: noop
-        # TODO: document and migrate in ecospheres (see whats what w/ indicators)
         use_tag_prefix: false
         values:
           - id: climatologique-base
