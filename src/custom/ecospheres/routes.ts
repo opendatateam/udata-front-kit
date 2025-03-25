@@ -21,7 +21,7 @@ export const routes = [
           title: 'Données',
           filtersComponent: async () =>
             await import(
-              '@/custom/ecospheres/components/datasets/DatasetSearch.vue'
+              '@/custom/ecospheres/components/datasets/EcospheresDatasetSearch.vue'
             )
         } as RouteMeta,
         component: async () =>
