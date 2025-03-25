@@ -5,8 +5,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetList from '@/components/datasets/DatasetList.vue'
-import DatasetSearch from '@/components/datasets/DatasetSearch.vue'
 import config from '@/config'
+import type { RouteMeta } from '@/router'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
 import { debounceWait } from '@/utils/config'
@@ -44,6 +44,23 @@ const search = useDebounceFn((query) => {
     hash: '#datasets-list'
   })
 }, debounceWait)
+
+// load custom filters component from router, or fallback to default
+const FiltersComponent = computed(() => {
+  const meta = route.meta as RouteMeta
+  const componentLoader = meta?.filtersComponent
+  if (componentLoader) {
+    return defineAsyncComponent({
+      loader: componentLoader,
+      onError: (err) => {
+        console.error('Failed to load component:', err)
+      }
+    })
+  }
+  return defineAsyncComponent(
+    () => import('@/components/datasets/DatasetSearch.vue')
+  )
+})
 </script>
 
 <template>
@@ -86,7 +103,7 @@ const search = useDebounceFn((query) => {
             <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <DatasetSearch />
+            <FiltersComponent />
           </div>
         </nav>
         <div className="fr-col">

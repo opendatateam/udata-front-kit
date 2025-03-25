@@ -1,4 +1,4 @@
-import { capitalize } from 'vue'
+import { capitalize, type Component } from 'vue'
 import {
   createRouter,
   createWebHistory,
@@ -11,6 +11,13 @@ import type { PageConfig } from '@/model/config'
 import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
+
+// used by custom site routers
+export interface RouteMeta {
+  title?: string
+  requiresAuth?: boolean
+  filtersComponent?: () => Promise<{ default: Component }>
+}
 
 const { topicsSlug, topicsName } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []

@@ -84,8 +84,9 @@ const executeQuery = async () => {
     },
     {} as Record<string, string>
   )
-  // execute query with props and filtersArgs
-  return store.query({ ...props, ...filtersArgs }).finally(() => loader.hide())
+  return store
+    .query({ ...route.query, ...props, ...filtersArgs })
+    .finally(() => loader.hide())
 }
 
 // launch search on route.query changes

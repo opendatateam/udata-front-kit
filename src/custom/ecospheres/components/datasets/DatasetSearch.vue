@@ -1,32 +1,53 @@
 <script setup lang="ts">
-import config from '@/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
+import { useRoute, useRouter } from 'vue-router'
 
-const hasOrganizationFilter = config.website.datasets
-  .organization_filter as boolean
+const router = useRouter()
+const route = useRoute()
+
+const selectedOrganization: Ref<string | null> = ref(null)
 
 const organizationOptions = computed(() => [
-  { value: '', text: 'Toutes les organisations' },
   ...useOrganizationStore().flatData.map((org) => {
-    return { value: org.id, text: org.name }
+    return { id: org.id, name: org.name }
   })
 ])
 
-const onSelectOrganization = (orgId: string | number) => {
+const onSelectOrganization = (orgId: string | null) => {
   router.push({
     path: '/datasets',
-    query: computeUrlQuery({
+    query: {
+      ...route.query,
       page: 1,
       organization: orgId
-    })
+    },
+    hash: '#datasets-list'
   })
 }
 
 onMounted(() => {
-  if (hasOrganizationFilter) {
-    useOrganizationStore().loadFromConfigFlat()
-  }
+  useOrganizationStore().loadFromConfigFlat()
 })
+
+watch(
+  () => route.query.organization,
+  (newValue) => {
+    selectedOrganization.value = newValue as string
+  },
+  { immediate: true }
+)
 </script>
 
-<template>TODO</template>
+<template>
+  <div className="filterForm">
+    <div class="fr-select-group">
+      <SelectComponent
+        default-option="Toutes les organisations"
+        label="Organisation"
+        :options="organizationOptions"
+        :model-value="selectedOrganization"
+        @update:model-value="onSelectOrganization"
+      />
+    </div>
+  </div>
+</template>

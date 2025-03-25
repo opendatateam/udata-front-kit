@@ -223,6 +223,11 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #             name: {string}    # name of the value
 #             parent: {string?} # id of the parent filter value (optional)
 filters:
+  # DATASETS (dummy)
+  datasets:
+    universe_tag:
+    tag_prefix:
+    items: []
   # BOUQUETS
   bouquets:
     tag_prefix: ecospheres
