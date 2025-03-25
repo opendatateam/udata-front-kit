@@ -20,13 +20,25 @@ const navigate = (data?: Record<string, string | null>) => {
 }
 
 const switchFilter = (filter: string, value: string | null) => {
-  filtersState[filter].selectedValue = value ?? undefined
   if (filtersState[filter].childId) {
     navigate({ [filter]: value, [filtersState[filter].childId]: null })
   } else {
     navigate({ [filter]: value })
   }
 }
+
+watch(
+  () => route.query,
+  () => {
+    // Update filtersState based on query parameters
+    Object.keys(filtersState).forEach((filter) => {
+      const value = route.query[filter]
+      const singleton = Array.isArray(value) ? value[0] : value
+      filtersState[filter].selectedValue = singleton ?? undefined
+    })
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

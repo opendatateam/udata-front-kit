@@ -19,6 +19,7 @@ interface FilterState {
  * - Updates child filter options when parent selection changes
  * - Maintains selected values across filter updates
  * - Provides reactive state management for filter selections
+ * - Does NOT update the route query parameters; that is the responsibility of the caller
  */
 export const useFiltersState = (
   routeQuery: QueryAsString,
