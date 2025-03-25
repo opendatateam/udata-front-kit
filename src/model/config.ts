@@ -57,10 +57,12 @@ export interface FilterItemConf {
 
 export type Filters = 'bouquets' | 'indicators' | 'datasets'
 
+export type FilterConf = {
+  tag_prefix: string
+  universe_tag: string | null
+  items: FilterItemConf[]
+}
+
 export type FiltersConf = {
-  [K in Filters]: {
-    tag_prefix: string
-    universe_tag: string | null
-    items: FilterItemConf[]
-  }
+  [K in Filters]: FilterConf
 }
