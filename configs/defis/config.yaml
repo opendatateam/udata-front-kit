@@ -205,8 +205,6 @@ website:
         url: '/defis/pages/accessibility.md'
   show_quality_component: true
   show_dataset_metadata_panel: false
-  list_search_topics:
-  url_search_topics: 'defis'
   oauth_option: true
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
@@ -251,7 +249,6 @@ website:
       display: false
       create: false
   datasets:
-    organization_filter: false
     add_to_bouquet: false
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []

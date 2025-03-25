@@ -90,8 +90,6 @@ website:
         route: '/pendant-le-hackathon'
         url: '/hackathon/pages/pendant-le-hackathon.md'
   show_quality_component: true
-  list_search_topics:
-  url_search_topics: 'datasets'
   oauth_option: true
   footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr permettant de lister les jeux de données utilisés dans le cadre d'événement de type hackathon par l'équipe data.gouv.fr ou ses partenaires."
   footer_external_links:
@@ -134,7 +132,6 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: false
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []

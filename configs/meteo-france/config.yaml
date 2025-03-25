@@ -108,14 +108,6 @@ website:
         route: '/hackathon'
         url: '/meteo-france/pages/hackathon.md'
   show_quality_component: true
-  list_search_topics:
-    - id: '6571f26dc009674feb726be9'
-      name: 'Données climatologiques de base'
-    - id: '6571f2db0273fc306408f265'
-      name: 'Données climatologiques de référence pour le changement climatique'
-    - id: '65e0c82c2da27c1dff5fa66f'
-      name: 'Données de Prévision Numérique du Temps (PNT)'
-  url_search_topics: 'datasets'
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
@@ -169,7 +161,6 @@ website:
       display: false
       create: false
   datasets:
-    organization_filter: false
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []

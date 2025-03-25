@@ -99,8 +99,6 @@ website:
         route: '/accessibility'
         url: '/logistique/pages/accessibility.md'
   show_quality_component: true
-  list_search_topics:
-  url_search_topics: 'datasets'
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
   footer_external_links:
@@ -143,7 +141,6 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: false
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []

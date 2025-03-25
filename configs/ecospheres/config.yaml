@@ -127,8 +127,6 @@ website:
         route: '/terms'
         url: '/ecospheres/pages/terms.md'
   show_quality_component: true
-  list_search_topics:
-  url_search_topics:
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
   default_debounce_wait: 600
@@ -155,7 +153,6 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: true
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
