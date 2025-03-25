@@ -40,9 +40,7 @@ const defaultRoutes: RouteRecordRaw[] = [
           await import('@/views/datasets/DatasetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
           query: route.query.q,
-          page: route.query.page,
-          organization: route.query.organization,
-          topic: route.query.topic
+          page: route.query.page
         })
       },
       {

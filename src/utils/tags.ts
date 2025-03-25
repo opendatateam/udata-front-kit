@@ -113,8 +113,10 @@ export interface QueryArgs {
 export const useTagSlug = (
   objectType: Filters,
   filterId: string,
-  tagId?: string
+  tagId?: string,
+  useTagPrefix = true
 ): string => {
+  if (!useTagPrefix) return tagId || ''
   const filtersConf = useFiltersConf(objectType)
   return `${filtersConf.tag_prefix}-${filterId}-${tagId || ''}`
 }
@@ -132,7 +134,9 @@ export const useTagsQuery = (
   for (const filter of filters) {
     const queryFilter = query[filter.id]
     if (queryFilter != null) {
-      queryArray.push(useTagSlug(objectType, filter.id, queryFilter))
+      queryArray.push(
+        useTagSlug(objectType, filter.id, queryFilter, filter.use_tag_prefix)
+      )
     }
     delete query[filter.id]
   }

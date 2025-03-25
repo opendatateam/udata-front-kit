@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/store/SearchStore'
+import { useFiltersConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
@@ -22,6 +23,7 @@ const router = useRouter()
 const route = useRoute()
 
 const store = useSearchStore()
+const filtersConf = useFiltersConf('datasets')
 const { datasets, pagination, total } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
@@ -68,14 +70,30 @@ const doSort = (value: string | null) => {
   })
 }
 
-const executeQuery = async (args: typeof props) => {
+const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
-  // async search(query, topic, page = 1, args = {}) {
-  return store.query(args).finally(() => loader.hide())
+  // get filters parameters from route
+  const filtersArgs = filtersConf.items.reduce(
+    (acc, item) => {
+      const value = route.query[item.id]
+      const singleton = Array.isArray(value) ? value[0] : value
+      if (singleton) {
+        acc[item.id] = singleton
+      }
+      return acc
+    },
+    {} as Record<string, string>
+  )
+  // execute query with props and filtersArgs
+  return store.query({ ...props, ...filtersArgs }).finally(() => loader.hide())
 }
 
-// launch search on props (~route.query) changes
-watch(props, () => executeQuery(props), { immediate: true, deep: true })
+// launch search on route.query changes
+watch(
+  () => route.query,
+  () => executeQuery(),
+  { immediate: true, deep: true }
+)
 
 defineExpose({
   numberOfResultMsg

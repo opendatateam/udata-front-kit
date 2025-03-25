@@ -217,7 +217,7 @@ organizations:
 filters:
   datasets:
     tag_prefix:
-    # TODO: document and migrate in ecospheres
+    # TODO: document and migrate in ecospheres (see whats what w/ indicators)
     universe_tag: meteodatagouvfr
     items:
       - name: Catégories
@@ -225,6 +225,8 @@ filters:
         id: category
         child: subcategory
         color: noop
+        # TODO: document and migrate in ecospheres (see whats what w/ indicators)
+        use_tag_prefix: false
         values:
           - id: climatologique-base
             name: Données climatologiques de base
@@ -238,6 +240,7 @@ filters:
         default_option: Toutes les sous-catégories
         id: subcategory
         color: noop
+        use_tag_prefix: false
         values:
           # parent-category: stations
           - name: Stations du réseau Météo-France

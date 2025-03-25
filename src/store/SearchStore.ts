@@ -45,6 +45,8 @@ export const useSearchStore = defineStore('search', {
   actions: {
     async query(args: QueryArgs) {
       const { query, ...queryArgs } = args
+      // FIXME: handle case where no tag_prefix (and no filter.id prefix either)
+      // or even better, make the change on meteo to have a tag_prefix
       const { extraArgs, tag } = useTagsQuery('datasets', queryArgs)
       const results = await searchAPI.search(
         query,

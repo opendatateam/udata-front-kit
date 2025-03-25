@@ -12,6 +12,7 @@ import { useAccessibilityProperties } from '@/utils/a11y'
 import { debounceWait } from '@/utils/config'
 
 defineEmits(['search'])
+
 const props = defineProps({
   query: {
     type: String,
@@ -20,14 +21,6 @@ const props = defineProps({
   page: {
     type: String,
     default: '1'
-  },
-  organization: {
-    type: String,
-    default: null
-  },
-  topic: {
-    type: String,
-    default: null
   }
 })
 

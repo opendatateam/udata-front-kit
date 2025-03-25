@@ -51,6 +51,7 @@ export interface FilterItemConf {
   child?: string
   color: string
   default_option: string
+  use_tag_prefix: boolean
   values: FilterItemValueConf[]
 }
 
