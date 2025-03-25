@@ -21,9 +21,7 @@ const navigate = (data?: Record<string, string | null>) => {
 
 const switchFilter = (filter: string, value: string | null) => {
   filtersState[filter].selectedValue = value ?? undefined
-  // empty linked child value
   if (filtersState[filter].childId) {
-    filtersState[filtersState[filter].childId].selectedValue = undefined
     navigate({ [filter]: value, [filtersState[filter].childId]: null })
   } else {
     navigate({ [filter]: value })
