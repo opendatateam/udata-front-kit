@@ -157,7 +157,7 @@ defineExpose({
   </div>
   <div class="fr-mb-4w border-top">
     <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
-      <li v-for="dataset in datasets" :key="dataset.id" class="col-fluid">
+      <li v-for="dataset in datasets" :key="dataset.id" class="fr-col-12">
         <DatasetCard
           :key="dataset.id"
           :dataset="dataset"
