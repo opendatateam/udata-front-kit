@@ -212,8 +212,6 @@ website:
       - topics
     pages:
   show_quality_component: true
-  list_search_topics:
-  url_search_topics: 'datasets'
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr'
   footer_external_links:
@@ -256,7 +254,6 @@ website:
       display: false
       create: false
   datasets:
-    organization_filter: false
     add_to_bouquet: false
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []

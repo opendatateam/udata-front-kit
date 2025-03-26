@@ -1,7 +1,7 @@
 import { Parser } from '@json2csv/plainjs'
 
 import { Availability, type DatasetProperties } from '@/model/topic'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 

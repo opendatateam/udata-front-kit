@@ -127,8 +127,6 @@ website:
         route: '/terms'
         url: '/ecospheres/pages/terms.md'
   show_quality_component: true
-  list_search_topics:
-  url_search_topics:
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
   default_debounce_wait: 600
@@ -155,7 +153,6 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: true
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
@@ -211,26 +208,35 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 # Configuration format for filters:
 #
 # filters:
-#   {object_type}:              # object type to filter on
-#     tag_prefix: {string}      # prefix for tags on data.gouv.fr
-#     items:                    # list of filters for this {object_type}
-#       - name: {string}        # name of the filter ⚠️ needs to be unique across all items
-#         id: {string}          # id of the filter
-#         child: {string?}      # id of the child filter (optional)
-#         color: {string}       # color of the filter's tag
-#         values:               # list of values for this filter
-#           - id: {string}      # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
-#             name: {string}    # name of the value
-#             parent: {string?} # id of the parent filter value (optional)
+#   {object_type}:               # object type to filter on
+#     universe_tag: {string}     # used to define a "universe" on a given {object_type}, through a tag
+#     tag_prefix: {string}       # prefix for tags on data.gouv.fr
+#     items:                     # list of filters for this {object_type}
+#       - name: {string}         # name of the filter ⚠️ needs to be unique across all items
+#         id: {string}           # id of the filter
+#         child: {string?}       # id of the child filter (optional)
+#         color: {string}        # color of the filter's tag
+#         use_tag_prefix: {bool} # whether to use {tag_prefix}-{item.id} when building value tag
+#         values:                # list of values for this filter
+#           - id: {string}       # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}     # name of the value
+#             parent: {string?}  # id of the parent filter value (optional)
 filters:
+  # DATASETS (dummy)
+  datasets:
+    universe_tag:
+    tag_prefix:
+    items: []
   # BOUQUETS
   bouquets:
+    universe_tag:
     tag_prefix: ecospheres
     items:
       - name: Thématique
         id: theme
         child: subtheme
         color: noop
+        use_tag_prefix: true
         values:
           - id: se-loger
             name: Se loger
@@ -249,6 +255,7 @@ filters:
       - name: Chantier
         id: subtheme
         color: green-archipel
+        use_tag_prefix: true
         values:
           # parent theme: se-loger
           - id: construction-et-renovation-des-logements
@@ -341,11 +348,13 @@ filters:
             parent: chantiers-transverses
   # INDICATORS
   indicators:
+    universe_tag: ecospheres-indicateurs
     tag_prefix: ecospheres-indicateurs
     items:
       - name: Thématique
         id: theme
         color: green-menthe
+        use_tag_prefix: true
         values:
           - id: autre
             name: Autre
@@ -364,6 +373,7 @@ filters:
       - name: Enjeu
         id: enjeu
         color: blue-ecume
+        use_tag_prefix: true
         values:
           - id: adaptation-climat
             name: Adaptation climat
@@ -378,6 +388,7 @@ filters:
       - name: Secteur
         id: secteur
         color: purple-glycine
+        use_tag_prefix: true
         values:
           - id: agriculture-forets-sols
             name: Agriculture, Forêts et Sols
@@ -402,6 +413,7 @@ filters:
       - name: Levier
         id: levier
         color: green-archipel
+        use_tag_prefix: true
         values:
           - id: biogaz
             name: Biogaz
@@ -442,6 +454,7 @@ filters:
       - name: Cas d'usage
         id: usage
         color: yellow-tournesol-main-731
+        use_tag_prefix: true
         values:
           - id: tdb-mobilite-durable
             name: Indicateurs Tableau de bord de mobilité Durable

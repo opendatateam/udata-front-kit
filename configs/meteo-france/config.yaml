@@ -8,7 +8,7 @@ datagouvfr:
 
 universe:
   # "universe" topic id
-  topic_id: 6571f222129681e83de11aa2 # meteo-test
+  topic_id:
   # universe name, used as bouquets tag
   name: meteo-france
 
@@ -82,8 +82,6 @@ website:
   menu:
     - text: Données
       to: /datasets
-    - text: Bouquets
-      to: /bouquets
     - text: Recherche guidée
       to: /form
     - text: 'Hackathon le 8 et 9 avril 🚀'
@@ -93,7 +91,7 @@ website:
   router:
     disable:
       - organizations_routes
-      - topics
+      - topic_routes
     pages:
       - title: 'A propos'
         id: 'about'
@@ -108,14 +106,6 @@ website:
         route: '/hackathon'
         url: '/meteo-france/pages/hackathon.md'
   show_quality_component: true
-  list_search_topics:
-    - id: '6571f26dc009674feb726be9'
-      name: 'Données climatologiques de base'
-    - id: '6571f2db0273fc306408f265'
-      name: 'Données climatologiques de référence pour le changement climatique'
-    - id: '65e0c82c2da27c1dff5fa66f'
-      name: 'Données de Prévision Numérique du Temps (PNT)'
-  url_search_topics: 'datasets'
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
@@ -169,19 +159,19 @@ website:
       display: false
       create: false
   datasets:
-    organization_filter: false
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    slug: bouquets
-    name: bouquet
-    extras_key: 'meteofrance'
+    # disabled in router.disable
+    slug: topics
+    name: Topics
+    extras_key:
     themes:
       usage: false
-      main_name: thématique
-      secondary_name: chantier
+      main_name:
+      secondary_name:
     # include a list page with all topics
     list_all: false
     show_drafts_by_default: false
@@ -191,25 +181,81 @@ website:
     can_add_topics:
       everyone: false
       authorized_users:
-        - 6230733357772160a4f77fbaxx
-themes:
-  - name: Données climatologiques
-    color: 043574
-    textColor: FFFFFF
-    subthemes:
-      - name: Informations sur les stations
-      - name: Données climatologiques de base
-      - name: Références à la station
-      - name: Données de références pour le changement climatiques
-  - name: Données de prévision numérique du temps (PNT)
-    color: 1E929E
-    textColor: FFFFFF
-    subthemes:
-      - name: ARPEGE
-      - name: AROME
-      - name: Modèle de vague haute
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
 organizations:
+
+# cf configs/ecospheres/config.yaml for filters config format details
+filters:
+  datasets:
+    tag_prefix:
+    universe_tag: meteodatagouvfr
+    items:
+      - name: Catégories
+        default_option: Toutes les catégories
+        id: category
+        child: subcategory
+        color: noop
+        use_tag_prefix: false
+        values:
+          - id: climatologique-base
+            name: Données climatologiques de base
+          - id: climatologique-changement-climatique
+            name: Données climatologiques de référence pour le changement climatique
+          - id: pnt
+            name: Données de Prévision Numérique du Temps (PNT)
+          - id: stations
+            name: Informations sur les stations
+      - name: Sous-catégories
+        default_option: Toutes les sous-catégories
+        id: subcategory
+        color: noop
+        use_tag_prefix: false
+        values:
+          # parent-category: stations
+          - name: Stations du réseau Météo-France
+            id: stations-mf
+            parent: stations
+          - name: Stations complémentaires
+            id: stations-complementaires
+            parent: stations
+          - name: Fiches de poste (par département)
+            id: fiches-postes-dep
+            parent: stations
+          - name: Fiches de postes réseau complémentaire (par département)
+            id: fiches-postes-complementaire-dep
+            parent: stations
+          - name: Informations réseau
+            id: infos-reseau
+            parent: stations
+          # parent-category: climatologique-base
+          - name: Données à la station du réseau Météo-France
+            id: climatologique-base-donnees-stations-mf
+            parent: climatologique-base
+          - name: Données stations complémentaires
+            id: climatologique-base-donnees-stations-complementaires
+            parent: climatologique-base
+          - name: Données spatialisées
+            id: climatologique-base-donnees-spatialisees
+            parent: climatologique-base
+          - name: Données à la station
+            id: climatologique-changement-climatique-donnees-station
+            parent: climatologique-changement-climatique
+          - name: Données spatialisées
+            id: climatologique-changement-climatique-donnees-spatialisees
+            parent: climatologique-changement-climatique
+          # parent-category: pnt
+          - name: Modèle ARPEGE
+            id: pnt-arpege
+            parent: pnt
+          - name: Modèle AROME Métropole
+            id: pnt-arome-metropole
+            parent: pnt
+          - name: Modèle AROME Outre-Mer
+            id: pnt-arome-outre-mer
+            parent: pnt
+          - name: Modèle de vagues et surcote
+            id: pnt-vague-surcote
+            parent: pnt

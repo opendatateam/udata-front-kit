@@ -1,4 +1,4 @@
-import { capitalize } from 'vue'
+import { capitalize, type Component } from 'vue'
 import {
   createRouter,
   createWebHistory,
@@ -11,6 +11,13 @@ import type { PageConfig } from '@/model/config'
 import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import SimplePageView from '@/views/SimplePageView.vue'
+
+// used by custom site routers
+export interface RouteMeta {
+  title?: string
+  requiresAuth?: boolean
+  filtersComponent?: () => Promise<{ default: Component }>
+}
 
 const { topicsSlug, topicsName } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
@@ -40,9 +47,7 @@ const defaultRoutes: RouteRecordRaw[] = [
           await import('@/views/datasets/DatasetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
           query: route.query.q,
-          page: route.query.page,
-          organization: route.query.organization,
-          topic: route.query.topic
+          page: route.query.page
         })
       },
       {
@@ -77,6 +82,7 @@ const defaultRoutes: RouteRecordRaw[] = [
   },
   {
     path: `/${topicsSlug}`,
+    name: 'topic_routes',
     children: [
       {
         path: '',
