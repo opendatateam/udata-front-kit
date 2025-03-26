@@ -272,14 +272,6 @@ website:
       authorized_users:
         - 5fda299e56f984a4b126afe1 #thanh-ha
         - 5e6f426e634f417810ab794b #geoffrey
-themes:
-  - name: defis
-    color: 043574
-    textColor: FFFFFF
-    subthemes:
-      - name: Saison 1
-      - name: Saison 2
-      - name: Saison 3
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

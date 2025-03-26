@@ -183,22 +183,6 @@ website:
       everyone: false
       authorized_users:
         - 6230733357772160a4f77fbaxx
-themes:
-  - name: Données climatologiques
-    color: 043574
-    textColor: FFFFFF
-    subthemes:
-      - name: Informations sur les stations
-      - name: Données climatologiques de base
-      - name: Références à la station
-      - name: Données de références pour le changement climatiques
-  - name: Données de prévision numérique du temps (PNT)
-    color: 1E929E
-    textColor: FFFFFF
-    subthemes:
-      - name: ARPEGE
-      - name: AROME
-      - name: Modèle de vague haute
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

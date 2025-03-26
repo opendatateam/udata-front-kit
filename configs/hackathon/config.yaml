@@ -155,12 +155,6 @@ website:
       authorized_users:
         - 5e6f426e634f417810ab794b
         - 5dee373f6f44416a83fbd907
-themes:
-  - name: Données alimentaires
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
