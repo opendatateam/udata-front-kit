@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { useRouteQueryAsString } from '@/router/utils'
-import { useFiltersConf } from '@/utils/config'
 import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
 const routeQuery = useRouteQueryAsString().query
-const filtersConf = useFiltersConf('datasets')
 
-const filtersState = useFiltersState(routeQuery, filtersConf)
+const { filtersState, filtersConf } = useFiltersState(routeQuery, 'datasets')
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({

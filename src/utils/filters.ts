@@ -1,6 +1,7 @@
-import type { FilterConf } from '@/model/config'
+import type { Filters } from '@/model/config'
 import type { TagSelectOption } from '@/model/tag'
 import type { QueryAsString } from '@/router/utils'
+import { useFiltersConf } from './config'
 import { getTagOptions } from './tags'
 
 interface FilterState {
@@ -20,11 +21,14 @@ interface FilterState {
  * - Maintains selected values across filter updates
  * - Provides reactive state management for filter selections
  * - Does NOT update the route query parameters; that is the responsibility of the caller
+ *
+ * Also provides filtersConf for convenience.
  */
 export const useFiltersState = (
   routeQuery: QueryAsString,
-  filtersConf: FilterConf
+  objectType: Filters
 ) => {
+  const filtersConf = useFiltersConf(objectType)
   const filtersState = reactive<Record<string, FilterState>>({})
 
   const setChildOptions = (
@@ -35,7 +39,7 @@ export const useFiltersState = (
       // Update child filter's options based on parent selection
       const childFilter = filtersState[filter.childId]
       childFilter.options = filter.selectedValue
-        ? getTagOptions('datasets', filter.childId, filter.selectedValue)
+        ? getTagOptions(objectType, filter.childId, filter.selectedValue)
         : []
       // Clear child selection when parent changes or set to initial value
       childFilter.selectedValue = childSelectedValue
@@ -50,7 +54,7 @@ export const useFiltersState = (
       selectedValue: routeQuery[filter.id] || undefined,
       options: withParent.includes(filter.id)
         ? []
-        : getTagOptions('datasets', filter.id),
+        : getTagOptions(objectType, filter.id),
       childId: filter.child
     }
   })
@@ -69,5 +73,5 @@ export const useFiltersState = (
     }
   })
 
-  return filtersState
+  return { filtersState, filtersConf }
 }
