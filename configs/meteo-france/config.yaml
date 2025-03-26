@@ -82,8 +82,6 @@ website:
   menu:
     - text: Données
       to: /datasets
-    - text: Bouquets
-      to: /bouquets
     - text: Recherche guidée
       to: /form
     - text: 'Hackathon le 8 et 9 avril 🚀'
@@ -93,7 +91,7 @@ website:
   router:
     disable:
       - organizations_routes
-      - topics
+      - topic_routes
     pages:
       - title: 'A propos'
         id: 'about'
@@ -166,13 +164,14 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    slug: bouquets
-    name: bouquet
-    extras_key: 'meteofrance'
+    # disabled in router.disable
+    slug: topics
+    name: Topics
+    extras_key:
     themes:
       usage: false
-      main_name: thématique
-      secondary_name: chantier
+      main_name:
+      secondary_name:
     # include a list page with all topics
     list_all: false
     show_drafts_by_default: false
@@ -182,7 +181,6 @@ website:
     can_add_topics:
       everyone: false
       authorized_users:
-        - 6230733357772160a4f77fbaxx
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

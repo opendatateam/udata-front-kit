@@ -82,6 +82,7 @@ const defaultRoutes: RouteRecordRaw[] = [
   },
   {
     path: `/${topicsSlug}`,
+    name: 'topic_routes',
     children: [
       {
         path: '',
