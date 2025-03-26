@@ -348,11 +348,13 @@ filters:
             parent: chantiers-transverses
   # INDICATORS
   indicators:
+    universe_tag: ecospheres-indicateurs
     tag_prefix: ecospheres-indicateurs
     items:
       - name: Thématique
         id: theme
         color: green-menthe
+        use_tag_prefix: true
         values:
           - id: autre
             name: Autre
@@ -371,6 +373,7 @@ filters:
       - name: Enjeu
         id: enjeu
         color: blue-ecume
+        use_tag_prefix: true
         values:
           - id: adaptation-climat
             name: Adaptation climat
@@ -385,6 +388,7 @@ filters:
       - name: Secteur
         id: secteur
         color: purple-glycine
+        use_tag_prefix: true
         values:
           - id: agriculture-forets-sols
             name: Agriculture, Forêts et Sols
@@ -409,6 +413,7 @@ filters:
       - name: Levier
         id: levier
         color: green-archipel
+        use_tag_prefix: true
         values:
           - id: biogaz
             name: Biogaz
@@ -449,6 +454,7 @@ filters:
       - name: Cas d'usage
         id: usage
         color: yellow-tournesol-main-731
+        use_tag_prefix: true
         values:
           - id: tdb-mobilite-durable
             name: Indicateurs Tableau de bord de mobilité Durable
