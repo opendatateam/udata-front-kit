@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
-import { useSearchStore } from '@/store/SearchStore'
+import { useSearchStore } from '@/store/DatasetSearchStore'
 import { useFiltersConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
