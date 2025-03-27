@@ -37,22 +37,23 @@ website:
         content:
         sub_section_datasets:
         sub_section_cards:
-        sub_section_tiles:
           class: fr-col-md-6
+          cards:
+            - name: 'Données climatologiques (par station et spatialisées)'
+              description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
+              url: 'datasets?tags=climatologique-base'
+              image_url: '/meteo-france/assets/climatologie.png'
+            - name: 'Données de référence pour le changement climatique'
+              description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
+              url: 'datasets?tags=climatologique-changement-climatique'
+              image_url: '/meteo-france/assets/climatique.jpg'
+            - name: 'Données de Prévision Numérique du Temps (PNT)'
+              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
+              url: 'datasets?tags=pnt'
+              image_url: '/meteo-france/assets/pnt.png'
+        sub_section_tiles:
           title:
           tiles:
-            - id: '6571f26dc009674feb726be9'
-              name: 'Données climatologiques de base'
-              description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
-              url: 'datasets?topic=6571f26dc009674feb726be9'
-            - id: '6571f2db0273fc306408f265'
-              name: 'Données climatologiques de référence pour le changement climatique'
-              description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
-              url: 'datasets?topic=6571f2db0273fc306408f265'
-            - id: '65e0c82c2da27c1dff5fa66f'
-              name: 'Données de Prévision Numérique du Temps (PNT)'
-              description: 'Accès en temps réel aux résultats des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
-              url: 'datasets?topic=65e0c82c2da27c1dff5fa66f'
         sub_section_buttons:
       - title: Actualités
         content: >-
