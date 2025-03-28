@@ -67,7 +67,7 @@ website:
         sub_section_buttons:
     meta_description:
   header_button:
-    display: true
+    display: false
     label: 'Donnez votre avis'
     link:
   header_search:
@@ -99,8 +99,6 @@ website:
         route: '/accessibility'
         url: '/logistique/pages/accessibility.md'
   show_quality_component: true
-  list_search_topics:
-  url_search_topics: 'datasets'
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
   footer_external_links:
@@ -125,7 +123,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 100
+    topics_list: 20
     files_list: 6
   home_banner_colors:
     - '#D2EAF7'
@@ -143,14 +141,13 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: false
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
     slug: bouquets
-    name: bouquet de donnée
+    name: bouquet
     extras_key: 'logistique'
     themes:
       usage: true
@@ -164,49 +161,96 @@ website:
     dataset_editorialization: true
     can_add_topics:
       everyone: yes
-themes:
-  - name: Immobilier logistique
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
-  - name: Infrastructure
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
-  - name: Trafic
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
-      - name: Transport routier
-      - name: Transport aérien
-      - name: Transport ferroviaire
-      - name: Transport fluvial
-      - name: Transport maritime
-  - name: Filières
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
-      - name: Filière agricole
-      - name: Filière industrielle
-      - name: Filière énergétique
-      - name: Filière pharmaceutique
-      - name: Filière commerce
-      - name: Filière matériaux de construction
-      - name: Filière matière premières
-  - name: Environnement
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
-  - name: Socio-économique
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
+
+# cf configs/ecospheres/config.yaml for filters config format details
+filters:
+  bouquets:
+    universe_tag:
+    tag_prefix: logistique
+    items:
+      - name: Catégorie
+        id: theme
+        child: subtheme
+        color: green-bourgeon
+        use_tag_prefix: true
+        values:
+          - id: immobilier-logistique
+            name: Immobilier logistique
+          - id: infrastructure
+            name: Infrastructure
+          - id: trafic
+            name: Trafic
+          - id: filieres
+            name: Filières
+          - id: environnement
+            name: Environnement
+          - id: socio-economique
+            name: Socio-économique
+      - name: Sous-catégorie
+        id: subtheme
+        color: blue-ecume
+        use_tag_prefix: true
+        values:
+          # immobilier-logistique
+          - id: immobilier-logistique-general
+            name: Général
+            parent: immobilier-logistique
+          # infrastructure
+          - id: infrastructure-general
+            name: Général
+            parent: infrastructure
+          # trafic
+          - id: trafic-general
+            name: Général
+            parent: trafic
+          - id: transport-routier
+            name: Transport routier
+            parent: trafic
+          - id: transport-aerien
+            name: Transport aérien
+            parent: trafic
+          - id: transport-ferroviaire
+            name: Transport ferroviaire
+            parent: trafic
+          - id: transport-fluvial
+            name: Transport fluvial
+            parent: trafic
+          - id: transport-maritime
+            name: Transport maritime
+            parent: trafic
+          # filieres
+          - id: filieres-general
+            name: Général
+            parent: filieres
+          - id: filiere-agricole
+            name: Filière agricole
+            parent: filieres
+          - id: filiere-industrielle
+            name: Filière industrielle
+            parent: filieres
+          - id: filiere-energetique
+            name: Filière énergétique
+            parent: filieres
+          - id: filiere-pharmaceutique
+            name: Filière pharmaceutique
+            parent: filieres
+          - id: filiere-commerce
+            name: Filière commerce
+            parent: filieres
+          - id: filiere-materiaux-de-construction
+            name: Filière matériaux de construction
+            parent: filieres
+          - id: filiere-matieres-premiere
+            name: Filière matières premières
+            parent: filieres
+          # environnement
+          - id: environnement-general
+            name: Général
+            parent: environnement
+          # socio-economique
+          - id: socio-economique-general
+            name: Général
+            parent: socio-economique
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

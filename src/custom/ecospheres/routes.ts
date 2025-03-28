@@ -1,3 +1,4 @@
+import type { RouteMeta } from '@/router'
 import { type RouteLocationNormalizedLoaded } from 'vue-router'
 import { FILTER_KEYS } from './model/indicator'
 
@@ -7,8 +8,36 @@ export const routes = [
     name: 'home',
     meta: {
       title: 'Accueil'
-    },
+    } as RouteMeta,
     component: async () => await import('./views/HomeView.vue')
+  },
+  {
+    path: '/datasets',
+    children: [
+      {
+        path: '',
+        name: 'datasets',
+        meta: {
+          title: 'Données',
+          filtersComponent: async () =>
+            await import(
+              '@/custom/ecospheres/components/datasets/EcospheresDatasetSearch.vue'
+            )
+        } as RouteMeta,
+        component: async () =>
+          await import('@/views/datasets/DatasetsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          query: route.query.q,
+          page: route.query.page
+        })
+      },
+      {
+        path: ':did',
+        name: 'dataset_detail',
+        component: async () =>
+          await import('@/views/datasets/DatasetDetailView.vue')
+      }
+    ]
   },
   {
     path: '/indicators',
@@ -18,7 +47,7 @@ export const routes = [
         name: 'indicators',
         meta: {
           title: 'Indicateurs'
-        },
+        } as RouteMeta,
         component: async () =>
           await import('./views/indicators/IndicatorsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => {

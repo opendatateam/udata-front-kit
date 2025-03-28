@@ -38,3 +38,31 @@ export interface MenuConfig {
   text: string
   to: string
 }
+
+export interface FilterItemValueConf {
+  id: string
+  name: string
+  parent?: string
+}
+
+export interface FilterItemConf {
+  name: string
+  id: string
+  child?: string
+  color: string
+  default_option: string
+  use_tag_prefix: boolean
+  values: FilterItemValueConf[]
+}
+
+export type Filters = 'bouquets' | 'indicators' | 'datasets'
+
+export type FilterConf = {
+  tag_prefix: string
+  universe_tag: string | null
+  items: FilterItemConf[]
+}
+
+export type FiltersConf = {
+  [K in Filters]: FilterConf
+}

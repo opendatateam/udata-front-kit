@@ -5,11 +5,11 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
+import { useAccessibilityProperties } from '@/utils/a11y'
 import { debounceWait } from '@/utils/config'
 import IndicatorList from '../../components/indicators/IndicatorList.vue'
 import IndicatorSearch from '../../components/indicators/IndicatorSearch.vue'
 import { FILTER_KEYS, type IndicatorFilters } from '../../model/indicator'
-import { useAccessibilityProperties } from '../../utils/a11y'
 
 const route = useRoute()
 const router = useRouter()

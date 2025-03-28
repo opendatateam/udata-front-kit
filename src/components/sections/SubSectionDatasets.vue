@@ -4,7 +4,7 @@ import { DatasetCard } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 
 const router = useRouter()
 const datasetStore = useDatasetStore()

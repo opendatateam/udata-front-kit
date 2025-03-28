@@ -2,15 +2,14 @@ import { defineStore } from 'pinia'
 
 import config from '@/config'
 import SearchAPI from '@/services/api/SearchAPI'
-import type { IndicatorsConf } from '../model/config'
+import { useFiltersConf } from '@/utils/config'
+import { useTagsQuery } from '@/utils/tags'
 import type { Indicator, IndicatorFilters } from '../model/indicator'
-import { useTagsQuery } from '../utils/indicator'
 
 const searchApi = new SearchAPI()
 const PAGE_SIZE = 20
 
-const indicatorsConf = config.indicators as IndicatorsConf
-const tagPrefix = indicatorsConf.global_tag_prefix
+const filtersConf = useFiltersConf('indicators')
 
 export interface RootState {
   indicators: Indicator[]
@@ -30,11 +29,11 @@ export const useIndicatorStore = defineStore('indicator', {
   actions: {
     async query(args: QueryArgs) {
       const { query, ...queryArgs } = args
-      const { extraArgs, tag } = useTagsQuery(queryArgs)
+      const { extraArgs, tag } = useTagsQuery('indicators', queryArgs)
       const results = await searchApi.search(query, null, 1, {
-        organization: config.indicators.organization_id,
+        organization: config.universe.indicators.organization_id,
         page_size: PAGE_SIZE,
-        tag: [tagPrefix, ...tag],
+        tag: [filtersConf.tag_prefix, ...tag],
         ...extraArgs
       })
       this.indicators = results.data as Indicator[]

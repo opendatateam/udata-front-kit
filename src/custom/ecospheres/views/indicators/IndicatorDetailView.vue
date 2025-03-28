@@ -12,7 +12,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useLicense } from '@/utils/dataset'
