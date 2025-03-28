@@ -227,7 +227,7 @@ filters:
     universe_tag:
     tag_prefix:
     items:
-      - name: Thème Inspire
+      - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
         color: noop
