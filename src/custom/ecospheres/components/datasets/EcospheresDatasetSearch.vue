@@ -1,38 +1,50 @@
 <script setup lang="ts">
+import { useRouteQueryAsString } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
+import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
+const routeQuery = useRouteQueryAsString().query
+const store = useOrganizationStore()
 
-const selectedOrganization: Ref<string | null> = ref(null)
+const { filtersState, filtersConf } = useFiltersState(routeQuery, 'datasets')
 
-const organizationOptions = computed(() => [
-  ...useOrganizationStore().flatData.map((org) => {
-    return { id: org.id, name: org.name }
-  })
-])
+const organizationOptions = computed(() =>
+  store.flatData.map(({ id, name }) => ({ id, name }))
+)
+const selectedOrganization = ref(routeQuery.organization || undefined)
 
-const onSelectOrganization = (orgId: string | null) => {
+const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    path: '/datasets',
-    query: {
-      ...route.query,
-      page: 1,
-      organization: orgId
-    },
+    name: 'datasets',
+    query: { ...route.query, ...data },
     hash: '#datasets-list'
   })
 }
 
+const switchFilter = (filter: string, value: string | null) => {
+  if (filtersState[filter]?.childId) {
+    navigate({ [filter]: value, [filtersState[filter].childId]: null })
+  } else {
+    navigate({ [filter]: value })
+  }
+}
+
 onMounted(() => {
-  useOrganizationStore().loadFromConfigFlat()
+  store.loadFromConfigFlat()
 })
 
 watch(
-  () => route.query.organization,
-  (newValue) => {
-    selectedOrganization.value = newValue as string
+  () => route.query,
+  () => {
+    // Update filtersState based on query parameters
+    Object.keys(filtersState).forEach((filter) => {
+      const value = route.query[filter]
+      const singleton = Array.isArray(value) ? value[0] : value
+      filtersState[filter].selectedValue = singleton ?? undefined
+    })
   },
   { immediate: true }
 )
@@ -46,7 +58,20 @@ watch(
         label="Organisation"
         :options="organizationOptions"
         :model-value="selectedOrganization"
-        @update:model-value="onSelectOrganization"
+        @update:model-value="(value) => switchFilter('organization', value)"
+      />
+    </div>
+    <div
+      v-for="filter in filtersConf.items"
+      :key="filter.id"
+      class="fr-select-group"
+    >
+      <SelectComponent
+        :default-option="filter.default_option"
+        :label="filter.name"
+        :options="filtersState[filter.id].options"
+        :model-value="filtersState[filter.id].selectedValue"
+        @update:model-value="(value) => switchFilter(filter.id, value)"
       />
     </div>
   </div>

@@ -13,7 +13,6 @@ const searchAPI = new SearchAPI()
 const filtersConf = useFiltersConf('datasets')
 
 interface QueryArgs {
-  // [key: string]: string | number
   query: string
   page: string
 }
