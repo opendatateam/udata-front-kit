@@ -272,6 +272,14 @@ const showModal = ref(false)
 const modalMessage = ref(
   'Le lancement du téléchargement peut prendre un moment. Patientez svp...'
 )
+
+const getAPIUrl = (endpoint: string) => {
+  const datasetId = selectedDataset.value
+    ? selectedDataset.value.id.toLowerCase()
+    : ''
+  const postesQuery = postes.value.map((post) => post.id).join(',')
+  return `https://meteo-api.data.gouv.fr/api/clim/base_${datasetId}${endpoint}/${selectedDep.value}/csv/?num_postes=${postesQuery}&anneemin=${valuesSlider.value[0]}&anneemax=${valuesSlider.value[1]}`
+}
 </script>
 
 <template>
@@ -402,20 +410,7 @@ const modalMessage = ref(
           <button
             type="button"
             class="fr-btn fr-btn--secondary"
-            @click="
-              copyToClipboard(
-                'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
-                  '_vent/' +
-                  selectedDep +
-                  '/csv/?num_postes=' +
-                  postes.map((post) => post.id).join(',') +
-                  '&anneemin=' +
-                  valuesSlider[0] +
-                  '&anneemax=' +
-                  valuesSlider[1]
-              )
-            "
+            @click="copyToClipboard(getAPIUrl('_vent'))"
           >
             {{ copyText }}
           </button>
@@ -423,20 +418,7 @@ const modalMessage = ref(
           <button
             type="button"
             class="fr-btn"
-            @click="
-              getCsv(
-                'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
-                  '_autres/' +
-                  selectedDep +
-                  '/csv/?num_postes=' +
-                  postes.map((post) => post.id).join(',') +
-                  '&anneemin=' +
-                  valuesSlider[0] +
-                  '&anneemax=' +
-                  valuesSlider[1]
-              )
-            "
+            @click="getCsv(getAPIUrl('_autres'))"
           >
             Télécharger les données "Autres paramètres" en CSV
           </button>
@@ -444,63 +426,20 @@ const modalMessage = ref(
           <button
             type="button"
             class="fr-btn fr-btn--secondary"
-            @click="
-              copyToClipboard(
-                'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
-                  '_autres/' +
-                  selectedDep +
-                  '/csv/?num_postes=' +
-                  postes.map((post) => post.id).join(',') +
-                  '&anneemin=' +
-                  valuesSlider[0] +
-                  '&anneemax=' +
-                  valuesSlider[1]
-              )
-            "
+            @click="copyToClipboard(getAPIUrl('_autres'))"
           >
             {{ copyText }}
           </button>
         </span>
         <span v-else>
-          <button
-            type="button"
-            class="fr-btn"
-            @click="
-              getCsv(
-                'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
-                  '/' +
-                  selectedDep +
-                  '/csv/?num_postes=' +
-                  postes.map((post) => post.id).join(',') +
-                  '&anneemin=' +
-                  valuesSlider[0] +
-                  '&anneemax=' +
-                  valuesSlider[1]
-              )
-            "
-          >
+          <button type="button" class="fr-btn" @click="getCsv(getAPIUrl(''))">
             Télécharger les données en CSV
           </button>
           &nbsp;&nbsp;
           <button
             type="button"
             class="fr-btn fr-btn--secondary"
-            @click="
-              copyToClipboard(
-                'https://meteo-api.data.gouv.fr/api/clim/base_' +
-                  (selectedDataset ? selectedDataset.id.toLowerCase() : '') +
-                  '/' +
-                  selectedDep +
-                  '/csv/?num_postes=' +
-                  postes.map((post) => post.id).join(',') +
-                  '&anneemin=' +
-                  valuesSlider[0] +
-                  '&anneemax=' +
-                  valuesSlider[1]
-              )
-            "
+            @click="copyToClipboard(getAPIUrl(''))"
           >
             {{ copyText }}
           </button>
