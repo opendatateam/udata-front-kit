@@ -5,7 +5,7 @@ export interface Feature {
     coordinates: number[]
   }
   properties: {
-    [key: string]: any
+    [key: string]: string | number | boolean | null
   }
 }
 

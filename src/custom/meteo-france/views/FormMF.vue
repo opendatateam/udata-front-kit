@@ -11,7 +11,7 @@ import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
 import MapComponent from '../components/MapComponent.vue'
 import ModalComponent from '../components/MeteoFormModal.vue'
-import type { Dataset, FeatureCollection, Station } from '../types'
+import type { Dataset, Feature, FeatureCollection, Station } from '../types'
 
 type DatasetIds = {
   [pack: string]: Record<string, Dataset>
@@ -51,7 +51,7 @@ const stations: Ref<FeatureCollection> = ref({
   features: []
 })
 
-const onSelectDataPack = (pack: string) => {
+const onSelectDataPack = (pack: string | number) => {
   selectedDataset.value = null
   showDep.value = false
   showPeriod.value = false
@@ -62,7 +62,7 @@ const onSelectDataPack = (pack: string) => {
   showCustomFilter.value = false
   filteredResources.value = []
 
-  selectedDataPack.value = pack
+  selectedDataPack.value = String(pack)
   optionsDataset.value = Object.keys(datasetsIdsTyped[pack])
   if (pack === 'Données de prévision numérique du temps (PNT)') {
     indicateurWording.value = 'Regroupement'
@@ -71,7 +71,7 @@ const onSelectDataPack = (pack: string) => {
   }
 }
 
-const onSelectDataset = (dataset: string) => {
+const onSelectDataset = (dataset: string | number) => {
   showLoader.value = true
   showDep.value = false
   showPeriod.value = false
@@ -119,11 +119,11 @@ const onSelectDataset = (dataset: string) => {
       })
   }
 }
-const hoveredPoint = ref(null)
+const hoveredPoint: Ref<Feature | null> = ref(null)
 const mouseX = ref(0)
 const mouseY = ref(0)
 
-function handlePointHover(feature) {
+function handlePointHover(feature: Feature) {
   hoveredPoint.value = feature
 }
 
@@ -140,9 +140,7 @@ onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove) // Listen to mouse movements
 })
 
-async function fetchStationsGeoJSON(
-  depCode: string
-): Promise<FeatureCollection> {
+async function fetchStationsGeoJSON(depCode: string) {
   const response = await fetch(
     `https://object.data.gouv.fr/meteofrance/data/stations/stations_${depCode}.geojson`
   )
@@ -190,7 +188,7 @@ async function onSelectDep(event: Event) {
   optionsPeriod.value = res
   showPeriod.value = true
   if (selectedDataPack.value == 'Données climatologiques de base') {
-    for (let obj of deps) {
+    for (const obj of deps) {
       if (obj.code === selectedDep.value) {
         mapOptions.value = obj
         //mapPoints.value = filterGeoJSONByNumDep(stations, selectedDep.value)
@@ -234,8 +232,9 @@ function onSelectIndicateur(event: Event) {
   )
 }
 
-function convertDate(dateStr) {
-  const dateObj = new Date(dateStr)
+function convertDate(dateStr: string | number | boolean | null) {
+  if (!dateStr) return ''
+  const dateObj = new Date(String(dateStr))
   const day = String(dateObj.getDate()).padStart(2, '0')
   const month = String(dateObj.getMonth() + 1).padStart(2, '0') // Months are zero-indexed
   const year = dateObj.getFullYear()
@@ -298,7 +297,7 @@ const modalMessage = ref(
       <template #label>Quelles données ?</template>
     </DsfrSelect>
 
-    <div class="select-classic" v-if="selectedDataset && showDep">
+    <div v-if="selectedDataset && showDep" class="select-classic">
       <label>Quel département ?</label>
       <select class="fr-select" @change="onSelectDep($event)">
         <option hidden>Choisir une option</option>
@@ -359,14 +358,14 @@ const modalMessage = ref(
 
       <div v-if="postes.length > 0">
         Vous avez sélectionné les stations :
-        <span v-for="item in postes">{{ item.name }} ; </span>
+        <span v-for="item in postes" :key="item.id">{{ item.name }} ; </span>
       </div>
       <br />
       <p>Sélectionner la période (5 ans maximum) :</p>
       <Slider
+        v-model="valuesSlider"
         :min="minSlider"
         :max="maxSlider"
-        v-model="valuesSlider"
         class="slider-dsfr"
       />
       <br />
@@ -568,7 +567,7 @@ const modalMessage = ref(
         et leurs noms.
       </p>
       <div>
-        <div class="code-api" v-if="selectedIndicateur">
+        <div v-if="selectedIndicateur" class="code-api">
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
             datasetSlug +
@@ -576,7 +575,7 @@ const modalMessage = ref(
             selectedIndicateur
           }}
         </div>
-        <div class="code-api" v-else>
+        <div v-else class="code-api">
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
             datasetSlug +
