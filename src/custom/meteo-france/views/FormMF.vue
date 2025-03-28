@@ -10,7 +10,7 @@ import config from '@/config'
 import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
 import MapComponent from '../components/MapComponent.vue'
-import ModalComponent from '../components/Modal.vue'
+import ModalComponent from '../components/MeteoFormModal.vue'
 import type { Dataset, FeatureCollection, Station } from '../types'
 
 type DatasetIds = {
@@ -641,7 +641,7 @@ const modalMessage = ref(
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .select-classic {
   margin-bottom: 20px;
 }
