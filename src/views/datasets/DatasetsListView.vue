@@ -5,11 +5,10 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetList from '@/components/datasets/DatasetList.vue'
-import config from '@/config'
 import type { RouteMeta } from '@/router'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
-import { debounceWait } from '@/utils/config'
+import { debounceWait, useFiltersConf } from '@/utils/config'
 
 defineEmits(['search'])
 
@@ -27,14 +26,13 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 const meta = route.meta as RouteMeta
+const filtersConf = useFiltersConf(meta.filterKey || 'datasets')
 
 const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
 const searchResultsMessage = computed(
   () => datasetListComp.value?.numberOfResultMsg || ''
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
-
-const banner = config.website.datasets.banner
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
@@ -68,17 +66,17 @@ const FiltersComponent = computed(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container datagouv-components fr-my-2w">
-    <h1>Jeux de données</h1>
+    <h1>{{ filtersConf.title }}</h1>
   </div>
   <section
-    v-if="banner"
+    v-if="filtersConf.banner"
     class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <h2 v-html="banner.title" />
+      <h2 v-html="filtersConf.banner.title" />
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="fromMarkdown(banner.content)" />
+      <div v-html="fromMarkdown(filtersConf.banner.content)" />
     </div>
   </section>
   <GenericContainer id="datasets-list">
@@ -87,8 +85,8 @@ const FiltersComponent = computed(() => {
         id="search-dataset"
         :model-value="props.query"
         :is-filter="true"
-        search-label="Rechercher un jeu de données"
-        label="Rechercher un jeu de données"
+        :search-label="filtersConf.search_text"
+        :label="filtersConf.search_text"
         @update:model-value="search"
       />
     </div>

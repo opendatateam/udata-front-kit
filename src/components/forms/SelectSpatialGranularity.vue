@@ -8,6 +8,17 @@ const selectedGranularity = defineModel({
   default: null
 })
 
+defineProps({
+  label: {
+    type: String,
+    required: true
+  },
+  defaultOption: {
+    type: String,
+    required: true
+  }
+})
+
 const options: Ref<SpatialCoverageLevel[]> = ref([])
 
 onMounted(() => {
@@ -22,8 +33,8 @@ onMounted(() => {
 <template>
   <SelectComponent
     v-model="selectedGranularity"
-    default-option="Toutes les mailles"
-    label="Maille minimale"
+    :default-option="defaultOption"
+    :label="label"
     :options="options"
   />
 </template>

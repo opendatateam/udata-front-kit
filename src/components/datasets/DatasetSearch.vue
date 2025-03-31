@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
+import SelectSpatialGranularity from '@/components/forms/SelectSpatialGranularity.vue'
+import type { SpatialCoverage } from '@/model/spatial'
 import type { RouteMeta } from '@/router'
 import { useRouteQueryAsString } from '@/router/utils'
 import { useFiltersState } from '@/utils/filters'
@@ -9,6 +12,10 @@ const route = useRoute()
 const meta = route.meta as RouteMeta
 const routeQuery = useRouteQueryAsString().query
 
+const selectedGranularity = ref(routeQuery.granularity || undefined)
+const selectedGeozone: Ref<string | null> = ref(null)
+const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
+
 const { filtersState, filtersConf } = useFiltersState(
   routeQuery,
   meta.filterKey || 'datasets'
@@ -16,18 +23,25 @@ const { filtersState, filtersConf } = useFiltersState(
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, ...data },
     hash: '#datasets-list'
   })
 }
 
 const switchFilter = (filter: string, value: string | null) => {
-  if (filtersState[filter].childId) {
+  if (filtersState[filter]?.childId) {
     navigate({ [filter]: value, [filtersState[filter].childId]: null })
   } else {
     navigate({ [filter]: value })
   }
+}
+
+const switchSpatialCoverage = (
+  spatialCoverage: SpatialCoverage | null | undefined
+) => {
+  selectedGeozone.value = spatialCoverage != null ? spatialCoverage.id : null
+  navigate({ geozone: selectedGeozone.value })
 }
 
 watch(
@@ -52,12 +66,30 @@ watch(
       class="fr-select-group"
     >
       <SelectComponent
+        v-if="filter.type === 'select'"
         :default-option="filter.default_option"
         :label="filter.name"
         :options="filtersState[filter.id].options"
         :model-value="filtersState[filter.id].selectedValue"
         @update:model-value="(value) => switchFilter(filter.id, value)"
       />
+      <SelectSpatialGranularity
+        v-if="filter.type === 'spatial_granularity'"
+        :default-option="filter.default_option"
+        :label="filter.name"
+        :model-value="selectedGranularity"
+        @update:model-value="(value) => switchFilter('granularity', value)"
+      />
+      <template v-if="filter.type === 'spatial_zone'">
+        <label class="fr-label" for="select-spatial-coverage">{{
+          filter.name
+        }}</label>
+        <SelectSpatialCoverage
+          v-model:spatial-coverage-model="selectedSpatialCoverage"
+          :short="true"
+          @update:spatial-coverage-model="switchSpatialCoverage"
+        />
+      </template>
     </div>
   </div>
 </template>

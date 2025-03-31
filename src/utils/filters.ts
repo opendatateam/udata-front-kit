@@ -1,4 +1,3 @@
-import type { Filters } from '@/model/config'
 import type { TagSelectOption } from '@/model/tag'
 import type { QueryAsString } from '@/router/utils'
 import { useFiltersConf } from './config'
@@ -26,10 +25,11 @@ interface FilterState {
  */
 export const useFiltersState = (
   routeQuery: QueryAsString,
-  objectType: Filters
+  filterKey: string
 ) => {
-  const filtersConf = useFiltersConf(objectType)
+  const filtersConf = useFiltersConf(filterKey)
   const filtersState = reactive<Record<string, FilterState>>({})
+  const filterItems = filtersConf.items.filter((item) => item.type === 'select')
 
   const setChildOptions = (
     filter: FilterState,
@@ -39,7 +39,7 @@ export const useFiltersState = (
       // Update child filter's options based on parent selection
       const childFilter = filtersState[filter.childId]
       childFilter.options = filter.selectedValue
-        ? getTagOptions(objectType, filter.childId, filter.selectedValue)
+        ? getTagOptions(filterKey, filter.childId, filter.selectedValue)
         : []
       // Clear child selection when parent changes or set to initial value
       childFilter.selectedValue = childSelectedValue
@@ -47,14 +47,14 @@ export const useFiltersState = (
   }
 
   // Initialize the filters structure
-  const withParent = filtersConf.items.map((filter) => filter.child)
-  filtersConf.items.forEach((filter) => {
+  const withParent = filterItems.map((filter) => filter.child)
+  filterItems.forEach((filter) => {
     filtersState[filter.id] = {
       id: filter.id,
       selectedValue: routeQuery[filter.id] || undefined,
       options: withParent.includes(filter.id)
         ? []
-        : getTagOptions(objectType, filter.id),
+        : getTagOptions(filterKey, filter.id),
       childId: filter.child
     }
   })

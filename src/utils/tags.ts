@@ -1,4 +1,4 @@
-import type { FilterItemConf, Filters } from '@/model/config'
+import type { FilterItemConf } from '@/model/config'
 import type { ResolvedTag, TagSelectOption } from '@/model/tag'
 import type { ComputedRef, Ref } from 'vue'
 import { useFiltersConf } from './config'
@@ -11,12 +11,12 @@ interface HasTags {
  * Extract and denormalize tags from an object
  */
 export const useTags = <T extends HasTags>(
-  objectType: Filters,
+  filterKey: string,
   object: T | undefined | null,
   filterId?: string,
   exclude?: string[]
 ): ComputedRef<ResolvedTag[]> => {
-  const filtersConf = useFiltersConf(objectType)
+  const filtersConf = useFiltersConf(filterKey)
   const tagPrefix = filtersConf.tag_prefix
   const filters = filtersConf.items
 
@@ -52,22 +52,22 @@ export const useTags = <T extends HasTags>(
 }
 
 export const useTag = <T extends HasTags>(
-  objectType: Filters,
+  filterKey: string,
   object: Ref<T | undefined | null>,
   filterId: string
 ): ComputedRef<ResolvedTag | undefined> => {
   return computed(() => {
-    const tags = useTags(objectType, object.value, filterId)
+    const tags = useTags(filterKey, object.value, filterId)
     return tags.value[0]
   })
 }
 
 export const getTagOptions = (
-  objectType: Filters,
+  filterKey: string,
   filterId: string,
   parentTagId?: string
 ): TagSelectOption[] => {
-  const filter = getFilterConf(objectType, filterId)
+  const filter = getFilterConf(filterKey, filterId)
   if (!filter) return []
   return filter.values.filter((value) => {
     if (!parentTagId) return true
@@ -76,28 +76,28 @@ export const getTagOptions = (
 }
 
 export const getFilterConf = (
-  objectType: Filters,
+  filterKey: string,
   filterId: string
 ): FilterItemConf | undefined => {
-  const filtersConf = useFiltersConf(objectType)
+  const filtersConf = useFiltersConf(filterKey)
   return filtersConf.items.find((filter) => filter.id === filterId)
 }
 
 export const useTagOptions = (
-  objectType: Filters,
+  filterKey: string,
   tagId: Ref<string | undefined>,
   tagType: string
 ): {
   tagOptions: TagSelectOption[]
   subTagOptions: ComputedRef<TagSelectOption[]>
 } => {
-  const tagOptions = getTagOptions(objectType, tagType)
+  const tagOptions = getTagOptions(filterKey, tagType)
 
   const subTagOptions = computed(() => {
     if (!tagId) return []
-    const filter = getFilterConf(objectType, tagType)
+    const filter = getFilterConf(filterKey, tagType)
     if (!filter || !filter.child) return []
-    return getTagOptions(objectType, filter.child, tagId.value)
+    return getTagOptions(filterKey, filter.child, tagId.value)
   })
 
   return {
@@ -111,13 +111,13 @@ export interface QueryArgs {
 }
 
 export const useTagSlug = (
-  objectType: Filters,
+  filterKey: string,
   filterId: string,
   tagId?: string,
   useTagPrefix = true
 ): string => {
   if (!useTagPrefix) return tagId || ''
-  const filtersConf = useFiltersConf(objectType)
+  const filtersConf = useFiltersConf(filterKey)
   return `${filtersConf.tag_prefix}-${filterId}-${tagId || ''}`
 }
 
@@ -125,17 +125,17 @@ export const useTagSlug = (
  * Build an array of normalized tags from query components and clean the original QueryArgs
  */
 export const useTagsQuery = (
-  objectType: Filters,
+  filterKey: string,
   query: QueryArgs
 ): { tag: Array<string>; extraArgs: QueryArgs } => {
-  const filtersConf = useFiltersConf(objectType)
-  const filters = filtersConf.items
+  const filtersConf = useFiltersConf(filterKey)
+  const filters = filtersConf.items.filter((item) => item.type === 'select')
   const queryArray = []
   for (const filter of filters) {
     const queryFilter = query[filter.id]
     if (queryFilter != null) {
       queryArray.push(
-        useTagSlug(objectType, filter.id, queryFilter, filter.use_tag_prefix)
+        useTagSlug(filterKey, filter.id, queryFilter, filter.use_tag_prefix)
       )
     }
     delete query[filter.id]
@@ -147,11 +147,11 @@ export const useTagsQuery = (
 }
 
 export const useTagFromId = (
-  objectType: Filters,
+  filterKey: string,
   filterId: string,
   tagId: string | null
 ): ResolvedTag | null => {
-  const filter = getFilterConf(objectType, filterId)
+  const filter = getFilterConf(filterKey, filterId)
   if (!filter) return null
   const tag = filter.values.find((v) => v.id === tagId)
   if (!tag) return null

@@ -48,6 +48,7 @@ export interface FilterItemValueConf {
 export interface FilterItemConf {
   name: string
   id: string
+  type: 'spatial_zone' | 'spatial_granularity' | 'select'
   child?: string
   color: string
   default_option: string
@@ -59,9 +60,17 @@ export type UniverseQuery = {
   [key: string]: string | number | boolean
 }
 
+export type FilterBanner = {
+  title: string
+  content: string
+}
+
 export type FilterConf = {
   tag_prefix: string
   universe_query: UniverseQuery
+  title: string
+  search_text: string
+  banner: FilterBanner | null
   items: FilterItemConf[]
 }
 
