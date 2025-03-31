@@ -35,8 +35,6 @@ jobs:
           environment: ${{ matrix.site }}-preview
           initial-status: in_progress
           transient-environment: true
-          ref: ${{ github.head_ref }}
-          auto-inactive: true
 
       - name: Create the review app
         if: github.event.action == 'opened'
