@@ -142,8 +142,18 @@ onMounted(() => {
             </p>
           </div>
         </div>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <p>{{ formatDate(dataset.last_update) }}</p>
+        <template v-if="dataset.harvest">
+          <template v-if="dataset.harvest.modified_at">
+            <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière révision</h2>
+            <p>
+              {{ formatDate(dataset.harvest.modified_at) }}
+            </p>
+          </template>
+        </template>
+        <template v-else>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
+          <p>{{ formatDate(dataset.last_update) }}</p>
+        </template>
         <template v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
           <p class="fr-text--sm fr-mt-0 fr-mb-3v">
