@@ -7,8 +7,6 @@ datagouvfr:
   oauth_client_id:
 
 universe:
-  # "universe" topic id
-  topic_id:
   # universe name, used as bouquets tag
   name: meteo-france
 
@@ -193,10 +191,18 @@ filters:
     tag_prefix:
     universe_query:
       tag: meteodatagouvfr
+    title: Jeux de données
+    search:
+      input: Rechercher un jeu de données
+      results:
+        one: 1 jeu de données disponible
+        other: '{{total}} jeux de données disponibles'
+    banner:
     items:
       - name: Catégories
         default_option: Toutes les catégories
         id: category
+        type: select
         child: subcategory
         color: noop
         use_tag_prefix: false
@@ -212,6 +218,7 @@ filters:
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
+        type: select
         color: noop
         use_tag_prefix: false
         values:
