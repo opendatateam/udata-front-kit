@@ -142,7 +142,7 @@ defineExpose({
         <li
           v-for="dataset in datasets"
           :key="dataset.id"
-          :class="meta.cardClass || 'fr-col-12'"
+          :class="[meta.cardClass || 'fr-col-12', 'card-container']"
         >
           <CardComponent
             :key="dataset.id"
@@ -168,5 +168,9 @@ defineExpose({
 .dataset-card {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+.card-container {
+  width: 100%;
 }
 </style>

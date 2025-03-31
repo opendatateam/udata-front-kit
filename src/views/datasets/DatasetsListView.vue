@@ -91,19 +91,19 @@ const FiltersComponent = computed(() => {
       />
     </div>
     <div class="fr-mt-2w">
-      <div className="fr-grid-row">
+      <div class="fr-grid-row">
         <nav
-          className="fr-sidemenu fr-col-md-4"
+          class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
-          <div className="fr-sidemenu__inner">
-            <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
+          <div class="fr-sidemenu__inner">
+            <h2 id="fr-sidemenu-title" class="fr-sidemenu__title h3">
               Filtres
             </h2>
             <FiltersComponent />
           </div>
         </nav>
-        <div className="fr-col">
+        <div class="fr-col datasets-list-container">
           <DatasetList
             ref="datasetListComp"
             :query="props.query"
@@ -114,3 +114,25 @@ const FiltersComponent = computed(() => {
     </div>
   </GenericContainer>
 </template>
+
+<style scoped>
+/* put above header (ground+500) so that multiselect floats above menu */
+.fr-sidemenu {
+  z-index: calc(var(--ground) + 600);
+}
+@media (max-width: 768px) {
+  .fr-sidemenu {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 2em;
+    width: 100%;
+    .fr-sidemenu__title {
+      box-shadow: none;
+    }
+  }
+}
+
+.datasets-list-container {
+  width: 100%;
+}
+</style>
