@@ -36,20 +36,10 @@ const harvestModifiedAt = props.dataset.harvest?.modified_at
           title="Publication"
         />
         <ExtendedInformationPanelItem
-          :items="[formatDate(dataset.created_at)]"
-          class="fr-col-12 fr-col-md-6"
-          title="Création"
-        />
-        <ExtendedInformationPanelItem
           v-if="harvestModifiedAt"
           :items="[formatDate(harvestModifiedAt)]"
           class="fr-col-12 fr-col-md-6"
           title="Dernière révision"
-        />
-        <ExtendedInformationPanelItem
-          :items="[formatDate(dataset.last_update)]"
-          class="fr-col-12 fr-col-md-6"
-          title="Dernière mise à jour des métadonnées"
         />
       </div>
       <ExtendedInformationPanelItem
