@@ -17,6 +17,8 @@ export interface RouteMeta {
   title?: string
   requiresAuth?: boolean
   filtersComponent?: () => Promise<{ default: Component }>
+  cardComponent?: () => Promise<{ default: Component }>
+  cardClass?: string
   filterKey?: string
 }
 

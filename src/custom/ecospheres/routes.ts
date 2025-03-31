@@ -50,6 +50,7 @@ export const routes = [
             await import(
               '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
             ),
+          cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
           filterKey: 'indicators'
         } as RouteMeta,
         component: async () =>

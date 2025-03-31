@@ -92,6 +92,20 @@ const executeQuery = async () => {
     .finally(() => loader.hide())
 }
 
+// load custom card component from router, or fallback to default
+const CardComponent = computed(() => {
+  const componentLoader = meta?.cardComponent
+  if (componentLoader) {
+    return defineAsyncComponent({
+      loader: componentLoader,
+      onError: (err) => {
+        console.error('Failed to load component:', err)
+      }
+    })
+  }
+  return DatasetCard
+})
+
 // launch search on route.query changes
 watch(
   () => route.query,
@@ -124,9 +138,13 @@ defineExpose({
       </div>
     </div>
     <div class="fr-mb-4w border-top">
-      <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
-        <li v-for="dataset in datasets" :key="dataset.id" class="fr-col-12">
-          <DatasetCard
+      <ul class="fr-grid-row fr-grid-row--gutters fr-mt-2w fr-pl-0" role="list">
+        <li
+          v-for="dataset in datasets"
+          :key="dataset.id"
+          :class="meta.cardClass || 'fr-col-12'"
+        >
+          <CardComponent
             :key="dataset.id"
             :dataset="dataset"
             :dataset-url="getDatasetPage(dataset.id)"
