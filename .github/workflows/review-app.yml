@@ -39,7 +39,7 @@ jobs:
           transient-environment: true
 
       - name: Create the review app
-        if: github.event.action == 'opened'
+        if: github.event.action == 'opened' || github.event.action == 'reopened'
         uses: dokku/github-action@master
         with:
           command: review-apps:create
@@ -71,7 +71,7 @@ jobs:
           branch: 'main'
 
       - name: Enable SSL with Let's Encrypt
-        if: github.event.action == 'opened'
+        if: github.event.action == 'opened' || github.event.action == 'reopened'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
