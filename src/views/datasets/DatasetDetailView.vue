@@ -143,14 +143,12 @@ onMounted(() => {
           </div>
         </div>
         <template v-if="dataset.harvest">
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière révision</h2>
-          <p>
-            {{
-              dataset.harvest.modified_at
-                ? formatDate(dataset.harvest.modified_at)
-                : 'non disponible'
-            }}
-          </p>
+          <template v-if="dataset.harvest.modified_at">
+            <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière révision</h2>
+            <p>
+              {{ formatDate(dataset.harvest.modified_at) }}
+            </p>
+          </template>
         </template>
         <template v-else>
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
