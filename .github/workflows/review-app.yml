@@ -2,7 +2,9 @@
 
 name: Deploy review app
 
-on: pull_request
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
 
 jobs:
   handle_review_app:
