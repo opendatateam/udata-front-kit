@@ -167,9 +167,17 @@ filters:
   bouquets:
     universe_query:
     tag_prefix: logistique
+    title:
+    search:
+      input:
+      results:
+        one:
+        other:
+    banner:
     items:
       - name: Catégorie
         id: theme
+        type: select
         child: subtheme
         color: green-bourgeon
         use_tag_prefix: true
@@ -188,6 +196,7 @@ filters:
             name: Socio-économique
       - name: Sous-catégorie
         id: subtheme
+        type: select
         color: blue-ecume
         use_tag_prefix: true
         values:
