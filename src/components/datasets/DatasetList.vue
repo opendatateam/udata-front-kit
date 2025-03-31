@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
+import type { RouteMeta } from '@/router'
 import { useSearchStore } from '@/store/DatasetSearchStore'
 import { useFiltersConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
@@ -22,9 +23,10 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
+const meta = route.meta as RouteMeta
 
 const store = useSearchStore()
-const filtersConf = useFiltersConf('datasets')
+const filtersConf = useFiltersConf(meta.filterKey || 'datasets')
 const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
@@ -86,7 +88,7 @@ const executeQuery = async () => {
     {} as Record<string, string>
   )
   return store
-    .query({ ...route.query, ...props, ...filtersArgs })
+    .query({ ...route.query, ...props, ...filtersArgs }, meta.filterKey)
     .finally(() => loader.hide())
 }
 

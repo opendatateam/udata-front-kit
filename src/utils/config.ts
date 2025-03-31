@@ -1,10 +1,5 @@
 import config from '@/config'
-import type {
-  CanAddTopicsConf,
-  Filters,
-  FiltersConf,
-  TopicsConf
-} from '@/model/config'
+import type { CanAddTopicsConf, FiltersConf, TopicsConf } from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
 interface TopicsConfNormalized {
@@ -45,7 +40,12 @@ export const useTopicsConf = (): TopicsConfNormalized => {
 // Get debounce value or set default.
 export const debounceWait: number = config.website.default_debounce_wait ?? 600
 
-export const useFiltersConf = (objectType: Filters) => {
+export const useFiltersConf = (filterKey: string) => {
   const filtersConf: FiltersConf = config.filters
-  return filtersConf[objectType]
+  if (!(filterKey in filtersConf)) {
+    throw new Error(
+      `Invalid filter key: ${filterKey}. Available filters: ${Object.keys(filtersConf).join(', ')}`
+    )
+  }
+  return filtersConf[filterKey]
 }

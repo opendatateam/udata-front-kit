@@ -1,13 +1,18 @@
 <script setup lang="ts">
+import type { RouteMeta } from '@/router'
 import { useRouteQueryAsString } from '@/router/utils'
 import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
+const meta = route.meta as RouteMeta
 const routeQuery = useRouteQueryAsString().query
 
-const { filtersState, filtersConf } = useFiltersState(routeQuery, 'datasets')
+const { filtersState, filtersConf } = useFiltersState(
+  routeQuery,
+  meta.filterKey || 'datasets'
+)
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({

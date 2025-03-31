@@ -17,6 +17,7 @@ export interface RouteMeta {
   title?: string
   requiresAuth?: boolean
   filtersComponent?: () => Promise<{ default: Component }>
+  filterKey?: string
 }
 
 const { topicsSlug, topicsName } = useTopicsConf()

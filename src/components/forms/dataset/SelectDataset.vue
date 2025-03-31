@@ -48,7 +48,8 @@ const search = useDebounceFn(async (query: string) => {
   }
   try {
     return (
-      await new SearchAPI().search(query, null, 1, {
+      await new SearchAPI().search(query, {
+        page: 1,
         page_size: 10
       })
     ).data

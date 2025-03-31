@@ -26,6 +26,7 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
+const meta = route.meta as RouteMeta
 
 const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
 const searchResultsMessage = computed(
@@ -47,7 +48,6 @@ const search = useDebounceFn((query) => {
 
 // load custom filters component from router, or fallback to default
 const FiltersComponent = computed(() => {
-  const meta = route.meta as RouteMeta
   const componentLoader = meta?.filtersComponent
   if (componentLoader) {
     return defineAsyncComponent({

@@ -55,14 +55,16 @@ export interface FilterItemConf {
   values: FilterItemValueConf[]
 }
 
-export type Filters = 'bouquets' | 'indicators' | 'datasets'
+export type UniverseQuery = {
+  [key: string]: string | number | boolean
+}
 
 export type FilterConf = {
   tag_prefix: string
-  universe_tag: string | null
+  universe_query: UniverseQuery
   items: FilterItemConf[]
 }
 
 export type FiltersConf = {
-  [K in Filters]: FilterConf
+  [key: string]: FilterConf
 }

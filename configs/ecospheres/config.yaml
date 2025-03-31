@@ -7,12 +7,8 @@ datagouvfr:
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
 
 universe:
-  # "universe" topic id
-  topic_id: 65141cd780d73f98142e9265
   # universe name, used as bouquets tag
   name: ecospheres
-  indicators:
-    organization_id: 67c57c2f1a418addfc94d38a
 
 robots:
   disallow:
@@ -209,7 +205,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #
 # filters:
 #   {object_type}:               # object type to filter on
-#     universe_tag: {string}     # used to define a "universe" on a given {object_type}, through a tag
+#     universe_query: {dict}     # used to define a "universe" on a given {object_type}, through query args
 #     tag_prefix: {string}       # prefix for tags on data.gouv.fr
 #     items:                     # list of filters for this {object_type}
 #       - name: {string}         # name of the filter ⚠️ needs to be unique across all items
@@ -224,7 +220,8 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 filters:
   # DATASETS
   datasets:
-    universe_tag:
+    universe_query:
+      topic: 65141cd780d73f98142e9265
     tag_prefix:
     items:
       - name: Thème INSPIRE
@@ -305,7 +302,7 @@ filters:
             name: Zones à risque naturel
   # BOUQUETS
   bouquets:
-    universe_tag:
+    universe_query:
     tag_prefix: ecospheres
     items:
       - name: Thématique
@@ -424,10 +421,13 @@ filters:
             parent: chantiers-transverses
   # INDICATORS
   indicators:
-    universe_tag: ecospheres-indicateurs
+    universe_query:
+      tag: ecospheres-indicateurs
+      organization: 67c57c2f1a418addfc94d38a
     tag_prefix: ecospheres-indicateurs
     items:
       - name: Thématique
+        default_option: Toutes les thématiques
         id: theme
         color: green-menthe
         use_tag_prefix: true
@@ -447,6 +447,7 @@ filters:
           - id: mieux-se-nourrir
             name: Mieux se nourrir
       - name: Enjeu
+        default_option: Tous les enjeux
         id: enjeu
         color: blue-ecume
         use_tag_prefix: true
@@ -462,6 +463,7 @@ filters:
           - id: sante
             name: Santé
       - name: Secteur
+        default_option: Tous les secteurs
         id: secteur
         color: purple-glycine
         use_tag_prefix: true
@@ -487,6 +489,7 @@ filters:
           - id: transverse
             name: Transverse
       - name: Levier
+        default_option: Tous les leviers
         id: levier
         color: green-archipel
         use_tag_prefix: true
@@ -528,6 +531,7 @@ filters:
           - id: velo
             name: Vélo
       - name: Cas d'usage
+        default_option: Tous les cas d'usage
         id: usage
         color: yellow-tournesol-main-731
         use_tag_prefix: true

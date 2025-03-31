@@ -165,7 +165,7 @@ website:
 # cf configs/ecospheres/config.yaml for filters config format details
 filters:
   bouquets:
-    universe_tag:
+    universe_query:
     tag_prefix: logistique
     items:
       - name: Catégorie

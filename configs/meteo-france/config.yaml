@@ -191,7 +191,8 @@ organizations:
 filters:
   datasets:
     tag_prefix:
-    universe_tag: meteodatagouvfr
+    universe_query:
+      tag: meteodatagouvfr
     items:
       - name: Catégories
         default_option: Toutes les catégories
