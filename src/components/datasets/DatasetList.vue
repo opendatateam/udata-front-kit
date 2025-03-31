@@ -31,9 +31,9 @@ const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return '1 jeu de données disponible'
+    return filtersConf.search.results.one
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} jeux de données disponibles`
+    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${filtersConf.search.results.other.replace('{{total}}', String(total.value))}`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -52,14 +52,14 @@ const getOrganizationPage = (id: string | undefined) => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  router.push({ name: 'datasets', query, hash: '#datasets-list' }).then(() => {
+  router.push({ name: route.name, query, hash: '#datasets-list' }).then(() => {
     emits('clearFilters')
   })
 }
 
 const goToPage = (page: number) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, page: page + 1 },
     hash: '#datasets-list'
   })
@@ -67,7 +67,7 @@ const goToPage = (page: number) => {
 
 const doSort = (value: string | null) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, sort: value },
     hash: '#datasets-list'
   })

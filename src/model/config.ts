@@ -65,11 +65,19 @@ export type FilterBanner = {
   content: string
 }
 
+export type FilterSearch = {
+  input: string
+  results: {
+    one: string
+    other: string
+  }
+}
+
 export type FilterConf = {
   tag_prefix: string
   universe_query: UniverseQuery
   title: string
-  search_text: string
+  search: FilterSearch
   banner: FilterBanner | null
   items: FilterItemConf[]
 }

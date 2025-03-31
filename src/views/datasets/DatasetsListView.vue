@@ -38,7 +38,7 @@ const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
 
 const search = useDebounceFn((query) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, q: query },
     hash: '#datasets-list'
   })
@@ -85,8 +85,8 @@ const FiltersComponent = computed(() => {
         id="search-dataset"
         :model-value="props.query"
         :is-filter="true"
-        :search-label="filtersConf.search_text"
-        :label="filtersConf.search_text"
+        :search-label="filtersConf.search.input"
+        :label="filtersConf.search.input"
         @update:model-value="search"
       />
     </div>
