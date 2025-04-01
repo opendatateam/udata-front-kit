@@ -51,7 +51,7 @@ const dropdown = config.website.header_search.dropdown
       </div>
     </section>
     <section class="fr-container explore-contribute fr-mt-10v">
-      <ul class="fr-grid-row flex-gap fr-pb-12v" role="list">
+      <ul class="fr-grid-row flex-gap fr-pb-16v" role="list">
         <li class="card-container border">
           <div class="home-card">
             <img src="../assets/explorer.svg" alt="" width="234" height="160" />
@@ -121,77 +121,6 @@ const dropdown = config.website.header_search.dropdown
       </ul>
     </section>
     <section class="fr-container--fluid bg-grey fr-py-16v">
-      <div class="fr-container bouquets">
-        <h2>Cataloguer les usages grâce aux bouquets</h2>
-
-        <div class="bg-white border fr-py-3w fr-px-2w">
-          <div class="bg-grey">
-            <ul class="fr-grid-row flex-gap organize-data" role="list">
-              <li class="fr-grid-row">
-                <div>
-                  <img
-                    src="../assets/sign-document.svg"
-                    alt=""
-                    class="illustration"
-                    width="64"
-                    height="64"
-                  />
-                  <h3>Documenter un besoin</h3>
-                </div>
-                <p>
-                  Quels enjeux cherche-t-on à soutenir&nbsp;? Quels sont les
-                  acteurs concernés&nbsp;? Un bouquet de données est créé au nom
-                  d’un utilisateur ou d’une organisation. Tous les membres d’une
-                  organisation peuvent éditer le bouquet.
-                </p>
-              </li>
-
-              <li class="fr-grid-row">
-                <div>
-                  <img
-                    src="../assets/binders.svg"
-                    alt=""
-                    class="illustration"
-                    width="64"
-                    height="64"
-                  />
-                  <h3>Lister les informations utiles</h3>
-                </div>
-                <p>
-                  Quelles sont les informations géographiques ou les indicateurs
-                  pertinents&nbsp;? Les bouquets de données permettent de
-                  renseigner les informations souhaitées indépendamment de
-                  l’existence des données.
-                </p>
-              </li>
-
-              <li class="fr-grid-row">
-                <div>
-                  <img
-                    src="../assets/document-add.svg"
-                    alt=""
-                    class="illustration"
-                    width="64"
-                    height="64"
-                  />
-                  <h3>Associer les données</h3>
-                </div>
-                <p>
-                  Les données existantes satisfont-elles les besoins du cas
-                  d’usage&nbsp;? L’association peut se faire dans sa forme la
-                  plus interopérable via une donnée cataloguée sur
-                  <b>data.gouv</b><i>.fr</i> ou le renseignement d’un URL.
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="fr-container fr-my-10v">
-        <div class="border"></div>
-      </div>
-
       <div class="fr-container">
         <h2>Les bouquets à découvrir</h2>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
@@ -219,14 +148,6 @@ const dropdown = config.website.header_search.dropdown
 </template>
 
 <style scoped>
-.bouquets {
-  --gap: 2px;
-  h3 {
-    margin-block-end: 0;
-    flex: 1 1 15ch;
-  }
-}
-
 .bg-grey {
   background-color: var(--background-alt-grey);
 }
@@ -234,30 +155,7 @@ const dropdown = config.website.header_search.dropdown
 .faq {
   background-color: var(--background-default-grey);
 }
-.organize-data li {
-  padding: 1rem;
-  flex-direction: column;
-  align-content: start;
-  gap: 1rem;
-  flex: 1 1 33%;
-  min-inline-size: 20ch;
-  background-color: white;
 
-  & > :first-child {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  h4 {
-    margin-top: 5px;
-  }
-
-  p {
-    margin-bottom: 0;
-  }
-}
 .discover {
   gap: 1.5rem;
 
@@ -304,6 +202,7 @@ const dropdown = config.website.header_search.dropdown
   container-type: inline-size;
   container-name: card;
 }
+
 .home-card {
   /* Fluid padding. Maths from: https://utopia.fyi/space/calculator/ */
   padding: clamp(1rem, 0.4286rem + 2.8571cqi, 1.5rem);
