@@ -1,6 +1,6 @@
 import type { TagSelectOption } from '@/model/tag'
 import type { QueryAsString } from '@/router/utils'
-import { useFiltersConf } from './config'
+import { usePageConf } from './config'
 import { getTagOptions } from './tags'
 
 interface FilterState {
@@ -21,15 +21,15 @@ interface FilterState {
  * - Provides reactive state management for filter selections
  * - Does NOT update the route query parameters; that is the responsibility of the caller
  *
- * Also provides filtersConf for convenience.
+ * Also provides pageConf for convenience.
  */
 export const useFiltersState = (
   routeQuery: QueryAsString,
   filterKey: string
 ) => {
-  const filtersConf = useFiltersConf(filterKey)
+  const pageConf = usePageConf(filterKey)
   const filtersState = reactive<Record<string, FilterState>>({})
-  const filterItems = filtersConf.items.filter((item) => item.type === 'select')
+  const filterItems = pageConf.filters.filter((item) => item.type === 'select')
 
   const setChildOptions = (
     filter: FilterState,
@@ -73,5 +73,5 @@ export const useFiltersState = (
     }
   })
 
-  return { filtersState, filtersConf }
+  return { filtersState, pageConf }
 }

@@ -8,7 +8,7 @@ import DatasetList from '@/components/datasets/DatasetList.vue'
 import type { RouteMeta } from '@/router'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
-import { debounceWait, useFiltersConf } from '@/utils/config'
+import { debounceWait, usePageConf } from '@/utils/config'
 
 defineEmits(['search'])
 
@@ -26,7 +26,7 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 const meta = route.meta as RouteMeta
-const filtersConf = useFiltersConf(meta.filterKey || 'datasets')
+const pageConf = usePageConf(meta.filterKey || 'datasets')
 
 const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
 const searchResultsMessage = computed(
@@ -36,7 +36,7 @@ useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const links = [
   { to: '/', text: 'Accueil' },
-  { text: filtersConf.breadcrumb_title || filtersConf.title }
+  { text: pageConf.breadcrumb_title || pageConf.title }
 ]
 
 const search = useDebounceFn((query) => {
@@ -69,17 +69,17 @@ const FiltersComponent = computed(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container datagouv-components fr-my-2w">
-    <h1>{{ filtersConf.title }}</h1>
+    <h1>{{ pageConf.title }}</h1>
   </div>
   <section
-    v-if="filtersConf.banner"
+    v-if="pageConf.banner"
     class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <h2 v-html="filtersConf.banner.title" />
+      <h2 v-html="pageConf.banner.title" />
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="fromMarkdown(filtersConf.banner.content)" />
+      <div v-html="fromMarkdown(pageConf.banner.content)" />
     </div>
   </section>
   <GenericContainer id="datasets-list">
@@ -88,8 +88,8 @@ const FiltersComponent = computed(() => {
         id="search-dataset"
         :model-value="props.query"
         :is-filter="true"
-        :search-label="filtersConf.search.input"
-        :label="filtersConf.search.input"
+        :search-label="pageConf.search.input"
+        :label="pageConf.search.input"
         @update:model-value="search"
       />
     </div>

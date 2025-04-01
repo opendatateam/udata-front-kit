@@ -3,7 +3,7 @@ import { computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import { pageStore } from '@/store/PageStore'
+import { pageStore } from '@/store/StaticPageStore'
 import { fromMarkdown } from '@/utils'
 
 const store = pageStore()
@@ -19,7 +19,7 @@ const props = defineProps({
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
-  { text: title.value }
+  { text: title.value || '' }
 ])
 
 watchEffect(async () => {

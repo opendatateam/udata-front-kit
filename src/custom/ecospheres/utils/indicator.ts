@@ -1,5 +1,5 @@
 import { useSpatialStore } from '@/store/SpatialStore'
-import { useFiltersConf } from '@/utils/config'
+import { usePageConf } from '@/utils/config'
 import type { DatasetV2 } from '@datagouv/components'
 import type { ComputedRef } from 'vue'
 import type {
@@ -10,7 +10,7 @@ import type {
   IndicatorsExtrasApi
 } from '../model/indicator'
 
-const filtersConf = useFiltersConf('indicators')
+const pageConf = usePageConf('indicators')
 
 export const UNFILLED_LABEL = 'Non renseigné'
 
@@ -58,6 +58,6 @@ export const isIndicator = (
   dataset: Ref<DatasetV2 | undefined>
 ): ComputedRef<boolean> => {
   return computed(() => {
-    return dataset.value?.tags?.includes(filtersConf.tag_prefix) || false
+    return dataset.value?.tags?.includes(pageConf.tag_prefix) || false
   })
 }

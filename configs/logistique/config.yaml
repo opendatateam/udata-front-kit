@@ -89,7 +89,7 @@ website:
     disable:
       - organizations_routes
       - topics
-    pages:
+    static_pages:
       - title: 'A propos'
         id: 'about'
         route: '/about'
@@ -162,8 +162,8 @@ website:
     can_add_topics:
       everyone: yes
 
-# cf configs/ecospheres/config.yaml for filters config format details
-filters:
+# cf configs/ecospheres/config.yaml for pages config format details
+pages:
   bouquets:
     universe_query:
     tag_prefix: logistique
@@ -175,7 +175,7 @@ filters:
         one:
         several:
     banner:
-    items:
+    filters:
       - name: Catégorie
         id: theme
         type: select

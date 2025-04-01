@@ -109,7 +109,7 @@ website:
   router:
     disable:
       - topics
-    pages:
+    static_pages:
       - title: 'À propos'
         id: 'about'
         route: '/about'
@@ -195,11 +195,11 @@ website:
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
-# Configuration format for filters:
+# Configuration format for pages:
 #
-# filters:
-#   {object_type}:               # object type to filter on
-#     universe_query: {dict}     # used to define a "universe" on a given {object_type}, through query args
+# pages:
+#   {page_id}:                   # page identifier
+#     universe_query: {dict}     # used to define a "universe" on a given {page_id}, through query args
 #     tag_prefix: {string}       # prefix for tags on data.gouv.fr
 #     title: {string}            # title for the list page
 #     breadcrumb_title: {string} # title in breadcrumb (optionnal, falls back to title)
@@ -211,7 +211,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #     banner:                    # banner for the list page (optionnal)
 #      title: {string}           # title for the banner
 #      content: {string}         # content for the banner
-#     items:                     # list of filters for this {object_type}
+#     filters:                   # list of filters for this {page_id}
 #       - name: {string}         # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}           # id of the filter
 #         type: {string}         # type of the filter (select | spatial_zone | spatial_granularity)
@@ -222,7 +222,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #           - id: {string}       # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}     # name of the value
 #             parent: {string?}  # id of the parent filter value (optional)
-filters:
+pages:
   # DATASETS
   datasets:
     universe_query:
@@ -241,7 +241,7 @@ filters:
         En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
 
         Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
-    items:
+    filters:
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
@@ -331,7 +331,7 @@ filters:
         one:
         several:
     banner:
-    items:
+    filters:
       - name: Thématique
         id: theme
         type: select
@@ -467,7 +467,7 @@ filters:
         L'Ecolab du Commissariat Général au Développement Durable met en place un hub d'indicateurs territoriaux, en co-construction avec les directions générales, les établissements publics et les services déconcentrés des ministères concernés, pour accompagner les territoires dans le suivi de leurs politiques publiques de transition écologique. Ces indicateurs sont référencés par thématiques et enjeux environnementaux de la planification écologique. Chaque fiche détaille la définition, les sources, le calcul des indicateurs et permet d'accéder aux données structurées. Plusieurs bouquets permettent de regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
 
         Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
-    items:
+    filters:
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme

@@ -16,7 +16,7 @@ const selectedGranularity = ref(routeQuery.granularity || undefined)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
-const { filtersState, filtersConf } = useFiltersState(
+const { filtersState, pageConf } = useFiltersState(
   routeQuery,
   meta.filterKey || 'datasets'
 )
@@ -61,7 +61,7 @@ watch(
 <template>
   <div className="filterForm">
     <div
-      v-for="filter in filtersConf.items"
+      v-for="filter in pageConf.filters"
       :key="filter.id"
       class="fr-select-group"
     >

@@ -90,7 +90,7 @@ website:
     disable:
       - organizations_routes
       - topic_routes
-    pages:
+    static_pages:
       - title: 'A propos'
         id: 'about'
         route: '/about'
@@ -185,8 +185,8 @@ website:
 # then Informations > ID at the bottom of the page
 organizations:
 
-# cf configs/ecospheres/config.yaml for filters config format details
-filters:
+# cf configs/ecospheres/config.yaml for pages config format details
+pages:
   datasets:
     tag_prefix:
     universe_query:
@@ -199,7 +199,7 @@ filters:
         one: 1 jeu de données disponible
         several: '{{total}} jeux de données disponibles'
     banner:
-    items:
+    filters:
       - name: Catégories
         default_option: Toutes les catégories
         id: category

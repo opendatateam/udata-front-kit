@@ -7,10 +7,10 @@ import {
 } from 'vue-router'
 
 import config from '@/config'
-import type { PageConfig } from '@/model/config'
+import type { StaticPageConfig } from '@/model/config'
 import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
-import SimplePageView from '@/views/SimplePageView.vue'
+import StaticPageView from '@/views/StaticPageView.vue'
 
 // used by custom site routers
 export interface RouteMeta {
@@ -144,18 +144,20 @@ const defaultRoutes: RouteRecordRaw[] = [
   return !disableRoutes.includes(route.name)
 })
 
-// pages
-const pages = (config.website.router.pages ?? []).map((item: PageConfig) => {
-  return {
-    path: item.route,
-    name: item.id,
-    component: SimplePageView,
-    props: { url: item.url },
-    meta: {
-      title: item.title
+// static pages
+const pages = (config.website.router.static_pages ?? []).map(
+  (item: StaticPageConfig) => {
+    return {
+      path: item.route,
+      name: item.id,
+      component: StaticPageView,
+      props: { url: item.url },
+      meta: {
+        title: item.title
+      }
     }
   }
-})
+)
 
 // oauth
 if (config.website.oauth_option === true) {

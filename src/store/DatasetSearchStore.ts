@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 import SearchAPI from '@/services/api/SearchAPI'
-import { useFiltersConf } from '@/utils/config'
+import { usePageConf } from '@/utils/config'
 import { useTagsQuery } from '@/utils/tags'
 import type { DatasetV2 } from '@datagouv/components'
 
@@ -44,13 +44,13 @@ export const useSearchStore = defineStore('search', {
   },
   actions: {
     async query(args: QueryArgs, filterKey?: string) {
-      const filtersConf = useFiltersConf(filterKey || 'datasets')
+      const pageConf = usePageConf(filterKey || 'datasets')
       const { query, ...queryArgs } = args
       const { extraArgs, tag } = useTagsQuery(
         filterKey || 'datasets',
         queryArgs
       )
-      const { tag: universeTag, ...universeQuery } = filtersConf.universe_query
+      const { tag: universeTag, ...universeQuery } = pageConf.universe_query
       const results = await searchAPI.search(query, {
         page_size: PAGE_SIZE,
         tag: [universeTag, ...tag].filter(Boolean),

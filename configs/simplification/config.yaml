@@ -210,7 +210,7 @@ website:
     disable:
       - organizations_routes
       - topics
-    pages:
+    static_pages:
   show_quality_component: true
   oauth_option: false
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr'
