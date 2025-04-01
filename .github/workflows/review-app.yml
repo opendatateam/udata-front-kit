@@ -23,6 +23,12 @@ jobs:
     # only run if the PR is from the same repo
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event_name == 'pull_request'
     steps:
+      - name: Debug event
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Event action: ${{ github.event.action }}"
+          echo "Pull request state: ${{ github.event.pull_request.state }}"
+
       - name: Cloning repo
         if: github.event.action != 'closed'
         uses: actions/checkout@v4
