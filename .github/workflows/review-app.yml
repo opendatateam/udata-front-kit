@@ -24,6 +24,7 @@ jobs:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event_name == 'pull_request'
     steps:
       - name: Cloning repo
+        if: github.event.action != 'closed'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
