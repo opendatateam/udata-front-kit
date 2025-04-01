@@ -168,6 +168,7 @@ filters:
     universe_query:
     tag_prefix: logistique
     title:
+    breadcrumb_title:
     search:
       input:
       results:

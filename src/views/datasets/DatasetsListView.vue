@@ -34,7 +34,10 @@ const searchResultsMessage = computed(
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
-const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
+const links = [
+  { to: '/', text: 'Accueil' },
+  { text: filtersConf.breadcrumb_title || filtersConf.title }
+]
 
 const search = useDebounceFn((query) => {
   router.push({

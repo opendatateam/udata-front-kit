@@ -192,6 +192,7 @@ filters:
     universe_query:
       tag: meteodatagouvfr
     title: Jeux de données
+    breadcrumb_title: Données
     search:
       input: Rechercher un jeu de données
       results:

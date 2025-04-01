@@ -77,6 +77,7 @@ export type FilterConf = {
   tag_prefix: string
   universe_query: UniverseQuery
   title: string
+  breadcrumb_title: string | null
   search: FilterSearch
   banner: FilterBanner | null
   items: FilterItemConf[]

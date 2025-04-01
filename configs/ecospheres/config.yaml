@@ -202,6 +202,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #     universe_query: {dict}     # used to define a "universe" on a given {object_type}, through query args
 #     tag_prefix: {string}       # prefix for tags on data.gouv.fr
 #     title: {string}            # title for the list page
+#     breadcrumb_title: {string} # title in breadcrumb (optionnal, falls back to title)
 #     search:
 #      input: {string}           # placeholder for the search input
 #      results:                  # results count message
@@ -228,6 +229,7 @@ filters:
       topic: 65141cd780d73f98142e9265
     tag_prefix:
     title: Jeux de données
+    breadcrumb_title: Données
     search:
       input: Rechercher un jeu de données
       results:
@@ -322,6 +324,7 @@ filters:
     universe_query:
     tag_prefix: ecospheres
     title:
+    breadcrumb_title:
     search:
       input:
       results:
@@ -452,6 +455,7 @@ filters:
       organization: 67c57c2f1a418addfc94d38a
     tag_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
+    breadcrumb_title: Indicateurs
     search:
       input: Rechercher un indicateur
       results:
