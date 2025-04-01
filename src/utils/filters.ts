@@ -1,7 +1,6 @@
-import type { Filters } from '@/model/config'
 import type { TagSelectOption } from '@/model/tag'
 import type { QueryAsString } from '@/router/utils'
-import { useFiltersConf } from './config'
+import { usePageConf } from './config'
 import { getTagOptions } from './tags'
 
 interface FilterState {
@@ -22,14 +21,15 @@ interface FilterState {
  * - Provides reactive state management for filter selections
  * - Does NOT update the route query parameters; that is the responsibility of the caller
  *
- * Also provides filtersConf for convenience.
+ * Also provides pageConf for convenience.
  */
 export const useFiltersState = (
   routeQuery: QueryAsString,
-  objectType: Filters
+  filterKey: string
 ) => {
-  const filtersConf = useFiltersConf(objectType)
+  const pageConf = usePageConf(filterKey)
   const filtersState = reactive<Record<string, FilterState>>({})
+  const filterItems = pageConf.filters.filter((item) => item.type === 'select')
 
   const setChildOptions = (
     filter: FilterState,
@@ -39,7 +39,7 @@ export const useFiltersState = (
       // Update child filter's options based on parent selection
       const childFilter = filtersState[filter.childId]
       childFilter.options = filter.selectedValue
-        ? getTagOptions(objectType, filter.childId, filter.selectedValue)
+        ? getTagOptions(filterKey, filter.childId, filter.selectedValue)
         : []
       // Clear child selection when parent changes or set to initial value
       childFilter.selectedValue = childSelectedValue
@@ -47,14 +47,14 @@ export const useFiltersState = (
   }
 
   // Initialize the filters structure
-  const withParent = filtersConf.items.map((filter) => filter.child)
-  filtersConf.items.forEach((filter) => {
+  const withParent = filterItems.map((filter) => filter.child)
+  filterItems.forEach((filter) => {
     filtersState[filter.id] = {
       id: filter.id,
       selectedValue: routeQuery[filter.id] || undefined,
       options: withParent.includes(filter.id)
         ? []
-        : getTagOptions(objectType, filter.id),
+        : getTagOptions(filterKey, filter.id),
       childId: filter.child
     }
   })
@@ -73,5 +73,5 @@ export const useFiltersState = (
     }
   })
 
-  return { filtersState, filtersConf }
+  return { filtersState, pageConf }
 }

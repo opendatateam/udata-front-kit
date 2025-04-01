@@ -194,7 +194,7 @@ website:
   router:
     disable:
       - organizations_routes
-    pages:
+    static_pages:
       - title: 'Open Data University'
         id: 'opendatauniversity'
         route: '/opendatauniversity'

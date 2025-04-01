@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 
-import config from '@/config'
 import SearchAPI from '@/services/api/SearchAPI'
-import { useFiltersConf } from '@/utils/config'
+import { usePageConf } from '@/utils/config'
 import { useTagsQuery } from '@/utils/tags'
 import type { DatasetV2 } from '@datagouv/components'
 
@@ -10,7 +9,6 @@ const PAGE_SIZE = 20
 // max search window for elasticsearch on data.gouv.fr
 const ES_MAX_TOTAL = 10000
 const searchAPI = new SearchAPI()
-const filtersConf = useFiltersConf('datasets')
 
 interface QueryArgs {
   query: string
@@ -45,19 +43,20 @@ export const useSearchStore = defineStore('search', {
     maxTotal: () => ES_MAX_TOTAL
   },
   actions: {
-    async query(args: QueryArgs) {
+    async query(args: QueryArgs, filterKey?: string) {
+      const pageConf = usePageConf(filterKey || 'datasets')
       const { query, ...queryArgs } = args
-      const { extraArgs, tag } = useTagsQuery('datasets', queryArgs)
-      const results = await searchAPI.search(
-        query,
-        config.universe.topic_id,
-        1,
-        {
-          page_size: PAGE_SIZE,
-          tag: [filtersConf.universe_tag, ...tag].filter(Boolean),
-          ...extraArgs
-        }
+      const { extraArgs, tag } = useTagsQuery(
+        filterKey || 'datasets',
+        queryArgs
       )
+      const { tag: universeTag, ...universeQuery } = pageConf.universe_query
+      const results = await searchAPI.search(query, {
+        page_size: PAGE_SIZE,
+        tag: [universeTag, ...tag].filter(Boolean),
+        ...universeQuery,
+        ...extraArgs
+      })
       this.datasets = results.data
       this.total = results.total
     }

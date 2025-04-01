@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.site }}
-      cancel-in-progress: true
+      cancel-in-progress: false
     strategy:
       matrix:
         site:

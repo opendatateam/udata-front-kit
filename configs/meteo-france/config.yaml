@@ -7,8 +7,6 @@ datagouvfr:
   oauth_client_id:
 
 universe:
-  # "universe" topic id
-  topic_id:
   # universe name, used as bouquets tag
   name: meteo-france
 
@@ -92,7 +90,7 @@ website:
     disable:
       - organizations_routes
       - topic_routes
-    pages:
+    static_pages:
       - title: 'A propos'
         id: 'about'
         route: '/about'
@@ -187,15 +185,25 @@ website:
 # then Informations > ID at the bottom of the page
 organizations:
 
-# cf configs/ecospheres/config.yaml for filters config format details
-filters:
+# cf configs/ecospheres/config.yaml for pages config format details
+pages:
   datasets:
     tag_prefix:
-    universe_tag: meteodatagouvfr
-    items:
+    universe_query:
+      tag: meteodatagouvfr
+    title: Jeux de données
+    breadcrumb_title: Données
+    search:
+      input: Rechercher un jeu de données
+      results:
+        one: 1 jeu de données disponible
+        several: '{{total}} jeux de données disponibles'
+    banner:
+    filters:
       - name: Catégories
         default_option: Toutes les catégories
         id: category
+        type: select
         child: subcategory
         color: noop
         use_tag_prefix: false
@@ -211,6 +219,7 @@ filters:
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
+        type: select
         color: noop
         use_tag_prefix: false
         values:

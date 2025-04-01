@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
+import type { RouteMeta } from '@/router'
 import { useSearchStore } from '@/store/DatasetSearchStore'
-import { useFiltersConf } from '@/utils/config'
+import { usePageConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
@@ -22,16 +23,17 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
+const meta = route.meta as RouteMeta
 
 const store = useSearchStore()
-const filtersConf = useFiltersConf('datasets')
+const pageConf = usePageConf(meta.filterKey || 'datasets')
 const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return '1 jeu de données disponible'
+    return pageConf.search.results.one
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} jeux de données disponibles`
+    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${pageConf.search.results.several.replace('{{total}}', String(total.value))}`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -50,14 +52,14 @@ const getOrganizationPage = (id: string | undefined) => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  router.push({ name: 'datasets', query, hash: '#datasets-list' }).then(() => {
+  router.push({ name: route.name, query, hash: '#datasets-list' }).then(() => {
     emits('clearFilters')
   })
 }
 
 const goToPage = (page: number) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, page: page + 1 },
     hash: '#datasets-list'
   })
@@ -65,7 +67,7 @@ const goToPage = (page: number) => {
 
 const doSort = (value: string | null) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, sort: value },
     hash: '#datasets-list'
   })
@@ -74,7 +76,7 @@ const doSort = (value: string | null) => {
 const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
   // get filters parameters from route
-  const filtersArgs = filtersConf.items.reduce(
+  const filtersArgs = pageConf.filters.reduce(
     (acc, item) => {
       const value = route.query[item.id]
       const singleton = Array.isArray(value) ? value[0] : value
@@ -86,9 +88,23 @@ const executeQuery = async () => {
     {} as Record<string, string>
   )
   return store
-    .query({ ...route.query, ...props, ...filtersArgs })
+    .query({ ...route.query, ...props, ...filtersArgs }, meta.filterKey)
     .finally(() => loader.hide())
 }
+
+// load custom card component from router, or fallback to default
+const CardComponent = computed(() => {
+  const componentLoader = meta?.cardComponent
+  if (componentLoader) {
+    return defineAsyncComponent({
+      loader: componentLoader,
+      onError: (err) => {
+        console.error('Failed to load component:', err)
+      }
+    })
+  }
+  return DatasetCard
+})
 
 // launch search on route.query changes
 watch(
@@ -122,9 +138,13 @@ defineExpose({
       </div>
     </div>
     <div class="fr-mb-4w border-top">
-      <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
-        <li v-for="dataset in datasets" :key="dataset.id" class="fr-col-12">
-          <DatasetCard
+      <ul class="fr-grid-row fr-grid-row--gutters fr-mt-2w fr-pl-0" role="list">
+        <li
+          v-for="dataset in datasets"
+          :key="dataset.id"
+          :class="[meta.cardClass || 'fr-col-12', 'dataset-card-container']"
+        >
+          <CardComponent
             :key="dataset.id"
             :dataset="dataset"
             :dataset-url="getDatasetPage(dataset.id)"
@@ -148,5 +168,9 @@ defineExpose({
 .dataset-card {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+.dataset-card-container {
+  width: 100%;
 }
 </style>

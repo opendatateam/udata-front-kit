@@ -5,11 +5,10 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetList from '@/components/datasets/DatasetList.vue'
-import config from '@/config'
 import type { RouteMeta } from '@/router'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
-import { debounceWait } from '@/utils/config'
+import { debounceWait, usePageConf } from '@/utils/config'
 
 defineEmits(['search'])
 
@@ -26,6 +25,8 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
+const meta = route.meta as RouteMeta
+const pageConf = usePageConf(meta.filterKey || 'datasets')
 
 const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
 const searchResultsMessage = computed(
@@ -33,13 +34,14 @@ const searchResultsMessage = computed(
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
-const banner = config.website.datasets.banner
-
-const links = [{ to: '/', text: 'Accueil' }, { text: 'Données' }]
+const links = [
+  { to: '/', text: 'Accueil' },
+  { text: pageConf.breadcrumb_title || pageConf.title }
+]
 
 const search = useDebounceFn((query) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, q: query },
     hash: '#datasets-list'
   })
@@ -47,7 +49,6 @@ const search = useDebounceFn((query) => {
 
 // load custom filters component from router, or fallback to default
 const FiltersComponent = computed(() => {
-  const meta = route.meta as RouteMeta
   const componentLoader = meta?.filtersComponent
   if (componentLoader) {
     return defineAsyncComponent({
@@ -68,17 +69,17 @@ const FiltersComponent = computed(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <div class="fr-container datagouv-components fr-my-2w">
-    <h1>Jeux de données</h1>
+    <h1>{{ pageConf.title }}</h1>
   </div>
   <section
-    v-if="banner"
+    v-if="pageConf.banner"
     class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <h2 v-html="banner.title" />
+      <h2 v-html="pageConf.banner.title" />
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="fromMarkdown(banner.content)" />
+      <div v-html="fromMarkdown(pageConf.banner.content)" />
     </div>
   </section>
   <GenericContainer id="datasets-list">
@@ -87,25 +88,25 @@ const FiltersComponent = computed(() => {
         id="search-dataset"
         :model-value="props.query"
         :is-filter="true"
-        search-label="Rechercher un jeu de données"
-        label="Rechercher un jeu de données"
+        :search-label="pageConf.search.input"
+        :label="pageConf.search.input"
         @update:model-value="search"
       />
     </div>
     <div class="fr-mt-2w">
-      <div className="fr-grid-row">
+      <div class="fr-grid-row">
         <nav
-          className="fr-sidemenu fr-col-md-4"
+          class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
-          <div className="fr-sidemenu__inner">
-            <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
+          <div class="fr-sidemenu__inner">
+            <h2 id="fr-sidemenu-title" class="fr-sidemenu__title h3">
               Filtres
             </h2>
             <FiltersComponent />
           </div>
         </nav>
-        <div className="fr-col">
+        <div class="fr-col datasets-list-container">
           <DatasetList
             ref="datasetListComp"
             :query="props.query"
@@ -116,3 +117,25 @@ const FiltersComponent = computed(() => {
     </div>
   </GenericContainer>
 </template>
+
+<style scoped>
+/* put above header (ground+500) so that multiselect floats above menu */
+.fr-sidemenu {
+  z-index: calc(var(--ground) + 600);
+}
+@media (max-width: 768px) {
+  .fr-sidemenu {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 2em;
+    width: 100%;
+    .fr-sidemenu__title {
+      box-shadow: none;
+    }
+  }
+}
+
+.datasets-list-container {
+  width: 100%;
+}
+</style>

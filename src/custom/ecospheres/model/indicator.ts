@@ -37,21 +37,3 @@ export type IndicatorExtras = DatasetV2['extras'] & {
 export type Indicator = DatasetV2 & {
   extras: IndicatorExtras
 }
-
-// repeating keys is necessary, type becomes too complex to be usable if we don't
-// we're keeping values and type in the same place to facilitate maintenance
-export const FILTER_KEYS = [
-  'theme',
-  'enjeu',
-  'secteur',
-  'levier',
-  'usage'
-] as const
-
-export type IndicatorFilters = {
-  theme: string | null
-  enjeu: string | null
-  secteur: string | null
-  levier: string | null
-  usage: string | null
-}

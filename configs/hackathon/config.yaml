@@ -72,7 +72,7 @@ website:
     disable:
       - organizations_routes
       - topics
-    pages:
+    static_pages:
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'

@@ -9,7 +9,7 @@ const route = useRoute()
 const routeQuery = useRouteQueryAsString().query
 const store = useOrganizationStore()
 
-const { filtersState, filtersConf } = useFiltersState(routeQuery, 'datasets')
+const { filtersState, pageConf } = useFiltersState(routeQuery, 'datasets')
 
 const organizationOptions = computed(() =>
   store.flatData.map(({ id, name }) => ({ id, name }))
@@ -62,7 +62,7 @@ watch(
       />
     </div>
     <div
-      v-for="filter in filtersConf.items"
+      v-for="filter in pageConf.filters"
       :key="filter.id"
       class="fr-select-group"
     >

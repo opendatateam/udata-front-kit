@@ -89,7 +89,7 @@ website:
     disable:
       - organizations_routes
       - topics
-    pages:
+    static_pages:
       - title: 'A propos'
         id: 'about'
         route: '/about'
@@ -162,14 +162,23 @@ website:
     can_add_topics:
       everyone: yes
 
-# cf configs/ecospheres/config.yaml for filters config format details
-filters:
+# cf configs/ecospheres/config.yaml for pages config format details
+pages:
   bouquets:
-    universe_tag:
+    universe_query:
     tag_prefix: logistique
-    items:
+    title:
+    breadcrumb_title:
+    search:
+      input:
+      results:
+        one:
+        several:
+    banner:
+    filters:
       - name: Catégorie
         id: theme
+        type: select
         child: subtheme
         color: green-bourgeon
         use_tag_prefix: true
@@ -188,6 +197,7 @@ filters:
             name: Socio-économique
       - name: Sous-catégorie
         id: subtheme
+        type: select
         color: blue-ecume
         use_tag_prefix: true
         values:
