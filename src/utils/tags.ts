@@ -1,7 +1,7 @@
-import type { FilterItemConf } from '@/model/config'
+import type { PageFilterConf } from '@/model/config'
 import type { ResolvedTag, TagSelectOption } from '@/model/tag'
 import type { ComputedRef, Ref } from 'vue'
-import { useFiltersConf } from './config'
+import { usePageConf } from './config'
 
 interface HasTags {
   tags: string[] | null
@@ -16,9 +16,9 @@ export const useTags = <T extends HasTags>(
   filterId?: string,
   exclude?: string[]
 ): ComputedRef<ResolvedTag[]> => {
-  const filtersConf = useFiltersConf(filterKey)
-  const tagPrefix = filtersConf.tag_prefix
-  const filters = filtersConf.items
+  const pageConf = usePageConf(filterKey)
+  const tagPrefix = pageConf.tag_prefix
+  const filters = pageConf.filters
 
   return computed(() => {
     const tags: ResolvedTag[] = []
@@ -78,9 +78,9 @@ export const getTagOptions = (
 export const getFilterConf = (
   filterKey: string,
   filterId: string
-): FilterItemConf | undefined => {
-  const filtersConf = useFiltersConf(filterKey)
-  return filtersConf.items.find((filter) => filter.id === filterId)
+): PageFilterConf | undefined => {
+  const pageConf = usePageConf(filterKey)
+  return pageConf.filters.find((filter) => filter.id === filterId)
 }
 
 export const useTagOptions = (
@@ -117,8 +117,8 @@ export const useTagSlug = (
   useTagPrefix = true
 ): string => {
   if (!useTagPrefix) return tagId || ''
-  const filtersConf = useFiltersConf(filterKey)
-  return `${filtersConf.tag_prefix}-${filterId}-${tagId || ''}`
+  const pageConf = usePageConf(filterKey)
+  return `${pageConf.tag_prefix}-${filterId}-${tagId || ''}`
 }
 
 /**
@@ -128,8 +128,8 @@ export const useTagsQuery = (
   filterKey: string,
   query: QueryArgs
 ): { tag: Array<string>; extraArgs: QueryArgs } => {
-  const filtersConf = useFiltersConf(filterKey)
-  const filters = filtersConf.items.filter((item) => item.type === 'select')
+  const pageConf = usePageConf(filterKey)
+  const filters = pageConf.filters.filter((item) => item.type === 'select')
   const queryArray = []
   for (const filter of filters) {
     const queryFilter = query[filter.id]

@@ -2,7 +2,7 @@
 import NoResults from '@/components/NoResults.vue'
 import type { RouteMeta } from '@/router'
 import { useSearchStore } from '@/store/DatasetSearchStore'
-import { useFiltersConf } from '@/utils/config'
+import { usePageConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
@@ -26,14 +26,14 @@ const route = useRoute()
 const meta = route.meta as RouteMeta
 
 const store = useSearchStore()
-const filtersConf = useFiltersConf(meta.filterKey || 'datasets')
+const pageConf = usePageConf(meta.filterKey || 'datasets')
 const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return filtersConf.search.results.one
+    return pageConf.search.results.one
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${filtersConf.search.results.several.replace('{{total}}', String(total.value))}`
+    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${pageConf.search.results.several.replace('{{total}}', String(total.value))}`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -76,7 +76,7 @@ const doSort = (value: string | null) => {
 const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
   // get filters parameters from route
-  const filtersArgs = filtersConf.items.reduce(
+  const filtersArgs = pageConf.filters.reduce(
     (acc, item) => {
       const value = route.query[item.id]
       const singleton = Array.isArray(value) ? value[0] : value

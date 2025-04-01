@@ -27,7 +27,7 @@ export interface TopicItemConf {
   name: string
 }
 
-export interface PageConfig {
+export interface StaticPageConfig {
   title: string
   id: string
   route: string
@@ -39,13 +39,13 @@ export interface MenuConfig {
   to: string
 }
 
-export interface FilterItemValueConf {
+export interface PageFilterValueConf {
   id: string
   name: string
   parent?: string
 }
 
-export interface FilterItemConf {
+export interface PageFilterConf {
   name: string
   id: string
   type: 'spatial_zone' | 'spatial_granularity' | 'select'
@@ -53,19 +53,19 @@ export interface FilterItemConf {
   color: string
   default_option: string
   use_tag_prefix: boolean
-  values: FilterItemValueConf[]
+  values: PageFilterValueConf[]
 }
 
-export type UniverseQuery = {
+export type PageUniverseQueryConf = {
   [key: string]: string | number | boolean
 }
 
-export type FilterBanner = {
+export type PageBannerConf = {
   title: string
   content: string
 }
 
-export type FilterSearch = {
+export type PageSearchConf = {
   input: string
   results: {
     one: string
@@ -73,16 +73,16 @@ export type FilterSearch = {
   }
 }
 
-export type FilterConf = {
+export type PageConf = {
   tag_prefix: string
-  universe_query: UniverseQuery
+  universe_query: PageUniverseQueryConf
   title: string
   breadcrumb_title: string | null
-  search: FilterSearch
-  banner: FilterBanner | null
-  items: FilterItemConf[]
+  search: PageSearchConf
+  banner: PageBannerConf | null
+  filters: PageFilterConf[]
 }
 
-export type FiltersConf = {
-  [key: string]: FilterConf
+export type PagesConf = {
+  [key: string]: PageConf
 }
