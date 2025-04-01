@@ -23,13 +23,20 @@ jobs:
     # only run if the PR is from the same repo
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event_name == 'pull_request'
     steps:
+      - name: Debug event
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Event action: ${{ github.event.action }}"
+          echo "Pull request state: ${{ github.event.pull_request.state }}"
+
       - name: Cloning repo
+        if: github.event.action != 'closed'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Start deployment
-        if: always()
+        if: github.event.action != 'closed'
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
@@ -97,12 +104,4 @@ jobs:
           token: ${{ github.token }}
           environment-url: https://deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}.sandbox.data.developpement-durable.gouv.fr
           state: ${{ job.status == 'success' && 'success' || 'failure' }}
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-
-      - name: Update deployment status (destroy)
-        if: github.event.action == 'closed'
-        uses: chrnorm/deployment-status@v2
-        with:
-          token: ${{ github.token }}
-          state: ${{ job.status == 'success' && 'inactive' || 'failure' }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
