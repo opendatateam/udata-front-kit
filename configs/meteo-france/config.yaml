@@ -185,7 +185,7 @@ website:
 # then Informations > ID at the bottom of the page
 organizations:
 
-# cf configs/ecospheres/config.yaml for filters config format details
+# cf configs/ecospheres/config.yaml for pages config format details
 pages:
   datasets:
     tag_prefix:
