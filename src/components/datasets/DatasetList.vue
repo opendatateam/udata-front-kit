@@ -33,7 +33,7 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
     return filtersConf.search.results.one
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${filtersConf.search.results.other.replace('{{total}}', String(total.value))}`
+    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${filtersConf.search.results.several.replace('{{total}}', String(total.value))}`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }

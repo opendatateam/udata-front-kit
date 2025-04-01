@@ -206,7 +206,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #      input: {string}           # placeholder for the search input
 #      results:                  # results count message
 #        one: {string}           # message for one result
-#        other: {string}         # message for multiple results (use {{total}} to display the total number of results)
+#        several: {string}         # message for multiple results (use {{total}} to display the total number of results)
 #     banner:                    # banner for the list page (optionnal)
 #      title: {string}           # title for the banner
 #      content: {string}         # content for the banner
@@ -232,7 +232,7 @@ filters:
       input: Rechercher un jeu de données
       results:
         one: 1 jeu de données disponible
-        other: '{{total}} jeux de données disponibles'
+        several: '{{total}} jeux de données disponibles'
     banner:
       title: Un guichet unique pour l’accès aux données environnementales
       content: |
@@ -326,7 +326,7 @@ filters:
       input:
       results:
         one:
-        other:
+        several:
     banner:
     items:
       - name: Thématique
@@ -456,7 +456,7 @@ filters:
       input: Rechercher un indicateur
       results:
         one: 1 indicateur disponible
-        other: '{{total}} indicateurs disponibles'
+        several: '{{total}} indicateurs disponibles'
     banner:
       title: Accéder aux indicateurs de référence pour la transition écologique des territoires
       content: |

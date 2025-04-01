@@ -69,7 +69,7 @@ export type FilterSearch = {
   input: string
   results: {
     one: string
-    other: string
+    several: string
   }
 }
 

@@ -196,7 +196,7 @@ filters:
       input: Rechercher un jeu de données
       results:
         one: 1 jeu de données disponible
-        other: '{{total}} jeux de données disponibles'
+        several: '{{total}} jeux de données disponibles'
     banner:
     items:
       - name: Catégories

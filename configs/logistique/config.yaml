@@ -172,7 +172,7 @@ filters:
       input:
       results:
         one:
-        other:
+        several:
     banner:
     items:
       - name: Catégorie
