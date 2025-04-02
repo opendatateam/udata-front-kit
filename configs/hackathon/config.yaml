@@ -72,7 +72,7 @@ website:
     disable:
       - organizations_routes
       - topics
-    pages:
+    static_pages:
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
@@ -90,8 +90,6 @@ website:
         route: '/pendant-le-hackathon'
         url: '/hackathon/pages/pendant-le-hackathon.md'
   show_quality_component: true
-  list_search_topics:
-  url_search_topics: 'datasets'
   oauth_option: true
   footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr permettant de lister les jeux de données utilisés dans le cadre d'événement de type hackathon par l'équipe data.gouv.fr ou ses partenaires."
   footer_external_links:
@@ -116,7 +114,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 100
+    topics_list: 20
     files_list: 6
   home_banner_colors:
     - '#D8E3A0'
@@ -134,7 +132,6 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: false
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
@@ -158,12 +155,6 @@ website:
       authorized_users:
         - 5e6f426e634f417810ab794b
         - 5dee373f6f44416a83fbd907
-themes:
-  - name: Données alimentaires
-    color: '#043574'
-    textColor: '#FFFFFF'
-    subthemes:
-      - name: Général
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

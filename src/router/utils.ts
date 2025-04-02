@@ -1,5 +1,7 @@
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
 
+export type QueryAsString = Record<string, string | null | undefined>
+
 interface RouteLocationParamsAsString
   extends Omit<RouteLocationNormalizedLoaded, 'params'> {
   params: Record<string, string>
@@ -7,7 +9,7 @@ interface RouteLocationParamsAsString
 
 interface RouteLocationQueryAsString
   extends Omit<RouteLocationNormalizedLoaded, 'query'> {
-  query: Record<string, string | null | undefined>
+  query: QueryAsString
 }
 
 /**

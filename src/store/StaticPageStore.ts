@@ -4,7 +4,7 @@ export interface RootState {
   data: string
 }
 
-export const pageStore = defineStore('getPage', {
+export const pageStore = defineStore('staticPage', {
   state: () =>
     ({
       data: ''

@@ -23,8 +23,6 @@ export interface ContactPoint {
 }
 
 export type ExtendedDatasetV2 = DatasetV2 & {
-  // FIXME: remove when @datagouv/components >= 2.0.6
-  contact_points: ContactPoint[]
   extras: {
     [key: string]: unknown
     dcat?: Record<string, string[] | undefined>

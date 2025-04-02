@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components'
 import { useDebounceFn } from '@vueuse/core'
-import { defineModel, ref } from 'vue'
+import { ref } from 'vue'
 
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
@@ -48,7 +48,8 @@ const search = useDebounceFn(async (query: string) => {
   }
   try {
     return (
-      await new SearchAPI().search(query, null, 1, {
+      await new SearchAPI().search(query, {
+        page: 1,
         page_size: 10
       })
     ).data

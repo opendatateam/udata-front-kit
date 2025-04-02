@@ -19,13 +19,12 @@ import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetM
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
-import type { ExtendedDatasetV2 } from '@/model/dataset'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useTopicsConf } from '@/utils/config'
@@ -38,8 +37,7 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-// FIXME: remove ExtendedDatasetV2 type cast when @datagouv/components >= 2.0.6 (contact_points)
-const dataset = computed(() => datasetStore.get(datasetId) as ExtendedDatasetV2)
+const dataset = computed(() => datasetStore.get(datasetId))
 
 const showAddToBouquetModal = ref(false)
 
@@ -144,8 +142,18 @@ onMounted(() => {
             </p>
           </div>
         </div>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <p>{{ formatDate(dataset.last_update) }}</p>
+        <template v-if="dataset.harvest">
+          <template v-if="dataset.harvest.modified_at">
+            <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière révision</h2>
+            <p>
+              {{ formatDate(dataset.harvest.modified_at) }}
+            </p>
+          </template>
+        </template>
+        <template v-else>
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
+          <p>{{ formatDate(dataset.last_update) }}</p>
+        </template>
         <template v-if="license">
           <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
           <p class="fr-text--sm fr-mt-0 fr-mb-3v">
