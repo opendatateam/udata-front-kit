@@ -11,16 +11,14 @@ export const routes = [
     component: async () => await import('./views/HomeView.vue')
   },
   useSearchPageRoutes({
-    slug: 'datasets',
-    metaTitle: 'Données',
     pageKey: 'datasets',
+    metaTitle: 'Données',
     filtersComponent: async () =>
       await import('./components/datasets/EcospheresDatasetSearch.vue')
   }),
   useSearchPageRoutes({
-    slug: 'indicators',
-    metaTitle: 'Indicateurs',
     pageKey: 'indicators',
+    metaTitle: 'Indicateurs',
     cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
     filtersComponent: async () =>
       await import('./components/datasets/EcospheresDatasetSearch.vue'),

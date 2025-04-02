@@ -44,29 +44,26 @@ export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
 }
 
 export const useSearchPageRoutes = ({
-  slug,
-  metaTitle,
   pageKey,
+  metaTitle,
   cardClass,
   filtersComponent,
   cardComponent,
   detailViewComponent
 }: {
-  // FIXME: merge slug and pageKey
-  slug: string
-  metaTitle: string
   pageKey: string
+  metaTitle: string
   cardClass?: string
   filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
   detailViewComponent?: () => Promise<{ default: Component }>
 }) => {
   return {
-    path: `/${slug}`,
+    path: `/${pageKey}`,
     children: [
       {
         path: '',
-        name: slug,
+        name: pageKey,
         meta: {
           title: metaTitle,
           pageKey,
@@ -85,7 +82,7 @@ export const useSearchPageRoutes = ({
       },
       {
         path: ':item_id',
-        name: `${slug}_detail`,
+        name: `${pageKey}_detail`,
         component:
           detailViewComponent ??
           (async () => await import('@/views/datasets/DatasetDetailView.vue'))
