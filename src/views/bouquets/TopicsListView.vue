@@ -90,7 +90,7 @@ const search = useDebounceFn(() => {
     .push({
       name: topicsSlug,
       query: { ...route.query, q: selectedQuery.value },
-      hash: '#bouquets-list'
+      hash: '#topics-list'
     })
     .then(() => {
       setLiveResults()
@@ -148,7 +148,7 @@ watch(
       <div v-html="fromMarkdown(banner.content)" />
     </div>
   </section>
-  <GenericContainer id="bouquets-list">
+  <GenericContainer id="topics-list">
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
         id="search-bouquet"

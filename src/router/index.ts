@@ -69,7 +69,7 @@ const defaultRoutes: RouteRecordRaw[] = [
           title: capitalize(topicsName) + 's'
         },
         component: async () =>
-          await import('@/views/bouquets/BouquetsListView.vue'),
+          await import('@/views/bouquets/TopicsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
           query: route.query.q || null,
           subtheme: route.query.subtheme || null,
@@ -87,7 +87,7 @@ const defaultRoutes: RouteRecordRaw[] = [
           bouquetId: route.params.bid
         }),
         component: async () =>
-          await import('@/views/bouquets/BouquetDetailView.vue')
+          await import('@/views/bouquets/TopicDetailView.vue')
       }
     ]
   },

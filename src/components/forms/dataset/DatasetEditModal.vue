@@ -148,7 +148,7 @@ const submit = async (modalData: DatasetModalData) => {
             modalData.dataset.availability = Availability.LOCAL_AVAILABLE
             const resolved = router.resolve({
               name: 'datasets_detail',
-              params: { did: dataset.id }
+              params: { item_id: dataset.id }
             })
             modalData.dataset.uri = resolved.href
             modalData.dataset.id = dataset.id

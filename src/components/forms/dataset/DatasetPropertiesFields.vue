@@ -93,7 +93,7 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
     datasetProperties.value.id = value.id
     const resolved = router.resolve({
       name: 'datasets_detail',
-      params: { did: value.id }
+      params: { item_id: value.id }
     })
     datasetProperties.value.uri = resolved.href
     delete datasetProperties.value.remoteDeleted
