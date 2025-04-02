@@ -26,7 +26,7 @@ const route = useRoute()
 const meta = route.meta as RouteMeta
 
 const store = useSearchStore()
-const pageConf = usePageConf(meta.filterKey || 'datasets')
+const pageConf = usePageConf(meta.pageKey || 'datasets')
 const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
@@ -40,7 +40,7 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
 })
 
 const getDatasetPage = (id: string) => {
-  return { name: 'dataset_detail', params: { did: id } }
+  return { name: 'datasets_detail', params: { item_id: id } }
 }
 
 const getOrganizationPage = (id: string | undefined) => {
@@ -88,7 +88,7 @@ const executeQuery = async () => {
     {} as Record<string, string>
   )
   return store
-    .query({ ...route.query, ...props, ...filtersArgs }, meta.filterKey)
+    .query({ ...route.query, ...props, ...filtersArgs }, meta.pageKey)
     .finally(() => loader.hide())
 }
 

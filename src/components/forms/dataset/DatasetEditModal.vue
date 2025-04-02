@@ -147,7 +147,7 @@ const submit = async (modalData: DatasetModalData) => {
           if (dataset !== undefined) {
             modalData.dataset.availability = Availability.LOCAL_AVAILABLE
             const resolved = router.resolve({
-              name: 'dataset_detail',
+              name: 'datasets_detail',
               params: { did: dataset.id }
             })
             modalData.dataset.uri = resolved.href

@@ -49,7 +49,7 @@ onMounted(async () => {
     :key="datasetContent.id"
     :dataset="datasetContent"
     :dataset-url="{
-      name: 'dataset_detail',
+      name: 'datasets_detail',
       params: { did: datasetContent.id }
     }"
     :show-description="false"

@@ -19,7 +19,7 @@ export interface RouteMeta {
   filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
   cardClass?: string
-  filterKey?: string
+  pageKey?: string
 }
 
 const { topicsSlug, topicsName } = useTopicsConf()
@@ -35,31 +35,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       title: 'Accueil'
     },
     component: async () => await import('@/views/HomeView.vue')
-  },
-  // datasets
-  {
-    path: '/datasets',
-    children: [
-      {
-        path: '',
-        name: 'datasets',
-        meta: {
-          title: 'Données'
-        },
-        component: async () =>
-          await import('@/views/datasets/DatasetsListView.vue'),
-        props: (route: RouteLocationNormalizedLoaded) => ({
-          query: route.query.q,
-          page: route.query.page
-        })
-      },
-      {
-        path: ':did',
-        name: 'dataset_detail',
-        component: async () =>
-          await import('@/views/datasets/DatasetDetailView.vue')
-      }
-    ]
   },
   // organizations
   {

@@ -1,3 +1,4 @@
+import type { RouteMeta } from '@/router'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
 
 export type QueryAsString = Record<string, string | null | undefined>
@@ -40,4 +41,55 @@ export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
     ])
   )
   return { ...route, query }
+}
+
+export const useSearchPageRoutes = ({
+  slug,
+  metaTitle,
+  pageKey,
+  cardClass,
+  filtersComponent,
+  cardComponent,
+  detailViewComponent
+}: {
+  // FIXME: merge slug and pageKey
+  slug: string
+  metaTitle: string
+  pageKey: string
+  cardClass?: string
+  filtersComponent?: () => Promise<{ default: Component }>
+  cardComponent?: () => Promise<{ default: Component }>
+  detailViewComponent?: () => Promise<{ default: Component }>
+}) => {
+  return {
+    path: `/${slug}`,
+    children: [
+      {
+        path: '',
+        name: slug,
+        meta: {
+          title: metaTitle,
+          pageKey,
+          cardClass,
+          filtersComponent,
+          cardComponent
+        } as RouteMeta,
+        component: async () =>
+          await import('@/views/datasets/DatasetsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          // this forces the component to be recreated when switching page type
+          key: pageKey,
+          query: route.query.q,
+          page: route.query.page
+        })
+      },
+      {
+        path: ':item_id',
+        name: `${slug}_detail`,
+        component:
+          detailViewComponent ??
+          (async () => await import('@/views/datasets/DatasetDetailView.vue'))
+      }
+    ]
+  }
 }

@@ -31,7 +31,7 @@ import { useTopicsConf } from '@/utils/config'
 import { useLicense } from '@/utils/dataset'
 
 const route = useRouteParamsAsString()
-const datasetId = route.params.did
+const datasetId = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()

@@ -25,8 +25,10 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
+// FIXME: useRouteMeta
 const meta = route.meta as RouteMeta
-const pageConf = usePageConf(meta.filterKey || 'datasets')
+// FIXME: pageKey should be mandatory
+const pageConf = usePageConf(meta.pageKey || 'datasets')
 
 const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
 const searchResultsMessage = computed(
