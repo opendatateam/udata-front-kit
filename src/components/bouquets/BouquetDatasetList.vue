@@ -8,7 +8,7 @@ import DatasetEditModal, {
 } from '@/components/forms/dataset/DatasetEditModal.vue'
 import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'

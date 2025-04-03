@@ -1,5 +1,5 @@
+import type { RouteMeta } from '@/router'
 import { type RouteLocationNormalizedLoaded } from 'vue-router'
-import { FILTER_KEYS } from './model/indicator'
 
 export const routes = [
   {
@@ -7,8 +7,36 @@ export const routes = [
     name: 'home',
     meta: {
       title: 'Accueil'
-    },
+    } as RouteMeta,
     component: async () => await import('./views/HomeView.vue')
+  },
+  {
+    path: '/datasets',
+    children: [
+      {
+        path: '',
+        name: 'datasets',
+        meta: {
+          title: 'Données',
+          filtersComponent: async () =>
+            await import(
+              '@/custom/ecospheres/components/datasets/EcospheresDatasetSearch.vue'
+            )
+        } as RouteMeta,
+        component: async () =>
+          await import('@/views/datasets/DatasetsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          query: route.query.q,
+          page: route.query.page
+        })
+      },
+      {
+        path: ':did',
+        name: 'dataset_detail',
+        component: async () =>
+          await import('@/views/datasets/DatasetDetailView.vue')
+      }
+    ]
   },
   {
     path: '/indicators',
@@ -17,27 +45,22 @@ export const routes = [
         path: '',
         name: 'indicators',
         meta: {
-          title: 'Indicateurs'
-        },
+          title: 'Indicateurs',
+          cardComponent: async () =>
+            await import(
+              '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
+            ),
+          cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
+          filterKey: 'indicators'
+        } as RouteMeta,
         component: async () =>
-          await import('./views/indicators/IndicatorsListView.vue'),
-        props: (route: RouteLocationNormalizedLoaded) => {
-          const filterProps = FILTER_KEYS.reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: route.query[key] || null
-            }),
-            {}
-          )
-          return {
-            query: route.query.q,
-            geozone: route.query.geozone || null,
-            granularity: route.query.granularity || null,
-            page: route.query.page || null,
-            sort: route.query.sort || null,
-            ...filterProps
-          }
-        }
+          await import('@/views/datasets/DatasetsListView.vue'),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          // this forces the component to be recreated when switching from datasets to indicators
+          key: 'indicators',
+          query: route.query.q,
+          page: route.query.page
+        })
       },
       {
         path: ':iid',

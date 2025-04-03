@@ -194,7 +194,7 @@ website:
   router:
     disable:
       - organizations_routes
-    pages:
+    static_pages:
       - title: 'Open Data University'
         id: 'opendatauniversity'
         route: '/opendatauniversity'
@@ -205,8 +205,6 @@ website:
         url: '/defis/pages/accessibility.md'
   show_quality_component: true
   show_dataset_metadata_panel: false
-  list_search_topics:
-  url_search_topics: 'defis'
   oauth_option: true
   footer_phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
   footer_external_links:
@@ -233,7 +231,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 100
+    topics_list: 20
     files_list: 6
   home_banner_colors:
     - '#DDE6FF'
@@ -251,7 +249,6 @@ website:
       display: false
       create: false
   datasets:
-    organization_filter: false
     add_to_bouquet: false
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
@@ -275,14 +272,6 @@ website:
       authorized_users:
         - 5fda299e56f984a4b126afe1 #thanh-ha
         - 5e6f426e634f417810ab794b #geoffrey
-themes:
-  - name: defis
-    color: 043574
-    textColor: FFFFFF
-    subthemes:
-      - name: Saison 1
-      - name: Saison 2
-      - name: Saison 3
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

@@ -33,6 +33,13 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
       return acc
     }, new Map<string, DatasetProperties[]>())
 
+    // Sort each group's datasets by lowered+unaccented title according to current locale
+    for (const [, datasets] of groupedMap.entries()) {
+      datasets.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
+      )
+    }
+
     // Extract and remove NO_GROUP entries
     const noGroupEntries = groupedMap.get(NO_GROUP)
     groupedMap.delete(NO_GROUP)

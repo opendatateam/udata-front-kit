@@ -1,4 +1,4 @@
-import { capitalize } from 'vue'
+import { capitalize, type Component } from 'vue'
 import {
   createRouter,
   createWebHistory,
@@ -7,10 +7,20 @@ import {
 } from 'vue-router'
 
 import config from '@/config'
-import type { PageConfig } from '@/model/config'
+import type { StaticPageConfig } from '@/model/config'
 import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
-import SimplePageView from '@/views/SimplePageView.vue'
+import StaticPageView from '@/views/StaticPageView.vue'
+
+// used by custom site routers
+export interface RouteMeta {
+  title?: string
+  requiresAuth?: boolean
+  filtersComponent?: () => Promise<{ default: Component }>
+  cardComponent?: () => Promise<{ default: Component }>
+  cardClass?: string
+  filterKey?: string
+}
 
 const { topicsSlug, topicsName } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
@@ -40,9 +50,7 @@ const defaultRoutes: RouteRecordRaw[] = [
           await import('@/views/datasets/DatasetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
           query: route.query.q,
-          page: route.query.page,
-          organization: route.query.organization,
-          topic: route.query.topic
+          page: route.query.page
         })
       },
       {
@@ -77,6 +85,7 @@ const defaultRoutes: RouteRecordRaw[] = [
   },
   {
     path: `/${topicsSlug}`,
+    name: 'topic_routes',
     children: [
       {
         path: '',
@@ -87,11 +96,13 @@ const defaultRoutes: RouteRecordRaw[] = [
         component: async () =>
           await import('@/views/bouquets/BouquetsListView.vue'),
         props: (route: RouteLocationNormalizedLoaded) => ({
-          query: route.query.q,
-          subtheme: route.query.subtheme,
-          theme: route.query.theme,
-          geozone: route.query.geozone,
-          drafts: route.query.drafts
+          query: route.query.q || null,
+          subtheme: route.query.subtheme || null,
+          theme: route.query.theme || null,
+          geozone: route.query.geozone || null,
+          include_private: route.query.include_private,
+          page: route.query.page || null,
+          sort: route.query.sort || '-created'
         })
       },
       {
@@ -133,18 +144,20 @@ const defaultRoutes: RouteRecordRaw[] = [
   return !disableRoutes.includes(route.name)
 })
 
-// pages
-const pages = (config.website.router.pages ?? []).map((item: PageConfig) => {
-  return {
-    path: item.route,
-    name: item.id,
-    component: SimplePageView,
-    props: { url: item.url },
-    meta: {
-      title: item.title
+// static pages
+const pages = (config.website.router.static_pages ?? []).map(
+  (item: StaticPageConfig) => {
+    return {
+      path: item.route,
+      name: item.id,
+      component: StaticPageView,
+      props: { url: item.url },
+      meta: {
+        title: item.title
+      }
     }
   }
-})
+)
 
 // oauth
 if (config.website.oauth_option === true) {

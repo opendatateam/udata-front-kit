@@ -27,7 +27,7 @@ export interface TopicItemConf {
   name: string
 }
 
-export interface PageConfig {
+export interface StaticPageConfig {
   title: string
   id: string
   route: string
@@ -37,4 +37,52 @@ export interface PageConfig {
 export interface MenuConfig {
   text: string
   to: string
+}
+
+export interface PageFilterValueConf {
+  id: string
+  name: string
+  parent?: string
+}
+
+export interface PageFilterConf {
+  name: string
+  id: string
+  type: 'spatial_zone' | 'spatial_granularity' | 'select'
+  child?: string
+  color: string
+  default_option: string
+  use_tag_prefix: boolean
+  values: PageFilterValueConf[]
+}
+
+export type PageUniverseQueryConf = {
+  [key: string]: string | number | boolean
+}
+
+export type PageBannerConf = {
+  title: string
+  content: string
+}
+
+export type PageSearchConf = {
+  input: string
+  results: {
+    one: string
+    several: string
+  }
+}
+
+export type PageConf = {
+  tag_prefix: string
+  universe_query: PageUniverseQueryConf
+  title: string
+  breadcrumb_title: string | null
+  search: PageSearchConf
+  banner: PageBannerConf | null
+  filters: PageFilterConf[]
+}
+
+export type PagesConf = {
+  [key: string]: PageConf
 }

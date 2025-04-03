@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineModel, ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -9,7 +9,7 @@ import {
   type DatasetProperties,
   type DatasetsGroups
 } from '@/model/topic'
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 
 import { useForm, type AllowedInput } from '@/utils/form'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
