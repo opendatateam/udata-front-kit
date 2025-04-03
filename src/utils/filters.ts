@@ -29,7 +29,9 @@ export const useFiltersState = (
 ) => {
   const pageConf = usePageConf(filterKey)
   const filtersState = reactive<Record<string, FilterState>>({})
-  const filterItems = pageConf.filters.filter((item) => item.type === 'select')
+  const filterItems = pageConf.filters.filter(
+    (item) => item.type === 'select' || item.type === 'checkbox'
+  )
 
   const setChildOptions = (
     filter: FilterState,

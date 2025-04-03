@@ -241,7 +241,6 @@ pages:
         default_option: Tous les thèmes
         id: inspire
         type: select
-        color: noop
         use_tag_prefix: false
         values:
           - id: adresses
@@ -333,6 +332,15 @@ pages:
 
         Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
     filters:
+      - name: Afficher les brouillons
+        id: include_private
+        type: checkbox
+        default_option: '1'
+        values:
+          - id: '1'
+            name: 'true'
+          - id: '0'
+            name: 'false'
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme

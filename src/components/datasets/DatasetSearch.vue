@@ -98,6 +98,14 @@ onMounted(async () => {
           @update:spatial-coverage-model="switchSpatialCoverage"
         />
       </template>
+      <DsfrCheckbox
+        v-if="filter.type === 'checkbox'"
+        :model-value="filtersState[filter.id]?.selectedValue"
+        :value="'1'"
+        :label="filter.name"
+        :name="filter.id"
+        @update:model-value="(value) => switchFilter(filter.id, value)"
+      />
     </div>
   </div>
 </template>

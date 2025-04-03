@@ -48,11 +48,11 @@ export interface PageFilterValueConf {
 export interface PageFilterConf {
   name: string
   id: string
-  type: 'spatial_zone' | 'spatial_granularity' | 'select'
-  child?: string
-  color: string
+  type: 'spatial_zone' | 'spatial_granularity' | 'select' | 'checkbox'
+  child: string | null
+  color: string | null
   default_option: string
-  use_tag_prefix: boolean
+  use_tag_prefix: boolean | null
   values: PageFilterValueConf[]
 }
 
