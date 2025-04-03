@@ -77,7 +77,7 @@ const defaultRoutes: RouteRecordRaw[] = [
           geozone: route.query.geozone || null,
           include_private: route.query.include_private,
           page: route.query.page || null,
-          sort: route.query.sort || '-last_modified'
+          sort: route.query.sort || '-created'
         })
       },
       {
