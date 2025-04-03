@@ -20,7 +20,7 @@ const navigate = (data?: Record<string, string | null>) => {
   router.push({
     name: 'datasets',
     query: { ...route.query, ...data },
-    hash: '#datasets-list'
+    hash: '#list'
   })
 }
 

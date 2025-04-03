@@ -41,7 +41,7 @@ const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
   name: `${topicsSlug}_detail`,
-  params: { bid: props.bouquet.slug }
+  params: { item_id: props.bouquet.slug }
 }
 
 const theme = useTag('bouquets', bouquetRef, 'theme')

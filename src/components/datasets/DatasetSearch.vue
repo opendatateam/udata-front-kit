@@ -4,6 +4,7 @@ import SelectSpatialGranularity from '@/components/forms/SelectSpatialGranularit
 import type { SpatialCoverage } from '@/model/spatial'
 import type { RouteMeta } from '@/router'
 import { useRouteQueryAsString } from '@/router/utils'
+import { useSpatialStore } from '@/store/SpatialStore'
 import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -18,14 +19,14 @@ const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
 
 const { filtersState, pageConf } = useFiltersState(
   routeQuery,
-  meta.filterKey || 'datasets'
+  meta.pageKey || 'datasets'
 )
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
     name: route.name,
     query: { ...route.query, ...data },
-    hash: '#datasets-list'
+    hash: '#list'
   })
 }
 
@@ -56,6 +57,14 @@ watch(
   },
   { immediate: true }
 )
+
+onMounted(async () => {
+  if (routeQuery.geozone) {
+    selectedSpatialCoverage.value = await useSpatialStore().loadZone(
+      routeQuery.geozone
+    )
+  }
+})
 </script>
 
 <template>

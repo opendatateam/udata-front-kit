@@ -171,12 +171,6 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
-    banner:
-      title: Mettre en commun les usages des données et des indicateurs territoriaux
-      content: |
-        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
-
-        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
   sitemap:
     - name: Accueil
       path: /
@@ -323,20 +317,25 @@ pages:
   bouquets:
     universe_query:
     tag_prefix: ecospheres
-    title:
+    title: Bouquets
     breadcrumb_title:
     search:
-      input:
+      input: Filtrer les bouquets
       results:
-        one:
-        several:
+        one: 1 bouquet disponible
+        several: '{{total}} bouquets disponibles'
     banner:
+      title: Mettre en commun les usages des données et des indicateurs territoriaux
+      content: |
+        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
+
+        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
     filters:
       - name: Thématique
+        default_option: Toutes les thématiques
         id: theme
         type: select
-        child: subtheme
-        color: noop
+        color: green-emeraude
         use_tag_prefix: true
         values:
           - id: se-loger
@@ -353,101 +352,10 @@ pages:
             name: Se déplacer
           - id: chantiers-transverses
             name: Chantiers transverses
-      - name: Chantier
-        id: subtheme
-        type: select
-        color: green-archipel
-        use_tag_prefix: true
-        values:
-          # parent theme: se-loger
-          - id: construction-et-renovation-des-logements
-            name: Construction et rénovation des logements
-            parent: se-loger
-          - id: amenagements-des-villes
-            name: Aménagements des villes
-            parent: se-loger
-          # parent theme: produire
-          - id: nucleaire
-            name: Nucléaire
-            parent: produire
-          - id: tertiaire
-            name:
-              Tertiaire (incluant les bâtiments publics de l'État et des collectivités,
-              hors logement)
-            parent: produire
-          - id: electricite-decarbonee
-            name: Production d'électricité décarbonée (hors nucléaire)
-            parent: produire
-          # parent theme: se-nourrir
-          - id: alimentation
-            name: Alimentation
-            parent: se-nourrir
-          - id: agriculture-et-peche
-            name: Agriculture et pêche
-            parent: se-nourrir
-          # parent theme: consommer
-          - id: consommation-plus-durable-menages
-            name: Consommation plus durable (ménages)
-            parent: consommer
-          - id: numerique-responsable
-            name: Numérique responsable
-            parent: consommer
-          - id: achats-durables
-            name: Achats durables (de l'État, des collectivités et des entreprises)
-            parent: consommer
-          # parent theme: preserver
-          - id: eau
-            name: Eau
-            parent: preserver
-          - id: sols
-            name: Sols
-            parent: preserver
-          - id: oceans-et-mers
-            name: Océans et mers
-            parent: preserver
-          - id: foret
-            name: Forêt
-            parent: preserver
-          # parent theme: se-deplacer
-          - id: voitures-et-infrastructures-routieres
-            name: Voitures et infrastructures routières
-            parent: se-deplacer
-          - id: mobilite-courte-distance-hors-voiture
-            name: Mobilité courte distance (hors voiture)
-            parent: se-deplacer
-          - id: mobilite-longue-distance-avion-train
-            name: Mobilité longue distance (avion, train)
-            parent: se-deplacer
-          # parent theme: chantiers-transverses
-          - id: financement-investissement
-            name:
-              Le financement qui permet de définir des trajectoires d'investissement
-              crédibles et cohérentes
-            parent: chantiers-transverses
-          - id: planification-differenciation-territoriale
-            name:
-              La planification et la différenciation territoriale selon les caractéristiques
-              et les spécificités de chaque territoire, incluant les territoires ultra-marins
-            parent: chantiers-transverses
-          - id: transition-filieres-emplois-formations-competences
-            name:
-              La transition des filières avec la gestion des emplois, des formations
-              et des compétences
-            parent: chantiers-transverses
-          - id: donnees-environnementales
-            name: Les données environnementales
-            parent: chantiers-transverses
-          - id: services-publics-exemplaires
-            name: Les services publics exemplaires
-            parent: chantiers-transverses
-          - id: transition-juste
-            name:
-              La transition juste et les mesures d’accompagnement, pour ne laisser personne
-              au bord du chemin
-            parent: chantiers-transverses
-          - id: sobriete-usages-ressources
-            name: La sobriété des usages et des ressources
-            parent: chantiers-transverses
+      - name: Couverture territoriale
+        default_option:
+        id: geozone
+        type: spatial_zone
   # INDICATORS
   indicators:
     universe_query:

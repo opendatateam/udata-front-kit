@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { capitalize, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import DatasetList from '@/components/datasets/DatasetList.vue'
+import TopicList from '@/components/topics/TopicList.vue'
 import type { RouteMeta } from '@/router'
+import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
-import { debounceWait, usePageConf } from '@/utils/config'
-
-defineEmits(['search'])
+import { debounceWait, usePageConf, useTopicsConf } from '@/utils/config'
 
 const props = defineProps({
   query: {
@@ -23,23 +23,33 @@ const props = defineProps({
   }
 })
 
+const { topicsSlug, topicsName } = useTopicsConf()
+
 const router = useRouter()
 const route = useRoute()
 // FIXME: useRouteMeta
 const meta = route.meta as RouteMeta
-// FIXME: pageKey should be mandatory
-const pageConf = usePageConf(meta.pageKey || 'datasets')
+const pageConf = usePageConf(meta.pageKey || 'topics')
 
-const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
+const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
 const searchResultsMessage = computed(
-  () => datasetListComp.value?.numberOfResultMsg || ''
+  () => topicListComp.value?.numberOfResultMsg || ''
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
+
+const selectedQuery = ref('')
+
+const userStore = useUserStore()
+const { canAddBouquet } = storeToRefs(userStore)
 
 const links = [
   { to: '/', text: 'Accueil' },
   { text: pageConf.breadcrumb_title || pageConf.title }
 ]
+
+const createUrl = computed(() => {
+  return { name: `${topicsSlug}_add`, query: route.query }
+})
 
 const search = useDebounceFn((query) => {
   router.push({
@@ -49,7 +59,6 @@ const search = useDebounceFn((query) => {
   })
 }, debounceWait)
 
-// load custom filters component from router, or fallback to default
 const FiltersComponent = computed(() => {
   const componentLoader = meta?.filtersComponent
   if (componentLoader) {
@@ -61,6 +70,8 @@ const FiltersComponent = computed(() => {
     })
   }
   return defineAsyncComponent(
+    // FIXME: rename file if it works across types
+    // FIXME: we need a "draft" selector in there
     () => import('@/components/datasets/DatasetSearch.vue')
   )
 })
@@ -70,8 +81,19 @@ const FiltersComponent = computed(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-my-2w">
-    <h1>{{ pageConf.title }}</h1>
+  <div class="fr-container datagouv-components fr-my-2v">
+    <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
+      <h1 class="fr-mb-0">{{ capitalize(topicsName) }}s</h1>
+      <div
+        v-if="canAddBouquet"
+        class="fr-col-auto fr-grid-row fr-grid-row--middle"
+      >
+        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
+          <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
+          Ajouter un {{ topicsName }}
+        </router-link>
+      </div>
+    </div>
   </div>
   <section
     v-if="pageConf.banner"
@@ -87,7 +109,7 @@ const FiltersComponent = computed(() => {
   <GenericContainer id="list">
     <div class="fr-col-md-12 fr-mb-2w">
       <SearchComponent
-        id="search-dataset"
+        id="search-topic"
         :model-value="props.query"
         :is-filter="true"
         :search-label="pageConf.search.input"
@@ -96,21 +118,21 @@ const FiltersComponent = computed(() => {
       />
     </div>
     <div class="fr-mt-2w">
-      <div class="fr-grid-row">
+      <div className="fr-grid-row">
         <nav
-          class="fr-sidemenu fr-col-md-4"
+          className="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
-          <div class="fr-sidemenu__inner">
-            <h2 id="fr-sidemenu-title" class="fr-sidemenu__title h3">
+          <div className="fr-sidemenu__inner">
+            <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
             <FiltersComponent />
           </div>
         </nav>
-        <div class="fr-col list-container">
-          <DatasetList
-            ref="datasetListComp"
+        <div className="fr-col-12 fr-col-md-8">
+          <TopicList
+            ref="topicListComp"
             :query="props.query"
             :page="props.page"
           />
@@ -125,6 +147,7 @@ const FiltersComponent = computed(() => {
 .fr-sidemenu {
   z-index: calc(var(--ground) + 600);
 }
+
 @media (max-width: 768px) {
   .fr-sidemenu {
     margin-left: 0;
@@ -135,9 +158,5 @@ const FiltersComponent = computed(() => {
       box-shadow: none;
     }
   }
-}
-
-.list-container {
-  width: 100%;
 }
 </style>

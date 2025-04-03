@@ -1,5 +1,5 @@
 import type { RouteMeta } from '@/router'
-import { useSearchPageRoutes } from '@/router/utils'
+import { useAdminPagesRoutes, useSearchPageRoutes } from '@/router/utils'
 
 export const routes = [
   {
@@ -11,12 +11,14 @@ export const routes = [
     component: async () => await import('./views/HomeView.vue')
   },
   useSearchPageRoutes({
+    pageType: 'dataset',
     pageKey: 'datasets',
     metaTitle: 'Données',
     filtersComponent: async () =>
       await import('./components/datasets/EcospheresDatasetSearch.vue')
   }),
   useSearchPageRoutes({
+    pageType: 'dataset',
     pageKey: 'indicators',
     metaTitle: 'Indicateurs',
     cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
@@ -26,47 +28,15 @@ export const routes = [
       await import(
         '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
       )
-  })
-  // {
-  //   path: '/bouquets',
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'bouquets',
-  //       meta: {
-  //         title: 'Bouquets'
-  //       },
-  //       component: async () =>
-  //         await import('@/views/bouquets/BouquetsListView.vue'),
-  //       props: (route: RouteLocationNormalizedLoaded) => ({
-  //         query: route.query.q || null,
-  //         page: route.query.page || null,
-  //         sort: route.query.sort || '-last_modified'
-  //       })
-  //     },
-  //     {
-  //       path: ':tid',
-  //       name: 'bouquet_detail',
-  //       props: (route: RouteLocationNormalizedLoaded) => ({
-  //         topicId: route.params.tid
-  //       }),
-  //       component: async () =>
-  //         await import('@/views/bouquets/BouquetDetailView.vue')
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/admin/bouquet/add',
-  //   name: 'bouquet_add',
-  //   component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-  //   meta: { requiresAuth: true },
-  //   props: { isCreate: true }
-  // },
-  // {
-  //   path: '/admin/bouquet/edit/:bid',
-  //   name: 'bouquet_edit',
-  //   component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-  //   meta: { requiresAuth: true },
-  //   props: { isCreate: false }
-  // },
+  }),
+  useSearchPageRoutes({
+    pageType: 'topic',
+    pageKey: 'bouquets',
+    metaTitle: 'Bouquets'
+    // props: (route: RouteLocationNormalizedLoaded) => ({
+    // FIXME: handle default sort
+    //   sort: route.query.sort || '-created'
+    // })
+  }),
+  ...useAdminPagesRoutes('bouquets')
 ]

@@ -52,7 +52,7 @@ const getOrganizationPage = (id: string | undefined) => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  router.push({ name: route.name, query, hash: '#datasets-list' }).then(() => {
+  router.push({ name: route.name, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
 }
@@ -61,7 +61,7 @@ const goToPage = (page: number) => {
   router.push({
     name: route.name,
     query: { ...route.query, page: page + 1 },
-    hash: '#datasets-list'
+    hash: '#list'
   })
 }
 
@@ -69,7 +69,7 @@ const doSort = (value: string | null) => {
   router.push({
     name: route.name,
     query: { ...route.query, sort: value },
-    hash: '#datasets-list'
+    hash: '#list'
   })
 }
 

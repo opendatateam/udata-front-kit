@@ -6,7 +6,6 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import NoResults from '@/components/NoResults.vue'
-import type { TopicsQueryArgs } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
@@ -20,7 +19,16 @@ const { topicsName, topicsSlug } = useTopicsConf()
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)
 
-const props = defineProps<TopicsQueryArgs>()
+const props = defineProps({
+  query: {
+    type: String,
+    default: null
+  },
+  page: {
+    type: String,
+    default: '1'
+  }
+})
 
 const emits = defineEmits(['clearFilters'])
 
