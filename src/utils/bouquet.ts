@@ -50,14 +50,22 @@ export const cloneTopic = (
   keepDatasets: boolean = false
 ): TopicPostData => {
   const { id, slug, ...data } = topic
+
+  // get a deduplicated list of dataset ids from factors that point to a dataset
+  const getDatasetsIds = () => {
+    return [
+      ...new Set(
+        topic.extras[topicsExtrasKey].datasets_properties
+          .map((dp) => dp.id)
+          .filter((id) => id != null)
+      )
+    ]
+  }
+
   return {
     ...data,
     private: true,
-    datasets: keepDatasets
-      ? topic.extras[topicsExtrasKey].datasets_properties
-          .map((dp) => dp.id)
-          .filter((id) => id != null)
-      : [],
+    datasets: keepDatasets ? getDatasetsIds() : [],
     reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
