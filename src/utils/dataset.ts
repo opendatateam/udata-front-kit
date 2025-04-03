@@ -1,4 +1,4 @@
-import { useDatasetStore } from '@/store/DatasetStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import type { DatasetV2, License } from '@datagouv/components'
 
 export const useLicense = (

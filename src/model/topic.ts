@@ -30,8 +30,6 @@ export interface DatasetProperties {
 export type DatasetsGroups = Map<string, DatasetProperties[]>
 
 export interface SiteTopicExtras {
-  theme: string
-  subtheme: string
   datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
@@ -64,4 +62,14 @@ export type TopicPostData = Omit<
   slug?: string
   datasets: string[]
   reuses: string[]
+}
+
+export interface TopicsQueryArgs {
+  query: string | null
+  theme: string | null
+  subtheme: string | null
+  include_private?: string
+  geozone: string | null
+  page: string | null
+  sort: string
 }

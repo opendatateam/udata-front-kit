@@ -7,8 +7,6 @@ datagouvfr:
   oauth_client_id: 66fa76d405b98d06ca73854a
 
 universe:
-  # "universe" topic id
-  topic_id: 65e9aa6cb5c809c30c70ee02
   # universe name, used as bouquets tag
   name: univers-ecospheres
 
@@ -114,7 +112,7 @@ website:
   router:
     disable:
       - topics
-    pages:
+    static_pages:
       - title: 'À propos'
         id: 'about'
         route: '/about'
@@ -128,14 +126,12 @@ website:
         route: '/terms'
         url: '/ecospheres/pages/terms.md'
   show_quality_component: true
-  list_search_topics:
-  url_search_topics:
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
   default_debounce_wait: 600
   pagination_sizes:
     organizations_list: 9
-    topics_list: 100
+    topics_list: 20
     files_list: 6
   contact_email: ecospheres@developpement-durable.gouv.fr
   home_banner_colors:
@@ -156,18 +152,11 @@ website:
       display: true
       create: true
   datasets:
-    organization_filter: true
     add_to_bouquet: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
-    banner:
-      title: Un guichet unique pour l’accès aux données environnementales
-      content: |
-        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
-
-        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
   topics:
     slug: bouquets
     name: bouquet
@@ -207,171 +196,409 @@ website:
     - name: Accessibilité
       path: /accessibility
 
-themes:
-  - name: Se loger
-    color: 'var(--blue-ecume-sun-247-moon-675)'
-    textColor: 'var(--blue-ecume-975-75)'
-    subthemes:
-      - name: Construction et rénovation des logements
-      - name: Aménagements des villes
-  - name: Produire
-    color: 'var(--green-archipel-sun-391-moon-716)'
-    textColor: 'var(--green-archipel-975-75)'
-    subthemes:
-      - name: Nucléaire
-      - name: Tertiaire (incluant les bâtiments publics de l'État et des collectivités, hors logement)
-      - name: Production d'électricité décarbonée (hors nucléaire)
-  - name: Se nourrir
-    color: 'var(--green-menthe-975-75)'
-    textColor: 'var(--green-menthe-sun-373-moon-652)'
-    subthemes:
-      - name: Alimentation
-      - name: Agriculture et pêche
-  - name: Consommer
-    color: 'var(--green-emeraude-975-75)'
-    textColor: 'var(--green-emeraude-sun-425-moon-753)'
-    subthemes:
-      - name: Consommation plus durable (ménages)
-      - name: Numérique responsable
-      - name: Achats durables (de l'État, des collectivités et des entreprises)
-  - name: Préserver
-    color: 'var(--green-bourgeon-975-75)'
-    textColor: 'var(--green-bourgeon-sun-425-moon-759)'
-    subthemes:
-      - name: Eau
-      - name: Sols
-      - name: Océans et mers
-      - name: Forêt
-  - name: Se déplacer
-    color: 'var(--green-tilleul-verveine-975-75)'
-    textColor: 'var(--green-tilleul-verveine-sun-418-moon-817)'
-    subthemes:
-      - name: Voitures et infrastructures routières
-      - name: Mobilité courte distance (hors voiture)
-      - name: Mobilité longue distance (avion, train)
-  - name: Chantiers transverses
-    color: 'var(--blue-ecume-975-75)'
-    textColor: 'var(--blue-ecume-sun-247-moon-675)'
-    subthemes:
-      - name: Le financement qui permet de définir des trajectoires d'investissement crédibles et cohérentes
-      - name: La planification et la différenciation territoriale selon les caractéristiques et les spécificités de chaque territoire, incluant les territoires ultra-marins
-      - name: La transition des filières avec la gestion des emplois, des formations et des compétences
-      - name: Les données environnementales
-      - name: Les services publics exemplaires
-      - name: La transition juste et les mesures d’accompagnement, pour ne laisser personne au bord du chemin
-      - name: La sobriété des usages et des ressources
+organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
-organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-prod.json
+# Configuration format for pages:
+#
+# pages:
+#   {page_id}:                   # page identifier
+#     universe_query: {dict}     # used to define a "universe" on a given {page_id}, through query args
+#     tag_prefix: {string}       # prefix for tags on data.gouv.fr
+#     title: {string}            # title for the list page
+#     breadcrumb_title: {string} # title in breadcrumb (optionnal, falls back to title)
+#     search:
+#      input: {string}           # placeholder for the search input
+#      results:                  # results count message
+#        one: {string}           # message for one result
+#        several: {string}         # message for multiple results (use {{total}} to display the total number of results)
+#     banner:                    # banner for the list page (optionnal)
+#      title: {string}           # title for the banner
+#      content: {string}         # content for the banner
+#     filters:                   # list of filters for this {page_id}
+#       - name: {string}         # name of the filter ⚠️ needs to be unique across all items
+#         id: {string}           # id of the filter
+#         type: {string}         # type of the filter (select | spatial_zone | spatial_granularity)
+#         child: {string?}       # id of the child filter (optional)
+#         color: {string}        # color of the filter's tag
+#         use_tag_prefix: {bool} # whether to use {tag_prefix}-{item.id} when building value tag
+#         values:                # list of values for this filter
+#           - id: {string}       # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}     # name of the value
+#             parent: {string?}  # id of the parent filter value (optional)
+pages:
+  # DATASETS
+  datasets:
+    universe_query:
+      topic: 65e9aa6cb5c809c30c70ee02
+    tag_prefix:
+    title: Jeux de données
+    breadcrumb_title: Données
+    search:
+      input: Rechercher un jeu de données
+      results:
+        one: 1 jeu de données disponible
+        several: '{{total}} jeux de données disponibles'
+    banner:
+      title: Un guichet unique pour l’accès aux données environnementales
+      content: |
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
 
-indicators:
-  organization_id: 67884b4da4fca9c97bbef479
-  global_tag_prefix: ecospheres-indicateurs
-  filters:
-    - name: Thématique
-      id: theme
-      color: green-menthe
-      values:
-        - id: autre
-          name: Autre
-        - id: mieux-consommer
-          name: Mieux consommer
-        - id: mieux-produire
-          name: Mieux produire
-        - id: mieux-preserver-valoriser-ecosystemes
-          name: Mieux préserver et valoriser nos ecosystèmes
-        - id: mieux-se-deplacer
-          name: Mieux se déplacer
-        - id: mieux-se-loger
-          name: Mieux se loger
-        - id: mieux-se-nourrir
-          name: Mieux se nourrir
-    - name: Enjeu
-      id: enjeu
-      color: blue-ecume
-      values:
-        - id: adaptation-climat
-          name: Adaptation climat
-        - id: attenuation-climat
-          name: Atténuation climat
-        - id: biodiversite
-          name: Biodiversité
-        - id: ressources
-          name: Ressources
-        - id: sante
-          name: Santé
-    - name: Secteur
-      id: secteur
-      color: purple-glycine
-      values:
-        - id: agriculture-forets-sols
-          name: Agriculture, Forêts et Sols
-        - id: alimentation
-          name: Alimentation
-        - id: batiment
-          name: Bâtiment
-        - id: dechets
-          name: Déchets
-        - id: eau
-          name: Eau
-        - id: energie
-          name: Energie
-        - id: industrie
-          name: Industrie
-        - id: transport-marchandises
-          name: Transport de marchandises
-        - id: transport-voyageurs
-          name: Transport de voyageurs
-        - id: transverse
-          name: Transverse
-    - name: Levier
-      id: levier
-      color: green-archipel
-      values:
-        - id: biogaz
-          name: Biogaz
-        - id: changements-de-pratiques-de-fertilisation-azotee
-          name: Changements de pratiques de fertilisation azotée
-        - id: covoiturage
-          name: Covoiturage
-        - id: developpement-de-lagriculture-biologique-et-de-hve
-          name: Développement de l'agriculture biologique et de HVE
-        - id: efficacite-et-sobriete-logistique
-          name: Efficacité et sobriété logistique
-        - id: gestion-des-prairies
-          name: Gestion des prairies
-        - id: pratiques-stockantes
-          name: Pratiques stockantes
-        - id: prevention-des-dechets
-          name: Prévention des déchets
-        - id: reduction-des-deplacements
-          name: Réduction des déplacements
-        - id: renovation-hors-changement-chaudieres
-          name: Rénovation (hors changement chaudières)
-        - id: sobriete-dans-lutilisation-de-la-ressource-en-eau
-          name: Sobriété dans l'utilisation de la ressource en eau
-        - id: sobriete-des-batiments-residentiel
-          name: Sobriété des bâtiments (résidentiel)
-        - id: sobriete-fonciere
-          name: Sobriété foncière
-        - id: surface-en-aire-protegee
-          name: Surface en aire protégée
-        - id: transports-en-commun
-          name: Transports en commun
-        - id: valorisation-matiere-des-dechets
-          name: Valorisation matière des déchets
-        - id: vehicules-electriques
-          name: Véhicules électriques
-        - id: velo
-          name: Vélo
-    - name: Cas d'usage
-      id: usage
-      color: yellow-tournesol-main-731
-      values:
-        - id: tdb-mobilite-durable
-          name: Indicateurs Tableau de bord de mobilité Durable
-        - id: territoires-en-transitions
-          name:
-            Indicateurs du programme Territoire Engagé de l'ADEME (Territoires en
-            Transitions)
-        - id: cop-region
-          name: Indicateurs de planification écologique régionale (COPs)
+        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    filters:
+      - name: Thème INSPIRE
+        default_option: Tous les thèmes
+        id: inspire
+        type: select
+        color: noop
+        use_tag_prefix: false
+        values:
+          - id: adresses
+            name: Adresses
+          - id: altitude
+            name: Altitude
+          - id: conditions-atmospheriques
+            name: Conditions atmosphériques
+          - id: batiments
+            name: Bâtiments
+          - id: caracteristiques-geographiques-meteorologiques
+            name: Caractéristiques géographiques météorologiques
+          - id: caracteristiques-geographiques-oceanographiques
+            name: Caractéristiques géographiques océanographiques
+          - id: conditions-atmospheriques
+            name: Conditions atmosphériques
+          - id: denominations-geographiques
+            name: Dénominations géographiques
+          - id: geologie
+            name: Géologie
+          - id: habitats-et-biotopes
+            name: Habitats et biotopes
+          - id: hydrographie
+            name: Hydrographie
+          - id: installations-agricoles-et-aquacoles
+            name: Installations agricoles et aquacoles
+          - id: installations-de-suivi-environnemental
+            name: Installations de suivi environnemental
+          - id: lieux-de-production-et-sites-industriels
+            name: Lieux de production et sites industriels
+          - id: occupation-des-terres
+            name: Occupation des terres
+          - id: ortho-imagerie
+            name: Ortho-imagerie
+          - id: parcelles-cadastrales
+            name: Parcelles cadastrales
+          - id: ressources-minerales
+            name: Ressources minérales
+          - id: referentiels-de-coordonnees
+            name: Référentiels de coordonnées
+          - id: regions-biogeographiques
+            name: Régions biogéographiques
+          - id: regions-maritimes
+            name: Régions maritimes
+          - id: repartition-de-la-population-demographie
+            name: Répartition de la population — démographie
+          - id: repartition-des-especes
+            name: Répartition des espèces
+          - id: reseaux-de-transport
+            name: Réseaux de transport
+          - id: sante-et-securite-des-personnes
+            name: Santé et sécurité des personnes
+          - id: services-dutilite-publique-et-services-publics
+            name: Services d'utilité publique et services publics
+          - id: sites-proteges
+            name: Sites protégés
+          - id: sols
+            name: Sols
+          - id: sources-denergie
+            name: Sources d'énergie
+          - id: systemes-de-maillage-geographique
+            name: Systèmes de maillage géographique
+          - id: unites-administratives
+            name: Unités administratives
+          - id: unites-statistiques
+            name: Unités statistiques
+          - id: usage-des-sols
+            name: Usage des sols
+          - id: zones-de-gestion-de-restriction-ou-de-reglementation-et-unites-de-declaration
+            name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
+          - id: zones-a-risque-naturel
+            name: Zones à risque naturel
+  # BOUQUETS
+  bouquets:
+    universe_query:
+    tag_prefix: ecospheres
+    title:
+    breadcrumb_title:
+    search:
+      input:
+      results:
+        one:
+        several:
+    banner:
+    filters:
+      - name: Thématique
+        id: theme
+        type: select
+        child: subtheme
+        color: noop
+        use_tag_prefix: true
+        values:
+          - id: se-loger
+            name: Se loger
+          - id: produire
+            name: Produire
+          - id: se-nourrir
+            name: Se nourrir
+          - id: consommer
+            name: Consommer
+          - id: preserver
+            name: Préserver
+          - id: se-deplacer
+            name: Se déplacer
+          - id: chantiers-transverses
+            name: Chantiers transverses
+      - name: Chantier
+        id: subtheme
+        type: select
+        color: green-archipel
+        use_tag_prefix: true
+        values:
+          # parent theme: se-loger
+          - id: construction-et-renovation-des-logements
+            name: Construction et rénovation des logements
+            parent: se-loger
+          - id: amenagements-des-villes
+            name: Aménagements des villes
+            parent: se-loger
+          # parent theme: produire
+          - id: nucleaire
+            name: Nucléaire
+            parent: produire
+          - id: tertiaire
+            name:
+              Tertiaire (incluant les bâtiments publics de l'État et des collectivités,
+              hors logement)
+            parent: produire
+          - id: electricite-decarbonee
+            name: Production d'électricité décarbonée (hors nucléaire)
+            parent: produire
+          # parent theme: se-nourrir
+          - id: alimentation
+            name: Alimentation
+            parent: se-nourrir
+          - id: agriculture-et-peche
+            name: Agriculture et pêche
+            parent: se-nourrir
+          # parent theme: consommer
+          - id: consommation-plus-durable-menages
+            name: Consommation plus durable (ménages)
+            parent: consommer
+          - id: numerique-responsable
+            name: Numérique responsable
+            parent: consommer
+          - id: achats-durables
+            name: Achats durables (de l'État, des collectivités et des entreprises)
+            parent: consommer
+          # parent theme: preserver
+          - id: eau
+            name: Eau
+            parent: preserver
+          - id: sols
+            name: Sols
+            parent: preserver
+          - id: oceans-et-mers
+            name: Océans et mers
+            parent: preserver
+          - id: foret
+            name: Forêt
+            parent: preserver
+          # parent theme: se-deplacer
+          - id: voitures-et-infrastructures-routieres
+            name: Voitures et infrastructures routières
+            parent: se-deplacer
+          - id: mobilite-courte-distance-hors-voiture
+            name: Mobilité courte distance (hors voiture)
+            parent: se-deplacer
+          - id: mobilite-longue-distance-avion-train
+            name: Mobilité longue distance (avion, train)
+            parent: se-deplacer
+          # parent theme: chantiers-transverses
+          - id: financement-investissement
+            name:
+              Le financement qui permet de définir des trajectoires d'investissement
+              crédibles et cohérentes
+            parent: chantiers-transverses
+          - id: planification-differenciation-territoriale
+            name:
+              La planification et la différenciation territoriale selon les caractéristiques
+              et les spécificités de chaque territoire, incluant les territoires ultra-marins
+            parent: chantiers-transverses
+          - id: transition-filieres-emplois-formations-competences
+            name:
+              La transition des filières avec la gestion des emplois, des formations
+              et des compétences
+            parent: chantiers-transverses
+          - id: donnees-environnementales
+            name: Les données environnementales
+            parent: chantiers-transverses
+          - id: services-publics-exemplaires
+            name: Les services publics exemplaires
+            parent: chantiers-transverses
+          - id: transition-juste
+            name:
+              La transition juste et les mesures d’accompagnement, pour ne laisser personne
+              au bord du chemin
+            parent: chantiers-transverses
+          - id: sobriete-usages-ressources
+            name: La sobriété des usages et des ressources
+            parent: chantiers-transverses
+  # INDICATORS
+  indicators:
+    universe_query:
+      tag: ecospheres-indicateurs
+      organization: 67884b4da4fca9c97bbef479
+    tag_prefix: ecospheres-indicateurs
+    title: Indicateurs territoriaux
+    breadcrumb_title: Indicateurs
+    search:
+      input: Rechercher un indicateur
+      results:
+        one: 1 indicateur disponible
+        several: '{{total}} indicateurs disponibles'
+    banner:
+      title: Accéder aux indicateurs de référence pour la transition écologique des territoires
+      content: |
+        L'Ecolab du Commissariat Général au Développement Durable met en place un hub d'indicateurs territoriaux, en co-construction avec les directions générales, les établissements publics et les services déconcentrés des ministères concernés, pour accompagner les territoires dans le suivi de leurs politiques publiques de transition écologique. Ces indicateurs sont référencés par thématiques et enjeux environnementaux de la planification écologique. Chaque fiche détaille la définition, les sources, le calcul des indicateurs et permet d'accéder aux données structurées. Plusieurs bouquets permettent de regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
+
+        Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    filters:
+      - name: Thématique
+        default_option: Toutes les thématiques
+        id: theme
+        type: select
+        color: green-menthe
+        use_tag_prefix: true
+        values:
+          - id: autre
+            name: Autre
+          - id: mieux-consommer
+            name: Mieux consommer
+          - id: mieux-produire
+            name: Mieux produire
+          - id: mieux-preserver-valoriser-ecosystemes
+            name: Mieux préserver et valoriser nos ecosystèmes
+          - id: mieux-se-deplacer
+            name: Mieux se déplacer
+          - id: mieux-se-loger
+            name: Mieux se loger
+          - id: mieux-se-nourrir
+            name: Mieux se nourrir
+      - name: Enjeu
+        default_option: Tous les enjeux
+        id: enjeu
+        type: select
+        color: blue-ecume
+        use_tag_prefix: true
+        values:
+          - id: adaptation-climat
+            name: Adaptation climat
+          - id: attenuation-climat
+            name: Atténuation climat
+          - id: biodiversite
+            name: Biodiversité
+          - id: ressources
+            name: Ressources
+          - id: sante
+            name: Santé
+      - name: Secteur
+        default_option: Tous les secteurs
+        id: secteur
+        type: select
+        color: purple-glycine
+        use_tag_prefix: true
+        values:
+          - id: agriculture-forets-sols
+            name: Agriculture, Forêts et Sols
+          - id: alimentation
+            name: Alimentation
+          - id: batiment
+            name: Bâtiment
+          - id: dechets
+            name: Déchets
+          - id: eau
+            name: Eau
+          - id: energie
+            name: Energie
+          - id: industrie
+            name: Industrie
+          - id: transport-marchandises
+            name: Transport de marchandises
+          - id: transport-voyageurs
+            name: Transport de voyageurs
+          - id: transverse
+            name: Transverse
+      - name: Levier
+        default_option: Tous les leviers
+        id: levier
+        type: select
+        color: green-archipel
+        use_tag_prefix: true
+        values:
+          - id: biogaz
+            name: Biogaz
+          - id: changements-de-pratiques-de-fertilisation-azotee
+            name: Changements de pratiques de fertilisation azotée
+          - id: covoiturage
+            name: Covoiturage
+          - id: developpement-de-lagriculture-biologique-et-de-hve
+            name: Développement de l'agriculture biologique et de HVE
+          - id: efficacite-et-sobriete-logistique
+            name: Efficacité et sobriété logistique
+          - id: gestion-des-prairies
+            name: Gestion des prairies
+          - id: pratiques-stockantes
+            name: Pratiques stockantes
+          - id: prevention-des-dechets
+            name: Prévention des déchets
+          - id: reduction-des-deplacements
+            name: Réduction des déplacements
+          - id: renovation-hors-changement-chaudieres
+            name: Rénovation (hors changement chaudières)
+          - id: sobriete-dans-lutilisation-de-la-ressource-en-eau
+            name: Sobriété dans l'utilisation de la ressource en eau
+          - id: sobriete-des-batiments-residentiel
+            name: Sobriété des bâtiments (résidentiel)
+          - id: sobriete-fonciere
+            name: Sobriété foncière
+          - id: surface-en-aire-protegee
+            name: Surface en aire protégée
+          - id: transports-en-commun
+            name: Transports en commun
+          - id: valorisation-matiere-des-dechets
+            name: Valorisation matière des déchets
+          - id: vehicules-electriques
+            name: Véhicules électriques
+          - id: velo
+            name: Vélo
+      - name: Cas d'usage
+        default_option: Tous les cas d'usage
+        id: usage
+        type: select
+        color: yellow-tournesol-main-731
+        use_tag_prefix: true
+        values:
+          - id: tdb-mobilite-durable
+            name: Indicateurs Tableau de bord de mobilité Durable
+          - id: territoires-en-transitions
+            name:
+              Indicateurs du programme Territoire Engagé de l'ADEME (Territoires en
+              Transitions)
+          - id: cop-region
+            name: Indicateurs de planification écologique régionale (COPs)
+      - name: Maille minimale
+        default_option: Toutes les mailles
+        id: granularity
+        type: spatial_granularity
+      - name: Couverture territoriale
+        default_option:
+        id: geozone
+        type: spatial_zone

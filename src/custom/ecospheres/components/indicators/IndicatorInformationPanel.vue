@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils'
 import { useSpatialCoverage } from '@/utils/spatial'
+import { formatDateRange } from '@datagouv/components'
 import { toRef } from 'vue'
 import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
@@ -66,13 +67,7 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
       v-if="indicator.temporal_coverage"
       title="Couverture temporelle"
     >
-      <!-- @vue-ignore FIXME: wrong type on upstream DatasetV2.temporal_coverage -->
-      <!-- https://github.com/datagouv/udata-front/pull/633 -->
-      {{ formatDate(indicator.temporal_coverage.start, true) }}
-      -
-      <!-- @vue-ignore FIXME: wrong type on upstream DatasetV2.temporal_coverage -->
-      <!-- https://github.com/datagouv/udata-front/pull/633 -->
-      {{ formatDate(indicator.temporal_coverage.end, true) }}
+      {{ formatDateRange(indicator.temporal_coverage) }}
     </InformationPanelItem>
     <InformationPanelItem
       title="Date de mise à jour"
