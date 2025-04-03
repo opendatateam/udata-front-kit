@@ -8,6 +8,7 @@ datagouvfr:
 
 universe:
   # universe name, used as bouquets tag
+  # FIXME: remove and migrate to universe_query everywhere
   name: ecospheres
 
 robots:
@@ -316,6 +317,7 @@ pages:
   # BOUQUETS
   bouquets:
     universe_query:
+      tag: ecospheres
     tag_prefix: ecospheres
     title: Bouquets
     breadcrumb_title:

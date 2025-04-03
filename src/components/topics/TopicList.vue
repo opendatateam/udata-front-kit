@@ -6,18 +6,10 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import NoResults from '@/components/NoResults.vue'
+import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
-
-const router = useRouter()
-const route = useRoute()
-const topicStore = useTopicStore()
-
-const { topicsName, topicsSlug } = useTopicsConf()
-
-const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
+import { usePageConf, useTopicsConf } from '@/utils/config'
 
 const props = defineProps({
   query: {
@@ -30,19 +22,27 @@ const props = defineProps({
   }
 })
 
+const router = useRouter()
+const route = useRoute()
+const meta = useRouteMeta()
+const { query: routeQuery } = useRouteQueryAsString()
+const topicStore = useTopicStore()
+
+const { topicsName, topicsSlug } = useTopicsConf()
+const pageConf = usePageConf(meta.pageKey || 'topics')
+
+const userStore = useUserStore()
+const { canAddBouquet } = storeToRefs(userStore)
+
 const emits = defineEmits(['clearFilters'])
 
-const {
-  topics: bouquets,
-  pagination,
-  total: nbBouquets
-} = storeToRefs(topicStore)
+const { topics, pagination, total } = storeToRefs(topicStore)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
-  if (nbBouquets.value === 1) {
-    return `1 ${topicsName} disponible`
-  } else if (nbBouquets.value > 1) {
-    return nbBouquets.value + ` ${topicsName}s disponibles`
+  if (total.value === 1) {
+    return pageConf.search.results.one
+  } else if (total.value > 1) {
+    return `${pageConf.search.results.several.replace('{{total}}', String(total.value))}`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -55,21 +55,36 @@ const createUrl = computed(() => {
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, query, hash: '#bouquets-list' }).then(() => {
+  router.push({ name: topicsSlug, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
 }
 
-const executeQuery = async (args: typeof props) => {
+const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
-  return topicStore.query(args).finally(() => loader.hide())
+  // get filters parameters from route
+  const filtersArgs = pageConf.filters.reduce(
+    (acc, item) => {
+      const value = route.query[item.id]
+      const singleton = Array.isArray(value) ? value[0] : value
+      if (singleton) {
+        acc[item.id] = singleton
+      }
+      return acc
+    },
+    {} as Record<string, string>
+  )
+  // FIXME: handle include_private
+  return topicStore
+    .query({ ...route.query, ...props, ...filtersArgs }, meta.pageKey)
+    .finally(() => loader.hide())
 }
 
 const goToPage = (page: number) => {
   router.push({
     name: topicsSlug,
     query: { ...route.query, page: page + 1 },
-    hash: '#bouquets-list'
+    hash: '#list'
   })
 }
 
@@ -77,12 +92,16 @@ const doSort = (value: string | null) => {
   router.push({
     name: topicsSlug,
     query: { ...route.query, sort: value },
-    hash: '#bouquets-list'
+    hash: '#list'
   })
 }
 
-// launch search on props (~route.query) changes
-watch(props, () => executeQuery(props), { immediate: true, deep: true })
+// launch search on route.query changes
+watch(
+  () => route.query,
+  () => executeQuery(),
+  { immediate: true, deep: true }
+)
 
 defineExpose({
   numberOfResultMsg
@@ -90,14 +109,15 @@ defineExpose({
 </script>
 
 <template>
-  <template v-if="nbBouquets > 0">
+  <template v-if="total > 0">
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
     >
       <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
+        <!-- FIXME: we need the default sort to '-created' — in page conf or default value in component? -->
         <SelectComponent
-          :model-value="sort"
+          :model-value="routeQuery.sort"
           label="Trier par :"
           :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
           :options="[
@@ -111,8 +131,8 @@ defineExpose({
     </div>
     <div class="fr-mb-4w border-top">
       <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
-        <li v-for="bouquet in bouquets" :key="bouquet.id" class="fr-col-12">
-          <BouquetCard :bouquet="bouquet" />
+        <li v-for="topic in topics" :key="topic.id" class="fr-col-12">
+          <TopicCard :topic="topic" />
         </li>
       </ul>
     </div>

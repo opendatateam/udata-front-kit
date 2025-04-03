@@ -20,7 +20,7 @@ import { useTag } from '@/utils/tags'
 const { topicsSlug } = useTopicsConf()
 
 const props = defineProps({
-  bouquet: {
+  topic: {
     type: Object as () => Topic,
     required: true
   },
@@ -30,33 +30,35 @@ const props = defineProps({
   }
 })
 
-const bouquetRef = toRef(props, 'bouquet')
-const spatialCoverage = useSpatialCoverage(bouquetRef)
+const topicRef = toRef(props, 'topic')
+const spatialCoverage = useSpatialCoverage(topicRef)
 
-const ownerName = useOwnerName(props.bouquet)
+const ownerName = useOwnerName(props.topic)
 
-const { datasetsProperties } = useExtras(bouquetRef)
+const { datasetsProperties } = useExtras(topicRef)
 
 const nbData: number = datasetsProperties.value.length
 
 const bouquetLink: RouteLocationRaw = {
   name: `${topicsSlug}_detail`,
-  params: { item_id: props.bouquet.slug }
+  params: { item_id: props.topic.slug }
 }
 
-const theme = useTag('bouquets', bouquetRef, 'theme')
-const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
+// FIXME: make this generic for all filters, like indicators
+const theme = useTag('bouquets', topicRef, 'theme')
+const subtheme = useTag('bouquets', topicRef, 'subtheme')
 </script>
 
 <template>
   <article class="fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link">
     <div
-      v-if="bouquet.private"
+      v-if="topic.private"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
     </div>
-    <div v-if="subtheme" class="fr-grid-row">
+    <!-- FIXME: make this generic for all filters, like indicators -->
+    <div class="fr-grid-row">
       <div class="fr-col-12">
         <ul class="fr-badges-group fr-mb-1w fr-mt-1w">
           <li>
@@ -71,15 +73,11 @@ const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
     <div
       class="fr-mt-2v fr-grid-row align-center flex-nowrap flex-gap owner-info"
     >
-      <OrganizationLogo
-        v-if="bouquet.organization"
-        :size="42"
-        :object="bouquet"
-      />
+      <OrganizationLogo v-if="topic.organization" :size="42" :object="topic" />
 
       <img
         v-else
-        :src="getOwnerAvatar(bouquet)"
+        :src="getOwnerAvatar(topic)"
         alt=""
         loading="lazy"
         class="border fr-p-1-5v owner-avatar"
@@ -90,16 +88,16 @@ const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
       <div class="overflow-hidden flex-1-1-auto">
         <h3 class="fr-mb-1v fr-grid-row h4">
           <RouterLink :to="bouquetLink" class="text-grey-500">
-            {{ bouquet.name }}
+            {{ topic.name }}
           </RouterLink>
         </h3>
         <p
-          v-if="bouquet.organization || bouquet.owner"
+          v-if="topic.organization || topic.owner"
           class="fr-m-0 fr-text--sm org--fix"
         >
-          <template v-if="bouquet.organization">
+          <template v-if="topic.organization">
             <OrganizationNameWithCertificate
-              :organization="bouquet.organization"
+              :organization="topic.organization"
             />
           </template>
           <template v-else>{{ ownerName }}</template>
@@ -107,7 +105,7 @@ const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
       </div>
     </div>
     <div v-if="!hideDescription" class="fr-grid-row description fr-mt-3v">
-      <p class="fr-mb-1v">{{ stripFromMarkdown(bouquet.description) }}</p>
+      <p class="fr-mb-1v">{{ stripFromMarkdown(topic.description) }}</p>
     </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
@@ -115,7 +113,7 @@ const subtheme = useTag('bouquets', bouquetRef, 'subtheme')
         name="time-line"
         class="fr-mr-1w text-grey-380 fr-icon--sm"
       />
-      Mis à jour {{ formatRelativeIfRecentDate(bouquet.last_modified) }}
+      Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
 
     <div class="fr-grid-row flex-gap">
