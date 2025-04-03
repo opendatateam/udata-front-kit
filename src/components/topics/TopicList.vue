@@ -115,9 +115,8 @@ defineExpose({
     >
       <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
-        <!-- FIXME: we need the default sort to '-created' — in page conf or default value in component? -->
         <SelectComponent
-          :model-value="routeQuery.sort"
+          :model-value="routeQuery.sort || '-created'"
           label="Trier par :"
           :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
           :options="[
