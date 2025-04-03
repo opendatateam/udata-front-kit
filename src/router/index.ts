@@ -1,20 +1,9 @@
-import { type Component } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
-
-// used by custom site routers
-export interface RouteMeta {
-  title?: string
-  requiresAuth?: boolean
-  filtersComponent?: () => Promise<{ default: Component }>
-  cardComponent?: () => Promise<{ default: Component }>
-  cardClass?: string
-  pageKey?: string
-}
 
 const disableRoutes: string[] = config.website.router.disable ?? []
 

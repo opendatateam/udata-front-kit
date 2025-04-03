@@ -1,9 +1,19 @@
-import type { RouteMeta } from '@/router'
+import { type Component } from 'vue'
 import {
   useRoute,
   type RouteLocationNormalizedLoaded,
   type RouteRecordRaw
 } from 'vue-router'
+
+// used by custom site routers
+export interface RouteMeta {
+  title?: string
+  requiresAuth?: boolean
+  filtersComponent?: () => Promise<{ default: Component }>
+  cardComponent?: () => Promise<{ default: Component }>
+  cardClass?: string
+  pageKey?: string
+}
 
 export type QueryAsString = Record<string, string | null | undefined>
 
@@ -129,4 +139,8 @@ export const useAdminPagesRoutes = (pageKey: string): RouteRecordRaw[] => {
       props: { isCreate: false }
     }
   ]
+}
+
+export const useRouteMeta = () => {
+  return useRoute().meta as RouteMeta
 }

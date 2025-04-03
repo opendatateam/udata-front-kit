@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import TopicList from '@/components/topics/TopicList.vue'
-import type { RouteMeta } from '@/router'
+import { useRouteMeta } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
@@ -27,8 +27,7 @@ const { topicsSlug, topicsName } = useTopicsConf()
 
 const router = useRouter()
 const route = useRoute()
-// FIXME: useRouteMeta
-const meta = route.meta as RouteMeta
+const meta = useRouteMeta()
 const pageConf = usePageConf(meta.pageKey || 'topics')
 
 const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
@@ -36,8 +35,6 @@ const searchResultsMessage = computed(
   () => topicListComp.value?.numberOfResultMsg || ''
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
-
-const selectedQuery = ref('')
 
 const userStore = useUserStore()
 const { canAddBouquet } = storeToRefs(userStore)

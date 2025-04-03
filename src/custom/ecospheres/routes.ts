@@ -1,4 +1,4 @@
-import type { RouteMeta } from '@/router'
+import type { RouteMeta } from '@/router/utils'
 import { useAdminPagesRoutes, useSearchPageRoutes } from '@/router/utils'
 
 export const routes = [

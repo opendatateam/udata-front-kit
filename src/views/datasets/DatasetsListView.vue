@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetList from '@/components/datasets/DatasetList.vue'
-import type { RouteMeta } from '@/router'
+import { useRouteMeta } from '@/router/utils'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
 import { debounceWait, usePageConf } from '@/utils/config'
@@ -25,8 +25,7 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
-// FIXME: useRouteMeta
-const meta = route.meta as RouteMeta
+const meta = useRouteMeta()
 // FIXME: pageKey should be mandatory
 const pageConf = usePageConf(meta.pageKey || 'datasets')
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
-import type { RouteMeta } from '@/router'
+import { useRouteMeta } from '@/router/utils'
 import { useSearchStore } from '@/store/DatasetSearchStore'
 import { usePageConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
@@ -23,7 +23,7 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
-const meta = route.meta as RouteMeta
+const meta = useRouteMeta()
 
 const store = useSearchStore()
 const pageConf = usePageConf(meta.pageKey || 'datasets')
