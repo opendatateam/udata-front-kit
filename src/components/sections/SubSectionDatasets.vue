@@ -29,7 +29,7 @@ const zIndex = (key: number) => {
 }
 
 const getDatasetPage = (id: string) => {
-  return { name: 'dataset_detail', params: { did: id } }
+  return { name: 'datasets_detail', params: { item_id: id } }
 }
 
 const getOrganizationPage = (id: string) => {

@@ -1,28 +1,10 @@
-import { capitalize, type Component } from 'vue'
-import {
-  createRouter,
-  createWebHistory,
-  type RouteLocationNormalizedLoaded,
-  type RouteRecordRaw
-} from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
-import { useTopicsConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 
-// used by custom site routers
-export interface RouteMeta {
-  title?: string
-  requiresAuth?: boolean
-  filtersComponent?: () => Promise<{ default: Component }>
-  cardComponent?: () => Promise<{ default: Component }>
-  cardClass?: string
-  filterKey?: string
-}
-
-const { topicsSlug, topicsName } = useTopicsConf()
 const disableRoutes: string[] = config.website.router.disable ?? []
 
 // common/default routes
@@ -35,31 +17,6 @@ const defaultRoutes: RouteRecordRaw[] = [
       title: 'Accueil'
     },
     component: async () => await import('@/views/HomeView.vue')
-  },
-  // datasets
-  {
-    path: '/datasets',
-    children: [
-      {
-        path: '',
-        name: 'datasets',
-        meta: {
-          title: 'Données'
-        },
-        component: async () =>
-          await import('@/views/datasets/DatasetsListView.vue'),
-        props: (route: RouteLocationNormalizedLoaded) => ({
-          query: route.query.q,
-          page: route.query.page
-        })
-      },
-      {
-        path: ':did',
-        name: 'dataset_detail',
-        component: async () =>
-          await import('@/views/datasets/DatasetDetailView.vue')
-      }
-    ]
   },
   // organizations
   {
@@ -82,53 +39,6 @@ const defaultRoutes: RouteRecordRaw[] = [
           await import('@/views/organizations/OrganizationDetailView.vue')
       }
     ]
-  },
-  {
-    path: `/${topicsSlug}`,
-    name: 'topic_routes',
-    children: [
-      {
-        path: '',
-        name: topicsSlug,
-        meta: {
-          title: capitalize(topicsName) + 's'
-        },
-        component: async () =>
-          await import('@/views/bouquets/BouquetsListView.vue'),
-        props: (route: RouteLocationNormalizedLoaded) => ({
-          query: route.query.q || null,
-          subtheme: route.query.subtheme || null,
-          theme: route.query.theme || null,
-          geozone: route.query.geozone || null,
-          include_private: route.query.include_private,
-          page: route.query.page || null,
-          sort: route.query.sort || '-created'
-        })
-      },
-      {
-        path: ':bid',
-        name: `${topicsSlug}_detail`,
-        props: (route: RouteLocationNormalizedLoaded) => ({
-          bouquetId: route.params.bid
-        }),
-        component: async () =>
-          await import('@/views/bouquets/BouquetDetailView.vue')
-      }
-    ]
-  },
-  {
-    path: `/admin/${topicsSlug}/add`,
-    name: `${topicsSlug}_add`,
-    component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-    meta: { requiresAuth: true },
-    props: { isCreate: true }
-  },
-  {
-    path: `/admin/${topicsSlug}/edit/:bid`,
-    name: `${topicsSlug}_edit`,
-    component: async () => await import('@/views/bouquets/BouquetFormView.vue'),
-    meta: { requiresAuth: true },
-    props: { isCreate: false }
   },
   // technical pages
   {

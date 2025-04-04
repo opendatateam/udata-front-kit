@@ -1,4 +1,19 @@
-import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
+import { type Component } from 'vue'
+import {
+  useRoute,
+  type RouteLocationNormalizedLoaded,
+  type RouteRecordRaw
+} from 'vue-router'
+
+// used by custom site routers
+export interface RouteMeta {
+  title?: string
+  requiresAuth?: boolean
+  filtersComponent?: () => Promise<{ default: Component }>
+  cardComponent?: () => Promise<{ default: Component }>
+  cardClass?: string
+  pageKey?: string
+}
 
 export type QueryAsString = Record<string, string | null | undefined>
 
@@ -40,4 +55,92 @@ export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
     ])
   )
   return { ...route, query }
+}
+
+export const useSearchPageRoutes = ({
+  pageType,
+  pageKey,
+  metaTitle,
+  cardClass,
+  filtersComponent,
+  cardComponent,
+  detailViewComponent
+}: {
+  pageType: 'dataset' | 'topic'
+  pageKey: string
+  metaTitle: string
+  cardClass?: string
+  filtersComponent?: () => Promise<{ default: Component }>
+  cardComponent?: () => Promise<{ default: Component }>
+  detailViewComponent?: () => Promise<{ default: Component }>
+}): RouteRecordRaw => {
+  const getListComponent = (pageType: 'dataset' | 'topic') => {
+    switch (pageType) {
+      case 'dataset':
+        return () => import('@/views/datasets/DatasetsListView.vue')
+      case 'topic':
+        return () => import('@/views/topics/TopicsListView.vue')
+    }
+  }
+
+  const getDetailsComponent = (pageType: 'dataset' | 'topic') => {
+    switch (pageType) {
+      case 'dataset':
+        return () => import('@/views/datasets/DatasetDetailView.vue')
+      case 'topic':
+        return () => import('@/views/topics/TopicDetailView.vue')
+    }
+  }
+
+  return {
+    path: `/${pageKey}`,
+    children: [
+      {
+        path: '',
+        name: pageKey,
+        meta: {
+          title: metaTitle,
+          pageKey,
+          cardClass,
+          filtersComponent,
+          cardComponent
+        } as RouteMeta,
+        component: getListComponent(pageType),
+        props: (route: RouteLocationNormalizedLoaded) => ({
+          // this forces the component to be recreated when switching page type
+          key: pageKey,
+          query: route.query.q,
+          page: route.query.page
+        })
+      },
+      {
+        path: ':item_id',
+        name: `${pageKey}_detail`,
+        component: detailViewComponent ?? getDetailsComponent(pageType)
+      }
+    ]
+  }
+}
+
+export const useAdminPagesRoutes = (pageKey: string): RouteRecordRaw[] => {
+  return [
+    {
+      path: `/admin/${pageKey}/add`,
+      name: `${pageKey}_add`,
+      component: async () => await import('@/views/topics/TopicFormView.vue'),
+      meta: { requiresAuth: true },
+      props: { isCreate: true }
+    },
+    {
+      path: `/admin/${pageKey}/edit/:bid`,
+      name: `${pageKey}_edit`,
+      component: async () => await import('@/views/topics/TopicFormView.vue'),
+      meta: { requiresAuth: true },
+      props: { isCreate: false }
+    }
+  ]
+}
+
+export const useRouteMeta = () => {
+  return useRoute().meta as RouteMeta
 }

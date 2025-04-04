@@ -43,13 +43,10 @@ export const useSearchStore = defineStore('search', {
     maxTotal: () => ES_MAX_TOTAL
   },
   actions: {
-    async query(args: QueryArgs, filterKey?: string) {
-      const pageConf = usePageConf(filterKey || 'datasets')
+    async query(args: QueryArgs, pageKey?: string) {
+      const pageConf = usePageConf(pageKey || 'datasets')
       const { query, ...queryArgs } = args
-      const { extraArgs, tag } = useTagsQuery(
-        filterKey || 'datasets',
-        queryArgs
-      )
+      const { extraArgs, tag } = useTagsQuery(pageKey || 'datasets', queryArgs)
       const { tag: universeTag, ...universeQuery } = pageConf.universe_query
       const results = await searchAPI.search(query, {
         page_size: PAGE_SIZE,

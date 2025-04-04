@@ -4,14 +4,21 @@ import { computed, type ComputedRef } from 'vue'
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
-import type { Topic, TopicsQueryArgs } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import { usePageConf } from '@/utils/config'
 import { useTagsQuery } from '@/utils/tags'
 
 import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
+
+interface QueryArgs {
+  query: string
+  page: string
+  include_private?: string
+}
 
 export interface RootState {
   topics: Topic[]
@@ -49,16 +56,20 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: TopicsQueryArgs): Promise<Topic[]> {
+    async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
+      const pageConf = usePageConf(pageKey || 'topics')
       const { query, include_private, ...queryArgs } = args
       const { extraArgs, tag } = useTagsQuery('bouquets', queryArgs)
+      const { tag: universeTag, ...universeQuery } = pageConf.universe_query
+
       const results = await topicsAPIv2.list({
         params: {
           q: query,
-          tag: [config.universe.name, ...tag],
+          tag: [universeTag, ...tag].filter(Boolean).map(String),
           page_size: config.website.pagination_sizes.topics_list,
           // remove include_private if not set to 1, API will interpret presence a truthy
           ...(include_private === '1' ? { include_private } : {}),
+          ...(universeQuery || {}),
           ...extraArgs
         },
         authenticated: true

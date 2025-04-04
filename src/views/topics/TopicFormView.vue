@@ -106,7 +106,7 @@ const handleTopicOperation = (
     .then((response) => {
       router.push({
         name: `${topicsSlug}_detail`,
-        params: { bid: response.slug }
+        params: { item_id: response.slug }
       })
     })
     .catch((error) => {
@@ -161,7 +161,7 @@ const cancel = () => {
     router.push({
       name: `${topicsSlug}_detail`,
       params: {
-        bid: topic.value.slug
+        item_id: topic.value.slug
       }
     })
   }

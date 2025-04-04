@@ -19,6 +19,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
+import { useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -32,14 +33,8 @@ import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTag } from '@/utils/tags'
 
-const props = defineProps({
-  bouquetId: {
-    type: String,
-    required: true
-  }
-})
-
 const router = useRouter()
+const { params } = useRouteParamsAsString()
 const store = useTopicStore()
 const loading = useLoading()
 
@@ -110,7 +105,7 @@ const cloneModalActions = [
 const goToEdit = () => {
   router.push({
     name: `${topicsSlug}_edit`,
-    params: { bid: topic.value?.id }
+    params: { item_id: topic.value?.id }
   })
 }
 
@@ -177,7 +172,7 @@ const metaTitle = computed(() => {
 const metaLink = (): string => {
   const resolved = router.resolve({
     name: `${topicsSlug}_detail`,
-    params: { bid: topic.value?.slug }
+    params: { item_id: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
 }
@@ -195,17 +190,17 @@ useHead({
 })
 
 watch(
-  () => props.bouquetId,
+  () => params.item_id,
   () => {
     const loader = loading.show({ enforceFocus: false })
     store
-      .load(props.bouquetId, { toasted: false, redirectNotFound: true })
+      .load(params.item_id, { toasted: false, redirectNotFound: true })
       .then((res) => {
         topic.value = res
-        if (topic.value.slug !== props.bouquetId) {
+        if (topic.value.slug !== params.item_id) {
           router.push({
             name: `${topicsSlug}_detail`,
-            params: { bid: topic.value.slug }
+            params: { item_id: topic.value.slug }
           })
         }
         setAccessibilityProperties(metaTitle.value)
@@ -359,7 +354,7 @@ watch(
               <RouterLink
                 :to="{
                   name: `${topicsSlug}_detail`,
-                  params: { bid: clonedFrom.slug }
+                  params: { item_id: clonedFrom.slug }
                 }"
               >
                 {{ clonedFrom.name }}

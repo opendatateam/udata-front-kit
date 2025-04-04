@@ -25,7 +25,7 @@ import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
-const indicatorId = route.params.iid
+const indicatorId = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()

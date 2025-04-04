@@ -3,7 +3,7 @@ import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import BouquetCard from '@/components/topics/TopicCard.vue'
 import config from '@/config'
 import HomeFaq from '@/custom/ecospheres/components/HomeFaq.vue'
 
