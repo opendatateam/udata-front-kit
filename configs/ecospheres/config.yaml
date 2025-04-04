@@ -336,7 +336,7 @@ pages:
         id: theme
         type: select
         child: subtheme
-        color: noop
+        color: green-emeraude
         use_tag_prefix: true
         values:
           - id: se-loger
