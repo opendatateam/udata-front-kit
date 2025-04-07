@@ -5,16 +5,6 @@ import {
   type RouteRecordRaw
 } from 'vue-router'
 
-// used by custom site routers
-export interface RouteMeta {
-  title?: string
-  requiresAuth?: boolean
-  filtersComponent?: () => Promise<{ default: Component }>
-  cardComponent?: () => Promise<{ default: Component }>
-  cardClass?: string
-  pageKey?: string
-}
-
 export type QueryAsString = Record<string, string | null | undefined>
 
 interface RouteLocationParamsAsString
@@ -104,7 +94,7 @@ export const useSearchPageRoutes = ({
           cardClass,
           filtersComponent,
           cardComponent
-        } as RouteMeta,
+        },
         component: getListComponent(pageType),
         props: (route: RouteLocationNormalizedLoaded) => ({
           // this forces the component to be recreated when switching page type
@@ -142,5 +132,5 @@ export const useAdminPagesRoutes = (pageKey: string): RouteRecordRaw[] => {
 }
 
 export const useRouteMeta = () => {
-  return useRoute().meta as RouteMeta
+  return useRoute().meta
 }

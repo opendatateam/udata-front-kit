@@ -1,13 +1,13 @@
-import type { RouteMeta } from '@/router/utils'
 import { useAdminPagesRoutes, useSearchPageRoutes } from '@/router/utils'
+import type { RouteRecordRaw } from 'vue-router'
 
-export const routes = [
+export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
     meta: {
       title: 'Accueil'
-    } as RouteMeta,
+    },
     component: async () => await import('./views/HomeView.vue')
   },
   useSearchPageRoutes({
@@ -31,10 +31,6 @@ export const routes = [
     pageType: 'topic',
     pageKey: 'bouquets',
     metaTitle: 'Bouquets'
-    // props: (route: RouteLocationNormalizedLoaded) => ({
-    // FIXME: handle default sort
-    //   sort: route.query.sort || '-created'
-    // })
   }),
   ...useAdminPagesRoutes('bouquets')
 ]
