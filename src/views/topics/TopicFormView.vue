@@ -28,7 +28,7 @@ const props = defineProps({
 })
 
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
+const { canAddTopic } = storeToRefs(userStore)
 
 const router = useRouter()
 const routeParams = useRouteParamsAsString().params
@@ -220,7 +220,7 @@ const onSubmit = async () => {
 
 <template>
   <GenericContainer class="fr-mt-4w">
-    <div v-if="canAddBouquet">
+    <div v-if="canAddTopic">
       <div v-if="errorMsg" class="fr-mt-4v">
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>

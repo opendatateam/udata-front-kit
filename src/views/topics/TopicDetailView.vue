@@ -2,7 +2,7 @@
 import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
+import { capitalize, computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -25,13 +25,10 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { usePageConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
-import {
-  updateTopicExtras,
-  useBreadcrumbLinksForTopic,
-  useExtras
-} from '@/utils/topic'
+import { updateTopicExtras, useExtras } from '@/utils/topic'
 
 const props = defineProps<TopicPageRouterConf>()
 
@@ -59,11 +56,22 @@ const canEdit = computed(() => {
 const canClone = computed(() => useUserStore().isLoggedIn)
 
 const topicsSlug = meta.pageKey || 'topics'
+const pageConf = usePageConf(topicsSlug)
 const tags = useTagsByRef(topicsSlug, topic)
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)
 
-const breadcrumbLinks = useBreadcrumbLinksForTopic(topic, props.listAll)
+const breadcrumbLinks = computed(() => {
+  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  if (props.listAll === true) {
+    breadcrumbs.push({
+      to: `/${meta.pageKey || 'topics'}`,
+      text: `${capitalize(pageConf.object.plural)}`
+    })
+  }
+  breadcrumbs.push({ to: '', text: topic.value?.name ?? '' })
+  return breadcrumbs
+})
 
 const tabTitles = [
   { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
@@ -262,12 +270,13 @@ watch(
               <template #default>
                 <p>
                   Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du {{ props.name }} que vous souhaitez cloner.
+                  données du {{ pageConf.object.singular }} que vous souhaitez
+                  cloner.
                 </p>
                 <p>
                   Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au nouveau {{ props.name }}, mais leurs
-                  libellés et raisons d'utilisation seront conservés.
+                  seront pas ajoutés au nouveau {{ pageConf.object.singular }},
+                  mais leurs libellés et raisons d'utilisation seront conservés.
                 </p>
                 <p>
                   Voulez-vous conserver les liens vers les jeux de
@@ -363,7 +372,7 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${props.name}`"
+      :tab-list-name="`Groupes d'attributs du ${pageConf.object.singular}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">

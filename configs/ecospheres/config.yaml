@@ -193,7 +193,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 # Configuration format for pages:
 #
 # pages:
-#   {page_id}:                      # page identifier
+#   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
 #     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
 #     tag_prefix: {string}          # prefix for tags on data.gouv.fr
 #     title: {string}               # title for the list page
@@ -322,6 +322,12 @@ pages:
     tag_prefix: ecospheres
     title: Bouquets
     breadcrumb_title:
+    # TODO: copy to other pages
+    object:
+      singular: bouquet
+      plural: bouquets
+      extended: bouquet de données
+    # FIXME: use object conf instead (maybe keep input)
     search:
       input: Filtrer les bouquets
       results:

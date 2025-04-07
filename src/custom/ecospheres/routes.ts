@@ -33,11 +33,10 @@ export const routes: RouteRecordRaw[] = [
     pageKey: 'bouquets',
     metaTitle: 'Bouquets',
     topicConf: {
-      listAll: false,
+      listAll: true,
       displayMetadata: true,
       enableReadMore: true,
-      datasetEditorialization: true,
-      name: 'bouquet'
+      datasetEditorialization: true
     }
   }),
   ...useTopicAdminPagesRoutes('bouquets')

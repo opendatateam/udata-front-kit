@@ -1,13 +1,5 @@
-import {
-  capitalize,
-  computed,
-  ref,
-  watch,
-  type ComputedRef,
-  type Ref
-} from 'vue'
+import { ref, watch, type Ref } from 'vue'
 
-import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   Availability,
   type DatasetProperties,
@@ -20,7 +12,8 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useTopicsConf } from '@/utils/config'
 
-const { topicsSlug, topicsName, topicsExtrasKey } = useTopicsConf()
+// FIXME:
+const { topicsExtrasKey } = useTopicsConf()
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
@@ -84,27 +77,6 @@ export const cloneTopic = (
       })
     })
   }
-}
-
-export function useBreadcrumbLinksForTopic(
-  topic: Ref<Topic | null>,
-  topicsListAll: boolean | null
-): ComputedRef<BreadcrumbItem[]> {
-  return computed(() => {
-    const breadcrumbs = [{ to: '/', text: 'Accueil' }]
-    if (topicsListAll === true) {
-      breadcrumbs.push({
-        to: `/${topicsSlug}`,
-        text: `${capitalize(topicsName)}s`
-      })
-    }
-
-    if (topic?.value != null) {
-      breadcrumbs.push({ to: '', text: topic.value.name ?? '' })
-    }
-
-    return breadcrumbs
-  })
 }
 
 export function useExtras(topic: Ref<Topic | null | undefined>): {

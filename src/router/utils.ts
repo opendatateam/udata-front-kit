@@ -55,7 +55,7 @@ interface SearchPageRoutesOptions {
   detailsViewComponent: () => Promise<{ default: Component }>
   filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
-  detailsViewProps?: Record<string, unknown>
+  props?: Record<string, unknown>
 }
 
 // FIXME: move somewhere else? e.g. @/router/model.ts
@@ -64,7 +64,6 @@ export interface TopicPageRouterConf {
   displayMetadata: boolean
   enableReadMore: boolean
   datasetEditorialization: boolean
-  name: string
 }
 
 interface TopicSearchPageRoutesOptions
@@ -126,10 +125,8 @@ export const useTopicSearchPageRoutes = ({
     filtersComponent,
     cardComponent,
     detailsViewComponent,
-    detailsViewProps: topicConf as unknown as Record<
-      string,
-      unknown
-    > /* loosen type before sending to generic fn */
+    // loosen type before sending to generic fn
+    props: topicConf as unknown as Record<string, unknown>
   })
 }
 
@@ -141,7 +138,7 @@ export const useSearchPageRoutes = ({
   detailsViewComponent,
   filtersComponent,
   cardComponent,
-  detailsViewProps
+  props
 }: SearchPageRoutesOptions): RouteRecordRaw => {
   return {
     path: `/${pageKey}`,
@@ -161,7 +158,8 @@ export const useSearchPageRoutes = ({
           // this forces the component to be recreated when switching page type
           key: pageKey,
           query: route.query.q,
-          page: route.query.page
+          page: route.query.page,
+          ...props
         })
       },
       {
@@ -171,7 +169,7 @@ export const useSearchPageRoutes = ({
         meta: {
           pageKey
         },
-        props: detailsViewProps || {}
+        props: props || {}
       }
     ]
   }

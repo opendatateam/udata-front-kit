@@ -9,7 +9,7 @@ import NoResults from '@/components/NoResults.vue'
 import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { usePageConf, useTopicsConf } from '@/utils/config'
+import { usePageConf } from '@/utils/config'
 
 const props = defineProps({
   query: {
@@ -28,11 +28,10 @@ const meta = useRouteMeta()
 const { query: routeQuery } = useRouteQueryAsString()
 const topicStore = useTopicStore()
 
-const { topicsName, topicsSlug } = useTopicsConf()
 const pageConf = usePageConf(meta.pageKey || 'topics')
 
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
+const { canAddTopic } = storeToRefs(userStore)
 
 const emits = defineEmits(['clearFilters'])
 
@@ -49,13 +48,13 @@ const numberOfResultMsg: ComputedRef<string> = computed(() => {
 })
 
 const createUrl = computed(() => {
-  return { name: `${topicsSlug}_add`, query: route.query }
+  return { name: `${String(route.name)}_add`, query: route.query }
 })
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, query, hash: '#list' }).then(() => {
+  router.push({ name: route.name, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
 }
@@ -70,7 +69,7 @@ const executeQuery = async () => {
 
 const goToPage = (page: number) => {
   router.push({
-    name: topicsSlug,
+    name: route.name,
     query: { ...route.query, page: page + 1 },
     hash: '#list'
   })
@@ -78,7 +77,7 @@ const goToPage = (page: number) => {
 
 const doSort = (value: string | null) => {
   router.push({
-    name: topicsSlug,
+    name: route.name,
     query: { ...route.query, sort: value },
     hash: '#list'
   })
@@ -135,16 +134,16 @@ defineExpose({
     <template #description>
       Essayez de réinitialiser les filtres pour agrandir votre champ de
       recherche.<br />
-      Vous pouvez aussi contribuer en créant un {{ topicsName }}.
+      Vous pouvez aussi contribuer en créant un {{ pageConf.object.singular }}.
     </template>
     <template #actions>
       <router-link
-        v-if="canAddBouquet"
+        v-if="canAddTopic"
         :to="createUrl"
         class="fr-btn fr-btn--secondary fr-ml-1w"
       >
         <VIconCustom name="add-circle-line" class="fr-mr-1v" />
-        Ajouter un {{ topicsName }}
+        Ajouter un {{ pageConf.object.singular }}
       </router-link>
     </template>
   </NoResults>

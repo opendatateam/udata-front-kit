@@ -4,6 +4,7 @@ import { useTopicsConf } from '@/utils/config'
 
 import type { GenericResponse } from './api'
 
+// FIXME:
 const { topicsName } = useTopicsConf()
 
 export type Reuse = Owned & {

@@ -9,12 +9,13 @@ import DatasetEditModal, {
 import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
+import { useRouteMeta } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
+import { usePageConf } from '@/utils/config'
 import { isOnlyNoGroup, useDatasetFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
@@ -40,7 +41,7 @@ const emits = defineEmits(['updateDatasets'])
 const modal: Ref<DatasetEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
-const { topicsName } = useTopicsConf()
+const pageConf = usePageConf(useRouteMeta().pageKey || 'topics')
 
 const {
   groupedDatasets,
@@ -136,7 +137,7 @@ onMounted(() => {
   <!-- Header and buttons -->
   <div class="flex-gap fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
-      Composition du {{ topicsName }} de données
+      Composition du {{ pageConf.object.extended }}
     </h2>
     <SearchComponent
       v-if="datasetEditorialization"
@@ -162,7 +163,9 @@ onMounted(() => {
     class="no-dataset fr-mt-2w"
   >
     <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
-    <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
+    <p v-else>
+      Ce {{ pageConf.object.singular }} ne contient pas encore de donnée.
+    </p>
   </div>
   <template v-else>
     <details v-if="showTOC" class="fr-mt-2w">

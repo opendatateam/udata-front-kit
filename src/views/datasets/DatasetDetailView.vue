@@ -36,13 +36,14 @@ const datasetId = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
+const { canAddTopic } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
 const showAddToBouquetModal = ref(false)
 
 const showDiscussions = config.website.discussions.dataset.display as boolean
+// FIXME:
 const { topicsName } = useTopicsConf()
 
 const setAccessibilityProperties = inject(
@@ -51,6 +52,7 @@ const setAccessibilityProperties = inject(
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
+  // FIXME:
   { to: '/datasets', text: 'Données' },
   { text: dataset.value?.title || '' }
 ])
@@ -182,7 +184,7 @@ onMounted(() => {
           v-if="
             config.website.datasets.add_to_bouquet &&
             userStore.loggedIn &&
-            canAddBouquet
+            canAddTopic
           "
         >
           <DsfrButton

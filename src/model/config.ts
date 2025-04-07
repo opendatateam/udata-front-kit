@@ -74,11 +74,18 @@ export type PageSearchConf = {
   }
 }
 
+export type PageObjectConf = {
+  singular: string
+  plural: string
+  extended: string
+}
+
 export type PageConf = {
   tag_prefix: string
   universe_query: PageUniverseQueryConf
   title: string
   breadcrumb_title: string | null
+  object: PageObjectConf
   search: PageSearchConf
   banner: PageBannerConf | null
   filters: PageFilterConf[]

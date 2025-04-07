@@ -10,6 +10,7 @@ import { useTopicsConf } from '@/utils/config'
 
 const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
+// FIXME:
 const { topicsCanAdd } = useTopicsConf()
 
 export interface RootState {
@@ -38,7 +39,7 @@ export const useUserStore = defineStore('user', {
     isAdmin(): boolean {
       return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
     },
-    canAddBouquet(state): boolean {
+    canAddTopic(state): boolean {
       if (topicsCanAdd.everyone || this.isAdmin) {
         return true
       }

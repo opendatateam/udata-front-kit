@@ -6,24 +6,22 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import TopicList from '@/components/topics/TopicList.vue'
+import type { TopicPageRouterConf } from '@/router/utils'
 import { useRouteMeta } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
-import { debounceWait, usePageConf, useTopicsConf } from '@/utils/config'
+import { debounceWait, usePageConf } from '@/utils/config'
 
-const props = defineProps({
-  query: {
-    type: String,
-    default: null
-  },
-  page: {
-    type: String,
-    default: '1'
-  }
+interface Props extends TopicPageRouterConf {
+  query: string
+  page: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  query: '',
+  page: '1'
 })
-
-const { topicsSlug, topicsName } = useTopicsConf()
 
 const router = useRouter()
 const route = useRoute()
@@ -37,7 +35,7 @@ const searchResultsMessage = computed(
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
+const { canAddTopic } = storeToRefs(userStore)
 
 const links = [
   { to: '/', text: 'Accueil' },
@@ -45,7 +43,7 @@ const links = [
 ]
 
 const createUrl = computed(() => {
-  return { name: `${topicsSlug}_add`, query: route.query }
+  return { name: `${meta.pageKey}_add`, query: route.query }
 })
 
 const search = useDebounceFn((query) => {
@@ -78,14 +76,14 @@ const FiltersComponent = computed(() => {
   </div>
   <div class="fr-container datagouv-components fr-my-2v">
     <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
-      <h1 class="fr-mb-0">{{ capitalize(topicsName) }}s</h1>
+      <h1 class="fr-mb-0">{{ capitalize(pageConf.object.plural) }}</h1>
       <div
-        v-if="canAddBouquet"
+        v-if="canAddTopic"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
           <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
-          Ajouter un {{ topicsName }}
+          Ajouter un {{ pageConf.object.singular }}
         </router-link>
       </div>
     </div>
