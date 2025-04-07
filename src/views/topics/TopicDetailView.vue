@@ -19,12 +19,12 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
+import type { TopicPageRouterConf } from '@/router/utils'
 import { useRouteMeta, useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import {
@@ -32,6 +32,8 @@ import {
   useBreadcrumbLinksForTopic,
   useExtras
 } from '@/utils/topic'
+
+const props = defineProps<TopicPageRouterConf>()
 
 const router = useRouter()
 const meta = useRouteMeta()
@@ -56,21 +58,12 @@ const canEdit = computed(() => {
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
 
-// FIXME: move to page config
-const {
-  topicsListAll, // this could be a computed on router
-  topicsDisplayMetadata,
-  topicsActivateReadMore,
-  topicsDatasetEditorialization,
-  topicsName
-} = useTopicsConf()
-
 const topicsSlug = meta.pageKey || 'topics'
 const tags = useTagsByRef(topicsSlug, topic)
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)
 
-const breadcrumbLinks = useBreadcrumbLinksForTopic(topic, topicsListAll)
+const breadcrumbLinks = useBreadcrumbLinksForTopic(topic, props.listAll)
 
 const tabTitles = [
   { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
@@ -216,7 +209,7 @@ watch(
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters">
       <div
         class="fr-col-12"
-        :class="topicsDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
+        :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
         <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
@@ -226,7 +219,7 @@ watch(
             </li>
           </ul>
         </div>
-        <div v-if="topicsActivateReadMore">
+        <div v-if="props.enableReadMore">
           <ReadMore max-height="600">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="description" />
@@ -240,7 +233,7 @@ watch(
       <div
         class="fr-col-12"
         :class="
-          topicsDisplayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
+          props.displayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
         "
       >
         <div class="fr-mb-2w">
@@ -269,11 +262,11 @@ watch(
               <template #default>
                 <p>
                   Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du {{ topicsName }} que vous souhaitez cloner.
+                  données du {{ props.name }} que vous souhaitez cloner.
                 </p>
                 <p>
                   Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au nouveau {{ topicsName }}, mais leurs
+                  seront pas ajoutés au nouveau {{ props.name }}, mais leurs
                   libellés et raisons d'utilisation seront conservés.
                 </p>
                 <p>
@@ -303,7 +296,7 @@ watch(
             />
           </div>
         </div>
-        <div v-if="topicsDisplayMetadata">
+        <div v-if="props.displayMetadata">
           <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
           <div
             v-if="topic.organization"
@@ -370,14 +363,14 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${topicsName}`"
+      :tab-list-name="`Groupes d'attributs du ${props.name}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
         <TopicDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
-          :dataset-editorialization="topicsDatasetEditorialization"
+          :dataset-editorialization="props.datasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
         <TopicDatasetListExport

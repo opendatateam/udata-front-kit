@@ -47,41 +47,102 @@ export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
   return { ...route, query }
 }
 
-export const useSearchPageRoutes = ({
-  pageType,
+interface SearchPageRoutesOptions {
+  pageKey: string
+  metaTitle: string
+  cardClass?: string
+  listViewComponent: () => Promise<{ default: Component }>
+  detailsViewComponent: () => Promise<{ default: Component }>
+  filtersComponent?: () => Promise<{ default: Component }>
+  cardComponent?: () => Promise<{ default: Component }>
+  detailsViewProps?: Record<string, unknown>
+}
+
+// FIXME: move somewhere else? e.g. @/router/model.ts
+export interface TopicPageRouterConf {
+  listAll: boolean
+  displayMetadata: boolean
+  enableReadMore: boolean
+  datasetEditorialization: boolean
+  name: string
+}
+
+interface TopicSearchPageRoutesOptions
+  extends Omit<
+    SearchPageRoutesOptions,
+    'detailsViewComponent' | 'listViewComponent'
+  > {
+  topicConf: TopicPageRouterConf
+}
+
+type DatasetSearchPageRouteOptions = Omit<
+  SearchPageRoutesOptions,
+  'detailsViewComponent' | 'listViewComponent'
+>
+
+export const useDatasetSearchPageRoutes = ({
   pageKey,
   metaTitle,
   cardClass,
   filtersComponent,
+  cardComponent
+}: DatasetSearchPageRouteOptions): RouteRecordRaw => {
+  const listViewComponent = () =>
+    import('@/views/datasets/DatasetsListView.vue')
+  const detailsViewComponent = () =>
+    import('@/views/datasets/DatasetDetailView.vue')
+  return useSearchPageRoutes({
+    pageKey,
+    metaTitle,
+    cardClass,
+    listViewComponent,
+    filtersComponent,
+    cardComponent,
+    detailsViewComponent
+  })
+}
+
+export const useTopicSearchPageRoutes = ({
+  pageKey,
+  metaTitle,
+  topicConf,
+  cardClass,
+  filtersComponent,
+  cardComponent
+}: TopicSearchPageRoutesOptions): RouteRecordRaw => {
+  const listViewComponent = () =>
+    import(
+      topicConf.listAll
+        ? '@/views/topics/TopicsListView.vue'
+        : '@/views/NotFoundView.vue'
+    )
+  const detailsViewComponent = () =>
+    import('@/views/topics/TopicDetailView.vue')
+  return useSearchPageRoutes({
+    pageKey,
+    metaTitle,
+    cardClass,
+    listViewComponent,
+    filtersComponent,
+    cardComponent,
+    detailsViewComponent,
+    detailsViewProps: topicConf as unknown as Record<
+      string,
+      unknown
+    > /* loosen type before sending to generic fn */
+  })
+}
+
+export const useSearchPageRoutes = ({
+  pageKey,
+  metaTitle,
+  cardClass,
+  listViewComponent,
+  detailsViewComponent,
+  filtersComponent,
   cardComponent,
-  detailViewComponent
-}: {
-  pageType: 'dataset' | 'topic'
-  pageKey: string
-  metaTitle: string
-  cardClass?: string
-  filtersComponent?: () => Promise<{ default: Component }>
-  cardComponent?: () => Promise<{ default: Component }>
-  detailViewComponent?: () => Promise<{ default: Component }>
-}): RouteRecordRaw => {
-  const getListComponent = (pageType: 'dataset' | 'topic') => {
-    switch (pageType) {
-      case 'dataset':
-        return () => import('@/views/datasets/DatasetsListView.vue')
-      case 'topic':
-        return () => import('@/views/topics/TopicsListView.vue')
-    }
-  }
-
-  const getDetailsComponent = (pageType: 'dataset' | 'topic') => {
-    switch (pageType) {
-      case 'dataset':
-        return () => import('@/views/datasets/DatasetDetailView.vue')
-      case 'topic':
-        return () => import('@/views/topics/TopicDetailView.vue')
-    }
-  }
-
+  detailsViewProps
+}: SearchPageRoutesOptions): RouteRecordRaw => {
   return {
     path: `/${pageKey}`,
     children: [
@@ -95,7 +156,7 @@ export const useSearchPageRoutes = ({
           filtersComponent,
           cardComponent
         },
-        component: getListComponent(pageType),
+        component: listViewComponent,
         props: (route: RouteLocationNormalizedLoaded) => ({
           // this forces the component to be recreated when switching page type
           key: pageKey,
@@ -106,16 +167,17 @@ export const useSearchPageRoutes = ({
       {
         path: ':item_id',
         name: `${pageKey}_detail`,
-        component: detailViewComponent ?? getDetailsComponent(pageType),
+        component: detailsViewComponent,
         meta: {
           pageKey
-        }
+        },
+        props: detailsViewProps || {}
       }
     ]
   }
 }
 
-export const useAdminPagesRoutes = (pageKey: string): RouteRecordRaw[] => {
+export const useTopicAdminPagesRoutes = (pageKey: string): RouteRecordRaw[] => {
   return [
     {
       path: `/admin/${pageKey}/add`,

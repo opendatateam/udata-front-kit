@@ -1,4 +1,8 @@
-import { useAdminPagesRoutes, useSearchPageRoutes } from '@/router/utils'
+import {
+  useDatasetSearchPageRoutes,
+  useTopicAdminPagesRoutes,
+  useTopicSearchPageRoutes
+} from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const routes: RouteRecordRaw[] = [
@@ -10,15 +14,13 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () => await import('./views/HomeView.vue')
   },
-  useSearchPageRoutes({
-    pageType: 'dataset',
+  useDatasetSearchPageRoutes({
     pageKey: 'datasets',
     metaTitle: 'Données',
     filtersComponent: async () =>
       await import('./components/datasets/EcospheresDatasetFilters.vue')
   }),
-  useSearchPageRoutes({
-    pageType: 'dataset',
+  useDatasetSearchPageRoutes({
     pageKey: 'indicators',
     metaTitle: 'Indicateurs',
     cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
@@ -27,10 +29,16 @@ export const routes: RouteRecordRaw[] = [
         '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
       )
   }),
-  useSearchPageRoutes({
-    pageType: 'topic',
+  useTopicSearchPageRoutes({
     pageKey: 'bouquets',
-    metaTitle: 'Bouquets'
+    metaTitle: 'Bouquets',
+    topicConf: {
+      listAll: false,
+      displayMetadata: true,
+      enableReadMore: true,
+      datasetEditorialization: true,
+      name: 'bouquet'
+    }
   }),
-  ...useAdminPagesRoutes('bouquets')
+  ...useTopicAdminPagesRoutes('bouquets')
 ]
