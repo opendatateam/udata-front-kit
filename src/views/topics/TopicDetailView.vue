@@ -24,14 +24,14 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useTopicsConf } from '@/utils/config'
+import { useSpatialCoverage } from '@/utils/spatial'
+import { useTag } from '@/utils/tags'
 import {
   updateTopicExtras,
   useBreadcrumbLinksForTopic,
   useExtras
-} from '@/utils/bouquet'
-import { useTopicsConf } from '@/utils/config'
-import { useSpatialCoverage } from '@/utils/spatial'
-import { useTag } from '@/utils/tags'
+} from '@/utils/topic'
 
 const router = useRouter()
 const { params } = useRouteParamsAsString()

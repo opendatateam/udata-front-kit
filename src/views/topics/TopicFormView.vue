@@ -16,9 +16,9 @@ import type { Topic, TopicPostData } from '@/model/topic'
 import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { cloneTopic } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { useTagSlug } from '@/utils/tags'
+import { cloneTopic } from '@/utils/topic'
 
 const props = defineProps({
   isCreate: {

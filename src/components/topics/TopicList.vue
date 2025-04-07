@@ -119,7 +119,7 @@ defineExpose({
     <div class="fr-mb-4w border-top">
       <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
         <li v-for="topic in topics" :key="topic.id" class="fr-col-12">
-          <TopicCard :topic="topic" />
+          <TopicCard :topic="topic" :topics-slug="meta.pageKey" />
         </li>
       </ul>
     </div>

@@ -9,10 +9,10 @@ import DatasetEditModal, {
 import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { isAvailable } from '@/utils/bouquet'
 import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
+import { isAvailable } from '@/utils/topic'
 
 import { basicSlugify, fromMarkdown } from '@/utils'
 import {

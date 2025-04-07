@@ -130,7 +130,11 @@ const dropdown = config.website.header_search.dropdown
         <h2>Les bouquets à découvrir</h2>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
           <li v-for="topic in topics" :key="topic.id">
-            <TopicCard :topic="topic" :hide-description="true" />
+            <TopicCard
+              :topic="topic"
+              topics-slug="bouquets"
+              :hide-description="true"
+            />
           </li>
         </ul>
         <p class="fr-m-0">

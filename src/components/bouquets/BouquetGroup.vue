@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 import { basicSlugify } from '@/utils'
-import { isAvailable } from '@/utils/bouquet'
 import { NO_GROUP, isOnlyNoGroup } from '@/utils/bouquetGroups'
+import { isAvailable } from '@/utils/topic'
 import { getRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps({

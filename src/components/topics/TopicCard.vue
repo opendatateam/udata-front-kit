@@ -12,14 +12,15 @@ import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { useExtras } from '@/utils/bouquet'
-import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useTag } from '@/utils/tags'
-
-const { topicsSlug } = useTopicsConf()
+import { useTags } from '@/utils/tags'
+import { useExtras } from '@/utils/topic'
 
 const props = defineProps({
+  topicsSlug: {
+    type: String,
+    default: 'topics'
+  },
   topic: {
     type: Object as () => Topic,
     required: true
@@ -32,21 +33,18 @@ const props = defineProps({
 
 const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
-
-const ownerName = useOwnerName(props.topic)
-
 const { datasetsProperties } = useExtras(topicRef)
 
 const nbData: number = datasetsProperties.value.length
 
-const bouquetLink: RouteLocationRaw = {
-  name: `${topicsSlug}_detail`,
+const ownerName = useOwnerName(props.topic)
+
+const topicLink: RouteLocationRaw = {
+  name: `${props.topicsSlug}_detail`,
   params: { item_id: props.topic.slug }
 }
 
-// FIXME: make this generic for all filters, like indicators
-const theme = useTag('bouquets', topicRef, 'theme')
-const subtheme = useTag('bouquets', topicRef, 'subtheme')
+const tags = useTags(props.topicsSlug, props.topic)
 </script>
 
 <template>
@@ -57,15 +55,11 @@ const subtheme = useTag('bouquets', topicRef, 'subtheme')
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
     </div>
-    <!-- FIXME: make this generic for all filters, like indicators -->
     <div class="fr-grid-row">
       <div class="fr-col-12">
-        <ul class="fr-badges-group fr-mb-1w fr-mt-1w">
-          <li>
-            <TagComponent :tag="theme" />
-          </li>
-          <li>
-            <TagComponent :tag="subtheme" />
+        <ul v-if="tags.length > 0" class="fr-badges-group fr-mb-1w">
+          <li v-for="t in tags" :key="`${t.type}-${t.id}`">
+            <TagComponent :tag="t" />
           </li>
         </ul>
       </div>
@@ -87,7 +81,7 @@ const subtheme = useTag('bouquets', topicRef, 'subtheme')
 
       <div class="overflow-hidden flex-1-1-auto">
         <h3 class="fr-mb-1v fr-grid-row h4">
-          <RouterLink :to="bouquetLink" class="text-grey-500">
+          <RouterLink :to="topicLink" class="text-grey-500">
             {{ topic.name }}
           </RouterLink>
         </h3>

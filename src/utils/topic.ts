@@ -87,6 +87,7 @@ export const cloneTopic = (
   }
 }
 
+// FIXME: should be generic (or removed)
 export function useBreadcrumbLinksForTopic(
   theme: Ref<ResolvedTag | undefined>,
   subtheme: Ref<ResolvedTag | undefined>,
