@@ -247,7 +247,6 @@ watch(
           <div v-if="!canEdit && topic.private" class="fr-mb-1w">
             <DsfrTag label="Brouillon" />
           </div>
-          <!-- TODO: 'bouquet' should be configurable in wording -->
           <div
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
@@ -270,12 +269,12 @@ watch(
               <template #default>
                 <p>
                   Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du bouquet que vous souhaitez cloner.
+                  données du {{ topicsName }} que vous souhaitez cloner.
                 </p>
                 <p>
                   Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au nouveau bouquet, mais leurs libellés et
-                  raisons d'utilisation seront conservés.
+                  seront pas ajoutés au nouveau {{ topicsName }}, mais leurs
+                  libellés et raisons d'utilisation seront conservés.
                 </p>
                 <p>
                   Voulez-vous conserver les liens vers les jeux de
