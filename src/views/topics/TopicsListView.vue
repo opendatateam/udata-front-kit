@@ -67,9 +67,7 @@ const FiltersComponent = computed(() => {
     })
   }
   return defineAsyncComponent(
-    // FIXME: rename file if it works across types
-    // FIXME: we need a "draft" selector in there
-    () => import('@/components/datasets/DatasetSearch.vue')
+    () => import('@/components/pages/PageFilters.vue')
   )
 })
 </script>

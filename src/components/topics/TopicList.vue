@@ -63,20 +63,8 @@ const clearFilters = () => {
 const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
   // get filters parameters from route
-  const filtersArgs = pageConf.filters.reduce(
-    (acc, item) => {
-      const value = route.query[item.id]
-      const singleton = Array.isArray(value) ? value[0] : value
-      if (singleton) {
-        acc[item.id] = singleton
-      }
-      return acc
-    },
-    {} as Record<string, string>
-  )
-  // FIXME: handle include_private
   return topicStore
-    .query({ ...route.query, ...props, ...filtersArgs }, meta.pageKey)
+    .query({ ...route.query, ...props }, meta.pageKey)
     .finally(() => loader.hide())
 }
 

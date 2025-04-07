@@ -26,7 +26,7 @@ defineProps({
     default: () => ['fr-label']
   },
   defaultOption: {
-    type: String,
+    type: String as () => string | null,
     default: null
   }
 })

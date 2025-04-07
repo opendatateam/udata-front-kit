@@ -135,7 +135,12 @@ export const useTagsQuery = (
     const queryFilter = query[filter.id]
     if (queryFilter != null) {
       queryArray.push(
-        useTagSlug(pageKey, filter.id, queryFilter, filter.use_tag_prefix)
+        useTagSlug(
+          pageKey,
+          filter.id,
+          queryFilter,
+          filter.use_tag_prefix || false
+        )
       )
     }
     delete query[filter.id]

@@ -51,7 +51,8 @@ export interface PageFilterConf {
   type: 'spatial_zone' | 'spatial_granularity' | 'select' | 'checkbox'
   child: string | null
   color: string | null
-  default_option: string
+  default_option: string | null
+  default_value: string | boolean | null
   use_tag_prefix: boolean | null
   values: PageFilterValueConf[]
 }

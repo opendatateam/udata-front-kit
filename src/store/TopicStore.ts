@@ -7,6 +7,7 @@ import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { usePageConf } from '@/utils/config'
+import { useCheckboxQuery } from '@/utils/filters'
 import { useTagsQuery } from '@/utils/tags'
 
 import { useUserStore } from './UserStore'
@@ -18,6 +19,7 @@ interface QueryArgs {
   query: string
   page: string
   include_private?: string
+  page_size?: string
 }
 
 export interface RootState {
@@ -58,19 +60,28 @@ export const useTopicStore = defineStore('topic', {
   actions: {
     async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
       const pageConf = usePageConf(pageKey || 'topics')
-      const { query, include_private, ...queryArgs } = args
-      const { extraArgs, tag } = useTagsQuery('bouquets', queryArgs)
       const { tag: universeTag, ...universeQuery } = pageConf.universe_query
+      const { query, ...queryArgs } = args
+
+      // extract tags and checkbox filters from query args
+      const { extraArgs: argsAfterTagQuery, tag } = useTagsQuery(
+        pageKey || 'topics',
+        queryArgs
+      )
+      const { extraArgs: refinedFilterArgs, checkboxArgs } = useCheckboxQuery(
+        pageKey || 'topics',
+        argsAfterTagQuery
+      )
 
       const results = await topicsAPIv2.list({
         params: {
           q: query,
           tag: [universeTag, ...tag].filter(Boolean).map(String),
+          // FIXME: move to component or page config
           page_size: config.website.pagination_sizes.topics_list,
-          // remove include_private if not set to 1, API will interpret presence a truthy
-          ...(include_private === '1' ? { include_private } : {}),
           ...(universeQuery || {}),
-          ...extraArgs
+          ...checkboxArgs,
+          ...refinedFilterArgs
         },
         authenticated: true
       })

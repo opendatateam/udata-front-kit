@@ -22,8 +22,6 @@ export const routes = [
     pageKey: 'indicators',
     metaTitle: 'Indicateurs',
     cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
-    filtersComponent: async () =>
-      await import('./components/datasets/EcospheresDatasetSearch.vue'),
     cardComponent: async () =>
       await import(
         '@/custom/ecospheres/components/indicators/IndicatorCard.vue'

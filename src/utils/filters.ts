@@ -5,9 +5,9 @@ import { getTagOptions } from './tags'
 
 interface FilterState {
   id: string
-  selectedValue: string | undefined
+  selectedValue: string | null
   options: TagSelectOption[]
-  childId?: string
+  childId: string | null
 }
 
 /**
@@ -44,7 +44,7 @@ export const useFiltersState = (
         ? getTagOptions(filterKey, filter.childId, filter.selectedValue)
         : []
       // Clear child selection when parent changes or set to initial value
-      childFilter.selectedValue = childSelectedValue
+      childFilter.selectedValue = childSelectedValue || null
     }
   }
 
@@ -53,7 +53,7 @@ export const useFiltersState = (
   filterItems.forEach((filter) => {
     filtersState[filter.id] = {
       id: filter.id,
-      selectedValue: routeQuery[filter.id] || undefined,
+      selectedValue: routeQuery[filter.id] || null,
       options: withParent.includes(filter.id)
         ? []
         : getTagOptions(filterKey, filter.id),
@@ -76,4 +76,33 @@ export const useFiltersState = (
   })
 
   return { filtersState, pageConf }
+}
+
+/**
+ * Extract checkbox filters as defined in conf from query args and return them as a separate object
+ */
+export const useCheckboxQuery = (
+  pageKey: string,
+  queryArgs: Record<string, string | null | undefined>
+) => {
+  const pageConf = usePageConf(pageKey)
+  const filters = pageConf.filters.filter((item) => item.type === 'checkbox')
+  const checkboxArgs: Record<string, string> = {}
+  for (const filter of filters) {
+    if (filter.type === 'checkbox') {
+      const queryFilter = queryArgs[filter.id]
+      // include the filter if it's true or if it's not in the query and the default is true
+      if (
+        queryFilter === 'true' ||
+        (queryFilter == null && filter.default_value === true)
+      ) {
+        checkboxArgs[filter.id] = 'true'
+      }
+      delete queryArgs[filter.id]
+    }
+  }
+  return {
+    checkboxArgs,
+    extraArgs: queryArgs
+  }
 }

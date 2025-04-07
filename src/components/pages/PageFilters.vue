@@ -6,6 +6,7 @@ import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
 import { useSpatialStore } from '@/store/SpatialStore'
 import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
+import CheckboxComponent from '../CheckboxComponent.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -51,7 +52,7 @@ watch(
     Object.keys(filtersState).forEach((filter) => {
       const value = route.query[filter]
       const singleton = Array.isArray(value) ? value[0] : value
-      filtersState[filter].selectedValue = singleton ?? undefined
+      filtersState[filter].selectedValue = singleton ?? null
     })
   },
   { immediate: true }
@@ -98,10 +99,10 @@ onMounted(async () => {
           @update:spatial-coverage-model="switchSpatialCoverage"
         />
       </template>
-      <DsfrCheckbox
+      <CheckboxComponent
         v-if="filter.type === 'checkbox'"
         :model-value="filtersState[filter.id]?.selectedValue"
-        :value="'1'"
+        :default-value="Boolean(filter.default_value)"
         :label="filter.name"
         :name="filter.id"
         @update:model-value="(value) => switchFilter(filter.id, value)"

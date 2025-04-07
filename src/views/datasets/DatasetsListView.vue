@@ -60,7 +60,7 @@ const FiltersComponent = computed(() => {
     })
   }
   return defineAsyncComponent(
-    () => import('@/components/datasets/DatasetSearch.vue')
+    () => import('@/components/pages/PageFilters.vue')
   )
 })
 </script>
