@@ -8,7 +8,6 @@ import {
 } from 'vue'
 
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import type { ResolvedTag } from '@/model/tag'
 import {
   Availability,
   type DatasetProperties,
@@ -87,10 +86,7 @@ export const cloneTopic = (
   }
 }
 
-// FIXME: should be generic (or removed)
 export function useBreadcrumbLinksForTopic(
-  theme: Ref<ResolvedTag | undefined>,
-  subtheme: Ref<ResolvedTag | undefined>,
   topic: Ref<Topic | null>,
   topicsListAll: boolean | null
 ): ComputedRef<BreadcrumbItem[]> {
@@ -101,21 +97,6 @@ export function useBreadcrumbLinksForTopic(
         to: `/${topicsSlug}`,
         text: `${capitalize(topicsName)}s`
       })
-    }
-
-    if (theme.value !== undefined && subtheme.value !== undefined) {
-      const themeName = theme.value.name
-      const subthemeName = subtheme.value.name
-      breadcrumbs.push(
-        {
-          text: themeName,
-          to: `/${topicsSlug}/?theme=${themeName}`
-        },
-        {
-          text: subthemeName,
-          to: `/${topicsSlug}/?theme=${themeName}&subtheme=${subthemeName}`
-        }
-      )
     }
 
     if (topic?.value != null) {

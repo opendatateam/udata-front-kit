@@ -51,6 +51,15 @@ export const useTags = <T extends HasTags>(
   })
 }
 
+export const useTagsByRef = <T extends HasTags>(
+  pageKey: string,
+  object: Ref<T | undefined | null>,
+  filterId?: string,
+  exclude?: string[]
+): ComputedRef<ResolvedTag[]> => {
+  return computed(() => useTags(pageKey, object.value, filterId, exclude).value)
+}
+
 export const useTag = <T extends HasTags>(
   pageKey: string,
   object: Ref<T | undefined | null>,

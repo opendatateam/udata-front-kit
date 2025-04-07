@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
 import { basicSlugify } from '@/utils'
-import { NO_GROUP, isOnlyNoGroup } from '@/utils/bouquetGroups'
 import { isAvailable } from '@/utils/topic'
-import { getRandomId } from '@gouvminint/vue-dsfr'
+import { NO_GROUP, isOnlyNoGroup } from '@/utils/topicGroups'
+import { useRandomId } from '@gouvminint/vue-dsfr'
+import type { Ref } from 'vue'
 
 const props = defineProps({
   groupName: {
@@ -62,7 +63,7 @@ const isDisclosureOpen: Ref<boolean> = ref(!isDisclosure.value)
 const toggleDisclosure = () => {
   isDisclosureOpen.value = !isDisclosureOpen.value
 }
-const widgetID = getRandomId('disclosure')
+const widgetID = useRandomId('disclosure')
 
 const opened = ref(false)
 const modalType = ref('')

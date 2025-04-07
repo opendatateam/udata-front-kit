@@ -11,22 +11,22 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
-import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
+import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
+import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
-import { useRouteParamsAsString } from '@/router/utils'
+import { useRouteMeta, useRouteParamsAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useTag } from '@/utils/tags'
+import { useTagsByRef } from '@/utils/tags'
 import {
   updateTopicExtras,
   useBreadcrumbLinksForTopic,
@@ -34,6 +34,7 @@ import {
 } from '@/utils/topic'
 
 const router = useRouter()
+const meta = useRouteMeta()
 const { params } = useRouteParamsAsString()
 const store = useTopicStore()
 const loading = useLoading()
@@ -55,25 +56,21 @@ const canEdit = computed(() => {
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
 
+// FIXME: move to page config
 const {
-  topicsListAll,
+  topicsListAll, // this could be a computed on router
   topicsDisplayMetadata,
   topicsActivateReadMore,
   topicsDatasetEditorialization,
-  topicsSlug,
   topicsName
 } = useTopicsConf()
 
-const { datasetsProperties, clonedFrom } = useExtras(topic)
-const theme = useTag('bouquets', topic, 'theme')
-const subtheme = useTag('bouquets', topic, 'subtheme')
+const topicsSlug = meta.pageKey || 'topics'
+const tags = useTagsByRef(topicsSlug, topic)
 
-const breadcrumbLinks = useBreadcrumbLinksForTopic(
-  theme,
-  subtheme,
-  topic,
-  topicsListAll
-)
+const { datasetsProperties, clonedFrom } = useExtras(topic)
+
+const breadcrumbLinks = useBreadcrumbLinksForTopic(topic, topicsListAll)
 
 const tabTitles = [
   { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
@@ -221,9 +218,13 @@ watch(
         class="fr-col-12"
         :class="topicsDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
-        <div class="bouquet__header fr-mb-4v">
+        <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <TagComponent :tag="subtheme" />
+          <ul v-if="tags.length > 0" class="fr-badges-group fr-mb-1w">
+            <li v-for="t in tags" :key="`${t.type}-${t.id}`">
+              <TagComponent :tag="t" />
+            </li>
+          </ul>
         </div>
         <div v-if="topicsActivateReadMore">
           <ReadMore max-height="600">
@@ -246,6 +247,7 @@ watch(
           <div v-if="!canEdit && topic.private" class="fr-mb-1w">
             <DsfrTag label="Brouillon" />
           </div>
+          <!-- TODO: 'bouquet' should be configurable in wording -->
           <div
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
@@ -373,13 +375,13 @@ watch(
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
-        <BouquetDatasetList
+        <TopicDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
           :dataset-editorialization="topicsDatasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
-        <BouquetDatasetListExport
+        <TopicDatasetListExport
           :datasets="datasetsProperties"
           :filename="topic.id"
         />
@@ -401,7 +403,7 @@ watch(
 </template>
 
 <style scoped>
-.bouquet__header {
+.topic__header {
   display: flex;
   align-items: center;
   flex-flow: wrap;

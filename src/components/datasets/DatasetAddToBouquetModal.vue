@@ -10,10 +10,10 @@ import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPrope
 import type { Topic } from '@/model/topic'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
-import { useGroups } from '@/utils/bouquetGroups'
 import { useTopicsConf } from '@/utils/config'
 import { useForm } from '@/utils/form'
 import { useExtras } from '@/utils/topic'
+import { useGroups } from '@/utils/topicGroups'
 
 const props = defineProps({
   show: {

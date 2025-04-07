@@ -15,13 +15,9 @@ import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
 import { basicSlugify, fromMarkdown } from '@/utils'
-import {
-  isOnlyNoGroup,
-  useDatasetFilter,
-  useGroups
-} from '@/utils/bouquetGroups'
-import BouquetDatasetCard from './BouquetDatasetCard.vue'
-import BouquetGroup from './BouquetGroup.vue'
+import { isOnlyNoGroup, useDatasetFilter, useGroups } from '@/utils/topicGroups'
+import TopicDatasetCard from './TopicDatasetCard.vue'
+import TopicGroup from './TopicGroup.vue'
 
 const datasetsProperties = defineModel({
   type: Array<DatasetProperties>,
@@ -185,7 +181,7 @@ onMounted(() => {
       <ul role="list" class="groups fr-m-0 fr-p-0">
         <template v-for="[group, datasets] in filteredResults" :key="group">
           <li v-if="datasets.length && !isGroupOnlyHidden(group)">
-            <BouquetGroup
+            <TopicGroup
               :group-name="group"
               :all-groups="filteredResults"
               :datasets-properties="datasets"
@@ -214,7 +210,7 @@ onMounted(() => {
               <template #datasetContent="{ dataset }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(dataset.purpose)"></div>
-                <BouquetDatasetCard
+                <TopicDatasetCard
                   v-if="dataset.id"
                   :dataset-properties="dataset"
                   :dataset-content="datasetsContent.get(dataset.id)"
@@ -236,14 +232,14 @@ onMounted(() => {
                   >
                 </div>
               </template>
-            </BouquetGroup>
+            </TopicGroup>
           </li>
         </template>
       </ul>
     </div>
     <div v-else>
       <div v-for="(dataset, index) in datasetsProperties" :key="index">
-        <BouquetDatasetCard
+        <TopicDatasetCard
           v-if="dataset.id"
           :dataset-properties="dataset"
           :dataset-content="datasetsContent.get(dataset.id)"

@@ -106,7 +106,10 @@ export const useSearchPageRoutes = ({
       {
         path: ':item_id',
         name: `${pageKey}_detail`,
-        component: detailViewComponent ?? getDetailsComponent(pageType)
+        component: detailViewComponent ?? getDetailsComponent(pageType),
+        meta: {
+          pageKey
+        }
       }
     ]
   }
