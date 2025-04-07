@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SelectComponent from '@/components/SelectComponent.vue'
 import { useRouteQueryAsString } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useFiltersState } from '@/utils/filters'
@@ -43,7 +44,7 @@ watch(
     Object.keys(filtersState).forEach((filter) => {
       const value = route.query[filter]
       const singleton = Array.isArray(value) ? value[0] : value
-      filtersState[filter].selectedValue = singleton ?? undefined
+      filtersState[filter].selectedValue = singleton ?? null
     })
   },
   { immediate: true }

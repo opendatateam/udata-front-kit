@@ -7,6 +7,7 @@ import { useSpatialStore } from '@/store/SpatialStore'
 import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
 import CheckboxComponent from '../CheckboxComponent.vue'
+import SelectComponent from '../SelectComponent.vue'
 
 const router = useRouter()
 const route = useRoute()

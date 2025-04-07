@@ -15,7 +15,7 @@ export const routes: RouteRecordRaw[] = [
     pageKey: 'datasets',
     metaTitle: 'Données',
     filtersComponent: async () =>
-      await import('./components/datasets/EcospheresDatasetSearch.vue')
+      await import('./components/datasets/EcospheresDatasetFilters.vue')
   }),
   useSearchPageRoutes({
     pageType: 'dataset',
