@@ -58,7 +58,7 @@ website:
               url: 'bouquets?theme=Socio-économique'
               image_url: '/logistique/assets/socio.jpg'
             - name: 'Filières'
-              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
+              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industrielle, énergétique...).'
               url: 'bouquets?theme=Filières'
               image_url: '/logistique/assets/risques.jpg'
         sub_section_tiles:
