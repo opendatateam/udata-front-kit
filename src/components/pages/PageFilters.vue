@@ -69,7 +69,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div className="filterForm">
+  <div>
     <div
       v-for="filter in pageConf.filters"
       :key="filter.id"

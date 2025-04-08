@@ -1,14 +1,29 @@
 <script setup lang="ts">
-import { required } from '@vee-validate/rules'
-import { useForm } from 'vee-validate'
-import { capitalize, onMounted, ref, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import type { TopicPostData } from '@/model/topic'
-import { useTopicsConf } from '@/utils/config'
+import { useRouteMeta } from '@/router/utils'
+import { useFiltersState } from '@/utils/filters'
+import type { FormErrorMessagesMap } from '@/utils/form'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useTag, useTagOptions, useTagSlug } from '@/utils/tags'
+import { useTagSlug } from '@/utils/tags'
+import ErrorMessage from '../ErrorMessage.vue'
+
+const meta = useRouteMeta()
+// FIXME: we need to get the initial values from the topic object instead of route query
+// maybe use initialValuesForFilters as input to useFiltersState
+// const initialValuesForFilters = filters.reduce((acc, filter) => ({
+//   ...acc,
+//   [filter.id]: useTag(meta.pageKey || 'topics', topic, filter.id).value?.id || ''
+// }), {})
+const { filtersState, pageConf } = useFiltersState(
+  {},
+  meta.pageKey || 'topics',
+  true
+)
+const filters = pageConf.filters.filter((f) => f.form != null)
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData> &
@@ -20,98 +35,95 @@ const formErrors = defineModel('formErrors', {
   default: () => []
 })
 
-type FormErrors = {
-  name?: string
-  description?: string
-  theme?: string
-  subtheme?: string
-}
-
-const emits = defineEmits(['updateValidation'])
-
-const spatialCoverage = useSpatialCoverage(topic)
-const { topicsUseThemes, topicsMainTheme, topicsSecondaryTheme, topicsName } =
-  useTopicsConf()
-
-const initialTheme = useTag('bouquets', topic, 'theme')
-const initialSubtheme = useTag('bouquets', topic, 'subtheme')
-
-// Define values and validation rules for each field
-const { values, errors, defineField, handleSubmit } = useForm({
-  initialValues: {
-    name: topic.value.name ?? '',
-    description: topic.value.description ?? '',
-    theme: initialTheme.value?.id || '',
-    subtheme: initialSubtheme.value?.id || ''
-  },
-  validationSchema: {
-    name: required,
-    description: required,
-    theme: required,
-    subtheme: required
+const props = defineProps({
+  formErrorMessagesMap: {
+    type: Object as () => FormErrorMessagesMap,
+    required: true
   }
 })
 
-// create fields value binding
-const [name, nameAttrs] = defineField('name')
-const [description, descriptionAttrs] = defineField('description')
-const [theme, themeAttrs] = defineField('theme')
-const [subtheme, subthemeAttrs] = defineField('subtheme')
+const spatialCoverage = useSpatialCoverage(topic)
+
+const validateFields = (): boolean => {
+  // Create a new array rather than pushing to existing one to make reactivity work on formErrors
+  const errors: string[] = []
+
+  if (!topic.value.name?.trim()) {
+    errors.push('name')
+  }
+  if (!topic.value.description?.trim()) {
+    errors.push('description')
+  }
+  filters.forEach((filter) => {
+    if (
+      filter.form?.required &&
+      filtersState[filter.id].selectedValue == null
+    ) {
+      errors.push(filter.id)
+    }
+  })
+
+  formErrors.value = errors
+  return errors.length === 0
+}
+
+const hasError = (field: string) => {
+  return formErrors.value.includes(field)
+}
+
+const getErrorMessage = (field: string) => {
+  return props.formErrorMessagesMap.get(field) || ''
+}
 
 const isSubmitted: Ref<boolean | undefined> = ref(undefined)
 
-const onValidSubmit = async (validatedValues: {
-  name: string
-  description: string
-  theme: string
-  subtheme: string
-}) => {
-  // set form states
+const onSubmit = () => {
+  formErrors.value = []
+  const isValid = validateFields()
   isSubmitted.value = true
-  // set topic values from validated fields
-  topic.value.name = validatedValues.name
-  topic.value.description = validatedValues.description
+  if (isValid) {
+    onValidSubmit()
+  }
+}
+
+const onValidSubmit = async () => {
+  // filter out know filters from existing tags and add those gotten from this form
+  const filtersPrefixes = filters.map((filter) =>
+    useTagSlug(
+      meta.pageKey || 'topics',
+      filter.id,
+      undefined,
+      Boolean(filter.use_tag_prefix)
+    )
+  )
+  const filtersTags = filters
+    .map((filter) =>
+      filtersState[filter.id].selectedValue
+        ? useTagSlug(
+            meta.pageKey || 'topics',
+            filter.id,
+            filtersState[filter.id].selectedValue,
+            Boolean(filter.use_tag_prefix)
+          )
+        : null
+    )
+    .filter((tag) => tag !== null)
   topic.value.tags = [
     ...topic.value.tags.filter(
-      (tag) =>
-        !tag.startsWith(useTagSlug('bouquets', 'theme')) &&
-        !tag.startsWith(useTagSlug('bouquets', 'subtheme'))
+      (tag) => !filtersPrefixes.some((prefix) => tag.startsWith(prefix))
     ),
-    useTagSlug('bouquets', 'theme', validatedValues.theme),
-    useTagSlug('bouquets', 'subtheme', validatedValues.subtheme)
+    ...filtersTags
   ]
-  // sync valid status with parent
-  emits('updateValidation', true)
+  isSubmitted.value = false
 }
-
-const onInvalidSubmit = ({ errors }: { errors: FormErrors }) => {
-  // send invalid fields name
-  formErrors.value = Object.keys(errors)
-  isSubmitted.value = true
-}
-
-const onSubmit = handleSubmit(onValidSubmit, onInvalidSubmit)
-
-defineExpose({
-  onSubmit
-})
-
-const { tagOptions: themeOptions, subTagOptions: subthemeOptions } =
-  useTagOptions('bouquets', theme, 'theme')
 
 const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
   const zones = value === undefined ? null : [value.id]
   topic.value.spatial = { ...topic.value.spatial, zones }
 }
 
-// initialize theme and subtheme from topic values, if any
-onMounted(() => {
-  if (initialTheme.value) {
-    theme.value = initialTheme.value.id
-  }
-  if (initialSubtheme.value) {
-    subtheme.value = initialSubtheme.value.id
-  }
+defineExpose({
+  onSubmit
 })
 </script>
 
@@ -120,47 +132,45 @@ onMounted(() => {
   <div class="fr-input-group">
     <DsfrInput
       id="input-name"
-      v-model="name"
-      v-bind="nameAttrs"
-      :label="`Sujet du ${topicsName} (obligatoire)`"
+      v-model="topic.name"
+      :label="`Sujet du ${pageConf.object.singular} (obligatoire)`"
       label-visible
-      :aria-invalid="errors.name && isSubmitted ? true : undefined"
-      :description-id="errors.name && isSubmitted ? 'errors-name' : undefined"
+      :aria-invalid="hasError('name') && isSubmitted ? true : undefined"
+      :description-id="
+        hasError('name') && isSubmitted ? 'errors-name' : undefined
+      "
     />
-    <p v-if="errors.name && isSubmitted" id="errors-name" class="error">
-      <VIconCustom name="error-fill" />
-      Veuillez renseigner un sujet.
-    </p>
+    <ErrorMessage
+      v-if="hasError('name') && isSubmitted"
+      input-name="name"
+      :error-message="getErrorMessage('name')"
+    />
   </div>
   <!-- Description -->
   <div class="fr-input-group">
     <DsfrInput
       id="input-description"
-      v-model="description"
-      v-bind="descriptionAttrs"
+      v-model="topic.description"
       is-textarea
-      :label="`Objectif du ${topicsName} (obligatoire)`"
+      :label="`Objectif du ${pageConf.object.singular} (obligatoire)`"
       label-visible
-      :aria-invalid="errors.description && isSubmitted ? true : undefined"
+      :aria-invalid="hasError('description') && isSubmitted ? true : undefined"
       :description-id="
-        errors.description && isSubmitted
+        hasError('description') && isSubmitted
           ? 'errors-description description-instructions'
           : 'description-instructions'
       "
     />
-    <p
-      v-if="errors.description && isSubmitted"
-      id="errors-description"
-      class="error"
-    >
-      <VIconCustom name="error-fill" />
-      La description ne doit pas être vide.
-    </p>
+    <ErrorMessage
+      v-if="hasError('description') && isSubmitted"
+      input-name="description"
+      :error-message="getErrorMessage('description')"
+    />
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
       Renseignez ici les informations nécessaires à la compréhension du
-      {{ topicsName }}&nbsp;: politique publique et problématique à laquelle il
-      répond, lien vers toute méthodologie de traitement des données,
-      description de l'organisme porteur du projet, etc.<br />
+      {{ pageConf.object.singular }}&nbsp;: politique publique et problématique
+      à laquelle il répond, lien vers toute méthodologie de traitement des
+      données, description de l'organisme porteur du projet, etc.<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
         ><span lang="en">markdown</span> (guide en anglais)</a
@@ -168,74 +178,38 @@ onMounted(() => {
       pour mettre en forme votre texte.
     </p>
   </div>
-  <!-- Theme -->
-  <div v-if="topicsUseThemes" class="fr-select-group fr-input-group">
+  <!-- Filters -->
+  <div
+    v-for="filter in filters"
+    :key="filter.id"
+    class="fr-select-group fr-input-group"
+  >
     <label class="fr-label" for="input-theme">
-      {{ capitalize(topicsMainTheme) }} (obligatoire)
+      {{ filter.name }} <span v-if="filter.form?.required">(obligatoire)</span>
     </label>
     <select
-      id="input-theme"
-      v-model="theme"
-      v-bind="themeAttrs"
-      class="fr-select"
-      :aria-invalid="errors.theme && isSubmitted ? true : undefined"
-      aria-errormessage="errors-theme"
-      @change="subtheme = ''"
+      :id="`input-${filter.id}`"
+      v-model="filtersState[filter.id].selectedValue"
+      class="fr-select fr-col"
+      :aria-invalid="hasError(filter.id) && isSubmitted ? true : undefined"
+      :aria-errormessage="`errors-${filter.id}`"
     >
-      <option value="" selected disabled hidden>
-        Choisir une {{ topicsMainTheme }}
-      </option>
       <option
-        v-for="option in themeOptions"
+        v-for="option in filtersState[filter.id].options"
         :key="option.id"
         :value="option.id"
-        :selected="option.id === theme"
       >
         {{ option.name }}
       </option>
     </select>
-    <p v-if="errors.theme && isSubmitted" id="errors-theme" class="error">
-      <VIconCustom name="error-fill" />
-      Veuillez sélectionner une thématique.
-    </p>
-  </div>
-  <!-- Subtheme -->
-  <div v-if="topicsUseThemes" class="fr-select-group">
-    <label class="fr-label" for="input-subtheme"
-      >{{ capitalize(topicsSecondaryTheme) }}
-      (obligatoire)
-    </label>
-    <select
-      id="input-subtheme"
-      v-model="subtheme"
-      v-bind="subthemeAttrs"
-      :disabled="!values.theme ? true : undefined"
-      class="fr-select"
-      :aria-invalid="errors.subtheme && isSubmitted ? true : undefined"
-      aria-describedby="subtheme-instructions"
-      aria-errormessage="errors-subtheme"
-    >
-      <option value="" selected disabled hidden>
-        Choisir un {{ topicsSecondaryTheme }}
-      </option>
-      <option
-        v-for="option in subthemeOptions"
-        :key="option.id"
-        :value="option.id"
-        :selected="option.id === subtheme"
-      >
-        {{ option.name }}
-      </option>
-    </select>
-    <p v-if="errors.subtheme && isSubmitted" id="errors-subtheme" class="error">
-      <VIconCustom name="error-fill" />
-      Veuillez sélectionner un {{ topicsSecondaryTheme }}.
-    </p>
-    <p v-if="theme === ''" id="subtheme-instructions" class="fr-text--sm">
-      Choisissez d'abord une {{ topicsMainTheme }}
-    </p>
+    <ErrorMessage
+      v-if="hasError(filter.id) && isSubmitted"
+      :input-name="filter.id"
+      :error-message="getErrorMessage(filter.id)"
+    />
   </div>
   <!-- Spatial coverage -->
+  <!-- FIXME: this should be in filters -->
   <div class="fr-select-group">
     <label class="fr-label" for="select-spatial-coverage"
       >Couverture territoriale (facultatif)</label

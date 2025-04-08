@@ -25,13 +25,14 @@ interface FilterState {
  */
 export const useFiltersState = (
   routeQuery: QueryAsString,
-  filterKey: string
+  pageKey: string,
+  filterOnForm: boolean = false
 ) => {
-  const pageConf = usePageConf(filterKey)
+  const pageConf = usePageConf(pageKey)
   const filtersState = reactive<Record<string, FilterState>>({})
-  const filterItems = pageConf.filters.filter(
-    (item) => item.type === 'select' || item.type === 'checkbox'
-  )
+  const filterItems = pageConf.filters
+    .filter((item) => item.type === 'select' || item.type === 'checkbox')
+    .filter((item) => !filterOnForm || item.form != null)
 
   const setChildOptions = (
     filter: FilterState,
@@ -41,7 +42,7 @@ export const useFiltersState = (
       // Update child filter's options based on parent selection
       const childFilter = filtersState[filter.childId]
       childFilter.options = filter.selectedValue
-        ? getTagOptions(filterKey, filter.childId, filter.selectedValue)
+        ? getTagOptions(pageKey, filter.childId, filter.selectedValue)
         : []
       // Clear child selection when parent changes or set to initial value
       childFilter.selectedValue = childSelectedValue || null
@@ -56,7 +57,7 @@ export const useFiltersState = (
       selectedValue: routeQuery[filter.id] || null,
       options: withParent.includes(filter.id)
         ? []
-        : getTagOptions(filterKey, filter.id),
+        : getTagOptions(pageKey, filter.id),
       childId: filter.child
     }
   })

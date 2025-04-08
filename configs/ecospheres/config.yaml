@@ -352,6 +352,7 @@ pages:
         type: select
         color: green-emeraude
         use_tag_prefix: true
+        # TODO: use a dedicated config for the form?
         form:
           required: true
         values:

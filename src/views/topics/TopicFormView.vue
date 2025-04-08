@@ -5,6 +5,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import ErrorSummary from '@/components/forms/ErrorSummary.vue'
 import TopicForm from '@/components/forms/topic/TopicForm.vue'
 import TopicOwnerForm from '@/components/forms/topic/TopicOwnerForm.vue'
 import config from '@/config'
@@ -67,7 +68,7 @@ const setAccessibilityProperties = inject(
 ) as AccessibilityPropertiesType
 
 const formFields = ref()
-const errorStatus = ref()
+const errorSummary = ref()
 const formErrors: Ref<string[]> = ref([])
 // define error messages for form fields
 const filtersMessages = pageConf.filters
@@ -79,14 +80,13 @@ const inputErrorMessages = new Map([
   ...filtersMessages
 ])
 // Filter out valid ipnuts. Needed to reorder the received input errors to match the form order
-const sortedinputErrors = computed(() =>
+const sortedErrors = computed(() =>
   Array.from(inputErrorMessages.keys()).filter((key) =>
     formErrors.value.includes(key)
   )
 )
 
 const errorMsg = ref('')
-const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
   const extras = topic.value?.extras?.[props.extrasKey]
@@ -171,15 +171,6 @@ const cancel = () => {
   }
 }
 
-const metaTitle = computed(() => {
-  if (topic.value.name && routeQuery.clone != null) {
-    return `Cloner le ${pageConf.object.singular} ${topic.value.name}`
-  } else if (topic.value.name) {
-    return `Éditer le ${pageConf.object.singular} ${topic.value.name}`
-  }
-  return `Ajouter un ${pageConf.object.singular}`
-})
-
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
@@ -201,22 +192,35 @@ onMounted(() => {
   }
 })
 
+const metaTitle = computed(() => {
+  if (props.isCreate && routeQuery.clone != null) {
+    return `Cloner le ${pageConf.object.singular} ${topic.value.name}`
+  } else if (!props.isCreate) {
+    return `Éditer le ${pageConf.object.singular} ${topic.value.name}`
+  }
+  return `Ajouter un ${pageConf.object.singular}`
+})
+
 watch(
   metaTitle,
   () => {
-    setAccessibilityProperties(metaTitle.value)
+    // FIXME: this should be focus=true but metaTitle should not update constantly
+    setAccessibilityProperties(metaTitle.value, false)
   },
   { immediate: true }
 )
 
 const onSubmit = async () => {
-  // reset error fields
-  formErrors.value = []
   await formFields.value.onSubmit()
-
   if (formErrors.value.length > 0) {
-    errorStatus.value.focus()
-  } else if (canSave.value) {
+    setTimeout(() => {
+      errorSummary.value.$el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+      errorSummary.value.$el.focus()
+    }, 0)
+  } else {
     save()
   }
 }
@@ -232,31 +236,13 @@ const onSubmit = async () => {
         {{ isCreate ? `Nouveau ${pageConf.object.singular}` : topic.name }}
       </h1>
       <form novalidate @submit.prevent>
-        <div
+        <ErrorSummary
           v-show="formErrors.length"
-          class="fr-my-4w fr-p-2w error-status"
-          role="group"
-          aria-labelledby="error-summary-title"
-        >
-          <h3 id="error-summary-title" ref="errorStatus" tabindex="-1">
-            Il y a {{ sortedinputErrors.length }} erreur<span
-              v-if="formErrors.length > 1"
-              >s</span
-            >
-            de saisie dans le formulaire.
-          </h3>
-          <ol>
-            <li
-              v-for="(error, index) in sortedinputErrors"
-              :key="index"
-              class="error"
-            >
-              <a :href="`#input-${error}`">{{
-                inputErrorMessages.get(error)
-              }}</a>
-            </li>
-          </ol>
-        </div>
+          ref="errorSummary"
+          :form-error-messages-map="inputErrorMessages"
+          :form-errors="sortedErrors"
+          heading-level="h3"
+        />
         <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
             Description du {{ pageConf.object.extended }}
@@ -266,7 +252,7 @@ const onSubmit = async () => {
             ref="formFields"
             v-model="topic"
             v-model:form-errors="formErrors"
-            @update-validation="(isValid: boolean) => (canSave = isValid)"
+            :form-error-messages-map="inputErrorMessages"
           />
         </fieldset>
         <fieldset v-if="isCreate">

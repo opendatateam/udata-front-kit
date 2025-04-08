@@ -122,7 +122,7 @@ export interface QueryArgs {
 export const useTagSlug = (
   pageKey: string,
   filterId: string,
-  tagId?: string,
+  tagId?: string | null,
   useTagPrefix = true
 ): string => {
   if (!useTagPrefix) return tagId || ''
