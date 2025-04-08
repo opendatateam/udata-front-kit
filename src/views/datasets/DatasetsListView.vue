@@ -96,6 +96,7 @@ const FiltersComponent = computed(() => {
     <div class="fr-mt-2w">
       <div class="fr-grid-row">
         <nav
+          v-if="pageConf.filters.length > 0"
           class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >

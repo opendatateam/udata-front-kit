@@ -543,8 +543,24 @@ pages:
         color: green-archipel
         use_tag_prefix: true
         values:
+          - id: 2-roues-elec-efficacite
+            name: 2 roues (élec&efficacité)
+          - id: augmentation-du-taux-de-collecte
+            name: Augmentation du taux de collecte
+          - id: batiments-machines-agricoles
+            name: Bâtiments & Machines agricoles
           - id: biogaz
             name: Biogaz
+          - id: bus-et-cars-decarbones
+            name: Bus et cars décarbonés
+          - id: changement-chaudieres-fioul-renovation-residentiel
+            name: Changement chaudières fioul + rénovation (résidentiel)
+          - id: changement-chaudieres-fioul-renovation-tertiaire
+            name: Changement chaudières fioul + rénovation (tertiaire)
+          - id: changement-chaudieres-gaz-renovation-residentiel
+            name: Changement chaudières gaz + rénovation (résidentiel)
+          - id: changement-chaudieres-gaz-renovation-tertiaire
+            name: Changement chaudières gaz + rénovation (tertiaire)
           - id: changements-de-pratiques-de-fertilisation-azotee
             name: Changements de pratiques de fertilisation azotée
           - id: covoiturage
@@ -553,8 +569,14 @@ pages:
             name: Développement de l'agriculture biologique et de HVE
           - id: efficacite-et-sobriete-logistique
             name: Efficacité et sobriété logistique
+          - id: electricite-renouvelable
+            name: Electricité renouvelable
+          - id: fret-decarbone-et-multimodalite
+            name: Fret décarboné et multimodalité
           - id: gestion-des-prairies
             name: Gestion des prairies
+          - id: industrie-diffuse
+            name: Industrie diffuse
           - id: pratiques-stockantes
             name: Pratiques stockantes
           - id: prevention-des-dechets
@@ -567,6 +589,8 @@ pages:
             name: Sobriété dans l'utilisation de la ressource en eau
           - id: sobriete-des-batiments-residentiel
             name: Sobriété des bâtiments (résidentiel)
+          - id: sobriete-des-batiments-tertiaire
+            name: Sobriété des bâtiments (tertiaire)
           - id: sobriete-fonciere
             name: Sobriété foncière
           - id: surface-en-aire-protegee
