@@ -79,7 +79,11 @@ website:
     name:
     link:
   menu:
-    - text: Accès aux données
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets
+    - text: Bouquets
       to: /bouquets
     - text: A propos
       to: /about
