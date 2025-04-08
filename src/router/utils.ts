@@ -1,3 +1,4 @@
+import type { SiteId } from '@/model/topic'
 import { type Component } from 'vue'
 import {
   useRoute,
@@ -64,6 +65,7 @@ export interface TopicPageRouterConf {
   displayMetadata: boolean
   enableReadMore: boolean
   datasetEditorialization: boolean
+  extrasKey: SiteId
 }
 
 interface TopicSearchPageRoutesOptions
@@ -175,21 +177,27 @@ export const useSearchPageRoutes = ({
   }
 }
 
-export const useTopicAdminPagesRoutes = (pageKey: string): RouteRecordRaw[] => {
+export const useTopicAdminPagesRoutes = ({
+  pageKey,
+  topicConf
+}: {
+  pageKey: string
+  topicConf: TopicPageRouterConf
+}): RouteRecordRaw[] => {
   return [
     {
       path: `/admin/${pageKey}/add`,
       name: `${pageKey}_add`,
       component: async () => await import('@/views/topics/TopicFormView.vue'),
-      meta: { requiresAuth: true },
-      props: { isCreate: true }
+      meta: { requiresAuth: true, pageKey },
+      props: { isCreate: true, ...topicConf }
     },
     {
       path: `/admin/${pageKey}/edit/:bid`,
       name: `${pageKey}_edit`,
       component: async () => await import('@/views/topics/TopicFormView.vue'),
-      meta: { requiresAuth: true },
-      props: { isCreate: false }
+      meta: { requiresAuth: true, pageKey },
+      props: { isCreate: false, ...topicConf }
     }
   ]
 }

@@ -116,7 +116,7 @@ export const useTagOptions = (
 }
 
 export interface QueryArgs {
-  [key: string]: string | null
+  [key: string]: string | null | undefined
 }
 
 export const useTagSlug = (
@@ -135,10 +135,13 @@ export const useTagSlug = (
  */
 export const useTagsQuery = (
   pageKey: string,
-  query: QueryArgs
+  query: QueryArgs,
+  filterOnForm: boolean = false
 ): { tag: Array<string>; extraArgs: QueryArgs } => {
   const pageConf = usePageConf(pageKey)
-  const filters = pageConf.filters.filter((item) => item.type === 'select')
+  const filters = pageConf.filters
+    .filter((item) => item.type === 'select')
+    .filter((item) => !filterOnForm || item.form != null)
   const queryArray = []
   for (const filter of filters) {
     const queryFilter = query[filter.id]

@@ -352,6 +352,8 @@ pages:
         type: select
         color: green-emeraude
         use_tag_prefix: true
+        form:
+          required: true
         values:
           - id: se-loger
             name: Se loger

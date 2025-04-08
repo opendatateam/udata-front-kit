@@ -5,51 +5,49 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import BouquetForm from '@/components/forms/bouquet/BouquetForm.vue'
-import BouquetOwnerForm from '@/components/forms/bouquet/BouquetOwnerForm.vue'
+import TopicForm from '@/components/forms/topic/TopicForm.vue'
+import TopicOwnerForm from '@/components/forms/topic/TopicOwnerForm.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic, TopicPostData } from '@/model/topic'
-import { useRouteParamsAsString, useRouteQueryAsString } from '@/router/utils'
+import type { TopicPageRouterConf } from '@/router/utils'
+import {
+  useRouteMeta,
+  useRouteParamsAsString,
+  useRouteQueryAsString
+} from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
-import { useTagSlug } from '@/utils/tags'
+import { usePageConf } from '@/utils/config'
+import { useTagsQuery } from '@/utils/tags'
 import { cloneTopic } from '@/utils/topic'
 
-const props = defineProps({
-  isCreate: {
-    type: Boolean,
-    default: true
-  }
+interface Props extends TopicPageRouterConf {
+  isCreate: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isCreate: true
 })
 
 const userStore = useUserStore()
 const { canAddTopic } = storeToRefs(userStore)
 
 const router = useRouter()
+const meta = useRouteMeta()
+const pageConf = usePageConf(meta.pageKey || 'topics')
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
-const {
-  topicsName,
-  topicsSlug,
-  topicsExtrasKey,
-  topicsMainTheme,
-  topicsSecondaryTheme
-} = useTopicsConf()
 
-// populate tags from theme and subtheme in query string
-const selectedTags = [
-  routeQuery.theme
-    ? useTagSlug('bouquets', 'theme', routeQuery.theme || undefined)
-    : undefined,
-  routeQuery.subtheme
-    ? useTagSlug('bouquets', 'subtheme', routeQuery.subtheme || undefined)
-    : undefined
-]
+// populate tags from filters in query string
+const { tag: selectedTags } = useTagsQuery(
+  meta.pageKey || 'topics',
+  routeQuery,
+  true
+)
 
 const topic: Ref<
   Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
@@ -58,7 +56,7 @@ const topic: Ref<
   tags: [config.universe.name, ...selectedTags.filter((v) => !!v)],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [topicsExtrasKey]: {
+    [props.extrasKey]: {
       datasets_properties: []
     }
   }
@@ -72,11 +70,13 @@ const formFields = ref()
 const errorStatus = ref()
 const formErrors: Ref<string[]> = ref([])
 // define error messages for form fields
+const filtersMessages = pageConf.filters
+  .filter((f) => f.form != null)
+  .map((f): [string, string] => [f.id, `Le champ "${f.name}" est obligatoire.`])
 const inputErrorMessages = new Map([
   ['name', 'Veuillez renseigner un sujet.'],
   ['description', 'La description ne doit pas être vide.'],
-  ['theme', `Veuillez sélectionner une ${topicsMainTheme}.`],
-  ['subtheme', `Veuillez sélectionner un ${topicsSecondaryTheme}.`]
+  ...filtersMessages
 ])
 // Filter out valid ipnuts. Needed to reorder the received input errors to match the form order
 const sortedinputErrors = computed(() =>
@@ -89,7 +89,7 @@ const errorMsg = ref('')
 const canSave = ref(false)
 
 const isReadyForForm = computed(() => {
-  const extras = topic.value?.extras?.[topicsExtrasKey]
+  const extras = topic.value?.extras?.[props.extrasKey]
   // condition for form mouting based on topic data load: edit || create raw || create cloned
   return (
     topic.value.id ||
@@ -105,7 +105,7 @@ const handleTopicOperation = (
   operation()
     .then((response) => {
       router.push({
-        name: `${topicsSlug}_detail`,
+        name: `${meta.pageKey}_detail`,
         params: { item_id: response.slug }
       })
     })
@@ -140,10 +140,14 @@ const destroy = async () => {
   if (topic.value?.id === undefined) {
     throw Error('Trying to delete topic without topic id')
   }
-  if (window.confirm(`Etes-vous sûr de vouloir supprimer ce ${topicsName} ?`)) {
+  if (
+    window.confirm(
+      `Etes-vous sûr de vouloir supprimer ce ${pageConf.object.plural} ?`
+    )
+  ) {
     useTopicStore()
       .delete(topic.value.id)
-      .then(() => router.push({ name: topicsSlug }))
+      .then(() => router.push({ name: meta.pageKey }))
       .catch((error) => {
         errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
       })
@@ -153,13 +157,13 @@ const destroy = async () => {
 const cancel = () => {
   if (props.isCreate) {
     if (routeQuery.clone == null) {
-      router.push({ name: topicsSlug })
+      router.push({ name: meta.pageKey })
     } else {
       router.go(-1)
     }
   } else {
     router.push({
-      name: `${topicsSlug}_detail`,
+      name: `${meta.pageKey}_detail`,
       params: {
         item_id: topic.value.slug
       }
@@ -169,11 +173,11 @@ const cancel = () => {
 
 const metaTitle = computed(() => {
   if (topic.value.name && routeQuery.clone != null) {
-    return `Cloner le ${topicsName} ${topic.value.name}`
+    return `Cloner le ${pageConf.object.singular} ${topic.value.name}`
   } else if (topic.value.name) {
-    return `Éditer le ${topicsName} ${topic.value.name}`
+    return `Éditer le ${pageConf.object.singular} ${topic.value.name}`
   }
-  return `Ajouter un ${topicsName}`
+  return `Ajouter un ${pageConf.object.singular}`
 })
 
 onMounted(() => {
@@ -225,7 +229,7 @@ const onSubmit = async () => {
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>
       <h1 class="fr-col-auto fr-mb-2v">
-        {{ isCreate ? `Nouveau ${topicsName}` : topic.name }}
+        {{ isCreate ? `Nouveau ${pageConf.object.singular}` : topic.name }}
       </h1>
       <form novalidate @submit.prevent>
         <div
@@ -255,9 +259,9 @@ const onSubmit = async () => {
         </div>
         <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
-            Description du {{ topicsName }} de données
+            Description du {{ pageConf.object.extended }}
           </legend>
-          <BouquetForm
+          <TopicForm
             v-if="isReadyForForm"
             ref="formFields"
             v-model="topic"
@@ -267,9 +271,9 @@ const onSubmit = async () => {
         </fieldset>
         <fieldset v-if="isCreate">
           <legend class="fr-fieldset__legend fr-text--lead">
-            Propriétaire du {{ topicsName }}
+            Propriétaire du {{ pageConf.object.extended }}
           </legend>
-          <BouquetOwnerForm v-if="isReadyForForm" v-model="topic" />
+          <TopicOwnerForm v-if="isReadyForForm" v-model="topic" />
         </fieldset>
         <div class="fr-mt-4w fr-grid-row fr-grid-row--right">
           <DsfrButton
@@ -298,7 +302,7 @@ const onSubmit = async () => {
       </form>
     </div>
     <div v-else>
-      Vous n'avez pas les droits pour ajouter un {{ topicsName }}.
+      Vous n'avez pas les droits pour ajouter un {{ pageConf.object.singular }}.
     </div>
   </GenericContainer>
 </template>

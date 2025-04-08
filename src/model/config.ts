@@ -45,6 +45,10 @@ export interface PageFilterValueConf {
   parent?: string
 }
 
+export interface PageFilterFormConf {
+  required: boolean
+}
+
 export interface PageFilterConf {
   name: string
   id: string
@@ -54,6 +58,7 @@ export interface PageFilterConf {
   default_option: string | null
   default_value: string | boolean | null
   use_tag_prefix: boolean | null
+  form: PageFilterFormConf | null
   values: PageFilterValueConf[]
 }
 

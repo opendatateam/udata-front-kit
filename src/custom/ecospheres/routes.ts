@@ -1,9 +1,19 @@
+import type { SiteId } from '@/model/topic'
 import {
   useDatasetSearchPageRoutes,
   useTopicAdminPagesRoutes,
   useTopicSearchPageRoutes
 } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
+
+const topicConf = {
+  listAll: true,
+  displayMetadata: true,
+  enableReadMore: true,
+  datasetEditorialization: true,
+  // FIXME: store in config as siteId or smtg
+  extrasKey: 'ecospheres' as SiteId
+}
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -32,12 +42,10 @@ export const routes: RouteRecordRaw[] = [
   useTopicSearchPageRoutes({
     pageKey: 'bouquets',
     metaTitle: 'Bouquets',
-    topicConf: {
-      listAll: true,
-      displayMetadata: true,
-      enableReadMore: true,
-      datasetEditorialization: true
-    }
+    topicConf
   }),
-  ...useTopicAdminPagesRoutes('bouquets')
+  ...useTopicAdminPagesRoutes({
+    pageKey: 'bouquets',
+    topicConf
+  })
 ]
