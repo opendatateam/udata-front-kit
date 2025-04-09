@@ -257,6 +257,7 @@ onMounted(() => {
     ref="modal"
     v-model="datasetsProperties"
     v-model:groups-model="groupedDatasets"
+    :dataset-editorialization
     @submit-modal="onDatasetEditModalSubmit"
   />
 </template>

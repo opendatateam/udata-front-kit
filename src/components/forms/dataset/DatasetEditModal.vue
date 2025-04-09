@@ -32,6 +32,12 @@ const datasetsGroups = defineModel('groups-model', {
   type: Object as () => DatasetsGroups,
   default: []
 })
+defineProps({
+  datasetEditorialization: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const isModalOpen = ref(false)
 const modalData: Ref<DatasetModalData> = ref({
@@ -211,6 +217,7 @@ defineExpose({ addDataset, editDataset })
         v-model="modalData.dataset"
         v-model:groups-model="datasetsGroups"
         v-model:errors-model="formErrors"
+        :dataset-editorialization
         :already-selected-datasets="datasets"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />
