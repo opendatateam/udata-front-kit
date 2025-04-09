@@ -58,16 +58,16 @@ website:
               url: 'bouquets?theme=Socio-économique'
               image_url: '/logistique/assets/socio.jpg'
             - name: 'Filières'
-              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
+              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industrielle, énergétique...).'
               url: 'bouquets?theme=Filières'
               image_url: '/logistique/assets/risques.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
   header_button:
-    display: false
+    display: true
     label: 'Donnez votre avis'
-    link:
+    link: https://framaforms.org/votre-avis-sur-logistiquedatagouvfr-1741274528
   header_search:
     display: true
     placeholder: Rechercher...
@@ -79,7 +79,11 @@ website:
     name:
     link:
   menu:
-    - text: Accès aux données
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets
+    - text: Bouquets
       to: /bouquets
     - text: A propos
       to: /about
