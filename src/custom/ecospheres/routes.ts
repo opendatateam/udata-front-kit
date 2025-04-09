@@ -1,4 +1,3 @@
-import type { SiteId } from '@/model/topic'
 import {
   useDatasetSearchPageRoutes,
   useTopicAdminPagesRoutes,
@@ -10,9 +9,7 @@ const topicConf = {
   listAll: true,
   displayMetadata: true,
   enableReadMore: true,
-  datasetEditorialization: true,
-  // FIXME: store in config as siteId or smtg
-  extrasKey: 'ecospheres' as SiteId
+  datasetEditorialization: true
 }
 
 export const routes: RouteRecordRaw[] = [

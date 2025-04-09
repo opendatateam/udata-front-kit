@@ -10,7 +10,6 @@ import type { SiteId } from '@/model/topic'
 interface TopicsConfNormalized {
   topicsName: string
   topicsSlug: string
-  topicsExtrasKey: SiteId
   topicsUseThemes: boolean
   topicsMainTheme: string
   topicsSecondaryTheme: string
@@ -23,7 +22,6 @@ export const useTopicsConf = (): TopicsConfNormalized => {
   return {
     topicsName: topicsConf.name,
     topicsSlug: topicsConf.slug,
-    topicsExtrasKey: topicsConf.extras_key,
     topicsUseThemes: topicsConf.themes.usage,
     topicsMainTheme: topicsConf.themes.main_name,
     topicsSecondaryTheme: topicsConf.themes.secondary_name,
@@ -48,4 +46,8 @@ export const usePageConf = (pageId: string) => {
 export const useDatasetsConf = () => {
   const datasetsConf: DatasetsConf = config.website.datasets
   return datasetsConf
+}
+
+export const useSiteId = () => {
+  return config.site_id as SiteId
 }

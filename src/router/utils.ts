@@ -1,4 +1,3 @@
-import type { SiteId } from '@/model/topic'
 import { type Component } from 'vue'
 import {
   useRoute,
@@ -65,7 +64,6 @@ export interface TopicPageRouterConf {
   displayMetadata: boolean
   enableReadMore: boolean
   datasetEditorialization: boolean
-  extrasKey: SiteId
 }
 
 interface TopicSearchPageRoutesOptions

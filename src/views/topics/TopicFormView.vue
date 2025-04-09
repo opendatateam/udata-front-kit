@@ -22,7 +22,7 @@ import {
 } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { usePageConf } from '@/utils/config'
+import { usePageConf, useSiteId } from '@/utils/config'
 import { useTagsQuery } from '@/utils/tags'
 import { cloneTopic } from '@/utils/topic'
 
@@ -57,7 +57,7 @@ const topic: Ref<
   tags: [config.universe.name, ...selectedTags.filter((v) => !!v)],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [props.extrasKey]: {
+    [useSiteId()]: {
       datasets_properties: []
     }
   }
@@ -89,7 +89,7 @@ const sortedErrors = computed(() =>
 const errorMsg = ref('')
 
 const isReadyForForm = computed(() => {
-  const extras = topic.value?.extras?.[props.extrasKey]
+  const extras = topic.value?.extras?.[useSiteId()]
   // condition for form mouting based on topic data load: edit || create raw || create cloned
   return (
     topic.value.id ||

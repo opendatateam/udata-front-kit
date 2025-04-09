@@ -10,10 +10,9 @@ import {
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
+import { useSiteId } from '@/utils/config'
 
-// FIXME:
-const { topicsExtrasKey } = useTopicsConf()
+const topicsExtrasKey = useSiteId()
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(

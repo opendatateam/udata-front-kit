@@ -1,5 +1,8 @@
 # config file for ecospheres-front
 
+# used as extras key
+site_id: ecospheres
+
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
@@ -154,8 +157,6 @@ website:
     add_to_topic:
       enable: true
       page: bouquets
-      # FIXME: mutualize with site id
-      extras_key: ecospheres
       dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
@@ -164,7 +165,6 @@ website:
   topics:
     slug: bouquets
     name: bouquet
-    extras_key: 'ecospheres'
     themes:
       usage: true
       main_name: thématique

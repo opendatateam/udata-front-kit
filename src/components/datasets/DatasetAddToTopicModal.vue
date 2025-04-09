@@ -11,7 +11,7 @@ import type { PageConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
-import { useDatasetsConf } from '@/utils/config'
+import { useDatasetsConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
 import { useExtras } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
@@ -121,10 +121,7 @@ const isDatasetInBouquet = computed(() => {
 const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
 
 const submit = async () => {
-  const topicsExtrasKey = datasetsConf.add_to_topic?.extras_key
-  if (topicsExtrasKey === undefined) {
-    throw Error('Trying to attach to topic without extras key')
-  }
+  const topicsExtrasKey = useSiteId()
   if (selectedBouquet.value === null) {
     throw Error('Trying to attach to topic without id')
   }

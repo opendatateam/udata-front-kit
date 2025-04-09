@@ -1,5 +1,3 @@
-import type { SiteId } from './topic'
-
 export interface CanAddTopicsConf {
   everyone: boolean
   authorized_users: string[]
@@ -8,7 +6,6 @@ export interface CanAddTopicsConf {
 export interface TopicsConf {
   slug: string
   name: string
-  extras_key: SiteId
   themes: {
     usage: boolean
     main_name: string
@@ -103,7 +100,6 @@ export type PagesConf = {
 export type DatasetsConf = {
   add_to_topic: {
     page: string
-    extras_key: SiteId
     dataset_editorialization: boolean
   } | null
   harvest_backends_quality_warning: string[]
