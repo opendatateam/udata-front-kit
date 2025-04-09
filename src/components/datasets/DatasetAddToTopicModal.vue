@@ -150,7 +150,7 @@ const {
   getErrorMessage,
   isSubmitted,
   handleSubmit
-} = useForm(formErrors, {
+} = useForm(formErrors, props.topicPageConf.object.singular, {
   validateFields,
   onSuccess: submit,
   errorSummaryRef: errorSummary,

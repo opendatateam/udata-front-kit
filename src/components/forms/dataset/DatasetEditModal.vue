@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import { computed, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -9,10 +10,10 @@ import {
   type DatasetProperties,
   type DatasetsGroups
 } from '@/model/topic'
+import { useRouteMeta } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-
+import { usePageConf } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
-import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
 export interface DatasetEditModalType {
@@ -23,6 +24,7 @@ export interface DatasetEditModalType {
 const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
+const pageConf = usePageConf(useRouteMeta().pageKey || 'topics')
 
 const datasets = defineModel({
   type: Object as () => DatasetProperties[],
@@ -178,7 +180,7 @@ const submit = async (modalData: DatasetModalData) => {
 }
 
 const { formErrorMessagesMap, sortedErrors, isSubmitted, handleSubmit } =
-  useForm(formErrors, {
+  useForm(formErrors, pageConf.object.singular, {
     validateFields,
     onSuccess: () => submit(modalData.value),
     errorSummaryRef: errorSummary

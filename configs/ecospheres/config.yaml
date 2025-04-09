@@ -163,18 +163,6 @@ website:
       - CSW-ISO-19139
     show_extended_information_panel: true
   topics:
-    slug: bouquets
-    name: bouquet
-    themes:
-      usage: true
-      main_name: thématique
-      secondary_name: chantier
-    # include a list page with all topics
-    list_all: true
-    show_drafts_by_default: true
-    display_metadata: true
-    activate_read_more: true
-    dataset_editorialization: true
     can_add_topics:
       everyone: true
       authorized_users:
