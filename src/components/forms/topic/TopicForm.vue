@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import type { TopicPostData } from '@/model/topic'
@@ -82,12 +80,9 @@ const getErrorMessage = (field: string) => {
   return props.formErrorMessagesMap.get(field) || ''
 }
 
-const isSubmitted: Ref<boolean | undefined> = ref(undefined)
-
 const onSubmit = () => {
   formErrors.value = []
   const isValid = validateFields()
-  isSubmitted.value = true
   if (isValid) {
     onValidSubmit()
   }
@@ -121,7 +116,6 @@ const onValidSubmit = async () => {
     ),
     ...filtersTags
   ]
-  isSubmitted.value = false
 }
 
 const onUpdateSpatialCoverage = (value: SpatialCoverage | undefined) => {
@@ -142,13 +136,11 @@ defineExpose({
       v-model="topic.name"
       :label="`Sujet du ${pageConf.object.singular} (obligatoire)`"
       label-visible
-      :aria-invalid="hasError('name') && isSubmitted ? true : undefined"
-      :description-id="
-        hasError('name') && isSubmitted ? 'errors-name' : undefined
-      "
+      :aria-invalid="hasError('name') ? true : undefined"
+      :description-id="hasError('name') ? 'errors-name' : undefined"
     />
     <ErrorMessage
-      v-if="hasError('name') && isSubmitted"
+      v-if="hasError('name')"
       input-name="name"
       :error-message="getErrorMessage('name')"
     />
@@ -161,15 +153,15 @@ defineExpose({
       is-textarea
       :label="`Objectif du ${pageConf.object.singular} (obligatoire)`"
       label-visible
-      :aria-invalid="hasError('description') && isSubmitted ? true : undefined"
+      :aria-invalid="hasError('description') ? true : undefined"
       :description-id="
-        hasError('description') && isSubmitted
+        hasError('description')
           ? 'errors-description description-instructions'
           : 'description-instructions'
       "
     />
     <ErrorMessage
-      v-if="hasError('description') && isSubmitted"
+      v-if="hasError('description')"
       input-name="description"
       :error-message="getErrorMessage('description')"
     />
@@ -198,7 +190,7 @@ defineExpose({
       :id="`input-${filter.id}`"
       v-model="filtersState[filter.id].selectedValue"
       class="fr-select fr-col"
-      :aria-invalid="hasError(filter.id) && isSubmitted ? true : undefined"
+      :aria-invalid="hasError(filter.id) ? true : undefined"
       :aria-errormessage="`errors-${filter.id}`"
     >
       <option
@@ -210,13 +202,13 @@ defineExpose({
       </option>
     </select>
     <ErrorMessage
-      v-if="hasError(filter.id) && isSubmitted"
+      v-if="hasError(filter.id)"
       :input-name="filter.id"
       :error-message="getErrorMessage(filter.id)"
     />
   </div>
   <!-- Spatial coverage -->
-  <div class="fr-select-group" v-if="hasSpatialCoverage">
+  <div v-if="hasSpatialCoverage" class="fr-select-group">
     <label class="fr-label" for="select-spatial-coverage"
       >Couverture territoriale (facultatif)</label
     >
