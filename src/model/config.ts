@@ -99,3 +99,13 @@ export type PageConf = {
 export type PagesConf = {
   [key: string]: PageConf
 }
+
+export type DatasetsConf = {
+  add_to_topic: {
+    page: string
+    extras_key: SiteId
+    dataset_editorialization: boolean
+  } | null
+  harvest_backends_quality_warning: string[]
+  show_extended_information_panel: boolean
+}

@@ -5,16 +5,17 @@ import { computed, inject, onMounted, ref } from 'vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
-import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
+import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import { useRouteParamsAsString } from '@/router/utils'
+import { useRouteMeta, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
+import { usePageConf } from '@/utils/config'
 import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
@@ -25,6 +26,8 @@ import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
+const meta = useRouteMeta()
+const pageConf = usePageConf(meta.pageKey || 'topics')
 const indicatorId = route.params.item_id
 
 const datasetStore = useDatasetStore()
@@ -103,7 +106,7 @@ onMounted(() => {
             icon="fr-icon-file-add-line"
             @click="showAddToBouquetModal = true"
           />
-          <DatasetAddToBouquetModal
+          <DatasetAddToTopicModal
             v-if="showAddToBouquetModal"
             v-model:show="showAddToBouquetModal"
             :dataset="indicator"

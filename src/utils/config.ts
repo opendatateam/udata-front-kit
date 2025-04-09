@@ -1,5 +1,10 @@
 import config from '@/config'
-import type { CanAddTopicsConf, PagesConf, TopicsConf } from '@/model/config'
+import type {
+  CanAddTopicsConf,
+  DatasetsConf,
+  PagesConf,
+  TopicsConf
+} from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
 interface TopicsConfNormalized {
@@ -38,4 +43,9 @@ export const usePageConf = (pageId: string) => {
     )
   }
   return pagesConf[pageId]
+}
+
+export const useDatasetsConf = () => {
+  const datasetsConf: DatasetsConf = config.website.datasets
+  return datasetsConf
 }

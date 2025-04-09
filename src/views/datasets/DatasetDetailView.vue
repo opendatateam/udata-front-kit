@@ -15,7 +15,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
-import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
+import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
@@ -27,8 +27,7 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
-// FIXME:
-import { useTopicsConf } from '@/utils/config'
+import { useDatasetsConf, usePageConf } from '@/utils/config'
 import { useLicense } from '@/utils/dataset'
 
 const route = useRouteParamsAsString()
@@ -43,8 +42,11 @@ const dataset = computed(() => datasetStore.get(datasetId))
 const showAddToBouquetModal = ref(false)
 
 const showDiscussions = config.website.discussions.dataset.display as boolean
-// FIXME:
-const { topicsName } = useTopicsConf()
+
+const datasetsConf = useDatasetsConf()
+const topicPageConf = datasetsConf.add_to_topic?.page
+  ? usePageConf(datasetsConf.add_to_topic.page)
+  : null
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -71,8 +73,7 @@ const license = useLicense(dataset)
 
 const showHarvestQualityWarning = computed(() => {
   const backend = dataset.value?.harvest?.backend
-  const warningBackends =
-    config.website.datasets.harvest_backends_quality_warning || []
+  const warningBackends = datasetsConf.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
 })
 
@@ -180,23 +181,19 @@ onMounted(() => {
           la source originale peuvent avoir été perdues lors de leur
           récupération. Nous travaillons actuellement à améliorer la situation.
         </div>
-        <div
-          v-if="
-            config.website.datasets.add_to_bouquet &&
-            userStore.loggedIn &&
-            canAddTopic
-          "
-        >
+        <!-- add dataset to topic (if enabled) -->
+        <div v-if="topicPageConf && userStore.loggedIn && canAddTopic">
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            :label="`Ajouter à un ${topicsName}`"
+            :label="`Ajouter à un ${topicPageConf.object.singular}`"
             icon="fr-icon-file-add-line"
             @click="showAddToBouquetModal = true"
           />
-          <DatasetAddToBouquetModal
+          <DatasetAddToTopicModal
             v-if="showAddToBouquetModal"
             v-model:show="showAddToBouquetModal"
+            :topic-page-conf="topicPageConf"
             :dataset="dataset"
           />
         </div>

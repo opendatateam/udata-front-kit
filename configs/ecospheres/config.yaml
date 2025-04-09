@@ -150,7 +150,13 @@ website:
       display: true
       create: true
   datasets:
-    add_to_bouquet: true
+    # TODO: copy to other configs
+    add_to_topic:
+      enable: true
+      page: bouquets
+      # FIXME: mutualize with site id
+      extras_key: ecospheres
+      dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-ISO-19139
@@ -227,6 +233,10 @@ pages:
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
+    object:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeux de données
     search:
       input: Rechercher un jeu de données
       results:
