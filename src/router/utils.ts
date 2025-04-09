@@ -193,7 +193,7 @@ export const useTopicAdminPagesRoutes = ({
       props: { isCreate: true, ...topicConf }
     },
     {
-      path: `/admin/${pageKey}/edit/:bid`,
+      path: `/admin/${pageKey}/edit/:item_id`,
       name: `${pageKey}_edit`,
       component: async () => await import('@/views/topics/TopicFormView.vue'),
       meta: { requiresAuth: true, pageKey },

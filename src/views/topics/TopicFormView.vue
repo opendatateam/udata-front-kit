@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -171,45 +171,6 @@ const cancel = () => {
   }
 }
 
-onMounted(() => {
-  if (!props.isCreate || routeQuery.clone != null) {
-    const loader = useLoading().show()
-    useTopicStore()
-      .load(routeQuery.clone || routeParams.bid)
-      .then((remoteTopic) => {
-        if (routeQuery.clone != null) {
-          topic.value = cloneTopic(
-            remoteTopic,
-            routeQuery['keep-datasets'] === '1'
-          )
-        } else {
-          // remove rels from TopicV2 for TopicPostData compatibility
-          const { datasets, reuses, ...data } = remoteTopic
-          topic.value = data
-        }
-      })
-      .finally(() => loader.hide())
-  }
-})
-
-const metaTitle = computed(() => {
-  if (props.isCreate && routeQuery.clone != null) {
-    return `Cloner le ${pageConf.object.singular} ${topic.value.name}`
-  } else if (!props.isCreate) {
-    return `Éditer le ${pageConf.object.singular} ${topic.value.name}`
-  }
-  return `Ajouter un ${pageConf.object.singular}`
-})
-
-watch(
-  metaTitle,
-  () => {
-    // FIXME: this should be focus=true but metaTitle should not update constantly
-    setAccessibilityProperties(metaTitle.value, false)
-  },
-  { immediate: true }
-)
-
 const onSubmit = async () => {
   await formFields.value.onSubmit()
   if (formErrors.value.length > 0) {
@@ -224,6 +185,40 @@ const onSubmit = async () => {
     save()
   }
 }
+
+const setMetaTitle = () => {
+  let metaTitle
+  if (props.isCreate && routeQuery.clone != null) {
+    metaTitle = `Cloner le ${pageConf.object.singular} ${topic.value.name}`
+  } else if (!props.isCreate) {
+    metaTitle = `Éditer le ${pageConf.object.singular} ${topic.value.name}`
+  } else {
+    metaTitle = `Ajouter un ${pageConf.object.singular}`
+  }
+  setAccessibilityProperties(metaTitle)
+}
+
+onMounted(() => {
+  if (!props.isCreate || routeQuery.clone != null) {
+    const loader = useLoading().show()
+    useTopicStore()
+      .load(routeQuery.clone || routeParams.item_id)
+      .then((remoteTopic) => {
+        if (routeQuery.clone != null) {
+          topic.value = cloneTopic(
+            remoteTopic,
+            routeQuery['keep-datasets'] === '1'
+          )
+        } else {
+          // remove rels from TopicV2 for TopicPostData compatibility
+          const { datasets, reuses, ...data } = remoteTopic
+          topic.value = data
+        }
+        setMetaTitle()
+      })
+      .finally(() => loader.hide())
+  }
+})
 </script>
 
 <template>
