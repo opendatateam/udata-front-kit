@@ -1,10 +1,46 @@
-import type { PageFilterConf } from '@/model/config'
+import type { PageFilterConf, PageFilterValueConf } from '@/model/config'
 import type { ResolvedTag, TagSelectOption } from '@/model/tag'
 import type { ComputedRef, Ref } from 'vue'
 import { usePageConf } from './config'
 
 interface HasTags {
   tags: string[] | null
+}
+
+export const useFilterValue = (
+  filterConf: PageFilterConf,
+  tagPrefix: string | null,
+  tag: string
+): PageFilterValueConf | undefined => {
+  const filterPrefix = filterConf.use_tag_prefix
+    ? `${tagPrefix}-${filterConf.id}-`
+    : null
+  if (filterPrefix && !tag.startsWith(filterPrefix)) return
+  const value =
+    filterConf.use_tag_prefix && filterPrefix
+      ? tag.replace(filterPrefix, '')
+      : tag
+  return filterConf.values.find((v) => v.id === value)
+}
+
+export const useTagsForFilter = <T extends HasTags>(
+  filter: PageFilterConf,
+  tagPrefix: string | null,
+  object: T | undefined | null
+): ResolvedTag[] => {
+  const tags: ResolvedTag[] = []
+  for (const tag of object?.tags || []) {
+    const matchingValue = useFilterValue(filter, tagPrefix, tag)
+    if (matchingValue) {
+      tags.push({
+        color: filter.color,
+        name: matchingValue.name,
+        type: filter.id,
+        id: matchingValue.id
+      })
+    }
+  }
+  return tags
 }
 
 /**
@@ -19,34 +55,13 @@ export const useTags = <T extends HasTags>(
   const pageConf = usePageConf(pageKey)
   const tagPrefix = pageConf.tag_prefix
   const filters = pageConf.filters
-
   return computed(() => {
     const tags: ResolvedTag[] = []
-
-    for (const tag of object?.tags || []) {
-      if (!tag.startsWith(tagPrefix)) continue
-
-      for (const filter of filters) {
-        if (filterId && filterId !== filter.id) continue
-        if (exclude?.includes(filter.id)) continue
-
-        const filterPrefix = `${tagPrefix}-${filter.id}-`
-        if (!tag.startsWith(filterPrefix)) continue
-
-        const value = tag.replace(filterPrefix, '')
-        const matchingValue = filter.values.find((v) => v.id === value)
-
-        if (matchingValue) {
-          tags.push({
-            color: filter.color,
-            name: matchingValue.name,
-            type: filter.id,
-            id: matchingValue.id
-          })
-        }
-      }
+    for (const filter of filters.filter((f) => f.type === 'select')) {
+      if (filterId && filterId !== filter.id) continue
+      if (exclude?.includes(filter.id)) continue
+      tags.push(...useTagsForFilter(filter, tagPrefix, object))
     }
-
     return tags
   })
 }

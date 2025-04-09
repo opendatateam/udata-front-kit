@@ -382,6 +382,10 @@ pages:
     tag_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
     breadcrumb_title: Indicateurs
+    object:
+      singular: indicateur
+      plural: indicateurs
+      extended: indicateurs
     search:
       input: Rechercher un indicateur
       results:

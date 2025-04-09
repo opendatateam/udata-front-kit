@@ -5,25 +5,15 @@ import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import type { TopicPostData } from '@/model/topic'
 import { useRouteMeta } from '@/router/utils'
+import { usePageConf } from '@/utils/config'
 import { useFiltersState } from '@/utils/filters'
 import type { FormErrorMessagesMap } from '@/utils/form'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useTagSlug } from '@/utils/tags'
+import { useTagSlug, useTagsForFilter } from '@/utils/tags'
 import ErrorMessage from '../ErrorMessage.vue'
 
 const meta = useRouteMeta()
-// FIXME: we need to get the initial values from the topic object instead of route query
-// maybe use initialValuesForFilters as input to useFiltersState
-// const initialValuesForFilters = filters.reduce((acc, filter) => ({
-//   ...acc,
-//   [filter.id]: useTag(meta.pageKey || 'topics', topic, filter.id).value?.id || ''
-// }), {})
-const { filtersState, pageConf } = useFiltersState(
-  {},
-  meta.pageKey || 'topics',
-  true
-)
-const filters = pageConf.filters.filter((f) => f.form != null)
+const pageConf = usePageConf(meta.pageKey || 'topics')
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData> &
@@ -43,6 +33,20 @@ const props = defineProps({
 })
 
 const spatialCoverage = useSpatialCoverage(topic)
+
+const filters = pageConf.filters.filter((f) => f.form != null)
+const initialValuesForFilters = filters.reduce((acc, filter) => {
+  const tags = useTagsForFilter(filter, pageConf.tag_prefix, topic.value)
+  return {
+    ...acc,
+    [filter.id]: tags.length ? tags[0].id : null
+  }
+}, {})
+const { filtersState } = useFiltersState(
+  initialValuesForFilters,
+  meta.pageKey || 'topics',
+  true
+)
 
 const validateFields = (): boolean => {
   // Create a new array rather than pushing to existing one to make reactivity work on formErrors

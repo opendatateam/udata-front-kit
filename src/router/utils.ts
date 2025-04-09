@@ -78,19 +78,22 @@ interface TopicSearchPageRoutesOptions
 
 type DatasetSearchPageRouteOptions = Omit<
   SearchPageRoutesOptions,
-  'detailsViewComponent' | 'listViewComponent'
->
+  'listViewComponent' | 'detailsViewComponent'
+> & {
+  detailsViewComponent?: () => Promise<{ default: Component }>
+}
 
 export const useDatasetSearchPageRoutes = ({
   pageKey,
   metaTitle,
   cardClass,
   filtersComponent,
-  cardComponent
+  cardComponent,
+  detailsViewComponent
 }: DatasetSearchPageRouteOptions): RouteRecordRaw => {
   const listViewComponent = () =>
     import('@/views/datasets/DatasetsListView.vue')
-  const detailsViewComponent = () =>
+  const defaultDetailsViewComponent = () =>
     import('@/views/datasets/DatasetDetailView.vue')
   return useSearchPageRoutes({
     pageKey,
@@ -99,7 +102,7 @@ export const useDatasetSearchPageRoutes = ({
     listViewComponent,
     filtersComponent,
     cardComponent,
-    detailsViewComponent
+    detailsViewComponent: detailsViewComponent ?? defaultDetailsViewComponent
   })
 }
 

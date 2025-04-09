@@ -37,6 +37,10 @@ export const routes: RouteRecordRaw[] = [
     cardComponent: async () =>
       await import(
         '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
+      ),
+    detailsViewComponent: async () =>
+      await import(
+        '@/custom/ecospheres/views/indicators/IndicatorDetailView.vue'
       )
   }),
   useTopicSearchPageRoutes({
