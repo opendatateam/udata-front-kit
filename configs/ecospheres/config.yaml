@@ -340,6 +340,7 @@ pages:
 
         Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
     filters:
+      # FIXME: needs to be visible only for connected users :-/
       - name: Afficher les brouillons
         id: include_private
         type: checkbox
