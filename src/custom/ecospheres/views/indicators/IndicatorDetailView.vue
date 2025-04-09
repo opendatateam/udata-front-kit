@@ -11,7 +11,7 @@ import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import { useRouteMeta, useRouteParamsAsString } from '@/router/utils'
+import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
@@ -26,9 +26,8 @@ import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
-const meta = useRouteMeta()
-const pageConf = usePageConf(meta.pageKey || 'topics')
 const indicatorId = route.params.item_id
+const topicPageConf = usePageConf('bouquets')
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -109,6 +108,7 @@ onMounted(() => {
           <DatasetAddToTopicModal
             v-if="showAddToBouquetModal"
             v-model:show="showAddToBouquetModal"
+            :topic-page-conf="topicPageConf"
             :dataset="indicator"
           />
         </div>
