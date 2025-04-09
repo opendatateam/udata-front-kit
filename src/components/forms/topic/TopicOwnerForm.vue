@@ -7,9 +7,10 @@ import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
 import type { TopicPostData } from '@/model/topic'
+import { useRouteMeta } from '@/router/utils'
 import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
-import { debounceWait, useTopicsConf } from '@/utils/config'
+import { debounceWait, usePageConf } from '@/utils/config'
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData>,
@@ -17,7 +18,8 @@ const topic = defineModel({
 })
 
 const userStore = useUserStore()
-const { topicsName } = useTopicsConf()
+const meta = useRouteMeta()
+const pageConf = usePageConf(meta.pageKey || 'topics')
 
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
@@ -109,7 +111,7 @@ watch(choice, () => {
     <DsfrRadioButtonSet
       v-model="choice"
       :options="radioOptions"
-      :legend="`Choisissez si vous souhaitez gérer ce ${topicsName}&nbsp;:`"
+      :legend="`Choisissez si vous souhaitez gérer ce ${pageConf.object.singular}&nbsp;:`"
       name="owner"
     />
     <div v-if="choice === 'organization'" class="flex-gap">
@@ -123,11 +125,11 @@ watch(choice, () => {
       />
 
       <div v-if="userStore.isAdmin" class="fr-select-group">
-        <label class="fr-label fr-mt-2v" for="any-org-select-bouquet"
+        <label class="fr-label fr-mt-2v" for="any-org-select-topic"
           >Cherchez une autre organisation&nbsp;:</label
         >
         <Multiselect
-          id="any-org-select-bouquet"
+          id="any-org-select-topic"
           v-model="selectedAnyOrganization"
           role="search"
           :object="true"
