@@ -57,7 +57,7 @@ const ownerName = useOwnerName(props.dataset)
       <div class="fr-col-12 fr-col-sm">
         <h4 class="fr-text--md fr-mb-0 fr-grid-row">
           <RouterLink
-            :to="{ name: 'indicator_detail', params: { iid: dataset.id } }"
+            :to="{ name: 'indicators_detail', params: { item_id: dataset.id } }"
             class="text-grey-500 fr-grid-row"
           >
             <TextClamp

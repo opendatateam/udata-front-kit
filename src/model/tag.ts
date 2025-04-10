@@ -8,5 +8,5 @@ export interface ResolvedTag {
   id: string
   name: string
   type: string
-  color: string
+  color: string | null
 }

@@ -1,6 +1,6 @@
 <!-- a select component with a selectable null value (default) -->
 <script setup lang="ts">
-import { getRandomId } from '@gouvminint/vue-dsfr'
+import { useRandomId } from '@gouvminint/vue-dsfr'
 
 type SelectOption = {
   id: string
@@ -26,12 +26,12 @@ defineProps({
     default: () => ['fr-label']
   },
   defaultOption: {
-    type: String,
+    type: String as () => string | null,
     default: null
   }
 })
 
-const id = getRandomId('select')
+const id = useRandomId('select')
 </script>
 
 <template>

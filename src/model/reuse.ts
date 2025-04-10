@@ -1,10 +1,6 @@
 import type { Owned } from '@datagouv/components'
 
-import { useTopicsConf } from '@/utils/config'
-
 import type { GenericResponse } from './api'
-
-const { topicsName } = useTopicsConf()
 
 export type Reuse = Owned & {
   id: string
@@ -22,10 +18,4 @@ export interface ReuseResponse extends GenericResponse {
 export interface ReuseType {
   id: string
   label: string
-}
-
-// use a const instead of an interface to be compatible with topicsName as a variable
-export const ReuseModel = {
-  dataset: 'jeu de donnée',
-  topic: topicsName
 }
