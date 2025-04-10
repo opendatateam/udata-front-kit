@@ -190,11 +190,12 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #     tag_prefix: {string}          # prefix for tags on data.gouv.fr
 #     title: {string}               # title for the list page
 #     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
+#     object:                       # how to call the object that is displayed by the page
+#       singular: {string}          # singular name for the object
+#       plural: {string}            # plural name for the object
+#       extended: {string}          # extended name for the object, singular
 #     search:
 #      input: {string}              # placeholder for the search input
-#      results:                     # results count message
-#        one: {string}              # message for one result
-#        several: {string}          # message for multiple results (use {{total}} to display the total number of results)
 #     banner:                       # banner for the list page (optionnal)
 #      title: {string}              # title for the banner
 #      content: {string}            # content for the banner
