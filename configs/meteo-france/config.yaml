@@ -1,16 +1,12 @@
 # config file for meteo-france
 
-site_id: meteo-france
+site_id: meteodatagouvfr
 
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id:
-
-universe:
-  # universe name, used as bouquets tag
-  name: meteo-france
 
 robots:
   disallow:
@@ -160,7 +156,7 @@ website:
       display: false
       create: false
   datasets:
-    add_to_bouquet: true
+    add_to_topic:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
@@ -182,11 +178,12 @@ pages:
       tag: meteodatagouvfr
     title: Jeux de données
     breadcrumb_title: Données
+    object:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
     search:
       input: Rechercher un jeu de données
-      results:
-        one: 1 jeu de données disponible
-        several: '{{total}} jeux de données disponibles'
     banner:
     filters:
       - name: Catégories

@@ -137,6 +137,7 @@ website:
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId:
+  # FIXME: migrate to page conf
   discussions:
     dataset:
       display: true
@@ -225,9 +226,6 @@ pages:
       extended: jeux de données
     search:
       input: Rechercher un jeu de données
-      results:
-        one: 1 jeu de données disponible
-        several: '{{total}} jeux de données disponibles'
     banner:
       title: Un guichet unique pour l’accès aux données environnementales
       content: |
@@ -380,9 +378,6 @@ pages:
       extended: indicateurs
     search:
       input: Rechercher un indicateur
-      results:
-        one: 1 indicateur disponible
-        several: '{{total}} indicateurs disponibles'
     banner:
       title: Accéder aux indicateurs de référence pour la transition écologique des territoires
       content: |
