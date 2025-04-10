@@ -1,5 +1,7 @@
 # config file for meteo-france
 
+site_id: meteo-france
+
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
@@ -163,20 +165,6 @@ website:
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    # disabled in router.disable
-    slug: topics
-    name: Topics
-    extras_key:
-    themes:
-      usage: false
-      main_name:
-      secondary_name:
-    # include a list page with all topics
-    list_all: false
-    show_drafts_by_default: false
-    display_metadata: false
-    activate_read_more: false
-    dataset_editorialization: false
     can_add_topics:
       everyone: false
       authorized_users:
