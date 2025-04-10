@@ -23,7 +23,7 @@ import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import { useRouteParamsAsString } from '@/router/utils'
+import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -41,7 +41,8 @@ const dataset = computed(() => datasetStore.get(datasetId))
 
 const showAddToBouquetModal = ref(false)
 
-const showDiscussions = config.website.discussions.dataset.display as boolean
+const { pageConf } = useCurrentPageConf()
+const showDiscussions = pageConf.discussions.display
 
 const datasetsConf = useDatasetsConf()
 const topicPageConf = datasetsConf.add_to_topic?.page
@@ -219,7 +220,7 @@ onMounted(() => {
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
         <Well
-          v-if="!config.website.discussions.dataset.create"
+          v-if="!pageConf.discussions.create"
           color="blue-cumulus"
           weight="regular"
         >

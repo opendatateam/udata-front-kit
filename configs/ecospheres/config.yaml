@@ -137,17 +137,6 @@ website:
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId:
-  # FIXME: migrate to page conf
-  discussions:
-    dataset:
-      display: true
-      create: true
-    topic:
-      display: true
-      create: true
-    indicator:
-      display: true
-      create: true
   datasets:
     # TODO: copy to other configs
     # TODO: better place for that?
@@ -195,10 +184,13 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #       plural: {string}            # plural name for the object
 #       extended: {string}          # extended name for the object, singular
 #     search:
-#      input: {string}              # placeholder for the search input
+#       input: {string}             # placeholder for the search input
 #     banner:                       # banner for the list page (optionnal)
-#      title: {string}              # title for the banner
-#      content: {string}            # content for the banner
+#       title: {string}             # title for the banner
+#       content: {string}           # content for the banner
+#     discussions:
+#       display: {bool}             # display discussions on detail page
+#       create: {bool}              # create discussions on detail page
 #     filters:                      # list of filters for this {page_id}
 #       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}              # id of the filter
@@ -233,6 +225,9 @@ pages:
         En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
 
         Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    discussions:
+      display: true
+      create: true
     filters:
       - name: Thème INSPIRE
         default_option: Tous les thèmes
@@ -329,6 +324,9 @@ pages:
         Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
 
         Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
+    discussions:
+      display: true
+      create: true
     filters:
       - name: Afficher les brouillons
         id: include_private
@@ -385,6 +383,9 @@ pages:
         L'Ecolab du Commissariat Général au Développement Durable met en place un hub d'indicateurs territoriaux, en co-construction avec les directions générales, les établissements publics et les services déconcentrés des ministères concernés, pour accompagner les territoires dans le suivi de leurs politiques publiques de transition écologique. Ces indicateurs sont référencés par thématiques et enjeux environnementaux de la planification écologique. Chaque fiche détaille la définition, les sources, le calcul des indicateurs et permet d'accéder aux données structurées. Plusieurs bouquets permettent de regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
 
         Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    discussions:
+      display: true
+      create: true
     filters:
       - name: Thématique
         default_option: Toutes les thématiques

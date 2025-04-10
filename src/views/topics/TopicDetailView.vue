@@ -46,8 +46,6 @@ const spatialCoverage = useSpatialCoverage(topic)
 const showCloneModal = ref(false)
 const cloneKeepDatasets = ref(false)
 
-const showDiscussions = config.website.discussions.topic.display
-
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
@@ -59,6 +57,7 @@ const canEdit = computed(() => {
 const canClone = computed(() => useUserStore().isLoggedIn)
 
 const { pageKey, pageConf } = useCurrentPageConf()
+const showDiscussions = pageConf.discussions.display
 const tags = useTagsByRef(pageKey, topic)
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)

@@ -73,6 +73,10 @@ export type PageConf = {
   object: PageObjectConf
   search: PageSearchConf
   banner: PageBannerConf | null
+  discussions: {
+    display: boolean
+    create: boolean
+  }
   filters: PageFilterConf[]
 }
 
