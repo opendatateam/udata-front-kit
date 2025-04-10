@@ -15,7 +15,6 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { usePageConf } from '@/utils/config'
 import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
@@ -27,7 +26,6 @@ import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
-const topicPageConf = usePageConf('bouquets')
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -108,7 +106,7 @@ onMounted(() => {
           <DatasetAddToTopicModal
             v-if="showAddToBouquetModal"
             v-model:show="showAddToBouquetModal"
-            :topic-page-conf="topicPageConf"
+            topic-page-key="bouquets"
             :dataset="indicator"
           />
         </div>

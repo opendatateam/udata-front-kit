@@ -193,7 +193,7 @@ onMounted(() => {
           <DatasetAddToTopicModal
             v-if="showAddToBouquetModal"
             v-model:show="showAddToBouquetModal"
-            :topic-page-conf="topicPageConf"
+            :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
             :dataset="dataset"
           />
         </div>

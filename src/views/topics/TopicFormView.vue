@@ -8,7 +8,6 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import ErrorSummary from '@/components/forms/ErrorSummary.vue'
 import TopicForm from '@/components/forms/topic/TopicForm.vue'
 import TopicOwnerForm from '@/components/forms/topic/TopicOwnerForm.vue'
-import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -25,6 +24,7 @@ import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
 import { useTagsQuery } from '@/utils/tags'
 import { cloneTopic } from '@/utils/topic'
+import { useUniverseQuery } from '@/utils/universe'
 
 interface Props extends TopicPageRouterConf {
   isCreate: boolean
@@ -48,12 +48,13 @@ const { tag: selectedTags } = useTagsQuery(
   routeQuery,
   true
 )
+const { tagsWithUniverse } = useUniverseQuery(pageKey, selectedTags)
 
 const topic: Ref<
   Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
 > = ref({
   private: true,
-  tags: [config.universe.name, ...selectedTags.filter((v) => !!v)],
+  tags: tagsWithUniverse,
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
     [useSiteId()]: {

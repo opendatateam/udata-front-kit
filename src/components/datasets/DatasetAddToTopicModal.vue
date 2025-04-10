@@ -7,11 +7,10 @@ import { toast } from 'vue3-toastify'
 
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
-import type { PageConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
-import { useDatasetsConf, useSiteId } from '@/utils/config'
+import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
 import { useExtras } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
@@ -25,8 +24,8 @@ const props = defineProps({
     type: Object as () => DatasetV2,
     required: true
   },
-  topicPageConf: {
-    type: Object as () => PageConf,
+  topicPageKey: {
+    type: String,
     required: true
   }
 })
@@ -35,6 +34,7 @@ const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
 const datasetsConf = useDatasetsConf()
+const topicPageConf = usePageConf(props.topicPageKey)
 
 const bouquets = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
@@ -136,7 +136,7 @@ const submit = async () => {
     extras: selectedBouquet.value.extras
   })
   toast(
-    `Jeu de données ajouté avec succès au ${props.topicPageConf.object.singular} "${selectedBouquet.value.name}"`,
+    `Jeu de données ajouté avec succès au ${topicPageConf.object.singular} "${selectedBouquet.value.name}"`,
     {
       type: 'success'
     }
@@ -150,7 +150,7 @@ const {
   getErrorMessage,
   isSubmitted,
   handleSubmit
-} = useForm(formErrors, props.topicPageConf.object.singular, {
+} = useForm(formErrors, topicPageConf.object.singular, {
   validateFields,
   onSuccess: submit,
   errorSummaryRef: errorSummary,
@@ -163,7 +163,9 @@ const closeModal = () => {
 
 onMounted(() => {
   const loading = loader.show()
-  topicStore.loadTopicsForUniverse().then(() => loading.hide())
+  topicStore
+    .loadTopicsForUniverse(props.topicPageKey)
+    .then(() => loading.hide())
 })
 </script>
 

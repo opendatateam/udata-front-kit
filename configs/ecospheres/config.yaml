@@ -9,11 +9,6 @@ datagouvfr:
   # oauth settings
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
 
-universe:
-  # universe name, used as bouquets tag
-  # FIXME: remove and migrate to universe_query everywhere
-  name: ecospheres
-
 robots:
   disallow:
   sitemap:

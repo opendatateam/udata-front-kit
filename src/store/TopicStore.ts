@@ -6,9 +6,9 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { usePageConf } from '@/utils/config'
 import { useCheckboxQuery } from '@/utils/filters'
 import { useTagsQuery } from '@/utils/tags'
+import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
 
@@ -59,8 +59,6 @@ export const useTopicStore = defineStore('topic', {
   },
   actions: {
     async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
-      const pageConf = usePageConf(pageKey || 'topics')
-      const { tag: universeTag, ...universeQuery } = pageConf.universe_query
       const { query, ...queryArgs } = args
 
       // extract tags and checkbox filters from query args
@@ -72,14 +70,17 @@ export const useTopicStore = defineStore('topic', {
         pageKey || 'topics',
         argsAfterTagQuery
       )
+      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
+        pageKey || 'topics',
+        tag
+      )
 
       const results = await topicsAPIv2.list({
         params: {
           q: query,
-          tag: [universeTag, ...tag].filter(Boolean).map(String),
-          // FIXME: move to component or page config
+          tag: tagsWithUniverse,
           page_size: config.website.pagination_sizes.topics_list,
-          ...(universeQuery || {}),
+          ...universeQuery,
           ...checkboxArgs,
           ...refinedFilterArgs
         },
@@ -103,14 +104,19 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Load all topics from universe by following pagination links
      */
-    async loadTopicsForUniverse(): Promise<Topic[]> {
+    async loadTopicsForUniverse(pageKey?: string): Promise<Topic[]> {
+      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
+        pageKey || 'topics',
+        []
+      )
       // make sure our user has registerd its permissions
       await useUserStore().waitForStoreInit()
       let response = await topicsAPIv2.list({
         params: {
-          tag: config.universe.name,
+          tag: tagsWithUniverse,
           include_private: 'yes',
-          sort: '-last_modified'
+          sort: '-last_modified',
+          ...universeQuery
         },
         authenticated: true
       })
