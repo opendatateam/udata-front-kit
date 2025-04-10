@@ -148,16 +148,31 @@ website:
               description: "Sport pour tous : Évaluer et améliorer l'égalité d'accès aux activités sportives en France"
               url: 'defis/acces-au-sport'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-acces-au-sport.jpg'
+            - id: '6639df879e70e0b00e5aeef1'
+              name: 'Accès et exploitation des données météorologiques'
+              description: "Comment faciliter la manipulation des données météorologiques ?"
+              url: 'defis/acces-et-exploitation-des-donnees-meteorologiques'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/acces-meteo.jpg'
+            - id: '6639e67fa95c6e4f1da70e39'
+              name: 'Décision agricole'
+              description: "Comment informer la prise de décision à partir des données météorologiques ?"
+              url: 'defis/decision-agricole'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/decision-agricole.jpg'
+            - id: '6639e311f4a75be320cfa517'
+              name: 'Énergies renouvelables'
+              description: "Comment prévoir les variations de production d'énergies renouvelables ?"
+              url: 'defis/energies-renouvelables'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/energies-renouvelables.jpg'
+            - id: '6639ea1a5fde712a09fa0c67'
+              name: 'Îlots de chaleur urbain'
+              description: "Comment identifier les zones sujettes à l'effet d'îlot de chaleur urbain ?"
+              url: 'defis/ilots-de-chaleur-urbain'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/ilot-de-chaleur.jpg'
             - id: '66a0ffa8d8f03afc1d474a53'
               name: 'JOP2024 et offre culturelle'
               description: "Jeux Olympiques et Paralympiques : Enrichissez l'expérience et mettez en valeur l'offre culturelle"
               url: 'defis/jop2024-et-offre-culturelle'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-jo-offre-culturelle.jpg'
-            - id: '66a10128a66990ed3d718a53'
-              name: 'JOP2024 et qualité de l’air'
-              description: "Jeux Olympiques et Paralympiques : enjeux de pollution de l'air dans le cadre d'une activité physique"
-              url: 'defis/jop2024-et-qualite-de-lair'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-jo-qualite-de-l%27air.jpg'
 
         sub_section_tiles:
         sub_section_buttons:
