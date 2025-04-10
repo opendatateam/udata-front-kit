@@ -5,10 +5,10 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetList from '@/components/datasets/DatasetList.vue'
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
-import { debounceWait, usePageConf } from '@/utils/config'
+import { debounceWait } from '@/utils/config'
 
 defineEmits(['search'])
 
@@ -25,9 +25,7 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
-const meta = useRouteMeta()
-// FIXME: pageKey should be mandatory
-const pageConf = usePageConf(meta.pageKey || 'datasets')
+const { meta, pageConf } = useCurrentPageConf()
 
 const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
 const searchResultsMessage = computed(

@@ -2,16 +2,14 @@
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import type { TopicPostData } from '@/model/topic'
-import { useRouteMeta } from '@/router/utils'
-import { usePageConf } from '@/utils/config'
+import { useCurrentPageConf } from '@/router/utils'
 import { useFiltersState } from '@/utils/filters'
 import type { FormErrorMessagesMap } from '@/utils/form'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagSlug, useTagsForFilter } from '@/utils/tags'
 import ErrorMessage from '../ErrorMessage.vue'
 
-const meta = useRouteMeta()
-const pageConf = usePageConf(meta.pageKey || 'topics')
+const { pageKey, pageConf } = useCurrentPageConf()
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData> &
@@ -45,7 +43,7 @@ const initialValuesForFilters = filters.reduce((acc, filter) => {
 }, {})
 const { filtersState } = useFiltersState(
   initialValuesForFilters,
-  meta.pageKey || 'topics',
+  pageKey || 'topics',
   true
 )
 
@@ -92,7 +90,7 @@ const onValidSubmit = async () => {
   // filter out know filters from existing tags and add those gotten from this form
   const filtersPrefixes = filters.map((filter) =>
     useTagSlug(
-      meta.pageKey || 'topics',
+      pageKey || 'topics',
       filter.id,
       undefined,
       Boolean(filter.use_tag_prefix)
@@ -102,7 +100,7 @@ const onValidSubmit = async () => {
     .map((filter) =>
       filtersState[filter.id].selectedValue
         ? useTagSlug(
-            meta.pageKey || 'topics',
+            pageKey || 'topics',
             filter.id,
             filtersState[filter.id].selectedValue,
             Boolean(filter.use_tag_prefix)

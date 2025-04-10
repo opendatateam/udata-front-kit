@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { DatasetProperties } from '@/model/topic'
-import { useRouteMeta } from '@/router/utils'
-import { usePageConf } from '@/utils/config'
+import { useCurrentPageConf } from '@/router/utils'
 
 const datasetProperties = defineModel('datasetProperties-model', {
   type: Object as () => DatasetProperties,
@@ -19,7 +18,7 @@ defineProps({
   }
 })
 
-const pageConf = usePageConf(useRouteMeta().pageKey || 'topics')
+const { pageConf } = useCurrentPageConf()
 </script>
 
 <template>

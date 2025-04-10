@@ -13,21 +13,19 @@ import type {
   PostForm,
   SubjectClass
 } from '@/model/discussion'
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useUserStore } from '@/store/UserStore'
 import { formatDate } from '@/utils'
-import { usePageConf } from '@/utils/config'
 
 const route = useRoute()
-const meta = useRouteMeta()
 const router = useRouter()
 
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const pageConf = usePageConf(meta.pageKey || 'topics')
+const { pageConf } = useCurrentPageConf()
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)

@@ -1,3 +1,4 @@
+import { usePageConf } from '@/utils/config'
 import { type Component } from 'vue'
 import {
   useRoute,
@@ -205,4 +206,16 @@ export const useTopicAdminPagesRoutes = ({
 
 export const useRouteMeta = () => {
   return useRoute().meta
+}
+
+export const useCurrentPageConf = () => {
+  const meta = useRouteMeta()
+  if (!meta.pageKey) {
+    throw new Error('Page key is not defined in route meta')
+  }
+  return {
+    pageKey: meta.pageKey,
+    meta,
+    pageConf: usePageConf(meta.pageKey)
+  }
 }

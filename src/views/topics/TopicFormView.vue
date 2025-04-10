@@ -16,13 +16,13 @@ import {
 import type { Topic, TopicPostData } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/utils'
 import {
-  useRouteMeta,
+  useCurrentPageConf,
   useRouteParamsAsString,
   useRouteQueryAsString
 } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { usePageConf, useSiteId } from '@/utils/config'
+import { useSiteId } from '@/utils/config'
 import { useTagsQuery } from '@/utils/tags'
 import { cloneTopic } from '@/utils/topic'
 
@@ -38,14 +38,13 @@ const userStore = useUserStore()
 const { canAddTopic } = storeToRefs(userStore)
 
 const router = useRouter()
-const meta = useRouteMeta()
-const pageConf = usePageConf(meta.pageKey || 'topics')
+const { pageKey, pageConf } = useCurrentPageConf()
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
 // populate tags from filters in query string
 const { tag: selectedTags } = useTagsQuery(
-  meta.pageKey || 'topics',
+  pageKey || 'topics',
   routeQuery,
   true
 )
@@ -105,7 +104,7 @@ const handleTopicOperation = (
   operation()
     .then((response) => {
       router.push({
-        name: `${meta.pageKey}_detail`,
+        name: `${pageKey}_detail`,
         params: { item_id: response.slug }
       })
     })
@@ -147,7 +146,7 @@ const destroy = async () => {
   ) {
     useTopicStore()
       .delete(topic.value.id)
-      .then(() => router.push({ name: meta.pageKey }))
+      .then(() => router.push({ name: pageKey }))
       .catch((error) => {
         errorMsg.value = `Quelque chose s'est mal passé, merci de réessayer. (${error.code})`
       })
@@ -157,13 +156,13 @@ const destroy = async () => {
 const cancel = () => {
   if (props.isCreate) {
     if (routeQuery.clone == null) {
-      router.push({ name: meta.pageKey })
+      router.push({ name: pageKey })
     } else {
       router.go(-1)
     }
   } else {
     router.push({
-      name: `${meta.pageKey}_detail`,
+      name: `${pageKey}_detail`,
       params: {
         item_id: topic.value.slug
       }

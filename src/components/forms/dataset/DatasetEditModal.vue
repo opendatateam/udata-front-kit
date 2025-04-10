@@ -10,9 +10,8 @@ import {
   type DatasetProperties,
   type DatasetsGroups
 } from '@/model/topic'
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { usePageConf } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
@@ -24,7 +23,7 @@ export interface DatasetEditModalType {
 const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
-const pageConf = usePageConf(useRouteMeta().pageKey || 'topics')
+const { pageConf } = useCurrentPageConf()
 
 const datasets = defineModel({
   type: Object as () => DatasetProperties[],

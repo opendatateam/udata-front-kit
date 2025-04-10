@@ -20,12 +20,15 @@ import {
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/utils'
-import { useRouteMeta, useRouteParamsAsString } from '@/router/utils'
+import {
+  useCurrentPageConf,
+  useRouteMeta,
+  useRouteParamsAsString
+} from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { usePageConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { updateTopicExtras, useExtras } from '@/utils/topic'
@@ -55,9 +58,8 @@ const canEdit = computed(() => {
 })
 const canClone = computed(() => useUserStore().isLoggedIn)
 
-const topicsSlug = meta.pageKey || 'topics'
-const pageConf = usePageConf(topicsSlug)
-const tags = useTagsByRef(topicsSlug, topic)
+const { pageKey, pageConf } = useCurrentPageConf()
+const tags = useTagsByRef(pageKey, topic)
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)
 
@@ -102,14 +104,14 @@ const cloneModalActions = [
 
 const goToEdit = () => {
   router.push({
-    name: `${topicsSlug}_edit`,
+    name: `${pageKey}_edit`,
     params: { item_id: topic.value?.id }
   })
 }
 
 const goToClone = () => {
   router.push({
-    name: `${topicsSlug}_add`,
+    name: `${pageKey}_add`,
     query: {
       clone: topic.value?.id,
       'keep-datasets': cloneKeepDatasets.value ? '1' : '0'
@@ -169,7 +171,7 @@ const metaTitle = computed(() => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: `${topicsSlug}_detail`,
+    name: `${pageKey}_detail`,
     params: { item_id: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
@@ -197,7 +199,7 @@ watch(
         topic.value = res
         if (topic.value.slug !== params.item_id) {
           router.push({
-            name: `${topicsSlug}_detail`,
+            name: `${pageKey}_detail`,
             params: { item_id: topic.value.slug }
           })
         }
@@ -356,7 +358,7 @@ watch(
             <p>
               <RouterLink
                 :to="{
-                  name: `${topicsSlug}_detail`,
+                  name: `${pageKey}_detail`,
                   params: { item_id: clonedFrom.slug }
                 }"
               >

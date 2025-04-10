@@ -13,9 +13,8 @@ import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import { usePageConf } from '@/utils/config'
 import { isOnlyNoGroup, useDatasetFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
@@ -41,7 +40,7 @@ const emits = defineEmits(['updateDatasets'])
 const modal: Ref<DatasetEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
-const pageConf = usePageConf(useRouteMeta().pageKey || 'topics')
+const { pageConf } = useCurrentPageConf()
 
 const {
   groupedDatasets,

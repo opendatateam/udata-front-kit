@@ -3,12 +3,11 @@ import { onMounted, ref, type Ref } from 'vue'
 
 import { type Reuse, type ReuseType } from '@/model/reuse'
 import type { Topic } from '@/model/topic'
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
 import { useReuseStore } from '@/store/ReuseStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { formatDate } from '@/utils'
-import { usePageConf } from '@/utils/config'
 
 const props = defineProps({
   model: {
@@ -21,7 +20,7 @@ const props = defineProps({
   }
 })
 
-const pageConf = usePageConf(useRouteMeta().pageKey || `${props.model}s`)
+const { pageConf } = useCurrentPageConf()
 const reuseStore = useReuseStore()
 const reuseApi = new ReusesAPI()
 const reuses: Ref<Reuse[]> = ref([])

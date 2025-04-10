@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import { useSearchStore } from '@/store/DatasetSearchStore'
-import { usePageConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
@@ -23,10 +22,9 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
-const meta = useRouteMeta()
 
 const store = useSearchStore()
-const pageConf = usePageConf(meta.pageKey || 'datasets')
+const { meta, pageConf } = useCurrentPageConf()
 const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {

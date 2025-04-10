@@ -7,10 +7,10 @@ import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
 import type { TopicPostData } from '@/model/topic'
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
-import { debounceWait, usePageConf } from '@/utils/config'
+import { debounceWait } from '@/utils/config'
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData>,
@@ -18,8 +18,7 @@ const topic = defineModel({
 })
 
 const userStore = useUserStore()
-const meta = useRouteMeta()
-const pageConf = usePageConf(meta.pageKey || 'topics')
+const { pageConf } = useCurrentPageConf()
 
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'

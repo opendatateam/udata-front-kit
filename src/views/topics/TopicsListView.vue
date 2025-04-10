@@ -7,11 +7,11 @@ import { useRoute, useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import TopicList from '@/components/topics/TopicList.vue'
 import type { TopicPageRouterConf } from '@/router/utils'
-import { useRouteMeta } from '@/router/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
-import { debounceWait, usePageConf } from '@/utils/config'
+import { debounceWait } from '@/utils/config'
 
 interface Props extends TopicPageRouterConf {
   query: string
@@ -25,8 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter()
 const route = useRoute()
-const meta = useRouteMeta()
-const pageConf = usePageConf(meta.pageKey || 'topics')
+const { meta, pageConf } = useCurrentPageConf()
 
 const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
 const searchResultsMessage = computed(
