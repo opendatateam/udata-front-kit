@@ -322,17 +322,12 @@ pages:
     tag_prefix: ecospheres
     title: Bouquets
     breadcrumb_title:
-    # TODO: copy to other pages
     object:
       singular: bouquet
       plural: bouquets
       extended: bouquet de données
-    # FIXME: use object conf instead (maybe keep input)
     search:
       input: Filtrer les bouquets
-      results:
-        one: 1 bouquet disponible
-        several: '{{total}} bouquets disponibles'
     banner:
       title: Mettre en commun les usages des données et des indicateurs territoriaux
       content: |

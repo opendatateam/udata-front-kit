@@ -56,10 +56,6 @@ export type PageBannerConf = {
 
 export type PageSearchConf = {
   input: string
-  results: {
-    one: string
-    several: string
-  }
 }
 
 export type PageObjectConf = {

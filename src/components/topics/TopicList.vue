@@ -37,9 +37,9 @@ const { topics, pagination, total } = storeToRefs(topicStore)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return pageConf.search.results.one
+    return `1 ${pageConf.object.singular} disponible`
   } else if (total.value > 1) {
-    return `${pageConf.search.results.several.replace('{{total}}', String(total.value))}`
+    return `${total.value} ${pageConf.object.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
