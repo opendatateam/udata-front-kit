@@ -154,6 +154,7 @@ website:
       create: true
   datasets:
     # TODO: copy to other configs
+    # TODO: better place for that?
     add_to_topic:
       enable: true
       page: bouquets
@@ -162,6 +163,7 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
+  # TODO: better place for that?
   topics:
     can_add_topics:
       everyone: true

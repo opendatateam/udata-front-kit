@@ -10,8 +10,7 @@ import { useTopicsConf } from '@/utils/config'
 
 const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
-// FIXME:
-const { topicsCanAdd } = useTopicsConf()
+const topicConf = useTopicsConf()
 
 export interface RootState {
   isInited: boolean
@@ -40,11 +39,13 @@ export const useUserStore = defineStore('user', {
       return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
     },
     canAddTopic(state): boolean {
-      if (topicsCanAdd.everyone || this.isAdmin) {
+      if (topicConf.can_add_topics.everyone || this.isAdmin) {
         return true
       }
       if (this.loggedIn && state.data != null) {
-        if (topicsCanAdd.authorized_users?.includes(state.data.id)) {
+        if (
+          topicConf.can_add_topics.authorized_users?.includes(state.data.id)
+        ) {
           return true
         }
       }

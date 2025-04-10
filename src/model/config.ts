@@ -1,22 +1,8 @@
-export interface CanAddTopicsConf {
-  everyone: boolean
-  authorized_users: string[]
-}
-
 export interface TopicsConf {
-  slug: string
-  name: string
-  themes: {
-    usage: boolean
-    main_name: string
-    secondary_name: string
+  can_add_topics: {
+    everyone: boolean
+    authorized_users: string[]
   }
-  list_all: boolean
-  display_metadata: boolean
-  activate_read_more: boolean
-  dataset_editorialization: boolean
-  can_add_topics: CanAddTopicsConf
-  show_drafts_by_default: boolean
 }
 
 export interface TopicItemConf {

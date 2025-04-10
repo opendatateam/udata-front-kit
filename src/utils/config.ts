@@ -1,21 +1,10 @@
 import config from '@/config'
-import type {
-  CanAddTopicsConf,
-  DatasetsConf,
-  PagesConf,
-  TopicsConf
-} from '@/model/config'
+import type { DatasetsConf, PagesConf, TopicsConf } from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
-interface TopicsConfNormalized {
-  topicsCanAdd: CanAddTopicsConf
-}
-
-export const useTopicsConf = (): TopicsConfNormalized => {
-  const topicsConf = config.website.topics as TopicsConf
-  return {
-    topicsCanAdd: topicsConf.can_add_topics
-  }
+export const useTopicsConf = (): TopicsConf => {
+  const topicsConf: TopicsConf = config.website.topics
+  return topicsConf
 }
 
 // Get debounce value or set default.
