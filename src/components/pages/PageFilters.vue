@@ -4,7 +4,9 @@ import SelectSpatialGranularity from '@/components/forms/SelectSpatialGranularit
 import type { SpatialCoverage } from '@/model/spatial'
 import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
 import { useSpatialStore } from '@/store/SpatialStore'
+import { useUserStore } from '@/store/UserStore'
 import { useFiltersState } from '@/utils/filters'
+import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import CheckboxComponent from '../CheckboxComponent.vue'
 import SelectComponent from '../SelectComponent.vue'
@@ -13,6 +15,9 @@ const router = useRouter()
 const route = useRoute()
 const meta = useRouteMeta()
 const routeQuery = useRouteQueryAsString().query
+
+const userStore = useUserStore()
+const { loggedIn } = storeToRefs(userStore)
 
 const selectedGranularity = ref(routeQuery.granularity || undefined)
 const selectedGeozone: Ref<string | null> = ref(null)
@@ -69,10 +74,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
+  <template v-for="filter in pageConf.filters" :key="filter.id">
     <div
-      v-for="filter in pageConf.filters"
-      :key="filter.id"
+      v-if="(filter.authenticated && loggedIn) || !filter.authenticated"
       class="fr-select-group"
     >
       <SelectComponent
@@ -109,5 +113,5 @@ onMounted(async () => {
         @update:model-value="(value) => switchFilter(filter.id, value)"
       />
     </div>
-  </div>
+  </template>
 </template>

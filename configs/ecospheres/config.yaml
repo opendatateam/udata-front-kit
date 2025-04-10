@@ -206,6 +206,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #         use_tag_prefix: {bool}    # whether to use {tag_prefix}-{item.id} when building value tag
 #         default_option: {string?} # default option for the filter (optional)
 #         default_value: {string?}  # default value for the filter (optional)
+#         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
 #         values:                   # list of values for this filter
 #           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}        # name of the value
@@ -330,12 +331,12 @@ pages:
 
         Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
     filters:
-      # FIXME: needs to be visible only for connected users :-/
       - name: Afficher les brouillons
         id: include_private
         type: checkbox
         default_option:
         default_value: true
+        authenticated: true
         values: []
       - name: Thématique
         default_option: Toutes les thématiques

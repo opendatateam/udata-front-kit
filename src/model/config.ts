@@ -42,6 +42,7 @@ export interface PageFilterConf {
   default_value: string | boolean | null
   use_tag_prefix: boolean | null
   form: PageFilterFormConf | null
+  authenticated: boolean | null
   values: PageFilterValueConf[]
 }
 
