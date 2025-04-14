@@ -199,7 +199,7 @@ website:
     link:
   menu:
     - text: Défis
-      to: /defis?saison=saison-3
+      to: /defis
     - text: Open Data University
       to: /opendatauniversity
     - text: Guides
