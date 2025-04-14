@@ -18,6 +18,7 @@ jobs:
           - ecospheres
           - meteo-france
           - logistique
+          - defis
     permissions:
       deployments: write
     # only run if the PR is from the same repo
