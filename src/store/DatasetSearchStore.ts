@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 
 import SearchAPI from '@/services/api/SearchAPI'
-import { usePageConf } from '@/utils/config'
+import { useCheckboxQuery } from '@/utils/filters'
 import { useTagsQuery } from '@/utils/tags'
+import { useUniverseQuery } from '@/utils/universe'
 import type { DatasetV2 } from '@datagouv/components'
 
 const PAGE_SIZE = 20
@@ -44,15 +45,28 @@ export const useSearchStore = defineStore('search', {
   },
   actions: {
     async query(args: QueryArgs, pageKey?: string) {
-      const pageConf = usePageConf(pageKey || 'datasets')
       const { query, ...queryArgs } = args
-      const { extraArgs, tag } = useTagsQuery(pageKey || 'datasets', queryArgs)
-      const { tag: universeTag, ...universeQuery } = pageConf.universe_query
+
+      // extract tags and checkbox filters from query args
+      const { extraArgs: argsAfterTagQuery, tag } = useTagsQuery(
+        pageKey || 'datasets',
+        queryArgs
+      )
+      const { extraArgs: refinedFilterArgs, checkboxArgs } = useCheckboxQuery(
+        pageKey || 'datasets',
+        argsAfterTagQuery
+      )
+      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
+        pageKey || 'datasets',
+        tag
+      )
+
       const results = await searchAPI.search(query, {
         page_size: PAGE_SIZE,
-        tag: [universeTag, ...tag].filter(Boolean),
+        tag: tagsWithUniverse,
         ...universeQuery,
-        ...extraArgs
+        ...checkboxArgs,
+        ...refinedFilterArgs
       })
       this.datasets = results.data
       this.total = results.total

@@ -67,7 +67,7 @@ export type PageObjectConf = {
 
 export type PageConf = {
   tag_prefix: string | null
-  universe_query: PageUniverseQueryConf
+  universe_query: PageUniverseQueryConf | null
   title: string
   breadcrumb_title: string | null
   object: PageObjectConf

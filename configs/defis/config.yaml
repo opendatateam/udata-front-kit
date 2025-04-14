@@ -1,16 +1,12 @@
 # config file for defis
 
+site_id: defis
+
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 670924ba96082fcc26ee3898
-
-universe:
-  # "universe" topic id
-  topic_id: 65c0f2e2fb22540a9e91a2e4
-  # universe name, used as bouquets tag
-  name: defis
 
 robots:
   disallow:
@@ -150,12 +146,12 @@ website:
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-acces-au-sport.jpg'
             - id: '6639df879e70e0b00e5aeef1'
               name: 'Accès et exploitation des données météorologiques'
-              description: "Comment faciliter la manipulation des données météorologiques ?"
+              description: 'Comment faciliter la manipulation des données météorologiques ?'
               url: 'defis/acces-et-exploitation-des-donnees-meteorologiques'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/acces-meteo.jpg'
             - id: '6639e67fa95c6e4f1da70e39'
               name: 'Décision agricole'
-              description: "Comment informer la prise de décision à partir des données météorologiques ?"
+              description: 'Comment informer la prise de décision à partir des données météorologiques ?'
               url: 'defis/decision-agricole'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/decision-agricole.jpg'
             - id: '6639e311f4a75be320cfa517'
@@ -202,6 +198,8 @@ website:
     name:
     link:
   menu:
+    - text: Défis
+      to: /defis
     - text: Open Data University
       to: /opendatauniversity
     - text: Guides
@@ -256,37 +254,73 @@ website:
   matomo:
     host:
     siteId:
-  discussions:
-    dataset:
-      display: true
-      create: false
-    topic:
-      display: false
-      create: false
   datasets:
-    add_to_bouquet: false
+    add_to_topic:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    slug: defis
-    name: défi
-    extras_key: 'defis'
-    themes:
-      usage: true
-      main_name: thématique
-      secondary_name: chantier
-    # include a list page with all topics
-    list_all: false
-    show_drafts_by_default: false
-    display_metadata: false
-    activate_read_more: false
-    dataset_editorialization: false
     can_add_topics:
       everyone: false
       authorized_users:
-        - 5fda299e56f984a4b126afe1 #thanh-ha
-        - 5e6f426e634f417810ab794b #geoffrey
+        - 5fda299e56f984a4b126afe1 # thanh-ha
+        - 5e6f426e634f417810ab794b # geoffrey
+        - 65e8b5082f2504e916c8f6da # ecospheres
+
+pages:
+  # DEFIS
+  defis:
+    universe_query:
+      tag: defisdatagouvfr
+    # FIXME: need migration of extras to tags
+    tag_prefix: defisdatagouvfr
+    title: Défis
+    breadcrumb_title: Défis
+    object:
+      singular: défi
+      plural: défis
+      extended: défi
+    search:
+      input: Chercher un défi
+    banner:
+    discussions:
+      display: false
+      create: false
+    filters:
+      - name: Saison
+        default_option: Toutes les saisons
+        id: saison
+        type: select
+        color: green-emeraude
+        use_tag_prefix: true
+        form:
+          required: true
+        values:
+          - id: saison-1
+            name: Saison 1
+          - id: saison-2
+            name: Saison 2
+          - id: saison-3
+            name: Saison 3
+  # DATASETS
+  # FIXME: make it possible to disable in routing
+  datasets:
+    universe_query:
+    tag_prefix:
+    title:
+    breadcrumb_title: Données
+    object:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input:
+    banner:
+    discussions:
+      display: false
+      create: false
+    filters: []
+
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
