@@ -7,8 +7,6 @@ datagouvfr:
   # FIXME:
   oauth_client_id: 6709257a89f70088a223eba3
 universe:
-  # "universe" topic id
-  topic_id: 66d5caab2ef9e95fc1625446
   # universe name, used as bouquets tag
   name: logistique
 
@@ -60,16 +58,16 @@ website:
               url: 'bouquets?theme=Socio-économique'
               image_url: '/logistique/assets/socio.jpg'
             - name: 'Filières'
-              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
+              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industrielle, énergétique...).'
               url: 'bouquets?theme=Filières'
               image_url: '/logistique/assets/risques.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
   header_button:
-    display: false
+    display: true
     label: 'Donnez votre avis'
-    link:
+    link: https://framaforms.org/votre-avis-sur-logistiquedatagouvfr-1741274528
   header_search:
     display: true
     placeholder: Rechercher...
@@ -81,7 +79,11 @@ website:
     name:
     link:
   menu:
-    - text: Accès aux données
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets
+    - text: Bouquets
       to: /bouquets
     - text: A propos
       to: /about
@@ -164,6 +166,19 @@ website:
 
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
+  datasets:
+    universe_query:
+      topic: 66d5caab2ef9e95fc1625446
+    tag_prefix:
+    title: Jeux de données
+    breadcrumb_title: Données
+    search:
+      input: Rechercher un jeu de données
+      results:
+        one: 1 jeu de données disponible
+        several: '{{total}} jeux de données disponibles'
+    banner:
+    filters: []
   bouquets:
     universe_query:
     tag_prefix: logistique
