@@ -199,7 +199,7 @@ website:
     link:
   menu:
     - text: Défis
-      to: /defis
+      to: /defis?saison=saison-3
     - text: Open Data University
       to: /opendatauniversity
     - text: Guides
@@ -273,7 +273,6 @@ pages:
     list_all: true
     universe_query:
       tag: defisdatagouvfr
-    # FIXME: need migration of extras to tags
     tag_prefix: defisdatagouvfr
     title: Défis
     breadcrumb_title: Défis

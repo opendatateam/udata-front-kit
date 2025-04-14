@@ -129,7 +129,7 @@ defineExpose({
     />
   </template>
   <NoResults v-else :clear-filters="clearFilters">
-    <template #description>
+    <template v-if="canAddTopic" #description>
       Essayez de réinitialiser les filtres pour agrandir votre champ de
       recherche.<br />
       Vous pouvez aussi contribuer en créant un {{ pageConf.object.singular }}.
