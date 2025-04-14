@@ -148,13 +148,6 @@ website:
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 292
-  discussions:
-    dataset:
-      display: true
-      create: false
-    topic:
-      display: false
-      create: false
   datasets:
     add_to_topic:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
@@ -185,6 +178,9 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
+    discussions:
+      display: true
+      create: false
     filters:
       - name: Catégories
         default_option: Toutes les catégories

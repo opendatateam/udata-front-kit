@@ -138,7 +138,6 @@ website:
     host: 'https://stats.data.gouv.fr'
     siteId:
   datasets:
-    # TODO: copy to other configs
     # TODO: better place for that?
     add_to_topic:
       enable: true
