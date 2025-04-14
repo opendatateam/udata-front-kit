@@ -61,7 +61,6 @@ interface SearchPageRoutesOptions {
 
 // FIXME: move somewhere else? e.g. @/router/model.ts
 export interface TopicPageRouterConf {
-  listAll: boolean
   displayMetadata: boolean
   enableReadMore: boolean
   datasetEditorialization: boolean
@@ -113,12 +112,7 @@ export const useTopicSearchPageRoutes = ({
   filtersComponent,
   cardComponent
 }: TopicSearchPageRoutesOptions): RouteRecordRaw => {
-  const listViewComponent = () =>
-    import(
-      topicConf.listAll
-        ? '@/views/topics/TopicsListView.vue'
-        : '@/views/NotFoundView.vue'
-    )
+  const listViewComponent = () => import('@/views/topics/TopicsListView.vue')
   const detailsViewComponent = () =>
     import('@/views/topics/TopicDetailView.vue')
   return useSearchPageRoutes({

@@ -149,6 +149,7 @@ website:
 pages:
   # DATASETS
   datasets:
+    list_all: true
     universe_query:
       topic: 66d5caab2ef9e95fc1625446
     tag_prefix:
@@ -167,6 +168,7 @@ pages:
     filters: []
   # BOUQUETS
   bouquets:
+    list_all: true
     universe_query:
       tag: logistique
     tag_prefix: logistique

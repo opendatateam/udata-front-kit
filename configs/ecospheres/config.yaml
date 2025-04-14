@@ -174,6 +174,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #
 # pages:
 #   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
+#     list_all: {bool}              # whether to have a list view or not
 #     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
 #     tag_prefix: {string}          # prefix for tags on data.gouv.fr
 #     title: {string}               # title for the list page
@@ -207,6 +208,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 pages:
   # DATASETS
   datasets:
+    list_all: true
     universe_query:
       topic: 65141cd780d73f98142e9265
     tag_prefix:
@@ -306,6 +308,7 @@ pages:
             name: Zones à risque naturel
   # BOUQUETS
   bouquets:
+    list_all: true
     universe_query:
       tag: ecospheres
     tag_prefix: ecospheres
@@ -364,6 +367,7 @@ pages:
         type: spatial_zone
   # INDICATORS
   indicators:
+    list_all: true
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67c57c2f1a418addfc94d38a

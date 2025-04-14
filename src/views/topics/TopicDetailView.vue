@@ -2,7 +2,7 @@
 import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { capitalize, computed, inject, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -64,10 +64,10 @@ const { datasetsProperties, clonedFrom } = useExtras(topic)
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
-  if (props.listAll === true) {
+  if (pageConf.list_all === true) {
     breadcrumbs.push({
       to: `/${meta.pageKey || 'topics'}`,
-      text: `${capitalize(pageConf.object.plural)}`
+      text: pageConf.breadcrumb_title || pageConf.title
     })
   }
   breadcrumbs.push({ to: '', text: topic.value?.name ?? '' })

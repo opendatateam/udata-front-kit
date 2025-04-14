@@ -166,6 +166,7 @@ organizations:
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
   datasets:
+    list_all: true
     tag_prefix:
     universe_query:
       tag: meteodatagouvfr

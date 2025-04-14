@@ -41,7 +41,7 @@ const dataset = computed(() => datasetStore.get(datasetId))
 
 const showAddToBouquetModal = ref(false)
 
-const { pageConf } = useCurrentPageConf()
+const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
 
 const datasetsConf = useDatasetsConf()
@@ -53,12 +53,15 @@ const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
-const links = computed(() => [
-  { to: '/', text: 'Accueil' },
-  // FIXME:
-  { to: '/datasets', text: 'Données' },
-  { text: dataset.value?.title || '' }
-])
+const links = computed(() => {
+  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  breadcrumbs.push({
+    to: pageConf.list_all === true ? `/${pageKey || 'datasets'}` : '',
+    text: pageConf.breadcrumb_title || pageConf.title
+  })
+  breadcrumbs.push({ to: '', text: dataset.value?.title ?? '' })
+  return breadcrumbs
+})
 
 const tabTitles = [
   { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },

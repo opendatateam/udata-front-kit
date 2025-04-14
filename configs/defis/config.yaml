@@ -270,6 +270,7 @@ website:
 pages:
   # DEFIS
   defis:
+    list_all: true
     universe_query:
       tag: defisdatagouvfr
     # FIXME: need migration of extras to tags
@@ -303,8 +304,8 @@ pages:
           - id: saison-3
             name: Saison 3
   # DATASETS
-  # FIXME: make it possible to disable in routing
   datasets:
+    list_all: false
     universe_query:
     tag_prefix:
     title:

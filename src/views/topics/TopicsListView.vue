@@ -67,6 +67,15 @@ const FiltersComponent = computed(() => {
     () => import('@/components/pages/PageFilters.vue')
   )
 })
+
+// TODO: this should be handled by the router, but we don't have access to pageConf there
+onMounted(() => {
+  if (!pageConf.list_all) {
+    router.push({
+      name: 'not_found'
+    })
+  }
+})
 </script>
 
 <template>

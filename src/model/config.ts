@@ -66,6 +66,7 @@ export type PageObjectConf = {
 }
 
 export type PageConf = {
+  list_all: boolean
   tag_prefix: string | null
   universe_query: PageUniverseQueryConf | null
   title: string

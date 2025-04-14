@@ -6,7 +6,6 @@ import {
 import type { RouteRecordRaw } from 'vue-router'
 
 const topicConf = {
-  listAll: true,
   displayMetadata: false,
   enableReadMore: false,
   datasetEditorialization: false
