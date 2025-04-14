@@ -204,6 +204,10 @@ pages:
             name: Environnement
           - id: socio-economique
             name: Socio-économique
+      - name: Couverture territoriale
+        default_option:
+        id: geozone
+        type: spatial_zone
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
