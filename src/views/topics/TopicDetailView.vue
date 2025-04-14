@@ -19,7 +19,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
-import type { TopicPageRouterConf } from '@/router/utils'
+import type { TopicPageRouterConf } from '@/router/model'
 import {
   useCurrentPageConf,
   useRouteMeta,

@@ -13,7 +13,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic, TopicPostData } from '@/model/topic'
-import type { TopicPageRouterConf } from '@/router/utils'
+import type { TopicPageRouterConf } from '@/router/model'
 import {
   useCurrentPageConf,
   useRouteParamsAsString,

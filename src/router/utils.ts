@@ -5,6 +5,7 @@ import {
   type RouteLocationNormalizedLoaded,
   type RouteRecordRaw
 } from 'vue-router'
+import type { TopicPageRouterConf } from './model'
 
 export type QueryAsString = Record<string, string | null | undefined>
 
@@ -57,13 +58,6 @@ interface SearchPageRoutesOptions {
   filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
   props?: Record<string, unknown>
-}
-
-// FIXME: move somewhere else? e.g. @/router/model.ts
-export interface TopicPageRouterConf {
-  displayMetadata: boolean
-  enableReadMore: boolean
-  datasetEditorialization: boolean
 }
 
 interface TopicSearchPageRoutesOptions
