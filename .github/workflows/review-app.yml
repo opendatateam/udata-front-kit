@@ -5,56 +5,78 @@ name: Deploy review app
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Site to deploy (ecospheres, meteo-france, or logistique)'
+        required: true
+        default: 'ecospheres'
+        type: choice
+        options:
+          - ecospheres
+          - meteo-france
+          - logistique
+      pr_number:
+        description: 'PR number (required for manual deployments)'
+        required: true
+        type: string
 
 jobs:
   handle_review_app:
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.site }}
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.site || 'ecospheres' }}
       cancel-in-progress: false
-    strategy:
-      matrix:
-        site:
-          - ecospheres
-          - meteo-france
-          - logistique
     permissions:
       deployments: write
-    # only run if the PR is from the same repo
-    if: github.event.pull_request.head.repo.full_name == github.repository && github.event_name == 'pull_request'
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
+      github.event_name == 'workflow_dispatch'
     steps:
+      - name: Set environment variables
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "SITE_ID=${{ github.event.pull_request.head.ref == 'main' && 'ecospheres' || 'ecospheres' }}" >> $GITHUB_ENV
+            echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          else
+            echo "SITE_ID=${{ inputs.site }}" >> $GITHUB_ENV
+            echo "PR_NUMBER=${{ inputs.pr_number }}" >> $GITHUB_ENV
+          fi
+
       - name: Debug event
         run: |
           echo "Event name: ${{ github.event_name }}"
           echo "Event action: ${{ github.event.action }}"
-          echo "Pull request state: ${{ github.event.pull_request.state }}"
+          echo "Pull request state: ${{ github.event.pull_request.state || 'N/A' }}"
+          echo "Site ID: ${{ env.SITE_ID }}"
+          echo "PR number: ${{ env.PR_NUMBER }}"
 
       - name: Cloning repo
-        if: github.event.action != 'closed'
+        if: github.event_name == 'workflow_dispatch' || github.event.action != 'closed'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Start deployment
-        if: github.event.action != 'closed'
+        if: github.event_name == 'workflow_dispatch' || github.event.action != 'closed'
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
           token: ${{ github.token }}
-          environment: ${{ matrix.site }}-preview
+          environment: ${{ env.SITE_ID }}-preview
           initial-status: in_progress
           transient-environment: true
 
       - name: Create the review app
-        if: github.event.action == 'opened' || github.event.action == 'reopened'
+        if: github.event_name == 'workflow_dispatch' || github.event.action == 'opened' || github.event.action == 'reopened'
         uses: dokku/github-action@master
+        # ignore errors as the app might already exist on workflow_dispatch
+        continue-on-error: true
         with:
           command: review-apps:create
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+          review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE_ID }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
-          # omitting this will prevent the app from being built (which is what we want)
-          # branch: 'main'
 
       - name: Set site id as build arg
         if: always()
@@ -65,20 +87,20 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            docker-options:add deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }} build "--build-arg VITE_SITE_ID=${{ matrix.site }}"
+            docker-options:add deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE_ID }} build "--build-arg VITE_SITE_ID=${{ env.SITE_ID }}"
 
       - name: Push to dokku
-        if: github.event.action != 'closed'
+        if: github.event_name == 'workflow_dispatch' || github.event.action != 'closed'
         uses: dokku/github-action@master
         with:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+          review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE_ID }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           git_push_flags: '--force'
           branch: 'main'
 
       - name: Enable SSL with Let's Encrypt
-        if: github.event.action == 'opened' || github.event.action == 'reopened'
+        if: github.event_name == 'workflow_dispatch' || github.event.action == 'opened' || github.event.action == 'reopened'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
@@ -86,22 +108,29 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            letsencrypt:enable deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+            letsencrypt:enable deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE_ID }}
 
-      - name: Destroy the review app
-        if: github.event.action == 'closed'
-        uses: dokku/github-action@master
+      - uses: mikefarah/yq@de2f77b49cbd40fd67031ee602245d0acc4ac482
+        id: get-sites
         with:
-          command: review-apps:destroy
-          git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
-          ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          cmd: eval '.on.workflow_dispatch.inputs.site.options[]' .github/workflows/review-app.yml
+
+      - name: Destroy all review apps
+        if: github.event.action == 'closed'
+        run: |
+          echo "${{ steps.get-sites.outputs.result }}" | while read site; do
+            echo "Destroying review app for site: $site"
+            ssh -i <(echo "${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}") \
+                -o StrictHostKeyChecking=no \
+                dokku@${{ secrets.REVIEW_APP_SSH_HOST }} \
+                apps:destroy deploy-preview-${{ env.PR_NUMBER }}--$site || true
+          done
 
       - name: Update deployment status
-        if: github.event.action != 'closed'
+        if: github.event_name == 'workflow_dispatch' || github.event.action != 'closed'
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ github.token }}
-          environment-url: https://deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}.sandbox.data.developpement-durable.gouv.fr
+          environment-url: https://deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE_ID }}.sandbox.data.developpement-durable.gouv.fr
           state: ${{ job.status == 'success' && 'success' || 'failure' }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
