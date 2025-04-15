@@ -74,7 +74,7 @@ website:
         sub_section_cards:
           title:
           cards:
-            - id: '6704d5262a223f0cbc866c68'
+            - id: '67f5438a3b2d79d922863e03'
               name: 'Diversité et inclusion en entreprise'
               description: 'Quelle politique sur l’inclusion et la diversité au sein d’EDF SA ? Défi porté par EDF'
               url: '/defis/diversite-et-inclusion-en-entreprise'
@@ -147,7 +147,7 @@ website:
             - id: '6639df879e70e0b00e5aeef1'
               name: 'Accès et exploitation des données météorologiques'
               description: 'Comment faciliter la manipulation des données météorologiques ?'
-              url: 'defis/acces-et-exploitation-des-donnees-meteorologiques'
+              url: 'defis/acces-aux-donnees-meteos'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/acces-meteo.jpg'
             - id: '6639e67fa95c6e4f1da70e39'
               name: 'Décision agricole'
