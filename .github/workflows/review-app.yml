@@ -113,7 +113,7 @@ jobs:
       - uses: mikefarah/yq@de2f77b49cbd40fd67031ee602245d0acc4ac482
         id: get-sites
         with:
-          cmd: yq '.on.workflow_dispatch.inputs.site | [.default] + .options[] | unique[]' '.github/workflows/review-app.yml'
+          cmd: yq 'unique(.on.workflow_dispatch.inputs.site.options[])' '.github/workflows/review-app.yml'
 
       - name: Destroy all review apps
         if: github.event.action == 'closed'
