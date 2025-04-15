@@ -37,15 +37,15 @@ website:
           cards:
             - name: 'Données climatologiques (par station et spatialisées)'
               description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
-              url: 'datasets?tags=climatologique-base'
+              url: 'datasets?category=climatologique-base'
               image_url: '/meteo-france/assets/climatologie.png'
             - name: 'Données de référence pour le changement climatique'
               description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
-              url: 'datasets?tags=climatologique-changement-climatique'
+              url: 'datasets?category=climatologique-changement-climatique'
               image_url: '/meteo-france/assets/climatique.jpg'
             - name: 'Données de Prévision Numérique du Temps (PNT)'
               description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
-              url: 'datasets?tags=pnt'
+              url: 'datasets?category=pnt'
               image_url: '/meteo-france/assets/pnt.png'
         sub_section_tiles:
           title:
