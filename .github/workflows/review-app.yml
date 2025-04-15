@@ -16,6 +16,8 @@ on:
           - ecospheres
           - meteo-france
           - logistique
+          - hackathon
+          - defis
       pr_number:
         description: 'PR number (required for manual deployments)'
         required: true
@@ -110,7 +112,8 @@ jobs:
           script: |
             letsencrypt:enable deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE_ID }}
 
-      - uses: mikefarah/yq@de2f77b49cbd40fd67031ee602245d0acc4ac482
+      - name: Extract available sites
+        uses: mikefarah/yq@de2f77b49cbd40fd67031ee602245d0acc4ac482
         id: get-sites
         with:
           cmd: yq '.on.workflow_dispatch.inputs.site.options[]' '.github/workflows/review-app.yml'

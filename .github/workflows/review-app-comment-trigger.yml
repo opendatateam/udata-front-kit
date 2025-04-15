@@ -1,0 +1,147 @@
+name: Trigger Review App Deployment from Comments
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  process_comment:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/deploy') }}
+
+    steps:
+      - name: Checkout code to access workflow file
+        uses: actions/checkout@v4
+
+      - name: Extract available sites
+        id: available_sites
+        uses: mikefarah/yq@de2f77b49cbd40fd67031ee602245d0acc4ac482
+        with:
+          cmd: yq '.on.workflow_dispatch.inputs.site.options[]' '.github/workflows/review-app.yml'
+
+      - name: Format available sites
+        id: format_sites
+        run: |
+          # Format the sites as a comma-separated list, excluding ecospheres
+          AVAILABLE_SITES=$(echo "${{ steps.available_sites.outputs.result }}" | grep -v "ecospheres" | tr '\n' ',' | sed 's/,$//')
+          echo "AVAILABLE_SITES=$AVAILABLE_SITES" >> $GITHUB_ENV
+          echo "available_sites=$AVAILABLE_SITES" >> $GITHUB_OUTPUT
+          echo "Available sites: $AVAILABLE_SITES"
+
+      - name: Get PR details
+        id: pr_details
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            core.setOutput('pr_number', prNumber);
+
+            // Get PR information to verify it's from the same repository
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            const isSameRepo = pullRequest.head.repo.full_name === context.repo.full_name;
+            core.setOutput('is_same_repo', isSameRepo.toString());
+
+            return { prNumber, isSameRepo };
+
+      - name: Parse deployment command
+        id: parse_command
+        if: ${{ steps.pr_details.outputs.is_same_repo == 'true' }}
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
+          AVAILABLE_SITES="${{ env.AVAILABLE_SITES }}"
+
+          # Extract sites from command
+          if [[ $COMMENT =~ /deploy\ +([a-zA-Z0-9,-]+) ]]; then
+            SITES="${BASH_REMATCH[1]}"
+
+            # Remove spaces if any
+            SITES=$(echo $SITES | tr -d '[:space:]')
+
+            # If "all" is specified, use all available sites (excluding ecospheres)
+            if [[ "$SITES" == "all" ]]; then
+              SITES="$AVAILABLE_SITES"
+            fi
+
+            echo "SITES=$SITES" >> $GITHUB_ENV
+            echo "sites=$SITES" >> $GITHUB_OUTPUT
+            echo "has_valid_sites=true" >> $GITHUB_OUTPUT
+          else
+            # No site specified, fail
+            echo "No site specified in the deployment command" >> $GITHUB_STEP_SUMMARY
+            echo "has_valid_sites=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Add reaction to comment
+        if: ${{ steps.pr_details.outputs.is_same_repo == 'true' && steps.parse_command.outputs.has_valid_sites == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content: 'rocket'
+            });
+
+      - name: Trigger deployments
+        if: ${{ steps.pr_details.outputs.is_same_repo == 'true' && steps.parse_command.outputs.has_valid_sites == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const sites = '${{ steps.parse_command.outputs.sites }}'.split(',');
+            const prNumber = '${{ steps.pr_details.outputs.pr_number }}';
+            const availableSites = '${{ steps.format_sites.outputs.available_sites }}'.split(',').filter(Boolean);
+
+            // Create a comment to inform about the deployments
+            let deploymentMessage = `📦 Triggering deployment for site(s): **${sites.join(', ')}**\n\n`;
+            let validSitesFound = false;
+
+            for (const site of sites) {
+              // Skip ecospheres as it's deployed directly by PR events
+              if (site === 'ecospheres') {
+                deploymentMessage += `ℹ️ Note: Site 'ecospheres' is deployed automatically by PR events and will be skipped.\n`;
+                continue;
+              }
+
+              // Validate against available sites
+              if (!availableSites.includes(site)) {
+                deploymentMessage += `⚠️ Warning: Site '${site}' is not recognized and will be skipped.\n`;
+                continue;
+              }
+
+              validSitesFound = true;
+              deploymentMessage += `🚀 Starting deployment for **${site}**...\n`;
+
+              try {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: 'review-app.yml',
+                  ref: 'main',
+                  inputs: {
+                    site: site,
+                    pr_number: prNumber
+                  }
+                });
+              } catch (error) {
+                deploymentMessage += `❌ Failed to trigger deployment for ${site}: ${error.message}\n`;
+                continue;
+              }
+            }
+
+            if (!validSitesFound) {
+              deploymentMessage += `\n❌ No valid sites were found to deploy. Please check your command and try again.`;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: deploymentMessage
+            });
