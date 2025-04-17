@@ -30,8 +30,10 @@ const indicatorId = route.params.iid
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
-const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
-const { unite } = useIndicatorExtras(indicator)
+const indicator = computed(
+  () => datasetStore.get(indicatorId) as Indicator | undefined
+)
+const { unite, api } = useIndicatorExtras(indicator)
 
 const showAddToBouquetModal = ref(false)
 
@@ -46,16 +48,28 @@ const links = computed(() => [
 ])
 
 const tabTitles = [
-  { title: 'Informations', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Fichiers et API', tabId: 'tab-1', panelId: 'tab-content-1' },
+  { title: 'Informations', tabId: 'tab-info', panelId: 'tab-content-info' },
+  {
+    title: 'Fichiers et API',
+    tabId: 'tab-files',
+    panelId: 'tab-content-files'
+  },
   {
     title: 'Réutilisations',
-    tabId: 'tab-2',
-    panelId: 'tab-content-2'
+    tabId: 'tab-reuses',
+    panelId: 'tab-content-reuses'
   },
-  { title: 'Discussions', tabId: 'tab-3', panelId: 'tab-content-3' },
-  { title: 'Sources', tabId: 'tab-4', panelId: 'tab-content-4' },
-  { title: 'Détails techniques', tabId: 'tab-5', panelId: 'tab-content-5' }
+  {
+    title: 'Discussions',
+    tabId: 'tab-discussions',
+    panelId: 'tab-content-discussions'
+  },
+  { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
+  {
+    title: 'Détails techniques',
+    tabId: 'tab-details',
+    panelId: 'tab-content-details'
+  }
 ]
 
 const activeTab = ref(0)
@@ -63,6 +77,46 @@ const activeTab = ref(0)
 const description = computed(() => descriptionFromMarkdown(indicator))
 const license = useLicense(indicator)
 const spatialGranularity = useSpatialGranularity(indicator)
+
+const dataVizUrl: Ref<string | null> = ref(null)
+watch(
+  () => api.value?.id,
+  (iid) => {
+    if (!iid) return null
+    const cleanId = iid.replace('id_', '')
+    // FIXME: this is a temporary access list for indicators with a viz available
+    // we should either have a dataviz for every indicator OR enable CORS on the dataviz server to test dynamically
+    const availableIds = [
+      '26',
+      '606',
+      '81',
+      '832',
+      '131',
+      '42',
+      '839',
+      '421',
+      '914',
+      '638',
+      '499',
+      '407',
+      '948',
+      '947',
+      '331',
+      '804',
+      '897'
+    ]
+    if (availableIds.includes(cleanId)) {
+      dataVizUrl.value = `https://region-beta.indicateurs.ecologie.gouv.fr/embed/${cleanId}/`
+      // insert at third position
+      tabTitles.splice(2, 0, {
+        title: 'Visualisation',
+        tabId: 'tab-dataviz',
+        panelId: 'tab-content-dataviz'
+      })
+    }
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   datasetStore
@@ -119,12 +173,12 @@ onMounted(() => {
       :tab-titles="tabTitles"
     >
       <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent panel-id="tab-content-info" tab-id="tab-info">
         <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Fichiers -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent panel-id="tab-content-files" tab-id="tab-files">
         <ResourcesList
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
@@ -132,23 +186,35 @@ onMounted(() => {
         <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
+      <!-- Visualisation -->
+      <DsfrTabContent
+        v-if="dataVizUrl"
+        panel-id="tab-content-dataviz"
+        tab-id="tab-dataviz"
+      >
+        <iframe width="100%" height="500px" :src="dataVizUrl"></iframe>
+      </DsfrTabContent>
+
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent panel-id="tab-content-reuses" tab-id="tab-reuses">
         <ReusesList model="dataset" :object-id="indicator.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
+      <DsfrTabContent
+        panel-id="tab-content-discussions"
+        tab-id="tab-discussions"
+      >
         <DiscussionsList :subject="indicator" subject-class="Indicator" />
       </DsfrTabContent>
 
       <!-- Sources -->
-      <DsfrTabContent panel-id="tab-content-4" tab-id="tab-4">
+      <DsfrTabContent panel-id="tab-content-sources" tab-id="tab-sources">
         <IndicatorSourcesList :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Détails techniques -->
-      <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
+      <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
         <InformationPanel
           v-if="license"
           :dataset="indicator"
