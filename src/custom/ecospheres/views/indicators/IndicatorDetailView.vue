@@ -85,7 +85,9 @@ watch(
     if (!iid) return null
     const cleanId = iid.replace('id_', '')
     // FIXME: this is a temporary access list for indicators with a viz available
-    // we should either have a dataviz for every indicator OR enable CORS on the dataviz server to test dynamically
+    // we should either have a dataviz for every indicator
+    // OR enable CORS on the dataviz server to test dynamically
+    // OR have a dedicated attribute for that in extras (e.g. extras.dataviz_embed_url)
     const availableIds = [
       '26',
       '606',
