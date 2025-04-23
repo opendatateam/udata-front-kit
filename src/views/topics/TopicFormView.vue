@@ -142,7 +142,7 @@ const destroy = async () => {
   }
   if (
     window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce ${pageConf.object.plural} ?`
+      `Etes-vous sûr de vouloir supprimer ce ${pageConf.object.singular} ?`
     )
   ) {
     useTopicStore()
