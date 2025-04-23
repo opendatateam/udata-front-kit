@@ -36,7 +36,7 @@ const topicStore = useTopicStore()
 const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
 
-const bouquets = topicStore.myTopics
+const topics = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
   title: '',
   purpose: '',
@@ -44,13 +44,13 @@ const datasetProperties = ref<DatasetProperties>({
   uri: `/datasets/${props.dataset.id}`,
   availability: Availability.LOCAL_AVAILABLE
 })
-const selectedBouquetId: Ref<string | null> = ref(null)
+const selectedTopicId: Ref<string | null> = ref(null)
 
-const bouquetOptions = computed(() => {
-  return bouquets.value.map((bouquet) => {
+const topicOptions = computed(() => {
+  return topics.value.map((topic) => {
     return {
-      value: bouquet.id,
-      text: bouquet.name
+      value: topic.id,
+      text: topic.name
     }
   })
 })
@@ -64,8 +64,8 @@ const validateFields = () => {
   if (!datasetProperties.value.purpose.trim()) {
     formErrors.value.push('purpose')
   }
-  if (!selectedBouquetId.value) {
-    formErrors.value.push('bouquetId')
+  if (!selectedTopicId.value) {
+    formErrors.value.push('topicId')
   }
   if (
     datasetProperties.value.group &&
@@ -79,7 +79,7 @@ const isValid = computed(() => {
   if (datasetsConf.add_to_topic?.dataset_editorialization) {
     return !formErrors.value.length
   } else {
-    return !!selectedBouquetId.value
+    return !!selectedTopicId.value
   }
 })
 
@@ -98,19 +98,19 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
 })
 
 const errorSummary = useTemplateRef('errorSummary')
-const selectedBouquet: Ref<Topic | null> = ref(null)
+const selectedTopic: Ref<Topic | null> = ref(null)
 
-watch(selectedBouquetId, async () => {
-  selectedBouquet.value =
-    selectedBouquetId.value === null
+watch(selectedTopicId, async () => {
+  selectedTopic.value =
+    selectedTopicId.value === null
       ? null
-      : await topicStore.load(selectedBouquetId.value)
+      : await topicStore.load(selectedTopicId.value)
 })
 
-const { datasetsProperties } = useExtras(selectedBouquet)
+const { datasetsProperties } = useExtras(selectedTopic)
 
-const isDatasetInBouquet = computed(() => {
-  if (!selectedBouquetId.value) {
+const isDatasetInTopic = computed(() => {
+  if (!selectedTopicId.value) {
     return false
   }
   return datasetsProperties.value.some(
@@ -122,21 +122,21 @@ const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
 
 const submit = async () => {
   const topicsExtrasKey = useSiteId()
-  if (selectedBouquet.value === null) {
+  if (selectedTopic.value === null) {
     throw Error('Trying to attach to topic without id')
   }
   const newDatasetsProperties =
-    selectedBouquet.value.extras[topicsExtrasKey].datasets_properties || []
+    selectedTopic.value.extras[topicsExtrasKey].datasets_properties || []
   newDatasetsProperties.push(datasetProperties.value)
-  selectedBouquet.value.extras[topicsExtrasKey].datasets_properties =
+  selectedTopic.value.extras[topicsExtrasKey].datasets_properties =
     newDatasetsProperties
-  await topicStore.update(selectedBouquet.value.id, {
-    id: selectedBouquet.value.id,
-    tags: selectedBouquet.value.tags,
-    extras: selectedBouquet.value.extras
+  await topicStore.update(selectedTopic.value.id, {
+    id: selectedTopic.value.id,
+    tags: selectedTopic.value.tags,
+    extras: selectedTopic.value.extras
   })
   toast(
-    `Jeu de données ajouté avec succès au ${topicPageConf.object.singular} "${selectedBouquet.value.name}"`,
+    `Jeu de données ajouté avec succès au ${topicPageConf.object.singular} "${selectedTopic.value.name}"`,
     {
       type: 'success'
     }
@@ -187,26 +187,26 @@ onMounted(() => {
       heading-level="h3"
     />
     <DsfrSelect
-      id="input-bouquetId"
-      v-model="selectedBouquetId"
+      id="input-topicId"
+      v-model="selectedTopicId"
       :label="`${capitalize(topicPageConf.object.singular)} à associer (obligatoire)`"
-      :options="bouquetOptions"
+      :options="topicOptions"
       :default-unselected-text="`Choisissez un ${topicPageConf.object.singular}`"
       :aria-invalid="
-        formErrors.includes('bouquetId') && isSubmitted ? true : undefined
+        formErrors.includes('topicId') && isSubmitted ? true : undefined
       "
-      aria-errormessage="errors-bouquetId"
+      aria-errormessage="errors-topicId"
     />
     <ErrorMessage
-      v-if="!!getErrorMessage('bouquetId')"
-      input-name="bouquetId"
-      :error-message="getErrorMessage('bouquetId')"
+      v-if="!!getErrorMessage('topicId')"
+      input-name="topicId"
+      :error-message="getErrorMessage('topicId')"
     />
 
     <DsfrBadge
-      v-if="isDatasetInBouquet"
+      v-if="isDatasetInTopic"
       type="info"
-      label="Déjà utilisé dans ce bouquet"
+      :label="`Déjà utilisé dans ce ${topicPageConf.object.singular}`"
       small
       ellipsis
       class="fr-mb-2w"
@@ -242,7 +242,7 @@ onMounted(() => {
 .fr-select-group:has(+ .fr-badge) {
   margin-bottom: 0.5rem;
 }
-:deep(.fr-select-group:has(+ #errors-bouquetId)) {
+:deep(.fr-select-group:has(+ #errors-topicId)) {
   margin-bottom: 0;
 }
 </style>

@@ -11,7 +11,7 @@ export type FormErrorMessagesMap = Map<
 const errorMessages = (topicName: string) =>
   [
     {
-      inputName: 'bouquetId',
+      inputName: 'topicId',
       message: `Veuillez sélectionner un ${topicName}.`
     },
     {
