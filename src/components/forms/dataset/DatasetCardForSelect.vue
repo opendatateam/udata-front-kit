@@ -3,9 +3,12 @@ import type { DatasetV2 } from '@datagouv/components'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { computed } from 'vue'
 
+import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useOwnerName } from '@/utils/dataset'
+
+const { pageConf } = useCurrentPageConf()
 
 const props = defineProps({
   dataset: {
@@ -54,7 +57,7 @@ const badgeClasse = computed(() => {
     <DsfrBadge
       v-if="alreadySelected"
       type="info"
-      label="Déjà utilisé dans ce bouquet"
+      :label="`Déjà utilisé dans ce ${pageConf.object.singular}`"
       small
       ellipsis
       :class="badgeClasse"
