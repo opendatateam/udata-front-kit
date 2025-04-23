@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import { useCurrentPageConf } from '@/router/utils'
 
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 import ErrorMessage from './ErrorMessage.vue'
+
+const { pageConf } = useCurrentPageConf()
 
 const datasetProperties = defineModel('properties-model', {
   type: Object as () => DatasetProperties,
@@ -68,7 +71,7 @@ const trimGroupName = (groupName: string) => {
     :searchable="true"
     :limit="5"
     :strict="false"
-    no-options-text="Il n'y a pas encore de regroupement dans ce bouquet."
+    :no-options-text="`Il n'y a pas encore de regroupement dans ce ${pageConf.object.singular}.`"
     no-results-text="Aucun regroupement existant."
     :create-option="true"
     placeholder=""
