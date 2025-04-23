@@ -276,7 +276,7 @@ watch(
                 </p>
                 <p>
                   Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au nouveau {{ pageConf.labels.singular }},
+                  seront pas ajoutés au {{ pageConf.labels.singular }} cloné,
                   mais leurs libellés et raisons d'utilisation seront conservés.
                 </p>
                 <p>
