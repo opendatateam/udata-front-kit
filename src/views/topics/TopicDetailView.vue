@@ -258,7 +258,7 @@ watch(
               size="md"
               label="Cloner"
               icon="fr-icon-git-merge-line"
-              title="Cloner le bouquet"
+              :title="`Cloner le ${pageConf.object.singular}`"
               @click="showCloneModal = true"
             />
             <DsfrModal
