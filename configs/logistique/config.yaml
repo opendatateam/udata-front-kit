@@ -158,7 +158,7 @@ pages:
     object:
       singular: jeu de données
       plural: jeux de données
-      extended: jeux de données
+      extended: jeu de données
     search:
       input: Rechercher un jeu de données
     banner:
