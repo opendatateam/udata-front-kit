@@ -377,7 +377,7 @@ pages:
     object:
       singular: indicateur
       plural: indicateurs
-      extended: indicateurs
+      extended: indicateur
     search:
       input: Rechercher un indicateur
     banner:
