@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
 import { isAvailable } from '@/utils/topic'
 import { NO_GROUP, isOnlyNoGroup } from '@/utils/topicGroups'
@@ -28,6 +29,8 @@ const props = defineProps({
     default: false
   }
 })
+
+const { pageConf } = useCurrentPageConf()
 
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
@@ -273,7 +276,8 @@ const actions = computed(() => {
             Ce regroupement contient un ou plusieurs jeux de données. En
             confirmant la suppression,
             <strong>
-              tous les jeux de données associés seront retirés du bouquet.
+              tous les jeux de données associés seront retirés du
+              {{ pageConf.object.singular }}.
             </strong>
           </p>
           <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>
