@@ -155,7 +155,7 @@ pages:
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
-    object:
+    labels:
       singular: jeu de données
       plural: jeux de données
       extended: jeu de données
@@ -174,7 +174,7 @@ pages:
     tag_prefix: logistique
     title: Bouquets
     breadcrumb_title: Bouquets
-    object:
+    labels:
       singular: bouquet
       plural: bouquets
       extended: bouquet de données

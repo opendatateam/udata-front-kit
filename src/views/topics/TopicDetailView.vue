@@ -258,7 +258,7 @@ watch(
               size="md"
               label="Cloner"
               icon="fr-icon-git-merge-line"
-              :title="`Cloner le ${pageConf.object.singular}`"
+              :title="`Cloner le ${pageConf.labels.singular}`"
               @click="showCloneModal = true"
             />
             <DsfrModal
@@ -271,12 +271,12 @@ watch(
               <template #default>
                 <p>
                   Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du {{ pageConf.object.singular }} que vous souhaitez
+                  données du {{ pageConf.labels.singular }} que vous souhaitez
                   cloner.
                 </p>
                 <p>
                   Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au nouveau {{ pageConf.object.singular }},
+                  seront pas ajoutés au nouveau {{ pageConf.labels.singular }},
                   mais leurs libellés et raisons d'utilisation seront conservés.
                 </p>
                 <p>
@@ -373,7 +373,7 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${pageConf.object.singular}`"
+      :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
@@ -394,7 +394,7 @@ watch(
           v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Pas de discussion pour ce ${pageConf.object.singular}.`"
+          :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->

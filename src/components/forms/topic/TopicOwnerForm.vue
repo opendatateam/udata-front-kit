@@ -110,7 +110,7 @@ watch(choice, () => {
     <DsfrRadioButtonSet
       v-model="choice"
       :options="radioOptions"
-      :legend="`Choisissez si vous souhaitez gérer ce ${pageConf.object.singular}&nbsp;:`"
+      :legend="`Choisissez si vous souhaitez gérer ce ${pageConf.labels.singular}&nbsp;:`"
       name="owner"
     />
     <div v-if="choice === 'organization'" class="flex-gap">

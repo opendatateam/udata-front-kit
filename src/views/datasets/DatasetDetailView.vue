@@ -190,7 +190,7 @@ onMounted(() => {
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            :label="`Ajouter à un ${topicPageConf.object.singular}`"
+            :label="`Ajouter à un ${topicPageConf.labels.singular}`"
             icon="fr-icon-file-add-line"
             @click="showAddToTopicModal = true"
           />

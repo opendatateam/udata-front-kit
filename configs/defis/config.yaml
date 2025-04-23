@@ -276,7 +276,7 @@ pages:
     tag_prefix: defisdatagouvfr
     title: Défis
     breadcrumb_title: Défis
-    object:
+    labels:
       singular: défi
       plural: défis
       extended: défi
@@ -309,7 +309,7 @@ pages:
     tag_prefix:
     title:
     breadcrumb_title: Données
-    object:
+    labels:
       singular: jeu de données
       plural: jeux de données
       extended: jeu de données

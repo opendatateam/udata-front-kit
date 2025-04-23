@@ -179,7 +179,7 @@ const submit = async (modalData: DatasetModalData) => {
 }
 
 const { formErrorMessagesMap, sortedErrors, isSubmitted, handleSubmit } =
-  useForm(formErrors, pageConf.object.singular, {
+  useForm(formErrors, pageConf.labels.singular, {
     validateFields,
     onSuccess: () => submit(modalData.value),
     errorSummaryRef: errorSummary

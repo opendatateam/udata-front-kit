@@ -71,7 +71,7 @@ const trimGroupName = (groupName: string) => {
     :searchable="true"
     :limit="5"
     :strict="false"
-    :no-options-text="`Il n'y a pas encore de regroupement dans ce ${pageConf.object.singular}.`"
+    :no-options-text="`Il n'y a pas encore de regroupement dans ce ${pageConf.labels.singular}.`"
     no-results-text="Aucun regroupement existant."
     :create-option="true"
     placeholder=""

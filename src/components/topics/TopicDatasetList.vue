@@ -136,7 +136,7 @@ onMounted(() => {
   <!-- Header and buttons -->
   <div class="flex-gap fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
-      Composition du {{ pageConf.object.extended }}
+      Composition du {{ pageConf.labels.extended }}
     </h2>
     <SearchComponent
       v-if="datasetEditorialization"
@@ -163,7 +163,7 @@ onMounted(() => {
   >
     <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
     <p v-else>
-      Ce {{ pageConf.object.singular }} ne contient pas encore de donnée.
+      Ce {{ pageConf.labels.singular }} ne contient pas encore de donnée.
     </p>
   </div>
   <template v-else>

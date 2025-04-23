@@ -179,7 +179,7 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 #     tag_prefix: {string}          # prefix for tags on data.gouv.fr
 #     title: {string}               # title for the list page
 #     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
-#     object:                       # how to call the object that is displayed by the page
+#     labels:                       # how to call the object that is displayed by the page
 #       singular: {string}          # singular name for the object
 #       plural: {string}            # plural name for the object
 #       extended: {string}          # extended name for the object, singular
@@ -214,7 +214,7 @@ pages:
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
-    object:
+    labels:
       singular: jeu de données
       plural: jeux de données
       extended: jeu de données
@@ -314,7 +314,7 @@ pages:
     tag_prefix: ecospheres
     title: Bouquets
     breadcrumb_title:
-    object:
+    labels:
       singular: bouquet
       plural: bouquets
       extended: bouquet de données
@@ -374,7 +374,7 @@ pages:
     tag_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
     breadcrumb_title: Indicateurs
-    object:
+    labels:
       singular: indicateur
       plural: indicateurs
       extended: indicateur

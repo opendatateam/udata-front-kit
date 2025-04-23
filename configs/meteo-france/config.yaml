@@ -172,7 +172,7 @@ pages:
       tag: meteodatagouvfr
     title: Jeux de données
     breadcrumb_title: Données
-    object:
+    labels:
       singular: jeu de données
       plural: jeux de données
       extended: jeu de données

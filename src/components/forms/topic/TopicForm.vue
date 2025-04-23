@@ -132,7 +132,7 @@ defineExpose({
     <DsfrInput
       id="input-name"
       v-model="topic.name"
-      :label="`Sujet du ${pageConf.object.singular} (obligatoire)`"
+      :label="`Sujet du ${pageConf.labels.singular} (obligatoire)`"
       label-visible
       :aria-invalid="hasError('name') ? true : undefined"
       :description-id="hasError('name') ? 'errors-name' : undefined"
@@ -149,7 +149,7 @@ defineExpose({
       id="input-description"
       v-model="topic.description"
       is-textarea
-      :label="`Objectif du ${pageConf.object.singular} (obligatoire)`"
+      :label="`Objectif du ${pageConf.labels.singular} (obligatoire)`"
       label-visible
       :aria-invalid="hasError('description') ? true : undefined"
       :description-id="
@@ -165,7 +165,7 @@ defineExpose({
     />
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
       Renseignez ici les informations nécessaires à la compréhension du
-      {{ pageConf.object.singular }}&nbsp;: politique publique et problématique
+      {{ pageConf.labels.singular }}&nbsp;: politique publique et problématique
       à laquelle il répond, lien vers toute méthodologie de traitement des
       données, description de l'organisme porteur du projet, etc.<br />
       Utilisez du

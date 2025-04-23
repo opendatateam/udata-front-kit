@@ -277,7 +277,7 @@ const actions = computed(() => {
             confirmant la suppression,
             <strong>
               tous les jeux de données associés seront retirés du
-              {{ pageConf.object.singular }}.
+              {{ pageConf.labels.singular }}.
             </strong>
           </p>
           <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>

@@ -48,7 +48,7 @@ const { pageConf } = useCurrentPageConf()
   <div class="fr-input-group">
     <label class="fr-label" for="input-purpose"
       >Raison d'utilisation dans ce
-      {{ pageConf.object.singular }} (obligatoire)</label
+      {{ pageConf.labels.singular }} (obligatoire)</label
     >
     <p id="purpose-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est

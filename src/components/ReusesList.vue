@@ -83,7 +83,7 @@ onMounted(() => {
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
       Il n'y a pas encore de réutilisation pour ce
-      {{ pageConf.object.singular }}.
+      {{ pageConf.labels.singular }}.
     </p>
     <p>
       <a

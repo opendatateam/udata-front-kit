@@ -84,14 +84,14 @@ onMounted(() => {
   </div>
   <div class="fr-container datagouv-components fr-my-2v">
     <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
-      <h1 class="fr-mb-0">{{ capitalize(pageConf.object.plural) }}</h1>
+      <h1 class="fr-mb-0">{{ capitalize(pageConf.labels.plural) }}</h1>
       <div
         v-if="canAddTopic"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
           <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
-          Ajouter un {{ pageConf.object.singular }}
+          Ajouter un {{ pageConf.labels.singular }}
         </router-link>
       </div>
     </div>

@@ -59,7 +59,7 @@ export type PageSearchConf = {
   input: string
 }
 
-export type PageObjectConf = {
+export type PageLabelsConf = {
   singular: string
   plural: string
   extended: string
@@ -71,7 +71,7 @@ export type PageConf = {
   universe_query: PageUniverseQueryConf | null
   title: string
   breadcrumb_title: string | null
-  object: PageObjectConf
+  labels: PageLabelsConf
   search: PageSearchConf
   banner: PageBannerConf | null
   discussions: {

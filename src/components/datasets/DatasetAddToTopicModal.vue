@@ -136,7 +136,7 @@ const submit = async () => {
     extras: selectedTopic.value.extras
   })
   toast(
-    `Jeu de données ajouté avec succès au ${topicPageConf.object.singular} "${selectedTopic.value.name}"`,
+    `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
     {
       type: 'success'
     }
@@ -150,7 +150,7 @@ const {
   getErrorMessage,
   isSubmitted,
   handleSubmit
-} = useForm(formErrors, topicPageConf.object.singular, {
+} = useForm(formErrors, topicPageConf.labels.singular, {
   validateFields,
   onSuccess: submit,
   errorSummaryRef: errorSummary,
@@ -173,7 +173,7 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    :title="`Ajouter le jeu de données à un de vos ${topicPageConf.object.plural}`"
+    :title="`Ajouter le jeu de données à un de vos ${topicPageConf.labels.plural}`"
     :opened="show"
     aria-modal="true"
     class="form"
@@ -189,9 +189,9 @@ onMounted(() => {
     <DsfrSelect
       id="input-topicId"
       v-model="selectedTopicId"
-      :label="`${capitalize(topicPageConf.object.singular)} à associer (obligatoire)`"
+      :label="`${capitalize(topicPageConf.labels.singular)} à associer (obligatoire)`"
       :options="topicOptions"
-      :default-unselected-text="`Choisissez un ${topicPageConf.object.singular}`"
+      :default-unselected-text="`Choisissez un ${topicPageConf.labels.singular}`"
       :aria-invalid="
         formErrors.includes('topicId') && isSubmitted ? true : undefined
       "
@@ -206,7 +206,7 @@ onMounted(() => {
     <DsfrBadge
       v-if="isDatasetInTopic"
       type="info"
-      :label="`Déjà utilisé dans ce ${topicPageConf.object.singular}`"
+      :label="`Déjà utilisé dans ce ${topicPageConf.labels.singular}`"
       small
       ellipsis
       class="fr-mb-2w"
