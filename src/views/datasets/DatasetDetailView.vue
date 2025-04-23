@@ -39,7 +39,7 @@ const { canAddTopic } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
-const showAddToBouquetModal = ref(false)
+const showAddToTopicModal = ref(false)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
@@ -192,11 +192,11 @@ onMounted(() => {
             size="md"
             :label="`Ajouter à un ${topicPageConf.object.singular}`"
             icon="fr-icon-file-add-line"
-            @click="showAddToBouquetModal = true"
+            @click="showAddToTopicModal = true"
           />
           <DatasetAddToTopicModal
-            v-if="showAddToBouquetModal"
-            v-model:show="showAddToBouquetModal"
+            v-if="showAddToTopicModal"
+            v-model:show="showAddToTopicModal"
             :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
             :dataset="dataset"
           />
