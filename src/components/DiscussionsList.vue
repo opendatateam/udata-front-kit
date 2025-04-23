@@ -40,14 +40,12 @@ const props = defineProps({
   subjectClass: {
     type: String as () => SubjectClass,
     default: 'Dataset'
+  },
+  emptyMessage: {
+    type: String,
+    default: 'Pas de discussion pour ce jeu de données.'
   }
 })
-
-const subjectClassLabels = {
-  Dataset: 'jeu de données',
-  Topic: pageConf.object.singular,
-  Indicator: 'indicateur'
-}
 
 const discussionForm: Ref<DiscussionForm> = ref({
   title: '',
@@ -194,9 +192,7 @@ watchEffect(() => {
       width="130"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      Pas de discussion pour
-      {{ props.subjectClass === 'Indicator' ? 'cet' : 'ce' }}
-      {{ subjectClassLabels[props.subjectClass] }}.
+      {{ emptyMessage }}
     </p>
   </div>
   <div v-else class="fr-mt-4w">

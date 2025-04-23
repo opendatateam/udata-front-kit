@@ -140,7 +140,11 @@ onMounted(() => {
 
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
-        <DiscussionsList :subject="indicator" subject-class="Indicator" />
+        <DiscussionsList
+          :subject="indicator"
+          subject-class="Dataset"
+          empty-message="Pas de discussion pour cet indicateur."
+        />
       </DsfrTabContent>
 
       <!-- Sources -->

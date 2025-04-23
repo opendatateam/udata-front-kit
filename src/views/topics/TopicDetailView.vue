@@ -394,6 +394,7 @@ watch(
           v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
+          :empty-message="`Pas de discussion pour ce ${pageConf.object.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
