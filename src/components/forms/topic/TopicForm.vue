@@ -87,7 +87,7 @@ const onSubmit = () => {
 }
 
 const onValidSubmit = async () => {
-  // filter out know filters from existing tags and add those gotten from this form
+  // filter out known filters from existing tags and add those gotten from this form
   const filtersPrefixes = filters.map((filter) =>
     useTagSlug(
       pageKey || 'topics',
