@@ -132,7 +132,7 @@ const dropdown = config.website.header_search.dropdown
           <li v-for="topic in topics" :key="topic.id">
             <TopicCard
               :topic="topic"
-              topics-slug="bouquets"
+              page-key="bouquets"
               :hide-description="true"
             />
           </li>

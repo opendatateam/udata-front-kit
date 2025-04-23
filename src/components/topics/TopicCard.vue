@@ -17,7 +17,7 @@ import { useTags } from '@/utils/tags'
 import { useExtras } from '@/utils/topic'
 
 const props = defineProps({
-  topicsSlug: {
+  pageKey: {
     type: String,
     default: 'topics'
   },
@@ -40,11 +40,11 @@ const nbData: number = datasetsProperties.value.length
 const ownerName = useOwnerName(props.topic)
 
 const topicLink: RouteLocationRaw = {
-  name: `${props.topicsSlug}_detail`,
+  name: `${props.pageKey}_detail`,
   params: { item_id: props.topic.slug }
 }
 
-const tags = useTags(props.topicsSlug, props.topic)
+const tags = useTags(props.pageKey, props.topic)
 </script>
 
 <template>
