@@ -62,7 +62,7 @@ export const useTopicStore = defineStore('topic', {
       const { query, ...queryArgs } = args
 
       // extract tags and checkbox filters from query args
-      const { extraArgs: argsAfterTagQuery, tag } = useTagsQuery(
+      const { extraArgs: argsAfterTagQuery, tags } = useTagsQuery(
         pageKey || 'topics',
         queryArgs
       )
@@ -72,7 +72,7 @@ export const useTopicStore = defineStore('topic', {
       )
       const { tagsWithUniverse, universeQuery } = useUniverseQuery(
         pageKey || 'topics',
-        tag
+        tags
       )
 
       const results = await topicsAPIv2.list({

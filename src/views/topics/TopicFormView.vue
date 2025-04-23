@@ -43,7 +43,7 @@ const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
 // populate tags from filters in query string
-const { tag: selectedTags } = useTagsQuery(
+const { tags: selectedTags } = useTagsQuery(
   pageKey || 'topics',
   routeQuery,
   true

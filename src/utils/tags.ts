@@ -152,7 +152,7 @@ export const useTagsQuery = (
   pageKey: string,
   query: QueryArgs,
   filterOnForm: boolean = false
-): { tag: Array<string>; extraArgs: QueryArgs } => {
+): { tags: Array<string>; extraArgs: QueryArgs } => {
   const pageConf = usePageConf(pageKey)
   const filters = pageConf.filters
     .filter((item) => item.type === 'select')
@@ -173,7 +173,7 @@ export const useTagsQuery = (
     delete query[filter.id]
   }
   return {
-    tag: queryArray,
+    tags: queryArray,
     extraArgs: query
   }
 }

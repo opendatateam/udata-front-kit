@@ -48,7 +48,7 @@ export const useSearchStore = defineStore('search', {
       const { query, ...queryArgs } = args
 
       // extract tags and checkbox filters from query args
-      const { extraArgs: argsAfterTagQuery, tag } = useTagsQuery(
+      const { extraArgs: argsAfterTagQuery, tags } = useTagsQuery(
         pageKey || 'datasets',
         queryArgs
       )
@@ -58,7 +58,7 @@ export const useSearchStore = defineStore('search', {
       )
       const { tagsWithUniverse, universeQuery } = useUniverseQuery(
         pageKey || 'datasets',
-        tag
+        tags
       )
 
       const results = await searchAPI.search(query, {
