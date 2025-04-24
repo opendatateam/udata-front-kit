@@ -1,20 +1,18 @@
 # config file for hackathon.data.gouv.fr
 
+site_id: hackathon
+
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  # FIXME:
   oauth_client_id: 673cbedb47b01e3f79eea45c
-universe:
-  # "universe" topic id
-  topic_id: 66d5caab2ef9e95fc1625446
-  # universe name, used as bouquets tag
-  name: hackathon
+
 robots:
   disallow:
   sitemap:
   meta: 'noindex, nofollow'
+
 # UI customizations
 website:
   title: 'hackathon.data.gouv.fr'
@@ -124,37 +122,69 @@ website:
   matomo:
     host:
     siteId:
-  discussions:
-    dataset:
-      display: true
-      create: true
-    topic:
-      display: true
-      create: true
   datasets:
-    add_to_bouquet: true
+    add_to_topic:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    slug: hackathons
-    name: hackathon
-    extras_key: 'hackathon'
-    themes:
-      usage: true
-      main_name: catégorie
-      secondary_name: sous-catégorie
-    # include a list page with all topics
-    list_all: false
-    show_drafts_by_default: false
-    display_metadata: false
-    activate_read_more: true
-    dataset_editorialization: true
     can_add_topics:
       everyone: false
       authorized_users:
-        - 5e6f426e634f417810ab794b
-        - 5dee373f6f44416a83fbd907
+        - 5fda299e56f984a4b126afe1 # thanh-ha
+        - 5e6f426e634f417810ab794b # geoffrey
+        - 65e8b5082f2504e916c8f6da # ecospheres
+
+pages:
+  # HACKATHONS
+  hackathons:
+    list_all: true
+    universe_query:
+      tag: hackathon
+    tag_prefix:
+    title: Hackathons
+    breadcrumb_title: Hackathons
+    labels:
+      singular: hackathon
+      plural: hackathons
+      extended: hackathon
+    search:
+      input: Filtrer les hackathons
+    banner:
+    discussions:
+      display: true
+      create: true
+    filters:
+      - name: Catégorie
+        default_option: Toutes les catégories
+        id: category
+        type: select
+        color: green-emeraude
+        use_tag_prefix: false
+        form:
+          required: true
+        values:
+          - id: alimentaire
+            name: Données alimentaires
+  # DATASETS
+  datasets:
+    list_all: false
+    universe_query:
+    tag_prefix:
+    title:
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input:
+    banner:
+    discussions:
+      display: true
+      create: true
+    filters: []
+
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

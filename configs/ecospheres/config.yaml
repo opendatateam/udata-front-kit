@@ -1,14 +1,13 @@
 # config file for ecospheres-front
 
+# used as extras key
+site_id: ecospheres
+
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
-
-universe:
-  # universe name, used as bouquets tag
-  name: ecospheres
 
 robots:
   disallow:
@@ -138,45 +137,21 @@ website:
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId:
-  discussions:
-    dataset:
-      display: true
-      create: true
-    topic:
-      display: true
-      create: true
-    indicator:
-      display: true
-      create: true
   datasets:
-    add_to_bouquet: true
+    # TODO: better place for that?
+    add_to_topic:
+      enable: true
+      page: bouquets
+      dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
+  # TODO: better place for that?
   topics:
-    slug: bouquets
-    name: bouquet
-    extras_key: 'ecospheres'
-    themes:
-      usage: true
-      main_name: thématique
-      secondary_name: chantier
-    # include a list page with all topics
-    list_all: true
-    show_drafts_by_default: true
-    display_metadata: true
-    activate_read_more: true
-    dataset_editorialization: true
     can_add_topics:
       everyone: true
       authorized_users:
-    banner:
-      title: Mettre en commun les usages des données et des indicateurs territoriaux
-      content: |
-        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
-
-        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
   sitemap:
     - name: Accueil
       path: /
@@ -198,55 +173,67 @@ organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/
 # Configuration format for pages:
 #
 # pages:
-#   {page_id}:                   # page identifier
-#     universe_query: {dict}     # used to define a "universe" on a given {page_id}, through query args
-#     tag_prefix: {string}       # prefix for tags on data.gouv.fr
-#     title: {string}            # title for the list page
-#     breadcrumb_title: {string} # title in breadcrumb (optionnal, falls back to title)
+#   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
+#     list_all: {bool}              # whether to have a list view or not
+#     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
+#     tag_prefix: {string}          # prefix for tags on data.gouv.fr
+#     title: {string}               # title for the list page
+#     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
+#     labels:                       # how to call the object that is displayed by the page
+#       singular: {string}          # singular name for the object
+#       plural: {string}            # plural name for the object
+#       extended: {string}          # extended name for the object, singular
 #     search:
-#      input: {string}           # placeholder for the search input
-#      results:                  # results count message
-#        one: {string}           # message for one result
-#        several: {string}         # message for multiple results (use {{total}} to display the total number of results)
-#     banner:                    # banner for the list page (optionnal)
-#      title: {string}           # title for the banner
-#      content: {string}         # content for the banner
-#     filters:                   # list of filters for this {page_id}
-#       - name: {string}         # name of the filter ⚠️ needs to be unique across all items
-#         id: {string}           # id of the filter
-#         type: {string}         # type of the filter (select | spatial_zone | spatial_granularity)
-#         child: {string?}       # id of the child filter (optional)
-#         color: {string}        # color of the filter's tag
-#         use_tag_prefix: {bool} # whether to use {tag_prefix}-{item.id} when building value tag
-#         values:                # list of values for this filter
-#           - id: {string}       # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
-#             name: {string}     # name of the value
-#             parent: {string?}  # id of the parent filter value (optional)
+#       input: {string}             # placeholder for the search input
+#     banner:                       # banner for the list page (optionnal)
+#       title: {string}             # title for the banner
+#       content: {string}           # content for the banner
+#     discussions:
+#       display: {bool}             # display discussions on detail page
+#       create: {bool}              # create discussions on detail page
+#     filters:                      # list of filters for this {page_id}
+#       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
+#         id: {string}              # id of the filter
+#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox)
+#         child: {string?}          # id of the child filter (optional)
+#         color: {string}           # color of the filter's tag
+#         use_tag_prefix: {bool}    # whether to use {tag_prefix}-{item.id} when building value tag
+#         default_option: {string?} # default option for the filter (optional)
+#         default_value: {string?}  # default value for the filter (optional)
+#         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
+#         values:                   # list of values for this filter
+#           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}        # name of the value
+#             parent: {string?}     # id of the parent filter value (optional)
 pages:
   # DATASETS
   datasets:
+    list_all: true
     universe_query:
       topic: 65141cd780d73f98142e9265
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
     search:
       input: Rechercher un jeu de données
-      results:
-        one: 1 jeu de données disponible
-        several: '{{total}} jeux de données disponibles'
     banner:
       title: Un guichet unique pour l’accès aux données environnementales
       content: |
         En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
 
         Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    discussions:
+      display: true
+      create: true
     filters:
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
         type: select
-        color: noop
         use_tag_prefix: false
         values:
           - id: adresses
@@ -321,23 +308,44 @@ pages:
             name: Zones à risque naturel
   # BOUQUETS
   bouquets:
+    list_all: true
     universe_query:
+      tag: ecospheres
     tag_prefix: ecospheres
-    title:
+    title: Bouquets
     breadcrumb_title:
+    labels:
+      singular: bouquet
+      plural: bouquets
+      extended: bouquet de données
     search:
-      input:
-      results:
-        one:
-        several:
+      input: Filtrer les bouquets
     banner:
+      title: Mettre en commun les usages des données et des indicateurs territoriaux
+      content: |
+        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
+
+        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
+    discussions:
+      display: true
+      create: true
     filters:
+      - name: Afficher les brouillons
+        id: include_private
+        type: checkbox
+        default_option:
+        default_value: true
+        authenticated: true
+        values: []
       - name: Thématique
+        default_option: Toutes les thématiques
         id: theme
         type: select
-        child: subtheme
-        color: noop
+        color: green-emeraude
         use_tag_prefix: true
+        # TODO: use a dedicated config for the form?
+        form:
+          required: true
         values:
           - id: se-loger
             name: Se loger
@@ -353,120 +361,34 @@ pages:
             name: Se déplacer
           - id: chantiers-transverses
             name: Chantiers transverses
-      - name: Chantier
-        id: subtheme
-        type: select
-        color: green-archipel
-        use_tag_prefix: true
-        values:
-          # parent theme: se-loger
-          - id: construction-et-renovation-des-logements
-            name: Construction et rénovation des logements
-            parent: se-loger
-          - id: amenagements-des-villes
-            name: Aménagements des villes
-            parent: se-loger
-          # parent theme: produire
-          - id: nucleaire
-            name: Nucléaire
-            parent: produire
-          - id: tertiaire
-            name:
-              Tertiaire (incluant les bâtiments publics de l'État et des collectivités,
-              hors logement)
-            parent: produire
-          - id: electricite-decarbonee
-            name: Production d'électricité décarbonée (hors nucléaire)
-            parent: produire
-          # parent theme: se-nourrir
-          - id: alimentation
-            name: Alimentation
-            parent: se-nourrir
-          - id: agriculture-et-peche
-            name: Agriculture et pêche
-            parent: se-nourrir
-          # parent theme: consommer
-          - id: consommation-plus-durable-menages
-            name: Consommation plus durable (ménages)
-            parent: consommer
-          - id: numerique-responsable
-            name: Numérique responsable
-            parent: consommer
-          - id: achats-durables
-            name: Achats durables (de l'État, des collectivités et des entreprises)
-            parent: consommer
-          # parent theme: preserver
-          - id: eau
-            name: Eau
-            parent: preserver
-          - id: sols
-            name: Sols
-            parent: preserver
-          - id: oceans-et-mers
-            name: Océans et mers
-            parent: preserver
-          - id: foret
-            name: Forêt
-            parent: preserver
-          # parent theme: se-deplacer
-          - id: voitures-et-infrastructures-routieres
-            name: Voitures et infrastructures routières
-            parent: se-deplacer
-          - id: mobilite-courte-distance-hors-voiture
-            name: Mobilité courte distance (hors voiture)
-            parent: se-deplacer
-          - id: mobilite-longue-distance-avion-train
-            name: Mobilité longue distance (avion, train)
-            parent: se-deplacer
-          # parent theme: chantiers-transverses
-          - id: financement-investissement
-            name:
-              Le financement qui permet de définir des trajectoires d'investissement
-              crédibles et cohérentes
-            parent: chantiers-transverses
-          - id: planification-differenciation-territoriale
-            name:
-              La planification et la différenciation territoriale selon les caractéristiques
-              et les spécificités de chaque territoire, incluant les territoires ultra-marins
-            parent: chantiers-transverses
-          - id: transition-filieres-emplois-formations-competences
-            name:
-              La transition des filières avec la gestion des emplois, des formations
-              et des compétences
-            parent: chantiers-transverses
-          - id: donnees-environnementales
-            name: Les données environnementales
-            parent: chantiers-transverses
-          - id: services-publics-exemplaires
-            name: Les services publics exemplaires
-            parent: chantiers-transverses
-          - id: transition-juste
-            name:
-              La transition juste et les mesures d’accompagnement, pour ne laisser personne
-              au bord du chemin
-            parent: chantiers-transverses
-          - id: sobriete-usages-ressources
-            name: La sobriété des usages et des ressources
-            parent: chantiers-transverses
+      - name: Couverture territoriale
+        default_option:
+        id: geozone
+        type: spatial_zone
   # INDICATORS
   indicators:
+    list_all: true
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67c57c2f1a418addfc94d38a
     tag_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
     breadcrumb_title: Indicateurs
+    labels:
+      singular: indicateur
+      plural: indicateurs
+      extended: indicateur
     search:
       input: Rechercher un indicateur
-      results:
-        one: 1 indicateur disponible
-        several: '{{total}} indicateurs disponibles'
     banner:
       title: Accéder aux indicateurs de référence pour la transition écologique des territoires
       content: |
         L'Ecolab du Commissariat Général au Développement Durable met en place un hub d'indicateurs territoriaux, en co-construction avec les directions générales, les établissements publics et les services déconcentrés des ministères concernés, pour accompagner les territoires dans le suivi de leurs politiques publiques de transition écologique. Ces indicateurs sont référencés par thématiques et enjeux environnementaux de la planification écologique. Chaque fiche détaille la définition, les sources, le calcul des indicateurs et permet d'accéder aux données structurées. Plusieurs bouquets permettent de regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
 
         Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    discussions:
+      display: true
+      create: true
     filters:
       - name: Thématique
         default_option: Toutes les thématiques

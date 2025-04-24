@@ -3,7 +3,7 @@ import { useHead } from '@unhead/vue'
 import { onMounted } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import TopicCard from '@/components/topics/TopicCard.vue'
 import config from '@/config'
 import HomeFaq from '@/custom/ecospheres/components/HomeFaq.vue'
 
@@ -13,7 +13,12 @@ import { storeToRefs } from 'pinia'
 const topicStore = useTopicStore()
 const { topics } = storeToRefs(topicStore)
 
-onMounted(() => topicStore.query({ page_size: '3' }))
+onMounted(() =>
+  topicStore.query(
+    { query: '', page: '1', page_size: '3', include_private: 'false' },
+    'bouquets'
+  )
+)
 
 useHead({
   meta: [
@@ -125,7 +130,11 @@ const dropdown = config.website.header_search.dropdown
         <h2>Les bouquets à découvrir</h2>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
           <li v-for="topic in topics" :key="topic.id">
-            <BouquetCard :bouquet="topic" :hide-description="true" />
+            <TopicCard
+              :topic="topic"
+              page-key="bouquets"
+              :hide-description="true"
+            />
           </li>
         </ul>
         <p class="fr-m-0">

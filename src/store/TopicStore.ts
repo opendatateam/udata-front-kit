@@ -4,14 +4,23 @@ import { computed, type ComputedRef } from 'vue'
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
-import type { Topic, TopicsQueryArgs } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import { useCheckboxQuery } from '@/utils/filters'
 import { useTagsQuery } from '@/utils/tags'
+import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI()
 const topicsAPIv2 = new TopicsAPI({ version: 2 })
+
+interface QueryArgs {
+  query: string
+  page: string
+  include_private?: string
+  page_size?: string
+}
 
 export interface RootState {
   topics: Topic[]
@@ -49,17 +58,31 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: TopicsQueryArgs): Promise<Topic[]> {
-      const { query, include_private, ...queryArgs } = args
-      const { extraArgs, tag } = useTagsQuery('bouquets', queryArgs)
+    async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
+      const { query, ...queryArgs } = args
+
+      // extract tags and checkbox filters from query args
+      const { extraArgs: argsAfterTagQuery, tags } = useTagsQuery(
+        pageKey || 'topics',
+        queryArgs
+      )
+      const { extraArgs: refinedFilterArgs, checkboxArgs } = useCheckboxQuery(
+        pageKey || 'topics',
+        argsAfterTagQuery
+      )
+      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
+        pageKey || 'topics',
+        tags
+      )
+
       const results = await topicsAPIv2.list({
         params: {
           q: query,
-          tag: [config.universe.name, ...tag],
+          tag: tagsWithUniverse,
           page_size: config.website.pagination_sizes.topics_list,
-          // remove include_private if not set to 1, API will interpret presence a truthy
-          ...(include_private === '1' ? { include_private } : {}),
-          ...extraArgs
+          ...universeQuery,
+          ...checkboxArgs,
+          ...refinedFilterArgs
         },
         authenticated: true
       })
@@ -81,14 +104,19 @@ export const useTopicStore = defineStore('topic', {
     /**
      * Load all topics from universe by following pagination links
      */
-    async loadTopicsForUniverse(): Promise<Topic[]> {
+    async loadTopicsForUniverse(pageKey?: string): Promise<Topic[]> {
+      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
+        pageKey || 'topics',
+        []
+      )
       // make sure our user has registerd its permissions
       await useUserStore().waitForStoreInit()
       let response = await topicsAPIv2.list({
         params: {
-          tag: config.universe.name,
+          tag: tagsWithUniverse,
           include_private: 'yes',
-          sort: '-last_modified'
+          sort: '-last_modified',
+          ...universeQuery
         },
         authenticated: true
       })

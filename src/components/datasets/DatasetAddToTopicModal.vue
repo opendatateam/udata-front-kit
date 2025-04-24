@@ -10,10 +10,10 @@ import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPrope
 import type { Topic } from '@/model/topic'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
-import { useExtras } from '@/utils/bouquet'
-import { useGroups } from '@/utils/bouquetGroups'
-import { useTopicsConf } from '@/utils/config'
+import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
+import { useExtras } from '@/utils/topic'
+import { useGroups } from '@/utils/topicGroups'
 
 const props = defineProps({
   show: {
@@ -23,17 +23,20 @@ const props = defineProps({
   dataset: {
     type: Object as () => DatasetV2,
     required: true
+  },
+  topicPageKey: {
+    type: String,
+    required: true
   }
 })
 
 const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
+const datasetsConf = useDatasetsConf()
+const topicPageConf = usePageConf(props.topicPageKey)
 
-const { topicsName, topicsExtrasKey, topicsDatasetEditorialization } =
-  useTopicsConf()
-
-const bouquets = topicStore.myTopics
+const topics = topicStore.myTopics
 const datasetProperties = ref<DatasetProperties>({
   title: '',
   purpose: '',
@@ -41,13 +44,13 @@ const datasetProperties = ref<DatasetProperties>({
   uri: `/datasets/${props.dataset.id}`,
   availability: Availability.LOCAL_AVAILABLE
 })
-const selectedBouquetId: Ref<string | null> = ref(null)
+const selectedTopicId: Ref<string | null> = ref(null)
 
-const bouquetOptions = computed(() => {
-  return bouquets.value.map((bouquet) => {
+const topicOptions = computed(() => {
+  return topics.value.map((topic) => {
     return {
-      value: bouquet.id,
-      text: bouquet.name
+      value: topic.id,
+      text: topic.name
     }
   })
 })
@@ -61,8 +64,8 @@ const validateFields = () => {
   if (!datasetProperties.value.purpose.trim()) {
     formErrors.value.push('purpose')
   }
-  if (!selectedBouquetId.value) {
-    formErrors.value.push('bouquetId')
+  if (!selectedTopicId.value) {
+    formErrors.value.push('topicId')
   }
   if (
     datasetProperties.value.group &&
@@ -73,10 +76,10 @@ const validateFields = () => {
 }
 
 const isValid = computed(() => {
-  if (topicsDatasetEditorialization) {
+  if (datasetsConf.add_to_topic?.dataset_editorialization) {
     return !formErrors.value.length
   } else {
-    return !!selectedBouquetId.value
+    return !!selectedTopicId.value
   }
 })
 
@@ -95,19 +98,19 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
 })
 
 const errorSummary = useTemplateRef('errorSummary')
-const selectedBouquet: Ref<Topic | null> = ref(null)
+const selectedTopic: Ref<Topic | null> = ref(null)
 
-watch(selectedBouquetId, async () => {
-  selectedBouquet.value =
-    selectedBouquetId.value === null
+watch(selectedTopicId, async () => {
+  selectedTopic.value =
+    selectedTopicId.value === null
       ? null
-      : await topicStore.load(selectedBouquetId.value)
+      : await topicStore.load(selectedTopicId.value)
 })
 
-const { datasetsProperties } = useExtras(selectedBouquet)
+const { datasetsProperties } = useExtras(selectedTopic)
 
-const isDatasetInBouquet = computed(() => {
-  if (!selectedBouquetId.value) {
+const isDatasetInTopic = computed(() => {
+  if (!selectedTopicId.value) {
     return false
   }
   return datasetsProperties.value.some(
@@ -118,21 +121,22 @@ const isDatasetInBouquet = computed(() => {
 const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
 
 const submit = async () => {
-  if (selectedBouquet.value === null) {
+  const topicsExtrasKey = useSiteId()
+  if (selectedTopic.value === null) {
     throw Error('Trying to attach to topic without id')
   }
   const newDatasetsProperties =
-    selectedBouquet.value.extras[topicsExtrasKey].datasets_properties || []
+    selectedTopic.value.extras[topicsExtrasKey].datasets_properties || []
   newDatasetsProperties.push(datasetProperties.value)
-  selectedBouquet.value.extras[topicsExtrasKey].datasets_properties =
+  selectedTopic.value.extras[topicsExtrasKey].datasets_properties =
     newDatasetsProperties
-  await topicStore.update(selectedBouquet.value.id, {
-    id: selectedBouquet.value.id,
-    tags: selectedBouquet.value.tags,
-    extras: selectedBouquet.value.extras
+  await topicStore.update(selectedTopic.value.id, {
+    id: selectedTopic.value.id,
+    tags: selectedTopic.value.tags,
+    extras: selectedTopic.value.extras
   })
   toast(
-    `Jeu de données ajouté avec succès au ${topicsName} "${selectedBouquet.value.name}"`,
+    `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
     {
       type: 'success'
     }
@@ -146,7 +150,7 @@ const {
   getErrorMessage,
   isSubmitted,
   handleSubmit
-} = useForm(formErrors, {
+} = useForm(formErrors, topicPageConf.labels.singular, {
   validateFields,
   onSuccess: submit,
   errorSummaryRef: errorSummary,
@@ -159,7 +163,9 @@ const closeModal = () => {
 
 onMounted(() => {
   const loading = loader.show()
-  topicStore.loadTopicsForUniverse().then(() => loading.hide())
+  topicStore
+    .loadTopicsForUniverse(props.topicPageKey)
+    .then(() => loading.hide())
 })
 </script>
 
@@ -167,7 +173,7 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    :title="`Ajouter le jeu de données à un de vos ${topicsName}s`"
+    :title="`Ajouter le jeu de données à un de vos ${topicPageConf.labels.plural}`"
     :opened="show"
     aria-modal="true"
     class="form"
@@ -181,26 +187,26 @@ onMounted(() => {
       heading-level="h3"
     />
     <DsfrSelect
-      id="input-bouquetId"
-      v-model="selectedBouquetId"
-      :label="`${capitalize(topicsName)} à associer (obligatoire)`"
-      :options="bouquetOptions"
-      :default-unselected-text="`Choisissez un ${topicsName}`"
+      id="input-topicId"
+      v-model="selectedTopicId"
+      :label="`${capitalize(topicPageConf.labels.singular)} à associer (obligatoire)`"
+      :options="topicOptions"
+      :default-unselected-text="`Choisissez un ${topicPageConf.labels.singular}`"
       :aria-invalid="
-        formErrors.includes('bouquetId') && isSubmitted ? true : undefined
+        formErrors.includes('topicId') && isSubmitted ? true : undefined
       "
-      aria-errormessage="errors-bouquetId"
+      aria-errormessage="errors-topicId"
     />
     <ErrorMessage
-      v-if="!!getErrorMessage('bouquetId')"
-      input-name="bouquetId"
-      :error-message="getErrorMessage('bouquetId')"
+      v-if="!!getErrorMessage('topicId')"
+      input-name="topicId"
+      :error-message="getErrorMessage('topicId')"
     />
 
     <DsfrBadge
-      v-if="isDatasetInBouquet"
+      v-if="isDatasetInTopic"
       type="info"
-      label="Déjà utilisé dans ce bouquet"
+      :label="`Déjà utilisé dans ce ${topicPageConf.labels.singular}`"
       small
       ellipsis
       class="fr-mb-2w"
@@ -215,7 +221,7 @@ onMounted(() => {
       />
     </div>
     <DatasetPropertiesTextFields
-      v-if="topicsDatasetEditorialization"
+      v-if="datasetsConf.add_to_topic?.dataset_editorialization"
       v-model:dataset-properties-model="datasetProperties"
       :error-title="getErrorMessage('title')"
       :error-purpose="getErrorMessage('purpose')"
@@ -236,7 +242,7 @@ onMounted(() => {
 .fr-select-group:has(+ .fr-badge) {
   margin-bottom: 0.5rem;
 }
-:deep(.fr-select-group:has(+ #errors-bouquetId)) {
+:deep(.fr-select-group:has(+ #errors-topicId)) {
   margin-bottom: 0;
 }
 </style>

@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
-import { isAvailable } from '@/utils/bouquet'
-import { NO_GROUP, isOnlyNoGroup } from '@/utils/bouquetGroups'
-import { getRandomId } from '@gouvminint/vue-dsfr'
+import { isAvailable } from '@/utils/topic'
+import { NO_GROUP, isOnlyNoGroup } from '@/utils/topicGroups'
+import { useRandomId } from '@gouvminint/vue-dsfr'
+import type { Ref } from 'vue'
 
 const props = defineProps({
   groupName: {
@@ -27,6 +29,8 @@ const props = defineProps({
     default: false
   }
 })
+
+const { pageConf } = useCurrentPageConf()
 
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
@@ -62,7 +66,7 @@ const isDisclosureOpen: Ref<boolean> = ref(!isDisclosure.value)
 const toggleDisclosure = () => {
   isDisclosureOpen.value = !isDisclosureOpen.value
 }
-const widgetID = getRandomId('disclosure')
+const widgetID = useRandomId('disclosure')
 
 const opened = ref(false)
 const modalType = ref('')
@@ -272,7 +276,8 @@ const actions = computed(() => {
             Ce regroupement contient un ou plusieurs jeux de données. En
             confirmant la suppression,
             <strong>
-              tous les jeux de données associés seront retirés du bouquet.
+              tous les jeux de données associés seront retirés du
+              {{ pageConf.labels.singular }}.
             </strong>
           </p>
           <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>

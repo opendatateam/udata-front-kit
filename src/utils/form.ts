@@ -1,9 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
-import { useTopicsConf } from './config'
 
 type FormErrorMessage = { inputName: string; message: string }
-
-const { topicsName } = useTopicsConf()
 
 export type FormErrorMessagesMap = Map<
   FormErrorMessage['inputName'],
@@ -11,32 +8,33 @@ export type FormErrorMessagesMap = Map<
 >
 
 // define error messages for all inputs here
-const errorMessages = [
-  {
-    inputName: 'bouquetId',
-    message: `Veuillez sélectionner un ${topicsName}.`
-  },
-  {
-    inputName: 'group',
-    message: 'Le nom du regroupement est limité à 100 caractères.'
-  },
-  { inputName: 'title', message: 'Le libellé doit être renseigné.' },
-  {
-    inputName: 'purpose',
-    message: "La raison d'utilisation ne doit pas être vide."
-  },
-  {
-    inputName: 'availability',
-    message: 'Un jeu de données ou une disponibilité doit être sélectionné.'
-  },
-  {
-    inputName: 'availabilityUrl',
-    message: 'Une URL doit être renseignée.'
-  }
-] as const
+const errorMessages = (topicName: string) =>
+  [
+    {
+      inputName: 'topicId',
+      message: `Veuillez sélectionner un ${topicName}.`
+    },
+    {
+      inputName: 'group',
+      message: 'Le nom du regroupement est limité à 100 caractères.'
+    },
+    { inputName: 'title', message: 'Le libellé doit être renseigné.' },
+    {
+      inputName: 'purpose',
+      message: "La raison d'utilisation ne doit pas être vide."
+    },
+    {
+      inputName: 'availability',
+      message: 'Un jeu de données ou une disponibilité doit être sélectionné.'
+    },
+    {
+      inputName: 'availabilityUrl',
+      message: 'Une URL doit être renseignée.'
+    }
+  ] as const
 
 // create a union type of available input errors
-export type AllowedInput = (typeof errorMessages)[number]['inputName']
+export type AllowedInput = ReturnType<typeof errorMessages>[number]['inputName']
 
 interface UseFormOptions {
   validateFields: () => void
@@ -47,6 +45,7 @@ interface UseFormOptions {
 
 export function useForm(
   formErrors: Ref<string[]>,
+  topicName: string,
   options?: UseFormOptions
 ): {
   formErrorMessagesMap: ComputedRef<FormErrorMessagesMap>
@@ -58,7 +57,7 @@ export function useForm(
   const isSubmitted = ref(false)
 
   const formErrorMessagesMap = computed(() => {
-    return errorMessages.reduce(
+    return errorMessages(topicName).reduce(
       (acc, error) => acc.set(error.inputName, error.message),
       new Map()
     )
