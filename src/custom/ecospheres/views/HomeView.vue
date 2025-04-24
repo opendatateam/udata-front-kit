@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia'
 const topicStore = useTopicStore()
 const { topics } = storeToRefs(topicStore)
 
-const selectedBouquetsTag = ref('featured')
+const selectedBouquetsTag: Ref<'featured' | 'latest'> = ref('featured')
 
 watch(
   selectedBouquetsTag,
