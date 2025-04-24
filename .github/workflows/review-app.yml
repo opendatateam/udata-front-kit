@@ -18,9 +18,8 @@ jobs:
           - ecospheres
           - meteo-france
           - logistique
-          # FIXME: keep those or remove?
-          - defis
-          - hackathon
+          # - defis
+          # - hackathon
     permissions:
       deployments: write
     # only run if the PR is from the same repo
