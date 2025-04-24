@@ -54,6 +54,7 @@ const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
+const isAdmin = computed(() => useUserStore().isAdmin)
 const canClone = computed(() => useUserStore().isLoggedIn)
 
 const { pageKey, pageConf } = useCurrentPageConf()
@@ -126,6 +127,18 @@ const togglePublish = () => {
     .update(topic.value.id, {
       tags: topic.value.tags,
       private: topic.value.private
+    })
+    .finally(() => loader.hide())
+}
+
+const toggleFeatured = () => {
+  if (topic.value === null) return
+  topic.value.featured = !topic.value.featured
+  const loader = useLoading().show()
+  store
+    .update(topic.value.id, {
+      tags: topic.value.tags,
+      featured: topic.value.featured
     })
     .finally(() => loader.hide())
 }
@@ -303,6 +316,18 @@ watch(
               "
               class="fr-mb-1v"
               @click="togglePublish"
+            />
+            <DsfrButton
+              v-if="isAdmin"
+              size="md"
+              :label="
+                topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'
+              "
+              :icon="
+                topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
+              "
+              class="fr-mb-1v"
+              @click="toggleFeatured"
             />
           </div>
         </div>
