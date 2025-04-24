@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { onMounted } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
@@ -13,11 +12,25 @@ import { storeToRefs } from 'pinia'
 const topicStore = useTopicStore()
 const { topics } = storeToRefs(topicStore)
 
-onMounted(() =>
-  topicStore.query(
-    { query: '', page: '1', page_size: '3', include_private: 'false' },
-    'bouquets'
-  )
+const selectedBouquetsTag = ref('featured')
+
+watch(
+  selectedBouquetsTag,
+  () => {
+    const args = {
+      query: '',
+      page: '1',
+      page_size: '3',
+      include_private: 'false'
+    }
+    topicStore.query(
+      selectedBouquetsTag.value === 'latest'
+        ? args
+        : { ...args, featured: 'true' },
+      'bouquets'
+    )
+  },
+  { immediate: true }
 )
 
 useHead({
@@ -127,7 +140,26 @@ const dropdown = config.website.header_search.dropdown
     </section>
     <section class="fr-container--fluid bg-grey fr-py-16v">
       <div class="fr-container">
-        <h2>Les bouquets à découvrir</h2>
+        <div class="fr-grid-row fr-grid-row--middle justify-between">
+          <h2>Les bouquets à découvrir</h2>
+          <div class="fr-col-auto fr-grid-row fr-mb-3w">
+            <DsfrTag
+              small
+              label="Bouquets mis en avant"
+              selectable
+              :selected="selectedBouquetsTag === 'featured'"
+              @select="selectedBouquetsTag = 'featured'"
+            />
+            <DsfrTag
+              small
+              class="fr-ml-2v"
+              label="Derniers bouquets"
+              selectable
+              :selected="selectedBouquetsTag === 'latest'"
+              @select="selectedBouquetsTag = 'latest'"
+            />
+          </div>
+        </div>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
           <li v-for="topic in topics" :key="topic.id">
             <TopicCard

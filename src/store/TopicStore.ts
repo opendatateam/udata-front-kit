@@ -20,6 +20,7 @@ interface QueryArgs {
   page: string
   include_private?: string
   page_size?: string
+  featured?: string
 }
 
 export interface RootState {
