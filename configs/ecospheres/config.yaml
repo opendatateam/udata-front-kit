@@ -486,6 +486,8 @@ pages:
             name: Covoiturage
           - id: developpement-de-lagriculture-biologique-et-de-hve
             name: Développement de l'agriculture biologique et de HVE
+          - id: efficacite-energetique-des-vehicules-prives
+            name: Efficacité énergétique des véhicules privés
           - id: efficacite-et-sobriete-logistique
             name: Efficacité et sobriété logistique
           - id: electricite-renouvelable
