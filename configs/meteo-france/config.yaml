@@ -6,7 +6,7 @@ datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id:
+  oauth_client_id: 5e6f426e634f417810ab794b
 
 robots:
   disallow:
