@@ -252,7 +252,7 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
-              :secondary="canEdit"
+              secondary
               size="md"
               label="Cloner"
               icon="fr-icon-git-merge-line"
