@@ -348,19 +348,19 @@ pages:
           required: true
         values:
           - id: se-loger
-            name: Se loger
+            name: Mieux se loger
           - id: produire
-            name: Produire
+            name: Mieux produire
           - id: se-nourrir
-            name: Se nourrir
+            name: Mieux se nourrir
           - id: consommer
-            name: Consommer
+            name: Mieux consommer
           - id: preserver
-            name: Préserver
+            name: Mieux préserver et valoriser nos ecosystèmes
           - id: se-deplacer
-            name: Se déplacer
+            name: Mieux se déplacer
           - id: chantiers-transverses
-            name: Chantiers transverses
+            name: Autre
       - name: Couverture territoriale
         default_option:
         id: geozone
