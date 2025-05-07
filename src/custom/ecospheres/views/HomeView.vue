@@ -125,7 +125,7 @@ const dropdown = config.website.header_search.dropdown
         </li>
       </ul>
     </section>
-    <section class="fr-container--fluid bg-grey fr-py-16v">
+    <section class="fr-container--fluid bg-blue fr-py-16v">
       <div class="fr-container">
         <h2>Les bouquets à découvrir</h2>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
@@ -157,8 +157,8 @@ const dropdown = config.website.header_search.dropdown
 </template>
 
 <style scoped>
-.bg-grey {
-  background-color: var(--background-alt-grey);
+.bg-blue {
+  background-color: var(--background-alt-blue-cumulus);
 }
 
 .faq {

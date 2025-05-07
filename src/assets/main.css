@@ -173,6 +173,25 @@ body {
 }
 
 /* overload datagouv-components */
+
+// datagouv-components applies `color: inherit` to titles, we want the title color
+.datagouv-components {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6 {
+    color: var(--text-title-grey);
+  }
+}
+
 .datagouv-components h3.fr-accordion__title {
   margin-bottom: 0;
 }
@@ -209,7 +228,7 @@ body {
 }
 
 .hero-banner {
-  background: #f3f3f3;
+  background-color: var(--background-alt-blue-cumulus);
   p:last-child {
     margin-bottom: 0;
   }
