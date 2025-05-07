@@ -54,7 +54,6 @@ const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
-const canClone = computed(() => useUserStore().isLoggedIn)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
@@ -253,7 +252,6 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
-              v-if="canClone"
               :secondary="canEdit"
               size="md"
               label="Cloner"
