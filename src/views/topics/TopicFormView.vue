@@ -159,7 +159,12 @@ const cancel = () => {
     if (routeQuery.clone == null) {
       router.push({ name: pageKey })
     } else {
-      router.go(-1)
+      router.push({
+        name: `${pageKey}_detail`,
+        params: {
+          item_id: routeQuery.clone
+        }
+      })
     }
   } else {
     router.push({
