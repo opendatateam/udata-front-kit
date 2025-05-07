@@ -170,6 +170,24 @@ website:
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
+# shared themes list for indicators and bouquets
+definitions: &definitions
+  fnv_themes: &fnv_themes
+    - id: mieux-consommer
+      name: Mieux consommer
+    - id: mieux-produire
+      name: Mieux produire
+    - id: mieux-preserver-valoriser-ecosystemes
+      name: Mieux préserver et valoriser nos ecosystèmes
+    - id: mieux-se-deplacer
+      name: Mieux se déplacer
+    - id: mieux-se-loger
+      name: Mieux se loger
+    - id: mieux-se-nourrir
+      name: Mieux se nourrir
+    - id: autre
+      name: Autre
+
 # Configuration format for pages:
 #
 # pages:
@@ -346,21 +364,7 @@ pages:
         # TODO: use a dedicated config for the form?
         form:
           required: true
-        values:
-          - id: consommer
-            name: Mieux consommer
-          - id: produire
-            name: Mieux produire
-          - id: preserver
-            name: Mieux préserver et valoriser nos ecosystèmes
-          - id: se-deplacer
-            name: Mieux se déplacer
-          - id: se-loger
-            name: Mieux se loger
-          - id: se-nourrir
-            name: Mieux se nourrir
-          - id: chantiers-transverses
-            name: Autre
+        values: *fnv_themes
       - name: Couverture territoriale
         default_option:
         id: geozone
@@ -396,21 +400,7 @@ pages:
         type: select
         color: green-menthe
         use_tag_prefix: true
-        values:
-          - id: mieux-consommer
-            name: Mieux consommer
-          - id: mieux-produire
-            name: Mieux produire
-          - id: mieux-preserver-valoriser-ecosystemes
-            name: Mieux préserver et valoriser nos ecosystèmes
-          - id: mieux-se-deplacer
-            name: Mieux se déplacer
-          - id: mieux-se-loger
-            name: Mieux se loger
-          - id: mieux-se-nourrir
-            name: Mieux se nourrir
-          - id: autre
-            name: Autre
+        values: *fnv_themes
       - name: Enjeu
         default_option: Tous les enjeux
         id: enjeu
