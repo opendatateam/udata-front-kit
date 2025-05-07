@@ -347,18 +347,18 @@ pages:
         form:
           required: true
         values:
-          - id: se-loger
-            name: Mieux se loger
-          - id: produire
-            name: Mieux produire
-          - id: se-nourrir
-            name: Mieux se nourrir
           - id: consommer
             name: Mieux consommer
+          - id: produire
+            name: Mieux produire
           - id: preserver
             name: Mieux préserver et valoriser nos ecosystèmes
           - id: se-deplacer
             name: Mieux se déplacer
+          - id: se-loger
+            name: Mieux se loger
+          - id: se-nourrir
+            name: Mieux se nourrir
           - id: chantiers-transverses
             name: Autre
       - name: Couverture territoriale
@@ -397,8 +397,6 @@ pages:
         color: green-menthe
         use_tag_prefix: true
         values:
-          - id: autre
-            name: Autre
           - id: mieux-consommer
             name: Mieux consommer
           - id: mieux-produire
@@ -411,6 +409,8 @@ pages:
             name: Mieux se loger
           - id: mieux-se-nourrir
             name: Mieux se nourrir
+          - id: autre
+            name: Autre
       - name: Enjeu
         default_option: Tous les enjeux
         id: enjeu
