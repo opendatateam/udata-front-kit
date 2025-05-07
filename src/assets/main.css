@@ -228,7 +228,7 @@ body {
 }
 
 .hero-banner {
-  background: #f3f3f3;
+  background-color: var(--background-alt-blue-cumulus);
   p:last-child {
     margin-bottom: 0;
   }
