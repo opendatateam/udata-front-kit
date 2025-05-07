@@ -60,6 +60,7 @@ export const cloneTopic = (
     reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
+    organization: null,
     extras: updateTopicExtras(topic, {
       cloned_from: topic.id,
       datasets_properties: topic.extras[
