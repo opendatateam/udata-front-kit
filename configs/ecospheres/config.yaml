@@ -341,7 +341,6 @@ pages:
         default_option: Toutes les thématiques
         id: theme
         type: select
-        child: subtheme
         color: green-emeraude
         use_tag_prefix: true
         # TODO: use a dedicated config for the form?
