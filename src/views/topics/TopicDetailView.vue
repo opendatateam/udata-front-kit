@@ -317,6 +317,7 @@ watch(
             />
             <DsfrButton
               v-if="isAdmin"
+              secondary
               size="md"
               :label="
                 topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'

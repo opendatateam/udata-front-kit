@@ -142,23 +142,27 @@ const dropdown = config.website.header_search.dropdown
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--middle justify-between">
           <h2>Les bouquets à découvrir</h2>
-          <div class="fr-col-auto fr-grid-row fr-mb-3w">
-            <DsfrTag
-              small
-              label="Bouquets mis en avant"
-              selectable
-              :selected="selectedBouquetsTag === 'featured'"
-              @select="selectedBouquetsTag = 'featured'"
-            />
-            <DsfrTag
-              small
-              class="fr-ml-2v"
-              label="Derniers bouquets"
-              selectable
-              :selected="selectedBouquetsTag === 'latest'"
-              @select="selectedBouquetsTag = 'latest'"
-            />
-          </div>
+          <ul class="fr-tags-group">
+            <li>
+              <DsfrTag
+                small
+                label="Bouquets mis en avant"
+                selectable
+                :selected="selectedBouquetsTag === 'featured'"
+                @select="selectedBouquetsTag = 'featured'"
+              />
+            </li>
+            <li>
+              <DsfrTag
+                small
+                class="fr-ml-2v"
+                label="Derniers bouquets"
+                selectable
+                :selected="selectedBouquetsTag === 'latest'"
+                @select="selectedBouquetsTag = 'latest'"
+              />
+            </li>
+          </ul>
         </div>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
           <li v-for="topic in topics" :key="topic.id">
