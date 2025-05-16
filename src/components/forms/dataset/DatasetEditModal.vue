@@ -52,7 +52,7 @@ const validateFields = () => {
   if (!modalData.value.dataset?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalData.value.dataset?.purpose.trim()) {
+  if (!modalData.value.dataset?.purpose?.trim()) {
     formErrors.value.push('purpose')
   }
   if (
