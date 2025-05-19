@@ -7,8 +7,7 @@ datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://www.data.gouv.fr
   # oauth settings
-  # FIXME:
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  oauth_client_id: 682b315e4a2aac9442492735
 
 robots:
   disallow:
@@ -41,9 +40,9 @@ website:
               description: "Données sur l'immobilier dédié aux activités de logistique (bâti, entrepôts, stockage, etc.)."
               url: 'bouquets?theme=accessibilite-numerique'
               image_url: '/logistique/assets/immobilier.jpg'
-            - name: 'Accessibilité PMR'
+            - name: 'Accessibilité des lieux'
               description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
-              url: 'bouquets?theme=accessibilite-accessibilite-pmr'
+              url: 'bouquets?theme=accessibilite-des-lieux'
               image_url: '/logistique/assets/infra.jpg'
         sub_section_tiles:
         sub_section_buttons:
@@ -165,10 +164,10 @@ organizations:
 # shared themes list for indicators and bouquets
 definitions: &definitions
   themes_list: &themes_list
-    - id: accessibilite-pmr
-      name: Personnes à Mobilité Réduite
+    - id: accessibilite-des-lieux
+      name: Accessibilité des lieux
     - id: accessibilite-numerique
-      name: Personnes à Mobilité Réduite
+      name: Accessibilité numérique
     - id: autre
       name: Autre
 
