@@ -5,7 +5,7 @@ site_id: accessibilite
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
   # FIXME:
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
@@ -178,7 +178,7 @@ pages:
   datasets:
     list_all: true
     universe_query:
-      topic: 682afeac8b5581deb12a7b37
+      topic: 682b1be88b2474e04b3cb19a
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
@@ -192,7 +192,7 @@ pages:
     discussions:
       display: true
       create: true
-    filters:
+    filters: []
   # BOUQUETS
   bouquets:
     list_all: true
