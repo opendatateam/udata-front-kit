@@ -35,15 +35,16 @@ website:
         sub_section_datasets:
         sub_section_cards:
           title:
+          class: 'fr-col-md-6'
           cards:
             - name: 'Accessibilité numérique'
               description: "Données sur l'immobilier dédié aux activités de logistique (bâti, entrepôts, stockage, etc.)."
               url: 'bouquets?theme=accessibilite-numerique'
-              image_url: '/logistique/assets/immobilier.jpg'
+              image_url: '/accessibilite/assets/accessibilite-numerique.jpg'
             - name: 'Accessibilité des lieux'
               description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
               url: 'bouquets?theme=accessibilite-des-lieux'
-              image_url: '/logistique/assets/infra.jpg'
+              image_url: '/accessibilite/assets/accessibilite-des-lieux.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
@@ -129,7 +130,6 @@ website:
     host: 'https://stats.data.gouv.fr'
     siteId:
   datasets:
-    # TODO: better place for that?
     add_to_topic:
       enable: true
       page: bouquets
@@ -138,7 +138,6 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
-  # TODO: better place for that?
   topics:
     can_add_topics:
       everyone: true
@@ -160,16 +159,6 @@ website:
       path: /accessibility
 
 organizations:
-
-# shared themes list for indicators and bouquets
-definitions: &definitions
-  themes_list: &themes_list
-    - id: accessibilite-des-lieux
-      name: Accessibilité des lieux
-    - id: accessibilite-numerique
-      name: Accessibilité numérique
-    - id: autre
-      name: Autre
 
 # Configuration format for pages:
 pages:
@@ -224,10 +213,15 @@ pages:
         type: select
         color: green-emeraude
         use_tag_prefix: true
-        # TODO: use a dedicated config for the form?
         form:
           required: true
-        values: *themes_list
+        values:
+          - id: accessibilite-des-lieux
+            name: Accessibilité des lieux
+          - id: accessibilite-numerique
+            name: Accessibilité numérique
+          - id: autre
+            name: Autre
       - name: Couverture territoriale
         default_option:
         id: geozone
