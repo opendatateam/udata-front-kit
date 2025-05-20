@@ -104,15 +104,15 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/ecospheres/pages/about.md'
+        url: '/accessibilite/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/ecospheres/pages/accessibility.md'
+        url: '/accessibilite/pages/accessibility.md'
       - title: "Conditions générales d'utilisation"
         id: 'terms'
         route: '/terms'
-        url: '/ecospheres/pages/terms.md'
+        url: '/accessibilite/pages/terms.md'
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
