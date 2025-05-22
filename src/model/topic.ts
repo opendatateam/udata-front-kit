@@ -16,7 +16,7 @@ export enum Availability {
 
 export interface DatasetProperties {
   title: string
-  purpose: string
+  purpose: string | null
   uri: string | null
   id: string | null
   availability: Availability
