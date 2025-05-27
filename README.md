@@ -75,8 +75,6 @@ npm run format
   - `@vueuse/integrations` // intégration supplémentaires de vueuse (`focustrap`)
 - `unplugin-auto-import` - `vite.config.mts` // auto-import d'API `vue` (`ref`, `computed`…) et `vue-dsfr` ([d'après ce tutoriel](https://vue-ds.fr/guide/pour-commencer#avoir-un-bundle-optimise-et-une-dx-optimale))
 - `unplugin-vue-components` - `vite.config.mts` // auto-import des composants custom et `vue-dsfr` ([idem](https://vue-ds.fr/guide/pour-commencer#avoir-un-bundle-optimise-et-une-dx-optimale))
-- `vee-validate` // validation de formulaire
-  - `@vee-validate/rules` // collection de règles de validation
 - `@unhead/vue` // SEO (en gros)
 
 ### Formatage et validation du code

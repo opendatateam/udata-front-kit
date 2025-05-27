@@ -6,75 +6,87 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import NoResults from '@/components/NoResults.vue'
-import type { TopicsQueryArgs } from '@/model/topic'
+import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
+
+const props = defineProps({
+  query: {
+    type: String,
+    default: null
+  },
+  page: {
+    type: String,
+    default: '1'
+  }
+})
 
 const router = useRouter()
 const route = useRoute()
+const { query: routeQuery } = useRouteQueryAsString()
 const topicStore = useTopicStore()
 
-const { topicsName, topicsSlug } = useTopicsConf()
+const { pageKey, pageConf } = useCurrentPageConf()
 
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
-
-const props = defineProps<TopicsQueryArgs>()
+const { canAddTopic } = storeToRefs(userStore)
 
 const emits = defineEmits(['clearFilters'])
 
-const {
-  topics: bouquets,
-  pagination,
-  total: nbBouquets
-} = storeToRefs(topicStore)
+const { topics, pagination, total } = storeToRefs(topicStore)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
-  if (nbBouquets.value === 1) {
-    return `1 ${topicsName} disponible`
-  } else if (nbBouquets.value > 1) {
-    return nbBouquets.value + ` ${topicsName}s disponibles`
+  if (total.value === 1) {
+    return `1 ${pageConf.labels.singular} disponible`
+  } else if (total.value > 1) {
+    return `${total.value} ${pageConf.labels.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
 })
 
 const createUrl = computed(() => {
-  return { name: `${topicsSlug}_add`, query: route.query }
+  return { name: `${String(route.name)}_add`, query: route.query }
 })
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
   if (route.query.drafts) query.drafts = route.query.drafts
-  router.push({ name: topicsSlug, query, hash: '#bouquets-list' }).then(() => {
+  router.push({ name: route.name, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
 }
 
-const executeQuery = async (args: typeof props) => {
+const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
-  return topicStore.query(args).finally(() => loader.hide())
+  // get filters parameters from route
+  return topicStore
+    .query({ ...route.query, ...props }, pageKey)
+    .finally(() => loader.hide())
 }
 
 const goToPage = (page: number) => {
   router.push({
-    name: topicsSlug,
+    name: route.name,
     query: { ...route.query, page: page + 1 },
-    hash: '#bouquets-list'
+    hash: '#list'
   })
 }
 
 const doSort = (value: string | null) => {
   router.push({
-    name: topicsSlug,
+    name: route.name,
     query: { ...route.query, sort: value },
-    hash: '#bouquets-list'
+    hash: '#list'
   })
 }
 
-// launch search on props (~route.query) changes
-watch(props, () => executeQuery(props), { immediate: true, deep: true })
+// launch search on route.query changes
+watch(
+  () => route.query,
+  () => executeQuery(),
+  { immediate: true, deep: true }
+)
 
 defineExpose({
   numberOfResultMsg
@@ -82,14 +94,14 @@ defineExpose({
 </script>
 
 <template>
-  <template v-if="nbBouquets > 0">
+  <template v-if="total > 0">
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
     >
       <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <SelectComponent
-          :model-value="sort"
+          :model-value="routeQuery.sort || '-created'"
           label="Trier par :"
           :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
           :options="[
@@ -103,8 +115,8 @@ defineExpose({
     </div>
     <div class="fr-mb-4w border-top">
       <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
-        <li v-for="bouquet in bouquets" :key="bouquet.id" class="fr-col-12">
-          <BouquetCard :bouquet="bouquet" />
+        <li v-for="topic in topics" :key="topic.id" class="fr-col-12">
+          <TopicCard :topic="topic" :page-key="pageKey" />
         </li>
       </ul>
     </div>
@@ -117,19 +129,19 @@ defineExpose({
     />
   </template>
   <NoResults v-else :clear-filters="clearFilters">
-    <template #description>
+    <template v-if="canAddTopic" #description>
       Essayez de réinitialiser les filtres pour agrandir votre champ de
       recherche.<br />
-      Vous pouvez aussi contribuer en créant un {{ topicsName }}.
+      Vous pouvez aussi contribuer en créant un {{ pageConf.labels.singular }}.
     </template>
     <template #actions>
       <router-link
-        v-if="canAddBouquet"
+        v-if="canAddTopic"
         :to="createUrl"
         class="fr-btn fr-btn--secondary fr-ml-1w"
       >
         <VIconCustom name="add-circle-line" class="fr-mr-1v" />
-        Ajouter un {{ topicsName }}
+        Ajouter un {{ pageConf.labels.singular }}
       </router-link>
     </template>
   </NoResults>

@@ -1,16 +1,12 @@
 # config file for defis
 
+site_id: defis
+
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 670924ba96082fcc26ee3898
-
-universe:
-  # "universe" topic id
-  topic_id: 65c0f2e2fb22540a9e91a2e4
-  # universe name, used as bouquets tag
-  name: defis
 
 robots:
   disallow:
@@ -78,7 +74,7 @@ website:
         sub_section_cards:
           title:
           cards:
-            - id: '6704d5262a223f0cbc866c68'
+            - id: '67f5438a3b2d79d922863e03'
               name: 'Diversité et inclusion en entreprise'
               description: 'Quelle politique sur l’inclusion et la diversité au sein d’EDF SA ? Défi porté par EDF'
               url: '/defis/diversite-et-inclusion-en-entreprise'
@@ -148,16 +144,31 @@ website:
               description: "Sport pour tous : Évaluer et améliorer l'égalité d'accès aux activités sportives en France"
               url: 'defis/acces-au-sport'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-acces-au-sport.jpg'
+            - id: '6639df879e70e0b00e5aeef1'
+              name: 'Accès et exploitation des données météorologiques'
+              description: 'Comment faciliter la manipulation des données météorologiques ?'
+              url: 'defis/acces-aux-donnees-meteos'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/acces-meteo.jpg'
+            - id: '6639e67fa95c6e4f1da70e39'
+              name: 'Décision agricole'
+              description: 'Comment informer la prise de décision à partir des données météorologiques ?'
+              url: 'defis/decision-agricole'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/decision-agricole.jpg'
+            - id: '6639e311f4a75be320cfa517'
+              name: 'Énergies renouvelables'
+              description: "Comment prévoir les variations de production d'énergies renouvelables ?"
+              url: 'defis/energies-renouvelables'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/energies-renouvelables.jpg'
+            - id: '6639ea1a5fde712a09fa0c67'
+              name: 'Îlots de chaleur urbain'
+              description: "Comment identifier les zones sujettes à l'effet d'îlot de chaleur urbain ?"
+              url: 'defis/ilots-de-chaleur-urbain'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/ilot-de-chaleur.jpg'
             - id: '66a0ffa8d8f03afc1d474a53'
               name: 'JOP2024 et offre culturelle'
               description: "Jeux Olympiques et Paralympiques : Enrichissez l'expérience et mettez en valeur l'offre culturelle"
               url: 'defis/jop2024-et-offre-culturelle'
               image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-jo-offre-culturelle.jpg'
-            - id: '66a10128a66990ed3d718a53'
-              name: 'JOP2024 et qualité de l’air'
-              description: "Jeux Olympiques et Paralympiques : enjeux de pollution de l'air dans le cadre d'une activité physique"
-              url: 'defis/jop2024-et-qualite-de-lair'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/main/defi-jo-qualite-de-l%27air.jpg'
 
         sub_section_tiles:
         sub_section_buttons:
@@ -187,6 +198,8 @@ website:
     name:
     link:
   menu:
+    - text: Défis
+      to: /defis
     - text: Open Data University
       to: /opendatauniversity
     - text: Guides
@@ -241,37 +254,73 @@ website:
   matomo:
     host:
     siteId:
-  discussions:
-    dataset:
-      display: true
-      create: false
-    topic:
-      display: false
-      create: false
   datasets:
-    add_to_bouquet: false
+    add_to_topic:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    slug: defis
-    name: défi
-    extras_key: 'defis'
-    themes:
-      usage: true
-      main_name: thématique
-      secondary_name: chantier
-    # include a list page with all topics
-    list_all: false
-    show_drafts_by_default: false
-    display_metadata: false
-    activate_read_more: false
-    dataset_editorialization: false
     can_add_topics:
       everyone: false
       authorized_users:
-        - 5fda299e56f984a4b126afe1 #thanh-ha
-        - 5e6f426e634f417810ab794b #geoffrey
+        - 5fda299e56f984a4b126afe1 # thanh-ha
+        - 5e6f426e634f417810ab794b # geoffrey
+        - 65e8b5082f2504e916c8f6da # ecospheres
+
+pages:
+  # DEFIS
+  defis:
+    list_all: true
+    universe_query:
+      tag: defisdatagouvfr
+    tag_prefix: defisdatagouvfr
+    title: Défis
+    breadcrumb_title: Défis
+    labels:
+      singular: défi
+      plural: défis
+      extended: défi
+    search:
+      input: Chercher un défi
+    banner:
+    discussions:
+      display: false
+      create: false
+    filters:
+      - name: Saison
+        default_option: Toutes les saisons
+        id: saison
+        type: select
+        color: green-emeraude
+        use_tag_prefix: true
+        form:
+          required: true
+        values:
+          - id: saison-1
+            name: Saison 1
+          - id: saison-2
+            name: Saison 2
+          - id: saison-3
+            name: Saison 3
+  # DATASETS
+  datasets:
+    list_all: false
+    universe_query:
+    tag_prefix:
+    title:
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input:
+    banner:
+    discussions:
+      display: false
+      create: false
+    filters: []
+
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page

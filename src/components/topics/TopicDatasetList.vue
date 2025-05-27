@@ -9,19 +9,15 @@ import DatasetEditModal, {
 import config from '@/config'
 import { type DatasetProperties } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { isAvailable } from '@/utils/bouquet'
-import { useTopicsConf } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
+import { isAvailable } from '@/utils/topic'
 
+import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import {
-  isOnlyNoGroup,
-  useDatasetFilter,
-  useGroups
-} from '@/utils/bouquetGroups'
-import BouquetDatasetCard from './BouquetDatasetCard.vue'
-import BouquetGroup from './BouquetGroup.vue'
+import { isOnlyNoGroup, useDatasetFilter, useGroups } from '@/utils/topicGroups'
+import TopicDatasetCard from './TopicDatasetCard.vue'
+import TopicGroup from './TopicGroup.vue'
 
 const datasetsProperties = defineModel({
   type: Array<DatasetProperties>,
@@ -44,7 +40,7 @@ const emits = defineEmits(['updateDatasets'])
 const modal: Ref<DatasetEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
-const { topicsName } = useTopicsConf()
+const { pageConf } = useCurrentPageConf()
 
 const {
   groupedDatasets,
@@ -140,7 +136,7 @@ onMounted(() => {
   <!-- Header and buttons -->
   <div class="flex-gap fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
-      Composition du {{ topicsName }} de données
+      Composition du {{ pageConf.labels.extended }}
     </h2>
     <SearchComponent
       v-if="datasetEditorialization"
@@ -166,7 +162,9 @@ onMounted(() => {
     class="no-dataset fr-mt-2w"
   >
     <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
-    <p v-else>Ce {{ topicsName }} ne contient pas encore de donnée.</p>
+    <p v-else>
+      Ce {{ pageConf.labels.singular }} ne contient pas encore de donnée.
+    </p>
   </div>
   <template v-else>
     <details v-if="showTOC" class="fr-mt-2w">
@@ -185,7 +183,7 @@ onMounted(() => {
       <ul role="list" class="groups fr-m-0 fr-p-0">
         <template v-for="[group, datasets] in filteredResults" :key="group">
           <li v-if="datasets.length && !isGroupOnlyHidden(group)">
-            <BouquetGroup
+            <TopicGroup
               :group-name="group"
               :all-groups="filteredResults"
               :datasets-properties="datasets"
@@ -214,7 +212,7 @@ onMounted(() => {
               <template #datasetContent="{ dataset }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(dataset.purpose)"></div>
-                <BouquetDatasetCard
+                <TopicDatasetCard
                   v-if="dataset.id"
                   :dataset-properties="dataset"
                   :dataset-content="datasetsContent.get(dataset.id)"
@@ -236,14 +234,14 @@ onMounted(() => {
                   >
                 </div>
               </template>
-            </BouquetGroup>
+            </TopicGroup>
           </li>
         </template>
       </ul>
     </div>
     <div v-else>
       <div v-for="(dataset, index) in datasetsProperties" :key="index">
-        <BouquetDatasetCard
+        <TopicDatasetCard
           v-if="dataset.id"
           :dataset-properties="dataset"
           :dataset-content="datasetsContent.get(dataset.id)"
@@ -258,6 +256,7 @@ onMounted(() => {
     ref="modal"
     v-model="datasetsProperties"
     v-model:groups-model="groupedDatasets"
+    :dataset-editorialization
     @submit-modal="onDatasetEditModalSubmit"
   />
 </template>

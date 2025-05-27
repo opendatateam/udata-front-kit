@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { onMounted } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
-import BouquetCard from '@/components/bouquets/BouquetCard.vue'
+import TopicCard from '@/components/topics/TopicCard.vue'
 import config from '@/config'
 import HomeFaq from '@/custom/ecospheres/components/HomeFaq.vue'
 
@@ -13,7 +12,26 @@ import { storeToRefs } from 'pinia'
 const topicStore = useTopicStore()
 const { topics } = storeToRefs(topicStore)
 
-onMounted(() => topicStore.query({ page_size: '3' }))
+const selectedBouquetsTag: Ref<'featured' | 'latest'> = ref('featured')
+
+watch(
+  selectedBouquetsTag,
+  () => {
+    const args = {
+      query: '',
+      page: '1',
+      page_size: '3',
+      include_private: 'false'
+    }
+    topicStore.query(
+      selectedBouquetsTag.value === 'latest'
+        ? args
+        : { ...args, featured: 'true' },
+      'bouquets'
+    )
+  },
+  { immediate: true }
+)
 
 useHead({
   meta: [
@@ -120,12 +138,39 @@ const dropdown = config.website.header_search.dropdown
         </li>
       </ul>
     </section>
-    <section class="fr-container--fluid bg-grey fr-py-16v">
+    <section class="fr-container--fluid bg-blue fr-py-16v">
       <div class="fr-container">
-        <h2>Les bouquets à découvrir</h2>
+        <div class="fr-grid-row fr-grid-row--middle justify-between">
+          <h2>Les bouquets à découvrir</h2>
+          <ul class="fr-tags-group">
+            <li>
+              <DsfrTag
+                small
+                label="Bouquets mis en avant"
+                selectable
+                :selected="selectedBouquetsTag === 'featured'"
+                @select="selectedBouquetsTag = 'featured'"
+              />
+            </li>
+            <li>
+              <DsfrTag
+                small
+                class="fr-ml-2v"
+                label="Derniers bouquets"
+                selectable
+                :selected="selectedBouquetsTag === 'latest'"
+                @select="selectedBouquetsTag = 'latest'"
+              />
+            </li>
+          </ul>
+        </div>
         <ul class="fr-grid-row discover fr-mb-2w" role="list">
           <li v-for="topic in topics" :key="topic.id">
-            <BouquetCard :bouquet="topic" :hide-description="true" />
+            <TopicCard
+              :topic="topic"
+              page-key="bouquets"
+              :hide-description="true"
+            />
           </li>
         </ul>
         <p class="fr-m-0">
@@ -148,8 +193,8 @@ const dropdown = config.website.header_search.dropdown
 </template>
 
 <style scoped>
-.bg-grey {
-  background-color: var(--background-alt-grey);
+.bg-blue {
+  background-color: var(--background-alt-blue-cumulus);
 }
 
 .faq {

@@ -32,7 +32,7 @@ interface Subject {
   id: SubjectId
 }
 
-type SubjectClass = 'Dataset' | 'Topic' | 'Indicator'
+type SubjectClass = 'Dataset' | 'Topic'
 
 type SubjectId = string
 

@@ -1,14 +1,5 @@
-import {
-  capitalize,
-  computed,
-  ref,
-  watch,
-  type ComputedRef,
-  type Ref
-} from 'vue'
+import { ref, watch, type Ref } from 'vue'
 
-import type { BreadcrumbItem } from '@/model/breadcrumb'
-import type { ResolvedTag } from '@/model/tag'
 import {
   Availability,
   type DatasetProperties,
@@ -19,9 +10,9 @@ import {
 } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
-import { useTopicsConf } from '@/utils/config'
+import { useSiteId } from '@/utils/config'
 
-const { topicsSlug, topicsName, topicsExtrasKey } = useTopicsConf()
+const topicsExtrasKey = useSiteId()
 
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
@@ -69,6 +60,7 @@ export const cloneTopic = (
     reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
+    organization: null,
     extras: updateTopicExtras(topic, {
       cloned_from: topic.id,
       datasets_properties: topic.extras[
@@ -85,44 +77,6 @@ export const cloneTopic = (
       })
     })
   }
-}
-
-export function useBreadcrumbLinksForTopic(
-  theme: Ref<ResolvedTag | undefined>,
-  subtheme: Ref<ResolvedTag | undefined>,
-  topic: Ref<Topic | null>,
-  topicsListAll: boolean | null
-): ComputedRef<BreadcrumbItem[]> {
-  return computed(() => {
-    const breadcrumbs = [{ to: '/', text: 'Accueil' }]
-    if (topicsListAll === true) {
-      breadcrumbs.push({
-        to: `/${topicsSlug}`,
-        text: `${capitalize(topicsName)}s`
-      })
-    }
-
-    if (theme.value !== undefined && subtheme.value !== undefined) {
-      const themeName = theme.value.name
-      const subthemeName = subtheme.value.name
-      breadcrumbs.push(
-        {
-          text: themeName,
-          to: `/${topicsSlug}/?theme=${themeName}`
-        },
-        {
-          text: subthemeName,
-          to: `/${topicsSlug}/?theme=${themeName}&subtheme=${subthemeName}`
-        }
-      )
-    }
-
-    if (topic?.value != null) {
-      breadcrumbs.push({ to: '', text: topic.value.name ?? '' })
-    }
-
-    return breadcrumbs
-  })
 }
 
 export function useExtras(topic: Ref<Topic | null | undefined>): {

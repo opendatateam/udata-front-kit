@@ -14,7 +14,7 @@ defineProps({
     required: true
   },
   defaultOption: {
-    type: String,
+    type: String as () => string | null,
     required: true
   }
 })

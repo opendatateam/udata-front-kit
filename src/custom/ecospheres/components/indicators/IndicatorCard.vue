@@ -18,7 +18,7 @@ defineProps({
         <IndicatorTags :indicator="dataset" :show-default-value="false" />
         <h3 class="fr-card__title fr-mb-1w">
           <RouterLink
-            :to="{ name: 'indicator_detail', params: { iid: dataset.id } }"
+            :to="{ name: 'indicators_detail', params: { item_id: dataset.id } }"
             >{{ dataset.title }}</RouterLink
           >
         </h3>
