@@ -15,7 +15,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
-import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
+import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
@@ -23,36 +23,45 @@ import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
-import { useRouteParamsAsString } from '@/router/utils'
+import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
-import { useTopicsConf } from '@/utils/config'
+import { useDatasetsConf, usePageConf } from '@/utils/config'
 import { useLicense } from '@/utils/dataset'
 
 const route = useRouteParamsAsString()
-const datasetId = route.params.did
+const datasetId = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
-const { canAddBouquet } = storeToRefs(userStore)
+const { canAddTopic } = storeToRefs(userStore)
 
 const dataset = computed(() => datasetStore.get(datasetId))
 
-const showAddToBouquetModal = ref(false)
+const showAddToTopicModal = ref(false)
 
-const showDiscussions = config.website.discussions.dataset.display as boolean
-const { topicsName } = useTopicsConf()
+const { pageKey, pageConf } = useCurrentPageConf()
+const showDiscussions = pageConf.discussions.display
+
+const datasetsConf = useDatasetsConf()
+const topicPageConf = datasetsConf.add_to_topic?.page
+  ? usePageConf(datasetsConf.add_to_topic.page)
+  : null
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
-const links = computed(() => [
-  { to: '/', text: 'Accueil' },
-  { to: '/datasets', text: 'Données' },
-  { text: dataset.value?.title || '' }
-])
+const links = computed(() => {
+  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  breadcrumbs.push({
+    to: pageConf.list_all === true ? `/${pageKey || 'datasets'}` : '',
+    text: pageConf.breadcrumb_title || pageConf.title
+  })
+  breadcrumbs.push({ to: '', text: dataset.value?.title ?? '' })
+  return breadcrumbs
+})
 
 const tabTitles = [
   { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
@@ -68,8 +77,7 @@ const license = useLicense(dataset)
 
 const showHarvestQualityWarning = computed(() => {
   const backend = dataset.value?.harvest?.backend
-  const warningBackends =
-    config.website.datasets.harvest_backends_quality_warning || []
+  const warningBackends = datasetsConf.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
 })
 
@@ -177,23 +185,19 @@ onMounted(() => {
           la source originale peuvent avoir été perdues lors de leur
           récupération. Nous travaillons actuellement à améliorer la situation.
         </div>
-        <div
-          v-if="
-            config.website.datasets.add_to_bouquet &&
-            userStore.loggedIn &&
-            canAddBouquet
-          "
-        >
+        <!-- add dataset to topic (if enabled) -->
+        <div v-if="topicPageConf && userStore.loggedIn && canAddTopic">
           <DsfrButton
             class="fr-mt-2w"
             size="md"
-            :label="`Ajouter à un ${topicsName}`"
+            :label="`Ajouter à un ${topicPageConf.labels.singular}`"
             icon="fr-icon-file-add-line"
-            @click="showAddToBouquetModal = true"
+            @click="showAddToTopicModal = true"
           />
-          <DatasetAddToBouquetModal
-            v-if="showAddToBouquetModal"
-            v-model:show="showAddToBouquetModal"
+          <DatasetAddToTopicModal
+            v-if="showAddToTopicModal"
+            v-model:show="showAddToTopicModal"
+            :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
             :dataset="dataset"
           />
         </div>
@@ -219,7 +223,7 @@ onMounted(() => {
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
         <Well
-          v-if="!config.website.discussions.dataset.create"
+          v-if="!pageConf.discussions.create"
           color="blue-cumulus"
           weight="regular"
         >

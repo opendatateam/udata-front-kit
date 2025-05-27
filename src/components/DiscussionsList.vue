@@ -13,11 +13,11 @@ import type {
   PostForm,
   SubjectClass
 } from '@/model/discussion'
+import { useCurrentPageConf } from '@/router/utils'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useUserStore } from '@/store/UserStore'
 import { formatDate } from '@/utils'
-import { useTopicsConf } from '@/utils/config'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,7 +25,7 @@ const router = useRouter()
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const { topicsName } = useTopicsConf()
+const { pageConf } = useCurrentPageConf()
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
@@ -40,14 +40,12 @@ const props = defineProps({
   subjectClass: {
     type: String as () => SubjectClass,
     default: 'Dataset'
+  },
+  emptyMessage: {
+    type: String,
+    default: 'Pas de discussion pour ce jeu de données.'
   }
 })
-
-const subjectClassLabels = {
-  Dataset: 'jeu de données',
-  Topic: topicsName,
-  Indicator: 'indicateur'
-}
 
 const discussionForm: Ref<DiscussionForm> = ref({
   title: '',
@@ -72,9 +70,7 @@ const pages = computed(() => {
   return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
 })
 
-const allowDiscussionCreation = computed(() => {
-  return config.website.discussions[props.subjectClass.toLowerCase()].create
-})
+const allowDiscussionCreation = pageConf.discussions.create
 
 const getUserAvatar = (post: Post) => {
   if (post.posted_by.avatar_thumbnail) {
@@ -196,9 +192,7 @@ watchEffect(() => {
       width="130"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      Pas de discussion pour
-      {{ props.subjectClass === 'Indicator' ? 'cet' : 'ce' }}
-      {{ subjectClassLabels[props.subjectClass] }}.
+      {{ emptyMessage }}
     </p>
   </div>
   <div v-else class="fr-mt-4w">

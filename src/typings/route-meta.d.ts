@@ -7,5 +7,9 @@ declare module 'vue-router' {
   interface RouteMeta {
     title?: string
     requiresAuth?: boolean
+    filtersComponent?: () => Promise<{ default: Component }>
+    cardComponent?: () => Promise<{ default: Component }>
+    cardClass?: string
+    pageKey?: string
   }
 }

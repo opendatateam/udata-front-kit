@@ -1,12 +1,10 @@
 <script setup lang="ts">
+import config from '@/config'
 import type { Resource } from '@datagouv/components'
 import { ResourceAccordion } from '@datagouv/components'
 import Slider from '@vueform/slider'
 import '@vueform/slider/themes/default.css'
 import { onMounted, ref, type Ref } from 'vue'
-
-import config from '@/config'
-
 import datasetsIds from '../assets/datasets.json'
 import deps from '../assets/deps.json'
 import MapComponent from '../components/MapComponent.vue'
@@ -150,21 +148,26 @@ async function fetchStationsGeoJSON(depCode: string) {
 
 function filterOpenStation() {
   mapPoints.value = filterGeoJSONOpen(stations.value)
+  isMapFiltered.value = !isMapFiltered.value
 }
 
 function filterGeoJSONOpen(geojson: FeatureCollection): FeatureCollection {
-  const filteredGeoJSON: FeatureCollection = {
-    type: 'FeatureCollection',
-    features: []
-  }
-
-  geojson.features.forEach((feature) => {
-    if (!feature.properties.DATFERM) {
-      filteredGeoJSON.features.push(feature)
+  if (isMapFiltered.value) {
+    return geojson
+  } else {
+    const filteredGeoJSON: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: []
     }
-  })
 
-  return filteredGeoJSON
+    geojson.features.forEach((feature) => {
+      if (!feature.properties.DATFERM) {
+        filteredGeoJSON.features.push(feature)
+      }
+    })
+
+    return filteredGeoJSON
+  }
 }
 
 function getCsv(url: string) {
@@ -262,6 +265,7 @@ const handlePostesUpdate = (newPostes: Station[]) => {
 }
 
 const showCustomFilter = ref(false)
+const isMapFiltered = ref(false)
 
 const minSlider = ref(0)
 const maxSlider = ref(100)
@@ -325,7 +329,11 @@ const getAPIUrl = (endpoint: string) => {
         carte
       </p>
       <button type="button" class="fr-btn" @click="filterOpenStation()">
-        Filtrer sur les stations encore ouvertes aujourd'hui
+        {{
+          isMapFiltered
+            ? 'Voir toutes les stations'
+            : "Filtrer sur les stations encore ouvertes aujourd'hui"
+        }}
       </button>
       <MapComponent
         :options="mapOptions"
@@ -404,7 +412,7 @@ const getAPIUrl = (endpoint: string) => {
               )
             "
           >
-            Télécharger les données "Vent" en CSV
+            Télécharger les données "Précipitations-Température-Vent" en CSV
           </button>
           &nbsp;&nbsp;
           <button

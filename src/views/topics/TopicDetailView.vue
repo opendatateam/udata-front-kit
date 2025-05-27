@@ -11,35 +11,33 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import BouquetDatasetList from '@/components/bouquets/BouquetDatasetList.vue'
-import BouquetDatasetListExport from '@/components/bouquets/BouquetDatasetListExport.vue'
+import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
+import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
+import type { TopicPageRouterConf } from '@/router/model'
+import {
+  useCurrentPageConf,
+  useRouteMeta,
+  useRouteParamsAsString
+} from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import {
-  updateTopicExtras,
-  useBreadcrumbLinksForTopic,
-  useExtras
-} from '@/utils/bouquet'
-import { useTopicsConf } from '@/utils/config'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useTag } from '@/utils/tags'
+import { useTagsByRef } from '@/utils/tags'
+import { updateTopicExtras, useExtras } from '@/utils/topic'
 
-const props = defineProps({
-  bouquetId: {
-    type: String,
-    required: true
-  }
-})
+const props = defineProps<TopicPageRouterConf>()
 
 const router = useRouter()
+const meta = useRouteMeta()
+const { params } = useRouteParamsAsString()
 const store = useTopicStore()
 const loading = useLoading()
 
@@ -47,8 +45,6 @@ const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
 const showCloneModal = ref(false)
 const cloneKeepDatasets = ref(false)
-
-const showDiscussions = config.website.discussions.topic.display
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -58,27 +54,25 @@ const description = computed(() => descriptionFromMarkdown(topic))
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
-const canClone = computed(() => useUserStore().isLoggedIn)
+const isAdmin = computed(() => useUserStore().isAdmin)
 
-const {
-  topicsListAll,
-  topicsDisplayMetadata,
-  topicsActivateReadMore,
-  topicsDatasetEditorialization,
-  topicsSlug,
-  topicsName
-} = useTopicsConf()
+const { pageKey, pageConf } = useCurrentPageConf()
+const showDiscussions = pageConf.discussions.display
+const tags = useTagsByRef(pageKey, topic)
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)
-const theme = useTag('bouquets', topic, 'theme')
-const subtheme = useTag('bouquets', topic, 'subtheme')
 
-const breadcrumbLinks = useBreadcrumbLinksForTopic(
-  theme,
-  subtheme,
-  topic,
-  topicsListAll
-)
+const breadcrumbLinks = computed(() => {
+  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  if (pageConf.list_all === true) {
+    breadcrumbs.push({
+      to: `/${meta.pageKey || 'topics'}`,
+      text: pageConf.breadcrumb_title || pageConf.title
+    })
+  }
+  breadcrumbs.push({ to: '', text: topic.value?.name ?? '' })
+  return breadcrumbs
+})
 
 const tabTitles = [
   { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
@@ -109,14 +103,14 @@ const cloneModalActions = [
 
 const goToEdit = () => {
   router.push({
-    name: `${topicsSlug}_edit`,
-    params: { bid: topic.value?.id }
+    name: `${pageKey}_edit`,
+    params: { item_id: topic.value?.id }
   })
 }
 
 const goToClone = () => {
   router.push({
-    name: `${topicsSlug}_add`,
+    name: `${pageKey}_add`,
     query: {
       clone: topic.value?.id,
       'keep-datasets': cloneKeepDatasets.value ? '1' : '0'
@@ -132,6 +126,18 @@ const togglePublish = () => {
     .update(topic.value.id, {
       tags: topic.value.tags,
       private: topic.value.private
+    })
+    .finally(() => loader.hide())
+}
+
+const toggleFeatured = () => {
+  if (topic.value === null) return
+  topic.value.featured = !topic.value.featured
+  const loader = useLoading().show()
+  store
+    .update(topic.value.id, {
+      tags: topic.value.tags,
+      featured: topic.value.featured
     })
     .finally(() => loader.hide())
 }
@@ -176,8 +182,8 @@ const metaTitle = computed(() => {
 
 const metaLink = (): string => {
   const resolved = router.resolve({
-    name: `${topicsSlug}_detail`,
-    params: { bid: topic.value?.slug }
+    name: `${pageKey}_detail`,
+    params: { item_id: topic.value?.slug }
   })
   return `${window.location.origin}${resolved.href}`
 }
@@ -195,17 +201,17 @@ useHead({
 })
 
 watch(
-  () => props.bouquetId,
+  () => params.item_id,
   () => {
     const loader = loading.show({ enforceFocus: false })
     store
-      .load(props.bouquetId, { toasted: false, redirectNotFound: true })
+      .load(params.item_id, { toasted: false, redirectNotFound: true })
       .then((res) => {
         topic.value = res
-        if (topic.value.slug !== props.bouquetId) {
+        if (topic.value.slug !== params.item_id) {
           router.push({
-            name: `${topicsSlug}_detail`,
-            params: { bid: topic.value.slug }
+            name: `${pageKey}_detail`,
+            params: { item_id: topic.value.slug }
           })
         }
         setAccessibilityProperties(metaTitle.value)
@@ -224,13 +230,17 @@ watch(
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters">
       <div
         class="fr-col-12"
-        :class="topicsDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
+        :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
-        <div class="bouquet__header fr-mb-4v">
+        <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <TagComponent :tag="subtheme" />
+          <ul v-if="tags.length > 0" class="fr-badges-group">
+            <li v-for="t in tags" :key="`${t.type}-${t.id}`">
+              <TagComponent :tag="t" />
+            </li>
+          </ul>
         </div>
-        <div v-if="topicsActivateReadMore">
+        <div v-if="props.enableReadMore">
           <ReadMore max-height="600">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="description" />
@@ -244,7 +254,7 @@ watch(
       <div
         class="fr-col-12"
         :class="
-          topicsDisplayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
+          props.displayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
         "
       >
         <div class="fr-mb-2w">
@@ -255,12 +265,11 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
-              v-if="canClone"
-              :secondary="canEdit"
+              secondary
               size="md"
               label="Cloner"
               icon="fr-icon-git-merge-line"
-              title="Cloner le bouquet"
+              :title="`Cloner le ${pageConf.labels.singular}`"
               @click="showCloneModal = true"
             />
             <DsfrModal
@@ -273,12 +282,13 @@ watch(
               <template #default>
                 <p>
                   Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du bouquet que vous souhaitez cloner.
+                  données du {{ pageConf.labels.singular }} que vous souhaitez
+                  cloner.
                 </p>
                 <p>
                   Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au nouveau bouquet, mais leurs libellés et
-                  raisons d'utilisation seront conservés.
+                  seront pas ajoutés au {{ pageConf.labels.singular }} cloné,
+                  mais leurs libellés et raisons d'utilisation seront conservés.
                 </p>
                 <p>
                   Voulez-vous conserver les liens vers les jeux de
@@ -305,9 +315,22 @@ watch(
               class="fr-mb-1v"
               @click="togglePublish"
             />
+            <DsfrButton
+              v-if="isAdmin"
+              secondary
+              size="md"
+              :label="
+                topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'
+              "
+              :icon="
+                topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
+              "
+              class="fr-mb-1v"
+              @click="toggleFeatured"
+            />
           </div>
         </div>
-        <div v-if="topicsDisplayMetadata">
+        <div v-if="props.displayMetadata">
           <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
           <div
             v-if="topic.organization"
@@ -358,8 +381,8 @@ watch(
             <p>
               <RouterLink
                 :to="{
-                  name: `${topicsSlug}_detail`,
-                  params: { bid: clonedFrom.slug }
+                  name: `${pageKey}_detail`,
+                  params: { item_id: clonedFrom.slug }
                 }"
               >
                 {{ clonedFrom.name }}
@@ -374,17 +397,17 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${topicsName}`"
+      :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
-        <BouquetDatasetList
+        <TopicDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
-          :dataset-editorialization="topicsDatasetEditorialization"
+          :dataset-editorialization="props.datasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
-        <BouquetDatasetListExport
+        <TopicDatasetListExport
           :datasets="datasetsProperties"
           :filename="topic.id"
         />
@@ -395,6 +418,7 @@ watch(
           v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
+          :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
@@ -406,7 +430,7 @@ watch(
 </template>
 
 <style scoped>
-.bouquet__header {
+.topic__header {
   display: flex;
   align-items: center;
   flex-flow: wrap;

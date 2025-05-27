@@ -8,7 +8,7 @@ La plateforme _ecologie_.**data.gouv**._fr_ est progressivement enrichie de nouv
 
 ## À qui s'adresse cette plateforme ?
 
-_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des administrations centrales, des services déconcentrés de l'État, des établissement publics et des administrations territoriales oeuvrant au déploiement des politiques publiques portées par le [ministère en charge de l&rsquo;environnement](https://www.ecologie.gouv.fr/). L'accès aux données brutes et aux indicateurs permet également à la société civile, au secteur privé ou encore à l'administration de s'en emparer dans un but de réutilisation.
+_ecologie_.**data.gouv**._fr_ s'adresse aux agents publics des administrations centrales, des services déconcentrés de l'État, des établissements publics et des administrations territoriales oeuvrant au déploiement des politiques publiques portées par le [ministère en charge de l&rsquo;environnement](https://www.ecologie.gouv.fr/). L'accès aux données brutes et aux indicateurs permet également à la société civile, au secteur privé ou encore à l'administration de s'en emparer dans un but de réutilisation.
 
 Un [gestionnaire de patrimoine](https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/gestionnaire-patrimoine-prod/?standalone=2) a été mis en place afin de faciliter le suivi des données d'une organisation moissonnée par [**data.gouv**._fr_](https://data.gouv.fr/). Il s'adresse principalement aux gestionnaires de catalogue et administrateurs de données locales et a pour objectif de faciliter l'identification d'éventuels problèmes de qualité des métadonnées.
 

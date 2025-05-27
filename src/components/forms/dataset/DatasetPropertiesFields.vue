@@ -9,7 +9,6 @@ import {
   type DatasetsGroups
 } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { useTopicsConf } from '@/utils/config'
 import { useForm } from '@/utils/form'
 
 import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
@@ -32,16 +31,19 @@ const formErrors = defineModel('errors-model', {
   default: []
 })
 
-defineProps({
+const props = defineProps({
   alreadySelectedDatasets: {
     type: Array<DatasetProperties>,
     default: []
+  },
+  datasetEditorialization: {
+    type: Boolean,
+    default: false
   }
 })
 
 const router = useRouter()
 const datasetStore = useDatasetStore()
-const { topicsDatasetEditorialization } = useTopicsConf()
 const { getErrorMessage } = useForm(formErrors)
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
@@ -62,7 +64,7 @@ const isValidDataset = computed((): boolean => {
     isValidUrlDataset.value &&
     !datasetProperties.value.remoteDeleted
 
-  if (!topicsDatasetEditorialization) return isValidWithoutEditorialization
+  if (!props.datasetEditorialization) return isValidWithoutEditorialization
 
   return isValidWithoutEditorialization && hasEditorialization.value
 })
@@ -92,8 +94,8 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
     datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
     datasetProperties.value.id = value.id
     const resolved = router.resolve({
-      name: 'dataset_detail',
-      params: { did: value.id }
+      name: 'datasets_detail',
+      params: { item_id: value.id }
     })
     datasetProperties.value.uri = resolved.href
     delete datasetProperties.value.remoteDeleted
@@ -131,7 +133,7 @@ onMounted(() => {
 
 <template>
   <DatasetPropertiesTextFields
-    v-if="topicsDatasetEditorialization"
+    v-if="datasetEditorialization"
     v-model:dataset-properties-model="datasetProperties"
     :error-title="getErrorMessage('title')"
     :error-purpose="getErrorMessage('purpose')"
@@ -145,10 +147,7 @@ onMounted(() => {
         @update:model-value="onSelectDataset"
       />
     </div>
-    <div
-      v-if="!selectedDataset && topicsDatasetEditorialization"
-      class="fr-mt-4w"
-    >
+    <div v-if="!selectedDataset && datasetEditorialization" class="fr-mt-4w">
       <fieldset
         class="fr-fieldset availability"
         role="radiogroup"

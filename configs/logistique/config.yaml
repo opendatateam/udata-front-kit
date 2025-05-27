@@ -1,14 +1,12 @@
 # config file for logistique.data.gouv.fr
 
+site_id: logistique
+
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  # FIXME:
   oauth_client_id: 6709257a89f70088a223eba3
-universe:
-  # universe name, used as bouquets tag
-  name: logistique
 
 robots:
   disallow:
@@ -39,35 +37,35 @@ website:
           cards:
             - name: 'Immobilier logistique'
               description: "Données sur l'immobilier dédié aux activités de logistique (bâti, entrepôts, stockage, etc.)."
-              url: 'bouquets?theme=Immobilier+logistique'
+              url: 'bouquets?theme=immobilier-logistique'
               image_url: '/logistique/assets/immobilier.jpg'
             - name: 'Infrastructure'
               description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
-              url: 'bouquets?theme=Infrastructure'
+              url: 'bouquets?theme=infrastructure'
               image_url: '/logistique/assets/infra.jpg'
             - name: 'Trafic'
               description: 'Données sur le flux des activités de logistique (trafic routier, fluvial, maritime, ferroviaire et aérien).'
-              url: 'bouquets?theme=Trafic'
+              url: 'bouquets?theme=trafic'
               image_url: '/logistique/assets/trafic.jpg'
             - name: 'Environnement'
               description: "Données offrant une base pour réaliser des études approfondies sur l'impact environnemental de la logistique."
-              url: 'bouquets?theme=Environnement'
+              url: 'bouquets?theme=environnement'
               image_url: '/logistique/assets/environnement.jpg'
             - name: 'Socio-économique'
               description: 'Bases essentielles pour étudier les interactions entre les dimensions sociales et économiques de la logistique.'
-              url: 'bouquets?theme=Socio-économique'
+              url: 'bouquets?theme=socio-economique'
               image_url: '/logistique/assets/socio.jpg'
             - name: 'Filières'
-              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industielle, énergétique...).'
-              url: 'bouquets?theme=Filières'
+              description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industrielle, énergétique...).'
+              url: 'bouquets?theme=filieres'
               image_url: '/logistique/assets/risques.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
   header_button:
-    display: false
+    display: true
     label: 'Donnez votre avis'
-    link:
+    link: https://framaforms.org/votre-avis-sur-logistiquedatagouvfr-1741274528
   header_search:
     display: true
     placeholder: Rechercher...
@@ -79,7 +77,11 @@ website:
     name:
     link:
   menu:
-    - text: Accès aux données
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets
+    - text: Bouquets
       to: /bouquets
     - text: A propos
       to: /about
@@ -131,68 +133,66 @@ website:
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 308
-  discussions:
-    dataset:
-      display: true
-      create: true
-    topic:
-      display: true
-      create: true
   datasets:
-    add_to_bouquet: true
+    add_to_topic:
+      enable: true
+      page: bouquets
+      dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    slug: bouquets
-    name: bouquet
-    extras_key: 'logistique'
-    themes:
-      usage: true
-      main_name: catégorie
-      secondary_name: sous-catégorie
-    # include a list page with all topics
-    list_all: false
-    show_drafts_by_default: false
-    display_metadata: false
-    activate_read_more: false
-    dataset_editorialization: true
     can_add_topics:
-      everyone: yes
+      everyone: true
 
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
+  # DATASETS
   datasets:
+    list_all: true
     universe_query:
       topic: 66d5caab2ef9e95fc1625446
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
     search:
       input: Rechercher un jeu de données
-      results:
-        one: 1 jeu de données disponible
-        several: '{{total}} jeux de données disponibles'
     banner:
+    discussions:
+      display: true
+      create: true
     filters: []
+  # BOUQUETS
   bouquets:
+    list_all: true
     universe_query:
+      tag: logistique
     tag_prefix: logistique
-    title:
-    breadcrumb_title:
+    title: Bouquets
+    breadcrumb_title: Bouquets
+    labels:
+      singular: bouquet
+      plural: bouquets
+      extended: bouquet de données
     search:
-      input:
-      results:
-        one:
-        several:
+      input: Filtrer les bouquets
     banner:
+    discussions:
+      display: true
+      create: true
     filters:
       - name: Catégorie
+        default_option: Toutes les catégories
         id: theme
         type: select
-        child: subtheme
         color: green-bourgeon
         use_tag_prefix: true
+        form:
+          required: true
         values:
           - id: immobilier-logistique
             name: Immobilier logistique
@@ -206,72 +206,10 @@ pages:
             name: Environnement
           - id: socio-economique
             name: Socio-économique
-      - name: Sous-catégorie
-        id: subtheme
-        type: select
-        color: blue-ecume
-        use_tag_prefix: true
-        values:
-          # immobilier-logistique
-          - id: immobilier-logistique-general
-            name: Général
-            parent: immobilier-logistique
-          # infrastructure
-          - id: infrastructure-general
-            name: Général
-            parent: infrastructure
-          # trafic
-          - id: trafic-general
-            name: Général
-            parent: trafic
-          - id: transport-routier
-            name: Transport routier
-            parent: trafic
-          - id: transport-aerien
-            name: Transport aérien
-            parent: trafic
-          - id: transport-ferroviaire
-            name: Transport ferroviaire
-            parent: trafic
-          - id: transport-fluvial
-            name: Transport fluvial
-            parent: trafic
-          - id: transport-maritime
-            name: Transport maritime
-            parent: trafic
-          # filieres
-          - id: filieres-general
-            name: Général
-            parent: filieres
-          - id: filiere-agricole
-            name: Filière agricole
-            parent: filieres
-          - id: filiere-industrielle
-            name: Filière industrielle
-            parent: filieres
-          - id: filiere-energetique
-            name: Filière énergétique
-            parent: filieres
-          - id: filiere-pharmaceutique
-            name: Filière pharmaceutique
-            parent: filieres
-          - id: filiere-commerce
-            name: Filière commerce
-            parent: filieres
-          - id: filiere-materiaux-de-construction
-            name: Filière matériaux de construction
-            parent: filieres
-          - id: filiere-matieres-premiere
-            name: Filière matières premières
-            parent: filieres
-          # environnement
-          - id: environnement-general
-            name: Général
-            parent: environnement
-          # socio-economique
-          - id: socio-economique-general
-            name: Général
-            parent: socio-economique
+      - name: Couverture territoriale
+        default_option:
+        id: geozone
+        type: spatial_zone
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref, type PropType, type Ref } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 
-import { ReuseModel, type Reuse, type ReuseType } from '@/model/reuse'
+import { type Reuse, type ReuseType } from '@/model/reuse'
 import type { Topic } from '@/model/topic'
+import { useCurrentPageConf } from '@/router/utils'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
 import { useReuseStore } from '@/store/ReuseStore'
 import { useTopicStore } from '@/store/TopicStore'
@@ -10,7 +11,7 @@ import { formatDate } from '@/utils'
 
 const props = defineProps({
   model: {
-    type: String as PropType<keyof typeof ReuseModel>,
+    type: String as () => 'dataset' | 'topic',
     required: true
   },
   objectId: {
@@ -19,6 +20,7 @@ const props = defineProps({
   }
 })
 
+const { pageConf } = useCurrentPageConf()
 const reuseStore = useReuseStore()
 const reuseApi = new ReusesAPI()
 const reuses: Ref<Reuse[]> = ref([])
@@ -80,7 +82,8 @@ onMounted(() => {
       width="130"
     />
     <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      Il n'y a pas encore de réutilisation pour ce {{ ReuseModel[model] }}.
+      Il n'y a pas encore de réutilisation pour ce
+      {{ pageConf.labels.singular }}.
     </p>
     <p>
       <a
@@ -107,7 +110,10 @@ onMounted(() => {
           :description="reuseDescription(r)"
           size="sm"
           :img-src="
-            r.image_thumbnail || r.organization?.logo || r.owner?.avatar
+            r.image_thumbnail ||
+            r.organization?.logo ||
+            r.owner?.avatar ||
+            undefined
           "
         />
       </li>
