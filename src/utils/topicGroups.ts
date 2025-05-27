@@ -36,7 +36,10 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     // Sort each group's datasets by lowered+unaccented title according to current locale
     for (const [, datasets] of groupedMap.entries()) {
       datasets.sort((a, b) =>
-        a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
+        // some legacy datasets have no title, fallback to '' to avoid errors
+        (a.title || '').localeCompare(b.title || '', undefined, {
+          sensitivity: 'base'
+        })
       )
     }
 

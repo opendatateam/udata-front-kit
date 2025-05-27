@@ -1,14 +1,12 @@
 # config file for meteo-france
 
+site_id: meteodatagouvfr
+
 datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id:
-
-universe:
-  # universe name, used as bouquets tag
-  name: meteo-france
+  oauth_client_id: 5e6f426e634f417810ab794b
 
 robots:
   disallow:
@@ -39,16 +37,20 @@ website:
           cards:
             - name: 'Données climatologiques (par station et spatialisées)'
               description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
-              url: 'datasets?tags=climatologique-base'
+              url: 'datasets?category=climatologique-base'
               image_url: '/meteo-france/assets/climatologie.png'
             - name: 'Données de référence pour le changement climatique'
               description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
-              url: 'datasets?tags=climatologique-changement-climatique'
+              url: 'datasets?category=climatologique-changement-climatique'
               image_url: '/meteo-france/assets/climatique.jpg'
             - name: 'Données de Prévision Numérique du Temps (PNT)'
-              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
-              url: 'datasets?tags=pnt'
+              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéances.'
+              url: 'datasets?category=pnt'
               image_url: '/meteo-france/assets/pnt.png'
+            - name: 'Informations sur les stations'
+              description: 'Accès aux caractéristiques des stations météorologiques de métropole et d’outre-mer en service.'
+              url: 'datasets?category=stations'
+              image_url: '/meteo-france/assets/station.png'
         sub_section_tiles:
           title:
           tiles:
@@ -150,33 +152,12 @@ website:
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 292
-  discussions:
-    dataset:
-      display: true
-      create: false
-    topic:
-      display: false
-      create: false
   datasets:
-    add_to_bouquet: true
+    add_to_topic:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
   topics:
-    # disabled in router.disable
-    slug: topics
-    name: Topics
-    extras_key:
-    themes:
-      usage: false
-      main_name:
-      secondary_name:
-    # include a list page with all topics
-    list_all: false
-    show_drafts_by_default: false
-    display_metadata: false
-    activate_read_more: false
-    dataset_editorialization: false
     can_add_topics:
       everyone: false
       authorized_users:
@@ -189,17 +170,22 @@ organizations:
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
   datasets:
+    list_all: true
     tag_prefix:
     universe_query:
       tag: meteodatagouvfr
     title: Jeux de données
     breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
     search:
       input: Rechercher un jeu de données
-      results:
-        one: 1 jeu de données disponible
-        several: '{{total}} jeux de données disponibles'
     banner:
+    discussions:
+      display: true
+      create: false
     filters:
       - name: Catégories
         default_option: Toutes les catégories

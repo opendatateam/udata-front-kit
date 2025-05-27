@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
-import type { RouteMeta } from '@/router'
+import { useCurrentPageConf } from '@/router/utils'
 import { useSearchStore } from '@/store/DatasetSearchStore'
-import { usePageConf } from '@/utils/config'
 import { DatasetCard } from '@datagouv/components'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
@@ -23,24 +22,23 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
-const meta = route.meta as RouteMeta
 
 const store = useSearchStore()
-const pageConf = usePageConf(meta.filterKey || 'datasets')
+const { meta, pageConf } = useCurrentPageConf()
 const { datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return pageConf.search.results.one
+    return `1 ${pageConf.labels.singular} disponible`
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${pageConf.search.results.several.replace('{{total}}', String(total.value))}`
+    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} ${pageConf.labels.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
 })
 
 const getDatasetPage = (id: string) => {
-  return { name: 'dataset_detail', params: { did: id } }
+  return { name: 'datasets_detail', params: { item_id: id } }
 }
 
 const getOrganizationPage = (id: string | undefined) => {
@@ -52,7 +50,7 @@ const getOrganizationPage = (id: string | undefined) => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  router.push({ name: route.name, query, hash: '#datasets-list' }).then(() => {
+  router.push({ name: route.name, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
 }
@@ -61,7 +59,7 @@ const goToPage = (page: number) => {
   router.push({
     name: route.name,
     query: { ...route.query, page: page + 1 },
-    hash: '#datasets-list'
+    hash: '#list'
   })
 }
 
@@ -69,7 +67,7 @@ const doSort = (value: string | null) => {
   router.push({
     name: route.name,
     query: { ...route.query, sort: value },
-    hash: '#datasets-list'
+    hash: '#list'
   })
 }
 
@@ -88,7 +86,7 @@ const executeQuery = async () => {
     {} as Record<string, string>
   )
   return store
-    .query({ ...route.query, ...props, ...filtersArgs }, meta.filterKey)
+    .query({ ...route.query, ...props, ...filtersArgs }, meta.pageKey)
     .finally(() => loader.hide())
 }
 

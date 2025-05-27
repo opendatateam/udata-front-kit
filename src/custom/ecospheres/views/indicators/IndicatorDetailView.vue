@@ -5,7 +5,7 @@ import { computed, inject, onMounted, ref } from 'vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
-import DatasetAddToBouquetModal from '@/components/datasets/DatasetAddToBouquetModal.vue'
+import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import {
   AccessibilityPropertiesKey,
@@ -25,7 +25,7 @@ import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
-const indicatorId = route.params.iid
+const indicatorId = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -103,9 +103,10 @@ onMounted(() => {
             icon="fr-icon-file-add-line"
             @click="showAddToBouquetModal = true"
           />
-          <DatasetAddToBouquetModal
+          <DatasetAddToTopicModal
             v-if="showAddToBouquetModal"
             v-model:show="showAddToBouquetModal"
+            topic-page-key="bouquets"
             :dataset="indicator"
           />
         </div>
@@ -139,7 +140,11 @@ onMounted(() => {
 
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
-        <DiscussionsList :subject="indicator" subject-class="Indicator" />
+        <DiscussionsList
+          :subject="indicator"
+          subject-class="Dataset"
+          empty-message="Pas de discussion pour cet indicateur."
+        />
       </DsfrTabContent>
 
       <!-- Sources -->

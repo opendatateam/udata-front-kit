@@ -5,7 +5,6 @@ import {
 import { computed, watch, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-// TODO: use this on BouquetsListView
 export const useAccessibilityProperties = (
   query: Ref<string>,
   searchResultsMessage: ComputedRef<string>
