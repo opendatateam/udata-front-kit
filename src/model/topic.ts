@@ -15,9 +15,9 @@ export enum Availability {
 }
 
 export interface SiteElementExtras {
-  uri?: string
-  group?: string
+  uri: string | null
   availability: Availability
+  group?: string
 }
 
 export type ElementExtras = Record<SiteId, SiteElementExtras>

@@ -6,7 +6,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { toast } from 'vue3-toastify'
 
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
-import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
+import DatasetPropertiesTextFields from '@/components/forms/dataset/ElementTextFields.vue'
 import type { Topic } from '@/model/topic'
 import { Availability, type DatasetProperties } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'

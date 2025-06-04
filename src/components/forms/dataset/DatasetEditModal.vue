@@ -7,17 +7,18 @@ import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
 import {
   Availability,
-  type DatasetProperties,
-  type DatasetsGroups
+  type DatasetElement,
+  type ElementsGroups
 } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
-import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
+import DatasetPropertiesFields from './ElementFields.vue'
 
 export interface DatasetEditModalType {
   addDataset: () => void
-  editDataset: (dataset: DatasetProperties, index: number) => void
+  editDataset: (dataset: DatasetElement, index: number) => void
 }
 
 const emits = defineEmits(['submitModal'])
@@ -25,12 +26,12 @@ const emits = defineEmits(['submitModal'])
 const router = useRouter()
 const { pageConf } = useCurrentPageConf()
 
-const datasets = defineModel({
-  type: Object as () => DatasetProperties[],
+const elements = defineModel({
+  type: Object as () => DatasetElement[],
   required: true
 })
 const datasetsGroups = defineModel('groups-model', {
-  type: Object as () => DatasetsGroups,
+  type: Object as () => ElementsGroups,
   default: []
 })
 defineProps({
@@ -49,27 +50,25 @@ const modalData: Ref<DatasetModalData> = ref({
 const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
-  if (!modalData.value.dataset?.title.trim()) {
+  if (!modalData.value.element?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalData.value.dataset?.purpose?.trim()) {
+  if (!modalData.value.element?.description?.trim()) {
     formErrors.value.push('purpose')
   }
-  if (
-    modalData.value.dataset?.group &&
-    modalData.value.dataset?.group.trim().length > 100
-  ) {
+  const siteExtras = modalData.value.element?.extras?.[useSiteId()]
+  if (siteExtras?.group && siteExtras?.group.length > 100) {
     formErrors.value.push('group')
   }
   if (
-    !modalData.value.dataset?.uri &&
-    modalData.value.dataset?.availability === Availability.LOCAL_AVAILABLE
+    !siteExtras?.uri &&
+    siteExtras?.availability === Availability.LOCAL_AVAILABLE
   ) {
     formErrors.value.push('availability')
   }
   if (
-    !modalData.value.dataset?.uri &&
-    modalData.value.dataset?.availability === Availability.URL_AVAILABLE
+    !siteExtras?.uri &&
+    siteExtras?.availability === Availability.URL_AVAILABLE
   ) {
     formErrors.value.push('availabilityUrl')
   }
@@ -105,11 +104,11 @@ const onCancel = () => {
   closeModal()
 }
 
-const editDataset = (dataset: DatasetProperties, index: number) => {
+const editDataset = (dataset: DatasetElement, index: number) => {
   // clone the object to enable cancellation
   modalData.value = {
     index,
-    dataset: { ...dataset },
+    element: { ...dataset },
     isValid: false,
     mode: 'edit'
   }
@@ -119,12 +118,17 @@ const editDataset = (dataset: DatasetProperties, index: number) => {
 const addDataset = () => {
   modalData.value = {
     index: undefined,
-    dataset: {
+    element: {
       title: '',
-      purpose: '',
-      availability: Availability.LOCAL_AVAILABLE,
-      uri: null,
-      id: null
+      description: '',
+      tags: [],
+      element: {},
+      extras: {
+        [useSiteId()]: {
+          availability: Availability.LOCAL_AVAILABLE,
+          uri: null
+        }
+      }
     },
     isValid: false,
     mode: 'create'
@@ -133,16 +137,17 @@ const addDataset = () => {
 }
 
 const submit = async (modalData: DatasetModalData) => {
-  if (modalData.dataset !== undefined) {
+  if (modalData.element !== undefined) {
     // check if data.gouv.fr URL and update metadata if needed
+    const siteExtras = modalData.element.extras?.[useSiteId()]
     if (
-      modalData.dataset.uri &&
-      modalData.dataset.availability === Availability.URL_AVAILABLE
+      siteExtras?.uri &&
+      siteExtras?.availability === Availability.URL_AVAILABLE
     ) {
       const pattern = new RegExp(
         `^${config.datagouvfr.base_url}(?:/.*)?/datasets/(?<datasetName>[a-zA-Z0-9_-]+)(?:/|#|$)`
       )
-      const match = pattern.exec(modalData.dataset.uri)
+      const match = pattern.exec(siteExtras.uri)
       if (match?.groups?.datasetName) {
         try {
           const dataset = await useDatasetStore().load(
@@ -152,13 +157,16 @@ const submit = async (modalData: DatasetModalData) => {
             }
           )
           if (dataset !== undefined) {
-            modalData.dataset.availability = Availability.LOCAL_AVAILABLE
+            siteExtras.availability = Availability.LOCAL_AVAILABLE
             const resolved = router.resolve({
               name: 'datasets_detail',
               params: { item_id: dataset.id }
             })
-            modalData.dataset.uri = resolved.href
-            modalData.dataset.id = dataset.id
+            siteExtras.uri = resolved.href
+            modalData.element.element = {
+              id: dataset.id,
+              class: 'Dataset'
+            }
           }
         } catch (error) {
           console.error(
@@ -169,9 +177,9 @@ const submit = async (modalData: DatasetModalData) => {
       }
     }
     if (modalData.mode === 'create') {
-      datasets.value.push(modalData.dataset)
+      elements.value.push(modalData.element)
     } else if (modalData.mode === 'edit' && modalData.index !== undefined) {
-      datasets.value[modalData.index] = modalData.dataset
+      elements.value[modalData.index] = modalData.element
     }
   }
   emits('submitModal')
@@ -194,7 +202,7 @@ defineExpose({ addDataset, editDataset })
 
 <template>
   <DsfrModal
-    v-if="isModalOpen && modalData.dataset"
+    v-if="isModalOpen && modalData.element"
     size="lg"
     class="form"
     :title="
@@ -215,11 +223,11 @@ defineExpose({ addDataset, editDataset })
     />
     <form novalidate>
       <DatasetPropertiesFields
-        v-model="modalData.dataset"
+        v-model="modalData.element"
         v-model:groups-model="datasetsGroups"
         v-model:errors-model="formErrors"
         :dataset-editorialization
-        :already-selected-datasets="datasets"
+        :already-selected-datasets="elements"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />
     </form>
