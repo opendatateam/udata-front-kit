@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 
 import type { DatasetV2 } from '@datagouv/components'
 
@@ -81,20 +81,20 @@ const handleDeleteGroup = (groupName: string) => {
 }
 
 const loadDatasetsContent = () => {
-  elements.value.forEach((datasetItem) => {
-    const id = datasetItem.element.id ?? null
-    if (id && !datasetsContent.value.has(id) && !datasetItem.remoteDeleted) {
+  elements.value.forEach((element) => {
+    const id = element.element.id ?? null
+    if (id && !datasetsContent.value.has(id) && !element.remoteDeleted) {
       useDatasetStore()
         .load(id, { toasted: false })
         .then((d) => {
           if (d) {
             datasetsContent.value.set(id, d)
-            datasetItem.remoteArchived = !!d.archived
+            element.remoteArchived = !!d.archived
           }
         })
         .catch((err) => {
           if (isNotFoundError(err)) {
-            datasetItem.remoteDeleted = true
+            element.remoteDeleted = true
           } else {
             toastHttpError(err)
           }
@@ -125,12 +125,17 @@ const editDataset = (dataset: DatasetElement, index: number, group: string) => {
 
 const onDatasetEditModalSubmit = () => {
   emits('updateDatasets')
+  // FIXME: test that this is not already triggered by the watcher below
   loadDatasetsContent()
 }
 
-onMounted(() => {
-  loadDatasetsContent()
-})
+watch(
+  () => elements.value.map((element) => element.element?.id).filter(Boolean),
+  () => {
+    loadDatasetsContent()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia'
 
-import type { DatasetElement } from '@/model/topic'
+import type {
+  DatasetElement,
+  ElementClass,
+  GenericElement
+} from '@/model/topic'
 import TopicAPI from '@/services/api/resources/TopicsAPI'
 
 const topicAPI = new TopicAPI({ version: 2 })
@@ -14,7 +18,10 @@ export const useTopicElementStore = defineStore('element', {
     datasetsElements: {}
   }),
   actions: {
-    async getTopicElements(topicId: string): Promise<DatasetElement[]> {
+    async getTopicElements(
+      topicId: string,
+      excludes: ElementClass[] = ['Reuse']
+    ): Promise<DatasetElement[]> {
       if (topicId in this.datasetsElements) {
         return this.datasetsElements[topicId]
       }
@@ -23,7 +30,10 @@ export const useTopicElementStore = defineStore('element', {
         entityId: `${topicId}/elements`,
         params: { page_size: 1000 }
       })
-      this.datasetsElements[topicId] = response.data
+      // TODO: maybe introduce a `class__ne=xxx` in API or smtg
+      this.datasetsElements[topicId] = response.data.filter(
+        (element: GenericElement) => !excludes.includes(element.element.class)
+      )
       return this.datasetsElements[topicId]
     }
   }

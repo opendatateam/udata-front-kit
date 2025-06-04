@@ -23,6 +23,14 @@ const IndicatorDatasetCard = shallowRef<Component | null>(null)
 const elementRef = toRef(props, 'element')
 const datasetIsIndicator: Ref<boolean> = ref(false)
 
+watch(
+  props,
+  (_props) => {
+    console.log('youhou', _props.datasetContent, _props.element)
+  },
+  { deep: true, immediate: true }
+)
+
 onMounted(async () => {
   // import indicator card and utils only when on ecospheres
   if (import.meta.env.VITE_SITE_ID === 'ecospheres') {

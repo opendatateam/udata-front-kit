@@ -22,14 +22,16 @@ export interface SiteDatasetElementExtras {
 
 export type DatasetElementExtras = Record<SiteId, SiteDatasetElementExtras>
 
-export interface DatasetElement {
+export type ElementClass = 'Dataset' | 'Reuse'
+
+export interface GenericElement {
   title: string
   description: string | null
   tags: string[]
   extras: DatasetElementExtras
   element:
     | {
-        class: 'Dataset'
+        class: ElementClass
         id: string
       }
     | Record<string, never> // <- this is an empty object
@@ -37,6 +39,15 @@ export interface DatasetElement {
   isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
+}
+
+export interface DatasetElement extends GenericElement {
+  element:
+    | {
+        class: 'Dataset'
+        id: string
+      }
+    | Record<string, never> // <- this is an empty object
 }
 
 export type ElementsGroups = Map<string, DatasetElement[]>
