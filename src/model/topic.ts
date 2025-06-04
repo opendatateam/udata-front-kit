@@ -46,8 +46,10 @@ export type Topic = Owned & {
   id: string
   page: string
   private: boolean
-  reuses: Rel
-  datasets: Rel
+  // FIXME: remove / fix after API is migrated to elements
+  reuses?: Rel | null
+  datasets?: Rel | null
+  elements?: Rel | null
   slug: string
   tags: string[]
   uri: string
