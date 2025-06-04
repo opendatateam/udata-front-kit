@@ -14,23 +14,34 @@ export enum Availability {
   REMOTE_DELETED = 'remote deleted'
 }
 
-export interface DatasetProperties {
-  title: string
-  purpose: string | null
-  uri: string | null
-  id: string | null
-  availability: Availability
+export interface SiteDatasetElementExtras {
+  uri?: string
   group?: string
+  availability: Availability
+}
+
+export type DatasetElementExtras = Record<SiteId, SiteDatasetElementExtras>
+
+export interface DatasetElement {
+  title: string
+  description: string | null
+  tags: string[]
+  extras: DatasetElementExtras
+  element:
+    | {
+        class: 'Dataset'
+        id: string
+      }
+    | Record<string, never> // <- this is an empty object
   // those are "local" properties, not stored on data.gouv.fr
   isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
 }
 
-export type DatasetsGroups = Map<string, DatasetProperties[]>
+export type ElementsGroups = Map<string, DatasetElement[]>
 
 export interface SiteTopicExtras {
-  datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
 
@@ -46,10 +57,7 @@ export type Topic = Owned & {
   id: string
   page: string
   private: boolean
-  // FIXME: remove / fix after API is migrated to elements
-  reuses?: Rel | null
-  datasets?: Rel | null
-  elements?: Rel | null
+  elements: Rel
   slug: string
   tags: string[]
   uri: string

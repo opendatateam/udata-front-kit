@@ -31,7 +31,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
-import { updateTopicExtras, useExtras } from '@/utils/topic'
+import { useExtras, useTopicElements } from '@/utils/topic'
 
 const props = defineProps<TopicPageRouterConf>()
 
@@ -60,7 +60,8 @@ const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
 const tags = useTagsByRef(pageKey, topic)
 
-const { datasetsProperties, clonedFrom } = useExtras(topic)
+const { clonedFrom } = useExtras(topic)
+const { elements } = useTopicElements(topic)
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -147,27 +148,13 @@ const onUpdateDatasets = () => {
     throw Error('Trying to update null topic')
   }
   const loader = useLoading().show()
-
-  // Deduplicate datasets ids in case of same DS used multiple times
-  // API rejects PUT if the same id is used more than once
-  const dedupedDatasets = [
-    ...new Set(
-      datasetsProperties.value
-        .filter((d) => d.id !== null && d.remoteDeleted !== true)
-        .map((d) => d.id)
-    )
-  ]
-
   store
     .update(topic.value.id, {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
-      datasets: dedupedDatasets,
-      extras: updateTopicExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
-        )
-      })
+      elements: elements.value.map(
+        ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
+      )
     })
     .finally(() => loader.hide())
 }
@@ -402,15 +389,12 @@ watch(
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
         <TopicDatasetList
-          v-model="datasetsProperties"
+          v-model="elements"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
           @update-datasets="onUpdateDatasets"
         />
-        <TopicDatasetListExport
-          :datasets="datasetsProperties"
-          :filename="topic.id"
-        />
+        <TopicDatasetListExport :datasets="elements" :filename="topic.id" />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import type { DatasetElement, ElementsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
+import { useSiteId } from '@/utils/config'
 import { isAvailable } from '@/utils/topic'
 import { NO_GROUP, isOnlyNoGroup } from '@/utils/topicGroups'
 import { useRandomId } from '@gouvminint/vue-dsfr'
@@ -13,11 +14,11 @@ const props = defineProps({
     required: true
   },
   allGroups: {
-    type: Object as () => DatasetsGroups,
+    type: Object as () => ElementsGroups,
     required: true
   },
-  datasetsProperties: {
-    type: Object as () => DatasetProperties[],
+  elements: {
+    type: Object as () => DatasetElement[],
     required: true
   },
   headingLevel: {
@@ -206,31 +207,31 @@ const actions = computed(() => {
     >
       <ul role="list" class="fr-m-0 fr-p-0">
         <li
-          v-for="(dataset, index) in datasetsProperties"
-          v-show="!dataset.isHidden"
+          v-for="(element, index) in elements"
+          v-show="!element.isHidden"
           :key="index"
         >
           <div class="dataset__header fr-px-2w fr-py-3v">
             <slot name="datasetTitle">
               <component :is="headingLevel" class="dataset__title">
-                {{ dataset.title }}
+                {{ element.title }}
               </component>
             </slot>
             <div class="dataset__actions">
               <DsfrTag
                 v-if="
-                  !isAvailable(dataset.availability) ||
-                  dataset.remoteDeleted ||
-                  dataset.remoteArchived
+                  !isAvailable(element.extras[useSiteId()]?.availability) ||
+                  element.remoteDeleted ||
+                  element.remoteArchived
                 "
                 class="uppercase bold fr-text--xs fr-mr-2w"
                 label="Non disponible"
               />
-              <slot name="datasetActions" :dataset="dataset" :index="index" />
+              <slot name="elementActions" :element="element" :index="index" />
             </div>
           </div>
-          <div v-if="$slots.datasetContent" class="dataset__content">
-            <slot name="datasetContent" :dataset="dataset" />
+          <div v-if="$slots.elementContent" class="element__content">
+            <slot name="elementContent" :element="element" />
           </div>
         </li>
       </ul>
@@ -398,7 +399,7 @@ const actions = computed(() => {
   font-size: 1.1rem;
 }
 
-.dataset__content {
+.element__content {
   padding-block: var(--padding-base) calc(var(--padding-base) / 2);
   padding-inline: calc(var(--padding-base) / 2);
 }
@@ -420,7 +421,7 @@ const actions = computed(() => {
   .disclosure__actions {
     gap: var(--padding-base);
   }
-  .dataset__content {
+  .element__content {
     padding-inline: var(--padding-base);
   }
 }

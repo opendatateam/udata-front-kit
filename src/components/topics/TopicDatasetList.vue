@@ -7,7 +7,7 @@ import DatasetEditModal, {
   type DatasetEditModalType
 } from '@/components/forms/dataset/DatasetEditModal.vue'
 import config from '@/config'
-import { type DatasetProperties } from '@/model/topic'
+import { type DatasetElement } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
@@ -15,12 +15,17 @@ import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import { isOnlyNoGroup, useDatasetFilter, useGroups } from '@/utils/topicGroups'
+import { useSiteId } from '@/utils/config'
+import {
+  isOnlyNoGroup,
+  useElementsFilter,
+  useGroups
+} from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
 
-const datasetsProperties = defineModel({
-  type: Array<DatasetProperties>,
+const elements = defineModel({
+  type: Array<DatasetElement>,
   default: []
 })
 
@@ -43,41 +48,41 @@ const datasetsContent = ref(new Map<string, DatasetV2>())
 const { pageConf } = useCurrentPageConf()
 
 const {
-  groupedDatasets,
-  getDatasetIndex,
-  removeDatasetFromGroup,
+  groupedElements,
+  getElementIndex,
+  removeElementFromGroup,
   renameGroup,
   deleteGroup
-} = useGroups(datasetsProperties)
+} = useGroups(elements)
 
 const {
   isFiltering,
-  filterDatasetsProperties,
-  filteredDatasets,
+  filterElements,
+  filteredElements,
   isAllGroupsHidden,
   isGroupOnlyHidden
-} = useDatasetFilter(datasetsProperties)
+} = useElementsFilter(elements)
 
-const { groupedDatasets: filteredResults } = useGroups(filteredDatasets)
+const { groupedElements: filteredResults } = useGroups(filteredElements)
 
 const handleRemoveDataset = (group: string, index: number) => {
-  datasetsProperties.value = removeDatasetFromGroup(group, index)
+  elements.value = removeElementFromGroup(group, index)
   emits('updateDatasets')
 }
 
 const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
-  datasetsProperties.value = renameGroup(oldGroupName, newGroupName)
+  elements.value = renameGroup(oldGroupName, newGroupName)
   emits('updateDatasets')
 }
 
 const handleDeleteGroup = (groupName: string) => {
-  datasetsProperties.value = deleteGroup(groupName)
+  elements.value = deleteGroup(groupName)
   emits('updateDatasets')
 }
 
 const loadDatasetsContent = () => {
-  datasetsProperties.value.forEach((datasetItem) => {
-    const id = datasetItem.id ?? null
+  elements.value.forEach((datasetItem) => {
+    const id = datasetItem.element.id ?? null
     if (id && !datasetsContent.value.has(id) && !datasetItem.remoteDeleted) {
       useDatasetStore()
         .load(id, { toasted: false })
@@ -114,12 +119,8 @@ const addDataset = () => {
   modal.value?.addDataset()
 }
 
-const editDataset = (
-  dataset: DatasetProperties,
-  index: number,
-  group: string
-) => {
-  modal.value?.editDataset(dataset, getDatasetIndex(group, index))
+const editDataset = (dataset: DatasetElement, index: number, group: string) => {
+  modal.value?.editDataset(dataset, getElementIndex(group, index))
 }
 
 const onDatasetEditModalSubmit = () => {
@@ -144,7 +145,7 @@ onMounted(() => {
       :is-filter="true"
       search-label="Filtrer les données"
       :label-visible="false"
-      @update:model-value="filterDatasetsProperties"
+      @update:model-value="filterElements"
     />
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
@@ -181,24 +182,27 @@ onMounted(() => {
     </details>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
-        <template v-for="[group, datasets] in filteredResults" :key="group">
-          <li v-if="datasets.length && !isGroupOnlyHidden(group)">
+        <template
+          v-for="[group, groupElements] in filteredResults"
+          :key="group"
+        >
+          <li v-if="groupElements.length && !isGroupOnlyHidden(group)">
             <TopicGroup
               :group-name="group"
               :all-groups="filteredResults"
-              :datasets-properties="datasets"
+              :elements="groupElements"
               :is-edit="isEdit"
               @edit-group-name="handleRenameGroup"
               @delete-group="handleDeleteGroup"
             >
-              <template v-if="isEdit" #datasetActions="{ dataset, index }">
+              <template v-if="isEdit" #elementActions="{ element, index }">
                 <DsfrButton
                   size="sm"
                   icon="fr-icon-edit-line"
                   label="Éditer"
                   tertiary
                   icon-only
-                  :on-click="() => editDataset(dataset, index, group)"
+                  :on-click="() => editDataset(element, index, group)"
                 />
                 <DsfrButton
                   size="sm"
@@ -209,26 +213,31 @@ onMounted(() => {
                   :on-click="() => handleRemoveDataset(group, index)"
                 />
               </template>
-              <template #datasetContent="{ dataset }">
+              <template #elementContent="{ element }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
-                <div v-html="fromMarkdown(dataset.purpose)"></div>
+                <div v-html="fromMarkdown(element.description)"></div>
                 <TopicDatasetCard
-                  v-if="dataset.id"
-                  :dataset-properties="dataset"
-                  :dataset-content="datasetsContent.get(dataset.id)"
+                  v-if="element.element.id"
+                  :element="element"
+                  :dataset-content="datasetsContent.get(element.element.id)"
                 />
                 <div class="fr-grid-row">
                   <a
-                    v-if="!isAvailable(dataset.availability) && !isEdit"
+                    v-if="
+                      !isAvailable(element.extras[useSiteId()]?.availability) &&
+                      !isEdit
+                    "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="`mailto:${config.website.contact_email}`"
                   >
                     Aidez-nous à trouver la donnée</a
                   >
                   <a
-                    v-if="dataset.uri && !dataset.id"
+                    v-if="
+                      element.extras[useSiteId()]?.uri && !element.element.id
+                    "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                    :href="dataset.uri"
+                    :href="element.extras[useSiteId()]?.uri"
                     target="_blank"
                     >Accéder au catalogue</a
                   >
@@ -240,11 +249,11 @@ onMounted(() => {
       </ul>
     </div>
     <div v-else>
-      <div v-for="(dataset, index) in datasetsProperties" :key="index">
+      <div v-for="(element, index) in elements" :key="index">
         <TopicDatasetCard
-          v-if="dataset.id"
-          :dataset-properties="dataset"
-          :dataset-content="datasetsContent.get(dataset.id)"
+          v-if="element.element.id"
+          :element="element"
+          :dataset-content="datasetsContent.get(element.element.id)"
         />
       </div>
     </div>
@@ -254,8 +263,8 @@ onMounted(() => {
   <DatasetEditModal
     v-if="isEdit"
     ref="modal"
-    v-model="datasetsProperties"
-    v-model:groups-model="groupedDatasets"
+    v-model="elements"
+    v-model:groups-model="groupedElements"
     :dataset-editorialization
     @submit-modal="onDatasetEditModalSubmit"
   />

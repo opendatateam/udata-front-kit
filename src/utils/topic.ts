@@ -2,12 +2,13 @@ import { ref, watch, type Ref } from 'vue'
 
 import {
   Availability,
-  type DatasetProperties,
+  type DatasetElement,
   type SiteTopicExtras,
   type Topic,
   type TopicExtras,
   type TopicPostData
 } from '@/model/topic'
+import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
@@ -80,39 +81,50 @@ export const cloneTopic = (
 }
 
 export function useExtras(topic: Ref<Topic | null | undefined>): {
-  datasetsProperties: Ref<DatasetProperties[]>
   clonedFrom: Ref<Topic | null>
 } {
-  const datasetsProperties: Ref<DatasetProperties[]> = ref([])
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
     topic,
     () => {
       const extras = topic.value?.extras[topicsExtrasKey]
-      if (extras != null) {
-        datasetsProperties.value = extras.datasets_properties ?? []
-
-        if (extras.cloned_from != null) {
-          useTopicStore()
-            .load(extras.cloned_from, { toasted: false })
-            .then((res) => {
-              clonedFrom.value = res
-            })
-            .catch((err) => {
-              console.error('Failed fetching cloned_from', err.response?.data)
-              clonedFrom.value = null
-            })
-        } else {
-          clonedFrom.value = null
-        }
-      } else {
-        datasetsProperties.value = []
-        clonedFrom.value = null
+      if (extras?.cloned_from != null) {
+        useTopicStore()
+          .load(extras.cloned_from, { toasted: false })
+          .then((res) => {
+            clonedFrom.value = res
+          })
+          .catch((err) => {
+            console.error('Failed fetching cloned_from', err.response?.data)
+            clonedFrom.value = null
+          })
       }
     },
     { immediate: true }
   )
 
-  return { datasetsProperties, clonedFrom }
+  return { clonedFrom }
+}
+
+export function useTopicElements(topic: Ref<Topic | null | undefined>): {
+  elements: Ref<DatasetElement[]>
+  nbElements: Ref<number>
+} {
+  const nbElements: Ref<number> = ref(0)
+  const elements: Ref<DatasetElement[]> = ref([])
+
+  watch(
+    topic,
+    async () => {
+      if (!topic.value) return
+      nbElements.value = topic.value.elements.total || 0
+      elements.value = await useTopicElementStore().getTopicElements(
+        topic.value.id
+      )
+    },
+    { immediate: true }
+  )
+
+  return { elements, nbElements }
 }
