@@ -14,13 +14,13 @@ export enum Availability {
   REMOTE_DELETED = 'remote deleted'
 }
 
-export interface SiteDatasetElementExtras {
+export interface SiteElementExtras {
   uri?: string
   group?: string
   availability: Availability
 }
 
-export type DatasetElementExtras = Record<SiteId, SiteDatasetElementExtras>
+export type ElementExtras = Record<SiteId, SiteElementExtras>
 
 export type ElementClass = 'Dataset' | 'Reuse'
 
@@ -28,7 +28,7 @@ export interface GenericElement {
   title: string
   description: string | null
   tags: string[]
-  extras: DatasetElementExtras
+  extras: ElementExtras
   element:
     | {
         class: ElementClass
