@@ -74,6 +74,11 @@ website:
         sub_section_cards:
           title:
           cards:
+            - id: '68234dc8f8f4d7549998f0ad'
+              name: 'Santé et territoires'
+              description: 'Comment aider les acteurs locaux à réaliser un diagnostic de santé publique ? Défi porté par la Fondation Roche'
+              url: '/defis/sante-et-territoires'
+              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/odu_defi-sante-territoires.jpg'
             - id: '67f5438a3b2d79d922863e03'
               name: 'Diversité et inclusion en entreprise'
               description: 'Quelle politique sur l’inclusion et la diversité au sein d’EDF SA ? Défi porté par EDF'
