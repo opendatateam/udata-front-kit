@@ -161,7 +161,6 @@ export const useTopicStore = defineStore('topic', {
       topicId: string,
       element: GenericElement
     ): Promise<Topic> {
-      // FIXME: update Topic in store?
       return await topicsAPI.createElements(topicId, [element])
     }
   }

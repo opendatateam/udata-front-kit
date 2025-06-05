@@ -131,6 +131,7 @@ const submit = async () => {
     throw Error('Trying to attach to topic without id')
   }
   await topicStore.createElement(selectedTopic.value.id, element.value)
+  elements.value.push(element.value)
   toast(
     `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
     {
