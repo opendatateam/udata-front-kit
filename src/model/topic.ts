@@ -75,12 +75,7 @@ export type Topic = Owned & {
   spatial: SpatialField | undefined
 }
 
-export type TopicPostData = Omit<
-  Topic,
-  'datasets' | 'reuses' | 'id' | 'slug'
-> & {
+export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
   id?: string
   slug?: string
-  datasets: string[]
-  reuses: string[]
 }

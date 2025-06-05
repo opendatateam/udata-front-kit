@@ -50,7 +50,6 @@ const { tags: selectedTags } = useTagsQuery(
 )
 const { tagsWithUniverse } = useUniverseQuery(pageKey, selectedTags)
 
-// FIXME:
 const topic: Ref<
   Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
 > = ref({
@@ -58,9 +57,7 @@ const topic: Ref<
   tags: tagsWithUniverse,
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [useSiteId()]: {
-      datasets_properties: []
-    }
+    [useSiteId()]: {}
   }
 })
 
