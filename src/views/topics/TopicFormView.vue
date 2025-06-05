@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// test modif
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
