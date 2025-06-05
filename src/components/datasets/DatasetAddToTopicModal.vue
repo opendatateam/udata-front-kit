@@ -8,11 +8,11 @@ import { toast } from 'vue3-toastify'
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/ElementTextFields.vue'
 import type { Topic } from '@/model/topic'
-import { Availability, type DatasetProperties } from '@/model/topic'
+import { Availability, type DatasetElement } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
-import { useExtras } from '@/utils/topic'
+import { useTopicElements } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
 
 const props = defineProps({
@@ -37,12 +37,20 @@ const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
 
 const topics = topicStore.myTopics
-const datasetProperties = ref<DatasetProperties>({
+const element = ref<DatasetElement>({
   title: '',
-  purpose: '',
-  id: props.dataset.id,
-  uri: `/datasets/${props.dataset.id}`,
-  availability: Availability.LOCAL_AVAILABLE
+  description: '',
+  tags: [],
+  element: {
+    class: 'Dataset',
+    id: props.dataset.id
+  },
+  extras: {
+    [useSiteId()]: {
+      uri: `/datasets/${props.dataset.id}`,
+      availability: Availability.LOCAL_AVAILABLE
+    }
+  }
 })
 const selectedTopicId: Ref<string | null> = ref(null)
 
@@ -58,19 +66,17 @@ const topicOptions = computed(() => {
 const formErrors: Ref<string[]> = ref([])
 
 const validateFields = () => {
-  if (!datasetProperties.value.title.trim()) {
+  const siteExtras = element.value.extras[useSiteId()]
+  if (!element.value.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!datasetProperties.value.purpose.trim()) {
+  if (!element.value.description?.trim()) {
     formErrors.value.push('purpose')
   }
   if (!selectedTopicId.value) {
     formErrors.value.push('topicId')
   }
-  if (
-    datasetProperties.value.group &&
-    datasetProperties.value.group.trim().length > 100
-  ) {
+  if (siteExtras.group && siteExtras.group.trim().length > 100) {
     formErrors.value.push('group')
   }
 }
@@ -107,34 +113,24 @@ watch(selectedTopicId, async () => {
       : await topicStore.load(selectedTopicId.value)
 })
 
-const { datasetsProperties } = useExtras(selectedTopic)
+const { elements } = useTopicElements(selectedTopic)
 
 const isDatasetInTopic = computed(() => {
   if (!selectedTopicId.value) {
     return false
   }
-  return datasetsProperties.value.some(
-    (datasetProps) => datasetProps.id === props.dataset.id
+  return elements.value.some(
+    (element) => element.element.id === props.dataset.id
   )
 })
 
-const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
+const { groupedElements: groups } = useGroups(elements)
 
 const submit = async () => {
-  const topicsExtrasKey = useSiteId()
   if (selectedTopic.value === null) {
     throw Error('Trying to attach to topic without id')
   }
-  const newDatasetsProperties =
-    selectedTopic.value.extras[topicsExtrasKey].datasets_properties || []
-  newDatasetsProperties.push(datasetProperties.value)
-  selectedTopic.value.extras[topicsExtrasKey].datasets_properties =
-    newDatasetsProperties
-  await topicStore.update(selectedTopic.value.id, {
-    id: selectedTopic.value.id,
-    tags: selectedTopic.value.tags,
-    extras: selectedTopic.value.extras
-  })
+  await topicStore.createElement(selectedTopic.value.id, element.value)
   toast(
     `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
     {
@@ -213,8 +209,8 @@ onMounted(() => {
     />
     <div class="fr-input-group">
       <SelectTopicGroup
-        v-model:properties-model="datasetProperties"
-        v-model:groups-model="datasetsGroups"
+        v-model:element-model="element"
+        v-model:groups-model="groups"
         label="Regroupement"
         description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
         :error-message="getErrorMessage('group')"
@@ -222,7 +218,7 @@ onMounted(() => {
     </div>
     <DatasetPropertiesTextFields
       v-if="datasetsConf.add_to_topic?.dataset_editorialization"
-      v-model:dataset-properties-model="datasetProperties"
+      v-model:element-model="element"
       :error-title="getErrorMessage('title')"
       :error-purpose="getErrorMessage('purpose')"
     />
