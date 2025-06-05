@@ -228,7 +228,7 @@ pages:
   datasets:
     list_all: true
     universe_query:
-      topic: 65141cd780d73f98142e9265
+      topic: 65e9aa6cb5c809c30c70ee02
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
@@ -374,7 +374,7 @@ pages:
     list_all: true
     universe_query:
       tag: ecospheres-indicateurs
-      organization: 67c57c2f1a418addfc94d38a
+      organization: 67884b4da4fca9c97bbef479
     tag_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
     breadcrumb_title: Indicateurs
