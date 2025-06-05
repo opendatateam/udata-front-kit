@@ -37,45 +37,32 @@ export const updateTopicExtras = (
 /**
  * Build a fonctionnal v1 (POST format) topic from clone source data
  */
-export const cloneTopic = (
+export const cloneTopic = async (
   topic: Topic,
   keepDatasets: boolean = false
-): TopicPostData => {
+): Promise<TopicPostData> => {
   const { id, slug, ...data } = topic
 
-  // get a deduplicated list of dataset ids from factors that point to a dataset
-  const getDatasetsIds = () => {
-    return [
-      ...new Set(
-        topic.extras[topicsExtrasKey].datasets_properties
-          .map((dp) => dp.id)
-          .filter((id) => id != null)
-      )
-    ]
-  }
+  const elements = (
+    await useTopicElementStore().getTopicElements(topic.id)
+  ).map((element) => {
+    if (!keepDatasets) {
+      element.element = {}
+      element.extras[useSiteId()].uri = null
+      element.extras[useSiteId()].availability = Availability.NOT_AVAILABLE
+    }
+    return element
+  })
 
   return {
     ...data,
     private: true,
-    datasets: keepDatasets ? getDatasetsIds() : [],
-    reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
     organization: null,
+    elements,
     extras: updateTopicExtras(topic, {
-      cloned_from: topic.id,
-      datasets_properties: topic.extras[
-        topicsExtrasKey
-      ].datasets_properties.map((dp) => {
-        return {
-          ...dp,
-          id: keepDatasets ? dp.id : null,
-          uri: keepDatasets ? dp.uri : null,
-          availability: keepDatasets
-            ? dp.availability
-            : Availability.NOT_AVAILABLE
-        }
-      })
+      cloned_from: topic.id
     })
   }
 }

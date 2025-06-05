@@ -78,4 +78,5 @@ export type Topic = Owned & {
 export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
   id?: string
   slug?: string
+  elements?: DatasetElement[]
 }

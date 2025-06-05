@@ -208,9 +208,10 @@ onMounted(() => {
       .load(routeQuery.clone || routeParams.item_id)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(
-            remoteTopic,
-            routeQuery['keep-datasets'] === '1'
+          cloneTopic(remoteTopic, routeQuery['keep-datasets'] === '1').then(
+            (newTopic) => {
+              topic.value = newTopic
+            }
           )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
