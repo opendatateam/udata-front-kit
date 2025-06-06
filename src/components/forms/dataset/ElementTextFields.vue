@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { DatasetProperties } from '@/model/topic'
+import type { DatasetElement } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
-const datasetProperties = defineModel('datasetProperties-model', {
-  type: Object as () => DatasetProperties,
+const element = defineModel('element-model', {
+  type: Object as () => DatasetElement,
   default: {}
 })
 
@@ -32,7 +32,7 @@ const { pageConf } = useCurrentPageConf()
     </p>
     <input
       id="input-title"
-      v-model="datasetProperties.title"
+      v-model="element.title"
       class="fr-input"
       type="text"
       aria-describedby="title-description"
@@ -62,7 +62,7 @@ const { pageConf } = useCurrentPageConf()
     </p>
     <textarea
       id="input-purpose"
-      v-model="datasetProperties.purpose"
+      v-model="element.description"
       class="fr-input"
       type="text"
       aria-describedby="purpose-description"

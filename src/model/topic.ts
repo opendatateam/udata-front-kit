@@ -14,23 +14,46 @@ export enum Availability {
   REMOTE_DELETED = 'remote deleted'
 }
 
-export interface DatasetProperties {
-  title: string
-  purpose: string | null
+export interface SiteElementExtras {
   uri: string | null
-  id: string | null
   availability: Availability
   group?: string
+}
+
+export type ElementExtras = Record<SiteId, SiteElementExtras>
+
+export type ElementClass = 'Dataset' | 'Reuse'
+
+export interface GenericElement {
+  title: string
+  description: string | null
+  tags: string[]
+  extras: ElementExtras
+  element:
+    | {
+        class: ElementClass
+        id: string
+      }
+    | Record<string, never> // <- this is an empty object
   // those are "local" properties, not stored on data.gouv.fr
   isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
 }
 
-export type DatasetsGroups = Map<string, DatasetProperties[]>
+// FIXME: FactorElement?
+export interface DatasetElement extends GenericElement {
+  element:
+    | {
+        class: 'Dataset'
+        id: string
+      }
+    | Record<string, never> // <- this is an empty object
+}
+
+export type ElementsGroups = Map<string, DatasetElement[]>
 
 export interface SiteTopicExtras {
-  datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
 
@@ -46,22 +69,15 @@ export type Topic = Owned & {
   id: string
   page: string
   private: boolean
-  // FIXME: remove / fix after API is migrated to elements
-  reuses?: Rel | null
-  datasets?: Rel | null
-  elements?: Rel | null
+  elements: Rel
   slug: string
   tags: string[]
   uri: string
   spatial: SpatialField | undefined
 }
 
-export type TopicPostData = Omit<
-  Topic,
-  'datasets' | 'reuses' | 'id' | 'slug'
-> & {
+export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
   id?: string
   slug?: string
-  datasets: string[]
-  reuses: string[]
+  elements?: DatasetElement[]
 }

@@ -14,7 +14,7 @@ import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTags } from '@/utils/tags'
-import { useExtras } from '@/utils/topic'
+import { useTopicElements } from '@/utils/topic'
 
 const props = defineProps({
   pageKey: {
@@ -33,9 +33,7 @@ const props = defineProps({
 
 const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
-const { datasetsProperties } = useExtras(topicRef)
-
-const nbData: number = datasetsProperties.value.length
+const { nbElements } = useTopicElements(topicRef)
 
 const ownerName = useOwnerName(props.topic)
 
@@ -120,7 +118,7 @@ const tags = useTags(props.pageKey, props.topic)
         />
         <span class="fr-mr-1v">
           {{
-            `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
+            `${nbElements > 0 ? nbElements : 'Aucune'} donnée${nbElements > 1 ? 's' : ''}`
           }}
         </span>
       </span>

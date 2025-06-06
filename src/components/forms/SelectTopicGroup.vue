@@ -1,20 +1,21 @@
 <script lang="ts" setup>
-import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import type { DatasetElement, ElementsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
+import { useSiteId } from '@/utils/config'
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 import ErrorMessage from './ErrorMessage.vue'
 
 const { pageConf } = useCurrentPageConf()
 
-const datasetProperties = defineModel('properties-model', {
-  type: Object as () => DatasetProperties,
+const element = defineModel('element-model', {
+  type: Object as () => DatasetElement,
   default: {}
 })
 
-const datasetsGroups = defineModel('groups-model', {
-  type: Object as () => DatasetsGroups,
+const elementsGroups = defineModel('groups-model', {
+  type: Object as () => ElementsGroups,
   default: []
 })
 
@@ -38,16 +39,16 @@ defineProps({
 })
 
 const groupOptions = computed(() =>
-  Array.from(datasetsGroups.value, ([key]) => key)
+  Array.from(elementsGroups.value, ([key]) => key)
 )
 
 const clear = () => {
-  datasetProperties.value.group = undefined
+  element.value.extras[useSiteId()].group = undefined
 }
 
 const trimGroupName = (groupName: string) => {
   // prevents spaces at the beginning and end of the group name
-  datasetProperties.value.group = groupName.trim()
+  element.value.extras[useSiteId()].group = groupName.trim()
 }
 </script>
 
@@ -65,7 +66,7 @@ const trimGroupName = (groupName: string) => {
   </p>
   <Multiselect
     id="input-group"
-    v-model="datasetProperties.group"
+    v-model="element.extras[useSiteId()].group"
     role="search"
     :options="groupOptions"
     :searchable="true"
