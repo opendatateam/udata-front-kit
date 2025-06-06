@@ -41,6 +41,7 @@ export interface GenericElement {
   remoteArchived?: boolean
 }
 
+// FIXME: FactorElement?
 export interface DatasetElement extends GenericElement {
   element:
     | {

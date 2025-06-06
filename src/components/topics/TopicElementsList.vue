@@ -3,9 +3,9 @@ import { ref, type Ref } from 'vue'
 
 import type { DatasetV2 } from '@datagouv/components'
 
-import DatasetEditModal, {
-  type DatasetEditModalType
-} from '@/components/forms/dataset/DatasetEditModal.vue'
+import ElementEditModal, {
+  type ElementEditModalType
+} from '@/components/forms/dataset/ElementEditModal.vue'
 import config from '@/config'
 import { type DatasetElement } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
@@ -40,9 +40,9 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['updateDatasets'])
+const emits = defineEmits(['updateElements'])
 
-const modal: Ref<DatasetEditModalType | null> = ref(null)
+const modal: Ref<ElementEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { pageConf } = useCurrentPageConf()
@@ -67,17 +67,17 @@ const { groupedElements: filteredResults } = useGroups(filteredElements)
 
 const handleRemoveDataset = (group: string, index: number) => {
   elements.value = removeElementFromGroup(group, index)
-  emits('updateDatasets')
+  emits('updateElements')
 }
 
 const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
   elements.value = renameGroup(oldGroupName, newGroupName)
-  emits('updateDatasets')
+  emits('updateElements')
 }
 
 const handleDeleteGroup = (groupName: string) => {
   elements.value = deleteGroup(groupName)
-  emits('updateDatasets')
+  emits('updateElements')
 }
 
 const loadDatasetsContent = () => {
@@ -116,15 +116,15 @@ const showTOC = computed(() => {
 })
 
 const addDataset = () => {
-  modal.value?.addDataset()
+  modal.value?.addElement()
 }
 
-const editDataset = (dataset: DatasetElement, index: number, group: string) => {
-  modal.value?.editDataset(dataset, getElementIndex(group, index))
+const editDataset = (element: DatasetElement, index: number, group: string) => {
+  modal.value?.editElement(element, getElementIndex(group, index))
 }
 
-const onDatasetEditModalSubmit = () => {
-  emits('updateDatasets')
+const onElementEditModalSubmit = () => {
+  emits('updateElements')
 }
 
 watch(
@@ -263,13 +263,13 @@ watch(
   </template>
 
   <!-- add/edit modal -->
-  <DatasetEditModal
+  <ElementEditModal
     v-if="isEdit"
     ref="modal"
     v-model="elements"
     v-model:groups-model="groupedElements"
     :dataset-editorialization
-    @submit-modal="onDatasetEditModalSubmit"
+    @submit-modal="onElementEditModalSubmit"
   />
 </template>
 

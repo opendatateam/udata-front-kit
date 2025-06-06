@@ -18,8 +18,8 @@ interface DatasetRow {
   group?: string
 }
 
-export const exportDatasets = async (
-  datasets: DatasetElement[]
+export const exportElements = async (
+  elements: DatasetElement[]
 ): Promise<Blob> => {
   const store = useDatasetStore()
   const headers = [
@@ -34,7 +34,7 @@ export const exportDatasets = async (
     'group'
   ]
   const rows = await Promise.all(
-    datasets.map(async (element) => {
+    elements.map(async (element) => {
       const siteExtras = element.extras[useSiteId()]
       const row: DatasetRow = {
         label: element.title,

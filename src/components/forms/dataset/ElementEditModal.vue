@@ -16,9 +16,9 @@ import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
 import DatasetPropertiesFields from './ElementFields.vue'
 
-export interface DatasetEditModalType {
-  addDataset: () => void
-  editDataset: (dataset: DatasetElement, index: number) => void
+export interface ElementEditModalType {
+  addElement: () => void
+  editElement: (element: DatasetElement, index: number) => void
 }
 
 const emits = defineEmits(['submitModal'])
@@ -30,7 +30,7 @@ const elements = defineModel({
   type: Object as () => DatasetElement[],
   required: true
 })
-const datasetsGroups = defineModel('groups-model', {
+const elementsGroups = defineModel('groups-model', {
   type: Object as () => ElementsGroups,
   default: []
 })
@@ -104,7 +104,7 @@ const onCancel = () => {
   closeModal()
 }
 
-const editDataset = (dataset: DatasetElement, index: number) => {
+const editElement = (dataset: DatasetElement, index: number) => {
   // clone the object to enable cancellation
   modalData.value = {
     index,
@@ -115,7 +115,7 @@ const editDataset = (dataset: DatasetElement, index: number) => {
   isModalOpen.value = true
 }
 
-const addDataset = () => {
+const addElement = () => {
   modalData.value = {
     index: undefined,
     element: {
@@ -197,7 +197,7 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
-defineExpose({ addDataset, editDataset })
+defineExpose({ addElement, editElement })
 </script>
 
 <template>
@@ -224,7 +224,7 @@ defineExpose({ addDataset, editDataset })
     <form novalidate>
       <DatasetPropertiesFields
         v-model="modalData.element"
-        v-model:groups-model="datasetsGroups"
+        v-model:groups-model="elementsGroups"
         v-model:errors-model="formErrors"
         :dataset-editorialization
         :already-selected-datasets="elements"

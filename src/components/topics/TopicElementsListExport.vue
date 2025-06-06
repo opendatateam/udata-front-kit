@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import type { DatasetElement } from '@/model/topic'
-import { exportDatasets } from '@/services/export'
+import { exportElements } from '@/services/export'
 
 const props = defineProps({
   filename: {
     type: String,
     required: true
   },
-  datasets: {
+  elements: {
     type: Array<DatasetElement>,
     default: []
   }
 })
 
 const doExport = async () => {
-  const data = await exportDatasets(props.datasets)
+  const data = await exportElements(props.elements)
   const link = document.createElement('a')
   link.href = URL.createObjectURL(data)
   link.setAttribute('download', `${props.filename}.csv`)
@@ -25,7 +25,7 @@ const doExport = async () => {
 </script>
 
 <template>
-  <div v-if="datasets.length > 0" class="flex align-start fr-mt-2w">
+  <div v-if="elements.length > 0" class="flex align-start fr-mt-2w">
     <DsfrButton
       size="sm"
       type="button"

@@ -11,8 +11,8 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
-import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
+import TopicElementsList from '@/components/topics/TopicElementsList.vue'
+import TopicElementsListExport from '@/components/topics/TopicElementsListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -143,7 +143,7 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateDatasets = () => {
+const onUpdateElements = () => {
   if (topic.value == null) {
     throw Error('Trying to update null topic')
   }
@@ -388,13 +388,13 @@ watch(
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
-        <TopicDatasetList
+        <TopicElementsList
           v-model="elements"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
-          @update-datasets="onUpdateDatasets"
+          @update-elements="onUpdateElements"
         />
-        <TopicDatasetListExport :datasets="elements" :filename="topic.id" />
+        <TopicElementsListExport :elements="elements" :filename="topic.id" />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
