@@ -125,8 +125,6 @@ const editDataset = (dataset: DatasetElement, index: number, group: string) => {
 
 const onDatasetEditModalSubmit = () => {
   emits('updateDatasets')
-  // FIXME: test that this is not already triggered by the watcher below
-  loadDatasetsContent()
 }
 
 watch(
@@ -242,7 +240,7 @@ watch(
                       element.extras[useSiteId()]?.uri && !element.element.id
                     "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                    :href="element.extras[useSiteId()]?.uri"
+                    :href="element.extras[useSiteId()]?.uri as string"
                     target="_blank"
                     >Accéder au catalogue</a
                   >
