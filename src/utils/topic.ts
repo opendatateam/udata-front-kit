@@ -3,6 +3,8 @@ import { ref, watch, type Ref } from 'vue'
 import {
   Availability,
   type DatasetElement,
+  type ElementExtras,
+  type SiteElementExtras,
   type SiteTopicExtras,
   type Topic,
   type TopicExtras,
@@ -29,6 +31,19 @@ export const updateTopicExtras = (
     ...topic.extras,
     [topicsExtrasKey]: {
       ...topic.extras[topicsExtrasKey],
+      ...data
+    }
+  }
+}
+
+export const updateTopicElementExtras = (
+  element: DatasetElement,
+  data: Partial<SiteElementExtras>
+): ElementExtras => {
+  return {
+    ...element.extras,
+    [topicsExtrasKey]: {
+      ...element.extras[topicsExtrasKey],
       ...data
     }
   }

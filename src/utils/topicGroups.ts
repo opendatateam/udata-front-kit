@@ -3,6 +3,7 @@ import { type ComputedRef, type Ref, ref } from 'vue'
 
 import type { DatasetElement, ElementsGroups } from '@/model/topic'
 import { useSiteId } from '@/utils/config'
+import { updateTopicElementExtras } from './topic'
 
 import { debounceWait } from '@/utils/config'
 
@@ -97,17 +98,10 @@ export function useGroups(elements: Ref<DatasetElement[]>): {
       return elements.value
     }
     const data = elements.value.map((element) =>
-      // FIXME: use a helper for this mayhem
       element.extras[useSiteId()]?.group === oldGroupName
         ? {
             ...element,
-            extras: {
-              ...element.extras,
-              [useSiteId()]: {
-                ...element.extras[useSiteId()],
-                group: newGroupName
-              }
-            }
+            extras: updateTopicElementExtras(element, { group: newGroupName })
           }
         : element
     )
