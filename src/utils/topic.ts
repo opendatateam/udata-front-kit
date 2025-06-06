@@ -5,9 +5,7 @@ import {
   type DatasetElement,
   type ElementExtras,
   type SiteElementExtras,
-  type SiteTopicExtras,
   type Topic,
-  type TopicExtras,
   type TopicPostData
 } from '@/model/topic'
 import { useTopicElementStore } from '@/store/TopicElementStore'
@@ -21,19 +19,6 @@ export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
     availability
   )
-}
-
-export const updateTopicExtras = (
-  topic: Topic,
-  data: Partial<SiteTopicExtras>
-): TopicExtras => {
-  return {
-    ...topic.extras,
-    [topicsExtrasKey]: {
-      ...topic.extras[topicsExtrasKey],
-      ...data
-    }
-  }
 }
 
 export const updateTopicElementExtras = (
@@ -50,7 +35,7 @@ export const updateTopicElementExtras = (
 }
 
 /**
- * Build a fonctionnal v1 (POST format) topic from clone source data
+ * Build a fonctionnal Topic from clone source data
  */
 export const cloneTopic = async (
   topic: Topic,
@@ -76,9 +61,12 @@ export const cloneTopic = async (
     owner: useUserStore().data ?? null,
     organization: null,
     elements,
-    extras: updateTopicExtras(topic, {
-      cloned_from: topic.id
-    })
+    // we're not copying all the extras over, only the ones we control
+    extras: {
+      [useSiteId()]: {
+        cloned_from: topic.id
+      }
+    }
   }
 }
 
