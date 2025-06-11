@@ -58,6 +58,7 @@ export const isIndicator = (
   dataset: Ref<DatasetV2 | undefined>
 ): ComputedRef<boolean> => {
   return computed(() => {
+    if (!pageConf.tag_prefix) return false
     return dataset.value?.tags?.includes(pageConf.tag_prefix) || false
   })
 }
