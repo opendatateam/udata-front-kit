@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import config from '@/config'
 import type { DsfrHeaderProps } from '@gouvminint/vue-dsfr'
-import Navigation from '../Navigation.vue'
+import Navigation from '../NavigationComponent.vue'
 import SearchComponent from '../SearchComponent.vue'
 
 type Props = {
@@ -98,6 +98,7 @@ const dropdown = config.website.header_search.dropdown ?? undefined
       />
     </template>
 
+    <!-- @vue-ignore FIXME: upstream bug, hidemodal is not typed in DsfrHeader slot props -->
     <template #mainnav="{ hidemodal }">
       <Navigation :on-click="hidemodal" />
     </template>
