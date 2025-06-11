@@ -20,7 +20,7 @@ export const useTopicElementStore = defineStore('element', {
   actions: {
     async getTopicElements(
       topicId: string,
-      excludes: ElementClass[] = ['Reuse']
+      classes: Array<undefined | ElementClass> = ['Dataset', undefined]
     ): Promise<DatasetElement[]> {
       if (topicId in this.datasetsElements) {
         return this.datasetsElements[topicId]
@@ -30,9 +30,9 @@ export const useTopicElementStore = defineStore('element', {
         entityId: `${topicId}/elements`,
         params: { page_size: 1000 }
       })
-      // TODO: maybe introduce a `class__ne=xxx` in API or smtg
+      // TODO: maybe introduce a `class=[]` in API
       this.datasetsElements[topicId] = response.data.filter(
-        (element: GenericElement) => !excludes.includes(element.element.class)
+        (element: GenericElement) => classes.includes(element.element?.class)
       )
       return this.datasetsElements[topicId]
     }

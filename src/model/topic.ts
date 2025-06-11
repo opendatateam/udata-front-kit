@@ -29,26 +29,21 @@ export interface GenericElement {
   description: string | null
   tags: string[]
   extras: ElementExtras
-  element:
-    | {
-        class: ElementClass
-        id: string
-      }
-    | Record<string, never> // <- this is an empty object
+  element: {
+    class: ElementClass
+    id: string
+  } | null
   // those are "local" properties, not stored on data.gouv.fr
   isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
 }
 
-// FIXME: FactorElement?
 export interface DatasetElement extends GenericElement {
-  element:
-    | {
-        class: 'Dataset'
-        id: string
-      }
-    | Record<string, never> // <- this is an empty object
+  element: {
+    class: 'Dataset'
+    id: string
+  } | null // <- this is an empty object
 }
 
 export type ElementsGroups = Map<string, DatasetElement[]>

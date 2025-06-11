@@ -8,7 +8,7 @@ import '@vueform/multiselect/themes/default.css'
 
 import '@/assets/multiselect.css'
 
-import type { DatasetProperties } from '@/model/topic'
+import type { DatasetElement } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchAPI'
 import { debounceWait } from '@/utils/config'
 
@@ -18,7 +18,7 @@ const selectedDataset = defineModel({
 
 const props = defineProps({
   alreadySelectedDatasets: {
-    type: Array<DatasetProperties>,
+    type: Array<DatasetElement>,
     default: []
   },
   isInvalid: {
@@ -33,12 +33,8 @@ const props = defineProps({
 
 const isLoading = ref(false)
 
-const alreadySelected = (id: string): boolean => {
-  for (const alreadySelectedDataset of props.alreadySelectedDatasets) {
-    if (alreadySelectedDataset.id === id) return true
-  }
-  return false
-}
+const alreadySelected = (id: string): boolean =>
+  props.alreadySelectedDatasets.some((dataset) => dataset.element?.id === id)
 
 const search = useDebounceFn(async (query: string) => {
   isLoading.value = true

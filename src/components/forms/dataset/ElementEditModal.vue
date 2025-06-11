@@ -122,7 +122,7 @@ const addElement = () => {
       title: '',
       description: '',
       tags: [],
-      element: {},
+      element: null,
       extras: {
         [useSiteId()]: {
           availability: Availability.LOCAL_AVAILABLE,

@@ -82,7 +82,7 @@ const handleDeleteGroup = (groupName: string) => {
 
 const loadDatasetsContent = () => {
   elements.value.forEach((element) => {
-    const id = element.element.id ?? null
+    const id = element.element?.id ?? null
     if (id && !datasetsContent.value.has(id) && !element.remoteDeleted) {
       useDatasetStore()
         .load(id, { toasted: false })
@@ -220,7 +220,7 @@ watch(
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(element.description)"></div>
                 <TopicDatasetCard
-                  v-if="element.element.id"
+                  v-if="element.element?.id"
                   :element="element"
                   :dataset-content="datasetsContent.get(element.element.id)"
                 />
@@ -237,7 +237,7 @@ watch(
                   >
                   <a
                     v-if="
-                      element.extras[useSiteId()]?.uri && !element.element.id
+                      element.extras[useSiteId()]?.uri && !element.element?.id
                     "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="element.extras[useSiteId()]?.uri as string"
@@ -254,7 +254,7 @@ watch(
     <div v-else>
       <div v-for="(element, index) in elements" :key="index">
         <TopicDatasetCard
-          v-if="element.element.id"
+          v-if="element.element?.id"
           :element="element"
           :dataset-content="datasetsContent.get(element.element.id)"
         />

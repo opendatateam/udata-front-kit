@@ -47,7 +47,7 @@ export const cloneTopic = async (
     await useTopicElementStore().getTopicElements(topic.id)
   ).map((element) => {
     if (!keepDatasets) {
-      element.element = {}
+      element.element = null
       element.extras[useSiteId()].uri = null
       element.extras[useSiteId()].availability = Availability.NOT_AVAILABLE
     }

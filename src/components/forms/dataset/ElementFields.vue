@@ -91,7 +91,7 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
   const siteExtras = element.value.extras[useSiteId()]
   if (value === undefined) {
     siteExtras.uri = null
-    element.value.element = {}
+    element.value.element = null
   } else {
     siteExtras.availability = Availability.LOCAL_AVAILABLE
     element.value.element = {
@@ -121,14 +121,14 @@ watch(
     if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
       element.value.extras[useSiteId()].uri = null
-      element.value.element = {}
+      element.value.element = null
     }
     delete element.value.remoteDeleted
   }
 )
 
 onMounted(() => {
-  if (element.value.element.id && !element.value.remoteDeleted) {
+  if (element.value.element?.id && !element.value.remoteDeleted) {
     datasetStore.load(element.value.element.id).then((dataset) => {
       selectedDataset.value = dataset
     })

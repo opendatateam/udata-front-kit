@@ -69,7 +69,7 @@ onMounted(async () => {
   >
     <div>Ce jeu de données a été détecté comme supprimé sur data.gouv.fr.</div>
     <div>
-      Son identifiant est <code>{{ elementRef.element.id }}</code
+      Son identifiant est <code>{{ elementRef.element?.id }}</code
       >.
     </div>
   </DsfrAlert>

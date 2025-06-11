@@ -45,7 +45,7 @@ export const exportElements = async (
       }
 
       const remoteDataset =
-        element.element.id != null
+        element.element?.id != null
           ? await store
               .load(element.element.id, { toasted: false })
               .catch((error) => {

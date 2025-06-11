@@ -120,7 +120,7 @@ const isDatasetInTopic = computed(() => {
     return false
   }
   return elements.value.some(
-    (element) => element.element.id === props.dataset.id
+    (element) => element.element?.id === props.dataset.id
   )
 })
 
