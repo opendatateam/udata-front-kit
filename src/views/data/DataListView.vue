@@ -4,7 +4,6 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import DatasetList from '@/components/datasets/DatasetList.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
@@ -27,9 +26,9 @@ const router = useRouter()
 const route = useRoute()
 const { meta, pageConf } = useCurrentPageConf()
 
-const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
+const listComponentRef = ref<{ numberOfResultMsg?: string } | null>(null)
 const searchResultsMessage = computed(
-  () => datasetListComp.value?.numberOfResultMsg || ''
+  () => listComponentRef.value?.numberOfResultMsg || ''
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
@@ -45,6 +44,20 @@ const search = useDebounceFn((query) => {
     hash: '#list'
   })
 }, debounceWait)
+
+// load list component from router
+const ListComponent = computed(() => {
+  const componentLoader = meta?.listComponent
+  if (componentLoader) {
+    return defineAsyncComponent({
+      loader: componentLoader,
+      onError: (err) => {
+        console.error('Failed to load component:', err)
+      }
+    })
+  }
+  return false
+})
 
 // load custom filters component from router, or fallback to default
 const FiltersComponent = computed(() => {
@@ -104,7 +117,7 @@ onMounted(() => {
     <div class="fr-mt-2w">
       <div class="fr-grid-row">
         <nav
-          v-if="pageConf.filters.length > 0"
+          v-if="pageConf.filters.length > 0 || meta.filtersComponent"
           class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
@@ -116,8 +129,8 @@ onMounted(() => {
           </div>
         </nav>
         <div class="fr-col list-container">
-          <DatasetList
-            ref="datasetListComp"
+          <ListComponent
+            ref="listComponentRef"
             :query="props.query"
             :page="props.page"
           />

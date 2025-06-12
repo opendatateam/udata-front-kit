@@ -65,6 +65,7 @@ watch(
 )
 
 onMounted(async () => {
+  console.log('pagefilters mounted')
   if (routeQuery.geozone) {
     selectedSpatialCoverage.value = await useSpatialStore().loadZone(
       routeQuery.geozone

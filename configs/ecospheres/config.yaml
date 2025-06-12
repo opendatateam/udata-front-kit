@@ -5,9 +5,9 @@ site_id: ecospheres
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: http://dev.local:7000
   # oauth settings
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  oauth_client_id: 66d567db8b15513140d44fd8
 
 robots:
   disallow:
@@ -99,6 +99,8 @@ website:
       to: /datasets
     - text: Indicateurs
       to: /indicators
+    - text: API
+      to: /dataservices
     - text: Bouquets
       to: /bouquets
     - text: Organisations
@@ -168,7 +170,11 @@ website:
     - name: Accessibilité
       path: /accessibility
 
-organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
+organizations:
+  # FIXME: organizations-datasets-demo.json
+  datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
+  # FIXME: point on main+demo
+  dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/b49d4941d02df6cc5d36218b3736c10b4e4af371/dist/organizations-dataservices-prod.json
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -324,6 +330,32 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
+  # API
+  dataservices:
+    list_all: true
+    universe_query:
+      # FIXME:
+      # topic: 65141cd780d73f98142e9265
+      topic: 6553204b4eed09bf62a04879
+    tag_prefix:
+    title: API
+    breadcrumb_title: API
+    labels:
+      singular: API
+      plural: APIs
+      extended: API
+    search:
+      input: Rechercher une API
+    banner:
+      title: Un guichet unique pour l’accès aux données environnementales
+      content: |
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
+
+        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    discussions:
+      display: true
+      create: true
+    filters: []
   # BOUQUETS
   bouquets:
     list_all: true
