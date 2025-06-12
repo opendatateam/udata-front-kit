@@ -5,6 +5,8 @@ import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
 
+// FIXME: this duplicates a lot of code from EcospheresDatasetFilters.vue
+
 const router = useRouter()
 const route = useRoute()
 const routeQuery = useRouteQueryAsString().query

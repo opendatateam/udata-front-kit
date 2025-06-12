@@ -54,6 +54,7 @@ interface SearchPageRoutesOptions {
   metaTitle: string
   cardClass?: string
   listViewComponent: () => Promise<{ default: Component }>
+  listComponent?: () => Promise<{ default: Component }>
   detailsViewComponent: () => Promise<{ default: Component }>
   filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
@@ -75,6 +76,11 @@ type DatasetSearchPageRouteOptions = Omit<
   detailsViewComponent?: () => Promise<{ default: Component }>
 }
 
+type DataserviceSearchPageRouteOptions = Omit<
+  DatasetSearchPageRouteOptions,
+  'cardComponent'
+>
+
 export const useDatasetSearchPageRoutes = ({
   pageKey,
   metaTitle,
@@ -83,8 +89,8 @@ export const useDatasetSearchPageRoutes = ({
   cardComponent,
   detailsViewComponent
 }: DatasetSearchPageRouteOptions): RouteRecordRaw => {
-  const listViewComponent = () =>
-    import('@/views/datasets/DatasetsListView.vue')
+  const listViewComponent = () => import('@/views/data/DataListView.vue')
+  const listComponent = () => import('@/components/datasets/DatasetList.vue')
   const defaultDetailsViewComponent = () =>
     import('@/views/datasets/DatasetDetailView.vue')
   return useSearchPageRoutes({
@@ -92,8 +98,32 @@ export const useDatasetSearchPageRoutes = ({
     metaTitle,
     cardClass,
     listViewComponent,
+    listComponent,
     filtersComponent,
     cardComponent,
+    detailsViewComponent: detailsViewComponent ?? defaultDetailsViewComponent
+  })
+}
+
+export const useDataserviceSearchPageRoutes = ({
+  pageKey,
+  metaTitle,
+  cardClass,
+  filtersComponent,
+  detailsViewComponent
+}: DataserviceSearchPageRouteOptions): RouteRecordRaw => {
+  const listViewComponent = () => import('@/views/data/DataListView.vue')
+  const listComponent = () =>
+    import('@/components/dataservices/DataservicesList.vue')
+  const defaultDetailsViewComponent = () =>
+    import('@/views/dataservices/DataserviceDetailView.vue')
+  return useSearchPageRoutes({
+    pageKey,
+    metaTitle,
+    cardClass,
+    listViewComponent,
+    listComponent,
+    filtersComponent,
     detailsViewComponent: detailsViewComponent ?? defaultDetailsViewComponent
   })
 }
@@ -127,6 +157,7 @@ export const useSearchPageRoutes = ({
   metaTitle,
   cardClass,
   listViewComponent,
+  listComponent,
   detailsViewComponent,
   filtersComponent,
   cardComponent,
@@ -143,7 +174,8 @@ export const useSearchPageRoutes = ({
           pageKey,
           cardClass,
           filtersComponent,
-          cardComponent
+          cardComponent,
+          listComponent
         },
         component: listViewComponent,
         props: (route: RouteLocationNormalizedLoaded) => ({
