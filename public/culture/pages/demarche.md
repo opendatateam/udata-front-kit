@@ -16,12 +16,8 @@ Aujourd’hui le ministère poursuit son travail de recensement et d’ouverture
 
 Avec la mise en place de cette plate-forme, le ministère de la Culture s’attache à offrir un espace de valorisation de ses ressources culturelles numériques (cartographie, graphique, data-visualisation, réutilisations) à l’attention de tous les citoyens, chercheurs, étudiants, journalistes, développeurs et aussi les entreprises grâce notamment aux API intégrées et aux divers formats ouverts.
 
-L’objectif de culture.data.gouv.fr, est de fédérer ses usagers et ses producteurs autour d’un éco-système culturel des données ouvertes et liées, et d’associer les citoyens à l’amélioration de la qualité des données.
+L’objectif de DataCulture.data.gouv.fr, est de fédérer ses usagers et ses producteurs autour d’un éco-système culturel des données ouvertes et liées, et d’associer les citoyens à l’amélioration de la qualité des données.
 
 Nous vous remercions par avance pour l’intérêt que vous porterez à nos données.
 
-Les données de culture.data.gouv.fr sont ouvertes pour être réutilisées, sous forme de cartes, de graphiques ou d'applications.
-
-Un onglet « Contact » vous permet de poser vos questions, de nous signaler une erreur sur nos jeux de données.
-
-Vous pouvez signaler vos réutilisations. Pour cela, allez sur la page du jeu de données ré-utilisé. 
+Les données de DataCulture.data.gouv.fr sont ouvertes pour être réutilisées, sous forme de cartes, de graphiques ou d'applications.
