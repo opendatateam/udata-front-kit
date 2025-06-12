@@ -9,7 +9,7 @@ const route = useRoute()
 
 const props = defineProps({
   onClick: {
-    type: Function,
+    type: Function as PropType<(id: string) => void>,
     default: () => {}
   }
 })
@@ -33,7 +33,8 @@ const navItems = computed(() => {
 </script>
 
 <template>
-  <DsfrNavigation id="main-nav">
+  <!-- pass a dummy nav-items to satisfy props check, we're overriding the slot anyway -->
+  <DsfrNavigation id="main-nav" :nav-items="[]">
     <DsfrNavigationItem v-for="(navItem, idx) of navItems" :key="idx">
       <DsfrNavigationMenuLink
         v-if="navItem.to && navItem.text"

@@ -174,7 +174,7 @@ body {
 
 /* overload datagouv-components */
 
-// datagouv-components applies `color: inherit` to titles, we want the title color
+/* datagouv-components applies `color: inherit` to titles, we want the title color */
 .datagouv-components {
   h1,
   h2,
