@@ -1,53 +1,38 @@
 <script setup lang="ts">
+import type { Dataset } from '@datagouv/components'
 import {
-  AppLink,
-  InformationPanel,
+  DatasetCard,
   OrganizationNameWithCertificate,
-  QualityComponent,
   ReadMore,
   Well
 } from '@datagouv/components'
-import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import ReusesList from '@/components/ReusesList.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
+import Swagger from '@/components/dataservices/SwaggerComponent.vue'
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
-import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
-import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
-import ResourcesList from '@/components/datasets/ResourcesList.vue'
-import config from '@/config'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { useUserStore } from '@/store/UserStore'
+import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
-import { useDatasetsConf, usePageConf } from '@/utils/config'
-import { useLicense } from '@/utils/dataset'
 
 const route = useRouteParamsAsString()
-const datasetId = route.params.item_id
+const dataserviceId = route.params.item_id
 
-const datasetStore = useDatasetStore()
-const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
+const dataserviceStore = useDataserviceStore()
 
-const dataset = computed(() => datasetStore.get(datasetId))
-
-const showAddToTopicModal = ref(false)
+const dataservice = computed(() => dataserviceStore.get(dataserviceId))
+const datasets: Ref<Dataset[]> = ref([])
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
-
-const datasetsConf = useDatasetsConf()
-const topicPageConf = datasetsConf.add_to_topic?.page
-  ? usePageConf(datasetsConf.add_to_topic.page)
-  : null
+const isSwaggerOpened = ref(false)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -56,46 +41,50 @@ const setAccessibilityProperties = inject(
 const links = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
   breadcrumbs.push({
-    to: pageConf.list_all === true ? `/${pageKey || 'datasets'}` : '',
+    to: pageConf.list_all === true ? `/${pageKey || 'dataservices'}` : '',
     text: pageConf.breadcrumb_title || pageConf.title
   })
-  breadcrumbs.push({ to: '', text: dataset.value?.title ?? '' })
+  breadcrumbs.push({ to: '', text: dataservice.value?.title ?? '' })
   return breadcrumbs
 })
 
 const tabTitles = [
-  { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
-  { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
+  { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
+  { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' },
+  { title: 'Informations', tabId: 'tab-2', panelId: 'tab-content-2' }
 ]
 
 const activeTab = ref(0)
 
-const description = computed(() => descriptionFromMarkdown(dataset))
-const license = useLicense(dataset)
-
-const showHarvestQualityWarning = computed(() => {
-  const backend = dataset.value?.harvest?.backend
-  const warningBackends = datasetsConf.harvest_backends_quality_warning || []
-  return backend && warningBackends.includes(backend)
-})
+const description = computed(() => descriptionFromMarkdown(dataservice))
 
 const discussionWellTitle = showDiscussions
   ? 'Participer aux discussions'
   : 'Voir les discussions'
 const discussionWellDescription = showDiscussions
-  ? 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour participer aux discussions.'
-  : 'Vous avez une question sur ce jeu de données ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
+  ? 'Vous avez une question sur cette API ? Rendez-vous sur data.gouv.fr pour participer aux discussions.'
+  : 'Vous avez une question sur cette API ? Rendez-vous sur data.gouv.fr pour voir les discussions.'
 
 const openDataGouvDiscussions = () =>
-  window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
+  window.open(
+    `${dataservice.value?.self_web_url}#/discussions`,
+    'datagouv-discussion'
+  )
+
+const goToBusinessDocumentation = () => {
+  window.open(dataservice.value?.business_documentation_url ?? undefined)
+}
 
 onMounted(() => {
-  datasetStore
-    .load(datasetId, { toasted: false, redirectNotFound: true })
+  dataserviceStore
+    .load(dataserviceId, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(dataset.value?.title)
+      setAccessibilityProperties(dataservice.value?.title)
+      dataserviceStore
+        .getDatasetsForDataservice(dataservice.value)
+        .then((data) => {
+          datasets.value = data
+        })
     })
 })
 </script>
@@ -104,124 +93,148 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="dataset">
-    <div class="fr-grid-row fr-grid-row--gutters">
+  <GenericContainer v-if="dataservice">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
-        <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
+        <h1 class="fr-mb-2v">{{ dataservice.title }}</h1>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
+        <!-- Producer -->
         <h2 id="producer" class="subtitle fr-mb-1v">
-          <span v-if="dataset.contact_points.length">Éditeur</span>
-          <span v-else>Producteur</span>
+          <span>Producteur</span>
         </h2>
         <div
-          v-if="dataset.organization"
+          v-if="dataservice.organization"
           class="fr-grid-row fr-grid-row--middle"
         >
-          <OrganizationLogo :object="dataset" :size="32" class="fr-mr-1-5v" />
+          <OrganizationLogo
+            :object="dataservice"
+            :size="32"
+            class="fr-mr-1-5v"
+          />
           <p class="fr-col fr-m-0">
-            <a class="fr-link" :href="dataset.organization.page">
+            <a class="fr-link" :href="dataservice.organization.page">
               <OrganizationNameWithCertificate
-                :organization="dataset.organization"
+                :organization="dataservice.organization"
               />
             </a>
           </p>
         </div>
-        <template v-if="dataset.contact_points.length">
-          <h2 id="attributions" class="subtitle fr-mb-1v fr-mt-3v">
-            Attributions
-          </h2>
-          <ContactPoints :contact-points="dataset.contact_points" />
+        <!-- contact points -->
+        <template v-if="dataservice.contact_points.length">
+          <h2 id="attributions" class="subtitle fr-mb-1v fr-mt-3v">Contact</h2>
+          <ContactPoints :contact-points="dataservice.contact_points" />
         </template>
-        <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">
-          <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
-            <p class="fr-grid-row fr-grid-row--middle fr-my-0">
-              Ce jeu de données provient d'un portail externe.
-              <AppLink
-                :to="dataset.harvest.remote_url"
-                target="_blank"
-                rel="noopener nofollow"
-                >Voir la source originale.</AppLink
-              >
-            </p>
-          </div>
+        <!-- last update -->
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
+        <div>{{ formatDate(dataservice.metadata_modified_at, true) }}</div>
+        <!-- rate limiting -->
+        <template v-if="dataservice.rate_limiting">
+          <h2 class="subtitle fr-mt-3v fr-mb-1v">Limite d'appels</h2>
+          <div>{{ dataservice.rate_limiting }}</div>
+        </template>
+        <!-- availability -->
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Taux de disponibilité</h2>
+        <div v-if="dataservice.availability">
+          {{ dataservice.availability }}%
         </div>
-        <template v-if="dataset.harvest">
-          <template v-if="dataset.harvest.modified_at">
-            <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière révision</h2>
-            <p>
-              {{ formatDate(dataset.harvest.modified_at) }}
-            </p>
-          </template>
-        </template>
-        <template v-else>
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-          <p>{{ formatDate(dataset.last_update) }}</p>
-        </template>
-        <template v-if="license">
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
-          <p class="fr-text--sm fr-mt-0 fr-mb-3v">
-            <code class="bg-alt-grey fr-px-1v text-grey-380">
-              <a :href="license.url">
-                {{ license.title }}
-              </a>
-            </code>
-          </p>
-        </template>
-        <QualityComponent
-          v-if="config.website.show_quality_component"
-          :quality="dataset.quality"
-        />
-        <div
-          v-if="showHarvestQualityWarning"
-          class="text-mention-grey fr-text--sm fr-my-1v"
-        >
-          <VIconCustom name="warning-line" class="fr-icon--sm" />
-          La qualité des métadonnées peut être trompeuse car les métadonnées de
-          la source originale peuvent avoir été perdues lors de leur
-          récupération. Nous travaillons actuellement à améliorer la situation.
-        </div>
-        <!-- add dataset to topic (if enabled) -->
-        <div v-if="topicPageConf && userStore.loggedIn && canAddTopic">
-          <DsfrButton
-            class="fr-mt-2w"
-            size="md"
-            :label="`Ajouter à un ${topicPageConf.labels.singular}`"
-            icon="fr-icon-file-add-line"
-            @click="showAddToTopicModal = true"
-          />
-          <DatasetAddToTopicModal
-            v-if="showAddToTopicModal"
-            v-model:show="showAddToTopicModal"
-            :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
-            :dataset="dataset"
-          />
+        <div v-else>Non communiqué</div>
+        <!-- access_type -->
+        <h2 class="subtitle fr-mt-3v fr-mb-1v">Accès</h2>
+        <DsfrBadge
+          v-if="dataservice.access_type === 'open'"
+          type="success"
+          label="Ouvert"
+          class="fr-mb-1v"
+          :no-icon="true"
+        ></DsfrBadge>
+        <DsfrBadge
+          v-if="dataservice.access_type === 'open_with_account'"
+          type="warning"
+          label="Ouvert avec compte"
+          class="fr-mb-1v"
+          :no-icon="true"
+        ></DsfrBadge>
+        <DsfrBadge
+          v-if="dataservice.access_type === 'restricted'"
+          type="warning"
+          label="Restreint"
+          class="fr-mb-1v"
+          :no-icon="true"
+        ></DsfrBadge>
+        <div v-if="dataservice.authorization_request_url" class="fr-mt-0">
+          <a
+            :href="dataservice.authorization_request_url"
+            rel="ugc nofollow noopener"
+            target="_blank"
+            class="fr-text--sm fr-link"
+            >Faire une demande d'habilitation</a
+          >
         </div>
       </div>
     </div>
 
+    <div
+      v-if="dataservice.business_documentation_url"
+      class="dataservice-well flex items-center justify-between"
+    >
+      <div class="text-datagouv-dark font-bold text-xl">Accéder à l'API</div>
+      <DsfrButton
+        icon="fr-icon-external-link-line"
+        @click="goToBusinessDocumentation()"
+      >
+        Documentation métier
+      </DsfrButton>
+    </div>
+
+    <div
+      v-if="dataservice.machine_documentation_url"
+      class="dataservice-well fr-mt-2w"
+    >
+      <button
+        type="button"
+        class="width-100 flex items-center justify-between swagger-button"
+        @click="isSwaggerOpened = !isSwaggerOpened"
+      >
+        <div class="text-datagouv-dark font-bold text-xl">Swagger</div>
+        <VIconCustom v-if="isSwaggerOpened" name="arrow-up-s-line" />
+        <VIconCustom v-else name="arrow-down-s-line" />
+      </button>
+      <Swagger
+        v-if="isSwaggerOpened"
+        :url="dataservice.machine_documentation_url"
+      />
+    </div>
+
     <DsfrTabs
       v-model="activeTab"
-      class="fr-mt-2w"
-      tab-list-name="Groupes d'attributs du jeu de données"
+      class="fr-mt-4w"
+      tab-list-name="Groupes d'attributs de l'API"
       :tab-titles="tabTitles"
     >
-      <!-- Fichiers -->
+      <!-- Données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
-        <ResourcesList :dataset="dataset" />
-      </DsfrTabContent>
-
-      <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
-        <ReusesList model="dataset" :object-id="dataset.id" />
+        <div class="border-bottom border-default-grey fr-pb-4w">
+          <h2 class="fr-mb-1v subtitle subtitle--uppercase">
+            {{
+              `${dataservice.datasets.total} jeu${dataservice.datasets.total > 1 ? 'x' : ''} de données`
+            }}
+          </h2>
+          <DatasetCard
+            v-for="dataset in datasets"
+            :key="dataset.id"
+            :dataset="dataset"
+            :dataset-url="`/datasets/${dataset.id}`"
+          ></DatasetCard>
+        </div>
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
         <Well
           v-if="!pageConf.discussions.create"
           color="blue-cumulus"
@@ -245,23 +258,56 @@ onMounted(() => {
             </div>
           </div>
         </Well>
-        <DiscussionsList v-if="showDiscussions" :subject="dataset" />
+        <DiscussionsList
+          v-if="showDiscussions"
+          :subject="dataservice"
+          empty-message="Pas de discussion pour cette API."
+        />
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
-        <ExtendedInformationPanel
-          v-if="
-            config.website.datasets.show_extended_information_panel && dataset
-          "
-          :dataset="dataset"
-        />
-        <InformationPanel
-          v-if="dataset && license"
-          :dataset="dataset"
-          :license="license"
-        />
+      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+        <div class="fr-pb-3w border-bottom border-default-grey">
+          <h2 class="fr-mb-3w subtitle subtitle--uppercase">
+            Informations techniques
+          </h2>
+          <div class="metadata-list fr-text--sm fr-m-0">
+            <div class="fr-grid-row">
+              <div class="fr-mb-3w fr-col-12 fr-col-md-6">
+                <h3 class="subtitle fr-mb-2v">Dernière mise à jour</h3>
+                <div class="fr-text--sm fr-m-0">
+                  {{ formatDate(dataservice.metadata_modified_at) }}
+                </div>
+              </div>
+              <div class="fr-mb-3w fr-col-12 fr-col-md-6">
+                <h3 class="subtitle fr-mb-2v">ID</h3>
+                <div class="fr-text--sm fr-m-0">{{ dataservice.id }}</div>
+              </div>
+              <div class="fr-mb-3w fr-col-12 fr-col-md-6">
+                <h3 class="subtitle fr-mb-2v">Date de création</h3>
+                <div class="fr-text--sm fr-m-0">
+                  {{ formatDate(dataservice.created_at) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
 </template>
+
+<style scoped>
+.dataservice-well {
+  font-size: 1.25rem;
+  color: var(--blue-cumulus-sun-368-moon-732);
+  border: 1px solid var(--blue-cumulus-sun-368-moon-732);
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  background-color: var(--background-alt-grey);
+}
+
+.swagger-button {
+  min-height: 42px;
+}
+</style>

@@ -21,7 +21,7 @@ interface RootState {
   total: number
 }
 
-export const useDataserviceSearchStore = defineStore('search', {
+export const useDataserviceSearchStore = defineStore('dataserviceSearch', {
   state: (): RootState => ({
     dataservices: [],
     total: 0

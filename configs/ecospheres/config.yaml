@@ -5,9 +5,9 @@ site_id: ecospheres
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: http://dev.local:7000
   # oauth settings
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  oauth_client_id: 66d567db8b15513140d44fd8
 
 robots:
   disallow:
@@ -149,6 +149,12 @@ website:
     harvest_backends_quality_warning:
       - CSW-ISO-19139
     show_extended_information_panel: true
+  # FIXME: add conf key to every site
+  dataservices:
+    add_to_topic:
+      enable: false
+      page: bouquets
+      dataset_editorialization: true
   # TODO: better place for that?
   topics:
     can_add_topics:
