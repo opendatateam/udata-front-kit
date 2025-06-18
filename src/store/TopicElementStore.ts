@@ -1,10 +1,6 @@
 import { defineStore } from 'pinia'
 
-import type {
-  DatasetElement,
-  ElementClass,
-  GenericElement
-} from '@/model/topic'
+import type { DatasetElement, ElementClass } from '@/model/topic'
 import TopicAPI from '@/services/api/resources/TopicsAPI'
 
 const topicAPI = new TopicAPI({ version: 2 })
@@ -25,14 +21,20 @@ export const useTopicElementStore = defineStore('element', {
       if (topicId in this.datasetsElements) {
         return this.datasetsElements[topicId]
       }
-      // TODO: handle pagination, max out page_size for now
-      const response = await topicAPI.get({
-        entityId: `${topicId}/elements`,
-        params: { page_size: 1000 }
-      })
-      // TODO: maybe introduce a `class=[]` in API
-      this.datasetsElements[topicId] = response.data.filter(
-        (element: GenericElement) => classes.includes(element.element?.class)
+      const promises = classes.map((elementClass) =>
+        topicAPI.get({
+          entityId: `${topicId}/elements`,
+          params: {
+            // TODO: handle pagination, max out page_size for now
+            page_size: 1000,
+            // undefined is mapped as string 'None' in the API
+            class: elementClass || 'None'
+          }
+        })
+      )
+      const responses = await Promise.all(promises)
+      this.datasetsElements[topicId] = responses.flatMap(
+        (response) => response.data
       )
       return this.datasetsElements[topicId]
     }
