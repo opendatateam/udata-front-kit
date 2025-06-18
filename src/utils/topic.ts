@@ -108,10 +108,10 @@ export function useTopicElements(topic: Ref<Topic | null | undefined>): {
     topic,
     async () => {
       if (!topic.value) return
-      nbElements.value = topic.value.elements.total || 0
       elements.value = await useTopicElementStore().getTopicElements(
         topic.value.id
       )
+      nbElements.value = elements.value.length
     },
     { immediate: true }
   )
