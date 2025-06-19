@@ -7,7 +7,7 @@ import ElementEditModal, {
   type ElementEditModalType
 } from '@/components/forms/dataset/ElementEditModal.vue'
 import config from '@/config'
-import { type DatasetElement } from '@/model/topic'
+import { type ResolvedDatasetElement } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
@@ -15,7 +15,6 @@ import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import { useSiteId } from '@/utils/config'
 import {
   isOnlyNoGroup,
   useElementsFilter,
@@ -25,7 +24,7 @@ import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
 
 const elements = defineModel({
-  type: Array<DatasetElement>,
+  type: Array<ResolvedDatasetElement>,
   default: []
 })
 
@@ -119,7 +118,11 @@ const addDataset = () => {
   modal.value?.addElement()
 }
 
-const editDataset = (element: DatasetElement, index: number, group: string) => {
+const editDataset = (
+  element: ResolvedDatasetElement,
+  index: number,
+  group: string
+) => {
   modal.value?.editElement(element, getElementIndex(group, index))
 }
 
@@ -227,8 +230,7 @@ watch(
                 <div class="fr-grid-row">
                   <a
                     v-if="
-                      !isAvailable(element.extras[useSiteId()]?.availability) &&
-                      !isEdit
+                      !isAvailable(element.siteExtras.availability) && !isEdit
                     "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="`mailto:${config.website.contact_email}`"
@@ -236,11 +238,9 @@ watch(
                     Aidez-nous à trouver la donnée</a
                   >
                   <a
-                    v-if="
-                      element.extras[useSiteId()]?.uri && !element.element?.id
-                    "
+                    v-if="element.siteExtras.uri && !element.element?.id"
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                    :href="element.extras[useSiteId()]?.uri as string"
+                    :href="element.siteExtras.uri as string"
                     target="_blank"
                     >Accéder au catalogue</a
                   >

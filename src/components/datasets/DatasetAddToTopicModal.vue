@@ -8,7 +8,8 @@ import { toast } from 'vue3-toastify'
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
 import DatasetPropertiesTextFields from '@/components/forms/dataset/ElementTextFields.vue'
 import type { Topic } from '@/model/topic'
-import { Availability, type DatasetElement } from '@/model/topic'
+import { Availability, ResolvedDatasetElement } from '@/model/topic'
+import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
@@ -37,21 +38,26 @@ const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
 
 const topics = topicStore.myTopics
-const element = ref<DatasetElement>({
-  title: '',
-  description: '',
-  tags: [],
-  element: {
-    class: 'Dataset',
-    id: props.dataset.id
-  },
-  extras: {
-    [useSiteId()]: {
-      uri: `/datasets/${props.dataset.id}`,
-      availability: Availability.LOCAL_AVAILABLE
-    }
-  }
-})
+const element = ref<ResolvedDatasetElement>(
+  new ResolvedDatasetElement(
+    {
+      title: '',
+      description: '',
+      tags: [],
+      element: {
+        class: 'Dataset',
+        id: props.dataset.id
+      },
+      extras: {
+        [useSiteId()]: {
+          uri: `/datasets/${props.dataset.id}`,
+          availability: Availability.LOCAL_AVAILABLE
+        }
+      }
+    },
+    useSiteId()
+  )
+)
 const selectedTopicId: Ref<string | null> = ref(null)
 
 const topicOptions = computed(() => {
@@ -66,7 +72,6 @@ const topicOptions = computed(() => {
 const formErrors: Ref<string[]> = ref([])
 
 const validateFields = () => {
-  const siteExtras = element.value.extras[useSiteId()]
   if (!element.value.title.trim()) {
     formErrors.value.push('title')
   }
@@ -76,7 +81,10 @@ const validateFields = () => {
   if (!selectedTopicId.value) {
     formErrors.value.push('topicId')
   }
-  if (siteExtras.group && siteExtras.group.trim().length > 100) {
+  if (
+    element.value.siteExtras.group &&
+    element.value.siteExtras.group.trim().length > 100
+  ) {
     formErrors.value.push('group')
   }
 }
@@ -130,8 +138,10 @@ const submit = async () => {
   if (selectedTopic.value === null) {
     throw Error('Trying to attach to topic without id')
   }
-  await topicStore.createElement(selectedTopic.value.id, element.value)
-  elements.value.push(element.value)
+  await useTopicElementStore().createElement(
+    selectedTopic.value.id,
+    element.value
+  )
   toast(
     `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
     {

@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 
-import type { DatasetElement, ElementClass } from '@/model/topic'
+import type {
+  DatasetElement,
+  ElementClass,
+  GenericElement,
+  Topic
+} from '@/model/topic'
 import TopicAPI from '@/services/api/resources/TopicsAPI'
 
 const topicAPI = new TopicAPI({ version: 2 })
@@ -14,11 +19,16 @@ export const useTopicElementStore = defineStore('element', {
     datasetsElements: {}
   }),
   actions: {
-    async getTopicElements(
-      topicId: string,
-      classes: Array<undefined | ElementClass> = ['Dataset', undefined]
-    ): Promise<DatasetElement[]> {
-      if (topicId in this.datasetsElements) {
+    async getTopicElements({
+      topicId,
+      classes = ['Dataset', undefined],
+      forceRefresh = false
+    }: {
+      topicId: string
+      classes?: Array<undefined | ElementClass>
+      forceRefresh?: boolean
+    }): Promise<DatasetElement[]> {
+      if (!forceRefresh && topicId in this.datasetsElements) {
         return this.datasetsElements[topicId]
       }
       const promises = classes.map((elementClass) =>
@@ -37,6 +47,15 @@ export const useTopicElementStore = defineStore('element', {
         (response) => response.data
       )
       return this.datasetsElements[topicId]
+    },
+    async createElement(
+      topicId: string,
+      element: GenericElement
+    ): Promise<Topic> {
+      const topic = await topicAPI.createElements(topicId, [element])
+      // refresh the stored topic elements
+      this.getTopicElements({ topicId, forceRefresh: true })
+      return topic
     }
   }
 })

@@ -4,7 +4,7 @@ import { computed, type ComputedRef } from 'vue'
 import config from '@/config'
 import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
-import type { GenericElement, Topic } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { useCheckboxQuery } from '@/utils/filters'
 import { useTagsQuery } from '@/utils/tags'
@@ -153,15 +153,6 @@ export const useTopicStore = defineStore('topic', {
      */
     async delete(topicId: string) {
       topicsAPI.delete({ entityId: topicId })
-    },
-    /**
-     * Create an element
-     */
-    async createElement(
-      topicId: string,
-      element: GenericElement
-    ): Promise<Topic> {
-      return await topicsAPI.createElements(topicId, [element])
     }
   }
 })

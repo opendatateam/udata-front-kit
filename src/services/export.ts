@@ -1,8 +1,7 @@
 import { Parser } from '@json2csv/plainjs'
 
-import { Availability, type DatasetElement } from '@/model/topic'
+import { Availability, type ResolvedDatasetElement } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import { useSiteId } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 
@@ -19,7 +18,7 @@ interface DatasetRow {
 }
 
 export const exportElements = async (
-  elements: DatasetElement[]
+  elements: ResolvedDatasetElement[]
 ): Promise<Blob> => {
   const store = useDatasetStore()
   const headers = [
@@ -35,13 +34,12 @@ export const exportElements = async (
   ]
   const rows = await Promise.all(
     elements.map(async (element) => {
-      const siteExtras = element.extras[useSiteId()]
       const row: DatasetRow = {
         label: element.title,
         label_description: element.description || '',
-        availability: siteExtras.availability,
-        uri: siteExtras.uri,
-        group: siteExtras.group
+        availability: element.siteExtras.availability,
+        uri: element.siteExtras.uri,
+        group: element.siteExtras.group
       }
 
       const remoteDataset =

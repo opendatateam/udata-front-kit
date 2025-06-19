@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { DatasetElement } from '@/model/topic'
+import type { ResolvedDatasetElement } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
 const element = defineModel('element-model', {
-  type: Object as () => DatasetElement,
+  type: Object as () => ResolvedDatasetElement,
   default: {}
 })
 

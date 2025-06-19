@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import type { DatasetElement, ElementsGroups } from '@/model/topic'
+import type { ElementsGroups, ResolvedDatasetElement } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
-import { useSiteId } from '@/utils/config'
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 import ErrorMessage from './ErrorMessage.vue'
@@ -10,7 +9,7 @@ import ErrorMessage from './ErrorMessage.vue'
 const { pageConf } = useCurrentPageConf()
 
 const element = defineModel('element-model', {
-  type: Object as () => DatasetElement,
+  type: Object as () => ResolvedDatasetElement,
   default: {}
 })
 
@@ -43,12 +42,12 @@ const groupOptions = computed(() =>
 )
 
 const clear = () => {
-  element.value.extras[useSiteId()].group = undefined
+  element.value.siteExtras.group = undefined
 }
 
 const trimGroupName = (groupName: string) => {
   // prevents spaces at the beginning and end of the group name
-  element.value.extras[useSiteId()].group = groupName.trim()
+  element.value.siteExtras.group = groupName.trim()
 }
 </script>
 
@@ -66,7 +65,7 @@ const trimGroupName = (groupName: string) => {
   </p>
   <Multiselect
     id="input-group"
-    v-model="element.extras[useSiteId()].group"
+    v-model="element.siteExtras.group"
     role="search"
     :options="groupOptions"
     :searchable="true"

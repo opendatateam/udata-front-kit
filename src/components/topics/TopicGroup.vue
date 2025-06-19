@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import type { DatasetElement, ElementsGroups } from '@/model/topic'
+import type { ElementsGroups, ResolvedDatasetElement } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
-import { useSiteId } from '@/utils/config'
 import { isAvailable } from '@/utils/topic'
 import { NO_GROUP, isOnlyNoGroup } from '@/utils/topicGroups'
 import { useRandomId } from '@gouvminint/vue-dsfr'
@@ -18,7 +17,7 @@ const props = defineProps({
     required: true
   },
   elements: {
-    type: Object as () => DatasetElement[],
+    type: Object as () => ResolvedDatasetElement[],
     required: true
   },
   headingLevel: {
@@ -220,7 +219,7 @@ const actions = computed(() => {
             <div class="dataset__actions">
               <DsfrTag
                 v-if="
-                  !isAvailable(element.extras[useSiteId()]?.availability) ||
+                  !isAvailable(element.siteExtras.availability) ||
                   element.remoteDeleted ||
                   element.remoteArchived
                 "

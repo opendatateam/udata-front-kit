@@ -5,21 +5,20 @@ import { useRouter } from 'vue-router'
 
 import {
   Availability,
-  type DatasetElement,
+  ResolvedDatasetElement,
   type ElementsGroups
 } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
 
-import { useSiteId } from '@/utils/config'
 import DatasetPropertiesTextFields from './ElementTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
 const emit = defineEmits(['updateValidation', 'update:datasetProperties'])
 
 const element = defineModel({
-  type: Object as () => DatasetElement,
+  type: Object as () => ResolvedDatasetElement,
   default: {}
 })
 
@@ -35,7 +34,7 @@ const formErrors = defineModel('errors-model', {
 
 const props = defineProps({
   alreadySelectedDatasets: {
-    type: Array<DatasetElement>,
+    type: Array<ResolvedDatasetElement>,
     default: []
   },
   datasetEditorialization: {
@@ -52,11 +51,12 @@ const { getErrorMessage } = useForm(formErrors, pageConf.labels.singular)
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const hasEditorialization = computed(() => {
-  const siteExtras = element.value.extras[useSiteId()]
   return (
     !!element.value.title.trim() &&
     !!element.value.description?.trim() &&
-    (siteExtras?.group ? siteExtras?.group.trim().length < 100 : true)
+    (element.value.siteExtras.group
+      ? element.value.siteExtras.group.trim().length < 100
+      : true)
   )
 })
 
@@ -72,28 +72,28 @@ const isValidDataset = computed((): boolean => {
 })
 
 const isValidCatalogDataset = computed((): boolean => {
-  const siteExtras = element.value.extras[useSiteId()]
-  if (siteExtras.availability === Availability.LOCAL_AVAILABLE) {
-    return siteExtras.uri !== null && element.value.element?.id !== null
+  if (element.value.siteExtras.availability === Availability.LOCAL_AVAILABLE) {
+    return (
+      element.value.siteExtras.uri !== null &&
+      element.value.element?.id !== null
+    )
   }
   return true
 })
 
 const isValidUrlDataset = computed((): boolean => {
-  const siteExtras = element.value.extras[useSiteId()]
-  if (siteExtras.availability === Availability.URL_AVAILABLE) {
-    return siteExtras.uri !== null
+  if (element.value.siteExtras.availability === Availability.URL_AVAILABLE) {
+    return element.value.siteExtras.uri !== null
   }
   return true
 })
 
 const onSelectDataset = (value: DatasetV2 | undefined) => {
-  const siteExtras = element.value.extras[useSiteId()]
   if (value === undefined) {
-    siteExtras.uri = null
+    element.value.siteExtras.uri = null
     element.value.element = null
   } else {
-    siteExtras.availability = Availability.LOCAL_AVAILABLE
+    element.value.siteExtras.availability = Availability.LOCAL_AVAILABLE
     element.value.element = {
       id: value.id,
       class: 'Dataset'
@@ -102,7 +102,7 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
       name: 'datasets_detail',
       params: { item_id: value.id }
     })
-    siteExtras.uri = resolved.href
+    element.value.siteExtras.uri = resolved.href
     delete element.value.remoteDeleted
   }
 }
@@ -116,11 +116,11 @@ watch(
 )
 
 watch(
-  () => element.value.extras[useSiteId()].availability,
+  () => element.value.siteExtras.availability,
   (availability) => {
     if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
-      element.value.extras[useSiteId()].uri = null
+      element.value.siteExtras.uri = null
       element.value.element = null
     }
     delete element.value.remoteDeleted
@@ -163,21 +163,18 @@ onMounted(() => {
           Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
         </legend>
         <DsfrRadioButton
-          v-model="element.extras[useSiteId()].availability"
+          v-model="element.siteExtras.availability"
           name="source"
           :value="Availability.URL_AVAILABLE"
           label="J'ajoute l'URL"
         />
         <div
-          v-if="
-            element.extras[useSiteId()].availability ===
-            Availability.URL_AVAILABLE
-          "
+          v-if="element.siteExtras.availability === Availability.URL_AVAILABLE"
           class="fr-mb-4w fr-fieldset__element"
         >
           <DsfrInput
             id="input-availabilityUrl"
-            v-model="element.extras[useSiteId()].uri"
+            v-model="element.siteExtras.uri"
             label="Url vers le jeu de données souhaité (obligatoire)"
             :label-visible="true"
             class="fr-mb-md-1w fr-input"
@@ -193,13 +190,13 @@ onMounted(() => {
           />
         </div>
         <DsfrRadioButton
-          v-model="element.extras[useSiteId()].availability"
+          v-model="element.siteExtras.availability"
           name="source"
           :value="Availability.MISSING"
           label="Je n'ai pas trouvé la donnée"
         />
         <DsfrRadioButton
-          v-model="element.extras[useSiteId()].availability"
+          v-model="element.siteExtras.availability"
           name="source"
           :value="Availability.NOT_AVAILABLE"
           label="Je n'ai pas cherché la donnée"

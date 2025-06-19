@@ -33,20 +33,60 @@ export interface GenericElement {
     class: ElementClass
     id: string
   } | null
+}
+
+class ResolvedGenericElement implements GenericElement {
+  title!: string
+  description!: string | null
+  tags!: string[]
+  extras!: ElementExtras
+  element!: {
+    class: ElementClass
+    id: string
+  } | null
+
   // those are "local" properties, not stored on data.gouv.fr
   isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
+
+  // used to compute siteExtras on demand (see getter below)
+  readonly siteId: SiteId
+
+  constructor(element: GenericElement, siteId: SiteId) {
+    Object.assign(this, element)
+    this.siteId = siteId
+  }
+
+  // this allow both get and set
+  get siteExtras(): SiteElementExtras {
+    return this.extras[this.siteId]
+  }
+
+  unresolved(): GenericElement {
+    // explicitely pick the required attributes for GenericElement
+    // const {removeMe, ...element} = this would not trigger type error if removeMe is not enough
+    const { title, description, tags, extras, element } = this
+    return { title, description, tags, extras, element }
+  }
 }
 
 export interface DatasetElement extends GenericElement {
   element: {
     class: 'Dataset'
     id: string
-  } | null // <- this is an empty object
+  } | null
 }
 
-export type ElementsGroups = Map<string, DatasetElement[]>
+export class ResolvedDatasetElement extends ResolvedGenericElement {
+  declare element: DatasetElement['element']
+
+  constructor(element: DatasetElement, siteId: SiteId) {
+    super(element, siteId)
+  }
+}
+
+export type ElementsGroups = Map<string, ResolvedDatasetElement[]>
 
 export interface SiteTopicExtras {
   cloned_from?: string

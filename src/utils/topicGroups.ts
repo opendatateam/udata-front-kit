@@ -1,9 +1,7 @@
 import { useDebounceFn } from '@vueuse/core'
 import { type ComputedRef, type Ref, ref } from 'vue'
 
-import type { DatasetElement, ElementsGroups } from '@/model/topic'
-import { useSiteId } from '@/utils/config'
-import { updateTopicElementExtras } from './topic'
+import type { ElementsGroups, ResolvedDatasetElement } from '@/model/topic'
 
 import { debounceWait } from '@/utils/config'
 
@@ -13,24 +11,30 @@ export const isOnlyNoGroup = (groups: ElementsGroups) => {
   return groups.has(NO_GROUP) && groups.size === 1
 }
 
-export function useGroups(elements: Ref<DatasetElement[]>): {
+export function useGroups(elements: Ref<ResolvedDatasetElement[]>): {
   groupedElements: ComputedRef<ElementsGroups>
   getElementIndex: (group: string, indexInGroup: number) => number
-  removeElementFromGroup: (group: string, index: number) => DatasetElement[]
+  removeElementFromGroup: (
+    group: string,
+    index: number
+  ) => ResolvedDatasetElement[]
   groupExists: (groupName: string) => boolean
-  renameGroup: (oldGroupName: string, newGroupName: string) => DatasetElement[]
-  deleteGroup: (groupName: string) => DatasetElement[]
+  renameGroup: (
+    oldGroupName: string,
+    newGroupName: string
+  ) => ResolvedDatasetElement[]
+  deleteGroup: (groupName: string) => ResolvedDatasetElement[]
 } {
   const groupedElements = computed(() => {
     // Group datasets by their group property
     const groupedMap = elements.value.reduce((acc, element) => {
-      const groupKey = element.extras[useSiteId()]?.group || NO_GROUP
+      const groupKey = element.siteExtras.group || NO_GROUP
       if (!acc.has(groupKey)) {
         acc.set(groupKey, [])
       }
       acc.get(groupKey)?.push(element)
       return acc
-    }, new Map<string, DatasetElement[]>())
+    }, new Map<string, ResolvedDatasetElement[]>())
 
     // Sort each group's datasets by lowered+unaccented title according to current locale
     for (const [, elements] of groupedMap.entries()) {
@@ -97,20 +101,18 @@ export function useGroups(elements: Ref<DatasetElement[]>): {
     if (groupExists(newGroupName) || !groupedElements.value.has(oldGroupName)) {
       return elements.value
     }
-    const data = elements.value.map((element) =>
-      element.extras[useSiteId()]?.group === oldGroupName
-        ? {
-            ...element,
-            extras: updateTopicElementExtras(element, { group: newGroupName })
-          }
-        : element
-    )
+    const data = elements.value.map((element) => {
+      if (element.siteExtras.group === oldGroupName) {
+        element.siteExtras.group = newGroupName
+      }
+      return element
+    })
     return data
   }
 
   const deleteGroup = (groupName: string) => {
     return elements.value.filter(
-      (element) => element.extras[useSiteId()]?.group !== groupName
+      (element) => element.siteExtras.group !== groupName
     )
   }
 
@@ -124,7 +126,7 @@ export function useGroups(elements: Ref<DatasetElement[]>): {
   }
 }
 
-export function useElementsFilter(elements: Ref<DatasetElement[]>) {
+export function useElementsFilter(elements: Ref<ResolvedDatasetElement[]>) {
   const searchQuery = ref('')
   const isFiltering = computed(() => !!searchQuery.value)
 
@@ -135,14 +137,14 @@ export function useElementsFilter(elements: Ref<DatasetElement[]>) {
 
     const searchValue = searchQuery.value.toLowerCase()
 
-    return elements.value.map((element) => ({
-      ...element,
-      isHidden: !(
+    return elements.value.map((element) => {
+      element.isHidden = !(
         element.title.toLowerCase().includes(searchValue) ||
         (element.description &&
           element.description.toLowerCase().includes(searchValue))
       )
-    }))
+      return element
+    })
   })
 
   // Check if all groups only contain hidden datasets
@@ -154,9 +156,7 @@ export function useElementsFilter(elements: Ref<DatasetElement[]>) {
   const isGroupOnlyHidden = (groupName: string) => {
     const filterGroupName = groupName === NO_GROUP ? null : groupName
     return filteredElements.value
-      .filter(
-        (element) => element.extras[useSiteId()]?.group === filterGroupName
-      )
+      .filter((element) => element.siteExtras.group === filterGroupName)
       .every((element) => element.isHidden)
   }
 

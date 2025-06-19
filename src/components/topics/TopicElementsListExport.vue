@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DatasetElement } from '@/model/topic'
+import type { ResolvedDatasetElement } from '@/model/topic'
 import { exportElements } from '@/services/export'
 
 const props = defineProps({
@@ -8,7 +8,7 @@ const props = defineProps({
     required: true
   },
   elements: {
-    type: Array<DatasetElement>,
+    type: Array<ResolvedDatasetElement>,
     default: []
   }
 })

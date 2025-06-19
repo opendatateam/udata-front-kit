@@ -7,18 +7,18 @@ import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
 import {
   Availability,
-  type DatasetElement,
+  ResolvedDatasetElement,
   type ElementsGroups
 } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
-import DatasetPropertiesFields from './ElementFields.vue'
+import ElementFields from './ElementFields.vue'
 
 export interface ElementEditModalType {
   addElement: () => void
-  editElement: (element: DatasetElement, index: number) => void
+  editElement: (element: ResolvedDatasetElement, index: number) => void
 }
 
 const emits = defineEmits(['submitModal'])
@@ -27,7 +27,7 @@ const router = useRouter()
 const { pageConf } = useCurrentPageConf()
 
 const elements = defineModel({
-  type: Object as () => DatasetElement[],
+  type: Object as () => ResolvedDatasetElement[],
   required: true
 })
 const elementsGroups = defineModel('groups-model', {
@@ -50,25 +50,28 @@ const modalData: Ref<DatasetModalData> = ref({
 const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
-  if (!modalData.value.element?.title.trim()) {
+  const modalElement = modalData.value.element
+  if (!modalElement?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalData.value.element?.description?.trim()) {
+  if (!modalElement?.description?.trim()) {
     formErrors.value.push('purpose')
   }
-  const siteExtras = modalData.value.element?.extras?.[useSiteId()]
-  if (siteExtras?.group && siteExtras?.group.length > 100) {
+  if (
+    modalElement?.siteExtras.group &&
+    modalElement?.siteExtras.group.length > 100
+  ) {
     formErrors.value.push('group')
   }
   if (
-    !siteExtras?.uri &&
-    siteExtras?.availability === Availability.LOCAL_AVAILABLE
+    !modalElement?.siteExtras.uri &&
+    modalElement?.siteExtras.availability === Availability.LOCAL_AVAILABLE
   ) {
     formErrors.value.push('availability')
   }
   if (
-    !siteExtras?.uri &&
-    siteExtras?.availability === Availability.URL_AVAILABLE
+    !modalElement?.siteExtras.uri &&
+    modalElement?.siteExtras.availability === Availability.URL_AVAILABLE
   ) {
     formErrors.value.push('availabilityUrl')
   }
@@ -104,11 +107,12 @@ const onCancel = () => {
   closeModal()
 }
 
-const editElement = (dataset: DatasetElement, index: number) => {
-  // clone the object to enable cancellation
+const editElement = (dataset: ResolvedDatasetElement, index: number) => {
+  // Create a deep clone to enable cancellation
+  const clonedData = JSON.parse(JSON.stringify(dataset))
   modalData.value = {
     index,
-    element: { ...dataset },
+    element: new ResolvedDatasetElement(clonedData, dataset.siteId),
     isValid: false,
     mode: 'edit'
   }
@@ -116,9 +120,8 @@ const editElement = (dataset: DatasetElement, index: number) => {
 }
 
 const addElement = () => {
-  modalData.value = {
-    index: undefined,
-    element: {
+  const element = new ResolvedDatasetElement(
+    {
       title: '',
       description: '',
       tags: [],
@@ -130,6 +133,11 @@ const addElement = () => {
         }
       }
     },
+    useSiteId()
+  )
+  modalData.value = {
+    index: undefined,
+    element,
     isValid: false,
     mode: 'create'
   }
@@ -222,7 +230,7 @@ defineExpose({ addElement, editElement })
       heading-level="h3"
     />
     <form novalidate>
-      <DatasetPropertiesFields
+      <ElementFields
         v-model="modalData.element"
         v-model:groups-model="elementsGroups"
         v-model:errors-model="formErrors"

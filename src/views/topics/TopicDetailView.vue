@@ -153,7 +153,8 @@ const onUpdateElements = () => {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
       elements: elements.value.map(
-        ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
+        // unresolved will remove "local" properties
+        (element) => element.unresolved()
       )
     })
     .finally(() => loader.hide())

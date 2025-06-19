@@ -3,11 +3,11 @@ import type { DatasetV2 } from '@datagouv/components'
 import { DatasetCard } from '@datagouv/components'
 import { toRef } from 'vue'
 
-import { type DatasetElement } from '@/model/topic'
+import { ResolvedDatasetElement } from '@/model/topic'
 
 const props = defineProps({
   element: {
-    type: Object as () => DatasetElement,
+    type: Object as () => ResolvedDatasetElement,
     required: true
   },
   datasetContent: {
