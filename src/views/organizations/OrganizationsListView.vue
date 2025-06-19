@@ -25,7 +25,10 @@ const title: string = config.website.formatted_title
 async function onUpdatePage(page: number) {
   const loader = $loading.show()
   currentPage.value = page + 1
-  organizations.value = await store.loadFromConfig(currentPage.value)
+  organizations.value = await store.loadFromConfig(
+    'datasets',
+    currentPage.value
+  )
   loader.hide()
 }
 

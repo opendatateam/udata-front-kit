@@ -9,7 +9,7 @@ import '@vueform/multiselect/themes/default.css'
 import '@/assets/multiselect.css'
 
 import type { DatasetElement } from '@/model/topic'
-import SearchAPI from '@/services/api/SearchAPI'
+import SearchAPI from '@/services/api/DatasetSearchAPI'
 import { debounceWait } from '@/utils/config'
 
 const selectedDataset = defineModel({

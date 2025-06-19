@@ -7,7 +7,6 @@ import CustomOrganizationsAPI from '@/services/api/CustomOrganizationsAPI'
 import OrganizationsAPI from '@/services/api/resources/OrganizationsAPI'
 
 const orgApi = new OrganizationsAPI()
-const customOrgApi = new CustomOrganizationsAPI()
 
 interface LightweightOrganization {
   id: string
@@ -41,8 +40,8 @@ export const useOrganizationStore = defineStore('organization', {
      * Async function to trigger API fetch of orgs list for a page, using the config
      * and preserving the config file order
      */
-    async loadFromConfig(page = 1) {
-      const orgsList = await this.loadFromConfigFlat()
+    async loadFromConfig(pageKey: string, page: number = 1) {
+      const orgsList = await this.loadFromConfigFlat(pageKey)
       const pageSize = config.website.pagination_sizes.organizations_list
       const paginated = orgsList
         .slice(pageSize * (page - 1), pageSize * page)
@@ -54,8 +53,9 @@ export const useOrganizationStore = defineStore('organization', {
      * Load multiple organizations in a lightweight format without pagination
      * Used for e.g. for filtering
      */
-    async loadFromConfigFlat() {
+    async loadFromConfigFlat(pageKey: string) {
       if (this.flatData.length > 0) return this.flatData
+      const customOrgApi = new CustomOrganizationsAPI(pageKey)
       this.flatData = await customOrgApi.list()
       return this.flatData
     },

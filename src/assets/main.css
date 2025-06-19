@@ -56,6 +56,10 @@ body {
   font-size: 0.8em;
 }
 
+.width-100 {
+  width: 100%;
+}
+
 /* ELEMENT DISPLAY */
 .block {
   display: block;

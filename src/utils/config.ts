@@ -1,5 +1,10 @@
 import config from '@/config'
-import type { DatasetsConf, PagesConf, TopicsConf } from '@/model/config'
+import type {
+  DataservicesConf,
+  DatasetsConf,
+  PagesConf,
+  TopicsConf
+} from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
 export const useTopicsConf = (): TopicsConf => {
@@ -23,6 +28,11 @@ export const usePageConf = (pageId: string) => {
 export const useDatasetsConf = () => {
   const datasetsConf: DatasetsConf = config.website.datasets
   return datasetsConf
+}
+
+export const useDataservicesConf = () => {
+  const dataservicesConf: DataservicesConf | null = config.website.dataservices
+  return dataservicesConf
 }
 
 export const useSiteId = () => {

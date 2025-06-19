@@ -1,8 +1,8 @@
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import type { DatasetV2, License } from '@datagouv/components'
+import type { Dataservice, DatasetV2, License } from '@datagouv/components'
 
 export const useLicense = (
-  dataset: Ref<DatasetV2 | undefined>
+  dataset: Ref<DatasetV2 | Dataservice | undefined>
 ): Ref<License | undefined> => {
   const datasetStore = useDatasetStore()
   const license = ref<License | undefined>(undefined)
@@ -22,7 +22,7 @@ export const useLicense = (
 // It handles types correcly when passing a DatasetV2
 // https://github.com/datagouv/udata-front/issues/661
 export const useOwnerName = (
-  dataset: DatasetV2
+  dataset: DatasetV2 | Dataservice
 ): ComputedRef<string | undefined> => {
   const owner = computed(() => {
     const ownedValue = toValue(dataset)
