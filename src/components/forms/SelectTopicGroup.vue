@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ElementsGroups, ResolvedDatasetElement } from '@/model/topic'
+import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
 import Multiselect from '@vueform/multiselect'
@@ -9,12 +9,12 @@ import ErrorMessage from './ErrorMessage.vue'
 const { pageConf } = useCurrentPageConf()
 
 const element = defineModel('element-model', {
-  type: Object as () => ResolvedDatasetElement,
+  type: Object as () => ResolvedFactor,
   default: {}
 })
 
-const elementsGroups = defineModel('groups-model', {
-  type: Object as () => ElementsGroups,
+const factorsGroups = defineModel('groups-model', {
+  type: Object as () => FactorsGroups,
   default: []
 })
 
@@ -38,7 +38,7 @@ defineProps({
 })
 
 const groupOptions = computed(() =>
-  Array.from(elementsGroups.value, ([key]) => key)
+  Array.from(factorsGroups.value, ([key]) => key)
 )
 
 const clear = () => {

@@ -6,14 +6,14 @@ import { useLoading } from 'vue-loading-overlay'
 import { toast } from 'vue3-toastify'
 
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
-import DatasetPropertiesTextFields from '@/components/forms/dataset/ElementTextFields.vue'
+import FactorTextFields from '@/components/forms/dataset/FactorTextFields.vue'
 import type { Topic } from '@/model/topic'
-import { Availability, ResolvedDatasetElement } from '@/model/topic'
+import { Availability, ResolvedFactor } from '@/model/topic'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
-import { useTopicElements } from '@/utils/topic'
+import { useTopicFactors } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
 
 const props = defineProps({
@@ -38,8 +38,8 @@ const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
 
 const topics = topicStore.myTopics
-const element = ref<ResolvedDatasetElement>(
-  new ResolvedDatasetElement(
+const element = ref<ResolvedFactor>(
+  new ResolvedFactor(
     {
       title: '',
       description: '',
@@ -121,18 +121,18 @@ watch(selectedTopicId, async () => {
       : await topicStore.load(selectedTopicId.value)
 })
 
-const { elements } = useTopicElements(selectedTopic)
+const { factors } = useTopicFactors(selectedTopic)
 
 const isDatasetInTopic = computed(() => {
   if (!selectedTopicId.value) {
     return false
   }
-  return elements.value.some(
+  return factors.value.some(
     (element) => element.element?.id === props.dataset.id
   )
 })
 
-const { groupedElements: groups } = useGroups(elements)
+const { groupedFactors: groups } = useGroups(factors)
 
 const submit = async () => {
   if (selectedTopic.value === null) {
@@ -227,7 +227,7 @@ onMounted(() => {
         :error-message="getErrorMessage('group')"
       />
     </div>
-    <DatasetPropertiesTextFields
+    <FactorTextFields
       v-if="datasetsConf.add_to_topic?.dataset_editorialization"
       v-model:element-model="element"
       :error-title="getErrorMessage('title')"

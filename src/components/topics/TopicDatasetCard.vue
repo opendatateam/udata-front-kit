@@ -3,11 +3,11 @@ import type { DatasetV2 } from '@datagouv/components'
 import { DatasetCard } from '@datagouv/components'
 import { toRef } from 'vue'
 
-import { ResolvedDatasetElement } from '@/model/topic'
+import { ResolvedFactor } from '@/model/topic'
 
 const props = defineProps({
-  element: {
-    type: Object as () => ResolvedDatasetElement,
+  factor: {
+    type: Object as () => ResolvedFactor,
     required: true
   },
   datasetContent: {
@@ -20,7 +20,7 @@ const props = defineProps({
 // use shallowRef to avoid deep reactivity on optionnal component
 const IndicatorDatasetCard = shallowRef<Component | null>(null)
 
-const elementRef = toRef(props, 'element')
+const factorRef = toRef(props, 'factor')
 const datasetIsIndicator: Ref<boolean> = ref(false)
 
 onMounted(async () => {
@@ -62,14 +62,14 @@ onMounted(async () => {
     class="dataset-card fr-m-0"
   />
   <DsfrAlert
-    v-if="element.remoteDeleted"
+    v-if="factor.remoteDeleted"
     class="fr-mb-4w"
     type="warning"
     title="Jeu de données supprimé"
   >
     <div>Ce jeu de données a été détecté comme supprimé sur data.gouv.fr.</div>
     <div>
-      Son identifiant est <code>{{ elementRef.element?.id }}</code
+      Son identifiant est <code>{{ factorRef.element?.id }}</code
       >.
     </div>
   </DsfrAlert>

@@ -1,25 +1,20 @@
 import { defineStore } from 'pinia'
 
-import type {
-  DatasetElement,
-  ElementClass,
-  GenericElement,
-  Topic
-} from '@/model/topic'
+import type { ElementClass, GenericElement, Topic } from '@/model/topic'
 import TopicAPI from '@/services/api/resources/TopicsAPI'
 
 const topicAPI = new TopicAPI({ version: 2 })
 
-export interface RootState {
-  datasetsElements: Record<string, DatasetElement[]>
+export interface RootState<T extends GenericElement> {
+  elements: Record<string, T[]>
 }
 
 export const useTopicElementStore = defineStore('element', {
-  state: (): RootState => ({
-    datasetsElements: {}
+  state: (): RootState<GenericElement> => ({
+    elements: {}
   }),
   actions: {
-    async getTopicElements({
+    async getTopicElements<T extends GenericElement>({
       topicId,
       classes = ['Dataset', undefined],
       forceRefresh = false
@@ -27,9 +22,9 @@ export const useTopicElementStore = defineStore('element', {
       topicId: string
       classes?: Array<undefined | ElementClass>
       forceRefresh?: boolean
-    }): Promise<DatasetElement[]> {
-      if (!forceRefresh && topicId in this.datasetsElements) {
-        return this.datasetsElements[topicId]
+    }): Promise<T[]> {
+      if (!forceRefresh && topicId in this.elements) {
+        return this.elements[topicId] as T[]
       }
       const promises = classes.map((elementClass) =>
         topicAPI.get({
@@ -43,10 +38,8 @@ export const useTopicElementStore = defineStore('element', {
         })
       )
       const responses = await Promise.all(promises)
-      this.datasetsElements[topicId] = responses.flatMap(
-        (response) => response.data
-      )
-      return this.datasetsElements[topicId]
+      this.elements[topicId] = responses.flatMap((response) => response.data)
+      return this.elements[topicId] as T[]
     },
     async createElement(
       topicId: string,

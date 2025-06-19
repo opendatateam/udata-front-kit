@@ -3,11 +3,11 @@ import { ref, type Ref } from 'vue'
 
 import type { DatasetV2 } from '@datagouv/components'
 
-import ElementEditModal, {
-  type ElementEditModalType
-} from '@/components/forms/dataset/ElementEditModal.vue'
+import FactorEditModal, {
+  type FactorEditModalType
+} from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
-import { type ResolvedDatasetElement } from '@/model/topic'
+import { type ResolvedFactor } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
@@ -15,16 +15,12 @@ import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import {
-  isOnlyNoGroup,
-  useElementsFilter,
-  useGroups
-} from '@/utils/topicGroups'
+import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
 
-const elements = defineModel({
-  type: Array<ResolvedDatasetElement>,
+const factors = defineModel({
+  type: Array<ResolvedFactor>,
   default: []
 })
 
@@ -39,48 +35,48 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['updateElements'])
+const emits = defineEmits(['updateFactors'])
 
-const modal: Ref<ElementEditModalType | null> = ref(null)
+const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { pageConf } = useCurrentPageConf()
 
 const {
-  groupedElements,
-  getElementIndex,
-  removeElementFromGroup,
+  groupedFactors,
+  getFactorIndex,
+  removeFactorFromGroup,
   renameGroup,
   deleteGroup
-} = useGroups(elements)
+} = useGroups(factors)
 
 const {
   isFiltering,
-  filterElements,
-  filteredElements,
+  filterFactors,
+  filteredFactors,
   isAllGroupsHidden,
   isGroupOnlyHidden
-} = useElementsFilter(elements)
+} = useFactorsFilter(factors)
 
-const { groupedElements: filteredResults } = useGroups(filteredElements)
+const { groupedFactors: filteredResults } = useGroups(filteredFactors)
 
-const handleRemoveDataset = (group: string, index: number) => {
-  elements.value = removeElementFromGroup(group, index)
-  emits('updateElements')
+const handleRemoveFactor = (group: string, index: number) => {
+  factors.value = removeFactorFromGroup(group, index)
+  emits('updateFactors')
 }
 
 const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
-  elements.value = renameGroup(oldGroupName, newGroupName)
-  emits('updateElements')
+  factors.value = renameGroup(oldGroupName, newGroupName)
+  emits('updateFactors')
 }
 
 const handleDeleteGroup = (groupName: string) => {
-  elements.value = deleteGroup(groupName)
-  emits('updateElements')
+  factors.value = deleteGroup(groupName)
+  emits('updateFactors')
 }
 
 const loadDatasetsContent = () => {
-  elements.value.forEach((element) => {
+  factors.value.forEach((element) => {
     const id = element.element?.id ?? null
     if (id && !datasetsContent.value.has(id) && !element.remoteDeleted) {
       useDatasetStore()
@@ -106,7 +102,7 @@ const showTOC = computed(() => {
   /*
   hide the table of content if "NoGroup" is the only group and results are not 0
   or
-  hide if all factors (datasetProperties) are hidden by the filter
+  hide if all factors are hidden by the filter
   */
   return (
     (!isOnlyNoGroup(filteredResults.value) && !!filteredResults.value.size) ||
@@ -118,20 +114,16 @@ const addDataset = () => {
   modal.value?.addElement()
 }
 
-const editDataset = (
-  element: ResolvedDatasetElement,
-  index: number,
-  group: string
-) => {
-  modal.value?.editElement(element, getElementIndex(group, index))
+const editFactor = (element: ResolvedFactor, index: number, group: string) => {
+  modal.value?.editElement(element, getFactorIndex(group, index))
 }
 
-const onElementEditModalSubmit = () => {
-  emits('updateElements')
+const onFactorEditModalSubmit = () => {
+  emits('updateFactors')
 }
 
 watch(
-  () => elements.value.map((element) => element.element?.id).filter(Boolean),
+  () => factors.value.map((element) => element.element?.id).filter(Boolean),
   () => {
     loadDatasetsContent()
   },
@@ -151,7 +143,7 @@ watch(
       :is-filter="true"
       search-label="Filtrer les données"
       :label-visible="false"
-      @update:model-value="filterElements"
+      @update:model-value="filterFactors"
     />
     <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
       <DsfrButton
@@ -188,27 +180,24 @@ watch(
     </details>
     <div v-if="datasetEditorialization" class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
-        <template
-          v-for="[group, groupElements] in filteredResults"
-          :key="group"
-        >
-          <li v-if="groupElements.length && !isGroupOnlyHidden(group)">
+        <template v-for="[group, groupFactors] in filteredResults" :key="group">
+          <li v-if="groupFactors.length && !isGroupOnlyHidden(group)">
             <TopicGroup
               :group-name="group"
               :all-groups="filteredResults"
-              :elements="groupElements"
+              :factors="groupFactors"
               :is-edit="isEdit"
               @edit-group-name="handleRenameGroup"
               @delete-group="handleDeleteGroup"
             >
-              <template v-if="isEdit" #elementActions="{ element, index }">
+              <template v-if="isEdit" #factorActions="{ factor, index }">
                 <DsfrButton
                   size="sm"
                   icon="fr-icon-edit-line"
                   label="Éditer"
                   tertiary
                   icon-only
-                  :on-click="() => editDataset(element, index, group)"
+                  :on-click="() => editFactor(factor, index, group)"
                 />
                 <DsfrButton
                   size="sm"
@@ -216,21 +205,21 @@ watch(
                   label="Supprimer"
                   tertiary
                   icon-only
-                  :on-click="() => handleRemoveDataset(group, index)"
+                  :on-click="() => handleRemoveFactor(group, index)"
                 />
               </template>
-              <template #elementContent="{ element }">
+              <template #factorContent="{ factor }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
-                <div v-html="fromMarkdown(element.description)"></div>
+                <div v-html="fromMarkdown(factor.description)"></div>
                 <TopicDatasetCard
-                  v-if="element.element?.id"
-                  :element="element"
-                  :dataset-content="datasetsContent.get(element.element.id)"
+                  v-if="factor.element?.id"
+                  :factor="factor"
+                  :dataset-content="datasetsContent.get(factor.element.id)"
                 />
                 <div class="fr-grid-row">
                   <a
                     v-if="
-                      !isAvailable(element.siteExtras.availability) && !isEdit
+                      !isAvailable(factor.siteExtras.availability) && !isEdit
                     "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="`mailto:${config.website.contact_email}`"
@@ -238,9 +227,9 @@ watch(
                     Aidez-nous à trouver la donnée</a
                   >
                   <a
-                    v-if="element.siteExtras.uri && !element.element?.id"
+                    v-if="factor.siteExtras.uri && !factor.element?.id"
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
-                    :href="element.siteExtras.uri as string"
+                    :href="factor.siteExtras.uri as string"
                     target="_blank"
                     >Accéder au catalogue</a
                   >
@@ -252,24 +241,24 @@ watch(
       </ul>
     </div>
     <div v-else>
-      <div v-for="(element, index) in elements" :key="index">
+      <div v-for="(factor, index) in factors" :key="index">
         <TopicDatasetCard
-          v-if="element.element?.id"
-          :element="element"
-          :dataset-content="datasetsContent.get(element.element.id)"
+          v-if="factor.element?.id"
+          :factor="factor"
+          :dataset-content="datasetsContent.get(factor.element.id)"
         />
       </div>
     </div>
   </template>
 
   <!-- add/edit modal -->
-  <ElementEditModal
+  <FactorEditModal
     v-if="isEdit"
     ref="modal"
-    v-model="elements"
-    v-model:groups-model="groupedElements"
+    v-model="factors"
+    v-model:groups-model="groupedFactors"
     :dataset-editorialization
-    @submit-modal="onElementEditModalSubmit"
+    @submit-modal="onFactorEditModalSubmit"
   />
 </template>
 

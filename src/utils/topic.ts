@@ -2,7 +2,8 @@ import { ref, watch, type Ref } from 'vue'
 
 import {
   Availability,
-  ResolvedDatasetElement,
+  ResolvedFactor,
+  type Factor,
   type Topic,
   type TopicPostData
 } from '@/model/topic'
@@ -13,7 +14,7 @@ import { useSiteId } from '@/utils/config'
 
 const topicsExtrasKey = useSiteId()
 
-// TODO: move to ResolvedDatasetElement class
+// TODO: move to ResolvedFactor class
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
     availability
@@ -29,8 +30,8 @@ export const cloneTopic = async (
 ): Promise<TopicPostData> => {
   const { id, slug, ...data } = topic
 
-  const elements = (
-    await useTopicElementStore().getTopicElements({ topicId: topic.id })
+  const factors = (
+    await useTopicElementStore().getTopicElements<Factor>({ topicId: topic.id })
   ).map((element) => {
     if (!keepDatasets) {
       element.element = null
@@ -46,7 +47,7 @@ export const cloneTopic = async (
     spatial: undefined,
     owner: useUserStore().data ?? null,
     organization: null,
-    elements,
+    elements: factors,
     // we're not copying all the extras over, only the ones we control
     extras: {
       [topicsExtrasKey]: {
@@ -83,27 +84,29 @@ export function useExtras(topic: Ref<Topic | null | undefined>): {
   return { clonedFrom }
 }
 
-export function useTopicElements(topic: Ref<Topic | null | undefined>): {
-  elements: Ref<ResolvedDatasetElement[]>
-  nbElements: Ref<number>
+export function useTopicFactors(topic: Ref<Topic | null | undefined>): {
+  factors: Ref<ResolvedFactor[]>
+  nbFactors: Ref<number>
 } {
-  const nbElements: Ref<number> = ref(0)
-  const elements: Ref<ResolvedDatasetElement[]> = ref([])
+  const nbFactors: Ref<number> = ref(0)
+  const factors: Ref<ResolvedFactor[]> = ref([])
 
   watch(
     topic,
     async () => {
       if (!topic.value) return
-      const rawElements = await useTopicElementStore().getTopicElements({
-        topicId: topic.value.id
-      })
-      elements.value = rawElements.map(
-        (element) => new ResolvedDatasetElement(element, useSiteId())
+      const rawElements = await useTopicElementStore().getTopicElements<Factor>(
+        {
+          topicId: topic.value.id
+        }
       )
-      nbElements.value = elements.value.length
+      factors.value = rawElements.map(
+        (element) => new ResolvedFactor(element, useSiteId())
+      )
+      nbFactors.value = factors.value.length
     },
     { immediate: true }
   )
 
-  return { elements, nbElements }
+  return { factors, nbFactors }
 }

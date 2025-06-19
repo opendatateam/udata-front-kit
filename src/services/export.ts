@@ -1,6 +1,6 @@
 import { Parser } from '@json2csv/plainjs'
 
-import { Availability, type ResolvedDatasetElement } from '@/model/topic'
+import { Availability, type ResolvedFactor } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
@@ -17,8 +17,8 @@ interface DatasetRow {
   group?: string
 }
 
-export const exportElements = async (
-  elements: ResolvedDatasetElement[]
+export const exportFactors = async (
+  elements: ResolvedFactor[]
 ): Promise<Blob> => {
   const store = useDatasetStore()
   const headers = [

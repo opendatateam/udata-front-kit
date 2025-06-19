@@ -5,20 +5,16 @@ import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
-import {
-  Availability,
-  ResolvedDatasetElement,
-  type ElementsGroups
-} from '@/model/topic'
+import { Availability, ResolvedFactor, type FactorsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
-import ElementFields from './ElementFields.vue'
+import FactorFields from './FactorFields.vue'
 
-export interface ElementEditModalType {
+export interface FactorEditModalType {
   addElement: () => void
-  editElement: (element: ResolvedDatasetElement, index: number) => void
+  editElement: (element: ResolvedFactor, index: number) => void
 }
 
 const emits = defineEmits(['submitModal'])
@@ -26,12 +22,12 @@ const emits = defineEmits(['submitModal'])
 const router = useRouter()
 const { pageConf } = useCurrentPageConf()
 
-const elements = defineModel({
-  type: Object as () => ResolvedDatasetElement[],
+const factors = defineModel({
+  type: Object as () => ResolvedFactor[],
   required: true
 })
-const elementsGroups = defineModel('groups-model', {
-  type: Object as () => ElementsGroups,
+const factorsGroups = defineModel('groups-model', {
+  type: Object as () => FactorsGroups,
   default: []
 })
 defineProps({
@@ -107,12 +103,12 @@ const onCancel = () => {
   closeModal()
 }
 
-const editElement = (dataset: ResolvedDatasetElement, index: number) => {
+const editElement = (dataset: ResolvedFactor, index: number) => {
   // Create a deep clone to enable cancellation
   const clonedData = JSON.parse(JSON.stringify(dataset))
   modalData.value = {
     index,
-    element: new ResolvedDatasetElement(clonedData, dataset.siteId),
+    element: new ResolvedFactor(clonedData, dataset.siteId),
     isValid: false,
     mode: 'edit'
   }
@@ -120,7 +116,7 @@ const editElement = (dataset: ResolvedDatasetElement, index: number) => {
 }
 
 const addElement = () => {
-  const element = new ResolvedDatasetElement(
+  const element = new ResolvedFactor(
     {
       title: '',
       description: '',
@@ -185,9 +181,9 @@ const submit = async (modalData: DatasetModalData) => {
       }
     }
     if (modalData.mode === 'create') {
-      elements.value.push(modalData.element)
+      factors.value.push(modalData.element)
     } else if (modalData.mode === 'edit' && modalData.index !== undefined) {
-      elements.value[modalData.index] = modalData.element
+      factors.value[modalData.index] = modalData.element
     }
   }
   emits('submitModal')
@@ -230,12 +226,12 @@ defineExpose({ addElement, editElement })
       heading-level="h3"
     />
     <form novalidate>
-      <ElementFields
+      <FactorFields
         v-model="modalData.element"
-        v-model:groups-model="elementsGroups"
+        v-model:groups-model="factorsGroups"
         v-model:errors-model="formErrors"
         :dataset-editorialization
-        :already-selected-datasets="elements"
+        :factors-in-topic="factors"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />
     </form>

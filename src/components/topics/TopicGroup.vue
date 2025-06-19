@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ElementsGroups, ResolvedDatasetElement } from '@/model/topic'
+import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
 import { isAvailable } from '@/utils/topic'
@@ -13,11 +13,11 @@ const props = defineProps({
     required: true
   },
   allGroups: {
-    type: Object as () => ElementsGroups,
+    type: Object as () => FactorsGroups,
     required: true
   },
-  elements: {
-    type: Object as () => ResolvedDatasetElement[],
+  factors: {
+    type: Object as () => ResolvedFactor[],
     required: true
   },
   headingLevel: {
@@ -206,31 +206,31 @@ const actions = computed(() => {
     >
       <ul role="list" class="fr-m-0 fr-p-0">
         <li
-          v-for="(element, index) in elements"
-          v-show="!element.isHidden"
+          v-for="(factor, index) in factors"
+          v-show="!factor.isHidden"
           :key="index"
         >
           <div class="dataset__header fr-px-2w fr-py-3v">
             <slot name="datasetTitle">
               <component :is="headingLevel" class="dataset__title">
-                {{ element.title }}
+                {{ factor.title }}
               </component>
             </slot>
             <div class="dataset__actions">
               <DsfrTag
                 v-if="
-                  !isAvailable(element.siteExtras.availability) ||
-                  element.remoteDeleted ||
-                  element.remoteArchived
+                  !isAvailable(factor.siteExtras.availability) ||
+                  factor.remoteDeleted ||
+                  factor.remoteArchived
                 "
                 class="uppercase bold fr-text--xs fr-mr-2w"
                 label="Non disponible"
               />
-              <slot name="elementActions" :element="element" :index="index" />
+              <slot name="factorActions" :factor="factor" :index="index" />
             </div>
           </div>
-          <div v-if="$slots.elementContent" class="element__content">
-            <slot name="elementContent" :element="element" />
+          <div v-if="$slots.factorContent" class="factor__content">
+            <slot name="factorContent" :factor="factor" />
           </div>
         </li>
       </ul>
@@ -398,7 +398,7 @@ const actions = computed(() => {
   font-size: 1.1rem;
 }
 
-.element__content {
+.factor__content {
   padding-block: var(--padding-base) calc(var(--padding-base) / 2);
   padding-inline: calc(var(--padding-base) / 2);
 }
@@ -420,7 +420,7 @@ const actions = computed(() => {
   .disclosure__actions {
     gap: var(--padding-base);
   }
-  .element__content {
+  .factor__content {
     padding-inline: var(--padding-base);
   }
 }

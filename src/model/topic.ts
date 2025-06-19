@@ -71,22 +71,22 @@ class ResolvedGenericElement implements GenericElement {
   }
 }
 
-export interface DatasetElement extends GenericElement {
+export interface Factor extends GenericElement {
   element: {
     class: 'Dataset'
     id: string
   } | null
 }
 
-export class ResolvedDatasetElement extends ResolvedGenericElement {
-  declare element: DatasetElement['element']
+export class ResolvedFactor extends ResolvedGenericElement {
+  declare element: Factor['element']
 
-  constructor(element: DatasetElement, siteId: SiteId) {
-    super(element, siteId)
+  constructor(factor: Factor, siteId: SiteId) {
+    super(factor, siteId)
   }
 }
 
-export type ElementsGroups = Map<string, ResolvedDatasetElement[]>
+export type FactorsGroups = Map<string, ResolvedFactor[]>
 
 export interface SiteTopicExtras {
   cloned_from?: string
@@ -114,5 +114,5 @@ export type Topic = Owned & {
 export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
   id?: string
   slug?: string
-  elements?: DatasetElement[]
+  elements?: Factor[]
 }

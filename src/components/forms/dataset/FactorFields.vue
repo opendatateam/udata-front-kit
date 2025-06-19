@@ -3,27 +3,23 @@ import type { DatasetV2 } from '@datagouv/components'
 import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import {
-  Availability,
-  ResolvedDatasetElement,
-  type ElementsGroups
-} from '@/model/topic'
+import { Availability, ResolvedFactor, type FactorsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
 
-import DatasetPropertiesTextFields from './ElementTextFields.vue'
+import FactorTextFields from './FactorTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
-const emit = defineEmits(['updateValidation', 'update:datasetProperties'])
+const emit = defineEmits(['updateValidation'])
 
 const element = defineModel({
-  type: Object as () => ResolvedDatasetElement,
+  type: Object as () => ResolvedFactor,
   default: {}
 })
 
-const elementsGroups = defineModel('groups-model', {
-  type: Object as () => ElementsGroups,
+const factorsGroups = defineModel('groups-model', {
+  type: Object as () => FactorsGroups,
   default: []
 })
 
@@ -33,8 +29,8 @@ const formErrors = defineModel('errors-model', {
 })
 
 const props = defineProps({
-  alreadySelectedDatasets: {
-    type: Array<ResolvedDatasetElement>,
+  factorsInTopic: {
+    type: Array<ResolvedFactor>,
     default: []
   },
   datasetEditorialization: {
@@ -137,7 +133,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <DatasetPropertiesTextFields
+  <FactorTextFields
     v-if="datasetEditorialization"
     v-model:element-model="element"
     :error-title="getErrorMessage('title')"
@@ -147,7 +143,7 @@ onMounted(() => {
     <div class="fr-mt-1w fr-mb-4w">
       <SelectDataset
         v-model="selectedDataset"
-        :already-selected-datasets="alreadySelectedDatasets"
+        :factors-in-topic="factorsInTopic"
         :is-invalid="formErrors.includes('availability')"
         @update:model-value="onSelectDataset"
       />
@@ -212,7 +208,7 @@ onMounted(() => {
   <div class="fr-input-group">
     <SelectTopicGroup
       v-model:element-model="element"
-      v-model:groups-model="elementsGroups"
+      v-model:groups-model="factorsGroups"
       label="Regroupement"
       description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
       :error-message="getErrorMessage('group')"

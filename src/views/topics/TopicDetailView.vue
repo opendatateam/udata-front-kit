@@ -11,8 +11,8 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import TopicElementsList from '@/components/topics/TopicElementsList.vue'
-import TopicElementsListExport from '@/components/topics/TopicElementsListExport.vue'
+import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
+import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -31,7 +31,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
-import { useExtras, useTopicElements } from '@/utils/topic'
+import { useExtras, useTopicFactors } from '@/utils/topic'
 
 const props = defineProps<TopicPageRouterConf>()
 
@@ -61,7 +61,7 @@ const showDiscussions = pageConf.discussions.display
 const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
-const { elements } = useTopicElements(topic)
+const { factors } = useTopicFactors(topic)
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -143,7 +143,7 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateElements = () => {
+const onUpdateFactors = () => {
   if (topic.value == null) {
     throw Error('Trying to update null topic')
   }
@@ -152,7 +152,7 @@ const onUpdateElements = () => {
     .update(topic.value.id, {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
-      elements: elements.value.map(
+      elements: factors.value.map(
         // unresolved will remove "local" properties
         (element) => element.unresolved()
       )
@@ -389,13 +389,13 @@ watch(
     >
       <!-- Jeux de données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
-        <TopicElementsList
-          v-model="elements"
+        <TopicFactorsList
+          v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
-          @update-elements="onUpdateElements"
+          @update-factors="onUpdateFactors"
         />
-        <TopicElementsListExport :elements="elements" :filename="topic.id" />
+        <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">

@@ -14,7 +14,7 @@ import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTags } from '@/utils/tags'
-import { useTopicElements } from '@/utils/topic'
+import { useTopicFactors } from '@/utils/topic'
 
 const props = defineProps({
   pageKey: {
@@ -33,7 +33,7 @@ const props = defineProps({
 
 const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
-const { nbElements } = useTopicElements(topicRef)
+const { nbFactors } = useTopicFactors(topicRef)
 
 const ownerName = useOwnerName(props.topic)
 
@@ -118,7 +118,7 @@ const tags = useTags(props.pageKey, props.topic)
         />
         <span class="fr-mr-1v">
           {{
-            `${nbElements > 0 ? nbElements : 'Aucune'} donnée${nbElements > 1 ? 's' : ''}`
+            `${nbFactors > 0 ? nbFactors : 'Aucune'} donnée${nbFactors > 1 ? 's' : ''}`
           }}
         </span>
       </span>
