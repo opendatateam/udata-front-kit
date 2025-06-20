@@ -125,7 +125,8 @@ export const useTopicStore = defineStore('topic', {
       while (response.next_page !== null) {
         response = await topicsAPI.request({
           url: response.next_page,
-          method: 'get'
+          method: 'get',
+          authenticated: true
         })
         this.topics = [...this.topics, ...response.data]
       }
