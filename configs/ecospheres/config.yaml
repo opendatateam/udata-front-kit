@@ -258,8 +258,6 @@ pages:
             name: Adresses
           - id: altitude
             name: Altitude
-          - id: conditions-atmospheriques
-            name: Conditions atmosphériques
           - id: batiments
             name: Bâtiments
           - id: caracteristiques-geographiques-meteorologiques
