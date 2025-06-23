@@ -18,6 +18,8 @@ jobs:
           - ecospheres
           - meteo-france
           - logistique
+          # FIXME: remove after PR
+          - accessibilite
           # - defis
           # - hackathon
     permissions:
