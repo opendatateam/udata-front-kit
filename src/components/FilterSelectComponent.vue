@@ -15,7 +15,7 @@ const selectedOption = defineModel({
   default: null
 })
 
-defineProps({
+const props = defineProps({
   options: {
     type: Object as PropType<SelectOption[]>,
     required: true
@@ -31,10 +31,18 @@ defineProps({
   defaultOption: {
     type: String as () => string | null,
     default: null
+  },
+  searchableThreshold: {
+    type: Number,
+    default: 15
   }
 })
 
 const id = useRandomId('select')
+
+const isSearchable = computed(
+  () => props.options.length > props.searchableThreshold
+)
 </script>
 
 <template>
@@ -50,7 +58,7 @@ const id = useRandomId('select')
     :filter-results="true"
     :clear-on-search="true"
     :options="options"
-    :searchable="true"
+    :searchable="isSearchable"
     :strict="false"
     :clear-on-blur="false"
     :allow-absent="true"
