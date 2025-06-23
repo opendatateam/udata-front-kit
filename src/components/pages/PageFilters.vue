@@ -9,7 +9,7 @@ import { useFiltersState } from '@/utils/filters'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import CheckboxComponent from '../CheckboxComponent.vue'
-import SelectComponent from '../SelectComponent.vue'
+import SelectComponent from '../SelectOrFilterComponent.vue'
 
 const router = useRouter()
 const route = useRoute()
