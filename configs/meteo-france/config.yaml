@@ -11,23 +11,23 @@ datagouvfr:
 robots:
   disallow:
   sitemap:
-  meta: "noindex, nofollow"
+  meta: 'noindex, nofollow'
 
 # UI customizations
 website:
-  title: "meteo.data.gouv.fr"
-  formatted_title: "<i>meteo.</i><b>data.gouv</b><i>.fr</i>"
-  rf_title: "RÉPUBLIQUE<br>
-    FRANÇAISE"
-  service_logo: "/logos/meteo-france-logo.svg"
+  title: 'meteo.data.gouv.fr'
+  formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
+  rf_title: 'RÉPUBLIQUE<br>
+    FRANÇAISE'
+  service_logo: '/logos/meteo-france-logo.svg'
   badge:
     display: false
-    text: "BETA"
-    style: "blue-cumulus"
+    text: 'BETA'
+    style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: "La météo et le climat en Open Data"
-    subtitle: "meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite."
+    title: 'La météo et le climat en Open Data'
+    subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     sections:
       - title: Thématiques
         content:
@@ -35,22 +35,26 @@ website:
         sub_section_cards:
           class: fr-col-md-6
           cards:
-            - name: "Données climatologiques (par station et spatialisées)"
-              description: "Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles."
-              url: "datasets?category=climatologique-base"
-              image_url: "/meteo-france/assets/climatologie.png"
-            - name: "Données de référence pour le changement climatique"
-              description: "Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques."
-              url: "datasets?category=climatologique-changement-climatique"
-              image_url: "/meteo-france/assets/climatique.jpg"
-            - name: "Données de Prévision Numérique du Temps (PNT)"
-              description: "Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéances."
-              url: "datasets?category=pnt"
-              image_url: "/meteo-france/assets/pnt.png"
-            - name: "Informations sur les stations"
-              description: "Accès aux caractéristiques des stations météorologiques de métropole et d’outre-mer en service."
-              url: "datasets?category=stations"
-              image_url: "/meteo-france/assets/station.png"
+            - name: 'Données climatologiques (par station et spatialisées)'
+              description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
+              url: 'datasets?category=climatologique-base'
+              image_url: '/meteo-france/assets/climatologie.png'
+            - name: 'Données de référence pour le changement climatique'
+              description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
+              url: 'datasets?category=climatologique-changement-climatique'
+              image_url: '/meteo-france/assets/climatique.jpg'
+            - name: 'Données de Prévision Numérique du Temps (PNT)'
+              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéances.'
+              url: 'datasets?category=pnt'
+              image_url: '/meteo-france/assets/pnt.png'
+            - name: 'Informations sur les stations'
+              description: 'Accès aux caractéristiques des stations météorologiques de métropole et d’outre-mer en service.'
+              url: 'datasets?category=stations'
+              image_url: '/meteo-france/assets/station.png'
+            - name: 'Fiches climatologiques'
+              description: "Fiches synthétiques contenant les moyennes mensuelles, les normales et les records d'une station."
+              url: 'datasets?category=fiches'
+              image_url: '/meteo-france/assets/fiche.png'
         sub_section_tiles:
           title:
           tiles:
@@ -68,24 +72,24 @@ website:
     meta_description:
   header_button:
     display: true
-    label: "Donnez votre avis"
+    label: 'Donnez votre avis'
     link: https://tally.so/r/wQ7y47
   header_search:
     display: true
     placeholder: Rechercher...
   search_bar:
     display: true
-    placeholder: "Rechercher un jeu de données"
+    placeholder: 'Rechercher un jeu de données'
   secondary_search:
     display: true
-    name: "Recherche guidée"
-    link: "/form"
+    name: 'Recherche guidée'
+    link: '/form'
   menu:
     - text: Données
       to: /datasets
     - text: Recherche guidée
       to: /form
-    - text: "Hackathon le 8 et 9 avril 🚀"
+    - text: 'Hackathon le 8 et 9 avril 🚀'
       to: /hackathon
     - text: A propos
       to: /about
@@ -94,45 +98,45 @@ website:
       - organizations_routes
       - topic_routes
     static_pages:
-      - title: "A propos"
-        id: "about"
-        route: "/about"
-        url: "/meteo-france/pages/about.md"
-      - title: "Accessibilité"
-        id: "accessibility"
-        route: "/accessibility"
-        url: "/meteo-france/pages/accessibility.md"
-      - title: "Hackathon le 8 et 9 avril 🚀"
-        id: "hackathon"
-        route: "/hackathon"
-        url: "/meteo-france/pages/hackathon.md"
+      - title: 'A propos'
+        id: 'about'
+        route: '/about'
+        url: '/meteo-france/pages/about.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/meteo-france/pages/accessibility.md'
+      - title: 'Hackathon le 8 et 9 avril 🚀'
+        id: 'hackathon'
+        route: '/hackathon'
+        url: '/meteo-france/pages/hackathon.md'
   show_quality_component: true
   oauth_option: true
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France."
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
   footer_external_links:
-    - label: "meteofrance.com"
-      href: "https://meteofrance.com/"
-    - label: "Portail des API Météo-France"
-      href: "https://portail-api.meteofrance.fr/"
-    - label: "data.gouv.fr"
-      href: "https://www.data.gouv.fr"
+    - label: 'meteofrance.com'
+      href: 'https://meteofrance.com/'
+    - label: 'Portail des API Météo-France'
+      href: 'https://portail-api.meteofrance.fr/'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
   footer_mandatory_links:
-    - label: "Licences"
-      href: "https://www.data.gouv.fr/fr/pages/legal/licences/"
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
     - label: "Conditions générales d'utilisation"
-      href: "https://www.data.gouv.fr/fr/terms/"
-    - label: "Politique de confidentialité"
-      href: "https://www.data.gouv.fr/fr/suivi/"
-    - label: "Accessibilité : non conforme"
-      to: "/accessibility"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
   logo_operator:
-    src: "https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png"
+    src: 'https://static.data.gouv.fr/avatars/81/6374003e904fad9ddac7436315fd15-100.png'
     header:
-      width: "60px"
-      height: "60px"
+      width: '60px'
+      height: '60px'
     footer:
-      width: "92px"
-      height: "92px"
+      width: '92px'
+      height: '92px'
   notice:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_
@@ -145,12 +149,12 @@ website:
     topics_list: 20
     files_list: 6
   home_banner_colors:
-    - "#F7EED4"
-    - "#ECEEE6"
-    - "#E2EEF8"
-  env: "prod"
+    - '#F7EED4'
+    - '#ECEEE6'
+    - '#E2EEF8'
+  env: 'prod'
   matomo:
-    host: "https://stats.data.gouv.fr"
+    host: 'https://stats.data.gouv.fr'
     siteId: 292
   datasets:
     add_to_topic:
