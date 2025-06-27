@@ -8,6 +8,7 @@ interface SearchPageConfNormalized {
   searchPageConfigTypeOrganization: string
   searchPageConfigTypeTopic: string
   searchPageConfigTypeCard: string
+  searchPageConfigDescriptionComponent: string
   searchPageExtrasKey: SiteId
   searchPageDatasetEditorialization: boolean
   searchPageGeozones: boolean
@@ -44,6 +45,8 @@ export const useSearchPagesConfig = (
     searchPageConfigTypeOrganization: searchPageConf.config_type.organization,
     searchPageConfigTypeTopic: searchPageConf.config_type.topic,
     searchPageConfigTypeCard: searchPageConf.config_type.card,
+    searchPageConfigDescriptionComponent:
+      searchPageConf.config_type.description_component,
     searchPageExtrasKey: searchPageConf.extras_key,
     searchPageDatasetEditorialization: searchPageConf.dataset_editorialization,
     searchPageGeozones: searchPageConf.searchPageGeozones,
