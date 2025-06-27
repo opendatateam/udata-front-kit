@@ -17,6 +17,7 @@ import ReusesList from '@/components/ReusesList.vue'
 import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
 import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
 import config from '@/config'
+import SimplifionsUseCaseDescription from '@/custom/simplifions/components/SimplifionsUseCaseDescription.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -33,6 +34,11 @@ import {
   useBreadcrumbLinksForTopic,
   useExtras
 } from '@/utils/topic'
+
+// Component registry for dynamic components
+const componentRegistry: Record<string, any> = {
+  SimplifionsUseCaseDescription
+}
 
 const props = defineProps({
   topicId: {
@@ -64,6 +70,7 @@ const canClone = computed(() => useUserStore().isLoggedIn)
 const {
   searchPageListAll,
   searchPageDisplayMetadata,
+  searchPageConfigDescriptionComponent,
   searchPageActivateReadMore,
   searchPageDatasetEditorialization,
   searchPageSlug,
@@ -310,15 +317,23 @@ watch(
         class="fr-col-12"
         :class="searchPageDisplayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
-        <div v-if="searchPageActivateReadMore">
-          <ReadMore max-height="600">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="description"></div>
-          </ReadMore>
+        <div v-if="searchPageConfigDescriptionComponent">
+          <component
+            :is="componentRegistry[searchPageConfigDescriptionComponent]"
+            :topic="topic"
+          />
         </div>
         <div v-else>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="description"></div>
+          <div v-if="searchPageActivateReadMore">
+            <ReadMore max-height="600">
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div v-html="description"></div>
+            </ReadMore>
+          </div>
+          <div v-else>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="description"></div>
+          </div>
         </div>
       </div>
     </div>

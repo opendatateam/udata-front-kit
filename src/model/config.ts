@@ -37,6 +37,7 @@ export interface ConfigTypeConf {
   organization: string
   topic: string
   card: string
+  description_component: string
 }
 export interface SearchConf {
   name: string
