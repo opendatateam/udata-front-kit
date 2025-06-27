@@ -12,7 +12,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import {
   vueDsfrAutoimportPreset,
   vueDsfrComponentResolver
-} from '@gouvminint/vue-dsfr'
+} from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
