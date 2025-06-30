@@ -2,7 +2,7 @@
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://www.data.gouv.fr
+  base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 676452675336109a436f8f73
 
