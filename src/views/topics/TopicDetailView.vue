@@ -52,15 +52,9 @@ const setAccessibilityProperties = inject(
 
 const description = computed(() => descriptionFromMarkdown(topic))
 
-// Check if there's a custom description component defined in route meta
-const hasCustomDescriptionComponent = computed(() => {
-  console.log(meta)
-  return !!meta.descriptionComponent
-})
-
 // Dynamically load the custom description component if it exists
 const customDescriptionComponent = computed(() => {
-  if (hasCustomDescriptionComponent.value) {
+  if (meta.descriptionComponent) {
     return defineAsyncComponent(meta.descriptionComponent as () => Promise<any>)
   }
   return null
@@ -248,7 +242,7 @@ watch(
         :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
         <!-- Use custom description component if defined, otherwise fallback to default HTML -->
-        <div v-if="hasCustomDescriptionComponent && customDescriptionComponent">
+        <div v-if="meta.descriptionComponent && customDescriptionComponent">
           <component :is="customDescriptionComponent" :topic="topic" />
         </div>
         <div v-else>
