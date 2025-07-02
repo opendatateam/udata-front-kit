@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
+import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
 import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -51,10 +52,13 @@ const setAccessibilityProperties = inject(
 ) as AccessibilityPropertiesType
 
 const description = computed(() => descriptionFromMarkdown(topic))
+
+const userStore = useUserStore()
 const canEdit = computed(() => {
-  return useUserStore().hasEditPermissions(topic.value)
+  return userStore.hasEditPermissions(topic.value)
 })
-const isAdmin = computed(() => useUserStore().isAdmin)
+const { canAddTopic } = storeToRefs(userStore)
+const isAdmin = computed(() => userStore.isAdmin)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
@@ -265,6 +269,7 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
+              v-if="canAddTopic"
               secondary
               size="md"
               label="Cloner"
