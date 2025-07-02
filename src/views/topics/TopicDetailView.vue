@@ -57,8 +57,7 @@ const userStore = useUserStore()
 const canEdit = computed(() => {
   return userStore.hasEditPermissions(topic.value)
 })
-const { canAddTopic } = storeToRefs(userStore)
-const isAdmin = computed(() => userStore.isAdmin)
+const { isAdmin, canAddTopic } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
