@@ -207,6 +207,8 @@ pages:
             name: Données de Prévision Numérique du Temps (PNT)
           - id: stations
             name: Informations sur les stations
+          - id: fiches
+            name: Fiches climatologiques
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
