@@ -247,27 +247,30 @@ watch(
         class="fr-col-12"
         :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
-        <div class="topic__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <ul v-if="tags.length > 0" class="fr-badges-group">
-            <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-              <TagComponent :tag="t" />
-            </li>
-          </ul>
-        </div>
         <!-- Use custom description component if defined, otherwise fallback to default HTML -->
         <div v-if="hasCustomDescriptionComponent && customDescriptionComponent">
           <component :is="customDescriptionComponent" :topic="topic" />
         </div>
-        <div v-else-if="props.enableReadMore">
-          <ReadMore max-height="600">
+        <div v-else>
+          <div class="topic__header fr-mb-4v">
+            <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
+            <ul v-if="tags.length > 0" class="fr-badges-group">
+              <li v-for="t in tags" :key="`${t.type}-${t.id}`">
+                <TagComponent :tag="t" />
+              </li>
+            </ul>
+          </div>
+
+          <div v-if="props.enableReadMore">
+            <ReadMore max-height="600">
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div v-html="description" />
+            </ReadMore>
+          </div>
+          <div v-else>
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="description" />
-          </ReadMore>
-        </div>
-        <div v-else>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="description" />
+          </div>
         </div>
       </div>
       <div

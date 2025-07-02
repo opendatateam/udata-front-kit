@@ -1,8 +1,66 @@
 <template>
   <div class="fr-mb-8w">
-    <p class="fr-text--lead">
-      {{ grist_data.Description_longue }}
+    <p class="fr-text--small">
+      <em>{{ grist_data.Description_courte }}</em>
     </p>
+
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
+      <div class="fr-col-12 fr-col-md-8">
+        <div class="topic__header fr-mb-4v">
+          <h1 class="fr-mb-1v fr-mr-2v">{{ grist_data.Titre }}</h1>
+        </div>
+
+        <p class="fr-text--lead">
+          {{ grist_data.Description_longue }}
+        </p>
+      </div>
+
+      <div class="fr-col-12 fr-col-md-4">
+        <nav
+          aria-labelledby="fr-summary-title"
+          role="navigation"
+          class="fr-summary"
+        >
+          <h2 id="fr-summary-title" class="fr-h6">Sommaire</h2>
+          <ol>
+            <li>
+              <a
+                href="#contexte-et-cadre-juridique"
+                id="summary-link-1"
+                class="fr-summary__link"
+                >Contexte et cadre juridique</a
+              >
+            </li>
+            <li>
+              <a
+                href="#solutions-disponibles"
+                id="summary-link-2"
+                class="fr-summary__link"
+                >Solutions disponibles</a
+              >
+              <ol>
+                <li>
+                  <a
+                    href="#solution-sans-dev-ni-budget"
+                    id="summary-link-2-1"
+                    class="fr-summary__link"
+                    >Sans développement, ni budget</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#solution-dev-ou-editeur"
+                    id="summary-link-2-2"
+                    class="fr-summary__link"
+                    >Avec des moyens techniques ou un éditeur de logiciel</a
+                  >
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
 
     <h2 class="fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
 
