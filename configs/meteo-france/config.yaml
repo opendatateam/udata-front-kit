@@ -51,6 +51,10 @@ website:
               description: 'Accès aux caractéristiques des stations météorologiques de métropole et d’outre-mer en service.'
               url: 'datasets?category=stations'
               image_url: '/meteo-france/assets/station.png'
+            - name: 'Fiches climatologiques'
+              description: "Fiches synthétiques contenant les moyennes mensuelles, les normales et les records d'une station."
+              url: 'datasets?category=fiches'
+              image_url: '/meteo-france/assets/fiche.png'
         sub_section_tiles:
           title:
           tiles:
