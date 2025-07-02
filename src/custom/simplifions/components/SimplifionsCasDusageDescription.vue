@@ -118,10 +118,9 @@ const props = defineProps<{
   topic: Topic
 }>()
 
-const casUsage = (props.topic.extras as any)['cas-d-usages'] as Record<
-  string,
-  any
->
+const casUsage = (props.topic.extras as any)[
+  'simplifions-cas-usages'
+] as Record<string, any>
 
 // const grouped_reco_solutions = casUsage.reco_solutions.reduce((acc: Record<string, any[]>, reco_solution: any) => {
 //   const key = reco_solution.Type_de_simplification

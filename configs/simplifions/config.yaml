@@ -496,12 +496,12 @@ pages:
       create: true
     filters:
       - name: 'À destination de :'
-        id: structure
+        id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'administrations
         use_tag_prefix: true
         values:
-          - id: communes # simplifions-struture-communes
+          - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
             name: Communes
           - id: departements
             name: Départements
@@ -514,7 +514,7 @@ pages:
           - id: autres
             name: Autres
       - name: 'Pour simplifier les démarches de :'
-        id: users
+        id: target-users
         type: select
         default_option: Tous les usagers
         use_tag_prefix: true
@@ -533,14 +533,14 @@ pages:
         default_option: Tous les types de ressources
         use_tag_prefix: true
         values:
-          - id: aucun-developpement
+          - id: aucun-developpement-ni-budget
             name: Aucun développement, ni budget
-          - id: moyens-techniques
+          - id: avec-des-moyens-techniques
             name: Avec des moyens techniques
-          - id: solution-editeur
+          - id: savec-solution-editeur
             name: Avec une solution éditeur
       - name: 'Type de simplification des démarches :'
-        id: simplification
+        id: types-de-simplification
         type: select
         default_option: Tous les types de simplification
         use_tag_prefix: true
@@ -652,7 +652,7 @@ pages:
           - id: gratuite
             name: Gratuite
       - name: 'Type de simplification des démarches :'
-        id: simplification
+        id: types-de-simplification
         type: select
         default_option: Tous les types de simplification
         use_tag_prefix: true
