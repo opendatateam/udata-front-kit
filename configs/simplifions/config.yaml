@@ -1,0 +1,665 @@
+# config file for simplifions
+
+# used as extras key
+site_id: simplifions
+
+datagouvfr:
+  # data.gouv.fr base URL (use www subdomain on prod)
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 676452675336109a436f8f73
+
+# universe configuration is now handled per page in pages.{page_id}.universe_query
+
+robots:
+  disallow:
+  sitemap:
+  meta: 'noindex, nofollow'
+
+# UI customizations
+website:
+  title: 'simplifions.data.gouv.fr'
+  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
+  service_logo: '/logos/simplifions-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+  logo_operator:
+    src: '/logos/simplifions-logo.svg'
+    show_in_header: false
+    footer:
+      width: '40px'
+      height: '219px'
+  homepage:
+    title: 'Acteurs publics, utilisez la donnée pour simplifier vos services !'
+    subtitle: |+
+      <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-content-media__img fr-col-lg-2 fr-col-4">
+          <img class="fr-responsive-img" src="/simplifions/assets/accueil-picto-ecosystem.png" alt="" style="display: block; width: 100%; height: auto;" />
+      </div>
+      <div  class="fr-col-lg-8 fr-col-12" style="font-family: Marianne,arial,sans-serif !important; font-style: normal;">
+        <p class="fr-text--lead"> Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données ! Vous gagnerez aussi du temps !</p>
+
+        <a class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg" href="/cas-d-usages">Tous les cas d'usages</a> 
+      </div>
+      </div>
+    sections:
+      - title:
+        content: >-
+          <h2 class="fr-h1 fr-mt-15w fr-mb-5w" style="color: black; text-align: center;">Améliorer les services à destination :</h2>
+
+          <p class="fr-text--lg" style="text-align: center;">
+          Le portail <i>simplifions.data.gouv.fr</i> vous accompagne pour simplifier, avec de la donnée, les démarches des citoyens.<br/>Retrouvez tous les cas d'usages selon le public concerné :
+          </p>
+
+          <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12 fr-col-lg-3">
+            <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-sourcing">
+            <div class="fr-tile__body">
+              <div class="fr-tile__content">
+              <h3 class="fr-tile__title fr-h3">
+                <a href="/cas-d-usages?tags=simplifions-users-particuliers">Particuliers<br/>👱</a>
+              </h3>
+              <p class="fr-tile__detail fr-h6">Tous les cas d'usages concernant les particuliers</p>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="fr-col-12 fr-col-lg-3">
+            <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-sourcing">
+            <div class="fr-tile__body">
+              <div class="fr-tile__content">
+              <h3 class="fr-tile__title fr-h3">
+                <a href="/cas-d-usages?tags=simplifions-users-entreprises">Entreprises<br/>💼</a>
+              </h3>
+              <p class="fr-tile__detail fr-h6">Tous les cas d'usages concernant les entreprises</p>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="fr-col-12 fr-col-lg-3">
+            <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-sourcing">
+            <div class="fr-tile__body">
+              <div class="fr-tile__content">
+              <h3 class="fr-tile__title fr-h3">
+                <a href="/cas-d-usages?tags=simplifions-users-associations">Associations<br/>🤝</a>
+              </h3>
+              <p class="fr-tile__detail fr-h6">Tous les cas d'usages concernant les associations</p>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="fr-col-12 fr-col-lg-3">
+            <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-sourcing">
+            <div class="fr-tile__body">
+              <div class="fr-tile__content">
+              <h3 class="fr-tile__title fr-h3">
+                <a href="/cas-d-usages?tags=simplifions-users-agents-publics">Agents publics<br/>🧑‍💼</a>
+              </h3>
+              <p class="fr-tile__detail fr-h6">Tous les cas d'usages concernant les agents publics</p>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          </div>
+        sub_section_buttons:
+          - name: "Tous les cas d'usages"
+            url: 'cas-d-usages'
+            class: 'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+      - title:
+        content: >-
+          <h2 class="fr-h1 fr-mt-15w fr-mb-5w" style="color: black; text-align: center;">Quelques soient vos ressources, il existe des solutions !</h2>
+
+          <p class="fr-text--lg" style="text-align: center;">
+          Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou non de ressources informatiques.
+          <br/>
+          Filtrez les cas d'usages et les solutions selon vos possibilités d'intégration :
+          </p>
+
+          <div class="fr-grid-row fr-grid-row--gutters">
+            <div class="fr-col-12 fr-col-lg-4">
+              <div class="fr-card" style="background-color: #FAFAFA;">
+                <div class="fr-card__body">
+                  <div class="fr-card__content">
+                  <h3 class="fr-card__title">
+                    Vous n'avez ni équipe technique, ni éditeur
+                  </h3>
+                  <p class="fr-card__desc">Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique.</p>
+                  </div>
+                  <div class="fr-card__footer">
+                  <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
+                    <li>
+                    <a class="fr-btn" href="/cas-d-usages?tags=simplifions-budget-aucun-developpement">Cas d'usages</a>
+                    </li>
+                    <li>
+                    <a class="fr-btn fr-btn--secondary" href="/solutions?tags=simplifions-solutions-moyens-aucun">Solutions</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+               <div class="fr-card__header">
+                  <div style="display: flex; justify-content: center; align-items: center; height: 100px; overflow: hidden; margin-top: 10px;">
+                    <img 
+                      class="fr-responsive-img" 
+                      src="/simplifions/assets/accueil-picto-contract.png" 
+                      alt="" 
+                      style="max-height: 100%; width: auto;" />
+                  </div>
+               </div>
+              </div>
+            </div>
+
+            <div class="fr-col-12 fr-col-lg-4">
+              <div class="fr-card" style="background-color: #FAFAFA;">
+              <div class="fr-card__body">
+                <div class="fr-card__content">
+                <h3 class="fr-card__title">
+                  Vous passez par un éditeur
+                </h3>
+                <p class="fr-card__desc">Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.</p>
+                </div>
+                <div class="fr-card__footer">
+                <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
+                  <li>
+                  <a class="fr-btn" href="/cas-d-usages?tags=simplifions-budget-solution-editeur">Cas d'usages</a>
+                  </li>
+                  <li>
+                  <a class="fr-btn fr-btn--secondary" href="/solutions?tags=simplifions-solutions-moyens-editeur">Solutions</a>
+                  </li>
+                </ul>
+                </div>
+              </div>
+              <div class="fr-card__header">
+                  <div style="display: flex; justify-content: center; align-items: center; height: 100px; overflow: hidden; margin-top: 10px;">
+                    <img 
+                      class="fr-responsive-img" 
+                      src="/simplifions/assets/accueil-picto-self-training.png" 
+                      alt="" 
+                      style="max-height: 100%; width: auto;" />
+                  </div>
+              </div>
+              </div>
+            </div>
+
+            <div class="fr-col-12 fr-col-lg-4">
+              <div class="fr-card" style="background-color: #FAFAFA;">
+              <div class="fr-card__body">
+                <div class="fr-card__content">
+                <h3 class="fr-card__title">
+                  Vous avez votre service informatique
+                </h3>
+                <p class="fr-card__desc">Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d'information.</p>
+                </div>
+                <div class="fr-card__footer">
+                <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
+                  <li>
+                  <a class="fr-btn" href="/cas-d-usages?tags=spf-budget-aucun-developpement">Cas d'usages</a>
+                  </li>
+                  <li>
+                  <a class="fr-btn fr-btn--secondary" href="/solutions?tags=spf-budget-aucun-developpement,spf-moyens-aucun">Solutions</a>
+                  </li>
+                </ul>
+                </div>
+              </div>
+              <div class="fr-card__header">
+                  <div style="display: flex; justify-content: center; align-items: center; height: 100px; overflow: hidden; margin-top: 10px;">
+                    <img 
+                      class="fr-responsive-img" 
+                      src="/simplifions/assets/accueil-picto-coding.png" 
+                      alt="" 
+                      style="max-height: 100%; width: auto;" />
+                  </div>
+              </div>
+              </div>
+            </div>
+
+          </div>
+
+      - title:
+        content: >-
+          <h2 class="fr-h1 fr-mt-15w fr-mb-5w" style="color: black; text-align: center;">Pourquoi simplifier vos démarches avec la donnée ?</h2>
+
+          <p class="fr-text--lg" style="text-align: center;">
+          Administrations et collectivités, en intégrant des API ou des données dans vos démarches et/ou votre système d'information, de nombreux avantages s'offrent à vous et vos usagers :
+          </p>
+
+          <ul class="fr-mx-10w fr-grid-row fr-grid-row--gutters fr-text--lg">
+            <li class="fr-col-12 fr-col-md-4">
+              🗄 <b>Accéder facilement aux données administratives de vos usagers</b>, qu'elles soient publiques ou protégées.
+            </li>
+            <li class="fr-col-12 fr-col-md-4">
+              ⏰ <b>Faire gagner du temps à vos agents instructeurs</b>. Ils n'ont pas de vérifications supplémentaires à réaliser, les informations obtenues sont certifiées 🔎.
+            </li>
+            <li class="fr-col-12 fr-col-md-4">
+              🎢 <b>Augmenter le pourcentage des démarches finalisées</b> car la démarche est moins longue et moins complexe pour l'usager.
+            </li>
+            <li class="fr-col-12 fr-col-md-4">
+              📜 <b>Vous conformer avec la législation</b> en mettant en oeuvre les principes de simplification tels que le <i>dîtes-le nous une fois</i> et la proactivité.
+            </li>
+            <li class="fr-col-12 fr-col-md-4">
+              💌 <b>Réduire le taux de non recours</b>, plus particulièrement en mettant en place des démarches proactives.
+          </ul>
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+          - name: 'Consulter les ressources juridiques'
+            url: 'TODO'
+            class: 'fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+      - title:
+        content: >-
+          <h2 class="fr-h1 fr-mt-15w fr-mb-5w" style="color: black; text-align: center;">La simplification en 3 niveaux</h2>
+
+          <p class="fr-text--lg" style="text-align: center;">
+          Il y a <a href="/niveaux-simplification">plusieurs niveaux de simplification</a> avec un effet positif croissant pour les usagers finaux. Pour chaque cas d'usage et solution référencés sur <i>simplifions.data.gouv.fr</i>, le ou les niveaux de simplification sont systématiquement indiqués :
+          </p>
+
+          <div class="fr-grid-row fr-grid-row--gutters">
+            <div class="fr-col-12 fr-col-md-4">
+              <div class="fr-card" style="background-color: #FAFAFA;">
+                <div class="fr-card__body">
+                  <div class="fr-card__content">
+                  <h3 class="fr-card__title">
+                    <p class="fr-tag fr-text--lg">Niveau 1 : ⭐️ Accès facile</p>
+                  </h3>
+                  <p class="fr-card__desc fr-h5"> 
+                L'agent trouve facilement l'information
+                  </p>
+                  </div>
+                  <div class="fr-card__footer">
+                  <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
+                    <li>
+                    <a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-acces-facile">Cas d'usages</a>
+                    </li>
+                    <li>
+                    <a class="fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-acces-facile">Solutions</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+               <div class="fr-card__header">
+                  <div style="display: flex; justify-content: center; align-items: center; height: 10px; overflow: hidden; margin-top: 0px;">
+                  </div>
+               </div>
+              </div>
+            </div>
+
+          <div class="fr-col-12 fr-col-md-4">
+              <div class="fr-card" style="background-color: #FAFAFA;">
+                <div class="fr-card__body">
+                  <div class="fr-card__content">
+                  <h3 class="fr-card__title">
+                    <p class="fr-tag fr-text--lg">Niveau 2 : ⭐️⭐️ Dîtes-le-nous une fois</p>
+                  </h3>
+                      <p class="fr-card__desc fr-h5"> 
+                L'usager n'a plus à fournir de justificatifs
+                  </p>
+                  </div>
+                  <div class="fr-card__footer">
+                  <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
+                    <li>
+                    <a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-dlnuf">Cas d'usages</a>
+                    </li>
+                    <li>
+                    <a class="fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-dlnuf">Solutions</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+               <div class="fr-card__header">
+                  <div style="display: flex; justify-content: center; align-items: center; height: 10px; overflow: hidden; margin-top: 0px;">
+                  </div>
+               </div>
+              </div>
+            </div>
+
+             <div class="fr-col-12 fr-col-md-4">
+              <div class="fr-card" style="background-color: #FAFAFA;">
+                <div class="fr-card__body">
+                  <div class="fr-card__content">
+                  <h3 class="fr-card__title">
+                    <p class="fr-tag fr-text--lg">Niveau 3 : ⭐️⭐️⭐️ Proactivité</p>
+                  </h3>
+                 <p class="fr-card__desc fr-h5"> 
+               L'usager n'a plus de démarche à faire
+                  </p>
+                  </div>
+                  <div class="fr-card__footer">
+                  <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg">
+                    <li>
+                    <a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-proactivite">Cas d'usages</a>
+                    </li>
+                    <li>
+                    <a class="fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-proactivite">Solution</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+               <div class="fr-card__header">
+                  <div style="display: flex; justify-content: center; align-items: center; height: 10px; overflow: hidden; margin-top: 0px;">
+                  </div>
+               </div>
+              </div>
+            </div>
+
+          </div>
+        sub_section_buttons:
+          - name: 'En savoir plus sur les niveaux de simplification'
+            url: '/niveaux-simplification'
+            class: 'fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+    meta_description: simplifions.data.gouv.fr référence et centralise les données de la transition écologique.
+  header_button:
+    display: true
+    label: 'Donnez votre avis'
+    link: https://tally.so/r/wLWrzp
+  header_search:
+    display: true
+    placeholder: Rechercher...
+    dropdown:
+      - text: Rechercher {} dans les <strong>cas d'usages</strong>
+        route: cas-d-usages
+      - text: Rechercher {} dans les <strong>solutions</strong>
+        route: solutions
+  search_bar:
+    display: false
+  secondary_search:
+    display: false
+    name:
+    link:
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à simplification administrative et à la circulation des données.'
+  footer_external_links:
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+      title: 'data.gouv.fr - nouvelle fenêtre'
+    - label: 'legifrance.gouv.fr'
+      href: 'https://www.legifrance.gouv.fr/'
+      title: 'legifrance - nouvelle fenêtre'
+    - label: 'gouvernement.fr'
+      href: 'https://www.gouvernement.fr'
+      title: 'gouvernement.fr - nouvelle fenêtre'
+  footer_mandatory_links:
+    - label: 'Plan du site'
+      to: '/sitemap'
+    - label: "Conditions générales d'utilisation"
+      to: '/terms'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : partiellement conforme'
+      to: '/accessibility'
+  notice:
+    display: true
+    content: ⚠️ Vous naviguez sur une version de développement de simplifions.data.gouv.fr ⚠️
+    closeable: false
+  menu:
+    - text: Accueil
+      to: /
+    - text: Cas d'usages
+      to: /cas-d-usages
+    - text: Solutions
+      to: /solutions
+    - text: À propos
+      to: /about
+  router:
+    disable:
+      - topics
+    static_pages:
+      - title: 'À propos'
+        id: 'about'
+        route: '/about'
+        url: '/simplifions/pages/about.md'
+      - title: 'Guide pour la simplification'
+        id: 'niveaux-simplification'
+        route: '/niveaux-simplification'
+        url: '/simplifions/pages/niveaux-simplification.md'
+      - title: Simplifier le sourcing des marchés publics avec API Entreprise
+        id: '/api-entreprise_cas-usage_marches_public_sourcing'
+        route: '/api-entreprise_cas-usage_marches_public_sourcing'
+        url: '/simplifions/pages/api-entreprise_cas-usage_marches_public_sourcing.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/simplifions/pages/accessibility.md'
+      - title: "Conditions générales d'utilisation"
+        id: 'terms'
+        route: '/terms'
+        url: '/simplifions/pages/terms.md'
+  show_quality_component: true
+  oauth_option: true
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
+  pagination_sizes:
+    topics_list: 10
+    files_list: 6
+  contact_email: contact@api.gouv.fr
+  home_banner_colors:
+    - '#f6f6f6'
+    - '#e3e3fd'
+    - '#BFDCB7'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId: # Demander à Jordan un ID pour monitorer simplifions
+  datasets:
+    # TODO: better place for that?
+    add_to_topic:
+      enable: false
+      page: cas-d-usages
+      dataset_editorialization: false
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning:
+    show_extended_information_panel: false
+  # TODO: better place for that?
+  topics:
+    can_add_topics:
+      everyone: false
+      authorized_users:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Cas d'usages
+      path: /cas-d-usages
+    - name: Solutions
+      path: /solutions
+    - name: Jeux de données
+      path: /datasets
+    # Organizations page removed as not needed for simplifions
+    - name: À propos
+      path: /about
+    - name: Conditions générales d'utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
+
+# organizations: (empty - no specific organizations configuration needed for simplifions)
+pages:
+  # CAS D'USAGES
+  cas-d-usages:
+    list_all: true
+    universe_query:
+      tag: simplifions-cas-d-usages
+    tag_prefix: simplifions
+    title: Cas d'usages
+    breadcrumb_title:
+    labels:
+      singular: cas d'usage
+      plural: cas d'usages
+      extended: cas d'usage
+    search:
+      input: Filtrer les cas d'usages
+    discussions:
+      display: true
+      create: true
+    filters:
+      - name: 'À destination de :'
+        id: fournisseurs-de-service
+        type: select
+        default_option: Tous les types d'administrations
+        use_tag_prefix: true
+        values:
+          - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
+            name: Communes
+          - id: departements
+            name: Départements
+          - id: regions
+            name: Régions
+          - id: administrations-centrales
+            name: Administrations centrales
+          - id: operateur-etat
+            name: Opérateurs de l'État
+          - id: autres
+            name: Autres
+      - name: 'Pour simplifier les démarches de :'
+        id: target-users
+        type: select
+        default_option: Tous les usagers
+        use_tag_prefix: true
+        values:
+          - id: particuliers
+            name: Particuliers
+          - id: entreprises
+            name: Entreprises
+          - id: associations
+            name: Associations
+          - id: agents-publics
+            name: Agents publics
+      - name: 'Moyens disponibles pour la mise en œuvre :'
+        id: budget
+        type: select
+        default_option: Tous les types de ressources
+        use_tag_prefix: true
+        values:
+          - id: aucun-developpement-ni-budget
+            name: Aucun développement, ni budget
+          - id: avec-des-moyens-techniques
+            name: Avec des moyens techniques
+          - id: savec-solution-editeur
+            name: Avec une solution éditeur
+      - name: 'Type de simplification des démarches :'
+        id: types-de-simplification
+        type: select
+        default_option: Tous les types de simplification
+        use_tag_prefix: true
+        values:
+          - id: proactivite
+            name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
+          - id: dlnuf
+            name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
+          - id: acces-facile
+            name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
+  # SOLUTIONS
+  solutions:
+    list_all: true
+    universe_query:
+      tag: simplifions-solutions
+    tag_prefix: simplifions-solutions
+    title: Solutions
+    breadcrumb_title:
+    labels:
+      singular: solution
+      plural: solutions
+      extended: solution
+    search:
+      input: Filtrer les solutions
+    discussions:
+      display: true
+      create: true
+    filters:
+      - name: 'Dans le cadre de :'
+        id: cadre
+        type: select
+        default_option: Tous les cas d'usages
+        use_tag_prefix: true
+        values:
+          - id: marches-publics
+            name: Marchés publics
+          - id: aides-publiques
+            name: Aides publiques entreprises
+          - id: tarification-sociale-solidaire
+            name: Tarification sociale/solidaire
+      - name: 'À destination de :'
+        id: destination
+        type: select
+        default_option: Tous les types d'administrations
+        use_tag_prefix: true
+        values:
+          - id: communes
+            name: Communes
+          - id: departements
+            name: Départements
+          - id: regions
+            name: Régions
+          - id: administrations-centrales
+            name: Administrations centrales
+          - id: operateur-etat
+            name: Opérateurs de l'État
+          - id: autres
+            name: Autres
+      - name: 'Pour simplifier les démarches de :'
+        id: demarches
+        type: select
+        default_option: Tous les usagers
+        use_tag_prefix: true
+        values:
+          - id: particuliers
+            name: Particuliers
+          - id: entreprises
+            name: Entreprises
+          - id: associations
+            name: Associations
+          - id: agents-publics
+            name: Agents publics
+      - name: 'Moyens disponibles pour la mise en œuvre :'
+        id: moyens
+        type: select
+        default_option: Tous les types de ressources
+        use_tag_prefix: true
+        values:
+          - id: aucun
+            name: Aucun développement, ni budget
+          - id: techniques
+            name: Avec des moyens techniques
+          - id: editeur
+            name: Avec une solution éditeur
+      - name: 'Type de solutions :'
+        id: type-solutions
+        type: select
+        default_option: Tous les types de solutions
+        use_tag_prefix: true
+        values:
+          - id: formulaire-en-ligne
+            name: Formulaire en ligne
+          - id: portail-de-donnees
+            name: Portail de données
+          - id: annuaire
+            name: Annuaire
+          - id: api
+            name: Bouquet d'API
+          - id: hub
+            name: Hub d'échange
+      - name: 'Caractéristiques :'
+        id: caracteristiques
+        type: select
+        default_option: Tous les types de solutions
+        use_tag_prefix: true
+        values:
+          - id: donnees-protegees
+            name: Avec accès à des données protégées
+          - id: gratuite
+            name: Gratuite
+      - name: 'Type de simplification des démarches :'
+        id: types-de-simplification
+        type: select
+        default_option: Tous les types de simplification
+        use_tag_prefix: true
+        values:
+          - id: proactivite
+            name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
+          - id: dlnuf
+            name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
+          - id: acces-facile
+            name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
