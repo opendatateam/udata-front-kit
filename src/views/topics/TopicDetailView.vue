@@ -2,7 +2,7 @@
 import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -51,6 +51,21 @@ const setAccessibilityProperties = inject(
 ) as AccessibilityPropertiesType
 
 const description = computed(() => descriptionFromMarkdown(topic))
+
+// Check if there's a custom description component defined in route meta
+const hasCustomDescriptionComponent = computed(() => {
+  console.log(meta)
+  return !!meta.descriptionComponent
+})
+
+// Dynamically load the custom description component if it exists
+const customDescriptionComponent = computed(() => {
+  if (hasCustomDescriptionComponent.value) {
+    return defineAsyncComponent(meta.descriptionComponent as () => Promise<any>)
+  }
+  return null
+})
+
 const canEdit = computed(() => {
   return useUserStore().hasEditPermissions(topic.value)
 })
@@ -240,7 +255,11 @@ watch(
             </li>
           </ul>
         </div>
-        <div v-if="props.enableReadMore">
+        <!-- Use custom description component if defined, otherwise fallback to default HTML -->
+        <div v-if="hasCustomDescriptionComponent && customDescriptionComponent">
+          <component :is="customDescriptionComponent" :topic="topic" />
+        </div>
+        <div v-else-if="props.enableReadMore">
           <ReadMore max-height="600">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="description" />

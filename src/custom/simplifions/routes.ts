@@ -21,7 +21,9 @@ export const routes: RouteRecordRaw[] = [
     metaTitle: "Cas d'usages",
     topicConf,
     cardComponent: async () =>
-      await import('./components/SimplifionsCasDusageCard.vue')
+      await import('./components/SimplifionsCasDusageCard.vue'),
+    descriptionComponent: async () =>
+      await import('./components/SimplifionsCasDusageDescription.vue')
   }),
   ...useTopicAdminPagesRoutes({
     pageKey: 'cas-d-usages',

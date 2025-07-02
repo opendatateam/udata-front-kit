@@ -456,7 +456,7 @@ website:
   # TODO: better place for that?
   topics:
     can_add_topics:
-      everyone: true
+      everyone: false
       authorized_users:
   sitemap:
     - name: Accueil
@@ -501,7 +501,7 @@ pages:
         default_option: Tous les types d'administrations
         use_tag_prefix: true
         values:
-          - id: communes
+          - id: communes # simplifions-struture-communes
             name: Communes
           - id: departements
             name: Départements
