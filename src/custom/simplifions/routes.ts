@@ -20,7 +20,8 @@ export const routes: RouteRecordRaw[] = [
     pageKey: 'cas-d-usages',
     metaTitle: "Cas d'usages",
     topicConf,
-    cardComponent: async () => await import('./components/CustomTopicCard.vue')
+    cardComponent: async () =>
+      await import('./components/SimplifionsCasDusageCard.vue')
   }),
   ...useTopicAdminPagesRoutes({
     pageKey: 'cas-d-usages',
@@ -29,8 +30,8 @@ export const routes: RouteRecordRaw[] = [
   useTopicSearchPageRoutes({
     pageKey: 'solutions',
     metaTitle: 'Solutions',
-    topicConf,
-    cardComponent: async () => await import('./components/CustomTopicCard.vue')
+    topicConf
+    // cardComponent: async () => await import('./components/SimplifionsCasDusageCard.vue')
   }),
   ...useTopicAdminPagesRoutes({
     pageKey: 'solutions',
