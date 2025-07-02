@@ -1,17 +1,17 @@
 <template>
   <div class="fr-mb-8w">
     <p class="fr-text--small">
-      <em>{{ grist_data.Description_courte }}</em>
+      <em>{{ casUsage.Description_courte }}</em>
     </p>
 
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ grist_data.Titre }}</h1>
+          <h1 class="fr-mb-1v fr-mr-2v">{{ casUsage.Titre }}</h1>
         </div>
 
         <p class="fr-text--lead">
-          {{ grist_data.Description_longue }}
+          {{ casUsage.Description_longue }}
         </p>
       </div>
 
@@ -69,19 +69,19 @@
       Contexte
     </h3>
 
-    <p v-html="fromMarkdown(grist_data.Contexte)"></p>
+    <p v-html="fromMarkdown(casUsage.Contexte)"></p>
 
     <h3 class="fr-h6">
       <span aria-hidden="true" class="fr-icon-newspaper-fill"></span>
       Cadre juridique
     </h3>
 
-    <p v-html="fromMarkdown(grist_data.Cadre_juridique)"></p>
+    <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
 
     <h2 class="fr-h2 fr-my-5w">Solutions disponibles</h2>
 
     <div
-      v-for="reco_solution in grist_data.reco_solutions"
+      v-for="reco_solution in casUsage.reco_solutions"
       :key="reco_solution.Nom_de_la_solution"
     >
       <SimplifionsRecoSolutions :reco_solution="reco_solution" />
@@ -118,12 +118,12 @@ const props = defineProps<{
   topic: Topic
 }>()
 
-const grist_data = (props.topic.extras as any)['cas-d-usages'] as Record<
+const casUsage = (props.topic.extras as any)['cas-d-usages'] as Record<
   string,
   any
 >
 
-// const grouped_reco_solutions = grist_data.reco_solutions.reduce((acc: Record<string, any[]>, reco_solution: any) => {
+// const grouped_reco_solutions = casUsage.reco_solutions.reduce((acc: Record<string, any[]>, reco_solution: any) => {
 //   const key = reco_solution.Type_de_simplification
 //   if (!acc[key]) {
 //     acc[key] = []
