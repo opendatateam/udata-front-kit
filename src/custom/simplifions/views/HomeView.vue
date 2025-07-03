@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import SubSectionButtons from '@/components/sections/SubSectionButtons.vue'
-import SubSectionCards from '@/components/sections/SubSectionCards.vue'
-import SubSectionDatasets from '@/components/sections/SubSectionDatasets.vue'
-import SubSectionTiles from '@/components/sections/SubSectionTiles.vue'
 import config from '@/config'
-import { fromMarkdown } from '@/utils'
 
-const sectionsHomePage = config.website.homepage.sections
 const colorsBanner = config.website.home_banner_colors
 
 const fournisseursDeService = [
@@ -36,7 +31,7 @@ const fournisseursDeService = [
   }
 ]
 
-const niveauxDeSimplification = [
+const budgets = [
   {
     title: "Vous n'avez ni équipe technique, ni éditeur",
     description:
@@ -60,6 +55,30 @@ const niveauxDeSimplification = [
     casUsagesTags: 'spf-budget-aucun-developpement',
     solutionsTags: 'spf-budget-aucun-developpement,spf-moyens-aucun',
     imageSrc: '/simplifions/assets/accueil-picto-coding.png'
+  }
+]
+
+const niveauxDeSimplification = [
+  {
+    title: 'Niveau 1 : ⭐️ Accès facile',
+    description: "L'agent trouve facilement l'information",
+    casUsagesTags: 'spf-simplification-acces-facile',
+    solutionsTags: 'spf-simplification-acces-facile',
+    buttonText: 'Solutions'
+  },
+  {
+    title: 'Niveau 2 : ⭐️⭐️ Dîtes-le-nous une fois',
+    description: "L'usager n'a plus à fournir de justificatifs",
+    casUsagesTags: 'spf-simplification-dlnuf',
+    solutionsTags: 'spf-simplification-dlnuf',
+    buttonText: 'Solutions'
+  },
+  {
+    title: 'Niveau 3 : ⭐️⭐️⭐️ Proactivité',
+    description: "L'usager n'a plus de démarche à faire",
+    casUsagesTags: 'spf-simplification-proactivite',
+    solutionsTags: 'spf-simplification-proactivite',
+    buttonText: 'Solution'
   }
 ]
 </script>
@@ -188,16 +207,16 @@ const niveauxDeSimplification = [
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
         class="fr-col-12 fr-col-lg-4"
-        v-for="niveau in niveauxDeSimplification"
-        :key="niveau.title"
+        v-for="budget in budgets"
+        :key="budget.title"
       >
         <div class="fr-card" style="background-color: #fafafa">
           <div class="fr-card__body">
             <div class="fr-card__content">
               <h3 class="fr-card__title">
-                {{ niveau.title }}
+                {{ budget.title }}
               </h3>
-              <p class="fr-card__desc">{{ niveau.description }}</p>
+              <p class="fr-card__desc">{{ budget.description }}</p>
             </div>
             <div class="fr-card__footer">
               <ul
@@ -206,14 +225,14 @@ const niveauxDeSimplification = [
                 <li>
                   <a
                     class="fr-btn"
-                    :href="`/cas-d-usages?tags=${niveau.casUsagesTags}`"
+                    :href="`/cas-d-usages?tags=${budget.casUsagesTags}`"
                     >Cas d'usages</a
                   >
                 </li>
                 <li>
                   <a
                     class="fr-btn fr-btn--secondary"
-                    :href="`/solutions?tags=${niveau.solutionsTags}`"
+                    :href="`/solutions?tags=${budget.solutionsTags}`"
                     >Solutions</a
                   >
                 </li>
@@ -233,7 +252,7 @@ const niveauxDeSimplification = [
             >
               <img
                 class="fr-responsive-img"
-                :src="niveau.imageSrc"
+                :src="budget.imageSrc"
                 alt=""
                 style="max-height: 100%; width: auto"
               />
@@ -297,28 +316,86 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-  <div v-for="item in sectionsHomePage" :key="item">
-    <div class="fr-container hero-text">
-      <h4 v-if="item.title">{{ item.title }}</h4>
-      <span v-html="fromMarkdown(item.content)"></span>
-      <div class="fr-mt-4w fr-col-md-12 datagouv-components">
-        <SubSectionDatasets
-          v-if="item.sub_section_datasets"
-          :subsection="item.sub_section_datasets"
-        />
-        <SubSectionCards
-          v-if="item.sub_section_cards"
-          :subsection="item.sub_section_cards"
-        />
-        <SubSectionTiles
-          v-if="item.sub_section_tiles"
-          :subsection="item.sub_section_tiles"
-        />
-        <SubSectionButtons
-          v-if="item.sub_section_buttons"
-          :subsection="item.sub_section_buttons"
-        />
+  <div class="fr-container hero-text">
+    <h2
+      class="fr-h1 fr-mt-15w fr-mb-5w"
+      style="color: black; text-align: center"
+    >
+      La simplification en 3 niveaux
+    </h2>
+
+    <p class="fr-text--lg" style="text-align: center">
+      Il y a
+      <a href="/niveaux-simplification">plusieurs niveaux de simplification</a>
+      avec un effet positif croissant pour les usagers finaux. Pour chaque cas
+      d'usage et solution référencés sur <i>simplifions.data.gouv.fr</i>, le ou
+      les niveaux de simplification sont systématiquement indiqués :
+    </p>
+
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div
+        class="fr-col-12 fr-col-md-4"
+        v-for="niveau in niveauxDeSimplification"
+        :key="niveau.title"
+      >
+        <div class="fr-card" style="background-color: #fafafa">
+          <div class="fr-card__body">
+            <div class="fr-card__content">
+              <h3 class="fr-card__title">
+                <p class="fr-tag fr-text--lg">{{ niveau.title }}</p>
+              </h3>
+              <p class="fr-card__desc fr-h5">
+                {{ niveau.description }}
+              </p>
+            </div>
+            <div class="fr-card__footer">
+              <ul
+                class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg"
+              >
+                <li>
+                  <a
+                    class="fr-btn"
+                    :href="`/cas-d-usages?tags=${niveau.casUsagesTags}`"
+                    >Cas d'usages</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="fr-btn fr-btn--secondary"
+                    :href="`/solutions?tags=${niveau.solutionsTags}`"
+                    >{{ niveau.buttonText }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="fr-card__header">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 10px;
+                overflow: hidden;
+                margin-top: 0px;
+              "
+            ></div>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <div class="fr-mt-4w fr-col-md-12 datagouv-components">
+      <SubSectionButtons
+        :subsection="[
+          {
+            name: 'En savoir plus sur les niveaux de simplification',
+            url: '/niveaux-simplification',
+            class:
+              'fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          }
+        ]"
+      />
     </div>
   </div>
 </template>
