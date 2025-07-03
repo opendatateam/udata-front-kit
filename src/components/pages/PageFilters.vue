@@ -9,7 +9,7 @@ import { useFiltersState } from '@/utils/filters'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import CheckboxComponent from '../CheckboxComponent.vue'
-import SelectComponent from '../SelectComponent.vue'
+import FilterSelectComponent from '../FilterSelectComponent.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -79,7 +79,7 @@ onMounted(async () => {
       v-if="(filter.authenticated && loggedIn) || !filter.authenticated"
       class="fr-select-group"
     >
-      <SelectComponent
+      <FilterSelectComponent
         v-if="filter.type === 'select'"
         :default-option="filter.default_option"
         :label="filter.name"

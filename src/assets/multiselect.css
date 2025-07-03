@@ -60,6 +60,7 @@
 .multiselect-wrapper {
   --ms-radius: 0.25rem 0.25rem 0 0;
   --ms-caret-color: var(--border-plain-grey);
+  box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
 }
 /* dsfr-input style */
 .multiselect-search {

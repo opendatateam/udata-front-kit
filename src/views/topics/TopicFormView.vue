@@ -216,7 +216,8 @@ onMounted(() => {
           )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
-          const { datasets, reuses, ...data } = remoteTopic
+          // FIXME: remove datasets and reuses after API is migrated to elements
+          const { datasets, reuses, elements, ...data } = remoteTopic
           topic.value = data
         }
         setMetaTitle()
