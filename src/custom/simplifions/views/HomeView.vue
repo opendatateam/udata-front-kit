@@ -35,6 +35,33 @@ const fournisseursDeService = [
     description: "Tous les cas d'usages concernant les agents publics"
   }
 ]
+
+const niveauxDeSimplification = [
+  {
+    title: "Vous n'avez ni équipe technique, ni éditeur",
+    description:
+      "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique.",
+    casUsagesTags: 'simplifions-budget-aucun-developpement',
+    solutionsTags: 'simplifions-solutions-moyens-aucun',
+    imageSrc: '/simplifions/assets/accueil-picto-contract.png'
+  },
+  {
+    title: 'Vous passez par un éditeur',
+    description:
+      "Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.",
+    casUsagesTags: 'simplifions-budget-solution-editeur',
+    solutionsTags: 'simplifions-solutions-moyens-editeur',
+    imageSrc: '/simplifions/assets/accueil-picto-self-training.png'
+  },
+  {
+    title: 'Vous avez votre service informatique',
+    description:
+      "Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d'information.",
+    casUsagesTags: 'spf-budget-aucun-developpement',
+    solutionsTags: 'spf-budget-aucun-developpement,spf-moyens-aucun',
+    imageSrc: '/simplifions/assets/accueil-picto-coding.png'
+  }
+]
 </script>
 
 <template>
@@ -139,6 +166,81 @@ const fournisseursDeService = [
           }
         ]"
       />
+    </div>
+  </div>
+
+  <div class="fr-container hero-text">
+    <h2
+      class="fr-h1 fr-mt-15w fr-mb-5w"
+      style="color: black; text-align: center"
+    >
+      Quelques soient vos ressources, il existe des solutions !
+    </h2>
+
+    <p class="fr-text--lg" style="text-align: center">
+      Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou
+      non de ressources informatiques.
+      <br />
+      Filtrez les cas d'usages et les solutions selon vos possibilités
+      d'intégration :
+    </p>
+
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div
+        class="fr-col-12 fr-col-lg-4"
+        v-for="niveau in niveauxDeSimplification"
+        :key="niveau.title"
+      >
+        <div class="fr-card" style="background-color: #fafafa">
+          <div class="fr-card__body">
+            <div class="fr-card__content">
+              <h3 class="fr-card__title">
+                {{ niveau.title }}
+              </h3>
+              <p class="fr-card__desc">{{ niveau.description }}</p>
+            </div>
+            <div class="fr-card__footer">
+              <ul
+                class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg"
+              >
+                <li>
+                  <a
+                    class="fr-btn"
+                    :href="`/cas-d-usages?tags=${niveau.casUsagesTags}`"
+                    >Cas d'usages</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="fr-btn fr-btn--secondary"
+                    :href="`/solutions?tags=${niveau.solutionsTags}`"
+                    >Solutions</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="fr-card__header">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100px;
+                overflow: hidden;
+                margin-top: 10px;
+              "
+            >
+              <img
+                class="fr-responsive-img"
+                :src="niveau.imageSrc"
+                alt=""
+                style="max-height: 100%; width: auto"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
