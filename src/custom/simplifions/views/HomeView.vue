@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SubSectionButtons from '@/components/sections/SubSectionButtons.vue'
 import config from '@/config'
 
 const colorsBanner = config.website.home_banner_colors
@@ -174,17 +173,16 @@ const niveauxDeSimplification = [
         </div>
       </div>
     </div>
-    <div class="fr-mt-4w fr-col-md-12 datagouv-components">
-      <SubSectionButtons
-        :subsection="[
-          {
-            name: 'Tous les cas d\'usages',
-            url: 'cas-d-usages',
-            class:
-              'fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
-          }
-        ]"
-      />
+    <div
+      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
+    >
+      <router-link to="/cas-d-usages" class="button-link">
+        <button
+          class="fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
+        >
+          Tous les cas d'usages
+        </button>
+      </router-link>
     </div>
   </div>
 
@@ -302,17 +300,16 @@ const niveauxDeSimplification = [
       </li>
     </ul>
 
-    <div class="fr-mt-4w fr-col-md-12 datagouv-components">
-      <SubSectionButtons
-        :subsection="[
-          {
-            name: 'Consulter les ressources juridiques',
-            url: '', // Dorine, y'a rien dans cet url là
-            class:
-              'fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
-          }
-        ]"
-      />
+    <div
+      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
+    >
+      <router-link to="" class="button-link">
+        <button
+          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
+        >
+          Consulter les ressources juridiques
+        </button>
+      </router-link>
     </div>
   </div>
 
@@ -385,17 +382,16 @@ const niveauxDeSimplification = [
       </div>
     </div>
 
-    <div class="fr-mt-4w fr-col-md-12 datagouv-components">
-      <SubSectionButtons
-        :subsection="[
-          {
-            name: 'En savoir plus sur les niveaux de simplification',
-            url: '/niveaux-simplification',
-            class:
-              'fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
-          }
-        ]"
-      />
+    <div
+      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
+    >
+      <router-link to="/niveaux-simplification" class="button-link">
+        <button
+          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
+        >
+          En savoir plus sur les niveaux de simplification
+        </button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -426,5 +422,10 @@ const niveauxDeSimplification = [
 .hero-text {
   margin-top: 30px;
   text-align: left;
+}
+
+.button-link {
+  text-decoration: none;
+  background: none;
 }
 </style>
