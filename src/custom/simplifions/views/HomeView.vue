@@ -8,6 +8,33 @@ import { fromMarkdown } from '@/utils'
 
 const sectionsHomePage = config.website.homepage.sections
 const colorsBanner = config.website.home_banner_colors
+
+const fournisseursDeService = [
+  {
+    title: 'Particuliers',
+    emoji: '👱',
+    href: '/cas-d-usages?tags=simplifions-users-particuliers',
+    description: "Tous les cas d'usages concernant les particuliers"
+  },
+  {
+    title: 'Entreprises',
+    emoji: '💼',
+    href: '/cas-d-usages?tags=simplifions-users-entreprises',
+    description: "Tous les cas d'usages concernant les entreprises"
+  },
+  {
+    title: 'Associations',
+    emoji: '🤝',
+    href: '/cas-d-usages?tags=simplifions-users-associations',
+    description: "Tous les cas d'usages concernant les associations"
+  },
+  {
+    title: 'Agents publics',
+    emoji: '🧑‍💼',
+    href: '/cas-d-usages?tags=simplifions-users-agents-publics',
+    description: "Tous les cas d'usages concernant les agents publics"
+  }
+]
 </script>
 
 <template>
@@ -79,7 +106,11 @@ const colorsBanner = config.website.home_banner_colors
     </p>
 
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12 fr-col-lg-3">
+      <div
+        class="fr-col-12 fr-col-lg-3"
+        v-for="item in fournisseursDeService"
+        :key="item.title"
+      >
         <div
           class="fr-tile fr-tile--horizontal fr-enlarge-link"
           id="tile-sourcing"
@@ -87,72 +118,10 @@ const colorsBanner = config.website.home_banner_colors
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <h3 class="fr-tile__title fr-h3">
-                <a href="/cas-d-usages?tags=simplifions-users-particuliers"
-                  >Particuliers<br />👱</a
-                >
+                <a :href="item.href">{{ item.title }}<br />{{ item.emoji }}</a>
               </h3>
               <p class="fr-tile__detail fr-h6">
-                Tous les cas d'usages concernant les particuliers
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="fr-col-12 fr-col-lg-3">
-        <div
-          class="fr-tile fr-tile--horizontal fr-enlarge-link"
-          id="tile-sourcing"
-        >
-          <div class="fr-tile__body">
-            <div class="fr-tile__content">
-              <h3 class="fr-tile__title fr-h3">
-                <a href="/cas-d-usages?tags=simplifions-users-entreprises"
-                  >Entreprises<br />💼</a
-                >
-              </h3>
-              <p class="fr-tile__detail fr-h6">
-                Tous les cas d'usages concernant les entreprises
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="fr-col-12 fr-col-lg-3">
-        <div
-          class="fr-tile fr-tile--horizontal fr-enlarge-link"
-          id="tile-sourcing"
-        >
-          <div class="fr-tile__body">
-            <div class="fr-tile__content">
-              <h3 class="fr-tile__title fr-h3">
-                <a href="/cas-d-usages?tags=simplifions-users-associations"
-                  >Associations<br />🤝</a
-                >
-              </h3>
-              <p class="fr-tile__detail fr-h6">
-                Tous les cas d'usages concernant les associations
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="fr-col-12 fr-col-lg-3">
-        <div
-          class="fr-tile fr-tile--horizontal fr-enlarge-link"
-          id="tile-sourcing"
-        >
-          <div class="fr-tile__body">
-            <div class="fr-tile__content">
-              <h3 class="fr-tile__title fr-h3">
-                <a href="/cas-d-usages?tags=simplifions-users-agents-publics"
-                  >Agents publics<br />🧑‍💼</a
-                >
-              </h3>
-              <p class="fr-tile__detail fr-h6">
-                Tous les cas d'usages concernant les agents publics
+                {{ item.description }}
               </p>
             </div>
           </div>
