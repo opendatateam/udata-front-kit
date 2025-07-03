@@ -8,6 +8,7 @@ import {
   type DatasetProperties,
   type DatasetsGroups
 } from '@/model/topic'
+import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
 
@@ -44,14 +45,15 @@ const props = defineProps({
 
 const router = useRouter()
 const datasetStore = useDatasetStore()
-const { getErrorMessage } = useForm(formErrors)
+const { pageConf } = useCurrentPageConf()
+const { getErrorMessage } = useForm(formErrors, pageConf.labels.singular)
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const hasEditorialization = computed(() => {
   return (
     !!datasetProperties.value.title.trim() &&
-    !!datasetProperties.value.purpose.trim() &&
+    !!datasetProperties.value.purpose?.trim() &&
     (datasetProperties.value.group
       ? datasetProperties.value.group.trim().length < 100
       : true)

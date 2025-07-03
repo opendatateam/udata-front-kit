@@ -1,0 +1,1 @@
+# Guide pour la simplification

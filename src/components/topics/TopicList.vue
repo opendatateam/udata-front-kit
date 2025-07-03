@@ -6,6 +6,7 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import NoResults from '@/components/NoResults.vue'
+import TopicCard from '@/components/topics/TopicCard.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -26,7 +27,7 @@ const route = useRoute()
 const { query: routeQuery } = useRouteQueryAsString()
 const topicStore = useTopicStore()
 
-const { pageKey, pageConf } = useCurrentPageConf()
+const { meta, pageKey, pageConf } = useCurrentPageConf()
 
 const userStore = useUserStore()
 const { canAddTopic } = storeToRefs(userStore)
@@ -64,6 +65,20 @@ const executeQuery = async () => {
     .query({ ...route.query, ...props }, pageKey)
     .finally(() => loader.hide())
 }
+
+// load custom card component from router, or fallback to default
+const CardComponent = computed(() => {
+  const componentLoader = meta?.cardComponent
+  if (componentLoader) {
+    return defineAsyncComponent({
+      loader: componentLoader,
+      onError: (err) => {
+        console.error('Failed to load component:', err)
+      }
+    })
+  }
+  return TopicCard
+})
 
 const goToPage = (page: number) => {
   router.push({
@@ -116,7 +131,7 @@ defineExpose({
     <div class="fr-mb-4w border-top">
       <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
         <li v-for="topic in topics" :key="topic.id" class="fr-col-12">
-          <TopicCard :topic="topic" :page-key="pageKey" />
+          <CardComponent :topic="topic" :page-key="pageKey" />
         </li>
       </ul>
     </div>
