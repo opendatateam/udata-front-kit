@@ -305,13 +305,14 @@ const niveauxDeSimplification = [
     <div
       class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
     >
-      <router-link to="" class="button-link">
-        <button
-          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
-        >
-          Consulter les ressources juridiques
-        </button>
-      </router-link>
+      <!--a href="https://guides.data.gouv.fr/guide-data.gouv.fr/api/outils-pour-les-administrations" class="button-link" -->
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
+        disabled
+      >
+        Consulter les ressources juridiques
+      </button>
+      <!--/a-->
     </div>
   </div>
 
