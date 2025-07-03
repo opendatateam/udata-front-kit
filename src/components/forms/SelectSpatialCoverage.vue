@@ -69,7 +69,7 @@ onMounted(() => {
     :clear-on-search="true"
     :delay="0"
     :options="search"
-    placeholder=""
+    placeholder="Toutes les couvertures"
     :resolve-on-load="false"
     :searchable="true"
     :limit="10"
@@ -134,5 +134,9 @@ onMounted(() => {
   .level {
     display: block;
   }
+}
+
+:deep(.multiselect-placeholder) {
+  color: var(--text-label-grey);
 }
 </style>

@@ -55,9 +55,16 @@ onMounted(() => {
       useTopicStore()
         .load(props.objectId)
         .then((t: Topic) => {
-          reuseApi
-            .getReusesFromRel(t.reuses)
-            .then((data) => (reuses.value = data))
+          // FIXME: remove this case when API is fully migrated to elements
+          if (t.reuses) {
+            reuseApi
+              .getReusesFromRel(t.reuses)
+              .then((data) => (reuses.value = data))
+          } else if (t.elements) {
+            reuseApi
+              .getReusesFromElementsRel(t.elements)
+              .then((data) => (reuses.value = data))
+          }
         })
       break
     default:

@@ -19,6 +19,32 @@ export default class ReusesAPI extends DatagouvfrAPI {
     })
   }
 
+  async getReusesFromElementsRel(elements: Rel): Promise<Reuse[]> {
+    // make sure the request is for reuses only
+    const elementsUrl = new URL(elements.href)
+    elementsUrl.searchParams.set('class', 'Reuse')
+    // fetch paginated reuses elements
+    let url = elementsUrl.toString()
+    const reusesLinks = []
+    while (url) {
+      const response = await this.request({
+        url: url,
+        method: 'get'
+      })
+      reusesLinks.push(...response.data)
+      url = response.next_page
+    }
+    // fetch reuses from reuses elements
+    return await Promise.all(
+      reusesLinks.map((link) =>
+        this.request({
+          url: `${this.url()}/${link.element.id}/`,
+          method: 'get'
+        })
+      )
+    )
+  }
+
   /**
    * Get reuses from rel
    */

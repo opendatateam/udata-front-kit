@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
 import { useHead } from '@unhead/vue'
+import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -51,10 +52,20 @@ const setAccessibilityProperties = inject(
 ) as AccessibilityPropertiesType
 
 const description = computed(() => descriptionFromMarkdown(topic))
-const canEdit = computed(() => {
-  return useUserStore().hasEditPermissions(topic.value)
+
+// Dynamically load the custom description component if it exists
+const customDescriptionComponent = computed(() => {
+  if (meta.descriptionComponent) {
+    return defineAsyncComponent(meta.descriptionComponent as () => Promise<any>)
+  }
+  return null
 })
-const isAdmin = computed(() => useUserStore().isAdmin)
+
+const userStore = useUserStore()
+const canEdit = computed(() => {
+  return userStore.hasEditPermissions(topic.value)
+})
+const { isAdmin, canAddTopic } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.discussions.display
@@ -232,23 +243,30 @@ watch(
         class="fr-col-12"
         :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
-        <div class="topic__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <ul v-if="tags.length > 0" class="fr-badges-group">
-            <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-              <TagComponent :tag="t" />
-            </li>
-          </ul>
-        </div>
-        <div v-if="props.enableReadMore">
-          <ReadMore max-height="600">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="description" />
-          </ReadMore>
+        <!-- Use custom description component if defined, otherwise fallback to default HTML -->
+        <div v-if="meta.descriptionComponent && customDescriptionComponent">
+          <component :is="customDescriptionComponent" :topic="topic" />
         </div>
         <div v-else>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="description" />
+          <div class="topic__header fr-mb-4v">
+            <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
+            <ul v-if="tags.length > 0" class="fr-badges-group">
+              <li v-for="t in tags" :key="`${t.type}-${t.id}`">
+                <TagComponent :tag="t" />
+              </li>
+            </ul>
+          </div>
+
+          <div v-if="props.enableReadMore">
+            <ReadMore max-height="600">
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div v-html="description" />
+            </ReadMore>
+          </div>
+          <div v-else>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="description" />
+          </div>
         </div>
       </div>
       <div
@@ -265,6 +283,7 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
+              v-if="canAddTopic"
               secondary
               size="md"
               label="Cloner"
