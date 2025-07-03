@@ -1,5 +1,6 @@
 # udata-front-kit
 
+TEST
 Verticales thématiques adossées à [data.gouv.fr](https://www.data.gouv.fr/).
 
 ## Configuration
