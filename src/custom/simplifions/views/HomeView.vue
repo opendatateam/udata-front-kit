@@ -244,6 +244,59 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
+  <div class="fr-container hero-text">
+    <h2
+      class="fr-h1 fr-mt-15w fr-mb-5w"
+      style="color: black; text-align: center"
+    >
+      Pourquoi simplifier vos démarches avec la donnée ?
+    </h2>
+
+    <p class="fr-text--lg" style="text-align: center">
+      Administrations et collectivités, en intégrant des API ou des données dans
+      vos démarches et/ou votre système d'information, de nombreux avantages
+      s'offrent à vous et vos usagers :
+    </p>
+
+    <ul class="fr-mx-10w fr-grid-row fr-grid-row--gutters fr-text--lg">
+      <li class="fr-col-12 fr-col-md-4">
+        🗄 <b>Accéder facilement aux données administratives de vos usagers</b>,
+        qu'elles soient publiques ou protégées.
+      </li>
+      <li class="fr-col-12 fr-col-md-4">
+        ⏰ <b>Faire gagner du temps à vos agents instructeurs</b>. Ils n'ont pas
+        de vérifications supplémentaires à réaliser, les informations obtenues
+        sont certifiées 🔎.
+      </li>
+      <li class="fr-col-12 fr-col-md-4">
+        🎢 <b>Augmenter le pourcentage des démarches finalisées</b> car la
+        démarche est moins longue et moins complexe pour l'usager.
+      </li>
+      <li class="fr-col-12 fr-col-md-4">
+        📜 <b>Vous conformer avec la législation</b> en mettant en oeuvre les
+        principes de simplification tels que le <i>dîtes-le nous une fois</i> et
+        la proactivité.
+      </li>
+      <li class="fr-col-12 fr-col-md-4">
+        💌 <b>Réduire le taux de non recours</b>, plus particulièrement en
+        mettant en place des démarches proactives.
+      </li>
+    </ul>
+
+    <div class="fr-mt-4w fr-col-md-12 datagouv-components">
+      <SubSectionButtons
+        :subsection="[
+          {
+            name: 'Consulter les ressources juridiques',
+            url: '', // Dorine, y'a rien dans cet url là
+            class:
+              'fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill'
+          }
+        ]"
+      />
+    </div>
+  </div>
+
   <div v-for="item in sectionsHomePage" :key="item">
     <div class="fr-container hero-text">
       <h4 v-if="item.title">{{ item.title }}</h4>
