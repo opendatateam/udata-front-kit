@@ -7,25 +7,25 @@ const fournisseursDeService = [
   {
     title: 'Particuliers',
     emoji: '👱',
-    href: '/cas-d-usages?tags=simplifions-users-particuliers',
+    tags: 'simplifions-users-particuliers',
     description: "Tous les cas d'usages concernant les particuliers"
   },
   {
     title: 'Entreprises',
     emoji: '💼',
-    href: '/cas-d-usages?tags=simplifions-users-entreprises',
+    tags: 'simplifions-users-entreprises',
     description: "Tous les cas d'usages concernant les entreprises"
   },
   {
     title: 'Associations',
     emoji: '🤝',
-    href: '/cas-d-usages?tags=simplifions-users-associations',
+    tags: 'simplifions-users-associations',
     description: "Tous les cas d'usages concernant les associations"
   },
   {
     title: 'Agents publics',
     emoji: '🧑‍💼',
-    href: '/cas-d-usages?tags=simplifions-users-agents-publics',
+    tags: 'simplifions-users-agents-publics',
     description: "Tous les cas d'usages concernant les agents publics"
   }
 ]
@@ -124,10 +124,10 @@ const niveauxDeSimplification = [
                 aussi du temps !
               </p>
 
-              <a
+              <router-link
                 class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg"
-                href="/cas-d-usages"
-                >Tous les cas d'usages</a
+                to="/cas-d-usages"
+                >Tous les cas d'usages</router-link
               >
             </div>
           </div>
@@ -163,7 +163,9 @@ const niveauxDeSimplification = [
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <h3 class="fr-tile__title fr-h3">
-                <a :href="item.href">{{ item.title }}<br />{{ item.emoji }}</a>
+                <router-link :to="`/cas-d-usages?tags=${item.tags}`"
+                  >{{ item.title }}<br />{{ item.emoji }}</router-link
+                >
               </h3>
               <p class="fr-tile__detail fr-h6">
                 {{ item.description }}
@@ -221,17 +223,17 @@ const niveauxDeSimplification = [
                 class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg"
               >
                 <li>
-                  <a
+                  <router-link
                     class="fr-btn"
-                    :href="`/cas-d-usages?tags=${budget.casUsagesTags}`"
-                    >Cas d'usages</a
+                    :to="`/cas-d-usages?tags=${budget.casUsagesTags}`"
+                    >Cas d'usages</router-link
                   >
                 </li>
                 <li>
-                  <a
+                  <router-link
                     class="fr-btn fr-btn--secondary"
-                    :href="`/solutions?tags=${budget.solutionsTags}`"
-                    >Solutions</a
+                    :to="`/solutions?tags=${budget.solutionsTags}`"
+                    >Solutions</router-link
                   >
                 </li>
               </ul>
@@ -323,7 +325,9 @@ const niveauxDeSimplification = [
 
     <p class="fr-text--lg" style="text-align: center">
       Il y a
-      <a href="/niveaux-simplification">plusieurs niveaux de simplification</a>
+      <router-link to="/niveaux-simplification"
+        >plusieurs niveaux de simplification</router-link
+      >
       avec un effet positif croissant pour les usagers finaux. Pour chaque cas
       d'usage et solution référencés sur <i>simplifions.data.gouv.fr</i>, le ou
       les niveaux de simplification sont systématiquement indiqués :
@@ -350,17 +354,17 @@ const niveauxDeSimplification = [
                 class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-lg"
               >
                 <li>
-                  <a
+                  <router-link
                     class="fr-btn"
-                    :href="`/cas-d-usages?tags=${niveau.casUsagesTags}`"
-                    >Cas d'usages</a
+                    :to="`/cas-d-usages?tags=${niveau.casUsagesTags}`"
+                    >Cas d'usages</router-link
                   >
                 </li>
                 <li>
-                  <a
+                  <router-link
                     class="fr-btn fr-btn--secondary"
-                    :href="`/solutions?tags=${niveau.solutionsTags}`"
-                    >{{ niveau.buttonText }}</a
+                    :to="`/solutions?tags=${niveau.solutionsTags}`"
+                    >{{ niveau.buttonText }}</router-link
                   >
                 </li>
               </ul>
