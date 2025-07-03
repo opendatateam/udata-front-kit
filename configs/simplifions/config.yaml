@@ -231,7 +231,7 @@ pages:
           - id: proactivite
             name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
           - id: dlnuf
-            name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
+            name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
             name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
   # SOLUTIONS
@@ -343,6 +343,6 @@ pages:
           - id: proactivite
             name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
           - id: dlnuf
-            name: ⭐️⭐️ Dîtes-le nous une fois | L'usager n'a plus à fournir de justificatifs
+            name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
             name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information

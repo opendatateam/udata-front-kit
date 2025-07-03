@@ -66,7 +66,7 @@ const niveauxDeSimplification = [
     buttonText: 'Solutions'
   },
   {
-    title: 'Niveau 2 : ⭐️⭐️ Dîtes-le-nous une fois',
+    title: 'Niveau 2 : ⭐️⭐️ Dites-le-nous une fois',
     description: "L'usager n'a plus à fournir de justificatifs",
     casUsagesTags: 'simplifions-types-de-simplification-dlnuf',
     solutionsTags: 'simplifions-solutions-types-de-simplification-dlnuf',
@@ -293,7 +293,7 @@ const niveauxDeSimplification = [
       </li>
       <li class="fr-col-12 fr-col-md-4">
         📜 <b>Vous conformer avec la législation</b> en mettant en oeuvre les
-        principes de simplification tels que le <i>dîtes-le nous une fois</i> et
+        principes de simplification tels que le <i>dites-le nous une fois</i> et
         la proactivité.
       </li>
       <li class="fr-col-12 fr-col-md-4">
