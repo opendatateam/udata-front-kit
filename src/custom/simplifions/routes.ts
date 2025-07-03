@@ -8,6 +8,14 @@ const topicConf = {
 }
 
 export const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: 'home',
+    meta: {
+      title: 'Accueil'
+    },
+    component: async () => await import('./views/HomeView.vue')
+  },
   useTopicSearchPageRoutes({
     pageKey: 'cas-d-usages',
     metaTitle: "Cas d'usages",
