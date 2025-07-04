@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
 import { computed, type ComputedRef } from 'vue'
 
@@ -12,8 +13,7 @@ import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
 
-const topicsAPI = new TopicsAPI()
-const topicsAPIv2 = new TopicsAPI({ version: 2 })
+const topicsAPI = new TopicsAPI({ version: 2 })
 
 interface QueryArgs {
   query: string
@@ -76,7 +76,7 @@ export const useTopicStore = defineStore('topic', {
         tags
       )
 
-      const results = await topicsAPIv2.list({
+      const results = await topicsAPI.list({
         params: {
           q: query,
           tag: tagsWithUniverse,
@@ -97,7 +97,7 @@ export const useTopicStore = defineStore('topic', {
     async loadTopicsFromList(topics: TopicItemConf[]): Promise<Topic[]> {
       this.topics = []
       for (const topic of topics) {
-        const res = await topicsAPIv2.get({ entityId: topic.id })
+        const res = await topicsAPI.get({ entityId: topic.id })
         this.topics.push(res)
       }
       return this.topics
@@ -112,7 +112,7 @@ export const useTopicStore = defineStore('topic', {
       )
       // make sure our user has registerd its permissions
       await useUserStore().waitForStoreInit()
-      let response = await topicsAPIv2.list({
+      let response = await topicsAPI.list({
         params: {
           tag: tagsWithUniverse,
           include_private: 'yes',
@@ -123,9 +123,10 @@ export const useTopicStore = defineStore('topic', {
       })
       this.topics = response.data
       while (response.next_page !== null) {
-        response = await topicsAPIv2.request({
+        response = await topicsAPI.request({
           url: response.next_page,
-          method: 'get'
+          method: 'get',
+          authenticated: true
         })
         this.topics = [...this.topics, ...response.data]
       }
@@ -135,27 +136,46 @@ export const useTopicStore = defineStore('topic', {
      * Get a single topic from API
      */
     async load(slugOrId: string, params?: BaseParams): Promise<Topic> {
-      return await topicsAPIv2.get({ entityId: slugOrId, ...params })
+      return await topicsAPI.get({ entityId: slugOrId, ...params })
+    },
+    // FIXME: temporary fallback on api v1, remove after API is migrated to elements
+    async withVersionFallback<T>(
+      apiCall: (api: TopicsAPI, toasted: boolean) => Promise<T>
+    ): Promise<T> {
+      try {
+        return await apiCall(topicsAPI, false)
+      } catch (err) {
+        if (err instanceof AxiosError && err.response?.status === 405) {
+          const v1Api = new TopicsAPI({ version: 1 })
+          console.log('fallback, v1 API used', v1Api)
+          return await apiCall(v1Api, true)
+        }
+        throw err
+      }
     },
     /**
      * Create a topic
-     * WARNING: returns a V1 payload
      */
     async create(topicData: object): Promise<Topic> {
-      return await topicsAPI.create({ data: topicData })
+      return await this.withVersionFallback((api, toasted) =>
+        api.create({ data: topicData, toasted })
+      )
     },
     /**
      * Update a topic
-     * WARNING: returns a V1 payload
      */
     async update(topicId: string, data: object): Promise<Topic> {
-      return await topicsAPI.update({ entityId: topicId, data })
+      return await this.withVersionFallback((api, toasted) =>
+        api.update({ entityId: topicId, data, toasted })
+      )
     },
     /**
      * Delete a topic
      */
     async delete(topicId: string) {
-      await topicsAPI.delete({ entityId: topicId })
+      await this.withVersionFallback((api, toasted) =>
+        api.delete({ entityId: topicId, toasted })
+      )
     }
   }
 })
