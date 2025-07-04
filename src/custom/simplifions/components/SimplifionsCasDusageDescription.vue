@@ -132,7 +132,7 @@ const topicRef = ref(props.topic)
 const tags = useTagsByRef(props.pageKey, topicRef)
 
 const casUsage = (props.topic.extras as any)[
-  'simplifions-cas-usages'
+  'simplifions-cas-d-usages'
 ] as Record<string, any>
 
 // const grouped_reco_solutions = casUsage.reco_solutions.reduce((acc: Record<string, any[]>, reco_solution: any) => {

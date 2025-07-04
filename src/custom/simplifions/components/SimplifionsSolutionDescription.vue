@@ -47,6 +47,23 @@
         }}</time>
       </div>
     </div>
+
+    <figure
+      aria-label="© Légende de l‘image"
+      role="group"
+      class="fr-content-media"
+    >
+      <div class="example-image fr-content-media__img">
+        <img
+          alt="Exemple d'interface de l'annuaire des entreprises"
+          :src="solution.Image_principale[0]"
+          class="fr-responsive-img fr-ratio-16x9"
+        />
+      </div>
+      <figcaption class="fr-content-media__caption">
+        {{ solution.Legende_image_principale }}
+      </figcaption>
+    </figure>
   </div>
 </template>
 
@@ -59,6 +76,19 @@ h2.colored-title {
 }
 h3 {
   color: #616161;
+}
+.example-image {
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  border: 4px solid #000;
+}
+
+.example-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
 }
 </style>
 
