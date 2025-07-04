@@ -30,6 +30,8 @@ export const routes: RouteRecordRaw[] = [
     metaTitle: 'Solutions',
     topicConf,
     cardComponent: async () =>
-      await import('./components/SimplifionsSolutionCard.vue')
+      await import('./components/SimplifionsSolutionCard.vue'),
+    descriptionComponent: async () =>
+      await import('./components/SimplifionsSolutionDescription.vue')
   })
 ]
