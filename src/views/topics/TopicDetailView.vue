@@ -245,7 +245,11 @@ watch(
       >
         <!-- Use custom description component if defined, otherwise fallback to default HTML -->
         <div v-if="meta.descriptionComponent && customDescriptionComponent">
-          <component :is="customDescriptionComponent" :topic="topic" />
+          <component
+            :is="customDescriptionComponent"
+            :topic="topic"
+            :pageKey="pageKey"
+          />
         </div>
         <div v-else>
           <div class="topic__header fr-mb-4v">

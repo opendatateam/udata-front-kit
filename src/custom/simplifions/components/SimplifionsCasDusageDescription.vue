@@ -13,6 +13,12 @@
         <p class="fr-text--lead">
           {{ casUsage.Description_longue }}
         </p>
+
+        <ul v-if="tags.length > 0" class="fr-badges-group fr-mt-2w">
+          <li v-for="t in tags" :key="`${t.type}-${t.id}`">
+            <TagComponent :tag="t" />
+          </li>
+        </ul>
       </div>
 
       <div class="fr-col-12 fr-col-md-4">
@@ -110,13 +116,20 @@ h3 {
 </style>
 
 <script setup lang="ts">
+import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import { fromMarkdown } from '@/utils'
+import { useTagsByRef } from '@/utils/tags'
+import { ref } from 'vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 
 const props = defineProps<{
   topic: Topic
+  pageKey: string
 }>()
+
+const topicRef = ref(props.topic)
+const tags = useTagsByRef(props.pageKey, topicRef)
 
 const casUsage = (props.topic.extras as any)[
   'simplifions-cas-usages'
