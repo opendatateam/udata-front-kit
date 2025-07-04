@@ -28,7 +28,10 @@ export const routes: RouteRecordRaw[] = [
   useTopicSearchPageRoutes({
     pageKey: 'solutions',
     metaTitle: 'Solutions',
-    topicConf
-    // cardComponent: async () => await import('./components/SimplifionsCasDusageCard.vue')
+    topicConf,
+    cardComponent: async () =>
+      await import('./components/SimplifionsSolutionCard.vue'),
+    descriptionComponent: async () =>
+      await import('./components/SimplifionsSolutionDescription.vue')
   })
 ]
