@@ -10,9 +10,15 @@
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <p class="fr-tile__title fr-text--lead">
-                <a :href="reco_solution.url_solution">{{
-                  reco_solution.Nom_de_la_solution_publique
-                }}</a>
+                <router-link
+                  v-if="relatedSolution"
+                  :to="`/solutions/${relatedSolution.slug}`"
+                >
+                  {{ reco_solution.Nom_de_la_solution_publique }}
+                </router-link>
+                <a v-else :href="reco_solution.url_solution">
+                  {{ reco_solution.Nom_de_la_solution_publique }}
+                </a>
                 <br />
                 <span class="fr-text-xs">En savoir plus</span>
               </p>
@@ -20,7 +26,7 @@
           </div>
           <div class="fr-tile__header">
             <img
-              :src="gristImageUrl(reco_solution.image_principale[0])"
+              :src="gristImageUrl(reco_solution.image_principale?.[0])"
               class="fr-responsive-img fr-ratio-16x9"
             />
           </div>
@@ -85,6 +91,9 @@
 </style>
 
 <script setup lang="ts">
+import type { Topic } from '@/model/topic'
+import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import { onMounted, ref } from 'vue'
 import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
@@ -92,4 +101,45 @@ const props = defineProps<{
 }>()
 
 const reco_solution = props.reco_solution
+
+// Reactive variable for the related solution
+const relatedSolution = ref<Topic | null>(null)
+
+// API instance for fetching topics
+const topicsAPI = new TopicsAPI({ version: 2 })
+
+// Function to fetch the related solution
+const fetchRelatedSolution = async () => {
+  if (!reco_solution?.solution_slug) return
+
+  try {
+    // Fetch all solutions topics
+    const response = await topicsAPI.list({
+      params: {
+        tag: 'simplifions-solutions',
+        page_size: 100 // Fetch a large number to get all potential matches
+      }
+    })
+
+    // Find the solution that matches the solution_slug (take the last one)
+    const matchingSolutions = response.data.filter((topic: Topic) => {
+      const solutionExtras = (topic.extras as any)['simplifions-solutions']
+      if (!solutionExtras) return false
+
+      return solutionExtras.slug === reco_solution.solution_slug
+    })
+    relatedSolution.value =
+      matchingSolutions.length > 0
+        ? matchingSolutions[matchingSolutions.length - 1]
+        : null
+  } catch (error) {
+    console.error('Error fetching related solution:', error)
+    relatedSolution.value = null
+  }
+}
+
+// Fetch related solution when component mounts
+onMounted(() => {
+  fetchRelatedSolution()
+})
 </script>

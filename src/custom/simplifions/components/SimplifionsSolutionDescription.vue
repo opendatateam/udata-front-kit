@@ -56,7 +56,7 @@
       <div class="example-image fr-content-media__img">
         <img
           alt="Exemple d'interface de l'annuaire des entreprises"
-          :src="gristImageUrl(solution.Image_principale[0])"
+          :src="gristImageUrl(solution.Image_principale?.[0])"
           class="fr-responsive-img fr-ratio-16x9"
         />
       </div>
@@ -291,15 +291,6 @@ const fetchRelatedCasUsages = async () => {
           (recoSolution: any) => recoSolution.solution_slug === solution.slug
         )
         if (foundBySlug) return true
-      }
-
-      // Check for Solutions_publiques_recommandees array with numeric IDs
-      if (casUsageExtras.Solutions_publiques_recommandees?.length > 0) {
-        const foundById =
-          casUsageExtras.Solutions_publiques_recommandees.includes(
-            solution.Solution_publique
-          )
-        if (foundById) return true
       }
 
       return false
