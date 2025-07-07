@@ -64,6 +64,34 @@
         {{ solution.Legende_image_principale }}
       </figcaption>
     </figure>
+
+    <h2>Caractéristiques de la solution</h2>
+    <ul>
+      <li><strong>Opérateur :</strong>{{ solution.operateur_nom }}</li>
+      <li>
+        <strong>Type de solution :</strong>
+        {{ solution.types_de_solution.join(' ou ') }}
+      </li>
+      <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
+      <li>
+        <strong>Moyens requis pour la mise en oeuvre :</strong>
+        <TagComponent
+          :tag="t"
+          v-for="t in tags_budget"
+          :key="`${t.type}-${t.id}`"
+          class="inline-tag"
+        />
+      </li>
+      <li>
+        <strong>Niveau de simplification :</strong>
+        <TagComponent
+          :tag="t"
+          v-for="t in tags_niveau_simplification"
+          :key="`${t.type}-${t.id}`"
+          class="inline-tag"
+        />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -90,6 +118,12 @@ h3 {
   height: auto;
   border-radius: 4px;
 }
+
+.inline-tag {
+  display: inline-flex;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}
 </style>
 
 <script setup lang="ts">
@@ -108,6 +142,10 @@ const props = defineProps<{
 
 const topicRef = ref(props.topic)
 const tags = useTagsByRef(props.pageKey, topicRef)
+const tags_niveau_simplification = tags.value.filter(
+  (t: any) => t.type === 'types-de-simplification'
+)
+const tags_budget = tags.value.filter((t: any) => t.type === 'budget')
 
 const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<
   string,
