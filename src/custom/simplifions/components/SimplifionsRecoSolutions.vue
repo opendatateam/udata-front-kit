@@ -110,28 +110,18 @@ const topicsAPI = new TopicsAPI({ version: 2 })
 
 // Function to fetch the related solution
 const fetchRelatedSolution = async () => {
-  if (!reco_solution?.solution_slug) return
+  // Check if we have a solution topic ID to fetch
+  if (!reco_solution?.solution_topic_id) {
+    relatedSolution.value = null
+    return
+  }
 
   try {
-    // Fetch all solutions topics
-    const response = await topicsAPI.list({
-      params: {
-        tag: 'simplifions-solutions',
-        page_size: 100 // Fetch a large number to get all potential matches
-      }
+    // Fetch the specific solution topic by its ID
+    const topic = await topicsAPI.get({
+      entityId: reco_solution.solution_topic_id
     })
-
-    // Find the solution that matches the solution_slug (take the last one)
-    const matchingSolutions = response.data.filter((topic: Topic) => {
-      const solutionExtras = (topic.extras as any)['simplifions-solutions']
-      if (!solutionExtras) return false
-
-      return solutionExtras.slug === reco_solution.solution_slug
-    })
-    relatedSolution.value =
-      matchingSolutions.length > 0
-        ? matchingSolutions[matchingSolutions.length - 1]
-        : null
+    relatedSolution.value = topic
   } catch (error) {
     console.error('Error fetching related solution:', error)
     relatedSolution.value = null
