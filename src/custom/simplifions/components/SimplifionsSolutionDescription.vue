@@ -256,45 +256,23 @@ const topicsAPI = new TopicsAPI({ version: 2 })
 
 // Function to fetch related cas d'usages
 const fetchRelatedCasUsages = async () => {
-  if (!solution?.slug) return
+  // Check if we have topic IDs to fetch
+  if (!solution?.cas_d_usages_topics_ids?.length) {
+    relatedCasUsages.value = []
+    return
+  }
 
   loading.value = true
   try {
-    // Fetch all cas d'usages topics
-    const response = await topicsAPI.list({
-      params: {
-        tag: 'simplifions-cas-d-usages',
-        page_size: 100 // Fetch a large number to get all potential matches
-      }
-    })
+    // Fetch only the specific topics by their IDs
+    const topicPromises = solution.cas_d_usages_topics_ids.map(
+      (topicId: string) => topicsAPI.get({ entityId: topicId })
+    )
 
-    console.log("Fetched cas d'usages topics:", response.data.length)
-    console.log('Current solution:', {
-      slug: solution.slug,
-      id: solution.Solution_publique || solution.id || props.topic.id
-    })
+    const topics = await Promise.all(topicPromises)
+    relatedCasUsages.value = topics
 
-    // *****************************************************
-    // Note : This is not ideal, we should do this filtering
-    // once in the backend and reference the topics ids in
-    // the solution's metadata.
-    // *****************************************************
-
-    // Filter topics that reference this solution in their reco_solutions
-    relatedCasUsages.value = response.data.filter((topic: Topic) => {
-      const casUsageExtras = (topic.extras as any)['simplifions-cas-d-usages']
-      if (!casUsageExtras) return false
-
-      // Check for reco_solutions array with solution_slug matching
-      if (casUsageExtras.reco_solutions?.length > 0) {
-        const foundBySlug = casUsageExtras.reco_solutions.some(
-          (recoSolution: any) => recoSolution.solution_slug === solution.slug
-        )
-        if (foundBySlug) return true
-      }
-
-      return false
-    })
+    console.log("Fetched related cas d'usages:", topics.length)
   } catch (error) {
     console.error("Error fetching related cas d'usages:", error)
     relatedCasUsages.value = []
