@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-mb-8w">
+  <div class="">
     <p class="fr-text--small">
       <em>{{ solution.Description_courte }}</em>
     </p>
@@ -130,12 +130,48 @@
       </p>
 
       <h2 class="colored-title fr-h2 fr-my-5w">Cas d'usages simplifiables</h2>
-
-      <p></p>
-      <!-- TODO: Ajouter les cas d'usages simplifiables -->
-
-      <h2 class="colored-title fr-h2 fr-my-5w">Données et API utilisées</h2>
     </div>
+
+    <div v-if="loading" class="fr-text--center fr-my-4w">
+      <span
+        class="fr-icon-loader-line fr-icon--rotate"
+        aria-hidden="true"
+      ></span>
+      Chargement des cas d'usages...
+    </div>
+    <div
+      v-else-if="relatedCasUsages.length > 0"
+      class="fr-grid-row fr-grid-row--gutters"
+    >
+      <div
+        v-for="casUsage in relatedCasUsages"
+        :key="casUsage.id"
+        class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-3w"
+      >
+        <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
+          <div class="fr-tile__body">
+            <div class="fr-tile__content">
+              <h3 class="fr-tile__title">
+                <router-link :to="`/cas-d-usages/${casUsage.slug}`">
+                  {{ casUsage.name }}
+                </router-link>
+              </h3>
+              <p class="fr-tile__detail">
+                {{ casUsage.description || 'Aucune description disponible' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p v-else class="fr-text--sm">
+      Aucun cas d'usage ne référence cette solution pour le moment.
+    </p>
+
+    <h2 class="colored-title fr-h2 fr-mt-8w fr-mb-0">
+      Données et API utilisées
+    </h2>
   </div>
 </template>
 
@@ -168,16 +204,30 @@ h3 {
   margin-right: 0.5em;
   margin-left: 0.5em;
 }
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fr-icon--rotate {
+  animation: rotate 1s linear infinite;
+}
 </style>
 
 <script setup lang="ts">
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
+import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const props = defineProps<{
   topic: Topic
@@ -195,4 +245,68 @@ const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<
   string,
   any
 >
+
+// Reactive variables for cas d'usages
+const loading = ref(false)
+const relatedCasUsages = ref<Topic[]>([])
+
+// API instance for fetching topics
+const topicsAPI = new TopicsAPI({ version: 2 })
+
+// Function to fetch related cas d'usages
+const fetchRelatedCasUsages = async () => {
+  if (!solution?.slug) return
+
+  loading.value = true
+  try {
+    // Fetch all cas d'usages topics
+    const response = await topicsAPI.list({
+      params: {
+        tag: 'simplifions-cas-d-usages',
+        page_size: 100 // Fetch a large number to get all potential matches
+      }
+    })
+
+    console.log("Fetched cas d'usages topics:", response.data.length)
+    console.log('Current solution:', {
+      slug: solution.slug,
+      id: solution.Solution_publique || solution.id || props.topic.id
+    })
+
+    // Filter topics that reference this solution in their reco_solutions
+    relatedCasUsages.value = response.data.filter((topic: Topic) => {
+      const casUsageExtras = (topic.extras as any)['simplifions-cas-d-usages']
+      if (!casUsageExtras) return false
+
+      // Check for reco_solutions array with solution_slug matching
+      if (casUsageExtras.reco_solutions?.length > 0) {
+        const foundBySlug = casUsageExtras.reco_solutions.some(
+          (recoSolution: any) => recoSolution.solution_slug === solution.slug
+        )
+        if (foundBySlug) return true
+      }
+
+      // Check for Solutions_publiques_recommandees array with numeric IDs
+      if (casUsageExtras.Solutions_publiques_recommandees?.length > 0) {
+        const solutionId =
+          solution.Solution_publique || solution.id || props.topic.id
+        const foundById =
+          casUsageExtras.Solutions_publiques_recommandees.includes(solutionId)
+        if (foundById) return true
+      }
+
+      return false
+    })
+  } catch (error) {
+    console.error("Error fetching related cas d'usages:", error)
+    relatedCasUsages.value = []
+  } finally {
+    loading.value = false
+  }
+}
+
+// Fetch related cas d'usages when component mounts
+onMounted(() => {
+  fetchRelatedCasUsages()
+})
 </script>
