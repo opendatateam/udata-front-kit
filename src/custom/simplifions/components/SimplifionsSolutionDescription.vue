@@ -65,33 +65,77 @@
       </figcaption>
     </figure>
 
-    <h2>Caractéristiques de la solution</h2>
-    <ul>
-      <li><strong>Opérateur :</strong>{{ solution.operateur_nom }}</li>
-      <li>
-        <strong>Type de solution :</strong>
-        {{ solution.types_de_solution.join(' ou ') }}
-      </li>
-      <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
-      <li>
-        <strong>Moyens requis pour la mise en oeuvre :</strong>
-        <TagComponent
-          :tag="t"
-          v-for="t in tags_budget"
-          :key="`${t.type}-${t.id}`"
-          class="inline-tag"
-        />
-      </li>
-      <li>
-        <strong>Niveau de simplification :</strong>
-        <TagComponent
-          :tag="t"
-          v-for="t in tags_niveau_simplification"
-          :key="`${t.type}-${t.id}`"
-          class="inline-tag"
-        />
-      </li>
-    </ul>
+    <div class="fr-col-12 fr-col-md-8">
+      <h2>Caractéristiques de la solution</h2>
+      <ul>
+        <li><strong>Opérateur :</strong>{{ solution.operateur_nom }}</li>
+        <li>
+          <strong>Type de solution :</strong>
+          {{ solution.types_de_solution.join(' ou ') }}
+        </li>
+        <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
+        <li>
+          <strong>Moyens requis pour la mise en oeuvre :</strong>
+          <TagComponent
+            :tag="t"
+            v-for="t in tags_budget"
+            :key="`${t.type}-${t.id}`"
+            class="inline-tag"
+          />
+        </li>
+        <li>
+          <strong>Niveau de simplification :</strong>
+          <TagComponent
+            :tag="t"
+            v-for="t in tags_niveau_simplification"
+            :key="`${t.type}-${t.id}`"
+            class="inline-tag"
+          />
+        </li>
+      </ul>
+
+      <h2>Description</h2>
+      <p v-html="fromMarkdown(solution.Description_longue)"></p>
+
+      <p>
+        <span
+          aria-hidden="true"
+          style="color: #27a658"
+          class="fr-icon-success-fill"
+        ></span>
+        <strong>Cette solution permet :</strong>
+      </p>
+
+      <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
+
+      <p>
+        <span
+          aria-hidden="true"
+          style="color: #ff292f"
+          class="fr-icon-error-fill"
+        ></span>
+        <strong> Cette solution ne permet pas :</strong>
+      </p>
+
+      <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
+
+      <p>
+        <a
+          rel="noopener noreferrer"
+          :href="solution.URL_Consulter_la_solution_"
+          class="fr-btn fr-my-4w"
+        >
+          Consulter le site de la solution
+        </a>
+      </p>
+
+      <h2 class="colored-title fr-h2 fr-my-5w">Cas d'usages simplifiables</h2>
+
+      <p></p>
+      <!-- TODO: Ajouter les cas d'usages simplifiables -->
+
+      <h2 class="colored-title fr-h2 fr-my-5w">Données et API utilisées</h2>
+    </div>
   </div>
 </template>
 
@@ -130,7 +174,7 @@ h3 {
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
-import { formatDate } from '@/utils'
+import { formatDate, fromMarkdown } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { ref } from 'vue'
