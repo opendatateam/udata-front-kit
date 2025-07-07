@@ -295,10 +295,10 @@ const fetchRelatedCasUsages = async () => {
 
       // Check for Solutions_publiques_recommandees array with numeric IDs
       if (casUsageExtras.Solutions_publiques_recommandees?.length > 0) {
-        const solutionId =
-          solution.Solution_publique || solution.id || props.topic.id
         const foundById =
-          casUsageExtras.Solutions_publiques_recommandees.includes(solutionId)
+          casUsageExtras.Solutions_publiques_recommandees.includes(
+            solution.Solution_publique
+          )
         if (foundById) return true
       }
 
