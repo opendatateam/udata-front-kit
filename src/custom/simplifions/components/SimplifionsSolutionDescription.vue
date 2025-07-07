@@ -152,9 +152,9 @@
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <h3 class="fr-tile__title">
-                <router-link :to="`/cas-d-usages/${casUsage.slug}`">
+                <a href="/cas-d-usages/{{casUsage.slug}}">
                   {{ casUsage.name }}
-                </router-link>
+                </a>
               </h3>
               <p class="fr-tile__detail">
                 {{ casUsage.description || 'Aucune description disponible' }}

@@ -10,12 +10,12 @@
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <p class="fr-tile__title fr-text--lead">
-                <router-link
+                <a
                   v-if="relatedSolution"
-                  :to="`/solutions/${relatedSolution.slug}`"
+                  :href="`/solutions/${relatedSolution.slug}`"
                 >
                   {{ reco_solution.Nom_de_la_solution_publique }}
-                </router-link>
+                </a>
                 <a v-else :href="reco_solution.url_solution">
                   {{ reco_solution.Nom_de_la_solution_publique }}
                 </a>
