@@ -56,7 +56,7 @@
       <div class="example-image fr-content-media__img">
         <img
           alt="Exemple d'interface de l'annuaire des entreprises"
-          :src="solution.Image_principale[0]"
+          :src="gristImageUrl(solution.Image_principale[0])"
           class="fr-responsive-img fr-ratio-16x9"
         />
       </div>
@@ -228,6 +228,7 @@ import { formatDate, fromMarkdown } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
+import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
   topic: Topic

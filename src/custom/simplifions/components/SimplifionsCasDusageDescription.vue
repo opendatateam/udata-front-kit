@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-mb-8w">
+  <div class="">
     <p class="fr-text--small">
       <em>{{ casUsage.Description_courte }}</em>
     </p>
@@ -63,27 +63,30 @@
       </div>
     </div>
 
-    <h2 class="fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
+    <div class="fr-col-12 fr-col-md-8">
+      <h2 class="fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
 
-    <h3 class="fr-h6">
-      <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
-      Contexte
-    </h3>
+      <h3 class="fr-h6">
+        <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
+        Contexte
+      </h3>
 
-    <p v-html="fromMarkdown(casUsage.Contexte)"></p>
+      <p v-html="fromMarkdown(casUsage.Contexte)"></p>
 
-    <h3 class="fr-h6">
-      <span aria-hidden="true" class="fr-icon-newspaper-fill"></span>
-      Cadre juridique
-    </h3>
+      <h3 class="fr-h6">
+        <span aria-hidden="true" class="fr-icon-newspaper-fill"></span>
+        Cadre juridique
+      </h3>
 
-    <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
+      <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
+    </div>
 
     <h2 class="fr-h2 fr-my-5w">Solutions disponibles</h2>
 
     <div
       v-for="(title, index) in Object.keys(grouped_reco_solutions)"
       :key="title"
+      class="fr-mb-4w"
     >
       <h3 class="fr-h3 fr-mb-3w">{{ index + 1 }}. {{ title }}</h3>
 
@@ -94,6 +97,10 @@
         <SimplifionsRecoSolutions :reco_solution="reco_solution" />
       </div>
     </div>
+
+    <h2 class="fr-h2 fr-mt-5w fr-mb-0">
+      ➡️ Utiliser les jeux de données et API utiles
+    </h2>
   </div>
 </template>
 
