@@ -273,6 +273,12 @@ const fetchRelatedCasUsages = async () => {
       id: solution.Solution_publique || solution.id || props.topic.id
     })
 
+    // *****************************************************
+    // Note : This is not ideal, we should do this filtering
+    // once in the backend and reference the topics ids in
+    // the solution's metadata.
+    // *****************************************************
+
     // Filter topics that reference this solution in their reco_solutions
     relatedCasUsages.value = response.data.filter((topic: Topic) => {
       const casUsageExtras = (topic.extras as any)['simplifions-cas-d-usages']
