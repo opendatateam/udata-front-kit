@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <p class="fr-text--small">
       <em>{{ casUsage.Description_courte }}</em>
     </p>
