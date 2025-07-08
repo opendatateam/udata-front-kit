@@ -68,22 +68,22 @@ npm run format
 
 ### 🔍 Déploiement en preview
 
-#### Déploiement automatique en preview
+Les **review apps** ne sont **plus créées automatiquement** lors de l'ouverture d'une Pull Request. L'auteur de la PR doit **déployer manuellement** les PR qu'il souhaite tester, via l'interface de GitHub Actions.
 
-Les **review apps** sont automatiquement créées lors de l'ouverture d'une Pull Request depuis la branche `main`. Chaque PR génère automatiquement des environnements de preview pour tous les sites configurés dans le [workflow de review apps](.github/workflows/review-app.yml) (ex: `ecospheres-preview`, `meteo-france-preview`, `logistique-preview`).
+> **💡 Info** : Une fois qu'une review app est créée pour une PR, elle sera **automatiquement mise à jour** à chaque nouveau commit sur la PR.
 
 **URLs générées** : `https://deploy-preview-{PR_NUMBER}--{SITE}.sandbox.data.developpement-durable.gouv.fr`
 
-#### Déploiement manuel en preview
+#### Comment créer une review app
 
-Pour déployer manuellement une PR spécifique vers un site particulier :
+Pour créer une review app pour votre PR :
 
 1. **Aller dans l'onglet "Actions"** du dépôt GitHub
 2. **Sélectionner "Deploy review app"** dans la liste des workflows
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
    - **Site** : Le site à déployer (dropdown)
-   - **Pull Request number** : Le numéro de la PR à déployer
+   - **Pull Request number** : Le numéro de votre PR
 5. **Cliquer sur "Run workflow"**
 
 ### 🏭 Déploiement en preprod et en production
