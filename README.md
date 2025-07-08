@@ -75,7 +75,7 @@ Le déploiement des verticales thématiques s'effectue via un workflow GitHub qu
 ```
 
 **Paramètres :**
-- **ENV** : `prod` ou `demo`
+- **ENV** : `prod` ou, soit `demo` soit `preprod` suivant la verticale
 - **CONFIG_NAME** : nom de la configuration (actuellement `ecologie`, `meteo`, `defis` ou `simplifions`)
 - **VERSION_PART** : `major`, `minor` ou `patch`
 
