@@ -51,7 +51,6 @@
                 >
                   <a
                     :href="`#solution-${index + 1}`"
-                    id="summary-link-2-1"
                     class="fr-summary__link"
                     >{{ title }}</a
                   >
