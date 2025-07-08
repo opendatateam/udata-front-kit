@@ -177,7 +177,7 @@ pages:
     discussions:
       display: true
       create: true
-    filters:
+    filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
@@ -220,7 +220,7 @@ pages:
             name: Aucun développement, ni budget
           - id: avec-des-moyens-techniques
             name: Avec des moyens techniques
-          - id: savec-solution-editeur
+          - id: avec-solution-editeur
             name: Avec une solution éditeur
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
@@ -239,7 +239,7 @@ pages:
     list_all: true
     universe_query:
       tag: simplifions-solutions
-    tag_prefix: simplifions-solutions
+    tag_prefix: simplifions
     title: Solutions
     breadcrumb_title:
     labels:
@@ -251,26 +251,14 @@ pages:
     discussions:
       display: true
       create: true
-    filters:
-      - name: 'Dans le cadre de :'
-        id: cadre
-        type: select
-        default_option: Tous les cas d'usages
-        use_tag_prefix: true
-        values:
-          - id: marches-publics
-            name: Marchés publics
-          - id: aides-publiques
-            name: Aides publiques entreprises
-          - id: tarification-sociale-solidaire
-            name: Tarification sociale/solidaire
+    filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
-        id: destination
+        id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'administrations
         use_tag_prefix: true
         values:
-          - id: communes
+          - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
             name: Communes
           - id: departements
             name: Départements
@@ -283,7 +271,7 @@ pages:
           - id: autres
             name: Autres
       - name: 'Pour simplifier les démarches de :'
-        id: demarches
+        id: target-users
         type: select
         default_option: Tous les usagers
         use_tag_prefix: true
@@ -297,43 +285,17 @@ pages:
           - id: agents-publics
             name: Agents publics
       - name: 'Moyens disponibles pour la mise en œuvre :'
-        id: moyens
+        id: budget
         type: select
         default_option: Tous les types de ressources
         use_tag_prefix: true
         values:
-          - id: aucun
+          - id: aucun-developpement-ni-budget
             name: Aucun développement, ni budget
-          - id: techniques
+          - id: avec-des-moyens-techniques
             name: Avec des moyens techniques
-          - id: editeur
+          - id: avec-solution-editeur
             name: Avec une solution éditeur
-      - name: 'Type de solutions :'
-        id: type-solutions
-        type: select
-        default_option: Tous les types de solutions
-        use_tag_prefix: true
-        values:
-          - id: formulaire-en-ligne
-            name: Formulaire en ligne
-          - id: portail-de-donnees
-            name: Portail de données
-          - id: annuaire
-            name: Annuaire
-          - id: api
-            name: Bouquet d'API
-          - id: hub
-            name: Hub d'échange
-      - name: 'Caractéristiques :'
-        id: caracteristiques
-        type: select
-        default_option: Tous les types de solutions
-        use_tag_prefix: true
-        values:
-          - id: donnees-protegees
-            name: Avec accès à des données protégées
-          - id: gratuite
-            name: Gratuite
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
         type: select
@@ -346,3 +308,32 @@ pages:
             name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
             name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
+
+      # TODO
+      # - name: 'Type de solutions :'
+      #   id: type-solutions
+      #   type: select
+      #   default_option: Tous les types de solutions
+      #   use_tag_prefix: true
+      #   values:
+      #     - id: formulaire-en-ligne
+      #       name: Formulaire en ligne
+      #     - id: portail-de-donnees
+      #       name: Portail de données
+      #     - id: annuaire
+      #       name: Annuaire
+      #     - id: api
+      #       name: Bouquet d'API
+      #     - id: hub
+      #       name: Hub d'échange
+
+      # - name: 'Caractéristiques :'
+      #   id: caracteristiques
+      #   type: select
+      #   default_option: Tous les types de solutions
+      #   use_tag_prefix: true
+      #   values:
+      #     - id: donnees-protegees
+      #       name: Avec accès à des données protégées
+      #     - id: gratuite
+      #       name: Gratuite
