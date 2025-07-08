@@ -135,7 +135,7 @@ jobs:
             letsencrypt:enable deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
 
       - name: Destroy the review app
-        if: github.event.action == 'closed'
+        if: github.event.action == 'closed' && env.REVIEW_APP_EXISTS == 'true'
         uses: dokku/github-action@master
         with:
           command: review-apps:destroy
