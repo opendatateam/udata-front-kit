@@ -68,7 +68,7 @@ npm run format
 
 ### 🔍 Déploiement en preview
 
-Les **review apps** ne sont **plus créées automatiquement** lors de l'ouverture d'une Pull Request. L'auteur de la PR doit **déployer manuellement** les PR qu'il souhaite tester, via l'interface de GitHub Actions.
+Les **review apps** ne sont **plus créées automatiquement** lors de l'ouverture d'une Pull Request. L'auteur de la PR doit **déployer manuellement** les PR qu'il souhaite tester en environnements de preview, via l'interface de GitHub Actions.  Les environnement de preview disponibles sont configurés dans le [workflow de review apps](.github/workflows/review-app.yml) (ex: `ecospheres-preview`, `meteo-france-preview`, `logistique-preview`).
 
 > **💡 Info** : Une fois qu'une review app est créée pour une PR, elle sera **automatiquement mise à jour** à chaque nouveau commit sur la PR.
 
