@@ -52,6 +52,7 @@
       aria-label="© Légende de l‘image"
       role="group"
       class="fr-content-media"
+      v-if="solution.Image_principale && solution.Image_principale.length > 0"
     >
       <div class="example-image fr-content-media__img">
         <img
