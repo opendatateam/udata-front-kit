@@ -75,7 +75,7 @@ Le déploiement des verticales thématiques s'effectue via un workflow GitHub qu
 ```
 
 **Paramètres :**
-- **ENV** : `prod` ou, soit `demo` soit `preprod` suivant la verticale
+- **ENV** : `prod` ou `demo`/`preprod` suivant la verticale
 - **CONFIG_NAME** : nom de la configuration (actuellement `ecologie`, `meteo`, `defis` ou `simplifions`)
 - **VERSION_PART** : `major`, `minor` ou `patch`
 
@@ -88,26 +88,21 @@ Le workflow se déclenche sur tous les push vers toutes les branches, mais ne s'
 
 Toutes les variables et secrets nécessaires pour ce workflow sont listés dans la section `env:` du [workflow de déploiement](.github/workflows/create-deploy-release.yml).
 
-### Actions du workflow
-
-Le workflow est responsable de :
-
-1. **Configuration de l'environnement** : variables et accès aux dépôts
-2. **Clonage des dépôts** : scaffolding et application
-3. **Récupération de la configuration** basée sur le message de commit
-4. **Création et push d'un nouveau tag** selon la partie de version spécifiée
-5. **Déclenchement d'un pipeline GitLab CI/CD**
-
-Le tag créé sera utilisé lors de la construction de l'image et pendant le déploiement.
+Le tag créé est utilisé lors de la construction de l'image et pendant le déploiement.
 
 ### Architecture de déploiement
 
-Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne en deux étapes :
+Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne en deux temps :
 
 1. **GitHub Actions** : Les commits sur GitHub déclenchent le workflow qui fait des appels à l'API GitLab via un script téléchargé depuis le dépôt "scaffolding"
 2. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
 
-**Note** : Pour cette raison il n'est pas possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions.
+Plus précisément, le [workflow de déploiement](.github/workflows/create-deploy-release.yml) est responsable de :
+1. **Configuration de l'environnement** : variables et accès aux dépôts
+2. **Clonage du dépôt "scaffolding" du script d'appel à l'infrastructure**
+3. **Récupération de la configuration** basée sur le message de commit
+4. **Création et push d'un nouveau tag** selon la partie de version spécifiée
+5. **Déclenchement d'un pipeline GitLab CI/CD**
 
 ## Librairies et plugins utilisés
 
