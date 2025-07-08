@@ -68,6 +68,8 @@ npm run format
 
 ### 🔍 Déploiement en preview
 
+Une **review app** est un environnement de prévisualisation temporaire qui permet de tester les changements d'une Pull Request dans un environnement similaire à la production. Un workflow CI/CD dédié ([`.github/workflows/review-app.yml`](.github/workflows/review-app.yml)) gère automatiquement la création, mise à jour et suppression de ces environnements.
+
 Les **review apps** ne sont **plus créées automatiquement** lors de l'ouverture d'une Pull Request. L'auteur de la PR doit **déployer manuellement** les PR qu'il souhaite tester, via l'interface de GitHub Actions.
 
 > **💡 Info** : Une fois qu'une review app est créée pour une PR, elle sera **automatiquement mise à jour** à chaque nouveau commit sur la PR.
@@ -90,7 +92,7 @@ Pour créer une review app pour votre PR :
 
 #### Workflow GitHub pour le déploiement en preprod et en production
 
-Le déploiement des verticales thématiques s'effectue via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
+Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
 
 ```
 [<env>:<config_name>:<version_part>] <description>
