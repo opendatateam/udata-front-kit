@@ -177,7 +177,7 @@ pages:
     discussions:
       display: true
       create: true
-    filters:
+    filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
@@ -251,7 +251,7 @@ pages:
     discussions:
       display: true
       create: true
-    filters:
+    filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select

@@ -55,7 +55,7 @@
     >
       <div class="example-image fr-content-media__img">
         <img
-          alt="Exemple d'interface de l'annuaire des entreprises"
+          :alt="solution.Legende_image_principale"
           :src="gristImageUrl(solution.Image_principale?.[0])"
           class="fr-responsive-img fr-ratio-16x9"
         />
