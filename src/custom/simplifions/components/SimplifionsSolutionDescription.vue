@@ -99,23 +99,27 @@
       <p v-html="fromMarkdown(solution.Description_longue)"></p>
 
       <p>
-        <span
-          aria-hidden="true"
-          style="color: #27a658"
-          class="fr-icon-success-fill"
-        ></span>
-        <strong>Cette solution permet :</strong>
+        <strong>
+          <span
+            aria-hidden="true"
+            style="color: #27a658"
+            class="fr-icon-success-fill"
+          ></span>
+          Cette solution permet :
+        </strong>
       </p>
 
       <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
 
       <p>
-        <span
-          aria-hidden="true"
-          style="color: #ff292f"
-          class="fr-icon-error-fill"
-        ></span>
-        <strong> Cette solution ne permet pas :</strong>
+        <strong>
+          <span
+            aria-hidden="true"
+            style="color: #ff292f"
+            class="fr-icon-error-fill"
+          ></span>
+          Cette solution ne permet pas :
+        </strong>
       </p>
 
       <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
