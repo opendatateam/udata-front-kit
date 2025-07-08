@@ -20,7 +20,7 @@
                   {{ reco_solution.Nom_de_la_solution_publique }}
                 </a>
                 <br />
-                <span class="fr-text-xs">En savoir plus</span>
+                En savoir plus
               </p>
             </div>
           </div>
