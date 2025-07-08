@@ -87,7 +87,9 @@
       :key="title"
       class="fr-mb-4w"
     >
-      <h3 class="fr-h3 fr-mb-3w">{{ index + 1 }}. {{ title }}</h3>
+      <h3 :id="`solution-${index + 1}`" class="fr-h3 fr-mb-3w">
+        {{ index + 1 }}. {{ title }}
+      </h3>
 
       <div
         v-for="reco_solution in grouped_reco_solutions[title]"
