@@ -70,7 +70,7 @@ npm run format
 
 #### Déploiement automatique en preview
 
-Les **review apps** sont automatiquement créées lors de l'ouverture d'une Pull Request depuis la branche `main`. Chaque PR génère automatiquement des environnements de preview pour tous les sites configurés dans le [workflow de review apps](.github/workflows/review-app.yml) (ex: `ecospheres-preview`, `meteo-france-preview`, `logistique-preview`).
+Les **review apps** sont automatiquement créées lors de l'ouverture d'une Pull Request vers la branche `main`. Chaque PR génère automatiquement des environnements de preview pour tous les sites configurés dans le [workflow de review apps](.github/workflows/review-app.yml) (ex: `ecospheres-preview`, `meteo-france-preview`, `logistique-preview`).
 
 **URLs générées** : `https://deploy-preview-{PR_NUMBER}--{SITE}.sandbox.data.developpement-durable.gouv.fr`
 
