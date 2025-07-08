@@ -92,7 +92,7 @@ jobs:
 
       - name: Set site id as build arg
         if: always()
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
@@ -113,7 +113,7 @@ jobs:
 
       - name: Enable SSL with Let's Encrypt
         if: github.event.action == 'opened' || github.event.action == 'reopened' || github.event_name == 'workflow_dispatch'
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
