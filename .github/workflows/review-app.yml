@@ -3,8 +3,26 @@
 name: Deploy review app
 
 on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Site to deploy in preview'
+        required: true
+        default: 'ecospheres'
+        type: choice
+        options:
+          - ecospheres
+          - meteo-france
+          - logistique
+          # - defis
+          # - hackathon
+          # - simplifions
+      pr_number:
+        description: 'Pull Request number to deploy'
+        required: true
+        type: string
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, reopened, closed]
 
 jobs:
   handle_review_app:
@@ -106,5 +124,80 @@ jobs:
         with:
           token: ${{ github.token }}
           environment-url: https://deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}.sandbox.data.developpement-durable.gouv.fr
+          state: ${{ job.status == 'success' && 'success' || 'failure' }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
+  manual_deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-manual-${{ github.event.inputs.pr_number }}-${{ github.event.inputs.site }}
+      cancel-in-progress: false
+    permissions:
+      deployments: write
+    # only run if manually triggered
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Debug event
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Site: ${{ github.event.inputs.site }}"
+          echo "PR number: ${{ github.event.inputs.pr_number }}"
+
+      - name: Cloning repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Start deployment
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: ${{ github.token }}
+          environment: ${{ github.event.inputs.site }}-preview
+          initial-status: in_progress
+          transient-environment: true
+
+      - name: Create the review app
+        uses: dokku/github-action@master
+        with:
+          command: review-apps:create
+          git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
+          review_app_name: deploy-preview-${{ github.event.inputs.pr_number }}--${{ github.event.inputs.site }}
+          ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+
+      - name: Set site id as build arg
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.REVIEW_APP_SSH_HOST }}
+          username: dokku
+          key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker-options:add deploy-preview-${{ github.event.inputs.pr_number }}--${{ github.event.inputs.site }} build "--build-arg VITE_SITE_ID=${{ github.event.inputs.site }}"
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
+          review_app_name: deploy-preview-${{ github.event.inputs.pr_number }}--${{ github.event.inputs.site }}
+          ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          git_push_flags: '--force'
+          branch: 'main'
+
+      - name: Enable SSL with Let's Encrypt
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.REVIEW_APP_SSH_HOST }}
+          username: dokku
+          key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            letsencrypt:enable deploy-preview-${{ github.event.inputs.pr_number }}--${{ github.event.inputs.site }}
+
+      - name: Update deployment status
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ github.token }}
+          environment-url: https://deploy-preview-${{ github.event.inputs.pr_number }}--${{ github.event.inputs.site }}.sandbox.data.developpement-durable.gouv.fr
           state: ${{ job.status == 'success' && 'success' || 'failure' }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
