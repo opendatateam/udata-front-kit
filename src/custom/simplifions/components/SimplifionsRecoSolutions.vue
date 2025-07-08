@@ -26,7 +26,11 @@
           </div>
           <div class="fr-tile__header">
             <img
-              :src="gristImageUrl(reco_solution.image_principale?.[0])"
+              v-if="
+                reco_solution.image_principale &&
+                reco_solution.image_principale.length > 0
+              "
+              :src="gristImageUrl(reco_solution.image_principale[0])"
               class="fr-responsive-img fr-ratio-16x9"
             />
           </div>
