@@ -294,7 +294,7 @@ pages:
             name: Aucun développement, ni budget
           - id: avec-des-moyens-techniques
             name: Avec des moyens techniques
-          - id: savec-solution-editeur
+          - id: avec-solution-editeur
             name: Avec une solution éditeur
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
