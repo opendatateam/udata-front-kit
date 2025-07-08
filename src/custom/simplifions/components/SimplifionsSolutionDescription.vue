@@ -137,15 +137,8 @@
       <h2 class="colored-title fr-h2 fr-my-5w">Cas d'usages simplifiables</h2>
     </div>
 
-    <div v-if="loading" class="fr-text--center fr-my-4w">
-      <span
-        class="fr-icon-loader-line fr-icon--rotate"
-        aria-hidden="true"
-      ></span>
-      Chargement des cas d'usages...
-    </div>
     <div
-      v-else-if="relatedCasUsages.length > 0"
+      v-if="relatedCasUsages.length > 0"
       class="fr-grid-row fr-grid-row--gutters"
     >
       <div
@@ -209,19 +202,6 @@ h3 {
   margin-right: 0.5em;
   margin-left: 0.5em;
 }
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.fr-icon--rotate {
-  animation: rotate 1s linear infinite;
-}
 </style>
 
 <script setup lang="ts">
@@ -233,6 +213,7 @@ import { formatDate, fromMarkdown } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
+import { useLoading } from 'vue-loading-overlay'
 import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
@@ -253,7 +234,6 @@ const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<
 >
 
 // Reactive variables for cas d'usages
-const loading = ref(false)
 const relatedCasUsages = ref<Topic[]>([])
 
 // API instance for fetching topics
@@ -267,7 +247,7 @@ const fetchRelatedCasUsages = async () => {
     return
   }
 
-  loading.value = true
+  const loader = useLoading().show({ enforceFocus: false })
   try {
     // Fetch only the specific topics by their IDs
     const topicPromises = solution.cas_d_usages_topics_ids.map(
@@ -282,7 +262,7 @@ const fetchRelatedCasUsages = async () => {
     console.error("Error fetching related cas d'usages:", error)
     relatedCasUsages.value = []
   } finally {
-    loading.value = false
+    loader.hide()
   }
 }
 
