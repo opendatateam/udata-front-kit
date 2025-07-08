@@ -157,7 +157,7 @@
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <h3 class="fr-tile__title">
-                <a href="/cas-d-usages/{{casUsage.slug}}">
+                <a :href="`/cas-d-usages/${casUsage.slug}`">
                   {{ casUsage.name }}
                 </a>
               </h3>
