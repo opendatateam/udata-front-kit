@@ -104,6 +104,8 @@ Plus précisément, le [workflow de déploiement](.github/workflows/create-deplo
 4. **Création et push d'un nouveau tag** selon la partie de version spécifiée
 5. **Déclenchement d'un pipeline GitLab CI/CD**
 
+**Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
+
 ## Librairies et plugins utilisés
 
 ### Librairies
