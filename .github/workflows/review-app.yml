@@ -14,9 +14,9 @@ on:
           - ecospheres
           - meteo-france
           - logistique
-          # - defis
-          # - hackathon
-          # - simplifions
+          - defis
+          - hackathon
+          - simplifions
       pr_number:
         description: 'Pull Request number to deploy'
         required: true
@@ -36,9 +36,9 @@ jobs:
           - ecospheres
           - meteo-france
           - logistique
-          # - defis
-          # - hackathon
-          # - simplifions
+          - defis
+          - hackathon
+          - simplifions
     permissions:
       deployments: write
     # only run if PR is from same repo OR if manually triggered
