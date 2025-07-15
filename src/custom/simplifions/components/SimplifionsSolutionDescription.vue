@@ -196,9 +196,9 @@ const props = defineProps<{
 const topicRef = ref(props.topic)
 const tags = useTagsByRef(props.pageKey, topicRef)
 const tags_niveau_simplification = tags.value.filter(
-  (t: any) => t.type === 'types-de-simplification'
+  (t) => t.type === 'types-de-simplification'
 )
-const tags_budget = tags.value.filter((t: any) => t.type === 'budget')
+const tags_budget = tags.value.filter((t) => t.type === 'budget')
 
 const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<
   string,

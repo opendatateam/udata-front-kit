@@ -95,7 +95,7 @@
 
       <div
         v-for="reco_solution in grouped_reco_solutions[title]"
-        :key="reco_solution.Nom_de_la_solution"
+        :key="reco_solution.Nom_de_la_solution_publique"
       >
         <SimplifionsRecoSolutions :reco_solution="reco_solution" />
       </div>
@@ -113,6 +113,7 @@ import type { Topic } from '@/model/topic'
 import { fromMarkdown } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { ref } from 'vue'
+import type { RecoSolution, SimplifionsExtras } from '../model/cas_usage'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 
 const props = defineProps<{
@@ -123,9 +124,9 @@ const props = defineProps<{
 const topicRef = ref(props.topic)
 const tags = useTagsByRef(props.pageKey, topicRef)
 
-const casUsage = (props.topic.extras as any)[
+const casUsage = (props.topic.extras as SimplifionsExtras)[
   'simplifions-cas-d-usages'
-] as Record<string, any>
+]
 
 const budget_group = (budget: Array<string>) => {
   if (budget.includes('Aucun développement, ni budget')) {
@@ -135,7 +136,7 @@ const budget_group = (budget: Array<string>) => {
 }
 
 const grouped_reco_solutions = casUsage.reco_solutions.reduce(
-  (acc: Record<string, any[]>, reco_solution: any) => {
+  (acc: Record<string, RecoSolution[]>, reco_solution) => {
     const key = budget_group(reco_solution.Moyens_requis_pour_la_mise_en_oeuvre)
     if (!acc[key]) {
       acc[key] = []
@@ -143,7 +144,7 @@ const grouped_reco_solutions = casUsage.reco_solutions.reduce(
     acc[key].push(reco_solution)
     return acc
   },
-  {} as Record<string, any[]>
+  {}
 )
 </script>
 
