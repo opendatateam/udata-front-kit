@@ -113,7 +113,10 @@ import type { Topic } from '@/model/topic'
 import { fromMarkdown } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { ref } from 'vue'
-import type { RecoSolution, SimplifionsExtras } from '../model/cas_usage'
+import type {
+  RecoSolution,
+  SimplifionsCasUsagesExtras
+} from '../model/cas_usage'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 
 const props = defineProps<{
@@ -124,7 +127,7 @@ const props = defineProps<{
 const topicRef = ref(props.topic)
 const tags = useTagsByRef(props.pageKey, topicRef)
 
-const casUsage = (props.topic.extras as SimplifionsExtras)[
+const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
   'simplifions-cas-d-usages'
 ]
 
