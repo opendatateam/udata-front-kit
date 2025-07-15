@@ -36,6 +36,9 @@ jobs:
           - ecospheres
           - meteo-france
           - logistique
+          # - defis
+          # - hackathon
+          # - simplifions
     permissions:
       deployments: write
     # only run if PR is from same repo OR if manually triggered
