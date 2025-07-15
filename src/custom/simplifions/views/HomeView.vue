@@ -152,13 +152,13 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        class="fr-col-12 fr-col-lg-3"
         v-for="item in fournisseursDeService"
         :key="item.title"
+        class="fr-col-12 fr-col-lg-3"
       >
         <div
-          class="fr-tile fr-tile--horizontal fr-enlarge-link"
           id="tile-sourcing"
+          class="fr-tile fr-tile--horizontal fr-enlarge-link"
         >
           <div class="fr-tile__body">
             <div class="fr-tile__content">
@@ -206,9 +206,9 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        class="fr-col-12 fr-col-lg-4"
         v-for="budget in budgets"
         :key="budget.title"
+        class="fr-col-12 fr-col-lg-4"
       >
         <div class="fr-card" style="background-color: #fafafa">
           <div class="fr-card__body">
@@ -336,9 +336,9 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        class="fr-col-12 fr-col-md-4"
         v-for="niveau in niveauxDeSimplification"
         :key="niveau.title"
+        class="fr-col-12 fr-col-md-4"
       >
         <div class="fr-card" style="background-color: #fafafa">
           <div class="fr-card__body">

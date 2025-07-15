@@ -248,7 +248,7 @@ watch(
           <component
             :is="customDescriptionComponent"
             :topic="topic"
-            :pageKey="pageKey"
+            :page-key="pageKey"
           />
         </div>
         <div v-else>

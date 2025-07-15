@@ -49,10 +49,10 @@
     </div>
 
     <figure
-      aria-label="© Légende de l‘image"
+      v-if="solution.Image_principale && solution.Image_principale.length > 0"
+      aria-label="© Légende de l'image"
       role="group"
       class="fr-content-media"
-      v-if="solution.Image_principale && solution.Image_principale.length > 0"
     >
       <div class="example-image fr-content-media__img">
         <img
@@ -78,24 +78,25 @@
         <li>
           <strong>Moyens requis pour la mise en oeuvre :</strong>
           <TagComponent
-            :tag="t"
             v-for="t in tags_budget"
             :key="`${t.type}-${t.id}`"
+            :tag="t"
             class="inline-tag"
           />
         </li>
         <li>
           <strong>Niveau de simplification :</strong>
           <TagComponent
-            :tag="t"
             v-for="t in tags_niveau_simplification"
             :key="`${t.type}-${t.id}`"
+            :tag="t"
             class="inline-tag"
           />
         </li>
       </ul>
 
       <h2>Description</h2>
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Description_longue)"></p>
 
       <p>
@@ -109,6 +110,7 @@
         </strong>
       </p>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
 
       <p>
@@ -122,6 +124,7 @@
         </strong>
       </p>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
 
       <p>
@@ -172,37 +175,6 @@
     </h2>
   </div>
 </template>
-
-<style scoped>
-h2.colored-title {
-  color: black;
-  background-color: rgb(167, 212, 205);
-  padding: 2px 4px;
-  display: inline-block;
-}
-h3 {
-  color: #616161;
-}
-.example-image {
-  display: inline-block;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  padding: 8px;
-  border: 4px solid #000;
-}
-
-.example-image img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.inline-tag {
-  display: inline-flex;
-  margin-right: 0.5em;
-  margin-left: 0.5em;
-}
-</style>
 
 <script setup lang="ts">
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
@@ -271,3 +243,34 @@ onMounted(() => {
   fetchRelatedCasUsages()
 })
 </script>
+
+<style scoped>
+h2.colored-title {
+  color: black;
+  background-color: rgb(167, 212, 205);
+  padding: 2px 4px;
+  display: inline-block;
+}
+h3 {
+  color: #616161;
+}
+.example-image {
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  border: 4px solid #000;
+}
+
+.example-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.inline-tag {
+  display: inline-flex;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}
+</style>

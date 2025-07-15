@@ -31,16 +31,16 @@
           <ol>
             <li>
               <a
-                href="#contexte-et-cadre-juridique"
                 id="summary-link-1"
+                href="#contexte-et-cadre-juridique"
                 class="fr-summary__link"
                 >Contexte et cadre juridique</a
               >
             </li>
             <li>
               <a
-                href="#solutions-disponibles"
                 id="summary-link-2"
+                href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
@@ -70,6 +70,7 @@
         Contexte
       </h3>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(casUsage.Contexte)"></p>
 
       <h3 class="fr-h6">
@@ -77,6 +78,7 @@
         Cadre juridique
       </h3>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
     </div>
 
@@ -104,18 +106,6 @@
     </h2>
   </div>
 </template>
-
-<style scoped>
-h2 {
-  color: black;
-  background-color: rgb(167, 212, 205);
-  padding: 2px 4px;
-  display: inline-block;
-}
-h3 {
-  color: #616161;
-}
-</style>
 
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
@@ -156,3 +146,15 @@ const grouped_reco_solutions = casUsage.reco_solutions.reduce(
   {} as Record<string, any[]>
 )
 </script>
+
+<style scoped>
+h2 {
+  color: black;
+  background-color: rgb(167, 212, 205);
+  padding: 2px 4px;
+  display: inline-block;
+}
+h3 {
+  color: #616161;
+}
+</style>
