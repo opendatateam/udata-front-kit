@@ -97,7 +97,7 @@
         v-for="reco_solution in grouped_reco_solutions[title]"
         :key="reco_solution.Nom_de_la_solution_publique"
       >
-        <SimplifionsRecoSolutions :reco_solution="reco_solution" />
+        <SimplifionsRecoSolutions :reco-solution="reco_solution" />
       </div>
     </div>
 

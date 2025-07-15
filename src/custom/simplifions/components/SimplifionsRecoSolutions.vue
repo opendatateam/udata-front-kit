@@ -111,13 +111,14 @@ import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { fromMarkdown } from '@/utils'
 import { onMounted, ref } from 'vue'
+import type { RecoSolution } from '../model/cas_usage'
 import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
-  reco_solution: Record<string, any>
+  recoSolution: RecoSolution
 }>()
 
-const reco_solution = props.reco_solution
+const reco_solution = props.recoSolution
 
 // Reactive variable for the related solution
 const relatedSolution = ref<Topic | null>(null)
