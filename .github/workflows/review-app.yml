@@ -104,6 +104,8 @@ jobs:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
           review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          # omitting this will prevent the app from being built (which is what we want)
+          # branch: 'main'
 
       - name: Set site id as build arg
         if: ((github.event.action == 'synchronize' || github.event.action == 'reopened') && env.REVIEW_APP_EXISTS == 'true') || github.event_name == 'workflow_dispatch'
