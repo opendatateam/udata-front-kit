@@ -61,7 +61,7 @@ const validateFields = () => {
   if (!datasetProperties.value.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!datasetProperties.value.purpose.trim()) {
+  if (!datasetProperties.value.purpose?.trim()) {
     formErrors.value.push('purpose')
   }
   if (!selectedTopicId.value) {

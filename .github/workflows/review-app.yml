@@ -20,6 +20,7 @@ jobs:
           - logistique
           # - defis
           # - hackathon
+          # - simplifions
     permissions:
       deployments: write
     # only run if the PR is from the same repo

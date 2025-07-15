@@ -64,6 +64,48 @@ npm run hint
 npm run format
 ```
 
+## Déploiement
+
+### Workflow GitHub pour le déploiement
+
+Le déploiement des verticales thématiques s'effectue via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
+
+```
+[<env>:<config_name>:<version_part>] <description>
+```
+
+**Paramètres :**
+- **ENV** : `prod` ou `demo`/`preprod` suivant la verticale
+- **CONFIG_NAME** : nom de la configuration (actuellement `ecologie`, `meteo`, `defis` ou `simplifions`)
+- **VERSION_PART** : `major`, `minor` ou `patch`
+
+**Exemple :**
+```
+[prod:ecologie:minor] nouvelle fonctionnalité incroyable
+```
+
+Le workflow se déclenche sur tous les push vers toutes les branches, mais ne s'exécute que si le message de commit commence par `[` (condition `startsWith(github.event.head_commit.message, '[')`). Cette condition n'est pas parfaite mais GitHub Actions ne supporte pas directement le déclenchement de workflows basé sur des expressions régulières dans les messages de commit.
+
+Toutes les variables et secrets nécessaires pour ce workflow sont listés dans la section `env:` du [workflow de déploiement](.github/workflows/create-deploy-release.yml).
+
+Le tag créé est utilisé lors de la construction de l'image et pendant le déploiement.
+
+### Architecture de déploiement
+
+Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne en deux temps :
+
+1. **GitHub Actions** : Les commits sur GitHub déclenchent le workflow qui fait des appels à l'API GitLab via un script téléchargé depuis le dépôt "scaffolding"
+2. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
+
+Plus précisément, le [workflow de déploiement](.github/workflows/create-deploy-release.yml) est responsable de :
+1. **Configuration de l'environnement** : variables et accès aux dépôts
+2. **Clonage du dépôt "scaffolding" du script d'appel à l'infrastructure**
+3. **Récupération de la configuration** basée sur le message de commit
+4. **Création et push d'un nouveau tag** selon la partie de version spécifiée
+5. **Déclenchement d'un pipeline GitLab CI/CD**
+
+**Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
+
 ## Librairies et plugins utilisés
 
 ### Librairies

@@ -170,6 +170,24 @@ website:
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
+# shared themes list for indicators and bouquets
+definitions: &definitions
+  fnv_themes: &fnv_themes
+    - id: mieux-consommer
+      name: Mieux consommer
+    - id: mieux-produire
+      name: Mieux produire
+    - id: mieux-preserver-valoriser-ecosystemes
+      name: Mieux préserver et valoriser nos ecosystèmes
+    - id: mieux-se-deplacer
+      name: Mieux se déplacer
+    - id: mieux-se-loger
+      name: Mieux se loger
+    - id: mieux-se-nourrir
+      name: Mieux se nourrir
+    - id: autre
+      name: Autre
+
 # Configuration format for pages:
 #
 # pages:
@@ -210,7 +228,7 @@ pages:
   datasets:
     list_all: true
     universe_query:
-      topic: 65141cd780d73f98142e9265
+      topic: 65e9aa6cb5c809c30c70ee02
     tag_prefix:
     title: Jeux de données
     breadcrumb_title: Données
@@ -240,8 +258,6 @@ pages:
             name: Adresses
           - id: altitude
             name: Altitude
-          - id: conditions-atmospheriques
-            name: Conditions atmosphériques
           - id: batiments
             name: Bâtiments
           - id: caracteristiques-geographiques-meteorologiques
@@ -346,21 +362,7 @@ pages:
         # TODO: use a dedicated config for the form?
         form:
           required: true
-        values:
-          - id: se-loger
-            name: Se loger
-          - id: produire
-            name: Produire
-          - id: se-nourrir
-            name: Se nourrir
-          - id: consommer
-            name: Consommer
-          - id: preserver
-            name: Préserver
-          - id: se-deplacer
-            name: Se déplacer
-          - id: chantiers-transverses
-            name: Chantiers transverses
+        values: *fnv_themes
       - name: Couverture territoriale
         default_option:
         id: geozone
@@ -370,7 +372,7 @@ pages:
     list_all: true
     universe_query:
       tag: ecospheres-indicateurs
-      organization: 67c57c2f1a418addfc94d38a
+      organization: 67884b4da4fca9c97bbef479
     tag_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
     breadcrumb_title: Indicateurs
@@ -396,21 +398,7 @@ pages:
         type: select
         color: green-menthe
         use_tag_prefix: true
-        values:
-          - id: autre
-            name: Autre
-          - id: mieux-consommer
-            name: Mieux consommer
-          - id: mieux-produire
-            name: Mieux produire
-          - id: mieux-preserver-valoriser-ecosystemes
-            name: Mieux préserver et valoriser nos ecosystèmes
-          - id: mieux-se-deplacer
-            name: Mieux se déplacer
-          - id: mieux-se-loger
-            name: Mieux se loger
-          - id: mieux-se-nourrir
-            name: Mieux se nourrir
+        values: *fnv_themes
       - name: Enjeu
         default_option: Tous les enjeux
         id: enjeu

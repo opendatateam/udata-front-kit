@@ -159,7 +159,12 @@ const cancel = () => {
     if (routeQuery.clone == null) {
       router.push({ name: pageKey })
     } else {
-      router.go(-1)
+      router.push({
+        name: `${pageKey}_detail`,
+        params: {
+          item_id: routeQuery.clone
+        }
+      })
     }
   } else {
     router.push({
@@ -211,7 +216,8 @@ onMounted(() => {
           )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
-          const { datasets, reuses, ...data } = remoteTopic
+          // FIXME: remove datasets and reuses after API is migrated to elements
+          const { datasets, reuses, elements, ...data } = remoteTopic
           topic.value = data
         }
         setMetaTitle()

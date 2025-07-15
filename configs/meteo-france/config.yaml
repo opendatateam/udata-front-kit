@@ -6,7 +6,7 @@ datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id:
+  oauth_client_id: 6709259c1e92c988c47d2f3e
 
 robots:
   disallow:
@@ -44,9 +44,17 @@ website:
               url: 'datasets?category=climatologique-changement-climatique'
               image_url: '/meteo-france/assets/climatique.jpg'
             - name: 'Données de Prévision Numérique du Temps (PNT)'
-              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
+              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéances.'
               url: 'datasets?category=pnt'
               image_url: '/meteo-france/assets/pnt.png'
+            - name: 'Informations sur les stations'
+              description: 'Accès aux caractéristiques des stations météorologiques de métropole et d’outre-mer en service.'
+              url: 'datasets?category=stations'
+              image_url: '/meteo-france/assets/station.png'
+            - name: 'Fiches climatologiques'
+              description: "Fiches synthétiques contenant les moyennes mensuelles, les normales et les records d'une station."
+              url: 'datasets?category=fiches'
+              image_url: '/meteo-france/assets/fiche.png'
         sub_section_tiles:
           title:
           tiles:
@@ -199,6 +207,8 @@ pages:
             name: Données de Prévision Numérique du Temps (PNT)
           - id: stations
             name: Informations sur les stations
+          - id: fiches
+            name: Fiches climatologiques
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
