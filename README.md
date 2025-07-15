@@ -72,7 +72,7 @@ Une **review app** est un environnement de prévisualisation temporaire qui perm
 
 Les **review apps** ne sont **plus créées automatiquement** lors de l'ouverture d'une Pull Request. L'auteur de la PR doit **déployer manuellement** les PR qu'il souhaite tester, via l'interface de GitHub Actions.
 
-> **💡 Info** : Une fois qu'une review app est créée pour une PR, elle sera **automatiquement mise à jour** à chaque nouveau commit sur la PR.
+> **💡 Info** : Une fois qu'une review app est créée pour une PR, elle sera **automatiquement mise à jour** à chaque nouveau commit sur la PR. Si une PR est fermée puis rouverte, une nouvelle review app sera automatiquement créée.
 
 **URLs générées** : `https://deploy-preview-{PR_NUMBER}--{SITE}.sandbox.data.developpement-durable.gouv.fr`
 
