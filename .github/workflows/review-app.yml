@@ -22,7 +22,7 @@ on:
         required: true
         type: string
   pull_request:
-    types: [synchronize, reopened, closed]
+    types: [synchronize, closed]
 
 jobs:
   deploy_review_app:
@@ -66,8 +66,8 @@ jobs:
             echo "SHOULD_CREATE=false" >> $GITHUB_ENV
             
             # Override defaults based on event type
-            if [ "${{ github.event.action }}" = "reopened" ] || [ "${{ github.event.action }}" = "synchronize" ]; then
-              # For reopened/synchronized PRs, only redeploy if review app already exists (manual-first approach)
+            if [ "${{ github.event.action }}" = "synchronize" ]; then
+              # For synchronized PRs, only redeploy if review app already exists (manual-first approach)
               if ssh -o StrictHostKeyChecking=no dokku@${{ secrets.REVIEW_APP_SSH_HOST }} apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}; then
                 echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
                 echo "SHOULD_CREATE=false" >> $GITHUB_ENV
