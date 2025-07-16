@@ -2,23 +2,71 @@
   <div class="topic-card">
     <RouterLink :to="topicLink">
       <div class="header-topic">
-        <div class="title-topic">{{ topic.name }}</div>
-        <div class="author-topic">
-          <template v-if="topic.organization">
-            <OrganizationNameWithCertificate
-              :organization="topic.organization"
-            />
-          </template>
-          <template v-else>{{ ownerName }}</template>
-        </div>
-        <div class="date-topic">
-          mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
-        </div>
-      </div>
-      <div class="description-topic">
-        <p class="fr-mb-1v">
+      <!--Titre et description-->
+        <div class="title-topic fr-text--lead">{{ topic.name }}</div>
+         <p class="fr-mb-1w">
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
         </p>
+        <div class="date-topic fr-text--xs fr-mb-0 fr-text--grey-500" style="text-align: right;">
+          Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
+        </div>
+
+      </div>
+      <!--Texte pour préciser les usagers et les fournisseurs de service-->
+      <div class="description-topic">
+        <div v-if="groupedTags['target-users']" class="fr-card__detail">
+          <p class="fr-mb-1w" style="white-space: normal;">
+            Démarches des 
+            <span
+              v-for="(t, index) in filteredTargetUsers"
+              :key="t.id"
+              class="tag-item"
+            >
+              <span class="font-bold">{{ t.name }}</span>
+              <span
+                v-if="index < filteredTargetUsers.length - 1"
+                class="fr-mx-1v"
+                style="font-weight: normal;"
+              >|</span>
+            </span>
+          </p>
+        </div>
+        <div
+          v-if="groupedTags['fournisseurs-de-service']"
+          class="fr-card__detail fr-text--right"
+        >
+          <p class="fr-mb-1w" style="white-space: normal;">
+            À destination des 
+            <span
+              v-for="(t, index) in groupedTags['fournisseurs-de-service']"
+              :key="t.id"
+              class="tag-item"
+            >
+              <span class="font-bold">{{ t.name }}</span>
+              <span
+                v-if="index < groupedTags['fournisseurs-de-service'].length - 1"
+                class="fr-mx-1v"
+                style="font-weight: normal;"
+              >|</span>
+            </span>
+          </p>
+        </div>
+
+        <!-- Tags indiquant le type de simplification et de budget -->
+        <div v-if="groupedTags['types-de-simplification']" class="simplification-group fr-mt-2w">
+          <ul class="fr-badges-group">
+            <li v-for="t in groupedTags['types-de-simplification']" :key="t.id">
+              <TagComponent :tag="t" />
+            </li>
+          </ul>
+        </div>
+        <div v-if="groupedTags['budget']" class="budget-group">
+          <ul class="fr-badges-group">
+            <li v-for="t in groupedTags['budget']" :key="t.id">
+              <TagComponent :tag="t" />
+            </li>
+          </ul>
+        </div>
       </div>
     </RouterLink>
   </div>
@@ -27,30 +75,52 @@
 <script setup lang="ts">
 import {
   formatRelativeIfRecentDate,
-  OrganizationNameWithCertificate,
   useOwnerName
 } from '@datagouv/components'
 
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
+
 import { stripFromMarkdown } from '@/utils'
+import { useTagsByRef } from '@/utils/tags'
 import type { RouteLocationRaw } from 'vue-router'
+
+
+const props = defineProps<{
+  topic: Topic
+}>()
+
 
 const { pageKey } = useCurrentPageConf()
 
-const props = defineProps({
-  topic: {
-    type: Object as () => Topic,
-    required: true
-  }
-})
-
+const topicRef = ref(props.topic)
+const tags = useTagsByRef(pageKey, topicRef)
 const ownerName = useOwnerName(props.topic)
 
 const topicLink: RouteLocationRaw = {
   name: `${pageKey}_detail`,
   params: { item_id: props.topic.slug }
 }
+
+// Regrouper les tags par type
+const groupedTags = computed(() => {
+  const groups: Record<string, typeof tags.value> = {}
+  for (const tag of tags.value) {
+    if (!groups[tag.type]) {
+      groups[tag.type] = []
+    }
+    groups[tag.type].push(tag)
+  }
+  return groups
+})
+
+const filteredTargetUsers = computed(() => {
+  return (groupedTags.value['target-users'] || []).filter(tag => tag.name !== 'Agents publics')
+})
+
+watch(groupedTags, (val) => {
+  console.log('groupedTags:', val)
+}, { immediate: true })
 </script>
 
 
@@ -119,4 +189,8 @@ const topicLink: RouteLocationRaw = {
   margin: 16px;
   min-height: 80px;
 }
+.date-topic {
+  color: #6b7280; /* gris moyen */
+}
+
 </style>
