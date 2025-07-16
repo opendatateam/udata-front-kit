@@ -70,11 +70,10 @@
 
       <div class="fr-col-12 fr-col-md-4">
         <nav
-          aria-labelledby="fr-summary-title"
-          role="navigation"
+          role="navigation" aria-labelledby="fr-summary-title"
           class="fr-summary"
         >
-          <h2 id="fr-summary-title" class="fr-h6">Sommaire</h2>
+          <h2 id="fr-summary-title" class="fr-summary__title  fr-text--md">Sommaire</h2>
           <ol>
             <li>
               <a
@@ -105,12 +104,31 @@
               </ol>
             </li>
           </ol>
-        </nav>
+          <hr class="fr-hr fr-my-2w" />
+           <p class="subtitle">
+            Contenu rédigé par :
+            <span v-if="topic.organization" style="font-weight: normal;">
+            <a :href="topic.organization.page">
+                 <OrganizationNameWithCertificate
+                  :organization="topic.organization"
+                /> 
+            </a>
+              </span>
+              <br/>
+              <span style="font-weight: normal;">
+                le <time :datetime="topic.created_at">{{formatDate(topic.created_at)}}.</time> 
+              </span>
+              <br/>
+              <span class="fr-text--xs" style="font-weight: normal;">Modifié le
+                <time :datetime="topic.last_modified">{{formatDate(topic.last_modified)}}.</time>
+              </span>
+            </p>
+          </nav>
       </div>
     </div>
 
     <div class="fr-col-12 fr-col-md-8">
-      <h2 class="fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
+      <h2 class="h2-cas-usage fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
 
       <h3 class="fr-h6">
         <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
@@ -127,14 +145,14 @@
       <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
     </div>
 
-    <h2 class="fr-h2 fr-my-5w">Solutions disponibles</h2>
+    <h2 class="h2-cas-usage fr-h2 fr-my-5w">Solutions disponibles</h2>
 
     <div
       v-for="(title, index) in sorted_grouped_reco_solutions"
       :key="title"
       class="fr-mb-4w"
     >
-      <h3 :id="`solution-${index + 1}`" class="fr-h3 fr-mb-3w">
+      <h3 :id="`solution-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
         {{ index + 1 }}. {{ title }}
       </h3>
 
@@ -146,7 +164,7 @@
       </div>
     </div>
 
-    <h2 class="fr-h2 fr-mt-5w fr-mb-0">
+    <h2 class="h2--cas-usage fr-h2 fr-mt-5w fr-mb-0">
       ➡️ Utiliser les jeux de données et API utiles
     </h2>
   </div>
@@ -155,11 +173,12 @@
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
-import { fromMarkdown } from '@/utils'
+import { fromMarkdown, formatDate } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { ref } from 'vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import { computed } from 'vue'
+import { OrganizationNameWithCertificate } from '@datagouv/components'
 
 const props = defineProps<{
   topic: Topic
@@ -223,13 +242,13 @@ const filteredTargetUsers = computed(() => {
 </script>
 
 <style scoped>
-h2 {
+.h2-cas-usage {
   color: black;
   background-color: rgb(167, 212, 205);
   padding: 2px 4px;
   display: inline-block;
 }
-h3 {
+.h3-cas-usage {
   color: #616161;
 }
 </style>
