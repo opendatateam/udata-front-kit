@@ -33,7 +33,7 @@
         </div>
         <div
           v-if="groupedTags['fournisseurs-de-service']"
-          class="fr-card__detail fr-text--right"
+          class="fr-card__detail"
         >
           <p class="fr-mb-1w" style="white-space: normal;">
             À destination des 
