@@ -96,11 +96,13 @@ jobs:
           exit 0
 
       - name: Cloning repo
+        if: env.SHOULD_DEPLOY == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Start deployment
+        if: env.SHOULD_DEPLOY == 'true'
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
@@ -121,6 +123,7 @@ jobs:
           # branch: 'main'
 
       - name: Set site id as build arg
+        if: env.SHOULD_DEPLOY == 'true'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
@@ -131,7 +134,8 @@ jobs:
             docker-options:add deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }} build "--build-arg VITE_SITE_ID=${{ env.SITE }}"
 
       - name: Push to dokku
-        uses: dokku/github-action@master
+        if: env.SHOULD_DEPLOY == 'true'
+        uses: dokku/github-action@v1.0.0
         with:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
           review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
@@ -160,6 +164,7 @@ jobs:
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
 
       - name: Update deployment status
+        if: env.SHOULD_DEPLOY == 'true'
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ github.token }}
