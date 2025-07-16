@@ -44,7 +44,7 @@ jobs:
     # only run if PR is from same repo OR if manually triggered
     if: (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) || github.event_name == 'workflow_dispatch'
     steps:
-      - name: Set variables
+      - name: Determine deployment strategy and check review app existence
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             # For manual deployment, only process the selected site
@@ -55,10 +55,29 @@ jobs:
             echo "SITE=${{ github.event.inputs.site }}" >> $GITHUB_ENV
             echo "PR_NUMBER=${{ github.event.inputs.pr_number }}" >> $GITHUB_ENV
             echo "EVENT_ACTION=manual" >> $GITHUB_ENV
+            echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
+            echo "SHOULD_CREATE=true" >> $GITHUB_ENV
           else
             echo "SITE=${{ matrix.site }}" >> $GITHUB_ENV
             echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
             echo "EVENT_ACTION=${{ github.event.action }}" >> $GITHUB_ENV
+            # Set defaults (no deployment, no creation)
+            echo "SHOULD_DEPLOY=false" >> $GITHUB_ENV
+            echo "SHOULD_CREATE=false" >> $GITHUB_ENV
+            
+            # Override defaults based on event type
+            if [ "${{ github.event.action }}" = "reopened" ] || [ "${{ github.event.action }}" = "synchronize" ]; then
+              # For reopened/synchronized PRs, only redeploy if review app already exists (manual-first approach)
+              if ssh -o StrictHostKeyChecking=no dokku@${{ secrets.REVIEW_APP_SSH_HOST }} apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}; then
+                echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
+                echo "SHOULD_CREATE=false" >> $GITHUB_ENV
+                echo "Review app exists, will redeploy"
+              else
+                echo "Review app does not exist, manual creation required"
+              fi
+            elif [ "${{ github.event.action }}" = "closed" ]; then
+              echo "PR closed, will cleanup"
+            fi
           fi
 
       - name: Debug event
@@ -67,27 +86,21 @@ jobs:
           echo "Site: ${{ env.SITE }}"
           echo "PR number: ${{ env.PR_NUMBER }}"
           echo "Event action: ${{ env.EVENT_ACTION }}"
+          echo "Should deploy: ${{ env.SHOULD_DEPLOY }}"
+          echo "Should create: ${{ env.SHOULD_CREATE }}"
 
-      - name: Check if review app exists for this site and PR
-        if: github.event.action == 'synchronize'
+      - name: Exit if no deployment needed (except for cleanup)
+        if: env.SHOULD_DEPLOY != 'true' && env.EVENT_ACTION != 'closed'
         run: |
-          # Check if the review app exists for this PR and site
-          if ssh -o StrictHostKeyChecking=no dokku@${{ secrets.REVIEW_APP_SSH_HOST }} apps:exists deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}; then
-            echo "REVIEW_APP_EXISTS=true" >> $GITHUB_ENV
-            echo "Review app exists, will redeploy"
-          else
-            echo "REVIEW_APP_EXISTS=false" >> $GITHUB_ENV
-            echo "Review app does not exist, skipping redeploy"
-          fi
+          echo "No deployment needed for this event, exiting"
+          exit 0
 
       - name: Cloning repo
-        if: (github.event.action == 'synchronize' && env.REVIEW_APP_EXISTS == 'true') || github.event.action == 'reopened' || github.event_name == 'workflow_dispatch'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Start deployment
-        if: (github.event.action == 'synchronize' && env.REVIEW_APP_EXISTS == 'true') || github.event.action == 'reopened' || github.event_name == 'workflow_dispatch'
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
@@ -97,7 +110,7 @@ jobs:
           transient-environment: true
 
       - name: Create the review app
-        if: github.event.action == 'reopened' || github.event_name == 'workflow_dispatch'
+        if: env.SHOULD_CREATE == 'true'
         uses: dokku/github-action@master
         with:
           command: review-apps:create
@@ -108,7 +121,6 @@ jobs:
           # branch: 'main'
 
       - name: Set site id as build arg
-        if: (github.event.action == 'synchronize' && env.REVIEW_APP_EXISTS == 'true') || github.event.action == 'reopened' || github.event_name == 'workflow_dispatch'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
@@ -119,7 +131,6 @@ jobs:
             docker-options:add deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }} build "--build-arg VITE_SITE_ID=${{ env.SITE }}"
 
       - name: Push to dokku
-        if: (github.event.action == 'synchronize' && env.REVIEW_APP_EXISTS == 'true') || github.event.action == 'reopened' || github.event_name == 'workflow_dispatch'
         uses: dokku/github-action@master
         with:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
@@ -129,7 +140,7 @@ jobs:
           branch: 'main'
 
       - name: Enable SSL with Let's Encrypt
-        if: github.event.action == 'reopened' || github.event_name == 'workflow_dispatch'
+        if: env.SHOULD_CREATE == 'true'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
@@ -149,7 +160,6 @@ jobs:
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
 
       - name: Update deployment status
-        if: ((github.event.action == 'synchronize' && env.REVIEW_APP_EXISTS == 'true') || github.event.action == 'reopened' || github.event_name == 'workflow_dispatch')
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ github.token }}
