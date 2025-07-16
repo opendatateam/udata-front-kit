@@ -52,6 +52,7 @@
             En quoi cette solution est utile pour ce cas d'usage ?
           </strong>
           <br />
+          <!-- eslint-disable vue/no-v-html -->
           <span
             v-html="
               fromMarkdown(
@@ -59,22 +60,27 @@
               )
             "
           ></span>
+          <!-- eslint-enable vue/no-v-html -->
         </p>
 
         <p v-if="reco_solution.Concretement_pour_les_usagers_">
           <strong>🧑 Concrètement, pour les usagers :</strong>
           <br />
+          <!-- eslint-disable vue/no-v-html -->
           <span
             v-html="fromMarkdown(reco_solution.Concretement_pour_les_usagers_)"
           ></span>
+          <!-- eslint-enable vue/no-v-html -->
         </p>
 
         <p v-if="reco_solution.Concretement_pour_vos_agents_">
           <strong>🧑‍💼 Concrètement, pour vos agents :</strong>
           <br />
+          <!-- eslint-disable vue/no-v-html -->
           <span
             v-html="fromMarkdown(reco_solution.Concretement_pour_vos_agents_)"
           ></span>
+          <!-- eslint-enable vue/no-v-html -->
         </p>
 
         <p v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_">
@@ -87,37 +93,32 @@
             Ce que ne fait pas cette solution :
           </strong>
           <br />
+          <!-- eslint-disable vue/no-v-html -->
           <span
             v-html="
               fromMarkdown(reco_solution.Ce_que_ne_fait_pas_cette_solution_)
             "
           ></span>
+          <!-- eslint-enable vue/no-v-html -->
         </p>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.reco-solution {
-  background-color: #f6f6f6;
-  /* padding: 15px; */
-  border-radius: 4px;
-}
-</style>
-
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { fromMarkdown } from '@/utils'
 import { onMounted, ref } from 'vue'
+import type { RecoSolution } from '../model/cas_usage'
 import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
-  reco_solution: Record<string, any>
+  recoSolution: RecoSolution
 }>()
 
-const reco_solution = props.reco_solution
+const reco_solution = props.recoSolution
 
 // Reactive variable for the related solution
 const relatedSolution = ref<Topic | null>(null)
@@ -150,3 +151,11 @@ onMounted(() => {
   fetchRelatedSolution()
 })
 </script>
+
+<style scoped>
+.reco-solution {
+  background-color: #f6f6f6;
+  /* padding: 15px; */
+  border-radius: 4px;
+}
+</style>

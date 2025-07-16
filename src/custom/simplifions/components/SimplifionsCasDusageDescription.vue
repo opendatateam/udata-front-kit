@@ -31,16 +31,16 @@
           <ol>
             <li>
               <a
-                href="#contexte-et-cadre-juridique"
                 id="summary-link-1"
+                href="#contexte-et-cadre-juridique"
                 class="fr-summary__link"
                 >Contexte et cadre juridique</a
               >
             </li>
             <li>
               <a
-                href="#solutions-disponibles"
                 id="summary-link-2"
+                href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
@@ -70,6 +70,7 @@
         Contexte
       </h3>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(casUsage.Contexte)"></p>
 
       <h3 class="fr-h6">
@@ -77,6 +78,7 @@
         Cadre juridique
       </h3>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
     </div>
 
@@ -93,9 +95,9 @@
 
       <div
         v-for="reco_solution in grouped_reco_solutions[title]"
-        :key="reco_solution.Nom_de_la_solution"
+        :key="reco_solution.Nom_de_la_solution_publique"
       >
-        <SimplifionsRecoSolutions :reco_solution="reco_solution" />
+        <SimplifionsRecoSolutions :reco-solution="reco_solution" />
       </div>
     </div>
 
@@ -104,6 +106,50 @@
     </h2>
   </div>
 </template>
+
+<script setup lang="ts">
+import TagComponent from '@/components/TagComponent.vue'
+import type { Topic } from '@/model/topic'
+import { fromMarkdown } from '@/utils'
+import { useTagsByRef } from '@/utils/tags'
+import { ref } from 'vue'
+import type {
+  RecoSolution,
+  SimplifionsCasUsagesExtras
+} from '../model/cas_usage'
+import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
+
+const props = defineProps<{
+  topic: Topic
+  pageKey: string
+}>()
+
+const topicRef = ref(props.topic)
+const tags = useTagsByRef(props.pageKey, topicRef)
+
+const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
+  'simplifions-cas-d-usages'
+]
+
+const budget_group = (budget: Array<string>) => {
+  if (budget.includes('Aucun développement, ni budget')) {
+    return 'Aucun développement, ni budget'
+  }
+  return 'Avec des moyens techniques ou un éditeur de logiciel'
+}
+
+const grouped_reco_solutions = casUsage.reco_solutions.reduce(
+  (acc: Record<string, RecoSolution[]>, reco_solution) => {
+    const key = budget_group(reco_solution.Moyens_requis_pour_la_mise_en_oeuvre)
+    if (!acc[key]) {
+      acc[key] = []
+    }
+    acc[key].push(reco_solution)
+    return acc
+  },
+  {}
+)
+</script>
 
 <style scoped>
 h2 {
@@ -116,43 +162,3 @@ h3 {
   color: #616161;
 }
 </style>
-
-<script setup lang="ts">
-import TagComponent from '@/components/TagComponent.vue'
-import type { Topic } from '@/model/topic'
-import { fromMarkdown } from '@/utils'
-import { useTagsByRef } from '@/utils/tags'
-import { ref } from 'vue'
-import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
-
-const props = defineProps<{
-  topic: Topic
-  pageKey: string
-}>()
-
-const topicRef = ref(props.topic)
-const tags = useTagsByRef(props.pageKey, topicRef)
-
-const casUsage = (props.topic.extras as any)[
-  'simplifions-cas-d-usages'
-] as Record<string, any>
-
-const budget_group = (budget: Array<string>) => {
-  if (budget.includes('Aucun développement, ni budget')) {
-    return 'Aucun développement, ni budget'
-  }
-  return 'Avec des moyens techniques ou un éditeur de logiciel'
-}
-
-const grouped_reco_solutions = casUsage.reco_solutions.reduce(
-  (acc: Record<string, any[]>, reco_solution: any) => {
-    const key = budget_group(reco_solution.Moyens_requis_pour_la_mise_en_oeuvre)
-    if (!acc[key]) {
-      acc[key] = []
-    }
-    acc[key].push(reco_solution)
-    return acc
-  },
-  {} as Record<string, any[]>
-)
-</script>

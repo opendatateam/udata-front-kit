@@ -56,7 +56,7 @@ const description = computed(() => descriptionFromMarkdown(topic))
 // Dynamically load the custom description component if it exists
 const customDescriptionComponent = computed(() => {
   if (meta.descriptionComponent) {
-    return defineAsyncComponent(meta.descriptionComponent as () => Promise<any>)
+    return defineAsyncComponent(meta.descriptionComponent)
   }
   return null
 })
@@ -248,7 +248,7 @@ watch(
           <component
             :is="customDescriptionComponent"
             :topic="topic"
-            :pageKey="pageKey"
+            :page-key="pageKey"
           />
         </div>
         <div v-else>
