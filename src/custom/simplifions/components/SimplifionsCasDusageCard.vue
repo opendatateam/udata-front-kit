@@ -15,12 +15,12 @@
           mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
         </div>
       </div>
+      <div class="description-topic">
+        <p class="fr-mb-1v">
+          {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
+        </p>
+      </div>
     </RouterLink>
-    <div class="description-topic">
-      <p class="fr-mb-1v">
-        {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
-      </p>
-    </div>
   </div>
 </template>
 
@@ -53,12 +53,12 @@ const topicLink: RouteLocationRaw = {
 }
 </script>
 
+
 <style scoped>
 .owner-avatar {
   margin-bottom: -6px;
   display: inline-block;
 }
-
 .fr-card__detail,
 :deep(h3) {
   max-width: 100%;
@@ -68,11 +68,9 @@ const topicLink: RouteLocationRaw = {
   display: block;
   line-height: inherit;
 }
-
 .topic-card-col-logo {
   max-width: 4.25rem;
 }
-
 .description p {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,8 +82,12 @@ const topicLink: RouteLocationRaw = {
 .topic-card {
   border: 1px solid #ebebeb;
 }
+.topic-card:hover {
+  background-color: #f6f6f6;
+  opacity: 50;
+}
 .header-topic {
-  background-color: #e6eefe;
+  background-color: rgba(209, 221, 244, 0.5);
   color: #465f9d;
   padding: 16px;
   gap: 10px;
@@ -101,9 +103,6 @@ const topicLink: RouteLocationRaw = {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   margin-bottom: 10px;
-}
-.header-topic:hover {
-  background-color: #ebebeb;
 }
 .author-topic {
   font-size: 14px;
