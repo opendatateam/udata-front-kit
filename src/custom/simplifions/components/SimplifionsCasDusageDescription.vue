@@ -130,7 +130,7 @@
     <h2 class="fr-h2 fr-my-5w">Solutions disponibles</h2>
 
     <div
-      v-for="(title, index) in Object.keys(grouped_reco_solutions)"
+      v-for="(title, index) in sorted_grouped_reco_solutions"
       :key="title"
       class="fr-mb-4w"
     >
@@ -159,6 +159,7 @@ import { fromMarkdown } from '@/utils'
 import { useTagsByRef } from '@/utils/tags'
 import { ref } from 'vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
   topic: Topic
@@ -179,6 +180,8 @@ const budget_group = (budget: Array<string>) => {
   return 'Avec des moyens techniques ou un éditeur de logiciel'
 }
 
+// Affichage des parties reco solutions, dans l'ordre voulu
+
 const grouped_reco_solutions = casUsage.reco_solutions.reduce(
   (acc: Record<string, any[]>, reco_solution: any) => {
     const key = budget_group(reco_solution.Moyens_requis_pour_la_mise_en_oeuvre)
@@ -191,7 +194,18 @@ const grouped_reco_solutions = casUsage.reco_solutions.reduce(
   {} as Record<string, any[]>
 )
 
-// Regrouper les tags par type
+const priorityKey = "Aucun développement, ni budget"
+
+const sorted_grouped_reco_solutions = computed(() => {
+  const keys = Object.keys(grouped_reco_solutions)
+  return keys.sort((a, b) => {
+    if (a === priorityKey) return -1
+    if (b === priorityKey) return 1
+    return 0
+  })
+})
+
+// Affichage des tags "type_simplification, target_users, etc"
 const groupedTags = computed(() => {
   const groups: Record<string, typeof tags.value> = {}
   for (const tag of tags.value) {
