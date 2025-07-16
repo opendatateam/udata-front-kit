@@ -13,12 +13,59 @@
         <p class="fr-text--lead">
           {{ casUsage.Description_longue }}
         </p>
-
-        <ul v-if="tags.length > 0" class="fr-badges-group fr-mt-2w">
-          <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-            <TagComponent :tag="t" />
-          </li>
-        </ul>
+        <!--Texte pour préciser les usagers et les fournisseurs de service-->
+        <div v-if="groupedTags['target-users']" class="fr-card__detail">
+          <p class="fr-mb-1w" style="white-space: normal;">
+            Démarches des 
+            <span
+              v-for="(t, index) in filteredTargetUsers"
+              :key="t.id"
+              class="tag-item"
+            >
+              <span class="font-bold">{{ t.name }}</span>
+              <span
+                v-if="index < filteredTargetUsers.length - 1"
+                class="fr-mx-1v"
+                style="font-weight: normal;"
+              >|</span>
+            </span>
+          </p>
+        </div>
+        <div
+          v-if="groupedTags['fournisseurs-de-service']"
+          class="fr-card__detail fr-text--right"
+        >
+          <p class="fr-mb-1w" style="white-space: normal;">
+            À destination des 
+            <span
+              v-for="(t, index) in groupedTags['fournisseurs-de-service']"
+              :key="t.id"
+              class="tag-item"
+            >
+              <span class="font-bold">{{ t.name }}</span>
+              <span
+                v-if="index < groupedTags['fournisseurs-de-service'].length - 1"
+                class="fr-mx-1v"
+                style="font-weight: normal;"
+              >|</span>
+            </span>
+          </p>
+        </div>
+         <!-- Tags indiquant le type de simplification et de budget -->
+        <div v-if="groupedTags['types-de-simplification']" class="simplification-group fr-mt-2w">
+          <ul class="fr-badges-group">
+            <li v-for="t in groupedTags['types-de-simplification']" :key="t.id">
+              <TagComponent :tag="t" />
+            </li>
+          </ul>
+        </div>
+        <div v-if="groupedTags['budget']" class="budget-group">
+          <ul class="fr-badges-group">
+            <li v-for="t in groupedTags['budget']" :key="t.id">
+              <TagComponent :tag="t" />
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div class="fr-col-12 fr-col-md-4">
@@ -31,16 +78,16 @@
           <ol>
             <li>
               <a
-                href="#contexte-et-cadre-juridique"
                 id="summary-link-1"
+                href="#contexte-et-cadre-juridique"
                 class="fr-summary__link"
                 >Contexte et cadre juridique</a
               >
             </li>
             <li>
               <a
-                href="#solutions-disponibles"
                 id="summary-link-2"
+                href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
@@ -105,18 +152,6 @@
   </div>
 </template>
 
-<style scoped>
-h2 {
-  color: black;
-  background-color: rgb(167, 212, 205);
-  padding: 2px 4px;
-  display: inline-block;
-}
-h3 {
-  color: #616161;
-}
-</style>
-
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
@@ -155,4 +190,32 @@ const grouped_reco_solutions = casUsage.reco_solutions.reduce(
   },
   {} as Record<string, any[]>
 )
+
+// Regrouper les tags par type
+const groupedTags = computed(() => {
+  const groups: Record<string, typeof tags.value> = {}
+  for (const tag of tags.value) {
+    if (!groups[tag.type]) {
+      groups[tag.type] = []
+    }
+    groups[tag.type].push(tag)
+  }
+  return groups
+})
+
+const filteredTargetUsers = computed(() => {
+  return (groupedTags.value['target-users'] || []).filter(tag => tag.name !== 'Agents publics')
+})
 </script>
+
+<style scoped>
+h2 {
+  color: black;
+  background-color: rgb(167, 212, 205);
+  padding: 2px 4px;
+  display: inline-block;
+}
+h3 {
+  color: #616161;
+}
+</style>

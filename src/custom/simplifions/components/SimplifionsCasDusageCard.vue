@@ -75,7 +75,6 @@
 <script setup lang="ts">
 import {
   formatRelativeIfRecentDate,
-  useOwnerName
 } from '@datagouv/components'
 
 import type { Topic } from '@/model/topic'
@@ -95,7 +94,6 @@ const { pageKey } = useCurrentPageConf()
 
 const topicRef = ref(props.topic)
 const tags = useTagsByRef(pageKey, topicRef)
-const ownerName = useOwnerName(props.topic)
 
 const topicLink: RouteLocationRaw = {
   name: `${pageKey}_detail`,
@@ -118,9 +116,6 @@ const filteredTargetUsers = computed(() => {
   return (groupedTags.value['target-users'] || []).filter(tag => tag.name !== 'Agents publics')
 })
 
-watch(groupedTags, (val) => {
-  console.log('groupedTags:', val)
-}, { immediate: true })
 </script>
 
 
