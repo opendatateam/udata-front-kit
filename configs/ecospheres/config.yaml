@@ -92,6 +92,7 @@ website:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
     closeable: false
+  # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
     - text: Accueil
       to: /
@@ -108,6 +109,7 @@ website:
   router:
     disable:
       - topics
+    # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
       - title: 'À propos'
         id: 'about'
@@ -121,6 +123,23 @@ website:
         id: 'terms'
         route: '/terms'
         url: '/ecospheres/pages/terms.md'
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Bouquets
+      path: /bouquets
+    - name: Jeux de données
+      path: /datasets
+    - name: Indicateurs
+      path: /indicators
+    - name: Organisations
+      path: /organizations
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
@@ -152,21 +171,6 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
-  sitemap:
-    - name: Accueil
-      path: /
-    - name: Bouquets
-      path: /bouquets
-    - name: Jeux de données
-      path: /datasets
-    - name: Organisations
-      path: /organizations
-    - name: À propos
-      path: /about
-    - name: Conditions générales d’utilisation
-      path: /terms
-    - name: Accessibilité
-      path: /accessibility
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
