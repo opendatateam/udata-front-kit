@@ -223,6 +223,8 @@ onMounted(() => {
         setMetaTitle()
       })
       .finally(() => loader.hide())
+  } else {
+    setMetaTitle()
   }
 })
 </script>
