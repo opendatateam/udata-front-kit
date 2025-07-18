@@ -7,25 +7,25 @@ const fournisseursDeService = [
   {
     title: 'Particuliers',
     emoji: '👱',
-    tags: 'simplifions-target-users-particuliers',
+    tags: 'simplifions-target-users-particuliers&target-users=particuliers',
     description: "Tous les cas d'usages concernant les particuliers"
   },
   {
     title: 'Entreprises',
     emoji: '💼',
-    tags: 'simplifions-target-users-entreprises',
+    tags: 'simplifions-target-users-entreprises&target-users=entreprises',
     description: "Tous les cas d'usages concernant les entreprises"
   },
   {
     title: 'Associations',
     emoji: '🤝',
-    tags: 'simplifions-target-users-associations',
+    tags: 'simplifions-target-users-associations&target-users=associations',
     description: "Tous les cas d'usages concernant les associations"
   },
   {
     title: 'Agents publics',
     emoji: '🧑‍💼',
-    tags: 'simplifions-target-users-agents-publics',
+    tags: 'simplifions-target-users-agents-publics&target-users=agents-publics',
     description: "Tous les cas d'usages concernant les agents publics"
   }
 ]
@@ -152,13 +152,13 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        class="fr-col-12 fr-col-lg-3"
         v-for="item in fournisseursDeService"
         :key="item.title"
+        class="fr-col-12 fr-col-lg-3"
       >
         <div
-          class="fr-tile fr-tile--horizontal fr-enlarge-link"
           id="tile-sourcing"
+          class="fr-tile fr-tile--horizontal fr-enlarge-link"
         >
           <div class="fr-tile__body">
             <div class="fr-tile__content">
@@ -206,9 +206,9 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        class="fr-col-12 fr-col-lg-4"
         v-for="budget in budgets"
         :key="budget.title"
+        class="fr-col-12 fr-col-lg-4"
       >
         <div class="fr-card" style="background-color: #fafafa">
           <div class="fr-card__body">
@@ -336,9 +336,9 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        class="fr-col-12 fr-col-md-4"
         v-for="niveau in niveauxDeSimplification"
         :key="niveau.title"
+        class="fr-col-12 fr-col-md-4"
       >
         <div class="fr-card" style="background-color: #fafafa">
           <div class="fr-card__body">
