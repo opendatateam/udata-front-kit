@@ -113,7 +113,7 @@ Plus précisément, le [workflow de déploiement](.github/workflows/create-deplo
 
 ## 📚 Bibliothèques et plugins utilisés
 
-### 📦 Librairies
+### 📦 Bibliothèques
 
 - `@datagouv/components` - Composants officiels de data.gouv.fr
 - `@gouvminint/vue-dsfr` - Intégration Vue.js du Design System de l'État
