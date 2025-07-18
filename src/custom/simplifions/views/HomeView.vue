@@ -35,24 +35,24 @@ const budgets = [
     title: "Vous n'avez ni équipe technique, ni éditeur",
     description:
       "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique.",
-    casUsagesTags: 'simplifions-budget-aucun-developpement-ni-budget',
-    solutionsTags: 'simplifions-solutions-moyens-aucun',
+    casUsagesTags: 'simplifions-budget-aucun-developpement-ni-budget&budget=aucun-developpement-ni-budget',
+    solutionsTags: 'simplifions-solutions-moyens-aucun&budget=aucun-developpement-ni-budget',
     imageSrc: '/simplifions/assets/accueil-picto-contract.png'
   },
   {
     title: 'Vous passez par un éditeur',
     description:
       "Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.",
-    casUsagesTags: 'simplifions-budget-savec-solution-editeur',
-    solutionsTags: 'simplifions-solutions-moyens-editeur',
+    casUsagesTags: 'simplifions-budget-aucun-developpement-ni-budget&budget=avec-solution-editeur',
+    solutionsTags: 'simplifions-solutions-moyens-aucun&budget=avec-solution-editeur',
     imageSrc: '/simplifions/assets/accueil-picto-self-training.png'
   },
   {
     title: 'Vous avez votre service informatique',
     description:
       "Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d'information.",
-    casUsagesTags: 'simplifions-budget-avec-des-moyens-techniques',
-    solutionsTags: 'simplifions-solutions-moyens-techniques',
+    casUsagesTags: 'simplifions-budget-aucun-developpement-ni-budget&budget=avec-des-moyens-techniques',
+    solutionsTags: 'simplifions-solutions-moyens-aucun&budget=avec-des-moyens-techniques',
     imageSrc: '/simplifions/assets/accueil-picto-coding.png'
   }
 ]
@@ -61,22 +61,22 @@ const niveauxDeSimplification = [
   {
     title: 'Niveau 1 : ⭐️ Accès facile',
     description: "L'agent trouve facilement l'information",
-    casUsagesTags: 'simplifions-types-de-simplification-acces-facile',
-    solutionsTags: 'simplifions-solutions-types-de-simplification-acces-facile',
+    casUsagesTags: 'simplifions-types-de-simplification-acces-facile&types-de-simplification=acces-facile',
+    solutionsTags: 'simplifions-solutions-types-de-simplification-acces-facile&types-de-simplification=acces-facile',
     buttonText: 'Solutions'
   },
   {
     title: 'Niveau 2 : ⭐️⭐️ Dites-le-nous une fois',
     description: "L'usager n'a plus à fournir de justificatifs",
-    casUsagesTags: 'simplifions-types-de-simplification-dlnuf',
-    solutionsTags: 'simplifions-solutions-types-de-simplification-dlnuf',
+    casUsagesTags: 'simplifions-types-de-simplification-acces-facile&types-de-simplification=dlnuf',
+    solutionsTags: 'simplifions-solutions-types-de-simplification-acces-facile&types-de-simplification=dlnuf',
     buttonText: 'Solutions'
   },
   {
     title: 'Niveau 3 : ⭐️⭐️⭐️ Proactivité',
     description: "L'usager n'a plus de démarche à faire",
-    casUsagesTags: 'simplifions-types-de-simplification-proactivite',
-    solutionsTags: 'simplifions-solutions-types-de-simplification-proactivite',
+    casUsagesTags: 'simplifions-types-de-simplification-acces-facile&types-de-simplification=proactivite',
+    solutionsTags: 'simplifions-solutions-types-de-simplification-acces-facile&types-de-simplification=proactivite',
     buttonText: 'Solution'
   }
 ]
