@@ -14,7 +14,7 @@ type Props = {
 withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgAlt: '',
   operatorImgStyle: () => ({}),
-  searchLabel: 'Recherche',
+  searchLabel: 'Rechercher',
   quickLinks: () => [],
   showSearch: config.website.header_search.display,
   customSearch: false
@@ -93,7 +93,7 @@ const dropdown = config.website.header_search.dropdown ?? undefined
         class="custom-search"
         :search-label="searchLabel"
         :dropdown="dropdown"
-        placeholder="Rechercher"
+        :placeholder="searchLabel"
         @do-search="closeModal"
       />
     </template>
