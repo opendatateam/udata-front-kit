@@ -6,6 +6,7 @@ dist/
 node_modules/
 shell.nix
 src/playground
+cypress/screenshots
 
 # vim swap files
 *.swp
