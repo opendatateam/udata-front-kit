@@ -96,7 +96,7 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   ]
 })
 
-const errorSummary = useTemplateRef('errorSummary')
+const errorSummary = useTemplateRef<ComponentPublicInstance>('errorSummary')
 
 const onCancel = () => {
   // reset error fields
