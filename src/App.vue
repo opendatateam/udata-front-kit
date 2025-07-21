@@ -79,6 +79,7 @@ onMounted(() => {
 
 const logoService = config.website.service_logo
 const logoText = config.website.rf_title
+const serviceTitle = config.website.title
 const logoOperator = config.website.logo_operator?.src
 const logoOperatorHeight = config.website.logo_operator?.header?.height
 const logoOperatorWidth = config.website.logo_operator?.header?.width
@@ -159,6 +160,7 @@ watch(
     :desc-text="footerPhrase"
     :ecosystem-links="footerExternalLinks"
     :mandatory-links="footerMandatoryLinks"
+    :home-title="`Retour à l'accueil du site - ${serviceTitle}`"
   />
 </template>
 
