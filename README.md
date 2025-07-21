@@ -45,10 +45,45 @@ npm run dev
 npm run build
 ```
 
-#### Tests via [Vitest](https://vitest.dev/)
+#### Tests unitaires via [Vitest](https://vitest.dev/)
 
 ```sh
 npm run test
+```
+
+#### Tests end-to-end via [Cypress](https://cypress.io/)
+
+**En environnement de dev** :
+
+Pour lancer les tests _génériques_ communs à tous les sites, qui se trouvent dans `/cypress/e2e/` :
+
+```sh
+# Pour lancer la version ligne de commande de cypress :
+npm run test:e2e
+
+# Pour lancer la version visuelle de cypress :
+npm run test:e2e:open
+```
+
+Pour lancer les tests génériques + les tests spécifiques à site particulier qui se trouvent dans `/cypress/e2e/monsite/` :
+
+```sh
+# Pour lancer la version ligne de commande de cypress :
+VITE_SITE_ID=monsite npm run test:e2e
+
+# Pour lancer la version visuelle de cypress :
+VITE_SITE_ID=monsite npm run test:e2e:open
+```
+
+**Tester un build** :
+
+Dans la CI, on veut lancer les tests sur un build, plutôt que sur un serveur de dev.
+
+```sh
+# Build pour monsite
+VITE_SITE_ID=monsite npm run build
+# Run les tests sur le build de monsite
+VITE_SITE_ID=monsite nom run test:e2e:for_production_build
 ```
 
 #### Linting via [ESLint](https://eslint.org/)
@@ -80,11 +115,13 @@ Le déploiement des verticales thématiques s'effectue via un workflow GitHub qu
 ```
 
 **Paramètres :**
+
 - **ENV** : `prod` ou `demo`/`preprod` suivant la verticale
 - **CONFIG_NAME** : nom de la configuration (actuellement `ecologie`, `meteo`, `defis` ou `simplifions`)
 - **VERSION_PART** : `major`, `minor` ou `patch`
 
 **Exemple :**
+
 ```
 [prod:ecologie:minor] nouvelle fonctionnalité incroyable
 ```
@@ -103,6 +140,7 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
 2. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
 
 Plus précisément, le [workflow de déploiement](.github/workflows/create-deploy-release.yml) est responsable de :
+
 1. **Configuration de l'environnement** : variables et accès aux dépôts
 2. **Clonage du dépôt "scaffolding" du script d'appel à l'infrastructure**
 3. **Récupération de la configuration** basée sur le message de commit
