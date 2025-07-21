@@ -41,8 +41,8 @@ jobs:
           - simplifions
     permissions:
       deployments: write
-    # only run if PR is from same repo OR if manually triggered
-    if: (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) || github.event_name == 'workflow_dispatch'
+    # Run for all PRs including forks and for manual triggers
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Determine deployment strategy and check review app existence
         run: |
