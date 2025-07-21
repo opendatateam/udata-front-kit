@@ -58,6 +58,7 @@ const dropdown = config.website.header_search.dropdown ?? undefined
     service-description=""
     :quick-links
     :show-search="showSearch && !customSearch"
+    :home-label="`Retour à l'accueil du site - ${serviceTitle}`"
   >
     <!-- needed because of logo + badge -->
     <template #operator>
