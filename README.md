@@ -83,7 +83,7 @@ Dans la CI, on veut lancer les tests sur un build, plutôt que sur un serveur de
 # Build pour monsite
 VITE_SITE_ID=monsite npm run build
 # Run les tests sur le build de monsite
-VITE_SITE_ID=monsite nom run test:e2e:for_production_build
+VITE_SITE_ID=monsite npm run test:e2e:for_production_build
 ```
 
 #### Linting via [ESLint](https://eslint.org/)
