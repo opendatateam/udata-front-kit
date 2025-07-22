@@ -89,9 +89,13 @@ Pour créer une review app pour votre PR :
 2. **Sélectionner "Deploy review app"** dans la liste des workflows
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
-   - **Branche** : la branche qui contient la PR à déployer
+
    - **Site** : Le site à déployer (dropdown)
    - **Pull Request number** : Le numéro de votre PR
+     > **💡 Info** : Le choix de la branche n'a pas d'influence.
+
+![Screenshot des paramètres de déploiement](https://i.ibb.co/2065xZg6/useless-param.jpg)
+
 5. **Cliquer sur "Run workflow"**
 
 ### 🏭 Déploiement en preprod et en production
@@ -105,11 +109,13 @@ Le déploiement des verticales thématiques en preprod et en production s'effect
 ```
 
 **Paramètres :**
+
 - **ENV** : `prod` ou `demo`/`preprod` suivant la verticale
 - **CONFIG_NAME** : nom de la configuration (actuellement `ecologie`, `meteo`, `defis` ou `simplifions`)
 - **VERSION_PART** : `major`, `minor` ou `patch`
 
 **Exemple :**
+
 ```
 [prod:ecologie:minor] nouvelle fonctionnalité incroyable
 ```
@@ -128,6 +134,7 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
 2. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
 
 Plus précisément, le [workflow de déploiement](.github/workflows/create-deploy-release.yml) est responsable de :
+
 1. **Configuration de l'environnement** : variables et accès aux dépôts
 2. **Clonage du dépôt "scaffolding" du script d'appel à l'infrastructure**
 3. **Récupération de la configuration** basée sur le message de commit
