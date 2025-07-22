@@ -64,11 +64,19 @@ jobs:
             # Set defaults (no deployment, no creation)
             echo "SHOULD_DEPLOY=false" >> $GITHUB_ENV
             echo "SHOULD_CREATE=false" >> $GITHUB_ENV
-            
+
+            # Check app existence
+            if ssh -o StrictHostKeyChecking=no dokku@${{ secrets.REVIEW_APP_SSH_HOST }} apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}; then
+              APP_EXISTS=true
+              echo "Review app exists"
+            else
+              APP_EXISTS=false
+              echo "Review app does not exist"
+            fi
+
             # Override defaults based on event type
             if [ "${{ github.event.action }}" = "synchronize" ]; then
-              # For synchronized PRs, only redeploy if review app already exists (manual-first approach)
-              if ssh -o StrictHostKeyChecking=no dokku@${{ secrets.REVIEW_APP_SSH_HOST }} apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}; then
+              if [ "$APP_EXISTS" = "true" ]; then
                 echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
                 echo "SHOULD_CREATE=false" >> $GITHUB_ENV
                 echo "Review app exists, will redeploy"
@@ -76,7 +84,14 @@ jobs:
                 echo "Review app does not exist, manual creation required"
               fi
             elif [ "${{ github.event.action }}" = "closed" ]; then
-              echo "PR closed, will cleanup"
+              if [ "$APP_EXISTS" = "true" ]; then
+                echo "Will cleanup existing review app"
+                echo "SHOULD_DESTROY=true" >> $GITHUB_ENV
+              else
+                echo "SHOULD_DESTROY=false" >> $GITHUB_ENV
+                echo "No cleanup needed"
+                exit 0
+              fi
             fi
           fi
 
@@ -88,6 +103,7 @@ jobs:
           echo "Event action: ${{ env.EVENT_ACTION }}"
           echo "Should deploy: ${{ env.SHOULD_DEPLOY }}"
           echo "Should create: ${{ env.SHOULD_CREATE }}"
+          echo "Should destroy: ${{ env.SHOULD_DESTROY }}"
 
       - name: Exit if no deployment needed (except for cleanup)
         if: env.SHOULD_DEPLOY != 'true' && env.EVENT_ACTION != 'closed'
@@ -155,7 +171,7 @@ jobs:
             letsencrypt:enable deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
 
       - name: Destroy the review app
-        if: github.event.action == 'closed'
+        if: github.event.action == 'closed' && env.SHOULD_DESTROY == 'true'
         uses: dokku/github-action@master
         with:
           command: review-apps:destroy
