@@ -139,30 +139,6 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui se déclenche **manuellement** via l'interface GitHub Actions.
 
-**Sites disponibles :**
-- `ecospheres` - Site écologie
-- `meteo-france` - Site météo
-- `logistique` - Site logistique
-- `defis` - Site défis
-- `hackathon` - Site hackathon
-- `simplifions` - Site simplifions
-
-**Environnements :**
-- `preprod` - Environnement de pré-production
-- `prod` - Environnement de production
-
-**Paramètres :**
-
-- **ENV** : `prod` ou `demo`/`preprod` suivant la verticale
-- **CONFIG_NAME** : nom de la configuration (actuellement `ecologie`, `meteo`, `defis` ou `simplifions`)
-- **VERSION_PART** : `major`, `minor` ou `patch`
-
-**Exemple :**
-
-```
-[prod:ecologie:minor] nouvelle fonctionnalité incroyable
-```
-
 Pour déployer une verticale :
 
 1. **Aller dans l'onglet "Actions"** du dépôt GitHub
@@ -170,7 +146,7 @@ Pour déployer une verticale :
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
    - **Site** : Le site à déployer (dropdown avec les sites disponibles)
-   - **Environment** : L'environnement cible (`preprod` ou `prod`)
+   - **Environment** : L'environnement cible (`demo` (preprod for `ecologie`), `preprod` (preprod for all other sites) ou `prod`)
    - **Version type** : Le type de version (`major`, `minor`, ou `patch`)
 5. **Cliquer sur "Run workflow"**
 
@@ -178,6 +154,14 @@ Le workflow va automatiquement :
 - Calculer la prochaine version basée sur les tags existants
 - Créer un nouveau tag avec cette version
 - Déclencher le pipeline de déploiement GitLab
+
+**Sites disponibles :**
+- `ecospheres` - Site écologie
+- `meteo-france` - Site météo
+- `logistique` - Site logistique
+- `defis` - Site défis
+- `hackathon` - Site hackathon
+- `simplifions` - Site simplifions
 
 **Exemple de déploiement :**
 - Site : `ecospheres`

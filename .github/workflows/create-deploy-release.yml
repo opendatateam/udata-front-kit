@@ -22,6 +22,7 @@ on:
         default: 'preprod'
         type: choice
         options:
+          - demo
           - preprod
           - prod
       version_type:
