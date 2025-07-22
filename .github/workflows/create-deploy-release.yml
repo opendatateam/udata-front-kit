@@ -1,4 +1,4 @@
-name: Deployment on preprod or prod with version bump
+name: Deployment on datagouv domains with version bump
 run-name: Deploy ${{ github.event.inputs.site }} to ${{ github.event.inputs.environment }} (v${{ github.sha }})
 
 on:
