@@ -89,9 +89,9 @@ Pour créer une review app pour votre PR :
 2. **Sélectionner "Deploy review app"** dans la liste des workflows
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
-   - **Branche** : la branche qui contient la PR à déployer
    - **Site** : Le site à déployer (dropdown)
    - **Pull Request number** : Le numéro de votre PR
+> **💡 Info** : Le choix de la branche n'a pas d'influence.
 5. **Cliquer sur "Run workflow"**
 
 ### 🏭 Déploiement en preprod et en production
