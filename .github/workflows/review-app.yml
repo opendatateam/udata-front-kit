@@ -45,20 +45,22 @@ jobs:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Check if review app exists
+        id: check_app
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
-          script: |
-            if dokku apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}; then
-              echo "APP_EXISTS=true" >> $GITHUB_ENV
-              echo "Review app exists"
-            else
-              echo "APP_EXISTS=false" >> $GITHUB_ENV
-              echo "Review app does not exist"
-            fi
+          script: dokku apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+
+      - name: Set APP_EXISTS variable
+        run: |
+          if [ ${{ steps.check_app.outcome }} == 'success' ]; then
+            echo "APP_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "APP_EXISTS=false" >> $GITHUB_ENV
+          fi
 
       - name: Determine deployment strategy
         run: |
