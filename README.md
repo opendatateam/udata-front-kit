@@ -146,7 +146,7 @@ Pour déployer une verticale :
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
    - **Site** : Le site à déployer (dropdown avec les sites disponibles)
-   - **Environment** : L'environnement cible (`demo` (preprod for `ecologie`), `preprod` (preprod for all other sites) ou `prod`)
+   - **Environment** : L'environnement cible (`demo`/`preprod` suivant la verticale, ou `prod`)
    - **Version type** : Le type de version (`major`, `minor`, ou `patch`)
 5. **Cliquer sur "Run workflow"**
 
