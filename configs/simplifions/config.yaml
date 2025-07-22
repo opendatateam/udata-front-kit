@@ -208,8 +208,6 @@ pages:
             name: Entreprises
           - id: associations
             name: Associations
-          - id: agents-publics
-            name: Agents publics
       - name: 'Moyens disponibles pour la mise en œuvre :'
         id: budget
         type: select
@@ -282,8 +280,6 @@ pages:
             name: Entreprises
           - id: associations
             name: Associations
-          - id: agents-publics
-            name: Agents publics
       - name: 'Moyens disponibles pour la mise en œuvre :'
         id: budget
         type: select
