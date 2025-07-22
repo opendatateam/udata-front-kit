@@ -42,7 +42,7 @@
     </div>
     <!-- Tags indiquant le type de simplification et de budget -->
     <div
-      v-if="groupedTags['types-de-simplification']"
+      v-if="showSimplification && groupedTags['types-de-simplification']"
       class="simplification-group fr-mt-2w"
     >
       <ul class="fr-badges-group">
@@ -51,7 +51,7 @@
         </li>
       </ul>
     </div>
-    <div v-if="groupedTags['budget']" class="budget-group">
+    <div v-if="showBudget && groupedTags['budget']" class="budget-group">
       <ul class="fr-badges-group">
         <li v-for="t in groupedTags['budget']" :key="t.id">
           <TagComponent :tag="t" />
@@ -61,6 +61,8 @@
   </div>
 </template>
 
+
+
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
@@ -69,6 +71,8 @@ import { useTagsByRef } from '@/utils/tags'
 const props = defineProps<{
   topic: Topic
   pageKey: string
+  showBudget?: boolean
+  showSimplification?: boolean
 }>()
 
 const topicRef = ref(props.topic)
@@ -84,6 +88,10 @@ const groupedTags = computed(() => {
   }
   return groups
 })
+
+const showBudget = computed(() => props.showBudget ?? true)
+const showSimplification = computed(() => props.showSimplification ?? true)
+
 </script>
 
 <style scoped></style>
