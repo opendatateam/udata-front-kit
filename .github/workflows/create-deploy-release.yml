@@ -68,14 +68,6 @@ jobs:
           echo "Site: ${{ github.event.inputs.site }}"
           echo "Environment: ${{ github.event.inputs.environment }}"
           echo "Version type: ${{ github.event.inputs.version_type }}"
-          echo "---"
-          echo "Environment variables:"
-          echo "CONFIG_NAME: ${{ env.CONFIG_NAME }}"
-          echo "ENV: ${{ env.ENV }}"
-          echo "VERSION_PART: ${{ env.VERSION_PART }}"
-          echo "APP_NAME: ${{ env.APP_NAME }}"
-          echo "ENVS: ${{ env.ENVS }}"
-          echo "APPS: ${{ env.APPS }}"
 
       - name: Setup SSH keys and Git configuration
         shell: bash
