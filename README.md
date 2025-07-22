@@ -106,9 +106,34 @@ npm run format
 
 ## 🚢 Déploiement
 
-### Workflow GitHub pour le déploiement
+### 🔍 Déploiement en preview
 
-Le déploiement des verticales thématiques s'effectue via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
+Une **review app** est un environnement de prévisualisation temporaire qui permet de tester les changements d'une Pull Request dans un environnement similaire à la production. Un workflow CI/CD dédié ([`.github/workflows/review-app.yml`](.github/workflows/review-app.yml)) gère automatiquement la création, mise à jour et suppression de ces environnements.
+
+Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture d'une Pull Request. L'auteur de la PR doit **déployer manuellement** les PR qu'il souhaite tester, via l'interface de GitHub Actions.
+
+> **💡 Info** : Une fois qu'une review app est créée pour une PR, elle sera **automatiquement mise à jour** à chaque nouveau commit sur la PR.
+
+**URLs générées** : `https://deploy-preview-{PR_NUMBER}--{SITE}.sandbox.data.developpement-durable.gouv.fr`
+
+#### Comment créer une review app
+
+Pour créer une review app pour votre PR :
+
+1. **Aller dans l'onglet "Actions"** du dépôt GitHub
+2. **Sélectionner "Deploy review app"** dans la liste des workflows
+3. **Cliquer sur "Run workflow"**
+4. **Choisir** :
+   - **Branche** : la branche qui contient la PR à déployer
+   - **Site** : Le site à déployer (dropdown)
+   - **Pull Request number** : Le numéro de votre PR
+5. **Cliquer sur "Run workflow"**
+
+### 🏭 Déploiement en preprod et en production
+
+#### Workflow GitHub pour le déploiement en preprod et en production
+
+Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
 
 ```
 [<env>:<config_name>:<version_part>] <description>
@@ -132,7 +157,7 @@ Toutes les variables et secrets nécessaires pour ce workflow sont listés dans 
 
 Le tag créé est utilisé lors de la construction de l'image et pendant le déploiement.
 
-### Architecture de déploiement
+#### Architecture de déploiement en preprod et en production
 
 Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne en deux temps :
 
