@@ -46,13 +46,14 @@ jobs:
     steps:
       - name: Check if review app exists
         id: check_app
+        continue-on-error: true
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
-          script: dokku apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+          script: apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
 
       - name: Set APP_EXISTS variable
         run: |
