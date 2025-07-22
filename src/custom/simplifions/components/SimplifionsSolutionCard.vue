@@ -47,6 +47,7 @@ import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import type { RouteLocationRaw } from 'vue-router'
+import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -59,10 +60,9 @@ const props = defineProps({
   }
 })
 
-const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<
-  string,
-  any
->
+const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
+  'simplifions-solutions'
+]
 
 const imageUrl = solution?.Image_principale?.[0]
   ? gristImageUrl(solution.Image_principale[0])
