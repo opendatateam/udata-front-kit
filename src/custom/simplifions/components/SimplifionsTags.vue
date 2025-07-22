@@ -5,13 +5,13 @@
       <p class="fr-mb-1w" style="white-space: normal">
         Démarches des
         <span
-          v-for="(t, index) in filteredTargetUsers"
+          v-for="(t, index) in groupedTags['target-users']"
           :key="t.id"
           class="tag-item"
         >
           <span class="font-bold">{{ t.name }}</span>
           <span
-            v-if="index < filteredTargetUsers.length - 1"
+            v-if="index < groupedTags['target-users'].length - 1"
             class="fr-mx-1v"
             style="font-weight: normal"
             >|</span
@@ -83,12 +83,6 @@ const groupedTags = computed(() => {
     groups[tag.type].push(tag)
   }
   return groups
-})
-
-const filteredTargetUsers = computed(() => {
-  return (groupedTags.value['target-users'] || []).filter(
-    (tag) => tag.name !== 'Agents publics'
-  )
 })
 </script>
 
