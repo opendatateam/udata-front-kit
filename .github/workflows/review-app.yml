@@ -47,7 +47,7 @@ jobs:
       - name: Check if review app exists
         id: check_app
         continue-on-error: true
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
@@ -151,7 +151,7 @@ jobs:
 
       - name: Set site id as build arg
         if: env.SHOULD_DEPLOY == 'true'
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
@@ -172,7 +172,7 @@ jobs:
 
       - name: Enable SSL with Let's Encrypt
         if: env.SHOULD_CREATE == 'true'
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
