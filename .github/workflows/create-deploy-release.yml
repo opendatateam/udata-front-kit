@@ -113,7 +113,7 @@ jobs:
           # Must have GITLAB_API_TOKEN set in the environment
           # GITLAB_API_TOKEN is the token related to the "infra" GitLab repository, so that the GitLab CI/CD pipeline can be triggered
           # The script args are, in order:
-          # - APP_NAME: the name of the project to deploy
+          # - CONFIG_NAME: the name of the project to deploy
           # - RELEASE_VERSION: the version to deploy
           # - ENV: the environment to deploy to
           # - VARS: the optional deploy variables
