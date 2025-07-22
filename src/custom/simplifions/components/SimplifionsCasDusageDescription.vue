@@ -40,13 +40,13 @@
               >
               <ol>
                 <li
-                  v-for="(title, index) in Object.keys(grouped_reco_solutions)"
-                  :key="title"
+                  v-for="(group, index) in grouped_reco_solutions"
+                  :key="group.title"
                 >
                   <a
                     :href="`#solution-${index + 1}`"
                     class="fr-summary__link"
-                    >{{ title }}</a
+                    >{{ group.title }}</a
                   >
                 </li>
               </ol>
@@ -102,16 +102,16 @@
     <h2 class="h2-cas-usage fr-h2 fr-my-5w">Solutions disponibles</h2>
 
     <div
-      v-for="(title, index) in sorted_grouped_reco_solutions"
-      :key="title"
+      v-for="(group, index) in grouped_reco_solutions"
+      :key="group.title"
       class="fr-mb-4w"
     >
       <h3 :id="`solution-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
-        {{ index + 1 }}. {{ title }}
+        {{ index + 1 }}. {{ group.title }}
       </h3>
 
       <div
-        v-for="reco_solution in grouped_reco_solutions[title]"
+        v-for="reco_solution in group.reco_solutions"
         :key="reco_solution.Nom_de_la_solution"
       >
         <SimplifionsRecoSolutions :reco_solution="reco_solution" />
@@ -128,7 +128,7 @@
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -152,28 +152,33 @@ const budget_group = (budget: Array<string>) => {
 
 // Affichage des parties reco solutions, dans l'ordre voulu
 
-const grouped_reco_solutions = casUsage.reco_solutions.reduce(
-  (acc: Record<string, any[]>, reco_solution: any) => {
-    const key = budget_group(reco_solution.Moyens_requis_pour_la_mise_en_oeuvre)
-    if (!acc[key]) {
-      acc[key] = []
-    }
-    acc[key].push(reco_solution)
-    return acc
-  },
-  {} as Record<string, any[]>
-)
+const grouped_reco_solutions = casUsage.reco_solutions
+  .reduce(
+    (
+      acc: Array<{ title: string; reco_solutions: any[] }>,
+      reco_solution: any
+    ) => {
+      const title = budget_group(
+        reco_solution.Moyens_requis_pour_la_mise_en_oeuvre
+      )
+      const existingGroup = acc.find((group) => group.title === title)
 
-const priorityKey = 'Aucun développement, ni budget'
+      if (existingGroup) {
+        existingGroup.reco_solutions.push(reco_solution)
+      } else {
+        acc.push({ title, reco_solutions: [reco_solution] })
+      }
 
-const sorted_grouped_reco_solutions = computed(() => {
-  const keys = Object.keys(grouped_reco_solutions)
-  return keys.sort((a, b) => {
-    if (a === priorityKey) return -1
-    if (b === priorityKey) return 1
-    return 0
-  })
-})
+      return acc
+    },
+    [] as Array<{ title: string; reco_solutions: any[] }>
+  )
+  .sort(
+    (
+      a: { title: string; reco_solutions: any[] },
+      b: { title: string; reco_solutions: any[] }
+    ) => a.title.localeCompare(b.title)
+  )
 </script>
 
 <style scoped>
