@@ -4,8 +4,8 @@
       ➡️ {{ reco_solution.Nom_de_la_solution_publique }}
     </h4>
 
-    <div class="fr-grid-row fr-grid-row--gutters fr-m-4w fr-grid-row--top">
-      <div class="fr-col-6 fr-col-md-3">
+    <div class="fr-grid-row fr-grid-row--gutters fr-my-4w fr-mx-2w fr-grid-row--top">
+      <div class="fr-col-12 fr-col-xs-8 fr-col-sm-4 fr-col-lg-3">
         <div class="fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link">
           <div class="fr-tile__body">
             <div class="fr-tile__content">
@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <div class="fr-col-12 fr-col-md-8">
+      <div class="fr-col-12 fr-col-sm-8">
         <p
           v-if="
             reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_

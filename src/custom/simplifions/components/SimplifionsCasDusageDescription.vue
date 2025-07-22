@@ -1,9 +1,5 @@
 <template>
   <div>
-    <p class="fr-text--small">
-      <em>{{ casUsage.Description_courte }}</em>
-    </p>
-
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
@@ -14,20 +10,18 @@
           {{ casUsage.Description_longue }}
         </p>
 
-        <ul v-if="tags.length > 0" class="fr-badges-group fr-mt-2w">
-          <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-            <TagComponent :tag="t" />
-          </li>
-        </ul>
+        <SimplifionsTags :topic="topic" :page-key="pageKey" />
       </div>
 
       <div class="fr-col-12 fr-col-md-4">
         <nav
-          aria-labelledby="fr-summary-title"
           role="navigation"
+          aria-labelledby="fr-summary-title"
           class="fr-summary"
         >
-          <h2 id="fr-summary-title" class="fr-h6">Sommaire</h2>
+          <h2 id="fr-summary-title" class="fr-summary__title fr-text--md">
+            Sommaire
+          </h2>
           <ol>
             <li>
               <a
@@ -46,24 +40,49 @@
               >
               <ol>
                 <li
-                  v-for="(title, index) in Object.keys(grouped_reco_solutions)"
-                  :key="title"
+                  v-for="(group, index) in grouped_reco_solutions"
+                  :key="group.title"
                 >
                   <a
                     :href="`#solution-${index + 1}`"
                     class="fr-summary__link"
-                    >{{ title }}</a
+                    >{{ group.title }}</a
                   >
                 </li>
               </ol>
             </li>
           </ol>
+          <hr class="fr-hr fr-my-2w" />
+          <p class="subtitle">
+            Contenu rédigé par :
+            <span v-if="topic.organization" style="font-weight: normal">
+              <a :href="topic.organization.page">
+                <OrganizationNameWithCertificate
+                  :organization="topic.organization"
+                />
+              </a>
+            </span>
+            <br />
+            <span style="font-weight: normal">
+              le
+              <time :datetime="topic.created_at"
+                >{{ formatDate(topic.created_at) }}.</time
+              >
+            </span>
+            <br />
+            <span class="fr-text--xs" style="font-weight: normal"
+              >Modifié le
+              <time :datetime="topic.last_modified"
+                >{{ formatDate(topic.last_modified) }}.</time
+              >
+            </span>
+          </p>
         </nav>
       </div>
     </div>
 
     <div class="fr-col-12 fr-col-md-8">
-      <h2 class="fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
+      <h2 class="h2-cas-usage fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
 
       <h3 class="fr-h6">
         <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
@@ -82,50 +101,46 @@
       <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
     </div>
 
-    <h2 class="fr-h2 fr-my-5w">Solutions disponibles</h2>
+    <h2 class="h2-cas-usage fr-h2 fr-my-5w">Solutions disponibles</h2>
 
     <div
-      v-for="(title, index) in Object.keys(grouped_reco_solutions)"
-      :key="title"
+      v-for="(group, index) in grouped_reco_solutions"
+      :key="group.title"
       class="fr-mb-4w"
     >
-      <h3 :id="`solution-${index + 1}`" class="fr-h3 fr-mb-3w">
-        {{ index + 1 }}. {{ title }}
+      <h3 :id="`solution-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
+        {{ index + 1 }}. {{ group.title }}
       </h3>
 
       <div
-        v-for="reco_solution in grouped_reco_solutions[title]"
+        v-for="reco_solution in group.reco_solutions"
         :key="reco_solution.Nom_de_la_solution_publique"
       >
         <SimplifionsRecoSolutions :reco-solution="reco_solution" />
       </div>
     </div>
 
-    <h2 class="fr-h2 fr-mt-5w fr-mb-0">
+    <h2 class="h2--cas-usage fr-h2 fr-mt-5w fr-mb-0">
       ➡️ Utiliser les jeux de données et API utiles
     </h2>
   </div>
 </template>
 
 <script setup lang="ts">
-import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
-import { fromMarkdown } from '@/utils'
-import { useTagsByRef } from '@/utils/tags'
-import { ref } from 'vue'
+import { formatDate, fromMarkdown } from '@/utils'
+import { OrganizationNameWithCertificate } from '@datagouv/components'
 import type {
   RecoSolution,
   SimplifionsCasUsagesExtras
 } from '../model/cas_usage'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
   topic: Topic
   pageKey: string
 }>()
-
-const topicRef = ref(props.topic)
-const tags = useTagsByRef(props.pageKey, topicRef)
 
 const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
   'simplifions-cas-d-usages'
@@ -138,27 +153,46 @@ const budget_group = (budget: Array<string>) => {
   return 'Avec des moyens techniques ou un éditeur de logiciel'
 }
 
-const grouped_reco_solutions = casUsage.reco_solutions.reduce(
-  (acc: Record<string, RecoSolution[]>, reco_solution) => {
-    const key = budget_group(reco_solution.Moyens_requis_pour_la_mise_en_oeuvre)
-    if (!acc[key]) {
-      acc[key] = []
-    }
-    acc[key].push(reco_solution)
-    return acc
-  },
-  {}
-)
+// Affichage des parties reco solutions, dans l'ordre voulu
+
+const grouped_reco_solutions = casUsage.reco_solutions
+  .reduce(
+    (
+      acc: Array<{ title: string; reco_solutions: RecoSolution[] }>,
+      reco_solution: RecoSolution
+    ) => {
+      const title = budget_group(
+        reco_solution.Moyens_requis_pour_la_mise_en_oeuvre
+      )
+      const existingGroup = acc.find((group) => group.title === title)
+
+      if (existingGroup) {
+        existingGroup.reco_solutions.push(reco_solution)
+      } else {
+        acc.push({ title, reco_solutions: [reco_solution] })
+      }
+
+      return acc
+    },
+    [] as Array<{ title: string; reco_solutions: RecoSolution[] }>
+  )
+  .sort(
+    (
+      a: { title: string; reco_solutions: RecoSolution[] },
+      b: { title: string; reco_solutions: RecoSolution[] }
+    ) => a.title.localeCompare(b.title)
+  )
 </script>
 
 <style scoped>
-h2 {
+.h2-cas-usage {
   color: black;
   background-color: rgb(167, 212, 205);
   padding: 2px 4px;
   display: inline-block;
 }
-h3 {
+
+.h3-cas-usage {
   color: #616161;
 }
 </style>
