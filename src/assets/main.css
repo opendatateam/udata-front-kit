@@ -222,6 +222,9 @@ body {
     --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
     --hover-tint: var(--blue-cumulus-sun-368-moon-732-hover--fix);
   }
+  button.fr-tag:hover[aria-pressed='false'] {
+    color: var(--blue-france-sun-113);
+  }
 }
 
 /* DSFR search bar fix */
