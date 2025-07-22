@@ -174,7 +174,7 @@ body {
 
 /* overload datagouv-components */
 
-// datagouv-components applies `color: inherit` to titles, we want the title color
+/* datagouv-components applies `color: inherit` to titles, we want the title color */
 .datagouv-components {
   h1,
   h2,
@@ -210,16 +210,18 @@ body {
 }
 
 /* Button color contrast fix */
-.fr-btn:not(
-    .fr-btn--close,
-    .fr-btn--menu,
-    .fr-btn--secondary,
-    .fr-btn--tertiary,
-    .fr-btn--tertiary-no-outline,
-    a.fr-btn
-  ),
-.fr-pagination__link[aria-current] {
-  --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
+.datagouv-components {
+  .fr-btn:not(
+      .fr-btn--close,
+      .fr-btn--menu,
+      .fr-btn--secondary,
+      .fr-btn--tertiary,
+      .fr-btn--tertiary-no-outline
+    ),
+  .fr-pagination__link[aria-current] {
+    --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
+    --hover-tint: var(--blue-cumulus-sun-368-moon-732-hover--fix);
+  }
 }
 
 /* DSFR search bar fix */
@@ -255,4 +257,12 @@ body {
 
 .text-mention-grey {
   color: var(--text-mention-grey);
+}
+
+/* DSFR a11y fixes */
+
+/* connected user button in header */
+.fr-header__tools-links .fr-btn:disabled,
+.fr-header__tools-links a.fr-btn:not([href]) {
+  color: #757575;
 }

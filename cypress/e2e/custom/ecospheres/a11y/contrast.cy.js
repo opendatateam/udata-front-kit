@@ -1,4 +1,4 @@
-describe('Contrast Testing', () => {
+describe('a11y contrast testing', () => {
   const pages = {
     '/': '#main-content',
     '/datasets': 'ul.fr-grid-row > li',
@@ -12,12 +12,7 @@ describe('Contrast Testing', () => {
     // check that loader has gone away
     cy.get('.vl-overlay').should('not.exist')
     cy.injectAxe()
-    cy.checkA11y(null, {
-      runOnly: {
-        type: 'rule',
-        values: ['color-contrast']
-      }
-    })
+    cy.checkRGAAContrast()
   }
 
   const userStates = [
@@ -28,7 +23,6 @@ describe('Contrast Testing', () => {
   userStates.forEach(({ name, setup }) => {
     describe(`${name} user`, () => {
       beforeEach(setup)
-
       Object.keys(pages).forEach((path) => {
         it(`checks color contrast on ${path} page`, () => {
           testContrast(path, pages[path])
