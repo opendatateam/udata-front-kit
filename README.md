@@ -1,15 +1,20 @@
-# udata-front-kit
+![udata-front-kit](banner.png)
 
-Verticales thématiques adossées à [data.gouv.fr](https://www.data.gouv.fr/).
+# udata front kit
 
-## Configuration
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/opendatateam/udata-front-kit/create-deploy-release.yml?branch=main)](https://github.com/opendatateam/udata-front-kit/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Kit de développement frontend Vue.js permettant de créer des sites thématiques ("verticales") spécialisés basés sur l'écosystème [data.gouv.fr](https://www.data.gouv.fr/). Ce framework fournit les composants, la configuration et l'architecture nécessaires pour déployer rapidement des verticales dédiées à des domaines spécifiques (écologie, météo, défis, etc.).
+
+## ⚙️ Configuration
 
 Chaque verticale est configurée dans un fichier `config.yaml` stocké sous [`configs/$verticale`](configs).
 
 La variable d'environnement `VITE_SITE_ID` permet de définir la configuration utilisée au lancement de l'application.
 Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dérivés.
 
-## Développement
+## 🚀 Développement
 
 ### Environnement recommandé
 
@@ -64,11 +69,36 @@ npm run hint
 npm run format
 ```
 
-## Déploiement
+## 🚢 Déploiement
 
-### Workflow GitHub pour le déploiement
+### 🔍 Déploiement en preview
 
-Le déploiement des verticales thématiques s'effectue via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
+Une **review app** est un environnement de prévisualisation temporaire qui permet de tester les changements d'une Pull Request dans un environnement similaire à la production. Un workflow CI/CD dédié ([`.github/workflows/review-app.yml`](.github/workflows/review-app.yml)) gère automatiquement la création, mise à jour et suppression de ces environnements.
+
+Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture d'une Pull Request. L'auteur de la PR doit **déployer manuellement** les PR qu'il souhaite tester, via l'interface de GitHub Actions.
+
+> **💡 Info** : Une fois qu'une review app est créée pour une PR, elle sera **automatiquement mise à jour** à chaque nouveau commit sur la PR.
+
+**URLs générées** : `https://deploy-preview-{PR_NUMBER}--{SITE}.sandbox.data.developpement-durable.gouv.fr`
+
+#### Comment créer une review app
+
+Pour créer une review app pour votre PR :
+
+1. **Aller dans l'onglet "Actions"** du dépôt GitHub
+2. **Sélectionner "Deploy review app"** dans la liste des workflows
+3. **Cliquer sur "Run workflow"**
+4. **Choisir** :
+   - **Branche** : la branche qui contient la PR à déployer
+   - **Site** : Le site à déployer (dropdown)
+   - **Pull Request number** : Le numéro de votre PR
+5. **Cliquer sur "Run workflow"**
+
+### 🏭 Déploiement en preprod et en production
+
+#### Workflow GitHub pour le déploiement en preprod et en production
+
+Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
 
 ```
 [<env>:<config_name>:<version_part>] <description>
@@ -90,7 +120,7 @@ Toutes les variables et secrets nécessaires pour ce workflow sont listés dans 
 
 Le tag créé est utilisé lors de la construction de l'image et pendant le déploiement.
 
-### Architecture de déploiement
+#### Architecture de déploiement en preprod et en production
 
 Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne en deux temps :
 
@@ -106,20 +136,20 @@ Plus précisément, le [workflow de déploiement](.github/workflows/create-deplo
 
 **Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
 
-## Librairies et plugins utilisés
+## 📚 Bibliothèques et plugins utilisés
 
-### Librairies
+### 📦 Bibliothèques
 
-- `@datagouv/components` // composants provenant de data.gouv.fr
-- `@gouvminint/vue-dsfr` // intégration `vue` de composants issus du DSFR
-- `@gouvfr/dsfr` // nécessaire pour les deux précédentes
-- `@vueuse/core` // collection d'utilitaires `vue` (`useTitle`)
-  - `@vueuse/integrations` // intégration supplémentaires de vueuse (`focustrap`)
-- `unplugin-auto-import` - `vite.config.mts` // auto-import d'API `vue` (`ref`, `computed`…) et `vue-dsfr` ([d'après ce tutoriel](https://vue-ds.fr/guide/pour-commencer#avoir-un-bundle-optimise-et-une-dx-optimale))
-- `unplugin-vue-components` - `vite.config.mts` // auto-import des composants custom et `vue-dsfr` ([idem](https://vue-ds.fr/guide/pour-commencer#avoir-un-bundle-optimise-et-une-dx-optimale))
-- `@unhead/vue` // SEO (en gros)
+- `@datagouv/components` - Composants officiels de data.gouv.fr
+- `@gouvminint/vue-dsfr` - Intégration Vue.js du Design System de l'État
+- `@gouvfr/dsfr` - Design System de l'État Français
+- `@vueuse/core` - Utilitaires Vue.js (useTitle, etc.)
+  - `@vueuse/integrations` - Intégrations supplémentaires de VueUse (focustrap)
+- `unplugin-auto-import` - Auto-import d'API Vue.js et vue-dsfr
+- `unplugin-vue-components` - Auto-import des composants custom et vue-dsfr
+- `@unhead/vue` - Gestion du SEO et des métadonnées
 
-### Formatage et validation du code
+### 🧹 Formatage et validation du code
 
 - `eslint` - `eslint.config.mjs`
   - `typescript-eslint`
@@ -130,7 +160,16 @@ Plus précisément, le [workflow de déploiement](.github/workflows/create-deplo
 
 À chaque `git commit`, `husky` lance `lint-staged` qui formate les fichiers "staged" avec `prettier`.
 
-## Auteurs
+## 👥 Auteurs
 
 - data.gouv.fr, Direction interministérielle du numérique.
 - Ecolab, Commissariat général au développement durable, Ministère en charge de l&rsquo;environnement.
+
+## 📄 Licence
+
+Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE.md) pour plus de détails.
+
+## 🆘 Support
+
+- **Issues** : [GitHub Issues](https://github.com/opendatateam/udata-front-kit/issues)
+- **Formulaire de contact** : [Formulaire de support](https://support.data.gouv.fr/)

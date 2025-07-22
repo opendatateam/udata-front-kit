@@ -153,6 +153,7 @@
         </strong>
       </p>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
 
       <p>
@@ -225,6 +226,7 @@ import { useTagsByRef } from '@/utils/tags'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
+import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -236,14 +238,13 @@ const props = defineProps<{
 const topicRef = ref(props.topic)
 const tags = useTagsByRef(props.pageKey, topicRef)
 const tags_niveau_simplification = tags.value.filter(
-  (t: any) => t.type === 'types-de-simplification'
+  (t) => t.type === 'types-de-simplification'
 )
-const tags_budget = tags.value.filter((t: any) => t.type === 'budget')
+const tags_budget = tags.value.filter((t) => t.type === 'budget')
 
-const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<
-  string,
-  any
->
+const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
+  'simplifions-solutions'
+]
 
 // Reactive variables for cas d'usages
 const relatedCasUsages = ref<Topic[]>([])

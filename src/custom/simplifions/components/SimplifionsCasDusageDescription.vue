@@ -89,6 +89,7 @@
         Contexte
       </h3>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(casUsage.Contexte)"></p>
 
       <h3 class="fr-h6">
@@ -96,6 +97,7 @@
         Cadre juridique
       </h3>
 
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
     </div>
 
@@ -114,7 +116,7 @@
         v-for="reco_solution in group.reco_solutions"
         :key="reco_solution.Nom_de_la_solution"
       >
-        <SimplifionsRecoSolutions :reco_solution="reco_solution" />
+        <SimplifionsRecoSolutions :reco-solution="reco_solution" />
       </div>
     </div>
 
@@ -129,6 +131,10 @@ import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { ref } from 'vue'
+import type {
+  RecoSolution,
+  SimplifionsCasUsagesExtras
+} from '../model/cas_usage'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -139,9 +145,9 @@ const props = defineProps<{
 
 const topicRef = ref(props.topic)
 
-const casUsage = (props.topic.extras as any)[
+const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
   'simplifions-cas-d-usages'
-] as Record<string, any>
+]
 
 const budget_group = (budget: Array<string>) => {
   if (budget.includes('Aucun développement, ni budget')) {
@@ -188,6 +194,7 @@ const grouped_reco_solutions = casUsage.reco_solutions
   padding: 2px 4px;
   display: inline-block;
 }
+
 .h3-cas-usage {
   color: #616161;
 }

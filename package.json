@@ -17,7 +17,8 @@
     "hint": "tsc --project tsconfig.vitest.json",
     "format": "prettier --write src/",
     "prepare": "husky",
-    "generate-robots-txt": "node scripts/generate-robots-txt.mjs"
+    "generate-robots-txt": "node scripts/generate-robots-txt.mjs",
+    "type-check": "vue-tsc --noEmit --project tsconfig.app.json"
   },
   "dependencies": {
     "@datagouv/components": "^2.0.7",
