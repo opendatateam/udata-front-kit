@@ -9,67 +9,19 @@
         <p class="fr-text--lead">
           {{ casUsage.Description_longue }}
         </p>
-        <!--Texte pour préciser les usagers et les fournisseurs de service-->
-        <div v-if="groupedTags['target-users']" class="fr-card__detail">
-          <p class="fr-mb-1w" style="white-space: normal;">
-            Démarches des 
-            <span
-              v-for="(t, index) in filteredTargetUsers"
-              :key="t.id"
-              class="tag-item"
-            >
-              <span class="font-bold">{{ t.name }}</span>
-              <span
-                v-if="index < filteredTargetUsers.length - 1"
-                class="fr-mx-1v"
-                style="font-weight: normal;"
-              >|</span>
-            </span>
-          </p>
-        </div>
-        <div
-          v-if="groupedTags['fournisseurs-de-service']"
-          class="fr-card__detail fr-text--right"
-        >
-          <p class="fr-mb-1w" style="white-space: normal;">
-            À destination des 
-            <span
-              v-for="(t, index) in groupedTags['fournisseurs-de-service']"
-              :key="t.id"
-              class="tag-item"
-            >
-              <span class="font-bold">{{ t.name }}</span>
-              <span
-                v-if="index < groupedTags['fournisseurs-de-service'].length - 1"
-                class="fr-mx-1v"
-                style="font-weight: normal;"
-              >|</span>
-            </span>
-          </p>
-        </div>
-         <!-- Tags indiquant le type de simplification et de budget -->
-        <div v-if="groupedTags['types-de-simplification']" class="simplification-group fr-mt-2w">
-          <ul class="fr-badges-group">
-            <li v-for="t in groupedTags['types-de-simplification']" :key="t.id">
-              <TagComponent :tag="t" />
-            </li>
-          </ul>
-        </div>
-        <div v-if="groupedTags['budget']" class="budget-group">
-          <ul class="fr-badges-group">
-            <li v-for="t in groupedTags['budget']" :key="t.id">
-              <TagComponent :tag="t" />
-            </li>
-          </ul>
-        </div>
+
+        <SimplifionsTags :topic="topic" :page-key="pageKey" />
       </div>
 
       <div class="fr-col-12 fr-col-md-4">
         <nav
-          role="navigation" aria-labelledby="fr-summary-title"
+          role="navigation"
+          aria-labelledby="fr-summary-title"
           class="fr-summary"
         >
-          <h2 id="fr-summary-title" class="fr-summary__title  fr-text--md">Sommaire</h2>
+          <h2 id="fr-summary-title" class="fr-summary__title fr-text--md">
+            Sommaire
+          </h2>
           <ol>
             <li>
               <a
@@ -101,25 +53,31 @@
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
-           <p class="subtitle">
+          <p class="subtitle">
             Contenu rédigé par :
-            <span v-if="topic.organization" style="font-weight: normal;">
-            <a :href="topic.organization.page">
-                 <OrganizationNameWithCertificate
+            <span v-if="topic.organization" style="font-weight: normal">
+              <a :href="topic.organization.page">
+                <OrganizationNameWithCertificate
                   :organization="topic.organization"
-                /> 
-            </a>
-              </span>
-              <br/>
-              <span style="font-weight: normal;">
-                le <time :datetime="topic.created_at">{{formatDate(topic.created_at)}}.</time> 
-              </span>
-              <br/>
-              <span class="fr-text--xs" style="font-weight: normal;">Modifié le
-                <time :datetime="topic.last_modified">{{formatDate(topic.last_modified)}}.</time>
-              </span>
-            </p>
-          </nav>
+                />
+              </a>
+            </span>
+            <br />
+            <span style="font-weight: normal">
+              le
+              <time :datetime="topic.created_at"
+                >{{ formatDate(topic.created_at) }}.</time
+              >
+            </span>
+            <br />
+            <span class="fr-text--xs" style="font-weight: normal"
+              >Modifié le
+              <time :datetime="topic.last_modified"
+                >{{ formatDate(topic.last_modified) }}.</time
+              >
+            </span>
+          </p>
+        </nav>
       </div>
     </div>
 
@@ -167,14 +125,12 @@
 </template>
 
 <script setup lang="ts">
-import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
-import { fromMarkdown, formatDate } from '@/utils'
-import { useTagsByRef } from '@/utils/tags'
-import { ref } from 'vue'
-import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
-import { computed } from 'vue'
+import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
+import { computed, ref } from 'vue'
+import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
   topic: Topic
@@ -182,7 +138,6 @@ const props = defineProps<{
 }>()
 
 const topicRef = ref(props.topic)
-const tags = useTagsByRef(props.pageKey, topicRef)
 
 const casUsage = (props.topic.extras as any)[
   'simplifions-cas-d-usages'
@@ -209,7 +164,7 @@ const grouped_reco_solutions = casUsage.reco_solutions.reduce(
   {} as Record<string, any[]>
 )
 
-const priorityKey = "Aucun développement, ni budget"
+const priorityKey = 'Aucun développement, ni budget'
 
 const sorted_grouped_reco_solutions = computed(() => {
   const keys = Object.keys(grouped_reco_solutions)
@@ -218,22 +173,6 @@ const sorted_grouped_reco_solutions = computed(() => {
     if (b === priorityKey) return 1
     return 0
   })
-})
-
-// Affichage des tags "type_simplification, target_users, etc"
-const groupedTags = computed(() => {
-  const groups: Record<string, typeof tags.value> = {}
-  for (const tag of tags.value) {
-    if (!groups[tag.type]) {
-      groups[tag.type] = []
-    }
-    groups[tag.type].push(tag)
-  }
-  return groups
-})
-
-const filteredTargetUsers = computed(() => {
-  return (groupedTags.value['target-users'] || []).filter(tag => tag.name !== 'Agents publics')
 })
 </script>
 

@@ -1,12 +1,12 @@
 <template>
   <RouterLink :to="topicLink" class="">
-    <div class="fr-card fr-enlarge-link fr-card--shadow ">
+    <div class="fr-card fr-enlarge-link fr-card--shadow">
       <div class="fr-card__body">
         <div class="fr-card__content">
           <p v-if="!imageUrl" class="fr-badge fr-badge--sm fr-mb-2w">
-            <span style="font-weight: normal;">Solution publique</span>
+            <span style="font-weight: normal">Solution publique</span>
             <span v-if="solution?.operateur_nom">
-              <span class="fr-ml-1v" style="font-weight: normal;"> | </span>
+              <span class="fr-ml-1v" style="font-weight: normal"> | </span>
               {{ solution.operateur_nom }}
             </span>
           </p>
@@ -17,60 +17,11 @@
           </p>
 
           <div class="fr-card__end">
-            <!-- Usagers -->
-            <div
-              v-if="groupedTags['target-users']"
-              class="fr-card__detail fr-text--md">
-              <p class="fr-mb-1w" style="white-space: normal;">
-                Démarches des&nbsp;
-                <span
-                  v-for="(t, index) in filteredTargetUsers"
-                  :key="t.id"
-                  class="tag-item"
-                >
-                  <strong>{{ t.name }}</strong>
-                  <span v-if="index < filteredTargetUsers.length - 1" class="fr-mx-1v">|</span>
-                </span>
-              </p>
-            </div>
-
-            <!-- Fournisseurs de service -->
-            <div
-              v-if="groupedTags['fournisseurs-de-service']"
-              class="fr-card__detail fr-text--md"
-           
-            >
-            <p class="" style="white-space: normal;">
-              À destination des&nbsp;
-              <span
-                v-for="(t, index) in groupedTags['fournisseurs-de-service']"
-                :key="t.id"
-                class="tag-item"
-              >
-                <strong>{{ t.name }}</strong>
-                <span v-if="index < groupedTags['fournisseurs-de-service'].length - 1" class="fr-mx-1v">|</span>
-              </span>
-              </p>
-            </div>
-
-            <!-- Badges -->
-            <ul v-if="groupedTags['types-de-simplification']" class="fr-badges-group">
-              <li v-for="t in groupedTags['types-de-simplification']" :key="t.id">
-                <TagComponent :tag="t" />
-              </li>
-            </ul>
-
-            <ul v-if="groupedTags['budget']" class="fr-badges-group">
-              <li v-for="t in groupedTags['budget']" :key="t.id">
-                <TagComponent :tag="t" />
-              </li>
-            </ul>
-            
+            <SimplifionsTags :topic="topic" :page-key="pageKey" />
           </div>
-
         </div>
       </div>
-       <div class="fr-card__header">
+      <div class="fr-card__header">
         <div v-if="imageUrl" class="fr-card__img topic-image-container fr-mx-0">
           <img
             :src="imageUrl"
@@ -79,9 +30,9 @@
           />
           <div class="topic-image-overlay"></div>
           <p class="fr-badge fr-badge--sm badge-absolute">
-            <span style="font-weight: normal;">Solution publique</span>
+            <span style="font-weight: normal">Solution publique</span>
             <span v-if="solution?.operateur_nom">
-              <span class="fr-ml-1v" style="font-weight: normal;"> | </span>
+              <span class="fr-ml-1v" style="font-weight: normal"> | </span>
               {{ solution.operateur_nom }}
             </span>
           </p>
@@ -91,15 +42,13 @@
   </RouterLink>
 </template>
 
-
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
-import { useTagsByRef } from '@/utils/tags'
 import { stripFromMarkdown } from '@/utils'
 import type { RouteLocationRaw } from 'vue-router'
 import { gristImageUrl } from './simplifions_utils'
-
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const { pageKey } = useCurrentPageConf()
 
@@ -110,37 +59,19 @@ const props = defineProps({
   }
 })
 
-const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<string, any>
+const solution = (props.topic.extras as any)['simplifions-solutions'] as Record<
+  string,
+  any
+>
 
 const imageUrl = solution?.Image_principale?.[0]
   ? gristImageUrl(solution.Image_principale[0])
   : ''
 
-
 const topicLink: RouteLocationRaw = {
   name: `${pageKey}_detail`,
   params: { item_id: props.topic.slug }
 }
-
-// ajoute les tags sur la carte 
-const topicRef = ref(props.topic)
-const tags = useTagsByRef(pageKey, topicRef)
-
-const groupedTags = computed(() => {
-  const groups: Record<string, typeof tags.value> = {}
-  for (const tag of tags.value) {
-    if (!groups[tag.type]) {
-      groups[tag.type] = []
-    }
-    groups[tag.type].push(tag)
-  }
-  return groups
-})
-
-const filteredTargetUsers = computed(() => {
-  return (groupedTags.value['target-users'] || []).filter(tag => tag.name !== 'Agents publics')
-})
-
 </script>
 
 <style scoped>
@@ -170,6 +101,4 @@ const filteredTargetUsers = computed(() => {
   left: 1rem;
   z-index: 2;
 }
-
 </style>
-

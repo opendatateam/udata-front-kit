@@ -4,13 +4,15 @@
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">
-            {{ solution.Ref_Nom_de_la_solution }} 
-            <br/><p class="fr-badge fr-badge--sm badge-absolute"> <span style="font-weight: normal;">Solution publique</span>
-            <span v-if="solution?.operateur_nom">
-              <span class="fr-ml-1v" style="font-weight: normal;"> | </span>
-              {{ solution.operateur_nom }}
-            </span></p>
-            
+            {{ solution.Ref_Nom_de_la_solution }}
+            <br />
+            <p class="fr-badge fr-badge--sm badge-absolute">
+              <span style="font-weight: normal">Solution publique</span>
+              <span v-if="solution?.operateur_nom">
+                <span class="fr-ml-1v" style="font-weight: normal"> | </span>
+                {{ solution.operateur_nom }}
+              </span>
+            </p>
           </h1>
         </div>
 
@@ -18,47 +20,15 @@
           {{ solution.Description_courte }}
         </p>
 
-         <!--Texte pour préciser les usagers et les fournisseurs de service-->
-        <div v-if="groupedTags['target-users']" class="fr-card__detail">
-          <p class="fr-mb-1w" style="white-space: normal;">
-            Démarches des 
-            <span
-              v-for="(t, index) in filteredTargetUsers"
-              :key="t.id"
-              class="tag-item"
-            >
-              <span class="font-bold">{{ t.name }}</span>
-              <span
-                v-if="index < filteredTargetUsers.length - 1"
-                class="fr-mx-1v"
-                style="font-weight: normal;"
-              >|</span>
-            </span>
-          </p>
-        </div>
-        <div
-          v-if="groupedTags['fournisseurs-de-service']"
-          class="fr-card__detail fr-text--right"
-        >
-          <p class="fr-mb-1w" style="white-space: normal;">
-            À destination des 
-            <span
-              v-for="(t, index) in groupedTags['fournisseurs-de-service']"
-              :key="t.id"
-              class="tag-item"
-            >
-              <span class="font-bold">{{ t.name }}</span>
-              <span
-                v-if="index < groupedTags['fournisseurs-de-service'].length - 1"
-                class="fr-mx-1v"
-                style="font-weight: normal;"
-              >|</span>
-            </span>
-          </p>
-        </div>
- 
+        <SimplifionsTags :topic="topic" :page-key="pageKey" />
+
         <ul class="fr-my-4w">
-          <li><strong>Fournisseur :</strong> <span v-if="solution.operateur_nom_long">{{ solution.operateur_nom_long }} | </span>{{ solution.operateur_nom }} </li>
+          <li>
+            <strong>Fournisseur :</strong>
+            <span v-if="solution.operateur_nom_long"
+              >{{ solution.operateur_nom_long }} | </span
+            >{{ solution.operateur_nom }}
+          </li>
           <li>
             <strong>Type de solution :</strong>
             {{ solution.types_de_solution.join(' ou ') }}
@@ -87,10 +57,13 @@
 
       <div class="fr-col-12 fr-col-md-4">
         <nav
-          role="navigation" aria-labelledby="fr-summary-title"
+          role="navigation"
+          aria-labelledby="fr-summary-title"
           class="fr-summary"
         >
-          <h2 id="fr-summary-title" class="fr-summary__title  fr-text--md">Sommaire</h2>
+          <h2 id="fr-summary-title" class="fr-summary__title fr-text--md">
+            Sommaire
+          </h2>
           <ol>
             <li>
               <a
@@ -118,31 +91,37 @@
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
-           <p class="subtitle">
+          <p class="subtitle">
             Contenu rédigé par :
-            <span v-if="topic.organization" style="font-weight: normal;">
-            <a :href="topic.organization.page">
-                 <OrganizationNameWithCertificate
+            <span v-if="topic.organization" style="font-weight: normal">
+              <a :href="topic.organization.page">
+                <OrganizationNameWithCertificate
                   :organization="topic.organization"
-                /> 
-            </a>
-              </span>
-              <br/>
-              <span style="font-weight: normal;">
-                le <time :datetime="topic.created_at">{{formatDate(topic.created_at)}}.</time> 
-              </span>
-              <br/>
-              <span class="fr-text--xs" style="font-weight: normal;">Modifié le
-                <time :datetime="topic.last_modified">{{formatDate(topic.last_modified)}}.</time>
-              </span>
-            </p>
-          </nav>
-        </div>
+                />
+              </a>
+            </span>
+            <br />
+            <span style="font-weight: normal">
+              le
+              <time :datetime="topic.created_at"
+                >{{ formatDate(topic.created_at) }}.</time
+              >
+            </span>
+            <br />
+            <span class="fr-text--xs" style="font-weight: normal"
+              >Modifié le
+              <time :datetime="topic.last_modified"
+                >{{ formatDate(topic.last_modified) }}.</time
+              >
+            </span>
+          </p>
+        </nav>
       </div>
-    <hr  v-if="!solution.Image_principale" class="fr-hr fr-my-2w" />
+    </div>
+    <hr v-if="!solution.Image_principale" class="fr-hr fr-my-2w" />
     <figure
       v-if="solution.Image_principale && solution.Image_principale.length > 0"
-      aria-label="© Légende de l‘image"
+      aria-label="© Légende de l'image"
       role="group"
       class="fr-content-media"
     >
@@ -158,9 +137,10 @@
       </figcaption>
     </figure>
 
-
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
-      <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">Possibilités de simplification :</h2>
+      <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
+        Possibilités de simplification :
+      </h2>
       <p v-html="fromMarkdown(solution.Description_longue)"></p>
       <p>
         <strong>
@@ -197,7 +177,9 @@
       </p>
     </div>
 
-    <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">Cas d'usages simplifiables</h2>
+    <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
+      Cas d'usages simplifiables
+    </h2>
     <div
       v-if="relatedCasUsages.length > 0"
       class="fr-grid-row fr-grid-row--gutters"
@@ -244,6 +226,7 @@ import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { gristImageUrl } from './simplifions_utils'
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
   topic: Topic
@@ -299,22 +282,6 @@ const fetchRelatedCasUsages = async () => {
 onMounted(() => {
   fetchRelatedCasUsages()
 })
-
-// Affichage des tags "type_simplification, target_users, etc"
-const groupedTags = computed(() => {
-  const groups: Record<string, typeof tags.value> = {}
-  for (const tag of tags.value) {
-    if (!groups[tag.type]) {
-      groups[tag.type] = []
-    }
-    groups[tag.type].push(tag)
-  }
-  return groups
-})
-
-const filteredTargetUsers = computed(() => {
-  return (groupedTags.value['target-users'] || []).filter(tag => tag.name !== 'Agents publics')
-})
 </script>
 
 <style scoped>
@@ -345,6 +312,6 @@ h3 {
   display: inline-flex;
   margin-right: 0.5em;
   margin-left: 0.5em;
-  padding: 0 0.5rem 0 0.5rem
+  padding: 0 0.5rem 0 0.5rem;
 }
 </style>
