@@ -114,7 +114,7 @@
 
       <div
         v-for="reco_solution in group.reco_solutions"
-        :key="reco_solution.Nom_de_la_solution"
+        :key="reco_solution.Nom_de_la_solution_publique"
       >
         <SimplifionsRecoSolutions :reco-solution="reco_solution" />
       </div>
@@ -130,7 +130,6 @@
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
-import { ref } from 'vue'
 import type {
   RecoSolution,
   SimplifionsCasUsagesExtras
@@ -142,8 +141,6 @@ const props = defineProps<{
   topic: Topic
   pageKey: string
 }>()
-
-const topicRef = ref(props.topic)
 
 const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
   'simplifions-cas-d-usages'
@@ -161,8 +158,8 @@ const budget_group = (budget: Array<string>) => {
 const grouped_reco_solutions = casUsage.reco_solutions
   .reduce(
     (
-      acc: Array<{ title: string; reco_solutions: any[] }>,
-      reco_solution: any
+      acc: Array<{ title: string; reco_solutions: RecoSolution[] }>,
+      reco_solution: RecoSolution
     ) => {
       const title = budget_group(
         reco_solution.Moyens_requis_pour_la_mise_en_oeuvre
@@ -177,12 +174,12 @@ const grouped_reco_solutions = casUsage.reco_solutions
 
       return acc
     },
-    [] as Array<{ title: string; reco_solutions: any[] }>
+    [] as Array<{ title: string; reco_solutions: RecoSolution[] }>
   )
   .sort(
     (
-      a: { title: string; reco_solutions: any[] },
-      b: { title: string; reco_solutions: any[] }
+      a: { title: string; reco_solutions: RecoSolution[] },
+      b: { title: string; reco_solutions: RecoSolution[] }
     ) => a.title.localeCompare(b.title)
   )
 </script>

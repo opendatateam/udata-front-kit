@@ -38,8 +38,6 @@ const props = defineProps<{
 
 const { pageKey } = useCurrentPageConf()
 
-const topicRef = ref(props.topic)
-
 const topicLink: RouteLocationRaw = {
   name: `${pageKey}_detail`,
   params: { item_id: props.topic.slug }

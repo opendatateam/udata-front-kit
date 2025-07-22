@@ -141,6 +141,7 @@
       <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
         Possibilités de simplification :
       </h2>
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Description_longue)"></p>
       <p>
         <strong>
@@ -166,6 +167,7 @@
           Cette solution ne permet pas :
         </strong>
       </p>
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
       <p>
         <a
