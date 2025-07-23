@@ -145,7 +145,7 @@ watch(
   />
 
   <main id="main-content" role="main">
-    <RouterView />
+    <RouterView :key="route.path" />
   </main>
 
   <DsfrFooter
