@@ -181,7 +181,7 @@ jobs:
           review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           git_push_flags: '--force'
-          branch: ${{ env.BRANCH_NAME }}
+          branch: 'main'
 
       - name: Enable SSL with Let's Encrypt
         if: env.SHOULD_CREATE == 'true'
