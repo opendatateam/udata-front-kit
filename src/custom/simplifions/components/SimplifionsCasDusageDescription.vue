@@ -44,7 +44,7 @@
                   :key="group.title"
                 >
                   <a
-                    :href="`#solution-${index + 1}`"
+                    :href="`#reco-group-${index + 1}`"
                     class="fr-summary__link"
                     >{{ group.title }}</a
                   >
@@ -82,7 +82,9 @@
     </div>
 
     <div class="fr-col-12 fr-col-md-8">
-      <h2 class="h2-cas-usage fr-h2 fr-my-5w">Contexte et cadre juridique</h2>
+      <h2 class="h2-cas-usage fr-h2 fr-my-5w" id="contexte-et-cadre-juridique">
+        Contexte et cadre juridique
+      </h2>
 
       <h3 class="fr-h6">
         <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
@@ -101,14 +103,16 @@
       <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
     </div>
 
-    <h2 class="h2-cas-usage fr-h2 fr-my-5w">Solutions disponibles</h2>
+    <h2 class="h2-cas-usage fr-h2 fr-my-5w" id="solutions-disponibles">
+      Solutions disponibles
+    </h2>
 
     <div
       v-for="(group, index) in grouped_reco_solutions"
       :key="group.title"
       class="fr-mb-4w"
     >
-      <h3 :id="`solution-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
+      <h3 :id="`reco-group-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
         {{ index + 1 }}. {{ group.title }}
       </h3>
 
