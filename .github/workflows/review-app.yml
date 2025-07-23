@@ -53,7 +53,12 @@ jobs:
           username: dokku
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
-          script: apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+          script: |
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              apps:exists deploy-preview-${{ github.event.inputs.pr_number }}--${{ matrix.site }}
+            else
+              apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+            fi
 
       - name: Set APP_EXISTS variable
         run: |
