@@ -1,4 +1,4 @@
-describe("Simplifions Cas d'usages Page", () => {
+describe("Simplifions Cas d'usages Listing Page", () => {
   const topicsName = "cas d'usages"
 
   beforeEach(() => {
