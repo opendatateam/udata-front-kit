@@ -118,19 +118,18 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 #### Comment créer une review app
 
-## Solution 1 - par commentaire
+## Solution 1 - par commentaire sur une PR
 
 1. Ecrire un commentaire du type `/deploy {SITE}` dans la PR (e.g. `/deploy ecospheres`)
 2. Une emoji 🚀 apparaîtra sous le commentaire pour indiquer que le déploiement est lancé.
 3. Une notification du type `@github-actions github-actions bot deployed to ecospheres-preview ` sur le fil de la PR indiquera que le déploiement est terminé, avec un lien vers le déploiement.
 
-## Solution 2 — par workflow
+## Solution 2 — sur l'interface web de GitHub Actions
 
 1. **Aller dans l'onglet "Actions"** du dépôt GitHub
 2. **Sélectionner "Deploy review app"** dans la liste des workflows
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
-
    - **Site** : Le site à déployer (dropdown)
    - **Pull Request number** : Le numéro de votre PR
      > **💡 Info** : Le choix de la branche n'a pas d'influence.
