@@ -25,7 +25,7 @@ export interface RecoSolution {
   solution_topic_id: string
 }
 
-export interface SimplifionsCasUsages {
+export interface SimplifionsCasUsage {
   Titre: string
   usagers: number[]
   Description_courte: string
@@ -50,5 +50,5 @@ export interface SimplifionsCasUsages {
 }
 
 export interface SimplifionsCasUsagesExtras extends TopicExtras {
-  'simplifions-cas-d-usages': SimplifionsCasUsages
+  'simplifions-cas-d-usages': SimplifionsCasUsage
 }

@@ -21,7 +21,7 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
 })
 
 // DsfrHeader does not expose the hidemodal function, so we do this to close the modal after a custom search.
-const headerRef = useTemplateRef('headerRef')
+const headerRef = useTemplateRef<ComponentPublicInstance>('headerRef')
 
 const closeModal = () => {
   const closeButton: HTMLButtonElement | undefined | null =

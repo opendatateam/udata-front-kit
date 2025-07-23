@@ -44,7 +44,26 @@ jobs:
     # Run for all PRs including forks and for manual triggers
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
-      - name: Determine deployment strategy and check review app existence
+      - name: Check if review app exists
+        id: check_app
+        continue-on-error: true
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.REVIEW_APP_SSH_HOST }}
+          username: dokku
+          key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
+          port: 22
+          script: apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}
+
+      - name: Set APP_EXISTS variable
+        run: |
+          if [ ${{ steps.check_app.outcome }} == 'success' ]; then
+            echo "APP_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "APP_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Determine deployment strategy
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             # For manual deployment, only process the selected site
@@ -64,15 +83,6 @@ jobs:
             # Set defaults (no deployment, no creation)
             echo "SHOULD_DEPLOY=false" >> $GITHUB_ENV
             echo "SHOULD_CREATE=false" >> $GITHUB_ENV
-
-            # Check app existence
-            if ssh -o StrictHostKeyChecking=no dokku@${{ secrets.REVIEW_APP_SSH_HOST }} apps:exists deploy-preview-${{ github.event.pull_request.number }}--${{ matrix.site }}; then
-              APP_EXISTS=true
-              echo "Review app exists"
-            else
-              APP_EXISTS=false
-              echo "Review app does not exist"
-            fi
 
             # Override defaults based on event type
             if [ "${{ github.event.action }}" = "synchronize" ]; then
@@ -101,6 +111,7 @@ jobs:
           echo "Site: ${{ env.SITE }}"
           echo "PR number: ${{ env.PR_NUMBER }}"
           echo "Event action: ${{ env.EVENT_ACTION }}"
+          echo "App exists: ${{ env.APP_EXISTS }}"
           echo "Should deploy: ${{ env.SHOULD_DEPLOY }}"
           echo "Should create: ${{ env.SHOULD_CREATE }}"
           echo "Should destroy: ${{ env.SHOULD_DESTROY }}"
@@ -140,7 +151,7 @@ jobs:
 
       - name: Set site id as build arg
         if: env.SHOULD_DEPLOY == 'true'
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
@@ -161,7 +172,7 @@ jobs:
 
       - name: Enable SSL with Let's Encrypt
         if: env.SHOULD_CREATE == 'true'
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
