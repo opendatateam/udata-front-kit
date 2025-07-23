@@ -32,12 +32,12 @@ describe("Simplifions Cas d'usages Page", () => {
 
   it("should be able to search for a cas d'usage", () => {
     // Fill the search bar with the topic name
-    cy.get('input#search-topic').type('Aides publiques entreprise')
+    cy.get('input#search-topic').type('Aides sociales des CCAS')
 
     // Verify that the page has the correct number of results
     cy.get('#number-of-results').should(
       'contain.text',
-      "2 cas d'usages disponibles"
+      "1 cas d'usage disponible"
     )
   })
 
