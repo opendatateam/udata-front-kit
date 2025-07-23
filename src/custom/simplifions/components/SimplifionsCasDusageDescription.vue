@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cas-usage-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
