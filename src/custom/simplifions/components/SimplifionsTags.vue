@@ -42,7 +42,7 @@
     </div>
     <!-- Tags indiquant le type de simplification et de budget -->
     <div
-      v-if="groupedTags['types-de-simplification']"
+      v-if="!hideSimplification && groupedTags['types-de-simplification']"
       class="simplification-group fr-mt-2w"
     >
       <ul class="fr-badges-group">
@@ -51,7 +51,7 @@
         </li>
       </ul>
     </div>
-    <div v-if="groupedTags['budget']" class="budget-group">
+    <div v-if="!hideBudget && groupedTags['budget']" class="budget-group">
       <ul class="fr-badges-group">
         <li v-for="t in groupedTags['budget']" :key="t.id">
           <TagComponent :tag="t" />
@@ -69,6 +69,8 @@ import { useTagsByRef } from '@/utils/tags'
 const props = defineProps<{
   topic: Topic
   pageKey: string
+  hideBudget?: boolean
+  hideSimplification?: boolean
 }>()
 
 const topicRef = ref(props.topic)
@@ -84,6 +86,9 @@ const groupedTags = computed(() => {
   }
   return groups
 })
+
+const hideBudget = computed(() => props.hideBudget)
+const hideSimplification = computed(() => props.hideSimplification)
 </script>
 
 <style scoped></style>

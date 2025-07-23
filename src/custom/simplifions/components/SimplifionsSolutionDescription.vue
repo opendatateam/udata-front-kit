@@ -20,7 +20,7 @@
           {{ solution.Description_courte }}
         </p>
 
-        <SimplifionsTags :topic="topic" :page-key="pageKey" />
+        <SimplifionsTags :topic="topic" :page-key="pageKey" :show-simplification="false" :show-budget="false" />
 
         <ul class="fr-my-4w">
           <li>
