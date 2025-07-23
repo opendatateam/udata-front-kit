@@ -14,11 +14,16 @@
               <p class="fr-tile__title fr-text--lead">
                 <a
                   v-if="relatedSolution"
+                  class="solution-link"
                   :href="`/solutions/${relatedSolution.slug}`"
                 >
                   {{ reco_solution.Nom_de_la_solution_publique }}
                 </a>
-                <a v-else :href="reco_solution.url_solution">
+                <a
+                  v-else
+                  class="solution-link"
+                  :href="reco_solution.url_solution"
+                >
                   {{ reco_solution.Nom_de_la_solution_publique }}
                 </a>
                 <br />

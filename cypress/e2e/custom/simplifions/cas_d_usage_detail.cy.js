@@ -31,4 +31,17 @@ describe("Simplifions Cas d'usages Show Page", () => {
       cy.get(link.attr('href')).should('be.visible')
     })
   })
+
+  it('should link to solutions recommendations', () => {
+    // Check that the solutions recommendations are visible
+    cy.get('.reco-solution').should('have.length.gt', 1)
+
+    // Click on the first solution recommendation
+    cy.get('.reco-solution:first').within(() => {
+      cy.get('a.solution-link').click()
+    })
+
+    // Check that the solution detail page is loaded
+    cy.url().should('include', '/solutions/')
+  })
 })
