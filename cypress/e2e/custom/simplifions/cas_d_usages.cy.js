@@ -1,4 +1,6 @@
 describe("Simplifions Cas d'usages Page", () => {
+  const topicsName = "cas d'usages"
+
   beforeEach(() => {
     // Visit the Simplifions home page before each test
     cy.visit('/cas-d-usages')
@@ -40,16 +42,12 @@ describe("Simplifions Cas d'usages Page", () => {
   })
 
   it('should be able to filter by fournisseurs de service ', () => {
-    cy.filterShouldRemoveResults(
-      "cas d'usages",
-      'À destination de :',
-      'Communes'
-    )
+    cy.filterShouldRemoveResults(topicsName, 'À destination de :', 'Communes')
   })
 
   it('should be able to filter by target users ', () => {
     cy.filterShouldRemoveResults(
-      "cas d'usages",
+      topicsName,
       'Pour simplifier les démarches de :',
       'Particuliers'
     )
@@ -57,7 +55,7 @@ describe("Simplifions Cas d'usages Page", () => {
 
   it('should be able to filter by budget ', () => {
     cy.filterShouldRemoveResults(
-      "cas d'usages",
+      topicsName,
       'Moyens disponibles pour la mise en œuvre :',
       'Avec des moyens techniques'
     )
@@ -65,7 +63,7 @@ describe("Simplifions Cas d'usages Page", () => {
 
   it('should be able to filter by types de simplification ', () => {
     cy.filterShouldRemoveResults(
-      "cas d'usages",
+      topicsName,
       'Type de simplification des démarches :',
       'Proactivité'
     )

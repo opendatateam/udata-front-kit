@@ -90,28 +90,28 @@ Cypress.Commands.add('selectFilterValue', (selectLabel, optionLabel) => {
     })
 })
 
-Cypress.Commands.add('getNumberOfResults', (topicName) => {
+Cypress.Commands.add('getNumberOfResults', (topicsName) => {
   return cy
     .get('#number-of-results')
     .invoke('text')
-    .then((text) => parseInt(text.replace(` ${topicName} disponibles`, '')))
+    .then((text) => parseInt(text.replace(` ${topicsName} disponibles`, '')))
 })
 
 Cypress.Commands.add(
   'filterShouldRemoveResults',
-  (topicName, selectLabel, optionLabel) => {
+  (topicsName, selectLabel, optionLabel) => {
     // Store the initial number of results
-    cy.getNumberOfResults(topicName).then((initialCount) => {
+    cy.getNumberOfResults(topicsName).then((initialCount) => {
       // Apply the filter
       cy.selectFilterValue(selectLabel, optionLabel)
 
       // Wait for the number of results to change
       cy.get('#number-of-results').should(
         'not.contain.text',
-        `${initialCount} ${topicName} disponibles`
+        `${initialCount} ${topicsName} disponibles`
       )
 
-      cy.getNumberOfResults(topicName).then((newCount) => {
+      cy.getNumberOfResults(topicsName).then((newCount) => {
         // Verify that the number of results is less than the initial count
         expect(newCount).to.be.lessThan(initialCount)
         // Verify that the number of results is greater than 0
