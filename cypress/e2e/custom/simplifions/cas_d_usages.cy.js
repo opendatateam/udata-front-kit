@@ -4,6 +4,27 @@ describe("Simplifions Cas d'usages Page", () => {
     cy.visit('/cas-d-usages')
   })
 
+  it('should be able to filter by fournisseurs de service ', () => {
+    // Store the initial number of results
+    const initialCount = cy.getNumberOfResults()
+
+    // Apply the filter
+    cy.selectFilterValue('À destination de :', 'Communes')
+
+    // Wait for the results to change
+    cy.getNumberOfResults().then((initialCount) => {
+      cy.get('#number-of-results').should(
+        'not.contain.text',
+        `${initialCount} cas d'usages disponibles`
+      )
+    })
+
+    // Verify the count decreased by comparing with the stored alias
+    initialCount.then((initialCount) => {
+      cy.getNumberOfResults().should('be.lessThan', initialCount)
+    })
+  })
+
   it("should display the cas d'usages listing page correctly", () => {
     // Verify the page loads and has the correct title
     cy.get('h1').should('contain.text', "Cas d'usages")

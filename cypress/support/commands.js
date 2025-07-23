@@ -89,3 +89,10 @@ Cypress.Commands.add('selectFilterValue', (selectLabel, optionLabel) => {
       cy.get('.multiselect-dropdown').should('have.class', 'is-hidden')
     })
 })
+
+Cypress.Commands.add('getNumberOfResults', () => {
+  return cy
+    .get('#number-of-results')
+    .invoke('text')
+    .then((text) => parseInt(text.replace(" cas d'usages disponibles", '')))
+})
