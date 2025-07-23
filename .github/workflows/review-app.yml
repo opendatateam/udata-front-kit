@@ -76,10 +76,17 @@ jobs:
             echo "EVENT_ACTION=manual" >> $GITHUB_ENV
             echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
             echo "SHOULD_CREATE=true" >> $GITHUB_ENV
+            
+            # Get branch name from PR number for manual deployment
+            PR_RESPONSE=$(curl -s -H "Authorization: token ${{ github.token }}" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.inputs.pr_number }}")
+            BRANCH_NAME=$(echo "$PR_RESPONSE" | jq -r '.head.ref')
+            echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
           else
             echo "SITE=${{ matrix.site }}" >> $GITHUB_ENV
             echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
             echo "EVENT_ACTION=${{ github.event.action }}" >> $GITHUB_ENV
+            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
             # Set defaults (no deployment, no creation)
             echo "SHOULD_DEPLOY=false" >> $GITHUB_ENV
             echo "SHOULD_CREATE=false" >> $GITHUB_ENV
@@ -110,6 +117,7 @@ jobs:
           echo "Event name: ${{ github.event_name }}"
           echo "Site: ${{ env.SITE }}"
           echo "PR number: ${{ env.PR_NUMBER }}"
+          echo "Branch name: ${{ env.BRANCH_NAME }}"
           echo "Event action: ${{ env.EVENT_ACTION }}"
           echo "App exists: ${{ env.APP_EXISTS }}"
           echo "Should deploy: ${{ env.SHOULD_DEPLOY }}"
@@ -168,7 +176,7 @@ jobs:
           review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           git_push_flags: '--force'
-          branch: 'main'
+          branch: ${{ env.BRANCH_NAME }}
 
       - name: Enable SSL with Let's Encrypt
         if: env.SHOULD_CREATE == 'true'
