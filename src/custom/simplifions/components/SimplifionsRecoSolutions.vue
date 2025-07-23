@@ -13,16 +13,8 @@
             <div class="fr-tile__content">
               <p class="fr-tile__title fr-text--lead">
                 <a
-                  v-if="relatedSolution"
                   class="solution-link"
-                  :href="`/solutions/${relatedSolution.slug}`"
-                >
-                  {{ reco_solution.Nom_de_la_solution_publique }}
-                </a>
-                <a
-                  v-else
-                  class="solution-link"
-                  :href="reco_solution.url_solution"
+                  :href="`/solutions/${reco_solution.solution_topic_id}`"
                 >
                   {{ reco_solution.Nom_de_la_solution_publique }}
                 </a>
@@ -114,10 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Topic } from '@/model/topic'
-import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { fromMarkdown } from '@/utils'
-import { onMounted, ref } from 'vue'
 import type { RecoSolution } from '../model/cas_usage'
 import { gristImageUrl } from './simplifions_utils'
 
@@ -126,37 +115,6 @@ const props = defineProps<{
 }>()
 
 const reco_solution = props.recoSolution
-
-// Reactive variable for the related solution
-const relatedSolution = ref<Topic | null>(null)
-
-// API instance for fetching topics
-const topicsAPI = new TopicsAPI({ version: 2 })
-
-// Function to fetch the related solution
-const fetchRelatedSolution = async () => {
-  // Check if we have a solution topic ID to fetch
-  if (!reco_solution?.solution_topic_id) {
-    relatedSolution.value = null
-    return
-  }
-
-  try {
-    // Fetch the specific solution topic by its ID
-    const topic = await topicsAPI.get({
-      entityId: reco_solution.solution_topic_id
-    })
-    relatedSolution.value = topic
-  } catch (error) {
-    console.error('Error fetching related solution:', error)
-    relatedSolution.value = null
-  }
-}
-
-// Fetch related solution when component mounts
-onMounted(() => {
-  fetchRelatedSolution()
-})
 </script>
 
 <style scoped>
