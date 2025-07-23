@@ -128,7 +128,7 @@ jobs:
 
       - name: Set next release version
         # Exclude tags created by this workflow to prevent circular triggers
-        # Only trigger on manually created tags
+        # Only trigger on manually created from GitHub UI
         if: github.event_name == 'workflow_dispatch'
         shell: bash
         run: |
