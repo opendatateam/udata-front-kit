@@ -1,6 +1,6 @@
 <template>
-  <RouterLink :to="topicLink" class="">
-    <div class="fr-card fr-enlarge-link fr-card--shadow">
+  <RouterLink :to="topicLink">
+    <div class="fr-card fr-enlarge-link fr-card--shadow topic-card">
       <div class="fr-card__body">
         <div class="fr-card__content">
           <p v-if="!imageUrl" class="fr-badge fr-badge--sm fr-mb-2w">
