@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="solution-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
@@ -195,13 +195,16 @@
       <div
         v-for="casUsage in relatedCasUsages"
         :key="casUsage.id"
-        class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-3w"
+        class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-3w cas-d-usage-card"
       >
         <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <h3 class="fr-tile__title">
-                <a :href="`/cas-d-usages/${casUsage.slug}`">
+                <a
+                  :href="`/cas-d-usages/${casUsage.slug}`"
+                  class="cas-d-usage-link"
+                >
                   {{ casUsage.name }}
                 </a>
               </h3>
