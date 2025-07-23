@@ -83,7 +83,7 @@ Dans la CI, on veut lancer les tests sur un build, plutôt que sur un serveur de
 # Build pour monsite
 VITE_SITE_ID=monsite npm run build
 # Run les tests sur le build de monsite
-VITE_SITE_ID=monsite nom run test:e2e:for_production_build
+VITE_SITE_ID=monsite npm run test:e2e:for_production_build
 ```
 
 #### Linting via [ESLint](https://eslint.org/)
@@ -124,9 +124,13 @@ Pour créer une review app pour votre PR :
 2. **Sélectionner "Deploy review app"** dans la liste des workflows
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
-   - **Branche** : la branche qui contient la PR à déployer
+
    - **Site** : Le site à déployer (dropdown)
    - **Pull Request number** : Le numéro de votre PR
+     > **💡 Info** : Le choix de la branche n'a pas d'influence.
+
+![Screenshot des paramètres de déploiement](https://i.ibb.co/2065xZg6/useless-param.jpg)
+
 5. **Cliquer sur "Run workflow"**
 
 ### 🏭 Déploiement en preprod et en production

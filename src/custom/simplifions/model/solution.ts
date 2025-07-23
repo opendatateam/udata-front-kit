@@ -1,6 +1,6 @@
 import type { TopicExtras } from '@/model/topic'
 
-export interface SimplifySolutions {
+export interface SimplifionsSolution {
   En_production: boolean
   Image_principale: string | null
   Legende_image_principale: string
@@ -37,5 +37,5 @@ export interface SimplifySolutions {
 }
 
 export interface SimplifionsSolutionsExtras extends TopicExtras {
-  'simplifions-solutions': SimplifySolutions
+  'simplifions-solutions': SimplifionsSolution
 }

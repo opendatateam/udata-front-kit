@@ -1,53 +1,129 @@
 <template>
   <div class="">
-    <p class="fr-text--small">
-      <em>{{ solution.Description_courte }}</em>
-    </p>
-
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">
             {{ solution.Ref_Nom_de_la_solution }}
+            <br />
+            <p class="fr-badge fr-badge--sm badge-absolute">
+              <span style="font-weight: normal">Solution publique</span>
+              <span v-if="solution?.operateur_nom">
+                <span class="fr-ml-1v" style="font-weight: normal"> | </span>
+                {{ solution.operateur_nom }}
+              </span>
+            </p>
           </h1>
         </div>
 
         <p class="fr-text--lead">
-          {{ solution.Description_longue }}
+          {{ solution.Description_courte }}
         </p>
 
-        <ul v-if="tags.length > 0" class="fr-badges-group fr-mt-2w">
-          <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-            <TagComponent :tag="t" />
+        <SimplifionsTags
+          :topic="topic"
+          :page-key="pageKey"
+          :show-simplification="false"
+          :show-budget="false"
+        />
+
+        <ul class="fr-my-4w">
+          <li>
+            <strong>Fournisseur :</strong>
+            <span v-if="solution.operateur_nom_long"
+              >{{ solution.operateur_nom_long }} | </span
+            >{{ solution.operateur_nom }}
+          </li>
+          <li>
+            <strong>Type de solution :</strong>
+            {{ solution.types_de_solution.join(' ou ') }}
+          </li>
+          <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
+          <li>
+            <strong>Moyens requis pour la mise en oeuvre :</strong>
+            <TagComponent
+              v-for="t in tags_budget"
+              :key="`${t.type}-${t.id}`"
+              :tag="t"
+              class="inline-tag"
+            />
+          </li>
+          <li>
+            <strong>Niveau de simplification :</strong>
+            <TagComponent
+              v-for="t in tags_niveau_simplification"
+              :key="`${t.type}-${t.id}`"
+              :tag="t"
+              class="inline-tag"
+            />
           </li>
         </ul>
       </div>
 
       <div class="fr-col-12 fr-col-md-4">
-        <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
-        <div v-if="topic.organization" class="fr-grid-row fr-grid-row--middle">
-          <div class="fr-col-auto fr-mr-1w">
-            <OrganizationLogo :object="topic" />
-          </div>
-          <p class="fr-col fr-m-0">
-            <a class="fr-link" :href="topic.organization.page">
-              <OrganizationNameWithCertificate
-                :organization="topic.organization"
-              />
-            </a>
+        <nav
+          role="navigation"
+          aria-labelledby="fr-summary-title"
+          class="fr-summary"
+        >
+          <h2 id="fr-summary-title" class="fr-summary__title fr-text--md">
+            Sommaire
+          </h2>
+          <ol>
+            <li>
+              <a
+                id="summary-link-1"
+                href="#possibilites-simplification"
+                class="fr-summary__link"
+                >Possibilités de simplification</a
+              >
+            </li>
+            <li>
+              <a
+                id="summary-link-1"
+                href="#cas-usages-simplifiables"
+                class="fr-summary__link"
+                >Cas d'usages simplifiables</a
+              >
+            </li>
+            <li>
+              <a
+                id="summary-link-2"
+                href="#donnees-api-utilisees"
+                class="fr-summary__link"
+                >Données et API utilisées</a
+              >
+            </li>
+          </ol>
+          <hr class="fr-hr fr-my-2w" />
+          <p class="subtitle">
+            Contenu rédigé par :
+            <span v-if="topic.organization" style="font-weight: normal">
+              <a :href="topic.organization.page">
+                <OrganizationNameWithCertificate
+                  :organization="topic.organization"
+                />
+              </a>
+            </span>
+            <br />
+            <span style="font-weight: normal">
+              le
+              <time :datetime="topic.created_at"
+                >{{ formatDate(topic.created_at) }}.</time
+              >
+            </span>
+            <br />
+            <span class="fr-text--xs" style="font-weight: normal"
+              >Modifié le
+              <time :datetime="topic.last_modified"
+                >{{ formatDate(topic.last_modified) }}.</time
+              >
+            </span>
           </p>
-        </div>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
-        <time :datetime="topic.created_at">{{
-          formatDate(topic.created_at)
-        }}</time>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <time :datetime="topic.last_modified">{{
-          formatDate(topic.last_modified)
-        }}</time>
+        </nav>
       </div>
     </div>
-
+    <hr v-if="!solution.Image_principale" class="fr-hr fr-my-2w" />
     <figure
       v-if="solution.Image_principale && solution.Image_principale.length > 0"
       aria-label="© Légende de l'image"
@@ -66,39 +142,12 @@
       </figcaption>
     </figure>
 
-    <div class="fr-col-12 fr-col-md-8">
-      <h2>Caractéristiques de la solution</h2>
-      <ul>
-        <li><strong>Opérateur :</strong>{{ solution.operateur_nom }}</li>
-        <li>
-          <strong>Type de solution :</strong>
-          {{ solution.types_de_solution.join(' ou ') }}
-        </li>
-        <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
-        <li>
-          <strong>Moyens requis pour la mise en oeuvre :</strong>
-          <TagComponent
-            v-for="t in tags_budget"
-            :key="`${t.type}-${t.id}`"
-            :tag="t"
-            class="inline-tag"
-          />
-        </li>
-        <li>
-          <strong>Niveau de simplification :</strong>
-          <TagComponent
-            v-for="t in tags_niveau_simplification"
-            :key="`${t.type}-${t.id}`"
-            :tag="t"
-            class="inline-tag"
-          />
-        </li>
-      </ul>
-
-      <h2>Description</h2>
+    <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
+      <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
+        Possibilités de simplification :
+      </h2>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Description_longue)"></p>
-
       <p>
         <strong>
           <span
@@ -123,10 +172,8 @@
           Cette solution ne permet pas :
         </strong>
       </p>
-
       <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
-
       <p>
         <a
           rel="noopener noreferrer"
@@ -136,10 +183,11 @@
           Consulter le site de la solution
         </a>
       </p>
-
-      <h2 class="colored-title fr-h2 fr-my-5w">Cas d'usages simplifiables</h2>
     </div>
 
+    <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
+      Cas d'usages simplifiables
+    </h2>
     <div
       v-if="relatedCasUsages.length > 0"
       class="fr-grid-row fr-grid-row--gutters"
@@ -170,14 +218,13 @@
       Aucun cas d'usage ne référence cette solution pour le moment.
     </p>
 
-    <h2 class="colored-title fr-h2 fr-mt-8w fr-mb-0">
+    <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w fr-mb-0">
       Données et API utilisées
     </h2>
   </div>
 </template>
 
 <script setup lang="ts">
-import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
@@ -188,6 +235,7 @@ import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
   topic: Topic
@@ -272,5 +320,6 @@ h3 {
   display: inline-flex;
   margin-right: 0.5em;
   margin-left: 0.5em;
+  padding: 0 0.5rem 0 0.5rem;
 }
 </style>
