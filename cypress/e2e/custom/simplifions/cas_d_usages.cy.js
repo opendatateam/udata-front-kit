@@ -4,27 +4,6 @@ describe("Simplifions Cas d'usages Page", () => {
     cy.visit('/cas-d-usages')
   })
 
-  it('should be able to filter by fournisseurs de service ', () => {
-    // Store the initial number of results
-    const initialCount = cy.getNumberOfResults()
-
-    // Apply the filter
-    cy.selectFilterValue('À destination de :', 'Communes')
-
-    // Wait for the results to change
-    cy.getNumberOfResults().then((initialCount) => {
-      cy.get('#number-of-results').should(
-        'not.contain.text',
-        `${initialCount} cas d'usages disponibles`
-      )
-    })
-
-    // Verify the count decreased by comparing with the stored alias
-    initialCount.then((initialCount) => {
-      cy.getNumberOfResults().should('be.lessThan', initialCount)
-    })
-  })
-
   it("should display the cas d'usages listing page correctly", () => {
     // Verify the page loads and has the correct title
     cy.get('h1').should('contain.text', "Cas d'usages")
@@ -60,30 +39,35 @@ describe("Simplifions Cas d'usages Page", () => {
     )
   })
 
-  it('should be able to filter by fournisseurs de service', () => {
-    // Store the initial number of results
-    cy.get('#number-of-results')
-      .invoke('text')
-      .then((text) => parseInt(text.replace(" cas d'usages disponibles", '')))
-      .as('initialCount')
+  it('should be able to filter by fournisseurs de service ', () => {
+    cy.filterShouldRemoveResults(
+      "cas d'usages",
+      'À destination de :',
+      'Communes'
+    )
+  })
 
-    // Apply the filter
-    cy.selectFilterValue('À destination de :', 'Communes')
+  it('should be able to filter by target users ', () => {
+    cy.filterShouldRemoveResults(
+      "cas d'usages",
+      'Pour simplifier les démarches de :',
+      'Particuliers'
+    )
+  })
 
-    // Wait for the results to change
-    cy.get('@initialCount').then((initialCount) => {
-      cy.get('#number-of-results').should(
-        'not.contain.text',
-        `${initialCount} cas d'usages disponibles`
-      )
-    })
+  it('should be able to filter by budget ', () => {
+    cy.filterShouldRemoveResults(
+      "cas d'usages",
+      'Moyens disponibles pour la mise en œuvre :',
+      'Avec des moyens techniques'
+    )
+  })
 
-    // Verify the count decreased by comparing with the stored alias
-    cy.get('@initialCount').then((initialCount) => {
-      cy.get('#number-of-results')
-        .invoke('text')
-        .then((text) => parseInt(text.replace(" cas d'usages disponibles", '')))
-        .should('be.lessThan', initialCount)
-    })
+  it('should be able to filter by types de simplification ', () => {
+    cy.filterShouldRemoveResults(
+      "cas d'usages",
+      'Type de simplification des démarches :',
+      'Proactivité'
+    )
   })
 })
