@@ -17,7 +17,10 @@ on:
           - defis
           - hackathon
           - simplifions
-
+      pr_number:
+        description: 'Pull Request number to deploy'
+        required: true
+        type: string
   pull_request:
     types: [synchronize, closed]
 
@@ -69,11 +72,13 @@ jobs:
               exit 0
             fi
             echo "SITE=${{ github.event.inputs.site }}" >> $GITHUB_ENV
+            echo "PR_NUMBER=${{ github.event.inputs.pr_number }}" >> $GITHUB_ENV
             echo "EVENT_ACTION=manual" >> $GITHUB_ENV
             echo "SHOULD_DEPLOY=true" >> $GITHUB_ENV
             echo "SHOULD_CREATE=true" >> $GITHUB_ENV
           else
             echo "SITE=${{ matrix.site }}" >> $GITHUB_ENV
+            echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
             echo "EVENT_ACTION=${{ github.event.action }}" >> $GITHUB_ENV
             # Set defaults (no deployment, no creation)
             echo "SHOULD_DEPLOY=false" >> $GITHUB_ENV
@@ -104,7 +109,7 @@ jobs:
         run: |
           echo "Event name: ${{ github.event_name }}"
           echo "Site: ${{ env.SITE }}"
-          echo "Branch name: ${{ github.ref_name }}"
+          echo "PR number: ${{ env.PR_NUMBER }}"
           echo "Event action: ${{ env.EVENT_ACTION }}"
           echo "App exists: ${{ env.APP_EXISTS }}"
           echo "Should deploy: ${{ env.SHOULD_DEPLOY }}"
@@ -139,7 +144,7 @@ jobs:
         with:
           command: review-apps:create
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.ref_name }}--${{ env.SITE }}
+          review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           # omitting this will prevent the app from being built (which is what we want)
           # branch: 'main'
@@ -153,17 +158,17 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            docker-options:add deploy-preview-${{ github.ref_name }}--${{ env.SITE }} build "--build-arg VITE_SITE_ID=${{ env.SITE }}"
+            docker-options:add deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }} build "--build-arg VITE_SITE_ID=${{ env.SITE }}"
 
       - name: Push to dokku
         if: env.SHOULD_DEPLOY == 'true'
-        uses: dokku/github-action@master
+        uses: dokku/github-action@v1.0.0
         with:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
-          review_app_name: deploy-preview-${{ github.ref_name }}--${{ env.SITE }}
+          review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
           ssh_private_key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           git_push_flags: '--force'
-          branch: ${{ github.ref_name }}
+          branch: 'main'
 
       - name: Enable SSL with Let's Encrypt
         if: env.SHOULD_CREATE == 'true'
@@ -174,7 +179,7 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            letsencrypt:enable deploy-preview-${{ github.ref_name }}--${{ env.SITE }}
+            letsencrypt:enable deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
 
       - name: Destroy the review app
         if: github.event.action == 'closed' && env.SHOULD_DESTROY == 'true'
