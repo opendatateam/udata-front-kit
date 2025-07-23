@@ -17,4 +17,18 @@ describe("Simplifions Cas d'usages Show Page", () => {
     // Check that the custom description is visible
     cy.get('.cas-usage-description').should('not.be.empty')
   })
+
+  it('should have a functional summary', () => {
+    // Check that the summary is visible
+    cy.get('.fr-summary').should('not.be.empty')
+
+    // Check that the summary has links
+    cy.get('.fr-summary__link').should('have.length.gt', 0)
+
+    // Check that the summary links scroll to the correct anchor
+    cy.get('.fr-summary__link').each((link) => {
+      cy.wrap(link).click()
+      cy.get(link.attr('href')).should('be.visible')
+    })
+  })
 })
