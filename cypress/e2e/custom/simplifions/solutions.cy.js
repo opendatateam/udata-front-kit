@@ -1,14 +1,14 @@
-describe("Simplifions Cas d'usages Page", () => {
-  const topicsName = "cas d'usages"
+describe('Simplifions Solutions Page', () => {
+  const topicsName = 'solutions'
 
   beforeEach(() => {
     // Visit the Simplifions home page before each test
-    cy.visit('/cas-d-usages')
+    cy.visit('/solutions')
   })
 
-  it("should display the cas d'usages listing page correctly", () => {
+  it('should display the solutions listing page correctly', () => {
     // Verify the page loads and has the correct title
-    cy.get('h1').should('contain.text', "Cas d'usages")
+    cy.get('h1').should('contain.text', 'Solutions')
 
     // Check that the page body is visible
     cy.get('body').should('be.visible')
@@ -17,7 +17,7 @@ describe("Simplifions Cas d'usages Page", () => {
     cy.get('ul[role="list"]').should('not.be.empty')
   })
 
-  it("should display a paginated list of cas d'usages", () => {
+  it('should display a paginated list of solutions', () => {
     // Verify that the page has 10 results
     cy.get('div.topic-card').should('have.length', 10)
 
@@ -30,15 +30,12 @@ describe("Simplifions Cas d'usages Page", () => {
     })
   })
 
-  it("should be able to search for a cas d'usage", () => {
+  it('should be able to search for a solution', () => {
     // Fill the search bar with the topic name
-    cy.get('input#search-topic').type('Aides sociales des CCAS')
+    cy.get('input#search-topic').type('Osiris')
 
     // Verify that the page has the correct number of results
-    cy.get('#number-of-results').should(
-      'contain.text',
-      "1 cas d'usage disponible"
-    )
+    cy.get('#number-of-results').should('contain.text', '1 solution disponible')
   })
 
   it('should be able to filter by fournisseurs de service ', () => {
