@@ -83,7 +83,13 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 #### Comment créer une review app
 
-Pour créer une review app pour votre PR :
+## Solution 1 - par commentaire
+
+1. Ecrire un commentaire du type `/deploy {SITE}` dans la PR (e.g. `/deploy ecospheres`)
+2. Une emoji 🚀 apparaîtra sous le commentaire pour indiquer que le déploiement est lancé.
+3. Une notification du type `@github-actions github-actions bot deployed to ecospheres-preview ` sur le fil de la PR indiquera que le déploiement est terminé, avec un lien vers le déploiement.
+
+## Solution 2 — par workflow
 
 1. **Aller dans l'onglet "Actions"** du dépôt GitHub
 2. **Sélectionner "Deploy review app"** dans la liste des workflows
@@ -105,11 +111,13 @@ Le déploiement des verticales thématiques en preprod et en production s'effect
 ```
 
 **Paramètres :**
+
 - **ENV** : `prod` ou `demo`/`preprod` suivant la verticale
 - **CONFIG_NAME** : nom de la configuration (actuellement `ecologie`, `meteo`, `defis` ou `simplifions`)
 - **VERSION_PART** : `major`, `minor` ou `patch`
 
 **Exemple :**
+
 ```
 [prod:ecologie:minor] nouvelle fonctionnalité incroyable
 ```
@@ -128,6 +136,7 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
 2. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
 
 Plus précisément, le [workflow de déploiement](.github/workflows/create-deploy-release.yml) est responsable de :
+
 1. **Configuration de l'environnement** : variables et accès aux dépôts
 2. **Clonage du dépôt "scaffolding" du script d'appel à l'infrastructure**
 3. **Récupération de la configuration** basée sur le message de commit
