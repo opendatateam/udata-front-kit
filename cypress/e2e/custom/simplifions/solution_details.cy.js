@@ -40,5 +40,6 @@ describe('Simplifions Solutions Details Page', () => {
 
     // Check that the cas d'usage detail page is loaded
     cy.url().should('include', '/cas-d-usages/')
+    cy.get('.fr-breadcrumb__list').should('contain.text', "Cas d'usages")
   })
 })

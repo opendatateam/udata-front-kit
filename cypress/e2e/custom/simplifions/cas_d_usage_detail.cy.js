@@ -43,5 +43,6 @@ describe("Simplifions Cas d'usages Show Page", () => {
 
     // Check that the solution detail page is loaded
     cy.url().should('include', '/solutions/')
+    cy.get('.fr-breadcrumb__list').should('contain.text', 'Solutions')
   })
 })
