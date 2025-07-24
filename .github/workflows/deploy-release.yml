@@ -82,7 +82,7 @@ jobs:
           
           # Parse tag format: {site}-{environment}-{version_type}
           # Example: ecospheres-prod-patch
-          if [[ $TAG_NAME =~ ^([a-zA-Z0-9-]+)-([a-zA-Z0-9]+)-(major|minor|patch)$ ]]; then
+          if [[ $TAG_NAME =~ ^([a-zA-Z0-9-]+)-(prod|preprod|demo)-(major|minor|patch)$ ]]; then
             CONFIG_NAME="${BASH_REMATCH[1]}"
             ENV="${BASH_REMATCH[2]}"
             VERSION_PART="${BASH_REMATCH[3]}"
@@ -99,6 +99,8 @@ jobs:
           else
             echo "Error: Invalid tag format. Expected: {site}-{environment}-{version_type}"
             echo "Example: ecospheres-prod-patch"
+            echo "Allowed environments: prod, preprod, demo"
+            echo "Allowed version types: patch, minor, major"
             exit 1 # This will stop the workflow execution
           fi
 
