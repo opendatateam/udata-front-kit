@@ -19,7 +19,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it("should display a paginated list of cas d'usages", () => {
     // Verify that the page has 10 results
-    cy.get('div.test_topic-car').should('have.length', 10)
+    cy.get('div.test_topic-card').should('have.length', 10)
 
     // Verify that the page has a pagination component
     cy.get('nav.fr-pagination').should('be.visible')
