@@ -81,10 +81,10 @@ const goToPage = (page: string) => {
       </div>
     </div>
   </div>
-  <div v-for="item in sectionsHomePage" :key="item">
+  <div v-for="(item, index) in sectionsHomePage" :key="index">
     <div class="fr-container hero-text">
       <h4 v-if="item.title">{{ item.title }}</h4>
-      <span v-html="fromMarkdown(item.content)"></span>
+      <span v-html="fromMarkdown(item.content || '')"></span>
       <div class="fr-mt-4w fr-col-md-12 datagouv-components">
         <SubSectionDatasets
           v-if="item.sub_section_datasets"

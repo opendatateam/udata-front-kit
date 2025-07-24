@@ -122,6 +122,7 @@ onMounted(() => {
             r.owner?.avatar ||
             undefined
           "
+          :title-link-attrs="{}"
         />
       </li>
     </ul>

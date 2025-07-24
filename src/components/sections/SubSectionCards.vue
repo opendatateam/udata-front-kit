@@ -11,7 +11,7 @@ defineProps({
   <div>
     <h3 v-if="subsection.title">{{ subsection.title }}</h3>
     <div style="display: flex; flex-wrap: wrap">
-      <div v-for="item in subsection.cards" :key="item">
+      <div v-for="(item, index) in subsection.cards" :key="index">
         <DsfrCard
           class="subsection-card"
           alt-img="altImg"
@@ -19,6 +19,7 @@ defineProps({
           :img-src="item.image_url"
           :link="item.url"
           :title="item.name"
+          :title-link-attrs="{}"
         />
       </div>
     </div>
