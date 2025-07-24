@@ -33,7 +33,7 @@
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^12.4.0",
     "@vueuse/integrations": "^12.4.0",
-    "axios": "^1.7.9",
+    "axios": "^1.11.0",
     "dompurify": "^3.2.3",
     "maplibre-gl": "^5.3.0",
     "marked": "^15.0.6",
