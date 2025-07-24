@@ -12,12 +12,15 @@
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <p class="fr-tile__title fr-text--lead">
-                <a
+                <router-link
                   class="solution-link"
-                  :href="`/solutions/${reco_solution.solution_topic_id}`"
+                  :to="{
+                    name: 'solutions_detail',
+                    params: { item_id: reco_solution.solution_topic_id }
+                  }"
                 >
                   {{ reco_solution.Nom_de_la_solution_publique }}
-                </a>
+                </router-link>
                 <br />
                 En savoir plus
               </p>
