@@ -21,7 +21,7 @@ jobs:
           echo "Comment: $COMMENT"
 
           # Extract /deploy command and site
-          if [[ "$COMMENT" =~ /deploy[[:space:]]+([a-zA-Z-_]+) ]]; then
+          if [[ "$COMMENT" =~ /deploy[[:space:]]+([a-zA-Z_-]+) ]]; then
             SITE="${BASH_REMATCH[1]}"
             echo "Extracted site: $SITE"
             echo "should_deploy=true" >> $GITHUB_OUTPUT
