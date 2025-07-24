@@ -137,56 +137,62 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 ### 🏭 Déploiement en preprod et en production
 
-Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui se déclenche **manuellement** via l'interface GitHub Actions.
-
-Pour déployer une verticale :
-
-1. **Aller dans l'onglet "Actions"** du dépôt GitHub
-2. **Sélectionner "Manual deployment with version bump"** dans la liste des workflows
-3. **Cliquer sur "Run workflow"**
-4. **Choisir** :
-   - **Site** : Le site à déployer (dropdown avec les sites disponibles)
-   - **Environment** : L'environnement cible (`demo`/`preprod` suivant la verticale, ou `prod`)
-   - **Version type** : Le type de version (`major`, `minor`, ou `patch`)
-5. **Cliquer sur "Run workflow"**
-
-Le workflow va automatiquement :
-- Calculer la prochaine version basée sur les tags existants
-- Créer un nouveau tag avec cette version
-- Déclencher le pipeline de déploiement GitLab
-
-**Sites disponibles :**
-- `ecospheres` - Site écologie
-- `meteo-france` - Site météo
-- `logistique` - Site logistique
-- `defis` - Site défis
-- `hackathon` - Site hackathon
-- `simplifions` - Site simplifions
-
-**Exemple de déploiement :**
-- Site : `ecospheres`
-- Environment : `prod`
-- Version type : `minor`
-Cela créera une nouvelle version mineure (ex: `ecospheres-prod-1.2.0`) et la déploiera en production.
-
-Toutes les variables et secrets nécessaires pour ce workflow sont listés dans la section `env:` du [workflow de déploiement](.github/workflows/create-deploy-release.yml).
+Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui peut être déclenché de deux manières différentes (voir les solutions ci-dessous).
 
 #### Architecture de déploiement en preprod et en production
 
-Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne en deux temps :
+Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne ainsi :
 
-1. **GitHub Actions** : Les commits sur GitHub déclenchent le workflow qui fait des appels à l'API GitLab via un script téléchargé depuis le dépôt "scaffolding"
-2. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
-
-Plus précisément, le [workflow de déploiement](.github/workflows/create-deploy-release.yml) est responsable de :
-
-1. **Configuration de l'environnement** : variables et accès aux dépôts
-2. **Clonage du dépôt "scaffolding" du script d'appel à l'infrastructure**
-3. **Récupération de la configuration** basée sur le message de commit
-4. **Création et push d'un nouveau tag** selon la partie de version spécifiée
-5. **Déclenchement d'un pipeline GitLab CI/CD**
+1. **GitHub Actions** : Les actions sur GitHub déclenchent le workflow
+2. **GitHub Actions** : Calcul de la prochaine version basée sur les tags existants
+3. **GitHub Actions** : Création d'un nouveau tag avec cette version
+4. **GitHub Actions** : Appels à l'API GitLab via un script téléchargé depuis le dépôt "scaffolding"
+5. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
 
 **Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
+
+#### Comment déployer en préproduction et en production
+
+## Solution 1 - par Git tag
+
+Le déploiement peut être déclenché en créant un tag Git avec le format `{site}-{environment}-{version_type}`.
+
+**Format du tag :**
+- `{site}` : Nom du site
+  - **Sites disponibles :**
+    - `ecospheres` - Site écologie
+    - `meteo-france` - Site météo
+    - `logistique` - Site logistique
+    - `defis` - Site défis
+    - `hackathon` - Site hackathon
+    - `simplifions` - Site simplifions
+- `{environment}` : Environnement cible (`prod`, `preprod`, ou `demo`)
+- `{version_type}` : Type de version (`major`, `minor`, ou `patch`)
+
+**Exemples de tags valides :**
+- `ecospheres-prod-patch` : Déploie ecospheres en production avec un patch
+- `meteo-france-preprod-minor` : Déploie meteo-france en preprod avec une version mineure
+- `logistique-demo-major` : Déploie logistique en demo avec une version majeure
+
+**Commandes Git :**
+```bash
+# Créer et pousser un tag pour déclencher le déploiement
+git tag ecospheres-prod-patch
+git push origin ecospheres-prod-patch
+```
+
+## Solution 2 — sur l'interface web de GitHub Actions
+
+Le déploiement peut également être déclenché manuellement via l'interface GitHub Actions :
+
+1. **Aller dans l'onglet "Actions"** du dépôt GitHub
+2. **Sélectionner "Deployment on datagouv domains with version bump"** dans la liste des workflows
+3. **Cliquer sur "Run workflow"**
+4. **Choisir** :
+   - **Site** : Le site à déployer (dropdown avec les sites disponibles)
+   - **Environment** : L'environnement cible (`demo`, `preprod`, ou `prod`)
+   - **Version type** : Le type de version (`major`, `minor`, ou `patch`)
+5. **Cliquer sur "Run workflow"**
 
 ## 📚 Bibliothèques et plugins utilisés
 
