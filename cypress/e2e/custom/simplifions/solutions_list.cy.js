@@ -54,7 +54,7 @@ describe('Simplifions Solutions Page', () => {
     cy.filterShouldRemoveResults(
       topicsName,
       'Moyens disponibles pour la mise en œuvre :',
-      'Avec des moyens techniques'
+      'Aucun développement, ni budget'
     )
   })
 
@@ -62,7 +62,7 @@ describe('Simplifions Solutions Page', () => {
     cy.filterShouldRemoveResults(
       topicsName,
       'Type de simplification des démarches :',
-      'Dites-le nous une fois'
+      'Accès facile'
     )
   })
 })
