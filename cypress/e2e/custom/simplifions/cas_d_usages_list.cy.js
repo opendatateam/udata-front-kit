@@ -7,11 +7,11 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   })
 
   it("should display the cas d'usages listing page correctly", () => {
-    // Verify the page loads and has the correct title
-    cy.get('h1').should('contain.text', "Cas d'usages")
-
     // Check that the page body is visible
     cy.get('body').should('be.visible')
+
+    // Verify the page loads and has the correct title
+    cy.get('h1').should('contain.text', "Cas d'usages")
 
     // Verify that the list is not empty
     cy.get('ul[role="list"]').should('not.be.empty')
