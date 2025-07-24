@@ -1,0 +1,20 @@
+export const REGIONS = [
+  ['84', 'Auvergne-Rhône-Alpes'],
+  ['27', 'Bourgogne-Franche-Comté'],
+  ['53', 'Bretagne'],
+  ['24', 'Centre-Val de Loire'],
+  ['94', 'Corse'],
+  ['44', 'Grand Est'],
+  ['01', 'Guadeloupe'],
+  ['03', 'Guyane'],
+  ['32', 'Hauts-de-France'],
+  ['11', 'Île-de-France'],
+  ['04', 'La Réunion'],
+  ['02', 'Martinique'],
+  ['06', 'Mayotte'],
+  ['28', 'Normandie'],
+  ['75', 'Nouvelle-Aquitaine'],
+  ['76', 'Occitanie'],
+  ['52', 'Pays de la Loire'],
+  ['93', "Provence-Alpes-Côte d'Azur"]
+]
