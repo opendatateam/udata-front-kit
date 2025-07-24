@@ -127,6 +127,16 @@
     <h2 class="h2--cas-usage fr-h2 fr-mt-5w fr-mb-0">
       ➡️ Utiliser les jeux de données et API utiles
     </h2>
+
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+      <div
+        v-for="apidOrData in casUsage.API_et_donnees_utiles"
+        :key="apidOrData.UID_data_gouv"
+        class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+      >
+        <SimplifionsDataApiCard :api-or-data="apidOrData" />
+      </div>
+    </div>
   </div>
 </template>
 

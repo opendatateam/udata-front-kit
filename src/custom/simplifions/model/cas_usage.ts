@@ -38,7 +38,7 @@ export interface SimplifionsCasUsage {
   slug: string
   Type_de_cas_d_usage: string[]
   Cas_d_usages_connexes: null
-  API_et_donnees_utiles: number[]
+  API_et_donnees_utiles: SimplifionsDataOrApi[]
   usagers_str: string
   Solutions_publiques_recommandees: number[]
   reco_solutions: RecoSolution[]
@@ -47,6 +47,12 @@ export interface SimplifionsCasUsage {
   target_users: string[]
   budget: string[]
   types_de_simplification: string[]
+}
+
+export interface SimplifionsDataOrApi {
+  Nom_donnees_ou_API: string
+  Type: string
+  UID_data_gouv: string
 }
 
 export interface SimplifionsCasUsagesExtras extends TopicExtras {
