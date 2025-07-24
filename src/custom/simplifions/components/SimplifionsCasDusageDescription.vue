@@ -82,7 +82,7 @@
     </div>
 
     <div class="fr-col-12 fr-col-md-8">
-      <h2 class="h2-cas-usage fr-h2 fr-my-5w" id="contexte-et-cadre-juridique">
+      <h2 id="contexte-et-cadre-juridique" class="h2-cas-usage fr-h2 fr-my-5w">
         Contexte et cadre juridique
       </h2>
 
@@ -103,7 +103,7 @@
       <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
     </div>
 
-    <h2 class="h2-cas-usage fr-h2 fr-my-5w" id="solutions-disponibles">
+    <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
       Solutions disponibles
     </h2>
 

@@ -113,7 +113,7 @@ defineExpose({
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
     >
-      <h2 class="fr-col-auto fr-my-0 h4" id="number-of-results">
+      <h2 id="number-of-results" class="fr-col-auto fr-my-0 h4">
         {{ numberOfResultMsg }}
       </h2>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
