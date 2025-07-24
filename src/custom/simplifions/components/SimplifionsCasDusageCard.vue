@@ -2,7 +2,7 @@
   <router-link
     :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
   >
-    <div class="topic-card">
+    <div class="test_topic-car">
       <div class="header-topic">
         <!--Titre et description-->
         <div class="title-topic fr-text--lead">{{ topic.name }}</div>
@@ -54,7 +54,7 @@ const { pageKey } = useCurrentPageConf()
   display: block;
   line-height: inherit;
 }
-.topic-card-col-logo {
+.test_topic-car-col-logo {
   max-width: 4.25rem;
 }
 .description p {
@@ -65,10 +65,10 @@ const { pageKey } = useCurrentPageConf()
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.topic-card {
+.test_topic-car {
   border: 1px solid #ebebeb;
 }
-.topic-card:hover {
+.test_topic-car:hover {
   background-color: #f6f6f6;
   opacity: 50;
 }

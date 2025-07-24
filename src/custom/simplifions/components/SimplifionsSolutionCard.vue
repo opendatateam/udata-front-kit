@@ -2,7 +2,7 @@
   <router-link
     :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
   >
-    <div class="fr-card fr-enlarge-link fr-card--shadow topic-card">
+    <div class="fr-card fr-enlarge-link fr-card--shadow test_topic-car">
       <div class="fr-card__body">
         <div class="fr-card__content">
           <p v-if="!imageUrl" class="fr-badge fr-badge--sm fr-mb-2w">
@@ -86,7 +86,7 @@ const imageUrl = solution?.Image_principale?.[0]
   z-index: 1;
 }
 
-.topic-card:hover .topic-image-overlay {
+.test_topic-car:hover .topic-image-overlay {
   opacity: 0.3;
 }
 

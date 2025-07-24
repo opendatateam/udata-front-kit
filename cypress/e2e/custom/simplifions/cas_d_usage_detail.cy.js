@@ -12,10 +12,10 @@ describe("Simplifions Cas d'usages Show Page", () => {
     )
 
     // Check that the topic detail is visible
-    cy.get('.topic-detail').should('not.be.empty')
+    cy.get('.test__topic-detail').should('not.be.empty')
 
     // Check that the custom description is visible
-    cy.get('.cas-usage-description').should('not.be.empty')
+    cy.get('.test_cas-d-usage-description').should('not.be.empty')
   })
 
   it('should have a functional summary', () => {

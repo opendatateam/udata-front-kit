@@ -145,7 +145,9 @@ watch(
   />
 
   <main id="main-content" role="main">
-    <RouterView :key="route.path" />
+    <RouterView
+      :key="`${String($route.name)}-${String($route.params.item_id)}`"
+    />
   </main>
 
   <DsfrFooter

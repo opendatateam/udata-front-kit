@@ -238,7 +238,7 @@ watch(
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
   <GenericContainer v-if="topic">
-    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters topic-detail">
+    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
         :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"

@@ -9,7 +9,7 @@ describe('Simplifions Solutions Details Page', () => {
     cy.get('h1').should('contain.text', 'Annuaire des entreprises')
 
     // Check that the topic detail is visible
-    cy.get('.topic-detail').should('not.be.empty')
+    cy.get('.test__topic-detail').should('not.be.empty')
 
     // Check that the custom description is visible
     cy.get('.solution-description').should('not.be.empty')
@@ -31,10 +31,10 @@ describe('Simplifions Solutions Details Page', () => {
 
   it("should link to cas d'usages", () => {
     // Check that the cas d'usages are visible
-    cy.get('.cas-d-usage-card').should('have.length.gt', 1)
+    cy.get('.test_cas-d-usage-card').should('have.length.gt', 1)
 
     // Click on the first cas d'usage
-    cy.get('.cas-d-usage-card:first').within(() => {
+    cy.get('.test_cas-d-usage-card:first').within(() => {
       cy.get('a.cas-d-usage-link').click()
     })
 
