@@ -201,15 +201,12 @@
           <div class="fr-tile__body">
             <div class="fr-tile__content">
               <h3 class="fr-tile__title">
-                <router-link
-                  :to="{
-                    name: 'cas-d-usages_detail',
-                    params: { item_id: casUsage.slug }
-                  }"
+                <a
+                  :href="`/cas-d-usages/${casUsage.slug}`"
                   class="cas-d-usage-link"
                 >
                   {{ casUsage.name }}
-                </router-link>
+                </a>
               </h3>
               <p class="fr-tile__detail">
                 {{ casUsage.description || 'Aucune description disponible' }}
