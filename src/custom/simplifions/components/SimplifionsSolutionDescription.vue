@@ -195,7 +195,7 @@
       <div
         v-for="casUsage in relatedCasUsages"
         :key="casUsage.id"
-        class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-3w cas-d-usage-card"
+        class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-3w test_cas-d-usage-card"
       >
         <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
           <div class="fr-tile__body">

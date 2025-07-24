@@ -67,7 +67,7 @@ describe('Simplifions Navigation', () => {
 
     // Wait for the page to load and check that the search results are visible
     cy.get('h1').should('contain.text', "Cas d'usages")
-    cy.get('.topic-card').should('have.length.gt', 0)
+    cy.get('.test_topic-car').should('have.length.gt', 0)
   })
 
   it('should search for solutions', () => {
@@ -87,6 +87,6 @@ describe('Simplifions Navigation', () => {
 
     // Wait for the page to load and check that the search results are visible
     cy.get('h1').should('contain.text', 'Solutions')
-    cy.get('.topic-card').should('have.length.gt', 0)
+    cy.get('.test_topic-car').should('have.length.gt', 0)
   })
 })

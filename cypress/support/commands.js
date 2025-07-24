@@ -67,7 +67,7 @@ Cypress.Commands.add('checkRGAAContrast', (context = null, options = {}) => {
 })
 
 /**
- * Custom command to select an option in a DSFR multiselect component
+ * Custom command to select an option in a multiselect component
  * @param {string} selectLabel - The label text of the select component (e.g., "À destination de :")
  * @param {string} optionLabel - The label/text of the option to select (e.g., "Communes")
  */
@@ -90,28 +90,28 @@ Cypress.Commands.add('selectFilterValue', (selectLabel, optionLabel) => {
     })
 })
 
-Cypress.Commands.add('getNumberOfResults', (topicsName) => {
+Cypress.Commands.add('getNumberOfResults', (pageName) => {
   return cy
     .get('#number-of-results')
     .invoke('text')
-    .then((text) => parseInt(text.replace(` ${topicsName} disponibles`, '')))
+    .then((text) => parseInt(text.replace(` ${pageName} disponibles`, '')))
 })
 
 Cypress.Commands.add(
   'filterShouldRemoveResults',
-  (topicsName, selectLabel, optionLabel) => {
+  (pageName, selectLabel, optionLabel) => {
     // Store the initial number of results
-    cy.getNumberOfResults(topicsName).then((initialCount) => {
+    cy.getNumberOfResults(pageName).then((initialCount) => {
       // Apply the filter
       cy.selectFilterValue(selectLabel, optionLabel)
 
       // Wait for the number of results to change
       cy.get('#number-of-results').should(
         'not.contain.text',
-        `${initialCount} ${topicsName} disponibles`
+        `${initialCount} ${pageName} disponibles`
       )
 
-      cy.getNumberOfResults(topicsName).then((newCount) => {
+      cy.getNumberOfResults(pageName).then((newCount) => {
         // Verify that the number of results is less than the initial count
         expect(newCount).to.be.lessThan(initialCount)
         // Verify that the number of results is greater than 0
