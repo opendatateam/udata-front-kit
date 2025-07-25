@@ -9,7 +9,7 @@ on:
         required: true
         default: 'ecospheres'
         type: choice
-        options:
+        options: # Can't use vars here because this is a workflow dispatch input
           - ecospheres
           - meteo-france
           - logistique
@@ -21,7 +21,7 @@ on:
         required: true
         default: 'preprod'
         type: choice
-        options:
+        options: # Can't use vars here because this is a workflow dispatch input
           - demo
           - preprod
           - prod
@@ -30,7 +30,7 @@ on:
         required: true
         default: 'patch'
         type: choice
-        options:
+        options: # Can't use vars here because this is a workflow dispatch input
           - major
           - minor
           - patch
