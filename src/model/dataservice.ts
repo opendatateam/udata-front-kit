@@ -1,16 +1,11 @@
+import type { Organization } from '@datagouv/components'
 import type { GenericResponse } from './api'
 
 export interface DataserviceV2 {
   id: string
   title: string
   description?: string
-  organization?: {
-    id: string
-    name: string
-    slug: string
-    logo?: string
-    logo_thumbnail?: string
-  }
+  organization?: Organization
   tags?: string[]
   created_at: string
   updated_at: string
