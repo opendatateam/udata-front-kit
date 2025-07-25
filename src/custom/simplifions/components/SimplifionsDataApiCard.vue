@@ -1,5 +1,5 @@
 <template>
-  <a href="datagouvLink" class="api-or-dataset-card">
+  <a href="datagouvLink" :class="`api-or-dataset-card ${entityName}-card`">
     <div class="api-or-dataset-header">
       <div
         v-if="resourceNotFound || !datagouvResource"
