@@ -45,4 +45,30 @@ describe("Simplifions Cas d'usages Show Page", () => {
     cy.url().should('include', '/solutions/')
     cy.get('.fr-breadcrumb__list').should('contain.text', 'Solutions')
   })
+
+  it('should display the APIs cards correctly', () => {
+    // Check that the data api card is visible
+    cy.get('.api-or-dataset-card').should('not.be.empty')
+  })
+})
+
+describe("Simplifions Cas d'usages Show Page for cas d'usage with datasets and custom descriptions", () => {
+  beforeEach(() => {
+    // Visit the Simplifions home page before each test
+    cy.visit(
+      '/cas-d-usages/marches-publics-depot-et-instruction-des-candidatures'
+    )
+  })
+
+  it("should display the datasets cards for a cas d'usage with datasets", () => {
+    // Check that the api cards are visible
+    cy.get('.api-or-dataset-card.dataservices-card').should('not.be.empty')
+    // Check that the datasets cards are visible
+    cy.get('.api-or-dataset-card.datasets-card').should('not.be.empty')
+  })
+
+  it('should display the custom descriptions in the dataservices and datasets cards', () => {
+    // Check that the dataservices custom description is visible
+    cy.get('.api-or-dataset-description').should('not.be.empty')
+  })
 })

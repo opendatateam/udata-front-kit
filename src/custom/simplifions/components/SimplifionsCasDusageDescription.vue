@@ -127,6 +127,19 @@
     <h2 class="h2--cas-usage fr-h2 fr-mt-5w fr-mb-0">
       ➡️ Utiliser les jeux de données et API utiles
     </h2>
+
+    <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none">
+      <li
+        v-for="apidOrData in casUsage.API_et_donnees_utiles"
+        :key="apidOrData.UID_data_gouv"
+        class="fr-col-12 fr-py-0 fr-mt-2w"
+      >
+        <SimplifionsDataApiCard
+          :api-or-data="apidOrData"
+          :custom-description="customDescription(apidOrData.UID_data_gouv)"
+        />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -155,6 +168,19 @@ const budget_group = (budget: Array<string>) => {
     return 'Aucun développement, ni budget'
   }
   return 'Avec des moyens techniques ou un éditeur de logiciel'
+}
+
+const customDescriptionsForDataApi =
+  casUsage.descriptions_api_et_donnees_utiles.reduce(
+    (acc, description) => {
+      acc[description.uid_datagouv] = description.Description_de_l_utilisation
+      return acc
+    },
+    {} as Record<string, string>
+  )
+
+const customDescription = (uid: string) => {
+  return customDescriptionsForDataApi[uid] || null
 }
 
 // Affichage des parties reco solutions, dans l'ordre voulu
@@ -198,5 +224,9 @@ const grouped_reco_solutions = casUsage.reco_solutions
 
 .h3-cas-usage {
   color: #616161;
+}
+
+ul.list-none {
+  list-style: none;
 }
 </style>
