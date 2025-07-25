@@ -45,4 +45,9 @@ describe("Simplifions Cas d'usages Show Page", () => {
     cy.url().should('include', '/solutions/')
     cy.get('.fr-breadcrumb__list').should('contain.text', 'Solutions')
   })
+
+  it('should display the APIs or datasets cards correctly', () => {
+    // Check that the data api card is visible
+    cy.get('.test_api-or-dataset-card').should('not.be.empty')
+  })
 })
