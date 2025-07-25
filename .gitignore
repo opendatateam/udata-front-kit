@@ -7,6 +7,7 @@ node_modules/
 shell.nix
 src/playground
 cypress/screenshots
+cypress/downloads
 
 # vim swap files
 *.swp

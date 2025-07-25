@@ -4,7 +4,9 @@
       ➡️ {{ reco_solution.Nom_de_la_solution_publique }}
     </h4>
 
-    <div class="fr-grid-row fr-grid-row--gutters fr-my-4w fr-mx-2w fr-grid-row--top">
+    <div
+      class="fr-grid-row fr-grid-row--gutters fr-my-4w fr-mx-2w fr-grid-row--top"
+    >
       <div class="fr-col-12 fr-col-xs-8 fr-col-sm-4 fr-col-lg-3">
         <div class="fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link">
           <div class="fr-tile__body">
