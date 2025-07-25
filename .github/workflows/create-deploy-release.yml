@@ -35,7 +35,7 @@ on:
           - minor
           - patch
   push:
-    tags:
+    branches:
       - '*'
 jobs:
   deploy-release:
