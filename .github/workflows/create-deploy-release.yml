@@ -92,7 +92,6 @@ jobs:
           echo "ENV=$ENV" >> $GITHUB_ENV
           echo "CONFIG_NAME=$CONFIG_NAME" >> $GITHUB_ENV
           echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
-        working-directory: ${{ env.APP_NAME }}
 
       - name: Setup SSH keys and Git configuration
         shell: bash
