@@ -11,7 +11,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
       'Aides publiques entreprises | Sourçage'
     )
 
-    // Check that the topic detail is visible
+    // Check that the topic detail is visible.
     cy.get('.test__topic-detail').should('not.be.empty')
 
     // Check that the custom description is visible
