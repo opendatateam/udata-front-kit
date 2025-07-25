@@ -1,32 +1,40 @@
 <template>
-  <div
-    v-if="resourceNotFound || !datagouvResource"
-    class="disabled-card fr-p-2w"
-  >
-    <h4 class="fr-col-12">
-      {{ apiOrData.Nom_donnees_ou_API }}
-    </h4>
-    <p class="fr-col-12 fr-grid-row justify-between">
-      <span>{{ apiOrData.Type }}</span>
+  <div class="test_api-or-dataset-card">
+    <div
+      v-if="resourceNotFound || !datagouvResource"
+      class="disabled-card fr-p-2w"
+    >
+      <h4 class="fr-col-12">
+        {{ apiOrData.Nom_donnees_ou_API }}
+      </h4>
+      <p class="fr-col-12 fr-grid-row justify-between">
+        <span class="fr-text--sm fr-mb-0"
+          >ID: {{ apiOrData.UID_data_gouv }}</span
+        >
 
-      <span v-if="resourceNotFound"> ⚠️ {{ apiOrData.Type }} non trouvée </span>
-      <span v-else> Chargement du lien en cours... </span>
-    </p>
+        <span v-if="resourceNotFound">
+          ⚠️ {{ apiOrData.Type }} non trouvé{{
+            apiOrData.Type == 'API' ? 'e' : ''
+          }}
+        </span>
+        <span v-else> Chargement du lien en cours... </span>
+      </p>
+    </div>
+
+    <DatasetCard
+      v-else-if="entityName == 'datasets'"
+      class="no-margins"
+      :dataset="datagouvResource as DatasetV2"
+      :dataset-url="datagouvLink"
+    />
+    <DataserviceCard
+      v-else-if="entityName == 'dataservices'"
+      class="no-margins"
+      :dataservice="datagouvResource as DataserviceV2"
+      :dataservice-url="datagouvLink"
+    />
+    <div v-else>{{ entityName }} | {{ datagouvResource.title }}</div>
   </div>
-
-  <DatasetCard
-    v-else-if="entityName == 'datasets'"
-    class="no-margins"
-    :dataset="datagouvResource as DatasetV2"
-    :dataset-url="datagouvLink"
-  />
-  <DataserviceCard
-    v-else-if="entityName == 'dataservices'"
-    class="no-margins"
-    :dataservice="datagouvResource as DataserviceV2"
-    :dataservice-url="datagouvLink"
-  />
-  <div v-else>{{ entityName }} | {{ datagouvResource.title }}</div>
 </template>
 
 <script setup lang="ts">
