@@ -11,7 +11,7 @@
 <h2 id="niveau-1-acces-facile" class="fr-h4 fr-my-0w" style="color: #616161;">Le contenu est rédigé :</h2>
 
 <p class="fr-text--lg">
-Par le <i>pôle data et circulation de la donnée</i> de la DINUM (Direction interministérielle du numérique) avec comme objectif la mise en oeuvre du dîtes-le nous une fois (DLNUF) et de la proactivité.
+Par le <i>pôle data et circulation de la donnée</i> de la DINUM (Direction interministérielle du numérique) avec comme objectif la mise en oeuvre du dites-le nous une fois (DLNUF) et de la proactivité.
 </p>
 <p>
 Ainsi, chaque cas d'usage et solution référencé est associé à un <a class="fr-link fr-icon-arrow-right-line fr-link--icon-right" href="/niveaux-simplification">niveau de simplification</a>
