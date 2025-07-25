@@ -1,7 +1,7 @@
 <template>
   <div
-    class="disabled-card fr-p-2w"
     v-if="resourceNotFound || !datagouvResource"
+    class="disabled-card fr-p-2w"
   >
     <h4 class="fr-col-12">
       {{ apiOrData.Nom_donnees_ou_API }}
@@ -9,21 +9,29 @@
     <p class="fr-col-12 fr-grid-row justify-between">
       <span>{{ apiOrData.Type }}</span>
 
-      <span v-if="resourceNotFound"> ⚠️ Lien invalide </span>
+      <span v-if="resourceNotFound"> ⚠️ {{ apiOrData.Type }} non trouvée </span>
       <span v-else> Chargement du lien en cours... </span>
     </p>
   </div>
 
   <DatasetCard
-    class="no-margins"
-    :dataset="datagouvResource"
     v-else-if="entityName == 'datasets'"
+    class="no-margins"
+    :dataset="datagouvResource as DatasetV2"
     :dataset-url="datagouvLink"
+  />
+  <DataserviceCard
+    v-else-if="entityName == 'dataservices'"
+    class="no-margins"
+    :dataservice="datagouvResource as DataserviceV2"
+    :dataservice-url="datagouvLink"
   />
   <div v-else>{{ entityName }} | {{ datagouvResource.title }}</div>
 </template>
 
 <script setup lang="ts">
+import DataserviceCard from '@/components/DataserviceCard.vue'
+import type { DataserviceV2 } from '@/model/dataservice'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { DatasetV2 } from '@datagouv/components'
 import { DatasetCard } from '@datagouv/components'
@@ -38,7 +46,7 @@ const datagouvLink = ref(
   `https://www.data.gouv.fr/fr/${entityName}/${props.apiOrData.UID_data_gouv}`
 )
 const resourceNotFound = ref(false)
-const datagouvResource = ref<DatasetV2 | null>(null)
+const datagouvResource = ref<DatasetV2 | DataserviceV2 | null>(null)
 
 // Get the actual data from datagouv, and replace reactive properties with it if it's found
 // If not found, disable the card

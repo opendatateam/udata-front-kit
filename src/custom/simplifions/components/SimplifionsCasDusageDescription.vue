@@ -128,7 +128,7 @@
       ➡️ Utiliser les jeux de données et API utiles
     </h2>
 
-    <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w fr-col-9">
+    <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w fr-col-9 list-none">
       <li
         v-for="apidOrData in casUsage.API_et_donnees_utiles"
         :key="apidOrData.UID_data_gouv"
@@ -208,5 +208,9 @@ const grouped_reco_solutions = casUsage.reco_solutions
 
 .h3-cas-usage {
   color: #616161;
+}
+
+ul.list-none {
+  list-style: none;
 }
 </style>
