@@ -24,7 +24,14 @@
       </div>
       <div class="fr-col-12 fr-col-sm">
         <h4 class="fr-text--md fr-mb-0 fr-grid-row">
-          <a :href="dataserviceUrl" class="text-grey-500 fr-grid-row">
+          <!-- External link (string URL) -->
+          <a
+            v-if="typeof dataserviceUrl === 'string'"
+            :href="dataserviceUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-grey-500 fr-grid-row"
+          >
             <TextClamp
               class="fr-col"
               :auto-resize="true"
@@ -32,6 +39,19 @@
               :max-lines="1"
             />
           </a>
+          <!-- Internal link (router object) -->
+          <RouterLink
+            v-else
+            :to="dataserviceUrl"
+            class="text-grey-500 fr-grid-row"
+          >
+            <TextClamp
+              class="fr-col"
+              :auto-resize="true"
+              :text="dataservice.title"
+              :max-lines="1"
+            />
+          </RouterLink>
         </h4>
         <div
           v-if="dataservice.organization"
@@ -79,11 +99,12 @@ import {
   Placeholder,
   formatRelativeIfRecentDate
 } from '@datagouv/components'
+import type { RouteLocationRaw } from 'vue-router'
 import TextClamp from 'vue3-text-clamp'
 
 interface Props {
   dataservice: DataserviceV2
-  dataserviceUrl: string
+  dataserviceUrl: string | RouteLocationRaw
   maxTags?: number
 }
 
