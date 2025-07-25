@@ -39,6 +39,11 @@ on:
       - '*'
 jobs:
   deploy-release:
+    # Only run this job for:
+    # - Manual workflow dispatch (workflow_dispatch)
+    # - Push to branches with commit messages starting with '[' (deployment commits)
+    # This prevents the job from running on normal commits and saves resources
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/') && startsWith(github.event.head_commit.message, '['))
     runs-on: ubuntu-latest
     env:
       # variables to be defined
@@ -57,6 +62,9 @@ jobs:
       ENV: ${{ github.event.inputs.environment }}
       VERSION_PART: ${{ github.event.inputs.version_type }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Debug event and inputs
         run: |
           echo "Event name: ${{ github.event_name }}"
@@ -75,7 +83,6 @@ jobs:
           fi
 
       - name: Parse commit message and set deployment variables
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
         shell: bash
         run: |
           LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
@@ -92,7 +99,6 @@ jobs:
           echo "ENV=$ENV" >> $GITHUB_ENV
           echo "CONFIG_NAME=$CONFIG_NAME" >> $GITHUB_ENV
           echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
-        working-directory: ${{ env.APP_NAME }}
 
       - name: Setup SSH keys and Git configuration
         shell: bash
