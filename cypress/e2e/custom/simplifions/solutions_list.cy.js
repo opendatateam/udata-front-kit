@@ -19,7 +19,7 @@ describe('Simplifions Solutions Page', () => {
 
   it('should display a paginated list of solutions', () => {
     // Verify that the page has 10 results
-    cy.get('div.test_topic-card').should('have.length.lt', 10)
+    cy.get('div.topic-card').should('have.length.lt', 10)
 
     // Verify that the page has a pagination component
     cy.get('nav.fr-pagination').should('be.visible')
