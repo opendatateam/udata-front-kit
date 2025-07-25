@@ -74,35 +74,25 @@ jobs:
             echo "Tag: ${{ github.ref_name }}"
           fi
 
-      - name: Parse tag and set deployment variables
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+      - name: Parse commit message and set deployment variables
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
+        shell: bash
         run: |
-          TAG_NAME="${{ github.ref_name }}"
-          echo "Parsing tag: $TAG_NAME"
-          
-          # Parse tag format: {site}-{environment}-{version_type}
-          # Example: ecospheres-prod-patch
-          if [[ $TAG_NAME =~ ^([a-zA-Z0-9-]+)-(prod|preprod|demo)-(major|minor|patch)$ ]]; then
-            CONFIG_NAME="${BASH_REMATCH[1]}"
-            ENV="${BASH_REMATCH[2]}"
+          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
+
+          if [[ $LAST_COMMIT_MESSAGE =~ ^\[($ENVS):($APPS):(major|minor|patch)\] ]]; then
+            ENV="${BASH_REMATCH[1]}"
+            CONFIG_NAME="${BASH_REMATCH[2]}"
             VERSION_PART="${BASH_REMATCH[3]}"
-            
-            echo "Parsed values:"
-            echo "CONFIG_NAME=$CONFIG_NAME"
-            echo "ENV=$ENV"
-            echo "VERSION_PART=$VERSION_PART"
-            
-            # Set environment variables
-            echo "CONFIG_NAME=$CONFIG_NAME" >> $GITHUB_ENV
-            echo "ENV=$ENV" >> $GITHUB_ENV
-            echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
           else
-            echo "Error: Invalid tag format. Expected: {site}-{environment}-{version_type}"
-            echo "Example: ecospheres-prod-patch"
-            echo "Allowed environments: prod, preprod, demo"
-            echo "Allowed version types: patch, minor, major"
-            exit 1 # This will stop the workflow execution
+            echo "error: invalid env, app and/or version part"
+            exit 1
           fi
+
+          echo "ENV=$ENV" >> $GITHUB_ENV
+          echo "CONFIG_NAME=$CONFIG_NAME" >> $GITHUB_ENV
+          echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
+        working-directory: ${{ env.APP_NAME }}
 
       - name: Setup SSH keys and Git configuration
         shell: bash
