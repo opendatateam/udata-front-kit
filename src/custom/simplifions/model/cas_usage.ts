@@ -47,12 +47,18 @@ export interface SimplifionsCasUsage {
   target_users: string[]
   budget: string[]
   types_de_simplification: string[]
+  descriptions_api_et_donnees_utiles: DescriptionApiEtDonneesUtiles[]
 }
 
 export interface SimplifionsDataOrApi {
   Nom_donnees_ou_API: string
   Type: string
   UID_data_gouv: string
+}
+
+export interface DescriptionApiEtDonneesUtiles {
+  uid_datagouv: string
+  Description_de_l_utilisation: string
 }
 
 export interface SimplifionsCasUsagesExtras extends TopicExtras {

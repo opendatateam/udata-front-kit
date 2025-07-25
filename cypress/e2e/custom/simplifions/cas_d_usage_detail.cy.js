@@ -48,6 +48,6 @@ describe("Simplifions Cas d'usages Show Page", () => {
 
   it('should display the APIs or datasets cards correctly', () => {
     // Check that the data api card is visible
-    cy.get('.test_api-or-dataset-card').should('not.be.empty')
+    cy.get('.api-or-dataset-card').should('not.be.empty')
   })
 })
