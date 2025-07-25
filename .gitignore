@@ -14,3 +14,8 @@ cypress/downloads
 
 # auto generated file from unplugin-vue-components
 components.d.ts
+
+# GitHub Act
+.actrc
+.secrets
+.github/**/act*.json
