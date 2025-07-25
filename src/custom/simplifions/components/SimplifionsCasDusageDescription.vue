@@ -128,15 +128,15 @@
       ➡️ Utiliser les jeux de données et API utiles
     </h2>
 
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
-      <div
+    <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w fr-col-9">
+      <li
         v-for="apidOrData in casUsage.API_et_donnees_utiles"
         :key="apidOrData.UID_data_gouv"
-        class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+        class="fr-col-12 fr-py-0 fr-mt-2w"
       >
         <SimplifionsDataApiCard :api-or-data="apidOrData" />
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 

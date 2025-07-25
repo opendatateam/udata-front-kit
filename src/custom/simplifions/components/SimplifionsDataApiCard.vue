@@ -1,25 +1,32 @@
 <template>
   <div
-    class="fr-tile fr-tile--horizontal fr-enlarge-link data-api-card"
-    :disabled="disabled"
+    class="disabled-card fr-p-2w"
+    v-if="resourceNotFound || !datagouvResource"
   >
-    <div class="fr-tile__body">
-      <div class="fr-tile__content">
-        <h3 class="fr-tile__title data-api-card-title">
-          <a :href="datagouvLink" :disabled="disabled">{{ title }}</a>
-        </h3>
-        <p class="fr-tile__detail">
-          <span>{{ apiOrData.Type }}</span>
+    <h4 class="fr-col-12">
+      {{ apiOrData.Nom_donnees_ou_API }}
+    </h4>
+    <p class="fr-col-12 fr-grid-row justify-between">
+      <span>{{ apiOrData.Type }}</span>
 
-          <span v-if="disabled"> ⚠️ Lien invalide </span>
-        </p>
-      </div>
-    </div>
+      <span v-if="resourceNotFound"> ⚠️ Lien invalide </span>
+      <span v-else> Chargement du lien en cours... </span>
+    </p>
   </div>
+
+  <DatasetCard
+    class="no-margins"
+    :dataset="datagouvResource"
+    v-else-if="entityName == 'datasets'"
+    :dataset-url="datagouvLink"
+  />
+  <div v-else>{{ entityName }} | {{ datagouvResource.title }}</div>
 </template>
 
 <script setup lang="ts">
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
+import type { DatasetV2 } from '@datagouv/components'
+import { DatasetCard } from '@datagouv/components'
 import type { SimplifionsDataOrApi } from '../model/cas_usage'
 
 const props = defineProps<{
@@ -30,15 +37,15 @@ const entityName = props.apiOrData.Type == 'API' ? 'dataservices' : 'datasets'
 const datagouvLink = ref(
   `https://www.data.gouv.fr/fr/${entityName}/${props.apiOrData.UID_data_gouv}`
 )
-const title = ref(props.apiOrData.Nom_donnees_ou_API)
-const disabled = ref(false)
+const resourceNotFound = ref(false)
+const datagouvResource = ref<DatasetV2 | null>(null)
 
 // Get the actual data from datagouv, and replace reactive properties with it if it's found
 // If not found, disable the card
 onMounted(async () => {
   try {
     const api = new DatagouvfrAPI({ endpoint: entityName })
-    const datagouvResource = await api.request({
+    datagouvResource.value = await api.request({
       url: `${api.url()}/${props.apiOrData.UID_data_gouv}`,
       method: 'get',
       params: {
@@ -46,38 +53,20 @@ onMounted(async () => {
           'title,description,organization,resources,tags,created_at,updated_at'
       }
     })
-    console.log(datagouvResource)
-    title.value = datagouvResource.title
   } catch (error) {
-    disabled.value = true
-    datagouvLink.value = '#'
+    resourceNotFound.value = true
     console.error('Failed to fetch datagouv resource:', error)
   }
 })
 </script>
 
 <style scoped>
-.data-api-card[disabled='true'] {
+.no-margins {
+  margin: 0 !important;
+}
+
+.disabled-card {
+  background-color: #f0f0f0;
   opacity: 0.5;
-  pointer-events: none;
-  cursor: not-allowed;
-}
-
-.data-api-card[disabled='true'] a {
-  color: #666;
-}
-
-.data-api-card[disabled='true'] .fr-tile__title a:before {
-  background-image: linear-gradient(0deg, #666, #666);
-}
-
-.data-api-card-title {
-  height: 100%;
-}
-
-.fr-tile__detail {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
 }
 </style>
