@@ -14,7 +14,7 @@
           <a class="fr-summary__link" id="summary-link-2" href="#niveau-1-acces-facile">Niveau 1 : ⭐️ Accès facile</a>
       </li>
       <li>
-          <a class="fr-summary__link" id="summary-link-2" href="#niveau-2-dlnuf">Niveau 2 : ⭐️⭐️ Dîtes-le-nous une fois</a>
+          <a class="fr-summary__link" id="summary-link-2" href="#niveau-2-dlnuf">Niveau 2 : ⭐️⭐️ Dites-le-nous une fois</a>
       </li>
       <li>
           <a class="fr-summary__link" id="summary-link-2" href="#niveau-3-proactivite">Niveau 3 : ⭐️⭐️⭐️ Proactivité</a>
@@ -34,7 +34,7 @@ Les solutions de niveau 1 reférencées sur ce site sont fréquemment des portai
 
 <a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-acces-facile">Cas d'usages de niveau 1 ⭐️</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-acces-facile"> Solutions de niveau 1 ⭐️</a>
 
-<h2 id="niveau-2-dlnuf" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">⭐️⭐️ Dîtes-le-nous une fois</h2>
+<h2 id="niveau-2-dlnuf" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">⭐️⭐️ Dites-le-nous une fois</h2>
 
 <p class="fr-text--lead"><b>L'usager n'a plus à fournir de justificatifs</b></p>
 
@@ -42,7 +42,7 @@ Le second niveau de simplification consiste à **ne plus réclamer une informati
 
 Contrairement au niveau 1, qui facilite principalement le travail des agents publics, le niveau 2 bénéficie aussi à l’usager. Ses démarches sont allégées grâce au pré-remplissage de ses données ou à la suppression de certaines demandes d’informations.
 
-<a class="fr-link fr-icon-arrow-right-line fr-link--icon-right" href="/todo">Cadre juridique du "Dîtes-le nous une fois"</a>
+<a class="fr-link fr-icon-arrow-right-line fr-link--icon-right" href="/todo">Cadre juridique du "Dites-le nous une fois"</a>
 
 Les solutions de niveau 2 sont donc fréquemment des API ou des logiciels/formulaires en ligne intégrant des API ou des jeux de données.
 
