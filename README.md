@@ -137,28 +137,21 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 ### 🏭 Déploiement en preprod et en production
 
-Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui peut être déclenché de deux manières différentes (voir les solutions ci-dessous).
-
-#### Architecture de déploiement en preprod et en production
-
-Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne ainsi :
-
-1. **GitHub Actions** : Les actions sur GitHub déclenchent le workflow
-2. **GitHub Actions** : Calcul de la prochaine version basée sur les tags existants
-3. **GitHub Actions** : Création d'un nouveau tag avec cette version
-4. **GitHub Actions** : Appels à l'API GitLab via un script téléchargé depuis le dépôt "scaffolding"
-5. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
-
-**Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
+Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui peut être déclenché de deux manières différentes :
 
 #### Comment déployer en préproduction et en production
 
-## Solution 1 - par Git tag
+## Solution 1 - par le message de Git commit
 
-Le déploiement peut être déclenché en créant un tag Git avec le format `{site}-{environment}-{version_type}`.
+Le déploiement des verticales thématiques en preprod et en production peut s'effectuer via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
 
-**Format du tag :**
-- `{site}` : Nom du site
+```
+[<environment>:<site>:<version_type>] <description>
+```
+
+**Paramètres :**
+- `<environment>` : Environnement cible (`prod` ou `demo`/`preprod` suivant la verticale)
+- `<site>` : Nom du site
   - **Sites disponibles :**
     - `ecospheres` - Site écologie
     - `meteo-france` - Site météo
@@ -166,20 +159,16 @@ Le déploiement peut être déclenché en créant un tag Git avec le format `{si
     - `defis` - Site défis
     - `hackathon` - Site hackathon
     - `simplifions` - Site simplifions
-- `{environment}` : Environnement cible (`prod`, `preprod`, ou `demo`)
-- `{version_type}` : Type de version (`major`, `minor`, ou `patch`)
+- `<version_type>` : Type de version (`major`, `minor`, ou `patch`)
 
-**Exemples de tags valides :**
-- `ecospheres-prod-patch` : Déploie ecospheres en production avec un patch
-- `meteo-france-preprod-minor` : Déploie meteo-france en preprod avec une version mineure
-- `logistique-demo-major` : Déploie logistique en demo avec une version majeure
-
-**Commandes Git :**
-```bash
-# Créer et pousser un tag pour déclencher le déploiement
-git tag ecospheres-prod-patch
-git push origin ecospheres-prod-patch
+**Exemple :**
 ```
+[prod:ecologie:minor] nouvelle fonctionnalité incroyable
+```
+
+Le workflow se déclenche sur tous les push vers toutes les branches, mais ne s'exécute que si le message de commit commence par `[` (condition `startsWith(github.event.head_commit.message, '[')`). Cette condition n'est pas parfaite mais GitHub Actions ne supporte pas directement le déclenchement de workflows basé sur des expressions régulières dans les messages de commit.
+
+Toutes les variables et secrets nécessaires pour ce workflow sont listés dans la section `env:` du [workflow de déploiement](.github/workflows/create-deploy-release.yml).
 
 ## Solution 2 — sur l'interface web de GitHub Actions
 
@@ -193,6 +182,18 @@ Le déploiement peut également être déclenché manuellement via l'interface G
    - **Environment** : L'environnement cible (`demo`, `preprod`, ou `prod`)
    - **Version type** : Le type de version (`major`, `minor`, ou `patch`)
 5. **Cliquer sur "Run workflow"**
+
+#### Architecture de déploiement en preprod et en production
+
+Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne ainsi :
+
+1. **GitHub Actions** : Les actions sur GitHub déclenchent le workflow
+2. **GitHub Actions** : Calcul de la prochaine version basée sur les tags existants
+3. **GitHub Actions** : Création d'un nouveau tag avec cette version. Le tag créé est utilisé lors de la construction de l'image et pendant le déploiement.
+4. **GitHub Actions** : Appels à l'API GitLab via un script téléchargé depuis le dépôt "scaffolding"
+5. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
+
+**Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
 
 ## 📚 Bibliothèques et plugins utilisés
 
