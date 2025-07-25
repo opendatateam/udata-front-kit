@@ -71,6 +71,9 @@ Pour lancer les tests génériques + les tests spécifiques à site particulier 
 # Pour lancer la version ligne de commande de cypress :
 VITE_SITE_ID=monsite npm run test:e2e
 
+# Pour lancer un seul test en ligne de commande :
+VITE_SITE_ID=monsite npm run test:e2e -- --spec cypress/e2e/my/file.cy.js
+
 # Pour lancer la version visuelle de cypress :
 VITE_SITE_ID=monsite npm run test:e2e:open
 ```

@@ -49,4 +49,44 @@ describe('Simplifions Navigation', () => {
     // Verify page title/heading contains "À propos"
     cy.get('h1').should('contain.text', 'À propos')
   })
+
+  it("should search for cas d'usages", () => {
+    cy.get('header[role="banner"]').within(() => {
+      // Click on the search input
+      cy.get('input.multiselect-search:first').click()
+
+      // Type "annuaire" into the search input
+      cy.get('input.multiselect-search:first').type('entreprises')
+
+      // Click on the search button
+      cy.contains(
+        'button',
+        "Rechercher « entreprises » dans les cas d'usage"
+      ).click()
+    })
+
+    // Wait for the page to load and check that the search results are visible
+    cy.get('h1').should('contain.text', "Cas d'usages")
+    cy.get('.topic-card').should('have.length.gt', 0)
+  })
+
+  it('should search for solutions', () => {
+    cy.get('header[role="banner"]').within(() => {
+      // Click on the search input
+      cy.get('input.multiselect-search:first').click()
+
+      // Type "annuaire" into the search input
+      cy.get('input.multiselect-search:first').type('annuaire')
+
+      // Click on the search button
+      cy.contains(
+        'button',
+        'Rechercher « annuaire » dans les solutions'
+      ).click()
+    })
+
+    // Wait for the page to load and check that the search results are visible
+    cy.get('h1').should('contain.text', 'Solutions')
+    cy.get('.topic-card').should('have.length.gt', 0)
+  })
 })

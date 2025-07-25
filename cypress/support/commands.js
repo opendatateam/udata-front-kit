@@ -65,3 +65,58 @@ Cypress.Commands.add('checkRGAAContrast', (context = null, options = {}) => {
     }
   })
 })
+
+/**
+ * Custom command to select an option in a multiselect component
+ * @param {string} selectLabel - The label text of the select component (e.g., "À destination de :")
+ * @param {string} optionLabel - The label/text of the option to select (e.g., "Communes")
+ */
+Cypress.Commands.add('selectFilterValue', (selectLabel, optionLabel) => {
+  // Find the label with the specified text, then navigate to its parent select group
+  cy.contains('label.fr-label', selectLabel)
+    .parent('.fr-select-group')
+    .within(() => {
+      // Click on the multiselect wrapper to open the dropdown
+      cy.get('.multiselect-wrapper').click()
+
+      // Wait for the dropdown to become visible (not have 'is-hidden' class)
+      cy.get('.multiselect-dropdown').should('not.have.class', 'is-hidden')
+
+      // Find and click the option with the matching text content
+      cy.get('.multiselect-option').contains(optionLabel).click()
+
+      // Verify the dropdown is closed again
+      cy.get('.multiselect-dropdown').should('have.class', 'is-hidden')
+    })
+})
+
+Cypress.Commands.add('getNumberOfResults', (pageName) => {
+  return cy
+    .get('#number-of-results')
+    .invoke('text')
+    .then((text) => parseInt(text.replace(` ${pageName} disponibles`, '')))
+})
+
+Cypress.Commands.add(
+  'filterShouldRemoveResults',
+  (pageName, selectLabel, optionLabel) => {
+    // Store the initial number of results
+    cy.getNumberOfResults(pageName).then((initialCount) => {
+      // Apply the filter
+      cy.selectFilterValue(selectLabel, optionLabel)
+
+      // Wait for the number of results to change
+      cy.get('#number-of-results').should(
+        'not.contain.text',
+        `${initialCount} ${pageName} disponibles`
+      )
+
+      cy.getNumberOfResults(pageName).then((newCount) => {
+        // Verify that the number of results is less than the initial count
+        expect(newCount).to.be.lessThan(initialCount)
+        // Verify that the number of results is greater than 0
+        expect(newCount).to.be.greaterThan(0)
+      })
+    })
+  }
+)
