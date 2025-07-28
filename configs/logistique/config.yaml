@@ -162,13 +162,14 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-    discussions:
-      display: true
-      create: true
-    datasets:
-      display: true
-    reuses:
-      display: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters: []
   # BOUQUETS
   bouquets:
@@ -185,13 +186,14 @@ pages:
     search:
       input: Filtrer les bouquets
     banner:
-    discussions:
-      display: true
-      create: true
-    datasets:
-      display: true
-    reuses:
-      display: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters:
       - name: Catégorie
         default_option: Toutes les catégories

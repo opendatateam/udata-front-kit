@@ -68,7 +68,9 @@ const canEdit = computed(() => {
 const { isAdmin, canAddTopic } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
-const showDiscussions = pageConf.discussions.display
+const showDiscussions = pageConf.resources_tabs.discussions.display
+const showDatasets = pageConf.resources_tabs.datasets.display
+const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)
@@ -86,17 +88,17 @@ const breadcrumbLinks = computed(() => {
 })
 
 const tabTitles: { title: string; tabId: string; panelId: string }[] = []
-if (pageConf.datasets.display === true) {
+if (pageConf.resources_tabs.datasets.display === true) {
   tabTitles.push({ title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' })
 }
-if (pageConf.discussions.display === true) {
+if (pageConf.resources_tabs.discussions.display === true) {
   tabTitles.push({
     title: 'Discussions',
     tabId: 'tab-1',
     panelId: 'tab-content-1'
   })
 }
-if (pageConf.reuses.display === true) {
+if (pageConf.resources_tabs.reuses.display === true) {
   tabTitles.push({
     title: 'Réutilisations',
     tabId: 'tab-2',
@@ -442,7 +444,7 @@ watch(
         panel-id="tab-content-0"
         tab-id="tab-0"
         class="fr-px-2w"
-        v-if="pageConf.datasets.display === true"
+        v-if="showDatasets"
       >
         <TopicDatasetList
           v-model="datasetsProperties"
@@ -468,11 +470,7 @@ watch(
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent
-        panel-id="tab-content-2"
-        tab-id="tab-2"
-        v-if="pageConf.reuses.display === true"
-      >
+      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2" v-if="showReuses">
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>

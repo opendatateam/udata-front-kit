@@ -174,13 +174,14 @@ pages:
       extended: cas d'usage
     search:
       input: Filtrer les cas d'usages
-    discussions:
-      display: true
-      create: true
-    datasets:
-      display: false
-    reuses:
-      display: false
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: false
+      reuses:
+        display: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
         id: fournisseurs-de-service
@@ -279,13 +280,14 @@ pages:
       extended: solution
     search:
       input: Filtrer les solutions
-    discussions:
-      display: true
-      create: true
-    datasets:
-      display: true
-    reuses:
-      display: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
         id: fournisseurs-de-service

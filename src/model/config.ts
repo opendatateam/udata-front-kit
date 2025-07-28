@@ -74,15 +74,17 @@ export type PageConf = {
   labels: PageLabelsConf
   search: PageSearchConf
   banner: PageBannerConf | null
-  discussions: {
-    display: boolean
-    create: boolean
-  }
-  datasets: {
-    display: boolean
-  }
-  reuses: {
-    display: boolean
+  resources_tabs: {
+    discussions: {
+      display: boolean
+      create: boolean
+    }
+    datasets: {
+      display: boolean
+    }
+    reuses: {
+      display: boolean
+    }
   }
   filters: PageFilterConf[]
 }

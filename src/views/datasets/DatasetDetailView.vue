@@ -42,7 +42,7 @@ const dataset = computed(() => datasetStore.get(datasetId))
 const showAddToTopicModal = ref(false)
 
 const { pageKey, pageConf } = useCurrentPageConf()
-const showDiscussions = pageConf.discussions.display
+const showDiscussions = pageConf.resources_tabs.discussions.display
 
 const datasetsConf = useDatasetsConf()
 const topicPageConf = datasetsConf.add_to_topic?.page
@@ -223,7 +223,7 @@ onMounted(() => {
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
         <Well
-          v-if="!pageConf.discussions.create"
+          v-if="!pageConf.resources_tabs.discussions.create"
           color="blue-cumulus"
           weight="regular"
         >

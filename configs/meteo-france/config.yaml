@@ -187,13 +187,14 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-    discussions:
-      display: true
-      create: false
-    datasets:
-      display: true
-    reuses:
-      display: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: false
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters:
       - name: Catégories
         default_option: Toutes les catégories
