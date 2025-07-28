@@ -85,11 +85,25 @@ const breadcrumbLinks = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Réutilisations', tabId: 'tab-2', panelId: 'tab-content-2' }
-]
+const tabTitles: { title: string; tabId: string; panelId: string }[] = []
+if (pageConf.datasets.display === true) {
+  tabTitles.push({ title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' })
+}
+if (pageConf.discussions.display === true) {
+  tabTitles.push({
+    title: 'Discussions',
+    tabId: 'tab-1',
+    panelId: 'tab-content-1'
+  })
+}
+if (pageConf.reuses.display === true) {
+  tabTitles.push({
+    title: 'Réutilisations',
+    tabId: 'tab-2',
+    panelId: 'tab-content-2'
+  })
+}
+
 const activeTab = ref(0)
 
 const cloneModalActions = [
@@ -417,13 +431,19 @@ watch(
     </div>
 
     <DsfrTabs
+      v-if="tabTitles.length > 0"
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
       :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
+      <DsfrTabContent
+        panel-id="tab-content-0"
+        tab-id="tab-0"
+        class="fr-px-2w"
+        v-if="pageConf.datasets.display === true"
+      >
         <TopicDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
@@ -436,16 +456,23 @@ watch(
         />
       </DsfrTabContent>
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent
+        panel-id="tab-content-1"
+        tab-id="tab-1"
+        v-if="showDiscussions && topic"
+      >
         <DiscussionsList
-          v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
           :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent
+        panel-id="tab-content-2"
+        tab-id="tab-2"
+        v-if="pageConf.reuses.display === true"
+      >
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>

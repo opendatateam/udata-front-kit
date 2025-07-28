@@ -177,6 +177,10 @@ pages:
     discussions:
       display: true
       create: true
+    datasets:
+      display: false
+    reuses:
+      display: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
         id: fournisseurs-de-service
@@ -232,6 +236,35 @@ pages:
             name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
             name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
+
+      # TODO
+      # - name: 'Type de solutions :'
+      #   id: type-solutions
+      #   type: select
+      #   default_option: Tous les types de solutions
+      #   use_tag_prefix: true
+      #   values:
+      #     - id: formulaire-en-ligne
+      #       name: Formulaire en ligne
+      #     - id: portail-de-donnees
+      #       name: Portail de données
+      #     - id: annuaire
+      #       name: Annuaire
+      #     - id: api
+      #       name: Bouquet d'API
+      #     - id: hub
+      #       name: Hub d'échange
+
+      # - name: 'Caractéristiques :'
+      #   id: caracteristiques
+      #   type: select
+      #   default_option: Tous les types de solutions
+      #   use_tag_prefix: true
+      #   values:
+      #     - id: donnees-protegees
+      #       name: Avec accès à des données protégées
+      #     - id: gratuite
+      #       name: Gratuite
   # SOLUTIONS
   solutions:
     list_all: true
@@ -249,6 +282,10 @@ pages:
     discussions:
       display: true
       create: true
+    datasets:
+      display: true
+    reuses:
+      display: true
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: 'À destination de :'
         id: fournisseurs-de-service

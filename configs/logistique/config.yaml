@@ -165,6 +165,10 @@ pages:
     discussions:
       display: true
       create: true
+    datasets:
+      display: true
+    reuses:
+      display: true
     filters: []
   # BOUQUETS
   bouquets:
@@ -184,6 +188,10 @@ pages:
     discussions:
       display: true
       create: true
+    datasets:
+      display: true
+    reuses:
+      display: true
     filters:
       - name: Catégorie
         default_option: Toutes les catégories

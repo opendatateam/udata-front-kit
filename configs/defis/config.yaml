@@ -291,6 +291,10 @@ pages:
     discussions:
       display: false
       create: false
+    datasets:
+      display: true
+    reuses:
+      display: true
     filters:
       - name: Saison
         default_option: Toutes les saisons
@@ -324,6 +328,10 @@ pages:
     discussions:
       display: false
       create: false
+    datasets:
+      display: true
+    reuses:
+      display: true
     filters: []
 
 # list of organisations' ids that should be handled by the portal

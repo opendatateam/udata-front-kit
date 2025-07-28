@@ -78,6 +78,12 @@ export type PageConf = {
     display: boolean
     create: boolean
   }
+  datasets: {
+    display: boolean
+  }
+  reuses: {
+    display: boolean
+  }
   filters: PageFilterConf[]
 }
 

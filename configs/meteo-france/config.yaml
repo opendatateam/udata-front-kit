@@ -190,6 +190,10 @@ pages:
     discussions:
       display: true
       create: false
+    datasets:
+      display: true
+    reuses:
+      display: true
     filters:
       - name: Catégories
         default_option: Toutes les catégories
