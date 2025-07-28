@@ -88,21 +88,21 @@ const breadcrumbLinks = computed(() => {
 })
 
 const tabTitles: { title: string; tabId: string; panelId: string }[] = []
-if (pageConf.resources_tabs.datasets.display === true) {
+if (showDatasets) {
   tabTitles.push({
     title: 'Données',
     tabId: 'tab-datasets',
     panelId: 'tab-content-datasets'
   })
 }
-if (pageConf.resources_tabs.discussions.display === true) {
+if (showDiscussions) {
   tabTitles.push({
     title: 'Discussions',
     tabId: 'tab-discussions',
     panelId: 'tab-content-discussions'
   })
 }
-if (pageConf.resources_tabs.reuses.display === true) {
+if (showReuses) {
   tabTitles.push({
     title: 'Réutilisations',
     tabId: 'tab-reuses',
