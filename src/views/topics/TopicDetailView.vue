@@ -445,10 +445,10 @@ watch(
     >
       <!-- Jeux de données -->
       <DsfrTabContent
+        v-if="showDatasets"
         panel-id="tab-content-datasets"
         tab-id="tab-datasets"
         class="fr-px-2w"
-        v-if="showDatasets"
       >
         <TopicDatasetList
           v-model="datasetsProperties"
@@ -463,9 +463,9 @@ watch(
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent
+        v-if="showDiscussions && topic"
         panel-id="tab-content-discussions"
         tab-id="tab-discussions"
-        v-if="showDiscussions && topic"
       >
         <DiscussionsList
           :subject="topic"
@@ -475,9 +475,9 @@ watch(
       </DsfrTabContent>
       <!-- Réutilisations -->
       <DsfrTabContent
+        v-if="showReuses"
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
-        v-if="showReuses"
       >
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
