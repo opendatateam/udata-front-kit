@@ -1,0 +1,171 @@
+<template>
+  <div class="fr-my-2w fr-p-2w border border-default-grey fr-enlarge-link">
+    <div
+      v-if="dataservice.is_restricted"
+      class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
+    >
+      <p class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w">
+        <span class="fr-icon-lock-line fr-icon--sm" aria-hidden="true"></span>
+        API restreinte
+      </p>
+    </div>
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
+      <div class="fr-col-auto">
+        <div class="logo">
+          <Placeholder
+            v-if="dataservice.organization"
+            type="organization"
+            :src="dataservice.organization.logo_thumbnail"
+            alt=""
+            :size="40"
+          />
+          <Placeholder v-else type="organization" :size="40" />
+        </div>
+      </div>
+      <div class="fr-col-12 fr-col-sm">
+        <h4 class="fr-text--md fr-mb-0 fr-grid-row">
+          <!-- External link (string URL) -->
+          <a
+            v-if="typeof dataserviceUrl === 'string'"
+            :href="dataserviceUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-grey-500 fr-grid-row"
+          >
+            <TextClamp
+              class="fr-col"
+              :auto-resize="true"
+              :text="dataservice.title"
+              :max-lines="1"
+            />
+          </a>
+          <!-- Internal link (router object) -->
+          <RouterLink
+            v-else
+            :to="dataserviceUrl"
+            class="text-grey-500 fr-grid-row"
+          >
+            <TextClamp
+              class="fr-col"
+              :auto-resize="true"
+              :text="dataservice.title"
+              :max-lines="1"
+            />
+          </RouterLink>
+        </h4>
+        <div
+          v-if="dataservice.organization"
+          class="fr-text--sm fr-m-0 inline-flex"
+        >
+          <span class="not-enlarged fr-mr-1v">
+            <OrganizationNameWithCertificate
+              :organization="dataservice.organization"
+            />
+          </span>
+          <span class="text-mention-grey dash-before-sm whitespace-nowrap"
+            >Mise à jour
+            {{ formatRelativeIfRecentDate(dataservice.updated_at) }}</span
+          >
+        </div>
+        <div
+          v-if="dataservice.tags && dataservice.tags.length > 0"
+          class="fr-mt-1v"
+        >
+          <div class="fr-tags-group">
+            <p
+              v-for="tag in displayedTags"
+              :key="tag"
+              class="fr-tag fr-tag--sm"
+            >
+              {{ tag }}
+            </p>
+            <p
+              v-if="dataservice.tags.length > maxTags"
+              class="fr-tag fr-tag--sm"
+            >
+              +{{ dataservice.tags.length - maxTags }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { DataserviceV2 } from '@/model/dataservice'
+import {
+  OrganizationNameWithCertificate,
+  Placeholder,
+  formatRelativeIfRecentDate
+} from '@datagouv/components'
+import type { RouteLocationRaw } from 'vue-router'
+import TextClamp from 'vue3-text-clamp'
+
+interface Props {
+  dataservice: DataserviceV2
+  dataserviceUrl: string | RouteLocationRaw
+  maxTags?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  maxTags: 3
+})
+
+const displayedTags = computed(() => {
+  if (!props.dataservice.tags) return []
+  return props.dataservice.tags.slice(0, props.maxTags)
+})
+</script>
+
+<style scoped>
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fr-tags-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.border-default-grey {
+  border: 1px solid var(--border-default-grey);
+}
+
+.text-grey-500 {
+  color: var(--text-default-grey);
+}
+
+.text-mention-grey {
+  color: var(--text-mention-grey);
+}
+
+.dash-before-sm::before {
+  content: '—';
+  margin-right: 0.5rem;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.not-enlarged {
+  transform: none !important;
+}
+
+.inline-flex {
+  display: inline-flex;
+  align-items: center;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.top-0 {
+  top: 0;
+}
+</style>
