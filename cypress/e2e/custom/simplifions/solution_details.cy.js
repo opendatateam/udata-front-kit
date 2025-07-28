@@ -31,10 +31,10 @@ describe('Simplifions Solutions Details Page', () => {
 
   it("should link to cas d'usages", () => {
     // Check that the cas d'usages are visible
-    cy.get('.test_cas-d-usage-card').should('have.length.gt', 1)
+    cy.get('.test__cas-d-usage-card').should('have.length.gt', 1)
 
     // Click on the first cas d'usage
-    cy.get('.test_cas-d-usage-card:first').within(() => {
+    cy.get('.test__cas-d-usage-card:first').within(() => {
       cy.get('a.cas-d-usage-link').click()
     })
 
