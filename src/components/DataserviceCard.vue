@@ -87,6 +87,16 @@
             </p>
           </div>
         </div>
+        <p
+          v-if="dataservice.description"
+          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm"
+        >
+          <TextClamp
+            :auto-resize="true"
+            :text="stripFromMarkdown(dataservice.description)"
+            :max-lines="2"
+          />
+        </p>
       </div>
     </div>
   </div>
@@ -94,6 +104,7 @@
 
 <script setup lang="ts">
 import type { DataserviceV2 } from '@/model/dataservice'
+import { stripFromMarkdown } from '@/utils'
 import {
   OrganizationNameWithCertificate,
   Placeholder,
@@ -167,5 +178,9 @@ const displayedTags = computed(() => {
 
 .top-0 {
   top: 0;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
 }
 </style>
