@@ -89,20 +89,24 @@ const breadcrumbLinks = computed(() => {
 
 const tabTitles: { title: string; tabId: string; panelId: string }[] = []
 if (pageConf.resources_tabs.datasets.display === true) {
-  tabTitles.push({ title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' })
+  tabTitles.push({
+    title: 'Données',
+    tabId: 'tab-datasets',
+    panelId: 'tab-content-datasets'
+  })
 }
 if (pageConf.resources_tabs.discussions.display === true) {
   tabTitles.push({
     title: 'Discussions',
-    tabId: 'tab-1',
-    panelId: 'tab-content-1'
+    tabId: 'tab-discussions',
+    panelId: 'tab-content-discussions'
   })
 }
 if (pageConf.resources_tabs.reuses.display === true) {
   tabTitles.push({
     title: 'Réutilisations',
-    tabId: 'tab-2',
-    panelId: 'tab-content-2'
+    tabId: 'tab-reuses',
+    panelId: 'tab-content-reuses'
   })
 }
 
@@ -441,8 +445,8 @@ watch(
     >
       <!-- Jeux de données -->
       <DsfrTabContent
-        panel-id="tab-content-0"
-        tab-id="tab-0"
+        panel-id="tab-content-datasets"
+        tab-id="tab-datasets"
         class="fr-px-2w"
         v-if="showDatasets"
       >
@@ -459,8 +463,8 @@ watch(
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent
-        panel-id="tab-content-1"
-        tab-id="tab-1"
+        panel-id="tab-content-discussions"
+        tab-id="tab-discussions"
         v-if="showDiscussions && topic"
       >
         <DiscussionsList
@@ -470,7 +474,11 @@ watch(
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2" v-if="showReuses">
+      <DsfrTabContent
+        panel-id="tab-content-reuses"
+        tab-id="tab-reuses"
+        v-if="showReuses"
+      >
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>
