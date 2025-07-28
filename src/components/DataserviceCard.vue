@@ -75,8 +75,11 @@
           "
           class="fr-mt-1v fr-grid-row fr-grid-row--middle fr-text--sm text-mention-grey"
         >
-          <div v-if="dataservice.availability !== undefined" class="fr-mr-2w">
-            <span
+          <div
+            v-if="dataservice.availability !== undefined"
+            class="fr-mr-1v flex-sm dash-after-sm"
+          >
+            <span class="fr-mr-1v"
               >Disponibilité :
               {{ formatAvailability(dataservice.availability) }}</span
             >
@@ -87,7 +90,7 @@
           >
             <div
               v-if="dataservice.metrics.views"
-              class="fr-mr-2w fr-grid-row fr-grid-row--middle"
+              class="fr-mr-1w fr-grid-row fr-grid-row--middle"
               :aria-label="`${dataservice.metrics.views} vues`"
             >
               <span
