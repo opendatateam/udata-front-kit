@@ -22,7 +22,7 @@
           <img
             :src="imageUrl"
             :alt="topic.name"
-            class="fr-responsive-img fr-ratio-16x9"
+            class="card-image fr-responsive-img fr-ratio-16x9"
           />
           <div class="topic-image-overlay"></div>
           <SimplifionsSolutionTag :solution="solution" class="badge-absolute" />
@@ -85,5 +85,10 @@ const imageUrl = solution?.Image_principale?.[0]
   top: 1rem;
   left: 1rem;
   z-index: 2;
+}
+
+.card-image {
+  max-height: 250px;
+  object-position: top center;
 }
 </style>
