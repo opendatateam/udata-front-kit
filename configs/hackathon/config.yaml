@@ -151,9 +151,14 @@ pages:
     search:
       input: Filtrer les hackathons
     banner:
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters:
       - name: Catégorie
         default_option: Toutes les catégories
@@ -180,9 +185,14 @@ pages:
     search:
       input:
     banner:
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters: []
 
 # list of organisations' ids that should be handled by the portal

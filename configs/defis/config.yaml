@@ -288,9 +288,14 @@ pages:
     search:
       input: Chercher un défi
     banner:
-    discussions:
-      display: false
-      create: false
+    resources_tabs:
+      discussions:
+        display: false
+        create: false
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters:
       - name: Saison
         default_option: Toutes les saisons
@@ -321,9 +326,14 @@ pages:
     search:
       input:
     banner:
-    discussions:
-      display: false
-      create: false
+    resources_tabs:
+      discussions:
+        display: false
+        create: false
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters: []
 
 # list of organisations' ids that should be handled by the portal

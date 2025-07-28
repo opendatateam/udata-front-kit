@@ -68,7 +68,9 @@ const canEdit = computed(() => {
 const { isAdmin, canAddTopic } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
-const showDiscussions = pageConf.discussions.display
+const showDiscussions = pageConf.resources_tabs.discussions.display
+const showDatasets = pageConf.resources_tabs.datasets.display
+const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
 const { datasetsProperties, clonedFrom } = useExtras(topic)
@@ -85,11 +87,29 @@ const breadcrumbLinks = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Réutilisations', tabId: 'tab-2', panelId: 'tab-content-2' }
-]
+const tabTitles: { title: string; tabId: string; panelId: string }[] = []
+if (showDatasets) {
+  tabTitles.push({
+    title: 'Données',
+    tabId: 'tab-datasets',
+    panelId: 'tab-content-datasets'
+  })
+}
+if (showDiscussions) {
+  tabTitles.push({
+    title: 'Discussions',
+    tabId: 'tab-discussions',
+    panelId: 'tab-content-discussions'
+  })
+}
+if (showReuses) {
+  tabTitles.push({
+    title: 'Réutilisations',
+    tabId: 'tab-reuses',
+    panelId: 'tab-content-reuses'
+  })
+}
+
 const activeTab = ref(0)
 
 const cloneModalActions = [
@@ -417,13 +437,19 @@ watch(
     </div>
 
     <DsfrTabs
+      v-if="tabTitles.length > 0"
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
       :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
+      <DsfrTabContent
+        v-if="showDatasets"
+        panel-id="tab-content-datasets"
+        tab-id="tab-datasets"
+        class="fr-px-2w"
+      >
         <TopicDatasetList
           v-model="datasetsProperties"
           :is-edit="canEdit"
@@ -436,16 +462,23 @@ watch(
         />
       </DsfrTabContent>
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent
+        v-if="showDiscussions && topic"
+        panel-id="tab-content-discussions"
+        tab-id="tab-discussions"
+      >
         <DiscussionsList
-          v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
           :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent
+        v-if="showReuses"
+        panel-id="tab-content-reuses"
+        tab-id="tab-reuses"
+      >
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>

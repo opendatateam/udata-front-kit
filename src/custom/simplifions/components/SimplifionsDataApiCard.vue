@@ -38,9 +38,10 @@
     </div>
 
     <div
-      class="api-or-dataset-description fr-p-2w"
       v-if="customDescription && datagouvResource"
+      class="api-or-dataset-description fr-p-2w"
     >
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(customDescription)"></p>
     </div>
   </a>
