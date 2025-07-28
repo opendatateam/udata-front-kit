@@ -38,9 +38,9 @@ website:
     sections:
     meta_description:
   header_button:
-    display: true
+    display: false # TODO : créer un formulaire de feedback sur tally.so
     label: 'Donnez votre avis'
-    link: https://tally.so/r/wLWrzp
+    link: ''
   header_search:
     display: true
     placeholder: Rechercher...

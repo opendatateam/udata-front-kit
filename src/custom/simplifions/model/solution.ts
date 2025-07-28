@@ -34,6 +34,7 @@ export interface SimplifionsSolution {
   Cas_d_usages: number[]
   cas_d_usages_slugs: string[]
   cas_d_usages_topics_ids: string[]
+  is_public: boolean
 }
 
 export interface SimplifionsSolutionsExtras extends TopicExtras {

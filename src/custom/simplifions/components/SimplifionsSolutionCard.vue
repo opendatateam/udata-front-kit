@@ -5,13 +5,7 @@
     <div class="fr-card fr-enlarge-link fr-card--shadow topic-card">
       <div class="fr-card__body">
         <div class="fr-card__content">
-          <p v-if="!imageUrl" class="fr-badge fr-badge--sm fr-mb-2w">
-            <span style="font-weight: normal">Solution publique</span>
-            <span v-if="solution?.operateur_nom">
-              <span class="fr-ml-1v" style="font-weight: normal"> | </span>
-              {{ solution.operateur_nom }}
-            </span>
-          </p>
+          <SimplifionsSolutionTag :solution="solution" v-if="!imageUrl" />
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
           <p class="fr-card__desc fr-text--lg">
@@ -28,16 +22,10 @@
           <img
             :src="imageUrl"
             :alt="topic.name"
-            class="fr-responsive-img fr-ratio-16x9"
+            class="card-image fr-responsive-img fr-ratio-16x9"
           />
           <div class="topic-image-overlay"></div>
-          <p class="fr-badge fr-badge--sm badge-absolute">
-            <span style="font-weight: normal">Solution publique</span>
-            <span v-if="solution?.operateur_nom">
-              <span class="fr-ml-1v" style="font-weight: normal"> | </span>
-              {{ solution.operateur_nom }}
-            </span>
-          </p>
+          <SimplifionsSolutionTag :solution="solution" class="badge-absolute" />
         </div>
       </div>
     </div>
@@ -50,6 +38,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
+import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const { pageKey } = useCurrentPageConf()
@@ -96,5 +85,10 @@ const imageUrl = solution?.Image_principale?.[0]
   top: 1rem;
   left: 1rem;
   z-index: 2;
+}
+
+.card-image {
+  max-height: 250px;
+  object-position: top center;
 }
 </style>

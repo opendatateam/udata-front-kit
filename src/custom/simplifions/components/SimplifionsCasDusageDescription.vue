@@ -137,6 +137,7 @@
         <SimplifionsDataApiCard
           :api-or-data="apidOrData"
           :custom-description="customDescription(apidOrData.UID_data_gouv)"
+          v-if="apidOrData.UID_data_gouv"
         />
       </li>
     </ul>
