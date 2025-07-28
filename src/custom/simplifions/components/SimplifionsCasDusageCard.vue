@@ -1,6 +1,8 @@
 <template>
-  <div class="topic-card">
-    <RouterLink :to="topicLink">
+  <router-link
+    :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
+  >
+    <div class="topic-card">
       <div class="header-topic">
         <!--Titre et description-->
         <div class="title-topic fr-text--lead">{{ topic.name }}</div>
@@ -18,8 +20,8 @@
       <div class="description-topic">
         <SimplifionsTags :topic="topic" :page-key="pageKey" />
       </div>
-    </RouterLink>
-  </div>
+    </div>
+  </router-link>
 </template>
 
 <script setup lang="ts">
@@ -29,7 +31,6 @@ import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
 import { stripFromMarkdown } from '@/utils'
-import type { RouteLocationRaw } from 'vue-router'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
@@ -37,11 +38,6 @@ const props = defineProps<{
 }>()
 
 const { pageKey } = useCurrentPageConf()
-
-const topicLink: RouteLocationRaw = {
-  name: `${pageKey}_detail`,
-  params: { item_id: props.topic.slug }
-}
 </script>
 
 <style scoped>
@@ -57,9 +53,6 @@ const topicLink: RouteLocationRaw = {
   text-overflow: ellipsis;
   display: block;
   line-height: inherit;
-}
-.topic-card-col-logo {
-  max-width: 4.25rem;
 }
 .description p {
   overflow: hidden;

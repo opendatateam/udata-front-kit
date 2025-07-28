@@ -1,6 +1,8 @@
 <template>
-  <RouterLink :to="topicLink" class="">
-    <div class="fr-card fr-enlarge-link fr-card--shadow">
+  <router-link
+    :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
+  >
+    <div class="fr-card fr-enlarge-link fr-card--shadow topic-card">
       <div class="fr-card__body">
         <div class="fr-card__content">
           <p v-if="!imageUrl" class="fr-badge fr-badge--sm fr-mb-2w">
@@ -39,14 +41,13 @@
         </div>
       </div>
     </div>
-  </RouterLink>
+  </router-link>
 </template>
 
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
-import type { RouteLocationRaw } from 'vue-router'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
 import SimplifionsTags from './SimplifionsTags.vue'
@@ -67,11 +68,6 @@ const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
 const imageUrl = solution?.Image_principale?.[0]
   ? gristImageUrl(solution.Image_principale[0])
   : ''
-
-const topicLink: RouteLocationRaw = {
-  name: `${pageKey}_detail`,
-  params: { item_id: props.topic.slug }
-}
 </script>
 
 <style scoped>
