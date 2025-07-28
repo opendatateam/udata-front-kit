@@ -6,13 +6,7 @@
           <h1 class="fr-mb-1v fr-mr-2v">
             {{ solution.Ref_Nom_de_la_solution }}
             <br />
-            <p class="fr-badge fr-badge--sm badge-absolute">
-              <span style="font-weight: normal">Solution publique</span>
-              <span v-if="solution?.operateur_nom">
-                <span class="fr-ml-1v" style="font-weight: normal"> | </span>
-                {{ solution.operateur_nom }}
-              </span>
-            </p>
+            <SimplifionsSolutionTag :solution="solution" />
           </h1>
         </div>
 
@@ -241,6 +235,7 @@ import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
+import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
