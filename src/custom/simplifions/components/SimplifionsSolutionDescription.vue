@@ -137,37 +137,49 @@
     </figure>
 
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
-      <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
-        Possibilités de simplification :
-      </h2>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(solution.Description_longue)"></p>
-      <p>
-        <strong>
-          <span
-            aria-hidden="true"
-            style="color: #27a658"
-            class="fr-icon-success-fill"
-          ></span>
-          Cette solution permet :
-        </strong>
-      </p>
+      <div v-if="solution.Description_longue">
+        <h2
+          id="possibilites-simplification"
+          class="colored-title fr-h2 fr-my-5w"
+        >
+          Possibilités de simplification :
+        </h2>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(solution.Description_longue)"></p>
+      </div>
 
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
+      <div v-if="solution.Cette_solution_permet_">
+        <p>
+          <strong>
+            <span
+              aria-hidden="true"
+              style="color: #27a658"
+              class="fr-icon-success-fill"
+            ></span>
+            Cette solution permet :
+          </strong>
+        </p>
 
-      <p>
-        <strong>
-          <span
-            aria-hidden="true"
-            style="color: #ff292f"
-            class="fr-icon-error-fill"
-          ></span>
-          Cette solution ne permet pas :
-        </strong>
-      </p>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
+      </div>
+
+      <div v-if="solution.Cette_solution_ne_permet_pas_">
+        <p>
+          <strong>
+            <span
+              aria-hidden="true"
+              style="color: #ff292f"
+              class="fr-icon-error-fill"
+            ></span>
+            Cette solution ne permet pas :
+          </strong>
+        </p>
+
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
+      </div>
+
       <p>
         <a
           rel="noopener noreferrer"
