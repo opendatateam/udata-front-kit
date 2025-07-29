@@ -10,13 +10,7 @@
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
         </p>
         <div class="date-topic fr-grid-row fr-grid-row--right fr-mt-1w">
-          <div v-if="topic.private">
-            <span
-              aria-hidden="true"
-              class="fr-icon-eye-off-line fr-icon--sm fr-mr-1v"
-            ></span>
-            Brouillon
-          </div>
+          <DraftTag v-if="topic.private" class="fr-mr-1v" />
           <div class="fr-ml-auto fr-mb-0 fr-text--xs">
             Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
           </div>

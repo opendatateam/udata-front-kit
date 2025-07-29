@@ -5,9 +5,9 @@
         <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">
             {{ solution.Ref_Nom_de_la_solution }}
-            <br />
-            <SimplifionsSolutionTag :solution="solution" />
           </h1>
+          <DraftTag v-if="topic.private" />
+          <SimplifionsSolutionTag :solution="solution" />
         </div>
 
         <p class="fr-text--lead">

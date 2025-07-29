@@ -10,13 +10,7 @@
         <div class="fr-card__content">
           <div class="fr-grid-row">
             <SimplifionsSolutionTag v-if="!imageUrl" :solution="solution" />
-            <div v-if="topic.private" class="fr-ml-auto fr-text--xs">
-              <span
-                aria-hidden="true"
-                class="fr-icon-eye-off-line fr-icon--sm fr-mr-1v"
-              ></span>
-              Brouillon
-            </div>
+            <DraftTag v-if="topic.private" class="fr-ml-auto" />
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
