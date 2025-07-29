@@ -24,7 +24,7 @@
             Sommaire
           </h2>
           <ol>
-            <li>
+            <li v-if="casUsage.Contexte || casUsage.Cadre_juridique">
               <a
                 id="summary-link-1"
                 href="#contexte-et-cadre-juridique"
@@ -32,14 +32,22 @@
                 >Contexte et cadre juridique</a
               >
             </li>
-            <li>
+            <li
+              v-if="
+                casUsage.reco_solutions && casUsage.reco_solutions.length > 0
+              "
+            >
               <a
                 id="summary-link-2"
                 href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
-              <ol>
+              <ol
+                v-if="
+                  casUsage.reco_solutions && casUsage.reco_solutions.length > 0
+                "
+              >
                 <li
                   v-for="(group, index) in grouped_reco_solutions"
                   :key="group.title"
@@ -122,7 +130,7 @@
         class="fr-mb-4w"
       >
         <h3 :id="`reco-group-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
-          {{ index + 1 }}. {{ group.title }}
+          {{ group.title }}
         </h3>
 
         <div
