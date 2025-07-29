@@ -62,9 +62,6 @@ jobs:
       ENV: ${{ github.event.inputs.environment }}
       VERSION_PART: ${{ github.event.inputs.version_type }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Debug event and inputs
         run: |
           echo "Event name: ${{ github.event_name }}"
@@ -81,6 +78,12 @@ jobs:
             echo "Tag-based trigger:"
             echo "Tag: ${{ github.ref_name }}"
           fi
+
+      - name: Clone this repo and the scaffold script repository
+        shell: bash
+        run: |
+          git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
+          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: Parse commit message and set deployment variables
         shell: bash
@@ -99,6 +102,7 @@ jobs:
           echo "ENV=$ENV" >> $GITHUB_ENV
           echo "CONFIG_NAME=$CONFIG_NAME" >> $GITHUB_ENV
           echo "VERSION_PART=$VERSION_PART" >> $GITHUB_ENV
+        working-directory: ${{ env.APP_NAME }}
 
       - name: Setup SSH keys and Git configuration
         shell: bash
@@ -117,12 +121,6 @@ jobs:
           # Configure Git identity
           git config --global user.email "root@data.gouv.fr"
           git config --global user.name "datagouv"
-
-      - name: Clone this repo and the scaffold script repository
-        shell: bash
-        run: |
-          git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
-          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: Set next release version
         shell: bash
