@@ -147,18 +147,10 @@
         Utiliser les jeux de données et API utiles
       </h2>
 
-      <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none">
-        <li
-          v-for="apidOrData in usefulDataApi"
-          :key="apidOrData.UID_data_gouv"
-          class="fr-col-12 fr-py-0 fr-mt-2w"
-        >
-          <SimplifionsDataApiCard
-            :api-or-data="apidOrData"
-            :custom-description="customDescription(apidOrData.UID_data_gouv)"
-          />
-        </li>
-      </ul>
+      <SimplifionsDataApiList
+        :data-api-list="usefulDataApi"
+        :custom-descriptions="customDescriptionsForDataApi"
+      />
     </div>
   </div>
 </template>
@@ -171,6 +163,7 @@ import type {
   RecoSolution,
   SimplifionsCasUsagesExtras
 } from '../model/cas_usage'
+import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -201,10 +194,6 @@ const customDescriptionsForDataApi =
     },
     {} as Record<string, string>
   )
-
-const customDescription = (uid: string) => {
-  return customDescriptionsForDataApi[uid] || null
-}
 
 // Affichage des parties reco solutions, dans l'ordre voulu
 
@@ -256,9 +245,5 @@ const usefulDataApi = computed(() => {
 
 .h3-cas-usage {
   color: #616161;
-}
-
-ul.list-none {
-  list-style: none;
 }
 </style>

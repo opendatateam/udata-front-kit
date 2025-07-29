@@ -1,0 +1,30 @@
+<template>
+  <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none">
+    <li
+      v-for="apidOrData in dataApiList"
+      :key="apidOrData.UID_data_gouv"
+      class="fr-col-12 fr-py-0 fr-mt-2w"
+    >
+      <SimplifionsDataApiCard
+        :api-or-data="apidOrData"
+        :custom-description="customDescriptions?.[apidOrData.UID_data_gouv]"
+      />
+    </li>
+  </ul>
+</template>
+
+<script setup lang="ts">
+import type { SimplifionsDataOrApi } from '../model/cas_usage'
+import SimplifionsDataApiCard from './SimplifionsDataApiCard.vue'
+
+defineProps<{
+  dataApiList: Array<SimplifionsDataOrApi>
+  customDescriptions?: Record<string, string>
+}>()
+</script>
+
+<style scoped>
+ul.list-none {
+  list-style: none;
+}
+</style>
