@@ -180,7 +180,7 @@
         <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
       </div>
 
-      <p>
+      <p v-if="solution.URL_Consulter_la_solution_">
         <a
           rel="noopener noreferrer"
           :href="solution.URL_Consulter_la_solution_"
@@ -189,6 +189,7 @@
           Consulter le site de la solution
         </a>
       </p>
+      <p v-else>⚠ Pas d'url disponible pour consulter cette solution.</p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
