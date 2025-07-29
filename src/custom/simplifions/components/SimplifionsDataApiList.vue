@@ -1,6 +1,7 @@
 <template>
   <ul
-    class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none scrollable-list fr-pb-2w"
+    class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none fr-pb-2w"
+    :class="{ 'scrollable-list': dataApiList.length > 3 }"
   >
     <li
       v-for="apidOrData in dataApiList"
