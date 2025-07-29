@@ -97,13 +97,25 @@ Cypress.Commands.add('getNumberOfResults', (pageName) => {
     .then((text) => parseInt(text.replace(` ${pageName} disponibles`, '')))
 })
 
+/**
+ * Custom command to check if the number of results changes when a filter is applied
+ * @param {string} pageName - The name of the page (e.g., "Cas d'usages")
+ * @param {string} expectedChange - The expected change in the number of results (e.g., 'decrease', 'increase')
+ * @param {function} filterAction - The action to apply the filter (e.g., cy.selectFilterValue)
+ */
 Cypress.Commands.add(
-  'filterShouldRemoveResults',
-  (pageName, selectLabel, optionLabel) => {
+  'filterShouldChangeResults',
+  (pageName, expectedChange, filterAction) => {
+    if (expectedChange !== 'increase' && expectedChange !== 'decrease') {
+      throw new Error(
+        `expectedChange must be 'increase' or 'decrease', got '${expectedChange}'`
+      )
+    }
+
     // Store the initial number of results
     cy.getNumberOfResults(pageName).then((initialCount) => {
       // Apply the filter
-      cy.selectFilterValue(selectLabel, optionLabel)
+      filterAction()
 
       // Wait for the number of results to change
       cy.get('#number-of-results').should(
@@ -113,10 +125,40 @@ Cypress.Commands.add(
 
       cy.getNumberOfResults(pageName).then((newCount) => {
         // Verify that the number of results is less than the initial count
-        expect(newCount).to.be.lessThan(initialCount)
+        if (expectedChange === 'decrease') {
+          expect(newCount).to.be.lessThan(initialCount)
+        } else {
+          expect(newCount).to.be.greaterThan(initialCount)
+        }
         // Verify that the number of results is greater than 0
         expect(newCount).to.be.greaterThan(0)
       })
     })
+  }
+)
+
+Cypress.Commands.add(
+  'filterShouldNotChangeResults',
+  (pageName, filterAction) => {
+    // Store the initial number of results
+    cy.getNumberOfResults(pageName).then((initialCount) => {
+      // Apply the filter
+      filterAction()
+
+      // Check the number of results has not changed
+      cy.get('#number-of-results').should(
+        'contain.text',
+        `${initialCount} ${pageName} disponibles`
+      )
+    })
+  }
+)
+
+Cypress.Commands.add(
+  'selectFilterShouldRemoveResults',
+  (pageName, selectLabel, optionLabel) => {
+    cy.filterShouldChangeResults(pageName, 'decrease', () =>
+      cy.selectFilterValue(selectLabel, optionLabel)
+    )
   }
 )
