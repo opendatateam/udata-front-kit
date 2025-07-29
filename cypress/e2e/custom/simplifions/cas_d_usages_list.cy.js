@@ -82,11 +82,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
       cy.simulateConnectedUser()
 
       cy.filterShouldNotChangeResults(topicsName, () => {
-        cy.get('input[name="include_private"]')
-          .invoke('attr', 'id')
-          .then((inputId) => {
-            cy.get(`label[for="${inputId}"]`).click()
-          })
+        cy.clickCheckbox('include_private')
       })
     })
   })
@@ -96,11 +92,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
       cy.simulateConnectedDINUMUser()
 
       cy.filterShouldChangeResults(topicsName, 'increase', () => {
-        cy.get('input[name="include_private"]')
-          .invoke('attr', 'id')
-          .then((inputId) => {
-            cy.get(`label[for="${inputId}"]`).click()
-          })
+        cy.clickCheckbox('include_private')
       })
     })
   })

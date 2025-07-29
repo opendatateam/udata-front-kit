@@ -116,6 +116,14 @@ Cypress.Commands.add('selectFilterValue', (selectLabel, optionLabel) => {
     })
 })
 
+Cypress.Commands.add('clickCheckbox', (checkbox_name) => {
+  cy.get(`input[name="${checkbox_name}"]`)
+    .invoke('attr', 'id')
+    .then((inputId) => {
+      cy.get(`label[for="${inputId}"]`).click()
+    })
+})
+
 Cypress.Commands.add('getNumberOfResults', (pageName) => {
   return cy
     .get('#number-of-results')
