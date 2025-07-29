@@ -170,6 +170,7 @@ pages:
         display: true
       reuses:
         display: true
+    editable: true
     filters: []
   # BOUQUETS
   bouquets:
@@ -194,6 +195,7 @@ pages:
         display: true
       reuses:
         display: true
+    editable: true
     filters:
       - name: Catégorie
         default_option: Toutes les catégories

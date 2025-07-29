@@ -4,6 +4,7 @@
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ casUsage.Titre }}</h1>
+          <DraftTag v-if="topic.private" />
         </div>
 
         <p class="fr-text--lead">

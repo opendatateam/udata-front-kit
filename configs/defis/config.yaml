@@ -296,6 +296,7 @@ pages:
         display: true
       reuses:
         display: true
+    editable: true
     filters:
       - name: Saison
         default_option: Toutes les saisons

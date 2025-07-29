@@ -256,6 +256,7 @@ pages:
         display: true
       reuses:
         display: true
+    editable: true
     filters:
       - name: Thème INSPIRE
         default_option: Tous les thèmes
@@ -359,6 +360,7 @@ pages:
         display: true
       reuses:
         display: true
+    editable: true
     filters:
       - name: Afficher les brouillons
         id: include_private
@@ -410,6 +412,7 @@ pages:
         display: true
       reuses:
         display: true
+    editable: true
     filters:
       - name: Thématique
         default_option: Toutes les thématiques

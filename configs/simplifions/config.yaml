@@ -182,6 +182,7 @@ pages:
         display: false
       reuses:
         display: false
+    editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
         id: include_private
@@ -264,9 +265,10 @@ pages:
         display: true
         create: true
       datasets:
-        display: true
+        display: false
       reuses:
-        display: true
+        display: false
+    editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
         id: include_private
