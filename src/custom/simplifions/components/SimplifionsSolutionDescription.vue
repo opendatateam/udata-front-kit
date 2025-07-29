@@ -232,10 +232,7 @@
     </p>
 
     <div v-if="usefulDataApi && usefulDataApi.length > 0">
-      <h2
-        id="donnees-api-utilisees"
-        class="colored-title fr-h2 fr-mt-8w fr-mb-0"
-      >
+      <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w">
         Données et API utilisées
       </h2>
 
