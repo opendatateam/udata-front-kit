@@ -110,7 +110,7 @@
         v-if="reco_solution.solutions_editeurs_topics.length > 0"
       >
         <hr />
-        <strong>Ces logiciels privés l'intègrent déjà :</strong>
+        <strong>Ces logiciels d'éditeurs l'intègrent déjà :</strong>
         <br />
 
         <div class="solutions-editeurs fr-mt-2w" role="list">
