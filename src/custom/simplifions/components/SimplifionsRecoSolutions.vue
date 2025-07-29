@@ -104,6 +104,45 @@
           <!-- eslint-enable vue/no-v-html -->
         </p>
       </div>
+
+      <div
+        class="fr-col-12"
+        v-if="reco_solution.solutions_editeurs_topics.length > 0"
+      >
+        <hr />
+        <strong>Ces logiciels privés l'intègrent déjà :</strong>
+        <br />
+
+        <div class="solutions-editeurs fr-mt-2w" role="list">
+          <div
+            v-for="solution_editeur in reco_solution.solutions_editeurs_topics"
+            :key="solution_editeur.topic_id"
+          >
+            <router-link
+              :to="{
+                name: 'solutions_detail',
+                params: { item_id: solution_editeur.topic_id }
+              }"
+            >
+              <div class="solution-editeur fr-py-2w">
+                <div class="fr-px-4w">
+                  <strong>{{ solution_editeur.solution_name }}</strong
+                  ><br />
+                  <span class="fr-text--xs"
+                    >par {{ solution_editeur.editeur_name }}</span
+                  >
+                </div>
+                <div class="fr-pr-1w">
+                  <span
+                    aria-hidden="true"
+                    class="fr-icon-arrow-right-line fr-icon--sm"
+                  ></span>
+                </div>
+              </div>
+            </router-link>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -125,5 +164,27 @@ const reco_solution = props.recoSolution
   background-color: #f6f6f6;
   /* padding: 15px; */
   border-radius: 4px;
+}
+
+.solutions-editeurs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.solution-editeur {
+  background-color: white;
+  border-bottom: 4px solid rgb(53, 88, 162);
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.solution-editeur:hover {
+  background-color: #e9e9e9;
+}
+
+.solution-editeur .fr-icon-arrow-right-line {
+  color: rgb(53, 88, 162);
 }
 </style>
