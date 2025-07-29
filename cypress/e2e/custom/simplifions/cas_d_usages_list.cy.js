@@ -79,7 +79,6 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   describe('when connected with a random user', () => {
     it("should not be able to see any private cas d'usages", () => {
-      // Connect the user
       cy.simulateConnectedUser()
 
       cy.filterShouldNotChangeResults(topicsName, () => {
@@ -92,21 +91,17 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
   })
 
-  // describe('when connected with a DINUM user', () => {
-  //   it('should be able to filter the private cas d\'usages', () => {
-  //     // Connect the user
-  //     cy.simulateConnectedUser({
-  //       organization: {
-  //         "class": "Organization",
-  //         "id": "57fe2a35c751df21e179df72",
-  //       }
-  //     })
+  describe('when connected with a DINUM user', () => {
+    it("should be able to see the private cas d'usages", () => {
+      cy.simulateConnectedDINUMUser()
 
-  //     cy.filterShouldChangeResults(topicsName, 'increase', () => {
-  //       cy.get('input[name="include_private"]').invoke('attr', 'id').then((inputId) => {
-  //         cy.get(`label[for="${inputId}"]`).click()
-  //       })
-  //     })
-  //   })
-  // })
+      cy.filterShouldChangeResults(topicsName, 'increase', () => {
+        cy.get('input[name="include_private"]')
+          .invoke('attr', 'id')
+          .then((inputId) => {
+            cy.get(`label[for="${inputId}"]`).click()
+          })
+      })
+    })
+  })
 })
