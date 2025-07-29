@@ -91,8 +91,8 @@
     </div>
 
     <div
-      class="fr-col-12 fr-col-md-8"
       v-if="casUsage.Contexte || casUsage.Cadre_juridique"
+      class="fr-col-12 fr-col-md-8"
     >
       <h2 id="contexte-et-cadre-juridique" class="h2-cas-usage fr-h2 fr-my-5w">
         Contexte et cadre juridique

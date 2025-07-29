@@ -106,8 +106,8 @@
       </div>
 
       <div
-        class="fr-col-12"
         v-if="reco_solution.solutions_editeurs_topics.length > 0"
+        class="fr-col-12"
       >
         <hr />
         <strong>Ces logiciels d'éditeurs l'intègrent déjà :</strong>
