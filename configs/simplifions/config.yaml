@@ -183,6 +183,13 @@ pages:
       reuses:
         display: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
+      - name: Afficher les brouillons
+        id: include_private
+        type: checkbox
+        default_option:
+        default_value: false
+        authenticated: true
+        values: []
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
@@ -261,6 +268,13 @@ pages:
       reuses:
         display: true
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
+      - name: Afficher les brouillons
+        id: include_private
+        type: checkbox
+        default_option:
+        default_value: false
+        authenticated: true
+        values: []
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
