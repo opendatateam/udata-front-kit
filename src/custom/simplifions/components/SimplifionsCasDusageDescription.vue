@@ -135,9 +135,9 @@
         class="fr-col-12 fr-py-0 fr-mt-2w"
       >
         <SimplifionsDataApiCard
+          v-if="apidOrData.UID_data_gouv"
           :api-or-data="apidOrData"
           :custom-description="customDescription(apidOrData.UID_data_gouv)"
-          v-if="apidOrData.UID_data_gouv"
         />
       </li>
     </ul>
