@@ -1,0 +1,223 @@
+# config file for culture
+
+# used as extras key
+site_id: culture
+
+datagouvfr:
+  # data.gouv.fr base URL (use www subdomain on prod)
+  base_url: https://www.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+
+robots:
+  disallow:
+  sitemap:
+  meta: 'noindex, nofollow'
+
+# UI customizations
+website:
+  title: 'culture.data.gouv.fr'
+  formatted_title: '<i>culture.</i><b>data.gouv</b><i>.fr</i>'
+  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
+  service_logo:
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+  logo_operator:
+    src:
+    show_in_header: false
+    footer:
+      width: '40px'
+      height: '219px'
+  homepage:
+    title: coucou
+    subtitle:
+    sections:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description: culture.data.gouv.fr référence et centralise les données du domaine de la culture.
+  header_button:
+    display: false
+    label:
+    link:
+  header_search:
+    display: true
+    placeholder: Rechercher...
+    dropdown:
+      - text: Rechercher {} dans les <strong>jeux de données</strong>
+        route: datasets
+  search_bar:
+    display: true
+    placeholder: Rechercher une donnée environnementale
+  secondary_search:
+    display: false
+    name:
+    link:
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la culture, réalisé par le ministère de la Culture'
+  footer_external_links:
+    - label: 'culture.gouv.fr'
+      href: 'https://www.culture.gouv.fr/'
+    - label: 'Portail des API Météo-France'
+      href: 'https://portail-api.meteofrance.fr/'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  notice:
+    display: true
+    content: ⚠️ Vous naviguez sur une version de développement de culture.data.gouv.fr ⚠️
+    closeable: false
+  # ⚠️ When updating this menu, also update the sitemap below if needed
+  menu:
+    - text: Accueil
+      to: /
+    - text: 'La démarche'
+      to: /demarche
+    - text: A propos
+      to: /about
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    # ⚠️ When updating this list, also update the sitemap below if needed
+    static_pages:
+      - title: 'A propos'
+        id: 'about'
+        route: '/about'
+        url: '/culture/pages/about.md'
+      - title: 'La démarche'
+        id: 'demarche'
+        route: '/demarche'
+        url: '/culture/pages/demarche.md'
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Jeux de données
+      path: /datasets
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+  show_quality_component: true
+  oauth_option: true
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 20
+    files_list: 6
+  contact_email: datagouv@datagouv.gouv.fr
+  home_banner_colors:
+    - '#f6f6f6'
+    - '#e3e3fd'
+    - '#019FE3'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId:
+  datasets:
+    # TODO: better place for that?
+    add_to_topic:
+      enable: false
+      page:
+      dataset_editorialization: true
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel:
+  # TODO: better place for that?
+  topics:
+    can_add_topics:
+      everyone: true
+      authorized_users:
+
+organizations: https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
+
+# Configuration format for pages:
+#
+# pages:
+#   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
+#     list_all: {bool}              # whether to have a list view or not
+#     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
+#     tag_prefix: {string}          # prefix for tags on data.gouv.fr
+#     title: {string}               # title for the list page
+#     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
+#     labels:                       # how to call the object that is displayed by the page
+#       singular: {string}          # singular name for the object
+#       plural: {string}            # plural name for the object
+#       extended: {string}          # extended name for the object, singular
+#     search:
+#       input: {string}             # placeholder for the search input
+#     banner:                       # banner for the list page (optionnal)
+#       title: {string}             # title for the banner
+#       content: {string}           # content for the banner
+#     discussions:
+#       display: {bool}             # display discussions on detail page
+#       create: {bool}              # create discussions on detail page
+#     filters:                      # list of filters for this {page_id}
+#       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
+#         id: {string}              # id of the filter
+#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox)
+#         child: {string?}          # id of the child filter (optional)
+#         color: {string}           # color of the filter's tag
+#         use_tag_prefix: {bool}    # whether to use {tag_prefix}-{item.id} when building value tag
+#         default_option: {string?} # default option for the filter (optional)
+#         default_value: {string?}  # default value for the filter (optional)
+#         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
+#         values:                   # list of values for this filter
+#           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}        # name of the value
+#             parent: {string?}     # id of the parent filter value (optional)
+pages:
+  # DATASETS
+  datasets:
+    list_all: true
+    universe_query:
+      topic: 68889f00bd51536864e35316
+    tag_prefix:
+    title: Jeux de données
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+    banner:
+      title: Un guichet unique pour l'accès aux données de la culture
+      content: |
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, le ministère de la Culture, et l'ensemble des organismes de tutelle. A compléter.
+
+        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    filters:
+      - name: Catégories
+        default_option: Toutess les catégories
+        id: category
+        type: select
+        use_tag_prefix: false
+        values:
+          - name: Bases patrimoniales
+            id: base-patrimoniales
+          - name: Domaine de l'audiovisuel
+            id: audiovisuel
+          - name: Données des musées
+            id: musee
