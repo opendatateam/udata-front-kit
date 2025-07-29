@@ -86,6 +86,7 @@ export type PageConf = {
       display: boolean
     }
   }
+  editable: boolean
   filters: PageFilterConf[]
 }
 

@@ -63,7 +63,7 @@ const customDescriptionComponent = computed(() => {
 
 const userStore = useUserStore()
 const canEdit = computed(() => {
-  return userStore.hasEditPermissions(topic.value)
+  return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
 const { isAdmin, canAddTopic } = storeToRefs(userStore)
 
