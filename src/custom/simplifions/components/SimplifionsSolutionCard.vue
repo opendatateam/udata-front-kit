@@ -5,7 +5,7 @@
     <div class="fr-card fr-enlarge-link fr-card--shadow topic-card">
       <div class="fr-card__body">
         <div class="fr-card__content">
-          <SimplifionsSolutionTag :solution="solution" v-if="!imageUrl" />
+          <SimplifionsSolutionTag v-if="!imageUrl" :solution="solution" />
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
           <p class="fr-card__desc fr-text--lg">

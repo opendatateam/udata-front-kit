@@ -21,6 +21,10 @@ export interface DataserviceV2 {
     contact_form?: string
     role: string
   }
+  metrics: {
+    views: number
+    followers: number
+  }
 }
 
 export interface DataserviceV2Response extends GenericResponse {

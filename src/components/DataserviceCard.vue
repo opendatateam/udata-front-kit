@@ -68,25 +68,60 @@
           >
         </div>
         <div
-          v-if="dataservice.tags && dataservice.tags.length > 0"
-          class="fr-mt-1v"
+          v-if="
+            dataservice.availability !== undefined ||
+            (dataservice.metrics &&
+              (dataservice.metrics.views || dataservice.metrics.followers))
+          "
+          class="fr-mt-1v fr-grid-row fr-grid-row--middle fr-text--sm text-mention-grey"
         >
-          <div class="fr-tags-group">
-            <p
-              v-for="tag in displayedTags"
-              :key="tag"
-              class="fr-tag fr-tag--sm"
+          <div
+            v-if="dataservice.availability !== undefined"
+            class="fr-mr-1v flex-sm dash-after-sm"
+          >
+            <span class="fr-mr-1v"
+              >Disponibilité :
+              {{ formatAvailability(dataservice.availability) }}</span
             >
-              {{ tag }}
-            </p>
-            <p
-              v-if="dataservice.tags.length > maxTags"
-              class="fr-tag fr-tag--sm"
+          </div>
+          <div
+            v-if="dataservice.metrics"
+            class="fr-grid-row fr-grid-row--middle"
+          >
+            <div
+              v-if="dataservice.metrics.views"
+              class="fr-mr-1w fr-grid-row fr-grid-row--middle"
+              :aria-label="`${dataservice.metrics.views} vues`"
             >
-              +{{ dataservice.tags.length - maxTags }}
-            </p>
+              <span
+                class="fr-icon-eye-line fr-icon--sm fr-mr-1v"
+                aria-hidden="true"
+              ></span>
+              <span>{{ summarize(dataservice.metrics.views) }}</span>
+            </div>
+            <div
+              v-if="dataservice.metrics.followers"
+              class="fr-grid-row fr-grid-row--middle"
+              :aria-label="`${dataservice.metrics.followers} abonnés`"
+            >
+              <span
+                class="fr-icon-star-line fr-icon--sm fr-mr-1v"
+                aria-hidden="true"
+              ></span>
+              <span>{{ summarize(dataservice.metrics.followers) }}</span>
+            </div>
           </div>
         </div>
+        <p
+          v-if="dataservice.description"
+          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm"
+        >
+          <TextClamp
+            :auto-resize="true"
+            :text="stripFromMarkdown(dataservice.description)"
+            :max-lines="2"
+          />
+        </p>
       </div>
     </div>
   </div>
@@ -94,10 +129,12 @@
 
 <script setup lang="ts">
 import type { DataserviceV2 } from '@/model/dataservice'
+import { stripFromMarkdown } from '@/utils'
 import {
   OrganizationNameWithCertificate,
   Placeholder,
-  formatRelativeIfRecentDate
+  formatRelativeIfRecentDate,
+  summarize
 } from '@datagouv/components'
 import type { RouteLocationRaw } from 'vue-router'
 import TextClamp from 'vue3-text-clamp'
@@ -105,17 +142,17 @@ import TextClamp from 'vue3-text-clamp'
 interface Props {
   dataservice: DataserviceV2
   dataserviceUrl: string | RouteLocationRaw
-  maxTags?: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  maxTags: 3
-})
+defineProps<Props>()
 
-const displayedTags = computed(() => {
-  if (!props.dataservice.tags) return []
-  return props.dataservice.tags.slice(0, props.maxTags)
-})
+const formatAvailability = (availability: number): string => {
+  if (availability) {
+    return `${availability}%`
+  } else {
+    return 'inconnue'
+  }
+}
 </script>
 
 <style scoped>
@@ -123,12 +160,6 @@ const displayedTags = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.fr-tags-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
 }
 
 .border-default-grey {
@@ -167,5 +198,9 @@ const displayedTags = computed(() => {
 
 .top-0 {
   top: 0;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
 }
 </style>
