@@ -2,18 +2,24 @@
   <router-link
     :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
   >
-    <div class="topic-card">
+    <div class="topic-card" :class="{ 'topic-card--private': topic.private }">
       <div class="header-topic">
         <!--Titre et description-->
         <div class="title-topic fr-text--lead">{{ topic.name }}</div>
         <p class="fr-mb-1w">
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
         </p>
-        <div
-          class="date-topic fr-text--xs fr-mb-0 fr-text--grey-500"
-          style="text-align: right"
-        >
-          Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
+        <div class="date-topic fr-grid-row fr-grid-row--right fr-mt-1w">
+          <div v-if="topic.private">
+            <span
+              aria-hidden="true"
+              class="fr-icon-eye-off-line fr-icon--sm fr-mr-1v"
+            ></span>
+            Brouillon
+          </div>
+          <div class="fr-ml-auto fr-mb-0 fr-text--xs">
+            Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
+          </div>
         </div>
       </div>
       <!--Texte pour préciser les usagers et les fournisseurs de service-->
@@ -77,6 +83,9 @@ const { pageKey } = useCurrentPageConf()
   opacity: 0px;
   min-height: 60px;
 }
+.topic-card:hover .header-topic {
+  background-color: rgba(188, 199, 219, 0.5);
+}
 .title-topic {
   font-family: Marianne;
   font-size: 18px;
@@ -104,5 +113,14 @@ const { pageKey } = useCurrentPageConf()
 }
 .date-topic {
   color: #6b7280; /* gris moyen */
+}
+
+.topic-card--private .header-topic {
+  background-color: #f6f6f6;
+  color: #666; /* gris moyen */
+}
+.topic-card--private:hover .header-topic {
+  background-color: #e7e7e7 !important;
+  color: #666; /* gris moyen */
 }
 </style>

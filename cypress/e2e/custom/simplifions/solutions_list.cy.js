@@ -39,11 +39,15 @@ describe('Simplifions Solutions Page', () => {
   })
 
   it('should be able to filter by fournisseurs de service ', () => {
-    cy.filterShouldRemoveResults(topicsName, 'À destination de :', 'Communes')
+    cy.selectFilterShouldRemoveResults(
+      topicsName,
+      'À destination de :',
+      'Communes'
+    )
   })
 
   it('should be able to filter by target users ', () => {
-    cy.filterShouldRemoveResults(
+    cy.selectFilterShouldRemoveResults(
       topicsName,
       'Pour simplifier les démarches de :',
       'Particuliers'
@@ -51,7 +55,7 @@ describe('Simplifions Solutions Page', () => {
   })
 
   it('should be able to filter by budget ', () => {
-    cy.filterShouldRemoveResults(
+    cy.selectFilterShouldRemoveResults(
       topicsName,
       'Moyens disponibles pour la mise en œuvre :',
       'Aucun développement, ni budget'
@@ -59,10 +63,34 @@ describe('Simplifions Solutions Page', () => {
   })
 
   it('should be able to filter by types de simplification ', () => {
-    cy.filterShouldRemoveResults(
+    cy.selectFilterShouldRemoveResults(
       topicsName,
       'Type de simplification des démarches :',
       'Accès facile'
     )
+  })
+
+  it('should not have the private filter', () => {
+    cy.get('input[name="include_private"]').should('not.exist')
+  })
+
+  describe('when connected with a random user', () => {
+    it("should not be able to see any private cas d'usages", () => {
+      cy.simulateConnectedUser()
+
+      cy.filterShouldNotChangeResults(topicsName, () => {
+        cy.clickCheckbox('include_private')
+      })
+    })
+  })
+
+  describe('when connected with a DINUM user', () => {
+    it("should be able to see the private cas d'usages", () => {
+      cy.simulateConnectedDINUMUser()
+
+      cy.filterShouldChangeResults(topicsName, 'increase', () => {
+        cy.clickCheckbox('include_private')
+      })
+    })
   })
 })
