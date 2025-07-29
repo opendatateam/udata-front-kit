@@ -1,4 +1,5 @@
 import type { TopicExtras } from '@/model/topic'
+import type { SimplifionsDataOrApi } from './cas_usage'
 
 export interface SimplifionsSolution {
   Image_principale: string | null
@@ -15,6 +16,7 @@ export interface SimplifionsSolution {
   types_de_solution: string[]
   cas_d_usages_topics_ids: string[]
   is_public: boolean
+  API_et_data_disponibles: SimplifionsDataOrApi[]
 }
 
 export interface SimplifionsSolutionsExtras extends TopicExtras {

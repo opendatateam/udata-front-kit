@@ -231,9 +231,24 @@
       Aucun cas d'usage ne référence cette solution pour le moment.
     </p>
 
-    <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w fr-mb-0">
-      Données et API utilisées
-    </h2>
+    <div v-if="usefulDataApi && usefulDataApi.length > 0">
+      <h2
+        id="donnees-api-utilisees"
+        class="colored-title fr-h2 fr-mt-8w fr-mb-0"
+      >
+        Données et API utilisées
+      </h2>
+
+      <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none">
+        <li
+          v-for="apidOrData in usefulDataApi"
+          :key="apidOrData.UID_data_gouv"
+          class="fr-col-12 fr-py-0 fr-mt-2w"
+        >
+          <SimplifionsDataApiCard :api-or-data="apidOrData" />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -248,6 +263,7 @@ import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
+import SimplifionsDataApiCard from './SimplifionsDataApiCard.vue'
 import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -300,6 +316,15 @@ const fetchRelatedCasUsages = async () => {
   }
 }
 
+const usefulDataApi = computed(() => {
+  if (!solution?.API_et_data_disponibles) {
+    return []
+  }
+  return solution.API_et_data_disponibles.filter(
+    (apidOrData) => apidOrData.UID_data_gouv
+  )
+})
+
 // Fetch related cas d'usages when component mounts
 onMounted(() => {
   fetchRelatedCasUsages()
@@ -335,5 +360,9 @@ h3 {
   margin-right: 0.5em;
   margin-left: 0.5em;
   padding: 0 0.5rem 0 0.5rem;
+}
+
+ul.list-none {
+  list-style: none;
 }
 </style>

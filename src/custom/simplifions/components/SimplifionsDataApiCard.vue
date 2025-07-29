@@ -58,7 +58,7 @@ import type { SimplifionsDataOrApi } from '../model/cas_usage'
 
 const props = defineProps<{
   apiOrData: SimplifionsDataOrApi
-  customDescription: string | null
+  customDescription?: string | null
 }>()
 
 const entityName = props.apiOrData.Type == 'API' ? 'dataservices' : 'datasets'
