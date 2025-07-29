@@ -82,8 +82,10 @@ jobs:
       - name: Clone this repo and the scaffold script repository
         shell: bash
         run: |
-          git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
-          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
+          REPO_SSH_URL=git@github.com:${{ github.repository }}.git
+          REPO_CURRENT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          git clone --quiet --depth 1 -b $REPO_CURRENT_BRANCH $REPO_SSH_URL
+          git clone --quiet --depth 1 ${{ env.SCAFFOLD_REPO_SSH_URL }} ${{ env.SCAFFOLD_DIR }}
 
       - name: Parse commit message and set deployment variables
         shell: bash
@@ -107,10 +109,6 @@ jobs:
       - name: Setup SSH keys and Git configuration
         shell: bash
         run: |
-          # Set Git repository URLs and branch info
-          echo "REPO_SSH_URL=git@github.com:${{ github.repository }}.git" >> $GITHUB_ENV
-          echo "REPO_CURRENT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
-
           # Configure SSH private key for GitLab access
           mkdir -p ~/.ssh
           echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
