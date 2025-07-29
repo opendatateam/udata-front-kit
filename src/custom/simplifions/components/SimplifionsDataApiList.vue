@@ -1,5 +1,7 @@
 <template>
-  <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none">
+  <ul
+    class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none scrollable-list fr-pb-2w"
+  >
     <li
       v-for="apidOrData in dataApiList"
       :key="apidOrData.UID_data_gouv"
@@ -26,5 +28,11 @@ defineProps<{
 <style scoped>
 ul.list-none {
   list-style: none;
+}
+
+.scrollable-list {
+  overflow-x: auto;
+  max-height: calc(100vh - 50px);
+  border: 1px solid #e4e4e4;
 }
 </style>

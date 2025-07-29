@@ -107,6 +107,11 @@ a.api-or-dataset-card:hover .api-or-dataset-header {
   background-color: var(--hover);
 }
 
+.api-or-dataset-header,
+.api-or-dataset-description {
+  background-color: white;
+}
+
 .api-or-dataset-description {
   border: 1px solid #e4e4e4;
   border-top: none;
