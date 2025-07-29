@@ -39,6 +39,11 @@ on:
       - '*'
 jobs:
   deploy-release:
+    # Only run this job for:
+    # - Manual workflow dispatch (workflow_dispatch)
+    # - Push to branches with commit messages starting with '[' (deployment commits)
+    # This prevents the job from running on normal commits and saves resources
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/') && startsWith(github.event.head_commit.message, '['))
     runs-on: ubuntu-latest
     env:
       # variables to be defined
@@ -74,8 +79,13 @@ jobs:
             echo "Tag: ${{ github.ref_name }}"
           fi
 
+      - name: Clone this repo and the scaffold script repository
+        shell: bash
+        run: |
+          git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
+          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
+
       - name: Parse commit message and set deployment variables
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
         shell: bash
         run: |
           LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
@@ -111,12 +121,6 @@ jobs:
           # Configure Git identity
           git config --global user.email "root@data.gouv.fr"
           git config --global user.name "datagouv"
-
-      - name: Clone this repo and the scaffold script repository
-        shell: bash
-        run: |
-          git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
-          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: Set next release version
         shell: bash
