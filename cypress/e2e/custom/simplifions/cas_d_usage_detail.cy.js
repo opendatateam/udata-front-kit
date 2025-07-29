@@ -52,7 +52,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
   })
 })
 
-describe("Simplifions Cas d'usages Show Page for cas d'usage with datasets and custom descriptions", () => {
+describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets, and custom descriptions", () => {
   beforeEach(() => {
     // Visit the Simplifions home page before each test
     cy.visit(
