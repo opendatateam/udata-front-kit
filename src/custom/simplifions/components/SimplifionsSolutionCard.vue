@@ -2,10 +2,22 @@
   <router-link
     :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
   >
-    <div class="fr-card fr-enlarge-link fr-card--shadow topic-card">
+    <div
+      class="fr-card fr-enlarge-link fr-card--shadow topic-card"
+      :class="{ 'topic-card--private': topic.private }"
+    >
       <div class="fr-card__body">
         <div class="fr-card__content">
-          <SimplifionsSolutionTag v-if="!imageUrl" :solution="solution" />
+          <div class="fr-grid-row">
+            <SimplifionsSolutionTag v-if="!imageUrl" :solution="solution" />
+            <div v-if="topic.private" class="fr-ml-auto fr-text--xs">
+              <span
+                aria-hidden="true"
+                class="fr-icon-eye-off-line fr-icon--sm fr-mr-1v"
+              ></span>
+              Brouillon
+            </div>
+          </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
           <p class="fr-card__desc fr-text--lg">
@@ -90,5 +102,10 @@ const imageUrl = solution?.Image_principale?.[0]
 .card-image {
   max-height: 250px;
   object-position: top center;
+}
+
+.topic-card--private {
+  background-color: #f6f6f6;
+  color: #6b7280; /* gris moyen */
 }
 </style>
