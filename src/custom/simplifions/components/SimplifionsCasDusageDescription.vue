@@ -134,7 +134,7 @@
       </div>
     </div>
 
-    <div v-if="usefulDataApi.length > 0">
+    <div v-if="usefulDataApi.length">
       <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
         Utiliser les jeux de données et API utiles
       </h2>

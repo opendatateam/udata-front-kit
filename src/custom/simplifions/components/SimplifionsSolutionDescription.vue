@@ -68,7 +68,7 @@
                 >Possibilités de simplification</a
               >
             </li>
-            <li v-if="relatedCasUsages.length > 0">
+            <li v-if="relatedCasUsages.length">
               <a
                 id="summary-link-1"
                 href="#cas-usages-simplifiables"
@@ -76,7 +76,7 @@
                 >Cas d'usages simplifiables</a
               >
             </li>
-            <li v-if="usefulDataApi.length > 0">
+            <li v-if="usefulDataApi.length">
               <a
                 id="summary-link-2"
                 href="#donnees-api-utilisees"
@@ -187,7 +187,7 @@
       Cas d'usages simplifiables
     </h2>
     <div
-      v-if="relatedCasUsages.length > 0"
+      v-if="relatedCasUsages.length"
       class="fr-grid-row fr-grid-row--gutters"
     >
       <div
@@ -222,7 +222,7 @@
       Aucun cas d'usage ne référence cette solution pour le moment.
     </p>
 
-    <div v-if="usefulDataApi.length > 0">
+    <div v-if="usefulDataApi.length">
       <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w">
         Données et API utilisées
       </h2>
