@@ -2,7 +2,6 @@
 import type { DatasetV2 } from '@datagouv/components'
 import { computed } from 'vue'
 
-import config from '@/config'
 import type { ExtendedDatasetV2 } from '@/model/dataset'
 import type { Topic } from '@/model/topic'
 
@@ -24,7 +23,7 @@ const props = defineProps({
 const logoSrc = computed(() => {
   return (
     props.object.organization?.logo_thumbnail ||
-    `${config.datagouvfr.base_url}/_themes/gouvfr/img/placeholders/organization.png`
+    `${useDatagouvfrConfig().base_url}/_themes/gouvfr/img/placeholders/organization.png`
   )
 })
 

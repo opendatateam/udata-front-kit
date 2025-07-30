@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-import config from '@/config'
 import type {
   AxiosError,
   AxiosResponseData,
@@ -26,7 +25,7 @@ axios.defaults.paramsSerializer = {
  * e.g. OrganizationsAPI will declare `endpoint = organizations`.
  */
 export default class DatagouvfrAPI {
-  baseUrl = `${config.datagouvfr.base_url}/api`
+  baseUrl = `${useDatagouvfrConfig().base_url}/api`
   version = 1
   endpoint = ''
   toasted = true

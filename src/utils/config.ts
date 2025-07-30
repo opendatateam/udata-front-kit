@@ -28,3 +28,13 @@ export const useDatasetsConf = () => {
 export const useSiteId = () => {
   return config.site_id as SiteId
 }
+
+export const useDatagouvfrConfig = () => {
+  const env = import.meta.env.MODE
+
+  if (config.datagouvfr[env]) {
+    return config.datagouvfr[env]
+  }
+
+  return config.datagouvfr
+}

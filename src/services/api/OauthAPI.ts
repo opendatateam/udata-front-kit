@@ -1,8 +1,6 @@
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 
-import config from '@/config'
-
 interface TokenParams {
   code: string
   pkceCodeVerifier: string
@@ -16,7 +14,7 @@ export default class OauthAPI {
    * Get a token after PKCE flow
    */
   async token(tokenConfig: TokenParams): Promise<string> {
-    const url = `${config.datagouvfr.base_url}/oauth/token`
+    const url = `${useDatagouvfrConfig().base_url}/oauth/token`
     const bodyFormData = new FormData()
     bodyFormData.append('grant_type', 'authorization_code')
     bodyFormData.append('code', tokenConfig.code)
@@ -42,7 +40,7 @@ export default class OauthAPI {
     bodyFormData.append('client_id', clientId)
     const response = await httpClient({
       method: 'post',
-      url: `${config.datagouvfr.base_url}/oauth/revoke`,
+      url: `${useDatagouvfrConfig().base_url}/oauth/revoke`,
       data: bodyFormData
     })
     return response

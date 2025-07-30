@@ -4,7 +4,6 @@ import type { ComputedRef, Ref } from 'vue'
 import { computed, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import config from '@/config'
 import type {
   DiscussionForm,
   DiscussionId,
@@ -76,7 +75,7 @@ const getUserAvatar = (post: Post) => {
   if (post.posted_by.avatar_thumbnail) {
     return post.posted_by.avatar_thumbnail
   }
-  return `${config.datagouvfr.base_url}/api/1/avatars/${post.posted_by.id}/20`
+  return `${useDatagouvfrConfig().base_url}/api/1/avatars/${post.posted_by.id}/20`
 }
 
 const triggerLogin = () => {
