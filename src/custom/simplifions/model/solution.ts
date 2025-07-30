@@ -4,7 +4,7 @@ import type { SimplifionsDataOrApi } from './cas_usage'
 export interface SimplifionsSolution {
   Image_principale: string | null
   Legende_image_principale: string
-  Prix_: string
+  Prix_: string[]
   Description_courte: string
   Description_longue: string
   Cette_solution_permet_: string

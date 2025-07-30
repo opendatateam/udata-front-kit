@@ -11,7 +11,10 @@
         </div>
 
         <p class="fr-text--lead">
-          {{ solution.Description_courte }}
+          <span v-if="solution.Description_courte">
+            {{ solution.Description_courte }}
+          </span>
+          <span v-else>⚠ Description non renseignée</span>
         </p>
 
         <SimplifionsTags
@@ -23,18 +26,30 @@
 
         <ul class="fr-my-4w">
           <li>
-            <strong>Fournisseur :</strong>
-            <span v-if="solution.operateur_nom_long"
-              >{{ solution.operateur_nom_long }} | </span
-            >{{ solution.operateur_nom }}
+            <strong>Fournisseur : </strong>
+            <span v-if="solution.operateur_nom_long || solution.operateur_nom">
+              <span v-if="solution.operateur_nom_long">
+                {{ solution.operateur_nom_long }} |
+              </span>
+              {{ solution.operateur_nom }}
+            </span>
+            <span v-else>Non renseigné</span>
           </li>
           <li>
             <strong>Type de solution :</strong>
-            {{ solution.types_de_solution.join(' ou ') }}
+            {{
+              solution.types_de_solution?.length
+                ? solution.types_de_solution.join(' ou ')
+                : 'Non renseigné'
+            }}
           </li>
           <li>
             <strong>Prix :</strong>
-            {{ solution.Prix_?.length ? solution.Prix_ : 'Non renseigné' }}
+            {{
+              solution.Prix_?.length
+                ? solution.Prix_.join(' ou ')
+                : 'Non renseigné'
+            }}
           </li>
         </ul>
       </div>
