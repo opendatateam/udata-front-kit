@@ -64,7 +64,7 @@
             Sommaire
           </h2>
           <ol>
-            <li>
+            <li v-if="solution.Description_longue">
               <a
                 id="summary-link-1"
                 href="#possibilites-simplification"
@@ -72,7 +72,7 @@
                 >Possibilités de simplification</a
               >
             </li>
-            <li>
+            <li v-if="relatedCasUsages.length > 0">
               <a
                 id="summary-link-1"
                 href="#cas-usages-simplifiables"
@@ -80,7 +80,7 @@
                 >Cas d'usages simplifiables</a
               >
             </li>
-            <li>
+            <li v-if="usefulDataApi.length > 0">
               <a
                 id="summary-link-2"
                 href="#donnees-api-utilisees"
