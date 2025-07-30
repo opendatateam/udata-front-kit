@@ -33,24 +33,6 @@
             {{ solution.types_de_solution.join(' ou ') }}
           </li>
           <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
-          <li>
-            <strong>Moyens requis pour la mise en oeuvre :</strong>
-            <TagComponent
-              v-for="t in tags_budget"
-              :key="`${t.type}-${t.id}`"
-              :tag="t"
-              class="inline-tag"
-            />
-          </li>
-          <li>
-            <strong>Niveau de simplification :</strong>
-            <TagComponent
-              v-for="t in tags_niveau_simplification"
-              :key="`${t.type}-${t.id}`"
-              :tag="t"
-              class="inline-tag"
-            />
-          </li>
         </ul>
       </div>
 
@@ -237,7 +219,6 @@
 </template>
 
 <script setup lang="ts">
-import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
