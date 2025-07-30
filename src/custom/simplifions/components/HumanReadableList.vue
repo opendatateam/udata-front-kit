@@ -1,13 +1,13 @@
 <template>
   <span>
-    <span v-for="(item, index) in humanReadableList(items)" :key="item.content">
+    <span v-for="item in humanReadableList(items)" :key="item.content">
       <span :class="{ 'font-bold': item.bold }">{{ item.content }}</span>
     </span>
   </span>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   items: string[]
 }>()
 
