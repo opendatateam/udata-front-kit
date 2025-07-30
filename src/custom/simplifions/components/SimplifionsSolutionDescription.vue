@@ -231,7 +231,7 @@
       Aucun cas d'usage ne référence cette solution pour le moment.
     </p>
 
-    <div v-if="usefulDataApi && usefulDataApi.length > 0">
+    <div v-if="usefulDataApi.length > 0">
       <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w">
         Données et API utilisées
       </h2>
