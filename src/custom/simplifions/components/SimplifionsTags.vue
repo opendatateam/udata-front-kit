@@ -3,7 +3,7 @@
     <!--Texte pour préciser les usagers et les fournisseurs de service-->
     <div v-if="groupedTags['target-users']" class="fr-card__detail">
       <p class="fr-mb-1w white-space-normal">
-        Démarches des
+        Pour simplifier les démarches des
         <span
           v-for="(t, index) in groupedTags['target-users']"
           :key="t.id"
