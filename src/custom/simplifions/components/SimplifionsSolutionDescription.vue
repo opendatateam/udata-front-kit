@@ -32,7 +32,10 @@
             <strong>Type de solution :</strong>
             {{ solution.types_de_solution.join(' ou ') }}
           </li>
-          <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
+          <li>
+            <strong>Prix :</strong>
+            {{ solution.Prix_?.length ? solution.Prix_ : 'Non renseigné' }}
+          </li>
         </ul>
       </div>
 
@@ -101,7 +104,7 @@
     </div>
     <hr v-if="!solution.Image_principale" class="fr-hr fr-my-2w" />
     <figure
-      v-if="solution.Image_principale && solution.Image_principale.length > 0"
+      v-if="solution.Image_principale?.length"
       aria-label="© Légende de l'image"
       role="group"
       class="fr-content-media"

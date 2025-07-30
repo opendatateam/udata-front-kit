@@ -32,22 +32,14 @@
                 >Contexte et cadre juridique</a
               >
             </li>
-            <li
-              v-if="
-                casUsage.reco_solutions && casUsage.reco_solutions.length > 0
-              "
-            >
+            <li v-if="casUsage.reco_solutions?.length">
               <a
                 id="summary-link-2"
                 href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
-              <ol
-                v-if="
-                  casUsage.reco_solutions && casUsage.reco_solutions.length > 0
-                "
-              >
+              <ol v-if="casUsage.reco_solutions?.length">
                 <li
                   v-for="(group, index) in grouped_reco_solutions"
                   :key="group.title"
@@ -119,7 +111,7 @@
       </div>
     </div>
 
-    <div v-if="casUsage.reco_solutions && casUsage.reco_solutions.length > 0">
+    <div v-if="casUsage.reco_solutions?.length">
       <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
         Solutions disponibles
       </h2>

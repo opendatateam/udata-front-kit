@@ -28,10 +28,7 @@
           </div>
           <div class="fr-tile__header">
             <img
-              v-if="
-                reco_solution.image_principale &&
-                reco_solution.image_principale.length > 0
-              "
+              v-if="reco_solution.image_principale?.length"
               :src="gristImageUrl(reco_solution.image_principale[0])"
               class="fr-responsive-img fr-ratio-16x9"
             />
@@ -101,10 +98,7 @@
       </div>
 
       <div
-        v-if="
-          reco_solution.solutions_editeurs_topics &&
-          reco_solution.solutions_editeurs_topics.length > 0
-        "
+        v-if="reco_solution.solutions_editeurs_topics?.length"
         class="fr-col-12"
       >
         <hr />
