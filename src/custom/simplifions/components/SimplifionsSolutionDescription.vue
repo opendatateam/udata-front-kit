@@ -45,11 +45,7 @@
           </li>
           <li>
             <strong>Prix :</strong>
-            {{
-              solution.Prix_?.length
-                ? solution.Prix_.join(' ou ')
-                : 'Non renseigné'
-            }}
+            {{ solution.Prix_ ? solution.Prix_ : 'Non renseigné' }}
           </li>
         </ul>
       </div>
