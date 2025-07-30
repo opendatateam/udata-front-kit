@@ -106,7 +106,10 @@
       </div>
 
       <div
-        v-if="reco_solution.solutions_editeurs_topics.length > 0"
+        v-if="
+          reco_solution.solutions_editeurs_topics &&
+          reco_solution.solutions_editeurs_topics.length > 0
+        "
         class="fr-col-12"
       >
         <hr />
