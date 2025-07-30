@@ -28,3 +28,5 @@ export const useDatasetsConf = () => {
 export const useSiteId = () => {
   return config.site_id as SiteId
 }
+
+console.info(import.meta.env)
