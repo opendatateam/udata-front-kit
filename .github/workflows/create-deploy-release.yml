@@ -78,14 +78,31 @@ jobs:
             echo "Tag-based trigger:"
             echo "Tag: ${{ github.ref_name }}"
           fi
+      - name: Configure environment
+        shell: bash
+        run: |
+          # configure environment variables
+          echo "REPO_HTTPS_URL=${{ github.server_url }}/${{ github.repository }}.git" >> $GITHUB_ENV
+          echo "REPO_SSH_URL=git@github.com:${{ github.repository }}.git" >> $GITHUB_ENV
+          echo "REPO_CURRENT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
+          echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
+
+          # configure the SSH deploy private key
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
+
+          # configure git
+          git config --global user.email "root@data.gouv.fr"
+          git config --global user.name "datagouv"
 
       - name: Clone this repo and the scaffold script repository
         shell: bash
         run: |
-          REPO_SSH_URL=git@github.com:${{ github.repository }}.git
-          REPO_CURRENT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          git clone --quiet --depth 1 -b $REPO_CURRENT_BRANCH $REPO_SSH_URL
-          git clone --quiet --depth 1 ${{ env.SCAFFOLD_REPO_SSH_URL }} ${{ env.SCAFFOLD_DIR }}
+          git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
+          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: Parse commit message and set deployment variables
         shell: bash
