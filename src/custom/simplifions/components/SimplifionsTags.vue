@@ -2,7 +2,7 @@
   <div>
     <!--Texte pour préciser les usagers et les fournisseurs de service-->
     <div v-if="groupedTags['target-users']" class="fr-card__detail">
-      <p class="fr-mb-1w" style="white-space: normal">
+      <p class="fr-mb-1w white-space-normal">
         Démarches des
         <span
           v-for="(t, index) in groupedTags['target-users']"
@@ -12,8 +12,7 @@
           <span class="font-bold">{{ t.name }}</span>
           <span
             v-if="index < groupedTags['target-users'].length - 1"
-            class="fr-mx-1v"
-            style="font-weight: normal"
+            class="fr-mx-1v font-weight-normal"
             >|</span
           >
         </span>
@@ -23,7 +22,7 @@
       v-if="groupedTags['fournisseurs-de-service']"
       class="fr-card__detail fr-text--right"
     >
-      <p class="fr-mb-1w" style="white-space: normal">
+      <p class="fr-mb-1w white-space-normal">
         À destination des
         <span
           v-for="(t, index) in groupedTags['fournisseurs-de-service']"
@@ -33,8 +32,7 @@
           <span class="font-bold">{{ t.name }}</span>
           <span
             v-if="index < groupedTags['fournisseurs-de-service'].length - 1"
-            class="fr-mx-1v"
-            style="font-weight: normal"
+            class="fr-mx-1v font-weight-normal"
             >|</span
           >
         </span>
@@ -91,4 +89,11 @@ const hideBudget = computed(() => props.hideBudget)
 const hideSimplification = computed(() => props.hideSimplification)
 </script>
 
-<style scoped></style>
+<style scoped>
+.white-space-normal {
+  white-space: normal;
+}
+.font-weight-normal {
+  font-weight: normal;
+}
+</style>

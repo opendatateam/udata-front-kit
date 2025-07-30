@@ -62,9 +62,9 @@
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
-          <p class="subtitle">
-            Contenu rédigé par :
-            <span v-if="topic.organization" style="font-weight: normal">
+          <p class="fr-text--sm">
+            <span class="subtitle">Contenu rédigé par :</span>
+            <span v-if="topic.organization">
               <a :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"
@@ -72,14 +72,14 @@
               </a>
             </span>
             <br />
-            <span style="font-weight: normal">
+            <span>
               le
               <time :datetime="topic.created_at"
                 >{{ formatDate(topic.created_at) }}.</time
               >
             </span>
             <br />
-            <span class="fr-text--xs" style="font-weight: normal"
+            <span class="fr-text--xs"
               >Modifié le
               <time :datetime="topic.last_modified"
                 >{{ formatDate(topic.last_modified) }}.</time

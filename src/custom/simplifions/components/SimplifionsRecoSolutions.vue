@@ -48,8 +48,7 @@
           <strong>
             <span
               aria-hidden="true"
-              style="color: #27a658"
-              class="fr-icon-success-fill"
+              class="fr-icon-success-fill icon-green"
             ></span>
             En quoi cette solution est utile pour ce cas d'usage ?
           </strong>
@@ -87,11 +86,7 @@
 
         <p v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_">
           <strong>
-            <span
-              aria-hidden="true"
-              style="color: #ff292f"
-              class="fr-icon-error-fill"
-            ></span>
+            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
             Ce que ne fait pas cette solution :
           </strong>
           <br />
@@ -189,5 +184,13 @@ const reco_solution = props.recoSolution
 
 .solution-editeur .fr-icon-arrow-right-line {
   color: rgb(53, 88, 162);
+}
+
+.icon-green {
+  color: #27a658;
+}
+
+.icon-red {
+  color: #ff292f;
 }
 </style>

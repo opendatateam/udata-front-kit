@@ -90,9 +90,9 @@
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
-          <p class="subtitle">
-            Contenu rédigé par :
-            <span v-if="topic.organization" style="font-weight: normal">
+          <p class="fr-text--sm">
+            <span class="subtitle">Contenu rédigé par :</span>
+            <span v-if="topic.organization">
               <a :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"
@@ -100,14 +100,14 @@
               </a>
             </span>
             <br />
-            <span style="font-weight: normal">
+            <span>
               le
               <time :datetime="topic.created_at"
                 >{{ formatDate(topic.created_at) }}.</time
               >
             </span>
             <br />
-            <span class="fr-text--xs" style="font-weight: normal"
+            <span class="fr-text--xs"
               >Modifié le
               <time :datetime="topic.last_modified"
                 >{{ formatDate(topic.last_modified) }}.</time
@@ -153,8 +153,7 @@
           <strong>
             <span
               aria-hidden="true"
-              style="color: #27a658"
-              class="fr-icon-success-fill"
+              class="fr-icon-success-fill icon-green"
             ></span>
             Cette solution permet :
           </strong>
@@ -167,11 +166,7 @@
       <div v-if="solution.Cette_solution_ne_permet_pas_">
         <p>
           <strong>
-            <span
-              aria-hidden="true"
-              style="color: #ff292f"
-              class="fr-icon-error-fill"
-            ></span>
+            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
             Cette solution ne permet pas :
           </strong>
         </p>
@@ -349,5 +344,13 @@ h3 {
   margin-right: 0.5em;
   margin-left: 0.5em;
   padding: 0 0.5rem 0 0.5rem;
+}
+
+.icon-green {
+  color: #27a658;
+}
+
+.icon-red {
+  color: #ff292f;
 }
 </style>
