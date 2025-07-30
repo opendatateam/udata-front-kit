@@ -29,4 +29,33 @@ export const useSiteId = () => {
   return config.site_id as SiteId
 }
 
-console.info(import.meta.env)
+var hasLoggedBaseUrl = false
+export const useBaseUrl = () => {
+  var env = import.meta.env.MODE
+
+  if (
+    env === 'production' &&
+    window.location.hostname.match(/(preprod|demo)\.data\.gouv\.fr$/)
+  ) {
+    env = 'demo'
+  }
+
+  if (!hasLoggedBaseUrl) {
+    console.info(`Use environment '${env}' to determine base_url`)
+  }
+
+  if (config.datagouvfr[env]) {
+    const url = config.datagouvfr[env].base_url
+    if (!hasLoggedBaseUrl) {
+      console.info(`Use base_url '${url}' specified for environment '${env}'`)
+      hasLoggedBaseUrl = true
+    }
+    return url
+  }
+
+  if (!hasLoggedBaseUrl) {
+    console.info(`Use default base_url '${config.datagouvfr.base_url}'`)
+    hasLoggedBaseUrl = true
+  }
+  return config.datagouvfr.base_url
+}

@@ -5,8 +5,13 @@ site_id: simplifions
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
-  # oauth settings
+  # base_url: https://demo.data.gouv.fr
+  development:
+    base_url: https://demo.data.gouv.fr
+  demo:
+    base_url: https://demo.data.gouv.fr
+  production:
+    base_url: https://www.data.gouv.fr
   oauth_client_id: 676452675336109a436f8f73
 
 # universe configuration is now handled per page in pages.{page_id}.universe_query
