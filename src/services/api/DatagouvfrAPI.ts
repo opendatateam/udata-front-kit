@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-import config from '@/config'
 import type {
   AxiosError,
   AxiosResponseData,
@@ -12,6 +11,7 @@ import type {
   RequestConfig,
   UpdateParams
 } from '@/model/api'
+import { useBaseUrl } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 
 // build queries like tag=1&tag=2 for arrays instead of tag[]=1&tag[]=2
@@ -26,7 +26,7 @@ axios.defaults.paramsSerializer = {
  * e.g. OrganizationsAPI will declare `endpoint = organizations`.
  */
 export default class DatagouvfrAPI {
-  baseUrl = `${config.datagouvfr.base_url}/api`
+  baseUrl = `${useBaseUrl()}/api`
   version = 1
   endpoint = ''
   toasted = true

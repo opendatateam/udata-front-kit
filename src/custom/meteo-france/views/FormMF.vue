@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import config from '@/config'
+import { useBaseUrl } from '@/utils/config'
 import type { Resource } from '@datagouv/components'
 import { ResourceAccordion } from '@datagouv/components'
 import Slider from '@vueform/slider'
@@ -84,11 +85,7 @@ const onSelectDataset = (dataset: string | number) => {
   if (selectedDataPack.value) {
     selectedDataset.value = datasetsIdsTyped[selectedDataPack.value][dataset]
     // FIXME: use DatagouvfrAPI
-    fetch(
-      config.datagouvfr.base_url +
-        '/api/1/datasets/' +
-        selectedDataset.value[env]
-    )
+    fetch(useBaseUrl() + '/api/1/datasets/' + selectedDataset.value[env])
       .then((response) => {
         return response.json()
       })

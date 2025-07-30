@@ -3,7 +3,6 @@ import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import { computed, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
 import {
   Availability,
@@ -12,6 +11,7 @@ import {
 } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useBaseUrl } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
 import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
 
@@ -140,7 +140,7 @@ const submit = async (modalData: DatasetModalData) => {
       modalData.dataset.availability === Availability.URL_AVAILABLE
     ) {
       const pattern = new RegExp(
-        `^${config.datagouvfr.base_url}(?:/.*)?/datasets/(?<datasetName>[a-zA-Z0-9_-]+)(?:/|#|$)`
+        `^${useBaseUrl()}(?:/.*)?/datasets/(?<datasetName>[a-zA-Z0-9_-]+)(?:/|#|$)`
       )
       const match = pattern.exec(modalData.dataset.uri)
       if (match?.groups?.datasetName) {
@@ -161,10 +161,7 @@ const submit = async (modalData: DatasetModalData) => {
             modalData.dataset.id = dataset.id
           }
         } catch (error) {
-          console.error(
-            `Error fetching dataset from ${config.datagouvfr.base_url}`,
-            error
-          )
+          console.error(`Error fetching dataset from ${useBaseUrl()}`, error)
         }
       }
     }
