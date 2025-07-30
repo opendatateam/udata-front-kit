@@ -9,6 +9,13 @@ export interface RecoSolution {
   Nom_de_la_solution_publique: string
   solution_topic_id: string
   image_principale: number[]
+  solutions_editeurs_topics: SolutionEditeurTopic[]
+}
+
+export interface SolutionEditeurTopic {
+  topic_id: string
+  solution_name: string
+  editeur_name: string
 }
 
 export interface SimplifionsCasUsage {

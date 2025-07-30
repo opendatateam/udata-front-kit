@@ -42,4 +42,16 @@ describe('Simplifions Solutions Details Page', () => {
     cy.url().should('include', '/cas-d-usages/')
     cy.get('.fr-breadcrumb__list').should('contain.text', "Cas d'usages")
   })
+
+  describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs", () => {
+    beforeEach(() => {
+      // Visit the Simplifions home page before each test
+      cy.visit('/cas-d-usages/achat-solution')
+    })
+
+    it("should display the datasets cards for a cas d'usage with datasets", () => {
+      // Check that the api cards are visible
+      cy.get('.api-or-dataset-card.dataservices-card').should('not.be.empty')
+    })
+  })
 })

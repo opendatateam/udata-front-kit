@@ -5,7 +5,7 @@
     </h4>
 
     <div
-      class="fr-grid-row fr-grid-row--gutters fr-my-4w fr-mx-2w fr-grid-row--top"
+      class="fr-grid-row fr-grid-row--gutters fr-mt-4w fr-mb-2w fr-mx-2w fr-grid-row--top"
     >
       <div class="fr-col-12 fr-col-xs-8 fr-col-sm-4 fr-col-lg-3">
         <div class="fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link">
@@ -28,10 +28,7 @@
           </div>
           <div class="fr-tile__header">
             <img
-              v-if="
-                reco_solution.image_principale &&
-                reco_solution.image_principale.length > 0
-              "
+              v-if="reco_solution.image_principale?.length"
               :src="gristImageUrl(reco_solution.image_principale[0])"
               class="fr-responsive-img fr-ratio-16x9"
             />
@@ -48,8 +45,7 @@
           <strong>
             <span
               aria-hidden="true"
-              style="color: #27a658"
-              class="fr-icon-success-fill"
+              class="fr-icon-success-fill icon-green"
             ></span>
             En quoi cette solution est utile pour ce cas d'usage ?
           </strong>
@@ -87,11 +83,7 @@
 
         <p v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_">
           <strong>
-            <span
-              aria-hidden="true"
-              style="color: #ff292f"
-              class="fr-icon-error-fill"
-            ></span>
+            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
             Ce que ne fait pas cette solution :
           </strong>
           <br />
@@ -103,6 +95,45 @@
           ></span>
           <!-- eslint-enable vue/no-v-html -->
         </p>
+      </div>
+
+      <div
+        v-if="reco_solution.solutions_editeurs_topics?.length"
+        class="fr-col-12"
+      >
+        <hr />
+        <strong>Ces logiciels d'éditeurs l'intègrent déjà :</strong>
+        <br />
+
+        <div class="solutions-editeurs fr-mt-2w" role="list">
+          <div
+            v-for="solution_editeur in reco_solution.solutions_editeurs_topics"
+            :key="solution_editeur.topic_id"
+          >
+            <router-link
+              :to="{
+                name: 'solutions_detail',
+                params: { item_id: solution_editeur.topic_id }
+              }"
+            >
+              <div class="solution-editeur fr-py-2w">
+                <div class="fr-px-4w">
+                  <strong>{{ solution_editeur.solution_name }}</strong
+                  ><br />
+                  <span class="fr-text--xs"
+                    >par {{ solution_editeur.editeur_name }}</span
+                  >
+                </div>
+                <div class="fr-pr-1w">
+                  <span
+                    aria-hidden="true"
+                    class="fr-icon-arrow-right-line fr-icon--sm"
+                  ></span>
+                </div>
+              </div>
+            </router-link>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -125,5 +156,35 @@ const reco_solution = props.recoSolution
   background-color: #f6f6f6;
   /* padding: 15px; */
   border-radius: 4px;
+}
+
+.solutions-editeurs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.solution-editeur {
+  background-color: white;
+  border-bottom: 4px solid rgb(53, 88, 162);
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.solution-editeur:hover {
+  background-color: #e9e9e9;
+}
+
+.solution-editeur .fr-icon-arrow-right-line {
+  color: rgb(53, 88, 162);
+}
+
+.icon-green {
+  color: #27a658;
+}
+
+.icon-red {
+  color: #ff292f;
 }
 </style>

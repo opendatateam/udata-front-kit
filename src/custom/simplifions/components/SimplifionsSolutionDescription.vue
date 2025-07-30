@@ -11,7 +11,10 @@
         </div>
 
         <p class="fr-text--lead">
-          {{ solution.Description_courte }}
+          <span v-if="solution.Description_courte">
+            {{ solution.Description_courte }}
+          </span>
+          <span v-else>⚠ Description non renseignée</span>
         </p>
 
         <SimplifionsTags
@@ -23,33 +26,26 @@
 
         <ul class="fr-my-4w">
           <li>
-            <strong>Fournisseur :</strong>
-            <span v-if="solution.operateur_nom_long"
-              >{{ solution.operateur_nom_long }} | </span
-            >{{ solution.operateur_nom }}
+            <strong>Fournisseur : </strong>
+            <span v-if="solution.operateur_nom_long || solution.operateur_nom">
+              <span v-if="solution.operateur_nom_long">
+                {{ solution.operateur_nom_long }} |
+              </span>
+              {{ solution.operateur_nom }}
+            </span>
+            <span v-else>Non renseigné</span>
           </li>
           <li>
             <strong>Type de solution :</strong>
-            {{ solution.types_de_solution.join(' ou ') }}
-          </li>
-          <li><strong>Prix :</strong> {{ solution.Prix_ }}</li>
-          <li>
-            <strong>Moyens requis pour la mise en oeuvre :</strong>
-            <TagComponent
-              v-for="t in tags_budget"
-              :key="`${t.type}-${t.id}`"
-              :tag="t"
-              class="inline-tag"
-            />
+            {{
+              solution.types_de_solution?.length
+                ? solution.types_de_solution.join(' ou ')
+                : 'Non renseigné'
+            }}
           </li>
           <li>
-            <strong>Niveau de simplification :</strong>
-            <TagComponent
-              v-for="t in tags_niveau_simplification"
-              :key="`${t.type}-${t.id}`"
-              :tag="t"
-              class="inline-tag"
-            />
+            <strong>Prix :</strong>
+            {{ solution.Prix_ ? solution.Prix_ : 'Non renseigné' }}
           </li>
         </ul>
       </div>
@@ -64,7 +60,7 @@
             Sommaire
           </h2>
           <ol>
-            <li>
+            <li v-if="solution.Description_longue">
               <a
                 id="summary-link-1"
                 href="#possibilites-simplification"
@@ -72,7 +68,7 @@
                 >Possibilités de simplification</a
               >
             </li>
-            <li>
+            <li v-if="relatedCasUsages.length">
               <a
                 id="summary-link-1"
                 href="#cas-usages-simplifiables"
@@ -80,7 +76,7 @@
                 >Cas d'usages simplifiables</a
               >
             </li>
-            <li>
+            <li v-if="usefulDataApi.length">
               <a
                 id="summary-link-2"
                 href="#donnees-api-utilisees"
@@ -90,9 +86,9 @@
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
-          <p class="subtitle">
-            Contenu rédigé par :
-            <span v-if="topic.organization" style="font-weight: normal">
+          <p class="fr-text--sm">
+            <span class="subtitle">Contenu rédigé par :</span>
+            <span v-if="topic.organization">
               <a :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"
@@ -100,14 +96,14 @@
               </a>
             </span>
             <br />
-            <span style="font-weight: normal">
+            <span>
               le
               <time :datetime="topic.created_at"
                 >{{ formatDate(topic.created_at) }}.</time
               >
             </span>
             <br />
-            <span class="fr-text--xs" style="font-weight: normal"
+            <span class="fr-text--xs"
               >Modifié le
               <time :datetime="topic.last_modified"
                 >{{ formatDate(topic.last_modified) }}.</time
@@ -119,7 +115,7 @@
     </div>
     <hr v-if="!solution.Image_principale" class="fr-hr fr-my-2w" />
     <figure
-      v-if="solution.Image_principale && solution.Image_principale.length > 0"
+      v-if="solution.Image_principale?.length"
       aria-label="© Légende de l'image"
       role="group"
       class="fr-content-media"
@@ -137,38 +133,45 @@
     </figure>
 
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
-      <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
-        Possibilités de simplification :
-      </h2>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(solution.Description_longue)"></p>
-      <p>
-        <strong>
-          <span
-            aria-hidden="true"
-            style="color: #27a658"
-            class="fr-icon-success-fill"
-          ></span>
-          Cette solution permet :
-        </strong>
-      </p>
+      <div v-if="solution.Description_longue">
+        <h2
+          id="possibilites-simplification"
+          class="colored-title fr-h2 fr-my-5w"
+        >
+          Possibilités de simplification :
+        </h2>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(solution.Description_longue)"></p>
+      </div>
 
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
+      <div v-if="solution.Cette_solution_permet_">
+        <p>
+          <strong>
+            <span
+              aria-hidden="true"
+              class="fr-icon-success-fill icon-green"
+            ></span>
+            Cette solution permet :
+          </strong>
+        </p>
 
-      <p>
-        <strong>
-          <span
-            aria-hidden="true"
-            style="color: #ff292f"
-            class="fr-icon-error-fill"
-          ></span>
-          Cette solution ne permet pas :
-        </strong>
-      </p>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
-      <p>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
+      </div>
+
+      <div v-if="solution.Cette_solution_ne_permet_pas_">
+        <p>
+          <strong>
+            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
+            Cette solution ne permet pas :
+          </strong>
+        </p>
+
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
+      </div>
+
+      <p v-if="solution.URL_Consulter_la_solution_">
         <a
           rel="noopener noreferrer"
           :href="solution.URL_Consulter_la_solution_"
@@ -177,13 +180,14 @@
           Consulter le site de la solution
         </a>
       </p>
+      <p v-else>⚠ Pas d'url disponible pour consulter cette solution.</p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
       Cas d'usages simplifiables
     </h2>
     <div
-      v-if="relatedCasUsages.length > 0"
+      v-if="relatedCasUsages.length"
       class="fr-grid-row fr-grid-row--gutters"
     >
       <div
@@ -218,23 +222,26 @@
       Aucun cas d'usage ne référence cette solution pour le moment.
     </p>
 
-    <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w fr-mb-0">
-      Données et API utilisées
-    </h2>
+    <div v-if="usefulDataApi.length">
+      <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w">
+        Données et API utilisées
+      </h2>
+
+      <SimplifionsDataApiList :data-api-list="usefulDataApi" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
-import { useTagsByRef } from '@/utils/tags'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
+import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
 import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -242,13 +249,6 @@ const props = defineProps<{
   topic: Topic
   pageKey: string
 }>()
-
-const topicRef = ref(props.topic)
-const tags = useTagsByRef(props.pageKey, topicRef)
-const tags_niveau_simplification = tags.value.filter(
-  (t) => t.type === 'types-de-simplification'
-)
-const tags_budget = tags.value.filter((t) => t.type === 'budget')
 
 const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
   'simplifions-solutions'
@@ -287,6 +287,15 @@ const fetchRelatedCasUsages = async () => {
   }
 }
 
+const usefulDataApi = computed(() => {
+  if (!solution?.API_et_data_disponibles) {
+    return []
+  }
+  return solution.API_et_data_disponibles.filter(
+    (apidOrData) => apidOrData.UID_data_gouv
+  )
+})
+
 // Fetch related cas d'usages when component mounts
 onMounted(() => {
   fetchRelatedCasUsages()
@@ -322,5 +331,13 @@ h3 {
   margin-right: 0.5em;
   margin-left: 0.5em;
   padding: 0 0.5rem 0 0.5rem;
+}
+
+.icon-green {
+  color: #27a658;
+}
+
+.icon-red {
+  color: #ff292f;
 }
 </style>

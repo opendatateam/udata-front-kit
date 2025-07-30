@@ -24,7 +24,7 @@
             Sommaire
           </h2>
           <ol>
-            <li>
+            <li v-if="casUsage.Contexte || casUsage.Cadre_juridique">
               <a
                 id="summary-link-1"
                 href="#contexte-et-cadre-juridique"
@@ -32,14 +32,14 @@
                 >Contexte et cadre juridique</a
               >
             </li>
-            <li>
+            <li v-if="casUsage.reco_solutions?.length">
               <a
                 id="summary-link-2"
                 href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
-              <ol>
+              <ol v-if="casUsage.reco_solutions?.length">
                 <li
                   v-for="(group, index) in grouped_reco_solutions"
                   :key="group.title"
@@ -54,9 +54,9 @@
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
-          <p class="subtitle">
-            Contenu rédigé par :
-            <span v-if="topic.organization" style="font-weight: normal">
+          <p class="fr-text--sm">
+            <span class="subtitle">Contenu rédigé par :</span>
+            <span v-if="topic.organization">
               <a :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"
@@ -64,14 +64,14 @@
               </a>
             </span>
             <br />
-            <span style="font-weight: normal">
+            <span>
               le
               <time :datetime="topic.created_at"
                 >{{ formatDate(topic.created_at) }}.</time
               >
             </span>
             <br />
-            <span class="fr-text--xs" style="font-weight: normal"
+            <span class="fr-text--xs"
               >Modifié le
               <time :datetime="topic.last_modified"
                 >{{ formatDate(topic.last_modified) }}.</time
@@ -82,66 +82,68 @@
       </div>
     </div>
 
-    <div class="fr-col-12 fr-col-md-8">
+    <div
+      v-if="casUsage.Contexte || casUsage.Cadre_juridique"
+      class="fr-col-12 fr-col-md-8"
+    >
       <h2 id="contexte-et-cadre-juridique" class="h2-cas-usage fr-h2 fr-my-5w">
         Contexte et cadre juridique
       </h2>
 
-      <h3 class="fr-h6">
-        <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
-        Contexte
-      </h3>
+      <div v-if="casUsage.Contexte">
+        <h3 class="fr-h6">
+          <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
+          Contexte
+        </h3>
 
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(casUsage.Contexte)"></p>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(casUsage.Contexte)"></p>
+      </div>
 
-      <h3 class="fr-h6">
-        <span aria-hidden="true" class="fr-icon-newspaper-fill"></span>
-        Cadre juridique
-      </h3>
+      <div v-if="casUsage.Cadre_juridique">
+        <h3 class="fr-h6">
+          <span aria-hidden="true" class="fr-icon-newspaper-fill"></span>
+          Cadre juridique
+        </h3>
 
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
-    </div>
-
-    <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
-      Solutions disponibles
-    </h2>
-
-    <div
-      v-for="(group, index) in grouped_reco_solutions"
-      :key="group.title"
-      class="fr-mb-4w"
-    >
-      <h3 :id="`reco-group-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
-        {{ index + 1 }}. {{ group.title }}
-      </h3>
-
-      <div
-        v-for="reco_solution in group.reco_solutions"
-        :key="reco_solution.Nom_de_la_solution_publique"
-      >
-        <SimplifionsRecoSolutions :reco-solution="reco_solution" />
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
       </div>
     </div>
 
-    <h2 class="h2--cas-usage fr-h2 fr-mt-5w fr-mb-0">
-      ➡️ Utiliser les jeux de données et API utiles
-    </h2>
+    <div v-if="casUsage.reco_solutions?.length">
+      <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
+        Solutions disponibles
+      </h2>
 
-    <ul class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none">
-      <li
-        v-for="apidOrData in casUsage.API_et_donnees_utiles"
-        :key="apidOrData.UID_data_gouv"
-        class="fr-col-12 fr-py-0 fr-mt-2w"
+      <div
+        v-for="(group, index) in grouped_reco_solutions"
+        :key="group.title"
+        class="fr-mb-4w"
       >
-        <SimplifionsDataApiCard
-          v-if="apidOrData.UID_data_gouv"
-          :api-or-data="apidOrData"
-          :custom-description="customDescription(apidOrData.UID_data_gouv)"
-        />
-      </li>
-    </ul>
+        <h3 :id="`reco-group-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
+          {{ group.title }}
+        </h3>
+
+        <div
+          v-for="reco_solution in group.reco_solutions"
+          :key="reco_solution.Nom_de_la_solution_publique"
+        >
+          <SimplifionsRecoSolutions :reco-solution="reco_solution" />
+        </div>
+      </div>
+    </div>
+
+    <div v-if="usefulDataApi.length">
+      <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
+        Utiliser les jeux de données et API utiles
+      </h2>
+
+      <SimplifionsDataApiList
+        :data-api-list="usefulDataApi"
+        :custom-descriptions="customDescriptionsForDataApi"
+      />
+    </div>
   </div>
 </template>
 
@@ -153,6 +155,7 @@ import type {
   RecoSolution,
   SimplifionsCasUsagesExtras
 } from '../model/cas_usage'
+import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -166,6 +169,9 @@ const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
 ]
 
 const budget_group = (budget: Array<string>) => {
+  if (!budget) {
+    return ''
+  }
   if (budget.includes('Aucun développement, ni budget')) {
     return 'Aucun développement, ni budget'
   }
@@ -180,10 +186,6 @@ const customDescriptionsForDataApi =
     },
     {} as Record<string, string>
   )
-
-const customDescription = (uid: string) => {
-  return customDescriptionsForDataApi[uid] || null
-}
 
 // Affichage des parties reco solutions, dans l'ordre voulu
 
@@ -214,6 +216,15 @@ const grouped_reco_solutions = casUsage.reco_solutions
       b: { title: string; reco_solutions: RecoSolution[] }
     ) => a.title.localeCompare(b.title)
   )
+
+const usefulDataApi = computed(() => {
+  if (!casUsage.API_et_donnees_utiles) {
+    return []
+  }
+  return casUsage.API_et_donnees_utiles.filter(
+    (apidOrData) => apidOrData.UID_data_gouv
+  )
+})
 </script>
 
 <style scoped>
@@ -226,9 +237,5 @@ const grouped_reco_solutions = casUsage.reco_solutions
 
 .h3-cas-usage {
   color: #616161;
-}
-
-ul.list-none {
-  list-style: none;
 }
 </style>

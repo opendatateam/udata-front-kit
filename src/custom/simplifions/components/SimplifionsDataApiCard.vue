@@ -58,7 +58,7 @@ import type { SimplifionsDataOrApi } from '../model/cas_usage'
 
 const props = defineProps<{
   apiOrData: SimplifionsDataOrApi
-  customDescription: string | null
+  customDescription?: string | null
 }>()
 
 const entityName = props.apiOrData.Type == 'API' ? 'dataservices' : 'datasets'
@@ -105,6 +105,11 @@ a.api-or-dataset-card {
 a.api-or-dataset-card:hover .api-or-dataset-description,
 a.api-or-dataset-card:hover .api-or-dataset-header {
   background-color: var(--hover);
+}
+
+.api-or-dataset-header,
+.api-or-dataset-description {
+  background-color: white;
 }
 
 .api-or-dataset-description {
