@@ -85,7 +85,7 @@ const onSelectDataset = (dataset: string | number) => {
     selectedDataset.value = datasetsIdsTyped[selectedDataPack.value][dataset]
     // FIXME: use DatagouvfrAPI
     fetch(
-      config.datagouvfr.base_url +
+      import.meta.env.VITE_DATAGOUV_BASE_URL +
         '/api/1/datasets/' +
         selectedDataset.value[env]
     )
