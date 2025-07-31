@@ -2,12 +2,6 @@
 
 site_id: hackathon
 
-datagouvfr:
-  # data.gouv.fr base URL
-  base_url: https://www.data.gouv.fr
-  # oauth settings
-  oauth_client_id: 673cbedb47b01e3f79eea45c
-
 robots:
   disallow:
   sitemap:
