@@ -57,6 +57,9 @@ npm run dev
 
 ```sh
 npm run build
+
+# Pour build avec les variables d'environnement du mode demo
+npm run build -- --mode demo
 ```
 
 #### Tests unitaires via [Vitest](https://vitest.dev/)
