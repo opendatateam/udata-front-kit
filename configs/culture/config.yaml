@@ -32,11 +32,64 @@ website:
       width: '40px'
       height: '219px'
   homepage:
-    title: coucou
-    subtitle:
+    title: 'Les données ouvertes de la Culture '
+    subtitle: 'culture.data.gouv.fr vise à référencer, héberger et diffuser les données publiques relatives à la culture en France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     sections:
-      - title:
+      - title: Données par thématiques
         content:
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - name: 'Les bases de données patrimoniales du ministère'
+              description: 'Découvrez la liste des bases de référence du ministère'
+              url: 'datasets?tags=base-patrimoniales'
+              image_url: '/culture/assets/patrimoine.png'
+            - name: "Données du cinéma et de l'audiovisuel"
+              description: "Découvrez la liste des données du domaine de l'audiovisuel"
+              url: 'datasets?tags=audiovisuel'
+              image_url: '/culture/assets/audiovisuel.png'
+            - name: 'Données relatives aux musées'
+              description: 'Découvrez la liste des données issues des musées français'
+              url: 'datasets?tags=musee'
+              image_url: '/culture/assets/musee.png'
+        sub_section_tiles:
+        sub_section_buttons:
+      - title: Jeux de données les plus récents
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - name: "DGCA - Mission encadrement et aides générales de l'activité des entreprises du spectacle vivant et des arts visuels"
+              description: 'Vous pouvez vérifier le statut de votre déclaration dans l’onglet « tableau » de cette base de données mise à jour quotidiennement.'
+              url: 'datasets/declarations-des-entrepreneurs-de-spectacles-vivants-espace-licence-hors-de-france'
+
+            - name: 'Manuscrits de pièces de théâtre du 19e siècle conservés aux Archives nationales'
+              description: "Les Archives nationales conservent une collection de plus de 28 000 manuscrits de pièces de théâtre soumis au bureau de la censure théâtrale (ministère de l'Intérieur) au 19e siècle."
+              url: 'datasets/manuscrits-de-pieces-de-theatre-du-19e-siecle-conserves-aux-archives-nationales'
+
+            - name: 'Données du système de déclaration de billetterie du spectacle vivant Sibil'
+              description: 'Le dispositif SIBIL (ou Système d’Information BILletterie) a été conçu en 2018 par la direction générale de la création artistique du ministère de la Culture afin de faciliter la transmission des données de billetterie des entrepreneurs du spectacle vivant.'
+              url: 'datasets/donnees-du-systeme-de-declaration-de-billetterie-du-spectacle-vivant-sibil'
+
+            - name: 'Compar:IA'
+              description: 'Compar:IA est un comparateur d''IA conversationnelles (une "chatbot arena") développé au sein du Ministère de la Culture.'
+              url: 'datasets/compar-ia'
+
+            - name: 'Données enquête utilisation des archives recherche universitaire'
+              description: 'Cette base de données a été réalisée dans le cadre de l’enquête sur la pratique des archives par le public des étudiants et des enseignants-chercheurs, menée entre 2023 et 2024 par le service interministériel des Archives de France (SIAF) et qui a recueilli 830 réponses.'
+              url: 'datasets/donnees-enquete-utilisation-des-archives-recherche-universitaire'
+
+            - name: 'Journées européennes du patrimoine 2024'
+              description: 'Pour sa 41e édition, les Journées européennes du patrimoine seront organisées les vendredi 20, samedi 21 et dimanche 22 septembre 2024 et auront pour thèmes « le patrimoine des itinéraires, des réseaux et des connexions et le patrimoine maritime ».'
+              url: 'datasets/journees-europeennes-du-patrimoine-2024'
+
+        sub_section_tiles:
+        sub_section_buttons:
+      - title: Actualités
+        content: >-
+          [En savoir plus sur la démarche](/demarche)
         sub_section_datasets:
         sub_section_cards:
         sub_section_tiles:
