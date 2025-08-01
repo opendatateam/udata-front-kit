@@ -15,6 +15,8 @@ import { fromMarkdown } from './utils'
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
 
+console.info(import.meta.env)
+
 const skipLinks: SkipLinksProps['links'] = [
   {
     id: 'main-content',

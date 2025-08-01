@@ -1,13 +1,11 @@
-import config from '@/config'
-
 import OauthAPI from './api/OauthAPI'
 
 const api = new OauthAPI()
 
 export default class AuthService {
   constructor() {
-    this.clientId = config.datagouvfr.oauth_client_id
-    this.baseURL = config.datagouvfr.base_url
+    this.clientId = import.meta.env.VITE_DATAGOUV_OAUTH_CLIENT_ID
+    this.baseURL = import.meta.env.VITE_DATAGOUV_BASE_URL
     this.redirectURI = `${window.location.origin}/login/callback`
   }
 

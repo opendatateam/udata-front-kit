@@ -2,12 +2,6 @@
 
 site_id: meteodatagouvfr
 
-datagouvfr:
-  # data.gouv.fr base URL
-  base_url: https://www.data.gouv.fr
-  # oauth settings
-  oauth_client_id: 6709259c1e92c988c47d2f3e
-
 robots:
   disallow:
   sitemap:

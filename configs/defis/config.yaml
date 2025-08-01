@@ -2,12 +2,6 @@
 
 site_id: defis
 
-datagouvfr:
-  # data.gouv.fr base URL
-  base_url: https://www.data.gouv.fr
-  # oauth settings
-  oauth_client_id: 670924ba96082fcc26ee3898
-
 robots:
   disallow:
   sitemap:

@@ -31,6 +31,20 @@ npm clean-install
 npm run prepare
 ```
 
+### Variables d'environnement
+
+Pour faire tourner le site de votre verticale en local, créez un fichier `.env.development.local` à la racine du projet pour y renseigner votre VITE_SITE_ID. Par exemple pour faire tourner la verticale "simplifions", je met :
+
+```sh
+VITE_SITE_ID=simplifions
+
+# Vous pouvez aussi y écraser le base_url et oauth_client_id si besoin
+VITE_DATAGOUV_BASE_URL=demo.data.gouv.fr
+VITE_DATAGOUV_OAUTH_CLIENT_ID=676452675336109a436f8f73
+```
+
+Pour plus de renseignements sur le fonctionnement des fichiers `.env` : https://vite.dev/guide/env-and-mode
+
 ### Commandes de référence
 
 #### Compilation et hot-reload pour le développement
@@ -43,6 +57,9 @@ npm run dev
 
 ```sh
 npm run build
+
+# Pour build avec les variables d'environnement du mode demo
+npm run build -- --mode demo
 ```
 
 #### Tests unitaires via [Vitest](https://vitest.dev/)
@@ -153,6 +170,7 @@ Le déploiement des verticales thématiques en preprod et en production peut s'e
 ```
 
 **Paramètres :**
+
 - `<environment>` : Environnement cible (`prod` ou `demo`/`preprod` suivant la verticale)
 - `<site>` : Nom du site
   - **Sites disponibles :**
@@ -165,6 +183,7 @@ Le déploiement des verticales thématiques en preprod et en production peut s'e
 - `<version_type>` : Type de version (`major`, `minor`, ou `patch`)
 
 **Exemple :**
+
 ```
 [prod:ecologie:minor] nouvelle fonctionnalité incroyable
 ```
