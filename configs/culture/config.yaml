@@ -35,58 +35,90 @@ website:
     title: 'Les données ouvertes de la Culture '
     subtitle: 'culture.data.gouv.fr vise à référencer, héberger et diffuser les données publiques relatives à la culture en France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     sections:
-      - title: Données par thématiques
+      - title: Découvrez les données phares
+        id: section_top_data
         content:
         sub_section_datasets:
         sub_section_cards:
           title:
           cards:
-            - name: 'Les bases de données patrimoniales du ministère'
-              description: 'Découvrez la liste des bases de référence du ministère'
-              url: 'datasets?tags=base-patrimoniales'
+            - name: '🔥 Jeux les plus consultés'
+              description: 'Découvrez les jeux les plus populaires sur la plateforme, en fonction du nombre de vues.'
+              url: 'datasets?sort=-views'
               image_url: '/culture/assets/patrimoine.png'
-            - name: "Données du cinéma et de l'audiovisuel"
-              description: "Découvrez la liste des données du domaine de l'audiovisuel"
-              url: 'datasets?tags=audiovisuel'
+            - name: '♻️ Jeux les plus réutilisés'
+              description: 'Explorez les jeux de données les plus réutilisés par la communauté.'
+              url: 'datasets?sort=-reuses'
               image_url: '/culture/assets/audiovisuel.png'
-            - name: 'Données relatives aux musées'
-              description: 'Découvrez la liste des données issues des musées français'
-              url: 'datasets?tags=musee'
+            - name: '🆕 Nouveaux jeux publiés'
+              description: 'Parcourez les nouveaux jeux de données publiés sur la plateforme.'
+              url: 'datasets?sort=-created_at'
               image_url: '/culture/assets/musee.png'
         sub_section_tiles:
         sub_section_buttons:
-      - title: Jeux de données les plus récents
+
+      - title: 🧭 Choisissez votre domaine culturel
+        id: section_thematiques
+        content: |
+          <ul class="fr-tags-group">
+            <li><a class="fr-tag" href="/datasets?tags=archives" aria-label="Dossier d’archives">🗃️ Archives</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=architecture" aria-label="Architecture et construction">🏗️ Architecture</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=arts-plastiques" aria-label="Arts plastiques">🎨 Arts plastiques</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=cinema" aria-label="Cinéma">🎬 Cinéma</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=spectacle-vivant" aria-label="Spectacle vivant">🎭 Spectacle vivant</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=livre" aria-label="Livre et lecture">📚 Livre & lecture</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=musique" aria-label="Musique">🎵 Musique</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=presse" aria-label="Presse écrite">📰 Presse écrite</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=musees" aria-label="Musées">🖼️ Musées</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=langue" aria-label="Langue et communication">💬 Langue</a></li>
+            <li><a class="fr-tag" href="/datasets?tags=industries-culturelles" aria-label="Industries culturelles et créatives">💡 Industries culturelles</a></li>
+          </ul>
+
+      - title: ''
+        content: >-
+          <section class="fr-container fr-my-5w" id="section_reutilisation">
+            <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+              <div class="fr-col-12 fr-col-md-6">
+                <img src="/culture/assets/GeoDataPatrimoine.png" alt="Réutilisation : Cartes IGN pour les JEP" class="fr-responsive-img" />
+              </div>
+              <div class="fr-col-12 fr-col-md-6">
+                <h3 class="fr-h5 fr-mb-2w">Réutilisation phare du mois</h3>
+                <h4 class="fr-h6 fr-mb-2w">Journées Européennes du Patrimoine</h4>
+                <p class="fr-text--sm fr-mb-2w">
+                  <strong>Cartes.gouv / IGN</strong><br>
+                  À l’occasion des Journées Européennes du Patrimoine, découvrez les lieux avec <a href="https://cartes.gouv.fr" target="_blank">cartes.gouv.fr</a>.
+                </p>
+                <p class="fr-text--sm fr-mb-3w">
+                  Réalisé à partir des <a href="https://www.data.gouv.fr/fr/datasets/journees-europeennes-du-patrimoine-2024" target="_blank">données ouvertes du ministère</a>.
+                </p>
+                <a href="https://cartes.gouv.fr" class="fr-btn" target="_blank" rel="noopener">
+                  Découvrez l’application IGN - Cartes
+                </a>
+              </div>
+            </div>
+
+      - title: Focus & discussions
+        id: section_focus_discussion
         content:
         sub_section_datasets:
         sub_section_cards:
           title:
           cards:
-            - name: "DGCA - Mission encadrement et aides générales de l'activité des entreprises du spectacle vivant et des arts visuels"
-              description: 'Vous pouvez vérifier le statut de votre déclaration dans l’onglet « tableau » de cette base de données mise à jour quotidiennement.'
-              url: 'datasets/declarations-des-entrepreneurs-de-spectacles-vivants-espace-licence-hors-de-france'
-
-            - name: 'Manuscrits de pièces de théâtre du 19e siècle conservés aux Archives nationales'
-              description: "Les Archives nationales conservent une collection de plus de 28 000 manuscrits de pièces de théâtre soumis au bureau de la censure théâtrale (ministère de l'Intérieur) au 19e siècle."
-              url: 'datasets/manuscrits-de-pieces-de-theatre-du-19e-siecle-conserves-aux-archives-nationales'
-
-            - name: 'Données du système de déclaration de billetterie du spectacle vivant Sibil'
-              description: 'Le dispositif SIBIL (ou Système d’Information BILletterie) a été conçu en 2018 par la direction générale de la création artistique du ministère de la Culture afin de faciliter la transmission des données de billetterie des entrepreneurs du spectacle vivant.'
-              url: 'datasets/donnees-du-systeme-de-declaration-de-billetterie-du-spectacle-vivant-sibil'
-
-            - name: 'Compar:IA'
-              description: 'Compar:IA est un comparateur d''IA conversationnelles (une "chatbot arena") développé au sein du Ministère de la Culture.'
-              url: 'datasets/compar-ia'
-
-            - name: 'Données enquête utilisation des archives recherche universitaire'
-              description: 'Cette base de données a été réalisée dans le cadre de l’enquête sur la pratique des archives par le public des étudiants et des enseignants-chercheurs, menée entre 2023 et 2024 par le service interministériel des Archives de France (SIAF) et qui a recueilli 830 réponses.'
-              url: 'datasets/donnees-enquete-utilisation-des-archives-recherche-universitaire'
-
-            - name: 'Journées européennes du patrimoine 2024'
-              description: 'Pour sa 41e édition, les Journées européennes du patrimoine seront organisées les vendredi 20, samedi 21 et dimanche 22 septembre 2024 et auront pour thèmes « le patrimoine des itinéraires, des réseaux et des connexions et le patrimoine maritime ».'
-              url: 'datasets/journees-europeennes-du-patrimoine-2024'
-
+            - name: '✨ Jeu du mois'
+              description: 'Chaque mois, découvrez un jeu de données mis à l’honneur pour sa pertinence ou son impact.'
+              url: '/datasets/jeu-du-mois'
+            #              image_url: '/culture/assets/jeu_mois.png'
+            - name: '🧽 Données de référence'
+              description: 'Explorez les bases de données structurantes du ministère de la Culture.'
+              url: 'datasets?tag=base-reference'
+            #              image_url: '/culture/assets/bases_reference.png'
+            - name: '💬 Discussions en cours'
+              description: 'Participez aux échanges autour des données culturelles sur le forum.'
+              url: 'https://forum.data.gouv.fr/tag/culture'
+        #              image_url: '/culture/assets/forum.png'
         sub_section_tiles:
         sub_section_buttons:
+
       - title: Actualités
         content: >-
           [En savoir plus sur la démarche](/demarche)
@@ -101,13 +133,13 @@ website:
     link:
   header_search:
     display: true
-    placeholder: Rechercher...
+    placeholder: Rechercher un jeu de données culture
     dropdown:
       - text: Rechercher {} dans les <strong>jeux de données</strong>
         route: datasets
   search_bar:
     display: true
-    placeholder: Rechercher une donnée environnementale
+    placeholder: Rechercher un jeu de données culture
   secondary_search:
     display: false
     name:
@@ -116,8 +148,8 @@ website:
   footer_external_links:
     - label: 'culture.gouv.fr'
       href: 'https://www.culture.gouv.fr/'
-    - label: 'Portail des API Météo-France'
-      href: 'https://portail-api.meteofrance.fr/'
+    #    - label: 'Portail des API Météo-France'
+    #      href: 'https://portail-api.meteofrance.fr/'
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
   footer_mandatory_links:
