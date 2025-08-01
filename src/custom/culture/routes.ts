@@ -9,8 +9,8 @@ const topicConf = {
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    name: 'home',
+    path: '/home-test', // à mettre à '/' pour utiliser en homepage
+    name: 'home-test', // à mettre à 'home' pour utiliser en hompage
     meta: {
       title: 'Accueil'
     },
