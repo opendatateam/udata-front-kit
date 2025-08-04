@@ -16,7 +16,7 @@
     "test:e2e": "node scripts/cypress-e2e.mjs",
     "test:e2e:open": "node scripts/cypress-e2e.mjs --open",
     "test:e2e:for_production_build": "node scripts/cypress-e2e.mjs --preview",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "hint": "tsc --project tsconfig.vitest.json",
     "format": "prettier --write src/",
     "prepare": "husky",
