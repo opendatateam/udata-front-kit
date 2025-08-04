@@ -274,7 +274,7 @@ watch(
         <div v-else>
           <div class="topic__header fr-mb-4v">
             <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-            <ul class="fr-badges-group" v-if="tags.length > 0">
+            <ul v-if="tags.length > 0" class="fr-badges-group">
               <li v-for="t in tags" :key="`${t.type}-${t.id}`">
                 <TagComponent :tag="t" />
               </li>
