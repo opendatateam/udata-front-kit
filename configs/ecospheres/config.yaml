@@ -212,9 +212,15 @@ definitions: &definitions
 #     banner:                       # banner for the list page (optionnal)
 #       title: {string}             # title for the banner
 #       content: {string}           # content for the banner
-#     discussions:
-#       display: {bool}             # display discussions on detail page
-#       create: {bool}              # create discussions on detail page
+#     resources_tabs:               # resources tabs at the bottom of a detail page
+#       discussions:
+#         display: {bool}           # display discussions tab on detail page
+#         create: {bool}            # create discussions tab on detail page
+#       datasets:
+#         display: {bool}           # display datasets tab on detail page
+#       reuses:
+#         display: {bool}           # display reuses tab on detail page
+#     editable: {bool}              # whether the page is editable when connected
 #     filters:                      # list of filters for this {page_id}
 #       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}              # id of the filter
