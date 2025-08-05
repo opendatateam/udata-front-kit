@@ -283,4 +283,10 @@ const usefulDataApi = computed(() => {
   background-color: #f1f1f1;
   padding: 1rem;
 }
+
+:deep(blockquote) {
+  border-left: 4px solid var(--border-default-grey);
+  margin-left: 2rem;
+  padding-left: 2rem;
+}
 </style>
