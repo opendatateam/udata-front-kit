@@ -154,7 +154,7 @@
     </div>
 
     <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
-      Utiliser les jeux de données et API utiles
+      Les jeux de données et API utiles
     </h2>
     <SimplifionsDataApiList
       v-if="usefulDataApi.length"
