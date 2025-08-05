@@ -144,11 +144,14 @@
           Possibilités de simplification :
         </h2>
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-if="solution.Description_longue" v-html="fromMarkdown(solution.Description_longue)"></p>
-         <p v-else class="fr-text--sm"><i>Aucun contenu actuellement.</i></p>
+        <p
+          v-if="solution.Description_longue"
+          v-html="fromMarkdown(solution.Description_longue)"
+        ></p>
+        <p v-else class="fr-text--sm"><i>Aucun contenu actuellement.</i></p>
       </div>
 
-      <div >
+      <div>
         <p>
           <strong>
             <span
@@ -160,11 +163,17 @@
         </p>
 
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-if="solution.Cette_solution_permet_" v-html="fromMarkdown(solution.Cette_solution_permet_)"></p>
-        <p v-else class="fr-text--sm"><i>Aucun contenu actuellement.</i> <a href="#modification-contenu">Proposer un contenu</a>.</p>
+        <p
+          v-if="solution.Cette_solution_permet_"
+          v-html="fromMarkdown(solution.Cette_solution_permet_)"
+        ></p>
+        <p v-else class="fr-text--sm">
+          <i>Aucun contenu actuellement.</i>
+          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        </p>
       </div>
 
-      <div >
+      <div>
         <p>
           <strong>
             <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
@@ -173,8 +182,14 @@
         </p>
 
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-if="solution.Cette_solution_ne_permet_pas_" v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"></p>
-         <p v-else class="fr-text--sm"><i>Aucun contenu actuellement.</i> <a href="#modification-contenu">Proposer un contenu</a>.</p>
+        <p
+          v-if="solution.Cette_solution_ne_permet_pas_"
+          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"
+        ></p>
+        <p v-else class="fr-text--sm">
+          <i>Aucun contenu actuellement.</i>
+          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        </p>
       </div>
 
       <p v-if="solution.URL_Consulter_la_solution_">
@@ -187,7 +202,9 @@
           Consulter le site de la solution
         </a>
       </p>
-       <p v-else class="fr-text--sm"><i>Aucun lien vers un site officiel actuellement.</i></p>
+      <p v-else class="fr-text--sm">
+        <i>Aucun lien vers un site officiel actuellement.</i>
+      </p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
@@ -226,29 +243,40 @@
     </div>
 
     <p v-else class="fr-text--sm">
-      <i>Aucun cas d'usage n'est référencé pour cette solution actuellement.</i> <a href="#modification-contenu">Proposer des cas d'usages</a>
+      <i>Aucun cas d'usage n'est référencé pour cette solution actuellement.</i>
+      <a href="#modification-contenu">✍️ Proposer des cas d'usages</a>
     </p>
 
-  
     <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w">
       Données et API utilisées
     </h2>
-    <div v-if="usefulDataApi.length">
-        <SimplifionsDataApiList :data-api-list="usefulDataApi" />
-    </div>
+    <SimplifionsDataApiList
+      :data-api-list="usefulDataApi"
+      v-if="usefulDataApi.length"
+    />
     <p v-else class="fr-text--sm">
-    <i>Aucun jeu de données ou API référencé pour cette solution actuellement.</i> <a href="#modification-contenu">Proposer un contenu</a>.
+      <i
+        >Aucun jeu de données ou API référencé pour cette solution
+        actuellement.</i
+      >
+      <a href="#modification-contenu">✍️ Proposer un contenu</a>.
     </p>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
-      <h2  class="fr-h6">✍️ Proposer une modification du contenu</h2>
+      <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
-      Pour proposer une modification du contenu de cette solution, vous pouvez contacter l'équipe via l'espace "Discussions" ci-dessous ou bien compléter 
-      <a href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions" rel="noopener noreferer" target="_blank" >ce formulaire</a>.
+        Pour proposer une modification du contenu de cette solution, vous pouvez
+        contacter l'équipe via l'espace "Discussions" ci-dessous ou bien
+        compléter
+        <a
+          href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
+          rel="noopener noreferer"
+          target="_blank"
+          >ce formulaire</a
+        >.
       </p>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
