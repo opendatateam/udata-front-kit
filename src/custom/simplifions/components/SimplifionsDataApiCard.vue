@@ -1,5 +1,10 @@
 <template>
-  <a href="datagouvLink" :class="`api-or-dataset-card ${entityName}-card`">
+  <a
+    href="datagouvLink"
+    :class="`api-or-dataset-card ${entityName}-card ${
+      customDescription ? 'with-description' : ''
+    }`"
+  >
     <div class="api-or-dataset-header">
       <div
         v-if="resourceNotFound || !datagouvResource"
@@ -39,12 +44,10 @@
 
     <div
       v-if="customDescription && datagouvResource"
-      class="api-or-dataset-description fr-pt-2w fr-px-2w"
+      class="api-or-dataset-description fr-pt-2w fr-pl-4w fr-pr-2w"
     >
-      <div class="fr-highlight fr-ml-0">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-html="fromMarkdown(customDescription)"></p>
-      </div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <p v-html="fromMarkdown(customDescription)"></p>
     </div>
   </a>
 </template>
@@ -91,6 +94,11 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.api-or-dataset-card.with-description {
+  display: block;
+  border-left: 4px solid var(--border-default-blue-france);
+}
+
 .no-margins {
   margin: 0 !important;
 }
