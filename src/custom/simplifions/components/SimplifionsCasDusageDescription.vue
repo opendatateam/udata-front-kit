@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable vue/no-v-html -->
   <div class="test_cas-d-usage-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
@@ -78,6 +79,9 @@
               >
             </span>
           </p>
+          <span>
+            <a href="#modification-contenu">✍️ Proposer une modification</a>
+          </span>
         </nav>
       </div>
     </div>
@@ -90,24 +94,37 @@
         Contexte et cadre juridique
       </h2>
 
-      <div v-if="casUsage.Contexte">
+      <div>
         <h3 class="fr-h6">
           <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
           Contexte
         </h3>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-html="fromMarkdown(casUsage.Contexte)"></p>
+        <p
+          v-if="casUsage.Contexte"
+          v-html="fromMarkdown(casUsage.Contexte)"
+        ></p>
+
+        <p v-else class="fr-text--sm">
+          <i>Aucun contenu actuellement.</i>
+          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        </p>
       </div>
 
-      <div v-if="casUsage.Cadre_juridique">
+      <div>
         <h3 class="fr-h6">
           <span aria-hidden="true" class="fr-icon-newspaper-fill"></span>
           Cadre juridique
         </h3>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
+        <p
+          v-if="casUsage.Cadre_juridique"
+          v-html="fromMarkdown(casUsage.Cadre_juridique)"
+        ></p>
+        <p v-else class="fr-text--sm">
+          <i>Aucun contenu actuellement.</i>
+          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        </p>
       </div>
     </div>
 
@@ -134,17 +151,38 @@
       </div>
     </div>
 
-    <div v-if="usefulDataApi.length">
-      <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
-        Utiliser les jeux de données et API utiles
-      </h2>
+    <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
+      Utiliser les jeux de données et API utiles
+    </h2>
+    <SimplifionsDataApiList
+      v-if="usefulDataApi.length"
+      :data-api-list="usefulDataApi"
+      :custom-descriptions="customDescriptionsForDataApi"
+    />
+    <p v-else class="fr-text--sm">
+      <i
+        >Aucun jeu de données ou API référencé pour cette solution
+        actuellement.</i
+      >
+      <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+    </p>
 
-      <SimplifionsDataApiList
-        :data-api-list="usefulDataApi"
-        :custom-descriptions="customDescriptionsForDataApi"
-      />
+    <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
+      <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
+      <p class="fr-mb-0">
+        Pour proposer une modification du contenu de cette solution, vous pouvez
+        contacter l'équipe via l'espace "Discussions" ci-dessous ou bien
+        compléter
+        <a
+          href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
+          rel="noopener noreferer"
+          target="_blank"
+          >ce formulaire</a
+        >.
+      </p>
     </div>
   </div>
+  <!-- eslint-enable vue/no-v-html -->
 </template>
 
 <script setup lang="ts">
@@ -237,5 +275,10 @@ const usefulDataApi = computed(() => {
 
 .h3-cas-usage {
   color: #616161;
+}
+
+.bloc-modifications {
+  background-color: #f1f1f1;
+  padding: 1rem;
 }
 </style>
