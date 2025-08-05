@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable vue/no-v-html -->
   <div class="solution-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
@@ -143,7 +144,6 @@
         >
           Possibilités de simplification :
         </h2>
-        <!-- eslint-disable-next-line vue/no-v-html -->
         <p
           v-if="solution.Description_longue"
           v-html="fromMarkdown(solution.Description_longue)"
@@ -162,7 +162,6 @@
           </strong>
         </p>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
         <p
           v-if="solution.Cette_solution_permet_"
           v-html="fromMarkdown(solution.Cette_solution_permet_)"
@@ -181,7 +180,6 @@
           </strong>
         </p>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
         <p
           v-if="solution.Cette_solution_ne_permet_pas_"
           v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"
@@ -251,8 +249,8 @@
       Données et API utilisées
     </h2>
     <SimplifionsDataApiList
-      :data-api-list="usefulDataApi"
       v-if="usefulDataApi.length"
+      :data-api-list="usefulDataApi"
     />
     <p v-else class="fr-text--sm">
       <i
@@ -277,6 +275,7 @@
       </p>
     </div>
   </div>
+  <!-- eslint-enable vue/no-v-html -->
 </template>
 
 <script setup lang="ts">

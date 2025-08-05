@@ -26,7 +26,7 @@ const props = defineProps<{
 }>()
 
 const sortedDataApiList = computed(() => {
-  return props.dataApiList.sort((a, b) => {
+  return [...props.dataApiList].sort((a, b) => {
     const aHasCustomDesc = !!props.customDescriptions?.[a.UID_data_gouv]
     const bHasCustomDesc = !!props.customDescriptions?.[b.UID_data_gouv]
 

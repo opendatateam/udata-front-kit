@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable vue/no-v-html -->
   <div class="test_cas-d-usage-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
@@ -99,11 +100,11 @@
           Contexte
         </h3>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
         <p
           v-if="casUsage.Contexte"
           v-html="fromMarkdown(casUsage.Contexte)"
         ></p>
+
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
           <a href="#modification-contenu">✍️ Proposer un contenu</a>.
@@ -116,7 +117,6 @@
           Cadre juridique
         </h3>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
         <p
           v-if="casUsage.Cadre_juridique"
           v-html="fromMarkdown(casUsage.Cadre_juridique)"
@@ -155,9 +155,9 @@
       Utiliser les jeux de données et API utiles
     </h2>
     <SimplifionsDataApiList
+      v-if="usefulDataApi.length"
       :data-api-list="usefulDataApi"
       :custom-descriptions="customDescriptionsForDataApi"
-      v-if="usefulDataApi.length"
     />
     <p v-else class="fr-text--sm">
       <i
@@ -182,6 +182,7 @@
       </p>
     </div>
   </div>
+  <!-- eslint-enable vue/no-v-html -->
 </template>
 
 <script setup lang="ts">
