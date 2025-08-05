@@ -53,6 +53,8 @@ website:
     dropdown:
       - text: Rechercher {} dans les <strong>jeux de données</strong>
         route: datasets
+      - text: Rechercher {} dans les <strong>indicateurs</strong>
+        route: indicators
       - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
   search_bar:
