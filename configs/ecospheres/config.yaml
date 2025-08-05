@@ -54,6 +54,8 @@ website:
         route: datasets
       - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
+      - text: Rechercher {} dans les <strong>indicateurs</strong>
+        route: indicators
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
