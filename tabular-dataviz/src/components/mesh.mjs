@@ -1,5 +1,5 @@
-import { getMeshDropdownContainer, getMeshSelect } from '../dom.mjs'
-import { MESHES } from '../enums.mjs'
+import { getMeshDropdownContainer, getMeshSelect } from '../core/dom.mjs'
+import { MESHES } from '../core/enums.mjs'
 import { makeDropdown } from './basic.mjs'
 import { makeTerritoryDropDown } from './territory.mjs'
 

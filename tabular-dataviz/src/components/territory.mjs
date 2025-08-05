@@ -2,12 +2,12 @@ import {
   getCurrentMesh,
   getTerritoryDropdownContainer,
   getTerritorySelect
-} from '../dom.mjs'
-import { fetchData } from '../fetch.mjs'
-import { COMMUNES } from '../territories/communes.mjs'
-import { DEPARTEMENTS } from '../territories/departements.mjs'
-import { EPCIS } from '../territories/epcis.mjs'
-import { REGIONS } from '../territories/regions.mjs'
+} from '../core/dom.mjs'
+import { fetchData } from '../core/fetch.mjs'
+import { COMMUNES } from '../data/territories/communes.mjs'
+import { DEPARTEMENTS } from '../data/territories/departements.mjs'
+import { EPCIS } from '../data/territories/epcis.mjs'
+import { REGIONS } from '../data/territories/regions.mjs'
 import { makeSearchDropDown } from './search.mjs'
 
 export function makeTerritoryDropDown(indicator) {

@@ -1,0 +1,53 @@
+{
+  "name": "@ecolabdata/tabular-dataviz",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Interactive data visualization library for data.gouv.fr tabular datasets",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist",
+    "styles",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "prepare": "npm run build",
+    "test": "echo \"Tests to be implemented\" && exit 0"
+  },
+  "keywords": [
+    "dataviz",
+    "data-visualization",
+    "charts",
+    "data.gouv.fr",
+    "tabular-api",
+    "france",
+    "government-data",
+    "environmental-data"
+  ],
+  "author": "Ecolab <contact@ecolab.gouv.fr>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecolabdata/tabular-dataviz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ecolabdata/tabular-dataviz/issues"
+  },
+  "homepage": "https://github.com/ecolabdata/tabular-dataviz#readme",
+  "peerDependencies": {
+    "chart.js": "^4.5.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "rollup": "^4.0.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "choices.js": "^11.1.0"
+  }
+}

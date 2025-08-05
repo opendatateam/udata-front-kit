@@ -1,10 +1,10 @@
+import { makeMeshDropdown } from '../components/mesh.mjs'
+import { makeTerritoryDropDown } from '../components/territory.mjs'
 import {
   getDataVizContainers,
   getFiles,
   getIndicatorFromContainer
 } from './dom.mjs'
-import { makeMeshDropdown } from './settingsComponents/mesh.mjs'
-import { makeTerritoryDropDown } from './settingsComponents/territory.mjs'
 
 function verifyParams(container) {
   /*

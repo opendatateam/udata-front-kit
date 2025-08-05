@@ -101,3 +101,8 @@ export function getSavedDataFromDOM(indicator, name) {
 export function getGroupAxeSwitch(indicator, axe) {
   return document.getElementById(`group-axe-${axe}-${indicator.id}`)
 }
+
+export function getTabularApiUrl(indicator) {
+  const container = getContainer(indicator)
+  return container.dataset.tabularApiUrl
+}

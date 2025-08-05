@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { useResourceStore } from '@/store/ResourceStore'
 import type { DatasetV2 } from '@datagouv/components'
-import { useHead } from '@unhead/vue'
-import Chart from 'chart.js/auto'
+import { initializeVisualization } from '@ecolabdata/tabular-dataviz'
+import '@ecolabdata/tabular-dataviz/styles/visualisation.css'
 
 const props = defineProps({
   indicator: {
     type: Object as () => DatasetV2,
+    required: true
+  },
+  tabularApiUrl: {
+    type: String,
     required: true
   }
 })
@@ -37,49 +41,40 @@ const indicatorFiles = computed(() => {
 // On formate l'indicateur selon le format attendu par le module de visualisation
 const indicatorForGraph = computed(() => {
   const metaData = props.indicator.extras['ecospheres-indicateurs']
-  return {
+
+  // FIXME:
+  // Mock pour tester le dataset 'pouvoir-de-rechauffement-global-par-secteur'
+  const isMockDataset = props.indicator.id === '67cad6f3b0a47a080da80278'
+
+  const formatted = {
     id: props.indicator.id,
-    unite: metaData?.unite ?? '',
-    summable: metaData?.summable,
-    enableVisualisation: metaData?.['enable_visualization']
+    unite: isMockDataset ? 'tonne' : (metaData?.unite ?? ''),
+    summable: isMockDataset ? true : (metaData?.summable ?? true),
+    enableVisualisation: isMockDataset
+      ? true
+      : (metaData?.['enable_visualization'] ?? false)
   }
+
+  return formatted
 })
 
-// On ajoute dans le header de la page HTML le code js du module de visualisation
-// Ainsi que le code de la dépendance choices.js pour faire un select avec de la recherche
-// et les fichiers de style
-useHead({
-  script: [
-    { src: '/visualisation/index.mjs', defer: true, type: 'module' },
-    { src: '/choices/choices.min.js', defer: true }
-  ],
-  link: [
-    { rel: 'stylesheet', href: '/choices/choices.min.css' },
-    { rel: 'stylesheet', href: '/visualisation/visualisation.css' }
-  ]
-})
-
-// Watcher pour attendre que le script du module de visualisation a bien été chargé
-// ainsi que les metadonnées des fichiers
-// le script de visualisation expose la fonction `makeIndicatorVisualisation` dans `window`
-// on attend que celle-ci soit bien accessible avant de l'invoquer
+// Watcher pour initialiser la visualisation quand les données changent
 watch(
-  // @ts-expect-error makeIndicatorVisualisation is defined in the visualisation/index.mjs header script
-  [indicatorFiles, () => window.makeIndicatorVisualisation],
-  ([newIndicatorFiles, newCallback], [oldIndicatorFiles, oldCallback]) => {
-    console.log(newCallback)
+  indicatorFiles,
+  (newIndicatorFiles, oldIndicatorFiles) => {
     if (
-      JSON.stringify(newIndicatorFiles) !== JSON.stringify(oldIndicatorFiles) ||
-      newCallback !== oldCallback
+      JSON.stringify(newIndicatorFiles) !== JSON.stringify(oldIndicatorFiles)
     ) {
-      if (newCallback) newCallback()
+      nextTick(() => {
+        // FIXME: to many timeout tricks here
+        setTimeout(() => {
+          initializeVisualization({ timeout: 500 })
+        }, 100)
+      })
     }
-  }
+  },
+  { immediate: true }
 )
-
-// On expose Chart.js dans `window` pour que le script de visualisation puisse l'utiliser sans qu'il le charge lui-même
-// @ts-expect-error make Chart.js available for the visualisation/index.mjs header script without import
-window.Chart = Chart
 
 // Pour le html :
 // On affiche le module de visualisation seulement si l'indicateur a des fichiers dans data.gouv.fr
@@ -97,5 +92,6 @@ window.Chart = Chart
     :data-indicator-id="indicator.id"
     :data-files="encodeURIComponent(JSON.stringify(indicatorFiles))"
     :data-indicator="encodeURIComponent(JSON.stringify(indicatorForGraph))"
+    :data-tabular-api-url="props.tabularApiUrl"
   ></div>
 </template>

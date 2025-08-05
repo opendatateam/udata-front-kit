@@ -2,12 +2,12 @@
  ** Fichier pour afficher les filtres des axes sous forme de checkboxes
  */
 
-import { makeChart } from '../chart.mjs'
+import { makeChart } from '../core/chart.mjs'
 import {
   getAxeCheckboxes,
   getAxesDropdownContainer,
   getGroupAxeSwitch
-} from '../dom.mjs'
+} from '../core/dom.mjs'
 
 function getAxesForCurrentFileAndData(file, data) {
   /*

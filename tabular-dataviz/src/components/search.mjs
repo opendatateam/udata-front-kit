@@ -1,3 +1,5 @@
+import Choices from 'choices.js'
+
 export function makeSearchDropDown(container, dropdownId, label, options) {
   /*
    * Construction d'une dropdown avec une barre de recherche et un choix unique
@@ -10,7 +12,7 @@ export function makeSearchDropDown(container, dropdownId, label, options) {
   </div>`
   container.innerHTML = html
   const element = document.getElementById(`select-${dropdownId}`)
-  new window.Choices(element, {
+  new Choices(element, {
     choices: options.map((opt, idx) => ({
       value: opt.value,
       label: opt.label,

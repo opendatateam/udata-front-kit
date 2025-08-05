@@ -8,6 +8,7 @@ datagouvfr:
   base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 robots:
   disallow:

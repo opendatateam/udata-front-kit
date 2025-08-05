@@ -2,6 +2,7 @@
  ** Ce fichier initialise et configure le graphique en utilisant Chart.js
  */
 
+import Chart from 'chart.js/auto'
 import { makeDatasets } from './datasets.mjs'
 import { getChartCanvas, getOneYearValueContainer } from './dom.mjs'
 import { COLORS } from './enums.mjs'
@@ -109,7 +110,7 @@ export function makeChart(indicator) {
   const datasets = makeDatasets(indicator)
   applyColors(datasets)
   const canvas = getChartCanvas(indicator)
-  const oldChart = window.Chart.getChart(canvas)
+  const oldChart = Chart.getChart(canvas)
   if (oldChart) {
     oldChart.destroy()
   }
@@ -122,6 +123,6 @@ export function makeChart(indicator) {
     // on paramètre si le graphique est visible ou non grâce à une classe CSS "hidden"
     canvas.parentElement.classList.remove('hidden')
     getOneYearValueContainer(indicator).classList.add('hidden')
-    new window.Chart(canvas, getConfig(indicator, datasets, minYear, maxYear))
+    new Chart(canvas, getConfig(indicator, datasets, minYear, maxYear))
   }
 }

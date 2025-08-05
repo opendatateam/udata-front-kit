@@ -3,16 +3,17 @@
  ** https://github.com/datagouv/api-tabular
  */
 
+import { makeAxesCheckboxes } from '../components/axes.mjs'
 import { makeChart } from './chart.mjs'
 import {
   getCurrentMesh,
   getCurrentTerritory,
   getFiles,
+  getTabularApiUrl,
   saveInTheDOM
 } from './dom.mjs'
 import { GEOCOLUMNS, YEAR_COLUMN } from './enums.mjs'
 import { formatData } from './format.mjs'
-import { makeAxesCheckboxes } from './settingsComponents/axes.mjs'
 
 async function fetchPage(url, allData) {
   /*
@@ -49,7 +50,9 @@ export async function fetchData(indicator) {
   const files = getFiles(indicator)
   const file = files.find((f) => f.mesh === mesh)
   const geoCondition = getGeoCondition(indicator, mesh)
-  const path = `https://tabular-api.data.gouv.fr/api/resources/${file.id}/data/`
+  const baseUrl =
+    getTabularApiUrl(indicator) || 'https://tabular-api.data.gouv.fr'
+  const path = `${baseUrl}/api/resources/${file.id}/data/`
   const url = `${path}?${geoCondition}${YEAR_COLUMN}__sort=asc`
   let allData = []
   allData = await fetchPage(url, allData)
