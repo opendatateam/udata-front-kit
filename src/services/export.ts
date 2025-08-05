@@ -7,7 +7,7 @@ import { isNotFoundError } from '@/utils/http'
 
 interface DatasetRow {
   label: string
-  label_description: string
+  label_description: string | null
   availability: string
   uri: string | null
   title?: string
@@ -42,22 +42,20 @@ export const exportDatasets = async (
         group: datasetProperties.group
       }
 
-      const remoteDataset =
-        datasetProperties.id != null
-          ? await store
-              .load(datasetProperties.id, { toasted: false })
-              .catch((error) => {
-                if (isNotFoundError(error)) {
-                  row.availability = Availability.REMOTE_DELETED
-                } else {
-                  toastHttpError(error)
-                }
+      if (datasetProperties.id == null) return row
 
-                return row
-              })
-          : null
+      const remoteDataset = await store
+        .load(datasetProperties.id, { toasted: false })
+        .catch((error) => {
+          if (isNotFoundError(error)) {
+            row.availability = Availability.REMOTE_DELETED
+          } else {
+            toastHttpError(error)
+          }
+          return null
+        })
 
-      if (remoteDataset == null) return row
+      if (!remoteDataset) return row
 
       row.title = remoteDataset.title
       row.uri = remoteDataset.page

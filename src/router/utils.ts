@@ -57,6 +57,7 @@ interface SearchPageRoutesOptions {
   detailsViewComponent: () => Promise<{ default: Component }>
   filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
+  descriptionComponent?: () => Promise<{ default: Component }>
   props?: Record<string, unknown>
 }
 
@@ -104,7 +105,8 @@ export const useTopicSearchPageRoutes = ({
   topicConf,
   cardClass,
   filtersComponent,
-  cardComponent
+  cardComponent,
+  descriptionComponent
 }: TopicSearchPageRoutesOptions): RouteRecordRaw => {
   const listViewComponent = () => import('@/views/topics/TopicsListView.vue')
   const detailsViewComponent = () =>
@@ -117,6 +119,7 @@ export const useTopicSearchPageRoutes = ({
     filtersComponent,
     cardComponent,
     detailsViewComponent,
+    descriptionComponent,
     // loosen type before sending to generic fn
     props: topicConf as unknown as Record<string, unknown>
   })
@@ -130,6 +133,7 @@ export const useSearchPageRoutes = ({
   detailsViewComponent,
   filtersComponent,
   cardComponent,
+  descriptionComponent,
   props
 }: SearchPageRoutesOptions): RouteRecordRaw => {
   return {
@@ -159,9 +163,14 @@ export const useSearchPageRoutes = ({
         name: `${pageKey}_detail`,
         component: detailsViewComponent,
         meta: {
-          pageKey
+          pageKey,
+          descriptionComponent
         },
-        props: props || {}
+        props: () => ({
+          // this forces the component to be recreated when switching page type
+          key: pageKey,
+          ...props
+        })
       }
     ]
   }

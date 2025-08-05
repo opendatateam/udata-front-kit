@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import config from '@/config'
 import type { DsfrHeaderProps } from '@gouvminint/vue-dsfr'
-import Navigation from '../Navigation.vue'
+import Navigation from '../NavigationComponent.vue'
 import SearchComponent from '../SearchComponent.vue'
 
 type Props = {
@@ -14,14 +14,14 @@ type Props = {
 withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgAlt: '',
   operatorImgStyle: () => ({}),
-  searchLabel: 'Recherche',
+  searchLabel: 'Rechercher',
   quickLinks: () => [],
   showSearch: config.website.header_search.display,
   customSearch: false
 })
 
 // DsfrHeader does not expose the hidemodal function, so we do this to close the modal after a custom search.
-const headerRef = useTemplateRef('headerRef')
+const headerRef = useTemplateRef<ComponentPublicInstance>('headerRef')
 
 const closeModal = () => {
   const closeButton: HTMLButtonElement | undefined | null =
@@ -58,6 +58,7 @@ const dropdown = config.website.header_search.dropdown ?? undefined
     service-description=""
     :quick-links
     :show-search="showSearch && !customSearch"
+    :home-label="`Retour à l'accueil du site - ${serviceTitle}`"
   >
     <!-- needed because of logo + badge -->
     <template #operator>
@@ -93,11 +94,12 @@ const dropdown = config.website.header_search.dropdown ?? undefined
         class="custom-search"
         :search-label="searchLabel"
         :dropdown="dropdown"
-        placeholder="Rechercher"
+        :placeholder="searchLabel"
         @do-search="closeModal"
       />
     </template>
 
+    <!-- @vue-ignore FIXME: upstream bug, hidemodal is not typed in DsfrHeader slot props -->
     <template #mainnav="{ hidemodal }">
       <Navigation :on-click="hidemodal" />
     </template>

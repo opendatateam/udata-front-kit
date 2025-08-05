@@ -180,11 +180,11 @@ const onSubmit = async () => {
   await formFields.value.onSubmit()
   if (formErrors.value.length > 0) {
     setTimeout(() => {
+      errorSummary.value.$el.focus({ preventScroll: true })
       errorSummary.value.$el.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       })
-      errorSummary.value.$el.focus()
     }, 0)
   } else {
     save()
@@ -223,6 +223,8 @@ onMounted(() => {
         setMetaTitle()
       })
       .finally(() => loader.hide())
+  } else {
+    setMetaTitle()
   }
 })
 </script>
