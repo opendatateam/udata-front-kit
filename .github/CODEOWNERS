@@ -1,0 +1,21 @@
+# Default owners
+
+*  @abulte @geoffreyaldebert @maudetes @streino
+
+
+# Special owners
+
+/.github/CODEOWNERS  @abulte @geoffreyaldebert @maudetes @streino
+
+/.github/workflows/create-deploy-release.yml  @geoffreyaldebert @jordanguedj @maudetes
+
+
+# Vertical owners
+# /configs/<vertical> and /src/custom/<vertical>
+
+**/defis/         @opendatateam/etalab
+**/ecospheres/    @ecolabdata/ecospheres-admin
+**/hackathon/     @opendatateam/etalab
+**/logistique/    @opendatateam/etalab @johanricher
+**/meteo-france/  @opendatateam/etalab
+**/simplifions/   @DorineLam @JeSuisUnCaillou
