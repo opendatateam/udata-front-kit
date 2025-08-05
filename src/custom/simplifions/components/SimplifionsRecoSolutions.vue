@@ -36,65 +36,101 @@
         </div>
       </div>
 
-      <div class="fr-col-12 fr-col-sm-8">
-        <p
+      <div class="fr-col-12 fr-col-sm-8 fr-ml-2w">
+        <div
           v-if="
             reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
           "
+          class="reco-section"
         >
-          <strong>
+          <div class="fr-mr-1w">
             <span
               aria-hidden="true"
               class="fr-icon-success-fill icon-green"
             ></span>
-            En quoi cette solution est utile pour ce cas d'usage ?
-          </strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="
-              fromMarkdown(
-                reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
-              )
-            "
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
-        </p>
+          </div>
 
-        <p v-if="reco_solution.Concretement_pour_les_usagers_">
-          <strong>🧑 Concrètement, pour les usagers :</strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="fromMarkdown(reco_solution.Concretement_pour_les_usagers_)"
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
-        </p>
+          <div class="reco-text-column">
+            <div>
+              <strong>
+                En quoi cette solution est utile pour ce cas d'usage ?
+              </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="
+                fromMarkdown(
+                  reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
+                )
+              "
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
 
-        <p v-if="reco_solution.Concretement_pour_vos_agents_">
-          <strong>🧑‍💼 Concrètement, pour vos agents :</strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="fromMarkdown(reco_solution.Concretement_pour_vos_agents_)"
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
-        </p>
+        <div
+          v-if="reco_solution.Concretement_pour_les_usagers_"
+          class="reco-section"
+        >
+          <div class="fr-mr-1w">
+            <span aria-hidden="true">🧑</span>
+          </div>
 
-        <p v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_">
-          <strong>
+          <div class="reco-text-column">
+            <div>
+              <strong> Concrètement, pour les usagers : </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="
+                fromMarkdown(reco_solution.Concretement_pour_les_usagers_)
+              "
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
+
+        <div
+          v-if="reco_solution.Concretement_pour_vos_agents_"
+          class="reco-section"
+        >
+          <div class="fr-mr-1w">
+            <span aria-hidden="true">🧑‍💼</span>
+          </div>
+
+          <div class="reco-text-column">
+            <div>
+              <strong> Concrètement, pour vos agents : </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="fromMarkdown(reco_solution.Concretement_pour_vos_agents_)"
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
+
+        <div
+          v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_"
+          class="reco-section"
+        >
+          <div class="fr-mr-1w">
             <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-            Ce que ne fait pas cette solution :
-          </strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="
-              fromMarkdown(reco_solution.Ce_que_ne_fait_pas_cette_solution_)
-            "
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
-        </p>
+          </div>
+
+          <div class="reco-text-column">
+            <div>
+              <strong> Ce que ne fait pas cette solution : </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="
+                fromMarkdown(reco_solution.Ce_que_ne_fait_pas_cette_solution_)
+              "
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
       </div>
 
       <div
@@ -186,5 +222,9 @@ const reco_solution = props.recoSolution
 
 .icon-red {
   color: #ff292f;
+}
+
+.reco-section {
+  display: flex;
 }
 </style>
