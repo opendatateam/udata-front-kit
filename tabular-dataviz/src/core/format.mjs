@@ -4,29 +4,27 @@
 
 import { YEAR_COLUMN } from './enums.mjs'
 
-export function formatBigNumber(n) {
+export function formatBigNumber(n, maxValue = n) {
   /*
    ** Utilisé pour l'axe Y du graphique car un grand nombre prend trop de place
-   ** Utilise les conventions francaises (M pour mille, MM pour million, MMM pour milliard)
-   ** Un petit texte pour rappeler la convention est disponible sous le graphe
+   ** Utilise les conventions courantes (k pour millier, M pour million, Md pour milliard)
+   ** L'unité est déterminée par la valeur maximale pour garder la cohérence dans tout le graphe
    */
-  if (n < 1000) return n.toString()
+  if (maxValue < 1000) return n.toString()
 
   let suffix = ''
   let diviseur = 1
 
-  if (n < 10000) {
+  // Détermine l'unité basée sur la valeur maximale pour une cohérence dans tout le graphe
+  if (maxValue >= 1_000_000_000) {
+    suffix = 'Md'
+    diviseur = 1_000_000_000
+  } else if (maxValue >= 1_000_000) {
     suffix = 'M'
-    diviseur = 1000
-  } else if (n < 1_000_000) {
-    suffix = 'M'
-    diviseur = 1000
-  } else if (n < 10_000_000) {
-    suffix = 'MM'
     diviseur = 1_000_000
   } else {
-    suffix = 'MMM'
-    diviseur = 1_000_000_000
+    suffix = 'k'
+    diviseur = 1000
   }
 
   let valeur = n / diviseur

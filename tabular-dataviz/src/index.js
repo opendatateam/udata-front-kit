@@ -98,7 +98,7 @@ export function initializeVisualization(options = {}) {
         </div>
         <div style="height:300px; width: 100%;" class="canvas-container">
           <canvas id="chart-${indicator.id}"></canvas>
-          <p class="help">M: mille, MM: million, MMM: milliard</p>
+          <p class="help">k: millier, M: million, Md: milliard</p>
         </div>
         <div id="one-year-value-${indicator.id}" class="one-year-value hidden"></div>
         `

@@ -9,6 +9,11 @@ import { COLORS } from './enums.mjs'
 import { formatBigNumber, numberWithCommas } from './format.mjs'
 
 function getConfig(indicator, datasets, minYear, maxYear) {
+  // Calcule la valeur maximale de tous les datasets pour une unité cohérente
+  const maxValue = Math.max(
+    ...datasets.flatMap((dataset) => dataset.data.map((point) => point.y))
+  )
+
   return {
     type: datasets.every((dt) => dt.data.length <= 1) ? 'bar' : 'line',
     data: { datasets },
@@ -59,7 +64,7 @@ function getConfig(indicator, datasets, minYear, maxYear) {
             text: indicator.unite
           },
           ticks: {
-            callback: (val) => formatBigNumber(val)
+            callback: (val) => formatBigNumber(val, maxValue)
           }
         }
       }
