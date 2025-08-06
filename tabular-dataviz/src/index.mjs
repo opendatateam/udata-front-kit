@@ -89,7 +89,7 @@ export function initializeVisualization(options = {}) {
           </div>
           <div id="axes-dropdown-container-${indicator.id}" class="axes-dropdown"></div>
         </div>
-        <div style="height:300px; width: 100%;" class="canvas-container">
+        <div style="height:300px; width: 100%;" class="canvas-container hidden">
           <canvas id="chart-${indicator.id}"></canvas>
           <p class="help">k: millier, M: million, Md: milliard</p>
         </div>

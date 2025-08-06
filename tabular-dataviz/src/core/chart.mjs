@@ -106,15 +106,14 @@ function makeOneYearValue(indicator, datasets) {
   </div>
   <p class="help">Seule année de données disponible.</p>
   `
-  container.classList.remove('hidden')
-  const canvasContainer = getChartCanvas(indicator).parentElement
-  canvasContainer.classList.add('hidden')
 }
 
 export function makeChart(indicator) {
   const datasets = makeDatasets(indicator)
   applyColors(datasets)
   const canvas = getChartCanvas(indicator)
+  const canvasContainer = canvas.parentElement
+  const oneYearContainer = getOneYearValueContainer(indicator)
   const oldChart = Chart.getChart(canvas)
   if (oldChart) {
     oldChart.destroy()
@@ -123,11 +122,13 @@ export function makeChart(indicator) {
   const [minYear, maxYear] = getMinMaxYear(years)
   // Si le graphique contient qu'une seule valeur pour une seule année
   if (datasets.length === 1 && datasets[0].data.length === 1) {
+    canvasContainer.classList.add('hidden')
     makeOneYearValue(indicator, datasets)
+    oneYearContainer.classList.remove('hidden')
   } else {
-    // on paramètre si le graphique est visible ou non grâce à une classe CSS "hidden"
-    canvas.parentElement.classList.remove('hidden')
+    oneYearContainer.classList.add('hidden')
     getOneYearValueContainer(indicator).classList.add('hidden')
     new Chart(canvas, getConfig(indicator, datasets, minYear, maxYear))
+    canvasContainer.classList.remove('hidden')
   }
 }
