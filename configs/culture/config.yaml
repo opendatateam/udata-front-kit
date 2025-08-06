@@ -32,96 +32,11 @@ website:
       width: '40px'
       height: '219px'
   homepage:
-    title: 'Les données ouvertes de la Culture '
-    subtitle: 'culture.data.gouv.fr vise à référencer, héberger et diffuser les données publiques relatives à la culture en France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
+    title:
+    subtitle:
     sections:
-      - title: Découvrez les données phares
-        id: section_top_data
+      - title:
         content:
-        sub_section_datasets:
-        sub_section_cards:
-          title:
-          cards:
-            - name: '🔥 Jeux les plus consultés'
-              description: 'Découvrez les jeux les plus populaires sur la plateforme, en fonction du nombre de vues.'
-              url: 'datasets?sort=-views'
-              image_url: '/culture/assets/patrimoine.png'
-            - name: '♻️ Jeux les plus réutilisés'
-              description: 'Explorez les jeux de données les plus réutilisés par la communauté.'
-              url: 'datasets?sort=-reuses'
-              image_url: '/culture/assets/audiovisuel.png'
-            - name: '🆕 Nouveaux jeux publiés'
-              description: 'Parcourez les nouveaux jeux de données publiés sur la plateforme.'
-              url: 'datasets?sort=-created_at'
-              image_url: '/culture/assets/musee.png'
-        sub_section_tiles:
-        sub_section_buttons:
-
-      - title: 🧭 Choisissez votre domaine culturel
-        id: section_thematiques
-        content: |
-          <ul class="fr-tags-group">
-            <li><a class="fr-tag" href="/datasets?tags=archives" aria-label="Dossier d’archives">🗃️ Archives</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=architecture" aria-label="Architecture et construction">🏗️ Architecture</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=arts-plastiques" aria-label="Arts plastiques">🎨 Arts plastiques</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=cinema" aria-label="Cinéma">🎬 Cinéma</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=spectacle-vivant" aria-label="Spectacle vivant">🎭 Spectacle vivant</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=livre" aria-label="Livre et lecture">📚 Livre & lecture</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=musique" aria-label="Musique">🎵 Musique</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=presse" aria-label="Presse écrite">📰 Presse écrite</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=musees" aria-label="Musées">🖼️ Musées</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=langue" aria-label="Langue et communication">💬 Langue</a></li>
-            <li><a class="fr-tag" href="/datasets?tags=industries-culturelles" aria-label="Industries culturelles et créatives">💡 Industries culturelles</a></li>
-          </ul>
-
-      - title: ''
-        content: >-
-          <section class="fr-container fr-my-5w" id="section_reutilisation">
-            <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
-              <div class="fr-col-12 fr-col-md-6">
-                <img src="/culture/assets/GeoDataPatrimoine.png" alt="Réutilisation : Cartes IGN pour les JEP" class="fr-responsive-img" />
-              </div>
-              <div class="fr-col-12 fr-col-md-6">
-                <h3 class="fr-h5 fr-mb-2w">Réutilisation phare du mois</h3>
-                <h4 class="fr-h6 fr-mb-2w">Journées Européennes du Patrimoine</h4>
-                <p class="fr-text--sm fr-mb-2w">
-                  <strong>Cartes.gouv / IGN</strong><br>
-                  À l’occasion des Journées Européennes du Patrimoine, découvrez les lieux avec <a href="https://cartes.gouv.fr" target="_blank">cartes.gouv.fr</a>.
-                </p>
-                <p class="fr-text--sm fr-mb-3w">
-                  Réalisé à partir des <a href="https://www.data.gouv.fr/fr/datasets/journees-europeennes-du-patrimoine-2024" target="_blank">données ouvertes du ministère</a>.
-                </p>
-                <a href="https://cartes.gouv.fr" class="fr-btn" target="_blank" rel="noopener">
-                  Découvrez l’application IGN - Cartes
-                </a>
-              </div>
-            </div>
-
-      - title: Focus & discussions
-        id: section_focus_discussion
-        content:
-        sub_section_datasets:
-        sub_section_cards:
-          title:
-          cards:
-            - name: '✨ Jeu du mois'
-              description: 'Chaque mois, découvrez un jeu de données mis à l’honneur pour sa pertinence ou son impact.'
-              url: '/datasets/jeu-du-mois'
-            #              image_url: '/culture/assets/jeu_mois.png'
-            - name: '🧽 Données de référence'
-              description: 'Explorez les bases de données structurantes du ministère de la Culture.'
-              url: 'datasets?tag=base-reference'
-            #              image_url: '/culture/assets/bases_reference.png'
-            - name: '💬 Discussions en cours'
-              description: 'Participez aux échanges autour des données culturelles sur le forum.'
-              url: 'https://forum.data.gouv.fr/tag/culture'
-        #              image_url: '/culture/assets/forum.png'
-        sub_section_tiles:
-        sub_section_buttons:
-
-      - title: Actualités
-        content: >-
-          [En savoir plus sur la démarche](/demarche)
         sub_section_datasets:
         sub_section_cards:
         sub_section_tiles:
@@ -169,6 +84,12 @@ website:
   menu:
     - text: Accueil
       to: /
+    - text: Explorer
+      to: /datasets
+    # - text: Réutiliser
+    #   to: /reuses
+    - text: Echanger
+      to: 'https://forum.data.gouv.fr/tag/culture'
     - text: 'La démarche'
       to: /demarche
     - text: A propos
@@ -295,14 +216,30 @@ pages:
         display: true
     filters:
       - name: Catégories
-        default_option: Toutess les catégories
-        id: category
+        default_option: Toutes les catégories
+        id: tag
         type: select
         use_tag_prefix: false
         values:
-          - name: Bases patrimoniales
-            id: base-patrimoniales
-          - name: Domaine de l'audiovisuel
-            id: audiovisuel
-          - name: Données des musées
+          - name: '🗃️ Archives'
+            id: archives
+          - name: '🏗️ Architecture'
+            id: architecture
+          - name: '🎨 Arts plastiques'
+            id: arts-plastiques
+          - name: '🎬 Cinéma'
+            id: cinema
+          - name: '🎭 Spectacle vivant'
+            id: spectacle-vivant
+          - name: '📚 Livre & lecture'
+            id: livre
+          - name: '🎵 Musique'
+            id: musique
+          - name: '📰 Presse écrite'
+            id: presse
+          - name: '🖼️ Musées'
             id: musee
+          - name: '💬 Langue'
+            id: langue
+          - name: '💡 Industries culturelles'
+            id: industries-culturelles
