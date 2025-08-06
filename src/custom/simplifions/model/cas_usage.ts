@@ -10,6 +10,7 @@ export interface RecoSolution {
   solution_topic_id: string
   image_principale: number[]
   solutions_editeurs_topics: SolutionEditeurTopic[]
+  API_et_data_utiles_fournies_par_la_solution_datagouv_slugs: string[]
 }
 
 export interface SolutionEditeurTopic {

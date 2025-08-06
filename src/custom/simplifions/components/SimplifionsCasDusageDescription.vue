@@ -156,7 +156,11 @@
           v-for="reco_solution in group.reco_solutions"
           :key="reco_solution.Nom_de_la_solution_publique"
         >
-          <SimplifionsRecoSolutions :reco-solution="reco_solution" />
+          <SimplifionsRecoSolutions
+            :reco-solution="reco_solution"
+            :useful-data-api="usefulDataApi"
+            :custom-descriptions="customDescriptionsForDataApi"
+          />
         </div>
       </div>
     </div>
