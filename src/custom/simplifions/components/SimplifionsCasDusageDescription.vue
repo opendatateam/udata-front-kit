@@ -27,7 +27,7 @@
             Sommaire
           </h2>
           <ol>
-            <li v-if="casUsage.Contexte || casUsage.Cadre_juridique">
+            <li>
               <a
                 id="summary-link-1"
                 href="#contexte-et-cadre-juridique"
@@ -35,17 +35,20 @@
                 >Contexte et cadre juridique</a
               >
             </li>
-            <li v-if="casUsage.reco_solutions?.length">
+            <li>
               <a
                 id="summary-link-2"
                 href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
-              <ol v-if="casUsage.reco_solutions?.length">
+              <ol v-if="casUsage.reco_solutions?.length" class="fr-mb-0">
                 <li
                   v-for="(group, index) in grouped_reco_solutions"
                   :key="group.title"
+                  :class="{
+                    'fr-pb-0': index === grouped_reco_solutions.length - 1
+                  }"
                 >
                   <a
                     :href="`#reco-group-${index + 1}`"
@@ -54,6 +57,14 @@
                   >
                 </li>
               </ol>
+            </li>
+            <li>
+              <a
+                id="summary-link-3"
+                class="fr-summary__link"
+                href="#donnees-et-api-utiles"
+                >Les jeux de données et API utiles</a
+              >
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
@@ -88,10 +99,7 @@
       </div>
     </div>
 
-    <div
-      v-if="casUsage.Contexte || casUsage.Cadre_juridique"
-      class="fr-col-12 fr-col-md-8"
-    >
+    <div class="fr-col-12 fr-col-md-8">
       <h2 id="contexte-et-cadre-juridique" class="h2-cas-usage fr-h2 fr-my-5w">
         Contexte et cadre juridique
       </h2>
@@ -130,7 +138,7 @@
       </div>
     </div>
 
-    <div v-if="casUsage.reco_solutions?.length">
+    <div>
       <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
         Solutions disponibles
       </h2>
@@ -153,8 +161,8 @@
       </div>
     </div>
 
-    <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
-      Utiliser les jeux de données et API utiles
+    <h2 id="donnees-et-api-utiles" class="h2-cas-usage fr-h2 fr-mt-5w">
+      Les jeux de données et API utiles
     </h2>
     <SimplifionsDataApiList
       v-if="usefulDataApi.length"
@@ -282,5 +290,11 @@ const usefulDataApi = computed(() => {
 .bloc-modifications {
   background-color: #f1f1f1;
   padding: 1rem;
+}
+
+:deep(blockquote) {
+  border-left: 4px solid var(--border-default-grey);
+  margin-left: 2rem;
+  padding-left: 2rem;
 }
 </style>

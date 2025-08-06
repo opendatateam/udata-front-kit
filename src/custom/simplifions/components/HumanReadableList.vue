@@ -14,7 +14,7 @@ defineProps<{
 const humanReadableList = (items: string[]) => {
   const acc: { content: string; bold: boolean }[] = []
   items.forEach((item, index) => {
-    if (index === items.length - 1) {
+    if (index === items.length - 1 && items.length >= 2) {
       acc.push({ content: ' et ', bold: false })
     } else if (index != 0) {
       acc.push({ content: ', ', bold: false })

@@ -1,6 +1,7 @@
 <template>
   <router-link
     :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
+    class="simplifions-card-link fr-p-0"
   >
     <div
       class="fr-card fr-enlarge-link fr-card--shadow topic-card"
@@ -14,7 +15,7 @@
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
-          <p class="fr-card__desc fr-text--lg">
+          <p class="fr-card__desc">
             {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
           </p>
 
@@ -66,6 +67,12 @@ const imageUrl = solution?.Image_principale?.[0]
 </script>
 
 <style scoped>
+.simplifions-card-link {
+  display: block;
+  margin-bottom: 1rem;
+  background: none;
+}
+
 .topic-image-container {
   position: relative;
 }
@@ -76,13 +83,9 @@ const imageUrl = solution?.Image_principale?.[0]
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s ease;
   z-index: 1;
-}
-
-.topic-card:hover .topic-image-overlay {
-  opacity: 0.3;
 }
 
 /* Badge "Simplification" positionné dans l'image */
@@ -101,5 +104,13 @@ const imageUrl = solution?.Image_principale?.[0]
 .topic-card--private {
   background-color: #f6f6f6;
   color: #6b7280; /* gris moyen */
+}
+
+.fr-card__title {
+  color: var(--text-action-high-blue-france);
+}
+.fr-card__desc {
+  color: var(--text-default-grey);
+  font-size: 1rem;
 }
 </style>
