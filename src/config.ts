@@ -5,6 +5,8 @@ const mode = import.meta.env.MODE
 const site_id = import.meta.env.VITE_SITE_ID
 
 // Use Vite's import.meta.glob to conditionally load mode-specific configs
+// This will actually only include the specific config file of the current mode
+// thanks to vite.config.mts dynamicImport plugin
 const modeConfigs = import.meta.glob('@siteConfig/config.*.yaml', {
   eager: true
 })

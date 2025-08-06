@@ -90,6 +90,15 @@ export default defineConfig(({ mode }) => {
               routeFile.includes(`custom/${env.VITE_SITE_ID}/routes.ts`)
             )
           }
+          // Include only the current mode's config file in the bundle
+          // to prevent /src/config.ts from including all config files before picking the right one
+          if (id.includes('/src/config.ts')) {
+            return files.filter((configFile) =>
+              configFile.includes(
+                `configs/${env.VITE_SITE_ID}/config.${mode}.yaml`
+              )
+            )
+          }
         }
       })
     ],
