@@ -22,7 +22,7 @@ export function makeTerritoryDropDown(indicator) {
         label: 'Région',
         values: REGIONS
       },
-      dpt: {
+      departement: {
         label: 'Département',
         values: DEPARTEMENTS
       },
@@ -30,7 +30,7 @@ export function makeTerritoryDropDown(indicator) {
         label: 'EPCI',
         values: EPCIS
       },
-      com: {
+      commune: {
         label: 'Commune',
         values: COMMUNES
       }

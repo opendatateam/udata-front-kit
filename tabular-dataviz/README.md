@@ -70,7 +70,7 @@ Disponibles dans `file.extras['ecospheres-indicateurs']` :
 }
 ```
 
-- `maille` : `fr`, `region`, `dpt`, `epci` ou `com`
+- `maille` : `fr`, `region`, `departement`, `epci` ou `commune`
 - `value-column` : nom de la colonne contenant la valeur principale
 - `axes` : objet avec les noms des colonnes des axes
 

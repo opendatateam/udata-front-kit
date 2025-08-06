@@ -45,7 +45,7 @@ function verifyParams(container) {
 function makeIndicatorVisualisation() {
   // petit timeout pour être sûr que le DOM a bien chargé.
   setTimeout(() => {
-    // C'est possible que la page peut contenir plusieurs container `data-viz` (un par indicateur)
+    // C'est possible que la page puise contenir plusieurs container `data-viz` (un par indicateur)
     // C'est pour cela que tous les IDs contiendront l'ID de l'indicateur.
     getDataVizContainers().forEach((container) => {
       verifyParams(container)

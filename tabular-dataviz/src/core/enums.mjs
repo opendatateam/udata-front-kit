@@ -1,22 +1,23 @@
 export const GEOCOLUMNS = {
-  dpt: 'geocode_departement',
+  departement: 'geocode_departement',
   region: 'geocode_region',
   epci: 'geocode_epci',
-  com: 'geocode_com'
+  commune: 'geocode_com'
 }
 
 export const MESHES = [
   ['fr', 'National'],
   ['region', 'Région'],
-  ['dpt', 'Département'],
+  ['departement', 'Département'],
   ['epci', 'EPCI'],
-  ['com', 'Commune']
+  ['commune', 'Commune']
 ]
 
 // convention de nommage dans les fichiers
 export const YEAR_COLUMN = 'date_mesure'
 
 // Couleur des lignes dans le graphique
+// https://www.systeme-de-design.gouv.fr/version-courante/fr/fondamentaux/couleurs--palette
 export const COLORS = [
   '#6A6AF4',
   '#000091',

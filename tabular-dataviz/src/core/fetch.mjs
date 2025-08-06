@@ -30,6 +30,13 @@ async function fetchPage(url, allData) {
         allData = fetchPage(nextUrl, allData)
       }
     }
+  } else {
+    console.error(
+      'Error fetching data from tabular API at url',
+      url,
+      response.status,
+      await response.text()
+    )
   }
   return allData
 }
