@@ -76,7 +76,7 @@ function getMinMaxYear(years) {
   /**
    ** Pour définir la borne min et max de l'axe X du graphique
    */
-  const minYear = Math.min(...years) - 1
+  const minYear = Math.min(...years)
   const minNumberOfYears = 3
   let maxYear = Math.max(...years)
   if (maxYear - minYear < minNumberOfYears) {
