@@ -42,10 +42,13 @@
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
-              <ol v-if="casUsage.reco_solutions?.length">
+              <ol v-if="casUsage.reco_solutions?.length" class="fr-mb-0">
                 <li
                   v-for="(group, index) in grouped_reco_solutions"
                   :key="group.title"
+                  :class="{
+                    'fr-pb-0': index === grouped_reco_solutions.length - 1
+                  }"
                 >
                   <a
                     :href="`#reco-group-${index + 1}`"
@@ -54,6 +57,14 @@
                   >
                 </li>
               </ol>
+            </li>
+            <li v-if="casUsage.API_et_donnees_utiles?.length">
+              <a
+                id="summary-link-3"
+                class="fr-summary__link"
+                href="#donnees-et-api-utiles"
+                >Les jeux de données et API utiles</a
+              >
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
@@ -153,7 +164,7 @@
       </div>
     </div>
 
-    <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
+    <h2 id="donnees-et-api-utiles" class="h2-cas-usage fr-h2 fr-mt-5w">
       Les jeux de données et API utiles
     </h2>
     <SimplifionsDataApiList
