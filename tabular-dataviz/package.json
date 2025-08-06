@@ -19,23 +19,20 @@
   "keywords": [
     "dataviz",
     "data-visualization",
-    "charts",
     "data.gouv.fr",
     "tabular-api",
-    "france",
-    "government-data",
-    "environmental-data"
+    "udata-frontkit"
   ],
-  "author": "Ecolab <contact@ecolab.gouv.fr>",
+  "author": "Ecolab / MTE",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ecolabdata/tabular-dataviz.git"
+    "url": "https://github.com/ecolabdata/ecospheres-tabular-dataviz.git"
   },
   "bugs": {
-    "url": "https://github.com/ecolabdata/tabular-dataviz/issues"
+    "url": "https://github.com/ecolabdata/ecospheres-tabular-dataviz/issues"
   },
-  "homepage": "https://github.com/ecolabdata/tabular-dataviz#readme",
+  "homepage": "https://github.com/ecolabdata/ecospheres-tabular-dataviz#readme",
   "peerDependencies": {
     "chart.js": "^4.5.0"
   },
