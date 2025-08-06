@@ -19,6 +19,7 @@ if (modeConfigs[modeConfigKey]) {
   console.log(
     `Loading and merging config for ${mode} with the default config of ${site_id}`
   )
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const configForMode = (modeConfigs[modeConfigKey] as any).default
   finalConfig = merge(config, configForMode)
 } else {
