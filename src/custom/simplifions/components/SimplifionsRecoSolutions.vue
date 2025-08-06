@@ -226,11 +226,24 @@ const hasContent = computed(() => {
 })
 
 const usefulDataApiFourniesParLaSolution = computed(() => {
-  return props.usefulDataApi.filter((data) =>
-    reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs.includes(
-      data.UID_data_gouv
+  return props.usefulDataApi
+    .filter((data) =>
+      reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs.includes(
+        data.UID_data_gouv
+      )
     )
-  )
+    .sort((a, b) => {
+      // First sort by custom description length (longer first)
+      const aDescLength = props.customDescriptions[a.UID_data_gouv]?.length || 0
+      const bDescLength = props.customDescriptions[b.UID_data_gouv]?.length || 0
+
+      if (aDescLength !== bDescLength) {
+        return bDescLength - aDescLength // Longer descriptions first
+      }
+
+      // Then sort by name alphabetically
+      return a.Nom_donnees_ou_API.localeCompare(b.Nom_donnees_ou_API)
+    })
 })
 </script>
 
