@@ -14,7 +14,7 @@
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
-          <p class="fr-card__desc fr-text--lg">
+          <p class="fr-card__desc">
             {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
           </p>
 
@@ -101,5 +101,13 @@ const imageUrl = solution?.Image_principale?.[0]
 .topic-card--private {
   background-color: #f6f6f6;
   color: #6b7280; /* gris moyen */
+}
+
+.fr-card__title {
+  color: var(--text-action-high-blue-france);
+}
+.fr-card__desc {
+  color: var(--text-default-grey);
+  font-size: 1rem;
 }
 </style>
