@@ -1,12 +1,10 @@
 /*!
  * @ecolabdata/tabular-dataviz
- * Interactive data visualization for data.gouv.fr tabular datasets
+ * Visualisation interactive des jeux de données tabulaires de data.gouv.fr
  */
 
-// Import Choices.js CSS
 import 'choices.js/public/assets/styles/choices.min.css'
 
-// Core modules
 export { makeChart } from './core/chart.mjs'
 export { makeDatasets } from './core/datasets.mjs'
 export { fetchData } from './core/fetch.mjs'
@@ -16,24 +14,19 @@ export {
   numberWithCommas
 } from './core/format.mjs'
 
-// DOM utilities
 export * from './core/dom.mjs'
 
-// Components
 export { makeAxesCheckboxes } from './components/axes.mjs'
 export { makeMeshDropdown } from './components/mesh.mjs'
 export { makeTerritoryDropDown } from './components/territory.mjs'
 
-// Constants
 export * from './core/enums.mjs'
 
-// Territory data
 export { COMMUNES } from './data/territories/communes.mjs'
 export { DEPARTEMENTS } from './data/territories/departements.mjs'
 export { EPCIS } from './data/territories/epcis.mjs'
 export { REGIONS } from './data/territories/regions.mjs'
 
-// Main initialization function
 import { makeMeshDropdown } from './components/mesh.mjs'
 import { makeTerritoryDropDown } from './components/territory.mjs'
 import {
@@ -116,7 +109,7 @@ export function initializeVisualization(options = {}) {
   }, timeout)
 }
 
-// Legacy global function for backward compatibility
+// Fonction globale pour utilisation sans système de build
 if (typeof window !== 'undefined') {
   window.makeIndicatorVisualisation = initializeVisualization
 }
