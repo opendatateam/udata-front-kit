@@ -162,13 +162,6 @@
       :data-api-list="usefulDataApiNotRecommended"
       :custom-descriptions="customDescriptionsForDataApi"
     />
-    <p v-else class="fr-text--sm">
-      <i
-        >Aucun jeu de données ou API référencé pour cette solution
-        actuellement.</i
-      >
-      <a href="#modification-contenu">✍️ Proposer un contenu</a>.
-    </p>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
       <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
