@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue'
+import merge from 'deepmerge'
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
 import { fileURLToPath, URL } from 'node:url'
@@ -29,10 +30,28 @@ interface Config {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const configDir = `./configs/${env.VITE_SITE_ID}`
+
+  // Load base config
   const configFileUrl = new URL(`${configDir}/config.yaml`, import.meta.url)
-  const config = load(readFileSync(configFileUrl, 'utf-8')) as Config
+  let config = load(readFileSync(configFileUrl, 'utf-8')) as Config
+
+  // Try to load and merge mode-specific config
+  try {
+    const modeConfigUrl = new URL(
+      `${configDir}/config.${mode}.yaml`,
+      import.meta.url
+    )
+    const modeConfig = load(readFileSync(modeConfigUrl, 'utf-8')) as Config
+    config = merge(config, modeConfig)
+    console.log(`Merged ${mode} config at build time`)
+  } catch {
+    console.log(`No ${mode} config found, using default`)
+  }
   return {
     base: '/',
+    define: {
+      __APP_CONFIG__: JSON.stringify(config)
+    },
     plugins: [
       vueDevTools(),
       vue({
@@ -88,15 +107,6 @@ export default defineConfig(({ mode }) => {
           if (id.includes('/src/router/index.ts')) {
             return files.filter((routeFile) =>
               routeFile.includes(`custom/${env.VITE_SITE_ID}/routes.ts`)
-            )
-          }
-          // Include only the current mode's config file in the bundle
-          // to prevent /src/config.ts from including all config files before picking the right one
-          if (id.includes('/src/config.ts')) {
-            return files.filter((configFile) =>
-              configFile.includes(
-                `configs/${env.VITE_SITE_ID}/config.${mode}.yaml`
-              )
             )
           }
         }
