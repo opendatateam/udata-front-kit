@@ -34,7 +34,7 @@ export function makeAxesCheckboxes(indicator, file, data) {
     html += `
     <fieldset id="axe-checkboxes-${suffix}" class="fr-fieldset" aria-labelledby="checkboxes-legend-${suffix} checkboxes-messages-${suffix}">
       <legend class="fr-fieldset__legend--regular fr-fieldset__legend" id="checkboxes-legend-${suffix}">
-          ${axe}
+          ${axe.charAt(0).toUpperCase() + axe.slice(1)}
       </legend>
       ${values
         .map(
@@ -58,7 +58,7 @@ export function makeAxesCheckboxes(indicator, file, data) {
     <div class="fr-toggle">
         <input type="checkbox" checked class="fr-toggle__input" id="group-axe-${suffix}">
         <label class="fr-toggle__label" for="group-axe-${suffix}">Regrouper</label>
-    </div> 
+    </div>
       `
         }
     `
