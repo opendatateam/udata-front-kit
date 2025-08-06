@@ -18,9 +18,8 @@ const props = defineProps({
 const resourceStore = useResourceStore()
 
 // Format files according to the format expected by the visualization module
-const indicatorFiles = computed(() => {
-  const allIndicatorRessources = resourceStore.data[props.indicator.id]
-  const mainResourcesGroup = allIndicatorRessources?.find(
+const indicatorResources = computed(() => {
+  const mainResourcesGroup = resourceStore.data[props.indicator.id]?.find(
     (group) => group.type?.id === 'main'
   )
   return (
@@ -84,10 +83,11 @@ const initializeWhenReady = async () => {
 
 // Watcher to trigger visualization initialization when data changes
 watch(
-  indicatorFiles,
-  (newIndicatorFiles, oldIndicatorFiles) => {
+  indicatorResources,
+  (newIndicatorResources, oldIndicatorResources) => {
     if (
-      JSON.stringify(newIndicatorFiles) !== JSON.stringify(oldIndicatorFiles)
+      JSON.stringify(newIndicatorResources) !==
+      JSON.stringify(oldIndicatorResources)
     ) {
       initializeWhenReady()
     }
@@ -97,14 +97,14 @@ watch(
 </script>
 
 <template
-  v-if="indicatorFiles.length > 0 && indicatorForGraph.enableVisualisation"
+  v-if="indicatorResources.length > 0 && indicatorForGraph.enableVisualisation"
 >
   <h2 class="subtitle subtitle--uppercase">Pré-visualisation</h2>
   <!-- Visualisation will use this div to render the graph through @ecolabadata/tabular-dataviz -->
   <div
     class="indicator-viz"
     :data-indicator-id="indicator.id"
-    :data-files="encodeURIComponent(JSON.stringify(indicatorFiles))"
+    :data-files="encodeURIComponent(JSON.stringify(indicatorResources))"
     :data-indicator="encodeURIComponent(JSON.stringify(indicatorForGraph))"
     :data-tabular-api-url="props.tabularApiUrl"
   ></div>
