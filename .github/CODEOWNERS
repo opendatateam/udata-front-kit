@@ -14,7 +14,7 @@
 # /configs/<vertical> and /src/custom/<vertical>
 
 **/defis/         @opendatateam/etalab
-**/ecospheres/    @ecolabdata/ecospheres-admin
+**/ecospheres/    @opendatateam/ecospheres-admin
 **/hackathon/     @opendatateam/etalab
 **/logistique/    @opendatateam/etalab @johanricher
 **/meteo-france/  @opendatateam/etalab
