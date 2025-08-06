@@ -1,6 +1,6 @@
-/*
- ** Fichier pour appeler l'API tabular de data.gouv.fr
- ** https://github.com/datagouv/api-tabular
+/**
+ * Fichier pour appeler l'API tabular de data.gouv.fr
+ * https://github.com/datagouv/api-tabular
  */
 
 import { makeAxesCheckboxes } from '../components/axes.mjs'
@@ -16,8 +16,8 @@ import { GEOCOLUMNS, YEAR_COLUMN } from './enums.mjs'
 import { formatData } from './format.mjs'
 
 async function fetchPage(url, allData) {
-  /*
-   ** Fonction récursive pour prendre en compte la pagination de l'API
+  /**
+   * Fonction récursive pour prendre en compte la pagination de l'API
    */
   const response = await fetch(url)
   if (response.ok) {

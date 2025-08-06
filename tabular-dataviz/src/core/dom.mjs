@@ -1,6 +1,6 @@
-/*
- ** Ce fichier contient toutes les fonctions qui manipulent le DOM
- ** Si un ID / classe change, c'est ici qu'il faut adapter le code
+/**
+ * Ce fichier contient toutes les fonctions qui manipulent le DOM
+ * Si un ID / classe change, c'est ici qu'il faut adapter le code
  */
 
 export function getContainer(indicator) {

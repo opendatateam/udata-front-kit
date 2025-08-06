@@ -1,4 +1,4 @@
-/*!
+/**
  * @ecolabdata/tabular-dataviz
  * Visualisation interactive des jeux de données tabulaires de data.gouv.fr
  */

@@ -1,5 +1,5 @@
 export function makeDropdown(dropdownId, label, options) {
-  /*
+  /**
    * Select basique du DSFR
    */
   const optionsHtlm = options

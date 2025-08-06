@@ -1,14 +1,14 @@
-/*
- ** Fichier pour formater les valeurs des données
+/**
+ * Fichier pour formater les valeurs des données
  */
 
 import { YEAR_COLUMN } from './enums.mjs'
 
 export function formatBigNumber(n, maxValue = n) {
-  /*
-   ** Utilisé pour l'axe Y du graphique car un grand nombre prend trop de place
-   ** Utilise les conventions courantes (k pour millier, M pour million, Md pour milliard)
-   ** L'unité est déterminée par la valeur maximale pour garder la cohérence dans tout le graphe
+  /**
+   * Utilisé pour l'axe Y du graphique car un grand nombre prend trop de place
+   * Utilise les conventions courantes (k pour millier, M pour million, Md pour milliard)
+   * L'unité est déterminée par la valeur maximale pour garder la cohérence dans tout le graphe
    */
   if (maxValue < 1000) return n.toString()
 
@@ -53,8 +53,8 @@ function formatValue(value) {
 }
 
 export function formatData(data, file) {
-  /*
-   ** On veut simplifier les données pour garder seulement une liste d'objet avec `year`, `value` et les axes.
+  /**
+   * On veut simplifier les données pour garder seulement une liste d'objet avec `year`, `value` et les axes.
    */
   if (!data || data.length === 0) {
     return []

@@ -1,5 +1,5 @@
-/*
- ** Ce fichier initialise et configure le graphique en utilisant Chart.js
+/**
+ * Ce fichier initialise et configure le graphique en utilisant Chart.js
  */
 
 import Chart from 'chart.js/auto'
@@ -73,7 +73,7 @@ function getConfig(indicator, datasets, minYear, maxYear) {
 }
 
 function getMinMaxYear(years) {
-  /*
+  /**
    ** Pour définir la borne min et max de l'axe X du graphique
    */
   const minYear = Math.min(...years) - 1
@@ -93,9 +93,9 @@ function applyColors(datasets) {
 }
 
 function makeOneYearValue(indicator, datasets) {
-  /*
-   ** Si le graphique ne contient qu'une seule valeur pour une seule année
-   ** On affiche un gros chiffre à la place du graphique
+  /**
+   * Si le graphique ne contient qu'une seule valeur pour une seule année
+   * On affiche un gros chiffre à la place du graphique
    */
   const container = getOneYearValueContainer(indicator)
   const data = datasets[0].data[0]

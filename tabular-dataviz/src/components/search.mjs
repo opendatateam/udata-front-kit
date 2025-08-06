@@ -1,7 +1,7 @@
 import Choices from 'choices.js'
 
 export function makeSearchDropDown(container, dropdownId, label, options) {
-  /*
+  /**
    * Construction d'une dropdown avec une barre de recherche et un choix unique
    * à l'aide de la librairie choices.js
    * https://github.com/jshjohnson/Choices#readme

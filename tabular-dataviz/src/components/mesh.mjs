@@ -4,7 +4,7 @@ import { makeTerritoryDropDown } from './territory.mjs'
 import { makeDropdown } from './utils.mjs'
 
 export function makeMeshDropdown(indicator, possibleMeshes) {
-  /*
+  /**
    * Construction et ajout de la dropdown des mailles
    */
   const meshes = MESHES.filter((m) => possibleMeshes.includes(m[0]))

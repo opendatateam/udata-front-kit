@@ -1,7 +1,7 @@
-/*
- ** Fichier pour créer les datasets qu'on envoie à Chart.js
- ** un dataset est une liste de listes
- ** toutes les sous-listes représentent une ligne dans le graphique
+/**
+ * Fichier pour créer les datasets qu'on envoie à Chart.js
+ * un dataset est une liste de listes
+ * toutes les sous-listes représentent une ligne dans le graphique
  */
 
 import {
@@ -39,8 +39,8 @@ function getNonGroupedAxes(indicator, axesNames) {
 }
 
 function filterDataByCurrentAxes(indicator, axesNames, data) {
-  /*
-   ** On filtre sur les valeurs des axes choisies par l'utilisateur
+  /**
+   * On filtre sur les valeurs des axes choisies par l'utilisateur
    */
   const currentAxes = Object.fromEntries(
     axesNames.map((axe) => {
@@ -56,11 +56,11 @@ function filterDataByCurrentAxes(indicator, axesNames, data) {
 }
 
 function splitDataByAxes(indicator, axesNames, data) {
-  /*
-   ** Comportement de groupement ou non des valeurs selon un ou plusieurs axes
-   ** Si l'indicateur n'est pas sommable on fait une ligne par couple d'axes (par exemple une ligne pour "tertiaire - électricité")
-   ** Si l'indicateur est sommable, des switchs sous les axes sont affichés pour demander à l'utilisateur s'il veut grouper les lignes de l'axe concerné
-   ** Par exemple si on veut afficher seulement une ligne pour tout le secteur tertiaire alors qu'un axe "type d'énergie" existe avec deux valeurs sélectionnées.
+  /**
+   * Comportement de groupement ou non des valeurs selon un ou plusieurs axes
+   * Si l'indicateur n'est pas sommable on fait une ligne par couple d'axes (par exemple une ligne pour "tertiaire - électricité")
+   * Si l'indicateur est sommable, des switchs sous les axes sont affichés pour demander à l'utilisateur s'il veut grouper les lignes de l'axe concerné
+   * Par exemple si on veut afficher seulement une ligne pour tout le secteur tertiaire alors qu'un axe "type d'énergie" existe avec deux valeurs sélectionnées.
    */
   const groupedAxes = getGroupedAxes(indicator, axesNames)
   const nonGroupedAxes = getNonGroupedAxes(indicator, axesNames)

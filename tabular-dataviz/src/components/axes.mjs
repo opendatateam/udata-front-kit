@@ -1,5 +1,5 @@
-/*
- ** Fichier pour afficher les filtres des axes sous forme de checkboxes
+/**
+ * Fichier pour afficher les filtres des axes sous forme de checkboxes
  */
 
 import { makeChart } from '../core/chart.mjs'
@@ -10,7 +10,7 @@ import {
 } from '../core/dom.mjs'
 
 function getAxesForCurrentFileAndData(file, data) {
-  /*
+  /**
    * On récupère directement les valeurs des axes depuis les données et pas les meta-données
    */
   const axesNames = Object.keys(file.axes)
@@ -21,7 +21,7 @@ function getAxesForCurrentFileAndData(file, data) {
 }
 
 export function makeAxesCheckboxes(indicator, file, data) {
-  /*
+  /**
    * On boucle sur les axes, puis on boucle de nouveau sur les valeurs des axes
    * Pour afficher une checkbox par valeur d'axe
    * si l'indicateur est sommable on ajoute un interrupteur "regrouper" pour l'axe

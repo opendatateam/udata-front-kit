@@ -11,7 +11,7 @@ import { REGIONS } from '../data/territories/regions.mjs'
 import { makeSearchDropDown } from './search.mjs'
 
 export function makeTerritoryDropDown(indicator) {
-  /*
+  /**
    * Construction et ajout de la dropdown des territoires
    * les listes des territoires sont importées depuis des fichiers "en dur"
    */
