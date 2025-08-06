@@ -1,7 +1,7 @@
 <template>
   <div>
     <a
-      :href="`https://www.data.gouv.fr/fr/datasets/${apiOrData.UID_data_gouv}`"
+      :href="`https://www.data.gouv.fr/fr/${apiOrData.Type == 'API' ? 'dataservices' : 'datasets'}/${apiOrData.UID_data_gouv}`"
       target="_blank"
       >{{ apiOrData.Nom_donnees_ou_API }}</a
     >
