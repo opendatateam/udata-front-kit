@@ -43,7 +43,7 @@
           "
           class="reco-section"
         >
-          <div class="fr-mr-1w">
+          <div class="fr-mr-1w bullet-icon">
             <span
               aria-hidden="true"
               class="fr-icon-success-fill icon-green"
@@ -72,7 +72,7 @@
           v-if="reco_solution.Concretement_pour_les_usagers_"
           class="reco-section"
         >
-          <div class="fr-mr-1w">
+          <div class="fr-mr-1w bullet-icon">
             <span aria-hidden="true">🧑</span>
           </div>
 
@@ -94,7 +94,7 @@
           v-if="reco_solution.Concretement_pour_vos_agents_"
           class="reco-section"
         >
-          <div class="fr-mr-1w">
+          <div class="fr-mr-1w bullet-icon">
             <span aria-hidden="true">🧑‍💼</span>
           </div>
 
@@ -114,7 +114,7 @@
           v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_"
           class="reco-section"
         >
-          <div class="fr-mr-1w">
+          <div class="fr-mr-1w bullet-icon">
             <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
           </div>
 
@@ -201,6 +201,14 @@ const hasContent = computed(() => {
 </script>
 
 <style scoped>
+.bullet-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .reco-solution {
   background-color: #f6f6f6;
   /* padding: 15px; */
