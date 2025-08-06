@@ -27,7 +27,7 @@
             Sommaire
           </h2>
           <ol>
-            <li v-if="casUsage.Contexte || casUsage.Cadre_juridique">
+            <li>
               <a
                 id="summary-link-1"
                 href="#contexte-et-cadre-juridique"
@@ -35,7 +35,7 @@
                 >Contexte et cadre juridique</a
               >
             </li>
-            <li v-if="casUsage.reco_solutions?.length">
+            <li>
               <a
                 id="summary-link-2"
                 href="#solutions-disponibles"
@@ -58,7 +58,7 @@
                 </li>
               </ol>
             </li>
-            <li v-if="casUsage.API_et_donnees_utiles?.length">
+            <li>
               <a
                 id="summary-link-3"
                 class="fr-summary__link"
@@ -99,10 +99,7 @@
       </div>
     </div>
 
-    <div
-      v-if="casUsage.Contexte || casUsage.Cadre_juridique"
-      class="fr-col-12 fr-col-md-8"
-    >
+    <div class="fr-col-12 fr-col-md-8">
       <h2 id="contexte-et-cadre-juridique" class="h2-cas-usage fr-h2 fr-my-5w">
         Contexte et cadre juridique
       </h2>
@@ -141,7 +138,7 @@
       </div>
     </div>
 
-    <div v-if="casUsage.reco_solutions?.length">
+    <div>
       <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
         Solutions disponibles
       </h2>
