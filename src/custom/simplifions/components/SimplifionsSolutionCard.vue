@@ -76,13 +76,9 @@ const imageUrl = solution?.Image_principale?.[0]
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s ease;
   z-index: 1;
-}
-
-.topic-card:hover .topic-image-overlay {
-  opacity: 0.3;
 }
 
 /* Badge "Simplification" positionné dans l'image */
