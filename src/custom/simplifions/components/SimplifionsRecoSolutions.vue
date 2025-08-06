@@ -37,12 +37,7 @@
       </div>
 
       <div class="fr-col-12 fr-col-sm-8 fr-ml-2w">
-        <div
-          v-if="
-            reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
-          "
-          class="reco-section"
-        >
+        <div class="reco-section">
           <div class="fr-mr-1w">
             <span
               aria-hidden="true"
@@ -58,6 +53,9 @@
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
+              v-if="
+                reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
+              "
               v-html="
                 fromMarkdown(
                   reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
@@ -65,13 +63,14 @@
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
+            <p v-else class="fr-text--sm">
+              <i>Aucun contenu actuellement.</i>
+              <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+            </p>
           </div>
         </div>
 
-        <div
-          v-if="reco_solution.Concretement_pour_les_usagers_"
-          class="reco-section"
-        >
+        <div class="reco-section">
           <div class="fr-mr-1w">
             <span aria-hidden="true">🧑</span>
           </div>
@@ -82,18 +81,20 @@
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
+              v-if="reco_solution.Concretement_pour_les_usagers_"
               v-html="
                 fromMarkdown(reco_solution.Concretement_pour_les_usagers_)
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
+            <p v-else class="fr-text--sm">
+              <i>Aucun contenu actuellement.</i>
+              <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+            </p>
           </div>
         </div>
 
-        <div
-          v-if="reco_solution.Concretement_pour_vos_agents_"
-          class="reco-section"
-        >
+        <div class="reco-section">
           <div class="fr-mr-1w">
             <span aria-hidden="true">🧑‍💼</span>
           </div>
@@ -104,16 +105,18 @@
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
+              v-if="reco_solution.Concretement_pour_vos_agents_"
               v-html="fromMarkdown(reco_solution.Concretement_pour_vos_agents_)"
             ></div>
             <!-- eslint-enable vue/no-v-html -->
+            <p v-else class="fr-text--sm">
+              <i>Aucun contenu actuellement.</i>
+              <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+            </p>
           </div>
         </div>
 
-        <div
-          v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_"
-          class="reco-section"
-        >
+        <div class="reco-section">
           <div class="fr-mr-1w">
             <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
           </div>
@@ -124,11 +127,16 @@
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
+              v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_"
               v-html="
                 fromMarkdown(reco_solution.Ce_que_ne_fait_pas_cette_solution_)
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
+            <p v-else class="fr-text--sm">
+              <i>Aucun contenu actuellement.</i>
+              <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+            </p>
           </div>
         </div>
       </div>
