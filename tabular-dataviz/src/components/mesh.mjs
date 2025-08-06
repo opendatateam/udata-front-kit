@@ -1,7 +1,7 @@
 import { getMeshDropdownContainer, getMeshSelect } from '../core/dom.mjs'
 import { MESHES } from '../core/enums.mjs'
-import { makeDropdown } from './basic.mjs'
 import { makeTerritoryDropDown } from './territory.mjs'
+import { makeDropdown } from './utils.mjs'
 
 export function makeMeshDropdown(indicator, possibleMeshes) {
   /*
