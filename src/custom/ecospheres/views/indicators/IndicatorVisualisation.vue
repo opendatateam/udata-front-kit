@@ -17,7 +17,7 @@ const props = defineProps({
 
 const resourceStore = useResourceStore()
 
-// On formate les fichiers selon le format attendu par le module de visualisation
+// Format files according to the format expected by the visualization module
 const indicatorFiles = computed(() => {
   const allIndicatorRessources = resourceStore.data[props.indicator.id]
   const mainResourcesGroup = allIndicatorRessources?.find(
@@ -38,12 +38,11 @@ const indicatorFiles = computed(() => {
   )
 })
 
-// On formate l'indicateur selon le format attendu par le module de visualisation
+// Format indicator according to the format expected by the visualization module
 const indicatorForGraph = computed(() => {
   const metaData = props.indicator.extras['ecospheres-indicateurs']
 
-  // FIXME:
-  // Mock pour tester le dataset 'pouvoir-de-rechauffement-global-par-secteur'
+  // FIXME: Mock in order to test 'pouvoir-de-rechauffement-global-par-secteur'
   const isMockDataset = props.indicator.id === '67cad6f3b0a47a080da80278'
 
   const formatted = {
@@ -58,7 +57,7 @@ const indicatorForGraph = computed(() => {
   return formatted
 })
 
-// Watcher pour initialiser la visualisation quand les données changent
+// Watcher to trigger visualization initialization when data changes
 watch(
   indicatorFiles,
   (newIndicatorFiles, oldIndicatorFiles) => {
@@ -75,18 +74,13 @@ watch(
   },
   { immediate: true }
 )
-
-// Pour le html :
-// On affiche le module de visualisation seulement si l'indicateur a des fichiers dans data.gouv.fr
-// Et si il a bien `enable_visualization` dans les meta données de l'indicateur
-// On met une <div> avec la classe `indicator-viz` que le script de visualisation va reconnaitre et remplir
-// on passe les données des fichiers et de l'indicateur via les attributs data-* de la div
 </script>
 
 <template
   v-if="indicatorFiles.length > 0 && indicatorForGraph.enableVisualisation"
 >
   <h2 class="subtitle subtitle--uppercase">Pré-visualisation</h2>
+  <!-- Visualisation will use this div to render the graph through @ecolabadata/tabular-dataviz -->
   <div
     class="indicator-viz"
     :data-indicator-id="indicator.id"
