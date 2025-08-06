@@ -5,7 +5,6 @@
       target="_blank"
       >{{ apiOrData.Nom_donnees_ou_API }}</a
     >
-    <p v-if="customDescription">{{ customDescription }}</p>
     <!-- eslint-disable vue/no-v-html -->
     <div
       v-if="customDescription && customDescription.length > 0"
