@@ -58,14 +58,6 @@
                 </li>
               </ol>
             </li>
-            <li>
-              <a
-                id="summary-link-3"
-                class="fr-summary__link"
-                href="#donnees-et-api-utiles"
-                >Les jeux de données et API utiles</a
-              >
-            </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
           <p class="fr-text--sm">
@@ -165,12 +157,9 @@
       </div>
     </div>
 
-    <h2 id="donnees-et-api-utiles" class="h2-cas-usage fr-h2 fr-mt-5w">
-      Les jeux de données et API utiles
-    </h2>
     <SimplifionsDataApiList
-      v-if="usefulDataApi.length"
-      :data-api-list="usefulDataApi"
+      v-if="usefulDataApiNotRecommended.length"
+      :data-api-list="usefulDataApiNotRecommended"
       :custom-descriptions="customDescriptionsForDataApi"
     />
     <p v-else class="fr-text--sm">
@@ -275,6 +264,17 @@ const usefulDataApi = computed(() => {
   }
   return casUsage.API_et_donnees_utiles.filter(
     (apidOrData) => apidOrData.UID_data_gouv
+  )
+})
+
+const usefulDataApiNotRecommended = computed(() => {
+  return usefulDataApi.value.filter(
+    (apidOrData) =>
+      !casUsage.reco_solutions.some((recoSolution) =>
+        recoSolution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs.includes(
+          apidOrData.UID_data_gouv
+        )
+      )
   )
 })
 </script>
