@@ -231,6 +231,11 @@
                   }"
                   class="cas-d-usage-link"
                 >
+                  {{
+                    (casUsage.extras as SimplifionsCasUsagesExtras)[
+                      'simplifions-cas-d-usages'
+                    ].Icone_du_titre
+                  }}
                   {{ casUsage.name }}
                 </router-link>
               </h3>
@@ -288,6 +293,7 @@ import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
+import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
 import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
