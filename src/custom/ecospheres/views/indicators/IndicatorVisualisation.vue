@@ -26,12 +26,12 @@ const indicatorFiles = computed(() => {
   return (
     mainResourcesGroup?.resources
       .map((resource) => {
-        const metaData = resource.extras['ecospheres-indicateurs']
+        const metadata = resource.extras['ecospheres-indicateurs']
         return {
           id: resource.id,
-          mesh: metaData?.maille,
-          valueColumn: metaData?.['value-column'],
-          axes: metaData?.axes
+          mesh: metadata?.maille,
+          valueColumn: metadata?.['value-column'],
+          axes: metadata?.axes
         }
       })
       .filter((f) => f.mesh) || []
@@ -40,18 +40,18 @@ const indicatorFiles = computed(() => {
 
 // Format indicator according to the format expected by the visualization module
 const indicatorForGraph = computed(() => {
-  const metaData = props.indicator.extras['ecospheres-indicateurs']
+  const metadata = props.indicator.extras['ecospheres-indicateurs']
 
   // FIXME: Mock in order to test 'pouvoir-de-rechauffement-global-par-secteur'
   const isMockDataset = props.indicator.id === '67cad6f3b0a47a080da80278'
 
   const formatted = {
     id: props.indicator.id,
-    unite: isMockDataset ? 'tonne' : (metaData?.unite ?? ''),
-    summable: isMockDataset ? true : (metaData?.summable ?? true),
+    unite: isMockDataset ? 'tonne' : (metadata?.unite ?? ''),
+    summable: isMockDataset ? true : (metadata?.summable ?? true),
     enableVisualisation: isMockDataset
       ? true
-      : (metaData?.['enable_visualization'] ?? false)
+      : (metadata?.['enable_visualization'] ?? false)
   }
 
   return formatted
