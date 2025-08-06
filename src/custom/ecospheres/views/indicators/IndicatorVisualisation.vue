@@ -57,6 +57,31 @@ const indicatorForGraph = computed(() => {
   return formatted
 })
 
+// Function to wait for DOM element to be ready before initializing visualization
+const initializeWhenReady = async () => {
+  await nextTick()
+
+  // Wait for the indicator-viz element to be available in the DOM
+  const waitForElement = () => {
+    return new Promise((resolve) => {
+      const checkForElement = () => {
+        const element = document.querySelector(
+          `[data-indicator-id="${props.indicator.id}"]`
+        )
+        if (element) {
+          resolve(element)
+        } else {
+          setTimeout(checkForElement, 50)
+        }
+      }
+      checkForElement()
+    })
+  }
+
+  await waitForElement()
+  initializeVisualization()
+}
+
 // Watcher to trigger visualization initialization when data changes
 watch(
   indicatorFiles,
@@ -64,12 +89,7 @@ watch(
     if (
       JSON.stringify(newIndicatorFiles) !== JSON.stringify(oldIndicatorFiles)
     ) {
-      nextTick(() => {
-        // FIXME: to many timeout tricks here
-        setTimeout(() => {
-          initializeVisualization({ timeout: 500 })
-        }, 100)
-      })
+      initializeWhenReady()
     }
   },
   { immediate: true }
