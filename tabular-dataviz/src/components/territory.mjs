@@ -15,26 +15,26 @@ export function makeTerritoryDropDown(indicator) {
    * Construction et ajout de la dropdown des territoires
    * les listes des territoires sont importées depuis des fichiers "en dur"
    */
+  const choices = {
+    region: {
+      label: 'Région',
+      values: REGIONS
+    },
+    departement: {
+      label: 'Département',
+      values: DEPARTEMENTS
+    },
+    epci: {
+      label: 'EPCI',
+      values: EPCIS
+    },
+    commune: {
+      label: 'Commune',
+      values: COMMUNES
+    }
+  }
   const mesh = getCurrentMesh(indicator)
   if (mesh !== 'fr') {
-    const choices = {
-      region: {
-        label: 'Région',
-        values: REGIONS
-      },
-      departement: {
-        label: 'Département',
-        values: DEPARTEMENTS
-      },
-      epci: {
-        label: 'EPCI',
-        values: EPCIS
-      },
-      commune: {
-        label: 'Commune',
-        values: COMMUNES
-      }
-    }
     if ((!mesh) in choices) {
       throw 'no territories for this mesh'
     }
