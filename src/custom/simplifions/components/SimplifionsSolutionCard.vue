@@ -1,6 +1,7 @@
 <template>
   <router-link
     :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
+    class="simplifions-card-link fr-p-0"
   >
     <div
       class="fr-card fr-enlarge-link fr-card--shadow topic-card"
@@ -66,6 +67,12 @@ const imageUrl = solution?.Image_principale?.[0]
 </script>
 
 <style scoped>
+.simplifions-card-link {
+  display: block;
+  margin-bottom: 1rem;
+  background: none;
+}
+
 .topic-image-container {
   position: relative;
 }
