@@ -1,55 +1,56 @@
 <template>
-  <a
-    href="datagouvLink"
-    :class="`api-or-dataset-card ${entityName}-card ${
-      customDescription ? 'with-description' : ''
-    }`"
-  >
-    <div class="api-or-dataset-header">
-      <div
-        v-if="resourceNotFound || !datagouvResource"
-        class="disabled-card fr-p-2w"
-      >
-        <h4 class="fr-col-12">
-          {{ apiOrData.Nom_donnees_ou_API }}
-        </h4>
-        <p class="fr-col-12 fr-grid-row justify-between">
-          <span class="fr-text--sm fr-mb-0"
-            >ID: {{ apiOrData.UID_data_gouv }}</span
-          >
-
-          <span v-if="resourceNotFound">
-            ⚠️ {{ apiOrData.Type }} non trouvé{{
-              apiOrData.Type == 'API' ? 'e' : ''
-            }}
-          </span>
-          <span v-else> Chargement du lien en cours... </span>
-        </p>
-      </div>
-
-      <DatasetCard
-        v-else-if="entityName == 'datasets'"
-        class="no-margins"
-        :dataset="datagouvResource as DatasetV2"
-        :dataset-url="datagouvLink"
-      />
-      <DataserviceCard
-        v-else-if="entityName == 'dataservices'"
-        class="no-margins"
-        :dataservice="datagouvResource as DataserviceV2"
-        :dataservice-url="datagouvLink"
-      />
-      <div v-else>{{ entityName }} | {{ datagouvResource.title }}</div>
-    </div>
+  <div class="reco-data-api-card fr-p-2w">
+    <h4 class="fr-h4 fr-mb-2w">
+      ➡️ {{ datagouvResource?.title || apiOrData.Nom_donnees_ou_API }}
+    </h4>
 
     <div
       v-if="customDescription && datagouvResource"
-      class="api-or-dataset-description fr-pt-2w fr-pl-4w fr-pr-2w"
+      class="api-or-dataset-description fr-px-2w"
     >
       <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-html="fromMarkdown(customDescription)"></p>
     </div>
-  </a>
+
+    <a :href="datagouvLink" :class="`api-or-dataset-card ${entityName}-card`">
+      <div class="api-or-dataset-header">
+        <div
+          v-if="resourceNotFound || !datagouvResource"
+          class="disabled-card fr-p-2w"
+        >
+          <h4 class="fr-col-12">
+            {{ apiOrData.Nom_donnees_ou_API }}
+          </h4>
+          <p class="fr-col-12 fr-grid-row justify-between">
+            <span class="fr-text--sm fr-mb-0"
+              >ID: {{ apiOrData.UID_data_gouv }}</span
+            >
+
+            <span v-if="resourceNotFound">
+              ⚠️ {{ apiOrData.Type }} non trouvé{{
+                apiOrData.Type == 'API' ? 'e' : ''
+              }}
+            </span>
+            <span v-else> Chargement du lien en cours... </span>
+          </p>
+        </div>
+
+        <DatasetCard
+          v-else-if="entityName == 'datasets'"
+          class="no-margins"
+          :dataset="datagouvResource as DatasetV2"
+          :dataset-url="datagouvLink"
+        />
+        <DataserviceCard
+          v-else-if="entityName == 'dataservices'"
+          class="no-margins"
+          :dataservice="datagouvResource as DataserviceV2"
+          :dataservice-url="datagouvLink"
+        />
+        <div v-else>{{ entityName }} | {{ datagouvResource.title }}</div>
+      </div>
+    </a>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -94,9 +95,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.api-or-dataset-card.with-description {
-  display: block;
-  border-left: 4px solid var(--border-default-blue-france);
+.reco-data-api-card {
+  background-color: #f6f6f6;
+  border-radius: 4px;
 }
 
 .no-margins {
@@ -117,15 +118,7 @@ a.api-or-dataset-card:hover .api-or-dataset-header {
   background-color: var(--hover);
 }
 
-.api-or-dataset-header,
-.api-or-dataset-description {
+.api-or-dataset-header {
   background-color: white;
-}
-
-.api-or-dataset-description {
-  border: 1px solid #e4e4e4;
-  border-top: none;
-  text-decoration: none;
-  color: inherit;
 }
 </style>
