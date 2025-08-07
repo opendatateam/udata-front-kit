@@ -20,6 +20,8 @@ const props = defineProps({
 })
 
 const resourceStore = useResourceStore()
+// Track if visualization has been initialized to prevent multiple calls
+const isInitialized = ref(false)
 
 // Format files according to the format expected by the visualization module
 const indicatorResources = computed(() => {
@@ -89,15 +91,17 @@ const initializeWhenReady = async () => {
   initializeVisualization()
 }
 
-// Watcher to trigger visualization initialization when data changes
+// Watch for resources becoming available and initialize once
 watch(
   indicatorResources,
-  (newIndicatorResources, oldIndicatorResources) => {
+  async (newResources) => {
     if (
-      JSON.stringify(newIndicatorResources) !==
-      JSON.stringify(oldIndicatorResources)
+      newResources.length > 0 &&
+      indicatorForGraph.value.enableVisualisation &&
+      !isInitialized.value
     ) {
-      initializeWhenReady()
+      isInitialized.value = true
+      await initializeWhenReady()
     }
   },
   { immediate: true }
