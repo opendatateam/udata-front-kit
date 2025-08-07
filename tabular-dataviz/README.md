@@ -74,7 +74,15 @@ Disponibles dans `file.extras['ecospheres-indicateurs']` :
 - `value-column` : nom de la colonne contenant la valeur principale
 - `axes` : objet avec les noms des colonnes des axes
 
-> Seules les clés de l'objet `axes` sont utilisées. Le module affiche les valeurs disponibles selon les données réelles du fichier.
+Seules les clés de l'objet `axes` sont utilisées par le module. On lui passe donc une simple liste des clés.
+
+```json
+{
+  "maille": "region",
+  "value-column": "emission_co2",
+  "axes": ["secteur", "type_energie"]
+}
+```
 
 ### Meta-données de l'indicateur
 

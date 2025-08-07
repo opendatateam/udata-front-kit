@@ -13,7 +13,7 @@ function getAxesForCurrentFileAndData(file, data) {
   /**
    * On récupère directement les valeurs des axes depuis les données et pas les meta-données
    */
-  const axesNames = Object.keys(file.axes)
+  const axesNames = file.axes
   return axesNames.reduce((acc, key) => {
     acc[key] = [...new Set(data.map((item) => item[key]))]
     return acc

@@ -59,7 +59,7 @@ export function formatData(data, file) {
   if (!data || data.length === 0) {
     return []
   }
-  const axesNames = Object.keys(file.axes)
+  const axesNames = file.axes
   const valueColumn = file.valueColumn
   const formatedData = data.map((d) => {
     const row = {

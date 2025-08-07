@@ -19,7 +19,7 @@ export function getFilesFromContainer(container) {
 
 export function getFiles(indicator) {
   const container = getContainer(indicator)
-  return JSON.parse(decodeURIComponent(container.dataset.files))
+  return getFilesFromContainer(container)
 }
 
 export function getChartCanvas(indicator) {

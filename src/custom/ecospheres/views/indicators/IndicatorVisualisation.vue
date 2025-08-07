@@ -3,6 +3,10 @@ import { useResourceStore } from '@/store/ResourceStore'
 import type { DatasetV2 } from '@datagouv/components'
 import { initializeVisualization } from '@ecolabdata/tabular-dataviz'
 import '@ecolabdata/tabular-dataviz/styles/visualisation.css'
+import type {
+  IndicatorExtras,
+  IndicatorResourceExtras
+} from '../../model/indicator'
 
 const props = defineProps({
   indicator: {
@@ -25,12 +29,14 @@ const indicatorResources = computed(() => {
   return (
     mainResourcesGroup?.resources
       .map((resource) => {
-        const metadata = resource.extras['ecospheres-indicateurs']
+        const metadata = resource.extras[
+          'ecospheres-indicateurs'
+        ] as IndicatorResourceExtras | null
         return {
           id: resource.id,
           mesh: metadata?.maille,
           valueColumn: metadata?.['value-column'],
-          axes: metadata?.axes
+          axes: Object.keys(metadata?.axes || {})
         }
       })
       .filter((f) => f.mesh) || []
@@ -39,14 +45,16 @@ const indicatorResources = computed(() => {
 
 // Format indicator according to the format expected by the visualization module
 const indicatorForGraph = computed(() => {
-  const metadata = props.indicator.extras['ecospheres-indicateurs']
+  const metadata = props.indicator.extras[
+    'ecospheres-indicateurs'
+  ] as IndicatorExtras
 
   // FIXME: Mock in order to test 'pouvoir-de-rechauffement-global-par-secteur'
   const isMockDataset = props.indicator.id === '67cad6f3b0a47a080da80278'
 
   const formatted = {
     id: props.indicator.id,
-    unite: isMockDataset ? 'tonne' : (metadata?.unite ?? ''),
+    unite: isMockDataset ? 't' : (metadata?.unite ?? ''),
     summable: isMockDataset ? true : (metadata?.summable ?? true),
     enableVisualisation: isMockDataset
       ? true

@@ -65,7 +65,7 @@ export async function fetchData(indicator) {
   // On sauvegarde les données et les axes directement dans le DOM (sous forme de script JSON)
   // Ce qui permettra de ne pas effectuer de nouvelles requêtes à l'API si l'utilisateur filtre sur les axes
   saveInTheDOM(indicator, 'data', formatedData)
-  saveInTheDOM(indicator, 'axes', Object.keys(file.axes))
+  saveInTheDOM(indicator, 'axes', file.axes)
   // Une fois qu'on a les données, on peut remplir les valeurs possibles des axes
   // Cela permet de ne pas afficher des valeurs d'axe absentes du jeu de données courant
   makeAxesCheckboxes(indicator, file, formatedData)
