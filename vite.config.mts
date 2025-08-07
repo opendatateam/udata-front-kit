@@ -114,6 +114,18 @@ export default defineConfig(({ mode }) => {
           "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com dev.local:7000"
         ].join('; ')
       }
+    },
+    optimizeDeps: {
+      include: [
+        '@datagouv/components-next',
+        'debug',
+        'extend',
+        'highlight.js',
+        'rehype-highlight',
+        'swagger-ui-dist',
+        'unist-util-find',
+        'unist-util-find-all-between'
+      ]
     }
   }
 })
