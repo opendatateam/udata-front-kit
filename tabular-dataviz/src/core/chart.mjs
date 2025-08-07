@@ -55,7 +55,8 @@ function getConfig(indicator, datasets, minYear, maxYear) {
           suggestedMax: maxYear,
           suggestedMin: minYear,
           ticks: {
-            callback: (val) => val.toString()
+            stepSize: 1,
+            callback: (val) => (Number.isInteger(val) ? val.toString() : '')
           }
         },
         y: {
