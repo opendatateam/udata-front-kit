@@ -74,14 +74,20 @@ function getConfig(indicator, datasets, minYear, maxYear) {
 
 function getMinMaxYear(years) {
   /**
-   ** Pour définir la borne min et max de l'axe X du graphique
+   ** Pour définir la borne min et max de l'axe X du graphique, avec min 3 années
    */
   const minYear = Math.min(...years)
-  const minNumberOfYears = 3
-  let maxYear = Math.max(...years)
-  if (maxYear - minYear < minNumberOfYears) {
-    maxYear += 1
+  const maxYear = Math.max(...years)
+  const yearRange = maxYear - minYear
+
+  if (yearRange === 0) {
+    // Une seule année : centrer sur 3 années
+    return [minYear - 1, minYear + 1]
+  } else if (yearRange === 1) {
+    // Deux années : ajouter une année avant pour avoir 3 années
+    return [minYear - 1, maxYear]
   }
+  // 3 années ou plus : utiliser les valeurs originales
   return [minYear, maxYear]
 }
 

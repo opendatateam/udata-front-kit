@@ -51,7 +51,7 @@ export function makeAxesCheckboxes(indicator, file, data) {
         )
         .join('\n')}
       <div class="fr-messages-group" id="checkboxes-messages-${suffix}" aria-live="polite"></div>
-  </fieldset>
+    </fieldset>
         ${
           indicator.summable &&
           `
