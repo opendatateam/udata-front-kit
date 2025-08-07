@@ -1,4 +1,4 @@
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 
 import type { GenericResponse } from './api'
 import type { DatasetProperties } from './topic'
@@ -14,6 +14,7 @@ export interface DatasetModalData {
   mode: 'edit' | 'create'
 }
 
+// TODO use ContactPoint from @datagouv
 export interface ContactPoint {
   id: string
   name: string

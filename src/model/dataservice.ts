@@ -1,6 +1,7 @@
-import type { Organization } from '@datagouv/components'
+import type { Organization } from '@datagouv/components-next'
 import type { GenericResponse } from './api'
 
+// TODO: use Dataservice type from @datagouv ?
 export interface DataserviceV2 {
   id: string
   title: string

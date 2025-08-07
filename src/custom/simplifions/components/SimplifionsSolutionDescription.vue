@@ -282,7 +282,7 @@
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
-import { OrganizationNameWithCertificate } from '@datagouv/components'
+import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { onMounted, ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
