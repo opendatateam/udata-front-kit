@@ -12,7 +12,7 @@ import {
   getTabularApiUrl,
   saveInTheDOM
 } from './dom.mjs'
-import { GEOCOLUMNS, YEAR_COLUMN } from './enums.mjs'
+import { DEFAULT_TABULAR_API_URL, GEOCOLUMNS, YEAR_COLUMN } from './enums.mjs'
 import { formatData } from './format.mjs'
 
 async function fetchPage(url, allData) {
@@ -57,8 +57,7 @@ export async function fetchData(indicator) {
   const files = getFiles(indicator)
   const file = files.find((f) => f.mesh === mesh)
   const geoCondition = getGeoCondition(indicator, mesh)
-  const baseUrl =
-    getTabularApiUrl(indicator) || 'https://tabular-api.data.gouv.fr'
+  const baseUrl = getTabularApiUrl(indicator) || DEFAULT_TABULAR_API_URL
   const path = `${baseUrl}/api/resources/${file.id}/data/`
   const url = `${path}?${geoCondition}${YEAR_COLUMN}__sort=asc`
   let allData = []

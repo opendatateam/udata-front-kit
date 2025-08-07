@@ -1,3 +1,5 @@
+export const DEFAULT_TABULAR_API_URL = 'https://tabular-api.data.gouv.fr'
+
 export const GEOCOLUMNS = {
   departement: 'geocode_departement',
   region: 'geocode_region',
