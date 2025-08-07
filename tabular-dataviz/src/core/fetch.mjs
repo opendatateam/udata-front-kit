@@ -60,8 +60,7 @@ export async function fetchData(indicator) {
   const baseUrl = getTabularApiUrl(indicator) || DEFAULT_TABULAR_API_URL
   const path = `${baseUrl}/api/resources/${file.id}/data/`
   const url = `${path}?${geoCondition}${YEAR_COLUMN}__sort=asc`
-  let allData = []
-  allData = await fetchPage(url, allData)
+  const allData = await fetchPage(url, [])
   const formatedData = formatData(allData, file)
   // On sauvegarde les données et les axes directement dans le DOM (sous forme de script JSON)
   // Ce qui permettra de ne pas effectuer de nouvelles requêtes à l'API si l'utilisateur filtre sur les axes
