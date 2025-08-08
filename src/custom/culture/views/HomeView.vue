@@ -5,6 +5,7 @@ import { onMounted, ref } from 'vue'
 import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
 import CustomCard from '@/custom/culture/components/CustomCard.vue'
+import { fromMarkdown } from '@/utils'
 
 useHead({
   meta: [
@@ -127,13 +128,6 @@ const getBackgroundClass = (backgroundColor: string) => {
   if (backgroundColor === '#F6F6F6') return 'bg-light'
   if (backgroundColor === '#F3F6FE') return 'bg-blue'
   return ''
-}
-
-const parseMarkdown = (content: string) => {
-  return content
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-    .replace(/\n/g, '<br>')
 }
 
 onMounted(async () => {
@@ -280,7 +274,7 @@ onMounted(async () => {
               :key="item.id"
               class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle highlight-section"
             >
-              <div class="fr-col-12 fr-col-md-6" v-if="item.fields.imageUrl">
+              <div v-if="item.fields.imageUrl" class="fr-col-12 fr-col-md-6">
                 <img
                   :src="item.fields.imageUrl"
                   :alt="item.fields.title"
@@ -292,9 +286,10 @@ onMounted(async () => {
                   {{ section.fields.section_title }}
                 </h3>
                 <h4 class="fr-h6 fr-mb-2w">{{ item.fields.title }}</h4>
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <div
                   class="fr-text--sm fr-mb-3w"
-                  v-html="parseMarkdown(item.fields.content)"
+                  v-html="fromMarkdown(item.fields.content)"
                 ></div>
                 <a
                   v-if="item.fields.ctaLink && item.fields.ctaLabel"
@@ -316,10 +311,11 @@ onMounted(async () => {
           :class="getBackgroundClass(section.fields.background_color)"
         >
           <h2>{{ section.fields.section_title }}</h2>
+          <!-- eslint-disable-next-line vue/no-v-html -->
           <div
             v-for="item in getContentForSection(section.fields.section)"
             :key="item.id"
-            v-html="parseMarkdown(item.fields.content)"
+            v-html="fromMarkdown(item.fields.content)"
           ></div>
         </section>
 
@@ -332,10 +328,11 @@ onMounted(async () => {
             <div class="newsletter-social-content">
               <div class="newsletter-section">
                 <h3>{{ section.fields.section_title }}</h3>
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <div
                   v-for="item in getContentForSection(section.fields.section)"
                   :key="item.id"
-                  v-html="parseMarkdown(item.fields.content)"
+                  v-html="fromMarkdown(item.fields.content)"
                 ></div>
                 <br />
                 <a

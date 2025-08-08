@@ -1,22 +1,17 @@
 <script setup lang="ts">
+import { fromMarkdown } from '@/utils'
+
 interface Props {
   title?: string
   description?: string
   imgSrc?: string
   link?: string
   altImg?: string
-  titleLinkAttrs?: Record<string, any>
+  titleLinkAttrs?: Record<string, string | number | boolean>
   ctaLabel?: string
 }
 
 const { link, ctaLabel } = defineProps<Props>()
-
-const parseMarkdown = (content: string) => {
-  return content
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="custom-link">$1</a>')
-    .replace(/\n/g, '<br>')
-}
 </script>
 
 <template>
@@ -26,10 +21,11 @@ const parseMarkdown = (content: string) => {
         <h3 class="fr-card__title">
           {{ title }}
         </h3>
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <div
           v-if="description"
-          class="fr-card__desc custom-links"
-          v-html="parseMarkdown(description)"
+          class="fr-card__desc custom-links custom-card-desc culture-card-description"
+          v-html="fromMarkdown(description)"
         ></div>
       </div>
       <div v-if="ctaLabel || link" class="fr-card__cta">
@@ -91,13 +87,19 @@ const parseMarkdown = (content: string) => {
 
 .fr-card__desc {
   color: var(--text-default-grey);
-  font-size: 0.75rem;
-  line-height: 1.4;
+  font-size: 0.65rem !important;
+  line-height: 1.3;
   margin-bottom: 1rem;
 }
 
-.fr-card__desc :deep(strong) {
-  font-weight: 700;
+.custom-card-desc {
+  font-size: 0.65rem !important;
+  line-height: 1.3 !important;
+}
+
+.culture-card-description :deep(p) {
+  font-size: 0.8rem !important;
+  line-height: 1.5 !important;
 }
 
 .fr-card__desc :deep(a) {
