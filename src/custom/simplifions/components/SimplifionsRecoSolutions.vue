@@ -204,7 +204,7 @@ import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
   recoSolution: RecoSolution
-  withSubproducts: boolean
+  withProvidedDataApi: boolean
   usefulDataApi: SimplifionsDataOrApi[]
   customDescriptions: Record<string, string>
 }>()
@@ -213,7 +213,7 @@ const reco_solution = props.recoSolution
 
 const displaySubProducts = computed(() => {
   return (
-    props.withSubproducts &&
+    props.withProvidedDataApi &&
     reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs
       ?.length
   )

@@ -150,7 +150,7 @@
         >
           <SimplifionsRecoSolutions
             :reco-solution="reco_solution"
-            :with-subproducts="group.with_subproducts"
+            :with-provided-data-api="group.with_provided_data_api"
             :useful-data-api="usefulDataApi"
             :custom-descriptions="customDescriptionsForDataApi"
           />
@@ -222,7 +222,7 @@ const usefulDataApi = computed(() => {
   )
 })
 
-const usefulDataApiNotRecommendedInsideARecoSolution = computed(() => {
+const dataApiNotProvidedByARecoSolution = computed(() => {
   return usefulDataApi.value.filter(
     (apidOrData) =>
       !casUsage.reco_solutions.some((recoSolution) =>
@@ -234,43 +234,44 @@ const usefulDataApiNotRecommendedInsideARecoSolution = computed(() => {
 })
 
 const grouped_reco_solutions = computed(() => {
-  const first_group = {
-    title: 'Aucun développement, ni budget',
-    with_subproducts: false,
-    reco_solutions: casUsage.reco_solutions.filter((recoSolution) =>
+  const first_group_reco_solutions = casUsage.reco_solutions.filter(
+    (recoSolution) =>
       recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
         'Aucun développement, ni budget'
       )
-    ),
-    data_api_list: []
-  }
-  const second_group = {
-    title: 'Avec des moyens techniques ou un éditeur de logiciel',
-    with_subproducts: true,
-    data_api_recos: usefulDataApiNotRecommendedInsideARecoSolution.value,
-    reco_solutions: casUsage.reco_solutions.filter(
-      (recoSolution) =>
-        !recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
-          'Aucun développement, ni budget'
-        )
-    )
-  }
+  )
+  const second_group_reco_solutions = casUsage.reco_solutions.filter(
+    (recoSolution) =>
+      !recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
+        'Aucun développement, ni budget'
+      )
+  )
 
   const groups: Array<{
     title: string
     reco_solutions: RecoSolution[]
-    with_subproducts: boolean
+    with_provided_data_api: boolean
     data_api_recos?: SimplifionsDataOrApi[]
   }> = []
 
-  if (first_group.reco_solutions.length) {
-    groups.push(first_group)
+  if (first_group_reco_solutions.length) {
+    groups.push({
+      title: 'Aucun développement, ni budget',
+      with_provided_data_api: false,
+      reco_solutions: first_group_reco_solutions,
+      data_api_recos: []
+    })
   }
   if (
-    second_group.reco_solutions.length ||
-    second_group.data_api_recos?.length
+    second_group_reco_solutions.length ||
+    dataApiNotProvidedByARecoSolution.value.length
   ) {
-    groups.push(second_group)
+    groups.push({
+      title: 'Avec des moyens techniques ou un éditeur de logiciel',
+      with_provided_data_api: true,
+      reco_solutions: second_group_reco_solutions,
+      data_api_recos: dataApiNotProvidedByARecoSolution.value
+    })
   }
 
   return groups
