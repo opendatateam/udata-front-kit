@@ -137,6 +137,24 @@
         <a href="#modification-contenu">✍️ Proposer un contenu</a>.
       </p>
 
+      <div v-if="displaySubProducts" class="fr-col-12">
+        <hr />
+        <p>
+          <strong>API et données utiles fournies par la solution :</strong>
+        </p>
+        <ul>
+          <li
+            v-for="apidOrData in usefulDataApiFourniesParLaSolution"
+            :key="apidOrData.UID_data_gouv"
+          >
+            <SimplifionsRecoDataApiCard
+              :api-or-data="apidOrData"
+              :custom-description="customDescriptions[apidOrData.UID_data_gouv]"
+            />
+          </li>
+        </ul>
+      </div>
+
       <div
         v-if="reco_solution.solutions_editeurs_topics?.length"
         class="fr-col-12"
@@ -181,14 +199,25 @@
 
 <script setup lang="ts">
 import { fromMarkdown } from '@/utils'
-import type { RecoSolution } from '../model/cas_usage'
+import type { RecoSolution, SimplifionsDataOrApi } from '../model/cas_usage'
 import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
   recoSolution: RecoSolution
+  withProvidedDataApi: boolean
+  usefulDataApi: SimplifionsDataOrApi[]
+  customDescriptions: Record<string, string>
 }>()
 
 const reco_solution = props.recoSolution
+
+const displaySubProducts = computed(() => {
+  return (
+    props.withProvidedDataApi &&
+    reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs
+      ?.length
+  )
+})
 
 const hasContent = computed(() => {
   return (
@@ -197,6 +226,27 @@ const hasContent = computed(() => {
     reco_solution.Concretement_pour_vos_agents_ ||
     reco_solution.Ce_que_ne_fait_pas_cette_solution_
   )
+})
+
+const usefulDataApiFourniesParLaSolution = computed(() => {
+  return props.usefulDataApi
+    .filter((data) =>
+      reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs.includes(
+        data.UID_data_gouv
+      )
+    )
+    .sort((a, b) => {
+      // First sort by custom description length (longer first)
+      const aDescLength = props.customDescriptions[a.UID_data_gouv]?.length || 0
+      const bDescLength = props.customDescriptions[b.UID_data_gouv]?.length || 0
+
+      if (aDescLength !== bDescLength) {
+        return bDescLength - aDescLength // Longer descriptions first
+      }
+
+      // Then sort by name alphabetically
+      return a.Nom_donnees_ou_API.localeCompare(b.Nom_donnees_ou_API)
+    })
 })
 </script>
 
@@ -210,7 +260,7 @@ const hasContent = computed(() => {
 }
 
 .reco-solution {
-  background-color: #f6f6f6;
+  background-color: var(--background-alt-beige-gris-galet);
   /* padding: 15px; */
   border-radius: 4px;
 }
