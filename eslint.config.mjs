@@ -23,7 +23,9 @@ export default [
       '**/dist-ssr/**',
       '**/coverage/**',
       '**/*.d.ts',
-      'eslintrc-auto-import.mjs'
+      'eslintrc-auto-import.mjs',
+      // FIXME: temporary ignore for tabular-dataviz module development
+      'tabular-dataviz/**'
     ]
   },
   eslintConfigPrettier,

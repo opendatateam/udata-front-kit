@@ -7,6 +7,7 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 6709257a89f70088a223eba3
+  tabular_api_url:
 
 robots:
   disallow:

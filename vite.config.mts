@@ -50,8 +50,6 @@ export default defineConfig(({ mode }) => {
           // @ts-expect-error TS2322
           'vue-router',
           // @ts-expect-error TS2322
-          'vitest',
-          // @ts-expect-error TS2322
           vueDsfrAutoimportPreset // Autoimport des composables de VueDsfr
         ],
         vueTemplate: true,
