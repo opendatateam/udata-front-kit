@@ -139,6 +139,7 @@
         v-for="(group, index) in grouped_reco_solutions"
         :key="group.title"
         class="fr-mb-4w"
+        :class="{ 'fr-mt-5w': index > 0 }"
       >
         <h3 :id="`reco-group-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
           {{ group.title }}
