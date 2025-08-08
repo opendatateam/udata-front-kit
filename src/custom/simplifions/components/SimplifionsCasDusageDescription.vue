@@ -150,14 +150,15 @@
         >
           <SimplifionsRecoSolutions
             :reco-solution="reco_solution"
+            :with-subproducts="group.with_subproducts"
             :useful-data-api="usefulDataApi"
             :custom-descriptions="customDescriptionsForDataApi"
           />
         </div>
 
         <SimplifionsDataApiList
-          v-if="group.data_api_list?.length"
-          :data-api-list="group.data_api_list"
+          v-if="group.data_api_recos?.length"
+          :data-api-list="group.data_api_recos"
           :custom-descriptions="customDescriptionsForDataApi"
         />
       </div>
@@ -221,7 +222,7 @@ const usefulDataApi = computed(() => {
   )
 })
 
-const usefulDataApiNotRecommended = computed(() => {
+const usefulDataApiNotRecommendedInsideARecoSolution = computed(() => {
   return usefulDataApi.value.filter(
     (apidOrData) =>
       !casUsage.reco_solutions.some((recoSolution) =>
@@ -235,6 +236,7 @@ const usefulDataApiNotRecommended = computed(() => {
 const grouped_reco_solutions = computed(() => {
   const first_group = {
     title: 'Aucun développement, ni budget',
+    with_subproducts: false,
     reco_solutions: casUsage.reco_solutions.filter((recoSolution) =>
       recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
         'Aucun développement, ni budget'
@@ -244,19 +246,21 @@ const grouped_reco_solutions = computed(() => {
   }
   const second_group = {
     title: 'Avec des moyens techniques ou un éditeur de logiciel',
+    with_subproducts: true,
+    data_api_recos: usefulDataApiNotRecommendedInsideARecoSolution.value,
     reco_solutions: casUsage.reco_solutions.filter(
       (recoSolution) =>
         !recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
           'Aucun développement, ni budget'
         )
-    ),
-    data_api_list: usefulDataApiNotRecommended.value
+    )
   }
 
   const groups: Array<{
     title: string
     reco_solutions: RecoSolution[]
-    data_api_list?: SimplifionsDataOrApi[]
+    with_subproducts: boolean
+    data_api_recos?: SimplifionsDataOrApi[]
   }> = []
 
   if (first_group.reco_solutions.length) {
@@ -264,7 +268,7 @@ const grouped_reco_solutions = computed(() => {
   }
   if (
     second_group.reco_solutions.length ||
-    second_group.data_api_list?.length
+    second_group.data_api_recos?.length
   ) {
     groups.push(second_group)
   }

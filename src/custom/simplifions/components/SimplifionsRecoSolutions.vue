@@ -137,13 +137,7 @@
         <a href="#modification-contenu">✍️ Proposer un contenu</a>.
       </p>
 
-      <div
-        v-if="
-          reco_solution
-            .API_et_data_utiles_fournies_par_la_solution_datagouv_slugs?.length
-        "
-        class="fr-col-12"
-      >
+      <div v-if="displaySubProducts" class="fr-col-12">
         <hr />
         <p>
           <strong>API et données utiles fournies par la solution :</strong>
@@ -210,11 +204,20 @@ import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
   recoSolution: RecoSolution
+  withSubproducts: boolean
   usefulDataApi: SimplifionsDataOrApi[]
   customDescriptions: Record<string, string>
 }>()
 
 const reco_solution = props.recoSolution
+
+const displaySubProducts = computed(() => {
+  return (
+    props.withSubproducts &&
+    reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs
+      ?.length
+  )
+})
 
 const hasContent = computed(() => {
   return (
