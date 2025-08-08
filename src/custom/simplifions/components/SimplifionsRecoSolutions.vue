@@ -257,7 +257,7 @@ const usefulDataApiFourniesParLaSolution = computed(() => {
 }
 
 .reco-solution {
-  background-color: #f6f6f6;
+  background-color: var(--background-alt-beige-gris-galet);
   /* padding: 15px; */
   border-radius: 4px;
 }

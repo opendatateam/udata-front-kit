@@ -96,7 +96,7 @@ onMounted(async () => {
 
 <style scoped>
 .reco-data-api-card {
-  background-color: #f6f6f6;
+  background-color: var(--background-alt-beige-gris-galet);
   border-radius: 4px;
 }
 
