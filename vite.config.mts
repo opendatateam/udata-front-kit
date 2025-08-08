@@ -111,7 +111,7 @@ export default defineConfig(({ mode }) => {
       // ⚠️ this won't be applied on prod or other environments
       headers: {
         'Content-Security-Policy': [
-          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com dev.local:7000"
+          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com dev.local:7000 grist.numerique.gouv.fr"
         ].join('; ')
       }
     }
