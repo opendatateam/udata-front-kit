@@ -36,65 +36,123 @@
         </div>
       </div>
 
-      <div class="fr-col-12 fr-col-sm-8">
-        <p
+      <div v-if="hasContent" class="fr-col-12 fr-col-sm-8 fr-ml-2w">
+        <div
           v-if="
             reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
           "
+          class="reco-section"
         >
-          <strong>
+          <div class="fr-mr-1w bullet-icon">
             <span
               aria-hidden="true"
               class="fr-icon-success-fill icon-green"
             ></span>
-            En quoi cette solution est utile pour ce cas d'usage ?
-          </strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="
-              fromMarkdown(
-                reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
-              )
-            "
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
-        </p>
+          </div>
 
-        <p v-if="reco_solution.Concretement_pour_les_usagers_">
-          <strong>🧑 Concrètement, pour les usagers :</strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="fromMarkdown(reco_solution.Concretement_pour_les_usagers_)"
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
-        </p>
+          <div class="reco-text-column">
+            <div>
+              <strong>
+                En quoi cette solution est utile pour ce cas d'usage ?
+              </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="
+                fromMarkdown(
+                  reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_
+                )
+              "
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
 
-        <p v-if="reco_solution.Concretement_pour_vos_agents_">
-          <strong>🧑‍💼 Concrètement, pour vos agents :</strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="fromMarkdown(reco_solution.Concretement_pour_vos_agents_)"
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
-        </p>
+        <div
+          v-if="reco_solution.Concretement_pour_les_usagers_"
+          class="reco-section"
+        >
+          <div class="fr-mr-1w bullet-icon">
+            <span aria-hidden="true">🧑</span>
+          </div>
 
-        <p v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_">
-          <strong>
+          <div class="reco-text-column">
+            <div>
+              <strong> Concrètement, pour les usagers : </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="
+                fromMarkdown(reco_solution.Concretement_pour_les_usagers_)
+              "
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
+
+        <div
+          v-if="reco_solution.Concretement_pour_vos_agents_"
+          class="reco-section"
+        >
+          <div class="fr-mr-1w bullet-icon">
+            <span aria-hidden="true">🧑‍💼</span>
+          </div>
+
+          <div class="reco-text-column">
+            <div>
+              <strong> Concrètement, pour vos agents : </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="fromMarkdown(reco_solution.Concretement_pour_vos_agents_)"
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
+
+        <div
+          v-if="reco_solution.Ce_que_ne_fait_pas_cette_solution_"
+          class="reco-section"
+        >
+          <div class="fr-mr-1w bullet-icon">
             <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-            Ce que ne fait pas cette solution :
-          </strong>
-          <br />
-          <!-- eslint-disable vue/no-v-html -->
-          <span
-            v-html="
-              fromMarkdown(reco_solution.Ce_que_ne_fait_pas_cette_solution_)
-            "
-          ></span>
-          <!-- eslint-enable vue/no-v-html -->
+          </div>
+
+          <div class="reco-text-column">
+            <div>
+              <strong> Ce que ne fait pas cette solution : </strong>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              v-html="
+                fromMarkdown(reco_solution.Ce_que_ne_fait_pas_cette_solution_)
+              "
+            ></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
+        </div>
+      </div>
+      <p v-else class="fr-text--sm">
+        <i>Aucun contenu actuellement.</i>
+        <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+      </p>
+
+      <div v-if="displaySubProducts" class="fr-col-12">
+        <hr />
+        <p>
+          <strong>API et données utiles fournies par la solution :</strong>
         </p>
+        <ul>
+          <li
+            v-for="apidOrData in usefulDataApiFourniesParLaSolution"
+            :key="apidOrData.UID_data_gouv"
+          >
+            <SimplifionsRecoDataApiCard
+              :api-or-data="apidOrData"
+              :custom-description="customDescriptions[apidOrData.UID_data_gouv]"
+            />
+          </li>
+        </ul>
       </div>
 
       <div
@@ -141,19 +199,68 @@
 
 <script setup lang="ts">
 import { fromMarkdown } from '@/utils'
-import type { RecoSolution } from '../model/cas_usage'
+import type { RecoSolution, SimplifionsDataOrApi } from '../model/cas_usage'
 import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
   recoSolution: RecoSolution
+  withProvidedDataApi: boolean
+  usefulDataApi: SimplifionsDataOrApi[]
+  customDescriptions: Record<string, string>
 }>()
 
 const reco_solution = props.recoSolution
+
+const displaySubProducts = computed(() => {
+  return (
+    props.withProvidedDataApi &&
+    reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs
+      ?.length
+  )
+})
+
+const hasContent = computed(() => {
+  return (
+    reco_solution.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_ ||
+    reco_solution.Concretement_pour_les_usagers_ ||
+    reco_solution.Concretement_pour_vos_agents_ ||
+    reco_solution.Ce_que_ne_fait_pas_cette_solution_
+  )
+})
+
+const usefulDataApiFourniesParLaSolution = computed(() => {
+  return props.usefulDataApi
+    .filter((data) =>
+      reco_solution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs.includes(
+        data.UID_data_gouv
+      )
+    )
+    .sort((a, b) => {
+      // First sort by custom description length (longer first)
+      const aDescLength = props.customDescriptions[a.UID_data_gouv]?.length || 0
+      const bDescLength = props.customDescriptions[b.UID_data_gouv]?.length || 0
+
+      if (aDescLength !== bDescLength) {
+        return bDescLength - aDescLength // Longer descriptions first
+      }
+
+      // Then sort by name alphabetically
+      return a.Nom_donnees_ou_API.localeCompare(b.Nom_donnees_ou_API)
+    })
+})
 </script>
 
 <style scoped>
+.bullet-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .reco-solution {
-  background-color: #f6f6f6;
+  background-color: var(--background-alt-beige-gris-galet);
   /* padding: 15px; */
   border-radius: 4px;
 }
@@ -186,5 +293,9 @@ const reco_solution = props.recoSolution
 
 .icon-red {
   color: #ff292f;
+}
+
+.reco-section {
+  display: flex;
 }
 </style>

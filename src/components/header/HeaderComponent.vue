@@ -79,12 +79,12 @@ const dropdown = config.website.header_search.dropdown ?? undefined
           :alt="serviceTitle"
         />
       </div>
-      <span
+      <p
         v-if="showBadge"
         :class="`fr-badge fr-badge--sm fr-badge--${badgeStyle}`"
       >
         {{ badgeText }}
-      </span>
+      </p>
     </template>
 
     <template #after-quick-links>
