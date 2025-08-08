@@ -1,5 +1,5 @@
 <template>
-  <ul class="fr-grid-row fr-grid-row--gutters list-none fr-pb-2w">
+  <ul class="fr-grid-row fr-grid-row--gutters list-none fr-pt-2w">
     <li
       v-for="(apidOrData, index) in sortedDataApiList"
       :key="apidOrData.UID_data_gouv"

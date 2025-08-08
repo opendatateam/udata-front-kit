@@ -154,14 +154,14 @@
             :custom-descriptions="customDescriptionsForDataApi"
           />
         </div>
+
+        <SimplifionsDataApiList
+          v-if="group.data_api_list?.length"
+          :data-api-list="group.data_api_list"
+          :custom-descriptions="customDescriptionsForDataApi"
+        />
       </div>
     </div>
-
-    <SimplifionsDataApiList
-      v-if="usefulDataApiNotRecommended.length"
-      :data-api-list="usefulDataApiNotRecommended"
-      :custom-descriptions="customDescriptionsForDataApi"
-    />
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
       <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
@@ -187,7 +187,8 @@ import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import type {
   RecoSolution,
-  SimplifionsCasUsagesExtras
+  SimplifionsCasUsagesExtras,
+  SimplifionsDataOrApi
 } from '../model/cas_usage'
 import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
@@ -202,16 +203,6 @@ const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
   'simplifions-cas-d-usages'
 ]
 
-const budget_group = (budget: Array<string>) => {
-  if (!budget) {
-    return ''
-  }
-  if (budget.includes('Aucun développement, ni budget')) {
-    return 'Aucun développement, ni budget'
-  }
-  return 'Avec des moyens techniques ou un éditeur de logiciel'
-}
-
 const customDescriptionsForDataApi =
   casUsage.descriptions_api_et_donnees_utiles.reduce(
     (acc, description) => {
@@ -219,36 +210,6 @@ const customDescriptionsForDataApi =
       return acc
     },
     {} as Record<string, string>
-  )
-
-// Affichage des parties reco solutions, dans l'ordre voulu
-
-const grouped_reco_solutions = casUsage.reco_solutions
-  .reduce(
-    (
-      acc: Array<{ title: string; reco_solutions: RecoSolution[] }>,
-      reco_solution: RecoSolution
-    ) => {
-      const title = budget_group(
-        reco_solution.Moyens_requis_pour_la_mise_en_oeuvre
-      )
-      const existingGroup = acc.find((group) => group.title === title)
-
-      if (existingGroup) {
-        existingGroup.reco_solutions.push(reco_solution)
-      } else {
-        acc.push({ title, reco_solutions: [reco_solution] })
-      }
-
-      return acc
-    },
-    [] as Array<{ title: string; reco_solutions: RecoSolution[] }>
-  )
-  .sort(
-    (
-      a: { title: string; reco_solutions: RecoSolution[] },
-      b: { title: string; reco_solutions: RecoSolution[] }
-    ) => a.title.localeCompare(b.title)
   )
 
 const usefulDataApi = computed(() => {
@@ -269,6 +230,46 @@ const usefulDataApiNotRecommended = computed(() => {
         )
       )
   )
+})
+
+const grouped_reco_solutions = computed(() => {
+  const first_group = {
+    title: 'Aucun développement, ni budget',
+    reco_solutions: casUsage.reco_solutions.filter((recoSolution) =>
+      recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
+        'Aucun développement, ni budget'
+      )
+    ),
+    data_api_list: []
+  }
+  const second_group = {
+    title: 'Avec des moyens techniques ou un éditeur de logiciel',
+    reco_solutions: casUsage.reco_solutions.filter(
+      (recoSolution) =>
+        !recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
+          'Aucun développement, ni budget'
+        )
+    ),
+    data_api_list: usefulDataApiNotRecommended.value
+  }
+
+  const groups: Array<{
+    title: string
+    reco_solutions: RecoSolution[]
+    data_api_list?: SimplifionsDataOrApi[]
+  }> = []
+
+  if (first_group.reco_solutions.length) {
+    groups.push(first_group)
+  }
+  if (
+    second_group.reco_solutions.length ||
+    second_group.data_api_list?.length
+  ) {
+    groups.push(second_group)
+  }
+
+  return groups
 })
 </script>
 
