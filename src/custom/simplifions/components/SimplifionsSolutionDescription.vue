@@ -292,7 +292,6 @@ import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
 import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
@@ -323,7 +322,6 @@ const fetchRelatedCasUsages = async () => {
     return
   }
 
-  const loader = useLoading().show({ enforceFocus: false })
   try {
     // Fetch only the specific topics by their IDs
     const topicPromises = solution.cas_d_usages_topics_ids.map(
@@ -333,12 +331,10 @@ const fetchRelatedCasUsages = async () => {
     const topics = await Promise.all(topicPromises)
     relatedCasUsages.value = topics
 
-    console.log("Fetched related cas d'usages:", topics.length)
+    console.log(`Fetched ${topics.length} related cas d'usages`)
   } catch (error) {
     console.error("Error fetching related cas d'usages:", error)
     relatedCasUsages.value = []
-  } finally {
-    loader.hide()
   }
 }
 
