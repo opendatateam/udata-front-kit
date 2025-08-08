@@ -133,9 +133,9 @@ import { stripFromMarkdown } from '@/utils'
 import {
   OrganizationNameWithCertificate,
   Placeholder,
-  formatRelativeIfRecentDate,
-  summarize
-} from '@datagouv/components'
+  summarize,
+  useFormatDate
+} from '@datagouv/components-next'
 import type { RouteLocationRaw } from 'vue-router'
 import TextClamp from 'vue3-text-clamp'
 
@@ -145,6 +145,8 @@ interface Props {
 }
 
 defineProps<Props>()
+
+const { formatRelativeIfRecentDate } = useFormatDate()
 
 const formatAvailability = (availability: number): string => {
   if (availability) {

@@ -57,8 +57,8 @@ import DataserviceCard from '@/components/DataserviceCard.vue'
 import type { DataserviceV2 } from '@/model/dataservice'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import { fromMarkdown } from '@/utils'
-import type { DatasetV2 } from '@datagouv/components'
-import { DatasetCard } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
+import { DatasetCard } from '@datagouv/components-next'
 import type { SimplifionsDataOrApi } from '../model/cas_usage'
 
 const props = defineProps<{

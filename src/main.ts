@@ -6,9 +6,9 @@ import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires 
 
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
+import '@datagouv/components-next/dist/components.css'
 import '@datagouv/components/dist/style.css'
 
-import { setupI18n } from '@datagouv/components'
 import { createHead } from '@unhead/vue'
 import type { InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
@@ -32,14 +32,12 @@ import { isNotFoundError } from './utils/http'
 
 const app = createApp(App)
 const pinia = createPinia()
-const i18n = setupI18n()
 const head = createHead()
 
 routerPromise
   .then((router) => {
     app.use(router)
     app.use(pinia)
-    app.use(i18n)
     app.use(head)
     app.use(TextClamp)
     app.use(LoadingPlugin)

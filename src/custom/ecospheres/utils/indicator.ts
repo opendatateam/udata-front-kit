@@ -1,6 +1,6 @@
 import { useSpatialStore } from '@/store/SpatialStore'
 import { usePageConf } from '@/utils/config'
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 import type { ComputedRef } from 'vue'
 import type {
   Indicator,

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
-import { OrganizationNameWithCertificate } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
+import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { computed } from 'vue'
 
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
-import { useOwnerName } from '@/utils/dataset'
+import { useOwnerName } from '@/utils/owned'
 
 const { pageConf } = useCurrentPageConf()
 
