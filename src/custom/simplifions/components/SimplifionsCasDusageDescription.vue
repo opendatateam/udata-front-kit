@@ -11,7 +11,7 @@
         </div>
 
         <p class="fr-text--lead">
-          {{ casUsage.Description_longue }}
+          {{ topic.description }}
         </p>
 
         <SimplifionsTags :topic="topic" :page-key="pageKey" />

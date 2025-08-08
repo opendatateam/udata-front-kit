@@ -22,7 +22,6 @@ export interface SolutionEditeurTopic {
 export interface SimplifionsCasUsage {
   Icone_du_titre: string
   Titre: string
-  Description_longue: string
   Contexte: string
   Cadre_juridique: string
   API_et_donnees_utiles: SimplifionsDataOrApi[]
