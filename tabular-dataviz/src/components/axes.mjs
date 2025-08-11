@@ -32,6 +32,7 @@ export function makeAxesCheckboxes(indicator, file, data) {
   Object.entries(axes).forEach(([axe, values]) => {
     const suffix = `${axe}-${indicator.id}`
     html += `
+    <div class="axe-column">
     <fieldset id="axe-checkboxes-${suffix}" class="fr-fieldset" aria-labelledby="checkboxes-legend-${suffix} checkboxes-messages-${suffix}">
       <legend class="fr-fieldset__legend--regular fr-fieldset__legend" id="checkboxes-legend-${suffix}">
           ${axe.charAt(0).toUpperCase() + axe.slice(1)}
@@ -61,6 +62,7 @@ export function makeAxesCheckboxes(indicator, file, data) {
     </div>
       `
         }
+    </div>
     `
   })
 
