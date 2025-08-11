@@ -30,7 +30,10 @@ describe('Simplifions Solutions Details Page', () => {
   })
 
   it("should link to cas d'usages", () => {
-    // Check that the cas d'usages are visible
+    // Wait for the topic to load first
+    cy.get('.test__topic-detail', { timeout: 10000 }).should('be.visible')
+
+    // Check that there is at least one cas d'usage card
     cy.get('.test__cas-d-usage-card').should('have.length.gt', 1)
 
     // Click on the first cas d'usage
