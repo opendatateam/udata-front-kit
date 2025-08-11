@@ -106,3 +106,8 @@ export function getTabularApiUrl(indicator) {
   const container = getContainer(indicator)
   return container.dataset.tabularApiUrl
 }
+
+export function getChartTitle(indicator) {
+  const container = getContainer(indicator)
+  return container.dataset.chartTitle
+}

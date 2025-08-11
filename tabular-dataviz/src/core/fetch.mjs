@@ -19,7 +19,6 @@ async function fetchPage(url, allData, pageSize = 200) {
   /**
    * Fonction récursive pour prendre en compte la pagination de l'API
    */
-  // Add page_size parameter if not already present
   const urlObj = new URL(url)
   if (!urlObj.searchParams.has('page_size')) {
     urlObj.searchParams.set('page_size', pageSize)

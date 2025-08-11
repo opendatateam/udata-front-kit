@@ -4,7 +4,11 @@
 
 import Chart from 'chart.js/auto'
 import { makeDatasets } from './datasets.mjs'
-import { getChartCanvas, getOneYearValueContainer } from './dom.mjs'
+import {
+  getChartCanvas,
+  getChartTitle,
+  getOneYearValueContainer
+} from './dom.mjs'
 import { COLORS } from './enums.mjs'
 import { formatBigNumber, formatNumber } from './format.mjs'
 
@@ -13,6 +17,7 @@ function getConfig(indicator, datasets, minYear, maxYear) {
   const maxValue = Math.max(
     ...datasets.flatMap((dataset) => dataset.data.map((point) => point.y))
   )
+  const chartTitle = getChartTitle(indicator)
 
   return {
     type: datasets.every((dt) => dt.data.length <= 1) ? 'bar' : 'line',
@@ -25,6 +30,13 @@ function getConfig(indicator, datasets, minYear, maxYear) {
         mode: 'x'
       },
       plugins: {
+        title: {
+          display: !!chartTitle,
+          text: chartTitle,
+          font: {
+            family: 'Marianne, arial, sans-serif'
+          }
+        },
         legend: {
           display: datasets.length > 1,
           labels: {

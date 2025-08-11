@@ -114,5 +114,6 @@ watch(
     :data-files="encodeURIComponent(JSON.stringify(indicatorResources))"
     :data-indicator="encodeURIComponent(JSON.stringify(indicatorForGraph))"
     :data-tabular-api-url="props.tabularApiUrl"
+    :data-chart-title="props.indicator.title"
   ></div>
 </template>

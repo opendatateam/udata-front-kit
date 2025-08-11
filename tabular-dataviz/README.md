@@ -106,6 +106,7 @@ Disponibles dans `indicator.extras['ecospheres-indicateurs']` :
 - `data-files` : liste des fichiers encodée avec `encodeURIComponent(JSON.stringify(files))`
 - `data-indicator` : objet indicateur encodé avec `encodeURIComponent(JSON.stringify(indicator))`
 - `data-tabular-api-url` : URL de l'API tabular (optionnel, par défaut `https://tabular-api.data.gouv.fr`)
+- `data-chart-title` : Titre (optionnel) à afficher au-dessus du graphique
 
 ## API
 
