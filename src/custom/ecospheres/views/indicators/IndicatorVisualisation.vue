@@ -51,16 +51,11 @@ const indicatorForGraph = computed(() => {
     'ecospheres-indicateurs'
   ] as IndicatorExtras
 
-  // FIXME: Mock in order to test 'pouvoir-de-rechauffement-global-par-secteur'
-  const isMockDataset = props.indicator.id === '67cad6f3b0a47a080da80278'
-
   const formatted = {
     id: props.indicator.id,
-    unite: isMockDataset ? 't' : (metadata?.unite ?? ''),
-    summable: isMockDataset ? true : (metadata?.summable ?? true),
-    enableVisualisation: isMockDataset
-      ? true
-      : (metadata?.['enable_visualization'] ?? false)
+    unite: metadata?.unite ?? 'na',
+    summable: metadata?.summable ?? false,
+    enableVisualisation: metadata?.['enable_visualization'] ?? false
   }
 
   return formatted
