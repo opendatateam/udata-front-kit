@@ -1,13 +1,13 @@
 # Default owners
 
-*  @abulte @geoffreyaldebert @maudetes @streino
+*  @abulte @geoffreyaldebert @streino
 
 
 # Special owners
 
-/.github/CODEOWNERS  @abulte @geoffreyaldebert @maudetes @streino
+/.github/CODEOWNERS  @abulte @geoffreyaldebert @streino
 
-/.github/workflows/create-deploy-release.yml  @geoffreyaldebert @jordanguedj @maudetes
+/.github/workflows/create-deploy-release.yml  @geoffreyaldebert @jordanguedj
 
 
 # Vertical owners
