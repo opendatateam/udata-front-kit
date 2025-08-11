@@ -8,11 +8,7 @@ import 'choices.js/public/assets/styles/choices.min.css'
 export { makeChart } from './core/chart.mjs'
 export { makeDatasets } from './core/datasets.mjs'
 export { fetchData } from './core/fetch.mjs'
-export {
-  formatBigNumber,
-  formatData,
-  numberWithCommas
-} from './core/format.mjs'
+export { formatBigNumber, formatData, formatNumber } from './core/format.mjs'
 
 export * from './core/dom.mjs'
 

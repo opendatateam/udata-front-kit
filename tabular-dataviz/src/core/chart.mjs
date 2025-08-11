@@ -6,7 +6,7 @@ import Chart from 'chart.js/auto'
 import { makeDatasets } from './datasets.mjs'
 import { getChartCanvas, getOneYearValueContainer } from './dom.mjs'
 import { COLORS } from './enums.mjs'
-import { formatBigNumber, numberWithCommas } from './format.mjs'
+import { formatBigNumber, formatNumber } from './format.mjs'
 
 function getConfig(indicator, datasets, minYear, maxYear) {
   // Calcule la valeur maximale de tous les datasets pour une unité cohérente
@@ -41,7 +41,7 @@ function getConfig(indicator, datasets, minYear, maxYear) {
             label: (item) => {
               const prefix =
                 datasets.length > 1 ? item.dataset.label + ' : ' : ''
-              return prefix + numberWithCommas(item.raw.y) + indicator.unite
+              return prefix + formatNumber(item.raw.y) + indicator.unite
             }
           },
           itemSort: (i, j) => {
@@ -109,7 +109,7 @@ function makeOneYearValue(indicator, datasets) {
   container.innerHTML = `
   <div>
     <span>${data.x} : </span>
-    <span>${numberWithCommas(data.y) + indicator.unite}</span>
+    <span>${formatNumber(data.y) + indicator.unite}</span>
   </div>
   <p class="help">Seule année de données disponible.</p>
   `

@@ -35,9 +35,9 @@ export function formatBigNumber(n, maxValue = n) {
   return `${affichage}${suffix}`
 }
 
-export function numberWithCommas(x) {
-  // regex pour ajouter les virgules au bon endroit pour un nombre, par exemple : 1000000 => 1,000,000
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+export function formatNumber(x) {
+  // Utilise la locale courante du navigateur pour formater les nombres
+  return new Intl.NumberFormat().format(x)
 }
 
 function formatValue(value) {
