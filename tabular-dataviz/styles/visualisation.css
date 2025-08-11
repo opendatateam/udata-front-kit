@@ -42,10 +42,6 @@
   flex-direction: column;
 }
 
-.indicator-viz .axe-column .fr-toggle {
-  margin-top: 1rem;
-}
-
 .indicator-viz .choices__input {
   background-color: inherit;
 }
@@ -140,5 +136,10 @@
 }
 
 .indicator-viz .fr-fieldset {
+  margin-top: 1rem;
   margin-bottom: 0px;
+}
+
+.indicator-viz summary {
+  font-size: 0.7rem;
 }
