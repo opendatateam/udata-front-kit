@@ -62,9 +62,13 @@ export function formatData(data, file) {
   const axesNames = file.axes
   const valueColumn = file.valueColumn
   const formatedData = data.map((d) => {
+    const value = d[valueColumn]
+    if (!value) {
+      throw new Error(`No value found for column ${valueColumn} in ${file.id}`)
+    }
     const row = {
       year: new Date(d[YEAR_COLUMN]).getFullYear(),
-      value: formatValue(d[valueColumn])
+      value: formatValue(value)
     }
     axesNames.forEach((axe) => {
       row[axe] = d[axe]

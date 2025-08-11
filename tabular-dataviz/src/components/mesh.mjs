@@ -9,7 +9,7 @@ export function makeMeshDropdown(indicator, possibleMeshes) {
    */
   const meshes = MESHES.filter((m) => possibleMeshes.includes(m[0]))
   if (meshes.length === 0) {
-    throw `no mesh for ${possibleMeshes} in ${MESHES}`
+    throw new Error(`no mesh for ${possibleMeshes} in ${MESHES}`)
   }
   const container = getMeshDropdownContainer(indicator)
   const html = makeDropdown(

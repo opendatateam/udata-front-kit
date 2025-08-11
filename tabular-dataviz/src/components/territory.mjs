@@ -10,7 +10,7 @@ import { EPCIS } from '../data/territories/epcis.mjs'
 import { REGIONS } from '../data/territories/regions.mjs'
 import { makeSearchDropDown } from './search.mjs'
 
-export function makeTerritoryDropDown(indicator) {
+export async function makeTerritoryDropDown(indicator) {
   /**
    * Construction et ajout de la dropdown des territoires
    * les listes des territoires sont importées depuis des fichiers "en dur"
@@ -53,5 +53,5 @@ export function makeTerritoryDropDown(indicator) {
       fetchData(indicator)
     })
   }
-  fetchData(indicator)
+  await fetchData(indicator)
 }

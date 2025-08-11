@@ -68,11 +68,11 @@ function verifyParams(container) {
   })
 }
 
-export function initializeVisualization(options = {}) {
+export async function initializeVisualization(options = {}) {
   const { timeout = 100 } = options
 
   setTimeout(() => {
-    getDataVizContainers().forEach((container) => {
+    getDataVizContainers().forEach(async (container) => {
       try {
         verifyParams(container)
         const indicator = getIndicatorFromContainer(container)
@@ -100,10 +100,10 @@ export function initializeVisualization(options = {}) {
         const files = getFiles(indicator)
         const meshes = files.map((f) => f.mesh)
         makeMeshDropdown(indicator, meshes)
-        makeTerritoryDropDown(indicator)
+        await makeTerritoryDropDown(indicator)
       } catch (error) {
         console.error('Error initializing visualization:', error)
-        container.innerHTML = `<div class="error">Erreur lors de l'initialisation: ${error.message}</div>`
+        container.innerHTML = `<div class="error">Erreur lors de l'initialisation: <em>${error.message}</em></div>`
       }
     })
   }, timeout)
