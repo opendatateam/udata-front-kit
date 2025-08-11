@@ -63,7 +63,7 @@ export function formatData(data, file) {
   const valueColumn = file.valueColumn
   const formatedData = data.map((d) => {
     const value = d[valueColumn]
-    if (!value) {
+    if (value == null) {
       throw new Error(`No value found for column ${valueColumn} in ${file.id}`)
     }
     const row = {
