@@ -3,6 +3,7 @@
  */
 
 import Chart from 'chart.js/auto'
+
 import { makeDatasets } from './datasets.mjs'
 import {
   getChartCanvas,
@@ -11,6 +12,47 @@ import {
 } from './dom.mjs'
 import { COLORS } from './enums.mjs'
 import { formatBigNumber, formatNumber } from './format.mjs'
+
+// Plugin "plein écran" basique
+const fullscreenPlugin = {
+  id: 'fullscreen',
+  afterRender(chart) {
+    if (!chart.options.plugins.fullscreen?.enabled) return
+
+    const canvas = chart.canvas
+    const container = canvas.parentElement
+
+    // Add fullscreen button if it doesn't exist
+    let btn = container.querySelector('.chart-fullscreen-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.className = 'chart-fullscreen-btn'
+      btn.innerHTML = '⛶'
+      btn.style.cssText = `
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.1);
+        border: none;
+        padding: 5px 8px;
+        cursor: pointer;
+        font-size: 14px;
+        z-index: 1000;
+      `
+      btn.onclick = () => {
+        if (!document.fullscreenElement) {
+          container.requestFullscreen()
+        } else {
+          document.exitFullscreen()
+        }
+      }
+      container.style.position = 'relative'
+      container.appendChild(btn)
+    }
+  }
+}
+
+Chart.register(fullscreenPlugin)
 
 function getConfig(indicator, datasets, minYear, maxYear) {
   // Calcule la valeur maximale de tous les datasets pour une unité cohérente
@@ -25,11 +67,20 @@ function getConfig(indicator, datasets, minYear, maxYear) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        // Pour éviter que le graphe ne soit caché par le bouton plein écran
+        padding: {
+          top: 15
+        }
+      },
       interaction: {
         intersect: false,
         mode: 'x'
       },
       plugins: {
+        fullscreen: {
+          enabled: true
+        },
         title: {
           display: !!chartTitle,
           text: chartTitle,
