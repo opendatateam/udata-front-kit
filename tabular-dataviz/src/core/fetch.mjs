@@ -15,11 +15,17 @@ import {
 import { DEFAULT_TABULAR_API_URL, GEOCOLUMNS, YEAR_COLUMN } from './enums.mjs'
 import { formatData } from './format.mjs'
 
-async function fetchPage(url, allData) {
+async function fetchPage(url, allData, pageSize = 200) {
   /**
    * Fonction récursive pour prendre en compte la pagination de l'API
    */
-  const response = await fetch(url)
+  // Add page_size parameter if not already present
+  const urlObj = new URL(url)
+  if (!urlObj.searchParams.has('page_size')) {
+    urlObj.searchParams.set('page_size', pageSize)
+  }
+
+  const response = await fetch(urlObj.toString())
   if (response.ok) {
     const body = await response.json()
     const data = body.data
