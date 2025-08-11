@@ -22,6 +22,8 @@ import 'vue3-toastify/dist/index.css'
 
 import config from '@/config'
 
+import { setupI18n } from '@datagouv/components'
+import { datagouv } from '@datagouv/components-next'
 import App from './App.vue'
 import './assets/main.css'
 import type { CustomParams } from './model/api'
@@ -32,6 +34,7 @@ import { isNotFoundError } from './utils/http'
 
 const app = createApp(App)
 const pinia = createPinia()
+const i18n = setupI18n()
 const head = createHead()
 
 routerPromise
@@ -41,6 +44,24 @@ routerPromise
     app.use(head)
     app.use(TextClamp)
     app.use(LoadingPlugin)
+    app.use(i18n)
+    app.use(datagouv, {
+      name: 'data.gouv.fr',
+      baseUrl: config.datagouvfr.base_url,
+      apiBase: config.datagouvfr.base_url,
+      staticUrl: 'https://static.data.gouv.fr',
+      tabularApiUrl: 'https://tabular-api.data.gouv.fr',
+      tabularAllowRemote: true,
+      pmtilesViewerBaseUrl: null,
+      datasetQualityGuideUrl:
+        'https://guides.data.gouv.fr/guides-open-data/guide-qualite/ameliorer-la-qualite-dun-jeu-de-donnees-en-continu/ameliorer-le-score-de-qualite-des-metadonnees',
+      textClamp: TextClamp,
+      maxJsonPreviewSize: 1000000, // Maximum size of JSON to preview in characters (~1MB). JSON preview module is partly collapsed by default so we can have a preview for large files.
+      maxPdfPreviewSize: 10000000, // Maximum size of PDF to preview in bytes (10 MB)
+      maxXmlPreviewSize: 100000, // Maximum size of XML to preview in characters (~100KB). XML preview module can NOT be collapsed by default so we should not have a preview for large files.
+      schemaValidataUrl: 'https://validata.fr',
+      i18n
+    })
 
     if (config.website.matomo.siteId != null) {
       app.use(VueMatomo, {
