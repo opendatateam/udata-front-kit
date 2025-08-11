@@ -119,15 +119,17 @@ export default defineConfig(({ mode }) => {
       // commonjs dependencies must be included here
       // otherwise Vite dev server don't process them correctly at runtime
       include: [
-        '@datagouv/components-next',
         'debug',
         'extend',
         'highlight.js',
         'rehype-highlight',
         'swagger-ui-dist',
         'unist-util-find',
-        'unist-util-find-all-between'
-      ]
+        'unist-util-find-all-between',
+        'vue',
+        'vue-router'
+      ],
+      exclude: ['@datagouv/components-next']
     }
   }
 })
