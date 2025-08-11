@@ -16,7 +16,6 @@
     "moduleResolution": "Bundler",
     "experimentalDecorators": true,
     "noEmit": true,
-    "skipLibCheck": true,
     "strictNullChecks": true,
     "types": ["node", "unplugin-yaml/types"],
 
