@@ -116,6 +116,8 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
+      // commonjs dependencies must be included here
+      // otherwise Vite dev server don't process them correctly at runtime
       include: [
         '@datagouv/components-next',
         'debug',
