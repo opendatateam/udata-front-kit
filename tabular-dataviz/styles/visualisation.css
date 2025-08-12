@@ -147,3 +147,29 @@
 .canvas-container:fullscreen {
   background: white;
 }
+
+/* Hide default Choices.js dropdown arrows */
+.indicator-viz .choices__inner::before,
+.indicator-viz .choices::after,
+.indicator-viz .choices::before {
+  display: none !important;
+}
+
+.indicator-viz .choices[data-type*='select-one'] .choices__inner {
+  background-image: none !important;
+}
+
+/* Custom dropdown indicator */
+.indicator-viz .choices[data-type*='select-one'] .choices__inner::after {
+  --data-uri-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23161616' d='m12 13.1 5-4.9 1.4 1.4-6.4 6.3-6.4-6.4L7 8.1l5 5z'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--data-uri-svg);
+  mask-image: var(--data-uri-svg);
+  content: '';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.1rem;
+  height: 1.1rem;
+  background-color: #161616;
+}
