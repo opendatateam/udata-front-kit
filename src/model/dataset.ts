@@ -14,15 +14,6 @@ export interface DatasetModalData {
   mode: 'edit' | 'create'
 }
 
-// TODO use ContactPoint from @datagouv
-export interface ContactPoint {
-  id: string
-  name: string
-  email?: string
-  contact_form?: string
-  role: string
-}
-
 export type ExtendedDatasetV2 = DatasetV2 & {
   extras: {
     [key: string]: unknown
