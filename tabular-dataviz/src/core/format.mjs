@@ -12,7 +12,7 @@ export function formatBigNumber(n, maxValue = n, nbDecimals = 1) {
    * Gère aussi la troncation des décimales
    */
   if (maxValue < 1000) {
-    return new Intl.NumberFormat().format(Number(n.toFixed(nbDecimals)))
+    return formatNumber(Number(n.toFixed(nbDecimals)))
   }
 
   let suffix = ''
@@ -32,8 +32,8 @@ export function formatBigNumber(n, maxValue = n, nbDecimals = 1) {
 
   let valeur = n / diviseur
   let affichage = Number.isInteger(valeur)
-    ? new Intl.NumberFormat().format(valeur)
-    : new Intl.NumberFormat().format(Number(valeur.toFixed(nbDecimals)))
+    ? formatNumber(valeur)
+    : formatNumber(Number(valeur.toFixed(nbDecimals)))
 
   return `${affichage}${suffix}`
 }
