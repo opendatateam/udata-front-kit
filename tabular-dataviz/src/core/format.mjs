@@ -4,13 +4,16 @@
 
 import { YEAR_COLUMN } from './enums.mjs'
 
-export function formatBigNumber(n, maxValue = n) {
+export function formatBigNumber(n, maxValue = n, nbDecimals = 1) {
   /**
    * Utilisé pour l'axe Y du graphique car un grand nombre prend trop de place
    * Utilise les conventions courantes (k pour millier, M pour million, Md pour milliard)
    * L'unité est déterminée par la valeur maximale pour garder la cohérence dans tout le graphe
+   * Gère aussi la troncation des décimales
    */
-  if (maxValue < 1000) return n.toString()
+  if (maxValue < 1000) {
+    return new Intl.NumberFormat().format(Number(n.toFixed(nbDecimals)))
+  }
 
   let suffix = ''
   let diviseur = 1
@@ -29,8 +32,8 @@ export function formatBigNumber(n, maxValue = n) {
 
   let valeur = n / diviseur
   let affichage = Number.isInteger(valeur)
-    ? valeur.toString()
-    : valeur.toFixed(1).replace('.', ',')
+    ? new Intl.NumberFormat().format(valeur)
+    : new Intl.NumberFormat().format(Number(valeur.toFixed(nbDecimals)))
 
   return `${affichage}${suffix}`
 }
