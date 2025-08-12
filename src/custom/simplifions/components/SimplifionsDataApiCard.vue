@@ -36,7 +36,7 @@
       <DataserviceCard
         v-else-if="entityName == 'dataservices'"
         class="no-margins"
-        :dataservice="datagouvResource as DataserviceV2"
+        :dataservice="datagouvResource as Dataservice"
         :dataservice-url="datagouvLink"
       />
       <div v-else>{{ entityName }} | {{ datagouvResource.title }}</div>
@@ -54,10 +54,9 @@
 
 <script setup lang="ts">
 import DataserviceCard from '@/components/DataserviceCard.vue'
-import type { DataserviceV2 } from '@/model/dataservice'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import { fromMarkdown } from '@/utils'
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
 import type { SimplifionsDataOrApi } from '../model/cas_usage'
 
@@ -71,7 +70,7 @@ const datagouvLink = ref(
   `https://www.data.gouv.fr/fr/${entityName}/${props.apiOrData.UID_data_gouv}`
 )
 const resourceNotFound = ref(false)
-const datagouvResource = ref<DatasetV2 | DataserviceV2 | null>(null)
+const datagouvResource = ref<DatasetV2 | Dataservice | null>(null)
 
 // Get the actual data from datagouv, and replace reactive properties with it if it's found
 // If not found, disable the card

@@ -1,7 +1,7 @@
 <template>
   <div class="fr-my-2w fr-p-2w border border-default-grey fr-enlarge-link">
     <div
-      v-if="dataservice.is_restricted"
+      v-if="dataservice.access_type === 'restricted'"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
     >
       <p class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w">
@@ -64,7 +64,9 @@
           </span>
           <span class="text-mention-grey dash-before-sm whitespace-nowrap"
             >Mise à jour
-            {{ formatRelativeIfRecentDate(dataservice.updated_at) }}</span
+            {{
+              formatRelativeIfRecentDate(dataservice.metadata_modified_at)
+            }}</span
           >
         </div>
         <div
@@ -76,7 +78,7 @@
           class="fr-mt-1v fr-grid-row fr-grid-row--middle fr-text--sm text-mention-grey"
         >
           <div
-            v-if="dataservice.availability !== undefined"
+            v-if="dataservice.availability"
             class="fr-mr-1v flex-sm dash-after-sm"
           >
             <span class="fr-mr-1v"
@@ -128,19 +130,19 @@
 </template>
 
 <script setup lang="ts">
-import type { DataserviceV2 } from '@/model/dataservice'
 import { stripFromMarkdown } from '@/utils'
 import {
   OrganizationNameWithCertificate,
   Placeholder,
   summarize,
-  useFormatDate
+  useFormatDate,
+  type Dataservice
 } from '@datagouv/components-next'
 import type { RouteLocationRaw } from 'vue-router'
 import TextClamp from 'vue3-text-clamp'
 
 interface Props {
-  dataservice: DataserviceV2
+  dataservice: Dataservice
   dataserviceUrl: string | RouteLocationRaw
 }
 

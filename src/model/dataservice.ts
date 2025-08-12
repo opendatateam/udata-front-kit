@@ -1,38 +1,13 @@
-import type { Organization } from '@datagouv/components-next'
+import type { Dataservice } from '@datagouv/components-next'
 import type { GenericResponse } from './api'
 
-// TODO: use Dataservice type from @datagouv ?
-export interface DataserviceV2 {
-  id: string
-  title: string
-  description?: string
-  organization?: Organization
-  tags?: string[]
-  created_at: string
-  updated_at: string
-  uri?: string
-  url?: string
-  base_api_url?: string
-  availability?: number
-  is_restricted?: boolean
-  contact_point?: {
-    id: string
-    name: string
-    email?: string
-    contact_form?: string
-    role: string
-  }
-  metrics: {
-    views: number
-    followers: number
-  }
-}
-
+// TODO: remove ?
 export interface DataserviceV2Response extends GenericResponse {
-  data: DataserviceV2[]
+  data: Dataservice[]
 }
 
-export type ExtendedDataserviceV2 = DataserviceV2 & {
+// TODO: remove ?
+export type ExtendedDataserviceV2 = Dataservice & {
   extras: {
     [key: string]: unknown
     dcat?: Record<string, string[] | undefined>
