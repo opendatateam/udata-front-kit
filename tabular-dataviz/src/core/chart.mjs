@@ -104,7 +104,7 @@ function getConfig(indicator, datasets, minYear, maxYear) {
             label: (item) => {
               const prefix =
                 datasets.length > 1 ? item.dataset.label + ' : ' : ''
-              return prefix + formatNumber(item.raw.y) + indicator.unite
+              return `${prefix}${formatNumber(item.raw.y)} ${indicator.unite}`
             }
           },
           itemSort: (i, j) => {
@@ -172,7 +172,7 @@ function makeOneYearValue(indicator, datasets) {
   container.innerHTML = `
   <div>
     <span>${data.x} : </span>
-    <span>${formatNumber(data.y) + indicator.unite}</span>
+    <span>${formatNumber(data.y)} ${indicator.unite}</span>
   </div>
   <p class="help">Seule année de données disponible.</p>
   `
