@@ -61,7 +61,7 @@
             Sommaire
           </h2>
           <ol>
-            <li v-if="solution.Description_longue">
+            <li>
               <a
                 id="summary-link-1"
                 href="#possibilites-simplification"
@@ -69,7 +69,7 @@
                 >Possibilités de simplification</a
               >
             </li>
-            <li v-if="relatedCasUsages.length">
+            <li>
               <a
                 id="summary-link-1"
                 href="#cas-usages-simplifiables"
@@ -77,7 +77,7 @@
                 >Cas d'usages simplifiables</a
               >
             </li>
-            <li v-if="usefulDataApi.length">
+            <li>
               <a
                 id="summary-link-2"
                 href="#donnees-api-utilisees"
@@ -137,7 +137,7 @@
     </figure>
 
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
-      <div v-if="solution.Description_longue">
+      <div>
         <h2
           id="possibilites-simplification"
           class="colored-title fr-h2 fr-my-5w"
@@ -148,7 +148,10 @@
           v-if="solution.Description_longue"
           v-html="fromMarkdown(solution.Description_longue)"
         ></p>
-        <p v-else class="fr-text--sm"><i>Aucun contenu actuellement.</i></p>
+        <p v-else class="fr-text--sm">
+          <i>Aucune description actuellement.</i>
+          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        </p>
       </div>
 
       <div>
@@ -228,6 +231,11 @@
                   }"
                   class="cas-d-usage-link"
                 >
+                  {{
+                    (casUsage.extras as SimplifionsCasUsagesExtras)[
+                      'simplifions-cas-d-usages'
+                    ].Icone_du_titre
+                  }}
                   {{ casUsage.name }}
                 </router-link>
               </h3>
@@ -284,7 +292,7 @@ import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { onMounted, ref } from 'vue'
-import { useLoading } from 'vue-loading-overlay'
+import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
 import { gristImageUrl } from './simplifions_utils'
 import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
@@ -314,7 +322,6 @@ const fetchRelatedCasUsages = async () => {
     return
   }
 
-  const loader = useLoading().show({ enforceFocus: false })
   try {
     // Fetch only the specific topics by their IDs
     const topicPromises = solution.cas_d_usages_topics_ids.map(
@@ -324,12 +331,10 @@ const fetchRelatedCasUsages = async () => {
     const topics = await Promise.all(topicPromises)
     relatedCasUsages.value = topics
 
-    console.log("Fetched related cas d'usages:", topics.length)
+    console.log(`Fetched ${topics.length} related cas d'usages`)
   } catch (error) {
     console.error("Error fetching related cas d'usages:", error)
     relatedCasUsages.value = []
-  } finally {
-    loader.hide()
   }
 }
 

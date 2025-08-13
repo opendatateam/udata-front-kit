@@ -1,12 +1,9 @@
 <template>
-  <ul
-    class="fr-grid-row fr-grid-row--gutters fr-mt-3w list-none fr-pb-2w"
-    :class="{ 'scrollable-list': sortedDataApiList.length > 3 }"
-  >
+  <ul class="fr-grid-row fr-grid-row--gutters list-none fr-pt-2w">
     <li
       v-for="apidOrData in sortedDataApiList"
       :key="apidOrData.UID_data_gouv"
-      class="fr-col-12 fr-py-0 fr-mt-2w"
+      class="fr-col-12 fr-py-0 fr-mb-2w"
     >
       <SimplifionsDataApiCard
         :api-or-data="apidOrData"
@@ -42,11 +39,5 @@ const sortedDataApiList = computed(() => {
 <style scoped>
 ul.list-none {
   list-style: none;
-}
-
-.scrollable-list {
-  overflow-x: auto;
-  max-height: calc(100vh - 50px);
-  border: 1px solid #e4e4e4;
 }
 </style>

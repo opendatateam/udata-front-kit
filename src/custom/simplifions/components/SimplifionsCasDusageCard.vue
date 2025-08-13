@@ -1,6 +1,7 @@
 <template>
   <router-link
     :to="{ name: `${pageKey}_detail`, params: { item_id: topic.slug } }"
+    class="simplifions-card-link fr-p-0"
   >
     <div class="topic-card" :class="{ 'topic-card--private': topic.private }">
       <div class="header-topic">
@@ -52,6 +53,12 @@ const { pageKey } = useCurrentPageConf()
 </script>
 
 <style scoped>
+.simplifions-card-link {
+  display: block;
+  margin-bottom: 1rem;
+  background: none;
+}
+
 .owner-avatar {
   margin-bottom: -6px;
   display: inline-block;
