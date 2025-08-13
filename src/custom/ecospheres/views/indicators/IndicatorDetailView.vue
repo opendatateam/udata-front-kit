@@ -7,6 +7,8 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
+import config from '@/config'
+import IndicatorVisualisation from '@/custom/ecospheres/views/indicators/IndicatorVisualisation.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -32,6 +34,8 @@ const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 const { unite } = useIndicatorExtras(indicator)
+
+const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
 const showAddToBouquetModal = ref(false)
 
@@ -129,6 +133,11 @@ onMounted(() => {
         <ResourcesList
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
+        />
+        <IndicatorVisualisation
+          v-if="tabularApiUrl"
+          :indicator="indicator"
+          :tabular-api-url="tabularApiUrl"
         />
         <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
