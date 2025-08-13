@@ -156,6 +156,8 @@ onMounted(() => {
 
       <!-- Détails techniques -->
       <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
+        <!-- Suspense component is required here because `DatasetInformationPanel`
+           is a component with an async setup() -->
         <Suspense>
           <DatasetInformationPanel :dataset="indicator" />
           <template #fallback>
