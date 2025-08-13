@@ -6,7 +6,7 @@ describe('Simplifions Solutions Details Page', () => {
 
   it('should display the solutions details page correctly', () => {
     // Verify the page loads and has the correct title
-    cy.get('h1').should('contain.text', 'Annuaire des entreprises')
+    cy.get('h1').should('contain.text', 'Annuaire des Entreprises')
 
     // Check that the topic detail is visible
     cy.get('.test__topic-detail').should('not.be.empty')
@@ -30,7 +30,10 @@ describe('Simplifions Solutions Details Page', () => {
   })
 
   it("should link to cas d'usages", () => {
-    // Check that the cas d'usages are visible
+    // Wait for the topic to load first
+    cy.get('.test__topic-detail', { timeout: 10000 }).should('be.visible')
+
+    // Check that there is at least one cas d'usage card
     cy.get('.test__cas-d-usage-card').should('have.length.gt', 1)
 
     // Click on the first cas d'usage
