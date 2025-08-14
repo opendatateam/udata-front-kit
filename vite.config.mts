@@ -116,8 +116,9 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
-      // commonjs dependencies must be included here
-      // otherwise Vite dev server don't process them correctly at runtime
+      // Some `@datagouv/components-next` dependencies aren't scanned by Vite dev server.
+      // It must optimized them to be able to handle commonjs dependencies.
+      // See https://vite.dev/guide/dep-pre-bundling.html#customizing-the-behavior
       include: [
         'debug',
         'extend',
@@ -129,6 +130,9 @@ export default defineConfig(({ mode }) => {
         'vue',
         'vue-router'
       ],
+      // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
+      // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
+      // used for the components configuration.
       exclude: ['@datagouv/components-next']
     }
   }
