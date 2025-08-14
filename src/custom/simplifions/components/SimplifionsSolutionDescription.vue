@@ -37,12 +37,14 @@
             <span v-else>Non renseigné</span>
           </li>
           <li>
-            <strong>Type de solution :</strong>
-            {{
-              solution.types_de_solution?.length
-                ? solution.types_de_solution.join(' ou ')
-                : 'Non renseigné'
-            }}
+            <strong>Type de solution : </strong>
+            <HumanReadableList
+              v-if="solution.types_de_solution?.length"
+              :items="solution.types_de_solution"
+              :bold-items="false"
+              last-item-separator="ou"
+            />
+            <span v-else>Non renseigné</span>
           </li>
           <li>
             <strong>Prix :</strong>

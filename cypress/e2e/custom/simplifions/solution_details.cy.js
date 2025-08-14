@@ -6,7 +6,7 @@ describe('Simplifions Solutions Details Page', () => {
 
   it('should display the solutions details page correctly', () => {
     // Verify the page loads and has the correct title
-    cy.get('h1').should('contain.text', 'Annuaire des entreprises')
+    cy.get('h1').should('contain.text', 'Annuaire des Entreprises')
 
     // Check that the topic detail is visible
     cy.get('.test__topic-detail').should('not.be.empty')
