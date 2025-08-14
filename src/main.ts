@@ -46,7 +46,6 @@ routerPromise
       name: 'data.gouv.fr',
       baseUrl: config.datagouvfr.base_url,
       apiBase: config.datagouvfr.base_url,
-      staticUrl: 'https://static.data.gouv.fr',
       tabularApiUrl: config.datagouv.tabular_api_url,
       tabularAllowRemote: true,
       pmtilesViewerBaseUrl: null,
