@@ -385,7 +385,7 @@ watch(
             <div class="fr-col-auto fr-mr-1w">
               <OrganizationLogo :object="topic" />
             </div>
-            <p class="fr-col fr-m-0">
+            <p class="fr-col fr-m-0 min-width-0">
               <a class="fr-link" :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"

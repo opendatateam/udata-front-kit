@@ -124,7 +124,7 @@ onMounted(() => {
           class="fr-grid-row fr-grid-row--middle"
         >
           <OrganizationLogo :object="dataset" :size="32" class="fr-mr-1-5v" />
-          <p class="fr-col fr-m-0">
+          <p class="fr-col fr-m-0 min-width-0">
             <a class="fr-link" :href="dataset.organization.page">
               <OrganizationNameWithCertificate
                 :organization="dataset.organization"
