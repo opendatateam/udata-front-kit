@@ -53,7 +53,7 @@ const badgeClasse = computed(() => {
 </script>
 
 <template>
-  <div class="card">
+  <div class="card min-width-0">
     <DsfrBadge
       v-if="alreadySelected"
       type="info"
@@ -68,14 +68,14 @@ const badgeClasse = computed(() => {
           <img :src="thumbnail" alt="" loading="lazy" width="60" height="60" />
         </div>
       </div>
-      <div class="fr-col">
+      <div class="fr-col min-width-0">
         <h4 class="fr-mb-1v fr-grid-row">
           {{ dataset.title }}
           <small v-if="dataset.acronym">{{ dataset.acronym }}</small>
         </h4>
         <p
           v-if="dataset.organization || dataset.owner"
-          class="fr-m-0 fr-text--xs org--fix"
+          class="fr-m-0 fr-text--xs text-overflow-ellipsis org--fix"
         >
           <template v-if="dataset.organization">
             <OrganizationNameWithCertificate
