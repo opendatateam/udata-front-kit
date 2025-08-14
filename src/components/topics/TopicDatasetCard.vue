@@ -53,7 +53,7 @@ onMounted(async () => {
       params: { item_id: datasetContent.id }
     }"
     :show-description="false"
-    class="dataset-card fr-m-0"
+    class="dataset-card fr-my-2w fr-mx-0"
   />
   <IndicatorDatasetCard
     v-if="IndicatorDatasetCard && datasetContent && datasetIsIndicator"
