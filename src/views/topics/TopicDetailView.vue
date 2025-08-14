@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
+import {
+  OrganizationNameWithCertificate,
+  ReadMore
+} from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'

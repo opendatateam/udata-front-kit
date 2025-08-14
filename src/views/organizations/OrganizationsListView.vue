@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Organization } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
@@ -6,7 +7,6 @@ import { useLoading } from 'vue-loading-overlay'
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
-import type { Organization } from '@datagouv/components'
 
 const store = useOrganizationStore()
 const $loading = useLoading()

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
+import { DatasetCard } from '@datagouv/components-next'
 import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
@@ -13,7 +14,6 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { DatasetCard } from '@datagouv/components'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
