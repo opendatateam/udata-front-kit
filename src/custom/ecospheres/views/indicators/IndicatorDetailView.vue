@@ -156,8 +156,9 @@ onMounted(() => {
 
       <!-- Détails techniques -->
       <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
-        <!-- Suspense component is required here because `DatasetInformationPanel`
-           is a component with an async setup() -->
+        <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
+           is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
+          updated to handle its own loading state. -->
         <Suspense>
           <DatasetInformationPanel :dataset="indicator" />
           <template #fallback>
