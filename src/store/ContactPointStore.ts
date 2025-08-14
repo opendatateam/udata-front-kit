@@ -1,5 +1,5 @@
-import type { ContactPointRole } from '@/model/contactPoint'
 import ContactPointAPI from '@/services/api/resources/ContactPointAPI'
+import type { ContactPointRole } from '@datagouv/components-next'
 import { defineStore } from 'pinia'
 
 const api = new ContactPointAPI()

@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { InformationPanel, ReadMore } from '@datagouv/components'
+import {
+  AnimatedLoader,
+  DatasetInformationPanel,
+  ReadMore
+} from '@datagouv/components-next'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
@@ -17,7 +21,6 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
@@ -65,7 +68,6 @@ const tabTitles = [
 const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
-const license = useLicense(indicator)
 const spatialGranularity = useSpatialGranularity(indicator)
 
 onMounted(() => {
@@ -163,11 +165,15 @@ onMounted(() => {
 
       <!-- Détails techniques -->
       <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
-        <InformationPanel
-          v-if="license"
-          :dataset="indicator"
-          :license="license"
-        />
+        <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
+           is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
+          updated to handle its own loading state. -->
+        <Suspense>
+          <DatasetInformationPanel :dataset="indicator" />
+          <template #fallback>
+            <AnimatedLoader />
+          </template>
+        </Suspense>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

@@ -186,7 +186,7 @@
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
-import { OrganizationNameWithCertificate } from '@datagouv/components'
+import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import type {
   RecoSolution,
   SimplifionsCasUsagesExtras,
