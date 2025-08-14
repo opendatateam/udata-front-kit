@@ -40,6 +40,7 @@
           class="no-margins"
           :dataset="datagouvResource as DatasetV2"
           :dataset-url="datagouvLink"
+          dataset-url-in-new-tab
         />
         <DataserviceCard
           v-else-if="entityName == 'dataservices'"
