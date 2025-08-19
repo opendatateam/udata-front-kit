@@ -33,7 +33,7 @@ const datasetsGroups = defineModel('groups-model', {
   type: Object as () => DatasetsGroups,
   default: []
 })
-defineProps({
+const props = defineProps({
   datasetEditorialization: {
     type: Boolean,
     default: false
@@ -49,10 +49,13 @@ const modalData: Ref<DatasetModalData> = ref({
 const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
-  if (!modalData.value.dataset?.title.trim()) {
+  if (props.datasetEditorialization && !modalData.value.dataset?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalData.value.dataset?.purpose?.trim()) {
+  if (
+    props.datasetEditorialization &&
+    !modalData.value.dataset?.purpose?.trim()
+  ) {
     formErrors.value.push('purpose')
   }
   if (
