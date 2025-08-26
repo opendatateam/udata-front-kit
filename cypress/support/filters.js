@@ -1,5 +1,3 @@
-import { capitalizeFirstLetter } from './utils'
-
 /**
  * Custom command to select an option in a multiselect component
  * @param {string} selectLabel - The label text of the select component (e.g., "À destination de :")
@@ -35,9 +33,9 @@ Cypress.Commands.add('clickCheckbox', (checkbox_name) => {
 Cypress.Commands.add(
   'expectActionToCallApi',
   (action, resourceName, expectedUrlParams) => {
-    cy.wait(`@get${capitalizeFirstLetter(resourceName)}`)
+    cy.wait(`@get_${resourceName}_list`)
     cy.expectRequestWithParams(resourceName, expectedUrlParams)
     action()
-    cy.wait(`@get${capitalizeFirstLetter(resourceName)}`)
+    cy.wait(`@get_${resourceName}_list`)
   }
 )

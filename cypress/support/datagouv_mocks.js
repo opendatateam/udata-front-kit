@@ -1,5 +1,3 @@
-import { capitalizeFirstLetter } from './utils'
-
 const datagouvResponseBuilder = (data) => {
   return {
     data: data.slice(0, 10),
@@ -11,15 +9,17 @@ const datagouvResponseBuilder = (data) => {
   }
 }
 
-const datagouvUrlRegex = (resourceName) => {
-  return new RegExp(`.*data\\.gouv\\.fr/api/2/${resourceName}.*`)
+const datagouvUrlRegex = (resourceName, resourceId = null) => {
+  return new RegExp(
+    `.*data\\.gouv\\.fr/api/2/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
+  )
 }
 
 Cypress.Commands.add('mockDatagouvResourceList', (resourceName, data = []) => {
   cy.intercept('GET', datagouvUrlRegex(resourceName), {
     statusCode: 200,
     body: datagouvResponseBuilder(data)
-  }).as(`get${capitalizeFirstLetter(resourceName)}`)
+  }).as(`get_${resourceName}_list`)
 })
 
 // We can't use req.query to check the request params because the tags are not properly handled as an array
@@ -33,7 +33,7 @@ Cypress.Commands.add(
       } else {
         expect(req.url).to.include(requestParamsString)
       }
-    }).as(`get${capitalizeFirstLetter(resourceName)}`)
+    }).as(`get_${resourceName}_list`)
   }
 )
 
