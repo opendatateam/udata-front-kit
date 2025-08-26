@@ -1,6 +1,6 @@
 describe('Simplifions Navigation', () => {
   beforeEach(() => {
-    // Visit the Simplifions home page before each test
+    cy.mockDatagouvResource('topics')
     cy.visit('/')
   })
 

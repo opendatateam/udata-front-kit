@@ -15,7 +15,7 @@ const datagouvUrlRegex = (resourceName) => {
   return new RegExp(`.*data\\.gouv\\.fr/api/2/${resourceName}.*`)
 }
 
-Cypress.Commands.add('mockDatagouvResource', (resourceName, data) => {
+Cypress.Commands.add('mockDatagouvResource', (resourceName, data = []) => {
   cy.intercept('GET', datagouvUrlRegex(resourceName), {
     statusCode: 200,
     body: datagouvResponseBuilder(data)

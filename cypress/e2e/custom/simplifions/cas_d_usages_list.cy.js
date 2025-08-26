@@ -2,7 +2,6 @@ import { casUsageFactory } from '../../../support/factories/topics_factory'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
-    // Visit the Simplifions home page before each test
     cy.mockDatagouvResource('topics', casUsageFactory.many(11))
     cy.visit('/cas-d-usages')
   })
