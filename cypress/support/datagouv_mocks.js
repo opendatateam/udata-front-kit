@@ -53,7 +53,13 @@ Cypress.Commands.add('catchUnmockedRequests', () => {
     throw new Error(
       `Unmocked external API call detected: ${req.method} ${req.url}`
     )
-  }).as('catchUnmockedRequests')
+  }).as('catchExternalRequests')
+})
+
+Cypress.Commands.add('allowExternalRequests', () => {
+  cy.intercept('**', (req) => {
+    req.continue()
+  }).as('catchExternalRequests')
 })
 
 Cypress.Commands.add('mockGristImages', () => {

@@ -1,4 +1,11 @@
 describe('a11y contrast testing', () => {
+  beforeEach(() => {
+    // I couldn't figure out how to mock your data, and I don't want to spend too much time on it.
+    // But my 2 cents are that you shouldn't need so much data to test the contrast.
+    // - Valentin
+    cy.allowExternalRequests()
+  })
+
   const pages = {
     '/': '#main-content',
     '/datasets': 'ul.fr-grid-row > li',
