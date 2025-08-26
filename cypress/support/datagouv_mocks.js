@@ -11,7 +11,7 @@ const datagouvResponseBuilder = (data) => {
   }
 }
 
-Cypress.Commands.add('mockResource', (resource_name, data) => {
+Cypress.Commands.add('mockDatagouvResource', (resource_name, data) => {
   cy.intercept('GET', `**/api/2/${resource_name}/**`, {
     statusCode: 200,
     body: datagouvResponseBuilder(data)
