@@ -1,4 +1,7 @@
-import { casUsageFactory } from '../../../support/factories/topics_factory'
+import {
+  casUsageFactory,
+  solutionFactory
+} from '../../../support/factories/topics_factory'
 
 describe("Simplifions Cas d'usages Show Page", () => {
   beforeEach(() => {
@@ -15,7 +18,9 @@ describe("Simplifions Cas d'usages Show Page", () => {
     cy.mockDatagouvResource('topics', casUsage.slug, casUsage)
     cy.mockDatagouvResourceList('discussions')
     cy.mockGristImages()
-    cy.visit('/cas-d-usages/aides-publiques-entreprises-sourcage')
+    cy.mockDatagouvResource('topics', 'sample-solution', solutionFactory.one())
+
+    cy.visit(`/cas-d-usages/${casUsage.slug}`)
   })
 
   it("should display the cas d'usage show page correctly", () => {
@@ -47,8 +52,9 @@ describe("Simplifions Cas d'usages Show Page", () => {
   })
 
   it('should link to solutions recommendations', () => {
+    cy.wait('@get_topics_aides-publiques-entreprises-sourcage')
     // Check that the solutions recommendations are visible
-    cy.get('.reco-solution').should('have.length.gt', 1)
+    cy.get('.reco-solution').should('have.length', 1)
 
     // Click on the first solution recommendation
     cy.get('.reco-solution:first').within(() => {
