@@ -19,3 +19,9 @@ Cypress.Commands.add('mockResource', (resource_name, data) => {
     body: datagouvResponseBuilder(data)
   }).as(`get${capitalizeFirstLetter(resource_name)}`)
 })
+
+Cypress.Commands.add('expectRequestParams', (resource_name, request_params) => {
+  cy.intercept('GET', `**/api/2/${resource_name}/**`, (req) => {
+    expect(req.query).to.include(request_params)
+  }).as(`get${capitalizeFirstLetter(resource_name)}`)
+})

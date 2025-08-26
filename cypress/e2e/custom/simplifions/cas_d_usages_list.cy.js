@@ -30,20 +30,18 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
     // Check that the pagination component has several pages
     cy.get('nav.fr-pagination').within(() => {
-      cy.get('a.fr-pagination__link.fr-unhidden-lg').should('have.length.gt', 1)
+      cy.get('a.fr-pagination__link.fr-unhidden-lg').should('have.length', 2)
     })
   })
 
-  // TODO : test the outgoing request instead of the response
   it("should be able to search for a cas d'usage", () => {
-    // Fill the search bar with the topic name
+    cy.wait('@getTopics')
+    cy.expectRequestParams('topics', {
+      q: 'Aides sociales des CCAS',
+      tag: 'simplifions-cas-d-usages'
+    })
     cy.get('input#search-topic').type('Aides sociales des CCAS')
-
-    // Verify that the page has the correct number of results
-    cy.get('#number-of-results').should(
-      'contain.text',
-      "1 cas d'usage disponible"
-    )
+    cy.wait('@getTopics')
   })
 
   // TODO : test the outgoing request instead of the response
