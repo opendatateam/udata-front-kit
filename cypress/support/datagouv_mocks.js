@@ -48,11 +48,8 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('catchUnmockedRequests', () => {
-  cy.intercept('**', (req) => {
-    if (req.url.includes('localhost') || req.url.includes('127.0.0.1')) {
-      req.continue()
-      return
-    }
+  // Intercept only external URLs (not starting with localhost or 127.0.0.1)
+  cy.intercept(/^https?:\/\/(?!(localhost|127\.0\.0\.1)(:|\/|$)).*/, (req) => {
     throw new Error(
       `Unmocked external API call detected: ${req.method} ${req.url}`
     )
