@@ -1,8 +1,12 @@
+import '../../../support/simplifions/datagouv_mocks'
+import { casUsageBuilder } from '../../../support/simplifions/topics_factories'
+
 describe("Simplifions Cas d'usages Listing Page", () => {
   const topicsName = "cas d'usages"
 
   beforeEach(() => {
     // Visit the Simplifions home page before each test
+    cy.mockResource('topics', casUsageBuilder.many(11))
     cy.visit('/cas-d-usages')
   })
 
@@ -30,6 +34,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
   })
 
+  // TODO : test the outgoing request instead of the response
   it("should be able to search for a cas d'usage", () => {
     // Fill the search bar with the topic name
     cy.get('input#search-topic').type('Aides sociales des CCAS')
@@ -41,6 +46,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     )
   })
 
+  // TODO : test the outgoing request instead of the response
   it('should be able to filter by fournisseurs de service ', () => {
     cy.selectFilterShouldRemoveResults(
       topicsName,
@@ -49,6 +55,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     )
   })
 
+  // TODO : test the outgoing request instead of the response
   it('should be able to filter by target users ', () => {
     cy.selectFilterShouldRemoveResults(
       topicsName,
@@ -57,6 +64,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     )
   })
 
+  // TODO : test the outgoing request instead of the response
   it('should be able to filter by budget ', () => {
     cy.selectFilterShouldRemoveResults(
       topicsName,
@@ -65,6 +73,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     )
   })
 
+  // TODO : test the outgoing request instead of the response
   it('should be able to filter by types de simplification ', () => {
     cy.selectFilterShouldRemoveResults(
       topicsName,
@@ -77,6 +86,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.get('input[name="include_private"]').should('not.exist')
   })
 
+  // TODO : test the outgoing request instead of the response
   describe('when connected with a random user', () => {
     it("should not be able to see any private cas d'usages", () => {
       cy.simulateConnectedUser()
@@ -87,6 +97,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
   })
 
+  // TODO : test the outgoing request instead of the response
   describe('when connected with a DINUM user', () => {
     it("should be able to see the private cas d'usages", () => {
       cy.simulateConnectedDINUMUser()
