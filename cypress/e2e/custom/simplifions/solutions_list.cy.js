@@ -3,7 +3,7 @@ import { solutionFactory } from '../../../support/factories/topics_factory'
 describe('Simplifions Solutions Page', () => {
   beforeEach(() => {
     cy.mockGristImages()
-    cy.mockDatagouvResource('topics', solutionFactory.many(11))
+    cy.mockDatagouvResourceList('topics', solutionFactory.many(11))
     cy.visit('/solutions')
   })
 
@@ -36,7 +36,7 @@ describe('Simplifions Solutions Page', () => {
   })
 
   it('should display only one page when there are less than 10 results', () => {
-    cy.mockDatagouvResource('topics', solutionFactory.many(1))
+    cy.mockDatagouvResourceList('topics', solutionFactory.many(1))
     cy.visit('/solutions')
     cy.get('div.topic-card').should('have.length', 1)
     cy.get('#number-of-results').should('contain.text', '1 solution disponible')

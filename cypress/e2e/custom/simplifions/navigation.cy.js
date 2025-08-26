@@ -1,6 +1,6 @@
 describe('Simplifions Navigation', () => {
   beforeEach(() => {
-    cy.mockDatagouvResource('topics')
+    cy.mockDatagouvResourceList('topics')
     cy.visit('/')
   })
 

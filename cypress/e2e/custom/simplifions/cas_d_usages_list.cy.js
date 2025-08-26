@@ -2,7 +2,7 @@ import { casUsageFactory } from '../../../support/factories/topics_factory'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
-    cy.mockDatagouvResource('topics', casUsageFactory.many(11))
+    cy.mockDatagouvResourceList('topics', casUsageFactory.many(11))
     cy.visit('/cas-d-usages')
   })
 
@@ -35,7 +35,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   })
 
   it('should display only one page when there are less than 10 results', () => {
-    cy.mockDatagouvResource('topics', casUsageFactory.many(1))
+    cy.mockDatagouvResourceList('topics', casUsageFactory.many(1))
     cy.visit('/cas-d-usages')
     cy.get('div.topic-card').should('have.length', 1)
     cy.get('#number-of-results').should(
