@@ -33,4 +33,25 @@ Cypress.Commands.add(
   }
 )
 
-export { capitalizeFirstLetter }
+Cypress.Commands.add('catchUnmockedRequests', () => {
+  cy.intercept('**', (req) => {
+    if (req.url.includes('localhost') || req.url.includes('127.0.0.1')) {
+      req.continue()
+      return
+    }
+    throw new Error(
+      `Unmocked external API call detected: ${req.method} ${req.url}`
+    )
+  }).as('catchUnmockedRequests')
+})
+
+Cypress.Commands.add('mockGristImages', () => {
+  cy.intercept(
+    'GET',
+    'https://grist.numerique.gouv.fr/api/docs/*/attachments/*/download',
+    {
+      statusCode: 200,
+      body: 'some image'
+    }
+  ).as('mockGristImages')
+})

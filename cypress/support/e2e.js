@@ -29,3 +29,8 @@ Cypress.on('uncaught:exception', (err) => {
   console.log('Uncaught exception:', err.message)
   return false
 })
+
+// Fail tests when external API calls are not mocked
+beforeEach(() => {
+  cy.catchUnmockedRequests()
+})

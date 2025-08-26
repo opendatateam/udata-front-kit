@@ -3,6 +3,7 @@ import { solutionFactory } from '../../../support/factories/topics_factory'
 describe('Simplifions Solutions Page', () => {
   beforeEach(() => {
     // Visit the Simplifions home page before each test
+    cy.mockGristImages()
     cy.mockResource('topics', solutionFactory.many(11))
     cy.visit('/solutions')
   })
