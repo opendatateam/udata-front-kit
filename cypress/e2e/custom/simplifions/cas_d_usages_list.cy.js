@@ -36,55 +36,64 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it("should be able to search for a cas d'usage", () => {
     cy.wait('@getTopics')
-    cy.expectRequestParams('topics', {
-      q: 'Aides sociales des CCAS',
-      tag: 'simplifions-cas-d-usages'
-    })
+    cy.expectRequestParams(
+      'topics',
+      'q=Aides+sociales+des+CCAS&tag=simplifions-cas-d-usages'
+    )
     cy.get('input#search-topic').type('Aides sociales des CCAS')
     cy.wait('@getTopics')
   })
 
-  // TODO : test the outgoing request instead of the response
   it('should be able to filter by fournisseurs de service ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
-      'À destination de :',
-      'Communes'
+    cy.wait('@getTopics')
+    cy.expectRequestParams(
+      'topics',
+      'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-cas-d-usages'
     )
+    cy.selectFilterValue('À destination de :', 'Communes')
+    cy.wait('@getTopics')
   })
 
-  // TODO : test the outgoing request instead of the response
   it('should be able to filter by target users ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
-      'Pour simplifier les démarches de :',
-      'Particuliers'
+    cy.wait('@getTopics')
+    cy.expectRequestParams(
+      'topics',
+      'tag=simplifions-target-users-particuliers&tag=simplifions-cas-d-usages'
     )
+    cy.selectFilterValue('Pour simplifier les démarches de :', 'Particuliers')
+    cy.wait('@getTopics')
   })
 
-  // TODO : test the outgoing request instead of the response
   it('should be able to filter by budget ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
+    cy.wait('@getTopics')
+    cy.expectRequestParams(
+      'topics',
+      'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-cas-d-usages'
+    )
+    cy.selectFilterValue(
       'Moyens disponibles pour la mise en œuvre :',
       'Aucun développement, ni budget'
     )
+    cy.wait('@getTopics')
   })
 
-  // TODO : test the outgoing request instead of the response
   it('should be able to filter by types de simplification ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
+    cy.wait('@getTopics')
+    cy.expectRequestParams(
+      'topics',
+      'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-cas-d-usages'
+    )
+    cy.selectFilterValue(
       'Type de simplification des démarches :',
       'Accès facile'
     )
+    cy.wait('@getTopics')
   })
 
   it('should not have the private filter', () => {
     cy.get('input[name="include_private"]').should('not.exist')
   })
 
-  // TODO : test the outgoing request instead of the response
   describe('when connected with a random user', () => {
     it("should not be able to see any private cas d'usages", () => {
       cy.simulateConnectedUser()
@@ -95,7 +104,6 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
   })
 
-  // TODO : test the outgoing request instead of the response
   describe('when connected with a DINUM user', () => {
     it("should be able to see the private cas d'usages", () => {
       cy.simulateConnectedDINUMUser()
