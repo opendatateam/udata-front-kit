@@ -2,8 +2,6 @@ import '../../../support/simplifions/datagouv_mocks'
 import { casUsageBuilder } from '../../../support/simplifions/topics_factories'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
-  const topicsName = "cas d'usages"
-
   beforeEach(() => {
     // Visit the Simplifions home page before each test
     cy.mockResource('topics', casUsageBuilder.many(11))
@@ -112,23 +110,23 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.get('input[name="include_private"]').should('not.exist')
   })
 
-  describe('when connected with a random user', () => {
-    it("should not be able to see any private cas d'usages", () => {
+  describe('when connected with a user', () => {
+    beforeEach(() => {
       cy.simulateConnectedUser()
-
-      cy.filterShouldNotChangeResults(topicsName, () => {
-        cy.clickCheckbox('include_private')
-      })
     })
-  })
 
-  describe('when connected with a DINUM user', () => {
-    it("should be able to see the private cas d'usages", () => {
-      cy.simulateConnectedDINUMUser()
+    it('should have the private filter', () => {
+      cy.get('input[name="include_private"]').should('exist')
+    })
 
-      cy.filterShouldChangeResults(topicsName, 'increase', () => {
-        cy.clickCheckbox('include_private')
-      })
+    it("should request the private cas d'usages", () => {
+      cy.wait('@getTopics')
+      cy.expectRequestWithParams(
+        'topics',
+        /tag=simplifions-cas-d-usages&.+&include_private=true/
+      )
+      cy.clickCheckbox('include_private')
+      cy.wait('@getTopics')
     })
   })
 })

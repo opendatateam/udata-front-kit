@@ -20,13 +20,17 @@ Cypress.Commands.add('mockResource', (resource_name, data) => {
   }).as(`get${capitalizeFirstLetter(resource_name)}`)
 })
 
+// We can't use req.query to check the request params because the tags are not properly handled as an array
+// in the request so req.query only contains the last tag. I ended up checking for the params in the url instead.
 Cypress.Commands.add(
   'expectRequestWithParams',
   (resource_name, request_params_string) => {
     cy.intercept('GET', `**/api/2/${resource_name}/**`, (req) => {
-      // We can't use req.query because the tags are not properly handled as an array in the request
-      // so req.query only contains the last tag. I ended up checking for the params in the url instead.
-      expect(req.url).to.include(request_params_string)
+      if (request_params_string instanceof RegExp) {
+        expect(req.url).to.match(request_params_string)
+      } else {
+        expect(req.url).to.include(request_params_string)
+      }
     }).as(`get${capitalizeFirstLetter(resource_name)}`)
   }
 )
