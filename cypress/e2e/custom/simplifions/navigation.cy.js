@@ -6,6 +6,7 @@ import {
 describe('Simplifions Navigation', () => {
   beforeEach(() => {
     cy.mockDatagouvResourceList('topics')
+    cy.mockGristImages()
     cy.visit('/')
   })
 
