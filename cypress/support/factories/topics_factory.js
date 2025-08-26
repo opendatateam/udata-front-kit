@@ -22,8 +22,7 @@ const casUsageFactory = build({
     tags: ['simplifions', 'simplifions-cas-d-usages'],
     extras: {
       'simplifions-cas-d-usages': {
-        Icone_du_titre:
-          'https://demo.data.gouv.fr/api/1/topics/sample-topic/icone_du_titre/',
+        Icone_du_titre: '📥',
         Titre: 'Sample title',
         Contexte: 'Sample context',
         Cadre_juridique: 'Sample legal framework',

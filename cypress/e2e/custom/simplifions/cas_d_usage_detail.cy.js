@@ -1,6 +1,19 @@
+import { casUsageFactory } from '../../../support/factories/topics_factory'
+
 describe("Simplifions Cas d'usages Show Page", () => {
   beforeEach(() => {
-    // Visit the Simplifions home page before each test
+    const casUsage = casUsageFactory.one({
+      overrides: {
+        slug: 'aides-publiques-entreprises-sourcage',
+        extras: {
+          'simplifions-cas-d-usages': {
+            Titre: 'Aides publiques entreprises | Sourçage'
+          }
+        }
+      }
+    })
+    cy.mockDatagouvResource('topics', casUsage.slug, casUsage)
+    cy.mockDatagouvResourceList('discussions')
     cy.visit('/cas-d-usages/aides-publiques-entreprises-sourcage')
   })
 

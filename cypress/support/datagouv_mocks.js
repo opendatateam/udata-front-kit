@@ -11,7 +11,7 @@ const datagouvResponseBuilder = (data) => {
 
 const datagouvUrlRegex = (resourceName, resourceId = null) => {
   return new RegExp(
-    `.*data\\.gouv\\.fr/api/2/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
+    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
   )
 }
 
@@ -21,6 +21,16 @@ Cypress.Commands.add('mockDatagouvResourceList', (resourceName, data = []) => {
     body: datagouvResponseBuilder(data)
   }).as(`get_${resourceName}_list`)
 })
+
+Cypress.Commands.add(
+  'mockDatagouvResource',
+  (resourceName, resourceId, data = {}) => {
+    cy.intercept('GET', datagouvUrlRegex(resourceName, resourceId), {
+      statusCode: 200,
+      body: data
+    }).as(`get_${resourceName}_detail`)
+  }
+)
 
 // We can't use req.query to check the request params because the tags are not properly handled as an array
 // in the request so req.query only contains the last tag. I ended up checking for the params in the url instead.
