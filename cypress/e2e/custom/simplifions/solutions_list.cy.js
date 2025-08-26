@@ -47,59 +47,55 @@ describe('Simplifions Solutions Page', () => {
   })
 
   it('should be able to search for a solution', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () => cy.get('input#search-topic').type('Démarches simplifiées'),
       'topics',
       'q=D%C3%A9marches+simplifi%C3%A9es&tag=simplifions-solutions'
     )
-    cy.get('input#search-topic').type('Démarches simplifiées')
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by fournisseurs de service ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () => cy.selectFilterValue('À destination de :', 'Communes'),
       'topics',
       'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-solutions'
     )
-    cy.selectFilterValue('À destination de :', 'Communes')
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by target users ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () =>
+        cy.selectFilterValue(
+          'Pour simplifier les démarches de :',
+          'Particuliers'
+        ),
       'topics',
       'tag=simplifions-target-users-particuliers&tag=simplifions-solutions'
     )
-    cy.selectFilterValue('Pour simplifier les démarches de :', 'Particuliers')
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by budget ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () =>
+        cy.selectFilterValue(
+          'Moyens disponibles pour la mise en œuvre :',
+          'Aucun développement, ni budget'
+        ),
       'topics',
       'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-solutions'
     )
-    cy.selectFilterValue(
-      'Moyens disponibles pour la mise en œuvre :',
-      'Aucun développement, ni budget'
-    )
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by types de simplification ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () =>
+        cy.selectFilterValue(
+          'Type de simplification des démarches :',
+          'Accès facile'
+        ),
       'topics',
       'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-solutions'
     )
-    cy.selectFilterValue(
-      'Type de simplification des démarches :',
-      'Accès facile'
-    )
-    cy.wait('@getTopics')
   })
 
   it('should not have the private filter', () => {
@@ -116,13 +112,11 @@ describe('Simplifions Solutions Page', () => {
     })
 
     it('should request the private solutions', () => {
-      cy.wait('@getTopics')
-      cy.expectRequestWithParams(
+      cy.expectActionToCallApi(
+        () => cy.clickCheckbox('include_private'),
         'topics',
         /tag=simplifions-solutions&.+&include_private=true/
       )
-      cy.clickCheckbox('include_private')
-      cy.wait('@getTopics')
     })
   })
 })

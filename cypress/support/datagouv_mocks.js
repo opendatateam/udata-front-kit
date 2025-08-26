@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from './utils'
+
 const datagouvResponseBuilder = (data) => {
   return {
     data: data.slice(0, 10),
@@ -7,10 +9,6 @@ const datagouvResponseBuilder = (data) => {
     previous_page: null,
     total: data.length
   }
-}
-
-function capitalizeFirstLetter(val) {
-  return String(val).charAt(0).toUpperCase() + String(val).slice(1)
 }
 
 Cypress.Commands.add('mockResource', (resource_name, data) => {
@@ -34,3 +32,5 @@ Cypress.Commands.add(
     }).as(`get${capitalizeFirstLetter(resource_name)}`)
   }
 )
+
+export { capitalizeFirstLetter }

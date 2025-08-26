@@ -50,59 +50,55 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   })
 
   it("should be able to search for a cas d'usage", () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () => cy.get('input#search-topic').type('Aides sociales des CCAS'),
       'topics',
       'q=Aides+sociales+des+CCAS&tag=simplifions-cas-d-usages'
     )
-    cy.get('input#search-topic').type('Aides sociales des CCAS')
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by fournisseurs de service ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () => cy.selectFilterValue('À destination de :', 'Communes'),
       'topics',
       'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-cas-d-usages'
     )
-    cy.selectFilterValue('À destination de :', 'Communes')
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by target users ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () =>
+        cy.selectFilterValue(
+          'Pour simplifier les démarches de :',
+          'Particuliers'
+        ),
       'topics',
       'tag=simplifions-target-users-particuliers&tag=simplifions-cas-d-usages'
     )
-    cy.selectFilterValue('Pour simplifier les démarches de :', 'Particuliers')
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by budget ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () =>
+        cy.selectFilterValue(
+          'Moyens disponibles pour la mise en œuvre :',
+          'Aucun développement, ni budget'
+        ),
       'topics',
       'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-cas-d-usages'
     )
-    cy.selectFilterValue(
-      'Moyens disponibles pour la mise en œuvre :',
-      'Aucun développement, ni budget'
-    )
-    cy.wait('@getTopics')
   })
 
   it('should be able to filter by types de simplification ', () => {
-    cy.wait('@getTopics')
-    cy.expectRequestWithParams(
+    cy.expectActionToCallApi(
+      () =>
+        cy.selectFilterValue(
+          'Type de simplification des démarches :',
+          'Accès facile'
+        ),
       'topics',
       'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-cas-d-usages'
     )
-    cy.selectFilterValue(
-      'Type de simplification des démarches :',
-      'Accès facile'
-    )
-    cy.wait('@getTopics')
   })
 
   it('should not have the private filter', () => {
@@ -119,13 +115,11 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
 
     it("should request the private cas d'usages", () => {
-      cy.wait('@getTopics')
-      cy.expectRequestWithParams(
+      cy.expectActionToCallApi(
+        () => cy.clickCheckbox('include_private'),
         'topics',
         /tag=simplifions-cas-d-usages&.+&include_private=true/
       )
-      cy.clickCheckbox('include_private')
-      cy.wait('@getTopics')
     })
   })
 })
