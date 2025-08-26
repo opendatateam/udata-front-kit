@@ -16,6 +16,21 @@ const topicFactory = build({
   }
 })
 
+const recoSolutionFactory = build({
+  fields: {
+    En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage_: 'Sample text',
+    Concretement_pour_les_usagers_: 'Sample text',
+    Concretement_pour_vos_agents_: 'Sample text',
+    Ce_que_ne_fait_pas_cette_solution_: 'Sample text',
+    Moyens_requis_pour_la_mise_en_oeuvre: ['Sample text'],
+    Nom_de_la_solution_publique: 'Sample Solution Name',
+    solution_topic_id: 'sample-solution',
+    image_principale: ['sample-image'],
+    solutions_editeurs_topics: [],
+    API_et_data_utiles_fournies_par_la_solution_datagouv_slugs: []
+  }
+})
+
 const casUsageFactory = build({
   fields: {
     ...topicFactory.one(),
@@ -27,7 +42,7 @@ const casUsageFactory = build({
         Contexte: 'Sample context',
         Cadre_juridique: 'Sample legal framework',
         API_et_donnees_utiles: [],
-        reco_solutions: [],
+        reco_solutions: [recoSolutionFactory.one()],
         descriptions_api_et_donnees_utiles: []
       }
     }
@@ -67,5 +82,6 @@ const solutionFactory = build({
 export default {
   topicFactory,
   casUsageFactory,
-  solutionFactory
+  solutionFactory,
+  recoSolutionFactory
 }

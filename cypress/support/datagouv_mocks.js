@@ -28,7 +28,7 @@ Cypress.Commands.add(
     cy.intercept('GET', datagouvUrlRegex(resourceName, resourceId), {
       statusCode: 200,
       body: data
-    }).as(`get_${resourceName}_detail`)
+    }).as(`get_${resourceName}_${resourceId}`)
   }
 )
 

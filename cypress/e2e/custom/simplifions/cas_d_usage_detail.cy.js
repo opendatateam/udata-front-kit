@@ -14,6 +14,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
     })
     cy.mockDatagouvResource('topics', casUsage.slug, casUsage)
     cy.mockDatagouvResourceList('discussions')
+    cy.mockGristImages()
     cy.visit('/cas-d-usages/aides-publiques-entreprises-sourcage')
   })
 
