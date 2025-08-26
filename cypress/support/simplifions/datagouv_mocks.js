@@ -21,7 +21,7 @@ Cypress.Commands.add('mockResource', (resource_name, data) => {
 })
 
 Cypress.Commands.add(
-  'expectRequestParams',
+  'expectRequestWithParams',
   (resource_name, request_params_string) => {
     cy.intercept('GET', `**/api/2/${resource_name}/**`, (req) => {
       // We can't use req.query because the tags are not properly handled as an array in the request

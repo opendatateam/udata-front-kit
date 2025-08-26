@@ -24,6 +24,10 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   it("should display a paginated list of cas d'usages", () => {
     // Verify that the page has 10 results
     cy.get('div.topic-card').should('have.length', 10)
+    cy.get('#number-of-results').should(
+      'contain.text',
+      "11 cas d'usages disponibles"
+    )
 
     // Verify that the page has a pagination component
     cy.get('nav.fr-pagination').should('be.visible')
@@ -34,9 +38,23 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
   })
 
+  it('should display only one page when there are less than 10 results', () => {
+    cy.mockResource('topics', casUsageBuilder.many(1))
+    cy.visit('/cas-d-usages')
+    cy.get('div.topic-card').should('have.length', 1)
+    cy.get('#number-of-results').should(
+      'contain.text',
+      "1 cas d'usage disponible"
+    )
+    cy.get('nav.fr-pagination').should('be.visible')
+    cy.get('nav.fr-pagination').within(() => {
+      cy.get('a.fr-pagination__link.fr-unhidden-lg').should('have.length', 1)
+    })
+  })
+
   it("should be able to search for a cas d'usage", () => {
     cy.wait('@getTopics')
-    cy.expectRequestParams(
+    cy.expectRequestWithParams(
       'topics',
       'q=Aides+sociales+des+CCAS&tag=simplifions-cas-d-usages'
     )
@@ -46,7 +64,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it('should be able to filter by fournisseurs de service ', () => {
     cy.wait('@getTopics')
-    cy.expectRequestParams(
+    cy.expectRequestWithParams(
       'topics',
       'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-cas-d-usages'
     )
@@ -56,7 +74,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it('should be able to filter by target users ', () => {
     cy.wait('@getTopics')
-    cy.expectRequestParams(
+    cy.expectRequestWithParams(
       'topics',
       'tag=simplifions-target-users-particuliers&tag=simplifions-cas-d-usages'
     )
@@ -66,7 +84,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it('should be able to filter by budget ', () => {
     cy.wait('@getTopics')
-    cy.expectRequestParams(
+    cy.expectRequestWithParams(
       'topics',
       'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-cas-d-usages'
     )
@@ -79,7 +97,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it('should be able to filter by types de simplification ', () => {
     cy.wait('@getTopics')
-    cy.expectRequestParams(
+    cy.expectRequestWithParams(
       'topics',
       'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-cas-d-usages'
     )
