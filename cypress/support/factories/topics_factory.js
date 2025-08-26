@@ -71,7 +71,7 @@ const solutionFactory = build({
         operateur_nom: 'Sample Operator',
         operateur_nom_long: 'Sample Operator Full Name',
         types_de_solution: ['API', 'Service'],
-        cas_d_usages_topics_ids: [],
+        cas_d_usages_topics_ids: ['sample-cas-usage'],
         is_public: true,
         API_et_data_disponibles: []
       }
