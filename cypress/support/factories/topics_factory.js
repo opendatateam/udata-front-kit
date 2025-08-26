@@ -35,7 +35,38 @@ const casUsageFactory = build({
   }
 })
 
+const solutionFactory = build({
+  fields: {
+    ...topicFactory.one(),
+    tags: ['simplifions', 'simplifions-solutions'],
+    extras: {
+      'simplifions-solutions': {
+        Image_principale:
+          'https://demo.data.gouv.fr/api/1/topics/sample-solution/image_principale/',
+        Legende_image_principale: 'Sample image legend',
+        Prix_: 'Gratuit',
+        Description_courte: 'Sample short description of the solution',
+        Description_longue:
+          'Sample long description with more details about what this solution does and how it can help users.',
+        Cette_solution_permet_:
+          'This solution allows users to do various things efficiently',
+        Cette_solution_ne_permet_pas_:
+          'This solution does not handle complex edge cases',
+        Ref_Nom_de_la_solution: 'Sample Solution Name',
+        URL_Consulter_la_solution_: 'https://example.com/solution',
+        operateur_nom: 'Sample Operator',
+        operateur_nom_long: 'Sample Operator Full Name',
+        types_de_solution: ['API', 'Service'],
+        cas_d_usages_topics_ids: [],
+        is_public: true,
+        API_et_data_disponibles: []
+      }
+    }
+  }
+})
+
 export default {
   topicFactory,
-  casUsageFactory
+  casUsageFactory,
+  solutionFactory
 }

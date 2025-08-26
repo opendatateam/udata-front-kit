@@ -1,8 +1,9 @@
-describe('Simplifions Solutions Page', () => {
-  const topicsName = 'solutions'
+import { solutionFactory } from '../../../support/factories/topics_factory'
 
+describe('Simplifions Solutions Page', () => {
   beforeEach(() => {
     // Visit the Simplifions home page before each test
+    cy.mockResource('topics', solutionFactory.many(11))
     cy.visit('/solutions')
   })
 
@@ -19,78 +20,109 @@ describe('Simplifions Solutions Page', () => {
 
   it('should display a paginated list of solutions', () => {
     // Verify that the page has 10 results
-    cy.get('div.topic-card').should('have.length.lt', 10)
+    cy.get('div.topic-card').should('have.length', 10)
+    cy.get('#number-of-results').should(
+      'contain.text',
+      '11 solutions disponibles'
+    )
 
     // Verify that the page has a pagination component
     cy.get('nav.fr-pagination').should('be.visible')
 
     // Check that the pagination component has several pages
     cy.get('nav.fr-pagination').within(() => {
-      cy.get('a.fr-pagination__link.fr-unhidden-lg').should('have.length.gt', 0)
+      cy.get('a.fr-pagination__link.fr-unhidden-lg').should('have.length', 2)
+    })
+  })
+
+  it('should display only one page when there are less than 10 results', () => {
+    cy.mockResource('topics', solutionFactory.many(1))
+    cy.visit('/solutions')
+    cy.get('div.topic-card').should('have.length', 1)
+    cy.get('#number-of-results').should('contain.text', '1 solution disponible')
+    cy.get('nav.fr-pagination').should('be.visible')
+    cy.get('nav.fr-pagination').within(() => {
+      cy.get('a.fr-pagination__link.fr-unhidden-lg').should('have.length', 1)
     })
   })
 
   it('should be able to search for a solution', () => {
-    // Fill the search bar with the topic name
+    cy.wait('@getTopics')
+    cy.expectRequestWithParams(
+      'topics',
+      'q=D%C3%A9marches+simplifi%C3%A9es&tag=simplifions-solutions'
+    )
     cy.get('input#search-topic').type('Démarches simplifiées')
-
-    // Verify that the page has the correct number of results
-    cy.get('#number-of-results').should('contain.text', '1 solution disponible')
+    cy.wait('@getTopics')
   })
 
   it('should be able to filter by fournisseurs de service ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
-      'À destination de :',
-      'Communes'
+    cy.wait('@getTopics')
+    cy.expectRequestWithParams(
+      'topics',
+      'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-solutions'
     )
+    cy.selectFilterValue('À destination de :', 'Communes')
+    cy.wait('@getTopics')
   })
 
   it('should be able to filter by target users ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
-      'Pour simplifier les démarches de :',
-      'Particuliers'
+    cy.wait('@getTopics')
+    cy.expectRequestWithParams(
+      'topics',
+      'tag=simplifions-target-users-particuliers&tag=simplifions-solutions'
     )
+    cy.selectFilterValue('Pour simplifier les démarches de :', 'Particuliers')
+    cy.wait('@getTopics')
   })
 
   it('should be able to filter by budget ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
+    cy.wait('@getTopics')
+    cy.expectRequestWithParams(
+      'topics',
+      'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-solutions'
+    )
+    cy.selectFilterValue(
       'Moyens disponibles pour la mise en œuvre :',
       'Aucun développement, ni budget'
     )
+    cy.wait('@getTopics')
   })
 
   it('should be able to filter by types de simplification ', () => {
-    cy.selectFilterShouldRemoveResults(
-      topicsName,
+    cy.wait('@getTopics')
+    cy.expectRequestWithParams(
+      'topics',
+      'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-solutions'
+    )
+    cy.selectFilterValue(
       'Type de simplification des démarches :',
       'Accès facile'
     )
+    cy.wait('@getTopics')
   })
 
   it('should not have the private filter', () => {
     cy.get('input[name="include_private"]').should('not.exist')
   })
 
-  describe('when connected with a random user', () => {
-    it("should not be able to see any private cas d'usages", () => {
+  describe('when connected with a user', () => {
+    beforeEach(() => {
       cy.simulateConnectedUser()
-
-      cy.filterShouldNotChangeResults(topicsName, () => {
-        cy.clickCheckbox('include_private')
-      })
     })
-  })
 
-  describe('when connected with a DINUM user', () => {
-    it("should be able to see the private cas d'usages", () => {
-      cy.simulateConnectedDINUMUser()
+    it('should have the private filter', () => {
+      cy.get('input[name="include_private"]').should('exist')
+    })
 
-      cy.filterShouldChangeResults(topicsName, 'increase', () => {
-        cy.clickCheckbox('include_private')
-      })
+    it('should request the private solutions', () => {
+      cy.wait('@getTopics')
+      cy.expectRequestWithParams(
+        'topics',
+        /tag=simplifions-solutions&.+&include_private=true/
+      )
+      cy.clickCheckbox('include_private')
+      cy.wait('@getTopics')
     })
   })
 })
