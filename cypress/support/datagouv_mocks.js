@@ -66,3 +66,17 @@ Cypress.Commands.add('mockGristImages', () => {
     }
   ).as('mockGristImages')
 })
+
+Cypress.Commands.add('mockMatomo', () => {
+  cy.intercept('GET', 'https://stats.data.gouv.fr/matomo.js', {
+    statusCode: 200,
+    body: '// Mocked Matomo script'
+  }).as('mockMatomo')
+})
+
+Cypress.Commands.add('mockStaticDatagouv', () => {
+  cy.intercept('GET', 'https://static.data.gouv.fr/**', {
+    statusCode: 200,
+    body: '// Mocked static.data.gouv.fr content'
+  }).as('mockStaticDatagouv')
+})
