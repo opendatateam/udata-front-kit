@@ -22,15 +22,13 @@ Le programme est entièrement gratuit. Pour participer au dispositif, il suffit 
 **[Rejoindre l'Open Data University](https://airtable.com/appJY09hYLFOYjGdc/shr7WX6sMS1ciiyMv)**
 
 ## Quels sont les projets open data proposés ?
-Dans le cadre de l'Open Data University, 8 projets open data ont été conçus pour être intégrés dans des enseignements techniques :
-* [**Diversité et Inclusion en entreprise**](https://defis.data.gouv.fr/defis/diversite-et-inclusion-en-entreprise)
-* [**Revitalisation des petites villes**](https://defis.data.gouv.fr/defis/revitalisation-des-petites-villes)
+Dans le cadre de l'Open Data University, 7 projets open data ont été conçus pour être intégrés dans des enseignements techniques :
+* [**Tourisme en train**](https://defis.data.gouv.fr/defis/tourisme-en-train)
+* [**Santé et territoires**](https://defis.data.gouv.fr/defis/sante-et-territoires)
 * [**Les Françaises et les Français face à l'information**](https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation)
-* [**Impacts Diagnostics de Performance Energétique**](https://defis.data.gouv.fr/defis/diagnostics-de-performance-energetique)
+* [**Diagnostics de performance énergétique**](https://defis.data.gouv.fr/defis/diagnostics-de-performance-energetique)
 * [**Changement climatique**](https://defis.data.gouv.fr/defis/changement-climatique)
-* [**Offre culturelle**](https://defis.data.gouv.fr/defis/offre-culturelle)
-* [**Elections**](https://defis.data.gouv.fr/defis/elections)
-* [**Véhicules électriques**](https://defis.data.gouv.fr/defis/vehicules-electriques)
+Deux autres sont à venir en septembre/octobre. 
 
 ## Foire aux questions (FAQ)
 
@@ -60,7 +58,7 @@ Bienvenue ! En tant qu’administration, vous pouvez :
 Contacter Latitudes : Vous pouvez écrire à l’équipe pour toute question : open-data-university@latitudes.cc
 
 ##### J’ai une expertise tech, comment puis-je prendre part à l’ODU ?
-Bienvenue ! Le programme ODU accueille des mentors, notamment des expertes et experts en data, pour accompagner des étudiantes et étudiants dans leur projet. L’investissement peut être ponctuel ou en suivi plus régulier. Vous souhaitez devenir mentor ? Voici [le lien d’inscription](https://airtable.com/app3EKyPGxgEnB7Fw/shrWAHxi8EdHZEgt9).
+Bienvenue ! Le programme ODU recherche des référents pour chaque défi proposé, des spécialistes de la donnée qui accompagnent les professeurs et étudiantes et étudiants dans leur projet en explorant les données du défi choisi et en créant des dataviz, analyses ou guides de prise en main. Vous souhaitez devenir référent ou référente défi ? [Inscrivez-vous](https://lati.cc/odu-inscription-ref-defi) !
 
 ##### Comment l’open data devient-il un outil de formation essentiel dans l’enseignement supérieur ?
 L'équipe de data.gouv.fr a consacré [un article de blog](https://www.data.gouv.fr/fr/posts/comment-lopen-data-devient-un-outil-de-formation-essentiel-dans-lenseignement-superieur/) à ce sujet qui fournit quelques éléments de réponse. Nous vous invitons à le consulter.
