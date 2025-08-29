@@ -16,7 +16,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Démarche'
     },
-    component: async () => await import('./views/Demarche.vue')
+    component: async () => await import('./views/DemarcheView.vue')
   },
   useDatasetSearchPageRoutes({
     pageKey: 'datasets',
