@@ -92,25 +92,19 @@ website:
       to: 'https://forum.data.gouv.fr/tag/culture'
     - text: 'La démarche'
       to: /demarche
-    - text: A propos
-      to: /about
   router:
     disable:
       - organizations_routes
       - topics
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
-      - title: 'A propos'
-        id: 'about'
-        route: '/about'
-        url: '/culture/pages/about.md'
   sitemap:
     - name: Accueil
       path: /
     - name: Jeux de données
       path: /datasets
-    - name: À propos
-      path: /about
+    - name: Démarche
+      path: /demarche
     - name: Conditions générales d’utilisation
       path: /terms
   show_quality_component: true
