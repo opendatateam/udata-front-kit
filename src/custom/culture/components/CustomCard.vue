@@ -21,12 +21,13 @@ const { link, ctaLabel } = defineProps<Props>()
         <h3 class="fr-card__title">
           {{ title }}
         </h3>
-        <!-- eslint-disable-next-line vue/no-v-html -->
         <div
           v-if="description"
           class="fr-card__desc custom-links custom-card-desc culture-card-description"
-          v-html="fromMarkdown(description)"
-        ></div>
+        >
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="fromMarkdown(description)"></div>
+        </div>
       </div>
       <div v-if="ctaLabel || link" class="fr-card__cta">
         <a v-if="ctaLabel && link" :href="link" class="cta-label-link"

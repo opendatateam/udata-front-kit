@@ -286,11 +286,10 @@ onMounted(async () => {
                   {{ section.fields.section_title }}
                 </h3>
                 <h4 class="fr-h6 fr-mb-2w">{{ item.fields.title }}</h4>
-                <!-- eslint-disable-next-line vue/no-v-html -->
-                <div
-                  class="fr-text--sm fr-mb-3w"
-                  v-html="fromMarkdown(item.fields.content)"
-                ></div>
+                <div class="fr-text--sm fr-mb-3w">
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                </div>
                 <a
                   v-if="item.fields.ctaLink && item.fields.ctaLabel"
                   :href="item.fields.ctaLink"
@@ -311,12 +310,14 @@ onMounted(async () => {
           :class="getBackgroundClass(section.fields.background_color)"
         >
           <h2>{{ section.fields.section_title }}</h2>
-          <!-- eslint-disable-next-line vue/no-v-html -->
+
           <div
             v-for="item in getContentForSection(section.fields.section)"
             :key="item.id"
-            v-html="fromMarkdown(item.fields.content)"
-          ></div>
+          >
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="fromMarkdown(item.fields.content)"></div>
+          </div>
         </section>
 
         <section
@@ -328,12 +329,13 @@ onMounted(async () => {
             <div class="newsletter-social-content">
               <div class="newsletter-section">
                 <h3>{{ section.fields.section_title }}</h3>
-                <!-- eslint-disable-next-line vue/no-v-html -->
                 <div
                   v-for="item in getContentForSection(section.fields.section)"
                   :key="item.id"
-                  v-html="fromMarkdown(item.fields.content)"
-                ></div>
+                >
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                </div>
                 <br />
                 <a
                   v-if="
