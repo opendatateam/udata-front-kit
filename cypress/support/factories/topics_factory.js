@@ -56,7 +56,7 @@ const solutionFactory = build({
     extras: {
       'simplifions-solutions': {
         Image_principale:
-          'https://demo.data.gouv.fr/api/1/topics/sample-solution/image_principale/',
+          'https://demo.data.gouv.fr/api/1/topics/sample-solution/image_principale.png',
         Legende_image_principale: 'Sample image legend',
         Prix_: 'Gratuit',
         Description_courte: 'Sample short description of the solution',
