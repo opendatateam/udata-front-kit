@@ -93,7 +93,7 @@ VITE_SITE_ID=monsite npm run test:e2e:for_production_build
 
 Afin de ne pas dépendre de données extérieurs pour faire tourner les tests en autonomie complète, il est recommandé de "mocker" ou "bouchonner" vos calls APIs.
 
-On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js?tab=readme-ov-file#sequence) comme factory pour créer des données pour ces mocks.
+On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js) comme factory pour créer des données pour ces mocks.
 
 #### Linting via [ESLint](https://eslint.org/)
 
