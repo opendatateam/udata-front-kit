@@ -10,5 +10,5 @@ These topics are regularly updated with data from a Grist database by a DAG (it'
 
 You can see the topics created by requesting topics like this :
 
-- https://demo.data.gouv.fr/api/1/topics/?tag=simplifions-cas-d-usages
-- https://demo.data.gouv.fr/api/1/topics/?tag=simplifions-solutions
+- https://demo.data.gouv.fr/api/2/topics/?tag=simplifions-cas-d-usages
+- https://demo.data.gouv.fr/api/2/topics/?tag=simplifions-solutions
