@@ -1,7 +1,26 @@
+import {
+  casUsageFactory,
+  solutionFactory
+} from '../../../support/factories/custom/simplifions/topics_factory'
+
 describe("Simplifions Cas d'usages Show Page", () => {
   beforeEach(() => {
-    // Visit the Simplifions home page before each test
-    cy.visit('/cas-d-usages/aides-publiques-entreprises-sourcage')
+    const casUsage = casUsageFactory.one({
+      overrides: {
+        slug: 'aides-publiques-entreprises-sourcage',
+        extras: {
+          'simplifions-cas-d-usages': {
+            Titre: 'Aides publiques entreprises | Sourçage'
+          }
+        }
+      }
+    })
+    cy.mockDatagouvObject('topics', casUsage.slug, casUsage)
+    cy.mockDatagouvObjectList('discussions')
+    cy.mockGristImages()
+    cy.mockDatagouvObject('topics', 'sample-solution', solutionFactory.one())
+
+    cy.visit(`/cas-d-usages/${casUsage.slug}`)
   })
 
   it("should display the cas d'usage show page correctly", () => {
@@ -33,8 +52,9 @@ describe("Simplifions Cas d'usages Show Page", () => {
   })
 
   it('should link to solutions recommendations', () => {
+    cy.wait('@get_topics_aides-publiques-entreprises-sourcage')
     // Check that the solutions recommendations are visible
-    cy.get('.reco-solution').should('have.length.gt', 1)
+    cy.get('.reco-solution').should('have.length', 1)
 
     // Click on the first solution recommendation
     cy.get('.reco-solution:first').within(() => {

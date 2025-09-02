@@ -1,7 +1,34 @@
+import {
+  casUsageFactory,
+  solutionFactory
+} from '../../../support/factories/custom/simplifions/topics_factory'
+
 describe('Simplifions Solutions Details Page', () => {
   beforeEach(() => {
-    // Visit the Simplifions home page before each test
-    cy.visit('/solutions/annuaire-des-entreprises')
+    const solution = solutionFactory.one({
+      overrides: {
+        slug: 'annuaire-des-entreprises',
+        extras: {
+          'simplifions-solutions': {
+            Ref_Nom_de_la_solution: 'Annuaire des Entreprises'
+          }
+        }
+      }
+    })
+    cy.mockDatagouvObject('topics', solution.slug, solution)
+    cy.mockDatagouvObjectList('discussions')
+    cy.mockGristImages()
+    cy.mockDatagouvObject(
+      'topics',
+      'sample-cas-usage',
+      casUsageFactory.one({
+        overrides: {
+          slug: 'sample-cas-usage'
+        }
+      })
+    )
+
+    cy.visit(`/solutions/${solution.slug}`)
   })
 
   it('should display the solutions details page correctly', () => {
@@ -34,7 +61,7 @@ describe('Simplifions Solutions Details Page', () => {
     cy.get('.test__topic-detail', { timeout: 10000 }).should('be.visible')
 
     // Check that there is at least one cas d'usage card
-    cy.get('.test__cas-d-usage-card').should('have.length.gt', 1)
+    cy.get('.test__cas-d-usage-card').should('have.length', 1)
 
     // Click on the first cas d'usage
     cy.get('.test__cas-d-usage-card:first').within(() => {

@@ -1,6 +1,8 @@
 describe('Home Page', () => {
   beforeEach(() => {
     // Visit the home page before each test
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
     cy.visit('/')
   })
 
