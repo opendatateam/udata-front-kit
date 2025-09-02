@@ -111,7 +111,7 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   ]
 })
 
-const errorSummary = useTemplateRef('errorSummary')
+const errorSummary = useTemplateRef<ComponentPublicInstance>('errorSummary')
 const selectedTopic: Ref<Topic | null> = ref(null)
 
 watch(selectedTopicId, async () => {

@@ -30,7 +30,7 @@ const factorsGroups = defineModel('groups-model', {
   type: Object as () => FactorsGroups,
   default: []
 })
-defineProps({
+const props = defineProps({
   datasetEditorialization: {
     type: Boolean,
     default: false
@@ -50,26 +50,32 @@ const validateFields = () => {
   if (!modalElement?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalElement?.description?.trim()) {
-    formErrors.value.push('purpose')
+
+  if (props.datasetEditorialization) {
+    if (!modalElement?.title.trim()) {
+      formErrors.value.push('title')
+    }
+    if (!modalElement?.description?.trim()) {
+      formErrors.value.push('purpose')
+    }
+    if (
+      !modalElement?.siteExtras.uri &&
+      modalElement?.siteExtras.availability === Availability.LOCAL_AVAILABLE
+    ) {
+      formErrors.value.push('availability')
+    }
+    if (
+      !modalElement?.siteExtras.uri &&
+      modalElement?.siteExtras.availability === Availability.URL_AVAILABLE
+    ) {
+      formErrors.value.push('availabilityUrl')
+    }
   }
   if (
     modalElement?.siteExtras.group &&
     modalElement?.siteExtras.group.length > 100
   ) {
     formErrors.value.push('group')
-  }
-  if (
-    !modalElement?.siteExtras.uri &&
-    modalElement?.siteExtras.availability === Availability.LOCAL_AVAILABLE
-  ) {
-    formErrors.value.push('availability')
-  }
-  if (
-    !modalElement?.siteExtras.uri &&
-    modalElement?.siteExtras.availability === Availability.URL_AVAILABLE
-  ) {
-    formErrors.value.push('availabilityUrl')
   }
 }
 
@@ -94,7 +100,7 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
   ]
 })
 
-const errorSummary = useTemplateRef('errorSummary')
+const errorSummary = useTemplateRef<ComponentPublicInstance>('errorSummary')
 
 const onCancel = () => {
   // reset error fields

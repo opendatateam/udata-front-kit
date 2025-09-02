@@ -62,7 +62,7 @@ const dropdown = config.website.header_search.dropdown
           search-label="Rechercher"
           :dropdown="dropdown"
         />
-        <p class="text-grey-300 fr-text--sm fr-mt-1v">
+        <p class="text-mention-grey fr-text--sm fr-mt-1v">
           Exemple&nbsp;: «&nbsp;Itinéraires fraîcheur&nbsp;» dans les bouquets
           ou «&nbsp;Horaires des TGV&nbsp;» dans les données
         </p>
