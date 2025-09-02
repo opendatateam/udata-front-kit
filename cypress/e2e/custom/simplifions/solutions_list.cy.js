@@ -35,7 +35,7 @@ describe('Simplifions Solutions Page', () => {
     })
   })
 
-  it('should display only one page when there are less than 10 results', () => {
+  it('should display only one page when there is only one result', () => {
     cy.mockDatagouvResourceList('topics', solutionFactory.many(1))
     cy.visit('/solutions')
     cy.get('div.topic-card').should('have.length', 1)
