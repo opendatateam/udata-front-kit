@@ -33,7 +33,7 @@ const datasetsGroups = defineModel('groups-model', {
   type: Object as () => DatasetsGroups,
   default: []
 })
-defineProps({
+const props = defineProps({
   datasetEditorialization: {
     type: Boolean,
     default: false
@@ -49,29 +49,31 @@ const modalData: Ref<DatasetModalData> = ref({
 const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
-  if (!modalData.value.dataset?.title.trim()) {
-    formErrors.value.push('title')
-  }
-  if (!modalData.value.dataset?.purpose?.trim()) {
-    formErrors.value.push('purpose')
+  if (props.datasetEditorialization) {
+    if (!modalData.value.dataset?.title.trim()) {
+      formErrors.value.push('title')
+    }
+    if (!modalData.value.dataset?.purpose?.trim()) {
+      formErrors.value.push('purpose')
+    }
+    if (
+      !modalData.value.dataset?.uri &&
+      modalData.value.dataset?.availability === Availability.LOCAL_AVAILABLE
+    ) {
+      formErrors.value.push('availability')
+    }
+    if (
+      !modalData.value.dataset?.uri &&
+      modalData.value.dataset?.availability === Availability.URL_AVAILABLE
+    ) {
+      formErrors.value.push('availabilityUrl')
+    }
   }
   if (
     modalData.value.dataset?.group &&
     modalData.value.dataset?.group.trim().length > 100
   ) {
     formErrors.value.push('group')
-  }
-  if (
-    !modalData.value.dataset?.uri &&
-    modalData.value.dataset?.availability === Availability.LOCAL_AVAILABLE
-  ) {
-    formErrors.value.push('availability')
-  }
-  if (
-    !modalData.value.dataset?.uri &&
-    modalData.value.dataset?.availability === Availability.URL_AVAILABLE
-  ) {
-    formErrors.value.push('availabilityUrl')
   }
 }
 
