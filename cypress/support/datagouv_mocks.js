@@ -32,8 +32,9 @@ Cypress.Commands.add(
   }
 )
 
-// We can't use req.query to check the request params because the tags are not properly handled as an array
-// in the request so req.query only contains the last tag. I ended up checking for the params in the url instead.
+// We can't use req.query to check the request params because the tags are not handled as arrays
+// in the request so req.query only contains the last tag. So we check the params in the url instead.
+// This is a known issue of cypress: https://github.com/cypress-io/cypress/issues/17921
 Cypress.Commands.add(
   'expectRequestWithParams',
   (resourceName, requestParamsString) => {
