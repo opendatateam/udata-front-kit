@@ -64,14 +64,19 @@ Cypress.Commands.add('allowExternalRequests', () => {
 })
 
 Cypress.Commands.add('mockGristImages', () => {
-  cy.intercept(
-    'GET',
-    'https://grist.numerique.gouv.fr/api/docs/*/attachments/*/download',
-    {
-      statusCode: 200,
-      body: 'some image'
-    }
-  ).as('mockGristImages')
+  cy.readFile('public/blank_state/file.svg').then((svgContent) => {
+    cy.intercept(
+      'GET',
+      'https://grist.numerique.gouv.fr/api/docs/*/attachments/*/download',
+      {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'image/svg+xml'
+        },
+        body: svgContent
+      }
+    ).as('mockGristImages')
+  })
 })
 
 Cypress.Commands.add('mockMatomo', () => {
