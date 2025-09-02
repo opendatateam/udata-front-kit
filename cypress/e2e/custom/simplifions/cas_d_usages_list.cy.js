@@ -121,4 +121,21 @@ describe("Simplifions Cas d'usages Listing Page", () => {
       )
     })
   })
+
+  it('should request new results when a filter is applied', () => {
+    cy.get('#number-of-results').should(
+      'contain.text',
+      "11 cas d'usages disponibles"
+    )
+    cy.get('div.topic-card').should('have.length', 10)
+
+    cy.mockDatagouvResourceList('topics', casUsageFactory.many(3))
+    cy.selectFilterValue('À destination de :', 'Communes')
+
+    cy.get('#number-of-results').should(
+      'contain.text',
+      "3 cas d'usages disponibles"
+    )
+    cy.get('div.topic-card').should('have.length', 3)
+  })
 })

@@ -119,4 +119,21 @@ describe('Simplifions Solutions Page', () => {
       )
     })
   })
+
+  it('should request new results when a filter is applied', () => {
+    cy.get('#number-of-results').should(
+      'contain.text',
+      '11 solutions disponibles'
+    )
+    cy.get('div.topic-card').should('have.length', 10)
+
+    cy.mockDatagouvResourceList('topics', solutionFactory.many(3))
+    cy.selectFilterValue('À destination de :', 'Communes')
+
+    cy.get('#number-of-results').should(
+      'contain.text',
+      '3 solutions disponibles'
+    )
+    cy.get('div.topic-card').should('have.length', 3)
+  })
 })
