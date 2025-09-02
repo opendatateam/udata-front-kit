@@ -1,9 +1,9 @@
 import { build, sequence } from 'mimicry-js'
-import { organizationFactory } from './organizations_factory'
+import { dinumOrganization } from './organizations_factory'
 
 const topicFactory = build({
   fields: {
-    organization: organizationFactory.one(),
+    organization: dinumOrganization,
     name: 'Sample Topic',
     description: 'Sample description',
     created_at: '2025-07-28T12:03:28.390000+00:00',

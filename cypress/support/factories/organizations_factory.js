@@ -1,7 +1,26 @@
-import { build } from 'mimicry-js'
+import { build, sequence } from 'mimicry-js'
 
 const organizationFactory = build({
   fields: {
+    acronym: sequence((x) => `ORGA${x}`),
+    badges: [],
+    class: 'Organization',
+    id: sequence((x) => `org_id_${x}`),
+    logo: '/public/blank_state/file.svg',
+    logo_thumbnail: '/public/blank_state/file.svg',
+    name: sequence((x) => `Organization ${x}`),
+    page: sequence(
+      (x) => `https://demo.data.gouv.fr/organizations/organization-${x}/`
+    ),
+    slug: sequence((x) => `organization-${x}`),
+    uri: sequence(
+      (x) => `https://demo.data.gouv.fr/api/1/organizations/organization-${x}/`
+    )
+  }
+})
+
+const dinumOrganization = organizationFactory.one({
+  overrides: {
     acronym: 'DINUM',
     badges: [{ kind: 'certified' }, { kind: 'public-service' }],
     class: 'Organization',
@@ -17,5 +36,6 @@ const organizationFactory = build({
 })
 
 export default {
-  organizationFactory
+  organizationFactory,
+  dinumOrganization
 }
