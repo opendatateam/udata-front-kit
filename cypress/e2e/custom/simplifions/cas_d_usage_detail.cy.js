@@ -1,7 +1,7 @@
 import {
   casUsageFactory,
   solutionFactory
-} from '../../../support/factories/topics_factory'
+} from '../../../support/factories/custom/simplifions/topics_factory'
 
 describe("Simplifions Cas d'usages Show Page", () => {
   beforeEach(() => {

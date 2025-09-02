@@ -1,4 +1,4 @@
-import { solutionFactory } from '../../../support/factories/topics_factory'
+import { solutionFactory } from '../../../support/factories/custom/simplifions/topics_factory'
 
 describe('Simplifions Solutions Page', () => {
   beforeEach(() => {

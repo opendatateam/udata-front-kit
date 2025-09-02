@@ -1,4 +1,4 @@
-import { casUsageFactory } from '../../../support/factories/topics_factory'
+import { casUsageFactory } from '../../../support/factories/custom/simplifions/topics_factory'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
