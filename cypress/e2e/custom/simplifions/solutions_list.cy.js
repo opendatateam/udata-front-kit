@@ -3,7 +3,7 @@ import { solutionFactory } from '../../../support/factories/custom/simplifions/t
 describe('Simplifions Solutions Page', () => {
   beforeEach(() => {
     cy.mockGristImages()
-    cy.mockDatagouvResourceList('topics', solutionFactory.many(11))
+    cy.mockDatagouvObjectList('topics', solutionFactory.many(11))
     cy.visit('/solutions')
   })
 
@@ -36,7 +36,7 @@ describe('Simplifions Solutions Page', () => {
   })
 
   it('should display only one page when there is only one result', () => {
-    cy.mockDatagouvResourceList('topics', solutionFactory.many(1))
+    cy.mockDatagouvObjectList('topics', solutionFactory.many(1))
     cy.visit('/solutions')
     cy.get('div.topic-card').should('have.length', 1)
     cy.get('#number-of-results').should('contain.text', '1 solution disponible')
@@ -127,7 +127,7 @@ describe('Simplifions Solutions Page', () => {
     )
     cy.get('div.topic-card').should('have.length', 10)
 
-    cy.mockDatagouvResourceList('topics', solutionFactory.many(3))
+    cy.mockDatagouvObjectList('topics', solutionFactory.many(3))
     cy.selectFilterValue('À destination de :', 'Communes')
 
     cy.get('#number-of-results').should(

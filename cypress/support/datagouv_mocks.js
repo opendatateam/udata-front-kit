@@ -15,7 +15,7 @@ const datagouvUrlRegex = (resourceName, resourceId = null) => {
   )
 }
 
-Cypress.Commands.add('mockDatagouvResourceList', (resourceName, data = []) => {
+Cypress.Commands.add('mockDatagouvObjectList', (resourceName, data = []) => {
   cy.intercept('GET', datagouvUrlRegex(resourceName), {
     statusCode: 200,
     body: datagouvResponseBuilder(data)
@@ -23,7 +23,7 @@ Cypress.Commands.add('mockDatagouvResourceList', (resourceName, data = []) => {
 })
 
 Cypress.Commands.add(
-  'mockDatagouvResource',
+  'mockDatagouvObject',
   (resourceName, resourceId, data = {}) => {
     cy.intercept('GET', datagouvUrlRegex(resourceName, resourceId), {
       statusCode: 200,

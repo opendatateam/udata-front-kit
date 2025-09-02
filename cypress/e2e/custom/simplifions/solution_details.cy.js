@@ -15,10 +15,10 @@ describe('Simplifions Solutions Details Page', () => {
         }
       }
     })
-    cy.mockDatagouvResource('topics', solution.slug, solution)
-    cy.mockDatagouvResourceList('discussions')
+    cy.mockDatagouvObject('topics', solution.slug, solution)
+    cy.mockDatagouvObjectList('discussions')
     cy.mockGristImages()
-    cy.mockDatagouvResource(
+    cy.mockDatagouvObject(
       'topics',
       'sample-cas-usage',
       casUsageFactory.one({

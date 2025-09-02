@@ -15,10 +15,10 @@ describe("Simplifions Cas d'usages Show Page", () => {
         }
       }
     })
-    cy.mockDatagouvResource('topics', casUsage.slug, casUsage)
-    cy.mockDatagouvResourceList('discussions')
+    cy.mockDatagouvObject('topics', casUsage.slug, casUsage)
+    cy.mockDatagouvObjectList('discussions')
     cy.mockGristImages()
-    cy.mockDatagouvResource('topics', 'sample-solution', solutionFactory.one())
+    cy.mockDatagouvObject('topics', 'sample-solution', solutionFactory.one())
 
     cy.visit(`/cas-d-usages/${casUsage.slug}`)
   })

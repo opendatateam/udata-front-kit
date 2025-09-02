@@ -2,7 +2,7 @@ import { casUsageFactory } from '../../../support/factories/custom/simplifions/t
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
-    cy.mockDatagouvResourceList('topics', casUsageFactory.many(11))
+    cy.mockDatagouvObjectList('topics', casUsageFactory.many(11))
     cy.visit('/cas-d-usages')
   })
 
@@ -35,7 +35,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   })
 
   it('should display only one page when there are less than 10 results', () => {
-    cy.mockDatagouvResourceList('topics', casUsageFactory.many(1))
+    cy.mockDatagouvObjectList('topics', casUsageFactory.many(1))
     cy.visit('/cas-d-usages')
     cy.get('div.topic-card').should('have.length', 1)
     cy.get('#number-of-results').should(
@@ -129,7 +129,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     )
     cy.get('div.topic-card').should('have.length', 10)
 
-    cy.mockDatagouvResourceList('topics', casUsageFactory.many(3))
+    cy.mockDatagouvObjectList('topics', casUsageFactory.many(3))
     cy.selectFilterValue('À destination de :', 'Communes')
 
     cy.get('#number-of-results').should(

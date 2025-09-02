@@ -5,7 +5,7 @@ import {
 
 describe('Simplifions Navigation', () => {
   beforeEach(() => {
-    cy.mockDatagouvResourceList('topics')
+    cy.mockDatagouvObjectList('topics')
     cy.mockGristImages()
     cy.visit('/')
   })
@@ -57,7 +57,7 @@ describe('Simplifions Navigation', () => {
   })
 
   it("should search for cas d'usages", () => {
-    cy.mockDatagouvResourceList('topics', casUsageFactory.many(2))
+    cy.mockDatagouvObjectList('topics', casUsageFactory.many(2))
 
     cy.get('header[role="banner"]').within(() => {
       // Click on the search input
@@ -79,7 +79,7 @@ describe('Simplifions Navigation', () => {
   })
 
   it('should search for solutions', () => {
-    cy.mockDatagouvResourceList('topics', solutionFactory.many(2))
+    cy.mockDatagouvObjectList('topics', solutionFactory.many(2))
     cy.get('header[role="banner"]').within(() => {
       // Click on the search input
       cy.get('input.multiselect-search:first').click()
