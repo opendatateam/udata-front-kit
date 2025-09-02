@@ -77,8 +77,8 @@ website:
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   notice:
-    display: true
-    content: ⚠️ Vous naviguez sur une version de développement de culture.data.gouv.fr ⚠️
+    display: false
+    content:
     closeable: false
   # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
