@@ -60,16 +60,6 @@ website:
           title:
           tiles:
         sub_section_buttons:
-      #- title: Actualités
-        #content: >-
-          #Retours sur le hackathon du 8 et 9 avril dernier 🚀
-
-
-          [En savoir plus](/hackathon)
-        sub_section_datasets:
-        sub_section_cards:
-        sub_section_tiles:
-        sub_section_buttons:
     meta_description:
   header_button:
     display: true
@@ -108,9 +98,9 @@ website:
         route: '/accessibility'
         url: '/meteo-france/pages/accessibility.md'
       #- title: 'Hackathon le 8 et 9 avril 🚀'
-        #id: 'hackathon'
-        #route: '/hackathon'
-        #url: '/meteo-france/pages/hackathon.md'
+      #id: 'hackathon'
+      #route: '/hackathon'
+      #url: '/meteo-france/pages/hackathon.md'
   show_quality_component: true
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
