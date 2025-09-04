@@ -92,3 +92,10 @@ Cypress.Commands.add('mockStaticDatagouv', () => {
     body: '// Mocked static.data.gouv.fr content'
   }).as('mockStaticDatagouv')
 })
+
+Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
+  cy.intercept('GET', datagouvUrlRegex('topics', `${resourceId}/elements`), {
+    statusCode: 200,
+    body: datagouvResponseBuilder(elements)
+  }).as(`get_topics_${resourceId}_elements`)
+})
