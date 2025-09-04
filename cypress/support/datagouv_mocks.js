@@ -48,9 +48,20 @@ Cypress.Commands.add(
   }
 )
 
+const allowedDomains = [
+  'localhost',
+  '127.0.0.1',
+  'content-autofill.googleapis.com',
+  'android.clients.google.com'
+]
+
 Cypress.Commands.add('catchUnmockedRequests', () => {
-  // Intercept only external URLs (not starting with localhost or 127.0.0.1)
-  cy.intercept(/^https?:\/\/(?!(localhost|127\.0\.0\.1)(:|\/|$)).*/, (req) => {
+  const escapedDomains = allowedDomains
+    .map((domain) => domain.replace(/\./g, '\\.'))
+    .join('|')
+  const regex = new RegExp(`^https?:\\/\\/(?!(${escapedDomains})(:|\/|$)).*`)
+
+  cy.intercept(regex, (req) => {
     throw new Error(
       `Unmocked external API call detected: ${req.method} ${req.url}`
     )
