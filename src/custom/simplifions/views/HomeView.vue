@@ -36,21 +36,21 @@ const budgets = [
     description:
       "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique.",
     filters: 'budget=aucun-developpement-ni-budget',
-    imageSrc: '/simplifions/assets/accueil-picto-contract.png'
+    imageSrc: '/static/simplifions/assets/accueil-picto-contract.png'
   },
   {
     title: 'Vous passez par un éditeur',
     description:
       "Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.",
     filters: 'budget=avec-solution-editeur',
-    imageSrc: '/simplifions/assets/accueil-picto-self-training.png'
+    imageSrc: '/static/simplifions/assets/accueil-picto-self-training.png'
   },
   {
     title: 'Vous avez votre service informatique',
     description:
       "Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d'information.",
     filters: 'budget=avec-des-moyens-techniques',
-    imageSrc: '/simplifions/assets/accueil-picto-coding.png'
+    imageSrc: '/static/simplifions/assets/accueil-picto-coding.png'
   }
 ]
 
@@ -99,7 +99,7 @@ const niveauxDeSimplification = [
             <div class="fr-content-media__img fr-col-lg-2 fr-col-4">
               <img
                 class="fr-responsive-img"
-                src="/simplifions/assets/accueil-picto-ecosystem.png"
+                src="/static/simplifions/assets/accueil-picto-ecosystem.png"
                 alt=""
                 style="display: block; width: 100%; height: auto"
               />
