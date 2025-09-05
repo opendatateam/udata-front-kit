@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
 import { computed, type ComputedRef } from 'vue'
 
@@ -138,44 +137,23 @@ export const useTopicStore = defineStore('topic', {
     async load(slugOrId: string, params?: BaseParams): Promise<Topic> {
       return await topicsAPI.get({ entityId: slugOrId, ...params })
     },
-    // FIXME: temporary fallback on api v1, remove after API is migrated to elements
-    async withVersionFallback<T>(
-      apiCall: (api: TopicsAPI, toasted: boolean) => Promise<T>
-    ): Promise<T> {
-      try {
-        return await apiCall(topicsAPI, false)
-      } catch (err) {
-        if (err instanceof AxiosError && err.response?.status === 405) {
-          const v1Api = new TopicsAPI({ version: 1 })
-          console.log('fallback, v1 API used', v1Api)
-          return await apiCall(v1Api, true)
-        }
-        throw err
-      }
-    },
     /**
      * Create a topic
      */
     async create(topicData: object): Promise<Topic> {
-      return await this.withVersionFallback((api, toasted) =>
-        api.create({ data: topicData, toasted })
-      )
+      return await topicsAPI.create({ data: topicData })
     },
     /**
      * Update a topic
      */
     async update(topicId: string, data: object): Promise<Topic> {
-      return await this.withVersionFallback((api, toasted) =>
-        api.update({ entityId: topicId, data, toasted })
-      )
+      return await topicsAPI.update({ entityId: topicId, data })
     },
     /**
      * Delete a topic
      */
     async delete(topicId: string) {
-      await this.withVersionFallback((api, toasted) =>
-        api.delete({ entityId: topicId, toasted })
-      )
+      topicsAPI.delete({ entityId: topicId })
     }
   }
 })

@@ -212,12 +212,12 @@ body {
 /* Button color contrast fix */
 .datagouv-components {
   .fr-btn:not(
-      .fr-btn--close,
-      .fr-btn--menu,
-      .fr-btn--secondary,
-      .fr-btn--tertiary,
-      .fr-btn--tertiary-no-outline
-    ),
+    .fr-btn--close,
+    .fr-btn--menu,
+    .fr-btn--secondary,
+    .fr-btn--tertiary,
+    .fr-btn--tertiary-no-outline
+  ),
   .fr-pagination__link[aria-current] {
     --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
     --hover-tint: var(--blue-cumulus-sun-368-moon-732-hover--fix);

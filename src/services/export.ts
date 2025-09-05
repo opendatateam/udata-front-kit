@@ -1,6 +1,6 @@
 import { Parser } from '@json2csv/plainjs'
 
-import { Availability, type DatasetProperties } from '@/model/topic'
+import { Availability, type ResolvedFactor } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
@@ -17,8 +17,8 @@ interface DatasetRow {
   group?: string
 }
 
-export const exportDatasets = async (
-  datasets: DatasetProperties[]
+export const exportFactors = async (
+  elements: ResolvedFactor[]
 ): Promise<Blob> => {
   const store = useDatasetStore()
   const headers = [
@@ -33,19 +33,19 @@ export const exportDatasets = async (
     'group'
   ]
   const rows = await Promise.all(
-    datasets.map(async (datasetProperties) => {
+    elements.map(async (element) => {
       const row: DatasetRow = {
-        label: datasetProperties.title,
-        label_description: datasetProperties.purpose,
-        availability: datasetProperties.availability,
-        uri: datasetProperties.uri,
-        group: datasetProperties.group
+        label: element.title,
+        label_description: element.description || '',
+        availability: element.siteExtras.availability,
+        uri: element.siteExtras.uri,
+        group: element.siteExtras.group
       }
 
-      if (datasetProperties.id == null) return row
+      if (element.element?.id == null) return row
 
       const remoteDataset = await store
-        .load(datasetProperties.id, { toasted: false })
+        .load(element.element.id, { toasted: false })
         .catch((error) => {
           if (isNotFoundError(error)) {
             row.availability = Availability.REMOTE_DELETED
