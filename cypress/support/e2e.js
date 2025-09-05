@@ -18,6 +18,7 @@ import 'cypress-axe'
 // Import commands.js using ES2015 syntax:
 import './commands'
 import './datagouv_mocks'
+import './generic_mocks'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
