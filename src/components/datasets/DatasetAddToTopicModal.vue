@@ -15,6 +15,7 @@ import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
 import { useTopicFactors } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
+import SelectTopicFactorGroup from '../forms/SelectTopicFactorGroup.vue'
 
 const props = defineProps({
   show: {
@@ -127,9 +128,7 @@ const isDatasetInTopic = computed(() => {
   if (!selectedTopicId.value) {
     return false
   }
-  return factors.value.some(
-    (element) => element.element?.id === props.dataset.id
-  )
+  return factors.value.some((factor) => factor.element?.id === props.dataset.id)
 })
 
 const { groupedFactors: groups } = useGroups(factors)
@@ -219,7 +218,7 @@ onMounted(() => {
       class="fr-mb-2w"
     />
     <div class="fr-input-group">
-      <SelectTopicGroup
+      <SelectTopicFactorGroup
         v-model:element-model="element"
         v-model:groups-model="groups"
         label="Regroupement"

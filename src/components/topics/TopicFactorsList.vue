@@ -76,20 +76,20 @@ const handleDeleteGroup = (groupName: string) => {
 }
 
 const loadDatasetsContent = () => {
-  factors.value.forEach((element) => {
-    const id = element.element?.id ?? null
-    if (id && !datasetsContent.value.has(id) && !element.remoteDeleted) {
+  factors.value.forEach((factor) => {
+    const id = factor.element?.id ?? null
+    if (id && !datasetsContent.value.has(id) && !factor.remoteDeleted) {
       useDatasetStore()
         .load(id, { toasted: false })
         .then((d) => {
           if (d) {
             datasetsContent.value.set(id, d)
-            element.remoteArchived = !!d.archived
+            factor.remoteArchived = !!d.archived
           }
         })
         .catch((err) => {
           if (isNotFoundError(err)) {
-            element.remoteDeleted = true
+            factor.remoteDeleted = true
           } else {
             toastHttpError(err)
           }
@@ -111,11 +111,11 @@ const showTOC = computed(() => {
 })
 
 const addDataset = () => {
-  modal.value?.addElement()
+  modal.value?.addFactor()
 }
 
-const editFactor = (element: ResolvedFactor, index: number, group: string) => {
-  modal.value?.editElement(element, getFactorIndex(group, index))
+const editFactor = (factor: ResolvedFactor, index: number, group: string) => {
+  modal.value?.editFactor(factor, getFactorIndex(group, index))
 }
 
 const onFactorEditModalSubmit = () => {
@@ -123,7 +123,7 @@ const onFactorEditModalSubmit = () => {
 }
 
 watch(
-  () => factors.value.map((element) => element.element?.id).filter(Boolean),
+  () => factors.value.map((factor) => factor.element?.id).filter(Boolean),
   () => {
     loadDatasetsContent()
   },

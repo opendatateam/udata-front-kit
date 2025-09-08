@@ -13,8 +13,8 @@ import { useForm, type AllowedInput } from '@/utils/form'
 import FactorFields from './FactorFields.vue'
 
 export interface FactorEditModalType {
-  addElement: () => void
-  editElement: (element: ResolvedFactor, index: number) => void
+  addFactor: () => void
+  editFactor: (element: ResolvedFactor, index: number) => void
 }
 
 const emits = defineEmits(['submitModal'])
@@ -46,34 +46,34 @@ const modalData: Ref<DatasetModalData> = ref({
 const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
-  const modalElement = modalData.value.element
-  if (!modalElement?.title.trim()) {
+  const modalFactor = modalData.value.factor
+  if (!modalFactor?.title.trim()) {
     formErrors.value.push('title')
   }
 
   if (props.datasetEditorialization) {
-    if (!modalElement?.title.trim()) {
+    if (!modalFactor?.title.trim()) {
       formErrors.value.push('title')
     }
-    if (!modalElement?.description?.trim()) {
+    if (!modalFactor?.description?.trim()) {
       formErrors.value.push('purpose')
     }
     if (
-      !modalElement?.siteExtras.uri &&
-      modalElement?.siteExtras.availability === Availability.LOCAL_AVAILABLE
+      !modalFactor?.siteExtras.uri &&
+      modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
     ) {
       formErrors.value.push('availability')
     }
     if (
-      !modalElement?.siteExtras.uri &&
-      modalElement?.siteExtras.availability === Availability.URL_AVAILABLE
+      !modalFactor?.siteExtras.uri &&
+      modalFactor?.siteExtras.availability === Availability.URL_AVAILABLE
     ) {
       formErrors.value.push('availabilityUrl')
     }
   }
   if (
-    modalElement?.siteExtras.group &&
-    modalElement?.siteExtras.group.length > 100
+    modalFactor?.siteExtras.group &&
+    modalFactor?.siteExtras.group.length > 100
   ) {
     formErrors.value.push('group')
   }
@@ -109,20 +109,20 @@ const onCancel = () => {
   closeModal()
 }
 
-const editElement = (dataset: ResolvedFactor, index: number) => {
+const editFactor = (dataset: ResolvedFactor, index: number) => {
   // Create a deep clone to enable cancellation
   const clonedData = JSON.parse(JSON.stringify(dataset))
   modalData.value = {
     index,
-    element: new ResolvedFactor(clonedData, dataset.siteId),
+    factor: new ResolvedFactor(clonedData, dataset.siteId),
     isValid: false,
     mode: 'edit'
   }
   isModalOpen.value = true
 }
 
-const addElement = () => {
-  const element = new ResolvedFactor(
+const addFactor = () => {
+  const factor = new ResolvedFactor(
     {
       title: '',
       description: '',
@@ -139,7 +139,7 @@ const addElement = () => {
   )
   modalData.value = {
     index: undefined,
-    element,
+    factor,
     isValid: false,
     mode: 'create'
   }
@@ -147,9 +147,9 @@ const addElement = () => {
 }
 
 const submit = async (modalData: DatasetModalData) => {
-  if (modalData.element !== undefined) {
+  if (modalData.factor !== undefined) {
     // check if data.gouv.fr URL and update metadata if needed
-    const siteExtras = modalData.element.extras?.[useSiteId()]
+    const siteExtras = modalData.factor.extras?.[useSiteId()]
     if (
       siteExtras?.uri &&
       siteExtras?.availability === Availability.URL_AVAILABLE
@@ -173,7 +173,7 @@ const submit = async (modalData: DatasetModalData) => {
               params: { item_id: dataset.id }
             })
             siteExtras.uri = resolved.href
-            modalData.element.element = {
+            modalData.factor.element = {
               id: dataset.id,
               class: 'Dataset'
             }
@@ -187,9 +187,9 @@ const submit = async (modalData: DatasetModalData) => {
       }
     }
     if (modalData.mode === 'create') {
-      factors.value.push(modalData.element)
+      factors.value.push(modalData.factor)
     } else if (modalData.mode === 'edit' && modalData.index !== undefined) {
-      factors.value[modalData.index] = modalData.element
+      factors.value[modalData.index] = modalData.factor
     }
   }
   emits('submitModal')
@@ -207,12 +207,12 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
-defineExpose({ addElement, editElement })
+defineExpose({ addFactor, editFactor })
 </script>
 
 <template>
   <DsfrModal
-    v-if="isModalOpen && modalData.element"
+    v-if="isModalOpen && modalData.factor"
     size="lg"
     class="form"
     :title="
@@ -233,7 +233,7 @@ defineExpose({ addElement, editElement })
     />
     <form novalidate>
       <FactorFields
-        v-model="modalData.element"
+        v-model="modalData.factor"
         v-model:groups-model="factorsGroups"
         v-model:errors-model="formErrors"
         :dataset-editorialization

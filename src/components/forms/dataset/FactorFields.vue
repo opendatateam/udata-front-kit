@@ -8,12 +8,13 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
 
+import SelectTopicFactorGroup from '../SelectTopicFactorGroup.vue'
 import FactorTextFields from './FactorTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
 const emit = defineEmits(['updateValidation'])
 
-const element = defineModel({
+const factor = defineModel({
   type: Object as () => ResolvedFactor,
   default: {}
 })
@@ -48,10 +49,10 @@ const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const hasEditorialization = computed(() => {
   return (
-    !!element.value.title.trim() &&
-    !!element.value.description?.trim() &&
-    (element.value.siteExtras.group
-      ? element.value.siteExtras.group.trim().length < 100
+    !!factor.value.title.trim() &&
+    !!factor.value.description?.trim() &&
+    (factor.value.siteExtras.group
+      ? factor.value.siteExtras.group.trim().length < 100
       : true)
   )
 })
@@ -60,7 +61,7 @@ const isValidDataset = computed((): boolean => {
   const isValidWithoutEditorialization =
     isValidCatalogDataset.value &&
     isValidUrlDataset.value &&
-    !element.value.remoteDeleted
+    !factor.value.remoteDeleted
 
   if (!props.datasetEditorialization) return isValidWithoutEditorialization
 
@@ -68,29 +69,28 @@ const isValidDataset = computed((): boolean => {
 })
 
 const isValidCatalogDataset = computed((): boolean => {
-  if (element.value.siteExtras.availability === Availability.LOCAL_AVAILABLE) {
+  if (factor.value.siteExtras.availability === Availability.LOCAL_AVAILABLE) {
     return (
-      element.value.siteExtras.uri !== null &&
-      element.value.element?.id !== null
+      factor.value.siteExtras.uri !== null && factor.value.element?.id !== null
     )
   }
   return true
 })
 
 const isValidUrlDataset = computed((): boolean => {
-  if (element.value.siteExtras.availability === Availability.URL_AVAILABLE) {
-    return element.value.siteExtras.uri !== null
+  if (factor.value.siteExtras.availability === Availability.URL_AVAILABLE) {
+    return factor.value.siteExtras.uri !== null
   }
   return true
 })
 
 const onSelectDataset = (value: DatasetV2 | undefined) => {
   if (value === undefined) {
-    element.value.siteExtras.uri = null
-    element.value.element = null
+    factor.value.siteExtras.uri = null
+    factor.value.element = null
   } else {
-    element.value.siteExtras.availability = Availability.LOCAL_AVAILABLE
-    element.value.element = {
+    factor.value.siteExtras.availability = Availability.LOCAL_AVAILABLE
+    factor.value.element = {
       id: value.id,
       class: 'Dataset'
     }
@@ -98,8 +98,8 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
       name: 'datasets_detail',
       params: { item_id: value.id }
     })
-    element.value.siteExtras.uri = resolved.href
-    delete element.value.remoteDeleted
+    factor.value.siteExtras.uri = resolved.href
+    delete factor.value.remoteDeleted
   }
 }
 
@@ -112,20 +112,20 @@ watch(
 )
 
 watch(
-  () => element.value.siteExtras.availability,
+  () => factor.value.siteExtras.availability,
   (availability) => {
     if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
-      element.value.siteExtras.uri = null
-      element.value.element = null
+      factor.value.siteExtras.uri = null
+      factor.value.element = null
     }
-    delete element.value.remoteDeleted
+    delete factor.value.remoteDeleted
   }
 )
 
 onMounted(() => {
-  if (element.value.element?.id && !element.value.remoteDeleted) {
-    datasetStore.load(element.value.element.id).then((dataset) => {
+  if (factor.value.element?.id && !factor.value.remoteDeleted) {
+    datasetStore.load(factor.value.element.id).then((dataset) => {
       selectedDataset.value = dataset
     })
   }
@@ -135,7 +135,7 @@ onMounted(() => {
 <template>
   <FactorTextFields
     v-if="datasetEditorialization"
-    v-model:element-model="element"
+    v-model:element-model="factor"
     :error-title="getErrorMessage('title')"
     :error-purpose="getErrorMessage('purpose')"
   />
@@ -159,18 +159,18 @@ onMounted(() => {
           Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
         </legend>
         <DsfrRadioButton
-          v-model="element.siteExtras.availability"
+          v-model="factor.siteExtras.availability"
           name="source"
           :value="Availability.URL_AVAILABLE"
           label="J'ajoute l'URL"
         />
         <div
-          v-if="element.siteExtras.availability === Availability.URL_AVAILABLE"
+          v-if="factor.siteExtras.availability === Availability.URL_AVAILABLE"
           class="fr-mb-4w fr-fieldset__element"
         >
           <DsfrInput
             id="input-availabilityUrl"
-            v-model="element.siteExtras.uri"
+            v-model="factor.siteExtras.uri"
             label="Url vers le jeu de données souhaité (obligatoire)"
             :label-visible="true"
             class="fr-mb-md-1w fr-input"
@@ -186,13 +186,13 @@ onMounted(() => {
           />
         </div>
         <DsfrRadioButton
-          v-model="element.siteExtras.availability"
+          v-model="factor.siteExtras.availability"
           name="source"
           :value="Availability.MISSING"
           label="Je n'ai pas trouvé la donnée"
         />
         <DsfrRadioButton
-          v-model="element.siteExtras.availability"
+          v-model="factor.siteExtras.availability"
           name="source"
           :value="Availability.NOT_AVAILABLE"
           label="Je n'ai pas cherché la donnée"
@@ -206,8 +206,8 @@ onMounted(() => {
     />
   </div>
   <div class="fr-input-group">
-    <SelectTopicGroup
-      v-model:element-model="element"
+    <SelectTopicFactorGroup
+      v-model:element-model="factor"
       v-model:groups-model="factorsGroups"
       label="Regroupement"
       description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."

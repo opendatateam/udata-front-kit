@@ -9,7 +9,7 @@ export interface DatasetV2Response extends GenericResponse {
 
 export interface DatasetModalData {
   index?: number
-  element?: ResolvedFactor
+  factor?: ResolvedFactor
   isValid: boolean
   mode: 'edit' | 'create'
 }

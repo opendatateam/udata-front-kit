@@ -18,7 +18,7 @@ interface DatasetRow {
 }
 
 export const exportFactors = async (
-  elements: ResolvedFactor[]
+  factors: ResolvedFactor[]
 ): Promise<Blob> => {
   const store = useDatasetStore()
   const headers = [
@@ -33,19 +33,19 @@ export const exportFactors = async (
     'group'
   ]
   const rows = await Promise.all(
-    elements.map(async (element) => {
+    factors.map(async (factor) => {
       const row: DatasetRow = {
-        label: element.title,
-        label_description: element.description || '',
-        availability: element.siteExtras.availability,
-        uri: element.siteExtras.uri,
-        group: element.siteExtras.group
+        label: factor.title,
+        label_description: factor.description || '',
+        availability: factor.siteExtras.availability,
+        uri: factor.siteExtras.uri,
+        group: factor.siteExtras.group
       }
 
-      if (element.element?.id == null) return row
+      if (factor.element?.id == null) return row
 
       const remoteDataset = await store
-        .load(element.element.id, { toasted: false })
+        .load(factor.element.id, { toasted: false })
         .catch((error) => {
           if (isNotFoundError(error)) {
             row.availability = Availability.REMOTE_DELETED
