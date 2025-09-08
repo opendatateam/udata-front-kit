@@ -1,4 +1,3 @@
-
 ### Retour sur le Hackathon Données Ouvertes Météo-France
 
 <img src="https://static.data.gouv.fr/images/c6/b4f494d54c46e4af98f14712c8f703.png" style="width: 100%">
@@ -21,7 +20,7 @@ Pendant deux jours, ce sont ainsi **120 participantes et participants aux profil
 
 <img src="https://raw.githubusercontent.com/thanhhale7/images/main/Retour-1.jpg" width="600"/>
 
-*Les participantes et participants du hackathon* 
+_Les participantes et participants du hackathon_
 
 Pour donner corps à leurs idées, les 22 équipes formées ont pu se reposer sur les données mises à disposition par Météo-France sur [meteo.data.gouv.fr](http://meteo.data.gouv.fr) (données climatologiques de base, données climatologiques de référence pour le changement climatique, données des modèles de prévision numérique du temps, etc.) et l’expertise de mentors (8 mentors métiers de Météo-France, 6 mentors techniques de la Direction interministérielle du numérique).
 
@@ -32,7 +31,7 @@ Leurs réflexions et travaux ont donné lieu aux projets suivants :
 
 ![Prototype d'OpenGustMap](https://raw.githubusercontent.com/thanhhale7/images/main/Retour-2.png "entrez le titre de l'image ici")
 
-*Prototype d’OpenGustMap*
+_Prototype d’OpenGustMap_
 
 - **Equipe data Franceinfo** : Comparaison de la météo du jour à l’historique des températures des dernières décennies en Outre-Mer, qui passe par [le contrôle des niveaux de qualité des mesures quotidiennes de la température moyenne effectuées dans les stations d’Outre-Mer](https://www.data.gouv.fr/fr/reuses/niveaux-de-qualite-de-la-temperature-moyenne-quotidienne-tntxm-dans-les-stations-doutre-mer/) et [le décompte du nombre de mesures quotidiennes de la température moyenne effectuées chaque année dans les stations d’Outre-Mer](https://www.data.gouv.fr/fr/reuses/niveaux-de-renseignement-de-la-temperature-moyenne-quotidienne-tntxm-dans-les-stations-doutre-mer/), depuis 1970 ;
 - **Equipe SWI** : [Prédiction de l’indicateur de l’humidité des sols en vue d’évaluer l’assurabilité du péril sécheresse en France à l’horizon 2030](https://www.data.gouv.fr/fr/reuses/prediction-de-lindicateur-de-lhumidite-des-sols-swi-en-vue-devaluer-lassurabilite-du-peril-secheresse-en-france-a-horizon-2030/) ;
@@ -40,45 +39,45 @@ Leurs réflexions et travaux ont donné lieu aux projets suivants :
 
 ![Aperçu du projet de l'équipe Squadra Ardente](https://github.com/thanhhale7/images/blob/main/Retour-3.gif?raw=true "entrez le titre de l'image ici")
 
-*Aperçu du projet de l’équipe Squadra Ardente*
+_Aperçu du projet de l’équipe Squadra Ardente_
 
 - **Equipe Upsolar** : [Evaluation du potentiel solaire d’un bâtiment ou d’une parcelle](https://www.data.gouv.fr/fr/reuses/upsolar-evaluer-le-potentiel-solaire-dun-batiment-ou-dune-parcelle/) ;
 - **Equipe Meteo-Match** : [Moteur de recherche intuitif pour des patterns climatiques](https://www.data.gouv.fr/fr/reuses/meteo-match/?fbclid=IwAR3ne0lZqfrFHl_UGq69BKSJvkhTvr4umgBchWgVIGJENyAwBihIj31gk3o_aem_AdnbW7VxB6Fk3OMpxJS7P_8HuM5-WRRAAyfMK3cgUBq1yix1QNYk0RwnjCHT8vJsg46yu5k-Gtj9ClNUaVDAG_TG) ;
 
 <img src="https://raw.githubusercontent.com/thanhhale7/images/main/Retour-4.jpg" width="600"/>
 
-*L’équipe Meteo-Match*
+_L’équipe Meteo-Match_
 
 - **Equipe ClimateViz** : [Plateforme grand public de création d’indicateurs paramétrables sur les données d’historiques météo et de prévision climatique](https://www.data.gouv.fr/fr/reuses/climateviz/) ;
 
 ![Démonstration de ClimateViz](https://raw.githubusercontent.com/thanhhale7/images/main/Retour-5.gif "entrez le titre de l'image ici")
-*Démonstration de ClimateViz*
+_Démonstration de ClimateViz_
 
 - **Equipe CapPreventionMeteo** : [Prévision du débit d’un cours d’eau](https://www.data.gouv.fr/fr/reuses/prevision-du-debit-dun-cours-deau/) ;
 - **Equipe EasyAccess** : [Outil pour faciliter le téléchargement des données de l’API Météo-France](https://www.data.gouv.fr/fr/reuses/meteofranceapi-easyacces/) ;
 - **Equipe EasyChat** : [Chatbot Vigilance Météo-France](https://www.data.gouv.fr/fr/reuses/chatbot-vigilance-meteo-france/) ;
 
 ![Prototype du Chatbot Vigilance Météo-France](https://raw.githubusercontent.com/thanhhale7/images/main/Retour-6.png "entrez le titre de l'image ici")
-*Prototype du Chatbot Vigilance Météo-France*
+_Prototype du Chatbot Vigilance Météo-France_
 
 - **Equipe Climate Accessibility** : [Application web grand public permettant de récupérer des données nettoyées et formatées en quelques actions](https://www.data.gouv.fr/fr/reuses/climate-accessibility/) ;
 - **Equipe Pyronear** : [Création d’un score de risque de feu de forêt](https://www.data.gouv.fr/fr/reuses/risque-dincendie-meteo-environnement/) ;
 
 ![Aperçu du projet de l'équipe Pyronear](https://raw.githubusercontent.com/thanhhale7/images/main/Retour-7.png "entrez le titre de l'image ici")
-*Aperçu du projet de l'équipe Pyronear*
+_Aperçu du projet de l'équipe Pyronear_
 
 - **Equipe chauds, chauds, chauds les marrons chauds** : [Test des prédictions de l’Institut Paris Région sur les îlots de chaleur urbain, en utilisant les données publiques fournies par Météo-France](https://www.data.gouv.fr/fr/reuses/des-icu-du-futur-1/) ;
 - **Equipe SafeCoast** : [Alertes et analyses d’événements extrêmes sur les stations d’observation pour une meilleure protection des côtes françaises](https://www.data.gouv.fr/fr/reuses/safecoast-vers-une-meilleure-protection-des-cotes-francaises-contre-les-risques-climatiques/) ;
 - **Equipe TLS/La Dalle** : [Solution qui transforme les données météorologiques au format parquet et permet de les requêter facilement, sans connaissance approfondie des modèles météo et de leurs formats de données](https://www.data.gouv.fr/fr/reuses/projet-la-dalle/) ;
 - **Equipe Les voyageurs du climat** : [Plateforme présentant des visualisations claires des données météorologiques spécifiques au changement climatique, avec la possibilité de télécharger les données et d’afficher des prévisions](https://www.data.gouv.fr/fr/reuses/explorateur-de-donnees-climatiques/) ;
-    
+
 ![Visualisation produite par l'équipe des Voyageurs du climat](https://raw.githubusercontent.com/thanhhale7/images/main/Retour-8.png "entrez le titre de l'image ici")
-*Visualisation produite par l’équipe des Voyageurs du climat*
+_Visualisation produite par l’équipe des Voyageurs du climat_
 
 - **Equipe ClimaViz** : [Interface utilisateur pour visualiser les données SIM à un emplacement géographique spécifique ou à travers la sélection de villes](https://www.data.gouv.fr/fr/reuses/climaviz/) ;
 
 ![Prototype de ClimaViz](https://raw.githubusercontent.com/thanhhale7/images/main/Retour-9.png "entrez le titre de l'image ici")
-*Prototype de ClimaViz*
+_Prototype de ClimaViz_
 
 - **Equipe Christian Quest** : [3615 Météo](https://www.data.gouv.fr/fr/reuses/3615-meteo/).
 
@@ -92,10 +91,9 @@ Ces projets ont été présentés aux mentors du hackathon, qui en ont préséle
 - Christophe Morel, Directeur de la stratégie de Météo-France ;
 - Olivier Vacheret, Chef du département data d’Île-de-France Mobilités.
 
-
 <img src="https://raw.githubusercontent.com/thanhhale7/images/main/Retour-10.jpg" width="600" />
 
-*Les membres du jury du hackathon*
+_Les membres du jury du hackathon_
 
 Les membres du jury, attentifs à la pertinence, l’impact, la qualité technique, la durabilité ou encore l’originalité des projets, ont désigné **quatre lauréats :**
 
