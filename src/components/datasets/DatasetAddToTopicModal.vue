@@ -39,7 +39,7 @@ const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
 
 const topics = topicStore.myTopics
-const element = ref<ResolvedFactor>(
+const factor = ref<ResolvedFactor>(
   new ResolvedFactor(
     {
       title: '',
@@ -73,18 +73,18 @@ const topicOptions = computed(() => {
 const formErrors: Ref<string[]> = ref([])
 
 const validateFields = () => {
-  if (!element.value.title.trim()) {
+  if (!factor.value.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!element.value.description?.trim()) {
+  if (!factor.value.description?.trim()) {
     formErrors.value.push('purpose')
   }
   if (!selectedTopicId.value) {
     formErrors.value.push('topicId')
   }
   if (
-    element.value.siteExtras.group &&
-    element.value.siteExtras.group.trim().length > 100
+    factor.value.siteExtras.group &&
+    factor.value.siteExtras.group.trim().length > 100
   ) {
     formErrors.value.push('group')
   }
@@ -139,7 +139,7 @@ const submit = async () => {
   }
   await useTopicElementStore().createElement(
     selectedTopic.value.id,
-    element.value
+    factor.value
   )
   toast(
     `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
@@ -219,7 +219,7 @@ onMounted(() => {
     />
     <div class="fr-input-group">
       <SelectTopicFactorGroup
-        v-model:factor-model="element"
+        v-model:factor-model="factor"
         v-model:groups-model="groups"
         label="Regroupement"
         description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
@@ -228,7 +228,7 @@ onMounted(() => {
     </div>
     <FactorTextFields
       v-if="datasetsConf.add_to_topic?.dataset_editorialization"
-      v-model:factor-model="element"
+      v-model:factor-model="factor"
       :error-title="getErrorMessage('title')"
       :error-purpose="getErrorMessage('purpose')"
     />
