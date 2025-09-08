@@ -13,9 +13,9 @@
 # Vertical owners
 # /configs/<vertical> and /src/custom/<vertical>
 
-**/defis/         @opendatateam/etalab
+**/defis/         @geoffreyaldebert
 **/ecospheres/    @opendatateam/ecospheres-admin
-**/hackathon/     @opendatateam/etalab
-**/logistique/    @opendatateam/etalab @johanricher
-**/meteo-france/  @opendatateam/etalab
+**/hackathon/     @geoffreyaldebert
+**/logistique/    @johanricher
+**/meteo-france/  @geoffreyaldebert @pierlou
 **/simplifions/   @JeSuisUnCaillou
