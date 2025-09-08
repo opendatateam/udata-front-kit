@@ -95,9 +95,12 @@ export function useTopicFactors(topic: Ref<Topic | null | undefined>): {
     topic,
     async () => {
       if (!topic.value) return
-      const rawFactors = await useTopicElementStore().getTopicElements<Factor>({
-        topicId: topic.value.id
-      })
+      const rawFactors =
+        topic.value.elements.total > 0
+          ? await useTopicElementStore().getTopicElements<Factor>({
+              topicId: topic.value.id
+            })
+          : []
       factors.value = rawFactors.map(
         (element) => new ResolvedFactor(element, useSiteId())
       )

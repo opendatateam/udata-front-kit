@@ -20,8 +20,6 @@ describe("Simplifions Cas d'usages Show Page", () => {
     cy.mockDatagouvObjectList('discussions')
     cy.mockGristImages()
     cy.mockDatagouvObject('topics', 'sample-solution', sampleSolution)
-    cy.mockTopicElements(casUsage.id)
-    cy.mockTopicElements(sampleSolution.id)
 
     cy.visit(`/cas-d-usages/${casUsage.slug}`)
   })
