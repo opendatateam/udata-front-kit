@@ -32,13 +32,13 @@ export const cloneTopic = async (
 
   const factors = (
     await useTopicElementStore().getTopicElements<Factor>({ topicId: topic.id })
-  ).map((element) => {
+  ).map((factor) => {
     if (!keepDatasets) {
-      element.element = null
-      element.extras[topicsExtrasKey].uri = null
-      element.extras[topicsExtrasKey].availability = Availability.NOT_AVAILABLE
+      factor.element = null
+      factor.extras[topicsExtrasKey].uri = null
+      factor.extras[topicsExtrasKey].availability = Availability.NOT_AVAILABLE
     }
-    return element
+    return factor
   })
 
   return {
@@ -95,12 +95,10 @@ export function useTopicFactors(topic: Ref<Topic | null | undefined>): {
     topic,
     async () => {
       if (!topic.value) return
-      const rawElements = await useTopicElementStore().getTopicElements<Factor>(
-        {
-          topicId: topic.value.id
-        }
-      )
-      factors.value = rawElements.map(
+      const rawFactors = await useTopicElementStore().getTopicElements<Factor>({
+        topicId: topic.value.id
+      })
+      factors.value = rawFactors.map(
         (element) => new ResolvedFactor(element, useSiteId())
       )
       nbFactors.value = factors.value.length

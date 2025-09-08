@@ -2,7 +2,7 @@
 import type { ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
-const element = defineModel('element-model', {
+const factor = defineModel('factor-model', {
   type: Object as () => ResolvedFactor,
   default: {}
 })
@@ -32,7 +32,7 @@ const { pageConf } = useCurrentPageConf()
     </p>
     <input
       id="input-title"
-      v-model="element.title"
+      v-model="factor.title"
       class="fr-input"
       type="text"
       aria-describedby="title-description"
@@ -62,7 +62,7 @@ const { pageConf } = useCurrentPageConf()
     </p>
     <textarea
       id="input-purpose"
-      v-model="element.description"
+      v-model="factor.description"
       class="fr-input"
       type="text"
       aria-describedby="purpose-description"

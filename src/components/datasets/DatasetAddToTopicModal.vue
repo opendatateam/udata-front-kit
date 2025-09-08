@@ -219,7 +219,7 @@ onMounted(() => {
     />
     <div class="fr-input-group">
       <SelectTopicFactorGroup
-        v-model:element-model="element"
+        v-model:factor-model="element"
         v-model:groups-model="groups"
         label="Regroupement"
         description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
@@ -228,7 +228,7 @@ onMounted(() => {
     </div>
     <FactorTextFields
       v-if="datasetsConf.add_to_topic?.dataset_editorialization"
-      v-model:element-model="element"
+      v-model:factor-model="element"
       :error-title="getErrorMessage('title')"
       :error-purpose="getErrorMessage('purpose')"
     />

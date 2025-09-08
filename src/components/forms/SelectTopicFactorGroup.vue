@@ -8,7 +8,7 @@ import ErrorMessage from './ErrorMessage.vue'
 
 const { pageConf } = useCurrentPageConf()
 
-const element = defineModel('element-model', {
+const factor = defineModel('factor-model', {
   type: Object as () => ResolvedFactor,
   default: {}
 })
@@ -42,12 +42,12 @@ const groupOptions = computed(() =>
 )
 
 const clear = () => {
-  element.value.siteExtras.group = undefined
+  factor.value.siteExtras.group = undefined
 }
 
 const trimGroupName = (groupName: string) => {
   // prevents spaces at the beginning and end of the group name
-  element.value.siteExtras.group = groupName.trim()
+  factor.value.siteExtras.group = groupName.trim()
 }
 </script>
 
@@ -65,7 +65,7 @@ const trimGroupName = (groupName: string) => {
   </p>
   <Multiselect
     id="input-group"
-    v-model="element.siteExtras.group"
+    v-model="factor.siteExtras.group"
     role="search"
     :options="groupOptions"
     :searchable="true"

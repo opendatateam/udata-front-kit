@@ -21,18 +21,18 @@ export function useGroups(factors: Ref<ResolvedFactor[]>): {
 } {
   const groupedFactors = computed(() => {
     // Group datasets by their group property
-    const groupedMap = factors.value.reduce((acc, element) => {
-      const groupKey = element.siteExtras.group || NO_GROUP
+    const groupedMap = factors.value.reduce((acc, factor) => {
+      const groupKey = factor.siteExtras.group || NO_GROUP
       if (!acc.has(groupKey)) {
         acc.set(groupKey, [])
       }
-      acc.get(groupKey)?.push(element)
+      acc.get(groupKey)?.push(factor)
       return acc
     }, new Map<string, ResolvedFactor[]>())
 
     // Sort each group's factors by lowered+unaccented title according to current locale
-    for (const [, elements] of groupedMap.entries()) {
-      elements.sort((a, b) =>
+    for (const [, factors] of groupedMap.entries()) {
+      factors.sort((a, b) =>
         // some legacy factors have no title, fallback to '' to avoid errors
         (a.title || '').localeCompare(b.title || '', undefined, {
           sensitivity: 'base'
@@ -95,18 +95,18 @@ export function useGroups(factors: Ref<ResolvedFactor[]>): {
     if (groupExists(newGroupName) || !groupedFactors.value.has(oldGroupName)) {
       return factors.value
     }
-    const data = factors.value.map((element) => {
-      if (element.siteExtras.group === oldGroupName) {
-        element.siteExtras.group = newGroupName
+    const data = factors.value.map((factor) => {
+      if (factor.siteExtras.group === oldGroupName) {
+        factor.siteExtras.group = newGroupName
       }
-      return element
+      return factor
     })
     return data
   }
 
   const deleteGroup = (groupName: string) => {
     return factors.value.filter(
-      (element) => element.siteExtras.group !== groupName
+      (factor) => factor.siteExtras.group !== groupName
     )
   }
 
@@ -131,27 +131,27 @@ export function useFactorsFilter(factors: Ref<ResolvedFactor[]>) {
 
     const searchValue = searchQuery.value.toLowerCase()
 
-    return factors.value.map((element) => {
-      element.isHidden = !(
-        element.title.toLowerCase().includes(searchValue) ||
-        (element.description &&
-          element.description.toLowerCase().includes(searchValue))
+    return factors.value.map((factor) => {
+      factor.isHidden = !(
+        factor.title.toLowerCase().includes(searchValue) ||
+        (factor.description &&
+          factor.description.toLowerCase().includes(searchValue))
       )
-      return element
+      return factor
     })
   })
 
   // Check if all groups only contain hidden datasets
   const isAllGroupsHidden = computed(() => {
-    return filteredFactors.value.every((element) => element.isHidden)
+    return filteredFactors.value.every((factor) => factor.isHidden)
   })
 
   // Check if a specific group only contains hidden datasets
   const isGroupOnlyHidden = (groupName: string) => {
     const filterGroupName = groupName === NO_GROUP ? null : groupName
     return filteredFactors.value
-      .filter((element) => element.siteExtras.group === filterGroupName)
-      .every((element) => element.isHidden)
+      .filter((factor) => factor.siteExtras.group === filterGroupName)
+      .every((factor) => factor.isHidden)
   }
 
   // apply search query
