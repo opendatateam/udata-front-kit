@@ -1,4 +1,4 @@
-# ***À propos de logistique.data.gouv.fr***
+# **_À propos de logistique.data.gouv.fr_**
 
 logistique.data.gouv.fr est une plateforme publique de partage de données ouvertes liées à la logistique en France, facilitant l'accès aux informations pour améliorer l'efficacité et la transparence du secteur.
 
@@ -8,28 +8,57 @@ logistique.data.gouv.fr est une plateforme publique de partage de données ouver
 
 <div style="display: flex; flex-wrap: wrap;">
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ortl-grandest.fr/" target="_blank">ORT&L Grand Est</a></p>
-        <p>Observatoire Régional Transports & Logistique du Grand Est, qui propose des études et publications statistiques sur les transports et la logistique dans la région​.</p>
-    </div>
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/ofelif/" target="_blank">Observatoire Régional du fret et de la logistique Île-de-France</a></p>
-        <p>Actuellement en phase de préfiguration, cet observatoire vise à améliorer la connaissance du secteur pour éclairer les décisions.</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ort.bourgogne-franche-comte.developpement-durable.gouv.fr/" target="_blank">Bourgogne-Franche-Comté</a></p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.observatoire-transports.pays-de-la-loire.developpement-durable.gouv.fr/" target="_blank">ORTM Pays de la Loire</a></p>
-        <p>Observatoire régional des transports et de la mobilité dans les Pays de la Loire, offrant des données et des ressources sur les infrastructures et la logistique dans la région​.</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="http://www.observatoire-transports-bretagne.fr/" target="_blank">Bretagne</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ort-centre-val-de-loire.fr/" target="_blank">Centre-Val de Loire</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.corse.developpement-durable.gouv.fr/observatoire-regional-des-transports-de-corse-r324.html" target="_blank">Corse</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ortl-grandest.fr/" target="_blank">Grand Est</a></p>
+        <p>Observatoire Régional Transports & Logistique du Grand Est, qui propose des études et publications statistiques sur les transports et la logistique dans la région​.</p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.guadeloupe.developpement-durable.gouv.fr/observatoire-regional-des-transports-r80.html" target="_blank">Guadeloupe</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.guadeloupe.developpement-durable.gouv.fr/observatoire-regional-des-transports-r80.html" target="_blank">Guyane</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.observatoire-transports-hauts-de-france.fr/" target="_blank">Hauts-de-France</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/ofelif/" target="_blank">Île-de-France</a></p>
+        <p>Actuellement en phase de préfiguration, cet observatoire vise à améliorer la connaissance du secteur pour éclairer les décisions.</p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
         <p style="font-size: 20px; font-weight: bold;"><a href="https://www.institutparisregion.fr/" target="_blank">Institut Paris Région</a></p>
         <p>Offre une analyse approfondie de la logistique en Île-de-France, en se concentrant sur les aspects économiques, environnementaux et d’aménagement territorial​.</p>
     </div>
-    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ort-paca.fr/arl/" target="_blank">Ateliers Régionaux de la Logistique (ARL) - Région Sud</a></p>
-        <p>Un projet visant à renforcer la performance économique et environnementale de la filière logistique en région Sud.</p>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.normandie.developpement-durable.gouv.fr/observatoire-social-des-transports-r179.html" target="_blank">Normandie</a></p>
     </div>
     <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
-        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.logistique-grandest.fr/" target="_blank">Observatoire Régional du fret et de la logistique Bretagne</a></p>
-        <p>Étude détaillée des réalités et enjeux logistiques en Bretagne, incluant statistiques et analyses approfondies.</p>
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ortnouvelleaquitaine.fr/" target="_blank">Nouvelle-Aquitaine</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.martinique.developpement-durable.gouv.fr/observatoire-territorial-des-transports-a1845.html" target="_blank">Martinique</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://ort-occitanie.developpement-durable.gouv.fr/" target="_blank">Occitanie</a></p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px; margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.observatoire-transports.pays-de-la-loire.developpement-durable.gouv.fr/" target="_blank">Pays de la Loire</a></p>
+        <p>Observatoire régional des transports et de la mobilité dans les Pays de la Loire, offrant des données et des ressources sur les infrastructures et la logistique dans la région​.</p>
+    </div>
+    <div style="width: 350px; min-height: 150px; border: 1px solid #ebebeb; padding: 15px;  margin-right: 20px; margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold;"><a href="https://www.ort-paca.fr/" target="_blank">Provence-Alpes-Côte d’Azur</a></p>
+        <p>Un projet visant à renforcer la performance économique et environnementale de la filière logistique en région Sud.</p>
     </div>
 </div>
 

@@ -104,6 +104,7 @@ const clear = () => {
       type="search"
       :label-visible="labelVisible"
       :placeholder="!labelVisible ? searchLabel : undefined"
+      :title="!labelVisible ? searchLabel : undefined"
     >
       <template #before-input>
         <VIconCustom name="search-line" class="search-icon" />
@@ -111,6 +112,7 @@ const clear = () => {
     </DsfrInputGroup>
   </search>
 
+  <!-- FIXME: nested input needs a title attribute for a11y, but not supported by DsfrSearchBar -->
   <DsfrSearchBar
     v-else-if="!dropdown.length"
     v-model="query"
@@ -141,7 +143,8 @@ const clear = () => {
       :clear-on-search="true"
       :clear-on-blur="true"
       :close-on-select="true"
-      placeholder="Rechercher"
+      :placeholder="searchLabel"
+      :title="searchLabel"
       aria-owns=""
       :aria="{
         'aria-describedby': `${id}-description`,

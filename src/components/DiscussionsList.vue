@@ -70,7 +70,7 @@ const pages = computed(() => {
   return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
 })
 
-const allowDiscussionCreation = pageConf.discussions.create
+const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
 const getUserAvatar = (post: Post) => {
   if (post.posted_by.avatar_thumbnail) {

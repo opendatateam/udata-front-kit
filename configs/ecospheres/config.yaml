@@ -8,6 +8,7 @@ datagouvfr:
   base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 robots:
   disallow:
@@ -52,6 +53,8 @@ website:
     dropdown:
       - text: Rechercher {} dans les <strong>jeux de données</strong>
         route: datasets
+      - text: Rechercher {} dans les <strong>indicateurs</strong>
+        route: indicators
       - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
   search_bar:
@@ -92,6 +95,7 @@ website:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
     closeable: false
+  # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
     - text: Accueil
       to: /
@@ -108,6 +112,7 @@ website:
   router:
     disable:
       - topics
+    # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
       - title: 'À propos'
         id: 'about'
@@ -121,6 +126,23 @@ website:
         id: 'terms'
         route: '/terms'
         url: '/ecospheres/pages/terms.md'
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Bouquets
+      path: /bouquets
+    - name: Jeux de données
+      path: /datasets
+    - name: Indicateurs
+      path: /indicators
+    - name: Organisations
+      path: /organizations
+    - name: À propos
+      path: /about
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
@@ -152,21 +174,6 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
-  sitemap:
-    - name: Accueil
-      path: /
-    - name: Bouquets
-      path: /bouquets
-    - name: Jeux de données
-      path: /datasets
-    - name: Organisations
-      path: /organizations
-    - name: À propos
-      path: /about
-    - name: Conditions générales d’utilisation
-      path: /terms
-    - name: Accessibilité
-      path: /accessibility
 
 organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-demo.json
 
@@ -206,9 +213,15 @@ definitions: &definitions
 #     banner:                       # banner for the list page (optionnal)
 #       title: {string}             # title for the banner
 #       content: {string}           # content for the banner
-#     discussions:
-#       display: {bool}             # display discussions on detail page
-#       create: {bool}              # create discussions on detail page
+#     resources_tabs:               # resources tabs at the bottom of a detail page
+#       discussions:
+#         display: {bool}           # display discussions tab on detail page
+#         create: {bool}            # create discussions tab on detail page
+#       datasets:
+#         display: {bool}           # display datasets tab on detail page
+#       reuses:
+#         display: {bool}           # display reuses tab on detail page
+#     editable: {bool}              # whether the page is editable when connected
 #     filters:                      # list of filters for this {page_id}
 #       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}              # id of the filter
@@ -239,14 +252,20 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-      title: Un guichet unique pour l’accès aux données environnementales
+      title: Un guichet unique pour l'accès aux données environnementales
       content: |
-        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l’appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
+        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l'appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
 
         Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Thème INSPIRE
         default_option: Tous les thèmes
@@ -342,9 +361,15 @@ pages:
         Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
 
         Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Afficher les brouillons
         id: include_private
@@ -388,9 +413,15 @@ pages:
         L'Ecolab du Commissariat Général au Développement Durable met en place un hub d'indicateurs territoriaux, en co-construction avec les directions générales, les établissements publics et les services déconcentrés des ministères concernés, pour accompagner les territoires dans le suivi de leurs politiques publiques de transition écologique. Ces indicateurs sont référencés par thématiques et enjeux environnementaux de la planification écologique. Chaque fiche détaille la définition, les sources, le calcul des indicateurs et permet d'accéder aux données structurées. Plusieurs bouquets permettent de regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
 
         Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Thématique
         default_option: Toutes les thématiques

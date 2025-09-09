@@ -12,8 +12,8 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
-import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
+import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
+import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -32,7 +32,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
-import { updateTopicExtras, useExtras } from '@/utils/topic'
+import { useExtras, useTopicFactors } from '@/utils/topic'
 
 const props = defineProps<TopicPageRouterConf>()
 
@@ -56,22 +56,25 @@ const description = computed(() => descriptionFromMarkdown(topic))
 // Dynamically load the custom description component if it exists
 const customDescriptionComponent = computed(() => {
   if (meta.descriptionComponent) {
-    return defineAsyncComponent(meta.descriptionComponent as () => Promise<any>)
+    return defineAsyncComponent(meta.descriptionComponent)
   }
   return null
 })
 
 const userStore = useUserStore()
 const canEdit = computed(() => {
-  return userStore.hasEditPermissions(topic.value)
+  return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
 const { isAdmin, canAddTopic } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
-const showDiscussions = pageConf.discussions.display
+const showDiscussions = pageConf.resources_tabs.discussions.display
+const showDatasets = pageConf.resources_tabs.datasets.display
+const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
-const { datasetsProperties, clonedFrom } = useExtras(topic)
+const { clonedFrom } = useExtras(topic)
+const { factors } = useTopicFactors(topic)
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -85,11 +88,29 @@ const breadcrumbLinks = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Réutilisations', tabId: 'tab-2', panelId: 'tab-content-2' }
-]
+const tabTitles: { title: string; tabId: string; panelId: string }[] = []
+if (showDatasets) {
+  tabTitles.push({
+    title: 'Données',
+    tabId: 'tab-datasets',
+    panelId: 'tab-content-datasets'
+  })
+}
+if (showDiscussions) {
+  tabTitles.push({
+    title: 'Discussions',
+    tabId: 'tab-discussions',
+    panelId: 'tab-content-discussions'
+  })
+}
+if (showReuses) {
+  tabTitles.push({
+    title: 'Réutilisations',
+    tabId: 'tab-reuses',
+    panelId: 'tab-content-reuses'
+  })
+}
+
 const activeTab = ref(0)
 
 const cloneModalActions = [
@@ -153,32 +174,19 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateDatasets = () => {
+const onUpdateFactors = () => {
   if (topic.value == null) {
     throw Error('Trying to update null topic')
   }
   const loader = useLoading().show()
-
-  // Deduplicate datasets ids in case of same DS used multiple times
-  // API rejects PUT if the same id is used more than once
-  const dedupedDatasets = [
-    ...new Set(
-      datasetsProperties.value
-        .filter((d) => d.id !== null && d.remoteDeleted !== true)
-        .map((d) => d.id)
-    )
-  ]
-
   store
     .update(topic.value.id, {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
-      datasets: dedupedDatasets,
-      extras: updateTopicExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
-        )
-      })
+      elements: factors.value.map(
+        // unresolved will remove "local" properties
+        (element) => element.unresolved()
+      )
     })
     .finally(() => loader.hide())
 }
@@ -238,14 +246,18 @@ watch(
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
   <GenericContainer v-if="topic">
-    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters">
+    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
         :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
         <!-- Use custom description component if defined, otherwise fallback to default HTML -->
         <div v-if="meta.descriptionComponent && customDescriptionComponent">
-          <component :is="customDescriptionComponent" :topic="topic" />
+          <component
+            :is="customDescriptionComponent"
+            :topic="topic"
+            :page-key="pageKey"
+          />
         </div>
         <div v-else>
           <div class="topic__header fr-mb-4v">
@@ -413,35 +425,45 @@ watch(
     </div>
 
     <DsfrTabs
+      v-if="tabTitles.length > 0"
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
       :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
-        <TopicDatasetList
-          v-model="datasetsProperties"
+      <DsfrTabContent
+        v-if="showDatasets"
+        panel-id="tab-content-datasets"
+        tab-id="tab-datasets"
+        class="fr-px-2w"
+      >
+        <TopicFactorsList
+          v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
-          @update-datasets="onUpdateDatasets"
+          @update-factors="onUpdateFactors"
         />
-        <TopicDatasetListExport
-          :datasets="datasetsProperties"
-          :filename="topic.id"
-        />
+        <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent
+        v-if="showDiscussions && topic"
+        panel-id="tab-content-discussions"
+        tab-id="tab-discussions"
+      >
         <DiscussionsList
-          v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
           :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent
+        v-if="showReuses"
+        panel-id="tab-content-reuses"
+        tab-id="tab-reuses"
+      >
         <ReusesList model="topic" :object-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>
