@@ -15,18 +15,15 @@ describe('Simplifions Solutions Details Page', () => {
         }
       }
     })
+    const sampleCasUsage = casUsageFactory.one({
+      overrides: {
+        slug: 'sample-cas-usage'
+      }
+    })
     cy.mockDatagouvObject('topics', solution.slug, solution)
     cy.mockDatagouvObjectList('discussions')
     cy.mockGristImages()
-    cy.mockDatagouvObject(
-      'topics',
-      'sample-cas-usage',
-      casUsageFactory.one({
-        overrides: {
-          slug: 'sample-cas-usage'
-        }
-      })
-    )
+    cy.mockDatagouvObject('topics', 'sample-cas-usage', sampleCasUsage)
 
     cy.visit(`/solutions/${solution.slug}`)
   })
