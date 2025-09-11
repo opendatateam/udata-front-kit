@@ -7,7 +7,7 @@ import type {
 } from '@/model/spatial'
 import type { Topic, TopicPostData } from '@/model/topic'
 import { useSpatialStore } from '@/store/SpatialStore'
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 
 export const getZoneFromSpatial = async (
   spatial: SpatialField | undefined | null

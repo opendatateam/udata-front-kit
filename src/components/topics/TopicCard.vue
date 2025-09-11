@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import {
-  formatRelativeIfRecentDate,
   OrganizationNameWithCertificate,
-  useOwnerName
-} from '@datagouv/components'
+  useFormatDate
+} from '@datagouv/components-next'
 import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -12,6 +11,7 @@ import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useOwnerName } from '@/utils/owned'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTags } from '@/utils/tags'
 import { useTopicFactors } from '@/utils/topic'
@@ -33,6 +33,7 @@ const props = defineProps({
 
 const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
+const { formatRelativeIfRecentDate } = useFormatDate()
 const { nbFactors } = useTopicFactors(topicRef)
 
 const ownerName = useOwnerName(props.topic)
