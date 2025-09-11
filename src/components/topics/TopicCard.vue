@@ -34,7 +34,6 @@ const props = defineProps({
 const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
 const { formatRelativeIfRecentDate } = useFormatDate()
-const { datasetsProperties } = useExtras(topicRef)
 const { nbFactors } = useTopicFactors(topicRef)
 
 const ownerName = useOwnerName(props.topic)
