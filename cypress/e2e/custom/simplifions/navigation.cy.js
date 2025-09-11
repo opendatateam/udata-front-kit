@@ -1,6 +1,12 @@
+import {
+  casUsageFactory,
+  solutionFactory
+} from '../../../support/factories/custom/simplifions/topics_factory'
+
 describe('Simplifions Navigation', () => {
   beforeEach(() => {
-    // Visit the Simplifions home page before each test
+    cy.mockDatagouvObjectList('topics')
+    cy.mockGristImages()
     cy.visit('/')
   })
 
@@ -51,6 +57,8 @@ describe('Simplifions Navigation', () => {
   })
 
   it("should search for cas d'usages", () => {
+    cy.mockDatagouvObjectList('topics', casUsageFactory.many(2))
+
     cy.get('header[role="banner"]').within(() => {
       // Click on the search input
       cy.get('input.multiselect-search:first').click()
@@ -67,10 +75,11 @@ describe('Simplifions Navigation', () => {
 
     // Wait for the page to load and check that the search results are visible
     cy.get('h1').should('contain.text', "Cas d'usages")
-    cy.get('.topic-card').should('have.length.gt', 0)
+    cy.get('.topic-card').should('have.length', 2)
   })
 
   it('should search for solutions', () => {
+    cy.mockDatagouvObjectList('topics', solutionFactory.many(2))
     cy.get('header[role="banner"]').within(() => {
       // Click on the search input
       cy.get('input.multiselect-search:first').click()
@@ -87,6 +96,6 @@ describe('Simplifions Navigation', () => {
 
     // Wait for the page to load and check that the search results are visible
     cy.get('h1').should('contain.text', 'Solutions')
-    cy.get('.topic-card').should('have.length.gt', 0)
+    cy.get('.topic-card').should('have.length', 2)
   })
 })

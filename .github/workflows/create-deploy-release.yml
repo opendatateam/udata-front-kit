@@ -49,14 +49,14 @@ jobs:
       # variables to be defined
       APP_NAME: ${{ vars.APP_NAME }}
       SCAFFOLD_REPO_SSH_URL: ${{ vars.SCAFFOLD_REPO_SSH_URL }}
-      SCAFFOLD_DIR: "scaffold"
+      SCAFFOLD_DIR: 'scaffold'
       ENVS: ${{ vars.ENVS }}
       APPS: ${{ vars.APPS }}
 
       # secrets to be defined
       GITLAB_API_TOKEN: ${{ secrets.GITLAB_API_TOKEN }}
       DEPLOY_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-      
+
       # workflow dispatch inputs (for manual deployment)
       CONFIG_NAME: ${{ github.event.inputs.site }}
       ENV: ${{ github.event.inputs.environment }}

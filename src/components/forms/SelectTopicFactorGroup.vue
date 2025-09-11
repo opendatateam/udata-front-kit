@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 
 import Multiselect from '@vueform/multiselect'
@@ -8,13 +8,13 @@ import ErrorMessage from './ErrorMessage.vue'
 
 const { pageConf } = useCurrentPageConf()
 
-const datasetProperties = defineModel('properties-model', {
-  type: Object as () => DatasetProperties,
+const factor = defineModel('factor-model', {
+  type: Object as () => ResolvedFactor,
   default: {}
 })
 
-const datasetsGroups = defineModel('groups-model', {
-  type: Object as () => DatasetsGroups,
+const factorsGroups = defineModel('groups-model', {
+  type: Object as () => FactorsGroups,
   default: []
 })
 
@@ -38,16 +38,16 @@ defineProps({
 })
 
 const groupOptions = computed(() =>
-  Array.from(datasetsGroups.value, ([key]) => key)
+  Array.from(factorsGroups.value, ([key]) => key)
 )
 
 const clear = () => {
-  datasetProperties.value.group = undefined
+  factor.value.siteExtras.group = undefined
 }
 
 const trimGroupName = (groupName: string) => {
   // prevents spaces at the beginning and end of the group name
-  datasetProperties.value.group = groupName.trim()
+  factor.value.siteExtras.group = groupName.trim()
 }
 </script>
 
@@ -65,7 +65,7 @@ const trimGroupName = (groupName: string) => {
   </p>
   <Multiselect
     id="input-group"
-    v-model="datasetProperties.group"
+    v-model="factor.siteExtras.group"
     role="search"
     :options="groupOptions"
     :searchable="true"

@@ -1,7 +1,7 @@
 import type { DatasetV2 } from '@datagouv/components-next'
 
 import type { GenericResponse } from './api'
-import type { DatasetProperties } from './topic'
+import type { ResolvedFactor } from './topic'
 
 export interface DatasetV2Response extends GenericResponse {
   data: DatasetV2[]
@@ -9,7 +9,7 @@ export interface DatasetV2Response extends GenericResponse {
 
 export interface DatasetModalData {
   index?: number
-  dataset?: DatasetProperties
+  factor?: ResolvedFactor
   isValid: boolean
   mode: 'edit' | 'create'
 }

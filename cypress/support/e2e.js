@@ -17,6 +17,8 @@ import 'cypress-axe'
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import './datagouv_mocks'
+import './generic_mocks'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
@@ -27,4 +29,9 @@ Cypress.on('uncaught:exception', (err) => {
   // failing the test on uncaught exceptions
   console.log('Uncaught exception:', err.message)
   return false
+})
+
+// Fail tests when external API calls are not mocked
+beforeEach(() => {
+  cy.catchUnmockedRequests()
 })

@@ -30,32 +30,6 @@ Cypress.Commands.add('simulateConnectedUser', (userData = {}) => {
   }).as('revokeToken')
 })
 
-Cypress.Commands.add('simulateConnectedDINUMUser', () => {
-  cy.simulateConnectedUser({
-    id: 'dinum-user-id',
-    first_name: 'DINUM',
-    last_name: 'User',
-    slug: 'dinum-user',
-    organizations: [
-      {
-        class: 'Organization',
-        id: '678fbd66febd2b6454916dfe',
-        name: 'Direction interministérielle du numérique',
-        slug: 'direction-interministerielle-du-numerique'
-      }
-    ]
-  })
-
-  // Intercept simplifions topics API calls
-  cy.intercept('GET', '**/api/2/topics/*tag=simplifions*', (req) => {
-    if (req.query.include_private === 'true') {
-      req.reply({ fixture: 'simplifions/topics_with_private.json' })
-    } else {
-      req.reply({ fixture: 'simplifions/topics_public.json' })
-    }
-  }).as('getTopics')
-})
-
 Cypress.Commands.add('simulateDisconnectedUser', () => {
   cy.window().then((win) => {
     win.localStorage.removeItem('token')
