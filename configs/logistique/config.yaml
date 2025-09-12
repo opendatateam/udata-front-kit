@@ -7,6 +7,7 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 6709257a89f70088a223eba3
+  tabular_api_url:
 
 robots:
   disallow:
@@ -162,9 +163,15 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters: []
   # BOUQUETS
   bouquets:
@@ -181,9 +188,15 @@ pages:
     search:
       input: Filtrer les bouquets
     banner:
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Catégorie
         default_option: Toutes les catégories

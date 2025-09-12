@@ -6,9 +6,16 @@ dist/
 node_modules/
 shell.nix
 src/playground
+cypress/screenshots
+cypress/downloads
 
 # vim swap files
 *.swp
 
 # auto generated file from unplugin-vue-components
 components.d.ts
+
+# GitHub Act
+.actrc
+.secrets
+.github/**/act*.json

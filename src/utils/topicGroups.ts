@@ -1,42 +1,39 @@
 import { useDebounceFn } from '@vueuse/core'
 import { type ComputedRef, type Ref, ref } from 'vue'
 
-import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 
 import { debounceWait } from '@/utils/config'
 
 export const NO_GROUP = 'Sans regroupement'
 
-export const isOnlyNoGroup = (groups: DatasetsGroups) => {
+export const isOnlyNoGroup = (groups: FactorsGroups) => {
   return groups.has(NO_GROUP) && groups.size === 1
 }
 
-export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
-  groupedDatasets: ComputedRef<DatasetsGroups>
-  getDatasetIndex: (group: string, indexInGroup: number) => number
-  removeDatasetFromGroup: (group: string, index: number) => DatasetProperties[]
+export function useGroups(factors: Ref<ResolvedFactor[]>): {
+  groupedFactors: ComputedRef<FactorsGroups>
+  getFactorIndex: (group: string, indexInGroup: number) => number
+  removeFactorFromGroup: (group: string, index: number) => ResolvedFactor[]
   groupExists: (groupName: string) => boolean
-  renameGroup: (
-    oldGroupName: string,
-    newGroupName: string
-  ) => DatasetProperties[]
-  deleteGroup: (groupName: string) => DatasetProperties[]
+  renameGroup: (oldGroupName: string, newGroupName: string) => ResolvedFactor[]
+  deleteGroup: (groupName: string) => ResolvedFactor[]
 } {
-  const groupedDatasets = computed(() => {
+  const groupedFactors = computed(() => {
     // Group datasets by their group property
-    const groupedMap = datasetsProperties.value.reduce((acc, dataset) => {
-      const groupKey = dataset.group || NO_GROUP
+    const groupedMap = factors.value.reduce((acc, factor) => {
+      const groupKey = factor.siteExtras.group || NO_GROUP
       if (!acc.has(groupKey)) {
         acc.set(groupKey, [])
       }
-      acc.get(groupKey)?.push(dataset)
+      acc.get(groupKey)?.push(factor)
       return acc
-    }, new Map<string, DatasetProperties[]>())
+    }, new Map<string, ResolvedFactor[]>())
 
-    // Sort each group's datasets by lowered+unaccented title according to current locale
-    for (const [, datasets] of groupedMap.entries()) {
-      datasets.sort((a, b) =>
-        // some legacy datasets have no title, fallback to '' to avoid errors
+    // Sort each group's factors by lowered+unaccented title according to current locale
+    for (const [, factors] of groupedMap.entries()) {
+      factors.sort((a, b) =>
+        // some legacy factors have no title, fallback to '' to avoid errors
         (a.title || '').localeCompare(b.title || '', undefined, {
           sensitivity: 'base'
         })
@@ -59,13 +56,13 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
 
     return new Map(sortedEntries)
   })
-  const getDatasetIndex = (group: string, indexInGroup: number) => {
+  const getFactorIndex = (group: string, indexInGroup: number) => {
     // get all datasets from group
-    const groupItems = groupedDatasets.value.get(group ?? NO_GROUP)
+    const groupItems = groupedFactors.value.get(group ?? NO_GROUP)
 
     if (groupItems) {
       // find the right dataset index (to handle duplicates)
-      const datasetIndex = datasetsProperties.value.findIndex(
+      const datasetIndex = factors.value.findIndex(
         (item) => item === groupItems[indexInGroup]
       )
       return datasetIndex
@@ -73,98 +70,99 @@ export function useGroups(datasetsProperties: Ref<DatasetProperties[]>): {
     return -1
   }
 
-  const removeDatasetFromGroup = (group: string, index: number) => {
-    const datasetToDeleteIndex = getDatasetIndex(group, index)
+  const removeFactorFromGroup = (group: string, index: number) => {
+    const factorToDeleteIndex = getFactorIndex(group, index)
 
-    if (datasetToDeleteIndex === -1) {
-      return datasetsProperties.value
+    if (factorToDeleteIndex === -1) {
+      return factors.value
     }
 
     const confirmMessage =
       'Etes-vous sûr de vouloir supprimer ce jeu de données ?'
     if (!window.confirm(confirmMessage)) {
-      return datasetsProperties.value
+      return factors.value
     }
 
-    return datasetsProperties.value.filter(
-      (_, index) => index !== datasetToDeleteIndex
-    )
+    return factors.value.filter((_, index) => index !== factorToDeleteIndex)
   }
 
   const groupExists = (groupName: string) => {
-    return groupedDatasets.value.has(groupName)
+    return groupedFactors.value.has(groupName)
   }
 
   const renameGroup = (oldGroupName: string, newGroupName: string) => {
     // Skip if new group already exists or old group is empty
-    if (groupExists(newGroupName) || !groupedDatasets.value.has(oldGroupName)) {
-      return datasetsProperties.value
+    if (groupExists(newGroupName) || !groupedFactors.value.has(oldGroupName)) {
+      return factors.value
     }
-    const data = datasetsProperties.value.map((dataset) =>
-      dataset.group === oldGroupName
-        ? { ...dataset, group: newGroupName }
-        : dataset
-    )
+    const data = factors.value.map((factor) => {
+      if (factor.siteExtras.group === oldGroupName) {
+        factor.siteExtras.group = newGroupName
+      }
+      return factor
+    })
     return data
   }
 
   const deleteGroup = (groupName: string) => {
-    return datasetsProperties.value.filter(
-      (dataset) => dataset.group !== groupName
+    return factors.value.filter(
+      (factor) => factor.siteExtras.group !== groupName
     )
   }
 
   return {
-    groupedDatasets,
-    getDatasetIndex,
-    removeDatasetFromGroup,
+    groupedFactors,
+    getFactorIndex,
+    removeFactorFromGroup,
     groupExists,
     renameGroup,
     deleteGroup
   }
 }
 
-export function useDatasetFilter(datasetsProperties: Ref<DatasetProperties[]>) {
+export function useFactorsFilter(factors: Ref<ResolvedFactor[]>) {
   const searchQuery = ref('')
   const isFiltering = computed(() => !!searchQuery.value)
 
+  // TODO: move this to API elements q=
   // add a property to hide the datasets on filtering
-  const filteredDatasets = computed(() => {
-    if (!searchQuery.value) return datasetsProperties.value
+  const filteredFactors = computed(() => {
+    if (!searchQuery.value) return factors.value
 
     const searchValue = searchQuery.value.toLowerCase()
 
-    return datasetsProperties.value.map((dataset) => ({
-      ...dataset,
-      isHidden: !(
-        dataset.title.toLowerCase().includes(searchValue) ||
-        (dataset.purpose && dataset.purpose.toLowerCase().includes(searchValue))
+    return factors.value.map((factor) => {
+      factor.isHidden = !(
+        factor.title.toLowerCase().includes(searchValue) ||
+        (factor.description &&
+          factor.description.toLowerCase().includes(searchValue))
       )
-    }))
+      return factor
+    })
   })
 
   // Check if all groups only contain hidden datasets
   const isAllGroupsHidden = computed(() => {
-    return filteredDatasets.value.every((dataset) => dataset.isHidden)
+    return filteredFactors.value.every((factor) => factor.isHidden)
   })
 
   // Check if a specific group only contains hidden datasets
   const isGroupOnlyHidden = (groupName: string) => {
-    const filterGroupName = groupName === NO_GROUP ? undefined : groupName
-    return filteredDatasets.value
-      .filter((dataset) => dataset.group === filterGroupName)
-      .every((dataset) => dataset.isHidden)
+    const filterGroupName = groupName === NO_GROUP ? null : groupName
+    return filteredFactors.value
+      .filter((factor) => factor.siteExtras.group === filterGroupName)
+      .every((factor) => factor.isHidden)
   }
 
   // apply search query
-  const filterDatasetsProperties = useDebounceFn((value: string) => {
+  const filterFactors = useDebounceFn((value: string) => {
     searchQuery.value = value
   }, debounceWait)
 
   return {
     isFiltering,
-    filterDatasetsProperties,
-    filteredDatasets,
+    filterFactors,
+    filteredFactors,
     isAllGroupsHidden,
     isGroupOnlyHidden
   }

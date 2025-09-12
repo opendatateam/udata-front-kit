@@ -166,7 +166,11 @@ export const useSearchPageRoutes = ({
           pageKey,
           descriptionComponent
         },
-        props: props || {}
+        props: () => ({
+          // this forces the component to be recreated when switching page type
+          key: pageKey,
+          ...props
+        })
       }
     ]
   }

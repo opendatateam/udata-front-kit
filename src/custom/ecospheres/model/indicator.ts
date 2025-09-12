@@ -37,3 +37,11 @@ export type IndicatorExtras = DatasetV2['extras'] & {
 export type Indicator = DatasetV2 & {
   extras: IndicatorExtras
 }
+
+export type IndicatorResourceExtras = {
+  maille: string
+  'value-column': string
+  axes: {
+    [key: string]: string[]
+  }
+}

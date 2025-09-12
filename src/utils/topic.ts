@@ -2,117 +2,112 @@ import { ref, watch, type Ref } from 'vue'
 
 import {
   Availability,
-  type DatasetProperties,
-  type SiteTopicExtras,
+  ResolvedFactor,
+  type Factor,
   type Topic,
-  type TopicExtras,
   type TopicPostData
 } from '@/model/topic'
+import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
 
 const topicsExtrasKey = useSiteId()
 
+// TODO: move to ResolvedFactor class
 export const isAvailable = (availability: Availability): boolean => {
   return [Availability.LOCAL_AVAILABLE, Availability.URL_AVAILABLE].includes(
     availability
   )
 }
 
-export const updateTopicExtras = (
-  topic: Topic,
-  data: Partial<SiteTopicExtras>
-): TopicExtras => {
-  return {
-    ...topic.extras,
-    [topicsExtrasKey]: {
-      ...topic.extras[topicsExtrasKey],
-      ...data
-    }
-  }
-}
-
 /**
- * Build a fonctionnal v1 (POST format) topic from clone source data
+ * Build a fonctionnal Topic from clone source data
  */
-export const cloneTopic = (
+export const cloneTopic = async (
   topic: Topic,
   keepDatasets: boolean = false
-): TopicPostData => {
+): Promise<TopicPostData> => {
   const { id, slug, ...data } = topic
 
-  // get a deduplicated list of dataset ids from factors that point to a dataset
-  const getDatasetsIds = () => {
-    return [
-      ...new Set(
-        topic.extras[topicsExtrasKey].datasets_properties
-          .map((dp) => dp.id)
-          .filter((id) => id != null)
-      )
-    ]
-  }
+  const factors = (
+    await useTopicElementStore().getTopicElements<Factor>({ topicId: topic.id })
+  ).map((factor) => {
+    if (!keepDatasets) {
+      factor.element = null
+      factor.extras[topicsExtrasKey].uri = null
+      factor.extras[topicsExtrasKey].availability = Availability.NOT_AVAILABLE
+    }
+    return factor
+  })
 
   return {
     ...data,
     private: true,
-    datasets: keepDatasets ? getDatasetsIds() : [],
-    reuses: [],
     spatial: undefined,
     owner: useUserStore().data ?? null,
     organization: null,
-    extras: updateTopicExtras(topic, {
-      cloned_from: topic.id,
-      datasets_properties: topic.extras[
-        topicsExtrasKey
-      ].datasets_properties.map((dp) => {
-        return {
-          ...dp,
-          id: keepDatasets ? dp.id : null,
-          uri: keepDatasets ? dp.uri : null,
-          availability: keepDatasets
-            ? dp.availability
-            : Availability.NOT_AVAILABLE
-        }
-      })
-    })
+    elements: factors,
+    // we're not copying all the extras over, only the ones we control
+    extras: {
+      [topicsExtrasKey]: {
+        cloned_from: topic.id
+      }
+    }
   }
 }
 
 export function useExtras(topic: Ref<Topic | null | undefined>): {
-  datasetsProperties: Ref<DatasetProperties[]>
   clonedFrom: Ref<Topic | null>
 } {
-  const datasetsProperties: Ref<DatasetProperties[]> = ref([])
   const clonedFrom = ref<Topic | null>(null)
 
   watch(
     topic,
     () => {
       const extras = topic.value?.extras[topicsExtrasKey]
-      if (extras != null) {
-        datasetsProperties.value = extras.datasets_properties ?? []
-
-        if (extras.cloned_from != null) {
-          useTopicStore()
-            .load(extras.cloned_from, { toasted: false })
-            .then((res) => {
-              clonedFrom.value = res
-            })
-            .catch((err) => {
-              console.error('Failed fetching cloned_from', err.response?.data)
-              clonedFrom.value = null
-            })
-        } else {
-          clonedFrom.value = null
-        }
-      } else {
-        datasetsProperties.value = []
-        clonedFrom.value = null
+      if (extras?.cloned_from != null) {
+        useTopicStore()
+          .load(extras.cloned_from, { toasted: false })
+          .then((res) => {
+            clonedFrom.value = res
+          })
+          .catch((err) => {
+            console.error('Failed fetching cloned_from', err.response?.data)
+            clonedFrom.value = null
+          })
       }
     },
     { immediate: true }
   )
 
-  return { datasetsProperties, clonedFrom }
+  return { clonedFrom }
+}
+
+export function useTopicFactors(topic: Ref<Topic | null | undefined>): {
+  factors: Ref<ResolvedFactor[]>
+  nbFactors: Ref<number>
+} {
+  const nbFactors: Ref<number> = ref(0)
+  const factors: Ref<ResolvedFactor[]> = ref([])
+
+  watch(
+    topic,
+    async () => {
+      if (!topic.value) return
+      const rawFactors =
+        topic.value.elements.total > 0
+          ? await useTopicElementStore().getTopicElements<Factor>({
+              topicId: topic.value.id
+            })
+          : []
+      factors.value = rawFactors.map(
+        (element) => new ResolvedFactor(element, useSiteId())
+      )
+      nbFactors.value = factors.value.length
+    },
+    { immediate: true }
+  )
+
+  return { factors, nbFactors }
 }

@@ -7,6 +7,7 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 670924ba96082fcc26ee3898
+  tabular_api_url:
 
 robots:
   disallow:
@@ -74,11 +75,16 @@ website:
         sub_section_cards:
           title:
           cards:
+            - id: '68a342f531e98327ae1e6779'
+              name: 'Tourisme en train'
+              description: 'Comment faciliter et encourager le tourisme en train en France ?'
+              url: '/defis/tourisme-en-train'
+              image_url: 'https://raw.githubusercontent.com/datagouv/datagouvfr-pages/refs/heads/master/pages/assets/odu-defi-tourisme.jpg'
             - id: '68234dc8f8f4d7549998f0ad'
               name: 'Santé et territoires'
               description: 'Comment aider les acteurs locaux à réaliser un diagnostic de santé publique ? Défi porté par la Fondation Roche'
               url: '/defis/sante-et-territoires'
-              image_url: 'https://raw.githubusercontent.com/thanhhale7/images/refs/heads/main/Visuel-ODU-Sante.jpg'
+              image_url: 'https://raw.githubusercontent.com/datagouv/datagouvfr-pages/refs/heads/master/pages/assets/odu-defi-sante.jpg'
             - id: '67f5438a3b2d79d922863e03'
               name: 'Diversité et inclusion en entreprise'
               description: 'Quelle politique sur l’inclusion et la diversité au sein d’EDF SA ? Défi porté par EDF'
@@ -288,9 +294,15 @@ pages:
     search:
       input: Chercher un défi
     banner:
-    discussions:
-      display: false
-      create: false
+    resources_tabs:
+      discussions:
+        display: false
+        create: false
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Saison
         default_option: Toutes les saisons
@@ -321,9 +333,14 @@ pages:
     search:
       input:
     banner:
-    discussions:
-      display: false
-      create: false
+    resources_tabs:
+      discussions:
+        display: false
+        create: false
+      datasets:
+        display: true
+      reuses:
+        display: true
     filters: []
 
 # list of organisations' ids that should be handled by the portal

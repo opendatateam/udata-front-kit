@@ -1,64 +1,66 @@
 <template>
-  <div class="topic-card">
-    <RouterLink :to="topicLink">
+  <router-link
+    :to="{ name: `${pageKey}_detail`, params: { item_id: topic.slug } }"
+    class="simplifions-card-link fr-p-0"
+  >
+    <div class="topic-card" :class="{ 'topic-card--private': topic.private }">
       <div class="header-topic">
-        <div class="title-topic">{{ topic.name }}</div>
-        <div class="author-topic">
-          <template v-if="topic.organization">
-            <OrganizationNameWithCertificate
-              :organization="topic.organization"
-            />
-          </template>
-          <template v-else>{{ ownerName }}</template>
+        <!--Titre et description-->
+        <div class="title-topic fr-text--lead">
+          {{ titleIcon }} {{ topic.name }}
         </div>
-        <div class="date-topic">
-          mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
+        <p class="fr-mb-1w">
+          {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
+        </p>
+        <div class="date-topic fr-grid-row fr-grid-row--right fr-mt-1w">
+          <DraftTag v-if="topic.private" class="fr-mr-1v" />
+          <div class="fr-ml-auto fr-mb-0 fr-text--xs">
+            Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
+          </div>
         </div>
       </div>
-    </RouterLink>
-    <div class="description-topic">
-      <p class="fr-mb-1v">
-        {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
-      </p>
+      <!--Texte pour préciser les usagers et les fournisseurs de service-->
+      <div class="description-topic">
+        <SimplifionsTags :topic="topic" :page-key="pageKey" />
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script setup lang="ts">
-import {
-  formatRelativeIfRecentDate,
-  OrganizationNameWithCertificate,
-  useOwnerName
-} from '@datagouv/components'
+import { formatRelativeIfRecentDate } from '@datagouv/components'
 
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
+
 import { stripFromMarkdown } from '@/utils'
-import type { RouteLocationRaw } from 'vue-router'
+import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
+import SimplifionsTags from './SimplifionsTags.vue'
 
-const { pageKey } = useCurrentPageConf()
+const props = defineProps<{
+  topic: Topic
+}>()
 
-const props = defineProps({
-  topic: {
-    type: Object as () => Topic,
-    required: true
-  }
+const titleIcon = computed(() => {
+  return (props.topic.extras as SimplifionsCasUsagesExtras)[
+    'simplifions-cas-d-usages'
+  ].Icone_du_titre
 })
 
-const ownerName = useOwnerName(props.topic)
-
-const topicLink: RouteLocationRaw = {
-  name: `${pageKey}_detail`,
-  params: { item_id: props.topic.slug }
-}
+const { pageKey } = useCurrentPageConf()
 </script>
 
 <style scoped>
+.simplifions-card-link {
+  display: block;
+  margin-bottom: 1rem;
+  background: none;
+}
+
 .owner-avatar {
   margin-bottom: -6px;
   display: inline-block;
 }
-
 .fr-card__detail,
 :deep(h3) {
   max-width: 100%;
@@ -68,11 +70,6 @@ const topicLink: RouteLocationRaw = {
   display: block;
   line-height: inherit;
 }
-
-.topic-card-col-logo {
-  max-width: 4.25rem;
-}
-
 .description p {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,13 +81,20 @@ const topicLink: RouteLocationRaw = {
 .topic-card {
   border: 1px solid #ebebeb;
 }
+.topic-card:hover {
+  background-color: #f6f6f6;
+  opacity: 50;
+}
 .header-topic {
-  background-color: #e6eefe;
+  background-color: rgba(209, 221, 244, 0.5);
   color: #465f9d;
   padding: 16px;
   gap: 10px;
   opacity: 0px;
   min-height: 60px;
+}
+.topic-card:hover .header-topic {
+  background-color: rgba(188, 199, 219, 0.5);
 }
 .title-topic {
   font-family: Marianne;
@@ -101,9 +105,6 @@ const topicLink: RouteLocationRaw = {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   margin-bottom: 10px;
-}
-.header-topic:hover {
-  background-color: #ebebeb;
 }
 .author-topic {
   font-size: 14px;
@@ -119,5 +120,17 @@ const topicLink: RouteLocationRaw = {
 .description-topic {
   margin: 16px;
   min-height: 80px;
+}
+.date-topic {
+  color: #6b7280; /* gris moyen */
+}
+
+.topic-card--private .header-topic {
+  background-color: #f6f6f6;
+  color: #666; /* gris moyen */
+}
+.topic-card--private:hover .header-topic {
+  background-color: #e7e7e7 !important;
+  color: #666; /* gris moyen */
 }
 </style>

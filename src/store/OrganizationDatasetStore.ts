@@ -124,7 +124,6 @@ export const useDatasetStore = defineStore('dataset', {
         entityId: datasetId,
         ...params
       })
-      if (dataset === undefined) return
       return this.addOrphan(dataset)
     },
     /**

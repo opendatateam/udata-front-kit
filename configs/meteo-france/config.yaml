@@ -7,6 +7,7 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 6709259c1e92c988c47d2f3e
+  tabular_api_url:
 
 robots:
   disallow:
@@ -26,7 +27,7 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: 'La météo et le climat en Open Data'
+    title: 'Les données publiques sur la météo et le climat'
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     sections:
       - title: Thématiques
@@ -59,16 +60,6 @@ website:
           title:
           tiles:
         sub_section_buttons:
-      - title: Actualités
-        content: >-
-          Retours sur le hackathon du 8 et 9 avril dernier 🚀
-
-
-          [En savoir plus](/hackathon)
-        sub_section_datasets:
-        sub_section_cards:
-        sub_section_tiles:
-        sub_section_buttons:
     meta_description:
   header_button:
     display: true
@@ -89,8 +80,8 @@ website:
       to: /datasets
     - text: Recherche guidée
       to: /form
-    - text: 'Hackathon le 8 et 9 avril 🚀'
-      to: /hackathon
+    #- text: 'Hackathon le 8 et 9 avril 🚀'
+    #  to: /hackathon
     - text: A propos
       to: /about
   router:
@@ -106,10 +97,10 @@ website:
         id: 'accessibility'
         route: '/accessibility'
         url: '/meteo-france/pages/accessibility.md'
-      - title: 'Hackathon le 8 et 9 avril 🚀'
-        id: 'hackathon'
-        route: '/hackathon'
-        url: '/meteo-france/pages/hackathon.md'
+      #- title: 'Hackathon le 8 et 9 avril 🚀'
+      #id: 'hackathon'
+      #route: '/hackathon'
+      #url: '/meteo-france/pages/hackathon.md'
   show_quality_component: true
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
@@ -187,9 +178,15 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-    discussions:
-      display: true
-      create: false
+    resources_tabs:
+      discussions:
+        display: true
+        create: false
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Catégories
         default_option: Toutes les catégories
