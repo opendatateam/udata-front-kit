@@ -127,16 +127,18 @@ export function useFactorsFilter(factors: Ref<ResolvedFactor[]>) {
   // TODO: move this to API elements q=
   // add a property to hide the datasets on filtering
   const filteredFactors = computed(() => {
-    if (!searchQuery.value) return factors.value
-
-    const searchValue = searchQuery.value.toLowerCase()
+    const searchValue = searchQuery.value?.toLowerCase() || ''
 
     return factors.value.map((factor) => {
-      factor.isHidden = !(
-        factor.title.toLowerCase().includes(searchValue) ||
-        (factor.description &&
-          factor.description.toLowerCase().includes(searchValue))
-      )
+      if (!searchQuery.value) {
+        factor.isHidden = false
+      } else {
+        factor.isHidden = !(
+          factor.title.toLowerCase().includes(searchValue) ||
+          (factor.description &&
+            factor.description.toLowerCase().includes(searchValue))
+        )
+      }
       return factor
     })
   })
