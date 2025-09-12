@@ -97,7 +97,9 @@ export function useGroups(factors: Ref<ResolvedFactor[]>): {
     }
     const data = factors.value.map((factor) => {
       if (factor.siteExtras.group === oldGroupName) {
-        factor.siteExtras.group = newGroupName
+        // If renaming to NO_GROUP, clear the group instead of storing the string
+        factor.siteExtras.group =
+          newGroupName === NO_GROUP ? undefined : newGroupName
       }
       return factor
     })
@@ -127,16 +129,18 @@ export function useFactorsFilter(factors: Ref<ResolvedFactor[]>) {
   // TODO: move this to API elements q=
   // add a property to hide the datasets on filtering
   const filteredFactors = computed(() => {
-    if (!searchQuery.value) return factors.value
-
-    const searchValue = searchQuery.value.toLowerCase()
+    const searchValue = searchQuery.value?.toLowerCase() || ''
 
     return factors.value.map((factor) => {
-      factor.isHidden = !(
-        factor.title.toLowerCase().includes(searchValue) ||
-        (factor.description &&
-          factor.description.toLowerCase().includes(searchValue))
-      )
+      if (!searchQuery.value) {
+        factor.isHidden = false
+      } else {
+        factor.isHidden = !(
+          factor.title.toLowerCase().includes(searchValue) ||
+          (factor.description &&
+            factor.description.toLowerCase().includes(searchValue))
+        )
+      }
       return factor
     })
   })
@@ -148,7 +152,7 @@ export function useFactorsFilter(factors: Ref<ResolvedFactor[]>) {
 
   // Check if a specific group only contains hidden datasets
   const isGroupOnlyHidden = (groupName: string) => {
-    const filterGroupName = groupName === NO_GROUP ? null : groupName
+    const filterGroupName = groupName === NO_GROUP ? undefined : groupName
     return filteredFactors.value
       .filter((factor) => factor.siteExtras.group === filterGroupName)
       .every((factor) => factor.isHidden)

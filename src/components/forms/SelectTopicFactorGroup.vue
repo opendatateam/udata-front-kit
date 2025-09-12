@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
+import { NO_GROUP } from '@/utils/topicGroups'
 
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
@@ -38,7 +39,9 @@ defineProps({
 })
 
 const groupOptions = computed(() =>
-  Array.from(factorsGroups.value, ([key]) => key)
+  Array.from(factorsGroups.value, ([key]) => key).filter(
+    (key) => key !== NO_GROUP
+  )
 )
 
 const clear = () => {
