@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue'
+import merge from 'deepmerge'
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
 import { fileURLToPath, URL } from 'node:url'
@@ -7,6 +8,7 @@ import ViteYaml from 'unplugin-yaml/vite'
 import { defineConfig, loadEnv } from 'vite'
 import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import ViteRestart from 'vite-plugin-restart'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 import {
@@ -29,10 +31,33 @@ interface Config {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const configDir = `./configs/${env.VITE_SITE_ID}`
-  const configFileUrl = new URL(`${configDir}/config.yaml`, import.meta.url)
-  const config = load(readFileSync(configFileUrl, 'utf-8')) as Config
+  const configFiles = []
+
+  // Load base config
+  const mainConfigFile = `${configDir}/config.yaml`
+  configFiles.push(mainConfigFile)
+  let config = load(
+    readFileSync(new URL(mainConfigFile, import.meta.url), 'utf-8')
+  ) as Config
+
+  // Try to load and merge mode-specific config
+  const modeConfigFile = `${configDir}/config.${mode}.yaml`
+  configFiles.push(modeConfigFile)
+  try {
+    const modeConfig = load(
+      readFileSync(new URL(modeConfigFile, import.meta.url), 'utf-8')
+    ) as Config
+    config = merge(config, modeConfig)
+    console.log(`Merged ${mode} config at build time`)
+  } catch {
+    console.log(`No ${mode} config found, using default`)
+  }
+
   return {
     base: '/',
+    define: {
+      __APP_CONFIG__: JSON.stringify(config)
+    },
     plugins: [
       vueDevTools(),
       vue({
@@ -90,16 +115,10 @@ export default defineConfig(({ mode }) => {
               routeFile.includes(`custom/${env.VITE_SITE_ID}/routes.ts`)
             )
           }
-          // Include only the current mode's config file in the bundle
-          // to prevent /src/config.ts from including all config files before picking the right one
-          if (id.includes('/src/config.ts')) {
-            return files.filter((configFile) =>
-              configFile.includes(
-                `configs/${env.VITE_SITE_ID}/config.${mode}.yaml`
-              )
-            )
-          }
         }
+      }),
+      ViteRestart({
+        restart: configFiles
       })
     ],
     resolve: {
