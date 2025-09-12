@@ -17,6 +17,9 @@
   --blue-france-850-200: var(--blue-cumulus-850-200);
   /* toastify */
   --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
+  --toastify-text-color-light: var(
+    --text-title-grey
+  ); /* black text for better contrast on white background */
   /* DSFR contrast fix */
   --blue-cumulus-sun-368-moon-732-hover--fix: #516fb3;
 
@@ -174,7 +177,7 @@ body {
 
 /* overload datagouv-components */
 
-// datagouv-components applies `color: inherit` to titles, we want the title color
+/* datagouv-components applies `color: inherit` to titles, we want the title color */
 .datagouv-components {
   h1,
   h2,
@@ -210,16 +213,21 @@ body {
 }
 
 /* Button color contrast fix */
-.fr-btn:not(
+.datagouv-components {
+  .fr-btn:not(
     .fr-btn--close,
     .fr-btn--menu,
     .fr-btn--secondary,
     .fr-btn--tertiary,
-    .fr-btn--tertiary-no-outline,
-    a.fr-btn
+    .fr-btn--tertiary-no-outline
   ),
-.fr-pagination__link[aria-current] {
-  --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
+  .fr-pagination__link[aria-current] {
+    --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
+    --hover-tint: var(--blue-cumulus-sun-368-moon-732-hover--fix);
+  }
+  button.fr-tag:hover[aria-pressed='false'] {
+    color: var(--blue-france-sun-113);
+  }
 }
 
 /* DSFR search bar fix */
@@ -251,4 +259,16 @@ body {
 /* Flex gap utility (missing from DSFR) */
 .flex-gap {
   gap: var(--gap, 0.5rem);
+}
+
+.text-mention-grey {
+  color: var(--text-mention-grey);
+}
+
+/* DSFR a11y fixes */
+
+/* connected user button in header */
+.fr-header__tools-links .fr-btn:disabled,
+.fr-header__tools-links a.fr-btn:not([href]) {
+  color: #757575;
 }

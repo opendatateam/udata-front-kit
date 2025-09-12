@@ -1,0 +1,79 @@
+name: Deploy review app from PR comment
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  check_comment:
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/deploy')
+    outputs:
+      should_deploy: ${{ steps.parse.outputs.should_deploy }}
+      site: ${{ steps.parse.outputs.site }}
+      pr_number: ${{ steps.parse.outputs.pr_number }}
+      branch: ${{ steps.get_pr.outputs.branch }}
+    steps:
+      - name: Parse comment
+        id: parse
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
+          echo "Comment: $COMMENT"
+
+          # Extract /deploy command and site
+          if [[ "$COMMENT" =~ ^/deploy[[:space:]]+([a-zA-Z_-]+) ]]; then
+            SITE="${BASH_REMATCH[1]}"
+            echo "Extracted site: $SITE"
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+            echo "site=$SITE" >> $GITHUB_OUTPUT
+            echo "pr_number=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+          else
+            echo "Comment does not contain valid /deploy command format. Use: /deploy <site>"
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get PR branch
+        if: steps.parse.outputs.should_deploy == 'true'
+        id: get_pr
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ steps.parse.outputs.pr_number }}
+            });
+
+            console.log('PR branch:', pr.data.head.ref);
+            core.setOutput('branch', pr.data.head.ref);
+
+      - name: React to comment
+        if: steps.parse.outputs.should_deploy == 'true'
+        uses: peter-evans/create-or-update-comment@v4.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          comment-id: ${{ github.event.comment.id }}
+          reactions: rocket
+
+  trigger_deploy:
+    needs: check_comment
+    runs-on: ubuntu-latest
+    if: needs.check_comment.outputs.should_deploy == 'true'
+    steps:
+      - name: Trigger review app workflow
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const response = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'review-app.yml',
+              ref: '${{ needs.check_comment.outputs.branch }}',
+              inputs: {
+                site: '${{ needs.check_comment.outputs.site }}',
+                pr_number: '${{ needs.check_comment.outputs.pr_number }}'
+              }
+            });
+            console.log('Workflow dispatch response:', response.status);
