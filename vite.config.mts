@@ -8,6 +8,7 @@ import ViteYaml from 'unplugin-yaml/vite'
 import { defineConfig, loadEnv } from 'vite'
 import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import ViteRestart from 'vite-plugin-restart'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 import {
@@ -30,23 +31,28 @@ interface Config {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const configDir = `./configs/${env.VITE_SITE_ID}`
+  const configFiles = []
 
   // Load base config
-  const configFileUrl = new URL(`${configDir}/config.yaml`, import.meta.url)
-  let config = load(readFileSync(configFileUrl, 'utf-8')) as Config
+  const mainConfigFile = `${configDir}/config.yaml`
+  configFiles.push(mainConfigFile)
+  let config = load(
+    readFileSync(new URL(mainConfigFile, import.meta.url), 'utf-8')
+  ) as Config
 
   // Try to load and merge mode-specific config
+  const modeConfigFile = `${configDir}/config.${mode}.yaml`
+  configFiles.push(modeConfigFile)
   try {
-    const modeConfigUrl = new URL(
-      `${configDir}/config.${mode}.yaml`,
-      import.meta.url
-    )
-    const modeConfig = load(readFileSync(modeConfigUrl, 'utf-8')) as Config
+    const modeConfig = load(
+      readFileSync(new URL(modeConfigFile, import.meta.url), 'utf-8')
+    ) as Config
     config = merge(config, modeConfig)
     console.log(`Merged ${mode} config at build time`)
   } catch {
     console.log(`No ${mode} config found, using default`)
   }
+
   return {
     base: '/',
     define: {
@@ -110,6 +116,9 @@ export default defineConfig(({ mode }) => {
             )
           }
         }
+      }),
+      ViteRestart({
+        restart: configFiles
       })
     ],
     resolve: {
