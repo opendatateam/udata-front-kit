@@ -1,0 +1,9 @@
+# This config is specific to the production mode.
+# It is merged with the default config
+
+datagouvfr:
+  base_url: https://www.data.gouv.fr
+  oauth_client_id: 676452675336109a436f8f73
+website:
+  notice:
+    display: false
