@@ -63,10 +63,6 @@ const customDescriptionComponent = computed(() => {
 
 const userStore = useUserStore()
 const canEdit = computed(() => {
-  // FIXME: temp disable for ecospheres
-  if (import.meta.env.VITE_SITE_ID === 'ecospheres') {
-    return false
-  }
   return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
 const { isAdmin, canAddTopic } = storeToRefs(userStore)
@@ -167,11 +163,6 @@ const togglePublish = () => {
 }
 
 const toggleFeatured = () => {
-  // FIXME: temp disable for ecospheres
-  if (import.meta.env.VITE_SITE_ID === 'ecospheres') {
-    console.warn('Disabled for ecospheres')
-    return
-  }
   if (topic.value === null) return
   topic.value.featured = !topic.value.featured
   const loader = useLoading().show()
