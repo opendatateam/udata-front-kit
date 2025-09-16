@@ -50,7 +50,7 @@ describe('Simplifions Solutions Page', () => {
     cy.expectActionToCallApi(
       () => cy.get('input#search-topic').type('Démarches simplifiées'),
       'topics',
-      'q=D%C3%A9marches+simplifi%C3%A9es&tag=simplifions-solutions'
+      'q=D%C3%A9marches+simplifi%C3%A9es&tag=simplifions-v2-solutions'
     )
   })
 
@@ -58,7 +58,7 @@ describe('Simplifions Solutions Page', () => {
     cy.expectActionToCallApi(
       () => cy.selectFilterValue('À destination de :', 'Communes'),
       'topics',
-      'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-solutions'
+      'tag=simplifions-v2-fournisseurs-de-service-communes&tag=simplifions-v2-solutions'
     )
   })
 
@@ -70,7 +70,7 @@ describe('Simplifions Solutions Page', () => {
           'Particuliers'
         ),
       'topics',
-      'tag=simplifions-target-users-particuliers&tag=simplifions-solutions'
+      'tag=simplifions-v2-target-users-particuliers&tag=simplifions-v2-solutions'
     )
   })
 
@@ -82,7 +82,7 @@ describe('Simplifions Solutions Page', () => {
           'Aucun développement, ni budget'
         ),
       'topics',
-      'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-solutions'
+      'tag=simplifions-v2-budget-aucun-developpement-ni-budget&tag=simplifions-v2-solutions'
     )
   })
 
@@ -94,7 +94,7 @@ describe('Simplifions Solutions Page', () => {
           'Accès facile'
         ),
       'topics',
-      'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-solutions'
+      'tag=simplifions-v2-types-de-simplification-acces-facile&tag=simplifions-v2-solutions'
     )
   })
 
@@ -115,7 +115,7 @@ describe('Simplifions Solutions Page', () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-solutions&.+&include_private=true/
+        /tag=simplifions-v2-solutions&.+&include_private=true/
       )
     })
   })
