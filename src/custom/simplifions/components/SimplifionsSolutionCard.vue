@@ -58,12 +58,10 @@ const props = defineProps({
 })
 
 const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
-  'simplifions-solutions'
+  'simplifions-v2-solutions'
 ]
 
-const imageUrl = solution?.Image_principale?.[0]
-  ? gristImageUrl(solution.Image_principale[0])
-  : ''
+const imageUrl = solution?.Image?.[0] ? gristImageUrl(solution.Image[0]) : ''
 </script>
 
 <style scoped>
