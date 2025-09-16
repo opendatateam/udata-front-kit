@@ -4,6 +4,7 @@ import {
 } from '../../../support/factories/custom/simplifions/topics_factory'
 
 describe('Simplifions Solutions Details Page', () => {
+  // TODO REFAIRE TOUT from scratch en TDD
   beforeEach(() => {
     const solution = solutionFactory.one({
       overrides: {

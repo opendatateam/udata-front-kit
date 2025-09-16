@@ -4,6 +4,7 @@ import {
 } from '../../../support/factories/custom/simplifions/topics_factory'
 
 describe("Simplifions Cas d'usages Show Page", () => {
+  // TODO REFAIRE TOUT from scratch en TDD
   beforeEach(() => {
     const casUsage = casUsageFactory.one({
       overrides: {
