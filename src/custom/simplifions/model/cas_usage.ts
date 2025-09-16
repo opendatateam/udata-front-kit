@@ -20,6 +20,8 @@ export interface SolutionEditeurTopic {
 }
 
 export interface SimplifionsCasUsage {
+  id: number
+  // old fields
   Icone_du_titre: string
   Titre: string
   Contexte: string
@@ -41,5 +43,5 @@ export interface DescriptionApiEtDonneesUtiles {
 }
 
 export interface SimplifionsCasUsagesExtras extends TopicExtras {
-  'simplifions-cas-d-usages': SimplifionsCasUsage
+  'simplifions-v2-cas-d-usages': SimplifionsCasUsage
 }
