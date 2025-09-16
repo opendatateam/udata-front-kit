@@ -29,7 +29,7 @@
           <div class="fr-tile__header">
             <img
               v-if="reco_solution.image_principale?.length"
-              :src="gristImageUrl(reco_solution.image_principale[0])"
+              :src="grist.imageUrl(reco_solution.image_principale[0])"
               class="fr-responsive-img fr-ratio-16x9"
             />
           </div>
@@ -199,8 +199,8 @@
 
 <script setup lang="ts">
 import { fromMarkdown } from '@/utils'
+import grist from '../grist'
 import type { RecoSolution, SimplifionsDataOrApi } from '../model/cas_usage'
-import { gristImageUrl } from './simplifions_utils'
 
 const props = defineProps<{
   recoSolution: RecoSolution
