@@ -1,11 +1,14 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <div class="test_cas-d-usage-description">
+  <div v-if="casUsage === undefined" class="loading">
+    Chargement du cas d'usage en cours...
+  </div>
+  <div v-else class="test_cas-d-usage-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">
-            {{ casUsage.Icone_du_titre }} {{ casUsage.Titre }}
+            {{ topic.name }}
           </h1>
           <DraftTag v-if="topic.private" />
         </div>
@@ -42,12 +45,12 @@
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
-              <ol v-if="casUsage.reco_solutions?.length" class="fr-mb-0">
+              <ol v-if="casUsage.Recommandations?.length" class="fr-mb-0">
                 <li
-                  v-for="(group, index) in grouped_reco_solutions"
+                  v-for="(group, index) in grouped_recommandations"
                   :key="group.title"
                   :class="{
-                    'fr-pb-0': index === grouped_reco_solutions.length - 1
+                    'fr-pb-0': index === grouped_recommandations.length - 1
                   }"
                 >
                   <a
@@ -135,8 +138,11 @@
         Solutions disponibles
       </h2>
 
+      <div v-if="recommandations === undefined">
+        Chargement des recommandations en cours...
+      </div>
       <div
-        v-for="(group, index) in grouped_reco_solutions"
+        v-for="(group, index) in grouped_recommandations"
         :key="group.title"
         class="fr-mb-4w"
         :class="{ 'fr-mt-5w': index > 0 }"
@@ -146,22 +152,19 @@
         </h3>
 
         <div
-          v-for="reco_solution in group.reco_solutions"
-          :key="reco_solution.Nom_de_la_solution_publique"
+          v-for="recommandation in group.recommandations"
+          :key="recommandation.Nom_de_la_recommandation"
         >
           <SimplifionsRecoSolutions
-            :reco-solution="reco_solution"
-            :with-provided-data-api="group.with_provided_data_api"
-            :useful-data-api="usefulDataApi"
-            :custom-descriptions="customDescriptionsForDataApi"
+            v-if="recommandation.Solution_recommandee"
+            :recommandation="recommandation"
+            :display-sub-products="group.displaySubProducts"
+          />
+          <SimplifionsRecoDataApi
+            v-else-if="recommandation.API_ou_datasets_recommandes"
+            :recommandation="recommandation"
           />
         </div>
-
-        <SimplifionsDataApiList
-          v-if="group.data_api_recos?.length"
-          :data-api-list="group.data_api_recos"
-          :custom-descriptions="customDescriptionsForDataApi"
-        />
       </div>
     </div>
 
@@ -187,12 +190,10 @@
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
-import type {
-  RecoSolution,
-  SimplifionsCasUsagesExtras,
-  SimplifionsDataOrApi
-} from '../model/cas_usage'
-import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
+import { grist } from '../grist.ts'
+import type { CasUsage, Recommandation } from '../model/grist'
+import type { TopicCasUsagesExtras } from '../model/topics'
+import SimplifionsRecoDataApi from './SimplifionsRecoDataApi.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -201,78 +202,54 @@ const props = defineProps<{
   pageKey: string
 }>()
 
-const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
-  'simplifions-cas-d-usages'
-]
+const casUsageId = (props.topic.extras as TopicCasUsagesExtras)[
+  'simplifions-v2-cas-d-usages'
+].id
 
-const customDescriptionsForDataApi =
-  casUsage.descriptions_api_et_donnees_utiles.reduce(
-    (acc, description) => {
-      acc[description.uid_datagouv] = description.Description_de_l_utilisation
-      return acc
-    },
-    {} as Record<string, string>
-  )
+const casUsage = ref<CasUsage | undefined>(undefined)
+const recommandations = ref<Recommandation[] | undefined>(undefined)
 
-const usefulDataApi = computed(() => {
-  if (!casUsage.API_et_donnees_utiles) {
-    return []
-  }
-  return casUsage.API_et_donnees_utiles.filter(
-    (apidOrData) => apidOrData.UID_data_gouv
-  )
+grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
+  casUsage.value = data.fields as CasUsage
+
+  grist
+    .getRecords('Recommandations', { id: casUsage.value.Recommandations })
+    .then((data) => {
+      recommandations.value = (
+        data.map((d) => d.fields) as Recommandation[]
+      ).filter((reco) => reco.Visible_sur_simplifions)
+    })
 })
 
-const dataApiNotProvidedByARecoSolution = computed(() => {
-  return usefulDataApi.value.filter(
-    (apidOrData) =>
-      !casUsage.reco_solutions.some((recoSolution) =>
-        recoSolution.API_et_data_utiles_fournies_par_la_solution_datagouv_slugs.includes(
-          apidOrData.UID_data_gouv
-        )
-      )
-  )
-})
-
-const grouped_reco_solutions = computed(() => {
-  const first_group_reco_solutions = casUsage.reco_solutions.filter(
-    (recoSolution) =>
-      recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
-        'Aucun développement, ni budget'
-      )
-  )
-  const second_group_reco_solutions = casUsage.reco_solutions.filter(
-    (recoSolution) =>
-      !recoSolution.Moyens_requis_pour_la_mise_en_oeuvre.includes(
-        'Aucun développement, ni budget'
-      )
-  )
-
-  const groups: Array<{
-    title: string
-    reco_solutions: RecoSolution[]
-    with_provided_data_api: boolean
-    data_api_recos?: SimplifionsDataOrApi[]
-  }> = []
-
-  if (first_group_reco_solutions.length) {
-    groups.push({
-      title: 'Aucun développement, ni budget',
-      with_provided_data_api: false,
-      reco_solutions: first_group_reco_solutions,
-      data_api_recos: []
-    })
+const grouped_recommandations = computed(() => {
+  const first_group_recommandations = {
+    title: 'Aucun développement, ni budget',
+    recommandations: [] as Recommandation[],
+    displaySubProducts: false
   }
-  if (
-    second_group_reco_solutions.length ||
-    dataApiNotProvidedByARecoSolution.value.length
-  ) {
-    groups.push({
-      title: 'Avec des moyens techniques ou un éditeur de logiciel',
-      with_provided_data_api: true,
-      reco_solutions: second_group_reco_solutions,
-      data_api_recos: dataApiNotProvidedByARecoSolution.value
-    })
+
+  const second_group_recommandations = {
+    title: 'Avec des moyens techniques ou un éditeur de logiciel',
+    recommandations: [] as Recommandation[],
+    displaySubProducts: true
+  }
+
+  recommandations.value?.forEach((recommandation) => {
+    if (recommandation.budget_slugs.includes('aucun-developpement-ni-budget')) {
+      first_group_recommandations.recommandations.push(recommandation)
+    } else {
+      second_group_recommandations.recommandations.push(recommandation)
+    }
+  })
+
+  const groups = []
+
+  if (first_group_recommandations.recommandations.length > 0) {
+    groups.push(first_group_recommandations)
+  }
+
+  if (second_group_recommandations.recommandations.length > 0) {
+    groups.push(second_group_recommandations)
   }
 
   return groups

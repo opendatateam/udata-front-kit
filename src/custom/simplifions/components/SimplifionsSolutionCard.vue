@@ -10,7 +10,7 @@
       <div class="fr-card__body">
         <div class="fr-card__content">
           <div class="fr-grid-row">
-            <SimplifionsSolutionTag v-if="!imageUrl" :solution="solution" />
+            <SimplifionsSolutionTag v-if="!imageUrl" :topic-solution="topic" />
             <DraftTag v-if="topic.private" class="fr-ml-auto" />
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
@@ -32,7 +32,10 @@
             class="card-image fr-responsive-img fr-ratio-16x9"
           />
           <div class="topic-image-overlay"></div>
-          <SimplifionsSolutionTag :solution="solution" class="badge-absolute" />
+          <SimplifionsSolutionTag
+            :topic-solution="topic"
+            class="badge-absolute"
+          />
         </div>
       </div>
     </div>
@@ -43,8 +46,8 @@
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
-import type { SimplifionsSolutionsExtras } from '../model/solution'
-import { gristImageUrl } from './simplifions_utils'
+import { grist } from '../grist.ts'
+import type { TopicSolutionsExtras } from '../model/topics'
 import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -57,13 +60,11 @@ const props = defineProps({
   }
 })
 
-const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
-  'simplifions-solutions'
+const solution = (props.topic.extras as TopicSolutionsExtras)[
+  'simplifions-v2-solutions'
 ]
 
-const imageUrl = solution?.Image_principale?.[0]
-  ? gristImageUrl(solution.Image_principale[0])
-  : ''
+const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 </script>
 
 <style scoped>
