@@ -55,7 +55,9 @@ const indicatorForGraph = computed(() => {
     id: props.indicator.id,
     unite: metadata?.unite ?? 'na',
     summable: metadata?.summable ?? false,
-    enableVisualisation: metadata?.['enable_visualization'] ?? false
+    enableVisualisation: metadata?.['enable_visualization'] ?? false,
+    yStartAtZero: metadata?.['y_start_at_zero'] ?? false,
+    ignoreFormatBigNumber: metadata?.['ignore_format_big_number'] ?? false
   }
 
   return formatted
