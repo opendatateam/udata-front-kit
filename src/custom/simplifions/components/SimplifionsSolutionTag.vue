@@ -3,9 +3,9 @@
     :class="`fr-badge fr-badge--sm fr-mb-2w fr-badge--no-icon ${isPublic ? 'fr-badge--success' : 'fr-badge--info'}`"
   >
     <span class="font-weight-normal">{{ tagText }}</span>
-    <span v-if="solution?.operateur_nom">
+    <span v-if="operatorName">
       <span class="fr-ml-1v font-weight-normal"> | </span>
-      {{ solution.operateur_nom }}
+      {{ operatorName }}
     </span>
   </p>
 </template>
@@ -21,11 +21,15 @@ const props = defineProps({
 })
 
 const isPublic = computed(() => {
-  return props.solution.is_public
+  return props.solution.Public_ou_prive === 'Public'
 })
 
 const tagText = computed(() => {
   return isPublic.value ? 'Solution publique' : 'Solution privée'
+})
+
+const operatorName = computed(() => {
+  return props.solution?.Nom_de_l_operateur?.[0]
 })
 </script>
 

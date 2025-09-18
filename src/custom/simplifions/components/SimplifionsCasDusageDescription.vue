@@ -187,6 +187,7 @@
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
+import grist from '../grist'
 import type {
   RecoSolution,
   SimplifionsCasUsagesExtras,
@@ -202,8 +203,19 @@ const props = defineProps<{
 }>()
 
 const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
-  'simplifions-cas-d-usages'
+  'simplifions-v2-cas-d-usages'
 ]
+
+console.log(casUsage)
+
+grist
+  .getRecord('Cas_d_usages', casUsage.id)
+  .then((data) => {
+    console.log(data)
+  })
+  .catch((error) => {
+    console.error(error)
+  })
 
 const customDescriptionsForDataApi =
   casUsage.descriptions_api_et_donnees_utiles.reduce(

@@ -2,6 +2,11 @@ import type { TopicExtras } from '@/model/topic'
 import type { SimplifionsDataOrApi } from './cas_usage'
 
 export interface SimplifionsSolution {
+  id: number
+  Image: string | null
+  Nom_de_l_operateur: string
+  Public_ou_prive: string
+  // old fields
   Image_principale: string | null
   Legende_image_principale: string
   Prix_: string
@@ -20,5 +25,5 @@ export interface SimplifionsSolution {
 }
 
 export interface SimplifionsSolutionsExtras extends TopicExtras {
-  'simplifions-solutions': SimplifionsSolution
+  'simplifions-v2-solutions': SimplifionsSolution
 }

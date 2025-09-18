@@ -43,8 +43,8 @@
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
+import grist from '../grist'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
-import { gristImageUrl } from './simplifions_utils'
 import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -58,12 +58,10 @@ const props = defineProps({
 })
 
 const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
-  'simplifions-solutions'
+  'simplifions-v2-solutions'
 ]
 
-const imageUrl = solution?.Image_principale?.[0]
-  ? gristImageUrl(solution.Image_principale[0])
-  : ''
+const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 </script>
 
 <style scoped>

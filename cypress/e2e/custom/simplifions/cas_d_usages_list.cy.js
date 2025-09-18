@@ -52,7 +52,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.expectActionToCallApi(
       () => cy.get('input#search-topic').type('Aides sociales des CCAS'),
       'topics',
-      'q=Aides+sociales+des+CCAS&tag=simplifions-cas-d-usages'
+      'q=Aides+sociales+des+CCAS&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -60,7 +60,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.expectActionToCallApi(
       () => cy.selectFilterValue('À destination de :', 'Communes'),
       'topics',
-      'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-fournisseurs-de-service-communes&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -72,7 +72,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
           'Particuliers'
         ),
       'topics',
-      'tag=simplifions-target-users-particuliers&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-target-users-particuliers&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -84,7 +84,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
           'Aucun développement, ni budget'
         ),
       'topics',
-      'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-budget-aucun-developpement-ni-budget&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -96,7 +96,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
           'Accès facile'
         ),
       'topics',
-      'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-types-de-simplification-acces-facile&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -117,7 +117,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-cas-d-usages&.+&include_private=true/
+        /tag=simplifions-v2-cas-d-usages&.+&include_private=true/
       )
     })
   })

@@ -129,7 +129,7 @@
       <div class="example-image fr-content-media__img">
         <img
           :alt="solution.Legende_image_principale"
-          :src="gristImageUrl(solution.Image_principale?.[0])"
+          :src="grist.imageUrl(solution.Image_principale?.[0])"
           class="fr-responsive-img fr-ratio-16x9"
         />
       </div>
@@ -294,9 +294,9 @@ import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components'
 import { onMounted, ref } from 'vue'
+import grist from '../grist'
 import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
 import type { SimplifionsSolutionsExtras } from '../model/solution'
-import { gristImageUrl } from './simplifions_utils'
 import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
 import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
@@ -307,7 +307,7 @@ const props = defineProps<{
 }>()
 
 const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
-  'simplifions-solutions'
+  'simplifions-v2-solutions'
 ]
 
 // Reactive variables for cas d'usages
