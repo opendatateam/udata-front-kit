@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
-import { DatasetCard } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
+import { DatasetCard } from '@datagouv/components-next'
 import { toRef } from 'vue'
 
 import { ResolvedFactor } from '@/model/topic'
@@ -53,7 +53,7 @@ onMounted(async () => {
       params: { item_id: datasetContent.id }
     }"
     :show-description="false"
-    class="dataset-card fr-m-0"
+    class="dataset-card fr-my-2w fr-mx-0"
   />
   <IndicatorDatasetCard
     v-if="IndicatorDatasetCard && datasetContent && datasetIsIndicator"
