@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "@datagouv/components": "^2.0.7",
-    "@ecolabdata/tabular-dataviz": "^1.1.0",
     "@datagouv/components-next": "^0.0.32",
+    "@ecolabdata/tabular-dataviz": "^1.1.0",
     "@gouvfr/dsfr": "1.11.2",
     "@gouvminint/vue-dsfr": "^8.6.0",
     "@json2csv/plainjs": "^7.0.6",
