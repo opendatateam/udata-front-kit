@@ -1,5 +1,5 @@
-import type { ContactPointRole } from '@/model/contactPoint'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
+import type { ContactPointRole } from '@datagouv/components-next'
 
 export default class ContactPointAPI extends DatagouvfrAPI {
   endpoint = 'contacts'

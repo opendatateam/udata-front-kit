@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import {
+  AnimatedLoader,
   AppLink,
-  InformationPanel,
+  DatasetInformationPanel,
+  DatasetQuality,
   OrganizationNameWithCertificate,
-  QualityComponent,
   ReadMore,
-  Well
-} from '@datagouv/components'
+  SimpleBanner
+} from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref } from 'vue'
 
@@ -123,7 +124,7 @@ onMounted(() => {
           class="fr-grid-row fr-grid-row--middle"
         >
           <OrganizationLogo :object="dataset" :size="32" class="fr-mr-1-5v" />
-          <p class="fr-col fr-m-0">
+          <p class="fr-col fr-m-0 min-width-0">
             <a class="fr-link" :href="dataset.organization.page">
               <OrganizationNameWithCertificate
                 :organization="dataset.organization"
@@ -172,7 +173,7 @@ onMounted(() => {
             </code>
           </p>
         </template>
-        <QualityComponent
+        <DatasetQuality
           v-if="config.website.show_quality_component"
           :quality="dataset.quality"
         />
@@ -222,10 +223,9 @@ onMounted(() => {
 
       <!-- Discussions -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <Well
+        <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
-          color="blue-cumulus"
-          weight="regular"
+          type="primary"
         >
           <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
             <div class="fr-col-12 fr-col-lg-8">
@@ -244,7 +244,7 @@ onMounted(() => {
               />
             </div>
           </div>
-        </Well>
+        </SimpleBanner>
         <DiscussionsList v-if="showDiscussions" :subject="dataset" />
       </DsfrTabContent>
 
@@ -256,11 +256,12 @@ onMounted(() => {
           "
           :dataset="dataset"
         />
-        <InformationPanel
-          v-if="dataset && license"
-          :dataset="dataset"
-          :license="license"
-        />
+        <Suspense>
+          <DatasetInformationPanel :dataset="dataset" />
+          <template #fallback>
+            <AnimatedLoader />
+          </template>
+        </Suspense>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
