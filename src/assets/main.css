@@ -76,6 +76,10 @@ body {
   overflow: hidden;
 }
 
+.min-width-0 {
+  min-width: 0;
+}
+
 /* FONT CUSTOM */
 .uppercase {
   text-transform: uppercase;

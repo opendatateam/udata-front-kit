@@ -1,6 +1,6 @@
 import { useSpatialStore } from '@/store/SpatialStore'
 import { usePageConf } from '@/utils/config'
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 import type { ComputedRef } from 'vue'
 import type {
   Indicator,
@@ -28,8 +28,9 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   watch(
     indicator,
     () => {
-      const extras: IndicatorExtras =
-        indicator.value?.extras?.['ecospheres-indicateurs']
+      const extras = indicator.value?.extras?.['ecospheres-indicateurs'] as
+        | IndicatorExtras
+        | undefined
       if (extras) {
         unite.value = extras.unite
         mailles.value = (extras.mailles_geographiques || [])
