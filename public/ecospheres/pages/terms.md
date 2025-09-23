@@ -2,7 +2,7 @@
 
 ### Éditeur
 
-_ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable (CGDD).
+_ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’Ecolab du Commissariat Général au Développement Durable (CGDD).
 
 **Commissariat Général au Développement Durable**\
 Tour Séquoïa\
@@ -46,7 +46,7 @@ _ecologie_.**data**.**gouv**._fr_ permet :
 
 _ecologie_.**data**.**gouv**._fr_ diffuse des informations publiques et les données d’intérêt public publiées par les contributeurs qui peuvent être mises à disposition en téléchargement ou référencées par un lien. Seules les publications légales font foi, notamment au Journal officiel de la République française ou aux recueils des actes administratifs des préfectures.
 
-_ecologie_.**data**.**gouv**._fr_ n’a pas vocation à diffuser des données publicitaires, de promotion d’intérêts privés, contrevenant à l’ordre public ou, plus généralement, illicite. L’équipe Écosphères est susceptible, le cas échéant, sans préavis, de supprimer ou rendre impossible l’accès à de telles données.
+_ecologie_.**data**.**gouv**._fr_ n’a pas vocation à diffuser des données publicitaires, de promotion d’intérêts privés, contrevenant à l’ordre public ou, plus généralement, illicite. L’Ecolab est susceptible, le cas échéant, sans préavis, de supprimer ou rendre impossible l’accès à de telles données.
 
 Le CGDD encourage les contributeurs à fiabiliser et documenter les données et les bouquets de données qu’ils publient. Les autorités administratives actualisent les bases de données qu’elles publient, conformément à l’article L. 312-1-1 du CRPA.
 
@@ -74,7 +74,7 @@ Les contributeurs publiant un commentaire dans une discussion cèdent leurs droi
 
 ##### Utilisation du formulaire de contact
 
-Le formulaire de contact permet de contacter l’équipe Écosphères et n’a pas pour objet de recevoir des demandes relatives à la situation individuelle d’un usager dans ses relations avec une autorité administrative. Elle n’est pas non plus un moyen direct de contacter un contributeur.
+Le formulaire de contact permet de contacter l’Ecolab et n’a pas pour objet de recevoir des demandes relatives à la situation individuelle d’un usager dans ses relations avec une autorité administrative. Elle n’est pas non plus un moyen direct de contacter un contributeur.
 
 #### Engagements et responsabilité du CGDD
 
