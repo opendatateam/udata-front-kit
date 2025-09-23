@@ -1,4 +1,4 @@
-# Mentions Légales
+## Mentions Légales
 
 ### Éditeur
 
@@ -22,11 +22,11 @@ Code APE 2620Z\
 N° TVA : FR 22 424 761 419\
 Siège social : 2 rue Kellermann - 59100 Roubaix - France
 
-# Conditions générales d'utilisation
+## Conditions générales d'utilisation
 
 Le présent document a pour objet de régler les relations entre les différents intervenants sur le service. L'utilisation du service est libre, facultative et gratuite, sous réserve de l'acceptation et du respect des présentes conditions générales d’utilisation par l’utilisateur.
 
-## Présentation du service
+### Présentation du service
 
 _ecologie_.**data**.**gouv**._fr_ est une application web adossée à la plateforme **data**.**gouv**._fr_. Son interface permet un accès centralisé aux données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. Un bouquet de données est un ensemble de données contextualisées répondant au besoin spécifique d’une politique publique.
 
@@ -38,11 +38,11 @@ _ecologie_.**data**.**gouv**._fr_ permet :
 - la consultation ou le téléchargement des données de l’univers _ecologie_.**data**.**gouv**._fr_ par tout utilisateur,
 - une discussion autour des données après identification à partir d’un compte **data**.**gouv**._fr_.
 
-## Responsabilités
+### Responsabilités
 
-### Code de conduite et responsabilité des contributeurs
+#### Code de conduite et responsabilité des contributeurs
 
-### Règles générales
+#### Règles générales
 
 _ecologie_.**data**.**gouv**._fr_ diffuse des informations publiques et les données d’intérêt public publiées par les contributeurs qui peuvent être mises à disposition en téléchargement ou référencées par un lien. Seules les publications légales font foi, notamment au Journal officiel de la République française ou aux recueils des actes administratifs des préfectures.
 
@@ -54,7 +54,7 @@ Les contributeurs publiant un bouquet de données ou un jeu de données remonté
 
 Les contributeurs sont seuls responsables des contenus qu’ils publient directement depuis _ecologie_.**data**.**gouv**._fr_.
 
-### Données à caractère personnel
+#### Données à caractère personnel
 
 Les jeux ou bouquets de données contenant des données à caractère personnel, c’est-à-dire des données, y compris non nominatives, permettant l’identification directe ou indirecte de personnes physiques, ne peuvent pas être diffusés par _ecologie_.**data**.**gouv**._fr_ sauf si les personnes concernées y ont consenti ou si une disposition législative ou les articles L. 312-1-2 et D. 312-1-3 du CRPA le permettent.
 
@@ -62,23 +62,23 @@ Le contributeur publiant des jeux ou bouquets de données est responsable des je
 
 Le réutilisateur de telles données doit se conformer à la législation relative à la protection des données à caractère personnel en vigueur dans son territoire de résidence et respecter les stipulations pertinentes de la licence attachée à ces données.
 
-### Licences
+#### Licences
 
 Les ressources des jeux de données sont soumises à la licence choisie par le contributeur publiant les données à partir de **data**.**gouv**._fr_ et affichée sur la page de chaque jeu de données.
 
-### Publication de commentaire
+#### Publication de commentaire
 
 Les discussions ont vocation à porter sur le jeu ou le bouquet de données publié. Les contributeurs ne publient pas de messages de nature publicitaire ou promotionnelle, à caractère raciste ou diffamatoire, grossier ou injurieux, agressif ou violent ou de façon générale qui contreviendraient aux bonnes mœurs, l’ordre public ou aux dispositions légales en vigueur.
 
 Les contributeurs publiant un commentaire dans une discussion cèdent leurs droits de propriété intellectuelle sur ce commentaire de façon non exclusive, à titre gracieux, pour le monde entier, pour toute la durée de ces droits.
 
-### Utilisation du formulaire de contact
+#### Utilisation du formulaire de contact
 
 Le formulaire de contact permet de contacter l’équipe Écosphères et n’a pas pour objet de recevoir des demandes relatives à la situation individuelle d’un usager dans ses relations avec une autorité administrative. Elle n’est pas non plus un moyen direct de contacter un contributeur.
 
-### Engagements et responsabilité du CGDD
+#### Engagements et responsabilité du CGDD
 
-### Qualité de service et facilités offertes
+#### Qualité de service et facilités offertes
 
 Le CGDD grâce à l’appui opérationnel des équipes de **data**.**gouv**._fr_ s’efforce de garantir la disponibilité de la plateforme 99,5 % du temps mensuel, apprécié au terme de chaque mois.
 
@@ -90,7 +90,7 @@ Le CGDD et l’équipe de **data**.**gouv**._fr_ s’engagent à prendre toutes 
 
 Le CGDD se réserve également la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire. L’indisponibilité de la plateforme ne donne droit à aucune indemnité.
 
-### Responsabilité du CGDD
+#### Responsabilité du CGDD
 
 Les informations publiées sur _ecologie_.**data**.**gouv**._fr_ ne sauraient engager la responsabilité du CGDD, l’utilisateur y ayant recours en ayant conscience des potentielles erreurs ou omissions qu’elles peuvent comporter.
 
@@ -98,25 +98,25 @@ Nous nous efforçons de livrer des données de la meilleure qualité possible. T
 
 Le CGDD n’effectue pas de contrôle a priori sur les publications des autorités administratives ou des contributeurs sur la plateforme. Dès que le CGDD a connaissance de contenus illicites, le CGDD agit rapidement pour retirer ces contenus ou en rendre l’accès impossible. Tout utilisateur peut signaler un contenu non conforme aux présentes conditions d’utilisation. Le CGDD se réserve notamment la possibilité de supprimer ou de rendre inaccessibles, sans préavis, les contributions sans lien avec l’activité de la plateforme, publiées aux fins d’entraver le bon fonctionnement de la plateforme, de publicité ou de promotion, de propagande ou de prosélytisme et toute contribution contrevenant aux lois et règlements en vigueur. Le CGDD se réserve également la possibilité de supprimer le profil d’un contributeur et de refuser que certaines personnes aient accès à la plateforme, en cas de violation des présentes conditions d’utilisation.
 
-### Contenus proposés par le CGDD
+#### Contenus proposés par le CGDD
 
 Les contenus proposés par le CGDD sont sous [Licence Ouverte](https://github.com/etalab/licence-ouverte/blob/master/LO.md), à l’exception des logos et des représentations iconographiques et photographiques qui peuvent être régis par leurs licences propres.
 
 Le code source de la plateforme est libre et disponible ici : https://github.com/opendatateam/udata-front-kit
 
-### Évolution des conditions d’utilisation
+#### Évolution des conditions d’utilisation
 
 Les termes des présentes conditions d’utilisation peuvent être amendés à tout moment, sans préavis, en fonction des modifications apportées à la plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire.
 
-### Vie privée
+#### Vie privée
 
-### Cookies
+#### Cookies
 
 Le site dépose des cookies de mesure d’audience (nombre de visites, pages consultées), respectant les conditions d’exemption du consentement de l’internaute définies par la recommandation « Cookies » de la Commission nationale informatique et libertés (CNIL) ; il utilise Matomo, un outil libre, paramétré pour ce faire. Cela signifie, notamment, que ces cookies ne servent qu’à la production de statistiques anonymes et ne permettent pas de suivre la navigation de l’internaute sur d’autres sites.
 
 Le site dépose également des cookies de navigation, aux fins strictement techniques, qui ne sont pas conservés.
 
-### Données à caractère personnel
+#### Données à caractère personnel
 
 La consultation des jeux ou bouquet de données (y compris leur téléchargement) ne nécessite pas de s’inscrire, ni de s’authentifier.
 
@@ -142,7 +142,7 @@ Tour Séquoia, 1 place Carpeaux\
 
 En cas d’absence de réponse dans le délai d’un mois ou si vous n’êtes pas satisfait de la réponse apportée, vous pouvez également ouvrir une réclamation auprès de la [CNIL](https://www.cnil.fr/fr).
 
-## Textes de références
+### Textes de références
 
 [Livre III du code des relations entre le public et l’administration](https://www.legifrance.gouv.fr/affichCode.do;jsessionid=2B8CFC0D49E08E4D1843153F6E476CA7.tpdila11v_2?idSectionTA=LEGISCTA000031367685&cidTexte=LEGITEXT000031366350&dateTexte=20170808)
 
