@@ -110,13 +110,13 @@ Les termes des présentes conditions d’utilisation peuvent être amendés à t
 
 #### Vie privée
 
-#### Cookies
+##### Cookies
 
 Le site dépose des cookies de mesure d’audience (nombre de visites, pages consultées), respectant les conditions d’exemption du consentement de l’internaute définies par la recommandation « Cookies » de la Commission nationale informatique et libertés (CNIL) ; il utilise Matomo, un outil libre, paramétré pour ce faire. Cela signifie, notamment, que ces cookies ne servent qu’à la production de statistiques anonymes et ne permettent pas de suivre la navigation de l’internaute sur d’autres sites.
 
 Le site dépose également des cookies de navigation, aux fins strictement techniques, qui ne sont pas conservés.
 
-#### Données à caractère personnel
+##### Données à caractère personnel
 
 La consultation des jeux ou bouquet de données (y compris leur téléchargement) ne nécessite pas de s’inscrire, ni de s’authentifier.
 
