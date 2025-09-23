@@ -2,7 +2,7 @@
 
 ### Éditeur
 
-_ecologie_.**data.gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable (CGDD).
+_ecologie_.**data**.**gouv**._fr_ est un site du Ministère en charge du Développement Durable, édité et opéré par l’équipe Écosphères du Commissariat Général au Développement Durable (CGDD).
 
 **Commissariat Général au Développement Durable**\
 Tour Séquoïa\
@@ -15,7 +15,7 @@ Contact : [ecospheres@developpement-durable.gouv.fr](mailto:ecospheres@developpe
 
 ### Prestataire d’hébergement
 
-Le site \*ecologie.**\*data.gouv**._fr_ est hébergé par la société OVH dont les serveurs se situent en France.
+Le site _ecologie_.**data**.**gouv**._fr_ est hébergé par la société OVH dont les serveurs se situent en France.
 
 RCS Lille Métropole 424 761 419 00045\
 Code APE 2620Z\
@@ -28,15 +28,15 @@ Le présent document a pour objet de régler les relations entre les différents
 
 ## Présentation du service
 
-_ecologie_.**data.gouv**._fr_ est une application web adossée à la plateforme **data.gouv**._fr_. Son interface permet un accès centralisé aux données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. Un bouquet de données est un ensemble de données contextualisées répondant au besoin spécifique d’une politique publique.
+_ecologie_.**data**.**gouv**._fr_ est une application web adossée à la plateforme **data**.**gouv**._fr_. Son interface permet un accès centralisé aux données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. Un bouquet de données est un ensemble de données contextualisées répondant au besoin spécifique d’une politique publique.
 
-_ecologie_.**data.gouv**._fr_ permet :
+_ecologie_.**data**.**gouv**._fr_ permet :
 
 - la consultation de bouquets de données par tout utilisateur,
-- la publication de bouquets de données après identification à partir d’un compte **data.gouv**._fr_,
-- une discussion autour des bouquets de données après identification à partir d’un compte **data.gouv**._fr_,
-- la consultation ou le téléchargement des données de l’univers _ecologie_.**data.gouv**._fr_ par tout utilisateur,
-- une discussion autour des données après identification à partir d’un compte **data.gouv**._fr_.
+- la publication de bouquets de données après identification à partir d’un compte **data**.**gouv**._fr_,
+- une discussion autour des bouquets de données après identification à partir d’un compte **data**.**gouv**._fr_,
+- la consultation ou le téléchargement des données de l’univers _ecologie_.**data**.**gouv**._fr_ par tout utilisateur,
+- une discussion autour des données après identification à partir d’un compte **data**.**gouv**._fr_.
 
 ## Responsabilités
 
@@ -44,27 +44,27 @@ _ecologie_.**data.gouv**._fr_ permet :
 
 ### Règles générales
 
-_ecologie_.**data.gouv**._fr_ diffuse des informations publiques et les données d’intérêt public publiées par les contributeurs qui peuvent être mises à disposition en téléchargement ou référencées par un lien. Seules les publications légales font foi, notamment au Journal officiel de la République française ou aux recueils des actes administratifs des préfectures.
+_ecologie_.**data**.**gouv**._fr_ diffuse des informations publiques et les données d’intérêt public publiées par les contributeurs qui peuvent être mises à disposition en téléchargement ou référencées par un lien. Seules les publications légales font foi, notamment au Journal officiel de la République française ou aux recueils des actes administratifs des préfectures.
 
-_ecologie_.**data.gouv**._fr_ n’a pas vocation à diffuser des données publicitaires, de promotion d’intérêts privés, contrevenant à l’ordre public ou, plus généralement, illicite. L’équipe Écosphères est susceptible, le cas échéant, sans préavis, de supprimer ou rendre impossible l’accès à de telles données.
+_ecologie_.**data**.**gouv**._fr_ n’a pas vocation à diffuser des données publicitaires, de promotion d’intérêts privés, contrevenant à l’ordre public ou, plus généralement, illicite. L’équipe Écosphères est susceptible, le cas échéant, sans préavis, de supprimer ou rendre impossible l’accès à de telles données.
 
 Le CGDD encourage les contributeurs à fiabiliser et documenter les données et les bouquets de données qu’ils publient. Les autorités administratives actualisent les bases de données qu’elles publient, conformément à l’article L. 312-1-1 du CRPA.
 
-Les contributeurs publiant un bouquet de données ou un jeu de données remonté depuis **data.gouv**._fr_ sont invités à animer la page dédiée ; à cette fin, ils sont notifiés par courriel de chaque nouvelle contribution sur cette page notamment sous la forme de discussion.
+Les contributeurs publiant un bouquet de données ou un jeu de données remonté depuis **data**.**gouv**._fr_ sont invités à animer la page dédiée ; à cette fin, ils sont notifiés par courriel de chaque nouvelle contribution sur cette page notamment sous la forme de discussion.
 
-Les contributeurs sont seuls responsables des contenus qu’ils publient directement depuis _ecologie_.**data.gouv**._fr_.
+Les contributeurs sont seuls responsables des contenus qu’ils publient directement depuis _ecologie_.**data**.**gouv**._fr_.
 
 ### Données à caractère personnel
 
-Les jeux ou bouquets de données contenant des données à caractère personnel, c’est-à-dire des données, y compris non nominatives, permettant l’identification directe ou indirecte de personnes physiques, ne peuvent pas être diffusés par _ecologie_.**data.gouv**._fr_ sauf si les personnes concernées y ont consenti ou si une disposition législative ou les articles L. 312-1-2 et D. 312-1-3 du CRPA le permettent.
+Les jeux ou bouquets de données contenant des données à caractère personnel, c’est-à-dire des données, y compris non nominatives, permettant l’identification directe ou indirecte de personnes physiques, ne peuvent pas être diffusés par _ecologie_.**data**.**gouv**._fr_ sauf si les personnes concernées y ont consenti ou si une disposition législative ou les articles L. 312-1-2 et D. 312-1-3 du CRPA le permettent.
 
-Le contributeur publiant des jeux ou bouquets de données est responsable des jeux ou bouquets de données qu’il publie sur _ecologie_.**data.gouv**._fr_ et s’assure que cette publication est conforme à la législation en vigueur. Il prend toute mesure nécessaire à cette fin et le CGDD l’encourage à mentionner la présence de données à caractère personnel dans la documentation accompagnant le jeu ou le bouquet de données et préciser, lorsqu’elles existent, les restrictions juridiques à la réutilisation.
+Le contributeur publiant des jeux ou bouquets de données est responsable des jeux ou bouquets de données qu’il publie sur _ecologie_.**data**.**gouv**._fr_ et s’assure que cette publication est conforme à la législation en vigueur. Il prend toute mesure nécessaire à cette fin et le CGDD l’encourage à mentionner la présence de données à caractère personnel dans la documentation accompagnant le jeu ou le bouquet de données et préciser, lorsqu’elles existent, les restrictions juridiques à la réutilisation.
 
 Le réutilisateur de telles données doit se conformer à la législation relative à la protection des données à caractère personnel en vigueur dans son territoire de résidence et respecter les stipulations pertinentes de la licence attachée à ces données.
 
 ### Licences
 
-Les ressources des jeux de données sont soumises à la licence choisie par le contributeur publiant les données à partir de **data.gouv**._fr_ et affichée sur la page de chaque jeu de données.
+Les ressources des jeux de données sont soumises à la licence choisie par le contributeur publiant les données à partir de **data**.**gouv**._fr_ et affichée sur la page de chaque jeu de données.
 
 ### Publication de commentaire
 
@@ -80,19 +80,19 @@ Le formulaire de contact permet de contacter l’équipe Écosphères et n’a p
 
 ### Qualité de service et facilités offertes
 
-Le CGDD grâce à l’appui opérationnel des équipes de **data.gouv**._fr_ s’efforce de garantir la disponibilité de la plateforme 99,5 % du temps mensuel, apprécié au terme de chaque mois.
+Le CGDD grâce à l’appui opérationnel des équipes de **data**.**gouv**._fr_ s’efforce de garantir la disponibilité de la plateforme 99,5 % du temps mensuel, apprécié au terme de chaque mois.
 
-Le CGDD et l’équipe de **data.gouv**._fr_ s’engagent à prendre toutes les précautions utiles pour préserver l’intégrité des jeux de données mis à disposition, et notamment empêcher qu’ils soient déformés ou endommagés.
+Le CGDD et l’équipe de **data**.**gouv**._fr_ s’engagent à prendre toutes les précautions utiles pour préserver l’intégrité des jeux de données mis à disposition, et notamment empêcher qu’ils soient déformés ou endommagés.
 
-Le CGDD et l’équipe de **data.gouv**._fr_ s’engagent à prendre toutes les précautions utiles pour préserver les métadonnées de données collectées par moissonnage malgré les pertes d’information occasionnées par ce mécanisme. Les métadonnées de la fiche de métadonnées d’origine restent la source de référence.
+Le CGDD et l’équipe de **data**.**gouv**._fr_ s’engagent à prendre toutes les précautions utiles pour préserver les métadonnées de données collectées par moissonnage malgré les pertes d’information occasionnées par ce mécanisme. Les métadonnées de la fiche de métadonnées d’origine restent la source de référence.
 
-À la seule fin de garantir une meilleure information de l’utilisateur, à travers un meilleur référencement, et sans jamais en dénaturer le sens, le CGDD et l’équipe de **data.gouv**._fr_ se réservent la possibilité de modifier les métadonnées associées à un jeu de données.
+À la seule fin de garantir une meilleure information de l’utilisateur, à travers un meilleur référencement, et sans jamais en dénaturer le sens, le CGDD et l’équipe de **data**.**gouv**._fr_ se réservent la possibilité de modifier les métadonnées associées à un jeu de données.
 
 Le CGDD se réserve également la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire. L’indisponibilité de la plateforme ne donne droit à aucune indemnité.
 
 ### Responsabilité du CGDD
 
-Les informations publiées sur _ecologie.data.gouv.fr_ ne sauraient engager la responsabilité du CGDD, l’utilisateur y ayant recours en ayant conscience des potentielles erreurs ou omissions qu’elles peuvent comporter.
+Les informations publiées sur _ecologie_.**data**.**gouv**._fr_ ne sauraient engager la responsabilité du CGDD, l’utilisateur y ayant recours en ayant conscience des potentielles erreurs ou omissions qu’elles peuvent comporter.
 
 Nous nous efforçons de livrer des données de la meilleure qualité possible. Toutefois, malgré toute notre attention, elles peuvent encore comporter des erreurs ou omissions. Si vous constatez une erreur ou omission parmi ces données, nous vous invitons à nous écrire par courriel à ecospheres@developpement-durable.gouv.fr.
 
@@ -120,13 +120,13 @@ Le site dépose également des cookies de navigation, aux fins strictement techn
 
 La consultation des jeux ou bouquet de données (y compris leur téléchargement) ne nécessite pas de s’inscrire, ni de s’authentifier.
 
-L’inscription à la plateforme nécessite que l’utilisateur communique à l’opérateur de **data.gouv**._fr_ ses prénom et nom, ainsi que son courriel. Le CGDD et l’opérateur de **data.gouv**._fr_ s’engagent à prendre toutes les mesures techniques et organisationnelles nécessaires permettant de garantir la sécurité du courriel de l’utilisateur. Celui-ci n’est jamais communiqué à des tiers, en dehors des cas prévus par la loi.
+L’inscription à la plateforme nécessite que l’utilisateur communique à l’opérateur de **data**.**gouv**._fr_ ses prénom et nom, ainsi que son courriel. Le CGDD et l’opérateur de **data**.**gouv**._fr_ s’engagent à prendre toutes les mesures techniques et organisationnelles nécessaires permettant de garantir la sécurité du courriel de l’utilisateur. Celui-ci n’est jamais communiqué à des tiers, en dehors des cas prévus par la loi.
 
 L’historique de consultation de l’utilisateur n’est jamais rendu public, ni communiqué à des tiers, en dehors des cas prévus par la loi.
 
 Les données sont conservées pour une durée de 3 ans après le dernier contact avec le contributeur inscrit.
 
-En application de la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, l’utilisateur dispose d’un droit d’accès, de rectification, de limitation et d’opposition auprès de l’opérateur de **data.gouv**._fr_.
+En application de la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, l’utilisateur dispose d’un droit d’accès, de rectification, de limitation et d’opposition auprès de l’opérateur de **data**.**gouv**._fr_.
 
 Pour toute information ou pour exercer vos droits, vous pouvez nous contacter :
 
