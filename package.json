@@ -53,6 +53,8 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.26.5",
     "@eslint/js": "^9.18.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.13",
     "@testing-library/vue": "^8.1.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/hast": "^3.0.4",
@@ -77,6 +79,7 @@
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "start-server-and-test": "^2.0.8",
+    "tailwindcss": "^4.1.13",
     "typescript": "~5.7.3",
     "typescript-eslint": "^8.20.0",
     "unplugin-auto-import": "^19.0.0",
