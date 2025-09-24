@@ -11,7 +11,7 @@ const datagouvResponseBuilder = (data) => {
 
 const datagouvUrlRegex = (resourceName, resourceId = null) => {
   return new RegExp(
-    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
+    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}/$` : ''}.*`
   )
 }
 
@@ -72,10 +72,19 @@ Cypress.Commands.add('mockMatomo', () => {
 })
 
 Cypress.Commands.add('mockStaticDatagouv', () => {
-  cy.intercept('GET', 'https://static.data.gouv.fr/**', {
+  cy.intercept('GET', 'https://*static.data.gouv.fr/**', {
     statusCode: 200,
     body: '// Mocked static.data.gouv.fr content'
   }).as('mockStaticDatagouv')
+
+  // Mock avatar API calls
+  cy.intercept('GET', datagouvUrlRegex('avatars'), {
+    statusCode: 200,
+    body: '// Mocked avatar image',
+    headers: {
+      'Content-Type': 'image/png'
+    }
+  }).as('mockAvatars')
 })
 
 Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
