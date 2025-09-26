@@ -47,8 +47,8 @@ Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) s’
 
 Les fondements de ce cadre sont : 
 
-- la déclaration des droits de l’homme et des citoyens, article 15 : *La Société a le droit de demander compte à tout Agent public de son administration.*
-- la convention d’Aarhus (1998), article 4-1 : […] *les autorités publiques mettent à la disposition du public, dans le cadre de leur législation nationale, les informations sur l'environnement qui leur sont demandées* […]
+- La déclaration des droits de l’homme et des citoyens, article 15 : *« La société a le droit de demander compte à tout agent public de son administration »*.
+- La convention d’Aarhus (1998), article 4-1 : *« […] les autorités publiques mettent à la disposition du public, dans le cadre de leur législation nationale, les informations sur l'environnement qui leur sont demandées […] »*.
 
 Le cadre juridique de l’open data public repose principalement sur les textes applicables en matière d'accès, de diffusion et de réutilisation des documents administratifs :
 
