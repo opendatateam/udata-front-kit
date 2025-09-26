@@ -25,6 +25,12 @@ L’Ecolab est le laboratoire d’innovation au service de la transition écolog
 - Vice-présidence et le secrétariat du Conseil national de l’information géolocalisée (CNIG), qui fédère les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
 - Co-pilote de la Mission Connaissance, dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
 
+<div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
+<img width="173,5" height="189" alt="image" src="https://github.com/user-attachments/assets/0a9d9aaf-45bd-4c78-b2d3-81cdf709b3c2" />
+<img width="319" height="189" alt="image" src="https://github.com/user-attachments/assets/2366cdba-d074-4e38-b879-6e5c04e112d5" />
+<img width="240" height="246" alt="image" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f" />
+</div>
+
 ### 🔎 Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) :
 
 Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir sa stratégie en matière de données, d’algorithmes et de codes sources, de coordonner les acteurs concernés, et de servir de point de contact pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
@@ -32,12 +38,6 @@ Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 
 L’AMDAC est responsable de la mise en œuvre de la politique publique de la donnée. À ce titre, il veille à ce que les données soient accessibles et compréhensibles, diffusées en open data lorsque c’est possible, ou partagées entre ayants droit dans le cas contraire. Il s’assure également que ces données soient mobilisées de manière efficace au service des politiques publiques, des autres administrations et, au-delà, de la société civile pour accélérer la transition écologique. 
 
 C’est dans cette fonction que s’insère *ecologie*.**data.gouv**.*fr*.
-
-<div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-<img width="173,5" height="189" alt="image" src="https://github.com/user-attachments/assets/0a9d9aaf-45bd-4c78-b2d3-81cdf709b3c2" />
-<img width="319" height="189" alt="image" src="https://github.com/user-attachments/assets/2366cdba-d074-4e38-b879-6e5c04e112d5" />
-<img width="240" height="246" alt="image" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f" />
-</div>
 
 ## Le droit des données
 
