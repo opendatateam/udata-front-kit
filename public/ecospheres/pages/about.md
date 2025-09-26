@@ -10,7 +10,7 @@ Face à l’urgence, la planification écologique mobilise l’ensemble des acte
 - Une sélection d'[indicateurs territoriaux](https://ecologie.data.gouv.fr/indicators) de planification écologique, validés par des experts métiers, accessibles via une API dédiée.
 - Un espace de [partage des usages](https://ecologie.data.gouv.fr/bouquets), afin de diffuser des actions nationales et territoriales concrètes.
 
-Le catalogue est développé par l’[Ecolab](https://greentechinnovation.fr/), le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), en collaboration avec l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr) de la Direction interministérielle du numérique (DINUM). 
+Le catalogue est développé par l’[**Ecolab**](https://greentechinnovation.fr/), le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), en collaboration avec l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr) de la Direction interministérielle du numérique (DINUM). 
 
 Il s’inscrit dans la réalisation des politiques publiques portées par le Ministère de la Transition écologique, le Ministère de l’Aménagement du territoire et le Secrétariat général à la planification écologique (SGPE), ainsi que dans les actions phares de la feuille de route ministérielle sur la donnée, les algorithmes et les codes sources.
 
@@ -18,7 +18,7 @@ Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Tran
 
 ## 🖐️ Qui sommes-nous ?
 
-L’Ecolab est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
+L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’[**Ecolab**](https://greentechinnovation.fr/) assure les fonctions suivantes : 
 
 - Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
 - Point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
@@ -62,7 +62,7 @@ Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) peut
 
 [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) est un catalogue ouvert et communautaire qui repose sur la philosophie des communs numériques. Ces communs sont pensés comme des ressources collectives : ouverts à tous, enrichis par chacun et mis au service des politiques publiques.
 
-Dans cet esprit, l’Ecolab du Commissariat Général au Développement Durable (CGDD) a entrepris plusieurs projets et réalisations techniques qui favorisent l’accès, la circulation et la réutilisation des données publiques. Ils traduisent une même ambition : rendre la donnée plus utile et plus accessible pour relever ensemble les grands défis de la transition écologique.
+Dans cet esprit, l’[**Ecolab**](https://greentechinnovation.fr/) du Commissariat Général au Développement Durable (CGDD) a entrepris plusieurs projets et réalisations techniques qui favorisent l’accès, la circulation et la réutilisation des données publiques. Ils traduisent une même ambition : rendre la donnée plus utile et plus accessible pour relever ensemble les grands défis de la transition écologique.
 
 **La brique udata-front-kit**
 
