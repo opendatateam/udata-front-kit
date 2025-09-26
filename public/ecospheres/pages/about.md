@@ -16,7 +16,7 @@ Il s’inscrit dans la réalisation des politiques publiques portées par le Min
 
 Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et de la Pêche à l’occasion du Salon des Maires et des Collectivités locales de 2024.
 
-## Qui sommes-nous ?
+## 🖐️ Qui sommes-nous ?
 
 L’Ecolab est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
 
@@ -39,7 +39,7 @@ L’AMDAC est responsable de la mise en œuvre de la politique publique de la do
 
 C’est dans cette fonction que s’insère *ecologie*.**data.gouv**.*fr*.
 
-## Le droit des données
+## ⚖️ Le droit des données
 
 Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) s’inscrit dans le cadre juridique des données publiques. 
 
@@ -58,7 +58,7 @@ Ce cadre juridique s’applique aux données ouvertes (open data) qui renvoient 
 
 Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) peut accueillir à la fois des données ouvertes et restreintes.
 
-## Le développement des communs numériques
+## 🌐 Le développement des communs numériques
 
 [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) est un catalogue ouvert et communautaire qui repose sur la philosophie des communs numériques. Ces communs sont pensés comme des ressources collectives : ouverts à tous, enrichis par chacun et mis au service des politiques publiques.
 
