@@ -6,9 +6,9 @@
 
 Face à l’urgence, la planification écologique mobilise l’ensemble des acteurs – État, collectivités, entreprises, associations, citoyens – pour bâtir une action cohérente et efficace vis-à-vis des défis contemporains. Confrontées à un exercice d’une forte transversalité, [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr/) soutient toutes les parties prenantes de l’aménagement du territoire. Le catalogue répond à leurs besoins de recherche, d’exploitation et de suivi des données environnementales en proposant :
 
-- un accès centralisé à des [données](https://ecologie.data.gouv.fr/datasets) fiables, actualisées, produites par des acteurs de référence ;
-- une sélection d'[indicateurs territoriaux](https://ecologie.data.gouv.fr/indicators) de planification écologique, validés par des experts métiers, accessibles via une API dédiée ;
-- un espace de partage des usages, afin de diffuser des [actions nationales](https://ecologie.data.gouv.fr/bouquets/indicateurs-de-planification-ecologique-regionale-cops) et [territoriales](https://ecologie.data.gouv.fr/bouquets/iarbre-enraciner-la-resilience-climatique-des-territoires-en-cultivant-les-donnees-1) concrètes.
+- Un accès centralisé à des [données](https://ecologie.data.gouv.fr/datasets) fiables, actualisées, produites par des acteurs de référence.
+- Une sélection d'[indicateurs territoriaux](https://ecologie.data.gouv.fr/indicators) de planification écologique, validés par des experts métiers, accessibles via une API dédiée.
+- Un espace de partage des usages, afin de diffuser des [actions nationales](https://ecologie.data.gouv.fr/bouquets/indicateurs-de-planification-ecologique-regionale-cops) et [territoriales](https://ecologie.data.gouv.fr/bouquets/iarbre-enraciner-la-resilience-climatique-des-territoires-en-cultivant-les-donnees-1) concrètes.
 
 Le catalogue est développé et opéré par l’[Ecolab](https://www.notion.so/A-propos-23f0dc2226f580e0918dd553c6a4f3c9?pvs=21), le laboratoire d’innovation au service de la transition écologique du Commissariat Général au Développement Durable (CGDD), en collaboration avec l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr) de la Direction interministérielle du numérique (DINUM). 
 
