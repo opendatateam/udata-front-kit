@@ -1,4 +1,4 @@
-https://greentechinnovation.fr/mission-connaissance/# À propos de _ecologie_.**data.gouv**._fr_
+À propos de _ecologie_.**data.gouv**._fr_
 
 ## 🌿 Le catalogue de référence des données pour la transition écologique
 
@@ -20,10 +20,10 @@ Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Tran
 
 L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’[**Ecolab**](https://greentechinnovation.fr/) assure les fonctions suivantes : 
 
-- [**Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC)**](https://greentechinnovation.fr/ladministration-ministerielle-des-donnees-des-algorithmes-et-des-codes-sources-amdac/) ;
+- [Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC)](https://greentechinnovation.fr/ladministration-ministerielle-des-donnees-des-algorithmes-et-des-codes-sources-amdac/) ;
 - Vice-présidence et secrétariat du [**Conseil national de l’information géolocalisée (CNIG)**](https://cnig.gouv.fr/), qui fédère les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
 - Point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
-- Co-pilote de la [**Mission Connaissance**](https://greentechinnovation.fr/mission-connaissance/), dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
+- Co-pilote de la [Mission Connaissance](https://greentechinnovation.fr/mission-connaissance/), dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
 
 <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
 <img width="173,5" height="189" alt="image" src="https://github.com/user-attachments/assets/0a9d9aaf-45bd-4c78-b2d3-81cdf709b3c2" />
@@ -31,7 +31,7 @@ L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovat
 <img width="240" height="246" alt="image" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f" />
 </div>
 
-🔎 **Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC)**
+### 🔎 Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC)**
 
 Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir sa stratégie en matière de données, d’algorithmes et de codes sources, de coordonner les acteurs concernés, et de servir de point de contact pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
 
@@ -54,7 +54,7 @@ Le cadre juridique de l’open data public repose principalement sur les textes 
 - La [loi pour une République numérique](https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14), promulguée en 2016, qui fait de l’ouverture des données publiques par défaut la règle.
 - Le [livre Ier du Code de l’environnement](https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006074220/LEGISCTA000006159212/#LEGISCTA000006159212) définit le cadre juridique du droit d’accès à l’information relative à l’environnement.
 
-Ce cadre juridique s’applique aux données ouvertes (open data) qui renvoient aux données, produites par des acteurs publics ou privés, en accès libre, gratuites et facilement réutilisables par toutes et tous. Il définit également certaines exemptions à la règle d’ouverture par défaut des données publiques : ce sont les données restreintes, c’est-à-dire soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel. 
+Ce cadre juridique s’applique aux données ouvertes qui renvoient aux données, produites par des acteurs publics ou privés, en accès libre, gratuites et facilement réutilisables par toutes et tous. Il définit également certaines exemptions à la règle d’ouverture par défaut des données publiques : ce sont les données restreintes, c’est-à-dire soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel. 
 
 Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) peut accueillir à la fois des données ouvertes et restreintes.
 
