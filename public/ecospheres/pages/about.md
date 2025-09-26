@@ -21,7 +21,7 @@ Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Tran
 L’Ecolab est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
 
 - administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
-- point de contact national de la directive européenne INSPIRE qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
+- point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
 - vice-présidence et le secrétariat du Conseil National de l’Information Géolocalisée (CNIG) qui fédèrent les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
 - co-pilote la Mission Connaissance dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
 
