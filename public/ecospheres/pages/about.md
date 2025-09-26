@@ -23,7 +23,7 @@ L’Ecolab est le laboratoire d’innovation au service de la transition écolog
 - administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
 - point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
 - vice-présidence et le secrétariat du Conseil national de l’information géolocalisée (CNIG) qui fédèrent les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
-- co-pilote la Mission Connaissance dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
+- co-pilote de la Mission Connaissance, dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
 
 [En savoir plus ↗️](https://greentechinnovation.fr/) 
 
