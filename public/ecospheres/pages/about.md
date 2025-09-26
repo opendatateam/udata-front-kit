@@ -20,12 +20,10 @@ Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Tran
 
 L’Ecolab est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
 
-- administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
-- point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
-- vice-présidence et le secrétariat du Conseil national de l’information géolocalisée (CNIG) qui fédèrent les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
-- co-pilote de la Mission Connaissance, dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
-
-[En savoir plus ↗️](https://greentechinnovation.fr/) 
+- Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
+- Point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
+- Vice-présidence et le secrétariat du Conseil national de l’information géolocalisée (CNIG), qui fédère les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
+- Co-pilote de la Mission Connaissance, dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
 
 ### 🔎 Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) :
 
@@ -68,7 +66,7 @@ Dans cet esprit, l’Ecolab du Commissariat Général au Développement Durable 
 
 **La brique udata-front-kit**
 
-- Le catalogue s’appuie sur la brique technique udata-front-kit, développée conjointement par l’Ecolab et l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr/) de la DINUM. Le fruit de cette collaboration permet de créer et de diffuser facilement des portails thématiques mettant en valeur la donnée publique. Cette brique technique a notamment été réutilisée par Météo France pour son portail [ *meteo*.**data.gouv**.*fr*](http://meteo.data.gouv.fr). [En savoir plus ↗️](https://github.com/opendatateam/udata-front-kit)
+- Le catalogue s’appuie sur la brique technique [udata-front-kit](https://github.com/opendatateam/udata-front-kit), développée conjointement par l’Ecolab et l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr/) de la DINUM. Le fruit de cette collaboration permet de créer et de diffuser facilement des portails thématiques mettant en valeur la donnée publique. Cette brique technique a notamment été réutilisée par Météo France pour son portail [ *meteo*.**data.gouv**.*fr*](http://meteo.data.gouv.fr).
 
 **Le hub des indicateurs territoriaux**
 
@@ -80,7 +78,7 @@ Dans cet esprit, l’Ecolab du Commissariat Général au Développement Durable 
 
 **ISOmorphe** 
 
-- ISOmorphe est un outil d’harmonisation des métadonnées des fiches XML ISO-19139 à destination des gestionnaires de plateformes GeoNetwork. Il permet d’améliorer significativement leur moissonnage par [ **data.gouv**.*fr*](http://data.gouv.fr). [En savoir plus ↗️](https://isomorphe.data.developpement-durable.gouv.fr/)
+- [ISOmorphe](https://isomorphe.data.developpement-durable.gouv.fr/) est un outil d’harmonisation des métadonnées des fiches XML ISO-19139 à destination des gestionnaires de plateformes GeoNetwork. Il permet d’améliorer significativement leur moissonnage par [ **data.gouv**.*fr*](http://data.gouv.fr).
  
 ## 📩 Contact
 
