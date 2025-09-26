@@ -33,11 +33,11 @@ L’AMDAC est responsable de la mise en œuvre de la politique publique de la do
 
 C’est dans cette fonction que s’insère *ecologie*.**data.gouv**.*fr*.
 
-<p align="center">
+<div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
 <img width="173,5" height="189" alt="image" src="https://github.com/user-attachments/assets/0a9d9aaf-45bd-4c78-b2d3-81cdf709b3c2" />
 <img width="319" height="189" alt="image" src="https://github.com/user-attachments/assets/2366cdba-d074-4e38-b879-6e5c04e112d5" />
 <img width="240" height="246" alt="image" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f" />
-</p>
+</div>
 
 ## Le droit des données
 
