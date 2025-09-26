@@ -14,7 +14,7 @@ Le catalogue est développé et opéré par l’[Ecolab](https://www.notion.so/A
 
 Il s’inscrit dans la réalisation des politiques publiques portées par le Ministère de la Transition Écologique, le Ministère de l’Aménagement du territoire et le Secrétariat Général à la planification écologique (SGPE), ainsi que dans les actions phares de la feuille de route ministérielle sur la donnée, les algorithmes et les codes sources.
 
-Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et de la Pêche à l’occasion du Salon des Maires et des Collectivités locales 2024.
+Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et de la Pêche à l’occasion du Salon des Maires et des Collectivités locales de 2024.
 
 ## Qui sommes-nous ?
 
