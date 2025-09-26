@@ -126,6 +126,7 @@ watch(
 </script>
 
 <template>
+  <div id="tooltips" />
   <SkipLinks ref="skipLinksComp" :links="skipLinks" />
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice

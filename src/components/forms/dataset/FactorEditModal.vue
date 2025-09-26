@@ -47,10 +47,6 @@ const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
   const modalFactor = modalData.value.factor
-  if (!modalFactor?.title.trim()) {
-    formErrors.value.push('title')
-  }
-
   if (props.datasetEditorialization) {
     if (!modalFactor?.title.trim()) {
       formErrors.value.push('title')

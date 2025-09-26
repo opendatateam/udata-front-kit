@@ -1,20 +1,8 @@
-import type { Organization, User } from '@datagouv/components'
+import type { Owned } from '@datagouv/components-next'
 
 import config from '@/config'
 
-// FIXME: this is an ersatz of the Owned type in @datagouv/components,
-// but correctly working with our type system (especially DatasetV2)
-// see also @utils/dataset:useOwnerName
-// https://github.com/datagouv/udata-front/issues/661
-interface HasOwnership {
-  organization?: Organization | null
-  owner?: User | null
-}
-
-export const getOwnerAvatar = (
-  object: HasOwnership,
-  size: number = 32
-): string => {
+export const getOwnerAvatar = (object: Owned, size: number = 32): string => {
   if (object.owner?.avatar_thumbnail != null) {
     return object.owner.avatar_thumbnail
   }

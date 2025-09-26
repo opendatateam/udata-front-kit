@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatRelativeIfRecentDate } from '@datagouv/components'
+import { useFormatDate } from '@datagouv/components-next'
 
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
@@ -40,6 +40,8 @@ import SimplifionsTags from './SimplifionsTags.vue'
 const props = defineProps<{
   topic: Topic
 }>()
+
+const { formatRelativeIfRecentDate } = useFormatDate()
 
 const titleIcon = computed(() => {
   return (props.topic.extras as SimplifionsCasUsagesExtras)[
