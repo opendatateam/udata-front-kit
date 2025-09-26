@@ -18,7 +18,7 @@ Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Tran
 
 ## Qui sommes-nous ?
 
-L’Ecolab est le laboratoire d’innovation au service de la transition écologique du Commissariat Général au Développement Durable (CGDD), direction transversale du Ministère de la transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
+L’Ecolab est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
 
 - administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
 - point de contact national de la directive européenne INSPIRE qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
