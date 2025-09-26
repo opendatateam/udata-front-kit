@@ -6,19 +6,19 @@
 
 Face à l’urgence, la planification écologique mobilise l’ensemble des acteurs – État, collectivités, entreprises, citoyens – pour bâtir une action cohérente et efficace vis-à-vis des défis contemporains. Confrontées à un exercice d’une forte transversalité, [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr/) soutient toutes les parties prenantes de l’aménagement du territoire. Le catalogue répond à leurs besoins de recherche, d’exploitation et de suivi des données environnementales en proposant :
 
-- **un accès centralisé à des [données](https://ecologie.data.gouv.fr/datasets)** fiables, actualisées, produites par des acteurs de référence ;
-- une sélection d’**indicateurs territoriaux** de planification écologique, validés par des experts métiers, accessibles via une API dédiée ;
-- un espace de partage des usages, afin de diffuser des **actions nationales et territoriales concrètes**.
+- un accès centralisé à des [données](https://ecologie.data.gouv.fr/datasets) fiables, actualisées, produites par des acteurs de référence ;
+- une sélection d'[indicateurs territoriaux](https://ecologie.data.gouv.fr/indicators) de planification écologique, validés par des experts métiers, accessibles via une API dédiée ;
+- un espace de partage des usages, afin de diffuser des [actions nationales](https://ecologie.data.gouv.fr/bouquets/indicateurs-de-planification-ecologique-regionale-cops) et [territoriales](https://ecologie.data.gouv.fr/bouquets/iarbre-enraciner-la-resilience-climatique-des-territoires-en-cultivant-les-donnees-1) concrètes.
 
-Le catalogue est développé et opéré par l’**[Ecolab](https://www.notion.so/A-propos-23f0dc2226f580e0918dd553c6a4f3c9?pvs=21)**, le laboratoire d’innovation au service de la transition écologique du **Commissariat Général au Développement Durable (CGDD)**, en collaboration avec l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr) de la Direction interministérielle du numérique (DINUM). 
+Le catalogue est développé et opéré par l’[Ecolab](https://www.notion.so/A-propos-23f0dc2226f580e0918dd553c6a4f3c9?pvs=21), le laboratoire d’innovation au service de la transition écologique du Commissariat Général au Développement Durable (CGDD), en collaboration avec l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr) de la Direction interministérielle du numérique (DINUM). 
 
-Il s’inscrit dans la réalisation des politiques publiques portées par le **Ministère de la Transition Écologique, le Ministère de l’Aménagement du territoire et le Secrétariat Général à la planification écologique (SGPE)**, ainsi que dans les actions phares de la feuille de route ministérielle sur la donnée, les algorithmes et les codes sources.
+Il s’inscrit dans la réalisation des politiques publiques portées par le Ministère de la Transition Écologique, le Ministère de l’Aménagement du territoire et le Secrétariat Général à la planification écologique (SGPE), ainsi que dans les actions phares de la feuille de route ministérielle sur la donnée, les algorithmes et les codes sources.
 
 Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et de la Pêche à l’occasion du Salon des Maires et des Collectivités locales 2024.
 
 ## Qui sommes-nous ?
 
-L’**Ecolab** est le **laboratoire d’innovation** au service de la transition écologique du Commissariat Général au Développement Durable (CGDD), direction transversale du Ministère de la transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
+L’Ecolab est le laboratoire d’innovation au service de la transition écologique du Commissariat Général au Développement Durable (CGDD), direction transversale du Ministère de la transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
 
 - administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
 - point de contact national de la directive européenne INSPIRE qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
@@ -29,7 +29,7 @@ L’**Ecolab** est le **laboratoire d’innovation** au service de la transition
 
 ### 🔎 Zoom sur la fonction d’administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) :
 
-Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir sa stratégie en matière de données, d’algorithmes et de codes sources, de coordonner les acteurs concernés, et de servir de **point de contact** pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
+Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir sa stratégie en matière de données, d’algorithmes et de codes sources, de coordonner les acteurs concernés, et de servir de point de contact pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
 
 L’AMDAC est responsable de la mise en œuvre de la politique publique de la donnée. À ce titre, il veille à ce que les données soient accessibles et compréhensibles, diffusées en open data lorsque c’est possible, ou partagées entre ayants droit dans le cas contraire. Il s’assure également que ces données soient mobilisées de manière efficace au service des politiques publiques, des autres administrations et, au-delà, de la société civile pour accélérer la transition écologique. 
 
@@ -62,13 +62,13 @@ Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) peut
 
 ## Le développement des communs numériques
 
-[ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) est un catalogue ouvert et communautaire qui repose sur la philosophie des **communs numériques.** Ces communs sont pensés comme des ressources collectives : ouverts à tous, enrichis par chacun et mis au service des politiques publiques.
+[ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) est un catalogue ouvert et communautaire qui repose sur la philosophie des communs numériques. Ces communs sont pensés comme des ressources collectives : ouverts à tous, enrichis par chacun et mis au service des politiques publiques.
 
 Dans cet esprit, l’Ecolab du Commissariat Général au Développement Durable (CGDD) a entrepris plusieurs projets et réalisations techniques qui favorisent l’accès, la circulation et la réutilisation des données publiques. Ils traduisent une même ambition : rendre la donnée plus utile et plus accessible pour relever ensemble les grands défis de la transition écologique.
 
 **La brique udata-front-kit**
 
-- Le catalogue s’appuie sur la brique technique **udata-front-kit**, développée conjointement par l’Ecolab et l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr/) de la DINUM. Le fruit de cette collaboration permet de créer et de diffuser facilement des portails thématiques mettant en valeur la donnée publique. Cette brique technique a notamment été réutilisée par Météo France pour son portail [ *meteo*.**data.gouv**.*fr*](http://meteo.data.gouv.fr). [En savoir plus ↗️](https://github.com/opendatateam/udata-front-kit)
+- Le catalogue s’appuie sur la brique technique udata-front-kit, développée conjointement par l’Ecolab et l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr/) de la DINUM. Le fruit de cette collaboration permet de créer et de diffuser facilement des portails thématiques mettant en valeur la donnée publique. Cette brique technique a notamment été réutilisée par Météo France pour son portail [ *meteo*.**data.gouv**.*fr*](http://meteo.data.gouv.fr). [En savoir plus ↗️](https://github.com/opendatateam/udata-front-kit)
 
 **Le hub des indicateurs territoriaux**
 
