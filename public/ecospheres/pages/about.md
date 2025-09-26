@@ -10,7 +10,7 @@ Face à l’urgence, la planification écologique mobilise l’ensemble des acte
 - Une sélection d'[indicateurs territoriaux](https://ecologie.data.gouv.fr/indicators) de planification écologique, validés par des experts métiers, accessibles via une API dédiée.
 - Un espace de [partage des usages](https://ecologie.data.gouv.fr/bouquets), afin de diffuser des actions nationales et territoriales concrètes.
 
-Le catalogue est développé et opéré par l’[Ecolab](https://www.notion.so/A-propos-23f0dc2226f580e0918dd553c6a4f3c9?pvs=21), le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), en collaboration avec l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr) de la Direction interministérielle du numérique (DINUM). 
+Le catalogue est développé et opéré par l’[Ecolab](https://greentechinnovation.fr/), le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), en collaboration avec l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr) de la Direction interministérielle du numérique (DINUM). 
 
 Il s’inscrit dans la réalisation des politiques publiques portées par le Ministère de la Transition écologique, le Ministère de l’Aménagement du territoire et le Secrétariat général à la planification écologique (SGPE), ainsi que dans les actions phares de la feuille de route ministérielle sur la donnée, les algorithmes et les codes sources.
 
