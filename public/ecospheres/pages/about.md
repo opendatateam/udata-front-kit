@@ -22,16 +22,16 @@ L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovat
 
 - Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
 - Point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
-- Vice-présidence et secrétariat du [Conseil national de l’information géolocalisée (CNIG)](https://cnig.gouv.fr/), qui fédère les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
+- Vice-présidence et secrétariat du [**Conseil national de l’information géolocalisée (CNIG)**](https://cnig.gouv.fr/), qui fédère les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
 - Co-pilote de la Mission Connaissance, dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
+
+En savoir plus sur le site de l'[**Ecolab**](https://greentechinnovation.fr/).
 
 <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
 <img width="173,5" height="189" alt="image" src="https://github.com/user-attachments/assets/0a9d9aaf-45bd-4c78-b2d3-81cdf709b3c2" />
 <img width="319" height="189" alt="image" src="https://github.com/user-attachments/assets/2366cdba-d074-4e38-b879-6e5c04e112d5" />
 <img width="240" height="246" alt="image" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f" />
 </div>
-
-En savoir plus sur le site de l'[**Ecolab**](https://greentechinnovation.fr/).
 
 🔎 **Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC)**
 
@@ -76,7 +76,7 @@ Dans cet esprit, l’[**Ecolab**](https://greentechinnovation.fr/) du Commissari
 
 ### La fabrique des standards
 
-La [fabrique des standards](https://guides.data.gouv.fr/guides-de-data.gouv.fr/fabrique-des-standards/la-fabrique-des-standards) désigne le processus de création d'un standard [CNIG](https://cnig.gouv.fr/) avec ses différentes phases et la documentation associée à destination des acteurs de l'élaboration d'un standard (pilotes, animateurs ou participants aux GT). L’utilisation des données pour la transition écologique repose sur un ensemble d’infrastructures numériques, dont beaucoup sont ouvertes pour profiter au plus grand nombre. Parmi celles-ci, les standards de données sont à la fondation des projets. Ils décrivent des modèles de données (différents champs, représentation des données, etc.) afin d’assurer la montée en qualité et l’interopérabilité des données proposées.
+La [fabrique des standards](https://guides.data.gouv.fr/guides-de-data.gouv.fr/fabrique-des-standards/la-fabrique-des-standards) désigne le processus de création d'un standard [**CNIG**](https://cnig.gouv.fr/) avec ses différentes phases et la documentation associée à destination des acteurs de l'élaboration d'un standard (pilotes, animateurs ou participants aux GT). L’utilisation des données pour la transition écologique repose sur un ensemble d’infrastructures numériques, dont beaucoup sont ouvertes pour profiter au plus grand nombre. Parmi celles-ci, les standards de données sont à la fondation des projets. Ils décrivent des modèles de données (différents champs, représentation des données, etc.) afin d’assurer la montée en qualité et l’interopérabilité des données proposées.
 
 ### ISOmorphe 
 
