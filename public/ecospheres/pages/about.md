@@ -1,4 +1,6 @@
-# 🍀 [*ecologie*.data.gouv.*fr*](http://ecologie.data.gouv.fr/), le catalogue de référence des données pour la transition écologique
+# À propos de _ecologie_.**data.gouv**._fr_
+
+## 🍀 Le catalogue de référence des données pour la transition écologique
 
 **Sa mission : rendre les données plus accessibles et plus lisibles pour tous.** 
 
@@ -14,7 +16,7 @@ Il s’inscrit dans la réalisation des politiques publiques portées par le **M
 
 Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et de la Pêche à l’occasion du Salon des Maires et des Collectivités locales 2024.
 
-# Qui sommes-nous ?
+## Qui sommes-nous ?
 
 L’**Ecolab** est le **laboratoire d’innovation** au service de la transition écologique du **Commissariat Général au Développement Durable (CGDD)**, direction transversale du Ministère de la transition écologique. Acteur central de la donnée environnementale, l’Ecolab assure les fonctions suivantes : 
 
@@ -25,7 +27,7 @@ L’**Ecolab** est le **laboratoire d’innovation** au service de la transition
 
 [En savoir plus ↗️](https://greentechinnovation.fr/) 
 
-## 🔎 Zoom sur la fonction d’administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) :
+### 🔎 Zoom sur la fonction d’administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) :
 
 Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir **sa stratégie en matière de données**, d’algorithmes et de codes sources, de **coordonner les acteurs concernés**, et de servir de **point de contact** pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
 
@@ -39,7 +41,7 @@ C’est dans cette fonction que s’insère *ecologie*.**data.gouv**.*fr*.
 <img width="240" height="246" alt="image" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f" />
 </p>
 
-# Le droit des données
+## Le droit des données
 
 Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) s’inscrit dans le cadre juridique des données publiques. 
 
@@ -58,7 +60,7 @@ Ce cadre juridique s’applique aux **données ouvertes** (open data) qui renvoi
 
 Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) peut accueillir à la fois des données ouvertes et restreintes.
 
-# Le développement des communs numériques
+## Le développement des communs numériques
 
 [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) est un catalogue **ouvert et communautaire** qui repose sur la philosophie des **communs numériques.** Ces communs sont pensés comme des **ressources collectives** : ouverts à tous, enrichis par chacun et mis au service des politiques publiques.
 
@@ -80,7 +82,7 @@ Dans cet esprit, l’Ecolab du Commissariat Général au Développement Durable 
 
 - ISOmorphe est un outil d’harmonisation des métadonnées des fiches XML ISO-19139 à destination des gestionnaires de plateformes GeoNetwork. Il permet d’améliorer significativement leur moissonnage par [ **data.gouv**.*fr*](http://data.gouv.fr). [En savoir plus ↗️](https://isomorphe.data.developpement-durable.gouv.fr/)
  
-# 📩 Contact
+## 📩 Contact
 
 Vos retours sont bienvenus pour nous permettre d'améliorer le catalogue !
 
