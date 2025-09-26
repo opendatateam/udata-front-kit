@@ -33,7 +33,7 @@ L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovat
 
 En savoir plus sur le site de l'[**Ecolab**](https://greentechinnovation.fr/).
 
-### 🔎 Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) :
+🔎 **Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC)**
 
 Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir sa stratégie en matière de données, d’algorithmes et de codes sources, de coordonner les acteurs concernés, et de servir de point de contact pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
 
