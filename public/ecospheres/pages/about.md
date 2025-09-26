@@ -22,7 +22,7 @@ L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovat
 
 - Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) ;
 - Point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
-- Vice-présidence et le secrétariat du Conseil national de l’information géolocalisée (CNIG), qui fédère les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
+- Vice-présidence et secrétariat du [Conseil national de l’information géolocalisée (CNIG)](https://cnig.gouv.fr/), qui fédère les acteurs du secteur et travaille à améliorer la qualité des données géolocalisées ;
 - Co-pilote de la Mission Connaissance, dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
 
 <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
@@ -30,6 +30,8 @@ L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovat
 <img width="319" height="189" alt="image" src="https://github.com/user-attachments/assets/2366cdba-d074-4e38-b879-6e5c04e112d5" />
 <img width="240" height="246" alt="image" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f" />
 </div>
+
+En savoir plus sur le site de l'[**Ecolab**](https://greentechinnovation.fr/).
 
 ### 🔎 Zoom sur la fonction d’Administrateur ministériel des données, des algorithmes et des codes sources (AMDAC) :
 
@@ -39,7 +41,7 @@ L’AMDAC est responsable de la mise en œuvre de la politique publique de la do
 
 C’est dans cette fonction que s’insère *ecologie*.**data.gouv**.*fr*.
 
-## ⚖️ Le droit des données
+## 🏛️ Le droit des données
 
 Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) s’inscrit dans le cadre juridique des données publiques. 
 
@@ -58,27 +60,27 @@ Ce cadre juridique s’applique aux données ouvertes (open data) qui renvoient 
 
 Le catalogue [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) peut accueillir à la fois des données ouvertes et restreintes.
 
-## 🌐 Le développement des communs numériques
+## 🌐 Le développement de communs numériques
 
 [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) est un catalogue ouvert et communautaire qui repose sur la philosophie des communs numériques. Ces communs sont pensés comme des ressources collectives : ouverts à tous, enrichis par chacun et mis au service des politiques publiques.
 
-Dans cet esprit, l’[**Ecolab**](https://greentechinnovation.fr/) du Commissariat Général au Développement Durable (CGDD) a entrepris plusieurs projets et réalisations techniques qui favorisent l’accès, la circulation et la réutilisation des données publiques. Ils traduisent une même ambition : rendre la donnée plus utile et plus accessible pour relever ensemble les grands défis de la transition écologique.
+Dans cet esprit, l’[**Ecolab**](https://greentechinnovation.fr/) du Commissariat général au développement durable (CGDD) a entrepris plusieurs projets et réalisations techniques qui favorisent l’accès, la circulation et la réutilisation des données publiques. Ils traduisent une même ambition : rendre la donnée plus utile et plus accessible pour relever ensemble les grands défis de la transition écologique.
 
-**La brique udata-front-kit**
+### La brique udata-front-kit
 
-- Le catalogue s’appuie sur la brique technique [udata-front-kit](https://github.com/opendatateam/udata-front-kit), développée conjointement par l’Ecolab et l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr/) de la DINUM. Le fruit de cette collaboration permet de créer et de diffuser facilement des portails thématiques mettant en valeur la donnée publique. Cette brique technique a notamment été réutilisée par Météo France pour son portail [ *meteo*.**data.gouv**.*fr*](http://meteo.data.gouv.fr).
+[ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) s’appuie sur la brique technique [udata-front-kit](https://github.com/opendatateam/udata-front-kit), développée conjointement par l’[**Ecolab**](https://greentechinnovation.fr/) et l’équipe [ **data.gouv**.*fr*](http://data.gouv.fr/) de la DINUM. Elle permet de créer et de diffuser facilement des portails thématiques mettant en valeur la donnée publique en se basant sur les API de la plateforme nationale [ **data.gouv**.*fr*](http://data.gouv.fr). Cette brique technique a notamment été réutilisée par Météo France pour son portail [ *meteo*.**data.gouv**.*fr*](http://meteo.data.gouv.fr).
 
-**Le hub des indicateurs territoriaux**
+### Le hub des indicateurs territoriaux
 
-- Un travail d’identification d’indicateurs de résultat par leviers de la planification écologique est mené. Ces indicateurs, élaborés par une communauté d’experts, constituent une base de référence harmonisée et partagée. Ils permettent de représenter les évolutions des dernières années et de soutenir une discussion collective sur les trajectoires de transition les plus appropriées. Ces indicateurs sont mis à disposition via l’onglet “Indicateurs” du catalogue et une API dédiée. [En savoir plus ↗️](https://greentechinnovation.fr/indicateurs-territoriaux/)
+Élaboré par une communauté d’experts, le [hub des indicateurs territoriaux](https://greentechinnovation.fr/indicateurs-territoriaux/) constitue une base de référence harmonisée et partagée. Ces indicateurs permettent de représenter les évolutions des dernières années et de soutenir une discussion collective sur les trajectoires de transition les plus appropriées. Ils sont sont mis à disposition via l’onglet “Indicateurs” du [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr) et une API dédiée.
 
-**La fabrique des standards** 
+### La fabrique des standards
 
-- L’utilisation des données pour la transition écologique repose sur un ensemble d’infrastructures numériques, dont beaucoup sont ouvertes pour profiter au plus grand nombre. Parmi celles-ci, les standards de données sont à la fondation des projets. Ils décrivent des modèles de données (différents champs, représentation des données, etc.) afin d’assurer la montée en qualité et l’interopérabilité des données proposées, notamment lorsque plusieurs producteurs élaborent un même jeu de données. [En savoir plus ↗️](https://guides.data.gouv.fr/guides-de-data.gouv.fr/fabrique-des-standards/la-fabrique-des-standards)
+La [fabrique des standards](https://guides.data.gouv.fr/guides-de-data.gouv.fr/fabrique-des-standards/la-fabrique-des-standards) désigne le processus de création d'un standard [CNIG](https://cnig.gouv.fr/) avec ses différentes phases et la documentation associée à destination des acteurs de l'élaboration d'un standard (pilotes, animateurs ou participants aux GT). L’utilisation des données pour la transition écologique repose sur un ensemble d’infrastructures numériques, dont beaucoup sont ouvertes pour profiter au plus grand nombre. Parmi celles-ci, les standards de données sont à la fondation des projets. Ils décrivent des modèles de données (différents champs, représentation des données, etc.) afin d’assurer la montée en qualité et l’interopérabilité des données proposées.
 
-**ISOmorphe** 
+### ISOmorphe 
 
-- [ISOmorphe](https://isomorphe.data.developpement-durable.gouv.fr/) est un outil d’harmonisation des métadonnées des fiches XML ISO-19139 à destination des gestionnaires de plateformes GeoNetwork. Il permet d’améliorer significativement leur moissonnage par [ **data.gouv**.*fr*](http://data.gouv.fr).
+À destination des gestionnaires de catalogues GeoNetwork, [ISOmorphe](https://isomorphe.data.developpement-durable.gouv.fr/) est un outil d’harmonisation des métadonnées des fiches XML au format ISO-19139, le standard retenu par la directive INSPIRE qui a conduit à l’ouverture de la majorité des données du pôle ministériel. ISOmorphe permet d’améliorer significativement le moissonnage de ces catalogues par [ **data.gouv**.*fr*](http://data.gouv.fr).
  
 ## 📩 Contact
 
