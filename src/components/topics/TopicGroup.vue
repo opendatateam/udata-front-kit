@@ -175,6 +175,7 @@ const actions = computed(() => {
             icon-only
             secondary
             size="sm"
+            class="test__edit_group_btn"
             :on-click="() => openModal('edit')"
           />
           <DsfrButton
@@ -183,6 +184,7 @@ const actions = computed(() => {
             icon-only
             secondary
             size="sm"
+            class="test__delete_group_btn"
             :on-click="() => openModal('delete')"
           />
         </div>

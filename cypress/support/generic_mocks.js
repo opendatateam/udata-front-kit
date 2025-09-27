@@ -3,6 +3,9 @@ const allowedDomains = [
   '127.0.0.1',
   // These domains are allowed for when running tests with Chrome
   'content-autofill.googleapis.com',
+  'optimizationguide-pa.googleapis.com',
+  'clientservices.googleapis.com',
+  'www.google.com',
   'android.clients.google.com'
 ]
 

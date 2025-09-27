@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-import type { ElementClass, GenericElement, Topic } from '@/model/topic'
+import type { ElementClass, GenericElement } from '@/model/topic'
 import TopicAPI from '@/services/api/resources/TopicsAPI'
 
 const topicAPI = new TopicAPI({ version: 2 })
@@ -41,14 +41,49 @@ export const useTopicElementStore = defineStore('element', {
       this.elements[topicId] = responses.flatMap((response) => response.data)
       return this.elements[topicId] as T[]
     },
-    async createElement(
+    async createElement<T extends GenericElement>(
       topicId: string,
+      element: T
+    ): Promise<T> {
+      const createdElements = await topicAPI.createElements(topicId, [element])
+      const createdElement = createdElements[0] as T
+
+      // Update local state optimistically with the created element that now has an ID
+      if (!this.elements[topicId]) {
+        this.elements[topicId] = []
+      }
+      this.elements[topicId].push(createdElement)
+
+      return createdElement
+    },
+
+    async updateElement(
+      topicId: string,
+      elementId: string,
       element: GenericElement
-    ): Promise<Topic> {
-      const topic = await topicAPI.createElements(topicId, [element])
-      // refresh the stored topic elements
-      this.getTopicElements({ topicId, forceRefresh: true })
-      return topic
+    ): Promise<GenericElement> {
+      const updatedElement = await topicAPI.updateElement(
+        topicId,
+        elementId,
+        element
+      )
+
+      // Update local state optimistically
+      const elementIndex = this.elements[topicId].findIndex(
+        (el) => el.id === elementId
+      )
+      this.elements[topicId][elementIndex] = updatedElement
+
+      return updatedElement
+    },
+
+    async deleteElement(topicId: string, elementId: string): Promise<void> {
+      await topicAPI.deleteElement(topicId, elementId)
+
+      // Update local state optimistically
+      this.elements[topicId] = this.elements[topicId].filter(
+        (el) => el.id !== elementId
+      )
     }
   }
 })
