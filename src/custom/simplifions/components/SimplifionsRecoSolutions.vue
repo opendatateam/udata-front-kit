@@ -147,49 +147,50 @@
           displaySubProducts &&
           recommandation.API_et_datasets_utiles_fournis?.length
         "
-        class="fr-col-12"
+        class="fr-col-12 fr-p-0"
       >
-        <hr />
-        <p>
-          <strong>API et données utiles fournies par la solution :</strong>
-        </p>
-
-        <div v-if="usefulDataApiFourniesParLaSolution === undefined">
-          Chargement des données en cours...
-        </div>
-        <ul v-else>
-          <li
-            v-for="apidOrDataset in usefulDataApiFourniesParLaSolution"
-            :key="apidOrDataset.fields.UID_datagouv"
-          >
-            <SimplifionsDataApiUtile
-              :api-or-dataset="apidOrDataset.fields"
-              :custom-description="customDescriptions[apidOrDataset.id]"
-            />
-          </li>
-        </ul>
+        <DsfrAccordion>
+          <template #title>
+            <strong>API et données utiles</strong>, fournies par la solution
+          </template>
+          <div v-if="usefulDataApiFourniesParLaSolution === undefined">
+            Chargement des données en cours...
+          </div>
+          <ul v-else>
+            <li
+              v-for="apidOrDataset in sortedUsefulDataApiFourniesParLaSolution"
+              :key="apidOrDataset.fields.UID_datagouv"
+            >
+              <SimplifionsDataApiUtile
+                :api-or-dataset="apidOrDataset.fields"
+                :custom-description="customDescriptions[apidOrDataset.id]"
+              />
+            </li>
+          </ul>
+        </DsfrAccordion>
       </div>
 
-      <div v-if="solutionsEditeurs?.length" class="fr-col-12">
-        <hr />
-        <strong>Ces logiciels d'éditeurs l'intègrent déjà :</strong>
-        <br />
-
-        <div v-if="solutionsEditeurs === undefined">
-          Chargement des données en cours...
-        </div>
-        <div v-else class="solutions-editeurs fr-mt-2w" role="list">
-          <div v-for="solution in solutionsEditeurs" :key="solution.id">
-            <SimplifionsEditorSoftwareCard :solution="solution" />
+      <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
+        <DsfrAccordion>
+          <template #title>
+            <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
+            cette API pour ce cas d'usage
+          </template>
+          <div v-if="solutionsEditeurs === undefined">
+            Chargement des données en cours...
           </div>
-        </div>
+          <div v-else class="solutions-editeurs fr-mt-2w" role="list">
+            <div v-for="solution in solutionsEditeurs" :key="solution.id">
+              <SimplifionsEditorSoftwareCard :solution="solution" />
+            </div>
+          </div>
+        </DsfrAccordion>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import TopicsAPI from '@/services/api/resources/TopicsAPI.ts'
 import { fromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type {
@@ -198,6 +199,7 @@ import type {
   Recommandation,
   SolutionRecord
 } from '../model/grist'
+import TopicsAPI from '../simplifionsTopicsApi'
 
 const props = defineProps<{
   recommandation: Recommandation
@@ -226,6 +228,20 @@ const usefulDataApiFourniesParLaSolution = ref<
   ApiOrDatasetRecord[] | undefined
 >(undefined)
 const customDescriptions = ref<Record<number, string>>({})
+
+const sortedUsefulDataApiFourniesParLaSolution = computed(() => {
+  return usefulDataApiFourniesParLaSolution.value?.sort((a, b) => {
+    const aCustomDescription = customDescriptions.value[a.id] || ''
+    const bCustomDescription = customDescriptions.value[b.id] || ''
+
+    // First sort by custom description length (longest first)
+    const lengthDiff = bCustomDescription.length - aCustomDescription.length
+    if (lengthDiff !== 0) return lengthDiff
+
+    // Then sort by name
+    return a.fields.Nom.localeCompare(b.fields.Nom)
+  })
+})
 
 if (recommandation.API_et_datasets_utiles_fournis?.length) {
   grist
@@ -302,5 +318,16 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
 
 .reco-section {
   display: flex;
+}
+
+:deep(.fr-accordion__btn) {
+  background-color: var(--background-alt-blue-france);
+}
+:deep(.fr-accordion__btn[aria-expanded='true']) {
+  background-color: var(--hover-tint);
+}
+
+:deep(.fr-accordion__btn) {
+  color: #3558a2;
 }
 </style>

@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import TopicsAPI from '@/services/api/resources/TopicsAPI.ts'
 import type { SolutionRecord } from '../model/grist'
+import TopicsAPI from '../simplifionsTopicsApi'
 
 const props = defineProps<{
   solution: SolutionRecord

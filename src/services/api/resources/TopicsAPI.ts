@@ -16,18 +16,4 @@ export default class TopicsAPI extends DatagouvfrAPI {
       authenticated: true
     })
   }
-
-  async getTopicByTag(tag: string): Promise<Topic | null> {
-    const response = await this.request({
-      url: `${this.url(false)}/?tag=${tag}`,
-      method: 'get',
-      authenticated: true
-    })
-
-    if (response.data.length === 0) {
-      return null
-    }
-
-    return response.data[0]
-  }
 }
