@@ -78,7 +78,15 @@
                 >Cas d'usages simplifiables</a
               >
             </li>
-            <li>
+            <li v-if="solution.API_ou_datasets_integres?.length">
+              <a
+                id="summary-link-2"
+                href="#donnees-api-utilisees"
+                class="fr-summary__link"
+                >Données et API utilisées</a
+              >
+            </li>
+            <li v-if="solution.APIs_ou_datasets_fournis?.length">
               <a
                 id="summary-link-2"
                 href="#donnees-api-fournies"
@@ -86,12 +94,12 @@
                 >Données et API fournies</a
               >
             </li>
-            <li>
+            <li v-else>
               <a
                 id="summary-link-2"
-                href="#donnees-api-utilisees"
+                href="#donnees-api"
                 class="fr-summary__link"
-                >Données et API utilisées</a
+                >Données et API</a
               >
             </li>
           </ol>
@@ -273,7 +281,7 @@
       </ul>
     </div>
 
-    <div v-else>
+    <div v-else id="donnees-api">
       <h2 class="colored-title fr-h2 fr-mt-8w">Données et API</h2>
       <p class="fr-text--sm">
         <i
