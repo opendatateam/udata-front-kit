@@ -4,7 +4,7 @@
 
 Face à l’urgence, la planification écologique mobilise l’ensemble des acteurs – État, collectivités, entreprises, associations, citoyens – pour bâtir une action cohérente et efficace vis-à-vis des défis contemporains. Confrontées à un exercice d’une forte transversalité, [ *ecologie*.**data.gouv**.*fr*](http://ecologie.data.gouv.fr/) soutient toutes les parties prenantes de l’aménagement du territoire. Le catalogue vise à répondre à leurs besoins de recherche, d’exploitation et de suivi des données environnementales en proposant :
 
-- Un accès centralisé à des [données](https://ecologie.data.gouv.fr/datasets) fiables, actualisées, produites par des acteurs de référence.
+- Un accès centralisé à des [données](https://ecologie.data.gouv.fr/datasets) actualisées, produites par des acteurs de référence.
 - Une sélection d'[indicateurs territoriaux](https://ecologie.data.gouv.fr/indicators) de planification écologique, validés par des experts métiers, accessibles via une API dédiée.
 - Un espace de [partage des usages](https://ecologie.data.gouv.fr/bouquets), afin de diffuser des actions nationales et territoriales concrètes.
 
