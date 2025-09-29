@@ -147,6 +147,7 @@
           displaySubProducts &&
           recommandation.API_et_datasets_utiles_fournis?.length
         "
+        class="fr-col-12 fr-p-0"
       >
         <DsfrAccordion>
           <template #title>
@@ -157,7 +158,7 @@
           </div>
           <ul v-else>
             <li
-              v-for="apidOrDataset in usefulDataApiFourniesParLaSolution"
+              v-for="apidOrDataset in sortedUsefulDataApiFourniesParLaSolution"
               :key="apidOrDataset.fields.UID_datagouv"
             >
               <SimplifionsDataApiUtile
@@ -169,7 +170,7 @@
         </DsfrAccordion>
       </div>
 
-      <div v-if="solutionsEditeurs?.length">
+      <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
         <DsfrAccordion>
           <template #title>
             <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
@@ -227,6 +228,20 @@ const usefulDataApiFourniesParLaSolution = ref<
   ApiOrDatasetRecord[] | undefined
 >(undefined)
 const customDescriptions = ref<Record<number, string>>({})
+
+const sortedUsefulDataApiFourniesParLaSolution = computed(() => {
+  return usefulDataApiFourniesParLaSolution.value?.sort((a, b) => {
+    const aCustomDescription = customDescriptions.value[a.id] || ''
+    const bCustomDescription = customDescriptions.value[b.id] || ''
+
+    // First sort by custom description length (longest first)
+    const lengthDiff = bCustomDescription.length - aCustomDescription.length
+    if (lengthDiff !== 0) return lengthDiff
+
+    // Then sort by name
+    return a.fields.Nom.localeCompare(b.fields.Nom)
+  })
+})
 
 if (recommandation.API_et_datasets_utiles_fournis?.length) {
   grist
