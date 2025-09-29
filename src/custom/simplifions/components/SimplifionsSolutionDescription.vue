@@ -1,21 +1,21 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <div class="solution-description">
+  <div v-if="solution === undefined" class="loading">
+    Chargement de la solution en cours...
+  </div>
+  <div v-else class="solution-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">
-            {{ solution.Ref_Nom_de_la_solution }}
+            {{ topic.name }}
           </h1>
           <DraftTag v-if="topic.private" />
-          <SimplifionsSolutionTag :solution="solution" />
+          <SimplifionsSolutionTag :topic-solution="topic" />
         </div>
 
         <p class="fr-text--lead">
-          <span v-if="solution.Description_courte">
-            {{ solution.Description_courte }}
-          </span>
-          <span v-else>⚠ Description non renseignée</span>
+          {{ topic.description }}
         </p>
 
         <SimplifionsTags
@@ -28,19 +28,18 @@
         <ul class="fr-my-4w">
           <li>
             <strong>Fournisseur : </strong>
-            <span v-if="solution.operateur_nom_long || solution.operateur_nom">
-              <span v-if="solution.operateur_nom_long">
-                {{ solution.operateur_nom_long }} |
-              </span>
-              {{ solution.operateur_nom }}
-            </span>
+            <HumanReadableList
+              v-if="solution.Nom_de_l_operateur?.length"
+              :items="solution.Nom_de_l_operateur"
+              :bold-items="false"
+            />
             <span v-else>Non renseigné</span>
           </li>
           <li>
             <strong>Type de solution : </strong>
             <HumanReadableList
-              v-if="solution.types_de_solution?.length"
-              :items="solution.types_de_solution"
+              v-if="solution.Type_de_solution?.length"
+              :items="solution.Type_de_solution"
               :bold-items="false"
               last-item-separator="ou"
             />
@@ -48,7 +47,7 @@
           </li>
           <li>
             <strong>Prix :</strong>
-            {{ solution.Prix_ ? solution.Prix_ : 'Non renseigné' }}
+            {{ solution.Prix ? solution.Prix : 'Non renseigné' }}
           </li>
         </ul>
       </div>
@@ -79,12 +78,28 @@
                 >Cas d'usages simplifiables</a
               >
             </li>
-            <li>
+            <li v-if="solution.API_ou_datasets_integres?.length">
               <a
                 id="summary-link-2"
                 href="#donnees-api-utilisees"
                 class="fr-summary__link"
                 >Données et API utilisées</a
+              >
+            </li>
+            <li v-if="solution.APIs_ou_datasets_fournis?.length">
+              <a
+                id="summary-link-2"
+                href="#donnees-api-fournies"
+                class="fr-summary__link"
+                >Données et API fournies</a
+              >
+            </li>
+            <li v-else>
+              <a
+                id="summary-link-2"
+                href="#donnees-api"
+                class="fr-summary__link"
+                >Données et API</a
               >
             </li>
           </ol>
@@ -119,22 +134,26 @@
         </nav>
       </div>
     </div>
-    <hr v-if="!solution.Image_principale" class="fr-hr fr-my-2w" />
+
+    <hr v-if="!solution.Image" class="fr-hr fr-my-2w" />
     <figure
-      v-if="solution.Image_principale?.length"
+      v-if="solution.Image?.length"
       aria-label="© Légende de l'image"
       role="group"
       class="fr-content-media"
     >
       <div class="example-image fr-content-media__img">
         <img
-          :alt="solution.Legende_image_principale"
-          :src="gristImageUrl(solution.Image_principale?.[0])"
+          :alt="solution.Legende_de_l_image || ''"
+          :src="grist.imageUrl(solution.Image?.[0])"
           class="fr-responsive-img fr-ratio-16x9"
         />
       </div>
-      <figcaption class="fr-content-media__caption">
-        {{ solution.Legende_image_principale }}
+      <figcaption
+        v-if="solution.Legende_de_l_image"
+        class="fr-content-media__caption"
+      >
+        {{ solution.Legende_de_l_image }}
       </figcaption>
     </figure>
 
@@ -168,8 +187,8 @@
         </p>
 
         <p
-          v-if="solution.Cette_solution_permet_"
-          v-html="fromMarkdown(solution.Cette_solution_permet_)"
+          v-if="solution.Cette_solution_permet"
+          v-html="fromMarkdown(solution.Cette_solution_permet)"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -186,8 +205,8 @@
         </p>
 
         <p
-          v-if="solution.Cette_solution_ne_permet_pas_"
-          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas_)"
+          v-if="solution.Cette_solution_ne_permet_pas"
+          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas)"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -195,10 +214,10 @@
         </p>
       </div>
 
-      <p v-if="solution.URL_Consulter_la_solution_">
+      <p v-if="solution.Site_internet">
         <a
           rel="noopener noreferrer"
-          :href="solution.URL_Consulter_la_solution_"
+          :href="solution.Site_internet"
           class="fr-btn fr-my-4w"
           target="_blank"
         >
@@ -214,40 +233,15 @@
       Cas d'usages simplifiables
     </h2>
     <div
-      v-if="relatedCasUsages.length"
+      v-if="solution.Recommande_pour_les_cas_d_usages?.length"
       class="fr-grid-row fr-grid-row--gutters"
     >
-      <div
-        v-for="casUsage in relatedCasUsages"
-        :key="casUsage.id"
-        class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-3w test__cas-d-usage-card"
-      >
-        <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
-          <div class="fr-tile__body">
-            <div class="fr-tile__content">
-              <h3 class="fr-tile__title">
-                <router-link
-                  :to="{
-                    name: 'cas-d-usages_detail',
-                    params: { item_id: casUsage.slug }
-                  }"
-                  class="cas-d-usage-link"
-                >
-                  {{
-                    (casUsage.extras as SimplifionsCasUsagesExtras)[
-                      'simplifions-cas-d-usages'
-                    ].Icone_du_titre
-                  }}
-                  {{ casUsage.name }}
-                </router-link>
-              </h3>
-              <p class="fr-tile__detail">
-                {{ casUsage.description || 'Aucune description disponible' }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SimplifionsCasDusageRelatedCard
+        v-for="casUsageId in solution.Recommande_pour_les_cas_d_usages"
+        :key="casUsageId"
+        :cas-usage-id="casUsageId"
+        class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-3w"
+      />
     </div>
 
     <p v-else class="fr-text--sm">
@@ -255,20 +249,48 @@
       <a href="#modification-contenu">✍️ Proposer des cas d'usages</a>
     </p>
 
-    <h2 id="donnees-api-utilisees" class="colored-title fr-h2 fr-mt-8w">
-      Données et API utilisées
-    </h2>
-    <SimplifionsDataApiList
-      v-if="usefulDataApi.length"
-      :data-api-list="usefulDataApi"
-    />
-    <p v-else class="fr-text--sm">
-      <i
-        >Aucun jeu de données ou API référencé pour cette solution
-        actuellement.</i
-      >
-      <a href="#modification-contenu">✍️ Proposer un contenu</a>.
-    </p>
+    <div
+      v-if="solution.API_ou_datasets_integres?.length"
+      id="donnees-api-utilisees"
+    >
+      <h2 class="colored-title fr-h2 fr-mt-8w">Données et API utilisées</h2>
+      <ul class="fr-grid-row fr-grid-row--gutters list-none fr-pt-2w">
+        <li
+          v-for="apiOrDataset in apiOrDatasets"
+          :key="apiOrDataset.UID_datagouv"
+          class="fr-col-12 fr-py-0 fr-mb-2w"
+        >
+          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
+        </li>
+      </ul>
+    </div>
+
+    <div
+      v-else-if="solution.APIs_ou_datasets_fournis?.length"
+      id="donnees-api-fournies"
+    >
+      <h2 class="colored-title fr-h2 fr-mt-8w">Données et API fournies</h2>
+      <ul class="fr-grid-row fr-grid-row--gutters list-none fr-pt-2w">
+        <li
+          v-for="apiOrDataset in apisOrDatasetsFournis"
+          :key="apiOrDataset.UID_datagouv"
+          class="fr-col-12 fr-py-0 fr-mb-2w"
+        >
+          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
+        </li>
+      </ul>
+    </div>
+
+    <div v-else id="donnees-api">
+      <h2 class="colored-title fr-h2 fr-mt-8w">Données et API</h2>
+      <p class="fr-text--sm">
+        <i
+          >Aucun jeu de données ou API utilisé ou fourni par cette solution
+          actuellement.</i
+        >
+        <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+      </p>
+    </div>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
       <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
@@ -290,68 +312,55 @@
 
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
-import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { formatDate, fromMarkdown } from '@/utils'
-import { OrganizationNameWithCertificate } from '@datagouv/components'
-import { onMounted, ref } from 'vue'
-import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
-import type { SimplifionsSolutionsExtras } from '../model/solution'
-import { gristImageUrl } from './simplifions_utils'
-import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
-import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
-import SimplifionsTags from './SimplifionsTags.vue'
+import { OrganizationNameWithCertificate } from '@datagouv/components-next'
+import { grist } from '../grist'
+import type { ApiOrDataset, Solution } from '../model/grist'
+import type { TopicSolutionsExtras } from '../model/topics'
+import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
+import SimplifionsDataApi from './SimplifionsDataApi.vue'
 
 const props = defineProps<{
   topic: Topic
   pageKey: string
 }>()
 
-const solution = (props.topic.extras as SimplifionsSolutionsExtras)[
-  'simplifions-solutions'
-]
+const solutionId = (props.topic.extras as TopicSolutionsExtras)[
+  'simplifions-v2-solutions'
+].id
 
-// Reactive variables for cas d'usages
-const relatedCasUsages = ref<Topic[]>([])
+const solution = ref<Solution | undefined>(undefined)
+const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
+const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
 
-// API instance for fetching topics
-const topicsAPI = new TopicsAPI({ version: 2 })
+grist.getRecord('Solutions', solutionId).then((data) => {
+  solution.value = data.fields as Solution
 
-// Function to fetch related cas d'usages
-const fetchRelatedCasUsages = async () => {
-  // Check if we have topic IDs to fetch
-  if (!solution?.cas_d_usages_topics_ids?.length) {
-    relatedCasUsages.value = []
-    return
+  if (solution.value.API_ou_datasets_integres?.length) {
+    grist
+      .getRecordsByIds(
+        'APIs_et_datasets',
+        solution.value.API_ou_datasets_integres
+      )
+      .then((data) => {
+        apiOrDatasets.value = (
+          data.map((record) => record.fields) as ApiOrDataset[]
+        ).filter((apiOrDataset) => apiOrDataset.Visible_sur_simplifions)
+      })
   }
 
-  try {
-    // Fetch only the specific topics by their IDs
-    const topicPromises = solution.cas_d_usages_topics_ids.map(
-      (topicId: string) => topicsAPI.get({ entityId: topicId })
-    )
-
-    const topics = await Promise.all(topicPromises)
-    relatedCasUsages.value = topics
-
-    console.log(`Fetched ${topics.length} related cas d'usages`)
-  } catch (error) {
-    console.error("Error fetching related cas d'usages:", error)
-    relatedCasUsages.value = []
+  if (solution.value.APIs_ou_datasets_fournis?.length) {
+    grist
+      .getRecordsByIds(
+        'APIs_et_datasets',
+        solution.value.APIs_ou_datasets_fournis
+      )
+      .then((data) => {
+        apisOrDatasetsFournis.value = (
+          data.map((record) => record.fields) as ApiOrDataset[]
+        ).filter((apiOrDataset) => apiOrDataset.Visible_sur_simplifions)
+      })
   }
-}
-
-const usefulDataApi = computed(() => {
-  if (!solution?.API_et_data_disponibles) {
-    return []
-  }
-  return solution.API_et_data_disponibles.filter(
-    (apidOrData) => apidOrData.UID_data_gouv
-  )
-})
-
-// Fetch related cas d'usages when component mounts
-onMounted(() => {
-  fetchRelatedCasUsages()
 })
 </script>
 

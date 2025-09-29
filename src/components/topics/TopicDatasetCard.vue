@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
-import { DatasetCard } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
+import { DatasetCard } from '@datagouv/components-next'
 import { toRef } from 'vue'
 
-import { type DatasetProperties } from '@/model/topic'
+import { ResolvedFactor } from '@/model/topic'
 
 const props = defineProps({
-  datasetProperties: {
-    type: Object as () => DatasetProperties,
+  factor: {
+    type: Object as () => ResolvedFactor,
     required: true
   },
   datasetContent: {
@@ -20,7 +20,7 @@ const props = defineProps({
 // use shallowRef to avoid deep reactivity on optionnal component
 const IndicatorDatasetCard = shallowRef<Component | null>(null)
 
-const datasetPropertiesRef = toRef(props, 'datasetProperties')
+const factorRef = toRef(props, 'factor')
 const datasetIsIndicator: Ref<boolean> = ref(false)
 
 onMounted(async () => {
@@ -53,7 +53,7 @@ onMounted(async () => {
       params: { item_id: datasetContent.id }
     }"
     :show-description="false"
-    class="dataset-card fr-m-0"
+    class="dataset-card fr-my-2w fr-mx-0"
   />
   <IndicatorDatasetCard
     v-if="IndicatorDatasetCard && datasetContent && datasetIsIndicator"
@@ -62,14 +62,14 @@ onMounted(async () => {
     class="dataset-card fr-m-0"
   />
   <DsfrAlert
-    v-if="datasetProperties.remoteDeleted"
+    v-if="factor.remoteDeleted"
     class="fr-mb-4w"
     type="warning"
     title="Jeu de données supprimé"
   >
     <div>Ce jeu de données a été détecté comme supprimé sur data.gouv.fr.</div>
     <div>
-      Son identifiant est <code>{{ datasetPropertiesRef.id }}</code
+      Son identifiant est <code>{{ factorRef.element?.id }}</code
       >.
     </div>
   </DsfrAlert>

@@ -8,6 +8,7 @@ datagouvfr:
   base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 robots:
   disallow:
@@ -422,30 +423,6 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Thématique
-        default_option: Toutes les thématiques
-        id: theme
-        type: select
-        color: green-menthe
-        use_tag_prefix: true
-        values: *fnv_themes
-      - name: Enjeu
-        default_option: Tous les enjeux
-        id: enjeu
-        type: select
-        color: blue-ecume
-        use_tag_prefix: true
-        values:
-          - id: adaptation-climat
-            name: Adaptation climat
-          - id: attenuation-climat
-            name: Atténuation climat
-          - id: biodiversite
-            name: Biodiversité
-          - id: ressources
-            name: Ressources
-          - id: sante
-            name: Santé
       - name: Secteur
         default_option: Tous les secteurs
         id: secteur
@@ -542,26 +519,7 @@ pages:
             name: Véhicules électriques
           - id: velo
             name: Vélo
-      - name: Cas d'usage
-        default_option: Tous les cas d'usage
-        id: usage
-        type: select
-        color: yellow-tournesol-main-731
-        use_tag_prefix: true
-        values:
-          - id: tdb-mobilite-durable
-            name: Indicateurs Tableau de bord de mobilité Durable
-          - id: territoires-en-transitions
-            name:
-              Indicateurs du programme Territoire Engagé de l'ADEME (Territoires en
-              Transitions)
-          - id: cop-region
-            name: Indicateurs de planification écologique régionale (COPs)
       - name: Maille minimale
         default_option: Toutes les mailles
         id: granularity
         type: spatial_granularity
-      - name: Couverture territoriale
-        default_option:
-        id: geozone
-        type: spatial_zone

@@ -1,29 +1,26 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import {
-  Availability,
-  type DatasetProperties,
-  type DatasetsGroups
-} from '@/model/topic'
+import { Availability, ResolvedFactor, type FactorsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
 
-import DatasetPropertiesTextFields from './DatasetPropertiesTextFields.vue'
+import SelectTopicFactorGroup from '../SelectTopicFactorGroup.vue'
+import FactorTextFields from './FactorTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
 
-const emit = defineEmits(['updateValidation', 'update:datasetProperties'])
+const emit = defineEmits(['updateValidation'])
 
-const datasetProperties = defineModel({
-  type: Object as () => DatasetProperties,
+const factor = defineModel({
+  type: Object as () => ResolvedFactor,
   default: {}
 })
 
-const datasetsGroups = defineModel('groups-model', {
-  type: Object as () => DatasetsGroups,
+const factorsGroups = defineModel('groups-model', {
+  type: Object as () => FactorsGroups,
   default: []
 })
 
@@ -33,8 +30,8 @@ const formErrors = defineModel('errors-model', {
 })
 
 const props = defineProps({
-  alreadySelectedDatasets: {
-    type: Array<DatasetProperties>,
+  factorsInTopic: {
+    type: Array<ResolvedFactor>,
     default: []
   },
   datasetEditorialization: {
@@ -52,10 +49,10 @@ const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const hasEditorialization = computed(() => {
   return (
-    !!datasetProperties.value.title.trim() &&
-    !!datasetProperties.value.purpose?.trim() &&
-    (datasetProperties.value.group
-      ? datasetProperties.value.group.trim().length < 100
+    !!factor.value.title.trim() &&
+    !!factor.value.description?.trim() &&
+    (factor.value.siteExtras.group
+      ? factor.value.siteExtras.group.trim().length < 100
       : true)
   )
 })
@@ -64,7 +61,7 @@ const isValidDataset = computed((): boolean => {
   const isValidWithoutEditorialization =
     isValidCatalogDataset.value &&
     isValidUrlDataset.value &&
-    !datasetProperties.value.remoteDeleted
+    !factor.value.remoteDeleted
 
   if (!props.datasetEditorialization) return isValidWithoutEditorialization
 
@@ -72,35 +69,37 @@ const isValidDataset = computed((): boolean => {
 })
 
 const isValidCatalogDataset = computed((): boolean => {
-  if (datasetProperties.value.availability === Availability.LOCAL_AVAILABLE) {
+  if (factor.value.siteExtras.availability === Availability.LOCAL_AVAILABLE) {
     return (
-      datasetProperties.value.uri !== null &&
-      datasetProperties.value.id !== null
+      factor.value.siteExtras.uri !== null && factor.value.element?.id !== null
     )
   }
   return true
 })
 
 const isValidUrlDataset = computed((): boolean => {
-  if (datasetProperties.value.availability === Availability.URL_AVAILABLE) {
-    return datasetProperties.value.uri !== null
+  if (factor.value.siteExtras.availability === Availability.URL_AVAILABLE) {
+    return factor.value.siteExtras.uri !== null
   }
   return true
 })
 
 const onSelectDataset = (value: DatasetV2 | undefined) => {
   if (value === undefined) {
-    datasetProperties.value.uri = null
-    datasetProperties.value.id = null
+    factor.value.siteExtras.uri = null
+    factor.value.element = null
   } else {
-    datasetProperties.value.availability = Availability.LOCAL_AVAILABLE
-    datasetProperties.value.id = value.id
+    factor.value.siteExtras.availability = Availability.LOCAL_AVAILABLE
+    factor.value.element = {
+      id: value.id,
+      class: 'Dataset'
+    }
     const resolved = router.resolve({
       name: 'datasets_detail',
       params: { item_id: value.id }
     })
-    datasetProperties.value.uri = resolved.href
-    delete datasetProperties.value.remoteDeleted
+    factor.value.siteExtras.uri = resolved.href
+    delete factor.value.remoteDeleted
   }
 }
 
@@ -113,20 +112,20 @@ watch(
 )
 
 watch(
-  () => datasetProperties.value.availability,
+  () => factor.value.siteExtras.availability,
   (availability) => {
     if (availability !== Availability.LOCAL_AVAILABLE) {
       selectedDataset.value = undefined
-      datasetProperties.value.uri = null
-      datasetProperties.value.id = null
+      factor.value.siteExtras.uri = null
+      factor.value.element = null
     }
-    delete datasetProperties.value.remoteDeleted
+    delete factor.value.remoteDeleted
   }
 )
 
 onMounted(() => {
-  if (datasetProperties.value.id && !datasetProperties.value.remoteDeleted) {
-    datasetStore.load(datasetProperties.value.id).then((dataset) => {
+  if (factor.value.element?.id && !factor.value.remoteDeleted) {
+    datasetStore.load(factor.value.element.id).then((dataset) => {
       selectedDataset.value = dataset
     })
   }
@@ -134,9 +133,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <DatasetPropertiesTextFields
+  <FactorTextFields
     v-if="datasetEditorialization"
-    v-model:dataset-properties-model="datasetProperties"
+    v-model:factor-model="factor"
     :error-title="getErrorMessage('title')"
     :error-purpose="getErrorMessage('purpose')"
   />
@@ -144,7 +143,7 @@ onMounted(() => {
     <div class="fr-mt-1w fr-mb-4w">
       <SelectDataset
         v-model="selectedDataset"
-        :already-selected-datasets="alreadySelectedDatasets"
+        :factors-in-topic="factorsInTopic"
         :is-invalid="formErrors.includes('availability')"
         @update:model-value="onSelectDataset"
       />
@@ -160,18 +159,18 @@ onMounted(() => {
           Vous ne trouvez pas le jeu de données dans data.gouv.fr&nbsp;?
         </legend>
         <DsfrRadioButton
-          v-model="datasetProperties.availability"
+          v-model="factor.siteExtras.availability"
           name="source"
           :value="Availability.URL_AVAILABLE"
           label="J'ajoute l'URL"
         />
         <div
-          v-if="datasetProperties.availability === Availability.URL_AVAILABLE"
+          v-if="factor.siteExtras.availability === Availability.URL_AVAILABLE"
           class="fr-mb-4w fr-fieldset__element"
         >
           <DsfrInput
             id="input-availabilityUrl"
-            v-model="datasetProperties.uri"
+            v-model="factor.siteExtras.uri"
             label="Url vers le jeu de données souhaité (obligatoire)"
             :label-visible="true"
             class="fr-mb-md-1w fr-input"
@@ -187,13 +186,13 @@ onMounted(() => {
           />
         </div>
         <DsfrRadioButton
-          v-model="datasetProperties.availability"
+          v-model="factor.siteExtras.availability"
           name="source"
           :value="Availability.MISSING"
           label="Je n'ai pas trouvé la donnée"
         />
         <DsfrRadioButton
-          v-model="datasetProperties.availability"
+          v-model="factor.siteExtras.availability"
           name="source"
           :value="Availability.NOT_AVAILABLE"
           label="Je n'ai pas cherché la donnée"
@@ -207,9 +206,9 @@ onMounted(() => {
     />
   </div>
   <div class="fr-input-group">
-    <SelectTopicGroup
-      v-model:properties-model="datasetProperties"
-      v-model:groups-model="datasetsGroups"
+    <SelectTopicFactorGroup
+      v-model:factor-model="factor"
+      v-model:groups-model="factorsGroups"
       label="Regroupement"
       description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
       :error-message="getErrorMessage('group')"

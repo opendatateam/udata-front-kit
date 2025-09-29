@@ -8,6 +8,7 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 676452675336109a436f8f73
+  tabular_api_url:
 
 # universe configuration is now handled per page in pages.{page_id}.universe_query
 
@@ -164,8 +165,8 @@ pages:
   cas-d-usages:
     list_all: true
     universe_query:
-      tag: simplifions-cas-d-usages
-    tag_prefix: simplifions
+      tag: simplifions-v2-cas-d-usages
+    tag_prefix: simplifions-v2
     title: Cas d'usages
     breadcrumb_title:
     labels:
@@ -250,8 +251,8 @@ pages:
   solutions:
     list_all: true
     universe_query:
-      tag: simplifions-solutions
-    tag_prefix: simplifions
+      tag: simplifions-v2-solutions
+    tag_prefix: simplifions-v2
     title: Solutions
     breadcrumb_title:
     labels:

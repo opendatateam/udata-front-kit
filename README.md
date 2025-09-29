@@ -89,6 +89,12 @@ VITE_SITE_ID=monsite npm run build
 VITE_SITE_ID=monsite npm run test:e2e:for_production_build
 ```
 
+#### Factories pour les tests
+
+Afin de ne pas dépendre de données extérieures pour faire tourner les tests, il est recommandé de "mocker" ou "bouchonner" vos appels APIs.
+
+On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js) comme factory pour créer des données pour ces mocks.
+
 #### Linting via [ESLint](https://eslint.org/)
 
 ```sh
@@ -153,6 +159,7 @@ Le déploiement des verticales thématiques en preprod et en production peut s'e
 ```
 
 **Paramètres :**
+
 - `<environment>` : Environnement cible (`prod` ou `demo`/`preprod` suivant la verticale)
 - `<site>` : Nom du site
   - **Sites disponibles :**
@@ -165,6 +172,7 @@ Le déploiement des verticales thématiques en preprod et en production peut s'e
 - `<version_type>` : Type de version (`major`, `minor`, ou `patch`)
 
 **Exemple :**
+
 ```
 [prod:ecologie:minor] nouvelle fonctionnalité incroyable
 ```

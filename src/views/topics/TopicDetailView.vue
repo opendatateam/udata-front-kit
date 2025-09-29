@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
+import {
+  OrganizationNameWithCertificate,
+  ReadMore
+} from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
@@ -12,8 +15,8 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
-import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
+import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
+import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -32,7 +35,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
-import { updateTopicExtras, useExtras } from '@/utils/topic'
+import { useExtras, useTopicFactors } from '@/utils/topic'
 
 const props = defineProps<TopicPageRouterConf>()
 
@@ -73,7 +76,8 @@ const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
-const { datasetsProperties, clonedFrom } = useExtras(topic)
+const { clonedFrom } = useExtras(topic)
+const { factors } = useTopicFactors(topic)
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -173,32 +177,19 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateDatasets = () => {
+const onUpdateFactors = () => {
   if (topic.value == null) {
     throw Error('Trying to update null topic')
   }
   const loader = useLoading().show()
-
-  // Deduplicate datasets ids in case of same DS used multiple times
-  // API rejects PUT if the same id is used more than once
-  const dedupedDatasets = [
-    ...new Set(
-      datasetsProperties.value
-        .filter((d) => d.id !== null && d.remoteDeleted !== true)
-        .map((d) => d.id)
-    )
-  ]
-
   store
     .update(topic.value.id, {
       // send the tags or payload will be rejected
       tags: topic.value.tags,
-      datasets: dedupedDatasets,
-      extras: updateTopicExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
-        )
-      })
+      elements: factors.value.map(
+        // unresolved will remove "local" properties
+        (element) => element.unresolved()
+      )
     })
     .finally(() => loader.hide())
 }
@@ -382,7 +373,7 @@ watch(
             <div class="fr-col-auto fr-mr-1w">
               <OrganizationLogo :object="topic" />
             </div>
-            <p class="fr-col fr-m-0">
+            <p class="fr-col fr-m-0 min-width-0">
               <a class="fr-link" :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"
@@ -450,16 +441,13 @@ watch(
         tab-id="tab-datasets"
         class="fr-px-2w"
       >
-        <TopicDatasetList
-          v-model="datasetsProperties"
+        <TopicFactorsList
+          v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
-          @update-datasets="onUpdateDatasets"
+          @update-factors="onUpdateFactors"
         />
-        <TopicDatasetListExport
-          :datasets="datasetsProperties"
-          :filename="topic.id"
-        />
+        <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent

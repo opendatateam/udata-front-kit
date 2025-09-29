@@ -7,7 +7,7 @@
       <div class="header-topic">
         <!--Titre et description-->
         <div class="title-topic fr-text--lead">
-          {{ titleIcon }} {{ topic.name }}
+          {{ topic.name }}
         </div>
         <p class="fr-mb-1w">
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
@@ -28,24 +28,15 @@
 </template>
 
 <script setup lang="ts">
-import { formatRelativeIfRecentDate } from '@datagouv/components'
-
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
-
 import { stripFromMarkdown } from '@/utils'
-import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
+import { formatRelativeIfRecentDate } from '@datagouv/components'
 import SimplifionsTags from './SimplifionsTags.vue'
 
-const props = defineProps<{
+defineProps<{
   topic: Topic
 }>()
-
-const titleIcon = computed(() => {
-  return (props.topic.extras as SimplifionsCasUsagesExtras)[
-    'simplifions-cas-d-usages'
-  ].Icone_du_titre
-})
 
 const { pageKey } = useCurrentPageConf()
 </script>

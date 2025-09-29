@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import config from '@/config'
-import type { Resource } from '@datagouv/components'
-import { ResourceAccordion } from '@datagouv/components'
+import type { Dataset as DatasetV1 } from '@datagouv/components-next'
+import { ResourceAccordion } from '@datagouv/components-next'
 import Slider from '@vueform/slider'
 import '@vueform/slider/themes/default.css'
 import { onMounted, ref, type Ref } from 'vue'
@@ -22,13 +22,12 @@ const env: 'prod' | 'dev' = config.website.env
 
 const selectedDataPack: Ref<string | null> = ref(null)
 const optionsDataPack = ref(Object.keys(datasetsIds))
-const datasetTitle = ref(null)
-const datasetSlug = ref(null)
+const datasetMetadata: Ref<DatasetV1 | null> = ref(null)
 const indicateurWording = ref('Indicateur')
 const selectedDataset: Ref<Dataset | null> = ref(null)
 const optionsDataset = ref<string[]>([])
 
-const datasetResources: Ref<Resource[]> = ref([])
+const datasetResources = computed(() => datasetMetadata.value?.resources ?? [])
 const filteredResources: Ref<string[]> = ref([])
 
 const selectedPeriod: Ref<string | null> = ref(null)
@@ -92,10 +91,8 @@ const onSelectDataset = (dataset: string | number) => {
       .then((response) => {
         return response.json()
       })
-      .then((data) => {
-        datasetTitle.value = data.title
-        datasetSlug.value = data.slug
-        datasetResources.value = data.resources
+      .then((data: DatasetV1) => {
+        datasetMetadata.value = data
         if (selectedDataset.value?.departement) {
           showDep.value = true
         } else if (selectedDataset.value?.id.startsWith('SIM')) {
@@ -184,6 +181,9 @@ async function onSelectDep(event: Event) {
   optionsPeriod.value = []
   selectedPeriod.value = null
   selectedDep.value = (event.target as HTMLSelectElement).value
+  if (!datasetMetadata.value) {
+    return
+  }
   let res = datasetResources.value.map((a) => a.title)
   res = res.filter((r) => r.includes('departement_' + selectedDep.value))
   res = res.map((a) => a.split('_periode_')[1].split('_')[0].split('.')[0])
@@ -213,15 +213,16 @@ async function onSelectDep(event: Event) {
 
 function onSelectPeriod(event: Event) {
   selectedPeriod.value = (event.target as HTMLSelectElement).value
+  let resources = datasetResources.value.map((a) => a.title)
   if (!selectedDataset.value?.id.startsWith('SIM')) {
-    let res = datasetResources.value.map((a) => a.title)
-    res = res.filter((r) => r.includes('departement_' + selectedDep.value))
-    filteredResources.value = res.filter((r) =>
+    resources = resources.filter((r) =>
+      r.includes('departement_' + selectedDep.value)
+    )
+    filteredResources.value = resources.filter((r) =>
       r.includes('periode_' + selectedPeriod.value)
     )
   } else {
-    const res = datasetResources.value.map((a) => a.title)
-    filteredResources.value = res.filter(
+    filteredResources.value = resources.filter(
       (r) => selectedPeriod.value && r.includes(selectedPeriod.value)
     )
   }
@@ -500,8 +501,14 @@ const getAPIUrl = (endpoint: string) => {
       <p>
         Si vous souhaitez consulter le jeu de données complet,
         <a
-          :href="'https://' + config.website.title + '/datasets/' + datasetSlug"
-          >{{ datasetTitle }}
+          v-if="datasetMetadata"
+          :href="
+            'https://' +
+            config.website.title +
+            '/datasets/' +
+            datasetMetadata.slug
+          "
+          >{{ datasetMetadata.title }}
           <span
             class="fr-icon-external-link-line"
             aria-hidden="true"
@@ -514,18 +521,18 @@ const getAPIUrl = (endpoint: string) => {
         et leurs noms.
       </p>
       <div>
-        <div v-if="selectedIndicateur" class="code-api">
+        <div v-if="datasetMetadata && selectedIndicateur" class="code-api">
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
-            datasetSlug +
+            datasetMetadata.slug +
             '/resources/?q=' +
             selectedIndicateur
           }}
         </div>
-        <div v-else class="code-api">
+        <div v-else-if="datasetMetadata" class="code-api">
           {{
             'https://www.data.gouv.fr/api/2/datasets/' +
-            datasetSlug +
+            datasetMetadata.slug +
             '/resources/'
           }}
         </div>
@@ -540,12 +547,12 @@ const getAPIUrl = (endpoint: string) => {
       >
         <ResourceAccordion
           v-if="
-            selectedDataset &&
+            datasetMetadata &&
             item['id'] != 'b1d97b5b-cb0e-4991-90be-4c8a16a6c2a7' &&
             filteredResources.includes(item['title']) &&
             item['type'] == 'main'
           "
-          :dataset-id="selectedDataset[env]"
+          :dataset="datasetMetadata"
           :resource="item"
         />
       </div>
@@ -564,17 +571,18 @@ const getAPIUrl = (endpoint: string) => {
         >
           <ResourceAccordion
             v-if="
+              datasetMetadata &&
               item['title'].includes('_' + selectedIndicateur + '_') &&
               item['type'] == 'documentation'
             "
-            :dataset-id="selectedDataset[env]"
+            :dataset="datasetMetadata"
             :resource="item"
           />
         </span>
         <span v-else>
           <ResourceAccordion
-            v-if="selectedDataset && item['type'] == 'documentation'"
-            :dataset-id="selectedDataset[env]"
+            v-if="datasetMetadata && item['type'] == 'documentation'"
+            :dataset="datasetMetadata"
             :resource="item"
           />
         </span>
