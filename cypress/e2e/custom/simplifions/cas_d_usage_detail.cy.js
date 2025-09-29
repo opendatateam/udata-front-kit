@@ -139,7 +139,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
   it('should display the dataservices and datasets useful inside the recommandationsolution', () => {
     cy.get('.reco-solution').should(
       'contain.text',
-      'API et données utiles fournies par la solution'
+      'API et données utiles, fournies par la solution'
     )
     cy.get('.api-or-dataset-utile').should('have.length', 2)
   })
