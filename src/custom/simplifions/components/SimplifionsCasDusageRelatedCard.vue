@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
-import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import TopicsAPI from '../simplifionsTopicsApi'
 
 const props = defineProps<{
   casUsageId: number
