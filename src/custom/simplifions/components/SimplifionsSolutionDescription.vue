@@ -158,22 +158,9 @@
     </figure>
 
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
-      <div>
-        <h2
-          id="possibilites-simplification"
-          class="colored-title fr-h2 fr-my-5w"
-        >
-          Possibilités de simplification :
-        </h2>
-        <p
-          v-if="solution.Description_longue"
-          v-html="fromMarkdown(solution.Description_longue)"
-        ></p>
-        <p v-else class="fr-text--sm">
-          <i>Aucune description actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
-        </p>
-      </div>
+      <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
+        Possibilités de simplification :
+      </h2>
 
       <div>
         <p>

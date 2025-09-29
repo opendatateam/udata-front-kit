@@ -76,7 +76,6 @@ export type Solution = {
   Cette_solution_ne_permet_pas: string
   Cette_solution_permet: string
   Description_courte: string
-  Description_longue: string
   Image: number[] | null
   Legende_de_l_image: string | null
   Modifie_le: number
