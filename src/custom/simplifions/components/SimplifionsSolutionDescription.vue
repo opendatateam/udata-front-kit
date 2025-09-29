@@ -241,29 +241,6 @@
       <a href="#modification-contenu">✍️ Proposer des cas d'usages</a>
     </p>
 
-    <div id="donnees-api-fournies">
-      <h2 class="colored-title fr-h2 fr-mt-8w">Données et API fournies</h2>
-      <ul
-        v-if="solution.APIs_ou_datasets_fournis?.length"
-        class="fr-grid-row fr-grid-row--gutters list-none fr-pt-2w"
-      >
-        <li
-          v-for="apiOrDataset in apisOrDatasetsFournis"
-          :key="apiOrDataset.UID_datagouv"
-          class="fr-col-12 fr-py-0 fr-mb-2w"
-        >
-          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
-        </li>
-      </ul>
-      <p v-else class="fr-text--sm">
-        <i
-          >Aucun jeu de données ou API fourni pour cette solution
-          actuellement.</i
-        >
-        <a href="#modification-contenu">✍️ Proposer des données et API</a>
-      </p>
-    </div>
-
     <div id="donnees-api-utilisees">
       <h2 class="colored-title fr-h2 fr-mt-8w">Données et API utilisées</h2>
       <ul
@@ -285,6 +262,29 @@
           actuellement.</i
         >
         <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+      </p>
+    </div>
+
+    <div id="donnees-api-fournies">
+      <h2 class="colored-title fr-h2 fr-mt-8w">Données et API fournies</h2>
+      <ul
+        v-if="solution.APIs_ou_datasets_fournis?.length"
+        class="fr-grid-row fr-grid-row--gutters list-none fr-pt-2w"
+      >
+        <li
+          v-for="apiOrDataset in apisOrDatasetsFournis"
+          :key="apiOrDataset.UID_datagouv"
+          class="fr-col-12 fr-py-0 fr-mb-2w"
+        >
+          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
+        </li>
+      </ul>
+      <p v-else class="fr-text--sm">
+        <i
+          >Aucun jeu de données ou API fourni pour cette solution
+          actuellement.</i
+        >
+        <a href="#modification-contenu">✍️ Proposer des données et API</a>
       </p>
     </div>
 
