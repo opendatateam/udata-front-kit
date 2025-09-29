@@ -1,5 +1,3 @@
-À propos de _ecologie_.**data.gouv**._fr_
-
 ## 🌿 Le catalogue de référence des données pour la transition écologique
 
 **Sa mission : rendre les données plus accessibles et plus lisibles pour tous.** 
