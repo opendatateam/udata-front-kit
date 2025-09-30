@@ -11,7 +11,7 @@ const datagouvResponseBuilder = (data) => {
 
 const datagouvUrlRegex = (resourceName, resourceId = null) => {
   return new RegExp(
-    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}/$` : ''}.*`
+    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
   )
 }
 
