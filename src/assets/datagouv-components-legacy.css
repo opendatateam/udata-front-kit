@@ -1,0 +1,499 @@
+@charset "UTF-8";
+.datagouv-components .text-blue-400 {
+  color: var(--blue-cumulus-sun-368-moon-732) !important;
+}
+.datagouv-components .text-grey-380 {
+  color: var(--grey-425-625) !important;
+}
+.datagouv-components .text-grey-500 {
+  color: var(--grey-50-1000) !important;
+}
+.datagouv-components :root {
+  --grey-850-200: #cecece;
+  --success-625-425: #27a658;
+  --background-alt-blue-france: var(--background-alt-blue-cumulus);
+  --background-alt-blue-france-hover: var(--background-alt-blue-cumulus-hover);
+  --background-alt-blue-france-active: var(
+    --background-alt-blue-cumulus-active
+  );
+  --border-default-blue-france: var(--border-default-blue-cumulus);
+  --text-action-high-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --background-action-high-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --background-action-high-blue-france-hover: var(
+    --blue-cumulus-sun-368-moon-732-hover
+  );
+  --background-action-high-blue-france-active: var(
+    --blue-cumulus-sun-368-moon-732-active
+  );
+  --background-active-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --background-active-blue-france-hover: var(
+    --blue-cumulus-sun-368-moon-732-hover
+  );
+  --background-active-blue-france-active: var(
+    --blue-cumulus-sun-368-moon-732-active
+  );
+}
+.datagouv-components .bg-contrast-blue-cumulus {
+  background-color: var(--background-contrast-blue-cumulus);
+}
+.datagouv-components .bg-alt-blue-cumulus {
+  background-color: var(--background-alt-blue-cumulus);
+}
+.datagouv-components .bg-alt-grey {
+  background-color: var(--background-alt-grey);
+}
+.datagouv-components .text-mention-grey {
+  color: var(--text-mention-grey) !important;
+}
+.datagouv-components html,
+.datagouv-components body {
+  color: var(--grey-200-850);
+  font-size: 1rem;
+  font-family: Marianne, Arial, sans-serif;
+  line-height: 1.35;
+  text-rendering: optimizeLegibility;
+}
+.datagouv-components h1,
+.datagouv-components h2,
+.datagouv-components h3,
+.datagouv-components h4,
+.datagouv-components h5,
+.datagouv-components .h1,
+.datagouv-components .h2,
+.datagouv-components .h3,
+.datagouv-components .h4,
+.datagouv-components .h5 {
+  display: block;
+  margin-top: 0;
+  font-weight: 700;
+  line-height: 1.35;
+  color: inherit;
+}
+.datagouv-components .f-italic {
+  font-style: italic;
+}
+.datagouv-components .font-bold {
+  font-weight: 700;
+}
+.datagouv-components .code {
+  background-color: var(--background-alt-grey);
+  color: var(--grey-425-625);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+.datagouv-components .h1,
+.datagouv-components h1 {
+  margin-bottom: 3.5rem;
+  font-size: 2rem;
+}
+.datagouv-components .h2,
+.datagouv-components h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+.datagouv-components .h3,
+.datagouv-components h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+.datagouv-components .h4,
+.datagouv-components h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+.datagouv-components .h5,
+.datagouv-components h5 {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+.datagouv-components .small,
+.datagouv-components small {
+  font-size: 0.75rem;
+}
+.datagouv-components .subtitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  margin-bottom: 1rem;
+}
+.datagouv-components .subtitle--uppercase {
+  text-transform: uppercase !important;
+}
+.datagouv-components .text-align-right {
+  text-align: right !important;
+}
+.datagouv-components .overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+.datagouv-components .text-overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.datagouv-components .text-overflow-ellipsis a {
+  outline-offset: -1px;
+}
+.datagouv-components .whitespace-nowrap {
+  white-space: nowrap;
+}
+.datagouv-components .dash-after-sm:after,
+.datagouv-components .dash-before-sm:before {
+  content: '—';
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: var(--grey-425-625);
+  font-size: 0.6rem;
+}
+.datagouv-components .block {
+  display: block;
+}
+.datagouv-components .inline {
+  display: inline !important;
+}
+.datagouv-components .inline-block {
+  display: inline-block;
+}
+.datagouv-components .relative {
+  position: relative;
+}
+.datagouv-components .absolute {
+  position: absolute;
+}
+.datagouv-components .top-0 {
+  top: 0;
+}
+.datagouv-components .flex {
+  display: flex;
+}
+.datagouv-components .inline-flex {
+  display: inline-flex !important;
+}
+.datagouv-components .no-wrap {
+  flex-wrap: nowrap;
+}
+.datagouv-components .wrap {
+  flex-wrap: wrap;
+}
+.datagouv-components .flex-direction-column {
+  flex-direction: column !important;
+}
+.datagouv-components .justify-end {
+  justify-content: flex-end;
+}
+.datagouv-components .justify-between {
+  justify-content: space-between !important;
+}
+.datagouv-components .w-100 {
+  width: 100%;
+}
+.datagouv-components .min-width-0 {
+  min-width: 0;
+}
+.datagouv-components .fr-btn {
+  font-size: 0.875rem;
+  --background-action-high-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --background-action-high-blue-france-hover: var(
+    --blue-cumulus-sun-368-moon-732-hover
+  );
+  --background-action-high-blue-france-active: var(
+    --blue-cumulus-sun-368-moon-732-active
+  );
+  border-radius: 3em;
+}
+
+.datagouv-components .fr-btn--sm {
+  font-size: 0.75rem;
+}
+.datagouv-components .fr-btn--secondary {
+  --text-action-high-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --border-action-high-blue-france: var(--blue-cumulus-sun-368-moon-732);
+}
+.datagouv-components
+  .fr-btn:not([class*='fr-btn--icon-'])[class^='fr-icon--sm'],
+.datagouv-components
+  .fr-btn:not([class*='fr-btn--icon-'])[class*=' fr-icon--sm'] {
+  padding: 0.75rem;
+}
+.datagouv-components
+  .fr-btn:not([class*='fr-btn--icon-'])[class^='fr-icon--sm']:before,
+.datagouv-components
+  .fr-btn:not([class*='fr-btn--icon-'])[class*=' fr-icon--sm']:before {
+  --icon-size: 1rem;
+  margin-right: 0.75rem;
+  margin-top: -1px;
+}
+.datagouv-components .fr-btn--secondary-grey-500 {
+  border-color: var(--grey-50-1000);
+  color: var(--grey-50-1000);
+  --border-action-high-blue-france: var(--grey-50-1000);
+}
+.datagouv-components .fr-badge > [class^='fr-icon-'],
+.datagouv-components .fr-badge > [class*=' fr-icon-'] {
+  margin-right: 0.25rem;
+}
+.datagouv-components .fr-badge--mention-grey {
+  color: var(--text-mention-grey);
+}
+.datagouv-components .fr-badge--sm {
+  max-height: 1.25rem;
+}
+.datagouv-components .hidden {
+  display: none !important;
+}
+@media (min-width: 36em) {
+  .datagouv-components .flex-sm {
+    display: flex !important;
+  }
+}
+.datagouv-components .overflow-hidden {
+  overflow: hidden !important;
+}
+.datagouv-components .logo {
+  display: flex;
+  position: relative;
+  background: white;
+  border: 1px solid var(--grey-950-100);
+  padding: 0.75rem;
+}
+.datagouv-components .logo img {
+  max-width: 100%;
+}
+@media screen and (max-width: 48em) {
+  .datagouv-components .logo {
+    max-width: 140px;
+  }
+}
+.datagouv-components a:focus {
+  outline: 5px auto -webkit-focus-ring-color;
+}
+.datagouv-components a:active {
+  outline: none;
+}
+.datagouv-components .fr-link {
+  --text-action-high-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  display: inline;
+}
+.datagouv-components .fr-accordion {
+  --border-default-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --text-action-high-blue-france: var(--grey-50-1000);
+  --background-open-blue-france: var(--background-alt-grey);
+  --background-open-blue-france-hover: var(--background-alt-grey-hover);
+  --background-open-blue-france-active: var(--background-alt-grey-active);
+}
+.datagouv-components .rounded-xxs {
+  border-radius: 0.25rem;
+}
+.datagouv-components .border {
+  border: 1px solid var(--border-default-grey);
+}
+.datagouv-components .border-left {
+  border-left: 1px solid var(--border-default-grey);
+}
+.datagouv-components .border-bottom {
+  border-bottom: 1px solid var(--border-default-grey);
+}
+.datagouv-components .border-top {
+  border-top: 1px solid var(--border-default-grey);
+}
+.datagouv-components .border-default-grey {
+  border-color: var(--border-default-grey);
+}
+.datagouv-components .fr-tabs {
+  --text-active-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --border-active-blue-france: var(--blue-cumulus-sun-368-moon-732);
+  --background-action-low-blue-france: var(
+    --background-action-low-blue-cumulus
+  );
+  --background-action-low-blue-france-hover: var(
+    --background-action-low-blue-cumulus-hover
+  );
+  --background-action-low-blue-france-active: var(
+    --background-action-low-blue-cumulus-active
+  );
+  z-index: 1;
+}
+.datagouv-components .not-enlarged {
+  position: relative;
+  z-index: 2;
+}
+.datagouv-components .fr-enlarge-link .not-enlarged a {
+  background-image: var(--underline-img), var(--underline-img);
+}
+.datagouv-components .fr-enlarge-link .not-enlarged a:hover {
+  background-image: var(--underline-img), var(--underline-img);
+  background-position:
+    var(--underline-x) 100%,
+    var(--underline-x) calc(100% - var(--underline-thickness));
+  background-repeat: no-repeat, no-repeat;
+  transition: background-size 0s;
+  background-size:
+    var(--underline-hover-width) calc(var(--underline-thickness) * 2),
+    var(--underline-idle-width) var(--underline-thickness);
+}
+.datagouv-components .fr-enlarge-link .not-enlarged a:before {
+  background: none;
+}
+.datagouv-components .fr-card__title a[href] {
+  color: var(--text-title-grey);
+}
+.datagouv-components .fr-card__img img {
+  object-fit: cover;
+}
+@keyframes rotation {
+  to {
+    transform: rotate(1turn);
+  }
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+@keyframes scaleUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes rotation {
+  to {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+@keyframes rotation {
+  to {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+@-webkit-keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes pulse {
+  0% {
+    color: #fff;
+    background: #4990e2;
+    box-shadow: 0 0 #4990e2cc;
+  }
+  70% {
+    box-shadow: 0 0 0 5px #4990e200;
+  }
+  to {
+    color: #fff;
+    background: #4990e2;
+    box-shadow: 0 0 #4990e200;
+  }
+}
+@keyframes pulse {
+  0% {
+    color: #fff;
+    background: #4990e2;
+    box-shadow: 0 0 #4990e2cc;
+  }
+  70% {
+    box-shadow: 0 0 0 5px #4990e200;
+  }
+  to {
+    color: #fff;
+    background: #4990e2;
+    box-shadow: 0 0 #4990e200;
+  }
+}
+@-webkit-keyframes shake {
+  10%,
+  90% {
+    -webkit-transform: translate3d(-1px, 0, 0);
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    -webkit-transform: translate3d(2px, 0, 0);
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translate3d(-4px, 0, 0);
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    -webkit-transform: translate3d(4px, 0, 0);
+    transform: translate3d(4px, 0, 0);
+  }
+}
+@keyframes shake {
+  10%,
+  90% {
+    -webkit-transform: translate3d(-1px, 0, 0);
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    -webkit-transform: translate3d(2px, 0, 0);
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translate3d(-4px, 0, 0);
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    -webkit-transform: translate3d(4px, 0, 0);
+    transform: translate3d(4px, 0, 0);
+  }
+}
+@-webkit-keyframes scaleUp {
+  0% {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes scaleUp {
+  0% {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
