@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ContactPoint } from '@/model/dataset'
 import { useContactPointStore } from '@/store/ContactPointStore'
+import type { ContactPoint } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 
 const store = useContactPointStore()

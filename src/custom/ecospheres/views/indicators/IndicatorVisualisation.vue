@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useResourceStore } from '@/store/ResourceStore'
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 import { initializeVisualization } from '@ecolabdata/tabular-dataviz'
 import '@ecolabdata/tabular-dataviz/styles/visualisation.css'
 import type {
