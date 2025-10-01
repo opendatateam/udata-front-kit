@@ -4,7 +4,7 @@ import SearchAPI from '@/services/api/SearchAPI'
 import { useCheckboxQuery } from '@/utils/filters'
 import { useTagsQuery } from '@/utils/tags'
 import { useUniverseQuery } from '@/utils/universe'
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 
 const PAGE_SIZE = 20
 // max search window for elasticsearch on data.gouv.fr

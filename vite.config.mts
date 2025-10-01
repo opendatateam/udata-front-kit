@@ -104,14 +104,34 @@ export default defineConfig(({ mode }) => {
       globals: true
     },
     server: {
-      // this is a dev CSP, restricting outbound requests to *.data.gouv.fr
+      // this is a dev CSP, restricting outbound requests to *.data.gouv.fr and grist.numerique.gouv.fr
       // this makes sure we don't make unintended API calls to third-parties (looking at you iconify)
       // ⚠️ this won't be applied on prod or other environments
       headers: {
         'Content-Security-Policy': [
-          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com dev.local:7000"
+          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com dev.local:7000 grist.numerique.gouv.fr"
         ].join('; ')
       }
+    },
+    optimizeDeps: {
+      // Some `@datagouv/components-next` dependencies aren't scanned by Vite dev server.
+      // It must optimized them to be able to handle commonjs dependencies.
+      // See https://vite.dev/guide/dep-pre-bundling.html#customizing-the-behavior
+      include: [
+        'debug',
+        'extend',
+        'highlight.js',
+        'rehype-highlight',
+        'swagger-ui-dist',
+        'unist-util-find',
+        'unist-util-find-all-between',
+        'vue',
+        'vue-router'
+      ],
+      // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
+      // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
+      // used for the components configuration.
+      exclude: ['@datagouv/components-next']
     }
   }
 })

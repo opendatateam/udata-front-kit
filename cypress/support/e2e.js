@@ -19,6 +19,7 @@ import 'cypress-axe'
 import './commands'
 import './datagouv_mocks'
 import './generic_mocks'
+import './grist_mocks'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

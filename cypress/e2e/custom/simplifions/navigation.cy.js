@@ -1,6 +1,6 @@
 import {
-  casUsageFactory,
-  solutionFactory
+  topicCasUsageFactory,
+  topicSolutionFactory
 } from '../../../support/factories/custom/simplifions/topics_factory'
 
 describe('Simplifions Navigation', () => {
@@ -57,7 +57,7 @@ describe('Simplifions Navigation', () => {
   })
 
   it("should search for cas d'usages", () => {
-    cy.mockDatagouvObjectList('topics', casUsageFactory.many(2))
+    cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(2))
 
     cy.get('header[role="banner"]').within(() => {
       // Click on the search input
@@ -79,7 +79,7 @@ describe('Simplifions Navigation', () => {
   })
 
   it('should search for solutions', () => {
-    cy.mockDatagouvObjectList('topics', solutionFactory.many(2))
+    cy.mockDatagouvObjectList('topics', topicSolutionFactory.many(2))
     cy.get('header[role="banner"]').within(() => {
       // Click on the search input
       cy.get('input.multiselect-search:first').click()
