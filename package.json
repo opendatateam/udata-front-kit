@@ -52,6 +52,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.26.5",
     "@eslint/js": "^9.18.0",
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.13",
     "@testing-library/vue": "^8.1.0",
     "@tsconfig/node20": "^20.1.4",
