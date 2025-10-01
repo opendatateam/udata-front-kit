@@ -10,6 +10,7 @@ import { computed, defineAsyncComponent, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import ActivityList from '@/components/ActivityList.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
@@ -74,6 +75,7 @@ const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
+const showActivity = ref(false)
 const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
@@ -203,6 +205,19 @@ useHead({
     { property: 'og:description', content: metaDescription }
   ],
   link: [{ rel: 'canonical', href: metaLink }]
+})
+
+watch(canEdit, () => {
+  if (canEdit.value) {
+    // TODO: make this idempotent?
+    // TODO: use a computed list for tab titles?
+    tabTitles.push({
+      title: 'Activité',
+      tabId: 'tab-activity',
+      panelId: 'tab-content-activity'
+    })
+    showActivity.value = true
+  }
 })
 
 watch(
@@ -451,6 +466,14 @@ watch(
         tab-id="tab-reuses"
       >
         <ReusesList model="topic" :object-id="topic.id" />
+      </DsfrTabContent>
+      <!-- Activité -->
+      <DsfrTabContent
+        v-if="showActivity"
+        panel-id="tab-content-activity"
+        tab-id="tab-activity"
+      >
+        <ActivityList :topic-id="topic.id" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
