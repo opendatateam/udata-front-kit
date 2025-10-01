@@ -85,7 +85,6 @@ watch(
     </p>
   </div>
   <div v-else>
-    <!-- FIXME: we need to import tailwind if we want all the classes to apply :-/ like w-6 or size-[7px] -->
     <h2 class="fr-mt-4w">Activité</h2>
     <div
       v-for="(monthlyActivities, month) in groupedActivities"
@@ -169,9 +168,3 @@ watch(
     </div>
   </div>
 </template>
-
-<style scoped>
-.bg-gray-silver {
-  background-color: #cecece !important;
-}
-</style>

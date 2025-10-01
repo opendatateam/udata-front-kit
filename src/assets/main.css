@@ -1,3 +1,13 @@
+@import 'tailwindcss';
+
+/* opportunistic extract from https://github.com/datagouv/cdata/blob/main/datagouv-components/assets/main.css */
+@theme {
+  --color-gray-silver: #cecece;
+  --color-gray-medium: #666666;
+  --color-gray-title: #161616;
+  --color-gray-some: #f6f6f6;
+}
+
 :root {
   --blue-france-975-75: var(--blue-cumulus-975-75);
   --blue-france-975-75-hover: var(--blue-cumulus-975-75-hover);
