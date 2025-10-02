@@ -36,7 +36,7 @@ const app = createApp(App)
 const pinia = createPinia()
 const head = createHead()
 
-if (config.sentry && config.sentry.dsn) {
+if (config.sentry?.dsn) {
   Sentry.init({
     app,
     dsn: config.sentry.dsn,
