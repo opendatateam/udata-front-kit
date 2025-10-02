@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
@@ -89,6 +90,12 @@ export default defineConfig(({ mode }) => {
             )
           }
         }
+      }),
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: 'sentry',
+        project: env.VITE_SITE_ID,
+        url: 'https://errors.data.gouv.fr/'
       })
     ],
     resolve: {
@@ -102,6 +109,9 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'happy-dom',
       globals: true
+    },
+    build: {
+      sourcemap: true // Source map generation must be turned on
     },
     server: {
       // this is a dev CSP, restricting outbound requests to *.data.gouv.fr and grist.numerique.gouv.fr
