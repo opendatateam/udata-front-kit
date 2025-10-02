@@ -24,6 +24,9 @@ interface Config {
   robots: {
     meta: string
   }
+  sentry?: {
+    dsn?: string
+  }
 }
 
 // https://vitejs.dev/config/
@@ -91,12 +94,17 @@ export default defineConfig(({ mode }) => {
           }
         }
       }),
-      sentryVitePlugin({
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-        org: 'sentry',
-        project: env.VITE_SITE_ID,
-        url: 'https://errors.data.gouv.fr/'
-      })
+      // Only enable Sentry if the site config has sentry.dsn configured
+      ...(config.sentry?.dsn
+        ? [
+            sentryVitePlugin({
+              authToken: process.env.SENTRY_AUTH_TOKEN,
+              org: 'sentry',
+              project: env.VITE_SITE_ID,
+              url: 'https://errors.data.gouv.fr/'
+            })
+          ]
+        : [])
     ],
     resolve: {
       alias: {
