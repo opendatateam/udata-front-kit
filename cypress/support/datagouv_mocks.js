@@ -77,6 +77,15 @@ Cypress.Commands.add('mockStaticDatagouv', () => {
     statusCode: 200,
     body: '// Mocked static.data.gouv.fr content'
   }).as('mockStaticDatagouv')
+
+  // Mock avatar API calls
+  cy.intercept('GET', datagouvUrlRegex('avatars'), {
+    statusCode: 200,
+    body: '// Mocked avatar image',
+    headers: {
+      'Content-Type': 'image/png'
+    }
+  }).as('mockAvatars')
 })
 
 Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {

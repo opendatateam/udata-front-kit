@@ -14,10 +14,22 @@ export const isOnlyNoGroup = (groups: FactorsGroups) => {
 export function useGroups(factors: Ref<ResolvedFactor[]>): {
   groupedFactors: ComputedRef<FactorsGroups>
   getFactorIndex: (group: string, indexInGroup: number) => number
-  removeFactorFromGroup: (group: string, index: number) => ResolvedFactor[]
+  removeFactorFromGroup: (
+    group: string,
+    index: number
+  ) => { factors: ResolvedFactor[]; deletedFactor: ResolvedFactor | null }
   groupExists: (groupName: string) => boolean
-  renameGroup: (oldGroupName: string, newGroupName: string) => ResolvedFactor[]
-  deleteGroup: (groupName: string) => ResolvedFactor[]
+  renameGroup: (
+    oldGroupName: string,
+    newGroupName: string
+  ) => {
+    factors: ResolvedFactor[]
+    changedFactors: ResolvedFactor[]
+  }
+  deleteGroup: (groupName: string) => {
+    factors: ResolvedFactor[]
+    deletedFactors: ResolvedFactor[]
+  }
 } {
   const groupedFactors = computed(() => {
     // Group datasets by their group property
@@ -74,16 +86,17 @@ export function useGroups(factors: Ref<ResolvedFactor[]>): {
     const factorToDeleteIndex = getFactorIndex(group, index)
 
     if (factorToDeleteIndex === -1) {
-      return factors.value
+      return { factors: factors.value, deletedFactor: null }
     }
 
-    const confirmMessage =
-      'Etes-vous sûr de vouloir supprimer ce jeu de données ?'
-    if (!window.confirm(confirmMessage)) {
-      return factors.value
-    }
+    const deletedFactor = factors.value[factorToDeleteIndex]
 
-    return factors.value.filter((_, index) => index !== factorToDeleteIndex)
+    return {
+      factors: factors.value.filter(
+        (_, index) => index !== factorToDeleteIndex
+      ),
+      deletedFactor
+    }
   }
 
   const groupExists = (groupName: string) => {
@@ -93,22 +106,36 @@ export function useGroups(factors: Ref<ResolvedFactor[]>): {
   const renameGroup = (oldGroupName: string, newGroupName: string) => {
     // Skip if new group already exists or old group is empty
     if (groupExists(newGroupName) || !groupedFactors.value.has(oldGroupName)) {
-      return factors.value
+      return { factors: factors.value, changedFactors: [] }
     }
+
+    const changedFactors: ResolvedFactor[] = []
     const data = factors.value.map((factor) => {
       if (factor.siteExtras.group === oldGroupName) {
         // If renaming to NO_GROUP, clear the group instead of storing the string
         factor.siteExtras.group =
           newGroupName === NO_GROUP ? undefined : newGroupName
+        changedFactors.push(factor)
       }
       return factor
     })
-    return data
+    return { factors: data, changedFactors }
   }
 
   const deleteGroup = (groupName: string) => {
-    return factors.value.filter(
-      (factor) => factor.siteExtras.group !== groupName
+    return factors.value.reduce(
+      (acc, factor) => {
+        if (factor.siteExtras.group === groupName) {
+          acc.deletedFactors.push(factor)
+        } else {
+          acc.factors.push(factor)
+        }
+        return acc
+      },
+      {
+        factors: [] as ResolvedFactor[],
+        deletedFactors: [] as ResolvedFactor[]
+      }
     )
   }
 

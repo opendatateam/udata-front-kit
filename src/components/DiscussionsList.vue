@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import type { ComputedRef, Ref } from 'vue'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import config from '@/config'
@@ -106,14 +106,18 @@ const createPost = (discussionId: DiscussionId) => {
     })
 }
 
-watchEffect(() => {
-  if (!props.subject.id) return
-  discussionStore.loadDiscussionsForSubject(props.subject.id, currentPage.value)
-  discussionForm.value.subject = {
-    id: props.subject.id,
-    class: props.subjectClass
-  }
-})
+watch(
+  [() => props.subject.id, () => currentPage.value, () => props.subjectClass],
+  ([subjectId, page, subjectClass]) => {
+    if (!subjectId) return
+    discussionStore.loadDiscussionsForSubject(subjectId, page)
+    discussionForm.value.subject = {
+      id: subjectId,
+      class: subjectClass
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

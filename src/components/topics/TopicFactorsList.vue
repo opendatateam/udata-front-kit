@@ -9,6 +9,7 @@ import FactorEditModal, {
 import config from '@/config'
 import { type ResolvedFactor } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useTopicElementStore } from '@/store/TopicElementStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
@@ -24,7 +25,7 @@ const factors = defineModel({
   default: []
 })
 
-defineProps({
+const props = defineProps({
   isEdit: {
     type: Boolean,
     default: false
@@ -32,15 +33,18 @@ defineProps({
   datasetEditorialization: {
     type: Boolean,
     default: true
+  },
+  topicId: {
+    type: String,
+    required: true
   }
 })
-
-const emits = defineEmits(['updateFactors'])
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { pageConf } = useCurrentPageConf()
+const elementStore = useTopicElementStore()
 
 const {
   groupedFactors,
@@ -60,19 +64,60 @@ const {
 
 const { groupedFactors: filteredResults } = useGroups(filteredFactors)
 
-const handleRemoveFactor = (group: string, index: number) => {
-  factors.value = removeFactorFromGroup(group, index)
-  emits('updateFactors')
+const handleRemoveFactor = async (group: string, index: number) => {
+  const confirmMessage =
+    'Etes-vous sûr de vouloir supprimer ce jeu de données ?'
+  if (!window.confirm(confirmMessage)) {
+    return
+  }
+  const result = removeFactorFromGroup(group, index)
+  if (!result.deletedFactor) {
+    return
+  }
+  if (result.deletedFactor.id) {
+    await elementStore.deleteElement(props.topicId, result.deletedFactor.id)
+  }
+  factors.value = result.factors
 }
 
-const handleRenameGroup = (oldGroupName: string, newGroupName: string) => {
-  factors.value = renameGroup(oldGroupName, newGroupName)
-  emits('updateFactors')
+const handleRenameGroup = async (
+  oldGroupName: string,
+  newGroupName: string
+) => {
+  // Update local state and get the list of changed factors
+  const { factors: updatedFactors, changedFactors } = renameGroup(
+    oldGroupName,
+    newGroupName
+  )
+  factors.value = updatedFactors
+
+  // Persist changes to API only for the factors that were actually modified
+  const updatePromises = changedFactors.map(async (factor) => {
+    if (factor.id) {
+      return elementStore.updateElement(
+        props.topicId,
+        factor.id,
+        factor.unresolved()
+      )
+    }
+  })
+
+  await Promise.all(updatePromises)
 }
 
-const handleDeleteGroup = (groupName: string) => {
-  factors.value = deleteGroup(groupName)
-  emits('updateFactors')
+const handleDeleteGroup = async (groupName: string) => {
+  // Update local state and get the list of deleted factors
+  const { factors: updatedFactors, deletedFactors } = deleteGroup(groupName)
+  factors.value = updatedFactors
+
+  // Delete the factors via API
+  const deletePromises = deletedFactors.map(async (factor) => {
+    if (factor.id) {
+      return elementStore.deleteElement(props.topicId, factor.id)
+    }
+  })
+
+  await Promise.all(deletePromises)
 }
 
 const loadDatasetsContent = () => {
@@ -118,10 +163,6 @@ const editFactor = (factor: ResolvedFactor, index: number, group: string) => {
   modal.value?.editFactor(factor, getFactorIndex(group, index))
 }
 
-const onFactorEditModalSubmit = () => {
-  emits('updateFactors')
-}
-
 watch(
   () => factors.value.map((factor) => factor.element?.id).filter(Boolean),
   () => {
@@ -151,6 +192,7 @@ watch(
         size="sm"
         label="Ajouter un jeu de données"
         icon="fr-icon-add-line"
+        class="test__add_dataset_btn"
         @click.prevent="addDataset"
       />
     </div>
@@ -198,6 +240,7 @@ watch(
                   tertiary
                   icon-only
                   :on-click="() => editFactor(factor, index, group)"
+                  class="test__edit_factor_btn"
                 />
                 <DsfrButton
                   size="sm"
@@ -206,6 +249,7 @@ watch(
                   tertiary
                   icon-only
                   :on-click="() => handleRemoveFactor(group, index)"
+                  class="test__delete_factor_btn"
                 />
               </template>
               <template #factorContent="{ factor }">
@@ -258,7 +302,7 @@ watch(
     v-model="factors"
     v-model:groups-model="groupedFactors"
     :dataset-editorialization
-    @submit-modal="onFactorEditModalSubmit"
+    :topic-id="props.topicId"
   />
 </template>
 
