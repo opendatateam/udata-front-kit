@@ -2,6 +2,16 @@
 
 # used as extras key
 site_id: simplifions
+# Error tracker : Sentry
+
+sentry:
+  dsn: 'https://64125dbdddc34d8febc846b14ddca217@errors.data.gouv.fr/38'
+  tracePropagationTargets:
+    [
+      /^https:\/\/demo\.data\.gouv\.fr\/api/,
+      /^https:\/\/www\.data\.gouv\.fr\/api/,
+      /^https:\/\/grist\.numerique\.gouv\.fr\/api/
+    ]
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)

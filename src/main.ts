@@ -9,6 +9,7 @@ import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de Vue
 import '@datagouv/components-next/dist/components.css'
 import '@datagouv/components/dist/style.css'
 
+import * as Sentry from '@sentry/vue'
 import { createHead } from '@unhead/vue'
 import type { InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
@@ -34,6 +35,21 @@ import { isNotFoundError } from './utils/http'
 const app = createApp(App)
 const pinia = createPinia()
 const head = createHead()
+
+if (config.sentry && config.sentry.dsn) {
+  Sentry.init({
+    app,
+    dsn: config.sentry.dsn,
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.replayIntegration()
+    ],
+    tracesSampleRate: 1.0,
+    tracePropagationTargets: config.sentry.tracePropagationTargets || [],
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0
+  })
+}
 
 routerPromise
   .then((router) => {
