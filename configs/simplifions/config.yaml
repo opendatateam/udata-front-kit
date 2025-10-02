@@ -5,7 +5,7 @@ site_id: simplifions
 # Error tracker : Sentry
 
 sentry:
-  dsn: 'https://64125dbdddc34d8febc846b14ddca217@errors.data.gouv.fr/38'
+  dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
   tracePropagationTargets:
     [
       /^https:\/\/demo\.data\.gouv\.fr\/api/,
