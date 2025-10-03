@@ -40,7 +40,7 @@ matomo:
   siteId: 311
 
 sentry:
-  dsn: 'https://9bdf7991fb73d8d2c47ed37609152b46@errors.data.gouv.fr/39'
+  environment: 'production'
   tracePropagationTargets:
     [
       /^https:\/\/www\.data\.gouv\.fr\/api/,
