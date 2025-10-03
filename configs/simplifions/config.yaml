@@ -8,7 +8,7 @@ sentry:
   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
   tracePropagationTargets:
     [
-      /^https:\/\/demo\.data\.gouv\.fr\/api/,
+      /^https:\/\/www\.data\.gouv\.fr\/api/,
       /^https:\/\/grist\.numerique\.gouv\.fr\/api/
     ]
 
