@@ -9,7 +9,6 @@ sentry:
   tracePropagationTargets:
     [
       /^https:\/\/demo\.data\.gouv\.fr\/api/,
-      /^https:\/\/www\.data\.gouv\.fr\/api/,
       /^https:\/\/grist\.numerique\.gouv\.fr\/api/
     ]
 
