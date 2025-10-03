@@ -1,7 +1,9 @@
 import { topicCasUsageFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import './support'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
+    cy.baseMocksForSimplifions()
     cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(11))
     cy.visit('/cas-d-usages')
   })

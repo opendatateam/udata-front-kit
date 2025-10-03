@@ -7,10 +7,11 @@ import {
   mockSolutionRecommandation
 } from '../../../support/factories/custom/simplifions/simplifions_mocks'
 
+import './support'
+
 describe("Simplifions Cas d'usages Show Page", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristRecommandation } = mockSolutionRecommandation({
       API_et_datasets_utiles_fournis: [],
@@ -85,8 +86,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets recommandations", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristRecommandations } = mockApidatasetRecommandations(2)
     const { topicCasUsage } = mockCasUsage(
@@ -111,8 +111,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets, and one custom description", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristApisAndDatasets } = mockApisOrDatasets(2)
     const { gristApiOrDatasetUtiles } = mockApiOrDatasetUtiles(
@@ -157,8 +156,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
 
 describe("Simplifions Cas d'usages Show page for cas d'usage with editors integrations", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristSolution: gristEditorSolution } = mockSolution({
       Nom: 'The Best Editor Solution'
