@@ -45,6 +45,7 @@ if (config.sentry?.dsn) {
       Sentry.replayIntegration()
     ],
     tracesSampleRate: 1.0,
+    environment: import.meta.env.MODE,
     tracePropagationTargets: config.sentry.tracePropagationTargets || [],
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0
