@@ -74,6 +74,7 @@ export type PageConf = {
   labels: PageLabelsConf
   search: PageSearchConf
   banner: PageBannerConf | null
+  default_sort: string | null
   resources_tabs: {
     discussions: {
       display: boolean
