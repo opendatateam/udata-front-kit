@@ -3,6 +3,10 @@
 # used as extras key
 site_id: ecospheres
 
+# sentry:                                     # optional, add only if you want to monitor errors in errors.data.gouv.fr. Documentation : https://docs.sentry.io/platforms/javascript/guides/vue/
+#   dsn: {string}                             # the DSN of the project in errors.data.gouv.fr
+#   tracePropagationTargets: {array of regex} # the URLs to propagate the trace to, typically https://data.gouv.fr/api
+
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
@@ -204,6 +208,7 @@ definitions: &definitions
 #     tag_prefix: {string}          # prefix for tags on data.gouv.fr
 #     title: {string}               # title for the list page
 #     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
+#     default_sort: {string}        # default sort option. Options are : "name", "-created", "-last_modified". "-created" by default if not specified.
 #     labels:                       # how to call the object that is displayed by the page
 #       singular: {string}          # singular name for the object
 #       plural: {string}            # plural name for the object

@@ -30,6 +30,8 @@
     "@gouvfr/dsfr": "1.11.2",
     "@gouvminint/vue-dsfr": "^8.6.0",
     "@json2csv/plainjs": "^7.0.6",
+    "@sentry/vite-plugin": "^4.3.0",
+    "@sentry/vue": "^10.17.0",
     "@unhead/vue": "^1.11.18",
     "@vueform/multiselect": "^2.6.11",
     "@vueform/slider": "^2.1.10",

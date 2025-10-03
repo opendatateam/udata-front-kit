@@ -2,6 +2,15 @@
 
 # used as extras key
 site_id: simplifions
+# Error tracker : Sentry
+
+sentry:
+  dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
+  tracePropagationTargets:
+    [
+      /^https:\/\/demo\.data\.gouv\.fr\/api/,
+      /^https:\/\/grist\.numerique\.gouv\.fr\/api/
+    ]
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
@@ -175,6 +184,7 @@ pages:
       extended: cas d'usage
     search:
       input: Filtrer les cas d'usages
+    default_sort: name
     resources_tabs:
       discussions:
         display: true
@@ -261,6 +271,7 @@ pages:
       extended: solution
     search:
       input: Filtrer les solutions
+    default_sort: name
     resources_tabs:
       discussions:
         display: true

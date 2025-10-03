@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
@@ -22,6 +23,9 @@ interface Config {
   }
   robots: {
     meta: string
+  }
+  sentry?: {
+    dsn?: string
   }
 }
 
@@ -89,7 +93,18 @@ export default defineConfig(({ mode }) => {
             )
           }
         }
-      })
+      }),
+      // Only enable Sentry if the site config has sentry.dsn configured
+      ...(config.sentry?.dsn
+        ? [
+            sentryVitePlugin({
+              authToken: process.env.SENTRY_AUTH_TOKEN,
+              org: 'sentry',
+              project: env.VITE_SITE_ID,
+              url: 'https://errors.data.gouv.fr/'
+            })
+          ]
+        : [])
     ],
     resolve: {
       alias: {
@@ -102,6 +117,9 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'happy-dom',
       globals: true
+    },
+    build: {
+      sourcemap: true // Source map generation must be turned on
     },
     server: {
       // this is a dev CSP, restricting outbound requests to *.data.gouv.fr and grist.numerique.gouv.fr
