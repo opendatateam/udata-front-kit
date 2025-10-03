@@ -7,7 +7,7 @@ import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires 
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import '@datagouv/components-next/dist/components.css'
-import '@datagouv/components/dist/style.css'
+import './assets/datagouv-components-legacy.css'
 
 import { createHead } from '@unhead/vue'
 import type { InternalAxiosRequestConfig } from 'axios'

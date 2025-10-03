@@ -31,7 +31,7 @@
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
-import { formatRelativeIfRecentDate } from '@datagouv/components'
+import { useFormatDate } from '@datagouv/components-next'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 defineProps<{
@@ -39,6 +39,7 @@ defineProps<{
 }>()
 
 const { pageKey } = useCurrentPageConf()
+const { formatRelativeIfRecentDate } = useFormatDate()
 </script>
 
 <style scoped>
