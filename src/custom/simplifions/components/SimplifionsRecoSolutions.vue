@@ -343,14 +343,8 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
   display: flex;
 }
 
-:deep(.fr-accordion__btn) {
-  background-color: var(--background-alt-blue-france);
-}
 :deep(.fr-accordion__btn[aria-expanded='true']) {
-  background-color: var(--hover-tint);
-}
-
-:deep(.fr-accordion__btn) {
+  background-color: var(--background-alt-blue-france);
   color: #3558a2;
 }
 </style>
