@@ -120,7 +120,7 @@ export default defineConfig(({ mode }) => {
       globals: true
     },
     build: {
-      sourcemap: true // Source map generation must be turned on
+      sourcemap: true // Source map generation must be turned on for sentry integration
     },
     server: {
       // this is a dev CSP, restricting outbound requests to *.data.gouv.fr and grist.numerique.gouv.fr
