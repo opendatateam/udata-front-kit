@@ -26,14 +26,14 @@ website:
   title: 'ecologie.data.gouv.fr'
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/ecospheres-logo.svg'
+  service_logo: '/static/logos/ecospheres-logo.svg'
   badge:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-    src: '/logos/ecospheres-logo.svg'
+    src: '/static/logos/ecospheres-logo.svg'
     show_in_header: false
     footer:
       width: '40px'
@@ -123,15 +123,15 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/ecospheres/pages/about.md'
+        url: '/static/ecospheres/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/ecospheres/pages/accessibility.md'
+        url: '/static/ecospheres/pages/accessibility.md'
       - title: "Conditions générales d'utilisation"
         id: 'terms'
         route: '/terms'
-        url: '/ecospheres/pages/terms.md'
+        url: '/static/ecospheres/pages/terms.md'
   sitemap:
     - name: Accueil
       path: /
