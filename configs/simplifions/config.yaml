@@ -7,7 +7,7 @@ site_id: simplifions
 sentry:
   domain_url: 'https://errors.data.gouv.fr/'
   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
-  environment: 'preprod'
+  environment: 'production'
   tracePropagationTargets: []
   tracesSampleRate: 1.0
   replaysSessionSampleRate: 0.1
@@ -15,7 +15,7 @@ sentry:
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 676452675336109a436f8f73
   tabular_api_url:
@@ -87,9 +87,7 @@ website:
     - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
   notice:
-    display: true
-    content: ⚠️ Vous naviguez sur une version de développement de simplifions.data.gouv.fr ⚠️
-    closeable: false
+    display: false
   menu:
     - text: Accueil
       to: /
@@ -137,7 +135,7 @@ website:
     - '#BFDCB7'
   matomo:
     host: 'https://stats.data.gouv.fr'
-    siteId: # Demander à Jordan un ID pour monitorer simplifions
+    siteId: 311
   datasets:
     # TODO: better place for that?
     add_to_topic:
