@@ -61,6 +61,7 @@ export type ApiOrDatasetUtiles = {
   Cas_d_usage: number
   Api_ou_dataset_utile_fourni_par_une_recommandation: number
   En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage: string
+  Ordre: number
   Modifie_par: string
   Modifie_le: number
 }

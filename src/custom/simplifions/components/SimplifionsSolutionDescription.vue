@@ -394,4 +394,10 @@ h3 {
   background-color: #f1f1f1;
   padding: 1rem;
 }
+
+/* Markdown spacing fix for all ul that are inside a p, and right after a p*/
+:deep(p p + ul) {
+  margin-top: -1rem !important;
+  margin-bottom: 1rem !important;
+}
 </style>
