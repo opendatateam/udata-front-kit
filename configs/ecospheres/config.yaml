@@ -204,7 +204,7 @@ definitions: &definitions
 #     tag_prefix: {string}          # prefix for tags on data.gouv.fr
 #     title: {string}               # title for the list page
 #     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
-#     default_sort: {string}        # default sort option. Options are : "name", "-created", "-last_modified". "-created" by default if not specified.
+#     default_sort: {string}        # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
 #     labels:                       # how to call the object that is displayed by the page
 #       singular: {string}          # singular name for the object
 #       plural: {string}            # plural name for the object
