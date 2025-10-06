@@ -41,11 +41,6 @@ matomo:
 
 sentry:
   environment: 'production'
-  tracePropagationTargets:
-    [
-      /^https:\/\/www\.data\.gouv\.fr\/api/,
-      /^https:\/\/grist\.numerique\.gouv\.fr\/api/
-    ]
 ```
 
 So merge the branch `main` into `simplifions-prod` before deploying.
