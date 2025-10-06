@@ -8,11 +8,7 @@ sentry:
   domain_url: 'https://errors.data.gouv.fr/'
   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
   environment: 'preprod'
-  tracePropagationTargets:
-    [
-      /^https:\/\/demo\.data\.gouv\.fr\/api/,
-      /^https:\/\/grist\.numerique\.gouv\.fr\/api/
-    ]
+  tracePropagationTargets: []
   tracesSampleRate: 1.0
   replaysSessionSampleRate: 0.1
   replaysOnErrorSampleRate: 1.0
