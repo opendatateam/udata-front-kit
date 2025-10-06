@@ -16,7 +16,7 @@ import {
 } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import type { SentryConfig } from './src/typings/sentry'
+import type { SentryConfig } from './src/model/config'
 
 interface Config {
   website: {

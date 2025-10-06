@@ -241,7 +241,7 @@ sentry:
   environment: 'preprod' # Ou autre (par exemple 'production'), selon la branche de déploiement
 ```
 
-D'autres éléments de configuration sont disponibles dans le fichier [typings/sentry.d.ts](./typings/sentry.d.ts)
+D'autres éléments de configuration sont disponibles dans le fichier [src/model/config.ts](./src/model/config.ts)
 
 ## 👥 Auteurs
 

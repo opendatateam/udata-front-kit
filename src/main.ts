@@ -27,10 +27,10 @@ import { datagouv } from '@datagouv/components-next'
 import App from './App.vue'
 import './assets/main.css'
 import type { CustomParams } from './model/api'
+import type { SentryConfig } from './model/config'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
-import type { SentryConfig } from './typings/sentry'
 import { isNotFoundError } from './utils/http'
 
 const app = createApp(App)
