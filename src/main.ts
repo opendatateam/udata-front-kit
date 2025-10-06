@@ -36,19 +36,19 @@ const app = createApp(App)
 const pinia = createPinia()
 const head = createHead()
 
-if (config.sentry?.dsn && import.meta.env.MODE !== 'test') {
+if (config.sentry && import.meta.env.MODE !== 'test') {
   Sentry.init({
     app,
     dsn: config.sentry.dsn,
+    environment: config.sentry.environment,
     integrations: [
       Sentry.browserTracingIntegration(),
       Sentry.replayIntegration()
     ],
-    tracesSampleRate: 1.0,
-    environment: config.sentry.environment,
+    tracesSampleRate: config.sentry.tracesSampleRate || 1.0,
     tracePropagationTargets: config.sentry.tracePropagationTargets || [],
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0
+    replaysSessionSampleRate: config.sentry.replaysSessionSampleRate || 0.1,
+    replaysOnErrorSampleRate: config.sentry.replaysOnErrorSampleRate || 1.0
   })
 }
 

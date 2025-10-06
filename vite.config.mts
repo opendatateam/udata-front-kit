@@ -26,6 +26,7 @@ interface Config {
   }
   sentry?: {
     dsn?: string
+    domain_url?: string
   }
 }
 
@@ -95,13 +96,13 @@ export default defineConfig(({ mode }) => {
         }
       }),
       // Only enable Sentry if the site config has sentry.dsn configured and not in test environment
-      ...(config.sentry?.dsn && mode !== 'test'
+      ...(config.sentry && mode !== 'test'
         ? [
             sentryVitePlugin({
               authToken: process.env.SENTRY_AUTH_TOKEN,
               org: 'sentry',
               project: env.VITE_SITE_ID,
-              url: 'https://errors.data.gouv.fr/'
+              url: config.sentry.domain_url
             })
           ]
         : [])
