@@ -16,6 +16,7 @@ import {
 } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
+import type { SentryConfig } from './src/typings/sentry'
 
 interface Config {
   website: {
@@ -24,10 +25,7 @@ interface Config {
   robots: {
     meta: string
   }
-  sentry?: {
-    dsn?: string
-    domain_url?: string
-  }
+  sentry?: SentryConfig
 }
 
 // https://vitejs.dev/config/
@@ -95,8 +93,11 @@ export default defineConfig(({ mode }) => {
           }
         }
       }),
-      // Only enable Sentry if the site config has sentry.dsn configured and not in test environment
-      ...(config.sentry && mode !== 'test'
+      // Only enable Sentry if the site config has sentry configured and not in test environment
+      ...(mode !== 'test' &&
+      config.sentry?.dsn &&
+      config.sentry?.domain_url &&
+      process.env.SENTRY_AUTH_TOKEN
         ? [
             sentryVitePlugin({
               authToken: process.env.SENTRY_AUTH_TOKEN,

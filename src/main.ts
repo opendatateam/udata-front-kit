@@ -30,25 +30,17 @@ import type { CustomParams } from './model/api'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
+import type { SentryConfig } from './typings/sentry'
 import { isNotFoundError } from './utils/http'
 
 const app = createApp(App)
 const pinia = createPinia()
 const head = createHead()
 
-if (config.sentry && import.meta.env.MODE !== 'test') {
+if (config.sentry?.dsn && import.meta.env.MODE !== 'test') {
   Sentry.init({
     app,
-    dsn: config.sentry.dsn,
-    environment: config.sentry.environment,
-    integrations: [
-      Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration()
-    ],
-    tracesSampleRate: config.sentry.tracesSampleRate || 1.0,
-    tracePropagationTargets: config.sentry.tracePropagationTargets || [],
-    replaysSessionSampleRate: config.sentry.replaysSessionSampleRate || 0.1,
-    replaysOnErrorSampleRate: config.sentry.replaysOnErrorSampleRate || 1.0
+    ...(config.sentry as SentryConfig)
   })
 }
 

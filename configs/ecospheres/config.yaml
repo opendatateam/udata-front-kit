@@ -3,9 +3,11 @@
 # used as extras key
 site_id: ecospheres
 
-# sentry:                                     # optional, add only if you want to monitor errors in errors.data.gouv.fr. Documentation : https://docs.sentry.io/platforms/javascript/guides/vue/
-#   dsn: {string}                             # the DSN of the project in errors.data.gouv.fr
-#   tracePropagationTargets: {array of regex} # the URLs to propagate the trace to, typically https://data.gouv.fr/api
+# sentry:                                     # optional, add only if you want to monitor errors with sentry
+#   dsn: {string}                             # the DSN of the sentry project
+#   domain_url: {string}                      # the domain to send sourcemaps to
+#   environment: {string}                     # the environment to send to sentry (production, preprod, etc.)
+#   ... For other sentry options, see ./typings/sentry.d.ts
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
