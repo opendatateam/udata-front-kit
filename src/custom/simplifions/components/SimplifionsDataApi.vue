@@ -65,12 +65,23 @@ const datagouvType = computed(() => {
   }
 })
 
+const datagouvApiVersion = computed(() => {
+  if (datagouvType.value == 'dataservices') {
+    return 1
+  } else {
+    return 2
+  }
+})
+
 const datagouvLink = computed(() => {
   return `https://www.data.gouv.fr/fr/${datagouvType.value}/${props.apiOrDataset.UID_datagouv}`
 })
 
 // Fetch the resource data when the component mounts
-const api = new DatagouvfrAPI({ endpoint: datagouvType.value })
+const api = new DatagouvfrAPI({
+  endpoint: datagouvType.value,
+  version: datagouvApiVersion.value
+})
 api
   .request({
     url: `${api.url()}/${props.apiOrDataset.UID_datagouv}`,
