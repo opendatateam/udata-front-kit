@@ -185,6 +185,7 @@ pages:
       extended: cas d'usage
     search:
       input: Filtrer les cas d'usages
+    default_sort: name
     resources_tabs:
       discussions:
         display: true
@@ -271,6 +272,7 @@ pages:
       extended: solution
     search:
       input: Filtrer les solutions
+    default_sort: name
     resources_tabs:
       discussions:
         display: true

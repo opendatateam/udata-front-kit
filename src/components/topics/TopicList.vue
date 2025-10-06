@@ -62,7 +62,14 @@ const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
   // get filters parameters from route
   return topicStore
-    .query({ ...route.query, ...props }, pageKey)
+    .query(
+      {
+        ...route.query,
+        ...props,
+        sort: route.query.sort || pageConf.default_sort
+      } as Parameters<typeof topicStore.query>[0],
+      pageKey
+    )
     .finally(() => loader.hide())
 }
 
@@ -118,7 +125,7 @@ defineExpose({
       </h2>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <SelectComponent
-          :model-value="routeQuery.sort || '-created'"
+          :model-value="routeQuery.sort || pageConf.default_sort || '-created'"
           label="Trier par :"
           :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
           :options="[
