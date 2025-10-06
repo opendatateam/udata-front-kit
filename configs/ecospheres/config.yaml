@@ -239,6 +239,7 @@ definitions: &definitions
 #         default_option: {string?} # default option for the filter (optional)
 #         default_value: {string?}  # default value for the filter (optional)
 #         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
+#         hide_on_list: {bool?}     # do not display filter on list page (optional, defaults to false)
 #         values:                   # list of values for this filter
 #           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}        # name of the value
@@ -430,6 +431,32 @@ pages:
         display: true
     editable: true
     filters:
+      - name: Thématique
+        default_option: Toutes les thématiques
+        id: theme
+        type: select
+        color: green-menthe
+        use_tag_prefix: true
+        hide_on_list: true
+        values: *fnv_themes
+      - name: Enjeu
+        default_option: Tous les enjeux
+        id: enjeu
+        type: select
+        color: blue-ecume
+        use_tag_prefix: true
+        hide_on_list: true
+        values:
+          - id: adaptation-climat
+            name: Adaptation climat
+          - id: attenuation-climat
+            name: Atténuation climat
+          - id: biodiversite
+            name: Biodiversité
+          - id: ressources
+            name: Ressources
+          - id: sante
+            name: Santé
       - name: Secteur
         default_option: Tous les secteurs
         id: secteur
