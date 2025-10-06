@@ -57,9 +57,7 @@ const topic: Ref<
   tags: tagsWithUniverse,
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [useSiteId()]: {
-      datasets_properties: []
-    }
+    [useSiteId()]: {}
   }
 })
 
@@ -210,14 +208,14 @@ onMounted(() => {
       .load(routeQuery.clone || routeParams.item_id)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(
-            remoteTopic,
-            routeQuery['keep-datasets'] === '1'
+          cloneTopic(remoteTopic, routeQuery['keep-datasets'] === '1').then(
+            (newTopic) => {
+              topic.value = newTopic
+            }
           )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
-          // FIXME: remove datasets and reuses after API is migrated to elements
-          const { datasets, reuses, elements, ...data } = remoteTopic
+          const { elements, ...data } = remoteTopic
           topic.value = data
         }
         setMetaTitle()

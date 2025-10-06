@@ -2,7 +2,7 @@ const datagouvResponseBuilder = (data) => {
   return {
     data: data.slice(0, 10),
     next_page: null,
-    page: Math.ceil(data.length / 10),
+    page: Math.max(1, Math.ceil(data.length / 10)),
     page_size: 10,
     previous_page: null,
     total: data.length
@@ -21,6 +21,23 @@ Cypress.Commands.add('mockDatagouvObjectList', (resourceName, data = []) => {
     body: datagouvResponseBuilder(data)
   }).as(`get_${resourceName}_list`)
 })
+
+Cypress.Commands.add(
+  'mockDatagouvObjectListWithTags',
+  (resourceName, tags = [], data = []) => {
+    const tagsParam = tags
+      .map((tag) => `tag=${encodeURIComponent(tag)}`)
+      .join('&')
+    const urlPattern = new RegExp(
+      `.*data\\.gouv\\.fr/api/\\d/${resourceName}.*${tagsParam}.*`
+    )
+
+    cy.intercept('GET', urlPattern, {
+      statusCode: 200,
+      body: datagouvResponseBuilder(data)
+    }).as(`get_${resourceName}_list_with_tags_${tags.join('_')}`)
+  }
+)
 
 Cypress.Commands.add(
   'mockDatagouvObject',
@@ -48,37 +65,6 @@ Cypress.Commands.add(
   }
 )
 
-Cypress.Commands.add('catchUnmockedRequests', () => {
-  // Intercept only external URLs (not starting with localhost or 127.0.0.1)
-  cy.intercept(/^https?:\/\/(?!(localhost|127\.0\.0\.1)(:|\/|$)).*/, (req) => {
-    throw new Error(
-      `Unmocked external API call detected: ${req.method} ${req.url}`
-    )
-  }).as('catchExternalRequests')
-})
-
-Cypress.Commands.add('allowExternalRequests', () => {
-  cy.intercept('**', (req) => {
-    req.continue()
-  }).as('catchExternalRequests')
-})
-
-Cypress.Commands.add('mockGristImages', () => {
-  cy.readFile('public/static/blank_state/file.svg').then((svgContent) => {
-    cy.intercept(
-      'GET',
-      'https://grist.numerique.gouv.fr/api/docs/*/attachments/*/download',
-      {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'image/svg+xml'
-        },
-        body: svgContent
-      }
-    ).as('mockGristImages')
-  })
-})
-
 Cypress.Commands.add('mockMatomo', () => {
   cy.intercept('GET', 'https://stats.data.gouv.fr/matomo.js', {
     statusCode: 200,
@@ -87,8 +73,24 @@ Cypress.Commands.add('mockMatomo', () => {
 })
 
 Cypress.Commands.add('mockStaticDatagouv', () => {
-  cy.intercept('GET', 'https://static.data.gouv.fr/**', {
+  cy.intercept('GET', 'https://**static.data.gouv.fr/**', {
     statusCode: 200,
     body: '// Mocked static.data.gouv.fr content'
   }).as('mockStaticDatagouv')
+
+  // Mock avatar API calls
+  cy.intercept('GET', datagouvUrlRegex('avatars'), {
+    statusCode: 200,
+    body: '// Mocked avatar image',
+    headers: {
+      'Content-Type': 'image/png'
+    }
+  }).as('mockAvatars')
+})
+
+Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
+  cy.intercept('GET', datagouvUrlRegex('topics', `${resourceId}/elements`), {
+    statusCode: 200,
+    body: datagouvResponseBuilder(elements)
+  }).as(`get_topics_${resourceId}_elements`)
 })

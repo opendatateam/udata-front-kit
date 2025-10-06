@@ -1,8 +1,10 @@
-import { casUsageFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import { topicCasUsageFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import './support'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('topics', casUsageFactory.many(11))
+    cy.baseMocksForSimplifions()
+    cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(11))
     cy.visit('/cas-d-usages')
   })
 
@@ -35,7 +37,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   })
 
   it('should display only one page when there are less than 10 results', () => {
-    cy.mockDatagouvObjectList('topics', casUsageFactory.many(1))
+    cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(1))
     cy.visit('/cas-d-usages')
     cy.get('div.topic-card').should('have.length', 1)
     cy.get('#number-of-results').should(
@@ -52,7 +54,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.expectActionToCallApi(
       () => cy.get('input#search-topic').type('Aides sociales des CCAS'),
       'topics',
-      'q=Aides+sociales+des+CCAS&tag=simplifions-cas-d-usages'
+      'q=Aides+sociales+des+CCAS&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -60,7 +62,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.expectActionToCallApi(
       () => cy.selectFilterValue('À destination de :', 'Communes'),
       'topics',
-      'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-fournisseurs-de-service-communes&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -72,7 +74,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
           'Particuliers'
         ),
       'topics',
-      'tag=simplifions-target-users-particuliers&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-target-users-particuliers&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -84,7 +86,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
           'Aucun développement, ni budget'
         ),
       'topics',
-      'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-budget-aucun-developpement-ni-budget&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -96,7 +98,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
           'Accès facile'
         ),
       'topics',
-      'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-cas-d-usages'
+      'tag=simplifions-v2-types-de-simplification-acces-facile&tag=simplifions-v2-cas-d-usages'
     )
   })
 
@@ -117,7 +119,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-cas-d-usages&.+&include_private=true/
+        /tag=simplifions-v2-cas-d-usages&.+&include_private=true/
       )
     })
   })
@@ -129,7 +131,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     )
     cy.get('div.topic-card').should('have.length', 10)
 
-    cy.mockDatagouvObjectList('topics', casUsageFactory.many(3))
+    cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(3))
     cy.selectFilterValue('À destination de :', 'Communes')
 
     cy.get('#number-of-results').should(

@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import { capitalize, computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { toast } from 'vue3-toastify'
 
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
-import DatasetPropertiesTextFields from '@/components/forms/dataset/DatasetPropertiesTextFields.vue'
+import FactorTextFields from '@/components/forms/dataset/FactorTextFields.vue'
 import type { Topic } from '@/model/topic'
-import { Availability, type DatasetProperties } from '@/model/topic'
+import { Availability, ResolvedFactor } from '@/model/topic'
+import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
-import { useExtras } from '@/utils/topic'
+import { useTopicFactors } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
+import SelectTopicFactorGroup from '../forms/SelectTopicFactorGroup.vue'
 
 const props = defineProps({
   show: {
@@ -37,13 +39,26 @@ const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
 
 const topics = topicStore.myTopics
-const datasetProperties = ref<DatasetProperties>({
-  title: '',
-  purpose: '',
-  id: props.dataset.id,
-  uri: `/datasets/${props.dataset.id}`,
-  availability: Availability.LOCAL_AVAILABLE
-})
+const factor = ref<ResolvedFactor>(
+  new ResolvedFactor(
+    {
+      title: '',
+      description: '',
+      tags: [],
+      element: {
+        class: 'Dataset',
+        id: props.dataset.id
+      },
+      extras: {
+        [useSiteId()]: {
+          uri: `/datasets/${props.dataset.id}`,
+          availability: Availability.LOCAL_AVAILABLE
+        }
+      }
+    },
+    useSiteId()
+  )
+)
 const selectedTopicId: Ref<string | null> = ref(null)
 
 const topicOptions = computed(() => {
@@ -58,18 +73,18 @@ const topicOptions = computed(() => {
 const formErrors: Ref<string[]> = ref([])
 
 const validateFields = () => {
-  if (!datasetProperties.value.title.trim()) {
+  if (!factor.value.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!datasetProperties.value.purpose?.trim()) {
+  if (!factor.value.description?.trim()) {
     formErrors.value.push('purpose')
   }
   if (!selectedTopicId.value) {
     formErrors.value.push('topicId')
   }
   if (
-    datasetProperties.value.group &&
-    datasetProperties.value.group.trim().length > 100
+    factor.value.siteExtras.group &&
+    factor.value.siteExtras.group.trim().length > 100
   ) {
     formErrors.value.push('group')
   }
@@ -107,34 +122,25 @@ watch(selectedTopicId, async () => {
       : await topicStore.load(selectedTopicId.value)
 })
 
-const { datasetsProperties } = useExtras(selectedTopic)
+const { factors } = useTopicFactors(selectedTopic)
 
 const isDatasetInTopic = computed(() => {
   if (!selectedTopicId.value) {
     return false
   }
-  return datasetsProperties.value.some(
-    (datasetProps) => datasetProps.id === props.dataset.id
-  )
+  return factors.value.some((factor) => factor.element?.id === props.dataset.id)
 })
 
-const { groupedDatasets: datasetsGroups } = useGroups(datasetsProperties)
+const { groupedFactors: groups } = useGroups(factors)
 
 const submit = async () => {
-  const topicsExtrasKey = useSiteId()
   if (selectedTopic.value === null) {
     throw Error('Trying to attach to topic without id')
   }
-  const newDatasetsProperties =
-    selectedTopic.value.extras[topicsExtrasKey].datasets_properties || []
-  newDatasetsProperties.push(datasetProperties.value)
-  selectedTopic.value.extras[topicsExtrasKey].datasets_properties =
-    newDatasetsProperties
-  await topicStore.update(selectedTopic.value.id, {
-    id: selectedTopic.value.id,
-    tags: selectedTopic.value.tags,
-    extras: selectedTopic.value.extras
-  })
+  await useTopicElementStore().createElement(
+    selectedTopic.value.id,
+    factor.value
+  )
   toast(
     `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
     {
@@ -212,17 +218,17 @@ onMounted(() => {
       class="fr-mb-2w"
     />
     <div class="fr-input-group">
-      <SelectTopicGroup
-        v-model:properties-model="datasetProperties"
-        v-model:groups-model="datasetsGroups"
+      <SelectTopicFactorGroup
+        v-model:factor-model="factor"
+        v-model:groups-model="groups"
         label="Regroupement"
         description="Rechercher ou créer un regroupement (100 caractères maximum). Un regroupement contient un ou plusieurs jeux de données."
         :error-message="getErrorMessage('group')"
       />
     </div>
-    <DatasetPropertiesTextFields
+    <FactorTextFields
       v-if="datasetsConf.add_to_topic?.dataset_editorialization"
-      v-model:dataset-properties-model="datasetProperties"
+      v-model:factor-model="factor"
       :error-title="getErrorMessage('title')"
       :error-purpose="getErrorMessage('purpose')"
     />

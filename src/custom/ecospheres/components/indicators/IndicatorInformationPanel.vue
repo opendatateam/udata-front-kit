@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { formatDateRange } from '@datagouv/components'
+import { DateRangeDetails } from '@datagouv/components-next'
 import { toRef } from 'vue'
 import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
@@ -67,7 +67,7 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
       v-if="indicator.temporal_coverage"
       title="Couverture temporelle"
     >
-      {{ formatDateRange(indicator.temporal_coverage) }}
+      <DateRangeDetails :range="indicator.temporal_coverage" />
     </InformationPanelItem>
     <InformationPanelItem
       title="Date de mise à jour"

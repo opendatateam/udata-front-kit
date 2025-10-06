@@ -17,7 +17,7 @@ const cypressCommand =
 const command = 'npx'
 const commandArgs = [
   'start-server-and-test',
-  `vite ${viteMode} --port 4173`,
+  `vite ${viteMode} --mode test --port 4173`,
   'http://localhost:4173',
   cypressCommand
 ]

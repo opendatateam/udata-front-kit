@@ -319,6 +319,8 @@ pages:
             name: Saison 2
           - id: saison-3
             name: Saison 3
+          - id: saison-4
+            name: Saison 4
   # DATASETS
   datasets:
     list_all: false

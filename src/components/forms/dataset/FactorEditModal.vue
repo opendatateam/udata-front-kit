@@ -7,36 +7,44 @@ import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
 import {
   Availability,
-  type DatasetProperties,
-  type DatasetsGroups
+  ResolvedFactor,
+  type Factor,
+  type FactorsGroups
 } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useTopicElementStore } from '@/store/TopicElementStore'
+import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
-import DatasetPropertiesFields from './DatasetPropertiesFields.vue'
+import FactorFields from './FactorFields.vue'
 
-export interface DatasetEditModalType {
-  addDataset: () => void
-  editDataset: (dataset: DatasetProperties, index: number) => void
+export interface FactorEditModalType {
+  addFactor: () => void
+  editFactor: (element: ResolvedFactor, index: number) => void
 }
 
 const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
 const { pageConf } = useCurrentPageConf()
+const elementStore = useTopicElementStore()
 
-const datasets = defineModel({
-  type: Object as () => DatasetProperties[],
+const factors = defineModel({
+  type: Object as () => ResolvedFactor[],
   required: true
 })
-const datasetsGroups = defineModel('groups-model', {
-  type: Object as () => DatasetsGroups,
+const factorsGroups = defineModel('groups-model', {
+  type: Object as () => FactorsGroups,
   default: []
 })
 const props = defineProps({
   datasetEditorialization: {
     type: Boolean,
     default: false
+  },
+  topicId: {
+    type: String,
+    required: true
   }
 })
 
@@ -49,29 +57,30 @@ const modalData: Ref<DatasetModalData> = ref({
 const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
+  const modalFactor = modalData.value.factor
   if (props.datasetEditorialization) {
-    if (!modalData.value.dataset?.title.trim()) {
+    if (!modalFactor?.title.trim()) {
       formErrors.value.push('title')
     }
-    if (!modalData.value.dataset?.purpose?.trim()) {
+    if (!modalFactor?.description?.trim()) {
       formErrors.value.push('purpose')
     }
     if (
-      !modalData.value.dataset?.uri &&
-      modalData.value.dataset?.availability === Availability.LOCAL_AVAILABLE
+      !modalFactor?.siteExtras.uri &&
+      modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
     ) {
       formErrors.value.push('availability')
     }
     if (
-      !modalData.value.dataset?.uri &&
-      modalData.value.dataset?.availability === Availability.URL_AVAILABLE
+      !modalFactor?.siteExtras.uri &&
+      modalFactor?.siteExtras.availability === Availability.URL_AVAILABLE
     ) {
       formErrors.value.push('availabilityUrl')
     }
   }
   if (
-    modalData.value.dataset?.group &&
-    modalData.value.dataset?.group.trim().length > 100
+    modalFactor?.siteExtras.group &&
+    modalFactor?.siteExtras.group.length > 100
   ) {
     formErrors.value.push('group')
   }
@@ -90,6 +99,7 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
     {
       label: 'Enregistrer',
       type: 'button',
+      class: 'test__submit_modal_btn',
       onClick: ($event: MouseEvent) => {
         $event.preventDefault()
         handleSubmit()
@@ -107,27 +117,37 @@ const onCancel = () => {
   closeModal()
 }
 
-const editDataset = (dataset: DatasetProperties, index: number) => {
-  // clone the object to enable cancellation
+const editFactor = (dataset: ResolvedFactor, index: number) => {
+  // Create a deep clone to enable cancellation
+  const clonedData = JSON.parse(JSON.stringify(dataset))
   modalData.value = {
     index,
-    dataset: { ...dataset },
+    factor: new ResolvedFactor(clonedData, dataset.siteId),
     isValid: false,
     mode: 'edit'
   }
   isModalOpen.value = true
 }
 
-const addDataset = () => {
+const addFactor = () => {
+  const factor = new ResolvedFactor(
+    {
+      title: '',
+      description: '',
+      tags: [],
+      element: null,
+      extras: {
+        [useSiteId()]: {
+          availability: Availability.LOCAL_AVAILABLE,
+          uri: null
+        }
+      }
+    },
+    useSiteId()
+  )
   modalData.value = {
     index: undefined,
-    dataset: {
-      title: '',
-      purpose: '',
-      availability: Availability.LOCAL_AVAILABLE,
-      uri: null,
-      id: null
-    },
+    factor,
     isValid: false,
     mode: 'create'
   }
@@ -135,16 +155,17 @@ const addDataset = () => {
 }
 
 const submit = async (modalData: DatasetModalData) => {
-  if (modalData.dataset !== undefined) {
+  if (modalData.factor !== undefined) {
     // check if data.gouv.fr URL and update metadata if needed
+    const siteExtras = modalData.factor.extras?.[useSiteId()]
     if (
-      modalData.dataset.uri &&
-      modalData.dataset.availability === Availability.URL_AVAILABLE
+      siteExtras?.uri &&
+      siteExtras?.availability === Availability.URL_AVAILABLE
     ) {
       const pattern = new RegExp(
         `^${config.datagouvfr.base_url}(?:/.*)?/datasets/(?<datasetName>[a-zA-Z0-9_-]+)(?:/|#|$)`
       )
-      const match = pattern.exec(modalData.dataset.uri)
+      const match = pattern.exec(siteExtras.uri)
       if (match?.groups?.datasetName) {
         try {
           const dataset = await useDatasetStore().load(
@@ -154,13 +175,16 @@ const submit = async (modalData: DatasetModalData) => {
             }
           )
           if (dataset !== undefined) {
-            modalData.dataset.availability = Availability.LOCAL_AVAILABLE
+            siteExtras.availability = Availability.LOCAL_AVAILABLE
             const resolved = router.resolve({
               name: 'datasets_detail',
               params: { item_id: dataset.id }
             })
-            modalData.dataset.uri = resolved.href
-            modalData.dataset.id = dataset.id
+            siteExtras.uri = resolved.href
+            modalData.factor.element = {
+              id: dataset.id,
+              class: 'Dataset'
+            }
           }
         } catch (error) {
           console.error(
@@ -171,9 +195,24 @@ const submit = async (modalData: DatasetModalData) => {
       }
     }
     if (modalData.mode === 'create') {
-      datasets.value.push(modalData.dataset)
+      const createdElement = await elementStore.createElement<Factor>(
+        props.topicId,
+        modalData.factor.unresolved<Factor>()
+      )
+      // Add the element with ID returned from server to local factors
+      const resolvedFactor = new ResolvedFactor(createdElement, useSiteId())
+      factors.value.push(resolvedFactor)
     } else if (modalData.mode === 'edit' && modalData.index !== undefined) {
-      datasets.value[modalData.index] = modalData.dataset
+      // Use atomic element update
+      const existingFactor = factors.value[modalData.index]
+      if (existingFactor?.id) {
+        await elementStore.updateElement(
+          props.topicId,
+          existingFactor.id,
+          modalData.factor.unresolved()
+        )
+      }
+      factors.value[modalData.index] = modalData.factor
     }
   }
   emits('submitModal')
@@ -191,12 +230,12 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
-defineExpose({ addDataset, editDataset })
+defineExpose({ addFactor, editFactor })
 </script>
 
 <template>
   <DsfrModal
-    v-if="isModalOpen && modalData.dataset"
+    v-if="isModalOpen && modalData.factor"
     size="lg"
     class="form"
     :title="
@@ -216,12 +255,12 @@ defineExpose({ addDataset, editDataset })
       heading-level="h3"
     />
     <form novalidate>
-      <DatasetPropertiesFields
-        v-model="modalData.dataset"
-        v-model:groups-model="datasetsGroups"
+      <FactorFields
+        v-model="modalData.factor"
+        v-model:groups-model="factorsGroups"
         v-model:errors-model="formErrors"
         :dataset-editorialization
-        :already-selected-datasets="datasets"
+        :factors-in-topic="factors"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />
     </form>

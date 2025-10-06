@@ -2,8 +2,8 @@
 import config from '@/config'
 import type { ResourceData } from '@/model/resource'
 import { useResourceStore } from '@/store/ResourceStore'
-import type { DatasetV2 } from '@datagouv/components'
-import { Pagination, ResourceAccordion } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
+import { Pagination, ResourceAccordion } from '@datagouv/components-next'
 import { useLoading } from 'vue-loading-overlay'
 
 const pageSize = config.website.pagination_sizes.files_list as number
@@ -119,7 +119,7 @@ onMounted(async () => {
           <ResourceAccordion
             v-for="resource in typedResources.resources"
             :key="resource.id"
-            :dataset-id="dataset.id"
+            :dataset="dataset"
             :resource="resource"
           />
           <Pagination

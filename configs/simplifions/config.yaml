@@ -2,6 +2,16 @@
 
 # used as extras key
 site_id: simplifions
+# Error tracker : Sentry
+
+sentry:
+  domain_url: 'https://errors.data.gouv.fr/'
+  dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
+  environment: 'preprod'
+  tracePropagationTargets: []
+  tracesSampleRate: 1.0
+  replaysSessionSampleRate: 0.1
+  replaysOnErrorSampleRate: 1.0
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
@@ -165,8 +175,8 @@ pages:
   cas-d-usages:
     list_all: true
     universe_query:
-      tag: simplifions-cas-d-usages
-    tag_prefix: simplifions
+      tag: simplifions-v2-cas-d-usages
+    tag_prefix: simplifions-v2
     title: Cas d'usages
     breadcrumb_title:
     labels:
@@ -175,6 +185,7 @@ pages:
       extended: cas d'usage
     search:
       input: Filtrer les cas d'usages
+    default_sort: name
     resources_tabs:
       discussions:
         display: true
@@ -251,8 +262,8 @@ pages:
   solutions:
     list_all: true
     universe_query:
-      tag: simplifions-solutions
-    tag_prefix: simplifions
+      tag: simplifions-v2-solutions
+    tag_prefix: simplifions-v2
     title: Solutions
     breadcrumb_title:
     labels:
@@ -261,6 +272,7 @@ pages:
       extended: solution
     search:
       input: Filtrer les solutions
+    default_sort: name
     resources_tabs:
       discussions:
         display: true
