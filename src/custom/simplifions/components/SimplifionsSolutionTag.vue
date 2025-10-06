@@ -23,7 +23,7 @@ const props = defineProps({
 
 const solution = computed(
   () =>
-    (props.topicSolution.extras as TopicSolutionsExtras)[
+    (props.topicSolution.extras as TopicSolutionsExtras | undefined)?.[
       'simplifions-v2-solutions'
     ]
 )
