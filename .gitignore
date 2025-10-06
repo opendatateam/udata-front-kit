@@ -19,6 +19,3 @@ components.d.ts
 .actrc
 .secrets
 .github/**/act*.json
-
-# Sentry Config File
-.env.sentry-build-plugin
