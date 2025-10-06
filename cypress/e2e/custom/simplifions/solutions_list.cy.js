@@ -1,8 +1,9 @@
 import { topicSolutionFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import './support'
 
 describe('Simplifions Solutions Page', () => {
   beforeEach(() => {
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
     cy.mockDatagouvObjectList('topics', topicSolutionFactory.many(11))
     cy.visit('/solutions')
   })

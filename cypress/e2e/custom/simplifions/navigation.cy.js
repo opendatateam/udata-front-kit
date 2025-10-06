@@ -2,11 +2,11 @@ import {
   topicCasUsageFactory,
   topicSolutionFactory
 } from '../../../support/factories/custom/simplifions/topics_factory'
+import './support'
 
 describe('Simplifions Navigation', () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('topics')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
     cy.visit('/')
   })
 

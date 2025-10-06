@@ -4,10 +4,11 @@ import {
   mockSolution
 } from '../../../support/factories/custom/simplifions/simplifions_mocks'
 
+import './support'
+
 describe('Simplifions Solutions Details Page', () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { topicSolution } = mockSolution(
       {
@@ -57,8 +58,7 @@ describe('Simplifions Solutions Details Page', () => {
 
 describe("Simplifions Solutions Details Page with cas d'usages", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristCasUsage } = mockCasUsage()
 
@@ -91,8 +91,7 @@ describe("Simplifions Solutions Details Page with cas d'usages", () => {
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs utilisées", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristApisAndDatasets } = mockApisOrDatasets(2)
 
@@ -116,8 +115,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs utilisée
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs fournies", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristApisAndDatasets } = mockApisOrDatasets(2)
 
