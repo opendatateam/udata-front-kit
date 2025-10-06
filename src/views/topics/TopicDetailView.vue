@@ -177,23 +177,6 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateFactors = () => {
-  if (topic.value == null) {
-    throw Error('Trying to update null topic')
-  }
-  const loader = useLoading().show()
-  store
-    .update(topic.value.id, {
-      // send the tags or payload will be rejected
-      tags: topic.value.tags,
-      elements: factors.value.map(
-        // unresolved will remove "local" properties
-        (element) => element.unresolved()
-      )
-    })
-    .finally(() => loader.hide())
-}
-
 const metaDescription = (): string | undefined => {
   return topic.value?.description ?? ''
 }
@@ -445,7 +428,7 @@ watch(
           v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
-          @update-factors="onUpdateFactors"
+          :topic-id="topic.id"
         />
         <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
