@@ -29,7 +29,7 @@ const solution = computed(
 )
 
 const isPublic = computed(() => {
-  return solution.value.Public_ou_prive === 'Public'
+  return solution.value?.Public_ou_prive === 'Public'
 })
 
 const tagText = computed(() => {
@@ -37,7 +37,7 @@ const tagText = computed(() => {
 })
 
 const operatorName = computed(() => {
-  return solution.value.Nom_de_l_operateur?.[0]
+  return solution.value?.Nom_de_l_operateur?.[0]
 })
 </script>
 
