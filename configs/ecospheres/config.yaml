@@ -3,6 +3,12 @@
 # used as extras key
 site_id: ecospheres
 
+# sentry:                                     # optional, add only if you want to monitor errors with sentry
+#   dsn: {string}                             # the DSN of the sentry project
+#   domain_url: {string}                      # the domain to send sourcemaps to
+#   environment: {string}                     # the environment to send to sentry (production, preprod, etc.)
+#   ... For other sentry options, see ./src/model/config.ts
+
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
