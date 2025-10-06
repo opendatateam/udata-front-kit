@@ -94,8 +94,8 @@ export default defineConfig(({ mode }) => {
           }
         }
       }),
-      // Only enable Sentry if the site config has sentry.dsn configured
-      ...(config.sentry?.dsn
+      // Only enable Sentry if the site config has sentry.dsn configured and not in test environment
+      ...(config.sentry?.dsn && mode !== 'test'
         ? [
             sentryVitePlugin({
               authToken: process.env.SENTRY_AUTH_TOKEN,

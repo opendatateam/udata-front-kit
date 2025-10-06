@@ -3,7 +3,6 @@ describe('Home Page', () => {
     // Visit the home page before each test
     cy.mockMatomo()
     cy.mockStaticDatagouv()
-    cy.mockSentry()
     cy.visit('/')
   })
 

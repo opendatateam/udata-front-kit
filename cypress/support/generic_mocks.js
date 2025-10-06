@@ -19,13 +19,6 @@ Cypress.Commands.add('catchUnmockedRequests', () => {
   }).as('catchExternalRequests')
 })
 
-Cypress.Commands.add('mockSentry', () => {
-  cy.intercept('POST', 'https://errors.data.gouv.fr/api/**', {
-    statusCode: 200,
-    body: {}
-  }).as('mockSentry')
-})
-
 Cypress.Commands.add('allowExternalRequests', () => {
   cy.intercept('**', (req) => {
     req.continue()
