@@ -95,7 +95,6 @@ export default defineConfig(({ mode }) => {
       }),
       // Only enable Sentry if the site config has sentry configured and not in test environment
       ...(mode !== 'test' &&
-      config.sentry?.dsn &&
       config.sentry?.domain_url &&
       process.env.SENTRY_AUTH_TOKEN
         ? [
