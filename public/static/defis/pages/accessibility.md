@@ -23,10 +23,10 @@ Cette procédure est à utiliser dans le cas suivant : vous avez signalé au res
 
 Vous pouvez :
 
-* Écrire un message au Défenseur des droits
-* Contacter le délégué du Défenseur des droits dans votre région
-* Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) : 
-    Défenseur des droits
-    Libre réponse 71120 75342 Paris CEDEX 07
+- Écrire un message au Défenseur des droits
+- Contacter le délégué du Défenseur des droits dans votre région
+- Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) :
+  Défenseur des droits
+  Libre réponse 71120 75342 Paris CEDEX 07
 
 Cette déclaration d’accessibilité a été créé le 11 décembre 2023 grâce au Générateur de Déclaration d’Accessibilité de BetaGouv.

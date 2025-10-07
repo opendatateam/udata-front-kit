@@ -106,6 +106,8 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
   it('should display the recommandations of APIs or datasets', () => {
     cy.get('.reco-data-api-card').should('have.length', 2)
     cy.get('.api-or-dataset-card').should('have.length', 2)
+    cy.get('.dataset-card').should('have.length', 1)
+    cy.get('.dataservice-card').should('have.length', 1)
   })
 })
 

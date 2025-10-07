@@ -20,7 +20,7 @@ website:
   formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/logos/meteo-france-logo.svg'
+  service_logo: '/static/logos/meteo-france-logo.svg'
   badge:
     display: false
     text: 'BETA'
@@ -39,23 +39,23 @@ website:
             - name: 'Données climatologiques (par station et spatialisées)'
               description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
               url: 'datasets?category=climatologique-base'
-              image_url: '/meteo-france/assets/climatologie.png'
+              image_url: '/static/meteo-france/assets/climatologie.png'
             - name: 'Données de référence pour le changement climatique'
               description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
               url: 'datasets?category=climatologique-changement-climatique'
-              image_url: '/meteo-france/assets/climatique.jpg'
+              image_url: '/static/meteo-france/assets/climatique.jpg'
             - name: 'Données de Prévision Numérique du Temps (PNT)'
               description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéances.'
               url: 'datasets?category=pnt'
-              image_url: '/meteo-france/assets/pnt.png'
+              image_url: '/static/meteo-france/assets/pnt.png'
             - name: 'Informations sur les stations'
               description: 'Accès aux caractéristiques des stations météorologiques de métropole et d’outre-mer en service.'
               url: 'datasets?category=stations'
-              image_url: '/meteo-france/assets/station.png'
+              image_url: '/static/meteo-france/assets/station.png'
             - name: 'Fiches climatologiques'
               description: "Fiches synthétiques contenant les moyennes mensuelles, les normales et les records d'une station."
               url: 'datasets?category=fiches'
-              image_url: '/meteo-france/assets/fiche.png'
+              image_url: '/static/meteo-france/assets/fiche.png'
         sub_section_tiles:
           title:
           tiles:
@@ -92,15 +92,15 @@ website:
       - title: 'A propos'
         id: 'about'
         route: '/about'
-        url: '/meteo-france/pages/about.md'
+        url: '/static/meteo-france/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/meteo-france/pages/accessibility.md'
+        url: '/static/meteo-france/pages/accessibility.md'
       #- title: 'Hackathon le 8 et 9 avril 🚀'
       #id: 'hackathon'
       #route: '/hackathon'
-      #url: '/meteo-france/pages/hackathon.md'
+      #url: '/static/meteo-france/pages/hackathon.md'
   show_quality_component: true
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'

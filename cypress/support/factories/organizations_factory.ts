@@ -1,13 +1,13 @@
+import type { Organization } from '@datagouv/components-next'
 import { build, sequence } from 'mimicry-js'
 
-const organizationFactory = build({
+export const organizationFactory = build<Organization>({
   fields: {
     acronym: sequence((x) => `ORGA${x}`),
     badges: [],
-    class: 'Organization',
     id: sequence((x) => `org_id_${x}`),
-    logo: '/public/blank_state/file.svg',
-    logo_thumbnail: '/public/blank_state/file.svg',
+    logo: '/public/static/blank_state/file.svg',
+    logo_thumbnail: '/public/static/blank_state/file.svg',
     name: sequence((x) => `Organization ${x}`),
     page: sequence(
       (x) => `https://demo.data.gouv.fr/organizations/organization-${x}/`
@@ -15,15 +15,34 @@ const organizationFactory = build({
     slug: sequence((x) => `organization-${x}`),
     uri: sequence(
       (x) => `https://demo.data.gouv.fr/api/1/organizations/organization-${x}/`
-    )
+    ),
+    business_number_id: sequence((x) => `business-number-${x}`),
+    description: sequence((x) => `Description for organization ${x}`),
+    url: sequence((x) => `https://example.com/organization/${x}`),
+    created_at: new Date().toISOString(),
+    last_modified: new Date().toISOString(),
+    last_update: new Date().toISOString(),
+    extras: {},
+    deleted: null,
+    members: [],
+    metrics: {
+      dataservices: 42,
+      dataservices_by_months: {},
+      datasets: 43,
+      datasets_by_months: {},
+      followers: 44,
+      members: 45,
+      reuses: 46,
+      reuses_by_months: {},
+      views: 47
+    }
   }
 })
 
-const dinumOrganization = organizationFactory.one({
+export const dinumOrganization = organizationFactory.one({
   overrides: {
     acronym: 'DINUM',
     badges: [{ kind: 'certified' }, { kind: 'public-service' }],
-    class: 'Organization',
     id: '57fe2a35c751df21e179df72',
     logo: 'https://demo-static.data.gouv.fr/avatars/a0/16eb04d7754b989b7dcd21d77699bd-original.png',
     logo_thumbnail:
@@ -34,8 +53,3 @@ const dinumOrganization = organizationFactory.one({
     uri: 'https://demo.data.gouv.fr/api/1/organizations/direction-interministerielle-du-numerique/'
   }
 })
-
-export default {
-  organizationFactory,
-  dinumOrganization
-}
