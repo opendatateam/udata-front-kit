@@ -25,6 +25,7 @@ export type ElementExtras = Record<SiteId, SiteElementExtras>
 export type ElementClass = 'Dataset' | 'Reuse'
 
 export interface GenericElement {
+  id?: string
   title: string
   description: string | null
   tags: string[]
@@ -36,6 +37,7 @@ export interface GenericElement {
 }
 
 class ResolvedGenericElement implements GenericElement {
+  id?: string
   title!: string
   description!: string | null
   tags!: string[]
@@ -63,11 +65,11 @@ class ResolvedGenericElement implements GenericElement {
     return this.extras[this.siteId]
   }
 
-  unresolved(): GenericElement {
+  unresolved<T extends GenericElement = GenericElement>(): T {
     // explicitely pick the required attributes for GenericElement
     // const {removeMe, ...element} = this would not trigger type error if removeMe is not enough
-    const { title, description, tags, extras, element } = this
-    return { title, description, tags, extras, element }
+    const { id, title, description, tags, extras, element } = this
+    return { id, title, description, tags, extras, element } as T
   }
 }
 

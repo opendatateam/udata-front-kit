@@ -31,14 +31,14 @@ robots:
 website:
   title: 'simplifions.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/simplifions-logo.svg'
+  service_logo: '/static/logos/simplifions-logo.svg'
   badge:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-    src: '/logos/simplifions-logo.svg'
+    src: '/static/logos/simplifions-logo.svg'
     show_in_header: false
     footer:
       width: '40px'
@@ -106,23 +106,23 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/simplifions/pages/about.md'
+        url: '/static/simplifions/pages/about.md'
       - title: 'Guide pour la simplification'
         id: 'niveaux-simplification'
         route: '/niveaux-simplification'
-        url: '/simplifions/pages/niveaux-simplification.md'
+        url: '/static/simplifions/pages/niveaux-simplification.md'
       - title: Simplifier le sourcing des marchés publics avec API Entreprise
         id: '/api-entreprise_cas-usage_marches_public_sourcing'
         route: '/api-entreprise_cas-usage_marches_public_sourcing'
-        url: '/simplifions/pages/api-entreprise_cas-usage_marches_public_sourcing.md'
+        url: '/static/simplifions/pages/api-entreprise_cas-usage_marches_public_sourcing.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/simplifions/pages/accessibility.md'
+        url: '/static/simplifions/pages/accessibility.md'
       - title: "Conditions générales d'utilisation"
         id: 'terms'
         route: '/terms'
-        url: '/simplifions/pages/terms.md'
+        url: '/static/simplifions/pages/terms.md'
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)

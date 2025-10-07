@@ -1,4 +1,4 @@
-# ***À propos de meteo.data.gouv.fr***
+# **_À propos de meteo.data.gouv.fr_**
 
 ### **Qu’est-ce que [meteo.data.gouv.fr](http://meteo.data.gouv.fr/) ?**
 
@@ -39,6 +39,6 @@ Celle-ci s’inscrit dans une démarche plus large de construction de biens comm
 
 **[Vos retours](https://tally.so/r/wQ7y47)** sont bienvenus pour nous permettre d’améliorer la plateforme !
 
-Si vous avez une question qui porte sur les données vous pouvez *vous adresser à Météo-France en commentant le jeu de données concernant votre demande (onglet discussion de la page du jeu de donnée)*.
+Si vous avez une question qui porte sur les données vous pouvez _vous adresser à Météo-France en commentant le jeu de données concernant votre demande (onglet discussion de la page du jeu de donnée)_.
 
 Si vous avez une question spécifique sur le fonctionnement de la plateforme vous pouvez [écrire à l’équipe data.gouv.fr.](https://support.data.gouv.fr/)

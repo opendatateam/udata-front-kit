@@ -1,5 +1,5 @@
 Cypress.Commands.add('mockGristImages', () => {
-  cy.readFile('public/blank_state/file.svg').then((svgContent) => {
+  cy.readFile('public/static/blank_state/file.svg').then((svgContent) => {
     cy.intercept(
       'GET',
       'https://grist.numerique.gouv.fr/api/docs/*/attachments/*/download',
