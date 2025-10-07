@@ -343,16 +343,4 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
 }
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.text-align-right {
-  text-align: right;
-}
-
-.f-italic {
-  font-style: italic;
-}
 </style>
