@@ -8,12 +8,11 @@ import {
 } from '@datagouv/components-next'
 import { computed, inject, onMounted, ref } from 'vue'
 
+import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
-import Swagger from '@/components/dataservices/SwaggerComponent.vue'
-import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -21,6 +20,7 @@ import {
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
+import SwaggerClient from '@datagouv/components-next/src/components/ResourceAccordion/Swagger.client.vue'
 
 const route = useRouteParamsAsString()
 const dataserviceId = route.params.item_id
@@ -223,7 +223,7 @@ onMounted(() => {
         <VIconCustom v-if="isSwaggerOpened" name="arrow-up-s-line" />
         <VIconCustom v-else name="arrow-down-s-line" />
       </button>
-      <Swagger
+      <SwaggerClient
         v-if="isSwaggerOpened"
         :url="dataservice.machine_documentation_url"
       />
