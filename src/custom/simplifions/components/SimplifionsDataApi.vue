@@ -24,14 +24,14 @@
 
       <DatasetCard
         v-else-if="datagouvType == 'datasets' && datagouvLink"
-        class="no-margins"
+        class="no-margins dataset-card"
         :dataset="datagouvResource as DatasetV2"
         :dataset-url="datagouvLink"
         dataset-url-in-new-tab
       />
       <DataserviceCard
         v-else-if="datagouvType == 'dataservices' && datagouvLink"
-        class="no-margins"
+        class="no-margins dataservice-card"
         :dataservice="datagouvResource as Dataservice"
         :dataservice-url="datagouvLink"
       />
