@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 
+import type { DataserviceWithRel } from '@/model/dataservice'
 import DataserviceSearchAPI from '@/services/api/DataserviceSearchAPI'
 import { useCheckboxQuery } from '@/utils/filters'
 import { useTagsQuery } from '@/utils/tags'
 import { useUniverseQuery } from '@/utils/universe'
-import type { Dataservice } from '@datagouv/components-next'
 
 const PAGE_SIZE = 20
 // max search window for elasticsearch on data.gouv.fr
@@ -17,7 +17,7 @@ interface QueryArgs {
 }
 
 interface RootState {
-  dataservices: Dataservice[]
+  dataservices: DataserviceWithRel[]
   total: number
 }
 
