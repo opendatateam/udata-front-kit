@@ -3,6 +3,16 @@ import { build, sequence } from 'mimicry-js'
 import { dinumOrganization } from './organizations_factory'
 
 export const dataserviceFactory = build<DataserviceWithRel>({
+  // ensures slug and id are synchronized to urls, sometimes sequence() are out of sync.
+  postBuild: (obj) => ({
+    ...obj,
+    self_web_url: `https://demo.data.gouv.fr/dataservices/${obj.slug}/`,
+    self_api_url: `https://demo.data.gouv.fr/api/1/dataservices/${obj.slug}/`,
+    datasets: {
+      ...obj.datasets,
+      href: `https://www.data.gouv.fr/api/1/datasets/?dataservice=${obj.id}`
+    }
+  }),
   fields: {
     acronym: sequence((x) => `ACRO${x}`),
     organization: dinumOrganization,
