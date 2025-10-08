@@ -98,6 +98,10 @@ const goToBusinessDocumentation = () => {
   window.open(dataservice.value?.business_documentation_url ?? undefined)
 }
 
+const getDatasetPage = (id: string) => {
+  return { name: 'datasets_detail', params: { item_id: id } }
+}
+
 onMounted(() => {
   dataserviceStore
     .load(dataserviceId, { toasted: false, redirectNotFound: true })
@@ -250,7 +254,7 @@ onMounted(() => {
               <DatasetCard
                 :show-description="false"
                 :dataset="dataset"
-                :dataset-url="`/datasets/${dataset.id}`"
+                :dataset-url="getDatasetPage(dataset.id)"
               />
             </div>
           </div>
