@@ -7,6 +7,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
+import { useAsyncComponent } from '@/utils/component'
 import { debounceWait } from '@/utils/config'
 
 defineEmits(['search'])
@@ -46,35 +47,13 @@ const search = useDebounceFn((query) => {
 }, debounceWait)
 
 // load list component from router
-// FIXME: make a composable for that and use it everywhere
-const ListComponent = computed(() => {
-  const componentLoader = meta?.listComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return false
-})
+const ListComponent = useAsyncComponent(() => meta?.listComponent)
 
 // load custom filters component from router, or fallback to default
-const FiltersComponent = computed(() => {
-  const componentLoader = meta?.filtersComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return defineAsyncComponent(
-    () => import('@/components/pages/PageFilters.vue')
-  )
-})
+const FiltersComponent = useAsyncComponent(
+  () => meta?.filtersComponent,
+  defineAsyncComponent(() => import('@/components/pages/PageFilters.vue'))
+)
 
 // TODO: this should be handled by the router, but we don't have access to pageConf there
 onMounted(() => {

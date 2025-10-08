@@ -2,6 +2,7 @@
 import NoResults from '@/components/NoResults.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useSearchStore } from '@/store/DatasetSearchStore'
+import { useAsyncComponent } from '@/utils/component'
 import { DatasetCard } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
@@ -91,18 +92,7 @@ const executeQuery = async () => {
 }
 
 // load custom card component from router, or fallback to default
-const CardComponent = computed(() => {
-  const componentLoader = meta?.cardComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return DatasetCard
-})
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, DatasetCard)
 
 // launch search on route.query changes
 watch(
