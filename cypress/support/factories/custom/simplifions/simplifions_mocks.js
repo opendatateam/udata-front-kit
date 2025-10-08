@@ -101,7 +101,11 @@ export const mockApisOrDatasets = (amount = 2, apiOrDatasetFields = {}) => {
       }
     }
   })
+  // Mock the list of APIs/Datasets and then mock each API/Dataset individually too
   cy.mockGristRecords('APIs_et_datasets', gristApisAndDatasets)
+  gristApisAndDatasets.forEach((apiOrDataset) => {
+    cy.mockGristRecord('APIs_et_datasets', apiOrDataset)
+  })
 
   const dataservicesOrDatasets = gristApisAndDatasets.map(
     (gristApiAndDataset) => {

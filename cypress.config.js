@@ -24,6 +24,14 @@ export default defineConfig({
         config.excludeSpecPattern = 'cypress/e2e/custom/**/*.cy.{js,jsx,ts,tsx}'
       }
 
+      // use cy.task('log', 'message') to log to terminal
+      on('task', {
+        log(message) {
+          console.log(message)
+          return null
+        }
+      })
+
       return config
     }
   },
