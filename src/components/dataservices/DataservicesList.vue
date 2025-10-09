@@ -26,13 +26,13 @@ const route = useRoute()
 
 const store = useDataserviceSearchStore()
 const { meta, pageConf } = useCurrentPageConf()
-const { dataservices, pagination, total, maxTotal } = storeToRefs(store)
+const { items: dataservices, pagination, total } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
     return `1 ${pageConf.labels.singular} disponible`
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} ${pageConf.labels.plural} disponibles`
+    return `${total.value} ${pageConf.labels.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }

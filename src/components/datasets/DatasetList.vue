@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
 import { useCurrentPageConf } from '@/router/utils'
-import { useSearchStore } from '@/store/DatasetSearchStore'
+import { useDatasetSearchStore } from '@/store/DatasetSearchStore'
 import { useAsyncComponent } from '@/utils/component'
 import { DatasetCard } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
@@ -24,9 +24,9 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 
-const store = useSearchStore()
+const store = useDatasetSearchStore()
 const { meta, pageConf } = useCurrentPageConf()
-const { datasets, pagination, total, maxTotal } = storeToRefs(store)
+const { items: datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
