@@ -241,7 +241,7 @@ onMounted(() => {
     >
       <!-- Données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
-        <div id="datasets" class="border-bottom border-default-grey fr-pb-4w">
+        <div id="datasets" class="fr-pb-2w">
           <h2 class="fr-mb-1v subtitle subtitle--uppercase">
             {{ `${total} jeu${total > 1 ? 'x' : ''} de données` }}
           </h2>
