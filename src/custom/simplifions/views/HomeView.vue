@@ -56,19 +56,19 @@ const budgets = [
 
 const niveauxDeSimplification = [
   {
-    title: 'Niveau 1 : ⭐️ Accès facile',
+    title: 'Niveau 1 : 💠 Accès facile',
     description: "L'agent trouve facilement l'information",
     filters: 'types-de-simplification=acces-facile',
     buttonText: 'Solutions'
   },
   {
-    title: 'Niveau 2 : ⭐️⭐️ Dites-le-nous une fois',
+    title: 'Niveau 2 : 💠💠 Dites-le-nous une fois',
     description: "L'usager n'a plus à fournir de justificatifs",
     filters: 'types-de-simplification=dlnuf',
     buttonText: 'Solutions'
   },
   {
-    title: 'Niveau 3 : ⭐️⭐️⭐️ Proactivité',
+    title: 'Niveau 3 : 💠💠💠 Proactivité',
     description: "L'usager n'a plus de démarche à faire",
     filters: 'types-de-simplification=proactivite',
     buttonText: 'Solution'
