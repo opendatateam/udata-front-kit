@@ -308,9 +308,9 @@ onMounted(() => {
           <div class="metadata-list fr-text--sm fr-m-0">
             <div class="fr-grid-row">
               <div class="fr-mb-3w fr-col-12 fr-col-md-6">
-                <h3 class="subtitle fr-mb-2v">Dernière mise à jour</h3>
+                <h3 class="subtitle fr-mb-2v">Création</h3>
                 <div class="fr-text--sm fr-m-0">
-                  {{ formatDate(dataservice.metadata_modified_at) }}
+                  {{ formatDate(dataservice.created_at) }}
                 </div>
               </div>
               <div class="fr-mb-3w fr-col-12 fr-col-md-6">
@@ -318,9 +318,9 @@ onMounted(() => {
                 <div class="fr-text--sm fr-m-0">{{ dataservice.id }}</div>
               </div>
               <div class="fr-mb-3w fr-col-12 fr-col-md-6">
-                <h3 class="subtitle fr-mb-2v">Date de création</h3>
+                <h3 class="subtitle fr-mb-2v">Dernière mise à jour</h3>
                 <div class="fr-text--sm fr-m-0">
-                  {{ formatDate(dataservice.created_at) }}
+                  {{ formatDate(dataservice.metadata_modified_at) }}
                 </div>
               </div>
             </div>
