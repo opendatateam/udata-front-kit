@@ -143,7 +143,7 @@ defineExpose({
       </ul>
     </div>
     <DsfrPagination
-      v-if="pagination.length"
+      v-if="pagination.length > 1"
       :current-page="parseInt(page) - 1"
       :pages="pagination"
       @update:current-page="goToPage"
