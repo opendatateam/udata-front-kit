@@ -250,11 +250,11 @@ pages:
         use_tag_prefix: true
         values:
           - id: proactivite
-            name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
+            name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
           - id: dlnuf
-            name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
+            name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
-            name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
+            name: 💠 Accès facile | L'usager ou l'agent trouve l'information
 
   # SOLUTIONS
   solutions:
@@ -337,8 +337,8 @@ pages:
         use_tag_prefix: true
         values:
           - id: proactivite
-            name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
+            name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
           - id: dlnuf
-            name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
+            name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
-            name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
+            name: 💠 Accès facile | L'usager ou l'agent trouve l'information
