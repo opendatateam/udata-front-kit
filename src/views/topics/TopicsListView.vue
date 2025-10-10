@@ -11,6 +11,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
+import { useAsyncComponent } from '@/utils/component'
 import { debounceWait } from '@/utils/config'
 
 interface Props extends TopicPageRouterConf {
@@ -53,20 +54,10 @@ const search = useDebounceFn((query) => {
   })
 }, debounceWait)
 
-const FiltersComponent = computed(() => {
-  const componentLoader = meta?.filtersComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return defineAsyncComponent(
-    () => import('@/components/pages/PageFilters.vue')
-  )
-})
+const FiltersComponent = useAsyncComponent(
+  () => meta?.filtersComponent,
+  defineAsyncComponent(() => import('@/components/pages/PageFilters.vue'))
+)
 
 // TODO: this should be handled by the router, but we don't have access to pageConf there
 onMounted(() => {

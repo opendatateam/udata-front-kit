@@ -9,6 +9,7 @@ declare module 'vue-router' {
     requiresAuth?: boolean
     filtersComponent?: () => Promise<{ default: Component }>
     cardComponent?: () => Promise<{ default: Component }>
+    listComponent?: () => Promise<{ default: Component }>
     descriptionComponent?: () => Promise<{ default: Component }>
     cardClass?: string
     pageKey?: string

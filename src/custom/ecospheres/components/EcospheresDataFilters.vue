@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import FilterSelectComponent from '@/components/FilterSelectComponent.vue'
-import { useRouteQueryAsString } from '@/router/utils'
+import SelectComponent from '@/components/SelectComponent.vue'
+import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useFiltersState } from '@/utils/filters'
 import { useRoute, useRouter } from 'vue-router'
@@ -10,16 +10,20 @@ const route = useRoute()
 const routeQuery = useRouteQueryAsString().query
 const store = useOrganizationStore()
 
-const { filtersState, pageConf } = useFiltersState(routeQuery, 'datasets')
+const { pageKey } = useCurrentPageConf()
+const { filtersState, pageConf } = useFiltersState(routeQuery, pageKey)
 
-const organizationOptions = computed(() =>
-  store.flatData.map(({ id, name }) => ({ id, name }))
-)
+const organizationOptions: Ref<
+  {
+    id: string
+    name: string
+  }[]
+> = ref([])
 const selectedOrganization = ref(routeQuery.organization || undefined)
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
-    name: 'datasets',
+    name: route.name,
     query: { ...route.query, ...data },
     hash: '#list'
   })
@@ -34,7 +38,9 @@ const switchFilter = (filter: string, value: string | null) => {
 }
 
 onMounted(() => {
-  store.loadFromConfigFlat()
+  store.loadFromConfigFlat(pageKey).then((orgs) => {
+    organizationOptions.value = orgs.map(({ id, name }) => ({ id, name }))
+  })
 })
 
 watch(
@@ -54,7 +60,7 @@ watch(
 <template>
   <div className="filterForm">
     <div class="fr-select-group">
-      <FilterSelectComponent
+      <SelectComponent
         default-option="Toutes les organisations"
         label="Organisation"
         :options="organizationOptions"
@@ -67,7 +73,7 @@ watch(
       :key="filter.id"
       class="fr-select-group"
     >
-      <FilterSelectComponent
+      <SelectComponent
         :default-option="filter.default_option"
         :label="filter.name"
         :options="filtersState[filter.id].options"

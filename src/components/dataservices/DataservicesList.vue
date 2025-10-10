@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import { useCurrentPageConf } from '@/router/utils'
-import { useDatasetSearchStore } from '@/store/DatasetSearchStore'
-import { useAsyncComponent } from '@/utils/component'
-import { DatasetCard } from '@datagouv/components-next'
+import { useDataserviceSearchStore } from '@/store/DataserviceSearchStore'
+import { DataserviceCard, type Dataservice } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
@@ -24,29 +24,22 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 
-const store = useDatasetSearchStore()
+const store = useDataserviceSearchStore()
 const { meta, pageConf } = useCurrentPageConf()
-const { items: datasets, pagination, total, maxTotal } = storeToRefs(store)
+const { items: dataservices, pagination, total } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
     return `1 ${pageConf.labels.singular} disponible`
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} ${pageConf.labels.plural} disponibles`
+    return `${total.value} ${pageConf.labels.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
 })
 
-const getDatasetPage = (id: string) => {
-  return { name: 'datasets_detail', params: { item_id: id } }
-}
-
-const getOrganizationPage = (id: string | undefined) => {
-  if (router.hasRoute('organization_detail')) {
-    return { name: 'organization_detail', params: { oid: id } }
-  }
-  return ''
+const getDataservicePage = (id: string) => {
+  return { name: 'dataservices_detail', params: { item_id: id } }
 }
 
 const clearFilters = () => {
@@ -91,9 +84,6 @@ const executeQuery = async () => {
     .finally(() => loader.hide())
 }
 
-// load custom card component from router, or fallback to default
-const CardComponent = useAsyncComponent(() => meta?.cardComponent, DatasetCard)
-
 // launch search on route.query changes
 watch(
   () => route.query,
@@ -107,7 +97,7 @@ defineExpose({
 </script>
 
 <template>
-  <template v-if="datasets.length > 0">
+  <template v-if="dataservices.length > 0">
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
     >
@@ -119,7 +109,7 @@ defineExpose({
           :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
           :options="[
             { id: '-created', name: 'Les plus récemment créés' },
-            { id: '-last_update', name: 'Les plus récemment modifiés' }
+            { id: '-last_modified', name: 'Les plus récemment modifiés' }
           ]"
           @update:model-value="doSort"
         />
@@ -128,16 +118,14 @@ defineExpose({
     <div class="fr-mb-4w border-top">
       <ul class="fr-grid-row fr-grid-row--gutters fr-mt-2w fr-pl-0" role="list">
         <li
-          v-for="dataset in datasets"
-          :key="dataset.id"
-          :class="[meta.cardClass || 'fr-col-12', 'dataset-card-container']"
+          v-for="dataservice in dataservices"
+          :key="dataservice.id"
+          :class="[meta.cardClass || 'fr-col-12', 'dataservice-card-container']"
         >
-          <CardComponent
-            :key="dataset.id"
-            :dataset="dataset"
-            :dataset-url="getDatasetPage(dataset.id)"
-            :organization-url="getOrganizationPage(dataset.organization?.id)"
-            class="dataset-card"
+          <DataserviceCard
+            :key="dataservice.id"
+            :dataservice="dataservice as unknown as Dataservice"
+            :dataservice-url="getDataservicePage(dataservice.id)"
           />
         </li>
       </ul>
@@ -153,12 +141,13 @@ defineExpose({
 </template>
 
 <style scoped>
-.dataset-card {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+.dataservice-card-container {
+  width: 100%;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
-.dataset-card-container {
-  width: 100%;
+:deep(h4 > a) {
+  color: var(--text-title-grey);
 }
 </style>

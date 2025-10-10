@@ -5,5 +5,6 @@ declare namespace Cypress {
     mockMatomo(): Chainable<void>
     mockStaticDatagouv(): Chainable<void>
     simulateConnectedUser(userData?: object): Chainable<void>
+    simulateDisconnectedUser(): Chainable<void>
   }
 }
