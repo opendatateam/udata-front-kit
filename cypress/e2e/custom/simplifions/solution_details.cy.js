@@ -54,6 +54,40 @@ describe('Simplifions Solutions Details Page', () => {
       cy.get(link.attr('href')).should('be.visible')
     })
   })
+
+  it('should have a functional site link', () => {
+    cy.get('.fr-btns-group--inline .fr-btn').should('have.length', 1)
+
+    cy.get('.fr-btns-group--inline .fr-btn:first').should(
+      'contain.text',
+      'Site de la solution'
+    )
+  })
+
+  describe('with an access link in grist data', () => {
+    beforeEach(() => {
+      const { topicSolution } = mockSolution({
+        API_ou_datasets_integres: [],
+        APIs_ou_datasets_fournis: [],
+        Recommande_pour_les_cas_d_usages: [],
+        URL_demande_d_acces: 'https://example.com'
+      })
+
+      cy.visit(`/solutions/${topicSolution.slug}`)
+    })
+
+    it('should have a functional access link', () => {
+      cy.get('.fr-btns-group--inline .fr-btn').should('have.length', 2)
+      cy.get('.fr-btns-group--inline .fr-btn:first').should(
+        'contain.text',
+        'Site de la solution'
+      )
+      cy.get('.fr-btns-group--inline .fr-btn:last').should(
+        'contain.text',
+        "Demande d'accès"
+      )
+    })
+  })
 })
 
 describe("Simplifions Solutions Details Page with cas d'usages", () => {
