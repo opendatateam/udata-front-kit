@@ -56,9 +56,9 @@ describe('Simplifions Solutions Details Page', () => {
   })
 
   it('should have a functional site link', () => {
-    cy.get('.fr-btns-group--inline .fr-btn').should('have.length', 1)
+    cy.get('.solution-links .fr-btn').should('have.length', 1)
 
-    cy.get('.fr-btns-group--inline .fr-btn:first').should(
+    cy.get('.solution-links .fr-btn:first').should(
       'contain.text',
       'Site de la solution'
     )
@@ -77,12 +77,12 @@ describe('Simplifions Solutions Details Page', () => {
     })
 
     it('should have a functional access link', () => {
-      cy.get('.fr-btns-group--inline .fr-btn').should('have.length', 2)
-      cy.get('.fr-btns-group--inline .fr-btn:first').should(
+      cy.get('.solution-links .fr-btn').should('have.length', 2)
+      cy.get('.solution-links .fr-btn:first').should(
         'contain.text',
         'Site de la solution'
       )
-      cy.get('.fr-btns-group--inline .fr-btn:last').should(
+      cy.get('.solution-links .fr-btn:last').should(
         'contain.text',
         "Demande d'accès"
       )
