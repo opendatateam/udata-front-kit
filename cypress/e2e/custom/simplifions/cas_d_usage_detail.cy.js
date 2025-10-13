@@ -82,6 +82,41 @@ describe("Simplifions Cas d'usages Show Page", () => {
   it('should not display the APIs cards when no APIs or datasets are recommended', () => {
     cy.get('.api-or-dataset-card').should('not.exist')
   })
+
+  it('should not display the access link when no access link is provided', () => {
+    cy.get('.reco-solution .access-link').should('not.exist')
+  })
+
+  describe('with an access link in recommandation grist data', () => {
+    beforeEach(() => {
+      const { gristRecommandation } = mockSolutionRecommandation({
+        API_et_datasets_utiles_fournis: [],
+        Descriptions_des_API_et_datasets_utiles_fournis: [],
+        Ces_logiciels_l_integrent_deja: [],
+        URL_demande_d_acces_cas_usage: 'https://example.com'
+      })
+
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: [gristRecommandation.id]
+        },
+        {
+          slug: 'aides-publiques-entreprises-sourcage',
+          name: 'Aides publiques entreprises | Sourçage',
+          description: 'Lorem ipsum dolor sit amet'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+    })
+
+    it('should have a functional access link', () => {
+      cy.get('.reco-solution .access-link').should(
+        'contain.text',
+        "Demande d'accès"
+      )
+    })
+  })
 })
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets recommandations", () => {

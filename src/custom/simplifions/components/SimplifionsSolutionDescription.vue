@@ -51,7 +51,7 @@
           </li>
         </ul>
 
-        <ul class="fr-btns-group fr-btns-group--inline fr-my-4w">
+        <ul class="solution-links fr-btns-group fr-btns-group--inline fr-my-4w">
           <li v-if="solution.Site_internet">
             <a
               rel="noopener noreferrer"
