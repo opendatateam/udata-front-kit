@@ -175,6 +175,79 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
       )
     })
   })
+
+  describe('with dataservice authorization_request_url', () => {
+    beforeEach(() => {
+      cy.baseMocksForSimplifions()
+
+      const { gristRecommandations, dataservicesOrDatasets } =
+        mockApidatasetRecommandations(
+          1,
+          {},
+          { Type: 'API' },
+          { authorization_request_url: 'https://dataservice-auth.example.com' }
+        )
+
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: gristRecommandations.map((reco) => reco.id)
+        },
+        {
+          slug: 'dataservice-auth-test',
+          name: 'Test with Dataservice Auth',
+          description: 'Testing authorization_request_url'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+      cy.wait(`@get_dataservices_${dataservicesOrDatasets[0].slug}`)
+    })
+
+    it('should display the access link from dataservice authorization_request_url', () => {
+      cy.get('.reco-data-api-card .access-link').should('exist')
+      cy.get('.reco-data-api-card .access-link')
+        .should('contain.text', "Demande d'accès")
+        .and('have.attr', 'href', 'https://dataservice-auth.example.com')
+    })
+  })
+
+  describe('with both access link in recommandation grist data and dataservice authorization_request_url', () => {
+    beforeEach(() => {
+      cy.baseMocksForSimplifions()
+
+      const { gristRecommandations, dataservicesOrDatasets } =
+        mockApidatasetRecommandations(
+          1,
+          {
+            URL_demande_d_acces_cas_usage:
+              'https://recommandation-url.example.com'
+          },
+          { Type: 'API' },
+          { authorization_request_url: 'https://dataservice-auth.example.com' }
+        )
+
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: gristRecommandations.map((reco) => reco.id)
+        },
+        {
+          slug: 'priority-test',
+          name: 'Test URL Priority',
+          description: 'Testing URL priority'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+      cy.wait(`@get_dataservices_${dataservicesOrDatasets[0].slug}`)
+    })
+
+    it('should prioritize recommandation URL over dataservice authorization_request_url', () => {
+      cy.get('.reco-data-api-card .access-link').should('exist')
+      cy.get('.reco-data-api-card .access-link')
+        .should('contain.text', "Demande d'accès")
+        .and('have.attr', 'href', 'https://recommandation-url.example.com')
+    })
+  })
 })
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets, and one custom description", () => {
