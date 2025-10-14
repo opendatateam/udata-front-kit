@@ -25,7 +25,7 @@
           :show-budget="false"
         />
 
-        <ul class="fr-my-4w">
+        <ul class="fr-mt-4w">
           <li>
             <strong>Fournisseur : </strong>
             <HumanReadableList
@@ -50,6 +50,32 @@
             {{ solution.Prix ? solution.Prix : 'Non renseigné' }}
           </li>
         </ul>
+
+        <ul class="solution-links fr-btns-group fr-btns-group--inline fr-my-4w">
+          <li v-if="solution.Site_internet">
+            <a
+              rel="noopener noreferrer"
+              :href="solution.Site_internet"
+              class="fr-btn fr-btn--secondary"
+              target="_blank"
+            >
+              Site de la solution
+            </a>
+          </li>
+          <li v-if="solution.URL_demande_d_acces">
+            <a
+              rel="noopener noreferrer"
+              :href="solution.URL_demande_d_acces"
+              class="fr-btn"
+              target="_blank"
+            >
+              Demande d'accès
+            </a>
+          </li>
+        </ul>
+        <p v-if="!solution.Site_internet" class="fr-text--sm">
+          <i>Aucun lien vers un site officiel actuellement.</i>
+        </p>
       </div>
 
       <div class="fr-col-12 fr-col-md-4">
@@ -200,20 +226,6 @@
           <a href="#modification-contenu">✍️ Proposer un contenu</a>.
         </p>
       </div>
-
-      <p v-if="solution.Site_internet">
-        <a
-          rel="noopener noreferrer"
-          :href="solution.Site_internet"
-          class="fr-btn fr-my-4w"
-          target="_blank"
-        >
-          Consulter le site de la solution
-        </a>
-      </p>
-      <p v-else class="fr-text--sm">
-        <i>Aucun lien vers un site officiel actuellement.</i>
-      </p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
