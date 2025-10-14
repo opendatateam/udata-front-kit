@@ -1,8 +1,21 @@
 <template>
   <div class="reco-data-api-card fr-p-2w fr-mb-4w">
-    <h4 class="fr-h4 fr-mb-2w">
-      ➡️ {{ recommandation.Nom_de_la_recommandation }}
-    </h4>
+    <div class="fr-grid-row">
+      <h4 class="fr-h4 fr-mb-2w fr-col-md fr-col-12">
+        ➡️ {{ recommandation.Nom_de_la_recommandation }}
+      </h4>
+
+      <div v-if="recommandation.URL_demande_d_acces_cas_usage">
+        <a
+          rel="noopener noreferrer"
+          :href="recommandation.URL_demande_d_acces_cas_usage"
+          class="fr-btn access-link"
+          target="_blank"
+        >
+          Demande d'accès
+        </a>
+      </div>
+    </div>
 
     <div
       v-if="

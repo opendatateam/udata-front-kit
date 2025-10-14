@@ -144,6 +144,37 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
     cy.get('.dataset-card').should('have.length', 1)
     cy.get('.dataservice-card').should('have.length', 1)
   })
+
+  it('should not display the access link when no access link is provided', () => {
+    cy.get('.reco-data-api-card .access-link').should('not.exist')
+  })
+
+  describe('with an access link in recommandation grist data', () => {
+    beforeEach(() => {
+      const { gristRecommandations } = mockApidatasetRecommandations(1, {
+        URL_demande_d_acces_cas_usage: 'https://example.com'
+      })
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: gristRecommandations.map((reco) => reco.id)
+        },
+        {
+          slug: 'aides-publiques-entreprises-sourcage',
+          name: 'Aides publiques entreprises | Sourçage',
+          description: 'Lorem ipsum dolor sit amet'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+    })
+
+    it('should have a functional access link', () => {
+      cy.get('.reco-data-api-card .access-link').should(
+        'contain.text',
+        "Demande d'accès"
+      )
+    })
+  })
 })
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets, and one custom description", () => {
