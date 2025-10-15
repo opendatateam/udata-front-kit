@@ -38,6 +38,13 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 const { canAddTopic } = storeToRefs(userStore)
 
+const canEdit = computed(() => {
+  return pageConf.editable && userStore.hasEditPermissions(dataset.value)
+})
+const canAddToTopic = computed(() => {
+  return topicPageConf && userStore.loggedIn && canAddTopic
+})
+
 const dataset = computed(() => datasetStore.get(datasetId))
 
 const showAddToTopicModal = ref(false)
@@ -91,6 +98,11 @@ const discussionWellDescription = showDiscussions
 
 const openDataGouvDiscussions = () =>
   window.open(`${dataset.value?.page}#/discussions`, 'datagouv-discussion')
+
+const goToEdit = () => {
+  if (!dataset.value) return
+  window.location.href = `${config.datagouvfr.base_url}/admin/datasets/${dataset.value.id}/`
+}
 
 onMounted(() => {
   datasetStore
@@ -186,21 +198,33 @@ onMounted(() => {
           la source originale peuvent avoir été perdues lors de leur
           récupération. Nous travaillons actuellement à améliorer la situation.
         </div>
-        <!-- add dataset to topic (if enabled) -->
-        <div v-if="topicPageConf && userStore.loggedIn && canAddTopic">
+        <div
+          v-if="canEdit || canAddToTopic"
+          class="fr-mt-2w fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+        >
           <DsfrButton
-            class="fr-mt-2w"
+            v-if="canEdit"
+            secondary
             size="md"
-            :label="`Ajouter à un ${topicPageConf.labels.singular}`"
-            icon="fr-icon-file-add-line"
-            @click="showAddToTopicModal = true"
+            label="Éditer"
+            icon="fr-icon-pencil-line"
+            @click="goToEdit"
           />
-          <DatasetAddToTopicModal
-            v-if="showAddToTopicModal"
-            v-model:show="showAddToTopicModal"
-            :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
-            :dataset="dataset"
-          />
+          <!-- add dataset to topic (if enabled) -->
+          <template v-if="canAddToTopic && topicPageConf">
+            <DsfrButton
+              size="md"
+              :label="`Ajouter à un ${topicPageConf.labels.singular}`"
+              icon="fr-icon-file-add-line"
+              @click="showAddToTopicModal = true"
+            />
+            <DatasetAddToTopicModal
+              v-if="showAddToTopicModal"
+              v-model:show="showAddToTopicModal"
+              :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
+              :dataset="dataset"
+            />
+          </template>
         </div>
       </div>
     </div>

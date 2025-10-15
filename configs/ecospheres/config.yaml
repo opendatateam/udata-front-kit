@@ -428,7 +428,7 @@ pages:
         display: true
       reuses:
         display: true
-    editable: true
+    editable: false
     filters:
       - name: Secteur
         default_option: Tous les secteurs
