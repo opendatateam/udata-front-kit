@@ -37,6 +37,7 @@ export type Recommandation = {
   Image: number[] | null
   Descriptions_des_API_et_datasets_utiles_fournis: number[]
   budget_slugs: string[]
+  URL_demande_d_acces_cas_usage: string
 }
 export type RecommandationRecord = GristRecord & {
   fields: Recommandation
@@ -92,6 +93,7 @@ export type Solution = {
   Visible_sur_simplifions: boolean
   Recommande_pour_les_cas_d_usages: number[] | null
   Type_de_solution: string[]
+  URL_demande_d_acces: string
 }
 export type SolutionRecord = GristRecord & {
   fields: Solution

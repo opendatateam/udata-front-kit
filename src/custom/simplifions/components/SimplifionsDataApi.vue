@@ -51,6 +51,10 @@ const props = defineProps<{
   apiOrDataset: ApiOrDataset
 }>()
 
+const emit = defineEmits<{
+  resourceFetched: [resource: DatasetV2 | Dataservice]
+}>()
+
 const resourceNotFound = ref(false)
 const datagouvResource = ref<DatasetV2 | Dataservice | null>(null)
 
@@ -93,6 +97,8 @@ api
   })
   .then((data) => {
     datagouvResource.value = data
+    // Emit the fetched resource to the parent component
+    emit('resourceFetched', data)
   })
   .catch((error) => {
     resourceNotFound.value = true
