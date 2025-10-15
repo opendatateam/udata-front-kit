@@ -2,12 +2,23 @@
 
 # used as extras key
 site_id: simplifions
+# Error tracker : Sentry
+
+sentry:
+  domain_url: 'https://errors.data.gouv.fr/'
+  dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
+  environment: 'preprod'
+  tracePropagationTargets: []
+  tracesSampleRate: 1.0
+  replaysSessionSampleRate: 0.1
+  replaysOnErrorSampleRate: 1.0
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 676452675336109a436f8f73
+  tabular_api_url:
 
 # universe configuration is now handled per page in pages.{page_id}.universe_query
 
@@ -20,14 +31,14 @@ robots:
 website:
   title: 'simplifions.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/simplifions-logo.svg'
+  service_logo: '/static/logos/simplifions-logo.svg'
   badge:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-    src: '/logos/simplifions-logo.svg'
+    src: '/static/logos/simplifions-logo.svg'
     show_in_header: false
     footer:
       width: '40px'
@@ -40,7 +51,7 @@ website:
   header_button:
     display: false # TODO : créer un formulaire de feedback sur tally.so
     label: 'Donnez votre avis'
-    link: ''
+    link: https://form.typeform.com/to/sYKAer7j
   header_search:
     display: true
     placeholder: Rechercher...
@@ -95,23 +106,23 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/simplifions/pages/about.md'
+        url: '/static/simplifions/pages/about.md'
       - title: 'Guide pour la simplification'
         id: 'niveaux-simplification'
         route: '/niveaux-simplification'
-        url: '/simplifions/pages/niveaux-simplification.md'
+        url: '/static/simplifions/pages/niveaux-simplification.md'
       - title: Simplifier le sourcing des marchés publics avec API Entreprise
         id: '/api-entreprise_cas-usage_marches_public_sourcing'
         route: '/api-entreprise_cas-usage_marches_public_sourcing'
-        url: '/simplifions/pages/api-entreprise_cas-usage_marches_public_sourcing.md'
+        url: '/static/simplifions/pages/api-entreprise_cas-usage_marches_public_sourcing.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/simplifions/pages/accessibility.md'
+        url: '/static/simplifions/pages/accessibility.md'
       - title: "Conditions générales d'utilisation"
         id: 'terms'
         route: '/terms'
-        url: '/simplifions/pages/terms.md'
+        url: '/static/simplifions/pages/terms.md'
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
@@ -164,8 +175,8 @@ pages:
   cas-d-usages:
     list_all: true
     universe_query:
-      tag: simplifions-cas-d-usages
-    tag_prefix: simplifions
+      tag: simplifions-v2-cas-d-usages
+    tag_prefix: simplifions-v2
     title: Cas d'usages
     breadcrumb_title:
     labels:
@@ -174,6 +185,7 @@ pages:
       extended: cas d'usage
     search:
       input: Filtrer les cas d'usages
+    default_sort: name
     resources_tabs:
       discussions:
         display: true
@@ -240,18 +252,18 @@ pages:
         use_tag_prefix: true
         values:
           - id: proactivite
-            name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
+            name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
           - id: dlnuf
-            name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
+            name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
-            name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
+            name: 💠 Accès facile | L'usager ou l'agent trouve l'information
 
   # SOLUTIONS
   solutions:
     list_all: true
     universe_query:
-      tag: simplifions-solutions
-    tag_prefix: simplifions
+      tag: simplifions-v2-solutions
+    tag_prefix: simplifions-v2
     title: Solutions
     breadcrumb_title:
     labels:
@@ -260,6 +272,7 @@ pages:
       extended: solution
     search:
       input: Filtrer les solutions
+    default_sort: name
     resources_tabs:
       discussions:
         display: true
@@ -326,8 +339,8 @@ pages:
         use_tag_prefix: true
         values:
           - id: proactivite
-            name: ⭐️⭐️⭐️ Proactivité | L'usager n'a plus de démarche à faire
+            name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
           - id: dlnuf
-            name: ⭐️⭐️ Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
+            name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
           - id: acces-facile
-            name: ⭐️ Accès facile | L'usager ou l'agent trouve l'information
+            name: 💠 Accès facile | L'usager ou l'agent trouve l'information

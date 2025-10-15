@@ -146,5 +146,6 @@ onMounted(() => {
 
 .list-container {
   width: 100%;
+  min-width: 0; /* default is `min-content` for flex items */
 }
 </style>

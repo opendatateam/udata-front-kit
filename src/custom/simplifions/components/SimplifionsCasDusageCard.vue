@@ -1,11 +1,14 @@
 <template>
   <router-link
-    :to="{ name: `${pageKey}_detail`, params: { item_id: props.topic.slug } }"
+    :to="{ name: `${pageKey}_detail`, params: { item_id: topic.slug } }"
+    class="simplifions-card-link fr-p-0"
   >
     <div class="topic-card" :class="{ 'topic-card--private': topic.private }">
       <div class="header-topic">
         <!--Titre et description-->
-        <div class="title-topic fr-text--lead">{{ topic.name }}</div>
+        <div class="title-topic fr-text--lead">
+          {{ topic.name }}
+        </div>
         <p class="fr-mb-1w">
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
         </p>
@@ -25,22 +28,27 @@
 </template>
 
 <script setup lang="ts">
-import { formatRelativeIfRecentDate } from '@datagouv/components'
-
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
-
 import { stripFromMarkdown } from '@/utils'
+import { useFormatDate } from '@datagouv/components-next'
 import SimplifionsTags from './SimplifionsTags.vue'
 
-const props = defineProps<{
+defineProps<{
   topic: Topic
 }>()
 
 const { pageKey } = useCurrentPageConf()
+const { formatRelativeIfRecentDate } = useFormatDate()
 </script>
 
 <style scoped>
+.simplifions-card-link {
+  display: block;
+  margin-bottom: 1rem;
+  background: none;
+}
+
 .owner-avatar {
   margin-bottom: -6px;
   display: inline-block;

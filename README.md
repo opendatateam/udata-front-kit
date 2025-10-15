@@ -89,6 +89,12 @@ VITE_SITE_ID=monsite npm run build
 VITE_SITE_ID=monsite npm run test:e2e:for_production_build
 ```
 
+#### Factories pour les tests
+
+Afin de ne pas dépendre de données extérieures pour faire tourner les tests, il est recommandé de "mocker" ou "bouchonner" vos appels APIs.
+
+On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js) comme factory pour créer des données pour ces mocks.
+
 #### Linting via [ESLint](https://eslint.org/)
 
 ```sh
@@ -153,6 +159,7 @@ Le déploiement des verticales thématiques en preprod et en production peut s'e
 ```
 
 **Paramètres :**
+
 - `<environment>` : Environnement cible (`prod` ou `demo`/`preprod` suivant la verticale)
 - `<site>` : Nom du site
   - **Sites disponibles :**
@@ -165,6 +172,7 @@ Le déploiement des verticales thématiques en preprod et en production peut s'e
 - `<version_type>` : Type de version (`major`, `minor`, ou `patch`)
 
 **Exemple :**
+
 ```
 [prod:ecologie:minor] nouvelle fonctionnalité incroyable
 ```
@@ -221,6 +229,19 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
   - `prettier-plugin-organize-imports` // organise et/ou supprime les imports des fichiers
 
 À chaque `git commit`, `husky` lance `lint-staged` qui formate les fichiers "staged" avec `prettier`.
+
+## Configurer Sentry pour surveiller les erreurs
+
+Après avoir créé votre projet (VueJs) sur sentry, voici la configuration à ajouter à votre fichier de config pour activer Sentry dans votre projet :
+
+```
+sentry:
+  domain_url: 'https://errors.data.gouv.fr/' # Ou tout autre domaine où vous hébergez votre sentry
+  dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38' # Vous trouverez ce DSN lors de l'initialisation de votre projet dans Sentry
+  environment: 'preprod' # Ou autre (par exemple 'production'), selon la branche de déploiement
+```
+
+D'autres éléments de configuration sont disponibles dans le fichier [src/model/config.ts](./src/model/config.ts)
 
 ## 👥 Auteurs
 

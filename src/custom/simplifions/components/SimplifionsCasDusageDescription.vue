@@ -1,14 +1,20 @@
 <template>
-  <div class="test_cas-d-usage-description">
+  <!-- eslint-disable vue/no-v-html -->
+  <div v-if="casUsage === undefined" class="loading">
+    Chargement du cas d'usage en cours...
+  </div>
+  <div v-else class="test_cas-d-usage-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ casUsage.Titre }}</h1>
+          <h1 class="fr-mb-1v fr-mr-2v">
+            {{ topic.name }}
+          </h1>
           <DraftTag v-if="topic.private" />
         </div>
 
         <p class="fr-text--lead">
-          {{ casUsage.Description_longue }}
+          {{ topic.description }}
         </p>
 
         <SimplifionsTags :topic="topic" :page-key="pageKey" />
@@ -24,7 +30,7 @@
             Sommaire
           </h2>
           <ol>
-            <li v-if="casUsage.Contexte || casUsage.Cadre_juridique">
+            <li>
               <a
                 id="summary-link-1"
                 href="#contexte-et-cadre-juridique"
@@ -32,17 +38,20 @@
                 >Contexte et cadre juridique</a
               >
             </li>
-            <li v-if="casUsage.reco_solutions?.length">
+            <li>
               <a
                 id="summary-link-2"
                 href="#solutions-disponibles"
                 class="fr-summary__link"
                 >Solutions disponibles</a
               >
-              <ol v-if="casUsage.reco_solutions?.length">
+              <ol v-if="casUsage.Recommandations?.length" class="fr-mb-0">
                 <li
-                  v-for="(group, index) in grouped_reco_solutions"
+                  v-for="(group, index) in grouped_recommandations"
                   :key="group.title"
+                  :class="{
+                    'fr-pb-0': index === grouped_recommandations.length - 1
+                  }"
                 >
                   <a
                     :href="`#reco-group-${index + 1}`"
@@ -78,84 +87,113 @@
               >
             </span>
           </p>
+          <span>
+            <a href="#modification-contenu">✍️ Proposer une modification</a>
+          </span>
         </nav>
       </div>
     </div>
 
-    <div
-      v-if="casUsage.Contexte || casUsage.Cadre_juridique"
-      class="fr-col-12 fr-col-md-8"
-    >
+    <div class="fr-col-12 fr-col-md-8">
       <h2 id="contexte-et-cadre-juridique" class="h2-cas-usage fr-h2 fr-my-5w">
         Contexte et cadre juridique
       </h2>
 
-      <div v-if="casUsage.Contexte">
+      <div>
         <h3 class="fr-h6">
           <span aria-hidden="true" class="fr-icon-map-pin-2-fill"></span>
           Contexte
         </h3>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-html="fromMarkdown(casUsage.Contexte)"></p>
+        <p
+          v-if="casUsage.Contexte"
+          v-html="fromMarkdown(casUsage.Contexte)"
+        ></p>
+
+        <p v-else class="fr-text--sm">
+          <i>Aucun contenu actuellement.</i>
+          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        </p>
       </div>
 
-      <div v-if="casUsage.Cadre_juridique">
+      <div>
         <h3 class="fr-h6">
           <span aria-hidden="true" class="fr-icon-newspaper-fill"></span>
           Cadre juridique
         </h3>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p v-html="fromMarkdown(casUsage.Cadre_juridique)"></p>
+        <p
+          v-if="casUsage.Cadre_juridique"
+          v-html="fromMarkdown(casUsage.Cadre_juridique)"
+        ></p>
+        <p v-else class="fr-text--sm">
+          <i>Aucun contenu actuellement.</i>
+          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        </p>
       </div>
     </div>
 
-    <div v-if="casUsage.reco_solutions?.length">
+    <div>
       <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
         Solutions disponibles
       </h2>
 
+      <div v-if="recommandations === undefined">
+        Chargement des recommandations en cours...
+      </div>
       <div
-        v-for="(group, index) in grouped_reco_solutions"
+        v-for="(group, index) in grouped_recommandations"
         :key="group.title"
         class="fr-mb-4w"
+        :class="{ 'fr-mt-5w': index > 0 }"
       >
         <h3 :id="`reco-group-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
           {{ group.title }}
         </h3>
 
         <div
-          v-for="reco_solution in group.reco_solutions"
-          :key="reco_solution.Nom_de_la_solution_publique"
+          v-for="recommandation in group.recommandations"
+          :key="recommandation.Nom_de_la_recommandation"
         >
-          <SimplifionsRecoSolutions :reco-solution="reco_solution" />
+          <SimplifionsRecoSolutions
+            v-if="recommandation.Solution_recommandee"
+            :recommandation="recommandation"
+            :display-sub-products="group.displaySubProducts"
+          />
+          <SimplifionsRecoDataApi
+            v-else-if="recommandation.API_ou_datasets_recommandes"
+            :recommandation="recommandation"
+          />
         </div>
       </div>
     </div>
 
-    <div v-if="usefulDataApi.length">
-      <h2 class="h2-cas-usage fr-h2 fr-mt-5w">
-        Utiliser les jeux de données et API utiles
-      </h2>
-
-      <SimplifionsDataApiList
-        :data-api-list="usefulDataApi"
-        :custom-descriptions="customDescriptionsForDataApi"
-      />
+    <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
+      <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
+      <p class="fr-mb-0">
+        Pour proposer une modification du contenu de cette solution, vous pouvez
+        contacter l'équipe via l'espace "Discussions" ci-dessous ou bien
+        compléter
+        <a
+          href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
+          rel="noopener noreferer"
+          target="_blank"
+          >ce formulaire</a
+        >.
+      </p>
     </div>
   </div>
+  <!-- eslint-enable vue/no-v-html -->
 </template>
 
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
-import { OrganizationNameWithCertificate } from '@datagouv/components'
-import type {
-  RecoSolution,
-  SimplifionsCasUsagesExtras
-} from '../model/cas_usage'
-import SimplifionsDataApiList from './SimplifionsDataApiList.vue'
+import { OrganizationNameWithCertificate } from '@datagouv/components-next'
+import { grist } from '../grist.ts'
+import type { CasUsage, Recommandation } from '../model/grist'
+import type { TopicCasUsagesExtras } from '../model/topics'
+import SimplifionsRecoDataApi from './SimplifionsRecoDataApi.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -164,66 +202,57 @@ const props = defineProps<{
   pageKey: string
 }>()
 
-const casUsage = (props.topic.extras as SimplifionsCasUsagesExtras)[
-  'simplifions-cas-d-usages'
-]
+const casUsageId = (props.topic.extras as TopicCasUsagesExtras)[
+  'simplifions-v2-cas-d-usages'
+].id
 
-const budget_group = (budget: Array<string>) => {
-  if (!budget) {
-    return ''
+const casUsage = ref<CasUsage | undefined>(undefined)
+const recommandations = ref<Recommandation[] | undefined>(undefined)
+
+grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
+  casUsage.value = data.fields as CasUsage
+
+  grist
+    .getRecords('Recommandations', { id: casUsage.value.Recommandations })
+    .then((data) => {
+      recommandations.value = (
+        data.map((d) => d.fields) as Recommandation[]
+      ).filter((reco) => reco.Visible_sur_simplifions)
+    })
+})
+
+const grouped_recommandations = computed(() => {
+  const first_group_recommandations = {
+    title: 'Aucun développement, ni budget',
+    recommandations: [] as Recommandation[],
+    displaySubProducts: false
   }
-  if (budget.includes('Aucun développement, ni budget')) {
-    return 'Aucun développement, ni budget'
+
+  const second_group_recommandations = {
+    title: 'Avec des moyens techniques ou un éditeur de logiciel',
+    recommandations: [] as Recommandation[],
+    displaySubProducts: true
   }
-  return 'Avec des moyens techniques ou un éditeur de logiciel'
-}
 
-const customDescriptionsForDataApi =
-  casUsage.descriptions_api_et_donnees_utiles.reduce(
-    (acc, description) => {
-      acc[description.uid_datagouv] = description.Description_de_l_utilisation
-      return acc
-    },
-    {} as Record<string, string>
-  )
+  recommandations.value?.forEach((recommandation) => {
+    if (recommandation.budget_slugs.includes('aucun-developpement-ni-budget')) {
+      first_group_recommandations.recommandations.push(recommandation)
+    } else {
+      second_group_recommandations.recommandations.push(recommandation)
+    }
+  })
 
-// Affichage des parties reco solutions, dans l'ordre voulu
+  const groups = []
 
-const grouped_reco_solutions = casUsage.reco_solutions
-  .reduce(
-    (
-      acc: Array<{ title: string; reco_solutions: RecoSolution[] }>,
-      reco_solution: RecoSolution
-    ) => {
-      const title = budget_group(
-        reco_solution.Moyens_requis_pour_la_mise_en_oeuvre
-      )
-      const existingGroup = acc.find((group) => group.title === title)
-
-      if (existingGroup) {
-        existingGroup.reco_solutions.push(reco_solution)
-      } else {
-        acc.push({ title, reco_solutions: [reco_solution] })
-      }
-
-      return acc
-    },
-    [] as Array<{ title: string; reco_solutions: RecoSolution[] }>
-  )
-  .sort(
-    (
-      a: { title: string; reco_solutions: RecoSolution[] },
-      b: { title: string; reco_solutions: RecoSolution[] }
-    ) => a.title.localeCompare(b.title)
-  )
-
-const usefulDataApi = computed(() => {
-  if (!casUsage.API_et_donnees_utiles) {
-    return []
+  if (first_group_recommandations.recommandations.length > 0) {
+    groups.push(first_group_recommandations)
   }
-  return casUsage.API_et_donnees_utiles.filter(
-    (apidOrData) => apidOrData.UID_data_gouv
-  )
+
+  if (second_group_recommandations.recommandations.length > 0) {
+    groups.push(second_group_recommandations)
+  }
+
+  return groups
 })
 </script>
 
@@ -237,5 +266,22 @@ const usefulDataApi = computed(() => {
 
 .h3-cas-usage {
   color: #616161;
+}
+
+.bloc-modifications {
+  background-color: #f1f1f1;
+  padding: 1rem;
+}
+
+:deep(blockquote) {
+  border-left: 4px solid var(--border-default-grey);
+  margin-left: 2rem;
+  padding-left: 2rem;
+}
+
+/* Markdown spacing fix for all ul that are inside a p, and right after a p*/
+:deep(p p + ul) {
+  margin-top: -1rem !important;
+  margin-bottom: 1rem !important;
 }
 </style>

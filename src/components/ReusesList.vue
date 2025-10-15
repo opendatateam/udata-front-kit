@@ -55,16 +55,9 @@ onMounted(() => {
       useTopicStore()
         .load(props.objectId)
         .then((t: Topic) => {
-          // FIXME: remove this case when API is fully migrated to elements
-          if (t.reuses) {
-            reuseApi
-              .getReusesFromRel(t.reuses)
-              .then((data) => (reuses.value = data))
-          } else if (t.elements) {
-            reuseApi
-              .getReusesFromElementsRel(t.elements)
-              .then((data) => (reuses.value = data))
-          }
+          reuseApi
+            .getReusesFromElementsRel(t.elements)
+            .then((data) => (reuses.value = data))
         })
       break
     default:
@@ -82,7 +75,7 @@ onMounted(() => {
     class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
   >
     <img
-      src="/blank_state/reuse.svg"
+      src="/static/blank_state/reuse.svg"
       alt=""
       loading="lazy"
       height="105"
@@ -122,6 +115,7 @@ onMounted(() => {
             r.owner?.avatar ||
             undefined
           "
+          :title-link-attrs="{}"
         />
       </li>
     </ul>

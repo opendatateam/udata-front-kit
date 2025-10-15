@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import {
-  formatRelativeIfRecentDate,
   OrganizationNameWithCertificate,
-  useOwnerName
-} from '@datagouv/components'
+  useFormatDate
+} from '@datagouv/components-next'
 import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -12,9 +11,10 @@ import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useOwnerName } from '@/utils/owned'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTags } from '@/utils/tags'
-import { useExtras } from '@/utils/topic'
+import { useTopicFactors } from '@/utils/topic'
 
 const props = defineProps({
   pageKey: {
@@ -33,9 +33,8 @@ const props = defineProps({
 
 const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
-const { datasetsProperties } = useExtras(topicRef)
-
-const nbData: number = datasetsProperties.value.length
+const { formatRelativeIfRecentDate } = useFormatDate()
+const { nbFactors } = useTopicFactors(topicRef)
 
 const ownerName = useOwnerName(props.topic)
 
@@ -120,7 +119,7 @@ const tags = useTags(props.pageKey, props.topic)
         />
         <span class="fr-mr-1v">
           {{
-            `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
+            `${nbFactors > 0 ? nbFactors : 'Aucune'} donnée${nbFactors > 1 ? 's' : ''}`
           }}
         </span>
       </span>

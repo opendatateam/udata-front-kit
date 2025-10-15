@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
 import { isAvailable } from '@/utils/topic'
@@ -13,11 +13,11 @@ const props = defineProps({
     required: true
   },
   allGroups: {
-    type: Object as () => DatasetsGroups,
+    type: Object as () => FactorsGroups,
     required: true
   },
-  datasetsProperties: {
-    type: Object as () => DatasetProperties[],
+  factors: {
+    type: Object as () => ResolvedFactor[],
     required: true
   },
   headingLevel: {
@@ -175,6 +175,7 @@ const actions = computed(() => {
             icon-only
             secondary
             size="sm"
+            class="test__edit_group_btn"
             :on-click="() => openModal('edit')"
           />
           <DsfrButton
@@ -183,6 +184,7 @@ const actions = computed(() => {
             icon-only
             secondary
             size="sm"
+            class="test__delete_group_btn"
             :on-click="() => openModal('delete')"
           />
         </div>
@@ -206,31 +208,31 @@ const actions = computed(() => {
     >
       <ul role="list" class="fr-m-0 fr-p-0">
         <li
-          v-for="(dataset, index) in datasetsProperties"
-          v-show="!dataset.isHidden"
+          v-for="(factor, index) in factors"
+          v-show="!factor.isHidden"
           :key="index"
         >
           <div class="dataset__header fr-px-2w fr-py-3v">
             <slot name="datasetTitle">
               <component :is="headingLevel" class="dataset__title">
-                {{ dataset.title }}
+                {{ factor.title }}
               </component>
             </slot>
             <div class="dataset__actions">
               <DsfrTag
                 v-if="
-                  !isAvailable(dataset.availability) ||
-                  dataset.remoteDeleted ||
-                  dataset.remoteArchived
+                  !isAvailable(factor.siteExtras.availability) ||
+                  factor.remoteDeleted ||
+                  factor.remoteArchived
                 "
                 class="uppercase bold fr-text--xs fr-mr-2w"
                 label="Non disponible"
               />
-              <slot name="datasetActions" :dataset="dataset" :index="index" />
+              <slot name="factorActions" :factor="factor" :index="index" />
             </div>
           </div>
-          <div v-if="$slots.datasetContent" class="dataset__content">
-            <slot name="datasetContent" :dataset="dataset" />
+          <div v-if="$slots.factorContent" class="factor__content">
+            <slot name="factorContent" :factor="factor" />
           </div>
         </li>
       </ul>
@@ -398,7 +400,7 @@ const actions = computed(() => {
   font-size: 1.1rem;
 }
 
-.dataset__content {
+.factor__content {
   padding-block: var(--padding-base) calc(var(--padding-base) / 2);
   padding-inline: calc(var(--padding-base) / 2);
 }
@@ -420,7 +422,7 @@ const actions = computed(() => {
   .disclosure__actions {
     gap: var(--padding-base);
   }
-  .dataset__content {
+  .factor__content {
     padding-inline: var(--padding-base);
   }
 }

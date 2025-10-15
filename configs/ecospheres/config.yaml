@@ -3,11 +3,18 @@
 # used as extras key
 site_id: ecospheres
 
+# sentry:                                     # optional, add only if you want to monitor errors with sentry
+#   dsn: {string}                             # the DSN of the sentry project
+#   domain_url: {string}                      # the domain to send sourcemaps to
+#   environment: {string}                     # the environment to send to sentry (production, preprod, etc.)
+#   ... For other sentry options, see ./src/model/config.ts
+
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 robots:
   disallow:
@@ -19,14 +26,14 @@ website:
   title: 'ecologie.data.gouv.fr'
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/ecospheres-logo.svg'
+  service_logo: '/static/logos/ecospheres-logo.svg'
   badge:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-    src: '/logos/ecospheres-logo.svg'
+    src: '/static/logos/ecospheres-logo.svg'
     show_in_header: false
     footer:
       width: '40px'
@@ -52,6 +59,8 @@ website:
     dropdown:
       - text: Rechercher {} dans les <strong>jeux de données</strong>
         route: datasets
+      - text: Rechercher {} dans les <strong>indicateurs</strong>
+        route: indicators
       - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
   search_bar:
@@ -114,15 +123,15 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/ecospheres/pages/about.md'
+        url: '/static/ecospheres/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/ecospheres/pages/accessibility.md'
+        url: '/static/ecospheres/pages/accessibility.md'
       - title: "Conditions générales d'utilisation"
         id: 'terms'
         route: '/terms'
-        url: '/ecospheres/pages/terms.md'
+        url: '/static/ecospheres/pages/terms.md'
   sitemap:
     - name: Accueil
       path: /
@@ -201,6 +210,7 @@ definitions: &definitions
 #     tag_prefix: {string}          # prefix for tags on data.gouv.fr
 #     title: {string}               # title for the list page
 #     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
+#     default_sort: {string}        # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
 #     labels:                       # how to call the object that is displayed by the page
 #       singular: {string}          # singular name for the object
 #       plural: {string}            # plural name for the object
@@ -210,9 +220,15 @@ definitions: &definitions
 #     banner:                       # banner for the list page (optionnal)
 #       title: {string}             # title for the banner
 #       content: {string}           # content for the banner
-#     discussions:
-#       display: {bool}             # display discussions on detail page
-#       create: {bool}              # create discussions on detail page
+#     resources_tabs:               # resources tabs at the bottom of a detail page
+#       discussions:
+#         display: {bool}           # display discussions tab on detail page
+#         create: {bool}            # create discussions tab on detail page
+#       datasets:
+#         display: {bool}           # display datasets tab on detail page
+#       reuses:
+#         display: {bool}           # display reuses tab on detail page
+#     editable: {bool}              # whether the page is editable when connected
 #     filters:                      # list of filters for this {page_id}
 #       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}              # id of the filter
@@ -412,32 +428,8 @@ pages:
         display: true
       reuses:
         display: true
-    editable: true
+    editable: false
     filters:
-      - name: Thématique
-        default_option: Toutes les thématiques
-        id: theme
-        type: select
-        color: green-menthe
-        use_tag_prefix: true
-        values: *fnv_themes
-      - name: Enjeu
-        default_option: Tous les enjeux
-        id: enjeu
-        type: select
-        color: blue-ecume
-        use_tag_prefix: true
-        values:
-          - id: adaptation-climat
-            name: Adaptation climat
-          - id: attenuation-climat
-            name: Atténuation climat
-          - id: biodiversite
-            name: Biodiversité
-          - id: ressources
-            name: Ressources
-          - id: sante
-            name: Santé
       - name: Secteur
         default_option: Tous les secteurs
         id: secteur
@@ -534,26 +526,7 @@ pages:
             name: Véhicules électriques
           - id: velo
             name: Vélo
-      - name: Cas d'usage
-        default_option: Tous les cas d'usage
-        id: usage
-        type: select
-        color: yellow-tournesol-main-731
-        use_tag_prefix: true
-        values:
-          - id: tdb-mobilite-durable
-            name: Indicateurs Tableau de bord de mobilité Durable
-          - id: territoires-en-transitions
-            name:
-              Indicateurs du programme Territoire Engagé de l'ADEME (Territoires en
-              Transitions)
-          - id: cop-region
-            name: Indicateurs de planification écologique régionale (COPs)
       - name: Maille minimale
         default_option: Toutes les mailles
         id: granularity
         type: spatial_granularity
-      - name: Couverture territoriale
-        default_option:
-        id: geozone
-        type: spatial_zone

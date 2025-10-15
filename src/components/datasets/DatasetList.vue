@@ -2,7 +2,7 @@
 import NoResults from '@/components/NoResults.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useSearchStore } from '@/store/DatasetSearchStore'
-import { DatasetCard } from '@datagouv/components'
+import { DatasetCard } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'

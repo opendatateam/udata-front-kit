@@ -1,4 +1,4 @@
-import type { Owned, Rel } from '@datagouv/components'
+import type { Owned, Rel } from '@datagouv/components-next'
 
 import type { SpatialField } from './spatial'
 
@@ -14,23 +14,83 @@ export enum Availability {
   REMOTE_DELETED = 'remote deleted'
 }
 
-export interface DatasetProperties {
-  title: string
-  purpose: string | null
+export interface SiteElementExtras {
   uri: string | null
-  id: string | null
   availability: Availability
   group?: string
+}
+
+export type ElementExtras = Record<SiteId, SiteElementExtras>
+
+export type ElementClass = 'Dataset' | 'Reuse'
+
+export interface GenericElement {
+  id?: string
+  title: string
+  description: string | null
+  tags: string[]
+  extras: ElementExtras
+  element: {
+    class: ElementClass
+    id: string
+  } | null
+}
+
+class ResolvedGenericElement implements GenericElement {
+  id?: string
+  title!: string
+  description!: string | null
+  tags!: string[]
+  extras!: ElementExtras
+  element!: {
+    class: ElementClass
+    id: string
+  } | null
+
   // those are "local" properties, not stored on data.gouv.fr
   isHidden?: boolean
   remoteDeleted?: boolean
   remoteArchived?: boolean
+
+  // used to compute siteExtras on demand (see getter below)
+  readonly siteId: SiteId
+
+  constructor(element: GenericElement, siteId: SiteId) {
+    Object.assign(this, element)
+    this.siteId = siteId
+  }
+
+  // this allow both get and set
+  get siteExtras(): SiteElementExtras {
+    return this.extras[this.siteId]
+  }
+
+  unresolved<T extends GenericElement = GenericElement>(): T {
+    // explicitely pick the required attributes for GenericElement
+    // const {removeMe, ...element} = this would not trigger type error if removeMe is not enough
+    const { id, title, description, tags, extras, element } = this
+    return { id, title, description, tags, extras, element } as T
+  }
 }
 
-export type DatasetsGroups = Map<string, DatasetProperties[]>
+export interface Factor extends GenericElement {
+  element: {
+    class: 'Dataset'
+    id: string
+  } | null
+}
+
+export class ResolvedFactor extends ResolvedGenericElement {
+  declare element: Factor['element']
+
+  constructor(factor: Factor, siteId: SiteId) {
+    super(factor, siteId)
+  }
+}
+
+export type FactorsGroups = Map<string, ResolvedFactor[]>
 
 export interface SiteTopicExtras {
-  datasets_properties: DatasetProperties[]
   cloned_from?: string
 }
 
@@ -46,22 +106,15 @@ export type Topic = Owned & {
   id: string
   page: string
   private: boolean
-  // FIXME: remove / fix after API is migrated to elements
-  reuses?: Rel | null
-  datasets?: Rel | null
-  elements?: Rel | null
+  elements: Rel
   slug: string
   tags: string[]
   uri: string
   spatial: SpatialField | undefined
 }
 
-export type TopicPostData = Omit<
-  Topic,
-  'datasets' | 'reuses' | 'id' | 'slug'
-> & {
+export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
   id?: string
   slug?: string
-  datasets: string[]
-  reuses: string[]
+  elements?: Factor[]
 }

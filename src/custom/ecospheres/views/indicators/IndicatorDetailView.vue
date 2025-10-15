@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { InformationPanel, ReadMore } from '@datagouv/components'
+import {
+  AnimatedLoader,
+  DatasetInformationPanel,
+  ReadMore
+} from '@datagouv/components-next'
+import { useHead } from '@unhead/vue'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
@@ -7,6 +12,8 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
+import config from '@/config'
+import IndicatorVisualisation from '@/custom/ecospheres/views/indicators/IndicatorVisualisation.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -15,7 +22,6 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { useLicense } from '@/utils/dataset'
 import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
@@ -32,6 +38,8 @@ const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 const { unite } = useIndicatorExtras(indicator)
+
+const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
 const showAddToBouquetModal = ref(false)
 
@@ -61,8 +69,26 @@ const tabTitles = [
 const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
-const license = useLicense(indicator)
 const spatialGranularity = useSpatialGranularity(indicator)
+
+const metaDescription = (): string | undefined => {
+  return indicator.value?.description ?? ''
+}
+
+const metaTitle = computed(() => {
+  return indicator.value?.title
+})
+
+useHead({
+  meta: [
+    {
+      property: 'og:title',
+      content: () => `${metaTitle.value} | ${config.website.title}`
+    },
+    { name: 'description', content: metaDescription },
+    { property: 'og:description', content: metaDescription }
+  ]
+})
 
 onMounted(() => {
   datasetStore
@@ -130,6 +156,11 @@ onMounted(() => {
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
         />
+        <IndicatorVisualisation
+          v-if="tabularApiUrl"
+          :indicator="indicator"
+          :tabular-api-url="tabularApiUrl"
+        />
         <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
@@ -154,11 +185,15 @@ onMounted(() => {
 
       <!-- Détails techniques -->
       <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
-        <InformationPanel
-          v-if="license"
-          :dataset="indicator"
-          :license="license"
-        />
+        <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
+           is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
+          updated to handle its own loading state. -->
+        <Suspense>
+          <DatasetInformationPanel :dataset="indicator" />
+          <template #fallback>
+            <AnimatedLoader />
+          </template>
+        </Suspense>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
