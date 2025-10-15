@@ -1,7 +1,7 @@
 import { build, sequence } from 'mimicry-js'
 import { dinumOrganization } from './organizations_factory'
 
-const datasetFactory = build({
+export const datasetFactory = build({
   fields: {
     organization: dinumOrganization,
     title: 'Sample Dataset',
@@ -57,7 +57,3 @@ const datasetFactory = build({
     temporal_coverage: null
   }
 })
-
-export default {
-  datasetFactory
-}

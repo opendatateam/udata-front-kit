@@ -69,11 +69,15 @@ export const mockSolutionRecommandation = (recommandationFields = {}) => {
 export const mockApidatasetRecommandations = (
   amount = 2,
   recommandationFields = {},
-  apiOrDatasetFields = {}
+  apiOrDatasetFields = {},
+  dataserviceFields = {},
+  datasetFields = {}
 ) => {
-  const { gristApisAndDatasets } = mockApisOrDatasets(
+  const { gristApisAndDatasets, dataservicesOrDatasets } = mockApisOrDatasets(
     amount,
-    apiOrDatasetFields
+    apiOrDatasetFields,
+    dataserviceFields,
+    datasetFields
   )
 
   const gristRecommandations = gristApisAndDatasets.map((girstApiOrDataset) => {
@@ -90,10 +94,15 @@ export const mockApidatasetRecommandations = (
 
   cy.mockGristRecords('Recommandations', gristRecommandations)
 
-  return { gristApisAndDatasets, gristRecommandations }
+  return { gristApisAndDatasets, gristRecommandations, dataservicesOrDatasets }
 }
 
-export const mockApisOrDatasets = (amount = 2, apiOrDatasetFields = {}) => {
+export const mockApisOrDatasets = (
+  amount = 2,
+  apiOrDatasetFields = {},
+  dataserviceFields = {},
+  datasetFields = {}
+) => {
   const gristApisAndDatasets = apiOrDatasetFactory.many(amount, {
     overrides: {
       fields: {
@@ -101,7 +110,11 @@ export const mockApisOrDatasets = (amount = 2, apiOrDatasetFields = {}) => {
       }
     }
   })
+  // Mock the list of APIs/Datasets and then mock each API/Dataset individually too
   cy.mockGristRecords('APIs_et_datasets', gristApisAndDatasets)
+  gristApisAndDatasets.forEach((apiOrDataset) => {
+    cy.mockGristRecord('APIs_et_datasets', apiOrDataset)
+  })
 
   const dataservicesOrDatasets = gristApisAndDatasets.map(
     (gristApiAndDataset) => {
@@ -110,7 +123,8 @@ export const mockApisOrDatasets = (amount = 2, apiOrDatasetFields = {}) => {
       if (gristApiAndDataset.fields.Type === 'API') {
         dataserviceOrDataset = dataserviceFactory.one({
           overrides: {
-            slug: gristApiAndDataset.fields.UID_datagouv
+            slug: gristApiAndDataset.fields.UID_datagouv,
+            ...dataserviceFields
           }
         })
         cy.mockDatagouvObject(
@@ -121,7 +135,8 @@ export const mockApisOrDatasets = (amount = 2, apiOrDatasetFields = {}) => {
       } else {
         dataserviceOrDataset = datasetFactory.one({
           overrides: {
-            slug: gristApiAndDataset.fields.UID_datagouv
+            slug: gristApiAndDataset.fields.UID_datagouv,
+            ...datasetFields
           }
         })
         cy.mockDatagouvObject(

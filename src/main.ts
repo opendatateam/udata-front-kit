@@ -10,8 +10,9 @@ import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de Vue
 import '@datagouv/components-next/assets/main.css'
 // this includes the result of the tailwind compilation on datagouv/components-next
 import '@datagouv/components-next/dist/components.css'
-import '@datagouv/components/dist/style.css'
+import './assets/datagouv-components-legacy.css'
 
+import * as Sentry from '@sentry/vue'
 import { createHead } from '@unhead/vue'
 import type { InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
@@ -29,6 +30,7 @@ import { datagouv } from '@datagouv/components-next'
 import App from './App.vue'
 import './assets/main.css'
 import type { CustomParams } from './model/api'
+import type { SentryConfig } from './model/config'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
@@ -37,6 +39,13 @@ import { isNotFoundError } from './utils/http'
 const app = createApp(App)
 const pinia = createPinia()
 const head = createHead()
+
+if (config.sentry?.dsn && import.meta.env.MODE !== 'test') {
+  Sentry.init({
+    app,
+    ...(config.sentry as SentryConfig)
+  })
+}
 
 routerPromise
   .then((router) => {

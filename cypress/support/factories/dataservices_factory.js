@@ -1,7 +1,7 @@
 import { build, sequence } from 'mimicry-js'
 import { dinumOrganization } from './organizations_factory'
 
-const dataserviceFactory = build({
+export const dataserviceFactory = build({
   fields: {
     organization: dinumOrganization,
     title: 'Sample Dataservice',
@@ -52,7 +52,3 @@ const dataserviceFactory = build({
     base_api_url: sequence((x) => `https://api.example.com/v1/service_${x}`)
   }
 })
-
-export default {
-  dataserviceFactory
-}

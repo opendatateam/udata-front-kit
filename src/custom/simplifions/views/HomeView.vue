@@ -36,39 +36,39 @@ const budgets = [
     description:
       "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique.",
     filters: 'budget=aucun-developpement-ni-budget',
-    imageSrc: '/simplifions/assets/accueil-picto-contract.png'
+    imageSrc: '/static/simplifions/assets/accueil-picto-contract.png'
   },
   {
     title: 'Vous passez par un éditeur',
     description:
       "Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.",
     filters: 'budget=avec-solution-editeur',
-    imageSrc: '/simplifions/assets/accueil-picto-self-training.png'
+    imageSrc: '/static/simplifions/assets/accueil-picto-self-training.png'
   },
   {
     title: 'Vous avez votre service informatique',
     description:
       "Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d'information.",
     filters: 'budget=avec-des-moyens-techniques',
-    imageSrc: '/simplifions/assets/accueil-picto-coding.png'
+    imageSrc: '/static/simplifions/assets/accueil-picto-coding.png'
   }
 ]
 
 const niveauxDeSimplification = [
   {
-    title: 'Niveau 1 : ⭐️ Accès facile',
+    title: 'Niveau 1 : 💠 Accès facile',
     description: "L'agent trouve facilement l'information",
     filters: 'types-de-simplification=acces-facile',
     buttonText: 'Solutions'
   },
   {
-    title: 'Niveau 2 : ⭐️⭐️ Dites-le-nous une fois',
+    title: 'Niveau 2 : 💠💠 Dites-le-nous une fois',
     description: "L'usager n'a plus à fournir de justificatifs",
     filters: 'types-de-simplification=dlnuf',
     buttonText: 'Solutions'
   },
   {
-    title: 'Niveau 3 : ⭐️⭐️⭐️ Proactivité',
+    title: 'Niveau 3 : 💠💠💠 Proactivité',
     description: "L'usager n'a plus de démarche à faire",
     filters: 'types-de-simplification=proactivite',
     buttonText: 'Solution'
@@ -99,7 +99,7 @@ const niveauxDeSimplification = [
             <div class="fr-content-media__img fr-col-lg-2 fr-col-4">
               <img
                 class="fr-responsive-img"
-                src="/simplifions/assets/accueil-picto-ecosystem.png"
+                src="/static/simplifions/assets/accueil-picto-ecosystem.png"
                 alt=""
                 style="display: block; width: 100%; height: auto"
               />

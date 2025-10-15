@@ -6,8 +6,8 @@ export const organizationFactory = build<Organization>({
     acronym: sequence((x) => `ORGA${x}`),
     badges: [],
     id: sequence((x) => `org_id_${x}`),
-    logo: '/public/blank_state/file.svg',
-    logo_thumbnail: '/public/blank_state/file.svg',
+    logo: '/public/static/blank_state/file.svg',
+    logo_thumbnail: '/public/static/blank_state/file.svg',
     name: sequence((x) => `Organization ${x}`),
     page: sequence(
       (x) => `https://demo.data.gouv.fr/organizations/organization-${x}/`
