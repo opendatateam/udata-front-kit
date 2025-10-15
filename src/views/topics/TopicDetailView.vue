@@ -6,7 +6,7 @@ import {
 import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, defineAsyncComponent, inject, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -33,6 +33,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useAsyncComponent } from '@/utils/component'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -57,12 +58,9 @@ const setAccessibilityProperties = inject(
 const description = computed(() => descriptionFromMarkdown(topic))
 
 // Dynamically load the custom description component if it exists
-const customDescriptionComponent = computed(() => {
-  if (meta.descriptionComponent) {
-    return defineAsyncComponent(meta.descriptionComponent)
-  }
-  return null
-})
+const customDescriptionComponent = useAsyncComponent(
+  () => meta.descriptionComponent
+)
 
 const userStore = useUserStore()
 const canEdit = computed(() => {
