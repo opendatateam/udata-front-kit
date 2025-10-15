@@ -1,5 +1,4 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin'
-import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
@@ -38,7 +37,6 @@ export default defineConfig(({ mode }) => {
   return {
     base: '/',
     plugins: [
-      tailwindcss(),
       vueDevTools(),
       vue({
         template: {

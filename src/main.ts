@@ -6,9 +6,6 @@ import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires 
 
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
-// this includes the tailwind theme from data.gouv.fr that our local tailwind will use
-import '@datagouv/components-next/assets/main.css'
-// this includes the result of the tailwind compilation on datagouv/components-next
 import '@datagouv/components-next/dist/components.css'
 import './assets/datagouv-components-legacy.css'
 

@@ -1,23 +1,6 @@
-import type { Organization, User } from '@datagouv/components-next'
-import type { GenericResponse } from './api'
+import type { Activity as DatagouvActivity } from '@datagouv/components-next'
 
-export interface Activity {
-  actor: User
-  changes: string[]
-  created_at: string
-  extras: {
-    element_id?: string
-  }
-  icon: string
+// Extend the datagouv Activity type to support custom activity keys
+export interface Activity extends Omit<DatagouvActivity, 'key'> {
   key: string
-  label: string
-  organization: Organization | null
-  related_to: string
-  related_to_id: string
-  related_to_kind: string
-  related_to_url: string
-}
-
-export interface ActivityResponse extends GenericResponse {
-  data: Activity[]
 }
