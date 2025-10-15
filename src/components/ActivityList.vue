@@ -74,7 +74,7 @@ watch(
     class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
   >
     <img
-      src="/blank_state/reuse.svg"
+      src="/static/blank_state/reuse.svg"
       alt=""
       loading="lazy"
       height="105"
