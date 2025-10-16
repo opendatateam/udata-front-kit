@@ -32,6 +32,11 @@ export interface IndicatorExtrasData {
   calcul: IndicatorExtrasCalcul
   api: IndicatorsExtrasApi
   sources: IndicatorExtrasSource[]
+  // visualisation attributes
+  summable?: boolean
+  y_start_at_zero?: boolean
+  ignore_format_big_number?: boolean
+  enable_visualization?: boolean
 }
 
 export type IndicatorExtras = DatasetV2['extras'] & {
