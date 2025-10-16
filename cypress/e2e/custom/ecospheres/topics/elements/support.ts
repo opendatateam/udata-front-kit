@@ -141,7 +141,10 @@ export function mockTopicElementsByClass(
 }
 
 // Common mocks for topic and discussions
-export function mockTopicAndDiscussions(topic: Topic, factors: Factor[] = []) {
+export function mockTopicAndRelatedObjects(
+  topic: Topic,
+  factors: Factor[] = []
+) {
   cy.mockDatagouvObject('topics', topic.id, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
@@ -154,6 +157,9 @@ export function mockTopicAndDiscussions(topic: Topic, factors: Factor[] = []) {
   })
   cy.mockDatagouvObjectList('discussions')
   cy.mockDatagouvObjectList('reuses')
+
+  // datasets related
+  cy.mockResourceTypes()
 }
 
 // Helper to expand disclosure groups
@@ -171,7 +177,7 @@ export function setupTopicWithExistingFactors(factors?: Factor[]) {
   const testFactors = factors || createTestFactors(2, ['dataset_in_group'])
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndDiscussions(testTopic, testFactors)
+  mockTopicAndRelatedObjects(testTopic, testFactors)
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(
@@ -191,7 +197,7 @@ export function setupEmptyTopic(): { testTopic: Topic } {
 
   const testTopic = createTestTopic()
 
-  mockTopicAndDiscussions(testTopic)
+  mockTopicAndRelatedObjects(testTopic)
   // Set up element mocks for empty topic (all classes return empty arrays)
   mockTopicElementsByClass(testTopic.id, [], [], [])
 
