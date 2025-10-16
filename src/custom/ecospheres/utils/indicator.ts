@@ -4,7 +4,6 @@ import type { DatasetV2 } from '@datagouv/components-next'
 import type { ComputedRef } from 'vue'
 import type {
   Indicator,
-  IndicatorExtras,
   IndicatorExtrasCalcul,
   IndicatorExtrasSource,
   IndicatorsExtrasApi
@@ -28,9 +27,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   watch(
     indicator,
     () => {
-      const extras = indicator.value?.extras?.['ecospheres-indicateurs'] as
-        | IndicatorExtras
-        | undefined
+      const extras = indicator.value?.extras?.['ecospheres-indicateurs']
       if (extras) {
         unite.value = extras.unite
         mailles.value = (extras.mailles_geographiques || [])

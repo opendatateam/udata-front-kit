@@ -94,3 +94,43 @@ Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
     body: datagouvResponseBuilder(elements)
   }).as(`get_topics_${resourceId}_elements`)
 })
+
+Cypress.Commands.add('mockSpatialLevels', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/levels'), {
+    statusCode: 200,
+    body: [
+      { id: 'country', name: 'Pays' },
+      { id: 'fr:region', name: 'Région française' },
+      { id: 'fr:departement', name: 'Département français' },
+      { id: 'fr:commune', name: 'Commune française' }
+    ]
+  }).as('get_spatial_levels')
+})
+
+Cypress.Commands.add('mockDatasetLicenses', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/licenses'), {
+    statusCode: 200,
+    body: []
+  }).as('get_licenses')
+})
+
+Cypress.Commands.add('mockResourceTypes', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/resource_types'), {
+    statusCode: 200,
+    body: []
+  }).as('get_resource_types')
+})
+
+Cypress.Commands.add('mockDatasetFrequencies', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/frequencies'), {
+    statusCode: 200,
+    body: []
+  }).as('get_frequencies')
+})
+
+Cypress.Commands.add('mockSpatialGranularities', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/granularities'), {
+    statusCode: 200,
+    body: []
+  }).as('get_spatial_granularities')
+})

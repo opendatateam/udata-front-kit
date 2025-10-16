@@ -43,6 +43,7 @@ export interface PageFilterConf {
   use_tag_prefix: boolean | null
   form: PageFilterFormConf | null
   authenticated: boolean | null
+  hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
 

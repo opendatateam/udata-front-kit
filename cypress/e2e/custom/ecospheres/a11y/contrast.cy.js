@@ -9,6 +9,7 @@ describe('a11y contrast testing', () => {
   const pages = {
     '/': '#main-content',
     '/datasets': 'ul.fr-grid-row > li',
+    '/dataservices': 'ul.fr-grid-row > li',
     '/bouquets': 'ul.fr-grid-row > li',
     '/indicators': 'ul.fr-grid-row > li'
   }
