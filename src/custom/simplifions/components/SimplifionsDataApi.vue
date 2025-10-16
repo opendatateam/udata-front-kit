@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import DataserviceCard from '@/components/DataserviceCard.vue'
+import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserviceCard.vue'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
@@ -49,6 +49,10 @@ import type { ApiOrDataset } from '../model/grist'
 
 const props = defineProps<{
   apiOrDataset: ApiOrDataset
+}>()
+
+const emit = defineEmits<{
+  resourceFetched: [resource: DatasetV2 | Dataservice]
 }>()
 
 const resourceNotFound = ref(false)
@@ -93,6 +97,8 @@ api
   })
   .then((data) => {
     datagouvResource.value = data
+    // Emit the fetched resource to the parent component
+    emit('resourceFetched', data)
   })
   .catch((error) => {
     resourceNotFound.value = true

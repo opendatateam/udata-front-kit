@@ -10,6 +10,7 @@ import TopicCard from '@/components/topics/TopicCard.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { useAsyncComponent } from '@/utils/component'
 
 const props = defineProps({
   query: {
@@ -74,18 +75,7 @@ const executeQuery = async () => {
 }
 
 // load custom card component from router, or fallback to default
-const CardComponent = computed(() => {
-  const componentLoader = meta?.cardComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return TopicCard
-})
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, TopicCard)
 
 const goToPage = (page: number) => {
   router.push({

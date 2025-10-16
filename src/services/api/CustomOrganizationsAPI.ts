@@ -12,8 +12,11 @@ export default class CustomOrganizationsAPI {
   baseUrl: string
   toasted: boolean
 
-  constructor() {
-    this.baseUrl = config.organizations
+  constructor(pageKey: string) {
+    this.baseUrl = config.organizations[pageKey]
+    if (!this.baseUrl) {
+      throw new Error(`No organizations base URL found for ${pageKey}`)
+    }
     this.toasted = true
   }
 
