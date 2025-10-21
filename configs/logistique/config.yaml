@@ -12,7 +12,7 @@ datagouvfr:
 robots:
   disallow:
   sitemap:
-  meta: 'noindex, nofollow'
+  meta: 'index, follow'
 
 # UI customizations
 website:
