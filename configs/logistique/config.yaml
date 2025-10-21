@@ -11,6 +11,8 @@ datagouvfr:
 
 robots:
   disallow:
+    - /admin
+    - /datasets
   sitemap:
   meta: 'index, follow'
 
