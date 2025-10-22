@@ -69,11 +69,6 @@ async function fetchWfsLayerNames(baseUrl: string): Promise<string[]> {
       }
     })
 
-    console.info(
-      `Found ${layerNames.length} layers in WFS GetCapabilities`,
-      layerNames
-    )
-
     return layerNames
   } catch (error) {
     console.error('Failed to fetch WFS GetCapabilities:', error)
@@ -169,6 +164,9 @@ function generateQlr(
 function generateWmsQlr(layerInfo: QgisLayerInfo): string {
   const { url, layerName = '' } = layerInfo
 
+  // Clean URL for consistency with WFS
+  const baseUrl = extractBaseUrl(url)
+
   const datasource = [
     'contextualWMSLegend=0',
     'crs=EPSG:4326',
@@ -177,7 +175,7 @@ function generateWmsQlr(layerInfo: QgisLayerInfo): string {
     'format=image/png',
     `layers=${layerName}`,
     'styles',
-    `url=${url}`
+    `url=${baseUrl}`
   ].join('&')
 
   return generateQlr(layerInfo, 'raster', 'wms', datasource)
@@ -287,50 +285,56 @@ function downloadQlrFile(
 }
 
 /**
- * Validates if a string could be a valid WFS typename
- * Valid typenames typically:
+ * Validates if a string could be a valid OGC layer name (WMS/WFS)
+ * Valid layer names typically:
  * - Contain only alphanumeric, underscore, hyphen, colon, and dot characters
  * - Don't contain spaces or special characters
  * - Are relatively short (not long sentences)
  * - May follow pattern: namespace:layername or just layername
  */
-function isValidWfsTypename(typename: string): boolean {
-  if (!typename || typename.length === 0) {
+function isValidLayerName(layerName: string): boolean {
+  if (!layerName || layerName.length === 0) {
     return false
   }
 
   // Check if it's too long (likely a human-readable title if > 100 chars)
-  if (typename.length > 100) {
+  if (layerName.length > 100) {
     return false
   }
 
-  // Check if it contains spaces (WFS typenames shouldn't have spaces)
-  if (typename.includes(' ')) {
+  // Check if it contains spaces (layer names shouldn't have spaces)
+  if (layerName.includes(' ')) {
     return false
   }
 
-  // Check if it matches typical WFS typename pattern
+  // Check if it matches typical layer name pattern
   // Allows: alphanumeric, underscore, hyphen, colon (for namespace), and dot
-  const typenamePattern = /^[a-zA-Z0-9_\-.:]+$/
-  return typenamePattern.test(typename)
+  const layerNamePattern = /^[a-zA-Z0-9_\-.:]+$/
+  return layerNamePattern.test(layerName)
 }
 
 /**
- * Extracts the WFS layer name from the URL if present
- * WFS URLs often contain the typename in query parameters
+ * Extracts the layer name from URL query parameters
+ * Works for both WMS (layers=) and WFS (typename=)
  */
-function extractWfsLayerName(url: string): string | null {
+function extractLayerNameFromUrl(url: string, format: string): string | null {
   try {
     const urlObj = new URL(url)
-    // Check for typename parameter (common in WFS GetCapabilities URLs)
-    const typename =
-      urlObj.searchParams.get('typename') ||
-      urlObj.searchParams.get('typeName') ||
-      urlObj.searchParams.get('TYPENAME') ||
-      urlObj.searchParams.get('typeNames') ||
-      urlObj.searchParams.get('TYPENAMES')
-    if (typename) {
-      return typename
+
+    // Define parameter names to check based on format
+    const paramNames =
+      format.toLowerCase() === 'wfs'
+        ? ['typename', 'typeName', 'typeNames']
+        : ['layers', 'layer']
+
+    // Check all case variations of each parameter name
+    for (const paramName of paramNames) {
+      const value =
+        urlObj.searchParams.get(paramName) ||
+        urlObj.searchParams.get(paramName.toUpperCase())
+      if (value) {
+        return value
+      }
     }
   } catch {
     // If URL parsing fails, return null
@@ -347,25 +351,27 @@ export function findQgisCompatibleResource(
   for (const resource of resources) {
     const format = detectOgcService(resource)
     if (format) {
-      let layerName = resource.title || ''
+      let layerName = ''
 
-      // For WFS, try to extract the actual layer typename from URL parameters
-      if (format.toLowerCase() === 'wfs') {
-        const extractedName = extractWfsLayerName(resource.url)
-        if (extractedName && isValidWfsTypename(extractedName)) {
-          layerName = extractedName
-        } else if (resource.title && isValidWfsTypename(resource.title)) {
-          // Resource title might be valid typename
-          layerName = resource.title
-        } else {
-          layerName = ''
-        }
+      // Try to extract layer name from URL parameters
+      const extractedName = extractLayerNameFromUrl(resource.url, format)
+      if (extractedName && isValidLayerName(extractedName)) {
+        layerName = extractedName
+      } else if (resource.title && isValidLayerName(resource.title)) {
+        // Resource title might be a valid layer name
+        layerName = resource.title
+      }
+
+      // If no valid layer name found, return null (hide "Open in QGIS" button)
+      // For WFS, we can fetch GetCapabilities, but for WMS it's harder
+      if (!layerName && format.toLowerCase() === 'wms') {
+        continue // Skip this resource, try the next one
       }
 
       return {
         url: resource.url,
         format,
-        title: resource.title || 'Layer',
+        title: resource.title,
         layerName
       }
     }
