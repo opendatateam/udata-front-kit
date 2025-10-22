@@ -122,16 +122,6 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: true // Source map generation must be turned on for sentry integration
     },
-    server: {
-      // this is a dev CSP, restricting outbound requests to *.data.gouv.fr and grist.numerique.gouv.fr
-      // this makes sure we don't make unintended API calls to third-parties (looking at you iconify)
-      // ⚠️ this won't be applied on prod or other environments
-      headers: {
-        'Content-Security-Policy': [
-          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com dev.local:7000 grist.numerique.gouv.fr"
-        ].join('; ')
-      }
-    },
     optimizeDeps: {
       // Some `@datagouv/components-next` dependencies aren't scanned by Vite dev server.
       // It must optimized them to be able to handle commonjs dependencies.
