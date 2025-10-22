@@ -128,16 +128,20 @@ const qgisLayerInfo = ref(new Map<string, QgisLayerInfo>())
 
 const computeQgisInfo = async (dataset: DatasetV2) => {
   if (!config.website.datasets.open_in_qgis) return
-  const resources = await resourceStore.loadResources(
-    dataset.id,
-    dataset.resources
-  )
-  const layerInfo = findQgisCompatibleResource(
-    resources.flatMap((rdata) => rdata.resources)
-  )
-  if (layerInfo) {
-    qgisLayerInfo.value.set(dataset.id, layerInfo)
-  }
+
+  let page = 1
+  let response
+
+  // uses do-while to ensure at least one iteration
+  do {
+    response = await resourceStore.fetchDatasetResources(dataset.id, page++)
+    const layerInfo = findQgisCompatibleResource(response.data)
+
+    if (layerInfo) {
+      qgisLayerInfo.value.set(dataset.id, layerInfo)
+      return
+    }
+  } while (response.next_page)
 }
 
 const handleOpenInQgis = (datasetId: string, datasetTitle?: string) => {

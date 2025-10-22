@@ -68,8 +68,8 @@ const changePage = async (type: string, page = 1, query = '') => {
   queries.value[type] = query
   const data = await resourceStore.fetchDatasetResources(
     props.dataset.id,
-    type,
     page,
+    type,
     query
   )
   resources.value[type].resources = data.data
