@@ -144,10 +144,15 @@ const computeQgisInfo = async (dataset: DatasetV2) => {
   } while (response.next_page)
 }
 
-const handleOpenInQgis = (datasetId: string, datasetTitle?: string) => {
+const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
   const layerInfo = qgisLayerInfo.value.get(datasetId)
   if (layerInfo) {
-    openInQgis(layerInfo, datasetTitle)
+    try {
+      await openInQgis(layerInfo, datasetTitle)
+    } catch (error) {
+      console.error('Failed to open in QGIS:', error)
+      alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+    }
   }
 }
 
