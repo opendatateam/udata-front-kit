@@ -344,10 +344,14 @@ function extractLayerNameFromUrl(url: string, format: string): string | null {
 
 /**
  * Finds the first OGC-compatible resource in a dataset and returns QGIS layer info
+ * Prioritizes WFS over WMS (vector data is more useful than raster)
  */
 export function findQgisCompatibleResource(
   resources: Resource[]
 ): QgisLayerInfo | null {
+  let wmsCandidate: QgisLayerInfo | null = null
+
+  // First pass: look for WFS
   for (const resource of resources) {
     const format = detectOgcService(resource)
     if (format) {
@@ -362,21 +366,28 @@ export function findQgisCompatibleResource(
         layerName = resource.title
       }
 
-      // If no valid layer name found, return null (hide "Open in QGIS" button)
-      // For WFS, we can fetch GetCapabilities, but for WMS it's harder
-      if (!layerName && format.toLowerCase() === 'wms') {
-        continue // Skip this resource, try the next one
-      }
-
-      return {
-        url: resource.url,
-        format,
-        title: resource.title,
-        layerName
+      if (format.toLowerCase() === 'wfs') {
+        // WFS found - return immediately (or store it even without layer name)
+        return {
+          url: resource.url,
+          format,
+          title: resource.title,
+          layerName
+        }
+      } else if (format.toLowerCase() === 'wms' && layerName && !wmsCandidate) {
+        // Store first valid WMS as fallback
+        wmsCandidate = {
+          url: resource.url,
+          format,
+          title: resource.title,
+          layerName
+        }
       }
     }
   }
-  return null
+
+  // No WFS found, return WMS if available
+  return wmsCandidate
 }
 
 /**
