@@ -145,7 +145,12 @@ export default defineConfig(({ mode }) => {
         'unist-util-find',
         'unist-util-find-all-between',
         'vue',
-        'vue-router'
+        'vue-router',
+        // geopf-extensions-openlayers and geoportal-access-lib contain legacy CommonJS modules
+        // (es6-promise, eventbusjs) that need pre-bundling to be properly converted to ESM
+        // for the dev server. Without this, map preview components fail to load.
+        'geopf-extensions-openlayers',
+        'geoportal-access-lib'
       ],
       // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
       // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
