@@ -84,10 +84,10 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Explorer
+    - text: Données
       to: /datasets
-    # - text: Réutiliser
-    #   to: /reuses
+    - text: Bouquets
+      to: bouquets
     - text: Echanger
       to: 'https://forum.data.gouv.fr/tag/culture'
     - text: 'La démarche'
@@ -135,8 +135,10 @@ website:
   # TODO: better place for that?
   topics:
     can_add_topics:
-      everyone: true
+      everyone: false
       authorized_users:
+        - 57d0546ec751df5cda97bae5 # Johan
+        - 67165b0e33e5dea4962c1184 # Eudes
 
 organizations: https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
 
@@ -232,3 +234,35 @@ pages:
             id: langue
           - name: '💡 Industries culturelles'
             id: industries-culturelles
+  # BOUQUETS
+  bouquets:
+    list_all: true
+    universe_query:
+      tag: culture
+    tag_prefix: culture
+    title: Bouquets
+    breadcrumb_title: Bouquets
+    labels:
+      singular: bouquet
+      plural: bouquets
+      extended: bouquet de données
+    search:
+      input: Filtrer les bouquets
+    banner:
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - name: Afficher les brouillons
+        id: include_private
+        type: checkbox
+        default_option:
+        default_value: true
+        authenticated: true
+        values: []
