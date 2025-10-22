@@ -225,12 +225,23 @@ function generateMultiLayerWfsQlr(
     })
     .ele('qlr')
 
-  // Add layer-tree-group for multiple layers
-  const layerTree = root.ele('layer-tree-group', {
-    name: title,
+  // Add outer wrapper layer-tree-group with empty name
+  const outerGroup = root.ele('layer-tree-group', {
+    checked: 'Qt::Checked',
+    groupLayer: '',
     expanded: '1',
-    checked: 'Qt::Checked'
+    name: ''
   })
+  outerGroup.ele('customproperties').ele('Option')
+
+  // Add inner layer-tree-group for the actual group
+  const innerGroup = outerGroup.ele('layer-tree-group', {
+    checked: 'Qt::Checked',
+    groupLayer: '',
+    expanded: '1',
+    name: title
+  })
+  innerGroup.ele('customproperties').ele('Option')
 
   // Generate layer IDs once and reuse them
   const layerIds = layerNames.map(
@@ -238,14 +249,18 @@ function generateMultiLayerWfsQlr(
       `layer_${layerName.replace(/:/g, '_')}_${Date.now()}_${index}`
   )
 
-  // Add each layer as a child in the tree
+  // Add each layer as a child in the tree with providerKey and source
   layerNames.forEach((layerName, index) => {
-    layerTree.ele('layer-tree-layer', {
+    const datasource = buildWfsDatasource(baseUrl, layerName)
+    const layerTreeLayer = innerGroup.ele('layer-tree-layer', {
+      providerKey: 'WFS',
+      source: datasource,
       id: layerIds[index],
       name: layerName,
       expanded: '0',
       checked: 'Qt::Checked'
     })
+    layerTreeLayer.ele('customproperties').ele('Option')
   })
 
   // Add all maplayers
