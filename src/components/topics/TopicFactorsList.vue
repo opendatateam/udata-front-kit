@@ -15,7 +15,10 @@ import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
+import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
+import type { QgisLayerInfo } from '@/utils/qgis'
+import { findQgisCompatibleResource, openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
@@ -45,6 +48,7 @@ const datasetsContent = ref(new Map<string, DatasetV2>())
 
 const { pageConf } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
+const resourceStore = useResourceStore()
 
 const {
   groupedFactors,
@@ -120,6 +124,41 @@ const handleDeleteGroup = async (groupName: string) => {
   await Promise.all(deletePromises)
 }
 
+const qgisLayerInfo = ref(new Map<string, QgisLayerInfo>())
+
+const computeQgisInfo = async (dataset: DatasetV2) => {
+  if (!config.website.datasets.open_in_qgis) return
+
+  let page = 1
+  let response
+  const allResources = []
+
+  // Collect resources from all pages
+  do {
+    response = await resourceStore.fetchDatasetResources(dataset.id, page++)
+    allResources.push(...response.data)
+  } while (response.next_page)
+
+  // Find the best compatible resource (prioritizes WFS over WMS)
+  const layerInfo = findQgisCompatibleResource(allResources)
+
+  if (layerInfo) {
+    qgisLayerInfo.value.set(dataset.id, layerInfo)
+  }
+}
+
+const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
+  const layerInfo = qgisLayerInfo.value.get(datasetId)
+  if (layerInfo) {
+    try {
+      await openInQgis(layerInfo, datasetTitle)
+    } catch (error) {
+      console.error('Failed to open in QGIS:', error)
+      alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+    }
+  }
+}
+
 const loadDatasetsContent = () => {
   factors.value.forEach((factor) => {
     const id = factor.element?.id ?? null
@@ -130,6 +169,7 @@ const loadDatasetsContent = () => {
           if (d) {
             datasetsContent.value.set(id, d)
             factor.remoteArchived = !!d.archived
+            computeQgisInfo(d)
           }
         })
         .catch((err) => {
@@ -277,6 +317,20 @@ watch(
                     target="_blank"
                     >Accéder au catalogue</a
                   >
+                  <button
+                    v-if="
+                      factor.element?.id && qgisLayerInfo.has(factor.element.id)
+                    "
+                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    @click="
+                      handleOpenInQgis(
+                        factor.element.id,
+                        datasetsContent.get(factor.element.id)?.title
+                      )
+                    "
+                  >
+                    Ouvrir dans QGIS
+                  </button>
                 </div>
               </template>
             </TopicGroup>
