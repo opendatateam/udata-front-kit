@@ -102,7 +102,7 @@ website:
   sitemap:
     - name: Accueil
       path: /
-    - name: Jeux de données
+    - name: Explorer
       path: /datasets
     - name: Démarche
       path: /demarche
@@ -200,3 +200,11 @@ pages:
             id: langue
           - name: '💡 Industries culturelles'
             id: industries-culturelles
+
+      - name: Type d'organisation
+        id: organization_badge
+        type: select
+        color: blue-france
+        values:
+          - id: local-authority
+            name: Collectivités territoriales
