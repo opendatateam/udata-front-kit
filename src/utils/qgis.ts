@@ -358,6 +358,7 @@ function extractLayerNameFromUrl(url: string, format: string): string | null {
 /**
  * Finds the first OGC-compatible resource in a dataset and returns QGIS layer info
  * Prioritizes WFS over WMS (vector data is more useful than raster)
+ * Excludes intranet URLs (*.rie.gouv.fr)
  */
 export function findQgisCompatibleResource(
   resources: Resource[]
@@ -366,6 +367,11 @@ export function findQgisCompatibleResource(
 
   // First pass: look for WFS
   for (const resource of resources) {
+    // Skip intranet URLs (not accessible outside government network)
+    if (/\.rie\.gouv\.fr/i.test(resource.url)) {
+      continue
+    }
+
     const format = detectOgcService(resource)
     if (format) {
       let layerName = ''
