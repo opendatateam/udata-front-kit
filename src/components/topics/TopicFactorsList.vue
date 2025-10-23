@@ -131,17 +131,20 @@ const computeQgisInfo = async (dataset: DatasetV2) => {
 
   let page = 1
   let response
+  const allResources = []
 
-  // uses do-while to ensure at least one iteration
+  // Collect resources from all pages
   do {
     response = await resourceStore.fetchDatasetResources(dataset.id, page++)
-    const layerInfo = findQgisCompatibleResource(response.data)
-
-    if (layerInfo) {
-      qgisLayerInfo.value.set(dataset.id, layerInfo)
-      return
-    }
+    allResources.push(...response.data)
   } while (response.next_page)
+
+  // Find the best compatible resource (prioritizes WFS over WMS)
+  const layerInfo = findQgisCompatibleResource(allResources)
+
+  if (layerInfo) {
+    qgisLayerInfo.value.set(dataset.id, layerInfo)
+  }
 }
 
 const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
