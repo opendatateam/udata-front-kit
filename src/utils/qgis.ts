@@ -112,13 +112,11 @@ function addMaplayer(
   maplayer.ele('provider', { encoding: 'UTF-8' }).txt(provider)
   maplayer.ele('layername').txt(layerName)
 
-  // Add CRS for vector layers
-  if (type === 'vector') {
-    const spatialrefsys = maplayer.ele('srs').ele('spatialrefsys')
-    spatialrefsys.ele('proj4').txt('+proj=longlat +datum=WGS84 +no_defs')
-    spatialrefsys.ele('srid').txt('4326')
-    spatialrefsys.ele('authid').txt(crs)
-  }
+  // Add CRS for all layers (both raster and vector need spatial reference)
+  const spatialrefsys = maplayer.ele('srs').ele('spatialrefsys')
+  spatialrefsys.ele('proj4').txt('+proj=longlat +datum=WGS84 +no_defs')
+  spatialrefsys.ele('srid').txt('4326')
+  spatialrefsys.ele('authid').txt(crs)
 
   return maplayer
 }
