@@ -234,6 +234,14 @@ pages:
             id: langue
           - name: '💡 Industries culturelles'
             id: industries-culturelles
+      
+      - name: Type d'organisation
+        id: organization_badge
+        type: select
+        color: blue-france
+        values:
+          - id: local-authority
+            name: Collectivités territoriales
   # BOUQUETS
   bouquets:
     list_all: true
