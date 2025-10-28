@@ -6,6 +6,7 @@ export function createIndicator(overrides = {}): Indicator {
   const dataset = datasetFactory.one({
     overrides: {
       title: 'Test Indicator Title',
+      description: 'This is the indicator description.',
       tags: [
         'ecospheres-indicateurs',
         'ecospheres-indicateurs-theme-mieux-consommer',

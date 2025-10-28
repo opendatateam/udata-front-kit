@@ -83,7 +83,7 @@ export const datasetFactory = build<DatasetV2>({
     id: sequence((x) => `dataset_id_${x}`),
     slug: sequence((x) => `dataset_slug_${x}`),
     uri: sequence(
-      (x) => `https://www.data.gouv.fr/api/1/datasets/topic_slug_${x}/`
+      (x) => `https://www.data.gouv.fr/api/2/datasets/topic_slug_${x}/`
     ),
     page: sequence((x) => `https://www.data.gouv.fr/datasets/topic_slug_${x}/`)
   }

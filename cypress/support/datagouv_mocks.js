@@ -131,6 +131,11 @@ Cypress.Commands.add('mockDatasetFrequencies', () => {
 Cypress.Commands.add('mockSpatialGranularities', () => {
   cy.intercept('GET', datagouvUrlRegex('spatial/granularities'), {
     statusCode: 200,
-    body: []
+    body: [
+      { id: 'country', name: 'Pays' },
+      { id: 'fr:region', name: 'Région française' },
+      { id: 'fr:departement', name: 'Département français' },
+      { id: 'fr:commune', name: 'Commune française' }
+    ]
   }).as('get_spatial_granularities')
 })

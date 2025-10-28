@@ -36,7 +36,7 @@ describe('Indicator Detail View', () => {
     })
   })
 
-  describe('Custom Metadata', () => {
+  describe('Custom Metadata In Informations tab', () => {
     it('should display the thématique', () => {
       cy.visit(`/indicators/${indicator.id}`)
       cy.contains('Thématique').should('be.visible')
@@ -61,16 +61,21 @@ describe('Indicator Detail View', () => {
       cy.contains('Biogaz').should('be.visible')
     })
 
-    it('should display the maille minimale', () => {
-      cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Maille minimale').should('be.visible')
-      cy.contains('Région française').should('be.visible')
-    })
-
     it('should display the unité', () => {
       cy.visit(`/indicators/${indicator.id}`)
       cy.contains('Unité').should('be.visible')
       cy.contains('kg CO2').should('be.visible')
+    })
+  })
+
+  describe('Custom Metadata In Technical Details Tab', () => {
+    it('should display the granularité de la couverture territoriale', () => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains('Détails technique').click()
+      cy.contains('Granularité de la couverture territoriale').should(
+        'be.visible'
+      )
+      cy.contains('Région française').should('be.visible')
     })
   })
 })
