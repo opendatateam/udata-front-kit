@@ -69,13 +69,43 @@ describe('Indicator Detail View', () => {
   })
 
   describe('Custom Metadata In Technical Details Tab', () => {
-    it('should display the granularité de la couverture territoriale', () => {
+    beforeEach(() => {
       cy.visit(`/indicators/${indicator.id}`)
       cy.contains('Détails technique').click()
+    })
+
+    it('should display the granularité de la couverture territoriale', () => {
       cy.contains('Granularité de la couverture territoriale').should(
         'be.visible'
       )
       cy.contains('Région française').should('be.visible')
+    })
+  })
+
+  describe('Sources Tab', () => {
+    beforeEach(() => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains('Sources').click()
+    })
+
+    it('should display the informations calcul', () => {
+      cy.contains('Informations calcul').should('be.visible')
+      cy.contains('Responsable du calcul').should('be.visible')
+      cy.contains('Méthode de calcul détaillée').should('be.visible')
+    })
+
+    it('should display source name and description', () => {
+      cy.contains('Source 1').should('be.visible')
+      cy.contains('Description de la source 1').should('be.visible')
+    })
+
+    it('should display source producteur and distributeur', () => {
+      cy.contains('Producteur 1').should('be.visible')
+      cy.contains('Distributeur 1').should('be.visible')
+    })
+
+    it('should display source URL', () => {
+      cy.contains('https://example.com/source1').should('be.visible')
     })
   })
 })
