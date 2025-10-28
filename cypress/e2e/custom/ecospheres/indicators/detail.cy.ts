@@ -68,6 +68,25 @@ describe('Indicator Detail View', () => {
     })
   })
 
+  describe('Fichiers et API Tab', () => {
+    beforeEach(() => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains('Fichiers et API').click()
+    })
+
+    it('should display axis annee values', () => {
+      cy.contains('2020').should('be.visible')
+      cy.contains('2021').should('be.visible')
+      cy.contains('2022').should('be.visible')
+    })
+
+    it('should display axis secteur values', () => {
+      cy.contains('transport').should('be.visible')
+      cy.contains('energie').should('be.visible')
+      cy.contains('agriculture').should('be.visible')
+    })
+  })
+
   describe('Custom Metadata In Technical Details Tab', () => {
     beforeEach(() => {
       cy.visit(`/indicators/${indicator.id}`)
