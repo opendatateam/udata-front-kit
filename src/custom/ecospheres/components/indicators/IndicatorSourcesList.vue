@@ -15,12 +15,14 @@ const props = defineProps({
 
 const indicator = toRef(props, 'indicator')
 
-const { sources } = useIndicatorExtras(indicator)
+const { sources, calcul } = useIndicatorExtras(indicator)
 </script>
 
 <template>
-  <template v-for="source in sources" :key="source.url">
-    <h2 class="subtitle subtitle--uppercase">{{ source.nom }}</h2>
+  <template v-for="(source, idx) in sources" :key="source.url">
+    <h2 class="subtitle subtitle--uppercase">
+      {{ `Source ${idx + 1} : ${source.nom}` }}
+    </h2>
     <InformationPanelSection>
       <template #description>
         <!-- eslint-disable-next-line vue/no-v-html -->
@@ -40,4 +42,23 @@ const { sources } = useIndicatorExtras(indicator)
       </InformationPanelItem>
     </InformationPanelSection>
   </template>
+  <!-- Informations calcul -->
+  <InformationPanelSection title="Informations calcul">
+    <template #description
+      >Nous documentons les hypothèses de traitement utilisées pour le calcul
+      des indicateurs dans la section Méthode de Calcul. L'équipe en charge de
+      leur application est indiquée dans le champ Responsable Calcul.</template
+    >
+    <InformationPanelItem
+      title="Responsable calcul"
+      :is-row="true"
+      :value="calcul?.responsable"
+    />
+    <InformationPanelItem
+      title="Méthode calcul"
+      :is-row="true"
+      :value="calcul?.methode"
+      :is-markdown="true"
+    />
+  </InformationPanelSection>
 </template>
