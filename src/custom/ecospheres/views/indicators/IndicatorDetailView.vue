@@ -11,6 +11,7 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
+import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
 import IndicatorVisualisation from '@/custom/ecospheres/views/indicators/IndicatorVisualisation.vue'
@@ -22,13 +23,10 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
-import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
-import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
@@ -37,7 +35,6 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
-const { unite } = useIndicatorExtras(indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
@@ -69,7 +66,6 @@ const tabTitles = [
 const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
-const spatialGranularity = useSpatialGranularity(indicator)
 
 const metaDescription = (): string | undefined => {
   return indicator.value?.description ?? ''
@@ -112,31 +108,25 @@ onMounted(() => {
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <div class="fr-col-12 fr-col-md-4 fr-mb-4w">
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Thématique</h2>
-        <IndicatorTags :indicator="indicator" type="theme" />
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Levier</h2>
-        <IndicatorTags :indicator="indicator" type="levier" />
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
-        <p>{{ spatialGranularity?.name || UNFILLED_LABEL }}</p>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
-        <p>{{ unite || UNFILLED_LABEL }}</p>
-        <div v-if="userStore.loggedIn">
-          <DsfrButton
-            class="fr-mt-2w"
-            size="md"
-            label="Ajouter à un bouquet"
-            icon="fr-icon-file-add-line"
-            @click="showAddToBouquetModal = true"
-          />
-          <DatasetAddToTopicModal
-            v-if="showAddToBouquetModal"
-            v-model:show="showAddToBouquetModal"
-            topic-page-key="bouquets"
-            :dataset="indicator"
-          />
-        </div>
-      </div>
+      <DatasetSidebar :dataset="indicator">
+        <template #bottom>
+          <div v-if="userStore.loggedIn">
+            <DsfrButton
+              class="fr-mt-2w"
+              size="md"
+              label="Ajouter à un bouquet"
+              icon="fr-icon-file-add-line"
+              @click="showAddToBouquetModal = true"
+            />
+            <DatasetAddToTopicModal
+              v-if="showAddToBouquetModal"
+              v-model:show="showAddToBouquetModal"
+              topic-page-key="bouquets"
+              :dataset="indicator"
+            />
+          </div>
+        </template>
+      </DatasetSidebar>
     </div>
 
     <DsfrTabs
@@ -202,5 +192,9 @@ onMounted(() => {
 <style scoped>
 :deep(.subtitle) {
   font-size: 1rem;
+}
+/* override previous rule for sidebar */
+:deep(.dataset-sidebar .subtitle) {
+  font-size: 0.875rem;
 }
 </style>

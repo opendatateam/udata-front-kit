@@ -32,7 +32,7 @@ const showHarvestQualityWarning = computed(() => {
 </script>
 
 <template>
-  <div class="fr-col-12 fr-col-md-4">
+  <div class="dataset-sidebar fr-col-12 fr-col-md-4">
     <h2 id="producer" class="subtitle fr-mb-1v">
       <span v-if="dataset.contact_points.length">Éditeur</span>
       <span v-else>Producteur</span>
