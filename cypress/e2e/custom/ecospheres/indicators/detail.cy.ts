@@ -1,5 +1,5 @@
 import type { Indicator } from '@/custom/ecospheres/model/indicator'
-import { createIndicator } from './support'
+import { createIndicator, createIndicatorResource } from './support'
 
 describe('Indicator Detail View', () => {
   let indicator: Indicator
@@ -8,20 +8,8 @@ describe('Indicator Detail View', () => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
 
-    // Create a mock indicator
-    indicator = createIndicator()
-
-    // Mock the API call to get the indicator
-    cy.mockDatagouvObject('datasets', indicator.id, indicator)
-
-    // Mock common data.gouv.fr APIs
-    cy.mockSpatialLevels()
-    cy.mockDatasetLicenses()
-    cy.mockResourceTypes()
-    cy.mockDatasetFrequencies()
-    cy.mockSpatialGranularities()
-    cy.mockDatagouvObjectList('discussions', [])
-    cy.mockDatagouvObjectList('reuses', [])
+    indicator = createIndicator({}, { enable_visualization: false })
+    cy.mockDatasetAndRelatedObjects(indicator)
   })
 
   describe('Native attributes', () => {
@@ -125,6 +113,38 @@ describe('Indicator Detail View', () => {
 
     it('should display source URL', () => {
       cy.contains('https://example.com/source1').should('be.visible')
+    })
+  })
+
+  describe('No Datavisualisation Configured', () => {
+    it('should not display the previsualisation', () => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains('Pré-visualisation').should('not.be.visible')
+    })
+  })
+
+  describe('Pré-visualisation Tab', () => {
+    it('should display the previsualisation when enabled', () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const vizResource = createIndicatorResource()
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
+        {
+          statusCode: 200,
+          body: {
+            data: []
+          }
+        }
+      ).as(`tabular_api`)
+      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      cy.contains('Pré-visualisation').click()
+      // Check if the visualization element appears
+      cy.get('.indicator-viz').should('be.visible')
     })
   })
 })

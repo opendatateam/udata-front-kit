@@ -117,7 +117,12 @@ Cypress.Commands.add('mockDatasetLicenses', () => {
 Cypress.Commands.add('mockResourceTypes', () => {
   cy.intercept('GET', datagouvUrlRegex('datasets/resource_types'), {
     statusCode: 200,
-    body: []
+    body: [
+      {
+        id: 'main',
+        label: 'Fichier principal'
+      }
+    ]
   }).as('get_resource_types')
 })
 
@@ -139,3 +144,39 @@ Cypress.Commands.add('mockSpatialGranularities', () => {
     ]
   }).as('get_spatial_granularities')
 })
+
+Cypress.Commands.add('mockDatasetSchemas', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/schemas'), {
+    statusCode: 200,
+    body: []
+  }).as('get_schemas')
+})
+
+Cypress.Commands.add('mockResources', (datasetId, data = []) => {
+  cy.intercept('GET', datagouvUrlRegex(`datasets/${datasetId}/resources`), {
+    statusCode: 200,
+    body: {
+      data,
+      total: data.length
+    }
+  }).as(`get_resources_${datasetId}`)
+})
+
+Cypress.Commands.add(
+  'mockDatasetAndRelatedObjects',
+  (dataset, resources = []) => {
+    // Update dataset.resources.total to match the resources array
+    dataset.resources.total = resources.length
+    cy.mockDatagouvObject('datasets', dataset.id, dataset)
+    // Mock related APIs
+    cy.mockSpatialLevels()
+    cy.mockDatasetLicenses()
+    cy.mockResourceTypes()
+    cy.mockDatasetFrequencies()
+    cy.mockSpatialGranularities()
+    cy.mockDatasetSchemas()
+    cy.mockDatagouvObjectList('discussions', [])
+    cy.mockDatagouvObjectList('reuses', [])
+    cy.mockResources(dataset.id, resources)
+  }
+)

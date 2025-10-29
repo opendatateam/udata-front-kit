@@ -50,18 +50,40 @@ const links = computed(() => [
   { text: indicator.value?.title || '' }
 ])
 
-const tabTitles = [
-  { title: 'Informations', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Fichiers et API', tabId: 'tab-1', panelId: 'tab-content-1' },
+const tabTitles = computed(() => [
+  { title: 'Informations', tabId: 'tab-info', panelId: 'tab-content-info' },
+  {
+    title: 'Fichiers et API',
+    tabId: 'tab-files',
+    panelId: 'tab-content-files'
+  },
+  // only display the visualization tab if the indicator has visualization enabled
+  ...(indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
+    ? [
+        {
+          title: 'Pré-visualisation',
+          tabId: 'tab-viz',
+          panelId: 'tab-content-viz'
+        }
+      ]
+    : []),
   {
     title: 'Réutilisations',
-    tabId: 'tab-2',
-    panelId: 'tab-content-2'
+    tabId: 'tab-reuses',
+    panelId: 'tab-content-reuses'
   },
-  { title: 'Discussions', tabId: 'tab-3', panelId: 'tab-content-3' },
-  { title: 'Sources', tabId: 'tab-4', panelId: 'tab-content-4' },
-  { title: 'Détails techniques', tabId: 'tab-5', panelId: 'tab-content-5' }
-]
+  {
+    title: 'Discussions',
+    tabId: 'tab-discussions',
+    panelId: 'tab-content-discussions'
+  },
+  { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
+  {
+    title: 'Détails techniques',
+    tabId: 'tab-details',
+    panelId: 'tab-content-details'
+  }
+])
 
 const activeTab = ref(0)
 
@@ -136,31 +158,38 @@ onMounted(() => {
       :tab-titles="tabTitles"
     >
       <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent panel-id="tab-content-info" tab-id="tab-info">
         <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Fichiers -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent panel-id="tab-content-files" tab-id="tab-files">
         <ResourcesList
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
         />
+        <IndicatorAPIDocumentation :indicator="indicator" />
+      </DsfrTabContent>
+
+      <!-- Prévisualisation -->
+      <DsfrTabContent panel-id="tab-content-viz" tab-id="tab-viz">
         <IndicatorVisualisation
           v-if="tabularApiUrl"
           :indicator="indicator"
           :tabular-api-url="tabularApiUrl"
         />
-        <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent panel-id="tab-content-reuses" tab-id="tab-reuses">
         <ReusesList model="dataset" :object-id="indicator.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
+      <DsfrTabContent
+        panel-id="tab-content-discussions"
+        tab-id="tab-discussions"
+      >
         <DiscussionsList
           :subject="indicator"
           subject-class="Dataset"
@@ -169,12 +198,12 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Sources -->
-      <DsfrTabContent panel-id="tab-content-4" tab-id="tab-4">
+      <DsfrTabContent panel-id="tab-content-sources" tab-id="tab-sources">
         <IndicatorSourcesList :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Détails techniques -->
-      <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
+      <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
         <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
            is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
           updated to handle its own loading state. -->
