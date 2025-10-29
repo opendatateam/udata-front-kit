@@ -24,8 +24,6 @@ useHead({
   link: [{ rel: 'canonical', href: window.location.origin }]
 })
 
-const dropdown = config.website.header_search.dropdown
-
 interface Section {
   id: number
   fields: {
