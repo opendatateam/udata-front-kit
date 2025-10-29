@@ -95,6 +95,10 @@ website:
       - topics
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/static/culture/pages/accessibility.md'
   sitemap:
     - name: Accueil
       path: /
@@ -104,6 +108,8 @@ website:
       path: /demarche
     - name: Conditions générales d’utilisation
       path: /terms
+    - name: Accessibilité
+      path: /accessibility
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
@@ -137,41 +143,6 @@ website:
 
 organizations: https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
 
-# Configuration format for pages:
-#
-# pages:
-#   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
-#     list_all: {bool}              # whether to have a list view or not
-#     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
-#     tag_prefix: {string}          # prefix for tags on data.gouv.fr
-#     title: {string}               # title for the list page
-#     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
-#     labels:                       # how to call the object that is displayed by the page
-#       singular: {string}          # singular name for the object
-#       plural: {string}            # plural name for the object
-#       extended: {string}          # extended name for the object, singular
-#     search:
-#       input: {string}             # placeholder for the search input
-#     banner:                       # banner for the list page (optionnal)
-#       title: {string}             # title for the banner
-#       content: {string}           # content for the banner
-#     discussions:
-#       display: {bool}             # display discussions on detail page
-#       create: {bool}              # create discussions on detail page
-#     filters:                      # list of filters for this {page_id}
-#       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
-#         id: {string}              # id of the filter
-#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox)
-#         child: {string?}          # id of the child filter (optional)
-#         color: {string}           # color of the filter's tag
-#         use_tag_prefix: {bool}    # whether to use {tag_prefix}-{item.id} when building value tag
-#         default_option: {string?} # default option for the filter (optional)
-#         default_value: {string?}  # default value for the filter (optional)
-#         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
-#         values:                   # list of values for this filter
-#           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
-#             name: {string}        # name of the value
-#             parent: {string?}     # id of the parent filter value (optional)
 pages:
   # DATASETS
   datasets:
@@ -199,6 +170,7 @@ pages:
         display: true
       reuses:
         display: true
+    editable: true
     filters:
       - name: Catégories
         default_option: Toutes les catégories

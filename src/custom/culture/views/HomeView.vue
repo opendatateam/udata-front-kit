@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
-import CustomCard from '@/custom/culture/components/CustomCard.vue'
+import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
 import { fromMarkdown } from '@/utils'
 
 useHead({
@@ -130,9 +130,10 @@ const getBackgroundClass = (backgroundColor: string) => {
   return ''
 }
 
-onMounted(async () => {
-  await Promise.all([fetchSections(), fetchContent(), fetchTopItems()])
-  loading.value = false
+onMounted(() => {
+  Promise.all([fetchSections(), fetchContent(), fetchTopItems()]).then(() => {
+    loading.value = false
+  })
 })
 </script>
 
@@ -151,7 +152,6 @@ onMounted(async () => {
           id="big-select-search"
           :placeholder="config.website.header_search.placeholder"
           search-label="Rechercher"
-          :dropdown="dropdown"
         />
       </div>
     </section>
@@ -165,37 +165,37 @@ onMounted(async () => {
         <h2 class="section-h2">Découvrez les données phares</h2>
         <div class="cards-container">
           <div class="card-wrapper">
-            <CustomCard
+            <CultureDatasetCard
               class="subsection-card"
               alt-img="patrimoine"
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('top-datasets'))
               "
-              img-src="/culture/assets/patrimoine.png"
+              img-src="/static/culture/assets/patrimoine.png"
               title="🔥 Jeux les plus consultés"
               :title-link-attrs="{}"
             />
           </div>
           <div class="card-wrapper">
-            <CustomCard
+            <CultureDatasetCard
               class="subsection-card"
               alt-img="audiovisuel"
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('top-reuses'))
               "
-              img-src="/culture/assets/audiovisuel.png"
+              img-src="/static/culture/assets/audiovisuel.png"
               title="♻️ Jeux les plus réutilisés"
               :title-link-attrs="{}"
             />
           </div>
           <div class="card-wrapper">
-            <CustomCard
+            <CultureDatasetCard
               class="subsection-card"
               alt-img="musee"
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('new-datasets'))
               "
-              img-src="/culture/assets/musee.png"
+              img-src="/static/culture/assets/musee.png"
               title="🆕 Nouveaux jeux publiés"
               :title-link-attrs="{}"
             />
@@ -227,7 +227,7 @@ onMounted(async () => {
                 :key="item.id"
                 class="card-wrapper"
               >
-                <CustomCard
+                <CultureDatasetCard
                   class="subsection-card"
                   alt-img="Image de données culturelles"
                   :description="item.fields.content"
