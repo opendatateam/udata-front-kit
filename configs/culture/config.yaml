@@ -49,9 +49,6 @@ website:
   header_search:
     display: true
     placeholder: Rechercher un jeu de données culture
-    dropdown:
-      - text: Rechercher {} dans les <strong>jeux de données</strong>
-        route: datasets
   search_bar:
     display: true
     placeholder: Rechercher un jeu de données culture
