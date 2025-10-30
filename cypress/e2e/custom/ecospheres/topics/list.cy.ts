@@ -90,7 +90,7 @@ describe('Topics - List Page', () => {
       // Click again to show drafts
       cy.contains('Afficher les brouillons').click()
 
-      // Verify URL includes include_private=false or doesn't include the parameter
+      // Verify URL includes include_private=true
       cy.url().should('include', 'include_private=true')
     })
   })
