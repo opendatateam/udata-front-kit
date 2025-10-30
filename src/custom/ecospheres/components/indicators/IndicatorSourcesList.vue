@@ -46,8 +46,8 @@ const { sources, calcul } = useIndicatorExtras(indicator)
   <InformationPanelSection title="Informations calcul">
     <template #description
       >Nous documentons les hypothèses de traitement utilisées pour le calcul
-      des indicateurs dans la section Méthode de Calcul. L'équipe en charge de
-      leur application est indiquée dans le champ Responsable Calcul.</template
+      des indicateurs dans la section "Méthode calcul". L'équipe en charge de
+      leur application est indiquée dans le champ "Responsable calcul".</template
     >
     <InformationPanelItem
       title="Responsable calcul"
