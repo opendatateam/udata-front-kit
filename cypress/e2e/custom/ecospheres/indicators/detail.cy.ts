@@ -24,7 +24,7 @@ describe('Indicator Detail View', () => {
     })
   })
 
-  describe('Custom Metadata In Informations tab', () => {
+  describe('Custom Metadata In Informations Tab', () => {
     it('should display the thématique', () => {
       cy.visit(`/indicators/${indicator.id}`)
       cy.contains('Thématique').should('be.visible')
