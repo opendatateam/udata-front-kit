@@ -78,7 +78,7 @@ describe('Topics - List Page', () => {
         .find('input[type="checkbox"]')
         .should('be.checked')
 
-      // Click the checkbox to show drafts
+      // Click the checkbox to hide drafts
       cy.contains('Afficher les brouillons').click()
 
       // Verify URL includes include_private=false
