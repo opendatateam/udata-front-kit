@@ -36,14 +36,17 @@ describe('Dataservices (API) - List Page', () => {
 
     // Wait for the initial API calls to complete
     cy.wait('@get_dataservices_list')
-    cy.wait('@mockDataservicesOrganizations')
+    cy.wait('@mockUniverseOrganizations')
 
-    // Select ADEME from the organization filter
+    // Click on the multiselect to open the dropdown
     cy.contains('label.fr-label', 'Organisation')
       .parent('.fr-select-group')
       .within(() => {
-        cy.get('select.fr-select').select('ADEME')
+        cy.get('.multiselect-wrapper').click()
       })
+
+    // Select ADEME from the dropdown options
+    cy.get('.multiselect-option[aria-label="ADEME"]').click()
 
     // Verify the URL contains the organization parameter
     cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
