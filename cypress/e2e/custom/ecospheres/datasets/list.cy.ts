@@ -20,7 +20,7 @@ describe('Datasets - List Page', () => {
     cy.wait('@get_datasets_list')
 
     // Check that the page title is present
-    cy.contains('API').should('be.visible')
+    cy.contains('Jeux de données').should('be.visible')
 
     // Check that all datasets are displayed
     testDatasets.forEach((dataset) => {
