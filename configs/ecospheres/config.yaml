@@ -107,10 +107,10 @@ website:
       to: /
     - text: Données
       to: /datasets
-    - text: API
-      to: /dataservices
     - text: Indicateurs
       to: /indicators
+    - text: API
+      to: /dataservices
     - text: Bouquets
       to: /bouquets
     - text: Organisations
