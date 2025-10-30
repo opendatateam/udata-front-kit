@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SelectComponent from '@/components/SelectComponent.vue'
+import FilterSelectComponent from '@/components/FilterSelectComponent.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { useFiltersState } from '@/utils/filters'
@@ -60,7 +60,7 @@ watch(
 <template>
   <div className="filterForm">
     <div class="fr-select-group">
-      <SelectComponent
+      <FilterSelectComponent
         default-option="Toutes les organisations"
         label="Organisation"
         :options="organizationOptions"
@@ -73,7 +73,7 @@ watch(
       :key="filter.id"
       class="fr-select-group"
     >
-      <SelectComponent
+      <FilterSelectComponent
         :default-option="filter.default_option"
         :label="filter.name"
         :options="filtersState[filter.id].options"
