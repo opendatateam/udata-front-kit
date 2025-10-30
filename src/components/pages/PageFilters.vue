@@ -55,7 +55,7 @@ const switchSpatialCoverage = (
 const shouldShowFilter = (filter: PageFilterConf) => {
   return (
     !filter.hide_on_list &&
-    ((filter.authenticated && loggedIn) || !filter.authenticated)
+    ((filter.authenticated && loggedIn.value) || !filter.authenticated)
   )
 }
 
