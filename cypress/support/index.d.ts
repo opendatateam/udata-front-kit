@@ -1,5 +1,6 @@
 declare namespace Cypress {
   interface Chainable {
+    checkRGAAContrast(): Chainable<void>
     mockDatasetFrequencies(): Chainable<void>
     mockDatasetLicenses(): Chainable<void>
     mockDatagouvObject(resourceName: string, resourceId: string, data?: object): Chainable<void>
