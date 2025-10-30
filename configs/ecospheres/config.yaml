@@ -61,6 +61,8 @@ website:
         route: datasets
       - text: Rechercher {} dans les <strong>indicateurs</strong>
         route: indicators
+      - text: Rechercher {} dans les <strong>API</strong>
+        route: dataservices
       - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
   search_bar:
