@@ -87,7 +87,7 @@ describe('Topics - List Page', () => {
       // Wait for the API call with the new parameter
       cy.wait('@get_topics_list')
 
-      // Click again to hide drafts
+      // Click again to show drafts
       cy.contains('Afficher les brouillons').click()
 
       // Verify URL includes include_private=false or doesn't include the parameter
