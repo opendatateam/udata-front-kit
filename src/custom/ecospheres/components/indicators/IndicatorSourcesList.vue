@@ -28,7 +28,7 @@ const { sources, calcul } = useIndicatorExtras(indicator)
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="fromMarkdown(source.description)"></div>
       </template>
-      <InformationPanelItem title="URL source">
+      <InformationPanelItem title="URL source" :is-row="true">
         <a :href="source.url" target="_blank">{{ source.url }}</a>
       </InformationPanelItem>
       <InformationPanelItem title="Distributeur" :value="source.distributeur" />
@@ -47,7 +47,8 @@ const { sources, calcul } = useIndicatorExtras(indicator)
     <template #description
       >Nous documentons les hypothèses de traitement utilisées pour le calcul
       des indicateurs dans la section "Méthode calcul". L'équipe en charge de
-      leur application est indiquée dans le champ "Responsable calcul".</template
+      leur application est indiquée dans le champ "Responsable
+      calcul".</template
     >
     <InformationPanelItem
       title="Responsable calcul"
