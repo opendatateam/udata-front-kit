@@ -179,6 +179,7 @@ website:
       dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
+      - CSW-DCAT
       - CSW-ISO-19139
     show_extended_information_panel: true
   # TODO: better place for that?
