@@ -43,7 +43,15 @@ jobs:
     strategy:
       matrix:
         site_id:
-          [ecospheres, meteo-france, defis, hackathon, logistique, simplifions]
+          [
+            ecospheres,
+            meteo-france,
+            defis,
+            hackathon,
+            logistique,
+            simplifions,
+            culture
+          ]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
