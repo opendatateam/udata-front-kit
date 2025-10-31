@@ -148,7 +148,6 @@ pages:
   datasets:
     list_all: true
     universe_query:
-      topic:
       tag: culture
     tag_prefix:
     title: Jeux de données
