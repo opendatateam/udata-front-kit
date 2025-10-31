@@ -200,3 +200,16 @@ pages:
             id: langue
           - name: '💡 Industries culturelles'
             id: industries-culturelles
+      - name: Type d'organisation
+        id: organization_badge
+        type: select
+        color: blue-france
+        values:
+          - name: Service public
+            id: public-service
+          - name: Collectivités territoriales
+            id: local-authority
+          - name: Association
+            id: association
+          - name: Entreprise
+            id: company
