@@ -2,8 +2,8 @@
 
 <div class="fr-grid-row fr-grid-row--gutters">
 <div class="fr-col-12 fr-col-lg-8">
-<p class="fr-text--lead">Sur <i>simplifions.data.gouv.fr</i>, chaque solution et cas d'usage référencés sont associés à un niveau de simplification, reflétant l’ampleur des améliorations apportées à l’usager.</p>
-<p class="fr-mb-4w"> Ces niveaux s’appuient sur des principes tels que le « Dites-le-nous une fois » ou la « proactivité ». Cette page a pour objectif de les présenter et de rassembler des ressources utiles pour mieux comprendre ces concepts.
+<p class="fr-text--lead">Sur <i>simplifions.data.gouv.fr</i>, différents produits, logiciels, services sont référencés en tant que « Solutions » permettant de simplifier des démarches via la donnée.</p>
+<p class="fr-text--lead fr-text--bold"> Le choix de référencer ou de ne pas référencer un produit en tant que « Solution » se fait selon les règles décrites dans la doctrine suivante :
 </p>
 </div>
 
@@ -11,44 +11,55 @@
 <nav class="fr-summary" role="navigation" aria-labelledby="fr-summary-title">
   <ol>
       <li>
-          <a class="fr-summary__link" id="summary-link-2" href="#niveau-1-acces-facile">Niveau 1 : 💠 Accès facile</a>
+          <a class="fr-summary__link" id="summary-link-2" href="#regles-de-referencement">Règles de référencement</a>
       </li>
       <li>
-          <a class="fr-summary__link" id="summary-link-2" href="#niveau-2-dlnuf">Niveau 2 : 💠💠 Dites-le-nous une fois</a>
-      </li>
-      <li>
-          <a class="fr-summary__link" id="summary-link-2" href="#niveau-3-proactivite">Niveau 3 : 💠💠💠 Proactivité</a>
+          <a class="fr-summary__link" id="summary-link-2" href="#seules-solutions-publiques-dans-les-recommandations">Seules les solutions publiques sont recommandées pour un cas d'usage</a>
       </li>
   </ol>
 </nav>
 </div>
 </div>
 
-<h2 id="niveau-1-acces-facile" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠 Accès facile</h2>
+<h2 id="regles-de-referencement" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">Règles de référencement</h2>
 
-<p class="fr-text--lead"><b>L'agent trouve facilement l'information</b></p>
+<p class="fr-text--lead">Lorsque l'équipe du Pôle Data identifie un produit (logiciel, outil numérique, portail usager, API, jeu de données, etc) susceptible de simplifier une démarche via l'utilisation de données, voici les questions auxquelles le pôle répond pour identifier si ce produit peut être considéré comme une solution sur Simplifions.data.gouv.fr. </p>
 
-Une première étape pour simplifier les démarches des usagers consiste à **rendre plus facilement accessible la donnée aux agents publics** directement. L'agent public, en ayant un accès aux informations d'autres administrations peut éviter de réclamer une information à l'usager au cours d'une démarche.
-
-Les solutions de niveau 1 reférencées sur ce site sont fréquemment des portails d'accès aux données ou des annuaires.
-
-<a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-acces-facile">Cas d'usages de niveau 1 💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-acces-facile"> Solutions de niveau 1 💠</a>
-
-<h2 id="niveau-2-dlnuf" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠💠 Dites-le-nous une fois</h2>
-
-<p class="fr-text--lead"><b>L'usager n'a plus à fournir de justificatifs</b></p>
-
-Le second niveau de simplification consiste à **ne plus réclamer une information administrative à l'usager final**. L'usager _« ne transmet l'information qu'une seule fois à l'administration »_, qui, elle, se charge de récupérer l'information auprès des autres administrations.
-
-Contrairement au niveau 1, qui facilite principalement le travail des agents publics, le niveau 2 bénéficie aussi à l’usager. Ses démarches sont allégées grâce au pré-remplissage de ses données ou à la suppression de certaines demandes d’informations.
-
-<a class="fr-link fr-icon-arrow-right-line fr-link--icon-right" href="/todo">Cadre juridique du "Dites-le nous une fois"</a>
-
-Les solutions de niveau 2 sont donc fréquemment des API ou des logiciels/formulaires en ligne intégrant des API ou des jeux de données.
-
-<a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-dlnuf">Cas d'usages de niveau 2 💠💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-dlnuf">Solutions de niveau 2 💠💠</a>
-
-<h2 id="niveau-3-proactivite" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠💠💠 Proactivité</h2>
+<div class="fr-col-12 fr-col-lg-8 fr-ml-4w fr-mt-4w">
+    <p class="fr-pt-4w"><span style="background-color: #e7e7e7ff; padding: 2px; border-radius: 4px;" class="fr-text--lg fr-text--bold">1. Ce produit est-il accessible aux acteurs publics* ? <br></span><i>*Administrations, collectivités, opérateurs, entreprise chargée d’une mission de service public, etc.</i></p>
+    <ul class=" ">
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>NON</b></span> <span style="background-color: #ffdddaff; padding: 2px; border-radius: 4px;">❌ Cet outil ne peut pas être référencé sur simplifions.gouv.fr</span></li>
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>OUI</b></span> ⬇️ Question suivante </li>
+    </ul>
+    <p class="fr-pt-4w"><span style="background-color: #e7e7e7ff; padding: 2px; border-radius: 4px;" class="fr-text--lg fr-text--bold">2. Ce produit utilise-t-il de la donnée de l’usager final* ? <br></span><i>**Le produit est connecté avec des données concernant l’usager final (particulier, entreprises ou associations).</i></p>
+    <ul class=" ">
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>NON</b></span> <span style="background-color: #ffdddaff; padding: 2px; border-radius: 4px;">❌ Cet outil ne peut pas être référencé sur simplifions.gouv.fr</span></li>
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>OUI</b></span> ⬇️ Question suivante </li>
+    </ul>
+    <p class="fr-pt-4w"><span style="background-color: #e7e7e7ff; padding: 2px; border-radius: 4px;" class="fr-text--lg fr-text--bold">3. Ce produit évite-t’il de demander ces données à l’usager, lors de sa démarche ? <br></span></p>
+    <ul class=" ">
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>NON</b></span> Ce produit permet-il aux agents traitant les démarches de trouver la donnée de l’usager (donnée fiable) ? Et est-il susceptible d’accélérer la démarche ou d’augmenter sa fiabilité/rapidité pour l'usager final ?</span>
+        <ul class="fr-ml-8w">
+            <li ><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>NON</b></span> <span style="background-color: #ffdddaff; padding: 2px; border-radius: 4px;">❌ Cet outil ne peut pas être référencé sur simplifions.gouv.fr</span></li>
+            <li><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>OUI</b></span> ⬇️ Question suivante</li>
+        </ul>
+    </li>
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>OUI</b></span> ⬇️ Question suivante </li>
+    </ul>
+    <p class="fr-pt-4w"><span style="background-color: #e7e7e7ff; padding: 2px; border-radius: 4px;" class="fr-text--lg fr-text--bold">3. Ce produit est-il un jeu de données ou une API ? <br></span></p>
+    <ul class=" ">
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>NON</b></span> Ce produit est site internet, un logiciel ou autre mais n'est pas une API ou un jeu de données. <span style="background-color: #c3ffc5ff; padding: 2px; border-radius: 4px;">✅ Ce produit peut rejoindre le catalogue des « Solutions » sur Simplifions.Data</span>
+    </li>
+    <li class="fr-text--lg"><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>OUI</b></span> Une équipe sera-t'elle disponible pour proposer un contenu concernant cet API ou jeu de données et le tenir à jour ?</span>
+        <ul class="fr-ml-8w">
+            <li ><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>NON</b></span> <span style="background-color: #ffdddaff; padding: 2px; border-radius: 4px;">❌ Cet outil ne peut pas être référencé sur simplifions.gouv.fr</span></li>
+            <li><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>OUI</b></span> <span style="background-color: #c3ffc5ff; padding: 2px; border-radius: 4px;">✅ Ce produit peut rejoindre le catalogue des « Solutions » sur Simplifions.Data</span> </li>
+        </ul>
+    </li>
+    </ul>
+   
+</div>
+<h2 id="seules-solutions-publiques-dans-les-recommandations" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">Seules les solutions publiques sont recommandées pour un cas d'usage</h2>
 
 <p class="fr-text--lead"><b>L'usager n'a plus de démarche à faire</b></p>
 
