@@ -61,6 +61,8 @@ website:
         route: datasets
       - text: Rechercher {} dans les <strong>indicateurs</strong>
         route: indicators
+      - text: Rechercher {} dans les <strong>API</strong>
+        route: dataservices
       - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
   search_bar:
@@ -107,10 +109,10 @@ website:
       to: /
     - text: Données
       to: /datasets
-    - text: API
-      to: /dataservices
     - text: Indicateurs
       to: /indicators
+    - text: API
+      to: /dataservices
     - text: Bouquets
       to: /bouquets
     - text: Organisations
@@ -177,6 +179,7 @@ website:
       dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
+      - CSW-DCAT
       - CSW-ISO-19139
     show_extended_information_panel: true
   # TODO: better place for that?

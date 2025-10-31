@@ -12,19 +12,12 @@ export const mockOrganizationsLists = () => {
 
   cy.intercept(
     'GET',
-    new RegExp(`${baseUrl}/organizations-dataservices-(demo|prod)\\.json$`),
+    new RegExp(
+      `${baseUrl}/organizations-(dataservices|datasets)-(demo|prod)\\.json$`
+    ),
     {
       statusCode: 200,
       body: orgsBody
     }
-  ).as('mockDataservicesOrganizations')
-
-  cy.intercept(
-    'GET',
-    new RegExp(`${baseUrl}/organizations-(demo|prod)\\.json$`),
-    {
-      statusCode: 200,
-      body: orgsBody
-    }
-  ).as('mockDatasetsOrganizations')
+  ).as('mockUniverseOrganizations')
 }
