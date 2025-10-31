@@ -11,8 +11,10 @@ datagouvfr:
 
 robots:
   disallow:
+    - /admin
+    - /datasets
   sitemap:
-  meta: 'noindex, nofollow'
+  meta: 'index, follow'
 
 # UI customizations
 website:
