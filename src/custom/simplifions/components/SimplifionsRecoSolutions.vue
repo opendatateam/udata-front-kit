@@ -4,10 +4,10 @@
       <h4 class="fr-h4 fr-mb-2w fr-col-md fr-col-12">
         ➡️ {{ recommandation.Nom_de_la_recommandation }}
       </h4>
-      <div v-if="recommandation.URL_demande_d_acces_cas_usage">
+      <div v-if="recommandation.access_link_with_fallback">
         <a
           rel="noopener noreferrer"
-          :href="recommandation.URL_demande_d_acces_cas_usage"
+          :href="recommandation.access_link_with_fallback"
           class="fr-btn access-link"
           target="_blank"
         >
