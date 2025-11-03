@@ -3,7 +3,7 @@ import type { QueryAsString } from '@/router/utils'
 import { usePageConf } from './config'
 import { getTagOptions } from './tags'
 
-interface FilterState {
+export interface FilterState {
   id: string
   selectedValue: string | null
   options: TagSelectOption[]

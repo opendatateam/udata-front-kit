@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SelectOrganization from '@/components/forms/SelectOrganization.vue'
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import SelectSpatialGranularity from '@/components/forms/SelectSpatialGranularity.vue'
 import type { PageFilterConf } from '@/model/config'
@@ -92,14 +93,20 @@ onMounted(async () => {
         :model-value="filtersState[filter.id].selectedValue"
         @update:model-value="(value) => switchFilter(filter.id, value)"
       />
+      <SelectOrganization
+        v-else-if="filter.type === 'organization'"
+        :label="filter.name"
+        :default-option="filter.default_option"
+        @update:value="(value) => switchFilter('organization', value)"
+      />
       <SelectSpatialGranularity
-        v-if="filter.type === 'spatial_granularity'"
+        v-else-if="filter.type === 'spatial_granularity'"
         :default-option="filter.default_option"
         :label="filter.name"
         :model-value="selectedGranularity"
         @update:model-value="(value) => switchFilter('granularity', value)"
       />
-      <template v-if="filter.type === 'spatial_zone'">
+      <template v-else-if="filter.type === 'spatial_zone'">
         <label class="fr-label" for="select-spatial-coverage">{{
           filter.name
         }}</label>
@@ -110,7 +117,7 @@ onMounted(async () => {
         />
       </template>
       <CheckboxComponent
-        v-if="filter.type === 'checkbox'"
+        v-else-if="filter.type === 'checkbox'"
         :model-value="filtersState[filter.id]?.selectedValue"
         :default-value="Boolean(filter.default_value)"
         :label="filter.name"

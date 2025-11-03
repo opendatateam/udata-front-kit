@@ -11,6 +11,7 @@ declare namespace Cypress {
     mockResourceTypes(): Chainable<void>
     mockSpatialGranularities(): Chainable<void>
     mockSpatialLevels(): Chainable<void>
+    mockSpatialZonesSuggest(): Chainable<void>
     mockStaticDatagouv(): Chainable<void>
     simulateConnectedUser(userData?: object): Chainable<void>
     simulateDisconnectedUser(): Chainable<void>

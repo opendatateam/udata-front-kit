@@ -76,7 +76,7 @@ Cypress.Commands.add('mockStaticDatagouv', () => {
   cy.intercept('GET', 'https://**static.data.gouv.fr/**', {
     statusCode: 200,
     body: '// Mocked static.data.gouv.fr content'
-  }).as('mockStaticDatagouv')
+  }).as('get_static_datagouv')
 
   // Mock avatar API calls
   cy.intercept('GET', datagouvUrlRegex('avatars'), {
@@ -85,7 +85,17 @@ Cypress.Commands.add('mockStaticDatagouv', () => {
     headers: {
       'Content-Type': 'image/png'
     }
-  }).as('mockAvatars')
+  }).as('get_avatars')
+
+  // Mock datagouvfr-pages content
+  cy.intercept(
+    'GET',
+    'https://raw.githubusercontent.com/datagouv/datagouvfr-pages/**',
+    {
+      statusCode: 200,
+      body: '// Mocked static.data.gouv.fr content'
+    }
+  ).as('get_datagouvfr_pages')
 })
 
 Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
@@ -143,6 +153,30 @@ Cypress.Commands.add('mockSpatialGranularities', () => {
       { id: 'fr:commune', name: 'Commune française' }
     ]
   }).as('get_spatial_granularities')
+})
+
+Cypress.Commands.add('mockSpatialZonesSuggest', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/zones/suggest'), {
+    statusCode: 200,
+    body: [
+      {
+        id: 'fr:commune:75056',
+        name: 'Paris',
+        code: '75056',
+        level: 'fr:commune',
+        population: 2161000,
+        area: 105.4
+      },
+      {
+        id: 'fr:departement:75',
+        name: 'Paris',
+        code: '75',
+        level: 'fr:departement',
+        population: 2161000,
+        area: 105.4
+      }
+    ]
+  }).as('get_spatial_zones_suggest')
 })
 
 Cypress.Commands.add('mockDatasetSchemas', () => {
