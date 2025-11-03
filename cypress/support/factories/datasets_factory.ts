@@ -16,18 +16,6 @@ const payload = {
   private: false,
   tags: [],
   badges: [],
-  resources: {
-    rel: 'subsection',
-    href: 'https://www.data.gouv.fr/api/2/datasets/68d3ad6e4ba8e4c8938ebad4/resources/?page=1&page_size=50',
-    type: 'GET',
-    total: 1
-  },
-  community_resources: {
-    rel: 'subsection',
-    href: 'https://www.data.gouv.fr/api/1/datasets/community_resources/?dataset=68d3ad6e4ba8e4c8938ebad4&page=1&page_size=50',
-    type: 'GET',
-    total: 0
-  },
   frequency: 'unknown',
   frequency_date: null,
   extras: {},
@@ -83,8 +71,24 @@ export const datasetFactory = build<DatasetV2>({
     id: sequence((x) => `dataset_id_${x}`),
     slug: sequence((x) => `dataset_slug_${x}`),
     uri: sequence(
-      (x) => `https://www.data.gouv.fr/api/1/datasets/topic_slug_${x}/`
+      (x) => `https://www.data.gouv.fr/api/2/datasets/topic_slug_${x}/`
     ),
-    page: sequence((x) => `https://www.data.gouv.fr/datasets/topic_slug_${x}/`)
+    page: sequence((x) => `https://www.data.gouv.fr/datasets/topic_slug_${x}/`),
+    resources: sequence((x) => {
+      return {
+        rel: 'subsection',
+        href: `https://www.data.gouv.fr/api/2/datasets/dataset_id_${x}/resources/?page=1&page_size=50`,
+        type: 'GET',
+        total: 0
+      }
+    }),
+    community_resources: sequence((x) => {
+      return {
+        rel: 'subsection',
+        href: `https://www.data.gouv.fr/api/1/datasets/community_resources/?dataset=dataset_id_${x}&page=1&page_size=50`,
+        type: 'GET',
+        total: 0
+      }
+    })
   }
 })

@@ -18,18 +18,12 @@ const props = defineProps({
 
 const indicator = toRef(props, 'indicator')
 const spatialCoverage = useSpatialCoverage(indicator)
-const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
+const { unite, mailles } = useIndicatorExtras(indicator)
 </script>
 
 <template>
   <!-- Catégorisation -->
   <InformationPanelSection title="Catégorisation">
-    <template #description
-      >Les informations ci-dessous permettent de mieux qualifier les politiques
-      publiques de transition écologique que l'indicateur cherche à suivre. Les
-      catégories proposées sont celle de la planification écologique France
-      Nation Verte.</template
-    >
     <InformationPanelItem title="Enjeux">
       <IndicatorTags :indicator="indicator" type="enjeu" />
     </InformationPanelItem>
@@ -51,14 +45,6 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
       title="Mailles"
       :value="mailles.length ? mailles.join(', ') : UNFILLED_LABEL"
     />
-
-    <template v-for="(values, axis, index) in axes" :key="axis">
-      <InformationPanelItem :title="`Axe n°${index + 1} - ${axis}`">
-        <ul>
-          <li v-for="value in values" :key="value">{{ value }}</li>
-        </ul>
-      </InformationPanelItem>
-    </template>
   </InformationPanelSection>
 
   <!-- Couverture -->
@@ -76,26 +62,6 @@ const { unite, mailles, axes, calcul } = useIndicatorExtras(indicator)
     <InformationPanelItem
       title="Couverture géographique"
       :value="spatialCoverage?.name"
-    />
-  </InformationPanelSection>
-
-  <!-- Informations calcul -->
-  <InformationPanelSection title="Informations calcul">
-    <template #description
-      >Nous documentons les hypothèses de traitement utilisées pour le calcul
-      des indicateurs dans la section Méthode de Calcul. L'équipe en charge de
-      leur application est indiquée dans le champ Responsable Calcul.</template
-    >
-    <InformationPanelItem
-      title="Responsable calcul"
-      :is-row="true"
-      :value="calcul?.responsable"
-    />
-    <InformationPanelItem
-      title="Méthode calcul"
-      :is-row="true"
-      :value="calcul?.methode"
-      :is-markdown="true"
     />
   </InformationPanelSection>
 </template>

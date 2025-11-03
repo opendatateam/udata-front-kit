@@ -4,10 +4,10 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import DatasetList from '@/components/datasets/DatasetList.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
+import { useAsyncComponent } from '@/utils/component'
 import { debounceWait } from '@/utils/config'
 
 defineEmits(['search'])
@@ -27,9 +27,9 @@ const router = useRouter()
 const route = useRoute()
 const { meta, pageConf } = useCurrentPageConf()
 
-const datasetListComp = ref<InstanceType<typeof DatasetList> | null>(null)
+const listComponentRef = ref<{ numberOfResultMsg?: string } | null>(null)
 const searchResultsMessage = computed(
-  () => datasetListComp.value?.numberOfResultMsg || ''
+  () => listComponentRef.value?.numberOfResultMsg || ''
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
@@ -46,21 +46,14 @@ const search = useDebounceFn((query) => {
   })
 }, debounceWait)
 
+// load list component from router
+const ListComponent = useAsyncComponent(() => meta?.listComponent)
+
 // load custom filters component from router, or fallback to default
-const FiltersComponent = computed(() => {
-  const componentLoader = meta?.filtersComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return defineAsyncComponent(
-    () => import('@/components/pages/PageFilters.vue')
-  )
-})
+const FiltersComponent = useAsyncComponent(
+  () => meta?.filtersComponent,
+  defineAsyncComponent(() => import('@/components/pages/PageFilters.vue'))
+)
 
 // TODO: this should be handled by the router, but we don't have access to pageConf there
 onMounted(() => {
@@ -104,7 +97,7 @@ onMounted(() => {
     <div class="fr-mt-2w">
       <div class="fr-grid-row">
         <nav
-          v-if="pageConf.filters.length > 0"
+          v-if="pageConf.filters.length > 0 || meta.filtersComponent"
           class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
@@ -115,9 +108,9 @@ onMounted(() => {
             <FiltersComponent />
           </div>
         </nav>
-        <div class="fr-col list-container">
-          <DatasetList
-            ref="datasetListComp"
+        <div class="fr-col-12 fr-col-md-8 list-container">
+          <ListComponent
+            ref="listComponentRef"
             :query="props.query"
             :page="props.page"
           />

@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import DataserviceCard from '@/components/DataserviceCard.vue'
+import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserviceCard.vue'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'

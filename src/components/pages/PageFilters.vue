@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import SelectSpatialGranularity from '@/components/forms/SelectSpatialGranularity.vue'
+import type { PageFilterConf } from '@/model/config'
 import type { SpatialCoverage } from '@/model/spatial'
 import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
 import { useSpatialStore } from '@/store/SpatialStore'
@@ -51,6 +52,13 @@ const switchSpatialCoverage = (
   navigate({ geozone: selectedGeozone.value })
 }
 
+const shouldShowFilter = (filter: PageFilterConf) => {
+  return (
+    !filter.hide_on_list &&
+    ((filter.authenticated && loggedIn.value) || !filter.authenticated)
+  )
+}
+
 watch(
   () => route.query,
   () => {
@@ -75,10 +83,7 @@ onMounted(async () => {
 
 <template>
   <template v-for="filter in pageConf.filters" :key="filter.id">
-    <div
-      v-if="(filter.authenticated && loggedIn) || !filter.authenticated"
-      class="fr-select-group"
-    >
+    <div v-if="shouldShowFilter(filter)" class="fr-select-group">
       <FilterSelectComponent
         v-if="filter.type === 'select'"
         :default-option="filter.default_option"
