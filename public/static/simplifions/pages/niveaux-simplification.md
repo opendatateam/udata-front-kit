@@ -42,7 +42,7 @@ Le second niveau de simplification consiste à **ne plus réclamer une informati
 
 Contrairement au niveau 1, qui facilite principalement le travail des agents publics, le niveau 2 bénéficie aussi à l’usager. Ses démarches sont allégées grâce au pré-remplissage de ses données ou à la suppression de certaines demandes d’informations.
 
-<a class="fr-link fr-icon-arrow-right-line fr-link--icon-right" aria-disabled>Cadre juridique du "Dites-le nous une fois"</a>
+<!--a class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Cadre juridique du "Dites-le nous une fois"</a-->
 
 Les solutions de niveau 2 sont donc fréquemment des API ou des logiciels/formulaires en ligne intégrant des API ou des jeux de données.
 
@@ -58,7 +58,7 @@ Pour terminer, le niveau 3 consiste presque à supprimer la démarche. Par l'ana
     <p>⚠️ La proactivité ne peut être qu'au bénéfice de l'usager (personne physique ou personne morale) et jamais à des fins de lutte contre la fraude.</p>
 </div>
 
-<a class="fr-link fr-icon-arrow-right-line fr-link--icon-right" aria-disabled>Cadre juridique de la proactivité</a>
+<!--a class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Cadre juridique de la proactivité</a-->
 
 Les solutions de niveau 3 sont donc fréquemment des API, des fichiers de données, ou des logiciels permettant la circulation de la donnée en temps réel entre les administrations.
 
