@@ -58,8 +58,8 @@ const fetchedResource = ref<DatasetV2 | Dataservice | undefined>(undefined)
 
 const access_url = computed(() => {
   // Prioritize the URL from the recommandation
-  if (props.recommandation.URL_demande_d_acces_cas_usage) {
-    return props.recommandation.URL_demande_d_acces_cas_usage
+  if (props.recommandation.access_link_with_fallback) {
+    return props.recommandation.access_link_with_fallback
   }
   // Fall back to the authorization_request_url from the fetched dataservice
   // (authorization_request_url only exists on dataservices, not datasets)
