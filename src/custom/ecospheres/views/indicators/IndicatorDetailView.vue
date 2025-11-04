@@ -121,7 +121,7 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="indicator">
+  <GenericContainer v-if="indicator" class="tabs-height-fix">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ indicator.title }}</h1>
