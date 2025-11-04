@@ -25,7 +25,7 @@ datagouvfr:
 robots:
   disallow:
   sitemap:
-  meta: 'noindex, nofollow'
+  meta: ''
 
 # UI customizations
 website:
