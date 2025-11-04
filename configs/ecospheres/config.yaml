@@ -448,9 +448,7 @@ pages:
     banner:
       title: Un hub d’indicateurs territoriaux de transition écologique
       content: |
-        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée.
-
-        Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
