@@ -191,6 +191,7 @@ website:
 organizations:
   datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-datasets-demo.json
   dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-dataservices-demo.json
+  bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-bouquets-demo.json
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -284,6 +285,10 @@ pages:
         display: true
     editable: true
     filters:
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
@@ -385,7 +390,11 @@ pages:
       datasets:
         display: true
     editable: false
-    filters: []
+    filters:
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization
   # BOUQUETS
   bouquets:
     list_all: true
@@ -423,6 +432,10 @@ pages:
         default_value: true
         authenticated: true
         values: []
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme

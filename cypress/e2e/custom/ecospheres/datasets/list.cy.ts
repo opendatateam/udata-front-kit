@@ -1,6 +1,6 @@
 import type { DatasetV2 } from '@datagouv/components-next'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
-import { mockOrganizationsLists } from '../mocks'
+import { mockUniverseOrganizations } from '../mocks'
 
 describe('Datasets - List Page', () => {
   let testDatasets: DatasetV2[]
@@ -8,7 +8,7 @@ describe('Datasets - List Page', () => {
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
-    mockOrganizationsLists()
+    mockUniverseOrganizations()
     testDatasets = datasetFactory.many(3)
     cy.mockDatagouvObjectList('datasets', testDatasets)
   })
@@ -33,7 +33,7 @@ describe('Datasets - List Page', () => {
 
     // Wait for the initial API calls to complete
     cy.wait('@get_datasets_list')
-    cy.wait('@mockUniverseOrganizations')
+    cy.wait('@get_universe_organizations')
 
     // Click on the multiselect to open the dropdown
     cy.contains('label.fr-label', 'Organisation')

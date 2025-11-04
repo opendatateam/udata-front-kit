@@ -35,7 +35,12 @@ export interface PageFilterFormConf {
 export interface PageFilterConf {
   name: string
   id: string
-  type: 'spatial_zone' | 'spatial_granularity' | 'select' | 'checkbox'
+  type:
+    | 'spatial_zone'
+    | 'spatial_granularity'
+    | 'select'
+    | 'checkbox'
+    | 'organization'
   child: string | null
   color: string | null
   default_option: string | null
