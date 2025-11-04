@@ -18,7 +18,10 @@ describe('Topics - List Page', () => {
   describe('List Display', () => {
     it('should display the list of topics', () => {
       cy.visit('/bouquets')
-      cy.wait('@get_topics_list')
+      cy.wait('@get_topics_list').then((interception) => {
+        // Verify the API call includes the universe query tag
+        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+      })
 
       // Check that all topics are displayed
       testTopics.forEach((topic) => {
@@ -46,8 +49,13 @@ describe('Topics - List Page', () => {
       // Verify the URL contains the organization parameter
       cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
 
-      // Wait for the filtered API call
-      cy.wait('@get_topics_list')
+      // Wait for the filtered API call and verify parameters
+      cy.wait('@get_topics_list').then((interception) => {
+        expect(interception.request.url).to.match(
+          /[?&]organization=534fff4ca3a7292c64a77c95(?:&|$)/
+        )
+        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+      })
     })
 
     it('should filter by theme when a theme is selected', () => {
@@ -69,8 +77,13 @@ describe('Topics - List Page', () => {
       // Verify the URL contains the theme parameter
       cy.url().should('include', 'theme=mieux-consommer')
 
-      // Wait for the filtered API call
-      cy.wait('@get_topics_list')
+      // Wait for the filtered API call and verify parameters
+      cy.wait('@get_topics_list').then((interception) => {
+        expect(interception.request.url).to.match(
+          /[?&]tag=ecospheres-theme-mieux-consommer(?:&|$)/
+        )
+        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+      })
     })
 
     it('should filter by spatial coverage when a zone is selected', () => {
@@ -99,8 +112,13 @@ describe('Topics - List Page', () => {
       // Verify the URL contains the geozone parameter (first zone of mock)
       cy.url().should('include', 'geozone=fr:commune:75056')
 
-      // Wait for the filtered API call
-      cy.wait('@get_topics_list')
+      // Wait for the filtered API call and verify parameters
+      cy.wait('@get_topics_list').then((interception) => {
+        expect(interception.request.url).to.match(
+          /[?&]geozone=fr:commune:75056(?:&|$)/
+        )
+        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+      })
     })
   })
 
@@ -137,9 +155,15 @@ describe('Topics - List Page', () => {
       })
 
       cy.visit('/bouquets')
-      cy.wait('@get_topics_list')
+      cy.wait('@get_topics_list').then((interception) => {
+        // By default, include_private should be true (from default_value in config)
+        expect(interception.request.url).to.match(
+          /[?&]include_private=true(?:&|$)/
+        )
+        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+      })
 
-      // Initially, include_private should not be in URL
+      // Initially, include_private should not be in URL (default value)
       cy.url().should('not.include', 'include_private')
 
       // Verify the checkbox is checked by default
@@ -155,13 +179,26 @@ describe('Topics - List Page', () => {
       cy.url().should('include', 'include_private=false')
 
       // Wait for the API call with the new parameter
-      cy.wait('@get_topics_list')
+      cy.wait('@get_topics_list').then((interception) => {
+        expect(interception.request.url).to.not.match(
+          /[?&]include_private=true(?:&|$)/
+        )
+        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+      })
 
       // Click again to show drafts
       cy.contains('Afficher les brouillons').click()
 
       // Verify URL includes include_private=true
       cy.url().should('include', 'include_private=true')
+
+      // Wait for the API call with the new parameter
+      cy.wait('@get_topics_list').then((interception) => {
+        expect(interception.request.url).to.match(
+          /[?&]include_private=true(?:&|$)/
+        )
+        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+      })
     })
   })
 })

@@ -153,7 +153,7 @@ pages:
     list_all: true
     universe_query:
       topic: 66d5caab2ef9e95fc1625446
-    tag_prefix:
+    filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
     labels:
@@ -178,7 +178,7 @@ pages:
     list_all: true
     universe_query:
       tag: logistique
-    tag_prefix: logistique
+    filter_prefix: logistique
     title: Bouquets
     breadcrumb_title: Bouquets
     labels:
@@ -203,7 +203,7 @@ pages:
         id: theme
         type: select
         color: green-bourgeon
-        use_tag_prefix: true
+        use_filter_prefix: true
         form:
           required: true
         values:

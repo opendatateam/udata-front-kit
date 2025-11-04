@@ -142,7 +142,7 @@ pages:
     list_all: true
     universe_query:
       tag: hackathon
-    tag_prefix:
+    filter_prefix:
     title: Hackathons
     breadcrumb_title: Hackathons
     labels:
@@ -167,7 +167,7 @@ pages:
         id: category
         type: select
         color: green-emeraude
-        use_tag_prefix: false
+        use_filter_prefix: false
         form:
           required: true
         values:
@@ -177,7 +177,7 @@ pages:
   datasets:
     list_all: false
     universe_query:
-    tag_prefix:
+    filter_prefix:
     title:
     breadcrumb_title: Données
     labels:
