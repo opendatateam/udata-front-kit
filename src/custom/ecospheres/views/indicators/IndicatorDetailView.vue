@@ -67,6 +67,7 @@ const tabTitles = computed(() => [
         }
       ]
     : []),
+  { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
   {
     title: 'Réutilisations',
     tabId: 'tab-reuses',
@@ -77,7 +78,6 @@ const tabTitles = computed(() => [
     tabId: 'tab-discussions',
     panelId: 'tab-content-discussions'
   },
-  { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
   {
     title: 'Détails techniques',
     tabId: 'tab-details',
