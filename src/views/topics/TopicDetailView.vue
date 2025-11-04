@@ -229,7 +229,7 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <GenericContainer v-if="topic">
+  <GenericContainer v-if="topic" class="tabs-height-fix">
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
@@ -467,14 +467,5 @@ watch(
 }
 .owner-avatar {
   margin-bottom: -6px;
-}
-/*
-FIXME: magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
-*/
-:deep(.fr-tabs) {
-  height: auto;
-}
-:deep(.fr-tabs)::before {
-  height: calc(var(--tabs-height) - 47px);
 }
 </style>
