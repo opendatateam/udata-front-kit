@@ -100,7 +100,7 @@ watch(
 <template
   v-if="indicatorResources.length > 0 && indicatorForGraph.enableVisualisation"
 >
-  <h2 class="subtitle subtitle--uppercase">Pré-visualisation</h2>
+  <h2 class="subtitle subtitle--uppercase">Prévisualisation</h2>
   <!-- Visualisation will use this div to render the graph through @ecolabadata/tabular-dataviz -->
   <div
     class="indicator-viz"
