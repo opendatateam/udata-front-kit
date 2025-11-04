@@ -61,7 +61,7 @@ const tabTitles = computed(() => [
   ...(indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
     ? [
         {
-          title: 'Pré-visualisation',
+          title: 'Prévisualisation',
           tabId: 'tab-viz',
           panelId: 'tab-content-viz'
         }
