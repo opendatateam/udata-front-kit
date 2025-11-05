@@ -2,8 +2,8 @@
 
 <div class="fr-grid-row fr-grid-row--gutters">
 <div class="fr-col-12 fr-col-lg-8">
-<p class="fr-text--lead">Sur <i>simplifions.data.gouv.fr</i>, différents produits, logiciels, services sont référencés en tant que «&nbsp;solutions&nbsp;» permettant de simplifier des démarches via la donnée.</p>
-<p class="fr-text--lead fr-text--bold"> Le choix de référencer ou de ne pas référencer un produit en tant que «&nbsp;solutions&nbsp;» se fait selon les règles décrites dans la doctrine suivante :
+<p class="fr-text--lead">Sur <i>simplifions.data.gouv.fr</i>, différents produits <i>- logiciels, site internet, portail usager, API, jeu de données, ... -</i> sont référencés dans le <a href="/solutions">catalogue des solutions</a>.</p>
+<p class="fr-text--lead fr-text--bold"> Le choix de référencer ou de ne pas référencer un produit en tant que «&nbsp;solution&nbsp;» se fait selon les règles décrites dans la doctrine suivante :
 </p>
 </div>
 
@@ -77,9 +77,9 @@
     </ol>
 </div>
 
-<h3>Le référencement d'une solution est-il un gage de qualité ?</h3>
+<h3>Le référencement d'une solution est-il un gage de qualité du produit ?</h3>
 
-<p class="fr-text--lg fr-text--bold">La présence d'un produit dans le catalogue des solutions n'est pas un indicateur de qualité&nbsp;:</p>
+<p class="fr-text--lg">La présence d'un produit dans le catalogue des solutions n'est pas un indicateur de qualité&nbsp;:</p>
 
 <ul class="fr-text--lg">
     <li>D'abord, toutes les solutions, qu'elles soient opérées par une organisation publique ou privée, qui correspondent aux règles de référencement ci-dessus, peuvent apparaître dans le catalogue. Les solutions utilisant ou rendant accessible de nombreuses données administratives sont autant référencées que les solutions qui en intègrent très peu.</li>
@@ -93,9 +93,8 @@
 
 <p class="fr-text--lg">Certaines solutions sont recommandées dans les <a href="/cas-d-usages">cas d'usages</a>. Pour être recommandée dans un cas d'usage, la solution répond aux exigences suivantes :</p>
 
-<ul >
-    <li class="fr-text--lg">Elle simplifie le cas d'usage concerné.</li>
-    <li class="fr-text--lg">C'est une solution publique. 
-    <p>ℹ️ Les solutions privées peuvent être référencées mais ne sont pas recommandées directement sur une solution. Si elles intègrent une API, un jeu de données ou une service opéré par une organisation publique qui est recommandé dans un cas d'usage, alors elles sont référencées dans un accordéon au niveau de la recommandation de la solution publique.</p>
-    </li>
+<ul>
+    <li class="fr-text--lg fr-mb-0">Elle simplifie le cas d'usage concerné.</li>
+    <li class="fr-text--lg fr-mt-0">C'est une solution publique.</li>
 </ul>
+
