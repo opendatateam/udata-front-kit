@@ -151,7 +151,7 @@ website:
       path: /organizations
     - name: À propos
       path: /about
-    - name: Conditions générales d’utilisation
+    - name: Conditions générales d'utilisation
       path: /terms
     - name: Accessibilité
       path: /accessibility
@@ -271,11 +271,9 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-      title: Un guichet unique pour l'accès aux données environnementales
+      title: Un guichet national pour l'accès aux données de la transition écologique
       content: |
-        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l'appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
-
-        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+        Le catalogue offre un accès centralisé à des données actualisées produites par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
@@ -379,11 +377,9 @@ pages:
     search:
       input: Rechercher une API
     banner:
-      title: Un guichet unique pour l'accès aux données environnementales
+      title: Des interfaces privilégiées pour l'intégration des données dans vos outils
       content: |
-        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l'appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
-
-        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+        Le catalogue recense les API mises à disposition par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
@@ -411,11 +407,9 @@ pages:
     search:
       input: Filtrer les bouquets
     banner:
-      title: Mettre en commun les usages des données et des indicateurs territoriaux
+      title: Mettre en commun les usages pour une action efficace
       content: |
-        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
-
-        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
+        Un bouquet regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l'action collective en créant vos propres bouquets : un simple compte **data.gouv**._fr_ suffit.
     resources_tabs:
       discussions:
         display: true
@@ -467,11 +461,9 @@ pages:
     search:
       input: Rechercher un indicateur
     banner:
-      title: Accéder aux indicateurs de référence pour la transition écologique des territoires
+      title: Un hub d'indicateurs territoriaux de transition écologique
       content: |
-        L'Ecolab du Commissariat Général au Développement Durable met en place un hub d'indicateurs territoriaux, en co-construction avec les directions générales, les établissements publics et les services déconcentrés des ministères concernés, pour accompagner les territoires dans le suivi de leurs politiques publiques de transition écologique. Ces indicateurs sont référencés par thématiques et enjeux environnementaux de la planification écologique. Chaque fiche détaille la définition, les sources, le calcul des indicateurs et permet d'accéder aux données structurées. Plusieurs bouquets permettent de regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
-
-        Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
