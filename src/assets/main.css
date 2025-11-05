@@ -208,6 +208,25 @@ body {
   --ground: 1;
 }
 
+/*
+FIXME: Tabs height bug workaround
+Root cause: DSFR's --tabs-height CSS variable is not dynamically recomputed when tab content changes
+This causes the ::before border element to stay at the wrong height when switching between tabs
+Workaround: Hide DSFR's ::before border and create our own that grows naturally with content
+Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
+*/
+.tabs-height-fix .fr-tabs {
+  height: auto;
+}
+.tabs-height-fix .fr-tabs::before {
+  display: none;
+}
+.tabs-height-fix .fr-tabs__panel {
+  border: 1px solid var(--border-default-grey);
+  padding: 1.5rem;
+  margin-top: 39px;
+}
+
 .datagouv-components h1 {
   margin-bottom: 1.5rem;
 }
