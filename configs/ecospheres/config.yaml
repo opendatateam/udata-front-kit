@@ -151,7 +151,7 @@ website:
       path: /organizations
     - name: À propos
       path: /about
-    - name: Conditions générales d’utilisation
+    - name: Conditions générales d'utilisation
       path: /terms
     - name: Accessibilité
       path: /accessibility
@@ -270,7 +270,7 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-      title: Un guichet national pour l’accès aux données de la transition écologique
+      title: Un guichet national pour l'accès aux données de la transition écologique
       content: |
         Le catalogue offre un accès centralisé à des données actualisées produites par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
@@ -376,7 +376,7 @@ pages:
     search:
       input: Rechercher une API
     banner:
-      title: Des interfaces privilégiées pour l’intégration des données dans vos outils
+      title: Des interfaces privilégiées pour l'intégration des données dans vos outils
       content: |
         Le catalogue recense les API mises à disposition par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
@@ -408,7 +408,8 @@ pages:
     banner:
       title: Mettre en commun les usages pour une action efficace
       content: |
-        Un bouquet regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d’initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l’action collective en créant vos propres bouquets : un simple compte **data.gouv**._fr_ suffit.
+        Un bouquet regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l'action collective en créant vos propres bouquets : un simple compte **data.gouv**._fr_ suffit.
+    resources_tabs:
       discussions:
         display: true
         create: true
@@ -459,7 +460,7 @@ pages:
     search:
       input: Rechercher un indicateur
     banner:
-      title: Un hub d’indicateurs territoriaux de transition écologique
+      title: Un hub d'indicateurs territoriaux de transition écologique
       content: |
         Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
