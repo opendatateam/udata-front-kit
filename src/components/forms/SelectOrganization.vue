@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FilterSelectComponent from '@/components/FilterSelectComponent.vue'
-import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
+import { useRouteMeta } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { onMounted, ref, type Ref } from 'vue'
 
@@ -9,12 +9,12 @@ defineProps<{
   defaultOption?: string | null
 }>()
 
-const emit = defineEmits<{
-  'update:value': [value: string | null]
-}>()
+const selectedOrganization = defineModel({
+  type: String as () => string | null,
+  default: null
+})
 
 const meta = useRouteMeta()
-const routeQuery = useRouteQueryAsString().query
 const organizationStore = useOrganizationStore()
 
 const organizationOptions: Ref<
@@ -23,7 +23,6 @@ const organizationOptions: Ref<
     name: string
   }[]
 > = ref([])
-const selectedOrganization = ref(routeQuery.organization || null)
 
 onMounted(async () => {
   organizationStore
@@ -36,10 +35,9 @@ onMounted(async () => {
 
 <template>
   <FilterSelectComponent
+    v-model="selectedOrganization"
     :default-option="defaultOption || 'Toutes les organisations'"
     :label="label"
     :options="organizationOptions"
-    :model-value="selectedOrganization"
-    @update:model-value="(value: string | null) => emit('update:value', value)"
   />
 </template>

@@ -21,6 +21,7 @@ const routeQuery = useRouteQueryAsString().query
 const userStore = useUserStore()
 const { loggedIn } = storeToRefs(userStore)
 
+const selectedOrganization = ref(routeQuery.organization || null)
 const selectedGranularity = ref(routeQuery.granularity || undefined)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
@@ -62,24 +63,36 @@ const shouldShowFilter = (filter: PageFilterConf) => {
 
 watch(
   () => route.query,
-  () => {
+  async () => {
     // Update filtersState based on query parameters
     Object.keys(filtersState).forEach((filter) => {
       const value = route.query[filter]
       const singleton = Array.isArray(value) ? value[0] : value
       filtersState[filter].selectedValue = singleton ?? null
     })
+
+    // Update organization
+    const organization = route.query.organization
+    selectedOrganization.value =
+      (Array.isArray(organization) ? organization[0] : organization) ?? null
+
+    // Update granularity
+    const granularity = route.query.granularity
+    selectedGranularity.value =
+      (Array.isArray(granularity) ? granularity[0] : granularity) ?? undefined
+
+    // Update spatial coverage
+    const geozone = route.query.geozone
+    const geozoneValue = Array.isArray(geozone) ? geozone[0] : geozone
+    if (geozoneValue) {
+      selectedSpatialCoverage.value =
+        await useSpatialStore().loadZone(geozoneValue)
+    } else {
+      selectedSpatialCoverage.value = undefined
+    }
   },
   { immediate: true }
 )
-
-onMounted(async () => {
-  if (routeQuery.geozone) {
-    selectedSpatialCoverage.value = await useSpatialStore().loadZone(
-      routeQuery.geozone
-    )
-  }
-})
 </script>
 
 <template>
@@ -95,9 +108,10 @@ onMounted(async () => {
       />
       <SelectOrganization
         v-else-if="filter.type === 'organization'"
+        :model-value="selectedOrganization"
         :label="filter.name"
         :default-option="filter.default_option"
-        @update:value="(value) => switchFilter('organization', value)"
+        @update:model-value="(value) => switchFilter('organization', value)"
       />
       <SelectSpatialGranularity
         v-else-if="filter.type === 'spatial_granularity'"

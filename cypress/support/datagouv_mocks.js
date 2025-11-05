@@ -179,6 +179,20 @@ Cypress.Commands.add('mockSpatialZonesSuggest', () => {
   }).as('get_spatial_zones_suggest')
 })
 
+Cypress.Commands.add('mockSpatialZone', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/zone/fr:commune:75056'), {
+    statusCode: 200,
+    body: {
+      id: 'fr:commune:75056',
+      name: 'Paris',
+      code: '75056',
+      level: 'fr:commune',
+      population: 2161000,
+      area: 105.4
+    }
+  }).as('get_spatial_zone')
+})
+
 Cypress.Commands.add('mockDatasetSchemas', () => {
   cy.intercept('GET', datagouvUrlRegex('datasets/schemas'), {
     statusCode: 200,
