@@ -6,6 +6,7 @@ on:
       # deployment branches
       - ecospheres-prod
       - ecospheres-demo
+      - simplifions-prod
       # - meteodatagouvfr-prod
       # - defisdatagouvfr-prod
 
