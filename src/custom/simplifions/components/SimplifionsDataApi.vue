@@ -2,7 +2,7 @@
   <a :href="datagouvLink" :class="`api-or-dataset-card ${datagouvType}-card`">
     <div class="api-or-dataset-header">
       <div
-        v-if="resourceNotFound || !datagouvResource"
+        v-if="hasEmptyUid || resourceNotFound || !datagouvResource"
         class="disabled-card fr-p-2w"
       >
         <h4 class="fr-col-12">
@@ -13,7 +13,8 @@
             >ID: {{ props.apiOrDataset.UID_datagouv }}</span
           >
 
-          <span v-if="resourceNotFound">
+          <span v-if="hasEmptyUid"> ⚠️ Datagouv UID missing </span>
+          <span v-else-if="resourceNotFound">
             ⚠️ {{ props.apiOrDataset.Type }} non trouvé{{
               props.apiOrDataset.Type == 'API' ? 'e' : ''
             }}
@@ -45,6 +46,7 @@ import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserv
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
+import * as Sentry from '@sentry/vue'
 import type { ApiOrDataset } from '../model/grist'
 
 const props = defineProps<{
@@ -57,6 +59,13 @@ const emit = defineEmits<{
 
 const resourceNotFound = ref(false)
 const datagouvResource = ref<DatasetV2 | Dataservice | null>(null)
+
+const hasEmptyUid = computed(() => {
+  return (
+    !props.apiOrDataset.UID_datagouv ||
+    props.apiOrDataset.UID_datagouv.trim() === ''
+  )
+})
 
 const datagouvType = computed(() => {
   switch (props.apiOrDataset.Type) {
@@ -82,28 +91,42 @@ const datagouvLink = computed(() => {
 })
 
 // Fetch the resource data when the component mounts
-const api = new DatagouvfrAPI({
-  endpoint: datagouvType.value,
-  version: datagouvApiVersion.value
-})
-api
-  .request({
-    url: `${api.url()}/${props.apiOrDataset.UID_datagouv}`,
-    method: 'get',
-    params: {
-      fields:
-        'title,description,organization,resources,tags,created_at,updated_at'
-    }
+// Only fetch if UID is not empty
+if (!hasEmptyUid.value) {
+  const api = new DatagouvfrAPI({
+    endpoint: datagouvType.value,
+    version: datagouvApiVersion.value
   })
-  .then((data) => {
-    datagouvResource.value = data
-    // Emit the fetched resource to the parent component
-    emit('resourceFetched', data)
-  })
-  .catch((error) => {
-    resourceNotFound.value = true
-    console.error('Failed to fetch datagouv resource:', error)
-  })
+  api
+    .request({
+      url: `${api.url()}/${props.apiOrDataset.UID_datagouv}`,
+      method: 'get',
+      params: {
+        fields:
+          'title,description,organization,resources,tags,created_at,updated_at'
+      }
+    })
+    .then((data) => {
+      datagouvResource.value = data
+      // Emit the fetched resource to the parent component
+      emit('resourceFetched', data)
+    })
+    .catch((error) => {
+      resourceNotFound.value = true
+      console.error('Failed to fetch datagouv resource:', error)
+      Sentry.captureException(error, {
+        tags: {
+          component: 'SimplifionsDataApi',
+          resourceType: datagouvType.value,
+          uid: props.apiOrDataset.UID_datagouv
+        },
+        extra: {
+          apiOrDatasetName: props.apiOrDataset.Nom,
+          apiOrDatasetType: props.apiOrDataset.Type
+        }
+      })
+    })
+}
 </script>
 
 <style scoped>
