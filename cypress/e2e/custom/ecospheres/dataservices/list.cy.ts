@@ -1,13 +1,13 @@
 import type { DataserviceWithRel } from '@/model/dataservice'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
-import { mockOrganizationsLists } from '../mocks'
+import { mockUniverseOrganizations } from '../mocks'
 
 describe('Dataservices (API) - List Page', () => {
   let testDataservices: DataserviceWithRel[]
 
   beforeEach(() => {
     cy.mockMatomo()
-    mockOrganizationsLists()
+    mockUniverseOrganizations()
 
     // Create test dataservices
     testDataservices = dataserviceFactory.many(3)
@@ -36,7 +36,7 @@ describe('Dataservices (API) - List Page', () => {
 
     // Wait for the initial API calls to complete
     cy.wait('@get_dataservices_list')
-    cy.wait('@mockUniverseOrganizations')
+    cy.wait('@get_universe_organizations')
 
     // Click on the multiselect to open the dropdown
     cy.contains('label.fr-label', 'Organisation')

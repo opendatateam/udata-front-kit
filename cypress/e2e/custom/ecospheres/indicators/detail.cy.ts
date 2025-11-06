@@ -119,11 +119,11 @@ describe('Indicator Detail View', () => {
   describe('No Datavisualisation Configured', () => {
     it('should not display the previsualisation', () => {
       cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Pré-visualisation').should('not.be.visible')
+      cy.contains('Prévisualisation').should('not.be.visible')
     })
   })
 
-  describe('Pré-visualisation Tab', () => {
+  describe('Prévisualisation Tab', () => {
     it('should display the previsualisation when enabled', () => {
       const indicatorWithViz = createIndicator(
         {},
@@ -142,7 +142,7 @@ describe('Indicator Detail View', () => {
         }
       ).as(`tabular_api`)
       cy.visit(`/indicators/${indicatorWithViz.id}`)
-      cy.contains('Pré-visualisation').click()
+      cy.contains('Prévisualisation').click()
       // Check if the visualization element appears
       cy.get('.indicator-viz').should('be.visible')
     })

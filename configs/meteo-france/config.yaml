@@ -166,7 +166,7 @@ organizations:
 pages:
   datasets:
     list_all: true
-    tag_prefix:
+    filter_prefix:
     universe_query:
       tag: meteodatagouvfr
     title: Jeux de données
@@ -194,7 +194,7 @@ pages:
         type: select
         child: subcategory
         color: noop
-        use_tag_prefix: false
+        use_filter_prefix: false
         values:
           - id: climatologique-base
             name: Données climatologiques de base
@@ -211,7 +211,7 @@ pages:
         id: subcategory
         type: select
         color: noop
-        use_tag_prefix: false
+        use_filter_prefix: false
         values:
           # parent-category: stations
           - name: Stations du réseau Météo-France

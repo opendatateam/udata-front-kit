@@ -169,7 +169,7 @@ onMounted(() => {
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('top-datasets'))
               "
-              img-src="/static/culture/assets/patrimoine.png"
+              img-src="/static/culture/assets/MC_Patrimoine_c6e3a5b33cce.webp"
               title="🔥 Jeux les plus consultés"
               :title-link-attrs="{}"
             />
@@ -181,7 +181,7 @@ onMounted(() => {
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('top-reuses'))
               "
-              img-src="/static/culture/assets/audiovisuel.png"
+              img-src="/static/culture/assets/MC_Publics_b86a092e27b8.webp"
               title="♻️ Jeux les plus réutilisés"
               :title-link-attrs="{}"
             />
@@ -193,7 +193,7 @@ onMounted(() => {
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('new-datasets'))
               "
-              img-src="/static/culture/assets/musee.png"
+              img-src="/static/culture/assets/MC_Langues_78627c8ca0c3-20251007.webp"
               title="🆕 Nouveaux jeux publiés"
               :title-link-attrs="{}"
             />

@@ -149,7 +149,7 @@ pages:
     list_all: true
     universe_query:
       tag: culture
-    tag_prefix:
+    filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
     labels:
@@ -176,7 +176,7 @@ pages:
         default_option: Toutes les catégories
         id: tag
         type: select
-        use_tag_prefix: false
+        use_filter_prefix: false
         values:
           - name: '🗃️ Archives'
             id: archives
@@ -200,11 +200,19 @@ pages:
             id: langue
           - name: '💡 Industries culturelles'
             id: industries-culturelles
-
       - name: Type d'organisation
+        default_option: Tous les types
         id: organization_badge
         type: select
+        api_param: organization_badge
+        use_filter_prefix: false
         color: blue-france
         values:
-          - id: local-authority
-            name: Collectivités territoriales
+          - name: Service public
+            id: public-service
+          - name: Collectivités territoriales
+            id: local-authority
+          - name: Association
+            id: association
+          - name: Entreprise
+            id: company

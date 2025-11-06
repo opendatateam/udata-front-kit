@@ -1,4 +1,4 @@
-export const mockOrganizationsLists = () => {
+export const mockUniverseOrganizations = () => {
   const baseUrl =
     'https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist'
   const orgsBody = [
@@ -13,11 +13,11 @@ export const mockOrganizationsLists = () => {
   cy.intercept(
     'GET',
     new RegExp(
-      `${baseUrl}/organizations-(dataservices|datasets)-(demo|prod)\\.json$`
+      `${baseUrl}/organizations-(dataservices|datasets|bouquets)-(demo|prod)\\.json$`
     ),
     {
       statusCode: 200,
       body: orgsBody
     }
-  ).as('mockUniverseOrganizations')
+  ).as('get_universe_organizations')
 }
