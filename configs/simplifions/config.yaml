@@ -24,8 +24,8 @@ datagouvfr:
 
 robots:
   disallow:
-  sitemap:
-  meta: 'noindex, nofollow' # default value for preprod
+  sitemap: 'https://simplifions.data.gouv.fr/sitemap.xml'
+  meta: 'index, follow'
 
 # UI customizations
 website:
