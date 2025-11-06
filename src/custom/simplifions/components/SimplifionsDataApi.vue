@@ -13,9 +13,7 @@
             >ID: {{ props.apiOrDataset.UID_datagouv }}</span
           >
 
-          <span v-if="hasEmptyUid">
-            ⚠️ Datagouv UID missing
-          </span>
+          <span v-if="hasEmptyUid"> ⚠️ Datagouv UID missing </span>
           <span v-else-if="resourceNotFound">
             ⚠️ {{ props.apiOrDataset.Type }} non trouvé{{
               props.apiOrDataset.Type == 'API' ? 'e' : ''
@@ -48,6 +46,7 @@ import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserv
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
+import * as Sentry from '@sentry/vue'
 import type { ApiOrDataset } from '../model/grist'
 
 const props = defineProps<{
@@ -62,7 +61,10 @@ const resourceNotFound = ref(false)
 const datagouvResource = ref<DatasetV2 | Dataservice | null>(null)
 
 const hasEmptyUid = computed(() => {
-  return !props.apiOrDataset.UID_datagouv || props.apiOrDataset.UID_datagouv.trim() === ''
+  return (
+    !props.apiOrDataset.UID_datagouv ||
+    props.apiOrDataset.UID_datagouv.trim() === ''
+  )
 })
 
 const datagouvType = computed(() => {
@@ -112,6 +114,17 @@ if (!hasEmptyUid.value) {
     .catch((error) => {
       resourceNotFound.value = true
       console.error('Failed to fetch datagouv resource:', error)
+      Sentry.captureException(error, {
+        tags: {
+          component: 'SimplifionsDataApi',
+          resourceType: datagouvType.value,
+          uid: props.apiOrDataset.UID_datagouv
+        },
+        extra: {
+          apiOrDatasetName: props.apiOrDataset.Nom,
+          apiOrDatasetType: props.apiOrDataset.Type
+        }
+      })
     })
 }
 </script>
