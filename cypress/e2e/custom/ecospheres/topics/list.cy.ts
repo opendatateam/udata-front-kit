@@ -9,6 +9,7 @@ describe('Topics - List Page', () => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
     cy.mockSpatialLevels()
+    cy.mockSpatialZone()
     cy.mockSpatialZonesSuggest()
     mockUniverseOrganizations()
     testTopics = topicFactory.many(3)
