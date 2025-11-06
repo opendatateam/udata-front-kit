@@ -1,0 +1,189 @@
+import type { Factor, Topic } from '@/model/topic'
+import {
+  factorFactory,
+  setupTopicWithExistingFactors,
+  visitTopic
+} from './support'
+
+const VIEWPORT_WAIT = 500 // ms - time to wait for viewport to stabilize
+
+describe('Topic Elements - Deep Linking', () => {
+  let testTopic: Topic
+  let testFactors: Factor[]
+
+  beforeEach(() => {
+    ;({ testTopic, testFactors } = setupTopicWithExistingFactors())
+  })
+
+  describe('Navigating to a specific factor via URL hash', () => {
+    it('should navigate to a factor in a group when hash is present in URL', () => {
+      const targetFactor = testFactors[0]
+      const factorId = targetFactor.id
+
+      // Visit the topic page with a hash pointing to the factor
+      cy.visit(`/bouquets/${testTopic.id}#factor-${factorId}`)
+
+      cy.wait('@getElementsDataset')
+
+      // Verify the factor is visible (group should auto-expand)
+      cy.contains(targetFactor.title).should('be.visible')
+
+      // Verify the factor element has the correct ID
+      cy.get(`#factor-${factorId}`).should('exist')
+
+      // Verify the factor is scrolled into viewport
+      // Wait for smooth scroll animation to complete
+      cy.get(`#factor-${factorId}`).isInViewport({ wait: VIEWPORT_WAIT })
+
+      // Verify we're on the "Données" tab (first tab, index 0)
+      cy.get('[role="tablist"]')
+        .find('[role="tab"][aria-selected="true"]')
+        .should('contain', 'Données')
+    })
+
+    it('should highlight the target factor temporarily', () => {
+      const targetFactor = testFactors[0]
+      const factorId = targetFactor.id
+
+      cy.visit(`/bouquets/${testTopic.id}#factor-${factorId}`)
+      cy.wait('@getElementsDataset')
+
+      // Wait for smooth scroll animation to complete
+      cy.get(`#factor-${factorId}`).isInViewport({ wait: VIEWPORT_WAIT })
+
+      // Verify the factor element gets highlighted
+      cy.get(`#factor-${factorId}`).should(($el) => {
+        const outline = $el.css('outline')
+        // Check that outline is applied (it should be non-empty)
+        expect(outline).to.not.equal('none')
+      })
+
+      // Wait for highlight to disappear (2 seconds + buffer)
+      cy.wait(2500)
+
+      // Verify the highlight is removed
+      cy.get(`#factor-${factorId}`).should(($el) => {
+        const outline = $el.css('outline')
+        // Outline should be removed or set to none/initial
+        expect(outline).to.satisfy((val: string) => {
+          return val === 'none' || val === '' || val.includes('0px')
+        })
+      })
+    })
+
+    it('should work with multiple factors in the same group', () => {
+      const firstFactor = testFactors[0]
+      const secondFactor = testFactors[1]
+
+      // Navigate to first factor
+      cy.visit(`/bouquets/${testTopic.id}#factor-${firstFactor.id}`)
+      cy.wait('@getElementsDataset')
+
+      cy.get(`#factor-${firstFactor.id}`).isInViewport({ wait: VIEWPORT_WAIT })
+      cy.contains(firstFactor.title).should('be.visible')
+
+      // Now navigate to second factor by updating the hash
+      cy.visit(`/bouquets/${testTopic.id}#factor-${secondFactor.id}`)
+
+      cy.get(`#factor-${secondFactor.id}`).isInViewport({ wait: VIEWPORT_WAIT })
+      cy.contains(secondFactor.title).should('be.visible')
+    })
+
+    it('should handle non-existent factor IDs gracefully', () => {
+      const nonExistentFactorId = 'factor-does-not-exist'
+
+      // Visit with a hash to a non-existent factor
+      cy.visit(`/bouquets/${testTopic.id}#factor-${nonExistentFactorId}`)
+      cy.wait('@getElementsDataset')
+
+      // Page should still load normally
+      cy.get('[role="tablist"]').should('exist')
+
+      // Element should not exist
+      cy.get(`#factor-${nonExistentFactorId}`).should('not.exist')
+    })
+
+    it('should work with ungrouped factors', () => {
+      // Create ungrouped factors
+      const ungroupedFactors = factorFactory.many(2, {
+        traits: ['missing_no_group']
+      })
+      const { testTopic, testFactors } =
+        setupTopicWithExistingFactors(ungroupedFactors)
+      const targetFactor = testFactors[0]
+
+      cy.visit(`/bouquets/${testTopic.id}#factor-${targetFactor.id}`)
+      cy.wait('@getElementsNone')
+
+      // Ungrouped factors should be visible by default, and the target should be scrolled to
+      cy.get(`#factor-${targetFactor.id}`).isInViewport({ wait: VIEWPORT_WAIT })
+      cy.contains(targetFactor.title).should('be.visible')
+    })
+  })
+
+  // TODO: move those tests to topics parent folder
+  describe('Tab switching with deep links', () => {
+    it('should switch to Données tab when navigating from another tab', () => {
+      const targetFactor = testFactors[0]
+
+      // First visit without hash
+      visitTopic(testTopic.id)
+      cy.wait('@getElementsDataset')
+
+      // Switch to Discussions tab
+      cy.get('[role="tab"]').contains('Discussions').click()
+      cy.get('[role="tab"][aria-selected="true"]').should(
+        'contain',
+        'Discussions'
+      )
+
+      // Now navigate to a factor via hash
+      cy.visit(`/bouquets/${testTopic.id}#factor-${targetFactor.id}`)
+
+      // Should switch back to Données tab
+      cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
+
+      // Factor should be visible and scrolled into viewport
+      cy.get(`#factor-${targetFactor.id}`).isInViewport({ wait: VIEWPORT_WAIT })
+    })
+
+    it('should not interfere with normal tab navigation', () => {
+      visitTopic(testTopic.id)
+      cy.wait('@getElementsDataset')
+
+      // Click through tabs normally
+      cy.get('[role="tab"]').contains('Discussions').click()
+      cy.get('[role="tab"][aria-selected="true"]').should(
+        'contain',
+        'Discussions'
+      )
+
+      cy.get('[role="tab"]').contains('Données').click()
+      cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
+    })
+
+    it('should allow navigating from factor deeplink to another tab', () => {
+      const targetFactor = testFactors[0]
+
+      // Start with a factor deeplink
+      cy.visit(`/bouquets/${testTopic.id}#factor-${targetFactor.id}`)
+      cy.wait('@getElementsDataset')
+
+      // Verify we're on Données tab with factor visible
+      cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
+      cy.get(`#factor-${targetFactor.id}`).should('be.visible')
+
+      // Switch to Discussions tab
+      cy.get('[role="tab"]').contains('Discussions').click()
+
+      // Verify Discussions tab is now active
+      cy.get('[role="tab"][aria-selected="true"]').should(
+        'contain',
+        'Discussions'
+      )
+
+      // Factor should no longer be in view (different tab)
+      cy.get(`#factor-${targetFactor.id}`).should('not.be.visible')
+    })
+  })
+})

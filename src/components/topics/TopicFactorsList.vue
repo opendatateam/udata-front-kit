@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { nextTick, ref, type Ref } from 'vue'
 
 import type { DatasetV2 } from '@datagouv/components-next'
+
+// Constants for navigation animation timings
+const HIGHLIGHT_DURATION = 2000 // ms - time to show highlight on factor
+const SCROLL_TIMEOUT = 150 // ms - time to wait before scrolling (not an exact science)
 
 import FactorEditModal, {
   type FactorEditModalType
@@ -16,7 +20,12 @@ import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
+import {
+  isOnlyNoGroup,
+  NO_GROUP,
+  useFactorsFilter,
+  useGroups
+} from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
 
@@ -42,6 +51,8 @@ const props = defineProps({
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
+const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
+const highlightedFactorId = ref<string | null>(null)
 
 const { pageConf } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
@@ -170,6 +181,37 @@ watch(
   },
   { immediate: true }
 )
+
+const navigateToElement = (elementId: string) => {
+  const factor = factors.value.find((f) => f.id === elementId)
+  if (!factor) {
+    console.warn(`Trying to scroll to factor ${elementId}, not found.`)
+    return
+  }
+  const groupName = factor.siteExtras.group || NO_GROUP
+  nextTick(() => {
+    const groupRef = groupRefs.value[groupName]
+    if (groupRef) {
+      groupRef.openDisclosure()
+    }
+    // Wait a bit for full loading, then scroll
+    setTimeout(() => {
+      const element = document.getElementById(`factor-${elementId}`)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Add highlight effect using reactive state
+        highlightedFactorId.value = elementId
+        setTimeout(() => {
+          highlightedFactorId.value = null
+        }, HIGHLIGHT_DURATION)
+      }
+    }, SCROLL_TIMEOUT)
+  })
+}
+
+defineExpose({
+  navigateToElement
+})
 </script>
 
 <template>
@@ -225,10 +267,17 @@ watch(
         <template v-for="[group, groupFactors] in filteredResults" :key="group">
           <li v-if="groupFactors.length && !isGroupOnlyHidden(group)">
             <TopicGroup
+              :ref="
+                (el) => {
+                  if (el)
+                    groupRefs[group] = el as InstanceType<typeof TopicGroup>
+                }
+              "
               :group-name="group"
               :all-groups="filteredResults"
               :factors="groupFactors"
               :is-edit="isEdit"
+              :highlighted-factor-id="highlightedFactorId"
               @edit-group-name="handleRenameGroup"
               @delete-group="handleDeleteGroup"
             >

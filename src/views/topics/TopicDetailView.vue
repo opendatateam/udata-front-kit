@@ -6,7 +6,7 @@ import {
 import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -15,6 +15,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
+import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import config from '@/config'
@@ -72,10 +73,14 @@ const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
+const showActivity = ref(false)
 const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
 const { factors } = useTopicFactors(topic)
+const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
+  null
+)
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -113,6 +118,58 @@ if (showReuses) {
 }
 
 const activeTab = ref(0)
+
+// Sync activeTab with URL hash for tab navigation
+watch(activeTab, (newTab) => {
+  const currentHash = router.currentRoute.value.hash
+  // Don't override factor hashes when on Données tab
+  if (newTab === 0 && currentHash.startsWith('#factor-')) {
+    return
+  }
+  // Update hash to reflect current tab
+  const tabId = tabTitles[newTab]?.tabId
+  if (tabId) {
+    router.replace({ hash: `#${tabId}` })
+  }
+})
+
+// Handle URL hash changes for both tab switching and factor navigation
+watch(
+  () => router.currentRoute.value.hash,
+  (hash) => {
+    if (!hash) {
+      activeTab.value = 0
+      return
+    }
+
+    // Factor hashes: switch to Données tab and navigate to factor
+    if (hash.startsWith('#factor-')) {
+      activeTab.value = 0
+      const elementId = hash.replace('#factor-', '')
+
+      // Use watchEffect to reactively wait for component and data to be ready
+      let stopWatching: (() => void) | undefined = undefined
+      stopWatching = watchEffect(() => {
+        if (topicFactorsListRef.value && factors.value.length > 0) {
+          nextTick(() => {
+            topicFactorsListRef.value?.navigateToElement(elementId)
+          })
+          // Stop watching once navigation is triggered
+          stopWatching?.()
+        }
+      })
+      return
+    }
+
+    // Tab hashes: find and switch to that tab
+    const cleanHash = hash.replace('#', '')
+    const index = tabTitles.findIndex((tab) => tab.tabId === cleanHash)
+    if (index >= 0) {
+      activeTab.value = index
+    }
+  },
+  { immediate: true }
+)
 
 const cloneModalActions = [
   {
@@ -201,6 +258,19 @@ useHead({
     { property: 'og:description', content: metaDescription }
   ],
   link: [{ rel: 'canonical', href: metaLink }]
+})
+
+watch(canEdit, () => {
+  if (canEdit.value) {
+    // TODO: make this idempotent?
+    // TODO: use a computed list for tab titles?
+    tabTitles.push({
+      title: 'Activité',
+      tabId: 'tab-activity',
+      panelId: 'tab-content-activity'
+    })
+    showActivity.value = true
+  }
 })
 
 watch(
@@ -423,6 +493,7 @@ watch(
         class="fr-px-2w"
       >
         <TopicFactorsList
+          ref="topicFactorsListRef"
           v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
@@ -449,6 +520,14 @@ watch(
         tab-id="tab-reuses"
       >
         <ReusesList model="topic" :object-id="topic.id" />
+      </DsfrTabContent>
+      <!-- Activité -->
+      <DsfrTabContent
+        v-if="showActivity"
+        panel-id="tab-content-activity"
+        tab-id="tab-activity"
+      >
+        <TopicActivityList :topic :factors />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

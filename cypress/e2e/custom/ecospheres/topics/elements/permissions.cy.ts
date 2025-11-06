@@ -1,7 +1,7 @@
 import type { Topic } from '@/model/topic'
 import {
   createTestTopic,
-  mockTopicAndDiscussions,
+  mockTopicAndRelatedObjects,
   setupTopicWithExistingFactors,
   visitTopic
 } from './support'
@@ -25,7 +25,7 @@ describe('Topic Elements - Permissions and Access Control', () => {
         }
       })
 
-      mockTopicAndDiscussions(otherUserTopic)
+      mockTopicAndRelatedObjects(otherUserTopic)
       cy.visit(`/bouquets/${otherUserTopic.id}`)
 
       // Verify edit controls are not present
