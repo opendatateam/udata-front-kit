@@ -4,7 +4,7 @@ import type { DatasetV2 } from '@datagouv/components-next'
 import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
-import { mockOrganizationsLists } from '../mocks'
+import { mockUniverseOrganizations } from '../mocks'
 
 describe('a11y contrast testing', () => {
   let testTopics: Topic[]
@@ -16,7 +16,7 @@ describe('a11y contrast testing', () => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
     cy.mockSpatialLevels()
-    mockOrganizationsLists()
+    mockUniverseOrganizations()
     // mock topics
     testTopics = topicFactory.many(3)
     cy.mockDatagouvObjectList('topics', testTopics)

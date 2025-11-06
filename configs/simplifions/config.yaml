@@ -25,7 +25,7 @@ datagouvfr:
 robots:
   disallow:
   sitemap:
-  meta: 'noindex, nofollow'
+  meta: 'index, follow'
 
 # UI customizations
 website:
@@ -174,7 +174,7 @@ pages:
     list_all: true
     universe_query:
       tag: simplifions-v2-cas-d-usages
-    tag_prefix: simplifions-v2
+    filter_prefix: simplifions-v2
     title: Cas d'usages
     breadcrumb_title:
     labels:
@@ -205,7 +205,7 @@ pages:
         id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'administrations
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
             name: Communes
@@ -223,7 +223,7 @@ pages:
         id: target-users
         type: select
         default_option: Tous les usagers
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: particuliers
             name: Particuliers
@@ -235,7 +235,7 @@ pages:
         id: budget
         type: select
         default_option: Tous les types de ressources
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: aucun-developpement-ni-budget
             name: Aucun développement, ni budget
@@ -247,7 +247,7 @@ pages:
         id: types-de-simplification
         type: select
         default_option: Tous les types de simplification
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: proactivite
             name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
@@ -261,7 +261,7 @@ pages:
     list_all: true
     universe_query:
       tag: simplifions-v2-solutions
-    tag_prefix: simplifions-v2
+    filter_prefix: simplifions-v2
     title: Solutions
     breadcrumb_title:
     labels:
@@ -292,7 +292,7 @@ pages:
         id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'administrations
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
             name: Communes
@@ -310,7 +310,7 @@ pages:
         id: target-users
         type: select
         default_option: Tous les usagers
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: particuliers
             name: Particuliers
@@ -322,7 +322,7 @@ pages:
         id: budget
         type: select
         default_option: Tous les types de ressources
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: aucun-developpement-ni-budget
             name: Aucun développement, ni budget
@@ -334,7 +334,7 @@ pages:
         id: types-de-simplification
         type: select
         default_option: Tous les types de simplification
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: proactivite
             name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
