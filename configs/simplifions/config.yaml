@@ -25,7 +25,7 @@ datagouvfr:
 robots:
   disallow:
   sitemap:
-  meta: 'index, follow'
+  meta: 'noindex, nofollow' # default value for preprod
 
 # UI customizations
 website:
