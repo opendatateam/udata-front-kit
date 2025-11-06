@@ -45,7 +45,8 @@ export interface PageFilterConf {
   color: string | null
   default_option: string | null
   default_value: string | boolean | null
-  use_tag_prefix: boolean | null
+  use_filter_prefix: boolean | null
+  api_param: string | null
   form: PageFilterFormConf | null
   authenticated: boolean | null
   hide_on_list: boolean | null
@@ -73,7 +74,7 @@ export type PageLabelsConf = {
 
 export type PageConf = {
   list_all: boolean
-  tag_prefix: string | null
+  filter_prefix: string | null
   universe_query: PageUniverseQueryConf | null
   title: string
   breadcrumb_title: string | null

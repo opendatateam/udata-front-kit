@@ -217,7 +217,7 @@ definitions: &definitions
 #   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
 #     list_all: {bool}              # whether to have a list view or not
 #     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
-#     tag_prefix: {string}          # prefix for tags on data.gouv.fr
+#     filter_prefix: {string}       # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
 #     title: {string}               # title for the list page
 #     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
 #     default_sort: {string}        # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
@@ -242,10 +242,11 @@ definitions: &definitions
 #     filters:                      # list of filters for this {page_id}
 #       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}              # id of the filter
-#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox)
+#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox | organization)
 #         child: {string?}          # id of the child filter (optional)
 #         color: {string}           # color of the filter's tag
-#         use_tag_prefix: {bool}    # whether to use {tag_prefix}-{item.id} when building value tag
+#         use_filter_prefix: {bool}    # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
+#         api_param: {string?}      # API query parameter name to use (optional, defaults to "tag")
 #         default_option: {string?} # default option for the filter (optional)
 #         default_value: {string?}  # default value for the filter (optional)
 #         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
@@ -260,7 +261,7 @@ pages:
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
-    tag_prefix:
+    filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
     labels:
@@ -291,7 +292,7 @@ pages:
         default_option: Tous les thèmes
         id: inspire
         type: select
-        use_tag_prefix: false
+        use_filter_prefix: false
         values:
           - id: adresses
             name: Adresses
@@ -366,7 +367,7 @@ pages:
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
-    tag_prefix:
+    filter_prefix:
     title: API
     breadcrumb_title: API
     labels:
@@ -396,7 +397,7 @@ pages:
     list_all: true
     universe_query:
       tag: ecospheres
-    tag_prefix: ecospheres
+    filter_prefix: ecospheres
     title: Bouquets
     breadcrumb_title:
     labels:
@@ -435,7 +436,7 @@ pages:
         id: theme
         type: select
         color: green-emeraude
-        use_tag_prefix: true
+        use_filter_prefix: true
         # TODO: use a dedicated config for the form?
         form:
           required: true
@@ -450,7 +451,7 @@ pages:
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
-    tag_prefix: ecospheres-indicateurs
+    filter_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
     breadcrumb_title: Indicateurs
     labels:
@@ -478,7 +479,7 @@ pages:
         id: theme
         type: select
         color: green-menthe
-        use_tag_prefix: true
+        use_filter_prefix: true
         hide_on_list: true
         values: *fnv_themes
       - name: Enjeu
@@ -486,7 +487,7 @@ pages:
         id: enjeu
         type: select
         color: blue-ecume
-        use_tag_prefix: true
+        use_filter_prefix: true
         hide_on_list: true
         values:
           - id: adaptation-climat
@@ -504,7 +505,7 @@ pages:
         id: secteur
         type: select
         color: purple-glycine
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: agriculture-forets-sols
             name: Agriculture, Forêts et Sols
@@ -531,7 +532,7 @@ pages:
         id: levier
         type: select
         color: green-archipel
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: 2-roues-elec-efficacite
             name: 2 roues (élec&efficacité)
