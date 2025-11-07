@@ -253,7 +253,7 @@
           :key="apiOrDataset.UID_datagouv"
           class="fr-col-12 fr-py-0 fr-mb-2w"
         >
-          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
+          <SimplifionsDataApi :api-or-dataset="apiOrDataset" title-tag="h3" />
         </li>
       </ul>
     </div>
@@ -269,7 +269,7 @@
           :key="apiOrDataset.UID_datagouv"
           class="fr-col-12 fr-py-0 fr-mb-2w"
         >
-          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
+          <SimplifionsDataApi :api-or-dataset="apiOrDataset" title-tag="h3" />
         </li>
       </ul>
     </div>

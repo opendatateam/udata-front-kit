@@ -29,12 +29,14 @@
         :dataset="datagouvResource as DatasetV2"
         :dataset-url="datagouvLink"
         dataset-url-in-new-tab
+        :title-tag="props.titleTag"
       />
       <DataserviceCard
         v-else-if="datagouvType == 'dataservices' && datagouvLink"
         class="no-margins dataservice-card"
         :dataservice="datagouvResource as Dataservice"
         :dataservice-url="datagouvLink"
+        :title-tag="props.titleTag"
       />
       <div v-else>{{ datagouvType }} | {{ datagouvResource.title }}</div>
     </div>
@@ -49,9 +51,12 @@ import { DatasetCard } from '@datagouv/components-next'
 import * as Sentry from '@sentry/vue'
 import type { ApiOrDataset } from '../model/grist'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   apiOrDataset: ApiOrDataset
-}>()
+  titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+}>(), {
+  titleTag: 'h3'
+})
 
 const emit = defineEmits<{
   resourceFetched: [resource: DatasetV2 | Dataservice]

@@ -38,6 +38,7 @@
       v-if="apiOrDataset"
       :api-or-dataset="apiOrDataset"
       @resource-fetched="handleResourceFetched"
+      title-tag="h5"
     />
   </div>
 </template>
