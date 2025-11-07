@@ -5,9 +5,9 @@
         v-if="hasEmptyUid || resourceNotFound || !datagouvResource"
         class="disabled-card fr-p-2w"
       >
-        <h4 class="fr-col-12">
+        <h3 class="fr-text--md fr-col-12">
           {{ props.apiOrDataset.Nom }}
-        </h4>
+        </h3>
         <p class="fr-col-12 fr-grid-row justify-between">
           <span class="fr-text--sm fr-mb-0"
             >ID: {{ props.apiOrDataset.UID_datagouv }}</span

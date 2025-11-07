@@ -189,16 +189,13 @@
       </h2>
 
       <div>
-        <p>
-          <strong>
-            <span
-              aria-hidden="true"
-              class="fr-icon-success-fill icon-green"
-            ></span>
-            Cette solution permet :
-          </strong>
-        </p>
-
+        <h3 class="fr-text--md fr-mt-2w">
+          <span
+            aria-hidden="true"
+            class="fr-icon-success-fill icon-green"
+          ></span>
+          Cette solution permet :
+        </h3>
         <p
           v-if="solution.Cette_solution_permet"
           v-html="fromMarkdown(solution.Cette_solution_permet)"
@@ -210,13 +207,10 @@
       </div>
 
       <div>
-        <p>
-          <strong>
-            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-            Cette solution ne permet pas :
-          </strong>
-        </p>
-
+        <h3 class="fr-text--md fr-mt-2w">
+          <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
+          Cette solution ne permet pas :
+        </h3>
         <p
           v-if="solution.Cette_solution_ne_permet_pas"
           v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas)"
@@ -369,9 +363,6 @@ h2.colored-title {
   background-color: rgb(167, 212, 205);
   padding: 2px 4px;
   display: inline-block;
-}
-h3 {
-  color: #616161;
 }
 .example-image {
   display: inline-block;
