@@ -69,9 +69,9 @@
 
           <div class="reco-text-column">
             <div>
-              <strong>
+              <h5 class="fr-text--md">
                 En quoi cette solution est utile pour ce cas d'usage ?
-              </strong>
+              </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -95,7 +95,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Concrètement, pour les usagers : </strong>
+               <h5 class="fr-text--md"> Concrètement, pour les usagers : </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -117,7 +117,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Concrètement, pour vos agents : </strong>
+                <h5 class="fr-text--md">Concrètement, pour vos agents :</h5> 
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -137,7 +137,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Ce que ne fait pas cette solution : </strong>
+              <h5 class="fr-text--md"> Ce que ne fait pas cette solution : </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -161,7 +161,7 @@
         "
         class="fr-col-12 fr-p-0"
       >
-        <DsfrAccordion>
+        <DsfrAccordion  titleTag="h5">
           <template #title>
             <strong>API et données utiles</strong>, fournies par la solution
           </template>
@@ -186,7 +186,7 @@
       </div>
 
       <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion>
+        <DsfrAccordion  titleTag="h5">
           <template #title>
             <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
             cette API pour ce cas d'usage
