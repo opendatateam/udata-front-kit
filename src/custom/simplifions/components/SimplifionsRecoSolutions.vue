@@ -161,7 +161,7 @@
         "
         class="fr-col-12 fr-p-0"
       >
-        <DsfrAccordion  titleTag="h5">
+        <DsfrAccordion  title-tag="h5">
           <template #title>
             <strong>API et données utiles</strong>, fournies par la solution
           </template>
@@ -186,7 +186,7 @@
       </div>
 
       <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion  titleTag="h5">
+        <DsfrAccordion  title-tag="h5">
           <template #title>
             <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
             cette API pour ce cas d'usage
