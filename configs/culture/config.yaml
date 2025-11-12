@@ -141,7 +141,10 @@ website:
       everyone: true
       authorized_users:
 
-organizations: https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
+  # Grist organisations ministère de la Culture https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
+  # Organisations transversale des données ouvertes de la culture
+organizations:
+  datasets: https://raw.githubusercontent.com/culturegouv/donnees-ouvertes/refs/heads/main/data/organizations-datasets.json
 
 pages:
   # DATASETS
@@ -216,3 +219,7 @@ pages:
             id: association
           - name: Entreprise
             id: company
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization
