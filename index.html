@@ -7,10 +7,16 @@
     <meta name="robots" content="<%= metaRobots %>" />
     <title><%= title %></title>
     <meta property="og:title" content="<%= title %>">
+    <% if (metaDescription) { %>
     <meta name="description" content="<%= metaDescription %>">
     <meta property="og:description" content="<%= metaDescription %>">
+    <% } %>
+    <% if (metaKeywords) { %>
     <meta name="keywords" content="<%= metaKeywords %>">
+    <% } %>
+    <% if (canonicalUrl) { %>
     <link rel="canonical" href="<%= canonicalUrl %>">
+    <% } %>
   </head>
   <body>
     <div id="app"></div>
