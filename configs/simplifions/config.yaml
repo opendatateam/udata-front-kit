@@ -32,7 +32,7 @@ website:
   title: 'Simplifions.data.gouv.fr'
   meta_keywords: 'simplification, administration, données, API, open data'
   meta_description: |
-    Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données de l'état.
+    Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données de l'État.
   canonical_url: https://simplifions.data.gouv.fr
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/simplifions-logo.svg'
