@@ -21,6 +21,11 @@ jobs:
           node-version: 20.x
           cache: 'npm'
       - run: npm ci
+      - name: Set VITE_SITE_ID based on branch name
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          VITE_SITE_ID=$(echo "$BRANCH_NAME" | cut -d'-' -f1)
+          echo "VITE_SITE_ID=$VITE_SITE_ID" >> $GITHUB_ENV
       - run: npm run generate-robots-txt
       - run: |
           git config --local user.email "action@github.com"
