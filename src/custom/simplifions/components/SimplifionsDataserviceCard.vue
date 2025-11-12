@@ -23,7 +23,9 @@
         </div>
       </div>
       <div class="fr-col-12 fr-col-sm">
-        <h4 class="fr-text--md fr-mb-0 fr-grid-row">
+        <component
+          :is="props.titleTag"
+          class="fr-text--md fr-mb-0 fr-grid-row">
           <!-- External link (string URL) -->
           <a
             v-if="typeof dataserviceUrl === 'string'"
@@ -52,7 +54,7 @@
               :max-lines="1"
             />
           </RouterLink>
-        </h4>
+        </component>
         <div
           v-if="dataservice.organization"
           class="fr-text--sm fr-m-0 inline-flex"
@@ -144,9 +146,12 @@ import TextClamp from 'vue3-text-clamp'
 interface Props {
   dataservice: Dataservice
   dataserviceUrl: string | RouteLocationRaw
+  titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }
 
-defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  titleTag: 'h4'
+})
 
 const { formatRelativeIfRecentDate } = useFormatDate()
 

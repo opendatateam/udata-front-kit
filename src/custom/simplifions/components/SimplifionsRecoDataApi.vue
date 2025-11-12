@@ -37,6 +37,7 @@
     <SimplifionsDataApi
       v-if="apiOrDataset"
       :api-or-dataset="apiOrDataset"
+      title-tag="h5"
       @resource-fetched="handleResourceFetched"
     />
   </div>
