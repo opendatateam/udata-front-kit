@@ -1,0 +1,526 @@
+[
+  {
+    "id": "5bdc50dc634f412dd9a4e7a3",
+    "name": "Agglo du Pays de Dreux"
+  },
+  {
+    "id": "6246a8ef51bb06001c520e78",
+    "name": "Arcom - Autorité de Régulation de la Communication Audiovisuelle et Numérique"
+  },
+  {
+    "id": "534fff55a3a7292c64a77cdf",
+    "name": "Arts vivants en Ille-et-Vilaine"
+  },
+  {
+    "id": "534fff56a3a7292c64a77ce3",
+    "name": "Association Trans Musicales"
+  },
+  {
+    "id": "60f7d111a6874047ef5c56f5",
+    "name": "Avignon"
+  },
+  {
+    "id": "534fff5aa3a7292c64a77d09",
+    "name": "Bibliothèque nationale de France"
+  },
+  {
+    "id": "5b0d11f688ee382af4b18c95",
+    "name": "Bordeaux Métropole"
+  },
+  {
+    "id": "534fff5ba3a7292c64a77d19",
+    "name": "Brest métropole"
+  },
+  {
+    "id": "5fa985066333fad0e735c985",
+    "name": "Caisse des Dépôts"
+  },
+  {
+    "id": "673c60d46977e554ea8fb462",
+    "name": "CC Autour de Chenonceaux Bléré - Val de Cher"
+  },
+  {
+    "id": "534fff5ea3a7292c64a77d40",
+    "name": "Centre des monuments nationaux "
+  },
+  {
+    "id": "552e97f3c751df636537dddb",
+    "name": "Centre National des Œuvres Universitaires et Scolaires"
+  },
+  {
+    "id": "534fff5fa3a7292c64a77d49",
+    "name": "Centre national du cinéma et de l'image animée"
+  },
+  {
+    "id": "6399f7e3f801257af9a3b4b3",
+    "name": "CHARTRES METROPOLE"
+  },
+  {
+    "id": "5bf67a998b4c417eae692920",
+    "name": "CHATEAUROUX METROPOLE"
+  },
+  {
+    "id": "670521e8d95df97ada2ffbd9",
+    "name": "CipherBliss EI"
+  },
+  {
+    "id": "619e52c5aed3f24ffa360651",
+    "name": "Cità di Portivechju"
+  },
+  {
+    "id": "5f60b2cb86bb3584d0f09f08",
+    "name": "Clermont Auvergne Métropole"
+  },
+  {
+    "id": "537d58eea3a72973a2dc026c",
+    "name": "Collectivité de Corse"
+  },
+  {
+    "id": "58c5a537c751df2fb0fde3c9",
+    "name": "Communauté d'Agglomeration Versailles Grand Parc"
+  },
+  {
+    "id": "5ddcf096634f411f920b844d",
+    "name": "Communauté d'Agglomération Lisieux Normandie"
+  },
+  {
+    "id": "5f89b85270114f233c8b6f08",
+    "name": "Communauté d'Agglomération Lunel Agglo"
+  },
+  {
+    "id": "56dfe50288ee384349cfd996",
+    "name": "Communauté d'Agglomération Plaine Vallée"
+  },
+  {
+    "id": "655f2947859732fe0d21e791",
+    "name": "Communauté de Communes Coeur de France"
+  },
+  {
+    "id": "534fff65a3a7292c64a77d76",
+    "name": "Commune de Brocas"
+  },
+  {
+    "id": "5437e8c288ee387cb68f5e87",
+    "name": "Commune de Chaville"
+  },
+  {
+    "id": "5c6303468b4c414d6ae2ebcd",
+    "name": "Commune de Saint-Paul-lès-Dax"
+  },
+  {
+    "id": "606d7f3644b7c6a93cf48e8d",
+    "name": "Commune de Tartas"
+  },
+  {
+    "id": "5bb1c7e4634f412a95dff6b9",
+    "name": "Conseil départemental de l'Isère"
+  },
+  {
+    "id": "534fff67a3a7292c64a77d83",
+    "name": "Conseil Départemental de la Gironde"
+  },
+  {
+    "id": "582a045088ee3875cec65bb4",
+    "name": "Conseil départemental de la Haute-Garonne - Haute-Garonne Open Data"
+  },
+  {
+    "id": "5c34b73c634f412639ff1b5f",
+    "name": "Conseil Départemental de la Haute-Savoie"
+  },
+  {
+    "id": "534fff6aa3a7292c64a77d95",
+    "name": "Conseil régional d'Aquitaine"
+  },
+  {
+    "id": "58aedac788ee387b6dcadf8e",
+    "name": "DDTM Finistère"
+  },
+  {
+    "id": "58aeedd088ee3820f0d3e7cd",
+    "name": "DDTM Pas-de-Calais"
+  },
+  {
+    "id": "5e32dee6634f411679399abb",
+    "name": "Direction Interministérielle de la Transformation Publique"
+  },
+  {
+    "id": "67a34f4cfe9d312c39d50e50",
+    "name": "Direction régionale de l'environnement, de l'aménagement et du logement de Bretagne"
+  },
+  {
+    "id": "57275bd288ee387fd5a19f12",
+    "name": "Direction régionale de l'Environnement, de l'Aménagement et du Logement de Normandie"
+  },
+  {
+    "id": "5ae685b1c751df0800b5b0f8",
+    "name": "Dododata"
+  },
+  {
+    "id": "59087a45c751df5a2a2c425f",
+    "name": "Département de l'Hérault"
+  },
+  {
+    "id": "5e281d5b634f417c0c54ae2f",
+    "name": "Département de la Seine-Maritime"
+  },
+  {
+    "id": "534fff68a3a7292c64a77d8d",
+    "name": "Département de Saône-et-Loire"
+  },
+  {
+    "id": "62344583fb72d30231b482f5",
+    "name": "Département des Alpes de Haute-Provence"
+  },
+  {
+    "id": "5e00c7456f444104766e92d6",
+    "name": "Département des Alpes-Maritimes"
+  },
+  {
+    "id": "54aff788c751df39e138127d",
+    "name": "Département des Côtes d'Armor"
+  },
+  {
+    "id": "5c3f1ca2634f411d2aef4ddb",
+    "name": "Département des Hautes-Pyrénées"
+  },
+  {
+    "id": "544e1b0888ee38289ae1ed05",
+    "name": "Département des Hauts-de-Seine"
+  },
+  {
+    "id": "5bd96f848b4c415ecb7a9a8b",
+    "name": "Département du Calvados"
+  },
+  {
+    "id": "57d90ef4c751df44fb79df72",
+    "name": "Département du Loiret"
+  },
+  {
+    "id": "619f618f38e27e934733e60c",
+    "name": "Entre Juine et Renarde "
+  },
+  {
+    "id": "656dac008f9e9319f0d31414",
+    "name": "France Tiers-Lieux"
+  },
+  {
+    "id": "5a7ad2b1c751df27e7d1190c",
+    "name": "Grand Avignon"
+  },
+  {
+    "id": "5a997b56c751df3510b19351",
+    "name": "Grand Paris Sud Est Avenir"
+  },
+  {
+    "id": "54da1f52c751df59f7467389",
+    "name": "Grand Poitiers Open Data"
+  },
+  {
+    "id": "5ddc086f634f41190d4c1006",
+    "name": "Géo2France"
+  },
+  {
+    "id": "534fff7ea3a7292c64a77e36",
+    "name": "Infolocale"
+  },
+  {
+    "id": "54f461f8c751df0f88882844",
+    "name": "Institut français de recherche pour l'exploitation de la mer (IFREMER)"
+  },
+  {
+    "id": "534fff81a3a7292c64a77e5c",
+    "name": "Institut national de la statistique et des études économiques (Insee)"
+  },
+  {
+    "id": "5ba9f0bb634f416762d56c0c",
+    "name": "La Gaude"
+  },
+  {
+    "id": "5aeab860c751df3bca98b623",
+    "name": "Le Conseil Départemental de la Mayenne"
+  },
+  {
+    "id": "58f7c89fc751df5bdb3b701f",
+    "name": "Le deuxième texte"
+  },
+  {
+    "id": "618292126ca6738c405a64a9",
+    "name": "Le Poinçonnet"
+  },
+  {
+    "id": "534fff87a3a7292c64a77eb0",
+    "name": "Loire-Atlantique Développement"
+  },
+  {
+    "id": "5d1db3df8b4c416509fd0870",
+    "name": "Mairie de Cannes"
+  },
+  {
+    "id": "5c050cfb8b4c413be36cb1c3",
+    "name": "Mairie de Saint-Denis (La Réunion)"
+  },
+  {
+    "id": "534fff8aa3a7292c64a77ecd",
+    "name": "Mairie de Toulouse"
+  },
+  {
+    "id": "534fff90a3a7292c64a77f45",
+    "name": "Ministère de l'Enseignement supérieur, de la Recherche et de l'Espace"
+  },
+  {
+    "id": "534fff94a3a7292c64a77fb5",
+    "name": "Ministère de l'Europe et des Affaires Etrangères (MEAE)"
+  },
+  {
+    "id": "534fff8ea3a7292c64a77f02",
+    "name": "Ministère de l'Économie, des Finances et de l'Industrie"
+  },
+  {
+    "id": "534fff91a3a7292c64a77f73",
+    "name": "Ministère de la Culture"
+  },
+  {
+    "id": "534fff8fa3a7292c64a77f22",
+    "name": "Ministères de l'Éducation nationale, Sports et Jeunesse"
+  },
+  {
+    "id": "5be06c41634f4158c956b300",
+    "name": "Mulhouse Alsace Agglomération"
+  },
+  {
+    "id": "534fff98a3a7292c64a78011",
+    "name": "Musique et Danse en Loire-Atlantique"
+  },
+  {
+    "id": "57e3e31888ee38155a5ff490",
+    "name": "Musée d'art et d'histoire - Ville de Saint-Brieuc"
+  },
+  {
+    "id": "534fff97a3a7292c64a7800b",
+    "name": "Musée des arts asiatiques Guimet"
+  },
+  {
+    "id": "5c9c9b21634f4110f582a39a",
+    "name": "Métropole du Grand Paris"
+  },
+  {
+    "id": "58b69c62c751df4b175dd7a4",
+    "name": "Métropole Européenne de Lille "
+  },
+  {
+    "id": "59aea226c751df38f3f6834b",
+    "name": "Métropole Nice Côte d'Azur"
+  },
+  {
+    "id": "5a0467d188ee38711f65672c",
+    "name": "Métropole Rouen Normandie"
+  },
+  {
+    "id": "534fff99a3a7292c64a78016",
+    "name": "NosDonnées.fr"
+  },
+  {
+    "id": "534fff60a3a7292c64a77d53",
+    "name": "OpenAgenda"
+  },
+  {
+    "id": "5759caa0c751df09eeac31a0",
+    "name": "OpenEventDatabase"
+  },
+  {
+    "id": "57ed2fe9c751df236179df72",
+    "name": "Orléans Métropole"
+  },
+  {
+    "id": "534fffa2a3a7292c64a7808c",
+    "name": "Ouest France"
+  },
+  {
+    "id": "5f91506e6d1d6f595ceb0ea8",
+    "name": "Parc naturel régional du Morvan "
+  },
+  {
+    "id": "5f33a01d3afea2a7f576af1a",
+    "name": "Plateforme Open Data ZABAL"
+  },
+  {
+    "id": "534fffaaa3a7292c64a780dd",
+    "name": "Rennes Métropole"
+  },
+  {
+    "id": "580735be88ee3814295ff490",
+    "name": "Rennes Métropole en accès libre"
+  },
+  {
+    "id": "5420b971a3a7297b491991e1",
+    "name": "Ressourcerie datalocale"
+  },
+  {
+    "id": "559a4970c751df46a9a453ba",
+    "name": "Région Bretagne"
+  },
+  {
+    "id": "561a7f00c751df4e6dcdbb48",
+    "name": "Région Centre-Val de Loire"
+  },
+  {
+    "id": "534fffa7a3a7292c64a780c5",
+    "name": "Région des Pays de la Loire"
+  },
+  {
+    "id": "55df259f88ee386e57a46ec2",
+    "name": "Région GRAND EST"
+  },
+  {
+    "id": "5df935d8634f414e69469492",
+    "name": "Région Hauts-de-France"
+  },
+  {
+    "id": "565ebf4788ee3869aae72046",
+    "name": "Région Normandie"
+  },
+  {
+    "id": "5a153f5688ee3829e2fbf39f",
+    "name": "Région Occitanie / Pyrénées Méditerranée"
+  },
+  {
+    "id": "534fffa8a3a7292c64a780d2",
+    "name": "Région Provence-Alpes-Côte-d'Azur"
+  },
+  {
+    "id": "534fffa8a3a7292c64a780c8",
+    "name": "Région Île-de-France"
+  },
+  {
+    "id": "5a7c19f5c751df3e55b0c321",
+    "name": "Saint-Louis Agglomération"
+  },
+  {
+    "id": "619f587a232623229cd54d68",
+    "name": "Saint-Marcellin "
+  },
+  {
+    "id": "54126af3a3a7292a9bbf14d6",
+    "name": "Service d'Information du Gouvernement"
+  },
+  {
+    "id": "534fffb1a3a7292c64a7811f",
+    "name": "Société des grands projets"
+  },
+  {
+    "id": "534fffb3a3a7292c64a78129",
+    "name": "Toulouse métropole"
+  },
+  {
+    "id": "5cb6d4f78b4c4118e18f37d1",
+    "name": "Tours Métropole Val de Loire"
+  },
+  {
+    "id": "65f2e13a41f2ef9a76ff6ed5",
+    "name": "Troyes Champagne Métropole"
+  },
+  {
+    "id": "5bec29278b4c412a07c7ee5f",
+    "name": "Ville d'Agen"
+  },
+  {
+    "id": "566594f388ee38738640355c",
+    "name": "Ville d'Antibes"
+  },
+  {
+    "id": "5fa50f45bd278f782c7d3e31",
+    "name": "Ville d'Argenteuil"
+  },
+  {
+    "id": "62711de919af2df1f9141a08",
+    "name": "Ville d'Argenton-sur-Creuse"
+  },
+  {
+    "id": "609e908036c716d80d0036bd",
+    "name": "Ville d'Houplin-Ancoisne"
+  },
+  {
+    "id": "534fffb7a3a7292c64a78145",
+    "name": "Ville d'Issy-les-Moulineaux"
+  },
+  {
+    "id": "58d53c4688ee380aeea5e932",
+    "name": "Ville de Bayonne"
+  },
+  {
+    "id": "54d8f2a4c751df1df7467389",
+    "name": "Ville de Boulogne-Billancourt"
+  },
+  {
+    "id": "534fffb8a3a7292c64a78149",
+    "name": "Ville de Digne-les-Bains"
+  },
+  {
+    "id": "5b8ffc778b4c413ec36d73f6",
+    "name": "VILLE DE FORT-DE-FRANCE"
+  },
+  {
+    "id": "5733038988ee38472ed1b934",
+    "name": "Ville de Grenoble"
+  },
+  {
+    "id": "59d6526ac751df274a175d35",
+    "name": "Ville de Lanester"
+  },
+  {
+    "id": "5afd51bfc751df62ae0b80ff",
+    "name": "Ville de Levallois"
+  },
+  {
+    "id": "609e8e40d5d435e4228f5d8a",
+    "name": "Ville de Loos"
+  },
+  {
+    "id": "59e05c6588ee386ef4f4f86d",
+    "name": "Ville de Lorient"
+  },
+  {
+    "id": "534fffb8a3a7292c64a7814c",
+    "name": "Ville de Marseille"
+  },
+  {
+    "id": "5be9467a634f415a8620975f",
+    "name": "Ville de Martigues"
+  },
+  {
+    "id": "5912ddcac751df1c0de5387b",
+    "name": "Ville de Niort"
+  },
+  {
+    "id": "534fff89a3a7292c64a77eb7",
+    "name": "Ville de Paris"
+  },
+  {
+    "id": "534fffb9a3a7292c64a7815d",
+    "name": "Ville de Rennes"
+  },
+  {
+    "id": "5be53f55634f4119ca26ec72",
+    "name": "Ville de Roubaix"
+  },
+  {
+    "id": "53ba4599a3a729219b7beaca",
+    "name": "Ville de Saint-Malo"
+  },
+  {
+    "id": "6095142a84c45b36441511eb",
+    "name": "Ville de Soissons"
+  },
+  {
+    "id": "56d5a6d4c751df360dabb90c",
+    "name": "Ville de Tours"
+  },
+  {
+    "id": "63aff09b9f4e6a0a9c9ecabd",
+    "name": "wikimaginot"
+  },
+  {
+    "id": "534fff74a3a7292c64a77de0",
+    "name": "Établissement public du musée d'Orsay et du musée de l'Orangerie"
+  }
+]

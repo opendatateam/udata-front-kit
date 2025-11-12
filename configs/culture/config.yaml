@@ -144,7 +144,7 @@ website:
   # Grist organisations ministère de la Culture https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
   # Organisations transversale des données ouvertes de la culture
 organizations:
-  datasets: https://raw.githubusercontent.com/datagouv/portail-culture/refs/heads/Documentation/data/organizations-datasets.json
+  datasets: https://raw.githubusercontent.com/culturegouv/donnees-ouvertes/refs/heads/main/data/organizations-datasets.json
 
 pages:
   # DATASETS
