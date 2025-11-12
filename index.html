@@ -7,15 +7,15 @@
     <meta name="robots" content="<%= metaRobots %>" />
     <title><%= title %></title>
     <meta property="og:title" content="<%= title %>">
-    <% if (metaDescription) { %>
-    <meta name="description" content="<%= metaDescription %>">
-    <meta property="og:description" content="<%= metaDescription %>">
+    <% if (meta?.description) { %>
+      <meta name="description" content="<%= meta?.description %>">
+      <meta property="og:description" content="<%= meta?.description %>">
     <% } %>
-    <% if (metaKeywords) { %>
-    <meta name="keywords" content="<%= metaKeywords %>">
+    <% if (meta?.keywords) { %>
+      <meta name="keywords" content="<%= meta?.keywords %>">
     <% } %>
-    <% if (canonicalUrl) { %>
-    <link rel="canonical" href="<%= canonicalUrl %>">
+    <% if (meta?.canonicalUrl) { %>
+      <link rel="canonical" href="<%= meta?.canonicalUrl %>">
     <% } %>
   </head>
   <body>

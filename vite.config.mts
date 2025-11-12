@@ -21,9 +21,11 @@ import type { SentryConfig } from './src/model/config'
 interface Config {
   website: {
     title: string
-    metaKeywords: string
-    metaDescription: string
-    canonicalUrl: string
+    meta: {
+      keywords: string
+      description: string
+      canonicalUrl: string
+    }
   }
   robots: {
     meta: string
@@ -82,9 +84,7 @@ export default defineConfig(({ mode }) => {
         inject: {
           data: {
             title: config.website.title,
-            metaKeywords: config.website.metaKeywords,
-            metaDescription: config.website.metaDescription,
-            canonicalUrl: config.website.canonicalUrl,
+            meta: config.website.meta,
             metaRobots: config.robots.meta
           }
         }

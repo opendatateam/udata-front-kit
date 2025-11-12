@@ -24,9 +24,10 @@ robots:
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
-  metaKeywords:
-  metaDescription:
-  canonicalUrl:
+  meta:
+    keywords:
+    description:
+    canonicalUrl:
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'
