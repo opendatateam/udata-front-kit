@@ -53,7 +53,6 @@ const createUrl = computed(() => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  if (route.query.drafts) query.drafts = route.query.drafts
   router.push({ name: route.name, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
