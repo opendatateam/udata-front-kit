@@ -58,7 +58,7 @@ describe('Topic Activity List', () => {
 
       // Should show activity items with translated labels
       cy.contains('a créé le bouquet').should('be.visible')
-      cy.contains('a ajouté un facteur au bouquet').should('be.visible')
+      cy.contains('a ajouté le facteur').should('be.visible')
       cy.contains('a modifié le bouquet').should('be.visible')
     })
   })
@@ -91,13 +91,13 @@ describe('Topic Activity List', () => {
       cy.get('[role="tab"]').contains('Activité').click()
       cy.wait('@get_activity_list')
 
-      // Element activities should be buttons
-      cy.contains('a ajouté un facteur au bouquet')
-        .should('have.prop', 'tagName', 'BUTTON')
+      // Element activities should be links
+      cy.contains('a ajouté le facteur')
+        .should('have.prop', 'tagName', 'A')
         .and('have.class', 'activity-link')
 
-      cy.contains('a modifié un facteur du bouquet')
-        .should('have.prop', 'tagName', 'BUTTON')
+      cy.contains('a modifié le')
+        .should('have.prop', 'tagName', 'A')
         .and('have.class', 'activity-link')
     })
 
@@ -146,7 +146,7 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Click on element activity
-      cy.contains('a ajouté un facteur au bouquet').click()
+      cy.contains('a ajouté le facteur').click()
 
       // Should navigate to Données tab
       cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
@@ -190,7 +190,7 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Click first activity
-      cy.contains('a ajouté un facteur au bouquet').click()
+      cy.contains('a ajouté le facteur').click()
       cy.wait(500) // Wait for scroll animation
       cy.get(`#factor-${firstFactorId}`).isInViewport({ wait: 300 })
 
@@ -198,7 +198,7 @@ describe('Topic Activity List', () => {
       cy.get('[role="tab"]').contains('Activité').click()
 
       // Click second activity
-      cy.contains('a modifié un facteur du bouquet').click()
+      cy.contains('a modifié le facteur').click()
       cy.wait(500) // Wait for scroll animation
       cy.get(`#factor-${secondFactorId}`).isInViewport({ wait: 300 })
     })
