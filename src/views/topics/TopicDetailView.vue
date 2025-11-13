@@ -73,7 +73,6 @@ const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
-const showActivity = ref(false)
 const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
@@ -94,28 +93,42 @@ const breadcrumbLinks = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles: { title: string; tabId: string; panelId: string }[] = []
-if (showDatasets) {
-  tabTitles.push({
-    title: 'Données',
-    tabId: 'tab-datasets',
-    panelId: 'tab-content-datasets'
-  })
-}
-if (showDiscussions) {
-  tabTitles.push({
-    title: 'Discussions',
-    tabId: 'tab-discussions',
-    panelId: 'tab-content-discussions'
-  })
-}
-if (showReuses) {
-  tabTitles.push({
-    title: 'Réutilisations',
-    tabId: 'tab-reuses',
-    panelId: 'tab-content-reuses'
-  })
-}
+const showActivity = computed(() => canEdit.value)
+
+const tabTitles = computed(() => {
+  const tabs: { title: string; tabId: string; panelId: string }[] = []
+
+  if (showDatasets) {
+    tabs.push({
+      title: 'Données',
+      tabId: 'tab-datasets',
+      panelId: 'tab-content-datasets'
+    })
+  }
+  if (showDiscussions) {
+    tabs.push({
+      title: 'Discussions',
+      tabId: 'tab-discussions',
+      panelId: 'tab-content-discussions'
+    })
+  }
+  if (showReuses) {
+    tabs.push({
+      title: 'Réutilisations',
+      tabId: 'tab-reuses',
+      panelId: 'tab-content-reuses'
+    })
+  }
+  if (showActivity.value) {
+    tabs.push({
+      title: 'Activité',
+      tabId: 'tab-activity',
+      panelId: 'tab-content-activity'
+    })
+  }
+
+  return tabs
+})
 
 const activeTab = ref(0)
 
@@ -230,19 +243,6 @@ watch(
   },
   { immediate: true }
 )
-
-watch(canEdit, () => {
-  if (canEdit.value) {
-    // TODO: make this idempotent?
-    // TODO: use a computed list for tab titles?
-    tabTitles.push({
-      title: 'Activité',
-      tabId: 'tab-activity',
-      panelId: 'tab-content-activity'
-    })
-    showActivity.value = true
-  }
-})
 
 watch(
   () => params.item_id,
