@@ -34,7 +34,7 @@ website:
     keywords: 'simplification, API, données, data, dites-le-nous une fois, proactivité, administration, collectivité, dlnuf'
     description: |
       Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données de l'État.
-    canonicalUrl: https://simplifions.data.gouv.fr
+    canonical_url: https://simplifions.data.gouv.fr
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/simplifions-logo.svg'
   badge:

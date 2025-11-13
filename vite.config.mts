@@ -24,7 +24,7 @@ interface Config {
     meta: {
       keywords: string
       description: string
-      canonicalUrl: string
+      canonical_url: string
     }
   }
   robots: {
