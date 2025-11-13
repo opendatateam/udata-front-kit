@@ -66,12 +66,11 @@ const doSearch = (typeId: string) => {
 const changePage = async (type: string, page = 1, query = '') => {
   resources.value[type].currentPage = page
   queries.value[type] = query
-  const data = await resourceStore.fetchDatasetResources(
-    props.dataset.id,
+  const data = await resourceStore.fetchDatasetResources(props.dataset.id, {
     page,
-    type,
-    query
-  )
+    typeId: type,
+    q: query
+  })
   resources.value[type].resources = data.data
   resources.value[type].total = data.total
 }

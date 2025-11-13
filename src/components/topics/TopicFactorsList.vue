@@ -135,7 +135,9 @@ const computeQgisInfo = async (dataset: DatasetV2) => {
 
   // Collect resources from all pages
   do {
-    response = await resourceStore.fetchDatasetResources(dataset.id, page++)
+    response = await resourceStore.fetchDatasetResources(dataset.id, {
+      page: page++
+    })
     allResources.push(...response.data)
   } while (response.next_page)
 

@@ -17,9 +17,8 @@ function extractBaseUrl(url: string): string {
     // If no other parameters remain, use just the base path
     if (urlObj.searchParams.toString() === '') {
       return `${urlObj.origin}${urlObj.pathname}`
-    } else {
-      return urlObj.toString()
     }
+    return urlObj.toString()
   } catch {
     // If URL parsing fails, use as-is
     return url
@@ -87,7 +86,7 @@ export interface QgisLayerInfo {
  * Generates a unique ID for QGIS layers
  */
 function generateId(): string {
-  return `layer_${Math.random().toString(36).substring(2, 11)}_${Date.now()}`
+  return `layer_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`
 }
 
 /**
@@ -432,12 +431,13 @@ export async function openInQgis(
 
       if (layerNames.length === 0) {
         alert(
-          'Impossible de récupérer la liste des couches WFS.\n\n' +
-            'Pour ajouter cette couche dans QGIS :\n' +
-            '1. Ouvrez QGIS\n' +
-            '2. Allez dans "Couche" > "Ajouter une couche" > "Ajouter une couche WFS"\n' +
-            `3. Créez une nouvelle connexion avec l\'URL : ${baseUrl}\n` +
-            '4. Sélectionnez la couche désirée dans la liste'
+          `Impossible de récupérer la liste des couches WFS.
+
+Pour ajouter cette couche dans QGIS :
+1. Ouvrez QGIS
+2. Allez dans "Couche" > "Ajouter une couche" > "Ajouter une couche WFS"
+3. Créez une nouvelle connexion avec l'URL : ${baseUrl}
+4. Sélectionnez la couche désirée dans la liste`
         )
         return
       }

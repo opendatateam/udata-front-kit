@@ -14,6 +14,12 @@ export interface RootState {
   resourceTypes: ResourceType[]
 }
 
+export interface FetchResourcesOptions {
+  page?: number
+  typeId?: string | null
+  q?: string
+}
+
 export const useResourceStore = defineStore('resource', {
   state: (): RootState => ({
     data: {},
@@ -58,10 +64,9 @@ export const useResourceStore = defineStore('resource', {
      */
     async fetchDatasetResources(
       datasetId: string,
-      page: number,
-      typeId: string | null = null,
-      q = ''
+      options: FetchResourcesOptions = {}
     ) {
+      const { page = 1, typeId = null, q = '' } = options
       return await datasetsApiv2.getResourcesForDataset(
         datasetId,
         page,
