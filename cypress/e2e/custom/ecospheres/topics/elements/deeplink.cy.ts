@@ -3,7 +3,7 @@ import {
   factorFactory,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 const VIEWPORT_WAIT = 500 // ms - time to wait for viewport to stabilize
 
@@ -35,7 +35,7 @@ describe('Topic Elements - Deep Linking', () => {
       // Wait for smooth scroll animation to complete
       cy.get(`#factor-${factorId}`).isInViewport({ wait: VIEWPORT_WAIT })
 
-      // Verify we're on the "Données" tab (first tab, index 0)
+      // Verify we're on the "Données" tab
       cy.get('[role="tablist"]')
         .find('[role="tab"][aria-selected="true"]')
         .should('contain', 'Données')
@@ -55,7 +55,7 @@ describe('Topic Elements - Deep Linking', () => {
       cy.get(`#factor-${factorId}`).should(($el) => {
         const outline = $el.css('outline')
         // Check that outline is applied (it should be non-empty)
-        expect(outline).to.not.equal('none')
+        expect(outline).to.not.include('0px')
       })
 
       // Wait for highlight to disappear (2 seconds + buffer)
@@ -65,9 +65,7 @@ describe('Topic Elements - Deep Linking', () => {
       cy.get(`#factor-${factorId}`).should(($el) => {
         const outline = $el.css('outline')
         // Outline should be removed or set to none/initial
-        expect(outline).to.satisfy((val: string) => {
-          return val === 'none' || val === '' || val.includes('0px')
-        })
+        expect(outline).to.include('0px')
       })
     })
 
@@ -121,7 +119,6 @@ describe('Topic Elements - Deep Linking', () => {
     })
   })
 
-  // TODO: move those tests to topics parent folder
   describe('Tab switching with deep links', () => {
     it('should switch to Données tab when navigating from another tab', () => {
       const targetFactor = testFactors[0]

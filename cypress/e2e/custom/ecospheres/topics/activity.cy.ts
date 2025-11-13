@@ -3,7 +3,7 @@ import {
   createTestFactors,
   setupTopicWithExistingFactors,
   visitTopic
-} from './elements/support'
+} from './support'
 
 describe('Topic Activity List', () => {
   describe('Activity tab visibility', () => {

@@ -4,7 +4,7 @@ import {
   mockTopicAndRelatedObjects,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Permissions and Access Control', () => {
   let testTopic: Topic

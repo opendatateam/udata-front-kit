@@ -1,5 +1,5 @@
 import type { Topic } from '@/model/topic'
-import { factorFactory, setupEmptyTopic, visitTopic } from './support'
+import { factorFactory, setupEmptyTopic, visitTopic } from '../support'
 
 describe('Topic Elements - Factor Addition', () => {
   let testTopic: Topic

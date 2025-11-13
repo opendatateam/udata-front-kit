@@ -5,7 +5,7 @@ import {
   setupEmptyTopic,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Factor List Display', () => {
   let testTopic: Topic
