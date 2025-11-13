@@ -93,7 +93,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
         API_et_datasets_utiles_fournis: [],
         Descriptions_des_API_et_datasets_utiles_fournis: [],
         Ces_logiciels_l_integrent_deja: [],
-        URL_demande_d_acces_cas_usage: 'https://example.com'
+        access_link_with_fallback: 'https://example.com'
       })
 
       const { topicCasUsage } = mockCasUsage(
@@ -152,7 +152,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
   describe('with an access link in recommandation grist data', () => {
     beforeEach(() => {
       const { gristRecommandations } = mockApidatasetRecommandations(1, {
-        URL_demande_d_acces_cas_usage: 'https://example.com'
+        access_link_with_fallback: 'https://example.com'
       })
       const { topicCasUsage } = mockCasUsage(
         {
@@ -219,8 +219,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
         mockApidatasetRecommandations(
           1,
           {
-            URL_demande_d_acces_cas_usage:
-              'https://recommandation-url.example.com'
+            access_link_with_fallback: 'https://recommandation-url.example.com'
           },
           { Type: 'API' },
           { authorization_request_url: 'https://dataservice-auth.example.com' }

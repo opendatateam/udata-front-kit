@@ -4,10 +4,10 @@
       <h4 class="fr-h4 fr-mb-2w fr-col-md fr-col-12">
         ➡️ {{ recommandation.Nom_de_la_recommandation }}
       </h4>
-      <div v-if="recommandation.URL_demande_d_acces_cas_usage">
+      <div v-if="recommandation.access_link_with_fallback">
         <a
           rel="noopener noreferrer"
-          :href="recommandation.URL_demande_d_acces_cas_usage"
+          :href="recommandation.access_link_with_fallback"
           class="fr-btn access-link"
           target="_blank"
         >
@@ -69,9 +69,9 @@
 
           <div class="reco-text-column">
             <div>
-              <strong>
+              <h5 class="fr-text--md">
                 En quoi cette solution est utile pour ce cas d'usage ?
-              </strong>
+              </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -95,7 +95,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Concrètement, pour les usagers : </strong>
+               <h5 class="fr-text--md"> Concrètement, pour les usagers : </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -117,7 +117,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Concrètement, pour vos agents : </strong>
+                <h5 class="fr-text--md">Concrètement, pour vos agents :</h5> 
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -137,7 +137,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Ce que ne fait pas cette solution : </strong>
+              <h5 class="fr-text--md"> Ce que ne fait pas cette solution : </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -161,7 +161,7 @@
         "
         class="fr-col-12 fr-p-0"
       >
-        <DsfrAccordion>
+        <DsfrAccordion  title-tag="h5">
           <template #title>
             <strong>API et données utiles</strong>, fournies par la solution
           </template>
@@ -186,7 +186,7 @@
       </div>
 
       <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion>
+        <DsfrAccordion  title-tag="h5">
           <template #title>
             <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
             cette API pour ce cas d'usage

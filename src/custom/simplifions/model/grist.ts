@@ -38,6 +38,7 @@ export type Recommandation = {
   Descriptions_des_API_et_datasets_utiles_fournis: number[]
   budget_slugs: string[]
   URL_demande_d_acces_cas_usage: string
+  access_link_with_fallback: string
 }
 export type RecommandationRecord = GristRecord & {
   fields: Recommandation

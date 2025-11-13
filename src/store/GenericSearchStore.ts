@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { useCheckboxQuery } from '@/utils/filters'
-import { useTagsQuery } from '@/utils/tags'
-import { useUniverseQuery } from '@/utils/universe'
+import { usePageQueryParams } from '@/utils/filters'
 
 const PAGE_SIZE = 20
 
@@ -56,26 +54,11 @@ export function createSearchStore<T>({
     ) {
       const { query, ...queryArgs } = args
 
-      // extract tags and checkbox filters from query args
-      const { extraArgs: argsAfterTagQuery, tags } = useTagsQuery(
-        pageKey || defaultPageKey,
-        queryArgs
-      )
-      const { extraArgs: refinedFilterArgs, checkboxArgs } = useCheckboxQuery(
-        pageKey || defaultPageKey,
-        argsAfterTagQuery
-      )
-      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
-        pageKey || defaultPageKey,
-        tags
-      )
+      const params = usePageQueryParams(pageKey || defaultPageKey, queryArgs)
 
       const results = await searchAPI.search(query, {
-        page_size: PAGE_SIZE,
-        tag: tagsWithUniverse,
-        ...universeQuery,
-        ...checkboxArgs,
-        ...refinedFilterArgs
+        ...params,
+        page_size: PAGE_SIZE
       })
       items.value = results.data
       total.value = results.total

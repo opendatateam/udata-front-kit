@@ -1,0 +1,225 @@
+# config file for culture
+
+# used as extras key
+site_id: culture
+
+datagouvfr:
+  # data.gouv.fr base URL (use www subdomain on prod)
+  base_url: https://www.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 68b1ac79a751200a42f2ba19
+
+robots:
+  disallow:
+  sitemap:
+  meta: 'noindex, nofollow'
+
+# UI customizations
+website:
+  title: 'culture.data.gouv.fr'
+  formatted_title: '<i>culture.</i><b>data.gouv</b><i>.fr</i>'
+  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
+  service_logo:
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+  logo_operator:
+    src:
+    show_in_header: false
+    footer:
+      width: '40px'
+      height: '219px'
+  homepage:
+    title:
+    subtitle:
+    sections:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description: culture.data.gouv.fr référence et centralise les données du domaine de la culture.
+  header_button:
+    display: false
+    label:
+    link:
+  header_search:
+    display: true
+    placeholder: Rechercher un jeu de données culture
+  search_bar:
+    display: true
+    placeholder: Rechercher un jeu de données culture
+  secondary_search:
+    display: false
+    name:
+    link:
+  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la culture, réalisé par le ministère de la Culture'
+  footer_external_links:
+    - label: 'culture.gouv.fr'
+      href: 'https://www.culture.gouv.fr/'
+    #    - label: 'Portail des API Météo-France'
+    #      href: 'https://portail-api.meteofrance.fr/'
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  notice:
+    display: false
+    content:
+    closeable: false
+  # ⚠️ When updating this menu, also update the sitemap below if needed
+  menu:
+    - text: Accueil
+      to: /
+    - text: Explorer
+      to: /datasets
+    # - text: Réutiliser
+    #   to: /reuses
+    - text: Echanger
+      to: 'https://forum.data.gouv.fr/tag/culture'
+    - text: 'La démarche'
+      to: /demarche
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    # ⚠️ When updating this list, also update the sitemap below if needed
+    static_pages:
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/static/culture/pages/accessibility.md'
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Jeux de données
+      path: /datasets
+    - name: Démarche
+      path: /demarche
+    - name: Conditions générales d’utilisation
+      path: /terms
+    - name: Accessibilité
+      path: /accessibility
+  show_quality_component: true
+  oauth_option: true
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 20
+    files_list: 6
+  contact_email: datagouv@datagouv.gouv.fr
+  home_banner_colors:
+    - '#f6f6f6'
+    - '#e3e3fd'
+    - '#019FE3'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 312
+  datasets:
+    # TODO: better place for that?
+    add_to_topic:
+      enable: false
+      page:
+      dataset_editorialization: true
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel:
+  # TODO: better place for that?
+  topics:
+    can_add_topics:
+      everyone: true
+      authorized_users:
+
+  # Grist organisations ministère de la Culture https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
+  # Organisations transversale des données ouvertes de la culture
+organizations:
+  datasets: https://raw.githubusercontent.com/culturegouv/donnees-ouvertes/refs/heads/main/data/organizations-datasets.json
+
+pages:
+  # DATASETS
+  datasets:
+    list_all: true
+    universe_query:
+      tag: culture
+    filter_prefix:
+    title: Jeux de données
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+    banner:
+      title: Un guichet unique pour l'accès aux données de la culture
+      content: |
+        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - name: Catégories
+        default_option: Toutes les catégories
+        id: tag
+        type: select
+        use_filter_prefix: false
+        values:
+          - name: '🗃️ Archives'
+            id: archives
+          - name: '🏗️ Architecture'
+            id: architecture
+          - name: '🎨 Arts plastiques'
+            id: arts-plastiques
+          - name: '🎬 Cinéma'
+            id: cinema
+          - name: '🎭 Spectacle vivant'
+            id: spectacle-vivant
+          - name: '📚 Livre & lecture'
+            id: livre
+          - name: '🎵 Musique'
+            id: musique
+          - name: '📰 Presse écrite'
+            id: presse
+          - name: '🖼️ Musées'
+            id: musee
+          - name: '💬 Langue'
+            id: langue
+          - name: '💡 Industries culturelles'
+            id: industries-culturelles
+      - name: Type d'organisation
+        default_option: Tous les types
+        id: organization_badge
+        type: select
+        api_param: organization_badge
+        use_filter_prefix: false
+        color: blue-france
+        values:
+          - name: Service public
+            id: public-service
+          - name: Collectivités territoriales
+            id: local-authority
+          - name: Association
+            id: association
+          - name: Entreprise
+            id: company
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization

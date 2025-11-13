@@ -284,7 +284,7 @@ pages:
     list_all: true
     universe_query:
       tag: defisdatagouvfr
-    tag_prefix: defisdatagouvfr
+    filter_prefix: defisdatagouvfr
     title: Défis
     breadcrumb_title: Défis
     labels:
@@ -309,7 +309,7 @@ pages:
         id: saison
         type: select
         color: green-emeraude
-        use_tag_prefix: true
+        use_filter_prefix: true
         form:
           required: true
         values:
@@ -325,7 +325,7 @@ pages:
   datasets:
     list_all: false
     universe_query:
-    tag_prefix:
+    filter_prefix:
     title:
     breadcrumb_title: Données
     labels:
