@@ -119,53 +119,24 @@ if (showReuses) {
 
 const activeTab = ref(0)
 
-// Sync activeTab with URL hash for tab navigation
-watch(activeTab, (newTab) => {
-  const currentHash = router.currentRoute.value.hash
-  // Don't override factor hashes when on Données tab
-  if (newTab === 0 && currentHash.startsWith('#factor-')) {
-    return
-  }
-  // Update hash to reflect current tab
-  const tabId = tabTitles[newTab]?.tabId
-  if (tabId) {
-    router.replace({ hash: `#${tabId}` })
-  }
-})
-
-// Handle URL hash changes for both tab switching and factor navigation
+// Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
 watch(
   () => router.currentRoute.value.hash,
   (hash) => {
-    if (!hash) {
-      activeTab.value = 0
-      return
-    }
-
-    // Factor hashes: switch to Données tab and navigate to factor
     if (hash.startsWith('#factor-')) {
       activeTab.value = 0
       const elementId = hash.replace('#factor-', '')
 
-      // Use watchEffect to reactively wait for component and data to be ready
+      // Wait for component and data to be ready before navigating
       let stopWatching: (() => void) | undefined = undefined
       stopWatching = watchEffect(() => {
         if (topicFactorsListRef.value && factors.value.length > 0) {
           nextTick(() => {
             topicFactorsListRef.value?.navigateToElement(elementId)
           })
-          // Stop watching once navigation is triggered
           stopWatching?.()
         }
       })
-      return
-    }
-
-    // Tab hashes: find and switch to that tab
-    const cleanHash = hash.replace('#', '')
-    const index = tabTitles.findIndex((tab) => tab.tabId === cleanHash)
-    if (index >= 0) {
-      activeTab.value = index
     }
   },
   { immediate: true }

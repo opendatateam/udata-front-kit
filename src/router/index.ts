@@ -137,10 +137,8 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
-      // Skip auto-scroll for factor hashes and tab hashes
-      // Factor hashes: we handle scrolling to the element manually in TopicDetailView
-      // Tab hashes: DsfrTabs component handles visibility, no scroll needed
-      if (to.hash.startsWith('#factor-') || to.hash.startsWith('#tab-')) {
+      // Skip auto-scroll for factor hashes - we handle scrolling manually in TopicDetailView
+      if (to.hash.startsWith('#factor-')) {
         return false
       }
       if (to.hash !== '') {
