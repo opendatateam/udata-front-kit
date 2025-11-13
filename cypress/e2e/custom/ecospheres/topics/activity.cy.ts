@@ -33,7 +33,7 @@ describe('Topic Activity List', () => {
 
   describe('Activity list display', () => {
     it('should display activities when Activity tab is clicked', () => {
-      const testFactors = createTestFactors(2, ['dataset_in_group'])
+      const testFactors = createTestFactors(2)
 
       const activities = [
         activityFactory.one({ traits: ['topic_created'] }),
@@ -65,7 +65,7 @@ describe('Topic Activity List', () => {
 
   describe('Activity deep-linking', () => {
     it('should make element activities clickable', () => {
-      const testFactors = createTestFactors(2, ['dataset_in_group'])
+      const testFactors = createTestFactors(2)
 
       const activities = [
         activityFactory.one({ traits: ['topic_created'] }),
@@ -122,7 +122,7 @@ describe('Topic Activity List', () => {
     })
 
     it('should navigate to factor when clicking element activity', () => {
-      const testFactors = createTestFactors(2, ['dataset_in_group'])
+      const testFactors = createTestFactors(2)
       const targetFactorId = testFactors[0].id
 
       const activities = [
@@ -159,7 +159,7 @@ describe('Topic Activity List', () => {
     })
 
     it('should navigate between different factors from activity list', () => {
-      const testFactors = createTestFactors(2, ['dataset_in_group'])
+      const testFactors = createTestFactors(2)
       const firstFactorId = testFactors[0].id
       const secondFactorId = testFactors[1].id
 

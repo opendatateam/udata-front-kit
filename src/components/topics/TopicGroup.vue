@@ -72,16 +72,13 @@ const toggleDisclosure = () => {
 }
 
 const openDisclosure = () => {
-  if (!isDisclosureOpen.value) {
-    isDisclosureOpen.value = true
-  }
+  isDisclosureOpen.value = true
 }
 
 const widgetID = useRandomId('disclosure')
 
 defineExpose({
-  openDisclosure,
-  isOpen: computed(() => isDisclosureOpen.value)
+  openDisclosure
 })
 
 const opened = ref(false)

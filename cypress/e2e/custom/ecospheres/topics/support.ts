@@ -49,14 +49,7 @@ export const activityFactory = build<Activity>({
   fields: {
     key: 'topic:updated',
     label: 'Topic updated',
-    actor: () =>
-      UserFactory.one({
-        overrides: {
-          id: `user-${Math.random().toString(36).substr(2, 9)}`,
-          first_name: 'Test',
-          last_name: 'User'
-        }
-      }),
+    actor: () => UserFactory.one(),
     created_at: () => new Date().toISOString(),
     organization: null,
     related_to: '',
@@ -239,7 +232,7 @@ export function setupTopicWithExistingFactors(
 ) {
   setupElementTest()
 
-  const testFactors = factors || createTestFactors(2, ['dataset_in_group'])
+  const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
   mockTopicAndRelatedObjects(testTopic, testFactors, activities)

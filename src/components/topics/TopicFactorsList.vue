@@ -20,12 +20,7 @@ import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import {
-  isOnlyNoGroup,
-  NO_GROUP,
-  useFactorsFilter,
-  useGroups
-} from '@/utils/topicGroups'
+import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
 
@@ -188,11 +183,13 @@ const navigateToElement = (elementId: string) => {
     console.warn(`Trying to scroll to factor ${elementId}, not found.`)
     return
   }
-  const groupName = factor.siteExtras.group || NO_GROUP
   nextTick(() => {
-    const groupRef = groupRefs.value[groupName]
-    if (groupRef) {
-      groupRef.openDisclosure()
+    // open the group disclosure if needed
+    if (factor.siteExtras.group) {
+      const groupRef = groupRefs.value[factor.siteExtras.group]
+      if (groupRef) {
+        groupRef.openDisclosure()
+      }
     }
     // Wait a bit for full loading, then scroll
     setTimeout(() => {
@@ -268,10 +265,8 @@ defineExpose({
           <li v-if="groupFactors.length && !isGroupOnlyHidden(group)">
             <TopicGroup
               :ref="
-                (el) => {
-                  if (el)
-                    groupRefs[group] = el as InstanceType<typeof TopicGroup>
-                }
+                (el) =>
+                  (groupRefs[group] = el as InstanceType<typeof TopicGroup>)
               "
               :group-name="group"
               :all-groups="filteredResults"
