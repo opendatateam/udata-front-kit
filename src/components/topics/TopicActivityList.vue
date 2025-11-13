@@ -15,14 +15,19 @@ const { pageConf } = useCurrentPageConf()
 
 const getActivityTranslation = (activity: Activity) => {
   const elementId = getElementId(activity)
+  const activeFactor = getActiveFactor(elementId)
   switch (activity.key) {
     case 'topic:created':
       return `a créé le ${pageConf.labels.singular}`
     case 'topic:updated':
       return `a modifié le ${pageConf.labels.singular}`
     case 'topic:element:created':
+      if (activeFactor)
+        return `a ajouté le facteur "${activeFactor.title}" au ${pageConf.labels.singular} (${elementId})`
       return `a ajouté un facteur au ${pageConf.labels.singular} (${elementId})`
     case 'topic:element:updated':
+      if (activeFactor)
+        return `a modifié le facteur "${activeFactor.title}" du ${pageConf.labels.singular} (${elementId})`
       return `a modifié un facteur du ${pageConf.labels.singular} (${elementId})`
     case 'topic:element:deleted':
       return `a supprimé un facteur du ${pageConf.labels.singular} (${elementId})`
@@ -33,7 +38,7 @@ const getActivityTranslation = (activity: Activity) => {
 
 const isActiveFactorActivity = (activity: Activity) => {
   return (
-    isActiveFactor(getElementId(activity)) &&
+    getActiveFactor(getElementId(activity)) &&
     ['topic:element:created', 'topic:element:updated'].includes(activity.key)
   )
 }
@@ -42,9 +47,11 @@ const getElementId = (activity: Activity): string | null => {
   return (activity.extras?.element_id as string) || null
 }
 
-const isActiveFactor = (elementId: string | null): boolean => {
-  if (elementId == null) return false
-  return !!props.factors.find((factor) => factor.id === elementId)
+const getActiveFactor = (
+  elementId: string | null
+): ResolvedFactor | undefined => {
+  if (elementId == null) return
+  return props.factors.find((factor) => factor.id === elementId)
 }
 
 const handleActivityClick = (activity: Activity) => {
@@ -59,14 +66,14 @@ const handleActivityClick = (activity: Activity) => {
   <Suspense>
     <ActivityListComponent :id="topic.id">
       <template #activity="{ activity }">
-        <button
+        <a
           v-if="isActiveFactorActivity(activity)"
-          type="button"
+          href="#"
           class="activity-link"
-          @click="handleActivityClick(activity)"
+          @click.prevent.stop="handleActivityClick(activity)"
         >
           {{ getActivityTranslation(activity) }}
-        </button>
+        </a>
         <span v-else>
           {{ getActivityTranslation(activity) }}
         </span>
@@ -81,20 +88,3 @@ const handleActivityClick = (activity: Activity) => {
     </template>
   </Suspense>
 </template>
-
-<style scoped>
-.activity-link {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  text-align: left;
-}
-
-.activity-link:hover {
-  text-decoration: underline;
-}
-</style>
