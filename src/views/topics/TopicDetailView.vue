@@ -119,29 +119,6 @@ if (showReuses) {
 
 const activeTab = ref(0)
 
-// Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
-watch(
-  () => router.currentRoute.value.hash,
-  (hash) => {
-    if (hash.startsWith('#factor-')) {
-      activeTab.value = 0
-      const elementId = hash.replace('#factor-', '')
-
-      // Wait for component and data to be ready before navigating
-      let stopWatching: (() => void) | undefined = undefined
-      stopWatching = watchEffect(() => {
-        if (topicFactorsListRef.value && factors.value.length > 0) {
-          nextTick(() => {
-            topicFactorsListRef.value?.navigateToElement(elementId)
-          })
-          stopWatching?.()
-        }
-      })
-    }
-  },
-  { immediate: true }
-)
-
 const cloneModalActions = [
   {
     label: 'Conserver les liens',
@@ -230,6 +207,29 @@ useHead({
   ],
   link: [{ rel: 'canonical', href: metaLink }]
 })
+
+// Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
+watch(
+  () => router.currentRoute.value.hash,
+  (hash) => {
+    if (hash.startsWith('#factor-')) {
+      activeTab.value = 0
+      const elementId = hash.replace('#factor-', '')
+
+      // Wait for component and data to be ready before navigating
+      let stopWatching: (() => void) | undefined = undefined
+      stopWatching = watchEffect(() => {
+        if (topicFactorsListRef.value && factors.value.length > 0) {
+          nextTick(() => {
+            topicFactorsListRef.value?.navigateToElement(elementId)
+          })
+          stopWatching?.()
+        }
+      })
+    }
+  },
+  { immediate: true }
+)
 
 watch(canEdit, () => {
   if (canEdit.value) {
