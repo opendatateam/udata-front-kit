@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="<%= metaRobots %>" />
     <title><%= title %></title>
+    <meta property="og:title" content="<%= title %>">
+    <% if (meta?.description) { %>
+      <meta name="description" content="<%= meta?.description %>">
+      <meta property="og:description" content="<%= meta?.description %>">
+    <% } %>
+    <% if (meta?.keywords) { %>
+      <meta name="keywords" content="<%= meta?.keywords %>">
+    <% } %>
+    <% if (meta?.canonical_url) { %>
+      <link rel="canonical" href="<%= meta?.canonical_url %>">
+    <% } %>
   </head>
   <body>
     <div id="app"></div>
