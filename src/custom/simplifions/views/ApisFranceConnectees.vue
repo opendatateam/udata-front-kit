@@ -16,8 +16,7 @@
                 <a id="summary-link-2" class="fr-summary__link"  href="#definition">Définition</a>
             </li>
             <li>
-                <a id="summary-link-2"
-                class="fr-summary__link"  href="#acteurs">Acteurs</a>
+                <a id="summary-link-2" class="fr-summary__link"  href="#acteurs">Acteurs</a>
             </li>
             <li>
                 <a id="summary-link-2" class="fr-summary__link" href="#possibilite-de-simplification">Possibilités de simplification</a>
