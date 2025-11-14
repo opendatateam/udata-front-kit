@@ -85,8 +85,13 @@ website:
       to: /datasets
     # - text: Réutiliser
     #   to: /reuses
+    - text: 'Publier'
+      to: /publier
     - text: Echanger
       to: 'https://forum.data.gouv.fr/tag/culture'
+      target: '_blank'
+      rel: 'noopener noreferrer'
+      title: 'Ouvre la page du forum dans un nouvel onglet'
     - text: 'La démarche'
       to: /demarche
   router:
@@ -105,6 +110,8 @@ website:
     - name: Jeux de données
       path: /datasets
     - name: Démarche
+      path: /publier
+    - name: Publier
       path: /demarche
     - name: Conditions générales d’utilisation
       path: /terms
