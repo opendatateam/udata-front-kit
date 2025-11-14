@@ -22,7 +22,7 @@
 
 
 
-<p class="fr-text--lead">Lorsque l'équipe de Simplifions.data.gouv.fr identifie un cas d'usage (par exemple : une démarche utilisateur ou un cadre d'utilisation qui requierent de la donnée), susceptible d'être simplifié via l'utilisation de données, voici les questions qu'elle se pose pour identifier si ce cas d'usage peut être référencé sur Simplifions.data.gouv.fr. </p>
+<p class="fr-text--lead">Lorsque l'équipe de Simplifions.data.gouv.fr identifie un cas d'usage susceptible d'être simplifié via l'utilisation de données, voici les questions qu'elle se pose pour identifier si ce cas d'usage peut être référencé sur Simplifions.data.gouv.fr. </p>
 
 
 <div class="fr-col-12 fr-col-lg-8 fr-ml-4w">
