@@ -435,7 +435,7 @@ const niveauxDeSimplification = [
             style="width: auto; height: 100%"
           />
         </div>
-      </figure>
+       </figure>
        <h3 style="text-align: center">
           Contenu contributif
         </h3>
@@ -448,8 +448,20 @@ const niveauxDeSimplification = [
       </div>
     </div>
 
+
+    <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w" style="text-align: center">✍️ Proposez une modification, un cas d'usage ou une solution :</p>        
+    
+    <div class="fr-mb-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters ">
+     
+        <a
+          href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions" target="_blank" class="fr-btn fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w "
+        >
+          Formulaire pour proposer un contenu
+     </a>    
+
+    </div>
     <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-2w" style="text-align: center">
-      Retrouvez ci-dessous les doctrines utilisées par le pôle Data <br/>pour identifier les contenus qui sont référencés ou non dans Simplifions.data : 
+      Consultez les règles utilisées par le pôle Data <br/>pour identifier les contenus qui sont référencés dans <i>Simplifions.data</i> : 
     </p>
 
     <div
