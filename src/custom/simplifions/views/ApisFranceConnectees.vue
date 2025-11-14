@@ -13,16 +13,17 @@
       <nav class="fr-summary" role="navigation" aria-labelledby="fr-summary-title">
         <ol>
            <li>
-                <a class="fr-summary__link" id="summary-link-2" href="#definition">Définition</a>
+                <a id="summary-link-2" class="fr-summary__link"  href="#definition">Définition</a>
             </li>
             <li>
-                <a class="fr-summary__link" id="summary-link-2" href="#acteurs">Acteurs</a>
+                <a id="summary-link-2"
+                class="fr-summary__link"  href="#acteurs">Acteurs</a>
             </li>
             <li>
-                <a class="fr-summary__link" id="summary-link-2" href="#possibilite-de-simplification">Possibilités de simplification</a>
+                <a id="summary-link-2" class="fr-summary__link" href="#possibilite-de-simplification">Possibilités de simplification</a>
             </li>
             <li>
-                <a class="fr-summary__link" id="summary-link-2" href="#liste-des-api-franceconnectees">Liste des API FranceConnectées</a>
+                <a id="summary-link-2" class="fr-summary__link" href="#liste-des-api-franceconnectees">Liste des API FranceConnectées</a>
             </li>
         </ol>
       </nav>
