@@ -1,5 +1,4 @@
 .env.local
-.env
 .eslintcache
 .idea
 TODO.md
