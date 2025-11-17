@@ -105,7 +105,7 @@ const niveauxDeSimplification = [
               />
             </div>
             <div
-              class="fr-col-lg-8 fr-col-12"
+              class="fr-col-lg-8 fr-col-12 datagouv-components"
               style="
                 font-family: Marianne, arial, sans-serif !important;
                 font-style: normal;
@@ -119,7 +119,7 @@ const niveauxDeSimplification = [
               </p>
 
               <router-link
-                class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg"
+                class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg fr-text--lg"
                 to="/cas-d-usages"
                 >Tous les cas d'usages</router-link
               >
@@ -301,7 +301,7 @@ const niveauxDeSimplification = [
     >
       <!--a href="https://guides.data.gouv.fr/guide-data.gouv.fr/api/outils-pour-les-administrations" class="button-link" -->
       <button
-        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
+        class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
         disabled
       >
         Consulter les ressources juridiques
@@ -386,9 +386,103 @@ const niveauxDeSimplification = [
     >
       <router-link to="/niveaux-simplification" class="button-link">
         <button
-          class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
+          class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
         >
           En savoir plus sur les niveaux de simplification
+        </button>
+      </router-link>
+    </div>
+  </div>
+    <div class="fr-container hero-text fr-mt-8w fr-py-8w" style="background-color: rgb(243, 243, 251)">
+    <h2
+      class="fr-h1 fr-mb-5w"
+      style="color: black; text-align: center"
+    >
+      Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
+    </h2>
+
+    <div class="fr-grid-row fr-grid-row--gutters fr-ml-8w fr-mr-8w fr-grid-row--top">
+      <div class="fr-col-12 fr-col-md-6">
+      <figure role="group" class="fr-content-media fr-content-media--sm">
+        <div class="fr-content-media__img  fr-col-4">
+          <img
+            class="fr-responsive-img "
+            src="/static/simplifions/assets/accueil-picto-contenu-ligne-editoriale.png"
+            alt=""
+            style="width: auto; height: 100%"
+          />
+        </div>
+      </figure>
+       <h3 style="text-align: center">
+          Ligne éditoriale <i>DLNUF/proactivité</i>
+        </h3>
+         <p class="fr-text--lg fr-text--bold"> Un contenu rédigé au sein du Pôle Data pour tenir une ligne éditoriale :</p>
+         <ul class="fr-text--lg">
+         
+          <li>focalisée sur la mise en oeuvre d'une simplification par la donnée, souvent via les deux principes que sont le "Dites-le nous une fois" et la "Proactivité" ;</li>
+          <li>synthétisant les retours et les contributions ;</li>
+          <li>lisible pour les usagers.</li>
+        </ul>
+      </div>
+      <div
+        class="fr-col-12 fr-col-md-6">
+        <figure role="group" class="fr-content-media fr-content-media--sm ">
+        <div class="fr-content-media__img fr-col-3">
+          <img
+            class="fr-responsive-img"
+            src="/static/simplifions/assets/accueil-picto-contenu-contributif.png"
+            alt=""
+            style="width: auto; height: 100%"
+          />
+        </div>
+       </figure>
+       <h3 style="text-align: center">
+          Contenu contributif
+        </h3>
+         <p class="fr-text--lg fr-text--bold">De nombreux espaces sont disponibles sur le site pour permettre aux usagers de contribuer dans l'objectif de proposer une base de connaissance :</p>
+        <ul class="fr-text--lg">
+          <li>élaborée sur des expériences concrètes ;</li>
+          <li>exhaustive ;</li>
+          <li>mise à jour régulièrement.</li>
+        </ul>
+      </div>
+    </div>
+
+
+    <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w" style="text-align: center">✍️ Proposez une modification, un cas d'usage ou une solution :</p>        
+    
+    <div class="fr-mb-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters ">
+     
+        <a
+          href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions" target="_blank" class="fr-btn fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w "
+        >
+          Formulaire pour proposer un contenu
+     </a>    
+
+    </div>
+    <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-2w" style="text-align: center">
+      Consultez les règles utilisées par le pôle Data <br/>pour identifier les contenus qui sont référencés dans <i>Simplifions.data</i> : 
+    </p>
+
+    <div
+      class="fr-mt-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
+    >
+      <router-link to="/doctrine-referencement-cas-usages" class="button-link">
+        <button
+          class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
+        >
+          Doctrine de référencement des cas d'usages
+        </button>    
+      </router-link>
+    </div>
+    <div
+      class="fr-mt-1w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
+    >
+        <router-link to="/doctrine-referencement-solutions" class="button-link">
+        <button
+          class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
+        >
+          Doctrine de référencement des solutions
         </button>
       </router-link>
     </div>
