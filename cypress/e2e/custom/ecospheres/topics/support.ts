@@ -32,6 +32,23 @@ export const factorFactory = build<Factor>({
               (x) => `https://www.data.gouv.fr/datasets/dataset-factor-${x}`
             ),
             availability: Availability.LOCAL_AVAILABLE,
+            group: 'Test Group'
+          }
+        },
+        element: {
+          class: 'Dataset',
+          id: sequence((x) => `dataset-factor-${x}`)
+        }
+      }
+    },
+    dataset_in_sequential_group: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence(
+              (x) => `https://www.data.gouv.fr/datasets/dataset-factor-${x}`
+            ),
+            availability: Availability.LOCAL_AVAILABLE,
             group: sequence((x) => `Test Group ${x}`)
           }
         },
