@@ -32,7 +32,7 @@ export const factorFactory = build<Factor>({
               (x) => `https://www.data.gouv.fr/datasets/dataset-factor-${x}`
             ),
             availability: Availability.LOCAL_AVAILABLE,
-            group: 'Test Group'
+            group: sequence((x) => `Test Group ${x}`)
           }
         },
         element: {

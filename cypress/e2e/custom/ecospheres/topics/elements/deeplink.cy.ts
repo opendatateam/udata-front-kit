@@ -105,13 +105,23 @@ describe('Topic Elements - Deep Linking', () => {
     })
 
     it('should work with ungrouped factors', () => {
+      // Create multiple groups to push down the ungrouped section in viewport
+      const groupedFactors = []
+      for (let index = 0; index < 10; index++) {
+        groupedFactors.push(factorFactory.one({ traits: ['dataset_in_group'] }))
+      }
+
       // Create ungrouped factors
       const ungroupedFactors = factorFactory.many(2, {
         traits: ['missing_no_group']
       })
-      const { testTopic, testFactors } =
-        setupTopicWithExistingFactors(ungroupedFactors)
-      const targetFactor = testFactors[0]
+      const { testTopic } = setupTopicWithExistingFactors([
+        ...ungroupedFactors,
+        ...groupedFactors
+      ])
+      const targetFactor = ungroupedFactors[0]
+
+      if (!targetFactor) throw Error('Could not find any ungrouped factor')
 
       cy.visit(`/bouquets/${testTopic.id}#factor-${targetFactor.id}`)
       cy.wait('@getElementsNone')
