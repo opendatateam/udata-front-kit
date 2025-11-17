@@ -240,9 +240,12 @@ watch(
         }
       })
 
-      // Clear hash after triggering navigation, this prevents interfering with tab navigation
+      // Clear hash immediately using replaceState to avoid adding history entry
+      // and to avoid interfering with navigateToElement's scroll behavior
       // TODO: proper way would be implement deeplinking for tabs
-      router.replace({ hash: '' })
+      const url = new URL(window.location.href)
+      url.hash = ''
+      window.history.replaceState(window.history.state, '', url.toString())
     }
   },
   { immediate: true }
