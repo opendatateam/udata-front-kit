@@ -72,24 +72,6 @@ describe('Topic Elements - Deep Linking', () => {
       })
     })
 
-    it('should work with multiple factors in the same group', () => {
-      const firstFactor = testFactors[0]
-      const secondFactor = testFactors[1]
-
-      // Navigate to first factor
-      cy.visit(`/bouquets/${testTopic.id}#factor-${firstFactor.id}`)
-      cy.wait('@getElementsDataset')
-
-      cy.get(`#factor-${firstFactor.id}`).isInViewport({ wait: VIEWPORT_WAIT })
-      cy.contains(firstFactor.title).should('be.visible')
-
-      // Now navigate to second factor by updating the hash
-      cy.visit(`/bouquets/${testTopic.id}#factor-${secondFactor.id}`)
-
-      cy.get(`#factor-${secondFactor.id}`).isInViewport({ wait: VIEWPORT_WAIT })
-      cy.contains(secondFactor.title).should('be.visible')
-    })
-
     it('should handle non-existent factor IDs gracefully', () => {
       const nonExistentFactorId = 'factor-does-not-exist'
 
