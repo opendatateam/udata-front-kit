@@ -209,6 +209,13 @@ const metaLink = (): string => {
   return `${window.location.origin}${resolved.href}`
 }
 
+const handleNavigateToFactor = (elementId: string) => {
+  activeTab.value = 0
+  nextTick(() => {
+    topicFactorsListRef.value?.navigateToElement(elementId)
+  })
+}
+
 useHead({
   meta: [
     {
@@ -505,7 +512,11 @@ watch(
         panel-id="tab-content-activity"
         tab-id="tab-activity"
       >
-        <TopicActivityList :topic :factors />
+        <TopicActivityList
+          :topic
+          :factors
+          @navigate-to-factor="handleNavigateToFactor"
+        />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

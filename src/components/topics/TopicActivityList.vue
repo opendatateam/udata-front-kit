@@ -3,14 +3,12 @@ import type { Activity } from '@/model/activity'
 import type { ResolvedFactor, Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { ActivityList as ActivityListComponent } from '@datagouv/components-next'
-import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   topic: Topic
   factors: ResolvedFactor[]
 }>()
 
-const router = useRouter()
 const { pageConf } = useCurrentPageConf()
 
 const getActivityTranslation = (activity: Activity) => {
@@ -55,11 +53,20 @@ const getFactor = (elementId: string | null): ResolvedFactor | undefined => {
   return props.factors.find((factor) => factor.id === elementId)
 }
 
+const emit = defineEmits<{
+  navigateToFactor: [elementId: string]
+}>()
+
 const handleActivityClick = (activity: Activity) => {
   const elementId = getElementId(activity)
   if (!elementId || !isFactorActivity(activity)) return
-  // Update URL hash - parent will watch for this change
-  router.replace({ hash: `#factor-${elementId}` })
+  // Emit event to parent to handle navigation directly
+  emit('navigateToFactor', elementId)
+}
+
+const getFactorHash = (activity: Activity): string => {
+  const elementId = getElementId(activity)
+  return elementId ? `#factor-${elementId}` : '#'
 }
 </script>
 
@@ -69,7 +76,7 @@ const handleActivityClick = (activity: Activity) => {
       <template #activity="{ activity }">
         <a
           v-if="isFactorActivity(activity)"
-          href="#"
+          :href="getFactorHash(activity)"
           class="activity-link"
           @click.prevent.stop="handleActivityClick(activity)"
         >
