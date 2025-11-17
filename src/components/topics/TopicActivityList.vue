@@ -15,7 +15,7 @@ const { pageConf } = useCurrentPageConf()
 
 const getActivityTranslation = (activity: Activity) => {
   const elementId = getElementId(activity)
-  const activeFactor = getActiveFactor(elementId)
+  const activeFactor = getFactor(elementId)
   switch (activity.key) {
     case 'topic:created':
       return `a créé le ${pageConf.labels.singular}`
@@ -36,9 +36,12 @@ const getActivityTranslation = (activity: Activity) => {
   }
 }
 
-const isActiveFactorActivity = (activity: Activity) => {
+/*
+ * Is activity is about a factor that still exists (not deleted)?
+ */
+const isFactorActivity = (activity: Activity) => {
   return (
-    getActiveFactor(getElementId(activity)) &&
+    getFactor(getElementId(activity)) &&
     ['topic:element:created', 'topic:element:updated'].includes(activity.key)
   )
 }
@@ -47,16 +50,14 @@ const getElementId = (activity: Activity): string | null => {
   return (activity.extras?.element_id as string) || null
 }
 
-const getActiveFactor = (
-  elementId: string | null
-): ResolvedFactor | undefined => {
+const getFactor = (elementId: string | null): ResolvedFactor | undefined => {
   if (elementId == null) return
   return props.factors.find((factor) => factor.id === elementId)
 }
 
 const handleActivityClick = (activity: Activity) => {
   const elementId = getElementId(activity)
-  if (!elementId || !isActiveFactorActivity(activity)) return
+  if (!elementId || !isFactorActivity(activity)) return
   // Update URL hash - parent will watch for this change
   router.replace({ hash: `#factor-${elementId}` })
 }
@@ -67,7 +68,7 @@ const handleActivityClick = (activity: Activity) => {
     <ActivityListComponent :id="topic.id">
       <template #activity="{ activity }">
         <a
-          v-if="isActiveFactorActivity(activity)"
+          v-if="isFactorActivity(activity)"
           href="#"
           class="activity-link"
           @click.prevent.stop="handleActivityClick(activity)"
