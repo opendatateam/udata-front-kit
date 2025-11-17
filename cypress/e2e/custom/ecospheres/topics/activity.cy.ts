@@ -61,7 +61,7 @@ describe('Topic Activity List', () => {
 
       // Should show activity items with translated labels
       cy.contains('a créé le bouquet').should('be.visible')
-      cy.contains('a ajouté le facteur').should('be.visible')
+      cy.contains("a ajouté l'élément").should('be.visible')
       cy.contains('a modifié le bouquet').should('be.visible')
     })
   })
@@ -95,11 +95,11 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Element activities should be links
-      cy.contains('a ajouté le facteur')
+      cy.contains("a ajouté l'élément")
         .should('have.prop', 'tagName', 'A')
         .and('have.class', 'activity-link')
 
-      cy.contains('a modifié le')
+      cy.contains("a modifié l'élément")
         .should('have.prop', 'tagName', 'A')
         .and('have.class', 'activity-link')
     })
@@ -142,7 +142,7 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Element activity should be spans, not buttons
-      cy.contains('a modifié un facteur')
+      cy.contains('a modifié un élément')
         .should('have.prop', 'tagName', 'SPAN')
         .and('not.have.class', 'activity-link')
     })
@@ -172,7 +172,7 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Click on element activity
-      cy.contains('a ajouté le facteur').click()
+      cy.contains("a ajouté l'élément").click()
 
       // Should navigate to Données tab
       cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
@@ -213,14 +213,14 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Click first activity
-      cy.contains('a ajouté le facteur').click()
+      cy.contains("a ajouté l'élément").click()
       cy.get(`#factor-${firstFactorId}`).isInViewport({ wait: VIEWPORT_WAIT })
 
       // Go back to Activity tab
       cy.get('[role="tab"]').contains('Activité').click()
 
       // Click second activity
-      cy.contains('a modifié le facteur').click()
+      cy.contains("a modifié l'élément").click()
       cy.get(`#factor-${secondFactorId}`).isInViewport({ wait: VIEWPORT_WAIT })
     })
   })

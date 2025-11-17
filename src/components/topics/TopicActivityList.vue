@@ -21,14 +21,14 @@ const getActivityTranslation = (activity: Activity) => {
       return `a modifié le ${pageConf.labels.singular}`
     case 'topic:element:created':
       if (activeFactor)
-        return `a ajouté le facteur "${activeFactor.title}" au ${pageConf.labels.singular} (${elementId})`
-      return `a ajouté un facteur au ${pageConf.labels.singular} (${elementId})`
+        return `a ajouté l'élément "${activeFactor.title}" au ${pageConf.labels.singular} (${elementId})`
+      return `a ajouté un élément au ${pageConf.labels.singular} (${elementId})`
     case 'topic:element:updated':
       if (activeFactor)
-        return `a modifié le facteur "${activeFactor.title}" du ${pageConf.labels.singular} (${elementId})`
-      return `a modifié un facteur du ${pageConf.labels.singular} (${elementId})`
+        return `a modifié l'élément "${activeFactor.title}" du ${pageConf.labels.singular} (${elementId})`
+      return `a modifié un élément du ${pageConf.labels.singular} (${elementId})`
     case 'topic:element:deleted':
-      return `a supprimé un facteur du ${pageConf.labels.singular} (${elementId})`
+      return `a supprimé un élément du ${pageConf.labels.singular} (${elementId})`
     default:
       return activity.label
   }
