@@ -1,9 +1,12 @@
+import { useWaitConstants } from './elements/constants'
 import {
   activityFactory,
   createTestFactors,
   setupTopicWithExistingFactors,
   visitTopic
 } from './support'
+
+const { VIEWPORT_WAIT } = useWaitConstants()
 
 describe('Topic Activity List', () => {
   describe('Activity tab visibility', () => {
@@ -155,7 +158,7 @@ describe('Topic Activity List', () => {
       cy.location('hash').should('eq', `#factor-${targetFactorId}`)
 
       // Factor should be visible and scrolled into view
-      cy.get(`#factor-${targetFactorId}`).isInViewport({ wait: 300 })
+      cy.get(`#factor-${targetFactorId}`).isInViewport({ wait: VIEWPORT_WAIT })
     })
 
     it('should navigate between different factors from activity list', () => {
@@ -191,16 +194,14 @@ describe('Topic Activity List', () => {
 
       // Click first activity
       cy.contains('a ajouté le facteur').click()
-      cy.wait(500) // Wait for scroll animation
-      cy.get(`#factor-${firstFactorId}`).isInViewport({ wait: 300 })
+      cy.get(`#factor-${firstFactorId}`).isInViewport({ wait: VIEWPORT_WAIT })
 
       // Go back to Activity tab
       cy.get('[role="tab"]').contains('Activité').click()
 
       // Click second activity
       cy.contains('a modifié le facteur').click()
-      cy.wait(500) // Wait for scroll animation
-      cy.get(`#factor-${secondFactorId}`).isInViewport({ wait: 300 })
+      cy.get(`#factor-${secondFactorId}`).isInViewport({ wait: VIEWPORT_WAIT })
     })
   })
 })

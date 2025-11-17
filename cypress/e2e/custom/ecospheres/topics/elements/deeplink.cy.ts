@@ -5,9 +5,10 @@ import {
   setupTopicWithExistingFactors,
   visitTopic
 } from '../support'
+import { useWaitConstants } from './constants'
 
 const { HIGHLIGHT_DURATION } = useAnimationConstants()
-const VIEWPORT_WAIT = 500 // ms - time to wait for viewport to stabilize
+const { VIEWPORT_WAIT } = useWaitConstants()
 
 describe('Topic Elements - Deep Linking', () => {
   let testTopic: Topic
