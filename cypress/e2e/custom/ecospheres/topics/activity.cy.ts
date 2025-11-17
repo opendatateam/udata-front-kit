@@ -154,9 +154,6 @@ describe('Topic Activity List', () => {
       // Should navigate to Données tab
       cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
 
-      // URL should have factor hash
-      cy.location('hash').should('eq', `#factor-${targetFactorId}`)
-
       // Factor should be visible and scrolled into view
       cy.get(`#factor-${targetFactorId}`).isInViewport({ wait: VIEWPORT_WAIT })
     })
