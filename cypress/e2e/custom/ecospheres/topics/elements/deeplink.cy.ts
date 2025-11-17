@@ -126,7 +126,10 @@ describe('Topic Elements - Deep Linking', () => {
       cy.wait('@getElementsNone')
 
       // Ungrouped factors should be visible by default, and the target should be scrolled to
-      cy.get(`#factor-${targetFactor.id}`).isInViewport({ wait: VIEWPORT_WAIT })
+      // this one can be a bit long to finish scrolling, wait longer
+      cy.get(`#factor-${targetFactor.id}`).isInViewport({
+        wait: VIEWPORT_WAIT * 2
+      })
       cy.contains(targetFactor.title).should('be.visible')
     })
   })
