@@ -109,9 +109,9 @@ website:
       path: /
     - name: Jeux de données
       path: /datasets
-    - name: Démarche
-      path: /publier
     - name: Publier
+      path: /publier
+    - name: Démarche
       path: /demarche
     - name: Conditions générales d’utilisation
       path: /terms
