@@ -18,7 +18,8 @@ robots:
 website:
   title: 'culture.data.gouv.fr'
   formatted_title: '<i>culture.</i><b>data.gouv</b><i>.fr</i>'
-  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
+  rf_title: 'MINISTÈRE<br>
+    DE LA CULTURE'
   service_logo:
   badge:
     display: true
@@ -85,8 +86,13 @@ website:
       to: /datasets
     # - text: Réutiliser
     #   to: /reuses
+    - text: 'Publier'
+      to: /publier
     - text: Echanger
       to: 'https://forum.data.gouv.fr/tag/culture'
+      target: '_blank'
+      rel: 'noopener noreferrer'
+      title: 'Ouvre la page du forum dans un nouvel onglet'
     - text: 'La démarche'
       to: /demarche
   router:
@@ -104,6 +110,8 @@ website:
       path: /
     - name: Jeux de données
       path: /datasets
+    - name: Publier
+      path: /publier
     - name: Démarche
       path: /demarche
     - name: Conditions générales d’utilisation

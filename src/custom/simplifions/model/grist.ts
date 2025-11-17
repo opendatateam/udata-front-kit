@@ -54,6 +54,7 @@ export type ApiOrDataset = {
   Modifie_par: string
   Modifie_le: number
   Description_pour_la_recommandation: string
+  API_FranceConnectee: boolean
 }
 export type ApiOrDatasetRecord = GristRecord & {
   fields: ApiOrDataset
