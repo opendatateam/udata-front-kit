@@ -49,7 +49,7 @@ const fetchPublierContent = async () => {
     }
   } catch (error) {
     console.error(
-      'Erreur lors de la récupération du contenu de la démarche:',
+      'Erreur lors de la récupération du contenu de la page Publier:',
       error
     )
   } finally {
