@@ -84,6 +84,11 @@ describe('Topic Elements - Deep Linking', () => {
 
       // Element should not exist
       cy.get(`#factor-${nonExistentFactorId}`).should('not.exist')
+
+      // Should be at the top of the page when factor doesn't exist
+      cy.window().then((win) => {
+        expect(win.scrollY).to.equal(0)
+      })
     })
 
     it('should work with ungrouped factors', () => {
