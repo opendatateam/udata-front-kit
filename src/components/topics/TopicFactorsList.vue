@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { nextTick, ref, type Ref } from 'vue'
 
+import { useAnimationConstants } from '@/utils/topic'
 import type { DatasetV2 } from '@datagouv/components-next'
 
-// Constants for navigation animation timings
-const HIGHLIGHT_DURATION = 2000 // ms - time to show highlight on factor
-const SCROLL_TIMEOUT = 150 // ms - time to wait before scrolling (not an exact science)
+const { HIGHLIGHT_DURATION, SCROLL_TIMEOUT } = useAnimationConstants()
 
 import FactorEditModal, {
   type FactorEditModalType

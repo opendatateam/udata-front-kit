@@ -1,10 +1,12 @@
 import type { Factor, Topic } from '@/model/topic'
+import { useAnimationConstants } from '@/utils/topic'
 import {
   factorFactory,
   setupTopicWithExistingFactors,
   visitTopic
 } from '../support'
 
+const { HIGHLIGHT_DURATION } = useAnimationConstants()
 const VIEWPORT_WAIT = 500 // ms - time to wait for viewport to stabilize
 
 describe('Topic Elements - Deep Linking', () => {
@@ -58,8 +60,8 @@ describe('Topic Elements - Deep Linking', () => {
         expect(outline).to.not.include('0px')
       })
 
-      // Wait for highlight to disappear (2 seconds + buffer)
-      cy.wait(2500)
+      // Wait for highlight to disappear (constant + buffer)
+      cy.wait(HIGHLIGHT_DURATION + 500)
 
       // Verify the highlight is removed
       cy.get(`#factor-${factorId}`).should(($el) => {
