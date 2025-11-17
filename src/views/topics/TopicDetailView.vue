@@ -239,6 +239,10 @@ watch(
           stopWatching?.()
         }
       })
+
+      // Clear hash after triggering navigation, this prevents interfering with tab navigation
+      // TODO: proper way would be implement deeplinking for tabs
+      router.replace({ hash: '' })
     }
   },
   { immediate: true }
