@@ -124,6 +124,29 @@ describe('Topic Activity List', () => {
         .and('not.have.class', 'activity-link')
     })
 
+    it('should make deleted element activities non-clickable', () => {
+      const activities = [
+        // This won't be linked to a real factor, thus simulating a deleted element activity
+        activityFactory.one({
+          traits: ['element_updated'],
+          overrides: { extras: { element_id: 'deleted-factor-id' } }
+        })
+      ]
+
+      const { testTopic } = setupTopicWithExistingFactors(undefined, activities)
+
+      visitTopic(testTopic.id)
+      cy.wait('@getElementsDataset')
+
+      cy.get('[role="tab"]').contains('Activité').click()
+      cy.wait('@get_activity_list')
+
+      // Element activity should be spans, not buttons
+      cy.contains('a modifié un facteur')
+        .should('have.prop', 'tagName', 'SPAN')
+        .and('not.have.class', 'activity-link')
+    })
+
     it('should navigate to factor when clicking element activity', () => {
       const testFactors = createTestFactors(2)
       const targetFactorId = testFactors[0].id
