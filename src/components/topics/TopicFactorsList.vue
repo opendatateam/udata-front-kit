@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, type Ref } from 'vue'
 
-import { useAnimationConstants } from '@/utils/topic'
+import { useAnimationConstants } from '@/utils/constants'
 import type { DatasetV2 } from '@datagouv/components-next'
 
 const { HIGHLIGHT_DURATION, SCROLL_TIMEOUT } = useAnimationConstants()

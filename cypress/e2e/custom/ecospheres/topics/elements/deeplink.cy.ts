@@ -1,5 +1,5 @@
 import type { Factor, Topic } from '@/model/topic'
-import { useAnimationConstants } from '@/utils/topic'
+import { useAnimationConstants } from '@/utils/constants'
 import {
   factorFactory,
   setupTopicWithExistingFactors,
