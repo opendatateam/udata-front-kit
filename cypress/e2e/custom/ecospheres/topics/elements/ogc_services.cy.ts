@@ -96,5 +96,39 @@ describe('Topic Elements - OGC Services (QGIS Integration)', () => {
       // Verify QGIS button does NOT exist
       cy.contains('button', 'Ouvrir dans QGIS').should('not.exist')
     })
+
+    it('should trigger download when clicking "Ouvrir dans QGIS" button', () => {
+      // Create a factor with a dataset
+      testFactor = factorFactory.one({ traits: ['dataset_in_group'] })
+      testTopic = createTestTopicWithElements([testFactor])
+
+      const datasetId = testFactor.element!.id
+
+      // Create WFS resource
+      const wfsResource = resourceFactory.one({ traits: ['wfs'] })
+
+      // Mock topic and dataset with WFS resource
+      mockTopicAndRelatedObjects(testTopic, [testFactor], {
+        [datasetId]: [wfsResource]
+      })
+      mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
+
+      visitTopic(testTopic.id)
+      cy.wait('@getElementsDataset')
+
+      // Expand group to see the dataset
+      expandDisclosureGroup()
+
+      // Spy on URL.createObjectURL to detect blob creation
+      cy.window().then((win) => {
+        cy.spy(win.URL, 'createObjectURL').as('createObjectURL')
+      })
+
+      // Click the QGIS button
+      cy.contains('button', 'Ouvrir dans QGIS').click()
+
+      // Verify that URL.createObjectURL was called (indicating download triggered)
+      cy.get('@createObjectURL').should('have.been.calledOnce')
+    })
   })
 })
