@@ -134,6 +134,7 @@ const computeQgisInfo = async (dataset: DatasetV2) => {
   const allResources = []
 
   // Collect resources from all pages
+  // FIXME: smarter lookup, stop iterating if WFS is found. also maybe max page param?
   do {
     response = await resourceStore.fetchDatasetResources(dataset.id, {
       page: page++
@@ -161,6 +162,12 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
   }
 }
 
+/**
+ * Introspects topic's datasets from data.gouv.fr:
+ * - build a cache of content
+ * - sync status (archived, deleted)
+ * - find qgis compatible resources
+ */
 const loadDatasetsContent = () => {
   factors.value.forEach((factor) => {
     const id = factor.element?.id ?? null
@@ -321,7 +328,9 @@ watch(
                   >
                   <button
                     v-if="
-                      factor.element?.id && qgisLayerInfo.has(factor.element.id)
+                      config.open_in_qgis &&
+                      factor.element?.id &&
+                      qgisLayerInfo.has(factor.element.id)
                     "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     @click="
