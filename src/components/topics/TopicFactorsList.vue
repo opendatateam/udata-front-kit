@@ -17,8 +17,9 @@ import { isAvailable } from '@/utils/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import type { QgisLayerInfo } from '@/utils/qgis'
-import { findQgisCompatibleResource, openInQgis } from '@/utils/qgis'
+import type { OgcLayerInfo } from '@/utils/ogcServices'
+import { findOgcCompatibleResource } from '@/utils/ogcServices'
+import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
@@ -124,9 +125,9 @@ const handleDeleteGroup = async (groupName: string) => {
   await Promise.all(deletePromises)
 }
 
-const qgisLayerInfo = ref(new Map<string, QgisLayerInfo>())
+const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
 
-const computeQgisInfo = async (dataset: DatasetV2) => {
+const computeOgcInfo = async (dataset: DatasetV2) => {
   if (!config.website.datasets.open_in_qgis) return
 
   let page = 1
@@ -143,15 +144,15 @@ const computeQgisInfo = async (dataset: DatasetV2) => {
   } while (response.next_page)
 
   // Find the best compatible resource (prioritizes WFS over WMS)
-  const layerInfo = findQgisCompatibleResource(allResources)
+  const layerInfo = findOgcCompatibleResource(allResources)
 
   if (layerInfo) {
-    qgisLayerInfo.value.set(dataset.id, layerInfo)
+    ogcLayerInfo.value.set(dataset.id, layerInfo)
   }
 }
 
 const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
-  const layerInfo = qgisLayerInfo.value.get(datasetId)
+  const layerInfo = ogcLayerInfo.value.get(datasetId)
   if (layerInfo) {
     try {
       await openInQgis(layerInfo, datasetTitle)
@@ -178,7 +179,7 @@ const loadDatasetsContent = () => {
           if (d) {
             datasetsContent.value.set(id, d)
             factor.remoteArchived = !!d.archived
-            computeQgisInfo(d)
+            computeOgcInfo(d)
           }
         })
         .catch((err) => {
@@ -328,9 +329,9 @@ watch(
                   >
                   <button
                     v-if="
-                      config.open_in_qgis &&
+                      config.website.datasets.open_in_qgis &&
                       factor.element?.id &&
-                      qgisLayerInfo.has(factor.element.id)
+                      ogcLayerInfo.has(factor.element.id)
                     "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     @click="
