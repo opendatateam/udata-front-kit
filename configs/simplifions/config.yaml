@@ -116,6 +116,14 @@ website:
         id: 'niveaux-simplification'
         route: '/niveaux-simplification'
         url: '/static/simplifions/pages/niveaux-simplification.md'
+      - title: "Doctrine de référencement des cas d'usages"
+        id: 'doctrine-referencement-cas-usages'
+        route: '/doctrine-referencement-cas-usages'
+        url: '/static/simplifions/pages/doctrine-referencement-cas-usages.md'
+      - title: 'Doctrine de référencement des solutions'
+        id: 'doctrine-referencement-solutions'
+        route: '/doctrine-referencement-solutions'
+        url: '/static/simplifions/pages/doctrine-referencement-solutions.md'
       - title: Simplifier le sourcing des marchés publics avec API Entreprise
         id: '/api-entreprise_cas-usage_marches_public_sourcing'
         route: '/api-entreprise_cas-usage_marches_public_sourcing'

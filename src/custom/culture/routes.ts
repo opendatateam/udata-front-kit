@@ -11,6 +11,14 @@ export const routes: RouteRecordRaw[] = [
     component: async () => await import('./views/HomeView.vue')
   },
   {
+    path: '/publier',
+    name: 'publier',
+    meta: {
+      title: 'Publier'
+    },
+    component: async () => await import('./views/PublierView.vue')
+  },
+  {
     path: '/demarche',
     name: 'demarche',
     meta: {
