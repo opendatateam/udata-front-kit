@@ -17,7 +17,7 @@ import { isAvailable } from '@/utils/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import type { OgcLayerInfo } from '@/utils/ogcServices'
+import type { OgcLayerInfo, OgcSearchResult } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
@@ -127,27 +127,32 @@ const handleDeleteGroup = async (groupName: string) => {
 
 const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
 
+/**
+ * Iterate over MAX_PAGES pages of resources. Stops if WFS is found, fallback to WMS.
+ */
 const computeOgcInfo = async (dataset: DatasetV2) => {
   if (!config.website.datasets.open_in_qgis) return
-
-  let page = 1
-  let response
-  const allResources = []
-
-  // Collect resources from all pages
-  // FIXME: smarter lookup, stop iterating if WFS is found. also maybe max page param?
-  do {
-    response = await resourceStore.fetchDatasetResources(dataset.id, {
-      page: page++
+  const MAX_PAGES = 10
+  let bestResult: OgcSearchResult = { layerInfo: null, foundWfs: false }
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const response = await resourceStore.fetchDatasetResources(dataset.id, {
+      page
     })
-    allResources.push(...response.data)
-  } while (response.next_page)
-
-  // Find the best compatible resource (prioritizes WFS over WMS)
-  const layerInfo = findOgcCompatibleResource(allResources)
-
-  if (layerInfo) {
-    ogcLayerInfo.value.set(dataset.id, layerInfo)
+    const pageResult = findOgcCompatibleResource(response.data)
+    // Update best result if we found something better
+    if (
+      pageResult.foundWfs ||
+      (!bestResult.layerInfo && pageResult.layerInfo)
+    ) {
+      bestResult = pageResult
+    }
+    // Stop if we found WFS (best possible) or no more pages
+    if (pageResult.foundWfs || !response.next_page) {
+      break
+    }
+  }
+  if (bestResult.layerInfo) {
+    ogcLayerInfo.value.set(dataset.id, bestResult.layerInfo)
   }
 }
 

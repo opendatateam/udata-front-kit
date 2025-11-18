@@ -11,6 +11,11 @@ export interface OgcLayerInfo {
   layerName?: string
 }
 
+export interface OgcSearchResult {
+  layerInfo: OgcLayerInfo | null
+  foundWfs: boolean // true if WFS found (best possible, no need to search more)
+}
+
 /**
  * Extracts base URL by removing GetCapabilities query parameters
  * WFS URLs often come as: https://example.com/wfs?request=GetCapabilities&service=WFS
@@ -148,10 +153,11 @@ export function extractLayerNameFromUrl(
  * Finds the first OGC-compatible resource in a dataset
  * Prioritizes WFS over WMS (vector data is more useful than raster)
  * Excludes intranet URLs (*.rie.gouv.fr)
+ * Returns result with foundWfs flag to signal if search can stop
  */
 export function findOgcCompatibleResource(
   resources: Resource[]
-): OgcLayerInfo | null {
+): OgcSearchResult {
   let wmsCandidate: OgcLayerInfo | null = null
 
   // First pass: look for WFS
@@ -175,12 +181,15 @@ export function findOgcCompatibleResource(
       }
 
       if (format.toLowerCase() === 'wfs') {
-        // WFS found - return immediately (or store it even without layer name)
+        // WFS found - return immediately (best result, no need to search more)
         return {
-          url: resource.url,
-          format,
-          title: resource.title,
-          layerName
+          layerInfo: {
+            url: resource.url,
+            format,
+            title: resource.title,
+            layerName
+          },
+          foundWfs: true
         }
       } else if (format.toLowerCase() === 'wms' && layerName && !wmsCandidate) {
         // Store first valid WMS as fallback
@@ -194,6 +203,9 @@ export function findOgcCompatibleResource(
     }
   }
 
-  // No WFS found, return WMS if available
-  return wmsCandidate
+  // No WFS found, return WMS if available (or null)
+  return {
+    layerInfo: wmsCandidate,
+    foundWfs: false
+  }
 }
