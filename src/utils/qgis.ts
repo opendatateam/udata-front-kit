@@ -78,8 +78,9 @@ function generateQlr(
 
 /**
  * Generates QGIS Layer Definition (.qlr) XML content for WMS layers
+ * @internal Exported for testing
  */
-function generateWmsQlr(layerInfo: OgcLayerInfo): string {
+export function generateWmsQlr(layerInfo: OgcLayerInfo): string {
   const { url, layerName = '' } = layerInfo
 
   // Clean URL for consistency with WFS
@@ -118,8 +119,9 @@ function buildWfsDatasource(baseUrl: string, typename: string): string {
 
 /**
  * Generates QGIS Layer Definition (.qlr) XML content for WFS layers
+ * @internal Exported for testing
  */
-function generateWfsQlr(layerInfo: OgcLayerInfo): string {
+export function generateWfsQlr(layerInfo: OgcLayerInfo): string {
   const { url, layerName = '' } = layerInfo
   const baseUrl = extractBaseUrl(url)
   const datasource = buildWfsDatasource(baseUrl, layerName)
@@ -129,8 +131,9 @@ function generateWfsQlr(layerInfo: OgcLayerInfo): string {
 
 /**
  * Generates a multi-layer QLR with all WFS layers
+ * @internal Exported for testing
  */
-function generateMultiLayerWfsQlr(
+export function generateMultiLayerWfsQlr(
   layerInfo: OgcLayerInfo,
   layerNames: string[]
 ): string {
