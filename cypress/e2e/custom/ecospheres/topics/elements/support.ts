@@ -1,5 +1,6 @@
 import { build, sequence } from 'mimicry-js'
 
+import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
@@ -143,16 +144,19 @@ export function mockTopicElementsByClass(
 // Common mocks for topic and discussions
 export function mockTopicAndRelatedObjects(
   topic: Topic,
-  factors: Factor[] = []
+  factors: Factor[] = [],
+  datasetResources: Record<string, Resource[]> = {}
 ) {
   cy.mockDatagouvObject('topics', topic.id, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
-      cy.mockDatagouvObject(
-        'datasets',
-        factor.element.id,
-        datasetFactory.one({ overrides: { id: factor.element.id } })
-      )
+      const datasetId = factor.element.id
+      const dataset = datasetFactory.one({ overrides: { id: datasetId } })
+      cy.mockDatagouvObject('datasets', datasetId, dataset)
+
+      // Mock resources for this dataset if provided
+      const resources = datasetResources[datasetId] || []
+      cy.mockResources(datasetId, resources)
     }
   })
   cy.mockDatagouvObjectList('discussions')
