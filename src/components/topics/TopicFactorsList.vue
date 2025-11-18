@@ -128,7 +128,9 @@ const handleDeleteGroup = async (groupName: string) => {
 const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
 
 /**
- * Iterate over MAX_PAGES pages of resources. Stops if WFS is found, fallback to WMS.
+ * Iterate over MAX_PAGES pages of resources for a dataset and find the best OGC service.
+ * Stores result in ogcLayerInfo Map.
+ * Stops if WFS is found, fallback to WMS.
  */
 const computeOgcInfo = async (dataset: DatasetV2) => {
   if (!config.website.datasets.open_in_qgis) return
@@ -334,9 +336,7 @@ watch(
                   >
                   <button
                     v-if="
-                      config.website.datasets.open_in_qgis &&
-                      factor.element?.id &&
-                      ogcLayerInfo.has(factor.element.id)
+                      factor.element?.id && ogcLayerInfo.has(factor.element.id)
                     "
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     @click="
