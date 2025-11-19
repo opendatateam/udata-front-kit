@@ -27,7 +27,27 @@ export const fromMarkdown = (value: string | null, inline: boolean = false) => {
   const fn = inline ? marked.parseInline : marked.parse
   const parsed = fn(value, markedOptions)
   // type cast to string because we don't use async mode of marked
-  return DOMPurify.sanitize(parsed as string)
+  return DOMPurify.sanitize(parsed as string, {
+    ADD_TAGS: [
+      'line-chart',
+      'bar-chart',
+      'pie-chart',
+      'scatter-chart',
+      'radar-chart',
+      'gauge-chart',
+      'bar-line-chart',
+      'map-chart'
+    ],
+    ADD_ATTR: [
+      'x',
+      'y',
+      'name',
+      'unit-tooltip',
+      'selected-palette',
+      'databox-id',
+      'databox-type'
+    ]
+  })
 }
 
 /**
