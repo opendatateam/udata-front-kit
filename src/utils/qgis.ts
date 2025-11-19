@@ -3,6 +3,26 @@ import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces'
 import type { OgcLayerInfo } from './ogcServices'
 import { extractBaseUrl, fetchWfsLayerNames } from './ogcServices'
 
+/**
+ * CRS (Coordinate Reference System) definitions for QGIS layers
+ * Each field corresponds to epsg.io API endpoints:
+ * - authid: EPSG code identifier (e.g. "EPSG:4326")
+ * - srid: Spatial Reference System ID - numeric part only (e.g. "4326")
+ * - proj4: Proj4 string from https://epsg.io/{code}.proj4
+ *
+ * To add a new CRS:
+ * 1. Fetch proj4 string from https://epsg.io/{code}.proj4
+ * 2. Add entry here with authid, srid, and proj4 fields
+ */
+const CRS_DEFINITIONS = {
+  'EPSG:4326': {
+    authid: 'EPSG:4326',
+    srid: '4326',
+    proj4: '+proj=longlat +datum=WGS84 +no_defs +type=crs'
+  }
+}
+
+type SupportedCrs = keyof typeof CRS_DEFINITIONS
 const DEFAULT_PROJECTION = 'EPSG:4326'
 
 /**
@@ -22,8 +42,10 @@ function addMaplayer(
   provider: string,
   layerName: string,
   type: 'raster' | 'vector',
-  crs: string = DEFAULT_PROJECTION
+  crs: SupportedCrs
 ) {
+  const crsDef = CRS_DEFINITIONS[crs]
+
   const maplayer = parent.ele('maplayer', {
     type: type,
     hasScaleBasedVisibilityFlag: '0'
@@ -34,11 +56,11 @@ function addMaplayer(
   maplayer.ele('provider', { encoding: 'UTF-8' }).txt(provider)
   maplayer.ele('layername').txt(layerName)
 
-  // Add CRS for all layers (both raster and vector need spatial reference)
+  // Add CRS info from CRS_DEFINITIONS
   const spatialrefsys = maplayer.ele('srs').ele('spatialrefsys')
-  spatialrefsys.ele('proj4').txt('+proj=longlat +datum=WGS84 +no_defs')
-  spatialrefsys.ele('srid').txt('4326')
-  spatialrefsys.ele('authid').txt(crs)
+  spatialrefsys.ele('proj4').txt(crsDef.proj4)
+  spatialrefsys.ele('srid').txt(crsDef.srid)
+  spatialrefsys.ele('authid').txt(crsDef.authid)
 
   return maplayer
 }
@@ -51,7 +73,7 @@ function generateQlr(
   type: 'raster' | 'vector',
   provider: string,
   datasource: string,
-  crs: string
+  crs: SupportedCrs
 ): string {
   const { title = 'Layer' } = layerInfo
 
@@ -82,7 +104,10 @@ function generateQlr(
  * Generates QGIS Layer Definition (.qlr) XML content for WMS layers
  * @internal Exported for testing
  */
-export function generateWmsQlr(layerInfo: OgcLayerInfo, crs: string): string {
+export function generateWmsQlr(
+  layerInfo: OgcLayerInfo,
+  crs: SupportedCrs
+): string {
   const { url, layerName } = layerInfo
 
   if (!layerName) throw Error('layerName is required for WMS layers')
@@ -110,7 +135,7 @@ export function generateWmsQlr(layerInfo: OgcLayerInfo, crs: string): string {
 function buildWfsDatasource(
   baseUrl: string,
   typename: string,
-  crs: string
+  crs: SupportedCrs
 ): string {
   const params = [
     "pagingEnabled='true'",
@@ -129,7 +154,10 @@ function buildWfsDatasource(
  * Generates QGIS Layer Definition (.qlr) XML content for WFS layers
  * @internal Exported for testing
  */
-export function generateWfsQlr(layerInfo: OgcLayerInfo, crs: string): string {
+export function generateWfsQlr(
+  layerInfo: OgcLayerInfo,
+  crs: SupportedCrs
+): string {
   const { url, layerName = '' } = layerInfo
   const baseUrl = extractBaseUrl(url)
   const datasource = buildWfsDatasource(baseUrl, layerName, crs)
@@ -144,9 +172,9 @@ export function generateWfsQlr(layerInfo: OgcLayerInfo, crs: string): string {
 export function generateMultiLayerWfsQlr(
   layerInfo: OgcLayerInfo,
   layerNames: string[],
-  crs: string
+  crs: SupportedCrs
 ): string {
-  const { url, title = 'WFS Layers' } = layerInfo
+  const { url, title = 'WFS layers' } = layerInfo
   const baseUrl = extractBaseUrl(url)
 
   const root = create({ version: '1.0', encoding: 'UTF-8' })
@@ -204,7 +232,8 @@ export function generateMultiLayerWfsQlr(
       datasource,
       'WFS',
       layerName,
-      'vector'
+      'vector',
+      crs
     )
   })
 
@@ -235,7 +264,7 @@ function downloadQlrFile(
 export async function openInQgis(
   layerInfo: OgcLayerInfo,
   datasetTitle?: string,
-  crs: string = DEFAULT_PROJECTION
+  crs: SupportedCrs = DEFAULT_PROJECTION
 ): Promise<void> {
   let qlrContent: string
 

@@ -32,7 +32,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test:layer'
       }
 
-      const qlr = generateWfsQlr(layerInfo)
+      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       // Verify it's a valid QLR document
@@ -47,7 +47,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test:layer'
       }
 
-      const qlr = generateWfsQlr(layerInfo)
+      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const provider = doc.querySelector('provider')
@@ -62,7 +62,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test:layer'
       }
 
-      const qlr = generateWfsQlr(layerInfo)
+      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const maplayer = doc.querySelector('maplayer')
@@ -77,7 +77,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test:layer'
       }
 
-      const qlr = generateWfsQlr(layerInfo)
+      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const datasource = doc.querySelector('datasource')
@@ -92,7 +92,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test:layer'
       }
 
-      const qlr = generateWfsQlr(layerInfo)
+      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const datasource = doc.querySelector('datasource')
@@ -108,7 +108,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test:layer'
       }
 
-      const qlr = generateWfsQlr(layerInfo)
+      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const layername = doc.querySelector('layername')
@@ -125,7 +125,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test_layer'
       }
 
-      const qlr = generateWmsQlr(layerInfo)
+      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       expect(doc.querySelector('qlr')).toBeTruthy()
@@ -139,7 +139,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test_layer'
       }
 
-      const qlr = generateWmsQlr(layerInfo)
+      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const provider = doc.querySelector('provider')
@@ -154,7 +154,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test_layer'
       }
 
-      const qlr = generateWmsQlr(layerInfo)
+      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const maplayer = doc.querySelector('maplayer')
@@ -169,7 +169,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test_layer'
       }
 
-      const qlr = generateWmsQlr(layerInfo)
+      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const datasource = doc.querySelector('datasource')
@@ -184,7 +184,7 @@ describe('QGIS QLR Generation', () => {
         layerName: 'test_layer'
       }
 
-      const qlr = generateWmsQlr(layerInfo)
+      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const datasource = doc.querySelector('datasource')
@@ -203,7 +203,7 @@ describe('QGIS QLR Generation', () => {
 
       const layerNames = ['layer1', 'layer2', 'layer3']
 
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames)
+      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       expect(doc.querySelector('qlr')).toBeTruthy()
@@ -218,7 +218,7 @@ describe('QGIS QLR Generation', () => {
 
       const layerNames = ['layer1', 'layer2', 'layer3']
 
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames)
+      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')
@@ -234,7 +234,7 @@ describe('QGIS QLR Generation', () => {
 
       const layerNames = ['layer1', 'layer2', 'layer3']
 
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames)
+      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const maplayers = doc.querySelectorAll('maplayer')
@@ -250,7 +250,7 @@ describe('QGIS QLR Generation', () => {
 
       const layerNames = ['namespace:layer1', 'namespace:layer2']
 
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames)
+      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const datasources = doc.querySelectorAll('datasource')
@@ -271,7 +271,7 @@ describe('QGIS QLR Generation', () => {
 
       const layerNames = ['layer1']
 
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames)
+      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const groups = doc.querySelectorAll('layer-tree-group')
