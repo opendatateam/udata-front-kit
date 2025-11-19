@@ -26,6 +26,7 @@ type SupportedCrs = keyof typeof CRS_DEFINITIONS
 const DEFAULT_PROJECTION = 'EPSG:4326'
 
 type LAYER_TYPE = 'raster' | 'vector'
+type PROVIDER = 'wms' | 'wfs'
 
 /**
  * Generates a unique ID for QGIS layers
@@ -41,7 +42,7 @@ function addMaplayer(
   parent: XMLBuilder,
   id: string,
   datasource: string,
-  provider: string,
+  provider: PROVIDER,
   layerName: string,
   type: LAYER_TYPE,
   crs: SupportedCrs
@@ -73,7 +74,7 @@ function addMaplayer(
 function generateQlr(
   layerInfo: OgcLayerInfo,
   type: LAYER_TYPE,
-  provider: string,
+  provider: PROVIDER,
   datasource: string,
   crs: SupportedCrs
 ): string {
@@ -164,7 +165,7 @@ export function generateWfsQlr(
   const baseUrl = extractBaseUrl(url)
   const datasource = buildWfsDatasource(baseUrl, layerName, crs)
 
-  return generateQlr(layerInfo, 'vector', 'WFS', datasource, crs)
+  return generateQlr(layerInfo, 'vector', 'wfs', datasource, crs)
 }
 
 /**
@@ -232,7 +233,7 @@ export function generateMultiLayerWfsQlr(
       maplayers,
       layerIds[index],
       datasource,
-      'WFS',
+      'wfs',
       layerName,
       'vector',
       crs
