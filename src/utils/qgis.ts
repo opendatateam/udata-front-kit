@@ -1,6 +1,6 @@
 import { create } from 'xmlbuilder2'
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces'
-import type { OgcLayerInfo } from './ogcServices'
+import type { OGC_SERVICE_FORMAT, OgcLayerInfo } from './ogcServices'
 import { extractBaseUrl, fetchWfsLayerNames } from './ogcServices'
 
 /**
@@ -26,7 +26,6 @@ type SupportedCrs = keyof typeof CRS_DEFINITIONS
 const DEFAULT_PROJECTION = 'EPSG:4326'
 
 type LAYER_TYPE = 'raster' | 'vector'
-type PROVIDER = 'wms' | 'wfs'
 
 /**
  * Generates a unique ID for QGIS layers
@@ -42,7 +41,7 @@ function addMaplayer(
   parent: XMLBuilder,
   id: string,
   datasource: string,
-  provider: PROVIDER,
+  provider: OGC_SERVICE_FORMAT,
   layerName: string,
   type: LAYER_TYPE,
   crs: SupportedCrs
@@ -74,7 +73,7 @@ function addMaplayer(
 function generateQlr(
   layerInfo: OgcLayerInfo,
   type: LAYER_TYPE,
-  provider: PROVIDER,
+  provider: OGC_SERVICE_FORMAT,
   datasource: string,
   crs: SupportedCrs
 ): string {

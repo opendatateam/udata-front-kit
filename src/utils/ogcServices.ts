@@ -1,12 +1,14 @@
 import type { Resource } from '@/model/resource'
 import { detectOgcService } from '@datagouv/components-next'
 
+export type OGC_SERVICE_FORMAT = 'wms' | 'wfs'
+
 /**
  * Information about an OGC service layer (WFS/WMS)
  */
 export interface OgcLayerInfo {
   url: string
-  format: string
+  format: OGC_SERVICE_FORMAT
   layerName?: string
   title?: string
 }
@@ -114,14 +116,14 @@ export function isValidLayerName(layerName: string): boolean {
  */
 export function extractLayerNameFromUrl(
   url: string,
-  format: string
+  format: OGC_SERVICE_FORMAT
 ): string | null {
   try {
     const urlObj = new URL(url)
 
     // Define parameter names to check based on format
     const paramNames =
-      format.toLowerCase() === 'wfs'
+      format === 'wfs'
         ? ['typename', 'typeName', 'typeNames']
         : ['layers', 'layer']
 
@@ -158,7 +160,8 @@ export function findOgcCompatibleResource(
       continue
     }
 
-    const format = detectOgcService(resource)
+    // type assertion from OGC_SERVICES_FORMATS values array in datagouv components
+    const format = detectOgcService(resource) as OGC_SERVICE_FORMAT
     if (format) {
       let layerName = undefined
 
@@ -171,7 +174,7 @@ export function findOgcCompatibleResource(
         layerName = resource.title
       }
 
-      if (format.toLowerCase() === 'wfs') {
+      if (format === 'wfs') {
         // WFS found - return immediately (best result, no need to search more)
         return {
           layerInfo: {
@@ -182,13 +185,14 @@ export function findOgcCompatibleResource(
           },
           foundWfs: true
         }
-      } else if (format.toLowerCase() === 'wms' && layerName && !wmsCandidate) {
+      }
+      // layerName is required for WMS (we don't do multi-layers)
+      else if (format === 'wms' && layerName && !wmsCandidate) {
         // Store first valid WMS as fallback
         wmsCandidate = {
           url: resource.url,
           format,
           title: resource.title,
-          // layerName is required for WMS
           layerName
         }
       }
