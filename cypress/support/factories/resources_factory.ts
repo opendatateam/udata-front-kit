@@ -18,8 +18,15 @@ export const resourceFactory = build<Resource>({
     last_modified: '2024-01-01T00:00:00',
     extras: {},
     harvest: null,
-    preview_url: null,
-    schema: null
+    preview_url: '',
+    schema: null,
+    checksum: null,
+    internal: {},
+    latest: '',
+    metrics: {
+      views: 42
+    },
+    filetype: 'remote'
   },
   traits: {
     wfs: {

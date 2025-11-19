@@ -10,7 +10,7 @@ import {
   visitTopic
 } from './support'
 
-describe('Topic Elements - OGC Services (QGIS Integration)', () => {
+describe('Topic Elements - QGIS Integration', () => {
   let testTopic: Topic
   let testFactor: Factor
 

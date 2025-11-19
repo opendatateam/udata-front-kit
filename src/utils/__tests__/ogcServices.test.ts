@@ -1,5 +1,6 @@
 import type { Resource } from '@/model/resource'
 import { describe, expect, it } from 'vitest'
+import { resourceFactory } from '../../../cypress/support/factories/resources_factory'
 import {
   extractBaseUrl,
   extractLayerNameFromUrl,
@@ -7,38 +8,21 @@ import {
   isValidLayerName
 } from '../ogcServices'
 
-// Helper to create mock resources
-function createMockResource(overrides: Partial<Resource> = {}): Resource {
-  return {
-    id: 'test-resource',
-    title: 'Test Resource',
-    description: '',
-    url: 'https://example.com/data',
-    format: 'csv',
-    type: 'main',
-    filesize: 1024,
-    mime: 'text/csv',
-    created_at: '2024-01-01T00:00:00',
-    last_modified: '2024-01-01T00:00:00',
-    extras: {},
-    harvest: null,
-    preview_url: null,
-    schema: null,
-    ...overrides
-  }
-}
-
 describe('OGC Services', () => {
   describe('findOgcCompatibleResource', () => {
     it('should prioritize WFS over WMS when both are available', () => {
       const resources: Resource[] = [
-        createMockResource({
-          format: 'wms',
-          url: 'https://example.com/wms?layers=test_layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'wms',
+            url: 'https://example.com/wms?layers=test_layer'
+          }
         }),
-        createMockResource({
-          format: 'wfs',
-          url: 'https://example.com/wfs?typename=test:layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'wfs',
+            url: 'https://example.com/wfs?typename=test:layer'
+          }
         })
       ]
 
@@ -52,13 +36,17 @@ describe('OGC Services', () => {
     it('should prioritize WFS over WMS regardless of order', () => {
       // WFS comes first
       const resources1: Resource[] = [
-        createMockResource({
-          format: 'wfs',
-          url: 'https://example.com/wfs?typename=test:layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'wfs',
+            url: 'https://example.com/wfs?typename=test:layer'
+          }
         }),
-        createMockResource({
-          format: 'wms',
-          url: 'https://example.com/wms?layers=test_layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'wms',
+            url: 'https://example.com/wms?layers=test_layer'
+          }
         })
       ]
 
@@ -68,13 +56,17 @@ describe('OGC Services', () => {
 
       // WMS comes first
       const resources2: Resource[] = [
-        createMockResource({
-          format: 'wms',
-          url: 'https://example.com/wms?layers=test_layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'wms',
+            url: 'https://example.com/wms?layers=test_layer'
+          }
         }),
-        createMockResource({
-          format: 'wfs',
-          url: 'https://example.com/wfs?typename=test:layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'wfs',
+            url: 'https://example.com/wfs?typename=test:layer'
+          }
         })
       ]
 
@@ -85,10 +77,16 @@ describe('OGC Services', () => {
 
     it('should return WMS if no WFS is available', () => {
       const resources: Resource[] = [
-        createMockResource({ format: 'csv' }),
-        createMockResource({
-          format: 'wms',
-          url: 'https://example.com/wms?layers=test_layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'csv'
+          }
+        }),
+        resourceFactory.one({
+          overrides: {
+            format: 'wms',
+            url: 'https://example.com/wms?layers=test_layer'
+          }
         })
       ]
 
@@ -101,9 +99,9 @@ describe('OGC Services', () => {
 
     it('should return null if no OGC service is available', () => {
       const resources: Resource[] = [
-        createMockResource({ format: 'csv' }),
-        createMockResource({ format: 'json' }),
-        createMockResource({ format: 'pdf' })
+        resourceFactory.one({ overrides: { format: 'csv' } }),
+        resourceFactory.one({ overrides: { format: 'json' } }),
+        resourceFactory.one({ overrides: { format: 'pdf' } })
       ]
 
       const result = findOgcCompatibleResource(resources)
@@ -113,14 +111,18 @@ describe('OGC Services', () => {
     })
 
     it('should filter out intranet URLs (*.rie.gouv.fr)', () => {
-      const resources: Resource[] = [
-        createMockResource({
-          format: 'wfs',
-          url: 'https://internal.rie.gouv.fr/wfs?typename=test:layer'
+      const resources = [
+        resourceFactory.one({
+          overrides: {
+            format: 'wfs',
+            url: 'https://internal.rie.gouv.fr/wfs?typename=test:layer'
+          }
         }),
-        createMockResource({
-          format: 'wms',
-          url: 'https://public.example.com/wms?layers=test_layer'
+        resourceFactory.one({
+          overrides: {
+            format: 'wms',
+            url: 'https://public.example.com/wms?layers=test_layer'
+          }
         })
       ]
 
@@ -134,9 +136,11 @@ describe('OGC Services', () => {
 
     it('should extract layer name from URL parameters', () => {
       const resources: Resource[] = [
-        createMockResource({
-          format: 'wfs',
-          url: 'https://example.com/wfs?typename=namespace:layername'
+        resourceFactory.one({
+          overrides: {
+            format: 'wfs',
+            url: 'https://example.com/wfs?typename=namespace:layername'
+          }
         })
       ]
 
@@ -148,10 +152,12 @@ describe('OGC Services', () => {
 
     it('should use resource title as layer name if it is valid', () => {
       const resources: Resource[] = [
-        createMockResource({
-          format: 'wfs',
-          url: 'https://example.com/wfs',
-          title: 'valid_layer_name'
+        resourceFactory.one({
+          overrides: {
+            format: 'wfs',
+            url: 'https://example.com/wfs',
+            title: 'valid_layer_name'
+          }
         })
       ]
 
@@ -163,10 +169,12 @@ describe('OGC Services', () => {
 
     it('should not use resource title if it contains spaces', () => {
       const resources: Resource[] = [
-        createMockResource({
-          format: 'wfs',
-          url: 'https://example.com/wfs',
-          title: 'Invalid Layer Name With Spaces'
+        resourceFactory.one({
+          overrides: {
+            format: 'wfs',
+            url: 'https://example.com/wfs',
+            title: 'Invalid Layer Name With Spaces'
+          }
         })
       ]
 
@@ -174,16 +182,18 @@ describe('OGC Services', () => {
 
       // Should return the resource but without a layer name
       expect(result.layerInfo?.format).toBe('wfs')
-      expect(result.layerInfo?.layerName).toBe('')
+      expect(result.layerInfo?.layerName).toBe(undefined)
       expect(result.foundWfs).toBe(true)
     })
 
     it('should only return WMS if it has a valid layer name', () => {
       const resources: Resource[] = [
-        createMockResource({
-          format: 'wms',
-          url: 'https://example.com/wms', // No layers param
-          title: 'Invalid Layer Name'
+        resourceFactory.one({
+          overrides: {
+            format: 'wms',
+            url: 'https://example.com/wms', // No layers param
+            title: 'Invalid Layer Name'
+          }
         })
       ]
 
@@ -216,13 +226,6 @@ describe('OGC Services', () => {
       const result = extractBaseUrl(url)
 
       expect(result).toBe('https://example.com/wfs')
-    })
-
-    it('should return original URL if parsing fails', () => {
-      const invalidUrl = 'not-a-valid-url'
-      const result = extractBaseUrl(invalidUrl)
-
-      expect(result).toBe(invalidUrl)
     })
   })
 

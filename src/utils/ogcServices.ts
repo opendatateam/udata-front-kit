@@ -7,8 +7,8 @@ import { detectOgcService } from '@datagouv/components-next'
 export interface OgcLayerInfo {
   url: string
   format: string
-  title?: string
   layerName?: string
+  title?: string
 }
 
 export interface OgcSearchResult {
@@ -22,20 +22,11 @@ export interface OgcSearchResult {
  * This returns just the base URL: https://example.com/wfs
  */
 export function extractBaseUrl(url: string): string {
-  try {
-    const urlObj = new URL(url)
-    // Remove GetCapabilities-specific parameters
-    urlObj.searchParams.delete('request')
-    urlObj.searchParams.delete('service')
-    // If no other parameters remain, use just the base path
-    if (urlObj.searchParams.toString() === '') {
-      return `${urlObj.origin}${urlObj.pathname}`
-    }
-    return urlObj.toString()
-  } catch {
-    // If URL parsing fails, use as-is
-    return url
-  }
+  const urlObj = new URL(url)
+  // Remove GetCapabilities-specific parameters
+  urlObj.searchParams.delete('request')
+  urlObj.searchParams.delete('service')
+  return urlObj.toString()
 }
 
 /**
@@ -169,7 +160,7 @@ export function findOgcCompatibleResource(
 
     const format = detectOgcService(resource)
     if (format) {
-      let layerName = ''
+      let layerName = undefined
 
       // Try to extract layer name from URL parameters
       const extractedName = extractLayerNameFromUrl(resource.url, format)
@@ -197,6 +188,7 @@ export function findOgcCompatibleResource(
           url: resource.url,
           format,
           title: resource.title,
+          // layerName is required for WMS
           layerName
         }
       }

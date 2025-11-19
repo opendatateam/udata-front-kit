@@ -3,6 +3,8 @@ import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces'
 import type { OgcLayerInfo } from './ogcServices'
 import { extractBaseUrl, fetchWfsLayerNames } from './ogcServices'
 
+const DEFAULT_PROJECTION = 'EPSG:4326'
+
 /**
  * Generates a unique ID for QGIS layers
  */
@@ -20,7 +22,7 @@ function addMaplayer(
   provider: string,
   layerName: string,
   type: 'raster' | 'vector',
-  crs: string = 'EPSG:4326'
+  crs: string = DEFAULT_PROJECTION
 ) {
   const maplayer = parent.ele('maplayer', {
     type: type,
@@ -49,7 +51,7 @@ function generateQlr(
   type: 'raster' | 'vector',
   provider: string,
   datasource: string,
-  crs: string = 'EPSG:4326'
+  crs: string
 ): string {
   const { title = 'Layer' } = layerInfo
 
@@ -80,15 +82,17 @@ function generateQlr(
  * Generates QGIS Layer Definition (.qlr) XML content for WMS layers
  * @internal Exported for testing
  */
-export function generateWmsQlr(layerInfo: OgcLayerInfo): string {
-  const { url, layerName = '' } = layerInfo
+export function generateWmsQlr(layerInfo: OgcLayerInfo, crs: string): string {
+  const { url, layerName } = layerInfo
 
-  // Clean URL for consistency with WFS
+  if (!layerName) throw Error('layerName is required for WMS layers')
+
+  // Clean URL for consistency
   const baseUrl = extractBaseUrl(url)
 
   const datasource = [
     'contextualWMSLegend=0',
-    'crs=EPSG:4326',
+    `crs=${crs}`,
     'dpiMode=7',
     'featureCount=10',
     'format=image/png',
@@ -97,18 +101,22 @@ export function generateWmsQlr(layerInfo: OgcLayerInfo): string {
     `url=${baseUrl}`
   ].join('&')
 
-  return generateQlr(layerInfo, 'raster', 'wms', datasource)
+  return generateQlr(layerInfo, 'raster', 'wms', datasource, crs)
 }
 
 /**
  * Builds WFS datasource string
  */
-function buildWfsDatasource(baseUrl: string, typename: string): string {
+function buildWfsDatasource(
+  baseUrl: string,
+  typename: string,
+  crs: string
+): string {
   const params = [
     "pagingEnabled='true'",
     "preferCoordinatesForWfsT11='false'",
     "restrictToRequestBBOX='1'",
-    "srsname='EPSG:4326'",
+    `srsname='${crs}'`,
     `typename='${typename}'`,
     `url='${baseUrl}'`,
     "version='auto'",
@@ -121,12 +129,12 @@ function buildWfsDatasource(baseUrl: string, typename: string): string {
  * Generates QGIS Layer Definition (.qlr) XML content for WFS layers
  * @internal Exported for testing
  */
-export function generateWfsQlr(layerInfo: OgcLayerInfo): string {
+export function generateWfsQlr(layerInfo: OgcLayerInfo, crs: string): string {
   const { url, layerName = '' } = layerInfo
   const baseUrl = extractBaseUrl(url)
-  const datasource = buildWfsDatasource(baseUrl, layerName)
+  const datasource = buildWfsDatasource(baseUrl, layerName, crs)
 
-  return generateQlr(layerInfo, 'vector', 'WFS', datasource)
+  return generateQlr(layerInfo, 'vector', 'WFS', datasource, crs)
 }
 
 /**
@@ -135,7 +143,8 @@ export function generateWfsQlr(layerInfo: OgcLayerInfo): string {
  */
 export function generateMultiLayerWfsQlr(
   layerInfo: OgcLayerInfo,
-  layerNames: string[]
+  layerNames: string[],
+  crs: string
 ): string {
   const { url, title = 'WFS Layers' } = layerInfo
   const baseUrl = extractBaseUrl(url)
@@ -172,7 +181,7 @@ export function generateMultiLayerWfsQlr(
 
   // Add each layer as a child in the tree with providerKey and source
   layerNames.forEach((layerName, index) => {
-    const datasource = buildWfsDatasource(baseUrl, layerName)
+    const datasource = buildWfsDatasource(baseUrl, layerName, crs)
     const layerTreeLayer = innerGroup.ele('layer-tree-layer', {
       providerKey: 'WFS',
       source: datasource,
@@ -188,7 +197,7 @@ export function generateMultiLayerWfsQlr(
   const maplayers = root.ele('maplayers')
 
   layerNames.forEach((layerName, index) => {
-    const datasource = buildWfsDatasource(baseUrl, layerName)
+    const datasource = buildWfsDatasource(baseUrl, layerName, crs)
     addMaplayer(
       maplayers,
       layerIds[index],
@@ -225,18 +234,25 @@ function downloadQlrFile(
  */
 export async function openInQgis(
   layerInfo: OgcLayerInfo,
-  datasetTitle?: string
+  datasetTitle?: string,
+  crs: string = DEFAULT_PROJECTION
 ): Promise<void> {
   let qlrContent: string
 
   const format = layerInfo.format.toLowerCase()
 
+  // for wms, just generate a QLR with the metadata we have (layer name from resource title)
   if (format === 'wms') {
-    qlrContent = generateWmsQlr(layerInfo)
-  } else if (format === 'wfs') {
-    // If no typename is available, try to fetch it from GetCapabilities
+    qlrContent = generateWmsQlr(layerInfo, crs)
+  }
+  // wfs is more advanced, without a valid layer name we fallback on all layers
+  else if (format === 'wfs') {
+    // If no layerName is available, try to fetch it from GetCapabilities
+    // TODO: maybe should we validate the layerName from getCap in all cases
     if (!layerInfo.layerName) {
-      console.info('No WFS typename found, fetching GetCapabilities...')
+      console.info(
+        'No layerName for WFS specified, fetching GetCapabilities...'
+      )
 
       const baseUrl = extractBaseUrl(layerInfo.url)
       const layerNames = await fetchWfsLayerNames(baseUrl)
@@ -258,9 +274,9 @@ Pour ajouter cette couche dans QGIS :
       console.info(
         `Found ${layerNames.length} WFS layers, generating multi-layer QLR`
       )
-      qlrContent = generateMultiLayerWfsQlr(layerInfo, layerNames)
+      qlrContent = generateMultiLayerWfsQlr(layerInfo, layerNames, crs)
     } else {
-      qlrContent = generateWfsQlr(layerInfo)
+      qlrContent = generateWfsQlr(layerInfo, crs)
     }
   } else {
     console.warn(`Unsupported OGC service format: ${format}`)
