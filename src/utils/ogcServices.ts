@@ -15,7 +15,7 @@ export interface OgcLayerInfo {
 
 export interface OgcSearchResult {
   layerInfo: OgcLayerInfo | null
-  foundWfs: boolean // true if WFS found (best possible, no need to search more)
+  foundWfs: boolean
 }
 
 /**
@@ -57,9 +57,7 @@ export async function fetchWfsLayerNames(baseUrl: string): Promise<string[]> {
     }
 
     // Extract layer names from FeatureTypeList
-    // WFS uses <FeatureType><Name>namespace:layername</Name></FeatureType>
     const layerNames: string[] = []
-
     // Try different namespaces (WFS 1.0.0, 1.1.0, 2.0.0)
     const nameElements = xmlDoc.querySelectorAll(
       'FeatureType > Name, ' +
@@ -83,14 +81,9 @@ export async function fetchWfsLayerNames(baseUrl: string): Promise<string[]> {
 
 /**
  * Validates if a string could be a valid OGC layer name (WMS/WFS)
- * Valid layer names typically:
- * - Contain only alphanumeric, underscore, hyphen, colon, and dot characters
- * - Don't contain spaces or special characters
- * - Are relatively short (not long sentences)
- * - May follow pattern: namespace:layername or just layername
  */
 export function isValidLayerName(layerName: string): boolean {
-  if (!layerName || layerName.length === 0) {
+  if (layerName.length === 0) {
     return false
   }
 
@@ -104,8 +97,7 @@ export function isValidLayerName(layerName: string): boolean {
     return false
   }
 
-  // Check if it matches typical layer name pattern
-  // Allows: alphanumeric, underscore, hyphen, colon (for namespace), and dot
+  // Check if it matches typical layer name pattern (aka technical name)
   const layerNamePattern = /^[a-zA-Z0-9_\-.:]+$/
   return layerNamePattern.test(layerName)
 }
@@ -153,7 +145,6 @@ export function findOgcCompatibleResource(
 ): OgcSearchResult {
   let wmsCandidate: OgcLayerInfo | null = null
 
-  // First pass: look for WFS
   for (const resource of resources) {
     // Skip intranet URLs (not accessible outside government network)
     if (/\.rie\.gouv\.fr/i.test(resource.url)) {
@@ -165,12 +156,11 @@ export function findOgcCompatibleResource(
     if (format) {
       let layerName = undefined
 
-      // Try to extract layer name from URL parameters
+      // Try to extract layer name from URL parameters or resource.title
       const extractedName = extractLayerNameFromUrl(resource.url, format)
       if (extractedName && isValidLayerName(extractedName)) {
         layerName = extractedName
       } else if (resource.title && isValidLayerName(resource.title)) {
-        // Resource title might be a valid layer name
         layerName = resource.title
       }
 
