@@ -25,6 +25,8 @@ const CRS_DEFINITIONS = {
 type SupportedCrs = keyof typeof CRS_DEFINITIONS
 const DEFAULT_PROJECTION = 'EPSG:4326'
 
+type LAYER_TYPE = 'raster' | 'vector'
+
 /**
  * Generates a unique ID for QGIS layers
  */
@@ -41,7 +43,7 @@ function addMaplayer(
   datasource: string,
   provider: string,
   layerName: string,
-  type: 'raster' | 'vector',
+  type: LAYER_TYPE,
   crs: SupportedCrs
 ) {
   const crsDef = CRS_DEFINITIONS[crs]
@@ -70,7 +72,7 @@ function addMaplayer(
  */
 function generateQlr(
   layerInfo: OgcLayerInfo,
-  type: 'raster' | 'vector',
+  type: LAYER_TYPE,
   provider: string,
   datasource: string,
   crs: SupportedCrs
