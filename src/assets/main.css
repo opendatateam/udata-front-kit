@@ -321,3 +321,6 @@ Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2
 .fr-header__tools-links a.fr-btn:not([href]) {
   color: #757575;
 }
+
+/* DSFR Chart – components & visuals */
+@import '@gouvfr/dsfr-chart/css';
