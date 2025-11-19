@@ -1,26 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import type { OgcLayerInfo } from '../ogcServices'
+import { type OgcLayerInfo, parseXml } from '../ogcServices'
 import {
   generateMultiLayerWfsQlr,
   generateWfsQlr,
   generateWmsQlr
 } from '../qgis'
-
-/**
- * Helper to parse XML string into a DOM Document
- */
-function parseXml(xmlString: string): Document {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(xmlString, 'text/xml')
-
-  // Check for parsing errors
-  const parserError = doc.querySelector('parsererror')
-  if (parserError) {
-    throw new Error(`XML parsing failed: ${parserError.textContent}`)
-  }
-
-  return doc
-}
 
 describe('QGIS QLR Generation', () => {
   describe('generateWfsQlr', () => {
@@ -37,146 +21,31 @@ describe('QGIS QLR Generation', () => {
 
       // Verify it's a valid QLR document
       expect(doc.querySelector('qlr')).toBeTruthy()
-    })
 
-    it('should set correct provider for WFS', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'Test WFS Layer',
-        layerName: 'test:layer'
-      }
-
-      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check provider
       const provider = doc.querySelector('provider')
-      expect(provider?.textContent).toBe('WFS')
-    })
+      expect(provider?.textContent).toBe('wfs')
 
-    it('should set correct layer type for WFS (vector)', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'Test WFS Layer',
-        layerName: 'test:layer'
-      }
-
-      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check maplayer type
       const maplayer = doc.querySelector('maplayer')
       expect(maplayer?.getAttribute('type')).toBe('vector')
-    })
 
-    it('should include typename in datasource', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'Test WFS Layer',
-        layerName: 'test:layer'
-      }
-
-      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check layer id
       const datasource = doc.querySelector('datasource')
       expect(datasource?.textContent).toContain("typename='test:layer'")
-    })
 
-    it('should include base URL in datasource', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs?service=WFS&request=GetCapabilities',
-        format: 'wfs',
-        title: 'Test WFS Layer',
-        layerName: 'test:layer'
-      }
-
-      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
-      const datasource = doc.querySelector('datasource')
+      // Check base url in datasource (with quotes for WFS)
       // URL should be cleaned (GetCapabilities params removed)
       expect(datasource?.textContent).toContain("url='https://example.com/wfs'")
-    })
 
-    it('should set layer name from title', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'My WFS Layer',
-        layerName: 'test:layer'
-      }
-
-      const qlr = generateWfsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check layer name from title
       const layername = doc.querySelector('layername')
-      expect(layername?.textContent).toBe('My WFS Layer')
+      expect(layername?.textContent).toBe('Test WFS Layer')
     })
   })
 
   describe('generateWmsQlr', () => {
     it('should generate valid WMS QLR XML', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wms',
-        format: 'wms',
-        title: 'Test WMS Layer',
-        layerName: 'test_layer'
-      }
-
-      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
-      expect(doc.querySelector('qlr')).toBeTruthy()
-    })
-
-    it('should set correct provider for WMS', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wms',
-        format: 'wms',
-        title: 'Test WMS Layer',
-        layerName: 'test_layer'
-      }
-
-      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
-      const provider = doc.querySelector('provider')
-      expect(provider?.textContent).toBe('wms')
-    })
-
-    it('should set correct layer type for WMS (raster)', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wms',
-        format: 'wms',
-        title: 'Test WMS Layer',
-        layerName: 'test_layer'
-      }
-
-      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
-      const maplayer = doc.querySelector('maplayer')
-      expect(maplayer?.getAttribute('type')).toBe('raster')
-    })
-
-    it('should include layers parameter in datasource', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wms',
-        format: 'wms',
-        title: 'Test WMS Layer',
-        layerName: 'test_layer'
-      }
-
-      const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
-      const datasource = doc.querySelector('datasource')
-      expect(datasource?.textContent).toContain('layers=test_layer')
-    })
-
-    it('should include url parameter in datasource', () => {
       const layerInfo: OgcLayerInfo = {
         url: 'https://example.com/wms?service=WMS&request=GetCapabilities',
         format: 'wms',
@@ -187,9 +56,28 @@ describe('QGIS QLR Generation', () => {
       const qlr = generateWmsQlr(layerInfo, 'EPSG:4326')
       const doc = parseXml(qlr)
 
+      // Verify it's a valid QLR document
+      expect(doc.querySelector('qlr')).toBeTruthy()
+
+      // Check provider
+      const provider = doc.querySelector('provider')
+      expect(provider?.textContent).toBe('wms')
+
+      // Check maplayer type
+      const maplayer = doc.querySelector('maplayer')
+      expect(maplayer?.getAttribute('type')).toBe('raster')
+
+      // Check layer id
       const datasource = doc.querySelector('datasource')
-      // URL should be cleaned
+      expect(datasource?.textContent).toContain('layers=test_layer')
+
+      // Check base url in datasource (no quotes for WMS)
+      // URL should be cleaned (GetCapabilities params removed)
       expect(datasource?.textContent).toContain('url=https://example.com/wms')
+
+      // Check layer name from title
+      const layername = doc.querySelector('layername')
+      expect(layername?.textContent).toBe('Test WMS Layer')
     })
   })
 
@@ -201,82 +89,34 @@ describe('QGIS QLR Generation', () => {
         title: 'WFS Service'
       }
 
-      const layerNames = ['layer1', 'layer2', 'layer3']
+      const layerNames = ['layer1', 'layer2', 'namespace:layer3']
 
       const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
       const doc = parseXml(qlr)
 
+      // Verify it's a valid QLR document
       expect(doc.querySelector('qlr')).toBeTruthy()
-    })
 
-    it('should create layer-tree-layer for each layer', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'WFS Service'
-      }
-
-      const layerNames = ['layer1', 'layer2', 'layer3']
-
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check layers tree
       const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')
       expect(layerTreeLayers.length).toBe(3)
-    })
 
-    it('should create maplayer for each layer', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'WFS Service'
-      }
-
-      const layerNames = ['layer1', 'layer2', 'layer3']
-
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check map layers
       const maplayers = doc.querySelectorAll('maplayer')
       expect(maplayers.length).toBe(3)
-    })
 
-    it('should set correct typename for each layer', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'WFS Service'
-      }
-
-      const layerNames = ['namespace:layer1', 'namespace:layer2']
-
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check layer id for every layer
       const datasources = doc.querySelectorAll('datasource')
-      expect(datasources[0]?.textContent).toContain(
-        "typename='namespace:layer1'"
+      expect(datasources[0]?.textContent).toContain("typename='layer1'")
+      expect(datasources[1]?.textContent).toContain("typename='layer2'")
+      expect(datasources[2]?.textContent).toContain(
+        "typename='namespace:layer3'"
       )
-      expect(datasources[1]?.textContent).toContain(
-        "typename='namespace:layer2'"
-      )
-    })
 
-    it('should create a layer-tree-group with title', () => {
-      const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs',
-        format: 'wfs',
-        title: 'My WFS Service'
-      }
-
-      const layerNames = ['layer1']
-
-      const qlr = generateMultiLayerWfsQlr(layerInfo, layerNames, 'EPSG:4326')
-      const doc = parseXml(qlr)
-
+      // Check title in groups
       const groups = doc.querySelectorAll('layer-tree-group')
       const namedGroup = Array.from(groups).find(
-        (g) => g.getAttribute('name') === 'My WFS Service'
+        (g) => g.getAttribute('name') === 'WFS Service'
       )
       expect(namedGroup).toBeTruthy()
     })

@@ -19,6 +19,22 @@ export interface OgcSearchResult {
 }
 
 /**
+ * Helper to parse XML string into a DOM Document
+ */
+export function parseXml(xmlString: string): Document {
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(xmlString, 'text/xml')
+
+  // Check for parsing errors
+  const parserError = doc.querySelector('parsererror')
+  if (parserError) {
+    throw new Error(`XML parsing failed: ${parserError.textContent}`)
+  }
+
+  return doc
+}
+
+/**
  * Extracts base URL by removing GetCapabilities query parameters
  * WFS URLs often come as: https://example.com/wfs?request=GetCapabilities&service=WFS
  * This returns just the base URL: https://example.com/wfs
@@ -47,14 +63,7 @@ export async function fetchWfsLayerNames(baseUrl: string): Promise<string[]> {
     }
 
     const xmlText = await response.text()
-    const parser = new DOMParser()
-    const xmlDoc = parser.parseFromString(xmlText, 'text/xml')
-
-    // Check for parsing errors
-    const parserError = xmlDoc.querySelector('parsererror')
-    if (parserError) {
-      throw new Error('Failed to parse GetCapabilities XML')
-    }
+    const xmlDoc = parseXml(xmlText)
 
     // Extract layer names from FeatureTypeList
     const layerNames: string[] = []
