@@ -154,7 +154,8 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs fournies"
     const { gristApisAndDatasets } = mockApisOrDatasets(2)
 
     const { topicSolution } = mockSolution({
-      API_ou_datasets_integres: [],
+      // also shows some API_ou_datasets_integres, check we display both
+      API_ou_datasets_integres: gristApisAndDatasets.map((api) => api.id),
       APIs_ou_datasets_fournis: gristApisAndDatasets.map((api) => api.id),
       Recommande_pour_les_cas_d_usages: []
     })
