@@ -8,7 +8,8 @@ const allowedDomains = [
   'clientservices.googleapis.com',
   'www.google.com',
   'android.clients.google.com',
-  'safebrowsing.googleapis.com'
+  'safebrowsing.googleapis.com',
+  'accounts.google.com'
 ]
 
 Cypress.Commands.add('catchUnmockedRequests', () => {

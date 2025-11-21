@@ -20,18 +20,40 @@ interface RouteLocationQueryAsString
 }
 
 /**
+ * Converts route params from potential arrays to single strings
+ * Warning: this will discard additional values if param is an array
+ */
+const convertParamsToString = (
+  params: Record<string, string | string[]>
+): Record<string, string> => {
+  return Object.fromEntries(
+    Object.entries(params).map(([key, value]) => [
+      key,
+      Array.isArray(value) ? value[0] : value
+    ])
+  )
+}
+
+/**
  * Exposes first element from route params that could contain an array
  * Warning: this will discard the other values if any
  */
 export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
   const route = useRoute()
-  const params = Object.fromEntries(
-    Object.entries(route.params).map(([key, value]) => [
-      key,
-      Array.isArray(value) ? value[0] : value
-    ])
-  )
+  const params = convertParamsToString(route.params)
   return { ...route, params }
+}
+
+/**
+ * Reactive version of useRouteParamsAsString
+ * Returns a computed ref that updates when route params change
+ */
+export const useRouteParamsAsStringReactive = () => {
+  const route = useRoute()
+  return computed(() => ({
+    ...route,
+    params: convertParamsToString(route.params)
+  }))
 }
 
 /**

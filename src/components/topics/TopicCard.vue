@@ -9,6 +9,7 @@ import type { RouteLocationRaw } from 'vue-router'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
+import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useOwnerName } from '@/utils/owned'
@@ -28,6 +29,10 @@ const props = defineProps({
   hideDescription: {
     type: Boolean,
     default: false
+  },
+  asFactorReference: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -35,6 +40,8 @@ const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
 const { formatRelativeIfRecentDate } = useFormatDate()
 const { nbFactors } = useTopicFactors(topicRef)
+// FIXME: this can't be called when Card is out of page scope
+const { pageConf } = useCurrentPageConf()
 
 const ownerName = useOwnerName(props.topic)
 
@@ -49,14 +56,26 @@ const tags = useTags(props.pageKey, props.topic)
 <template>
   <article class="fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link">
     <div
-      v-if="topic.private"
+      v-if="topic.private && !asFactorReference"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
     </div>
+    <div
+      v-if="asFactorReference"
+      class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
+    >
+      <p class="fr-badge fr-badge--sm fr-badge--mention-grey fr-mr-1w">
+        <span class="fr-icon-plant-line fr-icon--sm" aria-hidden="true"></span>
+        {{ pageConf.labels.singular }}
+      </p>
+    </div>
     <div class="fr-grid-row">
       <div class="fr-col-12">
-        <ul v-if="tags.length > 0" class="fr-badges-group fr-mb-1w">
+        <ul
+          v-if="tags.length > 0 && !asFactorReference"
+          class="fr-badges-group fr-mb-1w"
+        >
           <li v-for="t in tags" :key="`${t.type}-${t.id}`">
             <TagComponent :tag="t" />
           </li>
@@ -109,7 +128,7 @@ const tags = useTags(props.pageKey, props.topic)
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
 
-    <div class="fr-grid-row flex-gap">
+    <div v-if="!asFactorReference" class="fr-grid-row flex-gap">
       <span class="fr-tag">
         <VIconCustom
           name="database-line"
