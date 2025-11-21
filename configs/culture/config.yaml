@@ -10,9 +10,9 @@ datagouvfr:
   oauth_client_id: 68b1ac79a751200a42f2ba19
 
 robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
+  disallow: ''
+  sitemap: '/sitemap.xml'
+  meta: 'index, follow'
 
 # UI customizations
 website:
