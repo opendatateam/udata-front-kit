@@ -48,6 +48,7 @@ export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
  * Reactive version of useRouteParamsAsString
  * Returns a computed ref that updates when route params change
  */
+// FIXME: unused
 export const useRouteParamsAsStringReactive = () => {
   const route = useRoute()
   return computed(() => ({
