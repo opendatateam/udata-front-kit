@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress'
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:4173',
+    baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:4173',
     supportFile: 'cypress/support/e2e.js',
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     video: false,
