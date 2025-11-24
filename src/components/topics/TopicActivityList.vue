@@ -84,7 +84,7 @@ const getFactorHash = (activity: Activity): string => {
 
 <template>
   <Suspense>
-    <ActivityListComponent :key="activityListKey" :id="topic.id">
+    <ActivityListComponent :id="topic.id" :key="activityListKey">
       <template #activity="{ activity }">
         <a
           v-if="isFactorActivity(activity)"
