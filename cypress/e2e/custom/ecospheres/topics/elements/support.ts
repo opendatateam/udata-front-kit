@@ -45,7 +45,8 @@ export const factorFactory = build<Factor>({
         extras: {
           ['ecospheres' as SiteId]: {
             uri: sequence(
-              (x) => `https://demo.data.gouv.fr/bouquets/referenced-topic-${x}`
+              (x) =>
+                `https://demo.ecologie.data.gouv.fr/bouquets/referenced-topic-${x}`
             ),
             availability: Availability.LOCAL_AVAILABLE,
             group: 'Test Group'
