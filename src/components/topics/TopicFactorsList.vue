@@ -19,8 +19,8 @@ import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
-import TopicFactorCard from './TopicFactorCard.vue'
 import TopicGroup from './TopicGroup.vue'
+import TopicFactorCard from './TopicInTopicCard.vue'
 
 const factors = defineModel({
   type: Array<ResolvedFactor>,
