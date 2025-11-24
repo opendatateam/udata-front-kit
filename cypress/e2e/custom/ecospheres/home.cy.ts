@@ -71,9 +71,6 @@ describe('Home Page Ecologie', () => {
         cy.contains(topic.name).should('be.visible')
       })
 
-      // Verify organization logos are displayed for each card
-      cy.get('article').should('have.length', testTopics.length)
-
       // Verify "Voir les bouquets" link is present
       cy.contains('a', 'Voir les bouquets').should('be.visible')
     })

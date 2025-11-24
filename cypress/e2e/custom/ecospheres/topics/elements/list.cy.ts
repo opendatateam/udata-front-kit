@@ -1,6 +1,7 @@
 import type { Factor, Topic } from '@/model/topic'
 import {
   createTestTopic,
+  createTestTopicWithElements,
   expandDisclosureGroup,
   factorFactory,
   mockTopicAndDiscussions,
@@ -88,21 +89,14 @@ describe('Topic Elements - Factor List Display', () => {
         traits: ['topic_reference']
       })
 
-      const mainTopic = createTestTopic({
-        slug: 'main-topic',
-        elements: {
-          total: 1
-        }
-      })
-
-      // Mock the main topic and the referenced topic
+      // Create and mock a test topic with this factor and referenced topic
+      const mainTopic = createTestTopicWithElements([topicRefFactor])
       mockTopicAndDiscussions(mainTopic, [topicRefFactor], [referencedTopic])
-
-      // Mock element calls - topic reference factors have element: null
       mockTopicElementsByClass(mainTopic.id, [], [topicRefFactor], [])
 
       visitTopic(mainTopic.slug)
 
+      // Wait for element=null mock, for referenced topic
       cy.wait('@getElementsNone')
 
       // Expand the group to see the factor
