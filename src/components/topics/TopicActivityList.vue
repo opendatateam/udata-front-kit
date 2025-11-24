@@ -3,6 +3,7 @@ import type { Activity } from '@/model/activity'
 import type { ResolvedFactor, Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { ActivityList as ActivityListComponent } from '@datagouv/components-next'
+import { ref, type Ref } from 'vue'
 
 const props = defineProps<{
   topic: Topic
@@ -10,6 +11,17 @@ const props = defineProps<{
 }>()
 
 const { pageConf } = useCurrentPageConf()
+
+const activityListKey: Ref<number> = ref(0)
+
+const refreshActivityList = () => {
+  // Force remount of ActivityListComponent by changing its key
+  activityListKey.value++
+}
+
+defineExpose({
+  refreshActivityList
+})
 
 const getActivityTranslation = (activity: Activity) => {
   const elementId = getElementId(activity)
@@ -72,7 +84,7 @@ const getFactorHash = (activity: Activity): string => {
 
 <template>
   <Suspense>
-    <ActivityListComponent :id="topic.id">
+    <ActivityListComponent :key="activityListKey" :id="topic.id">
       <template #activity="{ activity }">
         <a
           v-if="isFactorActivity(activity)"

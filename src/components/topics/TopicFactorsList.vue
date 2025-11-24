@@ -69,6 +69,10 @@ const {
 
 const { groupedFactors: filteredResults } = useGroups(filteredFactors)
 
+const emit = defineEmits<{
+  factorChanged: []
+}>()
+
 const handleRemoveFactor = async (group: string, index: number) => {
   const confirmMessage =
     'Etes-vous sûr de vouloir supprimer ce jeu de données ?'
@@ -83,6 +87,7 @@ const handleRemoveFactor = async (group: string, index: number) => {
     await elementStore.deleteElement(props.topicId, result.deletedFactor.id)
   }
   factors.value = result.factors
+  emit('factorChanged')
 }
 
 const handleRenameGroup = async (
@@ -346,6 +351,7 @@ defineExpose({
     v-model:groups-model="groupedFactors"
     :dataset-editorialization
     :topic-id="props.topicId"
+    @submit-modal="emit('factorChanged')"
   />
 </template>
 

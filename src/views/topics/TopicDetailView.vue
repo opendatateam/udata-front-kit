@@ -80,6 +80,14 @@ const { factors } = useTopicFactors(topic)
 const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
   null
 )
+const topicActivityListRef = ref<InstanceType<typeof TopicActivityList> | null>(
+  null
+)
+
+const handleFactorChanged = () => {
+  // Refresh activity list when factors are added, modified, or deleted
+  topicActivityListRef.value?.refreshActivityList()
+}
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -483,6 +491,7 @@ watch(
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
           :topic-id="topic.id"
+          @factor-changed="handleFactorChanged"
         />
         <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
@@ -513,6 +522,7 @@ watch(
         tab-id="tab-activity"
       >
         <TopicActivityList
+          ref="topicActivityListRef"
           :topic
           :factors
           @navigate-to-factor="handleNavigateToFactor"
