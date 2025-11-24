@@ -449,8 +449,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <!-- FIXME: this triggers another call to topic details API -->
-        <ReusesList model="topic" :object-id="topic.slug" />
+        <ReusesList model="topic" :object="topic" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
