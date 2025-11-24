@@ -18,8 +18,8 @@ import { isAvailable } from '@/utils/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify, fromMarkdown } from '@/utils'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
-import TopicCard from './TopicCard.vue'
 import TopicDatasetCard from './TopicDatasetCard.vue'
+import TopicFactorCard from './TopicFactorCard.vue'
 import TopicGroup from './TopicGroup.vue'
 
 const factors = defineModel({
@@ -308,12 +308,10 @@ watch(
                   :factor="factor"
                   :dataset-content="datasetsContent.get(factor.element.id)"
                 />
-                <TopicCard
+                <TopicFactorCard
                   v-else-if="getTopicForFactor(factor)"
                   :page-key="pageKey"
                   :topic="getTopicForFactor(factor)!"
-                  :as-factor-reference="true"
-                  :hide-description="true"
                   class="fr-my-2w"
                 />
                 <div v-else class="fr-grid-row">

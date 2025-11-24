@@ -58,4 +58,36 @@ describe('Home Page Ecologie', () => {
         })
     })
   })
+
+  describe('Bouquets Cards Display', () => {
+    it('should display bouquet cards in the discover section', () => {
+      cy.visit('/')
+
+      // Verify the "Les bouquets à découvrir" section is present
+      cy.contains('h2', 'Les bouquets à découvrir').should('be.visible')
+
+      // Verify that bouquet cards are displayed
+      testTopics.forEach((topic) => {
+        cy.contains(topic.name).should('be.visible')
+      })
+
+      // Verify organization logos are displayed for each card
+      cy.get('article').should('have.length', testTopics.length)
+
+      // Verify "Voir les bouquets" link is present
+      cy.contains('a', 'Voir les bouquets').should('be.visible')
+    })
+
+    it('should navigate to bouquet detail page when clicking on a card', () => {
+      cy.visit('/')
+
+      const firstTopic = testTopics[0]
+
+      // Click on the first bouquet card title
+      cy.contains('a', firstTopic.name).click()
+
+      // Verify navigation to the bouquet detail page
+      cy.url().should('include', `/bouquets/${firstTopic.slug}`)
+    })
+  })
 })

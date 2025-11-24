@@ -3,65 +3,41 @@ import {
   OrganizationNameWithCertificate,
   useFormatDate
 } from '@datagouv/components-next'
-import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
-import { stripFromMarkdown } from '@/utils'
+import { useCurrentPageConf } from '@/router/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useOwnerName } from '@/utils/owned'
-import { useSpatialCoverage } from '@/utils/spatial'
-import { useTags } from '@/utils/tags'
-import { useTopicFactors } from '@/utils/topic'
 
 const props = defineProps({
-  pageKey: {
-    type: String,
-    default: 'topics'
-  },
   topic: {
     type: Object as () => Topic,
     required: true
-  },
-  hideDescription: {
-    type: Boolean,
-    default: false
   }
 })
 
-const topicRef = toRef(props, 'topic')
-const spatialCoverage = useSpatialCoverage(topicRef)
 const { formatRelativeIfRecentDate } = useFormatDate()
-const { nbFactors } = useTopicFactors(topicRef)
+const { pageKey, pageConf } = useCurrentPageConf()
 
 const ownerName = useOwnerName(props.topic)
 
 const topicLink: RouteLocationRaw = {
-  name: `${props.pageKey}_detail`,
+  name: `${pageKey}_detail`,
   params: { item_id: props.topic.slug }
 }
-
-const tags = useTags(props.pageKey, props.topic)
 </script>
 
 <template>
   <article class="fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link">
     <div
-      v-if="topic.private"
-      class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
+      class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
     >
-      <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
-    </div>
-    <div class="fr-grid-row">
-      <div class="fr-col-12">
-        <ul v-if="tags.length > 0" class="fr-badges-group fr-mb-1w">
-          <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-            <TagComponent :tag="t" />
-          </li>
-        </ul>
-      </div>
+      <p class="fr-badge fr-badge--sm fr-badge--mention-grey fr-mr-1w">
+        <span class="fr-icon-plant-line fr-icon--sm" aria-hidden="true"></span>
+        {{ pageConf.labels.singular }}
+      </p>
     </div>
     <div
       class="fr-mt-2v fr-grid-row align-center flex-nowrap flex-gap owner-info"
@@ -97,9 +73,6 @@ const tags = useTags(props.pageKey, props.topic)
         </p>
       </div>
     </div>
-    <div v-if="!hideDescription" class="fr-grid-row description fr-mt-3v">
-      <p class="fr-mb-1v">{{ stripFromMarkdown(topic.description) }}</p>
-    </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
       <VIconCustom
@@ -108,34 +81,6 @@ const tags = useTags(props.pageKey, props.topic)
       />
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
-
-    <div class="fr-grid-row flex-gap">
-      <span class="fr-tag">
-        <VIconCustom
-          name="database-line"
-          class="fr-mr-1v"
-          size="lg"
-          align="text-top"
-        />
-        <span class="fr-mr-1v">
-          {{
-            `${nbFactors > 0 ? nbFactors : 'Aucune'} donnée${nbFactors > 1 ? 's' : ''}`
-          }}
-        </span>
-      </span>
-
-      <span v-if="spatialCoverage" class="fr-tag">
-        <VIconCustom
-          name="road-map-line"
-          class="fr-mr-1v"
-          size="lg"
-          align="text-top"
-        />
-        <span class="fr-mr-1v">
-          {{ spatialCoverage.name }}
-        </span>
-      </span>
-    </div>
   </article>
 </template>
 
