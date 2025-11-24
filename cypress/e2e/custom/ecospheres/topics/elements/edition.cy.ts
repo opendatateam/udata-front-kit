@@ -15,7 +15,7 @@ describe('Topic Elements - Factor Edition', () => {
 
   describe('Editing Existing Factors', () => {
     beforeEach(() => {
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
     })
 
