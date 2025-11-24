@@ -37,6 +37,8 @@ export type Recommandation = {
   Image: number[] | null
   Descriptions_des_API_et_datasets_utiles_fournis: number[]
   budget_slugs: string[]
+  URL_demande_d_acces_cas_usage: string
+  access_link_with_fallback: string
 }
 export type RecommandationRecord = GristRecord & {
   fields: Recommandation
@@ -52,6 +54,7 @@ export type ApiOrDataset = {
   Modifie_par: string
   Modifie_le: number
   Description_pour_la_recommandation: string
+  API_FranceConnectee: boolean
 }
 export type ApiOrDatasetRecord = GristRecord & {
   fields: ApiOrDataset
@@ -61,6 +64,7 @@ export type ApiOrDatasetUtiles = {
   Cas_d_usage: number
   Api_ou_dataset_utile_fourni_par_une_recommandation: number
   En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage: string
+  Ordre: number
   Modifie_par: string
   Modifie_le: number
 }
@@ -91,6 +95,7 @@ export type Solution = {
   Visible_sur_simplifions: boolean
   Recommande_pour_les_cas_d_usages: number[] | null
   Type_de_solution: string[]
+  URL_demande_d_acces: string
 }
 export type SolutionRecord = GristRecord & {
   fields: Solution

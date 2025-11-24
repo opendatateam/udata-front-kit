@@ -230,6 +230,19 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
 
 À chaque `git commit`, `husky` lance `lint-staged` qui formate les fichiers "staged" avec `prettier`.
 
+## Configurer Sentry pour surveiller les erreurs
+
+Après avoir créé votre projet (VueJs) sur sentry, voici la configuration à ajouter à votre fichier de config pour activer Sentry dans votre projet :
+
+```
+sentry:
+  domain_url: 'https://errors.data.gouv.fr/' # Ou tout autre domaine où vous hébergez votre sentry
+  dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38' # Vous trouverez ce DSN lors de l'initialisation de votre projet dans Sentry
+  environment: 'preprod' # Ou autre (par exemple 'production'), selon la branche de déploiement
+```
+
+D'autres éléments de configuration sont disponibles dans le fichier [src/model/config.ts](./src/model/config.ts)
+
 ## 👥 Auteurs
 
 - data.gouv.fr, Direction interministérielle du numérique.

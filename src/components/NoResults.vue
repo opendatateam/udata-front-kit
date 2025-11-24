@@ -14,7 +14,7 @@ defineProps({
     <div class="fr-col fr-grid-row fr-grid-row--gutters text-blue-400">
       <div class="fr-col-auto">
         <img
-          src="/search/france_with_magnifying_glass.svg"
+          src="/static/search/france_with_magnifying_glass.svg"
           alt=""
           loading="lazy"
           class="w-100"

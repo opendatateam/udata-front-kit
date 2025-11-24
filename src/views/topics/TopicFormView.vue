@@ -22,7 +22,7 @@ import {
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
-import { useTagsQuery } from '@/utils/tags'
+import { useFiltersApiParams } from '@/utils/filters'
 import { cloneTopic } from '@/utils/topic'
 import { useUniverseQuery } from '@/utils/universe'
 
@@ -43,18 +43,14 @@ const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
 // populate tags from filters in query string
-const { tags: selectedTags } = useTagsQuery(
-  pageKey || 'topics',
-  routeQuery,
-  true
-)
-const { tagsWithUniverse } = useUniverseQuery(pageKey, selectedTags)
+const { apiParams } = useFiltersApiParams(pageKey || 'topics', routeQuery, true)
+const mergedApiParams = useUniverseQuery(pageKey, apiParams)
 
 const topic: Ref<
   Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
 > = ref({
   private: true,
-  tags: tagsWithUniverse,
+  tags: mergedApiParams.tag || [],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
     [useSiteId()]: {}
