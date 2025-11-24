@@ -10,6 +10,7 @@ import TopicCard from '@/components/topics/TopicCard.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { useAsyncComponent } from '@/utils/component'
 
 const props = defineProps({
   query: {
@@ -52,7 +53,6 @@ const createUrl = computed(() => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  if (route.query.drafts) query.drafts = route.query.drafts
   router.push({ name: route.name, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
@@ -62,23 +62,19 @@ const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
   // get filters parameters from route
   return topicStore
-    .query({ ...route.query, ...props }, pageKey)
+    .query(
+      {
+        ...route.query,
+        ...props,
+        sort: route.query.sort || pageConf.default_sort
+      } as Parameters<typeof topicStore.query>[0],
+      pageKey
+    )
     .finally(() => loader.hide())
 }
 
 // load custom card component from router, or fallback to default
-const CardComponent = computed(() => {
-  const componentLoader = meta?.cardComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return TopicCard
-})
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, TopicCard)
 
 const goToPage = (page: number) => {
   router.push({
@@ -118,7 +114,7 @@ defineExpose({
       </h2>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <SelectComponent
-          :model-value="routeQuery.sort || '-created'"
+          :model-value="routeQuery.sort || pageConf.default_sort || '-created'"
           label="Trier par :"
           :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
           :options="[

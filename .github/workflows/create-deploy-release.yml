@@ -16,6 +16,7 @@ on:
           - defis
           - hackathon
           - simplifions
+          - culture
       environment:
         description: 'Environment to deploy to'
         required: true

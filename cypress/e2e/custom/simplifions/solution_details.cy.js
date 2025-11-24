@@ -4,10 +4,11 @@ import {
   mockSolution
 } from '../../../support/factories/custom/simplifions/simplifions_mocks'
 
+import './support'
+
 describe('Simplifions Solutions Details Page', () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { topicSolution } = mockSolution(
       {
@@ -53,12 +54,45 @@ describe('Simplifions Solutions Details Page', () => {
       cy.get(link.attr('href')).should('be.visible')
     })
   })
+
+  it('should have a functional site link', () => {
+    cy.get('.solution-links .fr-btn').should('have.length', 1)
+
+    cy.get('.solution-links .fr-btn:first').should(
+      'contain.text',
+      'Site de la solution'
+    )
+  })
+
+  describe('with an access link in grist data', () => {
+    beforeEach(() => {
+      const { topicSolution } = mockSolution({
+        API_ou_datasets_integres: [],
+        APIs_ou_datasets_fournis: [],
+        Recommande_pour_les_cas_d_usages: [],
+        URL_demande_d_acces: 'https://example.com'
+      })
+
+      cy.visit(`/solutions/${topicSolution.slug}`)
+    })
+
+    it('should have a functional access link', () => {
+      cy.get('.solution-links .fr-btn').should('have.length', 2)
+      cy.get('.solution-links .fr-btn:first').should(
+        'contain.text',
+        'Site de la solution'
+      )
+      cy.get('.solution-links .fr-btn:last').should(
+        'contain.text',
+        "Demande d'accès"
+      )
+    })
+  })
 })
 
 describe("Simplifions Solutions Details Page with cas d'usages", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristCasUsage } = mockCasUsage()
 
@@ -91,8 +125,7 @@ describe("Simplifions Solutions Details Page with cas d'usages", () => {
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs utilisées", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristApisAndDatasets } = mockApisOrDatasets(2)
 
@@ -116,13 +149,13 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs utilisée
 
 describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs fournies", () => {
   beforeEach(() => {
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
 
     const { gristApisAndDatasets } = mockApisOrDatasets(2)
 
     const { topicSolution } = mockSolution({
-      API_ou_datasets_integres: [],
+      // also shows some API_ou_datasets_integres, check we display both
+      API_ou_datasets_integres: gristApisAndDatasets.map((api) => api.id),
       APIs_ou_datasets_fournis: gristApisAndDatasets.map((api) => api.id),
       Recommande_pour_les_cas_d_usages: []
     })

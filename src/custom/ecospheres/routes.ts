@@ -1,4 +1,5 @@
 import {
+  useDataserviceSearchPageRoutes,
   useDatasetSearchPageRoutes,
   useTopicAdminPagesRoutes,
   useTopicSearchPageRoutes
@@ -22,9 +23,11 @@ export const routes: RouteRecordRaw[] = [
   },
   useDatasetSearchPageRoutes({
     pageKey: 'datasets',
-    metaTitle: 'Données',
-    filtersComponent: async () =>
-      await import('./components/datasets/EcospheresDatasetFilters.vue')
+    metaTitle: 'Données'
+  }),
+  useDataserviceSearchPageRoutes({
+    pageKey: 'dataservices',
+    metaTitle: 'API'
   }),
   useDatasetSearchPageRoutes({
     pageKey: 'indicators',

@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress'
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:4173',
+    baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:4173',
     supportFile: 'cypress/support/e2e.js',
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     video: false,
@@ -23,6 +23,14 @@ export default defineConfig({
         // If no site ID is set, exclude all custom site tests
         config.excludeSpecPattern = 'cypress/e2e/custom/**/*.cy.{js,jsx,ts,tsx}'
       }
+
+      // use cy.task('log', 'message') to log to terminal
+      on('task', {
+        log(message) {
+          console.log(message)
+          return null
+        }
+      })
 
       return config
     }
