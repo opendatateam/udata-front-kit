@@ -36,7 +36,6 @@ const convertParamsToString = (
 
 /**
  * Exposes first element from route params that could contain an array
- * Warning: this will discard the other values if any
  */
 export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
   const route = useRoute()
@@ -48,7 +47,6 @@ export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
  * Reactive version of useRouteParamsAsString
  * Returns a computed ref that updates when route params change
  */
-// FIXME: unused
 export const useRouteParamsAsStringReactive = () => {
   const route = useRoute()
   return computed(() => ({

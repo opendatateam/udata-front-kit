@@ -24,7 +24,11 @@ import {
 } from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
-import { useCurrentPageConf, useRouteMeta } from '@/router/utils'
+import {
+  useCurrentPageConf,
+  useRouteMeta,
+  useRouteParamsAsStringReactive
+} from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -37,10 +41,10 @@ import { useExtras, useTopicFactors } from '@/utils/topic'
 const props = defineProps<TopicPageRouterConf>()
 
 const router = useRouter()
-const route = useRoute()
 const meta = useRouteMeta()
 const store = useTopicStore()
 const loading = useLoading()
+const route = useRouteParamsAsStringReactive()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
@@ -200,12 +204,9 @@ useHead({
 })
 
 watch(
-  () => {
-    const itemId = route.params.item_id
-    return Array.isArray(itemId) ? itemId[0] : itemId
-  },
+  () => route.value?.params.item_id,
   (itemId) => {
-    if (!itemId || typeof itemId !== 'string') return
+    if (!itemId) return
     const loader = loading.show({ enforceFocus: false })
     store
       .load(itemId, { toasted: false, redirectNotFound: true })
