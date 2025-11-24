@@ -25,7 +25,7 @@
           :show-budget="false"
         />
 
-        <ul class="fr-my-4w">
+        <ul class="fr-mt-4w">
           <li>
             <strong>Fournisseur : </strong>
             <HumanReadableList
@@ -50,6 +50,32 @@
             {{ solution.Prix ? solution.Prix : 'Non renseigné' }}
           </li>
         </ul>
+
+        <ul class="solution-links fr-btns-group fr-btns-group--inline fr-my-4w">
+          <li v-if="solution.Site_internet">
+            <a
+              rel="noopener noreferrer"
+              :href="solution.Site_internet"
+              class="fr-btn fr-btn--secondary"
+              target="_blank"
+            >
+              Site de la solution
+            </a>
+          </li>
+          <li v-if="solution.URL_demande_d_acces">
+            <a
+              rel="noopener noreferrer"
+              :href="solution.URL_demande_d_acces"
+              class="fr-btn"
+              target="_blank"
+            >
+              Demande d'accès
+            </a>
+          </li>
+        </ul>
+        <p v-if="!solution.Site_internet" class="fr-text--sm">
+          <i>Aucun lien vers un site officiel actuellement.</i>
+        </p>
       </div>
 
       <div class="fr-col-12 fr-col-md-4">
@@ -163,16 +189,13 @@
       </h2>
 
       <div>
-        <p>
-          <strong>
-            <span
-              aria-hidden="true"
-              class="fr-icon-success-fill icon-green"
-            ></span>
-            Cette solution permet :
-          </strong>
-        </p>
-
+        <h3 class="fr-text--md fr-mt-2w">
+          <span
+            aria-hidden="true"
+            class="fr-icon-success-fill icon-green"
+          ></span>
+          Cette solution permet :
+        </h3>
         <p
           v-if="solution.Cette_solution_permet"
           v-html="fromMarkdown(solution.Cette_solution_permet)"
@@ -184,13 +207,10 @@
       </div>
 
       <div>
-        <p>
-          <strong>
-            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-            Cette solution ne permet pas :
-          </strong>
-        </p>
-
+        <h3 class="fr-text--md fr-mt-2w">
+          <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
+          Cette solution ne permet pas :
+        </h3>
         <p
           v-if="solution.Cette_solution_ne_permet_pas"
           v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas)"
@@ -200,20 +220,6 @@
           <a href="#modification-contenu">✍️ Proposer un contenu</a>.
         </p>
       </div>
-
-      <p v-if="solution.Site_internet">
-        <a
-          rel="noopener noreferrer"
-          :href="solution.Site_internet"
-          class="fr-btn fr-my-4w"
-          target="_blank"
-        >
-          Consulter le site de la solution
-        </a>
-      </p>
-      <p v-else class="fr-text--sm">
-        <i>Aucun lien vers un site officiel actuellement.</i>
-      </p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
@@ -247,13 +253,13 @@
           :key="apiOrDataset.UID_datagouv"
           class="fr-col-12 fr-py-0 fr-mb-2w"
         >
-          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
+          <SimplifionsDataApi :api-or-dataset="apiOrDataset" title-tag="h3" />
         </li>
       </ul>
     </div>
 
     <div
-      v-else-if="solution.APIs_ou_datasets_fournis?.length"
+      v-if="solution.APIs_ou_datasets_fournis?.length"
       id="donnees-api-fournies"
     >
       <h2 class="colored-title fr-h2 fr-mt-8w">Données et API fournies</h2>
@@ -263,7 +269,7 @@
           :key="apiOrDataset.UID_datagouv"
           class="fr-col-12 fr-py-0 fr-mb-2w"
         >
-          <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
+          <SimplifionsDataApi :api-or-dataset="apiOrDataset" title-tag="h3" />
         </li>
       </ul>
     </div>
@@ -358,9 +364,6 @@ h2.colored-title {
   padding: 2px 4px;
   display: inline-block;
 }
-h3 {
-  color: #616161;
-}
 .example-image {
   display: inline-block;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -393,5 +396,11 @@ h3 {
 .bloc-modifications {
   background-color: #f1f1f1;
   padding: 1rem;
+}
+
+/* Markdown spacing fix for all ul that are inside a p, and right after a p*/
+:deep(p p + ul) {
+  margin-top: -1rem !important;
+  margin-bottom: 1rem !important;
 }
 </style>

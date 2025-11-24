@@ -6,7 +6,7 @@ import {
 import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, defineAsyncComponent, inject, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -33,6 +33,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useAsyncComponent } from '@/utils/component'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -57,12 +58,9 @@ const setAccessibilityProperties = inject(
 const description = computed(() => descriptionFromMarkdown(topic))
 
 // Dynamically load the custom description component if it exists
-const customDescriptionComponent = computed(() => {
-  if (meta.descriptionComponent) {
-    return defineAsyncComponent(meta.descriptionComponent)
-  }
-  return null
-})
+const customDescriptionComponent = useAsyncComponent(
+  () => meta.descriptionComponent
+)
 
 const userStore = useUserStore()
 const canEdit = computed(() => {
@@ -177,23 +175,6 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateFactors = () => {
-  if (topic.value == null) {
-    throw Error('Trying to update null topic')
-  }
-  const loader = useLoading().show()
-  store
-    .update(topic.value.id, {
-      // send the tags or payload will be rejected
-      tags: topic.value.tags,
-      elements: factors.value.map(
-        // unresolved will remove "local" properties
-        (element) => element.unresolved()
-      )
-    })
-    .finally(() => loader.hide())
-}
-
 const metaDescription = (): string | undefined => {
   return topic.value?.description ?? ''
 }
@@ -248,7 +229,7 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <GenericContainer v-if="topic">
+  <GenericContainer v-if="topic" class="tabs-height-fix">
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
@@ -445,7 +426,7 @@ watch(
           v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
-          @update-factors="onUpdateFactors"
+          :topic-id="topic.id"
         />
         <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
@@ -486,14 +467,5 @@ watch(
 }
 .owner-avatar {
   margin-bottom: -6px;
-}
-/*
-FIXME: magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
-*/
-:deep(.fr-tabs) {
-  height: auto;
-}
-:deep(.fr-tabs)::before {
-  height: calc(var(--tabs-height) - 47px);
 }
 </style>

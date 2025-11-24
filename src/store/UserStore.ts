@@ -132,8 +132,8 @@ export const useUserStore = defineStore('user', {
     /**
      * Has current user edit permissions on given object?
      */
-    hasEditPermissions<T>(object: WithOwned<T> | null): boolean {
-      if (object === null) return false
+    hasEditPermissions<T>(object: WithOwned<T> | null | undefined): boolean {
+      if (object == null) return false
       if (!this.loggedIn || this.data === undefined) return false
       if (this.isAdmin) return true
       if (object.owner != null) {

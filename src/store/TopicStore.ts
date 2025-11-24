@@ -6,8 +6,7 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { useCheckboxQuery } from '@/utils/filters'
-import { useTagsQuery } from '@/utils/tags'
+import { usePageQueryParams } from '@/utils/filters'
 import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
@@ -61,28 +60,13 @@ export const useTopicStore = defineStore('topic', {
     async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
       const { query, ...queryArgs } = args
 
-      // extract tags and checkbox filters from query args
-      const { extraArgs: argsAfterTagQuery, tags } = useTagsQuery(
-        pageKey || 'topics',
-        queryArgs
-      )
-      const { extraArgs: refinedFilterArgs, checkboxArgs } = useCheckboxQuery(
-        pageKey || 'topics',
-        argsAfterTagQuery
-      )
-      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
-        pageKey || 'topics',
-        tags
-      )
+      const params = usePageQueryParams(pageKey || 'topics', queryArgs)
 
       const results = await topicsAPI.list({
         params: {
           q: query,
-          tag: tagsWithUniverse,
           page_size: config.website.pagination_sizes.topics_list,
-          ...universeQuery,
-          ...checkboxArgs,
-          ...refinedFilterArgs
+          ...params
         },
         authenticated: true
       })
@@ -105,18 +89,14 @@ export const useTopicStore = defineStore('topic', {
      * Load all topics from universe by following pagination links
      */
     async loadTopicsForUniverse(pageKey?: string): Promise<Topic[]> {
-      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
-        pageKey || 'topics',
-        []
-      )
+      const mergedApiParams = useUniverseQuery(pageKey || 'topics', {})
       // make sure our user has registerd its permissions
       await useUserStore().waitForStoreInit()
       let response = await topicsAPI.list({
         params: {
-          tag: tagsWithUniverse,
           include_private: 'yes',
           sort: '-last_modified',
-          ...universeQuery
+          ...mergedApiParams
         },
         authenticated: true
       })

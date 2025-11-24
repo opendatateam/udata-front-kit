@@ -19,7 +19,7 @@ website:
   title: 'defis.data.gouv.fr'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/logos/defis-logo.svg'
+  service_logo: '/static/logos/defis-logo.svg'
   badge:
     display: true
     text: 'BETA'
@@ -222,11 +222,11 @@ website:
       - title: 'Open Data University'
         id: 'opendatauniversity'
         route: '/opendatauniversity'
-        url: '/defis/pages/opendatauniversity.md'
+        url: '/static/defis/pages/opendatauniversity.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/defis/pages/accessibility.md'
+        url: '/static/defis/pages/accessibility.md'
   show_quality_component: true
   show_dataset_metadata_panel: false
   oauth_option: true
@@ -284,7 +284,7 @@ pages:
     list_all: true
     universe_query:
       tag: defisdatagouvfr
-    tag_prefix: defisdatagouvfr
+    filter_prefix: defisdatagouvfr
     title: Défis
     breadcrumb_title: Défis
     labels:
@@ -309,7 +309,7 @@ pages:
         id: saison
         type: select
         color: green-emeraude
-        use_tag_prefix: true
+        use_filter_prefix: true
         form:
           required: true
         values:
@@ -325,7 +325,7 @@ pages:
   datasets:
     list_all: false
     universe_query:
-    tag_prefix:
+    filter_prefix:
     title:
     breadcrumb_title: Données
     labels:

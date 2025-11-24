@@ -35,14 +35,21 @@ export interface PageFilterFormConf {
 export interface PageFilterConf {
   name: string
   id: string
-  type: 'spatial_zone' | 'spatial_granularity' | 'select' | 'checkbox'
+  type:
+    | 'spatial_zone'
+    | 'spatial_granularity'
+    | 'select'
+    | 'checkbox'
+    | 'organization'
   child: string | null
   color: string | null
   default_option: string | null
   default_value: string | boolean | null
-  use_tag_prefix: boolean | null
+  use_filter_prefix: boolean | null
+  api_param: string | null
   form: PageFilterFormConf | null
   authenticated: boolean | null
+  hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
 
@@ -67,13 +74,14 @@ export type PageLabelsConf = {
 
 export type PageConf = {
   list_all: boolean
-  tag_prefix: string | null
+  filter_prefix: string | null
   universe_query: PageUniverseQueryConf | null
   title: string
   breadcrumb_title: string | null
   labels: PageLabelsConf
   search: PageSearchConf
   banner: PageBannerConf | null
+  default_sort: string | null
   resources_tabs: {
     discussions: {
       display: boolean
@@ -101,4 +109,15 @@ export type DatasetsConf = {
   } | null
   harvest_backends_quality_warning: string[]
   show_extended_information_panel: boolean
+}
+
+// https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
+export type SentryConfig = {
+  dsn: string // Mandatory to send errors to Sentry
+  domain_url?: string // Mandatory to send sourcemaps to Sentry. This is not used in sentry options, it is only used in vite.config.mts to send sourcemaps to the correct domain.
+  environment?: string
+  tracePropagationTargets?: RegExp[]
+  tracesSampleRate?: number
+  replaysSessionSampleRate?: number
+  replaysOnErrorSampleRate?: number
 }

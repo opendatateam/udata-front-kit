@@ -8,6 +8,7 @@ shell.nix
 src/playground
 cypress/screenshots
 cypress/downloads
+.ddev/
 
 # vim swap files
 *.swp
@@ -19,3 +20,4 @@ components.d.ts
 .actrc
 .secrets
 .github/**/act*.json
+

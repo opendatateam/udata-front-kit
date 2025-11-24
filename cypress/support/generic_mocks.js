@@ -2,8 +2,13 @@ const allowedDomains = [
   'localhost',
   '127.0.0.1',
   // These domains are allowed for when running tests with Chrome
+  // it's eye opening to maintain this list... 🕵️‍♀️
   'content-autofill.googleapis.com',
-  'android.clients.google.com'
+  'optimizationguide-pa.googleapis.com',
+  'clientservices.googleapis.com',
+  'www.google.com',
+  'android.clients.google.com',
+  'safebrowsing.googleapis.com'
 ]
 
 Cypress.Commands.add('catchUnmockedRequests', () => {

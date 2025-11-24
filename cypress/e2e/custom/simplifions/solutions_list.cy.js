@@ -1,8 +1,9 @@
 import { topicSolutionFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import './support'
 
 describe('Simplifions Solutions Page', () => {
   beforeEach(() => {
-    cy.mockGristImages()
+    cy.baseMocksForSimplifions()
     cy.mockDatagouvObjectList('topics', topicSolutionFactory.many(11))
     cy.visit('/solutions')
   })
@@ -50,7 +51,7 @@ describe('Simplifions Solutions Page', () => {
     cy.expectActionToCallApi(
       () => cy.get('input#search-topic').type('Démarches simplifiées'),
       'topics',
-      'q=D%C3%A9marches+simplifi%C3%A9es&tag=simplifions-v2-solutions'
+      /q=D%C3%A9marches\+simplifi%C3%A9es.*tag=simplifions-v2-solutions/
     )
   })
 
@@ -115,7 +116,7 @@ describe('Simplifions Solutions Page', () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-v2-solutions&.+&include_private=true/
+        /tag=simplifions-v2-solutions.*include_private=true/
       )
     })
   })
