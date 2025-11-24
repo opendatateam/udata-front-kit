@@ -42,6 +42,9 @@ describe('Topic Elements - Deep Linking', () => {
       cy.get('[role="tablist"]')
         .find('[role="tab"][aria-selected="true"]')
         .should('contain', 'Données')
+
+      // Check the hash has been removed from the URL
+      cy.url().should('not.include', `#factor-${factorId}`)
     })
 
     it('should highlight the target factor temporarily', () => {
