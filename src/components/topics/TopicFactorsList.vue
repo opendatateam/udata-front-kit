@@ -69,9 +69,9 @@ const {
 const { groupedFactors: filteredResults } = useGroups(filteredFactors)
 
 const getTopicSlugFromUri = (uri: string): string | null => {
-  const currentDomain = window.location.origin
-  const pattern = new RegExp(`${currentDomain}/${pageKey}/([^/]+)`)
-  const match = uri.match(pattern)
+  const baseUrl = config.website.meta?.canonical_url
+  if (!baseUrl) return null
+  const match = uri.match(new RegExp(`${baseUrl}/${pageKey}/([^/]+)`))
   return match ? match[1] : null
 }
 
