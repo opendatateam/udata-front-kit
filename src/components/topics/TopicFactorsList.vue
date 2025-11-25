@@ -7,9 +7,10 @@ import FactorEditModal, {
   type FactorEditModalType
 } from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
-import { type ResolvedFactor } from '@/model/topic'
+import { type ResolvedFactor, type Topic } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
+import { useTopicStore } from '@/store/TopicStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
@@ -19,6 +20,7 @@ import { basicSlugify, fromMarkdown } from '@/utils'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
+import TopicFactorCard from './TopicInTopicCard.vue'
 
 const factors = defineModel({
   type: Array<ResolvedFactor>,
@@ -42,9 +44,11 @@ const props = defineProps({
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
+const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
 
-const { pageConf } = useCurrentPageConf()
+const { pageConf, pageKey } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
+const topicStore = useTopicStore()
 
 const {
   groupedFactors,
@@ -63,6 +67,19 @@ const {
 } = useFactorsFilter(factors)
 
 const { groupedFactors: filteredResults } = useGroups(filteredFactors)
+
+const getTopicSlugFromUri = (uri: string): string | null => {
+  const baseUrl = config.website.meta?.canonical_url
+  if (!baseUrl) return null
+  const match = uri.match(new RegExp(`${baseUrl}/${pageKey}/([^/]+)`))
+  return match ? match[1] : null
+}
+
+const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
+  if (!factor.id) return null
+  const entry = topicsContent.value.get(factor.id)
+  return entry?.topic || null
+}
 
 const handleRemoveFactor = async (group: string, index: number) => {
   const confirmMessage =
@@ -143,6 +160,33 @@ const loadDatasetsContent = () => {
   })
 }
 
+/**
+ * Loads the "local" topics associated to the factors via siteExtras.uri
+ */
+const loadTopicsContent = () => {
+  factors.value.forEach((factor) => {
+    if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
+      const slug = getTopicSlugFromUri(factor.siteExtras.uri)
+      if (slug && !topicsContent.value.has(factor.id)) {
+        topicStore
+          .load(slug, { toasted: false })
+          .then((topic) => {
+            if (topic && factor.id) {
+              topicsContent.value.set(factor.id, { slug, topic })
+            }
+          })
+          .catch((err) => {
+            if (isNotFoundError(err)) {
+              factor.remoteDeleted = true
+            } else {
+              toastHttpError(err)
+            }
+          })
+      }
+    }
+  })
+}
+
 const showTOC = computed(() => {
   /*
   hide the table of content if "NoGroup" is the only group and results are not 0
@@ -164,9 +208,13 @@ const editFactor = (factor: ResolvedFactor, index: number, group: string) => {
 }
 
 watch(
-  () => factors.value.map((factor) => factor.element?.id).filter(Boolean),
+  () =>
+    factors.value
+      .map((factor) => factor.element?.id || factor.siteExtras?.uri)
+      .filter(Boolean),
   () => {
     loadDatasetsContent()
+    loadTopicsContent()
   },
   { immediate: true }
 )
@@ -260,7 +308,13 @@ watch(
                   :factor="factor"
                   :dataset-content="datasetsContent.get(factor.element.id)"
                 />
-                <div class="fr-grid-row">
+                <TopicFactorCard
+                  v-else-if="getTopicForFactor(factor)"
+                  :page-key="pageKey"
+                  :topic="getTopicForFactor(factor)!"
+                  class="fr-my-2w"
+                />
+                <div v-else class="fr-grid-row">
                   <a
                     v-if="
                       !isAvailable(factor.siteExtras.availability) && !isEdit
@@ -271,7 +325,7 @@ watch(
                     Aidez-nous à trouver la donnée</a
                   >
                   <a
-                    v-if="factor.siteExtras.uri && !factor.element?.id"
+                    v-else-if="factor.siteExtras.uri"
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="factor.siteExtras.uri as string"
                     target="_blank"
@@ -340,5 +394,11 @@ details[open] summary::marker {
 }
 :deep(search) {
   margin-inline-start: auto;
+}
+
+/* Intensify contrast for topic and dataset cards badges */
+:deep(.fr-badge--mention-grey) {
+  background-color: #cecece;
+  color: var(--text-default-grey) !important;
 }
 </style>
