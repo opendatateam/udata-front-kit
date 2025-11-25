@@ -3,6 +3,12 @@
 # used as extras key
 site_id: ecospheres
 
+# sentry:                                     # optional, add only if you want to monitor errors with sentry
+#   dsn: {string}                             # the DSN of the sentry project
+#   domain_url: {string}                      # the domain to send sourcemaps to
+#   environment: {string}                     # the environment to send to sentry (production, preprod, etc.)
+#   ... For other sentry options, see ./src/model/config.ts
+
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://www.data.gouv.fr
@@ -21,16 +27,20 @@ robots:
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
+  meta:
+    keywords:
+    description:
+    canonical_url:
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/ecospheres-logo.svg'
+  service_logo: '/static/logos/ecospheres-logo.svg'
   badge:
     display: true
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   logo_operator:
-    src: '/logos/ecospheres-logo.svg'
+    src: '/static/logos/ecospheres-logo.svg'
     show_in_header: false
     footer:
       width: '40px'
@@ -58,6 +68,8 @@ website:
         route: datasets
       - text: Rechercher {} dans les <strong>indicateurs</strong>
         route: indicators
+      - text: Rechercher {} dans les <strong>API</strong>
+        route: dataservices
       - text: Rechercher {} dans les <strong>bouquets</strong>
         route: bouquets
   search_bar:
@@ -106,6 +118,8 @@ website:
       to: /datasets
     - text: Indicateurs
       to: /indicators
+    - text: API
+      to: /dataservices
     - text: Bouquets
       to: /bouquets
     - text: Organisations
@@ -120,15 +134,15 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/ecospheres/pages/about.md'
+        url: '/static/ecospheres/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/ecospheres/pages/accessibility.md'
+        url: '/static/ecospheres/pages/accessibility.md'
       - title: "Conditions générales d'utilisation"
         id: 'terms'
         route: '/terms'
-        url: '/ecospheres/pages/terms.md'
+        url: '/static/ecospheres/pages/terms.md'
   sitemap:
     - name: Accueil
       path: /
@@ -136,13 +150,15 @@ website:
       path: /bouquets
     - name: Jeux de données
       path: /datasets
+    - name: API
+      path: /dataservices
     - name: Indicateurs
       path: /indicators
     - name: Organisations
       path: /organizations
     - name: À propos
       path: /about
-    - name: Conditions générales d’utilisation
+    - name: Conditions générales d'utilisation
       path: /terms
     - name: Accessibilité
       path: /accessibility
@@ -170,6 +186,7 @@ website:
       dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
+      - CSW-DCAT
       - CSW-ISO-19139
     show_extended_information_panel: true
   # TODO: better place for that?
@@ -178,7 +195,10 @@ website:
       everyone: true
       authorized_users:
 
-organizations: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-prod.json
+organizations:
+  datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-datasets-prod.json
+  dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-dataservices-prod.json
+  bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-bouquets-prod.json
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -204,9 +224,10 @@ definitions: &definitions
 #   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
 #     list_all: {bool}              # whether to have a list view or not
 #     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
-#     tag_prefix: {string}          # prefix for tags on data.gouv.fr
+#     filter_prefix: {string}       # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
 #     title: {string}               # title for the list page
 #     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
+#     default_sort: {string}        # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
 #     labels:                       # how to call the object that is displayed by the page
 #       singular: {string}          # singular name for the object
 #       plural: {string}            # plural name for the object
@@ -228,13 +249,15 @@ definitions: &definitions
 #     filters:                      # list of filters for this {page_id}
 #       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}              # id of the filter
-#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox)
+#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox | organization)
 #         child: {string?}          # id of the child filter (optional)
 #         color: {string}           # color of the filter's tag
-#         use_tag_prefix: {bool}    # whether to use {tag_prefix}-{item.id} when building value tag
+#         use_filter_prefix: {bool}    # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
+#         api_param: {string?}      # API query parameter name to use (optional, defaults to "tag")
 #         default_option: {string?} # default option for the filter (optional)
 #         default_value: {string?}  # default value for the filter (optional)
 #         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
+#         hide_on_list: {bool?}     # do not display filter on list page (optional, defaults to false)
 #         values:                   # list of values for this filter
 #           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}        # name of the value
@@ -245,7 +268,7 @@ pages:
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
-    tag_prefix:
+    filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
     labels:
@@ -255,11 +278,9 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-      title: Un guichet unique pour l'accès aux données environnementales
+      title: Un guichet national pour l'accès aux données de la transition écologique
       content: |
-        En collaboration étroite avec <b>data.gouv</b><i>.fr</i>, les plateformes de données territoriales et les plateformes thématiques, l'Ecolab du Commissariat Général au Développement Durable oeuvre à la centralisation des données utiles à l'appui des politiques publiques du pôle ministériel. <i>ecologie.</i><b>data.gouv</b><i>.fr</i> expose dans cet onglet les données publiées par des organisations à caractère environnemental telles que les données diffusées par les directions générales, les établissements publics et les services déconcentrés des ministères concernés. Un travail de suivi de leurs métadonnées est entrepris afin d'en garantir un accès optimal.
-
-        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+        Le catalogue offre un accès centralisé à des données actualisées produites par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
@@ -270,11 +291,15 @@ pages:
         display: true
     editable: true
     filters:
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
         type: select
-        use_tag_prefix: false
+        use_filter_prefix: false
         values:
           - id: adresses
             name: Adresses
@@ -344,12 +369,42 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
+  # DATASERVICES
+  dataservices:
+    list_all: true
+    universe_query:
+      topic: 65e9aa6cb5c809c30c70ee02
+    filter_prefix:
+    title: API
+    breadcrumb_title: API
+    labels:
+      singular: API
+      plural: APIs
+      extended: API
+    search:
+      input: Rechercher une API
+    banner:
+      title: Des interfaces privilégiées pour l'intégration des données dans vos outils
+      content: |
+        Le catalogue recense les API mises à disposition par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+    editable: false
+    filters:
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization
   # BOUQUETS
   bouquets:
     list_all: true
     universe_query:
       tag: univers-ecospheres
-    tag_prefix: ecospheres
+    filter_prefix: ecospheres
     title: Bouquets
     breadcrumb_title:
     labels:
@@ -359,11 +414,9 @@ pages:
     search:
       input: Filtrer les bouquets
     banner:
-      title: Mettre en commun les usages des données et des indicateurs territoriaux
+      title: Mettre en commun les usages pour une action efficace
       content: |
-        Le module de bouquet offre aux acteurs du développement durable un cadre collaboratif pour documenter dans un contexte précis territoire par territoire l'usage des données et des indicateurs qu'ils mobilisent. Ils sont pensés pour être enrichis au fil du temps à mesure que des informations complémentaires sont identifiées par leurs contributeurs afin de promouvoir une réponse toujours plus complète aux problématiques exprimées.
-
-        Toute donnée ou indicateur présent sur <b>data.gouv</b><i>.fr</i> peut être associé à un bouquet.
+        Un bouquet regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l'action collective en créant vos propres bouquets : un simple compte **data.gouv**._fr_ suffit.
     resources_tabs:
       discussions:
         display: true
@@ -381,12 +434,16 @@ pages:
         default_value: true
         authenticated: true
         values: []
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme
         type: select
         color: green-emeraude
-        use_tag_prefix: true
+        use_filter_prefix: true
         # TODO: use a dedicated config for the form?
         form:
           required: true
@@ -401,7 +458,7 @@ pages:
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
-    tag_prefix: ecospheres-indicateurs
+    filter_prefix: ecospheres-indicateurs
     title: Indicateurs territoriaux
     breadcrumb_title: Indicateurs
     labels:
@@ -411,11 +468,9 @@ pages:
     search:
       input: Rechercher un indicateur
     banner:
-      title: Accéder aux indicateurs de référence pour la transition écologique des territoires
+      title: Un hub d'indicateurs territoriaux de transition écologique
       content: |
-        L'Ecolab du Commissariat Général au Développement Durable met en place un hub d'indicateurs territoriaux, en co-construction avec les directions générales, les établissements publics et les services déconcentrés des ministères concernés, pour accompagner les territoires dans le suivi de leurs politiques publiques de transition écologique. Ces indicateurs sont référencés par thématiques et enjeux environnementaux de la planification écologique. Chaque fiche détaille la définition, les sources, le calcul des indicateurs et permet d'accéder aux données structurées. Plusieurs bouquets permettent de regrouper un ensemble d'indicateurs en lien avec un cas d'usage.
-
-        Cette première version constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
@@ -424,14 +479,40 @@ pages:
         display: true
       reuses:
         display: true
-    editable: true
+    editable: false
     filters:
+      - name: Thématique
+        default_option: Toutes les thématiques
+        id: theme
+        type: select
+        color: green-menthe
+        use_filter_prefix: true
+        hide_on_list: true
+        values: *fnv_themes
+      - name: Enjeu
+        default_option: Tous les enjeux
+        id: enjeu
+        type: select
+        color: blue-ecume
+        use_filter_prefix: true
+        hide_on_list: true
+        values:
+          - id: adaptation-climat
+            name: Adaptation climat
+          - id: attenuation-climat
+            name: Atténuation climat
+          - id: biodiversite
+            name: Biodiversité
+          - id: ressources
+            name: Ressources
+          - id: sante
+            name: Santé
       - name: Secteur
         default_option: Tous les secteurs
         id: secteur
         type: select
         color: purple-glycine
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: agriculture-forets-sols
             name: Agriculture, Forêts et Sols
@@ -458,7 +539,7 @@ pages:
         id: levier
         type: select
         color: green-archipel
-        use_tag_prefix: true
+        use_filter_prefix: true
         values:
           - id: 2-roues-elec-efficacite
             name: 2 roues (élec&efficacité)

@@ -15,6 +15,7 @@ const { formatDate } = useFormatDate()
 const dcatExtras = props.dataset.extras?.dcat
 const uri: string | undefined = props.dataset.harvest?.uri
 const harvestCreatedAt = props.dataset.harvest?.created_at
+const harvestIssuedAt = props.dataset.harvest?.issued_at
 const harvestModifiedAt = props.dataset.harvest?.modified_at
 </script>
 
@@ -33,14 +34,20 @@ const harvestModifiedAt = props.dataset.harvest?.modified_at
       <div class="fr-grid-row">
         <ExtendedInformationPanelItem
           v-if="harvestCreatedAt"
-          class="fr-col-12 fr-col-md-6"
+          class="fr-col-12 fr-col-md-4"
           :items="[formatDate(harvestCreatedAt)]"
+          title="Création"
+        />
+        <ExtendedInformationPanelItem
+          v-if="harvestIssuedAt"
+          class="fr-col-12 fr-col-md-4"
+          :items="[formatDate(harvestIssuedAt)]"
           title="Publication"
         />
         <ExtendedInformationPanelItem
           v-if="harvestModifiedAt"
           :items="[formatDate(harvestModifiedAt)]"
-          class="fr-col-12 fr-col-md-6"
+          class="fr-col-12 fr-col-md-4"
           title="Dernière révision"
         />
       </div>

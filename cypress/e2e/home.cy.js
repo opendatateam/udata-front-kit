@@ -3,6 +3,8 @@ describe('Home Page', () => {
     // Visit the home page before each test
     cy.mockMatomo()
     cy.mockStaticDatagouv()
+    // some site home pages use Grist (eg culture), loosely mock records fetching
+    cy.mockGristRecords('*')
     cy.visit('/')
   })
 

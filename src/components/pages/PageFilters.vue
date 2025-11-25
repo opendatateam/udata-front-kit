@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import SelectOrganization from '@/components/forms/SelectOrganization.vue'
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import SelectSpatialGranularity from '@/components/forms/SelectSpatialGranularity.vue'
+import type { PageFilterConf } from '@/model/config'
 import type { SpatialCoverage } from '@/model/spatial'
 import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
 import { useSpatialStore } from '@/store/SpatialStore'
@@ -19,6 +21,7 @@ const routeQuery = useRouteQueryAsString().query
 const userStore = useUserStore()
 const { loggedIn } = storeToRefs(userStore)
 
+const selectedOrganization = ref(routeQuery.organization || null)
 const selectedGranularity = ref(routeQuery.granularity || undefined)
 const selectedGeozone: Ref<string | null> = ref(null)
 const selectedSpatialCoverage: Ref<SpatialCoverage | undefined> = ref(undefined)
@@ -51,34 +54,50 @@ const switchSpatialCoverage = (
   navigate({ geozone: selectedGeozone.value })
 }
 
+const shouldShowFilter = (filter: PageFilterConf) => {
+  return (
+    !filter.hide_on_list &&
+    ((filter.authenticated && loggedIn.value) || !filter.authenticated)
+  )
+}
+
 watch(
   () => route.query,
-  () => {
+  async () => {
     // Update filtersState based on query parameters
     Object.keys(filtersState).forEach((filter) => {
       const value = route.query[filter]
       const singleton = Array.isArray(value) ? value[0] : value
       filtersState[filter].selectedValue = singleton ?? null
     })
+
+    // Update organization
+    const organization = route.query.organization
+    selectedOrganization.value =
+      (Array.isArray(organization) ? organization[0] : organization) ?? null
+
+    // Update granularity
+    const granularity = route.query.granularity
+    selectedGranularity.value =
+      (Array.isArray(granularity) ? granularity[0] : granularity) ?? undefined
+
+    // Update spatial coverage
+    const geozone = route.query.geozone
+    const geozoneValue = Array.isArray(geozone) ? geozone[0] : geozone
+    if (geozoneValue) {
+      selectedSpatialCoverage.value =
+        await useSpatialStore().loadZone(geozoneValue)
+    } else {
+      selectedSpatialCoverage.value = undefined
+    }
   },
   { immediate: true }
 )
-
-onMounted(async () => {
-  if (routeQuery.geozone) {
-    selectedSpatialCoverage.value = await useSpatialStore().loadZone(
-      routeQuery.geozone
-    )
-  }
-})
 </script>
 
 <template>
   <template v-for="filter in pageConf.filters" :key="filter.id">
-    <div
-      v-if="(filter.authenticated && loggedIn) || !filter.authenticated"
-      class="fr-select-group"
-    >
+    <div v-if="shouldShowFilter(filter)" class="fr-select-group">
       <FilterSelectComponent
         v-if="filter.type === 'select'"
         :default-option="filter.default_option"
@@ -87,14 +106,21 @@ onMounted(async () => {
         :model-value="filtersState[filter.id].selectedValue"
         @update:model-value="(value) => switchFilter(filter.id, value)"
       />
+      <SelectOrganization
+        v-else-if="filter.type === 'organization'"
+        :model-value="selectedOrganization"
+        :label="filter.name"
+        :default-option="filter.default_option"
+        @update:model-value="(value) => switchFilter('organization', value)"
+      />
       <SelectSpatialGranularity
-        v-if="filter.type === 'spatial_granularity'"
+        v-else-if="filter.type === 'spatial_granularity'"
         :default-option="filter.default_option"
         :label="filter.name"
         :model-value="selectedGranularity"
         @update:model-value="(value) => switchFilter('granularity', value)"
       />
-      <template v-if="filter.type === 'spatial_zone'">
+      <template v-else-if="filter.type === 'spatial_zone'">
         <label class="fr-label" for="select-spatial-coverage">{{
           filter.name
         }}</label>
@@ -105,7 +131,7 @@ onMounted(async () => {
         />
       </template>
       <CheckboxComponent
-        v-if="filter.type === 'checkbox'"
+        v-else-if="filter.type === 'checkbox'"
         :model-value="filtersState[filter.id]?.selectedValue"
         :default-value="Boolean(filter.default_value)"
         :label="filter.name"

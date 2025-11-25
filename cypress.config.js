@@ -1,8 +1,10 @@
 import { defineConfig } from 'cypress'
+import { readFileSync } from 'fs'
+import { load } from 'js-yaml'
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:4173',
+    baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:4173',
     supportFile: 'cypress/support/e2e.js',
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     video: false,
@@ -12,6 +14,13 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // Dynamically exclude custom site tests that don't match current VITE_SITE_ID
       const siteId = process.env.VITE_SITE_ID
+
+      // Load site config and make it available to tests
+      if (siteId) {
+        const configPath = `./configs/${siteId}/config.yaml`
+        const siteConfig = load(readFileSync(configPath, 'utf-8'))
+        config.env.siteConfig = siteConfig
+      }
 
       if (siteId) {
         // Only include tests for the specific site
@@ -23,6 +32,14 @@ export default defineConfig({
         // If no site ID is set, exclude all custom site tests
         config.excludeSpecPattern = 'cypress/e2e/custom/**/*.cy.{js,jsx,ts,tsx}'
       }
+
+      // use cy.task('log', 'message') to log to terminal
+      on('task', {
+        log(message) {
+          console.log(message)
+          return null
+        }
+      })
 
       return config
     }

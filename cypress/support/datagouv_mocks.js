@@ -76,7 +76,26 @@ Cypress.Commands.add('mockStaticDatagouv', () => {
   cy.intercept('GET', 'https://**static.data.gouv.fr/**', {
     statusCode: 200,
     body: '// Mocked static.data.gouv.fr content'
-  }).as('mockStaticDatagouv')
+  }).as('get_static_datagouv')
+
+  // Mock avatar API calls
+  cy.intercept('GET', datagouvUrlRegex('avatars'), {
+    statusCode: 200,
+    body: '// Mocked avatar image',
+    headers: {
+      'Content-Type': 'image/png'
+    }
+  }).as('get_avatars')
+
+  // Mock datagouvfr-pages content
+  cy.intercept(
+    'GET',
+    'https://raw.githubusercontent.com/datagouv/datagouvfr-pages/**',
+    {
+      statusCode: 200,
+      body: '// Mocked static.data.gouv.fr content'
+    }
+  ).as('get_datagouvfr_pages')
 })
 
 Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
@@ -85,3 +104,127 @@ Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
     body: datagouvResponseBuilder(elements)
   }).as(`get_topics_${resourceId}_elements`)
 })
+
+Cypress.Commands.add('mockSpatialLevels', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/levels'), {
+    statusCode: 200,
+    body: [
+      { id: 'country', name: 'Pays' },
+      { id: 'fr:region', name: 'Région française' },
+      { id: 'fr:departement', name: 'Département français' },
+      { id: 'fr:commune', name: 'Commune française' }
+    ]
+  }).as('get_spatial_levels')
+})
+
+Cypress.Commands.add('mockDatasetLicenses', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/licenses'), {
+    statusCode: 200,
+    body: []
+  }).as('get_licenses')
+})
+
+Cypress.Commands.add('mockResourceTypes', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/resource_types'), {
+    statusCode: 200,
+    body: [
+      {
+        id: 'main',
+        label: 'Fichier principal'
+      }
+    ]
+  }).as('get_resource_types')
+})
+
+Cypress.Commands.add('mockDatasetFrequencies', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/frequencies'), {
+    statusCode: 200,
+    body: []
+  }).as('get_frequencies')
+})
+
+Cypress.Commands.add('mockSpatialGranularities', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/granularities'), {
+    statusCode: 200,
+    body: [
+      { id: 'country', name: 'Pays' },
+      { id: 'fr:region', name: 'Région française' },
+      { id: 'fr:departement', name: 'Département français' },
+      { id: 'fr:commune', name: 'Commune française' }
+    ]
+  }).as('get_spatial_granularities')
+})
+
+Cypress.Commands.add('mockSpatialZonesSuggest', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/zones/suggest'), {
+    statusCode: 200,
+    body: [
+      {
+        id: 'fr:commune:75056',
+        name: 'Paris',
+        code: '75056',
+        level: 'fr:commune',
+        population: 2161000,
+        area: 105.4
+      },
+      {
+        id: 'fr:departement:75',
+        name: 'Paris',
+        code: '75',
+        level: 'fr:departement',
+        population: 2161000,
+        area: 105.4
+      }
+    ]
+  }).as('get_spatial_zones_suggest')
+})
+
+Cypress.Commands.add('mockSpatialZone', () => {
+  cy.intercept('GET', datagouvUrlRegex('spatial/zone/fr:commune:75056'), {
+    statusCode: 200,
+    body: {
+      id: 'fr:commune:75056',
+      name: 'Paris',
+      code: '75056',
+      level: 'fr:commune',
+      population: 2161000,
+      area: 105.4
+    }
+  }).as('get_spatial_zone')
+})
+
+Cypress.Commands.add('mockDatasetSchemas', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/schemas'), {
+    statusCode: 200,
+    body: []
+  }).as('get_schemas')
+})
+
+Cypress.Commands.add('mockResources', (datasetId, data = []) => {
+  cy.intercept('GET', datagouvUrlRegex(`datasets/${datasetId}/resources`), {
+    statusCode: 200,
+    body: {
+      data,
+      total: data.length
+    }
+  }).as(`get_resources_${datasetId}`)
+})
+
+Cypress.Commands.add(
+  'mockDatasetAndRelatedObjects',
+  (dataset, resources = []) => {
+    // Update dataset.resources.total to match the resources array
+    dataset.resources.total = resources.length
+    cy.mockDatagouvObject('datasets', dataset.id, dataset)
+    // Mock related APIs
+    cy.mockSpatialLevels()
+    cy.mockDatasetLicenses()
+    cy.mockResourceTypes()
+    cy.mockDatasetFrequencies()
+    cy.mockSpatialGranularities()
+    cy.mockDatasetSchemas()
+    cy.mockDatagouvObjectList('discussions', [])
+    cy.mockDatagouvObjectList('reuses', [])
+    cy.mockResources(dataset.id, resources)
+  }
+)

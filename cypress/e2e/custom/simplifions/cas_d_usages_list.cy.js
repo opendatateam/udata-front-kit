@@ -1,7 +1,9 @@
 import { topicCasUsageFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import './support'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
+    cy.baseMocksForSimplifions()
     cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(11))
     cy.visit('/cas-d-usages')
   })
@@ -52,7 +54,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.expectActionToCallApi(
       () => cy.get('input#search-topic').type('Aides sociales des CCAS'),
       'topics',
-      'q=Aides+sociales+des+CCAS&tag=simplifions-v2-cas-d-usages'
+      /q=Aides\+sociales\+des\+CCAS.*tag=simplifions-v2-cas-d-usages/
     )
   })
 
@@ -117,7 +119,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-v2-cas-d-usages&.+&include_private=true/
+        /tag=simplifions-v2-cas-d-usages.*include_private=true/
       )
     })
   })

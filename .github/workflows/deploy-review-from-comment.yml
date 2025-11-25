@@ -17,7 +17,10 @@ jobs:
       - name: Parse comment
         id: parse
         run: |
-          COMMENT="${{ github.event.comment.body }}"
+          COMMENT=$(cat << 'EOF'
+          ${{ github.event.comment.body }}
+          EOF
+          )
           echo "Comment: $COMMENT"
 
           # Extract /deploy command and site

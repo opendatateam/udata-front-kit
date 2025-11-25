@@ -85,10 +85,12 @@ export const apiOrDatasetFactory = build({
   fields: {
     id: sequence((x) => x),
     fields: {
-      UID_datagouv: sequence((x) => `dataset-uid-${x}`),
-      Nom: sequence((x) => `API ou Dataset ${x}`),
+      UID_datagouv: sequence(
+        (x) => ['dataservice-uid-' + x, 'dataset-uid-' + x][x % 2]
+      ),
+      Nom: sequence((x) => ['API n°' + x, 'Jeu de données n°' + x][x % 2]),
       Type: sequence((x) => ['API', 'Jeu de données'][x % 2]),
-      Fourni_par: sequence((x) => x),
+      Fourni_par: 1,
       Integre_par: [1, 2],
       Visible_sur_simplifions: true,
       Modifie_par: 'admin@example.com',

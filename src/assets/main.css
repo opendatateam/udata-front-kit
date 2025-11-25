@@ -208,6 +208,25 @@ body {
   --ground: 1;
 }
 
+/*
+FIXME: Tabs height bug workaround
+Root cause: DSFR's --tabs-height CSS variable is not dynamically recomputed when tab content changes
+This causes the ::before border element to stay at the wrong height when switching between tabs
+Workaround: Hide DSFR's ::before border and create our own that grows naturally with content
+Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
+*/
+.tabs-height-fix .fr-tabs {
+  height: auto;
+}
+.tabs-height-fix .fr-tabs::before {
+  display: none;
+}
+.tabs-height-fix .fr-tabs__panel {
+  border: 1px solid var(--border-default-grey);
+  padding: 1.5rem;
+  margin-top: 39px;
+}
+
 .datagouv-components h1 {
   margin-bottom: 1.5rem;
 }
@@ -232,6 +251,32 @@ body {
   button.fr-tag:hover[aria-pressed='false'] {
     color: var(--blue-france-sun-113);
   }
+}
+
+/*
+  This is originally a .datagouv-components subclass,
+   but .datagouv-components is not applied to tooltips (top level of DOM).
+   So we copy the style and apply it directly to .tooltip and .toggletip.
+*/
+.toggletip,
+.tooltip {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow:
+    0 1px 4px #0000003b,
+    0 1px 0 -2px #00000029,
+    0 1px 1px #00000029;
+  color: var(--grey-50-1000);
+  font-size: 0.875rem;
+  left: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  max-width: calc(100vw - 2rem);
+  padding: 0.75rem;
+  position: absolute;
+  top: 1.5rem;
+  width: 23rem;
+  z-index: 100;
 }
 
 /* DSFR search bar fix */

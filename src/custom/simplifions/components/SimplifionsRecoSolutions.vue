@@ -1,13 +1,25 @@
 <template>
   <div class="reco-solution fr-p-2w fr-mb-4w">
-    <h4 class="fr-h4 fr-mb-2w">
-      ➡️ {{ recommandation.Nom_de_la_recommandation }}
-    </h4>
+    <div class="fr-grid-row">
+      <h4 class="fr-h4 fr-mb-2w fr-col-md fr-col-12">
+        ➡️ {{ recommandation.Nom_de_la_recommandation }}
+      </h4>
+      <div v-if="recommandation.access_link_with_fallback">
+        <a
+          rel="noopener noreferrer"
+          :href="recommandation.access_link_with_fallback"
+          class="fr-btn access-link"
+          target="_blank"
+        >
+          Demande d'accès
+        </a>
+      </div>
+    </div>
 
     <div
       class="fr-grid-row fr-grid-row--gutters fr-mt-4w fr-mb-2w fr-mx-2w fr-grid-row--top"
     >
-      <div class="fr-col-12 fr-col-xs-8 fr-col-sm-4 fr-col-lg-3">
+      <div class="fr-col-12 fr-col-md-8 fr-col-lg-3">
         <div class="fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link">
           <div class="fr-tile__body">
             <div class="fr-tile__content">
@@ -41,7 +53,7 @@
         </div>
       </div>
 
-      <div v-if="hasContent" class="fr-col-12 fr-col-sm-8 fr-ml-2w">
+      <div v-if="hasContent" class="fr-col-12 fr-col-lg-8 fr-ml-2w">
         <div
           v-if="
             recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage
@@ -57,9 +69,9 @@
 
           <div class="reco-text-column">
             <div>
-              <strong>
+              <h5 class="fr-text--md">
                 En quoi cette solution est utile pour ce cas d'usage ?
-              </strong>
+              </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -83,7 +95,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Concrètement, pour les usagers : </strong>
+              <h5 class="fr-text--md">Concrètement, pour les usagers :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -105,7 +117,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Concrètement, pour vos agents : </strong>
+              <h5 class="fr-text--md">Concrètement, pour vos agents :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -125,7 +137,7 @@
 
           <div class="reco-text-column">
             <div>
-              <strong> Ce que ne fait pas cette solution : </strong>
+              <h5 class="fr-text--md">Ce que ne fait pas cette solution :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -149,7 +161,7 @@
         "
         class="fr-col-12 fr-p-0"
       >
-        <DsfrAccordion>
+        <DsfrAccordion title-tag="h5">
           <template #title>
             <strong>API et données utiles</strong>, fournies par la solution
           </template>
@@ -163,7 +175,10 @@
             >
               <SimplifionsDataApiUtile
                 :api-or-dataset="apidOrDataset.fields"
-                :custom-description="customDescriptions[apidOrDataset.id]"
+                :custom-description="
+                  customDescriptions[apidOrDataset.id]
+                    ?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
+                "
               />
             </li>
           </ul>
@@ -171,7 +186,7 @@
       </div>
 
       <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion>
+        <DsfrAccordion title-tag="h5">
           <template #title>
             <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
             cette API pour ce cas d'usage
@@ -195,6 +210,7 @@ import { fromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type {
   ApiOrDatasetRecord,
+  ApiOrDatasetUtiles,
   ApiOrDatasetUtilesRecord,
   Recommandation,
   SolutionRecord
@@ -227,18 +243,38 @@ topicsAPI.getTopicByTag(solutionTag).then((topic) => {
 const usefulDataApiFourniesParLaSolution = ref<
   ApiOrDatasetRecord[] | undefined
 >(undefined)
-const customDescriptions = ref<Record<number, string>>({})
+const customDescriptions = ref<Record<number, ApiOrDatasetUtiles>>({})
 
 const sortedUsefulDataApiFourniesParLaSolution = computed(() => {
   return usefulDataApiFourniesParLaSolution.value?.sort((a, b) => {
-    const aCustomDescription = customDescriptions.value[a.id] || ''
-    const bCustomDescription = customDescriptions.value[b.id] || ''
+    const aCustomDescription = customDescriptions.value[a.id]
+    const bCustomDescription = customDescriptions.value[b.id]
 
-    // First sort by custom description length (longest first)
-    const lengthDiff = bCustomDescription.length - aCustomDescription.length
+    // First sort by ordre (lowest first) - items with ordre come first
+    const aOrdre =
+      typeof aCustomDescription?.Ordre === 'number'
+        ? aCustomDescription.Ordre
+        : Infinity
+    const bOrdre =
+      typeof bCustomDescription?.Ordre === 'number'
+        ? bCustomDescription.Ordre
+        : Infinity
+
+    if (aOrdre !== bOrdre) return aOrdre - bOrdre
+
+    // Then sort by custom description length (longest first)
+    const aDescriptionLength =
+      aCustomDescription
+        ?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage?.length ||
+      0
+    const bDescriptionLength =
+      bCustomDescription
+        ?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage?.length ||
+      0
+    const lengthDiff = bDescriptionLength - aDescriptionLength
     if (lengthDiff !== 0) return lengthDiff
 
-    // Then sort by name
+    // Finally sort by name
     return a.fields.Nom.localeCompare(b.fields.Nom)
   })
 })
@@ -267,8 +303,7 @@ if (recommandation.API_et_datasets_utiles_fournis?.length) {
             apidata_utiles.forEach((record) => {
               customDescriptions.value[
                 record.fields.Api_ou_dataset_utile_fourni_par_une_recommandation
-              ] =
-                record.fields.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
+              ] = record.fields
             })
           })
       }
@@ -320,14 +355,8 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
   display: flex;
 }
 
-:deep(.fr-accordion__btn) {
-  background-color: var(--background-alt-blue-france);
-}
 :deep(.fr-accordion__btn[aria-expanded='true']) {
-  background-color: var(--hover-tint);
-}
-
-:deep(.fr-accordion__btn) {
+  background-color: var(--background-alt-blue-france);
   color: #3558a2;
 }
 </style>

@@ -5,9 +5,15 @@ import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import type { DatasetModalData } from '@/model/dataset'
-import { Availability, ResolvedFactor, type FactorsGroups } from '@/model/topic'
+import {
+  Availability,
+  ResolvedFactor,
+  type Factor,
+  type FactorsGroups
+} from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
 import FactorFields from './FactorFields.vue'
@@ -21,6 +27,7 @@ const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
 const { pageConf } = useCurrentPageConf()
+const elementStore = useTopicElementStore()
 
 const factors = defineModel({
   type: Object as () => ResolvedFactor[],
@@ -34,6 +41,10 @@ const props = defineProps({
   datasetEditorialization: {
     type: Boolean,
     default: false
+  },
+  topicId: {
+    type: String,
+    required: true
   }
 })
 
@@ -88,6 +99,7 @@ const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
     {
       label: 'Enregistrer',
       type: 'button',
+      class: 'test__submit_modal_btn',
       onClick: ($event: MouseEvent) => {
         $event.preventDefault()
         handleSubmit()
@@ -183,8 +195,23 @@ const submit = async (modalData: DatasetModalData) => {
       }
     }
     if (modalData.mode === 'create') {
-      factors.value.push(modalData.factor)
+      const createdElement = await elementStore.createElement<Factor>(
+        props.topicId,
+        modalData.factor.unresolved<Factor>()
+      )
+      // Add the element with ID returned from server to local factors
+      const resolvedFactor = new ResolvedFactor(createdElement, useSiteId())
+      factors.value.push(resolvedFactor)
     } else if (modalData.mode === 'edit' && modalData.index !== undefined) {
+      // Use atomic element update
+      const existingFactor = factors.value[modalData.index]
+      if (existingFactor?.id) {
+        await elementStore.updateElement(
+          props.topicId,
+          existingFactor.id,
+          modalData.factor.unresolved()
+        )
+      }
       factors.value[modalData.index] = modalData.factor
     }
   }
