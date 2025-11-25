@@ -1,4 +1,6 @@
 import { defineConfig } from 'cypress'
+import { readFileSync } from 'fs'
+import { load } from 'js-yaml'
 
 export default defineConfig({
   e2e: {
@@ -12,6 +14,13 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // Dynamically exclude custom site tests that don't match current VITE_SITE_ID
       const siteId = process.env.VITE_SITE_ID
+
+      // Load site config and make it available to tests
+      if (siteId) {
+        const configPath = `./configs/${siteId}/config.yaml`
+        const siteConfig = load(readFileSync(configPath, 'utf-8'))
+        config.env.siteConfig = siteConfig
+      }
 
       if (siteId) {
         // Only include tests for the specific site
