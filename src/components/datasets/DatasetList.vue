@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
 import { useCurrentPageConf } from '@/router/utils'
-import { useSearchStore } from '@/store/DatasetSearchStore'
-import { DatasetCard } from '@datagouv/components'
+import { useDatasetSearchStore } from '@/store/DatasetSearchStore'
+import { useAsyncComponent } from '@/utils/component'
+import { DatasetCard } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
@@ -23,9 +24,9 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 
-const store = useSearchStore()
+const store = useDatasetSearchStore()
 const { meta, pageConf } = useCurrentPageConf()
-const { datasets, pagination, total, maxTotal } = storeToRefs(store)
+const { items: datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
@@ -91,18 +92,7 @@ const executeQuery = async () => {
 }
 
 // load custom card component from router, or fallback to default
-const CardComponent = computed(() => {
-  const componentLoader = meta?.cardComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return DatasetCard
-})
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, DatasetCard)
 
 // launch search on route.query changes
 watch(
@@ -153,7 +143,7 @@ defineExpose({
       </ul>
     </div>
     <DsfrPagination
-      v-if="pagination.length"
+      v-if="pagination.length > 1"
       :current-page="parseInt(page) - 1"
       :pages="pagination"
       @update:current-page="goToPage"

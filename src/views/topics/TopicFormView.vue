@@ -22,7 +22,7 @@ import {
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
-import { useTagsQuery } from '@/utils/tags'
+import { useFiltersApiParams } from '@/utils/filters'
 import { cloneTopic } from '@/utils/topic'
 import { useUniverseQuery } from '@/utils/universe'
 
@@ -43,23 +43,17 @@ const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
 // populate tags from filters in query string
-const { tags: selectedTags } = useTagsQuery(
-  pageKey || 'topics',
-  routeQuery,
-  true
-)
-const { tagsWithUniverse } = useUniverseQuery(pageKey, selectedTags)
+const { apiParams } = useFiltersApiParams(pageKey || 'topics', routeQuery, true)
+const mergedApiParams = useUniverseQuery(pageKey, apiParams)
 
 const topic: Ref<
   Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
 > = ref({
   private: true,
-  tags: tagsWithUniverse,
+  tags: mergedApiParams.tag || [],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [useSiteId()]: {
-      datasets_properties: []
-    }
+    [useSiteId()]: {}
   }
 })
 
@@ -210,14 +204,14 @@ onMounted(() => {
       .load(routeQuery.clone || routeParams.item_id)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(
-            remoteTopic,
-            routeQuery['keep-datasets'] === '1'
+          cloneTopic(remoteTopic, routeQuery['keep-datasets'] === '1').then(
+            (newTopic) => {
+              topic.value = newTopic
+            }
           )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
-          // FIXME: remove datasets and reuses after API is migrated to elements
-          const { datasets, reuses, elements, ...data } = remoteTopic
+          const { elements, ...data } = remoteTopic
           topic.value = data
         }
         setMetaTitle()

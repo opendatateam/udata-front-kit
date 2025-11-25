@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { InformationPanel, ReadMore } from '@datagouv/components'
+import {
+  AnimatedLoader,
+  DatasetInformationPanel,
+  ReadMore
+} from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
 import { computed, inject, onMounted, ref } from 'vue'
 
@@ -7,6 +11,7 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
+import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
 import IndicatorVisualisation from '@/custom/ecospheres/views/indicators/IndicatorVisualisation.vue'
@@ -18,14 +23,10 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { useLicense } from '@/utils/dataset'
-import { useSpatialGranularity } from '@/utils/spatial'
 import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
-import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
-import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
@@ -34,7 +35,6 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
-const { unite } = useIndicatorExtras(indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
@@ -50,24 +50,44 @@ const links = computed(() => [
   { text: indicator.value?.title || '' }
 ])
 
-const tabTitles = [
-  { title: 'Informations', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Fichiers et API', tabId: 'tab-1', panelId: 'tab-content-1' },
+const tabTitles = computed(() => [
+  { title: 'Informations', tabId: 'tab-info', panelId: 'tab-content-info' },
+  {
+    title: 'Fichiers et API',
+    tabId: 'tab-files',
+    panelId: 'tab-content-files'
+  },
+  // only display the visualization tab if the indicator has visualization enabled
+  ...(indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
+    ? [
+        {
+          title: 'Prévisualisation',
+          tabId: 'tab-viz',
+          panelId: 'tab-content-viz'
+        }
+      ]
+    : []),
+  { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
   {
     title: 'Réutilisations',
-    tabId: 'tab-2',
-    panelId: 'tab-content-2'
+    tabId: 'tab-reuses',
+    panelId: 'tab-content-reuses'
   },
-  { title: 'Discussions', tabId: 'tab-3', panelId: 'tab-content-3' },
-  { title: 'Sources', tabId: 'tab-4', panelId: 'tab-content-4' },
-  { title: 'Détails techniques', tabId: 'tab-5', panelId: 'tab-content-5' }
-]
+  {
+    title: 'Discussions',
+    tabId: 'tab-discussions',
+    panelId: 'tab-content-discussions'
+  },
+  {
+    title: 'Détails techniques',
+    tabId: 'tab-details',
+    panelId: 'tab-content-details'
+  }
+])
 
 const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
-const license = useLicense(indicator)
-const spatialGranularity = useSpatialGranularity(indicator)
 
 const metaDescription = (): string | undefined => {
   return indicator.value?.description ?? ''
@@ -101,7 +121,7 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="indicator">
+  <GenericContainer v-if="indicator" class="tabs-height-fix">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ indicator.title }}</h1>
@@ -110,31 +130,25 @@ onMounted(() => {
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <div class="fr-col-12 fr-col-md-4 fr-mb-4w">
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Thématique</h2>
-        <IndicatorTags :indicator="indicator" type="theme" />
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Levier</h2>
-        <IndicatorTags :indicator="indicator" type="levier" />
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Maille minimale</h2>
-        <p>{{ spatialGranularity?.name || UNFILLED_LABEL }}</p>
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Unité</h2>
-        <p>{{ unite || UNFILLED_LABEL }}</p>
-        <div v-if="userStore.loggedIn">
-          <DsfrButton
-            class="fr-mt-2w"
-            size="md"
-            label="Ajouter à un bouquet"
-            icon="fr-icon-file-add-line"
-            @click="showAddToBouquetModal = true"
-          />
-          <DatasetAddToTopicModal
-            v-if="showAddToBouquetModal"
-            v-model:show="showAddToBouquetModal"
-            topic-page-key="bouquets"
-            :dataset="indicator"
-          />
-        </div>
-      </div>
+      <DatasetSidebar :dataset="indicator">
+        <template #bottom>
+          <div v-if="userStore.loggedIn">
+            <DsfrButton
+              class="fr-mt-2w"
+              size="md"
+              label="Ajouter à un bouquet"
+              icon="fr-icon-file-add-line"
+              @click="showAddToBouquetModal = true"
+            />
+            <DatasetAddToTopicModal
+              v-if="showAddToBouquetModal"
+              v-model:show="showAddToBouquetModal"
+              topic-page-key="bouquets"
+              :dataset="indicator"
+            />
+          </div>
+        </template>
+      </DatasetSidebar>
     </div>
 
     <DsfrTabs
@@ -144,31 +158,38 @@ onMounted(() => {
       :tab-titles="tabTitles"
     >
       <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent panel-id="tab-content-info" tab-id="tab-info">
         <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Fichiers -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent panel-id="tab-content-files" tab-id="tab-files">
         <ResourcesList
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
         />
+        <IndicatorAPIDocumentation :indicator="indicator" />
+      </DsfrTabContent>
+
+      <!-- Prévisualisation -->
+      <DsfrTabContent panel-id="tab-content-viz" tab-id="tab-viz">
         <IndicatorVisualisation
           v-if="tabularApiUrl"
           :indicator="indicator"
           :tabular-api-url="tabularApiUrl"
         />
-        <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <ReusesList model="dataset" :object-id="indicator.id" />
+      <DsfrTabContent panel-id="tab-content-reuses" tab-id="tab-reuses">
+        <ReusesList model="dataset" :object="indicator" />
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
+      <DsfrTabContent
+        panel-id="tab-content-discussions"
+        tab-id="tab-discussions"
+      >
         <DiscussionsList
           :subject="indicator"
           subject-class="Dataset"
@@ -177,17 +198,21 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Sources -->
-      <DsfrTabContent panel-id="tab-content-4" tab-id="tab-4">
+      <DsfrTabContent panel-id="tab-content-sources" tab-id="tab-sources">
         <IndicatorSourcesList :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Détails techniques -->
-      <DsfrTabContent panel-id="tab-content-5" tab-id="tab-5">
-        <InformationPanel
-          v-if="license"
-          :dataset="indicator"
-          :license="license"
-        />
+      <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
+        <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
+           is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
+          updated to handle its own loading state. -->
+        <Suspense>
+          <DatasetInformationPanel :dataset="indicator" />
+          <template #fallback>
+            <AnimatedLoader />
+          </template>
+        </Suspense>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
@@ -196,5 +221,9 @@ onMounted(() => {
 <style scoped>
 :deep(.subtitle) {
   font-size: 1rem;
+}
+/* override previous rule for sidebar */
+:deep(.dataset-sidebar .subtitle) {
+  font-size: 0.875rem;
 }
 </style>

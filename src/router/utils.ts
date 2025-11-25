@@ -20,18 +20,39 @@ interface RouteLocationQueryAsString
 }
 
 /**
- * Exposes first element from route params that could contain an array
- * Warning: this will discard the other values if any
+ * Converts route params from potential arrays to single strings
+ * Warning: this will discard additional values if param is an array
  */
-export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
-  const route = useRoute()
-  const params = Object.fromEntries(
-    Object.entries(route.params).map(([key, value]) => [
+const convertParamsToString = (
+  params: Record<string, string | string[]>
+): Record<string, string> => {
+  return Object.fromEntries(
+    Object.entries(params).map(([key, value]) => [
       key,
       Array.isArray(value) ? value[0] : value
     ])
   )
+}
+
+/**
+ * Exposes first element from route params that could contain an array
+ */
+export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
+  const route = useRoute()
+  const params = convertParamsToString(route.params)
   return { ...route, params }
+}
+
+/**
+ * Reactive version of useRouteParamsAsString
+ * Returns a computed ref that updates when route params change
+ */
+export const useRouteParamsAsStringReactive = () => {
+  const route = useRoute()
+  return computed(() => ({
+    ...route,
+    params: convertParamsToString(route.params)
+  }))
 }
 
 /**
@@ -54,6 +75,7 @@ interface SearchPageRoutesOptions {
   metaTitle: string
   cardClass?: string
   listViewComponent: () => Promise<{ default: Component }>
+  listComponent?: () => Promise<{ default: Component }>
   detailsViewComponent: () => Promise<{ default: Component }>
   filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
@@ -84,8 +106,8 @@ export const useDatasetSearchPageRoutes = ({
   cardComponent,
   detailsViewComponent
 }: DatasetSearchPageRouteOptions): RouteRecordRaw => {
-  const listViewComponent = () =>
-    import('@/views/datasets/DatasetsListView.vue')
+  const listViewComponent = () => import('@/views/data/DataListView.vue')
+  const listComponent = () => import('@/components/datasets/DatasetList.vue')
   const defaultDetailsViewComponent = () =>
     import('@/views/datasets/DatasetDetailView.vue')
   return useSearchPageRoutes({
@@ -93,9 +115,39 @@ export const useDatasetSearchPageRoutes = ({
     metaTitle,
     cardClass,
     listViewComponent,
+    listComponent,
     filtersComponent,
     cardComponent,
     detailsViewComponent: detailsViewComponent ?? defaultDetailsViewComponent
+  })
+}
+
+type DataserviceSearchPageRouteOptions = Omit<
+  SearchPageRoutesOptions,
+  'listViewComponent' | 'detailsViewComponent'
+>
+
+export const useDataserviceSearchPageRoutes = ({
+  pageKey,
+  metaTitle,
+  cardClass,
+  filtersComponent,
+  cardComponent
+}: DataserviceSearchPageRouteOptions): RouteRecordRaw => {
+  const listViewComponent = () => import('@/views/data/DataListView.vue')
+  const listComponent = () =>
+    import('@/components/dataservices/DataservicesList.vue')
+  const detailsViewComponent = () =>
+    import('@/views/dataservices/DataserviceDetailView.vue')
+  return useSearchPageRoutes({
+    pageKey,
+    metaTitle,
+    cardClass,
+    listViewComponent,
+    listComponent,
+    filtersComponent,
+    cardComponent,
+    detailsViewComponent
   })
 }
 
@@ -130,6 +182,7 @@ export const useSearchPageRoutes = ({
   metaTitle,
   cardClass,
   listViewComponent,
+  listComponent,
   detailsViewComponent,
   filtersComponent,
   cardComponent,
@@ -147,7 +200,8 @@ export const useSearchPageRoutes = ({
           pageKey,
           cardClass,
           filtersComponent,
-          cardComponent
+          cardComponent,
+          listComponent
         },
         component: listViewComponent,
         props: (route: RouteLocationNormalizedLoaded) => ({

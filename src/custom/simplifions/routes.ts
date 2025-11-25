@@ -16,6 +16,14 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () => await import('./views/HomeView.vue')
   },
+  {
+    path: '/apis-franceconnectees',
+    name: 'apis-franceconnectees',
+    meta: {
+      title: 'APIs FranceConnectées'
+    },
+    component: async () => await import('./views/ApisFranceConnectees.vue')
+  },
   useTopicSearchPageRoutes({
     pageKey: 'cas-d-usages',
     metaTitle: "Cas d'usages",

@@ -1,4 +1,4 @@
-import type { Organization } from '@datagouv/components'
+import type { Organization } from '@datagouv/components-next'
 import { defineStore } from 'pinia'
 
 import config from '@/config'
@@ -7,7 +7,6 @@ import CustomOrganizationsAPI from '@/services/api/CustomOrganizationsAPI'
 import OrganizationsAPI from '@/services/api/resources/OrganizationsAPI'
 
 const orgApi = new OrganizationsAPI()
-const customOrgApi = new CustomOrganizationsAPI()
 
 interface LightweightOrganization {
   id: string
@@ -22,13 +21,13 @@ interface PaginatedOrganizations {
 
 interface RootState {
   data: PaginatedOrganizations[]
-  flatData: LightweightOrganization[]
+  flatData: Record<string, LightweightOrganization[]>
 }
 
 export const useOrganizationStore = defineStore('organization', {
   state: (): RootState => ({
     data: [],
-    flatData: []
+    flatData: {}
   }),
   actions: {
     /**
@@ -41,8 +40,8 @@ export const useOrganizationStore = defineStore('organization', {
      * Async function to trigger API fetch of orgs list for a page, using the config
      * and preserving the config file order
      */
-    async loadFromConfig(page = 1) {
-      const orgsList = await this.loadFromConfigFlat()
+    async loadFromConfig(pageKey: string, page: number = 1) {
+      const orgsList = await this.loadFromConfigFlat(pageKey)
       const pageSize = config.website.pagination_sizes.organizations_list
       const paginated = orgsList
         .slice(pageSize * (page - 1), pageSize * page)
@@ -54,10 +53,11 @@ export const useOrganizationStore = defineStore('organization', {
      * Load multiple organizations in a lightweight format without pagination
      * Used for e.g. for filtering
      */
-    async loadFromConfigFlat() {
-      if (this.flatData.length > 0) return this.flatData
-      this.flatData = await customOrgApi.list()
-      return this.flatData
+    async loadFromConfigFlat(pageKey: string) {
+      if (this.flatData[pageKey]?.length > 0) return this.flatData[pageKey]
+      const customOrgApi = new CustomOrganizationsAPI(pageKey)
+      this.flatData[pageKey] = await customOrgApi.list()
+      return this.flatData[pageKey]
     },
     /**
      * Load multiple organizations to store
@@ -112,7 +112,8 @@ export const useOrganizationStore = defineStore('organization', {
   getters: {
     pagination: (state) => {
       const pageSize = config.website.pagination_sizes.organizations_list
-      const total = state.flatData.length
+      // pagination is only used in a 'datasets' context
+      const total = state.flatData['datasets'].length
       const nbPages = Math.ceil(total / pageSize)
       return [...Array(nbPages).keys()].map((page) => {
         page += 1

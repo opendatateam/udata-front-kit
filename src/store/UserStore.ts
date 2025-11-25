@@ -3,10 +3,10 @@ import { defineStore } from 'pinia'
 import { watch } from 'vue'
 
 import type { WithOwned } from '@/model'
-import type { ExtendedUser } from '@/model/user'
 import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
 import { useTopicsConf } from '@/utils/config'
+import type { User } from '@datagouv/components-next'
 
 const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
@@ -16,7 +16,7 @@ export interface RootState {
   isInited: boolean
   isLoggedIn: boolean
   token: string | undefined
-  data: ExtendedUser | undefined
+  data: User | undefined
 }
 
 export const useUserStore = defineStore('user', {
@@ -57,12 +57,12 @@ export const useUserStore = defineStore('user', {
      * Init store from localStorage
      * If we have a token, fetch user infos from API
      */
-    async init(): Promise<ExtendedUser | undefined> {
+    async init(): Promise<User | undefined> {
       const token = localStorage.getItem(STORAGE_KEY)
       if (token !== null) {
         this.token = token
         this.isLoggedIn = true
-        let userData: ExtendedUser | undefined
+        let userData: User | undefined
         try {
           userData = await userAPI.list({ authenticated: true })
         } catch (err) {
@@ -126,14 +126,14 @@ export const useUserStore = defineStore('user', {
     /**
      * Store user infos
      */
-    storeInfo(data: ExtendedUser) {
+    storeInfo(data: User) {
       this.data = data
     },
     /**
      * Has current user edit permissions on given object?
      */
-    hasEditPermissions<T>(object: WithOwned<T> | null): boolean {
-      if (object === null) return false
+    hasEditPermissions<T>(object: WithOwned<T> | null | undefined): boolean {
+      if (object == null) return false
       if (!this.loggedIn || this.data === undefined) return false
       if (this.isAdmin) return true
       if (object.owner != null) {

@@ -1,26 +1,35 @@
 import {
-  casUsageFactory,
-  solutionFactory
-} from '../../../support/factories/custom/simplifions/topics_factory'
+  mockApidatasetRecommandations,
+  mockApiOrDatasetUtiles,
+  mockApisOrDatasets,
+  mockCasUsage,
+  mockSolution,
+  mockSolutionRecommandation
+} from '../../../support/factories/custom/simplifions/simplifions_mocks'
+
+import './support'
 
 describe("Simplifions Cas d'usages Show Page", () => {
   beforeEach(() => {
-    const casUsage = casUsageFactory.one({
-      overrides: {
-        slug: 'aides-publiques-entreprises-sourcage',
-        extras: {
-          'simplifions-cas-d-usages': {
-            Titre: 'Aides publiques entreprises | Sourçage'
-          }
-        }
-      }
-    })
-    cy.mockDatagouvObject('topics', casUsage.slug, casUsage)
-    cy.mockDatagouvObjectList('discussions')
-    cy.mockGristImages()
-    cy.mockDatagouvObject('topics', 'sample-solution', solutionFactory.one())
+    cy.baseMocksForSimplifions()
 
-    cy.visit(`/cas-d-usages/${casUsage.slug}`)
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: [],
+      Descriptions_des_API_et_datasets_utiles_fournis: [],
+      Ces_logiciels_l_integrent_deja: []
+    })
+    const { topicCasUsage } = mockCasUsage(
+      {
+        Recommandations: [gristRecommandation.id]
+      },
+      {
+        slug: 'aides-publiques-entreprises-sourcage',
+        name: 'Aides publiques entreprises | Sourçage',
+        description: 'Lorem ipsum dolor sit amet'
+      }
+    )
+
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
   })
 
   it("should display the cas d'usage show page correctly", () => {
@@ -35,6 +44,10 @@ describe("Simplifions Cas d'usages Show Page", () => {
 
     // Check that the custom description is visible
     cy.get('.test_cas-d-usage-description').should('not.be.empty')
+    cy.get('.test_cas-d-usage-description').should(
+      'contain.text',
+      'Lorem ipsum dolor sit amet'
+    )
   })
 
   it('should have a functional summary', () => {
@@ -66,29 +79,246 @@ describe("Simplifions Cas d'usages Show Page", () => {
     cy.get('.fr-breadcrumb__list').should('contain.text', 'Solutions')
   })
 
-  it('should display the APIs cards correctly', () => {
-    // Check that the data api card is visible
-    cy.get('.api-or-dataset-card').should('not.be.empty')
+  it('should not display the APIs cards when no APIs or datasets are recommended', () => {
+    cy.get('.api-or-dataset-card').should('not.exist')
+  })
+
+  it('should not display the access link when no access link is provided', () => {
+    cy.get('.reco-solution .access-link').should('not.exist')
+  })
+
+  describe('with an access link in recommandation grist data', () => {
+    beforeEach(() => {
+      const { gristRecommandation } = mockSolutionRecommandation({
+        API_et_datasets_utiles_fournis: [],
+        Descriptions_des_API_et_datasets_utiles_fournis: [],
+        Ces_logiciels_l_integrent_deja: [],
+        access_link_with_fallback: 'https://example.com'
+      })
+
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: [gristRecommandation.id]
+        },
+        {
+          slug: 'aides-publiques-entreprises-sourcage',
+          name: 'Aides publiques entreprises | Sourçage',
+          description: 'Lorem ipsum dolor sit amet'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+    })
+
+    it('should have a functional access link', () => {
+      cy.get('.reco-solution .access-link').should(
+        'contain.text',
+        "Demande d'accès"
+      )
+    })
   })
 })
 
-describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets, and custom descriptions", () => {
+describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets recommandations", () => {
   beforeEach(() => {
-    // Visit the Simplifions home page before each test
-    cy.visit(
-      '/cas-d-usages/marches-publics-depot-et-instruction-des-candidatures'
+    cy.baseMocksForSimplifions()
+
+    const { gristRecommandations } = mockApidatasetRecommandations(2)
+    const { topicCasUsage } = mockCasUsage(
+      {
+        Recommandations: gristRecommandations.map((reco) => reco.id)
+      },
+      {
+        slug: 'aides-publiques-entreprises-sourcage',
+        name: 'Aides publiques entreprises | Sourçage',
+        description: 'Lorem ipsum dolor sit amet'
+      }
+    )
+
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+  })
+
+  it('should display the recommandations of APIs or datasets', () => {
+    cy.get('.reco-data-api-card').should('have.length', 2)
+    cy.get('.api-or-dataset-card').should('have.length', 2)
+    cy.get('.dataset-card').should('have.length', 1)
+    cy.get('.dataservice-card').should('have.length', 1)
+  })
+
+  it('should not display the access link when no access link is provided', () => {
+    cy.get('.reco-data-api-card .access-link').should('not.exist')
+  })
+
+  describe('with an access link in recommandation grist data', () => {
+    beforeEach(() => {
+      const { gristRecommandations } = mockApidatasetRecommandations(1, {
+        access_link_with_fallback: 'https://example.com'
+      })
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: gristRecommandations.map((reco) => reco.id)
+        },
+        {
+          slug: 'aides-publiques-entreprises-sourcage',
+          name: 'Aides publiques entreprises | Sourçage',
+          description: 'Lorem ipsum dolor sit amet'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+    })
+
+    it('should have a functional access link', () => {
+      cy.get('.reco-data-api-card .access-link').should(
+        'contain.text',
+        "Demande d'accès"
+      )
+    })
+  })
+
+  describe('with dataservice authorization_request_url', () => {
+    beforeEach(() => {
+      cy.baseMocksForSimplifions()
+
+      const { gristRecommandations, dataservicesOrDatasets } =
+        mockApidatasetRecommandations(
+          1,
+          {},
+          { Type: 'API' },
+          { authorization_request_url: 'https://dataservice-auth.example.com' }
+        )
+
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: gristRecommandations.map((reco) => reco.id)
+        },
+        {
+          slug: 'dataservice-auth-test',
+          name: 'Test with Dataservice Auth',
+          description: 'Testing authorization_request_url'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+      cy.wait(`@get_dataservices_${dataservicesOrDatasets[0].slug}`)
+    })
+
+    it('should display the access link from dataservice authorization_request_url', () => {
+      cy.get('.reco-data-api-card .access-link').should('exist')
+      cy.get('.reco-data-api-card .access-link')
+        .should('contain.text', "Demande d'accès")
+        .and('have.attr', 'href', 'https://dataservice-auth.example.com')
+    })
+  })
+
+  describe('with both access link in recommandation grist data and dataservice authorization_request_url', () => {
+    beforeEach(() => {
+      cy.baseMocksForSimplifions()
+
+      const { gristRecommandations, dataservicesOrDatasets } =
+        mockApidatasetRecommandations(
+          1,
+          {
+            access_link_with_fallback: 'https://recommandation-url.example.com'
+          },
+          { Type: 'API' },
+          { authorization_request_url: 'https://dataservice-auth.example.com' }
+        )
+
+      const { topicCasUsage } = mockCasUsage(
+        {
+          Recommandations: gristRecommandations.map((reco) => reco.id)
+        },
+        {
+          slug: 'priority-test',
+          name: 'Test URL Priority',
+          description: 'Testing URL priority'
+        }
+      )
+
+      cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+      cy.wait(`@get_dataservices_${dataservicesOrDatasets[0].slug}`)
+    })
+
+    it('should prioritize recommandation URL over dataservice authorization_request_url', () => {
+      cy.get('.reco-data-api-card .access-link').should('exist')
+      cy.get('.reco-data-api-card .access-link')
+        .should('contain.text', "Demande d'accès")
+        .and('have.attr', 'href', 'https://recommandation-url.example.com')
+    })
+  })
+})
+
+describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datasets, and one custom description", () => {
+  beforeEach(() => {
+    cy.baseMocksForSimplifions()
+
+    const { gristApisAndDatasets } = mockApisOrDatasets(2)
+    const { gristApiOrDatasetUtiles } = mockApiOrDatasetUtiles(
+      [gristApisAndDatasets[0].id],
+      {
+        En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage:
+          'This is a custom description'
+      }
+    )
+
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: gristApisAndDatasets.map((a) => a.id),
+      Descriptions_des_API_et_datasets_utiles_fournis:
+        gristApiOrDatasetUtiles.map((a) => a.id),
+      Ces_logiciels_l_integrent_deja: []
+    })
+    const { topicCasUsage } = mockCasUsage({
+      Recommandations: [gristRecommandation.id]
+    })
+
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+  })
+
+  it('should display the dataservices and datasets useful inside the recommandationsolution', () => {
+    cy.get('.reco-solution').should(
+      'contain.text',
+      'API et données utiles, fournies par la solution'
+    )
+    cy.get('.api-or-dataset-utile').should('have.length', 2)
+  })
+
+  it('should display the custom description of the api or dataset utile', () => {
+    // Check that the dataservices custom description is visible
+    cy.get('.api-or-dataset-utile').should('have.length', 2)
+    cy.get('.api-or-dataset-utile-description').should('have.length', 1)
+    cy.get('.api-or-dataset-utile-description').should(
+      'contain.text',
+      'This is a custom description'
     )
   })
+})
 
-  it("should display the datasets cards for a cas d'usage with datasets", () => {
-    // Check that the api cards are visible
-    cy.get('.api-or-dataset-card.dataservices-card').should('not.be.empty')
-    // Check that the datasets cards are visible
-    cy.get('.api-or-dataset-card.datasets-card').should('not.be.empty')
+describe("Simplifions Cas d'usages Show page for cas d'usage with editors integrations", () => {
+  beforeEach(() => {
+    cy.baseMocksForSimplifions()
+
+    const { gristSolution: gristEditorSolution } = mockSolution({
+      Nom: 'The Best Editor Solution'
+    })
+
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: [],
+      Descriptions_des_API_et_datasets_utiles_fournis: [],
+      Ces_logiciels_l_integrent_deja: [gristEditorSolution.id]
+    })
+    const { topicCasUsage } = mockCasUsage({
+      Recommandations: [gristRecommandation.id]
+    })
+
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
   })
 
-  it('should display the custom descriptions in the dataservices and datasets cards', () => {
-    // Check that the dataservices custom description is visible
-    cy.get('.api-or-dataset-description').should('not.be.empty')
+  it('should display the editor solution', () => {
+    cy.get('.solutions-editeurs').should('have.length', 1)
+    cy.get('.solutions-editeurs').should(
+      'contain.text',
+      'The Best Editor Solution'
+    )
   })
 })

@@ -1,9 +1,10 @@
-import { solutionFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import { topicSolutionFactory } from '../../../support/factories/custom/simplifions/topics_factory'
+import './support'
 
 describe('Simplifions Solutions Page', () => {
   beforeEach(() => {
-    cy.mockGristImages()
-    cy.mockDatagouvObjectList('topics', solutionFactory.many(11))
+    cy.baseMocksForSimplifions()
+    cy.mockDatagouvObjectList('topics', topicSolutionFactory.many(11))
     cy.visit('/solutions')
   })
 
@@ -36,7 +37,7 @@ describe('Simplifions Solutions Page', () => {
   })
 
   it('should display only one page when there is only one result', () => {
-    cy.mockDatagouvObjectList('topics', solutionFactory.many(1))
+    cy.mockDatagouvObjectList('topics', topicSolutionFactory.many(1))
     cy.visit('/solutions')
     cy.get('div.topic-card').should('have.length', 1)
     cy.get('#number-of-results').should('contain.text', '1 solution disponible')
@@ -50,7 +51,7 @@ describe('Simplifions Solutions Page', () => {
     cy.expectActionToCallApi(
       () => cy.get('input#search-topic').type('Démarches simplifiées'),
       'topics',
-      'q=D%C3%A9marches+simplifi%C3%A9es&tag=simplifions-solutions'
+      /q=D%C3%A9marches\+simplifi%C3%A9es.*tag=simplifions-v2-solutions/
     )
   })
 
@@ -58,7 +59,7 @@ describe('Simplifions Solutions Page', () => {
     cy.expectActionToCallApi(
       () => cy.selectFilterValue('À destination de :', 'Communes'),
       'topics',
-      'tag=simplifions-fournisseurs-de-service-communes&tag=simplifions-solutions'
+      'tag=simplifions-v2-fournisseurs-de-service-communes&tag=simplifions-v2-solutions'
     )
   })
 
@@ -70,7 +71,7 @@ describe('Simplifions Solutions Page', () => {
           'Particuliers'
         ),
       'topics',
-      'tag=simplifions-target-users-particuliers&tag=simplifions-solutions'
+      'tag=simplifions-v2-target-users-particuliers&tag=simplifions-v2-solutions'
     )
   })
 
@@ -82,7 +83,7 @@ describe('Simplifions Solutions Page', () => {
           'Aucun développement, ni budget'
         ),
       'topics',
-      'tag=simplifions-budget-aucun-developpement-ni-budget&tag=simplifions-solutions'
+      'tag=simplifions-v2-budget-aucun-developpement-ni-budget&tag=simplifions-v2-solutions'
     )
   })
 
@@ -94,7 +95,7 @@ describe('Simplifions Solutions Page', () => {
           'Accès facile'
         ),
       'topics',
-      'tag=simplifions-types-de-simplification-acces-facile&tag=simplifions-solutions'
+      'tag=simplifions-v2-types-de-simplification-acces-facile&tag=simplifions-v2-solutions'
     )
   })
 
@@ -115,7 +116,7 @@ describe('Simplifions Solutions Page', () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-solutions&.+&include_private=true/
+        /tag=simplifions-v2-solutions.*include_private=true/
       )
     })
   })
@@ -127,7 +128,7 @@ describe('Simplifions Solutions Page', () => {
     )
     cy.get('div.topic-card').should('have.length', 10)
 
-    cy.mockDatagouvObjectList('topics', solutionFactory.many(3))
+    cy.mockDatagouvObjectList('topics', topicSolutionFactory.many(3))
     cy.selectFilterValue('À destination de :', 'Communes')
 
     cy.get('#number-of-results').should(
@@ -135,5 +136,48 @@ describe('Simplifions Solutions Page', () => {
       '3 solutions disponibles'
     )
     cy.get('div.topic-card').should('have.length', 3)
+  })
+
+  it('should display images from Grist for solutions', () => {
+    cy.mockDatagouvObjectList(
+      'topics',
+      topicSolutionFactory.many(1, {
+        overrides: {
+          extras: {
+            'simplifions-v2-solutions': {
+              Image: ['123']
+            }
+          }
+        }
+      })
+    )
+
+    cy.get('img.card-image').should('have.length', 1)
+    cy.get('img.card-image')
+      .should('have.attr', 'src')
+      .and(
+        'match',
+        /https:\/\/grist\.numerique\.gouv\.fr\/api\/docs\/.+\/attachments\/123\/download/
+      )
+  })
+
+  it('should display the first operator name and public/privatefrom the extras', () => {
+    cy.mockDatagouvObjectList(
+      'topics',
+      topicSolutionFactory.many(1, {
+        overrides: {
+          extras: {
+            'simplifions-v2-solutions': {
+              Nom_de_l_operateur: ['First Operator', 'Second Operator'],
+              Public_ou_prive: 'Public'
+            }
+          }
+        }
+      })
+    )
+
+    cy.get('.topic-card').should('contain.text', 'First Operator')
+    cy.get('.topic-card').should('not.contain.text', 'Second Operator')
+    cy.get('.topic-card').should('contain.text', 'Solution publique')
   })
 })

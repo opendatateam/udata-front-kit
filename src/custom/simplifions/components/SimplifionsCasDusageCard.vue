@@ -6,9 +6,9 @@
     <div class="topic-card" :class="{ 'topic-card--private': topic.private }">
       <div class="header-topic">
         <!--Titre et description-->
-        <div class="title-topic fr-text--lead">
-          {{ titleIcon }} {{ topic.name }}
-        </div>
+        <h3 class="title-topic fr-text--lead">
+          {{ topic.name }}
+        </h3>
         <p class="fr-mb-1w">
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
         </p>
@@ -28,26 +28,18 @@
 </template>
 
 <script setup lang="ts">
-import { formatRelativeIfRecentDate } from '@datagouv/components'
-
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
-
 import { stripFromMarkdown } from '@/utils'
-import type { SimplifionsCasUsagesExtras } from '../model/cas_usage'
+import { useFormatDate } from '@datagouv/components-next'
 import SimplifionsTags from './SimplifionsTags.vue'
 
-const props = defineProps<{
+defineProps<{
   topic: Topic
 }>()
 
-const titleIcon = computed(() => {
-  return (props.topic.extras as SimplifionsCasUsagesExtras)[
-    'simplifions-cas-d-usages'
-  ].Icone_du_titre
-})
-
 const { pageKey } = useCurrentPageConf()
+const { formatRelativeIfRecentDate } = useFormatDate()
 </script>
 
 <style scoped>
@@ -98,6 +90,7 @@ const { pageKey } = useCurrentPageConf()
 }
 .title-topic {
   font-family: Marianne;
+  color: #465f9d;
   font-size: 18px;
   font-weight: 800;
   line-height: 27px;

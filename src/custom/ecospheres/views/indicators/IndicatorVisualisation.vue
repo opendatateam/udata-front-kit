@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { useResourceStore } from '@/store/ResourceStore'
-import type { DatasetV2 } from '@datagouv/components'
 import { initializeVisualization } from '@ecolabdata/tabular-dataviz'
 import '@ecolabdata/tabular-dataviz/styles/visualisation.css'
-import type {
-  IndicatorExtras,
-  IndicatorResourceExtras
-} from '../../model/indicator'
+import type { Indicator, IndicatorResourceExtras } from '../../model/indicator'
 
 const props = defineProps({
   indicator: {
-    type: Object as () => DatasetV2,
+    type: Object as () => Indicator,
     required: true
   },
   tabularApiUrl: {
@@ -47,17 +43,15 @@ const indicatorResources = computed(() => {
 
 // Format indicator according to the format expected by the visualization module
 const indicatorForGraph = computed(() => {
-  const metadata = props.indicator.extras[
-    'ecospheres-indicateurs'
-  ] as IndicatorExtras
-
+  const metadata = props.indicator.extras['ecospheres-indicateurs']
   const formatted = {
     id: props.indicator.id,
     unite: metadata?.unite ?? 'na',
     summable: metadata?.summable ?? false,
-    enableVisualisation: metadata?.['enable_visualization'] ?? false
+    enableVisualisation: metadata?.['enable_visualization'] ?? false,
+    yStartAtZero: metadata?.['y_start_at_zero'] ?? false,
+    ignoreFormatBigNumber: metadata?.['ignore_format_big_number'] ?? false
   }
-
   return formatted
 })
 
@@ -106,7 +100,7 @@ watch(
 <template
   v-if="indicatorResources.length > 0 && indicatorForGraph.enableVisualisation"
 >
-  <h2 class="subtitle subtitle--uppercase">Pré-visualisation</h2>
+  <h2 class="subtitle subtitle--uppercase">Prévisualisation</h2>
   <!-- Visualisation will use this div to render the graph through @ecolabadata/tabular-dataviz -->
   <div
     class="indicator-viz"

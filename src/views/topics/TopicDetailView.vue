@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
+import {
+  OrganizationNameWithCertificate,
+  ReadMore
+} from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, defineAsyncComponent, inject, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -12,8 +15,8 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
-import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
+import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
+import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -24,23 +27,24 @@ import type { TopicPageRouterConf } from '@/router/model'
 import {
   useCurrentPageConf,
   useRouteMeta,
-  useRouteParamsAsString
+  useRouteParamsAsStringReactive
 } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useAsyncComponent } from '@/utils/component'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
-import { updateTopicExtras, useExtras } from '@/utils/topic'
+import { useExtras, useTopicFactors } from '@/utils/topic'
 
 const props = defineProps<TopicPageRouterConf>()
 
 const router = useRouter()
 const meta = useRouteMeta()
-const { params } = useRouteParamsAsString()
 const store = useTopicStore()
 const loading = useLoading()
+const route = useRouteParamsAsStringReactive()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
@@ -54,12 +58,9 @@ const setAccessibilityProperties = inject(
 const description = computed(() => descriptionFromMarkdown(topic))
 
 // Dynamically load the custom description component if it exists
-const customDescriptionComponent = computed(() => {
-  if (meta.descriptionComponent) {
-    return defineAsyncComponent(meta.descriptionComponent)
-  }
-  return null
-})
+const customDescriptionComponent = useAsyncComponent(
+  () => meta.descriptionComponent
+)
 
 const userStore = useUserStore()
 const canEdit = computed(() => {
@@ -73,7 +74,8 @@ const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
-const { datasetsProperties, clonedFrom } = useExtras(topic)
+const { clonedFrom } = useExtras(topic)
+const { factors } = useTopicFactors(topic)
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -173,36 +175,6 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateDatasets = () => {
-  if (topic.value == null) {
-    throw Error('Trying to update null topic')
-  }
-  const loader = useLoading().show()
-
-  // Deduplicate datasets ids in case of same DS used multiple times
-  // API rejects PUT if the same id is used more than once
-  const dedupedDatasets = [
-    ...new Set(
-      datasetsProperties.value
-        .filter((d) => d.id !== null && d.remoteDeleted !== true)
-        .map((d) => d.id)
-    )
-  ]
-
-  store
-    .update(topic.value.id, {
-      // send the tags or payload will be rejected
-      tags: topic.value.tags,
-      datasets: dedupedDatasets,
-      extras: updateTopicExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
-        )
-      })
-    })
-    .finally(() => loader.hide())
-}
-
 const metaDescription = (): string | undefined => {
   return topic.value?.description ?? ''
 }
@@ -232,14 +204,15 @@ useHead({
 })
 
 watch(
-  () => params.item_id,
-  () => {
+  () => route.value?.params.item_id,
+  (itemId) => {
+    if (!itemId) return
     const loader = loading.show({ enforceFocus: false })
     store
-      .load(params.item_id, { toasted: false, redirectNotFound: true })
+      .load(itemId, { toasted: false, redirectNotFound: true })
       .then((res) => {
         topic.value = res
-        if (topic.value.slug !== params.item_id) {
+        if (topic.value.slug !== itemId) {
           router.push({
             name: `${pageKey}_detail`,
             params: { item_id: topic.value.slug }
@@ -257,7 +230,7 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <GenericContainer v-if="topic">
+  <GenericContainer v-if="topic" class="tabs-height-fix">
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
@@ -382,7 +355,7 @@ watch(
             <div class="fr-col-auto fr-mr-1w">
               <OrganizationLogo :object="topic" />
             </div>
-            <p class="fr-col fr-m-0">
+            <p class="fr-col fr-m-0 min-width-0">
               <a class="fr-link" :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"
@@ -450,16 +423,13 @@ watch(
         tab-id="tab-datasets"
         class="fr-px-2w"
       >
-        <TopicDatasetList
-          v-model="datasetsProperties"
+        <TopicFactorsList
+          v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
-          @update-datasets="onUpdateDatasets"
+          :topic-id="topic.id"
         />
-        <TopicDatasetListExport
-          :datasets="datasetsProperties"
-          :filename="topic.id"
-        />
+        <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent
@@ -479,7 +449,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <ReusesList model="topic" :object-id="topic.id" />
+        <ReusesList model="topic" :object="topic" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
@@ -498,14 +468,5 @@ watch(
 }
 .owner-avatar {
   margin-bottom: -6px;
-}
-/*
-FIXME: magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
-*/
-:deep(.fr-tabs) {
-  height: auto;
-}
-:deep(.fr-tabs)::before {
-  height: calc(var(--tabs-height) - 47px);
 }
 </style>

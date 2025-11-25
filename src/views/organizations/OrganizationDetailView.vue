@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
+import { DatasetCard } from '@datagouv/components-next'
 import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
@@ -13,7 +14,6 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { DatasetCard } from '@datagouv/components'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
@@ -118,12 +118,12 @@ watchEffect(() => {
       </div>
     </div>
 
-    <h2 class="fr-mt-2w">Jeux de données</h2>
+    <h2 class="fr-my-2w">Jeux de données</h2>
     <div v-if="!datasets?.length">
       Pas de jeu de données pour cette organisation.
     </div>
     <ul v-else class="fr-px-0" role="list">
-      <li v-for="d in datasets" :key="d.id" class="fr-col-md-12 fr-py-0">
+      <li v-for="d in datasets" :key="d.id" class="fr-col-md-12 fr-py-1w">
         <DatasetCard
           :dataset="d"
           :dataset-url="{ name: 'datasets_detail', params: { item_id: d.id } }"

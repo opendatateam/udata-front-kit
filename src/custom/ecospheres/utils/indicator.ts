@@ -1,10 +1,9 @@
 import { useSpatialStore } from '@/store/SpatialStore'
 import { usePageConf } from '@/utils/config'
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 import type { ComputedRef } from 'vue'
 import type {
   Indicator,
-  IndicatorExtras,
   IndicatorExtrasCalcul,
   IndicatorExtrasSource,
   IndicatorsExtrasApi
@@ -28,8 +27,7 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   watch(
     indicator,
     () => {
-      const extras: IndicatorExtras =
-        indicator.value?.extras?.['ecospheres-indicateurs']
+      const extras = indicator.value?.extras?.['ecospheres-indicateurs']
       if (extras) {
         unite.value = extras.unite
         mailles.value = (extras.mailles_geographiques || [])
@@ -58,7 +56,7 @@ export const isIndicator = (
   dataset: Ref<DatasetV2 | undefined>
 ): ComputedRef<boolean> => {
   return computed(() => {
-    if (!pageConf.tag_prefix) return false
-    return dataset.value?.tags?.includes(pageConf.tag_prefix) || false
+    if (!pageConf.filter_prefix) return false
+    return dataset.value?.tags?.includes(pageConf.filter_prefix) || false
   })
 }

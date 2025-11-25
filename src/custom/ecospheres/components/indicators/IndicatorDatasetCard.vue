@@ -3,24 +3,25 @@
  * This component is a copy of the DatasetCard component from the @datagouv/components package.
  * It is used to display an indicator.
  */
-import type { DatasetV2 } from '@datagouv/components'
+import type { DatasetV2 } from '@datagouv/components-next'
 import {
   Avatar,
+  DatasetQualityInline,
   OrganizationNameWithCertificate,
   Placeholder,
-  QualityComponentInline,
-  formatRelativeIfRecentDate,
-  summarize
-} from '@datagouv/components'
+  summarize,
+  useFormatDate
+} from '@datagouv/components-next'
 import TextClamp from 'vue3-text-clamp'
 
-import { useOwnerName } from '@/utils/dataset'
+import { useOwnerName } from '@/utils/owned'
 
 type Props = {
   dataset: DatasetV2
 }
 
 const props = defineProps<Props>()
+const { formatRelativeIfRecentDate } = useFormatDate()
 
 const ownerName = useOwnerName(props.dataset)
 </script>
@@ -98,7 +99,7 @@ const ownerName = useOwnerName(props.dataset)
           class="fr-mx-0 fr-mb-n1v fr-grid-row fr-grid-row--middle fr-text--sm text-mention-grey"
         >
           <div class="fr-hidden flex-sm dash-after-sm text-grey-500">
-            <QualityComponentInline :quality="dataset.quality" />
+            <DatasetQualityInline :quality="dataset.quality" />
           </div>
           <div class="fr-grid-row fr-grid-row--middle fr-mr-1v">
             <p
