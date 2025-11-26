@@ -18,7 +18,9 @@ export const topicFactory = build<Topic>({
     private: false,
     slug: sequence((n) => `sample-topic-${n}`),
     tags: ['ecospheres'],
-    uri: sequence((n) => `https://www.data.gouv.fr/topics/id-topic-${n}`),
+    uri: sequence(
+      (n) => `https://www.data.gouv.fr/api/2/topics/slug-topic-${n}`
+    ),
     spatial: undefined,
     page: sequence((n) => `https://www.data.gouv.fr/topics/slug-topic-${n}`),
     elements: {

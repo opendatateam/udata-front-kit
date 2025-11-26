@@ -28,7 +28,7 @@ import type { TopicPageRouterConf } from '@/router/model'
 import {
   useCurrentPageConf,
   useRouteMeta,
-  useRouteParamsAsString
+  useRouteParamsAsStringReactive
 } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -43,9 +43,9 @@ const props = defineProps<TopicPageRouterConf>()
 
 const router = useRouter()
 const meta = useRouteMeta()
-const { params } = useRouteParamsAsString()
 const store = useTopicStore()
 const loading = useLoading()
+const route = useRouteParamsAsStringReactive()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
@@ -267,14 +267,15 @@ watch(
 )
 
 watch(
-  () => params.item_id,
-  () => {
+  () => route.value?.params.item_id,
+  (itemId) => {
+    if (!itemId) return
     const loader = loading.show({ enforceFocus: false })
     store
-      .load(params.item_id, { toasted: false, redirectNotFound: true })
+      .load(itemId, { toasted: false, redirectNotFound: true })
       .then((res) => {
         topic.value = res
-        if (topic.value.slug !== params.item_id) {
+        if (topic.value.slug !== itemId) {
           router.push({
             name: `${pageKey}_detail`,
             params: { item_id: topic.value.slug }
@@ -513,7 +514,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <ReusesList model="topic" :object-id="topic.id" />
+        <ReusesList model="topic" :object="topic" />
       </DsfrTabContent>
       <!-- Activité -->
       <DsfrTabContent

@@ -36,7 +36,7 @@ describe('Topic Elements - Permissions and Access Control', () => {
 
     it('should show edit controls for topic owners', () => {
       // Topic is owned by current user
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
 
       // Verify edit controls are present
       cy.get('.test__add_dataset_btn').should('be.visible')

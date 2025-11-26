@@ -41,6 +41,21 @@ export const factorFactory = build<Factor>({
         }
       }
     },
+    topic_reference: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence(
+              (x) =>
+                `https://demo.ecologie.data.gouv.fr/bouquets/referenced-topic-${x}`
+            ),
+            availability: Availability.LOCAL_AVAILABLE,
+            group: 'Test Group'
+          }
+        },
+        element: null
+      }
+    },
     dataset_in_sequential_group: {
       overrides: {
         extras: {
@@ -214,12 +229,13 @@ export function mockTopicElementsByClass(
 }
 
 // Common mocks for topic and discussions
-export function mockTopicAndRelatedObjects(
+export function mockTopicAndDiscussions(
   topic: Topic,
   factors: Factor[] = [],
+  referencedTopics: Topic[] = [],
   activities: Activity[] = []
 ) {
-  cy.mockDatagouvObject('topics', topic.id, topic)
+  cy.mockDatagouvObject('topics', topic.slug, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
       cy.mockDatagouvObject(
@@ -228,6 +244,10 @@ export function mockTopicAndRelatedObjects(
         datasetFactory.one({ overrides: { id: factor.element.id } })
       )
     }
+  })
+  // Mock referenced topics for topic_reference trait
+  referencedTopics.forEach((refTopic) => {
+    cy.mockDatagouvObject('topics', refTopic.slug, refTopic)
   })
   cy.mockDatagouvObjectList('discussions')
   cy.mockDatagouvObjectList('reuses')

@@ -10,7 +10,7 @@ describe('Topic Elements - Factor Addition', () => {
 
   describe('Adding New Factors', () => {
     beforeEach(() => {
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
     })
 
     it('should add a new "missing" factor and be able to edit it immediately', () => {
