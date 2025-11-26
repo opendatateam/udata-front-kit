@@ -66,7 +66,5 @@ jobs:
           node-version: 20.x
           cache: 'pnpm'
       - run: pnpm install
-      - name: Verify Cypress binary
-        run: npx cypress verify
       - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run build -- --mode test
       - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run test:e2e:for_production_build
