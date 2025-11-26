@@ -8,7 +8,7 @@ WORKDIR /app
 # Copy package files first for better layer caching
 COPY package.json pnpm-lock.yaml .npmrc ./
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Copy source files
 COPY ./ /app
