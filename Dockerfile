@@ -1,7 +1,7 @@
 FROM node:22 AS builder
 
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.2 --activate
+RUN corepack enable && corepack prepare pnpm@latest-10 --activate
 
 WORKDIR /app
 
