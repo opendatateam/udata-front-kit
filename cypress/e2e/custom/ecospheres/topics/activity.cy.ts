@@ -13,7 +13,7 @@ describe('Topic Activity List', () => {
   describe('Activity tab visibility', () => {
     it('should show Activity tab for topic owners', () => {
       const { testTopic } = setupTopicWithExistingFactors()
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
 
       cy.wait('@getElementsDataset')
 
@@ -27,7 +27,7 @@ describe('Topic Activity List', () => {
       // Disconnect user to simulate non-owner
       cy.simulateDisconnectedUser()
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Activity tab should not exist for non-owners
@@ -53,7 +53,7 @@ describe('Topic Activity List', () => {
         activities
       )
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Click Activity tab
@@ -89,7 +89,7 @@ describe('Topic Activity List', () => {
         activities
       )
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       cy.get('[role="tab"]').contains('Activité').click()
@@ -113,7 +113,7 @@ describe('Topic Activity List', () => {
 
       const { testTopic } = setupTopicWithExistingFactors(undefined, activities)
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       cy.get('[role="tab"]').contains('Activité').click()
@@ -136,7 +136,7 @@ describe('Topic Activity List', () => {
 
       const { testTopic } = setupTopicWithExistingFactors(undefined, activities)
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       cy.get('[role="tab"]').contains('Activité').click()
@@ -166,7 +166,7 @@ describe('Topic Activity List', () => {
         activities
       )
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       cy.get('[role="tab"]').contains('Activité').click()
@@ -207,7 +207,7 @@ describe('Topic Activity List', () => {
         activities
       )
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       cy.get('[role="tab"]').contains('Activité').click()
@@ -229,7 +229,7 @@ describe('Topic Activity List', () => {
   describe('Activity list updates after factor operations', () => {
     it('should update activity list immediately after adding a factor', () => {
       const { testTopic } = setupTopicWithExistingFactors()
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       const newFactor = {
@@ -280,7 +280,7 @@ describe('Topic Activity List', () => {
     it('should update activity list immediately after modifying a factor', () => {
       const testFactors = createTestFactors(1)
       const { testTopic } = setupTopicWithExistingFactors(testFactors)
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       const updatedFactor = {
@@ -330,7 +330,7 @@ describe('Topic Activity List', () => {
     it('should update activity list immediately after deleting a factor', () => {
       const testFactors = createTestFactors(1)
       const { testTopic } = setupTopicWithExistingFactors(testFactors)
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       cy.intercept(

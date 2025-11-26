@@ -26,7 +26,7 @@ describe('Topic Elements - Permissions and Access Control', () => {
       })
 
       mockTopicAndRelatedObjects(otherUserTopic)
-      cy.visit(`/bouquets/${otherUserTopic.id}`)
+      cy.visit(`/bouquets/${otherUserTopic.slug}`)
 
       // Verify edit controls are not present
       cy.get('.test__add_dataset_btn').should('not.exist')

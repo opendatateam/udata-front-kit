@@ -24,7 +24,7 @@ describe('Topic Elements - Deep Linking', () => {
       const factorId = targetFactor.id
 
       // Visit the topic page with a hash pointing to the factor
-      cy.visit(`/bouquets/${testTopic.id}#factor-${factorId}`)
+      cy.visit(`/bouquets/${testTopic.slug}#factor-${factorId}`)
 
       cy.wait('@getElementsDataset')
 
@@ -51,7 +51,7 @@ describe('Topic Elements - Deep Linking', () => {
       const targetFactor = testFactors[0]
       const factorId = targetFactor.id
 
-      cy.visit(`/bouquets/${testTopic.id}#factor-${factorId}`)
+      cy.visit(`/bouquets/${testTopic.slug}#factor-${factorId}`)
       cy.wait('@getElementsDataset')
 
       // Wait for smooth scroll animation to complete
@@ -79,7 +79,7 @@ describe('Topic Elements - Deep Linking', () => {
       const nonExistentFactorId = 'factor-does-not-exist'
 
       // Visit with a hash to a non-existent factor
-      cy.visit(`/bouquets/${testTopic.id}#factor-${nonExistentFactorId}`)
+      cy.visit(`/bouquets/${testTopic.slug}#factor-${nonExistentFactorId}`)
       cy.wait('@getElementsDataset')
 
       // Page should still load normally
@@ -112,7 +112,7 @@ describe('Topic Elements - Deep Linking', () => {
 
       if (!targetFactor) throw Error('Could not find any ungrouped factor')
 
-      cy.visit(`/bouquets/${testTopic.id}#factor-${targetFactor.id}`)
+      cy.visit(`/bouquets/${testTopic.slug}#factor-${targetFactor.id}`)
       cy.wait('@getElementsNone')
 
       // Ungrouped factors should be visible by default, and the target should be scrolled to
@@ -129,7 +129,7 @@ describe('Topic Elements - Deep Linking', () => {
       const targetFactor = testFactors[0]
 
       // First visit without hash
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Switch to Discussions tab
@@ -140,7 +140,7 @@ describe('Topic Elements - Deep Linking', () => {
       )
 
       // Now navigate to a factor via hash
-      cy.visit(`/bouquets/${testTopic.id}#factor-${targetFactor.id}`)
+      cy.visit(`/bouquets/${testTopic.slug}#factor-${targetFactor.id}`)
 
       // Should switch back to Données tab
       cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
@@ -150,7 +150,7 @@ describe('Topic Elements - Deep Linking', () => {
     })
 
     it('should not interfere with normal tab navigation', () => {
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Click through tabs normally
@@ -168,7 +168,7 @@ describe('Topic Elements - Deep Linking', () => {
       const targetFactor = testFactors[0]
 
       // Start with a factor deeplink
-      cy.visit(`/bouquets/${testTopic.id}#factor-${targetFactor.id}`)
+      cy.visit(`/bouquets/${testTopic.slug}#factor-${targetFactor.id}`)
       cy.wait('@getElementsDataset')
 
       // Verify we're on Données tab with factor visible
