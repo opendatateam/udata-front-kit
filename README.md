@@ -117,12 +117,13 @@ pnpm run format
 
 Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm pour plusieurs raisons :
 
-- **Sécurité** : pnpm bloque par défaut les scripts d'installation des dépendances, empêchant les attaques de type supply-chain (comme shai-hulud 2.0)
+- **Sécurité** :
+  - Bloque par défaut les scripts d'installation des dépendances (sauf Cypress et Husky via `onlyBuiltDependencies`)
+  - Période de cooldown de 4 jours (`minimum-release-age`) avant d'installer les nouveaux packages, laissant le temps à la communauté de détecter les versions malveillantes
+  - Protection contre les attaques supply-chain (comme shai-hulud 2.0)
 - **Performance** : Installations plus rapides grâce à la parallélisation et aux liens symboliques
 - **Espace disque** : Économie significative d'espace grâce au stockage global partagé
 - **Fiabilité** : Meilleure résolution des dépendances
-
-Nous utilisons `onlyBuiltDependencies` pour autoriser explicitement uniquement Cypress et Husky à exécuter des scripts d'installation.
 
 ## 🚢 Déploiement
 
