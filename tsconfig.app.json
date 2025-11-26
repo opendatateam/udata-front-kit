@@ -17,6 +17,7 @@
     "experimentalDecorators": true,
     "noEmit": true,
     "strictNullChecks": true,
+    "skipLibCheck": true,
     "types": ["node", "unplugin-yaml/types"],
 
     "baseUrl": ".",

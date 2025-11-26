@@ -25,10 +25,10 @@ Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dériv�
 ### Initialisation du projet
 
 ```sh
-npm clean-install
+pnpm install
 
 # installe les pre-commit hooks Husky
-npm run prepare
+pnpm run prepare
 ```
 
 ### Commandes de référence
@@ -36,19 +36,19 @@ npm run prepare
 #### Compilation et hot-reload pour le développement
 
 ```sh
-npm run dev
+pnpm run dev
 ```
 
 #### Compilation et minification pour la production
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 #### Tests unitaires via [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test
+pnpm run test
 ```
 
 #### Tests end-to-end via [Cypress](https://cypress.io/)
@@ -59,23 +59,23 @@ Pour lancer les tests _génériques_ communs à tous les sites, qui se trouvent 
 
 ```sh
 # Pour lancer la version ligne de commande de cypress :
-npm run test:e2e
+pnpm run test:e2e
 
 # Pour lancer la version visuelle de cypress :
-npm run test:e2e:open
+pnpm run test:e2e:open
 ```
 
 Pour lancer les tests génériques + les tests spécifiques à site particulier qui se trouvent dans `/cypress/e2e/monsite/` :
 
 ```sh
 # Pour lancer la version ligne de commande de cypress :
-VITE_SITE_ID=monsite npm run test:e2e
+VITE_SITE_ID=monsite pnpm run test:e2e
 
 # Pour lancer un seul test en ligne de commande :
-VITE_SITE_ID=monsite npm run test:e2e -- --spec cypress/e2e/my/file.cy.js
+VITE_SITE_ID=monsite pnpm run test:e2e -- --spec cypress/e2e/my/file.cy.js
 
 # Pour lancer la version visuelle de cypress :
-VITE_SITE_ID=monsite npm run test:e2e:open
+VITE_SITE_ID=monsite pnpm run test:e2e:open
 ```
 
 **Tester un build** :
@@ -84,9 +84,9 @@ Dans la CI, on veut lancer les tests sur un build, plutôt que sur un serveur de
 
 ```sh
 # Build pour monsite
-VITE_SITE_ID=monsite npm run build
+VITE_SITE_ID=monsite pnpm run build
 # Run les tests sur le build de monsite
-VITE_SITE_ID=monsite npm run test:e2e:for_production_build
+VITE_SITE_ID=monsite pnpm run test:e2e:for_production_build
 ```
 
 #### Factories pour les tests
@@ -98,20 +98,31 @@ On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js) comm
 #### Linting via [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+pnpm run lint
 ```
 
 #### Typage via [TSc](https://www.typescriptlang.org/docs/handbook/compiler-options.html/)
 
 ```sh
-npm run hint
+pnpm run hint
 ```
 
 #### Code formatting with [Prettier](https://prettier.io/)
 
 ```sh
-npm run format
+pnpm run format
 ```
+
+### Pourquoi pnpm ?
+
+Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm pour plusieurs raisons :
+
+- **Sécurité** : pnpm bloque par défaut les scripts d'installation des dépendances, empêchant les attaques de type supply-chain (comme shai-hulud 2.0)
+- **Performance** : Installations plus rapides grâce à la parallélisation et aux liens symboliques
+- **Espace disque** : Économie significative d'espace grâce au stockage global partagé
+- **Fiabilité** : Meilleure résolution des dépendances
+
+Nous utilisons `onlyBuiltDependencies` pour autoriser explicitement uniquement Cypress et Husky à exécuter des scripts d'installation.
 
 ## 🚢 Déploiement
 
