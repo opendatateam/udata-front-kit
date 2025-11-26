@@ -42,7 +42,7 @@ jobs:
           node-version: 20.x
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build --if-present
+      - run: pnpm run build
       - run: pnpm run test:single
 
   e2e-tests:
@@ -74,5 +74,5 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Verify Cypress binary
         run: npx cypress verify
-      - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run build --if-present -- --mode test
+      - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run build -- --mode test
       - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run test:e2e:for_production_build
