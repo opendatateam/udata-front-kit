@@ -3,7 +3,7 @@ import {
   expandDisclosureGroup,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Factor Edition', () => {
   let testTopic: Topic

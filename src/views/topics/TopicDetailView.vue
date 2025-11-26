@@ -6,7 +6,7 @@ import {
 import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -15,6 +15,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
+import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import config from '@/config'
@@ -76,6 +77,17 @@ const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
 const { factors } = useTopicFactors(topic)
+const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
+  null
+)
+const topicActivityListRef = ref<InstanceType<typeof TopicActivityList> | null>(
+  null
+)
+
+const handleFactorChanged = () => {
+  // Refresh activity list when factors are added, modified, or deleted
+  topicActivityListRef.value?.refreshActivityList()
+}
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -89,28 +101,42 @@ const breadcrumbLinks = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles: { title: string; tabId: string; panelId: string }[] = []
-if (showDatasets) {
-  tabTitles.push({
-    title: 'Données',
-    tabId: 'tab-datasets',
-    panelId: 'tab-content-datasets'
-  })
-}
-if (showDiscussions) {
-  tabTitles.push({
-    title: 'Discussions',
-    tabId: 'tab-discussions',
-    panelId: 'tab-content-discussions'
-  })
-}
-if (showReuses) {
-  tabTitles.push({
-    title: 'Réutilisations',
-    tabId: 'tab-reuses',
-    panelId: 'tab-content-reuses'
-  })
-}
+const showActivity = computed(() => canEdit.value)
+
+const tabTitles = computed(() => {
+  const tabs: { title: string; tabId: string; panelId: string }[] = []
+
+  if (showDatasets) {
+    tabs.push({
+      title: 'Données',
+      tabId: 'tab-datasets',
+      panelId: 'tab-content-datasets'
+    })
+  }
+  if (showDiscussions) {
+    tabs.push({
+      title: 'Discussions',
+      tabId: 'tab-discussions',
+      panelId: 'tab-content-discussions'
+    })
+  }
+  if (showReuses) {
+    tabs.push({
+      title: 'Réutilisations',
+      tabId: 'tab-reuses',
+      panelId: 'tab-content-reuses'
+    })
+  }
+  if (showActivity.value) {
+    tabs.push({
+      title: 'Activité',
+      tabId: 'tab-activity',
+      panelId: 'tab-content-activity'
+    })
+  }
+
+  return tabs
+})
 
 const activeTab = ref(0)
 
@@ -191,6 +217,13 @@ const metaLink = (): string => {
   return `${window.location.origin}${resolved.href}`
 }
 
+const handleNavigateToFactor = (elementId: string) => {
+  activeTab.value = 0
+  nextTick(() => {
+    topicFactorsListRef.value?.navigateToElement(elementId)
+  })
+}
+
 useHead({
   meta: [
     {
@@ -202,6 +235,36 @@ useHead({
   ],
   link: [{ rel: 'canonical', href: metaLink }]
 })
+
+// Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
+watch(
+  () => router.currentRoute.value.hash,
+  (hash) => {
+    if (hash.startsWith('#factor-')) {
+      activeTab.value = 0
+      const elementId = hash.replace('#factor-', '')
+
+      // Wait for component and data to be ready before navigating
+      let stopWatching: (() => void) | undefined = undefined
+      stopWatching = watchEffect(() => {
+        if (topicFactorsListRef.value && factors.value.length > 0) {
+          nextTick(() => {
+            topicFactorsListRef.value?.navigateToElement(elementId)
+          })
+          stopWatching?.()
+        }
+      })
+
+      // Clear hash immediately using replaceState to avoid adding history entry
+      // and to avoid interfering with navigateToElement's scroll behavior
+      // TODO: proper way would be implement deeplinking for tabs
+      const url = new URL(window.location.href)
+      url.hash = ''
+      window.history.replaceState(window.history.state, '', url.toString())
+    }
+  },
+  { immediate: true }
+)
 
 watch(
   () => route.value?.params.item_id,
@@ -424,10 +487,12 @@ watch(
         class="fr-px-2w"
       >
         <TopicFactorsList
+          ref="topicFactorsListRef"
           v-model="factors"
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
           :topic-id="topic.id"
+          @factor-changed="handleFactorChanged"
         />
         <TopicFactorsListExport :factors="factors" :filename="topic.id" />
       </DsfrTabContent>
@@ -450,6 +515,19 @@ watch(
         tab-id="tab-reuses"
       >
         <ReusesList model="topic" :object="topic" />
+      </DsfrTabContent>
+      <!-- Activité -->
+      <DsfrTabContent
+        v-if="showActivity"
+        panel-id="tab-content-activity"
+        tab-id="tab-activity"
+      >
+        <TopicActivityList
+          ref="topicActivityListRef"
+          :topic
+          :factors
+          @navigate-to-factor="handleNavigateToFactor"
+        />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
