@@ -229,7 +229,7 @@ export function mockTopicElementsByClass(
 }
 
 // Common mocks for topic and discussions
-export function mockTopicAndDiscussions(
+export function mockTopicAndRelatedObjects(
   topic: Topic,
   factors: Factor[] = [],
   referencedTopics: Topic[] = [],
@@ -272,7 +272,7 @@ export function setupTopicWithExistingFactors(
   const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndRelatedObjects(testTopic, testFactors, activities)
+  mockTopicAndRelatedObjects(testTopic, testFactors, [], activities)
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(
