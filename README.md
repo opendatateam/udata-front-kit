@@ -133,6 +133,8 @@ Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm principalement pour de
 - installation via le lockfile par défaut (`npm ci` like),
 - ... et d'autres valeurs de configurations par défaut plus saines que celles de npm.
 
+`pnpm` promet également de meilleurs performances à l'installation et un usage réduit d'espace disque. On ne bénéficie malheureusement pas (encore) de la structure "non-flat" des `node_modules` pour des raisons de rétro-compatibilité avec certaines dépendances.
+
 ## 🚢 Déploiement
 
 ### 🔍 Déploiement en preview
