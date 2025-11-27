@@ -36,8 +36,8 @@ export function parseXml(xmlString: string): Document {
 
 /**
  * Extracts base URL by removing GetCapabilities query parameters
- * WFS URLs often come as: https://example.com/wfs?request=GetCapabilities&service=WFS
- * This returns just the base URL: https://example.com/wfs
+ * WFS URLs often come as: https://example.com/wfs?request=GetCapabilities&service=WFS&unrelated=true
+ * This returns just the base URL: https://example.com/wfs?unrelated=true
  */
 export function extractBaseUrl(url: string): string {
   const urlObj = new URL(url)
