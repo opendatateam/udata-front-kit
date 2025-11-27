@@ -22,6 +22,17 @@ Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dériv�
 \+ [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 \+ [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
+### Installation de pnpm
+
+Ce projet utilise pnpm au lieu de npm. Si vous ne l'avez pas déjà installé :
+
+```sh
+# Enable pnpm via Corepack (inclus avec Node.js 20+)
+corepack enable pnpm
+```
+
+Il existe [d'autres méthodes d'installation si besoin](https://pnpm.io/installation).
+
 ### Initialisation du projet
 
 ```sh
@@ -115,15 +126,11 @@ pnpm run format
 
 ### Pourquoi pnpm ?
 
-Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm pour plusieurs raisons :
+Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm principalement pour des raisons de sécurité :
 
-- **Sécurité** :
-  - Bloque par défaut les scripts d'installation des dépendances (sauf Cypress et Husky via `onlyBuiltDependencies`)
-  - Période de cooldown de 4 jours (`minimum-release-age`) avant d'installer les nouveaux packages, laissant le temps à la communauté de détecter les versions malveillantes
-  - Protection contre les attaques supply-chain (comme shai-hulud 2.0)
-- **Performance** : Installations plus rapides grâce à la parallélisation et aux liens symboliques
-- **Espace disque** : Économie significative d'espace grâce au stockage global partagé
-- **Fiabilité** : Meilleure résolution des dépendances
+- Bloque par défaut les scripts d'installation des dépendances (sauf Cypress et Husky via `onlyBuiltDependencies`)
+- Période de cooldown de 4 jours (`minimum-release-age`) avant d'installer les nouveaux packages, laissant le temps à la communauté de détecter les versions malveillantes
+- ... et d'autres valeurs de configurations par défaut plus saines que celles de npm.
 
 ## 🚢 Déploiement
 
