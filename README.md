@@ -128,8 +128,9 @@ pnpm run format
 
 Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm principalement pour des raisons de sécurité :
 
-- Bloque par défaut les scripts d'installation des dépendances (sauf Cypress et Husky via `onlyBuiltDependencies`)
-- Période de cooldown de 4 jours (`minimum-release-age`) avant d'installer les nouveaux packages, laissant le temps à la communauté de détecter les versions malveillantes
+- bloque par défaut les scripts d'installation des dépendances (sauf Cypress et Husky via `onlyBuiltDependencies`),
+- période de cooldown de 4 jours (`minimum-release-age`) avant d'installer les nouveaux packages, laissant le temps à la communauté de détecter les versions malveillantes,
+- installation via le lockfile par défaut (`npm ci` like),
 - ... et d'autres valeurs de configurations par défaut plus saines que celles de npm.
 
 ## 🚢 Déploiement
