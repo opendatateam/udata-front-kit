@@ -182,7 +182,7 @@ onMounted(() => {
 
       <!-- Réutilisations -->
       <DsfrTabContent panel-id="tab-content-reuses" tab-id="tab-reuses">
-        <ReusesList model="dataset" :object-id="indicator.id" />
+        <ReusesList model="dataset" :object="indicator" />
       </DsfrTabContent>
 
       <!-- Discussions -->

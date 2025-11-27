@@ -8,7 +8,7 @@ import {
   mockTopicElementsByClass,
   setupElementTest,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - QGIS Integration', () => {
   let testTopic: Topic
