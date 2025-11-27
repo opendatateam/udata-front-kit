@@ -7,10 +7,10 @@ on:
       site:
         description: 'Site to deploy on preprod or prod'
         required: true
-        default: 'ecospheres'
+        default: 'ecologie'
         type: choice
         options: # Can't use vars here because this is a workflow dispatch input
-          - ecospheres
+          - ecologie
           - meteo-france
           - logistique
           - defis
