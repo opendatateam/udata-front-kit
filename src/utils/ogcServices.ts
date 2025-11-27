@@ -67,11 +67,11 @@ export async function fetchWfsLayerNames(baseUrl: string): Promise<string[]> {
 
     // Extract layer names from FeatureTypeList
     const layerNames: string[] = []
-    // Try different namespaces (WFS 1.0.0, 1.1.0, 2.0.0)
+    // Try different namespaces
     const nameElements = xmlDoc.querySelectorAll(
-      'FeatureType > Name, ' +
-        'wfs\\:FeatureType > wfs\\:Name, ' +
-        'FeatureType > wfs\\:Name'
+      'FeatureType > Name, ' + // WFS 1.0.0
+        'wfs\\:FeatureType > wfs\\:Name, ' + // WFS 1.1.0 & 2.0.0
+        'FeatureType > wfs\\:Name' // Defensive: non-standard implementations
     )
 
     nameElements.forEach((element) => {
