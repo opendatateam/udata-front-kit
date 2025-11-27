@@ -3,7 +3,7 @@ import {
   expandDisclosureGroup,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Factor Edition', () => {
   let testTopic: Topic
@@ -15,7 +15,7 @@ describe('Topic Elements - Factor Edition', () => {
 
   describe('Editing Existing Factors', () => {
     beforeEach(() => {
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
     })
 
