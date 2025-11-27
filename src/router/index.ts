@@ -137,6 +137,10 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
+      // Skip auto-scroll for factor hashes - we handle scrolling manually in TopicDetailView
+      if (to.hash.startsWith('#factor-')) {
+        return false
+      }
       if (to.hash !== '') {
         return {
           el: to.hash

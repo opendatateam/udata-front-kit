@@ -30,7 +30,7 @@ website:
   meta:
     keywords:
     description:
-    canonical_url:
+    canonical_url: https://ecologie.data.gouv.fr
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'
