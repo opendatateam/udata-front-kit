@@ -90,24 +90,11 @@ export async function fetchWfsLayerNames(baseUrl: string): Promise<string[]> {
 
 /**
  * Validates if a string could be a valid OGC layer name (WMS/WFS)
+ * Layer names should be technical identifiers: 1-100 chars, alphanumeric + _-.:
  */
 export function isValidLayerName(layerName: string): boolean {
-  if (layerName.length === 0) {
-    return false
-  }
-
-  // Check if it's too long (likely a human-readable title if > 100 chars)
-  if (layerName.length > 100) {
-    return false
-  }
-
-  // Check if it contains spaces (layer names shouldn't have spaces)
-  if (layerName.includes(' ')) {
-    return false
-  }
-
-  // Check if it matches typical layer name pattern (aka technical name)
-  const layerNamePattern = /^[a-zA-Z0-9_\-.:]+$/
+  // Combined check: length (1-100), no spaces, valid characters only
+  const layerNamePattern = /^[a-zA-Z0-9_\-.:]{1,100}$/
   return layerNamePattern.test(layerName)
 }
 
