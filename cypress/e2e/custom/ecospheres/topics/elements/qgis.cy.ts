@@ -30,12 +30,15 @@ describe('Topic Elements - QGIS Integration', () => {
       const wfsResource = resourceFactory.one({ traits: ['wfs'] })
 
       // Mock topic and dataset with WFS resource
-      mockTopicAndRelatedObjects(testTopic, [testFactor], {
-        [datasetId]: [wfsResource]
+      mockTopicAndRelatedObjects(testTopic, {
+        factors: [testFactor],
+        datasetResources: {
+          [datasetId]: [wfsResource]
+        }
       })
       mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Expand group to see the dataset
@@ -56,12 +59,15 @@ describe('Topic Elements - QGIS Integration', () => {
       const wmsResource = resourceFactory.one({ traits: ['wms'] })
 
       // Mock topic and dataset with WMS resource
-      mockTopicAndRelatedObjects(testTopic, [testFactor], {
-        [datasetId]: [wmsResource]
+      mockTopicAndRelatedObjects(testTopic, {
+        factors: [testFactor],
+        datasetResources: {
+          [datasetId]: [wmsResource]
+        }
       })
       mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Expand group to see the dataset
@@ -82,12 +88,15 @@ describe('Topic Elements - QGIS Integration', () => {
       const csvResource = resourceFactory.one({ traits: ['csv'] })
 
       // Mock topic and dataset with CSV resource only
-      mockTopicAndRelatedObjects(testTopic, [testFactor], {
-        [datasetId]: [csvResource]
+      mockTopicAndRelatedObjects(testTopic, {
+        factors: [testFactor],
+        datasetResources: {
+          [datasetId]: [csvResource]
+        }
       })
       mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Expand group to see the dataset
@@ -108,12 +117,15 @@ describe('Topic Elements - QGIS Integration', () => {
       const wfsResource = resourceFactory.one({ traits: ['wfs'] })
 
       // Mock topic and dataset with WFS resource
-      mockTopicAndRelatedObjects(testTopic, [testFactor], {
-        [datasetId]: [wfsResource]
+      mockTopicAndRelatedObjects(testTopic, {
+        factors: [testFactor],
+        datasetResources: {
+          [datasetId]: [wfsResource]
+        }
       })
       mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
 
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
       // Expand group to see the dataset

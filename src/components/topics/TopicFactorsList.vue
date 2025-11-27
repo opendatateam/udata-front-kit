@@ -160,7 +160,9 @@ const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
  * Stops if WFS is found, fallback to WMS.
  */
 const computeOgcInfo = async (dataset: DatasetV2) => {
-  if (!config.website.datasets.open_in_qgis) return
+  if (!config.website.datasets.open_in_qgis) {
+    return
+  }
   const MAX_PAGES = 10
   let bestResult: OgcSearchResult = { layerInfo: null, foundWfs: false }
   for (let page = 1; page <= MAX_PAGES; page++) {
@@ -409,7 +411,7 @@ defineExpose({
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(factor.description)"></div>
                 <TopicDatasetCard
-                  v-if="factor.element?.id"
+                  v-if="factor.element?.class === 'Dataset'"
                   :factor="factor"
                   :dataset-content="datasetsContent.get(factor.element.id)"
                 />
@@ -419,7 +421,7 @@ defineExpose({
                   :topic="getTopicForFactor(factor)!"
                   class="fr-my-2w"
                 />
-                <div v-else class="fr-grid-row">
+                <div v-if="!getTopicForFactor(factor)" class="fr-grid-row">
                   <a
                     v-if="
                       !isAvailable(factor.siteExtras.availability) && !isEdit
@@ -430,7 +432,7 @@ defineExpose({
                     Aidez-nous à trouver la donnée</a
                   >
                   <a
-                    v-else-if="factor.siteExtras.uri"
+                    v-if="factor.siteExtras.uri && !factor.element?.id"
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="factor.siteExtras.uri as string"
                     target="_blank"

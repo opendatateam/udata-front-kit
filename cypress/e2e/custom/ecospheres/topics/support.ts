@@ -229,14 +229,34 @@ export function mockTopicElementsByClass(
   }).as('getElementsReuse')
 }
 
-// Common mocks for topic and discussions
+/**
+ * Options for mocking topic and related objects
+ */
+export interface MockTopicOptions {
+  /** Factor/elements associated with the topic */
+  factors?: Factor[]
+  /** Referenced topics (for topic_reference trait) */
+  referencedTopics?: Topic[]
+  /** Activity history for the topic */
+  activities?: Activity[]
+  /** Dataset resources mapped by dataset ID */
+  datasetResources?: Record<string, Resource[]>
+}
+
+/**
+ * Common mocks for topic and discussions
+ */
 export function mockTopicAndRelatedObjects(
   topic: Topic,
-  factors: Factor[] = [],
-  referencedTopics: Topic[] = [],
-  activities: Activity[] = [],
-  datasetResources: Record<string, Resource[]> = {}
+  options: MockTopicOptions = {}
 ) {
+  const {
+    factors = [],
+    referencedTopics = [],
+    activities = [],
+    datasetResources = {}
+  } = options
+
   cy.mockDatagouvObject('topics', topic.slug, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
@@ -279,7 +299,7 @@ export function setupTopicWithExistingFactors(
   const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndRelatedObjects(testTopic, testFactors, [], activities)
+  mockTopicAndRelatedObjects(testTopic, { factors: testFactors, activities })
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(
@@ -299,7 +319,7 @@ export function setupEmptyTopic(): { testTopic: Topic } {
 
   const testTopic = createTestTopic()
 
-  mockTopicAndRelatedObjects(testTopic)
+  mockTopicAndRelatedObjects(testTopic, {})
   // Set up element mocks for empty topic (all classes return empty arrays)
   mockTopicElementsByClass(testTopic.id, [], [], [])
 
