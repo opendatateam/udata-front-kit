@@ -14,28 +14,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run type-check
-      - run: npm run lint
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm run type-check
+      - run: pnpm run lint
 
   unit-tests:
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm run test:single
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm run build
+      - run: pnpm run test:single
 
   e2e-tests:
     name: End-to-end Tests
@@ -54,11 +58,13 @@ jobs:
           ]
     steps:
       - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: 'npm'
-      - run: npm ci
-      - run: VITE_SITE_ID=${{ matrix.site_id }} npm run build --if-present -- --mode test
-      - run: VITE_SITE_ID=${{ matrix.site_id }} npm run test:e2e:for_production_build
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run build -- --mode test
+      - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run test:e2e:for_production_build

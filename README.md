@@ -22,13 +22,24 @@ Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dériv�
 \+ [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 \+ [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
+### Installation de pnpm
+
+Ce projet utilise pnpm au lieu de npm. Si vous ne l'avez pas déjà installé :
+
+```sh
+# Enable pnpm via Corepack (inclus avec Node.js 20+)
+corepack enable pnpm
+```
+
+Il existe [d'autres méthodes d'installation si besoin](https://pnpm.io/installation).
+
 ### Initialisation du projet
 
 ```sh
-npm clean-install
+pnpm install
 
 # installe les pre-commit hooks Husky
-npm run prepare
+pnpm run prepare
 ```
 
 ### Commandes de référence
@@ -36,19 +47,19 @@ npm run prepare
 #### Compilation et hot-reload pour le développement
 
 ```sh
-npm run dev
+pnpm run dev
 ```
 
 #### Compilation et minification pour la production
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 #### Tests unitaires via [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test
+pnpm run test
 ```
 
 #### Tests end-to-end via [Cypress](https://cypress.io/)
@@ -59,23 +70,23 @@ Pour lancer les tests _génériques_ communs à tous les sites, qui se trouvent 
 
 ```sh
 # Pour lancer la version ligne de commande de cypress :
-npm run test:e2e
+pnpm run test:e2e
 
 # Pour lancer la version visuelle de cypress :
-npm run test:e2e:open
+pnpm run test:e2e:open
 ```
 
 Pour lancer les tests génériques + les tests spécifiques à site particulier qui se trouvent dans `/cypress/e2e/monsite/` :
 
 ```sh
 # Pour lancer la version ligne de commande de cypress :
-VITE_SITE_ID=monsite npm run test:e2e
+VITE_SITE_ID=monsite pnpm run test:e2e
 
 # Pour lancer un seul test en ligne de commande :
-VITE_SITE_ID=monsite npm run test:e2e -- --spec cypress/e2e/my/file.cy.js
+VITE_SITE_ID=monsite pnpm run test:e2e -- --spec cypress/e2e/my/file.cy.js
 
 # Pour lancer la version visuelle de cypress :
-VITE_SITE_ID=monsite npm run test:e2e:open
+VITE_SITE_ID=monsite pnpm run test:e2e:open
 ```
 
 **Tester un build** :
@@ -84,9 +95,9 @@ Dans la CI, on veut lancer les tests sur un build, plutôt que sur un serveur de
 
 ```sh
 # Build pour monsite
-VITE_SITE_ID=monsite npm run build
+VITE_SITE_ID=monsite pnpm run build
 # Run les tests sur le build de monsite
-VITE_SITE_ID=monsite npm run test:e2e:for_production_build
+VITE_SITE_ID=monsite pnpm run test:e2e:for_production_build
 ```
 
 #### Factories pour les tests
@@ -98,20 +109,31 @@ On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js) comm
 #### Linting via [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+pnpm run lint
 ```
 
 #### Typage via [TSc](https://www.typescriptlang.org/docs/handbook/compiler-options.html/)
 
 ```sh
-npm run hint
+pnpm run hint
 ```
 
 #### Code formatting with [Prettier](https://prettier.io/)
 
 ```sh
-npm run format
+pnpm run format
 ```
+
+### Pourquoi pnpm ?
+
+Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm principalement pour des raisons de sécurité :
+
+- bloque par défaut les scripts d'installation des dépendances (sauf Cypress et Husky via `onlyBuiltDependencies`),
+- période de cooldown de 4 jours (`minimum-release-age`) avant d'installer les nouveaux packages, laissant le temps à la communauté de détecter les versions malveillantes,
+- installation via le lockfile par défaut (`npm ci` like),
+- ... et d'autres valeurs de configurations par défaut plus saines que celles de npm.
+
+`pnpm` promet également de meilleurs performances à l'installation et un usage réduit d'espace disque. On ne bénéficie malheureusement pas (encore) de la structure "non-flat" des `node_modules` pour des raisons de rétro-compatibilité avec certaines dépendances.
 
 ## 🚢 Déploiement
 
