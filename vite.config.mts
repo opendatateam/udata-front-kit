@@ -135,7 +135,6 @@ export default defineConfig(({ mode }) => {
       include: [
         'debug',
         'extend',
-        'highlight.js',
         'rehype-highlight',
         'swagger-ui-dist',
         'unist-util-find',
