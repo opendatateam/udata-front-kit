@@ -1,6 +1,7 @@
 import { build, sequence } from 'mimicry-js'
 
 import type { Activity } from '@/model/activity'
+import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
@@ -230,21 +231,44 @@ export function mockTopicElementsByClass(
   }).as('getElementsReuse')
 }
 
-// Common mocks for topic and discussions
+/**
+ * Options for mocking topic and related objects
+ */
+export interface MockTopicOptions {
+  /** Factor/elements associated with the topic */
+  factors?: Factor[]
+  /** Referenced topics (for topic_reference trait) */
+  referencedTopics?: Topic[]
+  /** Activity history for the topic */
+  activities?: Activity[]
+  /** Dataset resources mapped by dataset ID */
+  datasetResources?: Record<string, Resource[]>
+}
+
+/**
+ * Common mocks for topic and discussions
+ */
 export function mockTopicAndRelatedObjects(
   topic: Topic,
-  factors: Factor[] = [],
-  referencedTopics: Topic[] = [],
-  activities: Activity[] = []
+  options: MockTopicOptions = {}
 ) {
+  const {
+    factors = [],
+    referencedTopics = [],
+    activities = [],
+    datasetResources = {}
+  } = options
+
   cy.mockDatagouvObject('topics', topic.slug, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
-      cy.mockDatagouvObject(
-        'datasets',
-        factor.element.id,
-        datasetFactory.one({ overrides: { id: factor.element.id } })
-      )
+      const datasetId = factor.element.id
+      const dataset = datasetFactory.one({ overrides: { id: datasetId } })
+      cy.mockDatagouvObject('datasets', datasetId, dataset)
+
+      // Mock resources for this dataset if provided
+      const resources = datasetResources[datasetId] || []
+      cy.mockResources(datasetId, resources)
     }
   })
   // Mock referenced topics for topic_reference trait
@@ -254,6 +278,9 @@ export function mockTopicAndRelatedObjects(
   cy.mockDatagouvObjectList('discussions')
   cy.mockDatagouvObjectList('reuses')
   cy.mockDatagouvObjectList('activity', activities)
+
+  // datasets related
+  cy.mockResourceTypes()
 }
 
 // Helper to expand disclosure groups
@@ -274,7 +301,7 @@ export function setupTopicWithExistingFactors(
   const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndRelatedObjects(testTopic, testFactors, [], activities)
+  mockTopicAndRelatedObjects(testTopic, { factors: testFactors, activities })
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(
@@ -294,7 +321,7 @@ export function setupEmptyTopic(): { testTopic: Topic } {
 
   const testTopic = createTestTopic()
 
-  mockTopicAndRelatedObjects(testTopic)
+  mockTopicAndRelatedObjects(testTopic, {})
   // Set up element mocks for empty topic (all classes return empty arrays)
   mockTopicElementsByClass(testTopic.id, [], [], [])
 
