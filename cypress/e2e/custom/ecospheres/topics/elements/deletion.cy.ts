@@ -3,7 +3,7 @@ import {
   expandDisclosureGroup,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Factor Deletion', () => {
   let testTopic: Topic
@@ -15,7 +15,7 @@ describe('Topic Elements - Factor Deletion', () => {
 
   describe('Deleting Factors', () => {
     beforeEach(() => {
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
     })
 
     it('should only fire delete request after user confirms', () => {
@@ -82,7 +82,7 @@ describe('Topic Elements - Factor Deletion', () => {
 
   describe('Deleting Groups', () => {
     beforeEach(() => {
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
     })
 

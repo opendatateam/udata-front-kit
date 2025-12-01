@@ -6,16 +6,16 @@ import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
 import { useReuseStore } from '@/store/ReuseStore'
-import { useTopicStore } from '@/store/TopicStore'
 import { formatDate } from '@/utils'
+import type { DatasetV2 } from '@datagouv/components-next'
 
 const props = defineProps({
   model: {
     type: String as () => 'dataset' | 'topic',
     required: true
   },
-  objectId: {
-    type: String,
+  object: {
+    type: Object as () => DatasetV2 | Topic,
     required: true
   }
 })
@@ -48,17 +48,13 @@ onMounted(() => {
   switch (props.model) {
     case 'dataset':
       reuseStore
-        .loadReusesForDataset(props.objectId)
+        .loadReusesForDataset(props.object.id)
         .then((r) => (reuses.value = r))
       break
     case 'topic':
-      useTopicStore()
-        .load(props.objectId)
-        .then((t: Topic) => {
-          reuseApi
-            .getReusesFromElementsRel(t.elements)
-            .then((data) => (reuses.value = data))
-        })
+      reuseApi
+        .getReusesFromElementsRel((props.object as Topic).elements)
+        .then((data) => (reuses.value = data))
       break
     default:
       break
