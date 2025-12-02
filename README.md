@@ -37,6 +37,7 @@ Il existe [d'autres méthodes d'installation si besoin](https://pnpm.io/installa
 
 ```sh
 pnpm install
+# vous pouvez ignorer ici les éventuels warnings de type "pnpm approve-builds"
 
 # installe les pre-commit hooks Husky
 pnpm run prepare
