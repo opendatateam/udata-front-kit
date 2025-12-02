@@ -181,6 +181,7 @@ website:
       enable: true
       page: bouquets
       dataset_editorialization: true
+    open_in_qgis: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-DCAT

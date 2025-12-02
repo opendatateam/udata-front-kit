@@ -2,7 +2,7 @@ import type { Rel } from '@datagouv/components-next'
 import { defineStore } from 'pinia'
 
 import config from '@/config'
-import type { Resource, ResourceData, ResourceType } from '@/model/resource'
+import type { ResourceData, ResourceType } from '@/model/resource'
 import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
 
 const datasetsApi = new DatasetsAPI()
@@ -14,6 +14,12 @@ export interface RootState {
   resourceTypes: ResourceType[]
 }
 
+export interface FetchResourcesOptions {
+  page?: number
+  typeId?: string | null
+  q?: string
+}
+
 export const useResourceStore = defineStore('resource', {
   state: (): RootState => ({
     data: {},
@@ -22,7 +28,7 @@ export const useResourceStore = defineStore('resource', {
   actions: {
     /**
      * Load resources from the API via a HATEOAS rel
-     *
+     * Handle first page for every type and stores results for caching.
      */
     async loadResources(datasetId: string, rel: Rel): Promise<ResourceData[]> {
       if (datasetId in this.data) {
@@ -53,22 +59,21 @@ export const useResourceStore = defineStore('resource', {
       return this.data[datasetId]
     },
 
+    /**
+     * Fetch dataset's resources for a given page and type, without storage
+     */
     async fetchDatasetResources(
       datasetId: string,
-      typeId: string,
-      page: number,
-      q = ''
-    ): Promise<{ data: Resource[]; total: number }> {
-      const response = await datasetsApiv2.get({
-        entityId: `${datasetId}/resources`,
-        params: {
-          page,
-          page_size: pageSize,
-          type: typeId,
-          q
-        }
-      })
-      return { data: response.data, total: response.total }
+      options: FetchResourcesOptions = {}
+    ) {
+      const { page = 1, typeId = null, q = '' } = options
+      return await datasetsApiv2.getResourcesForDataset(
+        datasetId,
+        page,
+        pageSize,
+        typeId,
+        q
+      )
     }
   }
 })
