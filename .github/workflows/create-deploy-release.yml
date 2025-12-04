@@ -103,7 +103,7 @@ jobs:
         shell: bash
         run: |
           git clone --quiet --depth 1 -b ${{ env.REPO_CURRENT_BRANCH }} ${{ env.REPO_SSH_URL }}
-          git clone --quiet --depth 1 $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
+          git clone --quiet --depth 1 -b pnpm-ufk $SCAFFOLD_REPO_SSH_URL ${{ env.SCAFFOLD_DIR }}
 
       - name: Parse commit message and set deployment variables
         if: (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/') && startsWith(github.event.head_commit.message, '['))
