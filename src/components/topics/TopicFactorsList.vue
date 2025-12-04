@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { nextTick, ref, type Ref } from 'vue'
 
+import { useAnimationConstants } from '@/utils/constants'
 import type { DatasetV2 } from '@datagouv/components-next'
+
+const { HIGHLIGHT_DURATION, SCROLL_TIMEOUT } = useAnimationConstants()
 
 import FactorEditModal, {
   type FactorEditModalType
@@ -45,6 +48,8 @@ const props = defineProps({
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
+const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
+const highlightedFactorId = ref<string | null>(null)
 
 const { pageConf, pageKey } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
@@ -67,6 +72,10 @@ const {
 } = useFactorsFilter(factors)
 
 const { groupedFactors: filteredResults } = useGroups(filteredFactors)
+
+const emit = defineEmits<{
+  factorChanged: []
+}>()
 
 const getTopicSlugFromUri = (uri: string): string | null => {
   const baseUrl = config.website.meta?.canonical_url
@@ -95,6 +104,7 @@ const handleRemoveFactor = async (group: string, index: number) => {
     await elementStore.deleteElement(props.topicId, result.deletedFactor.id)
   }
   factors.value = result.factors
+  emit('factorChanged')
 }
 
 const handleRenameGroup = async (
@@ -218,6 +228,39 @@ watch(
   },
   { immediate: true }
 )
+
+const navigateToElement = (elementId: string) => {
+  const factor = factors.value.find((f) => f.id === elementId)
+  if (!factor) {
+    console.warn(`Trying to scroll to factor ${elementId}, not found.`)
+    return
+  }
+  nextTick(() => {
+    // open the group disclosure if needed
+    if (factor.siteExtras.group) {
+      const groupRef = groupRefs.value[factor.siteExtras.group]
+      if (groupRef) {
+        groupRef.openDisclosure()
+      }
+    }
+    // Wait a bit for full loading, then scroll
+    setTimeout(() => {
+      const element = document.getElementById(`factor-${elementId}`)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Add highlight effect using reactive state
+        highlightedFactorId.value = elementId
+        setTimeout(() => {
+          highlightedFactorId.value = null
+        }, HIGHLIGHT_DURATION)
+      }
+    }, SCROLL_TIMEOUT)
+  })
+}
+
+defineExpose({
+  navigateToElement
+})
 </script>
 
 <template>
@@ -273,10 +316,15 @@ watch(
         <template v-for="[group, groupFactors] in filteredResults" :key="group">
           <li v-if="groupFactors.length && !isGroupOnlyHidden(group)">
             <TopicGroup
+              :ref="
+                (el) =>
+                  (groupRefs[group] = el as InstanceType<typeof TopicGroup>)
+              "
               :group-name="group"
               :all-groups="filteredResults"
               :factors="groupFactors"
               :is-edit="isEdit"
+              :highlighted-factor-id="highlightedFactorId"
               @edit-group-name="handleRenameGroup"
               @delete-group="handleDeleteGroup"
             >
@@ -357,6 +405,7 @@ watch(
     v-model:groups-model="groupedFactors"
     :dataset-editorialization
     :topic-id="props.topicId"
+    @submit-modal="emit('factorChanged')"
   />
 </template>
 

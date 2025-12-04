@@ -64,7 +64,17 @@ routerPromise
       maxJsonPreviewCharSize: 1000000, // Maximum size of JSON to preview in characters (~1MB). JSON preview module is partly collapsed by default so we can have a preview for large files.
       maxPdfPreviewByteSize: 10000000, // Maximum size of PDF to preview in bytes (10 MB)
       maxXmlPreviewCharSize: 100000, // Maximum size of XML to preview in characters (~100KB). XML preview module can NOT be collapsed by default so we should not have a preview for large files.
-      schemaValidataUrl: 'https://validata.fr'
+      schemaValidataUrl: 'https://validata.fr',
+      // inject authentication for datagouv components that make their own API calls
+      onRequest: (param) => {
+        const store = useUserStore()
+        if (store.$state.isLoggedIn && store.$state.token) {
+          param.options.headers.set(
+            'Authorization',
+            `Bearer ${store.$state.token}`
+          )
+        }
+      }
     })
 
     if (config.website.matomo.siteId != null) {

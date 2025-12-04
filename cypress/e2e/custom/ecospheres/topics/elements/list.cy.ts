@@ -4,13 +4,13 @@ import {
   createTestTopicWithElements,
   expandDisclosureGroup,
   factorFactory,
-  mockTopicAndDiscussions,
+  mockTopicAndRelatedObjects,
   mockTopicElementsByClass,
   setupElementTest,
   setupEmptyTopic,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Factor List Display', () => {
   let testTopic: Topic
@@ -91,7 +91,7 @@ describe('Topic Elements - Factor List Display', () => {
 
       // Create and mock a test topic with this factor and referenced topic
       const mainTopic = createTestTopicWithElements([topicRefFactor])
-      mockTopicAndDiscussions(mainTopic, [topicRefFactor], [referencedTopic])
+      mockTopicAndRelatedObjects(mainTopic, [topicRefFactor], [referencedTopic])
       mockTopicElementsByClass(mainTopic.id, [], [topicRefFactor], [])
 
       visitTopic(mainTopic.slug)
