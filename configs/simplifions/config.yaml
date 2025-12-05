@@ -219,21 +219,35 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'administrations
+        default_option: Tous les types d'acteurs publics
         use_filter_prefix: true
         values:
           - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
-            name: Communes
+            name: Communes et groupements de communes
           - id: departements
             name: Départements
           - id: regions
             name: Régions
-          - id: administrations-centrales
-            name: Administrations centrales
-          - id: operateur-etat
-            name: Opérateurs de l'État
-          - id: autres
-            name: Autres
+          - id: tout-collectivites-territoires
+            name: Toutes les collectivités et territoires
+          - id: etat
+            name: État
+          - id: autres-autorites-nationales
+            name: Autres autorités nationales
+          - id: organismes-droit-prive
+            name: Organismes de droit privé
+          - id: acteurs-education-enseignement
+            name: Acteurs de l'éducation et de l'enseignement
+          - id: acteurs-culture
+            name: Acteurs de la culture
+          - id: acteurs-sante
+            name: Acteurs de la santé
+          - id: acteurs-transport
+            name: Acteurs du transport
+          - id: acteurs-environnement
+            name: Acteurs de l'environnement
+          - id: tout-acteurs-publics
+            name: Tous les acteurs publics
       - name: 'Pour simplifier les démarches de :'
         id: target-users
         type: select
@@ -306,7 +320,7 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'administrations
+        default_option: Tous les types d'acteurs publics
         use_filter_prefix: true
         values:
           - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
