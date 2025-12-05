@@ -16,8 +16,9 @@ const port = process.env.PORT || '4173'
 const cypressCommand =
   `cypress ${cypressMode} --e2e ${cypressArgs.join(' ')}`.trim()
 
-const command = 'npx'
+const command = 'pnpm'
 const commandArgs = [
+  'exec',
   'start-server-and-test',
   `vite ${viteMode} --mode test --port ${port} --strictPort`,
   `http://localhost:${port}`,
