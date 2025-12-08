@@ -10,7 +10,7 @@ describe('QGIS QLR Generation', () => {
   describe('generateWfsQlr', () => {
     it('should generate valid WFS QLR XML', () => {
       const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wfs?service=WFS&request=GetCapabilities',
+        url: 'https://example.com/wfs?service=WFS&request=GetCapabilities&custom=value',
         format: 'wfs',
         title: 'Test WFS Layer',
         layerName: 'test:layer'
@@ -35,8 +35,10 @@ describe('QGIS QLR Generation', () => {
       expect(datasource?.textContent).toContain("typename='test:layer'")
 
       // Check base url in datasource (with quotes for WFS)
-      // URL should be cleaned (GetCapabilities params removed)
-      expect(datasource?.textContent).toContain("url='https://example.com/wfs'")
+      // URL should be cleaned (OGC request params removed but other params kept)
+      expect(datasource?.textContent).toContain(
+        "url='https://example.com/wfs?custom=value'"
+      )
 
       // Check layer name from title
       const layername = doc.querySelector('layername')
@@ -47,7 +49,7 @@ describe('QGIS QLR Generation', () => {
   describe('generateWmsQlr', () => {
     it('should generate valid WMS QLR XML', () => {
       const layerInfo: OgcLayerInfo = {
-        url: 'https://example.com/wms?service=WMS&request=GetCapabilities',
+        url: 'https://example.com/wms?service=WMS&request=GetCapabilities&custom=value',
         format: 'wms',
         title: 'Test WMS Layer',
         layerName: 'test_layer'
@@ -72,8 +74,10 @@ describe('QGIS QLR Generation', () => {
       expect(datasource?.textContent).toContain('layers=test_layer')
 
       // Check base url in datasource (no quotes for WMS)
-      // URL should be cleaned (GetCapabilities params removed)
-      expect(datasource?.textContent).toContain('url=https://example.com/wms')
+      // URL should be cleaned (OGC request params removed but other params kept)
+      expect(datasource?.textContent).toContain(
+        'url=https://example.com/wms?custom=value'
+      )
 
       // Check layer name from title
       const layername = doc.querySelector('layername')
