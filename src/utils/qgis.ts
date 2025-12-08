@@ -55,7 +55,7 @@ function addMaplayer(
 
   maplayer.ele('id').txt(id)
   maplayer.ele('datasource').txt(datasource)
-  maplayer.ele('provider', { encoding: 'UTF-8' }).txt(provider)
+  maplayer.ele('provider').txt(provider)
   maplayer.ele('layername').txt(layerName)
 
   // Add CRS info from CRS_DEFINITIONS
