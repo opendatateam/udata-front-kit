@@ -269,14 +269,12 @@ export async function openInQgis(
 ): Promise<void> {
   let qlrContent: string
 
-  const format = layerInfo.format.toLowerCase()
-
   // for wms, just generate a QLR with the metadata we have (layer name from resource title)
-  if (format === 'wms') {
+  if (layerInfo.format === 'wms') {
     qlrContent = generateWmsQlr(layerInfo, crs)
   }
   // wfs is more advanced, without a valid layer name we fallback on all layers
-  else if (format === 'wfs') {
+  else if (layerInfo.format === 'wfs') {
     // If no layerName is available, try to fetch it from GetCapabilities
     // TODO: maybe should we validate the layerName from getCap in all cases
     if (!layerInfo.layerName) {
@@ -309,7 +307,7 @@ Pour ajouter cette couche dans QGIS :
       qlrContent = generateWfsQlr(layerInfo, crs)
     }
   } else {
-    console.warn(`Unsupported OGC service format: ${format}`)
+    console.warn(`Unsupported OGC service format: ${layerInfo.format}`)
     return
   }
 
