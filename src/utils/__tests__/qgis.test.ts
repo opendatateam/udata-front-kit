@@ -30,15 +30,13 @@ describe('QGIS QLR Generation', () => {
       const maplayer = doc.querySelector('maplayer')
       expect(maplayer?.getAttribute('type')).toBe('vector')
 
-      // Check layer id
+      // Check WFS datasource (space-separated format)
       const datasource = doc.querySelector('datasource')
-      expect(datasource?.textContent).toContain("typename='test:layer'")
-
-      // Check base url in datasource (with quotes for WFS)
+      const datasourceText = datasource?.textContent || ''
+      const params = datasourceText.split(' ')
+      expect(params).toContain("typename='test:layer'")
       // URL should be cleaned (OGC request params removed but other params kept)
-      expect(datasource?.textContent).toContain(
-        "url='https://example.com/wfs?custom=value'"
-      )
+      expect(params).toContain("url='https://example.com/wfs?custom=value'")
 
       // Check layer name from title
       const layername = doc.querySelector('layername')
@@ -69,15 +67,13 @@ describe('QGIS QLR Generation', () => {
       const maplayer = doc.querySelector('maplayer')
       expect(maplayer?.getAttribute('type')).toBe('raster')
 
-      // Check layer id
+      // Check WMS datasource (ampersand-separated format)
       const datasource = doc.querySelector('datasource')
-      expect(datasource?.textContent).toContain('layers=test_layer')
-
-      // Check base url in datasource (no quotes for WMS)
+      const datasourceText = datasource?.textContent || ''
+      const params = datasourceText.split('&')
+      expect(params).toContain('layers=test_layer')
       // URL should be cleaned (OGC request params removed but other params kept)
-      expect(datasource?.textContent).toContain(
-        'url=https://example.com/wms?custom=value'
-      )
+      expect(params).toContain('url=https://example.com/wms?custom=value')
 
       // Check layer name from title
       const layername = doc.querySelector('layername')
