@@ -214,11 +214,16 @@ describe('OGC Services', () => {
       expect(result).toBe('test_layer')
     })
 
-    it('should handle case-insensitive parameter names', () => {
-      const url = 'https://example.com/wfs?TYPENAME=namespace:layer'
-      const result = extractLayerNameFromUrl(url, 'wfs')
+    it('should handle parameter name variations (case-insensitive and camelCase)', () => {
+      // Uppercase
+      const url1 = 'https://example.com/wfs?TYPENAME=namespace:layer'
+      const result1 = extractLayerNameFromUrl(url1, 'wfs')
+      expect(result1).toBe('namespace:layer')
 
-      expect(result).toBe('namespace:layer')
+      // CamelCase
+      const url2 = 'https://example.com/wfs?typeName=namespace:layer'
+      const result2 = extractLayerNameFromUrl(url2, 'wfs')
+      expect(result2).toBe('namespace:layer')
     })
 
     it('should return null if parameter is not found', () => {
@@ -226,13 +231,6 @@ describe('OGC Services', () => {
       const result = extractLayerNameFromUrl(url, 'wfs')
 
       expect(result).toBeNull()
-    })
-
-    it('should handle typeName variation (camelCase)', () => {
-      const url = 'https://example.com/wfs?typeName=namespace:layer'
-      const result = extractLayerNameFromUrl(url, 'wfs')
-
-      expect(result).toBe('namespace:layer')
     })
   })
 
