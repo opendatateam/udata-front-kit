@@ -30,13 +30,13 @@ export function parseXml(xmlString: string): Document {
 }
 
 /**
- * Extracts base URL by removing GetCapabilities query parameters
- * WFS URLs often come as: https://example.com/wfs?request=GetCapabilities&service=WFS&unrelated=true
+ * Extracts base URL by removing OGC request parameters (service, request)
+ * OGC URLs often come as: https://example.com/wfs?request=GetCapabilities&service=WFS&unrelated=true
  * This returns just the base URL: https://example.com/wfs?unrelated=true
  */
 export function extractBaseUrl(url: string): string {
   const urlObj = new URL(url)
-  // Remove GetCapabilities-specific parameters
+  // Remove OGC request parameters
   urlObj.searchParams.delete('request')
   urlObj.searchParams.delete('service')
   return urlObj.toString()

@@ -176,7 +176,7 @@ describe('OGC Services', () => {
   })
 
   describe('extractBaseUrl', () => {
-    it('should remove GetCapabilities parameters', () => {
+    it('should remove OGC request parameters (service, request)', () => {
       const url = 'https://example.com/wfs?service=WFS&request=GetCapabilities'
       const result = extractBaseUrl(url)
 
