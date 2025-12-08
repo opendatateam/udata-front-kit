@@ -10,28 +10,6 @@ import {
 
 describe('OGC Services', () => {
   describe('findOgcCompatibleResource', () => {
-    it('should prioritize WFS over WMS when both are available', () => {
-      const resources: Resource[] = [
-        resourceFactory.one({
-          overrides: {
-            format: 'wms',
-            url: 'https://example.com/wms?layers=test_layer'
-          }
-        }),
-        resourceFactory.one({
-          overrides: {
-            format: 'wfs',
-            url: 'https://example.com/wfs?typename=test:layer'
-          }
-        })
-      ]
-
-      const result = findOgcCompatibleResource(resources)
-
-      expect(result).toBeTruthy()
-      expect(result?.format).toBe('wfs')
-    })
-
     it('should prioritize WFS over WMS regardless of order', () => {
       // WFS comes first
       const resources1: Resource[] = [
