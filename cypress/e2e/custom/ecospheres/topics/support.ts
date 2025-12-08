@@ -46,10 +46,12 @@ export const factorFactory = build<Factor>({
       overrides: {
         extras: {
           ['ecospheres' as SiteId]: {
-            uri: sequence(
-              (x) =>
-                `https://demo.ecologie.data.gouv.fr/bouquets/referenced-topic-${x}`
-            ),
+            uri: sequence((x) => {
+              const canonicalUrl =
+                Cypress.env('siteConfig').website.meta.canonical_url ||
+                'https://demo.ecologie.data.gouv.fr'
+              return `${canonicalUrl}/bouquets/referenced-topic-${x}`
+            }),
             availability: Availability.LOCAL_AVAILABLE,
             group: 'Test Group'
           }
