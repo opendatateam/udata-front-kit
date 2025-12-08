@@ -262,7 +262,11 @@ describe('OGC Services', () => {
       expect(isValidLayerName('layer/name')).toBe(false)
     })
 
-    it('should accept layer names at boundary (100 chars)', () => {
+    it('should accept layer names at boundaries (1 and 100 chars)', () => {
+      // Lower boundary: 1 character
+      expect(isValidLayerName('a')).toBe(true)
+
+      // Upper boundary: 100 characters
       const boundaryName = 'a'.repeat(100)
       expect(isValidLayerName(boundaryName)).toBe(true)
     })
