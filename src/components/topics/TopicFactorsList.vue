@@ -21,7 +21,7 @@ import { isAvailable } from '@/utils/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
-import type { OgcLayerInfo, OgcSearchResult } from '@/utils/ogcServices'
+import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
@@ -164,26 +164,23 @@ const computeOgcInfo = async (dataset: DatasetV2) => {
     return
   }
   const MAX_PAGES = 10
-  let bestResult: OgcSearchResult = { layerInfo: null, foundWfs: false }
+  let bestResult: OgcLayerInfo | null = null
   for (let page = 1; page <= MAX_PAGES; page++) {
     const response = await resourceStore.fetchDatasetResources(dataset.id, {
       page
     })
     const pageResult = findOgcCompatibleResource(response.data)
     // Update best result if we found something better
-    if (
-      pageResult.foundWfs ||
-      (!bestResult.layerInfo && pageResult.layerInfo)
-    ) {
+    if (pageResult?.format === 'wfs' || (!bestResult && pageResult)) {
       bestResult = pageResult
     }
     // Stop if we found WFS (best possible) or no more pages
-    if (pageResult.foundWfs || !response.next_page) {
+    if (pageResult?.format === 'wfs' || !response.next_page) {
       break
     }
   }
-  if (bestResult.layerInfo) {
-    ogcLayerInfo.value.set(dataset.id, bestResult.layerInfo)
+  if (bestResult) {
+    ogcLayerInfo.value.set(dataset.id, bestResult)
   }
 }
 

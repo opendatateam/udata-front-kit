@@ -13,11 +13,6 @@ export interface OgcLayerInfo {
   title?: string
 }
 
-export interface OgcSearchResult {
-  layerInfo: OgcLayerInfo | null
-  foundWfs: boolean
-}
-
 /**
  * Helper to parse XML string into a DOM Document
  */
@@ -134,11 +129,10 @@ export function extractLayerNameFromUrl(
  * Finds the first OGC-compatible resource in a dataset
  * Prioritizes WFS over WMS (vector data is more useful than raster)
  * Excludes intranet URLs (*.rie.gouv.fr)
- * Returns result with foundWfs flag to signal if search can stop
  */
 export function findOgcCompatibleResource(
   resources: Resource[]
-): OgcSearchResult {
+): OgcLayerInfo | null {
   let wmsCandidate: OgcLayerInfo | null = null
 
   for (const resource of resources) {
@@ -163,13 +157,10 @@ export function findOgcCompatibleResource(
       if (format === 'wfs') {
         // WFS found - return immediately (best result, no need to search more)
         return {
-          layerInfo: {
-            url: resource.url,
-            format,
-            title: resource.title,
-            layerName
-          },
-          foundWfs: true
+          url: resource.url,
+          format,
+          title: resource.title,
+          layerName
         }
       }
       // layerName is required for WMS (we don't do multi-layers)
@@ -186,8 +177,5 @@ export function findOgcCompatibleResource(
   }
 
   // No WFS found, return WMS if available (or null)
-  return {
-    layerInfo: wmsCandidate,
-    foundWfs: false
-  }
+  return wmsCandidate
 }

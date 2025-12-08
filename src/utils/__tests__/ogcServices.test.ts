@@ -28,9 +28,8 @@ describe('OGC Services', () => {
 
       const result = findOgcCompatibleResource(resources)
 
-      expect(result.layerInfo).toBeTruthy()
-      expect(result.layerInfo?.format).toBe('wfs')
-      expect(result.foundWfs).toBe(true)
+      expect(result).toBeTruthy()
+      expect(result?.format).toBe('wfs')
     })
 
     it('should prioritize WFS over WMS regardless of order', () => {
@@ -51,8 +50,7 @@ describe('OGC Services', () => {
       ]
 
       const result1 = findOgcCompatibleResource(resources1)
-      expect(result1.layerInfo?.format).toBe('wfs')
-      expect(result1.foundWfs).toBe(true)
+      expect(result1?.format).toBe('wfs')
 
       // WMS comes first
       const resources2: Resource[] = [
@@ -71,8 +69,7 @@ describe('OGC Services', () => {
       ]
 
       const result2 = findOgcCompatibleResource(resources2)
-      expect(result2.layerInfo?.format).toBe('wfs')
-      expect(result2.foundWfs).toBe(true)
+      expect(result2?.format).toBe('wfs')
     })
 
     it('should return WMS if no WFS is available', () => {
@@ -92,9 +89,8 @@ describe('OGC Services', () => {
 
       const result = findOgcCompatibleResource(resources)
 
-      expect(result.layerInfo).toBeTruthy()
-      expect(result.layerInfo?.format).toBe('wms')
-      expect(result.foundWfs).toBe(false)
+      expect(result).toBeTruthy()
+      expect(result?.format).toBe('wms')
     })
 
     it('should return null if no OGC service is available', () => {
@@ -106,8 +102,7 @@ describe('OGC Services', () => {
 
       const result = findOgcCompatibleResource(resources)
 
-      expect(result.layerInfo).toBeNull()
-      expect(result.foundWfs).toBe(false)
+      expect(result).toBeNull()
     })
 
     it('should filter out intranet URLs (*.rie.gouv.fr)', () => {
@@ -129,9 +124,8 @@ describe('OGC Services', () => {
       const result = findOgcCompatibleResource(resources)
 
       // Should return WMS since WFS is filtered out
-      expect(result.layerInfo?.format).toBe('wms')
-      expect(result.layerInfo?.url).not.toContain('.rie.gouv.fr')
-      expect(result.foundWfs).toBe(false)
+      expect(result?.format).toBe('wms')
+      expect(result?.url).not.toContain('.rie.gouv.fr')
     })
 
     it('should extract layer name from URL parameters', () => {
@@ -146,8 +140,8 @@ describe('OGC Services', () => {
 
       const result = findOgcCompatibleResource(resources)
 
-      expect(result.layerInfo?.layerName).toBe('namespace:layername')
-      expect(result.foundWfs).toBe(true)
+      expect(result?.layerName).toBe('namespace:layername')
+      expect(result?.format).toBe('wfs')
     })
 
     it('should use resource title as layer name if it is valid', () => {
@@ -163,8 +157,8 @@ describe('OGC Services', () => {
 
       const result = findOgcCompatibleResource(resources)
 
-      expect(result.layerInfo?.layerName).toBe('valid_layer_name')
-      expect(result.foundWfs).toBe(true)
+      expect(result?.layerName).toBe('valid_layer_name')
+      expect(result?.format).toBe('wfs')
     })
 
     it('should not use resource title if it contains spaces', () => {
@@ -181,9 +175,8 @@ describe('OGC Services', () => {
       const result = findOgcCompatibleResource(resources)
 
       // Should return the resource but without a layer name
-      expect(result.layerInfo?.format).toBe('wfs')
-      expect(result.layerInfo?.layerName).toBe(undefined)
-      expect(result.foundWfs).toBe(true)
+      expect(result?.format).toBe('wfs')
+      expect(result?.layerName).toBe(undefined)
     })
 
     it('should only return WMS if it has a valid layer name', () => {
@@ -200,8 +193,7 @@ describe('OGC Services', () => {
       const result = findOgcCompatibleResource(resources)
 
       // WMS requires a layer name, so should return null
-      expect(result.layerInfo).toBeNull()
-      expect(result.foundWfs).toBe(false)
+      expect(result).toBeNull()
     })
   })
 
