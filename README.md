@@ -229,6 +229,19 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
 
 **Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
 
+#### Workflow de déploiement recommandé
+
+:warning: Cette section est une recommandation, chaque verticale/site est libre de définir ses propres processus.
+
+- La branche `main` recueille les fonctionnalités au fur et à mesure de leur développement.
+- La branche `{site}-preprod` est utilisée pour les déploiements sur <https://{site}.preprod.data.gouv.fr>.
+  - On commence par créer une Pull Request depuis `main` vers `{site}-preprod` ;
+  - Une fois cette PR validée, on déploie soit via un message de commit normé soit via l'UI GitHub Actions (cf plus haut).
+- La branche `{site}-prod` est utilisée pour les déploiements sur <https://{site}.data.gouv.fr>.
+  - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site})-prod`.
+
+NB : dans certains cas, il possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
+
 ## 📚 Bibliothèques et plugins utilisés
 
 ### 📦 Bibliothèques
