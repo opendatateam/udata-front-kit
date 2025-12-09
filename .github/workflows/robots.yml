@@ -7,6 +7,8 @@ on:
       - ecospheres-prod
       - ecospheres-demo
       - simplifions-prod
+      - culture-preprod
+      - culture-prod
       # - meteodatagouvfr-prod
       # - defisdatagouvfr-prod
 
