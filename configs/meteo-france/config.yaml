@@ -56,6 +56,10 @@ website:
               description: "Fiches synthétiques contenant les moyennes mensuelles, les normales et les records d'une station."
               url: 'datasets?category=fiches'
               image_url: '/static/meteo-france/assets/fiche.png'
+            - name: 'Données d’observations météorologiques'
+              description: 'Archive des observations pour différentes sources de données sol, mer et altitude'
+              url: 'datasets?category=observations'
+              image_url: '/static/meteo-france/assets/observations.png'
         sub_section_tiles:
           title:
           tiles:
