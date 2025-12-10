@@ -210,6 +210,8 @@ pages:
             name: Informations sur les stations
           - id: fiches
             name: Fiches climatologiques
+          - id: observations
+            name: Données d'observations météorologiques
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
