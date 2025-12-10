@@ -49,6 +49,7 @@ website:
         - bouquets
       datasets_pages:
         - indicators
+      dataservices_pages:
       static_urls:
         - /
         - /bouquets
