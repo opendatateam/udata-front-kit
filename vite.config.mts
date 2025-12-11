@@ -33,6 +33,16 @@ interface Config {
   sentry?: SentryConfig
 }
 
+// Shared esbuild config for dev and prod
+const esbuildOptions = {
+  supported: {
+    // Tell esbuild that class fields are natively supported - don't transpile them
+    // This prevents __publicField helper issues with maplibre-gl under pnpm
+    'class-field': true,
+    'class-static-field': true
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -125,6 +135,7 @@ export default defineConfig(({ mode }) => {
       environment: 'happy-dom',
       globals: true
     },
+    esbuild: esbuildOptions,
     build: {
       sourcemap: true // Source map generation must be turned on for sentry integration
     },
@@ -145,12 +156,15 @@ export default defineConfig(({ mode }) => {
         // (es6-promise, eventbusjs) that need pre-bundling to be properly converted to ESM
         // for the dev server. Without this, map preview components fail to load.
         'geopf-extensions-openlayers',
-        'geoportal-access-lib'
+        'geoportal-access-lib',
+        // Include maplibre-gl to ensure proper bundling with esbuild class field support
+        'maplibre-gl'
       ],
       // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
       // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
       // used for the components configuration.
-      exclude: ['@datagouv/components-next']
+      exclude: ['@datagouv/components-next'],
+      esbuildOptions
     }
   }
 })
