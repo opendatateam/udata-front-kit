@@ -19,7 +19,11 @@ import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
+import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
+import type { OgcLayerInfo } from '@/utils/ogcServices'
+import { findOgcCompatibleResource } from '@/utils/ogcServices'
+import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
@@ -53,6 +57,7 @@ const highlightedFactorId = ref<string | null>(null)
 
 const { pageConf, pageKey } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
+const resourceStore = useResourceStore()
 const topicStore = useTopicStore()
 
 const {
@@ -147,6 +152,56 @@ const handleDeleteGroup = async (groupName: string) => {
   await Promise.all(deletePromises)
 }
 
+const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
+
+/**
+ * Iterate over MAX_PAGES pages of resources for a dataset and find the best OGC service.
+ * Stores result in ogcLayerInfo Map.
+ * Stops if WFS is found, fallback to WMS.
+ */
+const computeOgcInfo = async (dataset: DatasetV2) => {
+  if (!config.website.datasets.open_in_qgis) {
+    return
+  }
+  const MAX_PAGES = 10
+  let bestResult: OgcLayerInfo | null = null
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const response = await resourceStore.fetchDatasetResources(dataset.id, {
+      page
+    })
+    const pageResult = findOgcCompatibleResource(response.data)
+    // Update best result if we found something better
+    if (pageResult?.format === 'wfs' || (!bestResult && pageResult)) {
+      bestResult = pageResult
+    }
+    // Stop if we found WFS (best possible) or no more pages
+    if (pageResult?.format === 'wfs' || !response.next_page) {
+      break
+    }
+  }
+  if (bestResult) {
+    ogcLayerInfo.value.set(dataset.id, bestResult)
+  }
+}
+
+const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
+  const layerInfo = ogcLayerInfo.value.get(datasetId)
+  if (layerInfo) {
+    try {
+      await openInQgis(layerInfo, datasetTitle)
+    } catch (error) {
+      console.error('Failed to open in QGIS:', error)
+      alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+    }
+  }
+}
+
+/**
+ * Introspects topic's datasets from data.gouv.fr:
+ * - build a cache of content
+ * - sync status (archived, deleted)
+ * - find qgis compatible resources
+ */
 const loadDatasetsContent = () => {
   factors.value.forEach((factor) => {
     const id = factor.element?.id ?? null
@@ -157,6 +212,7 @@ const loadDatasetsContent = () => {
           if (d) {
             datasetsContent.value.set(id, d)
             factor.remoteArchived = !!d.archived
+            computeOgcInfo(d)
           }
         })
         .catch((err) => {
@@ -352,7 +408,7 @@ defineExpose({
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(factor.description)"></div>
                 <TopicDatasetCard
-                  v-if="factor.element?.id"
+                  v-if="factor.element?.class === 'Dataset'"
                   :factor="factor"
                   :dataset-content="datasetsContent.get(factor.element.id)"
                 />
@@ -362,7 +418,7 @@ defineExpose({
                   :topic="getTopicForFactor(factor)!"
                   class="fr-my-2w"
                 />
-                <div v-else class="fr-grid-row">
+                <div v-if="!getTopicForFactor(factor)" class="fr-grid-row">
                   <a
                     v-if="
                       !isAvailable(factor.siteExtras.availability) && !isEdit
@@ -373,12 +429,26 @@ defineExpose({
                     Aidez-nous à trouver la donnée</a
                   >
                   <a
-                    v-else-if="factor.siteExtras.uri"
+                    v-if="factor.siteExtras.uri && !factor.element?.id"
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="factor.siteExtras.uri as string"
                     target="_blank"
                     >Accéder au catalogue</a
                   >
+                  <button
+                    v-if="
+                      factor.element?.id && ogcLayerInfo.has(factor.element.id)
+                    "
+                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    @click="
+                      handleOpenInQgis(
+                        factor.element.id,
+                        datasetsContent.get(factor.element.id)?.title
+                      )
+                    "
+                  >
+                    Ouvrir dans QGIS
+                  </button>
                 </div>
               </template>
             </TopicGroup>

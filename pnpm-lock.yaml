@@ -82,6 +82,9 @@ importers:
       vue3-toastify:
         specifier: ^0.2.8
         version: 0.2.8(vue@3.5.25(typescript@5.7.3))
+      xmlbuilder2:
+        specifier: ^3.1.1
+        version: 3.1.1
     devDependencies:
       '@babel/eslint-parser':
         specifier: ^7.26.5
@@ -1093,6 +1096,34 @@ packages:
       {
         integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==
       }
+
+  '@oozcitak/dom@1.15.10':
+    resolution:
+      {
+        integrity: sha512-0JT29/LaxVgRcGKvHmSrUTEvZ8BXvZhGl2LASRUgHqDTC1M5g1pLmVv56IYNyt3bG2CUjDkc67wnyZC14pbQrQ==
+      }
+    engines: { node: '>=8.0' }
+
+  '@oozcitak/infra@1.0.8':
+    resolution:
+      {
+        integrity: sha512-JRAUc9VR6IGHOL7OGF+yrvs0LO8SlqGnPAMqyzOuFZPSZSXI7Xf2O9+awQPSMXgIWGtgUf/dA6Hs6X6ySEaWTg==
+      }
+    engines: { node: '>=6.0' }
+
+  '@oozcitak/url@1.0.4':
+    resolution:
+      {
+        integrity: sha512-kDcD8y+y3FCSOvnBI6HJgl00viO/nGbQoCINmQ0h98OhnGITrWR3bOGfwYCthgcrV8AnTJz8MzslTQbC3SOAmw==
+      }
+    engines: { node: '>=8.0' }
+
+  '@oozcitak/util@8.3.8':
+    resolution:
+      {
+        integrity: sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
+      }
+    engines: { node: '>=8.0' }
 
   '@petamoriken/float16@3.9.3':
     resolution:
@@ -4836,6 +4867,13 @@ packages:
         integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==
       }
 
+  js-yaml@3.14.1:
+    resolution:
+      {
+        integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==
+      }
+    hasBin: true
+
   js-yaml@3.14.2:
     resolution:
       {
@@ -8003,6 +8041,13 @@ packages:
         integrity: sha512-RqM+2o1RYs6T8+3DzDSoTRAUfrvaejbVHcp3+thnAtDKo8LskR+HomLajEy5UjTz24rpka7AxVBRR3g2wTUkJA==
       }
 
+  xmlbuilder2@3.1.1:
+    resolution:
+      {
+        integrity: sha512-WCSfbfZnQDdLQLiMdGUQpMxxckeQ4oZNMNhLVkcekTu7xhD4tuUDyAPoY8CwXvBYE6LwBHd6QW2WZXlOWr1vCw==
+      }
+    engines: { node: '>=12.0' }
+
   xtend@4.0.2:
     resolution:
       {
@@ -8690,6 +8735,23 @@ snapshots:
       fastq: 1.19.1
 
   '@one-ini/wasm@0.1.1': {}
+
+  '@oozcitak/dom@1.15.10':
+    dependencies:
+      '@oozcitak/infra': 1.0.8
+      '@oozcitak/url': 1.0.4
+      '@oozcitak/util': 8.3.8
+
+  '@oozcitak/infra@1.0.8':
+    dependencies:
+      '@oozcitak/util': 8.3.8
+
+  '@oozcitak/url@1.0.4':
+    dependencies:
+      '@oozcitak/infra': 1.0.8
+      '@oozcitak/util': 8.3.8
+
+  '@oozcitak/util@8.3.8': {}
 
   '@petamoriken/float16@3.9.3': {}
 
@@ -10999,6 +11061,11 @@ snapshots:
 
   js-tokens@9.0.1: {}
 
+  js-yaml@3.14.1:
+    dependencies:
+      argparse: 1.0.10
+      esprima: 4.0.1
+
   js-yaml@3.14.2:
     dependencies:
       argparse: 1.0.10
@@ -13138,6 +13205,13 @@ snapshots:
   xml-name-validator@4.0.0: {}
 
   xml-utils@1.10.2: {}
+
+  xmlbuilder2@3.1.1:
+    dependencies:
+      '@oozcitak/dom': 1.15.10
+      '@oozcitak/infra': 1.0.8
+      '@oozcitak/util': 8.3.8
+      js-yaml: 3.14.1
 
   xtend@4.0.2: {}
 
