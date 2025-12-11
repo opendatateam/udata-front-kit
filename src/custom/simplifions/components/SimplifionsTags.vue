@@ -15,7 +15,7 @@
     >
       <p class="fr-mb-1w white-space-normal">
         À destination des
-        <HumanReadableList :items="orderedFournisseursDeService" />
+        <HumanReadableList :items="filteredFournisseursDeService" />
       </p>
     </div>
     <!-- Tags indiquant le type de simplification et de budget -->
@@ -69,14 +69,14 @@ const groupedTags = computed(() => {
 const hideBudget = computed(() => props.hideBudget)
 const hideSimplification = computed(() => props.hideSimplification)
 
-const orderedFournisseursDeService = computed(() => {
-  const names = groupedTags.value['fournisseurs-de-service'].map(
-    (fn) => fn.name
+const filteredFournisseursDeService = computed(() => {
+  return (
+    groupedTags.value['fournisseurs-de-service']
+      .map((fn) => fn.name)
+      // Filter out generic elements, like "Toutes les collectivités"
+      .filter((name) => !name.match(/^Tou(t|s|tes)/))
+      .sort()
   )
-  const otherItems = names.filter((name) => !name.match(/Autres?/))
-  const autresItems = names.filter((name) => name.match(/Autres?/))
-
-  return [...otherItems.sort(), ...autresItems]
 })
 </script>
 
