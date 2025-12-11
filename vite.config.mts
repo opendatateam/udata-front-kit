@@ -33,6 +33,16 @@ interface Config {
   sentry?: SentryConfig
 }
 
+// Shared esbuild config for dev and prod
+const esbuildOptions = {
+  supported: {
+    // Tell esbuild that class fields are natively supported - don't transpile them
+    // This prevents __publicField helper issues with maplibre-gl under pnpm
+    'class-field': true,
+    'class-static-field': true
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -125,15 +135,7 @@ export default defineConfig(({ mode }) => {
       environment: 'happy-dom',
       globals: true
     },
-    esbuild: {
-      supported: {
-        // Tell esbuild that class fields are natively supported - don't transpile them
-        // This prevents __publicField helper issues with maplibre-gl under pnpm
-        // Applies to production builds here, see below for dev
-        'class-field': true,
-        'class-static-field': true
-      }
-    },
+    esbuild: esbuildOptions,
     build: {
       sourcemap: true // Source map generation must be turned on for sentry integration
     },
@@ -162,15 +164,7 @@ export default defineConfig(({ mode }) => {
       // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
       // used for the components configuration.
       exclude: ['@datagouv/components-next'],
-      esbuildOptions: {
-        supported: {
-          // Tell esbuild that class fields are natively supported - don't transpile them
-          // This prevents __publicField helper issues with maplibre-gl under pnpm
-          // Applies to dev builds here, see above for prod
-          'class-field': true,
-          'class-static-field': true
-        }
-      }
+      esbuildOptions
     }
   }
 })
