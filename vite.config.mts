@@ -145,12 +145,22 @@ export default defineConfig(({ mode }) => {
         // (es6-promise, eventbusjs) that need pre-bundling to be properly converted to ESM
         // for the dev server. Without this, map preview components fail to load.
         'geopf-extensions-openlayers',
-        'geoportal-access-lib'
+        'geoportal-access-lib',
+        // Include maplibre-gl to ensure proper bundling with esbuild class field support
+        'maplibre-gl'
       ],
       // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
       // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
       // used for the components configuration.
-      exclude: ['@datagouv/components-next']
+      exclude: ['@datagouv/components-next'],
+      esbuildOptions: {
+        supported: {
+          // Tell esbuild that class fields are natively supported - don't transpile them
+          // This prevents __publicField helper issues with maplibre-gl under pnpm
+          'class-field': true,
+          'class-static-field': true
+        }
+      }
     }
   }
 })
