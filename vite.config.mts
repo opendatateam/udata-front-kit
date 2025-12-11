@@ -125,6 +125,15 @@ export default defineConfig(({ mode }) => {
       environment: 'happy-dom',
       globals: true
     },
+    esbuild: {
+      supported: {
+        // Tell esbuild that class fields are natively supported - don't transpile them
+        // This prevents __publicField helper issues with maplibre-gl under pnpm
+        // Applies to production builds here, see below for dev
+        'class-field': true,
+        'class-static-field': true
+      }
+    },
     build: {
       sourcemap: true // Source map generation must be turned on for sentry integration
     },
@@ -157,6 +166,7 @@ export default defineConfig(({ mode }) => {
         supported: {
           // Tell esbuild that class fields are natively supported - don't transpile them
           // This prevents __publicField helper issues with maplibre-gl under pnpm
+          // Applies to dev builds here, see above for prod
           'class-field': true,
           'class-static-field': true
         }
