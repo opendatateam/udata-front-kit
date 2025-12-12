@@ -31,30 +31,22 @@ website:
     description:
     canonical_url: https://demo.ecologie.data.gouv.fr
   seo:
+    canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected
     meta:
       keywords:
       description:
-      canonical_url: https://demo.ecologie.data.gouv.fr
       robots: 'noindex, nofollow'
     # robots.txt content (consumed by udata-front-kit-seo)
     robots_txt:
       disallow:
-      # XXX: this could be deduced in udata-front-seo, but
-      sitemap_xml_url:
     # sitemap.xml content (consumed by udata-front-kit-seo)
     sitemap_xml:
-      enable: true
       topics_pages:
         - bouquets
       datasets_pages:
         - indicators
       dataservices_pages:
-      static_urls:
-        - /
-        - /bouquets
-        - /indicators
-        - /about
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'
