@@ -5,7 +5,7 @@
       <p class="fr-mb-1w white-space-normal">
         Pour simplifier les démarches des
         <HumanReadableList
-          :items="groupedTags['target-users'].map((t) => t.name)"
+          :items="groupedTags['target-users'].map((t: ResolvedTag) => t.name)"
         />
       </p>
     </div>
@@ -15,7 +15,7 @@
     >
       <p class="fr-mb-1w white-space-normal">
         À destination des
-        <HumanReadableList :items="orderedFournisseursDeService" />
+        <HumanReadableList :items="filteredFournisseursDeService" />
       </p>
     </div>
     <!-- Tags indiquant le type de simplification et de budget -->
@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
+import type { ResolvedTag } from '@/model/tag'
 import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
 import HumanReadableList from './HumanReadableList.vue'
@@ -69,14 +70,28 @@ const groupedTags = computed(() => {
 const hideBudget = computed(() => props.hideBudget)
 const hideSimplification = computed(() => props.hideSimplification)
 
-const orderedFournisseursDeService = computed(() => {
+const filteredFournisseursDeService = computed(() => {
   const names = groupedTags.value['fournisseurs-de-service'].map(
     (fn) => fn.name
   )
-  const otherItems = names.filter((name) => !name.match(/Autres?/))
-  const autresItems = names.filter((name) => name.match(/Autres?/))
-
-  return [...otherItems.sort(), ...autresItems]
+  const rootElement = 'Tous les acteurs publics'
+  const topLevelElements = names
+    .filter((name) => name !== rootElement)
+    // Include generic elements, like "Toutes les collectivités"
+    .filter((name) => !name.match(/^Tou(t|s|tes)/))
+    // Include "État"
+    .filter((name) => name !== 'État')
+    .sort()
+  const specificElements = names
+    .filter((name) => !topLevelElements.includes(name) && name !== rootElement)
+    .sort()
+  if (specificElements.length > 0) {
+    return specificElements
+  } else if (topLevelElements.length > 0) {
+    return topLevelElements
+  } else {
+    return [rootElement]
+  }
 })
 </script>
 
