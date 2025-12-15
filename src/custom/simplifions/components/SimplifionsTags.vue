@@ -76,11 +76,13 @@ const filteredFournisseursDeService = computed(() => {
   )
   const rootElement = 'Tous les acteurs publics'
   const topLevelElements = names
-    .filter((name) => name !== rootElement)
-    // Include generic elements, like "Toutes les collectivités"
-    .filter((name) => !name.match(/^Tou(t|s|tes)/))
-    // Include "État"
-    .filter((name) => name !== 'État')
+    .filter((name) => {
+      return (
+        name !== rootElement &&
+        // Include generic elements like "Tous les..." and "Etat"
+        (name.match(/^Tou(t|s|tes)/) || name === 'État')
+      )
+    })
     .sort()
   const specificElements = names
     .filter((name) => !topLevelElements.includes(name) && name !== rootElement)
