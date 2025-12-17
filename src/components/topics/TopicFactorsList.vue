@@ -83,7 +83,7 @@ const emit = defineEmits<{
 }>()
 
 const getTopicSlugFromUri = (uri: string): string | null => {
-  const baseUrl = config.website.meta?.canonical_url
+  const baseUrl = config.website.seo?.canonical_url
   if (!baseUrl) return null
   const match = uri.match(new RegExp(`${baseUrl}/${pageKey}/([^/]+)`))
   return match ? match[1] : null
