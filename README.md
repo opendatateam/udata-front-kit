@@ -266,6 +266,38 @@ NB : dans certains cas, il possible de créer et de déployer des Pull Requests 
 
 À chaque `git commit`, `husky` lance `lint-staged` qui formate les fichiers "staged" avec `prettier`.
 
+## Configuration SEO
+
+### sitemap.xml et robots.txt
+
+Le référencement des verticales est géré via la section `website.seo` du fichier de configuration. Cette configuration pilote la génération de `robots.txt` et `sitemap.xml` par le package [`udata-front-kit-seo`](https://github.com/opendatateam/udata-front-kit-seo), qui lit cette configuration et génère les fichiers pour chaque couple site/environnement.
+
+Les clés dans `sitemap_xml` (`topics_pages`, `datasets_pages`, `dataservices_pages`) doivent correspondre aux identifiants définis dans la section `pages:` du fichier de configuration.
+
+Exemple :
+
+```yaml
+website:
+  seo:
+    canonical_url: https://site.data.gouv.fr
+    meta:
+      keywords: 'mots-clés, séparés, par, virgules'
+      description: 'Description du site'
+      robots: 'index, follow' # 'noindex, nofollow' pour demo/preprod
+    robots_txt:
+      disallow: [/admin]
+    sitemap_xml:
+      topics_pages: [bouquets]
+      datasets_pages: [indicators]
+```
+
+### Gestion des meta tags dans l'application
+
+- Les meta `robots` sont injectés au niveau du template HTML (`index.html`) lors du build via `vite.config.mts`
+- Les meta `keywords` et `description` globaux peuvent être définis dans `website.seo.meta`
+- Pour les meta tags dynamiques par page (Open Graph, descriptions spécifiques, etc.), utilisez le composable `useHead` de [`@unhead/vue`](https://unhead.unjs.io/) directement dans vos composants Vue (voir exemples dans `src/custom/*/views/`)
+- Le `canonical_url` est utilisé comme base pour les liens canoniques
+
 ## Configurer Sentry pour surveiller les erreurs
 
 Après avoir créé votre projet (VueJs) sur sentry, voici la configuration à ajouter à votre fichier de config pour activer Sentry dans votre projet :
