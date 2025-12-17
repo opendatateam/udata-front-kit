@@ -13,11 +13,11 @@ datagouvfr:
 website:
   title: 'meteo.data.gouv.fr'
   seo:
-    canonical_url: https://meteo.data.gouv.fr
+    canonical_url: https://meteo.preprod.data.gouv.fr
     meta:
       keywords:
       description:
-      robots: 'index, follow'
+      robots: 'noindex, nofollow'
     robots_txt:
       disallow:
         - /admin
