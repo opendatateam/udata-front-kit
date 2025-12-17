@@ -16,20 +16,9 @@ datagouvfr:
   oauth_client_id: 66e30254d3cc5d5b52a4b6ec
   tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
-# FIXME: legacy section to remove
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
-
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
-  # FIXME: legacy section to remove
-  meta:
-    keywords:
-    description:
-    canonical_url: https://demo.ecologie.data.gouv.fr
   seo:
     canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected
@@ -40,13 +29,14 @@ website:
     # robots.txt content (consumed by udata-front-kit-seo)
     robots_txt:
       disallow:
+        - /admin
+        - /datasets
+        - /organizations
     # sitemap.xml content (consumed by udata-front-kit-seo)
     sitemap_xml:
-      topics_pages:
-        - bouquets
-      datasets_pages:
-        - indicators
-      dataservices_pages:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'

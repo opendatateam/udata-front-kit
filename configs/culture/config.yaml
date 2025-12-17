@@ -9,14 +9,23 @@ datagouvfr:
   # oauth settings
   oauth_client_id: 68b1ac79a751200a42f2ba19
 
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
-
 # UI customizations
 website:
   title: 'culture.data.gouv.fr'
+  seo:
+    canonical_url: https://culture.preprod.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>culture.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA CULTURE'

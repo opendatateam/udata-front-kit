@@ -9,14 +9,23 @@ datagouvfr:
   oauth_client_id: 6709259c1e92c988c47d2f3e
   tabular_api_url:
 
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
-
 # UI customizations
 website:
   title: 'meteo.data.gouv.fr'
+  seo:
+    canonical_url: https://meteo.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'index, follow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
