@@ -1,9 +1,11 @@
 import { build, sequence } from 'mimicry-js'
 
 import type { Activity } from '@/model/activity'
+import type { DataserviceWithRel } from '@/model/dataservice'
 import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
+import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
 import { UserFactory } from 'cypress/support/factories/users_factory'
@@ -51,6 +53,23 @@ export const factorFactory = build<Factor>({
                 Cypress.env('siteConfig').website.meta.canonical_url ||
                 'https://demo.ecologie.data.gouv.fr'
               return `${canonicalUrl}/bouquets/referenced-topic-${x}`
+            }),
+            availability: Availability.LOCAL_AVAILABLE,
+            group: 'Test Group'
+          }
+        },
+        element: null
+      }
+    },
+    dataservice_reference: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence((x) => {
+              const canonicalUrl =
+                Cypress.env('siteConfig').website.meta.canonical_url ||
+                'https://demo.ecologie.data.gouv.fr'
+              return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
             group: 'Test Group'
@@ -161,6 +180,17 @@ export function createTestTopic(overrides = {}): Topic {
   })
 }
 
+// Create test dataservice with proper setup
+export function createTestDataservice(overrides = {}): DataserviceWithRel {
+  return dataserviceFactory.one({
+    overrides: {
+      slug: 'referenced-dataservice-1',
+      title: 'Referenced Dataservice Name',
+      ...overrides
+    }
+  })
+}
+
 // Create test topic that already has elements
 export function createTestTopicWithElements(testFactors: Factor[]) {
   return createTestTopic({
@@ -239,6 +269,8 @@ export interface MockTopicOptions {
   factors?: Factor[]
   /** Referenced topics (for topic_reference trait) */
   referencedTopics?: Topic[]
+  /** Referenced dataservices (for dataservice_reference trait) */
+  referencedDataservices?: DataserviceWithRel[]
   /** Activity history for the topic */
   activities?: Activity[]
   /** Dataset resources mapped by dataset ID */
@@ -255,6 +287,7 @@ export function mockTopicAndRelatedObjects(
   const {
     factors = [],
     referencedTopics = [],
+    referencedDataservices = [],
     activities = [],
     datasetResources = {}
   } = options
@@ -274,6 +307,27 @@ export function mockTopicAndRelatedObjects(
   // Mock referenced topics for topic_reference trait
   referencedTopics.forEach((refTopic) => {
     cy.mockDatagouvObject('topics', refTopic.slug, refTopic)
+  })
+  // Mock referenced dataservices for dataservice_reference trait
+  referencedDataservices.forEach((refDataservice) => {
+    cy.mockDatagouvObject('dataservices', refDataservice.slug, refDataservice)
+
+    // Mock the datasets list for this dataservice
+    cy.intercept(
+      'GET',
+      new RegExp(`.*datasets.*dataservice=${refDataservice.id}`),
+      {
+        statusCode: 200,
+        body: {
+          data: [],
+          total: 0,
+          page: 1,
+          page_size: 20,
+          next_page: null,
+          previous_page: null
+        }
+      }
+    ).as(`getDataserviceDatasets_${refDataservice.id}`)
   })
   cy.mockDatagouvObjectList('discussions')
   cy.mockDatagouvObjectList('reuses')

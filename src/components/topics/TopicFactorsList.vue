@@ -10,7 +10,9 @@ import FactorEditModal, {
   type FactorEditModalType
 } from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
+import type { DataserviceWithRel } from '@/model/dataservice'
 import { type ResolvedFactor, type Topic } from '@/model/topic'
+import { useDataserviceStore } from '@/store/DataserviceStore'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
@@ -25,6 +27,7 @@ import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
+import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
 import TopicFactorCard from './TopicInTopicCard.vue'
@@ -52,6 +55,9 @@ const props = defineProps({
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
 const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
+const dataservicesContent = ref(
+  new Map<string, { slug: string; dataservice: DataserviceWithRel }>()
+)
 const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
 const highlightedFactorId = ref<string | null>(null)
 
@@ -59,6 +65,7 @@ const { pageConf, pageKey } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
 const resourceStore = useResourceStore()
 const topicStore = useTopicStore()
+const dataserviceStore = useDataserviceStore()
 
 const {
   groupedFactors,
@@ -93,6 +100,21 @@ const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
   if (!factor.id) return null
   const entry = topicsContent.value.get(factor.id)
   return entry?.topic || null
+}
+
+const getDataserviceSlugFromUri = (uri: string): string | null => {
+  const baseUrl = config.website.meta?.canonical_url
+  if (!baseUrl) return null
+  const match = uri.match(new RegExp(`${baseUrl}/dataservices/([^/]+)`))
+  return match ? match[1] : null
+}
+
+const getDataserviceForFactor = (
+  factor: ResolvedFactor
+): DataserviceWithRel | null => {
+  if (!factor.id) return null
+  const entry = dataservicesContent.value.get(factor.id)
+  return entry?.dataservice || null
 }
 
 const handleRemoveFactor = async (group: string, index: number) => {
@@ -253,6 +275,33 @@ const loadTopicsContent = () => {
   })
 }
 
+/**
+ * Loads the dataservices associated to the factors via siteExtras.uri
+ */
+const loadDataservicesContent = () => {
+  factors.value.forEach((factor) => {
+    if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
+      const slug = getDataserviceSlugFromUri(factor.siteExtras.uri)
+      if (slug && !dataservicesContent.value.has(factor.id)) {
+        dataserviceStore
+          .load(slug, { toasted: false })
+          .then((dataservice) => {
+            if (dataservice && factor.id) {
+              dataservicesContent.value.set(factor.id, { slug, dataservice })
+            }
+          })
+          .catch((err) => {
+            if (isNotFoundError(err)) {
+              factor.remoteDeleted = true
+            } else {
+              toastHttpError(err)
+            }
+          })
+      }
+    }
+  })
+}
+
 const showTOC = computed(() => {
   /*
   hide the table of content if "NoGroup" is the only group and results are not 0
@@ -281,6 +330,7 @@ watch(
   () => {
     loadDatasetsContent()
     loadTopicsContent()
+    loadDataservicesContent()
   },
   { immediate: true }
 )
@@ -418,7 +468,18 @@ defineExpose({
                   :topic="getTopicForFactor(factor)!"
                   class="fr-my-2w"
                 />
-                <div v-if="!getTopicForFactor(factor)" class="fr-grid-row">
+                <DataserviceInTopicCard
+                  v-else-if="getDataserviceForFactor(factor)"
+                  :dataservice="getDataserviceForFactor(factor)!"
+                  class="fr-my-2w"
+                />
+                <div
+                  v-if="
+                    !getTopicForFactor(factor) &&
+                    !getDataserviceForFactor(factor)
+                  "
+                  class="fr-grid-row"
+                >
                   <a
                     v-if="
                       !isAvailable(factor.siteExtras.availability) && !isEdit

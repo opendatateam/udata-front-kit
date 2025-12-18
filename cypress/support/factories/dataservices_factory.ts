@@ -10,7 +10,7 @@ export const dataserviceFactory = build<DataserviceWithRel>({
     self_api_url: `https://demo.data.gouv.fr/api/1/dataservices/${obj.slug}/`,
     datasets: {
       ...obj.datasets,
-      href: `https://www.data.gouv.fr/api/1/datasets/?dataservice=${obj.id}`
+      href: `https://demo.data.gouv.fr/api/1/datasets/?dataservice=${obj.id}`
     }
   }),
   fields: {
@@ -63,7 +63,7 @@ export const dataserviceFactory = build<DataserviceWithRel>({
     datasets: {
       href: sequence(
         (x) =>
-          `https://www.data.gouv.fr/api/1/datasets/?dataservice=dataservice_id_${x}`
+          `https://demo.data.gouv.fr/api/1/datasets/?dataservice=dataservice_id_${x}`
       ),
       rel: 'subsection',
       total: 0,

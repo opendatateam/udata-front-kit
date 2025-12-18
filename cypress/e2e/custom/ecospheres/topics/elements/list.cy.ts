@@ -1,5 +1,6 @@
 import type { Factor, Topic } from '@/model/topic'
 import {
+  createTestDataservice,
   createTestTopic,
   createTestTopicWithElements,
   expandDisclosureGroup,
@@ -130,6 +131,57 @@ describe('Topic Elements - Factor List Display', () => {
 
       // Verify we're now on the referenced topic page
       cy.contains('h1', referencedTopic.name).should('be.visible')
+    })
+
+    it('should display DataserviceCard for factors referencing dataservices', () => {
+      setupElementTest()
+
+      // Create a referenced dataservice that will be displayed in the card
+      const referencedDataservice = createTestDataservice({
+        slug: 'referenced-dataservice-1',
+        title: 'Referenced Dataservice Name'
+      })
+
+      // Create a factor with dataservice_reference trait
+      const dataserviceRefFactor = factorFactory.one({
+        traits: ['dataservice_reference']
+      })
+
+      // Create and mock a test topic with this factor and referenced dataservice
+      const mainTopic = createTestTopicWithElements([dataserviceRefFactor])
+      mockTopicAndRelatedObjects(mainTopic, {
+        factors: [dataserviceRefFactor],
+        referencedDataservices: [referencedDataservice]
+      })
+      mockTopicElementsByClass(mainTopic.id, [], [dataserviceRefFactor], [])
+
+      visitTopic(mainTopic.slug)
+
+      // Wait for element=null mock, for referenced dataservice
+      cy.wait('@getElementsNone')
+
+      // Expand the group to see the factor
+      expandDisclosureGroup()
+
+      // Verify factor title is visible
+      cy.contains(dataserviceRefFactor.title).should('be.visible')
+
+      // Verify DataserviceCard is displayed with the referenced dataservice name
+      cy.contains(referencedDataservice.title).should('be.visible')
+
+      // Verify the badge with "API" label is displayed
+      cy.get('.fr-badge--mention-grey')
+        .should('be.visible')
+        .and('contain.text', 'API')
+
+      // Verify the "Accéder au catalogue" button is NOT displayed
+      cy.contains('Accéder au catalogue').should('not.exist')
+
+      // Click on the DataserviceCard to navigate
+      cy.contains(referencedDataservice.title).click()
+
+      // Verify navigation occurred to the referenced dataservice
+      cy.url().should('include', `/dataservices/${referencedDataservice.id}`)
     })
   })
 })
