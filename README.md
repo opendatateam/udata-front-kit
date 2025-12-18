@@ -285,10 +285,15 @@ website:
       description: 'Description du site'
       robots: 'index, follow' # 'noindex, nofollow' pour demo/preprod
     robots_txt:
-      disallow: [/admin]
+      disallow:
+        - /admin
     sitemap_xml:
-      topics_pages: [bouquets]
-      datasets_pages: [indicators]
+      topics_pages:
+        - bouquets
+      datasets_pages:
+        - indicators
+      dataservices_pages:
+        - dataservices
 ```
 
 ### Gestion des meta tags dans l'application
