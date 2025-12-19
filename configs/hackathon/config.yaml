@@ -9,14 +9,23 @@ datagouvfr:
   oauth_client_id: 673cbedb47b01e3f79eea45c
   tabular_api_url:
 
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
-
 # UI customizations
 website:
   title: 'hackathon.data.gouv.fr'
+  seo:
+    canonical_url: https://hackathon.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'index, follow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages:
+        - hackathons
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>hackathon.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/hackathon-logo.svg'

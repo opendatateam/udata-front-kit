@@ -95,7 +95,7 @@ export default defineConfig(({ mode }) => {
           data: {
             title: config.website.title,
             meta: config.website.meta,
-            metaRobots: config.robots.meta
+            metaRobots: config.website.seo?.meta?.robots
           }
         }
       }),

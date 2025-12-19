@@ -22,19 +22,23 @@ datagouvfr:
 
 # universe configuration is now handled per page in pages.{page_id}.universe_query
 
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow' # default value for preprod
-
 # UI customizations
 website:
   title: 'Simplifions.data.gouv.fr'
-  meta:
-    keywords: 'simplification, API, données, data, dites-le-nous une fois, proactivité, administration, collectivité, dlnuf'
-    description: |
-      Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données de l'État.
-    canonical_url: https://simplifions.data.gouv.fr
+  seo:
+    canonical_url: https://simplifions.preprod.data.gouv.fr
+    meta:
+      keywords: 'simplification, API, données, data, dites-le-nous une fois, proactivité, administration, collectivité, dlnuf'
+      description: |
+        Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données de l'État.
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/simplifions-logo.svg'
   badge:
