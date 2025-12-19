@@ -259,7 +259,7 @@
     </div>
 
     <div
-      v-else-if="solution.APIs_ou_datasets_fournis?.length"
+      v-if="solution.APIs_ou_datasets_fournis?.length"
       id="donnees-api-fournies"
     >
       <h2 class="colored-title fr-h2 fr-mt-8w">Données et API fournies</h2>

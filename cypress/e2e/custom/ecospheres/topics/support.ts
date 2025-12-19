@@ -1,5 +1,7 @@
 import { build, sequence } from 'mimicry-js'
 
+import type { Activity } from '@/model/activity'
+import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
@@ -38,6 +40,95 @@ export const factorFactory = build<Factor>({
           class: 'Dataset',
           id: sequence((x) => `dataset-factor-${x}`)
         }
+      }
+    },
+    topic_reference: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence((x) => {
+              const canonicalUrl =
+                Cypress.env('siteConfig').website.meta.canonical_url ||
+                'https://demo.ecologie.data.gouv.fr'
+              return `${canonicalUrl}/bouquets/referenced-topic-${x}`
+            }),
+            availability: Availability.LOCAL_AVAILABLE,
+            group: 'Test Group'
+          }
+        },
+        element: null
+      }
+    },
+    dataset_in_sequential_group: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence(
+              (x) => `https://www.data.gouv.fr/datasets/dataset-factor-${x}`
+            ),
+            availability: Availability.LOCAL_AVAILABLE,
+            group: sequence((x) => `Test Group ${x}`)
+          }
+        },
+        element: {
+          class: 'Dataset',
+          id: sequence((x) => `dataset-factor-${x}`)
+        }
+      }
+    }
+  }
+})
+
+// Activity factory for testing
+export const activityFactory = build<Activity>({
+  fields: {
+    key: 'topic:updated',
+    label: 'Topic updated',
+    actor: () => UserFactory.one(),
+    created_at: () => new Date().toISOString(),
+    organization: null,
+    related_to: '',
+    related_to_id: '',
+    related_to_kind: 'Topic',
+    related_to_url: '',
+    icon: 'fr-icon-file-text-line',
+    extras: {}
+  },
+  traits: {
+    topic_created: {
+      overrides: {
+        key: 'topic:created',
+        label: 'Topic created'
+      }
+    },
+    topic_updated: {
+      overrides: {
+        key: 'topic:updated',
+        label: 'Topic updated'
+      }
+    },
+    element_created: {
+      overrides: {
+        key: 'topic:element:created',
+        label: 'Element created',
+        extras: {
+          element_id: sequence((x) => `factor-${x}`)
+        }
+      }
+    },
+    element_updated: {
+      overrides: {
+        key: 'topic:element:updated',
+        label: 'Element updated',
+        extras: {
+          element_id: sequence((x) => `factor-${x}`)
+        }
+      }
+    },
+    element_deleted: {
+      overrides: {
+        key: 'topic:element:deleted',
+        label: 'Element deleted'
       }
     }
   }
@@ -140,20 +231,56 @@ export function mockTopicElementsByClass(
   }).as('getElementsReuse')
 }
 
-// Common mocks for topic and discussions
-export function mockTopicAndDiscussions(topic: Topic, factors: Factor[] = []) {
-  cy.mockDatagouvObject('topics', topic.id, topic)
+/**
+ * Options for mocking topic and related objects
+ */
+export interface MockTopicOptions {
+  /** Factor/elements associated with the topic */
+  factors?: Factor[]
+  /** Referenced topics (for topic_reference trait) */
+  referencedTopics?: Topic[]
+  /** Activity history for the topic */
+  activities?: Activity[]
+  /** Dataset resources mapped by dataset ID */
+  datasetResources?: Record<string, Resource[]>
+}
+
+/**
+ * Common mocks for topic and discussions
+ */
+export function mockTopicAndRelatedObjects(
+  topic: Topic,
+  options: MockTopicOptions = {}
+) {
+  const {
+    factors = [],
+    referencedTopics = [],
+    activities = [],
+    datasetResources = {}
+  } = options
+
+  cy.mockDatagouvObject('topics', topic.slug, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
-      cy.mockDatagouvObject(
-        'datasets',
-        factor.element.id,
-        datasetFactory.one({ overrides: { id: factor.element.id } })
-      )
+      const datasetId = factor.element.id
+      const dataset = datasetFactory.one({ overrides: { id: datasetId } })
+      cy.mockDatagouvObject('datasets', datasetId, dataset)
+
+      // Mock resources for this dataset if provided
+      const resources = datasetResources[datasetId] || []
+      cy.mockResources(datasetId, resources)
     }
+  })
+  // Mock referenced topics for topic_reference trait
+  referencedTopics.forEach((refTopic) => {
+    cy.mockDatagouvObject('topics', refTopic.slug, refTopic)
   })
   cy.mockDatagouvObjectList('discussions')
   cy.mockDatagouvObjectList('reuses')
+  cy.mockDatagouvObjectList('activity', activities)
+
+  // datasets related
+  cy.mockResourceTypes()
 }
 
 // Helper to expand disclosure groups
@@ -165,13 +292,16 @@ export function expandDisclosureGroup(groupName = 'Test Group') {
 }
 
 // Combined setup for tests with existing factors
-export function setupTopicWithExistingFactors(factors?: Factor[]) {
+export function setupTopicWithExistingFactors(
+  factors?: Factor[],
+  activities: Activity[] = []
+) {
   setupElementTest()
 
-  const testFactors = factors || createTestFactors(2, ['dataset_in_group'])
+  const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndDiscussions(testTopic, testFactors)
+  mockTopicAndRelatedObjects(testTopic, { factors: testFactors, activities })
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(
@@ -191,7 +321,7 @@ export function setupEmptyTopic(): { testTopic: Topic } {
 
   const testTopic = createTestTopic()
 
-  mockTopicAndDiscussions(testTopic)
+  mockTopicAndRelatedObjects(testTopic, {})
   // Set up element mocks for empty topic (all classes return empty arrays)
   mockTopicElementsByClass(testTopic.id, [], [], [])
 

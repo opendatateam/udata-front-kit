@@ -49,7 +49,7 @@ jobs:
       - name: Check if review app exists
         id: check_app
         continue-on-error: true
-        uses: appleboy/ssh-action@v1.2.2
+        uses: appleboy/ssh-action@823bd89e131d8d508129f9443cad5855e9ba96f0 # v1.2.4
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
@@ -126,13 +126,13 @@ jobs:
 
       - name: Cloning repo
         if: env.SHOULD_DEPLOY == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
 
       - name: Start deployment
         if: env.SHOULD_DEPLOY == 'true'
-        uses: chrnorm/deployment-action@v2
+        uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1 # v2.0.7
         id: deployment
         with:
           token: ${{ github.token }}
@@ -142,7 +142,7 @@ jobs:
 
       - name: Create the review app
         if: env.SHOULD_CREATE == 'true'
-        uses: dokku/github-action@master
+        uses: dokku/github-action@823c08b33e974704528c7c7f3d3d8002426e7634 # v1.9.0
         with:
           command: review-apps:create
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
@@ -153,7 +153,7 @@ jobs:
 
       - name: Set site id as build arg
         if: env.SHOULD_DEPLOY == 'true'
-        uses: appleboy/ssh-action@v1.2.2
+        uses: appleboy/ssh-action@823bd89e131d8d508129f9443cad5855e9ba96f0 # v1.2.4
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
@@ -164,7 +164,7 @@ jobs:
 
       - name: Push to dokku
         if: env.SHOULD_DEPLOY == 'true'
-        uses: dokku/github-action@v1.0.0
+        uses: dokku/github-action@823c08b33e974704528c7c7f3d3d8002426e7634 # v1.9.0
         with:
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
           review_app_name: deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}
@@ -174,7 +174,7 @@ jobs:
 
       - name: Enable SSL with Let's Encrypt
         if: env.SHOULD_CREATE == 'true'
-        uses: appleboy/ssh-action@v1.2.2
+        uses: appleboy/ssh-action@823bd89e131d8d508129f9443cad5855e9ba96f0 # v1.2.4
         with:
           host: ${{ secrets.REVIEW_APP_SSH_HOST }}
           username: dokku
@@ -185,7 +185,7 @@ jobs:
 
       - name: Destroy the review app
         if: github.event.action == 'closed' && env.SHOULD_DESTROY == 'true'
-        uses: dokku/github-action@master
+        uses: dokku/github-action@823c08b33e974704528c7c7f3d3d8002426e7634 # v1.9.0
         with:
           command: review-apps:destroy
           git_remote_url: ${{ secrets.REVIEW_APP_SSH_URL }}
@@ -194,7 +194,7 @@ jobs:
 
       - name: Update deployment status
         if: env.SHOULD_DEPLOY == 'true'
-        uses: chrnorm/deployment-status@v2
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806 # v2.0.3
         with:
           token: ${{ github.token }}
           environment-url: https://deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}.sandbox.data.developpement-durable.gouv.fr

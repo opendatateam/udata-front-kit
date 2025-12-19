@@ -1,11 +1,16 @@
 import type { Factor, Topic } from '@/model/topic'
 import {
+  createTestTopic,
+  createTestTopicWithElements,
   expandDisclosureGroup,
   factorFactory,
+  mockTopicAndRelatedObjects,
+  mockTopicElementsByClass,
+  setupElementTest,
   setupEmptyTopic,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Factor List Display', () => {
   let testTopic: Topic
@@ -17,7 +22,7 @@ describe('Topic Elements - Factor List Display', () => {
 
   describe('Displaying Factors', () => {
     beforeEach(() => {
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
     })
 
     it('should display existing factors on the topic page', () => {
@@ -44,7 +49,7 @@ describe('Topic Elements - Factor List Display', () => {
 
     it('should handle empty factors list', () => {
       const { testTopic: emptyTopic } = setupEmptyTopic()
-      visitTopic(emptyTopic.id)
+      visitTopic(emptyTopic.slug)
 
       // this one will always fired and is easy to catch, signals that the page is loaded
       cy.wait('@getElementsReuse')
@@ -61,13 +66,70 @@ describe('Topic Elements - Factor List Display', () => {
       })
       const { testTopic, testFactors } =
         setupTopicWithExistingFactors(ungroupedFactors)
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
 
       cy.wait('@getElementsNone')
 
       // Ungrouped factors should be visible immediately without needing to expand
       cy.contains(testFactors[0].title).should('be.visible')
       cy.contains(testFactors[1].title).should('be.visible')
+    })
+
+    it('should display TopicCard for factors referencing local topics', () => {
+      setupElementTest()
+
+      // Create a referenced topic that will be displayed in the card
+      const referencedTopic = createTestTopic({
+        slug: 'referenced-topic-1',
+        name: 'Referenced Topic Name'
+      })
+
+      // Create a factor with topic_reference trait
+      const topicRefFactor = factorFactory.one({
+        traits: ['topic_reference']
+      })
+
+      // Create and mock a test topic with this factor and referenced topic
+      const mainTopic = createTestTopicWithElements([topicRefFactor])
+      mockTopicAndRelatedObjects(mainTopic, {
+        factors: [topicRefFactor],
+        referencedTopics: [referencedTopic]
+      })
+      mockTopicElementsByClass(mainTopic.id, [], [topicRefFactor], [])
+
+      visitTopic(mainTopic.slug)
+
+      // Wait for element=null mock, for referenced topic
+      cy.wait('@getElementsNone')
+
+      // Expand the group to see the factor
+      expandDisclosureGroup()
+
+      // Verify factor title is visible
+      cy.contains(topicRefFactor.title).should('be.visible')
+
+      // Verify TopicCard is displayed with the referenced topic name
+      cy.contains(referencedTopic.name).should('be.visible')
+
+      // Verify the badge with "bouquet" label is displayed
+      cy.get('.fr-badge--mention-grey')
+        .should('be.visible')
+        .and('contain.text', 'bouquet')
+
+      // Verify the "Accéder au catalogue" button is NOT displayed
+      cy.contains('Accéder au catalogue').should('not.exist')
+
+      // Mock element calls for referenced topic (for navigation)
+      mockTopicElementsByClass(referencedTopic.id, [], [], [])
+
+      // Click on the TopicCard to navigate
+      cy.contains(referencedTopic.name).click()
+
+      // Verify navigation occurred to the referenced topic
+      cy.url().should('include', `/bouquets/${referencedTopic.slug}`)
+
+      // Verify we're now on the referenced topic page
+      cy.contains('h1', referencedTopic.name).should('be.visible')
     })
   })
 })

@@ -26,8 +26,8 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: Hackathons DINUM
-    subtitle: Bienvenue sur le site des hackathons organisés par la direction interministérielle du numérique (DINUM).
+    title: Les hackathons de la Direction interministérielle du numérique
+    subtitle: Retrouvez toutes les ressources et informations des hackathons organisés par la DINUM et ses partenaires.
     sections:
       - title:
         content:
@@ -38,13 +38,13 @@ website:
           class: 'fr-col-md-6'
           tiles:
             - id: 'find'
-              name: 'Voir les hackathons'
-              description: 'Retrouvez les instructions, données et résultats des hackathons organisés avec nos partenaires.'
-              url: '/hackathons/'
+              name: 'Voir le prochain hackathon "Le climat en données"'
+              description: 'Explorez les données mises à disposition et disponibles pour le hackathon'
+              url: '/hackathons/hackathon-le-climat-en-donnees/'
             - id: 'guide'
-              name: 'Guide du dernier hackathon'
-              description: 'Voir le guide qui a pour vocation de vous accompagner au Hackathon Données Alimentaires pendant toute la durée de l’événement avec des informations, des ressources et des bonnes pratiques.'
-              url: 'https://docs.numerique.gouv.fr/docs/e6589294-9422-4292-a823-54401106c841/'
+              name: 'Consulter le guide du hackathon "Le climat en données"'
+              description: 'Parcourez le guide qui vous accompagnera pendant toute la durée du hackathon avec des informations, des ressources et des bonnes pratiques.'
+              url: 'https://guides.data.gouv.fr/guide-du-participant-au-hackathon-le-climat-en-donnees/'
 
         sub_section_buttons:
     meta_description:
@@ -63,10 +63,10 @@ website:
     name:
     link:
   menu:
-    - text: Voir les hackathons
+    - text: Tous les hackathons
       to: /hackathons/
-    - text: Guide du dernier hackathon
-      to: 'https://docs.numerique.gouv.fr/docs/e6589294-9422-4292-a823-54401106c841/'
+    - text: Guide du prochain hackathon
+      to: 'https://guides.data.gouv.fr/guide-du-participant-au-hackathon-le-climat-en-donnees/'
   router:
     disable:
       - organizations_routes
@@ -90,7 +90,7 @@ website:
         url: '/static/hackathon/pages/pendant-le-hackathon.md'
   show_quality_component: true
   oauth_option: true
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr permettant de lister les jeux de données utilisés dans le cadre d'événement de type hackathon par l'équipe data.gouv.fr ou ses partenaires."
+  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr permettant de lister les jeux de données utilisés dans le cadre d'événements de type hackathon par l'équipe data.gouv.fr ou ses partenaires."
   footer_external_links:
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
@@ -173,6 +173,8 @@ pages:
         values:
           - id: alimentaire
             name: Données alimentaires
+          - id: climat
+            name: Données utiles pour les analyses climatiques
   # DATASETS
   datasets:
     list_all: false

@@ -1,24 +1,33 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { nextTick, ref, type Ref } from 'vue'
 
+import { useAnimationConstants } from '@/utils/constants'
 import type { DatasetV2 } from '@datagouv/components-next'
+
+const { HIGHLIGHT_DURATION, SCROLL_TIMEOUT } = useAnimationConstants()
 
 import FactorEditModal, {
   type FactorEditModalType
 } from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
-import { type ResolvedFactor } from '@/model/topic'
+import { type ResolvedFactor, type Topic } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
+import { useTopicStore } from '@/store/TopicStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
+import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
+import type { OgcLayerInfo } from '@/utils/ogcServices'
+import { findOgcCompatibleResource } from '@/utils/ogcServices'
+import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
+import TopicFactorCard from './TopicInTopicCard.vue'
 
 const factors = defineModel({
   type: Array<ResolvedFactor>,
@@ -42,9 +51,14 @@ const props = defineProps({
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
+const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
+const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
+const highlightedFactorId = ref<string | null>(null)
 
-const { pageConf } = useCurrentPageConf()
+const { pageConf, pageKey } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
+const resourceStore = useResourceStore()
+const topicStore = useTopicStore()
 
 const {
   groupedFactors,
@@ -64,6 +78,23 @@ const {
 
 const { groupedFactors: filteredResults } = useGroups(filteredFactors)
 
+const emit = defineEmits<{
+  factorChanged: []
+}>()
+
+const getTopicSlugFromUri = (uri: string): string | null => {
+  const baseUrl = config.website.meta?.canonical_url
+  if (!baseUrl) return null
+  const match = uri.match(new RegExp(`${baseUrl}/${pageKey}/([^/]+)`))
+  return match ? match[1] : null
+}
+
+const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
+  if (!factor.id) return null
+  const entry = topicsContent.value.get(factor.id)
+  return entry?.topic || null
+}
+
 const handleRemoveFactor = async (group: string, index: number) => {
   const confirmMessage =
     'Etes-vous sûr de vouloir supprimer ce jeu de données ?'
@@ -78,6 +109,7 @@ const handleRemoveFactor = async (group: string, index: number) => {
     await elementStore.deleteElement(props.topicId, result.deletedFactor.id)
   }
   factors.value = result.factors
+  emit('factorChanged')
 }
 
 const handleRenameGroup = async (
@@ -120,6 +152,56 @@ const handleDeleteGroup = async (groupName: string) => {
   await Promise.all(deletePromises)
 }
 
+const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
+
+/**
+ * Iterate over MAX_PAGES pages of resources for a dataset and find the best OGC service.
+ * Stores result in ogcLayerInfo Map.
+ * Stops if WFS is found, fallback to WMS.
+ */
+const computeOgcInfo = async (dataset: DatasetV2) => {
+  if (!config.website.datasets.open_in_qgis) {
+    return
+  }
+  const MAX_PAGES = 10
+  let bestResult: OgcLayerInfo | null = null
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const response = await resourceStore.fetchDatasetResources(dataset.id, {
+      page
+    })
+    const pageResult = findOgcCompatibleResource(response.data)
+    // Update best result if we found something better
+    if (pageResult?.format === 'wfs' || (!bestResult && pageResult)) {
+      bestResult = pageResult
+    }
+    // Stop if we found WFS (best possible) or no more pages
+    if (pageResult?.format === 'wfs' || !response.next_page) {
+      break
+    }
+  }
+  if (bestResult) {
+    ogcLayerInfo.value.set(dataset.id, bestResult)
+  }
+}
+
+const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
+  const layerInfo = ogcLayerInfo.value.get(datasetId)
+  if (layerInfo) {
+    try {
+      await openInQgis(layerInfo, datasetTitle)
+    } catch (error) {
+      console.error('Failed to open in QGIS:', error)
+      alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+    }
+  }
+}
+
+/**
+ * Introspects topic's datasets from data.gouv.fr:
+ * - build a cache of content
+ * - sync status (archived, deleted)
+ * - find qgis compatible resources
+ */
 const loadDatasetsContent = () => {
   factors.value.forEach((factor) => {
     const id = factor.element?.id ?? null
@@ -130,6 +212,7 @@ const loadDatasetsContent = () => {
           if (d) {
             datasetsContent.value.set(id, d)
             factor.remoteArchived = !!d.archived
+            computeOgcInfo(d)
           }
         })
         .catch((err) => {
@@ -139,6 +222,33 @@ const loadDatasetsContent = () => {
             toastHttpError(err)
           }
         })
+    }
+  })
+}
+
+/**
+ * Loads the "local" topics associated to the factors via siteExtras.uri
+ */
+const loadTopicsContent = () => {
+  factors.value.forEach((factor) => {
+    if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
+      const slug = getTopicSlugFromUri(factor.siteExtras.uri)
+      if (slug && !topicsContent.value.has(factor.id)) {
+        topicStore
+          .load(slug, { toasted: false })
+          .then((topic) => {
+            if (topic && factor.id) {
+              topicsContent.value.set(factor.id, { slug, topic })
+            }
+          })
+          .catch((err) => {
+            if (isNotFoundError(err)) {
+              factor.remoteDeleted = true
+            } else {
+              toastHttpError(err)
+            }
+          })
+      }
     }
   })
 }
@@ -164,12 +274,49 @@ const editFactor = (factor: ResolvedFactor, index: number, group: string) => {
 }
 
 watch(
-  () => factors.value.map((factor) => factor.element?.id).filter(Boolean),
+  () =>
+    factors.value
+      .map((factor) => factor.element?.id || factor.siteExtras?.uri)
+      .filter(Boolean),
   () => {
     loadDatasetsContent()
+    loadTopicsContent()
   },
   { immediate: true }
 )
+
+const navigateToElement = (elementId: string) => {
+  const factor = factors.value.find((f) => f.id === elementId)
+  if (!factor) {
+    console.warn(`Trying to scroll to factor ${elementId}, not found.`)
+    return
+  }
+  nextTick(() => {
+    // open the group disclosure if needed
+    if (factor.siteExtras.group) {
+      const groupRef = groupRefs.value[factor.siteExtras.group]
+      if (groupRef) {
+        groupRef.openDisclosure()
+      }
+    }
+    // Wait a bit for full loading, then scroll
+    setTimeout(() => {
+      const element = document.getElementById(`factor-${elementId}`)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Add highlight effect using reactive state
+        highlightedFactorId.value = elementId
+        setTimeout(() => {
+          highlightedFactorId.value = null
+        }, HIGHLIGHT_DURATION)
+      }
+    }, SCROLL_TIMEOUT)
+  })
+}
+
+defineExpose({
+  navigateToElement
+})
 </script>
 
 <template>
@@ -225,10 +372,15 @@ watch(
         <template v-for="[group, groupFactors] in filteredResults" :key="group">
           <li v-if="groupFactors.length && !isGroupOnlyHidden(group)">
             <TopicGroup
+              :ref="
+                (el) =>
+                  (groupRefs[group] = el as InstanceType<typeof TopicGroup>)
+              "
               :group-name="group"
               :all-groups="filteredResults"
               :factors="groupFactors"
               :is-edit="isEdit"
+              :highlighted-factor-id="highlightedFactorId"
               @edit-group-name="handleRenameGroup"
               @delete-group="handleDeleteGroup"
             >
@@ -256,11 +408,17 @@ watch(
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(factor.description)"></div>
                 <TopicDatasetCard
-                  v-if="factor.element?.id"
+                  v-if="factor.element?.class === 'Dataset'"
                   :factor="factor"
                   :dataset-content="datasetsContent.get(factor.element.id)"
                 />
-                <div class="fr-grid-row">
+                <TopicFactorCard
+                  v-else-if="getTopicForFactor(factor)"
+                  :page-key="pageKey"
+                  :topic="getTopicForFactor(factor)!"
+                  class="fr-my-2w"
+                />
+                <div v-if="!getTopicForFactor(factor)" class="fr-grid-row">
                   <a
                     v-if="
                       !isAvailable(factor.siteExtras.availability) && !isEdit
@@ -277,6 +435,20 @@ watch(
                     target="_blank"
                     >Accéder au catalogue</a
                   >
+                  <button
+                    v-if="
+                      factor.element?.id && ogcLayerInfo.has(factor.element.id)
+                    "
+                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    @click="
+                      handleOpenInQgis(
+                        factor.element.id,
+                        datasetsContent.get(factor.element.id)?.title
+                      )
+                    "
+                  >
+                    Ouvrir dans QGIS
+                  </button>
                 </div>
               </template>
             </TopicGroup>
@@ -303,6 +475,7 @@ watch(
     v-model:groups-model="groupedFactors"
     :dataset-editorialization
     :topic-id="props.topicId"
+    @submit-modal="emit('factorChanged')"
   />
 </template>
 
@@ -340,5 +513,11 @@ details[open] summary::marker {
 }
 :deep(search) {
   margin-inline-start: auto;
+}
+
+/* Intensify contrast for topic and dataset cards badges */
+:deep(.fr-badge--mention-grey) {
+  background-color: #cecece;
+  color: var(--text-default-grey) !important;
 }
 </style>

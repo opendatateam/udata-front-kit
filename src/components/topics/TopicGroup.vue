@@ -27,6 +27,10 @@ const props = defineProps({
   isEdit: {
     type: Boolean,
     default: false
+  },
+  highlightedFactorId: {
+    type: String as () => string | null,
+    default: null
   }
 })
 
@@ -66,7 +70,16 @@ const isDisclosureOpen: Ref<boolean> = ref(!isDisclosure.value)
 const toggleDisclosure = () => {
   isDisclosureOpen.value = !isDisclosureOpen.value
 }
+
+const openDisclosure = () => {
+  isDisclosureOpen.value = true
+}
+
 const widgetID = useRandomId('disclosure')
+
+defineExpose({
+  openDisclosure
+})
 
 const opened = ref(false)
 const modalType = ref('')
@@ -210,7 +223,9 @@ const actions = computed(() => {
         <li
           v-for="(factor, index) in factors"
           v-show="!factor.isHidden"
+          :id="factor.id ? `factor-${factor.id}` : undefined"
           :key="index"
+          :class="{ 'factor-highlighted': factor.id === highlightedFactorId }"
         >
           <div class="dataset__header fr-px-2w fr-py-3v">
             <slot name="datasetTitle">
@@ -440,5 +455,12 @@ const actions = computed(() => {
 
 .modal-delete :deep(.fr-btns-group :last-child button) {
   background-color: var(--modal-confirm-button-bg);
+}
+
+/* Factor highlight for deep-linking */
+.factor-highlighted {
+  outline: 3px solid var(--blue-france-sun-113-625);
+  outline-offset: 4px;
+  transition: outline 0.3s ease;
 }
 </style>

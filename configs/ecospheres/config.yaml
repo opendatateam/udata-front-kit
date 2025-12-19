@@ -27,7 +27,7 @@ website:
   meta:
     keywords:
     description:
-    canonical_url:
+    canonical_url: https://demo.ecologie.data.gouv.fr
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'
@@ -181,6 +181,7 @@ website:
       enable: true
       page: bouquets
       dataset_editorialization: true
+    open_in_qgis: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-DCAT
