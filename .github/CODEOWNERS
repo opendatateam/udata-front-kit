@@ -1,21 +1,2 @@
-# Default owners
-
-*  @abulte @geoffreyaldebert @streino
-
-
-# Special owners
-
-/.github/CODEOWNERS  @abulte @geoffreyaldebert @streino
-
-/.github/workflows/create-deploy-release.yml  @geoffreyaldebert @jordanguedj
-
-
-# Vertical owners
-# /configs/<vertical> and /src/custom/<vertical>
-
-**/defis/         @geoffreyaldebert
-**/ecospheres/    @opendatateam/ecospheres-admin
-**/hackathon/     @geoffreyaldebert
-**/logistique/    @johanricher
-**/meteo-france/  @geoffreyaldebert @pierlou
-**/simplifions/   @JeSuisUnCaillou
+# simplifions-* deployment branches ONLY
+*  @abulte @DorineLam
