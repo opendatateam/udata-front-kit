@@ -1,10 +1,10 @@
 import type { Topic } from '@/model/topic'
 import {
   createTestTopic,
-  mockTopicAndDiscussions,
+  mockTopicAndRelatedObjects,
   setupTopicWithExistingFactors,
   visitTopic
-} from './support'
+} from '../support'
 
 describe('Topic Elements - Permissions and Access Control', () => {
   let testTopic: Topic
@@ -25,8 +25,8 @@ describe('Topic Elements - Permissions and Access Control', () => {
         }
       })
 
-      mockTopicAndDiscussions(otherUserTopic)
-      cy.visit(`/bouquets/${otherUserTopic.id}`)
+      mockTopicAndRelatedObjects(otherUserTopic, {})
+      cy.visit(`/bouquets/${otherUserTopic.slug}`)
 
       // Verify edit controls are not present
       cy.get('.test__add_dataset_btn').should('not.exist')
@@ -36,7 +36,7 @@ describe('Topic Elements - Permissions and Access Control', () => {
 
     it('should show edit controls for topic owners', () => {
       // Topic is owned by current user
-      visitTopic(testTopic.id)
+      visitTopic(testTopic.slug)
 
       // Verify edit controls are present
       cy.get('.test__add_dataset_btn').should('be.visible')
