@@ -4,6 +4,9 @@ import { mockUniverseOrganizations } from '../mocks'
 
 describe('Topics - List Page', () => {
   let testTopics: Topic[]
+  const universeTag =
+    Cypress.env('siteConfig').pages.bouquets.universe_query.tag
+  const universeTagRegex = new RegExp(`[?&]tag=${universeTag}(?:&|$)`)
 
   beforeEach(() => {
     cy.mockMatomo()
@@ -21,7 +24,7 @@ describe('Topics - List Page', () => {
       cy.visit('/bouquets')
       cy.wait('@get_topics_list').then((interception) => {
         // Verify the API call includes the universe query tag
-        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
       })
 
       // Check that all topics are displayed
@@ -55,7 +58,7 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.match(
           /[?&]organization=534fff4ca3a7292c64a77c95(?:&|$)/
         )
-        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
       })
     })
 
@@ -83,7 +86,7 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.match(
           /[?&]tag=ecospheres-theme-mieux-consommer(?:&|$)/
         )
-        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
       })
     })
 
@@ -118,7 +121,7 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.match(
           /[?&]geozone=fr:commune:75056(?:&|$)/
         )
-        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
       })
     })
   })
@@ -161,7 +164,7 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.match(
           /[?&]include_private=true(?:&|$)/
         )
-        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
       })
 
       // Initially, include_private should not be in URL (default value)
@@ -184,7 +187,7 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.not.match(
           /[?&]include_private=true(?:&|$)/
         )
-        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
       })
 
       // Click again to show drafts
@@ -198,7 +201,7 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.match(
           /[?&]include_private=true(?:&|$)/
         )
-        expect(interception.request.url).to.match(/[?&]tag=ecospheres(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
       })
     })
   })

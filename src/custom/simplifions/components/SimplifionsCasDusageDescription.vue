@@ -213,7 +213,11 @@ grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
   casUsage.value = data.fields as CasUsage
 
   grist
-    .getRecords('Recommandations', { id: casUsage.value.Recommandations })
+    .getRecords(
+      'Recommandations',
+      { id: casUsage.value.Recommandations },
+      { sort: 'manualSort' }
+    )
     .then((data) => {
       recommandations.value = (
         data.map((d) => d.fields) as Recommandation[]

@@ -25,10 +25,14 @@ export const grist = {
     return `${grist_url}/attachments/${attachment_id}/download`
   },
 
-  getRecords: async (table_id: string, filter = {}): Promise<GristRecord[]> => {
+  getRecords: async (
+    table_id: string,
+    filter = {},
+    extraParams = {}
+  ): Promise<GristRecord[]> => {
     const url = `${grist_url}/tables/${table_id}/records`
     const response = await axios.get(url, {
-      params: { filter: JSON.stringify(filter) }
+      params: { filter: JSON.stringify(filter), ...extraParams }
     })
     return response.data['records'].map(cleanRecordLists)
   },

@@ -62,7 +62,7 @@ const isSearchable = computed(
     :strict="false"
     :clear-on-blur="false"
     :allow-absent="true"
-    no-options-text="Aucune résultat trouvé, précisez ou élargissez votre recherche."
+    no-options-text="Aucun résultat trouvé, précisez ou élargissez votre recherche."
     :aria="{
       // useless or unsupported yet https://github.com/vueform/multiselect/issues/436
       'aria-labelledby': null,

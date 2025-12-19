@@ -1,6 +1,9 @@
 import type { Topic } from '@/model/topic'
 
 describe('Ecospheres - Topic (Bouquet) Creation', () => {
+  const universeTag =
+    Cypress.env('siteConfig').pages.bouquets.universe_query.tag
+
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
@@ -64,7 +67,7 @@ describe('Ecospheres - Topic (Bouquet) Creation', () => {
       expect(requestBody.tags).to.include('ecospheres-theme-mieux-consommer')
 
       // The tags should also include the universe query tag
-      expect(requestBody.tags).to.include('ecospheres')
+      expect(requestBody.tags).to.include(universeTag)
     })
 
     // Verify redirect to the detail page (optional but good practice)
