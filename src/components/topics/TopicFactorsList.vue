@@ -89,32 +89,41 @@ const emit = defineEmits<{
   factorChanged: []
 }>()
 
+/**
+ * Generic function to extract a slug from a URI based on base URLs and resource path
+ */
+const getSlugFromUri = (
+  uri: string,
+  resourcePath: string,
+  baseUrls: (string | undefined)[]
+): string | null => {
+  const validBaseUrls = baseUrls.filter(Boolean)
+  if (validBaseUrls.length === 0) return null
+
+  for (const baseUrl of validBaseUrls) {
+    const match = uri.match(new RegExp(`${baseUrl}/${resourcePath}/([^/]+)`))
+    if (match) return match[1]
+  }
+
+  return null
+}
+
 const getTopicSlugFromUri = (uri: string): string | null => {
-  const baseUrl = config.website.meta?.canonical_url
-  if (!baseUrl) return null
-  const match = uri.match(new RegExp(`${baseUrl}/${pageKey}/([^/]+)`))
-  return match ? match[1] : null
+  return getSlugFromUri(uri, pageKey, [config.website.meta?.canonical_url])
+}
+
+const getDataserviceSlugFromUri = (uri: string): string | null => {
+  // match both from data.gouv.fr and current site urls
+  return getSlugFromUri(uri, 'dataservices', [
+    config.website.meta?.canonical_url,
+    config.datagouvfr?.base_url
+  ])
 }
 
 const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
   if (!factor.id) return null
   const entry = topicsContent.value.get(factor.id)
   return entry?.topic || null
-}
-
-const getDataserviceSlugFromUri = (uri: string): string | null => {
-  // match both from data.gouv.fr and current site urls
-  const baseUrls = [
-    config.website.meta?.canonical_url,
-    config.datagouvfr?.base_url
-  ].filter(Boolean)
-
-  for (const baseUrl of baseUrls) {
-    const match = uri.match(new RegExp(`${baseUrl}/dataservices/([^/]+)`))
-    if (match) return match[1]
-  }
-
-  return null
 }
 
 const getDataserviceForFactor = (
@@ -257,18 +266,25 @@ const loadDatasetsContent = () => {
 }
 
 /**
- * Loads the "local" topics associated to the factors via siteExtras.uri
+ * Generic function to load referenced content (topics or dataservices) from factors
  */
-const loadTopicsContent = () => {
+const loadReferencedContent = (
+  getSlugFn: (uri: string) => string | null,
+  contentMap: Map<string, Record<string, unknown>>,
+  store:
+    | ReturnType<typeof useTopicStore>
+    | ReturnType<typeof useDataserviceStore>,
+  contentKey: string
+) => {
   factors.value.forEach((factor) => {
     if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
-      const slug = getTopicSlugFromUri(factor.siteExtras.uri)
-      if (slug && !topicsContent.value.has(factor.id)) {
-        topicStore
+      const slug = getSlugFn(factor.siteExtras.uri)
+      if (slug && !contentMap.has(factor.id)) {
+        store
           .load(slug, { toasted: false })
-          .then((topic) => {
-            if (topic && factor.id) {
-              topicsContent.value.set(factor.id, { slug, topic })
+          .then((content) => {
+            if (content && factor.id) {
+              contentMap.set(factor.id, { slug, [contentKey]: content })
             }
           })
           .catch((err) => {
@@ -284,30 +300,27 @@ const loadTopicsContent = () => {
 }
 
 /**
+ * Loads the "local" topics associated to the factors via siteExtras.uri
+ */
+const loadTopicsContent = () => {
+  loadReferencedContent(
+    getTopicSlugFromUri,
+    topicsContent.value,
+    topicStore,
+    'topic'
+  )
+}
+
+/**
  * Loads the dataservices associated to the factors via siteExtras.uri
  */
 const loadDataservicesContent = () => {
-  factors.value.forEach((factor) => {
-    if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
-      const slug = getDataserviceSlugFromUri(factor.siteExtras.uri)
-      if (slug && !dataservicesContent.value.has(factor.id)) {
-        dataserviceStore
-          .load(slug, { toasted: false })
-          .then((dataservice) => {
-            if (dataservice && factor.id) {
-              dataservicesContent.value.set(factor.id, { slug, dataservice })
-            }
-          })
-          .catch((err) => {
-            if (isNotFoundError(err)) {
-              factor.remoteDeleted = true
-            } else {
-              toastHttpError(err)
-            }
-          })
-      }
-    }
-  })
+  loadReferencedContent(
+    getDataserviceSlugFromUri,
+    dataservicesContent.value,
+    dataserviceStore,
+    'dataservice'
+  )
 }
 
 const showTOC = computed(() => {
