@@ -52,12 +52,15 @@ const props = defineProps({
   }
 })
 
+type ReferencedContent = {
+  slug: string
+  topic?: Topic
+  dataservice?: DataserviceWithRel
+}
+
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
-const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
-const dataservicesContent = ref(
-  new Map<string, { slug: string; dataservice: DataserviceWithRel }>()
-)
+const referencedContent = ref(new Map<string, ReferencedContent>())
 const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
 const highlightedFactorId = ref<string | null>(null)
 
@@ -122,7 +125,7 @@ const getDataserviceSlugFromUri = (uri: string): string | null => {
 
 const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
   if (!factor.id) return null
-  const entry = topicsContent.value.get(factor.id)
+  const entry = referencedContent.value.get(factor.id)
   return entry?.topic || null
 }
 
@@ -130,7 +133,7 @@ const getDataserviceForFactor = (
   factor: ResolvedFactor
 ): DataserviceWithRel | null => {
   if (!factor.id) return null
-  const entry = dataservicesContent.value.get(factor.id)
+  const entry = referencedContent.value.get(factor.id)
   return entry?.dataservice || null
 }
 
@@ -270,21 +273,23 @@ const loadDatasetsContent = () => {
  */
 const loadReferencedContent = (
   getSlugFn: (uri: string) => string | null,
-  contentMap: Map<string, Record<string, unknown>>,
   store:
     | ReturnType<typeof useTopicStore>
     | ReturnType<typeof useDataserviceStore>,
-  contentKey: string
+  contentKey: 'topic' | 'dataservice'
 ) => {
   factors.value.forEach((factor) => {
     if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
       const slug = getSlugFn(factor.siteExtras.uri)
-      if (slug && !contentMap.has(factor.id)) {
+      if (slug && !referencedContent.value.has(factor.id)) {
         store
           .load(slug, { toasted: false })
           .then((content) => {
             if (content && factor.id) {
-              contentMap.set(factor.id, { slug, [contentKey]: content })
+              referencedContent.value.set(factor.id, {
+                slug,
+                [contentKey]: content
+              })
             }
           })
           .catch((err) => {
@@ -303,12 +308,7 @@ const loadReferencedContent = (
  * Loads the "local" topics associated to the factors via siteExtras.uri
  */
 const loadTopicsContent = () => {
-  loadReferencedContent(
-    getTopicSlugFromUri,
-    topicsContent.value,
-    topicStore,
-    'topic'
-  )
+  loadReferencedContent(getTopicSlugFromUri, topicStore, 'topic')
 }
 
 /**
@@ -317,7 +317,6 @@ const loadTopicsContent = () => {
 const loadDataservicesContent = () => {
   loadReferencedContent(
     getDataserviceSlugFromUri,
-    dataservicesContent.value,
     dataserviceStore,
     'dataservice'
   )
