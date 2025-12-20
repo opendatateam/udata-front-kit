@@ -1,4 +1,9 @@
-import type { Factor, Topic } from '@/model/topic'
+import {
+  Availability,
+  type Factor,
+  type SiteId,
+  type Topic
+} from '@/model/topic'
 import {
   createTestDataservice,
   createTestTopic,
@@ -136,52 +141,87 @@ describe('Topic Elements - Factor List Display', () => {
     it('should display DataserviceCard for factors referencing dataservices', () => {
       setupElementTest()
 
-      // Create a referenced dataservice that will be displayed in the card
-      const referencedDataservice = createTestDataservice({
+      // Create referenced dataservices that will be displayed in the cards
+      const referencedDataserviceEcologie = createTestDataservice({
         slug: 'referenced-dataservice-1',
-        title: 'Referenced Dataservice Name'
+        title: 'Referenced Dataservice 1 Name'
       })
-
-      // Create a factor with dataservice_reference trait
-      const dataserviceRefFactor = factorFactory.one({
-        traits: ['dataservice_reference']
+      const referencedDataserviceDatagouvfr = createTestDataservice({
+        slug: 'referenced-dataservice-2',
+        title: 'Referenced Dataservice 2 Name'
       })
+      const referencedDataservices = [
+        referencedDataserviceEcologie,
+        referencedDataserviceDatagouvfr
+      ]
 
-      // Create and mock a test topic with this factor and referenced dataservice
-      const mainTopic = createTestTopicWithElements([dataserviceRefFactor])
+      // Create factors with dataservice_reference traits
+      const dataserviceFactorEcologie = factorFactory.one({
+        traits: ['dataservice_reference_ecologie']
+      })
+      // Override URI for second factor because each trait's sequence() starts from 1 independently
+      // Without override, both would generate referenced-dataservice-1
+      const dataserviceFactorDatagouvfr = factorFactory.one({
+        traits: ['dataservice_reference_datagouvfr'],
+        overrides: {
+          extras: {
+            ['ecospheres' as SiteId]: {
+              uri: `${Cypress.env('siteConfig').datagouvfr.base_url}/dataservices/referenced-dataservice-2`,
+              availability: Availability.LOCAL_AVAILABLE,
+              group: 'Test Group'
+            }
+          }
+        }
+      })
+      const dataserviceFactors = [
+        dataserviceFactorEcologie,
+        dataserviceFactorDatagouvfr
+      ]
+
+      // Create and mock a test topic with those factors and referenced dataservices
+      const mainTopic = createTestTopicWithElements(dataserviceFactors)
       mockTopicAndRelatedObjects(mainTopic, {
-        factors: [dataserviceRefFactor],
-        referencedDataservices: [referencedDataservice]
+        factors: dataserviceFactors,
+        referencedDataservices
       })
-      mockTopicElementsByClass(mainTopic.id, [], [dataserviceRefFactor], [])
+      mockTopicElementsByClass(mainTopic.id, [], dataserviceFactors, [])
 
       visitTopic(mainTopic.slug)
 
-      // Wait for element=null mock, for referenced dataservice
+      // Wait for element=null mock, for referenced dataservices
       cy.wait('@getElementsNone')
 
-      // Expand the group to see the factor
+      // Expand the group to see the factors
       expandDisclosureGroup()
 
       // Verify factor title is visible
-      cy.contains(dataserviceRefFactor.title).should('be.visible')
+      for (const dataserviceFactor of dataserviceFactors) {
+        cy.contains(dataserviceFactor.title).should('be.visible')
+      }
 
       // Verify DataserviceCard is displayed with the referenced dataservice name
-      cy.contains(referencedDataservice.title).should('be.visible')
+      for (const referencedDataservice of referencedDataservices) {
+        cy.contains(referencedDataservice.title).should('be.visible')
+      }
 
-      // Verify the badge with "API" label is displayed
+      // Verify the badge with "API" label is displayed twice
       cy.get('.fr-badge--mention-grey')
-        .should('be.visible')
-        .and('contain.text', 'API')
+        .should('have.length', 2)
+        .each(($badge) => {
+          cy.wrap($badge).should('contain.text', 'API')
+        })
 
       // Verify the "Accéder au catalogue" button is NOT displayed
       cy.contains('Accéder au catalogue').should('not.exist')
 
       // Click on the DataserviceCard to navigate
-      cy.contains(referencedDataservice.title).click()
+      cy.contains(referencedDataservices[0].title).click()
 
       // Verify navigation occurred to the referenced dataservice
-      cy.url().should('include', `/dataservices/${referencedDataservice.id}`)
+      cy.url().should(
+        'include',
+        `/dataservices/${referencedDataservices[0].id}`
+      )
     })
   })
 })

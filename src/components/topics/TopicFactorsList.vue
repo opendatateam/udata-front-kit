@@ -103,10 +103,18 @@ const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
 }
 
 const getDataserviceSlugFromUri = (uri: string): string | null => {
-  const baseUrl = config.website.meta?.canonical_url
-  if (!baseUrl) return null
-  const match = uri.match(new RegExp(`${baseUrl}/dataservices/([^/]+)`))
-  return match ? match[1] : null
+  // match both from data.gouv.fr and current site urls
+  const baseUrls = [
+    config.website.meta?.canonical_url,
+    config.datagouvfr?.base_url
+  ].filter(Boolean)
+
+  for (const baseUrl of baseUrls) {
+    const match = uri.match(new RegExp(`${baseUrl}/dataservices/([^/]+)`))
+    if (match) return match[1]
+  }
+
+  return null
 }
 
 const getDataserviceForFactor = (

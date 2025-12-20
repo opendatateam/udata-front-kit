@@ -61,14 +61,28 @@ export const factorFactory = build<Factor>({
         element: null
       }
     },
-    dataservice_reference: {
+    dataservice_reference_ecologie: {
       overrides: {
         extras: {
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.meta.canonical_url ||
-                'https://demo.ecologie.data.gouv.fr'
+                Cypress.env('siteConfig').website.meta.canonical_url
+              return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
+            }),
+            availability: Availability.LOCAL_AVAILABLE,
+            group: 'Test Group'
+          }
+        },
+        element: null
+      }
+    },
+    dataservice_reference_datagouvfr: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence((x) => {
+              const canonicalUrl = Cypress.env('siteConfig').datagouvfr.base_url
               return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
