@@ -10,12 +10,9 @@ import FactorEditModal, {
   type FactorEditModalType
 } from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
-import type { DataserviceWithRel } from '@/model/dataservice'
-import { type ResolvedFactor, type Topic } from '@/model/topic'
-import { useDataserviceStore } from '@/store/DataserviceStore'
+import { type ResolvedFactor } from '@/model/topic'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
-import { useTopicStore } from '@/store/TopicStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
@@ -27,6 +24,7 @@ import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
+import { useReferencedContent } from '@/utils/topicReferencedContent'
 import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
@@ -54,18 +52,19 @@ const props = defineProps({
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
-const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
-const dataservicesContent = ref(
-  new Map<string, { slug: string; dataservice: DataserviceWithRel }>()
-)
 const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
 const highlightedFactorId = ref<string | null>(null)
 
 const { pageConf, pageKey } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
 const resourceStore = useResourceStore()
-const topicStore = useTopicStore()
-const dataserviceStore = useDataserviceStore()
+
+const {
+  getTopicForFactor,
+  getDataserviceForFactor,
+  loadTopicsContent,
+  loadDataservicesContent
+} = useReferencedContent(factors, pageKey)
 
 const {
   groupedFactors,
@@ -88,37 +87,6 @@ const { groupedFactors: filteredResults } = useGroups(filteredFactors)
 const emit = defineEmits<{
   factorChanged: []
 }>()
-
-/**
- * Generic function to extract a slug from a URI based on base URLs and resource path
- */
-const getSlugFromUri = (
-  uri: string,
-  resourcePath: string,
-  baseUrls: (string | undefined)[]
-): string | null => {
-  const validBaseUrls = baseUrls.filter(Boolean)
-  if (validBaseUrls.length === 0) return null
-
-  for (const baseUrl of validBaseUrls) {
-    const match = uri.match(new RegExp(`${baseUrl}/${resourcePath}/([^/]+)`))
-    if (match) return match[1]
-  }
-
-  return null
-}
-
-const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
-  if (!factor.id) return null
-  return topicsContent.value.get(factor.id)?.topic || null
-}
-
-const getDataserviceForFactor = (
-  factor: ResolvedFactor
-): DataserviceWithRel | null => {
-  if (!factor.id) return null
-  return dataservicesContent.value.get(factor.id)?.dataservice || null
-}
 
 const handleRemoveFactor = async (group: string, index: number) => {
   const confirmMessage =
@@ -249,69 +217,6 @@ const loadDatasetsContent = () => {
         })
     }
   })
-}
-
-/**
- * Generic function to load referenced content (topics or dataservices) from factors
- */
-function loadReferencedContent<T>(
-  getSlugFn: (uri: string) => string | null,
-  contentMap: Map<string, T>,
-  store: {
-    load: (slug: string, opts: { toasted: boolean }) => Promise<unknown>
-  },
-  createEntry: (slug: string, content: unknown) => T
-): void {
-  factors.value.forEach((factor) => {
-    if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
-      const slug = getSlugFn(factor.siteExtras.uri)
-      if (slug && !contentMap.has(factor.id)) {
-        store
-          .load(slug, { toasted: false })
-          .then((content) => {
-            if (content && factor.id) {
-              contentMap.set(factor.id, createEntry(slug, content))
-            }
-          })
-          .catch((err) => {
-            if (isNotFoundError(err)) {
-              factor.remoteDeleted = true
-            } else {
-              toastHttpError(err)
-            }
-          })
-      }
-    }
-  })
-}
-
-/**
- * Loads the "local" topics associated to the factors via siteExtras.uri
- */
-const loadTopicsContent = () => {
-  loadReferencedContent(
-    (uri) => getSlugFromUri(uri, pageKey, [config.website.meta?.canonical_url]),
-    topicsContent.value,
-    topicStore,
-    (slug, content) => ({ slug, topic: content as Topic })
-  )
-}
-
-/**
- * Loads the dataservices associated to the factors via siteExtras.uri
- */
-const loadDataservicesContent = () => {
-  loadReferencedContent(
-    (uri) =>
-      // match both base urls from data.gouv.fr and current site
-      getSlugFromUri(uri, 'dataservices', [
-        config.website.meta?.canonical_url,
-        config.datagouvfr?.base_url
-      ]),
-    dataservicesContent.value,
-    dataserviceStore,
-    (slug, content) => ({ slug, dataservice: content as DataserviceWithRel })
-  )
 }
 
 const showTOC = computed(() => {
