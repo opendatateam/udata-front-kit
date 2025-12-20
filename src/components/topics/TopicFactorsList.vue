@@ -52,11 +52,9 @@ const props = defineProps({
   }
 })
 
-type ReferencedContent = {
-  slug: string
-  topic?: Topic
-  dataservice?: DataserviceWithRel
-}
+type ReferencedContent =
+  | { type: 'topic'; slug: string; content: Topic }
+  | { type: 'dataservice'; slug: string; content: DataserviceWithRel }
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
@@ -111,30 +109,11 @@ const getSlugFromUri = (
   return null
 }
 
-const getTopicSlugFromUri = (uri: string): string | null => {
-  return getSlugFromUri(uri, pageKey, [config.website.meta?.canonical_url])
-}
-
-const getDataserviceSlugFromUri = (uri: string): string | null => {
-  // match both from data.gouv.fr and current site urls
-  return getSlugFromUri(uri, 'dataservices', [
-    config.website.meta?.canonical_url,
-    config.datagouvfr?.base_url
-  ])
-}
-
-const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
-  if (!factor.id) return null
-  const entry = referencedContent.value.get(factor.id)
-  return entry?.topic || null
-}
-
-const getDataserviceForFactor = (
+const getReferencedContentForFactor = (
   factor: ResolvedFactor
-): DataserviceWithRel | null => {
+): ReferencedContent | null => {
   if (!factor.id) return null
-  const entry = referencedContent.value.get(factor.id)
-  return entry?.dataservice || null
+  return referencedContent.value.get(factor.id) || null
 }
 
 const handleRemoveFactor = async (group: string, index: number) => {
@@ -276,7 +255,7 @@ const loadReferencedContent = (
   store:
     | ReturnType<typeof useTopicStore>
     | ReturnType<typeof useDataserviceStore>,
-  contentKey: 'topic' | 'dataservice'
+  contentType: 'topic' | 'dataservice'
 ) => {
   factors.value.forEach((factor) => {
     if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
@@ -287,9 +266,10 @@ const loadReferencedContent = (
           .then((content) => {
             if (content && factor.id) {
               referencedContent.value.set(factor.id, {
+                type: contentType,
                 slug,
-                [contentKey]: content
-              })
+                content
+              } as ReferencedContent)
             }
           })
           .catch((err) => {
@@ -308,7 +288,11 @@ const loadReferencedContent = (
  * Loads the "local" topics associated to the factors via siteExtras.uri
  */
 const loadTopicsContent = () => {
-  loadReferencedContent(getTopicSlugFromUri, topicStore, 'topic')
+  loadReferencedContent(
+    (uri) => getSlugFromUri(uri, pageKey, [config.website.meta?.canonical_url]),
+    topicStore,
+    'topic'
+  )
 }
 
 /**
@@ -316,7 +300,12 @@ const loadTopicsContent = () => {
  */
 const loadDataservicesContent = () => {
   loadReferencedContent(
-    getDataserviceSlugFromUri,
+    (uri) =>
+      // match both base urls from data.gouv.fr and current site
+      getSlugFromUri(uri, 'dataservices', [
+        config.website.meta?.canonical_url,
+        config.datagouvfr?.base_url
+      ]),
     dataserviceStore,
     'dataservice'
   )
@@ -483,21 +472,28 @@ defineExpose({
                   :dataset-content="datasetsContent.get(factor.element.id)"
                 />
                 <TopicFactorCard
-                  v-else-if="getTopicForFactor(factor)"
+                  v-else-if="
+                    getReferencedContentForFactor(factor)?.type === 'topic'
+                  "
                   :page-key="pageKey"
-                  :topic="getTopicForFactor(factor)!"
+                  :topic="
+                    getReferencedContentForFactor(factor)!.content as Topic
+                  "
                   class="fr-my-2w"
                 />
                 <DataserviceInTopicCard
-                  v-else-if="getDataserviceForFactor(factor)"
-                  :dataservice="getDataserviceForFactor(factor)!"
+                  v-else-if="
+                    getReferencedContentForFactor(factor)?.type ===
+                    'dataservice'
+                  "
+                  :dataservice="
+                    getReferencedContentForFactor(factor)!
+                      .content as DataserviceWithRel
+                  "
                   class="fr-my-2w"
                 />
                 <div
-                  v-if="
-                    !getTopicForFactor(factor) &&
-                    !getDataserviceForFactor(factor)
-                  "
+                  v-if="!getReferencedContentForFactor(factor)"
                   class="fr-grid-row"
                 >
                   <a
