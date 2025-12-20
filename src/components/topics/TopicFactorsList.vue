@@ -52,13 +52,12 @@ const props = defineProps({
   }
 })
 
-type ReferencedContent =
-  | { type: 'topic'; slug: string; content: Topic }
-  | { type: 'dataservice'; slug: string; content: DataserviceWithRel }
-
 const modal: Ref<FactorEditModalType | null> = ref(null)
 const datasetsContent = ref(new Map<string, DatasetV2>())
-const referencedContent = ref(new Map<string, ReferencedContent>())
+const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
+const dataservicesContent = ref(
+  new Map<string, { slug: string; dataservice: DataserviceWithRel }>()
+)
 const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
 const highlightedFactorId = ref<string | null>(null)
 
@@ -109,11 +108,16 @@ const getSlugFromUri = (
   return null
 }
 
-const getReferencedContentForFactor = (
-  factor: ResolvedFactor
-): ReferencedContent | null => {
+const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
   if (!factor.id) return null
-  return referencedContent.value.get(factor.id) || null
+  return topicsContent.value.get(factor.id)?.topic || null
+}
+
+const getDataserviceForFactor = (
+  factor: ResolvedFactor
+): DataserviceWithRel | null => {
+  if (!factor.id) return null
+  return dataservicesContent.value.get(factor.id)?.dataservice || null
 }
 
 const handleRemoveFactor = async (group: string, index: number) => {
@@ -250,26 +254,23 @@ const loadDatasetsContent = () => {
 /**
  * Generic function to load referenced content (topics or dataservices) from factors
  */
-const loadReferencedContent = (
+function loadReferencedContent<T>(
   getSlugFn: (uri: string) => string | null,
-  store:
-    | ReturnType<typeof useTopicStore>
-    | ReturnType<typeof useDataserviceStore>,
-  contentType: 'topic' | 'dataservice'
-) => {
+  contentMap: Map<string, T>,
+  store: {
+    load: (slug: string, opts: { toasted: boolean }) => Promise<unknown>
+  },
+  createEntry: (slug: string, content: unknown) => T
+): void {
   factors.value.forEach((factor) => {
     if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
       const slug = getSlugFn(factor.siteExtras.uri)
-      if (slug && !referencedContent.value.has(factor.id)) {
+      if (slug && !contentMap.has(factor.id)) {
         store
           .load(slug, { toasted: false })
           .then((content) => {
             if (content && factor.id) {
-              referencedContent.value.set(factor.id, {
-                type: contentType,
-                slug,
-                content
-              } as ReferencedContent)
+              contentMap.set(factor.id, createEntry(slug, content))
             }
           })
           .catch((err) => {
@@ -290,8 +291,9 @@ const loadReferencedContent = (
 const loadTopicsContent = () => {
   loadReferencedContent(
     (uri) => getSlugFromUri(uri, pageKey, [config.website.meta?.canonical_url]),
+    topicsContent.value,
     topicStore,
-    'topic'
+    (slug, content) => ({ slug, topic: content as Topic })
   )
 }
 
@@ -306,8 +308,9 @@ const loadDataservicesContent = () => {
         config.website.meta?.canonical_url,
         config.datagouvfr?.base_url
       ]),
+    dataservicesContent.value,
     dataserviceStore,
-    'dataservice'
+    (slug, content) => ({ slug, dataservice: content as DataserviceWithRel })
   )
 }
 
@@ -472,28 +475,21 @@ defineExpose({
                   :dataset-content="datasetsContent.get(factor.element.id)"
                 />
                 <TopicFactorCard
-                  v-else-if="
-                    getReferencedContentForFactor(factor)?.type === 'topic'
-                  "
+                  v-else-if="getTopicForFactor(factor)"
                   :page-key="pageKey"
-                  :topic="
-                    getReferencedContentForFactor(factor)!.content as Topic
-                  "
+                  :topic="getTopicForFactor(factor)!"
                   class="fr-my-2w"
                 />
                 <DataserviceInTopicCard
-                  v-else-if="
-                    getReferencedContentForFactor(factor)?.type ===
-                    'dataservice'
-                  "
-                  :dataservice="
-                    getReferencedContentForFactor(factor)!
-                      .content as DataserviceWithRel
-                  "
+                  v-else-if="getDataserviceForFactor(factor)"
+                  :dataservice="getDataserviceForFactor(factor)!"
                   class="fr-my-2w"
                 />
                 <div
-                  v-if="!getReferencedContentForFactor(factor)"
+                  v-if="
+                    !getTopicForFactor(factor) &&
+                    !getDataserviceForFactor(factor)
+                  "
                   class="fr-grid-row"
                 >
                   <a
