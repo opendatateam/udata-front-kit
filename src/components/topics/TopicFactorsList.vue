@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { DatasetV2 } from '@datagouv/components-next'
 import { nextTick, ref, type Ref } from 'vue'
 
 import { useAnimationConstants } from '@/utils/constants'
-import type { DatasetV2 } from '@datagouv/components-next'
 
 const { HIGHLIGHT_DURATION, SCROLL_TIMEOUT } = useAnimationConstants()
 
@@ -11,10 +11,7 @@ import FactorEditModal, {
 } from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
 import { type ResolvedFactor } from '@/model/topic'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
-import { toastHttpError } from '@/utils/error'
-import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
@@ -51,7 +48,6 @@ const props = defineProps({
 })
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
-const datasetsContent = ref(new Map<string, DatasetV2>())
 const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
 const highlightedFactorId = ref<string | null>(null)
 
@@ -62,8 +58,10 @@ const resourceStore = useResourceStore()
 const {
   getTopicForFactor,
   getDataserviceForFactor,
+  getDatasetForFactor,
   loadTopicsContent,
-  loadDataservicesContent
+  loadDataservicesContent,
+  loadDatasetsContent
 } = useReferencedContent(factors, pageKey)
 
 const {
@@ -189,36 +187,6 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
   }
 }
 
-/**
- * Introspects topic's datasets from data.gouv.fr:
- * - build a cache of content
- * - sync status (archived, deleted)
- * - find qgis compatible resources
- */
-const loadDatasetsContent = () => {
-  factors.value.forEach((factor) => {
-    const id = factor.element?.id ?? null
-    if (id && !datasetsContent.value.has(id) && !factor.remoteDeleted) {
-      useDatasetStore()
-        .load(id, { toasted: false })
-        .then((d) => {
-          if (d) {
-            datasetsContent.value.set(id, d)
-            factor.remoteArchived = !!d.archived
-            computeOgcInfo(d)
-          }
-        })
-        .catch((err) => {
-          if (isNotFoundError(err)) {
-            factor.remoteDeleted = true
-          } else {
-            toastHttpError(err)
-          }
-        })
-    }
-  })
-}
-
 const showTOC = computed(() => {
   /*
   hide the table of content if "NoGroup" is the only group and results are not 0
@@ -245,7 +213,7 @@ watch(
       .map((factor) => factor.element?.id || factor.siteExtras?.uri)
       .filter(Boolean),
   () => {
-    loadDatasetsContent()
+    loadDatasetsContent(computeOgcInfo)
     loadTopicsContent()
     loadDataservicesContent()
   },
@@ -377,7 +345,7 @@ defineExpose({
                 <TopicDatasetCard
                   v-if="factor.element?.class === 'Dataset'"
                   :factor="factor"
-                  :dataset-content="datasetsContent.get(factor.element.id)"
+                  :dataset-content="getDatasetForFactor(factor)"
                 />
                 <TopicFactorCard
                   v-else-if="getTopicForFactor(factor)"
@@ -421,7 +389,7 @@ defineExpose({
                     @click="
                       handleOpenInQgis(
                         factor.element.id,
-                        datasetsContent.get(factor.element.id)?.title
+                        getDatasetForFactor(factor)?.title
                       )
                     "
                   >
@@ -439,7 +407,7 @@ defineExpose({
         <TopicDatasetCard
           v-if="factor.element?.id"
           :factor="factor"
-          :dataset-content="datasetsContent.get(factor.element.id)"
+          :dataset-content="getDatasetForFactor(factor)"
         />
       </div>
     </div>

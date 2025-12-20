@@ -1,9 +1,11 @@
+import type { DatasetV2 } from '@datagouv/components-next'
 import { type Ref, ref } from 'vue'
 
 import config from '@/config'
 import type { DataserviceWithRel } from '@/model/dataservice'
 import type { ResolvedFactor, Topic } from '@/model/topic'
 import { useDataserviceStore } from '@/store/DataserviceStore'
+import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
@@ -70,9 +72,11 @@ export function useReferencedContent(
   const dataservicesContent = ref(
     new Map<string, { slug: string; dataservice: DataserviceWithRel }>()
   )
+  const datasetsContent = ref(new Map<string, DatasetV2>())
 
   const topicStore = useTopicStore()
   const dataserviceStore = useDataserviceStore()
+  const datasetStore = useDatasetStore()
 
   const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
     if (!factor.id) return null
@@ -84,6 +88,14 @@ export function useReferencedContent(
   ): DataserviceWithRel | null => {
     if (!factor.id) return null
     return dataservicesContent.value.get(factor.id)?.dataservice || null
+  }
+
+  const getDatasetForFactor = (
+    factor: ResolvedFactor
+  ): DatasetV2 | undefined => {
+    const id = factor.element?.id
+    if (!id) return undefined
+    return datasetsContent.value.get(id)
   }
 
   /**
@@ -118,12 +130,44 @@ export function useReferencedContent(
     )
   }
 
+  /**
+   * Introspects topic's datasets from data.gouv.fr:
+   * - build a cache of content
+   * - sync status (archived, deleted)
+   * - optional callback for extra processing (e.g., QGIS)
+   */
+  const loadDatasetsContent = (
+    onDatasetLoaded?: (dataset: DatasetV2, factor: ResolvedFactor) => void
+  ) => {
+    factors.value.forEach((factor) => {
+      const id = factor.element?.id ?? null
+      if (id && !datasetsContent.value.has(id) && !factor.remoteDeleted) {
+        datasetStore
+          .load(id, { toasted: false })
+          .then((d) => {
+            if (d) {
+              datasetsContent.value.set(id, d)
+              factor.remoteArchived = !!d.archived
+              onDatasetLoaded?.(d, factor)
+            }
+          })
+          .catch((err) => {
+            if (isNotFoundError(err)) {
+              factor.remoteDeleted = true
+            } else {
+              toastHttpError(err)
+            }
+          })
+      }
+    })
+  }
+
   return {
-    topicsContent,
-    dataservicesContent,
     getTopicForFactor,
     getDataserviceForFactor,
+    getDatasetForFactor,
     loadTopicsContent,
-    loadDataservicesContent
+    loadDataservicesContent,
+    loadDatasetsContent
   }
 }
