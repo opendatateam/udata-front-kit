@@ -345,7 +345,7 @@ defineExpose({
                 <DatasetInTopicCard
                   v-if="getDatasetForFactor(factor)"
                   :factor="factor"
-                  :dataset-content="getDatasetForFactor(factor)"
+                  :dataset-content="getDatasetForFactor(factor)!"
                 />
                 <TopicInTopicCard
                   v-else-if="getTopicForFactor(factor)"

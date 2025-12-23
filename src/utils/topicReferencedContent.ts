@@ -15,14 +15,14 @@ import { isNotFoundError } from '@/utils/http'
  */
 const getSlugFromUri = (
   uri: string,
-  resourcePath: string,
+  resourceName: string,
   baseUrls: (string | undefined)[]
 ): string | null => {
   const validBaseUrls = baseUrls.filter(Boolean)
   if (validBaseUrls.length === 0) return null
 
   for (const baseUrl of validBaseUrls) {
-    const match = uri.match(new RegExp(`${baseUrl}/${resourcePath}/([^/]+)`))
+    const match = uri.match(new RegExp(`${baseUrl}/${resourceName}/([^/]+)`))
     if (match) return match[1]
   }
 
@@ -30,9 +30,9 @@ const getSlugFromUri = (
 }
 
 /**
- * Generic function to load referenced content (topics or dataservices) from factors
+ * Generic function to load URI-referenced content (topics or dataservices) from factors
  */
-function loadReferencedContent<T>(
+function loadURIReferencedContent<T>(
   factors: Ref<ResolvedFactor[]>,
   getSlugFn: (uri: string) => string | null,
   contentMap: Map<string, T>,
@@ -90,21 +90,20 @@ export function useTopicReferencedContent(
     return dataservicesContent.value.get(factor.id)?.dataservice || null
   }
 
-  const getDatasetForFactor = (
-    factor: ResolvedFactor
-  ): DatasetV2 | undefined => {
-    const id = factor.element?.id
-    if (!id) return undefined
-    return datasetsContent.value.get(id)
+  const getDatasetForFactor = (factor: ResolvedFactor): DatasetV2 | null => {
+    const datasetId = factor.element?.id
+    if (!datasetId) return null
+    return datasetsContent.value.get(datasetId) || null
   }
 
   /**
    * Loads the "local" topics associated to the factors via siteExtras.uri
    */
   const loadTopicsContent = () => {
-    loadReferencedContent(
+    loadURIReferencedContent(
       factors,
       (uri) =>
+        // match only current site url
         getSlugFromUri(uri, pageKey, [config.website.meta?.canonical_url]),
       topicsContent.value,
       topicStore,
@@ -116,7 +115,7 @@ export function useTopicReferencedContent(
    * Loads the dataservices associated to the factors via siteExtras.uri
    */
   const loadDataservicesContent = () => {
-    loadReferencedContent(
+    loadURIReferencedContent(
       factors,
       (uri) =>
         // match both base urls from data.gouv.fr and current site
