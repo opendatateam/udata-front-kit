@@ -5,7 +5,6 @@ import type { DataserviceWithRel } from '@/model/dataservice'
 import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
-import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
 import { UserFactory } from 'cypress/support/factories/users_factory'
@@ -189,17 +188,6 @@ export function createTestTopic(overrides = {}): Topic {
     overrides: {
       organization: null,
       owner,
-      ...overrides
-    }
-  })
-}
-
-// Create test dataservice with proper setup
-export function createTestDataservice(overrides = {}): DataserviceWithRel {
-  return dataserviceFactory.one({
-    overrides: {
-      slug: 'referenced-dataservice-1',
-      title: 'Referenced Dataservice Name',
       ...overrides
     }
   })

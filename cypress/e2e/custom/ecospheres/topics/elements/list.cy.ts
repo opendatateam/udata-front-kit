@@ -4,8 +4,8 @@ import {
   type SiteId,
   type Topic
 } from '@/model/topic'
+import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import {
-  createTestDataservice,
   createTestTopic,
   createTestTopicWithElements,
   expandDisclosureGroup,
@@ -142,13 +142,17 @@ describe('Topic Elements - Factor List Display', () => {
       setupElementTest()
 
       // Create referenced dataservices that will be displayed in the cards
-      const referencedDataserviceEcologie = createTestDataservice({
-        slug: 'referenced-dataservice-1',
-        title: 'Referenced Dataservice 1 Name'
+      const referencedDataserviceEcologie = dataserviceFactory.one({
+        overrides: {
+          slug: 'referenced-dataservice-1',
+          title: 'Referenced Dataservice 1 Name'
+        }
       })
-      const referencedDataserviceDatagouvfr = createTestDataservice({
-        slug: 'referenced-dataservice-2',
-        title: 'Referenced Dataservice 2 Name'
+      const referencedDataserviceDatagouvfr = dataserviceFactory.one({
+        overrides: {
+          slug: 'referenced-dataservice-2',
+          title: 'Referenced Dataservice 2 Name'
+        }
       })
       const referencedDataservices = [
         referencedDataserviceEcologie,
