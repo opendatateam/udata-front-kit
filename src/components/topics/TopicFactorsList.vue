@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { DatasetV2 } from '@datagouv/components-next'
 import { nextTick, ref, type Ref } from 'vue'
 
 import { useAnimationConstants } from '@/utils/constants'
-import type { DatasetV2 } from '@datagouv/components-next'
 
 const { HIGHLIGHT_DURATION, SCROLL_TIMEOUT } = useAnimationConstants()
 
@@ -10,12 +10,8 @@ import FactorEditModal, {
   type FactorEditModalType
 } from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
-import { type ResolvedFactor, type Topic } from '@/model/topic'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import type { ResolvedFactor } from '@/model/topic'
 import { useTopicElementStore } from '@/store/TopicElementStore'
-import { useTopicStore } from '@/store/TopicStore'
-import { toastHttpError } from '@/utils/error'
-import { isNotFoundError } from '@/utils/http'
 import { isAvailable } from '@/utils/topic'
 
 import { useCurrentPageConf } from '@/router/utils'
@@ -25,9 +21,11 @@ import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
-import TopicDatasetCard from './TopicDatasetCard.vue'
+import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
+import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
+import DatasetInTopicCard from './DatasetInTopicCard.vue'
 import TopicGroup from './TopicGroup.vue'
-import TopicFactorCard from './TopicInTopicCard.vue'
+import TopicInTopicCard from './TopicInTopicCard.vue'
 
 const factors = defineModel({
   type: Array<ResolvedFactor>,
@@ -50,15 +48,21 @@ const props = defineProps({
 })
 
 const modal: Ref<FactorEditModalType | null> = ref(null)
-const datasetsContent = ref(new Map<string, DatasetV2>())
-const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
 const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
 const highlightedFactorId = ref<string | null>(null)
 
 const { pageConf, pageKey } = useCurrentPageConf()
 const elementStore = useTopicElementStore()
 const resourceStore = useResourceStore()
-const topicStore = useTopicStore()
+
+const {
+  getTopicForFactor,
+  getDataserviceForFactor,
+  getDatasetForFactor,
+  loadTopicsContent,
+  loadDataservicesContent,
+  loadDatasetsContent
+} = useTopicReferencedContent(factors, pageKey)
 
 const {
   groupedFactors,
@@ -81,19 +85,6 @@ const { groupedFactors: filteredResults } = useGroups(filteredFactors)
 const emit = defineEmits<{
   factorChanged: []
 }>()
-
-const getTopicSlugFromUri = (uri: string): string | null => {
-  const baseUrl = config.website.meta?.canonical_url
-  if (!baseUrl) return null
-  const match = uri.match(new RegExp(`${baseUrl}/${pageKey}/([^/]+)`))
-  return match ? match[1] : null
-}
-
-const getTopicForFactor = (factor: ResolvedFactor): Topic | null => {
-  if (!factor.id) return null
-  const entry = topicsContent.value.get(factor.id)
-  return entry?.topic || null
-}
 
 const handleRemoveFactor = async (group: string, index: number) => {
   const confirmMessage =
@@ -196,63 +187,6 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
   }
 }
 
-/**
- * Introspects topic's datasets from data.gouv.fr:
- * - build a cache of content
- * - sync status (archived, deleted)
- * - find qgis compatible resources
- */
-const loadDatasetsContent = () => {
-  factors.value.forEach((factor) => {
-    const id = factor.element?.id ?? null
-    if (id && !datasetsContent.value.has(id) && !factor.remoteDeleted) {
-      useDatasetStore()
-        .load(id, { toasted: false })
-        .then((d) => {
-          if (d) {
-            datasetsContent.value.set(id, d)
-            factor.remoteArchived = !!d.archived
-            computeOgcInfo(d)
-          }
-        })
-        .catch((err) => {
-          if (isNotFoundError(err)) {
-            factor.remoteDeleted = true
-          } else {
-            toastHttpError(err)
-          }
-        })
-    }
-  })
-}
-
-/**
- * Loads the "local" topics associated to the factors via siteExtras.uri
- */
-const loadTopicsContent = () => {
-  factors.value.forEach((factor) => {
-    if (factor.id && factor.siteExtras?.uri && !factor.element?.id) {
-      const slug = getTopicSlugFromUri(factor.siteExtras.uri)
-      if (slug && !topicsContent.value.has(factor.id)) {
-        topicStore
-          .load(slug, { toasted: false })
-          .then((topic) => {
-            if (topic && factor.id) {
-              topicsContent.value.set(factor.id, { slug, topic })
-            }
-          })
-          .catch((err) => {
-            if (isNotFoundError(err)) {
-              factor.remoteDeleted = true
-            } else {
-              toastHttpError(err)
-            }
-          })
-      }
-    }
-  })
-}
-
 const showTOC = computed(() => {
   /*
   hide the table of content if "NoGroup" is the only group and results are not 0
@@ -279,8 +213,9 @@ watch(
       .map((factor) => factor.element?.id || factor.siteExtras?.uri)
       .filter(Boolean),
   () => {
-    loadDatasetsContent()
+    loadDatasetsContent(computeOgcInfo)
     loadTopicsContent()
+    loadDataservicesContent()
   },
   { immediate: true }
 )
@@ -407,18 +342,29 @@ defineExpose({
               <template #factorContent="{ factor }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(factor.description)"></div>
-                <TopicDatasetCard
-                  v-if="factor.element?.class === 'Dataset'"
+                <DatasetInTopicCard
+                  v-if="getDatasetForFactor(factor)"
                   :factor="factor"
-                  :dataset-content="datasetsContent.get(factor.element.id)"
+                  :dataset-content="getDatasetForFactor(factor)!"
                 />
-                <TopicFactorCard
+                <TopicInTopicCard
                   v-else-if="getTopicForFactor(factor)"
                   :page-key="pageKey"
                   :topic="getTopicForFactor(factor)!"
                   class="fr-my-2w"
                 />
-                <div v-if="!getTopicForFactor(factor)" class="fr-grid-row">
+                <DataserviceInTopicCard
+                  v-else-if="getDataserviceForFactor(factor)"
+                  :dataservice="getDataserviceForFactor(factor)!"
+                  class="fr-my-2w"
+                />
+                <div
+                  v-if="
+                    !getTopicForFactor(factor) &&
+                    !getDataserviceForFactor(factor)
+                  "
+                  class="fr-grid-row"
+                >
                   <a
                     v-if="
                       !isAvailable(factor.siteExtras.availability) && !isEdit
@@ -443,7 +389,7 @@ defineExpose({
                     @click="
                       handleOpenInQgis(
                         factor.element.id,
-                        datasetsContent.get(factor.element.id)?.title
+                        getDatasetForFactor(factor)?.title
                       )
                     "
                   >
@@ -461,7 +407,7 @@ defineExpose({
         <TopicDatasetCard
           v-if="factor.element?.id"
           :factor="factor"
-          :dataset-content="datasetsContent.get(factor.element.id)"
+          :dataset-content="getDatasetForFactor(factor)"
         />
       </div>
     </div>
