@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest'
 import { type OgcLayerInfo, parseXml } from '../ogcServices'
 import {
   generateMultiLayerWfsQlr,
+  generateTopicQlr,
   generateWfsQlr,
-  generateWmsQlr
+  generateWmsQlr,
+  type TopicLayersByGroup
 } from '../qgis'
 
 describe('QGIS QLR Generation', () => {
@@ -119,6 +121,220 @@ describe('QGIS QLR Generation', () => {
         (g) => g.getAttribute('name') === 'WFS Service'
       )
       expect(namedGroup).toBeTruthy()
+    })
+  })
+
+  describe('generateTopicQlr', () => {
+    it('should generate valid multi-group topic QLR with WFS and WMS layers', () => {
+      const layersByGroup: TopicLayersByGroup[] = [
+        {
+          groupName: 'Environnement',
+          layers: [
+            {
+              datasetId: 'dataset1',
+              datasetTitle: 'Zones protégées',
+              ogcLayerInfo: {
+                url: 'https://example.com/wfs',
+                format: 'wfs',
+                title: 'Zones protégées',
+                layerName: 'protected_areas'
+              },
+              groupName: 'Environnement'
+            },
+            {
+              datasetId: 'dataset2',
+              datasetTitle: 'Occupation du sol',
+              ogcLayerInfo: {
+                url: 'https://example.com/wms',
+                format: 'wms',
+                title: 'Occupation du sol',
+                layerName: 'land_use'
+              },
+              groupName: 'Environnement'
+            }
+          ]
+        },
+        {
+          groupName: 'Transport',
+          layers: [
+            {
+              datasetId: 'dataset3',
+              datasetTitle: 'Routes',
+              ogcLayerInfo: {
+                url: 'https://example.com/wfs',
+                format: 'wfs',
+                title: 'Routes',
+                layerName: 'roads'
+              },
+              groupName: 'Transport'
+            }
+          ]
+        }
+      ]
+
+      const qlr = generateTopicQlr('Mon Topic', layersByGroup, 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      // Debug: print XML if test fails
+      // console.log(qlr)
+
+      // Verify root structure
+      expect(doc.querySelector('qlr')).toBeTruthy()
+
+      // Verify outer wrapper group (empty name)
+      const outerGroups = doc.querySelectorAll('layer-tree-group')
+      expect(outerGroups.length).toBeGreaterThan(0)
+      expect(outerGroups[0].getAttribute('name')).toBe('')
+
+      // Verify topic group
+      const topicGroup = Array.from(outerGroups).find(
+        (g) => g.getAttribute('name') === 'Mon Topic'
+      )
+      expect(topicGroup).toBeTruthy()
+
+      // Verify factor groups
+      const factorGroups = topicGroup!.querySelectorAll(
+        ':scope > layer-tree-group'
+      )
+      expect(factorGroups.length).toBe(2)
+
+      const groupNames = Array.from(factorGroups).map((g) =>
+        g.getAttribute('name')
+      )
+      expect(groupNames).toContain('Environnement')
+      expect(groupNames).toContain('Transport')
+
+      // Verify layer count
+      const allLayers = doc.querySelectorAll('layer-tree-layer')
+      expect(allLayers.length).toBe(3)
+
+      // Verify maplayers
+      const maplayers = doc.querySelectorAll('maplayer')
+      expect(maplayers.length).toBe(3)
+
+      // Verify mixed providers (WFS vector + WMS raster)
+      const vectorLayers = doc.querySelectorAll('maplayer[type="vector"]')
+      expect(vectorLayers.length).toBe(2)
+
+      const rasterLayers = doc.querySelectorAll('maplayer[type="raster"]')
+      expect(rasterLayers.length).toBe(1)
+
+      // Verify providerKey attributes
+      const allLayerTreeLayers = doc.querySelectorAll('layer-tree-layer')
+      const providerKeys = Array.from(allLayerTreeLayers).map((l) =>
+        l.getAttribute('providerKey')
+      )
+
+      expect(providerKeys.filter((k) => k === 'WFS').length).toBe(2)
+      expect(providerKeys.filter((k) => k === 'WMS').length).toBe(1)
+    })
+
+    it('should handle NO_GROUP (Sans regroupement) correctly', () => {
+      const layersByGroup: TopicLayersByGroup[] = [
+        {
+          groupName: 'Sans regroupement',
+          layers: [
+            {
+              datasetId: 'dataset1',
+              datasetTitle: 'Dataset sans groupe',
+              ogcLayerInfo: {
+                url: 'https://example.com/wfs',
+                format: 'wfs',
+                title: 'Dataset sans groupe',
+                layerName: 'layer1'
+              },
+              groupName: 'Sans regroupement'
+            }
+          ]
+        }
+      ]
+
+      const qlr = generateTopicQlr('Test Topic', layersByGroup, 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      // Verify NO_GROUP is rendered as "Sans regroupement"
+      const groups = doc.querySelectorAll('layer-tree-group')
+      const noGroup = Array.from(groups).find(
+        (g) => g.getAttribute('name') === 'Sans regroupement'
+      )
+      expect(noGroup).toBeTruthy()
+    })
+
+    it('should generate unique layer IDs for all layers', () => {
+      const layersByGroup: TopicLayersByGroup[] = [
+        {
+          groupName: 'Group 1',
+          layers: [
+            {
+              datasetId: 'dataset1',
+              datasetTitle: 'Dataset 1',
+              ogcLayerInfo: {
+                url: 'https://example.com/wfs',
+                format: 'wfs',
+                title: 'Dataset 1',
+                layerName: 'layer1'
+              },
+              groupName: 'Group 1'
+            },
+            {
+              datasetId: 'dataset2',
+              datasetTitle: 'Dataset 2',
+              ogcLayerInfo: {
+                url: 'https://example.com/wfs',
+                format: 'wfs',
+                title: 'Dataset 2',
+                layerName: 'layer2'
+              },
+              groupName: 'Group 1'
+            }
+          ]
+        }
+      ]
+
+      const qlr = generateTopicQlr('Test Topic', layersByGroup, 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      // Get all layer IDs
+      const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')
+      const ids = Array.from(layerTreeLayers).map((l) => l.getAttribute('id'))
+
+      // Verify all IDs are unique
+      const uniqueIds = new Set(ids)
+      expect(uniqueIds.size).toBe(ids.length)
+    })
+
+    it('should use dataset titles as layer names', () => {
+      const layersByGroup: TopicLayersByGroup[] = [
+        {
+          groupName: 'Test Group',
+          layers: [
+            {
+              datasetId: 'dataset1',
+              datasetTitle: 'My Custom Dataset Title',
+              ogcLayerInfo: {
+                url: 'https://example.com/wfs',
+                format: 'wfs',
+                title: 'Original Title',
+                layerName: 'layer1'
+              },
+              groupName: 'Test Group'
+            }
+          ]
+        }
+      ]
+
+      const qlr = generateTopicQlr('Test Topic', layersByGroup, 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      // Verify layer tree layer uses dataset title
+      const layerTreeLayer = doc.querySelector('layer-tree-layer')
+      expect(layerTreeLayer?.getAttribute('name')).toBe(
+        'My Custom Dataset Title'
+      )
+
+      // Verify maplayer uses dataset title
+      const layername = doc.querySelector('layername')
+      expect(layername?.textContent).toBe('My Custom Dataset Title')
     })
   })
 })

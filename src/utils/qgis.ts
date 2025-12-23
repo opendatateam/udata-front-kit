@@ -4,6 +4,24 @@ import type { OGC_SERVICE_FORMAT, OgcLayerInfo } from './ogcServices'
 import { extractBaseUrl, fetchWfsLayerNames } from './ogcServices'
 
 /**
+ * Information about a dataset's OGC layer within a topic
+ */
+export interface TopicDatasetLayer {
+  datasetId: string
+  datasetTitle: string
+  ogcLayerInfo: OgcLayerInfo
+  groupName: string // The factor group (or NO_GROUP)
+}
+
+/**
+ * Collection of layers organized by groups
+ */
+export interface TopicLayersByGroup {
+  groupName: string
+  layers: TopicDatasetLayer[]
+}
+
+/**
  * CRS (Coordinate Reference System) definitions for QGIS layers
  * Each field corresponds to epsg.io API endpoints:
  * - authid: EPSG code identifier (e.g. "EPSG:4326")
@@ -176,8 +194,7 @@ export function generateMultiLayerWfsQlr(
   layerNames: string[],
   crs: SupportedCrs
 ): string {
-  const { url, title = 'WFS layers' } = layerInfo
-  const baseUrl = extractBaseUrl(url)
+  const { title = 'WFS layers' } = layerInfo
 
   const root = create({ version: '1.0', encoding: 'UTF-8' })
     .dtd({
@@ -194,49 +211,210 @@ export function generateMultiLayerWfsQlr(
   })
   outerGroup.ele('customproperties').ele('Option')
 
-  // Add inner layer-tree-group for the actual group
-  const innerGroup = outerGroup.ele('layer-tree-group', {
-    checked: 'Qt::Checked',
-    groupLayer: '',
-    expanded: '1',
-    name: title
-  })
-  innerGroup.ele('customproperties').ele('Option')
+  // Add maplayers section
+  const maplayers = root.ele('maplayers')
 
-  // Generate layer IDs once and reuse them
-  const layerIds = layerNames.map(
-    (layerName, index) =>
-      `layer_${layerName.replace(/:/g, '_')}_${Date.now()}_${index}`
+  // Use shared function to add dataset with all its layers
+  const layers = layerNames.map((layerName) => ({
+    ...layerInfo,
+    layerName
+  }))
+  addDatasetLayers(
+    outerGroup,
+    title,
+    layerInfo.title || title,
+    layers,
+    crs,
+    maplayers
   )
 
-  // Add each layer as a child in the tree with providerKey and source
-  layerNames.forEach((layerName, index) => {
-    const datasource = buildWfsDatasource(baseUrl, layerName, crs)
-    const layerTreeLayer = innerGroup.ele('layer-tree-layer', {
-      providerKey: 'WFS',
+  return root.end({ prettyPrint: true })
+}
+
+/**
+ * Generates WMS datasource string for a layer
+ */
+function buildWmsDatasource(
+  baseUrl: string,
+  layerName: string,
+  crs: SupportedCrs
+): string {
+  return [
+    'contextualWMSLegend=0',
+    `crs=${crs}`,
+    'dpiMode=7',
+    'featureCount=10',
+    'format=image/png',
+    `layers=${layerName}`,
+    'styles',
+    `url=${baseUrl}`
+  ].join('&')
+}
+
+/**
+ * Adds a dataset with its layers to a parent element.
+ * Creates a nested group only when multiple layers exist.
+ * This is the single source of truth for dataset structure in both single and multi-factor exports.
+ *
+ * @param parent - Parent XML element to add to
+ * @param datasetTitle - Dataset title (used as layer name for single layer)
+ * @param ogcServiceTitle - OGC service title (used as group name for multiple layers)
+ * @param layers - Array of OGC layer info
+ * @param crs - Coordinate reference system
+ * @param maplayers - XML builder for maplayers section
+ */
+function addDatasetLayers(
+  parent: XMLBuilder,
+  datasetTitle: string,
+  ogcServiceTitle: string,
+  layers: OgcLayerInfo[],
+  crs: SupportedCrs,
+  maplayers: XMLBuilder
+): void {
+  // Create nested group only when multiple layers
+  const needsGroup = layers.length > 1
+  let targetElement = parent
+
+  if (needsGroup) {
+    // Create nested group - use OGC service title
+    const group = parent.ele('layer-tree-group', {
+      checked: 'Qt::Checked',
+      groupLayer: '',
+      expanded: '1',
+      name: ogcServiceTitle
+    })
+    group.ele('customproperties').ele('Option')
+    targetElement = group
+  }
+
+  // Add each layer
+  layers.forEach((layerInfo) => {
+    const { format, url, layerName = '' } = layerInfo
+    const layerId = generateId()
+
+    let datasource: string
+    let provider: OGC_SERVICE_FORMAT
+    let type: LAYER_TYPE
+    let providerKey: string
+
+    if (format === 'wfs') {
+      const baseUrl = extractBaseUrl(url)
+      datasource = buildWfsDatasource(baseUrl, layerName, crs)
+      provider = 'wfs'
+      type = 'vector'
+      providerKey = 'WFS'
+    } else if (format === 'wms') {
+      const baseUrl = extractBaseUrl(url)
+      datasource = buildWmsDatasource(baseUrl, layerName, crs)
+      provider = 'wms'
+      type = 'raster'
+      providerKey = 'WMS'
+    } else {
+      return
+    }
+
+    // Display name: for multi-layer use layer name, for single use dataset title
+    const displayName = needsGroup ? layerName : datasetTitle
+
+    // Add to tree
+    const layerTreeLayer = targetElement.ele('layer-tree-layer', {
+      providerKey,
       source: datasource,
-      id: layerIds[index],
-      name: layerName,
+      id: layerId,
+      name: displayName,
       expanded: '0',
       checked: 'Qt::Checked'
     })
     layerTreeLayer.ele('customproperties').ele('Option')
-  })
 
-  // Add all maplayers
-  const maplayers = root.ele('maplayers')
-
-  layerNames.forEach((layerName, index) => {
-    const datasource = buildWfsDatasource(baseUrl, layerName, crs)
+    // Add to maplayers
     addMaplayer(
       maplayers,
-      layerIds[index],
+      layerId,
       datasource,
-      'wfs',
-      layerName,
-      'vector',
+      provider,
+      displayName,
+      type,
       crs
     )
+  })
+}
+
+/**
+ * Generates a multi-dataset, multi-group QLR file for a topic
+ * Organizes layers by factor groups with support for both WFS and WMS
+ * @internal Exported for testing
+ */
+export function generateTopicQlr(
+  topicTitle: string,
+  layersByGroup: TopicLayersByGroup[],
+  crs: SupportedCrs = DEFAULT_PROJECTION
+): string {
+  const root = create({ version: '1.0', encoding: 'UTF-8' })
+    .dtd({
+      name: 'qgis-layer-definition'
+    })
+    .ele('qlr')
+
+  // Add outer wrapper layer-tree-group with empty name
+  const outerGroup = root.ele('layer-tree-group', {
+    checked: 'Qt::Checked',
+    groupLayer: '',
+    expanded: '1',
+    name: ''
+  })
+  outerGroup.ele('customproperties').ele('Option')
+
+  // Add topic-level layer-tree-group
+  const topicGroup = outerGroup.ele('layer-tree-group', {
+    checked: 'Qt::Checked',
+    groupLayer: '',
+    expanded: '1',
+    name: topicTitle
+  })
+  topicGroup.ele('customproperties').ele('Option')
+
+  // Add maplayers section (will be populated by addDatasetLayers)
+  const maplayers = root.ele('maplayers')
+
+  // Add each factor group
+  layersByGroup.forEach((group) => {
+    const factorGroup = topicGroup.ele('layer-tree-group', {
+      checked: 'Qt::Checked',
+      groupLayer: '',
+      expanded: '1',
+      name: group.groupName
+    })
+    factorGroup.ele('customproperties').ele('Option')
+
+    // Group layers by datasetId and ogcLayerInfo.title to detect multi-layer datasets
+    const layersByDataset = new Map<
+      string,
+      { layers: typeof group.layers; ogcTitle: string }
+    >()
+    group.layers.forEach((layer) => {
+      const key = `${layer.datasetId}_${layer.ogcLayerInfo.title}`
+      if (!layersByDataset.has(key)) {
+        layersByDataset.set(key, {
+          layers: [],
+          ogcTitle: layer.ogcLayerInfo.title || layer.datasetTitle
+        })
+      }
+      layersByDataset.get(key)!.layers.push(layer)
+    })
+
+    // Add each dataset (with potential sub-grouping for multi-layer datasets)
+    layersByDataset.forEach(({ layers: datasetLayers, ogcTitle }) => {
+      const datasetTitle = datasetLayers[0].datasetTitle
+      addDatasetLayers(
+        factorGroup,
+        datasetTitle,
+        ogcTitle,
+        datasetLayers.map((l) => l.ogcLayerInfo),
+        crs,
+        maplayers
+      )
+    })
   })
 
   return root.end({ prettyPrint: true })
@@ -260,6 +438,31 @@ function downloadQlrFile(
 }
 
 /**
+ * Expands a WFS service without a layer name into multiple layers by fetching
+ * all available layers from GetCapabilities.
+ * For other formats or WFS with layer name, returns the original info as a single-element array.
+ */
+export async function expandWfsLayers(
+  ogcInfo: OgcLayerInfo
+): Promise<OgcLayerInfo[]> {
+  if (ogcInfo.format === 'wfs' && !ogcInfo.layerName) {
+    const baseUrl = extractBaseUrl(ogcInfo.url)
+    const layerNames = await fetchWfsLayerNames(baseUrl)
+
+    if (layerNames.length === 0) {
+      return []
+    }
+
+    return layerNames.map((layerName) => ({
+      ...ogcInfo,
+      layerName
+    }))
+  }
+
+  return [ogcInfo]
+}
+
+/**
  * Opens a QGIS-compatible resource by downloading a .qlr file
  */
 export async function openInQgis(
@@ -275,17 +478,15 @@ export async function openInQgis(
   }
   // wfs is more advanced, without a valid layer name we fallback on all layers
   else if (layerInfo.format === 'wfs') {
-    // If no layerName is available, try to fetch it from GetCapabilities
-    // TODO: maybe should we validate the layerName from getCap in all cases
     if (!layerInfo.layerName) {
       console.info(
         'No layerName for WFS specified, fetching GetCapabilities...'
       )
 
-      const baseUrl = extractBaseUrl(layerInfo.url)
-      const layerNames = await fetchWfsLayerNames(baseUrl)
+      const expandedLayers = await expandWfsLayers(layerInfo)
 
-      if (layerNames.length === 0) {
+      if (expandedLayers.length === 0) {
+        const baseUrl = extractBaseUrl(layerInfo.url)
         alert(
           `Impossible de récupérer la liste des couches WFS.
 
@@ -300,8 +501,11 @@ Pour ajouter cette couche dans QGIS :
 
       // Generate a multi-layer QLR with all available layers
       console.info(
-        `Found ${layerNames.length} WFS layers, generating multi-layer QLR`
+        `Found ${expandedLayers.length} WFS layers, generating multi-layer QLR`
       )
+      const layerNames = expandedLayers
+        .map((l) => l.layerName)
+        .filter((n): n is string => !!n)
       qlrContent = generateMultiLayerWfsQlr(layerInfo, layerNames, crs)
     } else {
       qlrContent = generateWfsQlr(layerInfo, crs)
@@ -314,6 +518,24 @@ Pour ajouter cette couche dans QGIS :
   const filename = datasetTitle
     ? `${datasetTitle.toLowerCase().replace(/[^a-z0-9]/g, '_')}.qlr`
     : 'layer.qlr'
+
+  downloadQlrFile(qlrContent, filename)
+}
+
+/**
+ * Opens all OGC resources from a topic in QGIS
+ * Downloads a single .qlr file with all layers organized by groups
+ */
+export function openTopicInQgis(
+  layersByGroup: TopicLayersByGroup[],
+  topicTitle: string,
+  crs: SupportedCrs = DEFAULT_PROJECTION
+): void {
+  const qlrContent = generateTopicQlr(topicTitle, layersByGroup, crs)
+
+  const filename = topicTitle
+    ? `${topicTitle.toLowerCase().replace(/[^a-z0-9]/g, '_')}_topic.qlr`
+    : 'topic.qlr'
 
   downloadQlrFile(qlrContent, filename)
 }

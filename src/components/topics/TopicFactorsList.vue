@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, type Ref } from 'vue'
+import { computed, nextTick, ref, type Ref } from 'vue'
 
 import { useAnimationConstants } from '@/utils/constants'
 import type { DatasetV2 } from '@datagouv/components-next'
@@ -23,7 +23,12 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
-import { openInQgis } from '@/utils/qgis'
+import {
+  expandWfsLayers,
+  openInQgis,
+  openTopicInQgis,
+  type TopicLayersByGroup
+} from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import TopicDatasetCard from './TopicDatasetCard.vue'
 import TopicGroup from './TopicGroup.vue'
@@ -46,6 +51,11 @@ const props = defineProps({
   topicId: {
     type: String,
     required: true
+  },
+  topicName: {
+    type: String,
+    required: false,
+    default: 'Topic'
   }
 })
 
@@ -197,6 +207,83 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
 }
 
 /**
+ * Check if any dataset in the topic has OGC-compatible resources
+ */
+const hasAnyOgcResources = computed(() => {
+  return ogcLayerInfo.value.size > 0
+})
+
+/**
+ * Opens all OGC-compatible resources from the topic in QGIS,
+ * organized by factor groups
+ */
+const handleOpenTopicInQgis = async () => {
+  if (!config.website.datasets.open_in_qgis) {
+    return
+  }
+
+  // Collect all OGC layers organized by groups
+  const layersByGroup: TopicLayersByGroup[] = []
+
+  for (const [groupName, groupFactors] of groupedFactors.value) {
+    const groupLayers = []
+
+    for (const factor of groupFactors) {
+      const datasetId = factor.element?.id
+      if (!datasetId) continue
+
+      const ogcInfo = ogcLayerInfo.value.get(datasetId)
+      if (!ogcInfo) continue
+
+      const dataset = datasetsContent.value.get(datasetId)
+      const datasetTitle = dataset?.title || factor.title
+
+      // Expand WFS services without layer name into multiple layers
+      try {
+        const expandedLayers = await expandWfsLayers(ogcInfo)
+
+        if (expandedLayers.length === 0) {
+          console.warn(`No layers found for ${datasetTitle}. Skipping.`)
+          continue
+        }
+
+        // Add each expanded layer
+        for (const expandedLayer of expandedLayers) {
+          groupLayers.push({
+            datasetId,
+            datasetTitle,
+            ogcLayerInfo: expandedLayer,
+            groupName
+          })
+        }
+      } catch (error) {
+        console.error(`Failed to expand layers for ${datasetTitle}:`, error)
+        // Skip this dataset if we can't expand its layers
+        continue
+      }
+    }
+
+    // Only add group if it has OGC layers
+    if (groupLayers.length > 0) {
+      layersByGroup.push({ groupName, layers: groupLayers })
+    }
+  }
+
+  // Check if we have any layers at all
+  if (layersByGroup.length === 0) {
+    console.warn('No OGC-compatible resources found in topic')
+    return
+  }
+
+  try {
+    openTopicInQgis(layersByGroup, props.topicName)
+  } catch (error) {
+    console.error('Failed to open topic in QGIS:', error)
+    alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+  }
+}
+
+/**
  * Introspects topic's datasets from data.gouv.fr:
  * - build a cache of content
  * - sync status (archived, deleted)
@@ -320,6 +407,21 @@ defineExpose({
 </script>
 
 <template>
+  <!-- Topic-level QGIS button -->
+  <div
+    v-if="hasAnyOgcResources && config.website.datasets.open_in_qgis"
+    class="fr-mb-2w"
+  >
+    <DsfrButton
+      secondary
+      size="md"
+      label="Ouvrir tous les jeux de données dans QGIS"
+      icon="fr-icon-download-line"
+      class="test__open_topic_in_qgis_btn"
+      @click="handleOpenTopicInQgis"
+    />
+  </div>
+
   <!-- Header and buttons -->
   <div class="flex-gap fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">

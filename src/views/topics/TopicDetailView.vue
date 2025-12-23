@@ -492,6 +492,7 @@ watch(
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
           :topic-id="topic.id"
+          :topic-name="topic.name"
           @factor-changed="handleFactorChanged"
         />
         <TopicFactorsListExport :factors="factors" :filename="topic.id" />
