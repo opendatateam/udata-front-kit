@@ -10,7 +10,7 @@ import FactorEditModal, {
   type FactorEditModalType
 } from '@/components/forms/dataset/FactorEditModal.vue'
 import config from '@/config'
-import { type ResolvedFactor } from '@/model/topic'
+import type { ResolvedFactor } from '@/model/topic'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { isAvailable } from '@/utils/topic'
 
@@ -21,11 +21,11 @@ import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
-import { useReferencedContent } from '@/utils/topicReferencedContent'
+import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
 import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
-import TopicDatasetCard from './TopicDatasetCard.vue'
+import DatasetInTopicCard from './DatasetInTopicCard.vue'
 import TopicGroup from './TopicGroup.vue'
-import TopicFactorCard from './TopicInTopicCard.vue'
+import TopicInTopicCard from './TopicInTopicCard.vue'
 
 const factors = defineModel({
   type: Array<ResolvedFactor>,
@@ -62,7 +62,7 @@ const {
   loadTopicsContent,
   loadDataservicesContent,
   loadDatasetsContent
-} = useReferencedContent(factors, pageKey)
+} = useTopicReferencedContent(factors, pageKey)
 
 const {
   groupedFactors,
@@ -342,12 +342,12 @@ defineExpose({
               <template #factorContent="{ factor }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="fromMarkdown(factor.description)"></div>
-                <TopicDatasetCard
-                  v-if="factor.element?.class === 'Dataset'"
+                <DatasetInTopicCard
+                  v-if="getDatasetForFactor(factor)"
                   :factor="factor"
                   :dataset-content="getDatasetForFactor(factor)"
                 />
-                <TopicFactorCard
+                <TopicInTopicCard
                   v-else-if="getTopicForFactor(factor)"
                   :page-key="pageKey"
                   :topic="getTopicForFactor(factor)!"

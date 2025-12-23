@@ -64,7 +64,7 @@ function loadReferencedContent<T>(
   })
 }
 
-export function useReferencedContent(
+export function useTopicReferencedContent(
   factors: Ref<ResolvedFactor[]>,
   pageKey: string
 ) {
