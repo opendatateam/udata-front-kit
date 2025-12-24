@@ -20,10 +20,9 @@ import { basicSlugify, fromMarkdown } from '@/utils'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
 import {
-  expandWfsLayers,
   openInQgis,
   openTopicInQgis,
-  type TopicLayersByGroup
+  type TopicDatasetInput
 } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
@@ -185,7 +184,7 @@ const computeOgcInfo = async (dataset: DatasetV2) => {
   }
 }
 
-const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
+const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
   const layerInfo = ogcLayerInfo.value.get(datasetId)
   if (layerInfo) {
     try {
@@ -200,25 +199,22 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
 /**
  * Check if any dataset in the topic has OGC-compatible resources
  */
-const hasAnyOgcResources = computed(() => {
+const hasOgcResources = computed(() => {
   return ogcLayerInfo.value.size > 0
 })
 
 /**
- * Opens all OGC-compatible resources from the topic in QGIS,
- * organized by factor groups
+ * Opens all OGC-compatible resources from the topic in QGIS, organized by factor groups.
  */
 const handleOpenTopicInQgis = async () => {
   if (!config.website.datasets.open_in_qgis) {
     return
   }
 
-  // Collect all OGC layers organized by groups
-  const layersByGroup: TopicLayersByGroup[] = []
+  // Collect simple input data - let qgis.ts handle expansion and grouping
+  const datasetsToExport: TopicDatasetInput[] = []
 
   for (const [groupName, groupFactors] of groupedFactors.value) {
-    const groupLayers = []
-
     for (const factor of groupFactors) {
       const datasetId = factor.element?.id
       if (!datasetId) continue
@@ -227,47 +223,23 @@ const handleOpenTopicInQgis = async () => {
       if (!ogcInfo) continue
 
       const dataset = getDatasetForFactor(factor)
-      const datasetTitle = dataset?.title || factor.title
+      if (!dataset) continue
 
-      // Expand WFS services without layer name into multiple layers
-      try {
-        const expandedLayers = await expandWfsLayers(ogcInfo)
-
-        if (expandedLayers.length === 0) {
-          console.warn(`No layers found for ${datasetTitle}. Skipping.`)
-          continue
-        }
-
-        // Add each expanded layer
-        for (const expandedLayer of expandedLayers) {
-          groupLayers.push({
-            datasetId,
-            datasetTitle,
-            ogcLayerInfo: expandedLayer,
-            groupName
-          })
-        }
-      } catch (error) {
-        console.error(`Failed to expand layers for ${datasetTitle}:`, error)
-        // Skip this dataset if we can't expand its layers
-        continue
-      }
-    }
-
-    // Only add group if it has OGC layers
-    if (groupLayers.length > 0) {
-      layersByGroup.push({ groupName, layers: groupLayers })
+      datasetsToExport.push({
+        ogcInfo,
+        datasetTitle: dataset.title,
+        groupName
+      })
     }
   }
 
-  // Check if we have any layers at all
-  if (layersByGroup.length === 0) {
+  if (datasetsToExport.length === 0) {
     console.warn('No OGC-compatible resources found in topic')
     return
   }
 
   try {
-    openTopicInQgis(layersByGroup, props.topicName)
+    await openTopicInQgis(datasetsToExport, props.topicName)
   } catch (error) {
     console.error('Failed to open topic in QGIS:', error)
     alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
@@ -337,26 +309,13 @@ const navigateToElement = (elementId: string) => {
 }
 
 defineExpose({
-  navigateToElement
+  navigateToElement,
+  hasOgcResources,
+  handleOpenTopicInQgis
 })
 </script>
 
 <template>
-  <!-- Topic-level QGIS button -->
-  <div
-    v-if="hasAnyOgcResources && config.website.datasets.open_in_qgis"
-    class="fr-mb-2w"
-  >
-    <DsfrButton
-      secondary
-      size="md"
-      label="Ouvrir tous les jeux de données dans QGIS"
-      icon="fr-icon-download-line"
-      class="test__open_topic_in_qgis_btn"
-      @click="handleOpenTopicInQgis"
-    />
-  </div>
-
   <!-- Header and buttons -->
   <div class="flex-gap fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
@@ -491,7 +450,7 @@ defineExpose({
                     @click="
                       handleOpenInQgis(
                         factor.element.id,
-                        getDatasetForFactor(factor)?.title
+                        getDatasetForFactor(factor)!.title
                       )
                     "
                   >
@@ -506,10 +465,10 @@ defineExpose({
     </div>
     <div v-else>
       <div v-for="(factor, index) in factors" :key="index">
-        <TopicDatasetCard
-          v-if="factor.element?.id"
+        <DatasetInTopicCard
+          v-if="getDatasetForFactor(factor)"
           :factor="factor"
-          :dataset-content="getDatasetForFactor(factor)"
+          :dataset-content="getDatasetForFactor(factor)!"
         />
       </div>
     </div>
