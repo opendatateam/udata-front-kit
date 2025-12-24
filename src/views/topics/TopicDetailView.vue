@@ -492,9 +492,18 @@ watch(
           :is-edit="canEdit"
           :dataset-editorialization="props.datasetEditorialization"
           :topic-id="topic.id"
+          :topic-name="topic.name"
           @factor-changed="handleFactorChanged"
         />
-        <TopicFactorsListExport :factors="factors" :filename="topic.id" />
+        <TopicFactorsListExport
+          :factors="factors"
+          :filename="topic.id"
+          :has-ogc-resources="
+            topicFactorsListRef?.hasOgcResources &&
+            config.website.datasets.open_in_qgis
+          "
+          @open-topic-in-qgis="topicFactorsListRef?.handleOpenTopicInQgis"
+        />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent
