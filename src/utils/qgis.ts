@@ -58,6 +58,17 @@ function createGroup(parent: XMLBuilder, name: string): XMLBuilder {
 }
 
 /**
+ * Creates the root of the QLR XML
+ */
+function createRoot() {
+  return create({ version: '1.0', encoding: 'UTF-8' })
+    .dtd({
+      name: 'qgis-layer-definition'
+    })
+    .ele('qlr')
+}
+
+/**
  * Adds a maplayer element with all its children
  */
 function addMaplayer(
@@ -246,12 +257,7 @@ export function generateSingleDatasetQlr(
   layers: OgcLayerInfo[],
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): string {
-  const root = create({ version: '1.0', encoding: 'UTF-8' })
-    .dtd({
-      name: 'qgis-layer-definition'
-    })
-    .ele('qlr')
-
+  const root = createRoot()
   const outerGroup = createGroup(root, '')
   const maplayers = root.ele('maplayers')
 
@@ -335,12 +341,7 @@ export function generateTopicQlr(
   topicTitle: string,
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): string {
-  const root = create({ version: '1.0', encoding: 'UTF-8' })
-    .dtd({
-      name: 'qgis-layer-definition'
-    })
-    .ele('qlr')
-
+  const root = createRoot()
   const outerGroup = createGroup(root, '')
   const topicGroup = createGroup(outerGroup, topicTitle)
 
@@ -393,7 +394,6 @@ export async function openTopicInQgis(
   const preparedByGroup = new Map<string, PreparedDataset[]>()
 
   for (const { ogcInfo, datasetTitle, groupName } of datasets) {
-    // Resolve OGC layers (expand WFS if needed)
     const expandedLayers = await resolveOgcLayers(ogcInfo)
     if (expandedLayers.length === 0) continue
 

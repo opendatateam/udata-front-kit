@@ -19,11 +19,7 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
-import {
-  openInQgis,
-  openTopicInQgis,
-  type TopicDatasetInput
-} from '@/utils/qgis'
+import { openInQgis, openTopicInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
 import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
@@ -184,6 +180,16 @@ const computeOgcInfo = async (dataset: DatasetV2) => {
   }
 }
 
+/**
+ * Check if any dataset in the topic has OGC-compatible resources
+ */
+const hasOgcResources = computed(() => {
+  return ogcLayerInfo.value.size > 0
+})
+
+/**
+ * Opens a given dataset from a factor in QGIS
+ */
 const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
   const layerInfo = ogcLayerInfo.value.get(datasetId)
   if (layerInfo) {
@@ -197,22 +203,10 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
 }
 
 /**
- * Check if any dataset in the topic has OGC-compatible resources
- */
-const hasOgcResources = computed(() => {
-  return ogcLayerInfo.value.size > 0
-})
-
-/**
  * Opens all OGC-compatible resources from the topic in QGIS, organized by factor groups.
  */
 const handleOpenTopicInQgis = async () => {
-  if (!config.website.datasets.open_in_qgis) {
-    return
-  }
-
-  // Collect simple input data - let qgis.ts handle expansion and grouping
-  const datasetsToExport: TopicDatasetInput[] = []
+  const datasetsToExport = []
 
   for (const [groupName, groupFactors] of groupedFactors.value) {
     for (const factor of groupFactors) {
@@ -231,11 +225,6 @@ const handleOpenTopicInQgis = async () => {
         groupName
       })
     }
-  }
-
-  if (datasetsToExport.length === 0) {
-    console.warn('No OGC-compatible resources found in topic')
-    return
   }
 
   try {
