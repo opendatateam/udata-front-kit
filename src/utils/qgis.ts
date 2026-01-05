@@ -175,6 +175,7 @@ function addDatasetLayers(
       type = 'raster'
       providerKey = 'WMS'
     } else {
+      console.error(`Unsupported format '${format}'`)
       return
     }
 
