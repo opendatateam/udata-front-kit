@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { type OgcLayerInfo, parseXml } from '../ogcServices'
-import {
-  generateSingleDatasetQlr,
-  generateTopicQlr,
-  type PreparedDataset
-} from '../qgis'
+import { generateSingleDatasetQlr, generateTopicQlr } from '../qgis'
 
 describe('QGIS QLR Generation', () => {
   describe('generateSingleDatasetQlr', () => {
@@ -18,12 +14,8 @@ describe('QGIS QLR Generation', () => {
         }
       ]
 
-      const qlr = generateSingleDatasetQlr(
-        'Test Dataset',
-        'WFS Service',
-        layers,
-        'EPSG:4326'
-      )
+      const layersByDataset = new Map([['Test Dataset', layers]])
+      const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       // Check structure: outer group > dataset group > resource group > layer
@@ -65,12 +57,8 @@ describe('QGIS QLR Generation', () => {
         }
       ]
 
-      const qlr = generateSingleDatasetQlr(
-        'WMS Dataset',
-        'WMS Service',
-        layers,
-        'EPSG:4326'
-      )
+      const layersByDataset = new Map([['WMS Dataset', layers]])
+      const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       // Check WMS specifics
@@ -106,12 +94,8 @@ describe('QGIS QLR Generation', () => {
         }
       ]
 
-      const qlr = generateSingleDatasetQlr(
-        'Multi-layer Dataset',
-        'WFS Service',
-        layers,
-        'EPSG:4326'
-      )
+      const layersByDataset = new Map([['Multi-layer Dataset', layers]])
+      const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
       const doc = parseXml(qlr)
 
       // Should have 3 layers
@@ -129,51 +113,39 @@ describe('QGIS QLR Generation', () => {
 
   describe('generateTopicQlr', () => {
     it('should generate QLR with Topic > Factor Group > Dataset > Resource > Layer structure', () => {
-      const preparedByGroup = new Map<string, PreparedDataset[]>()
+      const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
 
-      preparedByGroup.set('Group A', [
+      const groupALayers = new Map<string, OgcLayerInfo[]>()
+      groupALayers.set('Dataset 1', [
         {
-          datasetTitle: 'Dataset 1',
+          url: 'https://example.com/wfs1',
+          format: 'wfs',
           resourceTitle: 'Resource 1',
-          layers: [
-            {
-              url: 'https://example.com/wfs1',
-              format: 'wfs',
-              resourceTitle: 'Resource 1',
-              layerName: 'layer1'
-            }
-          ]
-        },
+          layerName: 'layer1'
+        }
+      ])
+      groupALayers.set('Dataset 2', [
         {
-          datasetTitle: 'Dataset 2',
+          url: 'https://example.com/wfs2',
+          format: 'wfs',
           resourceTitle: 'Resource 2',
-          layers: [
-            {
-              url: 'https://example.com/wfs2',
-              format: 'wfs',
-              resourceTitle: 'Resource 2',
-              layerName: 'layer2'
-            }
-          ]
+          layerName: 'layer2'
         }
       ])
+      layersByGroup.set('Group A', groupALayers)
 
-      preparedByGroup.set('Group B', [
+      const groupBLayers = new Map<string, OgcLayerInfo[]>()
+      groupBLayers.set('Dataset 3', [
         {
-          datasetTitle: 'Dataset 3',
+          url: 'https://example.com/wms1',
+          format: 'wms',
           resourceTitle: 'Resource 3',
-          layers: [
-            {
-              url: 'https://example.com/wms1',
-              format: 'wms',
-              resourceTitle: 'Resource 3',
-              layerName: 'layer3'
-            }
-          ]
+          layerName: 'layer3'
         }
       ])
+      layersByGroup.set('Group B', groupBLayers)
 
-      const qlr = generateTopicQlr(preparedByGroup, 'Test Topic', 'EPSG:4326')
+      const qlr = generateTopicQlr(layersByGroup, 'Test Topic', 'EPSG:4326')
       const doc = parseXml(qlr)
 
       // Check topic group
@@ -232,24 +204,20 @@ describe('QGIS QLR Generation', () => {
     })
 
     it('should handle Sans regroupement group', () => {
-      const preparedByGroup = new Map<string, PreparedDataset[]>()
+      const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
 
-      preparedByGroup.set('Sans regroupement', [
+      const noGroupLayers = new Map<string, OgcLayerInfo[]>()
+      noGroupLayers.set('Dataset', [
         {
-          datasetTitle: 'Dataset',
+          url: 'https://example.com/wfs',
+          format: 'wfs',
           resourceTitle: 'Resource',
-          layers: [
-            {
-              url: 'https://example.com/wfs',
-              format: 'wfs',
-              resourceTitle: 'Resource',
-              layerName: 'layer'
-            }
-          ]
+          layerName: 'layer'
         }
       ])
+      layersByGroup.set('Sans regroupement', noGroupLayers)
 
-      const qlr = generateTopicQlr(preparedByGroup, 'Test Topic', 'EPSG:4326')
+      const qlr = generateTopicQlr(layersByGroup, 'Test Topic', 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const groups = doc.querySelectorAll('layer-tree-group')
@@ -260,36 +228,28 @@ describe('QGIS QLR Generation', () => {
     })
 
     it('should handle mixed WFS and WMS layers', () => {
-      const preparedByGroup = new Map<string, PreparedDataset[]>()
+      const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
 
-      preparedByGroup.set('Mixed Group', [
+      const mixedGroup = new Map<string, OgcLayerInfo[]>()
+      mixedGroup.set('WFS Dataset', [
         {
-          datasetTitle: 'WFS Dataset',
+          url: 'https://example.com/wfs',
+          format: 'wfs',
           resourceTitle: 'WFS Resource',
-          layers: [
-            {
-              url: 'https://example.com/wfs',
-              format: 'wfs',
-              resourceTitle: 'WFS Resource',
-              layerName: 'wfs_layer'
-            }
-          ]
-        },
-        {
-          datasetTitle: 'WMS Dataset',
-          resourceTitle: 'WMS Resource',
-          layers: [
-            {
-              url: 'https://example.com/wms',
-              format: 'wms',
-              resourceTitle: 'WMS Resource',
-              layerName: 'wms_layer'
-            }
-          ]
+          layerName: 'wfs_layer'
         }
       ])
+      mixedGroup.set('WMS Dataset', [
+        {
+          url: 'https://example.com/wms',
+          format: 'wms',
+          resourceTitle: 'WMS Resource',
+          layerName: 'wms_layer'
+        }
+      ])
+      layersByGroup.set('Mixed Group', mixedGroup)
 
-      const qlr = generateTopicQlr(preparedByGroup, 'Test Topic', 'EPSG:4326')
+      const qlr = generateTopicQlr(layersByGroup, 'Test Topic', 'EPSG:4326')
       const doc = parseXml(qlr)
 
       const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')

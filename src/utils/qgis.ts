@@ -1,18 +1,20 @@
+import type { ResolvedFactor } from '@/model/topic'
 import { create } from 'xmlbuilder2'
 import type { XMLBuilder } from 'xmlbuilder2/lib/interfaces'
 import type { OGC_SERVICE_FORMAT, OgcLayerInfo } from './ogcServices'
 import { extractBaseUrl, fetchWfsLayerNames } from './ogcServices'
 
 /**
- * Datasets grouped by factor group name for topic export
+ * Layers organized by dataset title
+ * Base structure used for both single and topic exports
  */
-type DatasetsByGroup = Map<
-  string,
-  {
-    ogcInfo: OgcLayerInfo
-    datasetTitle: string
-  }[]
->
+type LayersByDataset = Map<string, OgcLayerInfo[]>
+
+/**
+ * Layers organized by factor group, then by dataset title
+ * Used for topic exports with multiple groups
+ */
+type LayersByGroup = Map<string, LayersByDataset>
 
 /**
  * CRS (Coordinate Reference System) definitions for QGIS layers
@@ -254,23 +256,25 @@ export async function resolveOgcLayers(
  * @internal Exported for testing
  */
 export function generateSingleDatasetQlr(
-  datasetTitle: string,
-  resourceTitle: string,
-  layers: OgcLayerInfo[],
+  layersByDataset: LayersByDataset,
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): string {
   const root = createRoot()
   const outerGroup = createGroup(root, '')
   const maplayers = root.ele('maplayers')
 
-  addDatasetLayers(
-    outerGroup,
-    datasetTitle,
-    resourceTitle,
-    layers,
-    crs,
-    maplayers
-  )
+  // Add the dataset (should only be one entry)
+  layersByDataset.forEach((layers, datasetTitle) => {
+    const resourceTitle = layers[0].resourceTitle
+    addDatasetLayers(
+      outerGroup,
+      datasetTitle,
+      resourceTitle,
+      layers,
+      crs,
+      maplayers
+    )
+  })
 
   return root.end({ prettyPrint: true })
 }
@@ -300,29 +304,24 @@ Pour ajouter cette couche dans QGIS :
     return
   }
 
-  const qlrContent = generateSingleDatasetQlr(
-    datasetTitle,
-    layerInfo.resourceTitle,
-    expandedLayers,
-    crs
-  )
+  // Build unified structure: Map<datasetTitle, layers[]>
+  const layersByDataset: LayersByDataset = new Map([
+    [datasetTitle, expandedLayers]
+  ])
+
+  const qlrContent = generateSingleDatasetQlr(layersByDataset, crs)
   const filename = `${datasetTitle.toLowerCase().replace(/[^a-z0-9]/g, '_')}.qlr`
   downloadQlrFile(qlrContent, filename)
-}
-
-/**
- * Prepared dataset data for topic QLR generation
- */
-export interface PreparedDataset {
-  datasetTitle: string
-  layers: OgcLayerInfo[]
 }
 
 /**
  * Generates QLR XML for a topic with multiple datasets organized by factor groups
  * @internal Exported for testing
  *
- * Typical structure:
+ * Structure mirrors the XML hierarchy:
+ * Map<groupName, Map<datasetTitle, layers[]>>
+ *
+ * Typical output:
  * - Topic Name
  *   - Factor Group 1
  *     - Dataset 1
@@ -338,7 +337,7 @@ export interface PreparedDataset {
  *         - Layer 4
  */
 export function generateTopicQlr(
-  preparedByGroup: Map<string, PreparedDataset[]>,
+  layersByGroup: LayersByGroup,
   topicTitle: string,
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): string {
@@ -349,12 +348,12 @@ export function generateTopicQlr(
   const maplayers = root.ele('maplayers')
 
   // Add each factor group
-  preparedByGroup.forEach((preparedDatasets, groupName) => {
+  layersByGroup.forEach((layersByDataset, groupName) => {
     const factorGroup = createGroup(topicGroup, groupName)
 
     // Add each dataset
-    preparedDatasets.forEach(({ datasetTitle, layers }) => {
-      // All layers share the same resource titles in a topic
+    layersByDataset.forEach((layers, datasetTitle) => {
+      // All layers from same dataset share the same resourceTitle
       const resourceTitle = layers[0].resourceTitle
       addDatasetLayers(
         factorGroup,
@@ -375,33 +374,44 @@ export function generateTopicQlr(
  * Downloads a single .qlr file with all layers organized by groups
  */
 export async function openTopicInQgis(
-  datasetsByGroup: DatasetsByGroup,
+  groupedFactors: Map<string, ResolvedFactor[]>,
+  ogcLayerInfo: Map<string, OgcLayerInfo>,
+  getDatasetInfo: (
+    factor: ResolvedFactor
+  ) => { id: string; title: string } | null,
   topicTitle: string,
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): Promise<void> {
-  const preparedByGroup = new Map<string, PreparedDataset[]>()
+  // Build and expand layers: Map<groupName, Map<datasetTitle, OgcLayerInfo[]>>
+  const expandedLayersByGroup: LayersByGroup = new Map()
 
-  for (const [groupName, datasets] of datasetsByGroup) {
-    for (const { ogcInfo, datasetTitle } of datasets) {
+  for (const [groupName, factors] of groupedFactors) {
+    const expandedLayersByDataset: LayersByDataset = new Map()
+
+    for (const factor of factors) {
+      const dataset = getDatasetInfo(factor)
+      if (!dataset) continue
+
+      const ogcInfo = ogcLayerInfo.get(dataset.id)
+      if (!ogcInfo) continue
+
       const expandedLayers = await resolveOgcLayers(ogcInfo)
       if (expandedLayers.length === 0) continue
 
-      if (!preparedByGroup.has(groupName)) {
-        preparedByGroup.set(groupName, [])
-      }
-      preparedByGroup.get(groupName)!.push({
-        datasetTitle,
-        layers: expandedLayers
-      })
+      expandedLayersByDataset.set(dataset.title, expandedLayers)
+    }
+
+    if (expandedLayersByDataset.size > 0) {
+      expandedLayersByGroup.set(groupName, expandedLayersByDataset)
     }
   }
 
-  if (preparedByGroup.size === 0) {
+  if (expandedLayersByGroup.size === 0) {
     console.warn('No OGC-compatible resources found in topic')
     return
   }
 
-  const qlrContent = generateTopicQlr(preparedByGroup, topicTitle, crs)
+  const qlrContent = generateTopicQlr(expandedLayersByGroup, topicTitle, crs)
   const filename = `${topicTitle.toLowerCase().replace(/[^a-z0-9]/g, '_')}_topic.qlr`
   downloadQlrFile(qlrContent, filename)
 }

@@ -194,6 +194,7 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
   const layerInfo = ogcLayerInfo.value.get(datasetId)
   if (layerInfo) {
     try {
+      // FIXME: maybe use Map structure here directly?
       await openInQgis(layerInfo, datasetTitle)
     } catch (error) {
       console.error('Failed to open in QGIS:', error)
@@ -206,37 +207,16 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
  * Opens all OGC-compatible resources from the topic in QGIS, organized by factor groups.
  */
 const handleOpenTopicInQgis = async () => {
-  // Build grouped structure: Map<groupName, datasets[]>
-  const datasetsByGroup = new Map()
-
-  for (const [groupName, groupFactors] of groupedFactors.value) {
-    for (const factor of groupFactors) {
-      const datasetId = factor.element?.id
-      if (!datasetId) continue
-
-      const ogcInfo = ogcLayerInfo.value.get(datasetId)
-      if (!ogcInfo) continue
-
-      const dataset = getDatasetForFactor(factor)
-      if (!dataset) continue
-
-      if (!datasetsByGroup.has(groupName)) {
-        datasetsByGroup.set(groupName, [])
-      }
-      datasetsByGroup.get(groupName)!.push({
-        ogcInfo,
-        datasetTitle: dataset.title
-      })
-    }
-  }
-
-  if (datasetsByGroup.size === 0) {
-    console.warn('No OGC-compatible resources found in topic')
-    return
-  }
-
   try {
-    await openTopicInQgis(datasetsByGroup, props.topicName)
+    await openTopicInQgis(
+      groupedFactors.value,
+      ogcLayerInfo.value,
+      (factor) => {
+        const dataset = getDatasetForFactor(factor)
+        return dataset ? { id: dataset.id, title: dataset.title } : null
+      },
+      props.topicName
+    )
   } catch (error) {
     console.error('Failed to open topic in QGIS:', error)
     alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
