@@ -206,7 +206,8 @@ const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
  * Opens all OGC-compatible resources from the topic in QGIS, organized by factor groups.
  */
 const handleOpenTopicInQgis = async () => {
-  const datasetsToExport = []
+  // Build grouped structure: Map<groupName, datasets[]>
+  const datasetsByGroup = new Map()
 
   for (const [groupName, groupFactors] of groupedFactors.value) {
     for (const factor of groupFactors) {
@@ -219,16 +220,23 @@ const handleOpenTopicInQgis = async () => {
       const dataset = getDatasetForFactor(factor)
       if (!dataset) continue
 
-      datasetsToExport.push({
+      if (!datasetsByGroup.has(groupName)) {
+        datasetsByGroup.set(groupName, [])
+      }
+      datasetsByGroup.get(groupName)!.push({
         ogcInfo,
-        datasetTitle: dataset.title,
-        groupName
+        datasetTitle: dataset.title
       })
     }
   }
 
+  if (datasetsByGroup.size === 0) {
+    console.warn('No OGC-compatible resources found in topic')
+    return
+  }
+
   try {
-    await openTopicInQgis(datasetsToExport, props.topicName)
+    await openTopicInQgis(datasetsByGroup, props.topicName)
   } catch (error) {
     console.error('Failed to open topic in QGIS:', error)
     alert("Une erreur est survenue lors de l'ouverture dans QGIS.")

@@ -4,13 +4,15 @@ import type { OGC_SERVICE_FORMAT, OgcLayerInfo } from './ogcServices'
 import { extractBaseUrl, fetchWfsLayerNames } from './ogcServices'
 
 /**
- * Input data for topic export
+ * Datasets grouped by factor group name for topic export
  */
-export interface TopicDatasetInput {
-  ogcInfo: OgcLayerInfo
-  datasetTitle: string
-  groupName: string
-}
+type DatasetsByGroup = Map<
+  string,
+  {
+    ogcInfo: OgcLayerInfo
+    datasetTitle: string
+  }[]
+>
 
 /**
  * CRS (Coordinate Reference System) definitions for QGIS layers
@@ -313,7 +315,6 @@ Pour ajouter cette couche dans QGIS :
  */
 export interface PreparedDataset {
   datasetTitle: string
-  resourceTitle: string
   layers: OgcLayerInfo[]
 }
 
@@ -351,23 +352,10 @@ export function generateTopicQlr(
   preparedByGroup.forEach((preparedDatasets, groupName) => {
     const factorGroup = createGroup(topicGroup, groupName)
 
-    // Group by dataset to consolidate resources
-    const layersByDataset = new Map<string, PreparedDataset>()
-
-    preparedDatasets.forEach((prepared) => {
-      const key = prepared.resourceTitle
-      if (!layersByDataset.has(key)) {
-        layersByDataset.set(key, {
-          datasetTitle: prepared.datasetTitle,
-          resourceTitle: prepared.resourceTitle,
-          layers: []
-        })
-      }
-      layersByDataset.get(key)!.layers.push(...prepared.layers)
-    })
-
     // Add each dataset
-    layersByDataset.forEach(({ datasetTitle, resourceTitle, layers }) => {
+    preparedDatasets.forEach(({ datasetTitle, layers }) => {
+      // All layers share the same resource titles in a topic
+      const resourceTitle = layers[0].resourceTitle
       addDatasetLayers(
         factorGroup,
         datasetTitle,
@@ -387,24 +375,25 @@ export function generateTopicQlr(
  * Downloads a single .qlr file with all layers organized by groups
  */
 export async function openTopicInQgis(
-  datasets: TopicDatasetInput[],
+  datasetsByGroup: DatasetsByGroup,
   topicTitle: string,
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): Promise<void> {
   const preparedByGroup = new Map<string, PreparedDataset[]>()
 
-  for (const { ogcInfo, datasetTitle, groupName } of datasets) {
-    const expandedLayers = await resolveOgcLayers(ogcInfo)
-    if (expandedLayers.length === 0) continue
+  for (const [groupName, datasets] of datasetsByGroup) {
+    for (const { ogcInfo, datasetTitle } of datasets) {
+      const expandedLayers = await resolveOgcLayers(ogcInfo)
+      if (expandedLayers.length === 0) continue
 
-    if (!preparedByGroup.has(groupName)) {
-      preparedByGroup.set(groupName, [])
+      if (!preparedByGroup.has(groupName)) {
+        preparedByGroup.set(groupName, [])
+      }
+      preparedByGroup.get(groupName)!.push({
+        datasetTitle,
+        layers: expandedLayers
+      })
     }
-    preparedByGroup.get(groupName)!.push({
-      datasetTitle,
-      resourceTitle: ogcInfo.resourceTitle,
-      layers: expandedLayers
-    })
   }
 
   if (preparedByGroup.size === 0) {
