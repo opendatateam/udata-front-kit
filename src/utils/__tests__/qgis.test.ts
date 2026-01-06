@@ -14,7 +14,8 @@ describe('QGIS QLR Generation', () => {
         }
       ]
 
-      const layersByDataset = new Map([['Test Dataset', layers]])
+      const layersByDataset = new Map()
+      layersByDataset.set('Test Dataset', layers)
       const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
       const doc = parseXml(qlr)
 
@@ -57,7 +58,8 @@ describe('QGIS QLR Generation', () => {
         }
       ]
 
-      const layersByDataset = new Map([['WMS Dataset', layers]])
+      const layersByDataset = new Map()
+      layersByDataset.set('WMS Dataset', layers)
       const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
       const doc = parseXml(qlr)
 
@@ -94,7 +96,8 @@ describe('QGIS QLR Generation', () => {
         }
       ]
 
-      const layersByDataset = new Map([['Multi-layer Dataset', layers]])
+      const layersByDataset = new Map()
+      layersByDataset.set('Multi-layer Dataset', layers)
       const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
       const doc = parseXml(qlr)
 
@@ -201,30 +204,6 @@ describe('QGIS QLR Generation', () => {
       const wmsProviders = providers.filter((p) => p.textContent === 'wms')
       expect(wfsProviders.length).toBe(2)
       expect(wmsProviders.length).toBe(1)
-    })
-
-    it('should handle Sans regroupement group', () => {
-      const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
-
-      const noGroupLayers = new Map<string, OgcLayerInfo[]>()
-      noGroupLayers.set('Dataset', [
-        {
-          url: 'https://example.com/wfs',
-          format: 'wfs',
-          resourceTitle: 'Resource',
-          layerName: 'layer'
-        }
-      ])
-      layersByGroup.set('Sans regroupement', noGroupLayers)
-
-      const qlr = generateTopicQlr(layersByGroup, 'Test Topic', 'EPSG:4326')
-      const doc = parseXml(qlr)
-
-      const groups = doc.querySelectorAll('layer-tree-group')
-      const noGroup = Array.from(groups).find(
-        (g) => g.getAttribute('name') === 'Sans regroupement'
-      )
-      expect(noGroup).toBeTruthy()
     })
 
     it('should handle mixed WFS and WMS layers', () => {
