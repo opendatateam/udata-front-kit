@@ -191,15 +191,11 @@ const hasOgcResources = computed(() => {
  * Opens a given dataset from a factor in QGIS
  */
 const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
-  const layerInfo = ogcLayerInfo.value.get(datasetId)
-  if (layerInfo) {
-    try {
-      // FIXME: maybe use Map structure here directly?
-      await openInQgis(layerInfo, datasetTitle)
-    } catch (error) {
-      console.error('Failed to open in QGIS:', error)
-      alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
-    }
+  try {
+    await openInQgis(datasetId, datasetTitle, ogcLayerInfo.value)
+  } catch (error) {
+    console.error('Failed to open in QGIS:', error)
+    alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
   }
 }
 

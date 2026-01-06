@@ -147,6 +147,28 @@ function buildWmsDatasource(
 }
 
 /**
+ * Adds all datasets with their layers to a parent element
+ */
+function addLayersByDataset(
+  parent: XMLBuilder,
+  layersByDataset: LayersByDataset,
+  crs: SupportedCrs,
+  maplayers: XMLBuilder
+): void {
+  layersByDataset.forEach((layers, datasetTitle) => {
+    const resourceTitle = layers[0].resourceTitle
+    addDatasetLayers(
+      parent,
+      datasetTitle,
+      resourceTitle,
+      layers,
+      crs,
+      maplayers
+    )
+  })
+}
+
+/**
  * Adds a dataset with its layers to a parent element.
  * Always creates a consistent two-level group structure:
  * Dataset Title > Resource Title > Layers
@@ -263,18 +285,7 @@ export function generateSingleDatasetQlr(
   const outerGroup = createGroup(root, '')
   const maplayers = root.ele('maplayers')
 
-  // Add the dataset (should only be one entry)
-  layersByDataset.forEach((layers, datasetTitle) => {
-    const resourceTitle = layers[0].resourceTitle
-    addDatasetLayers(
-      outerGroup,
-      datasetTitle,
-      resourceTitle,
-      layers,
-      crs,
-      maplayers
-    )
-  })
+  addLayersByDataset(outerGroup, layersByDataset, crs, maplayers)
 
   return root.end({ prettyPrint: true })
 }
@@ -283,10 +294,17 @@ export function generateSingleDatasetQlr(
  * Opens a QGIS-compatible resource by downloading a .qlr file
  */
 export async function openInQgis(
-  layerInfo: OgcLayerInfo,
+  datasetId: string,
   datasetTitle: string,
+  ogcLayerInfo: Map<string, OgcLayerInfo>,
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): Promise<void> {
+  const layerInfo = ogcLayerInfo.get(datasetId)
+  if (!layerInfo) {
+    console.warn(`No OGC info found for dataset ${datasetId}`)
+    return
+  }
+
   // Resolve OGC layers (expand WFS if needed)
   const expandedLayers = await resolveOgcLayers(layerInfo)
   if (expandedLayers.length === 0) {
@@ -305,9 +323,8 @@ Pour ajouter cette couche dans QGIS :
   }
 
   // Build unified structure: Map<datasetTitle, layers[]>
-  const layersByDataset: LayersByDataset = new Map([
-    [datasetTitle, expandedLayers]
-  ])
+  const layersByDataset: LayersByDataset = new Map()
+  layersByDataset.set(datasetTitle, expandedLayers)
 
   const qlrContent = generateSingleDatasetQlr(layersByDataset, crs)
   const filename = `${datasetTitle.toLowerCase().replace(/[^a-z0-9]/g, '_')}.qlr`
@@ -350,20 +367,7 @@ export function generateTopicQlr(
   // Add each factor group
   layersByGroup.forEach((layersByDataset, groupName) => {
     const factorGroup = createGroup(topicGroup, groupName)
-
-    // Add each dataset
-    layersByDataset.forEach((layers, datasetTitle) => {
-      // All layers from same dataset share the same resourceTitle
-      const resourceTitle = layers[0].resourceTitle
-      addDatasetLayers(
-        factorGroup,
-        datasetTitle,
-        resourceTitle,
-        layers,
-        crs,
-        maplayers
-      )
-    })
+    addLayersByDataset(factorGroup, layersByDataset, crs, maplayers)
   })
 
   return root.end({ prettyPrint: true })
