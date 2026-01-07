@@ -75,6 +75,16 @@ website:
         sub_section_cards:
           title:
           cards:
+            - id: '690b5f6dec83300a693af800'
+              name: 'IA culturelles'
+              description: 'Comment mobiliser les IA culturelles pour mieux comprendre les usages et biais des IA ?'
+              url: '/defis/ia-culturelles'
+              image_url: 'https://raw.githubusercontent.com/datagouv/datagouvfr-pages/refs/heads/master/pages/assets/ODU_Defi_IA-culturelles.jpg'
+            - id: '68e52edae038ccd86722ac8c'
+              name: 'Prévention des risques à Bordeaux Métropole'
+              description: 'Comment préparer les habitants de Bordeaux Métropole aux risques potentiels ?'
+              url: '/defis/prevention-des-risques-a-bordeaux-metropole'
+              image_url: 'https://raw.githubusercontent.com/datagouv/datagouvfr-pages/refs/heads/master/pages/assets/ODU_Defi_Bordeaux.jpg'
             - id: '68a342f531e98327ae1e6779'
               name: 'Tourisme en train'
               description: 'Comment faciliter et encourager le tourisme en train en France ?'
