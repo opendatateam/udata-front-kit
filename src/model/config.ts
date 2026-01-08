@@ -111,6 +111,18 @@ export type DatasetsConf = {
   show_extended_information_panel: boolean
 }
 
+export interface WebsiteConfig {
+  title: string
+  seo?: {
+    canonical_url?: string
+    meta?: {
+      keywords?: string
+      description?: string
+      robots?: string
+    }
+  }
+}
+
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
 export type SentryConfig = {
   dsn: string // Mandatory to send errors to Sentry
