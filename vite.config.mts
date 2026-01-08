@@ -16,20 +16,10 @@ import {
 } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import type { SentryConfig } from './src/model/config'
+import type { SentryConfig, WebsiteConfig } from './src/model/config'
 
 interface Config {
-  website: {
-    title: string
-    meta: {
-      keywords: string
-      description: string
-      canonical_url: string
-    }
-  }
-  robots: {
-    meta: string
-  }
+  website: WebsiteConfig
   sentry?: SentryConfig
 }
 
@@ -94,8 +84,8 @@ export default defineConfig(({ mode }) => {
         inject: {
           data: {
             title: config.website.title,
-            meta: config.website.meta,
-            metaRobots: config.robots.meta
+            meta: config.website.seo?.meta,
+            metaRobots: config.website.seo?.meta?.robots
           }
         }
       }),

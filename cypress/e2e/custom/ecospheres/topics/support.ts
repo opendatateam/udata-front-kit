@@ -49,7 +49,7 @@ export const factorFactory = build<Factor>({
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.meta.canonical_url ||
+                Cypress.env('siteConfig').website.seo.canonical_url ||
                 'https://demo.ecologie.data.gouv.fr'
               return `${canonicalUrl}/bouquets/referenced-topic-${x}`
             }),
@@ -66,7 +66,7 @@ export const factorFactory = build<Factor>({
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.meta.canonical_url
+                Cypress.env('siteConfig').website.seo.canonical_url
               return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
