@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components-next'
-import { nextTick, ref, type Ref } from 'vue'
+import { computed, nextTick, ref, type Ref } from 'vue'
 
 import { useAnimationConstants } from '@/utils/constants'
 
@@ -19,7 +19,7 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { findOgcCompatibleResource } from '@/utils/ogcServices'
-import { openInQgis } from '@/utils/qgis'
+import { openInQgis, openTopicInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
 import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
@@ -44,6 +44,11 @@ const props = defineProps({
   topicId: {
     type: String,
     required: true
+  },
+  topicName: {
+    type: String,
+    required: false,
+    default: 'Topic'
   }
 })
 
@@ -175,15 +180,42 @@ const computeOgcInfo = async (dataset: DatasetV2) => {
   }
 }
 
-const handleOpenInQgis = async (datasetId: string, datasetTitle?: string) => {
-  const layerInfo = ogcLayerInfo.value.get(datasetId)
-  if (layerInfo) {
-    try {
-      await openInQgis(layerInfo, datasetTitle)
-    } catch (error) {
-      console.error('Failed to open in QGIS:', error)
-      alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
-    }
+/**
+ * Check if any dataset in the topic has OGC-compatible resources
+ */
+const hasOgcResources = computed(() => {
+  return ogcLayerInfo.value.size > 0
+})
+
+/**
+ * Opens a given dataset from a factor in QGIS
+ */
+const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
+  try {
+    await openInQgis(datasetId, datasetTitle, ogcLayerInfo.value)
+  } catch (error) {
+    console.error('Failed to open in QGIS:', error)
+    alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+  }
+}
+
+/**
+ * Opens all OGC-compatible resources from the topic in QGIS, organized by factor groups.
+ */
+const handleOpenTopicInQgis = async () => {
+  try {
+    await openTopicInQgis(
+      groupedFactors.value,
+      ogcLayerInfo.value,
+      (factor) => {
+        const dataset = getDatasetForFactor(factor)
+        return dataset ? { id: dataset.id, title: dataset.title } : null
+      },
+      props.topicName
+    )
+  } catch (error) {
+    console.error('Failed to open topic in QGIS:', error)
+    alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
   }
 }
 
@@ -250,7 +282,9 @@ const navigateToElement = (elementId: string) => {
 }
 
 defineExpose({
-  navigateToElement
+  navigateToElement,
+  hasOgcResources,
+  handleOpenTopicInQgis
 })
 </script>
 
@@ -389,7 +423,7 @@ defineExpose({
                     @click="
                       handleOpenInQgis(
                         factor.element.id,
-                        getDatasetForFactor(factor)?.title
+                        getDatasetForFactor(factor)!.title
                       )
                     "
                   >
@@ -404,10 +438,10 @@ defineExpose({
     </div>
     <div v-else>
       <div v-for="(factor, index) in factors" :key="index">
-        <TopicDatasetCard
-          v-if="factor.element?.id"
+        <DatasetInTopicCard
+          v-if="getDatasetForFactor(factor)"
           :factor="factor"
-          :dataset-content="getDatasetForFactor(factor)"
+          :dataset-content="getDatasetForFactor(factor)!"
         />
       </div>
     </div>
