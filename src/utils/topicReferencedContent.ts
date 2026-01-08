@@ -104,7 +104,7 @@ export function useTopicReferencedContent(
       factors,
       (uri) =>
         // match only current site url
-        getSlugFromUri(uri, pageKey, [config.website.meta?.canonical_url]),
+        getSlugFromUri(uri, pageKey, [config.website.seo?.canonical_url]),
       topicsContent.value,
       topicStore,
       (slug, content) => ({ slug, topic: content as Topic })
@@ -120,7 +120,7 @@ export function useTopicReferencedContent(
       (uri) =>
         // match both base urls from data.gouv.fr and current site
         getSlugFromUri(uri, 'dataservices', [
-          config.website.meta?.canonical_url,
+          config.website.seo?.canonical_url,
           config.datagouvfr?.base_url
         ]),
       dataservicesContent.value,
