@@ -4,6 +4,8 @@ import '@gouvfr/dsfr/dist/component/component.main.min.css' // Styles de tous le
 
 import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires : les composants de VueDsfr en ont besoin
 
+import '@gouvfr/dsfr-chart'
+import '@gouvfr/dsfr-chart/css'
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import '@datagouv/components-next/dist/components.css'

@@ -77,6 +77,20 @@ onMounted(() => {
       <p>Aucun contenu trouvé.</p>
     </div>
   </div>
+  <!-- ✅ Test DSFR Chart -->
+  <div class="fr-container fr-py-8w">
+    <bar-chart
+      x="[[2019, 2024, 2025]]"
+      y="[[150, 200, 950]]"
+      name='["Jeux de données de la Verticale Culture"]'
+      selected-palette="default"
+      unit-tooltip="jeux de données"
+    ></bar-chart>
+    <p class="fr-text--sm fr-mt-2w">
+      Avant 2025, la plateforme accueillait uniquement les jeux produits par le
+      ministère de la Culture.
+    </p>
+  </div>
 </template>
 
 <style scoped>
