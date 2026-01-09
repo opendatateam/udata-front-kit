@@ -21,7 +21,7 @@ useHead({
         'culture.data.gouv.fr référence et centralise les données du domaine de la culture.'
     }
   ],
-  link: [{ rel: 'canonical', href: window.location.origin }]
+  link: [{ rel: 'canonical', href: window.location.origin + '/deps' }]
 })
 
 interface Section {
@@ -67,7 +67,7 @@ const loading = ref(true)
 const fetchSections = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Table1/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_sections/records?sort=ordre'
     )
     const data = await response.json()
     sections.value = data.records
@@ -79,7 +79,7 @@ const fetchSections = async () => {
 const fetchContent = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Content_section/records'
+      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_content_section/records'
     )
     const data = await response.json()
     contentItems.value = data.records
@@ -91,7 +91,7 @@ const fetchContent = async () => {
 const fetchTopItems = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Tops/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_tops/records?sort=ordre'
     )
     const data = await response.json()
     topItems.value = data.records
