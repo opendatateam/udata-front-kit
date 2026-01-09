@@ -67,7 +67,7 @@ const loading = ref(true)
 const fetchSections = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Sections/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Table1/records?sort=ordre'
     )
     const data = await response.json()
     sections.value = data.records
