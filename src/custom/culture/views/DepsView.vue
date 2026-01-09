@@ -138,7 +138,7 @@ onMounted(() => {
 <template>
   <div class="datagouv-components">
     <section class="fr-container fr-pt-12v">
-      <h1 class="main-title-v2">Les données ouvertes de la Culture</h1>
+      <h1 class="main-title-v2">Les données du DEPS</h1>
       <p class="fr-text--lead fr-mb-6w text-center">
         culture.data.gouv.fr vise à référencer, héberger et diffuser les données
         publiques relatives à la culture en France. Vous y trouverez des données
