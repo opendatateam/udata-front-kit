@@ -33,10 +33,6 @@ const props = defineProps({
   factorsInTopic: {
     type: Array<ResolvedFactor>,
     default: []
-  },
-  datasetEditorialization: {
-    type: Boolean,
-    default: false
   }
 })
 
@@ -62,8 +58,6 @@ const isValidDataset = computed((): boolean => {
     isValidCatalogDataset.value &&
     isValidUrlDataset.value &&
     !factor.value.remoteDeleted
-
-  if (!props.datasetEditorialization) return isValidWithoutEditorialization
 
   return isValidWithoutEditorialization && hasEditorialization.value
 })
@@ -134,7 +128,6 @@ onMounted(() => {
 
 <template>
   <FactorTextFields
-    v-if="datasetEditorialization"
     v-model:factor-model="factor"
     :error-title="getErrorMessage('title')"
     :error-purpose="getErrorMessage('purpose')"
@@ -148,7 +141,7 @@ onMounted(() => {
         @update:model-value="onSelectDataset"
       />
     </div>
-    <div v-if="!selectedDataset && datasetEditorialization" class="fr-mt-4w">
+    <div v-if="!selectedDataset" class="fr-mt-4w">
       <fieldset
         class="fr-fieldset availability"
         role="radiogroup"

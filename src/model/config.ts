@@ -105,7 +105,6 @@ export type PagesConf = {
 export type DatasetsConf = {
   add_to_topic: {
     page: string
-    dataset_editorialization: boolean
   } | null
   harvest_backends_quality_warning: string[]
   show_extended_information_panel: boolean
