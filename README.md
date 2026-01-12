@@ -169,7 +169,60 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 ### 🏭 Déploiement en preprod et en production
 
-Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui peut être déclenché de deux manières différentes :
+#### 🛠️ Script de déploiement local (recommandé)
+
+Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes :
+
+**Étape 1 : Préparer le déploiement**
+
+Crée une branche de merge temporaire, fusionne les changements (avec résolution de conflits si nécessaire), et crée une PR :
+
+```bash
+./scripts/deploy.sh prepare <site> <env> <version>
+
+# Exemple
+./scripts/deploy.sh prepare ecospheres preprod minor
+```
+
+Le script :
+
+- Crée une branche `{site}-{env}-merge` depuis `{site}-{env}`
+- Fusionne `main` (pour demo/preprod) ou `{site}-preprod` (pour prod) dans cette branche
+- Pousse la branche et crée une PR pour revue
+- Gère automatiquement les conflits (vous les résolvez localement avant de créer la PR)
+
+**Étape 2 : Déployer**
+
+Après validation de la PR, merge avec le message de commit qui déclenche le CI/CD GitLab :
+
+```bash
+./scripts/deploy.sh deploy <site> <env> <version>
+
+# Exemple
+./scripts/deploy.sh deploy ecospheres preprod minor
+```
+
+Le script :
+
+- Trouve la PR de déploiement
+- Affiche les détails et demande confirmation
+- Merge avec le message normalisé `[{env}:{site}:{version}]`
+- Nettoie la branche de merge
+- Déclenche automatiquement le pipeline GitLab
+
+**Arguments :**
+
+- `<site>` : `ecospheres`, `meteo-france`, `logistique`, `defis`, `hackathon`, `simplifions`, `culture`
+- `<env>` : `demo`, `preprod`, `prod`
+- `<version>` : `major`, `minor`, `patch`
+
+**Prérequis :** [GitHub CLI (`gh`)](https://cli.github.com/) installé et authentifié
+
+---
+
+#### Déploiement alternatif via commit message ou GitHub Actions
+
+Le déploiement des verticales thématiques en preprod et en production peut également s'effectuer via un workflow GitHub qui peut être déclenché de deux manières différentes :
 
 #### Comment déployer en préproduction et en production
 
