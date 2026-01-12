@@ -148,7 +148,6 @@ website:
     add_to_topic:
       enable: false
       page:
-      dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel:
