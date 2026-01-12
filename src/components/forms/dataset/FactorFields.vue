@@ -29,7 +29,7 @@ const formErrors = defineModel('errors-model', {
   default: []
 })
 
-const props = defineProps({
+defineProps({
   factorsInTopic: {
     type: Array<ResolvedFactor>,
     default: []

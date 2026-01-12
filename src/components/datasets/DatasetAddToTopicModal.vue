@@ -11,7 +11,7 @@ import type { Topic } from '@/model/topic'
 import { Availability, ResolvedFactor } from '@/model/topic'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
-import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
+import { usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
 import { useTopicFactors } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
@@ -35,7 +35,6 @@ const props = defineProps({
 const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
-const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
 
 const topics = topicStore.myTopics
