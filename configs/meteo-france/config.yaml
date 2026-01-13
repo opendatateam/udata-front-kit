@@ -74,13 +74,14 @@ website:
           tiles:
         sub_section_buttons:
     meta_description:
-  header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wQ7y47
-  header_search:
-    display: true
-    placeholder: Rechercher...
+  header:
+    button:
+      display: true
+      label: 'Donnez votre avis'
+      link: https://tally.so/r/wQ7y47
+    search:
+      display: true
+      placeholder: Rechercher...
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'

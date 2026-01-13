@@ -36,7 +36,7 @@ const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
 const userName = computed(() => userStore.userName)
 const quickLinks = computed(() => {
-  const button = config.website.header_button
+  const button = config.website.header.button
 
   const userProfile = {
     button: true,

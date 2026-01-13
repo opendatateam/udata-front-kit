@@ -52,13 +52,14 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description: culture.data.gouv.fr référence et centralise les données du domaine de la culture.
-  header_button:
-    display: false
-    label:
-    link:
-  header_search:
-    display: true
-    placeholder: Rechercher un jeu de données culture
+  header:
+    button:
+      display: false
+      label:
+      link:
+    search:
+      display: true
+      placeholder: Rechercher un jeu de données culture
   search_bar:
     display: true
     placeholder: Rechercher un jeu de données culture
