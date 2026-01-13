@@ -9,16 +9,24 @@ datagouvfr:
   oauth_client_id: 6709257a89f70088a223eba3
   tabular_api_url:
 
-robots:
-  disallow:
-    - /admin
-    - /datasets
-  sitemap:
-  meta: 'index, follow'
-
 # UI customizations
 website:
   title: 'logistique.data.gouv.fr'
+  seo:
+    canonical_url: https://logistique.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'index, follow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages:
+        - bouquets
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
@@ -140,7 +148,6 @@ website:
     add_to_topic:
       enable: true
       page: bouquets
-      dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false

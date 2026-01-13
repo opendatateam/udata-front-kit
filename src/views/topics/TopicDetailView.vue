@@ -490,7 +490,6 @@ watch(
           ref="topicFactorsListRef"
           v-model="factors"
           :is-edit="canEdit"
-          :dataset-editorialization="props.datasetEditorialization"
           :topic-id="topic.id"
           @factor-changed="handleFactorChanged"
         />
