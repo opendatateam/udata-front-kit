@@ -39,7 +39,7 @@ const doExport = async () => {
         v-if="hasOgcResources"
         size="sm"
         type="button"
-        label="Ouvrir tous les jeux de données dans QGIS"
+        label="Ouvrir le bouquet dans QGIS"
         class="fr-mt-2w test__open_topic_in_qgis_btn"
         icon="fr-icon-road-map-line"
         secondary
