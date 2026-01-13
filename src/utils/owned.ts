@@ -1,3 +1,4 @@
+import type { DataserviceWithRel } from '@/model/dataservice'
 import type { Topic } from '@/model/topic'
 import {
   getOwnerName,
@@ -7,7 +8,7 @@ import {
 
 // This is a redefinition of the previous function from @datagouv/components
 export const useOwnerName = (
-  object: DatasetV2 | Topic | TopicV2 | null
+  object: DatasetV2 | Topic | TopicV2 | DataserviceWithRel | null
 ): ComputedRef<string | undefined> => {
   return computed(() => {
     if (object) {

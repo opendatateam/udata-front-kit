@@ -9,16 +9,23 @@ datagouvfr:
   # oauth settings
   oauth_client_id: 68b1ac79a751200a42f2ba19
 
-robots:
-  disallow:
-    - /admin
-    - /datasets
-  sitemap:
-  meta: 'index, follow'
-
 # UI customizations
 website:
   title: 'culture.data.gouv.fr'
+  seo:
+    canonical_url: https://culture.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      meta: 'index, follow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>culture.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA CULTURE'
@@ -141,7 +148,6 @@ website:
     add_to_topic:
       enable: false
       page:
-      dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel:
