@@ -73,13 +73,15 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
-  header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://framaforms.org/votre-avis-sur-logistiquedatagouvfr-1741274528
-  header_search:
-    display: true
-    placeholder: Rechercher...
+  header:
+    admin_shortcut: false
+    button:
+      display: true
+      label: 'Donnez votre avis'
+      link: https://framaforms.org/votre-avis-sur-logistiquedatagouvfr-1741274528
+    search:
+      display: true
+      placeholder: Rechercher...
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
