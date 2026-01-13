@@ -205,6 +205,7 @@ website:
           [En savoir plus sur l’Open Data University.](/opendatauniversity)
     meta_description:
   header:
+    admin_shortcut: false
     button:
       display: false
       label: 'Donnez votre avis'

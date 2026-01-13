@@ -58,6 +58,7 @@ website:
     sections:
     meta_description:
   header:
+    admin_shortcut: false
     button:
       display: false # TODO : créer un formulaire de feedback sur tally.so
       label: 'Donnez votre avis'

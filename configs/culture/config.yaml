@@ -53,6 +53,7 @@ website:
         sub_section_buttons:
     meta_description: culture.data.gouv.fr référence et centralise les données du domaine de la culture.
   header:
+    admin_shortcut: true
     button:
       display: false
       label:

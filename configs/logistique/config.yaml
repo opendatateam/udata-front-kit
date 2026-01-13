@@ -74,6 +74,7 @@ website:
         sub_section_buttons:
     meta_description:
   header:
+    admin_shortcut: false
     button:
       display: true
       label: 'Donnez votre avis'

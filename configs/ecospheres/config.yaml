@@ -63,6 +63,7 @@ website:
         sub_section_buttons:
     meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
   header:
+    admin_shortcut: true
     button:
       display: true
       label: 'Donnez votre avis'
