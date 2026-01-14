@@ -80,7 +80,6 @@ onMounted(() => {
       <p>Aucun contenu trouvé.</p>
     </div>
   </div>
-  <!-- ✅ Test DSFR Chart -->
   <div class="fr-container fr-py-8w">
     <bar-chart
       x="[[2019, 2024, 2025]]"
