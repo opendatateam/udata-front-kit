@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import '@gouvfr/dsfr-chart/BarChart'
+import '@gouvfr/dsfr-chart/BarChart/css'
+
 import { useHead } from '@unhead/vue'
 import { computed, onMounted, ref } from 'vue'
 
