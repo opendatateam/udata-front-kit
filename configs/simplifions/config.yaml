@@ -57,18 +57,20 @@ website:
     subtitle:
     sections:
     meta_description:
-  header_button:
-    display: false # TODO : créer un formulaire de feedback sur tally.so
-    label: 'Donnez votre avis'
-    link: https://form.typeform.com/to/sYKAer7j
-  header_search:
-    display: true
-    placeholder: Rechercher...
-    dropdown:
-      - text: Rechercher {} dans les <strong>cas d'usages</strong>
-        route: cas-d-usages
-      - text: Rechercher {} dans les <strong>solutions</strong>
-        route: solutions
+  header:
+    admin_shortcut: false
+    button:
+      display: false # TODO : créer un formulaire de feedback sur tally.so
+      label: 'Donnez votre avis'
+      link: https://form.typeform.com/to/sYKAer7j
+    search:
+      display: true
+      placeholder: Rechercher...
+      dropdown:
+        - text: Rechercher {} dans les <strong>cas d'usages</strong>
+          route: cas-d-usages
+        - text: Rechercher {} dans les <strong>solutions</strong>
+          route: solutions
   search_bar:
     display: false
   secondary_search:
@@ -160,7 +162,6 @@ website:
     add_to_topic:
       enable: false
       page: cas-d-usages
-      dataset_editorialization: false
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
     show_extended_information_panel: false

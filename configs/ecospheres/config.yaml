@@ -62,22 +62,24 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
-  header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wLWrzp
-  header_search:
-    display: true
-    placeholder: Rechercher...
-    dropdown:
-      - text: Rechercher {} dans les <strong>jeux de données</strong>
-        route: datasets
-      - text: Rechercher {} dans les <strong>indicateurs</strong>
-        route: indicators
-      - text: Rechercher {} dans les <strong>API</strong>
-        route: dataservices
-      - text: Rechercher {} dans les <strong>bouquets</strong>
-        route: bouquets
+  header:
+    admin_shortcut: true
+    button:
+      display: true
+      label: 'Donnez votre avis'
+      link: https://tally.so/r/wLWrzp
+    search:
+      display: true
+      placeholder: Rechercher...
+      dropdown:
+        - text: Rechercher {} dans les <strong>jeux de données</strong>
+          route: datasets
+        - text: Rechercher {} dans les <strong>indicateurs</strong>
+          route: indicators
+        - text: Rechercher {} dans les <strong>API</strong>
+          route: dataservices
+        - text: Rechercher {} dans les <strong>bouquets</strong>
+          route: bouquets
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
@@ -189,7 +191,6 @@ website:
     add_to_topic:
       enable: true
       page: bouquets
-      dataset_editorialization: true
     open_in_qgis: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
