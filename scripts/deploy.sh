@@ -4,7 +4,8 @@ set -e
 # Deploy script for udata-front-kit
 # Two-step deployment workflow with merge branch strategy
 
-VALID_SITES="ecospheres meteo-france logistique defis hackathon simplifions culture"
+# Discover valid sites from configs directory
+VALID_SITES=$(find configs -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | sort | tr '\n' ' ')
 VALID_ENVS="demo preprod prod"
 VALID_VERSIONS="major minor patch"
 
@@ -29,7 +30,7 @@ warn() {
 
 usage() {
   cat <<EOF
-Usage: $0 <command> <site> <env> <version>
+Usage: $0 <command> <site> <env> <version> [--source <branch>]
 
 Commands:
   prepare    Create merge branch, merge source, and create PR
@@ -40,12 +41,13 @@ Arguments:
   env        Environment (${VALID_ENVS})
   version    Version type (${VALID_VERSIONS})
 
-Examples:
-  # Step 1: Create deployment PR (handles conflicts locally)
-  $0 prepare ecospheres preprod minor
+Options:
+  --source <branch>   Source branch (required for prod, defaults to main for demo/preprod)
 
-  # Step 2: Merge validated PR with deployment trigger
+Examples:
+  $0 prepare ecospheres preprod minor
   $0 deploy ecospheres preprod minor
+  $0 prepare ecospheres prod minor --source ecospheres-preprod
 
 Merge branch strategy:
   - Creates temporary merge branch: {site}-{env}-merge
@@ -88,32 +90,32 @@ check_git_clean() {
   fi
 }
 
-check_branch_exists() {
+local_branch_exists() {
   local branch=$1
-  git fetch origin >/dev/null 2>&1
-  if ! git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+  git show-ref --verify --quiet "refs/heads/$branch"
+}
+
+remote_branch_exists() {
+  local branch=$1
+  git show-ref --verify --quiet "refs/remotes/origin/$branch"
+}
+
+check_remote_branch_exists() {
+  local branch=$1
+  if ! remote_branch_exists "$branch"; then
     error "Branch 'origin/$branch' does not exist"
   fi
 }
 
 get_source_branch() {
-  local site=$1
-  local env=$2
+  local env=$1
+  local source_override=$2
 
-  if [[ "$env" == "prod" ]]; then
-    # Auto-detect: check preprod first, then demo
-    local preprod_branch="${site}-preprod"
-    local demo_branch="${site}-demo"
-
-    if git show-ref --verify --quiet "refs/remotes/origin/$preprod_branch"; then
-      echo "$preprod_branch"
-    elif git show-ref --verify --quiet "refs/remotes/origin/$demo_branch"; then
-      echo "$demo_branch"
-    else
-      error "No preprod or demo branch found for $site (tried: $preprod_branch, $demo_branch)"
-    fi
+  if [[ -n "$source_override" ]]; then
+    echo "$source_override"
+  elif [[ "$env" == "prod" ]]; then
+    error "--source is required for prod deployments"
   else
-    # For demo/preprod, source is always main
     echo "main"
   fi
 }
@@ -122,6 +124,7 @@ cmd_prepare() {
   local site=$1
   local env=$2
   local version=$3
+  local source_override=$4
 
   # Validate arguments
   validate_site "$site"
@@ -132,28 +135,28 @@ cmd_prepare() {
   # Determine branches
   local target_branch="${site}-${env}"
   local merge_branch="${site}-${env}-merge"
-  local source_branch=$(get_source_branch "$site" "$env")
+  local source_branch=$(get_source_branch "$env" "$source_override")
 
   info "Preparing deployment: $source_branch → $target_branch"
   info "Using merge branch: $merge_branch"
-
-  # Check target branch exists
-  check_branch_exists "$target_branch"
 
   # Fetch latest refs
   info "Fetching latest from origin..."
   git fetch origin
 
+  # Check target branch exists
+  check_remote_branch_exists "$target_branch"
+
   # Check if we're in the middle of a merge
   if [[ -f .git/MERGE_HEAD ]]; then
-    error "Merge is not complete. Finish the merge commit first: git commit"
+    error "Merge is not complete. Finish the merge first."
   fi
 
   # Check if merge branch already exists locally
   local merge_branch_exists=false
   local current_branch=$(git branch --show-current)
 
-  if git show-ref --verify --quiet "refs/heads/$merge_branch"; then
+  if local_branch_exists "$merge_branch"; then
     merge_branch_exists=true
 
     # Check if we're on the merge branch (continuing after conflict resolution)
@@ -174,7 +177,7 @@ cmd_prepare() {
   fi
 
   # Check if merge branch exists on origin
-  if git show-ref --verify --quiet "refs/remotes/origin/$merge_branch"; then
+  if remote_branch_exists "$merge_branch"; then
     warn "Merge branch '$merge_branch' exists on origin."
     read -p "Delete it and start fresh? [y/N] " -n 1 -r
     echo
@@ -194,13 +197,15 @@ cmd_prepare() {
     # Merge source into merge branch
     info "Merging $source_branch into $merge_branch..."
     if ! git merge "origin/$source_branch" --no-edit; then
+      local source_arg=""
+      [[ -n "$source_override" ]] && source_arg=" --source $source_override"
       error "Merge conflicts detected!
 
 Please resolve conflicts manually:
   1. Edit conflicted files
   2. Stage resolved files: git add <files>
   3. Complete merge: git commit
-  4. Re-run: $0 prepare $site $env $version
+  4. Re-run: $0 prepare $site $env $version$source_arg
 
 Or abort: git merge --abort"
     fi
@@ -221,18 +226,15 @@ Or abort: git merge --abort"
   info "Pushing merge branch to origin..."
   git push -u origin "$merge_branch"
 
-  # Get source commit info for PR body
-  local source_commit=$(git rev-parse "origin/$source_branch")
-  local source_commit_short=$(git rev-parse --short "origin/$source_branch")
-
   # Create PR
   info "Creating PR: $merge_branch → $target_branch"
+  local today=$(date +%Y-%m-%d)
   local pr_body="## Deployment Summary
 
 - **Site:** $site
 - **Environment:** $env
 - **Version bump:** $version
-- **Source:** \`$source_branch\` (\`$source_commit_short\`)
+- **Source:** \`$source_branch\`
 - **Target:** \`$target_branch\`
 
 ## Checklist
@@ -249,13 +251,18 @@ After review and approval:
 ./scripts/deploy.sh deploy $site $env $version
 \`\`\`"
 
-  gh pr create \
+  local pr_url=$(gh pr create \
     --base "$target_branch" \
     --head "$merge_branch" \
-    --title "Deploy $site to $env ($version)" \
-    --body "$pr_body"
+    --title "release($site): $env $today-1" \
+    --body "$pr_body" \
+    --draft)
+
+  # Trigger review app creation
+  gh pr comment "$pr_url" --body "/deploy $site"
 
   info "✓ Deployment PR created successfully!"
+  info "$pr_url"
   info "Review the PR and when ready, run: ./scripts/deploy.sh deploy $site $env $version"
 }
 
@@ -263,6 +270,7 @@ cmd_deploy() {
   local site=$1
   local env=$2
   local version=$3
+  local source_override=$4
 
   # Validate arguments
   validate_site "$site"
@@ -273,12 +281,12 @@ cmd_deploy() {
   # Determine branches
   local target_branch="${site}-${env}"
   local merge_branch="${site}-${env}-merge"
-  local source_branch=$(get_source_branch "$site" "$env")
+  local source_branch=$(get_source_branch "$env" "$source_override")
 
   info "Deploying: $merge_branch → $target_branch"
 
   # Check target branch exists
-  check_branch_exists "$target_branch"
+  check_remote_branch_exists "$target_branch"
 
   # Fetch latest refs
   git fetch origin
@@ -338,16 +346,11 @@ cmd_deploy() {
 
   # Delete merge branch (remote and local)
   info "Cleaning up merge branch..."
-  if git push origin --delete "$merge_branch" 2>/dev/null; then
-    info "Deleted remote merge branch"
-  else
-    warn "Could not delete remote merge branch (may already be deleted)"
-  fi
+  git push origin --delete "$merge_branch" 2>/dev/null || true
+  git branch -D "$merge_branch" 2>/dev/null || true
 
-  if git show-ref --verify --quiet "refs/heads/$merge_branch"; then
-    git branch -D "$merge_branch"
-    info "Deleted local merge branch"
-  fi
+  # Return to main branch
+  git checkout main
 
   info "✓ Deployment completed successfully!"
   info "Commit: $commit_sha_short"
@@ -364,13 +367,28 @@ COMMAND=$1
 SITE=$2
 ENV=$3
 VERSION=$4
+shift 4
+
+# Parse optional arguments
+SOURCE_BRANCH=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --source)
+      SOURCE_BRANCH="$2"
+      shift 2
+      ;;
+    *)
+      error "Unknown option: $1"
+      ;;
+  esac
+done
 
 case "$COMMAND" in
   prepare)
-    cmd_prepare "$SITE" "$ENV" "$VERSION"
+    cmd_prepare "$SITE" "$ENV" "$VERSION" "$SOURCE_BRANCH"
     ;;
   deploy)
-    cmd_deploy "$SITE" "$ENV" "$VERSION"
+    cmd_deploy "$SITE" "$ENV" "$VERSION" "$SOURCE_BRANCH"
     ;;
   *)
     error "Unknown command: $COMMAND"
