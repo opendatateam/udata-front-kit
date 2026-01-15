@@ -131,6 +131,8 @@ cmd_prepare() {
   local env=$2
   local version=$3
   local source_override=$4
+  local source_arg=""
+  [[ -n "$source_override" ]] && source_arg=" --source $source_override"
 
   # Validate arguments
   validate_site "$site"
@@ -203,8 +205,6 @@ cmd_prepare() {
     # Merge source into merge branch
     info "Merging $source_branch into $merge_branch..."
     if ! git merge "origin/$source_branch" --no-edit; then
-      local source_arg=""
-      [[ -n "$source_override" ]] && source_arg=" --source $source_override"
       error "Merge conflicts detected!
 
 Please resolve conflicts manually:
@@ -223,7 +223,7 @@ Or abort: git merge --abort"
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     info "Cancelled. Merge branch '$merge_branch' exists locally. You can:"
-    info "  - Continue: $0 prepare $site $env $version"
+    info "  - Continue: $0 prepare $site $env $version$source_arg"
     info "  - Abort: git checkout main && git branch -D $merge_branch"
     exit 0
   fi
@@ -254,7 +254,7 @@ Or abort: git merge --abort"
 
 After review and approval:
 \`\`\`bash
-./scripts/deploy.sh deploy $site $env $version
+./scripts/deploy.sh deploy <pr_url>
 \`\`\`"
 
   local pr_url=$(gh pr create \
@@ -334,14 +334,14 @@ cmd_deploy() {
 
     # Find previous release tag for changelog
     git fetch --tags
-    local prev_tag=$(git tag --list "${site}-prod-*" --sort=-version:refname | head -1)
+    local prev_tag=$(git tag --list "${site}-prod-*" --sort=-creatordate | head -1)
 
-    local release_opts="--generate-notes --target $target_branch"
+    local release_opts=(--generate-notes --target "$target_branch")
     if [[ -n "$prev_tag" ]]; then
-      release_opts="$release_opts --notes-start-tag $prev_tag"
+      release_opts+=(--notes-start-tag "$prev_tag")
     fi
 
-    gh release create "$new_tag" $release_opts --title "$new_tag"
+    gh release create "$new_tag" "${release_opts[@]}" --title "$new_tag"
     info "Created release: $new_tag"
   fi
 
