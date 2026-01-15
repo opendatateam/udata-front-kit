@@ -224,7 +224,7 @@ Le script :
 - Pour les déploiements **prod** : crée une release GitHub avec changelog auto-généré
 - Déclenche automatiquement le pipeline GitLab
 
-##### Arguments
+**Arguments :**
 
 | Argument    | Valeurs possibles                                      |
 | ----------- | ------------------------------------------------------ |
@@ -232,7 +232,7 @@ Le script :
 | `<env>`     | `demo`, `preprod`, `prod`                              |
 | `<version>` | `major`, `minor`, `patch`                              |
 
-##### Options
+**Options :**
 
 | Option               | Description                                                               |
 | -------------------- | ------------------------------------------------------------------------- |
