@@ -19,6 +19,8 @@ const datasetIsIndicator = isIndicator(toRef(props, 'dataset'))
     v-if="datasetIsIndicator"
     :key="dataset.id"
     :dataset="dataset"
+    show-description
+    :show-metrics="false"
   />
   <DatasetCard
     v-else
