@@ -410,11 +410,13 @@ defineExpose({
                     target="_blank"
                     >Accéder au catalogue</a
                   >
-                  <button
+                  <DsfrButton
                     v-if="
                       factor.element?.id && ogcLayerInfo.has(factor.element.id)
                     "
-                    class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
+                    secondary
+                    size="sm"
+                    icon="fr-icon-road-map-line"
                     @click="
                       handleOpenInQgis(
                         factor.element.id,
@@ -423,7 +425,7 @@ defineExpose({
                     "
                   >
                     Ouvrir dans QGIS
-                  </button>
+                  </DsfrButton>
                 </div>
               </template>
             </TopicGroup>
