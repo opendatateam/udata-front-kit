@@ -233,7 +233,7 @@ Or abort: git merge --abort"
 
   # Create PR
   info "Creating PR: $merge_branch → $target_branch"
-  local today=$(date +%Y-%m-%d)
+  local today=$(date +%Y%m%d)
   local pr_body="## Deployment Summary
 
 - **Site:** $site
