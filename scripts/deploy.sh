@@ -43,6 +43,7 @@ Arguments:
 
 Options:
   --source <branch>   Source branch (required for prod, defaults to main for demo/preprod)
+  --ignore-git-clean  Skip the git clean check
 
 Examples:
   $0 prepare ecospheres preprod minor
@@ -85,6 +86,10 @@ validate_version() {
 }
 
 check_git_clean() {
+  if [[ "$IGNORE_GIT_CLEAN" == true ]]; then
+    warn "Skipping git clean check (--ignore-git-clean)"
+    return
+  fi
   if [[ -n $(git status --porcelain) ]]; then
     error "Git working directory is not clean. Commit or stash changes first."
   fi
@@ -371,11 +376,16 @@ shift 4
 
 # Parse optional arguments
 SOURCE_BRANCH=""
+IGNORE_GIT_CLEAN=false
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --source)
       SOURCE_BRANCH="$2"
       shift 2
+      ;;
+    --ignore-git-clean)
+      IGNORE_GIT_CLEAN=true
+      shift
       ;;
     *)
       error "Unknown option: $1"
