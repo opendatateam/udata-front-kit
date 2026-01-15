@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import IndicatorDatasetCard from '@/custom/ecospheres/components/indicators/IndicatorDatasetCard.vue'
 import { isIndicator } from '@/custom/ecospheres/utils/indicator'
 import type { DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
 import { toRef } from 'vue'
+import IndicatorInDatasetListCard from './IndicatorInDatasetListCard.vue'
 
 const props = defineProps<{
   dataset: DatasetV2
@@ -12,15 +12,20 @@ const props = defineProps<{
 }>()
 
 const datasetIsIndicator = isIndicator(toRef(props, 'dataset'))
+
+const indicatorUrl = computed(() => ({
+  name: 'indicators_detail',
+  params: { item_id: props.dataset.id }
+}))
 </script>
 
 <template>
-  <IndicatorDatasetCard
+  <IndicatorInDatasetListCard
     v-if="datasetIsIndicator"
     :key="dataset.id"
     :dataset="dataset"
-    show-description
-    :show-metrics="false"
+    :dataset-url="indicatorUrl"
+    :organization-url="organizationUrl"
   />
   <DatasetCard
     v-else

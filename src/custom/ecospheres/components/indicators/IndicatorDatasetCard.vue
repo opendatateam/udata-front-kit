@@ -14,19 +14,13 @@ import {
 } from '@datagouv/components-next'
 import TextClamp from 'vue3-text-clamp'
 
-import { stripFromMarkdown } from '@/utils'
 import { useOwnerName } from '@/utils/owned'
 
 type Props = {
   dataset: DatasetV2
-  showDescription?: boolean
-  showMetrics?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  showDescription: false,
-  showMetrics: true
-})
+const props = defineProps<Props>()
 const { formatRelativeIfRecentDate } = useFormatDate()
 
 const ownerName = useOwnerName(props.dataset)
@@ -101,18 +95,7 @@ const ownerName = useOwnerName(props.dataset)
             {{ formatRelativeIfRecentDate(dataset.last_update) }}</span
           >
         </div>
-        <p
-          v-if="showDescription && dataset.description"
-          class="fr-text--sm fr-my-1w text-grey-500"
-        >
-          <TextClamp
-            :auto-resize="true"
-            :text="stripFromMarkdown(dataset.description)"
-            :max-lines="2"
-          />
-        </p>
         <div
-          v-if="showMetrics"
           class="fr-mx-0 fr-mb-n1v fr-grid-row fr-grid-row--middle fr-text--sm text-mention-grey"
         >
           <div class="fr-hidden flex-sm dash-after-sm text-grey-500">
