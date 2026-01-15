@@ -238,6 +238,7 @@ Le script :
 | -------------------- | ------------------------------------------------------------------------- |
 | `--source <branch>`  | Branche source (obligatoire pour prod, défaut : `main` pour demo/preprod) |
 | `--ignore-git-clean` | Ignore la vérification de l'état git (utile pour les tests)               |
+| `--skip-release`     | Ne pas créer de release GitHub (prod uniquement)                          |
 
 ##### Solution 2 : Message de commit
 

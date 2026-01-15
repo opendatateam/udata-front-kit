@@ -49,6 +49,7 @@ Arguments (deploy):
 Options:
   --source <branch>   Source branch (required for prod, defaults to main for demo/preprod)
   --ignore-git-clean  Skip the git clean check
+  --skip-release      Skip GitHub release creation (prod only)
 
 Examples:
   $0 prepare ecospheres demo minor
@@ -325,7 +326,7 @@ cmd_deploy() {
   git branch -D "$merge_branch" 2>/dev/null || true
 
   # Create release for prod deployments
-  if [[ "$env" == "prod" ]]; then
+  if [[ "$env" == "prod" && "$SKIP_RELEASE" != true ]]; then
     info "Creating release..."
 
     # Extract date-increment from PR title: "release(site): prod 20260115-1" -> "20260115-1"
@@ -361,6 +362,7 @@ shift
 # Parse optional arguments (can appear anywhere after command)
 SOURCE_BRANCH=""
 IGNORE_GIT_CLEAN=false
+SKIP_RELEASE=false
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -370,6 +372,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --ignore-git-clean)
       IGNORE_GIT_CLEAN=true
+      shift
+      ;;
+    --skip-release)
+      SKIP_RELEASE=true
       shift
       ;;
     -*)
