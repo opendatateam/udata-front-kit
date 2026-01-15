@@ -204,12 +204,14 @@ website:
 
           [En savoir plus sur l’Open Data University.](/opendatauniversity)
     meta_description:
-  header_button:
-    display: false
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wQ7y47
-  header_search:
-    display: false
+  header:
+    admin_shortcut: false
+    button:
+      display: false
+      label: 'Donnez votre avis'
+      link: https://tally.so/r/wQ7y47
+    search:
+      display: false
   search_bar:
     display: false
     placeholder: 'Rechercher un jeu de données'

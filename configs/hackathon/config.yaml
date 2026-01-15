@@ -57,13 +57,15 @@ website:
 
         sub_section_buttons:
     meta_description:
-  header_button:
-    display: false
-    label: 'Donnez votre avis'
-    link:
-  header_search:
-    display: false
-    placeholder: Rechercher...
+  header:
+    admin_shortcut: false
+    button:
+      display: false
+      label: 'Donnez votre avis'
+      link:
+    search:
+      display: false
+      placeholder: Rechercher...
   search_bar:
     display: false
     placeholder: 'Rechercher un jeu de données'

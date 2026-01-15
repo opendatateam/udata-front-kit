@@ -37,10 +37,6 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  datasetEditorialization: {
-    type: Boolean,
-    default: true
-  },
   topicId: {
     type: String,
     required: true
@@ -261,7 +257,6 @@ defineExpose({
       Composition du {{ pageConf.labels.extended }}
     </h2>
     <SearchComponent
-      v-if="datasetEditorialization"
       id="filter-factors"
       :is-filter="true"
       search-label="Filtrer les données"
@@ -302,7 +297,7 @@ defineExpose({
         </li>
       </ul>
     </details>
-    <div v-if="datasetEditorialization" class="fr-mt-10v">
+    <div class="fr-mt-10v">
       <ul role="list" class="groups fr-m-0 fr-p-0">
         <template v-for="[group, groupFactors] in filteredResults" :key="group">
           <li v-if="groupFactors.length && !isGroupOnlyHidden(group)">
@@ -402,15 +397,6 @@ defineExpose({
         </template>
       </ul>
     </div>
-    <div v-else>
-      <div v-for="(factor, index) in factors" :key="index">
-        <TopicDatasetCard
-          v-if="factor.element?.id"
-          :factor="factor"
-          :dataset-content="getDatasetForFactor(factor)"
-        />
-      </div>
-    </div>
   </template>
 
   <!-- add/edit modal -->
@@ -419,7 +405,6 @@ defineExpose({
     ref="modal"
     v-model="factors"
     v-model:groups-model="groupedFactors"
-    :dataset-editorialization
     :topic-id="props.topicId"
     @submit-modal="emit('factorChanged')"
   />
