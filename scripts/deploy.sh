@@ -30,25 +30,31 @@ warn() {
 
 usage() {
   cat <<EOF
-Usage: $0 <command> <site> <env> <version> [--source <branch>]
+Usage:
+  $0 prepare <site> <env> <version> [--source <branch>]
+  $0 deploy <pr>
 
 Commands:
   prepare    Create merge branch, merge source, and create PR
   deploy     Merge validated PR with deployment trigger
 
-Arguments:
+Arguments (prepare):
   site       Site name (${VALID_SITES})
   env        Environment (${VALID_ENVS})
   version    Version type (${VALID_VERSIONS})
+
+Arguments (deploy):
+  pr         PR number or URL
 
 Options:
   --source <branch>   Source branch (required for prod, defaults to main for demo/preprod)
   --ignore-git-clean  Skip the git clean check
 
 Examples:
-  $0 prepare ecospheres preprod minor
-  $0 deploy ecospheres preprod minor
+  $0 prepare ecospheres demo minor
   $0 prepare ecospheres prod minor --source ecospheres-preprod
+  $0 deploy 123
+  $0 deploy https://github.com/org/repo/pull/123
 
 Merge branch strategy:
   - Creates temporary merge branch: {site}-{env}-merge
@@ -268,115 +274,77 @@ After review and approval:
 
   info "✓ Deployment PR created successfully!"
   info "$pr_url"
-  info "Review the PR and when ready, run: ./scripts/deploy.sh deploy $site $env $version"
+  info "Review the PR and when ready, run: ./scripts/deploy.sh deploy $pr_url"
 }
 
 cmd_deploy() {
-  local site=$1
-  local env=$2
-  local version=$3
-  local source_override=$4
+  local pr_ref=$1
 
-  # Validate arguments
+  # Fetch PR info
+  info "Fetching PR $pr_ref..."
+  local pr_json=$(gh pr view "$pr_ref" --json headRefName,baseRefName,body,state,number,reviewDecision,title)
+  local pr_number=$(echo "$pr_json" | jq -r '.number')
+  local pr_body=$(echo "$pr_json" | jq -r '.body')
+  local pr_title=$(echo "$pr_json" | jq -r '.title')
+
+  local state=$(echo "$pr_json" | jq -r '.state')
+  if [[ "$state" != "OPEN" ]]; then
+    error "PR #$pr_number is not open (state: $state)"
+  fi
+
+  local review_decision=$(echo "$pr_json" | jq -r '.reviewDecision')
+  if [[ "$review_decision" != "APPROVED" ]]; then
+    error "PR #$pr_number is not approved (reviewDecision: $review_decision)"
+  fi
+
+  local merge_branch=$(echo "$pr_json" | jq -r '.headRefName')
+  local target_branch=$(echo "$pr_json" | jq -r '.baseRefName')
+
+  # Parse site and env from branch name ({site}-{env}-merge)
+  if [[ ! "$merge_branch" =~ ^(.+)-([^-]+)-merge$ ]]; then
+    error "Cannot parse site/env from branch name: $merge_branch"
+  fi
+  local site="${BASH_REMATCH[1]}"
+  local env="${BASH_REMATCH[2]}"
+
+  # Parse version from PR body
+  local version=$(echo "$pr_body" | sed -n 's/.*\*\*Version bump:\*\* \([a-z]*\).*/\1/p')
+  if [[ -z "$version" ]]; then
+    error "Cannot parse version from PR body"
+  fi
+
+  # Validate parsed values
   validate_site "$site"
   validate_env "$env"
   validate_version "$version"
-  check_git_clean
-
-  # Determine branches
-  local target_branch="${site}-${env}"
-  local merge_branch="${site}-${env}-merge"
-  local source_branch=$(get_source_branch "$env" "$source_override")
 
   info "Deploying: $merge_branch → $target_branch"
+  info "Site: $site, Env: $env, Version: $version"
 
-  # Check target branch exists
-  check_remote_branch_exists "$target_branch"
+  # Merge PR
+  local commit_msg="[${env}:${site}:${version}] ${pr_title} #${pr_number}"
+  info "Merging PR #$pr_number with message: $commit_msg"
+  gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch
 
-  # Fetch latest refs
-  git fetch origin
-
-  # Find open PR
-  info "Looking for PR from $merge_branch to $target_branch..."
-  local pr_list=$(gh pr list --base "$target_branch" --head "$merge_branch" --state open --json number --jq '.[].number')
-
-  if [[ -z "$pr_list" ]]; then
-    error "No open PR found from $merge_branch → $target_branch. Run prepare first."
-  fi
-
-  local pr_count=$(echo "$pr_list" | wc -l)
-  if [[ $pr_count -gt 1 ]]; then
-    error "Multiple PRs found from $merge_branch → $target_branch. Please close duplicates."
-  fi
-
-  local pr_number=$pr_list
-
-  # Show PR details
-  info "Found PR #$pr_number"
-  gh pr view "$pr_number"
-  echo
-
-  # Always confirm
-  warn "Deploy $site to $env?"
-  read -p "Continue? [y/N] " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    info "Deployment cancelled"
-    exit 0
-  fi
-
-  # Checkout target branch
-  info "Checking out $target_branch..."
-  git checkout "$target_branch"
-
-  # Pull latest
-  info "Pulling latest from origin..."
-  git pull origin "$target_branch"
-
-  # Merge with normalized commit message
-  local commit_msg="[${env}:${site}:${version}]"
-  info "Merging $merge_branch with message: $commit_msg"
-  git merge "$merge_branch" -m "$commit_msg"
-
-  # Push to trigger GitLab CI/CD
-  info "Pushing to origin to trigger deployment..."
-  git push origin "$target_branch"
-
-  local commit_sha=$(git rev-parse HEAD)
-  local commit_sha_short=$(git rev-parse --short HEAD)
-
-  # Close PR
-  info "Closing PR #$pr_number..."
-  gh pr close "$pr_number"
-
-  # Delete merge branch (remote and local)
-  info "Cleaning up merge branch..."
-  git push origin --delete "$merge_branch" 2>/dev/null || true
+  # Clean up local merge branch if it exists
   git branch -D "$merge_branch" 2>/dev/null || true
 
-  # Return to main branch
-  git checkout main
-
   info "✓ Deployment completed successfully!"
-  info "Commit: $commit_sha_short"
   info "GitLab CI/CD pipeline should be triggered now."
-  info "Monitor deployment in GitLab: check your infra repository"
 }
 
 # Main script
-if [[ $# -lt 4 ]]; then
+if [[ $# -lt 2 ]]; then
   usage
 fi
 
 COMMAND=$1
-SITE=$2
-ENV=$3
-VERSION=$4
-shift 4
+shift
 
-# Parse optional arguments
+# Parse optional arguments (can appear anywhere after command)
 SOURCE_BRANCH=""
 IGNORE_GIT_CLEAN=false
+POSITIONAL=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --source)
@@ -387,18 +355,28 @@ while [[ $# -gt 0 ]]; do
       IGNORE_GIT_CLEAN=true
       shift
       ;;
-    *)
+    -*)
       error "Unknown option: $1"
+      ;;
+    *)
+      POSITIONAL+=("$1")
+      shift
       ;;
   esac
 done
 
 case "$COMMAND" in
   prepare)
-    cmd_prepare "$SITE" "$ENV" "$VERSION" "$SOURCE_BRANCH"
+    if [[ ${#POSITIONAL[@]} -lt 3 ]]; then
+      error "prepare requires: <site> <env> <version>"
+    fi
+    cmd_prepare "${POSITIONAL[0]}" "${POSITIONAL[1]}" "${POSITIONAL[2]}" "$SOURCE_BRANCH"
     ;;
   deploy)
-    cmd_deploy "$SITE" "$ENV" "$VERSION" "$SOURCE_BRANCH"
+    if [[ ${#POSITIONAL[@]} -lt 1 ]]; then
+      error "deploy requires: <pr>"
+    fi
+    cmd_deploy "${POSITIONAL[0]}"
     ;;
   *)
     error "Unknown command: $COMMAND"
