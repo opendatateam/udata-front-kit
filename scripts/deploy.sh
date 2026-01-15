@@ -70,11 +70,6 @@ validate_site() {
   if [[ ! " $VALID_SITES " =~ " $site " ]]; then
     error "Invalid site '$site'. Available: $VALID_SITES"
   fi
-
-  # Check config file exists
-  if [[ ! -f "configs/$site/config.yaml" ]]; then
-    error "Config file not found: configs/$site/config.yaml"
-  fi
 }
 
 validate_env() {
@@ -329,8 +324,30 @@ cmd_deploy() {
   # Clean up local merge branch if it exists
   git branch -D "$merge_branch" 2>/dev/null || true
 
+  # Create release for prod deployments
+  if [[ "$env" == "prod" ]]; then
+    info "Creating release..."
+
+    # Extract date-increment from PR title: "release(site): prod 20260115-1" -> "20260115-1"
+    local date_increment=$(echo "$pr_title" | sed 's/.*prod //')
+    local new_tag="${site}-prod-${date_increment}"
+
+    # Find previous release tag for changelog
+    git fetch --tags
+    local prev_tag=$(git tag --list "${site}-prod-*" --sort=-version:refname | head -1)
+
+    local release_opts="--generate-notes --target $target_branch"
+    if [[ -n "$prev_tag" ]]; then
+      release_opts="$release_opts --notes-start-tag $prev_tag"
+    fi
+
+    gh release create "$new_tag" $release_opts --title "$new_tag"
+    info "Created release: $new_tag"
+  fi
+
   info "✓ Deployment completed successfully!"
   info "GitLab CI/CD pipeline should be triggered now."
+  info "https://github.com/opendatateam/udata-front-kit/actions"
 }
 
 # Main script
