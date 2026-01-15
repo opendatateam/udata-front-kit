@@ -222,7 +222,7 @@ function addDatasetLayers(
       id: layerId,
       name: layerName,
       expanded: '0',
-      checked: 'Qt::Checked'
+      checked: 'Qt::Unchecked'
     })
     layerTreeLayer.ele('customproperties').ele('Option')
 
