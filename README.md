@@ -169,64 +169,77 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 ### 🏭 Déploiement en preprod et en production
 
-#### 🛠️ Script de déploiement local (recommandé)
+#### Comment déployer en préproduction et en production
 
-Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes :
+##### Solution 1 : Script de déploiement local (recommandé)
 
-**Étape 1 : Préparer le déploiement**
+Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes.
 
-Crée une branche de merge temporaire, fusionne les changements (avec résolution de conflits si nécessaire), et crée une PR :
+**Prérequis :** [GitHub CLI (`gh`)](https://cli.github.com/) et `jq` installés, `gh` authentifié.
+
+##### Étape 1 : Préparer le déploiement
+
+Crée une branche de merge temporaire, fusionne les changements (avec résolution de conflits si nécessaire), et crée une PR draft :
 
 ```bash
+# Pour demo/preprod (source = main par défaut)
 ./scripts/deploy.sh prepare <site> <env> <version>
 
-# Exemple
-./scripts/deploy.sh prepare ecospheres preprod minor
+# Pour prod (--source obligatoire)
+./scripts/deploy.sh prepare <site> prod <version> --source <site>-preprod
+```
+
+**Exemples :**
+
+```bash
+./scripts/deploy.sh prepare ecospheres demo minor
+./scripts/deploy.sh prepare ecospheres prod minor --source ecospheres-demo
 ```
 
 Le script :
 
 - Crée une branche `{site}-{env}-merge` depuis `{site}-{env}`
-- Fusionne `main` (pour demo/preprod) ou `{site}-preprod` (pour prod) dans cette branche
-- Pousse la branche et crée une PR pour revue
-- Gère automatiquement les conflits (vous les résolvez localement avant de créer la PR)
+- Fusionne la branche source dans cette branche
+- En cas de conflits, vous les résolvez localement puis relancez la commande
+- Pousse la branche et crée une PR draft
+- Poste un commentaire `/deploy {site}` pour créer une review app
 
-**Étape 2 : Déployer**
+##### Étape 2 : Déployer
 
-Après validation de la PR, merge avec le message de commit qui déclenche le CI/CD GitLab :
+Après validation et approbation de la PR, lancez le déploiement avec l'URL ou le numéro de la PR :
 
 ```bash
-./scripts/deploy.sh deploy <site> <env> <version>
+./scripts/deploy.sh deploy <pr>
 
-# Exemple
-./scripts/deploy.sh deploy ecospheres preprod minor
+# Exemples
+./scripts/deploy.sh deploy 123
+./scripts/deploy.sh deploy https://github.com/opendatateam/udata-front-kit/pull/123
 ```
 
 Le script :
 
-- Trouve la PR de déploiement
-- Affiche les détails et demande confirmation
-- Merge avec le message normalisé `[{env}:{site}:{version}]`
-- Nettoie la branche de merge
+- Vérifie que la PR est ouverte et approuvée
+- Merge la PR avec le message normalisé `[{env}:{site}:{version}] {titre_pr} #{numéro_pr}`
+- Supprime la branche de merge
+- Pour les déploiements **prod** : crée une release GitHub avec changelog auto-généré
 - Déclenche automatiquement le pipeline GitLab
 
-**Arguments :**
+##### Arguments
 
-- `<site>` : `ecospheres`, `meteo-france`, `logistique`, `defis`, `hackathon`, `simplifions`, `culture`
-- `<env>` : `demo`, `preprod`, `prod`
-- `<version>` : `major`, `minor`, `patch`
+| Argument    | Valeurs possibles                                      |
+| ----------- | ------------------------------------------------------ |
+| `<site>`    | Déterminé dynamiquement depuis les dossiers `configs/` |
+| `<env>`     | `demo`, `preprod`, `prod`                              |
+| `<version>` | `major`, `minor`, `patch`                              |
 
-**Prérequis :** [GitHub CLI (`gh`)](https://cli.github.com/) installé et authentifié
+##### Options
 
----
+| Option               | Description                                                               |
+| -------------------- | ------------------------------------------------------------------------- |
+| `--source <branch>`  | Branche source (obligatoire pour prod, défaut : `main` pour demo/preprod) |
+| `--ignore-git-clean` | Ignore la vérification de l'état git (utile pour les tests)               |
 
-#### Déploiement alternatif via commit message ou GitHub Actions
-
-Le déploiement des verticales thématiques en preprod et en production peut également s'effectuer via un workflow GitHub qui peut être déclenché de deux manières différentes :
-
-#### Comment déployer en préproduction et en production
-
-## Solution 1 - par le message de Git commit
+##### Solution 2 : Message de commit
 
 Le déploiement des verticales thématiques en preprod et en production peut s'effectuer via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
 
@@ -257,9 +270,9 @@ Le workflow se déclenche sur tous les push vers toutes les branches, mais ne s'
 
 Toutes les variables et secrets nécessaires pour ce workflow sont listés dans la section `env:` du [workflow de déploiement](.github/workflows/create-deploy-release.yml).
 
-## Solution 2 — sur l'interface web de GitHub Actions
+##### Solution 3 : Interface GitHub Actions
 
-Le déploiement peut également être déclenché manuellement via l'interface GitHub Actions :
+Le déploiement peut être déclenché manuellement via l'interface GitHub Actions :
 
 1. **Aller dans l'onglet "Actions"** du dépôt GitHub
 2. **Sélectionner "Deployment on datagouv domains with version bump"** dans la liste des workflows
