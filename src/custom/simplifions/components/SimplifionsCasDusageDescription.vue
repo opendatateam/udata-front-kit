@@ -1,9 +1,6 @@
 <template>
-  <!-- eslint-disable vue/no-v-html -->
-  <div v-if="casUsage === undefined" class="loading">
-    Chargement du cas d'usage en cours...
-  </div>
-  <div v-else class="test_cas-d-usage-description">
+  <ContentPlaceholder v-if="isLoading" />
+  <div v-if="casUsage" class="test_cas-d-usage-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
@@ -105,10 +102,12 @@
           Contexte
         </h3>
 
+        <!-- eslint-disable vue/no-v-html -->
         <p
           v-if="casUsage.Contexte"
           v-html="fromMarkdown(casUsage.Contexte)"
         ></p>
+        <!-- eslint-enable vue/no-v-html -->
 
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -122,10 +121,12 @@
           Cadre juridique
         </h3>
 
+        <!-- eslint-disable vue/no-v-html -->
         <p
           v-if="casUsage.Cadre_juridique"
           v-html="fromMarkdown(casUsage.Cadre_juridique)"
         ></p>
+        <!-- eslint-enable vue/no-v-html -->
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
           <a href="#modification-contenu">✍️ Proposer un contenu</a>.
@@ -187,6 +188,7 @@
 </template>
 
 <script setup lang="ts">
+import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
@@ -200,6 +202,7 @@ import SimplifionsTags from './SimplifionsTags.vue'
 const props = defineProps<{
   topic: Topic
   pageKey: string
+  hideLoader: (() => void) | null
 }>()
 
 const casUsageId = (props.topic.extras as TopicCasUsagesExtras)[
@@ -208,9 +211,13 @@ const casUsageId = (props.topic.extras as TopicCasUsagesExtras)[
 
 const casUsage = ref<CasUsage | undefined>(undefined)
 const recommandations = ref<Recommandation[] | undefined>(undefined)
+const isLoading = ref(true)
 
 grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
   casUsage.value = data.fields as CasUsage
+
+  isLoading.value = false
+  props.hideLoader?.()
 
   grist
     .getRecords(
