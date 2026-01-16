@@ -1,5 +1,5 @@
 <template>
-  <div class="integrateurs-filters fr-mb-4w">
+  <div class="integrateurs-filters fr-mb-2w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <!-- Type de solutions filter -->
       <div class="fr-col-12 fr-col-md-4">
@@ -68,9 +68,9 @@
       </div>
     </div>
 
-    <!-- Second row: toggle + count + sort -->
-    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-mt-2w">
-      <div class="fr-col-12 fr-col-md-4">
+    <!-- Second row: toggle -->
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12">
         <div class="fr-toggle">
           <input
             id="toggle-public"
@@ -84,35 +84,31 @@
           </label>
         </div>
       </div>
+    </div>
+  </div>
+  <!-- Third row: count + sort -->
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+    <div class="fr-col-12 fr-col-md-6">
+      <p class="fr-text--bold fr-mb-0 fr-ml-2w">
+        {{ filteredCount }} solution{{
+          filteredCount > 1 ? 's' : ''
+        }}
+        disponible{{ filteredCount > 1 ? 's' : '' }}
+      </p>
+    </div>
 
-      <div class="fr-col-12 fr-col-md-4">
-        <p class="fr-text--bold fr-mb-0">
-          {{ filteredCount }} solution{{
-            filteredCount > 1 ? 's' : ''
-          }}
-          disponible{{ filteredCount > 1 ? 's' : '' }}
-        </p>
-      </div>
-
-      <div class="fr-col-12 fr-col-md-4">
-        <div class="sort-container">
-          <label for="sort-by" class="fr-label fr-mr-2w"> Trier par : </label>
-          <select
-            id="sort-by"
-            v-model="sortBy"
-            class="fr-select fr-select--inline"
-            @change="emitFilters"
-          >
-            <option value="integration-desc">
-              Le plus de données intégrées
-            </option>
-            <option value="integration-asc">
-              Le moins de données intégrées
-            </option>
-            <option value="name-asc">Nom (A-Z)</option>
-            <option value="name-desc">Nom (Z-A)</option>
-          </select>
-        </div>
+    <div class="fr-col-12 fr-col-md-6">
+      <div class="sort-container">
+        <label for="sort-by" class="fr-label fr-mr-2w"> Trier par : </label>
+        <select
+          id="sort-by"
+          v-model="sortBy"
+          class="fr-select fr-select--inline"
+          @change="emitFilters"
+        >
+          <option value="integration">Le plus de données intégrées</option>
+          <option value="title">Titre</option>
+        </select>
       </div>
     </div>
   </div>
@@ -144,7 +140,7 @@ const selectedTypeSolution = ref('')
 const selectedCasUsage = ref<number | null>(null)
 const minApisIntegrated = ref(0)
 const onlyPublic = ref(false)
-const sortBy = ref('integration-desc')
+const sortBy = ref('integration')
 
 const availableCasUsages = computed(() => {
   return props.casUsages.map((cu) => ({
