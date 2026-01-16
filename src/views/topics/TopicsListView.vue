@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter()
 const route = useRoute()
-const { meta, pageConf } = useCurrentPageConf()
+const { meta, pageConf, pageKey } = useCurrentPageConf()
 
 const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
 const searchResultsMessage = computed(
@@ -41,7 +41,7 @@ const links = [
 ]
 
 const createUrl = computed(() => {
-  return { name: `${meta.pageKey}_add`, query: route.query }
+  return { name: `${pageKey}_add`, query: route.query }
 })
 
 const search = useDebounceFn((query) => {
@@ -75,7 +75,7 @@ onMounted(() => {
     <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
       <h1 class="fr-mb-0">{{ capitalize(pageConf.labels.plural) }}</h1>
       <div
-        v-if="userStore.canAddTopic(meta.pageKey)"
+        v-if="userStore.canAddTopic(pageKey)"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
