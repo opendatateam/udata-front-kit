@@ -125,9 +125,9 @@
             <li v-if="solutionsIntegratices.length">
               <a
                 id="summary-link-3"
-                href="#editeurs-logiciels"
+                href="#solutions-integratices"
                 class="fr-summary__link"
-                >Éditeurs de logiciels</a
+                >Solutions intégratrices</a
               >
             </li>
           </ol>
@@ -187,7 +187,7 @@
 
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
       <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
-        Possibilités de simplification :
+        Possibilités de simplification
       </h2>
 
       <div>
@@ -287,7 +287,7 @@
       </p>
     </div>
 
-    <div v-if="solutionsIntegratices.length" id="editeurs-logiciels">
+    <div v-if="solutionsIntegratices.length" id="solutions-integratices">
       <h2 class="colored-title fr-h2 fr-mt-8w">
         Solutions intégrant "{{ topic.name }}"
       </h2>
@@ -381,7 +381,7 @@ const integrateursFilters = ref<IntegrateursFilters>({
   casUsage: null,
   minApisIntegrated: 0,
   onlyPublic: false,
-  sortBy: 'integration-desc'
+  sortBy: 'integration'
 })
 
 grist.getRecord('Solutions', solutionId).then((data) => {
@@ -462,11 +462,9 @@ const maxApisCount = computed(() => {
   return availableApisOrDatasets.value.length
 })
 
-// Helper to count integrated APIs for a solution
+// Helper to count integrated APIs or datasets for a solution
 const getIntegrationCount = (sol: SolutionRecord) => {
-  return (sol.fields.API_ou_datasets_integres || []).filter((apiId) =>
-    availableApisOrDatasets.value.includes(apiId)
-  ).length
+  return (sol.fields.API_ou_datasets_integres || []).length
 }
 
 const filteredAndSortedSolutions = computed(() => {
@@ -506,17 +504,11 @@ const filteredAndSortedSolutions = computed(() => {
   // Sort based on sortBy value
   return filtered.sort((a, b) => {
     switch (integrateursFilters.value.sortBy) {
-      case 'integration-desc': {
+      case 'integration': {
         return getIntegrationCount(b) - getIntegrationCount(a)
       }
-      case 'integration-asc': {
-        return getIntegrationCount(a) - getIntegrationCount(b)
-      }
-      case 'name-asc': {
+      case 'title': {
         return a.fields.Nom.localeCompare(b.fields.Nom)
-      }
-      case 'name-desc': {
-        return b.fields.Nom.localeCompare(a.fields.Nom)
       }
       default:
         return 0
