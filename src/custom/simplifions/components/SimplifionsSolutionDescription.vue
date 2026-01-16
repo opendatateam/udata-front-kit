@@ -122,6 +122,14 @@
                 >Données et API</a
               >
             </li>
+            <li v-if="solutionsIntegratices.length">
+              <a
+                id="summary-link-3"
+                href="#editeurs-logiciels"
+                class="fr-summary__link"
+                >Éditeurs de logiciels</a
+              >
+            </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
           <p class="fr-text--sm">
@@ -279,6 +287,23 @@
       </p>
     </div>
 
+    <div v-if="solutionsIntegratices.length" id="editeurs-logiciels">
+      <h2 class="colored-title fr-h2 fr-mt-8w">Éditeurs de logiciels</h2>
+      <p class="fr-text--sm fr-mb-2w">
+        Ces éditeurs de logiciels ont intégré les données et API fournies par
+        cette solution :
+      </p>
+      <ul class="fr-grid-row fr-grid-row--gutters list-none">
+        <li
+          v-for="editeur in solutionsIntegratices"
+          :key="editeur.id"
+          class="fr-col-12 fr-col-md-6 fr-col-lg-4 fr-mb-2w"
+        >
+          <SimplifionsEditorSoftwareCard :solution="editeur" />
+        </li>
+      </ul>
+    </div>
+
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
       <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
@@ -303,10 +328,11 @@ import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
-import type { ApiOrDataset, Solution } from '../model/grist'
+import type { ApiOrDataset, Solution, SolutionRecord } from '../model/grist'
 import type { TopicSolutionsExtras } from '../model/topics'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
 import SimplifionsDataApi from './SimplifionsDataApi.vue'
+import SimplifionsEditorSoftwareCard from './SimplifionsEditorSoftwareCard.vue'
 
 const props = defineProps<{
   topic: Topic
@@ -321,6 +347,7 @@ const solutionId = (props.topic.extras as TopicSolutionsExtras)[
 const solution = ref<Solution | undefined>(undefined)
 const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
 const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
+const solutionsIntegratices = ref<SolutionRecord[]>([])
 
 grist.getRecord('Solutions', solutionId).then((data) => {
   solution.value = data.fields as Solution
@@ -351,6 +378,16 @@ grist.getRecord('Solutions', solutionId).then((data) => {
         apisOrDatasetsFournis.value = (
           data.map((record) => record.fields) as ApiOrDataset[]
         ).filter((apiOrDataset) => apiOrDataset.Visible_sur_simplifions)
+      })
+  }
+
+  if (solution.value.solutions_integratrices?.length) {
+    grist
+      .getRecordsByIds('Solutions', solution.value.solutions_integratrices)
+      .then((solutions) => {
+        solutionsIntegratices.value = (solutions as SolutionRecord[]).filter(
+          (sol) => sol.fields.Visible_sur_simplifions
+        )
       })
   }
 })
