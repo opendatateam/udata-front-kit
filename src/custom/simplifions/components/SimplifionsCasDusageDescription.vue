@@ -1,6 +1,6 @@
 <template>
-  <ContentPlaceholder v-if="isLoading" />
-  <div v-if="casUsage" class="test_cas-d-usage-description">
+  <ContentPlaceholder v-if="!casUsage" />
+  <div v-else class="test_cas-d-usage-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
         <div class="topic__header fr-mb-4v">
@@ -211,12 +211,11 @@ const casUsageId = (props.topic.extras as TopicCasUsagesExtras)[
 
 const casUsage = ref<CasUsage | undefined>(undefined)
 const recommandations = ref<Recommandation[] | undefined>(undefined)
-const isLoading = ref(true)
 
 grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
   casUsage.value = data.fields as CasUsage
 
-  isLoading.value = false
+  // hide parent component loader
   props.hideLoader?.()
 
   grist
