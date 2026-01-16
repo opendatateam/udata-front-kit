@@ -54,10 +54,11 @@ const search = useDebounceFn((query) => {
   })
 }, debounceWait)
 
-const FiltersComponent = useAsyncComponent(
-  () => meta?.filtersComponent,
-  defineAsyncComponent(() => import('@/components/pages/PageFilters.vue'))
-)
+const FiltersComponent = useAsyncComponent(() => meta?.filtersComponent, {
+  fallback: defineAsyncComponent(
+    () => import('@/components/pages/PageFilters.vue')
+  )
+})
 
 // TODO: this should be handled by the router, but we don't have access to pageConf there
 onMounted(() => {
