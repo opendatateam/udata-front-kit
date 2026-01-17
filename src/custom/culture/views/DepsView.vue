@@ -150,7 +150,6 @@ onMounted(() => {
           id="big-select-search"
           :placeholder="config.website.header_search.placeholder"
           search-label="Rechercher"
-          :dropdown="true"
           :search-endpoint-params="{ tag: 'deps-doc' }"
         />
       </div>
