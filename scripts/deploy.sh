@@ -254,6 +254,7 @@ After review and approval:
 ./scripts/deploy.sh deploy <pr_url>
 \`\`\`"
 
+  # TODO: `-1` suffix could be dynamic
   local pr_url=$(gh pr create \
     --base "$target_branch" \
     --head "$merge_branch" \
