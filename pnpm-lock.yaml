@@ -16,6 +16,9 @@ importers:
       '@gouvfr/dsfr':
         specifier: 1.11.2
         version: 1.11.2
+      '@gouvfr/dsfr-chart':
+        specifier: ^2.0.4
+        version: 2.0.4
       '@gouvminint/vue-dsfr':
         specifier: ^8.6.0
         version: 8.6.0(@iconify/vue@4.3.0(vue@3.5.25(typescript@5.7.3)))(vue-router@4.6.3(vue@3.5.25(typescript@5.7.3)))(vue@3.5.25(typescript@5.7.3))
@@ -801,6 +804,12 @@ packages:
     resolution:
       {
         integrity: sha512-BfNqNW6KA83Nexspgb9DZuz578R7HT8MZw1CfK9I6Ah4QReNWEJsXWHN+SdmOVLNGmTPDi+fDT535Df5PzMLbQ==
+      }
+
+  '@gouvfr/dsfr-chart@2.0.4':
+    resolution:
+      {
+        integrity: sha512-/JoW6R7ystExxvuLvHacR0ZWcL1PpDkUyG/niF8jgqRaksWgb31EpJGQjmgaHR29nrANdyvoRb1DEQAL00XZ1A==
       }
 
   '@gouvfr/dsfr@1.11.2':
@@ -8553,6 +8562,8 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@gouvfr/dsfr-chart@2.0.4': {}
 
   '@gouvfr/dsfr@1.11.2': {}
 
