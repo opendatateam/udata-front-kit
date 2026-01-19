@@ -314,13 +314,10 @@ cmd_deploy() {
   info "Deploying: $merge_branch → $target_branch"
   info "Site: $site, Env: $env, Version: $version"
 
-  # Merge PR
+  # Merge PR and delete merge branches locally and remotely
   local commit_msg="[${env}:${site}:${version}] ${pr_title} #${pr_number}"
   info "Merging PR #$pr_number with message: $commit_msg"
   gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch
-
-  # Clean up local merge branch if it exists
-  git branch -D "$merge_branch" 2>/dev/null || true
 
   # Create release for prod deployments
   if [[ "$env" == "prod" && "$SKIP_RELEASE" != true ]]; then
