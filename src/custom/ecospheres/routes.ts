@@ -22,7 +22,11 @@ export const routes: RouteRecordRaw[] = [
   },
   useDatasetSearchPageRoutes({
     pageKey: 'datasets',
-    metaTitle: 'Données'
+    metaTitle: 'Données',
+    cardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   useDataserviceSearchPageRoutes({
     pageKey: 'dataservices',

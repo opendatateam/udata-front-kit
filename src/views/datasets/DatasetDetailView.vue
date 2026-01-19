@@ -5,7 +5,6 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
-import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
@@ -31,26 +30,29 @@ const datasetId = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
-
-const canEdit = computed(() => {
-  return pageConf.editable && userStore.hasEditPermissions(dataset.value)
-})
-const canAddToTopic = computed(() => {
-  return topicPageConf && userStore.loggedIn && canAddTopic
-})
-
-const dataset = computed(() => datasetStore.get(datasetId))
-
-const showAddToTopicModal = ref(false)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 
 const datasetsConf = useDatasetsConf()
-const topicPageConf = datasetsConf.add_to_topic?.page
-  ? usePageConf(datasetsConf.add_to_topic.page)
-  : null
+const topicPageKey = datasetsConf.add_to_topic?.page
+const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
+
+const canEdit = computed(() => {
+  return pageConf.editable && userStore.hasEditPermissions(dataset.value)
+})
+const canAddToTopic = computed(() => {
+  return (
+    topicPageConf &&
+    topicPageKey &&
+    userStore.loggedIn &&
+    userStore.canAddTopic(topicPageKey)
+  )
+})
+
+const dataset = computed(() => datasetStore.get(datasetId))
+
+const showAddToTopicModal = ref(false)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
