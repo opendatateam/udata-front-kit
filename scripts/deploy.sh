@@ -58,9 +58,9 @@ Examples:
   $0 deploy https://github.com/org/repo/pull/123
 
 Merge branch strategy:
-  - Creates temporary merge branch: {site}-{env}-merge
+  - Creates temporary merge branch: {site}-{env}-{version}-merge
   - Merges source → merge branch (resolve conflicts locally)
-  - Creates PR: {site}-{env}-merge → {site}-{env}
+  - Creates PR: {site}-{env}-{version}-merge → {site}-{env}
   - After deploy: deletes merge branch
 EOF
   exit 1
@@ -135,7 +135,7 @@ cmd_prepare() {
 
   # Determine branches
   local target_branch="${site}-${env}"
-  local merge_branch="${site}-${env}-merge"
+  local merge_branch="${site}-${env}-${version}-merge"
   local source_branch=$(get_source_branch "$env" "$source_override")
 
   info "Preparing deployment: $source_branch → $target_branch"
@@ -293,18 +293,13 @@ cmd_deploy() {
   local merge_branch=$(echo "$pr_json" | jq -r '.headRefName')
   local target_branch=$(echo "$pr_json" | jq -r '.baseRefName')
 
-  # Parse site and env from branch name ({site}-{env}-merge)
-  if [[ ! "$merge_branch" =~ ^(.+)-([^-]+)-merge$ ]]; then
-    error "Cannot parse site/env from branch name: $merge_branch"
+  # Parse site, env, and version from branch name ({site}-{env}-{version}-merge)
+  if [[ ! "$merge_branch" =~ ^(.+)-([^-]+)-([^-]+)-merge$ ]]; then
+    error "Cannot parse site/env/version from branch name: $merge_branch"
   fi
   local site="${BASH_REMATCH[1]}"
   local env="${BASH_REMATCH[2]}"
-
-  # Parse version from PR body
-  local version=$(echo "$pr_body" | sed -n 's/.*\*\*Version bump:\*\* \([a-z]*\).*/\1/p')
-  if [[ -z "$version" ]]; then
-    error "Cannot parse version from PR body"
-  fi
+  local version="${BASH_REMATCH[3]}"
 
   # Validate parsed values
   validate_site "$site"
