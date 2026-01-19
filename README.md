@@ -204,7 +204,7 @@ Le script :
 - Pousse la branche et crée une PR draft
 - Poste un commentaire `/deploy {site}` pour créer une review app
 
-##### Étape 2 : Déployer
+###### Étape 2 : Déployer
 
 Après validation et approbation de la PR, lancez le déploiement avec l'URL ou le numéro de la PR :
 
