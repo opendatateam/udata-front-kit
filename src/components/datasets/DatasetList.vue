@@ -92,7 +92,9 @@ const executeQuery = async () => {
 }
 
 // load custom card component from router, or fallback to default
-const CardComponent = useAsyncComponent(() => meta?.cardComponent, DatasetCard)
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+  fallback: DatasetCard
+})
 
 // launch search on route.query changes
 watch(
