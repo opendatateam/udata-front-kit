@@ -175,7 +175,9 @@ cmd_prepare() {
       fi
     else
       # On different branch, merge branch exists - this is an error state
-      error "Merge branch '$merge_branch' already exists locally but you're on '$current_branch'. Delete it first: git branch -D $merge_branch"
+      error "Merge branch '$merge_branch' already exists locally but you're on '$current_branch'.
+  - To resume: git checkout $merge_branch
+  - To start fresh: git branch -D $merge_branch"
     fi
   fi
 
