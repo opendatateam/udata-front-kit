@@ -157,7 +157,7 @@ cmd_prepare() {
 
   # Check if we're in the middle of a merge
   if [[ -f .git/MERGE_HEAD ]]; then
-    error "Merge is not complete. Finish the merge first."
+    error "Merge is not complete. Finish or abort the merge first."
   fi
 
   # Check if merge branch already exists locally
