@@ -107,13 +107,6 @@ remote_branch_exists() {
   git show-ref --verify --quiet "refs/remotes/origin/$branch"
 }
 
-check_remote_branch_exists() {
-  local branch=$1
-  if ! remote_branch_exists "$branch"; then
-    error "Branch 'origin/$branch' does not exist"
-  fi
-}
-
 get_source_branch() {
   local env=$1
   local source_override=$2
@@ -153,7 +146,9 @@ cmd_prepare() {
   git fetch origin
 
   # Check target branch exists
-  check_remote_branch_exists "$target_branch"
+  if ! remote_branch_exists "$branch"; then
+    error "Branch 'origin/$branch' does not exist"
+  fi
 
   # Check if we're in the middle of a merge
   if [[ -f .git/MERGE_HEAD ]]; then
