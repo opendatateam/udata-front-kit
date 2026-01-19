@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eu
 
 # Deploy script for udata-front-kit
 # Two-step deployment workflow with merge branch strategy
@@ -124,7 +124,7 @@ cmd_prepare() {
   local site=$1
   local env=$2
   local version=$3
-  local source_override=$4
+  local source_override=${4:-}
   local source_arg=${source_override:+ --source $source_override}
 
   # Validate arguments
@@ -146,8 +146,8 @@ cmd_prepare() {
   git fetch origin
 
   # Check target branch exists
-  if ! remote_branch_exists "$branch"; then
-    error "Branch 'origin/$branch' does not exist"
+  if ! remote_branch_exists "$target_branch"; then
+    error "Branch 'origin/$target_branch' does not exist"
   fi
 
   # Check if we're in the middle of a merge
