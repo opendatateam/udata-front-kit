@@ -67,7 +67,7 @@ const userStore = useUserStore()
 const canEdit = computed(() => {
   return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
-const { isAdmin, canAddTopic } = storeToRefs(userStore)
+const { isAdmin } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
@@ -343,7 +343,7 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
-              v-if="canAddTopic"
+              v-if="userStore.canAddTopic(pageKey)"
               secondary
               size="md"
               label="Cloner"
