@@ -177,7 +177,7 @@ Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deu
 
 **Prérequis :** [GitHub CLI (`gh`)](https://cli.github.com/) et `jq` installés, `gh` authentifié.
 
-##### Étape 1 : Préparer le déploiement
+###### Étape 1 : Préparer le déploiement
 
 Crée une branche de merge temporaire, fusionne les changements (avec résolution de conflits si nécessaire), et crée une PR draft :
 
