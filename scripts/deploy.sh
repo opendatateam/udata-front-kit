@@ -132,8 +132,7 @@ cmd_prepare() {
   local env=$2
   local version=$3
   local source_override=$4
-  local source_arg=""
-  [[ -n "$source_override" ]] && source_arg=" --source $source_override"
+  local source_arg=${source_override:+ --source $source_override}
 
   # Validate arguments
   validate_site "$site"
