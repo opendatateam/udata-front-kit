@@ -128,6 +128,14 @@
                 >Données et API</a
               >
             </li>
+            <li v-if="solutionsIntegratices.length">
+              <a
+                id="summary-link-3"
+                href="#solutions-integratices"
+                class="fr-summary__link"
+                >Solutions intégratrices</a
+              >
+            </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
           <p class="fr-text--sm">
@@ -185,7 +193,7 @@
 
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
       <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
-        Possibilités de simplification :
+        Possibilités de simplification
       </h2>
 
       <div>
@@ -285,6 +293,42 @@
       </p>
     </div>
 
+    <div v-if="solutionsIntegratices.length" id="solutions-integratices">
+      <h2 class="colored-title fr-h2 fr-mt-8w">
+        Solutions intégrant "{{ topic.name }}"
+      </h2>
+
+      <SimplifionsIntegrateursFilters
+        v-if="solutionsIntegratices.length > 1"
+        :available-type-solutions="availableTypeSolutions"
+        :cas-usages="casUsagesForIntegrateurs"
+        :max-apis-count="maxApisCount"
+        :filtered-count="filteredAndSortedSolutions.length"
+        @update:filters="onFiltersUpdate"
+      />
+
+      <ul class="fr-grid-row fr-grid-row--gutters list-none">
+        <li
+          v-for="editeur in filteredAndSortedSolutions"
+          :key="editeur.id"
+          class="fr-col-12 fr-mb-2w"
+        >
+          <SimplifionsIntegrateurCard
+            :solution="editeur"
+            :available-apis-or-datasets="availableApisOrDatasets"
+            :cas-usages="casUsagesForIntegrateurs"
+          />
+        </li>
+      </ul>
+
+      <p
+        v-if="filteredAndSortedSolutions.length === 0"
+        class="fr-text--sm fr-text--center"
+      >
+        <i>Aucun éditeur ne correspond aux filtres sélectionnés.</i>
+      </p>
+    </div>
+
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
       <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
@@ -308,10 +352,19 @@ import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
-import type { ApiOrDataset, Solution } from '../model/grist'
+import type {
+  ApiOrDataset,
+  CasUsageRecord,
+  Solution,
+  SolutionRecord
+} from '../model/grist'
 import type { TopicSolutionsExtras } from '../model/topics'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
 import SimplifionsDataApi from './SimplifionsDataApi.vue'
+import SimplifionsIntegrateurCard from './SimplifionsIntegrateurCard.vue'
+import SimplifionsIntegrateursFilters, {
+  type IntegrateursFilters
+} from './SimplifionsIntegrateursFilters.vue'
 
 const props = defineProps<{
   topic: Topic
@@ -325,6 +378,15 @@ const solutionId = (props.topic.extras as TopicSolutionsExtras)[
 const solution = ref<Solution | undefined>(undefined)
 const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
 const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
+const solutionsIntegratices = ref<SolutionRecord[]>([])
+const casUsagesForIntegrateurs = ref<CasUsageRecord[]>([])
+const integrateursFilters = ref<IntegrateursFilters>({
+  typeSolution: '',
+  casUsage: null,
+  minApisIntegrated: 0,
+  onlyPublic: false,
+  sortBy: 'integration'
+})
 
 grist.getRecord('Solutions', solutionId).then((data) => {
   solution.value = data.fields as Solution
@@ -354,7 +416,110 @@ grist.getRecord('Solutions', solutionId).then((data) => {
         ).filter((apiOrDataset) => apiOrDataset.Visible_sur_simplifions)
       })
   }
+
+  if (solution.value.solutions_integratrices?.length) {
+    grist
+      .getRecordsByIds('Solutions', solution.value.solutions_integratrices)
+      .then((solutions) => {
+        solutionsIntegratices.value = (solutions as SolutionRecord[]).filter(
+          (sol) => sol.fields.Visible_sur_simplifions
+        )
+
+        // Fetch cas d'usages for integrator solutions
+        const allCasUsageIds = new Set<number>()
+        solutionsIntegratices.value.forEach((sol) => {
+          sol.fields.Recommande_pour_les_cas_d_usages?.forEach((id) => {
+            allCasUsageIds.add(id)
+          })
+        })
+
+        if (allCasUsageIds.size > 0) {
+          grist
+            .getRecordsByIds('Cas_d_usages', Array.from(allCasUsageIds))
+            .then((casUsages) => {
+              casUsagesForIntegrateurs.value = casUsages as CasUsageRecord[]
+            })
+        }
+      })
+  }
 })
+
+// Computed properties for filters
+const availableTypeSolutions = computed(() => {
+  const types = new Set<string>()
+  solutionsIntegratices.value.forEach((sol) => {
+    sol.fields.Type_de_solution?.forEach((type) => {
+      types.add(type)
+    })
+  })
+  return Array.from(types).sort()
+})
+
+const availableApisOrDatasets = computed(() => {
+  return solution.value?.APIs_ou_datasets_fournis || []
+})
+
+const maxApisCount = computed(() => {
+  return availableApisOrDatasets.value.length
+})
+
+// Helper to count integrated APIs or datasets for a solution
+const getIntegrationCount = (sol: SolutionRecord) => {
+  return (sol.fields.API_ou_datasets_integres || []).length
+}
+
+const filteredAndSortedSolutions = computed(() => {
+  let filtered = [...solutionsIntegratices.value]
+
+  // Filter by type de solution (single select)
+  if (integrateursFilters.value.typeSolution) {
+    filtered = filtered.filter((sol) =>
+      sol.fields.Type_de_solution?.includes(
+        integrateursFilters.value.typeSolution
+      )
+    )
+  }
+
+  // Filter by cas d'usage (single select)
+  if (integrateursFilters.value.casUsage !== null) {
+    filtered = filtered.filter((sol) =>
+      sol.fields.Recommande_pour_les_cas_d_usages?.includes(
+        integrateursFilters.value.casUsage as number
+      )
+    )
+  }
+
+  // Filter by min APIs integrated
+  if (integrateursFilters.value.minApisIntegrated > 0) {
+    filtered = filtered.filter((sol) => {
+      const integratedCount = getIntegrationCount(sol)
+      return integratedCount >= integrateursFilters.value.minApisIntegrated
+    })
+  }
+
+  // Filter by public only
+  if (integrateursFilters.value.onlyPublic) {
+    filtered = filtered.filter((sol) => sol.fields.Public_ou_prive === 'Public')
+  }
+
+  // Sort based on sortBy value
+  return filtered.sort((a, b) => {
+    switch (integrateursFilters.value.sortBy) {
+      case 'integration': {
+        return getIntegrationCount(b) - getIntegrationCount(a)
+      }
+      case 'title': {
+        return a.fields.Nom.localeCompare(b.fields.Nom)
+      }
+      default:
+        return 0
+    }
+  })
+})
+
+const onFiltersUpdate = (filters: IntegrateursFilters) => {
+  integrateursFilters.value = filters
+}
 </script>
 
 <style scoped>

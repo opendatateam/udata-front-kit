@@ -96,6 +96,7 @@ export type Solution = {
   Recommande_pour_les_cas_d_usages: number[] | null
   Type_de_solution: string[]
   URL_demande_d_acces: string
+  solutions_integratrices: number[] | null
 }
 export type SolutionRecord = GristRecord & {
   fields: Solution
