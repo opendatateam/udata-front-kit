@@ -69,16 +69,23 @@
                 <span class="cas-usage-name">{{ casUsage.name }}</span>
               </div>
               <div class="cas-usage-card__indicator">
-                <IntegrationIndicator
-                  :integrated-count="casUsage.integratedCount"
-                  :total-count="casUsage.totalCount"
-                  :color-class="casUsage.colorClass"
-                />
-                <span
-                  class="indicator-label"
-                  :title="`${casUsage.integratedCount} API ou jeux de données sur les ${casUsage.totalCount} utiles pour ce cas d'usage ont été intégrés par cette solution.`"
-                  >API ou jeux de données intégrés</span
-                >
+                <span :class="['indicator-count', casUsage.colorClass]">
+                  {{ casUsage.integratedCount }}/{{ casUsage.totalCount }}
+                </span>
+                <span class="indicator-label-wrapper">
+                  <span class="indicator-label"
+                    >API ou jeux de données intégrés</span
+                  >
+                  <span class="indicator-tooltip">
+                    <span :class="['indicator-count', casUsage.colorClass]"
+                      >{{ casUsage.integratedCount }} API et jeux de données
+                      "<strong>{{ supplierName }}</strong
+                      >"</span
+                    >
+                    sur les {{ casUsage.totalCount }} utiles pour ce cas d'usage
+                    ont été intégrés par cette solution.
+                  </span>
+                </span>
               </div>
             </div>
           </div>
@@ -107,13 +114,13 @@ import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
 import type { CasUsageRecord, SolutionRecord } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
-import IntegrationIndicator from './IntegrationIndicator.vue'
 
 const props = defineProps<{
   solution: SolutionRecord
   availableApisOrDatasets: number[]
   casUsages: CasUsageRecord[]
   usefulApisByCasUsage: Map<number, number[]>
+  supplierName: string
 }>()
 
 const solutionTopic = ref<Topic | undefined>(undefined)
@@ -296,12 +303,71 @@ const casUsagesWithIndicators = computed(() => {
   border-radius: 4px;
 }
 
+.indicator-label-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .indicator-label {
   font-size: 0.75rem;
   color: #666;
   text-decoration: underline dotted;
   text-underline-offset: 2px;
   cursor: help;
+}
+
+.indicator-tooltip {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 4px;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.15),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--grey-50-1000);
+  width: max-content;
+  max-width: 20rem;
+  z-index: 1000;
+  line-height: 1.4;
+}
+
+.indicator-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom-color: white;
+}
+
+.indicator-label-wrapper:hover .indicator-tooltip {
+  display: block;
+}
+
+.indicator-count {
+  font-weight: 700;
+}
+
+.indicator-count.indicator--green {
+  background-color: rgb(184, 254, 201);
+}
+
+.indicator-count.indicator--yellow {
+  background-color: rgb(254, 240, 184);
+}
+
+.indicator-count.indicator--orange {
+  background-color: rgb(254, 224, 184);
+}
+
+.indicator-count.indicator--red {
+  background-color: rgb(254, 201, 201);
 }
 
 .font-weight-normal {

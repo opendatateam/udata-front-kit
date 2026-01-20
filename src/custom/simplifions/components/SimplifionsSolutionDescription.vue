@@ -312,6 +312,7 @@
             :available-apis-or-datasets="availableApisOrDatasets"
             :cas-usages="casUsagesForIntegrateurs"
             :useful-apis-by-cas-usage="usefulApisByCasUsage"
+            :supplier-name="topic.name"
           />
         </li>
       </ul>
