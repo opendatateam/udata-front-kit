@@ -73,6 +73,7 @@
                 <IntegrationIndicator
                   :integrated-count="casUsage.integratedCount"
                   :total-count="casUsage.totalCount"
+                  :color-class="casUsage.colorClass"
                 />
                 <span
                   class="indicator-label"
@@ -173,12 +174,21 @@ const casUsagesWithIndicators = computed(() => {
         usefulApisForCasUsage.includes(apiId)
       ).length
 
+      // Color class based on percentage (red → orange → yellow → green)
+      const percentage =
+        totalCount === 0 ? 0 : (integratedCount / totalCount) * 100
+      let colorClass = 'indicator--red'
+      if (percentage >= 75) colorClass = 'indicator--green'
+      else if (percentage >= 50) colorClass = 'indicator--yellow'
+      else if (percentage >= 25) colorClass = 'indicator--orange'
+
       return {
         id: casUsageId,
         name: casUsage.fields.Nom_complet || casUsage.fields.Nom,
         icon: casUsage.fields.Icone_du_titre || '📋',
         integratedCount,
-        totalCount
+        totalCount,
+        colorClass
       }
     })
     .filter(Boolean) as Array<{
@@ -187,6 +197,7 @@ const casUsagesWithIndicators = computed(() => {
     icon: string
     integratedCount: number
     totalCount: number
+    colorClass: string
   }>
 })
 </script>

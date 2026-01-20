@@ -7,22 +7,11 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   integratedCount: number
   totalCount: number
+  colorClass: string
 }>()
-
-const percentage = computed(() => {
-  if (props.totalCount === 0) return 0
-  return (props.integratedCount / props.totalCount) * 100
-})
-
-const colorClass = computed(() => {
-  if (percentage.value >= 75) return 'indicator-count--green'
-  if (percentage.value >= 50) return 'indicator-count--blue'
-  if (percentage.value >= 25) return 'indicator-count--yellow'
-  return 'indicator-count--red'
-})
 </script>
 
 <style scoped>
@@ -36,19 +25,19 @@ const colorClass = computed(() => {
   font-weight: 700;
 }
 
-.indicator-count--green {
-  color: #18753c;
+.indicator-count.indicator--green {
+  background-color: rgb(184, 254, 201);
 }
 
-.indicator-count--blue {
-  color: #000091;
+.indicator-count.indicator--yellow {
+  background-color: rgb(254, 240, 184);
 }
 
-.indicator-count--yellow {
-  color: #b34000;
+.indicator-count.indicator--orange {
+  background-color: rgb(254, 224, 184);
 }
 
-.indicator-count--red {
-  color: #ce0500;
+.indicator-count.indicator--red {
+  background-color: rgb(254, 201, 201);
 }
 </style>
