@@ -4,14 +4,14 @@
 site_id: simplifions
 # Error tracker : Sentry
 
-sentry:
-  domain_url: 'https://errors.data.gouv.fr/'
-  dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
-  environment: 'preprod'
-  tracePropagationTargets: []
-  tracesSampleRate: 1.0
-  replaysSessionSampleRate: 0.1
-  replaysOnErrorSampleRate: 1.0
+# sentry:
+#   domain_url: 'https://errors.data.gouv.fr/'
+#   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38'
+#   environment: 'preprod'
+#   tracePropagationTargets: []
+#   tracesSampleRate: 1.0
+#   replaysSessionSampleRate: 0.1
+#   replaysOnErrorSampleRate: 1.0
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
@@ -22,19 +22,23 @@ datagouvfr:
 
 # universe configuration is now handled per page in pages.{page_id}.universe_query
 
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow' # default value for preprod
-
 # UI customizations
 website:
   title: 'Simplifions.data.gouv.fr'
-  meta:
-    keywords: 'simplification, API, données, data, dites-le-nous une fois, proactivité, administration, collectivité, dlnuf'
-    description: |
-      Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données de l'État.
-    canonical_url: https://simplifions.data.gouv.fr
+  seo:
+    canonical_url: https://simplifions.preprod.data.gouv.fr
+    meta:
+      keywords: 'simplification, API, données, data, dites-le-nous une fois, proactivité, administration, collectivité, dlnuf'
+      description: |
+        Simplifiez les démarches et services des citoyens, entreprises et associations en récupérant pour eux leurs informations administratives grâce aux API et aux données de l'État.
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/simplifions-logo.svg'
   badge:
@@ -53,18 +57,20 @@ website:
     subtitle:
     sections:
     meta_description:
-  header_button:
-    display: false # TODO : créer un formulaire de feedback sur tally.so
-    label: 'Donnez votre avis'
-    link: https://form.typeform.com/to/sYKAer7j
-  header_search:
-    display: true
-    placeholder: Rechercher...
-    dropdown:
-      - text: Rechercher {} dans les <strong>cas d'usages</strong>
-        route: cas-d-usages
-      - text: Rechercher {} dans les <strong>solutions</strong>
-        route: solutions
+  header:
+    admin_shortcut: false
+    button:
+      display: false # TODO : créer un formulaire de feedback sur tally.so
+      label: 'Donnez votre avis'
+      link: https://form.typeform.com/to/sYKAer7j
+    search:
+      display: true
+      placeholder: Rechercher...
+      dropdown:
+        - text: Rechercher {} dans les <strong>cas d'usages</strong>
+          route: cas-d-usages
+        - text: Rechercher {} dans les <strong>solutions</strong>
+          route: solutions
   search_bar:
     display: false
   secondary_search:
@@ -156,7 +162,6 @@ website:
     add_to_topic:
       enable: false
       page: cas-d-usages
-      dataset_editorialization: false
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
     show_extended_information_panel: false
@@ -183,6 +188,61 @@ website:
       path: /accessibility
 
 # organizations: (empty - no specific organizations configuration needed for simplifions)
+
+# Shared filter values (using YAML anchors for reuse)
+shared_filter_values:
+  fournisseurs_de_service: &fournisseurs_de_service_values
+    - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
+      name: Communes et groupements de communes
+    - id: departements
+      name: Départements
+    - id: regions
+      name: Régions
+    - id: tout-collectivites-territoires
+      name: Toutes les collectivités et territoires
+    - id: etat
+      name: État
+    # - id: autres-autorites-nationales
+    #   name: Autres autorités nationales
+    # - id: organismes-droit-prive
+    #   name: Organismes de droit privé
+    - id: acteurs-education-enseignement
+      name: Acteurs de l'éducation et de l'enseignement
+    # - id: acteurs-culture
+    #   name: Acteurs de la culture
+    # - id: acteurs-sante
+    #   name: Acteurs de la santé
+    - id: acteurs-transport
+      name: Acteurs du transport
+    # - id: acteurs-environnement
+    #   name: Acteurs de l'environnement
+    - id: tout-acteurs-publics
+      name: Tous les acteurs publics
+
+  target_users: &target_users_values
+    - id: particuliers
+      name: Particuliers
+    - id: entreprises
+      name: Entreprises
+    - id: associations
+      name: Associations
+
+  budget: &budget_values
+    - id: aucun-developpement-ni-budget
+      name: Aucun développement, ni budget
+    - id: avec-des-moyens-techniques
+      name: Avec des moyens techniques
+    - id: avec-solution-editeur
+      name: Avec une solution éditeur
+
+  types_de_simplification: &types_de_simplification_values
+    - id: proactivite
+      name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
+    - id: dlnuf
+      name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
+    - id: acces-facile
+      name: 💠 Accès facile | L'usager ou l'agent trouve l'information
+
 pages:
   # CAS D'USAGES
   cas-d-usages:
@@ -219,57 +279,27 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'administrations
+        default_option: Tous les types d'acteurs publics
         use_filter_prefix: true
-        values:
-          - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
-            name: Communes
-          - id: departements
-            name: Départements
-          - id: regions
-            name: Régions
-          - id: administrations-centrales
-            name: Administrations centrales
-          - id: operateur-etat
-            name: Opérateurs de l'État
-          - id: autres
-            name: Autres
+        values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
         id: target-users
         type: select
         default_option: Tous les usagers
         use_filter_prefix: true
-        values:
-          - id: particuliers
-            name: Particuliers
-          - id: entreprises
-            name: Entreprises
-          - id: associations
-            name: Associations
+        values: *target_users_values
       - name: 'Moyens disponibles pour la mise en œuvre :'
         id: budget
         type: select
         default_option: Tous les types de ressources
         use_filter_prefix: true
-        values:
-          - id: aucun-developpement-ni-budget
-            name: Aucun développement, ni budget
-          - id: avec-des-moyens-techniques
-            name: Avec des moyens techniques
-          - id: avec-solution-editeur
-            name: Avec une solution éditeur
+        values: *budget_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
         type: select
         default_option: Tous les types de simplification
         use_filter_prefix: true
-        values:
-          - id: proactivite
-            name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
-          - id: dlnuf
-            name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
-          - id: acces-facile
-            name: 💠 Accès facile | L'usager ou l'agent trouve l'information
+        values: *types_de_simplification_values
 
   # SOLUTIONS
   solutions:
@@ -306,54 +336,24 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'administrations
+        default_option: Tous les types d'acteurs publics
         use_filter_prefix: true
-        values:
-          - id: communes # searches a tag = simplifions-fournisseurs-de-service-communes
-            name: Communes
-          - id: departements
-            name: Départements
-          - id: regions
-            name: Régions
-          - id: administrations-centrales
-            name: Administrations centrales
-          - id: operateur-etat
-            name: Opérateurs de l'État
-          - id: autres
-            name: Autres
+        values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
         id: target-users
         type: select
         default_option: Tous les usagers
         use_filter_prefix: true
-        values:
-          - id: particuliers
-            name: Particuliers
-          - id: entreprises
-            name: Entreprises
-          - id: associations
-            name: Associations
+        values: *target_users_values
       - name: 'Moyens disponibles pour la mise en œuvre :'
         id: budget
         type: select
         default_option: Tous les types de ressources
         use_filter_prefix: true
-        values:
-          - id: aucun-developpement-ni-budget
-            name: Aucun développement, ni budget
-          - id: avec-des-moyens-techniques
-            name: Avec des moyens techniques
-          - id: avec-solution-editeur
-            name: Avec une solution éditeur
+        values: *budget_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
         type: select
         default_option: Tous les types de simplification
         use_filter_prefix: true
-        values:
-          - id: proactivite
-            name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
-          - id: dlnuf
-            name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
-          - id: acces-facile
-            name: 💠 Accès facile | L'usager ou l'agent trouve l'information
+        values: *types_de_simplification_values

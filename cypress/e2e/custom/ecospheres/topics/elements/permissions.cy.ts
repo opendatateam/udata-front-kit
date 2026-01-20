@@ -25,7 +25,7 @@ describe('Topic Elements - Permissions and Access Control', () => {
         }
       })
 
-      mockTopicAndRelatedObjects(otherUserTopic)
+      mockTopicAndRelatedObjects(otherUserTopic, {})
       cy.visit(`/bouquets/${otherUserTopic.slug}`)
 
       // Verify edit controls are not present

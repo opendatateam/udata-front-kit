@@ -10,11 +10,12 @@
       </p>
     </div>
     <div
-      v-if="groupedTags['fournisseurs-de-service']"
+      v-if="orderedFournisseursDeService.length > 0"
       class="fr-card__detail fr-text--right"
     >
       <p class="fr-mb-1w white-space-normal">
-        À destination des
+        À destination
+        {{ orderedFournisseursDeService[0].startsWith('Tou') ? 'de' : 'des' }}
         <HumanReadableList :items="orderedFournisseursDeService" />
       </p>
     </div>
@@ -43,6 +44,10 @@
 import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
+import type {
+  TopicCasUsagesExtras,
+  TopicSolutionsExtras
+} from '../model/topics'
 import HumanReadableList from './HumanReadableList.vue'
 
 const props = defineProps<{
@@ -70,13 +75,14 @@ const hideBudget = computed(() => props.hideBudget)
 const hideSimplification = computed(() => props.hideSimplification)
 
 const orderedFournisseursDeService = computed(() => {
-  const names = groupedTags.value['fournisseurs-de-service'].map(
-    (fn) => fn.name
-  )
-  const otherItems = names.filter((name) => !name.match(/Autres?/))
-  const autresItems = names.filter((name) => name.match(/Autres?/))
-
-  return [...otherItems.sort(), ...autresItems]
+  const extras = props.topic.extras as
+    | TopicCasUsagesExtras
+    | TopicSolutionsExtras
+  const extrasForObject =
+    'simplifions-v2-cas-d-usages' in extras
+      ? extras['simplifions-v2-cas-d-usages']
+      : extras['simplifions-v2-solutions']
+  return extrasForObject?.A_destination_de?.map((v) => v.label).sort() || []
 })
 </script>
 
