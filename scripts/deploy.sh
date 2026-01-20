@@ -136,7 +136,8 @@ cmd_prepare() {
   # Determine branches
   local target_branch="${site}-${env}"
   local merge_branch="${site}-${env}-${version}-merge"
-  local source_branch=$(get_source_branch "$env" "$source_override")
+  local source_branch
+  source_branch=$(get_source_branch "$env" "$source_override")
 
   info "Preparing deployment: $source_branch → $target_branch"
   info "Using merge branch: $merge_branch"
@@ -309,8 +310,14 @@ cmd_deploy() {
   info "Deploying: $merge_branch → $target_branch"
   info "Site: $site, Env: $env, Version: $version"
 
+  # Translate site name for commit message (ecospheres -> ecologie)
+  local site_for_infra="$site"
+  if [[ "$site" == "ecospheres" ]]; then
+    site_for_infra="ecologie"
+  fi
+
   # Merge PR and delete merge branches locally and remotely
-  local commit_msg="[${env}:${site}:${version}] ${pr_title} #${pr_number}"
+  local commit_msg="[${env}:${site_for_infra}:${version}] ${pr_title} #${pr_number}"
   info "Merging PR #$pr_number with message: $commit_msg"
   gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch
 
