@@ -36,41 +36,49 @@ const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
 const userName = computed(() => userStore.userName)
 const quickLinks = computed(() => {
-  const button = config.website.header_button
+  const headerButton = config.website.header.button.display
+    ? {
+        label: config.website.header.button.label,
+        icon: 'fr-icon-lightbulb-line',
+        href: config.website.header.button.link,
+        iconRight: true
+      }
+    : null
 
-  const userProfile = {
-    button: true,
-    disabled: true,
-    label: isLoggedIn.value ? userName.value : undefined,
-    icon: 'fr-icon-account-circle-line',
-    iconRight: true
-  }
+  const adminShorcut =
+    config.website.header.admin_shortcut && isLoggedIn.value
+      ? {
+          label: 'Administration',
+          icon: 'fr-icon-settings-5-line',
+          href: `${config.datagouvfr.base_url}/admin`,
+          iconRight: true
+        }
+      : null
 
-  const headerButton = {
-    label: button.label,
-    icon: 'fr-icon-lightbulb-line',
-    href: button.link,
-    iconRight: true
-  }
+  const userProfile = isLoggedIn.value
+    ? {
+        button: true,
+        disabled: true,
+        label: userName.value,
+        icon: 'fr-icon-account-circle-line',
+        iconRight: true
+      }
+    : null
 
-  const logLink = {
-    label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
-    icon: isLoggedIn.value
-      ? 'fr-icon-logout-box-r-line'
-      : 'fr-icon-account-circle-line',
-    to: isLoggedIn.value ? '/logout' : '/login',
-    iconRight: true
-  }
+  const logLink = config.website.oauth_option
+    ? {
+        label: isLoggedIn.value ? 'Déconnexion' : 'Se connecter',
+        icon: isLoggedIn.value
+          ? 'fr-icon-logout-box-r-line'
+          : 'fr-icon-account-circle-line',
+        to: isLoggedIn.value ? '/logout' : '/login',
+        iconRight: true
+      }
+    : null
 
-  if (!config.website.oauth_option) {
-    return button.display ? [headerButton] : []
-  }
+  const buttons = [userProfile, headerButton, adminShorcut, logLink]
 
-  if (isLoggedIn.value) {
-    return button.display ? [userProfile, headerButton, logLink] : [logLink]
-  }
-
-  return button.display ? [headerButton, logLink] : [logLink]
+  return buttons.filter((button) => button !== null)
 })
 
 onMounted(() => {

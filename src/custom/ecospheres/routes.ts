@@ -8,8 +8,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const topicConf = {
   displayMetadata: true,
-  enableReadMore: true,
-  datasetEditorialization: true
+  enableReadMore: true
 }
 
 export const routes: RouteRecordRaw[] = [
@@ -23,7 +22,11 @@ export const routes: RouteRecordRaw[] = [
   },
   useDatasetSearchPageRoutes({
     pageKey: 'datasets',
-    metaTitle: 'Données'
+    metaTitle: 'Données',
+    cardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   useDataserviceSearchPageRoutes({
     pageKey: 'dataservices',
