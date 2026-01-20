@@ -38,10 +38,6 @@ const factorsGroups = defineModel('groups-model', {
   default: []
 })
 const props = defineProps({
-  datasetEditorialization: {
-    type: Boolean,
-    default: false
-  },
   topicId: {
     type: String,
     required: true
@@ -58,25 +54,23 @@ const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
   const modalFactor = modalData.value.factor
-  if (props.datasetEditorialization) {
-    if (!modalFactor?.title.trim()) {
-      formErrors.value.push('title')
-    }
-    if (!modalFactor?.description?.trim()) {
-      formErrors.value.push('purpose')
-    }
-    if (
-      !modalFactor?.siteExtras.uri &&
-      modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
-    ) {
-      formErrors.value.push('availability')
-    }
-    if (
-      !modalFactor?.siteExtras.uri &&
-      modalFactor?.siteExtras.availability === Availability.URL_AVAILABLE
-    ) {
-      formErrors.value.push('availabilityUrl')
-    }
+  if (!modalFactor?.title.trim()) {
+    formErrors.value.push('title')
+  }
+  if (!modalFactor?.description?.trim()) {
+    formErrors.value.push('purpose')
+  }
+  if (
+    !modalFactor?.siteExtras.uri &&
+    modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
+  ) {
+    formErrors.value.push('availability')
+  }
+  if (
+    !modalFactor?.siteExtras.uri &&
+    modalFactor?.siteExtras.availability === Availability.URL_AVAILABLE
+  ) {
+    formErrors.value.push('availabilityUrl')
   }
   if (
     modalFactor?.siteExtras.group &&
@@ -259,7 +253,6 @@ defineExpose({ addFactor, editFactor })
         v-model="modalData.factor"
         v-model:groups-model="factorsGroups"
         v-model:errors-model="formErrors"
-        :dataset-editorialization
         :factors-in-topic="factors"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />

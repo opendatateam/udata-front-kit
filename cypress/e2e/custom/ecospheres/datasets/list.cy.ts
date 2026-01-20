@@ -1,5 +1,6 @@
 import type { DatasetV2 } from '@datagouv/components-next'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
+import { createIndicator } from '../indicators/support'
 import { mockUniverseOrganizations } from '../mocks'
 
 describe('Datasets - List Page', () => {
@@ -13,7 +14,7 @@ describe('Datasets - List Page', () => {
     cy.mockDatagouvObjectList('datasets', testDatasets)
   })
 
-  it('should display the list of dataservices', () => {
+  it('should display the list of datasets', () => {
     cy.visit('/datasets')
 
     // Wait for the API call to complete
@@ -50,5 +51,37 @@ describe('Datasets - List Page', () => {
 
     // Wait for the filtered API call
     cy.wait('@get_datasets_list')
+  })
+
+  it('should display indicator datasets with the Indicateur badge', () => {
+    // Create a mix of regular datasets and indicator datasets
+    const regularDataset = datasetFactory.one({
+      overrides: { title: 'Regular Dataset Title' }
+    })
+    const indicatorDataset = createIndicator({
+      title: 'Indicator Dataset Title'
+    })
+
+    cy.mockDatagouvObjectList('datasets', [regularDataset, indicatorDataset])
+
+    cy.visit('/datasets')
+    cy.wait('@get_datasets_list')
+
+    // Check that both datasets are displayed
+    cy.contains('Regular Dataset Title').should('be.visible')
+    cy.contains('Indicator Dataset Title').should('be.visible')
+
+    // Check that the indicator dataset has the "Indicateur" badge
+    cy.contains('Indicator Dataset Title')
+      .closest('li')
+      .find('.fr-badge')
+      .contains('Indicateur')
+      .should('be.visible')
+
+    // Check that the regular dataset does NOT have the "Indicateur" badge
+    cy.contains('Regular Dataset Title')
+      .closest('li')
+      .find('.fr-badge')
+      .should('not.exist')
   })
 })

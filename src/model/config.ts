@@ -105,10 +105,21 @@ export type PagesConf = {
 export type DatasetsConf = {
   add_to_topic: {
     page: string
-    dataset_editorialization: boolean
   } | null
   harvest_backends_quality_warning: string[]
   show_extended_information_panel: boolean
+}
+
+export interface WebsiteConfig {
+  title: string
+  seo?: {
+    canonical_url?: string
+    meta?: {
+      keywords?: string
+      description?: string
+      robots?: string
+    }
+  }
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/

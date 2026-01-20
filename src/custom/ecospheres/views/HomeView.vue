@@ -44,7 +44,7 @@ useHead({
   ],
   link: [{ rel: 'canonical', href: window.location.origin }]
 })
-const dropdown = config.website.header_search.dropdown
+const dropdown = config.website.header.search.dropdown
 </script>
 
 <template>
