@@ -1,5 +1,5 @@
 <template>
-  <span class="integration-indicator" :title="tooltipText">
+  <span class="integration-indicator">
     <span :class="['indicator-count', colorClass]"
       >{{ integratedCount }}/{{ totalCount }}</span
     >
@@ -23,17 +23,12 @@ const colorClass = computed(() => {
   if (percentage.value >= 25) return 'indicator-count--yellow'
   return 'indicator-count--red'
 })
-
-const tooltipText = computed(() => {
-  return `${props.integratedCount} API et jeux de données sur les ${props.totalCount} utiles pour ce cas d'usage ont été intégrés par cette solution.`
-})
 </script>
 
 <style scoped>
 .integration-indicator {
   display: inline-flex;
   align-items: center;
-  cursor: help;
 }
 
 .indicator-count {

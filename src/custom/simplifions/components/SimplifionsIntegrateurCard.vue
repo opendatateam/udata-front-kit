@@ -67,9 +67,6 @@
               class="cas-usage-card"
             >
               <div class="cas-usage-card__header">
-                <span v-if="casUsage.icon" class="cas-usage-icon">{{
-                  casUsage.icon
-                }}</span>
                 <span class="cas-usage-name">{{ casUsage.name }}</span>
               </div>
               <div class="cas-usage-card__indicator">
@@ -77,7 +74,9 @@
                   :integrated-count="casUsage.integratedCount"
                   :total-count="casUsage.totalCount"
                 />
-                <span class="indicator-label"
+                <span
+                  class="indicator-label"
+                  :title="`${casUsage.integratedCount} API ou jeux de données sur les ${casUsage.totalCount} utiles pour ce cas d'usage ont été intégrés par cette solution.`"
                   >API ou jeux de données intégrés</span
                 >
               </div>
@@ -257,8 +256,8 @@ const casUsagesWithIndicators = computed(() => {
 }
 
 .cas-usages-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
 }
 
@@ -266,9 +265,8 @@ const casUsagesWithIndicators = computed(() => {
   background-color: #e3e3fd;
   border-radius: 4px;
   padding: 0.75rem 1rem;
-  min-width: 200px;
-  max-width: 300px;
-  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .cas-usage-card__header {
@@ -276,11 +274,6 @@ const casUsagesWithIndicators = computed(() => {
   align-items: flex-start;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-}
-
-.cas-usage-icon {
-  font-size: 1rem;
-  flex-shrink: 0;
 }
 
 .cas-usage-name {
@@ -292,13 +285,20 @@ const casUsagesWithIndicators = computed(() => {
 
 .cas-usage-card__indicator {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
+  margin-top: auto;
+  background-color: #f6f6f6;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
 }
 
 .indicator-label {
   font-size: 0.75rem;
   color: #666;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: help;
 }
 
 .font-weight-normal {
@@ -333,11 +333,7 @@ const casUsagesWithIndicators = computed(() => {
   }
 
   .cas-usages-grid {
-    flex-direction: column;
-  }
-
-  .cas-usage-card {
-    max-width: none;
+    grid-template-columns: 1fr;
   }
 }
 </style>
