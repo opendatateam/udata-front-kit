@@ -128,7 +128,7 @@ const solutionTopic = ref<Topic | undefined>(undefined)
 const topicsAPI = new TopicsAPI({ version: 2 })
 const solutionTag = `simplifions-v2-solutions-${props.solution.id}`
 topicsAPI.getTopicByTag(solutionTag).then((topic) => {
-  solutionTopic.value = topic
+  solutionTopic.value = topic ?? undefined
 })
 
 const datagouvSlug = computed(() => solutionTopic.value?.slug)
