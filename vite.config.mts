@@ -16,21 +16,21 @@ import {
 } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import type { SentryConfig } from './src/model/config'
+import type { SentryConfig, WebsiteConfig } from './src/model/config'
 
 interface Config {
-  website: {
-    title: string
-    meta: {
-      keywords: string
-      description: string
-      canonical_url: string
-    }
-  }
-  robots: {
-    meta: string
-  }
+  website: WebsiteConfig
   sentry?: SentryConfig
+}
+
+// Shared esbuild config for dev and prod
+const esbuildOptions = {
+  supported: {
+    // Tell esbuild that class fields are natively supported - don't transpile them
+    // This prevents __publicField helper issues with maplibre-gl under pnpm
+    'class-field': true,
+    'class-static-field': true
+  }
 }
 
 // https://vitejs.dev/config/
@@ -84,8 +84,8 @@ export default defineConfig(({ mode }) => {
         inject: {
           data: {
             title: config.website.title,
-            meta: config.website.meta,
-            metaRobots: config.robots.meta
+            meta: config.website.seo?.meta,
+            metaRobots: config.website.seo?.meta?.robots
           }
         }
       }),
@@ -125,6 +125,7 @@ export default defineConfig(({ mode }) => {
       environment: 'happy-dom',
       globals: true
     },
+    esbuild: esbuildOptions,
     build: {
       sourcemap: true // Source map generation must be turned on for sentry integration
     },
@@ -145,12 +146,15 @@ export default defineConfig(({ mode }) => {
         // (es6-promise, eventbusjs) that need pre-bundling to be properly converted to ESM
         // for the dev server. Without this, map preview components fail to load.
         'geopf-extensions-openlayers',
-        'geoportal-access-lib'
+        'geoportal-access-lib',
+        // Include maplibre-gl to ensure proper bundling with esbuild class field support
+        'maplibre-gl'
       ],
       // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
       // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
       // used for the components configuration.
-      exclude: ['@datagouv/components-next']
+      exclude: ['@datagouv/components-next'],
+      esbuildOptions
     }
   }
 })

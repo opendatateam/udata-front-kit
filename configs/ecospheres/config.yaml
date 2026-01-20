@@ -16,21 +16,29 @@ datagouvfr:
   oauth_client_id: 66fa76d405b98d06ca73854a
   tabular_api_url: https://tabular-api.data.gouv.fr
 
-robots:
-  disallow:
-    - /admin
-    - /datasets
-    - /organizations
-  sitemap: https://ecologie.data.gouv.fr/sitemap.xml
-  meta: 'index, follow'
-
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
-  meta:
-    keywords:
-    description:
+  seo:
     canonical_url: https://ecologie.data.gouv.fr
+    # global metas injected
+    meta:
+      keywords:
+      description:
+      robots: 'index, follow'
+    # robots.txt content (consumed by udata-front-kit-seo)
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+        - /organizations
+    # sitemap.xml content (consumed by udata-front-kit-seo)
+    sitemap_xml:
+      topics_pages:
+        - bouquets
+      datasets_pages:
+        - indicators
+      dataservices_pages: []
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'
@@ -56,22 +64,24 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description: ecologie.data.gouv.fr référence et centralise les données de la transition écologique.
-  header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wLWrzp
-  header_search:
-    display: true
-    placeholder: Rechercher...
-    dropdown:
-      - text: Rechercher {} dans les <strong>jeux de données</strong>
-        route: datasets
-      - text: Rechercher {} dans les <strong>indicateurs</strong>
-        route: indicators
-      - text: Rechercher {} dans les <strong>API</strong>
-        route: dataservices
-      - text: Rechercher {} dans les <strong>bouquets</strong>
-        route: bouquets
+  header:
+    admin_shortcut: true
+    button:
+      display: true
+      label: 'Donnez votre avis'
+      link: https://tally.so/r/wLWrzp
+    search:
+      display: true
+      placeholder: Rechercher...
+      dropdown:
+        - text: Rechercher {} dans les <strong>jeux de données</strong>
+          route: datasets
+        - text: Rechercher {} dans les <strong>indicateurs</strong>
+          route: indicators
+        - text: Rechercher {} dans les <strong>API</strong>
+          route: dataservices
+        - text: Rechercher {} dans les <strong>bouquets</strong>
+          route: bouquets
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
@@ -183,7 +193,7 @@ website:
     add_to_topic:
       enable: true
       page: bouquets
-      dataset_editorialization: true
+    open_in_qgis: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning:
       - CSW-DCAT
