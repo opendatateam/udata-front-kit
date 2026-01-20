@@ -42,8 +42,7 @@
           <ul v-if="simplificationTags.length" class="fr-tags-group fr-mt-2v">
             <li v-for="tag in simplificationTags" :key="tag.id">
               <p class="fr-tag fr-tag--sm">
-                <span v-if="tag.icon" class="fr-mr-1v">{{ tag.icon }}</span>
-                {{ tag.label }}
+                {{ tag.name }}
               </p>
             </li>
           </ul>
@@ -104,6 +103,8 @@
 </template>
 
 <script setup lang="ts">
+import type { Topic } from '@/model/topic'
+import { useTagsByRef } from '@/utils/tags'
 import type { CasUsageRecord, SolutionRecord } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import IntegrationIndicator from './IntegrationIndicator.vue'
@@ -115,13 +116,15 @@ const props = defineProps<{
   usefulApisByCasUsage: Map<number, number[]>
 }>()
 
-const datagouvSlug = ref<string | undefined>(undefined)
+const solutionTopic = ref<Topic | undefined>(undefined)
 
 const topicsAPI = new TopicsAPI({ version: 2 })
 const solutionTag = `simplifions-v2-solutions-${props.solution.id}`
 topicsAPI.getTopicByTag(solutionTag).then((topic) => {
-  datagouvSlug.value = topic?.slug
+  solutionTopic.value = topic
 })
+
+const datagouvSlug = computed(() => solutionTopic.value?.slug)
 
 const isPublic = computed(() => {
   return props.solution.fields.Public_ou_prive === 'Public'
@@ -135,21 +138,10 @@ const operatorName = computed(() => {
   return props.solution.fields.Nom_de_l_operateur?.[0]
 })
 
+const topicTags = useTagsByRef('solutions', solutionTopic)
+
 const simplificationTags = computed(() => {
-  const tags: Array<{ id: string; label: string; icon?: string }> = []
-
-  // Check if the solution has specific simplification types based on the data
-  if (props.solution.fields.Types_de_simplification?.length) {
-    // Add a generic tag for DLNUF if present
-    tags.push({
-      id: 'dlnuf',
-      label:
-        "Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs",
-      icon: '💎'
-    })
-  }
-
-  return tags
+  return topicTags.value.filter((tag) => tag.type === 'types-de-simplification')
 })
 
 const casUsagesWithIndicators = computed(() => {
