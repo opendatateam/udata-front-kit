@@ -311,6 +311,7 @@
             :solution="editeur"
             :available-apis-or-datasets="availableApisOrDatasets"
             :cas-usages="casUsagesForIntegrateurs"
+            :useful-apis-by-cas-usage="usefulApisByCasUsage"
           />
         </li>
       </ul>
@@ -350,6 +351,7 @@ import { grist } from '../grist'
 import type {
   ApiOrDataset,
   CasUsageRecord,
+  RecommandationRecord,
   Solution,
   SolutionRecord
 } from '../model/grist'
@@ -376,6 +378,7 @@ const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
 const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
 const solutionsIntegratices = ref<SolutionRecord[]>([])
 const casUsagesForIntegrateurs = ref<CasUsageRecord[]>([])
+const supplierRecommendations = ref<RecommandationRecord[]>([])
 const integrateursFilters = ref<IntegrateursFilters>({
   typeSolution: '',
   casUsage: null,
@@ -440,6 +443,14 @@ grist.getRecord('Solutions', solutionId).then((data) => {
             })
         }
       })
+
+    // Fetch Recommendations for the supplier solution to get per-use-case API requirements
+    grist
+      .getRecords('Recommandations', { Solution_recommandee: [solutionId] })
+      .then((recommendations) => {
+        supplierRecommendations.value =
+          recommendations as RecommandationRecord[]
+      })
   }
 })
 
@@ -458,13 +469,43 @@ const availableApisOrDatasets = computed(() => {
   return solution.value?.APIs_ou_datasets_fournis || []
 })
 
-const maxApisCount = computed(() => {
-  return availableApisOrDatasets.value.length
+// Map of cas d'usage ID -> useful APIs/datasets IDs (Y value per use case)
+const usefulApisByCasUsage = computed(() => {
+  const map = new Map<number, number[]>()
+  supplierRecommendations.value.forEach((rec) => {
+    const casUsageId = rec.fields.Cas_d_usage
+    const usefulApis = rec.fields.API_et_datasets_utiles_fournis || []
+    map.set(casUsageId, usefulApis)
+  })
+  return map
 })
 
-// Helper to count integrated APIs or datasets for a solution
+// Max possible integration count (sum of Y across all supplier use cases)
+const maxApisCount = computed(() => {
+  let total = 0
+  for (const usefulApis of usefulApisByCasUsage.value.values()) {
+    total += usefulApis.length
+  }
+  // Fallback if no recommendations loaded yet
+  return total || availableApisOrDatasets.value.length
+})
+
+// Helper to count integrated useful APIs/datasets for a solution (sum of X across use cases)
 const getIntegrationCount = (sol: SolutionRecord) => {
-  return (sol.fields.API_ou_datasets_integres || []).length
+  const integratedApis = sol.fields.API_ou_datasets_integres || []
+  const recommendedCasUsages = sol.fields.Recommande_pour_les_cas_d_usages || []
+
+  let totalIntegrated = 0
+  for (const casUsageId of recommendedCasUsages) {
+    const usefulApis =
+      usefulApisByCasUsage.value.get(casUsageId) ||
+      availableApisOrDatasets.value
+    const integratedCount = integratedApis.filter((apiId) =>
+      usefulApis.includes(apiId)
+    ).length
+    totalIntegrated += integratedCount
+  }
+  return totalIntegrated
 }
 
 const filteredAndSortedSolutions = computed(() => {

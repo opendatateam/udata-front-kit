@@ -112,6 +112,7 @@ const props = defineProps<{
   solution: SolutionRecord
   availableApisOrDatasets: number[]
   casUsages: CasUsageRecord[]
+  usefulApisByCasUsage: Map<number, number[]>
 }>()
 
 const datagouvSlug = ref<string | undefined>(undefined)
@@ -161,11 +162,17 @@ const casUsagesWithIndicators = computed(() => {
       const casUsage = props.casUsages.find((cu) => cu.id === casUsageId)
       if (!casUsage) return null
 
-      // Count how many of the available APIs/datasets this solution has integrated
+      // Get the useful APIs for this specific use case (Y value)
+      // Falls back to all available APIs if no specific recommendation exists
+      const usefulApisForCasUsage =
+        props.usefulApisByCasUsage.get(casUsageId) ||
+        props.availableApisOrDatasets
+      const totalCount = usefulApisForCasUsage.length
+
+      // Count how many of the useful APIs this solution has integrated (X value)
       const integratedCount = integratedApis.filter((apiId) =>
-        props.availableApisOrDatasets.includes(apiId)
+        usefulApisForCasUsage.includes(apiId)
       ).length
-      const totalCount = props.availableApisOrDatasets.length
 
       return {
         id: casUsageId,
