@@ -72,20 +72,20 @@
                 <span :class="['indicator-count', casUsage.colorClass]">
                   {{ casUsage.integratedCount }}/{{ casUsage.totalCount }}
                 </span>
-                <span class="indicator-label-wrapper">
-                  <span class="indicator-label"
-                    >API ou jeux de données intégrés</span
-                  >
-                  <span class="indicator-tooltip">
-                    <span :class="['indicator-count', casUsage.colorClass]"
-                      >{{ casUsage.integratedCount }} API et jeux de données
-                      "<strong>{{ supplierName }}</strong
-                      >"</span
+                <TooltipWrapper>
+                  <template #trigger>
+                    <span class="indicator-label"
+                      >API ou jeux de données intégrés</span
                     >
-                    sur les {{ casUsage.totalCount }} utiles pour ce cas d'usage
-                    ont été intégrés par cette solution.
-                  </span>
-                </span>
+                  </template>
+                  <span :class="['indicator-count', casUsage.colorClass]"
+                    >{{ casUsage.integratedCount }} API et jeux de données
+                    "<strong>{{ supplierName }}</strong
+                    >"</span
+                  >
+                  sur les {{ casUsage.totalCount }} utiles pour ce cas d'usage
+                  ont été intégrés par cette solution.
+                </TooltipWrapper>
               </div>
             </div>
           </div>
@@ -110,6 +110,7 @@
 </template>
 
 <script setup lang="ts">
+import TooltipWrapper from '@/components/TooltipWrapper.vue'
 import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
 import type { CasUsageRecord, SolutionRecord } from '../model/grist'
@@ -303,51 +304,11 @@ const casUsagesWithIndicators = computed(() => {
   border-radius: 4px;
 }
 
-.indicator-label-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
 .indicator-label {
   font-size: 0.75rem;
   color: #666;
   text-decoration: underline dotted;
   text-underline-offset: 2px;
-  cursor: help;
-}
-
-.indicator-tooltip {
-  display: none;
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  border-radius: 4px;
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.15),
-    0 1px 2px rgba(0, 0, 0, 0.1);
-  padding: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--grey-50-1000);
-  width: max-content;
-  max-width: 20rem;
-  z-index: 1000;
-  line-height: 1.4;
-}
-
-.indicator-tooltip::before {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-bottom-color: white;
-}
-
-.indicator-label-wrapper:hover .indicator-tooltip {
-  display: block;
 }
 
 .indicator-count {
