@@ -5094,10 +5094,10 @@ packages:
       }
     engines: { node: '>=10' }
 
-  lodash-es@4.17.21:
+  lodash-es@4.17.22:
     resolution:
       {
-        integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+        integrity: sha512-XEawp1t0gxSi9x01glktRZ5HDy0HXqrM0x5pXQM98EaI0NxO6jVM7omDOxsuEo5UIASAnm2bRp1Jt/e0a2XU8Q==
       }
 
   lodash._reinterpolate@3.0.0:
@@ -11204,7 +11204,7 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
-  lodash-es@4.17.21: {}
+  lodash-es@4.17.22: {}
 
   lodash._reinterpolate@3.0.0: {}
 
@@ -12440,7 +12440,7 @@ snapshots:
       '@types/lodash-es': 4.17.12
       codsen-utils: 1.7.0
       html-entities: 2.6.0
-      lodash-es: 4.17.21
+      lodash-es: 4.17.22
       ranges-apply: 7.1.0
       ranges-push: 7.1.0
       string-left-right: 6.1.0
