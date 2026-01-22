@@ -148,7 +148,7 @@ onMounted(() => {
       <div class="big-search">
         <SearchComponent
           id="big-select-search"
-          :placeholder="xxx"
+          :placeholder="Rechercher un jeu de données…"
           search-label="Rechercher"
           :search-endpoint-params="{ tag: 'deps-doc' }"
         />
