@@ -14,6 +14,14 @@ Il s’inscrit dans la réalisation des politiques publiques portées par le Min
 
 Le catalogue a été lancé par Mme Agnès Pannier-Runacher, ministre de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et de la Pêche à l’occasion du Salon des Maires et des Collectivités locales de 2024.
 
+## 📚 Table des matières
+
+- [Qui sommes-nous ?](#-qui-sommes-nous-)
+- [Zoom sur la fonction d’AMDAC](#-zoom-sur-la-fonction-damdac)
+- [Le droit des données](#-le-droit-des-données)
+- [Le développement de communs numériques](#-le-développement-de-communs-numériques)
+- [Contact](#-contact)
+
 ## 🖐️ Qui sommes-nous ?
 
 L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovation au service de la transition écologique du Commissariat général au développement durable (CGDD), direction transversale du Ministère de la Transition écologique. Acteur central de la donnée environnementale, l’[**Ecolab**](https://greentechinnovation.fr/) assure les fonctions suivantes :
