@@ -1,8 +1,8 @@
 ## 🌿 Le catalogue de référence des données pour la transition écologique
 
-**Sa mission : rendre les données plus accessibles et plus lisibles pour tous.**
+**Sa mission : rendre les données plus accessibles et plus lisibles pour tous**
 
-Face à l’urgence, la planification écologique mobilise l’ensemble des acteurs – État, collectivités, entreprises, associations, citoyens – pour bâtir une action cohérente et efficace vis-à-vis des défis contemporains. Confrontées à un exercice d’une forte transversalité, [ _ecologie_.**data.gouv**._fr_](http://ecologie.data.gouv.fr/) soutient toutes les parties prenantes de l’aménagement du territoire. Le catalogue vise à répondre à leurs besoins de recherche, d’exploitation et de suivi des données environnementales en proposant :
+La planification écologique mobilise l’ensemble des acteurs – État, collectivités, entreprises, associations, citoyens – pour bâtir une action cohérente et efficace vis-à-vis des défis contemporains que sont l'adaptation au changement climatique et la territorialisation des objectifs de transition écologique. [ _ecologie_.**data.gouv**._fr_](http://ecologie.data.gouv.fr/) vise à répondre aux besoins de recherche, d’exploitation et de suivi des données environnementales de toutes les parties prenantes de l’aménagement du territoire en proposant :
 
 - Un accès centralisé à des [données](https://ecologie.data.gouv.fr/datasets) actualisées, produites par des acteurs de référence.
 - Une sélection d'[indicateurs territoriaux](https://ecologie.data.gouv.fr/indicators) de planification écologique, validés par des experts métiers, accessibles via une API dédiée.
@@ -23,15 +23,9 @@ L’[**Ecolab**](https://greentechinnovation.fr/) est le laboratoire d’innovat
 - Point de contact national de la directive européenne INSPIRE, qui vise à établir une infrastructure d’information géographique et impose aux autorités publiques de rendre leurs données environnementales accessibles sur internet ;
 - Co-pilote de la [Mission Connaissance](https://greentechinnovation.fr/mission-connaissance/), dont l’objectif est de renforcer le rôle de la connaissance territoriale dans l’élaboration, la conduite et l’évaluation des politiques publiques environnementales de l’État pour l’ensemble des acteurs.
 
-<div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-<img width="120" height="130" alt="Logo Pôle ministériel" src="https://github.com/user-attachments/assets/0a9d9aaf-45bd-4c78-b2d3-81cdf709b3c2">
-<img width="220" height="130" alt="Logo Ecolab" src="https://github.com/user-attachments/assets/2366cdba-d074-4e38-b879-6e5c04e112d5">
-<img width="127" height="130" alt="Logo Conseil national de l'information géolocalisée" src="https://github.com/user-attachments/assets/1532f923-f766-42ac-b42d-6b8fcba83e1f">
-</div>
-
 ## 🔎 Zoom sur la fonction d’AMDAC
 
-Les AMDAC ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir sa stratégie en matière de données, d’algorithmes et de codes sources, de coordonner les acteurs concernés, et de servir de point de contact pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
+Les Administrateurs ministériels des données, des algorithmes et des codes sources (AMDAC) ont été institués par le Premier ministre dans la circulaire du 27 avril 2021 sur la politique publique de la donnée, des algorithmes et des codes sources. Chaque ministère dispose de son propre AMDAC, chargé de définir sa stratégie en matière de données, d’algorithmes et de codes sources, de coordonner les acteurs concernés, et de servir de point de contact pour les utilisateurs de données et d’applications numériques relevant de son périmètre.
 
 L’AMDAC est responsable de la mise en œuvre de la politique publique de la donnée. À ce titre, il veille à ce que les données soient accessibles et compréhensibles, diffusées en open data lorsque c’est possible, ou partagées entre ayants droit dans le cas contraire. Il s’assure également que ces données soient mobilisées de manière efficace au service des politiques publiques, des autres administrations et, au-delà, de la société civile pour accélérer la transition écologique.
 
