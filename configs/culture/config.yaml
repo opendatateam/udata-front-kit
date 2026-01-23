@@ -97,6 +97,8 @@ website:
       to: /datasets
     # - text: Réutiliser
     #   to: /reuses
+    - text: 'Observer'
+      to: /deps
     - text: 'Publier'
       to: /publier
     - text: Echanger
@@ -123,6 +125,8 @@ website:
       path: /datasets
     - name: Publier
       path: /publier
+    - name: Observer
+      path: /deps
     - name: Démarche
       path: /demarche
     - name: Conditions générales d’utilisation
