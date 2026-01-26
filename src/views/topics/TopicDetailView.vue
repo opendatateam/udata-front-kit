@@ -225,13 +225,16 @@ const handleNavigateToFactor = (elementId: string) => {
 }
 
 useHead({
-  meta: [
+  meta: () => [
     {
       property: 'og:title',
-      content: () => `${metaTitle.value} | ${config.website.title}`
+      content: `${metaTitle.value} | ${config.website.title}`
     },
-    { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription }
+    { name: 'description', content: metaDescription() },
+    { property: 'og:description', content: metaDescription() },
+    ...(topic.value?.private
+      ? [{ name: 'robots', content: 'noindex, nofollow' }]
+      : [])
   ],
   link: [{ rel: 'canonical', href: metaLink }]
 })
