@@ -9,14 +9,23 @@ datagouvfr:
   oauth_client_id: 670924ba96082fcc26ee3898
   tabular_api_url:
 
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
-
 # UI customizations
 website:
   title: 'defis.data.gouv.fr'
+  seo:
+    canonical_url: https://defis.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'index, follow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages:
+        - defis
+      datasets_pages: []
+      dataservices_pages: []
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
   service_logo: '/static/logos/defis-logo.svg'
@@ -195,12 +204,14 @@ website:
 
           [En savoir plus sur l’Open Data University.](/opendatauniversity)
     meta_description:
-  header_button:
-    display: false
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wQ7y47
-  header_search:
-    display: false
+  header:
+    admin_shortcut: false
+    button:
+      display: false
+      label: 'Donnez votre avis'
+      link: https://tally.so/r/wQ7y47
+    search:
+      display: false
   search_bar:
     display: false
     placeholder: 'Rechercher un jeu de données'

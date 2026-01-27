@@ -1,4 +1,10 @@
-import type { Factor, Topic } from '@/model/topic'
+import {
+  Availability,
+  type Factor,
+  type SiteId,
+  type Topic
+} from '@/model/topic'
+import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import {
   createTestTopic,
   createTestTopicWithElements,
@@ -130,6 +136,96 @@ describe('Topic Elements - Factor List Display', () => {
 
       // Verify we're now on the referenced topic page
       cy.contains('h1', referencedTopic.name).should('be.visible')
+    })
+
+    it('should display DataserviceCard for factors referencing dataservices', () => {
+      setupElementTest()
+
+      // Create referenced dataservices that will be displayed in the cards
+      const referencedDataserviceEcologie = dataserviceFactory.one({
+        overrides: {
+          slug: 'referenced-dataservice-1',
+          title: 'Referenced Dataservice 1 Name'
+        }
+      })
+      const referencedDataserviceDatagouvfr = dataserviceFactory.one({
+        overrides: {
+          slug: 'referenced-dataservice-2',
+          title: 'Referenced Dataservice 2 Name'
+        }
+      })
+      const referencedDataservices = [
+        referencedDataserviceEcologie,
+        referencedDataserviceDatagouvfr
+      ]
+
+      // Create factors with dataservice_reference traits
+      const dataserviceFactorEcologie = factorFactory.one({
+        traits: ['dataservice_reference_ecologie']
+      })
+      // Override URI for second factor because each trait's sequence() starts from 1 independently
+      // Without override, both would generate referenced-dataservice-1
+      const dataserviceFactorDatagouvfr = factorFactory.one({
+        traits: ['dataservice_reference_datagouvfr'],
+        overrides: {
+          extras: {
+            ['ecospheres' as SiteId]: {
+              uri: `${Cypress.env('siteConfig').datagouvfr.base_url}/dataservices/referenced-dataservice-2`,
+              availability: Availability.LOCAL_AVAILABLE,
+              group: 'Test Group'
+            }
+          }
+        }
+      })
+      const dataserviceFactors = [
+        dataserviceFactorEcologie,
+        dataserviceFactorDatagouvfr
+      ]
+
+      // Create and mock a test topic with those factors and referenced dataservices
+      const mainTopic = createTestTopicWithElements(dataserviceFactors)
+      mockTopicAndRelatedObjects(mainTopic, {
+        factors: dataserviceFactors,
+        referencedDataservices
+      })
+      mockTopicElementsByClass(mainTopic.id, [], dataserviceFactors, [])
+
+      visitTopic(mainTopic.slug)
+
+      // Wait for element=null mock, for referenced dataservices
+      cy.wait('@getElementsNone')
+
+      // Expand the group to see the factors
+      expandDisclosureGroup()
+
+      // Verify factor title is visible
+      for (const dataserviceFactor of dataserviceFactors) {
+        cy.contains(dataserviceFactor.title).should('be.visible')
+      }
+
+      // Verify DataserviceCard is displayed with the referenced dataservice name
+      for (const referencedDataservice of referencedDataservices) {
+        cy.contains(referencedDataservice.title).should('be.visible')
+      }
+
+      // Verify the badge with "API" label is displayed twice
+      cy.get('.fr-badge--mention-grey')
+        .should('have.length', 2)
+        .each(($badge) => {
+          cy.wrap($badge).should('contain.text', 'API')
+        })
+
+      // Verify the "Accéder au catalogue" button is NOT displayed
+      cy.contains('Accéder au catalogue').should('not.exist')
+
+      // Click on the DataserviceCard to navigate
+      cy.contains(referencedDataservices[0].title).click()
+
+      // Verify navigation occurred to the referenced dataservice
+      cy.url().should(
+        'include',
+        `/dataservices/${referencedDataservices[0].id}`
+      )
     })
   })
 })
