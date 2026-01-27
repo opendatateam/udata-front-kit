@@ -36,7 +36,9 @@ website:
       disallow:
         - /admin
     sitemap_xml:
-      topics_pages: []
+      topics_pages:
+        - solutions
+        - cas-d-usages
       datasets_pages: []
       dataservices_pages: []
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
