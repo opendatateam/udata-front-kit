@@ -97,6 +97,8 @@ website:
       to: /datasets
     # - text: Réutiliser
     #   to: /reuses
+    - text: 'Observer'
+      to: /deps
     - text: 'Publier'
       to: /publier
     - text: Echanger
@@ -121,6 +123,8 @@ website:
       path: /
     - name: Jeux de données
       path: /datasets
+    - name: Observer
+      path: /deps
     - name: Publier
       path: /publier
     - name: Démarche
