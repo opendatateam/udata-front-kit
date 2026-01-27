@@ -43,10 +43,6 @@
             />
             <span v-else>Non renseigné</span>
           </li>
-          <li>
-            <strong>Prix :</strong>
-            {{ solution.Prix ? solution.Prix : 'Non renseigné' }}
-          </li>
         </ul>
 
         <ul class="solution-links fr-btns-group fr-btns-group--inline fr-my-4w">

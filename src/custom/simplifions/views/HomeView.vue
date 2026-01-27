@@ -187,7 +187,7 @@ const niveauxDeSimplification = [
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
     >
-      Quelques soient vos ressources, il existe des solutions !
+      Quelles que soient vos ressources, il existe des solutions !
     </h2>
 
     <p class="fr-text--lg" style="text-align: center">
