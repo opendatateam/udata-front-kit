@@ -88,6 +88,7 @@ export type Solution = {
   Nom_de_l_operateur: string[]
   Operateur: number[]
   Pour_simplifier_les_demarches_de: number[]
+  Prix: string
   Public_ou_prive: string
   Site_internet: string
   Types_de_simplification: number[]
