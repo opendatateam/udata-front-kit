@@ -10,6 +10,7 @@ import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
@@ -60,7 +61,8 @@ const description = computed(() => descriptionFromMarkdown(topic))
 
 // Dynamically load the custom description component if it exists
 const customDescriptionComponent = useAsyncComponent(
-  () => meta.descriptionComponent
+  () => meta.descriptionComponent,
+  { loadingComponent: ContentPlaceholder }
 )
 
 const userStore = useUserStore()
@@ -269,11 +271,15 @@ watch(
   { immediate: true }
 )
 
+// Callback to hide the loader, passed to custom description components
+const hideLoader = ref<(() => void) | null>(null)
+
 watch(
   () => route.value?.params.item_id,
   (itemId) => {
     if (!itemId) return
     const loader = loading.show({ enforceFocus: false })
+    hideLoader.value = () => loader.hide()
     store
       .load(itemId, { toasted: false, redirectNotFound: true })
       .then((res) => {
@@ -286,7 +292,13 @@ watch(
         }
         setAccessibilityProperties(metaTitle.value)
       })
-      .finally(() => loader.hide())
+      .finally(() => {
+        // Only auto-hide if there's no custom description component
+        // Custom components are responsible for calling hideLoader when ready
+        if (!meta.descriptionComponent) {
+          loader.hide()
+        }
+      })
   },
   { immediate: true }
 )
@@ -308,6 +320,7 @@ watch(
             :is="customDescriptionComponent"
             :topic="topic"
             :page-key="pageKey"
+            :hide-loader="hideLoader"
           />
         </div>
         <div v-else>
