@@ -37,19 +37,6 @@ export const useUserStore = defineStore('user', {
     },
     isAdmin(): boolean {
       return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
-    },
-    canAddTopic(state): boolean {
-      if (topicConf.can_add_topics.everyone || this.isAdmin) {
-        return true
-      }
-      if (this.loggedIn && state.data != null) {
-        if (
-          topicConf.can_add_topics.authorized_users?.includes(state.data.id)
-        ) {
-          return true
-        }
-      }
-      return false
     }
   },
   actions: {
@@ -142,6 +129,24 @@ export const useUserStore = defineStore('user', {
         return this.data.organizations
           .map((o) => o.id)
           .includes(object.organization.id)
+      }
+      return false
+    },
+    /**
+     * Can user add a topic for the given page?
+     * Checks both user permissions and route existence.
+     */
+    canAddTopic(pageKey: string): boolean {
+      if (!this.$router.hasRoute(`${pageKey}_add`)) {
+        return false
+      }
+      if (topicConf.can_add_topics.everyone || this.isAdmin) {
+        return true
+      }
+      if (this.loggedIn && this.data != null) {
+        if (topicConf.can_add_topics.authorized_users?.includes(this.data.id)) {
+          return true
+        }
       }
       return false
     }

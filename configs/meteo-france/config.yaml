@@ -9,14 +9,23 @@ datagouvfr:
   oauth_client_id: 6709259c1e92c988c47d2f3e
   tabular_api_url:
 
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
-
 # UI customizations
 website:
   title: 'meteo.data.gouv.fr'
+  seo:
+    canonical_url: https://meteo.preprod.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
@@ -65,13 +74,15 @@ website:
           tiles:
         sub_section_buttons:
     meta_description:
-  header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wQ7y47
-  header_search:
-    display: true
-    placeholder: Rechercher...
+  header:
+    admin_shortcut: false
+    button:
+      display: true
+      label: 'Donnez votre avis'
+      link: https://tally.so/r/wQ7y47
+    search:
+      display: true
+      placeholder: Rechercher...
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'

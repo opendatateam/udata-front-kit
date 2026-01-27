@@ -169,11 +169,78 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 ### 🏭 Déploiement en preprod et en production
 
-Le déploiement des verticales thématiques en preprod et en production s'effectue via un workflow GitHub qui peut être déclenché de deux manières différentes :
-
 #### Comment déployer en préproduction et en production
 
-## Solution 1 - par le message de Git commit
+##### Solution 1 : Script de déploiement local (recommandé)
+
+Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes.
+
+**Prérequis :** [GitHub CLI (`gh`)](https://cli.github.com/) et `jq` installés, `gh` authentifié.
+
+###### Étape 1 : Préparer le déploiement
+
+Crée une branche de merge temporaire, fusionne les changements (avec résolution de conflits si nécessaire), et crée une PR draft :
+
+```bash
+# Pour demo/preprod (source = main par défaut)
+./scripts/deploy.sh prepare <site> <env> <version>
+
+# Pour prod (--source obligatoire)
+./scripts/deploy.sh prepare <site> prod <version> --source <site>-preprod
+```
+
+**Exemples :**
+
+```bash
+./scripts/deploy.sh prepare ecospheres demo minor
+./scripts/deploy.sh prepare ecospheres prod minor --source ecospheres-demo
+```
+
+Le script :
+
+- Crée une branche `{site}-{env}-merge` depuis `{site}-{env}`
+- Fusionne la branche source dans cette branche
+- En cas de conflits, vous les résolvez localement puis relancez la commande
+- Pousse la branche et crée une PR draft
+- Poste un commentaire `/deploy {site}` pour créer une review app
+
+###### Étape 2 : Déployer
+
+Après validation et approbation de la PR, lancez le déploiement avec l'URL ou le numéro de la PR :
+
+```bash
+./scripts/deploy.sh deploy <pr>
+
+# Exemples
+./scripts/deploy.sh deploy 123
+./scripts/deploy.sh deploy https://github.com/opendatateam/udata-front-kit/pull/123
+```
+
+Le script :
+
+- Vérifie que la PR est ouverte et approuvée
+- Merge la PR avec le message normalisé `[{env}:{site}:{version}] {titre_pr} #{numéro_pr}`
+- Supprime la branche de merge
+- Pour les déploiements **prod** : crée une release GitHub avec changelog auto-généré
+- Déclenche automatiquement le pipeline GitLab
+
+**Arguments :**
+
+| Argument    | Valeurs possibles                                      |
+| ----------- | ------------------------------------------------------ |
+| `<site>`    | Déterminé dynamiquement depuis les dossiers `configs/` |
+| `<env>`     | `demo`, `preprod`, `prod`                              |
+| `<version>` | `major`, `minor`, `patch`                              |
+
+**Options :**
+
+| Option               | Description                                                               |
+| -------------------- | ------------------------------------------------------------------------- |
+| `--source <branch>`  | Branche source (obligatoire pour prod, défaut : `main` pour demo/preprod) |
+| `--ignore-git-clean` | Ignore la vérification de l'état git (utile pour les tests)               |
+| `--skip-release`     | Ne pas créer de release GitHub (prod uniquement)                          |
+
+##### Solution 2 : Message de commit
 
 Le déploiement des verticales thématiques en preprod et en production peut s'effectuer via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
 
@@ -204,9 +271,9 @@ Le workflow se déclenche sur tous les push vers toutes les branches, mais ne s'
 
 Toutes les variables et secrets nécessaires pour ce workflow sont listés dans la section `env:` du [workflow de déploiement](.github/workflows/create-deploy-release.yml).
 
-## Solution 2 — sur l'interface web de GitHub Actions
+##### Solution 3 : Interface GitHub Actions
 
-Le déploiement peut également être déclenché manuellement via l'interface GitHub Actions :
+Le déploiement peut être déclenché manuellement via l'interface GitHub Actions :
 
 1. **Aller dans l'onglet "Actions"** du dépôt GitHub
 2. **Sélectionner "Deployment on datagouv domains with version bump"** dans la liste des workflows
@@ -265,6 +332,43 @@ NB : dans certains cas, il possible de créer et de déployer des Pull Requests 
   - `prettier-plugin-organize-imports` // organise et/ou supprime les imports des fichiers
 
 À chaque `git commit`, `husky` lance `lint-staged` qui formate les fichiers "staged" avec `prettier`.
+
+## Configuration SEO
+
+### sitemap.xml et robots.txt
+
+Le référencement des verticales est géré via la section `website.seo` du fichier de configuration. Cette configuration pilote la génération de `robots.txt` et `sitemap.xml` par le package [`udata-front-kit-seo`](https://github.com/opendatateam/udata-front-kit-seo), qui lit cette configuration et génère les fichiers pour chaque couple site/environnement.
+
+Les clés dans `sitemap_xml` (`topics_pages`, `datasets_pages`, `dataservices_pages`) doivent correspondre aux identifiants définis dans la section `pages:` du fichier de configuration.
+
+Exemple :
+
+```yaml
+website:
+  seo:
+    canonical_url: https://site.data.gouv.fr
+    meta:
+      keywords: 'mots-clés, séparés, par, virgules'
+      description: 'Description du site'
+      robots: 'index, follow' # 'noindex, nofollow' pour demo/preprod
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages:
+        - bouquets
+      datasets_pages:
+        - indicators
+      dataservices_pages:
+        - dataservices
+```
+
+### Gestion des meta tags dans l'application
+
+- Les meta `robots` sont injectés au niveau du template HTML (`index.html`) lors du build via `vite.config.mts`
+- Les meta `keywords` et `description` globaux peuvent être définis dans `website.seo.meta`
+- Pour les meta tags dynamiques par page (Open Graph, descriptions spécifiques, etc.), utilisez le composable `useHead` de [`@unhead/vue`](https://unhead.unjs.io/) directement dans vos composants Vue (voir exemples dans `src/custom/*/views/`)
+- Le `canonical_url` est utilisé comme base pour les liens canoniques
 
 ## Configurer Sentry pour surveiller les erreurs
 
