@@ -206,9 +206,9 @@ website:
       authorized_users:
 
 organizations:
-  datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-datasets-prod.json
-  dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-dataservices-prod.json
-  bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-bouquets-prod.json
+  datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-prod/organizations-datasets.json
+  dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-prod/organizations-dataservices.json
+  bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-prod/organizations-bouquets.json
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
