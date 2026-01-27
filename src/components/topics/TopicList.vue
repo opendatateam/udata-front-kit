@@ -31,7 +31,6 @@ const topicStore = useTopicStore()
 const { meta, pageKey, pageConf } = useCurrentPageConf()
 
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
 const emits = defineEmits(['clearFilters'])
 
@@ -144,14 +143,14 @@ defineExpose({
     />
   </template>
   <NoResults v-else :clear-filters="clearFilters">
-    <template v-if="canAddTopic" #description>
+    <template v-if="userStore.canAddTopic(pageKey)" #description>
       Essayez de réinitialiser les filtres pour agrandir votre champ de
       recherche.<br />
       Vous pouvez aussi contribuer en créant un {{ pageConf.labels.singular }}.
     </template>
     <template #actions>
       <router-link
-        v-if="canAddTopic"
+        v-if="userStore.canAddTopic(pageKey)"
         :to="createUrl"
         class="fr-btn fr-btn--secondary fr-ml-1w"
       >

@@ -10,7 +10,7 @@ export interface OgcLayerInfo {
   url: string
   format: OGC_SERVICE_FORMAT
   layerName?: string
-  title?: string
+  resourceTitle: string
 }
 
 /**
@@ -159,7 +159,7 @@ export function findOgcCompatibleResource(
         return {
           url: resource.url,
           format,
-          title: resource.title,
+          resourceTitle: resource.title,
           layerName
         }
       }
@@ -169,7 +169,7 @@ export function findOgcCompatibleResource(
         wmsCandidate = {
           url: resource.url,
           format,
-          title: resource.title,
+          resourceTitle: resource.title,
           layerName
         }
       }

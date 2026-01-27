@@ -11,7 +11,7 @@ export interface IndicatorExtrasSource {
   description: string
   producteur: string
   distributeur: string
-  plage_temporelle: {
+  plage_temporelle?: {
     start: string
     end: string
   }

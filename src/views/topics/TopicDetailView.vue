@@ -69,7 +69,7 @@ const userStore = useUserStore()
 const canEdit = computed(() => {
   return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
-const { isAdmin, canAddTopic } = storeToRefs(userStore)
+const { isAdmin } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
@@ -227,13 +227,16 @@ const handleNavigateToFactor = (elementId: string) => {
 }
 
 useHead({
-  meta: [
+  meta: () => [
     {
       property: 'og:title',
-      content: () => `${metaTitle.value} | ${config.website.title}`
+      content: `${metaTitle.value} | ${config.website.title}`
     },
-    { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription }
+    { name: 'description', content: metaDescription() },
+    { property: 'og:description', content: metaDescription() },
+    ...(topic.value?.private
+      ? [{ name: 'robots', content: 'noindex, nofollow' }]
+      : [])
   ],
   link: [{ rel: 'canonical', href: metaLink }]
 })
@@ -356,7 +359,7 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
-              v-if="canAddTopic"
+              v-if="userStore.canAddTopic(pageKey)"
               secondary
               size="md"
               label="Cloner"
@@ -504,9 +507,18 @@ watch(
           v-model="factors"
           :is-edit="canEdit"
           :topic-id="topic.id"
+          :topic-name="topic.name"
           @factor-changed="handleFactorChanged"
         />
-        <TopicFactorsListExport :factors="factors" :filename="topic.id" />
+        <TopicFactorsListExport
+          :factors="factors"
+          :filename="topic.id"
+          :has-ogc-resources="
+            topicFactorsListRef?.hasOgcResources &&
+            config.website.datasets.open_in_qgis
+          "
+          @open-topic-in-qgis="topicFactorsListRef?.handleOpenTopicInQgis"
+        />
       </DsfrTabContent>
       <!-- Discussions -->
       <DsfrTabContent
