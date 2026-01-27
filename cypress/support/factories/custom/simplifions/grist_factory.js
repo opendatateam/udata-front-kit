@@ -71,7 +71,6 @@ export const solutionFactory = build({
       ]),
       Operateur: [1, 2],
       Pour_simplifier_les_demarches_de: [1, 2],
-      Prix: sequence((x) => ['Gratuit', 'Payant'][x % 2]),
       Public_ou_prive: sequence((x) => ['Public', 'Privé'][x % 2]),
       Site_internet: sequence((x) => `https://solution${x}.example.com`),
       Types_de_simplification: [1, 2],
