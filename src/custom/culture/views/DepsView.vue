@@ -21,7 +21,7 @@ useHead({
         'culture.data.gouv.fr référence et centralise les données du domaine de la culture.'
     }
   ],
-  link: [{ rel: 'canonical', href: window.location.origin }]
+  link: [{ rel: 'canonical', href: window.location.origin + '/deps' }]
 })
 
 interface Section {
@@ -67,7 +67,7 @@ const loading = ref(true)
 const fetchSections = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Table1/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_sections/records?sort=ordre'
     )
     const data = await response.json()
     sections.value = data.records
@@ -79,7 +79,7 @@ const fetchSections = async () => {
 const fetchContent = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Content_section/records'
+      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_content_section/records'
     )
     const data = await response.json()
     contentItems.value = data.records
@@ -91,7 +91,7 @@ const fetchContent = async () => {
 const fetchTopItems = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Tops/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_tops/records?sort=ordre'
     )
     const data = await response.json()
     topItems.value = data.records
@@ -115,7 +115,7 @@ const getTopItemsByType = (
 const formatTopItemsAsMarkdown = (items: TopItem[]) => {
   return items
     .map((item) => {
-      const url = `${window.location.origin}/datasets/${item.fields.slug}`
+      const url = `/datasets/${item.fields.slug}`
       return `[${item.fields.titre}](${url})`
     })
     .join('\n\n')
@@ -138,7 +138,7 @@ onMounted(() => {
 <template>
   <div class="datagouv-components">
     <section class="fr-container fr-pt-12v">
-      <h1 class="main-title-v2">Les données ouvertes de la Culture</h1>
+      <h1 class="main-title-v2">Les données du DEPS</h1>
       <p class="fr-text--lead fr-mb-6w text-center">
         culture.data.gouv.fr vise à référencer, héberger et diffuser les données
         publiques relatives à la culture en France. Vous y trouverez des données
@@ -148,8 +148,9 @@ onMounted(() => {
       <div class="big-search">
         <SearchComponent
           id="big-select-search"
-          :placeholder="config.website.header.search.placeholder"
+          placeholder="Rechercher un jeu de données du DEPS"
           search-label="Rechercher"
+          :search-endpoint-params="{ tag: 'deps-doc' }"
         />
       </div>
     </section>

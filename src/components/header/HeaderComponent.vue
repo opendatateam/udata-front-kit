@@ -16,7 +16,7 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgStyle: () => ({}),
   searchLabel: 'Rechercher',
   quickLinks: () => [],
-  showSearch: config.website.header_search.display,
+  showSearch: config.website.header.search.display,
   customSearch: false
 })
 
@@ -43,7 +43,7 @@ const showLogoOperatorInHeader =
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
 const badgeStyle = config.website.badge.style
-const dropdown = config.website.header_search.dropdown ?? undefined
+const dropdown = config.website.header.search.dropdown ?? undefined
 </script>
 
 <template>

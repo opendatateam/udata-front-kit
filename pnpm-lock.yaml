@@ -11,11 +11,14 @@ importers:
         specifier: ^0.1.5
         version: 0.1.5(core-js@3.47.0)(resize-detector@0.3.0)(typescript@5.7.3)
       '@ecolabdata/tabular-dataviz':
-        specifier: ^1.3.1
-        version: 1.3.1(chart.js@4.5.1)
+        specifier: ^1.3.3
+        version: 1.3.3(chart.js@4.5.1)
       '@gouvfr/dsfr':
         specifier: 1.11.2
         version: 1.11.2
+      '@gouvfr/dsfr-chart':
+        specifier: ^2.0.4
+        version: 2.0.4
       '@gouvminint/vue-dsfr':
         specifier: ^8.6.0
         version: 8.6.0(@iconify/vue@4.3.0(vue@3.5.25(typescript@5.7.3)))(vue-router@4.6.3(vue@3.5.25(typescript@5.7.3)))(vue@3.5.25(typescript@5.7.3))
@@ -55,6 +58,9 @@ importers:
       marked:
         specifier: ^15.0.6
         version: 15.0.12
+      marked-gfm-heading-id:
+        specifier: ^4.1.3
+        version: 4.1.3(marked@15.0.12)
       pinia:
         specifier: ^2.3.0
         version: 2.3.1(typescript@5.7.3)(vue@3.5.25(typescript@5.7.3))
@@ -471,10 +477,10 @@ packages:
         integrity: sha512-1kC1Rn3YLdtDLaxOyLN0j21bHhkBQVCk5paDJLDWieOXUSMELW3AIU92Zj7FQQxF5Nj63iChUjdnEo8WAl50zQ==
       }
 
-  '@ecolabdata/tabular-dataviz@1.3.1':
+  '@ecolabdata/tabular-dataviz@1.3.3':
     resolution:
       {
-        integrity: sha512-x87hh6U+5GpJOFPa4sT4KqvFi14ScwvDWofEMcAISuVjvLctC3+noJzeVIpkXLyiGTHtAyxW9qhElEWhVTRXnA==
+        integrity: sha512-zeYlaATAVOIoEEGkn3nb96/eRXkHG8g5u7vweNez+OIWQ6UyBVLnnq4boHeODUfWsYnine2ZX7IHsIBZ9usEqg==
       }
     engines: { node: '>=16' }
     peerDependencies:
@@ -801,6 +807,12 @@ packages:
     resolution:
       {
         integrity: sha512-BfNqNW6KA83Nexspgb9DZuz578R7HT8MZw1CfK9I6Ah4QReNWEJsXWHN+SdmOVLNGmTPDi+fDT535Df5PzMLbQ==
+      }
+
+  '@gouvfr/dsfr-chart@2.0.4':
+    resolution:
+      {
+        integrity: sha512-/JoW6R7ystExxvuLvHacR0ZWcL1PpDkUyG/niF8jgqRaksWgb31EpJGQjmgaHR29nrANdyvoRb1DEQAL00XZ1A==
       }
 
   '@gouvfr/dsfr@1.11.2':
@@ -5085,10 +5097,10 @@ packages:
       }
     engines: { node: '>=10' }
 
-  lodash-es@4.17.21:
+  lodash-es@4.17.22:
     resolution:
       {
-        integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+        integrity: sha512-XEawp1t0gxSi9x01glktRZ5HDy0HXqrM0x5pXQM98EaI0NxO6jVM7omDOxsuEo5UIASAnm2bRp1Jt/e0a2XU8Q==
       }
 
   lodash._reinterpolate@3.0.0:
@@ -5257,6 +5269,14 @@ packages:
       }
     engines: { node: '>=0.10.0' }
     hasBin: true
+
+  marked-gfm-heading-id@4.1.3:
+    resolution:
+      {
+        integrity: sha512-aR0i63LmFbuxU/gAgrgz1Ir+8HK6zAIFXMlckeKHpV+qKbYaOP95L4Ux5Gi+sKmCZU5qnN2rdKpvpb7PnUBIWg==
+      }
+    peerDependencies:
+      marked: '>=13 <18'
 
   marked@15.0.12:
     resolution:
@@ -8405,7 +8425,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@ecolabdata/tabular-dataviz@1.3.1(chart.js@4.5.1)':
+  '@ecolabdata/tabular-dataviz@1.3.3(chart.js@4.5.1)':
     dependencies:
       chart.js: 4.5.1
       choices.js: 11.1.0
@@ -8553,6 +8573,8 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@gouvfr/dsfr-chart@2.0.4': {}
 
   '@gouvfr/dsfr@1.11.2': {}
 
@@ -11193,7 +11215,7 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
-  lodash-es@4.17.21: {}
+  lodash-es@4.17.22: {}
 
   lodash._reinterpolate@3.0.0: {}
 
@@ -11314,6 +11336,11 @@ snapshots:
       remarkable: 1.7.4
       repeat-string: 1.6.1
       strip-color: 0.1.0
+
+  marked-gfm-heading-id@4.1.3(marked@15.0.12):
+    dependencies:
+      github-slugger: 2.0.0
+      marked: 15.0.12
 
   marked@15.0.12: {}
 
@@ -12429,7 +12456,7 @@ snapshots:
       '@types/lodash-es': 4.17.12
       codsen-utils: 1.7.0
       html-entities: 2.6.0
-      lodash-es: 4.17.21
+      lodash-es: 4.17.22
       ranges-apply: 7.1.0
       ranges-push: 7.1.0
       string-left-right: 6.1.0

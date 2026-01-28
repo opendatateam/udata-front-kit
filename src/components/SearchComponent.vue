@@ -44,6 +44,12 @@ const props = defineProps({
   searchEndpoint: {
     type: String,
     default: () => null
+  },
+  searchEndpointParams: {
+    type: Object as () => Record<string, string>,
+    default: () => {
+      return {}
+    }
   }
 })
 
@@ -59,18 +65,22 @@ const query = ref('')
 const selectedMultiSearch = ref()
 const multiselect = useTemplateRef('multiselect')
 
+const buildSearchQueryParams = (q: string) => {
+  return { ...props.searchEndpointParams, q }
+}
+
 const doSimpleSearch = (event: string) => {
   query.value = event
   router.push({
     path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
-    query: { q: query.value }
+    query: buildSearchQueryParams(query.value)
   })
   query.value = ''
   emits('doSearch')
 }
 
 const doMultiSearch = (item: DropdownItem) => {
-  router.push({ name: item.route, query: { q: query.value } })
+  router.push({ name: item.route, query: buildSearchQueryParams(query.value) })
   clear()
   query.value = ''
   emits('doSearch')

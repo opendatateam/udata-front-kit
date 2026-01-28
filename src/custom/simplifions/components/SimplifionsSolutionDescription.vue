@@ -1,8 +1,6 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <div v-if="solution === undefined" class="loading">
-    Chargement de la solution en cours...
-  </div>
+  <ContentPlaceholder v-if="!solution" />
   <div v-else class="solution-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
@@ -44,10 +42,6 @@
               last-item-separator="ou"
             />
             <span v-else>Non renseigné</span>
-          </li>
-          <li>
-            <strong>Prix :</strong>
-            {{ solution.Prix ? solution.Prix : 'Non renseigné' }}
           </li>
         </ul>
 
@@ -304,6 +298,7 @@
 </template>
 
 <script setup lang="ts">
+import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
@@ -316,6 +311,7 @@ import SimplifionsDataApi from './SimplifionsDataApi.vue'
 const props = defineProps<{
   topic: Topic
   pageKey: string
+  hideLoader: (() => void) | null
 }>()
 
 const solutionId = (props.topic.extras as TopicSolutionsExtras)[
@@ -328,6 +324,9 @@ const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
 
 grist.getRecord('Solutions', solutionId).then((data) => {
   solution.value = data.fields as Solution
+
+  // hide parent component loader
+  props.hideLoader?.()
 
   if (solution.value.API_ou_datasets_integres?.length) {
     grist
