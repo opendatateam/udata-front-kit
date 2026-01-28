@@ -6,7 +6,14 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
+import {
+  type Component,
+  computed,
+  inject,
+  onMounted,
+  ref,
+  shallowRef
+} from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
@@ -102,7 +109,16 @@ const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
 
-onMounted(() => {
+// use shallowRef to avoid deep reactivity on optional component
+const DynamicDatasetCard = shallowRef<Component | null>(null)
+
+onMounted(async () => {
+  if (import.meta.env.VITE_SITE_ID === 'ecospheres') {
+    const mod = await import(
+      '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+    )
+    DynamicDatasetCard.value = mod.default
+  }
   dataserviceStore
     .load(dataserviceId, { toasted: false, redirectNotFound: true })
     .then(() => {
@@ -245,13 +261,16 @@ onMounted(() => {
           <h2 class="fr-mb-1v subtitle subtitle--uppercase">
             {{ `${total} jeu${total > 1 ? 'x' : ''} de données` }}
           </h2>
-          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+          <div
+            class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-mt-2w"
+          >
             <div
               v-for="dataset in datasets"
               :key="dataset.id"
               class="fr-col-12 fr-col-lg-6"
             >
-              <DatasetCard
+              <component
+                :is="DynamicDatasetCard || DatasetCard"
                 :show-description="false"
                 :dataset="dataset"
                 :dataset-url="getDatasetPage(dataset.id)"
