@@ -377,6 +377,16 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
+      - name: Label de données
+        default_option: Tous les labels
+        id: badge
+        type: select
+        use_filter_prefix: false
+        values:
+          - id: hvd
+            name: Données de forte valeur
+          - id: inspire
+            name: INSPIRE
   # DATASERVICES
   dataservices:
     list_all: true
