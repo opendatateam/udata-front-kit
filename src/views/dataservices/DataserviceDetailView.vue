@@ -6,14 +6,7 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
-import {
-  type Component,
-  computed,
-  inject,
-  onMounted,
-  ref,
-  shallowRef
-} from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
@@ -27,6 +20,7 @@ import {
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
+import { useAsyncComponent } from '@/utils/component'
 import SwaggerClient from '@datagouv/components-next/src/components/ResourceAccordion/Swagger.client.vue'
 
 const route = useRouteParamsAsString()
@@ -41,7 +35,11 @@ const total = computed(
   () => dataserviceStore.datasetsTotals[dataserviceId]?.total || 0
 )
 
-const { pageKey, pageConf } = useCurrentPageConf()
+const { pageKey, meta, pageConf } = useCurrentPageConf()
+
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+  fallback: DatasetCard
+})
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const isSwaggerOpened = ref(false)
 
@@ -109,16 +107,7 @@ const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
 
-// use shallowRef to avoid deep reactivity on optional component
-const DynamicDatasetCard = shallowRef<Component | null>(null)
-
-onMounted(async () => {
-  if (import.meta.env.VITE_SITE_ID === 'ecospheres') {
-    const mod = await import(
-      '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
-    )
-    DynamicDatasetCard.value = mod.default
-  }
+onMounted(() => {
   dataserviceStore
     .load(dataserviceId, { toasted: false, redirectNotFound: true })
     .then(() => {
@@ -269,8 +258,7 @@ onMounted(async () => {
               :key="dataset.id"
               class="fr-col-12 fr-col-lg-6"
             >
-              <component
-                :is="DynamicDatasetCard || DatasetCard"
+              <CardComponent
                 :show-description="false"
                 :dataset="dataset"
                 :dataset-url="getDatasetPage(dataset.id)"

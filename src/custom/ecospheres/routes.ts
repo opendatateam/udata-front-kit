@@ -30,7 +30,11 @@ export const routes: RouteRecordRaw[] = [
   }),
   useDataserviceSearchPageRoutes({
     pageKey: 'dataservices',
-    metaTitle: 'API'
+    metaTitle: 'API',
+    cardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   useDatasetSearchPageRoutes({
     pageKey: 'indicators',

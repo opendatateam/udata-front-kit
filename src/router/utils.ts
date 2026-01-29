@@ -218,7 +218,8 @@ export const useSearchPageRoutes = ({
         component: detailsViewComponent,
         meta: {
           pageKey,
-          descriptionComponent
+          descriptionComponent,
+          cardComponent
         },
         props: () => ({
           // this forces the component to be recreated when switching page type
