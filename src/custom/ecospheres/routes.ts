@@ -52,7 +52,11 @@ export const routes: RouteRecordRaw[] = [
   useTopicSearchPageRoutes({
     pageKey: 'bouquets',
     metaTitle: 'Bouquets',
-    topicConf
+    topicConf,
+    datasetCardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   ...useTopicAdminPagesRoutes({
     pageKey: 'bouquets',
