@@ -4,11 +4,12 @@ import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import config from '@/config'
 import { formatDate } from '@/utils'
 import { useDatasetsConf } from '@/utils/config'
-import { useLicense } from '@/utils/dataset'
+import { useBadges, useLicense } from '@/utils/dataset'
 import type { DatasetV2 } from '@datagouv/components-next'
 import {
   AppLink,
   DatasetQuality,
+  LabelTag,
   OrganizationNameWithCertificate
 } from '@datagouv/components-next'
 import { toRef } from 'vue'
@@ -22,7 +23,9 @@ const props = defineProps({
 
 const datasetsConf = useDatasetsConf()
 
-const license = useLicense(toRef(props.dataset))
+const datasetRef = toRef(props.dataset)
+const license = useLicense(datasetRef)
+const badges = useBadges(datasetRef)
 
 const showHarvestQualityWarning = computed(() => {
   const backend = props.dataset.harvest?.backend
@@ -99,6 +102,15 @@ const showHarvestQualityWarning = computed(() => {
       source originale peuvent avoir été perdues lors de leur récupération. Nous
       travaillons actuellement à améliorer la situation.
     </div>
+    <template v-if="badges.length > 0">
+      <h2 id="labels" class="subtitle fr-mb-1v fr-mt-3v">Label</h2>
+      <LabelTag
+        v-for="badge in badges"
+        :key="badge.kind"
+        :badge
+        class="fr-mr-1v"
+      />
+    </template>
     <slot name="bottom" />
   </div>
 </template>
