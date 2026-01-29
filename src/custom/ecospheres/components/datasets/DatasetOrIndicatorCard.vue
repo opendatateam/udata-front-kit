@@ -8,6 +8,7 @@ const props = defineProps<{
   dataset: DatasetV2
   datasetUrl: object
   organizationUrl?: string | object
+  showDescription?: boolean
 }>()
 
 const datasetIsIndicator = isIndicator(toRef(props, 'dataset'))
@@ -35,6 +36,7 @@ const url = computed(() =>
       :dataset="dataset"
       :dataset-url="url"
       :organization-url="organizationUrl"
+      :show-description="showDescription ?? true"
     />
   </div>
 </template>

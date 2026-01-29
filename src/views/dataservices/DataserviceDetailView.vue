@@ -20,6 +20,7 @@ import {
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
+import { useAsyncComponent } from '@/utils/component'
 import SwaggerClient from '@datagouv/components-next/src/components/ResourceAccordion/Swagger.client.vue'
 
 const route = useRouteParamsAsString()
@@ -34,7 +35,11 @@ const total = computed(
   () => dataserviceStore.datasetsTotals[dataserviceId]?.total || 0
 )
 
-const { pageKey, pageConf } = useCurrentPageConf()
+const { pageKey, meta, pageConf } = useCurrentPageConf()
+
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+  fallback: DatasetCard
+})
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const isSwaggerOpened = ref(false)
 
@@ -245,13 +250,15 @@ onMounted(() => {
           <h2 class="fr-mb-1v subtitle subtitle--uppercase">
             {{ `${total} jeu${total > 1 ? 'x' : ''} de données` }}
           </h2>
-          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+          <div
+            class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-mt-2w"
+          >
             <div
               v-for="dataset in datasets"
               :key="dataset.id"
               class="fr-col-12 fr-col-lg-6"
             >
-              <DatasetCard
+              <CardComponent
                 :show-description="false"
                 :dataset="dataset"
                 :dataset-url="getDatasetPage(dataset.id)"

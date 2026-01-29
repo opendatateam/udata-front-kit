@@ -1,5 +1,7 @@
 import { build, sequence } from 'mimicry-js'
 
+import type { DatasetV2 } from '@datagouv/components-next'
+
 import type { Activity } from '@/model/activity'
 import type { DataserviceWithRel } from '@/model/dataservice'
 import type { Resource } from '@/model/resource'
@@ -277,6 +279,8 @@ export interface MockTopicOptions {
   activities?: Activity[]
   /** Dataset resources mapped by dataset ID */
   datasetResources?: Record<string, Resource[]>
+  /** Custom datasets mapped by dataset ID (overrides auto-generated ones) */
+  datasets?: Record<string, DatasetV2>
 }
 
 /**
@@ -291,14 +295,18 @@ export function mockTopicAndRelatedObjects(
     referencedTopics = [],
     referencedDataservices = [],
     activities = [],
-    datasetResources = {}
+    datasetResources = {},
+    datasets = {}
   } = options
 
   cy.mockDatagouvObject('topics', topic.slug, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
       const datasetId = factor.element.id
-      const dataset = datasetFactory.one({ overrides: { id: datasetId } })
+      // Use custom dataset if provided, otherwise generate one
+      const dataset =
+        datasets[datasetId] ||
+        datasetFactory.one({ overrides: { id: datasetId } })
       cy.mockDatagouvObject('datasets', datasetId, dataset)
 
       // Mock resources for this dataset if provided
