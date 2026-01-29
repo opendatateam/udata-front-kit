@@ -124,6 +124,13 @@ Cypress.Commands.add('mockDatasetLicenses', () => {
   }).as('get_licenses')
 })
 
+Cypress.Commands.add('mockDatasetBadges', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/badges'), {
+    statusCode: 200,
+    body: []
+  }).as('get_badges')
+})
+
 Cypress.Commands.add('mockResourceTypes', () => {
   cy.intercept('GET', datagouvUrlRegex('datasets/resource_types'), {
     statusCode: 200,
@@ -217,6 +224,7 @@ Cypress.Commands.add(
     dataset.resources.total = resources.length
     cy.mockDatagouvObject('datasets', dataset.id, dataset)
     // Mock related APIs
+    cy.mockDatasetBadges()
     cy.mockSpatialLevels()
     cy.mockDatasetLicenses()
     cy.mockResourceTypes()
