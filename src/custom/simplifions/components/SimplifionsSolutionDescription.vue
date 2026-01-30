@@ -313,6 +313,10 @@
             :cas-usages="casUsagesForIntegrateurs"
             :useful-apis-by-cas-usage="usefulApisByCasUsage"
             :supplier-name="topic.name"
+            :supplier-cas-usage-ids="supplierCasUsageIds"
+            :api-et-datasets-integres="
+              apiEtDatasetsIntegresParSolution.get(editeur.id) || []
+            "
           />
         </li>
       </ul>
@@ -350,6 +354,7 @@ import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
 import type {
+  ApiEtDatasetsIntegresRecord,
   ApiOrDataset,
   CasUsageRecord,
   RecommandationRecord,
@@ -380,6 +385,7 @@ const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
 const solutionsIntegratices = ref<SolutionRecord[]>([])
 const casUsagesForIntegrateurs = ref<CasUsageRecord[]>([])
 const supplierRecommendations = ref<RecommandationRecord[]>([])
+const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
 const integrateursFilters = ref<IntegrateursFilters>({
   typeSolution: '',
   casUsage: null,
@@ -452,6 +458,16 @@ grist.getRecord('Solutions', solutionId).then((data) => {
         supplierRecommendations.value =
           recommendations as RecommandationRecord[]
       })
+
+    // Fetch API_et_datasets_integres for integrator solutions to get per-use-case integration data
+    grist
+      .getRecords('API_et_datasets_integres', {
+        Solution_fournisseur: [solutionId]
+      })
+      .then((integrations) => {
+        apiEtDatasetsIntegres.value =
+          integrations as ApiEtDatasetsIntegresRecord[]
+      })
   }
 })
 
@@ -481,6 +497,24 @@ const usefulApisByCasUsage = computed(() => {
   return map
 })
 
+// Supplier's use case IDs (only show integrator use cases that are also supplier use cases)
+const supplierCasUsageIds = computed(() => {
+  return Array.from(usefulApisByCasUsage.value.keys())
+})
+
+// Map of integrator solution ID -> their API integrations
+const apiEtDatasetsIntegresParSolution = computed(() => {
+  const map = new Map<number, ApiEtDatasetsIntegresRecord[]>()
+  apiEtDatasetsIntegres.value.forEach((integration) => {
+    const solutionId = integration.fields.Solution_integratrice
+    if (!map.has(solutionId)) {
+      map.set(solutionId, [])
+    }
+    map.get(solutionId)!.push(integration)
+  })
+  return map
+})
+
 // Max possible integration count (sum of Y across all supplier use cases)
 const maxApisCount = computed(() => {
   let total = 0
@@ -493,16 +527,25 @@ const maxApisCount = computed(() => {
 
 // Helper to count integrated useful APIs/datasets for a solution (sum of X across use cases)
 const getIntegrationCount = (sol: SolutionRecord) => {
-  const integratedApis = sol.fields.API_ou_datasets_integres || []
+  const solutionIntegrations =
+    apiEtDatasetsIntegresParSolution.value.get(sol.id) || []
   const recommendedCasUsages = sol.fields.Recommande_pour_les_cas_d_usages || []
+  // Only count use cases that are covered by both supplier and integrator
+  const relevantCasUsages = recommendedCasUsages.filter((id) =>
+    supplierCasUsageIds.value.includes(id)
+  )
 
   let totalIntegrated = 0
-  for (const casUsageId of recommendedCasUsages) {
+  for (const casUsageId of relevantCasUsages) {
     const usefulApis =
       usefulApisByCasUsage.value.get(casUsageId) ||
       availableApisOrDatasets.value
-    const integratedCount = integratedApis.filter((apiId) =>
-      usefulApis.includes(apiId)
+    // Count integrations for this use case that are in the useful APIs list
+    const integratedCount = solutionIntegrations.filter(
+      (integration) =>
+        integration.fields.Integre_pour_les_cas_d_usages?.includes(
+          casUsageId
+        ) && usefulApis.includes(integration.fields.API_ou_dataset_integre)
     ).length
     totalIntegrated += integratedCount
   }

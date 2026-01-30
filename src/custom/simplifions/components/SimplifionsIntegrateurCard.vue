@@ -113,7 +113,11 @@
 import TooltipWrapper from '@/components/TooltipWrapper.vue'
 import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
-import type { CasUsageRecord, SolutionRecord } from '../model/grist'
+import type {
+  ApiEtDatasetsIntegresRecord,
+  CasUsageRecord,
+  SolutionRecord
+} from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 
 const props = defineProps<{
@@ -122,6 +126,8 @@ const props = defineProps<{
   casUsages: CasUsageRecord[]
   usefulApisByCasUsage: Map<number, number[]>
   supplierName: string
+  supplierCasUsageIds: number[]
+  apiEtDatasetsIntegres: ApiEtDatasetsIntegresRecord[]
 }>()
 
 const solutionTopic = ref<Topic | undefined>(undefined)
@@ -155,9 +161,12 @@ const simplificationTags = computed(() => {
 const casUsagesWithIndicators = computed(() => {
   const recommendedCasUsages =
     props.solution.fields.Recommande_pour_les_cas_d_usages || []
-  const integratedApis = props.solution.fields.API_ou_datasets_integres || []
+  // Only show use cases covered by BOTH supplier AND integrator
+  const relevantCasUsages = recommendedCasUsages.filter((id) =>
+    props.supplierCasUsageIds.includes(id)
+  )
 
-  return recommendedCasUsages
+  return relevantCasUsages
     .map((casUsageId) => {
       const casUsage = props.casUsages.find((cu) => cu.id === casUsageId)
       if (!casUsage) return null
@@ -169,9 +178,16 @@ const casUsagesWithIndicators = computed(() => {
         props.availableApisOrDatasets
       const totalCount = usefulApisForCasUsage.length
 
-      // Count how many of the useful APIs this solution has integrated (X value)
-      const integratedCount = integratedApis.filter((apiId) =>
-        usefulApisForCasUsage.includes(apiId)
+      // Count how many of the useful APIs this solution has integrated for this use case (X value)
+      // Use apiEtDatasetsIntegres filtered by Integre_pour_les_cas_d_usages
+      const integratedCount = props.apiEtDatasetsIntegres.filter(
+        (integration) =>
+          integration.fields.Integre_pour_les_cas_d_usages?.includes(
+            casUsageId
+          ) &&
+          usefulApisForCasUsage.includes(
+            integration.fields.API_ou_dataset_integre
+          )
       ).length
 
       // Color class based on percentage (red → orange → yellow → green)
