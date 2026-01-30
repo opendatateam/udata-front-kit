@@ -122,11 +122,9 @@ import TopicsAPI from '../simplifionsTopicsApi'
 
 const props = defineProps<{
   solution: SolutionRecord
-  availableApisOrDatasets: number[]
   casUsages: CasUsageRecord[]
   usefulApisByCasUsage: Map<number, number[]>
   supplierName: string
-  supplierCasUsageIds: number[]
   apiEtDatasetsIntegres: ApiEtDatasetsIntegresRecord[]
 }>()
 
@@ -159,27 +157,27 @@ const simplificationTags = computed(() => {
 })
 
 const casUsagesWithIndicators = computed(() => {
-  const recommendedCasUsages =
-    props.solution.fields.Recommande_pour_les_cas_d_usages || []
-  // Only show use cases covered by BOTH supplier AND integrator
-  const relevantCasUsages = recommendedCasUsages.filter((id) =>
-    props.supplierCasUsageIds.includes(id)
-  )
+  // Extract unique use case IDs from integration data
+  const useCaseIds = new Set<number>()
+  props.apiEtDatasetsIntegres.forEach((integration) => {
+    integration.fields.Integre_pour_les_cas_d_usages?.forEach((id) => {
+      useCaseIds.add(id)
+    })
+  })
 
-  return relevantCasUsages
+  return Array.from(useCaseIds)
     .map((casUsageId) => {
       const casUsage = props.casUsages.find((cu) => cu.id === casUsageId)
       if (!casUsage) return null
 
-      // Get the useful APIs for this specific use case (Y value)
-      // Falls back to all available APIs if no specific recommendation exists
-      const usefulApisForCasUsage =
-        props.usefulApisByCasUsage.get(casUsageId) ||
-        props.availableApisOrDatasets
+      // Y = useful APIs for this use case (from supplier's recommendations)
+      const usefulApisForCasUsage = props.usefulApisByCasUsage.get(casUsageId)
+      // Skip use cases not in supplier's recommendations
+      if (!usefulApisForCasUsage) return null
       const totalCount = usefulApisForCasUsage.length
+      if (totalCount === 0) return null
 
-      // Count how many of the useful APIs this solution has integrated for this use case (X value)
-      // Use apiEtDatasetsIntegres filtered by Integre_pour_les_cas_d_usages
+      // X = count of APIs integrated for this use case
       const integratedCount = props.apiEtDatasetsIntegres.filter(
         (integration) =>
           integration.fields.Integre_pour_les_cas_d_usages?.includes(
@@ -191,8 +189,7 @@ const casUsagesWithIndicators = computed(() => {
       ).length
 
       // Color class based on percentage (red → orange → yellow → green)
-      const percentage =
-        totalCount === 0 ? 0 : (integratedCount / totalCount) * 100
+      const percentage = (integratedCount / totalCount) * 100
       let colorClass = 'indicator--red'
       if (percentage >= 75) colorClass = 'indicator--green'
       else if (percentage >= 50) colorClass = 'indicator--yellow'

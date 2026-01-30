@@ -309,11 +309,9 @@
         >
           <SimplifionsIntegrateurCard
             :solution="editeur"
-            :available-apis-or-datasets="availableApisOrDatasets"
             :cas-usages="casUsagesForIntegrateurs"
             :useful-apis-by-cas-usage="usefulApisByCasUsage"
             :supplier-name="topic.name"
-            :supplier-cas-usage-ids="supplierCasUsageIds"
             :api-et-datasets-integres="
               apiEtDatasetsIntegresParSolution.get(editeur.id) || []
             "
@@ -427,19 +425,39 @@ grist.getRecord('Solutions', solutionId).then((data) => {
   }
 
   if (solution.value.solutions_integratrices?.length) {
+    // Fetch integrator solution details
     grist
       .getRecordsByIds('Solutions', solution.value.solutions_integratrices)
       .then((solutions) => {
         solutionsIntegratices.value = (solutions as SolutionRecord[]).filter(
           (sol) => sol.fields.Visible_sur_simplifions
         )
+      })
 
-        // Fetch cas d'usages for integrator solutions
+    // Fetch Recommendations for the supplier solution to get per-use-case API requirements (Y values)
+    grist
+      .getRecords('Recommandations', { Solution_recommandee: [solutionId] })
+      .then((recommendations) => {
+        supplierRecommendations.value =
+          recommendations as RecommandationRecord[]
+      })
+
+    // Fetch API_et_datasets_integres - this is the main source of truth
+    grist
+      .getRecords('API_et_datasets_integres', {
+        Solution_fournisseur: [solutionId]
+      })
+      .then((integrations) => {
+        apiEtDatasetsIntegres.value =
+          integrations as ApiEtDatasetsIntegresRecord[]
+
+        // Derive cas d'usage IDs from integration data and fetch them
         const allCasUsageIds = new Set<number>()
-        solutionsIntegratices.value.forEach((sol) => {
-          sol.fields.Recommande_pour_les_cas_d_usages?.forEach((id) => {
-            allCasUsageIds.add(id)
-          })
+        integrations.forEach((integration) => {
+          const useCases =
+            (integration as ApiEtDatasetsIntegresRecord).fields
+              .Integre_pour_les_cas_d_usages || []
+          useCases.forEach((id) => allCasUsageIds.add(id))
         })
 
         if (allCasUsageIds.size > 0) {
@@ -449,24 +467,6 @@ grist.getRecord('Solutions', solutionId).then((data) => {
               casUsagesForIntegrateurs.value = casUsages as CasUsageRecord[]
             })
         }
-      })
-
-    // Fetch Recommendations for the supplier solution to get per-use-case API requirements
-    grist
-      .getRecords('Recommandations', { Solution_recommandee: [solutionId] })
-      .then((recommendations) => {
-        supplierRecommendations.value =
-          recommendations as RecommandationRecord[]
-      })
-
-    // Fetch API_et_datasets_integres for integrator solutions to get per-use-case integration data
-    grist
-      .getRecords('API_et_datasets_integres', {
-        Solution_fournisseur: [solutionId]
-      })
-      .then((integrations) => {
-        apiEtDatasetsIntegres.value =
-          integrations as ApiEtDatasetsIntegresRecord[]
       })
   }
 })
@@ -497,11 +497,6 @@ const usefulApisByCasUsage = computed(() => {
   return map
 })
 
-// Supplier's use case IDs (only show integrator use cases that are also supplier use cases)
-const supplierCasUsageIds = computed(() => {
-  return Array.from(usefulApisByCasUsage.value.keys())
-})
-
 // Map of integrator solution ID -> their API integrations
 const apiEtDatasetsIntegresParSolution = computed(() => {
   const map = new Map<number, ApiEtDatasetsIntegresRecord[]>()
@@ -529,17 +524,21 @@ const maxApisCount = computed(() => {
 const getIntegrationCount = (sol: SolutionRecord) => {
   const solutionIntegrations =
     apiEtDatasetsIntegresParSolution.value.get(sol.id) || []
-  const recommendedCasUsages = sol.fields.Recommande_pour_les_cas_d_usages || []
-  // Only count use cases that are covered by both supplier and integrator
-  const relevantCasUsages = recommendedCasUsages.filter((id) =>
-    supplierCasUsageIds.value.includes(id)
-  )
+
+  // Extract unique use cases from integration data
+  const useCaseIds = new Set<number>()
+  solutionIntegrations.forEach((integration) => {
+    integration.fields.Integre_pour_les_cas_d_usages?.forEach((id) => {
+      useCaseIds.add(id)
+    })
+  })
 
   let totalIntegrated = 0
-  for (const casUsageId of relevantCasUsages) {
-    const usefulApis =
-      usefulApisByCasUsage.value.get(casUsageId) ||
-      availableApisOrDatasets.value
+  for (const casUsageId of useCaseIds) {
+    const usefulApis = usefulApisByCasUsage.value.get(casUsageId)
+    // Skip use cases not in supplier's recommendations or with no useful APIs
+    if (!usefulApis || usefulApis.length === 0) continue
+
     // Count integrations for this use case that are in the useful APIs list
     const integratedCount = solutionIntegrations.filter(
       (integration) =>
@@ -564,13 +563,17 @@ const filteredAndSortedSolutions = computed(() => {
     )
   }
 
-  // Filter by cas d'usage (single select)
+  // Filter by cas d'usage (single select) - based on integration data
   if (integrateursFilters.value.casUsage !== null) {
-    filtered = filtered.filter((sol) =>
-      sol.fields.Recommande_pour_les_cas_d_usages?.includes(
-        integrateursFilters.value.casUsage as number
+    filtered = filtered.filter((sol) => {
+      const integrations =
+        apiEtDatasetsIntegresParSolution.value.get(sol.id) || []
+      return integrations.some((integration) =>
+        integration.fields.Integre_pour_les_cas_d_usages?.includes(
+          integrateursFilters.value.casUsage as number
+        )
       )
-    )
+    })
   }
 
   // Filter by min APIs integrated
