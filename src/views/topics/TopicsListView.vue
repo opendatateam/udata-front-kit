@@ -7,6 +7,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import TopicList from '@/components/topics/TopicList.vue'
 import type { TopicPageRouterConf } from '@/router/model'
 import { useCurrentPageConf } from '@/router/utils'
+import { useTopicSearchStore } from '@/store/TopicSearchStore'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
@@ -34,6 +35,7 @@ const searchResultsMessage = computed(
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const userStore = useUserStore()
+const searchStore = useTopicSearchStore()
 
 const links = [
   { to: '/', text: 'Accueil' },
@@ -118,7 +120,7 @@ onMounted(() => {
             <h2 id="fr-sidemenu-title" className="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <FiltersComponent />
+            <FiltersComponent :search-store="searchStore" />
           </div>
         </nav>
         <div className="fr-col-12 fr-col-md-8">

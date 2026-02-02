@@ -100,6 +100,21 @@ export default class DatagouvfrAPI {
   }
 
   /**
+   * Search entities using /api/2/{endpoint}/search/
+   */
+  async search(query: string, args?: object): Promise<AxiosResponseData> {
+    const searchUrl = `${this.baseUrl}/2/${this.endpoint}/search/`
+    return await this.request({
+      url: searchUrl,
+      method: 'get',
+      params: {
+        q: query,
+        ...args
+      }
+    })
+  }
+
+  /**
    * Create an entity (POST)
    */
   async create({

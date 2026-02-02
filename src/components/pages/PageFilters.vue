@@ -7,11 +7,17 @@ import type { SpatialCoverage } from '@/model/spatial'
 import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
 import { useSpatialStore } from '@/store/SpatialStore'
 import { useUserStore } from '@/store/UserStore'
+import { getOrganizationOptionsFromFacets } from '@/utils/facets'
 import { useFiltersState } from '@/utils/filters'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CheckboxComponent from '../CheckboxComponent.vue'
 import FilterSelectComponent from '../FilterSelectComponent.vue'
+
+const props = defineProps<{
+  searchStore?: { facets: unknown } | null
+}>()
 
 const router = useRouter()
 const route = useRoute()
@@ -30,6 +36,12 @@ const { filtersState, pageConf } = useFiltersState(
   routeQuery,
   meta.pageKey || 'datasets'
 )
+
+// Derive organization options from search store facets
+const organizationOptions = computed(() => {
+  if (!props.searchStore?.facets) return []
+  return getOrganizationOptionsFromFacets(props.searchStore.facets as any)
+})
 
 const navigate = (data?: Record<string, string | null>) => {
   router.push({
@@ -111,6 +123,7 @@ watch(
         :model-value="selectedOrganization"
         :label="filter.name"
         :default-option="filter.default_option"
+        :options="organizationOptions"
         @update:model-value="(value) => switchFilter('organization', value)"
       />
       <SelectSpatialGranularity

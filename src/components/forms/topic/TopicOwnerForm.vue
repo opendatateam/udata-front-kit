@@ -8,7 +8,7 @@ import '@vueform/multiselect/themes/default.css'
 
 import type { TopicPostData } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
-import SearchAPI from '@/services/api/SearchOrgAPI'
+import OrganizationSuggestAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
 import { debounceWait } from '@/utils/config'
 
@@ -69,7 +69,7 @@ const search = useDebounceFn(async (query: string) => {
     return
   }
   try {
-    return await new SearchAPI().search(query, 10)
+    return await new OrganizationSuggestAPI().suggest(query, 10)
   } catch (error) {
     console.error('Search error', error)
   } finally {

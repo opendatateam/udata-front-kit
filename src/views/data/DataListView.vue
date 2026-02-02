@@ -5,6 +5,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import { useCurrentPageConf } from '@/router/utils'
+import { useDataserviceSearchStore } from '@/store/DataserviceSearchStore'
+import { useDatasetSearchStore } from '@/store/DatasetSearchStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
 import { useAsyncComponent } from '@/utils/component'
@@ -26,6 +28,18 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 const { meta, pageConf } = useCurrentPageConf()
+
+// Get the appropriate search store based on page type
+const searchStore = computed(() => {
+  switch (meta.pageKey) {
+    case 'datasets':
+      return useDatasetSearchStore()
+    case 'dataservices':
+      return useDataserviceSearchStore()
+    default:
+      return null
+  }
+})
 
 const listComponentRef = ref<{ numberOfResultMsg?: string } | null>(null)
 const searchResultsMessage = computed(
@@ -106,7 +120,7 @@ onMounted(() => {
             <h2 id="fr-sidemenu-title" class="fr-sidemenu__title h3">
               Filtres
             </h2>
-            <FiltersComponent />
+            <FiltersComponent :search-store="searchStore" />
           </div>
         </nav>
         <div class="fr-col-12 fr-col-md-8 list-container">
