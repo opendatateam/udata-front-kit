@@ -2,6 +2,7 @@
 import SelectOrganization from '@/components/forms/SelectOrganization.vue'
 import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import SelectSpatialGranularity from '@/components/forms/SelectSpatialGranularity.vue'
+import type { Facets } from '@/model/api'
 import type { PageFilterConf } from '@/model/config'
 import type { SpatialCoverage } from '@/model/spatial'
 import { useRouteMeta, useRouteQueryAsString } from '@/router/utils'
@@ -16,7 +17,7 @@ import CheckboxComponent from '../CheckboxComponent.vue'
 import FilterSelectComponent from '../FilterSelectComponent.vue'
 
 const props = defineProps<{
-  searchStore?: { facets: unknown } | null
+  searchStore?: { facets: Facets | undefined } | null
 }>()
 
 const router = useRouter()
@@ -40,7 +41,7 @@ const { filtersState, pageConf } = useFiltersState(
 // Derive organization options from search store facets
 const organizationOptions = computed(() => {
   if (!props.searchStore?.facets) return []
-  return getOrganizationOptionsFromFacets(props.searchStore.facets as any)
+  return getOrganizationOptionsFromFacets(props.searchStore.facets)
 })
 
 const navigate = (data?: Record<string, string | null>) => {
