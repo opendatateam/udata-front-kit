@@ -22,14 +22,14 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const api: Ref<IndicatorsExtrasApi | undefined> = ref()
 
   const store = useSpatialStore()
-  store.loadLevels()
 
   watch(
     indicator,
-    () => {
+    async () => {
       const extras = indicator.value?.extras?.['ecospheres-indicateurs']
       if (extras) {
         unite.value = extras.unite
+        await store.loadLevels()
         mailles.value = (extras.mailles_geographiques || [])
           .map((m: string) => store.getLevelById(m)?.name)
           .filter((v) => v !== undefined)
