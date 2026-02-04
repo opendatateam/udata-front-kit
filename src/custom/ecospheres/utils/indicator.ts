@@ -22,21 +22,22 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const api: Ref<IndicatorsExtrasApi | undefined> = ref()
 
   const store = useSpatialStore()
-  store.loadLevels()
+  const levelsReady = store.loadLevels()
 
   watch(
     indicator,
-    () => {
+    async () => {
       const extras = indicator.value?.extras?.['ecospheres-indicateurs']
       if (extras) {
         unite.value = extras.unite
-        mailles.value = (extras.mailles_geographiques || [])
-          .map((m: string) => store.getLevelById(m)?.name)
-          .filter((v) => v !== undefined)
         axes.value = extras.axes
         calcul.value = extras.calcul
         api.value = extras.api
         sources.value = extras.sources
+        await levelsReady
+        mailles.value = (extras.mailles_geographiques || [])
+          .map((m: string) => store.getLevelById(m)?.name)
+          .filter((v) => v !== undefined)
       }
     },
     { immediate: true }
