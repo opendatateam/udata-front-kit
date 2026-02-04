@@ -8,6 +8,7 @@ import '@vueform/multiselect/themes/default.css'
 type SelectOption = {
   id: string
   name: string
+  count?: number
 }
 
 const selectedOption = defineModel({
@@ -35,6 +36,10 @@ const props = defineProps({
   searchableThreshold: {
     type: Number,
     default: 15
+  },
+  showCount: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -70,11 +75,33 @@ const isSearchable = computed(
       'aria-placeholder': null
     }"
   >
+    <template v-if="showCount" #option="{ option }">
+      <div class="option-with-count">
+        <span>{{ option.name }}</span>
+        <span v-if="option.count != null" class="option-count">
+          {{ option.count }}
+        </span>
+      </div>
+    </template>
   </Multiselect>
 </template>
 
 <style scoped>
 :deep(.multiselect-placeholder) {
   color: var(--text-label-grey);
+}
+
+.option-with-count {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.option-count {
+  color: var(--text-mention-grey);
+}
+
+:deep(.multiselect-option.is-pointed) .option-count {
+  color: var(--text-inverted-grey);
 }
 </style>

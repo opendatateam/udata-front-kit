@@ -2,14 +2,11 @@ import type { Organization } from '@datagouv/components-next'
 
 import DatagouvfrAPI from './DatagouvfrAPI'
 
-/**
- * A wrapper around search engine API
- */
-export default class SearchAPI extends DatagouvfrAPI {
+export default class OrganizationSuggestAPI extends DatagouvfrAPI {
   version = 1
   endpoint = 'organizations/suggest'
 
-  async search(
+  async suggest(
     query: string,
     size: number,
     page?: number,

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
+import type { Facets } from '@/model/api'
 import { usePageQueryParams } from '@/utils/filters'
 
 const PAGE_SIZE = 20
@@ -9,7 +10,7 @@ interface SearchAPI<T> {
   search: (
     query: string,
     params: Record<string, unknown>
-  ) => Promise<{ data: T[]; total: number }>
+  ) => Promise<{ data: T[]; total: number; facets?: Facets }>
 }
 
 interface SearchStoreConfig<T> {
@@ -29,6 +30,7 @@ export function createSearchStore<T>({
     // State
     const items = ref<T[]>([])
     const total = ref(0)
+    const facets = ref<Facets | undefined>(undefined)
 
     // Getters
     const pagination = computed(() => {
@@ -62,11 +64,13 @@ export function createSearchStore<T>({
       })
       items.value = results.data
       total.value = results.total
+      facets.value = results.facets
     }
 
     return {
       items,
       total,
+      facets,
       pagination,
       maxTotal: maxTotalValue,
       query
