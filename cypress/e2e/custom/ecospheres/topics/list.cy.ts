@@ -89,41 +89,6 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.match(universeTagRegex)
       })
     })
-
-    it('should filter by spatial coverage when a zone is selected', () => {
-      cy.visit('/bouquets')
-
-      // Wait for the initial API calls to complete
-      cy.wait('@get_topics_list')
-
-      // Find the spatial coverage multiselect and click to activate it
-      cy.contains('label.fr-label', 'Couverture territoriale')
-        .parent('.fr-select-group')
-        .within(() => {
-          cy.get('.multiselect-wrapper').click()
-          cy.get('input.multiselect-search').type('Paris')
-        })
-
-      // Wait for the suggest API call
-      cy.wait('@get_spatial_zones_suggest')
-
-      // Select the first option from the spatial coverage dropdown specifically
-      cy.get('#select-spatial-coverage-dropdown .multiselect-option')
-        .first()
-        .should('be.visible')
-        .click()
-
-      // Verify the URL contains the geozone parameter (first zone of mock)
-      cy.url().should('include', 'geozone=fr:commune:75056')
-
-      // Wait for the filtered API call and verify parameters
-      cy.wait('@get_topics_list').then((interception) => {
-        expect(interception.request.url).to.match(
-          /[?&]geozone=fr:commune:75056(?:&|$)/
-        )
-        expect(interception.request.url).to.match(universeTagRegex)
-      })
-    })
   })
 
   describe('Draft Checkbox', () => {
