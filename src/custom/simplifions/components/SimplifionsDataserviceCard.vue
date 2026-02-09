@@ -14,18 +14,16 @@
         <div class="logo">
           <Placeholder
             v-if="dataservice.organization"
-            type="organization"
+            type="Organization"
             :src="dataservice.organization.logo_thumbnail"
             alt=""
             :size="40"
           />
-          <Placeholder v-else type="organization" :size="40" />
+          <Placeholder v-else type="Organization" :size="40" />
         </div>
       </div>
       <div class="fr-col-12 fr-col-sm">
-        <component
-          :is="props.titleTag"
-          class="fr-text--md fr-mb-0 fr-grid-row">
+        <component :is="props.titleTag" class="fr-text--md fr-mb-0 fr-grid-row">
           <!-- External link (string URL) -->
           <a
             v-if="typeof dataserviceUrl === 'string'"

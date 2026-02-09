@@ -2,6 +2,7 @@
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import config from '@/config'
+import type { TypedHarvest } from '@/model/dataset'
 import { formatDate } from '@/utils'
 import { useDatasetsConf } from '@/utils/config'
 import { useBadges, useLicense } from '@/utils/dataset'
@@ -25,6 +26,7 @@ const props = defineProps({
 
 const datasetsConf = useDatasetsConf()
 
+const harvest = computed(() => props.dataset.harvest as TypedHarvest)
 const datasetRef = toRef(props.dataset)
 const license = useLicense(datasetRef)
 const badges = useBadges(datasetRef)
@@ -54,7 +56,7 @@ const datasetDownloadsResourcesTotal = computed(
 )
 
 const showHarvestQualityWarning = computed(() => {
-  const backend = props.dataset.harvest?.backend
+  const backend = harvest.value?.backend
   const warningBackends = datasetsConf.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
 })
@@ -80,12 +82,12 @@ const showHarvestQualityWarning = computed(() => {
       <h2 id="attributions" class="subtitle fr-mb-1v fr-mt-3v">Attributions</h2>
       <ContactPoints :contact-points="dataset.contact_points" />
     </template>
-    <div v-if="dataset.harvest?.remote_url" class="fr-my-3v fr-text--sm">
+    <div v-if="harvest?.remote_url" class="fr-my-3v fr-text--sm">
       <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
         <p class="fr-grid-row fr-grid-row--middle fr-my-0">
           Ce jeu de données provient d'un portail externe.
           <AppLink
-            :to="dataset.harvest.remote_url"
+            :to="harvest.remote_url"
             target="_blank"
             rel="noopener nofollow"
             >Voir la source originale.</AppLink
@@ -93,11 +95,11 @@ const showHarvestQualityWarning = computed(() => {
         </p>
       </div>
     </div>
-    <template v-if="dataset.harvest">
-      <template v-if="dataset.harvest.modified_at">
+    <template v-if="harvest">
+      <template v-if="harvest.modified_at">
         <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière révision</h2>
         <p>
-          {{ formatDate(dataset.harvest.modified_at) }}
+          {{ formatDate(harvest.modified_at) }}
         </p>
       </template>
     </template>
