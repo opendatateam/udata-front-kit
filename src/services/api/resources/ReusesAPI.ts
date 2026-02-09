@@ -1,6 +1,6 @@
-import type { Rel } from '@datagouv/components-next'
+import type { Rel, Reuse } from '@datagouv/components-next'
 
-import type { Reuse, ReuseResponse } from '@/model/reuse'
+import type { ReuseResponse } from '@/model/reuse'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 export default class ReusesAPI extends DatagouvfrAPI {
@@ -9,12 +9,18 @@ export default class ReusesAPI extends DatagouvfrAPI {
   /**
    * Get reuses for a dataset
    */
-  async getReusesForDataset(datasetId: string): Promise<ReuseResponse> {
+  async getReusesForDataset(
+    datasetId: string,
+    page = 1,
+    pageSize = 6
+  ): Promise<ReuseResponse> {
     return await this.request({
       url: this.url(true),
       method: 'get',
       params: {
-        dataset: datasetId
+        dataset: datasetId,
+        page,
+        page_size: pageSize
       }
     })
   }

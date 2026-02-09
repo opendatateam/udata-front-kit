@@ -302,7 +302,7 @@ onMounted(() => {
         <DiscussionsList
           v-if="showDiscussions"
           :subject="dataservice"
-          empty-message="Pas de discussion pour cette API."
+          empty-message="Il n'y a pas encore de discussion pour cette API."
         />
       </DsfrTabContent>
 

@@ -4,6 +4,7 @@ import type { ComputedRef, Ref } from 'vue'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import BlankState from '@/components/BlankState.vue'
 import config from '@/config'
 import type {
   DiscussionForm,
@@ -43,7 +44,7 @@ const props = defineProps({
   },
   emptyMessage: {
     type: String,
-    default: 'Pas de discussion pour ce jeu de données.'
+    default: "Il n'y a pas encore de discussion pour ce jeu de données."
   }
 })
 
@@ -184,21 +185,11 @@ watch(
     </form>
   </div>
 
-  <div
+  <BlankState
     v-if="!discussions?.data?.length"
-    class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
-  >
-    <img
-      src="/static/blank_state/discussion.svg"
-      alt=""
-      loading="lazy"
-      height="105"
-      width="130"
-    />
-    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      {{ emptyMessage }}
-    </p>
-  </div>
+    image="/static/blank_state/discussion.svg"
+    :message="emptyMessage"
+  />
   <div v-else class="fr-mt-4w">
     <div
       v-for="discussion in discussions?.data"

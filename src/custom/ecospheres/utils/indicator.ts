@@ -5,8 +5,7 @@ import type { ComputedRef } from 'vue'
 import type {
   Indicator,
   IndicatorExtrasCalcul,
-  IndicatorExtrasSource,
-  IndicatorsExtrasApi
+  IndicatorExtrasSource
 } from '../model/indicator'
 
 const pageConf = usePageConf('indicators')
@@ -19,7 +18,6 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const axes: Ref<Record<string, string[]>> = ref({})
   const calcul: Ref<IndicatorExtrasCalcul | undefined> = ref()
   const sources: Ref<IndicatorExtrasSource[]> = ref([])
-  const api: Ref<IndicatorsExtrasApi | undefined> = ref()
 
   const store = useSpatialStore()
   const levelsReady = store.loadLevels()
@@ -32,7 +30,6 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
         unite.value = extras.unite
         axes.value = extras.axes
         calcul.value = extras.calcul
-        api.value = extras.api
         sources.value = extras.sources
         await levelsReady
         mailles.value = (extras.mailles_geographiques || [])
@@ -48,7 +45,6 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
     mailles,
     axes,
     calcul,
-    api,
     sources
   }
 }
