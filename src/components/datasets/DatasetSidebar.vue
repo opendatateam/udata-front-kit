@@ -5,14 +5,16 @@ import config from '@/config'
 import { formatDate } from '@/utils'
 import { useDatasetsConf } from '@/utils/config'
 import { useBadges, useLicense } from '@/utils/dataset'
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetMetrics, DatasetV2 } from '@datagouv/components-next'
 import {
   AppLink,
   DatasetQuality,
   LabelTag,
-  OrganizationNameWithCertificate
+  OrganizationNameWithCertificate,
+  StatBox,
+  useMetrics
 } from '@datagouv/components-next'
-import { toRef } from 'vue'
+import { ref, toRef, watchEffect } from 'vue'
 
 const props = defineProps({
   dataset: {
@@ -26,6 +28,30 @@ const datasetsConf = useDatasetsConf()
 const datasetRef = toRef(props.dataset)
 const license = useLicense(datasetRef)
 const badges = useBadges(datasetRef)
+
+const { getDatasetMetrics } = useMetrics()
+const datasetMetrics = ref<DatasetMetrics | null>(null)
+
+watchEffect(async () => {
+  if (!props.dataset?.id) return
+  try {
+    datasetMetrics.value = await getDatasetMetrics(props.dataset.id)
+  } catch (error) {
+    console.error('Failed to fetch dataset metrics', error)
+    datasetMetrics.value = null
+  }
+})
+
+const datasetVisits = computed(() => datasetMetrics.value?.visits ?? {})
+const datasetVisitsTotal = computed(
+  () => datasetMetrics.value?.visitsTotal ?? 0
+)
+const datasetDownloadsResources = computed(
+  () => datasetMetrics.value?.downloads ?? {}
+)
+const datasetDownloadsResourcesTotal = computed(
+  () => datasetMetrics.value?.downloadsTotal ?? 0
+)
 
 const showHarvestQualityWarning = computed(() => {
   const backend = props.dataset.harvest?.backend
@@ -89,6 +115,26 @@ const showHarvestQualityWarning = computed(() => {
         </code>
       </p>
     </template>
+    <div class="fr-grid-row fr-grid-row--gutters fr-my-3v">
+      <div class="fr-col-6">
+        <StatBox
+          title="Vues"
+          :data="datasetVisits"
+          size="sm"
+          type="line"
+          :summary="datasetVisitsTotal"
+        />
+      </div>
+      <div class="fr-col-6">
+        <StatBox
+          title="Téléchargements"
+          :data="datasetDownloadsResources"
+          size="sm"
+          type="line"
+          :summary="datasetDownloadsResourcesTotal"
+        />
+      </div>
+    </div>
     <DatasetQuality
       v-if="config.website.show_quality_component"
       :quality="dataset.quality"
