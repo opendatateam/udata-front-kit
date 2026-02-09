@@ -466,10 +466,6 @@ pages:
         form:
           required: true
         values: *fnv_themes
-      - name: Couverture territoriale
-        default_option:
-        id: geozone
-        type: spatial_zone
   # INDICATORS
   indicators:
     list_all: true
