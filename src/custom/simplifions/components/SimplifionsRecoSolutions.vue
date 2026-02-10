@@ -179,11 +179,11 @@
               >
                 <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
-                    v-for="topic in integratingSolutionsLogicielsMetiers"
-                    :key="topic.id"
-                    class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+                    v-for="solution in integratingSolutionsLogicielsMetiers"
+                    :key="solution.id"
+                    class="fr-col-12 fr-col-sm-6 fr-col-md-4 fr-col-lg-3 fr-col-xl-2"
                   >
-                    <SimplifionsSolutionCard :topic="topic" />
+                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
                   </div>
                 </div>
               </DsfrTabContent>
@@ -195,11 +195,11 @@
               >
                 <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
-                    v-for="topic in integratingSolutionsBriquesTechniques"
-                    :key="topic.id"
-                    class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+                    v-for="solution in integratingSolutionsBriquesTechniques"
+                    :key="solution.id"
+                    class="fr-col-12 fr-col-sm-6 fr-col-md-4 fr-col-lg-3 fr-col-xl-2"
                   >
-                    <SimplifionsSolutionCard :topic="topic" />
+                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
                   </div>
                 </div>
               </DsfrTabContent>
@@ -211,11 +211,11 @@
               >
                 <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
-                    v-for="topic in integratingSolutionsPortailsConsultation"
-                    :key="topic.id"
-                    class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+                    v-for="solution in integratingSolutionsPortailsConsultation"
+                    :key="solution.id"
+                    class="fr-col-12 fr-col-sm-6 fr-col-md-4 fr-col-lg-3 fr-col-xl-2"
                   >
-                    <SimplifionsSolutionCard :topic="topic" />
+                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
                   </div>
                 </div>
               </DsfrTabContent>
@@ -238,6 +238,7 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
+import SimplifionsRecoSolutionsIntegratricesCard from './SimplifionsRecoSolutionsIntegratricesCard.vue'
 import SimplifionsSolutionCard from './SimplifionsSolutionCard.vue'
 
 const props = defineProps<{
@@ -341,45 +342,42 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
     })
 }
 
-const fetchTopicsForCategory = async (ids: number[]) => {
-  const topics: Topic[] = []
-  for (const id of ids) {
-    const tag = `simplifions-v2-solutions-${id}`
-    const topic = await topicsAPI.getTopicByTag(tag)
-    if (topic) {
-      topics.push(topic)
-    }
-  }
-  return topics
+const fetchSolutionsForCategory = async (ids: number[]) => {
+  const data = await grist.getRecordsByIds('Solutions', ids)
+  return (data as SolutionRecord[]).filter(
+    (record) => record.fields.Visible_sur_simplifions
+  )
 }
 
-const integratingSolutionsLogicielsMetiers = ref<Topic[]>([])
-const integratingSolutionsBriquesTechniques = ref<Topic[]>([])
-const integratingSolutionsPortailsConsultation = ref<Topic[]>([])
+const integratingSolutionsLogicielsMetiers = ref<SolutionRecord[]>([])
+const integratingSolutionsBriquesTechniques = ref<SolutionRecord[]>([])
+const integratingSolutionsPortailsConsultation = ref<SolutionRecord[]>([])
 
 if (recommandation.Solutions_integratrices_categorie_logiciel_metier?.length) {
-  fetchTopicsForCategory(
+  fetchSolutionsForCategory(
     recommandation.Solutions_integratrices_categorie_logiciel_metier
-  ).then((topics) => {
-    integratingSolutionsLogicielsMetiers.value = topics
+  ).then((solutions) => {
+    integratingSolutionsLogicielsMetiers.value = solutions
   })
 }
 
-if (recommandation.solutions_integratrices_categorie_briques_techniques?.length) {
-  fetchTopicsForCategory(
+if (
+  recommandation.solutions_integratrices_categorie_briques_techniques?.length
+) {
+  fetchSolutionsForCategory(
     recommandation.solutions_integratrices_categorie_briques_techniques
-  ).then((topics) => {
-    integratingSolutionsBriquesTechniques.value = topics
+  ).then((solutions) => {
+    integratingSolutionsBriquesTechniques.value = solutions
   })
 }
 
 if (
   recommandation.Solutions_integratrices_categorie_portail_de_consultation?.length
 ) {
-  fetchTopicsForCategory(
+  fetchSolutionsForCategory(
     recommandation.Solutions_integratrices_categorie_portail_de_consultation
-  ).then((topics) => {
-    integratingSolutionsPortailsConsultation.value = topics
+  ).then((solutions) => {
+    integratingSolutionsPortailsConsultation.value = solutions
   })
 }
 
