@@ -160,6 +160,7 @@
                 panel-id="tab-content-logiciel-metier"
                 tab-id="tab-logiciel-metier"
               >
+              <p><strong>Liste des logiciels métier, sur étagère</strong> conçus pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
                 <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
                     v-for="solution in integratingSolutionsLogicielsMetiers"
@@ -176,6 +177,7 @@
                 panel-id="tab-content-brique-technique"
                 tab-id="tab-brique-technique"
               >
+               <p><strong>Briques techniques logicielles</strong> destinées à être intégrées dans un système informatique existant et conçues pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
                 <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
                     v-for="solution in integratingSolutionsBriquesTechniques"
@@ -192,6 +194,7 @@
                 panel-id="tab-content-portail-consultation"
                 tab-id="tab-portail-consultation"
               >
+               <p>Ces sites vous permettent de consulter certaines des données utiles pour ce cas d’usage  :</p>
                 <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
                     v-for="solution in integratingSolutionsPortailsConsultation"
@@ -232,7 +235,7 @@ const recommandation = props.recommandation
 const hasContent = computed(() => {
   return (
     recommandation.Donnees_utiles_disponibles ||
-    recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
+    recommandation.Parametres_a_saisir_pour_recuperer_les_donnees || recommandation.Nom_complet_du_cas_d_usage
   )
 })
 

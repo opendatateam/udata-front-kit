@@ -29,6 +29,7 @@ export type Recommandation = {
   Parametres_a_saisir_pour_recuperer_les_donnees: string
   Modifie_le: number
   Modifie_par: string
+  Nom_complet_du_cas_d_usage: string
   Nom_de_la_recommandation: string
   Solution_recommandee: number
   Visible_sur_simplifions: boolean
