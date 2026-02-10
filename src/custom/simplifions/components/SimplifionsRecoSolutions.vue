@@ -360,22 +360,25 @@ const activeTab = ref(0)
 const tabTitles = computed(() => {
   const titles = []
   if (integratingSolutionsLogicielsMetiers.value.length > 0) {
+    const count = integratingSolutionsLogicielsMetiers.value.length
     titles.push({
-      title: 'Logiciels métiers 💠💠💠',
+      title: `Logiciels métiers (${count}) 💠💠💠`,
       tabId: 'tab-logiciel-metier',
       panelId: 'tab-content-logiciel-metier'
     })
   }
   if (integratingSolutionsBriquesTechniques.value.length > 0) {
+    const count = integratingSolutionsBriquesTechniques.value.length
     titles.push({
-      title: 'Briques techniques 💠💠💠',
+      title: `Briques techniques (${count}) 💠💠💠`,
       tabId: 'tab-brique-technique',
       panelId: 'tab-content-brique-technique'
     })
   }
   if (integratingSolutionsPortailsConsultation.value.length > 0) {
+    const count = integratingSolutionsPortailsConsultation.value.length
     titles.push({
-      title: 'Portails de consultation',
+      title: `Portails de consultation (${count})`,
       tabId: 'tab-portail-consultation',
       panelId: 'tab-content-portail-consultation'
     })
@@ -403,10 +406,6 @@ const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
 
 .icon-green {
   color: #27a658;
-}
-
-.icon-red {
-  color: #ff292f;
 }
 
 .reco-section {
