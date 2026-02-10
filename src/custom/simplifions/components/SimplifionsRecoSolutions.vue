@@ -58,7 +58,7 @@
           v-if="
             recommandation.Donnees_utiles_disponibles
           "
-          class="reco-section"
+          class="reco-section fr-mb-2w"
         >
           <div class="fr-mr-1w bullet-icon">
             <span
@@ -70,7 +70,7 @@
           <div class="reco-text-column">
             <div>
               <h5 class="fr-text--md">
-                Données disponibles
+                Données disponibles :
               </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
@@ -87,7 +87,7 @@
 
         <div
           v-if="recommandation.Parametres_a_saisir_pour_recuperer_les_donnees"
-          class="reco-section"
+          class="reco-section fr-mb-2w"
         >
           <div class="fr-mr-1w bullet-icon">
             <span aria-hidden="true">✍️</span>
@@ -95,7 +95,7 @@
 
           <div class="reco-text-column">
             <div>
-               <h5 class="fr-text--md"> Informations à saisir pour récupérer la donnée</h5>
+               <h5 class="fr-text--md"> Informations à saisir pour récupérer la donnée :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
