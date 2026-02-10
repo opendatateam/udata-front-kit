@@ -449,7 +449,7 @@ const niveauxDeSimplification = [
     </div>
 
 
-    <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w" style="text-align: center">✍️ Proposez une modification, un cas d'usage ou une solution :</p>        
+    <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w" style="text-align: center">📝 Proposez une modification, un cas d'usage ou une solution :</p>        
     
     <div class="fr-mb-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters ">
      

@@ -90,7 +90,7 @@
           class="reco-section"
         >
           <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true">🧑</span>
+            <span aria-hidden="true">✍️</span>
           </div>
 
           <div class="reco-text-column">
@@ -110,7 +110,7 @@
       </div>
       <p v-else class="fr-text--sm">
         <i>Aucun contenu actuellement.</i>
-        <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
       </p>
 
       <div
