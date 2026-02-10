@@ -130,7 +130,7 @@ watch(
       <button
         v-if="loggedIn"
         type="button"
-        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-add-line fr-btn--icon-left"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-add-line fr-btn--icon-left"
         @click.stop.prevent="showDiscussionForm = true"
       >
         Démarrer une nouvelle discussion
@@ -138,7 +138,7 @@ watch(
       <button
         v-else
         type="button"
-        class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-account-line fr-btn--icon-left"
+        class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-account-line fr-btn--icon-left"
         @click.stop.prevent="triggerLogin()"
       >
         Connectez-vous pour démarrer une discussion
@@ -172,7 +172,7 @@ watch(
           name="message"
         ></textarea>
       </div>
-      <div class="text-align-right">
+      <div class="align-right">
         <button
           type="button"
           class="fr-btn fr-btn--secondary fr-mr-1w"
@@ -260,7 +260,7 @@ watch(
         <button
           v-if="postFormId !== discussion.id && loggedIn"
           type="button"
-          class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-chat-3-line fr-btn--icon-left"
+          class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-chat-3-line fr-btn--icon-left"
           aria-label="Répondre à la discussion"
           :aria-describedby="discussion.id"
           @click.stop.prevent="
@@ -275,7 +275,7 @@ watch(
         <button
           v-if="!loggedIn"
           type="button"
-          class="fr-btn fr-btn--sm fr-btn--secondary fr-btn--secondary-grey-500 fr-icon-account-line fr-btn--icon-left"
+          class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-account-line fr-btn--icon-left"
           @click.stop.prevent="triggerLogin()"
         >
           Connectez-vous pour répondre
@@ -296,7 +296,7 @@ watch(
               name="message"
             ></textarea>
           </div>
-          <div class="text-align-right">
+          <div class="align-right">
             <button
               type="button"
               class="fr-btn fr-btn--secondary fr-mr-1w"
@@ -342,7 +342,7 @@ watch(
 .user-name {
   margin: 0;
   font-size: 0.875rem;
-  color: #3557a2;
+  color: var(--text-action-high-blue-france);
 }
 
 .avatar {
