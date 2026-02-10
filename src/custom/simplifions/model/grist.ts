@@ -38,7 +38,7 @@ export type Recommandation = {
   URL_demande_d_acces_cas_usage: string
   access_link_with_fallback: string
   Solutions_integratrices_categorie_logiciel_metier: number[]
-  solutions_integratrices_categorie_briques_techniques: number[]
+  Solutions_integratrices_categorie_briques_techniques: number[]
   Solutions_integratrices_categorie_portail_de_consultation: number[]
 }
 export type RecommandationRecord = GristRecord & {

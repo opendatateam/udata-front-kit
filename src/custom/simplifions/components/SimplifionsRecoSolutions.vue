@@ -333,10 +333,10 @@ if (recommandation.Solutions_integratrices_categorie_logiciel_metier?.length) {
 }
 
 if (
-  recommandation.solutions_integratrices_categorie_briques_techniques?.length
+  recommandation.Solutions_integratrices_categorie_briques_techniques?.length
 ) {
   fetchSolutionsForCategory(
-    recommandation.solutions_integratrices_categorie_briques_techniques
+    recommandation.Solutions_integratrices_categorie_briques_techniques
   ).then((solutions) => {
     integratingSolutionsBriquesTechniques.value = solutions
   })
