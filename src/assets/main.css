@@ -93,10 +93,6 @@ body {
   word-wrap: break-word;
 }
 
-.block {
-  display: block;
-}
-
 .flex-nowrap {
   flex-wrap: nowrap;
 }
@@ -119,22 +115,12 @@ body {
   min-width: 0;
 }
 
-.fr-col-sm-45 {
-  flex: 0 0 45%;
-  max-width: 45%;
-  width: 45%;
-}
-
 .fit {
   width: fit-content;
 }
 
 .justify-between {
   justify-content: space-between;
-}
-
-.align-baseline {
-  align-items: baseline;
 }
 
 .align-center {
@@ -203,9 +189,6 @@ body {
 
 /* ===== Utilities for @datagouv/components-next (upstream does not bundle these) ===== */
 
-.font-bold {
-  font-weight: 700;
-}
 .f-italic {
   font-style: italic;
 }
@@ -218,10 +201,6 @@ body {
 .overflow-wrap-anywhere {
   overflow-wrap: anywhere;
 }
-.whitespace-nowrap {
-  white-space: nowrap;
-}
-
 .fr-badge--mention-grey {
   color: var(--text-mention-grey);
 }
