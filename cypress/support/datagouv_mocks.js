@@ -217,6 +217,25 @@ Cypress.Commands.add('mockResources', (datasetId, data = []) => {
   }).as(`get_resources_${datasetId}`)
 })
 
+Cypress.Commands.add('mockMetricsApi', (datasetId) => {
+  cy.intercept(
+    'GET',
+    `https://metric-api.data.gouv.fr/api/datasets/data/?dataset_id__exact=${datasetId}&metric_month__sort=desc&page_size=12`,
+    {
+      statusCode: 200,
+      body: { data: [] }
+    }
+  ).as(`get_metrics_${datasetId}`)
+  cy.intercept(
+    'GET',
+    `https://metric-api.data.gouv.fr/api/datasets_total/data/?dataset_id__exact=${datasetId}`,
+    {
+      statusCode: 200,
+      body: { data: [] }
+    }
+  ).as(`get_metrics_total_${datasetId}`)
+})
+
 Cypress.Commands.add(
   'mockDatasetAndRelatedObjects',
   (dataset, resources = []) => {
@@ -234,5 +253,6 @@ Cypress.Commands.add(
     cy.mockDatagouvObjectList('discussions', [])
     cy.mockDatagouvObjectList('reuses', [])
     cy.mockResources(dataset.id, resources)
+    cy.mockMetricsApi(dataset.id)
   }
 )

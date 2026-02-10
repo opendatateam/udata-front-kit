@@ -12,20 +12,16 @@
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-auto">
         <div class="logo">
-          <Placeholder
+          <OrganizationLogo
             v-if="dataservice.organization"
-            type="organization"
-            :src="dataservice.organization.logo_thumbnail"
-            alt=""
-            :size="40"
+            :organization="dataservice.organization"
+            size-class="size-10"
           />
-          <Placeholder v-else type="organization" :size="40" />
+          <Placeholder v-else type="Organization" class="size-10" />
         </div>
       </div>
       <div class="fr-col-12 fr-col-sm">
-        <component
-          :is="props.titleTag"
-          class="fr-text--md fr-mb-0 fr-grid-row">
+        <component :is="props.titleTag" class="fr-text--md fr-mb-0 fr-grid-row">
           <!-- External link (string URL) -->
           <a
             v-if="typeof dataserviceUrl === 'string'"
@@ -134,6 +130,7 @@
 <script setup lang="ts">
 import { stripFromMarkdown } from '@/utils'
 import {
+  OrganizationLogo,
   OrganizationNameWithCertificate,
   Placeholder,
   summarize,
