@@ -56,7 +56,7 @@
       <div v-if="hasContent" class="fr-col-12 fr-col-lg-8 fr-ml-2w">
         <div
           v-if="
-            recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage
+            recommandation.Donnees_utiles_disponibles
           "
           class="reco-section"
         >
@@ -70,14 +70,14 @@
           <div class="reco-text-column">
             <div>
               <h5 class="fr-text--md">
-                En quoi cette solution est utile pour ce cas d'usage ?
+                Données disponibles
               </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
               v-html="
                 fromMarkdown(
-                  recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage
+                  recommandation.Donnees_utiles_disponibles
                 )
               "
             ></div>
@@ -86,7 +86,7 @@
         </div>
 
         <div
-          v-if="recommandation.Concretement_pour_les_usagers"
+          v-if="recommandation.Parametres_a_saisir_pour_recuperer_les_donnees"
           class="reco-section"
         >
           <div class="fr-mr-1w bullet-icon">
@@ -95,59 +95,18 @@
 
           <div class="reco-text-column">
             <div>
-               <h5 class="fr-text--md"> Concrètement, pour les usagers : </h5>
+               <h5 class="fr-text--md"> Informations à saisir pour récupérer la donnée</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
               v-html="
-                fromMarkdown(recommandation.Concretement_pour_les_usagers)
+                fromMarkdown(recommandation.Parametres_a_saisir_pour_recuperer_les_donnees)
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
           </div>
         </div>
 
-        <div
-          v-if="recommandation.Concretement_pour_vos_agents"
-          class="reco-section"
-        >
-          <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true">🧑‍💼</span>
-          </div>
-
-          <div class="reco-text-column">
-            <div>
-                <h5 class="fr-text--md">Concrètement, pour vos agents :</h5> 
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="fromMarkdown(recommandation.Concretement_pour_vos_agents)"
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
-          </div>
-        </div>
-
-        <div
-          v-if="recommandation.Ce_que_ne_fait_pas_cette_solution"
-          class="reco-section"
-        >
-          <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-          </div>
-
-          <div class="reco-text-column">
-            <div>
-              <h5 class="fr-text--md"> Ce que ne fait pas cette solution : </h5>
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="
-                fromMarkdown(recommandation.Ce_que_ne_fait_pas_cette_solution)
-              "
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
-          </div>
-        </div>
       </div>
       <p v-else class="fr-text--sm">
         <i>Aucun contenu actuellement.</i>
@@ -222,10 +181,8 @@ const recommandation = props.recommandation
 
 const hasContent = computed(() => {
   return (
-    recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage ||
-    recommandation.Concretement_pour_les_usagers ||
-    recommandation.Concretement_pour_vos_agents ||
-    recommandation.Ce_que_ne_fait_pas_cette_solution
+    recommandation.Donnees_utiles_disponibles ||
+    recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
   )
 })
 
