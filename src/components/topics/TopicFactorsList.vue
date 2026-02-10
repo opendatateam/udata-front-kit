@@ -452,7 +452,7 @@ defineExpose({
 }
 details {
   border-block: 1px solid var(--border-default-grey, #ddd);
-  color: #000091;
+  color: var(--text-action-high-blue-france);
 }
 details[open] {
   padding-block-end: 0.75rem;

@@ -85,7 +85,7 @@ const goToPage = (page: string) => {
     <div class="fr-container hero-text">
       <h4 v-if="item.title">{{ item.title }}</h4>
       <span v-html="fromMarkdown(item.content || '')"></span>
-      <div class="fr-mt-4w fr-col-md-12 datagouv-components">
+      <div class="fr-mt-4w fr-col-md-12">
         <SubSectionDatasets
           v-if="item.sub_section_datasets"
           :subsection="item.sub_section_datasets"
@@ -174,7 +174,7 @@ const goToPage = (page: string) => {
   height: 40px;
 }
 .button-search-guided {
-  background-color: #3557a2;
+  background-color: var(--background-action-high-blue-france);
   padding-left: 10px;
   padding-right: 10px;
   color: white;
@@ -186,7 +186,7 @@ const goToPage = (page: string) => {
 }
 .button-search-guided:hover {
   cursor: pointer;
-  background-color: #5982e0;
+  background-color: var(--background-action-high-blue-france-hover);
 }
 .or-sep {
   text-align: 'center';

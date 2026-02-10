@@ -398,7 +398,6 @@ watch(
               size="md"
               label="Éditer"
               icon="fr-icon-pencil-line"
-              class="fr-mb-1v fr-mr-1v"
               @click="goToEdit"
             />
             <DsfrButton
@@ -408,7 +407,6 @@ watch(
               :icon="
                 topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
               "
-              class="fr-mb-1v"
               @click="togglePublish"
             />
             <DsfrButton
@@ -421,7 +419,6 @@ watch(
               :icon="
                 topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
               "
-              class="fr-mb-1v"
               @click="toggleFeatured"
             />
           </div>

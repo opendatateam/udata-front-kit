@@ -95,7 +95,7 @@
 
           <div class="reco-text-column">
             <div>
-               <h5 class="fr-text--md"> Concrètement, pour les usagers : </h5>
+              <h5 class="fr-text--md">Concrètement, pour les usagers :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -117,7 +117,7 @@
 
           <div class="reco-text-column">
             <div>
-                <h5 class="fr-text--md">Concrètement, pour vos agents :</h5> 
+              <h5 class="fr-text--md">Concrètement, pour vos agents :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -137,7 +137,7 @@
 
           <div class="reco-text-column">
             <div>
-              <h5 class="fr-text--md"> Ce que ne fait pas cette solution : </h5>
+              <h5 class="fr-text--md">Ce que ne fait pas cette solution :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
@@ -161,7 +161,7 @@
         "
         class="fr-col-12 fr-p-0"
       >
-        <DsfrAccordion  title-tag="h5">
+        <DsfrAccordion title-tag="h5">
           <template #title>
             <strong>API et données utiles</strong>, fournies par la solution
           </template>
@@ -186,7 +186,7 @@
       </div>
 
       <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion  title-tag="h5">
+        <DsfrAccordion title-tag="h5">
           <template #title>
             <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
             cette API pour ce cas d'usage
@@ -357,6 +357,6 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
 
 :deep(.fr-accordion__btn[aria-expanded='true']) {
   background-color: var(--background-alt-blue-france);
-  color: #3558a2;
+  color: var(--text-action-high-blue-france);
 }
 </style>

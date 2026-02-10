@@ -24,7 +24,7 @@ const url = computed(() =>
   <div :class="{ 'indicator-card-wrapper': datasetIsIndicator }">
     <p
       v-if="datasetIsIndicator"
-      class="fr-badge fr-badge--sm fr-badge--mention-grey text-grey-380 indicator-badge"
+      class="fr-badge fr-badge--sm fr-badge--mention-grey text-grey-425 indicator-badge"
     >
       <span
         class="fr-icon-lightbulb-line fr-icon--sm"

@@ -181,7 +181,7 @@ onMounted(() => {
                 {{ discussionWellDescription }}
               </p>
             </div>
-            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+            <div class="fr-col-12 fr-col-lg-4 align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
                 icon="fr-icon-external-link-line"
