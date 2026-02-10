@@ -155,10 +155,7 @@
       </p>
 
       <div
-        v-if="
-          displaySubProducts &&
-          recommandation.API_et_datasets_utiles_fournis?.length
-        "
+        v-if="recommandation.API_et_datasets_utiles_fournis?.length"
         class="fr-col-12 fr-p-0"
       >
         <DsfrAccordion  title-tag="h5">
@@ -219,7 +216,6 @@ import TopicsAPI from '../simplifionsTopicsApi'
 
 const props = defineProps<{
   recommandation: Recommandation
-  displaySubProducts: boolean
 }>()
 
 const recommandation = props.recommandation
