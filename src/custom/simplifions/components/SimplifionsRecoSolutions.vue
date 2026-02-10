@@ -108,14 +108,14 @@
         </div>
 
       </div>
-      <p v-else class="fr-text--sm">
+      <p v-else class="fr-text--sm ">
         <i>Aucun contenu actuellement.</i>
         <a href="#modification-contenu">✒️ Proposer un contenu</a>.
       </p>
 
       <div
         v-if="recommandation.API_et_datasets_utiles_fournis?.length"
-        class="fr-col-12 fr-p-0"
+        class="fr-col-12 fr-p-0 fr-mt-4w"
       >
         <DsfrAccordion  title-tag="h5">
           <template #title>
@@ -157,6 +157,72 @@
           </div>
         </DsfrAccordion>
       </div>
+
+      <div
+        v-if="hasIntegratingSolutions"
+        class="fr-col-12 fr-p-0"
+      >   
+        <DsfrAccordionsGroup v-model="activeIntegratingAccordion">
+          <DsfrAccordion title-tag="h5">
+            <template #title>
+              <strong>Solutions intégrant «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;»</strong>
+            </template>
+            <DsfrTabs
+              v-model="activeTab"
+              tab-list-name="Catégories de solutions intégratrices"
+              :tab-titles="tabTitles"
+            >
+              <DsfrTabContent
+                v-if="integratingSolutionsLogicielsMetiers?.length"
+                panel-id="tab-content-logiciel-metier"
+                tab-id="tab-logiciel-metier"
+              >
+                <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                  <div
+                    v-for="topic in integratingSolutionsLogicielsMetiers"
+                    :key="topic.id"
+                    class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+                  >
+                    <SimplifionsSolutionCard :topic="topic" />
+                  </div>
+                </div>
+              </DsfrTabContent>
+
+              <DsfrTabContent
+                v-if="integratingSolutionsBriquesTechniques?.length"
+                panel-id="tab-content-brique-technique"
+                tab-id="tab-brique-technique"
+              >
+                <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                  <div
+                    v-for="topic in integratingSolutionsBriquesTechniques"
+                    :key="topic.id"
+                    class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+                  >
+                    <SimplifionsSolutionCard :topic="topic" />
+                  </div>
+                </div>
+              </DsfrTabContent>
+
+              <DsfrTabContent
+                v-if="integratingSolutionsPortailsConsultation?.length"
+                panel-id="tab-content-portail-consultation"
+                tab-id="tab-portail-consultation"
+              >
+                <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                  <div
+                    v-for="topic in integratingSolutionsPortailsConsultation"
+                    :key="topic.id"
+                    class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+                  >
+                    <SimplifionsSolutionCard :topic="topic" />
+                  </div>
+                </div>
+              </DsfrTabContent>
+            </DsfrTabs>
+          </DsfrAccordion>
+        </DsfrAccordionsGroup>
+      </div>
     </div>
   </div>
 </template>
@@ -172,6 +238,7 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
+import SimplifionsSolutionCard from './SimplifionsSolutionCard.vue'
 
 const props = defineProps<{
   recommandation: Recommandation
@@ -273,6 +340,78 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
       )
     })
 }
+
+const fetchTopicsForCategory = async (ids: number[]) => {
+  const topics: Topic[] = []
+  for (const id of ids) {
+    const tag = `simplifions-v2-solutions-${id}`
+    const topic = await topicsAPI.getTopicByTag(tag)
+    if (topic) {
+      topics.push(topic)
+    }
+  }
+  return topics
+}
+
+const integratingSolutionsLogicielsMetiers = ref<Topic[]>([])
+const integratingSolutionsBriquesTechniques = ref<Topic[]>([])
+const integratingSolutionsPortailsConsultation = ref<Topic[]>([])
+
+if (recommandation.Solutions_integratrices_categorie_logiciel_metier?.length) {
+  fetchTopicsForCategory(
+    recommandation.Solutions_integratrices_categorie_logiciel_metier
+  ).then((topics) => {
+    integratingSolutionsLogicielsMetiers.value = topics
+  })
+}
+
+if (recommandation.solutions_integratrices_categorie_briques_techniques?.length) {
+  fetchTopicsForCategory(
+    recommandation.solutions_integratrices_categorie_briques_techniques
+  ).then((topics) => {
+    integratingSolutionsBriquesTechniques.value = topics
+  })
+}
+
+if (
+  recommandation.Solutions_integratrices_categorie_portail_de_consultation?.length
+) {
+  fetchTopicsForCategory(
+    recommandation.Solutions_integratrices_categorie_portail_de_consultation
+  ).then((topics) => {
+    integratingSolutionsPortailsConsultation.value = topics
+  })
+}
+
+const activeIntegratingAccordion = ref(0)
+const activeTab = ref(0)
+const tabTitles = computed(() => {
+  const titles = []
+  if (integratingSolutionsLogicielsMetiers.value.length > 0) {
+    titles.push({
+      title: 'Logiciels métiers 💠💠💠',
+      tabId: 'tab-logiciel-metier',
+      panelId: 'tab-content-logiciel-metier'
+    })
+  }
+  if (integratingSolutionsBriquesTechniques.value.length > 0) {
+    titles.push({
+      title: 'Briques techniques 💠💠💠',
+      tabId: 'tab-brique-technique',
+      panelId: 'tab-content-brique-technique'
+    })
+  }
+  if (integratingSolutionsPortailsConsultation.value.length > 0) {
+    titles.push({
+      title: 'Portails de consultation',
+      tabId: 'tab-portail-consultation',
+      panelId: 'tab-content-portail-consultation'
+    })
+  }
+  return titles
+})
+
+const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
 </script>
 
 <style scoped>
