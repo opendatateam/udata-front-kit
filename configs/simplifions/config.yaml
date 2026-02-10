@@ -106,8 +106,6 @@ website:
       to: /
     - text: Cas d'usages
       to: /cas-d-usages
-    - text: Solutions
-      to: /solutions
     - text: À propos
       to: /about
   router:
