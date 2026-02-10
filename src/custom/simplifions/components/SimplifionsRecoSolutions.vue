@@ -141,23 +141,6 @@
         </DsfrAccordion>
       </div>
 
-      <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion  title-tag="h5">
-          <template #title>
-            <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
-            cette API pour ce cas d'usage
-          </template>
-          <div v-if="solutionsEditeurs === undefined">
-            Chargement des données en cours...
-          </div>
-          <div v-else class="solutions-editeurs fr-mt-2w" role="list">
-            <div v-for="solution in solutionsEditeurs" :key="solution.id">
-              <SimplifionsEditorSoftwareCard :solution="solution" />
-            </div>
-          </div>
-        </DsfrAccordion>
-      </div>
-
       <div
         v-if="hasIntegratingSolutions"
         class="fr-col-12 fr-p-0"
@@ -239,7 +222,6 @@ import type {
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import SimplifionsRecoSolutionsIntegratricesCard from './SimplifionsRecoSolutionsIntegratricesCard.vue'
-import SimplifionsSolutionCard from './SimplifionsSolutionCard.vue'
 
 const props = defineProps<{
   recommandation: Recommandation
@@ -331,17 +313,6 @@ if (recommandation.API_et_datasets_utiles_fournis?.length) {
     })
 }
 
-const solutionsEditeurs = ref<SolutionRecord[] | undefined>(undefined)
-if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
-  grist
-    .getRecordsByIds('Solutions', recommandation.Ces_logiciels_l_integrent_deja)
-    .then((data) => {
-      solutionsEditeurs.value = (data as SolutionRecord[]).filter(
-        (record) => record.fields.Visible_sur_simplifions
-      )
-    })
-}
-
 const fetchSolutionsForCategory = async (ids: number[]) => {
   const data = await grist.getRecordsByIds('Solutions', ids)
   return (data as SolutionRecord[]).filter(
@@ -425,12 +396,6 @@ const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
   background-color: var(--background-alt-beige-gris-galet);
   /* padding: 15px; */
   border-radius: 4px;
-}
-
-.solutions-editeurs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
 .icon-green {
