@@ -87,7 +87,7 @@ const simplificationTags = computed(() => {
 
 const getShortLabelSimplificationTag = (name: string) => {
   if (name.includes('Accès facile')) return '💠'
-  if (name.includes('DLNUF')) return '💠💠'
+  if (name.includes('Dites-le nous une fois')) return '💠💠'
   if (name.toLowerCase().includes('proactivité')) return '💠💠💠'
   return name
 }
