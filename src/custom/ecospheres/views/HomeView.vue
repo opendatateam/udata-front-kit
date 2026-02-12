@@ -48,7 +48,7 @@ const dropdown = config.website.header.search.dropdown
 </script>
 
 <template>
-  <div class="datagouv-components">
+  <div>
     <section class="fr-container fr-pt-12v">
       <h1 class="main-title-v2">
         Le catalogue des données
@@ -194,7 +194,7 @@ const dropdown = config.website.header.search.dropdown
 
 <style scoped>
 .bg-blue {
-  background-color: var(--background-alt-blue-cumulus);
+  background-color: var(--background-alt-blue-france);
 }
 
 .faq {
@@ -311,7 +311,7 @@ const dropdown = config.website.header.search.dropdown
   }
 }
 .main-title-v2 :deep(.highlight) {
-  color: var(--blue-france-sun-113);
+  color: var(--text-active-blue-france);
 }
 
 .big-search {

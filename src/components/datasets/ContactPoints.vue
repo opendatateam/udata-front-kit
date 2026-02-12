@@ -42,11 +42,11 @@ onMounted(() => {
       :href="getLink(contactPoint)"
       rel="ugc nofollow noopener"
       target="_blank"
-      class="fr-text--sm fr-link text-grey-500 text-overflow-ellipsis overflow-hidden"
+      class="fr-text--sm fr-link text-grey-50 text-overflow-ellipsis overflow-hidden"
     >
       {{ contactPoint.name || contactPoint.email || contactPoint.contact_form }}
     </a>
-    <small class="fr-ml-1w fr-text--xs fr-m-0 text-grey-380 f-italic"
+    <small class="fr-ml-1w fr-text--xs fr-m-0 text-grey-425 f-italic"
       >({{ getRoleLabel(contactPoint.role) }})</small
     >
   </p>
