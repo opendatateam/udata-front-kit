@@ -33,6 +33,10 @@ const searchResultsMessage = computed(
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
+const hasFilters = computed(
+  () => pageConf.filters.length > 0 || !!meta.filtersComponent
+)
+
 const links = [
   { to: '/', text: 'Accueil' },
   { text: pageConf.breadcrumb_title || pageConf.title }
@@ -98,7 +102,7 @@ onMounted(() => {
     <div class="fr-mt-2w">
       <div class="fr-grid-row">
         <nav
-          v-if="pageConf.filters.length > 0 || meta.filtersComponent"
+          v-if="hasFilters"
           class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
@@ -109,7 +113,13 @@ onMounted(() => {
             <FiltersComponent />
           </div>
         </nav>
-        <div class="fr-col-12 fr-col-md-8 list-container">
+        <div
+          :class="[
+            'fr-col-12',
+            'list-container',
+            hasFilters ? 'fr-col-md-8' : ''
+          ]"
+        >
           <ListComponent
             ref="listComponentRef"
             :query="props.query"
