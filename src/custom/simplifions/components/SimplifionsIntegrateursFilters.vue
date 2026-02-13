@@ -67,24 +67,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Second row: toggle -->
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
-        <div class="fr-toggle">
-          <input
-            id="toggle-public"
-            type="checkbox"
-            class="fr-toggle__input"
-            :checked="onlyPublic"
-            @change="togglePublic"
-          />
-          <label class="fr-toggle__label" for="toggle-public">
-            Solution publique
-          </label>
-        </div>
-      </div>
-    </div>
   </div>
   <!-- Third row: count + sort -->
   <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
@@ -121,7 +103,6 @@ export interface IntegrateursFilters {
   typeSolution: string
   casUsage: number | null
   minApisIntegrated: number
-  onlyPublic: boolean
   sortBy: string
 }
 
@@ -139,7 +120,6 @@ const emit = defineEmits<{
 const selectedTypeSolution = ref('')
 const selectedCasUsage = ref<number | null>(null)
 const minApisIntegrated = ref(0)
-const onlyPublic = ref(false)
 const sortBy = ref('integration')
 
 const availableCasUsages = computed(() => {
@@ -149,17 +129,11 @@ const availableCasUsages = computed(() => {
   }))
 })
 
-const togglePublic = () => {
-  onlyPublic.value = !onlyPublic.value
-  emitFilters()
-}
-
 const emitFilters = () => {
   emit('update:filters', {
     typeSolution: selectedTypeSolution.value,
     casUsage: selectedCasUsage.value,
     minApisIntegrated: minApisIntegrated.value,
-    onlyPublic: onlyPublic.value,
     sortBy: sortBy.value
   })
 }

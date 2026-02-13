@@ -388,7 +388,6 @@ const integrateursFilters = ref<IntegrateursFilters>({
   typeSolution: '',
   casUsage: null,
   minApisIntegrated: 0,
-  onlyPublic: false,
   sortBy: 'integration'
 })
 
@@ -582,11 +581,6 @@ const filteredAndSortedSolutions = computed(() => {
       const integratedCount = getIntegrationCount(sol)
       return integratedCount >= integrateursFilters.value.minApisIntegrated
     })
-  }
-
-  // Filter by public only
-  if (integrateursFilters.value.onlyPublic) {
-    filtered = filtered.filter((sol) => sol.fields.Public_ou_prive === 'Public')
   }
 
   // Sort based on sortBy value
