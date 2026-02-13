@@ -141,8 +141,7 @@ const emitFilters = () => {
 
 <style scoped>
 .integrateurs-filters {
-  background-color: #f6f6f6;
-  padding: 1.5rem;
+  padding: 1.5rem 0;
 }
 
 .sort-container {

@@ -287,8 +287,12 @@
       </p>
     </div>
 
-    <div v-if="solutionsIntegratices.length" id="solutions-integratices">
-      <h2 class="colored-title fr-h2 fr-mt-8w">
+    <div
+      v-if="solutionsIntegratices.length"
+      id="solutions-integratices"
+      class="solutions-integratices-container fr-p-3w fr-mt-8w"
+    >
+      <h2 class="colored-title fr-h2">
         Solutions intégrant "{{ topic.name }}"
       </h2>
 
@@ -637,6 +641,14 @@ h2.colored-title {
 
 .icon-red {
   color: #ff292f;
+}
+
+.solutions-integratices-container {
+  background-color: #f1f1f1;
+}
+
+.solutions-integratices-container :deep(.fr-select) {
+  background-color: #fff;
 }
 
 .bloc-modifications {
