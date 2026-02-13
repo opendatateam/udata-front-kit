@@ -423,7 +423,7 @@ const niveauxDeSimplification = [
        <h3 style="text-align: center">
           Ligne éditoriale <i>DLNUF/proactivité</i>
         </h3>
-         <p class="fr-text--lg fr-text--bold"> Un contenu rédigé au sein du Pôle Data pour tenir une ligne éditoriale :</p>
+         <p class="fr-text--lg fr-text--bold"> Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une ligne éditoriale :</p>
          <ul class="fr-text--lg">
          
           <li>focalisée sur la mise en oeuvre d'une simplification par la donnée, souvent via les deux principes que sont le "Dites-le nous une fois" et la "Proactivité" ;</li>
@@ -446,7 +446,7 @@ const niveauxDeSimplification = [
        <h3 style="text-align: center">
           Contenu collaboratif
         </h3>
-         <p class="fr-text--lg fr-text--bold">De nombreux espaces sont disponibles sur le site pour permettre aux usagers de contribuer dans l'objectif de proposer une base de connaissance :</p>
+         <p class="fr-text--lg fr-text--bold">De nombreux espaces sont disponibles sur le site pour permettre aux usagers de proposer des modifications dans l'objectif de construire une base de connaissance :</p>
         <ul class="fr-text--lg">
           <li>élaborée sur des expériences concrètes ;</li>
           <li>exhaustive ;</li>
