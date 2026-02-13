@@ -9,7 +9,7 @@ import '@vueform/multiselect/themes/default.css'
 import '@/assets/multiselect.css'
 
 import type { Factor } from '@/model/topic'
-import SearchAPI from '@/services/api/SearchAPI'
+import DatasetsAPI from '@/services/api/resources/DatasetsAPI'
 import { debounceWait } from '@/utils/config'
 
 const selectedDataset = defineModel({
@@ -44,7 +44,7 @@ const search = useDebounceFn(async (query: string) => {
   }
   try {
     return (
-      await new SearchAPI().search(query, {
+      await new DatasetsAPI().search(query, {
         page: 1,
         page_size: 10
       })

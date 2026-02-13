@@ -15,6 +15,13 @@ export type AxiosResponseData = AxiosResponse['data']
 
 export type GenericData = object[]
 
+export interface FacetBucket {
+  name: string
+  count: number
+}
+
+export type Facets = Record<string, FacetBucket[]>
+
 export interface GenericResponse {
   data: GenericData
   page: number
@@ -22,6 +29,7 @@ export interface GenericResponse {
   next_page: string | null
   previous_page: string | null
   total: number
+  facets?: Facets
 }
 
 export interface DatagouvfrAPIArgs {
