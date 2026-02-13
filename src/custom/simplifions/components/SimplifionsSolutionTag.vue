@@ -2,11 +2,7 @@
   <p
     :class="`fr-badge fr-badge--sm fr-badge--no-icon ${isPublic ? 'fr-badge--brown-cafe-creme' : 'fr-badge--info'}`"
   >
-    <span class="font-weight-normal text-uppercase">{{ tagText }}</span>
-    <span v-if="operatorName">
-      <span class="fr-ml-1v font-weight-normal"> | </span>
-      <span class="text-uppercase">{{ operatorName }}</span>
-    </span>
+    <span class="font-weight-normal">{{ tagText }} | <b>{{ operatorName }}</b></span>
   </p>
 </template>
 
