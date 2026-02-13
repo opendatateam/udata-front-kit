@@ -166,7 +166,7 @@
                   <div
                     v-for="solution in integratingSolutionsLogicielsMetiers"
                     :key="solution.id"
-                    class="fr-col-12 fr-col-sm-6 fr-col-md-4 fr-col-lg-3 fr-col-xl-2"
+                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
                   </div>
@@ -184,7 +184,7 @@
                   <div
                     v-for="solution in integratingSolutionsBriquesTechniques"
                     :key="solution.id"
-                    class="fr-col-12 fr-col-sm-6 fr-col-md-4 fr-col-lg-3 fr-col-xl-2"
+                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
                   </div>
