@@ -189,7 +189,7 @@
 
       <div>
         <h3 class="fr-text--md fr-mt-2w">
-          <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
+          <span aria-hidden="true" class="fr-icon-octagon-fill icon-gray"></span>
           Cette solution ne permet pas :
         </h3>
         <p
@@ -586,8 +586,8 @@ h2.colored-title {
   color: #27a658;
 }
 
-.icon-red {
-  color: #ff292f;
+.icon-gray {
+  color: #8b8b8b;
 }
 
 .solutions-integratices-container {
