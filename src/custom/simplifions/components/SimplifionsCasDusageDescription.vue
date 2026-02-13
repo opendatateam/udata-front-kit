@@ -146,7 +146,7 @@
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
       <h2 class="fr-h6">✒️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
-        Pour proposer une modification du contenu de cette solution, vous pouvez
+        Pour proposer une modification du contenu de ce cas d'usage, vous pouvez
         contacter l'équipe via l'espace "Discussions" ci-dessous ou bien
         compléter
         <a

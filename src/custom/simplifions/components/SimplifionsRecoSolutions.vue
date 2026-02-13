@@ -217,8 +217,14 @@
 
               </DsfrTabContent>
             </DsfrTabs>
+            <p class="fr-text--sm fr-mx-3w fr-mt-2w">
+              <i>Une solution n'est pas listée parmi les solutions intégrant «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;» ? 
+              </i>
+              <a href="#modification-contenu">✒️ Proposer un contenu</a>.
+            </p>
           </DsfrAccordion>
         </DsfrAccordionsGroup>
+      
       </div>
     </div>
   </div>
