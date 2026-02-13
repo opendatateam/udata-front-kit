@@ -22,12 +22,6 @@ const fournisseursDeService = [
     filters: 'target-users=associations',
     description: "Tous les cas d'usages concernant les associations"
   },
-  {
-    title: 'Agents publics',
-    emoji: '🧑‍💼',
-    filters: 'target-users=agents-publics',
-    description: "Tous les cas d'usages concernant les agents publics"
-  }
 ]
 
 const budgets = [
@@ -148,7 +142,7 @@ const niveauxDeSimplification = [
       <div
         v-for="item in fournisseursDeService"
         :key="item.title"
-        class="fr-col-12 fr-col-lg-3"
+        class="fr-col-12 fr-col-lg-4"
       >
         <div
           id="tile-sourcing"
