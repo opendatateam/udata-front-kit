@@ -30,9 +30,12 @@
         </li>
       </ul>
     </div>
-    <div v-if="!hideBudget && groupedTags['budget']" class="budget-group">
+    <div
+      v-if="showCategorieDeSolution && groupedTags['categorie-de-solution']"
+      class="categorie-de-solution-group"
+    >
       <ul class="fr-badges-group">
-        <li v-for="t in groupedTags['budget']" :key="t.id">
+        <li v-for="t in groupedTags['categorie-de-solution']" :key="t.id">
           <TagComponent :tag="t" />
         </li>
       </ul>
@@ -50,12 +53,17 @@ import type {
 } from '../model/topics'
 import HumanReadableList from './HumanReadableList.vue'
 
-const props = defineProps<{
-  topic: Topic
-  pageKey: string
-  hideBudget?: boolean
-  hideSimplification?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    topic: Topic
+    pageKey: string
+    showCategorieDeSolution?: boolean
+    hideSimplification?: boolean
+  }>(),
+  {
+    showCategorieDeSolution: true
+  }
+)
 
 const topicRef = ref(props.topic)
 const tags = useTagsByRef(props.pageKey, topicRef)
@@ -71,7 +79,6 @@ const groupedTags = computed(() => {
   return groups
 })
 
-const hideBudget = computed(() => props.hideBudget)
 const hideSimplification = computed(() => props.hideSimplification)
 
 const orderedFournisseursDeService = computed(() => {
