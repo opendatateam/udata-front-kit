@@ -102,7 +102,7 @@ export interface IntegrateursFilters {
   typeSolution: string
   casUsage: number | null
   minApisIntegrated: number
-  sortBy: string
+  sortBy: 'integration' | 'title'
 }
 
 const props = defineProps<{
@@ -119,7 +119,7 @@ const emit = defineEmits<{
 const selectedTypeSolution = ref('')
 const selectedCasUsage = ref<number | null>(null)
 const minApisIntegrated = ref(0)
-const sortBy = ref('integration')
+const sortBy = ref<IntegrateursFilters['sortBy']>('integration')
 
 const availableCasUsages = computed(() => {
   return props.casUsages.map((cu) => ({
