@@ -197,16 +197,24 @@
                 tab-id="tab-portail-consultation"
                 style="background-color: white;"
               >
-               <p>Ces sites vous permettent de consulter certaines des données utiles pour ce cas d’usage  :</p>
+                <p>
+                  <b>Ces sites vous permettent de consulter certaines des données utiles pour ce cas d’usage  :</b>
+                </p>
+                <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
+                  <p class="fr-mb-0">💡 
+                    Pour vraiment simplifier la vie des usagers, l'intégration directe de cette API ou de jeu de données dans vos logiciels métiers est à privilégier car elle permet de mettre en oeuvre le <i>dites-le-nous une fois</i> et la proactivité !
+                  </p>
+                </div>
                 <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
                     v-for="solution in integratingSolutionsPortailsConsultation"
                     :key="solution.id"
-                    class="fr-col-12 fr-col-sm-6 fr-col-md-4 fr-col-lg-3 fr-col-xl-2"
+                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
                   </div>
                 </div>
+
               </DsfrTabContent>
             </DsfrTabs>
           </DsfrAccordion>
