@@ -79,24 +79,23 @@
       </p>
     </div>
 
-    <div class="fr-col-12 fr-col-md-6">
-      <div class="sort-container">
-        <label for="sort-by" class="fr-label fr-mr-2w"> Trier par : </label>
-        <select
-          id="sort-by"
-          v-model="sortBy"
-          class="fr-select fr-select--inline"
-          @change="emitFilters"
-        >
-          <option value="integration">Le plus de données intégrées</option>
-          <option value="title">Titre</option>
-        </select>
-      </div>
+    <div class="fr-col-auto fr-grid-row fr-grid-row--middle fr-ml-auto">
+      <SelectComponent
+        v-model="sortBy"
+        label="Trier par :"
+        :label-class="['fr-col-auto', 'fr-m-0', 'fr-mr-1w']"
+        :options="[
+          { id: 'integration', name: 'Le plus de données intégrées' },
+          { id: 'title', name: 'Titre' }
+        ]"
+        @update:model-value="emitFilters"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import SelectComponent from '@/components/SelectComponent.vue'
 import type { CasUsageRecord } from '../model/grist'
 
 export interface IntegrateursFilters {
@@ -138,27 +137,3 @@ const emitFilters = () => {
   })
 }
 </script>
-
-<style scoped>
-.sort-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.sort-container .fr-label {
-  margin-bottom: 0;
-  white-space: nowrap;
-}
-
-.fr-select--inline {
-  width: auto;
-  min-width: 220px;
-}
-
-@media (max-width: 767px) {
-  .sort-container {
-    justify-content: flex-start;
-  }
-}
-</style>
