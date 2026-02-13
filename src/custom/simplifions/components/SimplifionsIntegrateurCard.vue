@@ -57,9 +57,12 @@
         </div>
 
         <!-- Cas d'usages column -->
-        <div class="integrateur-card__usecases">
+        <div
+          v-if="casUsagesWithIndicators.length"
+          class="integrateur-card__usecases"
+        >
           <p class="section-label">Cas d'usages :</p>
-          <div v-if="casUsagesWithIndicators.length" class="cas-usages-grid">
+          <div class="cas-usages-grid">
             <div
               v-for="casUsage in casUsagesWithIndicators"
               :key="casUsage.id"
@@ -89,9 +92,6 @@
               </div>
             </div>
           </div>
-          <p v-else class="fr-text--sm fr-mb-0 fr-text--light">
-            Aucun cas d'usage associé
-          </p>
         </div>
       </div>
 
