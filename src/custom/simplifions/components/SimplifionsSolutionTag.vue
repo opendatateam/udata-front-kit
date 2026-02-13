@@ -1,35 +1,35 @@
 <template>
   <p
-    :class="`fr-badge fr-badge--sm fr-mb-2w fr-badge--no-icon ${isPublic ? 'fr-badge--success' : 'fr-badge--info'}`"
+    :class="`fr-badge fr-badge--sm fr-badge--no-icon ${isPublic ? 'fr-badge--brown-cafe-creme' : 'fr-badge--info'}`"
   >
-    <span class="font-weight-normal">{{ tagText }}</span>
-    <span v-if="operatorName">
-      <span class="fr-ml-1v font-weight-normal"> | </span>
-      {{ operatorName }}
-    </span>
+    <span class="font-weight-normal">{{ tagText }} | <b>{{ operatorName }}</b></span>
   </p>
 </template>
 
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
+import type { Solution } from '../model/grist'
 import type { TopicSolutionsExtras } from '../model/topics'
 
-const props = defineProps({
-  topicSolution: {
-    type: Object as () => Topic,
-    required: true
-  }
-})
+const props = defineProps<{
+  topicSolution?: Topic
+  solution?: Solution
+}>()
 
-const solution = computed(
-  () =>
-    (props.topicSolution.extras as TopicSolutionsExtras | undefined)?.[
+const solutionData = computed(() => {
+  if (props.solution) {
+    return props.solution
+  }
+  if (props.topicSolution) {
+    return (props.topicSolution.extras as TopicSolutionsExtras | undefined)?.[
       'simplifions-v2-solutions'
     ]
-)
+  }
+  return undefined
+})
 
 const isPublic = computed(() => {
-  return solution.value?.Public_ou_prive === 'Public'
+  return solutionData.value?.Public_ou_prive === 'Public'
 })
 
 const tagText = computed(() => {
@@ -37,6 +37,6 @@ const tagText = computed(() => {
 })
 
 const operatorName = computed(() => {
-  return solution.value?.Nom_de_l_operateur?.[0]
+  return solutionData.value?.Nom_de_l_operateur?.[0]
 })
 </script>
