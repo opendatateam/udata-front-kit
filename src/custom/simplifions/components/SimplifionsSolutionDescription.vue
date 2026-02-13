@@ -83,50 +83,30 @@
           </h2>
           <ol>
             <li>
-              <a
-                id="summary-link-1"
-                href="#possibilites-simplification"
-                class="fr-summary__link"
+              <a href="#possibilites-simplification" class="fr-summary__link"
                 >Possibilités de simplification</a
               >
             </li>
             <li>
-              <a
-                id="summary-link-1"
-                href="#cas-usages-simplifiables"
-                class="fr-summary__link"
+              <a href="#cas-usages-simplifiables" class="fr-summary__link"
                 >Cas d'usages simplifiables</a
               >
             </li>
             <li v-if="solution.API_ou_datasets_integres?.length">
-              <a
-                id="summary-link-2"
-                href="#donnees-api-utilisees"
-                class="fr-summary__link"
+              <a href="#donnees-api-utilisees" class="fr-summary__link"
                 >Données et API utilisées</a
               >
             </li>
             <li v-if="solution.APIs_ou_datasets_fournis?.length">
-              <a
-                id="summary-link-2"
-                href="#donnees-api-fournies"
-                class="fr-summary__link"
+              <a href="#donnees-api-fournies" class="fr-summary__link"
                 >Données et API fournies</a
               >
             </li>
             <li v-else>
-              <a
-                id="summary-link-2"
-                href="#donnees-api"
-                class="fr-summary__link"
-                >Données et API</a
-              >
+              <a href="#donnees-api" class="fr-summary__link">Données et API</a>
             </li>
             <li v-if="solutionsIntegratices.length">
-              <a
-                id="summary-link-3"
-                href="#solutions-integratices"
-                class="fr-summary__link"
+              <a href="#solutions-integratices" class="fr-summary__link"
                 >Solutions intégratrices</a
               >
             </li>
