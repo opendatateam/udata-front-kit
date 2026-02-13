@@ -83,7 +83,7 @@
                   </template>
                   <span :class="['indicator-count', casUsage.colorClass]"
                     >{{ casUsage.integratedCount }} API et jeux de données
-                    "<strong>{{ supplierName }}</strong
+                    "<strong>{{ nomFournisseur }}</strong
                     >"</span
                   >
                   sur les {{ casUsage.totalCount }} utiles pour ce cas d'usage
@@ -124,7 +124,7 @@ const props = defineProps<{
   solution: SolutionRecord
   casUsages: CasUsageRecord[]
   usefulApisByCasUsage: Map<number, number[]>
-  supplierName: string
+  nomFournisseur: string
   apiEtDatasetsIntegres: ApiEtDatasetsIntegresRecord[]
 }>()
 

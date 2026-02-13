@@ -315,7 +315,7 @@
             :solution="editeur"
             :cas-usages="casUsagesForIntegrateurs"
             :useful-apis-by-cas-usage="usefulApisByCasUsage"
-            :supplier-name="topic.name"
+            :nom-fournisseur="topic.name"
             :api-et-datasets-integres="
               apiEtDatasetsIntegresParSolution.get(editeur.id) || []
             "
@@ -386,7 +386,7 @@ const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
 const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
 const solutionsIntegratices = ref<SolutionRecord[]>([])
 const casUsagesForIntegrateurs = ref<CasUsageRecord[]>([])
-const supplierRecommendations = ref<RecommandationRecord[]>([])
+const recommandationsFournisseur = ref<RecommandationRecord[]>([])
 const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
 const integrateursFilters = ref<IntegrateursFilters>({
   typeSolution: '',
@@ -441,7 +441,7 @@ grist.getRecord('Solutions', solutionId).then((data) => {
     grist
       .getRecords('Recommandations', { Solution_recommandee: [solutionId] })
       .then((recommendations) => {
-        supplierRecommendations.value =
+        recommandationsFournisseur.value =
           recommendations as RecommandationRecord[]
       })
 
@@ -488,7 +488,7 @@ const availableTypeSolutions = computed(() => {
 // Map of cas d'usage ID -> useful APIs/datasets IDs (Y value per use case)
 const usefulApisByCasUsage = computed(() => {
   const map = new Map<number, number[]>()
-  supplierRecommendations.value.forEach((rec) => {
+  recommandationsFournisseur.value.forEach((rec) => {
     const casUsageId = rec.fields.Cas_d_usage
     const usefulApis = rec.fields.API_et_datasets_utiles_fournis || []
     map.set(casUsageId, usefulApis)
