@@ -19,10 +19,10 @@
             isPublic ? 'fr-badge--success' : 'fr-badge--info'
           ]"
         >
-          <span class="font-weight-normal text-uppercase">{{ tagText }}</span>
+          <span class="font-weight-normal uppercase">{{ tagText }}</span>
           <span v-if="operatorName">
             <span class="fr-ml-1v font-weight-normal"> | </span>
-            <span class="text-uppercase">{{ operatorName }}</span>
+            <span class="uppercase">{{ operatorName }}</span>
           </span>
         </p>
       </div>
@@ -295,14 +295,6 @@ const casUsagesWithIndicators = computed(() => {
 
 .indicator-count.indicator--red {
   background-color: rgb(254, 201, 201);
-}
-
-.font-weight-normal {
-  font-weight: normal;
-}
-
-.text-uppercase {
-  text-transform: uppercase;
 }
 
 @media (max-width: 767px) {
