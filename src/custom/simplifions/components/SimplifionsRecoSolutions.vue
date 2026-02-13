@@ -159,9 +159,10 @@
                 v-if="integratingSolutionsLogicielsMetiers?.length"
                 panel-id="tab-content-logiciel-metier"
                 tab-id="tab-logiciel-metier"
+                style="background-color: white;"
               >
               <p><strong>Liste des logiciels métier, sur étagère</strong> conçus pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
-                <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
                     v-for="solution in integratingSolutionsLogicielsMetiers"
                     :key="solution.id"
@@ -176,9 +177,10 @@
                 v-if="integratingSolutionsBriquesTechniques?.length"
                 panel-id="tab-content-brique-technique"
                 tab-id="tab-brique-technique"
+                style="background-color: white;"
               >
                <p><strong>Briques techniques logicielles</strong> destinées à être intégrées dans un système informatique existant et conçues pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
-                <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
                     v-for="solution in integratingSolutionsBriquesTechniques"
                     :key="solution.id"
@@ -193,9 +195,10 @@
                 v-if="integratingSolutionsPortailsConsultation?.length"
                 panel-id="tab-content-portail-consultation"
                 tab-id="tab-portail-consultation"
+                style="background-color: white;"
               >
                <p>Ces sites vous permettent de consulter certaines des données utiles pour ce cas d’usage  :</p>
-                <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
                   <div
                     v-for="solution in integratingSolutionsPortailsConsultation"
                     :key="solution.id"
