@@ -15,22 +15,24 @@ describe('Solutions intégratrices block', () => {
   } = {}) => {
     cy.baseMocksForSimplifions()
 
+    const { gristSolution, topicSolution } = mockSolution({
+      API_ou_datasets_integres: [],
+      APIs_ou_datasets_fournis: [],
+      Recommande_pour_les_cas_d_usages: []
+    })
+
     const { gristIntegrateurs, gristCasUsages } = mockSolutionsIntegratices({
-      fournisseurSolutionId: 999,
+      fournisseurSolutionId: gristSolution.id,
       integrateursSolutionFields,
       casUsageFields,
       integrations,
       recommandations
     })
 
-    const { gristSolution, topicSolution } = mockSolution({
-      API_ou_datasets_integres: [],
-      APIs_ou_datasets_fournis: [],
-      Recommande_pour_les_cas_d_usages: [],
-      solutions_integratrices: gristIntegrateurs.map((s) => s.id)
-    })
-
-    // Override Solutions mock with all records (supplier + integrators)
+    // Update supplier with integrator IDs and override Solutions mock with all records
+    gristSolution.fields.solutions_integratrices = gristIntegrateurs.map(
+      (s) => s.id
+    )
     cy.mockGristRecords('Solutions', [gristSolution, ...gristIntegrateurs])
 
     cy.visit(`/solutions/${topicSolution.slug}`)
