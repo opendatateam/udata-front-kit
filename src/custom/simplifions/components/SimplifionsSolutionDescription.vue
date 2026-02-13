@@ -287,17 +287,17 @@
 
       <ul class="fr-grid-row fr-grid-row--gutters list-none">
         <li
-          v-for="editeur in filteredAndSortedSolutions"
-          :key="editeur.id"
+          v-for="integrateur in filteredAndSortedSolutions"
+          :key="integrateur.id"
           class="fr-col-12 fr-mb-2w"
         >
           <SimplifionsIntegrateurCard
-            :solution="editeur"
+            :solution="integrateur"
             :cas-usages="casUsagesForIntegrateurs"
             :useful-apis-by-cas-usage="usefulApisByCasUsage"
             :nom-fournisseur="topic.name"
             :api-et-datasets-integres="
-              apiEtDatasetsIntegresParSolution.get(editeur.id) || []
+              apiEtDatasetsIntegresParSolution.get(integrateur.id) || []
             "
           />
         </li>
@@ -307,7 +307,7 @@
         v-if="filteredAndSortedSolutions.length === 0"
         class="fr-text--sm fr-text--center"
       >
-        <i>Aucun éditeur ne correspond aux filtres sélectionnés.</i>
+        <i>Aucune solution ne correspond aux filtres sélectionnés.</i>
       </p>
     </div>
 
