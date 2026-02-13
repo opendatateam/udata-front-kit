@@ -165,37 +165,36 @@ const casUsagesWithIndicators = computed(() => {
     })
   })
 
-  return Array.from(useCaseIds)
-    .map((casUsageId) => {
-      const casUsage = props.casUsages.find((cu) => cu.id === casUsageId)
-      if (!casUsage) return null
+  return Array.from(useCaseIds).flatMap((casUsageId) => {
+    const casUsage = props.casUsages.find((cu) => cu.id === casUsageId)
+    if (!casUsage) return []
 
-      // Y = useful APIs for this use case (from supplier's recommendations)
-      const usefulApisForCasUsage = props.usefulApisByCasUsage.get(casUsageId)
-      // Skip use cases not in supplier's recommendations
-      if (!usefulApisForCasUsage) return null
-      const totalCount = usefulApisForCasUsage.length
-      if (totalCount === 0) return null
+    // Y = useful APIs for this use case (from supplier's recommendations)
+    const usefulApisForCasUsage = props.usefulApisByCasUsage.get(casUsageId)
+    // Skip use cases not in supplier's recommendations
+    if (!usefulApisForCasUsage?.length) return []
 
-      // X = count of APIs integrated for this use case
-      const integratedCount = props.apiEtDatasetsIntegres.filter(
-        (integration) =>
-          integration.fields.Integre_pour_les_cas_d_usages?.includes(
-            casUsageId
-          ) &&
-          usefulApisForCasUsage.includes(
-            integration.fields.API_ou_dataset_integre
-          )
-      ).length
+    // X = count of APIs integrated for this use case
+    const integratedCount = props.apiEtDatasetsIntegres.filter(
+      (integration) =>
+        integration.fields.Integre_pour_les_cas_d_usages?.includes(
+          casUsageId
+        ) &&
+        usefulApisForCasUsage.includes(
+          integration.fields.API_ou_dataset_integre
+        )
+    ).length
 
-      // Color class based on percentage (red → orange → yellow → green)
-      const percentage = (integratedCount / totalCount) * 100
-      let colorClass = 'indicator--red'
-      if (percentage >= 75) colorClass = 'indicator--green'
-      else if (percentage >= 50) colorClass = 'indicator--yellow'
-      else if (percentage >= 25) colorClass = 'indicator--orange'
+    // Color class based on percentage (red → orange → yellow → green)
+    const totalCount = usefulApisForCasUsage.length
+    const percentage = (integratedCount / totalCount) * 100
+    let colorClass = 'indicator--red'
+    if (percentage >= 75) colorClass = 'indicator--green'
+    else if (percentage >= 50) colorClass = 'indicator--yellow'
+    else if (percentage >= 25) colorClass = 'indicator--orange'
 
-      return {
+    return [
+      {
         id: casUsageId,
         name: casUsage.fields.Nom_complet || casUsage.fields.Nom,
         icon: casUsage.fields.Icone_du_titre || '📋',
@@ -203,15 +202,8 @@ const casUsagesWithIndicators = computed(() => {
         totalCount,
         colorClass
       }
-    })
-    .filter(Boolean) as Array<{
-    id: number
-    name: string
-    icon: string
-    integratedCount: number
-    totalCount: number
-    colorClass: string
-  }>
+    ]
+  })
 })
 </script>
 
