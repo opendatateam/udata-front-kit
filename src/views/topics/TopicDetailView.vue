@@ -318,6 +318,7 @@ watch(
         <div v-if="meta.descriptionComponent && customDescriptionComponent">
           <component
             :is="customDescriptionComponent"
+            :key="topic.id"
             :topic="topic"
             :page-key="pageKey"
             :hide-loader="hideLoader"
