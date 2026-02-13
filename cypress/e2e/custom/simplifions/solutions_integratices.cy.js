@@ -30,8 +30,8 @@ describe('Solutions intégratrices block', () => {
       solutions_integratrices: gristIntegrateurs.map((s) => s.id)
     })
 
-    // Register specific intercept for integrator IDs after the general one
-    cy.mockGristRecordsByIds('Solutions', gristIntegrateurs)
+    // Override Solutions mock with all records (supplier + integrators)
+    cy.mockGristRecords('Solutions', [gristSolution, ...gristIntegrateurs])
 
     cy.visit(`/solutions/${topicSolution.slug}`)
     return { gristSolution, topicSolution, gristIntegrateurs, gristCasUsages }
@@ -220,15 +220,15 @@ describe('Solutions intégratrices block', () => {
     }
 
     // Mock supplier solution + topic
-    const { topicSolution } = mockSolution({
+    const { gristSolution, topicSolution } = mockSolution({
       API_ou_datasets_integres: [],
       APIs_ou_datasets_fournis: [],
       Recommande_pour_les_cas_d_usages: [],
       solutions_integratrices: [integrateurId]
     })
 
-    // Register integrator-specific intercept after the general one
-    cy.mockGristRecordsByIds('Solutions', [integrateur])
+    // Override Solutions mock with all records (supplier + integrator)
+    cy.mockGristRecords('Solutions', [gristSolution, integrateur])
 
     // Mock topic for integrator card
     const tagWithId = `simplifions-v2-solutions-${integrateurId}`

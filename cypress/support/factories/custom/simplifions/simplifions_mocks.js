@@ -190,8 +190,13 @@ export const mockSolution = (
 
   const topicSolution = topicSolutionFactory.one({
     overrides: {
+      ...topicSolutionFields,
       tags: ['simplifions-v2', 'simplifions-v2-solutions', tagWithId],
-      ...topicSolutionFields
+      extras: {
+        'simplifions-v2-solutions': {
+          id: gristSolution.id
+        }
+      }
     }
   })
 
