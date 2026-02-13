@@ -89,6 +89,10 @@ body {
   font-weight: 700;
 }
 
+.font-weight-normal {
+  font-weight: normal;
+}
+
 /* ALIGNMENT */
 .justify-between {
   justify-content: space-between;

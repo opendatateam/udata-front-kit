@@ -18,11 +18,17 @@ Cypress.Commands.add('mockGristRecords', (resourceId, elements = []) => {
   cy.intercept(
     'GET',
     `https://grist.numerique.gouv.fr/api/docs/*/tables/${resourceId}/records*`,
-    {
-      statusCode: 200,
-      body: {
-        records: elements
+    (req) => {
+      const url = new URL(req.url)
+      const filterParam = url.searchParams.get('filter')
+      const filter = filterParam ? JSON.parse(filterParam) : {}
+
+      let records = elements
+      if (filter.id) {
+        records = elements.filter((el) => filter.id.includes(el.id))
       }
+
+      req.reply({ statusCode: 200, body: { records } })
     }
   ).as(`get_grist_${resourceId}_records`)
 })

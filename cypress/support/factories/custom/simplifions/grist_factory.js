@@ -75,7 +75,22 @@ export const solutionFactory = build({
       Site_internet: sequence((x) => `https://solution${x}.example.com`),
       Types_de_simplification: [1, 2],
       Visible_sur_simplifions: true,
-      Recommande_pour_les_cas_d_usages: [1, 2]
+      Recommande_pour_les_cas_d_usages: [1, 2],
+      solutions_integratrices: null,
+      Type_de_solution: ['Éditeur']
+    }
+  }
+})
+
+export const apiEtDatasetsIntegresFactory = build({
+  fields: {
+    id: sequence((x) => x),
+    fields: {
+      Solution_integratrice: sequence((x) => x),
+      API_ou_dataset_integre: sequence((x) => x),
+      Integre_pour_les_cas_d_usages: [],
+      Status_de_l_integration: 'Intégré',
+      Solution_fournisseur: 1
     }
   }
 })
