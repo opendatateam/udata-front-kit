@@ -68,7 +68,7 @@
               :key="casUsage.id"
               class="cas-usage-card fr-p-2v"
             >
-              <span class="fr-text--xs fr-mb-1v cas-usage-name">{{
+              <span class="fr-text--xs fr-text--bold fr-mb-1v">{{
                 casUsage.name
               }}</span>
               <div class="cas-usage-card__indicator fr-p-1w">
@@ -251,11 +251,6 @@ const casUsagesWithIndicators = computed(() => {
   border-radius: 4px;
   display: flex;
   flex-direction: column;
-}
-
-.cas-usage-name {
-  font-weight: 500;
-  line-height: 1.3;
 }
 
 .cas-usage-card__indicator {
