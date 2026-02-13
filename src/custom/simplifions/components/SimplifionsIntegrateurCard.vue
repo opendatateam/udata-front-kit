@@ -72,16 +72,25 @@
                 casUsage.name
               }}</span>
               <div class="cas-usage-card__indicator fr-p-1w">
-                <span :class="['indicator-count', casUsage.colorClass]">
+                <span
+                  :class="[
+                    'fr-text--xs fr-text--bold indicator-count',
+                    casUsage.colorClass
+                  ]"
+                >
                   {{ casUsage.integratedCount }}/{{ casUsage.totalCount }}
                 </span>
                 <TooltipWrapper>
                   <template #trigger>
-                    <span class="indicator-label"
+                    <span class="fr-text--xs indicator-label"
                       >API ou jeux de données intégrés</span
                     >
                   </template>
-                  <span :class="['indicator-count', casUsage.colorClass]"
+                  <span
+                    :class="[
+                      'fr-text--xs fr-text--bold indicator-count',
+                      casUsage.colorClass
+                    ]"
                     >{{ casUsage.integratedCount }} API et jeux de données
                     "<strong>{{ nomFournisseur }}</strong
                     >"</span
@@ -255,22 +264,21 @@ const casUsagesWithIndicators = computed(() => {
 
 .cas-usage-card__indicator {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   gap: 0.5rem;
   margin-top: auto;
   background-color: var(--background-alt-grey);
   border-radius: 4px;
 }
 
+.cas-usage-card__indicator > * {
+  margin: 0 !important;
+}
+
 .indicator-label {
-  font-size: 0.75rem;
   color: var(--text-mention-grey);
   text-decoration: underline dotted;
   text-underline-offset: 2px;
-}
-
-.indicator-count {
-  font-weight: 700;
 }
 
 .indicator-count.indicator--green {
