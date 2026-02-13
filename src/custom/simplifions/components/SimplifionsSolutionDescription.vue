@@ -513,45 +513,17 @@ const apiEtDatasetsIntegresParSolution = computed(() => {
   return map
 })
 
-// Max possible integration count (sum of Y across all supplier use cases)
 const maxApisCount = computed(() => {
-  let total = 0
-  for (const usefulApis of usefulApisByCasUsage.value.values()) {
-    total += usefulApis.length
-  }
-  // Fallback if no recommendations loaded yet
-  return total || availableApisOrDatasets.value.length
+  return Math.max(
+    0,
+    ...solutionsIntegratices.value.map(
+      (sol) => sol.fields.API_ou_datasets_integres?.length ?? 0
+    )
+  )
 })
 
-// Helper to count integrated useful APIs/datasets for a solution (sum of X across use cases)
 const getIntegrationCount = (sol: SolutionRecord) => {
-  const solutionIntegrations =
-    apiEtDatasetsIntegresParSolution.value.get(sol.id) || []
-
-  // Extract unique use cases from integration data
-  const useCaseIds = new Set<number>()
-  solutionIntegrations.forEach((integration) => {
-    integration.fields.Integre_pour_les_cas_d_usages?.forEach((id) => {
-      useCaseIds.add(id)
-    })
-  })
-
-  let totalIntegrated = 0
-  for (const casUsageId of useCaseIds) {
-    const usefulApis = usefulApisByCasUsage.value.get(casUsageId)
-    // Skip use cases not in supplier's recommendations or with no useful APIs
-    if (!usefulApis || usefulApis.length === 0) continue
-
-    // Count integrations for this use case that are in the useful APIs list
-    const integratedCount = solutionIntegrations.filter(
-      (integration) =>
-        integration.fields.Integre_pour_les_cas_d_usages?.includes(
-          casUsageId
-        ) && usefulApis.includes(integration.fields.API_ou_dataset_integre)
-    ).length
-    totalIntegrated += integratedCount
-  }
-  return totalIntegrated
+  return sol.fields.API_ou_datasets_integres?.length ?? 0
 }
 
 const filteredAndSortedSolutions = computed(() => {
