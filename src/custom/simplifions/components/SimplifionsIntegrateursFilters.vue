@@ -1,5 +1,5 @@
 <template>
-  <div class="integrateurs-filters fr-mb-2w">
+  <div class="test__integrateurs-filters fr-py-3w fr-mb-2w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <!-- Type de solutions filter -->
       <div class="fr-col-12 fr-col-md-4">
@@ -140,10 +140,6 @@ const emitFilters = () => {
 </script>
 
 <style scoped>
-.integrateurs-filters {
-  padding: 1.5rem 0;
-}
-
 .sort-container {
   display: flex;
   align-items: center;

@@ -7,10 +7,10 @@
     }"
     class="integrateur-card-link"
   >
-    <div class="integrateur-card">
+    <div class="integrateur-card fr-p-3w">
       <!-- Header: Solution name + badge -->
-      <div class="integrateur-card__header">
-        <h3 class="integrateur-card__title">
+      <div class="fr-mb-2w">
+        <h3 class="fr-h5 fr-mb-1w integrateur-card__title">
           {{ solution.fields.Nom }}
         </h3>
         <p
@@ -28,11 +28,11 @@
       </div>
 
       <!-- Content: Type de solution + Cas d'usages -->
-      <div class="integrateur-card__content">
+      <div class="fr-grid-row fr-grid-row--gutters">
         <!-- Type de solution column -->
-        <div class="integrateur-card__type">
-          <p class="section-label">Type de solution :</p>
-          <p class="type-value">
+        <div class="fr-col-12 fr-col-md-4">
+          <p class="fr-text--sm fr-text--bold fr-mb-1v">Type de solution :</p>
+          <p class="fr-text--sm fr-mb-0">
             {{
               solution.fields.Type_de_solution?.join(' ou ') || 'Non renseigné'
             }}
@@ -59,19 +59,19 @@
         <!-- Cas d'usages column -->
         <div
           v-if="casUsagesWithIndicators.length"
-          class="integrateur-card__usecases"
+          class="fr-col-12 fr-col-md-8"
         >
-          <p class="section-label">Cas d'usages :</p>
+          <p class="fr-text--sm fr-text--bold fr-mb-1v">Cas d'usages :</p>
           <div class="cas-usages-grid">
             <div
               v-for="casUsage in casUsagesWithIndicators"
               :key="casUsage.id"
-              class="cas-usage-card"
+              class="cas-usage-card fr-p-2v"
             >
-              <div class="cas-usage-card__header">
-                <span class="cas-usage-name">{{ casUsage.name }}</span>
-              </div>
-              <div class="cas-usage-card__indicator">
+              <span class="fr-text--xs fr-mb-1v cas-usage-name">{{
+                casUsage.name
+              }}</span>
+              <div class="cas-usage-card__indicator fr-p-1w">
                 <span :class="['indicator-count', casUsage.colorClass]">
                   {{ casUsage.integratedCount }}/{{ casUsage.totalCount }}
                 </span>
@@ -104,7 +104,7 @@
       </div>
     </div>
   </router-link>
-  <div v-else class="integrateur-card integrateur-card--loading">
+  <div v-else class="integrateur-card integrateur-card--loading fr-p-3w">
     <p class="fr-text--sm fr-mb-0">Chargement...</p>
   </div>
 </template>
@@ -225,57 +225,26 @@ const casUsagesWithIndicators = computed(() => {
 .integrateur-card {
   background-color: white;
   border-bottom: 4px solid var(--blue-france-sun-113-625);
-  padding: 1.5rem;
   position: relative;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .integrateur-card:hover {
-  background-color: #f9f9f9;
+  background-color: var(--background-alt-grey);
 }
 
 .integrateur-card--loading {
-  background-color: #f9f9f9;
-  padding: 2rem;
-}
-
-.integrateur-card__header {
-  margin-bottom: 1rem;
+  background-color: var(--background-alt-grey);
 }
 
 .integrateur-card__title {
-  font-size: 1.375rem;
-  font-weight: 700;
   color: var(--text-action-high-blue-france);
-  margin: 0 0 0.5rem 0;
-}
-
-.integrateur-card__content {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 1.5rem;
-}
-
-.section-label {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #161616;
-  margin-bottom: 0.25rem;
-}
-
-.type-value {
-  font-size: 0.875rem;
-  color: #161616;
-  margin-bottom: 0;
 }
 
 .integrateur-card__arrow {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
-}
-
-.integrateur-card__arrow .fr-icon-arrow-right-line {
   color: var(--blue-france-sun-113-625);
 }
 
@@ -286,24 +255,14 @@ const casUsagesWithIndicators = computed(() => {
 }
 
 .cas-usage-card {
-  background-color: #e3e3fd;
+  background-color: var(--background-action-low-blue-france);
   border-radius: 4px;
-  padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
 }
 
-.cas-usage-card__header {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
 .cas-usage-name {
-  font-size: 0.8125rem;
   font-weight: 500;
-  color: #161616;
   line-height: 1.3;
 }
 
@@ -312,14 +271,13 @@ const casUsagesWithIndicators = computed(() => {
   align-items: flex-end;
   gap: 0.5rem;
   margin-top: auto;
-  background-color: #f6f6f6;
-  padding: 0.5rem 0.75rem;
+  background-color: var(--background-alt-grey);
   border-radius: 4px;
 }
 
 .indicator-label {
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-mention-grey);
   text-decoration: underline dotted;
   text-underline-offset: 2px;
 }
@@ -352,27 +310,14 @@ const casUsagesWithIndicators = computed(() => {
   text-transform: uppercase;
 }
 
-.fr-tags-group {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
 @media (max-width: 767px) {
-  .integrateur-card__content {
-    grid-template-columns: 1fr;
-  }
-
   .integrateur-card__arrow {
     position: static;
     display: flex;
     justify-content: flex-end;
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--border-default-grey);
   }
 
   .cas-usages-grid {

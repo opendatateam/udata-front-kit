@@ -73,7 +73,7 @@ describe('Solutions intégratrices block', () => {
 
     cy.get('#solutions-integratices').should('be.visible')
     cy.get('.integrateur-card').should('have.length', 1)
-    cy.get('.integrateurs-filters').should('not.exist')
+    cy.get('.test__integrateurs-filters').should('not.exist')
   })
 
   it('should show filters when there are multiple integrators', () => {
@@ -84,7 +84,7 @@ describe('Solutions intégratrices block', () => {
       ]
     })
 
-    cy.get('.integrateurs-filters').should('be.visible')
+    cy.get('.test__integrateurs-filters').should('be.visible')
     cy.get('#type-solutions').should('exist')
     cy.get('#cas-usage').should('exist')
     cy.get('#min-apis').should('exist')
