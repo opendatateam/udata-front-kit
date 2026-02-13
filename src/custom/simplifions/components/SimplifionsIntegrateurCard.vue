@@ -88,7 +88,7 @@
                   </template>
                   <span
                     :class="[
-                      'fr-text--xs fr-text--bold indicator-count',
+                      'fr-text--sm fr-text--bold indicator-count',
                       casUsage.colorClass
                     ]"
                     >{{ casUsage.integratedCount }} API et jeux de données
