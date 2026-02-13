@@ -226,20 +226,12 @@ shared_filter_values:
       name: Associations
 
   categorie_de_solution: &categorie_de_solution_values
+    - id: logiciel-metier
+      name: Logiciel métier "clé en main"
     - id: brique-technique
       name: Brique technique
-    - id: logiciel-metier
-      name: Logiciel métier
     - id: portail-consultation
       name: Portail de consultation
-
-  budget: &budget_values
-    - id: aucun-developpement-ni-budget
-      name: Aucun développement, ni budget
-    - id: avec-des-moyens-techniques
-      name: Avec des moyens techniques
-    - id: avec-solution-editeur
-      name: Avec une solution éditeur
 
   types_de_simplification: &types_de_simplification_values
     - id: proactivite
