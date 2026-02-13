@@ -485,10 +485,6 @@ const availableTypeSolutions = computed(() => {
   return Array.from(types).sort()
 })
 
-const availableApisOrDatasets = computed(() => {
-  return solution.value?.APIs_ou_datasets_fournis || []
-})
-
 // Map of cas d'usage ID -> useful APIs/datasets IDs (Y value per use case)
 const usefulApisByCasUsage = computed(() => {
   const map = new Map<number, number[]>()
