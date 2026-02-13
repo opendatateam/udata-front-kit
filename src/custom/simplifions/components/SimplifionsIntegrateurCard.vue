@@ -74,7 +74,7 @@
               <div class="cas-usage-card__indicator fr-p-1w">
                 <span
                   :class="[
-                    'fr-text--xs fr-text--bold indicator-count',
+                    'fr-text--sm fr-text--bold indicator-count',
                     casUsage.colorClass
                   ]"
                 >
