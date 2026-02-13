@@ -444,7 +444,7 @@ const niveauxDeSimplification = [
         </div>
        </figure>
        <h3 style="text-align: center">
-          Contenu contributif
+          Contenu collaboratif
         </h3>
          <p class="fr-text--lg fr-text--bold">De nombreux espaces sont disponibles sur le site pour permettre aux usagers de contribuer dans l'objectif de proposer une base de connaissance :</p>
         <ul class="fr-text--lg">
