@@ -22,35 +22,32 @@ const fournisseursDeService = [
     filters: 'target-users=associations',
     description: "Tous les cas d'usages concernant les associations"
   },
-  {
-    title: 'Agents publics',
-    emoji: '🧑‍💼',
-    filters: 'target-users=agents-publics',
-    description: "Tous les cas d'usages concernant les agents publics"
-  }
 ]
 
-const budgets = [
+const categories_solution = [
   {
-    title: "Vous n'avez ni équipe technique, ni éditeur",
+    title: 'Logiciels métiers "clé en main"',
+    simplificationLevel: ["DLNUF 💠💠", "Proactivité 💠💠💠"],
     description:
-      "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique.",
-    filters: 'budget=aucun-developpement-ni-budget',
-    imageSrc: '/static/simplifions/assets/accueil-picto-contract.png'
-  },
-  {
-    title: 'Vous passez par un éditeur',
-    description:
-      "Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.",
-    filters: 'budget=avec-solution-editeur',
+      "Des logiciels métiers prêts à l’emploi ont intégré les données utiles pour vos cas d’usages.",
+    filters: 'todo=logiciel-metier',
     imageSrc: '/static/simplifions/assets/accueil-picto-self-training.png'
   },
   {
-    title: 'Vous avez votre service informatique',
+    title: 'Briques techniques',
+    simplificationLevel: ["DLNUF 💠💠", "Proactivité 💠💠💠"],
     description:
-      "Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d'information.",
-    filters: 'budget=avec-des-moyens-techniques',
-    imageSrc: '/static/simplifions/assets/accueil-picto-coding.png'
+      "Des briques techniques permettent d’intégrer plus facilement les données.",
+    filters: 'todo=brique-technique',
+    imageSrc: '/static/simplifions/assets/accueil-picto-flow-settings.png'
+  },
+  {
+    title: 'Portails de consultation',
+    simplificationLevel: ["Accès facile 💠"],
+    description:
+      "Des sites internet vous permettent de consulter la donnée.",
+    filters: 'todo=portail-consultation',
+    imageSrc: '/static/simplifions/assets/accueil-picto-search.png'
   }
 ]
 
@@ -148,7 +145,7 @@ const niveauxDeSimplification = [
       <div
         v-for="item in fournisseursDeService"
         :key="item.title"
-        class="fr-col-12 fr-col-lg-3"
+        class="fr-col-12 fr-col-lg-4"
       >
         <div
           id="tile-sourcing"
@@ -200,17 +197,27 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        v-for="budget in budgets"
-        :key="budget.title"
+        v-for="categorie_solution in categories_solution"
+        :key="categorie_solution.title"
         class="fr-col-12 fr-col-lg-4"
       >
         <div class="fr-card" style="background-color: #fafafa">
           <div class="fr-card__body">
             <div class="fr-card__content">
+              <ul class="fr-tags-group">
+                <li
+                  v-for="level in categorie_solution.simplificationLevel"
+                  :key="level"
+                >
+                  <p class="fr-tag fr-tag--sm">
+                    {{ level }}
+                  </p>
+                </li>
+              </ul>
               <h3 class="fr-card__title">
-                {{ budget.title }}
+                {{ categorie_solution.title }}
               </h3>
-              <p class="fr-card__desc">{{ budget.description }}</p>
+              <p class="fr-card__desc">{{ categorie_solution.description }}</p>
             </div>
             <div class="fr-card__footer">
               <ul
@@ -218,16 +225,16 @@ const niveauxDeSimplification = [
               >
                 <li>
                   <router-link
-                    class="fr-btn"
-                    :to="`/cas-d-usages?${budget.filters}`"
+                    class="fr-btn fr-btn--secondary"
+                    :to="`/cas-d-usages?${categorie_solution.filters}`"
                     >Cas d'usages</router-link
                   >
                 </li>
                 <li>
                   <router-link
-                    class="fr-btn fr-btn--secondary"
-                    :to="`/solutions?${budget.filters}`"
-                    >Solutions</router-link
+                    class="fr-btn "
+                    :to="`/solutions?${categorie_solution.filters}`"
+                    >{{ categorie_solution.title }}</router-link
                   >
                 </li>
               </ul>
@@ -246,7 +253,7 @@ const niveauxDeSimplification = [
             >
               <img
                 class="fr-responsive-img"
-                :src="budget.imageSrc"
+                :src="categorie_solution.imageSrc"
                 alt=""
                 style="max-height: 100%; width: auto"
               />
@@ -416,7 +423,7 @@ const niveauxDeSimplification = [
        <h3 style="text-align: center">
           Ligne éditoriale <i>DLNUF/proactivité</i>
         </h3>
-         <p class="fr-text--lg fr-text--bold"> Un contenu rédigé au sein du Pôle Data pour tenir une ligne éditoriale :</p>
+         <p class="fr-text--lg fr-text--bold"> Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une ligne éditoriale :</p>
          <ul class="fr-text--lg">
          
           <li>focalisée sur la mise en oeuvre d'une simplification par la donnée, souvent via les deux principes que sont le "Dites-le nous une fois" et la "Proactivité" ;</li>
@@ -437,9 +444,9 @@ const niveauxDeSimplification = [
         </div>
        </figure>
        <h3 style="text-align: center">
-          Contenu contributif
+          Contenu collaboratif
         </h3>
-         <p class="fr-text--lg fr-text--bold">De nombreux espaces sont disponibles sur le site pour permettre aux usagers de contribuer dans l'objectif de proposer une base de connaissance :</p>
+         <p class="fr-text--lg fr-text--bold">De nombreux espaces sont disponibles sur le site pour permettre aux usagers de proposer des modifications dans l'objectif de construire une base de connaissance :</p>
         <ul class="fr-text--lg">
           <li>élaborée sur des expériences concrètes ;</li>
           <li>exhaustive ;</li>
