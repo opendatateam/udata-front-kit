@@ -20,7 +20,6 @@
           :topic="topic"
           :page-key="pageKey"
           :show-simplification="false"
-          :show-budget="false"
         />
 
         <ul class="fr-mt-4w">
