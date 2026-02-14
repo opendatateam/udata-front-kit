@@ -2,7 +2,7 @@ declare namespace Cypress {
   interface Chainable {
     checkRGAAContrast(): Chainable<void>
     isInViewport(options?: { threshold?: number; wait?: number }): Chainable<Element>
-    mockDatasetAndRelatedObjects(dataset: object, resources?: Array): Chainable<void>
+    mockDatasetAndRelatedObjects(dataset: object, resources?: Array, dataservices?: Array, reuses?: Array): Chainable<void>
     mockDatasetBadges(): Chainable<void>
     mockDatasetFrequencies(): Chainable<void>
     mockDatasetLicenses(): Chainable<void>

@@ -17,12 +17,6 @@ export interface IndicatorExtrasSource {
   }
 }
 
-export interface IndicatorsExtrasApi {
-  id: string
-  description: string
-  noms_cubes: string[]
-}
-
 export interface IndicatorExtrasData {
   unite: string
   mailles_geographiques: string[]
@@ -30,7 +24,6 @@ export interface IndicatorExtrasData {
     [key: string]: string[]
   }
   calcul: IndicatorExtrasCalcul
-  api: IndicatorsExtrasApi
   sources: IndicatorExtrasSource[]
   // visualisation attributes
   summable?: boolean
