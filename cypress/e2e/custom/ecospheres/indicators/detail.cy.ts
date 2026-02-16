@@ -1,4 +1,7 @@
 import type { Indicator } from '@/custom/ecospheres/model/indicator'
+import type { Dataservice, Reuse } from '@datagouv/components-next'
+import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
+import { reuseFactory } from 'cypress/support/factories/reuses_factory'
 import { createIndicator, createIndicatorResource } from './support'
 
 describe('Indicator Detail View', () => {
@@ -56,25 +59,6 @@ describe('Indicator Detail View', () => {
     })
   })
 
-  describe('Fichiers et API Tab', () => {
-    beforeEach(() => {
-      cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Fichiers et API').click()
-    })
-
-    it('should display axis annee values', () => {
-      cy.contains('2020').should('be.visible')
-      cy.contains('2021').should('be.visible')
-      cy.contains('2022').should('be.visible')
-    })
-
-    it('should display axis secteur values', () => {
-      cy.contains('transport').should('be.visible')
-      cy.contains('energie').should('be.visible')
-      cy.contains('agriculture').should('be.visible')
-    })
-  })
-
   describe('Custom Metadata In Technical Details Tab', () => {
     beforeEach(() => {
       cy.visit(`/indicators/${indicator.id}`)
@@ -113,6 +97,51 @@ describe('Indicator Detail View', () => {
 
     it('should display source URL', () => {
       cy.contains('https://example.com/source1').should('be.visible')
+    })
+  })
+
+  describe('Réutilisations et API Tab', () => {
+    it('should display dataservices when available', () => {
+      const dataservices = dataserviceFactory.many<Dataservice>(2)
+      const indicatorWithApis = createIndicator(
+        {},
+        { enable_visualization: false }
+      )
+      cy.mockDatasetAndRelatedObjects(indicatorWithApis, [], dataservices)
+      cy.visit(`/indicators/${indicatorWithApis.id}`)
+      cy.contains('Réutilisations et API').click()
+      cy.contains(`${dataservices.length} API`).should('be.visible')
+      cy.contains(dataservices[0].title).should('be.visible')
+      cy.contains(dataservices[1].title).should('be.visible')
+    })
+
+    it('should display empty state when no dataservices', () => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains('Réutilisations et API').click()
+      cy.contains("Il n'y a pas encore d'API pour cet indicateur.").should(
+        'be.visible'
+      )
+    })
+
+    it('should display reuses when available', () => {
+      const reuses = reuseFactory.many<Reuse>(2)
+      const indicatorWithReuses = createIndicator(
+        {},
+        { enable_visualization: false }
+      )
+      cy.mockDatasetAndRelatedObjects(indicatorWithReuses, [], [], reuses)
+      cy.visit(`/indicators/${indicatorWithReuses.id}`)
+      cy.contains('Réutilisations et API').click()
+      cy.contains(reuses[0].title).should('be.visible')
+      cy.contains(reuses[1].title).should('be.visible')
+    })
+
+    it('should display empty state when no reuses', () => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains('Réutilisations et API').click()
+      cy.contains(
+        "Il n'y a pas encore de réutilisation pour cet indicateur."
+      ).should('be.visible')
     })
   })
 

@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import {
   OrganizationNameWithCertificate,
-  useFormatDate
+  useFormatDate,
+  type Dataservice
 } from '@datagouv/components-next'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import type { DataserviceWithRel } from '@/model/dataservice'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useOwnerName } from '@/utils/owned'
 
 const props = defineProps({
   dataservice: {
-    type: Object as () => DataserviceWithRel,
+    type: Object as () => Dataservice,
     required: true
   }
 })

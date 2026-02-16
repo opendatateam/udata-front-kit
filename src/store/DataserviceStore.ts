@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 
 import type { BaseParams } from '@/model/api'
-import type { DataserviceWithRel } from '@/model/dataservice'
 import type { DatasetV2Response } from '@/model/dataset'
 import DataservicesAPI from '@/services/api/resources/DataservicesAPI'
+import type { Dataservice } from '@datagouv/components-next'
 
 const api = new DataservicesAPI()
 
 interface RootState {
-  dataservices: DataserviceWithRel[]
+  dataservices: Dataservice[]
   datasetsTotals: Record<string, { total: number; page_size: number }>
 }
 
@@ -33,15 +33,12 @@ export const useDataserviceStore = defineStore('dataservice', {
     }
   },
   actions: {
-    get(id_or_slug: string): DataserviceWithRel | undefined {
+    get(id_or_slug: string): Dataservice | undefined {
       return this.dataservices.find(
         (d) => d.id === id_or_slug || d.slug === id_or_slug
       )
     },
-    async load(
-      id_or_slug: string,
-      params?: BaseParams
-    ): Promise<DataserviceWithRel> {
+    async load(id_or_slug: string, params?: BaseParams): Promise<Dataservice> {
       const existing = this.get(id_or_slug)
       if (existing) return existing
       const dataservice = await api.get({ entityId: id_or_slug, ...params })
@@ -49,7 +46,7 @@ export const useDataserviceStore = defineStore('dataservice', {
       return dataservice
     },
     async getDatasetsForDataservice(
-      dataservice: DataserviceWithRel | undefined,
+      dataservice: Dataservice | undefined,
       page: number
     ): Promise<DatasetV2Response | null> {
       if (!dataservice) return null

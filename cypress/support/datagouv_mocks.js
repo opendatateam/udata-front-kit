@@ -238,7 +238,7 @@ Cypress.Commands.add('mockMetricsApi', (datasetId) => {
 
 Cypress.Commands.add(
   'mockDatasetAndRelatedObjects',
-  (dataset, resources = []) => {
+  (dataset, resources = [], dataservices = [], reuses = []) => {
     // Update dataset.resources.total to match the resources array
     dataset.resources.total = resources.length
     cy.mockDatagouvObject('datasets', dataset.id, dataset)
@@ -251,7 +251,8 @@ Cypress.Commands.add(
     cy.mockSpatialGranularities()
     cy.mockDatasetSchemas()
     cy.mockDatagouvObjectList('discussions', [])
-    cy.mockDatagouvObjectList('reuses', [])
+    cy.mockDatagouvObjectList('reuses', reuses)
+    cy.mockDatagouvObjectList('dataservices', dataservices)
     cy.mockResources(dataset.id, resources)
     cy.mockMetricsApi(dataset.id)
   }
