@@ -20,7 +20,6 @@
           :topic="topic"
           :page-key="pageKey"
           :show-simplification="false"
-          :show-budget="false"
         />
 
         <ul class="fr-mt-4w">
@@ -137,7 +136,7 @@
             </span>
           </p>
           <span>
-            <a href="#modification-contenu">✍️ Proposer une modification</a>
+            <a href="#modification-contenu">✒️ Proposer une modification</a>
           </span>
         </nav>
       </div>
@@ -184,7 +183,7 @@
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
 
@@ -199,7 +198,7 @@
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
     </div>
@@ -221,7 +220,7 @@
 
     <p v-else class="fr-text--sm">
       <i>Aucun cas d'usage n'est référencé pour cette solution actuellement.</i>
-      <a href="#modification-contenu">✍️ Proposer des cas d'usages</a>
+      <a href="#modification-contenu">✒️ Proposer des cas d'usages</a>
     </p>
 
     <div
@@ -263,7 +262,7 @@
           >Aucun jeu de données ou API utilisé ou fourni par cette solution
           actuellement.</i
         >
-        <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
       </p>
     </div>
 
@@ -312,7 +311,7 @@
     </div>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
-      <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
+      <h2 class="fr-h6">✒️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
         Pour proposer une modification du contenu de cette solution, vous pouvez
         contacter l'équipe via l'espace "Discussions" ci-dessous ou bien

@@ -56,9 +56,9 @@
       <div v-if="hasContent" class="fr-col-12 fr-col-lg-8 fr-ml-2w">
         <div
           v-if="
-            recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage
+            recommandation.Donnees_utiles_disponibles
           "
-          class="reco-section"
+          class="reco-section fr-mb-2w"
         >
           <div class="fr-mr-1w bullet-icon">
             <span
@@ -70,14 +70,14 @@
           <div class="reco-text-column">
             <div>
               <h5 class="fr-text--md">
-                En quoi cette solution est utile pour ce cas d'usage ?
+                Données disponibles :
               </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
               v-html="
                 fromMarkdown(
-                  recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage
+                  recommandation.Donnees_utiles_disponibles
                 )
               "
             ></div>
@@ -86,80 +86,36 @@
         </div>
 
         <div
-          v-if="recommandation.Concretement_pour_les_usagers"
-          class="reco-section"
+          v-if="recommandation.Parametres_a_saisir_pour_recuperer_les_donnees"
+          class="reco-section fr-mb-2w"
         >
           <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true">🧑</span>
+            <span aria-hidden="true">✍️</span>
           </div>
 
           <div class="reco-text-column">
             <div>
-               <h5 class="fr-text--md"> Concrètement, pour les usagers : </h5>
+               <h5 class="fr-text--md"> Informations à saisir pour récupérer la donnée :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
               v-html="
-                fromMarkdown(recommandation.Concretement_pour_les_usagers)
+                fromMarkdown(recommandation.Parametres_a_saisir_pour_recuperer_les_donnees)
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
           </div>
         </div>
 
-        <div
-          v-if="recommandation.Concretement_pour_vos_agents"
-          class="reco-section"
-        >
-          <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true">🧑‍💼</span>
-          </div>
-
-          <div class="reco-text-column">
-            <div>
-                <h5 class="fr-text--md">Concrètement, pour vos agents :</h5> 
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="fromMarkdown(recommandation.Concretement_pour_vos_agents)"
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
-          </div>
-        </div>
-
-        <div
-          v-if="recommandation.Ce_que_ne_fait_pas_cette_solution"
-          class="reco-section"
-        >
-          <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-          </div>
-
-          <div class="reco-text-column">
-            <div>
-              <h5 class="fr-text--md"> Ce que ne fait pas cette solution : </h5>
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="
-                fromMarkdown(recommandation.Ce_que_ne_fait_pas_cette_solution)
-              "
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
-          </div>
-        </div>
       </div>
-      <p v-else class="fr-text--sm">
+      <p v-else class="fr-text--sm ">
         <i>Aucun contenu actuellement.</i>
-        <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
       </p>
 
       <div
-        v-if="
-          displaySubProducts &&
-          recommandation.API_et_datasets_utiles_fournis?.length
-        "
-        class="fr-col-12 fr-p-0"
+        v-if="recommandation.API_et_datasets_utiles_fournis?.length"
+        class="fr-col-12 fr-p-0 fr-mt-4w"
       >
         <DsfrAccordion  title-tag="h5">
           <template #title>
@@ -185,21 +141,90 @@
         </DsfrAccordion>
       </div>
 
-      <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion  title-tag="h5">
-          <template #title>
-            <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
-            cette API pour ce cas d'usage
-          </template>
-          <div v-if="solutionsEditeurs === undefined">
-            Chargement des données en cours...
-          </div>
-          <div v-else class="solutions-editeurs fr-mt-2w" role="list">
-            <div v-for="solution in solutionsEditeurs" :key="solution.id">
-              <SimplifionsEditorSoftwareCard :solution="solution" />
-            </div>
-          </div>
-        </DsfrAccordion>
+      <div
+        v-if="hasIntegratingSolutions"
+        class="fr-col-12 fr-p-0"
+      >   
+        <DsfrAccordionsGroup v-model="activeIntegratingAccordion">
+          <DsfrAccordion title-tag="h5">
+            <template #title>
+              <strong>Solutions intégrant «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;»</strong>
+            </template>
+            <DsfrTabs
+              v-model="activeTab"
+              tab-list-name="Catégories de solutions intégratrices"
+              :tab-titles="tabTitles"
+            >
+              <DsfrTabContent
+                v-if="integratingSolutionsLogicielsMetiers?.length"
+                panel-id="tab-content-logiciel-metier"
+                tab-id="tab-logiciel-metier"
+                style="background-color: white;"
+              >
+              <p><strong>Liste des logiciels métier, sur étagère</strong> conçus pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
+                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                  <div
+                    v-for="solution in integratingSolutionsLogicielsMetiers"
+                    :key="solution.id"
+                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
+                  >
+                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
+                  </div>
+                </div>
+              </DsfrTabContent>
+
+              <DsfrTabContent
+                v-if="integratingSolutionsBriquesTechniques?.length"
+                panel-id="tab-content-brique-technique"
+                tab-id="tab-brique-technique"
+                style="background-color: white;"
+              >
+               <p><strong>Briques techniques logicielles</strong> destinées à être intégrées dans un système informatique existant et conçues pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
+                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                  <div
+                    v-for="solution in integratingSolutionsBriquesTechniques"
+                    :key="solution.id"
+                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
+                  >
+                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
+                  </div>
+                </div>
+              </DsfrTabContent>
+
+              <DsfrTabContent
+                v-if="integratingSolutionsPortailsConsultation?.length"
+                panel-id="tab-content-portail-consultation"
+                tab-id="tab-portail-consultation"
+                style="background-color: white;"
+              >
+                <p>
+                  <b>Ces sites vous permettent de consulter certaines des données utiles pour ce cas d’usage  :</b>
+                </p>
+                <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
+                  <p class="fr-mb-0">💡 
+                    Pour vraiment simplifier la vie des usagers, l'intégration directe de cette API ou de jeu de données dans vos logiciels métiers est à privilégier car elle permet de mettre en oeuvre le <i>dites-le-nous une fois</i> et la proactivité !
+                  </p>
+                </div>
+                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                  <div
+                    v-for="solution in integratingSolutionsPortailsConsultation"
+                    :key="solution.id"
+                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
+                  >
+                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
+                  </div>
+                </div>
+
+              </DsfrTabContent>
+            </DsfrTabs>
+            <p class="fr-text--sm fr-mx-3w fr-mt-2w">
+              <i>Une solution n'est pas listée parmi les solutions intégrant «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;» ? 
+              </i>
+              <a href="#modification-contenu">✒️ Proposer un contenu</a>.
+            </p>
+          </DsfrAccordion>
+        </DsfrAccordionsGroup>
+      
       </div>
     </div>
   </div>
@@ -216,20 +241,18 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
+import SimplifionsRecoSolutionsIntegratricesCard from './SimplifionsRecoSolutionsIntegratricesCard.vue'
 
 const props = defineProps<{
   recommandation: Recommandation
-  displaySubProducts: boolean
 }>()
 
 const recommandation = props.recommandation
 
 const hasContent = computed(() => {
   return (
-    recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage ||
-    recommandation.Concretement_pour_les_usagers ||
-    recommandation.Concretement_pour_vos_agents ||
-    recommandation.Ce_que_ne_fait_pas_cette_solution
+    recommandation.Donnees_utiles_disponibles ||
+    recommandation.Parametres_a_saisir_pour_recuperer_les_donnees || recommandation.Nom_complet_du_cas_d_usage
   )
 })
 
@@ -310,16 +333,77 @@ if (recommandation.API_et_datasets_utiles_fournis?.length) {
     })
 }
 
-const solutionsEditeurs = ref<SolutionRecord[] | undefined>(undefined)
-if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
-  grist
-    .getRecordsByIds('Solutions', recommandation.Ces_logiciels_l_integrent_deja)
-    .then((data) => {
-      solutionsEditeurs.value = (data as SolutionRecord[]).filter(
-        (record) => record.fields.Visible_sur_simplifions
-      )
-    })
+const fetchSolutionsForCategory = async (ids: number[]) => {
+  const data = await grist.getRecordsByIds('Solutions', ids)
+  return (data as SolutionRecord[]).filter(
+    (record) => record.fields.Visible_sur_simplifions
+  )
 }
+
+const integratingSolutionsLogicielsMetiers = ref<SolutionRecord[]>([])
+const integratingSolutionsBriquesTechniques = ref<SolutionRecord[]>([])
+const integratingSolutionsPortailsConsultation = ref<SolutionRecord[]>([])
+
+if (recommandation.Solutions_integratrices_categorie_logiciel_metier?.length) {
+  fetchSolutionsForCategory(
+    recommandation.Solutions_integratrices_categorie_logiciel_metier
+  ).then((solutions) => {
+    integratingSolutionsLogicielsMetiers.value = solutions
+  })
+}
+
+if (
+  recommandation.Solutions_integratrices_categorie_briques_techniques?.length
+) {
+  fetchSolutionsForCategory(
+    recommandation.Solutions_integratrices_categorie_briques_techniques
+  ).then((solutions) => {
+    integratingSolutionsBriquesTechniques.value = solutions
+  })
+}
+
+if (
+  recommandation.Solutions_integratrices_categorie_portail_de_consultation?.length
+) {
+  fetchSolutionsForCategory(
+    recommandation.Solutions_integratrices_categorie_portail_de_consultation
+  ).then((solutions) => {
+    integratingSolutionsPortailsConsultation.value = solutions
+  })
+}
+
+const activeIntegratingAccordion = ref(0)
+const activeTab = ref(0)
+const tabTitles = computed(() => {
+  const titles = []
+  if (integratingSolutionsLogicielsMetiers.value.length > 0) {
+    const count = integratingSolutionsLogicielsMetiers.value.length
+    titles.push({
+      title: `Logiciels métiers (${count}) 💠💠💠`,
+      tabId: 'tab-logiciel-metier',
+      panelId: 'tab-content-logiciel-metier'
+    })
+  }
+  if (integratingSolutionsBriquesTechniques.value.length > 0) {
+    const count = integratingSolutionsBriquesTechniques.value.length
+    titles.push({
+      title: `Briques techniques (${count}) 💠💠💠`,
+      tabId: 'tab-brique-technique',
+      panelId: 'tab-content-brique-technique'
+    })
+  }
+  if (integratingSolutionsPortailsConsultation.value.length > 0) {
+    const count = integratingSolutionsPortailsConsultation.value.length
+    titles.push({
+      title: `Portails de consultation (${count})`,
+      tabId: 'tab-portail-consultation',
+      panelId: 'tab-content-portail-consultation'
+    })
+  }
+  return titles
+})
+
+const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
 </script>
 
 <style scoped>
@@ -337,18 +421,8 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
   border-radius: 4px;
 }
 
-.solutions-editeurs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
 .icon-green {
   color: #27a658;
-}
-
-.icon-red {
-  color: #ff292f;
 }
 
 .reco-section {

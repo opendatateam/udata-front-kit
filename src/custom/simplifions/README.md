@@ -2,6 +2,8 @@
 
 ## Topics data
 
+### Principe général
+
 Simplifions uses 2 kinds of topics, identified by the tags `simplifions-cas-d-usages` and `simplifions-solutions`.
 These topics are regularly updated with data from a Grist database by a DAG (it's like a CRON).
 
@@ -12,6 +14,17 @@ You can see the topics created by requesting topics like this :
 
 - https://demo.data.gouv.fr/api/2/topics/?tag=simplifions-cas-d-usages
 - https://demo.data.gouv.fr/api/2/topics/?tag=simplifions-solutions
+
+
+### Implications sur la conception
+
+Pour modifier :
+- les filtres des catalogues cas d'usages et solutions ;
+- les en-têtes des pages cas d'usages et solutions (nom, tags, auteur, etc)
+
+Il est requis de faire des modifications, à la fois dans udata, mais aussi dans le DAG : 
+- Ajouter la table des valeurs du filtre dans [task_functions.py](https://github.com/datagouv/datagouvfr_data_pipelines/blob/main/verticales/simplifions/task_functions.py#L37) ;
+- Ajouter le nom de colonne dans [topics_v2_manager](https://github.com/datagouv/datagouvfr_data_pipelines/blob/main/verticales/simplifions/topics_v2_manager.py#L14C1-L14C20)
 
 # Deployment
 
