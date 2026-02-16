@@ -8,7 +8,7 @@ import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 import NoResults from '@/components/NoResults.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
-import { useTopicStore } from '@/store/TopicStore'
+import { useTopicSearchStore } from '@/store/TopicSearchStore'
 import { useUserStore } from '@/store/UserStore'
 import { useAsyncComponent } from '@/utils/component'
 
@@ -26,7 +26,7 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 const { query: routeQuery } = useRouteQueryAsString()
-const topicStore = useTopicStore()
+const store = useTopicSearchStore()
 
 const { meta, pageKey, pageConf } = useCurrentPageConf()
 
@@ -34,7 +34,7 @@ const userStore = useUserStore()
 
 const emits = defineEmits(['clearFilters'])
 
-const { topics, pagination, total } = storeToRefs(topicStore)
+const { items: topics, pagination, total } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
@@ -60,13 +60,13 @@ const clearFilters = () => {
 const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
   // get filters parameters from route
-  return topicStore
+  return store
     .query(
       {
         ...route.query,
         ...props,
         sort: route.query.sort || pageConf.default_sort
-      } as Parameters<typeof topicStore.query>[0],
+      } as Parameters<typeof store.query>[0],
       pageKey
     )
     .finally(() => loader.hide())
