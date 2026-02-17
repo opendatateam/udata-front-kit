@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BlankState from '@/components/BlankState.vue'
 import config from '@/config'
 import type { ResourceData } from '@/model/resource'
 import { useResourceStore } from '@/store/ResourceStore'
@@ -141,19 +142,9 @@ onMounted(async () => {
       </div>
     </template>
   </template>
-  <div
+  <BlankState
     v-else
-    class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
-  >
-    <img
-      src="/static/blank_state/file.svg"
-      alt=""
-      loading="lazy"
-      height="105"
-      width="130"
-    />
-    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      {{ noFileMessage }}
-    </p>
-  </div>
+    image="/static/blank_state/file.svg"
+    :message="noFileMessage"
+  />
 </template>

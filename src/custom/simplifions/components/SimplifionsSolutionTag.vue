@@ -40,9 +40,3 @@ const operatorName = computed(() => {
   return solution.value?.Nom_de_l_operateur?.[0]
 })
 </script>
-
-<style scoped>
-.font-weight-normal {
-  font-weight: normal;
-}
-</style>

@@ -11,16 +11,10 @@ export interface IndicatorExtrasSource {
   description: string
   producteur: string
   distributeur: string
-  plage_temporelle: {
+  plage_temporelle?: {
     start: string
     end: string
   }
-}
-
-export interface IndicatorsExtrasApi {
-  id: string
-  description: string
-  noms_cubes: string[]
 }
 
 export interface IndicatorExtrasData {
@@ -30,7 +24,6 @@ export interface IndicatorExtrasData {
     [key: string]: string[]
   }
   calcul: IndicatorExtrasCalcul
-  api: IndicatorsExtrasApi
   sources: IndicatorExtrasSource[]
   // visualisation attributes
   summable?: boolean

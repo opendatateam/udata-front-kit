@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import {
   OrganizationNameWithCertificate,
-  useFormatDate
+  useFormatDate,
+  type Dataservice
 } from '@datagouv/components-next'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import type { DataserviceWithRel } from '@/model/dataservice'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useOwnerName } from '@/utils/owned'
 
 const props = defineProps({
   dataservice: {
-    type: Object as () => DataserviceWithRel,
+    type: Object as () => Dataservice,
     required: true
   }
 })
@@ -61,7 +61,7 @@ const dataserviceLink: RouteLocationRaw = {
 
       <div class="overflow-hidden flex-1-1-auto">
         <h3 class="fr-mb-1v fr-grid-row h4">
-          <RouterLink :to="dataserviceLink" class="text-grey-500">
+          <RouterLink :to="dataserviceLink" class="text-grey-50">
             {{ dataservice.title }}
           </RouterLink>
         </h3>
@@ -79,10 +79,10 @@ const dataserviceLink: RouteLocationRaw = {
       </div>
     </div>
 
-    <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
+    <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-425">
       <VIconCustom
         name="time-line"
-        class="fr-mr-1w text-grey-380 fr-icon--sm"
+        class="fr-mr-1w text-grey-425 fr-icon--sm"
       />
       Mis à jour
       {{ formatRelativeIfRecentDate(dataservice.metadata_modified_at) }}

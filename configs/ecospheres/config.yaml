@@ -204,9 +204,9 @@ website:
       authorized_users:
 
 organizations:
-  datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-datasets-demo.json
-  dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-dataservices-demo.json
-  bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/organizations-bouquets-demo.json
+  datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-demo/organizations-datasets.json
+  dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-demo/organizations-dataservices.json
+  bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-demo/organizations-bouquets.json
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -377,6 +377,16 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
+      - name: Label de données
+        default_option: Tous les labels
+        id: badge
+        type: select
+        use_filter_prefix: false
+        values:
+          - id: hvd
+            name: Données de forte valeur
+          - id: inspire
+            name: INSPIRE
   # DATASERVICES
   dataservices:
     list_all: true
@@ -456,10 +466,6 @@ pages:
         form:
           required: true
         values: *fnv_themes
-      - name: Couverture territoriale
-        default_option:
-        id: geozone
-        type: spatial_zone
   # INDICATORS
   indicators:
     list_all: true
