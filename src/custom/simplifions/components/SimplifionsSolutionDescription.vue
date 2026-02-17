@@ -175,7 +175,7 @@
             aria-hidden="true"
             class="fr-icon-success-fill icon-green"
           ></span>
-          Simplification par la donnée via cette solution :
+          Simplification par la donnée grâce à cette solution :
         </h3>
         <p
           v-if="solution.Cette_solution_permet"
