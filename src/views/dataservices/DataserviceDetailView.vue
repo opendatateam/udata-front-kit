@@ -288,7 +288,7 @@ onMounted(() => {
                 {{ discussionWellDescription }}
               </p>
             </div>
-            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+            <div class="fr-col-12 fr-col-lg-4 align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
                 icon="fr-icon-external-link-line"
@@ -340,8 +340,8 @@ onMounted(() => {
 
 <style scoped>
 .dataservice-well {
-  color: var(--blue-cumulus-sun-368-moon-732);
-  border: 1px solid var(--blue-cumulus-sun-368-moon-732);
+  color: var(--text-active-blue-france);
+  border: 1px solid var(--border-active-blue-france);
   border-radius: 0.25rem;
   padding: 0.75rem;
   background-color: var(--background-alt-grey);

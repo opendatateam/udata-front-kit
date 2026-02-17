@@ -28,7 +28,7 @@
             :href="dataserviceUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-grey-500 fr-grid-row"
+            class="text-default-grey fr-grid-row"
           >
             <TextClamp
               class="fr-col"
@@ -41,7 +41,7 @@
           <RouterLink
             v-else
             :to="dataserviceUrl"
-            class="text-grey-500 fr-grid-row"
+            class="text-default-grey fr-grid-row"
           >
             <TextClamp
               class="fr-col"
@@ -172,7 +172,7 @@ const formatAvailability = (availability: number): string => {
   border: 1px solid var(--border-default-grey);
 }
 
-.text-grey-500 {
+.text-default-grey {
   color: var(--text-default-grey);
 }
 

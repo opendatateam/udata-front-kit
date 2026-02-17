@@ -1,34 +1,19 @@
+/* ===== Root & Custom Properties ===== */
+
 :root {
-  --blue-france-975-75: var(--blue-cumulus-975-75);
-  --blue-france-975-75-hover: var(--blue-cumulus-975-75-hover);
-  --blue-france-975-75-active: var(--blue-cumulus-975-75-active);
-  --blue-france-950-100: var(--blue-cumulus-950-100);
-  --blue-france-950-100-hover: var(--blue-cumulus-950-100-hover);
-  --blue-france-950-100-active: var(--blue-cumulus-950-100-active);
-  --blue-france-sun-113: #000091;
-  --blue-france-sun-113-625: var(--blue-cumulus-sun-368-moon-732);
-  --blue-france-sun-113-625-hover: var(--blue-cumulus-sun-368-moon-732-hover);
-  --blue-france-sun-113-625-active: var(--blue-cumulus-sun-368-moon-732-active);
-  --blue-france-925-125: var(--blue-cumulus-925-125);
-  --blue-france-925-125-hover: var(--blue-cumulus-925-125-hover);
-  --blue-france-925-125-active: var(--blue-cumulus-925-125-active);
-  --blue-france-975-sun-113: var(--blue-cumulus-975-75);
-  --blue-france-main-525: var(--blue-cumulus-main-526);
-  --blue-france-850-200: var(--blue-cumulus-850-200);
   /* toastify */
   --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
   --toastify-text-color-light: var(
     --text-title-grey
   ); /* black text for better contrast on white background */
-  /* DSFR contrast fix */
-  --blue-cumulus-sun-368-moon-732-hover--fix: #516fb3;
-
   /*
   progressively enhanced height: auto transition
   https://caniuse.com/mdn-css_properties_interpolate-size
   */
   interpolate-size: allow-keywords;
 }
+
+/* ===== Fonts ===== */
 
 @font-face {
   font-weight: 600;
@@ -41,27 +26,74 @@
   font-display: swap;
 }
 
+/* ===== Typography ===== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5 {
+  display: block;
+  margin-top: 0;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.h1,
+h1 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+.h2,
+h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+.h3,
+h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+.h4,
+h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+.h5,
+h5 {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+.small,
+small {
+  font-size: 0.75rem;
+}
+.subtitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  margin-bottom: 1rem;
+}
+.subtitle--uppercase {
+  text-transform: uppercase !important;
+}
+.font-weight-normal {
+  font-weight: normal;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+/* ===== Layout & Display ===== */
+
 body {
   word-wrap: break-word;
-}
-
-.fr-col-sm-45 {
-  flex: 0 0 45%;
-  max-width: 45%;
-  width: 45%;
-}
-
-.fit {
-  width: fit-content;
-}
-
-.small {
-  font-size: 0.8em;
-}
-
-/* ELEMENT DISPLAY */
-.block {
-  display: block;
 }
 
 .flex-nowrap {
@@ -76,30 +108,22 @@ body {
   overflow: hidden;
 }
 
+.text-overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .min-width-0 {
   min-width: 0;
 }
 
-/* FONT CUSTOM */
-.uppercase {
-  text-transform: uppercase;
+.fit {
+  width: fit-content;
 }
 
-.bold {
-  font-weight: 700;
-}
-
-.font-weight-normal {
-  font-weight: normal;
-}
-
-/* ALIGNMENT */
 .justify-between {
   justify-content: space-between;
-}
-
-.align-baseline {
-  align-items: baseline;
 }
 
 .align-center {
@@ -110,18 +134,193 @@ body {
   text-align: right;
 }
 
+.flex-direction-column {
+  flex-direction: column;
+}
+
+/* Flex gap utility (missing from DSFR) */
+.flex-gap {
+  gap: var(--gap, 0.5rem);
+}
+
+@media (min-width: 36em) {
+  .flex-sm {
+    display: flex !important;
+  }
+}
+
+/* ===== Colors & Backgrounds ===== */
+
+.bg-alt-blue {
+  background-color: var(--background-alt-blue-france);
+}
+.bg-contrast-blue {
+  background-color: var(--background-contrast-blue-france);
+}
+
+.text-mention-grey {
+  color: var(--text-mention-grey);
+}
+
+.text-grey-425 {
+  color: var(--grey-425-625);
+}
+.text-grey-50 {
+  color: var(--grey-50-1000);
+}
+
+/* ===== Links ===== */
+
+.dataset-card :where(.fr-link, a:not(.fr-btn)) {
+  color: var(--text-active-blue-france) !important;
+}
+
+/* ===== Borders ===== */
+
+.border-top {
+  border-top: 1px solid var(--border-default-grey);
+}
+.border-bottom {
+  border-bottom: 1px solid var(--border-default-grey);
+}
+.border-left {
+  border-left: 1px solid var(--border-default-grey);
+}
+.border-default-grey {
+  border-color: var(--border-default-grey);
+}
+
+/* ===== Utilities for @datagouv/components-next (upstream does not bundle these) ===== */
+
+.f-italic {
+  font-style: italic;
+}
+.code {
+  background-color: var(--background-alt-grey);
+  color: var(--grey-425-625);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+.fr-badge--mention-grey {
+  color: var(--text-mention-grey);
+}
+.fr-link {
+  display: inline;
+}
+
+.not-enlarged {
+  position: relative;
+  z-index: 2;
+}
+.fr-enlarge-link .not-enlarged a {
+  background-image: var(--underline-img), var(--underline-img);
+}
+.fr-enlarge-link .not-enlarged a:hover {
+  background-image: var(--underline-img), var(--underline-img);
+  background-position:
+    var(--underline-x) 100%,
+    var(--underline-x) calc(100% - var(--underline-thickness));
+  background-repeat: no-repeat, no-repeat;
+  transition: background-size 0s;
+  background-size:
+    var(--underline-hover-width) calc(var(--underline-thickness) * 2),
+    var(--underline-idle-width) var(--underline-thickness);
+}
+.fr-enlarge-link .not-enlarged a:before {
+  background: none;
+}
+
+.dash-after-sm:after,
+.dash-before-sm:before {
+  content: '—';
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: var(--grey-425-625);
+  font-size: 0.6rem;
+}
+
+/* ===== Components ===== */
+
 .actionTile {
-  background: var(--blue-france-sun-113);
+  background: var(--text-active-blue-france);
   .fr-tile__link {
     color: white;
   }
+}
+
+.logo {
+  display: flex;
+  position: relative;
+  background: white;
+  border: 1px solid var(--grey-950-100);
+  padding: 0.75rem;
+}
+.logo img {
+  max-width: 100%;
+}
+@media screen and (max-width: 48em) {
+  .logo {
+    max-width: 140px;
+  }
+}
+
+.hero-banner {
+  background-color: var(--background-alt-blue-france);
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/*
+  This is originally a .datagouv-components subclass,
+   but .datagouv-components is not applied to tooltips (top level of DOM).
+   So we copy the style and apply it directly to .tooltip and .toggletip.
+*/
+.toggletip,
+.tooltip {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow:
+    0 1px 4px #0000003b,
+    0 1px 0 -2px #00000029,
+    0 1px 1px #00000029;
+  color: var(--grey-50-1000);
+  font-size: 0.875rem;
+  left: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  max-width: calc(100vw - 2rem);
+  padding: 0.75rem;
+  position: absolute;
+  top: 1.5rem;
+  width: 23rem;
+  z-index: 100;
+}
+
+/* DSFR org name in card fix */
+/* remove default margins */
+.org--fix div.fr-mx-1v {
+  margin: 0 !important;
+}
+/* gap to add margins when needed */
+.org--fix .inline-flex {
+  gap: 0.25rem;
+}
+/* sometimes the first span is empty, hide it */
+.org--fix .inline-flex span:first-of-type:empty {
+  display: none;
 }
 
 .dsfr_alert {
   margin: 20px 0;
 }
 
-/* form */
+/* ===== Forms ===== */
 
 :is(form, .form) textarea {
   resize: vertical;
@@ -142,7 +341,8 @@ body {
   color: var(--text-mention-grey);
 }
 
-/* editorial (markdown) pages */
+/* ===== Editorial (markdown) ===== */
+
 .editorial {
   h2,
   h3,
@@ -178,39 +378,14 @@ body {
   }
 }
 
+/* ===== Lists ===== */
+
 /* Remove list styles on ul, ol elements with a list role, which tells browsers the list still behave as a list even without default styles */
 :where(ol, ul)[role='list'] {
   list-style: none;
 }
 
-/* overload datagouv-components */
-
-/* datagouv-components applies `color: inherit` to titles, we want the title color */
-.datagouv-components {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .h1,
-  .h2,
-  .h3,
-  .h4,
-  .h5,
-  .h6 {
-    color: var(--text-title-grey);
-  }
-}
-
-.datagouv-components h3.fr-accordion__title {
-  margin-bottom: 0;
-}
-
-.datagouv-components .fr-tabs {
-  z-index: auto;
-  --ground: 1;
-}
+/* ===== DSFR Fixes ===== */
 
 /*
 FIXME: Tabs height bug workaround
@@ -231,95 +406,7 @@ Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2
   margin-top: 39px;
 }
 
-.datagouv-components h1 {
-  margin-bottom: 1.5rem;
-}
-
-.datagouv-components :where(.fr-link, a:not(.fr-btn)) {
-  color: var(--blue-france-sun-113);
-}
-
-/* Button color contrast fix */
-.datagouv-components {
-  .fr-btn:not(
-    .fr-btn--close,
-    .fr-btn--menu,
-    .fr-btn--secondary,
-    .fr-btn--tertiary,
-    .fr-btn--tertiary-no-outline
-  ),
-  .fr-pagination__link[aria-current] {
-    --hover: var(--blue-cumulus-sun-368-moon-732-hover--fix);
-    --hover-tint: var(--blue-cumulus-sun-368-moon-732-hover--fix);
-  }
-  button.fr-tag:hover[aria-pressed='false'] {
-    color: var(--blue-france-sun-113);
-  }
-}
-
-/*
-  This is originally a .datagouv-components subclass,
-   but .datagouv-components is not applied to tooltips (top level of DOM).
-   So we copy the style and apply it directly to .tooltip and .toggletip.
-*/
-.toggletip,
-.tooltip {
-  background: #fff;
-  border-radius: 4px;
-  box-shadow:
-    0 1px 4px #0000003b,
-    0 1px 0 -2px #00000029,
-    0 1px 1px #00000029;
-  color: var(--grey-50-1000);
-  font-size: 0.875rem;
-  left: 0;
-  margin-bottom: 0;
-  margin-top: 0;
-  max-width: calc(100vw - 2rem);
-  padding: 0.75rem;
-  position: absolute;
-  top: 1.5rem;
-  width: 23rem;
-  z-index: 100;
-}
-
-/* DSFR search bar fix */
-.datagouv-components .fr-search-bar .fr-btn {
-  border-radius: 0 0.25rem 0 0;
-}
-
-.hero-banner {
-  background-color: var(--background-alt-blue-cumulus);
-  p:last-child {
-    margin-bottom: 0;
-  }
-}
-
-/* DSFR org name in card fix */
-/* remove default margins */
-.org--fix div.fr-mx-1v {
-  margin: 0 !important;
-}
-/* gap to add margins when needed */
-.org--fix .inline-flex {
-  gap: 0.25rem;
-}
-/* sometimes the first span is empty, hide it */
-.org--fix .inline-flex span:first-of-type:empty {
-  display: none;
-}
-
-/* Flex gap utility (missing from DSFR) */
-.flex-gap {
-  gap: var(--gap, 0.5rem);
-}
-
-.text-mention-grey {
-  color: var(--text-mention-grey);
-}
-
-/* DSFR a11y fixes */
-
+/* A11y fixes */
 /* connected user button in header */
 .fr-header__tools-links .fr-btn:disabled,
 .fr-header__tools-links a.fr-btn:not([href]) {

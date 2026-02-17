@@ -83,7 +83,7 @@ const showHarvestQualityWarning = computed(() => {
       <ContactPoints :contact-points="dataset.contact_points" />
     </template>
     <div v-if="harvest?.remote_url" class="fr-my-3v fr-text--sm">
-      <div class="bg-alt-blue-cumulus fr-p-3v fr-mb-1w">
+      <div class="bg-alt-blue fr-p-3v fr-mb-1w">
         <p class="fr-grid-row fr-grid-row--middle fr-my-0">
           Ce jeu de données provient d'un portail externe.
           <AppLink
@@ -110,7 +110,7 @@ const showHarvestQualityWarning = computed(() => {
     <template v-if="license">
       <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
       <p class="fr-text--sm fr-mt-0 fr-mb-3v">
-        <code class="bg-alt-grey fr-px-1v text-grey-380">
+        <code class="license-code fr-px-1v text-grey-425">
           <a :href="license.url">
             {{ license.title }}
           </a>
@@ -162,3 +162,9 @@ const showHarvestQualityWarning = computed(() => {
     <slot name="bottom" />
   </div>
 </template>
+
+<style scoped>
+.license-code {
+  background-color: var(--background-alt-grey);
+}
+</style>
