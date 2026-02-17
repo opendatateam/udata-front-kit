@@ -1,5 +1,9 @@
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import type { DatasetV2, License } from '@datagouv/components-next'
+import type {
+  DatasetV2,
+  License,
+  TranslatedBadge
+} from '@datagouv/components-next'
 
 export const useLicense = (
   dataset: Ref<DatasetV2 | undefined>
@@ -16,4 +20,25 @@ export const useLicense = (
     { immediate: true }
   )
   return license
+}
+
+export const useBadges = (
+  dataset: Ref<DatasetV2 | undefined>
+): Ref<TranslatedBadge[]> => {
+  const datasetStore = useDatasetStore()
+  const badges = ref<TranslatedBadge[]>([])
+  watch(
+    dataset,
+    async () => {
+      if (dataset.value) {
+        const badgeLabels = await datasetStore.getBadges()
+        badges.value = dataset.value.badges.flatMap((b) => {
+          const label = badgeLabels[b.kind]
+          return label ? [{ kind: b.kind, label }] : []
+        })
+      }
+    },
+    { immediate: true }
+  )
+  return badges
 }

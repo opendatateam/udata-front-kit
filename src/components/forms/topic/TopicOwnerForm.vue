@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Organization } from '@datagouv/components-next'
+import type { OrganizationReference } from '@datagouv/components-next'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, ref, watch, type Ref } from 'vue'
 
@@ -33,11 +33,12 @@ const ownOrganizationIndex = computed(() => {
   )
 })
 // both models check the above index to determine the default owner to display
-const selectedAnyOrganization: Ref<Organization | null | undefined> = ref(
-  ownOrganizationIndex.value < 0 && !topic.value.owner
-    ? topic.value.organization
-    : null
-)
+const selectedAnyOrganization: Ref<OrganizationReference | null | undefined> =
+  ref(
+    ownOrganizationIndex.value < 0 && !topic.value.owner
+      ? topic.value.organization
+      : null
+  )
 const selectedOwnOrganization: Ref<number | string | null> = ref(
   ownOrganizationIndex.value >= 0 && !topic.value.owner
     ? ownOrganizationIndex.value

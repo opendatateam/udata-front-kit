@@ -1,15 +1,15 @@
-import type { DataserviceWithRel } from '@/model/dataservice'
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
 import { datasetFactory } from '../../../../support/factories/datasets_factory'
+import { createIndicator } from '../indicators/support'
 
 /**
  * Helper to create a dataservice with all necessary mocks
  */
 function createMockedDataservice(
-  overrides: Partial<DataserviceWithRel> = {},
+  overrides: Partial<Dataservice> = {},
   datasets: DatasetV2[] = []
-): DataserviceWithRel {
+): Dataservice {
   const dataservice = dataserviceFactory.one({ overrides })
 
   // Mock the dataservice itself
@@ -32,7 +32,7 @@ function createMockedDataservice(
 }
 
 describe('Dataservices (API) - Detail Page', () => {
-  let testDataservice: DataserviceWithRel
+  let testDataservice: Dataservice
   let testDatasets: DatasetV2[]
 
   beforeEach(() => {
@@ -215,7 +215,9 @@ describe('Dataservices (API) - Detail Page', () => {
 
       // Discussions tab content should be visible
       cy.get('#tab-content-1').should('be.visible')
-      cy.contains('Pas de discussion pour cette API').should('be.visible')
+      cy.contains("Il n'y a pas encore de discussion pour cette API").should(
+        'be.visible'
+      )
     })
 
     it('should switch to informations tab when clicked', () => {
@@ -276,6 +278,41 @@ describe('Dataservices (API) - Detail Page', () => {
       cy.wait(`@get_dataservices_${emptyDataservice.id}`)
 
       cy.contains('0 jeu de données').should('be.visible')
+    })
+  })
+
+  describe('Indicator datasets', () => {
+    it('should display indicator datasets with the Indicateur badge', () => {
+      // Create a mix of regular datasets and indicator datasets
+      const regularDataset = datasetFactory.one({
+        overrides: { title: 'Regular Dataset Title' }
+      })
+      const indicatorDataset = createIndicator({
+        title: 'Indicator Dataset Title'
+      })
+
+      const ds = createMockedDataservice({}, [regularDataset, indicatorDataset])
+
+      cy.visit(`/dataservices/${ds.id}`)
+      cy.wait(`@get_dataservices_${ds.id}`)
+      cy.wait('@getDataserviceDatasets')
+
+      // Check that both datasets are displayed
+      cy.contains('Regular Dataset Title').should('be.visible')
+      cy.contains('Indicator Dataset Title').should('be.visible')
+
+      // Check that the indicator dataset has the "Indicateur" badge
+      cy.contains('Indicator Dataset Title')
+        .closest('.fr-col-12')
+        .find('.fr-badge')
+        .contains('Indicateur')
+        .should('be.visible')
+
+      // Check that the regular dataset does NOT have the "Indicateur" badge
+      cy.contains('Regular Dataset Title')
+        .closest('.fr-col-12')
+        .find('.fr-badge')
+        .should('not.exist')
     })
   })
 })

@@ -73,7 +73,9 @@ const executeQuery = async () => {
 }
 
 // load custom card component from router, or fallback to default
-const CardComponent = useAsyncComponent(() => meta?.cardComponent, TopicCard)
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+  fallback: TopicCard
+})
 
 const goToPage = (page: number) => {
   router.push({

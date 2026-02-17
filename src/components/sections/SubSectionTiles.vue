@@ -42,7 +42,7 @@ const goToPage = (page: string) => {
   padding: 20px;
   text-align: left;
   min-height: 190px;
-  border-bottom: 3px solid #3557a2;
+  border-bottom: 3px solid var(--border-action-high-blue-france);
 }
 .item-title {
   font-size: 18px;

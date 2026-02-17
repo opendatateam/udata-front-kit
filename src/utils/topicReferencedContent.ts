@@ -1,8 +1,7 @@
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { type Ref, ref } from 'vue'
 
 import config from '@/config'
-import type { DataserviceWithRel } from '@/model/dataservice'
 import type { ResolvedFactor, Topic } from '@/model/topic'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
@@ -70,7 +69,7 @@ export function useTopicReferencedContent(
 ) {
   const topicsContent = ref(new Map<string, { slug: string; topic: Topic }>())
   const dataservicesContent = ref(
-    new Map<string, { slug: string; dataservice: DataserviceWithRel }>()
+    new Map<string, { slug: string; dataservice: Dataservice }>()
   )
   const datasetsContent = ref(new Map<string, DatasetV2>())
 
@@ -85,7 +84,7 @@ export function useTopicReferencedContent(
 
   const getDataserviceForFactor = (
     factor: ResolvedFactor
-  ): DataserviceWithRel | null => {
+  ): Dataservice | null => {
     if (!factor.id) return null
     return dataservicesContent.value.get(factor.id)?.dataservice || null
   }
@@ -125,7 +124,7 @@ export function useTopicReferencedContent(
         ]),
       dataservicesContent.value,
       dataserviceStore,
-      (slug, content) => ({ slug, dataservice: content as DataserviceWithRel })
+      (slug, content) => ({ slug, dataservice: content as Dataservice })
     )
   }
 

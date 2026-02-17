@@ -113,7 +113,7 @@ export const useOrganizationStore = defineStore('organization', {
     pagination: (state) => {
       const pageSize = config.website.pagination_sizes.organizations_list
       // pagination is only used in a 'datasets' context
-      const total = state.flatData['datasets'].length
+      const total = (state.flatData['datasets'] || []).length
       const nbPages = Math.ceil(total / pageSize)
       return [...Array(nbPages).keys()].map((page) => {
         page += 1
