@@ -52,9 +52,8 @@ const { pageConf } = useCurrentPageConf()
     >
     <p id="purpose-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Renseignez les motifs métier ou techniques motivant la sélection de ce 
-      jeu de données dans le cadre du bouquet. Cet espace vous permet également
-      de partager des points d'attention relatifs à l'usage (limites éventuelles, 
-      préconisations).<br />
+      jeu de données dans le bouquet. Cet espace vous permet également
+      de signaler des éléments d'usage (limites, préconisations).<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
         ><span lang="en">markdown</span> (guide en anglais)</a
