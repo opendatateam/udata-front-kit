@@ -408,7 +408,7 @@ defineExpose({
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="factor.siteExtras.uri as string"
                     target="_blank"
-                    >Accéder au catalogue</a
+                    >Accéder aux données</a
                   >
                   <DsfrButton
                     v-if="
