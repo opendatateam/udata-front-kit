@@ -28,8 +28,7 @@ const { pageConf } = useCurrentPageConf()
     >
     <p id="title-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Indiquez la ou les informations clés pour le bouquet (indicateur, phénomène ou
-      ou objet géographique), en termes génériques. Par exemple&nbsp;: «&nbsp;Taux d'imperméabilisation 
-      des sols&nbsp;»Da
+      ou objet géographique), en termes génériques.
     </p>
     <input
       id="input-title"
