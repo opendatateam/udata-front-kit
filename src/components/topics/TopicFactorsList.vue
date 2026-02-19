@@ -417,6 +417,7 @@ defineExpose({
                     secondary
                     size="sm"
                     icon="fr-icon-road-map-line"
+                    class="test__open_dataset_in_qgis_btn"
                     @click="
                       handleOpenInQgis(
                         factor.element.id,

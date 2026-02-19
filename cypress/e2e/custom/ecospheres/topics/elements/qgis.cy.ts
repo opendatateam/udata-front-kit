@@ -43,7 +43,6 @@ describe('Topic Elements - QGIS Integration', () => {
 
       // Verify topic-level button is visible
       cy.get('.test__open_topic_in_qgis_btn').should('be.visible')
-      cy.contains('button', 'Ouvrir dans QGIS').should('be.visible')
     })
 
     it('should NOT show topic-level QGIS button when no factors have OGC resources', () => {
@@ -67,7 +66,6 @@ describe('Topic Elements - QGIS Integration', () => {
 
       // Verify topic-level button does NOT exist
       cy.get('.test__open_topic_in_qgis_btn').should('not.exist')
-      cy.contains('button', 'Ouvrir dans QGIS').should('not.exist')
     })
 
     it('should trigger download when clicking topic-level QGIS button', () => {
@@ -125,8 +123,8 @@ describe('Topic Elements - QGIS Integration', () => {
       // Expand group to see individual dataset
       expandDisclosureGroup()
 
-      // Verify individual dataset button also exists (exact match)
-      cy.contains('button', 'Ouvrir dans QGIS').should('be.visible')
+      // Verify individual dataset button also exists
+      cy.get('.test__open_dataset_in_qgis_btn').should('be.visible')
     })
   })
 
@@ -157,7 +155,7 @@ describe('Topic Elements - QGIS Integration', () => {
       expandDisclosureGroup()
 
       // Verify QGIS button is visible
-      cy.contains('button', 'Ouvrir dans QGIS').should('be.visible')
+      cy.get('.test__open_dataset_in_qgis_btn').should('be.visible')
     })
 
     it('should show "Ouvrir dans QGIS" button for dataset with WMS service', () => {
@@ -186,7 +184,7 @@ describe('Topic Elements - QGIS Integration', () => {
       expandDisclosureGroup()
 
       // Verify QGIS button is visible
-      cy.contains('button', 'Ouvrir dans QGIS').should('be.visible')
+      cy.get('.test__open_dataset_in_qgis_btn').should('be.visible')
     })
 
     it('should NOT show "Ouvrir dans QGIS" button for dataset without OGC service', () => {
@@ -215,7 +213,7 @@ describe('Topic Elements - QGIS Integration', () => {
       expandDisclosureGroup()
 
       // Verify QGIS button does NOT exist
-      cy.contains('button', 'Ouvrir dans QGIS').should('not.exist')
+      cy.get('.test__open_dataset_in_qgis_btn').should('not.exist')
     })
 
     it('should trigger download when clicking "Ouvrir dans QGIS" button', () => {
@@ -249,7 +247,7 @@ describe('Topic Elements - QGIS Integration', () => {
       })
 
       // Click the QGIS button
-      cy.contains('button', 'Ouvrir dans QGIS').click()
+      cy.get('.test__open_dataset_in_qgis_btn').click()
 
       // Verify that URL.createObjectURL was called (indicating download triggered)
       cy.get('@createObjectURL').should('have.been.calledOnce')
