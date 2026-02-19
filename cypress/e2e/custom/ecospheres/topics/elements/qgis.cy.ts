@@ -43,7 +43,7 @@ describe('Topic Elements - QGIS Integration', () => {
 
       // Verify topic-level button is visible
       cy.get('.test__open_topic_in_qgis_btn').should('be.visible')
-      cy.contains('button', 'Ouvrir le bouquet dans QGIS').should('be.visible')
+      cy.contains('button', 'Ouvrir dans QGIS').should('be.visible')
     })
 
     it('should NOT show topic-level QGIS button when no factors have OGC resources', () => {
@@ -67,7 +67,7 @@ describe('Topic Elements - QGIS Integration', () => {
 
       // Verify topic-level button does NOT exist
       cy.get('.test__open_topic_in_qgis_btn').should('not.exist')
-      cy.contains('button', 'Ouvrir le bouquet dans QGIS').should('not.exist')
+      cy.contains('button', 'Ouvrir dans QGIS').should('not.exist')
     })
 
     it('should trigger download when clicking topic-level QGIS button', () => {
