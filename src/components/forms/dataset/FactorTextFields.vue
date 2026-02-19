@@ -51,9 +51,10 @@ const { pageConf } = useCurrentPageConf()
       {{ pageConf.labels.singular }} (obligatoire)</label
     >
     <p id="purpose-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
-      Renseignez la raison d'utilisation de ce jeu de données, si celle-ci n'est
-      pas évidente. Vous pouvez également utiliser cet espace pour renseigner
-      des problèmes liés à l'accès ou la qualité des données.<br />
+      Renseignez les motifs métier ou techniques ayant motivé la sélection de ce 
+      jeu de données dans le cadre du bouquet. Cet espace vous permet également
+      de partager des points d'attention relatifs à son usage (limites éventuelles, 
+      préconisations).<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
         ><span lang="en">markdown</span> (guide en anglais)</a
