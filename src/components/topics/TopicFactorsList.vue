@@ -424,7 +424,7 @@ defineExpose({
                       )
                     "
                   >
-                    Ouvrir dans QGIS
+                    Ouvrir dans QGIS (WFS/WMS)
                   </DsfrButton>
                 </div>
               </template>
