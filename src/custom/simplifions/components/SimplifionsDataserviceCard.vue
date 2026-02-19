@@ -12,14 +12,12 @@
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-auto">
         <div class="logo">
-          <Placeholder
+          <OrganizationLogo
             v-if="dataservice.organization"
-            type="organization"
-            :src="dataservice.organization.logo_thumbnail"
-            alt=""
-            :size="40"
+            :organization="dataservice.organization"
+            size-class="size-10"
           />
-          <Placeholder v-else type="organization" :size="40" />
+          <Placeholder v-else type="Organization" class="size-10" />
         </div>
       </div>
       <div class="fr-col-12 fr-col-sm">
@@ -30,7 +28,7 @@
             :href="dataserviceUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-grey-500 fr-grid-row"
+            class="text-default-grey fr-grid-row"
           >
             <TextClamp
               class="fr-col"
@@ -43,7 +41,7 @@
           <RouterLink
             v-else
             :to="dataserviceUrl"
-            class="text-grey-500 fr-grid-row"
+            class="text-default-grey fr-grid-row"
           >
             <TextClamp
               class="fr-col"
@@ -132,6 +130,7 @@
 <script setup lang="ts">
 import { stripFromMarkdown } from '@/utils'
 import {
+  OrganizationLogo,
   OrganizationNameWithCertificate,
   Placeholder,
   summarize,
@@ -173,7 +172,7 @@ const formatAvailability = (availability: number): string => {
   border: 1px solid var(--border-default-grey);
 }
 
-.text-grey-500 {
+.text-default-grey {
   color: var(--text-default-grey);
 }
 

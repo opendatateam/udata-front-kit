@@ -240,7 +240,7 @@ const actions = computed(() => {
                   factor.remoteDeleted ||
                   factor.remoteArchived
                 "
-                class="uppercase bold fr-text--xs fr-mr-2w"
+                class="uppercase font-bold fr-text--xs fr-mr-2w"
                 label="Non disponible"
               />
               <slot name="factorActions" :factor="factor" :index="index" />
@@ -384,11 +384,10 @@ const actions = computed(() => {
 }
 
 .disclosure__header .fr-tag {
-  /* can't use custom properties because of the cumulus theme. */
   font-weight: 400;
   vertical-align: baseline;
-  color: #000091;
-  background-color: #e3e3fd;
+  color: var(--text-action-high-blue-france);
+  background-color: var(--background-action-low-blue-france);
 }
 .disclosure__content .fr-tag {
   color: var(--purple-glycine-sun-319-moon-630, #6e445a);
@@ -403,10 +402,7 @@ const actions = computed(() => {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  background: var(
-    --light-decisions-background-background-alt-blue-france,
-    #f5f5fe
-  );
+  background: var(--background-alt-blue-france);
 }
 .dataset__title {
   padding: 0;
@@ -457,9 +453,13 @@ const actions = computed(() => {
   background-color: var(--modal-confirm-button-bg);
 }
 
+.factor__content :deep(.fr-btn--secondary:hover) {
+  background-color: var(--background-default-grey);
+}
+
 /* Factor highlight for deep-linking */
 .factor-highlighted {
-  outline: 3px solid var(--blue-france-sun-113-625);
+  outline: 3px solid var(--text-active-blue-france);
   outline-offset: 4px;
   transition: outline 0.3s ease;
 }

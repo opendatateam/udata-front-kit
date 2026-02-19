@@ -357,6 +357,6 @@ if (recommandation.Ces_logiciels_l_integrent_deja?.length) {
 
 :deep(.fr-accordion__btn[aria-expanded='true']) {
   background-color: var(--background-alt-blue-france);
-  color: #3558a2;
+  color: var(--text-action-high-blue-france);
 }
 </style>

@@ -99,7 +99,7 @@ const addPointsToMap = () => {
         ) {
           markerElement.style.backgroundColor = '#AAAAAA'
         } else {
-          markerElement.style.backgroundColor = '#3558A2'
+          markerElement.style.backgroundColor = '#000091'
         }
         onMarkerClick(point)
       })

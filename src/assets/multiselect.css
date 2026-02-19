@@ -1,11 +1,13 @@
 .multiselect {
   --ms-max-height: 20rem;
   --ms-bg: var(--background-contrast-grey);
-  --ms-spinner-color: var(--blue-cumulus-sun-368-moon-732);
-  --ms-option-bg-selected: var(--blue-cumulus-sun-368-moon-732);
-  --ms-option-bg-pointed: var(--blue-cumulus-sun-368-moon-732);
+  --ms-spinner-color: var(--text-active-blue-france);
+  --ms-option-bg-selected: var(--background-action-high-blue-france);
+  --ms-option-bg-pointed: var(--background-action-high-blue-france);
   --ms-option-color-pointed: var(--background-contrast-grey);
-  --ms-option-bg-selected-pointed: var(--blue-cumulus-sun-368-moon-732-hover);
+  --ms-option-bg-selected-pointed: var(
+    --background-action-high-blue-france-hover
+  );
   &&,
   &&.is-active {
     border: none;
