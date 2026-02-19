@@ -51,9 +51,9 @@ const { pageConf } = useCurrentPageConf()
       {{ pageConf.labels.singular }} (obligatoire)</label
     >
     <p id="purpose-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
-      Renseignez les motifs métier ou techniques ayant motivé la sélection de ce 
+      Renseignez les motifs métier ou techniques motivant la sélection de ce 
       jeu de données dans le cadre du bouquet. Cet espace vous permet également
-      de partager des points d'attention relatifs à son usage (limites éventuelles, 
+      de partager des points d'attention relatifs à l'usage (limites éventuelles, 
       préconisations).<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
