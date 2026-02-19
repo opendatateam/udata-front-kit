@@ -408,7 +408,7 @@ defineExpose({
                     class="fr-btn fr-btn--sm fr-btn--secondary inline-flex"
                     :href="factor.siteExtras.uri as string"
                     target="_blank"
-                    >Accéder au catalogue</a
+                    >Accéder aux données</a
                   >
                   <DsfrButton
                     v-if="
@@ -417,6 +417,7 @@ defineExpose({
                     secondary
                     size="sm"
                     icon="fr-icon-road-map-line"
+                    class="test__open_dataset_in_qgis_btn"
                     @click="
                       handleOpenInQgis(
                         factor.element.id,
@@ -424,7 +425,7 @@ defineExpose({
                       )
                     "
                   >
-                    Ouvrir dans QGIS
+                    Ouvrir dans QGIS (WFS/WMS)
                   </DsfrButton>
                 </div>
               </template>
