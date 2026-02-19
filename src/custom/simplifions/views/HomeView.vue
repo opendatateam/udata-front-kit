@@ -105,7 +105,7 @@ const niveauxDeSimplification = [
               />
             </div>
             <div
-              class="fr-col-lg-8 fr-col-12 datagouv-components"
+              class="fr-col-lg-8 fr-col-12"
               style="
                 font-family: Marianne, arial, sans-serif !important;
                 font-style: normal;
@@ -169,9 +169,7 @@ const niveauxDeSimplification = [
         </div>
       </div>
     </div>
-    <div
-      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
-    >
+    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <router-link to="/cas-d-usages" class="button-link">
         <button
           class="fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
@@ -187,7 +185,7 @@ const niveauxDeSimplification = [
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
     >
-      Quelques soient vos ressources, il existe des solutions !
+      Quelles que soient vos ressources, il existe des solutions !
     </h2>
 
     <p class="fr-text--lg" style="text-align: center">
@@ -296,9 +294,7 @@ const niveauxDeSimplification = [
       </li>
     </ul>
 
-    <div
-      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
-    >
+    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <!--a href="https://guides.data.gouv.fr/guide-data.gouv.fr/api/outils-pour-les-administrations" class="button-link" -->
       <button
         class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
@@ -381,9 +377,7 @@ const niveauxDeSimplification = [
       </div>
     </div>
 
-    <div
-      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
-    >
+    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <router-link to="/niveaux-simplification" class="button-link">
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
@@ -464,9 +458,7 @@ const niveauxDeSimplification = [
       ✍️ Proposez une modification, un cas d'usage ou une solution :
     </p>
 
-    <div
-      class="fr-mb-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
-    >
+    <div class="fr-mb-4w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
       <a
         href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
         target="_blank"
@@ -483,9 +475,7 @@ const niveauxDeSimplification = [
       contenus qui sont référencés dans <i>Simplifions.data</i> :
     </p>
 
-    <div
-      class="fr-mt-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
-    >
+    <div class="fr-mt-4w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
       <router-link to="/doctrine-referencement-cas-usages" class="button-link">
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
@@ -494,9 +484,7 @@ const niveauxDeSimplification = [
         </button>
       </router-link>
     </div>
-    <div
-      class="fr-mt-1w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
-    >
+    <div class="fr-mt-1w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
       <router-link to="/doctrine-referencement-solutions" class="button-link">
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"

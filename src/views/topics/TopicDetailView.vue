@@ -10,14 +10,15 @@ import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
+import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -60,7 +61,8 @@ const description = computed(() => descriptionFromMarkdown(topic))
 
 // Dynamically load the custom description component if it exists
 const customDescriptionComponent = useAsyncComponent(
-  () => meta.descriptionComponent
+  () => meta.descriptionComponent,
+  { loadingComponent: ContentPlaceholder }
 )
 
 const userStore = useUserStore()
@@ -225,13 +227,16 @@ const handleNavigateToFactor = (elementId: string) => {
 }
 
 useHead({
-  meta: [
+  meta: () => [
     {
       property: 'og:title',
-      content: () => `${metaTitle.value} | ${config.website.title}`
+      content: `${metaTitle.value} | ${config.website.title}`
     },
-    { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription }
+    { name: 'description', content: metaDescription() },
+    { property: 'og:description', content: metaDescription() },
+    ...(topic.value?.private
+      ? [{ name: 'robots', content: 'noindex, nofollow' }]
+      : [])
   ],
   link: [{ rel: 'canonical', href: metaLink }]
 })
@@ -266,11 +271,15 @@ watch(
   { immediate: true }
 )
 
+// Callback to hide the loader, passed to custom description components
+const hideLoader = ref<(() => void) | null>(null)
+
 watch(
   () => route.value?.params.item_id,
   (itemId) => {
     if (!itemId) return
     const loader = loading.show({ enforceFocus: false })
+    hideLoader.value = () => loader.hide()
     store
       .load(itemId, { toasted: false, redirectNotFound: true })
       .then((res) => {
@@ -283,7 +292,13 @@ watch(
         }
         setAccessibilityProperties(metaTitle.value)
       })
-      .finally(() => loader.hide())
+      .finally(() => {
+        // Only auto-hide if there's no custom description component
+        // Custom components are responsible for calling hideLoader when ready
+        if (!meta.descriptionComponent) {
+          loader.hide()
+        }
+      })
   },
   { immediate: true }
 )
@@ -303,8 +318,10 @@ watch(
         <div v-if="meta.descriptionComponent && customDescriptionComponent">
           <component
             :is="customDescriptionComponent"
+            :key="topic.id"
             :topic="topic"
             :page-key="pageKey"
+            :hide-loader="hideLoader"
           />
         </div>
         <div v-else>
@@ -381,7 +398,6 @@ watch(
               size="md"
               label="Éditer"
               icon="fr-icon-pencil-line"
-              class="fr-mb-1v fr-mr-1v"
               @click="goToEdit"
             />
             <DsfrButton
@@ -391,7 +407,6 @@ watch(
               :icon="
                 topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
               "
-              class="fr-mb-1v"
               @click="togglePublish"
             />
             <DsfrButton
@@ -404,7 +419,6 @@ watch(
               :icon="
                 topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
               "
-              class="fr-mb-1v"
               @click="toggleFeatured"
             />
           </div>
@@ -513,7 +527,7 @@ watch(
         <DiscussionsList
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
+          :empty-message="`Il n'y a pas encore de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
@@ -522,7 +536,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <ReusesList model="topic" :object="topic" />
+        <TopicReusesList :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
       <DsfrTabContent
