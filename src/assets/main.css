@@ -1,9 +1,9 @@
 /* ===== Root & Custom Properties ===== */
 
 :root {
-  /* toastify */
-  --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
-  --toastify-text-color-light: var(
+  /* sonner */
+  --success-text: #1f8d49; /* --success-main-525 (unavailable to date) */
+  --normal-text: var(
     --text-title-grey
   ); /* black text for better contrast on white background */
   /*
