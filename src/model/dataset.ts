@@ -1,4 +1,8 @@
-import type { DatasetV2, Harvest } from '@datagouv/components-next'
+import type {
+  DatasetV2,
+  DatasetV2WithFullObject,
+  Harvest
+} from '@datagouv/components-next'
 
 import type { GenericResponse } from './api'
 import type { ResolvedFactor } from './topic'
@@ -24,7 +28,7 @@ export interface DatasetModalData {
   mode: 'edit' | 'create'
 }
 
-export type ExtendedDatasetV2 = DatasetV2 & {
+export type ExtendedDatasetV2WithFullObject = DatasetV2WithFullObject & {
   extras: {
     [key: string]: unknown
     dcat?: Record<string, string[] | undefined>

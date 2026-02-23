@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import type { ExtendedDatasetV2, TypedHarvest } from '@/model/dataset'
+import type {
+  ExtendedDatasetV2WithFullObject,
+  TypedHarvest
+} from '@/model/dataset'
 import { useFormatDate } from '@datagouv/components-next'
 import ExtendedInformationPanelItem from './ExtendedInformationPanelItem.vue'
 
 const props = defineProps({
   dataset: {
-    type: Object as () => ExtendedDatasetV2,
+    type: Object as () => ExtendedDatasetV2WithFullObject,
     required: true
   }
 })

@@ -17,13 +17,13 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
 
 const route = useRouteParamsAsString()
-const datasetId = route.params.item_id
+const datasetIdOrSlug = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -47,7 +47,7 @@ const canAddToTopic = computed(() => {
   )
 })
 
-const dataset = computed(() => datasetStore.get(datasetId))
+const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
 
 const showAddToTopicModal = ref(false)
 
@@ -93,7 +93,7 @@ const goToEdit = () => {
 
 onMounted(() => {
   datasetStore
-    .load(datasetId, { toasted: false, redirectNotFound: true })
+    .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(dataset.value?.title)
     })
