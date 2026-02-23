@@ -6,9 +6,9 @@ import {
   DatasetInformationSection,
   DatasetSchemaSection,
   DatasetSpatialSection,
-  DatasetTemporalitySection,
-  LeafletMap
+  DatasetTemporalitySection
 } from '@datagouv/components-next'
+import LeafletMap from './LeafletMap.vue'
 
 defineProps<{
   dataset: DatasetV2WithFullObject
@@ -21,7 +21,7 @@ defineProps<{
     <DatasetTemporalitySection :dataset="dataset" />
     <DatasetSpatialSection :dataset="dataset">
       <template #map="{ geojson }">
-        <LeafletMap :geojson="geojson" />
+        <LeafletMap :geojson="geojson" width="350px" height="350px" />
       </template>
     </DatasetSpatialSection>
     <Suspense>
