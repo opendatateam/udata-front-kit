@@ -16,18 +16,26 @@ defineProps<{
 </script>
 
 <template>
-  <DatasetInformationSection :dataset="dataset" />
-  <DatasetTemporalitySection :dataset="dataset" />
-  <DatasetSpatialSection :dataset="dataset">
-    <template #map="{ geojson }">
-      <LeafletMap :geojson="geojson" />
-    </template>
-  </DatasetSpatialSection>
-  <Suspense>
-    <DatasetSchemaSection :dataset="dataset" />
-    <template #fallback>
-      <AnimatedLoader />
-    </template>
-  </Suspense>
-  <DatasetEmbedSection :dataset="dataset" />
+  <div class="sections">
+    <DatasetInformationSection :dataset="dataset" />
+    <DatasetTemporalitySection :dataset="dataset" />
+    <DatasetSpatialSection :dataset="dataset">
+      <template #map="{ geojson }">
+        <LeafletMap :geojson="geojson" />
+      </template>
+    </DatasetSpatialSection>
+    <Suspense>
+      <DatasetSchemaSection :dataset="dataset" />
+      <template #fallback>
+        <AnimatedLoader />
+      </template>
+    </Suspense>
+    <DatasetEmbedSection :dataset="dataset" />
+  </div>
 </template>
+
+<style scoped>
+.sections > :deep(:not(:last-child)) {
+  border-bottom: 1px solid var(--border-default-grey);
+}
+</style>
