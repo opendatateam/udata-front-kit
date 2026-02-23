@@ -65,6 +65,8 @@ routerPromise
       maxXmlPreviewCharSize: 100000, // Maximum size of XML to preview in characters (~100KB). XML preview module can NOT be collapsed by default so we should not have a preview for large files.
       metricsApiUrl: 'https://metric-api.data.gouv.fr',
       schemaValidataUrl: 'https://validata.fr',
+      schemasSiteUrl: 'https://schema.data.gouv.fr/',
+      schemasSiteName: 'schema.data.gouv.fr',
       // inject authentication for datagouv components that make their own API calls
       onRequest: (param) => {
         const store = useUserStore()
