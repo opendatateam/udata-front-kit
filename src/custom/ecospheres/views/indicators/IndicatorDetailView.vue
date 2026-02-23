@@ -18,7 +18,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'

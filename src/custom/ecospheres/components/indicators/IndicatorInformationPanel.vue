@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils'
-import { useSpatialCoverage } from '@/utils/spatial'
 import { DateRangeDetails } from '@datagouv/components-next'
-import { toRef } from 'vue'
+import { computed, toRef } from 'vue'
 import type { Indicator } from '../../model/indicator'
 import { UNFILLED_LABEL, useIndicatorExtras } from '../../utils/indicator'
 import IndicatorTags from './IndicatorTags.vue'
@@ -17,7 +16,7 @@ const props = defineProps({
 })
 
 const indicator = toRef(props, 'indicator')
-const spatialCoverage = useSpatialCoverage(indicator)
+const spatialCoverage = computed(() => indicator.value.spatial?.zones?.[0])
 const { unite, mailles } = useIndicatorExtras(indicator)
 </script>
 
