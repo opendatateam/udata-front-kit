@@ -1,11 +1,6 @@
 /* ===== Root & Custom Properties ===== */
 
 :root {
-  /* sonner */
-  --success-text: #1f8d49; /* --success-main-525 (unavailable to date) */
-  --normal-text: var(
-    --text-title-grey
-  ); /* black text for better contrast on white background */
   /*
   progressively enhanced height: auto transition
   https://caniuse.com/mdn-css_properties_interpolate-size
