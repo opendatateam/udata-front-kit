@@ -189,6 +189,9 @@ body {
 .border-default-grey {
   border-color: var(--border-default-grey);
 }
+.divide-y > :not(:last-child) {
+  border-bottom: 1px solid var(--border-default-grey);
+}
 
 /* ===== Utilities for @datagouv/components-next (upstream does not bundle these) ===== */
 

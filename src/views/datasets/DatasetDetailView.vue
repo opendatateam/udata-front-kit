@@ -193,13 +193,15 @@ onMounted(() => {
 
       <!-- Informations -->
       <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
-        <ExtendedInformationPanel
-          v-if="
-            config.website.datasets.show_extended_information_panel && dataset
-          "
-          :dataset="dataset"
-        />
-        <DatasetInformationPanel :dataset="dataset" />
+        <div class="divide-y">
+          <ExtendedInformationPanel
+            v-if="
+              config.website.datasets.show_extended_information_panel && dataset
+            "
+            :dataset="dataset"
+          />
+          <DatasetInformationPanel :dataset="dataset" />
+        </div>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

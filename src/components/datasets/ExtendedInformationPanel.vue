@@ -24,10 +24,7 @@ const harvestModifiedAt = harvest?.modified_at
 </script>
 
 <template>
-  <div
-    v-if="dataset.harvest"
-    class="fr-pb-3w border-bottom border-default-grey"
-  >
+  <div v-if="dataset.harvest" class="fr-pb-3w">
     <h2 class="fr-sr-only">Informations étendues</h2>
     <div class="metadata-list fr-text--sm fr-m-0">
       <ExtendedInformationPanelItem
