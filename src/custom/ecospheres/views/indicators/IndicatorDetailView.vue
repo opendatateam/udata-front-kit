@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  AnimatedLoader,
-  DatasetInformationPanel,
-  ReadMore
-} from '@datagouv/components-next'
+import { ReadMore } from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
 import { computed, inject, onMounted, ref } from 'vue'
 
@@ -11,6 +7,7 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
@@ -210,15 +207,7 @@ onMounted(() => {
 
       <!-- Détails techniques -->
       <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
-        <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
-           is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
-          updated to handle its own loading state. -->
-        <Suspense>
-          <DatasetInformationPanel :dataset="indicator" />
-          <template #fallback>
-            <AnimatedLoader />
-          </template>
-        </Suspense>
+        <DatasetInformationPanel :dataset="indicator" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

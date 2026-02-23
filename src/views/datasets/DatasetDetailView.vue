@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import {
-  AnimatedLoader,
-  DatasetInformationPanel,
-  ReadMore,
-  SimpleBanner
-} from '@datagouv/components-next'
+import { ReadMore, SimpleBanner } from '@datagouv/components-next'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
@@ -203,12 +199,7 @@ onMounted(() => {
           "
           :dataset="dataset"
         />
-        <Suspense>
-          <DatasetInformationPanel :dataset="dataset" />
-          <template #fallback>
-            <AnimatedLoader />
-          </template>
-        </Suspense>
+        <DatasetInformationPanel :dataset="dataset" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
