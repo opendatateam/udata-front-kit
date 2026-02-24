@@ -46,7 +46,7 @@ const categories_solution = [
     simplificationLevel: ["Accès facile 💠"],
     description:
       "Des sites internet vous permettent de consulter la donnée.",
-    filters: 'todo=portail-consultation',
+    filters: 'categorie-de-solution=portail-consultation',
     imageSrc: '/static/simplifions/assets/accueil-picto-search.png'
   }
 ]
