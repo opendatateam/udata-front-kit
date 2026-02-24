@@ -112,28 +112,30 @@
         v-if="recommandation.API_et_datasets_utiles_fournis?.length"
         class="fr-col-12 fr-p-0 fr-mt-4w"
       >
-        <DsfrAccordion title-tag="h5">
-          <template #title>
-            <strong>API et données utiles</strong>, fournies par la solution
-          </template>
-          <div v-if="usefulDataApiFourniesParLaSolution === undefined">
-            Chargement des données en cours...
-          </div>
-          <ul v-else>
-            <li
-              v-for="apidOrDataset in sortedUsefulDataApiFourniesParLaSolution"
-              :key="apidOrDataset.fields.UID_datagouv"
-            >
-              <SimplifionsDataApiUtile
-                :api-or-dataset="apidOrDataset.fields"
-                :custom-description="
-                  customDescriptions[apidOrDataset.id]
-                    ?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
-                "
-              />
-            </li>
-          </ul>
-        </DsfrAccordion>
+        <DsfrAccordionsGroup v-model="activeApiAccordion">
+          <DsfrAccordion title-tag="h5">
+            <template #title>
+              <strong>API et données utiles</strong>, fournies par la solution
+            </template>
+            <div v-if="usefulDataApiFourniesParLaSolution === undefined">
+              Chargement des données en cours...
+            </div>
+            <ul v-else>
+              <li
+                v-for="apidOrDataset in sortedUsefulDataApiFourniesParLaSolution"
+                :key="apidOrDataset.fields.UID_datagouv"
+              >
+                <SimplifionsDataApiUtile
+                  :api-or-dataset="apidOrDataset.fields"
+                  :custom-description="
+                    customDescriptions[apidOrDataset.id]
+                      ?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
+                  "
+                />
+              </li>
+            </ul>
+          </DsfrAccordion>
+        </DsfrAccordionsGroup>
       </div>
 
       <div v-if="hasIntegratingSolutions" class="fr-col-12 fr-p-0">
@@ -406,6 +408,7 @@ if (
   })
 }
 
+const activeApiAccordion = ref(-1)
 const activeIntegratingAccordion = ref(0)
 const activeTab = ref(0)
 const tabTitles = computed(() => {
