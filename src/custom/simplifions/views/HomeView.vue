@@ -21,31 +21,30 @@ const fournisseursDeService = [
     emoji: '🤝',
     filters: 'target-users=associations',
     description: "Tous les cas d'usages concernant les associations"
-  },
+  }
 ]
 
 const categories_solution = [
   {
     title: 'Logiciels métiers "clé en main"',
-    simplificationLevel: ["DLNUF 💠💠", "Proactivité 💠💠💠"],
+    simplificationLevel: ['DLNUF 💠💠', 'Proactivité 💠💠💠'],
     description:
-      "Des logiciels métiers prêts à l’emploi ont intégré les données utiles pour vos cas d’usages.",
+      'Des logiciels métiers prêts à l’emploi ont intégré les données utiles pour vos cas d’usages.',
     filters: 'categorie-de-solution=logiciel-metier',
     imageSrc: '/static/simplifions/assets/accueil-picto-self-training.png'
   },
   {
     title: 'Briques techniques',
-    simplificationLevel: ["DLNUF 💠💠", "Proactivité 💠💠💠"],
+    simplificationLevel: ['DLNUF 💠💠', 'Proactivité 💠💠💠'],
     description:
-      "Des briques techniques permettent d’intégrer plus facilement les données.",
+      'Des briques techniques permettent d’intégrer plus facilement les données.',
     filters: 'categorie-de-solution=brique-technique',
     imageSrc: '/static/simplifions/assets/accueil-picto-flow-settings.png'
   },
   {
     title: 'Portails de consultation',
-    simplificationLevel: ["Accès facile 💠"],
-    description:
-      "Des sites internet vous permettent de consulter la donnée.",
+    simplificationLevel: ['Accès facile 💠'],
+    description: 'Des sites internet vous permettent de consulter la donnée.',
     filters: 'categorie-de-solution=portail-consultation',
     imageSrc: '/static/simplifions/assets/accueil-picto-search.png'
   }
@@ -230,7 +229,7 @@ const niveauxDeSimplification = [
                 </li>
                 <li>
                   <router-link
-                    class="fr-btn "
+                    class="fr-btn"
                     :to="`/solutions?${categorie_solution.filters}`"
                     >{{ categorie_solution.title }}</router-link
                   >
@@ -398,7 +397,11 @@ const niveauxDeSimplification = [
     class="fr-container hero-text fr-mt-8w fr-py-8w"
     style="background-color: rgb(243, 243, 251)"
   >
-    <h2 class="fr-h1 fr-mb-5w" style="color: black; text-align: center" id="redaction-contenu">
+    <h2
+      id="redaction-contenu"
+      class="fr-h1 fr-mb-5w"
+      style="color: black; text-align: center"
+    >
       Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
     </h2>
 
@@ -419,30 +422,37 @@ const niveauxDeSimplification = [
         <h3 style="text-align: center">
           Ligne éditoriale <i>DLNUF/proactivité</i>
         </h3>
-         <p class="fr-text--lg fr-text--bold"> Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une ligne éditoriale :</p>
-         <ul class="fr-text--lg">
-         
-          <li>focalisée sur la mise en oeuvre d'une simplification par la donnée, souvent via les deux principes que sont le "Dites-le nous une fois" et la "Proactivité" ;</li>
+        <p class="fr-text--lg fr-text--bold">
+          Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une
+          ligne éditoriale :
+        </p>
+        <ul class="fr-text--lg">
+          <li>
+            focalisée sur la mise en oeuvre d'une simplification par la donnée,
+            souvent via les deux principes que sont le "Dites-le nous une fois"
+            et la "Proactivité" ;
+          </li>
           <li>synthétisant les retours et les contributions ;</li>
           <li>lisible pour les usagers.</li>
         </ul>
       </div>
-      <div
-        class="fr-col-12 fr-col-md-6">
-        <figure role="group" class="fr-content-media fr-content-media--sm ">
-        <div class="fr-content-media__img fr-col-3">
-          <img
-            class="fr-responsive-img"
-            src="/static/simplifions/assets/accueil-picto-contenu-contributif.png"
-            alt=""
-            style="width: auto; height: 100%"
-          />
-        </div>
-       </figure>
-       <h3 style="text-align: center">
-          Contenu collaboratif
-        </h3>
-         <p class="fr-text--lg fr-text--bold">De nombreux espaces sont disponibles sur le site pour permettre aux usagers de proposer des modifications dans l'objectif de construire une base de connaissance :</p>
+      <div class="fr-col-12 fr-col-md-6">
+        <figure role="group" class="fr-content-media fr-content-media--sm">
+          <div class="fr-content-media__img fr-col-3">
+            <img
+              class="fr-responsive-img"
+              src="/static/simplifions/assets/accueil-picto-contenu-contributif.png"
+              alt=""
+              style="width: auto; height: 100%"
+            />
+          </div>
+        </figure>
+        <h3 style="text-align: center">Contenu collaboratif</h3>
+        <p class="fr-text--lg fr-text--bold">
+          De nombreux espaces sont disponibles sur le site pour permettre aux
+          usagers de proposer des modifications dans l'objectif de construire
+          une base de connaissance :
+        </p>
         <ul class="fr-text--lg">
           <li>élaborée sur des expériences concrètes ;</li>
           <li>exhaustive ;</li>
