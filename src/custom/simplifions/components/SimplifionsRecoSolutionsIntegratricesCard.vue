@@ -30,7 +30,7 @@
           </p>
         </div>
         </div>
-        <SimplifionsSolutionTag :gristSolution="solution.fields" />
+        <SimplifionsSolutionOperateurTag :gristSolution="solution.fields" />
       </div>
 
       <!-- Content: Type de solution  -->
@@ -66,7 +66,7 @@
 import type { Topic } from '@/model/topic'
 import type { SolutionRecord } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
-import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
+import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 
 
 const props = defineProps<{
