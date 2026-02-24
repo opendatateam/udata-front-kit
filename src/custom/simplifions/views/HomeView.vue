@@ -398,7 +398,7 @@ const niveauxDeSimplification = [
     class="fr-container hero-text fr-mt-8w fr-py-8w"
     style="background-color: rgb(243, 243, 251)"
   >
-    <h2 class="fr-h1 fr-mb-5w" style="color: black; text-align: center">
+    <h2 class="fr-h1 fr-mb-5w" style="color: black; text-align: center" id="redaction-contenu">
       Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
     </h2>
 
