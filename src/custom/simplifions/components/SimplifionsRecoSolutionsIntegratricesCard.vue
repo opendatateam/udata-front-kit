@@ -15,22 +15,22 @@
             {{ solution.fields.Nom }}
           </h3>
           <!-- Simplification tags (diamonds) with tag styling -->
-        <div
-          v-if="simplificationLevelTags.length"
-          class="fr-tags-group simplification-diamonds"
-        >
-          <p
-            v-for="levelTag in simplificationLevelTags"
-            :key="levelTag.id"
-            class="fr-tag fr-tag--sm fr-m-0"
-            :aria-label="`Niveau de simplification ${levelTag.id}`"
-            :title="`Niveau ${levelTag.id}`"
+          <div
+            v-if="simplificationLevelTags.length"
+            class="fr-tags-group simplification-diamonds"
           >
-            {{ levelTag.icon }}
-          </p>
+            <p
+              v-for="levelTag in simplificationLevelTags"
+              :key="levelTag.id"
+              class="fr-tag fr-tag--sm fr-m-0"
+              :aria-label="`Niveau de simplification ${levelTag.id}`"
+              :title="`Niveau ${levelTag.id}`"
+            >
+              {{ levelTag.icon }}
+            </p>
+          </div>
         </div>
-        </div>
-        <SimplifionsSolutionOperateurTag :gristSolution="solution.fields" />
+        <SimplifionsSolutionOperateurTag :grist-solution="solution.fields" />
       </div>
 
       <!-- Content: Type de solution  -->
@@ -68,7 +68,6 @@ import type { SolutionRecord } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 
-
 const props = defineProps<{
   solution: SolutionRecord
 }>()
@@ -90,15 +89,12 @@ const simplificationLevelTags = computed(() => {
   if (!levels?.length) return []
 
   return levels
-    .filter(level => [1, 2, 3].includes(level))
-    .map(level => ({
+    .filter((level) => [1, 2, 3].includes(level))
+    .map((level) => ({
       id: level,
-      icon: level === 1 ? '💠' :
-            level === 2 ? '💠💠' :
-            '💠💠💠'  
+      icon: level === 1 ? '💠' : level === 2 ? '💠💠' : '💠💠💠'
     }))
 })
-
 </script>
 
 <style scoped>
