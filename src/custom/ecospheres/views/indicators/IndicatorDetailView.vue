@@ -9,8 +9,9 @@ import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
+import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
@@ -23,7 +24,6 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import type { Indicator } from '../../model/indicator'
@@ -53,7 +53,7 @@ const links = computed(() => [
 const tabTitles = computed(() => [
   { title: 'Informations', tabId: 'tab-info', panelId: 'tab-content-info' },
   {
-    title: 'Fichiers et API',
+    title: 'Fichiers',
     tabId: 'tab-files',
     panelId: 'tab-content-files'
   },
@@ -69,7 +69,7 @@ const tabTitles = computed(() => [
     : []),
   { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
   {
-    title: 'Réutilisations',
+    title: 'Réutilisations et API',
     tabId: 'tab-reuses',
     panelId: 'tab-content-reuses'
   },
@@ -168,7 +168,6 @@ onMounted(() => {
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
         />
-        <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Prévisualisation -->
@@ -180,9 +179,16 @@ onMounted(() => {
         />
       </DsfrTabContent>
 
-      <!-- Réutilisations -->
+      <!-- Réutilisations et API -->
       <DsfrTabContent panel-id="tab-content-reuses" tab-id="tab-reuses">
-        <ReusesList model="dataset" :object="indicator" />
+        <DatasetDataservicesList
+          :dataset-id="indicator.id"
+          empty-message="Il n'y a pas encore d'API pour cet indicateur."
+        />
+        <DatasetReusesList
+          :dataset-id="indicator.id"
+          empty-message="Il n'y a pas encore de réutilisation pour cet indicateur."
+        />
       </DsfrTabContent>
 
       <!-- Discussions -->
@@ -193,7 +199,7 @@ onMounted(() => {
         <DiscussionsList
           :subject="indicator"
           subject-class="Dataset"
-          empty-message="Pas de discussion pour cet indicateur."
+          empty-message="Il n'y a pas encore de discussion pour cet indicateur."
         />
       </DsfrTabContent>
 

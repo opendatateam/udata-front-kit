@@ -3,7 +3,7 @@ import NoResults from '@/components/NoResults.vue'
 import SelectComponent from '@/components/SelectComponent.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDataserviceSearchStore } from '@/store/DataserviceSearchStore'
-import { DataserviceCard, type Dataservice } from '@datagouv/components-next'
+import { DataserviceCard } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
@@ -124,7 +124,7 @@ defineExpose({
         >
           <DataserviceCard
             :key="dataservice.id"
-            :dataservice="dataservice as unknown as Dataservice"
+            :dataservice="dataservice"
             :dataservice-url="getDataservicePage(dataservice.id)"
           />
         </li>
