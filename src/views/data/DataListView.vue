@@ -74,12 +74,12 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-my-2w">
+  <div class="fr-container fr-my-2w">
     <h1>{{ pageConf.title }}</h1>
   </div>
   <section
     v-if="pageConf.banner"
-    class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
+    class="fr-container--fluid hero-banner fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->

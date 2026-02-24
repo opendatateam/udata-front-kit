@@ -14,11 +14,11 @@ import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
+import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -398,7 +398,6 @@ watch(
               size="md"
               label="Éditer"
               icon="fr-icon-pencil-line"
-              class="fr-mb-1v fr-mr-1v"
               @click="goToEdit"
             />
             <DsfrButton
@@ -408,7 +407,6 @@ watch(
               :icon="
                 topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
               "
-              class="fr-mb-1v"
               @click="togglePublish"
             />
             <DsfrButton
@@ -421,7 +419,6 @@ watch(
               :icon="
                 topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
               "
-              class="fr-mb-1v"
               @click="toggleFeatured"
             />
           </div>
@@ -530,7 +527,7 @@ watch(
         <DiscussionsList
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
+          :empty-message="`Il n'y a pas encore de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
@@ -539,7 +536,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <ReusesList model="topic" :object="topic" />
+        <TopicReusesList :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
       <DsfrTabContent
