@@ -30,7 +30,7 @@
           </p>
         </div>
         </div>
-        <SimplifionsSolutionTag :solution="solution.fields" />
+        <SimplifionsSolutionTag :gristSolution="solution.fields" />
       </div>
 
       <!-- Content: Type de solution  -->

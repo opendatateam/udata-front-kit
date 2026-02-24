@@ -13,12 +13,12 @@ import type { TopicSolutionsExtras } from '../model/topics'
 
 const props = defineProps<{
   topicSolution?: Topic
-  solution?: Solution
+  gristSolution?: Solution
 }>()
 
 const solutionData = computed(() => {
-  if (props.solution) {
-    return props.solution
+  if (props.gristSolution) {
+    return props.gristSolution
   }
   if (props.topicSolution) {
     return (props.topicSolution.extras as TopicSolutionsExtras | undefined)?.[
