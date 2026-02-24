@@ -288,7 +288,7 @@ onMounted(() => {
                 {{ discussionWellDescription }}
               </p>
             </div>
-            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+            <div class="fr-col-12 fr-col-lg-4 align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
                 icon="fr-icon-external-link-line"
@@ -302,7 +302,7 @@ onMounted(() => {
         <DiscussionsList
           v-if="showDiscussions"
           :subject="dataservice"
-          empty-message="Pas de discussion pour cette API."
+          empty-message="Il n'y a pas encore de discussion pour cette API."
         />
       </DsfrTabContent>
 
@@ -340,8 +340,8 @@ onMounted(() => {
 
 <style scoped>
 .dataservice-well {
-  color: var(--blue-cumulus-sun-368-moon-732);
-  border: 1px solid var(--blue-cumulus-sun-368-moon-732);
+  color: var(--text-active-blue-france);
+  border: 1px solid var(--border-active-blue-france);
   border-radius: 0.25rem;
   padding: 0.75rem;
   background-color: var(--background-alt-grey);

@@ -66,7 +66,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="datagouv-components">
+  <div>
     <div v-if="loading" class="fr-container fr-py-8w">
       <p>Chargement...</p>
     </div>

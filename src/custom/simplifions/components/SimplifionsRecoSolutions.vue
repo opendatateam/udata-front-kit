@@ -55,9 +55,7 @@
 
       <div v-if="hasContent" class="fr-col-12 fr-col-lg-8 fr-ml-2w">
         <div
-          v-if="
-            recommandation.Donnees_utiles_disponibles
-          "
+          v-if="recommandation.Donnees_utiles_disponibles"
           class="reco-section fr-mb-2w"
         >
           <div class="fr-mr-1w bullet-icon">
@@ -69,17 +67,11 @@
 
           <div class="reco-text-column">
             <div>
-              <h5 class="fr-text--md">
-                Données disponibles :
-              </h5>
+              <h5 class="fr-text--md">Données disponibles :</h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
-              v-html="
-                fromMarkdown(
-                  recommandation.Donnees_utiles_disponibles
-                )
-              "
+              v-html="fromMarkdown(recommandation.Donnees_utiles_disponibles)"
             ></div>
             <!-- eslint-enable vue/no-v-html -->
           </div>
@@ -95,20 +87,23 @@
 
           <div class="reco-text-column">
             <div>
-               <h5 class="fr-text--md"> Informations à saisir pour récupérer la donnée :</h5>
+              <h5 class="fr-text--md">
+                Informations à saisir pour récupérer la donnée :
+              </h5>
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
               v-html="
-                fromMarkdown(recommandation.Parametres_a_saisir_pour_recuperer_les_donnees)
+                fromMarkdown(
+                  recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
+                )
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
           </div>
         </div>
-
       </div>
-      <p v-else class="fr-text--sm ">
+      <p v-else class="fr-text--sm">
         <i>Aucun contenu actuellement.</i>
         <a href="#modification-contenu">✒️ Proposer un contenu</a>.
       </p>
@@ -117,7 +112,7 @@
         v-if="recommandation.API_et_datasets_utiles_fournis?.length"
         class="fr-col-12 fr-p-0 fr-mt-4w"
       >
-        <DsfrAccordion  title-tag="h5">
+        <DsfrAccordion title-tag="h5">
           <template #title>
             <strong>API et données utiles</strong>, fournies par la solution
           </template>
@@ -141,14 +136,15 @@
         </DsfrAccordion>
       </div>
 
-      <div
-        v-if="hasIntegratingSolutions"
-        class="fr-col-12 fr-p-0"
-      >   
+      <div v-if="hasIntegratingSolutions" class="fr-col-12 fr-p-0">
         <DsfrAccordionsGroup v-model="activeIntegratingAccordion">
           <DsfrAccordion title-tag="h5">
             <template #title>
-              <strong>Solutions intégrant «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;»</strong>
+              <strong
+                >Solutions intégrant «&nbsp;{{
+                  recommandation.Nom_de_la_recommandation
+                }}&nbsp;»</strong
+              >
             </template>
             <DsfrTabs
               v-model="activeTab"
@@ -159,16 +155,27 @@
                 v-if="integratingSolutionsLogicielsMetiers?.length"
                 panel-id="tab-content-logiciel-metier"
                 tab-id="tab-logiciel-metier"
-                style="background-color: white;"
+                style="background-color: white"
               >
-              <p><strong>Liste des logiciels métier, sur étagère</strong> conçus pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
-                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                <p>
+                  <strong>Liste des logiciels métier, sur étagère</strong>
+                  conçus pour le cas d’usage «<i
+                    >&nbsp;{{
+                      recommandation.Nom_complet_du_cas_d_usage
+                    }}&nbsp;</i
+                  >» :
+                </p>
+                <div
+                  class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
+                >
                   <div
                     v-for="solution in integratingSolutionsLogicielsMetiers"
                     :key="solution.id"
                     class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                   >
-                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
+                    <SimplifionsRecoSolutionsIntegratricesCard
+                      :solution="solution"
+                    />
                   </div>
                 </div>
               </DsfrTabContent>
@@ -177,16 +184,28 @@
                 v-if="integratingSolutionsBriquesTechniques?.length"
                 panel-id="tab-content-brique-technique"
                 tab-id="tab-brique-technique"
-                style="background-color: white;"
+                style="background-color: white"
               >
-               <p><strong>Briques techniques logicielles</strong> destinées à être intégrées dans un système informatique existant et conçues pour le cas d’usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :</p>
-                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                <p>
+                  <strong>Briques techniques logicielles</strong> destinées à
+                  être intégrées dans un système informatique existant et
+                  conçues pour le cas d’usage «<i
+                    >&nbsp;{{
+                      recommandation.Nom_complet_du_cas_d_usage
+                    }}&nbsp;</i
+                  >» :
+                </p>
+                <div
+                  class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
+                >
                   <div
                     v-for="solution in integratingSolutionsBriquesTechniques"
                     :key="solution.id"
                     class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                   >
-                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
+                    <SimplifionsRecoSolutionsIntegratricesCard
+                      :solution="solution"
+                    />
                   </div>
                 </div>
               </DsfrTabContent>
@@ -195,36 +214,49 @@
                 v-if="integratingSolutionsPortailsConsultation?.length"
                 panel-id="tab-content-portail-consultation"
                 tab-id="tab-portail-consultation"
-                style="background-color: white;"
+                style="background-color: white"
               >
                 <p>
-                  <b>Ces sites vous permettent de consulter certaines des données utiles pour ce cas d’usage  :</b>
+                  <b
+                    >Ces sites vous permettent de consulter certaines des
+                    données utiles pour ce cas d’usage :</b
+                  >
                 </p>
-                <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
-                  <p class="fr-mb-0">💡 
-                    Pour vraiment simplifier la vie des usagers, l'intégration directe de cette API ou de jeu de données dans vos logiciels métiers est à privilégier car elle permet de mettre en oeuvre le <i>dites-le-nous une fois</i> et la proactivité !
+                <div
+                  class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight"
+                >
+                  <p class="fr-mb-0">
+                    💡 Pour vraiment simplifier la vie des usagers,
+                    l'intégration directe de cette API ou de jeu de données dans
+                    vos logiciels métiers est à privilégier car elle permet de
+                    mettre en oeuvre le <i>dites-le-nous une fois</i> et la
+                    proactivité !
                   </p>
                 </div>
-                <div class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w">
+                <div
+                  class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
+                >
                   <div
                     v-for="solution in integratingSolutionsPortailsConsultation"
                     :key="solution.id"
                     class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                   >
-                    <SimplifionsRecoSolutionsIntegratricesCard :solution="solution" />
+                    <SimplifionsRecoSolutionsIntegratricesCard
+                      :solution="solution"
+                    />
                   </div>
                 </div>
-
               </DsfrTabContent>
             </DsfrTabs>
             <p class="fr-text--sm fr-mx-3w fr-mt-2w">
-              <i>Une solution n'est pas listée parmi les solutions intégrant «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;» ? 
+              <i
+                >Une solution n'est pas listée parmi les solutions intégrant
+                «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;» ?
               </i>
               <a href="#modification-contenu">✒️ Proposer un contenu</a>.
             </p>
           </DsfrAccordion>
         </DsfrAccordionsGroup>
-      
       </div>
     </div>
   </div>
@@ -252,7 +284,8 @@ const recommandation = props.recommandation
 const hasContent = computed(() => {
   return (
     recommandation.Donnees_utiles_disponibles ||
-    recommandation.Parametres_a_saisir_pour_recuperer_les_donnees || recommandation.Nom_complet_du_cas_d_usage
+    recommandation.Parametres_a_saisir_pour_recuperer_les_donnees ||
+    recommandation.Nom_complet_du_cas_d_usage
   )
 })
 
@@ -363,7 +396,8 @@ if (
 }
 
 if (
-  recommandation.Solutions_integratrices_categorie_portail_de_consultation?.length
+  recommandation.Solutions_integratrices_categorie_portail_de_consultation
+    ?.length
 ) {
   fetchSolutionsForCategory(
     recommandation.Solutions_integratrices_categorie_portail_de_consultation
@@ -431,6 +465,6 @@ const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
 
 :deep(.fr-accordion__btn[aria-expanded='true']) {
   background-color: var(--background-alt-blue-france);
-  color: #3558a2;
+  color: var(--text-action-high-blue-france);
 }
 </style>
