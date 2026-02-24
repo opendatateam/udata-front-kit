@@ -153,10 +153,6 @@ const getShortLabelSimplificationTag = (name: string) => {
   color: var(--blue-france-sun-113-625);
 }
 
-.text-uppercase {
-  text-transform: uppercase;
-}
-
 .fr-tags-group {
   list-style: none;
   padding: 0;
