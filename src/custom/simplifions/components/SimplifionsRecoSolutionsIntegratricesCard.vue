@@ -15,17 +15,20 @@
             {{ solution.fields.Nom }}
           </h3>
           <!-- Simplification tags (diamonds) with tag styling -->
-          <div v-if="simplificationTags.length" class="fr-tags-group simplification-diamonds">
-      
-              <p v-for="tag in simplificationTags" :key="tag.id"
-                class="fr-tag fr-tag--sm fr-m-0"
-                :aria-label="tag.name"
-                :title="tag.name"
-              >
-                {{ getShortLabelSimplificationTag(tag.name) }}
-              </p>
-   
-        </div>
+          <div
+            v-if="simplificationTags.length"
+            class="fr-tags-group simplification-diamonds"
+          >
+            <p
+              v-for="tag in simplificationTags"
+              :key="tag.id"
+              class="fr-tag fr-tag--sm fr-m-0"
+              :aria-label="tag.name"
+              :title="tag.name"
+            >
+              {{ getShortLabelSimplificationTag(tag.name) }}
+            </p>
+          </div>
         </div>
         <SimplifionsSolutionTag :solution="solution.fields" />
       </div>
@@ -51,7 +54,10 @@
       </div>
     </div>
   </router-link>
-  <div v-else class="solution-integratrice-card solution-integratrice-card--loading">
+  <div
+    v-else
+    class="solution-integratrice-card solution-integratrice-card--loading"
+  >
     <p class="fr-text--sm fr-mb-0">Chargement...</p>
   </div>
 </template>
@@ -59,9 +65,7 @@
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
-import type {
-  SolutionRecord
-} from '../model/grist'
+import type { SolutionRecord } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
 
@@ -139,7 +143,6 @@ const getShortLabelSimplificationTag = (name: string) => {
   margin-left: auto;
 }
 
-
 .solution-integratrice-card__arrow {
   position: absolute;
   bottom: 1rem;
@@ -149,7 +152,6 @@ const getShortLabelSimplificationTag = (name: string) => {
 .solution-integratrice-card__arrow .fr-icon-arrow-right-line {
   color: var(--blue-france-sun-113-625);
 }
-
 
 .text-uppercase {
   text-transform: uppercase;

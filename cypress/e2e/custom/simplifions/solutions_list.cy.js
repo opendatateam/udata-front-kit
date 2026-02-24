@@ -75,15 +75,15 @@ describe('Simplifions Solutions Page', () => {
     )
   })
 
-  it('should be able to filter by budget ', () => {
+  it('should be able to filter by categorie de solution ', () => {
     cy.expectActionToCallApi(
       () =>
         cy.selectFilterValue(
-          'Moyens disponibles pour la mise en œuvre :',
-          'Aucun développement, ni budget'
+          'Catégorie de solution :',
+          'Logiciel métier "clé en main"'
         ),
       'topics',
-      'tag=simplifions-v2-budget-aucun-developpement-ni-budget&tag=simplifions-v2-solutions'
+      'tag=simplifions-v2-categorie-de-solution-logiciel-metier&tag=simplifions-v2-solutions'
     )
   })
 
