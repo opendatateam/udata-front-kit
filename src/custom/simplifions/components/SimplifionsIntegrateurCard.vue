@@ -16,7 +16,7 @@
         <p
           :class="[
             'fr-badge fr-badge--sm fr-badge--no-icon fr-mb-0',
-            isPublic ? 'fr-badge--success' : 'fr-badge--info'
+            isPublic ? 'fr-badge--brown-cafe-creme' : 'fr-badge--info'
           ]"
         >
           <span class="font-weight-normal uppercase">{{ tagText }}</span>
