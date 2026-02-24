@@ -189,7 +189,7 @@
 
       <div>
         <h3 class="fr-text--lg fr-mt-2w">
-          <span aria-hidden="true" class="fr-icon-octagon-fill icon-gray"></span>
+          <span aria-hidden="true" class="fr-icon-stop-circle-fill icon-gray"></span>
           Périmètre de simplification non couvert :
         </h3>
         <p
