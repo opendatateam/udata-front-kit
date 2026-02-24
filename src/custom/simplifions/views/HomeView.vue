@@ -21,36 +21,32 @@ const fournisseursDeService = [
     emoji: '🤝',
     filters: 'target-users=associations',
     description: "Tous les cas d'usages concernant les associations"
-  },
-  {
-    title: 'Agents publics',
-    emoji: '🧑‍💼',
-    filters: 'target-users=agents-publics',
-    description: "Tous les cas d'usages concernant les agents publics"
   }
 ]
 
-const budgets = [
+const categories_solution = [
   {
-    title: "Vous n'avez ni équipe technique, ni éditeur",
+    title: 'Logiciels métiers "clé en main"',
+    simplificationLevel: ['DLNUF 💠💠', 'Proactivité 💠💠💠'],
     description:
-      "Les cas d'usage accessibles avec des solutions clés en main, faciles à mettre en place par un agent non technique.",
-    filters: 'budget=aucun-developpement-ni-budget',
-    imageSrc: '/static/simplifions/assets/accueil-picto-contract.png'
-  },
-  {
-    title: 'Vous passez par un éditeur',
-    description:
-      "Les cas d'usages et solutions portés par des éditeurs qui s'occupent de l'intégration.",
-    filters: 'budget=avec-solution-editeur',
+      'Des logiciels métiers prêts à l’emploi ont intégré les données utiles pour vos cas d’usages.',
+    filters: 'categorie-de-solution=logiciel-metier',
     imageSrc: '/static/simplifions/assets/accueil-picto-self-training.png'
   },
   {
-    title: 'Vous avez votre service informatique',
+    title: 'Briques techniques',
+    simplificationLevel: ['DLNUF 💠💠', 'Proactivité 💠💠💠'],
     description:
-      "Les cas d'usages et solutions que vos services informatiques peuvent intégrer dans vos démarches et/ou votre système d'information.",
-    filters: 'budget=avec-des-moyens-techniques',
-    imageSrc: '/static/simplifions/assets/accueil-picto-coding.png'
+      'Des briques techniques permettent d’intégrer plus facilement les données.',
+    filters: 'categorie-de-solution=brique-technique',
+    imageSrc: '/static/simplifions/assets/accueil-picto-flow-settings.png'
+  },
+  {
+    title: 'Portails de consultation',
+    simplificationLevel: ['Accès facile 💠'],
+    description: 'Des sites internet vous permettent de consulter la donnée.',
+    filters: 'categorie-de-solution=portail-consultation',
+    imageSrc: '/static/simplifions/assets/accueil-picto-search.png'
   }
 ]
 
@@ -105,7 +101,7 @@ const niveauxDeSimplification = [
               />
             </div>
             <div
-              class="fr-col-lg-8 fr-col-12 datagouv-components"
+              class="fr-col-lg-8 fr-col-12"
               style="
                 font-family: Marianne, arial, sans-serif !important;
                 font-style: normal;
@@ -148,7 +144,7 @@ const niveauxDeSimplification = [
       <div
         v-for="item in fournisseursDeService"
         :key="item.title"
-        class="fr-col-12 fr-col-lg-3"
+        class="fr-col-12 fr-col-lg-4"
       >
         <div
           id="tile-sourcing"
@@ -169,9 +165,7 @@ const niveauxDeSimplification = [
         </div>
       </div>
     </div>
-    <div
-      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
-    >
+    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <router-link to="/cas-d-usages" class="button-link">
         <button
           class="fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
@@ -200,17 +194,27 @@ const niveauxDeSimplification = [
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
-        v-for="budget in budgets"
-        :key="budget.title"
+        v-for="categorie_solution in categories_solution"
+        :key="categorie_solution.title"
         class="fr-col-12 fr-col-lg-4"
       >
         <div class="fr-card" style="background-color: #fafafa">
           <div class="fr-card__body">
             <div class="fr-card__content">
+              <ul class="fr-tags-group">
+                <li
+                  v-for="level in categorie_solution.simplificationLevel"
+                  :key="level"
+                >
+                  <p class="fr-tag fr-tag--sm">
+                    {{ level }}
+                  </p>
+                </li>
+              </ul>
               <h3 class="fr-card__title">
-                {{ budget.title }}
+                {{ categorie_solution.title }}
               </h3>
-              <p class="fr-card__desc">{{ budget.description }}</p>
+              <p class="fr-card__desc">{{ categorie_solution.description }}</p>
             </div>
             <div class="fr-card__footer">
               <ul
@@ -218,16 +222,16 @@ const niveauxDeSimplification = [
               >
                 <li>
                   <router-link
-                    class="fr-btn"
-                    :to="`/cas-d-usages?${budget.filters}`"
+                    class="fr-btn fr-btn--secondary"
+                    :to="`/cas-d-usages?${categorie_solution.filters}`"
                     >Cas d'usages</router-link
                   >
                 </li>
                 <li>
                   <router-link
-                    class="fr-btn fr-btn--secondary"
-                    :to="`/solutions?${budget.filters}`"
-                    >Solutions</router-link
+                    class="fr-btn"
+                    :to="`/solutions?${categorie_solution.filters}`"
+                    >{{ categorie_solution.title }}</router-link
                   >
                 </li>
               </ul>
@@ -246,7 +250,7 @@ const niveauxDeSimplification = [
             >
               <img
                 class="fr-responsive-img"
-                :src="budget.imageSrc"
+                :src="categorie_solution.imageSrc"
                 alt=""
                 style="max-height: 100%; width: auto"
               />
@@ -296,9 +300,7 @@ const niveauxDeSimplification = [
       </li>
     </ul>
 
-    <div
-      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
-    >
+    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <!--a href="https://guides.data.gouv.fr/guide-data.gouv.fr/api/outils-pour-les-administrations" class="button-link" -->
       <button
         class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
@@ -381,9 +383,7 @@ const niveauxDeSimplification = [
       </div>
     </div>
 
-    <div
-      class="fr-mt-4w fr-col-md-12 datagouv-components fr-grid-row fr-grid-row--center"
-    >
+    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <router-link to="/niveaux-simplification" class="button-link">
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
@@ -397,7 +397,11 @@ const niveauxDeSimplification = [
     class="fr-container hero-text fr-mt-8w fr-py-8w"
     style="background-color: rgb(243, 243, 251)"
   >
-    <h2 class="fr-h1 fr-mb-5w" style="color: black; text-align: center">
+    <h2
+      id="redaction-contenu"
+      class="fr-h1 fr-mb-5w"
+      style="color: black; text-align: center"
+    >
       Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
     </h2>
 
@@ -419,8 +423,8 @@ const niveauxDeSimplification = [
           Ligne éditoriale <i>DLNUF/proactivité</i>
         </h3>
         <p class="fr-text--lg fr-text--bold">
-          Un contenu rédigé au sein du Pôle Data pour tenir une ligne éditoriale
-          :
+          Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une
+          ligne éditoriale :
         </p>
         <ul class="fr-text--lg">
           <li>
@@ -443,11 +447,11 @@ const niveauxDeSimplification = [
             />
           </div>
         </figure>
-        <h3 style="text-align: center">Contenu contributif</h3>
+        <h3 style="text-align: center">Contenu collaboratif</h3>
         <p class="fr-text--lg fr-text--bold">
           De nombreux espaces sont disponibles sur le site pour permettre aux
-          usagers de contribuer dans l'objectif de proposer une base de
-          connaissance :
+          usagers de proposer des modifications dans l'objectif de construire
+          une base de connaissance :
         </p>
         <ul class="fr-text--lg">
           <li>élaborée sur des expériences concrètes ;</li>
@@ -461,7 +465,7 @@ const niveauxDeSimplification = [
       class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w"
       style="text-align: center"
     >
-      ✍️ Proposez une modification, un cas d'usage ou une solution :
+      📝 Proposez une modification, un cas d'usage ou une solution :
     </p>
 
     <div
@@ -483,9 +487,7 @@ const niveauxDeSimplification = [
       contenus qui sont référencés dans <i>Simplifions.data</i> :
     </p>
 
-    <div
-      class="fr-mt-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
-    >
+    <div class="fr-mt-4w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
       <router-link to="/doctrine-referencement-cas-usages" class="button-link">
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
@@ -494,9 +496,7 @@ const niveauxDeSimplification = [
         </button>
       </router-link>
     </div>
-    <div
-      class="fr-mt-1w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
-    >
+    <div class="fr-mt-1w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
       <router-link to="/doctrine-referencement-solutions" class="button-link">
         <button
           class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"

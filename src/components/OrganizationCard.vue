@@ -100,7 +100,7 @@ const isPublicService = (): boolean =>
 }
 
 .fr-title-v2__title .badge {
-  color: var(--blue-france-sun-113-625);
+  color: var(--text-active-blue-france);
 }
 
 .card__tag {

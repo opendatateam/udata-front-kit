@@ -253,11 +253,11 @@ const faqMinisterLink =
   padding-inline: clamp(0.5rem, 0.3276rem + 0.8621vw, 1rem);
 }
 :deep(.fr-accordion__btn) {
-  color: #000091;
+  color: var(--text-action-high-blue-france);
 }
 :deep(.fr-accordion__btn[aria-expanded='true']),
 :deep(.fr-accordion__btn:hover) {
-  background-color: #e3e3fd;
+  background-color: var(--background-action-low-blue-france);
 }
 :deep(.fr-collapse) {
   background-color: white;

@@ -69,6 +69,10 @@ website:
               description: 'Archive des observations pour différentes sources de données sol, mer et altitude'
               url: 'datasets?category=observations'
               image_url: '/static/meteo-france/assets/observations.png'
+            - name: 'Bulletins météorologiques'
+              description: 'Archive des bulletins météorologiques pour différentes sources de données : forêt, marine, montagne, climatologie ...'
+              url: 'datasets?category=bulletins'
+              image_url: '/static/meteo-france/assets/bulletins.png'
         sub_section_tiles:
           title:
           tiles:
@@ -223,6 +227,8 @@ pages:
             name: Fiches climatologiques
           - id: observations
             name: Données d'observations météorologiques
+          - id: bulletins
+            name: Archive des bulletins météorologiques
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
