@@ -25,6 +25,7 @@ const solutionData = computed(() => {
       'simplifions-v2-solutions'
     ]
   }
+  console.warn("No solution passed to SimplifionsSolutionTag")
   return undefined
 })
 
