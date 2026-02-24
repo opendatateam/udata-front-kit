@@ -38,7 +38,7 @@ const categories_solution = [
     simplificationLevel: ["DLNUF 💠💠", "Proactivité 💠💠💠"],
     description:
       "Des briques techniques permettent d’intégrer plus facilement les données.",
-    filters: 'todo=brique-technique',
+    filters: 'categorie-de-solution=brique-technique',
     imageSrc: '/static/simplifions/assets/accueil-picto-flow-settings.png'
   },
   {
