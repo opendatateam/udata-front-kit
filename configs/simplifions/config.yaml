@@ -106,8 +106,6 @@ website:
       to: /
     - text: Cas d'usages
       to: /cas-d-usages
-    - text: Solutions
-      to: /solutions
     - text: À propos
       to: /about
   router:
@@ -227,13 +225,13 @@ shared_filter_values:
     - id: associations
       name: Associations
 
-  budget: &budget_values
-    - id: aucun-developpement-ni-budget
-      name: Aucun développement, ni budget
-    - id: avec-des-moyens-techniques
-      name: Avec des moyens techniques
-    - id: avec-solution-editeur
-      name: Avec une solution éditeur
+  categorie_de_solution: &categorie_de_solution_values
+    - id: logiciel-metier
+      name: Logiciel métier "clé en main"
+    - id: brique-technique
+      name: Brique technique
+    - id: portail-consultation
+      name: Portail de consultation
 
   types_de_simplification: &types_de_simplification_values
     - id: proactivite
@@ -288,12 +286,12 @@ pages:
         default_option: Tous les usagers
         use_filter_prefix: true
         values: *target_users_values
-      - name: 'Moyens disponibles pour la mise en œuvre :'
-        id: budget
+      - name: 'Catégorie de solution :'
+        id: categorie-de-solution
         type: select
-        default_option: Tous les types de ressources
+        default_option: Toutes les catégories
         use_filter_prefix: true
-        values: *budget_values
+        values: *categorie_de_solution_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
         type: select
@@ -345,12 +343,12 @@ pages:
         default_option: Tous les usagers
         use_filter_prefix: true
         values: *target_users_values
-      - name: 'Moyens disponibles pour la mise en œuvre :'
-        id: budget
+      - name: 'Catégorie de solution :'
+        id: categorie-de-solution
         type: select
-        default_option: Tous les types de ressources
+        default_option: Toutes les catégories
         use_filter_prefix: true
-        values: *budget_values
+        values: *categorie_de_solution_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
         type: select

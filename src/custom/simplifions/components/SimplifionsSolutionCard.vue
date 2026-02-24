@@ -10,7 +10,10 @@
       <div class="fr-card__body">
         <div class="fr-card__content">
           <div class="fr-grid-row">
-            <SimplifionsSolutionTag v-if="!imageUrl" :topic-solution="topic" />
+            <SimplifionsSolutionOperateurTag
+              v-if="!imageUrl"
+              :topic-solution="topic"
+            />
             <DraftTag v-if="topic.private" class="fr-ml-auto" />
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
@@ -32,7 +35,7 @@
             class="card-image fr-responsive-img fr-ratio-16x9"
           />
           <div class="topic-image-overlay"></div>
-          <SimplifionsSolutionTag
+          <SimplifionsSolutionOperateurTag
             :topic-solution="topic"
             class="badge-absolute"
           />
@@ -48,7 +51,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type { TopicSolutionsExtras } from '../model/topics'
-import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
+import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const { pageKey } = useCurrentPageConf()

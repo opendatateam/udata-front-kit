@@ -1,9 +1,9 @@
-import type { DataserviceWithRel } from '@/model/dataservice'
+import type { Dataservice } from '@datagouv/components-next'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
 import { mockUniverseOrganizations } from '../mocks'
 
 describe('Dataservices (API) - List Page', () => {
-  let testDataservices: DataserviceWithRel[]
+  let testDataservices: Dataservice[]
 
   beforeEach(() => {
     cy.mockMatomo()

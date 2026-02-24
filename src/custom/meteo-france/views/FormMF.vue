@@ -540,11 +540,7 @@ const getAPIUrl = (endpoint: string) => {
       <br />
       <br />
       <h5>Fichiers</h5>
-      <div
-        v-for="item in datasetResources"
-        :key="item['id']"
-        class="datagouv-components"
-      >
+      <div v-for="item in datasetResources" :key="item['id']">
         <ResourceAccordion
           v-if="
             datasetMetadata &&
@@ -559,11 +555,7 @@ const getAPIUrl = (endpoint: string) => {
 
       <br />
       <h5>Documentation</h5>
-      <div
-        v-for="item in datasetResources"
-        :key="item['id']"
-        class="datagouv-components"
-      >
+      <div v-for="item in datasetResources" :key="item['id']">
         <span
           v-if="
             selectedDataset && ['LSH', 'SQR'].includes(selectedDataset['id'])
@@ -608,9 +600,13 @@ const getAPIUrl = (endpoint: string) => {
 }
 
 .slider-dsfr {
-  --slider-connect-bg: #3558a2;
-  --slider-tooltip-bg: #3558a2;
-  --slider-handle-ring-color: #3558a230;
+  --slider-connect-bg: var(--background-action-high-blue-france);
+  --slider-tooltip-bg: var(--background-action-high-blue-france);
+  --slider-handle-ring-color: color-mix(
+    in srgb,
+    var(--background-action-high-blue-france) 19%,
+    transparent
+  );
 }
 
 .hover-info {
