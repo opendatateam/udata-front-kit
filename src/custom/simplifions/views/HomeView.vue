@@ -30,7 +30,7 @@ const categories_solution = [
     simplificationLevel: ["DLNUF 💠💠", "Proactivité 💠💠💠"],
     description:
       "Des logiciels métiers prêts à l’emploi ont intégré les données utiles pour vos cas d’usages.",
-    filters: 'todo=logiciel-metier',
+    filters: 'categorie-de-solution=logiciel-metier',
     imageSrc: '/static/simplifions/assets/accueil-picto-self-training.png'
   },
   {
