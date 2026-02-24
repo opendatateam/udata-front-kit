@@ -15,20 +15,20 @@
             {{ solution.fields.Nom }}
           </h3>
           <!-- Simplification tags (diamonds) with tag styling -->
-          <div
-            v-if="simplificationTags.length"
-            class="fr-tags-group simplification-diamonds"
+        <div
+          v-if="simplificationLevelTags.length"
+          class="fr-tags-group simplification-diamonds"
+        >
+          <p
+            v-for="levelTag in simplificationLevelTags"
+            :key="levelTag.id"
+            class="fr-tag fr-tag--sm fr-m-0"
+            :aria-label="`Niveau de simplification ${levelTag.id}`"
+            :title="`Niveau ${levelTag.id}`"
           >
-            <p
-              v-for="tag in simplificationTags"
-              :key="tag.id"
-              class="fr-tag fr-tag--sm fr-m-0"
-              :aria-label="tag.name"
-              :title="tag.name"
-            >
-              {{ getShortLabelSimplificationTag(tag.name) }}
-            </p>
-          </div>
+            {{ levelTag.icon }}
+          </p>
+        </div>
         </div>
         <SimplifionsSolutionTag :solution="solution.fields" />
       </div>
@@ -64,37 +64,41 @@
 
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
-import { useTagsByRef } from '@/utils/tags'
 import type { SolutionRecord } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import SimplifionsSolutionTag from './SimplifionsSolutionTag.vue'
+
 
 const props = defineProps<{
   solution: SolutionRecord
 }>()
 
+/* Récupère le slug de la solution */
 const solutionTopic = ref<Topic | undefined>(undefined)
-
+const datagouvSlug = computed(() => solutionTopic.value?.slug)
 const topicsAPI = new TopicsAPI({ version: 2 })
+
 const solutionTag = `simplifions-v2-solutions-${props.solution.id}`
 topicsAPI.getTopicByTag(solutionTag).then((topic) => {
   solutionTopic.value = topic ?? undefined
 })
 
-const datagouvSlug = computed(() => solutionTopic.value?.slug)
+/* Affiche le niveau de simplification */
 
-const topicTags = useTagsByRef('solutions', solutionTopic)
+const simplificationLevelTags = computed(() => {
+  const levels = props.solution.fields.Types_de_simplification
+  if (!levels?.length) return []
 
-const simplificationTags = computed(() => {
-  return topicTags.value.filter((tag) => tag.type === 'types-de-simplification')
+  return levels
+    .filter(level => [1, 2, 3].includes(level))
+    .map(level => ({
+      id: level,
+      icon: level === 1 ? '💠' :
+            level === 2 ? '💠💠' :
+            '💠💠💠'  
+    }))
 })
 
-const getShortLabelSimplificationTag = (name: string) => {
-  if (name.includes('Accès facile')) return '💠'
-  if (name.includes('Dites-le nous une fois')) return '💠💠'
-  if (name.toLowerCase().includes('proactivité')) return '💠💠💠'
-  return name
-}
 </script>
 
 <style scoped>
