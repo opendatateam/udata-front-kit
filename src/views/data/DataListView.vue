@@ -33,6 +33,10 @@ const searchResultsMessage = computed(
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
+const hasFilters = computed(
+  () => pageConf.filters.length > 0 || !!meta.filtersComponent
+)
+
 const links = [
   { to: '/', text: 'Accueil' },
   { text: pageConf.breadcrumb_title || pageConf.title }
@@ -50,10 +54,11 @@ const search = useDebounceFn((query) => {
 const ListComponent = useAsyncComponent(() => meta?.listComponent)
 
 // load custom filters component from router, or fallback to default
-const FiltersComponent = useAsyncComponent(
-  () => meta?.filtersComponent,
-  defineAsyncComponent(() => import('@/components/pages/PageFilters.vue'))
-)
+const FiltersComponent = useAsyncComponent(() => meta?.filtersComponent, {
+  fallback: defineAsyncComponent(
+    () => import('@/components/pages/PageFilters.vue')
+  )
+})
 
 // TODO: this should be handled by the router, but we don't have access to pageConf there
 onMounted(() => {
@@ -69,12 +74,12 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-my-2w">
+  <div class="fr-container fr-my-2w">
     <h1>{{ pageConf.title }}</h1>
   </div>
   <section
     v-if="pageConf.banner"
-    class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
+    class="fr-container--fluid hero-banner fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
@@ -97,7 +102,7 @@ onMounted(() => {
     <div class="fr-mt-2w">
       <div class="fr-grid-row">
         <nav
-          v-if="pageConf.filters.length > 0 || meta.filtersComponent"
+          v-if="hasFilters"
           class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
@@ -108,7 +113,13 @@ onMounted(() => {
             <FiltersComponent />
           </div>
         </nav>
-        <div class="fr-col-12 fr-col-md-8 list-container">
+        <div
+          :class="[
+            'fr-col-12',
+            'list-container',
+            hasFilters ? 'fr-col-md-8' : ''
+          ]"
+        >
           <ListComponent
             ref="listComponentRef"
             :query="props.query"

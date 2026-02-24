@@ -44,6 +44,12 @@ const props = defineProps({
   searchEndpoint: {
     type: String,
     default: () => null
+  },
+  searchEndpointParams: {
+    type: Object as () => Record<string, string>,
+    default: () => {
+      return {}
+    }
   }
 })
 
@@ -59,18 +65,22 @@ const query = ref('')
 const selectedMultiSearch = ref()
 const multiselect = useTemplateRef('multiselect')
 
+const buildSearchQueryParams = (q: string) => {
+  return { ...props.searchEndpointParams, q }
+}
+
 const doSimpleSearch = (event: string) => {
   query.value = event
   router.push({
     path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
-    query: { q: query.value }
+    query: buildSearchQueryParams(query.value)
   })
   query.value = ''
   emits('doSearch')
 }
 
 const doMultiSearch = (item: DropdownItem) => {
-  router.push({ name: item.route, query: { q: query.value } })
+  router.push({ name: item.route, query: buildSearchQueryParams(query.value) })
   clear()
   query.value = ''
   emits('doSearch')
@@ -195,7 +205,7 @@ const clear = () => {
 }
 .select-search :deep(input) {
   padding-inline-start: calc(var(--icon-width) + 1rem);
-  box-shadow: inset 0 -2px 0 0 var(--blue-france-sun-113);
+  box-shadow: inset 0 -2px 0 0 var(--text-active-blue-france);
 }
 .visible-label {
   margin-inline-start: var(--icon-width);

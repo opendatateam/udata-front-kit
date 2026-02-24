@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
@@ -35,7 +34,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
 const router = useRouter()
 const { pageKey, pageConf } = useCurrentPageConf()
@@ -225,7 +223,7 @@ onMounted(() => {
 
 <template>
   <GenericContainer class="fr-mt-4w">
-    <div v-if="canAddTopic">
+    <div v-if="userStore.canAddTopic(pageKey)">
       <div v-if="errorMsg" class="fr-mt-4v">
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>

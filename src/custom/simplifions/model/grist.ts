@@ -72,6 +72,17 @@ export type ApiOrDatasetUtilesRecord = GristRecord & {
   fields: ApiOrDatasetUtiles
 }
 
+export type ApiEtDatasetsIntegres = {
+  Solution_integratrice: number
+  API_ou_dataset_integre: number
+  Integre_pour_les_cas_d_usages: number[]
+  Status_de_l_integration: string
+  Solution_fournisseur: number
+}
+export type ApiEtDatasetsIntegresRecord = GristRecord & {
+  fields: ApiEtDatasetsIntegres
+}
+
 export type Solution = {
   API_ou_datasets_integres: number[] | null
   APIs_ou_datasets_fournis: number[] | null
@@ -96,6 +107,7 @@ export type Solution = {
   Recommande_pour_les_cas_d_usages: number[] | null
   Type_de_solution: string[]
   URL_demande_d_acces: string
+  solutions_integratrices: number[] | null
 }
 export type SolutionRecord = GristRecord & {
   fields: Solution

@@ -1,13 +1,14 @@
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
 import { stripHtml } from 'string-strip-html'
 import type { Ref } from 'vue'
 
+marked.use(gfmHeadingId())
+
 const markedOptions = {
   gfm: true,
-  breaks: true,
-  mangle: false,
-  headerIds: false
+  breaks: true
 }
 
 /**

@@ -13,7 +13,7 @@ export const mockUniverseOrganizations = () => {
   cy.intercept(
     'GET',
     new RegExp(
-      `${baseUrl}/organizations-(dataservices|datasets|bouquets)-(demo|prod)\\.json$`
+      `${baseUrl}/ecospheres-(demo|prod)/organizations-(dataservices|datasets|bouquets)\\.json$`
     ),
     {
       statusCode: 200,

@@ -90,7 +90,4 @@ const orderedFournisseursDeService = computed(() => {
 .white-space-normal {
   white-space: normal;
 }
-.font-weight-normal {
-  font-weight: normal;
-}
 </style>

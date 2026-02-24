@@ -34,7 +34,7 @@ const { sources, calcul } = useIndicatorExtras(indicator)
       <InformationPanelItem title="Distributeur" :value="source.distributeur" />
       <InformationPanelItem title="Producteur" :value="source.producteur" />
       <InformationPanelItem
-        v-if="indicator.temporal_coverage"
+        v-if="source.plage_temporelle"
         title="Plage temporelle"
       >
         {{ formatDate(source.plage_temporelle.start, true) }} -

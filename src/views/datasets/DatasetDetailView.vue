@@ -5,13 +5,13 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
-import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
+import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
@@ -31,26 +31,29 @@ const datasetId = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
-
-const canEdit = computed(() => {
-  return pageConf.editable && userStore.hasEditPermissions(dataset.value)
-})
-const canAddToTopic = computed(() => {
-  return topicPageConf && userStore.loggedIn && canAddTopic
-})
-
-const dataset = computed(() => datasetStore.get(datasetId))
-
-const showAddToTopicModal = ref(false)
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 
 const datasetsConf = useDatasetsConf()
-const topicPageConf = datasetsConf.add_to_topic?.page
-  ? usePageConf(datasetsConf.add_to_topic.page)
-  : null
+const topicPageKey = datasetsConf.add_to_topic?.page
+const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
+
+const canEdit = computed(() => {
+  return pageConf.editable && userStore.hasEditPermissions(dataset.value)
+})
+const canAddToTopic = computed(() => {
+  return (
+    topicPageConf &&
+    topicPageKey &&
+    userStore.loggedIn &&
+    userStore.canAddTopic(topicPageKey)
+  )
+})
+
+const dataset = computed(() => datasetStore.get(datasetId))
+
+const showAddToTopicModal = ref(false)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -68,7 +71,7 @@ const links = computed(() => {
 
 const tabTitles = [
   { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
+  { title: 'Réutilisations et API', tabId: 'tab-1', panelId: 'tab-content-1' },
   { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
   { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
 ]
@@ -159,9 +162,10 @@ onMounted(() => {
         <ResourcesList :dataset="dataset" />
       </DsfrTabContent>
 
-      <!-- Réutilisations -->
+      <!-- Réutilisations et API -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
-        <ReusesList model="dataset" :object="dataset" />
+        <DatasetDataservicesList :dataset-id="dataset.id" />
+        <DatasetReusesList :dataset-id="dataset.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
@@ -177,7 +181,7 @@ onMounted(() => {
                 {{ discussionWellDescription }}
               </p>
             </div>
-            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+            <div class="fr-col-12 fr-col-lg-4 align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
                 icon="fr-icon-external-link-line"
