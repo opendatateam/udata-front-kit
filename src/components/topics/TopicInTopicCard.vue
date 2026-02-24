@@ -56,7 +56,7 @@ const topicLink: RouteLocationRaw = {
 
       <div class="overflow-hidden flex-1-1-auto">
         <h3 class="fr-mb-1v fr-grid-row h4">
-          <RouterLink :to="topicLink" class="text-grey-500">
+          <RouterLink :to="topicLink" class="text-grey-50">
             {{ topic.name }}
           </RouterLink>
         </h3>
@@ -74,10 +74,10 @@ const topicLink: RouteLocationRaw = {
       </div>
     </div>
 
-    <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
+    <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-425">
       <VIconCustom
         name="time-line"
-        class="fr-mr-1w text-grey-380 fr-icon--sm"
+        class="fr-mr-1w text-grey-425 fr-icon--sm"
       />
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>

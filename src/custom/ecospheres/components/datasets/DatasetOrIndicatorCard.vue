@@ -8,6 +8,7 @@ const props = defineProps<{
   dataset: DatasetV2
   datasetUrl: object
   organizationUrl?: string | object
+  showDescription?: boolean
 }>()
 
 const datasetIsIndicator = isIndicator(toRef(props, 'dataset'))
@@ -23,7 +24,7 @@ const url = computed(() =>
   <div :class="{ 'indicator-card-wrapper': datasetIsIndicator }">
     <p
       v-if="datasetIsIndicator"
-      class="fr-badge fr-badge--sm fr-badge--mention-grey text-grey-380 indicator-badge"
+      class="fr-badge fr-badge--sm fr-badge--mention-grey text-grey-425 indicator-badge"
     >
       <span
         class="fr-icon-lightbulb-line fr-icon--sm"
@@ -35,6 +36,7 @@ const url = computed(() =>
       :dataset="dataset"
       :dataset-url="url"
       :organization-url="organizationUrl"
+      :show-description="showDescription ?? true"
     />
   </div>
 </template>

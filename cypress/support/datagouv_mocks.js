@@ -124,6 +124,13 @@ Cypress.Commands.add('mockDatasetLicenses', () => {
   }).as('get_licenses')
 })
 
+Cypress.Commands.add('mockDatasetBadges', () => {
+  cy.intercept('GET', datagouvUrlRegex('datasets/badges'), {
+    statusCode: 200,
+    body: []
+  }).as('get_badges')
+})
+
 Cypress.Commands.add('mockResourceTypes', () => {
   cy.intercept('GET', datagouvUrlRegex('datasets/resource_types'), {
     statusCode: 200,
@@ -210,13 +217,33 @@ Cypress.Commands.add('mockResources', (datasetId, data = []) => {
   }).as(`get_resources_${datasetId}`)
 })
 
+Cypress.Commands.add('mockMetricsApi', (datasetId) => {
+  cy.intercept(
+    'GET',
+    `https://metric-api.data.gouv.fr/api/datasets/data/?dataset_id__exact=${datasetId}&metric_month__sort=desc&page_size=12`,
+    {
+      statusCode: 200,
+      body: { data: [] }
+    }
+  ).as(`get_metrics_${datasetId}`)
+  cy.intercept(
+    'GET',
+    `https://metric-api.data.gouv.fr/api/datasets_total/data/?dataset_id__exact=${datasetId}`,
+    {
+      statusCode: 200,
+      body: { data: [] }
+    }
+  ).as(`get_metrics_total_${datasetId}`)
+})
+
 Cypress.Commands.add(
   'mockDatasetAndRelatedObjects',
-  (dataset, resources = []) => {
+  (dataset, resources = [], dataservices = [], reuses = []) => {
     // Update dataset.resources.total to match the resources array
     dataset.resources.total = resources.length
     cy.mockDatagouvObject('datasets', dataset.id, dataset)
     // Mock related APIs
+    cy.mockDatasetBadges()
     cy.mockSpatialLevels()
     cy.mockDatasetLicenses()
     cy.mockResourceTypes()
@@ -224,7 +251,9 @@ Cypress.Commands.add(
     cy.mockSpatialGranularities()
     cy.mockDatasetSchemas()
     cy.mockDatagouvObjectList('discussions', [])
-    cy.mockDatagouvObjectList('reuses', [])
+    cy.mockDatagouvObjectList('reuses', reuses)
+    cy.mockDatagouvObjectList('dataservices', dataservices)
     cy.mockResources(dataset.id, resources)
+    cy.mockMetricsApi(dataset.id)
   }
 )

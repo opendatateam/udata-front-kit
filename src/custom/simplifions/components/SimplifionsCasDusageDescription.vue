@@ -38,25 +38,10 @@
             <li>
               <a
                 id="summary-link-2"
-                href="#solutions-disponibles"
+                href="#donnees-disponibles"
                 class="fr-summary__link"
-                >Solutions disponibles</a
+                >Données disponibles</a
               >
-              <ol v-if="casUsage.Recommandations?.length" class="fr-mb-0">
-                <li
-                  v-for="(group, index) in grouped_recommandations"
-                  :key="group.title"
-                  :class="{
-                    'fr-pb-0': index === grouped_recommandations.length - 1
-                  }"
-                >
-                  <a
-                    :href="`#reco-group-${index + 1}`"
-                    class="fr-summary__link"
-                    >{{ group.title }}</a
-                  >
-                </li>
-              </ol>
             </li>
           </ol>
           <hr class="fr-hr fr-my-2w" />
@@ -85,7 +70,7 @@
             </span>
           </p>
           <span>
-            <a href="#modification-contenu">✍️ Proposer une modification</a>
+            <a href="#modification-contenu">✒️ Proposer une modification</a>
           </span>
         </nav>
       </div>
@@ -111,7 +96,7 @@
 
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
 
@@ -129,50 +114,39 @@
         <!-- eslint-enable vue/no-v-html -->
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
     </div>
 
     <div>
-      <h2 id="solutions-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
-        Solutions disponibles
+      <h2 id="donnees-disponibles" class="h2-cas-usage fr-h2 fr-my-5w">
+        Données disponibles
       </h2>
 
       <div v-if="recommandations === undefined">
         Chargement des recommandations en cours...
       </div>
       <div
-        v-for="(group, index) in grouped_recommandations"
-        :key="group.title"
+        v-for="recommandation in recommandations"
+        :key="recommandation.Nom_de_la_recommandation"
         class="fr-mb-4w"
-        :class="{ 'fr-mt-5w': index > 0 }"
       >
-        <h3 :id="`reco-group-${index + 1}`" class="h3-cas-usage fr-h3 fr-mb-3w">
-          {{ group.title }}
-        </h3>
-
-        <div
-          v-for="recommandation in group.recommandations"
-          :key="recommandation.Nom_de_la_recommandation"
-        >
-          <SimplifionsRecoSolutions
-            v-if="recommandation.Solution_recommandee"
-            :recommandation="recommandation"
-            :display-sub-products="group.displaySubProducts"
-          />
-          <SimplifionsRecoDataApi
-            v-else-if="recommandation.API_ou_datasets_recommandes"
-            :recommandation="recommandation"
-          />
-        </div>
+        <SimplifionsRecoSolutions
+          v-if="recommandation.Solution_recommandee"
+          :recommandation="recommandation"
+        />
+        <SimplifionsRecoDataApi
+          v-else-if="recommandation.API_ou_datasets_recommandes"
+          :recommandation="recommandation"
+        />
       </div>
     </div>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
-      <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
+      <h2 class="fr-h6">✒️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
-        Pour proposer une modification du contenu de cette solution, vous pouvez
+        Pour proposer une modification du contenu de ce cas d'usage, vous pouvez
         contacter l'équipe via l'espace "Discussions" ci-dessous ou bien
         compléter
         <a
@@ -231,39 +205,6 @@ grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
     })
 })
 
-const grouped_recommandations = computed(() => {
-  const first_group_recommandations = {
-    title: 'Aucun développement, ni budget',
-    recommandations: [] as Recommandation[],
-    displaySubProducts: false
-  }
-
-  const second_group_recommandations = {
-    title: 'Avec des moyens techniques ou un éditeur de logiciel',
-    recommandations: [] as Recommandation[],
-    displaySubProducts: true
-  }
-
-  recommandations.value?.forEach((recommandation) => {
-    if (recommandation.budget_slugs.includes('aucun-developpement-ni-budget')) {
-      first_group_recommandations.recommandations.push(recommandation)
-    } else {
-      second_group_recommandations.recommandations.push(recommandation)
-    }
-  })
-
-  const groups = []
-
-  if (first_group_recommandations.recommandations.length > 0) {
-    groups.push(first_group_recommandations)
-  }
-
-  if (second_group_recommandations.recommandations.length > 0) {
-    groups.push(second_group_recommandations)
-  }
-
-  return groups
-})
 </script>
 
 <style scoped>
