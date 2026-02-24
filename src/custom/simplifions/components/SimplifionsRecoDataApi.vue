@@ -18,62 +18,53 @@
     </div>
 
     <div
-      class="fr-grid-row fr-grid-row--gutters fr-mb-2w fr-grid-row--top fr-mx-2w">
+      class="fr-grid-row fr-grid-row--gutters fr-mb-2w fr-grid-row--top fr-mx-2w"
+    >
       <div
-        v-if="
-          recommandation.Donnees_utiles_disponibles
-        "
-        class="api-or-dataset-description  fr-mt-2w fr-mb-2w fr-col-12 fr-col-md-6 "
+        v-if="recommandation.Donnees_utiles_disponibles"
+        class="api-or-dataset-description fr-mt-2w fr-mb-2w fr-col-12 fr-col-md-6"
       >
         <div class="reco-text-column">
           <div>
             <h5 class="fr-text--md">
-              <span
-                aria-hidden="true"
-                class="fr-icon-success-fill icon-green">
-              </span> 
+              <span aria-hidden="true" class="fr-icon-success-fill icon-green">
+              </span>
               Données disponibles :
             </h5>
           </div>
           <!-- eslint-disable vue/no-v-html -->
           <div
-            v-html="
-              fromMarkdown(
-                recommandation.Donnees_utiles_disponibles
-              )
-            "
             class="fr-ml-3w"
+            v-html="fromMarkdown(recommandation.Donnees_utiles_disponibles)"
           ></div>
           <!-- eslint-enable vue/no-v-html -->
         </div>
       </div>
 
-        <div
-          v-if="
-            recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
-          "
-          class="api-or-dataset-description fr-px-2w fr-mt-2w fr-mb-2w fr-col-12 fr-col-md-6 "
-        >
-          <div class="reco-text-column">
-            <div>
-              <h5 class="fr-text--md">
-                <span aria-hidden="true">✍️</span>
-                 Informations à saisir pour récupérer la donnée :
-              </h5>
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="
-                fromMarkdown(
-                  recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
-                )
-              "
-              class="fr-ml-3w"
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
+      <div
+        v-if="recommandation.Parametres_a_saisir_pour_recuperer_les_donnees"
+        class="api-or-dataset-description fr-px-2w fr-mt-2w fr-mb-2w fr-col-12 fr-col-md-6"
+      >
+        <div class="reco-text-column">
+          <div>
+            <h5 class="fr-text--md">
+              <span aria-hidden="true">✍️</span>
+              Informations à saisir pour récupérer la donnée :
+            </h5>
           </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            class="fr-ml-3w"
+            v-html="
+              fromMarkdown(
+                recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
+              )
+            "
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
         </div>
       </div>
+    </div>
 
     <SimplifionsDataApi
       v-if="apiOrDataset"
