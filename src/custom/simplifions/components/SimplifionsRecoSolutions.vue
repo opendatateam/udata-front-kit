@@ -370,9 +370,14 @@ if (recommandation.API_et_datasets_utiles_fournis?.length) {
 
 const fetchSolutionsForCategory = async (ids: number[]) => {
   const data = await grist.getRecordsByIds('Solutions', ids)
-  return (data as SolutionRecord[]).filter(
-    (record) => record.fields.Visible_sur_simplifions
-  )
+
+  return (data as SolutionRecord[])
+    .filter((record) => record.fields.Visible_sur_simplifions)
+    .sort((a, b) =>
+      a.fields.Nom.localeCompare(b.fields.Nom, 'fr', {
+        sensitivity: 'base'
+      })
+    )
 }
 
 const integratingSolutionsLogicielsMetiers = ref<SolutionRecord[]>([])
