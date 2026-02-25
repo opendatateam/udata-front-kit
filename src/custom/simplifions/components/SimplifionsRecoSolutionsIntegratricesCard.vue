@@ -11,7 +11,7 @@
       <!-- Header: Solution name + badge -->
       <div class="solution-integratrice-card__header">
         <div class="solution-integratrice-card__title-row">
-          <h3 class="solution-integratrice-card__title fr-h6">
+          <h3 class="solution-integratrice-card__title fr-text--lg">
             {{ solution.fields.Nom }}
           </h3>
           <!-- Simplification tags (diamonds) with tag styling -->
