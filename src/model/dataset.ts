@@ -34,5 +34,5 @@ export type ExtendedDatasetV2WithFullObject = DatasetV2WithFullObject & {
     [key: string]: unknown
     dcat?: Record<string, string[] | undefined>
   }
-  harvest: TypedHarvest
+  harvest: TypedHarvest | null
 }
