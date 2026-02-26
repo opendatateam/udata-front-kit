@@ -18,20 +18,52 @@
     </div>
 
     <div
-      v-if="
-        recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage
-      "
-      class="api-or-dataset-description fr-px-2w fr-mt-2w fr-mb-4w"
+      class="fr-grid-row fr-grid-row--gutters fr-mb-2w fr-grid-row--top fr-mx-2w"
     >
-      <!-- eslint-disable vue/no-v-html -->
-      <p
-        v-html="
-          fromMarkdown(
-            recommandation.En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage
-          )
-        "
-      ></p>
-      <!-- eslint-enable vue/no-v-html -->
+      <div
+        v-if="recommandation.Donnees_utiles_disponibles"
+        class="api-or-dataset-description fr-mt-2w fr-mb-2w fr-col-12 fr-col-md-6"
+      >
+        <div class="reco-text-column">
+          <div>
+            <h5 class="fr-text--md">
+              <span aria-hidden="true" class="fr-icon-success-fill icon-green">
+              </span>
+              Données disponibles :
+            </h5>
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            class="fr-ml-3w"
+            v-html="fromMarkdown(recommandation.Donnees_utiles_disponibles)"
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+      </div>
+
+      <div
+        v-if="recommandation.Parametres_a_saisir_pour_recuperer_les_donnees"
+        class="api-or-dataset-description fr-px-2w fr-mt-2w fr-mb-2w fr-col-12 fr-col-md-6"
+      >
+        <div class="reco-text-column">
+          <div>
+            <h5 class="fr-text--md">
+              <span aria-hidden="true">✍️</span>
+              Informations à saisir pour récupérer la donnée :
+            </h5>
+          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            class="fr-ml-3w"
+            v-html="
+              fromMarkdown(
+                recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
+              )
+            "
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
+      </div>
     </div>
 
     <SimplifionsDataApi
@@ -91,5 +123,13 @@ grist
 .reco-data-api-card {
   background-color: var(--background-alt-beige-gris-galet);
   border-radius: 4px;
+}
+
+.icon-green {
+  color: #27a658;
+}
+
+.icon-red {
+  color: #ff292f;
 }
 </style>

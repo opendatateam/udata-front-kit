@@ -36,7 +36,11 @@ const app = createApp(App)
 const pinia = createPinia()
 const head = createHead()
 
-if (config.sentry?.dsn && import.meta.env.MODE !== 'test') {
+if (
+  config.sentry?.dsn &&
+  import.meta.env.MODE !== 'test' &&
+  !('Cypress' in window)
+) {
   Sentry.init({
     app,
     ...(config.sentry as SentryConfig)

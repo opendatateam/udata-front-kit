@@ -32,7 +32,7 @@ Une première étape pour simplifier les démarches des usagers consiste à **re
 
 Les solutions de niveau 1 reférencées sur ce site sont fréquemment des portails d'accès aux données ou des annuaires.
 
-<a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-acces-facile">Cas d'usages de niveau 1 💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-acces-facile"> Solutions de niveau 1 💠</a>
+<a class="fr-btn" href="/cas-d-usages?types-de-simplification=acces-facile#list">Cas d'usages de niveau 1 💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=acces-facile#list"> Solutions de niveau 1 💠</a>
 
 <h2 id="niveau-2-dlnuf" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠💠 Dites-le-nous une fois</h2>
 
@@ -46,7 +46,7 @@ Contrairement au niveau 1, qui facilite principalement le travail des agents pub
 
 Les solutions de niveau 2 sont donc fréquemment des API ou des logiciels/formulaires en ligne intégrant des API ou des jeux de données.
 
-<a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-dlnuf">Cas d'usages de niveau 2 💠💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-dlnuf">Solutions de niveau 2 💠💠</a>
+<a class="fr-btn" href="/cas-d-usages?types-de-simplification=dlnuf#list">Cas d'usages de niveau 2 💠💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=dlnuf#list">Solutions de niveau 2 💠💠</a>
 
 <h2 id="niveau-3-proactivite" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠💠💠 Proactivité</h2>
 
@@ -62,4 +62,4 @@ Pour terminer, le niveau 3 consiste presque à supprimer la démarche. Par l'ana
 
 Les solutions de niveau 3 sont donc fréquemment des API, des fichiers de données, ou des logiciels permettant la circulation de la donnée en temps réel entre les administrations.
 
-<a class="fr-btn" href="/cas-d-usages?tags=spf-simplification-proactivite">Cas d'usages de niveau 3 💠💠💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?tags=spf-simplification-proactivite">Solutions de niveau 3 💠💠💠</a>
+<a class="fr-btn" href="/cas-d-usages?types-de-simplification=proactivite#list">Cas d'usages de niveau 3 💠💠💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=proactivite#list">Solutions de niveau 3 💠💠💠</a>
