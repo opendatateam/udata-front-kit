@@ -1,6 +1,10 @@
 name: Update pnpm
 
 on:
+  # FIXME: remove push trigger before merging to main
+  push:
+    branches:
+      - chore/upgrade-pnpm
   schedule:
     - cron: '0 9 * * 1'
   workflow_dispatch:
