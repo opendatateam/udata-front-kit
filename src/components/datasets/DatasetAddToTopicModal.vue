@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { DatasetV2WithFullObject } from '@datagouv/components-next'
+import { toast } from '@datagouv/components-next'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import { capitalize, computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { toast } from 'vue3-toastify'
 
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
 import FactorTextFields from '@/components/forms/dataset/FactorTextFields.vue'
@@ -136,11 +136,8 @@ const submit = async () => {
     selectedTopic.value.id,
     factor.value
   )
-  toast(
-    `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
-    {
-      type: 'success'
-    }
+  toast.success(
+    `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`
   )
   closeModal()
 }

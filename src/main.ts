@@ -7,6 +7,7 @@ import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires 
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import '@datagouv/components-next/dist/components.css'
+import 'vue-sonner/style.css'
 
 import * as Sentry from '@sentry/vue'
 import { createHead } from '@unhead/vue'
@@ -18,7 +19,6 @@ import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
 import VueMatomo from 'vue-matomo'
 import TextClamp from 'vue3-text-clamp'
-import 'vue3-toastify/dist/index.css'
 
 import config from '@/config'
 
