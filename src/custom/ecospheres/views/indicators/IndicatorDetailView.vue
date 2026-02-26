@@ -214,11 +214,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
-:deep(.subtitle) {
-  font-size: 1rem;
-}
-/* override previous rule for sidebar */
-:deep(.dataset-sidebar .subtitle) {
-  font-size: 0.875rem;
+/* @datagouv/components-next v1 defines .subtitle with !important inside @layer components (Tailwind).
+   Unlayered !important loses to layered !important, so we must be in the same layer and use
+   higher specificity + !important to win the cascade. */
+@layer components {
+  :deep(.subtitle) {
+    font-size: 1rem !important;
+  }
+  /* override previous rule for sidebar */
+  :deep(.dataset-sidebar .subtitle) {
+    font-size: 0.875rem !important;
+  }
 }
 </style>
