@@ -207,6 +207,14 @@ const metaDescription = (): string | undefined => {
   return topic.value?.description ?? ''
 }
 
+const metaKeywords = computed(() => {
+  const tags = topic.value?.tags
+  if (!tags?.length) return undefined
+  const prefix = pageConf.filter_prefix
+  const keywords = prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
+  return keywords.length ? keywords.join(', ') : undefined
+})
+
 const metaTitle = computed(() => {
   return topic.value?.name
 })
@@ -234,6 +242,9 @@ useHead({
     },
     { name: 'description', content: metaDescription() },
     { property: 'og:description', content: metaDescription() },
+    ...(metaKeywords.value != null
+      ? [{ name: 'keywords', content: metaKeywords.value }]
+      : []),
     ...(topic.value?.private
       ? [{ name: 'robots', content: 'noindex, nofollow' }]
       : [])
