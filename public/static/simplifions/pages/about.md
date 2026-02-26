@@ -8,7 +8,6 @@
 - **les API et les jeux de données** qui répondent aux besoins du cas d'usage ;
 - **les solutions** (logiciels métiers clés en main, briques techniques ou portails de consultation) qui permettent d'accéder à ces données pour simplifier les cas d'usages.
 
-
 <h2 id="niveau-1-acces-facile" class="fr-h4 fr-my-0w">Le contenu est rédigé :</h2>
 
 <ul>
@@ -21,4 +20,3 @@
 </ul>
 
 <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/#redaction-contenu">En savoir plus sur la rédaction du contenu</a>
-

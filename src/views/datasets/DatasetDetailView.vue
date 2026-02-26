@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import {
-  AnimatedLoader,
-  DatasetInformationPanel,
-  ReadMore,
-  SimpleBanner
-} from '@datagouv/components-next'
+import { ReadMore, SimpleBanner } from '@datagouv/components-next'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
@@ -21,13 +17,13 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
 
 const route = useRouteParamsAsString()
-const datasetId = route.params.item_id
+const datasetIdOrSlug = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -51,7 +47,7 @@ const canAddToTopic = computed(() => {
   )
 })
 
-const dataset = computed(() => datasetStore.get(datasetId))
+const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
 
 const showAddToTopicModal = ref(false)
 
@@ -97,7 +93,7 @@ const goToEdit = () => {
 
 onMounted(() => {
   datasetStore
-    .load(datasetId, { toasted: false, redirectNotFound: true })
+    .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(dataset.value?.title)
     })
@@ -197,18 +193,15 @@ onMounted(() => {
 
       <!-- Informations -->
       <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
-        <ExtendedInformationPanel
-          v-if="
-            config.website.datasets.show_extended_information_panel && dataset
-          "
-          :dataset="dataset"
-        />
-        <Suspense>
+        <div class="divide-y">
+          <ExtendedInformationPanel
+            v-if="
+              config.website.datasets.show_extended_information_panel && dataset
+            "
+            :dataset="dataset"
+          />
           <DatasetInformationPanel :dataset="dataset" />
-          <template #fallback>
-            <AnimatedLoader />
-          </template>
-        </Suspense>
+        </div>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

@@ -204,7 +204,6 @@ grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
       ).filter((reco) => reco.Visible_sur_simplifions)
     })
 })
-
 </script>
 
 <style scoped>

@@ -10,7 +10,10 @@
       <div class="fr-card__body">
         <div class="fr-card__content">
           <div class="fr-grid-row">
-            <SimplifionsSolutionOperateurTag v-if="!imageUrl" :topic-solution="topic" />
+            <SimplifionsSolutionOperateurTag
+              v-if="!imageUrl"
+              :topic-solution="topic"
+            />
             <DraftTag v-if="topic.private" class="fr-ml-auto" />
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>

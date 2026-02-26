@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import type { ExtendedDatasetV2, TypedHarvest } from '@/model/dataset'
+import type {
+  ExtendedDatasetV2WithFullObject,
+  TypedHarvest
+} from '@/model/dataset'
 import { useFormatDate } from '@datagouv/components-next'
 import ExtendedInformationPanelItem from './ExtendedInformationPanelItem.vue'
 
 const props = defineProps({
   dataset: {
-    type: Object as () => ExtendedDatasetV2,
+    type: Object as () => ExtendedDatasetV2WithFullObject,
     required: true
   }
 })
@@ -21,10 +24,7 @@ const harvestModifiedAt = harvest?.modified_at
 </script>
 
 <template>
-  <div
-    v-if="dataset.harvest"
-    class="fr-pb-3w border-bottom border-default-grey"
-  >
+  <div v-if="dataset.harvest" class="fr-pb-3w">
     <h2 class="fr-sr-only">Informations étendues</h2>
     <div class="metadata-list fr-text--sm fr-m-0">
       <ExtendedInformationPanelItem

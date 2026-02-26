@@ -189,7 +189,10 @@
 
       <div>
         <h3 class="fr-text--lg fr-mt-2w">
-          <span aria-hidden="true" class="fr-icon-stop-circle-fill icon-gray"></span>
+          <span
+            aria-hidden="true"
+            class="fr-icon-stop-circle-fill icon-gray"
+          ></span>
           Périmètre de simplification non couvert :
         </h3>
         <p
@@ -201,11 +204,13 @@
           <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
-       <p class="fr-text--sm fr-mt-4w">
-              <i>Une remarque concernant les possibilités de simplification de cette solution ?
-              </i>
-              <a href="#modification-contenu">✒️ Proposer un contenu</a>.
-            </p>
+      <p class="fr-text--sm fr-mt-4w">
+        <i
+          >Une remarque concernant les possibilités de simplification de cette
+          solution ?
+        </i>
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
+      </p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">

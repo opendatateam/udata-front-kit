@@ -29,11 +29,9 @@
 
 <h2 id="regles-de-referencement-solution" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">Référencement d'une solution</h2>
 
-
 <h3 id="#regles-de-referencement">Règles de référencement</h3>
 
 <p class="fr-text--lead">Lorsque l'équipe de Simplifions.data.gouv.fr identifie un produit (par exemple : logiciel, outil numérique, portail usager, API, jeu de données), qu'il soit public ou privé, susceptible de simplifier une démarche via l'utilisation de données, voici les questions qu'elle se pose pour identifier si ce produit peut être référencé comme une solution sur Simplifions.data.gouv.fr. </p>
-
 
 <div class="fr-col-12 fr-col-lg-8 fr-ml-4w">
     <ol class="fr-text--lg">
@@ -86,7 +84,6 @@
 
 <h3 id="#referencement-nest-pas-un-indicateur-qualite">Le référencement d'une solution n'est pas un indicateur de qualité</h3>
 
-
 <p class="fr-text--lg">
     Toutes les solutions, qu'elles soient opérées par une organisation publique ou privée, qui correspondent aux règles de référencement ci-dessous, peuvent apparaître dans le catalogue. Les solutions utilisant ou rendant accessible de nombreuses données administratives sont autant référencées que les solutions qui en intègrent très peu.
 </p>
@@ -96,4 +93,3 @@
 <p class="fr-text--lg">
     Enfin, la mission de <i>Simplifions.data.gouv.fr</i> est surtout d'agréger au même endroit une multitude d'informations qui permettront aux internautes d'identifier par eux-mêmes si une solution répond ou non à leur besoin en termes de simplification par la donnée.
 </p>
-
