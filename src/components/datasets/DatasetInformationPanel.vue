@@ -38,6 +38,9 @@ const goToHarvester = (sourceId: string) => {
         <LeafletMap :geojson="geojson" width="350px" height="350px" />
       </template>
     </DatasetSpatialSection>
+    <!-- Suspense component (experimental) is required here because `DatasetSchemaSection`
+        is a component with an async setup(). If Suspense is removed from vue, `DatasetSchemaSection` must be
+        updated to handle its own loading state. -->
     <Suspense>
       <DatasetSchemaSection :dataset="dataset" />
       <template #fallback>
