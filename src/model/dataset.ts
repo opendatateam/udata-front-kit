@@ -15,6 +15,7 @@ export type TypedHarvest = Harvest & {
   created_at?: string
   issued_at?: string
   modified_at?: string
+  source_id?: string
 }
 
 export interface DatasetV2Response extends GenericResponse {
@@ -33,4 +34,5 @@ export type ExtendedDatasetV2WithFullObject = DatasetV2WithFullObject & {
     [key: string]: unknown
     dcat?: Record<string, string[] | undefined>
   }
+  harvest: TypedHarvest
 }

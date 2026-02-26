@@ -1,18 +1,32 @@
 <script setup lang="ts">
-import type { DatasetV2WithFullObject } from '@datagouv/components-next'
+import type { ExtendedDatasetV2WithFullObject } from '@/model/dataset'
 import {
   AnimatedLoader,
   DatasetEmbedSection,
   DatasetInformationSection,
   DatasetSchemaSection,
   DatasetSpatialSection,
-  DatasetTemporalitySection
+  DatasetTemporalitySection,
+  ExtraAccordion
 } from '@datagouv/components-next'
+import { storeToRefs } from 'pinia'
+
 import LeafletMap from './LeafletMap.vue'
 
+import config from '@/config'
+import { useUserStore } from '@/store/UserStore'
+
 defineProps<{
-  dataset: DatasetV2WithFullObject
+  dataset: ExtendedDatasetV2WithFullObject
 }>()
+
+const userStore = useUserStore()
+const { isAdmin } = storeToRefs(userStore)
+
+const goToHarvester = (sourceId: string) => {
+  const url = `${config.datagouvfr.base_url}/admin/harvesters/${sourceId}`
+  window.location.href = url
+}
 </script>
 
 <template>
@@ -31,5 +45,33 @@ defineProps<{
       </template>
     </Suspense>
     <DatasetEmbedSection :dataset="dataset" />
+    <div>
+      <ExtraAccordion
+        v-if="dataset.extras && Object.keys(dataset.extras).length"
+        class="pt-6"
+        button-text="Voir les extras"
+        title-text="Extras"
+        :extra="dataset.extras"
+        title-level="h3"
+      />
+      <ExtraAccordion
+        v-if="dataset.harvest"
+        button-text="Voir les extras du moissonnage"
+        title-text="Moissonnage"
+        :extra="dataset.harvest"
+        title-level="h3"
+      >
+        <template #buttons>
+          <DsfrButton
+            v-if="isAdmin && dataset.harvest.source_id"
+            secondary
+            icon="fr-icon-server-line"
+            size="sm"
+            label="Voir la source du moissonnage"
+            @click.prevent="goToHarvester(dataset.harvest.source_id)"
+          />
+        </template>
+      </ExtraAccordion>
+    </div>
   </div>
 </template>
