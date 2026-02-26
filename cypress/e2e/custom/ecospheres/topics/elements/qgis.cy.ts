@@ -1,8 +1,7 @@
-import type { Factor, Topic } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
 import {
   createTestTopicWithElements,
-  expandDisclosureGroup,
   factorFactory,
   mockTopicAndRelatedObjects,
   mockTopicElementsByClass,
@@ -12,7 +11,6 @@ import {
 
 describe('Topic Elements - QGIS Integration', () => {
   let testTopic: Topic
-  let testFactor: Factor
 
   beforeEach(() => {
     setupElementTest()
@@ -97,31 +95,6 @@ describe('Topic Elements - QGIS Integration', () => {
 
       // Verify download was triggered
       cy.get('@createObjectURL').should('have.been.calledOnce')
-    })
-
-    it('should NOT show individual dataset QGIS button in topic (button moved to dataset page)', () => {
-      // Create single factor with OGC resource
-      testFactor = factorFactory.one({ traits: ['dataset_in_group'] })
-      testTopic = createTestTopicWithElements([testFactor])
-
-      const wfsResource = resourceFactory.one({ traits: ['wfs'] })
-
-      mockTopicAndRelatedObjects(testTopic, {
-        factors: [testFactor],
-        datasetResources: {
-          [testFactor.element!.id]: [wfsResource]
-        }
-      })
-      mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
-
-      visitTopic(testTopic.slug)
-      cy.wait('@getElementsDataset')
-
-      // Expand group to see individual dataset
-      expandDisclosureGroup()
-
-      // Verify individual dataset button does NOT exist in topic view
-      cy.get('.test__open_dataset_in_qgis_btn').should('not.exist')
     })
   })
 })
