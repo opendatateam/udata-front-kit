@@ -124,7 +124,9 @@ onMounted(() => {
     .then(() => {
       setAccessibilityProperties(dataset.value?.title)
       if (dataset.value) {
-        computeOgcInfo(dataset.value.id)
+        computeOgcInfo(dataset.value.id).catch((err) =>
+          console.error('Failed to compute OGC info:', err)
+        )
       }
     })
 })
