@@ -28,9 +28,6 @@ const props = defineProps({
   }
 })
 
-const hasSpatialCoverage = pageConf.filters.some(
-  (f) => f.type === 'spatial_zone'
-)
 const spatialCoverage = useSpatialCoverage(topic)
 
 const filters = pageConf.filters.filter((f) => f.form != null)
@@ -206,7 +203,7 @@ defineExpose({
     />
   </div>
   <!-- Spatial coverage -->
-  <div v-if="hasSpatialCoverage" class="fr-select-group">
+  <div class="fr-select-group">
     <label class="fr-label" for="select-spatial-coverage"
       >Couverture territoriale (facultatif)</label
     >

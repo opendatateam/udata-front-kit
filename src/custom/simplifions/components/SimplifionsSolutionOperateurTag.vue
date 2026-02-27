@@ -1,6 +1,6 @@
 <template>
   <p
-    :class="`fr-badge fr-badge--sm fr-badge--no-icon ${isPublic ? 'fr-badge--brown-cafe-creme' : 'fr-badge--info'}`"
+    :class="`fr-badge fr-badge--sm fr-badge--no-icon ${isPublic ? 'fr-badge--blue-ecume' : 'fr-badge--green-tilleul-verveine'}`"
   >
     <span class="font-weight-normal"
       >{{ tagText }} | <b>{{ operatorName }}</b></span
