@@ -1,6 +1,6 @@
 export const mockUniverseOrganizations = () => {
   const baseUrl =
-    'https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist'
+    'https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/artifacts/dist'
   const orgsBody = [
     {
       id: '534fff4ca3a7292c64a77c95',

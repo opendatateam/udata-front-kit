@@ -11,7 +11,7 @@
       <!-- Header: Solution name + badge -->
       <div class="solution-integratrice-card__header">
         <div class="solution-integratrice-card__title-row">
-          <h3 class="solution-integratrice-card__title">
+          <h3 class="solution-integratrice-card__title fr-text--lg">
             {{ solution.fields.Nom }}
           </h3>
           <!-- Simplification tags (diamonds) with tag styling -->
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Arrow -->
-      <div class="solution-integratrice-card__arrow">
+      <div class="solution-integratrice-card__arrow fr-mt-0">
         <span
           aria-hidden="true"
           class="fr-icon-arrow-right-line fr-icon--lg"
@@ -133,8 +133,6 @@ const getShortLabelSimplificationTag = (name: string) => {
 }
 
 .solution-integratrice-card__title {
-  font-size: 1.25rem;
-  font-weight: 700;
   color: var(--text-action-high-blue-france);
   margin: 0;
 }
