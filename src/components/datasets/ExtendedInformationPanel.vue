@@ -3,7 +3,6 @@ import type {
   ExtendedDatasetV2WithFullObject,
   TypedHarvest
 } from '@/model/dataset'
-import { useFormatDate } from '@datagouv/components-next'
 import ExtendedInformationPanelItem from './ExtendedInformationPanelItem.vue'
 
 const props = defineProps({
@@ -13,14 +12,9 @@ const props = defineProps({
   }
 })
 
-const { formatDate } = useFormatDate()
-
 const dcatExtras = props.dataset.extras?.dcat
 const harvest = props.dataset.harvest as TypedHarvest
 const uri = harvest?.uri
-const harvestCreatedAt = harvest?.created_at
-const harvestIssuedAt = harvest?.issued_at
-const harvestModifiedAt = harvest?.modified_at
 </script>
 
 <template>
@@ -32,26 +26,6 @@ const harvestModifiedAt = harvest?.modified_at
         :items="[uri]"
         title="Identifiant de ressource unique"
       />
-      <div class="fr-grid-row">
-        <ExtendedInformationPanelItem
-          v-if="harvestCreatedAt"
-          class="fr-col-12 fr-col-md-4"
-          :items="[formatDate(harvestCreatedAt)]"
-          title="Création"
-        />
-        <ExtendedInformationPanelItem
-          v-if="harvestIssuedAt"
-          class="fr-col-12 fr-col-md-4"
-          :items="[formatDate(harvestIssuedAt)]"
-          title="Publication"
-        />
-        <ExtendedInformationPanelItem
-          v-if="harvestModifiedAt"
-          :items="[formatDate(harvestModifiedAt)]"
-          class="fr-col-12 fr-col-md-4"
-          title="Dernière révision"
-        />
-      </div>
       <ExtendedInformationPanelItem
         :items="dcatExtras?.accessRights"
         title="Conditions d'accès et d'utilisation"

@@ -6,10 +6,11 @@ import {
   DatasetInformationSection,
   DatasetSchemaSection,
   DatasetSpatialSection,
-  DatasetTemporalitySection,
   ExtraAccordion
 } from '@datagouv/components-next'
+
 import { storeToRefs } from 'pinia'
+import DatasetTemporalitySection from './DatasetTemporalitySection.vue'
 
 import LeafletMap from './LeafletMap.vue'
 
