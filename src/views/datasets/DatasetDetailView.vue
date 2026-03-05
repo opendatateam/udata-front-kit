@@ -18,15 +18,42 @@ import {
 } from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
+import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import type { OgcLayerInfo } from '@/utils/ogcServices'
+import { fetchBestOgcResource } from '@/utils/ogcServices'
+import { openInQgis } from '@/utils/qgis'
 
 const route = useRouteParamsAsString()
 const datasetIdOrSlug = route.params.item_id
 
 const datasetStore = useDatasetStore()
+const resourceStore = useResourceStore()
 const userStore = useUserStore()
+
+const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
+
+const computeOgcInfo = async (datasetId: string) => {
+  if (!config.website.datasets.open_in_qgis) return
+  const bestResult = await fetchBestOgcResource((page) =>
+    resourceStore.fetchDatasetResources(datasetId, { page })
+  )
+  if (bestResult) {
+    ogcLayerInfo.value.set(datasetId, bestResult)
+  }
+}
+
+const handleOpenInQgis = async () => {
+  if (!dataset.value) return
+  try {
+    await openInQgis(dataset.value.id, dataset.value.title, ogcLayerInfo.value)
+  } catch (error) {
+    console.error('Failed to open in QGIS:', error)
+    alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+  }
+}
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
@@ -96,6 +123,11 @@ onMounted(() => {
     .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(dataset.value?.title)
+      if (dataset.value) {
+        computeOgcInfo(dataset.value.id).catch((err) =>
+          console.error('Failed to compute OGC info:', err)
+        )
+      }
     })
 })
 </script>
@@ -156,6 +188,17 @@ onMounted(() => {
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
         <ResourcesList :dataset="dataset" />
+        <div v-if="ogcLayerInfo.has(dataset.id)" class="fr-mt-2w">
+          <DsfrButton
+            secondary
+            size="sm"
+            icon="fr-icon-road-map-line"
+            class="test__open_dataset_in_qgis_btn"
+            @click="handleOpenInQgis"
+          >
+            Ouvrir dans QGIS (WFS/WMS)
+          </DsfrButton>
+        </div>
       </DsfrTabContent>
 
       <!-- Réutilisations et API -->

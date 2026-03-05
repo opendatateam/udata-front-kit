@@ -126,6 +126,28 @@ export function extractLayerNameFromUrl(
 }
 
 /**
+ * Fetches pages of resources and returns the best OGC-compatible one.
+ * Stops early if a WFS resource is found (preferred over WMS).
+ */
+export async function fetchBestOgcResource(
+  fetchPage: (
+    page: number
+  ) => Promise<{ data: Resource[]; next_page: string | null }>
+): Promise<OgcLayerInfo | null> {
+  const MAX_PAGES = 10
+  let bestResult: OgcLayerInfo | null = null
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const response = await fetchPage(page)
+    const pageResult = findOgcCompatibleResource(response.data)
+    if (pageResult?.format === 'wfs' || (!bestResult && pageResult)) {
+      bestResult = pageResult
+    }
+    if (pageResult?.format === 'wfs' || !response.next_page) break
+  }
+  return bestResult
+}
+
+/**
  * Finds the first OGC-compatible resource in a dataset
  * Prioritizes WFS over WMS (vector data is more useful than raster)
  * Excludes intranet URLs (*.rie.gouv.fr)
