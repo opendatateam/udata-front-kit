@@ -202,8 +202,8 @@ shared_filter_values:
       name: État
     # - id: autres-autorites-nationales
     #   name: Autres autorités nationales
-    # - id: organismes-droit-prive
-    #   name: Organismes de droit privé
+    - id: organismes-droit-prive
+      name: Organismes de droit privé
     - id: acteurs-education-enseignement
       name: Acteurs de l'éducation et de l'enseignement
     # - id: acteurs-culture
@@ -277,7 +277,7 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'acteurs publics
+        default_option: Tous les types d'acteurs
         use_filter_prefix: true
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
@@ -334,7 +334,7 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'acteurs publics
+        default_option: Tous les types d'acteurs
         use_filter_prefix: true
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
