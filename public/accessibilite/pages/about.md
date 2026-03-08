@@ -1,22 +1,24 @@
-# À propos de accessibilite.data.gouv.fr
+# À propos du Point d'accès unique aux données d'accessibilité (PAUDA)
 
-### Qu'est-ce que accessibilite.data.gouv.fr ?
+### Qu'est-ce que PAUDA ?
 
-Cette plateforme est un catalogue national qui se veut être un point d’accès unique aux données sur l’accessibilité en France, sous formes de **données ouvertes**. Ces données utilisent des **indicateurs** pour l'accessibilité physique et numérique dans un ensemble de domaines (culture, sport, tourisme, etc…). Ces domaines sont utilisés pour créer des « **bouquets** » de données, il y a donc le bouquet culture, le bouquet sport, et ainsi de suite.
+PAUDA (accessibilite.data.gouv.fr) est le Point d'accès unique aux données d'accessibilité. Il a pour objectif de faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité.
+
+PAUDA est avant tout un guichet d'entrée pour les recherches de données d’accessibilité, qui renverra vers les bases de données existantes à commencer par data.gouv.fr
+
+L'ensemble des jeux de données référencés sont des **données ouvertes**. On entend par données ouvertes (open data) toutes données en accès libre, gratuites et facilement réutilisables par toutes et tous. Ces données peuvent être produites par l'administration, mais aussi par des acteurs privés ou encore des citoyens.
+
+PAUDA ne concernent pas les **données restreintes** qui, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel. Ce type de données n'est pas utilisé sur notre plateforme.
+
+Les jeux de données valorisés par PAUDA sont classés par **thématiques**, qui sont un ensemble contextualisé de données ou d’indicateurs répondant à une problématique donnée. Par ensemble contextualisé, on veut dire que les données ou indicateurs sont regroupés par thèmes / sujets / ou tout type de regroupement pertinent, permettant de répondre à une problématique. Ex : le bouquet culture pour réunir tous les indicateurs et données sur l’accessibilité de la culture.
 
 Un **indicateur** permet de renseigner l’accessibilité par cas d'usage. Ex : « présence de marches » pour un cheminement ou encore « informations en FALC » pour des renseignements.
 
-Un **bouquet** est un ensemble contextualisé de données ou d’indicateurs répondant à une problématique donnée. Par ensemble contextualisé, on veut dire que les données ou indicateurs sont regroupés par thèmes / sujets / ou tout type de regroupement pertinent, permettant de répondre à une problématique. Ex : le bouquet culture pour réunir tous les indicateurs et données sur l’accessibilité de la culture.
-
-Les **données ouvertes** (open data) sont des données en accès libre, gratuites et facilement réutilisables par toutes et tous. Ces données peuvent être produites par l'administration, mais aussi par des acteurs privés ou encore des citoyens.
-
-Les **données restreintes**, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel. Ce type de données n'est pas utilisé sur notre plateforme.
-
-La plateforme accessibilite.data.gouv.fr est progressivement enrichie de nouveaux bouquets et de nouvelles données ouvertes. De nouvelles fonctionnalités font aussi régulièrement leurs apparitions afin de faciliter la création, la recherche et le suivi de bouquets.
+PAUDA est progressivement enrichie de nouveaux bouquets et de nouvelles données ouvertes. De nouvelles fonctionnalités font aussi régulièrement leurs apparitions afin de faciliter la création, la recherche et le suivi de bouquets.
 
 ### À qui s'adresse cette plateforme ?
 
-A toutes les structures et personnes pouvant trouver une utilité à l’utilisation de données d’accessibilité. Ainsi, de façon non exhaustive, les principaux destinataires sont :
+À toutes les structures et personnes pouvant trouver une utilité à l’utilisation de données d’accessibilité. Ainsi, de façon non exhaustive, les principaux destinataires sont :
 
 - Les agents publics des administrations centrales, des services déconcentrés de l'État, des établissements publics et des administrations territoriales œuvrant au déploiement des politiques publiques d'accessibilité
 - La société civile, incluant les personnes directement concernées ou leurs proches,
@@ -24,15 +26,7 @@ A toutes les structures et personnes pouvant trouver une utilité à l’utilisa
 
 ### Quelles données sont mises à disposition ?
 
-Un travail sur les moissonnages de catalogues a été initié xxx. Il a vocation à couvrir l'ensemble des données cataloguées xxxx.
-
-On y trouve la présence de données provenant :
-
-- de l'administration centrale ;
-- de services déconcentrés ;
-- d'opérateurs de l'Etat
-- d'associations ;
-- de groupements d'intérêt public.
+Pour le moment, seules les données référencées par data.gouv.fr sont valorisées par PAUDA.
 
 ### Un énième portail de données ?
 
@@ -40,7 +34,7 @@ accessibilité.data.gouv.fr n’est pas un nouveau portail de données. C’est 
 
 ### Qui est derrière cette plateforme ?
 
-Cette plateforme est le fruit d'une collaboration entre la Délégation Interministérielle à l'Accessibilité, l'équipe de data.gouv.fr et l'équipe de beta.gouv.fr. Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de plateformes thématiques exposant de la donnée publique.
+Cette plateforme est le fruit d'une collaboration entre la Délégation Interministérielle à l'Accessibilité, la Fabrique de la Donnée territoriale (portée par l'IGN), l'équipe de data.gouv.fr et l'équipe de beta.gouv.fr. Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de plateformes thématiques exposant de la donnée publique.
 
 ### Comment est-elle gérée ?
 
