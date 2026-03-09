@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetProperties, DatasetsGroups } from '@/model/topic'
+import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
 import { isAvailable } from '@/utils/topic'
@@ -13,11 +13,11 @@ const props = defineProps({
     required: true
   },
   allGroups: {
-    type: Object as () => DatasetsGroups,
+    type: Object as () => FactorsGroups,
     required: true
   },
-  datasetsProperties: {
-    type: Object as () => DatasetProperties[],
+  factors: {
+    type: Object as () => ResolvedFactor[],
     required: true
   },
   headingLevel: {
@@ -27,6 +27,10 @@ const props = defineProps({
   isEdit: {
     type: Boolean,
     default: false
+  },
+  highlightedFactorId: {
+    type: String as () => string | null,
+    default: null
   }
 })
 
@@ -66,7 +70,16 @@ const isDisclosureOpen: Ref<boolean> = ref(!isDisclosure.value)
 const toggleDisclosure = () => {
   isDisclosureOpen.value = !isDisclosureOpen.value
 }
+
+const openDisclosure = () => {
+  isDisclosureOpen.value = true
+}
+
 const widgetID = useRandomId('disclosure')
+
+defineExpose({
+  openDisclosure
+})
 
 const opened = ref(false)
 const modalType = ref('')
@@ -175,6 +188,7 @@ const actions = computed(() => {
             icon-only
             secondary
             size="sm"
+            class="test__edit_group_btn"
             :on-click="() => openModal('edit')"
           />
           <DsfrButton
@@ -183,6 +197,7 @@ const actions = computed(() => {
             icon-only
             secondary
             size="sm"
+            class="test__delete_group_btn"
             :on-click="() => openModal('delete')"
           />
         </div>
@@ -206,31 +221,33 @@ const actions = computed(() => {
     >
       <ul role="list" class="fr-m-0 fr-p-0">
         <li
-          v-for="(dataset, index) in datasetsProperties"
-          v-show="!dataset.isHidden"
+          v-for="(factor, index) in factors"
+          v-show="!factor.isHidden"
+          :id="factor.id ? `factor-${factor.id}` : undefined"
           :key="index"
+          :class="{ 'factor-highlighted': factor.id === highlightedFactorId }"
         >
           <div class="dataset__header fr-px-2w fr-py-3v">
             <slot name="datasetTitle">
               <component :is="headingLevel" class="dataset__title">
-                {{ dataset.title }}
+                {{ factor.title }}
               </component>
             </slot>
             <div class="dataset__actions">
               <DsfrTag
                 v-if="
-                  !isAvailable(dataset.availability) ||
-                  dataset.remoteDeleted ||
-                  dataset.remoteArchived
+                  !isAvailable(factor.siteExtras.availability) ||
+                  factor.remoteDeleted ||
+                  factor.remoteArchived
                 "
-                class="uppercase bold fr-text--xs fr-mr-2w"
+                class="uppercase font-bold fr-text--xs fr-mr-2w"
                 label="Non disponible"
               />
-              <slot name="datasetActions" :dataset="dataset" :index="index" />
+              <slot name="factorActions" :factor="factor" :index="index" />
             </div>
           </div>
-          <div v-if="$slots.datasetContent" class="dataset__content">
-            <slot name="datasetContent" :dataset="dataset" />
+          <div v-if="$slots.factorContent" class="factor__content">
+            <slot name="factorContent" :factor="factor" />
           </div>
         </li>
       </ul>
@@ -367,11 +384,10 @@ const actions = computed(() => {
 }
 
 .disclosure__header .fr-tag {
-  /* can't use custom properties because of the cumulus theme. */
   font-weight: 400;
   vertical-align: baseline;
-  color: #000091;
-  background-color: #e3e3fd;
+  color: var(--text-action-high-blue-france);
+  background-color: var(--background-action-low-blue-france);
 }
 .disclosure__content .fr-tag {
   color: var(--purple-glycine-sun-319-moon-630, #6e445a);
@@ -386,10 +402,7 @@ const actions = computed(() => {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  background: var(
-    --light-decisions-background-background-alt-blue-france,
-    #f5f5fe
-  );
+  background: var(--background-alt-blue-france);
 }
 .dataset__title {
   padding: 0;
@@ -398,7 +411,7 @@ const actions = computed(() => {
   font-size: 1.1rem;
 }
 
-.dataset__content {
+.factor__content {
   padding-block: var(--padding-base) calc(var(--padding-base) / 2);
   padding-inline: calc(var(--padding-base) / 2);
 }
@@ -420,7 +433,7 @@ const actions = computed(() => {
   .disclosure__actions {
     gap: var(--padding-base);
   }
-  .dataset__content {
+  .factor__content {
     padding-inline: var(--padding-base);
   }
 }
@@ -438,5 +451,16 @@ const actions = computed(() => {
 
 .modal-delete :deep(.fr-btns-group :last-child button) {
   background-color: var(--modal-confirm-button-bg);
+}
+
+.factor__content :deep(.fr-btn--secondary:hover) {
+  background-color: var(--background-default-grey);
+}
+
+/* Factor highlight for deep-linking */
+.factor-highlighted {
+  outline: 3px solid var(--text-active-blue-france);
+  outline-offset: 4px;
+  transition: outline 0.3s ease;
 }
 </style>

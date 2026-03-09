@@ -6,9 +6,11 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import NoResults from '@/components/NoResults.vue'
+import TopicCard from '@/components/topics/TopicCard.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
+import { useAsyncComponent } from '@/utils/component'
 
 const props = defineProps({
   query: {
@@ -26,10 +28,9 @@ const route = useRoute()
 const { query: routeQuery } = useRouteQueryAsString()
 const topicStore = useTopicStore()
 
-const { pageKey, pageConf } = useCurrentPageConf()
+const { meta, pageKey, pageConf } = useCurrentPageConf()
 
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
 const emits = defineEmits(['clearFilters'])
 
@@ -51,7 +52,6 @@ const createUrl = computed(() => {
 
 const clearFilters = () => {
   const query: LocationQueryRaw = {}
-  if (route.query.drafts) query.drafts = route.query.drafts
   router.push({ name: route.name, query, hash: '#list' }).then(() => {
     emits('clearFilters')
   })
@@ -61,9 +61,21 @@ const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
   // get filters parameters from route
   return topicStore
-    .query({ ...route.query, ...props }, pageKey)
+    .query(
+      {
+        ...route.query,
+        ...props,
+        sort: route.query.sort || pageConf.default_sort
+      } as Parameters<typeof topicStore.query>[0],
+      pageKey
+    )
     .finally(() => loader.hide())
 }
+
+// load custom card component from router, or fallback to default
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+  fallback: TopicCard
+})
 
 const goToPage = (page: number) => {
   router.push({
@@ -98,10 +110,12 @@ defineExpose({
     <div
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle justify-between fr-pb-2w"
     >
-      <h2 class="fr-col-auto fr-my-0 h4">{{ numberOfResultMsg }}</h2>
+      <h2 id="number-of-results" class="fr-col-auto fr-my-0 h4">
+        {{ numberOfResultMsg }}
+      </h2>
       <div class="fr-col-auto fr-grid-row fr-grid-row--middle">
         <SelectComponent
-          :model-value="routeQuery.sort || '-created'"
+          :model-value="routeQuery.sort || pageConf.default_sort || '-created'"
           label="Trier par :"
           :label-class="['fr-col-auto', 'fr-text--sm', 'fr-m-0', 'fr-mr-1w']"
           :options="[
@@ -116,7 +130,7 @@ defineExpose({
     <div class="fr-mb-4w border-top">
       <ul class="fr-grid-row flex-gap fr-mt-3w fr-pl-0" role="list">
         <li v-for="topic in topics" :key="topic.id" class="fr-col-12">
-          <TopicCard :topic="topic" :page-key="pageKey" />
+          <CardComponent :topic="topic" :page-key="pageKey" />
         </li>
       </ul>
     </div>
@@ -129,14 +143,14 @@ defineExpose({
     />
   </template>
   <NoResults v-else :clear-filters="clearFilters">
-    <template v-if="canAddTopic" #description>
+    <template v-if="userStore.canAddTopic(pageKey)" #description>
       Essayez de réinitialiser les filtres pour agrandir votre champ de
       recherche.<br />
       Vous pouvez aussi contribuer en créant un {{ pageConf.labels.singular }}.
     </template>
     <template #actions>
       <router-link
-        v-if="canAddTopic"
+        v-if="userStore.canAddTopic(pageKey)"
         :to="createUrl"
         class="fr-btn fr-btn--secondary fr-ml-1w"
       >

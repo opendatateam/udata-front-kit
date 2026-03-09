@@ -7,7 +7,6 @@ import type {
 } from '@/model/spatial'
 import type { Topic, TopicPostData } from '@/model/topic'
 import { useSpatialStore } from '@/store/SpatialStore'
-import type { DatasetV2 } from '@datagouv/components'
 
 export const getZoneFromSpatial = async (
   spatial: SpatialField | undefined | null
@@ -21,7 +20,7 @@ export const getZoneFromSpatial = async (
 }
 
 export function useSpatialCoverage(
-  object: Ref<Topic | Partial<TopicPostData> | null | DatasetV2>
+  object: Ref<Topic | Partial<TopicPostData> | null>
 ): Ref<SpatialCoverage | undefined> {
   const spatialCoverage = ref<SpatialCoverage | undefined>(undefined)
 
@@ -49,18 +48,4 @@ export const getGranularityFromSpatial = async (
     await store.loadLevels()
     return store.getLevelById(spatial.granularity)
   }
-}
-
-export const useSpatialGranularity = (
-  dataset: Ref<DatasetV2 | undefined>
-): Ref<SpatialCoverageLevel | undefined> => {
-  const level = ref<SpatialCoverageLevel | undefined>(undefined)
-  watch(
-    dataset,
-    async () => {
-      level.value = await getGranularityFromSpatial(dataset.value?.spatial)
-    },
-    { immediate: true }
-  )
-  return level
 }

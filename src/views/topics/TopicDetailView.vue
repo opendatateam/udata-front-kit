@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { OrganizationNameWithCertificate, ReadMore } from '@datagouv/components'
+import {
+  OrganizationNameWithCertificate,
+  ReadMore
+} from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
+import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
+import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import TopicDatasetList from '@/components/topics/TopicDatasetList.vue'
-import TopicDatasetListExport from '@/components/topics/TopicDatasetListExport.vue'
+import TopicActivityList from '@/components/topics/TopicActivityList.vue'
+import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
+import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
+import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -23,23 +29,24 @@ import type { TopicPageRouterConf } from '@/router/model'
 import {
   useCurrentPageConf,
   useRouteMeta,
-  useRouteParamsAsString
+  useRouteParamsAsStringReactive
 } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useAsyncComponent } from '@/utils/component'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
-import { updateTopicExtras, useExtras } from '@/utils/topic'
+import { useExtras, useTopicFactors } from '@/utils/topic'
 
 const props = defineProps<TopicPageRouterConf>()
 
 const router = useRouter()
 const meta = useRouteMeta()
-const { params } = useRouteParamsAsString()
 const store = useTopicStore()
 const loading = useLoading()
+const route = useRouteParamsAsStringReactive()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
@@ -51,16 +58,38 @@ const setAccessibilityProperties = inject(
 ) as AccessibilityPropertiesType
 
 const description = computed(() => descriptionFromMarkdown(topic))
+
+// Dynamically load the custom description component if it exists
+const customDescriptionComponent = useAsyncComponent(
+  () => meta.descriptionComponent,
+  { loadingComponent: ContentPlaceholder }
+)
+
+const userStore = useUserStore()
 const canEdit = computed(() => {
-  return useUserStore().hasEditPermissions(topic.value)
+  return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
-const isAdmin = computed(() => useUserStore().isAdmin)
+const { isAdmin } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
-const showDiscussions = pageConf.discussions.display
+const showDiscussions = pageConf.resources_tabs.discussions.display
+const showDatasets = pageConf.resources_tabs.datasets.display
+const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
-const { datasetsProperties, clonedFrom } = useExtras(topic)
+const { clonedFrom } = useExtras(topic)
+const { factors } = useTopicFactors(topic)
+const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
+  null
+)
+const topicActivityListRef = ref<InstanceType<typeof TopicActivityList> | null>(
+  null
+)
+
+const handleFactorChanged = () => {
+  // Refresh activity list when factors are added, modified, or deleted
+  topicActivityListRef.value?.refreshActivityList()
+}
 
 const breadcrumbLinks = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -74,11 +103,43 @@ const breadcrumbLinks = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Réutilisations', tabId: 'tab-2', panelId: 'tab-content-2' }
-]
+const showActivity = computed(() => canEdit.value)
+
+const tabTitles = computed(() => {
+  const tabs: { title: string; tabId: string; panelId: string }[] = []
+
+  if (showDatasets) {
+    tabs.push({
+      title: 'Données',
+      tabId: 'tab-datasets',
+      panelId: 'tab-content-datasets'
+    })
+  }
+  if (showDiscussions) {
+    tabs.push({
+      title: 'Discussions',
+      tabId: 'tab-discussions',
+      panelId: 'tab-content-discussions'
+    })
+  }
+  if (showReuses) {
+    tabs.push({
+      title: 'Réutilisations',
+      tabId: 'tab-reuses',
+      panelId: 'tab-content-reuses'
+    })
+  }
+  if (showActivity.value) {
+    tabs.push({
+      title: 'Activité',
+      tabId: 'tab-activity',
+      panelId: 'tab-content-activity'
+    })
+  }
+
+  return tabs
+})
+
 const activeTab = ref(0)
 
 const cloneModalActions = [
@@ -142,39 +203,17 @@ const toggleFeatured = () => {
     .finally(() => loader.hide())
 }
 
-const onUpdateDatasets = () => {
-  if (topic.value == null) {
-    throw Error('Trying to update null topic')
-  }
-  const loader = useLoading().show()
-
-  // Deduplicate datasets ids in case of same DS used multiple times
-  // API rejects PUT if the same id is used more than once
-  const dedupedDatasets = [
-    ...new Set(
-      datasetsProperties.value
-        .filter((d) => d.id !== null && d.remoteDeleted !== true)
-        .map((d) => d.id)
-    )
-  ]
-
-  store
-    .update(topic.value.id, {
-      // send the tags or payload will be rejected
-      tags: topic.value.tags,
-      datasets: dedupedDatasets,
-      extras: updateTopicExtras(topic.value, {
-        datasets_properties: datasetsProperties.value.map(
-          ({ isHidden, remoteDeleted, remoteArchived, ...data }) => data
-        )
-      })
-    })
-    .finally(() => loader.hide())
-}
-
 const metaDescription = (): string | undefined => {
   return topic.value?.description ?? ''
 }
+
+const metaKeywords = computed(() => {
+  const tags = topic.value?.tags
+  if (!tags?.length) return undefined
+  const prefix = pageConf.filter_prefix
+  const keywords = prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
+  return keywords.length ? keywords.join(', ') : undefined
+})
 
 const metaTitle = computed(() => {
   return topic.value?.name
@@ -188,27 +227,75 @@ const metaLink = (): string => {
   return `${window.location.origin}${resolved.href}`
 }
 
+const handleNavigateToFactor = (elementId: string) => {
+  activeTab.value = 0
+  nextTick(() => {
+    topicFactorsListRef.value?.navigateToElement(elementId)
+  })
+}
+
 useHead({
-  meta: [
+  meta: () => [
     {
       property: 'og:title',
-      content: () => `${metaTitle.value} | ${config.website.title}`
+      content: `${metaTitle.value} | ${config.website.title}`
     },
-    { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription }
+    { name: 'description', content: metaDescription() },
+    { property: 'og:description', content: metaDescription() },
+    ...(metaKeywords.value != null
+      ? [{ name: 'keywords', content: metaKeywords.value }]
+      : []),
+    ...(topic.value?.private
+      ? [{ name: 'robots', content: 'noindex, nofollow' }]
+      : [])
   ],
   link: [{ rel: 'canonical', href: metaLink }]
 })
 
+// Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
 watch(
-  () => params.item_id,
-  () => {
+  () => router.currentRoute.value.hash,
+  (hash) => {
+    if (hash.startsWith('#factor-')) {
+      activeTab.value = 0
+      const elementId = hash.replace('#factor-', '')
+
+      // Wait for component and data to be ready before navigating
+      let stopWatching: (() => void) | undefined = undefined
+      stopWatching = watchEffect(() => {
+        if (topicFactorsListRef.value && factors.value.length > 0) {
+          nextTick(() => {
+            topicFactorsListRef.value?.navigateToElement(elementId)
+          })
+          stopWatching?.()
+        }
+      })
+
+      // Clear hash immediately using replaceState to avoid adding history entry
+      // and to avoid interfering with navigateToElement's scroll behavior
+      // TODO: proper way would be implement deeplinking for tabs
+      const url = new URL(window.location.href)
+      url.hash = ''
+      window.history.replaceState(window.history.state, '', url.toString())
+    }
+  },
+  { immediate: true }
+)
+
+// Callback to hide the loader, passed to custom description components
+const hideLoader = ref<(() => void) | null>(null)
+
+watch(
+  () => route.value?.params.item_id,
+  (itemId) => {
+    if (!itemId) return
     const loader = loading.show({ enforceFocus: false })
+    hideLoader.value = () => loader.hide()
     store
-      .load(params.item_id, { toasted: false, redirectNotFound: true })
+      .load(itemId, { toasted: false, redirectNotFound: true })
       .then((res) => {
         topic.value = res
-        if (topic.value.slug !== params.item_id) {
+        if (topic.value.slug !== itemId) {
           router.push({
             name: `${pageKey}_detail`,
             params: { item_id: topic.value.slug }
@@ -216,7 +303,13 @@ watch(
         }
         setAccessibilityProperties(metaTitle.value)
       })
-      .finally(() => loader.hide())
+      .finally(() => {
+        // Only auto-hide if there's no custom description component
+        // Custom components are responsible for calling hideLoader when ready
+        if (!meta.descriptionComponent) {
+          loader.hide()
+        }
+      })
   },
   { immediate: true }
 )
@@ -226,29 +319,42 @@ watch(
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <GenericContainer v-if="topic">
-    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters">
+  <GenericContainer v-if="topic" class="tabs-height-fix">
+    <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
         :class="props.displayMetadata ? 'fr-col-md-8' : 'fr-col-md-12'"
       >
-        <div class="topic__header fr-mb-4v">
-          <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
-          <ul v-if="tags.length > 0" class="fr-badges-group">
-            <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-              <TagComponent :tag="t" />
-            </li>
-          </ul>
-        </div>
-        <div v-if="props.enableReadMore">
-          <ReadMore max-height="600">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="description" />
-          </ReadMore>
+        <!-- Use custom description component if defined, otherwise fallback to default HTML -->
+        <div v-if="meta.descriptionComponent && customDescriptionComponent">
+          <component
+            :is="customDescriptionComponent"
+            :key="topic.id"
+            :topic="topic"
+            :page-key="pageKey"
+            :hide-loader="hideLoader"
+          />
         </div>
         <div v-else>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="description" />
+          <div class="topic__header fr-mb-4v">
+            <h1 class="fr-mb-1v fr-mr-2v">{{ topic.name }}</h1>
+            <ul v-if="tags.length > 0" class="fr-badges-group">
+              <li v-for="t in tags" :key="`${t.type}-${t.id}`">
+                <TagComponent :tag="t" />
+              </li>
+            </ul>
+          </div>
+
+          <div v-if="props.enableReadMore">
+            <ReadMore max-height="600">
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div v-html="description" />
+            </ReadMore>
+          </div>
+          <div v-else>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-html="description" />
+          </div>
         </div>
       </div>
       <div
@@ -265,6 +371,7 @@ watch(
             class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
           >
             <DsfrButton
+              v-if="userStore.canAddTopic(pageKey)"
               secondary
               size="md"
               label="Cloner"
@@ -302,7 +409,6 @@ watch(
               size="md"
               label="Éditer"
               icon="fr-icon-pencil-line"
-              class="fr-mb-1v fr-mr-1v"
               @click="goToEdit"
             />
             <DsfrButton
@@ -312,7 +418,6 @@ watch(
               :icon="
                 topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
               "
-              class="fr-mb-1v"
               @click="togglePublish"
             />
             <DsfrButton
@@ -325,7 +430,6 @@ watch(
               :icon="
                 topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
               "
-              class="fr-mb-1v"
               @click="toggleFeatured"
             />
           </div>
@@ -339,7 +443,7 @@ watch(
             <div class="fr-col-auto fr-mr-1w">
               <OrganizationLogo :object="topic" />
             </div>
-            <p class="fr-col fr-m-0">
+            <p class="fr-col fr-m-0 min-width-0">
               <a class="fr-link" :href="topic.organization.page">
                 <OrganizationNameWithCertificate
                   :organization="topic.organization"
@@ -394,36 +498,69 @@ watch(
     </div>
 
     <DsfrTabs
+      v-if="tabTitles.length > 0"
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
       :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
     >
       <!-- Jeux de données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0" class="fr-px-2w">
-        <TopicDatasetList
-          v-model="datasetsProperties"
+      <DsfrTabContent
+        v-if="showDatasets"
+        panel-id="tab-content-datasets"
+        tab-id="tab-datasets"
+        class="fr-px-2w"
+      >
+        <TopicFactorsList
+          ref="topicFactorsListRef"
+          v-model="factors"
           :is-edit="canEdit"
-          :dataset-editorialization="props.datasetEditorialization"
-          @update-datasets="onUpdateDatasets"
+          :topic-id="topic.id"
+          :topic-name="topic.name"
+          @factor-changed="handleFactorChanged"
         />
-        <TopicDatasetListExport
-          :datasets="datasetsProperties"
+        <TopicFactorsListExport
+          :factors="factors"
           :filename="topic.id"
+          :has-ogc-resources="
+            topicFactorsListRef?.hasOgcResources &&
+            config.website.datasets.open_in_qgis
+          "
+          @open-topic-in-qgis="topicFactorsListRef?.handleOpenTopicInQgis"
         />
       </DsfrTabContent>
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent
+        v-if="showDiscussions && topic"
+        panel-id="tab-content-discussions"
+        tab-id="tab-discussions"
+      >
         <DiscussionsList
-          v-if="showDiscussions && topic"
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
+          :empty-message="`Il n'y a pas encore de discussion pour ce ${pageConf.labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <ReusesList model="topic" :object-id="topic.id" />
+      <DsfrTabContent
+        v-if="showReuses"
+        panel-id="tab-content-reuses"
+        tab-id="tab-reuses"
+      >
+        <TopicReusesList :topic="topic" />
+      </DsfrTabContent>
+      <!-- Activité -->
+      <DsfrTabContent
+        v-if="showActivity"
+        panel-id="tab-content-activity"
+        tab-id="tab-activity"
+      >
+        <TopicActivityList
+          ref="topicActivityListRef"
+          :topic
+          :factors
+          @navigate-to-factor="handleNavigateToFactor"
+        />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
@@ -442,14 +579,5 @@ watch(
 }
 .owner-avatar {
   margin-bottom: -6px;
-}
-/*
-FIXME: magic calc to fix the tabs height bug https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
-*/
-:deep(.fr-tabs) {
-  height: auto;
-}
-:deep(.fr-tabs)::before {
-  height: calc(var(--tabs-height) - 47px);
 }
 </style>

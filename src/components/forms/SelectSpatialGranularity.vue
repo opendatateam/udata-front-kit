@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import SelectComponent from '@/components/SelectComponent.vue'
 import type { SpatialCoverageLevel } from '@/model/spatial'
 import { useSpatialStore } from '@/store/SpatialStore'
+import FilterSelectComponent from '../FilterSelectComponent.vue'
 
 const selectedGranularity = defineModel({
   type: String as () => string | null,
@@ -31,7 +31,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <SelectComponent
+  <FilterSelectComponent
     v-model="selectedGranularity"
     :default-option="defaultOption"
     :label="label"

@@ -6,14 +6,12 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { useCheckboxQuery } from '@/utils/filters'
-import { useTagsQuery } from '@/utils/tags'
+import { usePageQueryParams } from '@/utils/filters'
 import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
 
-const topicsAPI = new TopicsAPI()
-const topicsAPIv2 = new TopicsAPI({ version: 2 })
+const topicsAPI = new TopicsAPI({ version: 2 })
 
 interface QueryArgs {
   query: string
@@ -62,28 +60,13 @@ export const useTopicStore = defineStore('topic', {
     async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
       const { query, ...queryArgs } = args
 
-      // extract tags and checkbox filters from query args
-      const { extraArgs: argsAfterTagQuery, tags } = useTagsQuery(
-        pageKey || 'topics',
-        queryArgs
-      )
-      const { extraArgs: refinedFilterArgs, checkboxArgs } = useCheckboxQuery(
-        pageKey || 'topics',
-        argsAfterTagQuery
-      )
-      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
-        pageKey || 'topics',
-        tags
-      )
+      const params = usePageQueryParams(pageKey || 'topics', queryArgs)
 
-      const results = await topicsAPIv2.list({
+      const results = await topicsAPI.list({
         params: {
           q: query,
-          tag: tagsWithUniverse,
           page_size: config.website.pagination_sizes.topics_list,
-          ...universeQuery,
-          ...checkboxArgs,
-          ...refinedFilterArgs
+          ...params
         },
         authenticated: true
       })
@@ -97,7 +80,7 @@ export const useTopicStore = defineStore('topic', {
     async loadTopicsFromList(topics: TopicItemConf[]): Promise<Topic[]> {
       this.topics = []
       for (const topic of topics) {
-        const res = await topicsAPIv2.get({ entityId: topic.id })
+        const res = await topicsAPI.get({ entityId: topic.id })
         this.topics.push(res)
       }
       return this.topics
@@ -106,26 +89,23 @@ export const useTopicStore = defineStore('topic', {
      * Load all topics from universe by following pagination links
      */
     async loadTopicsForUniverse(pageKey?: string): Promise<Topic[]> {
-      const { tagsWithUniverse, universeQuery } = useUniverseQuery(
-        pageKey || 'topics',
-        []
-      )
+      const mergedApiParams = useUniverseQuery(pageKey || 'topics', {})
       // make sure our user has registerd its permissions
       await useUserStore().waitForStoreInit()
-      let response = await topicsAPIv2.list({
+      let response = await topicsAPI.list({
         params: {
-          tag: tagsWithUniverse,
           include_private: 'yes',
           sort: '-last_modified',
-          ...universeQuery
+          ...mergedApiParams
         },
         authenticated: true
       })
       this.topics = response.data
       while (response.next_page !== null) {
-        response = await topicsAPIv2.request({
+        response = await topicsAPI.request({
           url: response.next_page,
-          method: 'get'
+          method: 'get',
+          authenticated: true
         })
         this.topics = [...this.topics, ...response.data]
       }
@@ -135,18 +115,16 @@ export const useTopicStore = defineStore('topic', {
      * Get a single topic from API
      */
     async load(slugOrId: string, params?: BaseParams): Promise<Topic> {
-      return await topicsAPIv2.get({ entityId: slugOrId, ...params })
+      return await topicsAPI.get({ entityId: slugOrId, ...params })
     },
     /**
      * Create a topic
-     * WARNING: returns a V1 payload
      */
     async create(topicData: object): Promise<Topic> {
       return await topicsAPI.create({ data: topicData })
     },
     /**
      * Update a topic
-     * WARNING: returns a V1 payload
      */
     async update(topicId: string, data: object): Promise<Topic> {
       return await topicsAPI.update({ entityId: topicId, data })
@@ -155,7 +133,7 @@ export const useTopicStore = defineStore('topic', {
      * Delete a topic
      */
     async delete(topicId: string) {
-      await topicsAPI.delete({ entityId: topicId })
+      topicsAPI.delete({ entityId: topicId })
     }
   }
 })

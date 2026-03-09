@@ -7,19 +7,30 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 6709257a89f70088a223eba3
-
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
+  tabular_api_url:
 
 # UI customizations
 website:
   title: 'logistique.data.gouv.fr'
+  seo:
+    canonical_url: https://logistique.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'index, follow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages:
+        - bouquets
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
-  service_logo: '/logos/logistique-logo.svg'
+  service_logo: '/static/logos/logistique-logo.svg'
   badge:
     display: true
     text: 'BETA'
@@ -38,37 +49,39 @@ website:
             - name: 'Immobilier logistique'
               description: "Données sur l'immobilier dédié aux activités de logistique (bâti, entrepôts, stockage, etc.)."
               url: 'bouquets?theme=immobilier-logistique'
-              image_url: '/logistique/assets/immobilier.jpg'
+              image_url: '/static/logistique/assets/immobilier.jpg'
             - name: 'Infrastructure'
               description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
               url: 'bouquets?theme=infrastructure'
-              image_url: '/logistique/assets/infra.jpg'
+              image_url: '/static/logistique/assets/infra.jpg'
             - name: 'Trafic'
               description: 'Données sur le flux des activités de logistique (trafic routier, fluvial, maritime, ferroviaire et aérien).'
               url: 'bouquets?theme=trafic'
-              image_url: '/logistique/assets/trafic.jpg'
+              image_url: '/static/logistique/assets/trafic.jpg'
             - name: 'Environnement'
               description: "Données offrant une base pour réaliser des études approfondies sur l'impact environnemental de la logistique."
               url: 'bouquets?theme=environnement'
-              image_url: '/logistique/assets/environnement.jpg'
+              image_url: '/static/logistique/assets/environnement.jpg'
             - name: 'Socio-économique'
               description: 'Bases essentielles pour étudier les interactions entre les dimensions sociales et économiques de la logistique.'
               url: 'bouquets?theme=socio-economique'
-              image_url: '/logistique/assets/socio.jpg'
+              image_url: '/static/logistique/assets/socio.jpg'
             - name: 'Filières'
               description: 'Données sur les différentes filières relatives aux activités de logistique (agricole, industrielle, énergétique...).'
               url: 'bouquets?theme=filieres'
-              image_url: '/logistique/assets/risques.jpg'
+              image_url: '/static/logistique/assets/risques.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
-  header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://framaforms.org/votre-avis-sur-logistiquedatagouvfr-1741274528
-  header_search:
-    display: true
-    placeholder: Rechercher...
+  header:
+    admin_shortcut: false
+    button:
+      display: true
+      label: 'Donnez votre avis'
+      link: https://framaforms.org/votre-avis-sur-logistiquedatagouvfr-1741274528
+    search:
+      display: true
+      placeholder: Rechercher...
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -93,11 +106,11 @@ website:
       - title: 'A propos'
         id: 'about'
         route: '/about'
-        url: '/logistique/pages/about.md'
+        url: '/static/logistique/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/logistique/pages/accessibility.md'
+        url: '/static/logistique/pages/accessibility.md'
   show_quality_component: true
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
@@ -137,7 +150,6 @@ website:
     add_to_topic:
       enable: true
       page: bouquets
-      dataset_editorialization: true
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
@@ -152,7 +164,7 @@ pages:
     list_all: true
     universe_query:
       topic: 66d5caab2ef9e95fc1625446
-    tag_prefix:
+    filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
     labels:
@@ -162,16 +174,22 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters: []
   # BOUQUETS
   bouquets:
     list_all: true
     universe_query:
       tag: logistique
-    tag_prefix: logistique
+    filter_prefix: logistique
     title: Bouquets
     breadcrumb_title: Bouquets
     labels:
@@ -181,16 +199,22 @@ pages:
     search:
       input: Filtrer les bouquets
     banner:
-    discussions:
-      display: true
-      create: true
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Catégorie
         default_option: Toutes les catégories
         id: theme
         type: select
         color: green-bourgeon
-        use_tag_prefix: true
+        use_filter_prefix: true
         form:
           required: true
         values:

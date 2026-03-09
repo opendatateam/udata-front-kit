@@ -63,8 +63,8 @@ const onMarkerClick = (point: Feature) => {
       )
     } else {
       postes.value.push({
-        id: point.properties['NUM_POSTE'],
-        name: point.properties['NOM_USUEL']
+        id: String(point.properties['NUM_POSTE']),
+        name: String(point.properties['NOM_USUEL'])
       })
     }
     emit('update:postes', postes.value)
@@ -99,7 +99,7 @@ const addPointsToMap = () => {
         ) {
           markerElement.style.backgroundColor = '#AAAAAA'
         } else {
-          markerElement.style.backgroundColor = '#3558A2'
+          markerElement.style.backgroundColor = '#000091'
         }
         onMarkerClick(point)
       })
@@ -152,7 +152,7 @@ watch(
 
 watch(
   () => props.points,
-  (newPoints) => {
+  () => {
     if (map) {
       map.remove()
       map = new maplibregl.Map({

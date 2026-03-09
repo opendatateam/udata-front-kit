@@ -3,10 +3,10 @@ import SelectSpatialCoverage from '@/components/forms/SelectSpatialCoverage.vue'
 import type { SpatialCoverage } from '@/model/spatial'
 import type { TopicPostData } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
-import { useFiltersState } from '@/utils/filters'
+import { useFiltersState, useFilterValue } from '@/utils/filters'
 import type { FormErrorMessagesMap } from '@/utils/form'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { useTagSlug, useTagsForFilter } from '@/utils/tags'
+import { useTagsForFilter } from '@/utils/tags'
 import ErrorMessage from '../ErrorMessage.vue'
 
 const { pageKey, pageConf } = useCurrentPageConf()
@@ -28,14 +28,11 @@ const props = defineProps({
   }
 })
 
-const hasSpatialCoverage = pageConf.filters.some(
-  (f) => f.type === 'spatial_zone'
-)
 const spatialCoverage = useSpatialCoverage(topic)
 
 const filters = pageConf.filters.filter((f) => f.form != null)
 const initialValuesForFilters = filters.reduce((acc, filter) => {
-  const tags = useTagsForFilter(filter, pageConf.tag_prefix, topic.value)
+  const tags = useTagsForFilter(filter, pageConf.filter_prefix, topic.value)
   return {
     ...acc,
     [filter.id]: tags.length ? tags[0].id : null
@@ -89,21 +86,21 @@ const onSubmit = () => {
 const onValidSubmit = async () => {
   // filter out known filters from existing tags and add those gotten from this form
   const filtersPrefixes = filters.map((filter) =>
-    useTagSlug(
+    useFilterValue(
       pageKey || 'topics',
       filter.id,
       undefined,
-      Boolean(filter.use_tag_prefix)
+      Boolean(filter.use_filter_prefix)
     )
   )
   const filtersTags = filters
     .map((filter) =>
       filtersState[filter.id].selectedValue
-        ? useTagSlug(
+        ? useFilterValue(
             pageKey || 'topics',
             filter.id,
             filtersState[filter.id].selectedValue,
-            Boolean(filter.use_tag_prefix)
+            Boolean(filter.use_filter_prefix)
           )
         : null
     )
@@ -206,7 +203,7 @@ defineExpose({
     />
   </div>
   <!-- Spatial coverage -->
-  <div v-if="hasSpatialCoverage" class="fr-select-group">
+  <div class="fr-select-group">
     <label class="fr-label" for="select-spatial-coverage"
       >Couverture territoriale (facultatif)</label
     >

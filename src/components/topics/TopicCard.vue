@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import {
-  formatRelativeIfRecentDate,
   OrganizationNameWithCertificate,
-  useOwnerName
-} from '@datagouv/components'
+  useFormatDate
+} from '@datagouv/components-next'
 import { toRef } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -12,9 +11,10 @@ import TagComponent from '@/components/TagComponent.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useOwnerName } from '@/utils/owned'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTags } from '@/utils/tags'
-import { useExtras } from '@/utils/topic'
+import { useTopicFactors } from '@/utils/topic'
 
 const props = defineProps({
   pageKey: {
@@ -33,9 +33,8 @@ const props = defineProps({
 
 const topicRef = toRef(props, 'topic')
 const spatialCoverage = useSpatialCoverage(topicRef)
-const { datasetsProperties } = useExtras(topicRef)
-
-const nbData: number = datasetsProperties.value.length
+const { formatRelativeIfRecentDate } = useFormatDate()
+const { nbFactors } = useTopicFactors(topicRef)
 
 const ownerName = useOwnerName(props.topic)
 
@@ -81,7 +80,7 @@ const tags = useTags(props.pageKey, props.topic)
 
       <div class="overflow-hidden flex-1-1-auto">
         <h3 class="fr-mb-1v fr-grid-row h4">
-          <RouterLink :to="topicLink" class="text-grey-500">
+          <RouterLink :to="topicLink" class="text-grey-50">
             {{ topic.name }}
           </RouterLink>
         </h3>
@@ -102,10 +101,10 @@ const tags = useTags(props.pageKey, props.topic)
       <p class="fr-mb-1v">{{ stripFromMarkdown(topic.description) }}</p>
     </div>
 
-    <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-380">
+    <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-425">
       <VIconCustom
         name="time-line"
-        class="fr-mr-1w text-grey-380 fr-icon--sm"
+        class="fr-mr-1w text-grey-425 fr-icon--sm"
       />
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
@@ -120,7 +119,7 @@ const tags = useTags(props.pageKey, props.topic)
         />
         <span class="fr-mr-1v">
           {{
-            `${nbData > 0 ? nbData : 'Aucune'} donnée${nbData > 1 ? 's' : ''}`
+            `${nbFactors > 0 ? nbFactors : 'Aucune'} donnée${nbFactors > 1 ? 's' : ''}`
           }}
         </span>
       </span>

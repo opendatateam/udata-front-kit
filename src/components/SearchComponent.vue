@@ -44,6 +44,12 @@ const props = defineProps({
   searchEndpoint: {
     type: String,
     default: () => null
+  },
+  searchEndpointParams: {
+    type: Object as () => Record<string, string>,
+    default: () => {
+      return {}
+    }
   }
 })
 
@@ -59,18 +65,22 @@ const query = ref('')
 const selectedMultiSearch = ref()
 const multiselect = useTemplateRef('multiselect')
 
+const buildSearchQueryParams = (q: string) => {
+  return { ...props.searchEndpointParams, q }
+}
+
 const doSimpleSearch = (event: string) => {
   query.value = event
   router.push({
     path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
-    query: { q: query.value }
+    query: buildSearchQueryParams(query.value)
   })
   query.value = ''
   emits('doSearch')
 }
 
 const doMultiSearch = (item: DropdownItem) => {
-  router.push({ name: item.route, query: { q: query.value } })
+  router.push({ name: item.route, query: buildSearchQueryParams(query.value) })
   clear()
   query.value = ''
   emits('doSearch')
@@ -104,6 +114,7 @@ const clear = () => {
       type="search"
       :label-visible="labelVisible"
       :placeholder="!labelVisible ? searchLabel : undefined"
+      :title="!labelVisible ? searchLabel : undefined"
     >
       <template #before-input>
         <VIconCustom name="search-line" class="search-icon" />
@@ -111,6 +122,7 @@ const clear = () => {
     </DsfrInputGroup>
   </search>
 
+  <!-- FIXME: nested input needs a title attribute for a11y, but not supported by DsfrSearchBar -->
   <DsfrSearchBar
     v-else-if="!dropdown.length"
     v-model="query"
@@ -141,7 +153,8 @@ const clear = () => {
       :clear-on-search="true"
       :clear-on-blur="true"
       :close-on-select="true"
-      placeholder="Rechercher"
+      :placeholder="searchLabel"
+      :title="searchLabel"
       aria-owns=""
       :aria="{
         'aria-describedby': `${id}-description`,
@@ -192,7 +205,7 @@ const clear = () => {
 }
 .select-search :deep(input) {
   padding-inline-start: calc(var(--icon-width) + 1rem);
-  box-shadow: inset 0 -2px 0 0 var(--blue-france-sun-113);
+  box-shadow: inset 0 -2px 0 0 var(--text-active-blue-france);
 }
 .visible-label {
   margin-inline-start: var(--icon-width);

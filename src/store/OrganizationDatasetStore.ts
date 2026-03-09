@@ -1,4 +1,4 @@
-import type { DatasetV2, License } from '@datagouv/components'
+import type { DatasetV2, License } from '@datagouv/components-next'
 import { defineStore } from 'pinia'
 
 import type { BaseParams } from '@/model/api'
@@ -12,6 +12,8 @@ interface RootState {
   data: Record<string, DatasetV2Response[]>
   resourceTypes: unknown[]
   sort: string | undefined
+  licenses: License[]
+  badges: Record<string, string>
 }
 
 /**
@@ -31,7 +33,9 @@ export const useDatasetStore = defineStore('dataset', {
   state: (): RootState => ({
     data: {},
     resourceTypes: [],
-    sort: undefined
+    sort: undefined,
+    licenses: [],
+    badges: {}
   }),
   actions: {
     /**
@@ -124,7 +128,6 @@ export const useDatasetStore = defineStore('dataset', {
         entityId: datasetId,
         ...params
       })
-      if (dataset === undefined) return
       return this.addOrphan(dataset)
     },
     /**
@@ -142,12 +145,24 @@ export const useDatasetStore = defineStore('dataset', {
       }
       return fetchedDatasets
     },
-    async getLicense(license: string) {
-      const response: License[] = await datasetsApi.get({
+    async fetchLicenses() {
+      this.licenses = await datasetsApi.get({
         entityId: 'licenses'
       })
-      const foundLicense = response.find((l) => l.id === license)
+    },
+    async getLicense(license: string) {
+      if (this.licenses.length === 0) await this.fetchLicenses()
+      const foundLicense = this.licenses.find((l) => l.id === license)
       return foundLicense
+    },
+    async fetchBadges() {
+      this.badges = await datasetsApi.get({
+        entityId: 'badges'
+      })
+    },
+    async getBadges() {
+      if (Object.keys(this.badges).length === 0) await this.fetchBadges()
+      return this.badges
     }
   }
 })

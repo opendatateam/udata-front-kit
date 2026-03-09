@@ -1,38 +1,26 @@
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
-import type { DatasetV2, License } from '@datagouv/components'
+import type {
+  DatasetV2WithFullObject,
+  TranslatedBadge
+} from '@datagouv/components-next'
 
-export const useLicense = (
-  dataset: Ref<DatasetV2 | undefined>
-): Ref<License | undefined> => {
+export const useBadges = (
+  dataset: Ref<DatasetV2WithFullObject | undefined>
+): Ref<TranslatedBadge[]> => {
   const datasetStore = useDatasetStore()
-  const license = ref<License | undefined>(undefined)
+  const badges = ref<TranslatedBadge[]>([])
   watch(
     dataset,
     async () => {
       if (dataset.value) {
-        license.value = await datasetStore.getLicense(dataset.value.license)
+        const badgeLabels = await datasetStore.getBadges()
+        badges.value = dataset.value.badges.flatMap((b) => {
+          const label = badgeLabels[b.kind]
+          return label ? [{ kind: b.kind, label }] : []
+        })
       }
     },
     { immediate: true }
   )
-  return license
-}
-
-// FIXME: this is a redefinition of the same function in @datagouv/components
-// It handles types correcly when passing a DatasetV2
-// https://github.com/datagouv/udata-front/issues/661
-export const useOwnerName = (
-  dataset: DatasetV2
-): ComputedRef<string | undefined> => {
-  const owner = computed(() => {
-    const ownedValue = toValue(dataset)
-    if (ownedValue) {
-      if (ownedValue.organization) {
-        return ownedValue.organization.name
-      } else if (ownedValue.owner) {
-        return ownedValue.owner.first_name + ' ' + ownedValue.owner.last_name
-      }
-    }
-  })
-  return owner
+  return badges
 }

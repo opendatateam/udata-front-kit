@@ -16,11 +16,12 @@ defineProps<Props>()
       <!-- eslint-disable-next-line vue/no-v-html -->
       <li v-for="item in items" :key="item" v-html="fromMarkdown(item, true)" />
     </ul>
-    <!-- eslint-disable-next-line vue/no-v-html -->
+    <!-- eslint-disable vue/no-v-html -->
     <div
       v-else-if="items.length === 1"
       class="fr-text--sm fr-m-0"
       v-html="fromMarkdown(items[0], true)"
     />
+    <!-- eslint-enable vue/no-v-html -->
   </div>
 </template>

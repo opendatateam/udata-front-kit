@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
@@ -15,13 +16,20 @@ import {
 } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
+import type { SentryConfig, WebsiteConfig } from './src/model/config'
 
 interface Config {
-  website: {
-    title: string
-  }
-  robots: {
-    meta: string
+  website: WebsiteConfig
+  sentry?: SentryConfig
+}
+
+// Shared esbuild config for dev and prod
+const esbuildOptions = {
+  supported: {
+    // Tell esbuild that class fields are natively supported - don't transpile them
+    // This prevents __publicField helper issues with maplibre-gl under pnpm
+    'class-field': true,
+    'class-static-field': true
   }
 }
 
@@ -50,8 +58,6 @@ export default defineConfig(({ mode }) => {
           // @ts-expect-error TS2322
           'vue-router',
           // @ts-expect-error TS2322
-          'vitest',
-          // @ts-expect-error TS2322
           vueDsfrAutoimportPreset // Autoimport des composables de VueDsfr
         ],
         vueTemplate: true,
@@ -78,7 +84,8 @@ export default defineConfig(({ mode }) => {
         inject: {
           data: {
             title: config.website.title,
-            metaRobots: config.robots.meta
+            meta: config.website.seo?.meta,
+            metaRobots: config.website.seo?.meta?.robots
           }
         }
       }),
@@ -91,7 +98,20 @@ export default defineConfig(({ mode }) => {
             )
           }
         }
-      })
+      }),
+      // Only enable Sentry if the site config has sentry configured and not in test environment
+      ...(mode !== 'test' &&
+      config.sentry?.domain_url &&
+      process.env.SENTRY_AUTH_TOKEN
+        ? [
+            sentryVitePlugin({
+              authToken: process.env.SENTRY_AUTH_TOKEN,
+              org: 'sentry',
+              project: env.VITE_SITE_ID,
+              url: config.sentry.domain_url
+            })
+          ]
+        : [])
     ],
     resolve: {
       alias: {
@@ -105,15 +125,38 @@ export default defineConfig(({ mode }) => {
       environment: 'happy-dom',
       globals: true
     },
-    server: {
-      // this is a dev CSP, restricting outbound requests to *.data.gouv.fr
-      // this makes sure we don't make unintended API calls to third-parties (looking at you iconify)
-      // ⚠️ this won't be applied on prod or other environments
-      headers: {
-        'Content-Security-Policy': [
-          "connect-src 'self' *.data.gouv.fr raw.githubusercontent.com"
-        ].join('; ')
-      }
+    esbuild: esbuildOptions,
+    build: {
+      sourcemap: true // Source map generation must be turned on for sentry integration
+    },
+    optimizeDeps: {
+      // Some `@datagouv/components-next` dependencies aren't scanned by Vite dev server.
+      // It must optimized them to be able to handle commonjs dependencies.
+      // See https://vite.dev/guide/dep-pre-bundling.html#customizing-the-behavior
+      include: [
+        'debug',
+        'extend',
+        'rehype-highlight',
+        'swagger-ui-dist',
+        'unist-util-find',
+        'unist-util-find-all-between',
+        'vue',
+        'vue-router',
+        // geopf-extensions-openlayers and geoportal-access-lib contain legacy CommonJS modules
+        // (es6-promise, eventbusjs) that need pre-bundling to be properly converted to ESM
+        // for the dev server. Without this, map preview components fail to load.
+        'geopf-extensions-openlayers',
+        'geoportal-access-lib',
+        // Include maplibre-gl to ensure proper bundling with esbuild class field support
+        'maplibre-gl',
+        // leaflet is a dep of @datagouv/components-next which is excluded from optimizeDeps
+        'leaflet'
+      ],
+      // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
+      // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions
+      // used for the components configuration.
+      exclude: ['@datagouv/components-next'],
+      esbuildOptions
     }
   }
 })

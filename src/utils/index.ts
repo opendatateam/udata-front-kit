@@ -1,13 +1,14 @@
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
 import { stripHtml } from 'string-strip-html'
 import type { Ref } from 'vue'
 
+marked.use(gfmHeadingId())
+
 const markedOptions = {
   gfm: true,
-  breaks: true,
-  mangle: false,
-  headerIds: false
+  breaks: true
 }
 
 /**
@@ -22,7 +23,7 @@ export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
 /**
  * Parse markdown to HTML
  */
-export const fromMarkdown = (value: string, inline: boolean = false) => {
+export const fromMarkdown = (value: string | null, inline: boolean = false) => {
   if (!value) return ''
   const fn = inline ? marked.parseInline : marked.parse
   const parsed = fn(value, markedOptions)

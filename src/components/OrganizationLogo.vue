@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components'
+import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { computed } from 'vue'
 
 import config from '@/config'
-import type { ExtendedDatasetV2 } from '@/model/dataset'
+import type { ExtendedDatasetV2WithFullObject } from '@/model/dataset'
 import type { Topic } from '@/model/topic'
 
 const props = defineProps({
   object: {
-    type: Object as () => DatasetV2 | ExtendedDatasetV2 | Topic,
+    type: Object as () =>
+      | DatasetV2
+      | ExtendedDatasetV2WithFullObject
+      | Topic
+      | Dataservice,
     required: true
   },
   size: {

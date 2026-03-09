@@ -15,24 +15,26 @@ const props = defineProps({
 
 const indicator = toRef(props, 'indicator')
 
-const { sources } = useIndicatorExtras(indicator)
+const { sources, calcul } = useIndicatorExtras(indicator)
 </script>
 
 <template>
-  <template v-for="source in sources" :key="source.url">
-    <h2 class="subtitle subtitle--uppercase">{{ source.nom }}</h2>
+  <template v-for="(source, idx) in sources" :key="source.url">
+    <h2 class="subtitle subtitle--uppercase">
+      {{ `Source ${idx + 1} : ${source.nom}` }}
+    </h2>
     <InformationPanelSection>
       <template #description>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="fromMarkdown(source.description)"></div>
       </template>
-      <InformationPanelItem title="URL source">
+      <InformationPanelItem title="URL source" :is-row="true">
         <a :href="source.url" target="_blank">{{ source.url }}</a>
       </InformationPanelItem>
       <InformationPanelItem title="Distributeur" :value="source.distributeur" />
       <InformationPanelItem title="Producteur" :value="source.producteur" />
       <InformationPanelItem
-        v-if="indicator.temporal_coverage"
+        v-if="source.plage_temporelle"
         title="Plage temporelle"
       >
         {{ formatDate(source.plage_temporelle.start, true) }} -
@@ -40,4 +42,24 @@ const { sources } = useIndicatorExtras(indicator)
       </InformationPanelItem>
     </InformationPanelSection>
   </template>
+  <!-- Informations calcul -->
+  <InformationPanelSection title="Informations calcul">
+    <template #description
+      >Nous documentons les hypothèses de traitement utilisées pour le calcul
+      des indicateurs dans la section "Méthode calcul". L'équipe en charge de
+      leur application est indiquée dans le champ "Responsable
+      calcul".</template
+    >
+    <InformationPanelItem
+      title="Responsable calcul"
+      :is-row="true"
+      :value="calcul?.responsable"
+    />
+    <InformationPanelItem
+      title="Méthode calcul"
+      :is-row="true"
+      :value="calcul?.methode"
+      :is-markdown="true"
+    />
+  </InformationPanelSection>
 </template>

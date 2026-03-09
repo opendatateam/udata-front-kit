@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { storeToRefs } from 'pinia'
 import { capitalize, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -11,6 +10,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
+import { useAsyncComponent } from '@/utils/component'
 import { debounceWait } from '@/utils/config'
 
 interface Props extends TopicPageRouterConf {
@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter()
 const route = useRoute()
-const { meta, pageConf } = useCurrentPageConf()
+const { meta, pageConf, pageKey } = useCurrentPageConf()
 
 const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
 const searchResultsMessage = computed(
@@ -34,7 +34,6 @@ const searchResultsMessage = computed(
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
 const links = [
   { to: '/', text: 'Accueil' },
@@ -42,7 +41,7 @@ const links = [
 ]
 
 const createUrl = computed(() => {
-  return { name: `${meta.pageKey}_add`, query: route.query }
+  return { name: `${pageKey}_add`, query: route.query }
 })
 
 const search = useDebounceFn((query) => {
@@ -53,17 +52,8 @@ const search = useDebounceFn((query) => {
   })
 }, debounceWait)
 
-const FiltersComponent = computed(() => {
-  const componentLoader = meta?.filtersComponent
-  if (componentLoader) {
-    return defineAsyncComponent({
-      loader: componentLoader,
-      onError: (err) => {
-        console.error('Failed to load component:', err)
-      }
-    })
-  }
-  return defineAsyncComponent(
+const FiltersComponent = useAsyncComponent(() => meta?.filtersComponent, {
+  fallback: defineAsyncComponent(
     () => import('@/components/pages/PageFilters.vue')
   )
 })
@@ -82,11 +72,11 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-my-2v">
+  <div class="fr-container fr-my-2v">
     <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
       <h1 class="fr-mb-0">{{ capitalize(pageConf.labels.plural) }}</h1>
       <div
-        v-if="canAddTopic"
+        v-if="userStore.canAddTopic(pageKey)"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
@@ -98,7 +88,7 @@ onMounted(() => {
   </div>
   <section
     v-if="pageConf.banner"
-    class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
+    class="fr-container--fluid hero-banner fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->

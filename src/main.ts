@@ -6,9 +6,10 @@ import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires 
 
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
-import '@datagouv/components/dist/style.css'
+import '@datagouv/components-next/dist/components.css'
+import 'vue-sonner/style.css'
 
-import { setupI18n } from '@datagouv/components'
+import * as Sentry from '@sentry/vue'
 import { createHead } from '@unhead/vue'
 import type { InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
@@ -18,13 +19,14 @@ import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
 import VueMatomo from 'vue-matomo'
 import TextClamp from 'vue3-text-clamp'
-import 'vue3-toastify/dist/index.css'
 
 import config from '@/config'
 
+import { datagouv } from '@datagouv/components-next'
 import App from './App.vue'
 import './assets/main.css'
 import type { CustomParams } from './model/api'
+import type { SentryConfig } from './model/config'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
@@ -32,17 +34,54 @@ import { isNotFoundError } from './utils/http'
 
 const app = createApp(App)
 const pinia = createPinia()
-const i18n = setupI18n()
 const head = createHead()
+
+if (
+  config.sentry?.dsn &&
+  import.meta.env.MODE !== 'test' &&
+  !('Cypress' in window)
+) {
+  Sentry.init({
+    app,
+    ...(config.sentry as SentryConfig)
+  })
+}
 
 routerPromise
   .then((router) => {
     app.use(router)
     app.use(pinia)
-    app.use(i18n)
     app.use(head)
     app.use(TextClamp)
     app.use(LoadingPlugin)
+    app.use(datagouv, {
+      name: 'data.gouv.fr',
+      baseUrl: config.datagouvfr.base_url,
+      apiBase: config.datagouvfr.base_url,
+      tabularApiUrl: config.datagouvfr.tabular_api_url,
+      tabularAllowRemote: true,
+      pmtilesViewerBaseUrl: null,
+      datasetQualityGuideUrl:
+        'https://guides.data.gouv.fr/guides-open-data/guide-qualite/ameliorer-la-qualite-dun-jeu-de-donnees-en-continu/ameliorer-le-score-de-qualite-des-metadonnees',
+      textClamp: TextClamp,
+      maxJsonPreviewCharSize: 1000000, // Maximum size of JSON to preview in characters (~1MB). JSON preview module is partly collapsed by default so we can have a preview for large files.
+      maxPdfPreviewByteSize: 10000000, // Maximum size of PDF to preview in bytes (10 MB)
+      maxXmlPreviewCharSize: 100000, // Maximum size of XML to preview in characters (~100KB). XML preview module can NOT be collapsed by default so we should not have a preview for large files.
+      metricsApiUrl: 'https://metric-api.data.gouv.fr',
+      schemaValidataUrl: 'https://validata.fr',
+      schemasSiteUrl: 'https://schema.data.gouv.fr/',
+      schemasSiteName: 'schema.data.gouv.fr',
+      // inject authentication for datagouv components that make their own API calls
+      onRequest: (param) => {
+        const store = useUserStore()
+        if (store.$state.isLoggedIn && store.$state.token) {
+          param.options.headers.set(
+            'Authorization',
+            `Bearer ${store.$state.token}`
+          )
+        }
+      }
+    })
 
     if (config.website.matomo.siteId != null) {
       app.use(VueMatomo, {

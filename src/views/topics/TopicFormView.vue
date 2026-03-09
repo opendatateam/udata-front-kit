@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
@@ -22,7 +21,7 @@ import {
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
-import { useTagsQuery } from '@/utils/tags'
+import { useFiltersApiParams } from '@/utils/filters'
 import { cloneTopic } from '@/utils/topic'
 import { useUniverseQuery } from '@/utils/universe'
 
@@ -35,7 +34,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
 const router = useRouter()
 const { pageKey, pageConf } = useCurrentPageConf()
@@ -43,23 +41,17 @@ const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
 // populate tags from filters in query string
-const { tags: selectedTags } = useTagsQuery(
-  pageKey || 'topics',
-  routeQuery,
-  true
-)
-const { tagsWithUniverse } = useUniverseQuery(pageKey, selectedTags)
+const { apiParams } = useFiltersApiParams(pageKey || 'topics', routeQuery, true)
+const mergedApiParams = useUniverseQuery(pageKey, apiParams)
 
 const topic: Ref<
   Partial<TopicPostData> & Pick<TopicPostData, 'extras' | 'tags'>
 > = ref({
   private: true,
-  tags: tagsWithUniverse,
+  tags: mergedApiParams.tag || [],
   spatial: routeQuery.geozone ? { zones: [routeQuery.geozone] } : undefined,
   extras: {
-    [useSiteId()]: {
-      datasets_properties: []
-    }
+    [useSiteId()]: {}
   }
 })
 
@@ -180,11 +172,11 @@ const onSubmit = async () => {
   await formFields.value.onSubmit()
   if (formErrors.value.length > 0) {
     setTimeout(() => {
+      errorSummary.value.$el.focus({ preventScroll: true })
       errorSummary.value.$el.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       })
-      errorSummary.value.$el.focus()
     }, 0)
   } else {
     save()
@@ -210,25 +202,28 @@ onMounted(() => {
       .load(routeQuery.clone || routeParams.item_id)
       .then((remoteTopic) => {
         if (routeQuery.clone != null) {
-          topic.value = cloneTopic(
-            remoteTopic,
-            routeQuery['keep-datasets'] === '1'
+          cloneTopic(remoteTopic, routeQuery['keep-datasets'] === '1').then(
+            (newTopic) => {
+              topic.value = newTopic
+            }
           )
         } else {
           // remove rels from TopicV2 for TopicPostData compatibility
-          const { datasets, reuses, ...data } = remoteTopic
+          const { elements, ...data } = remoteTopic
           topic.value = data
         }
         setMetaTitle()
       })
       .finally(() => loader.hide())
+  } else {
+    setMetaTitle()
   }
 })
 </script>
 
 <template>
   <GenericContainer class="fr-mt-4w">
-    <div v-if="canAddTopic">
+    <div v-if="userStore.canAddTopic(pageKey)">
       <div v-if="errorMsg" class="fr-mt-4v">
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>

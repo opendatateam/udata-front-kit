@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import BlankState from '@/components/BlankState.vue'
 import config from '@/config'
 import type { ResourceData } from '@/model/resource'
 import { useResourceStore } from '@/store/ResourceStore'
-import type { DatasetV2 } from '@datagouv/components'
-import { Pagination, ResourceAccordion } from '@datagouv/components'
+import type {
+  DatasetV2,
+  DatasetV2WithFullObject
+} from '@datagouv/components-next'
+import { Pagination, ResourceAccordion } from '@datagouv/components-next'
 import { useLoading } from 'vue-loading-overlay'
 
 const pageSize = config.website.pagination_sizes.files_list as number
 
 const props = defineProps({
   dataset: {
-    type: Object as () => DatasetV2,
+    type: Object as () => DatasetV2WithFullObject,
     required: true
   },
   noFileMessage: {
@@ -18,6 +22,10 @@ const props = defineProps({
     default: "Il n'y a pas encore de fichier pour ce jeu de données."
   }
 })
+
+// FIXME: ResourceAccordion should accept DatasetV2WithFullObject — upstream bug in @datagouv/components-next
+// @ts-expect-error dataset prop is typed as Dataset | DatasetV2, not DatasetV2WithFullObject
+const datasetForAccordion: DatasetV2 = props.dataset
 
 const resourceStore = useResourceStore()
 const resources = ref<Record<string, ResourceData>>({})
@@ -66,12 +74,11 @@ const doSearch = (typeId: string) => {
 const changePage = async (type: string, page = 1, query = '') => {
   resources.value[type].currentPage = page
   queries.value[type] = query
-  const data = await resourceStore.fetchDatasetResources(
-    props.dataset.id,
-    type,
+  const data = await resourceStore.fetchDatasetResources(props.dataset.id, {
     page,
-    query
-  )
+    typeId: type,
+    q: query
+  })
   resources.value[type].resources = data.data
   resources.value[type].total = data.total
 }
@@ -119,7 +126,7 @@ onMounted(async () => {
           <ResourceAccordion
             v-for="resource in typedResources.resources"
             :key="resource.id"
-            :dataset-id="dataset.id"
+            :dataset="datasetForAccordion"
             :resource="resource"
           />
           <Pagination
@@ -142,19 +149,9 @@ onMounted(async () => {
       </div>
     </template>
   </template>
-  <div
+  <BlankState
     v-else
-    class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
-  >
-    <img
-      src="/blank_state/file.svg"
-      alt=""
-      loading="lazy"
-      height="105"
-      width="130"
-    />
-    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      {{ noFileMessage }}
-    </p>
-  </div>
+    image="/static/blank_state/file.svg"
+    :message="noFileMessage"
+  />
 </template>

@@ -11,7 +11,7 @@ export default {
     if (item !== null) {
       try {
         return JSON.parse(item)
-      } catch (e) {
+      } catch {
         return item
       }
     }

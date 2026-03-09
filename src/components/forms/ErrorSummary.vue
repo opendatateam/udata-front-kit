@@ -21,10 +21,11 @@ defineProps({
   <div
     v-show="formErrors.length"
     class="fr-my-4w fr-p-2w error-status"
-    role="group"
+    role="alert"
     aria-labelledby="error-summary-title"
+    tabindex="-1"
   >
-    <component :is="headingLevel" id="error-summary-title" tabindex="-1">
+    <component :is="headingLevel" id="error-summary-title">
       Il y a {{ formErrors.length }} erreur<span v-if="formErrors.length > 1"
         >s</span
       >

@@ -6,27 +6,37 @@ datagouvfr:
   # data.gouv.fr base URL
   base_url: https://www.data.gouv.fr
   # oauth settings
-  oauth_client_id: 5e6f426e634f417810ab794b
-
-robots:
-  disallow:
-  sitemap:
-  meta: 'noindex, nofollow'
+  oauth_client_id: 6709259c1e92c988c47d2f3e
+  tabular_api_url:
 
 # UI customizations
 website:
   title: 'meteo.data.gouv.fr'
+  seo:
+    canonical_url: https://meteo.preprod.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/logos/meteo-france-logo.svg'
+  service_logo: '/static/logos/meteo-france-logo.svg'
   badge:
     display: false
     text: 'BETA'
     style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: 'La météo et le climat en Open Data'
+    title: 'Les données publiques sur la météo et le climat'
     subtitle: 'meteo.data.gouv.fr vise à référencer, héberger et diffuser les données publiques météorologiques produites par Météo-France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.'
     sections:
       - title: Thématiques
@@ -38,37 +48,45 @@ website:
             - name: 'Données climatologiques (par station et spatialisées)'
               description: 'Données climatologiques pour toutes les stations françaises depuis leur ouverture, pour tous les paramètres disponibles.'
               url: 'datasets?category=climatologique-base'
-              image_url: '/meteo-france/assets/climatologie.png'
+              image_url: '/static/meteo-france/assets/climatologie.png'
             - name: 'Données de référence pour le changement climatique'
               description: 'Données recommandées par Météo-France pour réaliser des diagnostics et études climatiques.'
               url: 'datasets?category=climatologique-changement-climatique'
-              image_url: '/meteo-france/assets/climatique.jpg'
+              image_url: '/static/meteo-france/assets/climatique.jpg'
             - name: 'Données de Prévision Numérique du Temps (PNT)'
-              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéance.'
+              description: 'Données temps réel des dernières prévisions des modèles de prévision numérique jusqu’à 4 jours d’échéances.'
               url: 'datasets?category=pnt'
-              image_url: '/meteo-france/assets/pnt.png'
+              image_url: '/static/meteo-france/assets/pnt.png'
+            - name: 'Informations sur les stations'
+              description: 'Accès aux caractéristiques des stations météorologiques de métropole et d’outre-mer en service.'
+              url: 'datasets?category=stations'
+              image_url: '/static/meteo-france/assets/station.png'
+            - name: 'Fiches climatologiques'
+              description: "Fiches synthétiques contenant les moyennes mensuelles, les normales et les records d'une station."
+              url: 'datasets?category=fiches'
+              image_url: '/static/meteo-france/assets/fiche.png'
+            - name: 'Données d’observations météorologiques'
+              description: 'Archive des observations pour différentes sources de données sol, mer et altitude'
+              url: 'datasets?category=observations'
+              image_url: '/static/meteo-france/assets/observations.png'
+            - name: 'Bulletins météorologiques'
+              description: 'Archive des bulletins météorologiques pour différentes sources de données : forêt, marine, montagne, climatologie ...'
+              url: 'datasets?category=bulletins'
+              image_url: '/static/meteo-france/assets/bulletins.png'
         sub_section_tiles:
           title:
           tiles:
         sub_section_buttons:
-      - title: Actualités
-        content: >-
-          Retours sur le hackathon du 8 et 9 avril dernier 🚀
-
-
-          [En savoir plus](/hackathon)
-        sub_section_datasets:
-        sub_section_cards:
-        sub_section_tiles:
-        sub_section_buttons:
     meta_description:
-  header_button:
-    display: true
-    label: 'Donnez votre avis'
-    link: https://tally.so/r/wQ7y47
-  header_search:
-    display: true
-    placeholder: Rechercher...
+  header:
+    admin_shortcut: false
+    button:
+      display: true
+      label: 'Donnez votre avis'
+      link: https://tally.so/r/wQ7y47
+    search:
+      display: true
+      placeholder: Rechercher...
   search_bar:
     display: true
     placeholder: 'Rechercher un jeu de données'
@@ -81,8 +99,8 @@ website:
       to: /datasets
     - text: Recherche guidée
       to: /form
-    - text: 'Hackathon le 8 et 9 avril 🚀'
-      to: /hackathon
+    #- text: 'Hackathon le 8 et 9 avril 🚀'
+    #  to: /hackathon
     - text: A propos
       to: /about
   router:
@@ -93,15 +111,15 @@ website:
       - title: 'A propos'
         id: 'about'
         route: '/about'
-        url: '/meteo-france/pages/about.md'
+        url: '/static/meteo-france/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'
-        url: '/meteo-france/pages/accessibility.md'
-      - title: 'Hackathon le 8 et 9 avril 🚀'
-        id: 'hackathon'
-        route: '/hackathon'
-        url: '/meteo-france/pages/hackathon.md'
+        url: '/static/meteo-france/pages/accessibility.md'
+      #- title: 'Hackathon le 8 et 9 avril 🚀'
+      #id: 'hackathon'
+      #route: '/hackathon'
+      #url: '/static/meteo-france/pages/hackathon.md'
   show_quality_component: true
   oauth_option: true
   footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à la météo et au climat réalisé en collaboration avec Météo-France.'
@@ -167,7 +185,7 @@ organizations:
 pages:
   datasets:
     list_all: true
-    tag_prefix:
+    filter_prefix:
     universe_query:
       tag: meteodatagouvfr
     title: Jeux de données
@@ -179,9 +197,15 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-    discussions:
-      display: true
-      create: false
+    resources_tabs:
+      discussions:
+        display: true
+        create: false
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
     filters:
       - name: Catégories
         default_option: Toutes les catégories
@@ -189,7 +213,7 @@ pages:
         type: select
         child: subcategory
         color: noop
-        use_tag_prefix: false
+        use_filter_prefix: false
         values:
           - id: climatologique-base
             name: Données climatologiques de base
@@ -199,12 +223,18 @@ pages:
             name: Données de Prévision Numérique du Temps (PNT)
           - id: stations
             name: Informations sur les stations
+          - id: fiches
+            name: Fiches climatologiques
+          - id: observations
+            name: Données d'observations météorologiques
+          - id: bulletins
+            name: Archive des bulletins météorologiques
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
         type: select
         color: noop
-        use_tag_prefix: false
+        use_filter_prefix: false
         values:
           # parent-category: stations
           - name: Stations du réseau Météo-France
