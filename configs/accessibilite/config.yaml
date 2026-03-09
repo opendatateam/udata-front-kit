@@ -28,7 +28,7 @@ website:
   logo_operator:
   homepage:
     title: "Le Point d'Accès Unique aux Données d'Accessibilité"
-    subtitle: accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
+    subtitle: "accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
     sections:
       - title: Des thématiques de données pour articuler les politiques publiques en faveur de l'accesibilité et les données territoriales
         content:
