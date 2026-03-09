@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { type OgcLayerInfo, parseXml } from '../ogcServices'
-import { generateSingleDatasetQlr, generateTopicQlr } from '../qgis'
+import {
+  generateSingleDatasetQlr,
+  generateTopicQlr,
+  resolveAllOgcLayers
+} from '../qgis'
 
 describe('QGIS QLR Generation', () => {
   describe('generateSingleDatasetQlr', () => {
@@ -112,6 +116,79 @@ describe('QGIS QLR Generation', () => {
       const maplayers = doc.querySelectorAll('maplayer')
       expect(maplayers.length).toBe(3)
     })
+
+    it('should generate QLR with multiple resource sub-groups for a dataset with WFS and WMS', () => {
+      // Dataset has both a WFS and a WMS resource — each gets its own sub-group
+      const layers: OgcLayerInfo[] = [
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'wfs_layer'
+        },
+        {
+          url: 'https://example.com/wms',
+          format: 'wms',
+          resourceTitle: 'WMS Resource',
+          layerName: 'wms_layer'
+        }
+      ]
+
+      const layersByDataset = new Map()
+      layersByDataset.set('Multi-Resource Dataset', layers)
+      const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      const groups = doc.querySelectorAll('layer-tree-group')
+      // outer + dataset + WFS resource + WMS resource = 4
+      expect(groups.length).toBe(4)
+
+      const wfsResourceGroup = Array.from(groups).find(
+        (g) => g.getAttribute('name') === 'WFS Resource'
+      )
+      expect(wfsResourceGroup).toBeTruthy()
+
+      const wmsResourceGroup = Array.from(groups).find(
+        (g) => g.getAttribute('name') === 'WMS Resource'
+      )
+      expect(wmsResourceGroup).toBeTruthy()
+
+      const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')
+      expect(layerTreeLayers.length).toBe(2)
+
+      const wfsLayer = Array.from(layerTreeLayers).find(
+        (l) => l.getAttribute('providerKey') === 'WFS'
+      )
+      const wmsLayer = Array.from(layerTreeLayers).find(
+        (l) => l.getAttribute('providerKey') === 'WMS'
+      )
+      expect(wfsLayer).toBeTruthy()
+      expect(wmsLayer).toBeTruthy()
+    })
+  })
+
+  describe('resolveAllOgcLayers', () => {
+    it('should resolve multiple resources, each with a named layer', async () => {
+      const ogcInfos: OgcLayerInfo[] = [
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'wfs_layer'
+        },
+        {
+          url: 'https://example.com/wms',
+          format: 'wms',
+          resourceTitle: 'WMS Resource',
+          layerName: 'wms_layer'
+        }
+      ]
+
+      const resolved = await resolveAllOgcLayers(ogcInfos)
+      expect(resolved.length).toBe(2)
+      expect(resolved[0].layerName).toBe('wfs_layer')
+      expect(resolved[1].layerName).toBe('wms_layer')
+    })
   })
 
   describe('generateTopicQlr', () => {
@@ -205,7 +282,33 @@ describe('QGIS QLR Generation', () => {
       expect(wfsProviders.length).toBe(2)
       expect(wmsProviders.length).toBe(1)
     })
+  })
 
+  describe('resolveAllOgcLayers', () => {
+    it('should resolve multiple resources, each with a named layer', async () => {
+      const ogcInfos: OgcLayerInfo[] = [
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'wfs_layer'
+        },
+        {
+          url: 'https://example.com/wms',
+          format: 'wms',
+          resourceTitle: 'WMS Resource',
+          layerName: 'wms_layer'
+        }
+      ]
+
+      const resolved = await resolveAllOgcLayers(ogcInfos)
+      expect(resolved.length).toBe(2)
+      expect(resolved[0].layerName).toBe('wfs_layer')
+      expect(resolved[1].layerName).toBe('wms_layer')
+    })
+  })
+
+  describe('generateTopicQlr', () => {
     it('should handle mixed WFS and WMS layers', () => {
       const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
 

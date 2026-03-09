@@ -23,7 +23,7 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
-import { fetchBestOgcResource } from '@/utils/ogcServices'
+import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 
 const route = useRouteParamsAsString()
@@ -33,15 +33,15 @@ const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
 
-const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
+const ogcLayerInfo = ref(new Map<string, OgcLayerInfo[]>())
 
 const computeOgcInfo = async (datasetId: string) => {
   if (!config.website.datasets.open_in_qgis) return
-  const bestResult = await fetchBestOgcResource((page) =>
+  const results = await fetchAllOgcResources((page) =>
     resourceStore.fetchDatasetResources(datasetId, { page })
   )
-  if (bestResult) {
-    ogcLayerInfo.value.set(datasetId, bestResult)
+  if (results.length > 0) {
+    ogcLayerInfo.value.set(datasetId, results)
   }
 }
 

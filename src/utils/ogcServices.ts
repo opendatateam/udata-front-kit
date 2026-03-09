@@ -126,36 +126,14 @@ export function extractLayerNameFromUrl(
 }
 
 /**
- * Fetches pages of resources and returns the best OGC-compatible one.
- * Stops early if a WFS resource is found (preferred over WMS).
- */
-export async function fetchBestOgcResource(
-  fetchPage: (
-    page: number
-  ) => Promise<{ data: Resource[]; next_page: string | null }>
-): Promise<OgcLayerInfo | null> {
-  const MAX_PAGES = 10
-  let bestResult: OgcLayerInfo | null = null
-  for (let page = 1; page <= MAX_PAGES; page++) {
-    const response = await fetchPage(page)
-    const pageResult = findOgcCompatibleResource(response.data)
-    if (pageResult?.format === 'wfs' || (!bestResult && pageResult)) {
-      bestResult = pageResult
-    }
-    if (pageResult?.format === 'wfs' || !response.next_page) break
-  }
-  return bestResult
-}
-
-/**
- * Finds the first OGC-compatible resource in a dataset
- * Prioritizes WFS over WMS (vector data is more useful than raster)
+ * Finds all OGC-compatible resources in a list of resources.
+ * Includes all WFS resources and WMS resources that have a known layer name.
  * Excludes intranet URLs (*.rie.gouv.fr)
  */
-export function findOgcCompatibleResource(
+export function findAllOgcCompatibleResources(
   resources: Resource[]
-): OgcLayerInfo | null {
-  let wmsCandidate: OgcLayerInfo | null = null
+): OgcLayerInfo[] {
+  const results: OgcLayerInfo[] = []
 
   for (const resource of resources) {
     // Skip intranet URLs (not accessible outside government network)
@@ -165,39 +143,54 @@ export function findOgcCompatibleResource(
 
     // type assertion from OGC_SERVICES_FORMATS values array in datagouv components
     const format = detectOgcService(resource) as OGC_SERVICE_FORMAT
-    if (format) {
-      let layerName = undefined
+    if (!format) continue
 
-      // Try to extract layer name from URL parameters or resource.title
-      const extractedName = extractLayerNameFromUrl(resource.url, format)
-      if (extractedName && isValidLayerName(extractedName)) {
-        layerName = extractedName
-      } else if (resource.title && isValidLayerName(resource.title)) {
-        layerName = resource.title
-      }
+    let layerName = undefined
 
-      if (format === 'wfs') {
-        // WFS found - return immediately (best result, no need to search more)
-        return {
-          url: resource.url,
-          format,
-          resourceTitle: resource.title,
-          layerName
-        }
-      }
-      // layerName is required for WMS (we don't do multi-layers)
-      else if (format === 'wms' && layerName && !wmsCandidate) {
-        // Store first valid WMS as fallback
-        wmsCandidate = {
-          url: resource.url,
-          format,
-          resourceTitle: resource.title,
-          layerName
-        }
-      }
+    // Try to extract layer name from URL parameters or resource.title
+    const extractedName = extractLayerNameFromUrl(resource.url, format)
+    if (extractedName && isValidLayerName(extractedName)) {
+      layerName = extractedName
+    } else if (resource.title && isValidLayerName(resource.title)) {
+      layerName = resource.title
+    }
+
+    if (format === 'wfs') {
+      // Include all WFS resources; layer names are resolved later via GetCapabilities if needed
+      results.push({
+        url: resource.url,
+        format,
+        resourceTitle: resource.title,
+        layerName
+      })
+    } else if (format === 'wms' && layerName) {
+      // WMS requires a known layer name (no GetCapabilities fetch for WMS)
+      results.push({
+        url: resource.url,
+        format,
+        resourceTitle: resource.title,
+        layerName
+      })
     }
   }
 
-  // No WFS found, return WMS if available (or null)
-  return wmsCandidate
+  return results
+}
+
+/**
+ * Fetches pages of resources and returns all OGC-compatible ones (WFS and WMS).
+ */
+export async function fetchAllOgcResources(
+  fetchPage: (
+    page: number
+  ) => Promise<{ data: Resource[]; next_page: string | null }>
+): Promise<OgcLayerInfo[]> {
+  const MAX_PAGES = 10
+  const allResults: OgcLayerInfo[] = []
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const response = await fetchPage(page)
+    allResults.push(...findAllOgcCompatibleResources(response.data))
+    if (!response.next_page) break
+  }
+  return allResults
 }
