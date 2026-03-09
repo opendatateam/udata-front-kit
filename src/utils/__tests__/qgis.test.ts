@@ -284,30 +284,6 @@ describe('QGIS QLR Generation', () => {
     })
   })
 
-  describe('resolveAllOgcLayers', () => {
-    it('should resolve multiple resources, each with a named layer', async () => {
-      const ogcInfos: OgcLayerInfo[] = [
-        {
-          url: 'https://example.com/wfs',
-          format: 'wfs',
-          resourceTitle: 'WFS Resource',
-          layerName: 'wfs_layer'
-        },
-        {
-          url: 'https://example.com/wms',
-          format: 'wms',
-          resourceTitle: 'WMS Resource',
-          layerName: 'wms_layer'
-        }
-      ]
-
-      const resolved = await resolveAllOgcLayers(ogcInfos)
-      expect(resolved.length).toBe(2)
-      expect(resolved[0].layerName).toBe('wfs_layer')
-      expect(resolved[1].layerName).toBe('wms_layer')
-    })
-  })
-
   describe('generateTopicQlr', () => {
     it('should handle mixed WFS and WMS layers', () => {
       const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()

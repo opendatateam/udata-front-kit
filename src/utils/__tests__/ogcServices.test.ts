@@ -32,7 +32,7 @@ describe('OGC Services', () => {
       expect(result.some((r) => r.format === 'wms')).toBe(true)
     })
 
-    it('should return WMS if no WFS is available', () => {
+    it('should return WMS resources', () => {
       const resources: Resource[] = [
         resourceFactory.one({
           overrides: {
