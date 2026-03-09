@@ -167,7 +167,7 @@ function addLayersByDataset(
  *
  * @param parent - Parent XML element to add to
  * @param datasetTitle - Dataset title (top-level group)
- * @param layers - Array of OGC layer info (may span multiple resources)
+ * @param layers - Array of OGC layer info
  * @param crs - Coordinate reference system
  * @param maplayers - XML builder for maplayers section
  */
@@ -180,7 +180,6 @@ function addDatasetLayers(
 ): void {
   const datasetGroup = createGroup(parent, datasetTitle)
 
-  // Group layers by resourceTitle to create one sub-group per OGC resource
   const layersByResource = new Map<string, OgcLayerInfo[]>()
   for (const layer of layers) {
     const existing = layersByResource.get(layer.resourceTitle) ?? []
@@ -325,7 +324,7 @@ export async function openInQgis(
     return
   }
 
-  // Resolve all OGC resources (expand WFS GetCapabilities if needed)
+  // Resolve OGC layers (expand WFS if needed)
   const expandedLayers = await resolveAllOgcLayers(layerInfos)
   if (expandedLayers.length === 0) {
     // Show detailed error for single-dataset export
