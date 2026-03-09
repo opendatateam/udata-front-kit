@@ -19,7 +19,7 @@ website:
   title: 'accessibilite.data.gouv.fr'
   formatted_title: '<b>accessibilite.data.gouv.fr</b>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/logos/accessibilite-logo.svg'
+  service_logo: '/static/logos/accessibilite-logo.svg'
   badge:
     display: true
     text: 'BETA'
@@ -39,16 +39,16 @@ website:
           cards:
             - name: 'Tourisme'
               description: "Toutes les données liées au tourisme accessible (mobilités, établissements recevant du public, etc.)"
-              url: 'bouquets?theme=accessibilite-numerique'
-              image_url: '/accessibilite/assets/tourisme-handicap.jpg'
+              url: 'bouquets?theme=accessibilite-tourisme'
+              image_url: '/static/accessibilite/assets/tourisme-handicap.jpg'
             - name: 'Établissements recevant du public'
               description: "Données sur tous les établissements recevant du public (établissements scolaires, de santé, etc.)"
               url: 'bouquets?theme=accessibilite-des-lieux'
-              image_url: '/accessibilite/assets/accessibilite-des-lieux.jpg'
+              image_url: '/static/accessibilite/assets/accessibilite-des-lieux.jpg'
             - name: 'Numérique'
               description: "Les données en lien avec l'accessibilité numérique"
               url: 'bouquets?theme=accessibilite-numerique'
-              image_url: '/accessibilite/assets/accessibilite-numerique.jpg'
+              image_url: '/static/accessibilite/assets/accessibilite-numerique.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
@@ -108,15 +108,7 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        url: '/accessibilite/pages/about.md'
-      - title: 'Accessibilité'
-        id: 'accessibility'
-        route: '/accessibility'
-        url: '/accessibilite/pages/accessibility.md'
-      - title: "Conditions générales d'utilisation"
-        id: 'terms'
-        route: '/terms'
-        url: '/accessibilite/pages/terms.md'
+        url: '/static/accessibilite/pages/about.md'
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
@@ -220,8 +212,10 @@ pages:
         form:
           required: true
         values:
+          - id: accessibilite-tourisme
+            name: Tourisme accessible
           - id: accessibilite-des-lieux
-            name: Accessibilité des lieux
+            name: Accessibilité des établissements recevant du public
           - id: accessibilite-numerique
             name: Accessibilité numérique
           - id: autre
