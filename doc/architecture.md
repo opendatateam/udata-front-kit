@@ -10,7 +10,7 @@
    - [Configurations via `/configs`](#configurations-via-configs)
 3. [Les univers et leur paramétrage](#les-univers-et-leur-paramétrage)
 4. [Les filtres et leur configuration](#les-filtres-et-leur-configuration)
-5. [Composants – librairie fonctionnelle commune](#composants--librairie-fonctionnelle-commune)
+5. [Composants](#composants)
 
 ---
 
@@ -65,7 +65,7 @@ Chaque verticale peut ainsi :
 Tout ce qui n'est pas surchargé est fourni par le socle commun (`src/components`, `src/views`).
 
 > [!NOTE]
-> Il est recommandé d'utiliser au maximum les possibilités de configuration du comportent existant avant de définir des composants ou pages _custom_.
+> Il est recommandé d'utiliser au maximum les possibilités de configuration du comportement existant avant de définir des composants ou pages _custom_.
 
 ### Routes personnalisées et pages
 
@@ -137,7 +137,7 @@ Un **univers** est un sous-ensemble thématique de données exposé sur une page
 Cette notion d'univers est à mettre en parallèle avec celle du [dépôt de gestion des univers](https://github.com/opendatateam/udata-front-kit-universe/). Celui-ci agit en amont du frontend et permet de rassembler les données d'une thématique dans un topic dédié. Dans ce cas, l'univers du frontend se résume au dit topic.
 
 > [!NOTE]
-> Il est possible pour une verticale de définir un univers sans se reposer sur `udata-front-kit-univers` en amont. Par exemple, on peut considférer qu'un tag + une organisation constititue un univers. Cette contrainte sera exprimée dans `universe_query`.
+> Il est possible pour une verticale de définir un univers sans se reposer sur `udata-front-kit-univers` en amont. Par exemple, on peut considérer qu'un tag + une organisation constitue un univers. Cette contrainte sera exprimée dans `universe_query`.
 
 Exemple (extrait de `configs/ecospheres/config.yaml`) :
 
@@ -227,7 +227,7 @@ pages:
 Produira les effets suivants sur la page `indicators` :
 
 - Présence d'un filtre de type `select` "Enjeu" sur la page, avec une valeur par défaut "Tous les enjeux" ;
-- Au clic sur la valeur "Adaptation climent", génération d'une requête `?tag=ecospheres-indicateurs-enjeu-adaptation-climat&topic=1234` : concaténation de la `universe_query` et d'un tag préfixé.
+- Au clic sur la valeur "Adaptation climat", génération d'une requête `?tag=ecospheres-indicateurs-enjeu-adaptation-climat&topic=1234` : concaténation de la `universe_query` et d'un tag préfixé.
 
 ## Composants
 
