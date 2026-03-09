@@ -17,7 +17,7 @@ robots:
 # UI customizations
 website:
   title: 'accessibilite.data.gouv.fr'
-  formatted_title: '<i>accessibilite.</i><b>data.gouv</b><i>.fr</i>'
+  formatted_title: '<b>accessibilite.data.gouv.fr</b>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/logos/accessibilite-logo.svg'
   badge:
@@ -27,24 +27,28 @@ website:
   # leave empty if not pertinent
   logo_operator:
   homepage:
-    title: "Les données ouvertes relatives à l'accessibilité"
-    subtitle: "accessibilite.data.gouv.fr centralise et structure les données publiques relatives à l'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
+    title: "Le Point d'Accès Unique aux Données d'Accessibilité"
+    subtitle: "accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
     sections:
-      - title: Des bouquets de données pour articuler politiques publiques et données territoriales
-        content: "Créez un bouquet pour inventorier les données utiles à un cas d'usage : une politique publique sur un territoire"
+      - title: Des thématiques de données pour articuler les politiques publiques en faveur de l'accesibilité et les données territoriales
+        content:
         sub_section_datasets:
         sub_section_cards:
           title:
           class: 'fr-col-md-6'
           cards:
-            - name: 'Accessibilité numérique'
-              description: "Données sur l'immobilier dédié aux activités de logistique (bâti, entrepôts, stockage, etc.)."
+            - name: 'Tourisme'
+              description: "Toutes les données liées au tourisme accessible (mobilités, établissements recevant du public, etc.)"
               url: 'bouquets?theme=accessibilite-numerique'
-              image_url: '/accessibilite/assets/accessibilite-numerique.jpg'
-            - name: 'Accessibilité des lieux'
-              description: "Données sur l'infrastructure des activités de logistique (réseaux, voirie, zones livraison, etc.)."
+              image_url: '/accessibilite/assets/tourisme-handicap.jpg'
+            - name: 'Établissements recevant du public'
+              description: "Données sur tous les établissements recevant du public (établissements scolaires, de santé, etc.)"
               url: 'bouquets?theme=accessibilite-des-lieux'
               image_url: '/accessibilite/assets/accessibilite-des-lieux.jpg'
+            - name: 'Numérique'
+              description: "Les données en lien avec l'accessibilité numérique"
+              url: 'bouquets?theme=accessibilite-numerique'
+              image_url: '/accessibilite/assets/accessibilite-numerique.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
@@ -62,7 +66,7 @@ website:
     display: false
     name:
     link:
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à l'accessibilité."
+  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
   footer_external_links:
     - label: 'data.gouv.fr'
       href: 'https://www.data.gouv.fr'
@@ -93,7 +97,7 @@ website:
       to: /
     - text: Données
       to: /datasets
-    - text: Bouquets
+    - text: Thématiques
       to: /bouquets
     - text: À propos
       to: /about
@@ -121,11 +125,11 @@ website:
     organizations_list: 9
     topics_list: 20
     files_list: 6
-  contact_email: ecospheres@developpement-durable.gouv.fr
+  contact_email: tu-tho.thai.ext@beta.gouv.fr
   home_banner_colors:
-    - '#D6E3A1'
-    - '#BFDCB7'
-    - '#A7D4CD'
+    - '#FFFFFF'
+    - '#FFFFFF'
+    - '#FFFFFF'
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId:
@@ -145,7 +149,7 @@ website:
   sitemap:
     - name: Accueil
       path: /
-    - name: Bouquets
+    - name: Thématiques
       path: /bouquets
     - name: Jeux de données
       path: /datasets
@@ -190,11 +194,11 @@ pages:
     title: Bouquets
     breadcrumb_title:
     labels:
-      singular: bouquet
-      plural: bouquets
-      extended: bouquet de données
+      singular: thématique
+      plural: thématiques
+      extended: thématique des données
     search:
-      input: Filtrer les bouquets
+      input: Filtrer les thématiques
     banner:
     discussions:
       display: true
