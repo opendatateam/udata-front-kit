@@ -6,10 +6,11 @@
 2. [Arborescence du projet](#arborescence-du-projet)
    - [Répertoires principaux](#répertoires-principaux)
    - [Personnalisations via `/src/custom`](#personnalisations-via-srccustom)
+   - [Routes personnalisées et pages](#routes-personnalisées-et-pages)
    - [Configurations via `/configs`](#configurations-via-configs)
 3. [Les univers et leur paramétrage](#les-univers-et-leur-paramétrage)
 4. [Les filtres et leur configuration](#les-filtres-et-leur-configuration)
-5. [Composants DSFR Vue.js – librairie fonctionnelle commune](#composants-dsfr-vuejs--librairie-fonctionnelle-commune)
+5. [Composants – librairie fonctionnelle commune](#composants--librairie-fonctionnelle-commune)
 
 ---
 
@@ -65,6 +66,46 @@ Tout ce qui n'est pas surchargé est fourni par le socle commun (`src/components
 
 > [!NOTE]
 > Il est recommandé d'utiliser au maximum les possibilités de configuration du comportent existant avant de définir des composants ou pages _custom_.
+
+### Routes personnalisées et pages
+
+Le routeur principal (`src/router/index.ts`) charge les routes communes (organisations, pages statiques, authentification…). Au démarrage, il charge dynamiquement le fichier `src/custom/<site_id>/routes.ts` de la verticale active et **fusionne** les deux ensembles : une route custom ayant le même chemin qu'une route commune la remplace.
+
+Le fichier `routes.ts` d'une verticale s'appuie sur des fonctions utilitaires de `src/router/utils.ts` pour déclarer des pages de liste/détail sans avoir à câbler manuellement toutes les vues. Les principales fonctions disponibles sont :
+
+| Fonction                         | Usage                                                   |
+| -------------------------------- | ------------------------------------------------------- |
+| `useDatasetSearchPageRoutes`     | Page de liste/détail de jeux de données                 |
+| `useDataserviceSearchPageRoutes` | Page de liste/détail d'API                              |
+| `useTopicSearchPageRoutes`       | Page de liste/détail de bouquets (topics)               |
+| `useTopicAdminPagesRoutes`       | Pages d'administration des bouquets (création, édition) |
+
+Chaque appel prend un `pageKey` qui **doit correspondre à une clé sous `pages` dans `config.yaml`**. C'est ce lien qui permet aux vues génériques de lire la configuration (titre, filtres, univers, labels…) via `useCurrentPageConf()`.
+
+La route peut également recevoir des composants en surcharge, passés en props et injectés dynamiquement par les vues génériques :
+
+| Paramètre              | Rôle                                           |
+| ---------------------- | ---------------------------------------------- |
+| `cardComponent`        | Carte affichée pour chaque élément de la liste |
+| `detailsViewComponent` | Vue de détail d'un élément                     |
+| `filtersComponent`     | Panneau de filtres personnalisé                |
+| `listComponent`        | Composant de liste entier                      |
+| `cardClass`            | Classe CSS appliquée à chaque carte (grille)   |
+
+**Exemple** (extrait de `src/custom/ecospheres/routes.ts`) :
+
+```ts
+useDatasetSearchPageRoutes({
+  pageKey: 'indicators', // → lit pages.indicators dans config.yaml
+  metaTitle: 'Indicateurs',
+  cardClass: 'fr-col fr-col-lg-6',
+  cardComponent: () => import('./components/indicators/IndicatorCard.vue'),
+  detailsViewComponent: () =>
+    import('./views/indicators/IndicatorDetailView.vue')
+})
+```
+
+Ici, les indicateurs réutilisent entièrement l'infrastructure de liste des jeux de données (`DataListView`, filtres, pagination), mais avec une carte et une vue de détail spécifiques.
 
 ### Configurations via `/configs`
 
@@ -156,7 +197,7 @@ filters:
 
 Pour exemple, la configuration suivante :
 
-```
+```yaml
 pages:
   indicators:
     list_all: true
@@ -185,50 +226,42 @@ pages:
 
 Produira les effets suivants sur la page `indicators` :
 
-- Présence d'un filtre de type `select` sur la page ;
+- Présence d'un filtre de type `select` "Enjeu" sur la page, avec une valeur par défaut "Tous les enjeux" ;
 - Au clic sur la valeur "Adaptation climent", génération d'une requête `?tag=ecospheres-indicateurs-enjeu-adaptation-climat&topic=1234` : concaténation de la `universe_query` et d'un tag préfixé.
 
-## Composants DSFR Vue.js – librairie fonctionnelle commune
+## Composants
 
-Le socle commun fournit une bibliothèque de composants Vue.js conformes au [Design Système de l'État (DSFR)](https://www.systeme-de-design.gouv.fr/), organisés par domaine fonctionnel.
+Les composants utilisés dans le kit proviennent de trois sources :
 
-### Composants principaux (`src/components`)
+- **[`@datagouv/components-next`](https://github.com/datagouv/cdata/tree/main/datagouv-components)** : bibliothèque amont maintenue par l'équipe data.gouv.fr. Fournit les cartes de présentation (`DatasetCard`, `DataserviceCard`), les types de données (`DatasetV2`, `Dataservice`…) et des utilitaires comme `toast`.
+- **[`vue-dsfr`](https://vue-ds.fr)** : bibliothèque de composants Vue.js conformes au [Design Système de l'État (DSFR)](https://www.systeme-de-design.gouv.fr/). Fournit les briques d'interface génériques (`DsfrBreadcrumb`, `DsfrPagination`, `DsfrButton`…), enregistrées globalement et donc disponibles dans tout composant sans import explicite.
+- **`src/components/`** : composants propres au front-kit, conçus pour l'assemblage des pages et la logique métier (recherche, filtres, listes…).
 
-| Composant                   | Description                                   |
-| --------------------------- | --------------------------------------------- |
-| `SearchComponent.vue`       | Barre de recherche avec suggestions           |
-| `NavigationComponent.vue`   | Menu de navigation principal                  |
-| `FilterSelectComponent.vue` | Filtre de type liste déroulante               |
-| `SelectComponent.vue`       | Composant de sélection générique              |
-| `CheckboxComponent.vue`     | Filtre de type case à cocher                  |
-| `TagComponent.vue`          | Étiquette colorée (thématique, filtre actif…) |
-| `OrganizationCard.vue`      | Carte de présentation d'une organisation      |
-| `GenericContainer.vue`      | Conteneur de mise en page générique           |
-| `NoResults.vue`             | Message d'absence de résultats                |
-| `BlankState.vue`            | État vide (page sans contenu)                 |
+### Architecture typique d'une page de liste
 
-### Sections de page (`src/components/sections`)
+Toutes les pages de liste (jeux de données, API, bouquets, indicateurs…) partagent la même architecture de composants. La vue générique `DataListView` orchestre l'ensemble :
 
-Ces composants structurent les blocs d'une page d'accueil ou d'une page de contenu :
+```
+DataListView (src/views/data/DataListView.vue)
+├── DsfrBreadcrumb          — fil d'Ariane (vue-dsfr)
+├── SearchComponent         — barre de recherche textuelle
+├── FiltersComponent        — panneau latéral de filtres
+│   └── PageFilters         — implémentation par défaut (src/components/pages/PageFilters.vue)
+│       ├── FilterSelectComponent   — filtre de type liste déroulante
+│       └── CheckboxComponent       — filtre de type case à cocher
+└── ListComponent           — liste des résultats
+    └── DatasetList (src/components/datasets/DatasetList.vue)  — implémentation par défaut
+        ├── SelectComponent     — tri des résultats
+        ├── CardComponent       — carte par élément (DatasetCard par défaut, @datagouv/components-next)
+        ├── DsfrPagination      — pagination (vue-dsfr)
+        └── NoResults           — message si aucun résultat
+```
 
-| Composant                | Description                              |
-| ------------------------ | ---------------------------------------- |
-| `SubSectionDatasets.vue` | Bloc de mise en avant de jeux de données |
-| `SubSectionCards.vue`    | Bloc de cartes (organisations, thèmes…)  |
-| `SubSectionTiles.vue`    | Bloc de tuiles de navigation             |
-| `SubSectionButtons.vue`  | Bloc de boutons d'action                 |
-
-### Composants de jeux de données (`src/components/datasets`)
-
-| Composant                      | Description                                |
-| ------------------------------ | ------------------------------------------ |
-| `DatasetList.vue`              | Liste paginée de jeux de données           |
-| `DatasetInformationPanel.vue`  | Panneau d'informations d'un jeu de données |
-| `DatasetSidebar.vue`           | Barre latérale d'un jeu de données         |
-| `ResourcesList.vue`            | Liste des ressources d'un jeu de données   |
-| `LeafletMap.vue`               | Carte géographique (couverture spatiale)   |
-| `ExtendedInformationPanel.vue` | Panneau d'informations étendu              |
+`FiltersComponent` et `CardComponent` (et d'autres) sont **injectés dynamiquement** depuis la méta-donnée de la route. Une verticale peut ainsi remplacer uniquement la carte ou le panneau de filtres sans toucher au reste de l'infrastructure.
 
 ### Personnalisation des composants
 
-Une verticale peut remplacer ou étendre tout composant du socle en plaçant une version spécifique dans `src/custom/<site_id>/components/`. Le mécanisme de résolution de Vue privilégie la version locale sur la version commune.
+Une verticale peut remplacer ou étendre tout composant du socle de deux façons :
+
+1. **Via la route** : en passant `cardComponent`, `filtersComponent`, `listComponent` ou `detailsViewComponent` lors de la déclaration de la route (voir [Routes personnalisées et pages](#routes-personnalisées-et-pages)).
+2. **Via `src/custom/<site_id>/components/`** : en définissant un composant métier spécifique qui sera importé depuis la route ou depuis d'autres composants custom.
