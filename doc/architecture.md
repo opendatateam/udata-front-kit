@@ -16,7 +16,7 @@
 
 ## Vue d'ensemble
 
-`udata-front-kit` est un framework Vue.js permettant de déployer des sites thématiques (appelés **verticales**) basés sur l'écosystème [data.gouv.fr](https://www.data.gouv.fr/) — notamment les données qui y sont cataloguées. Chaque verticale partage le même socle applicatif tout en bénéficiant de sa propre configuration et de ses propres personnalisations.
+`udata-front-kit` est un framework Vue.js permettant de déployer des sites thématiques (appelés **verticales**) basés sur l'écosystème [data.gouv.fr](https://www.data.gouv.fr/), et notamment son catalogue de données. Chaque verticale partage le même socle applicatif tout en bénéficiant de sa propre configuration et de ses propres personnalisations.
 
 ## Arborescence du projet
 
