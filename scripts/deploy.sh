@@ -142,9 +142,9 @@ cmd_prepare() {
   info "Preparing deployment: $source_branch → $target_branch"
   info "Using merge branch: $merge_branch"
 
-  # Fetch latest refs
+  # Fetch latest refs (--prune removes stale remote-tracking refs)
   info "Fetching latest from origin..."
-  git fetch origin
+  git fetch --prune origin
 
   # Check target branch exists
   if ! remote_branch_exists "$target_branch"; then
