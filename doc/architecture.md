@@ -69,7 +69,7 @@ Tout ce qui n'est pas surchargé est fourni par le socle commun (`src/components
 
 ### Routes personnalisées et pages
 
-Le routeur principal (`src/router/index.ts`) charge les routes communes (organisations, pages statiques, authentification…). Au démarrage, il charge dynamiquement le fichier `src/custom/<site_id>/routes.ts` de la verticale active et **fusionne** les deux ensembles : une route custom ayant le même chemin qu'une route commune la remplace.
+Le routeur principal (`src/router/index.ts`) charge les routes communes (organisations, pages statiques, authentification…). Au démarrage, il charge dynamiquement le fichier `src/custom/<site_id>/routes.ts` de la verticale active et **fusionne** les deux : une route custom ayant le même chemin qu'une route commune la remplace.
 
 Le fichier `routes.ts` d'une verticale s'appuie sur des fonctions utilitaires de `src/router/utils.ts` pour déclarer des pages de liste/détail sans avoir à câbler manuellement toutes les vues. Les principales fonctions disponibles sont :
 
