@@ -148,7 +148,9 @@ export default defineConfig(({ mode }) => {
         'geopf-extensions-openlayers',
         'geoportal-access-lib',
         // Include maplibre-gl to ensure proper bundling with esbuild class field support
-        'maplibre-gl'
+        'maplibre-gl',
+        // leaflet is a dep of @datagouv/components-next which is excluded from optimizeDeps
+        'leaflet'
       ],
       // `@datagouv/components-next` shouldn't be optimize otherwise its vue instance is not the same
       // as the one used in udata-front-kit. This cause errors with the `provide` / `inject` functions

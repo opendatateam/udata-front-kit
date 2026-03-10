@@ -308,7 +308,7 @@ onMounted(() => {
 
       <!-- Informations -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <div class="fr-pb-3w border-bottom border-default-grey">
+        <div class="fr-pb-3w">
           <h2 class="fr-mb-3w subtitle subtitle--uppercase">
             Informations techniques
           </h2>

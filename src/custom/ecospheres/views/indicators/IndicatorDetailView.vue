@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  AnimatedLoader,
-  DatasetInformationPanel,
-  ReadMore
-} from '@datagouv/components-next'
+import { ReadMore } from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
 import { computed, inject, onMounted, ref } from 'vue'
 
@@ -11,6 +7,7 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
@@ -21,7 +18,7 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
@@ -210,26 +207,23 @@ onMounted(() => {
 
       <!-- Détails techniques -->
       <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
-        <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
-           is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
-          updated to handle its own loading state. -->
-        <Suspense>
-          <DatasetInformationPanel :dataset="indicator" />
-          <template #fallback>
-            <AnimatedLoader />
-          </template>
-        </Suspense>
+        <DatasetInformationPanel :dataset="indicator" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
 </template>
 
 <style scoped>
-:deep(.subtitle) {
-  font-size: 1rem;
-}
-/* override previous rule for sidebar */
-:deep(.dataset-sidebar .subtitle) {
-  font-size: 0.875rem;
+/* @datagouv/components-next v1 defines .subtitle with !important inside @layer components (Tailwind).
+   Unlayered !important loses to layered !important, so we must be in the same layer and use
+   higher specificity + !important to win the cascade. */
+@layer components {
+  :deep(.subtitle) {
+    font-size: 1rem !important;
+  }
+  /* override previous rule for sidebar */
+  :deep(.dataset-sidebar .subtitle) {
+    font-size: 0.875rem !important;
+  }
 }
 </style>

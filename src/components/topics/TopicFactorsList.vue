@@ -18,8 +18,8 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
-import { findOgcCompatibleResource } from '@/utils/ogcServices'
-import { openInQgis, openTopicInQgis } from '@/utils/qgis'
+import { fetchBestOgcResource } from '@/utils/ogcServices'
+import { openTopicInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
 import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
@@ -146,31 +146,11 @@ const handleDeleteGroup = async (groupName: string) => {
 
 const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
 
-/**
- * Iterate over MAX_PAGES pages of resources for a dataset and find the best OGC service.
- * Stores result in ogcLayerInfo Map.
- * Stops if WFS is found, fallback to WMS.
- */
 const computeOgcInfo = async (dataset: DatasetV2) => {
-  if (!config.website.datasets.open_in_qgis) {
-    return
-  }
-  const MAX_PAGES = 10
-  let bestResult: OgcLayerInfo | null = null
-  for (let page = 1; page <= MAX_PAGES; page++) {
-    const response = await resourceStore.fetchDatasetResources(dataset.id, {
-      page
-    })
-    const pageResult = findOgcCompatibleResource(response.data)
-    // Update best result if we found something better
-    if (pageResult?.format === 'wfs' || (!bestResult && pageResult)) {
-      bestResult = pageResult
-    }
-    // Stop if we found WFS (best possible) or no more pages
-    if (pageResult?.format === 'wfs' || !response.next_page) {
-      break
-    }
-  }
+  if (!config.website.datasets.open_in_qgis) return
+  const bestResult = await fetchBestOgcResource((page) =>
+    resourceStore.fetchDatasetResources(dataset.id, { page })
+  )
   if (bestResult) {
     ogcLayerInfo.value.set(dataset.id, bestResult)
   }
@@ -182,18 +162,6 @@ const computeOgcInfo = async (dataset: DatasetV2) => {
 const hasOgcResources = computed(() => {
   return ogcLayerInfo.value.size > 0
 })
-
-/**
- * Opens a given dataset from a factor in QGIS
- */
-const handleOpenInQgis = async (datasetId: string, datasetTitle: string) => {
-  try {
-    await openInQgis(datasetId, datasetTitle, ogcLayerInfo.value)
-  } catch (error) {
-    console.error('Failed to open in QGIS:', error)
-    alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
-  }
-}
 
 /**
  * Opens all OGC-compatible resources from the topic in QGIS, organized by factor groups.
@@ -410,23 +378,6 @@ defineExpose({
                     target="_blank"
                     >Accéder aux données</a
                   >
-                  <DsfrButton
-                    v-if="
-                      factor.element?.id && ogcLayerInfo.has(factor.element.id)
-                    "
-                    secondary
-                    size="sm"
-                    icon="fr-icon-road-map-line"
-                    class="test__open_dataset_in_qgis_btn"
-                    @click="
-                      handleOpenInQgis(
-                        factor.element.id,
-                        getDatasetForFactor(factor)!.title
-                      )
-                    "
-                  >
-                    Ouvrir dans QGIS (WFS/WMS)
-                  </DsfrButton>
                 </div>
               </template>
             </TopicGroup>
