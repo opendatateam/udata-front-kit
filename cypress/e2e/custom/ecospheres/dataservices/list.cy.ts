@@ -7,6 +7,7 @@ describe('Dataservices (API) - List Page', () => {
 
   beforeEach(() => {
     cy.mockMatomo()
+    cy.mockStaticDatagouv()
     mockUniverseOrganizations()
 
     // Create test dataservices

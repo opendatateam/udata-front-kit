@@ -100,7 +100,7 @@ const clear = () => {
 
 watch(choice, () => {
   if (choice.value === 'owner' && userStore.data?.id) {
-    topic.value.owner = userStore.data
+    topic.value.owner = userStore.userReference
     topic.value.organization = null
   }
 })
