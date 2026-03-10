@@ -18,7 +18,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
-import { fetchBestOgcResource } from '@/utils/ogcServices'
+import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openTopicInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
@@ -144,15 +144,15 @@ const handleDeleteGroup = async (groupName: string) => {
   await Promise.all(deletePromises)
 }
 
-const ogcLayerInfo = ref(new Map<string, OgcLayerInfo>())
+const ogcLayerInfo = ref(new Map<string, OgcLayerInfo[]>())
 
 const computeOgcInfo = async (dataset: DatasetV2) => {
   if (!config.website.datasets.open_in_qgis) return
-  const bestResult = await fetchBestOgcResource((page) =>
+  const results = await fetchAllOgcResources((page) =>
     resourceStore.fetchDatasetResources(dataset.id, { page })
   )
-  if (bestResult) {
-    ogcLayerInfo.value.set(dataset.id, bestResult)
+  if (results.length > 0) {
+    ogcLayerInfo.value.set(dataset.id, results)
   }
 }
 
