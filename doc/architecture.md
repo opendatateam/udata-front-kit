@@ -27,10 +27,10 @@
 
 ```
 .
-├── configs/          # Fichiers de configuration YAML par verticale
+├── configs/          # Fichiers de configuration, 1 fichier YAML par verticale
 ├── cypress/          # Tests end-to-end
-├── doc/              # Documentation
-├── public/           # Ressources statiques publiques
+├── doc/              # Documentation générale
+├── public/           # Ensemble des ressources publiques, dont les pages statiques de chaque verticale
 ├── scripts/          # Scripts utilitaires
 └── src/
     ├── components/   # Composants Vue.js partagés
@@ -45,7 +45,7 @@
 
 ### Configuration via `/configs`
 
-Chaque verticale possède un fichier `configs/<site_id>/config.yaml` qui centralise **toute la configuration fonctionnelle** : titre du site, URL de l'API data.gouv.fr, pages disponibles, filtres, univers, etc.
+Chaque verticale possède un fichier `configs/<site_id>/config.yaml` qui centralise **toute la configuration fonctionnelle** : titre du site, URL de l'API data.gouv.fr, pages disponibles, filtres, univers, etc. Ce fichier YAML est classé dans un sous-dossier au nom de la verticale (`<site_id>`).
 
 La variable d'environnement `VITE_SITE_ID` détermine quelle configuration est chargée au démarrage.
 
@@ -78,7 +78,7 @@ Chaque entrée sous `pages` dans `config.yaml` correspond à une page de liste (
 
 Un **univers** est un sous-ensemble thématique de données exposé sur une page donnée. Il est défini par un paramètre `universe_query` dans la configuration d'une page, qui se traduit en filtres automatiques appliqués à toutes les requêtes de cette page vers l'API data.gouv.fr.
 
-Cette notion d'univers est à mettre en parallèle avec celle du [dépôt de gestion des univers `udata-front-kit-univers`](https://github.com/opendatateam/udata-front-kit-universe/). Celui-ci agit en amont du frontend et permet de rassembler les données d'une thématique dans un topic dédié. Dans ce cas, l'univers du frontend se résume au dit topic.
+Cette notion d'univers est à mettre en parallèle avec celle du [dépôt de gestion des univers `udata-front-kit-univers`](https://github.com/opendatateam/udata-front-kit-universe/). Celui-ci agit en amont du frontend et permet de rassembler les données d'une thématique dans un topic dédié. Dans ce cas, l'univers du frontend se résume au-dit topic.
 
 Exemple (extrait de `configs/ecospheres/config.yaml`) :
 
