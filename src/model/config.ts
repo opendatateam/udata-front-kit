@@ -151,6 +151,16 @@ type FooterExternalLink = {
   title: string
 }
 
+export interface CmsPageConfig {
+  title: string
+  slug: string
+  route: string
+}
+
+export interface CmsConfig {
+  site_tag: string
+}
+
 type FooterMandatoryLink = {
   label: string
   to: string | undefined
@@ -178,6 +188,8 @@ export type WebsiteConfig = {
   }
   header: HeaderConf
   footer: FooterConf
+  cms?: CmsConfig
+  cms_pages?: CmsPageConfig[]
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/

@@ -19,6 +19,9 @@ datagouvfr:
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
+  cms:
+    site_tag: 'ecospheres'
+  cms_pages:
   seo:
     canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected
