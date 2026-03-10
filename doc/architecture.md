@@ -63,16 +63,16 @@ Les composants utilisés dans le front-kit proviennent de trois sources :
 
 Chaque entrée sous `pages` dans `config.yaml` correspond à une page de liste (jeux de données, API, bouquets…). Les principales clés sont :
 
-| Clé              | Description                                                   |
-| ---------------- | ------------------------------------------------------------- |
-| `universe_query` | Filtres fixes définissant l'univers (ex. topic, organisation) |
-| `filter_prefix`  | Préfixe/namespace pour les valeurs de filtres usager          |
-| `title`          | Titre affiché sur la page de liste                            |
-| `labels`         | Noms singulier/pluriel de l'objet listé                       |
-| `default_sort`   | Tri par défaut                                                |
-| `filters`        | Liste des filtres exposés à l'usager (voir section suivante)  |
-| `banner`         | Bandeau d'introduction optionnel                              |
-| `editable`       | Autorisation d'édition pour les usagers connectés             |
+| Clé              | Description                                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `universe_query` | Filtres fixes définissant l'univers (ex. topic, organisation)                                                       |
+| `filter_prefix`  | Préfixe/namespace pour les valeurs de filtres usager                                                                |
+| `title`          | Titre affiché sur la page de liste                                                                                  |
+| `labels`         | Noms singulier/pluriel de l'objet listé                                                                             |
+| `default_sort`   | Tri par défaut                                                                                                      |
+| `filters`        | Liste des filtres exposés à l'usager (voir [Les filtres et leur configuration](#les-filtres-et-leur-configuration)) |
+| `banner`         | Bandeau d'introduction optionnel                                                                                    |
+| `editable`       | Autorisation d'édition pour les usagers connectés                                                                   |
 
 ### Notion d'univers
 
