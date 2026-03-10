@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
+import { useCmsRoutes } from '@/router/utils'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 
@@ -122,12 +123,15 @@ const routesMap = new Map()
 defaultRoutes.forEach((route) => {
   routesMap.set(route.path, route)
 })
+const cmsRoutes = useCmsRoutes(config.website.cms_pages ?? [])
+
 const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   siteRoutes.forEach((route) => {
     routesMap.set(route.path, route)
   })
   const routes = Array.from(routesMap.values())
   routes.push(...pages)
+  routes.push(...cmsRoutes)
   // catch all 404 (keep at the end of the list)
   routes.push({
     path: '/:pathMatch(.*)',
