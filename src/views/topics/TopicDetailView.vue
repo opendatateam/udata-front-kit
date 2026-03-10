@@ -316,8 +316,67 @@ watch(
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
+    </div>
+    <div
+      v-if="topic && (userStore.canAddTopic(pageKey) || canEdit || isAdmin)"
+      class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+    >
+      <DsfrButton
+        v-if="userStore.canAddTopic(pageKey)"
+        secondary
+        size="sm"
+        label="Cloner"
+        icon="fr-icon-git-merge-line"
+        :title="`Cloner le ${pageConf.labels.singular}`"
+        @click="showCloneModal = true"
+      />
+      <DsfrModal
+        v-model:opened="showCloneModal"
+        title="Cloner en conservant les jeux de données&nbsp;?"
+        :is-alert="false"
+        :actions="cloneModalActions"
+        @close="showCloneModal = false"
+      >
+        <template #default>
+          <p>
+            Vous pouvez choisir de conserver les liens vers les jeux de données
+            du {{ pageConf.labels.singular }} que vous souhaitez cloner.
+          </p>
+          <p>
+            Si vous ne conservez pas les liens, les jeux de données ne seront
+            pas ajoutés au {{ pageConf.labels.singular }} cloné, mais leurs
+            libellés et raisons d'utilisation seront conservés.
+          </p>
+          <p>Voulez-vous conserver les liens vers les jeux de données&nbsp;?</p>
+        </template>
+      </DsfrModal>
+      <DsfrButton
+        v-if="canEdit"
+        secondary
+        size="sm"
+        label="Éditer"
+        icon="fr-icon-pencil-line"
+        @click="goToEdit"
+      />
+      <DsfrButton
+        v-if="canEdit"
+        size="sm"
+        :label="topic.private ? 'Publier' : 'Dépublier'"
+        :icon="topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'"
+        @click="togglePublish"
+      />
+      <DsfrButton
+        v-if="isAdmin"
+        secondary
+        size="sm"
+        :label="topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'"
+        :icon="topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'"
+        @click="toggleFeatured"
+      />
+    </div>
   </div>
   <GenericContainer v-if="topic" class="tabs-height-fix">
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
@@ -363,76 +422,8 @@ watch(
           props.displayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
         "
       >
-        <div class="fr-mb-2w">
-          <div v-if="!canEdit && topic.private" class="fr-mb-1w">
-            <DsfrTag label="Brouillon" />
-          </div>
-          <div
-            class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
-          >
-            <DsfrButton
-              v-if="userStore.canAddTopic(pageKey)"
-              secondary
-              size="md"
-              label="Cloner"
-              icon="fr-icon-git-merge-line"
-              :title="`Cloner le ${pageConf.labels.singular}`"
-              @click="showCloneModal = true"
-            />
-            <DsfrModal
-              v-model:opened="showCloneModal"
-              title="Cloner en conservant les jeux de données&nbsp;?"
-              :is-alert="false"
-              :actions="cloneModalActions"
-              @close="showCloneModal = false"
-            >
-              <template #default>
-                <p>
-                  Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du {{ pageConf.labels.singular }} que vous souhaitez
-                  cloner.
-                </p>
-                <p>
-                  Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au {{ pageConf.labels.singular }} cloné,
-                  mais leurs libellés et raisons d'utilisation seront conservés.
-                </p>
-                <p>
-                  Voulez-vous conserver les liens vers les jeux de
-                  données&nbsp;?
-                </p>
-              </template>
-            </DsfrModal>
-            <DsfrButton
-              v-if="canEdit"
-              secondary
-              size="md"
-              label="Éditer"
-              icon="fr-icon-pencil-line"
-              @click="goToEdit"
-            />
-            <DsfrButton
-              v-if="canEdit"
-              size="md"
-              :label="topic.private ? 'Publier' : 'Dépublier'"
-              :icon="
-                topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
-              "
-              @click="togglePublish"
-            />
-            <DsfrButton
-              v-if="isAdmin"
-              secondary
-              size="md"
-              :label="
-                topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'
-              "
-              :icon="
-                topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
-              "
-              @click="toggleFeatured"
-            />
-          </div>
+        <div v-if="!canEdit && topic.private" class="fr-mb-2w">
+          <DsfrTag label="Brouillon" />
         </div>
         <div v-if="props.displayMetadata">
           <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
