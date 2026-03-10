@@ -101,8 +101,8 @@ describe('OGC Services', () => {
 
       const result = findAllOgcCompatibleResources(resources)
 
-      expect(result[0]?.layerName).toBe('namespace:layername')
-      expect(result[0]?.format).toBe('wfs')
+      expect(result[0].layerName).toBe('namespace:layername')
+      expect(result[0].format).toBe('wfs')
     })
 
     it('should use resource title as layer name if it is valid', () => {
@@ -118,8 +118,8 @@ describe('OGC Services', () => {
 
       const result = findAllOgcCompatibleResources(resources)
 
-      expect(result[0]?.layerName).toBe('valid_layer_name')
-      expect(result[0]?.format).toBe('wfs')
+      expect(result[0].layerName).toBe('valid_layer_name')
+      expect(result[0].format).toBe('wfs')
     })
 
     it('should not use resource title if it contains spaces', () => {
@@ -136,8 +136,8 @@ describe('OGC Services', () => {
       const result = findAllOgcCompatibleResources(resources)
 
       // WFS returned but without a layer name (resolved later via GetCapabilities)
-      expect(result[0]?.format).toBe('wfs')
-      expect(result[0]?.layerName).toBe(undefined)
+      expect(result[0].format).toBe('wfs')
+      expect(result[0].layerName).toBe(undefined)
     })
 
     it('should only include WMS if it has a valid layer name', () => {
