@@ -4,9 +4,9 @@
 
 1. [Vue d'ensemble](#vue-densemble)
    - [Répertoires principaux](#répertoires-principaux)
+   - [Configuration via `/configs`](#configuration-via-configs)
    - [Sources des composants](#sources-des-composants)
 2. [Les univers et leur paramétrage](#les-univers-et-leur-paramétrage)
-   - [Configuration via `/configs`](#configuration-via-configs)
    - [Paramétrage des pages](#paramétrage-des-pages)
    - [Notion d'univers](#notion-dunivers)
 3. [Les filtres et leur configuration](#les-filtres-et-leur-configuration)
@@ -43,6 +43,12 @@
     └── views/        # Vues génériques partagées
 ```
 
+### Configuration via `/configs`
+
+Chaque verticale possède un fichier `configs/<site_id>/config.yaml` qui centralise **toute la configuration fonctionnelle** : titre du site, URL de l'API data.gouv.fr, pages disponibles, filtres, univers, etc.
+
+La variable d'environnement `VITE_SITE_ID` détermine quelle configuration est chargée au démarrage.
+
 ### Sources des composants
 
 Les composants utilisés dans le front-kit proviennent de trois sources :
@@ -52,12 +58,6 @@ Les composants utilisés dans le front-kit proviennent de trois sources :
 - **`src/components/`** : composants propres au front-kit, conçus pour l'assemblage des pages et la logique métier (recherche, filtres, listes…).
 
 ## Les univers et leur paramétrage
-
-### Configuration via `/configs`
-
-Chaque verticale possède un fichier `configs/<site_id>/config.yaml` qui centralise **toute la configuration fonctionnelle** : titre du site, URL de l'API data.gouv.fr, pages disponibles, filtres, univers, etc.
-
-La variable d'environnement `VITE_SITE_ID` détermine quelle configuration est chargée au démarrage.
 
 ### Paramétrage des pages
 
