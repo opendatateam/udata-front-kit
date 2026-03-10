@@ -316,7 +316,7 @@ watch(
 </script>
 
 <template>
-  <div class="fr-container fr-grid-row fr-grid-row--middle">
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
     <div class="fr-col">
       <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
     </div>
