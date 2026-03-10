@@ -1,4 +1,4 @@
-# Architecture du frontend udata-front-kit
+# Architecture de `udata-front-kit`
 
 ## Table des matières
 
