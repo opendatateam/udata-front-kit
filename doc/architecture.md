@@ -78,9 +78,11 @@ Chaque entrée sous `pages` dans `config.yaml` correspond à une page de liste (
 
 Un **univers** est un sous-ensemble thématique de données exposé sur une page donnée. Il est défini par un paramètre `universe_query` dans la configuration d'une page, qui se traduit en filtres automatiques appliqués à toutes les requêtes de cette page vers l'API data.gouv.fr.
 
-Cette notion d'univers est à mettre en parallèle avec celle du [dépôt de gestion des univers `udata-front-kit-univers`](https://github.com/opendatateam/udata-front-kit-universe/). Celui-ci agit en amont du frontend et permet de rassembler les données d'une thématique dans un topic dédié. Dans ce cas, l'univers du frontend se résume au-dit topic.
+Il existe deux façons de définir un univers :
 
-Exemple (extrait de `configs/ecospheres/config.yaml`) :
+#### 1. Via un topic géré par `udata-front-kit-universe`
+
+Le [dépôt `udata-front-kit-universe`](https://github.com/opendatateam/udata-front-kit-universe/) fournit un script de gestion qui agit en amont du frontend : il rassemble les données d'une thématique dans un topic dédié sur data.gouv.fr. L'univers se résume alors à ce topic, référencé par son identifiant dans `universe_query`.
 
 ```yaml
 pages:
@@ -90,10 +92,20 @@ pages:
     title: Jeux de données
 ```
 
-Ici, tous les jeux de données affichés sur la page `datasets` sont filtrés par le topic dont l'identifiant est `65e9aa6cb5c809c30c70ee02`. L'usager ne voit sur cette page que les données appartenant à cet univers.
+#### 2. Via une requête arbitraire sur les métadonnées existantes
 
-> [!NOTE]
-> Il est possible pour une verticale de définir un univers sans se reposer sur `udata-front-kit-univers` en amont. Par exemple, on peut considérer qu'un tag + une organisation constitue un univers. Cette contrainte sera exprimée dans `universe_query`.
+Il est aussi possible de définir un univers directement à partir de métadonnées déjà présentes dans le catalogue, sans recourir au script de gestion. Par exemple, une combinaison tag + organisation peut constituer un univers :
+
+```yaml
+pages:
+  datasets:
+    universe_query:
+      tag: energie
+      organization: 534fff75a3a7292c64a77e5f
+    title: Jeux de données énergie
+```
+
+Dans les deux cas, l'usager ne voit sur la page `/datasets` que les données appartenant à l'univers défini.
 
 ## Les filtres et leur configuration
 
