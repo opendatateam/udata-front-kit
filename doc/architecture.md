@@ -134,7 +134,7 @@ Chaque entrée sous `pages` dans `config.yaml` correspond à une page de liste (
 
 Un **univers** est un sous-ensemble thématique de données exposé sur une page donnée. Il est défini par un paramètre `universe_query` dans la configuration d'une page, qui se traduit en filtres automatiques appliqués à toutes les requêtes de cette page vers l'API data.gouv.fr.
 
-Cette notion d'univers est à mettre en parallèle avec celle du [dépôt de gestion des univers](https://github.com/opendatateam/udata-front-kit-universe/). Celui-ci agit en amont du frontend et permet de rassembler les données d'une thématique dans un topic dédié. Dans ce cas, l'univers du frontend se résume au dit topic.
+Cette notion d'univers est à mettre en parallèle avec celle du [dépôt de gestion des univers `udata-front-kit-univers`](https://github.com/opendatateam/udata-front-kit-universe/). Celui-ci agit en amont du frontend et permet de rassembler les données d'une thématique dans un topic dédié. Dans ce cas, l'univers du frontend se résume au dit topic.
 
 > [!NOTE]
 > Il est possible pour une verticale de définir un univers sans se reposer sur `udata-front-kit-univers` en amont. Par exemple, on peut considérer qu'un tag + une organisation constitue un univers. Cette contrainte sera exprimée dans `universe_query`.
