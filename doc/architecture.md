@@ -136,9 +136,6 @@ Un **univers** est un sous-ensemble thématique de données exposé sur une page
 
 Cette notion d'univers est à mettre en parallèle avec celle du [dépôt de gestion des univers `udata-front-kit-univers`](https://github.com/opendatateam/udata-front-kit-universe/). Celui-ci agit en amont du frontend et permet de rassembler les données d'une thématique dans un topic dédié. Dans ce cas, l'univers du frontend se résume au dit topic.
 
-> [!NOTE]
-> Il est possible pour une verticale de définir un univers sans se reposer sur `udata-front-kit-univers` en amont. Par exemple, on peut considérer qu'un tag + une organisation constitue un univers. Cette contrainte sera exprimée dans `universe_query`.
-
 Exemple (extrait de `configs/ecospheres/config.yaml`) :
 
 ```yaml
@@ -150,6 +147,9 @@ pages:
 ```
 
 Ici, tous les jeux de données affichés sur la page `datasets` sont filtrés par le topic dont l'identifiant est `65e9aa6cb5c809c30c70ee02`. L'usager ne voit sur cette page que les données appartenant à cet univers.
+
+> [!NOTE]
+> Il est possible pour une verticale de définir un univers sans se reposer sur `udata-front-kit-univers` en amont. Par exemple, on peut considérer qu'un tag + une organisation constitue un univers. Cette contrainte sera exprimée dans `universe_query`.
 
 ## Les filtres et leur configuration
 
