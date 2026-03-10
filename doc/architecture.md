@@ -224,9 +224,9 @@ pages:
             name: Santé
 ```
 
-Produira les effets suivants sur la page `indicators` :
+Produira les effets suivants :
 
-- Présence d'un filtre de type `select` "Enjeu" sur la page, avec une valeur par défaut "Tous les enjeux" ;
+- Présence d'un filtre "Enjeu" de type `select` sur la page `indicators`, avec une valeur par défaut "Tous les enjeux" ;
 - Au clic sur la valeur "Adaptation climat", génération d'une requête `?tag=ecospheres-indicateurs-enjeu-adaptation-climat&topic=1234` : concaténation de la `universe_query` et d'un tag préfixé.
 
 ## Composants
