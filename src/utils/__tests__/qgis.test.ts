@@ -46,7 +46,7 @@ describe('QGIS QLR Generation', () => {
       // Check maplayer
       const maplayers = doc.querySelectorAll('maplayer')
       expect(maplayers.length).toBe(1)
-      expect(maplayers[0]?.getAttribute('type')).toBe('vector')
+      expect(maplayers[0].getAttribute('type')).toBe('vector')
 
       const provider = doc.querySelector('provider')
       expect(provider?.textContent).toBe('wfs')
@@ -282,9 +282,54 @@ describe('QGIS QLR Generation', () => {
       expect(wfsProviders.length).toBe(2)
       expect(wmsProviders.length).toBe(1)
     })
-  })
 
-  describe('generateTopicQlr', () => {
+    it('should generate QLR with several layers in the same group', () => {
+      const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
+
+      const groupLayers = new Map<string, OgcLayerInfo[]>()
+      groupLayers.set('Dataset 1', [
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'layer1'
+        },
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'layer2'
+        },
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'layer3'
+        }
+      ])
+      layersByGroup.set('Group A', groupLayers)
+
+      const qlr = generateTopicQlr(layersByGroup, 'Test Topic', 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')
+      expect(layerTreeLayers.length).toBe(3)
+      expect(layerTreeLayers[0].getAttribute('name')).toBe('layer1')
+      expect(layerTreeLayers[1].getAttribute('name')).toBe('layer2')
+      expect(layerTreeLayers[2].getAttribute('name')).toBe('layer3')
+
+      const maplayers = doc.querySelectorAll('maplayer')
+      expect(maplayers.length).toBe(3)
+
+      // All 3 layers should be under a single resource group
+      const groups = doc.querySelectorAll('layer-tree-group')
+      const resourceGroup = Array.from(groups).find(
+        (g) => g.getAttribute('name') === 'WFS Resource'
+      )
+      expect(resourceGroup).toBeTruthy()
+      expect(resourceGroup?.querySelectorAll('layer-tree-layer').length).toBe(3)
+    })
+
     it('should handle mixed WFS and WMS layers', () => {
       const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
 
