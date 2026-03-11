@@ -117,7 +117,9 @@ export interface CmsPageConfig {
 }
 
 export interface CmsConfig {
+  enabled: boolean
   site_tag: string
+  pages?: CmsPageConfig[]
 }
 
 export interface WebsiteConfig {
@@ -131,7 +133,6 @@ export interface WebsiteConfig {
     }
   }
   cms?: CmsConfig
-  cms_pages?: CmsPageConfig[]
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
