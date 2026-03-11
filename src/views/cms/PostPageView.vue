@@ -7,7 +7,7 @@ import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 
 const props = defineProps<{
-  slug?: string
+  id?: string
 }>()
 
 const route = useRoute()
@@ -15,7 +15,7 @@ const router = useRouter()
 const postStore = usePostStore()
 const userStore = useUserStore()
 
-const slug = computed(() => props.slug ?? (route.params.slug as string))
+const id = computed(() => props.id ?? (route.params.id as string))
 
 const post = ref(postStore.currentPost)
 const loading = ref(true)
@@ -23,7 +23,7 @@ const error = ref(false)
 
 onMounted(async () => {
   try {
-    post.value = await postStore.fetchPostBySlug(slug.value)
+    post.value = await postStore.fetchPostById(id.value)
     if (post.value.body_type === 'blocs' && post.value.content_as_page) {
       await postStore.fetchPage(post.value.content_as_page.id)
     }

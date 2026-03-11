@@ -285,7 +285,7 @@ export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
   ]
   const publicRoutes: RouteRecordRaw[] = [
     {
-      path: '/pages/:slug',
+      path: '/pages/:id',
       name: 'cms_page',
       component: async () => await import('@/views/cms/PostPageView.vue')
     },
@@ -293,7 +293,7 @@ export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
       (p): RouteRecordRaw => ({
         path: p.route,
         component: async () => await import('@/views/cms/PostPageView.vue'),
-        props: { slug: p.slug }
+        props: { id: p.id }
       })
     )
   ]

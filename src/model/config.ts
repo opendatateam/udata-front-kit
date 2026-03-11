@@ -112,7 +112,7 @@ export type DatasetsConf = {
 
 export interface CmsPageConfig {
   title: string
-  slug: string
+  id: string
   route: string
 }
 

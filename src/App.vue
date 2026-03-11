@@ -57,11 +57,9 @@ const quickLinks = computed(() => {
       : null
 
   const cmsShortcut =
-    config.website.cms?.enabled &&
-    config.website.header.admin_shortcut &&
-    userStore.isAdmin
+    config.website.cms?.enabled && userStore.isAdmin
       ? {
-          label: 'Pages CMS',
+          label: 'CMS',
           icon: 'fr-icon-article-line',
           to: '/admin/cms',
           iconRight: true
