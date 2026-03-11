@@ -19,9 +19,19 @@ datagouvfr:
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
+  # Configuration format for cms:
+  #
+  # cms:
+  #   enabled: {bool}               # enable the CMS feature (routes and admin menu)
+  #   site_tag: {string}            # tag applied to all posts created via this CMS (e.g. 'ecospheres')
+  #   pages:                        # list of CMS pages mapped to local routes (optional)
+  #     - title: {string}           # display title
+  #       slug: {string}            # post slug on data.gouv.fr
+  #       route: {string}           # local route path (e.g. /about)
   cms:
+    enabled: true
     site_tag: 'ecospheres'
-  cms_pages:
+    pages:
   seo:
     canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected
