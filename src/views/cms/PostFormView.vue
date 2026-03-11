@@ -46,6 +46,8 @@ const loadPost = async (id: string) => {
   error.value = ''
   try {
     post.value = await postStore.fetchPostById(id)
+    name.value = post.value.name
+    headline.value = post.value.headline || ''
     if (post.value.content_as_page) {
       page.value = await postStore.fetchPage(post.value.content_as_page.id)
     }
@@ -86,6 +88,28 @@ const handleCreate = async () => {
     error.value = 'Erreur lors de la création.'
   } finally {
     saving.value = false
+  }
+}
+
+const savingMeta = ref(false)
+
+const handleSaveMeta = async () => {
+  if (!post.value) return
+  if (!name.value.trim()) {
+    error.value = 'Le titre est obligatoire.'
+    return
+  }
+  savingMeta.value = true
+  error.value = ''
+  try {
+    post.value = await postStore.updatePost(post.value.id, {
+      name: name.value,
+      headline: headline.value
+    })
+  } catch {
+    error.value = 'Erreur lors de la sauvegarde.'
+  } finally {
+    savingMeta.value = false
   }
 }
 
@@ -196,6 +220,38 @@ const togglePublish = async () => {
         <p>{{ error }}</p>
       </div>
     </div>
+    <GenericContainer>
+      <form @submit.prevent="handleSaveMeta">
+        <div class="fr-mb-3w">
+          <label for="post-name" class="fr-label">
+            Titre <span class="fr-hint-text">Obligatoire</span>
+          </label>
+          <input
+            id="post-name"
+            v-model="name"
+            type="text"
+            class="fr-input"
+            required
+          />
+        </div>
+        <div class="fr-mb-3w">
+          <label for="post-headline" class="fr-label">Sous-titre</label>
+          <input
+            id="post-headline"
+            v-model="headline"
+            type="text"
+            class="fr-input"
+          />
+        </div>
+        <button
+          type="submit"
+          class="fr-btn fr-btn--secondary fr-btn--sm"
+          :disabled="savingMeta"
+        >
+          {{ savingMeta ? 'Sauvegarde…' : 'Enregistrer les métadonnées' }}
+        </button>
+      </form>
+    </GenericContainer>
     <PageShow v-if="page" :page="page" :edit="true" @save="handleSave" />
     <div v-else class="fr-container fr-py-3w">
       <p>Aucune page de blocs associée.</p>
