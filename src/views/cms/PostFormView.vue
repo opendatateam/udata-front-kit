@@ -2,6 +2,7 @@
 import type { Page, Post } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 
+import GenericContainer from '@/components/GenericContainer.vue'
 import PageShow from '@/components/cms/PageShow.vue'
 import config from '@/config'
 import { usePostStore } from '@/store/PostStore'
@@ -26,9 +27,17 @@ const saving = ref(false)
 const publishing = ref(false)
 const error = ref('')
 
-// Form fields for create mode
 const name = ref('')
 const headline = ref('')
+
+const breadcrumbLinks = computed(() => {
+  const base = [
+    { to: '/', text: 'Accueil' },
+    { to: '/admin/cms', text: 'CMS' }
+  ]
+  if (isCreate.value) return [...base, { text: 'Nouvelle page' }]
+  return [...base, { text: post.value?.name ?? '…' }]
+})
 
 const loadPost = async (id: string) => {
   loading.value = true
@@ -50,9 +59,7 @@ const loadPost = async (id: string) => {
 watch(
   postId,
   (id) => {
-    if (id) {
-      loadPost(id)
-    }
+    if (id) loadPost(id)
   },
   { immediate: true }
 )
@@ -110,12 +117,44 @@ const togglePublish = async () => {
 </script>
 
 <template>
-  <div>
-    <div v-if="loading" class="fr-container fr-py-6w">
-      <p>Chargement…</p>
+  <div class="fr-container">
+    <div class="fr-grid-row fr-grid-row--middle justify-between">
+      <div class="fr-col">
+        <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
+      </div>
+      <div
+        v-if="!isCreate && post"
+        class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+      >
+        <span v-if="post.published" class="fr-badge fr-badge--success"
+          >Publié</span
+        >
+        <span v-else class="fr-badge fr-badge--new">Brouillon</span>
+        <RouterLink
+          :to="`/admin/cms/view/${post.id}`"
+          class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-eye-line fr-btn--icon-left"
+        >
+          Aperçu
+        </RouterLink>
+        <button
+          type="button"
+          class="fr-btn fr-btn--sm"
+          :class="post.published ? 'fr-btn--secondary' : ''"
+          :disabled="publishing"
+          @click="togglePublish"
+        >
+          {{ publishing ? '…' : post.published ? 'Dépublier' : 'Publier' }}
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div v-else-if="isCreate" class="fr-container fr-py-4w">
+  <div v-if="loading" class="fr-container fr-py-6w">
+    <p>Chargement…</p>
+  </div>
+
+  <template v-else-if="isCreate">
+    <GenericContainer>
       <h1 class="fr-h2">Nouvelle page</h1>
 
       <div v-if="error" class="fr-alert fr-alert--error fr-mb-3w">
@@ -148,58 +187,22 @@ const togglePublish = async () => {
           {{ saving ? 'Création en cours…' : 'Créer la page' }}
         </button>
       </form>
+    </GenericContainer>
+  </template>
+
+  <template v-else-if="post">
+    <div v-if="error" class="fr-container fr-py-1w">
+      <div class="fr-alert fr-alert--error">
+        <p>{{ error }}</p>
+      </div>
     </div>
-
-    <template v-else-if="post">
-      <div class="fr-container fr-py-2w">
-        <div class="fr-grid-row fr-grid-row--middle">
-          <h1 class="fr-h2 fr-mr-auto fr-mb-0">{{ post.name }}</h1>
-          <div class="fr-btns-group fr-btns-group--inline">
-            <RouterLink
-              to="/admin/cms"
-              class="fr-btn fr-btn--secondary fr-btn--sm"
-            >
-              Retour à la liste
-            </RouterLink>
-            <RouterLink
-              :to="`/admin/cms/view/${post.id}`"
-              class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-eye-line fr-btn--icon-left"
-            >
-              Voir la page
-            </RouterLink>
-            <button
-              type="button"
-              class="fr-btn fr-btn--sm"
-              :class="post.published ? 'fr-btn--secondary' : ''"
-              :disabled="publishing"
-              @click="togglePublish"
-            >
-              {{ publishing ? '…' : post.published ? 'Dépublier' : 'Publier' }}
-            </button>
-          </div>
-        </div>
-        <div class="fr-mt-1w">
-          <span v-if="post.published" class="fr-badge fr-badge--success"
-            >Publié</span
-          >
-          <span v-else class="fr-badge fr-badge--new">Brouillon</span>
-        </div>
-      </div>
-
-      <div v-if="error" class="fr-container fr-py-1w">
-        <div class="fr-alert fr-alert--error">
-          <p>{{ error }}</p>
-        </div>
-      </div>
-
-      <PageShow v-if="page" :page="page" :edit="true" @save="handleSave" />
-      <div v-else class="fr-container fr-py-3w">
-        <p>Aucune page de blocs associée.</p>
-      </div>
-    </template>
-
-    <div v-else class="fr-container fr-py-4w">
-      <p>{{ error || 'Page introuvable.' }}</p>
+    <PageShow v-if="page" :page="page" :edit="true" @save="handleSave" />
+    <div v-else class="fr-container fr-py-3w">
+      <p>Aucune page de blocs associée.</p>
     </div>
+  </template>
+
+  <div v-else class="fr-container fr-py-4w">
+    <p>{{ error || 'Page introuvable.' }}</p>
   </div>
 </template>
