@@ -162,14 +162,14 @@ website:
   # Grist organisations ministère de la Culture https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
   # Organisations transversale des données ouvertes de la culture
 organizations:
-  datasets: https://raw.githubusercontent.com/culturegouv/donnees-ouvertes/refs/heads/main/data/organizations-datasets.json
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/main/dist/culture-prod/organizations-datasets.json
 
 pages:
   # DATASETS
   datasets:
     list_all: true
     universe_query:
-      tag: culture
+      topic: 69aea5dff97ef1fc29836765
     filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
