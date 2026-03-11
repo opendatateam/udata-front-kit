@@ -33,7 +33,7 @@ website:
     site_tag: 'ecospheres'
     pages:
       - title: Test du CMS
-        id: 69b12f4cd930480842e50fba
+        id: 69b182514a94d2065d1cbb50
         route: /test-du-cms
   seo:
     canonical_url: https://demo.ecologie.data.gouv.fr
