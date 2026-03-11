@@ -24,6 +24,17 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+const handleDelete = async (post: Post) => {
+  if (
+    !confirm(
+      `Supprimer la page « ${post.name} » ? Cette action est irréversible.`
+    )
+  )
+    return
+  await postStore.deletePost(post.id)
+  posts.value = posts.value.filter((p) => p.id !== post.id)
+}
 </script>
 
 <template>
@@ -92,16 +103,20 @@ onMounted(async () => {
             <div class="fr-grid-row fr-grid-row--middle flex-gap">
               <RouterLink
                 :to="`/admin/cms/view/${post.id}`"
-                class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm"
-              >
-                Voir
-              </RouterLink>
+                class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-eye-line"
+                title="Voir"
+              />
               <RouterLink
                 :to="`/admin/cms/edit/${post.id}`"
-                class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm"
-              >
-                Modifier
-              </RouterLink>
+                class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-edit-line"
+                title="Modifier"
+              />
+              <button
+                type="button"
+                class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-delete-line"
+                title="Supprimer"
+                @click="handleDelete(post)"
+              />
             </div>
           </td>
         </tr>
