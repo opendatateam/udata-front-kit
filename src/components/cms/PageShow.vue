@@ -24,8 +24,6 @@ watch(
   }
 )
 
-const isFullWidth = (bloc: PageBloc) => bloc.class === 'HeroBloc'
-
 const updateBloc = (index: number, updated: PageBloc) => {
   blocs.value = blocs.value.map((b, i) => (i === index ? updated : b))
 }
