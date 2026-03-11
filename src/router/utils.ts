@@ -277,26 +277,25 @@ export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
       meta: { requiresAuth: true, title: 'Nouvelle page' }
     },
     {
+      path: '/admin/cms/view/:id',
+      name: 'cms_view',
+      component: async () => await import('@/views/cms/PostPageView.vue'),
+      meta: { requiresAuth: true, title: 'Aperçu' }
+    },
+    {
       path: '/admin/cms/edit/:id',
       name: 'cms_edit',
       component: async () => await import('@/views/cms/PostFormView.vue'),
       meta: { requiresAuth: true, title: 'Modifier la page' }
     }
   ]
-  const publicRoutes: RouteRecordRaw[] = [
-    {
-      path: '/pages/:id',
-      name: 'cms_page',
-      component: async () => await import('@/views/cms/PostPageView.vue')
-    },
-    ...cmsPages.map(
-      (p): RouteRecordRaw => ({
-        path: p.route,
-        component: async () => await import('@/views/cms/PostPageView.vue'),
-        props: { id: p.id }
-      })
-    )
-  ]
+  const publicRoutes: RouteRecordRaw[] = cmsPages.map(
+    (p): RouteRecordRaw => ({
+      path: p.route,
+      component: async () => await import('@/views/cms/PostPageView.vue'),
+      props: { id: p.id }
+    })
+  )
   return [...adminRoutes, ...publicRoutes]
 }
 
