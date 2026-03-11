@@ -22,10 +22,10 @@ export const usePostStore = defineStore('post', {
     loading: false
   }),
   actions: {
-    async fetchPostBySlug(slug: string): Promise<Post> {
+    async fetchPostById(id: string): Promise<Post> {
       this.loading = true
       try {
-        const post = await postsAPI.get({ entityId: slug })
+        const post = await postsAPI.get({ entityId: id })
         this.currentPost = post
         return post
       } finally {

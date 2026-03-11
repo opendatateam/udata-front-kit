@@ -44,6 +44,9 @@ onMounted(async () => {
       <thead>
         <tr>
           <th scope="col">Titre</th>
+          <th scope="col">
+            ID <span class="fr-hint-text">pour cms.pages[].id</span>
+          </th>
           <th scope="col">Statut</th>
           <th scope="col">Dernière modification</th>
           <th scope="col">Actions</th>
@@ -52,6 +55,9 @@ onMounted(async () => {
       <tbody>
         <tr v-for="post in posts" :key="post.id">
           <td>{{ post.name }}</td>
+          <td>
+            <code>{{ post.id }}</code>
+          </td>
           <td>
             <span v-if="post.published" class="fr-badge fr-badge--success"
               >Publié</span

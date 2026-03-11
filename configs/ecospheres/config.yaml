@@ -26,12 +26,15 @@ website:
   #   site_tag: {string}            # tag applied to all posts created via this CMS (e.g. 'ecospheres')
   #   pages:                        # list of CMS pages mapped to local routes (optional)
   #     - title: {string}           # display title
-  #       slug: {string}            # post slug on data.gouv.fr
+  #       id: {string}              # post id on data.gouv.fr
   #       route: {string}           # local route path (e.g. /about)
   cms:
     enabled: true
     site_tag: 'ecospheres'
     pages:
+      - title: Test du CMS
+        id: 69afe0a96a136ebf74744a84
+        route: /test-du-cms
   seo:
     canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected

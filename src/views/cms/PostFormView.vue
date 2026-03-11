@@ -36,7 +36,7 @@ const loadPost = async (id: string) => {
   page.value = null
   error.value = ''
   try {
-    post.value = await postStore.fetchPostBySlug(id)
+    post.value = await postStore.fetchPostById(id)
     if (post.value.content_as_page) {
       page.value = await postStore.fetchPage(post.value.content_as_page.id)
     }
