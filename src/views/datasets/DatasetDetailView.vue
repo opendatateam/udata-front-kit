@@ -193,7 +193,7 @@ onMounted(() => {
     </div>
   </div>
   <GenericContainer v-if="dataset" class="tabs-height-fix">
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <ReadMore max-height="600">
