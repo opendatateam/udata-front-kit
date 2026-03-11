@@ -2,12 +2,17 @@
 import type { Post } from '@datagouv/components-next'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import config from '@/config'
 import { usePostStore } from '@/store/PostStore'
 import { formatDate } from '@/utils'
 
 const postStore = usePostStore()
 const posts = ref<Post[]>([])
 const loading = ref(true)
+
+const cmsPages = config.website.cms?.pages ?? []
+const routeForPost = (postId: string) =>
+  cmsPages.find((p) => p.id === postId)?.route ?? null
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'CMS' }]
 
@@ -54,6 +59,7 @@ onMounted(async () => {
         <tr>
           <th scope="col">Titre</th>
           <th scope="col">Identifiant</th>
+          <th scope="col">Route</th>
           <th scope="col">Statut</th>
           <th scope="col">Dernière modification</th>
           <th scope="col">Actions</th>
@@ -64,6 +70,15 @@ onMounted(async () => {
           <td>{{ post.name }}</td>
           <td>
             <code>{{ post.id }}</code>
+          </td>
+          <td>
+            <RouterLink
+              v-if="routeForPost(post.id)"
+              :to="routeForPost(post.id)!"
+              class="fr-link fr-text--sm"
+              >{{ routeForPost(post.id) }}</RouterLink
+            >
+            <span v-else class="fr-text--sm fr-text-mention--grey">—</span>
           </td>
           <td>
             <span v-if="post.published" class="fr-badge fr-badge--success"
