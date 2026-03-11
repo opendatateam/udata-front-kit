@@ -624,11 +624,11 @@ pages:
         use_filter_prefix: true
         color:
         values:
-          - id: commune
-            name: Commune
+          - id: region
+            name: Région
           - id: departement
             name: Département
           - id: epci
             name: EPCI
-          - id: region
-            name: Région
+          - id: commune
+            name: Commune
