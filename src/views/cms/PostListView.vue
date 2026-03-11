@@ -67,6 +67,12 @@ onMounted(async () => {
           <td>{{ formatDate(post.last_modified, true) }}</td>
           <td>
             <RouterLink
+              :to="`/admin/cms/view/${post.id}`"
+              class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm"
+            >
+              Voir
+            </RouterLink>
+            <RouterLink
               :to="`/admin/cms/edit/${post.id}`"
               class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm"
             >

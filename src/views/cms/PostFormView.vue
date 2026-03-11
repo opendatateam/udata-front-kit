@@ -162,7 +162,7 @@ const togglePublish = async () => {
               Retour à la liste
             </RouterLink>
             <RouterLink
-              :to="`/pages/${post.slug}`"
+              :to="`/admin/cms/view/${post.id}`"
               class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-eye-line fr-btn--icon-left"
             >
               Voir la page
