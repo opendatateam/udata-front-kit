@@ -41,7 +41,12 @@ export const usePostStore = defineStore('post', {
       this.loading = true
       try {
         const result = await postsAPI.list({
-          params: { kind: 'page', me: 'true' },
+          params: {
+            kind: 'page',
+            me: 'true',
+            with_drafts: '1',
+            sort: '-created_at'
+          },
           authenticated: true
         })
         this.posts = result.data ?? result
@@ -66,6 +71,9 @@ export const usePostStore = defineStore('post', {
     },
     async unpublishPost(postId: string): Promise<void> {
       return await postsAPI.unpublish(postId)
+    },
+    async deletePost(postId: string): Promise<void> {
+      await postsAPI.delete({ entityId: postId })
     },
     async createPage(data: object): Promise<Page> {
       return await pagesAPI.create({ data })

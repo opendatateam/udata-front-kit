@@ -20,11 +20,11 @@ const post = ref<Post | null>(null)
 const loading = ref(true)
 const error = ref(false)
 
+const isAdminView = computed(() => route.name === 'cms_view')
+
 const breadcrumbLinks = computed(() => {
-  const base = [
-    { to: '/', text: 'Accueil' },
-    { to: '/admin/cms', text: 'CMS' }
-  ]
+  const base = [{ to: '/', text: 'Accueil' }]
+  if (isAdminView.value) base.push({ to: '/admin/cms', text: 'CMS' })
   return [...base, { text: post.value?.name ?? '…' }]
 })
 
