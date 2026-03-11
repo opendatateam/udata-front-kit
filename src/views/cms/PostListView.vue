@@ -3,6 +3,7 @@ import type { Post } from '@datagouv/components-next'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
+import type { CmsPageConfig } from '@/model/config'
 import { usePostStore } from '@/store/PostStore'
 import { formatDate } from '@/utils'
 
@@ -10,7 +11,7 @@ const postStore = usePostStore()
 const posts = ref<Post[]>([])
 const loading = ref(true)
 
-const cmsPages = config.website.cms?.pages ?? []
+const cmsPages: CmsPageConfig[] = config.website.cms?.pages ?? []
 const routeForPost = (postId: string) =>
   cmsPages.find((p) => p.id === postId)?.route ?? null
 
