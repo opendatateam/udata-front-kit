@@ -1,10 +1,53 @@
 <script setup lang="ts">
 import config from '@/config'
 import type { EcologieHomepageConf } from '@/custom/ecospheres/model/config'
+import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import { useUniverseQuery } from '@/utils/universe'
 
-const homepage = config.ecospheres.homepage as EcologieHomepageConf | undefined
-const collections = homepage?.collections ?? []
-const collectionsTotal = homepage?.collections_total ?? 0
+const homepage = config.ecospheres.homepage as EcologieHomepageConf
+const collections = homepage.collections
+
+const collectionsTotal = ref<string | number>('...')
+const nbDatasetsPerCollection = ref<Record<string, number>>({})
+
+const topicsAPI = new TopicsAPI()
+
+onMounted(() => {
+  topicsAPI
+    .list({
+      params: {
+        page_size: 1,
+        include_private: 'true',
+        ...useUniverseQuery('bouquets', {})
+      },
+      headers: {
+        'x-fields': 'total'
+      },
+      authenticated: true
+    })
+    .then((res) => {
+      collectionsTotal.value = res.total
+    })
+  for (const collection of collections) {
+    if (!collection.slug) return
+    topicsAPI
+      .get({
+        entityId: `${collection.slug}/elements`,
+        params: {
+          page_size: 1,
+          class: 'Dataset'
+        },
+        toasted: false,
+        headers: { 'x-fields': 'total' }
+      })
+      .then(
+        (res) => (nbDatasetsPerCollection.value[collection.slug] = res.total)
+      )
+      .catch((err) =>
+        console.error(`Error fetching Topic ${collection.slug}`, err)
+      )
+  }
+})
 </script>
 
 <template>
@@ -56,7 +99,8 @@ const collectionsTotal = homepage?.collections_total ?? 0
                 <p
                   class="fr-tag fr-icon-database-line fr-tag--icon-left fr-mb-0"
                 >
-                  {{ collection.dataset_count }} jeux de données
+                  {{ nbDatasetsPerCollection[collection.slug] || '...' }} jeux
+                  de données
                 </p>
               </li>
               <li>
@@ -169,7 +213,6 @@ const collectionsTotal = homepage?.collections_total ?? 0
 }
 
 .card {
-  background-color: var(--background-default-grey);
   border: 1px solid var(--border-default-grey);
 }
 
@@ -182,10 +225,6 @@ const collectionsTotal = homepage?.collections_total ?? 0
   width: 100%;
   height: 100%;
   color: inherit;
-
-  &:hover {
-    background: none;
-  }
 }
 
 .summary-img {
