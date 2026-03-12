@@ -50,8 +50,8 @@ importers:
         specifier: ^1.13.5
         version: 1.13.5(debug@4.4.3)
       dompurify:
-        specifier: ^3.2.3
-        version: 3.3.0
+        specifier: ^3.3.2
+        version: 3.3.2
       maplibre-gl:
         specifier: ^5.3.0
         version: 5.13.0
@@ -3424,11 +3424,12 @@ packages:
       }
     engines: { node: '>= 4' }
 
-  dompurify@3.3.0:
+  dompurify@3.3.2:
     resolution:
       {
-        integrity: sha512-r+f6MYR1gGN1eJv0TVQbhA7if/U7P87cdPl3HN5rikqaBSBxLiCb/b9O+2eG0cxz0ghyU+mU1QkbsOwERMYlWQ==
+        integrity: sha512-6obghkliLdmKa56xdbLOpUZ43pAR6xFy1uOrxBaIDjT+yaRuuybLjGS9eVBoSR/UPU5fq3OXClEHLJNGvbxKpQ==
       }
+    engines: { node: '>=20' }
 
   domutils@2.8.0:
     resolution:
@@ -8573,7 +8574,7 @@ snapshots:
       '@vueuse/core': 13.9.0(vue@3.5.25(typescript@5.7.3))
       '@vueuse/router': 13.9.0(vue-router@4.6.3(vue@3.5.25(typescript@5.7.3)))(vue@3.5.25(typescript@5.7.3))
       chart.js: 4.5.1
-      dompurify: 3.3.0
+      dompurify: 3.3.2
       geopf-extensions-openlayers: 1.0.0-beta.6
       leaflet: 1.9.4
       maplibre-gl: 5.13.0
@@ -10313,7 +10314,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.3.0:
+  dompurify@3.3.2:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
