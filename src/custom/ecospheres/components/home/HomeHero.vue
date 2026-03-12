@@ -21,8 +21,7 @@ const doSearch = (q: string) => {
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-9 hero-content">
           <h1 class="main-title">
-            Retrouvez les données clés<br />
-            de la
+            Retrouvez les données clés de la
             <span class="highlight">transition écologique</span>
           </h1>
           <div class="big-search">
@@ -88,6 +87,7 @@ const doSearch = (q: string) => {
 }
 
 .main-title {
+  max-width: 35rem;
   font-size: 2.5rem;
   line-height: 1.2;
   color: var(--text-default-grey);
