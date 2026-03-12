@@ -66,7 +66,7 @@ const doSearch = (q: string) => {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('../../assets/hero-topo-map.png');
+    background-image: url('../../assets/hero-topo-map.webp');
     background-size: cover;
     background-position: center;
     opacity: 0.2;
