@@ -100,6 +100,10 @@ const props = defineProps<{
 
 const activeTab = ref(0)
 
+watch(tabTitles, () => {
+  activeTab.value = 0
+})
+
 const filteredLogicielsMetiers = computed(() =>
   props.solutions.filter((sol) =>
     sol.fields.liste_categories_de_solution?.includes('Logiciel métier')
