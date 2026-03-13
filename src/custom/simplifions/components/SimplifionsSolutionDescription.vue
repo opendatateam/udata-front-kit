@@ -367,7 +367,7 @@ const solution = ref<Solution | undefined>(undefined)
 const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
 const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
 const solutionsIntegratices = ref<SolutionRecord[]>([])
-const casUsagesForIntegrateurs = ref<CasUsageRecord[]>([])
+const allFetchedCasUsages = ref<CasUsageRecord[]>([])
 const recommandationsFournisseur = ref<RecommandationRecord[]>([])
 const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
 const integrateursFilters = ref<IntegrateursFilters>({
@@ -448,7 +448,7 @@ grist.getRecord('Solutions', solutionId).then((data) => {
           grist
             .getRecordsByIds('Cas_d_usages', Array.from(allCasUsageIds))
             .then((casUsages) => {
-              casUsagesForIntegrateurs.value = casUsages as CasUsageRecord[]
+              allFetchedCasUsages.value = casUsages as CasUsageRecord[]
             })
         }
       })
@@ -477,6 +477,22 @@ const apiEtDatasetsIntegresParSolution = computed(() => {
     map.get(solutionId)!.push(integration)
   })
   return map
+})
+
+// Only expose cas d'usages linked to visible integrator solutions
+const casUsagesForIntegrateurs = computed(() => {
+  const visibleSolIds = new Set(
+    solutionsIntegratices.value.map((sol) => sol.id)
+  )
+  const validIds = new Set<number>()
+  apiEtDatasetsIntegres.value.forEach((integration) => {
+    if (visibleSolIds.has(integration.fields.Solution_integratrice)) {
+      integration.fields.Integre_pour_les_cas_d_usages?.forEach((id) =>
+        validIds.add(id)
+      )
+    }
+  })
+  return allFetchedCasUsages.value.filter((cu) => validIds.has(cu.id))
 })
 
 const maxApisCount = computed(() => {
