@@ -96,7 +96,6 @@ export type PageConf = {
   }
   editable: boolean
   filters: PageFilterConf[]
-  use_search_endpoint?: boolean
 }
 
 export type PagesConf = {

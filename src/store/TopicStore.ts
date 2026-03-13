@@ -6,7 +6,6 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { usePageConf } from '@/utils/config'
 import { usePageQueryParams } from '@/utils/filters'
 import { useUniverseQuery } from '@/utils/universe'
 
@@ -58,11 +57,13 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
+    async query(
+      args: QueryArgs,
+      pageKey?: string,
+      useSearchEndpoint = false
+    ): Promise<Topic[]> {
       const { query, ...queryArgs } = args
       const resolvedPageKey = pageKey || 'topics'
-      const useSearchEndpoint =
-        usePageConf(resolvedPageKey)?.use_search_endpoint ?? false
 
       const params = usePageQueryParams(resolvedPageKey, queryArgs)
 
