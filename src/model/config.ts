@@ -110,6 +110,18 @@ export type DatasetsConf = {
   show_extended_information_panel: boolean
 }
 
+export interface CmsPageConfig {
+  title: string
+  id: string
+  route: string
+}
+
+export interface CmsConfig {
+  enabled: boolean
+  site_tag: string
+  pages?: CmsPageConfig[]
+}
+
 export interface WebsiteConfig {
   title: string
   seo?: {
@@ -120,6 +132,7 @@ export interface WebsiteConfig {
       robots?: string
     }
   }
+  cms?: CmsConfig
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
