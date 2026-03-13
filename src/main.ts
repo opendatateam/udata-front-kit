@@ -7,6 +7,7 @@ import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires 
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import '@datagouv/components-next/dist/components.css'
+import 'vue-sonner/style.css'
 
 import * as Sentry from '@sentry/vue'
 import { createHead } from '@unhead/vue'
@@ -18,7 +19,6 @@ import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
 import VueMatomo from 'vue-matomo'
 import TextClamp from 'vue3-text-clamp'
-import 'vue3-toastify/dist/index.css'
 
 import config from '@/config'
 
@@ -36,7 +36,11 @@ const app = createApp(App)
 const pinia = createPinia()
 const head = createHead()
 
-if (config.sentry?.dsn && import.meta.env.MODE !== 'test') {
+if (
+  config.sentry?.dsn &&
+  import.meta.env.MODE !== 'test' &&
+  !('Cypress' in window)
+) {
   Sentry.init({
     app,
     ...(config.sentry as SentryConfig)
@@ -65,6 +69,8 @@ routerPromise
       maxXmlPreviewCharSize: 100000, // Maximum size of XML to preview in characters (~100KB). XML preview module can NOT be collapsed by default so we should not have a preview for large files.
       metricsApiUrl: 'https://metric-api.data.gouv.fr',
       schemaValidataUrl: 'https://validata.fr',
+      schemasSiteUrl: 'https://schema.data.gouv.fr/',
+      schemasSiteName: 'schema.data.gouv.fr',
       // inject authentication for datagouv components that make their own API calls
       onRequest: (param) => {
         const store = useUserStore()

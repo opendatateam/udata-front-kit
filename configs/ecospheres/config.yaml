@@ -619,7 +619,18 @@ pages:
             name: Véhicules électriques
           - id: velo
             name: Vélo
-      - name: Maille minimale
+      - name: Maille géographique
         default_option: Toutes les mailles
-        id: granularity
-        type: spatial_granularity
+        id: maille
+        type: select
+        use_filter_prefix: true
+        color:
+        values:
+          - id: region
+            name: Région
+          - id: departement
+            name: Département
+          - id: epci
+            name: EPCI
+          - id: commune
+            name: Commune
