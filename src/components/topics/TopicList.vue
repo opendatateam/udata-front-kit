@@ -68,7 +68,8 @@ const executeQuery = async () => {
     .query(
       {
         ...route.query,
-        ...props,
+        query: props.query,
+        page: props.page,
         sort: route.query.sort || pageConf.default_sort
       } as Parameters<typeof topicStore.query>[0],
       pageKey,
