@@ -3,6 +3,7 @@
     v-model="activeTab"
     tab-list-name="Catégories de solutions intégratrices"
     :tab-titles="tabTitles"
+    class="fr-mt-4w"
   >
     <DsfrTabContent
       v-if="filteredLogicielsMetiers.length"

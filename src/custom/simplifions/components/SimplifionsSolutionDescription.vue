@@ -287,7 +287,6 @@
 
       <SimplifionsIntegrateursFilters
         v-if="solutionsIntegratices.length > 1"
-        :available-type-solutions="availableTypeSolutions"
         :cas-usages="casUsagesForIntegrateurs"
         :max-apis-count="maxApisCount"
         :filtered-count="filteredAndSortedSolutions.length"
@@ -372,7 +371,6 @@ const casUsagesForIntegrateurs = ref<CasUsageRecord[]>([])
 const recommandationsFournisseur = ref<RecommandationRecord[]>([])
 const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
 const integrateursFilters = ref<IntegrateursFilters>({
-  typeSolution: '',
   casUsage: null,
   minApisIntegrated: 0,
   sortBy: 'integration'
@@ -457,17 +455,6 @@ grist.getRecord('Solutions', solutionId).then((data) => {
   }
 })
 
-// Computed properties for filters
-const availableTypeSolutions = computed(() => {
-  const types = new Set<string>()
-  solutionsIntegratices.value.forEach((sol) => {
-    sol.fields.Type_de_solution?.forEach((type) => {
-      types.add(type)
-    })
-  })
-  return Array.from(types).sort()
-})
-
 // Map of cas d'usage ID -> useful APIs/datasets IDs (Y value per use case)
 const usefulApisByCasUsage = computed(() => {
   const map = new Map<number, number[]>()
@@ -507,15 +494,6 @@ const getIntegrationCount = (sol: SolutionRecord) => {
 
 const filteredAndSortedSolutions = computed(() => {
   let filtered = [...solutionsIntegratices.value]
-
-  // Filter by type de solution (single select)
-  if (integrateursFilters.value.typeSolution) {
-    filtered = filtered.filter((sol) =>
-      sol.fields.Type_de_solution?.includes(
-        integrateursFilters.value.typeSolution
-      )
-    )
-  }
 
   // Filter by cas d'usage (single select) - based on integration data
   if (integrateursFilters.value.casUsage !== null) {
