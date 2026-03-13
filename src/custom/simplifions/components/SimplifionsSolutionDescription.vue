@@ -9,7 +9,7 @@
             {{ topic.name }}
           </h1>
           <DraftTag v-if="topic.private" />
-          <SimplifionsSolutionTag :topic-solution="topic" />
+          <SimplifionsSolutionOperateurTag :topic-solution="topic" />
         </div>
 
         <p class="fr-text--lead">
@@ -20,7 +20,6 @@
           :topic="topic"
           :page-key="pageKey"
           :show-simplification="false"
-          :show-budget="false"
         />
 
         <ul class="fr-mt-4w">
@@ -137,7 +136,7 @@
             </span>
           </p>
           <span>
-            <a href="#modification-contenu">✍️ Proposer une modification</a>
+            <a href="#modification-contenu">✒️ Proposer une modification</a>
           </span>
         </nav>
       </div>
@@ -171,12 +170,12 @@
       </h2>
 
       <div>
-        <h3 class="fr-text--md fr-mt-2w">
+        <h3 class="fr-text--lg fr-mt-2w">
           <span
             aria-hidden="true"
             class="fr-icon-success-fill icon-green"
           ></span>
-          Cette solution permet :
+          Simplification par la donnée grâce à cette solution :
         </h3>
         <p
           v-if="solution.Cette_solution_permet"
@@ -184,14 +183,17 @@
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
 
       <div>
-        <h3 class="fr-text--md fr-mt-2w">
-          <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-          Cette solution ne permet pas :
+        <h3 class="fr-text--lg fr-mt-2w">
+          <span
+            aria-hidden="true"
+            class="fr-icon-stop-circle-fill icon-gray"
+          ></span>
+          Périmètre de simplification non couvert :
         </h3>
         <p
           v-if="solution.Cette_solution_ne_permet_pas"
@@ -199,9 +201,16 @@
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
+      <p class="fr-text--sm fr-mt-4w">
+        <i
+          >Une remarque concernant les possibilités de simplification de cette
+          solution ?
+        </i>
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
+      </p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
@@ -221,7 +230,7 @@
 
     <p v-else class="fr-text--sm">
       <i>Aucun cas d'usage n'est référencé pour cette solution actuellement.</i>
-      <a href="#modification-contenu">✍️ Proposer des cas d'usages</a>
+      <a href="#modification-contenu">✒️ Proposer des cas d'usages</a>
     </p>
 
     <div
@@ -263,7 +272,7 @@
           >Aucun jeu de données ou API utilisé ou fourni par cette solution
           actuellement.</i
         >
-        <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
       </p>
     </div>
 
@@ -312,7 +321,7 @@
     </div>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
-      <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
+      <h2 class="fr-h6">✒️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
         Pour proposer une modification du contenu de cette solution, vous pouvez
         contacter l'équipe via l'espace "Discussions" ci-dessous ou bien
@@ -350,6 +359,7 @@ import SimplifionsIntegrateurCard from './SimplifionsIntegrateurCard.vue'
 import SimplifionsIntegrateursFilters, {
   type IntegrateursFilters
 } from './SimplifionsIntegrateursFilters.vue'
+import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 
 const props = defineProps<{
   topic: Topic
@@ -587,8 +597,8 @@ h2.colored-title {
   color: #27a658;
 }
 
-.icon-red {
-  color: #ff292f;
+.icon-gray {
+  color: #8b8b8b;
 }
 
 .solutions-integratices-container {
