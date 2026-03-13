@@ -216,6 +216,7 @@ describe('Solutions intégratrices block', () => {
         Nom: 'Mon Intégrateur',
         Visible_sur_simplifions: true,
         Type_de_solution: ['Éditeur'],
+        liste_categories_de_solution: ['Logiciel métier'],
         API_ou_datasets_integres: [101, 102],
         Public_ou_prive: 'Privé'
       }
