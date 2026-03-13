@@ -87,30 +87,8 @@ describe('Solutions intégratrices block', () => {
     })
 
     cy.get('.test__integrateurs-filters').should('be.visible')
-    cy.get('#type-solutions').should('exist')
     cy.get('#cas-usage').should('exist')
     cy.get('#min-apis').should('exist')
-  })
-
-  it('should filter by type de solution', () => {
-    setupWithIntegrateurs({
-      integrateursSolutionFields: [
-        {
-          Nom: 'Éditeur Solution',
-          Type_de_solution: ['Éditeur'],
-          Visible_sur_simplifions: true
-        },
-        {
-          Nom: 'Portail Solution',
-          Type_de_solution: ['Portail'],
-          Visible_sur_simplifions: true
-        }
-      ]
-    })
-
-    cy.get('#type-solutions').select('Éditeur')
-    cy.get('.integrateur-card').should('have.length', 1)
-    cy.get('.integrateur-card').should('contain.text', 'Éditeur Solution')
   })
 
   it('should filter by min APIs integrated', () => {
@@ -216,6 +194,7 @@ describe('Solutions intégratrices block', () => {
         Nom: 'Mon Intégrateur',
         Visible_sur_simplifions: true,
         Type_de_solution: ['Éditeur'],
+        liste_categories_de_solution: ['Logiciel métier'],
         API_ou_datasets_integres: [101, 102],
         Public_ou_prive: 'Privé'
       }
@@ -246,6 +225,67 @@ describe('Solutions intégratrices block', () => {
     cy.get('.cas-usage-card').should('have.length', 1)
     cy.get('.cas-usage-card').should('contain.text', 'Marchés publics')
     cy.get('.cas-usage-card .indicator-count').should('contain.text', '2/3')
+  })
+
+  it('should group solutions by category in tabs', () => {
+    setupWithIntegrateurs({
+      integrateursSolutionFields: [
+        {
+          Nom: 'Logiciel A',
+          liste_categories_de_solution: ['Logiciel métier'],
+          Visible_sur_simplifions: true
+        },
+        {
+          Nom: 'Brique A',
+          liste_categories_de_solution: ['Brique technique'],
+          Visible_sur_simplifions: true
+        }
+      ]
+    })
+
+    cy.contains('button[role="tab"]', 'Logiciels métiers').should('exist')
+    cy.contains('button[role="tab"]', 'Briques techniques').should('exist')
+
+    cy.contains('button[role="tab"]', 'Briques techniques').click()
+    cy.get('.fr-tabs__panel')
+      .filter(':visible')
+      .find('.integrateur-card')
+      .should('have.length', 1)
+      .should('contain.text', 'Brique A')
+  })
+
+  it('should reset to first tab when filters change visible categories', () => {
+    setupWithIntegrateurs({
+      integrateursSolutionFields: [
+        {
+          Nom: 'Logiciel A',
+          liste_categories_de_solution: ['Logiciel métier'],
+          API_ou_datasets_integres: [1],
+          Visible_sur_simplifions: true
+        },
+        {
+          Nom: 'Brique A',
+          liste_categories_de_solution: ['Brique technique'],
+          API_ou_datasets_integres: [1, 2, 3],
+          Visible_sur_simplifions: true
+        }
+      ]
+    })
+
+    // Navigate to the second tab
+    cy.contains('button[role="tab"]', 'Briques techniques').click()
+    cy.get('.integrateur-card').should('contain.text', 'Brique A')
+
+    // Apply a filter that removes all solutions with fewer APIs, hiding Logiciel métier tab
+    cy.get('#min-apis').select('Au moins 3')
+
+    // First (and only) tab should now be Briques techniques
+    cy.contains('button[role="tab"]', 'Logiciels métiers').should('not.exist')
+    cy.get('.fr-tabs__panel')
+      .filter(':visible')
+      .find('.integrateur-card')
+      .should('have.length', 1)
+      .should('contain.text', 'Brique A')
   })
 
   it('should hide integrators not visible on simplifions', () => {
