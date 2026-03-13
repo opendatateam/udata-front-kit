@@ -115,11 +115,30 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    </div>
+    <div
+      v-if="indicator && userStore.loggedIn"
+      class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+    >
+      <DsfrButton
+        size="sm"
+        label="Ajouter à un bouquet"
+        icon="fr-icon-file-add-line"
+        @click="showAddToBouquetModal = true"
+      />
+      <DatasetAddToTopicModal
+        v-if="showAddToBouquetModal"
+        v-model:show="showAddToBouquetModal"
+        topic-page-key="bouquets"
+        :dataset="indicator"
+      />
+    </div>
   </div>
   <GenericContainer v-if="indicator" class="tabs-height-fix">
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ indicator.title }}</h1>
         <ReadMore max-height="600">
@@ -127,25 +146,7 @@ onMounted(() => {
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <DatasetSidebar :dataset="indicator">
-        <template #bottom>
-          <div v-if="userStore.loggedIn">
-            <DsfrButton
-              class="fr-mt-2w"
-              size="md"
-              label="Ajouter à un bouquet"
-              icon="fr-icon-file-add-line"
-              @click="showAddToBouquetModal = true"
-            />
-            <DatasetAddToTopicModal
-              v-if="showAddToBouquetModal"
-              v-model:show="showAddToBouquetModal"
-              topic-page-key="bouquets"
-              :dataset="indicator"
-            />
-          </div>
-        </template>
-      </DatasetSidebar>
+      <DatasetSidebar :dataset="indicator" />
     </div>
 
     <DsfrTabs
