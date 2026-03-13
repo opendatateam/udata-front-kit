@@ -100,25 +100,21 @@ const props = defineProps<{
 
 const activeTab = ref(0)
 
-watch(tabTitles, () => {
-  activeTab.value = 0
-})
-
 const filteredLogicielsMetiers = computed(() =>
   props.solutions.filter((sol) =>
-    sol.fields.liste_categories_de_solution?.includes('Logiciel métier')
+    sol.fields.liste_categories_de_solution.includes('Logiciel métier')
   )
 )
 
 const filteredBriquesTechniques = computed(() =>
   props.solutions.filter((sol) =>
-    sol.fields.liste_categories_de_solution?.includes('Brique technique')
+    sol.fields.liste_categories_de_solution.includes('Brique technique')
   )
 )
 
 const filteredPortailsConsultation = computed(() =>
   props.solutions.filter((sol) =>
-    sol.fields.liste_categories_de_solution?.includes('Portail de consultation')
+    sol.fields.liste_categories_de_solution.includes('Portail de consultation')
   )
 )
 
@@ -146,5 +142,9 @@ const tabTitles = computed(() => {
     })
   }
   return titles
+})
+
+watch(tabTitles, () => {
+  activeTab.value = 0
 })
 </script>
