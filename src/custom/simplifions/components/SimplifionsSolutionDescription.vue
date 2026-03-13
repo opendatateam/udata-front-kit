@@ -294,30 +294,94 @@
         @update:filters="onFiltersUpdate"
       />
 
-      <ul class="fr-grid-row fr-grid-row--gutters list-none">
-        <li
-          v-for="integrateur in filteredAndSortedSolutions"
-          :key="integrateur.id"
-          class="fr-col-12 fr-mb-2w"
-        >
-          <SimplifionsIntegrateurCard
-            :solution="integrateur"
-            :cas-usages="casUsagesForIntegrateurs"
-            :useful-apis-by-cas-usage="usefulApisByCasUsage"
-            :nom-fournisseur="topic.name"
-            :api-et-datasets-integres="
-              apiEtDatasetsIntegresParSolution.get(integrateur.id) || []
-            "
-          />
-        </li>
-      </ul>
-
       <p
         v-if="filteredAndSortedSolutions.length === 0"
         class="fr-text--sm fr-text--center"
       >
         <i>Aucune solution ne correspond aux filtres sélectionnés.</i>
       </p>
+
+      <DsfrTabs
+        v-else
+        v-model="activeTab"
+        tab-list-name="Catégories de solutions intégratrices"
+        :tab-titles="tabTitles"
+      >
+        <DsfrTabContent
+          v-if="filteredLogicielsMetiers.length"
+          panel-id="tab-content-logiciel-metier"
+          tab-id="tab-logiciel-metier"
+          style="background-color: white"
+        >
+          <ul class="fr-grid-row fr-grid-row--gutters list-none">
+            <li
+              v-for="integrateur in filteredLogicielsMetiers"
+              :key="integrateur.id"
+              class="fr-col-12 fr-mb-2w"
+            >
+              <SimplifionsIntegrateurCard
+                :solution="integrateur"
+                :cas-usages="casUsagesForIntegrateurs"
+                :useful-apis-by-cas-usage="usefulApisByCasUsage"
+                :nom-fournisseur="topic.name"
+                :api-et-datasets-integres="
+                  apiEtDatasetsIntegresParSolution.get(integrateur.id) || []
+                "
+              />
+            </li>
+          </ul>
+        </DsfrTabContent>
+
+        <DsfrTabContent
+          v-if="filteredBriquesTechniques.length"
+          panel-id="tab-content-brique-technique"
+          tab-id="tab-brique-technique"
+          style="background-color: white"
+        >
+          <ul class="fr-grid-row fr-grid-row--gutters list-none">
+            <li
+              v-for="integrateur in filteredBriquesTechniques"
+              :key="integrateur.id"
+              class="fr-col-12 fr-mb-2w"
+            >
+              <SimplifionsIntegrateurCard
+                :solution="integrateur"
+                :cas-usages="casUsagesForIntegrateurs"
+                :useful-apis-by-cas-usage="usefulApisByCasUsage"
+                :nom-fournisseur="topic.name"
+                :api-et-datasets-integres="
+                  apiEtDatasetsIntegresParSolution.get(integrateur.id) || []
+                "
+              />
+            </li>
+          </ul>
+        </DsfrTabContent>
+
+        <DsfrTabContent
+          v-if="filteredPortailsConsultation.length"
+          panel-id="tab-content-portail-consultation"
+          tab-id="tab-portail-consultation"
+          style="background-color: white"
+        >
+          <ul class="fr-grid-row fr-grid-row--gutters list-none">
+            <li
+              v-for="integrateur in filteredPortailsConsultation"
+              :key="integrateur.id"
+              class="fr-col-12 fr-mb-2w"
+            >
+              <SimplifionsIntegrateurCard
+                :solution="integrateur"
+                :cas-usages="casUsagesForIntegrateurs"
+                :useful-apis-by-cas-usage="usefulApisByCasUsage"
+                :nom-fournisseur="topic.name"
+                :api-et-datasets-integres="
+                  apiEtDatasetsIntegresParSolution.get(integrateur.id) || []
+                "
+              />
+            </li>
+          </ul>
+        </DsfrTabContent>
+      </DsfrTabs>
     </div>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
@@ -562,6 +626,52 @@ const filteredAndSortedSolutions = computed(() => {
 const onFiltersUpdate = (filters: IntegrateursFilters) => {
   integrateursFilters.value = filters
 }
+
+const activeTab = ref(0)
+
+const filteredLogicielsMetiers = computed(() =>
+  filteredAndSortedSolutions.value.filter((sol) =>
+    sol.fields.liste_categories_de_solution?.includes('Logiciel métier')
+  )
+)
+
+const filteredBriquesTechniques = computed(() =>
+  filteredAndSortedSolutions.value.filter((sol) =>
+    sol.fields.liste_categories_de_solution?.includes('Brique technique')
+  )
+)
+
+const filteredPortailsConsultation = computed(() =>
+  filteredAndSortedSolutions.value.filter((sol) =>
+    sol.fields.liste_categories_de_solution?.includes('Portail de consultation')
+  )
+)
+
+const tabTitles = computed(() => {
+  const titles = []
+  if (filteredLogicielsMetiers.value.length > 0) {
+    titles.push({
+      title: `Logiciels métiers (${filteredLogicielsMetiers.value.length}) 💠💠💠`,
+      tabId: 'tab-logiciel-metier',
+      panelId: 'tab-content-logiciel-metier'
+    })
+  }
+  if (filteredBriquesTechniques.value.length > 0) {
+    titles.push({
+      title: `Briques techniques (${filteredBriquesTechniques.value.length}) 💠💠💠`,
+      tabId: 'tab-brique-technique',
+      panelId: 'tab-content-brique-technique'
+    })
+  }
+  if (filteredPortailsConsultation.value.length > 0) {
+    titles.push({
+      title: `Portails de consultation (${filteredPortailsConsultation.value.length})`,
+      tabId: 'tab-portail-consultation',
+      panelId: 'tab-content-portail-consultation'
+    })
+  }
+  return titles
+})
 </script>
 
 <style scoped>
