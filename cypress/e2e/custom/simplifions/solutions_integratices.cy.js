@@ -87,30 +87,8 @@ describe('Solutions intégratrices block', () => {
     })
 
     cy.get('.test__integrateurs-filters').should('be.visible')
-    cy.get('#type-solutions').should('exist')
     cy.get('#cas-usage').should('exist')
     cy.get('#min-apis').should('exist')
-  })
-
-  it('should filter by type de solution', () => {
-    setupWithIntegrateurs({
-      integrateursSolutionFields: [
-        {
-          Nom: 'Éditeur Solution',
-          Type_de_solution: ['Éditeur'],
-          Visible_sur_simplifions: true
-        },
-        {
-          Nom: 'Portail Solution',
-          Type_de_solution: ['Portail'],
-          Visible_sur_simplifions: true
-        }
-      ]
-    })
-
-    cy.get('#type-solutions').select('Éditeur')
-    cy.get('.integrateur-card').should('have.length', 1)
-    cy.get('.integrateur-card').should('contain.text', 'Éditeur Solution')
   })
 
   it('should filter by min APIs integrated', () => {
