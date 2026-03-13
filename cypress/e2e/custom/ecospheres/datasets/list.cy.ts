@@ -1,7 +1,6 @@
 import type { DatasetV2 } from '@datagouv/components-next'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
-import { mockUniverseOrganizations } from '../mocks'
 
 describe('Datasets - List Page', () => {
   let testDatasets: DatasetV2[]
@@ -9,7 +8,7 @@ describe('Datasets - List Page', () => {
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
-    mockUniverseOrganizations()
+    cy.mockUniverseOrganizations()
     testDatasets = datasetFactory.many(3)
     cy.mockDatagouvObjectList('datasets', testDatasets)
   })

@@ -204,9 +204,9 @@ website:
       authorized_users:
 
 organizations:
-  datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
-  dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
-  bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
+  dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
+  bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -624,11 +624,11 @@ pages:
         use_filter_prefix: true
         color:
         values:
-          - id: commune
-            name: Commune
+          - id: region
+            name: Région
           - id: departement
             name: Département
           - id: epci
             name: EPCI
-          - id: region
-            name: Région
+          - id: commune
+            name: Commune
