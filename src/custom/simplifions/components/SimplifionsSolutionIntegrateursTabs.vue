@@ -11,7 +11,9 @@
       tab-id="tab-logiciel-metier"
       class="fr-tabs__panel--white"
     >
-      <ul class="fr-grid-row fr-grid-row--gutters list-none fr-tabs__panel--beige-gris-galet">
+      <ul
+        class="fr-grid-row fr-grid-row--gutters list-none list--beige-gris-galet"
+      >
         <li
           v-for="integrateur in filteredLogicielsMetiers"
           :key="integrateur.id"
@@ -36,7 +38,9 @@
       tab-id="tab-brique-technique"
       class="fr-tabs__panel--white"
     >
-      <ul class="fr-grid-row fr-grid-row--gutters list-none fr-tabs__panel--beige-gris-galet" >
+      <ul
+        class="fr-grid-row fr-grid-row--gutters list-none list--beige-gris-galet"
+      >
         <li
           v-for="integrateur in filteredBriquesTechniques"
           :key="integrateur.id"
@@ -61,7 +65,9 @@
       tab-id="tab-portail-consultation"
       class="fr-tabs__panel--white"
     >
-      <ul class="fr-grid-row fr-grid-row--gutters list-none fr-tabs__panel--beige-gris-galet">
+      <ul
+        class="fr-grid-row fr-grid-row--gutters list-none list--beige-gris-galet"
+      >
         <li
           v-for="integrateur in filteredPortailsConsultation"
           :key="integrateur.id"
@@ -154,10 +160,7 @@ watch(tabTitles, () => {
   background-color: white;
 }
 
-.fr-tabs__panel--beige-gris-galet {
+.list--beige-gris-galet {
   background-color: var(--background-alt-beige-gris-galet);
 }
-
-
-
 </style>
