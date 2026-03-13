@@ -1,6 +1,5 @@
 import type { Topic } from '@/model/topic'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
-import { mockUniverseOrganizations } from '../mocks'
 
 describe('Topics - List Page', () => {
   let testTopics: Topic[]
@@ -14,7 +13,7 @@ describe('Topics - List Page', () => {
     cy.mockSpatialLevels()
     cy.mockSpatialZone()
     cy.mockSpatialZonesSuggest()
-    mockUniverseOrganizations()
+    cy.mockUniverseOrganizations()
     testTopics = topicFactory.many(3)
     cy.mockDatagouvObjectList('topics', testTopics)
   })
