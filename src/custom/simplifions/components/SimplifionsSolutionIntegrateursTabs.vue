@@ -9,7 +9,7 @@
       v-if="filteredLogicielsMetiers.length"
       panel-id="tab-content-logiciel-metier"
       tab-id="tab-logiciel-metier"
-      style="background-color: white"
+      class="fr-tabs__panel--white"
     >
       <ul class="fr-grid-row fr-grid-row--gutters list-none">
         <li
@@ -34,7 +34,7 @@
       v-if="filteredBriquesTechniques.length"
       panel-id="tab-content-brique-technique"
       tab-id="tab-brique-technique"
-      style="background-color: white"
+      class="fr-tabs__panel--white"
     >
       <ul class="fr-grid-row fr-grid-row--gutters list-none">
         <li
@@ -59,7 +59,7 @@
       v-if="filteredPortailsConsultation.length"
       panel-id="tab-content-portail-consultation"
       tab-id="tab-portail-consultation"
-      style="background-color: white"
+      class="fr-tabs__panel--white"
     >
       <ul class="fr-grid-row fr-grid-row--gutters list-none">
         <li
@@ -148,3 +148,9 @@ watch(tabTitles, () => {
   activeTab.value = 0
 })
 </script>
+
+<style scoped>
+.fr-tabs__panel--white {
+  background-color: white;
+}
+</style>
