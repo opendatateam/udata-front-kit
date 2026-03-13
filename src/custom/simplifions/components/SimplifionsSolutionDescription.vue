@@ -9,7 +9,7 @@
             {{ topic.name }}
           </h1>
           <DraftTag v-if="topic.private" />
-          <SimplifionsSolutionTag :topic-solution="topic" />
+          <SimplifionsSolutionOperateurTag :topic-solution="topic" />
         </div>
 
         <p class="fr-text--lead">
@@ -359,6 +359,7 @@ import SimplifionsIntegrateurCard from './SimplifionsIntegrateurCard.vue'
 import SimplifionsIntegrateursFilters, {
   type IntegrateursFilters
 } from './SimplifionsIntegrateursFilters.vue'
+import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 
 const props = defineProps<{
   topic: Topic
