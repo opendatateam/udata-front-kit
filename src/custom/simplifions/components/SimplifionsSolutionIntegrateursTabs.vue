@@ -11,7 +11,7 @@
       tab-id="tab-logiciel-metier"
       class="fr-tabs__panel--white"
     >
-      <ul class="fr-grid-row fr-grid-row--gutters list-none">
+      <ul class="fr-grid-row fr-grid-row--gutters list-none" style="background-color: var(--background-alt-beige-gris-galet)">
         <li
           v-for="integrateur in filteredLogicielsMetiers"
           :key="integrateur.id"
@@ -36,7 +36,7 @@
       tab-id="tab-brique-technique"
       class="fr-tabs__panel--white"
     >
-      <ul class="fr-grid-row fr-grid-row--gutters list-none">
+      <ul class="fr-grid-row fr-grid-row--gutters list-none" style="background-color: var(--background-alt-beige-gris-galet)">
         <li
           v-for="integrateur in filteredBriquesTechniques"
           :key="integrateur.id"
@@ -61,7 +61,7 @@
       tab-id="tab-portail-consultation"
       class="fr-tabs__panel--white"
     >
-      <ul class="fr-grid-row fr-grid-row--gutters list-none">
+      <ul class="fr-grid-row fr-grid-row--gutters list-none" style="background-color: var(--background-alt-beige-gris-galet)">
         <li
           v-for="integrateur in filteredPortailsConsultation"
           :key="integrateur.id"
