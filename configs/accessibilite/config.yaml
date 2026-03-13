@@ -40,7 +40,7 @@ website:
     title: "Le Point d'Accès Unique aux Données d'Accessibilité"
     subtitle: "accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
     sections:
-      - title: Des thématiques de données pour articuler les politiques publiques en faveur de l'accesibilité et les données territoriales
+      - title: Des bouquets de données pour articuler les politiques publiques en faveur de l'accesibilité et les données territoriales
         content:
         sub_section_datasets:
         sub_section_cards:
@@ -82,7 +82,7 @@ website:
       to: /
     - text: Données
       to: /datasets
-    - text: Thématiques
+    - text: Bouquets
       to: /bouquets
     - text: À propos
       to: /about
@@ -100,7 +100,7 @@ website:
       path: /
     - name: Données
       path: /datasets
-    - name: Thématiques
+    - name: Bouquets
       path: /bouquets
     - name: À propos
       path: /about
@@ -194,11 +194,11 @@ pages:
     title: Bouquets
     breadcrumb_title:
     labels:
-      singular: thématique
-      plural: thématiques
-      extended: thématique des données
+      singular: bouquet
+      plural: bouquets
+      extended: bouquet des données
     search:
-      input: Filtrer les thématiques
+      input: Filtrer les bouquets
     banner:
     resources_tabs:
       discussions:
