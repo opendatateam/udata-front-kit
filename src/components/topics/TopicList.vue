@@ -20,6 +20,10 @@ const props = defineProps({
   page: {
     type: String,
     default: '1'
+  },
+  useSearchEndpoint: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -64,10 +68,12 @@ const executeQuery = async () => {
     .query(
       {
         ...route.query,
-        ...props,
+        query: props.query,
+        page: props.page,
         sort: route.query.sort || pageConf.default_sort
       } as Parameters<typeof topicStore.query>[0],
-      pageKey
+      pageKey,
+      props.useSearchEndpoint
     )
     .finally(() => loader.hide())
 }

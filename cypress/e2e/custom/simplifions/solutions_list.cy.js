@@ -112,11 +112,11 @@ describe('Simplifions Solutions Page', () => {
       cy.get('input[name="include_private"]').should('exist')
     })
 
-    it('should request the private solutions', () => {
+    it('should not send include_private when using the search endpoint', () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-v2-solutions.*include_private=true/
+        /topics\/search\/.*tag=simplifions-v2-solutions/
       )
     })
   })

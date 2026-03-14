@@ -115,11 +115,11 @@ describe("Simplifions Cas d'usages Listing Page", () => {
       cy.get('input[name="include_private"]').should('exist')
     })
 
-    it("should request the private cas d'usages", () => {
+    it("should not send include_private when using the search endpoint", () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /tag=simplifions-v2-cas-d-usages.*include_private=true/
+        /topics\/search\/.*tag=simplifions-v2-cas-d-usages/
       )
     })
   })
