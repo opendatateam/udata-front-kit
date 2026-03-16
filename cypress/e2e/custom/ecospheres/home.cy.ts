@@ -35,7 +35,7 @@ describe('Home Page Ecologie', () => {
         .first()
         .within(() => {
           cy.contains('dans les jeux de données').should('be.visible')
-          cy.contains('dans les bouquets').should('be.visible')
+          cy.contains('dans les collections thématiques').should('be.visible')
           cy.contains('dans les indicateurs').should('be.visible')
           cy.contains('dans les API').should('be.visible')
         })
@@ -52,38 +52,38 @@ describe('Home Page Ecologie', () => {
         .first()
         .within(() => {
           cy.contains('dans les jeux de données').should('be.visible')
-          cy.contains('dans les bouquets').should('be.visible')
+          cy.contains('dans les collections thématiques').should('be.visible')
           cy.contains('dans les indicateurs').should('be.visible')
           cy.contains('dans les API').should('be.visible')
         })
     })
   })
 
-  describe('Bouquets Cards Display', () => {
-    it('should display bouquet cards in the discover section', () => {
+  describe('Collections thématiques Cards Display', () => {
+    it('should display collection cards in the discover section', () => {
       cy.visit('/')
 
-      // Verify the "Les bouquets à découvrir" section is present
-      cy.contains('h2', 'Les bouquets à découvrir').should('be.visible')
+      // Verify the "Collections thématiques" section is present
+      cy.contains('h2', 'Collections thématiques').should('be.visible')
 
-      // Verify that bouquet cards are displayed
+      // Verify that collection cards are displayed
       testTopics.forEach((topic) => {
         cy.contains(topic.name).should('be.visible')
       })
 
-      // Verify "Voir les bouquets" link is present
-      cy.contains('a', 'Voir les bouquets').should('be.visible')
+      // Verify link to all collections is present
+      cy.contains('a', 'Collections thématiques').should('be.visible')
     })
 
-    it('should navigate to bouquet detail page when clicking on a card', () => {
+    it('should navigate to collection thématique detail page when clicking on a card', () => {
       cy.visit('/')
 
       const firstTopic = testTopics[0]
 
-      // Click on the first bouquet card title
+      // Click on the first collection card title
       cy.contains('a', firstTopic.name).click()
 
-      // Verify navigation to the bouquet detail page
+      // Verify navigation to the collection thématique detail page
       cy.url().should('include', `/bouquets/${firstTopic.slug}`)
     })
   })

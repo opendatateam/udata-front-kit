@@ -79,7 +79,7 @@ website:
           route: indicators
         - text: Rechercher {} dans les <strong>API</strong>
           route: dataservices
-        - text: Rechercher {} dans les <strong>bouquets</strong>
+        - text: Rechercher {} dans les <strong>collections thématiques</strong>
           route: bouquets
   search_bar:
     display: true
@@ -129,7 +129,7 @@ website:
       to: /indicators
     - text: API
       to: /dataservices
-    - text: Bouquets
+    - text: Collections thématiques
       to: /bouquets
     - text: Organisations
       to: /organizations
@@ -155,7 +155,7 @@ website:
   sitemap:
     - name: Accueil
       path: /
-    - name: Bouquets
+    - name: Collections thématiques
       path: /bouquets
     - name: Jeux de données
       path: /datasets
@@ -400,6 +400,7 @@ pages:
       singular: API
       plural: APIs
       extended: API
+      feminine: true
     search:
       input: Rechercher une API
     banner:
@@ -424,18 +425,19 @@ pages:
     universe_query:
       tag: ecospheres
     filter_prefix: ecospheres
-    title: Bouquets
+    title: Collections thématiques
     breadcrumb_title:
     labels:
-      singular: bouquet
-      plural: bouquets
-      extended: bouquet de données
+      singular: collection thématique
+      plural: collections thématiques
+      extended: collection thématique
+      feminine: true
     search:
-      input: Filtrer les bouquets
+      input: Filtrer les collections thématiques
     banner:
       title: Mettre en commun les usages pour une action efficace
       content: |
-        Un bouquet regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l'action collective en créant vos propres bouquets : un simple compte **data.gouv**._fr_ suffit.
+        Une collection thématique regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l'action collective en créant vos propres collections thématiques : un simple compte **data.gouv**._fr_ suffit.
     resources_tabs:
       discussions:
         display: true
@@ -682,4 +684,4 @@ ecospheres:
       - date: '23 septembre 2025'
         title: 'Publication des données du SDES'
       - date: '11 août 2025'
-        title: "Sortie d'un nouveau bouquet"
+        title: "Sortie d'une nouvelle collection thématique"

@@ -61,9 +61,9 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Should show activity items with translated labels
-      cy.contains('a créé le bouquet').should('be.visible')
+      cy.contains('a créé la collection thématique').should('be.visible')
       cy.contains("a ajouté l'élément").should('be.visible')
-      cy.contains('a modifié le bouquet').should('be.visible')
+      cy.contains('a modifié la collection thématique').should('be.visible')
     })
   })
 
@@ -120,7 +120,7 @@ describe('Topic Activity List', () => {
       cy.wait('@get_activity_list')
 
       // Topic activities should be spans, not buttons
-      cy.contains('a créé le bouquet')
+      cy.contains('a créé la collection thématique')
         .should('have.prop', 'tagName', 'SPAN')
         .and('not.have.class', 'activity-link')
     })

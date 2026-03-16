@@ -13,7 +13,7 @@ describe('Global Layout', () => {
           'Données',
           'Indicateurs',
           'API',
-          'Bouquets',
+          'Collections thématiques',
           'Organisations',
           'À propos'
         ]

@@ -70,6 +70,7 @@ export type PageLabelsConf = {
   singular: string
   plural: string
   extended: string
+  feminine?: boolean
 }
 
 export type PageConf = {

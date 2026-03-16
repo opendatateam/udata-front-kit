@@ -22,6 +22,7 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
 import { useFiltersApiParams } from '@/utils/filters'
+import { useLabels } from '@/utils/labels'
 import { cloneTopic } from '@/utils/topic'
 import { useUniverseQuery } from '@/utils/universe'
 
@@ -37,6 +38,7 @@ const userStore = useUserStore()
 
 const router = useRouter()
 const { pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
@@ -134,7 +136,7 @@ const destroy = async () => {
   }
   if (
     window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce ${pageConf.labels.singular} ?`
+      `Etes-vous sûr de vouloir supprimer ${labels.articles.ce} ${labels.singular} ?`
     )
   ) {
     useTopicStore()
@@ -186,11 +188,11 @@ const onSubmit = async () => {
 const setMetaTitle = () => {
   let metaTitle
   if (props.isCreate && routeQuery.clone != null) {
-    metaTitle = `Cloner le ${pageConf.labels.singular} ${topic.value.name}`
+    metaTitle = `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
   } else if (!props.isCreate) {
-    metaTitle = `Éditer le ${pageConf.labels.singular} ${topic.value.name}`
+    metaTitle = `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
   } else {
-    metaTitle = `Ajouter un ${pageConf.labels.singular}`
+    metaTitle = `Ajouter ${labels.articles.un} ${labels.singular}`
   }
   setAccessibilityProperties(metaTitle)
 }
@@ -228,7 +230,11 @@ onMounted(() => {
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>
       <h1 class="fr-col-auto fr-mb-2v">
-        {{ isCreate ? `Nouveau ${pageConf.labels.singular}` : topic.name }}
+        {{
+          isCreate
+            ? `${labels.articles.nouveau} ${labels.singular}`
+            : topic.name
+        }}
       </h1>
       <form novalidate @submit.prevent>
         <ErrorSummary
@@ -240,7 +246,7 @@ onMounted(() => {
         />
         <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
-            Description du {{ pageConf.labels.extended }}
+            Description {{ labels.articles.du }} {{ labels.extended }}
           </legend>
           <TopicForm
             v-if="isReadyForForm"
@@ -252,7 +258,7 @@ onMounted(() => {
         </fieldset>
         <fieldset v-if="isCreate">
           <legend class="fr-fieldset__legend fr-text--lead">
-            Propriétaire du {{ pageConf.labels.extended }}
+            Propriétaire {{ labels.articles.du }} {{ labels.extended }}
           </legend>
           <TopicOwnerForm v-if="isReadyForForm" v-model="topic" />
         </fieldset>
@@ -283,7 +289,8 @@ onMounted(() => {
       </form>
     </div>
     <div v-else>
-      Vous n'avez pas les droits pour ajouter un {{ pageConf.labels.singular }}.
+      Vous n'avez pas les droits pour ajouter {{ labels.articles.un }}
+      {{ labels.singular }}.
     </div>
   </GenericContainer>
 </template>
