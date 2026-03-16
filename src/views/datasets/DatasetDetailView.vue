@@ -158,18 +158,10 @@ onMounted(() => {
       v-if="dataset && (canEdit || canAddToTopic || exploreUrl)"
       class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
     >
-      <DsfrButton
-        v-if="exploreUrl"
-        :secondary="!!(canAddToTopic && topicPageConf)"
-        size="sm"
-        label="Explorer les données"
-        icon="fr-icon-table-line"
-        target="_blank"
-        @click="goToExplore"
-      />
       <!-- add dataset to topic (if enabled) -->
       <template v-if="canAddToTopic && topicPageConf">
         <DsfrButton
+          secondary
           size="sm"
           :label="`Ajouter à un ${topicPageConf.labels.singular}`"
           icon="fr-icon-file-add-line"
@@ -182,6 +174,14 @@ onMounted(() => {
           :dataset="dataset"
         />
       </template>
+      <DsfrButton
+        v-if="exploreUrl"
+        size="sm"
+        label="Explorer les données"
+        icon="fr-icon-table-line"
+        target="_blank"
+        @click="goToExplore"
+      />
       <DsfrButton
         v-if="canEdit"
         secondary

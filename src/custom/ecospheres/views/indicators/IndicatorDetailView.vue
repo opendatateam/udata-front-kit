@@ -124,6 +124,7 @@ onMounted(() => {
       class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
     >
       <DsfrButton
+        secondary
         size="sm"
         label="Ajouter à un bouquet"
         icon="fr-icon-file-add-line"

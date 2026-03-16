@@ -191,18 +191,6 @@ const togglePublish = () => {
     .finally(() => loader.hide())
 }
 
-const toggleFeatured = () => {
-  if (topic.value === null) return
-  topic.value.featured = !topic.value.featured
-  const loader = useLoading().show()
-  store
-    .update(topic.value.id, {
-      tags: topic.value.tags,
-      featured: topic.value.featured
-    })
-    .finally(() => loader.hide())
-}
-
 const metaDescription = (): string | undefined => {
   return topic.value?.description ?? ''
 }
@@ -355,26 +343,18 @@ watch(
       </DsfrModal>
       <DsfrButton
         v-if="canEdit"
-        secondary
-        size="sm"
-        label="Éditer"
-        icon="fr-icon-pencil-line"
-        @click="goToEdit"
-      />
-      <DsfrButton
-        v-if="canEdit"
         size="sm"
         :label="topic.private ? 'Publier' : 'Dépublier'"
         :icon="topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'"
         @click="togglePublish"
       />
       <DsfrButton
-        v-if="isAdmin"
+        v-if="canEdit"
         secondary
         size="sm"
-        :label="topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'"
-        :icon="topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'"
-        @click="toggleFeatured"
+        label="Modifier"
+        icon="fr-icon-pencil-line"
+        @click="goToEdit"
       />
     </div>
   </div>
