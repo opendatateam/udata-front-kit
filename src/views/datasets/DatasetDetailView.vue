@@ -118,6 +118,20 @@ const goToEdit = () => {
   window.location.href = `${config.datagouvfr.base_url}/admin/datasets/${dataset.value.id}/`
 }
 
+const goToExplore = () => {
+  if (!exploreUrl.value) return
+  window.open(exploreUrl.value, '_blank')
+}
+
+const exploreUrl = computed(() => {
+  if (!dataset.value) return null
+  const resourceData = resourceStore.data[dataset.value.id]
+  const mainResources = resourceData?.find((rd) => rd.type.id === 'main')
+  return (
+    mainResources?.resources.find((r) => r.preview_url)?.preview_url ?? null
+  )
+})
+
 onMounted(() => {
   datasetStore
     .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
@@ -133,11 +147,50 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    </div>
+    <div
+      v-if="dataset && (canEdit || canAddToTopic || exploreUrl)"
+      class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+    >
+      <!-- add dataset to topic (if enabled) -->
+      <template v-if="canAddToTopic && topicPageConf">
+        <DsfrButton
+          secondary
+          size="sm"
+          :label="`Ajouter à un ${topicPageConf.labels.singular}`"
+          icon="fr-icon-file-add-line"
+          @click="showAddToTopicModal = true"
+        />
+        <DatasetAddToTopicModal
+          v-if="showAddToTopicModal"
+          v-model:show="showAddToTopicModal"
+          :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
+          :dataset="dataset"
+        />
+      </template>
+      <DsfrButton
+        v-if="exploreUrl"
+        size="sm"
+        label="Explorer les données"
+        icon="fr-icon-table-line"
+        target="_blank"
+        @click="goToExplore"
+      />
+      <DsfrButton
+        v-if="canEdit"
+        secondary
+        size="sm"
+        label="Modifier"
+        icon="fr-icon-pencil-line"
+        @click="goToEdit"
+      />
+    </div>
   </div>
   <GenericContainer v-if="dataset" class="tabs-height-fix">
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <ReadMore max-height="600">
@@ -145,38 +198,7 @@ onMounted(() => {
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <DatasetSidebar :dataset="dataset">
-        <template #bottom>
-          <div
-            v-if="canEdit || canAddToTopic"
-            class="fr-mt-2w fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
-          >
-            <DsfrButton
-              v-if="canEdit"
-              secondary
-              size="md"
-              label="Éditer"
-              icon="fr-icon-pencil-line"
-              @click="goToEdit"
-            />
-            <!-- add dataset to topic (if enabled) -->
-            <template v-if="canAddToTopic && topicPageConf">
-              <DsfrButton
-                size="md"
-                :label="`Ajouter à un ${topicPageConf.labels.singular}`"
-                icon="fr-icon-file-add-line"
-                @click="showAddToTopicModal = true"
-              />
-              <DatasetAddToTopicModal
-                v-if="showAddToTopicModal"
-                v-model:show="showAddToTopicModal"
-                :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
-                :dataset="dataset"
-              />
-            </template>
-          </div>
-        </template>
-      </DatasetSidebar>
+      <DatasetSidebar :dataset="dataset" />
     </div>
 
     <DsfrTabs
