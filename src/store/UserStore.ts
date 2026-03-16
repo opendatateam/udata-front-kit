@@ -37,13 +37,10 @@ export const useUserStore = defineStore('user', {
     },
     isAdmin(): boolean {
       return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
-<<<<<<< HEAD
-=======
     },
     userReference(): UserReference | undefined {
       if (!this.data) return undefined
       return { class: 'User', ...this.data }
->>>>>>> origin/main
     }
   },
   actions: {

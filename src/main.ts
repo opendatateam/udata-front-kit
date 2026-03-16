@@ -7,10 +7,7 @@ import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires 
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import '@datagouv/components-next/dist/components.css'
-<<<<<<< HEAD
-=======
 import 'vue-sonner/style.css'
->>>>>>> origin/main
 
 import * as Sentry from '@sentry/vue'
 import { createHead } from '@unhead/vue'

@@ -147,27 +147,6 @@ export function findAllOgcCompatibleResources(
 
     let layerName = undefined
 
-<<<<<<< HEAD
-      if (format === 'wfs') {
-        // WFS found - return immediately (best result, no need to search more)
-        return {
-          url: resource.url,
-          format,
-          resourceTitle: resource.title,
-          layerName
-        }
-      }
-      // layerName is required for WMS (we don't do multi-layers)
-      else if (format === 'wms' && layerName && !wmsCandidate) {
-        // Store first valid WMS as fallback
-        wmsCandidate = {
-          url: resource.url,
-          format,
-          resourceTitle: resource.title,
-          layerName
-        }
-      }
-=======
     // Try to extract layer name from URL parameters or resource.title
     const extractedName = extractLayerNameFromUrl(resource.url, format)
     if (extractedName && isValidLayerName(extractedName)) {
@@ -192,7 +171,6 @@ export function findAllOgcCompatibleResources(
         resourceTitle: resource.title,
         layerName
       })
->>>>>>> origin/main
     }
   }
 

@@ -1,14 +1,6 @@
 /* ===== Root & Custom Properties ===== */
 
 :root {
-<<<<<<< HEAD
-  /* toastify */
-  --toastify-color-success: #1f8d49; /* --success-main-525 (unavailable to date) */
-  --toastify-text-color-light: var(
-    --text-title-grey
-  ); /* black text for better contrast on white background */
-=======
->>>>>>> origin/main
   /*
   progressively enhanced height: auto transition
   https://caniuse.com/mdn-css_properties_interpolate-size
@@ -77,12 +69,6 @@ small {
   font-size: 0.75rem;
 }
 .subtitle {
-<<<<<<< HEAD
-  font-size: 0.875rem;
-  font-weight: 700;
-  line-height: 1.25rem;
-=======
->>>>>>> origin/main
   margin-bottom: 1rem;
 }
 .subtitle--uppercase {
@@ -198,13 +184,10 @@ body {
 
 /* ===== Utilities for @datagouv/components-next (upstream does not bundle these) ===== */
 
-<<<<<<< HEAD
-=======
 .divide-y > :not(:last-child) {
   border-bottom: 1px solid var(--border-default-grey);
 }
 
->>>>>>> origin/main
 .f-italic {
   font-style: italic;
 }

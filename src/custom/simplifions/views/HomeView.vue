@@ -397,15 +397,11 @@ const niveauxDeSimplification = [
     class="fr-container hero-text fr-mt-8w fr-py-8w"
     style="background-color: rgb(243, 243, 251)"
   >
-<<<<<<< HEAD
-    <h2 class="fr-h1 fr-mb-5w" style="color: black; text-align: center">
-=======
     <h2
       id="redaction-contenu"
       class="fr-h1 fr-mb-5w"
       style="color: black; text-align: center"
     >
->>>>>>> origin/main
       Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
     </h2>
 
@@ -427,13 +423,8 @@ const niveauxDeSimplification = [
           Ligne éditoriale <i>DLNUF/proactivité</i>
         </h3>
         <p class="fr-text--lg fr-text--bold">
-<<<<<<< HEAD
-          Un contenu rédigé au sein du Pôle Data pour tenir une ligne éditoriale
-          :
-=======
           Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une
           ligne éditoriale :
->>>>>>> origin/main
         </p>
         <ul class="fr-text--lg">
           <li>
@@ -456,19 +447,11 @@ const niveauxDeSimplification = [
             />
           </div>
         </figure>
-<<<<<<< HEAD
-        <h3 style="text-align: center">Contenu contributif</h3>
-        <p class="fr-text--lg fr-text--bold">
-          De nombreux espaces sont disponibles sur le site pour permettre aux
-          usagers de contribuer dans l'objectif de proposer une base de
-          connaissance :
-=======
         <h3 style="text-align: center">Contenu collaboratif</h3>
         <p class="fr-text--lg fr-text--bold">
           De nombreux espaces sont disponibles sur le site pour permettre aux
           usagers de proposer des modifications dans l'objectif de construire
           une base de connaissance :
->>>>>>> origin/main
         </p>
         <ul class="fr-text--lg">
           <li>élaborée sur des expériences concrètes ;</li>
@@ -482,24 +465,6 @@ const niveauxDeSimplification = [
       class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w"
       style="text-align: center"
     >
-<<<<<<< HEAD
-      ✍️ Proposez une modification, un cas d'usage ou une solution :
-    </p>
-
-    <div class="fr-mb-4w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-      <a
-        href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
-        target="_blank"
-        class="fr-btn fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
-      >
-        Formulaire pour proposer un contenu
-      </a>
-    </div>
-    <p
-      class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-2w"
-      style="text-align: center"
-    >
-=======
       📝 Proposez une modification, un cas d'usage ou une solution :
     </p>
 
@@ -518,7 +483,6 @@ const niveauxDeSimplification = [
       class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-2w"
       style="text-align: center"
     >
->>>>>>> origin/main
       Consultez les règles utilisées par le pôle Data <br />pour identifier les
       contenus qui sont référencés dans <i>Simplifions.data</i> :
     </p>

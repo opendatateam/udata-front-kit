@@ -110,10 +110,7 @@ export type Solution = {
   Type_de_solution: string[]
   URL_demande_d_acces: string
   solutions_integratrices: number[] | null
-<<<<<<< HEAD
-=======
   liste_categories_de_solution: string[]
->>>>>>> origin/main
 }
 export type SolutionRecord = GristRecord & {
   fields: Solution

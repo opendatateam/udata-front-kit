@@ -77,12 +77,8 @@ export const solutionFactory = build({
       Visible_sur_simplifions: true,
       Recommande_pour_les_cas_d_usages: [1, 2],
       solutions_integratrices: null,
-<<<<<<< HEAD
-      Type_de_solution: ['Éditeur']
-=======
       Type_de_solution: ['Éditeur'],
       liste_categories_de_solution: ['Logiciel métier']
->>>>>>> origin/main
     }
   }
 })

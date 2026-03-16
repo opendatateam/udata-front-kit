@@ -102,73 +102,6 @@
             <!-- eslint-enable vue/no-v-html -->
           </div>
         </div>
-<<<<<<< HEAD
-
-        <div
-          v-if="recommandation.Concretement_pour_les_usagers"
-          class="reco-section"
-        >
-          <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true">🧑</span>
-          </div>
-
-          <div class="reco-text-column">
-            <div>
-              <h5 class="fr-text--md">Concrètement, pour les usagers :</h5>
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="
-                fromMarkdown(recommandation.Concretement_pour_les_usagers)
-              "
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
-          </div>
-        </div>
-
-        <div
-          v-if="recommandation.Concretement_pour_vos_agents"
-          class="reco-section"
-        >
-          <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true">🧑‍💼</span>
-          </div>
-
-          <div class="reco-text-column">
-            <div>
-              <h5 class="fr-text--md">Concrètement, pour vos agents :</h5>
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="fromMarkdown(recommandation.Concretement_pour_vos_agents)"
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
-          </div>
-        </div>
-
-        <div
-          v-if="recommandation.Ce_que_ne_fait_pas_cette_solution"
-          class="reco-section"
-        >
-          <div class="fr-mr-1w bullet-icon">
-            <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-          </div>
-
-          <div class="reco-text-column">
-            <div>
-              <h5 class="fr-text--md">Ce que ne fait pas cette solution :</h5>
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-html="
-                fromMarkdown(recommandation.Ce_que_ne_fait_pas_cette_solution)
-              "
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
-          </div>
-        </div>
-=======
->>>>>>> origin/main
       </div>
       <p v-else class="fr-text--sm">
         <i>Aucun contenu actuellement.</i>
@@ -179,47 +112,6 @@
         v-if="recommandation.API_et_datasets_utiles_fournis?.length"
         class="fr-col-12 fr-p-0 fr-mt-4w"
       >
-<<<<<<< HEAD
-        <DsfrAccordion title-tag="h5">
-          <template #title>
-            <strong>API et données utiles</strong>, fournies par la solution
-          </template>
-          <div v-if="usefulDataApiFourniesParLaSolution === undefined">
-            Chargement des données en cours...
-          </div>
-          <ul v-else>
-            <li
-              v-for="apidOrDataset in sortedUsefulDataApiFourniesParLaSolution"
-              :key="apidOrDataset.fields.UID_datagouv"
-            >
-              <SimplifionsDataApiUtile
-                :api-or-dataset="apidOrDataset.fields"
-                :custom-description="
-                  customDescriptions[apidOrDataset.id]
-                    ?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
-                "
-              />
-            </li>
-          </ul>
-        </DsfrAccordion>
-      </div>
-
-      <div v-if="solutionsEditeurs?.length" class="fr-col-12 fr-p-0">
-        <DsfrAccordion title-tag="h5">
-          <template #title>
-            <strong>Liste des éditeurs de logiciels</strong>, ayant intégré
-            cette API pour ce cas d'usage
-          </template>
-          <div v-if="solutionsEditeurs === undefined">
-            Chargement des données en cours...
-          </div>
-          <div v-else class="solutions-editeurs fr-mt-2w" role="list">
-            <div v-for="solution in solutionsEditeurs" :key="solution.id">
-              <SimplifionsEditorSoftwareCard :solution="solution" />
-            </div>
-          </div>
-        </DsfrAccordion>
-=======
         <DsfrAccordionsGroup v-model="activeApiAccordion">
           <DsfrAccordion title-tag="h5">
             <template #title>
@@ -367,7 +259,6 @@
             </p>
           </DsfrAccordion>
         </DsfrAccordionsGroup>
->>>>>>> origin/main
       </div>
     </div>
   </div>

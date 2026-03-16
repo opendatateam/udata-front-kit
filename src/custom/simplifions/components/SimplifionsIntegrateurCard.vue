@@ -13,25 +13,10 @@
         <h3 class="fr-h5 fr-mb-1w integrateur-card__title">
           {{ solution.fields.Nom }}
         </h3>
-<<<<<<< HEAD
-        <p
-          :class="[
-            'fr-badge fr-badge--sm fr-badge--no-icon fr-mb-0',
-            isPublic ? 'fr-badge--success' : 'fr-badge--info'
-          ]"
-        >
-          <span class="font-weight-normal uppercase">{{ tagText }}</span>
-          <span v-if="operatorName">
-            <span class="fr-ml-1v font-weight-normal"> | </span>
-            <span class="uppercase">{{ operatorName }}</span>
-          </span>
-        </p>
-=======
         <SimplifionsSolutionOperateurTag
           :grist-solution="solution.fields"
           class="fr-mb-0"
         />
->>>>>>> origin/main
       </div>
 
       <!-- Content: Type de solution + Cas d'usages -->
@@ -135,10 +120,7 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
-<<<<<<< HEAD
-=======
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
->>>>>>> origin/main
 
 const props = defineProps<{
   solution: SolutionRecord
@@ -158,21 +140,6 @@ topicsAPI.getTopicByTag(solutionTag).then((topic) => {
 
 const datagouvSlug = computed(() => solutionTopic.value?.slug)
 
-<<<<<<< HEAD
-const isPublic = computed(() => {
-  return props.solution.fields.Public_ou_prive === 'Public'
-})
-
-const tagText = computed(() => {
-  return isPublic.value ? 'Solution publique' : 'Solution privée'
-})
-
-const operatorName = computed(() => {
-  return props.solution.fields.Nom_de_l_operateur?.[0]
-})
-
-=======
->>>>>>> origin/main
 const topicTags = useTagsByRef('solutions', solutionTopic)
 
 const simplificationTags = computed(() => {

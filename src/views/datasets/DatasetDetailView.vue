@@ -1,24 +1,12 @@
 <script setup lang="ts">
-<<<<<<< HEAD
-import {
-  AnimatedLoader,
-  DatasetInformationPanel,
-  ReadMore,
-  SimpleBanner
-} from '@datagouv/components-next'
-=======
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
->>>>>>> origin/main
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
-<<<<<<< HEAD
-=======
 import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
->>>>>>> origin/main
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
@@ -44,8 +32,6 @@ const datasetIdOrSlug = route.params.item_id
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
 const userStore = useUserStore()
-<<<<<<< HEAD
-=======
 
 const ogcLayerInfo = ref(new Map<string, OgcLayerInfo[]>())
 
@@ -68,7 +54,6 @@ const handleOpenInQgis = async () => {
     alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
   }
 }
->>>>>>> origin/main
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
@@ -89,11 +74,7 @@ const canAddToTopic = computed(() => {
   )
 })
 
-<<<<<<< HEAD
-const dataset = computed(() => datasetStore.get(datasetId))
-=======
 const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
->>>>>>> origin/main
 
 const showAddToTopicModal = ref(false)
 

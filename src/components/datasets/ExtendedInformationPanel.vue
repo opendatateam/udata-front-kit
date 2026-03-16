@@ -1,13 +1,8 @@
 <script setup lang="ts">
-<<<<<<< HEAD
-import type { ExtendedDatasetV2, TypedHarvest } from '@/model/dataset'
-import { useFormatDate } from '@datagouv/components-next'
-=======
 import type {
   ExtendedDatasetV2WithFullObject,
   TypedHarvest
 } from '@/model/dataset'
->>>>>>> origin/main
 import ExtendedInformationPanelItem from './ExtendedInformationPanelItem.vue'
 
 const props = defineProps({
@@ -20,12 +15,6 @@ const props = defineProps({
 const dcatExtras = props.dataset.extras?.dcat
 const harvest = props.dataset.harvest as TypedHarvest
 const uri = harvest?.uri
-<<<<<<< HEAD
-const harvestCreatedAt = harvest?.created_at
-const harvestIssuedAt = harvest?.issued_at
-const harvestModifiedAt = harvest?.modified_at
-=======
->>>>>>> origin/main
 </script>
 
 <template>

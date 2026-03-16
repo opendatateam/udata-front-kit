@@ -1,37 +1,8 @@
 <template>
   <div class="test__integrateurs-filters fr-py-3w fr-mb-2w">
     <div class="fr-grid-row fr-grid-row--gutters">
-<<<<<<< HEAD
-      <!-- Type de solutions filter -->
-      <div class="fr-col-12 fr-col-md-4">
-        <div class="fr-select-group">
-          <label for="type-solutions" class="fr-label">
-            Type de solutions :
-          </label>
-          <select
-            id="type-solutions"
-            v-model="selectedTypeSolution"
-            class="fr-select"
-            @change="emitFilters"
-          >
-            <option value="">Tous les types</option>
-            <option
-              v-for="type in availableTypeSolutions"
-              :key="type"
-              :value="type"
-            >
-              {{ type }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Cas d'usage filter -->
-      <div class="fr-col-12 fr-col-md-4">
-=======
       <!-- Cas d'usage filter -->
       <div class="fr-col-12 fr-col-md-6">
->>>>>>> origin/main
         <div class="fr-select-group">
           <label for="cas-usage" class="fr-label"> Cas d'usage : </label>
           <select
@@ -53,11 +24,7 @@
       </div>
 
       <!-- APIs/datasets filter -->
-<<<<<<< HEAD
-      <div class="fr-col-12 fr-col-md-4">
-=======
       <div class="fr-col-12 fr-col-md-6">
->>>>>>> origin/main
         <div class="fr-select-group">
           <label for="min-apis" class="fr-label">
             API ou jeux de données intégrés :
@@ -108,20 +75,12 @@ import SelectComponent from '@/components/SelectComponent.vue'
 import type { CasUsageRecord } from '../model/grist'
 
 export interface IntegrateursFilters {
-<<<<<<< HEAD
-  typeSolution: string
-=======
->>>>>>> origin/main
   casUsage: number | null
   minApisIntegrated: number
   sortBy: 'integration' | 'title'
 }
 
 const props = defineProps<{
-<<<<<<< HEAD
-  availableTypeSolutions: string[]
-=======
->>>>>>> origin/main
   casUsages: CasUsageRecord[]
   maxApisCount: number
   filteredCount: number
@@ -131,10 +90,6 @@ const emit = defineEmits<{
   'update:filters': [filters: IntegrateursFilters]
 }>()
 
-<<<<<<< HEAD
-const selectedTypeSolution = ref('')
-=======
->>>>>>> origin/main
 const selectedCasUsage = ref<number | null>(null)
 const minApisIntegrated = ref(0)
 const sortBy = ref<IntegrateursFilters['sortBy']>('integration')
@@ -148,10 +103,6 @@ const availableCasUsages = computed(() => {
 
 const emitFilters = () => {
   emit('update:filters', {
-<<<<<<< HEAD
-    typeSolution: selectedTypeSolution.value,
-=======
->>>>>>> origin/main
     casUsage: selectedCasUsage.value,
     minApisIntegrated: minApisIntegrated.value,
     sortBy: sortBy.value

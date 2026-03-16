@@ -1,12 +1,8 @@
-<<<<<<< HEAD
-import type { DatasetV2, Harvest } from '@datagouv/components-next'
-=======
 import type {
   DatasetV2,
   DatasetV2WithFullObject,
   Harvest
 } from '@datagouv/components-next'
->>>>>>> origin/main
 
 import type { GenericResponse } from './api'
 import type { ResolvedFactor } from './topic'
@@ -19,10 +15,7 @@ export type TypedHarvest = Harvest & {
   created_at?: string
   issued_at?: string
   modified_at?: string
-<<<<<<< HEAD
-=======
   source_id?: string
->>>>>>> origin/main
 }
 
 export interface DatasetV2Response extends GenericResponse {
