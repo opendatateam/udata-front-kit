@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Toaster } from '@datagouv/components-next'
 import { useTitle } from '@vueuse/core'
 
 import config from '@/config'
@@ -134,6 +135,7 @@ watch(
 </script>
 
 <template>
+  <Toaster rich-colors />
   <div id="tooltips" />
   <SkipLinks ref="skipLinksComp" :links="skipLinks" />
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />

@@ -1,8 +1,7 @@
-import type { Factor, Topic } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
 import {
   createTestTopicWithElements,
-  expandDisclosureGroup,
   factorFactory,
   mockTopicAndRelatedObjects,
   mockTopicElementsByClass,
@@ -12,7 +11,6 @@ import {
 
 describe('Topic Elements - QGIS Integration', () => {
   let testTopic: Topic
-  let testFactor: Factor
 
   beforeEach(() => {
     setupElementTest()
@@ -23,6 +21,7 @@ describe('Topic Elements - QGIS Integration', () => {
       // Create factors with mixed resources: WFS, WMS, and CSV
       const factors = factorFactory.many(3, { traits: ['dataset_in_group'] })
       testTopic = createTestTopicWithElements(factors)
+<<<<<<< HEAD
 
       const wfsResource = resourceFactory.one({ traits: ['wfs'] })
       const wmsResource = resourceFactory.one({ traits: ['wms'] })
@@ -133,11 +132,11 @@ describe('Topic Elements - QGIS Integration', () => {
       // Create a factor with a dataset
       testFactor = factorFactory.one({ traits: ['dataset_in_group'] })
       testTopic = createTestTopicWithElements([testFactor])
+=======
+>>>>>>> origin/main
 
-      const datasetId = testFactor.element!.id
-
-      // Create WFS resource
       const wfsResource = resourceFactory.one({ traits: ['wfs'] })
+<<<<<<< HEAD
 
       // Mock topic and dataset with WFS resource
       mockTopicAndRelatedObjects(testTopic, {
@@ -195,61 +194,92 @@ describe('Topic Elements - QGIS Integration', () => {
       const datasetId = testFactor.element!.id
 
       // Create regular CSV resource (no OGC service)
+=======
+      const wmsResource = resourceFactory.one({ traits: ['wms'] })
+>>>>>>> origin/main
       const csvResource = resourceFactory.one({ traits: ['csv'] })
 
-      // Mock topic and dataset with CSV resource only
       mockTopicAndRelatedObjects(testTopic, {
-        factors: [testFactor],
+        factors,
         datasetResources: {
-          [datasetId]: [csvResource]
+          [factors[0].element!.id]: [wfsResource],
+          [factors[1].element!.id]: [wmsResource],
+          [factors[2].element!.id]: [csvResource]
         }
       })
-      mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
+      mockTopicElementsByClass(testTopic.id, factors, [], [])
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
+<<<<<<< HEAD
       // Expand group to see the dataset
       expandDisclosureGroup()
 
       // Verify QGIS button does NOT exist
       cy.get('.test__open_dataset_in_qgis_btn').should('not.exist')
+=======
+      // Verify topic-level button is visible
+      cy.get('.test__open_topic_in_qgis_btn').should('be.visible')
+>>>>>>> origin/main
     })
 
-    it('should trigger download when clicking "Ouvrir dans QGIS" button', () => {
-      // Create a factor with a dataset
-      testFactor = factorFactory.one({ traits: ['dataset_in_group'] })
-      testTopic = createTestTopicWithElements([testFactor])
+    it('should NOT show topic-level QGIS button when no factors have OGC resources', () => {
+      // Create factors with only CSV resources (no OGC)
+      const factors = factorFactory.many(2, { traits: ['dataset_in_group'] })
+      testTopic = createTestTopicWithElements(factors)
 
-      const datasetId = testFactor.element!.id
+      const csvResources = resourceFactory.many(2, { traits: ['csv'] })
 
-      // Create WFS resource
-      const wfsResource = resourceFactory.one({ traits: ['wfs'] })
-
-      // Mock topic and dataset with WFS resource
       mockTopicAndRelatedObjects(testTopic, {
-        factors: [testFactor],
+        factors,
         datasetResources: {
-          [datasetId]: [wfsResource]
+          [factors[0].element!.id]: [csvResources[0]],
+          [factors[1].element!.id]: [csvResources[1]]
         }
       })
-      mockTopicElementsByClass(testTopic.id, [testFactor], [], [])
+      mockTopicElementsByClass(testTopic.id, factors, [], [])
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
-      // Expand group to see the dataset
-      expandDisclosureGroup()
+      // Verify topic-level button does NOT exist
+      cy.get('.test__open_topic_in_qgis_btn').should('not.exist')
+    })
+
+    it('should trigger download when clicking topic-level QGIS button', () => {
+      // Create factors with WFS resources
+      const factors = factorFactory.many(2, { traits: ['dataset_in_group'] })
+      testTopic = createTestTopicWithElements(factors)
+
+      const wfsResources = resourceFactory.many(2, { traits: ['wfs'] })
+
+      mockTopicAndRelatedObjects(testTopic, {
+        factors,
+        datasetResources: {
+          [factors[0].element!.id]: [wfsResources[0]],
+          [factors[1].element!.id]: [wfsResources[1]]
+        }
+      })
+      mockTopicElementsByClass(testTopic.id, factors, [], [])
+
+      visitTopic(testTopic.slug)
+      cy.wait('@getElementsDataset')
 
       // Spy on URL.createObjectURL to detect blob creation
       cy.window().then((win) => {
         cy.spy(win.URL, 'createObjectURL').as('createObjectURL')
       })
 
+<<<<<<< HEAD
       // Click the QGIS button
       cy.get('.test__open_dataset_in_qgis_btn').click()
+=======
+      // Click the topic-level QGIS button
+      cy.get('.test__open_topic_in_qgis_btn').click()
+>>>>>>> origin/main
 
-      // Verify that URL.createObjectURL was called (indicating download triggered)
+      // Verify download was triggered
       cy.get('@createObjectURL').should('have.been.calledOnce')
     })
   })

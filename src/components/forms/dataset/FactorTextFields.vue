@@ -23,12 +23,19 @@ const { pageConf } = useCurrentPageConf()
 
 <template>
   <div class="fr-input-group">
+<<<<<<< HEAD
     <label class="fr-label" for="input-title"
       >Libellé (obligatoire)</label
     >
     <p id="title-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Indiquez la ou les informations clés pour le bouquet (indicateur, phénomène ou
       ou objet géographique), en termes génériques.
+=======
+    <label class="fr-label" for="input-title">Libellé (obligatoire)</label>
+    <p id="title-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
+      Indiquez la ou les informations clés pour le bouquet (indicateur,
+      phénomène ou ou objet géographique), en termes génériques.
+>>>>>>> origin/main
     </p>
     <input
       id="input-title"
@@ -51,9 +58,15 @@ const { pageConf } = useCurrentPageConf()
       {{ pageConf.labels.singular }} (obligatoire)</label
     >
     <p id="purpose-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
+<<<<<<< HEAD
       Renseignez les motifs métier ou techniques motivant la sélection de ce 
       jeu de données dans le bouquet. Cet espace vous permet également
       de signaler des éléments d'usage (limites, préconisations).<br />
+=======
+      Renseignez les motifs métier ou techniques motivant la sélection de ce jeu
+      de données dans le bouquet. Cet espace vous permet également de signaler
+      des éléments d'usage (limites, préconisations).<br />
+>>>>>>> origin/main
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
         ><span lang="en">markdown</span> (guide en anglais)</a

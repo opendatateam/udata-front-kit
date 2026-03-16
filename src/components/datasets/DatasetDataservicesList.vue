@@ -64,7 +64,11 @@ onMounted(fetchDataservices)
       <li
         v-for="dataservice in dataservices"
         :key="dataservice.id"
+<<<<<<< HEAD
         class="fr-col-12 dataservice-card-container"
+=======
+        class="fr-col-12"
+>>>>>>> origin/main
       >
         <DataserviceCard
           :dataservice="dataservice"
@@ -87,6 +91,7 @@ onMounted(fetchDataservices)
     :message="emptyMessage"
   />
 </template>
+<<<<<<< HEAD
 
 <style scoped>
 .dataservice-card-container {
@@ -94,3 +99,5 @@ onMounted(fetchDataservices)
   padding-bottom: 0 !important;
 }
 </style>
+=======
+>>>>>>> origin/main

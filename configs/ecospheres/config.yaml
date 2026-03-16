@@ -204,9 +204,15 @@ website:
       authorized_users:
 
 organizations:
+<<<<<<< HEAD
   datasets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-demo/organizations-datasets.json
   dataservices: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/ecolabdata/ecospheres-universe/refs/heads/main/dist/ecospheres-demo/organizations-bouquets.json
+=======
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
+  dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
+  bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
+>>>>>>> origin/main
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -617,7 +623,18 @@ pages:
             name: Véhicules électriques
           - id: velo
             name: Vélo
-      - name: Maille minimale
+      - name: Maille géographique
         default_option: Toutes les mailles
-        id: granularity
-        type: spatial_granularity
+        id: maille
+        type: select
+        use_filter_prefix: true
+        color:
+        values:
+          - id: region
+            name: Région
+          - id: departement
+            name: Département
+          - id: epci
+            name: EPCI
+          - id: commune
+            name: Commune

@@ -120,7 +120,7 @@ defineExpose({
         <li
           v-for="dataservice in dataservices"
           :key="dataservice.id"
-          :class="[meta.cardClass || 'fr-col-12', 'dataservice-card-container']"
+          :class="meta.cardClass || 'fr-col-12'"
         >
           <DataserviceCard
             :key="dataservice.id"
@@ -141,12 +141,6 @@ defineExpose({
 </template>
 
 <style scoped>
-.dataservice-card-container {
-  width: 100%;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
 :deep(h4 > a) {
   color: var(--text-title-grey);
 }

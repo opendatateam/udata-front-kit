@@ -5,8 +5,16 @@ import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
 import { formatDate } from '@/utils'
 import { useDatasetsConf } from '@/utils/config'
+<<<<<<< HEAD
 import { useBadges, useLicense } from '@/utils/dataset'
 import type { DatasetMetrics, DatasetV2 } from '@datagouv/components-next'
+=======
+import { useBadges } from '@/utils/dataset'
+import type {
+  DatasetMetrics,
+  DatasetV2WithFullObject
+} from '@datagouv/components-next'
+>>>>>>> origin/main
 import {
   AppLink,
   DatasetQuality,
@@ -19,7 +27,7 @@ import { ref, toRef, watchEffect } from 'vue'
 
 const props = defineProps({
   dataset: {
-    type: Object as PropType<DatasetV2>,
+    type: Object as PropType<DatasetV2WithFullObject>,
     required: true
   }
 })
@@ -28,7 +36,10 @@ const datasetsConf = useDatasetsConf()
 
 const harvest = computed(() => props.dataset.harvest as TypedHarvest)
 const datasetRef = toRef(props.dataset)
+<<<<<<< HEAD
 const license = useLicense(datasetRef)
+=======
+>>>>>>> origin/main
 const badges = useBadges(datasetRef)
 
 const { getDatasetMetrics } = useMetrics()
@@ -107,12 +118,17 @@ const showHarvestQualityWarning = computed(() => {
       <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
       <p>{{ formatDate(dataset.last_update) }}</p>
     </template>
-    <template v-if="license">
+    <template v-if="dataset.license?.url">
       <h2 class="subtitle fr-mt-3v fr-mb-1v">Licence</h2>
       <p class="fr-text--sm fr-mt-0 fr-mb-3v">
         <code class="license-code fr-px-1v text-grey-425">
+<<<<<<< HEAD
           <a :href="license.url">
             {{ license.title }}
+=======
+          <a :href="dataset.license.url">
+            {{ dataset.license.title }}
+>>>>>>> origin/main
           </a>
         </code>
       </p>

@@ -3,12 +3,24 @@ import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { computed } from 'vue'
 
 import config from '@/config'
+<<<<<<< HEAD
 import type { ExtendedDatasetV2 } from '@/model/dataset'
+=======
+import type { ExtendedDatasetV2WithFullObject } from '@/model/dataset'
+>>>>>>> origin/main
 import type { Topic } from '@/model/topic'
 
 const props = defineProps({
   object: {
+<<<<<<< HEAD
     type: Object as () => DatasetV2 | ExtendedDatasetV2 | Topic | Dataservice,
+=======
+    type: Object as () =>
+      | DatasetV2
+      | ExtendedDatasetV2WithFullObject
+      | Topic
+      | Dataservice,
+>>>>>>> origin/main
     required: true
   },
   size: {
