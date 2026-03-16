@@ -126,13 +126,10 @@ const goToExplore = () => {
 const exploreUrl = computed(() => {
   if (!dataset.value) return null
   const resourceData = resourceStore.data[dataset.value.id]
-  if (!resourceData) return null
-  for (const typeData of resourceData) {
-    for (const resource of typeData.resources) {
-      if (resource.preview_url) return resource.preview_url
-    }
-  }
-  return null
+  const mainResources = resourceData?.find((rd) => rd.type.id === 'main')
+  return (
+    mainResources?.resources.find((r) => r.preview_url)?.preview_url ?? null
+  )
 })
 
 onMounted(() => {
