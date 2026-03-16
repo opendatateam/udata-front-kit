@@ -29,7 +29,7 @@ onMounted(() => {
       collectionsTotal.value = res.total
     })
   for (const collection of collections) {
-    if (!collection.slug) return
+    if (!collection.slug) continue
     topicsAPI
       .get({
         entityId: `${collection.slug}/elements`,
