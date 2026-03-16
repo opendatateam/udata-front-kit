@@ -1,4 +1,4 @@
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 
 export interface IndicatorExtrasCalcul {
   responsable: string
@@ -32,11 +32,11 @@ export interface IndicatorExtrasData {
   enable_visualization?: boolean
 }
 
-export type IndicatorExtras = DatasetV2['extras'] & {
+export type IndicatorExtras = DatasetV2WithFullObject['extras'] & {
   'ecospheres-indicateurs': IndicatorExtrasData
 }
 
-export type Indicator = DatasetV2 & {
+export type Indicator = DatasetV2WithFullObject & {
   extras: IndicatorExtras
 }
 

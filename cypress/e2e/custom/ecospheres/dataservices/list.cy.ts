@@ -1,13 +1,13 @@
 import type { Dataservice } from '@datagouv/components-next'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
-import { mockUniverseOrganizations } from '../mocks'
 
 describe('Dataservices (API) - List Page', () => {
   let testDataservices: Dataservice[]
 
   beforeEach(() => {
     cy.mockMatomo()
-    mockUniverseOrganizations()
+    cy.mockStaticDatagouv()
+    cy.mockUniverseOrganizations()
 
     // Create test dataservices
     testDataservices = dataserviceFactory.many(3)

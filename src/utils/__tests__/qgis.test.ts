@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { type OgcLayerInfo, parseXml } from '../ogcServices'
-import { generateSingleDatasetQlr, generateTopicQlr } from '../qgis'
+import {
+  generateSingleDatasetQlr,
+  generateTopicQlr,
+  resolveAllOgcLayers
+} from '../qgis'
 
 describe('QGIS QLR Generation', () => {
   describe('generateSingleDatasetQlr', () => {
@@ -42,7 +46,7 @@ describe('QGIS QLR Generation', () => {
       // Check maplayer
       const maplayers = doc.querySelectorAll('maplayer')
       expect(maplayers.length).toBe(1)
-      expect(maplayers[0]?.getAttribute('type')).toBe('vector')
+      expect(maplayers[0].getAttribute('type')).toBe('vector')
 
       const provider = doc.querySelector('provider')
       expect(provider?.textContent).toBe('wfs')
@@ -111,6 +115,79 @@ describe('QGIS QLR Generation', () => {
       // Should have 3 maplayers
       const maplayers = doc.querySelectorAll('maplayer')
       expect(maplayers.length).toBe(3)
+    })
+
+    it('should generate QLR with multiple resource sub-groups for a dataset with WFS and WMS', () => {
+      // Dataset has both a WFS and a WMS resource — each gets its own sub-group
+      const layers: OgcLayerInfo[] = [
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'wfs_layer'
+        },
+        {
+          url: 'https://example.com/wms',
+          format: 'wms',
+          resourceTitle: 'WMS Resource',
+          layerName: 'wms_layer'
+        }
+      ]
+
+      const layersByDataset = new Map()
+      layersByDataset.set('Multi-Resource Dataset', layers)
+      const qlr = generateSingleDatasetQlr(layersByDataset, 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      const groups = doc.querySelectorAll('layer-tree-group')
+      // outer + dataset + WFS resource + WMS resource = 4
+      expect(groups.length).toBe(4)
+
+      const wfsResourceGroup = Array.from(groups).find(
+        (g) => g.getAttribute('name') === 'WFS Resource'
+      )
+      expect(wfsResourceGroup).toBeTruthy()
+
+      const wmsResourceGroup = Array.from(groups).find(
+        (g) => g.getAttribute('name') === 'WMS Resource'
+      )
+      expect(wmsResourceGroup).toBeTruthy()
+
+      const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')
+      expect(layerTreeLayers.length).toBe(2)
+
+      const wfsLayer = Array.from(layerTreeLayers).find(
+        (l) => l.getAttribute('providerKey') === 'WFS'
+      )
+      const wmsLayer = Array.from(layerTreeLayers).find(
+        (l) => l.getAttribute('providerKey') === 'WMS'
+      )
+      expect(wfsLayer).toBeTruthy()
+      expect(wmsLayer).toBeTruthy()
+    })
+  })
+
+  describe('resolveAllOgcLayers', () => {
+    it('should resolve multiple resources, each with a named layer', async () => {
+      const ogcInfos: OgcLayerInfo[] = [
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'wfs_layer'
+        },
+        {
+          url: 'https://example.com/wms',
+          format: 'wms',
+          resourceTitle: 'WMS Resource',
+          layerName: 'wms_layer'
+        }
+      ]
+
+      const resolved = await resolveAllOgcLayers(ogcInfos)
+      expect(resolved.length).toBe(2)
+      expect(resolved[0].layerName).toBe('wfs_layer')
+      expect(resolved[1].layerName).toBe('wms_layer')
     })
   })
 
@@ -204,6 +281,53 @@ describe('QGIS QLR Generation', () => {
       const wmsProviders = providers.filter((p) => p.textContent === 'wms')
       expect(wfsProviders.length).toBe(2)
       expect(wmsProviders.length).toBe(1)
+    })
+
+    it('should generate QLR with several layers in the same group', () => {
+      const layersByGroup = new Map<string, Map<string, OgcLayerInfo[]>>()
+
+      const groupLayers = new Map<string, OgcLayerInfo[]>()
+      groupLayers.set('Dataset 1', [
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'layer1'
+        },
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'layer2'
+        },
+        {
+          url: 'https://example.com/wfs',
+          format: 'wfs',
+          resourceTitle: 'WFS Resource',
+          layerName: 'layer3'
+        }
+      ])
+      layersByGroup.set('Group A', groupLayers)
+
+      const qlr = generateTopicQlr(layersByGroup, 'Test Topic', 'EPSG:4326')
+      const doc = parseXml(qlr)
+
+      const layerTreeLayers = doc.querySelectorAll('layer-tree-layer')
+      expect(layerTreeLayers.length).toBe(3)
+      expect(layerTreeLayers[0].getAttribute('name')).toBe('layer1')
+      expect(layerTreeLayers[1].getAttribute('name')).toBe('layer2')
+      expect(layerTreeLayers[2].getAttribute('name')).toBe('layer3')
+
+      const maplayers = doc.querySelectorAll('maplayer')
+      expect(maplayers.length).toBe(3)
+
+      // All 3 layers should be under a single resource group
+      const groups = doc.querySelectorAll('layer-tree-group')
+      const resourceGroup = Array.from(groups).find(
+        (g) => g.getAttribute('name') === 'WFS Resource'
+      )
+      expect(resourceGroup).toBeTruthy()
+      expect(resourceGroup?.querySelectorAll('layer-tree-layer').length).toBe(3)
     })
 
     it('should handle mixed WFS and WMS layers', () => {
