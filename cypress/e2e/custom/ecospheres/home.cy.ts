@@ -19,23 +19,9 @@ describe('Home Page Ecologie', () => {
     cy.contains('John Doe').should('be.visible')
   })
 
-  describe('Search Dropdown Options', () => {
-    it('should display correct options in header search', () => {
-      cy.visit('/')
-
-      // Find the header search input
-      cy.get('header input[type="text"]').first().should('be.visible').click()
-
-      // Verify the dropdown options are visible
-      cy.get('.multiselect-dropdown:visible')
-        .first()
-        .within(() => {
-          cy.contains('dans les jeux de données').should('be.visible')
-          cy.contains('dans les collections thématiques').should('be.visible')
-          cy.contains('dans les indicateurs').should('be.visible')
-          cy.contains('dans les API').should('be.visible')
-        })
-    })
+  it('should not display header search on homepage', () => {
+    cy.visit('/')
+    cy.get('header .fr-search-bar').should('not.exist')
   })
 
   describe('Collections thématiques Cards Display', () => {

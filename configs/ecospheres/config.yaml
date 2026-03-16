@@ -71,6 +71,8 @@ website:
       link: https://tally.so/r/wLWrzp
     search:
       display: true
+      excluded_routes:
+        - /
       placeholder: Rechercher...
       dropdown:
         - text: Rechercher {} dans les <strong>jeux de données</strong>

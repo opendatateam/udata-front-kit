@@ -111,6 +111,13 @@ export type DatasetsConf = {
   show_extended_information_panel: boolean
 }
 
+export type HeaderSearchConf = {
+  display: boolean
+  excluded_routes?: string[]
+  placeholder?: string
+  dropdown?: { text: string; route: string }[]
+}
+
 export interface WebsiteConfig {
   title: string
   seo?: {
@@ -120,6 +127,9 @@ export interface WebsiteConfig {
       description?: string
       robots?: string
     }
+  }
+  header: {
+    search: HeaderSearchConf
   }
 }
 

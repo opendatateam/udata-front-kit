@@ -89,7 +89,7 @@ const dropdown = config.website.header.search.dropdown ?? undefined
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="customSearch"
+        v-if="customSearch && showSearch"
         id="header-select-search"
         class="custom-search"
         :search-label="searchLabel"
