@@ -439,7 +439,7 @@ pages:
     banner:
       title: Mettre en commun les usages pour une action efficace
       content: |
-        Une collection thématique regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l'action collective en créant vos propres collections thématiques : un simple compte **data.gouv**._fr_ suffit.
+        Une collection thématique regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/bouquets/creer-un-bouquet) : un simple compte **data.gouv**._fr_ suffit.
     resources_tabs:
       discussions:
         display: true
