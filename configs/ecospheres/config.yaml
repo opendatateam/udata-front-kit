@@ -125,15 +125,15 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Données
+    - text: Toutes les données
       to: /datasets
-    - text: Indicateurs
+    - text: Indicateurs phares
       to: /indicators
     - text: API
       to: /dataservices
     - text: Collections thématiques
       to: /bouquets
-    - text: Organisations
+    - text: Contributeurs
       to: /organizations
     - text: À propos
       to: /about
