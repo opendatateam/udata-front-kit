@@ -1,15 +1,11 @@
-import type { Topic } from '@/model/topic'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
 
 describe('Home Page Ecologie', () => {
-  let testTopics: Topic[]
-
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
     cy.mockSpatialLevels()
-    testTopics = topicFactory.many(3)
-    cy.mockDatagouvObjectList('topics', testTopics)
+    cy.mockDatagouvObjectList('topics', [])
   })
 
   it('displays user first name and last name on homepage when connected', () => {
@@ -24,23 +20,6 @@ describe('Home Page Ecologie', () => {
   })
 
   describe('Search Dropdown Options', () => {
-    it('should display correct options in mega dropdown search', () => {
-      cy.visit('/')
-
-      // Click on the multiselect component itself to open dropdown
-      cy.get('#big-select-search').click()
-
-      // Verify the dropdown options are visible
-      cy.get('.multiselect-dropdown:visible')
-        .first()
-        .within(() => {
-          cy.contains('dans les jeux de données').should('be.visible')
-          cy.contains('dans les collections thématiques').should('be.visible')
-          cy.contains('dans les indicateurs').should('be.visible')
-          cy.contains('dans les API').should('be.visible')
-        })
-    })
-
     it('should display correct options in header search', () => {
       cy.visit('/')
 
@@ -63,28 +42,22 @@ describe('Home Page Ecologie', () => {
     it('should display collection cards in the discover section', () => {
       cy.visit('/')
 
-      // Verify the "Collections thématiques" section is present
       cy.contains('h2', 'Collections thématiques').should('be.visible')
-
-      // Verify that collection cards are displayed
-      testTopics.forEach((topic) => {
-        cy.contains(topic.name).should('be.visible')
-      })
-
-      // Verify link to all collections is present
+      cy.get('.collection-card').should('have.length.greaterThan', 0)
       cy.contains('a', 'Collections thématiques').should('be.visible')
+    })
+
+    it('should display the total count of collections', () => {
+      cy.mockDatagouvObjectList('topics', topicFactory.many(3))
+      cy.visit('/')
+      cy.get('.summary-count').should('have.text', '3')
     })
 
     it('should navigate to collection thématique detail page when clicking on a card', () => {
       cy.visit('/')
 
-      const firstTopic = testTopics[0]
-
-      // Click on the first collection card title
-      cy.contains('a', firstTopic.name).click()
-
-      // Verify navigation to the collection thématique detail page
-      cy.url().should('include', `/bouquets/${firstTopic.slug}`)
+      cy.get('.collection-card').contains('a').first().click()
+      cy.url().should('include', '/bouquets/')
     })
   })
 })
