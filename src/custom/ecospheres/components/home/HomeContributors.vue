@@ -1,57 +1,54 @@
 <script setup lang="ts">
-const BASE = 'src/custom/ecospheres/assets/logos'
+import ademe from '@/custom/ecospheres/assets/logos/ademe.png'
+import bordeaux from '@/custom/ecospheres/assets/logos/bordeaux.png'
+import brgm from '@/custom/ecospheres/assets/logos/brgm.png'
+import cerema from '@/custom/ecospheres/assets/logos/cerema.png'
+import datagouvfr from '@/custom/ecospheres/assets/logos/datagouvfr.png'
+import docurba from '@/custom/ecospheres/assets/logos/docurba.png'
+import ign from '@/custom/ecospheres/assets/logos/ign.png'
+import meteoFrance from '@/custom/ecospheres/assets/logos/meteo-france.png'
+import metropoleLyon from '@/custom/ecospheres/assets/logos/metropole-lyon.png'
+import ministereMte from '@/custom/ecospheres/assets/logos/ministere-mte.png'
+import ofb from '@/custom/ecospheres/assets/logos/ofb.png'
+import ore from '@/custom/ecospheres/assets/logos/ore.png'
+import prefetAra from '@/custom/ecospheres/assets/logos/prefet-ara.png'
+
 const contributors = [
   {
     name: 'Météo-France',
-    logo_url: `${BASE}/meteo-france.png`,
+    logo_url: meteoFrance,
     href: 'https://www.meteofrance.fr'
   },
-  { name: 'BRGM', logo_url: `${BASE}/brgm.png`, href: 'https://www.brgm.fr' },
-  {
-    name: 'Cerema',
-    logo_url: `${BASE}/cerema.png`,
-    href: 'https://www.cerema.fr'
-  },
-  {
-    name: 'ADEME',
-    logo_url: `${BASE}/ademe.png`,
-    href: 'https://www.ademe.fr'
-  },
-  { name: 'IGN', logo_url: `${BASE}/ign.png`, href: 'https://www.ign.fr' },
-  { name: 'OFB', logo_url: `${BASE}/ofb.png`, href: 'https://www.ofb.gouv.fr' },
+  { name: 'BRGM', logo_url: brgm, href: 'https://www.brgm.fr' },
+  { name: 'Cerema', logo_url: cerema, href: 'https://www.cerema.fr' },
+  { name: 'ADEME', logo_url: ademe, href: 'https://www.ademe.fr' },
+  { name: 'IGN', logo_url: ign, href: 'https://www.ign.fr' },
+  { name: 'OFB', logo_url: ofb, href: 'https://www.ofb.gouv.fr' },
   {
     name: 'Métropole Grand Lyon',
-    logo_url: `${BASE}/metropole-lyon.png`,
+    logo_url: metropoleLyon,
     href: 'https://www.grandlyon.com'
   },
   {
     name: 'Bordeaux Métropole',
-    logo_url: `${BASE}/bordeaux.png`,
+    logo_url: bordeaux,
     href: 'https://www.bordeaux-metropole.fr'
   },
-  {
-    name: 'ORE',
-    logo_url: `${BASE}/ore.png`,
-    href: 'https://www.agenceore.fr'
-  },
-  {
-    name: 'Docurba',
-    logo_url: `${BASE}/docurba.png`,
-    href: 'https://docurba.beta.gouv.fr'
-  },
+  { name: 'ORE', logo_url: ore, href: 'https://www.agenceore.fr' },
+  { name: 'Docurba', logo_url: docurba, href: 'https://docurba.beta.gouv.fr' },
   {
     name: 'data.gouv.fr',
-    logo_url: `${BASE}/datagouvfr.png`,
+    logo_url: datagouvfr,
     href: 'https://www.data.gouv.fr'
   },
   {
     name: 'Ministères transition écologique aménagement du territoire transports ville et logement',
-    logo_url: `${BASE}/ministere-mte.png`,
+    logo_url: ministereMte,
     href: 'https://www.ecologie.gouv.fr'
   },
   {
     name: 'Préfet Auvergne-Rhône-Alpes',
-    logo_url: `${BASE}/prefet-ara.png`,
+    logo_url: prefetAra,
     href: 'https://www.prefectures-regions.gouv.fr/auvergne-rhone-alpes'
   }
 ]

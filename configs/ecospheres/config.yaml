@@ -291,7 +291,7 @@ pages:
     banner:
       title: Un guichet national pour l'accès aux données de la transition écologique
       content: |
-        Le catalogue offre un accès centralisé à des données actualisées produites par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
+        Le catalogue offre un accès centralisé à des données actualisées produites par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires. [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55).
     resources_tabs:
       discussions:
         display: true
@@ -489,7 +489,7 @@ pages:
     banner:
       title: Un hub d'indicateurs territoriaux de transition écologique
       content: |
-        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
+        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires. [Restez informés des dernières publications via notre lettre d’information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55).
     resources_tabs:
       discussions:
         display: true
