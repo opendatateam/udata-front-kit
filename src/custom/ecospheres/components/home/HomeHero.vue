@@ -19,7 +19,7 @@ const doSearch = (q: string) => {
   <section class="hero-section fr-pt-12v fr-pb-10v">
     <div class="fr-container">
       <div class="fr-grid-row">
-        <div class="fr-col-12 fr-col-md-9 hero-content">
+        <div class="fr-col-12 fr-col-lg-9 hero-content">
           <h1 class="main-title">
             Retrouvez les données clés de la
             <span class="highlight">transition écologique</span>
@@ -82,8 +82,13 @@ const doSearch = (q: string) => {
 .hero-content {
   width: 100%;
   background-color: #fff;
-  padding: 4rem;
-  margin-left: -4rem;
+  padding: 1.5rem;
+
+  /* fr-lg */
+  @media (min-width: 992px) {
+    padding: 4rem;
+    margin-left: -4rem;
+  }
 }
 
 .main-title {
