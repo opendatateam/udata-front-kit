@@ -8,7 +8,9 @@ const news = homepage?.news ?? []
 </script>
 
 <template>
-  <section class="fr-container--fluid about-news-section fr-pt-16v fr-pb-0">
+  <section
+    class="fr-container--fluid about-news-section fr-pt-12v fr-pb-0 fr-pt-lg-16v"
+  >
     <div class="fr-container">
       <div class="about-news-grid">
         <div>
