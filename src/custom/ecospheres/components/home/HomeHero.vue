@@ -102,6 +102,14 @@ h1 :deep(.highlight),
   color: var(--text-active-blue-france);
 }
 
+.fr-tags-group .fr-tag {
+  color: var(--text-action-high-blue-france);
+  background-color: var(--background-alt-blue-france);
+  box-shadow: inset 0 0 0 1px var(--border-open-blue-france);
+  font-size: 1.25rem;
+  line-height: 2rem;
+}
+
 .big-search :deep(.fr-search-bar) {
   .fr-input {
     box-shadow: inset 0 -2px 0 0 var(--text-default-grey);
