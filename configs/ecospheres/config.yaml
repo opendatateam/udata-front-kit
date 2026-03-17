@@ -23,8 +23,9 @@ website:
     canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected
     meta:
-      keywords:
-      description:
+      keywords: 'écologie, données, aménagement du territoire, API, indicateurs, data, transition écologique, environnement, climat, énergie, eau, météo, biodiversité, mobilité, territoire, adaptation, risques, bruit, mer, CGDD, Ecolab'
+      description: |
+        Accédez aux données de référence pour la transition écologique. Découvrez, réutilisez et partagez votre expertise pour agir en faveur d’un avenir durable grâce aux jeux de données, indicateurs et collections thématiques des services de l’État et des collectivités.
       robots: 'noindex, nofollow'
     # robots.txt content (consumed by udata-front-kit-seo)
     robots_txt:
