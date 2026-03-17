@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VIconCustom from '@/components/VIconCustom.vue'
 import { stripFromMarkdown } from '@/utils'
 
 const props = defineProps({

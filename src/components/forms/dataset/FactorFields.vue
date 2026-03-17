@@ -8,6 +8,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
 
+import ErrorMessage from '../ErrorMessage.vue'
 import SelectTopicFactorGroup from '../SelectTopicFactorGroup.vue'
 import FactorTextFields from './FactorTextFields.vue'
 import SelectDataset from './SelectDataset.vue'

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SearchComponent from '@/components/SearchComponent.vue'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
