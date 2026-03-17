@@ -55,7 +55,7 @@ const contributors = [
 </script>
 
 <template>
-  <section class="fr-container--fluid contributors-section fr-py-8v">
+  <section class="fr-container--fluid contributors-section fr-pt-12v fr-pb-30v">
     <div class="fr-container">
       <h2 class="contributors-title">Merci aux contributeurs</h2>
       <ul class="contributors-grid" role="list">
