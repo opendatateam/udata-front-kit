@@ -20,7 +20,7 @@ const doSearch = (q: string) => {
     <div class="fr-container">
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-lg-9 hero-content">
-          <h1 class="main-title">
+          <h1>
             Retrouvez les données clés de la
             <span class="highlight">transition écologique</span>
           </h1>
@@ -91,14 +91,13 @@ const doSearch = (q: string) => {
   }
 }
 
-.main-title {
+h1 {
   max-width: 35rem;
-  font-size: 2.5rem;
   line-height: 1.2;
   color: var(--text-default-grey);
 }
 
-.main-title :deep(.highlight),
+h1 :deep(.highlight),
 .highlight {
   color: var(--text-active-blue-france);
 }
