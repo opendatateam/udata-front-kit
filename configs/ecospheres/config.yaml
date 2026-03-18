@@ -270,7 +270,7 @@ pages:
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
     filter_prefix:
-    title: Jeux de données
+    title: Toutes les données
     breadcrumb_title: Données
     labels:
       singular: jeu de données
@@ -279,9 +279,9 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-      title: Un guichet national pour l'accès aux données de la transition écologique
+      title: Un accès centralisé à des données actualisées produites par des acteurs de référence.
       content: |
-        Le catalogue offre un accès centralisé à des données actualisées produites par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires. [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55).
+        [Recevez les dernières publications par courriel](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
     resources_tabs:
       discussions:
         display: true
@@ -396,9 +396,8 @@ pages:
     search:
       input: Rechercher une API
     banner:
-      title: Des interfaces privilégiées pour l'intégration des données dans vos outils
-      content: |
-        Le catalogue recense les API mises à disposition par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
+      title: Liste d’<abbr title="Application Programming Interface">APIs</abbr> mises à disposition par des acteurs de référence.
+      content:
     resources_tabs:
       discussions:
         display: true
@@ -427,9 +426,9 @@ pages:
     search:
       input: Filtrer les collections thématiques
     banner:
-      title: Mettre en commun les usages pour une action efficace
+      title: Des jeux de données et des indicateurs regroupés autour d’une politique publique ou d’un projet.
       content: |
-        Une collection thématique regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/bouquets/creer-un-bouquet) : un simple compte **data.gouv**._fr_ suffit.
+        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/bouquets/creer-un-bouquet)
     resources_tabs:
       discussions:
         display: true
@@ -468,7 +467,7 @@ pages:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
     filter_prefix: ecospheres-indicateurs
-    title: Indicateurs territoriaux
+    title: Indicateurs phares
     breadcrumb_title: Indicateurs
     labels:
       singular: indicateur
@@ -477,9 +476,9 @@ pages:
     search:
       input: Rechercher un indicateur
     banner:
-      title: Un hub d'indicateurs territoriaux de transition écologique
+      title: Une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers.
       content: |
-        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires. [Restez informés des dernières publications via notre lettre d’information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55).
+        [Recevez les dernières publications par courriel](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
     resources_tabs:
       discussions:
         display: true

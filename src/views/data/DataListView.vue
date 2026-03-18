@@ -84,9 +84,15 @@ onMounted(() => {
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <h2 v-html="pageConf.banner.title" />
+      <h2
+        :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
+        v-html="pageConf.banner.title"
+      />
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="fromMarkdown(pageConf.banner.content)" />
+      <div
+        v-if="pageConf.banner.content"
+        v-html="fromMarkdown(pageConf.banner.content)"
+      />
     </div>
   </section>
   <GenericContainer id="list">
