@@ -358,7 +358,7 @@ watch(
       />
     </div>
   </div>
-  <GenericContainer v-if="topic" class="tabs-height-fix">
+  <GenericContainer v-if="topic">
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
