@@ -137,6 +137,7 @@ watchEffect(() => {
   </GenericContainer>
   <DsfrPagination
     v-if="pages.length"
+    :trunc-limit="3"
     class="fr-container"
     :current-page="currentPage - 1"
     :pages="pages"

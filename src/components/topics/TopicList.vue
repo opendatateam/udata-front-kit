@@ -136,6 +136,7 @@ defineExpose({
     </div>
     <DsfrPagination
       v-if="pagination.length"
+      :trunc-limit="3"
       class="fr-container"
       :current-page="parseInt(page || '1') - 1"
       :pages="pagination"

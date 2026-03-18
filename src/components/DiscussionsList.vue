@@ -311,6 +311,7 @@ watch(
     </div>
     <div v-if="pages?.length > 1" class="fr-container">
       <DsfrPagination
+        :trunc-limit="3"
         :current-page="currentPage - 1"
         :pages="pages"
         @update:current-page="(p: number) => (currentPage = p + 1)"

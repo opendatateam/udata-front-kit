@@ -60,6 +60,7 @@ onMounted(() => {
   </GenericContainer>
   <DsfrPagination
     v-if="pagination.length"
+    :trunc-limit="3"
     class="fr-container"
     :current-page="currentPage - 1"
     :pages="pagination"

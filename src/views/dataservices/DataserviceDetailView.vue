@@ -267,6 +267,7 @@ onMounted(() => {
           </div>
           <DsfrPagination
             v-if="pagination.length > 1"
+            :trunc-limit="3"
             :current-page="currentPage - 1"
             :pages="pagination"
             class="fr-mt-4w"
