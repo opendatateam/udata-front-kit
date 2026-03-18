@@ -30,7 +30,7 @@ const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
   if (!config.website.notice?.display) return
-  return fromMarkdown(config.website.notice?.content)
+  return fromMarkdown(config.website.notice?.content, true)
 })
 
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
@@ -145,7 +145,7 @@ watch(
     @close="isNoticeClosed = true"
   >
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="noticeContent"></div>
+    <span v-html="noticeContent"></span>
   </DsfrNotice>
   <HeaderComponent
     :user-name="userName"
