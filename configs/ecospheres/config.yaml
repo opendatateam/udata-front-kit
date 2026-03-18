@@ -42,9 +42,9 @@ website:
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'
   badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
+    display: false
+    text:
+    style:
   # leave empty if not pertinent
   logo_operator:
     src: '/static/logos/ecospheres-logo.svg'
