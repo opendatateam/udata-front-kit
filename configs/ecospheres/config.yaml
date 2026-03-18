@@ -419,7 +419,7 @@ pages:
     title: Collections thématiques
     breadcrumb_title:
     labels:
-      singular: collection thématique
+      singular: collection
       plural: collections thématiques
       extended: collection thématique
       feminine: true
