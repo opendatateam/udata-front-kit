@@ -118,10 +118,10 @@ describe('Topic Elements - Factor List Display', () => {
       // Verify TopicCard is displayed with the referenced topic name
       cy.contains(referencedTopic.name).should('be.visible')
 
-      // Verify the badge with "collection thématique" label is displayed
+      // Verify the badge with "collection" label is displayed
       cy.get('.fr-badge--mention-grey')
         .should('be.visible')
-        .and('contain.text', 'collection thématique')
+        .and('contain.text', 'collection')
 
       // Verify the "Accéder au catalogue" button is NOT displayed
       cy.contains('Accéder au catalogue').should('not.exist')
