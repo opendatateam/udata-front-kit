@@ -113,7 +113,6 @@ export type DatasetsConf = {
 
 export type HeaderSearchConf = {
   display: boolean
-  excluded_routes?: string[]
   placeholder?: string
   dropdown?: { text: string; route: string }[]
 }

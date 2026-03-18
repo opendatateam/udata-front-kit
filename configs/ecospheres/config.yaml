@@ -70,19 +70,9 @@ website:
       label: 'Donnez votre avis'
       link: https://tally.so/r/wLWrzp
     search:
-      display: true
-      excluded_routes:
-        - /
-      placeholder: Rechercher...
+      display: false
+      placeholder:
       dropdown:
-        - text: Rechercher {} dans les <strong>jeux de données</strong>
-          route: datasets
-        - text: Rechercher {} dans les <strong>indicateurs</strong>
-          route: indicators
-        - text: Rechercher {} dans les <strong>API</strong>
-          route: dataservices
-        - text: Rechercher {} dans les <strong>collections thématiques</strong>
-          route: bouquets
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale

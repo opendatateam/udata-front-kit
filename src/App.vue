@@ -99,10 +99,6 @@ const footerExternalLinks = config.website.footer_external_links
 const footerMandatoryLinks = config.website.footer_mandatory_links
 
 const route = useRoute()
-const excludedSearchRoutes = config.website.header.search.excluded_routes ?? []
-const isHeaderSearchVisible = computed(
-  () => !excludedSearchRoutes.includes(route.path)
-)
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
 
@@ -158,7 +154,6 @@ watch(
     :quick-links="quickLinks"
     :logo-operator-height
     :logo-operator-width
-    :show-search="isHeaderSearchVisible"
     :custom-search="true"
   />
 
