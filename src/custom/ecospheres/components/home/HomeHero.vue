@@ -83,6 +83,7 @@ const doSearch = (q: string) => {
   width: 100%;
   background-color: #fff;
   padding: 1.5rem;
+  border-radius: 0.5em;
 
   /* fr-lg */
   @media (min-width: 992px) {
