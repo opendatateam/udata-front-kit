@@ -163,6 +163,7 @@ onMounted(() => {
         >
           <DsfrInput
             id="input-availabilityUrl"
+            label="Url vers le jeu de données souhaité (obligatoire)"
             :label-visible="true"
             class="fr-mb-md-1w fr-input"
             aria-errormessage="errors-availabilityUrl"
