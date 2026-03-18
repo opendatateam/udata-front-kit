@@ -146,6 +146,7 @@ const dropdown = config.website.header.search.dropdown
             <li>
               <DsfrTag
                 small
+                value="featured"
                 label="Bouquets mis en avant"
                 selectable
                 :selected="selectedBouquetsTag === 'featured'"
@@ -155,6 +156,7 @@ const dropdown = config.website.header.search.dropdown
             <li>
               <DsfrTag
                 small
+                value="latest"
                 class="fr-ml-2v"
                 label="Derniers bouquets"
                 selectable
