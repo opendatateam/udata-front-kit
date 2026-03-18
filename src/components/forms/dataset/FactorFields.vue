@@ -172,7 +172,8 @@ onMounted(() => {
             "
             :model-value="factor.siteExtras.uri ?? undefined"
             @update:model-value="
-              (v) => (factor.siteExtras.uri = v != null ? String(v) : null)
+              (v: string | number | undefined) =>
+                (factor.siteExtras.uri = v != null ? String(v) : null)
             "
           />
           <ErrorMessage
