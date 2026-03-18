@@ -383,6 +383,17 @@ body {
 
 /* ===== DSFR Fixes ===== */
 
+/*
+DSFR's JS sets --tabs-height to a fixed pixel value at mount time. When tab content
+height changes later (e.g. accordion/disclosure opens), the value is not recomputed,
+causing fr-tabs overflow:hidden to clip content and break scrollIntoView.
+Forcing height:auto overrides the JS-set value and lets the container grow naturally.
+The ::before border uses box-shadow in DSFR 1.14+ so it's unaffected by this override.
+*/
+.fr-tabs {
+  height: auto !important;
+}
+
 /* A11y fixes */
 /* connected user button in header */
 .fr-header__tools-links .fr-btn:disabled,
