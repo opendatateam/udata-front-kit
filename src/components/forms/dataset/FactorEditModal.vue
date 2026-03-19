@@ -16,6 +16,7 @@ import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
+import ErrorSummary from '../ErrorSummary.vue'
 import FactorFields from './FactorFields.vue'
 
 export interface FactorEditModalType {

@@ -6,7 +6,9 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import NoResults from '@/components/NoResults.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
@@ -136,6 +138,7 @@ defineExpose({
     </div>
     <DsfrPagination
       v-if="pagination.length"
+      :trunc-limit="3"
       class="fr-container"
       :current-page="parseInt(page || '1') - 1"
       :pages="pagination"
