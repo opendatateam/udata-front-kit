@@ -30,7 +30,7 @@ const doSearch = (q: string) => {
               id="big-select-search"
               v-model="searchQuery"
               label="Recherchez une donnée"
-              placeholder="Ex. vélo, urbanisme, COP"
+              placeholder="Ex. gaz à effet de serre, îlot de chaleur"
               button-text="Rechercher"
               :large="true"
               @search="doSearch"
