@@ -8,6 +8,7 @@ declare namespace Cypress {
     mockDatasetLicenses(): Chainable<void>
     mockDatagouvObject(resourceName: string, resourceId: string, data?: object): Chainable<void>
     mockDatagouvObjectList(resourceName: string, data?: object[]): Chainable<void>
+    mockDataserviceMetricsApi(dataserviceId: string): Chainable<void>
     mockMatomo(): Chainable<void>
     mockMetricsApi(datasetId: string): Chainable<void>
     mockResources(datasetId: string, data?: Array): Chainable<void>

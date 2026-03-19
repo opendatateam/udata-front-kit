@@ -4,6 +4,8 @@ import { capitalize, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import TopicList from '@/components/topics/TopicList.vue'
 import type { TopicPageRouterConf } from '@/router/model'
 import { useCurrentPageConf } from '@/router/utils'

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import VIconCustom from '@/components/VIconCustom.vue'
+
 defineProps({
   inputName: { type: String, required: true },
   errorMessage: { type: String, required: true }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetSearchStore } from '@/store/DatasetSearchStore'
 import { useAsyncComponent } from '@/utils/component'
@@ -146,6 +147,7 @@ defineExpose({
     </div>
     <DsfrPagination
       v-if="pagination.length > 1"
+      :trunc-limit="3"
       :current-page="parseInt(page) - 1"
       :pages="pagination"
       @update:current-page="goToPage"

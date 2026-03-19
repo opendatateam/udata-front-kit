@@ -51,6 +51,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type { TopicSolutionsExtras } from '../model/topics'
+import DraftTag from './DraftTag.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 

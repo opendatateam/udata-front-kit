@@ -8,6 +8,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
 
+import ErrorMessage from '../ErrorMessage.vue'
 import SelectTopicFactorGroup from '../SelectTopicFactorGroup.vue'
 import FactorTextFields from './FactorTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
@@ -163,13 +164,17 @@ onMounted(() => {
         >
           <DsfrInput
             id="input-availabilityUrl"
-            v-model="factor.siteExtras.uri"
             label="Url vers le jeu de données souhaité (obligatoire)"
             :label-visible="true"
             class="fr-mb-md-1w fr-input"
             aria-errormessage="errors-availabilityUrl"
             :aria-invalid="
               formErrors.includes('availabilityUrl') ? true : undefined
+            "
+            :model-value="factor.siteExtras.uri ?? undefined"
+            @update:model-value="
+              (v: string | number | undefined) =>
+                (factor.siteExtras.uri = v != null ? String(v) : null)
             "
           />
           <ErrorMessage
