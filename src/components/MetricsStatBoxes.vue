@@ -17,10 +17,16 @@ const metrics = ref<DatasetMetrics | DataserviceMetrics | null>(null)
 watchEffect(async () => {
   if (!props.objectId) return
   try {
-    metrics.value =
-      props.objectType === 'dataset'
-        ? await getDatasetMetrics(props.objectId)
-        : await getDataserviceMetrics(props.objectId)
+    switch (props.objectType) {
+      case 'dataset':
+        metrics.value = await getDatasetMetrics(props.objectId)
+        break
+      case 'dataservice':
+        metrics.value = await getDataserviceMetrics(props.objectId)
+        break
+      default:
+        throw new Error(`Unknown objectType: ${props.objectType}`)
+    }
   } catch (error) {
     console.error(`Failed to fetch ${props.objectType} metrics`, error)
     metrics.value = null
