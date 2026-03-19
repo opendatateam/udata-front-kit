@@ -162,7 +162,7 @@ onMounted(() => {
         <DsfrButton
           secondary
           size="sm"
-          :label="`Ajouter à un ${topicPageConf.labels.singular}`"
+          :label="`Ajouter à ${topicLabels!.articles.un} ${topicLabels!.singular}`"
           icon="fr-icon-file-add-line"
           @click="showAddToTopicModal = true"
         />
