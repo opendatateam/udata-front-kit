@@ -48,7 +48,7 @@ const factorsInGroup = computed(() => {
   let factorsLabel = ''
   switch (factors) {
     case 0:
-      factorsLabel = 'Aucun donnée'
+      factorsLabel = 'Aucune donnée'
       break
     case 1:
       factorsLabel = '1 donnée'
