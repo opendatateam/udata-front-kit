@@ -37,6 +37,17 @@ useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const userStore = useUserStore()
 
+const isDraftsView = ref(false)
+
+const segmentedOptions = [
+  { value: 'published', label: 'Publiés' },
+  { value: 'drafts', label: 'Brouillons' }
+]
+
+const setView = (value: string | number) => {
+  isDraftsView.value = value === 'drafts'
+}
+
 const links = [
   { to: '/', text: 'Accueil' },
   { text: pageConf.breadcrumb_title || pageConf.title }
@@ -124,10 +135,19 @@ onMounted(() => {
           </div>
         </nav>
         <div className="fr-col-12 fr-col-md-8">
+          <div v-if="userStore.isLoggedIn" class="fr-mb-2w">
+            <DsfrSegmentedSet
+              name="topic-view"
+              :model-value="isDraftsView ? 'drafts' : 'published'"
+              :options="segmentedOptions"
+              @update:model-value="setView"
+            />
+          </div>
           <TopicList
             ref="topicListComp"
             :query="props.query"
             :page="props.page"
+            :is-drafts-view="isDraftsView"
           />
         </div>
       </div>
