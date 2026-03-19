@@ -34,7 +34,7 @@ const contributors = [
     logo_url: bordeaux,
     href: 'https://www.bordeaux-metropole.fr'
   },
-  { name: 'ORE', logo_url: ore, href: 'https://www.agenceore.fr' },
+  { name: 'Agence ORE', logo_url: ore, href: 'https://www.agenceore.fr' },
   { name: 'Docurba', logo_url: docurba, href: 'https://docurba.beta.gouv.fr' },
   {
     name: 'data.gouv.fr',
