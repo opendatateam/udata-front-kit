@@ -32,7 +32,7 @@ accessibilité.data.gouv.fr n’est pas un nouveau portail de données. C’est 
 
 ### Qui est derrière cette plateforme ?
 
-Cette plateforme est le fruit d'une collaboration entre la Délégation Interministérielle à l'Accessibilité, la Fabrique de la Donnée territoriale (portée par l'IGN), l'équipe de data.gouv.fr et l'équipe de beta.gouv.fr. Celle-ci s'inscrit dans une démarche plus large de construction de communs numériques facilitant la création de plateformes thématiques exposant de la donnée publique.
+Cette plateforme est le fruit d'une collaboration entre la Délégation Interministérielle à l'Accessibilité, la Fabrique de la Donnée territoriale (portée par l'IGN), l'équipe de data.gouv.fr et l'équipe de beta.gouv.fr. Celle-ci s'inscrit dans une démarche plus large de [construction de communs numériques facilitant la création de plateformes thématiques exposant de la donnée publique](https://github.com/opendatateam/udata-front-kit).
 
 ### Comment est-elle gérée ?
 
