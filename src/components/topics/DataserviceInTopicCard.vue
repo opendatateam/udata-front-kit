@@ -7,6 +7,7 @@ import {
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useOwnerName } from '@/utils/owned'
 

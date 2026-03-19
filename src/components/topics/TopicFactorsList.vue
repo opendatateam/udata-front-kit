@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SearchComponent from '@/components/SearchComponent.vue'
 import type { DatasetV2 } from '@datagouv/components-next'
 import { computed, nextTick, ref, type Ref } from 'vue'
 

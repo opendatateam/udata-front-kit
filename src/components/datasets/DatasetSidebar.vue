@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
