@@ -14,7 +14,7 @@ export interface EcologieHomepageCollectionConf {
 export interface EcologieHomepageNewsItemConf {
   date: string
   title: string
-  href?: string
+  href: string
 }
 
 export interface EcologieHomepageConf {

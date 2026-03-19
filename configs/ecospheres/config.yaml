@@ -674,7 +674,10 @@ ecospheres:
     news:
       - date: 10 Octobre 2025
         title: Lancement de la fonctionnalité de visualisation
+        href: http://example.com
       - date: 23 septembre 2025
         title: Publication des données du SDES
+        href: http://example.com
       - date: 11 août 2025
         title: Sortie d'une nouvelle collection thématique
+        href: http://example.com

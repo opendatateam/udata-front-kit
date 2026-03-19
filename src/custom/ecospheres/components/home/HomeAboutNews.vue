@@ -25,16 +25,14 @@ const news = homepage?.news ?? []
         </div>
         <div>
           <h2 class="news-header-title">Actualités</h2>
-          <ul class="news-list" role="list">
-            <li v-for="item in news" :key="item.title" class="news-item">
+          <ul class="news-list fr-m-0 fr-p-0 fr-mb-4w" role="list">
+            <li v-for="item in news" :key="item.title" class="fr-pb-1w">
               <p class="news-date fr-text--sm">{{ item.date }}</p>
               <a
-                v-if="item.href"
                 :href="item.href"
-                class="news-title fr-link"
+                class="news-title fr-link fr-icon-arrow-right-line fr-link--icon-right"
                 >{{ item.title }}</a
               >
-              <p v-else class="news-title">{{ item.title }}</p>
             </li>
           </ul>
           <div class="news-cta fr-mt-4v">
@@ -76,20 +74,9 @@ const news = homepage?.news ?? []
 
 .news-list {
   list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-}
-
-.news-item {
-  border-bottom: 1px solid var(--border-default-grey);
-  padding-bottom: 1rem;
-
-  &:last-child {
-    border-bottom: none;
-  }
 }
 
 .news-date {
