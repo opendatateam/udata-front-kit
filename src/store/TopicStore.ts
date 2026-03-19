@@ -16,7 +16,7 @@ const topicsAPI = new TopicsAPI({ version: 2 })
 interface QueryArgs {
   query: string
   page: string
-  include_private?: string
+  private?: string
   page_size?: string
   featured?: string
 }
@@ -94,6 +94,7 @@ export const useTopicStore = defineStore('topic', {
       await useUserStore().waitForStoreInit()
       let response = await topicsAPI.list({
         params: {
+          // TODO: remove include_private when all servers migrated to private param
           include_private: 'yes',
           sort: '-last_modified',
           ...mergedApiParams

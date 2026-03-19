@@ -86,7 +86,12 @@ export const useFiltersState = (
   const pageConf = usePageConf(pageKey)
   const filtersState = reactive<Record<string, FilterState>>({})
   const filterItems = pageConf.filters
-    .filter((item) => item.type === 'select' || item.type === 'checkbox')
+    .filter(
+      (item) =>
+        item.type === 'select' ||
+        item.type === 'checkbox' ||
+        item.type === 'drafts'
+    )
     .filter((item) => !filterOnForm || item.form != null)
 
   const setChildOptions = (
@@ -142,7 +147,9 @@ export const useCheckboxQuery = (
   queryArgs: Record<string, string | null | undefined>
 ) => {
   const pageConf = usePageConf(pageKey)
-  const filters = pageConf.filters.filter((item) => item.type === 'checkbox')
+  const filters = pageConf.filters.filter(
+    (item) => item.type === 'checkbox' || item.type === 'drafts'
+  )
   const checkboxArgs: Record<string, string> = {}
   for (const filter of filters) {
     if (filter.type === 'checkbox') {
@@ -154,8 +161,23 @@ export const useCheckboxQuery = (
       ) {
         checkboxArgs[filter.id] = 'true'
       }
-      delete queryArgs[filter.id]
+    } else if (filter.type === 'drafts') {
+      const queryFilter = queryArgs[filter.id]
+      // Checked (ON) → send nothing (authenticated users get public+own private by default)
+      // Unchecked (OFF) → send private=false (public only)
+      const isOff =
+        queryFilter === 'false' ||
+        (queryFilter == null && filter.default_value !== true)
+      if (isOff) {
+        checkboxArgs[filter.id] = 'false'
+        // TODO: remove when all servers migrated to `private` param
+        // Old server hides drafts by absence of include_private, not by include_private=false
+      } else {
+        // TODO: remove when all servers migrated to `private` param
+        checkboxArgs['include_private'] = 'yes'
+      }
     }
+    delete queryArgs[filter.id]
   }
   return {
     checkboxArgs,
@@ -200,18 +222,18 @@ export const useFiltersApiParams = (
  * Process all page query parameters (filters, checkboxes) and merge with universe query
  * This is a convenience wrapper that combines useFiltersApiParams, useCheckboxQuery, and useUniverseQuery
  *
- * Example URL: `/bouquets?theme=mieux-consommer&organization=ademe&include_private=true&page=2`
+ * Example URL: `/bouquets?theme=mieux-consommer&organization=ademe&private=false&page=2`
  *
  * Processing flow:
  * 1. useFiltersApiParams extracts filter params:
  *    - `theme=mieux-consommer` → { tag: ['ecospheres-theme-mieux-consommer'] }
  *    - `organization=ademe` → { organization: ['ademe'] }
- * 2. useCheckboxQuery extracts checkbox params:
- *    - `include_private=true` → { include_private: 'true' }
+ * 2. useCheckboxQuery extracts checkbox/drafts params:
+ *    - `private=false` → { private: 'false', include_private: 'false' }
  * 3. useUniverseQuery merges with universe_query from config (universe_query: { tag: 'ecospheres' }):
  *    - Merges to: { tag: ['ecospheres-theme-mieux-consommer', 'ecospheres'], organization: ['ademe'] }
  * 4. Returns merged object ready for API:
- *    - { tag: ['ecospheres-theme-mieux-consommer', 'ecospheres'], organization: ['ademe'], include_private: 'true', page: '2' }
+ *    - { tag: ['ecospheres-theme-mieux-consommer', 'ecospheres'], organization: ['ademe'], private: 'false', include_private: 'false', page: '2' }
  */
 export const usePageQueryParams = (
   pageKey: string,
