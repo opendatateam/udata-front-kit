@@ -47,7 +47,7 @@ const contributors = [
     href: 'https://www.ecologie.gouv.fr'
   },
   {
-    name: 'Préfet Auvergne-Rhône-Alpes',
+    name: 'Préfecture Auvergne-Rhône-Alpes',
     logo_url: prefetAra,
     href: 'https://www.prefectures-regions.gouv.fr/auvergne-rhone-alpes'
   }
