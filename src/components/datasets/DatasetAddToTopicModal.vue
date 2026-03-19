@@ -6,6 +6,7 @@ import { capitalize, computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
+import ErrorSummary from '@/components/forms/ErrorSummary.vue'
 import FactorTextFields from '@/components/forms/dataset/FactorTextFields.vue'
 import type { Topic } from '@/model/topic'
 import { Availability, ResolvedFactor } from '@/model/topic'

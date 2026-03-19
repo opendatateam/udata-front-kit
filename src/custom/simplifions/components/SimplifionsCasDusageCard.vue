@@ -32,6 +32,7 @@ import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { useFormatDate } from '@datagouv/components-next'
+import DraftTag from './DraftTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 defineProps<{

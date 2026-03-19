@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetSearchStore } from '@/store/DatasetSearchStore'
 import { useAsyncComponent } from '@/utils/component'

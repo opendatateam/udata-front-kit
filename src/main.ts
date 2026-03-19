@@ -4,6 +4,7 @@ import '@gouvfr/dsfr/dist/component/component.main.min.css' // Styles de tous le
 
 import '@gouvfr/dsfr/dist/utility/utility.main.min.css' // Classes utilitaires : les composants de VueDsfr en ont besoin
 
+import VueDsfr from '@gouvminint/vue-dsfr'
 import '@gouvminint/vue-dsfr/styles' // Les styles propres aux composants de VueDsfr
 
 import '@datagouv/components-next/dist/components.css'
@@ -52,6 +53,7 @@ routerPromise
     app.use(router)
     app.use(pinia)
     app.use(head)
+    app.use(VueDsfr)
     app.use(TextClamp)
     app.use(LoadingPlugin)
     app.use(datagouv, {

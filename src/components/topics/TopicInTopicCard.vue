@@ -6,6 +6,7 @@ import {
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
