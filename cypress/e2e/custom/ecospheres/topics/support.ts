@@ -320,6 +320,7 @@ export function mockTopicAndRelatedObjects(
   // Mock referenced dataservices for dataservice_reference trait
   referencedDataservices.forEach((refDataservice) => {
     cy.mockDatagouvObject('dataservices', refDataservice.slug, refDataservice)
+    cy.mockDataserviceMetricsApi(refDataservice.id)
 
     // Mock the datasets list for this dataservice
     cy.intercept(

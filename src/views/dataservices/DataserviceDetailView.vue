@@ -6,11 +6,11 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import {
@@ -203,6 +203,11 @@ onMounted(() => {
             >Faire une demande d'habilitation</a
           >
         </div>
+        <!-- metrics -->
+        <MetricsStatBoxes
+          object-type="dataservice"
+          :object-id="dataservice.id"
+        />
       </div>
     </div>
 
