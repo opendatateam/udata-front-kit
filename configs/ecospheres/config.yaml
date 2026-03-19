@@ -668,7 +668,7 @@ ecospheres:
         creator: 'Ministère de la Transition écologique'
         maille: 'Communal'
         slug: ''
-    about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le Laboratoire d'innovation au service de la transition écologique au sein du Commissariat Général au Développement Durable (CGDD)."
+    about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le laboratoire d'innovation au service de la transition écologique, au sein du Commissariat Général au Développement Durable (CGDD)."
     news:
       - date: '10 Octobre 2025'
         title: 'Lancement de la fonctionnalité de visualisation'
