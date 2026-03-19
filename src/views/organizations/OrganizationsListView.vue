@@ -5,6 +5,7 @@ import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import OrganizationCard from '@/components/OrganizationCard.vue'
 import config from '@/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 
