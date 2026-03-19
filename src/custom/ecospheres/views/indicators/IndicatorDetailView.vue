@@ -39,7 +39,7 @@ const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
 const showAddToBouquetModal = ref(false)
 const bouquetsConf = usePageConf('bouquets')
-const bouquetsLabels = useLabels(bouquetsConf.labels)
+const topicsLabels = useLabels(bouquetsConf.labels)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -130,7 +130,7 @@ onMounted(() => {
       <DsfrButton
         secondary
         size="sm"
-        label="Ajouter à un bouquet"
+        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.plural}`"
         icon="fr-icon-file-add-line"
         @click="showAddToBouquetModal = true"
       />
