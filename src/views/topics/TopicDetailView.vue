@@ -320,7 +320,7 @@ watch(
         size="sm"
         label="Cloner"
         icon="fr-icon-git-merge-line"
-        :title="`Cloner le ${pageConf.labels.singular}`"
+        :title="`Cloner ${labels.articles.le} ${labels.singular}`"
         @click="showCloneModal = true"
       />
       <DsfrModal
@@ -333,12 +333,13 @@ watch(
         <template #default>
           <p>
             Vous pouvez choisir de conserver les liens vers les jeux de données
-            du {{ pageConf.labels.singular }} que vous souhaitez cloner.
+            {{ labels.articles.du }} {{ labels.singular }} que vous souhaitez
+            cloner.
           </p>
           <p>
             Si vous ne conservez pas les liens, les jeux de données ne seront
-            pas ajoutés au {{ pageConf.labels.singular }} cloné, mais leurs
-            libellés et raisons d'utilisation seront conservés.
+            pas ajoutés {{ labels.articles.au }} {{ labels.singular }} cloné,
+            mais leurs libellés et raisons d'utilisation seront conservés.
           </p>
           <p>Voulez-vous conserver les liens vers les jeux de données&nbsp;?</p>
         </template>
