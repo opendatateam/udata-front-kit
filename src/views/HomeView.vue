@@ -13,8 +13,8 @@ const router = useRouter()
 const query = ref('')
 
 // TODO: mutualize w/ App.vue
-const updateQuery = (q: string) => {
-  query.value = q
+const updateQuery = (q: string | number | undefined) => {
+  query.value = String(q ?? '')
 }
 
 const doSearch = () => {
