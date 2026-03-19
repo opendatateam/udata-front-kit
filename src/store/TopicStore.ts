@@ -63,9 +63,8 @@ export const useTopicStore = defineStore('topic', {
       useSearchEndpoint = false
     ): Promise<Topic[]> {
       const { query, ...queryArgs } = args
-      const resolvedPageKey = pageKey || 'topics'
 
-      const params = usePageQueryParams(resolvedPageKey, queryArgs)
+      const params = usePageQueryParams(pageKey || 'topics', queryArgs)
 
       let results
       if (useSearchEndpoint) {

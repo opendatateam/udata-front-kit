@@ -46,7 +46,7 @@ export default class TopicsAPI extends DatagouvfrAPI {
       url: `${this.url()}/search/`,
       method: 'get',
       params,
-      authenticated: true
+      authenticated: false
     })
   }
 }
