@@ -25,7 +25,7 @@ const labels = computed(() => props.labels ?? useLabels(pageConf.labels))
     <label class="fr-label" for="input-title">Libellé (obligatoire)</label>
     <p id="title-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Indiquez la ou les informations clés pour {{ labels.articles.le }}
-      {{ labels.singular }} (indicateur, phénomène ou ou objet géographique), en
+      {{ labels.singular }} (indicateur, phénomène ou objet géographique), en
       termes génériques.
     </p>
     <input
