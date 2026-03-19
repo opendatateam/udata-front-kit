@@ -632,49 +632,49 @@ pages:
 ecospheres:
   homepage:
     thematic_tags:
-      - label: 'Aménagement du territoire'
-        q: 'aménagement du territoire'
-      - label: 'Air'
-        q: 'air'
-      - label: 'Biodiversité'
-        q: 'biodiversité'
-      - label: 'Bruit'
-        q: 'bruit'
-      - label: 'Climat'
-        q: 'climat'
-      - label: 'Eau'
-        q: 'eau'
-      - label: 'Énergie'
-        q: 'énergie'
-      - label: 'Logement'
-        q: 'logement'
-      - label: 'Milieux marins'
-        q: 'milieux marins'
-      - label: 'Risques'
-        q: 'risques'
-      - label: 'Transport'
-        q: 'transport'
+      - label: Aménagement du territoire
+        q: aménagement du territoire
+      - label: Air
+        q: air
+      - label: Biodiversité
+        q: biodiversité
+      - label: Bruit
+        q: bruit
+      - label: Climat
+        q: climat
+      - label: Eau
+        q: eau
+      - label: Énergie
+        q: énergie
+      - label: Logement
+        q: logement
+      - label: Milieux marins
+        q: milieux marins
+      - label: Risques
+        q: risques
+      - label: Transport
+        q: transport
     collections:
-      - title: 'Indicateurs de planification écologique régionale (COPs)'
-        description: 'Évaluez les résultats physiques des actions de transition écologique de votre région.'
-        creator: 'SGPE'
-        maille: 'Régional'
-        slug: 'indicateurs-de-planification-ecologique-regionale-cops-1'
-      - title: 'Plan Climat-Air-Énergie Territorial (PCAET)'
-        description: "Comparez l'évolution de votre trajectoire par rapport aux indicateurs nationaux de la transition écologique."
-        creator: 'Ministère de la Transition écologique'
-        maille: 'EPCI à Communal'
-        slug: ''
-      - title: 'Planification territoriale (PLU(i), SCoT, SRADDET)'
-        description: "Accédez aux bases de données nationales et territoriales utiles à l'évolution des documents d'urbanisme."
-        creator: 'Ministère de la Transition écologique'
-        maille: 'Communal'
-        slug: ''
+      - title: Indicateurs de planification écologique régionale (COPs)
+        description: Évaluez les résultats physiques des actions de transition écologique de votre région.
+        creator: SGPE
+        maille: Régional
+        slug: indicateurs-regionaux-de-planification-ecologique-cops
+      - title: Indicateurs de mobilité durable
+        description: Faciliter l'orientation, la prise de décision et le suivi en matière de politiques publiques locales pour la mobilité durable des personnes.
+        creator: DRIEAT Île-de-France
+        maille: Communal à régional
+        slug: indicateurs-du-tableau-de-bord-des-mobilites-durables
+      - title: Planification territoriale (PLU(i), SCoT, SRADDET)
+        description: Accédez aux bases de données nationales et territoriales utiles à l'évolution des documents d'urbanisme.
+        creator: Docurba (DGALN)
+        maille: Communal
+        slug: elaboration-ou-evolution-dun-document-durbanisme
     about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le laboratoire d'innovation au service de la transition écologique, au sein du Commissariat Général au Développement Durable (CGDD)."
     news:
-      - date: '10 Octobre 2025'
-        title: 'Lancement de la fonctionnalité de visualisation'
-      - date: '23 septembre 2025'
-        title: 'Publication des données du SDES'
-      - date: '11 août 2025'
-        title: "Sortie d'une nouvelle collection thématique"
+      - date: 10 Octobre 2025
+        title: Lancement de la fonctionnalité de visualisation
+      - date: 23 septembre 2025
+        title: Publication des données du SDES
+      - date: 11 août 2025
+        title: Sortie d'une nouvelle collection thématique
