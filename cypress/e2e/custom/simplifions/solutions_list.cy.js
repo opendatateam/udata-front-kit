@@ -116,7 +116,7 @@ describe('Simplifions Solutions Page', () => {
       cy.expectActionToCallApi(
         () => cy.clickCheckbox('include_private'),
         'topics',
-        /topics\/search\/.*tag=simplifions-v2-solutions/
+        /topics\/search\/(?!.*include_private).*tag=simplifions-v2-solutions/
       )
     })
   })
