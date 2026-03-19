@@ -18,7 +18,7 @@ const organizations: Ref<Organization[]> = ref([])
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
-  { text: 'Organisations' }
+  { text: config.organizations?.list?.breadcrumb_title || 'Organisations' }
 ])
 
 const title: string = config.website.formatted_title

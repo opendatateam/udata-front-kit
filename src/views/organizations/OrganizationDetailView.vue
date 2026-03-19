@@ -5,6 +5,7 @@ import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
@@ -25,7 +26,10 @@ const org = computed(() => orgStore.get(organizationId))
 
 const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
-  { to: '/organizations', text: 'Organisations' }
+  {
+    to: '/organizations',
+    text: config.organizations?.list?.breadcrumb_title || 'Organisations'
+  }
 ])
 
 const currentPage = ref(1)

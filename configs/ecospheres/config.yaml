@@ -149,13 +149,13 @@ website:
       path: /
     - name: Collections thématiques
       path: /bouquets
-    - name: Jeux de données
+    - name: Toutes les données
       path: /datasets
     - name: API
       path: /dataservices
-    - name: Indicateurs
+    - name: Indicateurs phares
       path: /indicators
-    - name: Organisations
+    - name: Contributeurs
       path: /organizations
     - name: À propos
       path: /about
@@ -200,6 +200,8 @@ organizations:
   datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
   dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
+  list:
+    breadcrumb_title: Contributeurs
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
