@@ -93,10 +93,9 @@ const showHarvestQualityWarning = computed(() => {
       </p>
     </template>
     <MetricsStatBoxes object-type="dataset" :object-id="dataset.id" />
-    <DatasetQuality
-      v-if="config.website.show_quality_component"
-      :quality="dataset.quality"
-    />
+    <div v-if="config.website.show_quality_component" class="fr-mt-3v">
+      <DatasetQuality :quality="dataset.quality" />
+    </div>
     <div
       v-if="showHarvestQualityWarning"
       class="text-mention-grey fr-text--sm fr-my-1v"

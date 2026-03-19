@@ -42,7 +42,7 @@ const downloadsTotal = computed(() =>
 </script>
 
 <template>
-  <div class="fr-grid-row fr-grid-row--gutters fr-my-3v">
+  <div class="fr-grid-row fr-grid-row--gutters">
     <div class="fr-col-6">
       <StatBox
         title="Vues"
