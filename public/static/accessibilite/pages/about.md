@@ -10,9 +10,7 @@ L'ensemble des jeux de données référencés sont des **données ouvertes**. On
 
 PAUDA ne concernent pas les **données restreintes** qui, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel. Ce type de données n'est pas utilisé sur notre plateforme.
 
-Les jeux de données valorisés par PAUDA sont classés par **thématiques**, qui sont un ensemble contextualisé de données ou d’indicateurs répondant à une problématique donnée. Par ensemble contextualisé, on veut dire que les données ou indicateurs sont regroupés par thèmes / sujets / ou tout type de regroupement pertinent, permettant de répondre à une problématique. Ex : le bouquet culture pour réunir tous les indicateurs et données sur l’accessibilité de la culture.
-
-Un **indicateur** permet de renseigner l’accessibilité par cas d'usage. Ex : « présence de marches » pour un cheminement ou encore « informations en FALC » pour des renseignements.
+Les jeux de données valorisés par PAUDA sont classés par **bouquets**, qui sont un ensemble contextualisé de données ou d’indicateurs répondant à une problématique donnée. Par ensemble contextualisé, on veut dire que les données sont regroupées par thèmes / sujets / ou tout type de regroupement pertinent, permettant de répondre à une problématique. Ex : le bouquet culture pour réunir tous les jeux de données sur l’accessibilité de la culture.
 
 PAUDA est progressivement enrichie de nouveaux bouquets et de nouvelles données ouvertes. De nouvelles fonctionnalités font aussi régulièrement leurs apparitions afin de faciliter la création, la recherche et le suivi de bouquets.
 
