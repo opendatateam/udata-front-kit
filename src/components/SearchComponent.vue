@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VIconCustom from '@/components/VIconCustom.vue'
 import DOMPurify from 'dompurify'
 import { ref } from 'vue'
 

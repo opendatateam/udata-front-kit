@@ -2,6 +2,7 @@
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
 import { formatDate } from '@/utils'

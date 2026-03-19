@@ -345,6 +345,8 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import type { TopicSolutionsExtras } from '../model/topics'
+import DraftTag from './DraftTag.vue'
+import HumanReadableList from './HumanReadableList.vue'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
 import SimplifionsDataApi from './SimplifionsDataApi.vue'
 import SimplifionsIntegrateursFilters, {
@@ -352,6 +354,7 @@ import SimplifionsIntegrateursFilters, {
 } from './SimplifionsIntegrateursFilters.vue'
 import SimplifionsSolutionIntegrateursTabs from './SimplifionsSolutionIntegrateursTabs.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
   topic: Topic
