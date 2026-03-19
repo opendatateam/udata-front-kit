@@ -121,7 +121,7 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="dataservice" class="tabs-height-fix">
+  <GenericContainer v-if="dataservice">
     <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataservice.title }}</h1>
@@ -267,6 +267,7 @@ onMounted(() => {
           </div>
           <DsfrPagination
             v-if="pagination.length > 1"
+            :trunc-limit="3"
             :current-page="currentPage - 1"
             :pages="pagination"
             class="fr-mt-4w"

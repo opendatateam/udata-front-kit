@@ -140,10 +140,6 @@ const dropdown = config.website.header.search.dropdown ?? undefined
   flex-wrap: wrap;
   align-items: center;
 
-  & > nav {
-    flex: 1 0 100%;
-  }
-
   & > :last-child.custom-search {
     flex: 1 0 100%;
     max-inline-size: min(24rem, 100%);
