@@ -86,7 +86,7 @@ onMounted(() => {
             </h3>
             <p class="fr-m-0">{{ collection.description }}</p>
             <p class="fr-text--sm creator">
-              Créé par {{ collection.creator }}
+              Créée par {{ collection.creator }}
               <span
                 class="fr-icon-checkbox-circle-line fr-icon--sm"
                 aria-hidden="true"
