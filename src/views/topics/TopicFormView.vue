@@ -25,6 +25,7 @@ import { useFiltersApiParams } from '@/utils/filters'
 import { useLabels } from '@/utils/labels'
 import { cloneTopic } from '@/utils/topic'
 import { useUniverseQuery } from '@/utils/universe'
+import { capitalize } from 'vue'
 
 interface Props extends TopicPageRouterConf {
   isCreate: boolean
@@ -232,7 +233,7 @@ onMounted(() => {
       <h1 class="fr-col-auto fr-mb-2v">
         {{
           isCreate
-            ? `${labels.articles.nouveau} ${labels.singular}`
+            ? `${capitalize(labels.articles.nouveau)} ${labels.singular}`
             : topic.name
         }}
       </h1>

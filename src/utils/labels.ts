@@ -29,7 +29,7 @@ export function useLabels(labels: PageLabelsConf): Labels {
       du: f ? 'de la' : 'du',
       au: f ? 'à la' : 'au',
       ce: f ? 'cette' : 'ce',
-      nouveau: f ? 'Nouvelle' : 'Nouveau',
+      nouveau: f ? 'nouvelle' : 'nouveau',
       il: f ? 'elle' : 'il',
       eSuffixe: f ? 'e' : '',
       unDeVos: f ? 'une de vos' : 'un de vos'
