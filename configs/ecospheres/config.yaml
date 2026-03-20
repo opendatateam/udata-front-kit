@@ -672,12 +672,12 @@ ecospheres:
         slug: elaboration-ou-evolution-dun-document-durbanisme
     about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le laboratoire d'innovation au service de la transition écologique, au sein du Commissariat Général au Développement Durable (CGDD)."
     news:
-      - date: 10 Octobre 2025
-        title: Lancement de la fonctionnalité de visualisation
-        href: http://example.com
-      - date: 23 septembre 2025
-        title: Publication des données du SDES
-        href: http://example.com
-      - date: 11 août 2025
-        title: Sortie d'une nouvelle collection thématique
-        href: http://example.com
+      - date: 16 mars 2026
+        title: Ouverture des services WFS/WMS d'une collection
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#ouverture-dans-qgis-de-services-wfs-wms-a-partir-dun-bouquet
+      - date: 02 mars 2026
+        title: Enrichissement des points de contact des indicateurs
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#enrichissement-des-points-de-contact-des-indicateurs
+      - date: 26 février 2026
+        title: Publication des données sur la mer et le littoral
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#nouvelles-donnees-pour-le-suivi-de-la-transition-ecologique
