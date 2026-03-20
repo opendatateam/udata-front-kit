@@ -446,13 +446,6 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Afficher les brouillons
-        id: include_private
-        type: checkbox
-        default_option:
-        default_value: true
-        authenticated: true
-        values: []
       - name: Organisation
         default_option: Toutes les organisations
         id: organization

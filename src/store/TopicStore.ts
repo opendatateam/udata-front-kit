@@ -17,6 +17,7 @@ interface QueryArgs {
   query: string
   page: string
   include_private?: string
+  private?: string
   page_size?: string
   featured?: string
 }

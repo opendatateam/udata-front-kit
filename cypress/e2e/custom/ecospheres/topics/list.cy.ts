@@ -90,17 +90,16 @@ describe('Topics - List Page', () => {
     })
   })
 
-  describe('Draft Checkbox', () => {
-    it('should not show "Afficher les brouillons" checkbox when disconnected', () => {
+  describe('Segmented view control', () => {
+    it('should not be visible to disconnected users', () => {
       cy.visit('/bouquets')
       cy.wait('@get_topics_list')
 
-      // Verify the checkbox does not exist
-      cy.contains('Afficher les brouillons').should('not.exist')
+      cy.contains('Publiés').should('not.exist')
+      cy.contains('Brouillons').should('not.exist')
     })
 
-    it('should show "Afficher les brouillons" checkbox when connected', () => {
-      // Simulate connected user
+    it('should be visible to connected users', () => {
       cy.simulateConnectedUser({
         id: 'test-user-id',
         first_name: 'Test',
@@ -110,12 +109,11 @@ describe('Topics - List Page', () => {
       cy.visit('/bouquets')
       cy.wait('@get_topics_list')
 
-      // Verify the checkbox exists and is visible
-      cy.contains('Afficher les brouillons').should('be.visible')
+      cy.contains('Publiés').should('be.visible')
+      cy.contains('Brouillons').should('be.visible')
     })
 
-    it('should update URL parameter when clicking "Afficher les brouillons"', () => {
-      // Simulate connected user
+    it('should send private=false to the API in published mode', () => {
       cy.simulateConnectedUser({
         id: 'test-user-id',
         first_name: 'Test',
@@ -124,48 +122,24 @@ describe('Topics - List Page', () => {
 
       cy.visit('/bouquets')
       cy.wait('@get_topics_list').then((interception) => {
-        // By default, include_private should be true (from default_value in config)
-        expect(interception.request.url).to.match(
-          /[?&]include_private=true(?:&|$)/
-        )
-        expect(interception.request.url).to.match(universeTagRegex)
+        expect(interception.request.url).to.match(/[?&]private=false(?:&|$)/)
+      })
+    })
+
+    it('should send private=true to the API after clicking "Brouillons"', () => {
+      cy.simulateConnectedUser({
+        id: 'test-user-id',
+        first_name: 'Test',
+        last_name: 'User'
       })
 
-      // Initially, include_private should not be in URL (default value)
-      cy.url().should('not.include', 'include_private')
+      cy.visit('/bouquets')
+      cy.wait('@get_topics_list')
 
-      // Verify the checkbox is checked by default
-      cy.contains('Afficher les brouillons')
-        .parent()
-        .find('input[type="checkbox"]')
-        .should('be.checked')
+      cy.contains('Brouillons').click()
 
-      // Click the checkbox to hide drafts
-      cy.contains('Afficher les brouillons').click()
-
-      // Verify URL includes include_private=false
-      cy.url().should('include', 'include_private=false')
-
-      // Wait for the API call with the new parameter
       cy.wait('@get_topics_list').then((interception) => {
-        expect(interception.request.url).to.not.match(
-          /[?&]include_private=true(?:&|$)/
-        )
-        expect(interception.request.url).to.match(universeTagRegex)
-      })
-
-      // Click again to show drafts
-      cy.contains('Afficher les brouillons').click()
-
-      // Verify URL includes include_private=true
-      cy.url().should('include', 'include_private=true')
-
-      // Wait for the API call with the new parameter
-      cy.wait('@get_topics_list').then((interception) => {
-        expect(interception.request.url).to.match(
-          /[?&]include_private=true(?:&|$)/
-        )
-        expect(interception.request.url).to.match(universeTagRegex)
+        expect(interception.request.url).to.match(/[?&]private=true(?:&|$)/)
       })
     })
   })

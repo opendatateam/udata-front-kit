@@ -22,6 +22,10 @@ const props = defineProps({
   page: {
     type: String,
     default: '1'
+  },
+  isDraftsView: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -61,13 +65,14 @@ const clearFilters = () => {
 
 const executeQuery = async () => {
   const loader = useLoading().show({ enforceFocus: false })
-  // get filters parameters from route
   return topicStore
     .query(
       {
         ...route.query,
-        ...props,
-        sort: route.query.sort || pageConf.default_sort
+        query: props.query,
+        page: props.page,
+        sort: route.query.sort || pageConf.default_sort,
+        private: props.isDraftsView ? 'true' : 'false'
       } as Parameters<typeof topicStore.query>[0],
       pageKey
     )
@@ -100,6 +105,11 @@ watch(
   () => route.query,
   () => executeQuery(),
   { immediate: true, deep: true }
+)
+
+watch(
+  () => props.isDraftsView,
+  () => executeQuery()
 )
 
 defineExpose({
