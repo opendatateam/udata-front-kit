@@ -394,10 +394,11 @@ pages:
       extended: API
       feminine: true
     search:
-      input: Rechercher une API
+      input: Rechercher une API  
     banner:
-      title: Liste d’<abbr title="Application Programming Interface">APIs</abbr> mises à disposition par des acteurs de référence.
-      content:
+      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> mises à disposition par des acteurs de référence.
+      content: |
+        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
     resources_tabs:
       discussions:
         display: true
