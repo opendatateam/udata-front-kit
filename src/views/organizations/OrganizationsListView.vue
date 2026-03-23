@@ -19,8 +19,6 @@ const organizations: Ref<Organization[]> = ref([])
 const title = config.organizations?.list?.breadcrumb_title || 'Organisations'
 const links = computed(() => [{ to: '/', text: 'Accueil' }, { text: title }])
 
-const siteTitle: string = config.website.formatted_title
-
 async function onUpdatePage(page: number) {
   const loader = $loading.show()
   currentPage.value = page + 1
