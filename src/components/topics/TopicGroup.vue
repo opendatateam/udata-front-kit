@@ -2,6 +2,7 @@
 import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
+import { useLabels } from '@/utils/labels'
 import { isAvailable } from '@/utils/topic'
 import { NO_GROUP, isOnlyNoGroup } from '@/utils/topicGroups'
 import { useRandomId } from '@gouvminint/vue-dsfr'
@@ -35,6 +36,7 @@ const props = defineProps({
 })
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
@@ -293,8 +295,8 @@ const actions = computed(() => {
             Ce regroupement contient un ou plusieurs jeux de données. En
             confirmant la suppression,
             <strong>
-              tous les jeux de données associés seront retirés du
-              {{ pageConf.labels.singular }}.
+              tous les jeux de données associés seront retirés
+              {{ labels.articles.du }} {{ labels.singular }}.
             </strong>
           </p>
           <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>
