@@ -279,7 +279,7 @@ pages:
     search:
       input: Rechercher un jeu de données
     banner:
-      title: Un accès centralisé à des données actualisées produites par des acteurs de référence.
+      title: Un accès centralisé à des données produites par des acteurs de référence.
       content: |
         [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
     resources_tabs:
