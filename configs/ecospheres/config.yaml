@@ -396,7 +396,7 @@ pages:
     search:
       input: Rechercher une API  
     banner:
-      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> mises à disposition par des acteurs de référence.
+      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
       content: |
         [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
     resources_tabs:
@@ -427,7 +427,7 @@ pages:
     search:
       input: Filtrer les collections thématiques
     banner:
-      title: Des jeux de données et des indicateurs regroupés autour d’une politique publique ou d’un projet.
+      title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
       content: |
         [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/bouquets/creer-un-bouquet)
     resources_tabs:
@@ -665,7 +665,7 @@ ecospheres:
         maille: Communal à régional
         slug: indicateurs-du-tableau-de-bord-des-mobilites-durables
       - title: Planification territoriale (PLU(i), SCoT, SRADDET)
-        description: Accédez aux bases de données nationales et territoriales utiles à l'évolution des documents d'urbanisme.
+        description: Accédez aux bases de données nationales et territoriales utiles à l'élaboration des documents d'urbanisme.
         creator: Docurba (DGALN)
         maille: Communal
         slug: elaboration-ou-evolution-dun-document-durbanisme
