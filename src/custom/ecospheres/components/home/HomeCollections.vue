@@ -17,7 +17,6 @@ onMounted(() => {
     .list({
       params: {
         page_size: 1,
-        include_private: 'true',
         ...useUniverseQuery('bouquets', {})
       },
       headers: {
