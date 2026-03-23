@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import { Pagination, ReuseCard, type Reuse } from '@datagouv/components-next'
 
 import BlankState from '@/components/BlankState.vue'
+import DatasetDatavizSection from '@/components/datasets/DatasetDatavizSection.vue'
+import config from '@/config'
 import { useCurrentPageConf } from '@/router/utils'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
 import { useLabels } from '@/utils/labels'
@@ -52,6 +54,15 @@ onMounted(fetchReuses)
 </script>
 
 <template>
+  <DatasetDatavizSection
+    v-if="
+      config.website?.dataset_dataviz?.enabled &&
+      config.website?.dataset_dataviz?.grist_url
+    "
+    :dataset-id="props.datasetId"
+    :grist-url="config.website.dataset_dataviz.grist_url"
+    :title="config.website.dataset_dataviz.title"
+  />
   <div v-if="total > 0">
     <h2 class="fr-mt-4w subtitle subtitle--uppercase">
       {{ total }} {{ total > 1 ? 'réutilisations' : 'réutilisation' }}

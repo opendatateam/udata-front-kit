@@ -159,6 +159,10 @@ website:
     can_add_topics:
       everyone: true
       authorized_users:
+  dataset_dataviz:
+    enabled: true
+    title: 'Datavisualisations associées'
+    grist_url: 'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Datavisualisation/records'
 
   # Grist organisations ministère de la Culture https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
   # Organisations transversale des données ouvertes de la culture
