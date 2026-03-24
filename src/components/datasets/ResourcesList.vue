@@ -119,7 +119,8 @@ onMounted(async () => {
           class="search-bar"
           @search="() => doSearch(typedResources.type.id)"
           @update:model-value="
-            (value: string) => updateQuery(value, typedResources.type.id)
+            (value: string | number | undefined) =>
+              updateQuery(String(value ?? ''), typedResources.type.id)
           "
         />
         <span v-if="typedResources.resources.length != 0">

@@ -6,9 +6,11 @@ import { computed } from 'vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useLabels } from '@/utils/labels'
 import { useOwnerName } from '@/utils/owned'
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const props = defineProps({
   dataset: {
@@ -57,7 +59,7 @@ const badgeClasse = computed(() => {
     <DsfrBadge
       v-if="alreadySelected"
       type="info"
-      :label="`Déjà utilisé dans ce ${pageConf.labels.singular}`"
+      :label="`Déjà utilisé dans ${labels.articles.ce} ${labels.singular}`"
       small
       ellipsis
       :class="badgeClasse"
