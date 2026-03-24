@@ -41,7 +41,7 @@ export interface PageFilterConf {
     | 'select'
     | 'checkbox'
     | 'organization'
-    | 'drafts'
+    | 'private'
   child: string | null
   color: string | null
   default_option: string | null

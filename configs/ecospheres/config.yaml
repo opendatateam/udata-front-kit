@@ -448,7 +448,7 @@ pages:
     filters:
       - name: Afficher les brouillons
         id: private
-        type: drafts
+        type: private
         default_option:
         default_value: true
         authenticated: true

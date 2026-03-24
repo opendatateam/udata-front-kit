@@ -90,7 +90,7 @@ export const useFiltersState = (
       (item) =>
         item.type === 'select' ||
         item.type === 'checkbox' ||
-        item.type === 'drafts'
+        item.type === 'private'
     )
     .filter((item) => !filterOnForm || item.form != null)
 
@@ -148,7 +148,7 @@ export const useCheckboxQuery = (
 ) => {
   const pageConf = usePageConf(pageKey)
   const filters = pageConf.filters.filter(
-    (item) => item.type === 'checkbox' || item.type === 'drafts'
+    (item) => item.type === 'checkbox' || item.type === 'private'
   )
   const checkboxArgs: Record<string, string> = {}
   for (const filter of filters) {
@@ -161,7 +161,7 @@ export const useCheckboxQuery = (
       ) {
         checkboxArgs[filter.id] = 'true'
       }
-    } else if (filter.type === 'drafts') {
+    } else if (filter.type === 'private') {
       const queryFilter = queryArgs[filter.id]
       // Checked (ON) → send nothing (authenticated users get public+own private by default)
       // Unchecked (OFF) → send private=false (public only)
@@ -174,7 +174,7 @@ export const useCheckboxQuery = (
         // Old server hides drafts by absence of include_private, not by include_private=false
       } else {
         // TODO: remove when all servers migrated to `private` param
-        checkboxArgs['include_private'] = 'yes'
+        checkboxArgs['include_private'] = 'true'
       }
     }
     delete queryArgs[filter.id]

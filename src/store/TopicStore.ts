@@ -95,7 +95,7 @@ export const useTopicStore = defineStore('topic', {
       let response = await topicsAPI.list({
         params: {
           // TODO: remove include_private when all servers migrated to private param
-          include_private: 'yes',
+          include_private: 'true',
           sort: '-last_modified',
           ...mergedApiParams
         },

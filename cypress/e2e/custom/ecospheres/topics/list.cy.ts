@@ -179,9 +179,9 @@ describe('Topics - List Page', () => {
 
       cy.visit('/bouquets')
       cy.wait('@get_topics_list').then((interception) => {
-        // default ON: include_private=yes (compat shim)
+        // default ON: include_private=true (compat shim)
         expect(interception.request.url).to.match(
-          /[?&]include_private=yes(?:&|$)/
+          /[?&]include_private=true(?:&|$)/
         )
         expect(interception.request.url).to.match(universeTagRegex)
       })
@@ -195,9 +195,9 @@ describe('Topics - List Page', () => {
 
       cy.contains('Afficher les brouillons').click()
       cy.wait('@get_topics_list').then((interception) => {
-        // re-checked ON: include_private=yes again
+        // re-checked ON: include_private=true again
         expect(interception.request.url).to.match(
-          /[?&]include_private=yes(?:&|$)/
+          /[?&]include_private=true(?:&|$)/
         )
         expect(interception.request.url).to.match(universeTagRegex)
       })

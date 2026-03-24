@@ -269,7 +269,7 @@ pages:
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
         id: private
-        type: drafts
+        type: private
         default_option:
         default_value: false
         authenticated: true
@@ -326,7 +326,7 @@ pages:
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
         id: private
-        type: drafts
+        type: private
         default_option:
         default_value: false
         authenticated: true
