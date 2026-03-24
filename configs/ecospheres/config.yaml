@@ -418,7 +418,7 @@ pages:
       tag: ecospheres
     filter_prefix: ecospheres
     title: Collections thématiques
-    breadcrumb_title:
+    breadcrumb_title: Collections
     labels:
       singular: collection
       plural: collections thématiques
