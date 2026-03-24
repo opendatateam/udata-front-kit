@@ -429,7 +429,7 @@ pages:
     banner:
       title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
       content: |
-        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/bouquets/creer-un-bouquet)
+        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/collections-thematiques/ajouter-une-collection)
     resources_tabs:
       discussions:
         display: true

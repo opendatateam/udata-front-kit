@@ -37,9 +37,9 @@ const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
-const showAddToBouquetModal = ref(false)
-const bouquetsConf = usePageConf('bouquets')
-const topicsLabels = useLabels(bouquetsConf.labels)
+const showAddToTopicModal = ref(false)
+const topicConf = usePageConf('bouquets')
+const topicsLabels = useLabels(topicConf.labels)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -132,11 +132,11 @@ onMounted(() => {
         size="sm"
         :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.plural}`"
         icon="fr-icon-file-add-line"
-        @click="showAddToBouquetModal = true"
+        @click="showAddToTopicModal = true"
       />
       <DatasetAddToTopicModal
-        v-if="showAddToBouquetModal"
-        v-model:show="showAddToBouquetModal"
+        v-if="showAddToTopicModal"
+        v-model:show="showAddToTopicModal"
         topic-page-key="bouquets"
         :dataset="indicator"
       />
