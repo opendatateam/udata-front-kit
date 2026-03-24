@@ -394,7 +394,7 @@ pages:
       extended: API
       feminine: true
     search:
-      input: Rechercher une API  
+      input: Rechercher une API
     banner:
       title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
       content: |
@@ -673,7 +673,7 @@ ecospheres:
     news:
       - date: 16 mars 2026
         title: Ouverture des services WFS/WMS d'une collection
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#ouverture-dans-qgis-de-services-wfs-wms-a-partir-dun-bouquet
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#ouverture-dans-qgis-de-services-wfs-wms-a-partir-dune-collection
       - date: 02 mars 2026
         title: Enrichissement des points de contact des indicateurs
         href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#enrichissement-des-points-de-contact-des-indicateurs
