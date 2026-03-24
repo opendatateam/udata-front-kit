@@ -21,7 +21,7 @@ watch(
       query: '',
       page: '1',
       page_size: '3',
-      include_private: 'false'
+      private: 'false'
     }
     topicStore.query(
       selectedBouquetsTag.value === 'latest'
