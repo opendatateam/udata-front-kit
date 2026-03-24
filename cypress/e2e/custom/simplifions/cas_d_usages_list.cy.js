@@ -128,16 +128,16 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
 
     // TODO: remove when all servers migrated to private param
-    it('should omit include_private by default and send include_private=yes when checked (compat for old servers)', () => {
+    it('should omit include_private by default and send include_private=true when checked (compat for old servers)', () => {
       cy.wait('@get_topics_list').then((interception) => {
         // default OFF: include_private absent (old server hides drafts by its absence)
         expect(interception.request.url).to.not.match(/[?&]include_private=/)
       })
       cy.clickCheckbox('private')
       cy.wait('@get_topics_list').then((interception) => {
-        // checked ON: include_private=yes
+        // checked ON: include_private=true
         expect(interception.request.url).to.match(
-          /[?&]include_private=yes(?:&|$)/
+          /[?&]include_private=true(?:&|$)/
         )
       })
     })
