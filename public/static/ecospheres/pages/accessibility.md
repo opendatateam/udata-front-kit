@@ -83,10 +83,10 @@ Les tests des pages web ont été effectués avec les combinaisons de navigateur
 3. [Résultat de recherche](https://ecologie.data.gouv.fr/datasets?q=)
 4. [Accessibilité](https://ecologie.data.gouv.fr/accessibility)
 5. [À propos](https://ecologie.data.gouv.fr/about)
-6. [Bouquets](https://ecologie.data.gouv.fr/bouquets)
+6. [Collections](https://ecologie.data.gouv.fr/bouquets)
 7. [Dataset](https://ecologie.data.gouv.fr/datasets/5a5f4f6c88ee387da4d252a3)
-8. [Bouquet : Calque de plantabilité](https://ecologie.data.gouv.fr/bouquets/calque-de-plantabilite)
-9. [Ajout d’un bouquet (après connexion)](https://ecologie.data.gouv.fr/admin/bouquets/add)
+8. [Collection : Calque de plantabilité](https://ecologie.data.gouv.fr/bouquets/calque-de-plantabilite)
+9. [Ajout d’un collection (après connexion)](https://ecologie.data.gouv.fr/admin/bouquets/add)
 10. [Indicateurs](https://ecologie.data.gouv.fr/indicators)
 11. [Fiche indicateur](https://ecologie.data.gouv.fr/indicators/67cad6f3b0a47a080da80278)
 
