@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import SearchComponent from '@/components/SearchComponent.vue'
 import type { DatasetV2 } from '@datagouv/components-next'
-import { computed, nextTick, ref, type Ref } from 'vue'
+import { capitalize, computed, nextTick, ref, type Ref } from 'vue'
 
 import { useAnimationConstants } from '@/utils/constants'
 
@@ -17,6 +18,7 @@ import { isAvailable } from '@/utils/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
+import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openTopicInQgis } from '@/utils/qgis'
@@ -53,6 +55,7 @@ const groupRefs = ref<Record<string, InstanceType<typeof TopicGroup>>>({})
 const highlightedFactorId = ref<string | null>(null)
 
 const { pageConf, pageKey } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const elementStore = useTopicElementStore()
 const resourceStore = useResourceStore()
 
@@ -256,7 +259,7 @@ defineExpose({
   <!-- Header and buttons -->
   <div class="flex-gap fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
-      Composition du {{ pageConf.labels.extended }}
+      Composition {{ labels.articles.du }} {{ labels.extended }} (obligatoire)
     </h2>
     <SearchComponent
       id="filter-factors"
@@ -283,7 +286,8 @@ defineExpose({
   >
     <p v-if="isFiltering">Aucune donnée trouvée pour cette recherche.</p>
     <p v-else>
-      Ce {{ pageConf.labels.singular }} ne contient pas encore de donnée.
+      {{ capitalize(labels.articles.ce) }} {{ labels.singular }} ne contient pas
+      encore de donnée.
     </p>
   </div>
   <template v-else>

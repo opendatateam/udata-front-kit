@@ -6,11 +6,14 @@ import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
 import NoResults from '@/components/NoResults.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import { useCurrentPageConf, useRouteQueryAsString } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useAsyncComponent } from '@/utils/component'
+import { useLabels } from '@/utils/labels'
 
 const props = defineProps({
   query: {
@@ -29,6 +32,7 @@ const { query: routeQuery } = useRouteQueryAsString()
 const topicStore = useTopicStore()
 
 const { meta, pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const userStore = useUserStore()
 
@@ -38,9 +42,9 @@ const { topics, pagination, total } = storeToRefs(topicStore)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return `1 ${pageConf.labels.singular} disponible`
+    return `1 ${labels.singular} disponible`
   } else if (total.value > 1) {
-    return `${total.value} ${pageConf.labels.plural} disponibles`
+    return `${total.value} ${labels.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -136,6 +140,7 @@ defineExpose({
     </div>
     <DsfrPagination
       v-if="pagination.length"
+      :trunc-limit="3"
       class="fr-container"
       :current-page="parseInt(page || '1') - 1"
       :pages="pagination"
@@ -146,7 +151,8 @@ defineExpose({
     <template v-if="userStore.canAddTopic(pageKey)" #description>
       Essayez de réinitialiser les filtres pour agrandir votre champ de
       recherche.<br />
-      Vous pouvez aussi contribuer en créant un {{ pageConf.labels.singular }}.
+      Vous pouvez aussi contribuer en créant {{ labels.articles.un }}
+      {{ labels.singular }}.
     </template>
     <template #actions>
       <router-link
@@ -155,7 +161,7 @@ defineExpose({
         class="fr-btn fr-btn--secondary fr-ml-1w"
       >
         <VIconCustom name="add-circle-line" class="fr-mr-1v" />
-        Ajouter un {{ pageConf.labels.singular }}
+        Ajouter {{ labels.articles.un }} {{ labels.singular }}
       </router-link>
     </template>
   </NoResults>
