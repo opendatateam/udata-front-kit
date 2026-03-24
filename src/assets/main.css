@@ -266,9 +266,19 @@ body {
 }
 
 .hero-banner {
+  h2 {
+    font-size: 1.25em;
+    font-weight: 400;
+  }
   background-color: var(--background-alt-blue-france);
   p:last-child {
     margin-bottom: 0;
+  }
+  a {
+    color: var(--text-action-high-blue-france);
+    &::after {
+      content: ' →';
+    }
   }
 }
 

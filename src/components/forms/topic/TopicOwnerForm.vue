@@ -11,6 +11,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
 import { debounceWait } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData>,
@@ -19,6 +20,7 @@ const topic = defineModel({
 
 const userStore = useUserStore()
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
@@ -111,7 +113,7 @@ watch(choice, () => {
     <DsfrRadioButtonSet
       v-model="choice"
       :options="radioOptions"
-      :legend="`Choisissez si vous souhaitez gérer ce ${pageConf.labels.singular}&nbsp;:`"
+      :legend="`Choisissez si vous souhaitez gérer ${labels.articles.ce} ${labels.singular}&nbsp;:`"
       name="owner"
     />
     <div v-if="choice === 'organization'" class="flex-gap">

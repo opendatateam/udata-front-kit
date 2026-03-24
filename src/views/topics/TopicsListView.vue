@@ -14,6 +14,7 @@ import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
 import { useAsyncComponent } from '@/utils/component'
 import { debounceWait } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 
 interface Props extends TopicPageRouterConf {
   query: string
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
 const router = useRouter()
 const route = useRoute()
 const { meta, pageConf, pageKey } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
 const searchResultsMessage = computed(
@@ -76,14 +78,14 @@ onMounted(() => {
   </div>
   <div class="fr-container fr-my-2v">
     <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
-      <h1 class="fr-mb-0">{{ capitalize(pageConf.labels.plural) }}</h1>
+      <h1 class="fr-mb-0">{{ capitalize(labels.plural) }}</h1>
       <div
         v-if="userStore.canAddTopic(pageKey)"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
           <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
-          Ajouter un {{ pageConf.labels.singular }}
+          Ajouter {{ labels.articles.un }} {{ labels.singular }}
         </router-link>
       </div>
     </div>

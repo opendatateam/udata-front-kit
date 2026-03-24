@@ -21,6 +21,8 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
+import { usePageConf } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import type { Indicator } from '../../model/indicator'
@@ -35,7 +37,9 @@ const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
-const showAddToBouquetModal = ref(false)
+const showAddToTopicModal = ref(false)
+const topicConf = usePageConf('bouquets')
+const topicsLabels = useLabels(topicConf.labels)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -126,13 +130,13 @@ onMounted(() => {
       <DsfrButton
         secondary
         size="sm"
-        label="Ajouter à un bouquet"
+        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.plural}`"
         icon="fr-icon-file-add-line"
-        @click="showAddToBouquetModal = true"
+        @click="showAddToTopicModal = true"
       />
       <DatasetAddToTopicModal
-        v-if="showAddToBouquetModal"
-        v-model:show="showAddToBouquetModal"
+        v-if="showAddToTopicModal"
+        v-model:show="showAddToTopicModal"
         topic-page-key="bouquets"
         :dataset="indicator"
       />

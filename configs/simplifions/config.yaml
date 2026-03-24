@@ -311,6 +311,7 @@ pages:
       singular: solution
       plural: solutions
       extended: solution
+      feminine: true
     search:
       input: Filtrer les solutions
     default_sort: name
