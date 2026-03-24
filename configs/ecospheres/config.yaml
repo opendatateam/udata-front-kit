@@ -441,8 +441,8 @@ pages:
     editable: true
     filters:
       - name: Afficher les brouillons
-        id: include_private
-        type: checkbox
+        id: private
+        type: private
         default_option:
         default_value: true
         authenticated: true
