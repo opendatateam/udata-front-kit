@@ -154,16 +154,17 @@ website:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel:
+    grist_visualisations:
+      enabled: true
+      title: 'Datavisualisations associées'
+      doc_id: 'hrDZg8StuE1d'
+      table_id: 'Datavisualisation'
+
   # TODO: better place for that?
   topics:
     can_add_topics:
       everyone: true
       authorized_users:
-  dataset_dataviz:
-    enabled: true
-    title: 'Datavisualisations associées'
-    grist_url: 'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Datavisualisation/records'
-
   # Grist organisations ministère de la Culture https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
   # Organisations transversale des données ouvertes de la culture
 organizations:

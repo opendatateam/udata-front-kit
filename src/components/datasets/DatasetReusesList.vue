@@ -56,13 +56,14 @@ onMounted(fetchReuses)
 <template>
   <DatasetDatavizSection
     v-if="
-      config.website?.dataset_dataviz?.enabled &&
-      config.website?.dataset_dataviz?.grist_url
+      config.website?.datasets?.grist_visualisations?.enabled &&
+      config.website?.datasets?.grist_visualisations?.doc_id &&
+      config.website?.datasets?.grist_visualisations?.table_id
     "
     :dataset-id="props.datasetId"
-    :grist-url="config.website.dataset_dataviz.grist_url"
-    :title="config.website.dataset_dataviz.title"
+    :title="config.website.datasets.grist_visualisations.title"
   />
+
   <div v-if="total > 0">
     <h2 class="fr-mt-4w subtitle subtitle--uppercase">
       {{ total }} {{ total > 1 ? 'réutilisations' : 'réutilisation' }}
@@ -85,6 +86,7 @@ onMounted(fetchReuses)
       @change="(p: number) => (page = p)"
     />
   </div>
+
   <BlankState
     v-else
     image="/static/blank_state/reuse.svg"
