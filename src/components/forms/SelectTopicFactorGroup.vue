@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
+import { useLabels } from '@/utils/labels'
 import { NO_GROUP } from '@/utils/topicGroups'
 
 import Multiselect from '@vueform/multiselect'
@@ -8,6 +9,7 @@ import '@vueform/multiselect/themes/default.css'
 import ErrorMessage from './ErrorMessage.vue'
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const factor = defineModel('factor-model', {
   type: Object as () => ResolvedFactor,
@@ -74,7 +76,7 @@ const trimGroupName = (groupName: string) => {
     :searchable="true"
     :limit="5"
     :strict="false"
-    :no-options-text="`Il n'y a pas encore de regroupement dans ce ${pageConf.labels.singular}.`"
+    :no-options-text="`Il n'y a pas encore de regroupement dans ${labels.articles.ce} ${labels.singular}.`"
     no-results-text="Aucun regroupement existant."
     :create-option="true"
     placeholder=""

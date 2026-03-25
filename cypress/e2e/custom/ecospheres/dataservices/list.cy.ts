@@ -8,6 +8,7 @@ describe('Dataservices (API) - List Page', () => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
     cy.mockUniverseOrganizations()
+    cy.mockDatagouvObjectList('discussions')
 
     // Create test dataservices
     testDataservices = dataserviceFactory.many(3)
@@ -77,6 +78,23 @@ describe('Dataservices (API) - List Page', () => {
 
     // Mock the detail page API call
     cy.mockDatagouvObject('dataservices', firstDataservice.id, firstDataservice)
+    cy.mockDataserviceMetricsApi(firstDataservice.id)
+    // Mock the datasets for this dataservice
+    cy.intercept(
+      'GET',
+      `**/api/1/datasets/?dataservice=${firstDataservice.id}**`,
+      {
+        statusCode: 200,
+        body: {
+          data: [],
+          total: 0,
+          page: 1,
+          page_size: 20,
+          next_page: null,
+          previous_page: null
+        }
+      }
+    ).as('getDataserviceDatasets')
 
     // Click on the first dataservice card
     cy.contains(firstDataservice.title).click()
