@@ -50,6 +50,7 @@ Options:
   --source <branch>   Source branch (required for prod, defaults to main for demo/preprod)
   --ignore-git-clean  Skip the git clean check
   --skip-release      Skip GitHub release creation (prod only)
+  --bypass-review     Skip PR review status check
 
 Examples:
   $0 prepare ecospheres demo minor
@@ -288,7 +289,11 @@ cmd_deploy() {
 
   local review_decision=$(echo "$pr_json" | jq -r '.reviewDecision')
   if [[ "$review_decision" != "APPROVED" ]]; then
-    error "PR #$pr_number is not approved (reviewDecision: $review_decision)"
+    if [[ "$BYPASS_REVIEW" == true ]]; then
+      warn "PR #$pr_number is not approved (reviewDecision: $review_decision) — bypassing review check"
+    else
+      error "PR #$pr_number is not approved (reviewDecision: $review_decision)"
+    fi
   fi
 
   local merge_branch=$(echo "$pr_json" | jq -r '.headRefName')
@@ -319,7 +324,11 @@ cmd_deploy() {
   # Merge PR and delete merge branches locally and remotely
   local commit_msg="[${env}:${site_for_infra}:${version}] ${pr_title} #${pr_number}"
   info "Merging PR #$pr_number with message: $commit_msg"
-  gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch
+  local admin_flag=""
+  if [[ "$BYPASS_REVIEW" == true ]]; then
+    admin_flag="--admin"
+  fi
+  gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch $admin_flag
 
   # Create release for prod deployments
   if [[ "$env" == "prod" && "$SKIP_RELEASE" != true ]]; then
@@ -359,6 +368,7 @@ shift
 SOURCE_BRANCH=""
 IGNORE_GIT_CLEAN=false
 SKIP_RELEASE=false
+BYPASS_REVIEW=false
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -372,6 +382,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --skip-release)
       SKIP_RELEASE=true
+      shift
+      ;;
+    --bypass-review)
+      BYPASS_REVIEW=true
       shift
       ;;
     -*)
