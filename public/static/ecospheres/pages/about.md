@@ -86,4 +86,4 @@ Vos retours sont bienvenus pour nous permettre d'améliorer le catalogue !
 
 Si votre question porte sur le fonctionnement du catalogue, vous pouvez [écrire à l'équipe _ecologie_.**data.gouv**._fr_](mailto:ecospheres@developpement-durable.gouv.fr).
 
-Si votre question concerne une donnée, vous pouvez vous adresser directement à son propriétaire en laissant un commentaire sur le jeu de données ou le bouquet concerné, via l'onglet "Discussions" de la page correspondante.
+Si votre question concerne une donnée, vous pouvez vous adresser directement à son propriétaire en laissant un commentaire sur le jeu de données, via l'onglet "Discussions" de la page correspondante.

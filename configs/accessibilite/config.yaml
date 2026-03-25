@@ -1,0 +1,238 @@
+# config file for accessibilite.data.gouv.fr
+
+site_id: accessibilite
+
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://www.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 682c45ba772ed4a274715025
+  tabular_api_url:
+
+# UI customizations
+website:
+  title: 'accessibilite.data.gouv.fr'
+  seo:
+    canonical_url: https://accessibilite.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+        - /datasets
+    sitemap_xml:
+      topics_pages:
+        - bouquets
+      datasets_pages: []
+      dataservices_pages: []
+  formatted_title: '<b>accessibilite.data.gouv.fr</b>'
+  rf_title: 'RÉPUBLIQUE<br>
+    FRANÇAISE'
+  service_logo: '/static/logos/accessibilite-logo.svg'
+  badge:
+    display: true
+    text: 'BETA'
+    style: 'blue-cumulus'
+  # leave empty if not pertinent
+  homepage:
+    title: "Le Point d'Accès Unique aux Données d'Accessibilité"
+    subtitle: "accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
+    sections:
+      - title: Des bouquets de données pour articuler les politiques publiques en faveur de l'accesibilité et les données territoriales
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+          title:
+          cards:
+            - name: 'Tourisme'
+              description: 'Toutes les données liées au tourisme accessible (mobilités, établissements recevant du public, etc.)'
+              url: 'bouquets?theme=accessibilite-tourisme'
+              image_url: '/static/accessibilite/assets/tourisme-handicap.jpg'
+            - name: 'Établissements recevant du public'
+              description: 'Données sur tous les établissements recevant du public (établissements scolaires, de santé, etc.)'
+              url: 'bouquets?theme=accessibilite-des-lieux'
+              image_url: '/static/accessibilite/assets/accessibilite-des-lieux.jpg'
+            - name: 'Numérique'
+              description: "Les données en lien avec l'accessibilité numérique"
+              url: 'bouquets?theme=accessibilite-numerique'
+              image_url: '/static/accessibilite/assets/accessibilite-numerique.jpg'
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
+  header:
+    admin_shortcut: false
+    button:
+      display: false
+      label: 'Donnez votre avis'
+      link:
+    search:
+      display: true
+      placeholder: Rechercher...
+  search_bar:
+    display: true
+    placeholder: Rechercher un jeu de données
+  secondary_search:
+    display: false
+    name:
+    link:
+  menu:
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets
+    - text: Bouquets
+      to: /bouquets
+    - text: À propos
+      to: /about
+  router:
+    disable:
+      - organizations_routes
+      - topics
+    static_pages:
+      - title: 'À propos'
+        id: 'about'
+        route: '/about'
+        url: '/static/accessibilite/pages/about.md'
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Données
+      path: /datasets
+    - name: Bouquets
+      path: /bouquets
+    - name: À propos
+      path: /about
+  show_quality_component: true
+  oauth_option: true
+  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
+  footer_external_links:
+    - label: 'data.gouv.fr'
+      href: 'https://www.data.gouv.fr'
+  footer_mandatory_links:
+    - label: 'Licences'
+      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+    - label: "Conditions générales d'utilisation"
+      href: 'https://www.data.gouv.fr/fr/terms/'
+    - label: 'Politique de confidentialité'
+      href: 'https://www.data.gouv.fr/fr/suivi/'
+    - label: 'Accessibilité : non conforme'
+      to: '/accessibility'
+  logo_operator:
+    src:
+    show_in_header: false
+    footer:
+      width:
+      height:
+  notice:
+    display: true
+    content: ⚠️ Vous naviguez sur une version de développement d'accessibilite.data.gouv.fr ⚠️
+    closeable: false
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
+  # display settings
+  pagination_sizes:
+    organizations_list: 9
+    topics_list: 20
+    files_list: 6
+  home_banner_colors:
+    - '#FFFFFF'
+    - '#FFFFFF'
+    - '#FFFFFF'
+  contact_email:
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId:
+  datasets:
+    open_in_qgis: false
+    add_to_topic:
+      enable: true
+      page: bouquets
+      dataset_editorialization: true
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel: false
+  topics:
+    can_add_topics:
+      everyone: true
+      authorized_users:
+
+# cf configs/ecospheres/config.yaml for pages config format details
+pages:
+  # DATASETS
+  datasets:
+    list_all: true
+    universe_query:
+      topic: 682b1be88b2474e04b3cb19a
+    filter_prefix:
+    title: Jeux de données
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+    banner:
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters: []
+  # BOUQUETS
+  bouquets:
+    list_all: true
+    universe_query:
+      tag: accessibilite-datagouvfr
+    filter_prefix: accessibilite-datagouvfr
+    title: Bouquets
+    breadcrumb_title:
+    labels:
+      singular: bouquet
+      plural: bouquets
+      extended: bouquet des données
+    search:
+      input: Filtrer les bouquets
+    banner:
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - name: Thématique
+        default_option: Toutes les thématiques
+        id: theme
+        type: select
+        color: green-emeraude
+        use_filter_prefix: true
+        form:
+          required: true
+        values:
+          - id: accessibilite-tourisme
+            name: Tourisme accessible
+          - id: accessibilite-des-lieux
+            name: Accessibilité des établissements recevant du public
+          - id: accessibilite-numerique
+            name: Accessibilité numérique
+          - id: autre
+            name: Autre
+      - name: Couverture territoriale
+        default_option:
+        id: geozone
+        type: spatial_zone
+
+# list of organisations' ids that should be handled by the portal
+# to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
+# then Informations > ID at the bottom of the page
+organizations:

@@ -10,12 +10,8 @@ import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
-import {
-  vueDsfrAutoimportPreset,
-  vueDsfrComponentResolver
-} from '@gouvminint/vue-dsfr/meta'
+import { vueDsfrAutoimportPreset } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
 import type { SentryConfig, WebsiteConfig } from './src/model/config'
 
 interface Config {
@@ -67,16 +63,6 @@ export default defineConfig(({ mode }) => {
           filepath: './eslintrc-auto-import.mjs',
           globalsPropValue: true
         }
-      }),
-      // Autoimport des composants utilisés dans les templates
-      Components({
-        dirs: ['src/components', 'src/custom/**/components'], // Autoimport des composants
-        deep: true,
-        include: [/\.vue$/, /\.vue\?vue/],
-        dts: './src/components.d.ts',
-        resolvers: [
-          vueDsfrComponentResolver // Autoimport des composants de VueDsfr dans les templates
-        ]
       }),
       ViteYaml(),
       createHtmlPlugin({
