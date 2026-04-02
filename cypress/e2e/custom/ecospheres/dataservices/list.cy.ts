@@ -78,6 +78,7 @@ describe('Dataservices (API) - List Page', () => {
 
     // Mock the detail page API call
     cy.mockDatagouvObject('dataservices', firstDataservice.id, firstDataservice)
+    cy.mockDataserviceMetricsApi(firstDataservice.id)
     // Mock the datasets for this dataservice
     cy.intercept(
       'GET',

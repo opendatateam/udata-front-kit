@@ -268,8 +268,8 @@ pages:
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
-        id: include_private
-        type: checkbox
+        id: private
+        type: private
         default_option:
         default_value: false
         authenticated: true
@@ -311,6 +311,7 @@ pages:
       singular: solution
       plural: solutions
       extended: solution
+      feminine: true
     search:
       input: Filtrer les solutions
     default_sort: name
@@ -325,8 +326,8 @@ pages:
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
-        id: include_private
-        type: checkbox
+        id: private
+        type: private
         default_option:
         default_value: false
         authenticated: true

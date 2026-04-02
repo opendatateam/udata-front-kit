@@ -22,6 +22,7 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
@@ -61,6 +62,7 @@ const showDiscussions = pageConf.resources_tabs.discussions.display
 const datasetsConf = useDatasetsConf()
 const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
+const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
 
 const canEdit = computed(() => {
   return pageConf.editable && userStore.hasEditPermissions(dataset.value)
@@ -160,7 +162,7 @@ onMounted(() => {
         <DsfrButton
           secondary
           size="sm"
-          :label="`Ajouter à un ${topicPageConf.labels.singular}`"
+          :label="`Ajouter à ${topicLabels!.articles.un} ${topicLabels!.singular}`"
           icon="fr-icon-file-add-line"
           @click="showAddToTopicModal = true"
         />

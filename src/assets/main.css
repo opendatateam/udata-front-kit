@@ -266,9 +266,19 @@ body {
 }
 
 .hero-banner {
+  h2 {
+    font-size: 1.25em;
+    font-weight: 400;
+  }
   background-color: var(--background-alt-blue-france);
   p:last-child {
     margin-bottom: 0;
+  }
+  a {
+    color: var(--text-action-high-blue-france);
+    &::after {
+      content: ' →';
+    }
   }
 }
 
@@ -384,14 +394,22 @@ body {
 /* ===== DSFR Fixes ===== */
 
 /*
-DSFR's JS sets --tabs-height to a fixed pixel value at mount time. When tab content
-height changes later (e.g. accordion/disclosure opens), the value is not recomputed,
-causing fr-tabs overflow:hidden to clip content and break scrollIntoView.
-Forcing height:auto overrides the JS-set value and lets the container grow naturally.
-The ::before border uses box-shadow in DSFR 1.14+ so it's unaffected by this override.
+FIXME: Tabs height bug workaround
+Root cause: DSFR's --tabs-height CSS variable is not dynamically recomputed when tab content changes.
+This causes the ::before border element to stay at the wrong height when switching between tabs.
+Workaround: Hide DSFR's ::before border and create our own that grows naturally with content.
+Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2551404580
 */
 .fr-tabs {
   height: auto !important;
+}
+.fr-tabs::before {
+  display: none;
+}
+.fr-tabs__panel {
+  border: 1px solid var(--border-default-grey);
+  padding: 1.5rem;
+  margin-top: 39px;
 }
 
 /* A11y fixes */

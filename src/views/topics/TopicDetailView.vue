@@ -36,6 +36,7 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
+import { useLabels } from '@/utils/labels'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -72,6 +73,7 @@ const canEdit = computed(() => {
 const { isAdmin } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
@@ -318,7 +320,7 @@ watch(
         size="sm"
         label="Cloner"
         icon="fr-icon-git-merge-line"
-        :title="`Cloner le ${pageConf.labels.singular}`"
+        :title="`Cloner ${labels.articles.le} ${labels.singular}`"
         @click="showCloneModal = true"
       />
       <DsfrModal
@@ -331,12 +333,13 @@ watch(
         <template #default>
           <p>
             Vous pouvez choisir de conserver les liens vers les jeux de données
-            du {{ pageConf.labels.singular }} que vous souhaitez cloner.
+            {{ labels.articles.du }} {{ labels.singular }} que vous souhaitez
+            cloner.
           </p>
           <p>
             Si vous ne conservez pas les liens, les jeux de données ne seront
-            pas ajoutés au {{ pageConf.labels.singular }} cloné, mais leurs
-            libellés et raisons d'utilisation seront conservés.
+            pas ajoutés {{ labels.articles.au }} {{ labels.singular }} cloné,
+            mais leurs libellés et raisons d'utilisation seront conservés.
           </p>
           <p>Voulez-vous conserver les liens vers les jeux de données&nbsp;?</p>
         </template>
@@ -473,7 +476,7 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
+      :tab-list-name="`Groupes d'attributs ${labels.articles.du} ${labels.singular}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent
@@ -509,7 +512,7 @@ watch(
         <DiscussionsList
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Il n'y a pas encore de discussion pour ce ${pageConf.labels.singular}.`"
+          :empty-message="`Il n'y a pas encore de discussion pour ${labels.articles.ce} ${labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->

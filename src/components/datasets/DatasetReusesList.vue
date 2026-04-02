@@ -6,6 +6,7 @@ import { Pagination, ReuseCard, type Reuse } from '@datagouv/components-next'
 import BlankState from '@/components/BlankState.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
+import { useLabels } from '@/utils/labels'
 
 const props = defineProps({
   datasetId: {
@@ -19,6 +20,7 @@ const props = defineProps({
 })
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const reusesAPI = new ReusesAPI()
 
 const reuses = ref<Reuse[]>([])
@@ -30,7 +32,7 @@ const emptyMessage = computed(() => {
   if (props.emptyMessage) {
     return props.emptyMessage
   } else {
-    return `Il n'y a pas encore de réutilisation pour ce ${pageConf.labels.singular}.`
+    return `Il n'y a pas encore de réutilisation pour ${labels.articles.ce} ${labels.singular}.`
   }
 })
 

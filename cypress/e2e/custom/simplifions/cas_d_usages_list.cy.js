@@ -103,7 +103,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   })
 
   it('should not have the private filter', () => {
-    cy.get('input[name="include_private"]').should('not.exist')
+    cy.get('input[name="private"]').should('not.exist')
   })
 
   describe('when connected with a user', () => {
@@ -112,15 +112,34 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
 
     it('should have the private filter', () => {
-      cy.get('input[name="include_private"]').should('exist')
+      cy.get('input[name="private"]').should('exist')
     })
 
-    it('should not send include_private when using the search endpoint', () => {
-      cy.expectActionToCallApi(
-        () => cy.clickCheckbox('include_private'),
-        'topics',
-        /topics\/search\/(?!.*include_private).*tag=simplifions-v2-cas-d-usages/
-      )
+    it('should send private=false by default and no private param when checked', () => {
+      cy.wait('@get_topics_list').then((interception) => {
+        // default OFF: private=false
+        expect(interception.request.url).to.match(/[?&]private=false(?:&|$)/)
+      })
+      cy.clickCheckbox('private')
+      cy.wait('@get_topics_list').then((interception) => {
+        // checked ON: no private param
+        expect(interception.request.url).to.not.match(/[?&]private=/)
+      })
+    })
+
+    // TODO: remove when all servers migrated to private param
+    it('should omit include_private by default and send include_private=true when checked (compat for old servers)', () => {
+      cy.wait('@get_topics_list').then((interception) => {
+        // default OFF: include_private absent (old server hides drafts by its absence)
+        expect(interception.request.url).to.not.match(/[?&]include_private=/)
+      })
+      cy.clickCheckbox('private')
+      cy.wait('@get_topics_list').then((interception) => {
+        // checked ON: include_private=true
+        expect(interception.request.url).to.match(
+          /[?&]include_private=true(?:&|$)/
+        )
+      })
     })
   })
 

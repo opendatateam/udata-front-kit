@@ -10,6 +10,7 @@ import VIconCustom from '@/components/VIconCustom.vue'
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useLabels } from '@/utils/labels'
 import { useOwnerName } from '@/utils/owned'
 
 const props = defineProps({
@@ -21,6 +22,7 @@ const props = defineProps({
 
 const { formatRelativeIfRecentDate } = useFormatDate()
 const { pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const ownerName = useOwnerName(props.topic)
 
@@ -37,7 +39,7 @@ const topicLink: RouteLocationRaw = {
     >
       <p class="fr-badge fr-badge--sm fr-badge--mention-grey fr-mr-1w">
         <span class="fr-icon-plant-line fr-icon--sm" aria-hidden="true"></span>
-        {{ pageConf.labels.singular }}
+        {{ labels.singular }}
       </p>
     </div>
     <div
