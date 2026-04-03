@@ -9,7 +9,7 @@
             {{ topic.name }}
           </h1>
           <DraftTag v-if="topic.private" />
-          <SimplifionsSolutionTag :topic-solution="topic" />
+          <SimplifionsSolutionOperateurTag :topic-solution="topic" />
         </div>
 
         <p class="fr-text--lead">
@@ -189,7 +189,10 @@
 
       <div>
         <h3 class="fr-text--lg fr-mt-2w">
-          <span aria-hidden="true" class="fr-icon-stop-circle-fill icon-gray"></span>
+          <span
+            aria-hidden="true"
+            class="fr-icon-stop-circle-fill icon-gray"
+          ></span>
           Périmètre de simplification non couvert :
         </h3>
         <p
@@ -201,11 +204,13 @@
           <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
-       <p class="fr-text--sm fr-mt-4w">
-              <i>Une remarque concernant les possibilités de simplification de cette solution ?
-              </i>
-              <a href="#modification-contenu">✒️ Proposer un contenu</a>.
-            </p>
+      <p class="fr-text--sm fr-mt-4w">
+        <i
+          >Une remarque concernant les possibilités de simplification de cette
+          solution ?
+        </i>
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
+      </p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
@@ -282,30 +287,11 @@
 
       <SimplifionsIntegrateursFilters
         v-if="solutionsIntegratices.length > 1"
-        :available-type-solutions="availableTypeSolutions"
         :cas-usages="casUsagesForIntegrateurs"
         :max-apis-count="maxApisCount"
         :filtered-count="filteredAndSortedSolutions.length"
         @update:filters="onFiltersUpdate"
       />
-
-      <ul class="fr-grid-row fr-grid-row--gutters list-none">
-        <li
-          v-for="integrateur in filteredAndSortedSolutions"
-          :key="integrateur.id"
-          class="fr-col-12 fr-mb-2w"
-        >
-          <SimplifionsIntegrateurCard
-            :solution="integrateur"
-            :cas-usages="casUsagesForIntegrateurs"
-            :useful-apis-by-cas-usage="usefulApisByCasUsage"
-            :nom-fournisseur="topic.name"
-            :api-et-datasets-integres="
-              apiEtDatasetsIntegresParSolution.get(integrateur.id) || []
-            "
-          />
-        </li>
-      </ul>
 
       <p
         v-if="filteredAndSortedSolutions.length === 0"
@@ -313,6 +299,17 @@
       >
         <i>Aucune solution ne correspond aux filtres sélectionnés.</i>
       </p>
+
+      <SimplifionsSolutionIntegrateursTabs
+        v-else
+        :solutions="filteredAndSortedSolutions"
+        :cas-usages="casUsagesForIntegrateurs"
+        :useful-apis-by-cas-usage="usefulApisByCasUsage"
+        :nom-fournisseur="topic.name"
+        :api-et-datasets-integres-par-solution="
+          apiEtDatasetsIntegresParSolution
+        "
+      />
     </div>
 
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
@@ -348,12 +345,16 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import type { TopicSolutionsExtras } from '../model/topics'
+import DraftTag from './DraftTag.vue'
+import HumanReadableList from './HumanReadableList.vue'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
 import SimplifionsDataApi from './SimplifionsDataApi.vue'
-import SimplifionsIntegrateurCard from './SimplifionsIntegrateurCard.vue'
 import SimplifionsIntegrateursFilters, {
   type IntegrateursFilters
 } from './SimplifionsIntegrateursFilters.vue'
+import SimplifionsSolutionIntegrateursTabs from './SimplifionsSolutionIntegrateursTabs.vue'
+import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
   topic: Topic
@@ -369,11 +370,10 @@ const solution = ref<Solution | undefined>(undefined)
 const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
 const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
 const solutionsIntegratices = ref<SolutionRecord[]>([])
-const casUsagesForIntegrateurs = ref<CasUsageRecord[]>([])
+const allFetchedCasUsages = ref<CasUsageRecord[]>([])
 const recommandationsFournisseur = ref<RecommandationRecord[]>([])
 const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
 const integrateursFilters = ref<IntegrateursFilters>({
-  typeSolution: '',
   casUsage: null,
   minApisIntegrated: 0,
   sortBy: 'integration'
@@ -451,22 +451,11 @@ grist.getRecord('Solutions', solutionId).then((data) => {
           grist
             .getRecordsByIds('Cas_d_usages', Array.from(allCasUsageIds))
             .then((casUsages) => {
-              casUsagesForIntegrateurs.value = casUsages as CasUsageRecord[]
+              allFetchedCasUsages.value = casUsages as CasUsageRecord[]
             })
         }
       })
   }
-})
-
-// Computed properties for filters
-const availableTypeSolutions = computed(() => {
-  const types = new Set<string>()
-  solutionsIntegratices.value.forEach((sol) => {
-    sol.fields.Type_de_solution?.forEach((type) => {
-      types.add(type)
-    })
-  })
-  return Array.from(types).sort()
 })
 
 // Map of cas d'usage ID -> useful APIs/datasets IDs (Y value per use case)
@@ -493,6 +482,22 @@ const apiEtDatasetsIntegresParSolution = computed(() => {
   return map
 })
 
+// Only expose cas d'usages linked to visible integrator solutions
+const casUsagesForIntegrateurs = computed(() => {
+  const visibleSolIds = new Set(
+    solutionsIntegratices.value.map((sol) => sol.id)
+  )
+  const validIds = new Set<number>()
+  apiEtDatasetsIntegres.value.forEach((integration) => {
+    if (visibleSolIds.has(integration.fields.Solution_integratrice)) {
+      integration.fields.Integre_pour_les_cas_d_usages?.forEach((id) =>
+        validIds.add(id)
+      )
+    }
+  })
+  return allFetchedCasUsages.value.filter((cu) => validIds.has(cu.id))
+})
+
 const maxApisCount = computed(() => {
   return Math.max(
     0,
@@ -508,15 +513,6 @@ const getIntegrationCount = (sol: SolutionRecord) => {
 
 const filteredAndSortedSolutions = computed(() => {
   let filtered = [...solutionsIntegratices.value]
-
-  // Filter by type de solution (single select)
-  if (integrateursFilters.value.typeSolution) {
-    filtered = filtered.filter((sol) =>
-      sol.fields.Type_de_solution?.includes(
-        integrateursFilters.value.typeSolution
-      )
-    )
-  }
 
   // Filter by cas d'usage (single select) - based on integration data
   if (integrateursFilters.value.casUsage !== null) {

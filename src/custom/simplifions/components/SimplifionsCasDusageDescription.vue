@@ -169,6 +169,7 @@ import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist.ts'
 import type { CasUsage, Recommandation } from '../model/grist'
 import type { TopicCasUsagesExtras } from '../model/topics'
+import DraftTag from './DraftTag.vue'
 import SimplifionsRecoDataApi from './SimplifionsRecoDataApi.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
@@ -204,7 +205,6 @@ grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
       ).filter((reco) => reco.Visible_sur_simplifions)
     })
 })
-
 </script>
 
 <style scoped>

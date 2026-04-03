@@ -236,6 +236,25 @@ Cypress.Commands.add('mockMetricsApi', (datasetId) => {
   ).as(`get_metrics_total_${datasetId}`)
 })
 
+Cypress.Commands.add('mockDataserviceMetricsApi', (dataserviceId) => {
+  cy.intercept(
+    'GET',
+    `https://metric-api.data.gouv.fr/api/dataservices/data/?dataservice_id__exact=${dataserviceId}&metric_month__sort=desc&page_size=12`,
+    {
+      statusCode: 200,
+      body: { data: [] }
+    }
+  ).as(`get_metrics_${dataserviceId}`)
+  cy.intercept(
+    'GET',
+    `https://metric-api.data.gouv.fr/api/dataservices_total/data/?dataservice_id__exact=${dataserviceId}`,
+    {
+      statusCode: 200,
+      body: { data: [] }
+    }
+  ).as(`get_metrics_total_${dataserviceId}`)
+})
+
 Cypress.Commands.add(
   'mockDatasetAndRelatedObjects',
   (dataset, resources = [], dataservices = [], reuses = []) => {

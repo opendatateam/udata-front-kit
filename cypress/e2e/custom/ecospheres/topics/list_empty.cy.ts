@@ -1,5 +1,3 @@
-import { mockUniverseOrganizations } from '../mocks'
-
 describe('Topics - Empty List and Reset Filters', () => {
   beforeEach(() => {
     cy.mockMatomo()
@@ -7,7 +5,7 @@ describe('Topics - Empty List and Reset Filters', () => {
     cy.mockSpatialLevels()
     cy.mockSpatialZone()
     cy.mockSpatialZonesSuggest()
-    mockUniverseOrganizations()
+    cy.mockUniverseOrganizations()
   })
 
   describe('Reset Filters', () => {

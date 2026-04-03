@@ -14,6 +14,7 @@ function createMockedDataservice(
 
   // Mock the dataservice itself
   cy.mockDatagouvObject('dataservices', dataservice.id, dataservice)
+  cy.mockDataserviceMetricsApi(dataservice.id)
 
   // Mock the datasets for this dataservice
   cy.intercept('GET', `**/api/1/datasets/?dataservice=${dataservice.id}**`, {

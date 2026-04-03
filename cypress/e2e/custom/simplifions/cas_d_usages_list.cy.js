@@ -103,7 +103,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   })
 
   it('should not have the private filter', () => {
-    cy.get('input[name="include_private"]').should('not.exist')
+    cy.get('input[name="private"]').should('not.exist')
   })
 
   describe('when connected with a user', () => {
@@ -112,15 +112,19 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     })
 
     it('should have the private filter', () => {
-      cy.get('input[name="include_private"]').should('exist')
+      cy.get('input[name="private"]').should('exist')
     })
 
-    it("should request the private cas d'usages", () => {
-      cy.expectActionToCallApi(
-        () => cy.clickCheckbox('include_private'),
-        'topics',
-        /tag=simplifions-v2-cas-d-usages.*include_private=true/
-      )
+    it('should send private=false by default and no private param when checked', () => {
+      cy.wait('@get_topics_list').then((interception) => {
+        // default OFF: private=false
+        expect(interception.request.url).to.match(/[?&]private=false(?:&|$)/)
+      })
+      cy.clickCheckbox('private')
+      cy.wait('@get_topics_list').then((interception) => {
+        // checked ON: no private param
+        expect(interception.request.url).to.not.match(/[?&]private=/)
+      })
     })
   })
 

@@ -11,6 +11,7 @@ import '@/assets/multiselect.css'
 import type { Factor } from '@/model/topic'
 import SearchAPI from '@/services/api/SearchAPI'
 import { debounceWait } from '@/utils/config'
+import DatasetCardForSelect from './DatasetCardForSelect.vue'
 
 const selectedDataset = defineModel({
   type: Object as () => DatasetV2
