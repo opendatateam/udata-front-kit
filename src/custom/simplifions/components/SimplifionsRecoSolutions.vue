@@ -275,6 +275,7 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
+import SimplifionsDataApiUtile from './SimplifionsDataApiUtile.vue'
 import SimplifionsRecoSolutionsIntegratricesCard from './SimplifionsRecoSolutionsIntegratricesCard.vue'
 
 const props = defineProps<{

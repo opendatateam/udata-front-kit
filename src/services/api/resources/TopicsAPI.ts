@@ -1,8 +1,10 @@
+import type { AxiosResponseData } from '@/model/api'
 import type { GenericElement } from '@/model/topic'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 export default class TopicsAPI extends DatagouvfrAPI {
   endpoint = 'topics'
+  version = 2
 
   async createElements(
     topicId: string,
@@ -37,6 +39,15 @@ export default class TopicsAPI extends DatagouvfrAPI {
       method: 'delete',
       toasted: true,
       authenticated: true
+    })
+  }
+
+  async search(params: object): Promise<AxiosResponseData> {
+    return await this.request({
+      url: `${this.url()}/search/`,
+      method: 'get',
+      params,
+      authenticated: false
     })
   }
 }

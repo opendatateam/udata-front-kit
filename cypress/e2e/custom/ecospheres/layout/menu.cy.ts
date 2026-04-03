@@ -10,11 +10,11 @@ describe('Global Layout', () => {
         // but passing the config to the Cypress build is difficult
         const expectedMenuTexts = [
           'Accueil',
-          'Données',
-          'Indicateurs',
+          'Toutes les données',
+          'Indicateurs phares',
           'API',
-          'Bouquets',
-          'Organisations',
+          'Collections thématiques',
+          'Contributeurs',
           'À propos'
         ]
         cy.wrap($li)

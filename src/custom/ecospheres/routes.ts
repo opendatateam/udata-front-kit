@@ -51,7 +51,7 @@ export const routes: RouteRecordRaw[] = [
   }),
   useTopicSearchPageRoutes({
     pageKey: 'bouquets',
-    metaTitle: 'Bouquets',
+    metaTitle: 'Collections thématiques',
     topicConf,
     datasetCardComponent: async () =>
       await import(
