@@ -89,7 +89,7 @@ const dropdown = config.website.header.search.dropdown ?? undefined
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="customSearch"
+        v-if="customSearch && showSearch"
         id="header-select-search"
         class="custom-search"
         :search-label="searchLabel"
@@ -139,10 +139,6 @@ const dropdown = config.website.header.search.dropdown ?? undefined
 :deep(.fr-header__tools-links) {
   flex-wrap: wrap;
   align-items: center;
-
-  & > nav {
-    flex: 1 0 100%;
-  }
 
   & > :last-child.custom-search {
     flex: 1 0 100%;

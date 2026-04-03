@@ -8,6 +8,7 @@ datagouvfr:
   base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 68b1ac79a751200a42f2ba19
+  tabular_api_url: https://tabular-api.data.gouv.fr
 
 # UI customizations
 website:
@@ -162,14 +163,14 @@ website:
   # Grist organisations ministère de la Culture https://grist.numerique.gouv.fr/api/docs/jT6Q2SSUUder/tables/Table1/records
   # Organisations transversale des données ouvertes de la culture
 organizations:
-  datasets: https://raw.githubusercontent.com/culturegouv/donnees-ouvertes/refs/heads/main/data/organizations-datasets.json
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/culture-prod/organizations-datasets.json
 
 pages:
   # DATASETS
   datasets:
     list_all: true
     universe_query:
-      tag: culture
+      topic: 69aea5dff97ef1fc29836765
     filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données

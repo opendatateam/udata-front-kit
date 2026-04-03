@@ -14,6 +14,7 @@ on:
           - ecospheres
           - meteo-france
           - logistique
+          - accessibilite
           - defis
           - hackathon
           - simplifions
@@ -38,6 +39,7 @@ jobs:
           - ecospheres
           - meteo-france
           - logistique
+          - accessibilite
           - defis
           - hackathon
           - simplifions

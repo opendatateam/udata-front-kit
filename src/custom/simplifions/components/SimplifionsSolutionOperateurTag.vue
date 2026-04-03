@@ -2,7 +2,9 @@
   <p
     :class="`fr-badge fr-badge--sm fr-badge--no-icon ${isPublic ? 'fr-badge--blue-ecume' : 'fr-badge--green-tilleul-verveine'}`"
   >
-    <span class="font-weight-normal">{{ tagText }} | <b>{{ operatorName }}</b></span>
+    <span class="font-weight-normal"
+      >{{ tagText }} | <b>{{ operatorName }}</b></span
+    >
   </p>
 </template>
 
@@ -25,7 +27,7 @@ const solutionData = computed(() => {
       'simplifions-v2-solutions'
     ]
   }
-  console.warn("No solution passed to SimplifionsSolutionTag")
+  console.warn('No solution passed to SimplifionsSolutionTag')
   return undefined
 })
 

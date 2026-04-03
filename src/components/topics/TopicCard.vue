@@ -8,6 +8,7 @@ import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
