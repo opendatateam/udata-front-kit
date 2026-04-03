@@ -45,7 +45,7 @@ export const cloneTopic = async (
     ...data,
     private: true,
     spatial: undefined,
-    owner: useUserStore().data ?? null,
+    owner: useUserStore().userReference ?? null,
     organization: null,
     elements: factors,
     // we're not copying all the extras over, only the ones we control

@@ -1,13 +1,14 @@
 import type { Dataservice } from '@datagouv/components-next'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
-import { mockUniverseOrganizations } from '../mocks'
 
 describe('Dataservices (API) - List Page', () => {
   let testDataservices: Dataservice[]
 
   beforeEach(() => {
     cy.mockMatomo()
-    mockUniverseOrganizations()
+    cy.mockStaticDatagouv()
+    cy.mockUniverseOrganizations()
+    cy.mockDatagouvObjectList('discussions')
 
     // Create test dataservices
     testDataservices = dataserviceFactory.many(3)
@@ -77,6 +78,23 @@ describe('Dataservices (API) - List Page', () => {
 
     // Mock the detail page API call
     cy.mockDatagouvObject('dataservices', firstDataservice.id, firstDataservice)
+    cy.mockDataserviceMetricsApi(firstDataservice.id)
+    // Mock the datasets for this dataservice
+    cy.intercept(
+      'GET',
+      `**/api/1/datasets/?dataservice=${firstDataservice.id}**`,
+      {
+        statusCode: 200,
+        body: {
+          data: [],
+          total: 0,
+          page: 1,
+          page_size: 20,
+          next_page: null,
+          previous_page: null
+        }
+      }
+    ).as('getDataserviceDatasets')
 
     // Click on the first dataservice card
     cy.contains(firstDataservice.title).click()

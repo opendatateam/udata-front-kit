@@ -156,26 +156,17 @@ function addLayersByDataset(
   maplayers: XMLBuilder
 ): void {
   layersByDataset.forEach((layers, datasetTitle) => {
-    const resourceTitle = layers[0].resourceTitle
-    addDatasetLayers(
-      parent,
-      datasetTitle,
-      resourceTitle,
-      layers,
-      crs,
-      maplayers
-    )
+    addDatasetLayers(parent, datasetTitle, layers, crs, maplayers)
   })
 }
 
 /**
  * Adds a dataset with its layers to a parent element.
- * Always creates a consistent two-level group structure:
+ * Groups layers by resourceTitle, creating one sub-group per OGC resource:
  * Dataset Title > Resource Title > Layers
  *
  * @param parent - Parent XML element to add to
  * @param datasetTitle - Dataset title (top-level group)
- * @param resourceTitle - Resource title (second-level group)
  * @param layers - Array of OGC layer info
  * @param crs - Coordinate reference system
  * @param maplayers - XML builder for maplayers section
@@ -183,50 +174,67 @@ function addLayersByDataset(
 function addDatasetLayers(
   parent: XMLBuilder,
   datasetTitle: string,
-  resourceTitle: string,
   layers: OgcLayerInfo[],
   crs: SupportedCrs,
   maplayers: XMLBuilder
 ): void {
   const datasetGroup = createGroup(parent, datasetTitle)
-  const resourceGroup = createGroup(datasetGroup, resourceTitle)
 
-  layers.forEach((layerInfo) => {
-    const { format, url, layerName = '' } = layerInfo
-    const layerId = generateId()
-    const baseUrl = extractBaseUrl(url)
+  const layersByResource = new Map<string, OgcLayerInfo[]>()
+  for (const layer of layers) {
+    const existing = layersByResource.get(layer.resourceTitle) ?? []
+    existing.push(layer)
+    layersByResource.set(layer.resourceTitle, existing)
+  }
 
-    let datasource: string
-    let provider: OGC_SERVICE_FORMAT
-    let type: LAYER_TYPE
-    let providerKey: string
+  layersByResource.forEach((resourceLayers, resourceTitle) => {
+    const resourceGroup = createGroup(datasetGroup, resourceTitle)
 
-    if (format === 'wfs') {
-      datasource = buildWfsDatasource(baseUrl, layerName, crs)
-      provider = 'wfs'
-      type = 'vector'
-      providerKey = 'WFS'
-    } else if (format === 'wms') {
-      datasource = buildWmsDatasource(baseUrl, layerName, crs)
-      provider = 'wms'
-      type = 'raster'
-      providerKey = 'WMS'
-    } else {
-      console.error(`Unsupported format '${format}'`)
-      return
-    }
+    resourceLayers.forEach((layerInfo) => {
+      const { format, url, layerName = '' } = layerInfo
+      const layerId = generateId()
+      const baseUrl = extractBaseUrl(url)
 
-    const layerTreeLayer = resourceGroup.ele('layer-tree-layer', {
-      providerKey,
-      source: datasource,
-      id: layerId,
-      name: layerName,
-      expanded: '0',
-      checked: 'Qt::Unchecked'
+      let datasource: string
+      let provider: OGC_SERVICE_FORMAT
+      let type: LAYER_TYPE
+      let providerKey: string
+
+      if (format === 'wfs') {
+        datasource = buildWfsDatasource(baseUrl, layerName, crs)
+        provider = 'wfs'
+        type = 'vector'
+        providerKey = 'WFS'
+      } else if (format === 'wms') {
+        datasource = buildWmsDatasource(baseUrl, layerName, crs)
+        provider = 'wms'
+        type = 'raster'
+        providerKey = 'WMS'
+      } else {
+        console.error(`Unsupported format '${format}'`)
+        return
+      }
+
+      const layerTreeLayer = resourceGroup.ele('layer-tree-layer', {
+        providerKey,
+        source: datasource,
+        id: layerId,
+        name: layerName,
+        expanded: '0',
+        checked: 'Qt::Unchecked'
+      })
+      layerTreeLayer.ele('customproperties').ele('Option')
+
+      addMaplayer(
+        maplayers,
+        layerId,
+        datasource,
+        provider,
+        layerName,
+        type,
+        crs
+      )
     })
-    layerTreeLayer.ele('customproperties').ele('Option')
-
-    addMaplayer(maplayers, layerId, datasource, provider, layerName, type, crs)
   })
 }
 
@@ -274,6 +282,17 @@ export async function resolveOgcLayers(
 }
 
 /**
+ * Resolves an array of OGC layer infos to concrete layers.
+ * Each entry is resolved independently (WFS GetCapabilities fetched per resource).
+ */
+export async function resolveAllOgcLayers(
+  ogcInfos: OgcLayerInfo[]
+): Promise<OgcLayerInfo[]> {
+  const resolved = await Promise.all(ogcInfos.map(resolveOgcLayers))
+  return resolved.flat()
+}
+
+/**
  * Generates QLR XML for a single dataset
  * @internal Exported for testing
  */
@@ -296,20 +315,20 @@ export function generateSingleDatasetQlr(
 export async function openInQgis(
   datasetId: string,
   datasetTitle: string,
-  ogcLayerInfo: Map<string, OgcLayerInfo>,
+  ogcLayerInfo: Map<string, OgcLayerInfo[]>,
   crs: SupportedCrs = DEFAULT_PROJECTION
 ): Promise<void> {
-  const layerInfo = ogcLayerInfo.get(datasetId)
-  if (!layerInfo) {
+  const layerInfos = ogcLayerInfo.get(datasetId)
+  if (!layerInfos || layerInfos.length === 0) {
     console.warn(`No OGC info found for dataset ${datasetId}`)
     return
   }
 
   // Resolve OGC layers (expand WFS if needed)
-  const expandedLayers = await resolveOgcLayers(layerInfo)
+  const expandedLayers = await resolveAllOgcLayers(layerInfos)
   if (expandedLayers.length === 0) {
     // Show detailed error for single-dataset export
-    const baseUrl = extractBaseUrl(layerInfo.url)
+    const baseUrl = extractBaseUrl(layerInfos[0].url)
     alert(
       `Impossible de récupérer la liste des couches WFS.
 
@@ -379,7 +398,7 @@ export function generateTopicQlr(
  */
 export async function openTopicInQgis(
   groupedFactors: Map<string, ResolvedFactor[]>,
-  ogcLayerInfo: Map<string, OgcLayerInfo>,
+  ogcLayerInfo: Map<string, OgcLayerInfo[]>,
   getDatasetInfo: (
     factor: ResolvedFactor
   ) => { id: string; title: string } | null,
@@ -396,10 +415,10 @@ export async function openTopicInQgis(
       const dataset = getDatasetInfo(factor)
       if (!dataset) continue
 
-      const ogcInfo = ogcLayerInfo.get(dataset.id)
-      if (!ogcInfo) continue
+      const ogcInfos = ogcLayerInfo.get(dataset.id)
+      if (!ogcInfos || ogcInfos.length === 0) continue
 
-      const expandedLayers = await resolveOgcLayers(ogcInfo)
+      const expandedLayers = await resolveAllOgcLayers(ogcInfos)
       if (expandedLayers.length === 0) continue
 
       expandedLayersByDataset.set(dataset.title, expandedLayers)
