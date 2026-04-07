@@ -115,7 +115,7 @@ const topicSearch = useDebounceFn((query: string) => {
     <div class="fr-mb-2w">
       <SearchComponent
         id="search-topic"
-        :model-value="route.query.q as string | undefined"
+        :model-value="props.query"
         :is-filter="true"
         :search-label="pageConf.search.input"
         :label="pageConf.search.input"
@@ -123,8 +123,8 @@ const topicSearch = useDebounceFn((query: string) => {
       />
     </div>
     <TopicList
-      :query="route.query.q as string | undefined"
-      :page="route.query.page as string | undefined"
+      :query="props.query"
+      :page="props.page"
       :use-search-endpoint="props.useSearchEndpoint ?? false"
     />
   </div>
