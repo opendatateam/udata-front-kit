@@ -266,6 +266,7 @@ definitions: &definitions
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
@@ -292,14 +293,33 @@ pages:
         display: true
     editable: true
     filters:
+      - name: Mise à jour
+        id: last_update_range
+        type: last_update_range
+        search_display: basic
+        values: []
+      - name: Label
+        id: badge
+        type: badge
+        search_display: basic
+        values: []
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
         type: organization
+        search_display: advanced
+        values: []
+      - name: Granularité
+        id: granularity
+        type: granularity
+        search_display: advanced
+        values: []
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
         type: select
+        api_param: tag
+        search_display: advanced
         use_filter_prefix: false
         values:
           - id: adresses
@@ -370,18 +390,9 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
-      - name: Label de données
-        default_option: Tous les labels
-        id: badge
-        type: select
-        use_filter_prefix: false
-        values:
-          - id: hvd
-            name: Données de forte valeur
-          - id: inspire
-            name: INSPIRE
   # DATASERVICES
   dataservices:
+    object_type: dataservices
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
@@ -407,12 +418,20 @@ pages:
         display: true
     editable: false
     filters:
+      - name: Mise à jour
+        id: last_update_range
+        type: last_update_range
+        search_display: basic
+        values: []
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
         type: organization
+        search_display: advanced
+        values: []
   # BOUQUETS
   bouquets:
+    object_type: topics
     list_all: true
     universe_query:
       tag: ecospheres
@@ -463,6 +482,7 @@ pages:
         values: *fnv_themes
   # INDICATORS
   indicators:
+    object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
     universe_query:
       tag: ecospheres-indicateurs
@@ -490,6 +510,16 @@ pages:
         display: true
     editable: false
     filters:
+      - name: Mise à jour
+        id: last_update_range
+        type: last_update_range
+        search_display: basic
+        values: []
+      - name: Label
+        id: badge
+        type: badge
+        search_display: basic
+        values: []
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme

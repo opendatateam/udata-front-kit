@@ -32,6 +32,24 @@ export interface PageFilterFormConf {
   required: boolean
 }
 
+/** GlobalSearch-native filter type keys (passed directly to basicFilters/advancedFilters) */
+export enum GlobalSearchNativeFilterType {
+  LastUpdateRange = 'last_update_range',
+  Badge = 'badge',
+  Granularity = 'granularity',
+  Geozone = 'geozone',
+  Tag = 'tag',
+  FormatFamily = 'format_family',
+  AccessType = 'access_type',
+  Format = 'format',
+  License = 'license',
+  Schema = 'schema',
+  OrganizationBadge = 'organization_badge',
+  Topic = 'topic',
+  ProducerType = 'producer_type',
+  Organization = 'organization'
+}
+
 export interface PageFilterConf {
   name: string
   id: string
@@ -42,6 +60,9 @@ export interface PageFilterConf {
     | 'checkbox'
     | 'organization'
     | 'private'
+    | GlobalSearchNativeFilterType
+  /** Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch) */
+  search_display?: 'basic' | 'advanced'
   child: string | null
   color: string | null
   default_option: string | null
@@ -74,7 +95,10 @@ export type PageLabelsConf = {
   feminine?: boolean
 }
 
+export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
+
 export type PageConf = {
+  object_type: PageObjectType
   list_all: boolean
   filter_prefix: string | null
   universe_query: PageUniverseQueryConf | null

@@ -1,8 +1,6 @@
 import {
-  useDataserviceSearchPageRoutes,
-  useDatasetSearchPageRoutes,
-  useTopicAdminPagesRoutes,
-  useTopicSearchPageRoutes
+  useGlobalSearchPageRoutes,
+  useTopicAdminPagesRoutes
 } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -20,26 +18,15 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () => await import('./views/HomeView.vue')
   },
-  useDatasetSearchPageRoutes({
+  useGlobalSearchPageRoutes({
     pageKey: 'datasets',
-    metaTitle: 'Données',
     cardComponent: async () =>
       await import(
         '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
       )
   }),
-  useDataserviceSearchPageRoutes({
-    pageKey: 'dataservices',
-    metaTitle: 'API',
-    cardComponent: async () =>
-      await import(
-        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
-      )
-  }),
-  useDatasetSearchPageRoutes({
+  useGlobalSearchPageRoutes({
     pageKey: 'indicators',
-    metaTitle: 'Indicateurs',
-    cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
     cardComponent: async () =>
       await import(
         '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
@@ -49,9 +36,11 @@ export const routes: RouteRecordRaw[] = [
         '@/custom/ecospheres/views/indicators/IndicatorDetailView.vue'
       )
   }),
-  useTopicSearchPageRoutes({
+  useGlobalSearchPageRoutes({
+    pageKey: 'dataservices'
+  }),
+  useGlobalSearchPageRoutes({
     pageKey: 'bouquets',
-    metaTitle: 'Collections thématiques',
     topicConf,
     datasetCardComponent: async () =>
       await import(

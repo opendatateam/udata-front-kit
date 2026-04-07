@@ -168,6 +168,7 @@ organizations:
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 69aea5dff97ef1fc29836765

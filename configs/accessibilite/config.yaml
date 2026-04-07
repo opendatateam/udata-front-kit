@@ -162,6 +162,7 @@ website:
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 682b1be88b2474e04b3cb19a
@@ -187,6 +188,7 @@ pages:
     filters: []
   # BOUQUETS
   bouquets:
+    object_type: topics
     list_all: true
     universe_query:
       tag: accessibilite-datagouvfr

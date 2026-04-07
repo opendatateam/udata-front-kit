@@ -1,4 +1,9 @@
+import {
+  GlobalSearchNativeFilterType,
+  type PageObjectType
+} from '@/model/config'
 import { usePageConf } from '@/utils/config'
+import type { GlobalSearchConfig } from '@datagouv/components-next'
 import { type Component } from 'vue'
 import {
   useRoute,
@@ -82,102 +87,9 @@ interface SearchPageRoutesOptions {
   datasetCardComponent?: () => Promise<{ default: Component }>
   descriptionComponent?: () => Promise<{ default: Component }>
   props?: Record<string, unknown>
-}
-
-interface TopicSearchPageRoutesOptions
-  extends Omit<
-    SearchPageRoutesOptions,
-    'detailsViewComponent' | 'listViewComponent'
-  > {
-  topicConf: TopicPageRouterConf
-}
-
-type DatasetSearchPageRouteOptions = Omit<
-  SearchPageRoutesOptions,
-  'listViewComponent' | 'detailsViewComponent'
-> & {
-  detailsViewComponent?: () => Promise<{ default: Component }>
-}
-
-export const useDatasetSearchPageRoutes = ({
-  pageKey,
-  metaTitle,
-  cardClass,
-  filtersComponent,
-  cardComponent,
-  detailsViewComponent
-}: DatasetSearchPageRouteOptions): RouteRecordRaw => {
-  const listViewComponent = () => import('@/views/data/DataListView.vue')
-  const listComponent = () => import('@/components/datasets/DatasetList.vue')
-  const defaultDetailsViewComponent = () =>
-    import('@/views/datasets/DatasetDetailView.vue')
-  return useSearchPageRoutes({
-    pageKey,
-    metaTitle,
-    cardClass,
-    listViewComponent,
-    listComponent,
-    filtersComponent,
-    cardComponent,
-    detailsViewComponent: detailsViewComponent ?? defaultDetailsViewComponent
-  })
-}
-
-type DataserviceSearchPageRouteOptions = Omit<
-  SearchPageRoutesOptions,
-  'listViewComponent' | 'detailsViewComponent'
->
-
-export const useDataserviceSearchPageRoutes = ({
-  pageKey,
-  metaTitle,
-  cardClass,
-  filtersComponent,
-  cardComponent
-}: DataserviceSearchPageRouteOptions): RouteRecordRaw => {
-  const listViewComponent = () => import('@/views/data/DataListView.vue')
-  const listComponent = () =>
-    import('@/components/dataservices/DataservicesList.vue')
-  const detailsViewComponent = () =>
-    import('@/views/dataservices/DataserviceDetailView.vue')
-  return useSearchPageRoutes({
-    pageKey,
-    metaTitle,
-    cardClass,
-    listViewComponent,
-    listComponent,
-    filtersComponent,
-    cardComponent,
-    detailsViewComponent
-  })
-}
-
-export const useTopicSearchPageRoutes = ({
-  pageKey,
-  metaTitle,
-  topicConf,
-  cardClass,
-  filtersComponent,
-  cardComponent,
-  datasetCardComponent,
-  descriptionComponent
-}: TopicSearchPageRoutesOptions): RouteRecordRaw => {
-  const listViewComponent = () => import('@/views/topics/TopicsListView.vue')
-  const detailsViewComponent = () =>
-    import('@/views/topics/TopicDetailView.vue')
-  return useSearchPageRoutes({
-    pageKey,
-    metaTitle,
-    cardClass,
-    listViewComponent,
-    filtersComponent,
-    cardComponent,
-    datasetCardComponent,
-    detailsViewComponent,
-    descriptionComponent,
-    // loosen type before sending to generic fn
-    props: topicConf as unknown as Record<string, unknown>
-  })
+  // GlobalSearch-specific
+  searchType?: PageObjectType
+  searchConfig?: GlobalSearchConfig
 }
 
 export const useSearchPageRoutes = ({
@@ -191,7 +103,9 @@ export const useSearchPageRoutes = ({
   cardComponent,
   datasetCardComponent,
   descriptionComponent,
-  props
+  props,
+  searchType,
+  searchConfig
 }: SearchPageRoutesOptions): RouteRecordRaw => {
   return {
     path: `/${pageKey}`,
@@ -205,7 +119,9 @@ export const useSearchPageRoutes = ({
           cardClass,
           filtersComponent,
           cardComponent,
-          listComponent
+          listComponent,
+          searchType,
+          searchConfig
         },
         component: listViewComponent,
         props: (route: RouteLocationNormalizedLoaded) => ({
@@ -259,6 +175,96 @@ export const useTopicAdminPagesRoutes = ({
       props: { isCreate: false, ...topicConf }
     }
   ]
+}
+
+interface GlobalSearchPageRoutesOptions {
+  pageKey: string
+  cardComponent?: () => Promise<{ default: Component }>
+  datasetCardComponent?: () => Promise<{ default: Component }>
+  descriptionComponent?: () => Promise<{ default: Component }>
+  detailsViewComponent?: () => Promise<{ default: Component }>
+  topicConf?: TopicPageRouterConf
+}
+
+const NATIVE_FILTER_TYPE_SET = new Set<string>(
+  Object.values(GlobalSearchNativeFilterType)
+)
+
+/**
+ * Builds a GlobalSearchConfig from the page's YAML config.
+ * Converts universe_query → hiddenFilters.
+ * Derives basicFilters/advancedFilters from filters with search_display set and a GlobalSearch-native type.
+ */
+function buildGlobalSearchConfig(
+  pageKey: string,
+  searchType: Exclude<PageObjectType, 'topics'>
+): GlobalSearchConfig {
+  const pageConf = usePageConf(pageKey)
+  const hiddenFilters = Object.entries(pageConf.universe_query ?? {}).map(
+    ([key, value]) => ({ key, value }) as { key: string; value: unknown }
+  )
+  const basicFilters: string[] = []
+  const advancedFilters: string[] = []
+  for (const filter of pageConf.filters ?? []) {
+    if (!filter.search_display) continue
+    if (!NATIVE_FILTER_TYPE_SET.has(filter.type)) continue
+    // For native types, the type string IS the GlobalSearch filter key
+    if (filter.search_display === 'basic') {
+      basicFilters.push(filter.type)
+    } else {
+      advancedFilters.push(filter.type)
+    }
+  }
+  return [
+    {
+      class: searchType,
+      hiddenFilters,
+      basicFilters,
+      advancedFilters
+    } as GlobalSearchConfig[number]
+  ]
+}
+
+/**
+ * Creates routes for a GlobalSearch-based list page.
+ * Reads universe_query and filters[].search_display from YAML; only component references are passed as arguments.
+ */
+export const useGlobalSearchPageRoutes = ({
+  pageKey,
+  cardComponent,
+  datasetCardComponent,
+  descriptionComponent,
+  detailsViewComponent,
+  topicConf
+}: GlobalSearchPageRoutesOptions): RouteRecordRaw => {
+  const pageConf = usePageConf(pageKey)
+  const objectType = pageConf.object_type
+  const listViewComponent = () => import('@/views/UnifiedSearchView.vue')
+
+  const searchConfig =
+    objectType !== 'topics'
+      ? buildGlobalSearchConfig(pageKey, objectType)
+      : undefined
+
+  const defaultDetailsView = () =>
+    objectType === 'dataservices'
+      ? import('@/views/dataservices/DataserviceDetailView.vue')
+      : objectType === 'topics'
+        ? import('@/views/topics/TopicDetailView.vue')
+        : import('@/views/datasets/DatasetDetailView.vue')
+
+  return useSearchPageRoutes({
+    pageKey,
+    metaTitle: pageConf.title,
+    listViewComponent,
+    detailsViewComponent: detailsViewComponent ?? defaultDetailsView,
+    cardComponent,
+    datasetCardComponent,
+    descriptionComponent,
+    props: topicConf as unknown as Record<string, unknown>,
+    searchType: objectType,
+    searchConfig
+  })
 }
 
 export const useRouteMeta = () => {

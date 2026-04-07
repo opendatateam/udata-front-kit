@@ -188,6 +188,7 @@ organizations:
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
   datasets:
+    object_type: datasets
     list_all: true
     filter_prefix:
     universe_query:

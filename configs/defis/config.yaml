@@ -302,6 +302,7 @@ website:
 pages:
   # DEFIS
   defis:
+    object_type: topics
     list_all: true
     universe_query:
       tag: defisdatagouvfr
@@ -344,10 +345,11 @@ pages:
             name: Saison 4
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: false
     universe_query:
     filter_prefix:
-    title:
+    title: Données
     breadcrumb_title: Données
     labels:
       singular: jeu de données

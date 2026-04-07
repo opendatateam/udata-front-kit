@@ -1,4 +1,4 @@
-import { useTopicSearchPageRoutes } from '@/router/utils'
+import { useGlobalSearchPageRoutes } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
 
 const topicConf = {
@@ -24,18 +24,16 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () => await import('./views/ApisFranceConnectees.vue')
   },
-  useTopicSearchPageRoutes({
+  useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
-    metaTitle: "Cas d'usages",
     topicConf,
     cardComponent: async () =>
       await import('./components/SimplifionsCasDusageCard.vue'),
     descriptionComponent: async () =>
       await import('./components/SimplifionsCasDusageDescription.vue')
   }),
-  useTopicSearchPageRoutes({
+  useGlobalSearchPageRoutes({
     pageKey: 'solutions',
-    metaTitle: 'Solutions',
     topicConf,
     cardComponent: async () =>
       await import('./components/SimplifionsSolutionCard.vue'),

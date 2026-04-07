@@ -244,6 +244,7 @@ shared_filter_values:
 pages:
   # CAS D'USAGES
   cas-d-usages:
+    object_type: topics
     list_all: true
     universe_query:
       tag: simplifions-v2-cas-d-usages
@@ -301,6 +302,7 @@ pages:
 
   # SOLUTIONS
   solutions:
+    object_type: topics
     list_all: true
     universe_query:
       tag: simplifions-v2-solutions
