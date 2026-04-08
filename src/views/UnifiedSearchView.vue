@@ -1,29 +1,21 @@
 <script setup lang="ts">
-import SearchComponent from '@/components/SearchComponent.vue'
 import SearchSelectFilter from '@/components/SearchSelectFilter.vue'
-import TopicList from '@/components/topics/TopicList.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
-import { debounceWait } from '@/utils/config'
 import {
   DataserviceCard,
   DatasetCard,
-  GlobalSearch
+  GlobalSearch,
+  TopicCard
 } from '@datagouv/components-next'
-import { useDebounceFn } from '@vueuse/core'
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
-// Passed by the router props function; GlobalSearch/TopicList read state from the URL directly.
-const props = defineProps<{
-  query?: string
-  page?: string
-  useSearchEndpoint?: boolean
-}>()
+// Passed by the router props function; GlobalSearch reads state from the URL directly.
+defineProps<{ query?: string; page?: string }>()
 
 const route = useRoute()
-const router = useRouter()
 const { pageConf } = useCurrentPageConf()
 
 const links = [
@@ -34,17 +26,12 @@ const links = [
 const meta = route.meta
 const CardComponent = useAsyncComponent(() => meta.cardComponent)
 
-// Custom select filters from config: filters with search_display set and predefined values
+// Custom select filters: filters with search_display set and predefined values (type: select)
 const customSelectFilters = computed(() =>
-  pageConf.filters.filter(
+  (pageConf.filters ?? []).filter(
     (f) => f.search_display && f.values?.length && f.type === 'select'
   )
 )
-
-// Topic search input (searchType === 'topics' only)
-const topicSearch = useDebounceFn((query: string) => {
-  router.push({ name: route.name, query: { ...route.query, q: query } })
-}, debounceWait)
 </script>
 
 <template>
@@ -70,11 +57,7 @@ const topicSearch = useDebounceFn((query: string) => {
     </div>
   </section>
 
-  <!-- GlobalSearch for datasets / dataservices -->
-  <div
-    v-if="meta.searchType === 'datasets' || meta.searchType === 'dataservices'"
-    class="fr-container fr-mb-4w"
-  >
+  <div class="fr-container fr-mb-4w">
     <Suspense>
       <GlobalSearch :config="meta.searchConfig!">
         <template #dataset="{ dataset }">
@@ -97,6 +80,16 @@ const topicSearch = useDebounceFn((query: string) => {
             }"
           />
         </template>
+        <template #topic="{ topic }">
+          <component
+            :is="CardComponent ?? TopicCard"
+            :topic="topic"
+            :topic-url="{
+              name: `${meta.pageKey}_detail`,
+              params: { item_id: topic.id }
+            }"
+          />
+        </template>
         <template v-if="customSelectFilters.length" #filters>
           <SearchSelectFilter
             v-for="filter in customSelectFilters"
@@ -106,26 +99,5 @@ const topicSearch = useDebounceFn((query: string) => {
         </template>
       </GlobalSearch>
     </Suspense>
-  </div>
-
-  <!-- Topic search for bouquets/collections.
-       TODO: replace PageFilters with GlobalSearch once upstream supports topics class.
-       Tracked in: https://github.com/ecolabdata/ecospheres/issues/1010 -->
-  <div v-else-if="meta.searchType === 'topics'" class="fr-container fr-mb-4w">
-    <div class="fr-mb-2w">
-      <SearchComponent
-        id="search-topic"
-        :model-value="props.query"
-        :is-filter="true"
-        :search-label="pageConf.search.input"
-        :label="pageConf.search.input"
-        @update:model-value="topicSearch"
-      />
-    </div>
-    <TopicList
-      :query="props.query"
-      :page="props.page"
-      :use-search-endpoint="props.useSearchEndpoint ?? false"
-    />
   </div>
 </template>

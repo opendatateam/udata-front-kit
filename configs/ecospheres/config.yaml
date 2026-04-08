@@ -466,10 +466,16 @@ pages:
         default_value: true
         authenticated: true
         values: []
+      - name: Date de mise à jour
+        id: last_update_range
+        type: last_update_range
+        search_display: basic
+        values: []
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
         type: organization
+        search_display: advanced
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme

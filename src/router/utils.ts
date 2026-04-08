@@ -3,7 +3,12 @@ import {
   type PageObjectType
 } from '@/model/config'
 import { usePageConf } from '@/utils/config'
-import type { GlobalSearchConfig } from '@datagouv/components-next'
+import {
+  getDefaultDataserviceConfig,
+  getDefaultDatasetConfig,
+  getDefaultTopicConfig,
+  type GlobalSearchConfig
+} from '@datagouv/components-next'
 import { type Component } from 'vue'
 import {
   useRoute,
@@ -128,8 +133,7 @@ export const useSearchPageRoutes = ({
           // this forces the component to be recreated when switching page type
           key: pageKey,
           query: route.query.q,
-          page: route.query.page,
-          ...props
+          page: route.query.page
         })
       },
       {
@@ -197,7 +201,7 @@ const NATIVE_FILTER_TYPE_SET = new Set<string>(
  */
 function buildGlobalSearchConfig(
   pageKey: string,
-  searchType: Exclude<PageObjectType, 'topics'>
+  searchType: PageObjectType
 ): GlobalSearchConfig {
   const pageConf = usePageConf(pageKey)
   const hiddenFilters = Object.entries(pageConf.universe_query ?? {}).map(
@@ -215,14 +219,14 @@ function buildGlobalSearchConfig(
       advancedFilters.push(filter.type)
     }
   }
-  return [
-    {
-      class: searchType,
-      hiddenFilters,
-      basicFilters,
-      advancedFilters
-    } as GlobalSearchConfig[number]
-  ]
+  const overrides = { hiddenFilters, basicFilters, advancedFilters }
+  if (searchType === 'topics') {
+    return [getDefaultTopicConfig(overrides)]
+  } else if (searchType === 'dataservices') {
+    return [getDefaultDataserviceConfig(overrides)]
+  } else {
+    return [getDefaultDatasetConfig(overrides)]
+  }
 }
 
 /**
@@ -241,10 +245,7 @@ export const useGlobalSearchPageRoutes = ({
   const objectType = pageConf.object_type
   const listViewComponent = () => import('@/views/UnifiedSearchView.vue')
 
-  const searchConfig =
-    objectType !== 'topics'
-      ? buildGlobalSearchConfig(pageKey, objectType)
-      : undefined
+  const searchConfig = buildGlobalSearchConfig(pageKey, objectType)
 
   const defaultDetailsView = () =>
     objectType === 'dataservices'
