@@ -7,7 +7,8 @@ import {
   getDefaultDataserviceConfig,
   getDefaultDatasetConfig,
   getDefaultTopicConfig,
-  type GlobalSearchConfig
+  type GlobalSearchConfig,
+  type TagFilterConfig
 } from '@datagouv/components-next'
 import { type Component } from 'vue'
 import {
@@ -219,7 +220,37 @@ function buildGlobalSearchConfig(
       advancedFilters.push(filter.type)
     }
   }
-  const overrides = { hiddenFilters, basicFilters, advancedFilters }
+  // Build tagFilters from select-type filters that have search_display set and
+  // no explicit api_param (or api_param === 'tag'). Their selected value is
+  // merged into the "tag" API parameter alongside any hiddenFilters tag values
+  // inside GlobalSearch. Prefixed values follow the same convention as the old
+  // useFilterValue: `${filter_prefix}-${filter.id}-${value.id}`.
+  const tagFilters: TagFilterConfig[] = (pageConf.filters ?? [])
+    .filter(
+      (f) =>
+        f.type === 'select' &&
+        f.values?.length &&
+        f.search_display &&
+        (!f.api_param || f.api_param === 'tag')
+    )
+    .map((f) => ({
+      urlParam: f.id,
+      label: f.name,
+      defaultLabel: f.default_option ?? 'Tous',
+      values: (f.values ?? []).map((v) => ({
+        value:
+          f.use_filter_prefix && pageConf.filter_prefix
+            ? `${pageConf.filter_prefix}-${f.id}-${v.id}`
+            : v.id,
+        label: v.name
+      }))
+    }))
+  const overrides = {
+    hiddenFilters,
+    basicFilters,
+    advancedFilters,
+    ...(tagFilters.length ? { tagFilters } : {})
+  }
   if (searchType === 'topics') {
     return [getDefaultTopicConfig(overrides)]
   } else if (searchType === 'dataservices') {

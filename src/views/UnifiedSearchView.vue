@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SearchSelectFilter from '@/components/SearchSelectFilter.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -9,7 +8,6 @@ import {
   GlobalSearch,
   TopicCard
 } from '@datagouv/components-next'
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 // Passed by the router props function; GlobalSearch reads state from the URL directly.
@@ -25,13 +23,6 @@ const links = [
 
 const meta = route.meta
 const CardComponent = useAsyncComponent(() => meta.cardComponent)
-
-// Custom select filters: filters with search_display set and predefined values (type: select)
-const customSelectFilters = computed(() =>
-  (pageConf.filters ?? []).filter(
-    (f) => f.search_display && f.values?.length && f.type === 'select'
-  )
-)
 </script>
 
 <template>
@@ -88,13 +79,6 @@ const customSelectFilters = computed(() =>
               name: `${meta.pageKey}_detail`,
               params: { item_id: topic.id }
             }"
-          />
-        </template>
-        <template v-if="customSelectFilters.length" #filters>
-          <SearchSelectFilter
-            v-for="filter in customSelectFilters"
-            :key="filter.id"
-            :filter="filter"
           />
         </template>
       </GlobalSearch>

@@ -318,7 +318,6 @@ pages:
         default_option: Tous les thèmes
         id: inspire
         type: select
-        api_param: tag
         search_display: advanced
         use_filter_prefix: false
         values:
@@ -480,6 +479,7 @@ pages:
         default_option: Toutes les thématiques
         id: theme
         type: select
+        search_display: basic
         color: green-emeraude
         use_filter_prefix: true
         # TODO: use a dedicated config for the form?
@@ -530,6 +530,7 @@ pages:
         default_option: Toutes les thématiques
         id: theme
         type: select
+        search_display: basic
         color: green-menthe
         use_filter_prefix: true
         hide_on_list: true
@@ -538,6 +539,7 @@ pages:
         default_option: Tous les enjeux
         id: enjeu
         type: select
+        search_display: basic
         color: blue-ecume
         use_filter_prefix: true
         hide_on_list: true
@@ -556,6 +558,7 @@ pages:
         default_option: Tous les secteurs
         id: secteur
         type: select
+        search_display: basic
         color: purple-glycine
         use_filter_prefix: true
         values:
@@ -583,6 +586,7 @@ pages:
         default_option: Tous les leviers
         id: levier
         type: select
+        search_display: basic
         color: green-archipel
         use_filter_prefix: true
         values:
@@ -652,6 +656,7 @@ pages:
         default_option: Toutes les mailles
         id: maille
         type: select
+        search_display: basic
         use_filter_prefix: true
         color:
         values:
