@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import VIconCustom from '@/components/VIconCustom.vue'
 import { useCurrentPageConf } from '@/router/utils'
+import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
+import { useLabels } from '@/utils/labels'
 import {
   DataserviceCard,
   DatasetCard,
@@ -14,7 +17,9 @@ import { useRoute } from 'vue-router'
 defineProps<{ query?: string; page?: string }>()
 
 const route = useRoute()
-const { pageConf } = useCurrentPageConf()
+const { pageConf, pageKey } = useCurrentPageConf()
+const userStore = useUserStore()
+const labels = useLabels(pageConf.labels)
 
 const links = [
   { to: '/', text: 'Accueil' },
@@ -23,11 +28,30 @@ const links = [
 
 const meta = route.meta
 const CardComponent = useAsyncComponent(() => meta.cardComponent)
+const createUrl = computed(() => ({
+  name: `${pageKey}_add`,
+  query: route.query
+}))
 </script>
 
 <template>
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  </div>
+
+  <div class="fr-container fr-my-2v">
+    <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
+      <h1 class="fr-mb-0">{{ pageConf.title }}</h1>
+      <div
+        v-if="userStore.canAddTopic(pageKey)"
+        class="fr-col-auto fr-grid-row fr-grid-row--middle"
+      >
+        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
+          <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
+          Ajouter {{ labels.articles.un }} {{ labels.singular }}
+        </router-link>
+      </div>
+    </div>
   </div>
 
   <section
