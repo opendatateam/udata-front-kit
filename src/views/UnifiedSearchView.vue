@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
@@ -9,15 +10,22 @@ import {
   DataserviceCard,
   DatasetCard,
   GlobalSearch,
-  TopicCard
+  type Dataset,
+  type TopicV2
 } from '@datagouv/components-next'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 // Passed by the router props function; GlobalSearch reads state from the URL directly.
 defineProps<{ query?: string; page?: string }>()
 
 const route = useRoute()
+const router = useRouter()
 const { pageConf, pageKey } = useCurrentPageConf()
+
+const organizationUrl = (id: string | undefined) =>
+  router.hasRoute('organization_detail')
+    ? { name: 'organization_detail', params: { oid: id } }
+    : undefined
 const userStore = useUserStore()
 const labels = useLabels(pageConf.labels)
 
@@ -83,6 +91,9 @@ const createUrl = computed(() => ({
               name: `${meta.pageKey}_detail`,
               params: { item_id: dataset.id }
             }"
+            :organization-url="
+              organizationUrl((dataset as Dataset).organization?.id)
+            "
           />
         </template>
         <template #dataservice="{ dataservice }">
@@ -99,10 +110,14 @@ const createUrl = computed(() => ({
           <component
             :is="CardComponent ?? TopicCard"
             :topic="topic"
+            :page-key="pageKey"
             :topic-url="{
               name: `${meta.pageKey}_detail`,
-              params: { item_id: topic.id }
+              params: { item_id: topic.slug }
             }"
+            :organization-url="
+              organizationUrl((topic as TopicV2).organization?.id)
+            "
           />
         </template>
       </GlobalSearch>
