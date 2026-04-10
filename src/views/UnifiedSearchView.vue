@@ -36,6 +36,12 @@ const links = [
 
 const meta = route.meta
 const CardComponent = useAsyncComponent(() => meta.cardComponent)
+
+onMounted(() => {
+  if (!pageConf.list_all) {
+    router.push({ name: 'not_found' })
+  }
+})
 const createUrl = computed(() => ({
   name: `${pageKey}_add`,
   query: route.query
