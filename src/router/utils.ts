@@ -7,8 +7,12 @@ import {
   getDefaultDataserviceConfig,
   getDefaultDatasetConfig,
   getDefaultTopicConfig,
+  type DataserviceSearchFilters,
+  type DatasetSearchFilters,
   type GlobalSearchConfig,
-  type TagFilterConfig
+  type HiddenFilter,
+  type TagFilterConfig,
+  type TopicSearchFilters
 } from '@datagouv/components-next'
 import { type Component } from 'vue'
 import {
@@ -245,18 +249,35 @@ function buildGlobalSearchConfig(
         label: v.name
       }))
     }))
-  const overrides = {
-    hiddenFilters,
-    basicFilters,
-    advancedFilters,
-    ...(tagFilters.length ? { tagFilters } : {})
-  }
+  const tagFiltersOverride = tagFilters.length ? { tagFilters } : {}
   if (searchType === 'topics') {
-    return [getDefaultTopicConfig(overrides)]
+    return [
+      getDefaultTopicConfig({
+        hiddenFilters: hiddenFilters as HiddenFilter<TopicSearchFilters>[],
+        basicFilters: basicFilters as (keyof TopicSearchFilters)[],
+        advancedFilters: advancedFilters as (keyof TopicSearchFilters)[],
+        ...tagFiltersOverride
+      })
+    ]
   } else if (searchType === 'dataservices') {
-    return [getDefaultDataserviceConfig(overrides)]
+    return [
+      getDefaultDataserviceConfig({
+        hiddenFilters:
+          hiddenFilters as HiddenFilter<DataserviceSearchFilters>[],
+        basicFilters: basicFilters as (keyof DataserviceSearchFilters)[],
+        advancedFilters: advancedFilters as (keyof DataserviceSearchFilters)[],
+        ...tagFiltersOverride
+      })
+    ]
   } else {
-    return [getDefaultDatasetConfig(overrides)]
+    return [
+      getDefaultDatasetConfig({
+        hiddenFilters: hiddenFilters as HiddenFilter<DatasetSearchFilters>[],
+        basicFilters: basicFilters as (keyof DatasetSearchFilters)[],
+        advancedFilters: advancedFilters as (keyof DatasetSearchFilters)[],
+        ...tagFiltersOverride
+      })
+    ]
   }
 }
 
