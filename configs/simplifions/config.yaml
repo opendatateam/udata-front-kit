@@ -202,8 +202,8 @@ shared_filter_values:
       name: État
     # - id: autres-autorites-nationales
     #   name: Autres autorités nationales
-    # - id: organismes-droit-prive
-    #   name: Organismes de droit privé
+    - id: organismes-droit-prive
+      name: Organismes de droit privé
     - id: acteurs-education-enseignement
       name: Acteurs de l'éducation et de l'enseignement
     # - id: acteurs-culture
@@ -268,8 +268,8 @@ pages:
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
-        id: include_private
-        type: checkbox
+        id: private
+        type: private
         default_option:
         default_value: false
         authenticated: true
@@ -277,7 +277,7 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'acteurs publics
+        default_option: Tous les types d'acteurs
         use_filter_prefix: true
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
@@ -311,6 +311,7 @@ pages:
       singular: solution
       plural: solutions
       extended: solution
+      feminine: true
     search:
       input: Filtrer les solutions
     default_sort: name
@@ -325,8 +326,8 @@ pages:
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
       - name: Afficher les brouillons
-        id: include_private
-        type: checkbox
+        id: private
+        type: private
         default_option:
         default_value: false
         authenticated: true
@@ -334,7 +335,7 @@ pages:
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
-        default_option: Tous les types d'acteurs publics
+        default_option: Tous les types d'acteurs
         use_filter_prefix: true
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'

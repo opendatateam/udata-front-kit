@@ -6,11 +6,11 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import {
@@ -121,7 +121,7 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="dataservice" class="tabs-height-fix">
+  <GenericContainer v-if="dataservice">
     <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataservice.title }}</h1>
@@ -203,6 +203,11 @@ onMounted(() => {
             >Faire une demande d'habilitation</a
           >
         </div>
+        <!-- metrics -->
+        <MetricsStatBoxes
+          object-type="dataservice"
+          :object-id="dataservice.id"
+        />
       </div>
     </div>
 
@@ -267,6 +272,7 @@ onMounted(() => {
           </div>
           <DsfrPagination
             v-if="pagination.length > 1"
+            :trunc-limit="3"
             :current-page="currentPage - 1"
             :pages="pagination"
             class="fr-mt-4w"
@@ -308,7 +314,7 @@ onMounted(() => {
 
       <!-- Informations -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <div class="fr-pb-3w border-bottom border-default-grey">
+        <div class="fr-pb-3w">
           <h2 class="fr-mb-3w subtitle subtitle--uppercase">
             Informations techniques
           </h2>

@@ -10,7 +10,10 @@
       <div class="fr-card__body">
         <div class="fr-card__content">
           <div class="fr-grid-row">
-            <SimplifionsSolutionOperateurTag v-if="!imageUrl" :topic-solution="topic" />
+            <SimplifionsSolutionOperateurTag
+              v-if="!imageUrl"
+              :topic-solution="topic"
+            />
             <DraftTag v-if="topic.private" class="fr-ml-auto" />
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
@@ -48,6 +51,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type { TopicSolutionsExtras } from '../model/topics'
+import DraftTag from './DraftTag.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
