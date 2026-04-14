@@ -47,7 +47,8 @@ export enum GlobalSearchNativeFilterType {
   OrganizationBadge = 'organization_badge',
   Topic = 'topic',
   ProducerType = 'producer_type',
-  Organization = 'organization'
+  Organization = 'organization',
+  OrganizationFacet = 'organization_facet'
 }
 
 export interface PageFilterConf {
