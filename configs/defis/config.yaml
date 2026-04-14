@@ -91,7 +91,7 @@ website:
               image_url: 'https://gist.github.com/user-attachments/assets/d91c6beb-6516-44e9-b29c-2d0a264a8dfc'
             - id: '695e5d9d02995cff0635005f'
               name: 'L’impact environnemental de l’IA générative'
-              description: 'Face à l'opacité du secteur de l'IA générative sur son impact environnemental, comment mobiliser les données existantes pour éclairer le débat public et permettre des choix avisés ?'
+              description: "Face à l'opacité du secteur de l'IA générative sur son impact environnemental, comment mobiliser les données existantes pour éclairer le débat public et permettre des choix avisés ?"
               url: '/defis/limpact-environnemental-de-lia-generative'
               image_url: 'https://gist.github.com/user-attachments/assets/1b5ec0b3-a7b1-4b82-a0ae-43128e04007c'
             - id: '690b5f6dec83300a693af800'
