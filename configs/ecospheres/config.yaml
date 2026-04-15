@@ -702,7 +702,7 @@ ecospheres:
         slug: indicateurs-regionaux-de-planification-ecologique-cops
       - title: Indicateurs de mobilité durable
         description: Faciliter l'orientation, la prise de décision et le suivi en matière de politiques publiques locales pour la mobilité durable des personnes.
-        creator: DRIEAT Île-de-France
+        creator: Tableau de bord des mobilités durables
         maille: Communal à régional
         slug: indicateurs-du-tableau-de-bord-des-mobilites-durables
       - title: Planification territoriale (PLU(i), SCoT, SRADDET)
