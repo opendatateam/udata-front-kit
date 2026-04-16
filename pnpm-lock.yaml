@@ -1535,12 +1535,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scarf/scarf@1.4.0':
-    resolution:
-      {
-        integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==
-      }
-
   '@sec-ant/readable-stream@0.4.1':
     resolution:
       {
@@ -7261,12 +7255,6 @@ packages:
       }
     engines: { node: '>=10' }
 
-  swagger-ui-dist@5.30.3:
-    resolution:
-      {
-        integrity: sha512-giQl7/ToPxCqnUAx2wpnSnDNGZtGzw1LyUw6ZitIpTmdrvpxKFY/94v1hihm0zYNpgp1/VY0jTDk//R0BBgnRQ==
-      }
-
   synckit@0.11.11:
     resolution:
       {
@@ -8645,7 +8633,6 @@ snapshots:
       remark-rehype: 11.1.2
       strip-markdown: 6.0.0
       stylefire: 7.0.3
-      swagger-ui-dist: 5.30.3
       unified: 11.0.5
       unist-util-visit: 5.0.0
       vue: 3.5.30(typescript@5.7.3)
@@ -8655,6 +8642,7 @@ snapshots:
       vue3-json-viewer: 2.4.1(vue@3.5.30(typescript@5.7.3))
       vue3-text-clamp: 0.1.2(resize-detector@0.3.0)(vue@3.5.30(typescript@5.7.3))
       vue3-xml-viewer: 0.0.14(core-js@3.47.0)(vue@3.5.30(typescript@5.7.3))
+      yaml: 2.8.3
     transitivePeerDependencies:
       - '@nuxt/kit'
       - '@nuxt/schema'
@@ -9171,8 +9159,6 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.59.0':
     optional: true
-
-  '@scarf/scarf@1.4.0': {}
 
   '@sec-ant/readable-stream@0.4.1': {}
 
@@ -12909,10 +12895,6 @@ snapshots:
   supports-color@8.1.1:
     dependencies:
       has-flag: 4.0.0
-
-  swagger-ui-dist@5.30.3:
-    dependencies:
-      '@scarf/scarf': 1.4.0
 
   synckit@0.11.11:
     dependencies:

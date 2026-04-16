@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import { useCurrentPageConf } from '@/router/utils'
@@ -89,6 +90,13 @@ const createUrl = computed(() => ({
   <div class="fr-container fr-mb-4w">
     <Suspense>
       <GlobalSearch :config="meta.searchConfig!">
+        <template v-if="meta.tagFilters?.length" #custom-filters>
+          <SearchSelectFilter
+            v-for="filter in meta.tagFilters"
+            :key="filter.urlParam"
+            :config="filter"
+          />
+        </template>
         <template #dataset="{ dataset }">
           <component
             :is="CardComponent ?? DatasetCard"

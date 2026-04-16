@@ -7,12 +7,7 @@ import {
   getDefaultDataserviceConfig,
   getDefaultDatasetConfig,
   getDefaultTopicConfig,
-  type DataserviceSearchFilters,
-  type DatasetSearchFilters,
-  type GlobalSearchConfig,
-  type HiddenFilter,
-  type TagFilterConfig,
-  type TopicSearchFilters
+  type GlobalSearchConfig
 } from '@datagouv/components-next'
 import { type Component } from 'vue'
 import {
@@ -21,6 +16,35 @@ import {
   type RouteRecordRaw
 } from 'vue-router'
 import type { TopicPageRouterConf } from './model'
+
+// Extract filter key and hidden-filter types from the exported config helpers,
+// since the underlying filter interfaces are not re-exported by the package.
+type DatasetFilterKey = NonNullable<
+  ReturnType<typeof getDefaultDatasetConfig>['basicFilters']
+>[number]
+type DatasetHiddenFilter = NonNullable<
+  ReturnType<typeof getDefaultDatasetConfig>['hiddenFilters']
+>[number]
+type DataserviceFilterKey = NonNullable<
+  ReturnType<typeof getDefaultDataserviceConfig>['basicFilters']
+>[number]
+type DataserviceHiddenFilter = NonNullable<
+  ReturnType<typeof getDefaultDataserviceConfig>['hiddenFilters']
+>[number]
+type TopicFilterKey = NonNullable<
+  ReturnType<typeof getDefaultTopicConfig>['basicFilters']
+>[number]
+type TopicHiddenFilter = NonNullable<
+  ReturnType<typeof getDefaultTopicConfig>['hiddenFilters']
+>[number]
+
+export interface TagFilterConfig {
+  urlParam: string
+  label: string
+  defaultLabel: string
+  apiParam: string
+  values: Array<{ value: string; label: string }>
+}
 
 export type QueryAsString = Record<string, string | null | undefined>
 
@@ -100,6 +124,7 @@ interface SearchPageRoutesOptions {
   // GlobalSearch-specific
   searchType?: PageObjectType
   searchConfig?: GlobalSearchConfig
+  tagFilters?: TagFilterConfig[]
 }
 
 export const useSearchPageRoutes = ({
@@ -115,7 +140,8 @@ export const useSearchPageRoutes = ({
   descriptionComponent,
   props,
   searchType,
-  searchConfig
+  searchConfig,
+  tagFilters
 }: SearchPageRoutesOptions): RouteRecordRaw => {
   return {
     path: `/${pageKey}`,
@@ -131,7 +157,8 @@ export const useSearchPageRoutes = ({
           cardComponent,
           listComponent,
           searchType,
-          searchConfig
+          searchConfig,
+          tagFilters
         },
         component: listViewComponent,
         props: (route: RouteLocationNormalizedLoaded) => ({
@@ -200,14 +227,16 @@ const NATIVE_FILTER_TYPE_SET = new Set<string>(
 )
 
 /**
- * Builds a GlobalSearchConfig from the page's YAML config.
+ * Builds a GlobalSearchConfig and tag filters from the page's YAML config.
  * Converts universe_query → hiddenFilters.
  * Derives basicFilters/advancedFilters from filters with search_display set and a GlobalSearch-native type.
+ * Select-type filters are returned separately as TagFilterConfig[] for rendering via the
+ * #custom-filters slot using useSearchFilter().
  */
 function buildGlobalSearchConfig(
   pageKey: string,
   searchType: PageObjectType
-): GlobalSearchConfig {
+): { searchConfig: GlobalSearchConfig; tagFilters: TagFilterConfig[] } {
   const pageConf = usePageConf(pageKey)
   const hiddenFilters = Object.entries(pageConf.universe_query ?? {}).map(
     ([key, value]) => ({ key, value }) as { key: string; value: unknown }
@@ -224,23 +253,17 @@ function buildGlobalSearchConfig(
       advancedFilters.push(filter.type)
     }
   }
-  // Build tagFilters from select-type filters that have search_display set and
-  // no explicit api_param (or api_param === 'tag'). Their selected value is
-  // merged into the "tag" API parameter alongside any hiddenFilters tag values
-  // inside GlobalSearch. Prefixed values follow the same convention as the old
-  // useFilterValue: `${filter_prefix}-${filter.id}-${value.id}`.
+  // Build tagFilters from select-type filters that have search_display set.
+  // Rendered via SearchSelectFilter.vue in the #custom-filters slot using useSearchFilter().
+  // Prefixed values follow the same convention as the old useFilterValue:
+  // `${filter_prefix}-${filter.id}-${value.id}`.
   const tagFilters: TagFilterConfig[] = (pageConf.filters ?? [])
-    .filter(
-      (f) =>
-        f.type === 'select' &&
-        f.values?.length &&
-        f.search_display &&
-        (!f.api_param || f.api_param === 'tag')
-    )
+    .filter((f) => f.type === 'select' && f.values?.length && f.search_display)
     .map((f) => ({
       urlParam: f.id,
       label: f.name,
       defaultLabel: f.default_option ?? 'Tous',
+      apiParam: f.api_param ?? 'tag',
       values: (f.values ?? []).map((v) => ({
         value:
           f.use_filter_prefix && pageConf.filter_prefix
@@ -249,36 +272,33 @@ function buildGlobalSearchConfig(
         label: v.name
       }))
     }))
-  const tagFiltersOverride = tagFilters.length ? { tagFilters } : {}
+  let searchConfig: GlobalSearchConfig
   if (searchType === 'topics') {
-    return [
+    searchConfig = [
       getDefaultTopicConfig({
-        hiddenFilters: hiddenFilters as HiddenFilter<TopicSearchFilters>[],
-        basicFilters: basicFilters as (keyof TopicSearchFilters)[],
-        advancedFilters: advancedFilters as (keyof TopicSearchFilters)[],
-        ...tagFiltersOverride
+        hiddenFilters: hiddenFilters as TopicHiddenFilter[],
+        basicFilters: basicFilters as TopicFilterKey[],
+        advancedFilters: advancedFilters as TopicFilterKey[]
       })
     ]
   } else if (searchType === 'dataservices') {
-    return [
+    searchConfig = [
       getDefaultDataserviceConfig({
-        hiddenFilters:
-          hiddenFilters as HiddenFilter<DataserviceSearchFilters>[],
-        basicFilters: basicFilters as (keyof DataserviceSearchFilters)[],
-        advancedFilters: advancedFilters as (keyof DataserviceSearchFilters)[],
-        ...tagFiltersOverride
+        hiddenFilters: hiddenFilters as DataserviceHiddenFilter[],
+        basicFilters: basicFilters as DataserviceFilterKey[],
+        advancedFilters: advancedFilters as DataserviceFilterKey[]
       })
     ]
   } else {
-    return [
+    searchConfig = [
       getDefaultDatasetConfig({
-        hiddenFilters: hiddenFilters as HiddenFilter<DatasetSearchFilters>[],
-        basicFilters: basicFilters as (keyof DatasetSearchFilters)[],
-        advancedFilters: advancedFilters as (keyof DatasetSearchFilters)[],
-        ...tagFiltersOverride
+        hiddenFilters: hiddenFilters as DatasetHiddenFilter[],
+        basicFilters: basicFilters as DatasetFilterKey[],
+        advancedFilters: advancedFilters as DatasetFilterKey[]
       })
     ]
   }
+  return { searchConfig, tagFilters }
 }
 
 /**
@@ -297,7 +317,10 @@ export const useGlobalSearchPageRoutes = ({
   const objectType = pageConf.object_type
   const listViewComponent = () => import('@/views/UnifiedSearchView.vue')
 
-  const searchConfig = buildGlobalSearchConfig(pageKey, objectType)
+  const { searchConfig, tagFilters } = buildGlobalSearchConfig(
+    pageKey,
+    objectType
+  )
 
   const defaultDetailsView = () =>
     objectType === 'dataservices'
@@ -316,7 +339,8 @@ export const useGlobalSearchPageRoutes = ({
     descriptionComponent,
     props: topicConf as unknown as Record<string, unknown>,
     searchType: objectType,
-    searchConfig
+    searchConfig,
+    tagFilters
   })
 }
 
