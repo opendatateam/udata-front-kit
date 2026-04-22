@@ -2,7 +2,7 @@ import {
   GlobalSearchNativeFilterType,
   type PageObjectType
 } from '@/model/config'
-import { usePageConf } from '@/utils/config'
+import { usePageConf, usePagesConf } from '@/utils/config'
 import {
   getDefaultDataserviceConfig,
   getDefaultDatasetConfig,
@@ -227,16 +227,14 @@ const NATIVE_FILTER_TYPE_SET = new Set<string>(
 )
 
 /**
- * Builds a GlobalSearchConfig and tag filters from the page's YAML config.
- * Converts universe_query → hiddenFilters.
- * Derives basicFilters/advancedFilters from filters with search_display set and a GlobalSearch-native type.
- * Select-type filters are returned separately as TagFilterConfig[] for rendering via the
- * #custom-filters slot using useSearchFilter().
+ * Builds a single SearchTypeConfig for one page.
+ * Sets key=pageKey so multiple pages with the same object_type are differentiated.
+ * Sets name from breadcrumb_title or title for the type selector label.
  */
-function buildGlobalSearchConfig(
+function buildSingleTypeConfig(
   pageKey: string,
   searchType: PageObjectType
-): { searchConfig: GlobalSearchConfig; tagFilters: TagFilterConfig[] } {
+): GlobalSearchConfig[number] {
   const pageConf = usePageConf(pageKey)
   const hiddenFilters = Object.entries(pageConf.universe_query ?? {}).map(
     ([key, value]) => ({ key, value }) as { key: string; value: unknown }
@@ -246,17 +244,60 @@ function buildGlobalSearchConfig(
   for (const filter of pageConf.filters ?? []) {
     if (!filter.search_display) continue
     if (!NATIVE_FILTER_TYPE_SET.has(filter.type)) continue
-    // For native types, the type string IS the GlobalSearch filter key
     if (filter.search_display === 'basic') {
       basicFilters.push(filter.type)
     } else {
       advancedFilters.push(filter.type)
     }
   }
-  // Build tagFilters from select-type filters that have search_display set.
-  // Rendered via SearchSelectFilter.vue in the #custom-filters slot using useSearchFilter().
-  // Prefixed values follow the same convention as the old useFilterValue:
-  // `${filter_prefix}-${filter.id}-${value.id}`.
+  const name = pageConf.breadcrumb_title ?? pageConf.title
+  if (searchType === 'topics') {
+    return getDefaultTopicConfig({
+      key: pageKey,
+      name,
+      hiddenFilters: hiddenFilters as TopicHiddenFilter[],
+      basicFilters: basicFilters as TopicFilterKey[],
+      advancedFilters: advancedFilters as TopicFilterKey[]
+    })
+  } else if (searchType === 'dataservices') {
+    return getDefaultDataserviceConfig({
+      key: pageKey,
+      name,
+      hiddenFilters: hiddenFilters as DataserviceHiddenFilter[],
+      basicFilters: basicFilters as DataserviceFilterKey[],
+      advancedFilters: advancedFilters as DataserviceFilterKey[]
+    })
+  } else {
+    return getDefaultDatasetConfig({
+      key: pageKey,
+      name,
+      hiddenFilters: hiddenFilters as DatasetHiddenFilter[],
+      basicFilters: basicFilters as DatasetFilterKey[],
+      advancedFilters: advancedFilters as DatasetFilterKey[]
+    })
+  }
+}
+
+/**
+ * Builds a GlobalSearchConfig from all list_all pages in the site config.
+ * Pages are included in their config definition order — the same order on every page —
+ * so the type selector is stable across page switches.
+ * Each page gets key=pageKey so same-class pages (e.g. datasets + indicators) are distinct.
+ * Also returns tagFilters for the primary page for rendering via the #custom-filters slot.
+ */
+function buildGlobalSearchConfig(pageKey: string): {
+  searchConfig: GlobalSearchConfig
+  tagFilters: TagFilterConfig[]
+} {
+  const pageConf = usePageConf(pageKey)
+  const allPages = usePagesConf()
+  const searchConfig: GlobalSearchConfig = []
+  for (const [key, conf] of Object.entries(allPages)) {
+    if (!conf.list_all) continue
+    searchConfig.push(buildSingleTypeConfig(key, conf.object_type))
+  }
+
+  // Build tagFilters for the primary page (rendered via SearchSelectFilter in #custom-filters slot).
   const tagFilters: TagFilterConfig[] = (pageConf.filters ?? [])
     .filter((f) => f.type === 'select' && f.values?.length && f.search_display)
     .map((f) => ({
@@ -272,32 +313,7 @@ function buildGlobalSearchConfig(
         label: v.name
       }))
     }))
-  let searchConfig: GlobalSearchConfig
-  if (searchType === 'topics') {
-    searchConfig = [
-      getDefaultTopicConfig({
-        hiddenFilters: hiddenFilters as TopicHiddenFilter[],
-        basicFilters: basicFilters as TopicFilterKey[],
-        advancedFilters: advancedFilters as TopicFilterKey[]
-      })
-    ]
-  } else if (searchType === 'dataservices') {
-    searchConfig = [
-      getDefaultDataserviceConfig({
-        hiddenFilters: hiddenFilters as DataserviceHiddenFilter[],
-        basicFilters: basicFilters as DataserviceFilterKey[],
-        advancedFilters: advancedFilters as DataserviceFilterKey[]
-      })
-    ]
-  } else {
-    searchConfig = [
-      getDefaultDatasetConfig({
-        hiddenFilters: hiddenFilters as DatasetHiddenFilter[],
-        basicFilters: basicFilters as DatasetFilterKey[],
-        advancedFilters: advancedFilters as DatasetFilterKey[]
-      })
-    ]
-  }
+
   return { searchConfig, tagFilters }
 }
 
@@ -317,10 +333,7 @@ export const useGlobalSearchPageRoutes = ({
   const objectType = pageConf.object_type
   const listViewComponent = () => import('@/views/UnifiedSearchView.vue')
 
-  const { searchConfig, tagFilters } = buildGlobalSearchConfig(
-    pageKey,
-    objectType
-  )
+  const { searchConfig, tagFilters } = buildGlobalSearchConfig(pageKey)
 
   const defaultDetailsView = () =>
     objectType === 'dataservices'

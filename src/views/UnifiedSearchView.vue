@@ -38,6 +38,16 @@ const links = [
 const meta = route.meta
 const CardComponent = useAsyncComponent(() => meta.cardComponent)
 
+// localType is a plain ref (not prop-backed) so GlobalSearch can mutate it freely.
+// The component is recreated on route change (key: pageKey in router props), so
+// localType correctly re-initializes to the new pageKey on each page switch.
+const localType = ref(pageKey)
+watch(localType, (newType) => {
+  if (newType !== pageKey) {
+    router.push({ name: newType, query: { q: route.query.q } })
+  }
+})
+
 onMounted(() => {
   if (!pageConf.list_all) {
     router.push({ name: 'not_found' })
@@ -89,8 +99,9 @@ const createUrl = computed(() => ({
 
   <div class="fr-container fr-mb-4w">
     <Suspense>
-      <GlobalSearch :config="meta.searchConfig!">
-        <template v-if="meta.tagFilters?.length" #custom-filters>
+      <GlobalSearch v-model:type="localType" :config="meta.searchConfig!">
+        <!-- FIXME: validate placement top/bottom -->
+        <template v-if="meta.tagFilters?.length" #custom-filters-top>
           <SearchSelectFilter
             v-for="filter in meta.tagFilters"
             :key="filter.urlParam"
@@ -123,11 +134,11 @@ const createUrl = computed(() => ({
         <template #topic="{ topic }">
           <component
             :is="CardComponent ?? TopicCard"
-            :topic="topic"
+            :topic="topic as TopicV2"
             :page-key="pageKey"
             :topic-url="{
               name: `${meta.pageKey}_detail`,
-              params: { item_id: topic.slug }
+              params: { item_id: (topic as TopicV2).slug }
             }"
             :organization-url="
               organizationUrl((topic as TopicV2).organization?.id)

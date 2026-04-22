@@ -2,6 +2,8 @@ import config from '@/config'
 import type { DatasetsConf, PagesConf, TopicsConf } from '@/model/config'
 import type { SiteId } from '@/model/topic'
 
+export const usePagesConf = (): PagesConf => config.pages
+
 export const useTopicsConf = (): TopicsConf => {
   const topicsConf: TopicsConf = config.website.topics
   return topicsConf
