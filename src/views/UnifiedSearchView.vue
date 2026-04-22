@@ -33,8 +33,11 @@ const links = computed(() => [
   { text: pageConf.value.breadcrumb_title ?? pageConf.value.title }
 ])
 
-const meta = route.meta
-const CardComponent = useAsyncComponent(() => meta.cardComponent)
+// route.meta is reactive — read properties directly or via computed so they
+// update when Vue Router reuses this component across pages.
+const CardComponent = useAsyncComponent(
+  () => route.meta.cardComponent as (() => Promise<Component>) | undefined
+)
 
 // localType is a plain ref (not prop-backed) so GlobalSearch can mutate it freely.
 // Synced to pageKey on route change so the type selector stays in sync when the
@@ -109,21 +112,25 @@ const createUrl = computed(() => ({
 
   <div class="fr-container fr-mb-4w">
     <Suspense>
-      <GlobalSearch v-model:type="localType" :config="meta.searchConfig!">
+      <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
         <!-- FIXME: validate placement top/bottom -->
-        <template v-if="meta.tagFilters?.length" #custom-filters-top>
+        <template v-if="route.meta.tagFilters?.length" #custom-filters-top>
           <SearchSelectFilter
-            v-for="filter in meta.tagFilters"
+            v-for="filter in route.meta.tagFilters"
             :key="filter.urlParam"
             :config="filter"
           />
         </template>
         <template #dataset="{ dataset }">
           <component
-            :is="CardComponent ?? DatasetCard"
+            :is="
+              pageConf.object_type === 'datasets' && CardComponent
+                ? CardComponent
+                : DatasetCard
+            "
             :dataset="dataset"
             :dataset-url="{
-              name: `${meta.pageKey}_detail`,
+              name: `${localType}_detail`,
               params: { item_id: dataset.id }
             }"
             :organization-url="
@@ -133,21 +140,29 @@ const createUrl = computed(() => ({
         </template>
         <template #dataservice="{ dataservice }">
           <component
-            :is="CardComponent ?? DataserviceCard"
+            :is="
+              pageConf.object_type === 'dataservices' && CardComponent
+                ? CardComponent
+                : DataserviceCard
+            "
             :dataservice="dataservice"
             :dataservice-url="{
-              name: `${meta.pageKey}_detail`,
+              name: `${localType}_detail`,
               params: { item_id: dataservice.id }
             }"
           />
         </template>
         <template #topic="{ topic }">
           <component
-            :is="CardComponent ?? TopicCard"
+            :is="
+              pageConf.object_type === 'topics' && CardComponent
+                ? CardComponent
+                : TopicCard
+            "
             :topic="topic as TopicV2"
             :page-key="pageKey"
             :topic-url="{
-              name: `${meta.pageKey}_detail`,
+              name: `${localType}_detail`,
               params: { item_id: (topic as TopicV2).slug }
             }"
             :organization-url="
