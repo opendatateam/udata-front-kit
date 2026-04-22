@@ -2,10 +2,10 @@
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
-import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
+import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
 import {
   DataserviceCard,
@@ -16,45 +16,55 @@ import {
 } from '@datagouv/components-next'
 import { useRoute, useRouter } from 'vue-router'
 
-// Passed by the router props function; GlobalSearch reads state from the URL directly.
-defineProps<{ query?: string; page?: string }>()
-
 const route = useRoute()
 const router = useRouter()
-const { pageConf, pageKey } = useCurrentPageConf()
+const pageKey = computed(() => route.meta.pageKey as string)
+const pageConf = computed(() => usePageConf(pageKey.value))
 
 const organizationUrl = (id: string | undefined) =>
   router.hasRoute('organization_detail')
     ? { name: 'organization_detail', params: { oid: id } }
     : undefined
 const userStore = useUserStore()
-const labels = useLabels(pageConf.labels)
+const labels = computed(() => useLabels(pageConf.value.labels))
 
-const links = [
+const links = computed(() => [
   { to: '/', text: 'Accueil' },
-  { text: pageConf.breadcrumb_title ?? pageConf.title }
-]
+  { text: pageConf.value.breadcrumb_title ?? pageConf.value.title }
+])
 
 const meta = route.meta
 const CardComponent = useAsyncComponent(() => meta.cardComponent)
 
 // localType is a plain ref (not prop-backed) so GlobalSearch can mutate it freely.
-// The component is recreated on route change (key: pageKey in router props), so
-// localType correctly re-initializes to the new pageKey on each page switch.
-const localType = ref(pageKey)
-watch(localType, (newType) => {
-  if (newType !== pageKey) {
-    router.push({ name: newType, query: { q: route.query.q } })
+// Synced to pageKey on route change so the type selector stays in sync when the
+// component is reused by Vue Router (no remount).
+const localType = ref(pageKey.value)
+watch(pageKey, (newKey) => {
+  localType.value = newKey
+})
+
+watch(localType, async (newType) => {
+  if (newType !== pageKey.value) {
+    const scrollY = window.scrollY
+    const { page, ...restQuery } = route.query
+    await router.push({ name: newType, query: restQuery })
+    await nextTick()
+    // Both scrollBehavior (router) and this manual restore are needed:
+    // scrollBehavior prevents Vue Router from scrolling to top on navigation,
+    // but the browser still clamps scrollY when the document shrinks during
+    // the reactive re-render (old results → loading state → new results).
+    window.scrollTo(0, scrollY)
   }
 })
 
 onMounted(() => {
-  if (!pageConf.list_all) {
+  if (!pageConf.value.list_all) {
     router.push({ name: 'not_found' })
   }
 })
 const createUrl = computed(() => ({
-  name: `${pageKey}_add`,
+  name: `${pageKey.value}_add`,
   query: route.query
 }))
 </script>

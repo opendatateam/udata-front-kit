@@ -161,11 +161,8 @@ export const useSearchPageRoutes = ({
           tagFilters
         },
         component: listViewComponent,
-        props: (route: RouteLocationNormalizedLoaded) => ({
-          // this forces the component to be recreated when switching page type
-          key: pageKey,
-          query: route.query.q,
-          page: route.query.page
+        props: () => ({
+          // no props needed — UnifiedSearchView reads everything from the route directly
         })
       },
       {
@@ -179,8 +176,6 @@ export const useSearchPageRoutes = ({
           datasetCardComponent
         },
         props: () => ({
-          // this forces the component to be recreated when switching page type
-          key: pageKey,
           ...props
         })
       }
