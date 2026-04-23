@@ -415,7 +415,7 @@ pages:
   bouquets:
     list_all: true
     universe_query:
-      tag: ecospheres
+      tag: univers-ecospheres
     filter_prefix: ecospheres
     title: Collections thématiques
     breadcrumb_title: Collections
