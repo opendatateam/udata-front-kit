@@ -103,9 +103,9 @@ Cette procédure est à utiliser dans le cas suivant&nbsp;: vous avez signalé a
 
 - Écrire un message au [Défenseur des droits](https://formulaire.defenseurdesdroits.fr/)
 - Contacter le [délégué du Défenseur des droits dans votre région](https://www.defenseurdesdroits.fr/saisir/delegues)
-- Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre)&nbsp;: 
+- Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre)&nbsp;:
   ```
-  Défenseur des droits  
-  Libre réponse 71120  
+  Défenseur des droits
+  Libre réponse 71120
   75342 Paris CEDEX 07
   ```
