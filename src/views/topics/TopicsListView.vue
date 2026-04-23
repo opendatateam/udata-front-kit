@@ -130,6 +130,7 @@ onMounted(() => {
             ref="topicListComp"
             :query="props.query"
             :page="props.page"
+            :use-search-endpoint="props.useSearchEndpoint ?? false"
           />
         </div>
       </div>

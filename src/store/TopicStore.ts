@@ -57,19 +57,33 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
+    async query(
+      args: QueryArgs,
+      pageKey?: string,
+      useSearchEndpoint = false
+    ): Promise<Topic[]> {
       const { query, ...queryArgs } = args
 
       const params = usePageQueryParams(pageKey || 'topics', queryArgs)
 
-      const results = await topicsAPI.list({
-        params: {
+      let results
+      if (useSearchEndpoint) {
+        const { include_private, ...searchParams } = params
+        results = await topicsAPI.search({
           q: query,
           page_size: config.website.pagination_sizes.topics_list,
-          ...params
-        },
-        authenticated: true
-      })
+          ...searchParams
+        })
+      } else {
+        results = await topicsAPI.list({
+          params: {
+            q: query,
+            page_size: config.website.pagination_sizes.topics_list,
+            ...params
+          },
+          authenticated: true
+        })
+      }
       this.topics = results.data
       this.total = results.total
       return this.topics
