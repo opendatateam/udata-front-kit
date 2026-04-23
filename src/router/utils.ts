@@ -268,7 +268,11 @@ function buildSingleTypeConfig(
       name,
       hiddenFilters: hiddenFilters as DatasetHiddenFilter[],
       basicFilters: basicFilters as DatasetFilterKey[],
-      advancedFilters: advancedFilters as DatasetFilterKey[]
+      advancedFilters: advancedFilters as DatasetFilterKey[],
+      sortOptions: [
+        { value: '-created', label: 'Date de création' },
+        { value: '-last_update', label: 'Dernière mise à jour' }
+      ]
     })
   }
 }
