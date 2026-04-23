@@ -46,6 +46,12 @@ export interface TagFilterConfig {
   values: Array<{ value: string; label: string }>
 }
 
+export interface OrganizationFilterConfig {
+  pageKey: string
+  label: string
+  defaultOption: string
+}
+
 export type QueryAsString = Record<string, string | null | undefined>
 
 interface RouteLocationParamsAsString
@@ -125,6 +131,7 @@ interface SearchPageRoutesOptions {
   searchType?: PageObjectType
   searchConfig?: GlobalSearchConfig
   tagFilters?: TagFilterConfig[]
+  organizationFilter?: OrganizationFilterConfig | null
 }
 
 export const useSearchPageRoutes = ({
@@ -141,7 +148,8 @@ export const useSearchPageRoutes = ({
   props,
   searchType,
   searchConfig,
-  tagFilters
+  tagFilters,
+  organizationFilter
 }: SearchPageRoutesOptions): RouteRecordRaw => {
   return {
     path: `/${pageKey}`,
@@ -158,7 +166,8 @@ export const useSearchPageRoutes = ({
           listComponent,
           searchType,
           searchConfig,
-          tagFilters
+          tagFilters,
+          organizationFilter
         },
         component: listViewComponent,
         props: () => ({
@@ -287,6 +296,7 @@ function buildSingleTypeConfig(
 function buildGlobalSearchConfig(pageKey: string): {
   searchConfig: GlobalSearchConfig
   tagFilters: TagFilterConfig[]
+  organizationFilter: OrganizationFilterConfig | null
 } {
   const pageConf = usePageConf(pageKey)
   const allPages = usePagesConf()
@@ -313,7 +323,20 @@ function buildGlobalSearchConfig(pageKey: string): {
       }))
     }))
 
-  return { searchConfig, tagFilters }
+  // Build organization filter config (rendered via SearchOrganizationFilter in #custom-filters slot).
+  const orgFilterConf = (pageConf.filters ?? []).find(
+    (f) => f.type === 'organization_facet' && f.search_display
+  )
+  const organizationFilter: OrganizationFilterConfig | null = orgFilterConf
+    ? {
+        pageKey,
+        label: orgFilterConf.name,
+        defaultOption:
+          orgFilterConf.default_option ?? 'Toutes les organisations'
+      }
+    : null
+
+  return { searchConfig, tagFilters, organizationFilter }
 }
 
 /**
@@ -332,7 +355,8 @@ export const useGlobalSearchPageRoutes = ({
   const objectType = pageConf.object_type
   const listViewComponent = () => import('@/views/UnifiedSearchView.vue')
 
-  const { searchConfig, tagFilters } = buildGlobalSearchConfig(pageKey)
+  const { searchConfig, tagFilters, organizationFilter } =
+    buildGlobalSearchConfig(pageKey)
 
   const defaultDetailsView = () =>
     objectType === 'dataservices'
@@ -352,7 +376,8 @@ export const useGlobalSearchPageRoutes = ({
     props: topicConf as unknown as Record<string, unknown>,
     searchType: objectType,
     searchConfig,
-    tagFilters
+    tagFilters,
+    organizationFilter
   })
 }
 

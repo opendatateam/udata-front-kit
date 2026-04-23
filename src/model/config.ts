@@ -47,8 +47,7 @@ export enum GlobalSearchNativeFilterType {
   OrganizationBadge = 'organization_badge',
   Topic = 'topic',
   ProducerType = 'producer_type',
-  Organization = 'organization',
-  OrganizationFacet = 'organization_facet'
+  Organization = 'organization'
 }
 
 export interface PageFilterConf {
@@ -60,6 +59,7 @@ export interface PageFilterConf {
     | 'select'
     | 'checkbox'
     | 'organization'
+    | 'organization_facet'
     | 'private'
     | GlobalSearchNativeFilterType
   /** Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch) */

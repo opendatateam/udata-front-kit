@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SearchOrganizationFilter from '@/components/search/SearchOrganizationFilter.vue'
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
@@ -114,11 +115,20 @@ const createUrl = computed(() => ({
     <Suspense>
       <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
         <!-- FIXME: validate placement top/bottom -->
-        <template v-if="route.meta.tagFilters?.length" #custom-filters-top>
+        <template
+          v-if="route.meta.tagFilters?.length || route.meta.organizationFilter"
+          #custom-filters-top
+        >
           <SearchSelectFilter
             v-for="filter in route.meta.tagFilters"
             :key="filter.urlParam"
             :config="filter"
+          />
+          <SearchOrganizationFilter
+            v-if="route.meta.organizationFilter"
+            :page-key="localType"
+            :label="route.meta.organizationFilter.label"
+            :default-option="route.meta.organizationFilter.defaultOption"
           />
         </template>
         <template #dataset="{ dataset }">
