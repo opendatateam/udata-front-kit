@@ -116,20 +116,19 @@ const createUrl = computed(() => ({
       <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
         <!-- FIXME: validate placement top/bottom -->
         <template
-          v-if="route.meta.tagFilters?.length || route.meta.organizationFilter"
+          v-if="route.meta.customSelectFilters?.length"
           #custom-filters-top
         >
-          <SearchSelectFilter
-            v-for="filter in route.meta.tagFilters"
+          <template
+            v-for="filter in route.meta.customSelectFilters"
             :key="filter.urlParam"
-            :config="filter"
-          />
-          <SearchOrganizationFilter
-            v-if="route.meta.organizationFilter"
-            :page-key="localType"
-            :label="route.meta.organizationFilter.label"
-            :default-option="route.meta.organizationFilter.defaultOption"
-          />
+          >
+            <SearchSelectFilter v-if="'values' in filter" :config="filter" />
+            <SearchOrganizationFilter
+              v-else
+              :config="{ ...filter, pageKey: localType }"
+            />
+          </template>
         </template>
         <template #dataset="{ dataset }">
           <component

@@ -1,13 +1,10 @@
 <script setup lang="ts">
+import type { OrganizationFilterConfig } from '@/router/utils'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { SearchableSelect, useSearchFilter } from '@datagouv/components-next'
 import { computed, onMounted, ref, watch } from 'vue'
 
-const props = defineProps<{
-  pageKey: string
-  label: string
-  defaultOption: string
-}>()
+const props = defineProps<{ config: OrganizationFilterConfig }>()
 
 const organizationStore = useOrganizationStore()
 
@@ -19,18 +16,18 @@ const loadOrgs = async (key: string) => {
 }
 
 onMounted(async () => {
-  await loadOrgs(props.pageKey)
+  await loadOrgs(props.config.pageKey)
 })
 
 watch(
-  () => props.pageKey,
+  () => props.config.pageKey,
   async (newKey) => {
     await loadOrgs(newKey)
   }
 )
 
-const urlValue = useSearchFilter('organization', {
-  apiParam: 'organization'
+const urlValue = useSearchFilter(props.config.urlParam, {
+  apiParam: props.config.apiParam
 })
 
 const model = computed<{ id: string; name: string } | null>({
@@ -50,8 +47,8 @@ const model = computed<{ id: string; name: string } | null>({
     :options="orgOptions"
     :get-option-id="(opt) => opt.id"
     :display-value="(opt) => opt?.name ?? ''"
-    :placeholder="defaultOption"
-    :label="label"
+    :placeholder="config.defaultLabel"
+    :label="config.label"
     :multiple="false"
   />
 </template>
