@@ -17,8 +17,10 @@ import {
 } from 'vue-router'
 import type { TopicPageRouterConf } from './model'
 
-// Extract filter key and hidden-filter types from the exported config helpers,
-// since the underlying filter interfaces are not re-exported by the package.
+// FIXME: tight coupling on upstream types — filter interfaces are not re-exported by
+// @datagouv/components-next, so we infer them from return shapes. If the package changes
+// its return shape (e.g. renames basicFilters), these types silently break. Ask upstream
+// to export the filter interfaces directly.
 type DatasetFilterKey = NonNullable<
   ReturnType<typeof getDefaultDatasetConfig>['basicFilters']
 >[number]
