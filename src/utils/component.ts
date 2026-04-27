@@ -21,13 +21,6 @@ interface UseAsyncComponentOptions<T extends Component | null = null> {
  *   () => meta?.cardComponent,
  *   { fallback: DatasetCard }
  * )
- *
- * @example
- * // Load component from router meta with loading component
- * const ListComponent = useAsyncComponent(
- *   () => meta?.listComponent,
- *   { loadingComponent: ContentPlaceholder }
- * )
  */
 export function useAsyncComponent<T extends Component | null = null>(
   loader: () => (() => Promise<Component>) | undefined,

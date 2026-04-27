@@ -10,12 +10,9 @@ declare module 'vue-router' {
   interface RouteMeta {
     title?: string
     requiresAuth?: boolean
-    filtersComponent?: () => Promise<{ default: Component }>
     cardComponent?: () => Promise<{ default: Component }>
     datasetCardComponent?: () => Promise<{ default: Component }>
-    listComponent?: () => Promise<{ default: Component }>
     descriptionComponent?: () => Promise<{ default: Component }>
-    cardClass?: string
     pageKey?: string
     // GlobalSearch-specific
     searchType?: PageObjectType

@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       '@datagouv/components-next':
-        specifier: file:.yalc/@datagouv/components-next
-        version: file:.yalc/@datagouv/components-next(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
+        specifier: 1.0.2-dev.59
+        version: 1.0.2-dev.59(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       '@ecolabdata/tabular-dataviz':
         specifier: ^1.3.3
         version: 1.3.3(chart.js@4.5.1)
@@ -483,8 +483,11 @@ packages:
         integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==
       }
 
-  '@datagouv/components-next@file:.yalc/@datagouv/components-next':
-    resolution: { directory: .yalc/@datagouv/components-next, type: directory }
+  '@datagouv/components-next@1.0.2-dev.59':
+    resolution:
+      {
+        integrity: sha512-psat0gBsjc/M7/vb3EWqeObvuv+BekIuJ2heRMBIaTyXfkKn/MROX+GwJ2g+wb+4i2LL9BQ6ZFM8acyoT1FnWA==
+      }
     engines:
       {
         node: '>= 20.0.0',
@@ -8611,7 +8614,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@datagouv/components-next@file:.yalc/@datagouv/components-next(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
+  '@datagouv/components-next@1.0.2-dev.59(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
     dependencies:
       '@floating-ui/vue': 1.1.11(vue@3.5.30(typescript@5.7.3))
       '@headlessui/vue': 1.7.23(vue@3.5.30(typescript@5.7.3))

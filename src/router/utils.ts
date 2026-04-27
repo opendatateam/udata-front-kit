@@ -126,11 +126,8 @@ export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
 interface SearchPageRoutesOptions {
   pageKey: string
   metaTitle: string
-  cardClass?: string
   listViewComponent: () => Promise<{ default: Component }>
-  listComponent?: () => Promise<{ default: Component }>
   detailsViewComponent: () => Promise<{ default: Component }>
-  filtersComponent?: () => Promise<{ default: Component }>
   cardComponent?: () => Promise<{ default: Component }>
   datasetCardComponent?: () => Promise<{ default: Component }>
   descriptionComponent?: () => Promise<{ default: Component }>
@@ -144,11 +141,8 @@ interface SearchPageRoutesOptions {
 export const useSearchPageRoutes = ({
   pageKey,
   metaTitle,
-  cardClass,
   listViewComponent,
-  listComponent,
   detailsViewComponent,
-  filtersComponent,
   cardComponent,
   datasetCardComponent,
   descriptionComponent,
@@ -166,10 +160,7 @@ export const useSearchPageRoutes = ({
         meta: {
           title: metaTitle,
           pageKey,
-          cardClass,
-          filtersComponent,
           cardComponent,
-          listComponent,
           searchType,
           searchConfig,
           customSelectFilters
