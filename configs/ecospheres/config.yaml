@@ -433,7 +433,7 @@ pages:
     object_type: topics
     list_all: true
     universe_query:
-      tag: ecospheres
+      tag: univers-ecospheres
     filter_prefix: ecospheres
     title: Collections thématiques
     breadcrumb_title: Collections
