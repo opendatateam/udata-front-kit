@@ -315,10 +315,11 @@ function buildGlobalSearchConfig(pageKey: string): {
     .filter(
       (f) =>
         f.search_display &&
-        ((f.type === 'select' && f.values?.length) || f.type === 'organization')
+        ((f.type === 'select' && f.values?.length) ||
+          f.type === 'organization_custom')
     )
     .map((f) => {
-      if (f.type === 'organization') {
+      if (f.type === 'organization_custom') {
         return {
           urlParam: 'organization',
           label: f.name,

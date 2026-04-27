@@ -58,7 +58,8 @@ export interface PageFilterConf {
     | 'spatial_granularity'
     | 'select'
     | 'checkbox'
-    | 'organization'
+    // `organization_custom` in order to differentiate from native upstream filter
+    | 'organization_custom'
     | 'private'
     | GlobalSearchNativeFilterType
   /** Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch) */

@@ -306,7 +306,7 @@ pages:
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
-        type: organization
+        type: organization_custom
         search_display: basic
         values: []
       - name: Granularité
@@ -425,7 +425,7 @@ pages:
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
-        type: organization
+        type: organization_custom
         search_display: basic
         values: []
   # BOUQUETS
@@ -473,7 +473,7 @@ pages:
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
-        type: organization
+        type: organization_custom
         search_display: basic
       - name: Thématique
         default_option: Toutes les thématiques

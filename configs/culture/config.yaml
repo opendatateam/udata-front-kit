@@ -242,4 +242,4 @@ pages:
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
-        type: organization
+        type: organization_custom
