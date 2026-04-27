@@ -177,9 +177,6 @@ const createUrl = computed(() => ({
               name: `${localType}_detail`,
               params: { item_id: (topic as TopicV2).slug }
             }"
-            :organization-url="
-              organizationUrl((topic as TopicV2).organization?.id)
-            "
           />
         </template>
       </GlobalSearch>

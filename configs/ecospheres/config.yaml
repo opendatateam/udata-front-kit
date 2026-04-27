@@ -389,103 +389,6 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
-  # DATASERVICES
-  dataservices:
-    object_type: dataservices
-    list_all: true
-    universe_query:
-      topic: 65e9aa6cb5c809c30c70ee02
-    filter_prefix:
-    title: API
-    breadcrumb_title: API
-    labels:
-      singular: API
-      plural: APIs
-      extended: API
-      feminine: true
-    search:
-      input: Rechercher une API
-    banner:
-      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
-      content: |
-        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
-    resources_tabs:
-      discussions:
-        display: true
-        create: true
-      datasets:
-        display: true
-    editable: false
-    filters:
-      - name: Mise à jour
-        id: last_update_range
-        type: last_update_range
-        search_display: basic
-        values: []
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization_custom
-        search_display: basic
-        values: []
-  # BOUQUETS
-  bouquets:
-    object_type: topics
-    list_all: true
-    universe_query:
-      tag: univers-ecospheres
-    filter_prefix: ecospheres
-    title: Collections thématiques
-    breadcrumb_title: Collections
-    labels:
-      singular: collection
-      plural: collections thématiques
-      extended: collection thématique
-      feminine: true
-    search:
-      input: Filtrer les collections thématiques
-    banner:
-      title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
-      content: |
-        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/collections-thematiques/ajouter-une-collection)
-    resources_tabs:
-      discussions:
-        display: true
-        create: true
-      datasets:
-        display: true
-      reuses:
-        display: true
-    editable: true
-    filters:
-      - name: Afficher les brouillons
-        id: private
-        type: private
-        default_option:
-        default_value: true
-        authenticated: true
-        values: []
-      - name: Date de mise à jour
-        id: last_update_range
-        type: last_update_range
-        search_display: basic
-        values: []
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization_custom
-        search_display: basic
-      - name: Thématique
-        default_option: Toutes les thématiques
-        id: theme
-        type: select
-        search_display: basic
-        color: green-emeraude
-        use_filter_prefix: true
-        # TODO: use a dedicated config for the form?
-        form:
-          required: true
-        values: *fnv_themes
   # INDICATORS
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
@@ -668,6 +571,103 @@ pages:
             name: EPCI
           - id: commune
             name: Commune
+  # DATASERVICES
+  dataservices:
+    object_type: dataservices
+    list_all: true
+    universe_query:
+      topic: 65e9aa6cb5c809c30c70ee02
+    filter_prefix:
+    title: API
+    breadcrumb_title: API
+    labels:
+      singular: API
+      plural: APIs
+      extended: API
+      feminine: true
+    search:
+      input: Rechercher une API
+    banner:
+      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
+      content: |
+        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+    editable: false
+    filters:
+      - name: Mise à jour
+        id: last_update_range
+        type: last_update_range
+        search_display: basic
+        values: []
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization_custom
+        search_display: basic
+        values: []
+  # BOUQUETS
+  bouquets:
+    object_type: topics
+    list_all: true
+    universe_query:
+      tag: univers-ecospheres
+    filter_prefix: ecospheres
+    title: Collections thématiques
+    breadcrumb_title: Collections
+    labels:
+      singular: collection
+      plural: collections thématiques
+      extended: collection thématique
+      feminine: true
+    search:
+      input: Filtrer les collections thématiques
+    banner:
+      title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
+      content: |
+        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/collections-thematiques/ajouter-une-collection)
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - name: Afficher les brouillons
+        id: private
+        type: private
+        default_option:
+        default_value: true
+        authenticated: true
+        values: []
+      - name: Date de mise à jour
+        id: last_update_range
+        type: last_update_range
+        search_display: basic
+        values: []
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization_custom
+        search_display: basic
+      - name: Thématique
+        default_option: Toutes les thématiques
+        id: theme
+        type: select
+        search_display: basic
+        color: green-emeraude
+        use_filter_prefix: true
+        # TODO: use a dedicated config for the form?
+        form:
+          required: true
+        values: *fnv_themes
 
 ecospheres:
   homepage:
