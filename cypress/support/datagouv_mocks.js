@@ -49,22 +49,6 @@ Cypress.Commands.add(
   }
 )
 
-// We can't use req.query to check the request params because the tags are not handled as arrays
-// in the request so req.query only contains the last tag. So we check the params in the url instead.
-// This is a known issue of cypress: https://github.com/cypress-io/cypress/issues/17921
-Cypress.Commands.add(
-  'expectRequestWithParams',
-  (resourceName, requestParamsString) => {
-    cy.intercept('GET', datagouvUrlRegex(resourceName), (req) => {
-      if (requestParamsString instanceof RegExp) {
-        expect(req.url).to.match(requestParamsString)
-      } else {
-        expect(req.url).to.include(requestParamsString)
-      }
-    }).as(`get_${resourceName}_list`)
-  }
-)
-
 Cypress.Commands.add('mockMatomo', () => {
   cy.intercept('GET', 'https://stats.data.gouv.fr/matomo.js', {
     statusCode: 200,

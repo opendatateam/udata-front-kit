@@ -7,14 +7,8 @@ describe('Dataservices (API) - List Page', () => {
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
-    cy.mockUniverseOrganizations()
-    cy.mockDatagouvObjectList('discussions')
-
-    // Create test dataservices
     testDataservices = dataserviceFactory.many(3)
-
-    // Mock the API response
-    cy.mockDatagouvObjectList('dataservices', testDataservices)
+    cy.mockListApis('dataservices', testDataservices)
   })
 
   it('should display the list of dataservices', () => {

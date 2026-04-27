@@ -13,9 +13,8 @@ describe('Topics - List Page', () => {
     cy.mockSpatialLevels()
     cy.mockSpatialZone()
     cy.mockSpatialZonesSuggest()
-    cy.mockUniverseOrganizations()
     testTopics = topicFactory.many(3)
-    cy.mockDatagouvObjectList('topics', testTopics)
+    cy.mockListApis('topics', testTopics)
   })
 
   describe('List Display', () => {

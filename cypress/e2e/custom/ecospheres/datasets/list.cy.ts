@@ -8,9 +8,8 @@ describe('Datasets - List Page', () => {
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
-    cy.mockUniverseOrganizations()
     testDatasets = datasetFactory.many(3)
-    cy.mockDatagouvObjectList('datasets', testDatasets)
+    cy.mockListApis('datasets', testDatasets)
   })
 
   it('should display the list of datasets', () => {
@@ -62,17 +61,14 @@ describe('Datasets - List Page', () => {
     cy.contains('Regular Dataset Title').should('be.visible')
     cy.contains('Indicator Dataset Title').should('be.visible')
 
-    // Check that the indicator dataset has the "Indicateur" badge
-    cy.contains('Indicator Dataset Title')
-      .closest('li')
-      .find('.fr-badge')
-      .contains('Indicateur')
-      .should('be.visible')
+    // The indicator card wraps both the badge and the DatasetCard.
+    // Use the wrapper as the anchor to avoid fragile up-traversal across component boundaries.
+    cy.contains('.indicator-card-wrapper', 'Indicator Dataset Title')
+      .find('.indicator-badge')
+      .should('contain.text', 'Indicateur')
+      .and('be.visible')
 
-    // Check that the regular dataset does NOT have the "Indicateur" badge
-    cy.contains('Regular Dataset Title')
-      .closest('li')
-      .find('.fr-badge')
-      .should('not.exist')
+    // Only one indicator badge should exist in the list (the regular dataset has none)
+    cy.get('.indicator-badge').should('have.length', 1)
   })
 })

@@ -25,9 +25,25 @@ Cypress.Commands.add('clickCheckbox', (checkbox_name) => {
 Cypress.Commands.add(
   'expectActionToCallApi',
   (action, resourceName, expectedUrlParams) => {
+    const matches = (url) =>
+      expectedUrlParams instanceof RegExp
+        ? expectedUrlParams.test(url)
+        : url.includes(expectedUrlParams)
+
     cy.wait(`@get_${resourceName}_list`)
-    cy.expectRequestWithParams(resourceName, expectedUrlParams)
     action()
-    cy.wait(`@get_${resourceName}_list`)
+    // Check the intercepted call after the fact so background-type calls on pages
+    // with multiple search types (e.g. simplifions) don't cause false failures.
+    cy.wait(`@get_${resourceName}_list`).then((interception) => {
+      if (!matches(interception.request.url)) {
+        // Multiple types fired; the first call was a background type — check the next
+        cy.wait(`@get_${resourceName}_list`)
+          .its('request.url')
+          .should(
+            expectedUrlParams instanceof RegExp ? 'match' : 'include',
+            expectedUrlParams
+          )
+      }
+    })
   }
 )

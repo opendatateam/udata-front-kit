@@ -18,6 +18,7 @@ declare namespace Cypress {
     mockSpatialZone(): Chainable<void>
     mockSpatialZonesSuggest(): Chainable<void>
     mockStaticDatagouv(): Chainable<void>
+    mockListApis(primaryType: 'datasets' | 'dataservices' | 'topics', primaryData?: object[]): Chainable<void>
     mockUniverseOrganizations(): Chainable<void>
     simulateConnectedUser(userData?: object): Chainable<void>
     simulateDisconnectedUser(): Chainable<void>

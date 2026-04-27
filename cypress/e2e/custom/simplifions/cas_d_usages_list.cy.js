@@ -3,8 +3,7 @@ import './support'
 
 describe("Simplifions Cas d'usages Listing Page", () => {
   beforeEach(() => {
-    cy.baseMocksForSimplifions()
-    cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(11))
+    cy.baseMocksForSimplifions(topicCasUsageFactory.many(11))
     cy.visit('/cas-d-usages')
   })
 

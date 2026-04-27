@@ -5,13 +5,11 @@ describe('Topics - Empty List and Reset Filters', () => {
     cy.mockSpatialLevels()
     cy.mockSpatialZone()
     cy.mockSpatialZonesSuggest()
-    cy.mockUniverseOrganizations()
+    cy.mockListApis('topics')
   })
 
   describe('Reset Filters', () => {
     it('should clear all filter values when clicking "Réinitialiser les filtres"', () => {
-      // Start with empty results
-      cy.mockDatagouvObjectList('topics', [])
       cy.visit('/bouquets')
       cy.wait('@get_topics_list')
 
