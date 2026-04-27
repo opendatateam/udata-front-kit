@@ -11,8 +11,8 @@ describe('Datasets - List Page (no filters)', () => {
     cy.visit('/datasets')
     cy.wait('@get_datasets_list')
 
-    cy.get('.list-container').should('exist')
-    cy.get('.list-container').should('not.have.class', 'fr-col-md-8')
-    cy.get('.fr-sidemenu').should('not.exist')
+    // GlobalSearch renders section.search-results with no sidebar sibling when there are no filters
+    cy.get('section.search-results').should('exist')
+    cy.get('section.search-results').siblings().should('have.length', 0)
   })
 })

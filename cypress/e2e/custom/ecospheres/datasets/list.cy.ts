@@ -35,15 +35,7 @@ describe('Datasets - List Page', () => {
     cy.wait('@get_datasets_list')
     cy.wait('@get_universe_organizations')
 
-    // Click on the multiselect to open the dropdown
-    cy.contains('label.fr-label', 'Organisation')
-      .parent('.fr-select-group')
-      .within(() => {
-        cy.get('.multiselect-wrapper').click()
-      })
-
-    // Select ADEME from the dropdown options
-    cy.get('.multiselect-option[aria-label="ADEME"]').click()
+    cy.selectFilterValue('Organisation', 'ADEME')
 
     // Verify the URL contains the organization parameter
     cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
