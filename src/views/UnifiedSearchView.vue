@@ -112,6 +112,9 @@ const createUrl = computed(() => ({
   </section>
 
   <div class="fr-container fr-mb-4w">
+    <h2 v-if="pageConf.search?.input" class="fr-mb-2w">
+      {{ pageConf.search.input }}
+    </h2>
     <Suspense>
       <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
         <!-- FIXME: validate placement top/bottom -->
