@@ -3,7 +3,6 @@ import type { FilterOption, FilterState } from '@/model/filter'
 import type { QueryAsString } from '@/router/utils'
 import { usePageConf } from './config'
 import type { QueryArgs } from './tags'
-import { useUniverseQuery } from './universe'
 
 /**
  * Get filter configuration by filter ID
@@ -86,7 +85,7 @@ export const useFiltersState = (
   const pageConf = usePageConf(pageKey)
   const filtersState = reactive<Record<string, FilterState>>({})
   const filterItems = pageConf.filters
-    .filter((item) => item.type === 'select' || item.type === 'private')
+    .filter((item) => item.type === 'select')
     .filter((item) => !filterOnForm || item.form != null)
 
   const setChildOptions = (
@@ -135,41 +134,6 @@ export const useFiltersState = (
 }
 
 /**
- * Extract checkbox filters as defined in conf from query args and return them as a separate object
- */
-export const useCheckboxQuery = (
-  pageKey: string,
-  queryArgs: Record<string, string | null | undefined>
-) => {
-  const pageConf = usePageConf(pageKey)
-  const filters = pageConf.filters.filter((item) => item.type === 'private')
-  const checkboxArgs: Record<string, string> = {}
-  for (const filter of filters) {
-    if (filter.type === 'private') {
-      const queryFilter = queryArgs[filter.id]
-      // Checked (ON) → send nothing (authenticated users get public+own private by default)
-      // Unchecked (OFF) → send private=false (public only)
-      const isOff =
-        queryFilter === 'false' ||
-        (queryFilter == null && filter.default_value !== true)
-      if (isOff) {
-        checkboxArgs[filter.id] = 'false'
-        // TODO: remove when all servers migrated to `private` param
-        // Old server hides drafts by absence of include_private, not by include_private=false
-      } else {
-        // TODO: remove when all servers migrated to `private` param
-        checkboxArgs['include_private'] = 'true'
-      }
-    }
-    delete queryArgs[filter.id]
-  }
-  return {
-    checkboxArgs,
-    extraArgs: queryArgs
-  }
-}
-
-/**
  * Build an object of API parameters grouped by parameter name from filter query args and clean the original QueryArgs
  */
 export const useFiltersApiParams = (
@@ -199,49 +163,5 @@ export const useFiltersApiParams = (
   return {
     apiParams,
     extraArgs: query
-  }
-}
-
-/**
- * Process all page query parameters (filters, checkboxes) and merge with universe query
- * This is a convenience wrapper that combines useFiltersApiParams, useCheckboxQuery, and useUniverseQuery
- *
- * Example URL: `/bouquets?theme=mieux-consommer&organization=ademe&private=false&page=2`
- *
- * Processing flow:
- * 1. useFiltersApiParams extracts filter params:
- *    - `theme=mieux-consommer` → { tag: ['ecospheres-theme-mieux-consommer'] }
- *    - `organization=ademe` → { organization: ['ademe'] }
- * 2. useCheckboxQuery extracts checkbox/drafts params:
- *    - `private=false` → { private: 'false', include_private: 'false' }
- * 3. useUniverseQuery merges with universe_query from config (universe_query: { tag: 'ecospheres' }):
- *    - Merges to: { tag: ['ecospheres-theme-mieux-consommer', 'ecospheres'], organization: ['ademe'] }
- * 4. Returns merged object ready for API:
- *    - { tag: ['ecospheres-theme-mieux-consommer', 'ecospheres'], organization: ['ademe'], private: 'false', include_private: 'false', page: '2' }
- */
-export const usePageQueryParams = (
-  pageKey: string,
-  queryArgs: QueryArgs,
-  filterOnForm: boolean = false
-) => {
-  // Extract filter API params from query args
-  const { extraArgs: argsAfterFiltersQuery, apiParams } = useFiltersApiParams(
-    pageKey,
-    queryArgs,
-    filterOnForm
-  )
-  // Extract checkbox filters from remaining args
-  const { extraArgs: refinedFilterArgs, checkboxArgs } = useCheckboxQuery(
-    pageKey,
-    argsAfterFiltersQuery
-  )
-  // Merge API params with universe query
-  const mergedApiParams = useUniverseQuery(pageKey, apiParams)
-
-  // Return everything merged into a single object
-  return {
-    ...mergedApiParams,
-    ...checkboxArgs,
-    ...refinedFilterArgs
   }
 }

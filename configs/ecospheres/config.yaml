@@ -258,7 +258,6 @@ definitions: &definitions
 #         api_param: {string?}      # API query parameter name to use (optional, defaults to "tag")
 #         default_option: {string?} # default option for the filter (optional)
 #         default_value: {string?}  # default value for the filter (optional)
-#         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
 #         hide_on_list: {bool?}     # do not display filter on list page (optional, defaults to false)
 #         values:                   # list of values for this filter
 #           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
@@ -645,13 +644,6 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Afficher les brouillons
-        id: private
-        type: private
-        default_option:
-        default_value: true
-        authenticated: true
-        values: []
       - name: Date de mise à jour
         id: last_update_range
         type: last_update_range

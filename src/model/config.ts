@@ -57,7 +57,6 @@ export interface PageFilterConf {
     | 'select'
     // `organization_custom` in order to differentiate from native upstream filter
     | 'organization_custom'
-    | 'private'
     | GlobalSearchNativeFilterType
   /** Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch) */
   search_display?: 'basic' | 'advanced'
@@ -68,7 +67,6 @@ export interface PageFilterConf {
   use_filter_prefix: boolean | null
   api_param: string | null
   form: PageFilterFormConf | null
-  authenticated: boolean | null
   hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }

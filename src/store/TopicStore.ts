@@ -6,20 +6,11 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { usePageQueryParams } from '@/utils/filters'
 import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI({ version: 2 })
-
-interface QueryArgs {
-  query: string
-  page: string
-  private?: string
-  page_size?: string
-  featured?: string
-}
 
 export interface RootState {
   topics: Topic[]
@@ -57,37 +48,6 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(
-      args: QueryArgs,
-      pageKey?: string,
-      useSearchEndpoint = false
-    ): Promise<Topic[]> {
-      const { query, ...queryArgs } = args
-
-      const params = usePageQueryParams(pageKey || 'topics', queryArgs)
-
-      let results
-      if (useSearchEndpoint) {
-        const { include_private, ...searchParams } = params
-        results = await topicsAPI.search({
-          q: query,
-          page_size: config.website.pagination_sizes.topics_list,
-          ...searchParams
-        })
-      } else {
-        results = await topicsAPI.list({
-          params: {
-            q: query,
-            page_size: config.website.pagination_sizes.topics_list,
-            ...params
-          },
-          authenticated: true
-        })
-      }
-      this.topics = results.data
-      this.total = results.total
-      return this.topics
-    },
     /**
      * Load topics to store from a list of ids and API
      */
