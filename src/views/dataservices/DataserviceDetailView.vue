@@ -37,7 +37,7 @@ const total = computed(
 
 const { pageKey, meta, pageConf } = useCurrentPageConf()
 
-const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+const CardComponent = useAsyncComponent(() => meta?.datasetCardComponent, {
   fallback: DatasetCard
 })
 const showDiscussions = pageConf.resources_tabs.discussions.display
