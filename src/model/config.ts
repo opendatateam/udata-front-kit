@@ -54,8 +54,6 @@ export interface PageFilterConf {
   name: string
   id: string
   type:
-    | 'spatial_zone'
-    | 'spatial_granularity'
     | 'select'
     | 'checkbox'
     // `organization_custom` in order to differentiate from native upstream filter

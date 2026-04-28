@@ -252,7 +252,7 @@ function buildSingleTypeConfig(
     if (!NATIVE_FILTER_TYPE_SET.has(filter.type)) continue
     if (!filter.search_display) {
       console.warn(
-        `[ecospheres] Filter "${filter.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
+        `Filter "${filter.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
       )
       continue
     }
@@ -326,7 +326,7 @@ function buildGlobalSearchConfig(pageKey: string): {
         f.type === 'organization_custom'
       if (isRenderable && !f.search_display) {
         console.warn(
-          `[ecospheres] Filter "${f.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
+          `Filter "${f.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
         )
       }
       return isRenderable && !!f.search_display
