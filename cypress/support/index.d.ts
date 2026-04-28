@@ -1,5 +1,6 @@
 declare namespace Cypress {
   interface Chainable {
+    expectActionToCallApi(action: () => void, resourceName: string, expectedParams: Record<string, string | string[]>): Chainable<void>
     checkRGAAContrast(): Chainable<void>
     isInViewport(options?: { threshold?: number; wait?: number }): Chainable<Element>
     mockDatasetAndRelatedObjects(dataset: object, resources?: Array, dataservices?: Array, reuses?: Array): Chainable<void>

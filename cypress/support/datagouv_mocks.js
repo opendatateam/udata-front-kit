@@ -1,9 +1,9 @@
 const datagouvResponseBuilder = (data) => {
   return {
-    data: data.slice(0, 10),
+    data: data.slice(0, 20),
     next_page: null,
-    page: Math.max(1, Math.ceil(data.length / 10)),
-    page_size: 10,
+    page: 1,
+    page_size: 20,
     previous_page: null,
     total: data.length
   }

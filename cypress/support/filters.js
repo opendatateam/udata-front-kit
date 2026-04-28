@@ -24,26 +24,33 @@ Cypress.Commands.add('clickCheckbox', (checkbox_name) => {
 
 Cypress.Commands.add(
   'expectActionToCallApi',
-  (action, resourceName, expectedUrlParams) => {
-    const matches = (url) =>
-      expectedUrlParams instanceof RegExp
-        ? expectedUrlParams.test(url)
-        : url.includes(expectedUrlParams)
+  (action, resourceName, expectedParams) => {
+    // Order-independent URL param matching: { tag: ['a', 'b'], q: 'foo' }
+    const matches = (url) => {
+      const params = new URL(url).searchParams
+      return Object.entries(expectedParams).every(([key, value]) => {
+        const actual = params.getAll(key)
+        const expected = Array.isArray(value) ? value : [value]
+        return expected.every((v) => actual.includes(v))
+      })
+    }
 
-    cy.wait(`@get_${resourceName}_list`)
+    const alias = `@get_${resourceName}_list`
+
+    // Drain one initial call (page load), then trigger the action.
+    cy.wait(alias)
     action()
-    // Check the intercepted call after the fact so background-type calls on pages
-    // with multiple search types (e.g. simplifions) don't cause false failures.
-    cy.wait(`@get_${resourceName}_list`).then((interception) => {
-      if (!matches(interception.request.url)) {
-        // Multiple types fired; the first call was a background type — check the next
-        cy.wait(`@get_${resourceName}_list`)
-          .its('request.url')
-          .should(
-            expectedUrlParams instanceof RegExp ? 'match' : 'include',
-            expectedUrlParams
-          )
-      }
-    })
+
+    // Pages with multiple search types (e.g. simplifions) fire one request per
+    // type, so several calls may be queued. Walk through them until we find one
+    // that satisfies the expected params.
+    const findMatch = (attemptsLeft) => {
+      cy.wait(alias).then((interception) => {
+        if (matches(interception.request.url)) return
+        if (attemptsLeft > 0) findMatch(attemptsLeft - 1)
+        else cy.wrap(interception.request.url).should('satisfy', matches)
+      })
+    }
+    findMatch(3)
   }
 )

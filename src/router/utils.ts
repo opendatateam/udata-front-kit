@@ -181,6 +181,8 @@ export const useSearchPageRoutes = ({
           datasetCardComponent
         },
         props: () => ({
+          // forces component remount when switching between page types
+          key: pageKey,
           ...props
         })
       }
@@ -247,8 +249,13 @@ function buildSingleTypeConfig(
   const basicFilters: string[] = []
   const advancedFilters: string[] = []
   for (const filter of pageConf.filters ?? []) {
-    if (!filter.search_display) continue
     if (!NATIVE_FILTER_TYPE_SET.has(filter.type)) continue
+    if (!filter.search_display) {
+      console.warn(
+        `[ecospheres] Filter "${filter.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
+      )
+      continue
+    }
     if (filter.search_display === 'basic') {
       basicFilters.push(filter.type)
     } else {
@@ -305,12 +312,17 @@ function buildGlobalSearchConfig(pageKey: string): {
 
   // Build customSelectFilters for the primary page (rendered via SearchSelectFilter/SearchOrganizationFilter in #custom-filters slot).
   const customSelectFilters: CustomFilterConfig[] = (pageConf.filters ?? [])
-    .filter(
-      (f) =>
-        f.search_display &&
-        ((f.type === 'select' && f.values?.length) ||
-          f.type === 'organization_custom')
-    )
+    .filter((f) => {
+      const isRenderable =
+        (f.type === 'select' && f.values?.length) ||
+        f.type === 'organization_custom'
+      if (isRenderable && !f.search_display) {
+        console.warn(
+          `[ecospheres] Filter "${f.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
+        )
+      }
+      return isRenderable && !!f.search_display
+    })
     .map((f) => {
       if (f.type === 'organization_custom') {
         return {
