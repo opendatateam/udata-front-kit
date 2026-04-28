@@ -66,11 +66,6 @@ website:
     search:
       display: true
       placeholder: Rechercher...
-      dropdown:
-        - text: Rechercher {} dans les <strong>cas d'usages</strong>
-          route: cas-d-usages
-        - text: Rechercher {} dans les <strong>solutions</strong>
-          route: solutions
   search_bar:
     display: false
   secondary_search:

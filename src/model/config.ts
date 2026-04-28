@@ -136,7 +136,6 @@ export type DatasetsConf = {
 export type HeaderSearchConf = {
   display: boolean
   placeholder?: string
-  dropdown?: { text: string; route: string }[]
 }
 
 export interface WebsiteConfig {

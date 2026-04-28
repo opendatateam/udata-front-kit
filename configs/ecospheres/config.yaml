@@ -72,7 +72,6 @@ website:
     search:
       display: false
       placeholder:
-      dropdown:
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
