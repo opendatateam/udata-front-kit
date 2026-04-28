@@ -181,6 +181,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
       title: Un guichet unique pour l'accès aux données de la culture
       content: |

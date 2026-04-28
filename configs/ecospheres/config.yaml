@@ -234,7 +234,8 @@ definitions: &definitions
 #       plural: {string}            # plural name for the object
 #       extended: {string}          # extended name for the object, singular
 #     search:
-#       input: {string}             # placeholder for the search input
+#       input: {string}             # label displayed above the search input
+#       placeholder: {string|null}  # input placeholder (null = no placeholder, omit = upstream default)
 #     banner:                       # banner for the list page (optionnal)
 #       title: {string}             # title for the banner
 #       content: {string}           # content for the banner
@@ -279,6 +280,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
       title: Un accès centralisé à des données produites par des acteurs de référence.
       content: |
@@ -405,6 +407,7 @@ pages:
       extended: indicateur
     search:
       input: Rechercher un indicateur
+      placeholder: null
     banner:
       title: Une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers.
       content: |
@@ -587,6 +590,7 @@ pages:
       feminine: true
     search:
       input: Rechercher une API
+      placeholder: null
     banner:
       title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
       content: |
@@ -626,6 +630,7 @@ pages:
       feminine: true
     search:
       input: Filtrer les collections thématiques
+      placeholder: null
     banner:
       title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
       content: |

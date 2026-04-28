@@ -325,6 +325,7 @@ pages:
       extended: défi
     search:
       input: Chercher un défi
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -367,6 +368,7 @@ pages:
       extended: jeu de données
     search:
       input:
+      placeholder: null
     banner:
     resources_tabs:
       discussions:

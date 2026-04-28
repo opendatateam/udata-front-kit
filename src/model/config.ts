@@ -87,6 +87,7 @@ export type PageBannerConf = {
 
 export type PageSearchConf = {
   input: string
+  placeholder?: string | null
 }
 
 export type PageLabelsConf = {

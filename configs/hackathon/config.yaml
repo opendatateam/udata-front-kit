@@ -163,6 +163,7 @@ pages:
       extended: hackathon
     search:
       input: Filtrer les hackathons
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -201,6 +202,7 @@ pages:
       extended: jeu de données
     search:
       input:
+      placeholder: null
     banner:
     resources_tabs:
       discussions:

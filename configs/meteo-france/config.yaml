@@ -201,6 +201,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
     resources_tabs:
       discussions:

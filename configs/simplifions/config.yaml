@@ -257,6 +257,7 @@ pages:
       extended: cas d'usage
     search:
       input: Filtrer les cas d'usages
+      placeholder: null
     default_sort: name
     resources_tabs:
       discussions:
@@ -320,6 +321,7 @@ pages:
       feminine: true
     search:
       input: Filtrer les solutions
+      placeholder: null
     default_sort: name
     resources_tabs:
       discussions:

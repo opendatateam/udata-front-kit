@@ -263,13 +263,19 @@ function buildSingleTypeConfig(
     }
   }
   const name = pageConf.breadcrumb_title ?? pageConf.title
+  // GlobalSearch checks `'placeholder' in cfg` (not `cfg.placeholder !== undefined`), so
+  // spreading `placeholder: undefined` would suppress the upstream default. Only include the
+  // key when the YAML explicitly sets it (null = empty input, string = custom text).
+  const { placeholder } = pageConf.search
+  const placeholderOverride = placeholder !== undefined ? { placeholder } : {}
   if (searchType === 'topics') {
     return getDefaultTopicConfig({
       key: pageKey,
       name,
       hiddenFilters: hiddenFilters as TopicHiddenFilter[],
       basicFilters: basicFilters as TopicFilterKey[],
-      advancedFilters: advancedFilters as TopicFilterKey[]
+      advancedFilters: advancedFilters as TopicFilterKey[],
+      ...placeholderOverride
     })
   } else if (searchType === 'dataservices') {
     return getDefaultDataserviceConfig({
@@ -277,7 +283,8 @@ function buildSingleTypeConfig(
       name,
       hiddenFilters: hiddenFilters as DataserviceHiddenFilter[],
       basicFilters: basicFilters as DataserviceFilterKey[],
-      advancedFilters: advancedFilters as DataserviceFilterKey[]
+      advancedFilters: advancedFilters as DataserviceFilterKey[],
+      ...placeholderOverride
     })
   } else {
     return getDefaultDatasetConfig({
@@ -286,7 +293,8 @@ function buildSingleTypeConfig(
       hiddenFilters: hiddenFilters as DatasetHiddenFilter[],
       basicFilters: basicFilters as DatasetFilterKey[],
       advancedFilters: advancedFilters as DatasetFilterKey[],
-      sortOptions: datasetSortOptions
+      sortOptions: datasetSortOptions,
+      ...placeholderOverride
     })
   }
 }
