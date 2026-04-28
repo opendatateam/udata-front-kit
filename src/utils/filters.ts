@@ -86,12 +86,7 @@ export const useFiltersState = (
   const pageConf = usePageConf(pageKey)
   const filtersState = reactive<Record<string, FilterState>>({})
   const filterItems = pageConf.filters
-    .filter(
-      (item) =>
-        item.type === 'select' ||
-        item.type === 'checkbox' ||
-        item.type === 'private'
-    )
+    .filter((item) => item.type === 'select' || item.type === 'private')
     .filter((item) => !filterOnForm || item.form != null)
 
   const setChildOptions = (
@@ -147,21 +142,10 @@ export const useCheckboxQuery = (
   queryArgs: Record<string, string | null | undefined>
 ) => {
   const pageConf = usePageConf(pageKey)
-  const filters = pageConf.filters.filter(
-    (item) => item.type === 'checkbox' || item.type === 'private'
-  )
+  const filters = pageConf.filters.filter((item) => item.type === 'private')
   const checkboxArgs: Record<string, string> = {}
   for (const filter of filters) {
-    if (filter.type === 'checkbox') {
-      const queryFilter = queryArgs[filter.id]
-      // include the filter if it's true or if it's not in the query and the default is true
-      if (
-        queryFilter === 'true' ||
-        (queryFilter == null && filter.default_value === true)
-      ) {
-        checkboxArgs[filter.id] = 'true'
-      }
-    } else if (filter.type === 'private') {
+    if (filter.type === 'private') {
       const queryFilter = queryArgs[filter.id]
       // Checked (ON) → send nothing (authenticated users get public+own private by default)
       // Unchecked (OFF) → send private=false (public only)

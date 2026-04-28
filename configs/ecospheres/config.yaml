@@ -251,7 +251,7 @@ definitions: &definitions
 #     filters:                      # list of filters for this {page_id}
 #       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
 #         id: {string}              # id of the filter
-#         type: {string}            # type of the filter (select | checkbox | organization_custom | or any GlobalSearchNativeFilterType)
+#         type: {string}            # type of the filter (select | organization_custom | or any GlobalSearchNativeFilterType)
 #         child: {string?}          # id of the child filter (optional)
 #         color: {string}           # color of the filter's tag
 #         use_filter_prefix: {bool}    # whether to use {filter_prefix}-{filter.id}-{value} when building filter value

@@ -55,7 +55,6 @@ export interface PageFilterConf {
   id: string
   type:
     | 'select'
-    | 'checkbox'
     // `organization_custom` in order to differentiate from native upstream filter
     | 'organization_custom'
     | 'private'
