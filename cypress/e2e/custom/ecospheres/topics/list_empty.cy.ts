@@ -17,7 +17,6 @@ describe('Topics - Empty List and Reset Filters', () => {
       cy.contains('button', 'Réinitialiser les filtres').should('be.visible')
 
       // Navigate away and come back with all filters applied to test the reset
-      // SearchSelectFilter stores the full prefixed value in the URL
       cy.visit(
         '/bouquets?theme=ecospheres-theme-mieux-consommer&organization=534fff4ca3a7292c64a77c95'
       )
@@ -28,17 +27,17 @@ describe('Topics - Empty List and Reset Filters', () => {
       cy.url().should('include', 'theme=ecospheres-theme-mieux-consommer')
       cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
 
-      // Verify the theme filter is visually selected (ComboboxInput shows the selected value)
+      // Verify the theme filter is visually selected
       cy.contains('label.fr-label', 'Thématique')
         .closest('.fr-input-group')
-        .find('input')
-        .should('not.have.value', '')
+        .contains('Mieux consommer')
+        .should('be.visible')
 
       // Verify the organization filter is visually selected
       cy.contains('label.fr-label', 'Organisation')
         .closest('.fr-input-group')
-        .find('input')
-        .should('not.have.value', '')
+        .contains('ADEME')
+        .should('be.visible')
 
       // Click "Réinitialiser les filtres" button
       cy.contains('button', 'Réinitialiser les filtres').click()

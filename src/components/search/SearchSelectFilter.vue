@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { CustomSelectFilterConfig } from '@/router/utils'
+import type { SelectFilterConfig } from '@/router/utils'
 import { SearchableSelect, useSearchFilter } from '@datagouv/components-next'
 import { computed } from 'vue'
 
-type FilterOption = CustomSelectFilterConfig['values'][number]
+type FilterOption = SelectFilterConfig['values'][number]
 
-const props = defineProps<{ config: CustomSelectFilterConfig }>()
+const props = defineProps<{ config: SelectFilterConfig }>()
 
 const urlValue = useSearchFilter(props.config.urlParam, {
   apiParam: props.config.apiParam

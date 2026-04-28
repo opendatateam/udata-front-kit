@@ -113,7 +113,6 @@ describe('Simplifions Solutions Page', () => {
   })
 
   // TODO: private filter not yet ported to UnifiedSearchView.vue
-  // (was in deleted TopicList.vue — wire it up via #custom-filters-bottom slot)
   it.skip('should not have the private filter', () => {
     cy.get('input[name="private"]').should('not.exist')
   })

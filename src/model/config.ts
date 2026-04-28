@@ -32,6 +32,7 @@ export interface PageFilterFormConf {
   required: boolean
 }
 
+// FIXME: should be extracted from @datagouv/components-next once exported upstream
 /** GlobalSearch-native filter type keys (passed directly to basicFilters/advancedFilters) */
 export enum GlobalSearchNativeFilterType {
   LastUpdateRange = 'last_update_range',

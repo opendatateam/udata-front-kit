@@ -297,23 +297,19 @@ pages:
         id: last_update_range
         type: last_update_range
         search_display: basic
-        values: []
       - name: Label
         id: badge
         type: badge
         search_display: basic
-        values: []
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
         type: organization_custom
         search_display: basic
-        values: []
       - name: Granularité
         id: granularity
         type: granularity
         search_display: advanced
-        values: []
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
@@ -424,12 +420,10 @@ pages:
         id: last_update_range
         type: last_update_range
         search_display: basic
-        values: []
       - name: Label
         id: badge
         type: badge
         search_display: basic
-        values: []
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme
@@ -605,13 +599,11 @@ pages:
         id: last_update_range
         type: last_update_range
         search_display: basic
-        values: []
       - name: Organisation
         default_option: Toutes les organisations
         id: organization
         type: organization_custom
         search_display: basic
-        values: []
   # BOUQUETS
   bouquets:
     object_type: topics
@@ -647,7 +639,6 @@ pages:
         id: last_update_range
         type: last_update_range
         search_display: basic
-        values: []
       - name: Organisation
         default_option: Toutes les organisations
         id: organization

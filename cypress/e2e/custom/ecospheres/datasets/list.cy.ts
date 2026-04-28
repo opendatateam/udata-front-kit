@@ -62,7 +62,7 @@ describe('Datasets - List Page', () => {
     cy.contains('Indicator Dataset Title').should('be.visible')
 
     // The indicator card wraps both the badge and the DatasetCard.
-    // Use the wrapper as the anchor to avoid fragile up-traversal across component boundaries.
+    // Check that the indicator dataset has the "Indicateur" badge
     cy.contains('.indicator-card-wrapper', 'Indicator Dataset Title')
       .find('.indicator-badge')
       .should('contain.text', 'Indicateur')

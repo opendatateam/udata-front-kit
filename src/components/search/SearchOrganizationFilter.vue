@@ -26,8 +26,8 @@ watch(
   }
 )
 
-const urlValue = useSearchFilter(props.config.urlParam, {
-  apiParam: props.config.apiParam
+const urlValue = useSearchFilter('organization', {
+  apiParam: 'organization'
 })
 
 const model = computed<{ id: string; name: string } | null>({

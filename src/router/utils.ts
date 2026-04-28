@@ -40,7 +40,7 @@ type TopicHiddenFilter = NonNullable<
   ReturnType<typeof getDefaultTopicConfig>['hiddenFilters']
 >[number]
 
-export interface CustomSelectFilterConfig {
+export interface SelectFilterConfig {
   urlParam: string
   label: string
   defaultLabel: string
@@ -49,16 +49,12 @@ export interface CustomSelectFilterConfig {
 }
 
 export interface OrganizationFilterConfig {
-  urlParam: 'organization'
   label: string
   defaultLabel: string
-  apiParam: 'organization'
   pageKey: string
 }
 
-export type CustomFilterConfig =
-  | CustomSelectFilterConfig
-  | OrganizationFilterConfig
+export type CustomFilterConfig = SelectFilterConfig | OrganizationFilterConfig
 
 export type QueryAsString = Record<string, string | null | undefined>
 
@@ -135,7 +131,7 @@ interface SearchPageRoutesOptions {
   // GlobalSearch-specific
   searchType?: PageObjectType
   searchConfig?: GlobalSearchConfig
-  customSelectFilters?: CustomFilterConfig[]
+  customFilters?: CustomFilterConfig[]
 }
 
 export const useSearchPageRoutes = ({
@@ -149,7 +145,7 @@ export const useSearchPageRoutes = ({
   props,
   searchType,
   searchConfig,
-  customSelectFilters
+  customFilters
 }: SearchPageRoutesOptions): RouteRecordRaw => {
   return {
     path: `/${pageKey}`,
@@ -163,12 +159,9 @@ export const useSearchPageRoutes = ({
           cardComponent,
           searchType,
           searchConfig,
-          customSelectFilters
+          customFilters
         },
-        component: listViewComponent,
-        props: () => ({
-          // no props needed — UnifiedSearchView reads everything from the route directly
-        })
+        component: listViewComponent
       },
       {
         path: ':item_id',
@@ -181,7 +174,7 @@ export const useSearchPageRoutes = ({
           datasetCardComponent
         },
         props: () => ({
-          // forces component remount when switching between page types
+          // this forces the component to be recreated when switching page type
           key: pageKey,
           ...props
         })
@@ -304,11 +297,11 @@ function buildSingleTypeConfig(
  * Pages are included in their config definition order — the same order on every page —
  * so the type selector is stable across page switches.
  * Each page gets key=pageKey so same-class pages (e.g. datasets + indicators) are distinct.
- * Also returns customSelectFilters for the primary page for rendering via the #custom-filters slot.
+ * Also returns customFilters for the primary page for rendering via the #custom-filters slot.
  */
 function buildGlobalSearchConfig(pageKey: string): {
   searchConfig: GlobalSearchConfig
-  customSelectFilters: CustomFilterConfig[]
+  customFilters: CustomFilterConfig[]
 } {
   const pageConf = usePageConf(pageKey)
   const allPages = usePagesConf()
@@ -318,8 +311,8 @@ function buildGlobalSearchConfig(pageKey: string): {
     searchConfig.push(buildSingleTypeConfig(key, conf.object_type))
   }
 
-  // Build customSelectFilters for the primary page (rendered via SearchSelectFilter/SearchOrganizationFilter in #custom-filters slot).
-  const customSelectFilters: CustomFilterConfig[] = (pageConf.filters ?? [])
+  // Build customFilters for the primary page (rendered via SearchSelectFilter/SearchOrganizationFilter in #custom-filters slot).
+  const customFilters: CustomFilterConfig[] = (pageConf.filters ?? [])
     .filter((f) => {
       const isRenderable =
         (f.type === 'select' && f.values?.length) ||
@@ -334,10 +327,8 @@ function buildGlobalSearchConfig(pageKey: string): {
     .map((f) => {
       if (f.type === 'organization_custom') {
         return {
-          urlParam: 'organization',
           label: f.name,
           defaultLabel: f.default_option ?? 'Toutes les organisations',
-          apiParam: 'organization',
           pageKey
         }
       }
@@ -356,7 +347,7 @@ function buildGlobalSearchConfig(pageKey: string): {
       }
     })
 
-  return { searchConfig, customSelectFilters }
+  return { searchConfig, customFilters }
 }
 
 /**
@@ -375,7 +366,7 @@ export const useGlobalSearchPageRoutes = ({
   const objectType = pageConf.object_type
   const listViewComponent = () => import('@/views/UnifiedSearchView.vue')
 
-  const { searchConfig, customSelectFilters } = buildGlobalSearchConfig(pageKey)
+  const { searchConfig, customFilters } = buildGlobalSearchConfig(pageKey)
 
   const defaultDetailsView = () =>
     objectType === 'dataservices'
@@ -395,7 +386,7 @@ export const useGlobalSearchPageRoutes = ({
     props: topicConf as unknown as Record<string, unknown>,
     searchType: objectType,
     searchConfig,
-    customSelectFilters
+    customFilters
   })
 }
 

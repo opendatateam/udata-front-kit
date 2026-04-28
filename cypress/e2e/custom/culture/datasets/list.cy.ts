@@ -65,17 +65,12 @@ describe('Culture - Datasets List Page', () => {
         { tag: 'livre' }
       )
 
-      // Select an organization type — expectActionToCallApi can't be used here because it always
-      // drains one queued call before triggering the action (to skip the page-load request).
-      // That queued call was already consumed above, so a second drain would time out.
-      cy.selectFilterValue("Type d'organisation", 'Association')
-      // Verify the API call contains both filter parameters
-      cy.wait('@get_datasets_list').then((interception) => {
-        expect(interception.request.url).to.include('tag=livre')
-        expect(interception.request.url).to.include(
-          'organization_badge=association'
-        )
-      })
+      cy.expectActionToCallApi(
+        () => cy.selectFilterValue("Type d'organisation", 'Association'),
+        'datasets',
+        { tag: 'livre', organization_badge: 'association' },
+        { drain: false }
+      )
     })
   })
 })

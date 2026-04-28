@@ -30,10 +30,6 @@ const props = defineProps({
     type: Object as () => RouteLocationRaw,
     default: null
   },
-  organizationUrl: {
-    type: Object as () => RouteLocationRaw,
-    default: null
-  },
   hideDescription: {
     type: Boolean,
     default: false
@@ -101,13 +97,7 @@ const tags = useTags(props.pageKey, props.topic)
           class="fr-m-0 fr-text--sm org--fix"
         >
           <template v-if="topic.organization">
-            <RouterLink v-if="organizationUrl" :to="organizationUrl">
-              <OrganizationNameWithCertificate
-                :organization="topic.organization"
-              />
-            </RouterLink>
             <OrganizationNameWithCertificate
-              v-else
               :organization="topic.organization"
             />
           </template>

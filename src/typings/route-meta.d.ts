@@ -17,6 +17,6 @@ declare module 'vue-router' {
     // GlobalSearch-specific
     searchType?: PageObjectType
     searchConfig?: GlobalSearchConfig
-    customSelectFilters?: CustomFilterConfig[]
+    customFilters?: CustomFilterConfig[]
   }
 }

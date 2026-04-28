@@ -24,7 +24,7 @@ Cypress.Commands.add('clickCheckbox', (checkbox_name) => {
 
 Cypress.Commands.add(
   'expectActionToCallApi',
-  (action, resourceName, expectedParams) => {
+  (action, resourceName, expectedParams, { drain = true } = {}) => {
     // Order-independent URL param matching: { tag: ['a', 'b'], q: 'foo' }
     const matches = (url) => {
       const params = new URL(url).searchParams
@@ -37,11 +37,13 @@ Cypress.Commands.add(
 
     const alias = `@get_${resourceName}_list`
 
-    // Drain one initial call (page load), then trigger the action.
-    cy.wait(alias)
+    if (drain) {
+      // Drain one initial call (page load), then trigger the action.
+      cy.wait(alias)
+    }
     action()
 
-    // Pages with multiple search types (e.g. simplifions) fire one request per
+    // Pages with multiple search types fire one request per
     // type, so several calls may be queued. Walk through them until we find one
     // that satisfies the expected params.
     const findMatch = (attemptsLeft) => {

@@ -60,7 +60,7 @@ describe('Topics - List Page', () => {
 
       cy.selectFilterValue('Thématique', 'Mieux consommer')
 
-      // SearchSelectFilter stores the full prefixed value in the URL
+      // Verify the URL contains the theme parameter
       cy.url().should('include', 'theme=ecospheres-theme-mieux-consommer')
 
       // Wait for the filtered API call and verify parameters
@@ -74,7 +74,6 @@ describe('Topics - List Page', () => {
   })
 
   // TODO: private filter not yet ported to UnifiedSearchView.vue
-  // (was in deleted TopicList.vue — wire it up via #custom-filters-bottom slot)
   describe.skip('Draft Checkbox', () => {
     it('should not show "Afficher les brouillons" checkbox when disconnected', () => {
       cy.visit('/bouquets')
