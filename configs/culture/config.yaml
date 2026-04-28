@@ -200,6 +200,7 @@ pages:
         default_option: Toutes les catégories
         id: tag
         type: select
+        search_display: basic
         use_filter_prefix: false
         values:
           - name: '🗃️ Archives'
@@ -228,6 +229,7 @@ pages:
         default_option: Tous les types
         id: organization_badge
         type: select
+        search_display: basic
         api_param: organization_badge
         use_filter_prefix: false
         color: blue-france
@@ -244,3 +246,4 @@ pages:
         default_option: Toutes les organisations
         id: organization
         type: organization_custom
+        search_display: basic
