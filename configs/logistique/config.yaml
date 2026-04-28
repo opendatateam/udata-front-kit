@@ -217,6 +217,7 @@ pages:
         default_option: Toutes les catégories
         id: theme
         type: select
+        search_display: basic
         color: green-bourgeon
         use_filter_prefix: true
         form:
