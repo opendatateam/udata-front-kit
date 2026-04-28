@@ -64,8 +64,7 @@ website:
       label: 'Donnez votre avis'
       link: https://form.typeform.com/to/sYKAer7j
     search:
-      display: true
-      placeholder: Rechercher...
+      display: false
   search_bar:
     display: false
   secondary_search:
