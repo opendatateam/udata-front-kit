@@ -37,7 +37,11 @@ export const routes: RouteRecordRaw[] = [
       )
   }),
   useGlobalSearchPageRoutes({
-    pageKey: 'dataservices'
+    pageKey: 'dataservices',
+    cardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   useGlobalSearchPageRoutes({
     pageKey: 'bouquets',
