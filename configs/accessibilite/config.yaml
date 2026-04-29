@@ -4,10 +4,10 @@ site_id: accessibilite
 
 datagouvfr:
   # data.gouv.fr base URL
-  base_url: https://www.data.gouv.fr
+  base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 682c45ba772ed4a274715025
-  tabular_api_url:
+  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 # UI customizations
 website:
@@ -164,7 +164,7 @@ pages:
   datasets:
     list_all: true
     universe_query:
-      topic: 682b1be88b2474e04b3cb19a
+      topic: 69e0f61fc18dec5e382dea8b
     filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
@@ -189,8 +189,8 @@ pages:
   bouquets:
     list_all: true
     universe_query:
-      tag: accessibilite-datagouvfr
-    filter_prefix: accessibilite-datagouvfr
+      tag: accessibilite-univers
+    filter_prefix: accessibilite-univers
     title: Bouquets
     breadcrumb_title:
     labels:
