@@ -27,7 +27,7 @@ const model = computed<FilterOption | null>({
     :options="config.values"
     :get-option-id="(opt) => opt.value"
     :display-value="(opt) => opt?.label ?? ''"
-    :placeholder="config.defaultLabel"
+    :placeholder="config.defaultLabel ?? 'Tous'"
     :label="config.label"
     :multiple="false"
   />
