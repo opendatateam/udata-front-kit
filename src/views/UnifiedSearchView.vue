@@ -34,20 +34,22 @@ const links = computed(() => [
   { text: pageConf.value.breadcrumb_title ?? pageConf.value.title }
 ])
 
-// route.meta is reactive — read properties directly or via computed so they
-// update when Vue Router reuses this component across pages.
 const CardComponent = useAsyncComponent(
   () => route.meta.cardComponent as (() => Promise<Component>) | undefined
 )
 
-// localType is a plain ref (not prop-backed) so GlobalSearch can mutate it freely.
-// Synced to pageKey on route change so the type selector stays in sync when the
-// component is reused by Vue Router (no remount).
+// localType is needed because pageKey is read-only (derived from route), but
+// GlobalSearch needs a writable ref to track the active type (v-model:type).
+// When the user switches type, localType changes and the watch below navigates.
+// This watch keeps localType in sync when the route changes externally.
 const localType = ref(pageKey.value)
 watch(pageKey, (newKey) => {
   localType.value = newKey
 })
 
+// When the user switches type, navigate to the new route. The guard prevents
+// a loop: when pageKey changes externally and syncs localType (watch above),
+// this fires but newType === pageKey.value so the push is skipped.
 watch(localType, async (newType) => {
   if (newType !== pageKey.value) {
     const scrollY = window.scrollY
@@ -82,7 +84,9 @@ const createUrl = computed(() => ({
     <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
       <h1 class="fr-mb-0">{{ pageConf.title }}</h1>
       <div
-        v-if="userStore.canAddTopic(pageKey)"
+        v-if="
+          pageConf.object_type === 'topics' && userStore.canAddTopic(pageKey)
+        "
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
@@ -117,7 +121,6 @@ const createUrl = computed(() => ({
     </h2>
     <Suspense>
       <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
-        <!-- FIXME: validate placement top/bottom -->
         <template v-if="route.meta.customFilters?.length" #custom-filters-top>
           <template
             v-for="filter in route.meta.customFilters"
