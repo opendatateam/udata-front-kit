@@ -6,8 +6,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const topicConf = {
   displayMetadata: true,
-  enableReadMore: true,
-  datasetEditorialization: true
+  enableReadMore: true
 }
 
 export const routes: RouteRecordRaw[] = [
