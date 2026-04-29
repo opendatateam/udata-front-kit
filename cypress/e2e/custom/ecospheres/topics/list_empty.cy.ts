@@ -30,14 +30,14 @@ describe('Topics - Empty List and Reset Filters', () => {
       // Verify the theme filter is visually selected
       cy.contains('label.fr-label', 'Thématique')
         .closest('.fr-input-group')
-        .contains('Mieux consommer')
-        .should('be.visible')
+        .find('input')
+        .should('have.value', 'Mieux consommer')
 
       // Verify the organization filter is visually selected
       cy.contains('label.fr-label', 'Organisation')
         .closest('.fr-input-group')
-        .contains('ADEME')
-        .should('be.visible')
+        .find('input')
+        .should('have.value', 'ADEME')
 
       // Click "Réinitialiser les filtres" button
       cy.contains('button', 'Réinitialiser les filtres').click()
