@@ -36,6 +36,8 @@ const userStore = useUserStore()
 
 const ogcLayerInfo = ref(new Map<string, OgcLayerInfo[]>())
 
+const showDataservices = !!config.pages.dataservices
+
 const computeOgcInfo = async (datasetId: string) => {
   if (!config.website.datasets.open_in_qgis) return
   const results = await fetchAllOgcResources((page) =>
@@ -227,7 +229,10 @@ onMounted(() => {
 
       <!-- Réutilisations et API -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
-        <DatasetDataservicesList :dataset-id="dataset.id" />
+        <DatasetDataservicesList
+          v-if="showDataservices"
+          :dataset-id="dataset.id"
+        />
         <DatasetReusesList :dataset-id="dataset.id" />
       </DsfrTabContent>
 
