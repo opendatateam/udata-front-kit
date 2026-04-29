@@ -57,6 +57,20 @@ describe('Datasets - List Page', () => {
     cy.url().should('not.include', '/datasets')
   })
 
+  it('should clear org filter when switching to a type with a different org list', () => {
+    cy.visit('/datasets')
+    cy.wait('@get_datasets_list')
+    cy.wait('@get_universe_organizations')
+
+    cy.selectFilterValue('Organisation', 'ADEME')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
+
+    // Switch to API (dataservices) — also has an org filter but different values
+    cy.contains('label', 'API').click()
+    cy.url().should('include', '/dataservices')
+    cy.url().should('not.include', 'org=')
+  })
+
   it('should display indicator datasets with the Indicateur badge', () => {
     // Create a mix of regular datasets and indicator datasets
     const regularDataset = datasetFactory.one({

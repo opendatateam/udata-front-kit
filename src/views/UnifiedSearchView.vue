@@ -53,7 +53,16 @@ watch(pageKey, (newKey) => {
 watch(localType, async (newType) => {
   if (newType !== pageKey.value) {
     const scrollY = window.scrollY
-    const { page, ...restQuery } = route.query
+    const { page, ...allQuery } = route.query
+    // Org filter values are type-specific (different list per type) — don't carry them over
+    const orgParams = new Set(
+      (route.meta.customFilters ?? [])
+        .filter((f) => !('values' in f))
+        .map((f) => f.urlParam)
+    )
+    const restQuery = Object.fromEntries(
+      Object.entries(allQuery).filter(([k]) => !orgParams.has(k))
+    )
     await router.push({ name: newType, query: restQuery })
     await nextTick()
     // Both scrollBehavior (router) and this manual restore are needed:
