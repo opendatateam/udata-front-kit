@@ -36,7 +36,7 @@ describe('Dataservices (API) - List Page', () => {
     cy.selectFilterValue('Organisation', 'ADEME')
 
     // Verify the URL contains the organization parameter
-    cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
 
     // Wait for the filtered API call
     cy.wait('@get_dataservices_list')

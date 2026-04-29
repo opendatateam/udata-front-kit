@@ -21,7 +21,7 @@ watch(
 )
 
 const selectConfig = computed(() => ({
-  urlParam: 'organization',
+  urlParam: props.config.urlParam,
   apiParam: 'organization',
   label: props.config.label,
   defaultLabel: props.config.defaultLabel ?? 'Toutes les organisations',

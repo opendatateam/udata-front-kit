@@ -303,7 +303,7 @@ pages:
         search_display: basic
       - name: Organisation
         default_option: Toutes les organisations
-        id: organization
+        id: org
         type: organization_custom
         search_display: basic
       - name: Granularité
@@ -599,7 +599,7 @@ pages:
         search_display: basic
       - name: Organisation
         default_option: Toutes les organisations
-        id: organization
+        id: org
         type: organization_custom
         search_display: basic
   # BOUQUETS
@@ -639,7 +639,7 @@ pages:
         search_display: basic
       - name: Organisation
         default_option: Toutes les organisations
-        id: organization
+        id: org
         type: organization_custom
         search_display: basic
       - name: Thématique

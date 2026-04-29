@@ -37,10 +37,24 @@ describe('Datasets - List Page', () => {
     cy.selectFilterValue('Organisation', 'ADEME')
 
     // Verify the URL contains the organization parameter
-    cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
 
     // Wait for the filtered API call
     cy.wait('@get_datasets_list')
+  })
+
+  it('should navigate correctly when switching type while org filter is active', () => {
+    cy.visit('/datasets')
+    cy.wait('@get_datasets_list')
+    cy.wait('@get_universe_organizations')
+
+    cy.selectFilterValue('Organisation', 'ADEME')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
+
+    // Switch to Indicators type — must navigate to /indicators, not stay on /datasets
+    cy.contains('label', 'Indicateurs').click()
+    cy.url().should('include', '/indicators')
+    cy.url().should('not.include', '/datasets')
   })
 
   it('should display indicator datasets with the Indicateur badge', () => {

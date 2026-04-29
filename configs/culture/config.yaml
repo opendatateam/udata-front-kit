@@ -244,6 +244,6 @@ pages:
             id: company
       - name: Organisation
         default_option: Toutes les organisations
-        id: organization
+        id: org
         type: organization_custom
         search_display: basic

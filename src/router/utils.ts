@@ -29,6 +29,7 @@ export interface OrganizationFilterConfig {
   label: string
   defaultLabel?: string
   pageKey: string
+  urlParam: string
 }
 
 export type CustomFilterConfig = SelectFilterConfig | OrganizationFilterConfig
@@ -236,7 +237,8 @@ function buildGlobalSearchConfig(pageKey: string): {
         return {
           label: f.name,
           defaultLabel: f.default_option ?? undefined,
-          pageKey
+          pageKey,
+          urlParam: f.id
         }
       }
       return {

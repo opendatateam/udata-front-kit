@@ -18,14 +18,14 @@ describe('Topics - Empty List and Reset Filters', () => {
 
       // Navigate away and come back with all filters applied to test the reset
       cy.visit(
-        '/bouquets?theme=ecospheres-theme-mieux-consommer&organization=534fff4ca3a7292c64a77c95'
+        '/bouquets?theme=ecospheres-theme-mieux-consommer&org=534fff4ca3a7292c64a77c95'
       )
       cy.wait('@get_topics_list')
       cy.wait('@get_universe_organizations')
 
       // Verify all filters are in the URL
       cy.url().should('include', 'theme=ecospheres-theme-mieux-consommer')
-      cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
+      cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
 
       // Verify the theme filter is visually selected
       cy.contains('label.fr-label', 'Thématique')
@@ -47,7 +47,7 @@ describe('Topics - Empty List and Reset Filters', () => {
 
       // Verify URL no longer contains filter parameters
       cy.url().should('not.include', 'theme=')
-      cy.url().should('not.include', 'organization=')
+      cy.url().should('not.include', 'org=')
 
       // Verify the theme filter is actually cleared (input is empty)
       cy.contains('label.fr-label', 'Thématique')
