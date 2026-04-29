@@ -37,5 +37,9 @@ export const routes: RouteRecordRaw[] = [
   useDatasetSearchPageRoutes({
     pageKey: 'datasets',
     metaTitle: 'Données'
+  }),
+  useDatasetSearchPageRoutes({
+    pageKey: 'deps-univers',
+    metaTitle: 'Données du DEPS'
   })
 ]
