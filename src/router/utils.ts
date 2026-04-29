@@ -221,8 +221,9 @@ function buildGlobalSearchConfig(pageKey: string): {
   const customFilters: CustomFilterConfig[] = pageConf.filters
     .filter((f) => {
       const isRenderable =
-        (f.type === 'select' && f.values?.length) ||
-        f.type === 'organization_custom'
+        !f.hide_on_list &&
+        ((f.type === 'select' && f.values?.length) ||
+          f.type === 'organization_custom')
       if (isRenderable && !f.search_display) {
         console.warn(
           `Filter "${f.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`

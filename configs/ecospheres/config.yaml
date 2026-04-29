@@ -424,6 +424,32 @@ pages:
         id: badge
         type: badge
         search_display: basic
+      - name: Thématique
+        default_option: Toutes les thématiques
+        id: theme
+        type: select
+        color: green-menthe
+        use_filter_prefix: true
+        hide_on_list: true
+        values: *fnv_themes
+      - name: Enjeu
+        default_option: Tous les enjeux
+        id: enjeu
+        type: select
+        color: blue-ecume
+        use_filter_prefix: true
+        hide_on_list: true
+        values:
+          - id: adaptation-climat
+            name: Adaptation climat
+          - id: attenuation-climat
+            name: Atténuation climat
+          - id: biodiversite
+            name: Biodiversité
+          - id: ressources
+            name: Ressources
+          - id: sante
+            name: Santé
       - name: Secteur
         default_option: Tous les secteurs
         id: secteur
