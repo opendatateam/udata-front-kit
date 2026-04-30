@@ -243,10 +243,10 @@ pages:
         id: organization
         type: organization
   # DEPS
-  deps-univers:
+  univers-deps:
     list_all: true
     universe_query:
-      topic: 69aea5dff97ef1fc29836765
+      topic: 69f2fca0f4f30af95d4bab8a
     filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
