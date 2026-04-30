@@ -32,16 +32,35 @@ export interface PageFilterFormConf {
   required: boolean
 }
 
+// FIXME: should be extracted from @datagouv/components-next once exported upstream
+/** GlobalSearch-native filter type keys (passed directly to basicFilters/advancedFilters) */
+export enum GlobalSearchNativeFilterType {
+  LastUpdateRange = 'last_update_range',
+  Badge = 'badge',
+  Granularity = 'granularity',
+  Geozone = 'geozone',
+  Tag = 'tag',
+  FormatFamily = 'format_family',
+  AccessType = 'access_type',
+  Format = 'format',
+  License = 'license',
+  Schema = 'schema',
+  OrganizationBadge = 'organization_badge',
+  Topic = 'topic',
+  ProducerType = 'producer_type',
+  Organization = 'organization'
+}
+
 export interface PageFilterConf {
   name: string
   id: string
   type:
-    | 'spatial_zone'
-    | 'spatial_granularity'
     | 'select'
-    | 'checkbox'
-    | 'organization'
-    | 'private'
+    // `organization_custom` in order to differentiate from native upstream filter
+    | 'organization_custom'
+    | GlobalSearchNativeFilterType
+  /** Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch) */
+  search_display?: 'basic' | 'advanced'
   child: string | null
   color: string | null
   default_option: string | null
@@ -49,7 +68,6 @@ export interface PageFilterConf {
   use_filter_prefix: boolean | null
   api_param: string | null
   form: PageFilterFormConf | null
-  authenticated: boolean | null
   hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
@@ -65,6 +83,7 @@ export type PageBannerConf = {
 
 export type PageSearchConf = {
   input: string
+  placeholder?: string | null
 }
 
 export type PageLabelsConf = {
@@ -74,7 +93,10 @@ export type PageLabelsConf = {
   feminine?: boolean
 }
 
+export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
+
 export type PageConf = {
+  object_type: PageObjectType
   list_all: boolean
   filter_prefix: string | null
   universe_query: PageUniverseQueryConf | null
@@ -115,7 +137,6 @@ export type DatasetsConf = {
 export type HeaderSearchConf = {
   display: boolean
   placeholder?: string
-  dropdown?: { text: string; route: string }[]
 }
 
 export interface WebsiteConfig {

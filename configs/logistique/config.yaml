@@ -161,6 +161,7 @@ website:
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 66d5caab2ef9e95fc1625446
@@ -173,6 +174,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -186,6 +188,7 @@ pages:
     filters: []
   # BOUQUETS
   bouquets:
+    object_type: topics
     list_all: true
     universe_query:
       tag: logistique
@@ -198,6 +201,7 @@ pages:
       extended: bouquet de données
     search:
       input: Filtrer les bouquets
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -213,6 +217,7 @@ pages:
         default_option: Toutes les catégories
         id: theme
         type: select
+        search_display: basic
         color: green-bourgeon
         use_filter_prefix: true
         form:
@@ -233,7 +238,8 @@ pages:
       - name: Couverture territoriale
         default_option:
         id: geozone
-        type: spatial_zone
+        type: geozone
+        search_display: basic
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

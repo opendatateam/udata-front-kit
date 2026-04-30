@@ -168,6 +168,7 @@ organizations:
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 69aea5dff97ef1fc29836765
@@ -180,6 +181,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
       title: Un guichet unique pour l'accès aux données de la culture
       content: |
@@ -198,6 +200,7 @@ pages:
         default_option: Toutes les catégories
         id: tag
         type: select
+        search_display: basic
         use_filter_prefix: false
         values:
           - name: '🗃️ Archives'
@@ -226,6 +229,7 @@ pages:
         default_option: Tous les types
         id: organization_badge
         type: select
+        search_display: basic
         api_param: organization_badge
         use_filter_prefix: false
         color: blue-france
@@ -240,5 +244,6 @@ pages:
             id: company
       - name: Organisation
         default_option: Toutes les organisations
-        id: organization
-        type: organization
+        id: org
+        type: organization_custom
+        search_display: basic

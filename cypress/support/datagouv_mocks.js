@@ -1,9 +1,9 @@
 const datagouvResponseBuilder = (data) => {
   return {
-    data: data.slice(0, 10),
+    data: data.slice(0, 20),
     next_page: null,
-    page: Math.max(1, Math.ceil(data.length / 10)),
-    page_size: 10,
+    page: 1,
+    page_size: 20,
     previous_page: null,
     total: data.length
   }
@@ -46,22 +46,6 @@ Cypress.Commands.add(
       statusCode: 200,
       body: data
     }).as(`get_${resourceName}_${resourceId}`)
-  }
-)
-
-// We can't use req.query to check the request params because the tags are not handled as arrays
-// in the request so req.query only contains the last tag. So we check the params in the url instead.
-// This is a known issue of cypress: https://github.com/cypress-io/cypress/issues/17921
-Cypress.Commands.add(
-  'expectRequestWithParams',
-  (resourceName, requestParamsString) => {
-    cy.intercept('GET', datagouvUrlRegex(resourceName), (req) => {
-      if (requestParamsString instanceof RegExp) {
-        expect(req.url).to.match(requestParamsString)
-      } else {
-        expect(req.url).to.include(requestParamsString)
-      }
-    }).as(`get_${resourceName}_list`)
   }
 )
 

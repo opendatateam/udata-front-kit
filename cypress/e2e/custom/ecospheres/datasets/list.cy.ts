@@ -8,9 +8,8 @@ describe('Datasets - List Page', () => {
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
-    cy.mockUniverseOrganizations()
     testDatasets = datasetFactory.many(3)
-    cy.mockDatagouvObjectList('datasets', testDatasets)
+    cy.mockListApis('datasets', testDatasets)
   })
 
   it('should display the list of datasets', () => {
@@ -35,21 +34,41 @@ describe('Datasets - List Page', () => {
     cy.wait('@get_datasets_list')
     cy.wait('@get_universe_organizations')
 
-    // Click on the multiselect to open the dropdown
-    cy.contains('label.fr-label', 'Organisation')
-      .parent('.fr-select-group')
-      .within(() => {
-        cy.get('.multiselect-wrapper').click()
-      })
-
-    // Select ADEME from the dropdown options
-    cy.get('.multiselect-option[aria-label="ADEME"]').click()
+    cy.selectFilterValue('Organisation', 'ADEME')
 
     // Verify the URL contains the organization parameter
-    cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
 
     // Wait for the filtered API call
     cy.wait('@get_datasets_list')
+  })
+
+  it('should navigate correctly when switching type while org filter is active', () => {
+    cy.visit('/datasets')
+    cy.wait('@get_datasets_list')
+    cy.wait('@get_universe_organizations')
+
+    cy.selectFilterValue('Organisation', 'ADEME')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
+
+    // Switch to Indicators type — must navigate to /indicators, not stay on /datasets
+    cy.contains('label', 'Indicateurs').click()
+    cy.url().should('include', '/indicators')
+    cy.url().should('not.include', '/datasets')
+  })
+
+  it('should clear org filter when switching to a type with a different org list', () => {
+    cy.visit('/datasets')
+    cy.wait('@get_datasets_list')
+    cy.wait('@get_universe_organizations')
+
+    cy.selectFilterValue('Organisation', 'ADEME')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
+
+    // Switch to API (dataservices) — also has an org filter but different values
+    cy.contains('label', 'API').click()
+    cy.url().should('include', '/dataservices')
+    cy.url().should('not.include', 'org=')
   })
 
   it('should display indicator datasets with the Indicateur badge', () => {
@@ -70,17 +89,14 @@ describe('Datasets - List Page', () => {
     cy.contains('Regular Dataset Title').should('be.visible')
     cy.contains('Indicator Dataset Title').should('be.visible')
 
+    // The indicator card wraps both the badge and the DatasetCard.
     // Check that the indicator dataset has the "Indicateur" badge
-    cy.contains('Indicator Dataset Title')
-      .closest('li')
-      .find('.fr-badge')
-      .contains('Indicateur')
-      .should('be.visible')
+    cy.contains('.indicator-card-wrapper', 'Indicator Dataset Title')
+      .find('.indicator-badge')
+      .should('contain.text', 'Indicateur')
+      .and('be.visible')
 
-    // Check that the regular dataset does NOT have the "Indicateur" badge
-    cy.contains('Regular Dataset Title')
-      .closest('li')
-      .find('.fr-badge')
-      .should('not.exist')
+    // Only one indicator badge should exist in the list (the regular dataset has none)
+    cy.get('.indicator-badge').should('have.length', 1)
   })
 })

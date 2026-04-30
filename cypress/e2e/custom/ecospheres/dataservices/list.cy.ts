@@ -7,14 +7,8 @@ describe('Dataservices (API) - List Page', () => {
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
-    cy.mockUniverseOrganizations()
-    cy.mockDatagouvObjectList('discussions')
-
-    // Create test dataservices
     testDataservices = dataserviceFactory.many(3)
-
-    // Mock the API response
-    cy.mockDatagouvObjectList('dataservices', testDataservices)
+    cy.mockListApis('dataservices', testDataservices)
   })
 
   it('should display the list of dataservices', () => {
@@ -39,18 +33,10 @@ describe('Dataservices (API) - List Page', () => {
     cy.wait('@get_dataservices_list')
     cy.wait('@get_universe_organizations')
 
-    // Click on the multiselect to open the dropdown
-    cy.contains('label.fr-label', 'Organisation')
-      .parent('.fr-select-group')
-      .within(() => {
-        cy.get('.multiselect-wrapper').click()
-      })
-
-    // Select ADEME from the dropdown options
-    cy.get('.multiselect-option[aria-label="ADEME"]').click()
+    cy.selectFilterValue('Organisation', 'ADEME')
 
     // Verify the URL contains the organization parameter
-    cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
+    cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
 
     // Wait for the filtered API call
     cy.wait('@get_dataservices_list')
@@ -111,9 +97,7 @@ describe('Dataservices (API) - List Page', () => {
     cy.wait('@get_dataservices_list')
 
     // Should show appropriate message or empty state
-    cy.contains('Aucun résultat ne correspond à votre recherche').should(
-      'exist'
-    )
+    cy.contains("Vous n'avez pas trouvé ce que vous cherchez ?").should('exist')
   })
 
   it('should display breadcrumb navigation', () => {

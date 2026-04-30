@@ -1,24 +1,16 @@
 /**
- * Custom command to select an option in a multiselect component
- * @param {string} selectLabel - The label text of the select component (e.g., "À destination de :")
- * @param {string} optionLabel - The label/text of the option to select (e.g., "Communes")
+ * Custom command to select an option in a SearchableSelect component (Headless UI Combobox).
+ * @param {string} selectLabel - The label text of the select component (e.g., "Organisation")
+ * @param {string} optionLabel - The label/text of the option to select (e.g., "ADEME")
  */
 Cypress.Commands.add('selectFilterValue', (selectLabel, optionLabel) => {
-  // Find the label with the specified text, then navigate to its parent select group
   cy.contains('label.fr-label', selectLabel)
-    .parent('.fr-select-group')
+    .closest('.fr-input-group')
     .within(() => {
-      // Click on the multiselect wrapper to open the dropdown
-      cy.get('.multiselect-wrapper').click()
-
-      // Wait for the dropdown to become visible (not have 'is-hidden' class)
-      cy.get('.multiselect-dropdown').should('not.have.class', 'is-hidden')
-
-      // Find and click the option with the matching text content
-      cy.get('.multiselect-option').contains(optionLabel).click()
-
-      // Verify the dropdown is closed again
-      cy.get('.multiselect-dropdown').should('have.class', 'is-hidden')
+      // Click the combobox open button (covers the full input area when closed)
+      cy.get('[data-testid^="searchable-select-"]').click()
+      // Click the matching option in the dropdown
+      cy.contains('li', optionLabel).click()
     })
 })
 
@@ -32,10 +24,35 @@ Cypress.Commands.add('clickCheckbox', (checkbox_name) => {
 
 Cypress.Commands.add(
   'expectActionToCallApi',
-  (action, resourceName, expectedUrlParams) => {
-    cy.wait(`@get_${resourceName}_list`)
-    cy.expectRequestWithParams(resourceName, expectedUrlParams)
+  (action, resourceName, expectedParams, { drain = true } = {}) => {
+    // Order-independent URL param matching: { tag: ['a', 'b'], q: 'foo' }
+    const matches = (url) => {
+      const params = new URL(url).searchParams
+      return Object.entries(expectedParams).every(([key, value]) => {
+        const actual = params.getAll(key)
+        const expected = Array.isArray(value) ? value : [value]
+        return expected.every((v) => actual.includes(v))
+      })
+    }
+
+    const alias = `@get_${resourceName}_list`
+
+    if (drain) {
+      // Drain one initial call (page load), then trigger the action.
+      cy.wait(alias)
+    }
     action()
-    cy.wait(`@get_${resourceName}_list`)
+
+    // Pages with multiple search types fire one request per
+    // type, so several calls may be queued. Walk through them until we find one
+    // that satisfies the expected params.
+    const findMatch = (attemptsLeft) => {
+      cy.wait(alias).then((interception) => {
+        if (matches(interception.request.url)) return
+        if (attemptsLeft > 0) findMatch(attemptsLeft - 1)
+        else cy.wrap(interception.request.url).should('satisfy', matches)
+      })
+    }
+    findMatch(3)
   }
 )

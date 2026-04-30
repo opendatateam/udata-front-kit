@@ -64,13 +64,7 @@ website:
       label: 'Donnez votre avis'
       link: https://form.typeform.com/to/sYKAer7j
     search:
-      display: true
-      placeholder: Rechercher...
-      dropdown:
-        - text: Rechercher {} dans les <strong>cas d'usages</strong>
-          route: cas-d-usages
-        - text: Rechercher {} dans les <strong>solutions</strong>
-          route: solutions
+      display: false
   search_bar:
     display: false
   secondary_search:
@@ -244,6 +238,7 @@ shared_filter_values:
 pages:
   # CAS D'USAGES
   cas-d-usages:
+    object_type: topics
     list_all: true
     universe_query:
       tag: simplifions-v2-cas-d-usages
@@ -256,6 +251,7 @@ pages:
       extended: cas d'usage
     search:
       input: Filtrer les cas d'usages
+      placeholder: null
     default_sort: name
     resources_tabs:
       discussions:
@@ -267,40 +263,38 @@ pages:
         display: false
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
-      - name: Afficher les brouillons
-        id: private
-        type: private
-        default_option:
-        default_value: false
-        authenticated: true
-        values: []
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
+        search_display: basic
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
         id: target-users
         type: select
+        search_display: basic
         default_option: Tous les usagers
         use_filter_prefix: true
         values: *target_users_values
       - name: 'Catégorie de solution :'
         id: categorie-de-solution
         type: select
+        search_display: basic
         default_option: Toutes les catégories
         use_filter_prefix: true
         values: *categorie_de_solution_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
         type: select
+        search_display: basic
         default_option: Tous les types de simplification
         use_filter_prefix: true
         values: *types_de_simplification_values
 
   # SOLUTIONS
   solutions:
+    object_type: topics
     list_all: true
     universe_query:
       tag: simplifions-v2-solutions
@@ -314,6 +308,7 @@ pages:
       feminine: true
     search:
       input: Filtrer les solutions
+      placeholder: null
     default_sort: name
     resources_tabs:
       discussions:
@@ -325,34 +320,31 @@ pages:
         display: false
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
-      - name: Afficher les brouillons
-        id: private
-        type: private
-        default_option:
-        default_value: false
-        authenticated: true
-        values: []
       - name: 'À destination de :'
         id: fournisseurs-de-service
         type: select
+        search_display: basic
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
         id: target-users
         type: select
+        search_display: basic
         default_option: Tous les usagers
         use_filter_prefix: true
         values: *target_users_values
       - name: 'Catégorie de solution :'
         id: categorie-de-solution
         type: select
+        search_display: basic
         default_option: Toutes les catégories
         use_filter_prefix: true
         values: *categorie_de_solution_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
         type: select
+        search_display: basic
         default_option: Tous les types de simplification
         use_filter_prefix: true
         values: *types_de_simplification_values
