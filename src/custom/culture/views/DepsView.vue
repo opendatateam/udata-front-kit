@@ -150,7 +150,7 @@ onMounted(() => {
           id="big-select-search"
           placeholder="Rechercher un jeu de données du DEPS"
           search-label="Rechercher"
-          :search-endpoint-params="{ tag: 'deps-doc' }"
+          search-endpoint="/univers-deps"
         />
       </div>
     </section>
