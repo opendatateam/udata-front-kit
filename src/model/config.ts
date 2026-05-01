@@ -61,6 +61,8 @@ export interface PageFilterConf {
     | GlobalSearchNativeFilterType
   /** Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch) */
   search_display?: 'basic' | 'advanced'
+  /** Page keys this filter applies to in multi-type search. Defaults to the owning page only. */
+  applies_to_pages?: string[]
   child: string | null
   color: string | null
   default_option: string | null

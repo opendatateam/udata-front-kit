@@ -8,7 +8,8 @@ type FilterOption = SelectFilterConfig['values'][number]
 const props = defineProps<{ config: SelectFilterConfig }>()
 
 const urlValue = useSearchFilter(props.config.urlParam, {
-  apiParam: props.config.apiParam
+  apiParam: props.config.apiParam,
+  typeKeys: props.config.typeKeys
 })
 
 // Bridge between SearchableSelect (FilterOption | null) and useSearchFilter (string | undefined)

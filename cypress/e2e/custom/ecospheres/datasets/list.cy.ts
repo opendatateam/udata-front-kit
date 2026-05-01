@@ -57,6 +57,24 @@ describe('Datasets - List Page', () => {
     cy.url().should('not.include', '/datasets')
   })
 
+  it('should not trigger a background dataservices search when a datasets-only filter changes', () => {
+    cy.visit('/datasets')
+    cy.wait('@get_datasets_list')
+
+    cy.get('@get_dataservices_list.all').its('length').as('countBefore')
+
+    // inspire has typeKeys: ['datasets'] — selecting it must only re-search datasets
+    cy.expectActionToCallApi(
+      () => cy.selectFilterValue('Thème INSPIRE', 'Adresses'),
+      'datasets',
+      { tag: 'adresses' }
+    )
+
+    cy.get('@countBefore').then((countBefore) => {
+      cy.get('@get_dataservices_list.all').should('have.length', countBefore)
+    })
+  })
+
   it('should clear org filter when switching to a type with a different org list', () => {
     cy.visit('/datasets')
     cy.wait('@get_datasets_list')

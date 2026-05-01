@@ -269,6 +269,7 @@ pages:
         search_display: basic
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
         id: target-users
@@ -276,6 +277,7 @@ pages:
         search_display: basic
         default_option: Tous les usagers
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *target_users_values
       - name: 'Catégorie de solution :'
         id: categorie-de-solution
@@ -283,6 +285,7 @@ pages:
         search_display: basic
         default_option: Toutes les catégories
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *categorie_de_solution_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
@@ -290,6 +293,7 @@ pages:
         search_display: basic
         default_option: Tous les types de simplification
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *types_de_simplification_values
 
   # SOLUTIONS
@@ -326,6 +330,7 @@ pages:
         search_display: basic
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *fournisseurs_de_service_values
       - name: 'Pour simplifier les démarches de :'
         id: target-users
@@ -333,6 +338,7 @@ pages:
         search_display: basic
         default_option: Tous les usagers
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *target_users_values
       - name: 'Catégorie de solution :'
         id: categorie-de-solution
@@ -340,6 +346,7 @@ pages:
         search_display: basic
         default_option: Toutes les catégories
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *categorie_de_solution_values
       - name: 'Type de simplification des démarches :'
         id: types-de-simplification
@@ -347,4 +354,5 @@ pages:
         search_display: basic
         default_option: Tous les types de simplification
         use_filter_prefix: true
+        applies_to_pages: [cas-d-usages, solutions]
         values: *types_de_simplification_values

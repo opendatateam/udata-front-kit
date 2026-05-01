@@ -23,6 +23,7 @@ export interface SelectFilterConfig {
   defaultLabel?: string
   apiParam: string
   values: Array<{ value: string; label: string }>
+  typeKeys: string[]
 }
 
 export interface OrganizationFilterConfig {
@@ -30,6 +31,7 @@ export interface OrganizationFilterConfig {
   defaultLabel?: string
   pageKey: string
   urlParam: string
+  typeKeys: string[]
 }
 
 export type CustomFilterConfig = SelectFilterConfig | OrganizationFilterConfig
@@ -206,7 +208,7 @@ function buildSingleTypeConfig(
  * Each page gets key=pageKey so same-class pages (e.g. datasets + indicators) are distinct.
  * Also returns customFilters for the primary page for rendering via the #custom-filters slot.
  */
-function buildGlobalSearchConfig(pageKey: string): {
+export function buildGlobalSearchConfig(pageKey: string): {
   searchConfig: GlobalSearchConfig
   customFilters: CustomFilterConfig[]
 } {
@@ -238,9 +240,14 @@ function buildGlobalSearchConfig(pageKey: string): {
           label: f.name,
           defaultLabel: f.default_option ?? undefined,
           pageKey,
-          urlParam: f.id
+          urlParam: f.id,
+          typeKeys: [pageKey]
         }
       }
+      const rawTypeKeys = f.applies_to_pages ?? [pageKey]
+      const typeKeys = rawTypeKeys.includes(pageKey)
+        ? rawTypeKeys
+        : [pageKey, ...rawTypeKeys]
       return {
         urlParam: f.id,
         label: f.name,
@@ -252,7 +259,8 @@ function buildGlobalSearchConfig(pageKey: string): {
               ? `${pageConf.filter_prefix}-${f.id}-${v.id}`
               : v.id,
           label: v.name
-        }))
+        })),
+        typeKeys
       }
     })
 

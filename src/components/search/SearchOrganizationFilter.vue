@@ -25,7 +25,8 @@ const selectConfig = computed(() => ({
   apiParam: 'organization',
   label: props.config.label,
   defaultLabel: props.config.defaultLabel ?? 'Toutes les organisations',
-  values: orgOptions.value
+  values: orgOptions.value,
+  typeKeys: props.config.typeKeys
 }))
 </script>
 

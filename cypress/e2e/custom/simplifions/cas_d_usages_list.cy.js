@@ -7,6 +7,18 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.visit('/cas-d-usages')
   })
 
+  it('should retain filters when switching to solutions (filters are shared via applies_to_pages)', () => {
+    cy.selectFilterValue(
+      'À destination de :',
+      'Communes et groupements de communes'
+    )
+    cy.url().should('include', 'fournisseurs-de-service=')
+
+    cy.contains('label', 'Solutions').click()
+    cy.url().should('include', '/solutions')
+    cy.url().should('include', 'fournisseurs-de-service=')
+  })
+
   it("should display the cas d'usages listing page correctly", () => {
     // Check that the page body is visible
     cy.get('body').should('be.visible')
