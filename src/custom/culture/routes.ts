@@ -36,5 +36,8 @@ export const routes: RouteRecordRaw[] = [
   },
   useGlobalSearchPageRoutes({
     pageKey: 'datasets'
+  }),
+  useGlobalSearchPageRoutes({
+    pageKey: 'univers-deps'
   })
 ]
