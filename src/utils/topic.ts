@@ -76,6 +76,8 @@ export function useExtras(topic: Ref<Topic | null | undefined>): {
             console.error('Failed fetching cloned_from', err.response?.data)
             clonedFrom.value = null
           })
+      } else {
+        clonedFrom.value = null
       }
     },
     { immediate: true }
