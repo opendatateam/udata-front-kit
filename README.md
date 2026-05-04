@@ -25,44 +25,6 @@ Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dériv�
 \+ [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 \+ [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
-### Développement avec agent-vm
-
-[agent-vm](https://github.com/sylvinus/agent-vm) permet de lancer un agent IA dans une VM Lima isolée avec le serveur de développement prêt à l'emploi.
-
-**Installation (une seule fois) :**
-
-```sh
-git clone https://github.com/sylvinus/agent-vm.git
-cd agent-vm
-echo "source $(pwd)/agent-vm.sh" >> ~/.zshrc   # zsh
-echo "source $(pwd)/agent-vm.sh" >> ~/.bashrc  # bash
-agent-vm setup  # creates a base VM
-```
-
-**Configuration du site (optionnel) :**
-
-Créer un fichier `.env.local` à la racine du projet (non versionné) :
-
-```sh
-VITE_SITE_ID=simplifions
-```
-
-**Lancement :**
-
-```sh
-agent-vm claude
-agent-vm opencode
-agent-vm codex
-```
-
-:warning: Par défaut, `agent-vm` lance l'agent avec toutes les permissions possibles (e.g. `--dangerously-skip-permissions`).
-
-Au démarrage, la VM installe les dépendances puis lance le serveur de développement via [pm2](https://pm2.keymetrics.io/) (redémarrage automatique en cas de crash) sur le port 5173. Le site est accessible sur <http://localhost:5173> et redémarre automatiquement avec les changements dans le code.
-
-Pour aller plus loin (authentification github, clé ssh...), voir [la documentation du runtime.sh de agent-vm](https://github.com/sylvinus/agent-vm#per-user-runtime-agent-vmruntimesh).
-
----
-
 ### Installation de pnpm
 
 Ce projet utilise pnpm au lieu de npm. Si vous ne l'avez pas déjà installé :
@@ -166,16 +128,41 @@ pnpm run hint
 pnpm run format
 ```
 
-### Pourquoi pnpm ?
+### Développement avec agent-vm
 
-Ce projet utilise [pnpm](https://pnpm.io/) au lieu de npm principalement pour des raisons de sécurité :
+[agent-vm](https://github.com/sylvinus/agent-vm) permet de lancer un agent IA dans une VM Lima isolée avec le serveur de développement prêt à l'emploi.
 
-- bloque par défaut les scripts d'installation des dépendances (sauf Cypress et Husky via `onlyBuiltDependencies`),
-- période de cooldown de 4 jours (`minimum-release-age`) avant d'installer les nouveaux packages, laissant le temps à la communauté de détecter les versions malveillantes,
-- installation via le lockfile par défaut (`npm ci` like),
-- ... et d'autres valeurs de configurations par défaut plus saines que celles de npm.
+**Installation (une seule fois) :**
 
-`pnpm` promet également de meilleurs performances à l'installation et un usage réduit d'espace disque. On ne bénéficie malheureusement pas (encore) de la structure "non-flat" des `node_modules` pour des raisons de rétro-compatibilité avec certaines dépendances.
+```sh
+git clone https://github.com/sylvinus/agent-vm.git
+cd agent-vm
+echo "source $(pwd)/agent-vm.sh" >> ~/.zshrc   # zsh
+echo "source $(pwd)/agent-vm.sh" >> ~/.bashrc  # bash
+agent-vm setup  # creates a base VM
+```
+
+**Configuration du site (optionnel) :**
+
+Créer un fichier `.env.local` à la racine du projet (non versionné) :
+
+```sh
+VITE_SITE_ID=simplifions
+```
+
+**Lancement :**
+
+```sh
+agent-vm claude
+agent-vm opencode
+agent-vm codex
+```
+
+:warning: Par défaut, `agent-vm` lance l'agent avec toutes les permissions possibles (e.g. `--dangerously-skip-permissions`).
+
+Au démarrage, la VM installe les dépendances puis lance le serveur de développement via [pm2](https://pm2.keymetrics.io/) (redémarrage automatique en cas de crash) sur le port 5173. Le site est accessible sur <http://localhost:5173> et redémarre automatiquement avec les changements dans le code.
+
+Pour aller plus loin (authentification github, clé ssh...), voir [la documentation du runtime.sh de agent-vm](https://github.com/sylvinus/agent-vm#per-user-runtime-agent-vmruntimesh).
 
 ## 🚢 Déploiement
 
