@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import config from '@/config'
 import { onMounted, ref, watch } from 'vue'
 
 import {
@@ -33,7 +34,10 @@ const page = ref(1)
 const pageSize = 5
 
 const getDataservicePage = (id: string) => {
-  return { name: 'dataservices_detail', params: { item_id: id } }
+  const hasInternalDataservices = !!config.pages.dataservices
+  return hasInternalDataservices
+    ? { name: 'dataservices_detail', params: { item_id: id } }
+    : `https://www.data.gouv.fr/fr/dataservices/${id}`
 }
 
 const emptyMessage = computed(() => {

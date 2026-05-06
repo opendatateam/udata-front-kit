@@ -196,8 +196,8 @@ pages:
     labels:
       singular: thème
       plural: thèmes
-      extended: collection thématique
-      feminine: true
+      extended: thème
+      feminine: false
     search:
       input: Filtrer les thèmes
     banner:
