@@ -66,6 +66,12 @@ describe('Home Page', () => {
     cy.reload()
 
     // Check that no console errors occurred
-    cy.get('@consoleError').should('not.have.been.called')
+    cy.get('@consoleError').then((stub) => {
+      if (stub.called) {
+        throw new Error(
+          `console.error was called ${stub.callCount} time(s):\n${stub.args.map((a, i) => `Call ${i + 1}: ${JSON.stringify(a)}`).join('\n')}`
+        )
+      }
+    })
   })
 })
