@@ -64,12 +64,12 @@ export function createIndicator(
   }
 }
 
-export function createIndicatorResource() {
+export function createIndicatorResource(maille: string = 'region') {
   return resourceFactory.one({
     overrides: {
       extras: {
         'ecospheres-indicateurs': {
-          maille: 'region',
+          maille,
           'value-column': 'value',
           axes: {
             annee: ['2020', '2021', '2022'],

@@ -105,7 +105,12 @@ const isOneYear = computed(
 const chartCanvas = useTemplateRef<HTMLCanvasElement>('chartCanvas')
 const chartTitle = computed(() => props.indicator.title ?? '')
 
-useIndicatorVizChart(chartCanvas, series, indicatorExtras, chartTitle)
+const { hasNoData } = useIndicatorVizChart(
+  chartCanvas,
+  series,
+  indicatorExtras,
+  chartTitle
+)
 
 onMounted(() => {
   debug.log(`🔍 Indicator ${props.indicator.id} extras:`, indicatorExtras.value)
@@ -139,7 +144,11 @@ onMounted(() => {
         Erreur lors du chargement : <em>{{ error }}</em>
       </div>
 
-      <div v-if="!isOneYear && !error" class="canvas-container">
+      <div v-else-if="hasNoData && !isLoading" class="no-data-container">
+        Aucune donnée disponible pour le territoire sélectionné.
+      </div>
+
+      <div v-else-if="!isOneYear" class="canvas-container">
         <div v-if="isLoading" class="loading-overlay">
           <span class="loading-text">Chargement...</span>
         </div>
@@ -150,7 +159,7 @@ onMounted(() => {
       </div>
 
       <IndicatorVizOneYearValue
-        v-if="isOneYear && series[0]?.data[0]"
+        v-else-if="isOneYear && series[0]?.data[0]"
         :year="series[0].data[0].x"
         :value="series[0].data[0].y"
         :unite="indicatorExtras.unite"
@@ -229,7 +238,8 @@ onMounted(() => {
   color: #666;
 }
 
-.error-container {
+.error-container,
+.no-data-container {
   margin-top: 32px;
   margin-bottom: 32px;
 }
