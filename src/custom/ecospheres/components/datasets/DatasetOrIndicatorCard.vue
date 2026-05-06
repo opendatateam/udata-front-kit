@@ -15,7 +15,7 @@ const datasetIsIndicator = isIndicator(toRef(props, 'dataset'))
 
 const url = computed(() =>
   datasetIsIndicator.value
-    ? { name: 'indicators_detail', params: { item_id: props.dataset.id } }
+    ? { name: 'indicators_detail', params: { item_id: props.dataset.slug } }
     : props.datasetUrl
 )
 </script>

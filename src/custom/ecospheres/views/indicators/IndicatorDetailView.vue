@@ -23,12 +23,14 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
+import { toMetaDescription, useCanonical } from '@/utils/seo'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import type { Indicator } from '../../model/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
+const router = useRouter()
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -90,8 +92,8 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 
-const metaDescription = (): string | undefined => {
-  return indicator.value?.description ?? ''
+const metaDescription = (): string => {
+  return toMetaDescription(indicator.value?.description)
 }
 
 const metaTitle = computed(() => {
@@ -109,11 +111,27 @@ useHead({
   ]
 })
 
+useCanonical(() => {
+  const slug = indicator.value?.slug
+  if (!slug) return null
+  const resolved = router.resolve({
+    name: 'indicators_detail',
+    params: { item_id: slug }
+  })
+  return `${window.location.origin}${resolved.href}`
+})
+
 onMounted(() => {
   datasetStore
     .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(indicator.value?.title)
+      if (indicator.value?.slug && indicator.value.slug !== indicatorId) {
+        router.push({
+          name: 'indicators_detail',
+          params: { item_id: indicator.value.slug }
+        })
+      }
     })
 })
 </script>
