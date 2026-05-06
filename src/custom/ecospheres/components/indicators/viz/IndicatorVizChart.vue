@@ -140,13 +140,21 @@ onMounted(() => {
         />
       </div>
 
-      <div v-if="error" class="error-container">
-        Erreur lors du chargement : <em>{{ error }}</em>
-      </div>
+      <DsfrAlert
+        v-if="error"
+        type="error"
+        :description="`Erreur lors du chargement : ${error}`"
+        :small="true"
+        class="fr-mt-4w"
+      />
 
-      <div v-else-if="hasNoData && !isLoading" class="no-data-container">
-        Aucune donnée disponible pour le territoire sélectionné.
-      </div>
+      <DsfrAlert
+        v-else-if="hasNoData && !isLoading"
+        type="info"
+        description="Aucune donnée disponible pour le territoire sélectionné."
+        :small="true"
+        class="fr-mt-4w"
+      />
 
       <div v-else-if="!isOneYear" class="canvas-container">
         <div v-if="isLoading" class="loading-overlay">
@@ -236,12 +244,6 @@ onMounted(() => {
 .loading-text {
   font-size: 0.875rem;
   color: #666;
-}
-
-.error-container,
-.no-data-container {
-  margin-top: 32px;
-  margin-bottom: 32px;
 }
 
 :deep(label) {
