@@ -10,8 +10,9 @@ const router = useRouter()
 const searchQuery = ref('')
 
 const doSearch = (q: string) => {
-  router.push({ name: 'datasets', query: { q } })
-  searchQuery.value = ''
+  router
+    .push({ name: 'datasets', query: { q } })
+    .then(() => (searchQuery.value = ''))
 }
 </script>
 
