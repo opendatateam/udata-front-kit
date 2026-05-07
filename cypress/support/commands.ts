@@ -20,7 +20,7 @@ Cypress.Commands.add('checkRGAAContrast', () => {
           largeTextPt: 24, // RGAA: text must be 24px+ to be "large"
           boldTextPt: 18.5 // RGAA: bold text must be 18.5px+ to be "large"
         }
-      } as { enabled: boolean }
+      } as { enabled: boolean } // axe-core RuleObject only types `enabled`, not `options` — cast required until upstream fixes it
     }
   })
 })
