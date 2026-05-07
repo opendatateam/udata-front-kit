@@ -201,7 +201,7 @@ async function onSelectDep(event: Event) {
         const splitRanges = optionsPeriod.value.flatMap((range) =>
           range.split('-').map(Number)
         )
-        minSlider.value = Math.min(...splitRanges)
+        minSlider.value = 1800
         maxSlider.value = Math.max(...splitRanges)
         valuesSlider.value = [minSlider.value, maxSlider.value]
       }
