@@ -33,11 +33,11 @@ const total = ref(0)
 const page = ref(1)
 const pageSize = 5
 
-const getDataservicePage = (id: string) => {
+const getDataservicePage = (dataservice: Dataservice) => {
   const hasInternalDataservices = !!config.pages.dataservices
   return hasInternalDataservices
-    ? { name: 'dataservices_detail', params: { item_id: id } }
-    : `https://www.data.gouv.fr/fr/dataservices/${id}`
+    ? { name: 'dataservices_detail', params: { item_id: dataservice.id } }
+    : dataservice.self_web_url
 }
 
 const emptyMessage = computed(() => {
@@ -74,7 +74,7 @@ onMounted(fetchDataservices)
       >
         <DataserviceCard
           :dataservice="dataservice"
-          :dataservice-url="getDataservicePage(dataservice.id)"
+          :dataservice-url="getDataservicePage(dataservice)"
         />
       </li>
     </ul>
