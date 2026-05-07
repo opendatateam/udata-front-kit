@@ -8,8 +8,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const topicConf = {
   displayMetadata: true,
-  enableReadMore: true,
-  datasetEditorialization: true
+  enableReadMore: true
 }
 
 export const routes: RouteRecordRaw[] = [
@@ -23,11 +22,19 @@ export const routes: RouteRecordRaw[] = [
   },
   useDatasetSearchPageRoutes({
     pageKey: 'datasets',
-    metaTitle: 'Données'
+    metaTitle: 'Données',
+    cardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   useDataserviceSearchPageRoutes({
     pageKey: 'dataservices',
-    metaTitle: 'API'
+    metaTitle: 'API',
+    cardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   useDatasetSearchPageRoutes({
     pageKey: 'indicators',
@@ -44,8 +51,12 @@ export const routes: RouteRecordRaw[] = [
   }),
   useTopicSearchPageRoutes({
     pageKey: 'bouquets',
-    metaTitle: 'Bouquets',
-    topicConf
+    metaTitle: 'Collections thématiques',
+    topicConf,
+    datasetCardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
   }),
   ...useTopicAdminPagesRoutes({
     pageKey: 'bouquets',

@@ -2,6 +2,7 @@
 import type { Activity } from '@/model/activity'
 import type { ResolvedFactor, Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
+import { useLabels } from '@/utils/labels'
 import { ActivityList as ActivityListComponent } from '@datagouv/components-next'
 import { ref, type Ref } from 'vue'
 
@@ -11,6 +12,7 @@ const props = defineProps<{
 }>()
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const activityListKey: Ref<number> = ref(0)
 
@@ -28,19 +30,19 @@ const getActivityTranslation = (activity: Activity) => {
   const activeFactor = getFactor(elementId)
   switch (activity.key) {
     case 'topic:created':
-      return `a créé le ${pageConf.labels.singular}`
+      return `a créé ${labels.articles.le} ${labels.singular}`
     case 'topic:updated':
-      return `a modifié le ${pageConf.labels.singular}`
+      return `a modifié ${labels.articles.le} ${labels.singular}`
     case 'topic:element:created':
       if (activeFactor)
-        return `a ajouté l'élément "${activeFactor.title}" au ${pageConf.labels.singular} (${elementId})`
-      return `a ajouté un élément au ${pageConf.labels.singular} (${elementId})`
+        return `a ajouté l'élément "${activeFactor.title}" ${labels.articles.au} ${labels.singular} (${elementId})`
+      return `a ajouté un élément ${labels.articles.au} ${labels.singular} (${elementId})`
     case 'topic:element:updated':
       if (activeFactor)
-        return `a modifié l'élément "${activeFactor.title}" du ${pageConf.labels.singular} (${elementId})`
-      return `a modifié un élément du ${pageConf.labels.singular} (${elementId})`
+        return `a modifié l'élément "${activeFactor.title}" ${labels.articles.du} ${labels.singular} (${elementId})`
+      return `a modifié un élément ${labels.articles.du} ${labels.singular} (${elementId})`
     case 'topic:element:deleted':
-      return `a supprimé un élément du ${pageConf.labels.singular} (${elementId})`
+      return `a supprimé un élément ${labels.articles.du} ${labels.singular} (${elementId})`
     default:
       return activity.label
   }

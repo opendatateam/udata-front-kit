@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import {
-  AnimatedLoader,
-  DatasetInformationPanel,
-  ReadMore,
-  SimpleBanner
-} from '@datagouv/components-next'
-import { storeToRefs } from 'pinia'
+import { ReadMore, SimpleBanner } from '@datagouv/components-next'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
+import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
+import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
@@ -21,36 +17,69 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useDatasetStore } from '@/store/DatasetStore'
+import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
+import type { OgcLayerInfo } from '@/utils/ogcServices'
+import { fetchAllOgcResources } from '@/utils/ogcServices'
+import { openInQgis } from '@/utils/qgis'
+import { useCanonical } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
-const datasetId = route.params.item_id
+const datasetIdOrSlug = route.params.item_id
 
 const datasetStore = useDatasetStore()
+const resourceStore = useResourceStore()
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
-const canEdit = computed(() => {
-  return pageConf.editable && userStore.hasEditPermissions(dataset.value)
-})
-const canAddToTopic = computed(() => {
-  return topicPageConf && userStore.loggedIn && canAddTopic
-})
+const ogcLayerInfo = ref(new Map<string, OgcLayerInfo[]>())
 
-const dataset = computed(() => datasetStore.get(datasetId))
+const computeOgcInfo = async (datasetId: string) => {
+  if (!config.website.datasets.open_in_qgis) return
+  const results = await fetchAllOgcResources((page) =>
+    resourceStore.fetchDatasetResources(datasetId, { page })
+  )
+  if (results.length > 0) {
+    ogcLayerInfo.value.set(datasetId, results)
+  }
+}
 
-const showAddToTopicModal = ref(false)
+const handleOpenInQgis = async () => {
+  if (!dataset.value) return
+  try {
+    await openInQgis(dataset.value.id, dataset.value.title, ogcLayerInfo.value)
+  } catch (error) {
+    console.error('Failed to open in QGIS:', error)
+    alert("Une erreur est survenue lors de l'ouverture dans QGIS.")
+  }
+}
 
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 
 const datasetsConf = useDatasetsConf()
-const topicPageConf = datasetsConf.add_to_topic?.page
-  ? usePageConf(datasetsConf.add_to_topic.page)
-  : null
+const topicPageKey = datasetsConf.add_to_topic?.page
+const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
+const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
+
+const canEdit = computed(() => {
+  return pageConf.editable && userStore.hasEditPermissions(dataset.value)
+})
+const canAddToTopic = computed(() => {
+  return (
+    topicPageConf &&
+    topicPageKey &&
+    userStore.loggedIn &&
+    userStore.canAddTopic(topicPageKey)
+  )
+})
+
+const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
+
+const showAddToTopicModal = ref(false)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -68,7 +97,7 @@ const links = computed(() => {
 
 const tabTitles = [
   { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Réutilisations', tabId: 'tab-1', panelId: 'tab-content-1' },
+  { title: 'Réutilisations et API', tabId: 'tab-1', panelId: 'tab-content-1' },
   { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
   { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
 ]
@@ -92,21 +121,81 @@ const goToEdit = () => {
   window.location.href = `${config.datagouvfr.base_url}/admin/datasets/${dataset.value.id}/`
 }
 
+const goToExplore = () => {
+  if (!exploreUrl.value) return
+  window.open(exploreUrl.value, '_blank')
+}
+
+const exploreUrl = computed(() => {
+  if (!dataset.value) return null
+  const resourceData = resourceStore.data[dataset.value.id]
+  const mainResources = resourceData?.find((rd) => rd.type.id === 'main')
+  return (
+    mainResources?.resources.find((r) => r.preview_url)?.preview_url ?? null
+  )
+})
+
+useCanonical(() => dataset.value?.page)
+
 onMounted(() => {
   datasetStore
-    .load(datasetId, { toasted: false, redirectNotFound: true })
+    .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(dataset.value?.title)
+      if (dataset.value) {
+        computeOgcInfo(dataset.value.id).catch((err) =>
+          console.error('Failed to compute OGC info:', err)
+        )
+      }
     })
 })
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    </div>
+    <div
+      v-if="dataset && (canEdit || canAddToTopic || exploreUrl)"
+      class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+    >
+      <!-- add dataset to topic (if enabled) -->
+      <template v-if="canAddToTopic && topicPageConf">
+        <DsfrButton
+          secondary
+          size="sm"
+          :label="`Ajouter à ${topicLabels!.articles.un} ${topicLabels!.singular}`"
+          icon="fr-icon-file-add-line"
+          @click="showAddToTopicModal = true"
+        />
+        <DatasetAddToTopicModal
+          v-if="showAddToTopicModal"
+          v-model:show="showAddToTopicModal"
+          :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
+          :dataset="dataset"
+        />
+      </template>
+      <DsfrButton
+        v-if="exploreUrl"
+        size="sm"
+        label="Explorer les données"
+        icon="fr-icon-table-line"
+        target="_blank"
+        @click="goToExplore"
+      />
+      <DsfrButton
+        v-if="canEdit"
+        secondary
+        size="sm"
+        label="Modifier"
+        icon="fr-icon-pencil-line"
+        @click="goToEdit"
+      />
+    </div>
   </div>
-  <GenericContainer v-if="dataset" class="tabs-height-fix">
-    <div class="fr-grid-row fr-grid-row--gutters">
+  <GenericContainer v-if="dataset">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <ReadMore max-height="600">
@@ -114,38 +203,7 @@ onMounted(() => {
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <DatasetSidebar :dataset="dataset">
-        <template #bottom>
-          <div
-            v-if="canEdit || canAddToTopic"
-            class="fr-mt-2w fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
-          >
-            <DsfrButton
-              v-if="canEdit"
-              secondary
-              size="md"
-              label="Éditer"
-              icon="fr-icon-pencil-line"
-              @click="goToEdit"
-            />
-            <!-- add dataset to topic (if enabled) -->
-            <template v-if="canAddToTopic && topicPageConf">
-              <DsfrButton
-                size="md"
-                :label="`Ajouter à un ${topicPageConf.labels.singular}`"
-                icon="fr-icon-file-add-line"
-                @click="showAddToTopicModal = true"
-              />
-              <DatasetAddToTopicModal
-                v-if="showAddToTopicModal"
-                v-model:show="showAddToTopicModal"
-                :topic-page-key="datasetsConf.add_to_topic?.page || 'topics'"
-                :dataset="dataset"
-              />
-            </template>
-          </div>
-        </template>
-      </DatasetSidebar>
+      <DatasetSidebar :dataset="dataset" />
     </div>
 
     <DsfrTabs
@@ -157,11 +215,23 @@ onMounted(() => {
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
         <ResourcesList :dataset="dataset" />
+        <div v-if="ogcLayerInfo.has(dataset.id)" class="fr-mt-2w">
+          <DsfrButton
+            secondary
+            size="sm"
+            icon="fr-icon-road-map-line"
+            class="test__open_dataset_in_qgis_btn"
+            @click="handleOpenInQgis"
+          >
+            Ouvrir dans QGIS (WFS/WMS)
+          </DsfrButton>
+        </div>
       </DsfrTabContent>
 
-      <!-- Réutilisations -->
+      <!-- Réutilisations et API -->
       <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
-        <ReusesList model="dataset" :object="dataset" />
+        <DatasetDataservicesList :dataset-id="dataset.id" />
+        <DatasetReusesList :dataset-id="dataset.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
@@ -177,7 +247,7 @@ onMounted(() => {
                 {{ discussionWellDescription }}
               </p>
             </div>
-            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+            <div class="fr-col-12 fr-col-lg-4 align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
                 icon="fr-icon-external-link-line"
@@ -193,18 +263,15 @@ onMounted(() => {
 
       <!-- Informations -->
       <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
-        <ExtendedInformationPanel
-          v-if="
-            config.website.datasets.show_extended_information_panel && dataset
-          "
-          :dataset="dataset"
-        />
-        <Suspense>
+        <div class="divide-y">
+          <ExtendedInformationPanel
+            v-if="
+              config.website.datasets.show_extended_information_panel && dataset
+            "
+            :dataset="dataset"
+          />
           <DatasetInformationPanel :dataset="dataset" />
-          <template #fallback>
-            <AnimatedLoader />
-          </template>
-        </Suspense>
+        </div>
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

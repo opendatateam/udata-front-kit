@@ -4,7 +4,8 @@ import { dinumOrganization } from './organizations_factory'
 
 export const topicFactory = build<Topic>({
   fields: {
-    organization: dinumOrganization,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mimicry-js FieldType doesn't support the Owned discriminated union
+    organization: dinumOrganization as any,
     owner: null,
     name: 'Sample Topic',
     description: 'A sample topic description',

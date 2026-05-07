@@ -3,7 +3,8 @@ import NoResults from '@/components/NoResults.vue'
 import SelectComponent from '@/components/SelectComponent.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDataserviceSearchStore } from '@/store/DataserviceSearchStore'
-import { DataserviceCard, type Dataservice } from '@datagouv/components-next'
+import { useLabels } from '@/utils/labels'
+import { DataserviceCard } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
@@ -26,13 +27,14 @@ const route = useRoute()
 
 const store = useDataserviceSearchStore()
 const { meta, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const { items: dataservices, pagination, total } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return `1 ${pageConf.labels.singular} disponible`
+    return `1 ${labels.singular} disponible`
   } else if (total.value > 1) {
-    return `${total.value} ${pageConf.labels.plural} disponibles`
+    return `${total.value} ${labels.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -120,11 +122,11 @@ defineExpose({
         <li
           v-for="dataservice in dataservices"
           :key="dataservice.id"
-          :class="[meta.cardClass || 'fr-col-12', 'dataservice-card-container']"
+          :class="meta.cardClass || 'fr-col-12'"
         >
           <DataserviceCard
             :key="dataservice.id"
-            :dataservice="dataservice as unknown as Dataservice"
+            :dataservice="dataservice"
             :dataservice-url="getDataservicePage(dataservice.id)"
           />
         </li>
@@ -132,6 +134,7 @@ defineExpose({
     </div>
     <DsfrPagination
       v-if="pagination.length > 1"
+      :trunc-limit="3"
       :current-page="parseInt(page) - 1"
       :pages="pagination"
       @update:current-page="goToPage"
@@ -141,12 +144,6 @@ defineExpose({
 </template>
 
 <style scoped>
-.dataservice-card-container {
-  width: 100%;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
 :deep(h4 > a) {
   color: var(--text-title-grey);
 }

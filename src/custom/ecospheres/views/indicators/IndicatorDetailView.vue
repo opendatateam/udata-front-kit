@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import {
-  AnimatedLoader,
-  DatasetInformationPanel,
-  ReadMore
-} from '@datagouv/components-next'
+import { ReadMore } from '@datagouv/components-next'
 import { useHead } from '@unhead/vue'
 import { computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
+import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
+import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
+import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
@@ -20,16 +18,19 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
-import { useDatasetStore } from '@/store/OrganizationDatasetStore'
+import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
-import IndicatorAPIDocumentation from '../../components/indicators/IndicatorAPIDocumentation.vue'
+import { usePageConf } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
+import { toMetaDescription, useCanonical } from '@/utils/seo'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import type { Indicator } from '../../model/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
+const router = useRouter()
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -38,7 +39,9 @@ const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
-const showAddToBouquetModal = ref(false)
+const showAddToTopicModal = ref(false)
+const topicConf = usePageConf('bouquets')
+const topicsLabels = useLabels(topicConf.labels)
 
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
@@ -53,7 +56,7 @@ const links = computed(() => [
 const tabTitles = computed(() => [
   { title: 'Informations', tabId: 'tab-info', panelId: 'tab-content-info' },
   {
-    title: 'Fichiers et API',
+    title: 'Fichiers',
     tabId: 'tab-files',
     panelId: 'tab-content-files'
   },
@@ -69,7 +72,7 @@ const tabTitles = computed(() => [
     : []),
   { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
   {
-    title: 'Réutilisations',
+    title: 'Réutilisations et API',
     tabId: 'tab-reuses',
     panelId: 'tab-content-reuses'
   },
@@ -89,8 +92,8 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 
-const metaDescription = (): string | undefined => {
-  return indicator.value?.description ?? ''
+const metaDescription = (): string => {
+  return toMetaDescription(indicator.value?.description)
 }
 
 const metaTitle = computed(() => {
@@ -108,21 +111,57 @@ useHead({
   ]
 })
 
+useCanonical(() => {
+  const slug = indicator.value?.slug
+  if (!slug) return null
+  const resolved = router.resolve({
+    name: 'indicators_detail',
+    params: { item_id: slug }
+  })
+  return `${window.location.origin}${resolved.href}`
+})
+
 onMounted(() => {
   datasetStore
     .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(indicator.value?.title)
+      if (indicator.value?.slug && indicator.value.slug !== indicatorId) {
+        router.push({
+          name: 'indicators_detail',
+          params: { item_id: indicator.value.slug }
+        })
+      }
     })
 })
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    </div>
+    <div
+      v-if="indicator && userStore.loggedIn"
+      class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+    >
+      <DsfrButton
+        secondary
+        size="sm"
+        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.plural}`"
+        icon="fr-icon-file-add-line"
+        @click="showAddToTopicModal = true"
+      />
+      <DatasetAddToTopicModal
+        v-if="showAddToTopicModal"
+        v-model:show="showAddToTopicModal"
+        topic-page-key="bouquets"
+        :dataset="indicator"
+      />
+    </div>
   </div>
-  <GenericContainer v-if="indicator" class="tabs-height-fix">
-    <div class="fr-grid-row fr-grid-row--gutters">
+  <GenericContainer v-if="indicator">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ indicator.title }}</h1>
         <ReadMore max-height="600">
@@ -130,25 +169,7 @@ onMounted(() => {
           <div v-html="description"></div>
         </ReadMore>
       </div>
-      <DatasetSidebar :dataset="indicator">
-        <template #bottom>
-          <div v-if="userStore.loggedIn">
-            <DsfrButton
-              class="fr-mt-2w"
-              size="md"
-              label="Ajouter à un bouquet"
-              icon="fr-icon-file-add-line"
-              @click="showAddToBouquetModal = true"
-            />
-            <DatasetAddToTopicModal
-              v-if="showAddToBouquetModal"
-              v-model:show="showAddToBouquetModal"
-              topic-page-key="bouquets"
-              :dataset="indicator"
-            />
-          </div>
-        </template>
-      </DatasetSidebar>
+      <DatasetSidebar :dataset="indicator" />
     </div>
 
     <DsfrTabs
@@ -168,7 +189,6 @@ onMounted(() => {
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
         />
-        <IndicatorAPIDocumentation :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Prévisualisation -->
@@ -180,9 +200,16 @@ onMounted(() => {
         />
       </DsfrTabContent>
 
-      <!-- Réutilisations -->
+      <!-- Réutilisations et API -->
       <DsfrTabContent panel-id="tab-content-reuses" tab-id="tab-reuses">
-        <ReusesList model="dataset" :object="indicator" />
+        <DatasetDataservicesList
+          :dataset-id="indicator.id"
+          empty-message="Il n'y a pas encore d'API pour cet indicateur."
+        />
+        <DatasetReusesList
+          :dataset-id="indicator.id"
+          empty-message="Il n'y a pas encore de réutilisation pour cet indicateur."
+        />
       </DsfrTabContent>
 
       <!-- Discussions -->
@@ -193,7 +220,7 @@ onMounted(() => {
         <DiscussionsList
           :subject="indicator"
           subject-class="Dataset"
-          empty-message="Pas de discussion pour cet indicateur."
+          empty-message="Il n'y a pas encore de discussion pour cet indicateur."
         />
       </DsfrTabContent>
 
@@ -204,26 +231,23 @@ onMounted(() => {
 
       <!-- Détails techniques -->
       <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
-        <!-- Suspense component (experimental) is required here because `DatasetInformationPanel`
-           is a component with an async setup(). If Suspense is removed from vue, `DatasetInformationPanel` must be
-          updated to handle its own loading state. -->
-        <Suspense>
-          <DatasetInformationPanel :dataset="indicator" />
-          <template #fallback>
-            <AnimatedLoader />
-          </template>
-        </Suspense>
+        <DatasetInformationPanel :dataset="indicator" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>
 </template>
 
 <style scoped>
-:deep(.subtitle) {
-  font-size: 1rem;
-}
-/* override previous rule for sidebar */
-:deep(.dataset-sidebar .subtitle) {
-  font-size: 0.875rem;
+/* @datagouv/components-next v1 defines .subtitle with !important inside @layer components (Tailwind).
+   Unlayered !important loses to layered !important, so we must be in the same layer and use
+   higher specificity + !important to win the cascade. */
+@layer components {
+  :deep(.subtitle) {
+    font-size: 1rem !important;
+  }
+  /* override previous rule for sidebar */
+  :deep(.dataset-sidebar .subtitle) {
+    font-size: 0.875rem !important;
+  }
 }
 </style>

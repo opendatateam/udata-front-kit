@@ -6,8 +6,13 @@ export const UserFactory = build<User>({
     id: 'default-user-id',
     first_name: 'Default',
     last_name: 'User',
+    slug: 'default-user',
     about: '',
     page: '',
+    uri: '',
+    avatar: '',
+    avatar_thumbnail: '',
+    since: new Date().toISOString(),
     organizations: [],
     last_login_at: null,
     metrics: {

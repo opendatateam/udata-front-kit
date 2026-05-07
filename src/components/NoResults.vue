@@ -9,9 +9,9 @@ defineProps({
 
 <template>
   <div
-    class="fr-mt-2w rounded-xxs fr-p-3w fr-grid-row flex-direction-column bg-contrast-blue-cumulus"
+    class="no-results bg-contrast-blue fr-mt-2w fr-p-3w fr-grid-row flex-direction-column"
   >
-    <div class="fr-col fr-grid-row fr-grid-row--gutters text-blue-400">
+    <div class="fr-col fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-auto">
         <img
           src="/static/search/france_with_magnifying_glass.svg"
@@ -46,3 +46,10 @@ defineProps({
     </div>
   </div>
 </template>
+
+<style scoped>
+.no-results {
+  border-radius: 0.25rem;
+  color: var(--blue-cumulus-sun-368-moon-732);
+}
+</style>

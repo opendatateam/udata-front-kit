@@ -20,6 +20,7 @@ export default defineConfig({
         const configPath = `./configs/${siteId}/config.yaml`
         const siteConfig = load(readFileSync(configPath, 'utf-8'))
         config.env.siteConfig = siteConfig
+        config.env.siteId = siteId
       }
 
       if (siteId) {
