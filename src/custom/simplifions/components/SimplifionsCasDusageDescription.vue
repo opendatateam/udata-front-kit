@@ -163,26 +163,23 @@
 
 <script setup lang="ts">
 import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
-import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist.ts'
 import type { CasUsage, Recommandation } from '../model/grist'
-import type { TopicCasUsagesExtras } from '../model/topics'
+import type { TopicCasUsage } from '../model/topics'
 import DraftTag from './DraftTag.vue'
 import SimplifionsRecoDataApi from './SimplifionsRecoDataApi.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
-  topic: Topic
+  topic: TopicCasUsage
   pageKey: string
   hideLoader: (() => void) | null
 }>()
 
-const casUsageId = (props.topic.extras as TopicCasUsagesExtras)[
-  'simplifions-v2-cas-d-usages'
-].id
+const casUsageId = props.topic.extras['simplifions-v2-cas-d-usages'].id
 
 const casUsage = ref<CasUsage | undefined>(undefined)
 const recommandations = ref<Recommandation[] | undefined>(undefined)

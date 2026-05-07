@@ -1,34 +1,46 @@
+import type {
+  TopicCasUsage,
+  TopicSolution
+} from '@/custom/simplifions/model/topics'
 import { build, sequence } from 'mimicry-js'
-import { topicFactory } from '../../topics_factory'
+import { dinumOrganization } from '../../organizations_factory'
+import { makeTopicSequenceFields, topicBaseFields } from '../../topics_factory'
 
-const topicCasUsageFactory = build({
+export const topicCasUsageFactory = build<TopicCasUsage>({
   fields: {
-    ...topicFactory.one(),
+    /* eslint-disable @typescript-eslint/no-explicit-any -- mimicry-js FieldType doesn't support the Owned discriminated union */
+    organization: dinumOrganization as any,
+    owner: null as any,
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+    ...topicBaseFields,
+    ...makeTopicSequenceFields(),
     tags: ['simplifions-v2', 'simplifions-v2-cas-d-usages'],
     extras: {
       'simplifions-v2-cas-d-usages': {
-        id: sequence((x) => x)
+        id: sequence((x: number) => x),
+        A_destination_de: []
       }
     }
   }
 })
 
-const topicSolutionFactory = build({
+export const topicSolutionFactory = build<TopicSolution>({
   fields: {
-    ...topicFactory.one(),
+    /* eslint-disable @typescript-eslint/no-explicit-any -- mimicry-js FieldType doesn't support the Owned discriminated union */
+    organization: dinumOrganization as any,
+    owner: null as any,
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+    ...topicBaseFields,
+    ...makeTopicSequenceFields(),
     tags: ['simplifions-v2', 'simplifions-v2-solutions'],
     extras: {
       'simplifions-v2-solutions': {
-        id: sequence((x) => x),
-        Image: sequence((x) => [x]),
-        Nom_de_l_operateur: sequence((x) => `Operator ${x}`),
-        Public_ou_prive: sequence((x) => ['Public', 'Private'][x % 2])
+        id: sequence((x: number) => x),
+        Image: null,
+        Nom_de_l_operateur: [],
+        Public_ou_prive: '',
+        A_destination_de: []
       }
     }
   }
 })
-
-export default {
-  topicCasUsageFactory,
-  topicSolutionFactory
-}

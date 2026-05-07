@@ -28,15 +28,15 @@
 </template>
 
 <script setup lang="ts">
-import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { useFormatDate } from '@datagouv/components-next'
+import type { TopicCasUsage } from '../model/topics'
 import DraftTag from './DraftTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 defineProps<{
-  topic: Topic
+  topic: TopicCasUsage
 }>()
 
 const { pageKey } = useCurrentPageConf()
