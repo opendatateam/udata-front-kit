@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
-import ErrorMessage from '../ErrorMessage.vue'
 import { useLabels, type Labels } from '@/utils/labels'
 import { computed } from 'vue'
+import ErrorMessage from '../ErrorMessage.vue'
 
 const factor = defineModel('factor-model', {
   type: Object as () => ResolvedFactor,
