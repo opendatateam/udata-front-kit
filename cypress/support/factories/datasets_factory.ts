@@ -5,7 +5,15 @@ import { dinumOrganization } from './organizations_factory'
 // factory expands payload with the dynamic fields we need
 export const datasetFactory = build<DatasetV2>({
   fields: {
-    // "static" fields
+    /* eslint-disable @typescript-eslint/no-explicit-any -- mimicry-js FieldType doesn't support the Owned discriminated union */
+    organization: dinumOrganization as any,
+    owner: null as any,
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+    access_type: 'open',
+    access_audiences: [],
+    access_type_reason_category: null,
+    access_type_reason: null,
+    authorization_request_url: null,
     title:
       "Part des véhicules à faibles émissions dans le renouvellement d'un parc (organisation OFFICE PUBLIC DE L'HABITAT DU DEPARTEMENT DU DOUBS)",
     acronym: 'XXX',
@@ -31,7 +39,6 @@ export const datasetFactory = build<DatasetV2>({
       resources_downloads: 0
     },
     temporal_coverage: null,
-    owner: null,
     spatial: null,
     license: 'notspecified',
     last_update: '2025-09-24T08:35:59.477000+00:00',
@@ -62,7 +69,6 @@ export const datasetFactory = build<DatasetV2>({
       edit_resources: true
     },
     // factory fields
-    organization: dinumOrganization,
     id: sequence((x) => `dataset_id_${x}`),
     slug: sequence((x) => `dataset_slug_${x}`),
     uri: sequence(

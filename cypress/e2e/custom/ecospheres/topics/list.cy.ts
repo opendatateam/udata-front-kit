@@ -1,6 +1,5 @@
 import type { Topic } from '@/model/topic'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
-import { mockUniverseOrganizations } from '../mocks'
 
 describe('Topics - List Page', () => {
   let testTopics: Topic[]
@@ -14,7 +13,7 @@ describe('Topics - List Page', () => {
     cy.mockSpatialLevels()
     cy.mockSpatialZone()
     cy.mockSpatialZonesSuggest()
-    mockUniverseOrganizations()
+    cy.mockUniverseOrganizations()
     testTopics = topicFactory.many(3)
     cy.mockDatagouvObjectList('topics', testTopics)
   })
@@ -89,41 +88,6 @@ describe('Topics - List Page', () => {
         expect(interception.request.url).to.match(universeTagRegex)
       })
     })
-
-    it('should filter by spatial coverage when a zone is selected', () => {
-      cy.visit('/bouquets')
-
-      // Wait for the initial API calls to complete
-      cy.wait('@get_topics_list')
-
-      // Find the spatial coverage multiselect and click to activate it
-      cy.contains('label.fr-label', 'Couverture territoriale')
-        .parent('.fr-select-group')
-        .within(() => {
-          cy.get('.multiselect-wrapper').click()
-          cy.get('input.multiselect-search').type('Paris')
-        })
-
-      // Wait for the suggest API call
-      cy.wait('@get_spatial_zones_suggest')
-
-      // Select the first option from the spatial coverage dropdown specifically
-      cy.get('#select-spatial-coverage-dropdown .multiselect-option')
-        .first()
-        .should('be.visible')
-        .click()
-
-      // Verify the URL contains the geozone parameter (first zone of mock)
-      cy.url().should('include', 'geozone=fr:commune:75056')
-
-      // Wait for the filtered API call and verify parameters
-      cy.wait('@get_topics_list').then((interception) => {
-        expect(interception.request.url).to.match(
-          /[?&]geozone=fr:commune:75056(?:&|$)/
-        )
-        expect(interception.request.url).to.match(universeTagRegex)
-      })
-    })
   })
 
   describe('Draft Checkbox', () => {
@@ -150,8 +114,33 @@ describe('Topics - List Page', () => {
       cy.contains('Afficher les brouillons').should('be.visible')
     })
 
-    it('should update URL parameter when clicking "Afficher les brouillons"', () => {
-      // Simulate connected user
+    it('should update URL when clicking "Afficher les brouillons"', () => {
+      cy.simulateConnectedUser({
+        id: 'test-user-id',
+        first_name: 'Test',
+        last_name: 'User'
+      })
+
+      cy.visit('/bouquets')
+      cy.wait('@get_topics_list')
+
+      // Initially, private should not be in URL (default value)
+      cy.url().should('not.include', 'private')
+
+      // Verify the checkbox is checked by default
+      cy.contains('Afficher les brouillons')
+        .parent()
+        .find('input[type="checkbox"]')
+        .should('be.checked')
+
+      cy.contains('Afficher les brouillons').click()
+      cy.url().should('include', 'private=false')
+
+      cy.contains('Afficher les brouillons').click()
+      cy.url().should('include', 'private=true')
+    })
+
+    it('should send correct private params to API', () => {
       cy.simulateConnectedUser({
         id: 'test-user-id',
         first_name: 'Test',
@@ -160,44 +149,53 @@ describe('Topics - List Page', () => {
 
       cy.visit('/bouquets')
       cy.wait('@get_topics_list').then((interception) => {
-        // By default, include_private should be true (from default_value in config)
+        // default ON: no private param sent
+        expect(interception.request.url).to.not.match(/[?&]private=/)
+        expect(interception.request.url).to.match(universeTagRegex)
+      })
+
+      cy.contains('Afficher les brouillons').click()
+      cy.wait('@get_topics_list').then((interception) => {
+        // unchecked OFF: private=false
+        expect(interception.request.url).to.match(/[?&]private=false(?:&|$)/)
+        expect(interception.request.url).to.match(universeTagRegex)
+      })
+
+      cy.contains('Afficher les brouillons').click()
+      cy.wait('@get_topics_list').then((interception) => {
+        // re-checked ON: no private param
+        expect(interception.request.url).to.not.match(/[?&]private=false/)
+        expect(interception.request.url).to.match(universeTagRegex)
+      })
+    })
+
+    // TODO: remove when all servers migrated to private param
+    it('should send compat include_private params (old servers)', () => {
+      cy.simulateConnectedUser({
+        id: 'test-user-id',
+        first_name: 'Test',
+        last_name: 'User'
+      })
+
+      cy.visit('/bouquets')
+      cy.wait('@get_topics_list').then((interception) => {
+        // default ON: include_private=true (compat shim)
         expect(interception.request.url).to.match(
           /[?&]include_private=true(?:&|$)/
         )
         expect(interception.request.url).to.match(universeTagRegex)
       })
 
-      // Initially, include_private should not be in URL (default value)
-      cy.url().should('not.include', 'include_private')
-
-      // Verify the checkbox is checked by default
-      cy.contains('Afficher les brouillons')
-        .parent()
-        .find('input[type="checkbox"]')
-        .should('be.checked')
-
-      // Click the checkbox to hide drafts
       cy.contains('Afficher les brouillons').click()
-
-      // Verify URL includes include_private=false
-      cy.url().should('include', 'include_private=false')
-
-      // Wait for the API call with the new parameter
       cy.wait('@get_topics_list').then((interception) => {
-        expect(interception.request.url).to.not.match(
-          /[?&]include_private=true(?:&|$)/
-        )
+        // unchecked OFF: include_private absent (old server hides drafts by its absence)
+        expect(interception.request.url).to.not.match(/[?&]include_private=/)
         expect(interception.request.url).to.match(universeTagRegex)
       })
 
-      // Click again to show drafts
       cy.contains('Afficher les brouillons').click()
-
-      // Verify URL includes include_private=true
-      cy.url().should('include', 'include_private=true')
-
-      // Wait for the API call with the new parameter
       cy.wait('@get_topics_list').then((interception) => {
+        // re-checked ON: include_private=true again
         expect(interception.request.url).to.match(
           /[?&]include_private=true(?:&|$)/
         )

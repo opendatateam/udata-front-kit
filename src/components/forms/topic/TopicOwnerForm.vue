@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Organization } from '@datagouv/components-next'
+import type { OrganizationReference } from '@datagouv/components-next'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, ref, watch, type Ref } from 'vue'
 
@@ -11,6 +11,7 @@ import { useCurrentPageConf } from '@/router/utils'
 import SearchAPI from '@/services/api/SearchOrgAPI'
 import { useUserStore } from '@/store/UserStore'
 import { debounceWait } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData>,
@@ -19,6 +20,7 @@ const topic = defineModel({
 
 const userStore = useUserStore()
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const choice: Ref<'organization' | 'owner'> = ref(
   topic.value.organization != null ? 'organization' : 'owner'
@@ -33,11 +35,12 @@ const ownOrganizationIndex = computed(() => {
   )
 })
 // both models check the above index to determine the default owner to display
-const selectedAnyOrganization: Ref<Organization | null | undefined> = ref(
-  ownOrganizationIndex.value < 0 && !topic.value.owner
-    ? topic.value.organization
-    : null
-)
+const selectedAnyOrganization: Ref<OrganizationReference | null | undefined> =
+  ref(
+    ownOrganizationIndex.value < 0 && !topic.value.owner
+      ? topic.value.organization
+      : null
+  )
 const selectedOwnOrganization: Ref<number | string | null> = ref(
   ownOrganizationIndex.value >= 0 && !topic.value.owner
     ? ownOrganizationIndex.value
@@ -99,7 +102,7 @@ const clear = () => {
 
 watch(choice, () => {
   if (choice.value === 'owner' && userStore.data?.id) {
-    topic.value.owner = userStore.data
+    topic.value.owner = userStore.userReference
     topic.value.organization = null
   }
 })
@@ -110,7 +113,7 @@ watch(choice, () => {
     <DsfrRadioButtonSet
       v-model="choice"
       :options="radioOptions"
-      :legend="`Choisissez si vous souhaitez gérer ce ${pageConf.labels.singular}&nbsp;:`"
+      :legend="`Choisissez si vous souhaitez gérer ${labels.articles.ce} ${labels.singular}&nbsp;:`"
       name="owner"
     />
     <div v-if="choice === 'organization'" class="flex-gap">

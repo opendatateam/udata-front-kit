@@ -5,11 +5,13 @@ import type { TopicPostData } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useFiltersState, useFilterValue } from '@/utils/filters'
 import type { FormErrorMessagesMap } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsForFilter } from '@/utils/tags'
 import ErrorMessage from '../ErrorMessage.vue'
 
 const { pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const topic = defineModel({
   type: Object as () => Partial<TopicPostData> &
@@ -28,9 +30,6 @@ const props = defineProps({
   }
 })
 
-const hasSpatialCoverage = pageConf.filters.some(
-  (f) => f.type === 'spatial_zone'
-)
 const spatialCoverage = useSpatialCoverage(topic)
 
 const filters = pageConf.filters.filter((f) => f.form != null)
@@ -132,7 +131,7 @@ defineExpose({
     <DsfrInput
       id="input-name"
       v-model="topic.name"
-      :label="`Sujet du ${pageConf.labels.singular} (obligatoire)`"
+      :label="`Sujet ${labels.articles.du} ${labels.singular} (obligatoire)`"
       label-visible
       :aria-invalid="hasError('name') ? true : undefined"
       :description-id="hasError('name') ? 'errors-name' : undefined"
@@ -149,7 +148,7 @@ defineExpose({
       id="input-description"
       v-model="topic.description"
       is-textarea
-      :label="`Objectif du ${pageConf.labels.singular} (obligatoire)`"
+      :label="`Objectif ${labels.articles.du} ${labels.singular} (obligatoire)`"
       label-visible
       :aria-invalid="hasError('description') ? true : undefined"
       :description-id="
@@ -164,10 +163,11 @@ defineExpose({
       :error-message="getErrorMessage('description')"
     />
     <p id="description-instructions" class="fr-mt-1v fr-text--sm">
-      Renseignez ici les informations nécessaires à la compréhension du
-      {{ pageConf.labels.singular }}&nbsp;: politique publique et problématique
-      à laquelle il répond, lien vers toute méthodologie de traitement des
-      données, description de l'organisme porteur du projet, etc.<br />
+      Renseignez ici les informations nécessaires à la compréhension
+      {{ labels.articles.du }} {{ labels.singular }}&nbsp;: politique publique
+      et problématique à laquelle {{ labels.articles.il }} répond, lien vers
+      toute méthodologie de traitement des données, description de l'organisme
+      porteur du projet, etc.<br />
       Utilisez du
       <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/"
         ><span lang="en">markdown</span> (guide en anglais)</a
@@ -206,7 +206,7 @@ defineExpose({
     />
   </div>
   <!-- Spatial coverage -->
-  <div v-if="hasSpatialCoverage" class="fr-select-group">
+  <div class="fr-select-group">
     <label class="fr-label" for="select-spatial-coverage"
       >Couverture territoriale (facultatif)</label
     >

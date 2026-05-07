@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import NoResults from '@/components/NoResults.vue'
+import SelectComponent from '@/components/SelectComponent.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetSearchStore } from '@/store/DatasetSearchStore'
 import { useAsyncComponent } from '@/utils/component'
+import { useLabels } from '@/utils/labels'
 import { DatasetCard } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import { useLoading } from 'vue-loading-overlay'
@@ -26,13 +28,14 @@ const route = useRoute()
 
 const store = useDatasetSearchStore()
 const { meta, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const { items: datasets, pagination, total, maxTotal } = storeToRefs(store)
 
 const numberOfResultMsg: ComputedRef<string> = computed(() => {
   if (total.value === 1) {
-    return `1 ${pageConf.labels.singular} disponible`
+    return `1 ${labels.singular} disponible`
   } else if (total.value > 1) {
-    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} ${pageConf.labels.plural} disponibles`
+    return `${maxTotal.value === total.value ? 'Plus de ' : ''}${total.value} ${labels.plural} disponibles`
   } else {
     return 'Aucun résultat ne correspond à votre recherche'
   }
@@ -146,6 +149,7 @@ defineExpose({
     </div>
     <DsfrPagination
       v-if="pagination.length > 1"
+      :trunc-limit="3"
       :current-page="parseInt(page) - 1"
       :pages="pagination"
       @update:current-page="goToPage"

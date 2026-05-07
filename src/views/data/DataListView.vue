@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SearchComponent from '@/components/SearchComponent.vue'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -32,6 +33,10 @@ const searchResultsMessage = computed(
   () => listComponentRef.value?.numberOfResultMsg || ''
 )
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
+
+const hasFilters = computed(
+  () => pageConf.filters.length > 0 || !!meta.filtersComponent
+)
 
 const links = [
   { to: '/', text: 'Accueil' },
@@ -70,18 +75,24 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-my-2w">
+  <div class="fr-container fr-my-2w">
     <h1>{{ pageConf.title }}</h1>
   </div>
   <section
     v-if="pageConf.banner"
-    class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
+    class="fr-container--fluid hero-banner fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <h2 v-html="pageConf.banner.title" />
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="fromMarkdown(pageConf.banner.content)" />
+      <!-- eslint-disable vue/no-v-html -->
+      <h2
+        :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
+        v-html="pageConf.banner.title"
+      />
+      <div
+        v-if="pageConf.banner.content"
+        v-html="fromMarkdown(pageConf.banner.content)"
+      />
+      <!-- eslint-enable vue/no-v-html -->
     </div>
   </section>
   <GenericContainer id="list">
@@ -98,7 +109,7 @@ onMounted(() => {
     <div class="fr-mt-2w">
       <div class="fr-grid-row">
         <nav
-          v-if="pageConf.filters.length > 0 || meta.filtersComponent"
+          v-if="hasFilters"
           class="fr-sidemenu fr-col-md-4"
           aria-labelledby="fr-sidemenu-title"
         >
@@ -109,7 +120,13 @@ onMounted(() => {
             <FiltersComponent />
           </div>
         </nav>
-        <div class="fr-col-12 fr-col-md-8 list-container">
+        <div
+          :class="[
+            'fr-col-12',
+            'list-container',
+            hasFilters ? 'fr-col-md-8' : ''
+          ]"
+        >
           <ListComponent
             ref="listComponentRef"
             :query="props.query"

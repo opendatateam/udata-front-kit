@@ -5,6 +5,7 @@ import {
   type Topic
 } from '@/model/topic'
 import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
+import { createIndicator } from '../../indicators/support'
 import {
   createTestTopic,
   createTestTopicWithElements,
@@ -117,10 +118,10 @@ describe('Topic Elements - Factor List Display', () => {
       // Verify TopicCard is displayed with the referenced topic name
       cy.contains(referencedTopic.name).should('be.visible')
 
-      // Verify the badge with "bouquet" label is displayed
+      // Verify the badge with "collection" label is displayed
       cy.get('.fr-badge--mention-grey')
         .should('be.visible')
-        .and('contain.text', 'bouquet')
+        .and('contain.text', 'collection')
 
       // Verify the "Accéder au catalogue" button is NOT displayed
       cy.contains('Accéder au catalogue').should('not.exist')
@@ -136,6 +137,60 @@ describe('Topic Elements - Factor List Display', () => {
 
       // Verify we're now on the referenced topic page
       cy.contains('h1', referencedTopic.name).should('be.visible')
+    })
+
+    it('should display indicator datasets with the Indicateur badge', () => {
+      setupElementTest()
+
+      // Create an indicator dataset
+      const indicatorDataset = createIndicator({
+        id: 'indicator-dataset-1',
+        title: 'Indicator Dataset Title'
+      })
+
+      // Create a factor pointing to this indicator dataset
+      const indicatorFactor = factorFactory.one({
+        overrides: {
+          title: 'Factor with Indicator',
+          extras: {
+            ['ecospheres' as SiteId]: {
+              uri: `https://www.data.gouv.fr/datasets/${indicatorDataset.id}`,
+              availability: Availability.LOCAL_AVAILABLE,
+              group: 'Test Group'
+            }
+          },
+          element: {
+            class: 'Dataset',
+            id: indicatorDataset.id
+          }
+        }
+      })
+
+      // Create topic with the indicator factor
+      const mainTopic = createTestTopicWithElements([indicatorFactor])
+
+      mockTopicAndRelatedObjects(mainTopic, {
+        factors: [indicatorFactor],
+        datasets: { [indicatorDataset.id]: indicatorDataset }
+      })
+      mockTopicElementsByClass(mainTopic.id, [indicatorFactor], [], [])
+
+      visitTopic(mainTopic.slug)
+
+      cy.wait('@getElementsDataset')
+
+      // Expand the group to see the factor
+      expandDisclosureGroup()
+
+      // Verify the indicator dataset title is visible
+      cy.contains('Indicator Dataset Title').should('be.visible')
+
+      // Check that the indicator dataset has the "Indicateur" badge
+      cy.contains('Indicator Dataset Title')
+        .closest('.indicator-card-wrapper')
+        .find('.fr-badge')
+        .contains('Indicateur')
+        .should('be.visible')
     })
 
     it('should display DataserviceCard for factors referencing dataservices', () => {

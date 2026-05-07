@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import BlankState from '@/components/BlankState.vue'
 import config from '@/config'
 import type { ResourceData } from '@/model/resource'
 import { useResourceStore } from '@/store/ResourceStore'
-import type { DatasetV2 } from '@datagouv/components-next'
+import type {
+  DatasetV2,
+  DatasetV2WithFullObject
+} from '@datagouv/components-next'
 import { Pagination, ResourceAccordion } from '@datagouv/components-next'
 import { useLoading } from 'vue-loading-overlay'
 
@@ -10,7 +14,7 @@ const pageSize = config.website.pagination_sizes.files_list as number
 
 const props = defineProps({
   dataset: {
-    type: Object as () => DatasetV2,
+    type: Object as () => DatasetV2WithFullObject,
     required: true
   },
   noFileMessage: {
@@ -18,6 +22,10 @@ const props = defineProps({
     default: "Il n'y a pas encore de fichier pour ce jeu de données."
   }
 })
+
+// FIXME: ResourceAccordion should accept DatasetV2WithFullObject — upstream bug in @datagouv/components-next
+// @ts-expect-error dataset prop is typed as Dataset | DatasetV2, not DatasetV2WithFullObject
+const datasetForAccordion: DatasetV2 = props.dataset
 
 const resourceStore = useResourceStore()
 const resources = ref<Record<string, ResourceData>>({})
@@ -111,14 +119,15 @@ onMounted(async () => {
           class="search-bar"
           @search="() => doSearch(typedResources.type.id)"
           @update:model-value="
-            (value: string) => updateQuery(value, typedResources.type.id)
+            (value: string | number | undefined) =>
+              updateQuery(String(value ?? ''), typedResources.type.id)
           "
         />
         <span v-if="typedResources.resources.length != 0">
           <ResourceAccordion
             v-for="resource in typedResources.resources"
             :key="resource.id"
-            :dataset="dataset"
+            :dataset="datasetForAccordion"
             :resource="resource"
           />
           <Pagination
@@ -141,19 +150,9 @@ onMounted(async () => {
       </div>
     </template>
   </template>
-  <div
+  <BlankState
     v-else
-    class="fr-grid-row flex-direction-column fr-grid-row--middle fr-mt-5w"
-  >
-    <img
-      src="/static/blank_state/file.svg"
-      alt=""
-      loading="lazy"
-      height="105"
-      width="130"
-    />
-    <p class="fr-h6 fr-mt-2w fr-mb-5v text-center">
-      {{ noFileMessage }}
-    </p>
-  </div>
+    image="/static/blank_state/file.svg"
+    :message="noFileMessage"
+  />
 </template>

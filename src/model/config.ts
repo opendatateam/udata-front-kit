@@ -41,6 +41,7 @@ export interface PageFilterConf {
     | 'select'
     | 'checkbox'
     | 'organization'
+    | 'private'
   child: string | null
   color: string | null
   default_option: string | null
@@ -70,6 +71,7 @@ export type PageLabelsConf = {
   singular: string
   plural: string
   extended: string
+  feminine?: boolean
 }
 
 export type PageConf = {
@@ -110,6 +112,12 @@ export type DatasetsConf = {
   show_extended_information_panel: boolean
 }
 
+export type HeaderSearchConf = {
+  display: boolean
+  placeholder?: string
+  dropdown?: { text: string; route: string }[]
+}
+
 export interface WebsiteConfig {
   title: string
   seo?: {
@@ -119,6 +127,9 @@ export interface WebsiteConfig {
       description?: string
       robots?: string
     }
+  }
+  header: {
+    search: HeaderSearchConf
   }
 }
 

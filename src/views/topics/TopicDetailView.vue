@@ -14,11 +14,11 @@ import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import ReusesList from '@/components/ReusesList.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
+import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
 import {
   AccessibilityPropertiesKey,
@@ -36,6 +36,8 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
+import { useLabels } from '@/utils/labels'
+import { toMetaDescription, useCanonical } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -72,6 +74,7 @@ const canEdit = computed(() => {
 const { isAdmin } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
@@ -191,33 +194,21 @@ const togglePublish = () => {
     .finally(() => loader.hide())
 }
 
-const toggleFeatured = () => {
-  if (topic.value === null) return
-  topic.value.featured = !topic.value.featured
-  const loader = useLoading().show()
-  store
-    .update(topic.value.id, {
-      tags: topic.value.tags,
-      featured: topic.value.featured
-    })
-    .finally(() => loader.hide())
+const metaDescription = (): string => {
+  return toMetaDescription(topic.value?.description)
 }
 
-const metaDescription = (): string | undefined => {
-  return topic.value?.description ?? ''
-}
+const metaKeywords = computed(() => {
+  const tags = topic.value?.tags
+  if (!tags?.length) return undefined
+  const prefix = pageConf.filter_prefix
+  const keywords = prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
+  return keywords.length ? keywords.join(', ') : undefined
+})
 
 const metaTitle = computed(() => {
   return topic.value?.name
 })
-
-const metaLink = (): string => {
-  const resolved = router.resolve({
-    name: `${pageKey}_detail`,
-    params: { item_id: topic.value?.slug }
-  })
-  return `${window.location.origin}${resolved.href}`
-}
 
 const handleNavigateToFactor = (elementId: string) => {
   activeTab.value = 0
@@ -234,11 +225,23 @@ useHead({
     },
     { name: 'description', content: metaDescription() },
     { property: 'og:description', content: metaDescription() },
+    ...(metaKeywords.value != null
+      ? [{ name: 'keywords', content: metaKeywords.value }]
+      : []),
     ...(topic.value?.private
       ? [{ name: 'robots', content: 'noindex, nofollow' }]
       : [])
-  ],
-  link: [{ rel: 'canonical', href: metaLink }]
+  ]
+})
+
+useCanonical(() => {
+  const slug = topic.value?.slug
+  if (!slug) return null
+  const resolved = router.resolve({
+    name: `${pageKey}_detail`,
+    params: { item_id: slug }
+  })
+  return `${window.location.origin}${resolved.href}`
 })
 
 // Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
@@ -305,10 +308,62 @@ watch(
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
+    </div>
+    <div
+      v-if="topic && (userStore.canAddTopic(pageKey) || canEdit || isAdmin)"
+      class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
+    >
+      <DsfrButton
+        v-if="userStore.canAddTopic(pageKey)"
+        secondary
+        size="sm"
+        label="Cloner"
+        icon="fr-icon-git-merge-line"
+        :title="`Cloner ${labels.articles.le} ${labels.singular}`"
+        @click="showCloneModal = true"
+      />
+      <DsfrModal
+        v-model:opened="showCloneModal"
+        title="Cloner en conservant les jeux de données&nbsp;?"
+        :is-alert="false"
+        :actions="cloneModalActions"
+        @close="showCloneModal = false"
+      >
+        <template #default>
+          <p>
+            Vous pouvez choisir de conserver les liens vers les jeux de données
+            {{ labels.articles.du }} {{ labels.singular }} que vous souhaitez
+            cloner.
+          </p>
+          <p>
+            Si vous ne conservez pas les liens, les jeux de données ne seront
+            pas ajoutés {{ labels.articles.au }} {{ labels.singular }} cloné,
+            mais leurs libellés et raisons d'utilisation seront conservés.
+          </p>
+          <p>Voulez-vous conserver les liens vers les jeux de données&nbsp;?</p>
+        </template>
+      </DsfrModal>
+      <DsfrButton
+        v-if="canEdit"
+        size="sm"
+        :label="topic.private ? 'Publier' : 'Dépublier'"
+        :icon="topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'"
+        @click="togglePublish"
+      />
+      <DsfrButton
+        v-if="canEdit"
+        secondary
+        size="sm"
+        label="Modifier"
+        icon="fr-icon-pencil-line"
+        @click="goToEdit"
+      />
+    </div>
   </div>
-  <GenericContainer v-if="topic" class="tabs-height-fix">
+  <GenericContainer v-if="topic">
     <div class="fr-mt-1w fr-grid-row fr-grid-row--gutters test__topic-detail">
       <div
         class="fr-col-12"
@@ -318,6 +373,7 @@ watch(
         <div v-if="meta.descriptionComponent && customDescriptionComponent">
           <component
             :is="customDescriptionComponent"
+            :key="topic.id"
             :topic="topic"
             :page-key="pageKey"
             :hide-loader="hideLoader"
@@ -351,79 +407,8 @@ watch(
           props.displayMetadata ? 'fr-col-md-4' : 'fr-col-md-12 flex-reverse'
         "
       >
-        <div class="fr-mb-2w">
-          <div v-if="!canEdit && topic.private" class="fr-mb-1w">
-            <DsfrTag label="Brouillon" />
-          </div>
-          <div
-            class="fr-mt-1v fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
-          >
-            <DsfrButton
-              v-if="userStore.canAddTopic(pageKey)"
-              secondary
-              size="md"
-              label="Cloner"
-              icon="fr-icon-git-merge-line"
-              :title="`Cloner le ${pageConf.labels.singular}`"
-              @click="showCloneModal = true"
-            />
-            <DsfrModal
-              v-model:opened="showCloneModal"
-              title="Cloner en conservant les jeux de données&nbsp;?"
-              :is-alert="false"
-              :actions="cloneModalActions"
-              @close="showCloneModal = false"
-            >
-              <template #default>
-                <p>
-                  Vous pouvez choisir de conserver les liens vers les jeux de
-                  données du {{ pageConf.labels.singular }} que vous souhaitez
-                  cloner.
-                </p>
-                <p>
-                  Si vous ne conservez pas les liens, les jeux de données ne
-                  seront pas ajoutés au {{ pageConf.labels.singular }} cloné,
-                  mais leurs libellés et raisons d'utilisation seront conservés.
-                </p>
-                <p>
-                  Voulez-vous conserver les liens vers les jeux de
-                  données&nbsp;?
-                </p>
-              </template>
-            </DsfrModal>
-            <DsfrButton
-              v-if="canEdit"
-              secondary
-              size="md"
-              label="Éditer"
-              icon="fr-icon-pencil-line"
-              class="fr-mb-1v fr-mr-1v"
-              @click="goToEdit"
-            />
-            <DsfrButton
-              v-if="canEdit"
-              size="md"
-              :label="topic.private ? 'Publier' : 'Dépublier'"
-              :icon="
-                topic.private ? 'fr-icon-eye-line' : 'fr-icon-eye-off-line'
-              "
-              class="fr-mb-1v"
-              @click="togglePublish"
-            />
-            <DsfrButton
-              v-if="isAdmin"
-              secondary
-              size="md"
-              :label="
-                topic.featured ? 'Ne plus mettre en avant' : 'Mettre en avant'
-              "
-              :icon="
-                topic.featured ? 'fr-icon-dislike-line' : 'fr-icon-heart-line'
-              "
-              class="fr-mb-1v"
-              @click="toggleFeatured"
-            />
-          </div>
+        <div v-if="!canEdit && topic.private" class="fr-mb-2w">
+          <DsfrTag label="Brouillon" />
         </div>
         <div v-if="props.displayMetadata">
           <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
@@ -493,7 +478,7 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
+      :tab-list-name="`Groupes d'attributs ${labels.articles.du} ${labels.singular}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent
@@ -529,7 +514,7 @@ watch(
         <DiscussionsList
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Pas de discussion pour ce ${pageConf.labels.singular}.`"
+          :empty-message="`Il n'y a pas encore de discussion pour ${labels.articles.ce} ${labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
@@ -538,7 +523,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <ReusesList model="topic" :object="topic" />
+        <TopicReusesList :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
       <DsfrTabContent

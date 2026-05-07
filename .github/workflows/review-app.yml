@@ -14,6 +14,7 @@ on:
           - ecospheres
           - meteo-france
           - logistique
+          - accessibilite
           - defis
           - hackathon
           - simplifions
@@ -32,11 +33,13 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.site }}
       cancel-in-progress: false
     strategy:
+      max-parallel: 2
       matrix:
         site:
           - ecospheres
           - meteo-france
           - logistique
+          - accessibilite
           - defis
           - hackathon
           - simplifions

@@ -136,7 +136,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="datagouv-components">
+  <div>
     <section class="fr-container fr-pt-12v">
       <h1 class="main-title-v2">Les données du DEPS</h1>
       <p class="fr-text--lead fr-mb-6w text-center">
@@ -150,7 +150,7 @@ onMounted(() => {
           id="big-select-search"
           placeholder="Rechercher un jeu de données du DEPS"
           search-label="Rechercher"
-          :search-endpoint-params="{ tag: 'deps-doc' }"
+          search-endpoint="/univers-deps"
         />
       </div>
     </section>
@@ -475,7 +475,7 @@ onMounted(() => {
 }
 
 .bg-blue {
-  background-color: var(--background-alt-blue-cumulus);
+  background-color: var(--background-alt-blue-france);
 }
 
 .actualites {
@@ -585,7 +585,7 @@ section h2 {
 }
 
 .newsletter-social-section {
-  background-color: var(--background-alt-blue-cumulus);
+  background-color: var(--background-alt-blue-france);
   padding: 3rem 0;
   margin-top: 0;
   margin-bottom: 0;

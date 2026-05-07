@@ -1,8 +1,8 @@
-import type { DataserviceWithRel } from '@/model/dataservice'
+import type { Dataservice } from '@datagouv/components-next'
 import { build, sequence } from 'mimicry-js'
 import { dinumOrganization } from './organizations_factory'
 
-export const dataserviceFactory = build<DataserviceWithRel>({
+export const dataserviceFactory = build<Dataservice>({
   // ensures slug and id are synchronized to urls, sometimes sequence() are out of sync.
   postBuild: (obj) => ({
     ...obj,
@@ -14,9 +14,10 @@ export const dataserviceFactory = build<DataserviceWithRel>({
     }
   }),
   fields: {
-    acronym: sequence((x) => `ACRO${x}`),
-    organization: dinumOrganization,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mimicry-js FieldType doesn't support the Owned discriminated union
+    organization: dinumOrganization as any,
     owner: null,
+    acronym: sequence((x) => `ACRO${x}`),
     title: sequence((x) => `Sample Dataservice ${x}`),
     description: 'Sample dataservice description',
     created_at: '2025-07-28T12:03:28.390000+00:00',
@@ -27,7 +28,9 @@ export const dataserviceFactory = build<DataserviceWithRel>({
     self_web_url: sequence(
       (x) => `https://www.data.gouv.fr/dataservices/dataservice_slug_${x}/`
     ),
-    access_type: 'open', // 'open' | 'restricted' | 'open_with_account'
+    access_type: 'open',
+    access_type_reason_category: null,
+    access_type_reason: null,
     availability: sequence((x) => Math.min(95 + (x % 5), 100)), // availability percentage
     contact_points: [],
     deleted_at: null,

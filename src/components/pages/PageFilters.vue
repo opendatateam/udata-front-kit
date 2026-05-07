@@ -131,7 +131,7 @@ watch(
         />
       </template>
       <CheckboxComponent
-        v-else-if="filter.type === 'checkbox'"
+        v-else-if="filter.type === 'checkbox' || filter.type === 'private'"
         :model-value="filtersState[filter.id]?.selectedValue"
         :default-value="Boolean(filter.default_value)"
         :label="filter.name"

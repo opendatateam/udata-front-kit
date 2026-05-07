@@ -16,6 +16,8 @@ import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
+import ErrorSummary from '../ErrorSummary.vue'
 import FactorFields from './FactorFields.vue'
 
 export interface FactorEditModalType {
@@ -27,6 +29,7 @@ const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const elementStore = useTopicElementStore()
 
 const factors = defineModel({
@@ -214,7 +217,7 @@ const submit = async (modalData: DatasetModalData) => {
 }
 
 const { formErrorMessagesMap, sortedErrors, isSubmitted, handleSubmit } =
-  useForm(formErrors, pageConf.labels.singular, {
+  useForm(formErrors, labels.singular, {
     validateFields,
     onSuccess: () => submit(modalData.value),
     errorSummaryRef: errorSummary

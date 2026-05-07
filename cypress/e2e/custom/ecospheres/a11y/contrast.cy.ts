@@ -1,22 +1,20 @@
-import type { DataserviceWithRel } from '@/model/dataservice'
 import type { Topic } from '@/model/topic'
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
-import { mockUniverseOrganizations } from '../mocks'
 
 describe('a11y contrast testing', () => {
   let testTopics: Topic[]
   let testDatasets: DatasetV2[]
-  let testDataservices: DataserviceWithRel[]
+  let testDataservices: Dataservice[]
 
   beforeEach(() => {
     // global mocks
     cy.mockMatomo()
     cy.mockStaticDatagouv()
     cy.mockSpatialLevels()
-    mockUniverseOrganizations()
+    cy.mockUniverseOrganizations()
     // mock topics
     testTopics = topicFactory.many(3)
     cy.mockDatagouvObjectList('topics', testTopics)

@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { Toaster } from '@datagouv/components-next'
 import { useTitle } from '@vueuse/core'
 
 import config from '@/config'
 
+import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
+import LiveRegion from './components/LiveRegion.vue'
 import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
 import {
   AccessibilityPropertiesKey,
@@ -29,7 +32,7 @@ const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
   if (!config.website.notice?.display) return
-  return fromMarkdown(config.website.notice?.content)
+  return fromMarkdown(config.website.notice?.content, true)
 })
 
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
@@ -134,6 +137,7 @@ watch(
 </script>
 
 <template>
+  <Toaster rich-colors />
   <div id="tooltips" />
   <SkipLinks ref="skipLinksComp" :links="skipLinks" />
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
@@ -143,7 +147,7 @@ watch(
     @close="isNoticeClosed = true"
   >
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="noticeContent"></div>
+    <span v-html="noticeContent"></span>
   </DsfrNotice>
   <HeaderComponent
     :user-name="userName"

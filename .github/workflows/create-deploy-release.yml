@@ -145,7 +145,9 @@ jobs:
           pattern="${CONFIG_NAME}-${ENV}-[0-9]+\.[0-9]+\.[0-9]+$"
           tags=$(git ls-remote --tags origin | grep -Eo "refs/tags/${pattern}" | sed 's#refs/tags/##' || true)
           if [ -n "$tags" ]; then
-              for tag in $tags; do git fetch origin tag $tag; done
+              # --no-tags prevents git from auto-following related tags,
+              # which would cause "tag already exists" errors on subsequent fetches
+              for tag in $tags; do git fetch --no-tags origin tag $tag; done
           fi
           RELEASE_VERSION=$(../${{ env.SCAFFOLD_DIR }}/scripts/bump_version_non_semver.sh $CONFIG_NAME $ENV $VERSION_TYPE)
 

@@ -6,7 +6,7 @@ import type { WithOwned } from '@/model'
 import LocalStorageService from '@/services/LocalStorageService'
 import UserAPI from '@/services/api/resources/UserAPI'
 import { useTopicsConf } from '@/utils/config'
-import type { User } from '@datagouv/components-next'
+import type { User, UserReference } from '@datagouv/components-next'
 
 const STORAGE_KEY = 'token'
 const userAPI = new UserAPI()
@@ -37,6 +37,10 @@ export const useUserStore = defineStore('user', {
     },
     isAdmin(): boolean {
       return this.loggedIn && (this.data?.roles?.includes('admin') ?? false)
+    },
+    userReference(): UserReference | undefined {
+      if (!this.data) return undefined
+      return { class: 'User', ...this.data }
     }
   },
   actions: {

@@ -1,6 +1,5 @@
 import type { DatasetV2 } from '@datagouv/components-next'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
-import { mockUniverseOrganizations } from '../mocks'
 
 describe('Culture - Datasets List Page', () => {
   let testDatasets: DatasetV2[]
@@ -10,7 +9,7 @@ describe('Culture - Datasets List Page', () => {
     cy.mockStaticDatagouv()
     testDatasets = datasetFactory.many(3)
     cy.mockDatagouvObjectList('datasets', testDatasets)
-    mockUniverseOrganizations()
+    cy.mockUniverseOrganizations()
   })
 
   describe('List Display', () => {

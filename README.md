@@ -7,6 +7,9 @@
 
 Kit de développement frontend Vue.js permettant de créer des sites thématiques ("verticales") spécialisés basés sur l'écosystème [data.gouv.fr](https://www.data.gouv.fr/). Ce framework fournit les composants, la configuration et l'architecture nécessaires pour déployer rapidement des verticales dédiées à des domaines spécifiques (écologie, météo, défis, etc.).
 
+> [!NOTE]
+> Pour une présentation détaillée de l'architecture (arborescence, univers, filtres, composants), voir [doc/architecture.md](doc/architecture.md).
+
 ## ⚙️ Configuration
 
 Chaque verticale est configurée dans un fichier `config.yaml` stocké sous [`configs/$verticale`](configs).

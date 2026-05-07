@@ -294,7 +294,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
   })
 })
 
-describe("Simplifions Cas d'usages Show page for cas d'usage with editors integrations", () => {
+describe("Simplifions Cas d'usages Show page for cas d'usage with integrating solutions", () => {
   beforeEach(() => {
     cy.baseMocksForSimplifions()
 
@@ -305,7 +305,10 @@ describe("Simplifions Cas d'usages Show page for cas d'usage with editors integr
     const { gristRecommandation } = mockSolutionRecommandation({
       API_et_datasets_utiles_fournis: [],
       Descriptions_des_API_et_datasets_utiles_fournis: [],
-      Ces_logiciels_l_integrent_deja: [gristEditorSolution.id]
+      Ces_logiciels_l_integrent_deja: [],
+      Solutions_integratrices_categorie_logiciel_metier: [
+        gristEditorSolution.id
+      ]
     })
     const { topicCasUsage } = mockCasUsage({
       Recommandations: [gristRecommandation.id]
@@ -314,9 +317,9 @@ describe("Simplifions Cas d'usages Show page for cas d'usage with editors integr
     cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
   })
 
-  it('should display the editor solution', () => {
-    cy.get('.solutions-editeurs').should('have.length', 1)
-    cy.get('.solutions-editeurs').should(
+  it('should display the integrating solution', () => {
+    cy.get('.solution-integratrice-card').should('have.length', 1)
+    cy.get('.solution-integratrice-card').should(
       'contain.text',
       'The Best Editor Solution'
     )
