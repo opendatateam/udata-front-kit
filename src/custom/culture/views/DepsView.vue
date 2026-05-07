@@ -1,4 +1,3 @@
-giot
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
 import { onMounted, ref } from 'vue'
