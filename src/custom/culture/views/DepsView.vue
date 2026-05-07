@@ -1,3 +1,4 @@
+giot
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
 import { onMounted, ref } from 'vue'
@@ -67,7 +68,7 @@ const loading = ref(true)
 const fetchSections = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_sections/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_sections/records?sort=ordre'
     )
     const data = await response.json()
     sections.value = data.records
@@ -79,7 +80,7 @@ const fetchSections = async () => {
 const fetchContent = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_content_section/records'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_content_section/records'
     )
     const data = await response.json()
     contentItems.value = data.records
@@ -91,7 +92,7 @@ const fetchContent = async () => {
 const fetchTopItems = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_tops/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_tops/records?sort=ordre'
     )
     const data = await response.json()
     topItems.value = data.records
@@ -194,7 +195,7 @@ onMounted(() => {
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('new-datasets'))
               "
-              img-src="/static/culture/assets/MC_Langues_78627c8ca0c3-20251007.webp"
+              img-src="https://www.culture.gouv.fr/var/culture/storage/images/_aliases/illustration-16-9_webp/5/5/2/5/9345255-1-fre-FR/f7a46b12806f-2023-Musee-du-cheval-BD-Copyright-Sophie-Lloyd-18-.webp.webp"
               title="🆕 Nouveaux jeux publiés"
               :title-link-attrs="{}"
             />
