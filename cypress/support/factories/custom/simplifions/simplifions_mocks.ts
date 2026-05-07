@@ -150,7 +150,7 @@ export const mockApisOrDatasets = (
 
   const dataservicesOrDatasets = gristApisAndDatasets.map(
     (gristApiAndDataset) => {
-      var dataserviceOrDataset
+      let dataserviceOrDataset
 
       if (gristApiAndDataset.fields.Type === 'API') {
         dataserviceOrDataset = dataserviceFactory.one({
