@@ -1,6 +1,9 @@
 import { build, sequence } from 'mimicry-js'
 
+import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
+
 import type { Activity } from '@/model/activity'
+import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
@@ -47,9 +50,40 @@ export const factorFactory = build<Factor>({
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.meta.canonical_url ||
+                Cypress.env('siteConfig').website.seo.canonical_url ||
                 'https://demo.ecologie.data.gouv.fr'
               return `${canonicalUrl}/bouquets/referenced-topic-${x}`
+            }),
+            availability: Availability.LOCAL_AVAILABLE,
+            group: 'Test Group'
+          }
+        },
+        element: null
+      }
+    },
+    dataservice_reference_ecologie: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence((x) => {
+              const canonicalUrl =
+                Cypress.env('siteConfig').website.seo.canonical_url
+              return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
+            }),
+            availability: Availability.LOCAL_AVAILABLE,
+            group: 'Test Group'
+          }
+        },
+        element: null
+      }
+    },
+    dataservice_reference_datagouvfr: {
+      overrides: {
+        extras: {
+          ['ecospheres' as SiteId]: {
+            uri: sequence((x) => {
+              const canonicalUrl = Cypress.env('siteConfig').datagouvfr.base_url
+              return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
             group: 'Test Group'
@@ -230,30 +264,87 @@ export function mockTopicElementsByClass(
   }).as('getElementsReuse')
 }
 
-// Common mocks for topic and discussions
+/**
+ * Options for mocking topic and related objects
+ */
+export interface MockTopicOptions {
+  /** Factor/elements associated with the topic */
+  factors?: Factor[]
+  /** Referenced topics (for topic_reference trait) */
+  referencedTopics?: Topic[]
+  /** Referenced dataservices (for dataservice_reference trait) */
+  referencedDataservices?: Dataservice[]
+  /** Activity history for the topic */
+  activities?: Activity[]
+  /** Dataset resources mapped by dataset ID */
+  datasetResources?: Record<string, Resource[]>
+  /** Custom datasets mapped by dataset ID (overrides auto-generated ones) */
+  datasets?: Record<string, DatasetV2>
+}
+
+/**
+ * Common mocks for topic and discussions
+ */
 export function mockTopicAndRelatedObjects(
   topic: Topic,
-  factors: Factor[] = [],
-  referencedTopics: Topic[] = [],
-  activities: Activity[] = []
+  options: MockTopicOptions = {}
 ) {
+  const {
+    factors = [],
+    referencedTopics = [],
+    referencedDataservices = [],
+    activities = [],
+    datasetResources = {},
+    datasets = {}
+  } = options
+
   cy.mockDatagouvObject('topics', topic.slug, topic)
   factors.forEach((factor) => {
     if (factor.element?.class === 'Dataset') {
-      cy.mockDatagouvObject(
-        'datasets',
-        factor.element.id,
-        datasetFactory.one({ overrides: { id: factor.element.id } })
-      )
+      const datasetId = factor.element.id
+      // Use custom dataset if provided, otherwise generate one
+      const dataset =
+        datasets[datasetId] ||
+        datasetFactory.one({ overrides: { id: datasetId } })
+      cy.mockDatagouvObject('datasets', datasetId, dataset)
+
+      // Mock resources for this dataset if provided
+      const resources = datasetResources[datasetId] || []
+      cy.mockResources(datasetId, resources)
     }
   })
   // Mock referenced topics for topic_reference trait
   referencedTopics.forEach((refTopic) => {
     cy.mockDatagouvObject('topics', refTopic.slug, refTopic)
   })
+  // Mock referenced dataservices for dataservice_reference trait
+  referencedDataservices.forEach((refDataservice) => {
+    cy.mockDatagouvObject('dataservices', refDataservice.slug, refDataservice)
+    cy.mockDataserviceMetricsApi(refDataservice.id)
+
+    // Mock the datasets list for this dataservice
+    cy.intercept(
+      'GET',
+      new RegExp(`.*datasets.*dataservice=${refDataservice.id}`),
+      {
+        statusCode: 200,
+        body: {
+          data: [],
+          total: 0,
+          page: 1,
+          page_size: 20,
+          next_page: null,
+          previous_page: null
+        }
+      }
+    ).as(`getDataserviceDatasets_${refDataservice.id}`)
+  })
   cy.mockDatagouvObjectList('discussions')
   cy.mockDatagouvObjectList('reuses')
   cy.mockDatagouvObjectList('activity', activities)
+
+  // datasets related
+  cy.mockResourceTypes()
 }
 
 // Helper to expand disclosure groups
@@ -274,7 +365,7 @@ export function setupTopicWithExistingFactors(
   const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndRelatedObjects(testTopic, testFactors, [], activities)
+  mockTopicAndRelatedObjects(testTopic, { factors: testFactors, activities })
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(
@@ -294,7 +385,7 @@ export function setupEmptyTopic(): { testTopic: Topic } {
 
   const testTopic = createTestTopic()
 
-  mockTopicAndRelatedObjects(testTopic)
+  mockTopicAndRelatedObjects(testTopic, {})
   // Set up element mocks for empty topic (all classes return empty arrays)
   mockTopicElementsByClass(testTopic.id, [], [], [])
 

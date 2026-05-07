@@ -2,6 +2,7 @@ import { sequence } from 'mimicry-js'
 import { dataserviceFactory } from '../../dataservices_factory'
 import { datasetFactory } from '../../datasets_factory'
 import {
+  apiEtDatasetsIntegresFactory,
   apiOrDatasetFactory,
   apiOrDatasetUtilesFactory,
   gristCasUsageFactory,
@@ -189,8 +190,13 @@ export const mockSolution = (
 
   const topicSolution = topicSolutionFactory.one({
     overrides: {
+      ...topicSolutionFields,
       tags: ['simplifions-v2', 'simplifions-v2-solutions', tagWithId],
-      ...topicSolutionFields
+      extras: {
+        'simplifions-v2-solutions': {
+          id: gristSolution.id
+        }
+      }
     }
   })
 
@@ -199,4 +205,68 @@ export const mockSolution = (
   cy.mockDatagouvObjectListWithTags('topics', [tagWithId], [topicSolution])
 
   return { gristSolution, topicSolution }
+}
+
+/**
+ * Mock solutions intégratrices for a supplier solution.
+ */
+export const mockSolutionsIntegratices = ({
+  fournisseurSolutionId,
+  integrateursSolutionFields = [],
+  casUsageFields = [],
+  integrations = [],
+  recommandations = []
+}) => {
+  const gristIntegrateurs = integrateursSolutionFields.map((fields) =>
+    solutionFactory.one({
+      overrides: { fields: { ...fields } }
+    })
+  )
+
+  // Create topic for each integrator so the card can resolve via getTopicByTag
+  const topicIntegrateurs = gristIntegrateurs.map((sol) => {
+    const tagWithId = `simplifions-v2-solutions-${sol.id}`
+    const topic = topicSolutionFactory.one({
+      overrides: {
+        tags: ['simplifions-v2', 'simplifions-v2-solutions', tagWithId]
+      }
+    })
+    cy.mockDatagouvObjectListWithTags('topics', [tagWithId], [topic])
+    return topic
+  })
+
+  const gristCasUsages = casUsageFields.map((fields) =>
+    gristCasUsageFactory.one({
+      overrides: { fields: { ...fields } }
+    })
+  )
+  if (gristCasUsages.length) {
+    cy.mockGristRecords('Cas_d_usages', gristCasUsages)
+  }
+
+  const gristRecommandations = recommandations.map((fields) =>
+    gristRecommandationFactory.one({
+      overrides: { fields: { ...fields } }
+    })
+  )
+  cy.mockGristRecords('Recommandations', gristRecommandations)
+
+  const gristIntegrations = integrations.map((fields) =>
+    apiEtDatasetsIntegresFactory.one({
+      overrides: {
+        fields: {
+          Solution_fournisseur: fournisseurSolutionId,
+          ...fields
+        }
+      }
+    })
+  )
+  cy.mockGristRecords('API_et_datasets_integres', gristIntegrations)
+
+  return {
+    gristIntegrateurs,
+    topicIntegrateurs,
+    gristCasUsages,
+    gristIntegrations
+  }
 }

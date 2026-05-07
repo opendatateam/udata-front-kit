@@ -16,7 +16,7 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgStyle: () => ({}),
   searchLabel: 'Rechercher',
   quickLinks: () => [],
-  showSearch: config.website.header_search.display,
+  showSearch: config.website.header.search.display,
   customSearch: false
 })
 
@@ -43,7 +43,7 @@ const showLogoOperatorInHeader =
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
 const badgeStyle = config.website.badge.style
-const dropdown = config.website.header_search.dropdown ?? undefined
+const dropdown = config.website.header.search.dropdown ?? undefined
 </script>
 
 <template>
@@ -89,7 +89,7 @@ const dropdown = config.website.header_search.dropdown ?? undefined
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="customSearch"
+        v-if="customSearch && showSearch"
         id="header-select-search"
         class="custom-search"
         :search-label="searchLabel"
@@ -139,10 +139,6 @@ const dropdown = config.website.header_search.dropdown ?? undefined
 :deep(.fr-header__tools-links) {
   flex-wrap: wrap;
   align-items: center;
-
-  & > nav {
-    flex: 1 0 100%;
-  }
 
   & > :last-child.custom-search {
     flex: 1 0 100%;

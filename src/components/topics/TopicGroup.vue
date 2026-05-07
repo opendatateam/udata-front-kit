@@ -2,6 +2,7 @@
 import type { FactorsGroups, ResolvedFactor } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { basicSlugify } from '@/utils'
+import { useLabels } from '@/utils/labels'
 import { isAvailable } from '@/utils/topic'
 import { NO_GROUP, isOnlyNoGroup } from '@/utils/topicGroups'
 import { useRandomId } from '@gouvminint/vue-dsfr'
@@ -35,6 +36,7 @@ const props = defineProps({
 })
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const newGroupName: Ref<string> = ref(props.groupName)
 const inputErrors: Ref<string[]> = ref([])
@@ -48,7 +50,7 @@ const factorsInGroup = computed(() => {
   let factorsLabel = ''
   switch (factors) {
     case 0:
-      factorsLabel = 'Aucun donnée'
+      factorsLabel = 'Aucune donnée'
       break
     case 1:
       factorsLabel = '1 donnée'
@@ -240,7 +242,7 @@ const actions = computed(() => {
                   factor.remoteDeleted ||
                   factor.remoteArchived
                 "
-                class="uppercase bold fr-text--xs fr-mr-2w"
+                class="uppercase font-bold fr-text--xs fr-mr-2w"
                 label="Non disponible"
               />
               <slot name="factorActions" :factor="factor" :index="index" />
@@ -293,8 +295,8 @@ const actions = computed(() => {
             Ce regroupement contient un ou plusieurs jeux de données. En
             confirmant la suppression,
             <strong>
-              tous les jeux de données associés seront retirés du
-              {{ pageConf.labels.singular }}.
+              tous les jeux de données associés seront retirés
+              {{ labels.articles.du }} {{ labels.singular }}.
             </strong>
           </p>
           <p>Êtes-vous sûr de vouloir supprimer ce regroupement&nbsp;?</p>
@@ -384,11 +386,10 @@ const actions = computed(() => {
 }
 
 .disclosure__header .fr-tag {
-  /* can't use custom properties because of the cumulus theme. */
   font-weight: 400;
   vertical-align: baseline;
-  color: #000091;
-  background-color: #e3e3fd;
+  color: var(--text-action-high-blue-france);
+  background-color: var(--background-action-low-blue-france);
 }
 .disclosure__content .fr-tag {
   color: var(--purple-glycine-sun-319-moon-630, #6e445a);
@@ -403,10 +404,7 @@ const actions = computed(() => {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  background: var(
-    --light-decisions-background-background-alt-blue-france,
-    #f5f5fe
-  );
+  background: var(--background-alt-blue-france);
 }
 .dataset__title {
   padding: 0;
@@ -457,9 +455,13 @@ const actions = computed(() => {
   background-color: var(--modal-confirm-button-bg);
 }
 
+.factor__content :deep(.fr-btn--secondary:hover) {
+  background-color: var(--background-default-grey);
+}
+
 /* Factor highlight for deep-linking */
 .factor-highlighted {
-  outline: 3px solid var(--blue-france-sun-113-625);
+  outline: 3px solid var(--text-active-blue-france);
   outline-offset: 4px;
   transition: outline 0.3s ease;
 }

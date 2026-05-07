@@ -21,7 +21,6 @@ export const organizationFactory = build<Organization>({
     url: sequence((x) => `https://example.com/organization/${x}`),
     created_at: new Date().toISOString(),
     last_modified: new Date().toISOString(),
-    last_update: new Date().toISOString(),
     extras: {},
     deleted: null,
     members: [],

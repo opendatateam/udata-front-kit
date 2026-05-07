@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
+import { toast } from '@datagouv/components-next'
 import type { DsfrButtonGroupProps } from '@gouvminint/vue-dsfr'
 import { capitalize, computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
-import { toast } from 'vue3-toastify'
 
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
+import ErrorSummary from '@/components/forms/ErrorSummary.vue'
 import FactorTextFields from '@/components/forms/dataset/FactorTextFields.vue'
 import type { Topic } from '@/model/topic'
 import { Availability, ResolvedFactor } from '@/model/topic'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useTopicStore } from '@/store/TopicStore'
-import { useDatasetsConf, usePageConf, useSiteId } from '@/utils/config'
+import { usePageConf, useSiteId } from '@/utils/config'
 import { useForm } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
 import { useTopicFactors } from '@/utils/topic'
 import { useGroups } from '@/utils/topicGroups'
 import SelectTopicFactorGroup from '../forms/SelectTopicFactorGroup.vue'
@@ -23,7 +25,7 @@ const props = defineProps({
     default: false
   },
   dataset: {
-    type: Object as () => DatasetV2,
+    type: Object as () => DatasetV2WithFullObject,
     required: true
   },
   topicPageKey: {
@@ -35,8 +37,8 @@ const props = defineProps({
 const emit = defineEmits(['update:show'])
 const loader = useLoading()
 const topicStore = useTopicStore()
-const datasetsConf = useDatasetsConf()
 const topicPageConf = usePageConf(props.topicPageKey)
+const topicLabels = useLabels(topicPageConf.labels)
 
 const topics = topicStore.myTopics
 const factor = ref<ResolvedFactor>(
@@ -91,11 +93,7 @@ const validateFields = () => {
 }
 
 const isValid = computed(() => {
-  if (datasetsConf.add_to_topic?.dataset_editorialization) {
-    return !formErrors.value.length
-  } else {
-    return !!selectedTopicId.value
-  }
+  return !formErrors.value.length
 })
 
 const modalActions: Ref<DsfrButtonGroupProps['buttons']> = computed(() => {
@@ -141,11 +139,8 @@ const submit = async () => {
     selectedTopic.value.id,
     factor.value
   )
-  toast(
-    `Jeu de données ajouté avec succès au ${topicPageConf.labels.singular} "${selectedTopic.value.name}"`,
-    {
-      type: 'success'
-    }
+  toast.success(
+    `Jeu de données ajouté avec succès ${topicLabels.articles.au} ${topicLabels.singular} "${selectedTopic.value.name}"`
   )
   closeModal()
 }
@@ -156,7 +151,7 @@ const {
   getErrorMessage,
   isSubmitted,
   handleSubmit
-} = useForm(formErrors, topicPageConf.labels.singular, {
+} = useForm(formErrors, topicLabels.singular, {
   validateFields,
   onSuccess: submit,
   errorSummaryRef: errorSummary,
@@ -179,7 +174,7 @@ onMounted(() => {
   <DsfrModal
     v-if="show"
     size="lg"
-    :title="`Ajouter le jeu de données à un de vos ${topicPageConf.labels.plural}`"
+    :title="`Ajouter le jeu de données à ${topicLabels.articles.unDeVos} ${topicLabels.plural}`"
     :opened="show"
     aria-modal="true"
     class="form"
@@ -195,9 +190,9 @@ onMounted(() => {
     <DsfrSelect
       id="input-topicId"
       v-model="selectedTopicId"
-      :label="`${capitalize(topicPageConf.labels.singular)} à associer (obligatoire)`"
+      :label="`${capitalize(topicLabels.singular)} à associer (obligatoire)`"
       :options="topicOptions"
-      :default-unselected-text="`Choisissez un ${topicPageConf.labels.singular}`"
+      :default-unselected-text="`Choisissez ${topicLabels.articles.un} ${topicLabels.singular}`"
       :aria-invalid="
         formErrors.includes('topicId') && isSubmitted ? true : undefined
       "
@@ -212,7 +207,7 @@ onMounted(() => {
     <DsfrBadge
       v-if="isDatasetInTopic"
       type="info"
-      :label="`Déjà utilisé dans ce ${topicPageConf.labels.singular}`"
+      :label="`Déjà utilisé dans ${topicLabels.articles.ce} ${topicLabels.singular}`"
       small
       ellipsis
       class="fr-mb-2w"
@@ -227,10 +222,10 @@ onMounted(() => {
       />
     </div>
     <FactorTextFields
-      v-if="datasetsConf.add_to_topic?.dataset_editorialization"
       v-model:factor-model="factor"
       :error-title="getErrorMessage('title')"
       :error-purpose="getErrorMessage('purpose')"
+      :labels="topicLabels"
     />
 
     <slot name="footer">

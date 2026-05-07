@@ -6,11 +6,11 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import {
@@ -20,6 +20,8 @@ import {
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
+import { useAsyncComponent } from '@/utils/component'
+import { useCanonical } from '@/utils/seo'
 import SwaggerClient from '@datagouv/components-next/src/components/ResourceAccordion/Swagger.client.vue'
 
 const route = useRouteParamsAsString()
@@ -34,7 +36,11 @@ const total = computed(
   () => dataserviceStore.datasetsTotals[dataserviceId]?.total || 0
 )
 
-const { pageKey, pageConf } = useCurrentPageConf()
+const { pageKey, meta, pageConf } = useCurrentPageConf()
+
+const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+  fallback: DatasetCard
+})
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const isSwaggerOpened = ref(false)
 
@@ -102,6 +108,8 @@ const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
 
+useCanonical(() => dataservice.value?.self_web_url)
+
 onMounted(() => {
   dataserviceStore
     .load(dataserviceId, { toasted: false, redirectNotFound: true })
@@ -116,7 +124,7 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="dataservice" class="tabs-height-fix">
+  <GenericContainer v-if="dataservice">
     <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataservice.title }}</h1>
@@ -198,6 +206,11 @@ onMounted(() => {
             >Faire une demande d'habilitation</a
           >
         </div>
+        <!-- metrics -->
+        <MetricsStatBoxes
+          object-type="dataservice"
+          :object-id="dataservice.id"
+        />
       </div>
     </div>
 
@@ -245,13 +258,15 @@ onMounted(() => {
           <h2 class="fr-mb-1v subtitle subtitle--uppercase">
             {{ `${total} jeu${total > 1 ? 'x' : ''} de données` }}
           </h2>
-          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+          <div
+            class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-mt-2w"
+          >
             <div
               v-for="dataset in datasets"
               :key="dataset.id"
               class="fr-col-12 fr-col-lg-6"
             >
-              <DatasetCard
+              <CardComponent
                 :show-description="false"
                 :dataset="dataset"
                 :dataset-url="getDatasetPage(dataset.id)"
@@ -260,6 +275,7 @@ onMounted(() => {
           </div>
           <DsfrPagination
             v-if="pagination.length > 1"
+            :trunc-limit="3"
             :current-page="currentPage - 1"
             :pages="pagination"
             class="fr-mt-4w"
@@ -281,7 +297,7 @@ onMounted(() => {
                 {{ discussionWellDescription }}
               </p>
             </div>
-            <div class="fr-col-12 fr-col-lg-4 text-align-right">
+            <div class="fr-col-12 fr-col-lg-4 align-right">
               <DsfrButton
                 label="Voir les discussions sur data.gouv.fr"
                 icon="fr-icon-external-link-line"
@@ -295,13 +311,13 @@ onMounted(() => {
         <DiscussionsList
           v-if="showDiscussions"
           :subject="dataservice"
-          empty-message="Pas de discussion pour cette API."
+          empty-message="Il n'y a pas encore de discussion pour cette API."
         />
       </DsfrTabContent>
 
       <!-- Informations -->
       <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
-        <div class="fr-pb-3w border-bottom border-default-grey">
+        <div class="fr-pb-3w">
           <h2 class="fr-mb-3w subtitle subtitle--uppercase">
             Informations techniques
           </h2>
@@ -333,8 +349,8 @@ onMounted(() => {
 
 <style scoped>
 .dataservice-well {
-  color: var(--blue-cumulus-sun-368-moon-732);
-  border: 1px solid var(--blue-cumulus-sun-368-moon-732);
+  color: var(--text-active-blue-france);
+  border: 1px solid var(--border-active-blue-france);
   border-radius: 0.25rem;
   padding: 0.75rem;
   background-color: var(--background-alt-grey);

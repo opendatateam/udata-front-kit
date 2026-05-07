@@ -41,6 +41,7 @@ export interface PageFilterConf {
     | 'select'
     | 'checkbox'
     | 'organization'
+    | 'private'
   child: string | null
   color: string | null
   default_option: string | null
@@ -70,6 +71,7 @@ export type PageLabelsConf = {
   singular: string
   plural: string
   extended: string
+  feminine?: boolean
 }
 
 export type PageConf = {
@@ -105,10 +107,30 @@ export type PagesConf = {
 export type DatasetsConf = {
   add_to_topic: {
     page: string
-    dataset_editorialization: boolean
   } | null
   harvest_backends_quality_warning: string[]
   show_extended_information_panel: boolean
+}
+
+export type HeaderSearchConf = {
+  display: boolean
+  placeholder?: string
+  dropdown?: { text: string; route: string }[]
+}
+
+export interface WebsiteConfig {
+  title: string
+  seo?: {
+    canonical_url?: string
+    meta?: {
+      keywords?: string
+      description?: string
+      robots?: string
+    }
+  }
+  header: {
+    search: HeaderSearchConf
+  }
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/

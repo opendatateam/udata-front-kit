@@ -16,6 +16,8 @@ import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
+import ErrorSummary from '../ErrorSummary.vue'
 import FactorFields from './FactorFields.vue'
 
 export interface FactorEditModalType {
@@ -27,6 +29,7 @@ const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const elementStore = useTopicElementStore()
 
 const factors = defineModel({
@@ -38,10 +41,6 @@ const factorsGroups = defineModel('groups-model', {
   default: []
 })
 const props = defineProps({
-  datasetEditorialization: {
-    type: Boolean,
-    default: false
-  },
   topicId: {
     type: String,
     required: true
@@ -58,25 +57,23 @@ const formErrors: Ref<AllowedInput[]> = ref([])
 
 const validateFields = () => {
   const modalFactor = modalData.value.factor
-  if (props.datasetEditorialization) {
-    if (!modalFactor?.title.trim()) {
-      formErrors.value.push('title')
-    }
-    if (!modalFactor?.description?.trim()) {
-      formErrors.value.push('purpose')
-    }
-    if (
-      !modalFactor?.siteExtras.uri &&
-      modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
-    ) {
-      formErrors.value.push('availability')
-    }
-    if (
-      !modalFactor?.siteExtras.uri &&
-      modalFactor?.siteExtras.availability === Availability.URL_AVAILABLE
-    ) {
-      formErrors.value.push('availabilityUrl')
-    }
+  if (!modalFactor?.title.trim()) {
+    formErrors.value.push('title')
+  }
+  if (!modalFactor?.description?.trim()) {
+    formErrors.value.push('purpose')
+  }
+  if (
+    !modalFactor?.siteExtras.uri &&
+    modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
+  ) {
+    formErrors.value.push('availability')
+  }
+  if (
+    !modalFactor?.siteExtras.uri &&
+    modalFactor?.siteExtras.availability === Availability.URL_AVAILABLE
+  ) {
+    formErrors.value.push('availabilityUrl')
   }
   if (
     modalFactor?.siteExtras.group &&
@@ -220,7 +217,7 @@ const submit = async (modalData: DatasetModalData) => {
 }
 
 const { formErrorMessagesMap, sortedErrors, isSubmitted, handleSubmit } =
-  useForm(formErrors, pageConf.labels.singular, {
+  useForm(formErrors, labels.singular, {
     validateFields,
     onSuccess: () => submit(modalData.value),
     errorSummaryRef: errorSummary
@@ -259,7 +256,6 @@ defineExpose({ addFactor, editFactor })
         v-model="modalData.factor"
         v-model:groups-model="factorsGroups"
         v-model:errors-model="formErrors"
-        :dataset-editorialization
         :factors-in-topic="factors"
         @update-validation="(isValid: boolean) => (modalData.isValid = isValid)"
       />

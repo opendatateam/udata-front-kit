@@ -1,8 +1,6 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <div v-if="solution === undefined" class="loading">
-    Chargement de la solution en cours...
-  </div>
+  <ContentPlaceholder v-if="!solution" />
   <div v-else class="solution-description">
     <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-12 fr-col-md-8">
@@ -11,7 +9,7 @@
             {{ topic.name }}
           </h1>
           <DraftTag v-if="topic.private" />
-          <SimplifionsSolutionTag :topic-solution="topic" />
+          <SimplifionsSolutionOperateurTag :topic-solution="topic" />
         </div>
 
         <p class="fr-text--lead">
@@ -22,7 +20,6 @@
           :topic="topic"
           :page-key="pageKey"
           :show-simplification="false"
-          :show-budget="false"
         />
 
         <ul class="fr-mt-4w">
@@ -44,10 +41,6 @@
               last-item-separator="ou"
             />
             <span v-else>Non renseigné</span>
-          </li>
-          <li>
-            <strong>Prix :</strong>
-            {{ solution.Prix ? solution.Prix : 'Non renseigné' }}
           </li>
         </ul>
 
@@ -89,43 +82,31 @@
           </h2>
           <ol>
             <li>
-              <a
-                id="summary-link-1"
-                href="#possibilites-simplification"
-                class="fr-summary__link"
+              <a href="#possibilites-simplification" class="fr-summary__link"
                 >Possibilités de simplification</a
               >
             </li>
             <li>
-              <a
-                id="summary-link-1"
-                href="#cas-usages-simplifiables"
-                class="fr-summary__link"
+              <a href="#cas-usages-simplifiables" class="fr-summary__link"
                 >Cas d'usages simplifiables</a
               >
             </li>
             <li v-if="solution.API_ou_datasets_integres?.length">
-              <a
-                id="summary-link-2"
-                href="#donnees-api-utilisees"
-                class="fr-summary__link"
+              <a href="#donnees-api-utilisees" class="fr-summary__link"
                 >Données et API utilisées</a
               >
             </li>
             <li v-if="solution.APIs_ou_datasets_fournis?.length">
-              <a
-                id="summary-link-2"
-                href="#donnees-api-fournies"
-                class="fr-summary__link"
+              <a href="#donnees-api-fournies" class="fr-summary__link"
                 >Données et API fournies</a
               >
             </li>
             <li v-else>
-              <a
-                id="summary-link-2"
-                href="#donnees-api"
-                class="fr-summary__link"
-                >Données et API</a
+              <a href="#donnees-api" class="fr-summary__link">Données et API</a>
+            </li>
+            <li v-if="solutionsIntegratices.length">
+              <a href="#solutions-integratices" class="fr-summary__link"
+                >Solutions intégratrices</a
               >
             </li>
           </ol>
@@ -155,7 +136,7 @@
             </span>
           </p>
           <span>
-            <a href="#modification-contenu">✍️ Proposer une modification</a>
+            <a href="#modification-contenu">✒️ Proposer une modification</a>
           </span>
         </nav>
       </div>
@@ -185,16 +166,16 @@
 
     <div class="fr-col-12 fr-col-md-8 fr-mb-4w">
       <h2 id="possibilites-simplification" class="colored-title fr-h2 fr-my-5w">
-        Possibilités de simplification :
+        Possibilités de simplification
       </h2>
 
       <div>
-        <h3 class="fr-text--md fr-mt-2w">
+        <h3 class="fr-text--lg fr-mt-2w">
           <span
             aria-hidden="true"
             class="fr-icon-success-fill icon-green"
           ></span>
-          Cette solution permet :
+          Simplification par la donnée grâce à cette solution :
         </h3>
         <p
           v-if="solution.Cette_solution_permet"
@@ -202,14 +183,17 @@
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
 
       <div>
-        <h3 class="fr-text--md fr-mt-2w">
-          <span aria-hidden="true" class="fr-icon-error-fill icon-red"></span>
-          Cette solution ne permet pas :
+        <h3 class="fr-text--lg fr-mt-2w">
+          <span
+            aria-hidden="true"
+            class="fr-icon-stop-circle-fill icon-gray"
+          ></span>
+          Périmètre de simplification non couvert :
         </h3>
         <p
           v-if="solution.Cette_solution_ne_permet_pas"
@@ -217,9 +201,16 @@
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
-          <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+          <a href="#modification-contenu">✒️ Proposer un contenu</a>.
         </p>
       </div>
+      <p class="fr-text--sm fr-mt-4w">
+        <i
+          >Une remarque concernant les possibilités de simplification de cette
+          solution ?
+        </i>
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
+      </p>
     </div>
 
     <h2 id="cas-usages-simplifiables" class="colored-title fr-h2 fr-my-5w">
@@ -239,7 +230,7 @@
 
     <p v-else class="fr-text--sm">
       <i>Aucun cas d'usage n'est référencé pour cette solution actuellement.</i>
-      <a href="#modification-contenu">✍️ Proposer des cas d'usages</a>
+      <a href="#modification-contenu">✒️ Proposer des cas d'usages</a>
     </p>
 
     <div
@@ -281,12 +272,48 @@
           >Aucun jeu de données ou API utilisé ou fourni par cette solution
           actuellement.</i
         >
-        <a href="#modification-contenu">✍️ Proposer un contenu</a>.
+        <a href="#modification-contenu">✒️ Proposer un contenu</a>.
       </p>
     </div>
 
+    <div
+      v-if="solutionsIntegratices.length"
+      id="solutions-integratices"
+      class="solutions-integratices-container fr-p-3w fr-mt-8w"
+    >
+      <h2 class="colored-title fr-h2">
+        Solutions intégrant "{{ topic.name }}"
+      </h2>
+
+      <SimplifionsIntegrateursFilters
+        v-if="solutionsIntegratices.length > 1"
+        :cas-usages="casUsagesForIntegrateurs"
+        :max-apis-count="maxApisCount"
+        :filtered-count="filteredAndSortedSolutions.length"
+        @update:filters="onFiltersUpdate"
+      />
+
+      <p
+        v-if="filteredAndSortedSolutions.length === 0"
+        class="fr-text--sm fr-text--center"
+      >
+        <i>Aucune solution ne correspond aux filtres sélectionnés.</i>
+      </p>
+
+      <SimplifionsSolutionIntegrateursTabs
+        v-else
+        :solutions="filteredAndSortedSolutions"
+        :cas-usages="casUsagesForIntegrateurs"
+        :useful-apis-by-cas-usage="usefulApisByCasUsage"
+        :nom-fournisseur="topic.name"
+        :api-et-datasets-integres-par-solution="
+          apiEtDatasetsIntegresParSolution
+        "
+      />
+    </div>
+
     <div id="modification-contenu" class="bloc-modifications fr-mt-10w">
-      <h2 class="fr-h6">✍️ Proposer une modification du contenu</h2>
+      <h2 class="fr-h6">✒️ Proposer une modification du contenu</h2>
       <p class="fr-mb-0">
         Pour proposer une modification du contenu de cette solution, vous pouvez
         contacter l'équipe via l'espace "Discussions" ci-dessous ou bien
@@ -304,18 +331,35 @@
 </template>
 
 <script setup lang="ts">
+import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
-import type { ApiOrDataset, Solution } from '../model/grist'
+import type {
+  ApiEtDatasetsIntegresRecord,
+  ApiOrDataset,
+  CasUsageRecord,
+  RecommandationRecord,
+  Solution,
+  SolutionRecord
+} from '../model/grist'
 import type { TopicSolutionsExtras } from '../model/topics'
+import DraftTag from './DraftTag.vue'
+import HumanReadableList from './HumanReadableList.vue'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
 import SimplifionsDataApi from './SimplifionsDataApi.vue'
+import SimplifionsIntegrateursFilters, {
+  type IntegrateursFilters
+} from './SimplifionsIntegrateursFilters.vue'
+import SimplifionsSolutionIntegrateursTabs from './SimplifionsSolutionIntegrateursTabs.vue'
+import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
+import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
   topic: Topic
   pageKey: string
+  hideLoader: (() => void) | null
 }>()
 
 const solutionId = (props.topic.extras as TopicSolutionsExtras)[
@@ -325,9 +369,21 @@ const solutionId = (props.topic.extras as TopicSolutionsExtras)[
 const solution = ref<Solution | undefined>(undefined)
 const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
 const apisOrDatasetsFournis = ref<ApiOrDataset[] | undefined>(undefined)
+const solutionsIntegratices = ref<SolutionRecord[]>([])
+const allFetchedCasUsages = ref<CasUsageRecord[]>([])
+const recommandationsFournisseur = ref<RecommandationRecord[]>([])
+const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
+const integrateursFilters = ref<IntegrateursFilters>({
+  casUsage: null,
+  minApisIntegrated: 0,
+  sortBy: 'integration'
+})
 
 grist.getRecord('Solutions', solutionId).then((data) => {
   solution.value = data.fields as Solution
+
+  // hide parent component loader
+  props.hideLoader?.()
 
   if (solution.value.API_ou_datasets_integres?.length) {
     grist
@@ -354,7 +410,149 @@ grist.getRecord('Solutions', solutionId).then((data) => {
         ).filter((apiOrDataset) => apiOrDataset.Visible_sur_simplifions)
       })
   }
+
+  if (solution.value.solutions_integratrices?.length) {
+    // Fetch integrator solution details
+    grist
+      .getRecordsByIds('Solutions', solution.value.solutions_integratrices)
+      .then((solutions) => {
+        solutionsIntegratices.value = (solutions as SolutionRecord[]).filter(
+          (sol) => sol.fields.Visible_sur_simplifions
+        )
+      })
+
+    // Fetch Recommendations for the supplier solution to get per-use-case API requirements (Y values)
+    grist
+      .getRecords('Recommandations', { Solution_recommandee: [solutionId] })
+      .then((recommendations) => {
+        recommandationsFournisseur.value =
+          recommendations as RecommandationRecord[]
+      })
+
+    // Fetch API_et_datasets_integres - this is the main source of truth
+    grist
+      .getRecords('API_et_datasets_integres', {
+        Solution_fournisseur: [solutionId]
+      })
+      .then((integrations) => {
+        apiEtDatasetsIntegres.value =
+          integrations as ApiEtDatasetsIntegresRecord[]
+
+        // Derive cas d'usage IDs from integration data and fetch them
+        const allCasUsageIds = new Set<number>()
+        integrations.forEach((integration) => {
+          const useCases =
+            (integration as ApiEtDatasetsIntegresRecord).fields
+              .Integre_pour_les_cas_d_usages || []
+          useCases.forEach((id) => allCasUsageIds.add(id))
+        })
+
+        if (allCasUsageIds.size > 0) {
+          grist
+            .getRecordsByIds('Cas_d_usages', Array.from(allCasUsageIds))
+            .then((casUsages) => {
+              allFetchedCasUsages.value = casUsages as CasUsageRecord[]
+            })
+        }
+      })
+  }
 })
+
+// Map of cas d'usage ID -> useful APIs/datasets IDs (Y value per use case)
+const usefulApisByCasUsage = computed(() => {
+  const map = new Map<number, number[]>()
+  recommandationsFournisseur.value.forEach((rec) => {
+    const casUsageId = rec.fields.Cas_d_usage
+    const usefulApis = rec.fields.API_et_datasets_utiles_fournis || []
+    map.set(casUsageId, usefulApis)
+  })
+  return map
+})
+
+// Map of integrator solution ID -> their API integrations
+const apiEtDatasetsIntegresParSolution = computed(() => {
+  const map = new Map<number, ApiEtDatasetsIntegresRecord[]>()
+  apiEtDatasetsIntegres.value.forEach((integration) => {
+    const solutionId = integration.fields.Solution_integratrice
+    if (!map.has(solutionId)) {
+      map.set(solutionId, [])
+    }
+    map.get(solutionId)!.push(integration)
+  })
+  return map
+})
+
+// Only expose cas d'usages linked to visible integrator solutions
+const casUsagesForIntegrateurs = computed(() => {
+  const visibleSolIds = new Set(
+    solutionsIntegratices.value.map((sol) => sol.id)
+  )
+  const validIds = new Set<number>()
+  apiEtDatasetsIntegres.value.forEach((integration) => {
+    if (visibleSolIds.has(integration.fields.Solution_integratrice)) {
+      integration.fields.Integre_pour_les_cas_d_usages?.forEach((id) =>
+        validIds.add(id)
+      )
+    }
+  })
+  return allFetchedCasUsages.value.filter((cu) => validIds.has(cu.id))
+})
+
+const maxApisCount = computed(() => {
+  return Math.max(
+    0,
+    ...solutionsIntegratices.value.map(
+      (sol) => sol.fields.API_ou_datasets_integres?.length ?? 0
+    )
+  )
+})
+
+const getIntegrationCount = (sol: SolutionRecord) => {
+  return sol.fields.API_ou_datasets_integres?.length ?? 0
+}
+
+const filteredAndSortedSolutions = computed(() => {
+  let filtered = [...solutionsIntegratices.value]
+
+  // Filter by cas d'usage (single select) - based on integration data
+  if (integrateursFilters.value.casUsage !== null) {
+    filtered = filtered.filter((sol) => {
+      const integrations =
+        apiEtDatasetsIntegresParSolution.value.get(sol.id) || []
+      return integrations.some((integration) =>
+        integration.fields.Integre_pour_les_cas_d_usages?.includes(
+          integrateursFilters.value.casUsage as number
+        )
+      )
+    })
+  }
+
+  // Filter by min APIs integrated
+  if (integrateursFilters.value.minApisIntegrated > 0) {
+    filtered = filtered.filter((sol) => {
+      const integratedCount = getIntegrationCount(sol)
+      return integratedCount >= integrateursFilters.value.minApisIntegrated
+    })
+  }
+
+  // Sort based on sortBy value
+  return filtered.sort((a, b) => {
+    switch (integrateursFilters.value.sortBy) {
+      case 'integration': {
+        return getIntegrationCount(b) - getIntegrationCount(a)
+      }
+      case 'title': {
+        return a.fields.Nom.localeCompare(b.fields.Nom)
+      }
+      default:
+        return 0
+    }
+  })
+})
+
+const onFiltersUpdate = (filters: IntegrateursFilters) => {
+  integrateursFilters.value = filters
+}
 </script>
 
 <style scoped>
@@ -389,8 +587,16 @@ h2.colored-title {
   color: #27a658;
 }
 
-.icon-red {
-  color: #ff292f;
+.icon-gray {
+  color: #8b8b8b;
+}
+
+.solutions-integratices-container {
+  background-color: #f1f1f1;
+}
+
+.solutions-integratices-container :deep(.fr-select) {
+  background-color: #fff;
 }
 
 .bloc-modifications {

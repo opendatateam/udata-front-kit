@@ -18,7 +18,6 @@ describe('Simplifions Navigation', () => {
     cy.get('header[role="banner"]').within(() => {
       cy.contains('a', 'Accueil').should('be.visible')
       cy.contains('a', "Cas d'usages").should('be.visible')
-      cy.contains('a', 'Solutions').should('be.visible')
       cy.contains('a', 'À propos').should('be.visible')
     })
   })
@@ -32,17 +31,6 @@ describe('Simplifions Navigation', () => {
 
     // Verify page title/heading contains "Cas d'usages"
     cy.get('h1').should('contain.text', "Cas d'usages")
-  })
-
-  it('should navigate to "Solutions" page and display correctly', () => {
-    // Click on "Solutions" in the navigation
-    cy.get('nav').contains('a', 'Solutions').click()
-
-    // Check that the page loads correctly
-    cy.get('body').should('be.visible')
-
-    // Verify page title/heading contains "Solutions"
-    cy.get('h1').should('contain.text', 'Solutions')
   })
 
   it('should navigate to "À propos" page and display correctly', () => {

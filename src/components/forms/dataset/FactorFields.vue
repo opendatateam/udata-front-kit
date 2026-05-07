@@ -7,7 +7,9 @@ import { Availability, ResolvedFactor, type FactorsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
 
+import ErrorMessage from '../ErrorMessage.vue'
 import SelectTopicFactorGroup from '../SelectTopicFactorGroup.vue'
 import FactorTextFields from './FactorTextFields.vue'
 import SelectDataset from './SelectDataset.vue'
@@ -29,21 +31,18 @@ const formErrors = defineModel('errors-model', {
   default: []
 })
 
-const props = defineProps({
+defineProps({
   factorsInTopic: {
     type: Array<ResolvedFactor>,
     default: []
-  },
-  datasetEditorialization: {
-    type: Boolean,
-    default: false
   }
 })
 
 const router = useRouter()
 const datasetStore = useDatasetStore()
 const { pageConf } = useCurrentPageConf()
-const { getErrorMessage } = useForm(formErrors, pageConf.labels.singular)
+const labels = useLabels(pageConf.labels)
+const { getErrorMessage } = useForm(formErrors, labels.singular)
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
@@ -62,8 +61,6 @@ const isValidDataset = computed((): boolean => {
     isValidCatalogDataset.value &&
     isValidUrlDataset.value &&
     !factor.value.remoteDeleted
-
-  if (!props.datasetEditorialization) return isValidWithoutEditorialization
 
   return isValidWithoutEditorialization && hasEditorialization.value
 })
@@ -134,7 +131,6 @@ onMounted(() => {
 
 <template>
   <FactorTextFields
-    v-if="datasetEditorialization"
     v-model:factor-model="factor"
     :error-title="getErrorMessage('title')"
     :error-purpose="getErrorMessage('purpose')"
@@ -148,7 +144,7 @@ onMounted(() => {
         @update:model-value="onSelectDataset"
       />
     </div>
-    <div v-if="!selectedDataset && datasetEditorialization" class="fr-mt-4w">
+    <div v-if="!selectedDataset" class="fr-mt-4w">
       <fieldset
         class="fr-fieldset availability"
         role="radiogroup"
@@ -170,13 +166,17 @@ onMounted(() => {
         >
           <DsfrInput
             id="input-availabilityUrl"
-            v-model="factor.siteExtras.uri"
             label="Url vers le jeu de données souhaité (obligatoire)"
             :label-visible="true"
             class="fr-mb-md-1w fr-input"
             aria-errormessage="errors-availabilityUrl"
             :aria-invalid="
               formErrors.includes('availabilityUrl') ? true : undefined
+            "
+            :model-value="factor.siteExtras.uri ?? undefined"
+            @update:model-value="
+              (v: string | number | undefined) =>
+                (factor.siteExtras.uri = v != null ? String(v) : null)
             "
           />
           <ErrorMessage

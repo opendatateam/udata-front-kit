@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { storeToRefs } from 'pinia'
 import { capitalize, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import TopicList from '@/components/topics/TopicList.vue'
 import type { TopicPageRouterConf } from '@/router/model'
 import { useCurrentPageConf } from '@/router/utils'
@@ -13,6 +14,7 @@ import { fromMarkdown } from '@/utils'
 import { useAccessibilityProperties } from '@/utils/a11y'
 import { useAsyncComponent } from '@/utils/component'
 import { debounceWait } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 
 interface Props extends TopicPageRouterConf {
   query: string
@@ -26,7 +28,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter()
 const route = useRoute()
-const { meta, pageConf } = useCurrentPageConf()
+const { meta, pageConf, pageKey } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const topicListComp = ref<InstanceType<typeof TopicList> | null>(null)
 const searchResultsMessage = computed(
@@ -35,7 +38,6 @@ const searchResultsMessage = computed(
 useAccessibilityProperties(toRef(props, 'query'), searchResultsMessage)
 
 const userStore = useUserStore()
-const { canAddTopic } = storeToRefs(userStore)
 
 const links = [
   { to: '/', text: 'Accueil' },
@@ -43,7 +45,7 @@ const links = [
 ]
 
 const createUrl = computed(() => {
-  return { name: `${meta.pageKey}_add`, query: route.query }
+  return { name: `${pageKey}_add`, query: route.query }
 })
 
 const search = useDebounceFn((query) => {
@@ -54,10 +56,11 @@ const search = useDebounceFn((query) => {
   })
 }, debounceWait)
 
-const FiltersComponent = useAsyncComponent(
-  () => meta?.filtersComponent,
-  defineAsyncComponent(() => import('@/components/pages/PageFilters.vue'))
-)
+const FiltersComponent = useAsyncComponent(() => meta?.filtersComponent, {
+  fallback: defineAsyncComponent(
+    () => import('@/components/pages/PageFilters.vue')
+  )
+})
 
 // TODO: this should be handled by the router, but we don't have access to pageConf there
 onMounted(() => {
@@ -73,23 +76,23 @@ onMounted(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <div class="fr-container datagouv-components fr-my-2v">
+  <div class="fr-container fr-my-2v">
     <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
-      <h1 class="fr-mb-0">{{ capitalize(pageConf.labels.plural) }}</h1>
+      <h1 class="fr-mb-0">{{ capitalize(labels.plural) }}</h1>
       <div
-        v-if="canAddTopic"
+        v-if="userStore.canAddTopic(pageKey)"
         class="fr-col-auto fr-grid-row fr-grid-row--middle"
       >
         <router-link :to="createUrl" class="fr-btn fr-mb-1w">
           <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
-          Ajouter un {{ pageConf.labels.singular }}
+          Ajouter {{ labels.articles.un }} {{ labels.singular }}
         </router-link>
       </div>
     </div>
   </div>
   <section
     v-if="pageConf.banner"
-    class="fr-container--fluid hero-banner datagouv-components fr-mb-4w"
+    class="fr-container--fluid hero-banner fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable-next-line vue/no-v-html -->
@@ -127,6 +130,7 @@ onMounted(() => {
             ref="topicListComp"
             :query="props.query"
             :page="props.page"
+            :use-search-endpoint="props.useSearchEndpoint ?? false"
           />
         </div>
       </div>
