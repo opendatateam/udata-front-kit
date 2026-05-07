@@ -21,10 +21,6 @@ export function createIndicator(
         'ecospheres-indicateurs-secteur-energie',
         'ecospheres-indicateurs-levier-biogaz'
       ],
-      spatial: {
-        granularity: 'fr:region',
-        zones: []
-      },
       ...overrides
     }
   })
@@ -58,8 +54,14 @@ export function createIndicator(
     }
   }
 
-  // DatasetV2WithFullObject replaces license/frequency/spatial strings with richer objects; null satisfies all three
-  return { ...dataset, license: null, frequency: null, spatial: null, extras }
+  // DatasetV2WithFullObject replaces license/frequency/spatial with richer objects; license/frequency default to null.
+  return {
+    ...dataset,
+    license: null,
+    frequency: null,
+    spatial: { granularity: { id: 'fr:region', name: 'Région' }, zones: [] },
+    extras
+  }
 }
 
 export function createIndicatorResource() {
