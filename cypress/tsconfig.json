@@ -1,11 +1,6 @@
 {
   "extends": "../tsconfig.app.json",
-  "include": [
-    "../node_modules/cypress",
-    "./**/*.ts",
-    "./**/*.js",
-    "../src/**/*"
-  ],
+  "include": ["../node_modules/cypress", "./**/*.ts", "../src/**/*"],
   "compilerOptions": {
     "isolatedModules": false,
     "target": "es5",

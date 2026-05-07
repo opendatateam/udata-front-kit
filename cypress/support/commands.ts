@@ -4,8 +4,8 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-import './authentication.js'
-import './filters.js'
+import './authentication'
+import './filters'
 
 Cypress.Commands.add('checkRGAAContrast', (context = null, options = {}) => {
   cy.checkA11y(context, {
