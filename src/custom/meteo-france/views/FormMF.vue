@@ -180,6 +180,7 @@ function copyToClipboard(url: string) {
 async function onSelectDep(event: Event) {
   optionsPeriod.value = []
   selectedPeriod.value = null
+  isMapFiltered.value = false
   selectedDep.value = (event.target as HTMLSelectElement).value
   if (!datasetMetadata.value) {
     return
@@ -198,10 +199,11 @@ async function onSelectDep(event: Event) {
         await fetchStationsGeoJSON(selectedDep.value)
         mapPoints.value = stations.value
         showCustomFilter.value = true
-        const splitRanges = optionsPeriod.value.flatMap((range) =>
-          range.split('-').map(Number)
-        )
-        minSlider.value = 1800
+        const splitRanges = optionsPeriod.value.flatMap((range) => {
+          const [start, end] = range.split('-')
+          return [start === 'avant' ? 1800 : Number(start), Number(end)]
+        })
+        minSlider.value = Math.min(...splitRanges)
         maxSlider.value = Math.max(...splitRanges)
         valuesSlider.value = [minSlider.value, maxSlider.value]
       }
