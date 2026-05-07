@@ -60,7 +60,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
     // Check that the summary links scroll to the correct anchor
     cy.get('.fr-summary__link').each((link) => {
       cy.wrap(link).click()
-      cy.get(link.attr('href')).should('be.visible')
+      cy.get(link.attr('href')!).should('be.visible')
     })
   })
 

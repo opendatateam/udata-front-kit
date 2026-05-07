@@ -1,6 +1,14 @@
+import type {
+  ApiEtDatasetsIntegresRecord,
+  ApiOrDatasetRecord,
+  ApiOrDatasetUtilesRecord,
+  CasUsageRecord,
+  RecommandationRecord,
+  SolutionRecord
+} from '@/custom/simplifions/model/grist'
 import { build, sequence } from 'mimicry-js'
 
-export const gristCasUsageFactory = build({
+export const gristCasUsageFactory = build<CasUsageRecord>({
   fields: {
     id: sequence((x) => x),
     fields: {
@@ -23,32 +31,40 @@ export const gristCasUsageFactory = build({
   }
 })
 
-export const gristRecommandationFactory = build({
+export const gristRecommandationFactory = build<RecommandationRecord>({
   fields: {
     id: sequence((x) => x),
     fields: {
       API_et_datasets_utiles_fournis: [1, 2, 3],
-      Solution_recommandee: sequence((x) => x),
-      API_ou_datasets_recommandes: 0,
+      API_ou_datasets_recommandes: sequence((x) => x),
       Cas_d_usage: sequence((x) => x),
       Ce_que_ne_fait_pas_cette_solution: 'Cette solution ne permet pas...',
       Ces_logiciels_l_integrent_deja: [1, 2],
       Concretement_pour_les_usagers: 'Pour les usagers, cela signifie...',
       Concretement_pour_vos_agents: 'Pour vos agents, cela permet...',
+      Donnees_utiles_disponibles: '',
       En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage:
         'Cette solution est utile car...',
+      Parametres_a_saisir_pour_recuperer_les_donnees: '',
       Modifie_le: sequence(() => Date.now()),
       Modifie_par: 'admin@example.com',
+      Nom_complet_du_cas_d_usage: '',
       Nom_de_la_recommandation: sequence((x) => `Recommandation ${x}`),
+      Solution_recommandee: sequence((x) => x),
       Visible_sur_simplifions: true,
       Image: sequence((x) => [x]),
       Descriptions_des_API_et_datasets_utiles_fournis: [1, 2],
-      budget_slugs: ['gratuit', 'payant']
+      budget_slugs: ['gratuit', 'payant'],
+      URL_demande_d_acces_cas_usage: '',
+      access_link_with_fallback: '',
+      Solutions_integratrices_categorie_logiciel_metier: [],
+      Solutions_integratrices_categorie_briques_techniques: [],
+      Solutions_integratrices_categorie_portail_de_consultation: []
     }
   }
 })
 
-export const solutionFactory = build({
+export const solutionFactory = build<SolutionRecord>({
   fields: {
     id: sequence((x) => x),
     fields: {
@@ -71,19 +87,21 @@ export const solutionFactory = build({
       ]),
       Operateur: [1, 2],
       Pour_simplifier_les_demarches_de: [1, 2],
-      Public_ou_prive: sequence((x) => ['Public', 'Privé'][x % 2]),
+      Prix: '',
+      Public_ou_prive: sequence((x) => (x % 2 === 0 ? 'Public' : 'Privé')),
       Site_internet: sequence((x) => `https://solution${x}.example.com`),
       Types_de_simplification: [1, 2],
       Visible_sur_simplifions: true,
       Recommande_pour_les_cas_d_usages: [1, 2],
-      solutions_integratrices: null,
       Type_de_solution: ['Éditeur'],
+      URL_demande_d_acces: '',
+      solutions_integratrices: null,
       liste_categories_de_solution: ['Logiciel métier']
     }
   }
 })
 
-export const apiEtDatasetsIntegresFactory = build({
+export const apiEtDatasetsIntegresFactory = build<ApiEtDatasetsIntegresRecord>({
   fields: {
     id: sequence((x) => x),
     fields: {
@@ -96,26 +114,29 @@ export const apiEtDatasetsIntegresFactory = build({
   }
 })
 
-export const apiOrDatasetFactory = build({
+export const apiOrDatasetFactory = build<ApiOrDatasetRecord>({
   fields: {
     id: sequence((x) => x),
     fields: {
       UID_datagouv: sequence(
-        (x) => ['dataservice-uid-' + x, 'dataset-uid-' + x][x % 2]
+        (x) => ['dataservice-uid-' + x, 'dataset-uid-' + x][x % 2] as string
       ),
-      Nom: sequence((x) => ['API n°' + x, 'Jeu de données n°' + x][x % 2]),
-      Type: sequence((x) => ['API', 'Jeu de données'][x % 2]),
+      Nom: sequence(
+        (x) => ['API n°' + x, 'Jeu de données n°' + x][x % 2] as string
+      ),
+      Type: sequence((x) => ['API', 'Jeu de données'][x % 2] as string),
       Fourni_par: 1,
       Integre_par: [1, 2],
       Visible_sur_simplifions: true,
       Modifie_par: 'admin@example.com',
       Modifie_le: sequence(() => Date.now()),
-      Description_pour_la_recommandation: 'Cette API/dataset est utile pour...'
+      Description_pour_la_recommandation: 'Cette API/dataset est utile pour...',
+      API_FranceConnectee: false
     }
   }
 })
 
-export const apiOrDatasetUtilesFactory = build({
+export const apiOrDatasetUtilesFactory = build<ApiOrDatasetUtilesRecord>({
   fields: {
     id: sequence((x) => x),
     fields: {
@@ -123,6 +144,7 @@ export const apiOrDatasetUtilesFactory = build({
       Api_ou_dataset_utile_fourni_par_une_recommandation: sequence((x) => x),
       En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage:
         'Cette API/dataset est utile car...',
+      Ordre: sequence((x) => x),
       Modifie_par: 'admin@example.com',
       Modifie_le: sequence(() => Date.now())
     }

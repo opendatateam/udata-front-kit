@@ -7,8 +7,8 @@
 import './authentication'
 import './filters'
 
-Cypress.Commands.add('checkRGAAContrast', (context = null, options = {}) => {
-  cy.checkA11y(context, {
+Cypress.Commands.add('checkRGAAContrast', () => {
+  cy.checkA11y(undefined, {
     runOnly: {
       type: 'rule',
       values: ['color-contrast']
@@ -18,10 +18,9 @@ Cypress.Commands.add('checkRGAAContrast', (context = null, options = {}) => {
         enabled: true,
         options: {
           largeTextPt: 24, // RGAA: text must be 24px+ to be "large"
-          boldTextPt: 18.5, // RGAA: bold text must be 18.5px+ to be "large"
-          ...options
+          boldTextPt: 18.5 // RGAA: bold text must be 18.5px+ to be "large"
         }
-      }
+      } as { enabled: boolean }
     }
   })
 })

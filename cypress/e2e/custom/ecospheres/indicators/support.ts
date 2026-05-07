@@ -41,12 +41,6 @@ export function createIndicator(
         responsable: 'Responsable du calcul',
         methode: 'Méthode de calcul détaillée'
       },
-      api: {
-        id: 'api_id_1',
-        description:
-          'API permettant de récupérer les données de cet indicateur',
-        noms_cubes: ['cube_1']
-      },
       sources: [
         {
           nom: 'Source 1',
@@ -64,12 +58,8 @@ export function createIndicator(
     }
   }
 
-  const indicator: Indicator = {
-    ...dataset,
-    extras
-  }
-
-  return indicator
+  // DatasetV2WithFullObject replaces license/frequency/spatial strings with richer objects; null satisfies all three
+  return { ...dataset, license: null, frequency: null, spatial: null, extras }
 }
 
 export function createIndicatorResource() {

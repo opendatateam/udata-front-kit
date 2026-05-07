@@ -72,10 +72,11 @@ describe('Home Page', () => {
     cy.get('h1').should('be.visible')
     cy.contains('p', 'Chargement...').should('not.exist')
 
-    cy.get('@consoleError').then((stub) => {
+    cy.get('@consoleError').then((rawStub) => {
+      const stub = rawStub as unknown as sinon.SinonSpy
       if (stub.called) {
         throw new Error(
-          `console.error was called ${stub.callCount} time(s):\n${stub.args.map((a, i) => `Call ${i + 1}: ${JSON.stringify(a)}`).join('\n')}`
+          `console.error was called ${stub.callCount} time(s):\n${stub.args.map((a: unknown[], i: number) => `Call ${i + 1}: ${JSON.stringify(a)}`).join('\n')}`
         )
       }
     })
