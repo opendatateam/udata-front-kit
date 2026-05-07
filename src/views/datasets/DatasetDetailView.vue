@@ -26,6 +26,7 @@ import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
+import { useCanonical } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const datasetIdOrSlug = route.params.item_id
@@ -133,6 +134,8 @@ const exploreUrl = computed(() => {
     mainResources?.resources.find((r) => r.preview_url)?.preview_url ?? null
   )
 })
+
+useCanonical(() => dataset.value?.page)
 
 onMounted(() => {
   datasetStore
