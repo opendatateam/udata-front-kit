@@ -57,15 +57,21 @@ describe('Home Page', () => {
   })
 
   it('should not have console errors', () => {
-    // Listen for console errors
-    cy.window().then((win) => {
+    // Use window:before:load so the stub is set on the NEW window before any
+    // app code runs — cy.stub() on the old window wouldn't survive a reload.
+    cy.on('window:before:load', (win) => {
       cy.stub(win.console, 'error').as('consoleError')
     })
 
     // Reload the page to trigger any potential errors
     cy.reload()
 
-    // Check that no console errors occurred
+    // app.mount() runs inside routerPromise.then(), so Vue mounts asynchronously
+    // after cy.reload() resolves. Wait for the h1 to confirm mounting is done,
+    // then wait for any async data fetching (e.g. Grist on the culture site).
+    cy.get('h1').should('be.visible')
+    cy.contains('p', 'Chargement...').should('not.exist')
+
     cy.get('@consoleError').then((stub) => {
       if (stub.called) {
         throw new Error(
