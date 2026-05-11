@@ -1,5 +1,6 @@
 import {
-  GlobalSearchNativeFilterType,
+  CUSTOM_FILTER_TYPES,
+  type CustomFilterType,
   type PageObjectType
 } from '@/model/config'
 import { usePageConf, usePagesConf } from '@/utils/config'
@@ -133,9 +134,7 @@ interface GlobalSearchPageRoutesOptions {
   topicConf?: TopicPageRouterConf
 }
 
-const NATIVE_FILTER_TYPE_SET = new Set<string>(
-  Object.values(GlobalSearchNativeFilterType)
-)
+const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
 
 const datasetSortOptions = [
   { value: '-created' as const, label: 'Date de création' },
@@ -158,7 +157,7 @@ function buildSingleTypeConfig(
   const basicFilters: string[] = []
   const advancedFilters: string[] = []
   for (const filter of pageConf.filters) {
-    if (!NATIVE_FILTER_TYPE_SET.has(filter.type)) continue
+    if (CUSTOM_FILTER_TYPE_SET.has(filter.type as CustomFilterType)) continue
     if (!filter.search_display) {
       console.warn(
         `Filter "${filter.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`

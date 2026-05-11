@@ -1,3 +1,8 @@
+import type { BuiltInFilterKey } from '@datagouv/components-next'
+
+export const CUSTOM_FILTER_TYPES = ['select', 'organization_custom'] as const
+export type CustomFilterType = (typeof CUSTOM_FILTER_TYPES)[number]
+
 export interface TopicsConf {
   can_add_topics: {
     everyone: boolean
@@ -32,36 +37,13 @@ export interface PageFilterFormConf {
   required: boolean
 }
 
-// FIXME: should be extracted from @datagouv/components-next once exported upstream
-/** GlobalSearch-native filter type keys (passed directly to basicFilters/advancedFilters) */
-export enum GlobalSearchNativeFilterType {
-  LastUpdateRange = 'last_update_range',
-  Badge = 'badge',
-  Granularity = 'granularity',
-  Geozone = 'geozone',
-  Tag = 'tag',
-  FormatFamily = 'format_family',
-  AccessType = 'access_type',
-  Format = 'format',
-  License = 'license',
-  Schema = 'schema',
-  OrganizationBadge = 'organization_badge',
-  Topic = 'topic',
-  ProducerType = 'producer_type',
-  Organization = 'organization'
-}
-
 export interface PageFilterConf {
   name: string
   id: string
-  type:
-    | 'select'
-    // `organization_custom` in order to differentiate from native upstream filter
-    | 'organization_custom'
-    | GlobalSearchNativeFilterType
-  /** Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch) */
+  type: CustomFilterType | BuiltInFilterKey
+  // Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch)
   search_display?: 'basic' | 'advanced'
-  /** Page keys this filter applies to in multi-type search. Defaults to the owning page only. */
+  // Page keys this filter applies to in multi-type search. Defaults to the owning page only.
   applies_to_pages?: string[]
   child: string | null
   color: string | null
