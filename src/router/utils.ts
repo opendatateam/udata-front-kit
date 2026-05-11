@@ -198,44 +198,52 @@ export function buildGlobalSearchConfig(pageKey: string): {
   // Build customFilters for the primary page (rendered via SearchSelectFilter/SearchOrganizationFilter in #custom-filters slot).
   const customFilters: CustomFilterConfig[] = pageConf.filters
     .filter((f) => {
-      const isRenderable =
-        !f.hide_on_list &&
-        ((f.type === 'select' && f.values?.length) ||
-          f.type === 'organization_custom')
-      if (isRenderable && !f.search_display) {
+      if (f.hide_on_list) return false
+      if (!CUSTOM_FILTER_TYPE_SET.has(f.type as CustomFilterType)) return false
+      if (f.type === 'select' && !f.values?.length) return false
+      if (!f.search_display) {
         console.warn(
           `Filter "${f.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
         )
+        return false
       }
-      return isRenderable && !!f.search_display
+      return true
     })
-    .map((f) => {
+    .flatMap((f): CustomFilterConfig[] => {
       if (f.type === 'organization_custom') {
-        return {
-          label: f.name,
-          defaultLabel: f.default_option ?? undefined,
-          pageKey,
-          urlParam: f.id,
-          typeKeys: [pageKey]
-        }
-      }
-      const rawTypeKeys = f.applies_to_pages ?? [pageKey]
-      const typeKeys = rawTypeKeys.includes(pageKey)
-        ? rawTypeKeys
-        : [pageKey, ...rawTypeKeys]
-      return {
-        urlParam: f.id,
-        label: f.name,
-        defaultLabel: f.default_option ?? undefined,
-        apiParam: f.api_param ?? 'tag',
-        values: (f.values ?? []).map((v) => ({
-          value:
-            f.use_filter_prefix && pageConf.filter_prefix
-              ? `${pageConf.filter_prefix}-${f.id}-${v.id}`
-              : v.id,
-          label: v.name
-        })),
-        typeKeys
+        return [
+          {
+            label: f.name,
+            defaultLabel: f.default_option ?? undefined,
+            pageKey,
+            urlParam: f.id,
+            typeKeys: [pageKey]
+          }
+        ]
+      } else if (f.type === 'select') {
+        const rawTypeKeys = f.applies_to_pages ?? [pageKey]
+        const typeKeys = rawTypeKeys.includes(pageKey)
+          ? rawTypeKeys
+          : [pageKey, ...rawTypeKeys]
+        return [
+          {
+            urlParam: f.id,
+            label: f.name,
+            defaultLabel: f.default_option ?? undefined,
+            apiParam: f.api_param ?? 'tag',
+            values: (f.values ?? []).map((v) => ({
+              value:
+                f.use_filter_prefix && pageConf.filter_prefix
+                  ? `${pageConf.filter_prefix}-${f.id}-${v.id}`
+                  : v.id,
+              label: v.name
+            })),
+            typeKeys
+          }
+        ]
+      } else {
+        console.error(`Unhandled custom filter type: ${f.type}`)
+        return []
       }
     })
 

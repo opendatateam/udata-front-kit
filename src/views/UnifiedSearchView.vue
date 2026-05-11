@@ -136,7 +136,10 @@ const createUrl = computed(() => ({
             :key="filter.label"
           >
             <SearchSelectFilter v-if="'values' in filter" :config="filter" />
-            <SearchOrganizationFilter v-else :config="filter" />
+            <SearchOrganizationFilter
+              v-else-if="'pageKey' in filter"
+              :config="filter"
+            />
           </template>
         </template>
         <template #dataset="{ dataset }">
