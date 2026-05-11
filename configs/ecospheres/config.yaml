@@ -420,10 +420,6 @@ pages:
         id: last_update_range
         type: last_update_range
         search_display: basic
-      - name: Label
-        id: badge
-        type: badge
-        search_display: basic
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme
