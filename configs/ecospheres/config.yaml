@@ -221,47 +221,47 @@ definitions: &definitions
 # Configuration format for pages:
 #
 # pages:
-#   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
-#     list_all: {bool}              # whether to have a list view or not
-#     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
-#     filter_prefix: {string}       # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
-#     title: {string}               # title for the list page
-#     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
-#     default_sort: {string}        # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
-#     labels:                       # how to call the object that is displayed by the page
-#       singular: {string}          # singular name for the object
-#       plural: {string}            # plural name for the object
-#       extended: {string}          # extended name for the object, singular
+#   {page_id}:                        # page identifier, acts as a slug /{page_id}/{object_id?}
+#     list_all: {bool}                # whether to have a list view or not
+#     universe_query: {dict}          # used to define a "universe" on a given {page_id}, through query args
+#     filter_prefix: {string}         # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
+#     title: {string}                 # title for the list page
+#     breadcrumb_title: {string}      # title in breadcrumb (optionnal, falls back to title)
+#     default_sort: {string}          # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
+#     labels:                         # how to call the object that is displayed by the page
+#       singular: {string}            # singular name for the object
+#       plural: {string}              # plural name for the object
+#       extended: {string}            # extended name for the object, singular
 #     search:
-#       input: {string}             # label displayed above the search input
-#       placeholder: {string|null}  # input placeholder (null = no placeholder, omit = upstream default)
-#     banner:                       # banner for the list page (optionnal)
-#       title: {string}             # title for the banner
-#       content: {string}           # content for the banner
-#     resources_tabs:               # resources tabs at the bottom of a detail page
+#       input: {string}               # label displayed above the search input
+#       placeholder: {string?|null?}  # input placeholder (null = no placeholder, omit = data.gouv.fr's default)
+#     banner:                         # banner for the list page (optionnal)
+#       title: {string}               # title for the banner
+#       content: {string}             # content for the banner
+#     resources_tabs:                 # resources tabs at the bottom of a detail page
 #       discussions:
-#         display: {bool}           # display discussions tab on detail page
-#         create: {bool}            # create discussions tab on detail page
+#         display: {bool}             # display discussions tab on detail page
+#         create: {bool}              # create discussions tab on detail page
 #       datasets:
-#         display: {bool}           # display datasets tab on detail page
+#         display: {bool}             # display datasets tab on detail page
 #       reuses:
-#         display: {bool}           # display reuses tab on detail page
-#     editable: {bool}              # whether the page is editable when connected
-#     filters:                      # list of filters for this {page_id}
-#       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
-#         id: {string}              # id of the filter
-#         type: {string}            # type of the filter (select | organization_custom | or any GlobalSearchNativeFilterType)
-#         child: {string?}          # id of the child filter (optional)
-#         color: {string}           # color of the filter's tag
-#         use_filter_prefix: {bool}    # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
-#         api_param: {string?}      # API query parameter name to use (optional, defaults to "tag")
-#         default_option: {string?} # default option for the filter (optional)
-#         default_value: {string?}  # default value for the filter (optional)
-#         hide_on_list: {bool?}     # do not display filter on list page (optional, defaults to false)
-#         values:                   # list of values for this filter
-#           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
-#             name: {string}        # name of the value
-#             parent: {string?}     # id of the parent filter value (optional)
+#         display: {bool}             # display reuses tab on detail page
+#     editable: {bool}                # whether the page is editable when connected
+#     filters:                        # list of filters for this {page_id}
+#       - name: {string}              # name of the filter ⚠️ needs to be unique across all items
+#         id: {string}                # id of the filter
+#         type: {string}              # type of the filter (select | organization_custom | or any GlobalSearchNativeFilterType)
+#         child: {string?}            # id of the child filter (optional)
+#         color: {string}             # color of the filter's tag
+#         use_filter_prefix: {bool}   # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
+#         api_param: {string?}        # API query parameter name to use (optional, defaults to "tag")
+#         default_option: {string?}   # default option for the filter (optional)
+#         default_value: {string?}    # default value for the filter (optional)
+#         hide_on_list: {bool?}       # do not display filter on list page (optional, defaults to false)
+#         values:                     # list of values for this filter
+#           - id: {string}            # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}          # name of the value
+#             parent: {string?}       # id of the parent filter value (optional)
 pages:
   # DATASETS
   datasets:
