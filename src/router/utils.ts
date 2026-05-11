@@ -111,11 +111,6 @@ interface GlobalSearchPageRoutesOptions {
 
 const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
 
-const datasetSortOptions = [
-  { value: '-created' as const, label: 'Date de création' },
-  { value: '-last_update' as const, label: 'Dernière mise à jour' }
-]
-
 /**
  * Builds a single SearchTypeConfig for one page.
  * Sets key=pageKey so multiple pages with the same object_type are differentiated.
@@ -171,7 +166,10 @@ function buildSingleTypeConfig(
   }
   return getDefaultDatasetConfig({
     ...baseArgs,
-    sortOptions: datasetSortOptions
+    sortOptions: [
+      { value: '-created' as const, label: 'Date de création' },
+      { value: '-last_update' as const, label: 'Dernière mise à jour' }
+    ]
   } as Parameters<typeof getDefaultDatasetConfig>[0])
 }
 
