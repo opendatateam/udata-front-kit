@@ -1,0 +1,7 @@
+allowBuilds:
+  '@scarf/scarf': false
+  '@sentry/cli': false
+  core-js: false
+  cypress: true
+  esbuild: false
+  vue-demi: false
