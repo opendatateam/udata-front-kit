@@ -251,7 +251,7 @@ definitions: &definitions
 #       - name: {string}              # name of the filter  ⚠️ needs to be unique across all items
 #                                     # FIXME: the name is not used for data.gouv.fr native filters (eg Label de donnée)
 #         id: {string}                # id of the filter
-#         type: {string}              # type of the filter (select | organization_custom | or any GlobalSearchNativeFilterType)
+#         type: {string}              # type of the filter (CustomFilterType or any BuiltInFilterKey from data.gouv.fr GlobalSearch)
 #         child: {string?}            # id of the child filter (optional)
 #         color: {string}             # color of the filter's tag
 #         use_filter_prefix: {bool}   # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
