@@ -293,7 +293,7 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Mise à jour
+      - name: Date de mise à jour
         id: last_update_range
         type: last_update_range
         search_display: basic
@@ -416,7 +416,7 @@ pages:
         display: true
     editable: false
     filters:
-      - name: Mise à jour
+      - name: Date de mise à jour
         id: last_update_range
         type: last_update_range
         search_display: basic
@@ -589,7 +589,7 @@ pages:
         display: true
     editable: false
     filters:
-      - name: Mise à jour
+      - name: Date de mise à jour
         id: last_update_range
         type: last_update_range
         search_display: basic
