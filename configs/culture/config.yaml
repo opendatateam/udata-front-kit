@@ -242,3 +242,79 @@ pages:
         default_option: Toutes les organisations
         id: organization
         type: organization
+  # DEPS
+  univers-deps:
+    list_all: true
+    universe_query:
+      topic: 69f2fca0f4f30af95d4bab8a
+    filter_prefix:
+    title: Jeux de données
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+    banner:
+      title: Un guichet unique pour l'accès aux données de la culture
+      content: |
+        Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - name: Catégories
+        default_option: Toutes les catégories
+        id: tag
+        type: select
+        use_filter_prefix: false
+        values:
+          - name: '🗃️ Archives'
+            id: archives
+          - name: '🏗️ Architecture'
+            id: architecture
+          - name: '🎨 Arts plastiques'
+            id: arts-plastiques
+          - name: '🎬 Cinéma'
+            id: cinema
+          - name: '🎭 Spectacle vivant'
+            id: spectacle-vivant
+          - name: '📚 Livre & lecture'
+            id: livre
+          - name: '🎵 Musique'
+            id: musique
+          - name: '📰 Presse écrite'
+            id: presse
+          - name: '🖼️ Musées'
+            id: musee
+          - name: '💬 Langue'
+            id: langue
+          - name: '💡 Industries culturelles'
+            id: industries-culturelles
+      - name: Type d'organisation
+        default_option: Tous les types
+        id: organization_badge
+        type: select
+        api_param: organization_badge
+        use_filter_prefix: false
+        color: blue-france
+        values:
+          - name: Service public
+            id: public-service
+          - name: Collectivités territoriales
+            id: local-authority
+          - name: Association
+            id: association
+          - name: Entreprise
+            id: company
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization

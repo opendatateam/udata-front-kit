@@ -17,12 +17,12 @@ export const routes: RouteRecordRaw[] = [
     metaTitle: 'Données'
   }),
   useTopicSearchPageRoutes({
-    pageKey: 'bouquets',
-    metaTitle: 'Bouquets',
+    pageKey: 'themes',
+    metaTitle: 'themes',
     topicConf
   }),
   ...useTopicAdminPagesRoutes({
-    pageKey: 'bouquets',
+    pageKey: 'themes',
     topicConf
   })
 ]
