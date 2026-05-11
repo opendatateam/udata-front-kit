@@ -306,10 +306,6 @@ pages:
         id: org
         type: organization_custom
         search_display: basic
-      - name: Granularité
-        id: granularity
-        type: granularity
-        search_display: advanced
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
