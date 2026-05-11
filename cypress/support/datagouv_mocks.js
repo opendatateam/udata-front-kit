@@ -80,6 +80,22 @@ Cypress.Commands.add('mockStaticDatagouv', () => {
       body: '// Mocked static.data.gouv.fr content'
     }
   ).as('get_datagouvfr_pages')
+
+  // Mock gist attachments (used for images hosting by some sites)
+  cy.intercept('GET', 'https://gist.github.com/user-attachments/**', {
+    statusCode: 200,
+    body: '// Mocked gist.github.com content'
+  }).as('get_gist_attachments')
+
+  // Mock github host images (used for hosting by some sites)
+  cy.intercept(
+    'GET',
+    /^https:\/\/raw\.githubusercontent\.com\/.*\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i,
+    {
+      statusCode: 200,
+      body: '// Mocked github hosted images'
+    }
+  ).as('get_github_images')
 })
 
 Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {

@@ -1,4 +1,3 @@
-import { sequence } from 'mimicry-js'
 import { dataserviceFactory } from '../../dataservices_factory'
 import { datasetFactory } from '../../datasets_factory'
 import {
@@ -46,25 +45,51 @@ export const mockSolutionRecommandation = (recommandationFields = {}) => {
   const gristRecommandation = gristRecommandationFactory.one({
     overrides: {
       fields: {
-        Solution_recommandee: sequence((x) => x),
         API_ou_datasets_recommandes: 0,
         ...recommandationFields
       }
     }
   })
-  const tagWithId = `simplifions-v2-solutions-${gristRecommandation.fields.Solution_recommandee}`
+  const solutionRecommandeeId = gristRecommandation.fields.Solution_recommandee
+  const tagWithId = `simplifions-v2-solutions-${solutionRecommandeeId}`
 
-  const topicSolution = topicSolutionFactory.one({
+  const topicSolutionRecommandee = topicSolutionFactory.one({
     overrides: {
-      tags: ['simplifions-v2', 'simplifions-v2-solutions', tagWithId]
+      tags: ['simplifions-v2', 'simplifions-v2-solutions', tagWithId],
+      extras: {
+        'simplifions-v2-solutions': { id: solutionRecommandeeId }
+      }
     }
   })
 
-  cy.mockGristRecords('Recommandations', [gristRecommandation])
-  cy.mockDatagouvObject('topics', topicSolution.slug, topicSolution)
-  cy.mockDatagouvObjectListWithTags('topics', [tagWithId], [topicSolution])
+  // Inline minimal record — avoids using solutionFactory (which would advance
+  // the Nom sequence and shift expected values in other tests).
+  // null array fields prevent the solution detail page from making cascading requests.
+  const gristSolutionRecommandee = {
+    id: solutionRecommandeeId,
+    fields: {
+      Nom: `Solution ${solutionRecommandeeId}`,
+      Visible_sur_simplifions: true,
+      API_ou_datasets_integres: null,
+      APIs_ou_datasets_fournis: null,
+      solutions_integratrices: null
+    }
+  }
 
-  return { gristRecommandation, topicSolution }
+  cy.mockGristRecords('Recommandations', [gristRecommandation])
+  cy.mockGristRecord('Solutions', gristSolutionRecommandee)
+  cy.mockDatagouvObject(
+    'topics',
+    topicSolutionRecommandee.slug,
+    topicSolutionRecommandee
+  )
+  cy.mockDatagouvObjectListWithTags(
+    'topics',
+    [tagWithId],
+    [topicSolutionRecommandee]
+  )
+
+  return { gristRecommandation, topicSolution: topicSolutionRecommandee }
 }
 
 export const mockApidatasetRecommandations = (
