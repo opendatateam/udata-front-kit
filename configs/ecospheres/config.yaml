@@ -234,7 +234,7 @@ definitions: &definitions
 #       extended: {string}            # extended name for the object, singular
 #     search:
 #       input: {string}               # label displayed above the search input
-#       placeholder: {string?|null?}  # input placeholder (null = no placeholder, omit = data.gouv.fr's default)
+#       placeholder: {string?|null?}  # input placeholder (null = no placeholder, omit = data.gouv.fr default)
 #     banner:                         # banner for the list page (optionnal)
 #       title: {string}               # title for the banner
 #       content: {string}             # content for the banner
