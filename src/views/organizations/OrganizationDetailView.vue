@@ -15,6 +15,7 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
+import { useCanonical } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
@@ -40,6 +41,8 @@ const selectedSort: Ref<string | undefined> = ref(undefined)
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
+
+useCanonical(() => org.value?.page)
 
 onMounted(() => {
   orgStore
