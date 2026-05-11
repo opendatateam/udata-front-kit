@@ -8,7 +8,10 @@ import {
   getDefaultDataserviceConfig,
   getDefaultDatasetConfig,
   getDefaultTopicConfig,
-  type GlobalSearchConfig
+  type DataserviceSearchConfig,
+  type DatasetSearchConfig,
+  type GlobalSearchConfig,
+  type TopicSearchConfig
 } from '@datagouv/components-next'
 import { type Component } from 'vue'
 import {
@@ -152,16 +155,16 @@ function buildSingleTypeConfig(
     advancedFilters,
     ...(placeholder !== undefined ? { placeholder } : {})
   }
-  // FIXME: tight coupling on upstream types — filter interfaces are not exported by
-  // @datagouv/components-next, so we cast each call's args. Ask upstream to export them.
+  // basicFilters/advancedFilters are string[] but upstream expects per-type key unions
+  // (e.g. keyof DatasetSearchFilters) — cast is intentional, filter keys come from YAML config.
   if (searchType === 'topics') {
     return getDefaultTopicConfig(
-      baseArgs as Parameters<typeof getDefaultTopicConfig>[0]
+      baseArgs as Partial<Omit<TopicSearchConfig, 'class'>>
     )
   }
   if (searchType === 'dataservices') {
     return getDefaultDataserviceConfig(
-      baseArgs as Parameters<typeof getDefaultDataserviceConfig>[0]
+      baseArgs as Partial<Omit<DataserviceSearchConfig, 'class'>>
     )
   }
   return getDefaultDatasetConfig({
@@ -170,7 +173,7 @@ function buildSingleTypeConfig(
       { value: '-created' as const, label: 'Date de création' },
       { value: '-last_update' as const, label: 'Dernière mise à jour' }
     ]
-  } as Parameters<typeof getDefaultDatasetConfig>[0])
+  } as Partial<Omit<DatasetSearchConfig, 'class'>>)
 }
 
 /**
