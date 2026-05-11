@@ -133,7 +133,7 @@ const createUrl = computed(() => ({
         <template v-if="route.meta.customFilters?.length" #custom-filters-top>
           <template
             v-for="filter in route.meta.customFilters"
-            :key="filter.label"
+            :key="filter.urlParam"
           >
             <SearchSelectFilter v-if="'values' in filter" :config="filter" />
             <SearchOrganizationFilter

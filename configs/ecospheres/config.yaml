@@ -248,9 +248,9 @@ definitions: &definitions
 #         display: {bool}             # display reuses tab on detail page
 #     editable: {bool}                # whether the page is editable when connected
 #     filters:                        # list of filters for this {page_id}
-#       - name: {string}              # name of the filter  ⚠️ needs to be unique across all items
+#       - id: {string}                # id of the filter ⚠️ needs to be unique across all filters of the page
+#         name: {string}              # name of the filter
 #                                     # FIXME: the name is not used for data.gouv.fr native filters (eg Label de donnée)
-#         id: {string}                # id of the filter
 #         type: {string}              # type of the filter (CustomFilterType or any BuiltInFilterKey from data.gouv.fr GlobalSearch)
 #         child: {string?}            # id of the child filter (optional)
 #         color: {string}             # color of the filter's tag
@@ -296,19 +296,19 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Date de mise à jour
-        id: last_update_range
+      - id: last_update_range
+        name: Date de mise à jour
         type: last_update_range
-      - name: Label de donnée
-        id: badge
+      - id: badge
+        name: Label de donnée
         type: badge
-      - name: Organisation
+      - id: org
+        name: Organisation
         default_option: Toutes les organisations
-        id: org
         type: organization_custom
-      - name: Thème INSPIRE
+      - id: inspire
+        name: Thème INSPIRE
         default_option: Tous les thèmes
-        id: inspire
         type: select
         use_filter_prefix: false
         values:
@@ -411,20 +411,20 @@ pages:
         display: true
     editable: false
     filters:
-      - name: Date de mise à jour
-        id: last_update_range
+      - id: last_update_range
+        name: Date de mise à jour
         type: last_update_range
-      - name: Thématique
+      - id: theme
+        name: Thématique
         default_option: Toutes les thématiques
-        id: theme
         type: select
         color: green-menthe
         use_filter_prefix: true
         hide_on_list: true
         values: *fnv_themes
-      - name: Enjeu
+      - id: enjeu
+        name: Enjeu
         default_option: Tous les enjeux
-        id: enjeu
         type: select
         color: blue-ecume
         use_filter_prefix: true
@@ -440,9 +440,9 @@ pages:
             name: Ressources
           - id: sante
             name: Santé
-      - name: Secteur
+      - id: secteur
+        name: Secteur
         default_option: Tous les secteurs
-        id: secteur
         type: select
         color: purple-glycine
         use_filter_prefix: true
@@ -467,9 +467,9 @@ pages:
             name: Transport de voyageurs
           - id: transverse
             name: Transverse
-      - name: Levier
+      - id: levier
+        name: Levier
         default_option: Tous les leviers
-        id: levier
         type: select
         color: green-archipel
         use_filter_prefix: true
@@ -536,9 +536,9 @@ pages:
             name: Véhicules électriques
           - id: velo
             name: Vélo
-      - name: Maille géographique
+      - id: maille
+        name: Maille géographique
         default_option: Toutes les mailles
-        id: maille
         type: select
         use_filter_prefix: true
         color:
@@ -580,12 +580,12 @@ pages:
         display: true
     editable: false
     filters:
-      - name: Date de mise à jour
-        id: last_update_range
+      - id: last_update_range
+        name: Date de mise à jour
         type: last_update_range
-      - name: Organisation
+      - id: org
+        name: Organisation
         default_option: Toutes les organisations
-        id: org
         type: organization_custom
   # BOUQUETS
   bouquets:
@@ -618,16 +618,16 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Date de mise à jour
-        id: last_update_range
+      - id: last_update_range
+        name: Date de mise à jour
         type: last_update_range
-      - name: Organisation
+      - id: org
+        name: Organisation
         default_option: Toutes les organisations
-        id: org
         type: organization_custom
-      - name: Thématique
+      - id: theme
+        name: Thématique
         default_option: Toutes les thématiques
-        id: theme
         type: select
         color: green-emeraude
         use_filter_prefix: true
