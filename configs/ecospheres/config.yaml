@@ -663,7 +663,7 @@ ecospheres:
         slug: indicateurs-regionaux-de-planification-ecologique-cops
       - title: Indicateurs de mobilité durable
         description: Faciliter l'orientation, la prise de décision et le suivi en matière de politiques publiques locales pour la mobilité durable des personnes.
-        creator: DRIEAT Île-de-France
+        creator: Tableau de bord des mobilités durables
         maille: Communal à régional
         slug: indicateurs-du-tableau-de-bord-des-mobilites-durables
       - title: Planification territoriale (PLU(i), SCoT, SRADDET)
@@ -673,12 +673,12 @@ ecospheres:
         slug: elaboration-ou-evolution-dun-document-durbanisme
     about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le laboratoire d'innovation au service de la transition écologique, au sein du Commissariat Général au Développement Durable (CGDD)."
     news:
-      - date: 16 mars 2026
-        title: Ouverture des services WFS/WMS d'une collection
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#ouverture-dans-qgis-de-services-wfs-wms-a-partir-dune-collection
-      - date: 02 mars 2026
-        title: Enrichissement des points de contact des indicateurs
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#enrichissement-des-points-de-contact-des-indicateurs
-      - date: 26 février 2026
-        title: Publication des données sur la mer et le littoral
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#nouvelles-donnees-pour-le-suivi-de-la-transition-ecologique
+      - date: 17 avril 2026
+        title: Nouveaux indicateurs sur les achats durables
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-17-avril-2026-nouveaux-indicateurs-sur-les-achats-durables
+      - date: 9 avril 2026
+        title: Nouvel indicateur sur les émissions de polluants
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-9-avril-2026-nouvel-indicateur-sur-les-emissions-de-polluants
+      - date: 7 avril 2026
+        title: Modification de l'indicateur sur les prélèvements d'eau par usage
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-7-avril-2026-modification-de-lindicateur-sur-les-prelevements-deau-par-usage

@@ -259,7 +259,7 @@ defineExpose({
   <!-- Header and buttons -->
   <div class="flex-gap fr-grid-row fr-grid-row--middle justify-between">
     <h2 class="fr-col-auto fr-m-0">
-      Composition {{ labels.articles.du }} {{ labels.extended }} (obligatoire)
+      Composition {{ labels.articles.du }} {{ labels.extended }}
     </h2>
     <SearchComponent
       id="filter-factors"

@@ -73,6 +73,10 @@ website:
               description: 'Archive des bulletins météorologiques pour différentes sources de données : forêt, marine, montagne, climatologie ...'
               url: 'datasets?category=bulletins'
               image_url: '/static/meteo-france/assets/bulletins.png'
+            - name: 'Vigilance météorologique'
+              description: 'Archive de la vigilance météorologique pour l’Hexagone, la Nouvelle-Calédonie et la Polynésie.'
+              url: 'datasets?category=vigilance'
+              image_url: '/static/meteo-france/assets/vigilance.png'
         sub_section_tiles:
           title:
           tiles:
@@ -229,6 +233,8 @@ pages:
             name: Données d'observations météorologiques
           - id: bulletins
             name: Archive des bulletins météorologiques
+          - id: vigilance
+            name: Archive de la vigilance météorologique
       - name: Sous-catégories
         default_option: Toutes les sous-catégories
         id: subcategory
