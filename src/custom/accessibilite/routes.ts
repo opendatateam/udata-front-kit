@@ -14,11 +14,11 @@ export const routes: RouteRecordRaw[] = [
     pageKey: 'datasets'
   }),
   useGlobalSearchPageRoutes({
-    pageKey: 'bouquets',
+    pageKey: 'themes',
     topicConf
   }),
   ...useTopicAdminPagesRoutes({
-    pageKey: 'bouquets',
+    pageKey: 'themes',
     topicConf
   })
 ]

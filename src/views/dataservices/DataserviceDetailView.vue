@@ -21,6 +21,7 @@ import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
+import { useCanonical } from '@/utils/seo'
 import { OpenApiViewer } from '@datagouv/components-next'
 
 const route = useRouteParamsAsString()
@@ -106,6 +107,8 @@ const goToBusinessDocumentation = () => {
 const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
+
+useCanonical(() => dataservice.value?.self_web_url)
 
 onMounted(() => {
   dataserviceStore
