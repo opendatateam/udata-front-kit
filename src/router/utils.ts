@@ -131,16 +131,10 @@ function buildSingleTypeConfig(
   const advancedFilters: string[] = []
   for (const filter of pageConf.filters) {
     if (CUSTOM_FILTER_TYPE_SET.has(filter.type as CustomFilterType)) continue
-    if (!filter.search_display) {
-      console.warn(
-        `Filter "${filter.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
-      )
-      continue
-    }
-    if (filter.search_display === 'basic') {
-      basicFilters.push(filter.type)
-    } else {
+    if (filter.advanced) {
       advancedFilters.push(filter.type)
+    } else {
+      basicFilters.push(filter.type)
     }
   }
   // GlobalSearch checks `'placeholder' in cfg` (not `cfg.placeholder !== undefined`), so
@@ -200,13 +194,6 @@ export function buildGlobalSearchConfig(pageKey: string): {
     .filter((f) => {
       if (f.hide_on_list) return false
       if (!CUSTOM_FILTER_TYPE_SET.has(f.type as CustomFilterType)) return false
-      if (f.type === 'select' && !f.values?.length) return false
-      if (!f.search_display) {
-        console.warn(
-          `Filter "${f.id}" on page "${pageKey}" has no search_display — it will not be shown. Add search_display: basic or advanced to the config.`
-        )
-        return false
-      }
       return true
     })
     .flatMap((f): CustomFilterConfig[] => {
@@ -221,6 +208,10 @@ export function buildGlobalSearchConfig(pageKey: string): {
           }
         ]
       } else if (f.type === 'select') {
+        if (!f.values.length) {
+          console.warn(`No values set for select filter '${f.name}', skipping.`)
+          return []
+        }
         const rawTypeKeys = f.applies_to_pages ?? [pageKey]
         const typeKeys = rawTypeKeys.includes(pageKey)
           ? rawTypeKeys
@@ -252,7 +243,7 @@ export function buildGlobalSearchConfig(pageKey: string): {
 
 /**
  * Creates routes for a GlobalSearch-based list page.
- * Reads universe_query and filters[].search_display from YAML; only component references are passed as arguments.
+ * Reads universe_query and filters[].advanced from YAML; only component references are passed as arguments.
  */
 export const useGlobalSearchPageRoutes = ({
   pageKey,

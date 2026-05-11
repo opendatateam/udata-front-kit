@@ -41,8 +41,7 @@ export interface PageFilterConf {
   name: string
   id: string
   type: CustomFilterType | BuiltInFilterKey
-  // Where to display this filter in GlobalSearch (undefined = not shown in GlobalSearch)
-  search_display?: 'basic' | 'advanced'
+  advanced?: boolean
   // Page keys this filter applies to in multi-type search. Defaults to the owning page only.
   applies_to_pages?: string[]
   child: string | null

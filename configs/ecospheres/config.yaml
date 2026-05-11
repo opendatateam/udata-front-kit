@@ -259,6 +259,8 @@ definitions: &definitions
 #         default_option: {string?}   # default option for the filter (optional)
 #         default_value: {string?}    # default value for the filter (optional)
 #         hide_on_list: {bool?}       # do not display filter on list page (optional, defaults to false)
+#         advanced: {bool?}           # show in the advanced (collapsed) section of GlobalSearch; omit for basic (always visible)
+#                                     # ⚠️ only applicable to data.gouv.fr native filters (eg badge)
 #         values:                     # list of values for this filter
 #           - id: {string}            # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}          # name of the value
@@ -297,21 +299,17 @@ pages:
       - name: Date de mise à jour
         id: last_update_range
         type: last_update_range
-        search_display: basic
       - name: Label de donnée
         id: badge
         type: badge
-        search_display: basic
       - name: Organisation
         default_option: Toutes les organisations
         id: org
         type: organization_custom
-        search_display: basic
       - name: Thème INSPIRE
         default_option: Tous les thèmes
         id: inspire
         type: select
-        search_display: advanced
         use_filter_prefix: false
         values:
           - id: adresses
@@ -416,7 +414,6 @@ pages:
       - name: Date de mise à jour
         id: last_update_range
         type: last_update_range
-        search_display: basic
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme
@@ -447,7 +444,6 @@ pages:
         default_option: Tous les secteurs
         id: secteur
         type: select
-        search_display: basic
         color: purple-glycine
         use_filter_prefix: true
         values:
@@ -475,7 +471,6 @@ pages:
         default_option: Tous les leviers
         id: levier
         type: select
-        search_display: basic
         color: green-archipel
         use_filter_prefix: true
         values:
@@ -545,7 +540,6 @@ pages:
         default_option: Toutes les mailles
         id: maille
         type: select
-        search_display: basic
         use_filter_prefix: true
         color:
         values:
@@ -589,12 +583,10 @@ pages:
       - name: Date de mise à jour
         id: last_update_range
         type: last_update_range
-        search_display: basic
       - name: Organisation
         default_option: Toutes les organisations
         id: org
         type: organization_custom
-        search_display: basic
   # BOUQUETS
   bouquets:
     object_type: topics
@@ -629,17 +621,14 @@ pages:
       - name: Date de mise à jour
         id: last_update_range
         type: last_update_range
-        search_display: basic
       - name: Organisation
         default_option: Toutes les organisations
         id: org
         type: organization_custom
-        search_display: basic
       - name: Thématique
         default_option: Toutes les thématiques
         id: theme
         type: select
-        search_display: basic
         color: green-emeraude
         use_filter_prefix: true
         # TODO: use a dedicated config for the form?
