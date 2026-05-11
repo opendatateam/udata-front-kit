@@ -21,21 +21,20 @@ import {
 } from 'vue-router'
 import type { TopicPageRouterConf } from './model'
 
-export interface SelectFilterConfig {
+interface FilterConfigBase {
   urlParam: string
   label: string
   defaultLabel?: string
-  apiParam: string
-  values: Array<{ value: string; label: string }>
   typeKeys: string[]
 }
 
-export interface OrganizationFilterConfig {
-  label: string
-  defaultLabel?: string
+export interface SelectFilterConfig extends FilterConfigBase {
+  apiParam: string
+  values: Array<{ value: string; label: string }>
+}
+
+export interface OrganizationFilterConfig extends FilterConfigBase {
   pageKey: string
-  urlParam: string
-  typeKeys: string[]
 }
 
 export type CustomFilterConfig = SelectFilterConfig | OrganizationFilterConfig
