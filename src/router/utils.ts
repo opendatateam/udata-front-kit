@@ -100,31 +100,6 @@ export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
   return { ...route, query }
 }
 
-export const useTopicAdminPagesRoutes = ({
-  pageKey,
-  topicConf
-}: {
-  pageKey: string
-  topicConf: TopicPageRouterConf
-}): RouteRecordRaw[] => {
-  return [
-    {
-      path: `/admin/${pageKey}/add`,
-      name: `${pageKey}_add`,
-      component: async () => await import('@/views/topics/TopicFormView.vue'),
-      meta: { requiresAuth: true, pageKey },
-      props: { isCreate: true, ...topicConf }
-    },
-    {
-      path: `/admin/${pageKey}/edit/:item_id`,
-      name: `${pageKey}_edit`,
-      component: async () => await import('@/views/topics/TopicFormView.vue'),
-      meta: { requiresAuth: true, pageKey },
-      props: { isCreate: false, ...topicConf }
-    }
-  ]
-}
-
 interface GlobalSearchPageRoutesOptions {
   pageKey: string
   cardComponent?: () => Promise<{ default: Component }>
@@ -320,6 +295,31 @@ export const useGlobalSearchPageRoutes = ({
       }
     ]
   }
+}
+
+export const useTopicAdminPagesRoutes = ({
+  pageKey,
+  topicConf
+}: {
+  pageKey: string
+  topicConf: TopicPageRouterConf
+}): RouteRecordRaw[] => {
+  return [
+    {
+      path: `/admin/${pageKey}/add`,
+      name: `${pageKey}_add`,
+      component: async () => await import('@/views/topics/TopicFormView.vue'),
+      meta: { requiresAuth: true, pageKey },
+      props: { isCreate: true, ...topicConf }
+    },
+    {
+      path: `/admin/${pageKey}/edit/:item_id`,
+      name: `${pageKey}_edit`,
+      component: async () => await import('@/views/topics/TopicFormView.vue'),
+      meta: { requiresAuth: true, pageKey },
+      props: { isCreate: false, ...topicConf }
+    }
+  ]
 }
 
 export const useRouteMeta = () => {
