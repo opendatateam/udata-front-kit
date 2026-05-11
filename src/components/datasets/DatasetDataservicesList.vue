@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import config from '@/config'
 import { onMounted, ref, watch } from 'vue'
 
 import {
@@ -32,8 +33,11 @@ const total = ref(0)
 const page = ref(1)
 const pageSize = 5
 
-const getDataservicePage = (id: string) => {
-  return { name: 'dataservices_detail', params: { item_id: id } }
+const getDataservicePage = (dataservice: Dataservice) => {
+  const hasInternalDataservices = !!config.pages.dataservices
+  return hasInternalDataservices
+    ? { name: 'dataservices_detail', params: { item_id: dataservice.id } }
+    : dataservice.self_web_url
 }
 
 const emptyMessage = computed(() => {
@@ -70,7 +74,7 @@ onMounted(fetchDataservices)
       >
         <DataserviceCard
           :dataservice="dataservice"
-          :dataservice-url="getDataservicePage(dataservice.id)"
+          :dataservice-url="getDataservicePage(dataservice)"
         />
       </li>
     </ul>

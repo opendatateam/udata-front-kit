@@ -37,6 +37,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
+import { toMetaDescription, useCanonical } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -193,8 +194,8 @@ const togglePublish = () => {
     .finally(() => loader.hide())
 }
 
-const metaDescription = (): string | undefined => {
-  return topic.value?.description ?? ''
+const metaDescription = (): string => {
+  return toMetaDescription(topic.value?.description)
 }
 
 const metaKeywords = computed(() => {
@@ -208,14 +209,6 @@ const metaKeywords = computed(() => {
 const metaTitle = computed(() => {
   return topic.value?.name
 })
-
-const metaLink = (): string => {
-  const resolved = router.resolve({
-    name: `${pageKey}_detail`,
-    params: { item_id: topic.value?.slug }
-  })
-  return `${window.location.origin}${resolved.href}`
-}
 
 const handleNavigateToFactor = (elementId: string) => {
   activeTab.value = 0
@@ -238,8 +231,17 @@ useHead({
     ...(topic.value?.private
       ? [{ name: 'robots', content: 'noindex, nofollow' }]
       : [])
-  ],
-  link: [{ rel: 'canonical', href: metaLink }]
+  ]
+})
+
+useCanonical(() => {
+  const slug = topic.value?.slug
+  if (!slug) return null
+  const resolved = router.resolve({
+    name: `${pageKey}_detail`,
+    params: { item_id: slug }
+  })
+  return `${window.location.origin}${resolved.href}`
 })
 
 // Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
