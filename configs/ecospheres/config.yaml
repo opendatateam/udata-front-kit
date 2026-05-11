@@ -248,7 +248,8 @@ definitions: &definitions
 #         display: {bool}             # display reuses tab on detail page
 #     editable: {bool}                # whether the page is editable when connected
 #     filters:                        # list of filters for this {page_id}
-#       - name: {string}              # name of the filter ⚠️ needs to be unique across all items
+#       - name: {string}              # name of the filter  ⚠️ needs to be unique across all items
+#                                     # FIXME: the name is not used for data.gouv.fr native filters (eg Label de donnée)
 #         id: {string}                # id of the filter
 #         type: {string}              # type of the filter (select | organization_custom | or any GlobalSearchNativeFilterType)
 #         child: {string?}            # id of the child filter (optional)
@@ -297,7 +298,7 @@ pages:
         id: last_update_range
         type: last_update_range
         search_display: basic
-      - name: Label de données
+      - name: Label de donnée
         id: badge
         type: badge
         search_display: basic
