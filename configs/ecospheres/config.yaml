@@ -297,7 +297,7 @@ pages:
         id: last_update_range
         type: last_update_range
         search_display: basic
-      - name: Label
+      - name: Label de données
         id: badge
         type: badge
         search_display: basic
