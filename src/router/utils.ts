@@ -199,11 +199,11 @@ export function buildGlobalSearchConfig(pageKey: string): {
       if (f.type === 'organization_custom') {
         return [
           {
+            urlParam: f.id,
             label: f.name,
             defaultLabel: f.default_option ?? undefined,
-            pageKey,
-            urlParam: f.id,
-            typeKeys: [pageKey]
+            typeKeys: [pageKey],
+            pageKey
           }
         ]
       } else if (f.type === 'select') {
@@ -220,6 +220,7 @@ export function buildGlobalSearchConfig(pageKey: string): {
             urlParam: f.id,
             label: f.name,
             defaultLabel: f.default_option ?? undefined,
+            typeKeys,
             apiParam: f.api_param ?? 'tag',
             values: (f.values ?? []).map((v) => ({
               value:
@@ -227,8 +228,7 @@ export function buildGlobalSearchConfig(pageKey: string): {
                   ? `${pageConf.filter_prefix}-${f.id}-${v.id}`
                   : v.id,
               label: v.name
-            })),
-            typeKeys
+            }))
           }
         ]
       } else {
