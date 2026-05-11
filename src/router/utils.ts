@@ -190,11 +190,11 @@ export function buildGlobalSearchConfig(pageKey: string): {
 
   // Build customFilters for the primary page (rendered via SearchSelectFilter/SearchOrganizationFilter in #custom-filters slot).
   const customFilters: CustomFilterConfig[] = pageConf.filters
-    .filter((f) => {
-      if (f.hide_on_list) return false
-      if (!CUSTOM_FILTER_TYPE_SET.has(f.type as CustomFilterType)) return false
-      return true
-    })
+    .filter(
+      (f) =>
+        !f.hide_on_list &&
+        CUSTOM_FILTER_TYPE_SET.has(f.type as CustomFilterType)
+    )
     .flatMap((f): CustomFilterConfig[] => {
       if (f.type === 'organization_custom') {
         return [
