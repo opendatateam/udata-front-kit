@@ -1,3 +1,9 @@
+import type {
+  ApiEtDatasetsIntegres,
+  CasUsage,
+  Recommandation,
+  Solution
+} from '@/custom/simplifions/model/grist'
 import { dataserviceFactory } from '../../dataservices_factory'
 import { datasetFactory } from '../../datasets_factory'
 import {
@@ -144,7 +150,7 @@ export const mockApisOrDatasets = (
 
   const dataservicesOrDatasets = gristApisAndDatasets.map(
     (gristApiAndDataset) => {
-      var dataserviceOrDataset
+      let dataserviceOrDataset
 
       if (gristApiAndDataset.fields.Type === 'API') {
         dataserviceOrDataset = dataserviceFactory.one({
@@ -181,7 +187,7 @@ export const mockApisOrDatasets = (
 }
 
 export const mockApiOrDatasetUtiles = (
-  gristApiOrDatasetIds,
+  gristApiOrDatasetIds: number[],
   apiOrDatasetUtilesFields = {}
 ) => {
   const gristApiOrDatasetUtiles = gristApiOrDatasetIds.map((id) => {
@@ -237,10 +243,16 @@ export const mockSolution = (
  */
 export const mockSolutionsIntegratices = ({
   fournisseurSolutionId,
-  integrateursSolutionFields = [],
-  casUsageFields = [],
-  integrations = [],
-  recommandations = []
+  integrateursSolutionFields = [] as Partial<Solution>[],
+  casUsageFields = [] as Partial<CasUsage>[],
+  integrations = [] as Partial<ApiEtDatasetsIntegres>[],
+  recommandations = [] as Partial<Recommandation>[]
+}: {
+  fournisseurSolutionId: number
+  integrateursSolutionFields?: Partial<Solution>[]
+  casUsageFields?: Partial<CasUsage>[]
+  integrations?: Partial<ApiEtDatasetsIntegres>[]
+  recommandations?: Partial<Recommandation>[]
 }) => {
   const gristIntegrateurs = integrateursSolutionFields.map((fields) =>
     solutionFactory.one({
