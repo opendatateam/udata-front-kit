@@ -13,6 +13,8 @@ RUN pnpm install
 # Copy source files
 COPY ./ /app
 
+# Breathing room for build
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
 ARG VITE_SITE_ID
