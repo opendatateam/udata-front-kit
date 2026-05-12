@@ -1,6 +1,10 @@
 import { build, sequence } from 'mimicry-js'
 
-import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
+import type {
+  Dataservice,
+  DatasetV2,
+  DatasetV2WithFullObject
+} from '@datagouv/components-next'
 
 import type { Activity } from '@/model/activity'
 import type { Resource } from '@/model/resource'
@@ -278,8 +282,8 @@ export interface MockTopicOptions {
   activities?: Activity[]
   // Dataset resources mapped by dataset ID
   datasetResources?: Record<string, Resource[]>
-  // Custom datasets mapped by dataset ID (overrides auto-generated ones)
-  datasets?: Record<string, DatasetV2>
+  /** Custom datasets mapped by dataset ID (overrides auto-generated ones) */
+  datasets?: Record<string, DatasetV2 | DatasetV2WithFullObject>
 }
 
 /**

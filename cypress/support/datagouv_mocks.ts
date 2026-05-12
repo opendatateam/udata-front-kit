@@ -1,4 +1,9 @@
-const datagouvResponseBuilder = (data) => {
+import type {
+  DatasetV2,
+  DatasetV2WithFullObject
+} from '@datagouv/components-next'
+
+const datagouvResponseBuilder = (data: object[]) => {
   return {
     data: data.slice(0, 20),
     next_page: null,
@@ -9,7 +14,10 @@ const datagouvResponseBuilder = (data) => {
   }
 }
 
-const datagouvUrlRegex = (resourceName, resourceId = null) => {
+const datagouvUrlRegex = (
+  resourceName: string,
+  resourceId: string | null = null
+) => {
   return new RegExp(
     `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
   )
@@ -257,7 +265,12 @@ Cypress.Commands.add('mockDataserviceMetricsApi', (dataserviceId) => {
 
 Cypress.Commands.add(
   'mockDatasetAndRelatedObjects',
-  (dataset, resources = [], dataservices = [], reuses = []) => {
+  (
+    dataset: DatasetV2 | DatasetV2WithFullObject,
+    resources = [],
+    dataservices = [],
+    reuses = []
+  ) => {
     // Update dataset.resources.total to match the resources array
     dataset.resources.total = resources.length
     cy.mockDatagouvObject('datasets', dataset.id, dataset)

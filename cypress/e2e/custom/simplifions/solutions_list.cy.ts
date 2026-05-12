@@ -158,7 +158,7 @@ describe('Simplifions Solutions Page', () => {
         overrides: {
           extras: {
             'simplifions-v2-solutions': {
-              Image: ['123']
+              Image: [123]
             }
           }
         }

@@ -24,8 +24,12 @@ export type Recommandation = {
   API_et_datasets_utiles_fournis: number[]
   API_ou_datasets_recommandes: number
   Cas_d_usage: number
+  Ce_que_ne_fait_pas_cette_solution: string
   Ces_logiciels_l_integrent_deja: number[]
+  Concretement_pour_les_usagers: string
+  Concretement_pour_vos_agents: string
   Donnees_utiles_disponibles: string
+  En_quoi_cette_solution_est_elle_utile_pour_ce_cas_d_usage: string
   Parametres_a_saisir_pour_recuperer_les_donnees: string
   Modifie_le: number
   Modifie_par: string
@@ -93,6 +97,7 @@ export type Solution = {
   Cette_solution_ne_permet_pas: string
   Cette_solution_permet: string
   Description_courte: string
+  Description_longue: string
   Image: number[] | null
   Legende_de_l_image: string | null
   Modifie_le: number

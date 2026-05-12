@@ -1,3 +1,9 @@
+import type {
+  ApiEtDatasetsIntegres,
+  CasUsage,
+  Recommandation,
+  Solution
+} from '@/custom/simplifions/model/grist'
 import {
   mockSolution,
   mockSolutionsIntegratices
@@ -8,10 +14,10 @@ import './support'
 
 describe('Solutions intégratrices block', () => {
   const setupWithIntegrateurs = ({
-    integrateursSolutionFields = [],
-    casUsageFields = [],
-    integrations = [],
-    recommandations = []
+    integrateursSolutionFields = [] as Partial<Solution>[],
+    casUsageFields = [] as Partial<CasUsage>[],
+    integrations = [] as Partial<ApiEtDatasetsIntegres>[],
+    recommandations = [] as Partial<Recommandation>[]
   } = {}) => {
     cy.baseMocksForSimplifions()
 

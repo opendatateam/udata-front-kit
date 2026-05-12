@@ -30,7 +30,9 @@
     "format": "prettier --write src/",
     "prepare": "husky",
     "generate-robots-txt": "node scripts/generate-robots-txt.mjs",
-    "type-check": "vue-tsc --noEmit --project tsconfig.app.json"
+    "type-check": "pnpm run type-check:app && pnpm run type-check:cypress",
+    "type-check:app": "vue-tsc --noEmit --project tsconfig.app.json",
+    "type-check:cypress": "tsc --noEmit --project cypress/tsconfig.json"
   },
   "dependencies": {
     "@datagouv/components-next": "1.0.2-dev.67",
