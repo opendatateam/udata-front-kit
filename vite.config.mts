@@ -119,6 +119,7 @@ export default defineConfig(({ mode }) => {
           // @datagouv/components-next doesn't declare sideEffects:false, so Rollup
           // would otherwise bundle the unused ChartViewer component and its echarts
           // dependency (~14MB) even though this app never renders ChartViewer.
+          // FIXME: sideEffects: false should be set upstream
           moduleSideEffects: (id) => !id.includes('@datagouv/components-next')
         }
       }
