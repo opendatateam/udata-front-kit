@@ -10,11 +10,15 @@
 Cypress.Commands.add('mockListApis', (primaryType, primaryData = []) => {
   cy.mockUniverseOrganizations()
 
-  const pages = Cypress.env('siteConfig')?.pages ?? {}
+  const pages = (Cypress.env('siteConfig')?.pages ?? {}) as Record<
+    string,
+    { list_all?: boolean; object_type?: string }
+  >
   const listTypes = new Set(
     Object.values(pages)
       .filter((page) => page.list_all)
       .map((page) => page.object_type)
+      .filter((type): type is string => type !== undefined)
   )
 
   listTypes.forEach((type) => {

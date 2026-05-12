@@ -26,7 +26,7 @@ Cypress.Commands.add(
   'expectActionToCallApi',
   (action, resourceName, expectedParams, { drain = true } = {}) => {
     // Order-independent URL param matching: { tag: ['a', 'b'], q: 'foo' }
-    const matches = (url) => {
+    const matches = (url: string) => {
       const params = new URL(url).searchParams
       return Object.entries(expectedParams).every(([key, value]) => {
         const actual = params.getAll(key)
@@ -46,7 +46,7 @@ Cypress.Commands.add(
     // Pages with multiple search types fire one request per
     // type, so several calls may be queued. Walk through them until we find one
     // that satisfies the expected params.
-    const findMatch = (attemptsLeft) => {
+    const findMatch = (attemptsLeft: number) => {
       cy.wait(alias).then((interception) => {
         if (matches(interception.request.url)) return
         if (attemptsLeft > 0) findMatch(attemptsLeft - 1)
