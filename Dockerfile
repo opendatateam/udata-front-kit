@@ -1,12 +1,12 @@
 FROM node:22 AS builder
 
 # Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest-10 --activate
+RUN corepack enable && corepack prepare pnpm@latest-11 --activate
 
 WORKDIR /app
 
 # Copy package files first for better layer caching
-COPY package.json pnpm-lock.yaml .npmrc ./
+COPY package.json pnpm-lock.yaml ./
 
 RUN pnpm install
 
