@@ -75,12 +75,8 @@ const { rawData, availableAxisValues, isLoading, error } = useTabularData(
 const axisFilters = ref<Record<string, string[]>>({})
 const groupedAxis = ref<Record<string, boolean>>({})
 
-watch(availableAxisValues, (axisValues, oldAxisValues) => {
-  const newKeys = Object.keys(axisValues).sort().join(',')
-  const oldKeys = Object.keys(oldAxisValues ?? {})
-    .sort()
-    .join(',')
-  if (newKeys === oldKeys) return
+watch(availableAxisValues, (axisValues) => {
+  if (Object.keys(axisValues).length === 0) return
   axisFilters.value = { ...axisValues }
   groupedAxis.value = Object.fromEntries(
     Object.keys(axisValues).map((axis) => [axis, summable.value])
@@ -100,6 +96,12 @@ const series = computed(() =>
 
 const isOneYear = computed(
   () => series.value.length === 1 && series.value[0].data.length === 1
+)
+
+const hasNoAxisSelected = computed(
+  () =>
+    Object.keys(availableAxisValues.value).length > 0 &&
+    Object.values(axisFilters.value).some((v) => v.length === 0)
 )
 
 const chartCanvas = useTemplateRef<HTMLCanvasElement>('chartCanvas')
@@ -144,6 +146,14 @@ onMounted(() => {
         v-if="error"
         type="error"
         :description="`Erreur lors du chargement : ${error}`"
+        :small="true"
+        class="fr-mt-4w"
+      />
+
+      <DsfrAlert
+        v-else-if="hasNoAxisSelected && !isLoading"
+        type="info"
+        description="Aucune valeur d'axe sélectionnée."
         :small="true"
         class="fr-mt-4w"
       />
