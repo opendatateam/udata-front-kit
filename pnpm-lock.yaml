@@ -10,9 +10,6 @@ importers:
       '@datagouv/components-next':
         specifier: 1.1.0
         version: 1.1.0(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
-      '@ecolabdata/tabular-dataviz':
-        specifier: ^1.3.3
-        version: 1.3.3(chart.js@4.5.1)
       '@gouvfr/dsfr':
         specifier: ~1.14.3
         version: 1.14.4
@@ -45,10 +42,13 @@ importers:
         version: 12.8.2(typescript@5.7.3)
       '@vueuse/integrations':
         specifier: ^12.4.0
-        version: 12.8.2(axios@1.16.0)(focus-trap@7.8.0)(fuse.js@7.1.0)(sortablejs@1.15.3)(typescript@5.7.3)
+        version: 12.8.2(axios@1.16.0)(focus-trap@7.8.0)(sortablejs@1.15.3)(typescript@5.7.3)
       axios:
         specifier: ^1.15.2
         version: 1.16.0(debug@4.4.3)
+      chart.js:
+        specifier: ^4.5.1
+        version: 4.5.1
       dompurify:
         specifier: ^3.4.0
         version: 3.4.0
@@ -498,15 +498,6 @@ packages:
     peerDependencies:
       vue: ^3.5.13
       vue-router: ^4.5.0 || ^5.0.0
-
-  '@ecolabdata/tabular-dataviz@1.3.3':
-    resolution:
-      {
-        integrity: sha512-zeYlaATAVOIoEEGkn3nb96/eRXkHG8g5u7vweNez+OIWQ6UyBVLnnq4boHeODUfWsYnine2ZX7IHsIBZ9usEqg==
-      }
-    engines: { node: '>=16' }
-    peerDependencies:
-      chart.js: ^4.5.0
 
   '@esbuild/aix-ppc64@0.25.12':
     resolution:
@@ -2940,12 +2931,6 @@ packages:
       }
     engines: { node: '>= 0.8.0' }
 
-  choices.js@11.1.0:
-    resolution:
-      {
-        integrity: sha512-mIt0uLhedHg2ea/K2PACrVpt391vRGHuOoctPAiHcyemezwzNMxj7jOzNEk8e7EbjLh0S0sspDkSCADOKz9kcw==
-      }
-
   chokidar@3.6.0:
     resolution:
       {
@@ -4154,13 +4139,6 @@ packages:
         integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
       }
 
-  fuse.js@7.1.0:
-    resolution:
-      {
-        integrity: sha512-trLf4SzuuUxfusZADLINj+dE8clK1frKdmqiJNb1Es75fmI5oY6X2mxLVUciLLjxqw/xr72Dhy+lER6dGd02FQ==
-      }
-    engines: { node: '>=10' }
-
   gensync@1.0.0-beta.2:
     resolution:
       {
@@ -4187,7 +4165,6 @@ packages:
         integrity: sha512-TC0NKVHcJZ9QvkEDyuMB327lT0xQIcZoIE3aSNOHN4Bkt1TcF+D/zAMQTl2AVTAYdrLAqFl6bhTWn5r7VJvkpw==
       }
     engines: { node: '>=20' }
-    bundledDependencies: []
 
   geotiff@2.1.3:
     resolution:
@@ -8591,11 +8568,6 @@ snapshots:
       - resize-detector
       - supports-color
 
-  '@ecolabdata/tabular-dataviz@1.3.3(chart.js@4.5.1)':
-    dependencies:
-      chart.js: 4.5.1
-      choices.js: 11.1.0
-
   '@esbuild/aix-ppc64@0.25.12':
     optional: true
 
@@ -9717,7 +9689,7 @@ snapshots:
       '@vueuse/shared': 14.3.0(vue@3.5.30(typescript@5.7.3))
       vue: 3.5.30(typescript@5.7.3)
 
-  '@vueuse/integrations@12.8.2(axios@1.16.0)(focus-trap@7.8.0)(fuse.js@7.1.0)(sortablejs@1.15.3)(typescript@5.7.3)':
+  '@vueuse/integrations@12.8.2(axios@1.16.0)(focus-trap@7.8.0)(sortablejs@1.15.3)(typescript@5.7.3)':
     dependencies:
       '@vueuse/core': 12.8.2(typescript@5.7.3)
       '@vueuse/shared': 12.8.2(typescript@5.7.3)
@@ -9725,7 +9697,6 @@ snapshots:
     optionalDependencies:
       axios: 1.16.0(debug@4.4.3)
       focus-trap: 7.8.0
-      fuse.js: 7.1.0
       sortablejs: 1.15.3
     transitivePeerDependencies:
       - typescript
@@ -9994,10 +9965,6 @@ snapshots:
   check-error@2.1.1: {}
 
   check-more-types@2.24.0: {}
-
-  choices.js@11.1.0:
-    dependencies:
-      fuse.js: 7.1.0
 
   chokidar@3.6.0:
     dependencies:
@@ -10792,8 +10759,6 @@ snapshots:
   function-bind@1.1.2: {}
 
   functions-have-names@1.2.3: {}
-
-  fuse.js@7.1.0: {}
 
   gensync@1.0.0-beta.2: {}
 
