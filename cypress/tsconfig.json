@@ -7,9 +7,8 @@
     "target": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": ["cypress", "node"],
-    "baseUrl": "..",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["../src/*"]
     }
   }
 }
