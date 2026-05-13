@@ -4,11 +4,11 @@ declare global {
   namespace Cypress {
     interface Chainable {
       allowExternalRequests(): Chainable<void>
-      baseMocksForSimplifions(): Chainable<void>
+      baseMocksForSimplifions(topics?: object[]): Chainable<void>
       catchUnmockedRequests(): Chainable<void>
       checkRGAAContrast(): Chainable<void>
       clickCheckbox(checkbox_name: string): Chainable<void>
-      expectActionToCallApi(action: () => void, resourceName: string, expectedUrlParams: string | RegExp): Chainable<void>
+      expectActionToCallApi(action: () => void, resourceName: string, expectedParams: Record<string, string | string[]>, options?: { drain?: boolean }): Chainable<void>
       expectRequestWithParams(resourceName: string, requestParamsString: string | RegExp): Chainable<void>
       isInViewport(options?: { threshold?: number; wait?: number }): Chainable<Element>
       mockDatagouvObject(resourceName: string, resourceId: string, data?: object): Chainable<void>
@@ -24,6 +24,7 @@ declare global {
       mockGristRecord(resourceId: string, element: { id: number; [key: string]: unknown }): Chainable<void>
       mockGristRecords(resourceId: string, elements?: { id: number; [key: string]: unknown }[]): Chainable<void>
       mockGristRecordsByIds(resourceId: string, elements: { id: number; [key: string]: unknown }[]): Chainable<void>
+      mockListApis(primaryType: 'datasets' | 'dataservices' | 'topics', primaryData?: object[]): Chainable<void>
       mockMatomo(): Chainable<void>
       mockMetricsApi(datasetId: string): Chainable<void>
       mockResources(datasetId: string, data?: object[]): Chainable<void>

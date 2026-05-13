@@ -1,3 +1,8 @@
+import type { BuiltInFilterKey } from '@datagouv/components-next'
+
+export const CUSTOM_FILTER_TYPES = ['select', 'organization_custom'] as const
+export type CustomFilterType = (typeof CUSTOM_FILTER_TYPES)[number]
+
 export interface TopicsConf {
   can_add_topics: {
     everyone: boolean
@@ -35,13 +40,10 @@ export interface PageFilterFormConf {
 export interface PageFilterConf {
   name: string
   id: string
-  type:
-    | 'spatial_zone'
-    | 'spatial_granularity'
-    | 'select'
-    | 'checkbox'
-    | 'organization'
-    | 'private'
+  type: CustomFilterType | BuiltInFilterKey
+  advanced?: boolean
+  // Page keys this filter applies to in multi-type search. Defaults to the owning page only.
+  applies_to_pages?: string[]
   child: string | null
   color: string | null
   default_option: string | null
@@ -49,7 +51,6 @@ export interface PageFilterConf {
   use_filter_prefix: boolean | null
   api_param: string | null
   form: PageFilterFormConf | null
-  authenticated: boolean | null
   hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
@@ -65,6 +66,7 @@ export type PageBannerConf = {
 
 export type PageSearchConf = {
   input: string
+  placeholder?: string | null
 }
 
 export type PageLabelsConf = {
@@ -74,7 +76,10 @@ export type PageLabelsConf = {
   feminine?: boolean
 }
 
+export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
+
 export type PageConf = {
+  object_type: PageObjectType
   list_all: boolean
   filter_prefix: string | null
   universe_query: PageUniverseQueryConf | null
@@ -115,7 +120,6 @@ export type DatasetsConf = {
 export type HeaderSearchConf = {
   display: boolean
   placeholder?: string
-  dropdown?: { text: string; route: string }[]
 }
 
 export interface WebsiteConfig {
