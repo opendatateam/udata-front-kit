@@ -72,7 +72,6 @@ website:
     search:
       display: false
       placeholder:
-      dropdown:
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
@@ -222,50 +221,53 @@ definitions: &definitions
 # Configuration format for pages:
 #
 # pages:
-#   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
-#     list_all: {bool}              # whether to have a list view or not
-#     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
-#     filter_prefix: {string}       # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
-#     title: {string}               # title for the list page
-#     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
-#     default_sort: {string}        # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
-#     labels:                       # how to call the object that is displayed by the page
-#       singular: {string}          # singular name for the object
-#       plural: {string}            # plural name for the object
-#       extended: {string}          # extended name for the object, singular
+#   {page_id}:                        # page identifier, acts as a slug /{page_id}/{object_id?}
+#     list_all: {bool}                # whether to have a list view or not
+#     universe_query: {dict}          # used to define a "universe" on a given {page_id}, through query args
+#     filter_prefix: {string}         # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
+#     title: {string}                 # title for the list page
+#     breadcrumb_title: {string}      # title in breadcrumb (optionnal, falls back to title)
+#     default_sort: {string}          # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
+#     labels:                         # how to call the object that is displayed by the page
+#       singular: {string}            # singular name for the object
+#       plural: {string}              # plural name for the object
+#       extended: {string}            # extended name for the object, singular
 #     search:
-#       input: {string}             # placeholder for the search input
-#     banner:                       # banner for the list page (optionnal)
-#       title: {string}             # title for the banner
-#       content: {string}           # content for the banner
-#     resources_tabs:               # resources tabs at the bottom of a detail page
+#       input: {string}               # label displayed above the search input
+#       placeholder: {string?|null?}  # input placeholder (null = no placeholder, omit = data.gouv.fr default)
+#     banner:                         # banner for the list page (optionnal)
+#       title: {string}               # title for the banner
+#       content: {string}             # content for the banner
+#     resources_tabs:                 # resources tabs at the bottom of a detail page
 #       discussions:
-#         display: {bool}           # display discussions tab on detail page
-#         create: {bool}            # create discussions tab on detail page
+#         display: {bool}             # display discussions tab on detail page
+#         create: {bool}              # create discussions tab on detail page
 #       datasets:
-#         display: {bool}           # display datasets tab on detail page
+#         display: {bool}             # display datasets tab on detail page
 #       reuses:
-#         display: {bool}           # display reuses tab on detail page
-#     editable: {bool}              # whether the page is editable when connected
-#     filters:                      # list of filters for this {page_id}
-#       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
-#         id: {string}              # id of the filter
-#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox | organization)
-#         child: {string?}          # id of the child filter (optional)
-#         color: {string}           # color of the filter's tag
-#         use_filter_prefix: {bool}    # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
-#         api_param: {string?}      # API query parameter name to use (optional, defaults to "tag")
-#         default_option: {string?} # default option for the filter (optional)
-#         default_value: {string?}  # default value for the filter (optional)
-#         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
-#         hide_on_list: {bool?}     # do not display filter on list page (optional, defaults to false)
-#         values:                   # list of values for this filter
-#           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
-#             name: {string}        # name of the value
-#             parent: {string?}     # id of the parent filter value (optional)
+#         display: {bool}             # display reuses tab on detail page
+#     editable: {bool}                # whether the page is editable when connected
+#     filters:                        # list of filters for this {page_id}
+#       - id: {string}                # id of the filter ⚠️ needs to be unique across all filters of the page
+#         name: {string}              # name of the filter ⚠️ only used in templates by custom filters
+#         type: {string}              # type of the filter (CustomFilterType or any BuiltInFilterKey from data.gouv.fr GlobalSearch)
+#         child: {string?}            # id of the child filter (optional)
+#         color: {string}             # color of the filter's tag
+#         use_filter_prefix: {bool}   # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
+#         api_param: {string?}        # API query parameter name to use (optional, defaults to "tag")
+#         default_option: {string?}   # default option for the filter (optional)
+#         default_value: {string?}    # default value for the filter (optional)
+#         hide_on_list: {bool?}       # do not display filter on list page (optional, defaults to false)
+#         advanced: {bool?}           # show in the advanced (collapsed) section of GlobalSearch; omit for basic (always visible)
+#                                     # ⚠️ only applicable to data.gouv.fr native filters (eg badge)
+#         values:                     # list of values for this filter
+#           - id: {string}            # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}          # name of the value
+#             parent: {string?}       # id of the parent filter value (optional)
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
@@ -278,6 +280,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
       title: Un accès centralisé à des données produites par des acteurs de référence.
       content: |
@@ -292,13 +295,19 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Organisation
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: badge
+        name: Label de donnée
+        type: badge
+      - id: org
+        name: Organisation
         default_option: Toutes les organisations
-        id: organization
-        type: organization
-      - name: Thème INSPIRE
+        type: organization_custom
+      - id: inspire
+        name: Thème INSPIRE
         default_option: Tous les thèmes
-        id: inspire
         type: select
         use_filter_prefix: false
         values:
@@ -370,99 +379,9 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
-      - name: Label de données
-        default_option: Tous les labels
-        id: badge
-        type: select
-        use_filter_prefix: false
-        values:
-          - id: hvd
-            name: Données de forte valeur
-          - id: inspire
-            name: INSPIRE
-  # DATASERVICES
-  dataservices:
-    list_all: true
-    universe_query:
-      topic: 65e9aa6cb5c809c30c70ee02
-    filter_prefix:
-    title: API
-    breadcrumb_title: API
-    labels:
-      singular: API
-      plural: APIs
-      extended: API
-      feminine: true
-    search:
-      input: Rechercher une API
-    banner:
-      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
-      content: |
-        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
-    resources_tabs:
-      discussions:
-        display: true
-        create: true
-      datasets:
-        display: true
-    editable: false
-    filters:
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization
-  # BOUQUETS
-  bouquets:
-    list_all: true
-    universe_query:
-      tag: univers-ecospheres
-    filter_prefix: ecospheres
-    title: Collections thématiques
-    breadcrumb_title: Collections
-    labels:
-      singular: collection
-      plural: collections thématiques
-      extended: collection thématique
-      feminine: true
-    search:
-      input: Filtrer les collections thématiques
-    banner:
-      title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
-      content: |
-        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/collections-thematiques/ajouter-une-collection)
-    resources_tabs:
-      discussions:
-        display: true
-        create: true
-      datasets:
-        display: true
-      reuses:
-        display: true
-    editable: true
-    filters:
-      - name: Afficher les brouillons
-        id: private
-        type: private
-        default_option:
-        default_value: true
-        authenticated: true
-        values: []
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization
-      - name: Thématique
-        default_option: Toutes les thématiques
-        id: theme
-        type: select
-        color: green-emeraude
-        use_filter_prefix: true
-        # TODO: use a dedicated config for the form?
-        form:
-          required: true
-        values: *fnv_themes
   # INDICATORS
   indicators:
+    object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
     universe_query:
       tag: ecospheres-indicateurs
@@ -476,6 +395,7 @@ pages:
       extended: indicateur
     search:
       input: Rechercher un indicateur
+      placeholder: null
     banner:
       title: Une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers.
       content: |
@@ -490,17 +410,20 @@ pages:
         display: true
     editable: false
     filters:
-      - name: Thématique
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: theme
+        name: Thématique
         default_option: Toutes les thématiques
-        id: theme
         type: select
         color: green-menthe
         use_filter_prefix: true
         hide_on_list: true
         values: *fnv_themes
-      - name: Enjeu
+      - id: enjeu
+        name: Enjeu
         default_option: Tous les enjeux
-        id: enjeu
         type: select
         color: blue-ecume
         use_filter_prefix: true
@@ -516,9 +439,9 @@ pages:
             name: Ressources
           - id: sante
             name: Santé
-      - name: Secteur
+      - id: secteur
+        name: Secteur
         default_option: Tous les secteurs
-        id: secteur
         type: select
         color: purple-glycine
         use_filter_prefix: true
@@ -543,9 +466,9 @@ pages:
             name: Transport de voyageurs
           - id: transverse
             name: Transverse
-      - name: Levier
+      - id: levier
+        name: Levier
         default_option: Tous les leviers
-        id: levier
         type: select
         color: green-archipel
         use_filter_prefix: true
@@ -612,9 +535,9 @@ pages:
             name: Véhicules électriques
           - id: velo
             name: Vélo
-      - name: Maille géographique
+      - id: maille
+        name: Maille géographique
         default_option: Toutes les mailles
-        id: maille
         type: select
         use_filter_prefix: true
         color:
@@ -627,6 +550,90 @@ pages:
             name: EPCI
           - id: commune
             name: Commune
+  # DATASERVICES
+  dataservices:
+    object_type: dataservices
+    list_all: true
+    universe_query:
+      topic: 65e9aa6cb5c809c30c70ee02
+    filter_prefix:
+    title: API
+    breadcrumb_title: API
+    labels:
+      singular: API
+      plural: APIs
+      extended: API
+      feminine: true
+    search:
+      input: Rechercher une API
+      placeholder: null
+    banner:
+      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
+      content: |
+        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+    editable: false
+    filters:
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: org
+        name: Organisation
+        default_option: Toutes les organisations
+        type: organization_custom
+  # BOUQUETS
+  bouquets:
+    object_type: topics
+    list_all: true
+    universe_query:
+      tag: univers-ecospheres
+    filter_prefix: ecospheres
+    title: Collections thématiques
+    breadcrumb_title: Collections
+    labels:
+      singular: collection
+      plural: collections thématiques
+      extended: collection thématique
+      feminine: true
+    search:
+      input: Rechercher une collection thématique
+      placeholder: null
+    banner:
+      title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
+      content: |
+        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/collections-thematiques/ajouter-une-collection)
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: org
+        name: Organisation
+        default_option: Toutes les organisations
+        type: organization_custom
+      - id: theme
+        name: Thématique
+        default_option: Toutes les thématiques
+        type: select
+        color: green-emeraude
+        use_filter_prefix: true
+        # TODO: use a dedicated config for the form?
+        form:
+          required: true
+        values: *fnv_themes
 
 ecospheres:
   homepage:

@@ -22,7 +22,7 @@ import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { useCanonical } from '@/utils/seo'
-import SwaggerClient from '@datagouv/components-next/src/components/ResourceAccordion/Swagger.client.vue'
+import { OpenApiViewer } from '@datagouv/components-next'
 
 const route = useRouteParamsAsString()
 const dataserviceId = route.params.item_id
@@ -38,7 +38,7 @@ const total = computed(
 
 const { pageKey, meta, pageConf } = useCurrentPageConf()
 
-const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+const CardComponent = useAsyncComponent(() => meta?.datasetCardComponent, {
   fallback: DatasetCard
 })
 const showDiscussions = pageConf.resources_tabs.discussions.display
@@ -240,7 +240,7 @@ onMounted(() => {
         <VIconCustom v-if="isSwaggerOpened" name="arrow-up-s-line" />
         <VIconCustom v-else name="arrow-down-s-line" />
       </button>
-      <SwaggerClient
+      <OpenApiViewer
         v-if="isSwaggerOpened"
         :url="dataservice.machine_documentation_url"
       />

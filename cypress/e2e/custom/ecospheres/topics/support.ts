@@ -272,15 +272,15 @@ export function mockTopicElementsByClass(
  * Options for mocking topic and related objects
  */
 export interface MockTopicOptions {
-  /** Factor/elements associated with the topic */
+  // Factor/elements associated with the topic
   factors?: Factor[]
-  /** Referenced topics (for topic_reference trait) */
+  // Referenced topics (for topic_reference trait)
   referencedTopics?: Topic[]
-  /** Referenced dataservices (for dataservice_reference trait) */
+  // Referenced dataservices (for dataservice_reference trait)
   referencedDataservices?: Dataservice[]
-  /** Activity history for the topic */
+  // Activity history for the topic
   activities?: Activity[]
-  /** Dataset resources mapped by dataset ID */
+  // Dataset resources mapped by dataset ID
   datasetResources?: Record<string, Resource[]>
   /** Custom datasets mapped by dataset ID (overrides auto-generated ones) */
   datasets?: Record<string, DatasetV2 | DatasetV2WithFullObject>

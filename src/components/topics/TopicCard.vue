@@ -3,8 +3,8 @@ import {
   OrganizationNameWithCertificate,
   useFormatDate
 } from '@datagouv/components-next'
-import { toRef } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
+import { computed, toRef } from 'vue'
+import { type RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
@@ -26,6 +26,10 @@ const props = defineProps({
     type: Object as () => Topic,
     required: true
   },
+  topicUrl: {
+    type: Object as () => RouteLocationRaw,
+    default: null
+  },
   hideDescription: {
     type: Boolean,
     default: false
@@ -39,10 +43,13 @@ const { nbFactors } = useTopicFactors(topicRef)
 
 const ownerName = useOwnerName(props.topic)
 
-const topicLink: RouteLocationRaw = {
-  name: `${props.pageKey}_detail`,
-  params: { item_id: props.topic.slug }
-}
+const topicLink = computed<RouteLocationRaw>(
+  () =>
+    props.topicUrl ?? {
+      name: `${props.pageKey}_detail`,
+      params: { item_id: props.topic.slug }
+    }
+)
 
 const tags = useTags(props.pageKey, props.topic)
 </script>
