@@ -13,6 +13,7 @@ import IndicatorVizOneYearValue from './IndicatorVizOneYearValue.vue'
 import IndicatorVizTerritorySelect from './IndicatorVizTerritorySelect.vue'
 import { makeSeries } from './series'
 import { useIndicatorVizChart } from './useIndicatorVizChart'
+import { useIndicatorVizParams } from './useIndicatorVizParams'
 import { useTabularData } from './useTabularData'
 
 const props = defineProps<{
@@ -46,14 +47,18 @@ const availableIndicatorVizMeshes = computed<IndicatorMesh[]>(() =>
   resources.value.map((r) => r.extras['ecospheres-indicateurs']!.maille)
 )
 
-const selectedIndicatorVizMesh = ref<IndicatorMesh>('fr')
-const selectedTerritory = ref('')
+const {
+  mesh: selectedIndicatorVizMesh,
+  territory: selectedTerritory,
+  meshModel,
+  setMesh
+} = useIndicatorVizParams()
 
 watch(
   availableIndicatorVizMeshes,
   (meshes) => {
     if (meshes.length > 0 && !meshes.includes(selectedIndicatorVizMesh.value)) {
-      selectedIndicatorVizMesh.value = meshes[0]
+      setMesh(meshes[0])
     }
   },
   { immediate: true }
@@ -114,7 +119,7 @@ onMounted(() => {
       <div class="dropdowns">
         <div class="geo-dropdowns">
           <IndicatorVizMeshSelect
-            v-model="selectedIndicatorVizMesh"
+            v-model="meshModel"
             :available-meshes="availableIndicatorVizMeshes"
           />
           <IndicatorVizTerritorySelect
