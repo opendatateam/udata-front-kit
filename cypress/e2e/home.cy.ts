@@ -5,6 +5,8 @@ describe('Home Page', () => {
     cy.mockStaticDatagouv()
     // some site home pages use Grist (eg culture), loosely mock records fetching
     cy.mockGristRecords('*')
+    // some site home pages fetch topics (eg ecospheres)
+    cy.mockDatagouvObjectList('topics', [])
     cy.visit('/')
   })
 
