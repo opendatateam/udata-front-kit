@@ -155,6 +155,4 @@ export function useIndicatorVizChart(
   })
 
   onBeforeUnmount(destroyChart)
-
-  return { destroyChart }
 }
