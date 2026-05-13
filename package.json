@@ -3,18 +3,12 @@
   "version": "0.4.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
+  "packageManager": "pnpm@11.0.9+sha512.34ce82e6780233cf9cad8685029a8f81d2e06196c5a9bad98879f7424940c6817c4e4524fb7d38b8553ceed48b9758b8ebaf1abd3600c232c4c8cf7366086f38",
   "engines": {
     "node": ">= 22.0.0",
     "npm": "please-use-pnpm",
     "yarn": "please-use-pnpm",
     "pnpm": ">= 10.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "cypress",
-      "husky"
-    ]
   },
   "scripts": {
     "dev": "vite",
@@ -30,7 +24,9 @@
     "format": "prettier --write src/",
     "prepare": "husky",
     "generate-robots-txt": "node scripts/generate-robots-txt.mjs",
-    "type-check": "vue-tsc --noEmit --project tsconfig.app.json"
+    "type-check": "pnpm run type-check:app && pnpm run type-check:cypress",
+    "type-check:app": "vue-tsc --noEmit --project tsconfig.app.json",
+    "type-check:cypress": "tsc --noEmit --project cypress/tsconfig.json"
   },
   "dependencies": {
     "@datagouv/components-next": "^1.0.1",
@@ -45,7 +41,7 @@
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^12.4.0",
     "@vueuse/integrations": "^12.4.0",
-    "axios": "^1.15.0",
+    "axios": "^1.15.2",
     "chart.js": "^4.5.1",
     "dompurify": "^3.4.0",
     "maplibre-gl": "^5.3.0",
@@ -75,7 +71,7 @@
     "@vue/eslint-config-typescript": "^14.3.0",
     "@vue/tsconfig": "^0.7.0",
     "axios-mock-adapter": "^2.1.0",
-    "cypress": "^14.5.4",
+    "cypress": "^15.14.2",
     "cypress-axe": "^1.6.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",

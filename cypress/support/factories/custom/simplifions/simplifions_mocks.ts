@@ -1,4 +1,9 @@
-import { sequence } from 'mimicry-js'
+import type {
+  ApiEtDatasetsIntegres,
+  CasUsage,
+  Recommandation,
+  Solution
+} from '@/custom/simplifions/model/grist'
 import { dataserviceFactory } from '../../dataservices_factory'
 import { datasetFactory } from '../../datasets_factory'
 import {
@@ -46,25 +51,51 @@ export const mockSolutionRecommandation = (recommandationFields = {}) => {
   const gristRecommandation = gristRecommandationFactory.one({
     overrides: {
       fields: {
-        Solution_recommandee: sequence((x) => x),
         API_ou_datasets_recommandes: 0,
         ...recommandationFields
       }
     }
   })
-  const tagWithId = `simplifions-v2-solutions-${gristRecommandation.fields.Solution_recommandee}`
+  const solutionRecommandeeId = gristRecommandation.fields.Solution_recommandee
+  const tagWithId = `simplifions-v2-solutions-${solutionRecommandeeId}`
 
-  const topicSolution = topicSolutionFactory.one({
+  const topicSolutionRecommandee = topicSolutionFactory.one({
     overrides: {
-      tags: ['simplifions-v2', 'simplifions-v2-solutions', tagWithId]
+      tags: ['simplifions-v2', 'simplifions-v2-solutions', tagWithId],
+      extras: {
+        'simplifions-v2-solutions': { id: solutionRecommandeeId }
+      }
     }
   })
 
-  cy.mockGristRecords('Recommandations', [gristRecommandation])
-  cy.mockDatagouvObject('topics', topicSolution.slug, topicSolution)
-  cy.mockDatagouvObjectListWithTags('topics', [tagWithId], [topicSolution])
+  // Inline minimal record — avoids using solutionFactory (which would advance
+  // the Nom sequence and shift expected values in other tests).
+  // null array fields prevent the solution detail page from making cascading requests.
+  const gristSolutionRecommandee = {
+    id: solutionRecommandeeId,
+    fields: {
+      Nom: `Solution ${solutionRecommandeeId}`,
+      Visible_sur_simplifions: true,
+      API_ou_datasets_integres: null,
+      APIs_ou_datasets_fournis: null,
+      solutions_integratrices: null
+    }
+  }
 
-  return { gristRecommandation, topicSolution }
+  cy.mockGristRecords('Recommandations', [gristRecommandation])
+  cy.mockGristRecord('Solutions', gristSolutionRecommandee)
+  cy.mockDatagouvObject(
+    'topics',
+    topicSolutionRecommandee.slug,
+    topicSolutionRecommandee
+  )
+  cy.mockDatagouvObjectListWithTags(
+    'topics',
+    [tagWithId],
+    [topicSolutionRecommandee]
+  )
+
+  return { gristRecommandation, topicSolution: topicSolutionRecommandee }
 }
 
 export const mockApidatasetRecommandations = (
@@ -119,7 +150,7 @@ export const mockApisOrDatasets = (
 
   const dataservicesOrDatasets = gristApisAndDatasets.map(
     (gristApiAndDataset) => {
-      var dataserviceOrDataset
+      let dataserviceOrDataset
 
       if (gristApiAndDataset.fields.Type === 'API') {
         dataserviceOrDataset = dataserviceFactory.one({
@@ -156,7 +187,7 @@ export const mockApisOrDatasets = (
 }
 
 export const mockApiOrDatasetUtiles = (
-  gristApiOrDatasetIds,
+  gristApiOrDatasetIds: number[],
   apiOrDatasetUtilesFields = {}
 ) => {
   const gristApiOrDatasetUtiles = gristApiOrDatasetIds.map((id) => {
@@ -212,10 +243,16 @@ export const mockSolution = (
  */
 export const mockSolutionsIntegratices = ({
   fournisseurSolutionId,
-  integrateursSolutionFields = [],
-  casUsageFields = [],
-  integrations = [],
-  recommandations = []
+  integrateursSolutionFields = [] as Partial<Solution>[],
+  casUsageFields = [] as Partial<CasUsage>[],
+  integrations = [] as Partial<ApiEtDatasetsIntegres>[],
+  recommandations = [] as Partial<Recommandation>[]
+}: {
+  fournisseurSolutionId: number
+  integrateursSolutionFields?: Partial<Solution>[]
+  casUsageFields?: Partial<CasUsage>[]
+  integrations?: Partial<ApiEtDatasetsIntegres>[]
+  recommandations?: Partial<Recommandation>[]
 }) => {
   const gristIntegrateurs = integrateursSolutionFields.map((fields) =>
     solutionFactory.one({

@@ -1,4 +1,9 @@
-const datagouvResponseBuilder = (data) => {
+import type {
+  DatasetV2,
+  DatasetV2WithFullObject
+} from '@datagouv/components-next'
+
+const datagouvResponseBuilder = (data: object[]) => {
   return {
     data: data.slice(0, 10),
     next_page: null,
@@ -9,7 +14,10 @@ const datagouvResponseBuilder = (data) => {
   }
 }
 
-const datagouvUrlRegex = (resourceName, resourceId = null) => {
+const datagouvUrlRegex = (
+  resourceName: string,
+  resourceId: string | null = null
+) => {
   return new RegExp(
     `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
   )
@@ -96,6 +104,22 @@ Cypress.Commands.add('mockStaticDatagouv', () => {
       body: '// Mocked static.data.gouv.fr content'
     }
   ).as('get_datagouvfr_pages')
+
+  // Mock gist attachments (used for images hosting by some sites)
+  cy.intercept('GET', 'https://gist.github.com/user-attachments/**', {
+    statusCode: 200,
+    body: '// Mocked gist.github.com content'
+  }).as('get_gist_attachments')
+
+  // Mock github host images (used for hosting by some sites)
+  cy.intercept(
+    'GET',
+    /^https:\/\/raw\.githubusercontent\.com\/.*\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i,
+    {
+      statusCode: 200,
+      body: '// Mocked github hosted images'
+    }
+  ).as('get_github_images')
 })
 
 Cypress.Commands.add('mockTopicElements', (resourceId, elements = []) => {
@@ -257,7 +281,12 @@ Cypress.Commands.add('mockDataserviceMetricsApi', (dataserviceId) => {
 
 Cypress.Commands.add(
   'mockDatasetAndRelatedObjects',
-  (dataset, resources = [], dataservices = [], reuses = []) => {
+  (
+    dataset: DatasetV2 | DatasetV2WithFullObject,
+    resources = [],
+    dataservices = [],
+    reuses = []
+  ) => {
     // Update dataset.resources.total to match the resources array
     dataset.resources.total = resources.length
     cy.mockDatagouvObject('datasets', dataset.id, dataset)
