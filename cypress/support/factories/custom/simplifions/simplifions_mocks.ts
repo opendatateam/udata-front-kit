@@ -51,7 +51,7 @@ export const mockCasUsage = (
   return { gristCasUsage, topicCasUsage }
 }
 
-export const buildSolutionRecommandation = (recommandationFields = {}) => {
+export const mockSolutionRecommandation = (recommandationFields = {}) => {
   const gristRecommandation = gristRecommandationFactory.one({
     overrides: {
       fields: {
@@ -101,7 +101,7 @@ export const buildSolutionRecommandation = (recommandationFields = {}) => {
   return { gristRecommandation, topicSolution: topicSolutionRecommandee }
 }
 
-export const buildApidatasetRecommandations = (
+export const mockApidatasetRecommandations = (
   amount = 2,
   recommandationFields = {},
   apiOrDatasetFields = {},

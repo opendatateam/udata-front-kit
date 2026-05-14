@@ -1,10 +1,10 @@
 import {
-  buildApidatasetRecommandations,
-  buildSolutionRecommandation,
+  mockApidatasetRecommandations,
   mockApiOrDatasetUtiles,
   mockApisOrDatasets,
   mockCasUsage,
-  mockSolution
+  mockSolution,
+  mockSolutionRecommandation
 } from '../../../support/factories/custom/simplifions/simplifions_mocks'
 
 import './support'
@@ -13,7 +13,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
   beforeEach(() => {
     cy.baseMocksForSimplifions()
 
-    const { gristRecommandation } = buildSolutionRecommandation({
+    const { gristRecommandation } = mockSolutionRecommandation({
       API_et_datasets_utiles_fournis: [],
       Descriptions_des_API_et_datasets_utiles_fournis: [],
       Ces_logiciels_l_integrent_deja: []
@@ -87,7 +87,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
 
   describe('with an access link in recommandation grist data', () => {
     beforeEach(() => {
-      const { gristRecommandation } = buildSolutionRecommandation({
+      const { gristRecommandation } = mockSolutionRecommandation({
         API_et_datasets_utiles_fournis: [],
         Descriptions_des_API_et_datasets_utiles_fournis: [],
         Ces_logiciels_l_integrent_deja: [],
@@ -119,7 +119,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
   beforeEach(() => {
     cy.baseMocksForSimplifions()
 
-    const { gristRecommandations } = buildApidatasetRecommandations(2)
+    const { gristRecommandations } = mockApidatasetRecommandations(2)
     const { topicCasUsage } = mockCasUsage(
       {
         slug: 'aides-publiques-entreprises-sourcage',
@@ -145,7 +145,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
 
   describe('with an access link in recommandation grist data', () => {
     beforeEach(() => {
-      const { gristRecommandations } = buildApidatasetRecommandations(1, {
+      const { gristRecommandations } = mockApidatasetRecommandations(1, {
         access_link_with_fallback: 'https://example.com'
       })
       const { topicCasUsage } = mockCasUsage(
@@ -173,7 +173,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
       cy.baseMocksForSimplifions()
 
       const { gristRecommandations, dataservicesOrDatasets } =
-        buildApidatasetRecommandations(
+        mockApidatasetRecommandations(
           1,
           {},
           { Type: 'API' },
@@ -206,7 +206,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
       cy.baseMocksForSimplifions()
 
       const { gristRecommandations, dataservicesOrDatasets } =
-        buildApidatasetRecommandations(
+        mockApidatasetRecommandations(
           1,
           {
             access_link_with_fallback: 'https://recommandation-url.example.com'
@@ -250,7 +250,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
       }
     )
 
-    const { gristRecommandation } = buildSolutionRecommandation({
+    const { gristRecommandation } = mockSolutionRecommandation({
       API_et_datasets_utiles_fournis: gristApisAndDatasets.map((a) => a.id),
       Descriptions_des_API_et_datasets_utiles_fournis:
         gristApiOrDatasetUtiles.map((a) => a.id),
@@ -288,7 +288,7 @@ describe("Simplifions Cas d'usages Show page for cas d'usage with integrating so
       Nom: 'The Best Editor Solution'
     })
 
-    const { gristRecommandation } = buildSolutionRecommandation({
+    const { gristRecommandation } = mockSolutionRecommandation({
       API_et_datasets_utiles_fournis: [],
       Descriptions_des_API_et_datasets_utiles_fournis: [],
       Ces_logiciels_l_integrent_deja: [],
