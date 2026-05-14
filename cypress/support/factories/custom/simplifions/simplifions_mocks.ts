@@ -24,6 +24,7 @@ export const mockCasUsage = (
   const gristCasUsage = gristCasUsageFactory.one({
     overrides: {
       fields: {
+        Recommandations: recommandations.map((r) => r.id),
         ...gristCasUsageFields
       }
     }
