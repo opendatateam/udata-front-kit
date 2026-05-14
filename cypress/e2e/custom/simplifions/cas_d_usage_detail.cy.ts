@@ -26,7 +26,8 @@ describe("Simplifions Cas d'usages Show Page", () => {
         slug: 'aides-publiques-entreprises-sourcage',
         name: 'Aides publiques entreprises | Sourçage',
         description: 'Lorem ipsum dolor sit amet'
-      }
+      },
+      [gristRecommandation]
     )
 
     cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
@@ -104,7 +105,8 @@ describe("Simplifions Cas d'usages Show Page", () => {
           slug: 'aides-publiques-entreprises-sourcage',
           name: 'Aides publiques entreprises | Sourçage',
           description: 'Lorem ipsum dolor sit amet'
-        }
+        },
+        [gristRecommandation]
       )
 
       cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
@@ -132,7 +134,8 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
         slug: 'aides-publiques-entreprises-sourcage',
         name: 'Aides publiques entreprises | Sourçage',
         description: 'Lorem ipsum dolor sit amet'
-      }
+      },
+      gristRecommandations
     )
 
     cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
@@ -162,7 +165,8 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
           slug: 'aides-publiques-entreprises-sourcage',
           name: 'Aides publiques entreprises | Sourçage',
           description: 'Lorem ipsum dolor sit amet'
-        }
+        },
+        gristRecommandations
       )
 
       cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
@@ -196,7 +200,8 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
           slug: 'dataservice-auth-test',
           name: 'Test with Dataservice Auth',
           description: 'Testing authorization_request_url'
-        }
+        },
+        gristRecommandations
       )
 
       cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
@@ -233,7 +238,8 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
           slug: 'priority-test',
           name: 'Test URL Priority',
           description: 'Testing URL priority'
-        }
+        },
+        gristRecommandations
       )
 
       cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
@@ -268,9 +274,11 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
         gristApiOrDatasetUtiles.map((a) => a.id),
       Ces_logiciels_l_integrent_deja: []
     })
-    const { topicCasUsage } = mockCasUsage({
-      Recommandations: [gristRecommandation.id]
-    })
+    const { topicCasUsage } = mockCasUsage(
+      { Recommandations: [gristRecommandation.id] },
+      {},
+      [gristRecommandation]
+    )
 
     cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
   })
@@ -310,9 +318,11 @@ describe("Simplifions Cas d'usages Show page for cas d'usage with integrating so
         gristEditorSolution.id
       ]
     })
-    const { topicCasUsage } = mockCasUsage({
-      Recommandations: [gristRecommandation.id]
-    })
+    const { topicCasUsage } = mockCasUsage(
+      { Recommandations: [gristRecommandation.id] },
+      {},
+      [gristRecommandation]
+    )
 
     cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
   })
