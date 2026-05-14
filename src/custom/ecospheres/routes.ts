@@ -51,12 +51,6 @@ export const routes: RouteRecordRaw[] = [
         '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
       )
   }),
-  {
-    path: '/admin/bouquets/drafts',
-    name: 'bouquets_drafts',
-    component: async () => await import('@/views/topics/TopicDraftsView.vue'),
-    meta: { requiresAuth: true, title: 'Mes brouillons', pageKey: 'bouquets' }
-  },
   ...useTopicAdminPagesRoutes({
     pageKey: 'bouquets',
     topicConf

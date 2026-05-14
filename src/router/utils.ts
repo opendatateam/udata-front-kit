@@ -317,6 +317,12 @@ export const useTopicAdminPagesRoutes = ({
       component: async () => await import('@/views/topics/TopicFormView.vue'),
       meta: { requiresAuth: true, pageKey },
       props: { isCreate: false, ...topicConf }
+    },
+    {
+      path: `/admin/${pageKey}/drafts`,
+      name: `${pageKey}_drafts`,
+      component: async () => await import('@/views/topics/TopicDraftsView.vue'),
+      meta: { requiresAuth: true, title: 'Mes brouillons', pageKey }
     }
   ]
 }
