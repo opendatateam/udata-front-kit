@@ -148,11 +148,29 @@ describe('Indicator Detail View', () => {
   describe('No Datavisualisation Configured', () => {
     it('should not display the previsualisation', () => {
       cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Prévisualisation').should('not.be.visible')
+      cy.contains('Prévisualisation').should('not.exist')
     })
   })
 
   describe('Prévisualisation Tab', () => {
+    it('should display an error when the tabular API fails', () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const vizResource = createIndicatorResource()
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
+        { statusCode: 500, body: 'Internal Server Error' }
+      )
+      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      cy.contains('Prévisualisation').click()
+      cy.contains('Erreur lors du chargement').should('be.visible')
+      cy.contains('k: millier, M: million, Md: milliard').should('not.exist')
+    })
+
     it('should display the previsualisation when enabled', () => {
       const indicatorWithViz = createIndicator(
         {},
@@ -173,7 +191,7 @@ describe('Indicator Detail View', () => {
       cy.visit(`/indicators/${indicatorWithViz.id}`)
       cy.contains('Prévisualisation').click()
       // Check if the visualization element appears
-      cy.get('.indicator-viz').should('be.visible')
+      cy.get('[data-testid="indicator-viz-chart"]').should('be.visible')
     })
   })
 })

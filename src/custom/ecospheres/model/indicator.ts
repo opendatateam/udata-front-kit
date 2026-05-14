@@ -1,4 +1,7 @@
-import type { DatasetV2WithFullObject } from '@datagouv/components-next'
+import type {
+  DatasetV2WithFullObject,
+  Resource
+} from '@datagouv/components-next'
 
 export interface IndicatorExtrasCalcul {
   responsable: string
@@ -40,10 +43,18 @@ export type Indicator = DatasetV2WithFullObject & {
   extras: IndicatorExtras
 }
 
+export type IndicatorMesh = 'fr' | 'region' | 'departement' | 'epci'
+
 export type IndicatorResourceExtras = {
-  maille: string
+  maille: IndicatorMesh
   'value-column': string
   axes: {
     [key: string]: string[]
+  }
+}
+
+export type IndicatorResource = Resource & {
+  extras: Record<string, unknown> & {
+    'ecospheres-indicateurs'?: IndicatorResourceExtras
   }
 }

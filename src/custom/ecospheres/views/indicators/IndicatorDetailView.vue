@@ -12,7 +12,7 @@ import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
-import IndicatorVisualisation from '@/custom/ecospheres/views/indicators/IndicatorVisualisation.vue'
+import IndicatorVizChart from '@/custom/ecospheres/components/indicators/viz/IndicatorVizChart.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -193,7 +193,7 @@ onMounted(() => {
 
       <!-- Prévisualisation -->
       <DsfrTabContent panel-id="tab-content-viz" tab-id="tab-viz">
-        <IndicatorVisualisation
+        <IndicatorVizChart
           v-if="tabularApiUrl"
           :indicator="indicator"
           :tabular-api-url="tabularApiUrl"
