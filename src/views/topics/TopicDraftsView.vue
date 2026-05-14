@@ -89,10 +89,7 @@ watch(searchQuery, (q) => {
       </li>
     </ul>
   </GenericContainer>
-  <div
-    v-if="draftsPagination.length > 1"
-    class="fr-container fr-pagination-wrapper"
-  >
+  <div v-if="draftsPagination.length > 1" class="fr-container">
     <DsfrPagination
       :trunc-limit="3"
       :current-page="currentPage - 1"
@@ -103,10 +100,6 @@ watch(searchQuery, (q) => {
 </template>
 
 <style scoped>
-.fr-pagination-wrapper :deep(.fr-pagination__list) {
-  justify-content: center;
-}
-
 .es__tiles__list :deep(article) {
   display: flex;
   flex-direction: column;
