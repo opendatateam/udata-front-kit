@@ -17,15 +17,13 @@ import {
 import { topicCasUsageFactory, topicSolutionFactory } from './topics_factory'
 
 export const mockCasUsage = (
-  gristCasUsageFields = {},
   topicFields = {},
   recommandations: { id: number }[] = []
 ) => {
   const gristCasUsage = gristCasUsageFactory.one({
     overrides: {
       fields: {
-        Recommandations: recommandations.map((r) => r.id),
-        ...gristCasUsageFields
+        Recommandations: recommandations.map((r) => r.id)
       }
     }
   })
@@ -53,7 +51,7 @@ export const mockCasUsage = (
   return { gristCasUsage, topicCasUsage }
 }
 
-export const mockSolutionRecommandation = (recommandationFields = {}) => {
+export const buildSolutionRecommandation = (recommandationFields = {}) => {
   const gristRecommandation = gristRecommandationFactory.one({
     overrides: {
       fields: {
@@ -103,7 +101,7 @@ export const mockSolutionRecommandation = (recommandationFields = {}) => {
   return { gristRecommandation, topicSolution: topicSolutionRecommandee }
 }
 
-export const mockApidatasetRecommandations = (
+export const buildApidatasetRecommandations = (
   amount = 2,
   recommandationFields = {},
   apiOrDatasetFields = {},
