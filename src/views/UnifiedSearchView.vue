@@ -108,7 +108,7 @@ const createUrl = computed(() => ({
             Ajouter {{ labels.articles.un }} {{ labels.singular }}
           </router-link>
         </div>
-        <div v-if="userStore.loggedIn" class="fr-col-auto">
+        <div class="fr-col-auto">
           <router-link
             :to="{ name: `${pageKey}_drafts` }"
             class="fr-btn fr-btn--secondary fr-mb-1w"

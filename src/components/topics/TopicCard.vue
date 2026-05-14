@@ -150,9 +150,6 @@ const tags = useTags(props.pageKey, props.topic)
 <style scoped>
 article {
   background-color: var(--background-default-grey);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 .owner-info {
   --gap: 0.75rem;
@@ -175,10 +172,6 @@ article {
   text-overflow: ellipsis;
   display: block;
   line-height: inherit;
-}
-
-.card-footer {
-  margin-top: auto;
 }
 
 .description p {

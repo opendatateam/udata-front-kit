@@ -21,7 +21,6 @@ const pageConf = computed(() => usePageConf(pageKey.value))
 const topics = ref<Topic[]>([])
 const isLoaded = ref(false)
 const searchQuery = ref('')
-const activeQuery = ref('')
 const currentPage = ref(1)
 const total = ref(0)
 
@@ -64,7 +63,6 @@ const loadTopics = async (q?: string, page = 1) => {
 
   topics.value = response.data as Topic[]
   total.value = response.total
-  activeQuery.value = q ?? ''
   isLoaded.value = true
   loader.hide()
 }
@@ -78,7 +76,7 @@ const onSearch = (q: string) => {
 
 const onUpdatePage = (page: number) => {
   currentPage.value = page + 1
-  loadTopics(activeQuery.value || undefined, currentPage.value)
+  loadTopics(searchQuery.value || undefined, currentPage.value)
 }
 
 const debouncedSearch = useDebounceFn((q: string) => {
@@ -107,7 +105,7 @@ watch(searchQuery, (q) => {
     />
     <p v-if="isLoaded && topics.length === 0">
       {{
-        activeQuery
+        searchQuery
           ? 'Aucun brouillon ne correspond à votre recherche.'
           : 'Aucun brouillon.'
       }}
@@ -134,5 +132,15 @@ watch(searchQuery, (q) => {
 <style scoped>
 .fr-pagination-wrapper :deep(.fr-pagination__list) {
   justify-content: center;
+}
+
+.es__tiles__list :deep(article) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.es__tiles__list :deep(.card-footer) {
+  margin-top: auto;
 }
 </style>
