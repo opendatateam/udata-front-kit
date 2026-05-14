@@ -6,8 +6,10 @@ import { useRoute } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
+import VIconCustom from '@/components/VIconCustom.vue'
 import { useTopicStore } from '@/store/TopicStore'
 import { debounceWait, usePageConf } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 
 const route = useRoute()
 const $loading = useLoading()
@@ -19,6 +21,9 @@ const currentPage = ref(1)
 
 const topicStore = useTopicStore()
 const { drafts, draftsPagination } = storeToRefs(topicStore)
+
+const labels = computed(() => useLabels(pageConf.value.labels))
+const createUrl = computed(() => ({ name: `${pageKey.value}_add` }))
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
@@ -66,7 +71,15 @@ watch(searchQuery, (q) => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <GenericContainer>
-    <h1 class="fr-mb-3w">Mes brouillons</h1>
+    <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
+      <h1 class="fr-mb-0">Mes brouillons</h1>
+      <div class="fr-col-auto">
+        <router-link :to="createUrl" class="fr-btn">
+          <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
+          Ajouter {{ labels.articles.un }} {{ labels.singular }}
+        </router-link>
+      </div>
+    </div>
     <DsfrSearchBar
       v-model="searchQuery"
       label="Rechercher dans mes brouillons"
