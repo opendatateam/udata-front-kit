@@ -82,8 +82,8 @@ website:
       to: /
     - text: Données
       to: /datasets
-    - text: Thèmes
-      to: /themes
+    # - text: Thèmes
+    # to: /themes
     - text: À propos
       to: /about
   router:
@@ -100,8 +100,8 @@ website:
       path: /
     - name: Données
       path: /datasets
-    - name: Thèmes
-      path: /themes
+    # - name: Thèmes
+    #  path: /themes
     - name: À propos
       path: /about
   show_quality_component: true
