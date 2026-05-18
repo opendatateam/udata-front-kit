@@ -190,7 +190,7 @@ pages:
   # THÈMES (BOUQUETS)
   themes:
     object_type: topics
-    list_all: true
+    list_all: false
     universe_query:
       tag: accessibilite-univers
     filter_prefix: accessibilite-univers
