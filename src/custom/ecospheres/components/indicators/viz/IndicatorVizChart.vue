@@ -75,12 +75,8 @@ const { rawData, availableAxisValues, isLoading, error } = useTabularData(
 const axisFilters = ref<Record<string, string[]>>({})
 const groupedAxis = ref<Record<string, boolean>>({})
 
-watch(availableAxisValues, (axisValues, oldAxisValues) => {
-  const newKeys = Object.keys(axisValues).sort().join(',')
-  const oldKeys = Object.keys(oldAxisValues ?? {})
-    .sort()
-    .join(',')
-  if (newKeys === oldKeys) return
+watch(availableAxisValues, (axisValues) => {
+  if (Object.keys(axisValues).length === 0) return
   axisFilters.value = { ...axisValues }
   groupedAxis.value = Object.fromEntries(
     Object.keys(axisValues).map((axis) => [axis, summable.value])
@@ -102,10 +98,21 @@ const isOneYear = computed(
   () => series.value.length === 1 && series.value[0].data.length === 1
 )
 
+const hasNoAxisSelected = computed(
+  () =>
+    Object.keys(availableAxisValues.value).length > 0 &&
+    Object.values(axisFilters.value).some((v) => v.length === 0)
+)
+
 const chartCanvas = useTemplateRef<HTMLCanvasElement>('chartCanvas')
 const chartTitle = computed(() => props.indicator.title ?? '')
 
-useIndicatorVizChart(chartCanvas, series, indicatorExtras, chartTitle)
+const { hasNoData } = useIndicatorVizChart(
+  chartCanvas,
+  series,
+  indicatorExtras,
+  chartTitle
+)
 
 onMounted(() => {
   debug.log(`🔍 Indicator ${props.indicator.id} extras:`, indicatorExtras.value)
@@ -135,11 +142,31 @@ onMounted(() => {
         />
       </div>
 
-      <div v-if="error" class="error-container">
-        Erreur lors du chargement : <em>{{ error }}</em>
-      </div>
+      <DsfrAlert
+        v-if="error"
+        type="error"
+        :description="`Erreur lors du chargement : ${error}`"
+        :small="true"
+        class="fr-mt-4w"
+      />
 
-      <div v-if="!isOneYear && !error" class="canvas-container">
+      <DsfrAlert
+        v-else-if="hasNoAxisSelected && !isLoading"
+        type="info"
+        description="Aucune valeur d'axe sélectionnée."
+        :small="true"
+        class="fr-mt-4w"
+      />
+
+      <DsfrAlert
+        v-else-if="hasNoData && !isLoading"
+        type="info"
+        description="Aucune donnée disponible pour le territoire sélectionné."
+        :small="true"
+        class="fr-mt-4w"
+      />
+
+      <div v-else-if="!isOneYear" class="canvas-container">
         <div v-if="isLoading" class="loading-overlay">
           <span class="loading-text">Chargement...</span>
         </div>
@@ -150,7 +177,7 @@ onMounted(() => {
       </div>
 
       <IndicatorVizOneYearValue
-        v-if="isOneYear && series[0]?.data[0]"
+        v-else-if="isOneYear && series[0]?.data[0]"
         :year="series[0].data[0].x"
         :value="series[0].data[0].y"
         :unite="indicatorExtras.unite"
@@ -227,11 +254,6 @@ onMounted(() => {
 .loading-text {
   font-size: 0.875rem;
   color: #666;
-}
-
-.error-container {
-  margin-top: 32px;
-  margin-bottom: 32px;
 }
 
 :deep(label) {
