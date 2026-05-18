@@ -16,12 +16,8 @@ const currentPage = ref(1)
 const { pagination } = storeToRefs(store)
 const organizations: Ref<Organization[]> = ref([])
 
-const links = computed(() => [
-  { to: '/', text: 'Accueil' },
-  { text: 'Organisations' }
-])
-
-const title: string = config.website.formatted_title
+const title = config.organizations?.list?.breadcrumb_title || 'Organisations'
+const links = computed(() => [{ to: '/', text: 'Accueil' }, { text: title }])
 
 async function onUpdatePage(page: number) {
   const loader = $loading.show()
@@ -44,11 +40,7 @@ onMounted(() => {
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
   <GenericContainer>
-    <h1 class="fr-mb-2v">Organisations</h1>
-    <p>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      Parcourir toutes les organisations présentes sur <span v-html="title" />.
-    </p>
+    <h1 class="fr-mb-5v">{{ title }}</h1>
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li
         v-for="org in organizations"

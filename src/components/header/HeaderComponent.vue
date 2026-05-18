@@ -43,7 +43,6 @@ const showLogoOperatorInHeader =
 const showBadge = config.website.badge.display
 const badgeText = config.website.badge.text
 const badgeStyle = config.website.badge.style
-const dropdown = config.website.header.search.dropdown ?? undefined
 </script>
 
 <template>
@@ -89,11 +88,10 @@ const dropdown = config.website.header.search.dropdown ?? undefined
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="customSearch"
+        v-if="customSearch && showSearch"
         id="header-select-search"
         class="custom-search"
         :search-label="searchLabel"
-        :dropdown="dropdown"
         :placeholder="searchLabel"
         @do-search="closeModal"
       />

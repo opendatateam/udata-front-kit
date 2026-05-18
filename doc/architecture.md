@@ -61,7 +61,7 @@ Les composants utilisés dans le front-kit proviennent de trois sources :
 
 ### Paramétrage des pages
 
-Chaque entrée sous `pages` dans `config.yaml` correspond à une page de liste (jeux de données, API, bouquets…). Les principales clés sont :
+Chaque entrée sous `pages` dans `config.yaml` correspond à une page de liste (jeux de données, API, collections…). Les principales clés sont :
 
 | Clé              | Description                                                                                                         |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -220,12 +220,12 @@ Le routeur principal (`src/router/index.ts`) charge les routes communes (organis
 
 Le fichier `routes.ts` d'une verticale s'appuie sur les fonctions utilitaires de `src/router/utils.ts` pour déclarer des pages de liste/détail sans avoir à câbler manuellement toutes les vues. Les principales fonctions disponibles sont :
 
-| Fonction                         | Usage                                                   |
-| -------------------------------- | ------------------------------------------------------- |
-| `useDatasetSearchPageRoutes`     | Page de liste/détail de jeux de données                 |
-| `useDataserviceSearchPageRoutes` | Page de liste/détail d'API                              |
-| `useTopicSearchPageRoutes`       | Page de liste/détail de bouquets (topics)               |
-| `useTopicAdminPagesRoutes`       | Pages d'administration des bouquets (création, édition) |
+| Fonction                         | Usage                                                      |
+| -------------------------------- | ---------------------------------------------------------- |
+| `useDatasetSearchPageRoutes`     | Page de liste/détail de jeux de données                    |
+| `useDataserviceSearchPageRoutes` | Page de liste/détail d'API                                 |
+| `useTopicSearchPageRoutes`       | Page de liste/détail de collections (topics)               |
+| `useTopicAdminPagesRoutes`       | Pages d'administration des collections (création, édition) |
 
 Chaque appel prend un `pageKey` qui **doit correspondre à une clé sous `pages` dans `config.yaml`**. C'est ce lien qui permet aux vues génériques de lire la configuration (titre, filtres, univers, labels…) via `useCurrentPageConf()`.
 
@@ -256,7 +256,7 @@ Ici, les indicateurs réutilisent entièrement l'infrastructure de liste des jeu
 
 ### Architecture typique d'une page de liste
 
-Toutes les pages de liste (jeux de données, API, bouquets, indicateurs…) partagent la même architecture de composants. La vue générique `DataListView` orchestre l'ensemble :
+Toutes les pages de liste (jeux de données, API, collections, indicateurs…) partagent la même architecture de composants. La vue générique `DataListView` orchestre l'ensemble :
 
 ```
 DataListView (src/views/data/DataListView.vue)

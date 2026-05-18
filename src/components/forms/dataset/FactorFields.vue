@@ -7,6 +7,7 @@ import { Availability, ResolvedFactor, type FactorsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
 
 import ErrorMessage from '../ErrorMessage.vue'
 import SelectTopicFactorGroup from '../SelectTopicFactorGroup.vue'
@@ -40,7 +41,8 @@ defineProps({
 const router = useRouter()
 const datasetStore = useDatasetStore()
 const { pageConf } = useCurrentPageConf()
-const { getErrorMessage } = useForm(formErrors, pageConf.labels.singular)
+const labels = useLabels(pageConf.labels)
+const { getErrorMessage } = useForm(formErrors, labels.singular)
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 

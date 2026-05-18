@@ -1,6 +1,10 @@
-import type { Topic } from '@/model/topic'
+import {
+  createTestTopic,
+  mockTopicAndRelatedObjects,
+  mockTopicElementsByClass
+} from './support'
 
-describe('Ecospheres - Topic (Bouquet) Creation', () => {
+describe('Ecospheres - Topic (Collection) Creation', () => {
   const universeTag =
     Cypress.env('siteConfig').pages.bouquets.universe_query.tag
 
@@ -17,32 +21,28 @@ describe('Ecospheres - Topic (Bouquet) Creation', () => {
     })
   })
 
-  it('should create a bouquet with correctly formatted tags from filter selection', () => {
-    // Visit the bouquet creation page
+  it('should create a collection with correctly formatted tags from filter selection', () => {
+    // Visit the collection creation page
     cy.visit('/admin/bouquets/add')
 
-    // Mock the POST request for creating the topic/bouquet
-    cy.intercept('POST', '**/topics/', (req) => {
-      // Create a response based on the request body
-      const createdTopic: Topic = {
-        ...req.body,
-        id: 'created-topic-id-123',
-        slug: 'test-bouquet-slug',
-        created_at: new Date().toISOString(),
-        last_modified: new Date().toISOString(),
-        page: 'bouquets'
-      }
+    const createdTopic = createTestTopic({ slug: 'test-bouquet-slug' })
 
+    // Mock the POST request for creating the topic/collection
+    cy.intercept('POST', '**/topics/', (req) => {
       req.reply({
         statusCode: 201,
-        body: createdTopic
+        body: { ...createdTopic, ...req.body }
       })
     }).as('createTopic')
 
+    // Mock detail-page APIs triggered after redirect
+    mockTopicAndRelatedObjects(createdTopic)
+    mockTopicElementsByClass(createdTopic.id, [], [], [])
+
     // Fill in the required form fields
-    cy.get('#input-name').type('Test Bouquet for Filter Tags')
+    cy.get('#input-name').type('Test Collection for Filter Tags')
     cy.get('#input-description').type(
-      'This bouquet tests that filter selections generate correct tag payloads'
+      'This collection tests that filter selections generate correct tag payloads'
     )
 
     // Select a theme from the filter dropdown
@@ -58,7 +58,7 @@ describe('Ecospheres - Topic (Bouquet) Creation', () => {
 
       expect(requestBody).to.have.property(
         'name',
-        'Test Bouquet for Filter Tags'
+        'Test Collection for Filter Tags'
       )
       expect(requestBody).to.have.property('description')
       expect(requestBody).to.have.property('tags')
@@ -75,7 +75,7 @@ describe('Ecospheres - Topic (Bouquet) Creation', () => {
   })
 
   it('should populate tags from query string filters on initial load', () => {
-    // Visit the bouquet creation page with theme filter in query string
+    // Visit the collection creation page with theme filter in query string
     cy.visit('/admin/bouquets/add?theme=mieux-se-loger')
 
     // The form should pre-populate with the theme from query string

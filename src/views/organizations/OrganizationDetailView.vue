@@ -5,6 +5,7 @@ import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   AccessibilityPropertiesKey,
@@ -14,6 +15,7 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
+import { useCanonical } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
@@ -25,7 +27,10 @@ const org = computed(() => orgStore.get(organizationId))
 
 const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
-  { to: '/organizations', text: 'Organisations' }
+  {
+    to: '/organizations',
+    text: config.organizations?.list?.breadcrumb_title || 'Organisations'
+  }
 ])
 
 const currentPage = ref(1)
@@ -36,6 +41,8 @@ const selectedSort: Ref<string | undefined> = ref(undefined)
 const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
+
+useCanonical(() => org.value?.page)
 
 onMounted(() => {
   orgStore

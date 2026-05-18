@@ -136,7 +136,7 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   return createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
-    scrollBehavior(to, _from, savedPosition) {
+    scrollBehavior(to, from, savedPosition) {
       // Skip auto-scroll for factor hashes - we handle scrolling manually in TopicDetailView
       if (to.hash.startsWith('#factor-')) {
         return false
@@ -145,6 +145,10 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
         return {
           el: to.hash
         }
+      }
+      // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
+      if (to.meta.searchConfig && from.meta.searchConfig) {
+        return false
       }
       if (savedPosition !== null) {
         return savedPosition

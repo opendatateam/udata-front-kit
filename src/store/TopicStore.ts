@@ -6,20 +6,11 @@ import type { BaseParams } from '@/model/api'
 import type { TopicItemConf } from '@/model/config'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { usePageQueryParams } from '@/utils/filters'
 import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI({ version: 2 })
-
-interface QueryArgs {
-  query: string
-  page: string
-  include_private?: string
-  page_size?: string
-  featured?: string
-}
 
 export interface RootState {
   topics: Topic[]
@@ -57,23 +48,6 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
-      const { query, ...queryArgs } = args
-
-      const params = usePageQueryParams(pageKey || 'topics', queryArgs)
-
-      const results = await topicsAPI.list({
-        params: {
-          q: query,
-          page_size: config.website.pagination_sizes.topics_list,
-          ...params
-        },
-        authenticated: true
-      })
-      this.topics = results.data
-      this.total = results.total
-      return this.topics
-    },
     /**
      * Load topics to store from a list of ids and API
      */
@@ -94,7 +68,8 @@ export const useTopicStore = defineStore('topic', {
       await useUserStore().waitForStoreInit()
       let response = await topicsAPI.list({
         params: {
-          include_private: 'yes',
+          // TODO: remove include_private when all servers migrated to private param
+          include_private: 'true',
           sort: '-last_modified',
           ...mergedApiParams
         },
