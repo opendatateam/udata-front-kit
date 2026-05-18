@@ -53,12 +53,12 @@ describe('Topics - Drafts Page', () => {
         })
       })
 
-      it('should show the Brouillon badge on each card', () => {
+      it('should not show the Brouillon badge on topic card', () => {
         const drafts = topicFactory.many(2, { overrides: { private: true } })
         mockDraftsApi(drafts)
         cy.visit('/admin/bouquets/drafts')
         cy.wait('@get_drafts')
-        cy.get('.fr-badge').contains('Brouillon').should('be.visible')
+        cy.get('.fr-badge').should('not.exist')
       })
 
       it('should send private=true and universe tag to API', () => {
@@ -107,6 +107,16 @@ describe('Topics - Drafts Page', () => {
         cy.wait('@get_drafts').then((interception) => {
           expect(interception.request.url).to.match(/[?&]q=abc(?:&|$)/)
         })
+      })
+
+      it('should not auto-search when typing fewer than 3 characters', () => {
+        const drafts = topicFactory.many(2, { overrides: { private: true } })
+        mockDraftsApi(drafts)
+        cy.visit('/admin/bouquets/drafts')
+        cy.wait('@get_drafts')
+
+        cy.get('.fr-search-bar input').type('ab')
+        cy.get('@get_drafts.all').should('have.length', 1)
       })
 
       it('should show search-specific empty state when search returns no results', () => {
