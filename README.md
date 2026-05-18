@@ -262,6 +262,7 @@ Le déploiement des verticales thématiques en preprod et en production peut s'e
     - `defis` - Site défis
     - `hackathon` - Site hackathon
     - `simplifions` - Site simplifions
+    - `accessibilite` - Site accessibilite
 - `<version_type>` : Type de version (`major`, `minor`, ou `patch`)
 
 **Exemple :**
