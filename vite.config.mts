@@ -113,16 +113,7 @@ export default defineConfig(({ mode }) => {
     },
     esbuild: esbuildOptions,
     build: {
-      sourcemap: true, // Source map generation must be turned on for sentry integration
-      rollupOptions: {
-        treeshake: {
-          // @datagouv/components-next doesn't declare sideEffects:false, so Rollup
-          // would otherwise bundle the unused ChartViewer component and its echarts
-          // dependency (~14MB) even though this app never renders ChartViewer.
-          // FIXME: sideEffects: false should be set upstream
-          moduleSideEffects: (id) => !id.includes('@datagouv/components-next')
-        }
-      }
+      sourcemap: true // Source map generation must be turned on for sentry integration
     },
     optimizeDeps: {
       // Some `@datagouv/components-next` dependencies aren't scanned by Vite dev server.
