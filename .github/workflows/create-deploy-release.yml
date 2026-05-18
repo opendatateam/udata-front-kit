@@ -125,20 +125,6 @@ jobs:
           echo "VERSION_TYPE=$VERSION_TYPE" >> $GITHUB_ENV
         working-directory: ${{ env.APP_NAME }}
 
-      - name: Setup SSH keys and Git configuration
-        shell: bash
-        run: |
-          # Configure SSH private key for GitLab access
-          mkdir -p ~/.ssh
-          echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-          ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
-
-          # Configure Git identity
-          git config --global user.email "root@data.gouv.fr"
-          git config --global user.name "datagouv"
-
       - name: Set next release version
         shell: bash
         run: |
