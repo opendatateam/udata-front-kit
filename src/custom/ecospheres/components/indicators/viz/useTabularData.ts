@@ -52,7 +52,9 @@ export function useTabularData(
       resource.extras['ecospheres-indicateurs']?.axes ?? {}
     )
     return axisKeys.reduce<Record<string, string[]>>((acc, axis) => {
-      acc[axis] = [...new Set(rawData.value.map((row) => String(row[axis])))]
+      acc[axis] = [
+        ...new Set(rawData.value.map((row) => String(row[axis])))
+      ].sort()
       return acc
     }, {})
   })
