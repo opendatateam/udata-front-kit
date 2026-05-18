@@ -96,12 +96,26 @@ const createUrl = computed(() => ({
         v-if="
           pageConf.object_type === 'topics' && userStore.canAddTopic(pageKey)
         "
-        class="fr-col-auto fr-grid-row fr-grid-row--middle"
+        class="fr-col-auto fr-grid-row fr-grid-row--middle fr-grid-row--gutters"
       >
-        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-          <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
-          Ajouter {{ labels.articles.un }} {{ labels.singular }}
-        </router-link>
+        <div class="fr-col-auto">
+          <router-link :to="createUrl" class="fr-btn fr-mb-1w">
+            <VIconCustom
+              name="add-circle-line"
+              class="fr-mr-1w"
+              align="middle"
+            />
+            Ajouter {{ labels.articles.un }} {{ labels.singular }}
+          </router-link>
+        </div>
+        <div class="fr-col-auto">
+          <router-link
+            :to="{ name: `${pageKey}_drafts` }"
+            class="fr-btn fr-btn--secondary fr-mb-1w"
+          >
+            Mes brouillons
+          </router-link>
+        </div>
       </div>
     </div>
   </div>

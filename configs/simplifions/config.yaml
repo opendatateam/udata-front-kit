@@ -139,7 +139,7 @@ website:
   # debounce high enough for accessibility (screen readers will announce results)
   default_debounce_wait: 600
   pagination_sizes:
-    topics_list: 10
+    topics_drafts_list: 9
     files_list: 6
   contact_email: contact@api.gouv.fr
   home_banner_colors:
