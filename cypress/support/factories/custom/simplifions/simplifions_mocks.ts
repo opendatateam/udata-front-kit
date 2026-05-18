@@ -16,11 +16,14 @@ import {
 } from './grist_factory'
 import { topicCasUsageFactory, topicSolutionFactory } from './topics_factory'
 
-export const mockCasUsage = (gristCasUsageFields = {}, topicFields = {}) => {
+export const mockCasUsage = (
+  topicFields = {},
+  recommandations: { id: number }[] = []
+) => {
   const gristCasUsage = gristCasUsageFactory.one({
     overrides: {
       fields: {
-        ...gristCasUsageFields
+        Recommandations: recommandations.map((r) => r.id)
       }
     }
   })
@@ -36,6 +39,7 @@ export const mockCasUsage = (gristCasUsageFields = {}, topicFields = {}) => {
     }
   })
 
+  cy.mockGristRecords('Recommandations', recommandations)
   cy.mockGristRecords('Cas_d_usages', [gristCasUsage])
   cy.mockDatagouvObject('topics', topicCasUsage.slug, topicCasUsage)
   cy.mockDatagouvObjectListWithTags(
@@ -82,7 +86,6 @@ export const mockSolutionRecommandation = (recommandationFields = {}) => {
     }
   }
 
-  cy.mockGristRecords('Recommandations', [gristRecommandation])
   cy.mockGristRecord('Solutions', gristSolutionRecommandee)
   cy.mockDatagouvObject(
     'topics',
@@ -123,8 +126,6 @@ export const mockApidatasetRecommandations = (
       }
     })
   })
-
-  cy.mockGristRecords('Recommandations', gristRecommandations)
 
   return { gristApisAndDatasets, gristRecommandations, dataservicesOrDatasets }
 }
