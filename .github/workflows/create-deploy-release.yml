@@ -17,6 +17,7 @@ on:
           - hackathon
           - simplifions
           - culture
+          - accessibilite
       environment:
         description: 'Environment to deploy to'
         required: true
@@ -63,22 +64,15 @@ jobs:
       ENV: ${{ github.event.inputs.environment }}
       VERSION_TYPE: ${{ github.event.inputs.version_type }}
     steps:
-      - name: Debug event and set env vars if workflow inputs are set
+      - name: Debug event
         run: |
           echo "Event name: ${{ github.event_name }}"
           echo "Repository: ${{ github.repository }}"
           echo "Branch: ${{ github.ref }}"
           echo "SHA: ${{ github.sha }}"
-          echo "---"
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Workflow inputs:"
-            echo "ENV=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
-            echo "CONFIG_NAME=${{ github.event.inputs.site }}" >> $GITHUB_ENV
-            echo "VERSION_TYPE=${{ github.event.inputs.version_type }}" >> $GITHUB_ENV
-          else
-            echo "Tag-based trigger:"
-            echo "Tag: ${{ github.ref_name }}"
-          fi
+          echo "CONFIG_NAME: $CONFIG_NAME"
+          echo "ENV: $ENV"
+          echo "VERSION_TYPE: $VERSION_TYPE"
       - name: Configure environment
         shell: bash
         run: |
@@ -86,7 +80,6 @@ jobs:
           echo "REPO_HTTPS_URL=${{ github.server_url }}/${{ github.repository }}.git" >> $GITHUB_ENV
           echo "REPO_SSH_URL=git@github.com:${{ github.repository }}.git" >> $GITHUB_ENV
           echo "REPO_CURRENT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
-          echo "SCAFFOLD_DIR=scaffold" >> $GITHUB_ENV
 
           # configure the SSH deploy private key
           mkdir -p ~/.ssh
