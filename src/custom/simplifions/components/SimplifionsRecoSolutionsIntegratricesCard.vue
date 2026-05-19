@@ -151,7 +151,7 @@ const getShortLabelSimplificationTag = (name: string) => {
 .solution-integratrice-card {
   background-color: white;
   border-bottom: 4px solid var(--blue-france-sun-113-625);
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 4rem;
   position: relative;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
