@@ -31,8 +31,6 @@ website:
     robots_txt:
       disallow:
         - /admin
-        - /datasets
-        - /organizations
     # sitemap.xml content (consumed by udata-front-kit-seo)
     sitemap_xml:
       topics_pages: []
