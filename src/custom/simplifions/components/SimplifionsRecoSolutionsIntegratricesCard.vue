@@ -48,26 +48,29 @@
       <!-- Score d'intégration -->
       <div
         v-if="integrationScore && integrationScore.totalCount > 0"
-        class="solution-integratrice-card__score fr-mt-2w"
+        class="integration-indicator fr-p-1w fr-mt-2w"
       >
-        <div class="score-indicator fr-p-1w">
-          <span :class="['score-count fr-text--sm fr-text--bold', colorClass]">
-            {{ integrationScore.integratedCount }}/{{
-              integrationScore.totalCount
-            }}
-          </span>
-          <TooltipWrapper placement="top">
-            <template #trigger>
-              <span class="score-label fr-text--xs">
-                {{ typeLabel ?? 'API' }} utiles {{ nomFournisseur }}
-              </span>
-            </template>
-            {{ integrationScore.integratedCount }} {{ typeLabel ?? 'API' }} "{{
-              nomFournisseur
-            }}" sur les {{ integrationScore.totalCount }} utiles pour ce cas
-            d'usage ont été intégrées par cette solution.
-          </TooltipWrapper>
-        </div>
+        <span
+          :class="[
+            'integration-indicator__count fr-text--sm fr-text--bold',
+            colorClass
+          ]"
+        >
+          {{ integrationScore.integratedCount }}/{{
+            integrationScore.totalCount
+          }}
+        </span>
+        <TooltipWrapper placement="top">
+          <template #trigger>
+            <span class="integration-indicator__label fr-text--xs">
+              {{ typeLabel ?? 'API' }} utiles {{ nomFournisseur }}
+            </span>
+          </template>
+          {{ integrationScore.integratedCount }} {{ typeLabel ?? 'API' }} "{{
+            nomFournisseur
+          }}" sur les {{ integrationScore.totalCount }} utiles pour ce cas
+          d'usage ont été intégrées par cette solution.
+        </TooltipWrapper>
       </div>
 
       <!-- Arrow -->
@@ -137,6 +140,8 @@ const getShortLabelSimplificationTag = (name: string) => {
 </script>
 
 <style scoped>
+@import './integration-indicator.css';
+
 .solution-integratrice-card-link {
   display: block;
   text-decoration: none;
@@ -152,11 +157,11 @@ const getShortLabelSimplificationTag = (name: string) => {
 }
 
 .solution-integratrice-card:hover {
-  background-color: #f9f9f9;
+  background-color: var(--background-alt-grey);
 }
 
 .solution-integratrice-card--loading {
-  background-color: #f9f9f9;
+  background-color: var(--background-alt-grey);
   padding: 2rem;
 }
 
@@ -197,40 +202,6 @@ const getShortLabelSimplificationTag = (name: string) => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-.score-indicator {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  background-color: var(--background-alt-grey);
-  border-radius: 4px;
-}
-
-.score-indicator > * {
-  margin: 0 !important;
-}
-
-.score-label {
-  color: var(--text-mention-grey);
-  text-decoration: underline dotted;
-  text-underline-offset: 2px;
-}
-
-.score-count.indicator--green {
-  background-color: rgb(184, 254, 201);
-}
-
-.score-count.indicator--yellow {
-  background-color: rgb(254, 240, 184);
-}
-
-.score-count.indicator--orange {
-  background-color: rgb(254, 224, 184);
-}
-
-.score-count.indicator--red {
-  background-color: rgb(254, 201, 201);
 }
 
 @media (max-width: 767px) {
