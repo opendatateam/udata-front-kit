@@ -45,6 +45,31 @@
         </div>
       </div>
 
+      <!-- Score d'intégration -->
+      <div
+        v-if="integrationScore && integrationScore.totalCount > 0"
+        class="solution-integratrice-card__score fr-mt-2w"
+      >
+        <div class="score-indicator fr-p-1w">
+          <span :class="['score-count fr-text--sm fr-text--bold', colorClass]">
+            {{ integrationScore.integratedCount }}/{{
+              integrationScore.totalCount
+            }}
+          </span>
+          <TooltipWrapper placement="top">
+            <template #trigger>
+              <span class="score-label fr-text--xs">
+                {{ typeLabel ?? 'API' }} utiles {{ nomFournisseur }}
+              </span>
+            </template>
+            {{ integrationScore.integratedCount }} {{ typeLabel ?? 'API' }} "{{
+              nomFournisseur
+            }}" sur les {{ integrationScore.totalCount }} utiles pour ce cas
+            d'usage ont été intégrées par cette solution.
+          </TooltipWrapper>
+        </div>
+      </div>
+
       <!-- Arrow -->
       <div class="solution-integratrice-card__arrow fr-mt-0">
         <span
@@ -63,6 +88,7 @@
 </template>
 
 <script setup lang="ts">
+import TooltipWrapper from '@/components/TooltipWrapper.vue'
 import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
 import type { SolutionRecord } from '../model/grist'
@@ -71,6 +97,9 @@ import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.v
 
 const props = defineProps<{
   solution: SolutionRecord
+  integrationScore?: { integratedCount: number; totalCount: number }
+  nomFournisseur?: string
+  typeLabel?: string
 }>()
 
 const solutionTopic = ref<Topic | undefined>(undefined)
@@ -87,6 +116,16 @@ const topicTags = useTagsByRef('solutions', solutionTopic)
 
 const simplificationTags = computed(() => {
   return topicTags.value.filter((tag) => tag.type === 'types-de-simplification')
+})
+
+const colorClass = computed(() => {
+  if (!props.integrationScore) return ''
+  const { integratedCount, totalCount } = props.integrationScore
+  const pct = totalCount > 0 ? (integratedCount / totalCount) * 100 : 0
+  if (pct >= 75) return 'indicator--green'
+  if (pct >= 50) return 'indicator--yellow'
+  if (pct >= 25) return 'indicator--orange'
+  return 'indicator--red'
 })
 
 const getShortLabelSimplificationTag = (name: string) => {
@@ -158,6 +197,40 @@ const getShortLabelSimplificationTag = (name: string) => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.score-indicator {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  background-color: var(--background-alt-grey);
+  border-radius: 4px;
+}
+
+.score-indicator > * {
+  margin: 0 !important;
+}
+
+.score-label {
+  color: var(--text-mention-grey);
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+.score-count.indicator--green {
+  background-color: rgb(184, 254, 201);
+}
+
+.score-count.indicator--yellow {
+  background-color: rgb(254, 240, 184);
+}
+
+.score-count.indicator--orange {
+  background-color: rgb(254, 224, 184);
+}
+
+.score-count.indicator--red {
+  background-color: rgb(254, 201, 201);
 }
 
 @media (max-width: 767px) {

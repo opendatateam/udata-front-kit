@@ -177,6 +177,11 @@
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard
                       :solution="solution"
+                      :integration-score="
+                        integrationScorePerSolution.get(solution.id)
+                      "
+                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                      :type-label="typeLabel"
                     />
                   </div>
                 </div>
@@ -207,6 +212,11 @@
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard
                       :solution="solution"
+                      :integration-score="
+                        integrationScorePerSolution.get(solution.id)
+                      "
+                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                      :type-label="typeLabel"
                     />
                   </div>
                 </div>
@@ -245,6 +255,11 @@
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard
                       :solution="solution"
+                      :integration-score="
+                        integrationScorePerSolution.get(solution.id)
+                      "
+                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                      :type-label="typeLabel"
                     />
                   </div>
                 </div>
@@ -268,6 +283,7 @@
 import { fromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type {
+  ApiEtDatasetsIntegresRecord,
   ApiOrDatasetRecord,
   ApiOrDatasetUtiles,
   ApiOrDatasetUtilesRecord,
@@ -413,6 +429,54 @@ if (
     integratingSolutionsPortailsConsultation.value = solutions
   })
 }
+
+const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
+
+if (recommandation.Solution_recommandee) {
+  grist
+    .getRecords('API_et_datasets_integres', {
+      Solution_fournisseur: [recommandation.Solution_recommandee]
+    })
+    .then((data) => {
+      apiEtDatasetsIntegres.value = data as ApiEtDatasetsIntegresRecord[]
+    })
+}
+
+const integrationScorePerSolution = computed(() => {
+  const map = new Map<number, { integratedCount: number; totalCount: number }>()
+  const usefulApiIds = recommandation.API_et_datasets_utiles_fournis ?? []
+  const totalCount = usefulApiIds.length
+  if (totalCount === 0) return map
+
+  const casUsageId = recommandation.Cas_d_usage
+  const relevantIntegrations = apiEtDatasetsIntegres.value.filter(
+    (i) =>
+      i.fields.Integre_pour_les_cas_d_usages?.includes(casUsageId) &&
+      usefulApiIds.includes(i.fields.API_ou_dataset_integre)
+  )
+
+  const allSolutionIds = [
+    ...(recommandation.Solutions_integratrices_categorie_logiciel_metier ?? []),
+    ...(recommandation.Solutions_integratrices_categorie_briques_techniques ??
+      []),
+    ...(recommandation.Solutions_integratrices_categorie_portail_de_consultation ??
+      [])
+  ]
+  allSolutionIds.forEach((solutionId) => {
+    const integratedCount = relevantIntegrations.filter(
+      (i) => i.fields.Solution_integratrice === solutionId
+    ).length
+    map.set(solutionId, { integratedCount, totalCount })
+  })
+  return map
+})
+
+const typeLabel = computed(() => {
+  const t = recommandation.Type_de_recommandation
+  if (t === 'API') return 'API'
+  if (t === 'Jeu de données') return 'jeu de données'
+  return 'API ou jeu de données'
+})
 
 const activeApiAccordion = ref(-1)
 const activeIntegratingAccordion = ref(0)

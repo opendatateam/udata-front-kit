@@ -59,7 +59,8 @@ export const gristRecommandationFactory = build<RecommandationRecord>({
       access_link_with_fallback: '',
       Solutions_integratrices_categorie_logiciel_metier: [],
       Solutions_integratrices_categorie_briques_techniques: [],
-      Solutions_integratrices_categorie_portail_de_consultation: []
+      Solutions_integratrices_categorie_portail_de_consultation: [],
+      Type_de_recommandation: null
     }
   }
 })
