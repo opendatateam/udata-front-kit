@@ -283,7 +283,6 @@
 import { fromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type {
-  ApiEtDatasetsIntegresRecord,
   ApiOrDatasetRecord,
   ApiOrDatasetUtiles,
   ApiOrDatasetUtilesRecord,
@@ -430,45 +429,28 @@ if (
   })
 }
 
-const apiEtDatasetsIntegres = ref<ApiEtDatasetsIntegresRecord[]>([])
-
-if (recommandation.Solution_recommandee) {
-  grist
-    .getRecords('API_et_datasets_integres', {
-      Solution_fournisseur: [recommandation.Solution_recommandee]
-    })
-    .then((data) => {
-      apiEtDatasetsIntegres.value = data as ApiEtDatasetsIntegresRecord[]
-    })
-}
+const usefulApiIds = new Set(
+  recommandation.API_et_datasets_utiles_fournis ?? []
+)
 
 const integrationScorePerSolution = computed(() => {
-  const map = new Map<number, { integratedCount: number; totalCount: number }>()
-  const usefulApiIds = recommandation.API_et_datasets_utiles_fournis ?? []
-  const totalCount = usefulApiIds.length
-  if (totalCount === 0) return map
-
-  const casUsageId = recommandation.Cas_d_usage
-  const relevantIntegrations = apiEtDatasetsIntegres.value.filter(
-    (i) =>
-      i.fields.Integre_pour_les_cas_d_usages?.includes(casUsageId) &&
-      usefulApiIds.includes(i.fields.API_ou_dataset_integre)
-  )
-
-  const allSolutionIds = [
-    ...(recommandation.Solutions_integratrices_categorie_logiciel_metier ?? []),
-    ...(recommandation.Solutions_integratrices_categorie_briques_techniques ??
-      []),
-    ...(recommandation.Solutions_integratrices_categorie_portail_de_consultation ??
-      [])
+  const totalCount = usefulApiIds.size
+  const allSolutions = [
+    ...integratingSolutionsLogicielsMetiers.value,
+    ...integratingSolutionsBriquesTechniques.value,
+    ...integratingSolutionsPortailsConsultation.value
   ]
-  allSolutionIds.forEach((solutionId) => {
-    const integratedCount = relevantIntegrations.filter(
-      (i) => i.fields.Solution_integratrice === solutionId
-    ).length
-    map.set(solutionId, { integratedCount, totalCount })
-  })
-  return map
+  return new Map(
+    allSolutions.map((solution) => [
+      solution.id,
+      {
+        integratedCount: (
+          solution.fields.API_ou_datasets_integres ?? []
+        ).filter((id) => usefulApiIds.has(id)).length,
+        totalCount
+      }
+    ])
+  )
 })
 
 const typeLabel = computed(() => {
