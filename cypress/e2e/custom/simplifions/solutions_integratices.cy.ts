@@ -230,7 +230,10 @@ describe('Solutions intégratrices block', () => {
 
     cy.get('.cas-usage-card').should('have.length', 1)
     cy.get('.cas-usage-card').should('contain.text', 'Marchés publics')
-    cy.get('.cas-usage-card .indicator-count').should('contain.text', '2/3')
+    cy.get('.cas-usage-card .integration-indicator__count').should(
+      'contain.text',
+      '2/3'
+    )
   })
 
   it('should group solutions by category in tabs', () => {
