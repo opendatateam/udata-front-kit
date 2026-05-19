@@ -21,7 +21,6 @@ website:
     robots_txt:
       disallow:
         - /admin
-        - /datasets
     sitemap_xml:
       topics_pages:
         - themes
