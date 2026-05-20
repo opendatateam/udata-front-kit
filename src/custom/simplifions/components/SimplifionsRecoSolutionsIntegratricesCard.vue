@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <!-- Score d'intégration -->
+      <!-- Integration score -->
       <div
         v-if="integrationScore && integrationScore.totalCount > 0"
         class="integration-indicator fr-p-1w fr-mt-2w"
