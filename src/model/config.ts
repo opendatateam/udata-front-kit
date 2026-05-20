@@ -20,6 +20,9 @@ export interface StaticPageConfig {
   id: string
   route: string
   url: string
+  meta?: {
+    description?: string
+  }
 }
 
 export interface MenuConfig {
