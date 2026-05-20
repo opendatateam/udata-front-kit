@@ -50,6 +50,10 @@ export function useMeta({
   noIndex?: ReactiveInput<boolean | undefined>
 }) {
   const args = {
+    title: () => {
+      const t = toValue(title)
+      return t ? `${t} | ${config.website.title}` : config.website.title
+    },
     meta: () => {
       const t = toValue(title)
       const metaDescription = toMetaDescription(toValue(description))
@@ -57,7 +61,7 @@ export function useMeta({
       return [
         {
           property: 'og:title',
-          content: t ? `${t} | ${config.website.title}` : config.website.title
+          content: t || config.website.title
         },
         { name: 'description', content: metaDescription },
         { property: 'og:description', content: metaDescription },

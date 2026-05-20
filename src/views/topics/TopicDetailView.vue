@@ -230,6 +230,14 @@ useMeta({
   noIndex: () => topic.value?.private
 })
 
+watch(
+  metaTitle,
+  (t) => {
+    if (t) setAccessibilityProperties(t)
+  },
+  { immediate: true }
+)
+
 // Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
 watch(
   () => router.currentRoute.value.hash,
@@ -279,7 +287,6 @@ watch(
             params: { item_id: topic.value.slug }
           })
         }
-        setAccessibilityProperties(metaTitle.value)
       })
       .finally(() => {
         // Only auto-hide if there's no custom description component

@@ -42,18 +42,26 @@ const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
+const pageTitle = computed(() =>
+  org.value?.name ? `Organisation - ${org.value.name}` : undefined
+)
+
 useMeta({
-  title: () => org.value?.name && `Organisation - ${org.value.name}`,
+  title: pageTitle,
   description: () => org.value?.description,
   canonicalUrl: () => org.value?.page
 })
 
+watch(
+  pageTitle,
+  (t) => {
+    if (t) setAccessibilityProperties(t)
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
-  orgStore
-    .load(organizationId, -1, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      setAccessibilityProperties(org.value?.name)
-    })
+  orgStore.load(organizationId, -1, { toasted: false, redirectNotFound: true })
 })
 
 const sorts = [

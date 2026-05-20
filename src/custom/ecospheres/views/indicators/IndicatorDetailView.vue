@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { capitalize, computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, inject, onMounted, ref, watch } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -93,10 +93,14 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 
+const pageTitle = computed(() =>
+  indicator.value?.title
+    ? `${capitalize(labels.singular)} - ${indicator.value.title}`
+    : undefined
+)
+
 useMeta({
-  title: () =>
-    indicator.value?.title &&
-    `${capitalize(labels.singular)} - ${indicator.value.title}`,
+  title: pageTitle,
   description: () => indicator.value?.description,
   canonicalUrl: useCanonicalUrl(() => {
     const slug = indicator.value?.slug
@@ -105,11 +109,18 @@ useMeta({
   })
 })
 
+watch(
+  pageTitle,
+  (t) => {
+    if (t) setAccessibilityProperties(t)
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
   datasetStore
     .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(indicator.value?.title)
       if (indicator.value?.slug && indicator.value.slug !== indicatorId) {
         router.push({
           name: 'indicators_detail',

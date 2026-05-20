@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { capitalize, computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, inject, onMounted, ref, watch } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -136,19 +136,30 @@ const exploreUrl = computed(() => {
   )
 })
 
+const pageTitle = computed(() =>
+  dataset.value?.title
+    ? `${capitalize(labels.singular)} - ${dataset.value.title}`
+    : undefined
+)
+
 useMeta({
-  title: () =>
-    dataset.value?.title &&
-    `${capitalize(labels.singular)} - ${dataset.value.title}`,
+  title: pageTitle,
   description: () => dataset.value?.description,
   canonicalUrl: () => dataset.value?.page
 })
+
+watch(
+  pageTitle,
+  (t) => {
+    if (t) setAccessibilityProperties(t)
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   datasetStore
     .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(dataset.value?.title)
       if (dataset.value) {
         computeOgcInfo(dataset.value.id).catch((err) =>
           console.error('Failed to compute OGC info:', err)

@@ -111,21 +111,30 @@ const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
 
+const pageTitle = computed(() =>
+  dataservice.value?.title
+    ? `${capitalize(labels.singular)} - ${dataservice.value.title}`
+    : undefined
+)
+
 useMeta({
-  title: () =>
-    dataservice.value?.title &&
-    `${capitalize(labels.singular)} - ${dataservice.value.title}`,
+  title: pageTitle,
   description: () => dataservice.value?.description,
   canonicalUrl: () => dataservice.value?.self_web_url
 })
 
+watch(
+  pageTitle,
+  (t) => {
+    if (t) setAccessibilityProperties(t)
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
   dataserviceStore
     .load(dataserviceId, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      setAccessibilityProperties(dataservice.value?.title)
-      loadDatasets()
-    })
+    .then(loadDatasets)
 })
 </script>
 
