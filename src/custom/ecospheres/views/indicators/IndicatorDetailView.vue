@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { useHead } from '@unhead/vue'
-import { computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -23,7 +23,6 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
-import { toMetaDescription, useCanonical } from '@/utils/seo'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import type { Indicator } from '../../model/indicator'
@@ -40,6 +39,8 @@ const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
 const showAddToTopicModal = ref(false)
+const indicatorConf = usePageConf('indicators')
+const labels = useLabels(indicatorConf.labels)
 const topicConf = usePageConf('bouquets')
 const topicsLabels = useLabels(topicConf.labels)
 
@@ -92,33 +93,16 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 
-const metaDescription = (): string => {
-  return toMetaDescription(indicator.value?.description)
-}
-
-const metaTitle = computed(() => {
-  return indicator.value?.title
-})
-
-useHead({
-  meta: [
-    {
-      property: 'og:title',
-      content: () => `${metaTitle.value} | ${config.website.title}`
-    },
-    { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription }
-  ]
-})
-
-useCanonical(() => {
-  const slug = indicator.value?.slug
-  if (!slug) return null
-  const resolved = router.resolve({
-    name: 'indicators_detail',
-    params: { item_id: slug }
+useMeta({
+  title: () =>
+    indicator.value?.title &&
+    `${capitalize(labels.singular)} - ${indicator.value.title}`,
+  description: () => indicator.value?.description,
+  canonicalUrl: useCanonicalUrl(() => {
+    const slug = indicator.value?.slug
+    if (!slug) return null
+    return { name: 'indicators_detail', params: { item_id: slug } }
   })
-  return `${window.location.origin}${resolved.href}`
 })
 
 onMounted(() => {

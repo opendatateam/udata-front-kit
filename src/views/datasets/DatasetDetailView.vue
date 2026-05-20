@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -26,7 +26,7 @@ import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
-import { useCanonical } from '@/utils/seo'
+import { useMeta } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const datasetIdOrSlug = route.params.item_id
@@ -63,6 +63,7 @@ const showDiscussions = pageConf.resources_tabs.discussions.display
 const datasetsConf = useDatasetsConf()
 const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
+const labels = useLabels(pageConf.labels)
 const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
 
 const canEdit = computed(() => {
@@ -135,7 +136,13 @@ const exploreUrl = computed(() => {
   )
 })
 
-useCanonical(() => dataset.value?.page)
+useMeta({
+  title: () =>
+    dataset.value?.title &&
+    `${capitalize(labels.singular)} - ${dataset.value.title}`,
+  description: () => dataset.value?.description,
+  canonicalUrl: () => dataset.value?.page
+})
 
 onMounted(() => {
   datasetStore
