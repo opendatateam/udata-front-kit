@@ -78,9 +78,15 @@
                       >API ou jeux de données intégrés</span
                     >
                   </template>
-                  {{ casUsage.integratedCount }} API et jeux de données "{{
-                    nomFournisseur
-                  }}" sur les {{ casUsage.totalCount }} utiles pour ce cas
+                  <span
+                    :class="[
+                      'integration-indicator__count fr-text--sm fr-text--bold',
+                      casUsage.colorClass
+                    ]"
+                    >{{ casUsage.integratedCount }}</span
+                  >
+                  API et jeux de données "<strong>{{ nomFournisseur }}</strong
+                  >" sur les {{ casUsage.totalCount }} utiles pour ce cas
                   d'usage ont été intégrés par cette solution.
                 </TooltipWrapper>
               </div>

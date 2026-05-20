@@ -66,9 +66,15 @@
               {{ typeLabel ?? 'API' }} utiles {{ nomFournisseur }}
             </span>
           </template>
-          {{ integrationScore.integratedCount }} {{ typeLabel ?? 'API' }} "{{
-            nomFournisseur
-          }}" sur les {{ integrationScore.totalCount }} utiles pour ce cas
+          <span
+            :class="[
+              'integration-indicator__count fr-text--sm fr-text--bold',
+              colorClass
+            ]"
+            >{{ integrationScore.integratedCount }}</span
+          >
+          {{ typeLabel ?? 'API' }} "<strong>{{ nomFournisseur }}</strong
+          >" sur les {{ integrationScore.totalCount }} utiles pour ce cas
           d'usage ont été intégrées par cette solution.
         </TooltipWrapper>
       </div>
