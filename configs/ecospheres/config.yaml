@@ -130,10 +130,11 @@ website:
       - title: 'À propos'
         id: 'about'
         route: '/about'
-        meta_description: |
-          ecologie.data.gouv.fr met à disposition des acteurs de la planification écologique (État, collectivités, entreprises, associations, citoyens) 
-          des jeux de données actualisées, des indicateurs et des réalisations concrètes. L’objectif est de faciliter l'adaptation au changement 
-          climatique et la territorialisation des objectifs de transition écologique.
+        meta:
+          description: |
+            ecologie.data.gouv.fr met à disposition des acteurs de la planification écologique (État, collectivités, entreprises, associations, citoyens) 
+            des jeux de données actualisées, des indicateurs et des réalisations concrètes. L’objectif est de faciliter l'adaptation au changement 
+            climatique et la territorialisation des objectifs de transition écologique.
         url: '/static/ecospheres/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'

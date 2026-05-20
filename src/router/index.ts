@@ -64,7 +64,7 @@ const pages = (config.website.router.static_pages ?? []).map(
       props: { url: item.url },
       meta: {
         title: item.title,
-        metaDescription: item.meta_description
+        metaDescription: item.meta?.description
       }
     }
   }

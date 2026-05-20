@@ -25,8 +25,7 @@ const links = computed(() => [
 
 useMeta({
   title: title,
-  description: () =>
-    router.currentRoute.value.meta.metaDescription || undefined,
+  description: () => router.currentRoute.value.meta.metaDescription,
   canonicalUrl: () =>
     `${window.location.origin}${router.currentRoute.value.path}`
 })
