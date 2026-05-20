@@ -26,7 +26,7 @@ import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
-import { useCanonical } from '@/utils/seo'
+import { useMeta } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const datasetIdOrSlug = route.params.item_id
@@ -135,7 +135,12 @@ const exploreUrl = computed(() => {
   )
 })
 
-useCanonical(() => dataset.value?.page)
+useMeta({
+  // TODO: inject 'Jeu de données - {title}' if it makes sense
+  title: () => dataset.value?.title,
+  description: () => dataset.value?.description,
+  canonicalUrl: () => dataset.value?.page
+})
 
 onMounted(() => {
   datasetStore

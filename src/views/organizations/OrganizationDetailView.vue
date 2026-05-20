@@ -15,7 +15,7 @@ import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
-import { useCanonical } from '@/utils/seo'
+import { useMeta } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
@@ -42,7 +42,11 @@ const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
-useCanonical(() => org.value?.page)
+useMeta({
+  title: () => org.value?.name,
+  description: () => org.value?.description,
+  canonicalUrl: () => org.value?.page
+})
 
 onMounted(() => {
   orgStore

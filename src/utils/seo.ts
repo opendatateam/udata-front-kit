@@ -1,8 +1,11 @@
 import { useHead } from '@unhead/vue'
-import type { MaybeRefOrGetter } from 'vue'
+import type { Ref } from 'vue'
 import { toValue } from 'vue'
 
+import config from '@/config'
 import { stripFromMarkdown } from '@/utils'
+
+type ReactiveInput<T> = Ref<T> | (() => T)
 
 // Google displays ~160 chars; 155 gives a safe margin before it truncates
 const META_DESCRIPTION_MAX_LENGTH = 155
@@ -14,13 +17,47 @@ export function toMetaDescription(value: string | null | undefined): string {
   return plain.slice(0, META_DESCRIPTION_MAX_LENGTH).trimEnd() + '…'
 }
 
-export function useCanonical(
-  href: MaybeRefOrGetter<string | undefined | null>
-) {
-  useHead({
+function toMetaKeywords(keywords: string[] | undefined): string | undefined {
+  return keywords?.length ? keywords.join(', ') : undefined
+}
+
+export function useMeta({
+  title,
+  description,
+  keywords,
+  canonicalUrl,
+  noIndex
+}: {
+  title: ReactiveInput<string | undefined>
+  description: ReactiveInput<string | undefined>
+  keywords?: ReactiveInput<string[] | undefined>
+  canonicalUrl: ReactiveInput<string | undefined | null>
+  noIndex?: ReactiveInput<boolean | undefined>
+}) {
+  const args = {
+    meta: () => {
+      const t = toValue(title)
+      const metaDescription = toMetaDescription(toValue(description))
+      const metaKeywords = toMetaKeywords(toValue(keywords))
+      return [
+        {
+          property: 'og:title',
+          content: t ? `${t} | ${config.website.title}` : config.website.title
+        },
+        { name: 'description', content: metaDescription },
+        { property: 'og:description', content: metaDescription },
+        ...(metaKeywords != null
+          ? [{ name: 'keywords', content: metaKeywords }]
+          : []),
+        ...(toValue(noIndex)
+          ? [{ name: 'robots', content: 'noindex, nofollow' }]
+          : [])
+      ]
+    },
     link: () => {
-      const url = toValue(href)
+      const url = toValue(canonicalUrl)
       return url ? [{ rel: 'canonical', href: url }] : []
     }
-  })
+  }
+  useHead(args)
 }
