@@ -193,13 +193,6 @@ const togglePublish = () => {
     .finally(() => loader.hide())
 }
 
-const metaKeywords = computed(() => {
-  const tags = topic.value?.tags
-  if (!tags?.length) return undefined
-  const prefix = pageConf.filter_prefix
-  return prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
-})
-
 const metaTitle = computed(() => {
   return topic.value?.name
 })
@@ -214,7 +207,12 @@ const handleNavigateToFactor = (elementId: string) => {
 useMeta({
   title: metaTitle,
   description: () => topic.value?.description,
-  keywords: metaKeywords,
+  keywords: () => {
+    const tags = topic.value?.tags
+    if (!tags?.length) return undefined
+    const prefix = pageConf.filter_prefix
+    return prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
+  },
   canonicalUrl: useCanonicalUrl(() => {
     const slug = topic.value?.slug
     if (!slug) return null
