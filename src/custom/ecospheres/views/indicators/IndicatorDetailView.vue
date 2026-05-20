@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useMeta } from '@/utils/seo'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
 import { computed, inject, onMounted, ref } from 'vue'
 
@@ -94,15 +94,11 @@ const description = computed(() => descriptionFromMarkdown(indicator))
 useMeta({
   title: () => indicator.value?.title,
   description: () => indicator.value?.description,
-  canonicalUrl: () => {
+  canonicalUrl: useCanonicalUrl(() => {
     const slug = indicator.value?.slug
     if (!slug) return null
-    const resolved = router.resolve({
-      name: 'indicators_detail',
-      params: { item_id: slug }
-    })
-    return `${window.location.origin}${resolved.href}`
-  }
+    return { name: 'indicators_detail', params: { item_id: slug } }
+  })
 })
 
 onMounted(() => {

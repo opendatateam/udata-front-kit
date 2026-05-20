@@ -36,7 +36,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
-import { useMeta } from '@/utils/seo'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -215,15 +215,11 @@ useMeta({
   title: metaTitle,
   description: () => topic.value?.description,
   keywords: metaKeywords,
-  canonicalUrl: () => {
+  canonicalUrl: useCanonicalUrl(() => {
     const slug = topic.value?.slug
     if (!slug) return null
-    const resolved = router.resolve({
-      name: `${pageKey}_detail`,
-      params: { item_id: slug }
-    })
-    return `${window.location.origin}${resolved.href}`
-  },
+    return { name: `${pageKey}_detail`, params: { item_id: slug } }
+  }),
   noIndex: () => topic.value?.private
 })
 

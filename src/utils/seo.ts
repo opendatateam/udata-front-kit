@@ -1,6 +1,8 @@
 import { useHead } from '@unhead/vue'
 import type { Ref } from 'vue'
 import { toValue } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import config from '@/config'
 import { stripFromMarkdown } from '@/utils'
@@ -19,6 +21,17 @@ export function toMetaDescription(value: string | null | undefined): string {
 
 function toMetaKeywords(keywords: string[] | undefined): string | undefined {
   return keywords?.length ? keywords.join(', ') : undefined
+}
+
+export function useCanonicalUrl(
+  getRoute: () => RouteLocationRaw | null | undefined
+): () => string | null {
+  const router = useRouter()
+  return () => {
+    const route = getRoute()
+    if (!route) return null
+    return `${window.location.origin}${router.resolve(route).href}`
+  }
 }
 
 export function useMeta({
