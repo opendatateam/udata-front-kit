@@ -63,7 +63,8 @@ const pages = (config.website.router.static_pages ?? []).map(
       component: StaticPageView,
       props: { url: item.url },
       meta: {
-        title: item.title
+        title: item.title,
+        metaDescription: item.meta_description
       }
     }
   }
