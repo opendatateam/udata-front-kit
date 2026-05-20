@@ -5,7 +5,15 @@ import {
 } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
+import {
+  capitalize,
+  computed,
+  inject,
+  nextTick,
+  ref,
+  watch,
+  watchEffect
+} from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -205,7 +213,8 @@ const handleNavigateToFactor = (elementId: string) => {
 }
 
 useMeta({
-  title: metaTitle,
+  title: () =>
+    metaTitle.value && `${capitalize(labels.singular)} - ${metaTitle.value}`,
   description: () => topic.value?.description,
   keywords: () => {
     const tags = topic.value?.tags

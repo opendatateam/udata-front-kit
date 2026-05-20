@@ -6,6 +6,7 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
+import { capitalize } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
@@ -21,6 +22,7 @@ import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
+import { useLabels } from '@/utils/labels'
 import { useMeta } from '@/utils/seo'
 import { OpenApiViewer } from '@datagouv/components-next'
 
@@ -37,6 +39,7 @@ const total = computed(
 )
 
 const { pageKey, meta, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const CardComponent = useAsyncComponent(() => meta?.datasetCardComponent, {
   fallback: DatasetCard
@@ -109,7 +112,9 @@ const getDatasetPage = (id: string) => {
 }
 
 useMeta({
-  title: () => dataservice.value?.title,
+  title: () =>
+    dataservice.value?.title &&
+    `${capitalize(labels.singular)} - ${dataservice.value.title}`,
   description: () => dataservice.value?.description,
   canonicalUrl: () => dataservice.value?.self_web_url
 })

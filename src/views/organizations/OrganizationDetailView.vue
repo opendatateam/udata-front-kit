@@ -43,7 +43,7 @@ const setAccessibilityProperties = inject(
 ) as AccessibilityPropertiesType
 
 useMeta({
-  title: () => org.value?.name,
+  title: () => org.value?.name && `Organisation - ${org.value.name}`,
   description: () => org.value?.description,
   canonicalUrl: () => org.value?.page
 })

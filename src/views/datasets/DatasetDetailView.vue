@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -63,6 +63,7 @@ const showDiscussions = pageConf.resources_tabs.discussions.display
 const datasetsConf = useDatasetsConf()
 const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
+const labels = useLabels(pageConf.labels)
 const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
 
 const canEdit = computed(() => {
@@ -136,8 +137,9 @@ const exploreUrl = computed(() => {
 })
 
 useMeta({
-  // TODO: inject 'Jeu de données - {title}' if it makes sense
-  title: () => dataset.value?.title,
+  title: () =>
+    dataset.value?.title &&
+    `${capitalize(labels.singular)} - ${dataset.value.title}`,
   description: () => dataset.value?.description,
   canonicalUrl: () => dataset.value?.page
 })

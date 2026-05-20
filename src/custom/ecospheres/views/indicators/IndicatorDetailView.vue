@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -39,6 +39,8 @@ const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
 const showAddToTopicModal = ref(false)
+const indicatorConf = usePageConf('indicators')
+const labels = useLabels(indicatorConf.labels)
 const topicConf = usePageConf('bouquets')
 const topicsLabels = useLabels(topicConf.labels)
 
@@ -92,7 +94,9 @@ const activeTab = ref(0)
 const description = computed(() => descriptionFromMarkdown(indicator))
 
 useMeta({
-  title: () => indicator.value?.title,
+  title: () =>
+    indicator.value?.title &&
+    `${capitalize(labels.singular)} - ${indicator.value.title}`,
   description: () => indicator.value?.description,
   canonicalUrl: useCanonicalUrl(() => {
     const slug = indicator.value?.slug
