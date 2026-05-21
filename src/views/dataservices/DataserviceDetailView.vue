@@ -105,9 +105,8 @@ const getDatasetPage = (id: string) => {
 
 useMeta({
   title: () =>
-    dataservice.value?.title
-      ? `${capitalize(labels.singular)} - ${dataservice.value.title}`
-      : undefined,
+    dataservice.value?.title &&
+    `${capitalize(labels.singular)} - ${dataservice.value.title}`,
   description: () => dataservice.value?.description,
   canonicalUrl: () => dataservice.value?.self_web_url
 })

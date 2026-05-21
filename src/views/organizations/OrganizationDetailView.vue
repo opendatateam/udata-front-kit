@@ -35,8 +35,7 @@ const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort: Ref<string | undefined> = ref(undefined)
 
 useMeta({
-  title: () =>
-    org.value?.name ? `Organisation - ${org.value.name}` : undefined,
+  title: () => org.value?.name && `Organisation - ${org.value.name}`,
   description: () => org.value?.description,
   canonicalUrl: () => org.value?.page
 })
