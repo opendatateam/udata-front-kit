@@ -27,7 +27,7 @@ const defaultRoutes: RouteRecordRaw[] = [
         path: '',
         name: 'organizations',
         meta: {
-          title: 'Organisations'
+          title: config.organizations?.list?.meta?.title ?? 'Organisations'
         },
         component: async () =>
           await import('@/views/organizations/OrganizationsListView.vue')

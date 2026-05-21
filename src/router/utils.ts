@@ -270,7 +270,7 @@ export const useGlobalSearchPageRoutes = ({
         path: '',
         name: pageKey,
         meta: {
-          title: pageConf.title,
+          title: pageConf.meta?.title ?? pageConf.title,
           pageKey,
           cardComponent,
           searchType: objectType,

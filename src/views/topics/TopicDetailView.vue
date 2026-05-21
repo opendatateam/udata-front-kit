@@ -5,15 +5,7 @@ import {
 } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import {
-  capitalize,
-  computed,
-  inject,
-  nextTick,
-  ref,
-  watch,
-  watchEffect
-} from 'vue'
+import { capitalize, computed, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -27,10 +19,6 @@ import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
 import {
@@ -61,10 +49,6 @@ const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
 const showCloneModal = ref(false)
 const cloneKeepDatasets = ref(false)
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const description = computed(() => descriptionFromMarkdown(topic))
 
@@ -229,14 +213,6 @@ useMeta({
   }),
   noIndex: () => topic.value?.private
 })
-
-watch(
-  metaTitle,
-  (t) => {
-    if (t) setAccessibilityProperties(t)
-  },
-  { immediate: true }
-)
 
 // Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
 watch(

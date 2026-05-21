@@ -23,8 +23,10 @@ const links = computed(() => [
   { text: title.value || '' }
 ])
 
+// FIXME: find a way to inject a meta title different from the display title here
+// (and also get metaDescription from the config)
+
 useMeta({
-  title: title,
   description: () => router.currentRoute.value.meta.metaDescription,
   canonicalUrl: () =>
     `${window.location.origin}${router.currentRoute.value.path}`

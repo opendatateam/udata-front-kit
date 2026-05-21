@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { capitalize, computed, inject, onMounted, ref, watch } from 'vue'
+import { capitalize, computed, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -12,10 +12,6 @@ import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
@@ -82,10 +78,6 @@ const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
 
 const showAddToTopicModal = ref(false)
 
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
-
 const links = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
   breadcrumbs.push({
@@ -147,14 +139,6 @@ useMeta({
   description: () => dataset.value?.description,
   canonicalUrl: () => dataset.value?.page
 })
-
-watch(
-  pageTitle,
-  (t) => {
-    if (t) setAccessibilityProperties(t)
-  },
-  { immediate: true }
-)
 
 onMounted(() => {
   datasetStore
