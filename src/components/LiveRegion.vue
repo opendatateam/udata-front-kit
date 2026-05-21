@@ -22,7 +22,7 @@ const props = defineProps({
 const debug = new DebugLogger('LiveRegion')
 
 watch(
-  props.infos,
+  () => props.infos,
   () => {
     debug.log('Announcement', JSON.stringify(props.infos))
   },
