@@ -10,6 +10,9 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { stripFromMarkdown } from '@/utils'
+import { DebugLogger } from '@/utils/debug'
+
+const debug = new DebugLogger('useMeta')
 
 type ReactiveInput<T> = Ref<T> | (() => T)
 
@@ -65,6 +68,10 @@ export function useMeta({
   const fullTitle = () => {
     const t = resolvedTitle()
     return t ? `${t} | ${config.website.title}` : config.website.title
+  }
+
+  if (title === undefined && !route.meta.title) {
+    debug.warn(`route "${String(route.name)}" has no title`)
   }
 
   watch(
