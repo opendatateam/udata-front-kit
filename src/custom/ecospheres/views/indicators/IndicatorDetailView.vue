@@ -87,9 +87,8 @@ const description = computed(() => descriptionFromMarkdown(indicator))
 
 useMeta({
   title: () =>
-    indicator.value?.title
-      ? `${capitalize(labels.singular)} - ${indicator.value.title}`
-      : undefined,
+    indicator.value?.title &&
+    `${capitalize(labels.singular)} - ${indicator.value.title}`,
   description: () => indicator.value?.description,
   canonicalUrl: useCanonicalUrl(() => {
     const slug = indicator.value?.slug
