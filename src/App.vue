@@ -121,14 +121,11 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
 
 provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
-// watch route change and update title
+// announce page title to screen reader on route change
 watch(
-  () => route.path,
-  () => {
-    if (route.meta.title) {
-      const title = route.meta.title
-      setAccessibilityProperties(title)
-    }
+  () => route.meta.title,
+  (title) => {
+    if (title) setAccessibilityProperties(title)
   },
   { immediate: true }
 )
