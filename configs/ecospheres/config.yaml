@@ -303,6 +303,9 @@ pages:
       reuses:
         display: true
     editable: true
+    meta:
+      title: 'Jeux de données publics sur la transition écologique : climat, énergie, biodiversité'
+      description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile
     filters:
       - id: last_update_range
         name: Date de mise à jour
