@@ -49,19 +49,20 @@ export function useMeta({
   canonicalUrl: ReactiveInput<string | undefined | null>
   noIndex?: ReactiveInput<boolean | undefined>
 }) {
+  const fullTitle = () => {
+    const t = toValue(title)
+    return t ? `${t} | ${config.website.title}` : config.website.title
+  }
+
   const args = {
-    title: () => {
-      const t = toValue(title)
-      return t ? `${t} | ${config.website.title}` : config.website.title
-    },
+    title: fullTitle,
     meta: () => {
-      const t = toValue(title)
       const metaDescription = toMetaDescription(toValue(description))
       const metaKeywords = toMetaKeywords(toValue(keywords))
       return [
         {
           property: 'og:title',
-          content: t || config.website.title
+          content: fullTitle()
         },
         { name: 'description', content: metaDescription },
         { property: 'og:description', content: metaDescription },
