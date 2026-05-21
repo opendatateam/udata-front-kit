@@ -103,14 +103,11 @@ const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
 
-const pageTitle = computed(() =>
-  dataservice.value?.title
-    ? `${capitalize(labels.singular)} - ${dataservice.value.title}`
-    : undefined
-)
-
 useMeta({
-  title: pageTitle,
+  title: () =>
+    dataservice.value?.title
+      ? `${capitalize(labels.singular)} - ${dataservice.value.title}`
+      : undefined,
   description: () => dataservice.value?.description,
   canonicalUrl: () => dataservice.value?.self_web_url
 })
