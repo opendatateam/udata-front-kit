@@ -8,7 +8,7 @@ import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
-import { useMeta } from '@/utils/seo'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import {
   DataserviceCard,
   DatasetCard,
@@ -82,8 +82,7 @@ watch(localType, async (newType) => {
 useMeta({
   title: () => pageConf.value?.meta?.title,
   description: () => pageConf.value?.meta?.description,
-  canonicalUrl: () =>
-    `${window.location.origin}${router.currentRoute.value.path}`
+  canonicalUrl: useCanonicalUrl()
 })
 
 onMounted(() => {

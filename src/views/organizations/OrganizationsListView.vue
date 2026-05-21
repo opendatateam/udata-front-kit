@@ -9,7 +9,7 @@ import OrganizationCard from '@/components/OrganizationCard.vue'
 import config from '@/config'
 import type { OrganizationsConfig } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
-import { useMeta } from '@/utils/seo'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const store = useOrganizationStore()
 const $loading = useLoading()
@@ -36,7 +36,7 @@ async function onUpdatePage(page: number) {
 useMeta({
   title: () => organizationsConfig.list?.meta?.title,
   description: () => organizationsConfig.list?.meta?.description,
-  canonicalUrl: () => `${window.location.origin}/organizations`
+  canonicalUrl: useCanonicalUrl()
 })
 
 onMounted(() => {
