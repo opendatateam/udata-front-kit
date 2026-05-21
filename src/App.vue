@@ -121,7 +121,8 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
 
 provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
-// announce page title to screen reader on route change
+// Announce page title to screen reader on route change
+// for routes that don't have route.meta.title, announcment is responsibility of useMeta()
 watch(
   () => route.meta.title,
   (title) => {
