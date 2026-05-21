@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Toaster } from '@datagouv/components-next'
-import { useTitle } from '@vueuse/core'
 
 import config from '@/config'
 
@@ -107,7 +106,6 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
   focus = true,
   messages = []
 ): void => {
-  useTitle(`${title} | ${config.website.title}`)
   // announce page title to screen reader
   if (title) {
     liveInfos.value = [
