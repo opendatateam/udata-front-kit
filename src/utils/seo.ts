@@ -70,7 +70,7 @@ export function useMeta({
     return t ? `${t} | ${config.website.title}` : config.website.title
   }
 
-  if (title === undefined && !route.meta.title) {
+  if (!resolvedTitle()) {
     debug.warn(`route "${String(route.name)}" has no title`)
   }
 
