@@ -9,8 +9,6 @@ export {}
 declare module 'vue-router' {
   interface RouteMeta {
     title?: string
-    // FIXME: this are only used by StaticPage, find another way to inject from config
-    metaDescription?: string
     requiresAuth?: boolean
     cardComponent?: () => Promise<{ default: Component }>
     datasetCardComponent?: () => Promise<{ default: Component }>
