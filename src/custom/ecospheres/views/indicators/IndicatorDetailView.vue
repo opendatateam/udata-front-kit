@@ -85,14 +85,11 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 
-const pageTitle = computed(() =>
-  indicator.value?.title
-    ? `${capitalize(labels.singular)} - ${indicator.value.title}`
-    : undefined
-)
-
 useMeta({
-  title: pageTitle,
+  title: () =>
+    indicator.value?.title
+      ? `${capitalize(labels.singular)} - ${indicator.value.title}`
+      : undefined,
   description: () => indicator.value?.description,
   canonicalUrl: useCanonicalUrl(() => {
     const slug = indicator.value?.slug

@@ -34,12 +34,9 @@ const pages: Ref<{ label: string; href: string; title: string }[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort: Ref<string | undefined> = ref(undefined)
 
-const pageTitle = computed(() =>
-  org.value?.name ? `Organisation - ${org.value.name}` : undefined
-)
-
 useMeta({
-  title: pageTitle,
+  title: () =>
+    org.value?.name ? `Organisation - ${org.value.name}` : undefined,
   description: () => org.value?.description,
   canonicalUrl: () => org.value?.page
 })

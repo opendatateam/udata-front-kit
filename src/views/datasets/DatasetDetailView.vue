@@ -128,14 +128,11 @@ const exploreUrl = computed(() => {
   )
 })
 
-const pageTitle = computed(() =>
-  dataset.value?.title
-    ? `${capitalize(labels.singular)} - ${dataset.value.title}`
-    : undefined
-)
-
 useMeta({
-  title: pageTitle,
+  title: () =>
+    dataset.value?.title
+      ? `${capitalize(labels.singular)} - ${dataset.value.title}`
+      : undefined,
   description: () => dataset.value?.description,
   canonicalUrl: () => dataset.value?.page
 })
