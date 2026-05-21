@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -7,10 +7,6 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import ErrorSummary from '@/components/forms/ErrorSummary.vue'
 import TopicForm from '@/components/forms/topic/TopicForm.vue'
 import TopicOwnerForm from '@/components/forms/topic/TopicOwnerForm.vue'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import type { Topic, TopicPostData } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
 import {
@@ -23,6 +19,7 @@ import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
 import { useFiltersApiParams } from '@/utils/filters'
 import { useLabels } from '@/utils/labels'
+import { useMeta } from '@/utils/seo'
 import { cloneTopic } from '@/utils/topic'
 import { useUniverseQuery } from '@/utils/universe'
 import { capitalize } from 'vue'
@@ -58,9 +55,18 @@ const topic: Ref<
   }
 })
 
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
+useMeta({
+  title: () => {
+    if (props.isCreate && routeQuery.clone != null) {
+      return `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+    } else if (!props.isCreate) {
+      return `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+    }
+    return `Ajouter ${labels.articles.un} ${labels.singular}`
+  },
+  description: () => undefined,
+  canonicalUrl: () => null
+})
 
 const formFields = ref()
 const errorSummary = ref()
@@ -186,18 +192,6 @@ const onSubmit = async () => {
   }
 }
 
-const setMetaTitle = () => {
-  let metaTitle
-  if (props.isCreate && routeQuery.clone != null) {
-    metaTitle = `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
-  } else if (!props.isCreate) {
-    metaTitle = `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
-  } else {
-    metaTitle = `Ajouter ${labels.articles.un} ${labels.singular}`
-  }
-  setAccessibilityProperties(metaTitle)
-}
-
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
     const loader = useLoading().show()
@@ -215,11 +209,8 @@ onMounted(() => {
           const { elements, ...data } = remoteTopic
           topic.value = data
         }
-        setMetaTitle()
       })
       .finally(() => loader.hide())
-  } else {
-    setMetaTitle()
   }
 })
 </script>

@@ -10,6 +10,9 @@ import VIconCustom from '@/components/VIconCustom.vue'
 import { useTopicStore } from '@/store/TopicStore'
 import { debounceWait, usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
+import { useMeta } from '@/utils/seo'
+
+useMeta({ description: () => undefined, canonicalUrl: () => null })
 
 const route = useRoute()
 const $loading = useLoading()

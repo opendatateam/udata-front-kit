@@ -97,7 +97,6 @@ const footerPhrase = config.website.footer_phrase
 const footerExternalLinks = config.website.footer_external_links
 const footerMandatoryLinks = config.website.footer_mandatory_links
 
-const route = useRoute()
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
 
@@ -120,16 +119,6 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
 }
 
 provide(AccessibilityPropertiesKey, setAccessibilityProperties)
-
-// Announce page title to screen reader on route change
-// for routes that don't have route.meta.title, announcment is responsibility of useMeta()
-watch(
-  () => route.meta.title,
-  (title) => {
-    if (title) setAccessibilityProperties(title)
-  },
-  { immediate: true }
-)
 </script>
 
 <template>

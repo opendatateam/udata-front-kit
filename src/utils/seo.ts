@@ -10,7 +10,6 @@ import {
   type AccessibilityPropertiesType
 } from '@/model/injectionKeys'
 import { stripFromMarkdown } from '@/utils'
-import { DebugLogger } from '@/utils/debug'
 
 type ReactiveInput<T> = Ref<T> | (() => T)
 
@@ -59,15 +58,8 @@ export function useMeta({
     AccessibilityPropertiesKey
   ) as AccessibilityPropertiesType
 
-  if (title !== undefined && route.meta.title) {
-    new DebugLogger('useMeta').warn(
-      `Both route.meta.title ("${route.meta.title}") and explicit title are set on "${route.path}". ` +
-        'This causes a mismatch between the live region announcement and document.title. Remove one.'
-    )
-  }
-
   // Explicit title takes precedence; fall back to route.meta.title for pages
-  // that define their title in the router (list pages, static pages, home)
+  // that define their title in the router (list pages, home, 404…)
   const resolvedTitle = () => toValue(title) ?? (route.meta.title || undefined)
 
   const fullTitle = () => {
@@ -75,16 +67,13 @@ export function useMeta({
     return t ? `${t} | ${config.website.title}` : config.website.title
   }
 
-  // Only announce when App.vue's route watcher won't (routes without a static meta.title)
-  if (!route.meta.title) {
-    watch(
-      resolvedTitle,
-      (t) => {
-        if (t) setAccessibilityProperties(t)
-      },
-      { immediate: true }
-    )
-  }
+  watch(
+    resolvedTitle,
+    (t) => {
+      if (t) setAccessibilityProperties(t)
+    },
+    { immediate: true }
+  )
 
   const args = {
     title: fullTitle,
