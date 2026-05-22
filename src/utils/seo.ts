@@ -24,10 +24,12 @@ function toMetaKeywords(keywords: string[] | undefined): string | undefined {
 }
 
 export function useCanonicalUrl(
-  getRoute: () => RouteLocationRaw | null | undefined
+  getRoute?: () => RouteLocationRaw | null | undefined
 ): () => string | null {
   const router = useRouter()
   return () => {
+    if (!getRoute)
+      return `${window.location.origin}${router.currentRoute.value.path}`
     const route = getRoute()
     if (!route) return null
     return `${window.location.origin}${router.resolve(route).href}`

@@ -105,6 +105,10 @@ export type PageConf = {
     }
   }
   editable: boolean
+  meta?: {
+    title?: string
+    description?: string
+  }
   filters: PageFilterConf[]
 }
 
@@ -149,4 +153,17 @@ export type SentryConfig = {
   tracesSampleRate?: number
   replaysSessionSampleRate?: number
   replaysOnErrorSampleRate?: number
+}
+
+export type OrganizationsConfig = {
+  datasets?: string
+  dataservices?: string
+  bouquets?: string
+  list?: {
+    breadcrumb_title?: string
+    meta?: {
+      title?: string
+      description?: string
+    }
+  }
 }

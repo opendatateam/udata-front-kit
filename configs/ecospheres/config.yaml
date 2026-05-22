@@ -202,6 +202,9 @@ organizations:
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
   list:
     breadcrumb_title: Contributeurs
+    meta:
+      title: Liste des contributeurs
+      description: Recherchez une organisation qui a partagé un jeu de données ou une réutilisation sur la transition écologique
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -250,6 +253,9 @@ definitions: &definitions
 #       reuses:
 #         display: {bool}             # display reuses tab on detail page
 #     editable: {bool}                # whether the page is editable when connected
+#     meta?:
+#       title?: {string}              # meta title (seo)
+#       description?: {string}        # meta description (seo)
 #     filters:                        # list of filters for this {page_id}
 #       - id: {string}                # id of the filter ⚠️ needs to be unique across all filters of the page
 #         name: {string}              # name of the filter ⚠️ only used in templates by custom filters
@@ -297,6 +303,9 @@ pages:
       reuses:
         display: true
     editable: true
+    meta:
+      title: 'Jeux de données publics sur la transition écologique : climat, énergie, biodiversité'
+      description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -412,6 +421,9 @@ pages:
       reuses:
         display: true
     editable: false
+    meta:
+      title: Sélection de jeux de données sur la planification écologique
+      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimenté par l'administration et la société civile
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -581,6 +593,9 @@ pages:
       datasets:
         display: true
     editable: false
+    meta:
+      title: Sélection d’API sur la transition écologique
+      description: Vous recherchez une API sur la transition écologique pour automatiser des tâches depuis vos serveurs ? Explorez notre sélection
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -619,6 +634,9 @@ pages:
       reuses:
         display: true
     editable: true
+    meta:
+      title: Collections thématiques des jeux de données sur la transition écologique
+      description: Vous recherchez des familles de jeux de données sur la transition écologique ? Explorez rapidement notre notre catalogue
     filters:
       - id: last_update_range
         name: Date de mise à jour

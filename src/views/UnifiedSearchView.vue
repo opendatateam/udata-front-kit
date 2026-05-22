@@ -8,6 +8,7 @@ import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import {
   DataserviceCard,
   DatasetCard,
@@ -37,6 +38,11 @@ const links = computed(() => [
 const CardComponent = useAsyncComponent(
   () => route.meta.cardComponent as (() => Promise<Component>) | undefined
 )
+
+const createUrl = computed(() => ({
+  name: `${pageKey.value}_add`,
+  query: route.query
+}))
 
 // localType is needed because pageKey is read-only (derived from route), but
 // GlobalSearch needs a writable ref to track the active type (v-model:type).
@@ -73,15 +79,17 @@ watch(localType, async (newType) => {
   }
 })
 
+useMeta({
+  title: () => pageConf.value?.meta?.title,
+  description: () => pageConf.value?.meta?.description,
+  canonicalUrl: useCanonicalUrl()
+})
+
 onMounted(() => {
   if (!pageConf.value.list_all) {
     router.push({ name: 'not_found' })
   }
 })
-const createUrl = computed(() => ({
-  name: `${pageKey.value}_add`,
-  query: route.query
-}))
 </script>
 
 <template>
