@@ -423,7 +423,7 @@ pages:
     editable: false
     meta:
       title: Sélection de jeux de données sur la planification écologique
-      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimenté par l'administration et la société civile.
+      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimenté par l'administration et la société civile
     filters:
       - id: last_update_range
         name: Date de mise à jour
