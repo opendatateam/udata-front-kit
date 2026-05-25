@@ -59,6 +59,13 @@ Les composants utilisés dans le front-kit proviennent de trois sources :
 
 ## Les univers et leur paramétrage
 
+### Pages de liste et de détail : définitions
+
+Dans la suite de la documentation, on se référera à :
+
+- page de liste : page affichant la liste des objets d'un même type (eg liste des jeux de données),
+- page de détail : page affichant le détail d'un objet donné (eg page de détail d'un jeu de données).
+
 ### Paramétrage des pages
 
 Chaque entrée sous `pages` dans `config.yaml` correspond à une page de liste (jeux de données, API, collections…). Les principales clés sont :
@@ -162,7 +169,7 @@ Le filtre `organization_custom` ne déclare pas de `values` : la liste des organ
 | `default_value`    | Valeur par défaut                                                                                          |
 | `advanced`         | Place le filtre dans la section "Filtres avancés" de `GlobalSearch`                                        |
 | `applies_to_pages` | Indique les pages pour lesquelles le filtre est partagé (valeur de filtre conservée au changement de page) |
-| `hide_on_list`     | Masque le filtre sur la page de liste (tout en l'appliquant)                                               |
+| `hide_on_list`     | Masque le filtre sur la page de liste                                                                      |
 
 ### Exemple détaillé
 
