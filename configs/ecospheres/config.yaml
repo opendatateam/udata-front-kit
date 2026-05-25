@@ -199,7 +199,7 @@ organizations:
   datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
   dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
-  list:
+  page: # organizations.page is a special case of config.pages
     breadcrumb_title: Contributeurs
     labels:
       singular: contributeur

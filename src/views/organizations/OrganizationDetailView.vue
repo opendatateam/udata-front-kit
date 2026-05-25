@@ -7,6 +7,7 @@ import { useLoading } from 'vue-loading-overlay'
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
+import type { OrganizationsConfig } from '@/model/config'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -20,12 +21,13 @@ const orgStore = useOrganizationStore()
 const datasetStore = useDatasetStore()
 
 const org = computed(() => orgStore.get(organizationId))
+const organizationsConfig = config.organizations as OrganizationsConfig
 
 const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
   {
     to: '/organizations',
-    text: config.organizations?.list?.breadcrumb_title || 'Organisations'
+    text: organizationsConfig.page?.breadcrumb_title || 'Organisations'
   }
 ])
 
@@ -63,7 +65,7 @@ watch(
 
 const metaTitle = () => {
   if (!org.value?.name) return
-  const title = `${config.organizations?.list?.labels?.singular || 'Organisation'} - ${org.value.name}`
+  const title = `${organizationsConfig.page?.labels?.singular || 'Organisation'} - ${org.value.name}`
   return capitalize(title)
 }
 

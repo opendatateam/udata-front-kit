@@ -19,7 +19,7 @@ const { pagination } = storeToRefs(store)
 const organizations: Ref<Organization[]> = ref([])
 
 const organizationsConfig = config.organizations as OrganizationsConfig
-const title = organizationsConfig.list?.breadcrumb_title || 'Organisations'
+const title = organizationsConfig.page?.breadcrumb_title || 'Organisations'
 const links = computed(() => [{ to: '/', text: 'Accueil' }, { text: title }])
 
 async function onUpdatePage(page: number) {
@@ -34,8 +34,8 @@ async function onUpdatePage(page: number) {
 }
 
 useMeta({
-  title: () => organizationsConfig.list?.meta?.title ?? 'Organisations',
-  description: () => organizationsConfig.list?.meta?.description,
+  title: () => organizationsConfig.page?.meta?.title ?? 'Organisations',
+  description: () => organizationsConfig.page?.meta?.description,
   canonicalUrl: useCanonicalUrl()
 })
 
