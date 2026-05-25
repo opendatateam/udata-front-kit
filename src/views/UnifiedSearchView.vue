@@ -3,6 +3,10 @@ import SearchOrganizationFilter from '@/components/search/SearchOrganizationFilt
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
+import {
+  AccessibilityPropertiesKey,
+  type AccessibilityPropertiesType
+} from '@/model/injectionKeys'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -89,6 +93,50 @@ onMounted(() => {
     router.push({ name: 'not_found' })
   }
 })
+
+const setAccessibilityProperties = inject(
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
+
+// Mirrors the old useAccessibilityProperties behaviour:
+// announce on results change (query/filter), skip on pagination (same total).
+//
+// Requires GlobalSearch to emit a `results` event with the total — upstream PR:
+// https://github.com/ecolabdata/ecospheres/issues/1116
+
+const lastAnnouncedTotal = ref<number | null>(null)
+
+// Reset the dedup guard when any search param changes except `page`, so
+// same-count transitions (e.g. "vélo" → 0 results, clear → still 0) still
+// produce an announcement. Page changes do not reset the guard.
+watch(
+  () => {
+    const { page: _p, ...rest } = route.query
+    return JSON.stringify(rest)
+  },
+  () => {
+    lastAnnouncedTotal.value = null
+  }
+)
+
+const pageTitle = computed(() => {
+  const q = route.query.q as string | undefined
+  return q ? `${pageConf.value.title} pour "${q}"` : pageConf.value.title
+})
+
+const announceSearchResults = (total: number) => {
+  if (total === lastAnnouncedTotal.value) return
+  lastAnnouncedTotal.value = total
+  const text =
+    total === 0
+      ? 'Aucun résultat'
+      : total === 1
+        ? '1 résultat'
+        : `${total} résultats`
+  // setAccessibilityProperties requires a truthy title to update the LiveRegion;
+  // passing undefined silently drops the announcement (App.vue's if (title) guard)
+  setAccessibilityProperties(pageTitle.value, false, [{ text }])
+}
 </script>
 
 <template>
@@ -150,7 +198,12 @@ onMounted(() => {
       {{ pageConf.search.input }}
     </h2>
     <Suspense>
-      <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
+      <GlobalSearch
+        v-model:type="localType"
+        :config="route.meta.searchConfig!"
+        :auto-focus="false"
+        @results-count="announceSearchResults"
+      >
         <template v-if="route.meta.customFilters?.length" #custom-filters-top>
           <template
             v-for="filter in route.meta.customFilters"
