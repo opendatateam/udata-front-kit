@@ -12,8 +12,6 @@ import { debounceWait, usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
 import { useMeta } from '@/utils/seo'
 
-useMeta({ description: () => undefined, canonicalUrl: () => null })
-
 const route = useRoute()
 const $loading = useLoading()
 const pageKey = computed(() => route.meta.pageKey as string)
@@ -66,6 +64,12 @@ watch(searchQuery, (q) => {
   if (q.length === 0 || q.length >= 3) {
     debouncedSearch(q)
   }
+})
+
+useMeta({
+  description: () => undefined,
+  canonicalUrl: () => null,
+  noIndex: () => true
 })
 </script>
 

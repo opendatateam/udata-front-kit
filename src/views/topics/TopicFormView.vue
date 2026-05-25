@@ -55,19 +55,6 @@ const topic: Ref<
   }
 })
 
-useMeta({
-  title: () => {
-    if (props.isCreate && routeQuery.clone != null) {
-      return `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
-    } else if (!props.isCreate) {
-      return `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
-    }
-    return `Ajouter ${labels.articles.un} ${labels.singular}`
-  },
-  description: () => undefined,
-  canonicalUrl: () => null
-})
-
 const formFields = ref()
 const errorSummary = ref()
 const formErrors: Ref<string[]> = ref([])
@@ -191,6 +178,19 @@ const onSubmit = async () => {
     save()
   }
 }
+
+useMeta({
+  title: () => {
+    if (props.isCreate && routeQuery.clone != null) {
+      return `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+    } else if (!props.isCreate) {
+      return `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+    }
+    return `Ajouter ${labels.articles.un} ${labels.singular}`
+  },
+  description: () => undefined,
+  canonicalUrl: () => null
+})
 
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
