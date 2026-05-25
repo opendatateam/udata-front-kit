@@ -232,18 +232,19 @@ Tout ce qui n'est pas surchargé est fourni par le socle commun (`src/components
 
 ### Routes personnalisées et pages
 
-Le routeur principal (`src/router/index.ts`) charge les routes communes (organisations, pages statiques, authentification…). Au démarrage, il charge dynamiquement le fichier `src/custom/<site_id>/routes.ts` de la verticale active et **fusionne** les deux : une route custom ayant le même chemin qu'une route commune la remplace.
+Le routeur principal (`src/router/index.ts`) charge les routes communes (pages statiques, authentification…). Au démarrage, il charge dynamiquement le fichier `src/custom/<site_id>/routes.ts` de la verticale active et **fusionne** les deux : une route custom ayant le même chemin qu'une route commune la remplace.
 
-Le fichier `routes.ts` d'une verticale s'appuie sur les fonctions utilitaires de `src/router/utils.ts` pour déclarer des pages de liste/détail sans avoir à câbler manuellement toutes les vues. Les principales fonctions disponibles sont :
+Le fichier `routes.ts` d'une verticale s'appuie sur les fonctions utilitaires de `src/router/utils.ts` pour déclarer des pages de liste/détail sans avoir à câbler manuellement toutes les vues. Les fonctions disponibles sont :
 
 | Fonction                    | Usage                                                      |
 | --------------------------- | ---------------------------------------------------------- |
 | `useGlobalSearchPageRoutes` | Page de liste/détail (tous types : datasets, API, topics)  |
 | `useTopicAdminPagesRoutes`  | Pages d'administration des collections (création, édition) |
+| `useOrganizationsRoutes`    | Pages liste/détail des organisations                       |
 
-Chaque appel prend un `pageKey` qui **doit correspondre à une clé sous `pages` dans `config.yaml`**. Le type d'objet (`datasets`, `dataservices`, `topics`) est lu depuis la clé `object_type` de la page. C'est ce lien qui permet à `UnifiedSearchView` de lire la configuration (titre, filtres, univers, labels…) via `useCurrentPageConf()`.
+`useGlobalSearchPageRoutes` et `useTopicAdminPagesRoutes` prennent un `pageKey` qui **doit correspondre à une clé sous `pages` dans `config.yaml`**. C'est ce lien qui permet aux vues de lire la configuration (titre, filtres, univers, labels…) via `useCurrentPageConf()`.
 
-La route peut également recevoir des composants en surcharge :
+`useGlobalSearchPageRoutes` accepte en plus des composants en surcharge :
 
 | Paramètre              | Rôle                                                                |
 | ---------------------- | ------------------------------------------------------------------- |
@@ -252,6 +253,8 @@ La route peut également recevoir des composants en surcharge :
 | `descriptionComponent` | Composant de description dans la vue de détail                      |
 | `detailsViewComponent` | Vue de détail d'un élément                                          |
 | `topicConf`            | Options de configuration propres aux pages de topics                |
+
+`useOrganizationsRoutes` ne prend pas de `pageKey` : sa configuration est lue depuis la clé `organizations.page` dans `config.yaml`.
 
 **Exemple** (extrait de `src/custom/ecospheres/routes.ts`) :
 
