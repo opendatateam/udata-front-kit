@@ -327,6 +327,27 @@ export const useTopicAdminPagesRoutes = ({
   ]
 }
 
+export const useOrganizationsRoutes = (): RouteRecordRaw => {
+  return {
+    path: '/organizations',
+    name: 'organizations_routes',
+    children: [
+      {
+        path: '',
+        name: 'organizations',
+        component: async () =>
+          await import('@/views/organizations/OrganizationsListView.vue')
+      },
+      {
+        path: ':oid',
+        name: 'organization_detail',
+        component: async () =>
+          await import('@/views/organizations/OrganizationDetailView.vue')
+      }
+    ]
+  }
+}
+
 export const useRouteMeta = () => {
   return useRoute().meta
 }

@@ -107,9 +107,6 @@ website:
     - text: 'La démarche'
       to: /demarche
   router:
-    disable:
-      - organizations_routes
-      - topics
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
       - title: 'Accessibilité'

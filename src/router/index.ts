@@ -5,8 +5,6 @@ import type { StaticPageConfig } from '@/model/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 
-const disableRoutes: string[] = config.website.router.disable ?? []
-
 // common/default routes
 const defaultRoutes: RouteRecordRaw[] = [
   // home
@@ -18,28 +16,6 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: async () => await import('@/views/HomeView.vue')
   },
-  // organizations
-  {
-    path: '/organizations',
-    name: 'organizations_routes',
-    children: [
-      {
-        path: '',
-        name: 'organizations',
-        meta: {
-          title: config.organizations?.list?.meta?.title ?? 'Organisations'
-        },
-        component: async () =>
-          await import('@/views/organizations/OrganizationsListView.vue')
-      },
-      {
-        path: ':oid',
-        name: 'organization_detail',
-        component: async () =>
-          await import('@/views/organizations/OrganizationDetailView.vue')
-      }
-    ]
-  },
   // technical pages
   {
     path: '/404',
@@ -49,10 +25,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: NotFoundView
   }
-].filter((route) => {
-  if (route.name === undefined) return true
-  return !disableRoutes.includes(route.name)
-})
+]
 
 // static pages
 const pages = (config.website.router.static_pages ?? []).map(

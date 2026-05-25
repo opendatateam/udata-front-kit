@@ -34,6 +34,7 @@ async function onUpdatePage(page: number) {
 }
 
 useMeta({
+  title: () => organizationsConfig.list?.meta?.title ?? 'Organisations',
   description: () => organizationsConfig.list?.meta?.description,
   canonicalUrl: useCanonicalUrl()
 })

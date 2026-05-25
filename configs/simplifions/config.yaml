@@ -103,8 +103,6 @@ website:
     - text: À propos
       to: /about
   router:
-    disable:
-      - topics
     static_pages:
       - title: 'À propos'
         id: 'about'
