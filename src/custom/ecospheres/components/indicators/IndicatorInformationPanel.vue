@@ -16,7 +16,9 @@ const props = defineProps({
 })
 
 const indicator = toRef(props, 'indicator')
-const spatialCoverage = computed(() => indicator.value.spatial?.zones?.[0])
+const spatialCoverage = computed(() =>
+  (indicator.value.spatial?.zones || []).map((sz) => sz.name).join(', ')
+)
 const { unite, mailles } = useIndicatorExtras(indicator)
 </script>
 
@@ -61,7 +63,7 @@ const { unite, mailles } = useIndicatorExtras(indicator)
       />
       <InformationPanelItem
         title="Couverture géographique"
-        :value="spatialCoverage?.name"
+        :value="spatialCoverage"
       />
     </InformationPanelSection>
   </div>

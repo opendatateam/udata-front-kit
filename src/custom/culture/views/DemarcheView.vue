@@ -1,24 +1,14 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
 import { computed, onMounted, ref } from 'vue'
 
 import { fromMarkdown } from '@/utils'
+import { useMeta } from '@/utils/seo'
 
-useHead({
-  meta: [
-    { property: 'og:title', content: 'Démarche - culture.data.gouv.fr' },
-    {
-      name: 'description',
-      content:
-        "Découvrez la démarche et la vision du ministère de la Culture pour l'ouverture des données culturelles."
-    },
-    {
-      property: 'og:description',
-      content:
-        "Découvrez la démarche et la vision du ministère de la Culture pour l'ouverture des données culturelles."
-    }
-  ],
-  link: [{ rel: 'canonical', href: window.location.origin + '/demarche' }]
+useMeta({
+  title: () => 'Démarche',
+  description: () =>
+    "Découvrez la démarche et la vision du ministère de la Culture pour l'ouverture des données culturelles.",
+  canonicalUrl: () => `${window.location.origin}/demarche`
 })
 
 interface DemarcheContent {

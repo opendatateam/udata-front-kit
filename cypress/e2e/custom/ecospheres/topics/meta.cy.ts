@@ -54,7 +54,7 @@ describe('Topic meta tags', () => {
       cy.get('head meta[property="og:title"]').should(
         'have.attr',
         'content',
-        `Test Topic Name | ${siteTitle}`
+        `Collection - Test Topic Name | ${siteTitle}`
       )
       cy.get('head meta[property="og:description"]').should(
         'have.attr',

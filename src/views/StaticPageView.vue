@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import GenericContainer from '@/components/GenericContainer.vue'
 import { pageStore } from '@/store/StaticPageStore'
 import { fromMarkdown } from '@/utils'
+import { useMeta } from '@/utils/seo'
 
 const store = pageStore()
 const router = useRouter()
@@ -21,6 +22,13 @@ const links = computed(() => [
   { to: '/', text: 'Accueil' },
   { text: title.value || '' }
 ])
+
+useMeta({
+  title: title,
+  description: () => router.currentRoute.value.meta.metaDescription,
+  canonicalUrl: () =>
+    `${window.location.origin}${router.currentRoute.value.path}`
+})
 
 watchEffect(async () => {
   if (!props.url) return

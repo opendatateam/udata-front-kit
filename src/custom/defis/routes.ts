@@ -1,7 +1,6 @@
 import {
-  useDatasetSearchPageRoutes,
-  useTopicAdminPagesRoutes,
-  useTopicSearchPageRoutes
+  useGlobalSearchPageRoutes,
+  useTopicAdminPagesRoutes
 } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -11,13 +10,11 @@ const topicConf = {
 }
 
 export const routes: RouteRecordRaw[] = [
-  useDatasetSearchPageRoutes({
-    pageKey: 'datasets',
-    metaTitle: 'Données'
+  useGlobalSearchPageRoutes({
+    pageKey: 'datasets'
   }),
-  useTopicSearchPageRoutes({
+  useGlobalSearchPageRoutes({
     pageKey: 'defis',
-    metaTitle: 'Défis',
     topicConf
   }),
   ...useTopicAdminPagesRoutes({
