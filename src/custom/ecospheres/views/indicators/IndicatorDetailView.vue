@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { useHead } from '@unhead/vue'
-import { computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, inject, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -12,7 +12,7 @@ import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
-import IndicatorVisualisation from '@/custom/ecospheres/views/indicators/IndicatorVisualisation.vue'
+import IndicatorVizChart from '@/custom/ecospheres/components/indicators/viz/IndicatorVizChart.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -29,6 +29,7 @@ import type { Indicator } from '../../model/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
+const router = useRouter()
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -38,6 +39,8 @@ const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
 const showAddToTopicModal = ref(false)
+const indicatorConf = usePageConf('indicators')
+const labels = useLabels(indicatorConf.labels)
 const topicConf = usePageConf('bouquets')
 const topicsLabels = useLabels(topicConf.labels)
 
@@ -90,23 +93,16 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 
-const metaDescription = (): string | undefined => {
-  return indicator.value?.description ?? ''
-}
-
-const metaTitle = computed(() => {
-  return indicator.value?.title
-})
-
-useHead({
-  meta: [
-    {
-      property: 'og:title',
-      content: () => `${metaTitle.value} | ${config.website.title}`
-    },
-    { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription }
-  ]
+useMeta({
+  title: () =>
+    indicator.value?.title &&
+    `${capitalize(labels.singular)} - ${indicator.value.title}`,
+  description: () => indicator.value?.description,
+  canonicalUrl: useCanonicalUrl(() => {
+    const slug = indicator.value?.slug
+    if (!slug) return null
+    return { name: 'indicators_detail', params: { item_id: slug } }
+  })
 })
 
 onMounted(() => {
@@ -114,6 +110,12 @@ onMounted(() => {
     .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
       setAccessibilityProperties(indicator.value?.title)
+      if (indicator.value?.slug && indicator.value.slug !== indicatorId) {
+        router.push({
+          name: 'indicators_detail',
+          params: { item_id: indicator.value.slug }
+        })
+      }
     })
 })
 </script>
@@ -175,7 +177,7 @@ onMounted(() => {
 
       <!-- Prévisualisation -->
       <DsfrTabContent panel-id="tab-content-viz" tab-id="tab-viz">
-        <IndicatorVisualisation
+        <IndicatorVizChart
           v-if="tabularApiUrl"
           :indicator="indicator"
           :tabular-api-url="tabularApiUrl"

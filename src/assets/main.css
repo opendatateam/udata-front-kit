@@ -391,6 +391,12 @@ body {
   list-style: none;
 }
 
+/* ===== Pagination ===== */
+
+.fr-pagination .fr-pagination__list {
+  justify-content: center;
+}
+
 /* ===== DSFR Fixes ===== */
 
 /*

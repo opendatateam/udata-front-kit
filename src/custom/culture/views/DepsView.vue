@@ -1,27 +1,16 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
 import { onMounted, ref } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
 import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
 import { fromMarkdown } from '@/utils'
+import { useMeta } from '@/utils/seo'
 
-useHead({
-  meta: [
-    { property: 'og:title', content: config.website.title },
-    {
-      name: 'description',
-      content:
-        'culture.data.gouv.fr référence et centralise les données du domaine de la culture.'
-    },
-    {
-      property: 'og:description',
-      content:
-        'culture.data.gouv.fr référence et centralise les données du domaine de la culture.'
-    }
-  ],
-  link: [{ rel: 'canonical', href: window.location.origin + '/deps' }]
+useMeta({
+  title: () => undefined,
+  description: () => config.website.homepage.meta_description,
+  canonicalUrl: () => `${window.location.origin}/deps`
 })
 
 interface Section {
@@ -67,7 +56,7 @@ const loading = ref(true)
 const fetchSections = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_sections/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_sections/records?sort=ordre'
     )
     const data = await response.json()
     sections.value = data.records
@@ -79,7 +68,7 @@ const fetchSections = async () => {
 const fetchContent = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_content_section/records'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_content_section/records'
     )
     const data = await response.json()
     contentItems.value = data.records
@@ -91,7 +80,7 @@ const fetchContent = async () => {
 const fetchTopItems = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/hrDZg8StuE1d/tables/Deps_tops/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_tops/records?sort=ordre'
     )
     const data = await response.json()
     topItems.value = data.records
@@ -150,7 +139,7 @@ onMounted(() => {
           id="big-select-search"
           placeholder="Rechercher un jeu de données du DEPS"
           search-label="Rechercher"
-          :search-endpoint-params="{ tag: 'deps-doc' }"
+          search-endpoint="/univers-deps"
         />
       </div>
     </section>
@@ -194,7 +183,7 @@ onMounted(() => {
               :description="
                 formatTopItemsAsMarkdown(getTopItemsByType('new-datasets'))
               "
-              img-src="/static/culture/assets/MC_Langues_78627c8ca0c3-20251007.webp"
+              img-src="https://www.culture.gouv.fr/var/culture/storage/images/_aliases/illustration-16-9_webp/5/5/2/5/9345255-1-fre-FR/f7a46b12806f-2023-Musee-du-cheval-BD-Copyright-Sophie-Lloyd-18-.webp.webp"
               title="🆕 Nouveaux jeux publiés"
               :title-link-attrs="{}"
             />

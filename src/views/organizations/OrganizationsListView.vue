@@ -7,7 +7,9 @@ import { useLoading } from 'vue-loading-overlay'
 import GenericContainer from '@/components/GenericContainer.vue'
 import OrganizationCard from '@/components/OrganizationCard.vue'
 import config from '@/config'
+import type { OrganizationsConfig } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const store = useOrganizationStore()
 const $loading = useLoading()
@@ -16,7 +18,8 @@ const currentPage = ref(1)
 const { pagination } = storeToRefs(store)
 const organizations: Ref<Organization[]> = ref([])
 
-const title = config.organizations?.list?.breadcrumb_title || 'Organisations'
+const organizationsConfig = config.organizations as OrganizationsConfig
+const title = organizationsConfig.list?.breadcrumb_title || 'Organisations'
 const links = computed(() => [{ to: '/', text: 'Accueil' }, { text: title }])
 
 async function onUpdatePage(page: number) {
@@ -29,6 +32,12 @@ async function onUpdatePage(page: number) {
   )
   loader.hide()
 }
+
+useMeta({
+  title: () => organizationsConfig.list?.meta?.title,
+  description: () => organizationsConfig.list?.meta?.description,
+  canonicalUrl: useCanonicalUrl()
+})
 
 onMounted(() => {
   onUpdatePage(0)

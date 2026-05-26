@@ -1,25 +1,44 @@
-declare namespace Cypress {
-  interface Chainable {
-    checkRGAAContrast(): Chainable<void>
-    isInViewport(options?: { threshold?: number; wait?: number }): Chainable<Element>
-    mockDatasetAndRelatedObjects(dataset: object, resources?: Array, dataservices?: Array, reuses?: Array): Chainable<void>
-    mockDatasetBadges(): Chainable<void>
-    mockDatasetFrequencies(): Chainable<void>
-    mockDatasetLicenses(): Chainable<void>
-    mockDatagouvObject(resourceName: string, resourceId: string, data?: object): Chainable<void>
-    mockDatagouvObjectList(resourceName: string, data?: object[]): Chainable<void>
-    mockDataserviceMetricsApi(dataserviceId: string): Chainable<void>
-    mockMatomo(): Chainable<void>
-    mockMetricsApi(datasetId: string): Chainable<void>
-    mockResources(datasetId: string, data?: Array): Chainable<void>
-    mockResourceTypes(): Chainable<void>
-    mockSpatialGranularities(): Chainable<void>
-    mockSpatialLevels(): Chainable<void>
-    mockSpatialZone(): Chainable<void>
-    mockSpatialZonesSuggest(): Chainable<void>
-    mockStaticDatagouv(): Chainable<void>
-    mockUniverseOrganizations(): Chainable<void>
-    simulateConnectedUser(userData?: object): Chainable<void>
-    simulateDisconnectedUser(): Chainable<void>
+import type { DatasetV2, DatasetV2WithFullObject } from '@datagouv/components-next'
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      allowExternalRequests(): Chainable<void>
+      baseMocksForSimplifions(topics?: object[]): Chainable<void>
+      catchUnmockedRequests(): Chainable<void>
+      checkRGAAContrast(): Chainable<void>
+      clickCheckbox(checkbox_name: string): Chainable<void>
+      expectActionToCallApi(action: () => void, resourceName: string, expectedParams: Record<string, string | string[]>, options?: { drain?: boolean }): Chainable<void>
+      expectRequestWithParams(resourceName: string, requestParamsString: string | RegExp): Chainable<void>
+      isInViewport(options?: { threshold?: number; wait?: number }): Chainable<Element>
+      mockDatagouvObject(resourceName: string, resourceId: string, data?: object): Chainable<void>
+      mockDatagouvObjectList(resourceName: string, data?: object[]): Chainable<void>
+      mockDatagouvObjectListWithTags(resourceName: string, tags?: string[], data?: object[]): Chainable<void>
+      mockDataserviceMetricsApi(dataserviceId: string): Chainable<void>
+      mockDatasetAndRelatedObjects(dataset: DatasetV2 | DatasetV2WithFullObject, resources?: object[], dataservices?: object[], reuses?: object[]): Chainable<void>
+      mockDatasetBadges(): Chainable<void>
+      mockDatasetFrequencies(): Chainable<void>
+      mockDatasetLicenses(): Chainable<void>
+      mockDatasetSchemas(): Chainable<void>
+      mockGristImages(): Chainable<void>
+      mockGristRecord(resourceId: string, element: { id: number; [key: string]: unknown }): Chainable<void>
+      mockGristRecords(resourceId: string, elements?: { id: number; [key: string]: unknown }[]): Chainable<void>
+      mockGristRecordsByIds(resourceId: string, elements: { id: number; [key: string]: unknown }[]): Chainable<void>
+      mockListApis(primaryType: 'datasets' | 'dataservices' | 'topics', primaryData?: object[]): Chainable<void>
+      mockMatomo(): Chainable<void>
+      mockMetricsApi(datasetId: string): Chainable<void>
+      mockResources(datasetId: string, data?: object[]): Chainable<void>
+      mockResourceTypes(): Chainable<void>
+      mockSpatialGranularities(): Chainable<void>
+      mockSpatialLevels(): Chainable<void>
+      mockSpatialZone(): Chainable<void>
+      mockSpatialZonesSuggest(): Chainable<void>
+      mockStaticDatagouv(): Chainable<void>
+      mockTopicElements(resourceId: string, elements?: object[]): Chainable<void>
+      mockUniverseOrganizations(): Chainable<void>
+      selectFilterValue(selectLabel: string, optionLabel: string): Chainable<void>
+      simulateConnectedUser(userData?: object): Chainable<void>
+      simulateDisconnectedUser(): Chainable<void>
+    }
   }
 }

@@ -2,7 +2,7 @@ import type { Indicator } from '@/custom/ecospheres/model/indicator'
 import type { Dataservice, Reuse } from '@datagouv/components-next'
 import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import { reuseFactory } from 'cypress/support/factories/reuses_factory'
-import { createIndicator, createIndicatorResource } from './support'
+import { createIndicator } from './support'
 
 describe('Indicator Detail View', () => {
   let indicator: Indicator
@@ -142,38 +142,6 @@ describe('Indicator Detail View', () => {
       cy.contains(
         "Il n'y a pas encore de réutilisation pour cet indicateur."
       ).should('be.visible')
-    })
-  })
-
-  describe('No Datavisualisation Configured', () => {
-    it('should not display the previsualisation', () => {
-      cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Prévisualisation').should('not.be.visible')
-    })
-  })
-
-  describe('Prévisualisation Tab', () => {
-    it('should display the previsualisation when enabled', () => {
-      const indicatorWithViz = createIndicator(
-        {},
-        { enable_visualization: true }
-      )
-      const vizResource = createIndicatorResource()
-      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        {
-          statusCode: 200,
-          body: {
-            data: []
-          }
-        }
-      ).as(`tabular_api`)
-      cy.visit(`/indicators/${indicatorWithViz.id}`)
-      cy.contains('Prévisualisation').click()
-      // Check if the visualization element appears
-      cy.get('.indicator-viz').should('be.visible')
     })
   })
 })
