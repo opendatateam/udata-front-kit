@@ -60,9 +60,9 @@
             integrationScore.totalCount
           }}
         </span>
-        <TooltipWrapper placement="top">
+        <TooltipWrapper placement="top" class="integration-indicator__label">
           <template #trigger>
-            <span class="integration-indicator__label fr-text--xs">
+            <span class="fr-text--xs">
               {{ typeLabel ?? 'API' }} utiles {{ nomFournisseur }}
             </span>
           </template>
@@ -199,6 +199,11 @@ const getShortLabelSimplificationTag = (name: string) => {
 
 .solution-integratrice-card__arrow .fr-icon-arrow-right-line {
   color: var(--blue-france-sun-113-625);
+}
+
+.integration-indicator__label {
+  line-height: 0.1;
+  margin-bottom: 0;
 }
 
 .fr-tags-group {
