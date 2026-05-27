@@ -48,6 +48,32 @@ const createUrl = computed(() => ({
   query: route.query
 }))
 
+const setAccessibilityProperties = inject(
+  AccessibilityPropertiesKey
+) as AccessibilityPropertiesType
+
+const lastAnnouncementKey = ref<string | null>(null)
+
+const announcedTitle = computed(() => {
+  const q = route.query.q as string | undefined
+  return q ? `${pageConf.value.title} pour "${q}"` : pageConf.value.title
+})
+
+const announceSearchResults = (total: number) => {
+  const key = JSON.stringify({ ...route.query, total })
+  if (key === lastAnnouncementKey.value) return
+  lastAnnouncementKey.value = key
+  const page = Number(route.query.page ?? 1)
+  const countText =
+    total === 0
+      ? 'Aucun résultat'
+      : total === 1
+        ? '1 résultat'
+        : `${total} résultats`
+  const text = page > 1 ? `Page ${page}, ${countText}` : countText
+  setAccessibilityProperties(announcedTitle.value, false, [{ text }])
+}
+
 // localType is needed because pageKey is read-only (derived from route), but
 // GlobalSearch needs a writable ref to track the active type (v-model:type).
 // When the user switches type, localType changes and the watch below navigates.
@@ -93,32 +119,6 @@ onMounted(() => {
     router.push({ name: 'not_found' })
   }
 })
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
-
-const lastAnnouncementKey = ref<string | null>(null)
-
-const announcedTitle = computed(() => {
-  const q = route.query.q as string | undefined
-  return q ? `${pageConf.value.title} pour "${q}"` : pageConf.value.title
-})
-
-const announceSearchResults = (total: number) => {
-  const key = JSON.stringify({ ...route.query, total })
-  if (key === lastAnnouncementKey.value) return
-  lastAnnouncementKey.value = key
-  const page = Number(route.query.page ?? 1)
-  const countText =
-    total === 0
-      ? 'Aucun résultat'
-      : total === 1
-        ? '1 résultat'
-        : `${total} résultats`
-  const text = page > 1 ? `Page ${page}, ${countText}` : countText
-  setAccessibilityProperties(announcedTitle.value, false, [{ text }])
-}
 </script>
 
 <template>
