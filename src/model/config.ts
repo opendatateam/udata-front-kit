@@ -21,6 +21,7 @@ export interface StaticPageConfig {
   route: string
   url: string
   meta?: {
+    title?: string
     description?: string
   }
 }

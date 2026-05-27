@@ -14,7 +14,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'home',
     meta: {
-      title: 'Accueil'
+      title: 'Les données publiques françaises sur la transition écologique'
     },
     component: async () => await import('./views/HomeView.vue')
   },

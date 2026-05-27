@@ -1,11 +1,13 @@
 <script lang="ts" setup>
+import { DebugLogger } from '@/utils/debug'
+
 interface InfoToAnnounce {
   text: string
 }
 
 export type { InfoToAnnounce }
 
-defineProps({
+const props = defineProps({
   infos: {
     type: Object as () => InfoToAnnounce[],
     required: true
@@ -16,6 +18,16 @@ defineProps({
     default: () => 'polite'
   }
 })
+
+const debug = new DebugLogger('LiveRegion')
+
+watch(
+  () => props.infos,
+  () => {
+    debug.log('Announcement', JSON.stringify(props.infos))
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

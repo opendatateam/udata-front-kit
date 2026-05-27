@@ -9,7 +9,6 @@ export {}
 declare module 'vue-router' {
   interface RouteMeta {
     title?: string
-    metaDescription?: string
     requiresAuth?: boolean
     cardComponent?: () => Promise<{ default: Component }>
     datasetCardComponent?: () => Promise<{ default: Component }>

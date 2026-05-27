@@ -80,7 +80,6 @@ watch(localType, async (newType) => {
 })
 
 useMeta({
-  title: () => pageConf.value?.meta?.title,
   description: () => pageConf.value?.meta?.description,
   canonicalUrl: useCanonicalUrl()
 })

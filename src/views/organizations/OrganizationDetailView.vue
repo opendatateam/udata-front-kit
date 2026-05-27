@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
@@ -38,10 +34,6 @@ const pages: Ref<{ label: string; href: string; title: string }[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort: Ref<string | undefined> = ref(undefined)
 
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
-
 useMeta({
   title: () => org.value?.name && `Organisation - ${org.value.name}`,
   description: () => org.value?.description,
@@ -49,11 +41,7 @@ useMeta({
 })
 
 onMounted(() => {
-  orgStore
-    .load(organizationId, -1, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      setAccessibilityProperties(org.value?.name)
-    })
+  orgStore.load(organizationId, -1, { toasted: false, redirectNotFound: true })
 })
 
 const sorts = [

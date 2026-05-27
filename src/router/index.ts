@@ -27,7 +27,7 @@ const defaultRoutes: RouteRecordRaw[] = [
         path: '',
         name: 'organizations',
         meta: {
-          title: 'Organisations'
+          title: config.organizations?.list?.meta?.title ?? 'Organisations'
         },
         component: async () =>
           await import('@/views/organizations/OrganizationsListView.vue')
@@ -61,11 +61,7 @@ const pages = (config.website.router.static_pages ?? []).map(
       path: item.route,
       name: item.id,
       component: StaticPageView,
-      props: { url: item.url },
-      meta: {
-        title: item.title,
-        metaDescription: item.meta?.description
-      }
+      props: { url: item.url }
     }
   }
 )
