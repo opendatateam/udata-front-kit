@@ -79,9 +79,6 @@ website:
     - text: Guide du prochain hackathon
       to: 'https://guides.data.gouv.fr/guide-du-participant-au-hackathon-le-climat-en-donnees/'
   router:
-    disable:
-      - organizations_routes
-      - topics
     static_pages:
       - title: 'Accessibilité'
         id: 'accessibility'
