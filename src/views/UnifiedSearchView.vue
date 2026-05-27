@@ -98,37 +98,25 @@ const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
-// announce on results change (query/filter), skip on pagination (same total)
-const lastAnnouncedTotal = ref<number | null>(null)
+const lastAnnouncementKey = ref<string | null>(null)
 
-// Reset the dedup guard when any search param changes except `page`, so
-// same-count transitions (e.g. "vélo" → 0 results, clear → still 0) still
-// produce an announcement. Page changes do not reset the guard.
-watch(
-  () => {
-    const { page: _p, ...rest } = route.query
-    return JSON.stringify(rest)
-  },
-  () => {
-    lastAnnouncedTotal.value = null
-  }
-)
-
-const pageTitle = computed(() => {
+const announcedTitle = computed(() => {
   const q = route.query.q as string | undefined
   return q ? `${pageConf.value.title} pour "${q}"` : pageConf.value.title
 })
 
 const announceSearchResults = (total: number) => {
-  if (total === lastAnnouncedTotal.value) return
-  lastAnnouncedTotal.value = total
+  const { page: _p, ...rest } = route.query
+  const key = JSON.stringify({ ...rest, total })
+  if (key === lastAnnouncementKey.value) return
+  lastAnnouncementKey.value = key
   const text =
     total === 0
       ? 'Aucun résultat'
       : total === 1
         ? '1 résultat'
         : `${total} résultats`
-  setAccessibilityProperties(pageTitle.value, false, [{ text }])
+  setAccessibilityProperties(announcedTitle.value, false, [{ text }])
 }
 </script>
 

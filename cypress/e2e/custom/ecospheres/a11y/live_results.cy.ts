@@ -40,7 +40,6 @@ describe('Unified search – live result count announcement', () => {
   })
 
   it('includes the search query in the live-region page title', () => {
-    // pageTitle computed: "${page.title} pour \"${q}\"" when q is present
     cy.mockListApis('datasets', datasetFactory.many(2))
     cy.visit('/datasets?q=test')
     cy.wait('@get_datasets_list')
