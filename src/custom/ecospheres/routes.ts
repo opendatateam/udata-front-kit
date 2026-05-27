@@ -1,5 +1,6 @@
 import {
   useGlobalSearchPageRoutes,
+  useOrganizationsRoutes,
   useTopicAdminPagesRoutes
 } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
@@ -54,5 +55,6 @@ export const routes: RouteRecordRaw[] = [
   ...useTopicAdminPagesRoutes({
     pageKey: 'bouquets',
     topicConf
-  })
+  }),
+  useOrganizationsRoutes()
 ]

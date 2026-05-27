@@ -123,8 +123,6 @@ website:
     - text: À propos
       to: /about
   router:
-    disable:
-      - topics
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
       - title: 'À propos'
@@ -201,8 +199,10 @@ organizations:
   datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
   dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
-  list:
+  page: # organizations.page is a special case of config.pages
     breadcrumb_title: Contributeurs
+    labels:
+      singular: contributeur
     meta:
       title: Liste des contributeurs
       description: Recherchez une organisation qui a partagé un jeu de données ou une réutilisation sur la transition écologique
