@@ -166,7 +166,7 @@ pages:
     object_type: datasets
     list_all: true
     universe_query:
-      topic: 69f3767828440f63bfc33a1d
+      topic: 69e0f61fc18dec5e382dea8b
     filter_prefix:
     title: Jeux de données
     breadcrumb_title: Données
