@@ -106,16 +106,17 @@ const announcedTitle = computed(() => {
 })
 
 const announceSearchResults = (total: number) => {
-  const { page: _p, ...rest } = route.query
-  const key = JSON.stringify({ ...rest, total })
+  const key = JSON.stringify({ ...route.query, total })
   if (key === lastAnnouncementKey.value) return
   lastAnnouncementKey.value = key
-  const text =
+  const page = Number(route.query.page ?? 1)
+  const countText =
     total === 0
       ? 'Aucun résultat'
       : total === 1
         ? '1 résultat'
         : `${total} résultats`
+  const text = page > 1 ? `Page ${page}, ${countText}` : countText
   setAccessibilityProperties(announcedTitle.value, false, [{ text }])
 }
 </script>
