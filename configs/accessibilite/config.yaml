@@ -4,10 +4,10 @@ site_id: accessibilite
 
 datagouvfr:
   # data.gouv.fr base URL
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 682c45ba772ed4a274715025
-  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
+  tabular_api_url: https://tabular-api.data.gouv.fr
 
 # UI customizations
 website:
@@ -16,8 +16,9 @@ website:
     canonical_url: https://accessibilite.data.gouv.fr
     meta:
       keywords:
-      description:
-      robots: 'noindex, nofollow'
+      description: |
+        accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite.
+      robots:
     robots_txt:
       disallow:
         - /admin
