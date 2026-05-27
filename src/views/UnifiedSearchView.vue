@@ -98,12 +98,7 @@ const setAccessibilityProperties = inject(
   AccessibilityPropertiesKey
 ) as AccessibilityPropertiesType
 
-// Mirrors the old useAccessibilityProperties behaviour:
-// announce on results change (query/filter), skip on pagination (same total).
-//
-// Requires GlobalSearch to emit a `results` event with the total — upstream PR:
-// https://github.com/ecolabdata/ecospheres/issues/1116
-
+// announce on results change (query/filter), skip on pagination (same total)
 const lastAnnouncedTotal = ref<number | null>(null)
 
 // Reset the dedup guard when any search param changes except `page`, so
@@ -133,8 +128,6 @@ const announceSearchResults = (total: number) => {
       : total === 1
         ? '1 résultat'
         : `${total} résultats`
-  // setAccessibilityProperties requires a truthy title to update the LiveRegion;
-  // passing undefined silently drops the announcement (App.vue's if (title) guard)
   setAccessibilityProperties(pageTitle.value, false, [{ text }])
 }
 </script>

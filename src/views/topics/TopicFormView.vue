@@ -182,9 +182,13 @@ const onSubmit = async () => {
 useMeta({
   title: () => {
     if (props.isCreate && routeQuery.clone != null) {
-      return `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+      return topic.value.name
+        ? `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+        : undefined
     } else if (!props.isCreate) {
-      return `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+      return topic.value.name
+        ? `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+        : undefined
     }
     return `Ajouter ${labels.articles.un} ${labels.singular}`
   },
