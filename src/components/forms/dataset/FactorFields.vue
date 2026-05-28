@@ -49,7 +49,6 @@ const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 const hasEditorialization = computed(() => {
   return (
     !!factor.value.title.trim() &&
-    !!factor.value.description?.trim() &&
     (factor.value.siteExtras.group
       ? factor.value.siteExtras.group.trim().length < 100
       : true)

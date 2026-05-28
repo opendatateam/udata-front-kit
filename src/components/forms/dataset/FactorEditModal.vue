@@ -60,9 +60,6 @@ const validateFields = () => {
   if (!modalFactor?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalFactor?.description?.trim()) {
-    formErrors.value.push('purpose')
-  }
   if (
     !modalFactor?.siteExtras.uri &&
     modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE

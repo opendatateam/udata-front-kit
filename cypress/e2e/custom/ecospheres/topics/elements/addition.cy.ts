@@ -1,4 +1,5 @@
 import type { Topic } from '@/model/topic'
+import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { factorFactory, setupEmptyTopic, visitTopic } from '../support'
 
 describe('Topic Elements - Factor Addition', () => {
@@ -103,6 +104,97 @@ describe('Topic Elements - Factor Addition', () => {
       // Verify the updated factor appears in the DOM
       cy.contains(updatedFactor.title).should('be.visible')
       cy.contains(testFactor.title).should('not.exist')
+    })
+
+    it('should allow submission without description', () => {
+      const testFactor = factorFactory.one()
+      const remoteFactor = { ...testFactor, id: 'server-generated-id-456' }
+
+      cy.intercept('POST', `**/topics/${testTopic.id}/elements/`, {
+        statusCode: 201,
+        body: [remoteFactor]
+      }).as('createElement')
+
+      cy.get('.test__add_dataset_btn').click()
+
+      cy.get('#input-title').type(testFactor.title)
+
+      cy.get(`input[name="source"][value="missing"]`).then(($input) => {
+        const labelId = $input.attr('id')
+        cy.get(`label[for="${labelId}"]`).click()
+      })
+
+      // Submit without filling description
+      cy.get('.test__submit_modal_btn').click()
+
+      cy.wait('@createElement').then((interception) => {
+        expect(interception.request.body[0]).to.include({
+          title: testFactor.title
+        })
+      })
+
+      cy.contains(testFactor.title).should('be.visible')
+    })
+
+    it('should pre-fill the title when a dataset is selected and the title is empty', () => {
+      const searchDataset = datasetFactory.one({
+        overrides: { title: 'Pre-filled Dataset Title' }
+      })
+
+      cy.intercept('GET', /.*data\.gouv\.fr\/api\/\d\/datasets\/search.*/, {
+        statusCode: 200,
+        body: {
+          data: [searchDataset],
+          total: 1,
+          page: 1,
+          page_size: 10,
+          next_page: null,
+          previous_page: null
+        }
+      }).as('searchDatasets')
+
+      cy.get('.test__add_dataset_btn').click()
+
+      // Type in the dataset search input (min 3 chars to trigger search)
+      cy.get('#input-dataset').type('Pre-filled')
+      cy.wait('@searchDatasets')
+
+      // Select the first result
+      cy.get('.multiselect-option').first().click()
+
+      // Title should be pre-filled with the dataset title
+      cy.get('#input-title').should('have.value', searchDataset.title)
+    })
+
+    it('should not pre-fill the title when a dataset is selected but the title is already set', () => {
+      const searchDataset = datasetFactory.one({
+        overrides: { title: 'Dataset Title From Search' }
+      })
+
+      cy.intercept('GET', /.*data\.gouv\.fr\/api\/\d\/datasets\/search.*/, {
+        statusCode: 200,
+        body: {
+          data: [searchDataset],
+          total: 1,
+          page: 1,
+          page_size: 10,
+          next_page: null,
+          previous_page: null
+        }
+      }).as('searchDatasets')
+
+      cy.get('.test__add_dataset_btn').click()
+
+      // Set the title first
+      cy.get('#input-title').type('My custom title')
+
+      // Select a dataset
+      cy.get('#input-dataset').type('Dataset')
+      cy.wait('@searchDatasets')
+      cy.get('.multiselect-option').first().click()
+
+      // Title should remain unchanged
+      cy.get('#input-title').should('have.value', 'My custom title')
     })
   })
 })
