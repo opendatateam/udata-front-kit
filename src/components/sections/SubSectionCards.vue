@@ -10,7 +10,7 @@ defineProps({
 <template>
   <div>
     <h3 v-if="subsection.title">{{ subsection.title }}</h3>
-    <div style="display: flex; flex-wrap: wrap">
+    <div class="cards-row">
       <div v-for="(item, index) in subsection.cards" :key="index">
         <DsfrCard
           class="subsection-card"
@@ -31,5 +31,9 @@ defineProps({
   width: 350px;
   margin-right: 30px;
   margin-bottom: 30px;
+}
+.cards-row {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
