@@ -3,10 +3,6 @@ import SearchOrganizationFilter from '@/components/search/SearchOrganizationFilt
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -47,32 +43,6 @@ const createUrl = computed(() => ({
   name: `${pageKey.value}_add`,
   query: route.query
 }))
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
-
-const lastAnnouncementKey = ref<string | null>(null)
-
-const announcedTitle = computed(() => {
-  const q = route.query.q as string | undefined
-  return q ? `${pageConf.value.title} pour "${q}"` : pageConf.value.title
-})
-
-const announceSearchResults = (total: number) => {
-  const key = JSON.stringify({ ...route.query, total })
-  if (key === lastAnnouncementKey.value) return
-  lastAnnouncementKey.value = key
-  const page = Number(route.query.page ?? 1)
-  const countText =
-    total === 0
-      ? 'Aucun résultat'
-      : total === 1
-        ? '1 résultat'
-        : `${total} résultats`
-  const text = page > 1 ? `Page ${page}, ${countText}` : countText
-  setAccessibilityProperties(announcedTitle.value, false, [{ text }])
-}
 
 // localType is needed because pageKey is read-only (derived from route), but
 // GlobalSearch needs a writable ref to track the active type (v-model:type).
@@ -184,7 +154,6 @@ onMounted(() => {
         v-model:type="localType"
         :config="route.meta.searchConfig!"
         :auto-focus="false"
-        @results-count="announceSearchResults"
       >
         <template v-if="route.meta.customFilters?.length" #custom-filters-top>
           <template
