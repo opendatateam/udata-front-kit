@@ -87,13 +87,9 @@ const badgeClasse = computed(() => {
           <template v-else>{{ ownerName }}</template>
         </p>
         <p
-          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm"
+          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm description-clamp"
         >
-          <text-clamp
-            :auto-resize="true"
-            :text="stripFromMarkdown(dataset.description)"
-            :max-lines="2"
-          />
+          {{ stripFromMarkdown(dataset.description) }}
         </p>
       </div>
     </div>
@@ -103,5 +99,11 @@ const badgeClasse = computed(() => {
 <style scoped>
 h4 {
   font-size: 1rem;
+}
+.description-clamp {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
