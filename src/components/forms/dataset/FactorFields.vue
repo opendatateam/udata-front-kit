@@ -86,6 +86,9 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
     factor.value.siteExtras.uri = null
     factor.value.element = null
   } else {
+    if (!factor.value.title.trim()) {
+      factor.value.title = value.title
+    }
     factor.value.siteExtras.availability = Availability.LOCAL_AVAILABLE
     factor.value.element = {
       id: value.id,
