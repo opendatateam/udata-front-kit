@@ -189,12 +189,6 @@ onMounted(() => {
           :value="Availability.MISSING"
           label="Je n'ai pas trouvé la donnée"
         />
-        <DsfrRadioButton
-          v-model="factor.siteExtras.availability"
-          name="source"
-          :value="Availability.NOT_AVAILABLE"
-          label="Je n'ai pas cherché la donnée"
-        />
       </fieldset>
     </div>
     <ErrorMessage
