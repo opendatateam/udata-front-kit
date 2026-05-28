@@ -118,3 +118,9 @@ export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
   slug?: string
   elements?: Factor[]
 }
+
+export interface TopicSearchParams {
+  tag: string
+  page?: number
+  page_size?: number
+}

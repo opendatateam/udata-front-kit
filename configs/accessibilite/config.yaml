@@ -151,8 +151,8 @@ website:
     show_extended_information_panel: false
   topics:
     can_add_topics:
-      everyone: true
-      authorized_users:
+      everyone: false
+      authorized_users: ['69e0effc2ca128bf0bf1fea9']
 
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
@@ -221,11 +221,19 @@ pages:
           required: true
         values:
           - id: accessibilite-tourisme
-            name: Tourisme accessible
-          - id: accessibilite-des-lieux
-            name: Accessibilité des établissements recevant du public
+            name: Tourisme
+          - id: accessibilite-quotidienne
+            name: Vie quotidienne
           - id: accessibilite-numerique
-            name: Accessibilité numérique
+            name: Numérique
+          - id: accessibilite-enseignement
+            name: Enseignement
+          - id: accessibilite-sante
+            name: Santé
+          - id: accessibilite-logement
+            name: Logement
+          - id: accessibilite-autonomie
+            name: Autonomie
           - id: autre
             name: Autre
       - name: Couverture territoriale
