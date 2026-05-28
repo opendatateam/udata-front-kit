@@ -61,8 +61,9 @@ const validateFields = () => {
     formErrors.value.push('title')
   }
   if (
-    !modalFactor?.siteExtras.uri &&
-    modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
+    modalFactor?.siteExtras.availability === Availability.NOT_AVAILABLE ||
+    (!modalFactor?.siteExtras.uri &&
+      modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE)
   ) {
     formErrors.value.push('availability')
   }
