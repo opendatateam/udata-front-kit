@@ -130,11 +130,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <FactorTextFields
-    v-model:factor-model="factor"
-    :error-title="getErrorMessage('title')"
-    :error-purpose="getErrorMessage('purpose')"
-  />
   <div id="input-availability" tabindex="-1">
     <div class="fr-mt-1w fr-mb-4w">
       <SelectDataset
@@ -205,6 +200,11 @@ onMounted(() => {
       input-name="availability"
     />
   </div>
+  <FactorTextFields
+    v-model:factor-model="factor"
+    :error-title="getErrorMessage('title')"
+    :error-purpose="getErrorMessage('purpose')"
+  />
   <div class="fr-input-group">
     <SelectTopicFactorGroup
       v-model:factor-model="factor"
