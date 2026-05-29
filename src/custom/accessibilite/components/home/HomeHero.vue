@@ -13,7 +13,9 @@ const doSearch = (q: string) => {
 </script>
 
 <template>
-  <section class="hero-section fr-pt-9w fr-pb-10w">
+  <section
+    class="hero-section fr-py-8w fr-pb-10w fr-background-alt--yellow-moutarde"
+  >
     <div class="fr-container">
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-lg-9">
@@ -47,7 +49,8 @@ const doSearch = (q: string) => {
 .hero-section {
   position: relative;
   isolation: isolate;
-  background-color: var(--background-alt-yellow-moutarde);
+  /* match illustration height */
+  min-block-size: 360px;
 }
 h1 {
   max-inline-size: 28ch;

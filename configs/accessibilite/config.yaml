@@ -36,27 +36,13 @@ website:
     style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: "Le Point d'Accès Unique aux Données d'Accessibilité"
-    subtitle: "accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
+    title:
+    subtitle:
     sections:
-      - title: Des thèmes permettant de classer les jeux de données et de mieux visualiser les politiques publiques en faveur de l'accessibilité
+      - title:
         content:
         sub_section_datasets:
         sub_section_cards:
-          title:
-          cards:
-            - name: 'Tourisme'
-              description: 'Toutes les données liées au tourisme accessible (mobilités, établissements recevant du public, etc.)'
-              url: 'themes?theme=accessibilite-tourisme'
-              image_url: '/static/accessibilite/assets/tourisme-handicap.jpg'
-            - name: 'Établissements recevant du public'
-              description: 'Données sur tous les établissements recevant du public (établissements scolaires, de santé, etc.)'
-              url: 'themes?theme=accessibilite-des-lieux'
-              image_url: '/static/accessibilite/assets/accessibilite-des-lieux.jpg'
-            - name: 'Numérique'
-              description: "Les données en lien avec l'accessibilité numérique"
-              url: 'themes?theme=accessibilite-numerique'
-              image_url: '/static/accessibilite/assets/accessibilite-numerique.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
@@ -245,3 +231,42 @@ pages:
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
 organizations:
+
+accessibilite:
+  homepage:
+    sponsors:
+      - name: Délégation interministérielle à l'accessibilité
+        logo: logo-DIA
+      - name: La fabtique de la donnée territoriale
+        logo: logo-fabrique-territoriale
+      - name: IGN
+        logo: logo-IGN
+      - name: CNSA
+        logo: logo-cnsa
+      - name: beta.gouv
+        logo: logo-beta.gouv
+      - name: ECOLAB
+        logo: logo-ecolab
+      - name: datagouv
+        logo: logo-datagouv
+      - name: Direction interministérielle du numérique
+        logo: logo-DINUM
+      - name: Délégation ministérielle à l'accessibilité
+        logo: logo-DMA
+    partners:
+      - name: Association des maires ruraux de France
+        logo: logo-amrf
+      - name: collectif handicap visuel
+        logo: logo-collectif-handicap-visuel
+      - name: Départements de France
+        logo: logo-departements
+      - name: France urbaine
+        logo: logo-france-urbaine
+      - name: Régions de France
+        logo: logo-regions-france
+      - name: Unanimes
+        logo: logo-unanimes
+      - name: Unapeda
+        logo: logo-unapeda
+      - name: Unapei
+        logo: logo-unapei
