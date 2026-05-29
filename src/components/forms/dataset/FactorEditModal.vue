@@ -61,6 +61,7 @@ const validateFields = () => {
     formErrors.value.push('title')
   }
   if (
+    // NOT_AVAILABLE is not allowed anymore in edit/creation
     modalFactor?.siteExtras.availability === Availability.NOT_AVAILABLE ||
     (!modalFactor?.siteExtras.uri &&
       modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE)
