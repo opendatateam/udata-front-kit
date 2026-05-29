@@ -141,28 +141,15 @@ describe('Topic Elements - Factor Addition', () => {
         overrides: { title: 'Pre-filled Dataset Title' }
       })
 
-      cy.intercept('GET', /.*data\.gouv\.fr\/api\/\d\/datasets\/search.*/, {
-        statusCode: 200,
-        body: {
-          data: [searchDataset],
-          total: 1,
-          page: 1,
-          page_size: 10,
-          next_page: null,
-          previous_page: null
-        }
-      }).as('searchDatasets')
+      cy.mockSearch('datasets', [searchDataset])
 
       cy.get('.test__add_dataset_btn').click()
 
-      // Type in the dataset search input (min 3 chars to trigger search)
       cy.get('#input-dataset').type('Pre-filled')
-      cy.wait('@searchDatasets')
+      cy.wait('@search_datasets')
 
-      // Select the first result
       cy.get('.multiselect-option').first().click()
 
-      // Title should be pre-filled with the dataset title
       cy.get('#input-title').should('have.value', searchDataset.title)
     })
 
@@ -171,29 +158,16 @@ describe('Topic Elements - Factor Addition', () => {
         overrides: { title: 'Dataset Title From Search' }
       })
 
-      cy.intercept('GET', /.*data\.gouv\.fr\/api\/\d\/datasets\/search.*/, {
-        statusCode: 200,
-        body: {
-          data: [searchDataset],
-          total: 1,
-          page: 1,
-          page_size: 10,
-          next_page: null,
-          previous_page: null
-        }
-      }).as('searchDatasets')
+      cy.mockSearch('datasets', [searchDataset])
 
       cy.get('.test__add_dataset_btn').click()
 
-      // Set the title first
       cy.get('#input-title').type('My custom title')
 
-      // Select a dataset
       cy.get('#input-dataset').type('Dataset')
-      cy.wait('@searchDatasets')
+      cy.wait('@search_datasets')
       cy.get('.multiselect-option').first().click()
 
-      // Title should remain unchanged
       cy.get('#input-title').should('have.value', 'My custom title')
     })
   })
