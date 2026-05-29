@@ -18,7 +18,7 @@ useMeta({
 
   <section class="fr-container fr-py-7w">
     <h2>Qu’est-ce que des données d’accessibilité ?</h2>
-    <p class="fr-text--lead fr-mb-0">
+    <p class="fr-text--lead fr-mb-0 lead-text">
       Les données d’accessibilité sont des informations qui permettent de savoir
       si un lieu, un service, un trajet, un équipement sportif ou encore un site
       internet est accessible aux personnes en situation de handicap.
@@ -40,6 +40,10 @@ h3 {
 h2 {
   /* fluid typography: 28px at ~375px viewport → 32px at ~992px viewport */
   font-size: clamp(1.75rem, 0.65vw + 1.6rem, 2rem);
+}
+
+.lead-text {
+  max-inline-size: 70ch;
 }
 
 #footer {
