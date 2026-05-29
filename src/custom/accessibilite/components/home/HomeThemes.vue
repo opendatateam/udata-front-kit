@@ -8,7 +8,7 @@ const topics = ref<Topic[] | null>(null)
 
 onMounted(async () => {
   const response = await topicsAPI.search({
-    tag: 'accessibilite-univers',
+    tag: ['accessibilite-univers'],
     page: 1,
     page_size: 8
   })

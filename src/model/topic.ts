@@ -120,7 +120,25 @@ export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
 }
 
 export interface TopicSearchParams {
-  tag: string
+  q?: string
+  tag?: string[]
+  featured?: boolean
+  last_update_range?: 'last_30_days' | 'last_12_months' | 'last_3_years'
+  organization?: string
+  producer_type?:
+    | 'local-authority'
+    | 'not-specified'
+    | 'public-service'
+    | 'association'
+    | 'user'
+    | 'company'
+  sort?:
+    | 'name'
+    | 'created'
+    | 'last_modified'
+    | '-name'
+    | '-created'
+    | '-last_modified'
   page?: number
   page_size?: number
 }
