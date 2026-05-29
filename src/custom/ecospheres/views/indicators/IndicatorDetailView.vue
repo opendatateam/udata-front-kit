@@ -123,7 +123,7 @@ onMounted(() => {
       <DsfrButton
         secondary
         size="sm"
-        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.plural}`"
+        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.singular}`"
         icon="fr-icon-file-add-line"
         @click="showAddToTopicModal = true"
       />
