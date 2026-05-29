@@ -21,9 +21,7 @@ const META_DESCRIPTION_MAX_LENGTH = 155
 
 export function toMetaDescription(value: string | null | undefined): string {
   if (!value) return ''
-  const plain = stripFromMarkdown(value)
-  if (plain.length <= META_DESCRIPTION_MAX_LENGTH) return plain
-  return plain.slice(0, META_DESCRIPTION_MAX_LENGTH).trimEnd() + '…'
+  return stripFromMarkdown(value, META_DESCRIPTION_MAX_LENGTH)
 }
 
 function toMetaKeywords(keywords: string[] | undefined): string | undefined {

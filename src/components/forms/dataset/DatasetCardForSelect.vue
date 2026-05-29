@@ -89,7 +89,7 @@ const badgeClasse = computed(() => {
         <p
           class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm description-clamp"
         >
-          {{ stripFromMarkdown(dataset.description) }}
+          {{ stripFromMarkdown(dataset.description, 250) }}
         </p>
       </div>
     </div>
