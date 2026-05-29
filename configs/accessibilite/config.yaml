@@ -11,7 +11,7 @@ datagouvfr:
 
 # UI customizations
 website:
-  title: 'accessibilite.data.gouv.fr'
+  title: "Point d'accès unique aux données d'accessibilité"
   seo:
     canonical_url: https://accessibilite.data.gouv.fr
     meta:
@@ -29,7 +29,7 @@ website:
   formatted_title: '<b>accessibilite.data.gouv.fr</b>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/static/logos/accessibilite-logo.svg'
+  service_logo:
   badge:
     display: true
     text: 'BETA'
@@ -48,15 +48,16 @@ website:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
   header:
     admin_shortcut: false
+    service_description: accessibilite.data.gouv.fr
     button:
       display: false
       label: 'Donnez votre avis'
       link:
     search:
-      display: true
+      display: false
       placeholder: Rechercher...
   search_bar:
-    display: true
+    display: false
     placeholder: Rechercher un jeu de données
   secondary_search:
     display: false
@@ -65,26 +66,32 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Données
+    - text: Toutes les données
       to: /datasets
-    - text: Thèmes
+    - text: Données par thème
       to: /themes
-    - text: À propos
+    - text: Mots expliqués
+      to: /glossaire
+    - text: Qu’est-ce que PAUDA ?
       to: /about
   router:
     static_pages:
-      - title: 'À propos'
+      - title: 'Mots expliqués'
+        id: 'glossaire'
+        route: '/glossaire'
+        url: '/static/accessibilite/pages/glossaire.md'
+      - title: 'Qu’est-ce que PAUDA ?'
         id: 'about'
         route: '/about'
         url: '/static/accessibilite/pages/about.md'
   sitemap:
     - name: Accueil
       path: /
-    - name: Données
+    - name: Toutes les données
       path: /datasets
-    - name: Thèmes
+    - name: Données par thème
       path: /themes
-    - name: À propos
+    - name: Qu’est-ce que PAUDA ?
       path: /about
   show_quality_component: true
   oauth_option: true
@@ -102,7 +109,7 @@ website:
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   logo_operator:
-    src:
+    src: '/static/logos/accessibilite-logo.svg'
     show_in_header: false
     footer:
       width:

@@ -36,6 +36,8 @@ const closeModal = () => {
 
 const logoText = config.website.rf_title
 const serviceTitle = config.website.title
+const serviceDescription =
+  config.website.header.service_description ?? undefined
 const serviceLogo = config.website.service_logo
 const logoOperator = config.website.logo_operator?.src
 const showLogoOperatorInHeader =
@@ -54,7 +56,7 @@ const badgeStyle = config.website.badge.style
     :operator-img-src="showLogoOperatorInHeader ?? logoOperator"
     :operator-img-alt
     :operator-img-style
-    service-description=""
+    :service-description
     :quick-links
     :show-search="showSearch && !customSearch"
     :home-label="`Retour à l'accueil du site - ${serviceTitle}`"
