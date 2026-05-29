@@ -382,13 +382,34 @@ body {
     font-weight: normal;
     text-transform: uppercase;
   }
+  dd + dt {
+    margin-block-start: 1rem;
+  }
 }
 
 /* ===== Lists ===== */
 
-/* Remove list styles on ul, ol elements with a list role, which tells browsers the list still behave as a list even without default styles */
+/* Remove list styles on ul, ol elements with a list role, which tells browsers the list still behaves as a list even without default styles */
 :where(ol, ul)[role='list'] {
   list-style: none;
+}
+
+dl > dt {
+  font-weight: bold;
+}
+
+.accessibilite-glossary {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+
+  li {
+    margin: 0;
+  }
+
+  li a::before {
+    content: none;
+  }
 }
 
 /* ===== Pagination ===== */
