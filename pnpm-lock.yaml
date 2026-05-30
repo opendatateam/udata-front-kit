@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       '@datagouv/components-next':
-        specifier: 1.0.2-dev.90
-        version: 1.0.2-dev.90(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
+        specifier: 1.1.2
+        version: 1.1.2(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       '@gouvfr/dsfr':
         specifier: ~1.14.3
         version: 1.14.4
@@ -483,10 +483,10 @@ packages:
         integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==
       }
 
-  '@datagouv/components-next@1.0.2-dev.90':
+  '@datagouv/components-next@1.1.2':
     resolution:
       {
-        integrity: sha512-fH1+yUtJBr+69K/JWl3PdVglraSrPWWC7JAkQc5bzH3EtWorQLUXhRyuxk7To1uDS0BU3HcfGCYRhyfPfKz0Pg==
+        integrity: sha512-+MqQ2ll/MM2L2MbBzZgM4Up54cGJp6sPPHsZ4qlwgkKgWSC4yeQuJQaW/ohIcyqZjN7QVY2zsk8AotgOMMWt/w==
       }
     engines:
       {
@@ -8526,7 +8526,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@datagouv/components-next@1.0.2-dev.90(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
+  '@datagouv/components-next@1.1.2(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
     dependencies:
       '@floating-ui/vue': 1.1.11(vue@3.5.30(typescript@5.7.3))
       '@headlessui/vue': 1.7.23(vue@3.5.30(typescript@5.7.3))
