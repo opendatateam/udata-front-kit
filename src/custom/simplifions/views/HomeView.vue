@@ -90,23 +90,16 @@ const niveauxDeSimplification = [
         Acteurs publics, utilisez la donnée pour simplifier vos services !
       </h1>
       <div class="fr-mt-5w">
-        <div class="subtitle fr-text--alt fr-mb-10w">
+        <div class="subtitle fr-mb-10w">
           <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-content-media__img fr-col-lg-2 fr-col-4">
               <img
-                class="fr-responsive-img"
+                class="fr-responsive-img img-block"
                 src="/static/simplifions/assets/accueil-picto-ecosystem.png"
                 alt=""
-                style="display: block; width: 100%; height: auto"
               />
             </div>
-            <div
-              class="fr-col-lg-8 fr-col-12"
-              style="
-                font-family: Marianne, arial, sans-serif !important;
-                font-style: normal;
-              "
-            >
+            <div class="fr-col-lg-8 fr-col-12">
               <p class="fr-text--lead">
                 Simplifiez les démarches et services des citoyens, entreprises
                 et associations en récupérant pour eux leurs informations
@@ -127,14 +120,11 @@ const niveauxDeSimplification = [
   </div>
 
   <div class="fr-container hero-text">
-    <h2
-      class="fr-h1 fr-mt-15w fr-mb-5w"
-      style="color: black; text-align: center"
-    >
+    <h2 class="fr-h1 fr-mt-15w fr-mb-5w section-heading">
       Améliorer les services à destination :
     </h2>
 
-    <p class="fr-text--lg" style="text-align: center">
+    <p class="fr-text--lg text-center">
       Le portail <i>simplifions.data.gouv.fr</i> vous accompagne pour
       simplifier, avec de la donnée, les démarches des citoyens.<br />Retrouvez
       tous les cas d'usages selon le public concerné :
@@ -177,14 +167,11 @@ const niveauxDeSimplification = [
   </div>
 
   <div class="fr-container hero-text">
-    <h2
-      class="fr-h1 fr-mt-15w fr-mb-5w"
-      style="color: black; text-align: center"
-    >
+    <h2 class="fr-h1 fr-mt-15w fr-mb-5w section-heading">
       Quelles que soient vos ressources, il existe des solutions !
     </h2>
 
-    <p class="fr-text--lg" style="text-align: center">
+    <p class="fr-text--lg text-center">
       Ce portail s'adresse à l'ensemble des acteurs publics, qu'ils disposent ou
       non de ressources informatiques.
       <br />
@@ -198,7 +185,7 @@ const niveauxDeSimplification = [
         :key="categorie_solution.title"
         class="fr-col-12 fr-col-lg-4"
       >
-        <div class="fr-card" style="background-color: #fafafa">
+        <div class="fr-card card-light">
           <div class="fr-card__body">
             <div class="fr-card__content">
               <ul class="fr-tags-group">
@@ -238,21 +225,11 @@ const niveauxDeSimplification = [
             </div>
           </div>
           <div class="fr-card__header">
-            <div
-              style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100px;
-                overflow: hidden;
-                margin-top: 10px;
-              "
-            >
+            <div class="card-image-container">
               <img
-                class="fr-responsive-img"
+                class="fr-responsive-img card-image"
                 :src="categorie_solution.imageSrc"
                 alt=""
-                style="max-height: 100%; width: auto"
               />
             </div>
           </div>
@@ -262,14 +239,11 @@ const niveauxDeSimplification = [
   </div>
 
   <div class="fr-container hero-text">
-    <h2
-      class="fr-h1 fr-mt-15w fr-mb-5w"
-      style="color: black; text-align: center"
-    >
+    <h2 class="fr-h1 fr-mt-15w fr-mb-5w section-heading">
       Pourquoi simplifier vos démarches avec la donnée ?
     </h2>
 
-    <p class="fr-text--lg" style="text-align: center">
+    <p class="fr-text--lg text-center">
       Administrations et collectivités, en intégrant des API ou des données dans
       vos démarches et/ou votre système d'information, de nombreux avantages
       s'offrent à vous et vos usagers :
@@ -313,14 +287,11 @@ const niveauxDeSimplification = [
   </div>
 
   <div class="fr-container hero-text">
-    <h2
-      class="fr-h1 fr-mt-15w fr-mb-5w"
-      style="color: black; text-align: center"
-    >
+    <h2 class="fr-h1 fr-mt-15w fr-mb-5w section-heading">
       La simplification en 3 niveaux
     </h2>
 
-    <p class="fr-text--lg" style="text-align: center">
+    <p class="fr-text--lg text-center">
       Il y a
       <router-link to="/niveaux-simplification"
         >plusieurs niveaux de simplification</router-link
@@ -336,7 +307,7 @@ const niveauxDeSimplification = [
         :key="niveau.title"
         class="fr-col-12 fr-col-md-4"
       >
-        <div class="fr-card" style="background-color: #fafafa">
+        <div class="fr-card card-light">
           <div class="fr-card__body">
             <div class="fr-card__content">
               <h3 class="fr-card__title">
@@ -368,16 +339,7 @@ const niveauxDeSimplification = [
             </div>
           </div>
           <div class="fr-card__header">
-            <div
-              style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 10px;
-                overflow: hidden;
-                margin-top: 0px;
-              "
-            ></div>
+            <div class="card-header-spacer"></div>
           </div>
         </div>
       </div>
@@ -393,15 +355,8 @@ const niveauxDeSimplification = [
       </router-link>
     </div>
   </div>
-  <div
-    class="fr-container hero-text fr-mt-8w fr-py-8w"
-    style="background-color: rgb(243, 243, 251)"
-  >
-    <h2
-      id="redaction-contenu"
-      class="fr-h1 fr-mb-5w"
-      style="color: black; text-align: center"
-    >
+  <div class="fr-container hero-text fr-mt-8w fr-py-8w section-bg-light">
+    <h2 id="redaction-contenu" class="fr-h1 fr-mb-5w section-heading">
       Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
     </h2>
 
@@ -412,16 +367,13 @@ const niveauxDeSimplification = [
         <figure role="group" class="fr-content-media fr-content-media--sm">
           <div class="fr-content-media__img fr-col-4">
             <img
-              class="fr-responsive-img"
+              class="fr-responsive-img img-auto-height"
               src="/static/simplifions/assets/accueil-picto-contenu-ligne-editoriale.png"
               alt=""
-              style="width: auto; height: 100%"
             />
           </div>
         </figure>
-        <h3 style="text-align: center">
-          Ligne éditoriale <i>DLNUF/proactivité</i>
-        </h3>
+        <h3 class="text-center">Ligne éditoriale <i>DLNUF/proactivité</i></h3>
         <p class="fr-text--lg fr-text--bold">
           Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une
           ligne éditoriale :
@@ -440,14 +392,13 @@ const niveauxDeSimplification = [
         <figure role="group" class="fr-content-media fr-content-media--sm">
           <div class="fr-content-media__img fr-col-3">
             <img
-              class="fr-responsive-img"
+              class="fr-responsive-img img-auto-height"
               src="/static/simplifions/assets/accueil-picto-contenu-contributif.png"
               alt=""
-              style="width: auto; height: 100%"
             />
           </div>
         </figure>
-        <h3 style="text-align: center">Contenu collaboratif</h3>
+        <h3 class="text-center">Contenu collaboratif</h3>
         <p class="fr-text--lg fr-text--bold">
           De nombreux espaces sont disponibles sur le site pour permettre aux
           usagers de proposer des modifications dans l'objectif de construire
@@ -461,10 +412,7 @@ const niveauxDeSimplification = [
       </div>
     </div>
 
-    <p
-      class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w"
-      style="text-align: center"
-    >
+    <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w text-center">
       📝 Proposez une modification, un cas d'usage ou une solution :
     </p>
 
@@ -479,10 +427,7 @@ const niveauxDeSimplification = [
         Formulaire pour proposer un contenu
       </a>
     </div>
-    <p
-      class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-2w"
-      style="text-align: center"
-    >
+    <p class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-2w text-center">
       Consultez les règles utilisées par le pôle Data <br />pour identifier les
       contenus qui sont référencés dans <i>Simplifions.data</i> :
     </p>
@@ -527,7 +472,6 @@ const niveauxDeSimplification = [
 }
 .subtitle {
   text-align: left;
-  font-style: italic;
   font-size: 20px;
   line-height: 28px;
 }
@@ -535,9 +479,42 @@ const niveauxDeSimplification = [
   margin-top: 30px;
   text-align: left;
 }
-
 .button-link {
   text-decoration: none;
   background: none;
+}
+.img-block {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.section-heading {
+  color: black;
+  text-align: center;
+}
+.card-light {
+  background-color: #fafafa;
+}
+.card-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.card-image {
+  max-height: 100%;
+  width: auto;
+}
+.card-header-spacer {
+  height: 10px;
+}
+.section-bg-light {
+  background-color: rgb(243, 243, 251);
+}
+.img-auto-height {
+  width: auto;
+  height: 100%;
 }
 </style>
