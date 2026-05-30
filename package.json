@@ -29,7 +29,7 @@
     "type-check:cypress": "tsc --noEmit --project cypress/tsconfig.json"
   },
   "dependencies": {
-    "@datagouv/components-next": "1.1.1",
+    "@datagouv/components-next": "1.1.2",
     "@gouvfr/dsfr": "~1.14.3",
     "@gouvfr/dsfr-chart": "^2.0.4",
     "@gouvminint/vue-dsfr": "^8.15.0",
