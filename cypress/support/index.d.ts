@@ -29,6 +29,7 @@ declare global {
       mockMetricsApi(datasetId: string): Chainable<void>
       mockResources(datasetId: string, data?: object[]): Chainable<void>
       mockResourceTypes(): Chainable<void>
+      mockSearch(type: string, data?: object[]): Chainable<void>
       mockSpatialGranularities(): Chainable<void>
       mockSpatialLevels(): Chainable<void>
       mockSpatialZone(): Chainable<void>

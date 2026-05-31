@@ -34,10 +34,12 @@ export const fromMarkdown = (value: string | null, inline: boolean = false) => {
 /**
  * Strip HTML tags from markdown
  */
-export const stripFromMarkdown = (value: string) => {
+export const stripFromMarkdown = (value: string, maxSize?: number) => {
   const html = marked.parse(value, markedOptions)
   // type cast to string because we don't use async mode of marked
-  return stripHtml(html as string).result
+  const text = stripHtml(html as string).result
+  if (maxSize === undefined || text.length <= maxSize) return text
+  return text.slice(0, maxSize).replace(/\S+$/, '').trimEnd() + '…'
 }
 
 /**
