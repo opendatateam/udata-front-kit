@@ -89,6 +89,7 @@ export type PageConf = {
   universe_query: PageUniverseQueryConf | null
   title: string
   breadcrumb_title: string | null
+  icon?: string
   labels: PageLabelsConf
   search: PageSearchConf
   banner: PageBannerConf | null
