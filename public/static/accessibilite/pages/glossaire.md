@@ -1,6 +1,6 @@
 <nav class="fr-summary" role="navigation" aria-labelledby="fr-summary-title">
 	<h2 id="fr-summary-title" class="fr-summary__title">Table des matières</h2>
-	<ol class="accessibilite-glossary" role=list>
+	<ol class="glossary" role=list>
 		<li><a id="summary-link-1" class="fr-summary__link" href="#a">A</a></li>
 		<li><a id="summary-link-2" class="fr-summary__link" href="#c">C</a></li>
 		<li><a id="summary-link-3" class="fr-summary__link" href="#d">D</a></li>
