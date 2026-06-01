@@ -65,7 +65,7 @@ h1 {
   translate: 0 -50%;
   z-index: -1;
 
-  @media (width < 62rem) {
+  @media (width < 78rem) {
     display: none;
   }
 }

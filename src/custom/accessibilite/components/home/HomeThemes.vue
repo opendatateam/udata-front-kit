@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
+import { useUniverseQuery } from '@/utils/universe'
+
 import { DsfrTile } from '@gouvminint/vue-dsfr'
 
 const topicsAPI = new TopicsAPI()
 const topics = ref<Topic[] | null>(null)
 
 onMounted(async () => {
-  const response = await topicsAPI.search({
-    tag: ['accessibilite-univers'],
-    page: 1,
-    page_size: 8
+  const response = await topicsAPI.list({
+    params: { ...useUniverseQuery('themes', {}), page: 1, page_size: 8 }
   })
   topics.value = response.data
 })

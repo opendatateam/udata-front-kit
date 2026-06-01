@@ -45,10 +45,7 @@ form :deep(.fr-label) {
 }
 form :deep(.fr-input) {
   margin: 0;
-  flex: 1 0 80%;
+  flex: 1 1 70%;
   box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
-}
-form :deep(.fr-button) {
-  flex: 1;
 }
 </style>
