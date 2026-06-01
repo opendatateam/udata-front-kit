@@ -106,10 +106,6 @@ routerPromise
         LocalStorageService.setItem('lastRoute', to.fullPath)
         void router.push({ name: 'login' })
       }
-      // set page title where needed
-      if (to.meta.title != null) {
-        document.title = to.meta.title + ' | ' + config.website.title
-      }
     })
 
     // redirect to 404 if configured for this request

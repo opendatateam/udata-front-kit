@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref, watch, type Ref } from 'vue'
+import { capitalize, computed, onMounted, ref, watch, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
+import type { OrganizationsConfig } from '@/model/config'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useOrganizationStore } from '@/store/OrganizationStore'
 import { descriptionFromMarkdown } from '@/utils'
+import { useMeta } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const organizationId = route.params.oid
@@ -23,12 +21,13 @@ const orgStore = useOrganizationStore()
 const datasetStore = useDatasetStore()
 
 const org = computed(() => orgStore.get(organizationId))
+const organizationsConfig = config.organizations as OrganizationsConfig
 
 const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
   {
     to: '/organizations',
-    text: config.organizations?.list?.breadcrumb_title || 'Organisations'
+    text: organizationsConfig.page?.breadcrumb_title || 'Organisations'
   }
 ])
 
@@ -37,16 +36,8 @@ const pages: Ref<{ label: string; href: string; title: string }[]> = ref([])
 const datasets: Ref<DatasetV2[] | undefined> = ref(undefined)
 const selectedSort: Ref<string | undefined> = ref(undefined)
 
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
-
 onMounted(() => {
-  orgStore
-    .load(organizationId, -1, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      setAccessibilityProperties(org.value?.name)
-    })
+  orgStore.load(organizationId, -1, { toasted: false, redirectNotFound: true })
 })
 
 const sorts = [
@@ -71,6 +62,18 @@ watch(
   },
   { immediate: true }
 )
+
+const metaTitle = () => {
+  if (!org.value?.name) return
+  const title = `${organizationsConfig.page?.labels?.singular || 'Organisation'} - ${org.value.name}`
+  return capitalize(title)
+}
+
+useMeta({
+  title: () => metaTitle(),
+  description: () => org.value?.description,
+  canonicalUrl: () => org.value?.page
+})
 
 // we need the technical id to fetch the datasets and thus pagination
 watchEffect(() => {
