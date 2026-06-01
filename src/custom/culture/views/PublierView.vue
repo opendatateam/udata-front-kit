@@ -8,7 +8,6 @@ import { computed, onMounted, ref } from 'vue'
 import { fromMarkdown } from '@/utils'
 
 useMeta({
-  title: () => 'Publier',
   description: () =>
     'Découvrez comment ajouter vos jeux de données au sein de la transversale des données de la culture',
   canonicalUrl: () => `${window.location.origin}/publier`

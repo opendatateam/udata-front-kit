@@ -14,10 +14,6 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -65,10 +61,6 @@ const goToPage = (page: number) => {
   currentPage.value = page + 1
   loadDatasets()
 }
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const links = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -122,10 +114,7 @@ useMeta({
 onMounted(() => {
   dataserviceStore
     .load(dataserviceId, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      setAccessibilityProperties(dataservice.value?.title)
-      loadDatasets()
-    })
+    .then(loadDatasets)
 })
 </script>
 

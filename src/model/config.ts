@@ -21,6 +21,7 @@ export interface StaticPageConfig {
   route: string
   url: string
   meta?: {
+    title?: string
     description?: string
   }
 }
@@ -159,8 +160,11 @@ export type OrganizationsConfig = {
   datasets?: string
   dataservices?: string
   bouquets?: string
-  list?: {
+  page?: {
     breadcrumb_title?: string
+    labels?: {
+      singular?: string
+    }
     meta?: {
       title?: string
       description?: string

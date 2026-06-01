@@ -8,6 +8,7 @@ export type SiteId = 'siteId'
 
 export enum Availability {
   MISSING = 'missing',
+  // kept for backward compatibility with existing data — no longer offered in the UI
   NOT_AVAILABLE = 'not available',
   LOCAL_AVAILABLE = 'available',
   URL_AVAILABLE = 'url available',

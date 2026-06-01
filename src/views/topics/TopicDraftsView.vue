@@ -10,6 +10,7 @@ import VIconCustom from '@/components/VIconCustom.vue'
 import { useTopicStore } from '@/store/TopicStore'
 import { debounceWait, usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
+import { useMeta } from '@/utils/seo'
 
 const route = useRoute()
 const $loading = useLoading()
@@ -63,6 +64,12 @@ watch(searchQuery, (q) => {
   if (q.length === 0 || q.length >= 3) {
     debouncedSearch(q)
   }
+})
+
+useMeta({
+  description: () => undefined,
+  canonicalUrl: () => null,
+  noIndex: () => true
 })
 </script>
 
