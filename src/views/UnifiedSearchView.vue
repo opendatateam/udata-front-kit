@@ -80,7 +80,6 @@ watch(localType, async (newType) => {
 })
 
 useMeta({
-  title: () => pageConf.value?.meta?.title,
   description: () => pageConf.value?.meta?.description,
   canonicalUrl: useCanonicalUrl()
 })
@@ -151,7 +150,11 @@ onMounted(() => {
       {{ pageConf.search.input }}
     </h2>
     <Suspense>
-      <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
+      <GlobalSearch
+        v-model:type="localType"
+        :config="route.meta.searchConfig!"
+        :auto-focus="false"
+      >
         <template v-if="route.meta.customFilters?.length" #custom-filters-top>
           <template
             v-for="filter in route.meta.customFilters"

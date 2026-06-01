@@ -7,7 +7,6 @@ import HomeHero from '@/custom/ecospheres/components/home/HomeHero.vue'
 import { useMeta } from '@/utils/seo'
 
 useMeta({
-  title: () => undefined,
   description: () => config.website.homepage.meta_description,
   canonicalUrl: () => window.location.origin
 })

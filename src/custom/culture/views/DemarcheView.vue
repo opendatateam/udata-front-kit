@@ -5,7 +5,6 @@ import { fromMarkdown } from '@/utils'
 import { useMeta } from '@/utils/seo'
 
 useMeta({
-  title: () => 'Démarche',
   description: () =>
     "Découvrez la démarche et la vision du ministère de la Culture pour l'ouverture des données culturelles.",
   canonicalUrl: () => `${window.location.origin}/demarche`

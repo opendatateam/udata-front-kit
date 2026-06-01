@@ -86,9 +86,6 @@ website:
     - text: À propos
       to: /about
   router:
-    disable:
-      - organizations_routes
-      - topics
     static_pages:
       - title: 'À propos'
         id: 'about'

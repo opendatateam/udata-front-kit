@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { capitalize, computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -13,10 +13,6 @@ import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
 import IndicatorVizChart from '@/custom/ecospheres/components/indicators/viz/IndicatorVizChart.vue'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
@@ -43,10 +39,6 @@ const indicatorConf = usePageConf('indicators')
 const labels = useLabels(indicatorConf.labels)
 const topicConf = usePageConf('bouquets')
 const topicsLabels = useLabels(topicConf.labels)
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
@@ -109,7 +101,6 @@ onMounted(() => {
   datasetStore
     .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(indicator.value?.title)
       if (indicator.value?.slug && indicator.value.slug !== indicatorId) {
         router.push({
           name: 'indicators_detail',
@@ -132,7 +123,7 @@ onMounted(() => {
       <DsfrButton
         secondary
         size="sm"
-        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.plural}`"
+        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.singular}`"
         icon="fr-icon-file-add-line"
         @click="showAddToTopicModal = true"
       />

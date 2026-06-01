@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Toaster } from '@datagouv/components-next'
-import { useTitle } from '@vueuse/core'
 
 import config from '@/config'
 
@@ -98,7 +97,6 @@ const footerPhrase = config.website.footer_phrase
 const footerExternalLinks = config.website.footer_external_links
 const footerMandatoryLinks = config.website.footer_mandatory_links
 
-const route = useRoute()
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
 
@@ -107,7 +105,6 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
   focus = true,
   messages = []
 ): void => {
-  useTitle(`${title} | ${config.website.title}`)
   // announce page title to screen reader
   if (title) {
     liveInfos.value = [
@@ -122,18 +119,6 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
 }
 
 provide(AccessibilityPropertiesKey, setAccessibilityProperties)
-
-// watch route change and update title
-watch(
-  () => route.path,
-  () => {
-    if (route.meta.title) {
-      const title = route.meta.title
-      setAccessibilityProperties(title)
-    }
-  },
-  { immediate: true }
-)
 </script>
 
 <template>

@@ -270,7 +270,7 @@ export const useGlobalSearchPageRoutes = ({
         path: '',
         name: pageKey,
         meta: {
-          title: pageConf.title,
+          title: pageConf.meta?.title ?? pageConf.title,
           pageKey,
           cardComponent,
           searchType: objectType,
@@ -325,6 +325,27 @@ export const useTopicAdminPagesRoutes = ({
       meta: { requiresAuth: true, title: 'Mes brouillons', pageKey }
     }
   ]
+}
+
+export const useOrganizationsRoutes = (): RouteRecordRaw => {
+  return {
+    path: '/organizations',
+    name: 'organizations_routes',
+    children: [
+      {
+        path: '',
+        name: 'organizations',
+        component: async () =>
+          await import('@/views/organizations/OrganizationsListView.vue')
+      },
+      {
+        path: ':oid',
+        name: 'organization_detail',
+        component: async () =>
+          await import('@/views/organizations/OrganizationDetailView.vue')
+      }
+    ]
+  }
 }
 
 export const useRouteMeta = () => {
