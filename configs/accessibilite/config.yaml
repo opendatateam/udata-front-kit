@@ -48,6 +48,7 @@ website:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
   header:
     admin_shortcut: false
+    show_title: true
     service_description: accessibilite.data.gouv.fr
     button:
       display: false
@@ -110,10 +111,14 @@ website:
       to: '/accessibility'
   logo_operator:
     src: '/static/logos/accessibilite-logo.svg'
-    show_in_header: false
+    show_in_header: true
+    header:
+      width: '86px'
+      height: '35px'
+    show_in_footer: true
     footer:
-      width:
-      height:
+      width: '120px'
+      height: '49px'
   notice:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'accessibilite.data.gouv.fr ⚠️
