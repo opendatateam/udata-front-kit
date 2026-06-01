@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import config from '@/config'
-import type { DsfrHeaderProps } from '@gouvminint/vue-dsfr'
+import { DsfrHeader, type DsfrHeaderProps } from '@gouvminint/vue-dsfr'
 import Navigation from '../NavigationComponent.vue'
 import SearchComponent from '../SearchComponent.vue'
 
@@ -40,9 +40,9 @@ const serviceDescription =
   config.website.header.service_description ?? undefined
 const serviceLogo = config.website.service_logo
 const logoOperator = config.website.logo_operator?.src
-const showLogoOperatorInHeader =
-  config.website.logo_operator?.show_in_header ?? true
+const showLogoOperatorInHeader = config.website.logo_operator?.show_in_header
 const showBadge = config.website.badge.display
+const showTitle = config.website.header.show_title
 const badgeText = config.website.badge.text
 const badgeStyle = config.website.badge.style
 </script>
@@ -52,7 +52,11 @@ const badgeStyle = config.website.badge.style
     ref="headerRef"
     home-to="/"
     :logo-text
-    :service-title="serviceLogo ? undefined : serviceTitle"
+    :service-title="
+      (serviceLogo || showLogoOperatorInHeader) && !showTitle
+        ? undefined
+        : serviceTitle
+    "
     :operator-img-src="showLogoOperatorInHeader ?? logoOperator"
     :operator-img-alt
     :operator-img-style

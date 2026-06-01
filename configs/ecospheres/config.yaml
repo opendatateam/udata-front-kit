@@ -38,7 +38,7 @@ website:
       dataservices_pages: []
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/static/logos/ecospheres-logo.svg'
+  service_logo:
   badge:
     display: false
     text:
@@ -46,10 +46,14 @@ website:
   # leave empty if not pertinent
   logo_operator:
     src: '/static/logos/ecospheres-logo.svg'
-    show_in_header: false
+    show_in_header: true
+    header:
+      width: '192px'
+      height: '35px'
+    show_in_footer: true
     footer:
-      width: '40px'
-      height: '219px'
+      width: '219px'
+      height: '40px'
   homepage:
     title:
     subtitle:

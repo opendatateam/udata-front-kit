@@ -29,7 +29,7 @@ website:
   formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
-  service_logo: '/static/logos/logistique-logo.svg'
+  service_logo:
   badge:
     display: true
     text: 'BETA'
@@ -123,6 +123,12 @@ website:
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   logo_operator:
+    src: '/static/logos/logistique-logo.svg'
+    show_in_header: true
+    header:
+      width: '158px'
+      height: '35px'
+    show_in_foter: false
   notice:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_

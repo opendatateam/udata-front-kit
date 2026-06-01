@@ -40,7 +40,7 @@ website:
       datasets_pages: []
       dataservices_pages: []
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
-  service_logo: '/static/logos/simplifions-logo.svg'
+  service_logo:
   badge:
     display: true
     text: 'BETA'
@@ -48,10 +48,14 @@ website:
   # leave empty if not pertinent
   logo_operator:
     src: '/static/logos/simplifions-logo.svg'
-    show_in_header: false
+    show_in_header: true
+    header:
+      width: '215px'
+      height: '35px'
+    show_in_footer: true
     footer:
-      width: '40px'
-      height: '219px'
+      width: '215px'
+      height: '35px'
   homepage:
     title:
     subtitle:

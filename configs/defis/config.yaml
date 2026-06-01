@@ -28,7 +28,7 @@ website:
       dataservices_pages: []
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/static/logos/defis-logo.svg'
+  service_logo:
   badge:
     display: true
     text: 'BETA'
@@ -275,6 +275,12 @@ website:
     - label: 'Accessibilité : non conforme'
       to: '/accessibility'
   logo_operator:
+    src: '/static/logos/defis-logo.svg'
+    show_in_header: true
+    header:
+      width: '162px'
+      height: '35px'
+    show_in_footer: false
   notice:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_
