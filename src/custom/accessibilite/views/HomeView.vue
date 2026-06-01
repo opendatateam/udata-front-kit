@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import config from '@/config'
-import { useMeta } from '@/utils/seo'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 import HomeHero from '@/custom/accessibilite/components/home/HomeHero.vue'
 import HomeThemes from '@/custom/accessibilite/components/home/HomeThemes.vue'
@@ -9,7 +9,7 @@ import HomeLogos from '../components/home/HomeLogos.vue'
 
 useMeta({
   description: () => config.website.homepage.meta_description,
-  canonicalUrl: () => window.location.origin
+  canonicalUrl: useCanonicalUrl()
 })
 </script>
 
