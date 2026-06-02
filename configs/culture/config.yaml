@@ -29,13 +29,7 @@ website:
   formatted_title: '<i>culture.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA CULTURE'
-  service_logo:
-  badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
   # leave empty if not pertinent
-  logo_operator:
   homepage:
     title:
     subtitle:
@@ -47,8 +41,30 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description: culture.data.gouv.fr référence et centralise les données du domaine de la culture.
+  footer:
+    logo:
+    phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la culture, réalisé par le ministère de la Culture'
+    external_links:
+      - label: 'culture.gouv.fr'
+        href: 'https://www.culture.gouv.fr/'
+      #    - label: 'Portail des API Météo-France'
+      #      href: 'https://portail-api.meteofrance.fr/'
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+    mandatory_links:
+      - label: 'Licences'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        href: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
   header:
+    logo:
+    title_image:
     admin_shortcut: true
+    beta: true
     button:
       display: false
       label:
@@ -63,23 +79,6 @@ website:
     display: false
     name:
     link:
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la culture, réalisé par le ministère de la Culture'
-  footer_external_links:
-    - label: 'culture.gouv.fr'
-      href: 'https://www.culture.gouv.fr/'
-    #    - label: 'Portail des API Météo-France'
-    #      href: 'https://portail-api.meteofrance.fr/'
-    - label: 'data.gouv.fr'
-      href: 'https://www.data.gouv.fr'
-  footer_mandatory_links:
-    - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
-    - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
-      to: '/accessibility'
   notice:
     display: false
     content:
