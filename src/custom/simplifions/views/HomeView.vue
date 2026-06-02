@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import config from '@/config'
 
+import SimplifionsArticleCard from '../components/SimplifionsArticleCard.vue'
+import { articles as simplifionsArticles } from './Articles'
+
 const colorsBanner = config.website.home_banner_colors
 
 const fournisseursDeService = [
@@ -126,6 +129,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
+
   <div class="fr-container hero-text">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
@@ -165,7 +169,7 @@ const niveauxDeSimplification = [
         </div>
       </div>
     </div>
-    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
+    <div class="fr-mt-4w fr-mb-6w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <router-link to="/cas-d-usages" class="button-link">
         <button
           class="fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
@@ -175,6 +179,30 @@ const niveauxDeSimplification = [
       </router-link>
     </div>
   </div>
+
+  <section class="home-articles-section">
+    <div class="fr-container">
+    <h2
+      class="fr-h1"
+      style="color: black; text-align: center"
+    >
+     Guides et recommandations
+    </h2>
+      <p class="fr-mb-5w home-articles-section__subtitle">
+        Consulter nos différents articles pour comprendre et choisir :
+      </p>
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div
+          v-for="article in simplifionsArticles"
+          :key="article.to"
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+        >
+          <SimplifionsArticleCard :article="article" />
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <div class="fr-container hero-text">
     <h2
@@ -507,6 +535,36 @@ const niveauxDeSimplification = [
     </div>
   </div>
 </template>
+
+<style scoped>
+.home-articles-section {
+  padding: 4rem 0;
+  background: #e1e3fa;
+}
+
+.home-articles-section__header {
+  max-width: 60rem;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.home-articles-section__title {
+  margin: 0;
+  color: #1b1b35;
+}
+
+.home-articles-section__subtitle {
+  margin: 1rem 0 0;
+  font-size: 1.125rem;
+  color: #1b1b35;
+}
+
+@media (max-width: 62rem) {
+  .home-articles-section {
+    padding: 3rem 0;
+  }
+}
+</style>
 
 <style scoped>
 .fr-container {
