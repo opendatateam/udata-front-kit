@@ -29,11 +29,6 @@ website:
   formatted_title: '<b>accessibilite.data.gouv.fr</b>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo:
-  badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
     title:
@@ -46,10 +41,31 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
+  footer:
+    logo:
+      src: /static/logos/accessibilite-logo.svg
+      width: 120px
+      height: 49px
+    phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
+    external_links:
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+    mandatory_links:
+      - label: 'Licences'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        href: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
   header:
     admin_shortcut: false
-    show_title: true
-    service_description: accessibilite.data.gouv.fr
+    logo:
+      src: /static/logos/accessibilite-logo.svg
+    title_image:
+    description: accessibilite.data.gouv.fr
+    beta: true
     button:
       display: false
       label: 'Donnez votre avis'
@@ -96,29 +112,6 @@ website:
       path: /about
   show_quality_component: true
   oauth_option: true
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
-  footer_external_links:
-    - label: 'data.gouv.fr'
-      href: 'https://www.data.gouv.fr'
-  footer_mandatory_links:
-    - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
-    - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
-      to: '/accessibility'
-  logo_operator:
-    src: '/static/logos/accessibilite-logo.svg'
-    show_in_header: true
-    header:
-      width: '86px'
-      height: '35px'
-    show_in_footer: true
-    footer:
-      width: '120px'
-      height: '49px'
   notice:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'accessibilite.data.gouv.fr ⚠️
