@@ -146,7 +146,8 @@ function buildSingleTypeConfig(
     hiddenFilters,
     basicFilters,
     advancedFilters,
-    ...(placeholder !== undefined ? { placeholder } : {})
+    ...(placeholder !== undefined ? { placeholder } : {}),
+    ...(pageConf.default_sort ? { defaultSort: pageConf.default_sort } : {})
   }
   // basicFilters/advancedFilters are string[] but upstream expects per-type key unions
   // (e.g. keyof DatasetSearchFilters) — cast is intentional, filter keys come from YAML config.
