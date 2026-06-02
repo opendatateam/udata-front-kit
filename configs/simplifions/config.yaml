@@ -250,7 +250,6 @@ pages:
     search:
       input: Filtrer les cas d'usages
       placeholder: null
-    default_sort: name
     resources_tabs:
       discussions:
         display: true
@@ -307,7 +306,6 @@ pages:
     search:
       input: Filtrer les solutions
       placeholder: null
-    default_sort: name
     resources_tabs:
       discussions:
         display: true
