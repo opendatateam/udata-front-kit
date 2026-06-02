@@ -10,6 +10,14 @@ const topicConf = {
 }
 
 export const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: 'home',
+    meta: {
+      title: "Le Point d'Accès Unique aux Données d'Accessibilité"
+    },
+    component: async () => await import('./views/HomeView.vue')
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'datasets'
   }),
