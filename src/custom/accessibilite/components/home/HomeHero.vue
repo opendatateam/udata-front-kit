@@ -28,10 +28,6 @@ const doSearch = (q: string) => {
               srcset="/static/accessibilite/assets/illustration-homepage.avif"
               type="image/avif"
             />
-            <source
-              srcset="/static/accessibilite/assets/illustration-homepage.webp"
-              type="image/webp"
-            />
             <img
               src="/static/accessibilite/assets/illustration-homepage.jpg"
               alt=""

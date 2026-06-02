@@ -16,19 +16,31 @@ const partners: Logos[] = config.accessibilite.homepage.partners
       <h2>Une plateforme web portée par&nbsp;:</h2>
       <ul class="fr-mt-5w" role="list">
         <li v-for="sponsor in sponsors" :key="sponsor.name">
-          <img
-            :src="`/static/accessibilite/assets/logos/${sponsor.logo}.webp`"
-            :alt="sponsor.name"
-          />
+          <picture>
+            <source
+              :srcset="`/static/accessibilite/assets/logos/${sponsor.logo}.avif`"
+              type="image/avif"
+            />
+            <img
+              :src="`/static/accessibilite/assets/logos/${sponsor.logo}.jpg`"
+              :alt="sponsor.name"
+            />
+          </picture>
         </li>
       </ul>
       <h3 class="fr-mt-5w">En partenariat avec&nbsp;:</h3>
       <ul class="fr-mt-4w" role="list">
         <li v-for="partner in partners" :key="partner.name">
-          <img
-            :src="`/static/accessibilite/assets/logos/${partner.logo}.webp`"
-            :alt="partner.name"
-          />
+          <picture>
+            <source
+              :srcset="`/static/accessibilite/assets/logos/${partner.logo}.avif`"
+              type="image/avif"
+            />
+            <img
+              :src="`/static/accessibilite/assets/logos/${partner.logo}.jpg`"
+              :alt="partner.name"
+            />
+          </picture>
         </li>
       </ul>
     </div>
