@@ -3,6 +3,7 @@ import { Toaster } from '@datagouv/components-next'
 
 import config from '@/config'
 
+import { DsfrFooter } from '@gouvminint/vue-dsfr'
 import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import LiveRegion from './components/LiveRegion.vue'
@@ -87,15 +88,17 @@ onMounted(() => {
   userStore.init()
 })
 
-const logoService = config.website.service_logo
 const logoText = config.website.rf_title
 const serviceTitle = config.website.title
-const logoOperator = config.website.logo_operator?.src
-const logoOperatorHeight = config.website.logo_operator?.header?.height
-const logoOperatorWidth = config.website.logo_operator?.header?.width
-const footerPhrase = config.website.footer_phrase
-const footerExternalLinks = config.website.footer_external_links
-const footerMandatoryLinks = config.website.footer_mandatory_links
+const headerLogo = config.website.header.logo?.src
+const headerLogoHeight = config.website.header?.logo?.height
+const headerLogoWidth = config.website.header?.logo?.width
+const footerLogo = config.website.footer.logo?.src
+const footerLogoHeight = config.website.footer.logo?.height
+const footerLogoWidth = config.website.footer.logo?.width
+const footerPhrase = config.website.footer.phrase
+const footerExternalLinks = config.website.footer.external_links
+const footerMandatoryLinks = config.website.footer.mandatory_links
 
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
@@ -137,8 +140,9 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   <HeaderComponent
     :user-name="userName"
     :quick-links="quickLinks"
-    :logo-operator-height
-    :logo-operator-width
+    :header-logo
+    :header-logo-height
+    :header-logo-width
     :custom-search="true"
   />
 
@@ -149,12 +153,11 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   <DsfrFooter
     class="fr-mt-16w"
     :logo-text="logoText"
-    :operator-img-src="logoOperator"
+    :operator-img-src="footerLogo"
     :operator-img-style="{
-      height: logoOperatorHeight,
-      width: logoOperatorWidth
+      height: footerLogoHeight,
+      width: footerLogoWidth
     }"
-    :service-logo-src="logoService"
     :desc-text="footerPhrase"
     :ecosystem-links="footerExternalLinks"
     :mandatory-links="footerMandatoryLinks"

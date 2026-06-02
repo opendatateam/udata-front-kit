@@ -29,11 +29,6 @@ website:
   formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
-  service_logo: '/static/logos/logistique-logo.svg'
-  badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
     title: 'Les données ouvertes de la logistique'
@@ -72,8 +67,27 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
+  footer:
+    logo:
+    phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
+    external_links:
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+    mandatory_links:
+      - label: 'Licences'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        href: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
   header:
+    logo:
+    title_image:
+      src: '/static/logos/logistique-logo.svg'
     admin_shortcut: false
+    beta: true
     button:
       display: true
       label: 'Donnez votre avis'
@@ -109,20 +123,6 @@ website:
         url: '/static/logistique/pages/accessibility.md'
   show_quality_component: true
   oauth_option: true
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
-  footer_external_links:
-    - label: 'data.gouv.fr'
-      href: 'https://www.data.gouv.fr'
-  footer_mandatory_links:
-    - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
-    - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
-      to: '/accessibility'
-  logo_operator:
   notice:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_

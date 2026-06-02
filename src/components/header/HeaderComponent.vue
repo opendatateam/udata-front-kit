@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import config from '@/config'
-import type { DsfrHeaderProps } from '@gouvminint/vue-dsfr'
+import { DsfrHeader, type DsfrHeaderProps } from '@gouvminint/vue-dsfr'
 import Navigation from '../NavigationComponent.vue'
 import SearchComponent from '../SearchComponent.vue'
 
 type Props = {
   userName: string | undefined
-  logoOperatorHeight: string | undefined
-  logoOperatorWidth: string | undefined
+  headerLogo: string | undefined
+  headerLogoHeight: string | undefined
+  headerLogoWidth: string | undefined
   customSearch: boolean
 }
 
@@ -36,13 +37,11 @@ const closeModal = () => {
 
 const logoText = config.website.rf_title
 const serviceTitle = config.website.title
-const serviceLogo = config.website.service_logo
-const logoOperator = config.website.logo_operator?.src
-const showLogoOperatorInHeader =
-  config.website.logo_operator?.show_in_header ?? true
-const showBadge = config.website.badge.display
-const badgeText = config.website.badge.text
-const badgeStyle = config.website.badge.style
+const serviceDescription = config.website.header.description ?? undefined
+const titleImage = config.website.header.title_image?.src
+const titleImageHeight = config.website.header.title_image?.height
+const titleImageWidth = config.website.header.title_image?.width
+const showBeta = config.website.header.beta
 </script>
 
 <template>
@@ -50,40 +49,34 @@ const badgeStyle = config.website.badge.style
     ref="headerRef"
     home-to="/"
     :logo-text
-    :service-title="serviceLogo ? undefined : serviceTitle"
-    :operator-img-src="showLogoOperatorInHeader ?? logoOperator"
-    :operator-img-alt
-    :operator-img-style
-    service-description=""
+    :service-title="titleImage ? undefined : serviceTitle"
+    :service-description
     :quick-links
     :show-search="showSearch && !customSearch"
     :home-label="`Retour à l'accueil du site - ${serviceTitle}`"
+    :show-beta
   >
-    <!-- needed because of logo + badge -->
-    <template #operator>
-      <div v-if="showLogoOperatorInHeader && logoOperator">
+    <!-- needed because of logo + title image -->
+    <template v-if="headerLogo || titleImage" #operator>
+      <div v-if="headerLogo">
         <img
-          class="fr-responsive-img operator-logo"
-          :src="logoOperator"
+          class="fr-responsive-img header-logo"
+          :src="headerLogo"
           alt=""
           :style="operatorImgStyle"
-          :height="logoOperatorHeight"
-          :width="logoOperatorWidth"
+          :height="headerLogoHeight"
+          :width="headerLogoWidth"
         />
       </div>
-      <div v-if="serviceLogo">
+      <div v-if="titleImage">
         <img
-          class="fr-responsive-img service-logo"
-          :src="serviceLogo"
+          class="fr-responsive-img title-image"
+          :src="titleImage"
           :alt="serviceTitle"
+          :height="titleImageHeight"
+          :width="titleImageWidth"
         />
       </div>
-      <p
-        v-if="showBadge"
-        :class="`fr-badge fr-badge--sm fr-badge--${badgeStyle}`"
-      >
-        {{ badgeText }}
-      </p>
     </template>
 
     <template #after-quick-links>
@@ -105,12 +98,21 @@ const badgeStyle = config.website.badge.style
 </template>
 
 <style scoped>
-.operator-logo {
-  inline-size: v-bind(logoOperatorWidth);
-  block-size: v-bind(logoOperatorHeight);
+.header-logo,
+.title-image {
+  /* take values from config */
+  --width: v-bind(headerLogoWidth);
+  --height: v-bind(headerLogoHeight);
+  /* if no cusotm values limit height to 35px */
+  inline-size: var(--width, auto);
+  block-size: var(--height, 35px);
+  /* keep the original image ratio in case of wrong values */
+  object-fit: contain;
 }
-.service-logo {
-  max-block-size: 35px;
+
+.title-image {
+  --width: v-bind(titleImageWidth);
+  --height: v-bind(titleImageHeight);
 }
 :deep(.fr-header__brand-top) {
   flex-wrap: wrap;
