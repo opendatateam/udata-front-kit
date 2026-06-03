@@ -15,7 +15,6 @@
                 :label="tag.label"
                 :link="tag.href"
                 small
-                tag-name="span"
               />
             </li>
           </ul>
@@ -54,12 +53,7 @@
             v-for="badge in article.badges"
             :key="badge.label"
           >
-            <DsfrBadge
-              :label="badge.label"
-              small
-              no-icon
-              :class="badge.className"
-            />
+            <p :class="badge.className">{{ badge.label }}</p>
           </li>
         </ul>
       </div>
@@ -68,8 +62,6 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrBadge, DsfrTag } from '@gouvminint/vue-dsfr'
-
 import type { SimplifionsArticleCard } from '../model/articles'
 
 defineProps<{

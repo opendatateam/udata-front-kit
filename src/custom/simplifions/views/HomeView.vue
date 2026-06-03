@@ -129,7 +129,6 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-
   <div class="fr-container hero-text">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
@@ -182,13 +181,10 @@ const niveauxDeSimplification = [
 
   <section class="home-articles-section">
     <div class="fr-container">
-    <h2
-      class="fr-h1"
-      style="color: black; text-align: center"
-    >
-     Guides et recommandations
-    </h2>
-      <p class="fr-mb-5w home-articles-section__subtitle">
+      <h2 class="fr-h1 fr-text--center">
+        Guides et recommandations
+      </h2>
+      <p class="fr-mb-5w fr-text--lg fr-text--center">
         Consulter nos différents articles pour comprendre et choisir :
       </p>
       <div class="fr-grid-row fr-grid-row--gutters">
@@ -202,7 +198,6 @@ const niveauxDeSimplification = [
       </div>
     </div>
   </section>
-
 
   <div class="fr-container hero-text">
     <h2
@@ -539,24 +534,7 @@ const niveauxDeSimplification = [
 <style scoped>
 .home-articles-section {
   padding: 4rem 0;
-  background: #e1e3fa;
-}
-
-.home-articles-section__header {
-  max-width: 60rem;
-  margin: 0 auto 2rem;
-  text-align: center;
-}
-
-.home-articles-section__title {
-  margin: 0;
-  color: #1b1b35;
-}
-
-.home-articles-section__subtitle {
-  margin: 1rem 0 0;
-  font-size: 1.125rem;
-  color: #1b1b35;
+  background: var(--background-alt-blue-france);
 }
 
 @media (max-width: 62rem) {
@@ -564,9 +542,7 @@ const niveauxDeSimplification = [
     padding: 3rem 0;
   }
 }
-</style>
 
-<style scoped>
 .fr-container {
   text-align: center;
   margin-left: auto;

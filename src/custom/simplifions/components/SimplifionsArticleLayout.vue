@@ -42,10 +42,7 @@
                 </p>
               </li>
             </ul>
-
- 
           </div>
-
           <p v-if="kicker" class="article-hero__kicker">{{ kicker }}</p>
           <h1 class="article-hero__title">{{ title }}</h1>
           <p v-if="lead" class="article-hero__lead">
@@ -63,12 +60,13 @@
               <button
                 class="fr-sidemenu__btn"
                 type="button"
-                aria-expanded="true"
+                :aria-expanded="String(sidemenuExpanded)"
                 aria-controls="article-sidemenu-collapse"
+                @click="sidemenuExpanded = !sidemenuExpanded"
               >
                 Dans cet article
               </button>
-              <div id="article-sidemenu-collapse" class="fr-collapse fr-collapse--expanded">
+              <div id="article-sidemenu-collapse" :class="['fr-collapse', { 'fr-collapse--expanded': sidemenuExpanded }]">
                 <p id="article-sidemenu-title" class="fr-sidemenu__title">
                   Sommaire
                 </p>
@@ -99,8 +97,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 
 type ArticleSection = {
@@ -126,7 +122,6 @@ const props = withDefaults(
     lead?: string
     kicker?: string
     heroImageSrc?: string
-    heroImageAlt?: string
     articleTags?: readonly ArticleAudienceTag[]
     articleCategory?: ArticleCategory
     showNoDevelopmentBadge?: boolean
@@ -145,7 +140,9 @@ const props = withDefaults(
     sections: readonly ArticleSection[]
   }>(),
   {
-    heroImageAlt: '',
+    lead: '',
+    kicker: '',
+    heroImageSrc: '',
     articleTags: () => [],
     articleCategory: undefined,
     showNoDevelopmentBadge: false,
@@ -155,6 +152,8 @@ const props = withDefaults(
     breadcrumbLinks: () => []
   }
 )
+
+const sidemenuExpanded = ref(true)
 
 const articleRef = ref<HTMLElement | null>(null)
 const activeSection = ref(props.sections[0]?.id ?? '')
@@ -253,7 +252,7 @@ onBeforeUnmount(() => {
 }
 
 .article-hero {
-  color: #fff;
+  color: var(--text-inverted-grey);
   position: relative;
   min-height: clamp(16rem, 24vw, 21rem);
   padding: 0 0 1rem;

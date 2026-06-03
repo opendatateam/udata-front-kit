@@ -21,19 +21,21 @@
           :key="article.to"
           class="fr-col-12 fr-col-md-6"
         >
-          <router-link class="fr-card fr-enlarge-link folder-card" :to="article.to">
+          <div class="fr-card fr-enlarge-link folder-card">
             <div class="fr-card__body">
               <div class="fr-card__content">
                 <p v-if="article.badge" class="folder-card__badge">
                   {{ article.badge }}
                 </p>
-                <h2 class="fr-card__title">{{ article.title }}</h2>
+                <h2 class="fr-card__title">
+                  <router-link :to="article.to">{{ article.title }}</router-link>
+                </h2>
                 <p v-if="article.description" class="fr-card__desc">
                   {{ article.description }}
                 </p>
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -56,6 +58,7 @@ withDefaults(
     articles: readonly ArticleLink[]
   }>(),
   {
+    lead: '',
     eyebrow: 'Dossier'
   }
 )
@@ -70,7 +73,7 @@ withDefaults(
   position: relative;
   overflow: hidden;
   min-height: clamp(14rem, 20vw, 18rem);
-  color: #fff;
+  color: var(--text-inverted-grey);
 }
 
 .article-folder-hero__backdrop {
@@ -132,8 +135,7 @@ withDefaults(
 .folder-card {
   display: block;
   height: 100%;
-  text-decoration: none;
-  background: #fafafa;
+  background: var(--background-alt-grey);
 }
 
 .folder-card__badge {
@@ -142,7 +144,7 @@ withDefaults(
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #5f6358;
+  color: var(--text-mention-grey);
 }
 
 @media (max-width: 62rem) {

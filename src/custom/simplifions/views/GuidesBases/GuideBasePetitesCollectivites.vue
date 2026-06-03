@@ -3,7 +3,6 @@
     :title="article.title"
     :lead="article.description"
     :hero-image-src="article.imageSrc"
-    :hero-image-alt="article.imageAlt"
     :kicker="articleKicker"
     :article-tags="article.articleTags"
     :article-category="article.articleCategory"
@@ -281,28 +280,16 @@
       Avant d’aller plus loin, vérifiez ces points dans votre collectivité.
     </p>
 
-    <fieldset class="fr-fieldset guide-checkboxes">
-      <legend class="fr-fieldset__legend fr-fieldset__legend--regular">
-        Checklist de départ
-      </legend>
-      <div
+    <ul class="guide-checkboxes">
+      <li
         v-for="item in checklistOptions"
         :key="item.value"
-        class="fr-fieldset__element"
+        class="guide-checklist-item"
       >
-        <div class="fr-checkbox-group">
-          <input
-            :id="`checklist-${item.value}`"
-            type="checkbox"
-            checked
-            disabled
-          />
-          <label class="fr-label" :for="`checklist-${item.value}`">
-            {{ item.label }}
-          </label>
-        </div>
-      </div>
-    </fieldset>
+        <span class="fr-icon-check-line guide-checklist-icon" aria-hidden="true"></span>
+        {{ item.label }}
+      </li>
+    </ul>
   </SimplifionsArticleLayout>
 </template>
 
@@ -314,7 +301,6 @@ export const articleMeta = {
     'Récupérer les données de vos usagers pour éviter de leur redemander lors de leurs démarches administratives, c’est aussi possible pour les petites collectivités.',
   slug: 'guide-base-petites-collectivites',
   imageSrc: '/static/simplifions/assets/portail_famille.jpg',
-  imageAlt: 'Portail famille',
   articleTags: [{ label: 'Petites communes' }, { label: 'Maires' }],
   articleCategory: 'guide',
   showNoDevelopmentBadge: true,
@@ -328,8 +314,7 @@ import SimplifionsArticleLayout from '../../components/SimplifionsArticleLayout.
 import { buildSimplifionsArticlePageMeta } from '../../model/articles'
 import { themeMeta } from './index'
 
-const { article, articleKicker, breadcrumbLinks } =
-  buildSimplifionsArticlePageMeta(
+const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(
   themeMeta,
   articleMeta
 )
@@ -370,8 +355,8 @@ const checklistOptions = [
 
 <style scoped>
 .section-title {
-  color: black;
-  background-color: rgb(167, 212, 205);
+  color: var(--text-default-grey);
+  background-color: var(--background-contrast-green-menthe);
   padding: 2px 4px;
   display: inline-block;
 }
@@ -386,14 +371,14 @@ const checklistOptions = [
 
 .guide-card {
   height: 100%;
-  background: #fafafa;
+  background: var(--background-alt-grey);
 }
 
 .guide-card__label {
   margin: 0 0 0.5rem;
   font-size: 0.875rem;
   font-weight: 700;
-  color: #5f6358;
+  color: var(--text-mention-grey);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -418,5 +403,24 @@ const checklistOptions = [
 
 .guide-checkboxes {
   max-width: 74ch;
+  padding-left: 0;
+  list-style: none;
+}
+
+.guide-checklist-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border-default-grey);
+}
+
+.guide-checklist-item:last-child {
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
+.guide-checklist-icon {
+  flex-shrink: 0;
+  color: var(--text-default-success);
 }
 </style>
