@@ -247,8 +247,6 @@ website:
     - text: Guides
       to: https://guides.data.gouv.fr/
   router:
-    disable:
-      - organizations_routes
     static_pages:
       - title: 'Open Data University'
         id: 'opendatauniversity'
@@ -286,7 +284,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 20
+    topics_drafts_list: 9
     files_list: 6
   home_banner_colors:
     - '#DDE6FF'
@@ -312,6 +310,7 @@ website:
 pages:
   # DEFIS
   defis:
+    object_type: topics
     list_all: true
     universe_query:
       tag: defisdatagouvfr
@@ -324,6 +323,7 @@ pages:
       extended: défi
     search:
       input: Chercher un défi
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -354,10 +354,11 @@ pages:
             name: Saison 4
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: false
     universe_query:
     filter_prefix:
-    title:
+    title: Données
     breadcrumb_title: Données
     labels:
       singular: jeu de données
@@ -365,6 +366,7 @@ pages:
       extended: jeu de données
     search:
       input:
+      placeholder: null
     banner:
     resources_tabs:
       discussions:

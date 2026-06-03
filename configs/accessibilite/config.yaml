@@ -21,7 +21,6 @@ website:
     robots_txt:
       disallow:
         - /admin
-        - /datasets
     sitemap_xml:
       topics_pages:
         - themes
@@ -87,9 +86,6 @@ website:
     - text: À propos
       to: /about
   router:
-    disable:
-      - organizations_routes
-      - topics
     static_pages:
       - title: 'À propos'
         id: 'about'
@@ -134,7 +130,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 20
+    topics_drafts_list: 9
     files_list: 6
   home_banner_colors:
     - '#FFFFFF'
@@ -162,6 +158,7 @@ website:
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 69f3767828440f63bfc33a1d
@@ -174,6 +171,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -187,6 +185,7 @@ pages:
     filters: []
   # THÈMES (BOUQUETS)
   themes:
+    object_type: topics
     list_all: true
     universe_query:
       tag: accessibilite-univers
@@ -200,6 +199,7 @@ pages:
       feminine: false
     search:
       input: Filtrer les thèmes
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -231,7 +231,7 @@ pages:
       - name: Couverture territoriale
         default_option:
         id: geozone
-        type: spatial_zone
+        type: geozone
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/

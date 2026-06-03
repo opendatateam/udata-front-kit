@@ -21,7 +21,6 @@ website:
     robots_txt:
       disallow:
         - /admin
-        - /datasets
     sitemap_xml:
       topics_pages: []
       datasets_pages: []
@@ -108,9 +107,6 @@ website:
     - text: A propos
       to: /about
   router:
-    disable:
-      - organizations_routes
-      - topic_routes
     static_pages:
       - title: 'A propos'
         id: 'about'
@@ -160,7 +156,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 20
+    topics_drafts_list: 9
     files_list: 6
   home_banner_colors:
     - '#F7EED4'
@@ -188,6 +184,7 @@ organizations:
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
   datasets:
+    object_type: datasets
     list_all: true
     filter_prefix:
     universe_query:
@@ -200,6 +197,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
