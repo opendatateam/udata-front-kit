@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -7,10 +7,6 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import ErrorSummary from '@/components/forms/ErrorSummary.vue'
 import TopicForm from '@/components/forms/topic/TopicForm.vue'
 import TopicOwnerForm from '@/components/forms/topic/TopicOwnerForm.vue'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import type { Topic, TopicPostData } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
 import {
@@ -22,8 +18,11 @@ import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { useSiteId } from '@/utils/config'
 import { useFiltersApiParams } from '@/utils/filters'
+import { useLabels } from '@/utils/labels'
+import { useMeta } from '@/utils/seo'
 import { cloneTopic } from '@/utils/topic'
 import { useUniverseQuery } from '@/utils/universe'
+import { capitalize } from 'vue'
 
 interface Props extends TopicPageRouterConf {
   isCreate: boolean
@@ -37,6 +36,7 @@ const userStore = useUserStore()
 
 const router = useRouter()
 const { pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const routeParams = useRouteParamsAsString().params
 const routeQuery = useRouteQueryAsString().query
 
@@ -54,10 +54,6 @@ const topic: Ref<
     [useSiteId()]: {}
   }
 })
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const formFields = ref()
 const errorSummary = ref()
@@ -134,7 +130,7 @@ const destroy = async () => {
   }
   if (
     window.confirm(
-      `Etes-vous sûr de vouloir supprimer ce ${pageConf.labels.singular} ?`
+      `Etes-vous sûr de vouloir supprimer ${labels.articles.ce} ${labels.singular} ?`
     )
   ) {
     useTopicStore()
@@ -183,17 +179,22 @@ const onSubmit = async () => {
   }
 }
 
-const setMetaTitle = () => {
-  let metaTitle
-  if (props.isCreate && routeQuery.clone != null) {
-    metaTitle = `Cloner le ${pageConf.labels.singular} ${topic.value.name}`
-  } else if (!props.isCreate) {
-    metaTitle = `Éditer le ${pageConf.labels.singular} ${topic.value.name}`
-  } else {
-    metaTitle = `Ajouter un ${pageConf.labels.singular}`
-  }
-  setAccessibilityProperties(metaTitle)
-}
+useMeta({
+  title: () => {
+    if (props.isCreate && routeQuery.clone != null) {
+      return topic.value.name
+        ? `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+        : undefined
+    } else if (!props.isCreate) {
+      return topic.value.name
+        ? `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+        : undefined
+    }
+    return `Ajouter ${labels.articles.un} ${labels.singular}`
+  },
+  description: () => undefined,
+  canonicalUrl: () => null
+})
 
 onMounted(() => {
   if (!props.isCreate || routeQuery.clone != null) {
@@ -212,11 +213,8 @@ onMounted(() => {
           const { elements, ...data } = remoteTopic
           topic.value = data
         }
-        setMetaTitle()
       })
       .finally(() => loader.hide())
-  } else {
-    setMetaTitle()
   }
 })
 </script>
@@ -228,7 +226,11 @@ onMounted(() => {
         <DsfrAlert type="warning" :title="errorMsg" />
       </div>
       <h1 class="fr-col-auto fr-mb-2v">
-        {{ isCreate ? `Nouveau ${pageConf.labels.singular}` : topic.name }}
+        {{
+          isCreate
+            ? `${capitalize(labels.articles.nouveau)} ${labels.singular}`
+            : topic.name
+        }}
       </h1>
       <form novalidate @submit.prevent>
         <ErrorSummary
@@ -240,7 +242,7 @@ onMounted(() => {
         />
         <fieldset>
           <legend class="fr-fieldset__legend fr-text--lead">
-            Description du {{ pageConf.labels.extended }}
+            Description {{ labels.articles.du }} {{ labels.extended }}
           </legend>
           <TopicForm
             v-if="isReadyForForm"
@@ -252,7 +254,7 @@ onMounted(() => {
         </fieldset>
         <fieldset v-if="isCreate">
           <legend class="fr-fieldset__legend fr-text--lead">
-            Propriétaire du {{ pageConf.labels.extended }}
+            Propriétaire {{ labels.articles.du }} {{ labels.extended }}
           </legend>
           <TopicOwnerForm v-if="isReadyForForm" v-model="topic" />
         </fieldset>
@@ -283,7 +285,8 @@ onMounted(() => {
       </form>
     </div>
     <div v-else>
-      Vous n'avez pas les droits pour ajouter un {{ pageConf.labels.singular }}.
+      Vous n'avez pas les droits pour ajouter {{ labels.articles.un }}
+      {{ labels.singular }}.
     </div>
   </GenericContainer>
 </template>

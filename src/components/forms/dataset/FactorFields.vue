@@ -7,6 +7,7 @@ import { Availability, ResolvedFactor, type FactorsGroups } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useForm } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
 
 import ErrorMessage from '../ErrorMessage.vue'
 import SelectTopicFactorGroup from '../SelectTopicFactorGroup.vue'
@@ -40,14 +41,14 @@ defineProps({
 const router = useRouter()
 const datasetStore = useDatasetStore()
 const { pageConf } = useCurrentPageConf()
-const { getErrorMessage } = useForm(formErrors, pageConf.labels.singular)
+const labels = useLabels(pageConf.labels)
+const { getErrorMessage } = useForm(formErrors, labels.singular)
 
 const selectedDataset: Ref<DatasetV2 | undefined> = ref(undefined)
 
 const hasEditorialization = computed(() => {
   return (
     !!factor.value.title.trim() &&
-    !!factor.value.description?.trim() &&
     (factor.value.siteExtras.group
       ? factor.value.siteExtras.group.trim().length < 100
       : true)
@@ -84,6 +85,9 @@ const onSelectDataset = (value: DatasetV2 | undefined) => {
     factor.value.siteExtras.uri = null
     factor.value.element = null
   } else {
+    if (!factor.value.title.trim()) {
+      factor.value.title = value.title
+    }
     factor.value.siteExtras.availability = Availability.LOCAL_AVAILABLE
     factor.value.element = {
       id: value.id,
@@ -128,11 +132,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <FactorTextFields
-    v-model:factor-model="factor"
-    :error-title="getErrorMessage('title')"
-    :error-purpose="getErrorMessage('purpose')"
-  />
   <div id="input-availability" tabindex="-1">
     <div class="fr-mt-1w fr-mb-4w">
       <SelectDataset
@@ -189,12 +188,6 @@ onMounted(() => {
           :value="Availability.MISSING"
           label="Je n'ai pas trouvé la donnée"
         />
-        <DsfrRadioButton
-          v-model="factor.siteExtras.availability"
-          name="source"
-          :value="Availability.NOT_AVAILABLE"
-          label="Je n'ai pas cherché la donnée"
-        />
       </fieldset>
     </div>
     <ErrorMessage
@@ -203,6 +196,11 @@ onMounted(() => {
       input-name="availability"
     />
   </div>
+  <FactorTextFields
+    v-model:factor-model="factor"
+    :error-title="getErrorMessage('title')"
+    :error-purpose="getErrorMessage('purpose')"
+  />
   <div class="fr-input-group">
     <SelectTopicFactorGroup
       v-model:factor-model="factor"

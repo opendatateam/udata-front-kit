@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import config from '@/config'
 import { onMounted, ref, watch } from 'vue'
 
 import {
@@ -10,6 +11,7 @@ import {
 import BlankState from '@/components/BlankState.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import DataservicesAPI from '@/services/api/resources/DataservicesAPI'
+import { useLabels } from '@/utils/labels'
 
 const props = defineProps({
   datasetId: {
@@ -23,6 +25,7 @@ const props = defineProps({
 })
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const dataservicesAPI = new DataservicesAPI()
 
 const dataservices = ref<Dataservice[]>([])
@@ -30,15 +33,18 @@ const total = ref(0)
 const page = ref(1)
 const pageSize = 5
 
-const getDataservicePage = (id: string) => {
-  return { name: 'dataservices_detail', params: { item_id: id } }
+const getDataservicePage = (dataservice: Dataservice) => {
+  const hasInternalDataservices = !!config.pages.dataservices
+  return hasInternalDataservices
+    ? { name: 'dataservices_detail', params: { item_id: dataservice.id } }
+    : dataservice.self_web_url
 }
 
 const emptyMessage = computed(() => {
   if (props.emptyMessage) {
     return props.emptyMessage
   } else {
-    return `Il n'y a pas encore d'API pour ce ${pageConf.labels.singular}.`
+    return `Il n'y a pas encore d'API pour ${labels.articles.ce} ${labels.singular}.`
   }
 })
 
@@ -68,7 +74,7 @@ onMounted(fetchDataservices)
       >
         <DataserviceCard
           :dataservice="dataservice"
-          :dataservice-url="getDataservicePage(dataservice.id)"
+          :dataservice-url="getDataservicePage(dataservice)"
         />
       </li>
     </ul>

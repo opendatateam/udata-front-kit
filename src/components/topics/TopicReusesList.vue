@@ -7,6 +7,7 @@ import BlankState from '@/components/BlankState.vue'
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import ReusesAPI from '@/services/api/resources/ReusesAPI'
+import { useLabels } from '@/utils/labels'
 
 const props = defineProps({
   topic: {
@@ -16,6 +17,7 @@ const props = defineProps({
 })
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const reusesAPI = new ReusesAPI()
 const reuses = ref<Reuse[]>([])
 
@@ -45,7 +47,7 @@ onMounted(() => {
   <BlankState
     v-else
     image="/static/blank_state/reuse.svg"
-    :message="`Il n'y a pas encore de réutilisation pour ce ${pageConf.labels.singular}.`"
+    :message="`Il n'y a pas encore de réutilisation pour ${labels.articles.ce} ${labels.singular}.`"
   >
     <p>
       <a

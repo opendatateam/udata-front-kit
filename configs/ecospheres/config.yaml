@@ -31,8 +31,6 @@ website:
     robots_txt:
       disallow:
         - /admin
-        - /datasets
-        - /organizations
     # sitemap.xml content (consumed by udata-front-kit-seo)
     sitemap_xml:
       topics_pages: []
@@ -42,9 +40,9 @@ website:
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
   service_logo: '/static/logos/ecospheres-logo.svg'
   badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
+    display: false
+    text:
+    style:
   # leave empty if not pertinent
   logo_operator:
     src: '/static/logos/ecospheres-logo.svg'
@@ -70,17 +68,8 @@ website:
       label: 'Donnez votre avis'
       link: https://tally.so/r/wLWrzp
     search:
-      display: true
-      placeholder: Rechercher...
-      dropdown:
-        - text: Rechercher {} dans les <strong>jeux de données</strong>
-          route: datasets
-        - text: Rechercher {} dans les <strong>indicateurs</strong>
-          route: indicators
-        - text: Rechercher {} dans les <strong>API</strong>
-          route: dataservices
-        - text: Rechercher {} dans les <strong>bouquets</strong>
-          route: bouquets
+      display: false
+      placeholder:
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
@@ -113,8 +102,6 @@ website:
       href: 'https://www.data.gouv.fr/fr/suivi/'
     - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
-    - label: 'Statistiques'
-      href: 'https://dashboard.data.developpement-durable.gouv.fr/superset/dashboard/indicateurs-ecospheres/?standalone=2'
   notice:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
@@ -123,26 +110,30 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Données
+    - text: Toutes les données
       to: /datasets
-    - text: Indicateurs
+    - text: Indicateurs phares
       to: /indicators
     - text: API
       to: /dataservices
-    - text: Bouquets
+    - text: Collections thématiques
       to: /bouquets
-    - text: Organisations
+    - text: Contributeurs
       to: /organizations
     - text: À propos
       to: /about
   router:
-    disable:
-      - topics
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
       - title: 'À propos'
         id: 'about'
         route: '/about'
+        meta:
+          title: Notre mission
+          description: |
+            ecologie.data.gouv.fr met à disposition des acteurs de la planification écologique (État, collectivités, entreprises, associations, citoyens) 
+            des jeux de données actualisées, des indicateurs et des réalisations concrètes. L’objectif est de faciliter l'adaptation au changement 
+            climatique et la territorialisation des objectifs de transition écologique.
         url: '/static/ecospheres/pages/about.md'
       - title: 'Accessibilité'
         id: 'accessibility'
@@ -155,15 +146,15 @@ website:
   sitemap:
     - name: Accueil
       path: /
-    - name: Bouquets
+    - name: Collections thématiques
       path: /bouquets
-    - name: Jeux de données
+    - name: Toutes les données
       path: /datasets
     - name: API
       path: /dataservices
-    - name: Indicateurs
+    - name: Indicateurs phares
       path: /indicators
-    - name: Organisations
+    - name: Contributeurs
       path: /organizations
     - name: À propos
       path: /about
@@ -177,7 +168,7 @@ website:
   default_debounce_wait: 600
   pagination_sizes:
     organizations_list: 9
-    topics_list: 20
+    topics_drafts_list: 9
     files_list: 6
   contact_email: ecospheres@developpement-durable.gouv.fr
   home_banner_colors:
@@ -208,6 +199,13 @@ organizations:
   datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
   dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
+  page: # organizations.page is a special case of config.pages
+    breadcrumb_title: Contributeurs
+    labels:
+      singular: contributeur
+    meta:
+      title: Liste des contributeurs
+      description: Recherchez une organisation qui a partagé un jeu de données ou une réutilisation sur la transition écologique
 
 # shared themes list for indicators and bouquets
 definitions: &definitions
@@ -230,55 +228,61 @@ definitions: &definitions
 # Configuration format for pages:
 #
 # pages:
-#   {page_id}:                      # page identifier, acts as a slug /{page_id}/{object_id?}
-#     list_all: {bool}              # whether to have a list view or not
-#     universe_query: {dict}        # used to define a "universe" on a given {page_id}, through query args
-#     filter_prefix: {string}       # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
-#     title: {string}               # title for the list page
-#     breadcrumb_title: {string}    # title in breadcrumb (optionnal, falls back to title)
-#     default_sort: {string}        # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
-#     labels:                       # how to call the object that is displayed by the page
-#       singular: {string}          # singular name for the object
-#       plural: {string}            # plural name for the object
-#       extended: {string}          # extended name for the object, singular
+#   {page_id}:                        # page identifier, acts as a slug /{page_id}/{object_id?}
+#     list_all: {bool}                # whether to have a list view or not
+#     universe_query: {dict}          # used to define a "universe" on a given {page_id}, through query args
+#     filter_prefix: {string}         # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
+#     title: {string}                 # title for the list page
+#     breadcrumb_title: {string}      # title in breadcrumb (optionnal, falls back to title)
+#     default_sort: {string}          # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
+#     labels:                         # how to call the object that is displayed by the page
+#       singular: {string}            # singular name for the object
+#       plural: {string}              # plural name for the object
+#       extended: {string}            # extended name for the object, singular
 #     search:
-#       input: {string}             # placeholder for the search input
-#     banner:                       # banner for the list page (optionnal)
-#       title: {string}             # title for the banner
-#       content: {string}           # content for the banner
-#     resources_tabs:               # resources tabs at the bottom of a detail page
+#       input: {string}               # label displayed above the search input
+#       placeholder: {string?|null?}  # input placeholder (null = no placeholder, omit = data.gouv.fr default)
+#     banner:                         # banner for the list page (optionnal)
+#       title: {string}               # title for the banner
+#       content: {string}             # content for the banner
+#     resources_tabs:                 # resources tabs at the bottom of a detail page
 #       discussions:
-#         display: {bool}           # display discussions tab on detail page
-#         create: {bool}            # create discussions tab on detail page
+#         display: {bool}             # display discussions tab on detail page
+#         create: {bool}              # create discussions tab on detail page
 #       datasets:
-#         display: {bool}           # display datasets tab on detail page
+#         display: {bool}             # display datasets tab on detail page
 #       reuses:
-#         display: {bool}           # display reuses tab on detail page
-#     editable: {bool}              # whether the page is editable when connected
-#     filters:                      # list of filters for this {page_id}
-#       - name: {string}            # name of the filter ⚠️ needs to be unique across all items
-#         id: {string}              # id of the filter
-#         type: {string}            # type of the filter (select | spatial_zone | spatial_granularity | checkbox | organization)
-#         child: {string?}          # id of the child filter (optional)
-#         color: {string}           # color of the filter's tag
-#         use_filter_prefix: {bool}    # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
-#         api_param: {string?}      # API query parameter name to use (optional, defaults to "tag")
-#         default_option: {string?} # default option for the filter (optional)
-#         default_value: {string?}  # default value for the filter (optional)
-#         authenticated: {bool?}    # only visible to connected users (optional, defaults to false)
-#         hide_on_list: {bool?}     # do not display filter on list page (optional, defaults to false)
-#         values:                   # list of values for this filter
-#           - id: {string}          # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
-#             name: {string}        # name of the value
-#             parent: {string?}     # id of the parent filter value (optional)
+#         display: {bool}             # display reuses tab on detail page
+#     editable: {bool}                # whether the page is editable when connected
+#     meta?:
+#       title?: {string}              # meta title (seo)
+#       description?: {string}        # meta description (seo)
+#     filters:                        # list of filters for this {page_id}
+#       - id: {string}                # id of the filter ⚠️ needs to be unique across all filters of the page
+#         name: {string}              # name of the filter ⚠️ only used in templates by custom filters
+#         type: {string}              # type of the filter (CustomFilterType or any BuiltInFilterKey from data.gouv.fr GlobalSearch)
+#         child: {string?}            # id of the child filter (optional)
+#         color: {string}             # color of the filter's tag
+#         use_filter_prefix: {bool}   # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
+#         api_param: {string?}        # API query parameter name to use (optional, defaults to "tag")
+#         default_option: {string?}   # default option for the filter (optional)
+#         default_value: {string?}    # default value for the filter (optional)
+#         hide_on_list: {bool?}       # do not display filter on list page (optional, defaults to false)
+#         advanced: {bool?}           # show in the advanced (collapsed) section of GlobalSearch; omit for basic (always visible)
+#                                     # ⚠️ only applicable to data.gouv.fr native filters (eg badge)
+#         values:                     # list of values for this filter
+#           - id: {string}            # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
+#             name: {string}          # name of the value
+#             parent: {string?}       # id of the parent filter value (optional)
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
     filter_prefix:
-    title: Jeux de données
+    title: Toutes les données
     breadcrumb_title: Données
     labels:
       singular: jeu de données
@@ -286,10 +290,11 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
-      title: Un guichet national pour l'accès aux données de la transition écologique
+      title: Un accès centralisé à des données produites par des acteurs de référence.
       content: |
-        Le catalogue offre un accès centralisé à des données actualisées produites par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
+        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
     resources_tabs:
       discussions:
         display: true
@@ -299,14 +304,23 @@ pages:
       reuses:
         display: true
     editable: true
+    meta:
+      title: 'Jeux de données publics sur la transition écologique : climat, énergie, biodiversité'
+      description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile
     filters:
-      - name: Organisation
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: badge
+        name: Label de donnée
+        type: badge
+      - id: org
+        name: Organisation
         default_option: Toutes les organisations
-        id: organization
-        type: organization
-      - name: Thème INSPIRE
+        type: organization_custom
+      - id: inspire
+        name: Thème INSPIRE
         default_option: Tous les thèmes
-        id: inspire
         type: select
         use_filter_prefix: false
         values:
@@ -378,103 +392,15 @@ pages:
             name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
           - id: zones-a-risque-naturel
             name: Zones à risque naturel
-      - name: Label de données
-        default_option: Tous les labels
-        id: badge
-        type: select
-        use_filter_prefix: false
-        values:
-          - id: hvd
-            name: Données de forte valeur
-          - id: inspire
-            name: INSPIRE
-  # DATASERVICES
-  dataservices:
-    list_all: true
-    universe_query:
-      topic: 65e9aa6cb5c809c30c70ee02
-    filter_prefix:
-    title: API
-    breadcrumb_title: API
-    labels:
-      singular: API
-      plural: APIs
-      extended: API
-    search:
-      input: Rechercher une API
-    banner:
-      title: Des interfaces privilégiées pour l'intégration des données dans vos outils
-      content: |
-        Le catalogue recense les API mises à disposition par des acteurs de référence. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
-    resources_tabs:
-      discussions:
-        display: true
-        create: true
-      datasets:
-        display: true
-    editable: false
-    filters:
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization
-  # BOUQUETS
-  bouquets:
-    list_all: true
-    universe_query:
-      tag: ecospheres
-    filter_prefix: ecospheres
-    title: Bouquets
-    breadcrumb_title:
-    labels:
-      singular: bouquet
-      plural: bouquets
-      extended: bouquet de données
-    search:
-      input: Filtrer les bouquets
-    banner:
-      title: Mettre en commun les usages pour une action efficace
-      content: |
-        Un bouquet regroupe des jeux de données ou des indicateurs mobilisés dans le cadre d'initiatives nationales ou territoriales liées aux politiques de transition écologique. Mettez votre expertise au service de l'action collective en créant vos propres bouquets : un simple compte **data.gouv**._fr_ suffit.
-    resources_tabs:
-      discussions:
-        display: true
-        create: true
-      datasets:
-        display: true
-      reuses:
-        display: true
-    editable: true
-    filters:
-      - name: Afficher les brouillons
-        id: include_private
-        type: checkbox
-        default_option:
-        default_value: true
-        authenticated: true
-        values: []
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization
-      - name: Thématique
-        default_option: Toutes les thématiques
-        id: theme
-        type: select
-        color: green-emeraude
-        use_filter_prefix: true
-        # TODO: use a dedicated config for the form?
-        form:
-          required: true
-        values: *fnv_themes
   # INDICATORS
   indicators:
+    object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
     filter_prefix: ecospheres-indicateurs
-    title: Indicateurs territoriaux
+    title: Indicateurs phares
     breadcrumb_title: Indicateurs
     labels:
       singular: indicateur
@@ -482,10 +408,11 @@ pages:
       extended: indicateur
     search:
       input: Rechercher un indicateur
+      placeholder: null
     banner:
-      title: Un hub d'indicateurs territoriaux de transition écologique
+      title: Une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers.
       content: |
-        Le catalogue met à disposition une sélection d'indicateurs territoriaux de planification écologique, validés par des experts métiers, accessibles via une API dédiée. Cette collection constitue une base évolutive, appelée à s'enrichir grâce aux retours exprimés par les acteurs partenaires.
+        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
     resources_tabs:
       discussions:
         display: true
@@ -495,18 +422,24 @@ pages:
       reuses:
         display: true
     editable: false
+    meta:
+      title: Sélection de jeux de données sur la planification écologique
+      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimenté par l'administration et la société civile
     filters:
-      - name: Thématique
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: theme
+        name: Thématique
         default_option: Toutes les thématiques
-        id: theme
         type: select
         color: green-menthe
         use_filter_prefix: true
         hide_on_list: true
         values: *fnv_themes
-      - name: Enjeu
+      - id: enjeu
+        name: Enjeu
         default_option: Tous les enjeux
-        id: enjeu
         type: select
         color: blue-ecume
         use_filter_prefix: true
@@ -522,9 +455,9 @@ pages:
             name: Ressources
           - id: sante
             name: Santé
-      - name: Secteur
+      - id: secteur
+        name: Secteur
         default_option: Tous les secteurs
-        id: secteur
         type: select
         color: purple-glycine
         use_filter_prefix: true
@@ -549,9 +482,9 @@ pages:
             name: Transport de voyageurs
           - id: transverse
             name: Transverse
-      - name: Levier
+      - id: levier
+        name: Levier
         default_option: Tous les leviers
-        id: levier
         type: select
         color: green-archipel
         use_filter_prefix: true
@@ -618,9 +551,9 @@ pages:
             name: Véhicules électriques
           - id: velo
             name: Vélo
-      - name: Maille géographique
+      - id: maille
+        name: Maille géographique
         default_option: Toutes les mailles
-        id: maille
         type: select
         use_filter_prefix: true
         color:
@@ -633,3 +566,146 @@ pages:
             name: EPCI
           - id: commune
             name: Commune
+  # DATASERVICES
+  dataservices:
+    object_type: dataservices
+    list_all: true
+    universe_query:
+      topic: 65e9aa6cb5c809c30c70ee02
+    filter_prefix:
+    title: API
+    breadcrumb_title: API
+    labels:
+      singular: API
+      plural: APIs
+      extended: API
+      feminine: true
+    search:
+      input: Rechercher une API
+      placeholder: null
+    banner:
+      title: Un accès centralisé à des <abbr title="Application Programming Interface">APIs</abbr> fournies par des acteurs de référence.
+      content: |
+        [Restez informés des dernières publications via notre lettre d'information](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55)
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+    editable: false
+    meta:
+      title: Sélection d’API sur la transition écologique
+      description: Vous recherchez une API sur la transition écologique pour automatiser des tâches depuis vos serveurs ? Explorez notre sélection
+    filters:
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: org
+        name: Organisation
+        default_option: Toutes les organisations
+        type: organization_custom
+  # BOUQUETS
+  bouquets:
+    object_type: topics
+    list_all: true
+    universe_query:
+      tag: univers-ecospheres
+    filter_prefix: ecospheres
+    title: Collections thématiques
+    breadcrumb_title: Collections
+    labels:
+      singular: collection
+      plural: collections thématiques
+      extended: collection thématique
+      feminine: true
+    search:
+      input: Rechercher une collection thématique
+      placeholder: null
+    banner:
+      title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
+      content: |
+        [Créez et partagez vos propres collections](https://guides.data.gouv.fr/ecologie.data.gouv.fr/ecologie.data.gouv.fr/collections-thematiques/ajouter-une-collection)
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    meta:
+      title: Collections thématiques des jeux de données sur la transition écologique
+      description: Vous recherchez des familles de jeux de données sur la transition écologique ? Explorez rapidement notre notre catalogue
+    filters:
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range
+      - id: org
+        name: Organisation
+        default_option: Toutes les organisations
+        type: organization_custom
+      - id: theme
+        name: Thématique
+        default_option: Toutes les thématiques
+        type: select
+        color: green-emeraude
+        use_filter_prefix: true
+        # TODO: use a dedicated config for the form?
+        form:
+          required: true
+        values: *fnv_themes
+
+ecospheres:
+  homepage:
+    thematic_tags:
+      - label: Aménagement du territoire
+        q: aménagement du territoire
+      - label: Air
+        q: air
+      - label: Biodiversité
+        q: biodiversité
+      - label: Bruit
+        q: bruit
+      - label: Climat
+        q: climat
+      - label: Eau
+        q: eau
+      - label: Énergie
+        q: énergie
+      - label: Logement
+        q: logement
+      - label: Milieux marins
+        q: milieux marins
+      - label: Risques
+        q: risques
+      - label: Transport
+        q: transport
+    collections:
+      - title: Indicateurs de planification écologique régionale (COPs)
+        description: Évaluez les résultats physiques des actions de transition écologique de votre région.
+        creator: SGPE
+        maille: Régional
+        slug: indicateurs-regionaux-de-planification-ecologique-cops
+      - title: Indicateurs de mobilité durable
+        description: Faciliter l'orientation, la prise de décision et le suivi en matière de politiques publiques locales pour la mobilité durable des personnes.
+        creator: Tableau de bord des mobilités durables
+        maille: Communal à régional
+        slug: indicateurs-du-tableau-de-bord-des-mobilites-durables
+      - title: Planification territoriale (PLU(i), SCoT, SRADDET)
+        description: Accédez aux bases de données nationales et territoriales utiles à l'élaboration des documents d'urbanisme.
+        creator: Docurba (DGALN)
+        maille: Communal
+        slug: elaboration-ou-evolution-dun-document-durbanisme
+    about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le laboratoire d'innovation au service de la transition écologique, au sein du Commissariat Général au Développement Durable (CGDD)."
+    news:
+      - date: 17 avril 2026
+        title: Nouveaux indicateurs sur les achats durables
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-17-avril-2026-nouveaux-indicateurs-sur-les-achats-durables
+      - date: 9 avril 2026
+        title: Nouvel indicateur sur les émissions de polluants
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-9-avril-2026-nouvel-indicateur-sur-les-emissions-de-polluants
+      - date: 7 avril 2026
+        title: Modification de l'indicateur sur les prélèvements d'eau par usage
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-7-avril-2026-modification-de-lindicateur-sur-les-prelevements-deau-par-usage

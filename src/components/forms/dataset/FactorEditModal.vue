@@ -16,6 +16,7 @@ import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
+import { useLabels } from '@/utils/labels'
 import ErrorSummary from '../ErrorSummary.vue'
 import FactorFields from './FactorFields.vue'
 
@@ -28,6 +29,7 @@ const emits = defineEmits(['submitModal'])
 
 const router = useRouter()
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const elementStore = useTopicElementStore()
 
 const factors = defineModel({
@@ -58,12 +60,11 @@ const validateFields = () => {
   if (!modalFactor?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalFactor?.description?.trim()) {
-    formErrors.value.push('purpose')
-  }
   if (
-    !modalFactor?.siteExtras.uri &&
-    modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
+    // NOT_AVAILABLE is not allowed anymore in edit/creation
+    modalFactor?.siteExtras.availability === Availability.NOT_AVAILABLE ||
+    (!modalFactor?.siteExtras.uri &&
+      modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE)
   ) {
     formErrors.value.push('availability')
   }
@@ -215,7 +216,7 @@ const submit = async (modalData: DatasetModalData) => {
 }
 
 const { formErrorMessagesMap, sortedErrors, isSubmitted, handleSubmit } =
-  useForm(formErrors, pageConf.labels.singular, {
+  useForm(formErrors, labels.singular, {
     validateFields,
     onSuccess: () => submit(modalData.value),
     errorSummaryRef: errorSummary

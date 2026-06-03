@@ -28,13 +28,13 @@ Le présent document a pour objet de régler les relations entre les différents
 
 ### Présentation du service
 
-_ecologie_.**data**.**gouv**._fr_ est une application web adossée à la plateforme **data**.**gouv**._fr_. Son interface permet un accès centralisé aux données de la transition écologique et leur renseignement par cas d'usage sous la forme de bouquets de données. Un bouquet de données est un ensemble de données contextualisées répondant au besoin spécifique d’une politique publique.
+_ecologie_.**data**.**gouv**._fr_ est une application web adossée à la plateforme **data**.**gouv**._fr_. Son interface permet un accès centralisé aux données de la transition écologique et leur renseignement par cas d'usage sous la forme de collections thématiques. Une collection thématique constitue un ensemble de jeux de données ou d'indicateurs organisés par cas d’usage, c'est-à-dire par politique publique ou par projet.
 
 _ecologie_.**data**.**gouv**._fr_ permet :
 
-- la consultation de bouquets de données par tout utilisateur,
-- la publication de bouquets de données après identification à partir d’un compte **data**.**gouv**._fr_,
-- une discussion autour des bouquets de données après identification à partir d’un compte **data**.**gouv**._fr_,
+- la consultation de collections thématiques par tout utilisateur,
+- la publication de collections thématiques après identification à partir d’un compte **data**.**gouv**._fr_,
+- une discussion autour des collections thématiques après identification à partir d’un compte **data**.**gouv**._fr_,
 - la consultation ou le téléchargement des données de l’univers _ecologie_.**data**.**gouv**._fr_ par tout utilisateur,
 - une discussion autour des données après identification à partir d’un compte **data**.**gouv**._fr_.
 
@@ -48,17 +48,17 @@ _ecologie_.**data**.**gouv**._fr_ diffuse des informations publiques et les donn
 
 _ecologie_.**data**.**gouv**._fr_ n’a pas vocation à diffuser des données publicitaires, de promotion d’intérêts privés, contrevenant à l’ordre public ou, plus généralement, illicite. L’Ecolab est susceptible, le cas échéant, sans préavis, de supprimer ou rendre impossible l’accès à de telles données.
 
-Le CGDD encourage les contributeurs à fiabiliser et documenter les données et les bouquets de données qu’ils publient. Les autorités administratives actualisent les bases de données qu’elles publient, conformément à l’article L. 312-1-1 du CRPA.
+Le CGDD encourage les contributeurs à fiabiliser et documenter les jeux de données et les collections thématiques qu’ils publient. Les autorités administratives actualisent les bases de données qu’elles publient, conformément à l’article L. 312-1-1 du CRPA.
 
-Les contributeurs publiant un bouquet de données ou un jeu de données remonté depuis **data**.**gouv**._fr_ sont invités à animer la page dédiée ; à cette fin, ils sont notifiés par courriel de chaque nouvelle contribution sur cette page notamment sous la forme de discussion.
+Les contributeurs publiant un jeu de données ou une collection thématique remonté depuis **data**.**gouv**._fr_ sont invités à animer la page dédiée ; à cette fin, ils sont notifiés par courriel de chaque nouvelle contribution sur cette page notamment sous la forme de discussion.
 
 Les contributeurs sont seuls responsables des contenus qu’ils publient directement depuis _ecologie_.**data**.**gouv**._fr_.
 
 ##### Données à caractère personnel
 
-Les jeux ou bouquets de données contenant des données à caractère personnel, c’est-à-dire des données, y compris non nominatives, permettant l’identification directe ou indirecte de personnes physiques, ne peuvent pas être diffusés par _ecologie_.**data**.**gouv**._fr_ sauf si les personnes concernées y ont consenti ou si une disposition législative ou les articles L. 312-1-2 et D. 312-1-3 du CRPA le permettent.
+Les jeux de données ou collections thématiques contenant des données à caractère personnel, c’est-à-dire des données, y compris non nominatives, permettant l’identification directe ou indirecte de personnes physiques, ne peuvent pas être diffusés par _ecologie_.**data**.**gouv**._fr_ sauf si les personnes concernées y ont consenti ou si une disposition législative ou les articles L. 312-1-2 et D. 312-1-3 du CRPA le permettent.
 
-Le contributeur publiant des jeux ou bouquets de données est responsable des jeux ou bouquets de données qu’il publie sur _ecologie_.**data**.**gouv**._fr_ et s’assure que cette publication est conforme à la législation en vigueur. Il prend toute mesure nécessaire à cette fin et le CGDD l’encourage à mentionner la présence de données à caractère personnel dans la documentation accompagnant le jeu ou le bouquet de données et préciser, lorsqu’elles existent, les restrictions juridiques à la réutilisation.
+Le contributeur publiant des jeux de données ou collections thématiques est responsable des jeux de données ou collections thématiques qu’il publie sur _ecologie_.**data**.**gouv**._fr_ et s’assure que cette publication est conforme à la législation en vigueur. Il prend toute mesure nécessaire à cette fin et le CGDD l’encourage à mentionner la présence de données à caractère personnel dans la documentation accompagnant le jeu de données ou la collection thématique et préciser, lorsqu’elles existent, les restrictions juridiques à la réutilisation.
 
 Le réutilisateur de telles données doit se conformer à la législation relative à la protection des données à caractère personnel en vigueur dans son territoire de résidence et respecter les stipulations pertinentes de la licence attachée à ces données.
 
@@ -68,7 +68,7 @@ Les ressources des jeux de données sont soumises à la licence choisie par le c
 
 ##### Publication de commentaire
 
-Les discussions ont vocation à porter sur le jeu ou le bouquet de données publié. Les contributeurs ne publient pas de messages de nature publicitaire ou promotionnelle, à caractère raciste ou diffamatoire, grossier ou injurieux, agressif ou violent ou de façon générale qui contreviendraient aux bonnes mœurs, l’ordre public ou aux dispositions légales en vigueur.
+Les discussions ont vocation à porter sur le jeu de données ou la collection thématique publiés. Les contributeurs ne publient pas de messages de nature publicitaire ou promotionnelle, à caractère raciste ou diffamatoire, grossier ou injurieux, agressif ou violent ou de façon générale qui contreviendraient aux bonnes mœurs, l’ordre public ou aux dispositions légales en vigueur.
 
 Les contributeurs publiant un commentaire dans une discussion cèdent leurs droits de propriété intellectuelle sur ce commentaire de façon non exclusive, à titre gracieux, pour le monde entier, pour toute la durée de ces droits.
 
@@ -118,7 +118,7 @@ Le site dépose également des cookies de navigation, aux fins strictement techn
 
 ##### Données à caractère personnel
 
-La consultation des jeux ou bouquet de données (y compris leur téléchargement) ne nécessite pas de s’inscrire, ni de s’authentifier.
+La consultation des jeux de données ou collections thématiques (y compris leur téléchargement) ne nécessite pas de s’inscrire, ni de s’authentifier.
 
 L’inscription à la plateforme nécessite que l’utilisateur communique à l’opérateur de **data**.**gouv**._fr_ ses prénom et nom, ainsi que son courriel. Le CGDD et l’opérateur de **data**.**gouv**._fr_ s’engagent à prendre toutes les mesures techniques et organisationnelles nécessaires permettant de garantir la sécurité du courriel de l’utilisateur. Celui-ci n’est jamais communiqué à des tiers, en dehors des cas prévus par la loi.
 

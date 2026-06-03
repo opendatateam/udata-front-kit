@@ -6,9 +6,11 @@ import { computed } from 'vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
+import { useLabels } from '@/utils/labels'
 import { useOwnerName } from '@/utils/owned'
 
 const { pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
 const props = defineProps({
   dataset: {
@@ -57,7 +59,7 @@ const badgeClasse = computed(() => {
     <DsfrBadge
       v-if="alreadySelected"
       type="info"
-      :label="`Déjà utilisé dans ce ${pageConf.labels.singular}`"
+      :label="`Déjà utilisé dans ${labels.articles.ce} ${labels.singular}`"
       small
       ellipsis
       :class="badgeClasse"
@@ -85,13 +87,9 @@ const badgeClasse = computed(() => {
           <template v-else>{{ ownerName }}</template>
         </p>
         <p
-          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm"
+          class="fr-mt-1w fr-mb-1w fr-hidden fr-unhidden-sm overflow-wrap-anywhere fr-text--sm description-clamp"
         >
-          <text-clamp
-            :auto-resize="true"
-            :text="stripFromMarkdown(dataset.description)"
-            :max-lines="2"
-          />
+          {{ stripFromMarkdown(dataset.description, 250) }}
         </p>
       </div>
     </div>
@@ -101,5 +99,11 @@ const badgeClasse = computed(() => {
 <style scoped>
 h4 {
   font-size: 1rem;
+}
+.description-clamp {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
