@@ -3,10 +3,9 @@ import {
   OrganizationNameWithCertificate,
   ReadMore
 } from '@datagouv/components-next'
-import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
+import { capitalize, computed, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -20,10 +19,6 @@ import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
 import {
@@ -36,6 +31,8 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
+import { useLabels } from '@/utils/labels'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -53,10 +50,6 @@ const spatialCoverage = useSpatialCoverage(topic)
 const showCloneModal = ref(false)
 const cloneKeepDatasets = ref(false)
 
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
-
 const description = computed(() => descriptionFromMarkdown(topic))
 
 // Dynamically load the custom description component if it exists
@@ -72,6 +65,7 @@ const canEdit = computed(() => {
 const { isAdmin } = storeToRefs(userStore)
 
 const { pageKey, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 const showDiscussions = pageConf.resources_tabs.discussions.display
 const showDatasets = pageConf.resources_tabs.datasets.display
 const showReuses = pageConf.resources_tabs.reuses.display
@@ -191,29 +185,9 @@ const togglePublish = () => {
     .finally(() => loader.hide())
 }
 
-const metaDescription = (): string | undefined => {
-  return topic.value?.description ?? ''
-}
-
-const metaKeywords = computed(() => {
-  const tags = topic.value?.tags
-  if (!tags?.length) return undefined
-  const prefix = pageConf.filter_prefix
-  const keywords = prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
-  return keywords.length ? keywords.join(', ') : undefined
-})
-
 const metaTitle = computed(() => {
   return topic.value?.name
 })
-
-const metaLink = (): string => {
-  const resolved = router.resolve({
-    name: `${pageKey}_detail`,
-    params: { item_id: topic.value?.slug }
-  })
-  return `${window.location.origin}${resolved.href}`
-}
 
 const handleNavigateToFactor = (elementId: string) => {
   activeTab.value = 0
@@ -222,22 +196,22 @@ const handleNavigateToFactor = (elementId: string) => {
   })
 }
 
-useHead({
-  meta: () => [
-    {
-      property: 'og:title',
-      content: `${metaTitle.value} | ${config.website.title}`
-    },
-    { name: 'description', content: metaDescription() },
-    { property: 'og:description', content: metaDescription() },
-    ...(metaKeywords.value != null
-      ? [{ name: 'keywords', content: metaKeywords.value }]
-      : []),
-    ...(topic.value?.private
-      ? [{ name: 'robots', content: 'noindex, nofollow' }]
-      : [])
-  ],
-  link: [{ rel: 'canonical', href: metaLink }]
+useMeta({
+  title: () =>
+    metaTitle.value && `${capitalize(labels.singular)} - ${metaTitle.value}`,
+  description: () => topic.value?.description,
+  keywords: () => {
+    const tags = topic.value?.tags
+    if (!tags?.length) return undefined
+    const prefix = pageConf.filter_prefix
+    return prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
+  },
+  canonicalUrl: useCanonicalUrl(() => {
+    const slug = topic.value?.slug
+    if (!slug) return null
+    return { name: `${pageKey}_detail`, params: { item_id: slug } }
+  }),
+  noIndex: () => topic.value?.private
 })
 
 // Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
@@ -289,7 +263,6 @@ watch(
             params: { item_id: topic.value.slug }
           })
         }
-        setAccessibilityProperties(metaTitle.value)
       })
       .finally(() => {
         // Only auto-hide if there's no custom description component
@@ -318,7 +291,7 @@ watch(
         size="sm"
         label="Cloner"
         icon="fr-icon-git-merge-line"
-        :title="`Cloner le ${pageConf.labels.singular}`"
+        :title="`Cloner ${labels.articles.le} ${labels.singular}`"
         @click="showCloneModal = true"
       />
       <DsfrModal
@@ -331,12 +304,13 @@ watch(
         <template #default>
           <p>
             Vous pouvez choisir de conserver les liens vers les jeux de données
-            du {{ pageConf.labels.singular }} que vous souhaitez cloner.
+            {{ labels.articles.du }} {{ labels.singular }} que vous souhaitez
+            cloner.
           </p>
           <p>
             Si vous ne conservez pas les liens, les jeux de données ne seront
-            pas ajoutés au {{ pageConf.labels.singular }} cloné, mais leurs
-            libellés et raisons d'utilisation seront conservés.
+            pas ajoutés {{ labels.articles.au }} {{ labels.singular }} cloné,
+            mais leurs libellés et raisons d'utilisation seront conservés.
           </p>
           <p>Voulez-vous conserver les liens vers les jeux de données&nbsp;?</p>
         </template>
@@ -473,7 +447,7 @@ watch(
       v-model="activeTab"
       class="fr-mt-2w"
       :tab-titles="tabTitles"
-      :tab-list-name="`Groupes d'attributs du ${pageConf.labels.singular}`"
+      :tab-list-name="`Groupes d'attributs ${labels.articles.du} ${labels.singular}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent
@@ -509,7 +483,7 @@ watch(
         <DiscussionsList
           :subject="topic"
           subject-class="Topic"
-          :empty-message="`Il n'y a pas encore de discussion pour ce ${pageConf.labels.singular}.`"
+          :empty-message="`Il n'y a pas encore de discussion pour ${labels.articles.ce} ${labels.singular}.`"
         />
       </DsfrTabContent>
       <!-- Réutilisations -->

@@ -2,37 +2,28 @@ import { defineStore } from 'pinia'
 import { computed, type ComputedRef } from 'vue'
 
 import config from '@/config'
-import type { BaseParams } from '@/model/api'
-import type { TopicItemConf } from '@/model/config'
+import type { BaseParams, GenericResponse } from '@/model/api'
 import type { Topic } from '@/model/topic'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
-import { usePageQueryParams } from '@/utils/filters'
 import { useUniverseQuery } from '@/utils/universe'
 
 import { useUserStore } from './UserStore'
 
 const topicsAPI = new TopicsAPI({ version: 2 })
 
-interface QueryArgs {
-  query: string
-  page: string
-  include_private?: string
-  page_size?: string
-  featured?: string
-}
-
 export interface RootState {
   topics: Topic[]
-  total: number
+  drafts: Topic[]
+  draftsTotal: number
 }
 
 export const useTopicStore = defineStore('topic', {
   state: (): RootState => ({
     topics: [],
-    total: 0
+    drafts: [],
+    draftsTotal: 0
   }),
   getters: {
-    // Computed property to get topics writable by the current user
     myTopics(): ComputedRef<Topic[]> {
       const userStore = useUserStore()
       return computed(() => {
@@ -42,10 +33,9 @@ export const useTopicStore = defineStore('topic', {
         )
       })
     },
-    pagination() {
-      const nbPages = Math.ceil(
-        this.total / config.website.pagination_sizes.topics_list
-      )
+    draftsPagination() {
+      const pageSize = config.website.pagination_sizes.topics_drafts_list
+      const nbPages = Math.ceil(this.draftsTotal / pageSize)
       return [...Array(nbPages).keys()].map((page) => {
         page += 1
         return {
@@ -57,33 +47,30 @@ export const useTopicStore = defineStore('topic', {
     }
   },
   actions: {
-    async query(args: QueryArgs, pageKey?: string): Promise<Topic[]> {
-      const { query, ...queryArgs } = args
-
-      const params = usePageQueryParams(pageKey || 'topics', queryArgs)
-
-      const results = await topicsAPI.list({
+    async loadDrafts({
+      q,
+      page = 1,
+      pageKey,
+      sort = '-last_modified'
+    }: {
+      q?: string
+      page?: number
+      pageKey: string
+      sort?: string
+    }): Promise<void> {
+      const response: GenericResponse = await topicsAPI.list({
         params: {
-          q: query,
-          page_size: config.website.pagination_sizes.topics_list,
-          ...params
+          private: 'true',
+          sort,
+          page,
+          page_size: config.website.pagination_sizes.topics_drafts_list,
+          ...(q ? { q } : {}),
+          ...useUniverseQuery(pageKey, {})
         },
         authenticated: true
       })
-      this.topics = results.data
-      this.total = results.total
-      return this.topics
-    },
-    /**
-     * Load topics to store from a list of ids and API
-     */
-    async loadTopicsFromList(topics: TopicItemConf[]): Promise<Topic[]> {
-      this.topics = []
-      for (const topic of topics) {
-        const res = await topicsAPI.get({ entityId: topic.id })
-        this.topics.push(res)
-      }
-      return this.topics
+      this.drafts = response.data as Topic[]
+      this.draftsTotal = response.total
     },
     /**
      * Load all topics from universe by following pagination links
@@ -94,7 +81,8 @@ export const useTopicStore = defineStore('topic', {
       await useUserStore().waitForStoreInit()
       let response = await topicsAPI.list({
         params: {
-          include_private: 'yes',
+          // TODO: remove include_private when all servers migrated to private param
+          include_private: 'true',
           sort: '-last_modified',
           ...mergedApiParams
         },

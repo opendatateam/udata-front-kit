@@ -1,8 +1,7 @@
 import {
-  useDataserviceSearchPageRoutes,
-  useDatasetSearchPageRoutes,
-  useTopicAdminPagesRoutes,
-  useTopicSearchPageRoutes
+  useGlobalSearchPageRoutes,
+  useOrganizationsRoutes,
+  useTopicAdminPagesRoutes
 } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -16,30 +15,19 @@ export const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'home',
     meta: {
-      title: 'Accueil'
+      title: 'Les données publiques françaises sur la transition écologique'
     },
     component: async () => await import('./views/HomeView.vue')
   },
-  useDatasetSearchPageRoutes({
+  useGlobalSearchPageRoutes({
     pageKey: 'datasets',
-    metaTitle: 'Données',
     cardComponent: async () =>
       await import(
         '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
       )
   }),
-  useDataserviceSearchPageRoutes({
-    pageKey: 'dataservices',
-    metaTitle: 'API',
-    cardComponent: async () =>
-      await import(
-        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
-      )
-  }),
-  useDatasetSearchPageRoutes({
+  useGlobalSearchPageRoutes({
     pageKey: 'indicators',
-    metaTitle: 'Indicateurs',
-    cardClass: 'fr-col fr-col-lg-6 fr-col-md-12',
     cardComponent: async () =>
       await import(
         '@/custom/ecospheres/components/indicators/IndicatorCard.vue'
@@ -49,9 +37,15 @@ export const routes: RouteRecordRaw[] = [
         '@/custom/ecospheres/views/indicators/IndicatorDetailView.vue'
       )
   }),
-  useTopicSearchPageRoutes({
+  useGlobalSearchPageRoutes({
+    pageKey: 'dataservices',
+    datasetCardComponent: async () =>
+      await import(
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+      )
+  }),
+  useGlobalSearchPageRoutes({
     pageKey: 'bouquets',
-    metaTitle: 'Bouquets',
     topicConf,
     datasetCardComponent: async () =>
       await import(
@@ -61,5 +55,6 @@ export const routes: RouteRecordRaw[] = [
   ...useTopicAdminPagesRoutes({
     pageKey: 'bouquets',
     topicConf
-  })
+  }),
+  useOrganizationsRoutes()
 ]

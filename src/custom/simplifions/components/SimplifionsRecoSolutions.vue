@@ -177,6 +177,11 @@
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard
                       :solution="solution"
+                      :integration-score="
+                        integrationScorePerSolution.get(solution.id)
+                      "
+                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                      :type-label="typeLabel"
                     />
                   </div>
                 </div>
@@ -207,6 +212,11 @@
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard
                       :solution="solution"
+                      :integration-score="
+                        integrationScorePerSolution.get(solution.id)
+                      "
+                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                      :type-label="typeLabel"
                     />
                   </div>
                 </div>
@@ -245,6 +255,11 @@
                   >
                     <SimplifionsRecoSolutionsIntegratricesCard
                       :solution="solution"
+                      :integration-score="
+                        integrationScorePerSolution.get(solution.id)
+                      "
+                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                      :type-label="typeLabel"
                     />
                   </div>
                 </div>
@@ -413,6 +428,37 @@ if (
     integratingSolutionsPortailsConsultation.value = solutions
   })
 }
+
+const usefulApiIds = new Set(
+  recommandation.API_et_datasets_utiles_fournis ?? []
+)
+
+const integrationScorePerSolution = computed(() => {
+  const totalCount = usefulApiIds.size
+  const allSolutions = [
+    ...integratingSolutionsLogicielsMetiers.value,
+    ...integratingSolutionsBriquesTechniques.value,
+    ...integratingSolutionsPortailsConsultation.value
+  ]
+  return new Map(
+    allSolutions.map((solution) => [
+      solution.id,
+      {
+        integratedCount: (
+          solution.fields.API_ou_datasets_integres ?? []
+        ).filter((id) => usefulApiIds.has(id)).length,
+        totalCount
+      }
+    ])
+  )
+})
+
+const typeLabel = computed(() => {
+  const t = recommandation.Type_de_recommandation
+  if (t === 'API') return 'API'
+  if (t === 'Jeu de données') return 'jeu de données'
+  return 'API ou jeu de données'
+})
 
 const activeApiAccordion = ref(-1)
 const activeIntegratingAccordion = ref(0)

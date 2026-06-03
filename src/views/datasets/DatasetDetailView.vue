@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -12,19 +12,17 @@ import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
+import { useMeta } from '@/utils/seo'
 
 const route = useRouteParamsAsString()
 const datasetIdOrSlug = route.params.item_id
@@ -61,6 +59,8 @@ const showDiscussions = pageConf.resources_tabs.discussions.display
 const datasetsConf = useDatasetsConf()
 const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
+const labels = useLabels(pageConf.labels)
+const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
 
 const canEdit = computed(() => {
   return pageConf.editable && userStore.hasEditPermissions(dataset.value)
@@ -77,10 +77,6 @@ const canAddToTopic = computed(() => {
 const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
 
 const showAddToTopicModal = ref(false)
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const links = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -132,11 +128,18 @@ const exploreUrl = computed(() => {
   )
 })
 
+useMeta({
+  title: () =>
+    dataset.value?.title &&
+    `${capitalize(labels.singular)} - ${dataset.value.title}`,
+  description: () => dataset.value?.description,
+  canonicalUrl: () => dataset.value?.page
+})
+
 onMounted(() => {
   datasetStore
     .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(dataset.value?.title)
       if (dataset.value) {
         computeOgcInfo(dataset.value.id).catch((err) =>
           console.error('Failed to compute OGC info:', err)
@@ -160,7 +163,7 @@ onMounted(() => {
         <DsfrButton
           secondary
           size="sm"
-          :label="`Ajouter à un ${topicPageConf.labels.singular}`"
+          :label="`Ajouter à ${topicLabels!.articles.un} ${topicLabels!.singular}`"
           icon="fr-icon-file-add-line"
           @click="showAddToTopicModal = true"
         />
