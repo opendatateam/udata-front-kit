@@ -1,14 +1,11 @@
 <script lang="ts" setup>
-import config from '@/config'
+import { useWebsiteConfig } from '@/utils/config'
 import { DsfrHeader, type DsfrHeaderProps } from '@gouvminint/vue-dsfr'
 import Navigation from '../NavigationComponent.vue'
 import SearchComponent from '../SearchComponent.vue'
 
 type Props = {
   userName: string | undefined
-  headerLogo: string | undefined
-  headerLogoHeight: string | undefined
-  headerLogoWidth: string | undefined
   customSearch: boolean
 }
 
@@ -17,7 +14,6 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgStyle: () => ({}),
   searchLabel: 'Rechercher',
   quickLinks: () => [],
-  showSearch: config.website.header.search.display,
   customSearch: false
 })
 
@@ -35,53 +31,48 @@ const closeModal = () => {
   }
 }
 
-const logoText = config.website.rf_title
-const serviceTitle = config.website.title
-const serviceDescription = config.website.header.description ?? undefined
-const titleImage = config.website.header.title_image?.src
-const titleImageHeight = config.website.header.title_image?.height
-const titleImageWidth = config.website.header.title_image?.width
-const showBeta = config.website.header.beta
+const { header, rf_title, title } = useWebsiteConfig()
+const { logo, title_image, description, beta, search } = header
 </script>
 
 <template>
   <DsfrHeader
     ref="headerRef"
     home-to="/"
-    :logo-text
-    :service-title="titleImage ? undefined : serviceTitle"
-    :service-description
+    :logo-text="rf_title"
+    :service-title="title_image ? undefined : title"
+    :service-description="description"
     :quick-links
-    :show-search="showSearch && !customSearch"
-    :home-label="`Retour à l'accueil du site - ${serviceTitle}`"
-    :show-beta
+    :show-search="search.display && !customSearch"
+    :home-label="`Retour à l'accueil du site - ${title}`"
+    :show-beta="beta"
   >
     <!-- needed because of logo + title image -->
-    <template v-if="headerLogo || titleImage" #operator>
-      <div v-if="headerLogo">
+    <template v-if="logo || title_image" #operator>
+      <div v-if="logo">
         <img
           class="fr-responsive-img header-logo"
-          :src="headerLogo"
+          :src="logo.src"
           alt=""
           :style="operatorImgStyle"
-          :height="headerLogoHeight"
-          :width="headerLogoWidth"
+          :height="logo.height"
+          :width="logo.width"
         />
       </div>
-      <div v-if="titleImage">
+      <div v-if="title_image">
         <img
           class="fr-responsive-img title-image"
-          :src="titleImage"
-          :alt="serviceTitle"
-          :height="titleImageHeight"
-          :width="titleImageWidth"
+          :src="title_image.src"
+          :alt="title"
+          :height="title_image.height"
+          :width="title_image.width"
         />
       </div>
     </template>
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="customSearch && showSearch"
+        v-if="customSearch && search.display"
         id="header-select-search"
         class="custom-search"
         :search-label="searchLabel"
@@ -101,8 +92,8 @@ const showBeta = config.website.header.beta
 .header-logo,
 .title-image {
   /* take values from config */
-  --width: v-bind(headerLogoWidth);
-  --height: v-bind(headerLogoHeight);
+  --width: v-bind(logo?.width);
+  --height: v-bind(logo?.height);
   /* if no cusotm values limit height to 35px */
   inline-size: var(--width, auto);
   block-size: var(--height, 35px);
@@ -111,8 +102,8 @@ const showBeta = config.website.header.beta
 }
 
 .title-image {
-  --width: v-bind(titleImageWidth);
-  --height: v-bind(titleImageHeight);
+  --width: v-bind(title_image?.width);
+  --height: v-bind(title_image?.height);
 }
 :deep(.fr-header__brand-top) {
   flex-wrap: wrap;
@@ -135,6 +126,11 @@ const showBeta = config.website.header.beta
       order: 2;
     }
   }
+}
+/* override green beta badge */
+:deep(.fr-header__service .fr-badge) {
+  background-color: var(--background-contrast-blue-cumulus);
+  color: var(--text-label-blue-cumulus);
 }
 :deep(.fr-header__tools-links) {
   flex-wrap: wrap;

@@ -61,13 +61,13 @@ website:
         title: 'gouvernement.fr - nouvelle fenêtre'
     mandatory_links:
       - label: 'Contact'
-        href: 'https://tally.so/r/m61AqO'
+        to: 'https://tally.so/r/m61AqO'
       - label: 'Plan du site'
         to: '/sitemap'
       - label: "Conditions générales d'utilisation"
         to: '/terms'
       - label: 'Politique de confidentialité'
-        href: 'https://www.data.gouv.fr/fr/suivi/'
+        to: 'https://www.data.gouv.fr/fr/suivi/'
       - label: 'Accessibilité : partiellement conforme'
         to: '/accessibility'
   homepage:

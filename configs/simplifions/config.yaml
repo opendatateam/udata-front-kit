@@ -68,7 +68,7 @@ website:
       - label: "Conditions générales d'utilisation"
         to: '/terms'
       - label: 'Politique de confidentialité'
-        href: 'https://www.data.gouv.fr/fr/suivi/'
+        to: 'https://www.data.gouv.fr/fr/suivi/'
       - label: 'Accessibilité : partiellement conforme'
         to: '/accessibility'
   header:

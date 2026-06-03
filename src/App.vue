@@ -14,6 +14,7 @@ import {
 } from './model/injectionKeys'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
+import { useWebsiteConfig } from './utils/config'
 
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
@@ -88,17 +89,8 @@ onMounted(() => {
   userStore.init()
 })
 
-const logoText = config.website.rf_title
-const serviceTitle = config.website.title
-const headerLogo = config.website.header.logo?.src
-const headerLogoHeight = config.website.header?.logo?.height
-const headerLogoWidth = config.website.header?.logo?.width
-const footerLogo = config.website.footer.logo?.src
-const footerLogoHeight = config.website.footer.logo?.height
-const footerLogoWidth = config.website.footer.logo?.width
-const footerPhrase = config.website.footer.phrase
-const footerExternalLinks = config.website.footer.external_links
-const footerMandatoryLinks = config.website.footer.mandatory_links
+const { footer, rf_title, title } = useWebsiteConfig()
+const { logo, phrase, external_links, mandatory_links } = footer
 
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
@@ -140,9 +132,6 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   <HeaderComponent
     :user-name="userName"
     :quick-links="quickLinks"
-    :header-logo
-    :header-logo-height
-    :header-logo-width
     :custom-search="true"
   />
 
@@ -152,16 +141,16 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
   <DsfrFooter
     class="fr-mt-16w"
-    :logo-text="logoText"
-    :operator-img-src="footerLogo"
+    :logo-text="rf_title"
+    :operator-img-src="logo?.src"
     :operator-img-style="{
-      height: footerLogoHeight,
-      width: footerLogoWidth
+      height: logo?.height,
+      width: logo?.width
     }"
-    :desc-text="footerPhrase"
-    :ecosystem-links="footerExternalLinks"
-    :mandatory-links="footerMandatoryLinks"
-    :home-title="`Retour à l'accueil du site - ${serviceTitle}`"
+    :desc-text="phrase"
+    :ecosystem-links="external_links"
+    :mandatory-links="mandatory_links"
+    :home-title="`Retour à l'accueil du site - ${title}`"
   />
 </template>
 
