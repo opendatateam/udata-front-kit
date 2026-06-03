@@ -1,46 +1,27 @@
 import { useGlobalSearchPageRoutes } from '@/router/utils'
+import type { SimplifionsArticleCard, SimplifionsArticleMeta, SimplifionsFolderMeta } from './model/articles'
+import { buildSimplifionsArticleCard } from './model/articles'
 import { RouterView, type RouteRecordRaw } from 'vue-router'
-import {
-  articleMeta as apiFranceConnecteesArticleMeta,
-  default as apiFranceConnecteesArticleView
-} from './views/ApisFranceConnectees/ApisFranceConnectees.vue'
-import {
-  articleMeta as guidesDeBaseArticleMeta,
-  default as guidesDeBaseArticleView
-} from './views/GuidesBases/GuideBasePetitesCollectivites.vue'
-import { themeMeta as apiFranceConnecteesFolderMeta } from './views/ApisFranceConnectees'
-import { themeMeta as guidesDeBaseFolderMeta } from './views/GuidesBases'
+import { articleMeta as apiFranceConnecteesArticleMeta } from './views/Articles/ApisFranceConnectees/ApisFranceConnectees.vue'
+import { themeMeta as apiFranceConnecteesFolderMeta } from './views/Articles/ApisFranceConnectees'
+import { articleMeta as guidesDeBaseArticleMeta } from './views/Articles/GuidesBases/GuideBasePetitesCollectivites.vue'
+import { themeMeta as guidesDeBaseFolderMeta } from './views/Articles/GuidesBases'
+import { themeMeta as guidesMeta } from './views/Articles'
+import { articleMeta as nouvelArticleSansDossier } from './views/Articles/NouvelArticleSansDossier.vue'
 
 const topicConf = {
   displayMetadata: false,
   enableReadMore: false
 }
 
-type FolderMeta = {
-  id: string
-  label: string
-  title: string
-  description: string
-  slug: string
-  children: string[]
-}
-
-type ArticleMeta = {
-  id: string
-  title: string
-  description: string
-  slug: string
-}
-
-type ArticleView = () => Promise<unknown>
-
 const buildArticleFolderRoute = (
-  folderMeta: FolderMeta,
-  articleMeta: ArticleMeta,
-  articleComponent: ArticleView
+  folderMeta: SimplifionsFolderMeta,
+  articleMeta: SimplifionsArticleMeta,
+  articles: readonly SimplifionsArticleCard[],
+  articleComponent: () => Promise<unknown>
 ): RouteRecordRaw => {
   return {
-    path: folderMeta.slug,
+    path: `/${guidesMeta.id}/${folderMeta.id}`,
     component: RouterView,
     children: [
       {
@@ -54,18 +35,18 @@ const buildArticleFolderRoute = (
         props: {
           title: folderMeta.title,
           lead: folderMeta.description,
-          articles: [
-            {
-              title: articleMeta.title,
-              description: articleMeta.description,
-              to: `${folderMeta.slug}/${articleMeta.slug}`,
-              badge: 'Article'
-            }
-          ]
+          heroImageSrc: folderMeta.heroImageSrc,
+          heroBackdropGradient: folderMeta.heroBackdropGradient,
+          breadcrumbLinks: [
+            { to: '/', text: 'Accueil' },
+            { to: `/${guidesMeta.id}`, text: guidesMeta.title },
+            { text: folderMeta.title }
+          ],
+          articles
         }
       },
       {
-        path: articleMeta.slug,
+        path: articleMeta.id,
         name: articleMeta.id,
         meta: {
           title: articleMeta.title
@@ -85,20 +66,34 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () => await import('./views/HomeView.vue')
   },
+  {
+    path: '/guides',
+    name: guidesMeta.id,
+    meta: { title: guidesMeta.title },
+    component: async () => await import('./views/GuidesView.vue')
+  },
   buildArticleFolderRoute(
     apiFranceConnecteesFolderMeta,
     apiFranceConnecteesArticleMeta,
-    async () => apiFranceConnecteesArticleView
+    [buildSimplifionsArticleCard(apiFranceConnecteesFolderMeta, apiFranceConnecteesArticleMeta, `/${guidesMeta.id}`)],
+    async () => await import('./views/Articles/ApisFranceConnectees/ApisFranceConnectees.vue')
   ),
   {
     path: '/apis-franceconnectees',
-    redirect: '/api-franceconnectees/les-apis-franceconnectees'
+    redirect: '/guides/api-franceconnectees/les-apis-franceconnectees'
   },
   buildArticleFolderRoute(
     guidesDeBaseFolderMeta,
     guidesDeBaseArticleMeta,
-    async () => guidesDeBaseArticleView
+    [buildSimplifionsArticleCard(guidesDeBaseFolderMeta, guidesDeBaseArticleMeta, `/${guidesMeta.id}`)],
+    async () => await import('./views/Articles/GuidesBases/GuideBasePetitesCollectivites.vue')
   ),
+  {
+    path: `/${guidesMeta.id}/${nouvelArticleSansDossier.id}`,
+    name: nouvelArticleSansDossier.id,
+    meta: { title: nouvelArticleSansDossier.title },
+    component: async () => await import('./views/Articles/NouvelArticleSansDossier.vue')
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,

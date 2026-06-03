@@ -8,11 +8,8 @@
     :breadcrumb-links="breadcrumbLinks"
     :hero-backdrop-gradient="article.heroBackdropGradient"
     :hero-panel-background="article.heroPanelBackground"
-    :sections="sections"
   >
-    <h2 id="definition" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Définition
-    </h2>
+    <ArticleSection id="definition" label="Définition">
 
     <p class="fr-text--lead fr-text--center">
       Dans l'administration, on parle d'<i>«&nbsp;API FranceConnectée&nbsp;»</i> :
@@ -61,10 +58,10 @@
         </p>
       </div>
     </div>
+    </ArticleSection>
 
-    <h2 id="acteurs" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Les acteurs des API FranceConnectées
-    </h2>
+    <ArticleSection id="acteurs" label="Acteurs">
+      <template #heading>Les acteurs des API FranceConnectées</template>
 
     <h3 class="fr-h4">FranceConnect et les fournisseurs d'identité :</h3>
 
@@ -115,10 +112,9 @@
         Si vous accédez aux API FranceConnectées via ce bouquet d'API, API Particulier est votre interlocuteur unique pour l'habilitation, l'intégration et la maintenance des API FranceConnectées du bouquet. API Particulier est en mesure de répondre à vos questions concernant les données distribuées et le fonctionnement des API qu'il propose. En cas de difficulté, API Particulier se charge des échanges avec les fournisseurs de données.
       </p>
     </div>
+    </ArticleSection>
 
-    <h2 id="possibilite-de-simplification" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Possibilités de simplification
-    </h2>
+    <ArticleSection id="possibilite-de-simplification" label="Possibilités de simplification">
 
     <p class="fr-text--lead">
       Voici un comparatif entre une API appelée via une modalité d'appel classique <i>identifiant ou état civil</i> et une API appelée en mode "FranceConnectée", c'est-à-dire via l'identité pivot FranceConnect :
@@ -174,10 +170,9 @@
         </tbody>
       </table>
     </div>
+    </ArticleSection>
 
-    <h2 id="liste-des-api-franceconnectees" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Liste des API FranceConnectées
-    </h2>
+    <ArticleSection id="liste-des-api-franceconnectees" label="Liste des API FranceConnectées">
 
     <p class="fr-text--lead">
       Voici la liste des API pouvant être requêtées via un token FranceConnect :
@@ -200,6 +195,7 @@
         <SimplifionsDataApi :api-or-dataset="apiOrDataset" />
       </li>
     </ul>
+    </ArticleSection>
   </SimplifionsArticleLayout>
 </template>
 
@@ -209,9 +205,8 @@ export const articleMeta = {
   title: 'Les APIs FranceConnectées',
   description:
     `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
-  slug: 'les-apis-franceconnectees',
   articleTags: [
-    { label: 'Direction des systèmes d’information' },
+    { label: "Direction des systèmes d'information" },
     { label: 'Développeurs' }
   ],
   articleCategory: 'liste',
@@ -221,24 +216,21 @@ export const articleMeta = {
 </script>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../components/SimplifionsArticleLayout.vue'
-import SimplifionsDataApi from '../../components/SimplifionsDataApi.vue'
-import { buildSimplifionsArticlePageMeta } from '../../model/articles'
-import { grist } from '../../grist'
-import type { ApiOrDataset } from '../../model/grist'
+import SimplifionsArticleLayout from '../../../components/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../../components/SimplifionsArticleSection.vue'
+import SimplifionsDataApi from '../../../components/SimplifionsDataApi.vue'
+import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
+import { grist } from '../../../grist'
+import type { ApiOrDataset } from '../../../model/grist'
+import { guidesMeta } from '../meta'
 import { themeMeta } from './index'
 
 const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(
   themeMeta,
-  articleMeta
+  articleMeta,
+  [{ to: `/${guidesMeta.id}`, text: guidesMeta.title }],
+  `/${guidesMeta.id}`
 )
-
-const sections = [
-  { id: 'definition', label: 'Définition' },
-  { id: 'acteurs', label: 'Acteurs' },
-  { id: 'possibilite-de-simplification', label: 'Possibilités de simplification' },
-  { id: 'liste-des-api-franceconnectees', label: 'Liste des API FranceConnectées' }
-]
 
 const apisLoading = ref(true)
 const apisFranceConnectees = ref<ApiOrDataset[]>([])
@@ -261,13 +253,6 @@ grist
 </script>
 
 <style scoped>
-.section-title {
-  color: var(--text-default-grey);
-  background-color: var(--background-contrast-green-menthe);
-  padding: 2px 4px;
-  display: inline-block;
-}
-
 .list-none {
   list-style: none;
   padding: 0;

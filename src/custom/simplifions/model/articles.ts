@@ -4,14 +4,16 @@ export type SimplifionsFolderMeta = {
   id: string
   label: string
   title: string
-  slug: string
+  description: string
+  children: string[]
+  heroImageSrc?: string
+  heroBackdropGradient?: string
 }
 
 export type SimplifionsArticleMeta = {
   id: string
   title: string
   description: string
-  slug: string
 }
 
 export type SimplifionsArticleAudienceTag = {
@@ -27,11 +29,11 @@ export type SimplifionsArticleCardBadge = {
 }
 
 export type SimplifionsArticleCard = {
+  id: string
   title: string
   description: string
   to: string
   imageSrc: string
-  imageAlt?: string
   heroBackdropGradient: string
   badges: SimplifionsArticleCardBadge[]
   tags: SimplifionsArticleAudienceTag[]
@@ -39,7 +41,6 @@ export type SimplifionsArticleCard = {
 
 type SimplifionsArticleMetaForCard = SimplifionsArticleMeta & {
   imageSrc?: string
-  imageAlt?: string
   heroBackdropGradient: string
   articleTags?: readonly SimplifionsArticleAudienceTag[]
   articleCategory?: SimplifionsArticleCategory
@@ -107,18 +108,25 @@ const buildArticleSpecialBadge = (
   ]
 }
 
+export type FeaturedItem =
+  | { type: 'folder'; meta: SimplifionsFolderMeta; to: string; articleCount: number }
+  | { type: 'article'; card: SimplifionsArticleCard }
+
 export const buildSimplifionsArticleCard = (
-  folderMeta: SimplifionsFolderMeta,
-  articleMeta: SimplifionsArticleMetaForCard
+  folderMeta: SimplifionsFolderMeta | null,
+  articleMeta: SimplifionsArticleMetaForCard,
+  parentPath = ''
 ): SimplifionsArticleCard => {
   return {
+    id: articleMeta.id,
     title: articleMeta.title,
     description: articleMeta.description,
-    to: `${folderMeta.slug}/${articleMeta.slug}`,
+    to: folderMeta
+      ? `${parentPath}/${folderMeta.id}/${articleMeta.id}`
+      : `${parentPath}/${articleMeta.id}`,
     imageSrc:
       articleMeta.imageSrc ??
       buildSimplifionsGradientImage(articleMeta.heroBackdropGradient),
-    imageAlt: articleMeta.imageAlt,
     heroBackdropGradient: articleMeta.heroBackdropGradient,
     badges: [
       ...buildArticleCategoryBadge(articleMeta.articleCategory),
@@ -132,15 +140,18 @@ export const buildSimplifionsArticlePageMeta = <
   TArticleMeta extends SimplifionsArticleMeta
 >(
   folderMeta: SimplifionsFolderMeta | null | undefined,
-  articleMeta: TArticleMeta
+  articleMeta: TArticleMeta,
+  ancestorLinks: readonly BreadcrumbItem[] = [],
+  folderPathPrefix = ''
 ) => {
   const breadcrumbLinks: BreadcrumbItem[] = [
-    { to: '/', text: 'Accueil' }
+    { to: '/', text: 'Accueil' },
+    ...ancestorLinks
   ]
 
   if (folderMeta) {
     breadcrumbLinks.push({
-      to: folderMeta.slug,
+      to: `${folderPathPrefix}/${folderMeta.id}`,
       text: folderMeta.title
     })
   }

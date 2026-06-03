@@ -60,7 +60,7 @@
               <button
                 class="fr-sidemenu__btn"
                 type="button"
-                :aria-expanded="String(sidemenuExpanded)"
+                :aria-expanded="sidemenuExpanded"
                 aria-controls="article-sidemenu-collapse"
                 @click="sidemenuExpanded = !sidemenuExpanded"
               >
@@ -97,7 +97,9 @@
 </template>
 
 <script setup lang="ts">
+import { provide } from 'vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
+import { articleSectionKey } from './articleSectionKey'
 
 type ArticleSection = {
   id: string
@@ -137,7 +139,6 @@ const props = withDefaults(
     // var(--background-alt-grey), var(--background-contrast-grey),
     // var(--background-elevated-grey).
     heroPanelBackground?: string
-    sections: readonly ArticleSection[]
   }>(),
   {
     lead: '',
@@ -153,10 +154,13 @@ const props = withDefaults(
   }
 )
 
+const sections = ref<ArticleSection[]>([])
+provide(articleSectionKey, (id, label) => sections.value.push({ id, label }))
+
 const sidemenuExpanded = ref(true)
 
 const articleRef = ref<HTMLElement | null>(null)
-const activeSection = ref(props.sections[0]?.id ?? '')
+const activeSection = ref('')
 let observer: IntersectionObserver | undefined
 
 const heroBackdropStyle = computed(() => ({
@@ -214,10 +218,12 @@ const articleBadges = computed(() =>
 const hasMeta = computed(() => articleTags.value.length > 0 || articleBadges.value.length > 0)
 
 onMounted(() => {
+  activeSection.value = sections.value[0]?.id ?? ''
+
   const container = articleRef.value
   if (!container) return
 
-  const targets = props.sections
+  const targets = sections.value
     .map((section) => container.querySelector<HTMLElement>(`#${section.id}`))
     .filter((el): el is HTMLElement => el !== null)
 

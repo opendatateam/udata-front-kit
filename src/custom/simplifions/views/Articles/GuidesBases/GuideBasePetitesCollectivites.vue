@@ -10,15 +10,12 @@
     :breadcrumb-links="breadcrumbLinks"
     :hero-backdrop-gradient="article.heroBackdropGradient"
     :hero-panel-background="article.heroPanelBackground"
-    :sections="sections"
   >
-    <div class="fr-callout fr-callout--beige-gris-galet">
-      <h2 id="verifications" class="fr-callout__title">
-        2 vérifications à faire
-      </h2>
+    <ArticleSection id="verifications" label="2 vérifications à faire">
+      <div class="fr-callout fr-callout--beige-gris-galet">
       <div class="fr-callout__text">
         <p class="fr-text--lead guide-section-lead">
-          Pour s’assurer que votre collectivité utilise déjà bien les bases
+          Pour s'assurer que votre collectivité utilise déjà bien les bases
           dont toute collectivité peut bénéficier, commencez par ces deux
           points.
         </p>
@@ -59,21 +56,22 @@
           </li>
         </ul>
       </div>
-    </div>
+      </div>
+    </ArticleSection>
 
-    <h2 id="definition" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Simplifier une démarche en récupérant la donnée à la source : de quoi
-      parle-t-on ?
-    </h2>
+    <ArticleSection id="definition" label="De quoi parle-t-on ?">
+      <template #heading>
+        Simplifier une démarche en récupérant la donnée à la source : de quoi parle-t-on ?
+      </template>
 
     <p class="fr-text--lead guide-section-lead">
-      Lorsqu’un usager, particulier, entreprise ou association complète une
-      démarche administrative, il est souvent requis qu’il fournisse des
-      informations le concernant, qu’il a le plus souvent déjà transmises.
+      Lorsqu'un usager, particulier, entreprise ou association complète une
+      démarche administrative, il est souvent requis qu'il fournisse des
+      informations le concernant, qu'il a le plus souvent déjà transmises.
     </p>
 
     <p class="guide-paragraph">
-      Par exemple, lorsqu’un parent inscrit son enfant à la cantine, il peut
+      Par exemple, lorsqu'un parent inscrit son enfant à la cantine, il peut
       avoir à transmettre son quotient familial ou son revenu fiscal de
       référence pour obtenir le tarif adéquat. Ces informations sont pourtant
       déjà connues de la CAF, de la MSA ou de la direction générale des
@@ -82,29 +80,29 @@
 
     <div class="fr-mt-4w fr-p-2w fr-highlight fr-highlight--green-menthe">
       <p class="fr-mb-0">
-        Sur le site Simplifions, ce qu’on entend par
+        Sur le site Simplifions, ce qu'on entend par
         <strong>
           “Récupérer la donnée à la source pour simplifier une démarche”
         </strong>
         ou
-        <strong>“récupérer les données utiles par démarche”</strong>, c’est
-        aller chercher la donnée directement auprès de l’administration qui la
-        possède pour éviter de la demander à l’usager.
+        <strong>“récupérer les données utiles par démarche”</strong>, c'est
+        aller chercher la donnée directement auprès de l'administration qui la
+        possède pour éviter de la demander à l'usager.
       </p>
     </div>
 
     <div class="fr-mt-4w fr-p-2w fr-highlight fr-highlight--orange-terre-battue">
       <p class="fr-mb-0">
-        Ce principe s’incarne dans l’obligation légale du
-        <strong>Dites-le nous une fois</strong>, qui exige de l’administration
-        qu’elle ne redemande plus une information déjà connue.
+        Ce principe s'incarne dans l'obligation légale du
+        <strong>Dites-le nous une fois</strong>, qui exige de l'administration
+        qu'elle ne redemande plus une information déjà connue.
       </p>
     </div>
 
     <p class="guide-paragraph">
       Ce principe est souvent mieux connu et mis en place par les
       administrations ou les collectivités ayant des services innovation et
-      une direction de l’informatique en mesure de récupérer et d’intégrer les
+      une direction de l'informatique en mesure de récupérer et d'intégrer les
       données via les tuyaux informatiques proposés par les administrations
       fournisseurs de la donnée.
     </p>
@@ -122,25 +120,25 @@
         leurs clients publics ;
       </li>
       <li>
-        accessible sans ressources supplémentaires via l’utilisation, par vos
+        accessible sans ressources supplémentaires via l'utilisation, par vos
         agents, de sites en ligne qui permettent de consulter les données
         administratives des entreprises, des associations ou des particuliers.
       </li>
     </ul>
 
     <p class="guide-paragraph">
-      L’objectif de simplifions.data.gouv.fr est de recenser les données
+      L'objectif de simplifions.data.gouv.fr est de recenser les données
       accessibles et utiles par démarche administrative. Cela inclut les
       données brutes, mais aussi les sites de consultation utilisés par les
       agents et les logiciels métiers clés en main.
     </p>
+    </ArticleSection>
 
-    <h2 id="sites-consultation" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Les sites de consultation, aucun développement ni budget requis
-    </h2>
+    <ArticleSection id="sites-consultation" label="Les sites de consultation">
+      <template #heading>Les sites de consultation, aucun développement ni budget requis</template>
 
     <p class="fr-text--lead guide-section-lead">
-      La première chose à vérifier auprès de vos agents, c’est s’ils ont bien
+      La première chose à vérifier auprès de vos agents, c'est s'ils ont bien
       accès aux portails de consultation suivants.
     </p>
 
@@ -165,9 +163,9 @@
           <div class="fr-card__body">
             <div class="fr-card__content">
               <p class="guide-card__label">Entreprises</p>
-              <h3 class="fr-card__title">L’annuaire des entreprises</h3>
+              <h3 class="fr-card__title">L'annuaire des entreprises</h3>
               <p class="fr-card__desc">
-                Une porte d’entrée simple pour consulter les données utiles.
+                Une porte d'entrée simple pour consulter les données utiles.
               </p>
             </div>
           </div>
@@ -193,25 +191,24 @@
     <div class="fr-mt-4w fr-p-2w fr-highlight fr-highlight--blue-france">
       <p class="fr-mb-0">
         Tous ces sites sont accessibles aux agents publics, gratuitement, sous
-        réserve d’une utilisation adaptée, dans le strict cadre de leurs
+        réserve d'une utilisation adaptée, dans le strict cadre de leurs
         missions.
       </p>
     </div>
 
     <p class="guide-paragraph">
       Ils permettent notamment de couvrir une partie des besoins de nombreux
-      cas d’usages. Ce sont un premier pas pour récupérer les données. Vos
+      cas d'usages. Ce sont un premier pas pour récupérer les données. Vos
       agents peuvent les consulter en ligne, elles sont souvent tenues à jour
-      le plus fréquemment possible. En revanche, la donnée n’est pas
-      directement déposée dans les outils métiers des agents. C’est à eux de
+      le plus fréquemment possible. En revanche, la donnée n'est pas
+      directement déposée dans les outils métiers des agents. C'est à eux de
       se rendre sur le site et de copier, coller ou télécharger les
       informations nécessaires pour instruire les démarches.
     </p>
+    </ArticleSection>
 
-    <h2 id="logiciels-editeurs" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Les logiciels éditeurs : découvrez les données auxquelles vous avez déjà
-      accès
-    </h2>
+    <ArticleSection id="logiciels-editeurs" label="Les logiciels éditeurs">
+      <template #heading>Les logiciels éditeurs : découvrez les données auxquelles vous avez déjà accès</template>
 
     <p class="guide-paragraph">
       Simplifions.data.gouv.fr référence les logiciels métiers clés en main
@@ -222,18 +219,18 @@
 
     <p class="guide-paragraph">
       Cette liste se trouve en bas de la page dans la partie concernée. Elle
-      n’est pas exhaustive et vise à être complétée. Elle concerne
-      principalement l’intégration des données fournies par le biais de deux
-      API spécialisées pour la simplification des démarches : l’API Particulier
-      et l’API Entreprise, qui distribuent respectivement de nombreuses données
+      n'est pas exhaustive et vise à être complétée. Elle concerne
+      principalement l'intégration des données fournies par le biais de deux
+      API spécialisées pour la simplification des démarches : l'API Particulier
+      et l'API Entreprise, qui distribuent respectivement de nombreuses données
       des particuliers ou des entreprises et associations.
     </p>
 
     <p class="guide-paragraph">
       Il est également possible de consulter la liste des logiciels ayant
-      intégré les données de l’API Particulier et de l’API Entreprise et de
-      savoir, pour chacun d’entre eux, précisément le nombre de données utiles
-      et disponibles par cas d’usage.
+      intégré les données de l'API Particulier et de l'API Entreprise et de
+      savoir, pour chacun d'entre eux, précisément le nombre de données utiles
+      et disponibles par cas d'usage.
     </p>
 
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
@@ -250,34 +247,32 @@
           class="fr-btn fr-btn--lg fr-btn--icon-right fr-icon-arrow-right-line"
           to="/cas-d-usages"
         >
-          Voir les cas d’usages
+          Voir les cas d'usages
         </router-link>
       </div>
     </div>
+    </ArticleSection>
 
-    <h2 id="cta" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Vous vous intéressez à une intégration directe par API ou par base de
-      données ?
-    </h2>
+    <ArticleSection id="cta" label="Intégration directe">
+      <template #heading>Vous vous intéressez à une intégration directe par API ou par base de données ?</template>
 
     <p class="fr-text--lead guide-section-lead">
       Si votre collectivité veut aller plus loin, la prochaine étape est de
-      regarder les solutions raccordées aux données ou les cas d’usages qui
+      regarder les solutions raccordées aux données ou les cas d'usages qui
       reposent sur une intégration technique directe.
     </p>
 
     <p class="guide-paragraph">
       Vous pouvez commencer par explorer les solutions techniques et les cas
-      d’usages déjà référencés sur simplifions.data.gouv.fr, puis identifier le
+      d'usages déjà référencés sur simplifions.data.gouv.fr, puis identifier le
       chemin le plus simple pour votre collectivité.
     </p>
+    </ArticleSection>
 
-    <h2 id="checklist" class="fr-h2 fr-my-0w fr-mt-4w section-title">
-      Checklist de départ
-    </h2>
+    <ArticleSection id="checklist" label="Checklist de départ">
 
     <p class="fr-text--lead guide-section-lead">
-      Avant d’aller plus loin, vérifiez ces points dans votre collectivité.
+      Avant d'aller plus loin, vérifiez ces points dans votre collectivité.
     </p>
 
     <ul class="guide-checkboxes">
@@ -290,6 +285,7 @@
         {{ item.label }}
       </li>
     </ul>
+    </ArticleSection>
   </SimplifionsArticleLayout>
 </template>
 
@@ -298,8 +294,7 @@ export const articleMeta = {
   id: 'guide-base-petites-collectivites',
   title: 'Guide de base pour les petites collectivités',
   description:
-    'Récupérer les données de vos usagers pour éviter de leur redemander lors de leurs démarches administratives, c’est aussi possible pour les petites collectivités.',
-  slug: 'guide-base-petites-collectivites',
+    `Récupérer les données de vos usagers pour éviter de leur redemander lors de leurs démarches administratives, c'est aussi possible pour les petites collectivités.`,
   imageSrc: '/static/simplifions/assets/portail_famille.jpg',
   articleTags: [{ label: 'Petites communes' }, { label: 'Maires' }],
   articleCategory: 'guide',
@@ -310,23 +305,18 @@ export const articleMeta = {
 </script>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../components/SimplifionsArticleLayout.vue'
-import { buildSimplifionsArticlePageMeta } from '../../model/articles'
+import SimplifionsArticleLayout from '../../../components/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../../components/SimplifionsArticleSection.vue'
+import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
+import { guidesMeta } from '../meta'
 import { themeMeta } from './index'
 
 const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(
   themeMeta,
-  articleMeta
+  articleMeta,
+  [{ to: `/${guidesMeta.id}`, text: guidesMeta.title }],
+  `/${guidesMeta.id}`
 )
-
-const sections = [
-  { id: 'verifications', label: '2 vérifications à faire' },
-  { id: 'definition', label: 'De quoi parle-t-on ?' },
-  { id: 'sites-consultation', label: 'Les sites de consultation' },
-  { id: 'logiciels-editeurs', label: 'Les logiciels éditeurs' },
-  { id: 'cta', label: 'Intégration directe' },
-  { id: 'checklist', label: 'Checklist de départ' }
-]
 
 const checklistOptions = [
   {
@@ -348,19 +338,12 @@ const checklistOptions = [
   {
     value: 'mode',
     label:
-      'Vous savez si vous partez d’un site de consultation, d’un logiciel éditeur, ou d’une intégration directe.'
+      `Vous savez si vous partez d'un site de consultation, d'un logiciel éditeur, ou d'une intégration directe.`
   }
 ]
 </script>
 
 <style scoped>
-.section-title {
-  color: var(--text-default-grey);
-  background-color: var(--background-contrast-green-menthe);
-  padding: 2px 4px;
-  display: inline-block;
-}
-
 .guide-section-lead {
   max-width: 68ch;
 }

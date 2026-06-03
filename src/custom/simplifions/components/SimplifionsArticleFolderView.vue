@@ -1,41 +1,43 @@
 <template>
-  <div class="article-folder-page">
-    <header class="article-folder-hero">
-      <div class="article-folder-hero__backdrop"></div>
+  <div class="folder-page">
+    <header class="folder-hero">
+      <div
+        v-if="heroImageSrc"
+        class="folder-hero__media"
+        :style="heroImageStyle"
+        aria-hidden="true"
+      ></div>
+      <div
+        v-else
+        class="folder-hero__backdrop"
+        :style="heroBackdropStyle"
+        aria-hidden="true"
+      ></div>
 
-      <div class="fr-container article-folder-hero__inner">
-        <div class="article-folder-hero__panel">
-          <p class="article-folder-hero__eyebrow">{{ eyebrow }}</p>
-          <h1 class="article-folder-hero__title">{{ title }}</h1>
-          <p v-if="lead" class="article-folder-hero__lead">
-            {{ lead }}
+      <div v-if="breadcrumbLinks.length" class="fr-container folder-hero__breadcrumb">
+        <DsfrBreadcrumb :links="breadcrumbLinks" />
+      </div>
+
+      <div class="fr-container folder-hero__inner">
+        <div class="folder-hero__content">
+          <p class="folder-hero__kicker">
+            <span class="fr-icon-folder-2-line fr-icon--sm" aria-hidden="true"></span>
+            Dossier
           </p>
+          <h1 class="folder-hero__title">{{ title }}</h1>
+          <p v-if="lead" class="folder-hero__lead">{{ lead }}</p>
         </div>
       </div>
     </header>
 
-    <div class="fr-container article-folder-shell">
-      <div v-if="articles.length" class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-container folder-shell">
+      <div v-if="articles.length" class="fr-grid-row fr-grid-row--gutters folder-cards">
         <div
           v-for="article in articles"
           :key="article.to"
-          class="fr-col-12 fr-col-md-6"
+          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
         >
-          <div class="fr-card fr-enlarge-link folder-card">
-            <div class="fr-card__body">
-              <div class="fr-card__content">
-                <p v-if="article.badge" class="folder-card__badge">
-                  {{ article.badge }}
-                </p>
-                <h2 class="fr-card__title">
-                  <router-link :to="article.to">{{ article.title }}</router-link>
-                </h2>
-                <p v-if="article.description" class="fr-card__desc">
-                  {{ article.description }}
-                </p>
-              </div>
-            </div>
-          </div>
+          <ArticleCard :article="article" />
         </div>
       </div>
     </div>
@@ -43,66 +45,83 @@
 </template>
 
 <script setup lang="ts">
-type ArticleLink = {
-  title: string
-  to: string
-  description?: string
-  badge?: string
-}
+import type { BreadcrumbItem } from '@/model/breadcrumb'
+import type { SimplifionsArticleCard } from '../model/articles'
+import ArticleCard from './SimplifionsArticleCard.vue'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     title: string
     lead?: string
-    eyebrow?: string
-    articles: readonly ArticleLink[]
+    heroImageSrc?: string
+    heroBackdropGradient?: string
+    breadcrumbLinks?: readonly BreadcrumbItem[]
+    articles: readonly SimplifionsArticleCard[]
   }>(),
   {
     lead: '',
-    eyebrow: 'Dossier'
+    heroImageSrc: '',
+    heroBackdropGradient: 'linear-gradient(135deg, #bfccfb 0%, #fef7da 100%)',
+    breadcrumbLinks: () => []
   }
 )
+
+const heroBackdropStyle = computed(() => ({
+  backgroundColor: '#bfccfb',
+  backgroundImage: props.heroBackdropGradient
+}))
+
+const heroImageStyle = computed(() => ({
+  backgroundImage: `linear-gradient(rgba(0,0,0,0.12), rgba(0,0,0,0.24)), url(${props.heroImageSrc})`
+}))
 </script>
 
 <style scoped>
-.article-folder-page {
-  --article-folder-panel-bg: var(--background-alt-beige-gris-galet);
-}
-
-.article-folder-hero {
+.folder-hero {
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   min-height: clamp(14rem, 20vw, 18rem);
-  color: var(--text-inverted-grey);
+  color: var(--text-default-grey);
 }
 
-.article-folder-hero__backdrop {
+.folder-hero__backdrop,
+.folder-hero__media {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.article-folder-hero__inner {
+.folder-hero__breadcrumb {
+  position: relative;
+  z-index: 2;
+  padding-top: 1rem;
+}
+
+.folder-hero__inner {
   position: relative;
   z-index: 1;
+  flex: 1;
   display: flex;
-  align-items: flex-end;
-  min-height: inherit;
-  padding-top: clamp(5rem, 8vw, 7rem);
-  padding-bottom: 1rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.5rem 0 2.5rem;
 }
 
-.article-folder-hero__panel {
-  width: min(75%, 64rem);
-  padding: 1.5rem 1.75rem 1.75rem;
-  color: var(--text-title-grey);
-  background-color: var(--article-folder-panel-bg);
+.folder-hero__content {
+  max-width: 52rem;
 }
 
-.article-folder-hero__eyebrow {
+.folder-hero__kicker {
   display: inline-flex;
   align-items: center;
-  margin: 0 0 0.875rem;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
   padding: 0.3rem 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -113,54 +132,32 @@ withDefaults(
   border-radius: 999px;
 }
 
-.article-folder-hero__title {
+.folder-hero__title {
   margin: 0;
-  font-size: clamp(2rem, 3.8vw, 3.4rem);
-  line-height: 1.05;
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  line-height: 1.08;
 }
 
-.article-folder-hero__lead {
-  margin: 1rem 0 0;
-  max-width: 68ch;
+.folder-hero__lead {
+  margin: 1rem auto 0;
+  max-width: 56ch;
   font-size: clamp(1.05rem, 1.1vw, 1.2rem);
-  line-height: 1.65;
-  color: var(--text-default-grey);
+  line-height: 1.6;
+  opacity: 0.9;
 }
 
-.article-folder-shell {
-  padding-top: 2rem;
+.folder-shell {
+  padding-top: 2.5rem;
   padding-bottom: 4rem;
 }
 
-.folder-card {
-  display: block;
-  height: 100%;
-  background: var(--background-alt-grey);
-}
-
-.folder-card__badge {
-  margin: 0 0 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text-mention-grey);
+.folder-cards {
+  justify-content: center;
 }
 
 @media (max-width: 62rem) {
-  .article-folder-hero__inner {
-    padding-top: 4.5rem;
-  }
-
-  .article-folder-hero__panel {
-    width: 100%;
-    padding: 1.1rem 1.1rem 1.25rem;
-  }
-}
-
-@media (min-width: 90rem) {
-  .article-folder-hero__panel {
-    width: min(66.666%, 58rem);
+  .folder-hero__inner {
+    padding: 1.75rem 0 2rem;
   }
 }
 </style>

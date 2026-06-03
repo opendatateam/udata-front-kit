@@ -40,7 +40,7 @@
         <img
           class="fr-responsive-img simplifions-article-card__image"
           :src="article.imageSrc"
-          :alt="article.imageAlt ?? ''"
+          alt=""
         >
       </div>
 

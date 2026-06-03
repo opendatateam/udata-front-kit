@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import config from '@/config'
 
-import SimplifionsArticleCard from '../components/SimplifionsArticleCard.vue'
-import { articles as simplifionsArticles } from './Articles'
+import SimplifionsArticleCarousel from '../components/SimplifionsArticleCarousel.vue'
+import { featuredItems } from './Articles'
 
 const colorsBanner = config.website.home_banner_colors
 
@@ -185,17 +185,9 @@ const niveauxDeSimplification = [
         Guides et recommandations
       </h2>
       <p class="fr-mb-5w fr-text--lg fr-text--center">
-        Consulter nos différents articles pour comprendre et choisir :
+        Consulter nos différents dossiers et articles pour comprendre et choisir :
       </p>
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div
-          v-for="article in simplifionsArticles"
-          :key="article.to"
-          class="fr-col-12 fr-col-md-6 fr-col-xl-4"
-        >
-          <SimplifionsArticleCard :article="article" />
-        </div>
-      </div>
+      <SimplifionsArticleCarousel :items="featuredItems" />
     </div>
   </section>
 

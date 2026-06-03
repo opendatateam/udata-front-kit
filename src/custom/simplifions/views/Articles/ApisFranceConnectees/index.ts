@@ -3,7 +3,6 @@ export const themeMeta = {
   label: 'API FranceConnectées',
   title: 'API FranceConnectées',
   description:
-    'Un dossier d’articles pour comprendre les API FranceConnectées et accéder aux contenus associés.',
-  slug: '/api-franceconnectees',
+    `Toutes les choses que vous devez savoir pour utiliser les API FranceConnectées.`,
   children: ['les-apis-franceconnectees']
 }
