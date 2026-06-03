@@ -51,6 +51,8 @@ En complément, le projet est activement soutenu par&nbsp;:
 
 Nous avons la chance de pouvoir compter sur le soutien financier de la Caisse nationale pour la solidarité à l’autonomie (CNSA). Leur participation pour 2026 est de 64220 euros. Elle finance intégralement l'équipe de PAUDA, composée de trois personnes.
 
+En complément, nous comptons sur le soutien de&nbsp;:
+
 - Association des maires ruraux de France (AMRF)&nbsp;;
 - France Urbaine&nbsp;;
 - Départements de France&nbsp;;

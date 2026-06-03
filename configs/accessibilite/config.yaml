@@ -239,9 +239,9 @@ accessibilite:
         logo: logo-DIA
       - name: La fabrique de la donnée territoriale
         logo: logo-fabrique-territoriale
-      - name: IGN
+      - name: Institut national de l'information géographique et forestière
         logo: logo-IGN
-      - name: CNSA
+      - name: Caisse nationale pour la solidarité à l’autonomie
         logo: logo-cnsa
       - name: beta.gouv
         logo: logo-beta.gouv
@@ -264,9 +264,9 @@ accessibilite:
         logo: logo-france-urbaine
       - name: Régions de France
         logo: logo-regions-france
-      - name: Unanimes
+      - name: Union des associations nationales pour l'inclusion des malentendants et des sourds
         logo: logo-unanimes
-      - name: Unapeda
+      - name: Union nationale des associations de parents d’enfants déficients auditifs
         logo: logo-unapeda
-      - name: Unapei
+      - name: Union nationale des associations de parents d'enfants inadaptés
         logo: logo-unapei
