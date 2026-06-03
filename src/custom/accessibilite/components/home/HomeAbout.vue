@@ -38,5 +38,3 @@ import { DsfrButton } from '@gouvminint/vue-dsfr'
     </div>
   </section>
 </template>
-
-<style scoped></style>

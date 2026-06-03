@@ -237,7 +237,7 @@ accessibilite:
     sponsors:
       - name: Délégation interministérielle à l'accessibilité
         logo: logo-DIA
-      - name: La fabtique de la donnée territoriale
+      - name: La fabrique de la donnée territoriale
         logo: logo-fabrique-territoriale
       - name: IGN
         logo: logo-IGN
@@ -245,7 +245,7 @@ accessibilite:
         logo: logo-cnsa
       - name: beta.gouv
         logo: logo-beta.gouv
-      - name: ECOLAB
+      - name: Commissariat général au développement durable
         logo: logo-ecolab
       - name: datagouv
         logo: logo-datagouv
