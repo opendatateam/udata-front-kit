@@ -65,11 +65,9 @@ const showHarvestQualityWarning = computed(() => {
       </div>
     </div>
     <SidebarList class="fr-mt-3v">
-      <template v-if="harvest">
-        <SidebarItem v-if="harvest.modified_at" term="Dernière révision">
-          {{ formatDate(harvest.modified_at) }}
-        </SidebarItem>
-      </template>
+      <SidebarItem v-if="harvest?.modified_at" term="Dernière révision">
+        {{ formatDate(harvest.modified_at) }}
+      </SidebarItem>
       <SidebarItem v-else term="Dernière mise à jour">
         {{ formatDate(dataset.last_update) }}
       </SidebarItem>
