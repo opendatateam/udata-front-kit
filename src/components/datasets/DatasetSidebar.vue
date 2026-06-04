@@ -63,7 +63,6 @@ const showHarvestQualityWarning = computed(() => {
       <SidebarItem
         v-if="dataset.contact_points.length"
         id="attributions"
-        class="fr-mt-3v"
         term="Attributions"
       >
         <ContactPoints :contact-points="dataset.contact_points" />
@@ -91,7 +90,7 @@ const showHarvestQualityWarning = computed(() => {
       <SidebarItem v-else term="Dernière mise à jour">
         {{ formatDate(dataset.last_update) }}
       </SidebarItem>
-      <SidebarItem v-if="dataset.license?.url" class="fr-mt-3v" term="Licence">
+      <SidebarItem v-if="dataset.license?.url" term="Licence">
         <p class="fr-text--sm fr-mt-0 fr-mb-3v">
           <code class="license-code fr-px-1v text-grey-425">
             <a :href="dataset.license.url">

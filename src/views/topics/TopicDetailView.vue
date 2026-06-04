@@ -416,24 +416,20 @@ watch(
               </p>
             </div>
           </SidebarItem>
-          <SidebarItem class="fr-mt-3v" term="Création">
+          <SidebarItem term="Création">
             <time :datetime="topic.created_at">{{
               formatDate(topic.created_at)
             }}</time>
           </SidebarItem>
-          <SidebarItem class="fr-mt-3v" term="Dernière mise à jour">
+          <SidebarItem term="Dernière mise à jour">
             <time :datetime="topic.last_modified">{{
               formatDate(topic.last_modified)
             }}</time>
           </SidebarItem>
-          <SidebarItem
-            v-if="spatialCoverage"
-            class="fr-mt-3v"
-            term="Couverture territoriale"
-          >
+          <SidebarItem v-if="spatialCoverage" term="Couverture territoriale">
             {{ spatialCoverage.name }}
           </SidebarItem>
-          <SidebarItem v-if="clonedFrom" class="fr-mt-3v" term="Cloné depuis">
+          <SidebarItem v-if="clonedFrom" term="Cloné depuis">
             <RouterLink
               :to="{
                 name: `${pageKey}_detail`,

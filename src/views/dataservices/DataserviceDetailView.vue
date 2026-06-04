@@ -159,32 +159,27 @@ onMounted(() => {
           <SidebarItem
             v-if="dataservice.contact_points?.length"
             id="attributions"
-            class="fr-mt-3v"
             term="Contact"
           >
             <ContactPoints :contact-points="dataservice.contact_points" />
           </SidebarItem>
           <!-- last update -->
-          <SidebarItem class="fr-mt-3v" term="Dernière mise à jour">
+          <SidebarItem term="Dernière mise à jour">
             {{ formatDate(dataservice.metadata_modified_at, true) }}
           </SidebarItem>
           <!-- rate limiting -->
-          <SidebarItem
-            v-if="dataservice.rate_limiting"
-            class="fr-mt-3v"
-            term="Limite d'appels"
-          >
+          <SidebarItem v-if="dataservice.rate_limiting" term="Limite d'appels">
             {{ dataservice.rate_limiting }}
           </SidebarItem>
           <!-- availability -->
-          <SidebarItem class="fr-mt-3v" term="Taux de disponibilité">
+          <SidebarItem term="Taux de disponibilité">
             <template v-if="dataservice.availability">
               {{ dataservice.availability }}%
             </template>
             <template v-else>Non communiqué</template>
           </SidebarItem>
           <!-- access_type -->
-          <SidebarItem class="fr-mt-3v" term="Accès">
+          <SidebarItem term="Accès">
             <DsfrBadge
               v-if="dataservice.access_type === 'open'"
               type="success"
