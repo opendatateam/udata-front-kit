@@ -1,5 +1,5 @@
 <template>
-  <dl class="p-0">
+  <dl class="fr-p-0">
     <slot />
   </dl>
 </template>
