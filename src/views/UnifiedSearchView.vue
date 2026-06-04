@@ -133,7 +133,7 @@ onMounted(() => {
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable vue/no-v-html -->
-      <h2
+      <p
         :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
         v-html="pageConf.banner.title"
       />
