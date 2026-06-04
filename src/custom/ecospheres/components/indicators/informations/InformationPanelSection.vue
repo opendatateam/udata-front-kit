@@ -13,10 +13,8 @@ defineProps({
       {{ title }}
     </h3>
     <p v-if="$slots.description"><slot name="description" /></p>
-    <dl class="fr-p-0 fr-m-0">
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <slot />
-      </div>
+    <dl class="fr-p-0 fr-grid-row fr-grid-row--gutters">
+      <slot />
     </dl>
     <slot name="description-below" />
   </div>
