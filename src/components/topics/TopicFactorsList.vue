@@ -337,7 +337,7 @@ defineExpose({
                 <a
                   v-if="factor.id"
                   :href="`#factor-${factor.id}`"
-                  class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-links-line"
+                  class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-links-line test__permalink_factor_btn"
                   :title="`Copier le lien permanent vers ${factor.title}`"
                   @click="copyPermalink(factor.id, $event)"
                 />
