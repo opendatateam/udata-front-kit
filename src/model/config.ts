@@ -134,8 +134,8 @@ interface Logo {
 
 export type HeaderConf = {
   admin_shortcut: boolean
-  logo: Logo
-  title_image: Logo
+  logo?: Logo
+  title_image?: Logo
   description?: string
   beta: boolean
   search: {
@@ -145,7 +145,7 @@ export type HeaderConf = {
 }
 
 export type FooterConf = {
-  logo: Logo
+  logo?: Logo
   phrase?: string
   external_links?: DsfrFooterProps['ecosystemLinks']
   mandatory_links?: DsfrFooterProps['mandatoryLinks']
