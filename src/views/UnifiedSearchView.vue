@@ -130,10 +130,12 @@ onMounted(() => {
   <section
     v-if="pageConf.banner"
     class="fr-container--fluid hero-banner fr-mb-4w"
+    aria-labelledby="banner-section-title"
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable vue/no-v-html -->
       <h2
+        id="banner-section-title"
         :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
         v-html="pageConf.banner.title"
       />
@@ -145,8 +147,17 @@ onMounted(() => {
     </div>
   </section>
 
-  <div class="fr-container fr-mb-4w">
-    <h2 v-if="pageConf.search?.input" class="fr-mb-2w">
+  <section
+    class="fr-container fr-mb-4w"
+    :aria-labelledby="
+      pageConf.search?.input ? 'search-section-title' : undefined
+    "
+  >
+    <h2
+      v-if="pageConf.search?.input"
+      id="search-section-title"
+      class="fr-mb-2w"
+    >
       {{ pageConf.search.input }}
     </h2>
     <Suspense>
@@ -215,5 +226,5 @@ onMounted(() => {
         </template>
       </GlobalSearch>
     </Suspense>
-  </div>
+  </section>
 </template>
