@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
-import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
+import SidebarOwner from '@/components/SidebarOwner.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
@@ -11,12 +11,7 @@ import { formatDate } from '@/utils'
 import { useDatasetsConf } from '@/utils/config'
 import { useBadges } from '@/utils/dataset'
 import type { DatasetV2WithFullObject } from '@datagouv/components-next'
-import {
-  AppLink,
-  DatasetQuality,
-  LabelTag,
-  OrganizationNameWithCertificate
-} from '@datagouv/components-next'
+import { AppLink, DatasetQuality, LabelTag } from '@datagouv/components-next'
 import { toRef } from 'vue'
 
 const props = defineProps({
@@ -46,19 +41,7 @@ const showHarvestQualityWarning = computed(() => {
         id="producer"
         :term="dataset.contact_points.length ? 'Éditeur' : 'Producteur'"
       >
-        <div
-          v-if="dataset.organization"
-          class="fr-grid-row fr-grid-row--middle"
-        >
-          <OrganizationLogo :object="dataset" :size="32" class="fr-mr-1-5v" />
-          <p class="fr-col fr-m-0 min-width-0">
-            <a class="fr-link" :href="dataset.organization.page">
-              <OrganizationNameWithCertificate
-                :organization="dataset.organization"
-              />
-            </a>
-          </p>
-        </div>
+        <SidebarOwner :object="dataset" />
       </SidebarItem>
       <SidebarItem
         v-if="dataset.contact_points.length"

@@ -1,20 +1,15 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components-next'
-import {
-  DatasetCard,
-  OrganizationNameWithCertificate,
-  ReadMore,
-  SimpleBanner
-} from '@datagouv/components-next'
+import { DatasetCard, ReadMore, SimpleBanner } from '@datagouv/components-next'
 import { capitalize } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
-import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
+import SidebarOwner from '@/components/SidebarOwner.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
@@ -137,23 +132,7 @@ onMounted(() => {
         <SidebarList>
           <!-- Producer -->
           <SidebarItem id="producer" term="Producteur">
-            <div
-              v-if="dataservice.organization"
-              class="fr-grid-row fr-grid-row--middle"
-            >
-              <OrganizationLogo
-                :object="dataservice"
-                :size="32"
-                class="fr-mr-1-5v"
-              />
-              <p class="fr-col fr-m-0">
-                <a class="fr-link" :href="dataservice.organization.page">
-                  <OrganizationNameWithCertificate
-                    :organization="dataservice.organization"
-                  />
-                </a>
-              </p>
-            </div>
+            <SidebarOwner :object="dataservice" />
           </SidebarItem>
           <!-- contact points -->
           <SidebarItem

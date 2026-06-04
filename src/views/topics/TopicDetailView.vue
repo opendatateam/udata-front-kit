@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  OrganizationNameWithCertificate,
-  ReadMore
-} from '@datagouv/components-next'
+import { ReadMore } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
 import { capitalize, computed, nextTick, ref, watch, watchEffect } from 'vue'
@@ -12,9 +9,9 @@ import { useRouter } from 'vue-router'
 import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
-import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
+import SidebarOwner from '@/components/SidebarOwner.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
@@ -31,7 +28,6 @@ import {
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
-import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
@@ -383,38 +379,7 @@ watch(
         </div>
         <SidebarList v-if="props.displayMetadata">
           <SidebarItem id="producer" term="Auteur">
-            <div
-              v-if="topic.organization"
-              class="fr-grid-row fr-grid-row--middle"
-            >
-              <div class="fr-col-auto fr-mr-1w">
-                <OrganizationLogo :object="topic" />
-              </div>
-              <p class="fr-col fr-m-0 min-width-0">
-                <a class="fr-link" :href="topic.organization.page">
-                  <OrganizationNameWithCertificate
-                    :organization="topic.organization"
-                  />
-                </a>
-              </p>
-            </div>
-            <div v-else class="fr-grid-row fr-grid-row--middle">
-              <div class="fr-col-auto">
-                <div class="border fr-p-1-5v fr-mr-1-5v">
-                  <img
-                    :src="getOwnerAvatar(topic)"
-                    alt=""
-                    loading="lazy"
-                    class="owner-avatar"
-                    height="32"
-                    width="32"
-                  />
-                </div>
-              </div>
-              <p class="fr-col fr-m-0">
-                {{ topic.owner.first_name }} {{ topic.owner.last_name }}
-              </p>
-            </div>
+            <SidebarOwner :object="topic" />
           </SidebarItem>
           <SidebarItem term="Création">
             <time :datetime="topic.created_at">{{
@@ -522,8 +487,5 @@ watch(
 .flex-reverse {
   display: flex;
   flex-direction: row-reverse;
-}
-.owner-avatar {
-  margin-bottom: -6px;
 }
 </style>
