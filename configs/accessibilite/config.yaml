@@ -11,7 +11,7 @@ datagouvfr:
 
 # UI customizations
 website:
-  title: 'accessibilite.data.gouv.fr'
+  title: "Point d'accès unique aux données d'accessibilité"
   seo:
     canonical_url: https://accessibilite.data.gouv.fr
     meta:
@@ -29,11 +29,6 @@ website:
   formatted_title: '<b>accessibilite.data.gouv.fr</b>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/static/logos/accessibilite-logo.svg'
-  badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
     title:
@@ -46,17 +41,40 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
+  footer:
+    logo:
+      src: /static/logos/accessibilite-logo.svg
+      width: 120px
+      height: 49px
+    phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
+    external_links:
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+    mandatory_links:
+      - label: 'Licences'
+        to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        to: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        to: 'https://www.data.gouv.fr/fr/suivi/'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
   header:
     admin_shortcut: false
+    logo:
+      src: /static/logos/accessibilite-logo.svg
+    title_image:
+    description: accessibilite.data.gouv.fr
+    beta: true
     button:
       display: false
       label: 'Donnez votre avis'
       link:
     search:
-      display: true
+      display: false
       placeholder: Rechercher...
   search_bar:
-    display: true
+    display: false
     placeholder: Rechercher un jeu de données
   secondary_search:
     display: false
@@ -65,48 +83,35 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Données
+    - text: Toutes les données
       to: /datasets
-    - text: Thèmes
+    - text: Données par thème
       to: /themes
-    - text: À propos
+    - text: Mots expliqués
+      to: /glossaire
+    - text: Qu’est-ce que PAUDA ?
       to: /about
   router:
     static_pages:
-      - title: 'À propos'
+      - title: 'Mots expliqués'
+        id: 'glossaire'
+        route: '/glossaire'
+        url: '/static/accessibilite/pages/glossaire.md'
+      - title: 'Qu’est-ce que PAUDA ?'
         id: 'about'
         route: '/about'
         url: '/static/accessibilite/pages/about.md'
   sitemap:
     - name: Accueil
       path: /
-    - name: Données
+    - name: Toutes les données
       path: /datasets
-    - name: Thèmes
+    - name: Données par thème
       path: /themes
-    - name: À propos
+    - name: Qu’est-ce que PAUDA ?
       path: /about
   show_quality_component: true
   oauth_option: true
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
-  footer_external_links:
-    - label: 'data.gouv.fr'
-      href: 'https://www.data.gouv.fr'
-  footer_mandatory_links:
-    - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
-    - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
-      to: '/accessibility'
-  logo_operator:
-    src:
-    show_in_header: false
-    footer:
-      width:
-      height:
   notice:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'accessibilite.data.gouv.fr ⚠️
