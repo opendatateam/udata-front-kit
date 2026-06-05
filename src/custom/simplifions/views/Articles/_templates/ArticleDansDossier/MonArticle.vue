@@ -14,12 +14,68 @@
     <ArticleSection id="premiere-section" label="Première section">
       <p class="fr-text--lead">Phrase d'introduction de la section.</p>
       <p>Contenu de la section.</p>
+
+      <!-- CALLOUT BORDURE VERTE
+           Encadré informatif mis en avant. Aucun import requis.
+      <div class="fr-callout fr-callout--green-menthe fr-my-4w">
+        <p class="fr-callout__title">Titre optionnel</p>
+        <p class="fr-callout__text">
+          Texte du callout. Met en avant une information importante ou un point clé.
+        </p>
+      </div>
+      -->
+
+      <!-- SPOTLIGHT — 1 SLUG
+           Carte solution ou cas d'usage + commentaire côte à côte.
+           Import requis : SimplifionsArticleTopicSpotlight (voir script ci-dessous)
+      <SimplifionsArticleTopicSpotlight :slugs="['mon-slug']" page-key="solutions">
+        <p>Commentaire éditorial sur cette solution.</p>
+        <router-link class="fr-btn fr-btn--sm fr-btn--secondary" to="/solutions/mon-slug">
+          Voir la fiche complète
+        </router-link>
+      </SimplifionsArticleTopicSpotlight>
+      -->
+
+      <!-- SPOTLIGHT — 3 SLUGS
+           Commentaire en haut, trois cartes en grille en dessous.
+           Import requis : SimplifionsArticleTopicSpotlight (voir script ci-dessous)
+      <SimplifionsArticleTopicSpotlight
+        :slugs="['slug-1', 'slug-2', 'slug-3']"
+        page-key="solutions"
+      >
+        <p>Commentaire s'appliquant aux trois solutions présentées ci-dessous.</p>
+      </SimplifionsArticleTopicSpotlight>
+      -->
     </ArticleSection>
 
     <ArticleSection id="deuxieme-section" label="Deuxième section">
       <!-- Slot #heading : à utiliser si le titre dans l'article est plus long que le label du sommaire -->
       <!-- <template #heading>Titre long de la deuxième section</template> -->
       <p>Contenu de la deuxième section.</p>
+
+      <!-- CHECKLIST
+           Liste de points à cocher, fond beige, icône verte. Aucun import requis.
+      <SimplifionsArticleChecklist>
+        <li>Premier point à vérifier.</li>
+        <li>
+          Deuxième point avec un
+          <router-link class="fr-link" to="/solutions/mon-slug">lien interne</router-link>.
+        </li>
+        <li>Troisième point.</li>
+      </SimplifionsArticleChecklist>
+      -->
+
+      <!-- BOUTON CENTRÉ
+           Bouton d'appel à l'action centré. Aucun import requis.
+      <div class="fr-grid-row fr-grid-row--center fr-mt-3w">
+        <router-link
+          class="fr-btn fr-btn--secondary fr-icon-arrow-right-line fr-btn--icon-right"
+          to="/ma-page"
+        >
+          Texte du bouton
+        </router-link>
+      </div>
+      -->
     </ArticleSection>
   </SimplifionsArticleLayout>
 </template>
@@ -50,20 +106,11 @@ import { buildSimplifionsArticlePageMeta } from '../../../../model/articles'
 import { guidesMeta } from '../../meta'
 import { themeMeta } from './index'
 
-// --- Spotlight : mettre une solution ou un cas d'usage en avant avec un commentaire ---
+// --- Imports optionnels selon les composants utilisés ---
 // import SimplifionsArticleTopicSpotlight from '../../../../components/article/SimplifionsArticleTopicSpotlight.vue'
+// import SimplifionsArticleChecklist from '../../../../components/article/SimplifionsArticleChecklist.vue'
 //
-// Dans le template (aucun import supplémentaire, aucun fetch à écrire) :
-// <SimplifionsArticleTopicSpotlight :slugs="['mon-slug']" page-key="solutions">
-//   <p>Mon commentaire éditorial, avec du <strong>gras</strong> ou des liens.</p>
-//   <router-link class="fr-btn fr-btn--sm fr-btn--secondary" to="/solutions/mon-slug">
-//     Voir la fiche complète
-//   </router-link>
-// </SimplifionsArticleTopicSpotlight>
-//
-// Plusieurs topics : :slugs="['slug-1', 'slug-2']"
-// Pour un cas d'usage : page-key="cas-d-usages"
-// Props optionnelles pour enrichir la carte (toutes à false par défaut) :
+// Props optionnelles du Spotlight (toutes à false par défaut) :
 //   :show-description="true"  :show-image="true"  :show-target-users="true"
 //   :show-fournisseurs="true"  :show-simplification-tags="true"  :show-categorie-de-solution="true"
 
