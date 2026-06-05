@@ -12,7 +12,8 @@ export type SimplifionsFolderMeta = {
 
 export type SimplifionsArticleMeta = {
   id: string
-  title: string
+  h1: string
+  title?: string
   description: string
 }
 
@@ -21,7 +22,7 @@ export type SimplifionsArticleAudienceTag = {
   href?: string
 }
 
-export type SimplifionsArticleCategory = 'guide' | 'liste' | 'palmares'
+export type SimplifionsArticleCategory = 'guide' | 'liste' | 'palmares' | 'veille'
 
 export type SimplifionsArticleCardBadge = {
   label: string
@@ -88,6 +89,10 @@ const buildArticleCategoryBadge = (
     palmares: {
       label: 'Palmarès',
       className: 'fr-badge fr-badge--sm fr-badge--brown-caramel'
+    },
+    veille: {
+      label: 'Veille',
+      className: 'fr-badge fr-badge--sm fr-badge--brown-caramel'
     }
   }
 
@@ -119,7 +124,7 @@ export const buildSimplifionsArticleCard = (
 ): SimplifionsArticleCard => {
   return {
     id: articleMeta.id,
-    title: articleMeta.title,
+    title: articleMeta.h1,
     description: articleMeta.description,
     to: folderMeta
       ? `${parentPath}/${folderMeta.id}/${articleMeta.id}`
@@ -156,7 +161,7 @@ export const buildSimplifionsArticlePageMeta = <
     })
   }
 
-  breadcrumbLinks.push({ text: articleMeta.title })
+  breadcrumbLinks.push({ text: articleMeta.h1 })
 
   return {
     article: {

@@ -9,7 +9,7 @@
         <h3 class="title-topic fr-text--lead">
           {{ topic.name }}
         </h3>
-        <p class="fr-mb-1w">
+        <p v-if="showDescription" class="fr-mb-1w">
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
         </p>
         <div class="date-topic fr-grid-row fr-grid-row--right fr-mt-1w">
@@ -21,25 +21,50 @@
       </div>
       <!--Texte pour préciser les usagers et les fournisseurs de service-->
       <div class="description-topic">
-        <SimplifionsTags :topic="topic" :page-key="pageKey" />
+        <SimplifionsTags
+          :topic="topic"
+          :page-key="pageKey"
+          :show-target-users="showTargetUsers"
+          :show-fournisseurs="showFournisseurs"
+          :hide-simplification="!showSimplificationTags"
+          :show-categorie-de-solution="showCategorieDeSolution"
+        />
       </div>
     </div>
   </router-link>
 </template>
 
 <script setup lang="ts">
-import { useCurrentPageConf } from '@/router/utils'
+import { useRoute } from 'vue-router'
 import { stripFromMarkdown } from '@/utils'
 import { useFormatDate } from '@datagouv/components-next'
 import type { TopicCasUsage } from '../model/topics'
 import DraftTag from './DraftTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
-defineProps<{
-  topic: TopicCasUsage
-}>()
+const props = withDefaults(
+  defineProps<{
+    topic: TopicCasUsage
+    pageKey?: string
+    showDescription?: boolean
+    showTargetUsers?: boolean
+    showFournisseurs?: boolean
+    showSimplificationTags?: boolean
+    showCategorieDeSolution?: boolean
+  }>(),
+  {
+    showDescription: true,
+    showTargetUsers: true,
+    showFournisseurs: true,
+    showSimplificationTags: true,
+    showCategorieDeSolution: true
+  }
+)
 
-const { pageKey } = useCurrentPageConf()
+const route = useRoute()
+const pageKey = computed(
+  () => props.pageKey ?? (route.meta.pageKey as string | undefined) ?? 'cas-d-usages'
+)
 const { formatRelativeIfRecentDate } = useFormatDate()
 </script>
 

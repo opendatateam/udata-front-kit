@@ -44,7 +44,7 @@
             </ul>
           </div>
           <p v-if="kicker" class="article-hero__kicker">{{ kicker }}</p>
-          <h1 class="article-hero__title">{{ title }}</h1>
+          <h1 class="article-hero__title">{{ h1 }}</h1>
           <p v-if="lead" class="article-hero__lead">
             {{ lead }}
           </p>
@@ -99,6 +99,7 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { articleSectionKey } from './articleSectionKey'
 
 type ArticleSection = {
@@ -111,7 +112,7 @@ type ArticleAudienceTag = {
   href?: string
 }
 
-type ArticleCategory = 'guide' | 'liste' | 'palmares'
+type ArticleCategory = 'guide' | 'liste' | 'palmares' | 'veille'
 
 type ArticleBadge = {
   label: string
@@ -120,7 +121,8 @@ type ArticleBadge = {
 
 const props = withDefaults(
   defineProps<{
-    title: string
+    h1: string
+    title?: string
     lead?: string
     kicker?: string
     heroImageSrc?: string
@@ -141,6 +143,7 @@ const props = withDefaults(
     heroPanelBackground?: string
   }>(),
   {
+    title: undefined,
     lead: '',
     kicker: '',
     heroImageSrc: '',
@@ -153,6 +156,12 @@ const props = withDefaults(
     breadcrumbLinks: () => []
   }
 )
+
+useMeta({
+  title: () => props.title ?? props.h1,
+  description: () => props.lead,
+  canonicalUrl: useCanonicalUrl()
+})
 
 const sections = ref<ArticleSection[]>([])
 provide(articleSectionKey, (id, label) => sections.value.push({ id, label }))
@@ -196,7 +205,11 @@ const categoryBadge = computed<ArticleBadge | null>(() => {
     palmares: {
       label: 'Palmarès',
       className: 'fr-badge fr-badge--md fr-badge--brown-caramel'
-    }
+    },
+    veille: {
+      label: 'Veille',
+      className: 'fr-badge fr-badge--md fr-badge--brown-caramel'
+    },
   }
 
   return byCategory[props.articleCategory]

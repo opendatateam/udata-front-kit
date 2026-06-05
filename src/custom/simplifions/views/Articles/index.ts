@@ -2,6 +2,7 @@ import type { FeaturedItem, SimplifionsArticleCard } from '../../model/articles'
 import { buildSimplifionsArticleCard } from '../../model/articles'
 import { articleMeta as apiFranceConnecteesArticleMeta } from './ApisFranceConnectees/ApisFranceConnectees.vue'
 import { articleMeta as nouvelArticleSansDossier } from './NouvelArticleSansDossier.vue'
+import { articleMeta as ditesLeNousUneFois } from './DitesLeNousUneFois.vue'
 import { themeMeta as apiFranceConnecteesFolderMeta } from './ApisFranceConnectees'
 import { articleMeta as guideBaseArticleMeta } from './GuidesBases/GuideBasePetitesCollectivites.vue'
 import { themeMeta as guideBaseFolderMeta } from './GuidesBases'
@@ -25,7 +26,8 @@ export const folders = [
 export const articles = folders.flatMap((f) => f.articles)
 
 export const rootArticles: SimplifionsArticleCard[] = [
-  buildSimplifionsArticleCard(null, nouvelArticleSansDossier, parentPath)
+  buildSimplifionsArticleCard(null, nouvelArticleSansDossier, parentPath),
+  buildSimplifionsArticleCard(null, ditesLeNousUneFois, parentPath)
 ]
 
 export const folderById = (id: string): FeaturedItem => {

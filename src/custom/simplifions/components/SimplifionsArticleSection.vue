@@ -1,6 +1,6 @@
 <template>
   <section class="article-section">
-    <h2 :id="id" class="fr-h2 article-section__title">
+    <h2 :id="id" class="fr-h2 article-section__title fr-mb-4w">
       <slot name="heading">{{ label }}</slot>
     </h2>
     <slot />

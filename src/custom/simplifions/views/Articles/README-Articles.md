@@ -92,7 +92,7 @@ export const articleMeta = {
 
   // --- Optionnel ---
   // imageSrc: '/static/simplifions/assets/mon-image.jpg',
-  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares'
+  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares'  | 'veille'
   // showNoDevelopmentBadge: true,
   // articleTags: [{ label: 'Mon public' }, { label: 'Autre public', href: '/solutions?audience=xxx' }]
 } as const
@@ -259,7 +259,7 @@ import { articleMeta as monArticleRacineMeta } from './views/Articles/MonArticle
 | `heroBackdropGradient` | `string` | oui | Dégradé CSS du bandeau hero |
 | `heroPanelBackground` | `string` | oui | Couleur de fond du panneau titre |
 | `imageSrc` | `string` | non | Chemin de l'image hero ; fallback = dégradé SVG |
-| `articleCategory` | `'guide' \| 'liste' \| 'palmares'` | non | Badge catégorie |
+| `articleCategory` | `'guide' \| 'liste' \| 'palmares' \| 'veille'` | non | Badge catégorie |
 | `showNoDevelopmentBadge` | `boolean` | non | Badge "Sans développement" |
 | `articleTags` | `{ label: string; href?: string }[]` | non | Tags audience dans le hero |
 

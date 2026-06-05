@@ -1,5 +1,6 @@
 <template>
   <SimplifionsArticleLayout
+    :h1="article.h1"
     :title="article.title"
     :lead="article.description"
     :kicker="articleKicker"
@@ -26,7 +27,8 @@
 <script lang="ts">
 export const articleMeta = {
   id: 'mon-article',                       // → URL : /guides/mon-article
-  title: "Titre de l'article",
+  h1: "Titre de l'article",
+  // title: 'Titre SEO (optionnel, fallback sur h1)',
   description: 'Résumé affiché dans la carte et le bandeau hero.',
 
   heroBackdropGradient: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)',
@@ -34,7 +36,7 @@ export const articleMeta = {
 
   // --- Optionnel ---
   // imageSrc: '/static/simplifions/assets/mon-image.jpg',
-  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares'
+  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares' | 'veille'
   // showNoDevelopmentBadge: true,
   // articleTags: [{ label: 'Mon public' }, { label: 'Autre public', href: '/solutions?audience=xxx' }]
 } as const

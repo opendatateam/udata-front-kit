@@ -49,7 +49,7 @@ const buildArticleFolderRoute = (
         path: articleMeta.id,
         name: articleMeta.id,
         meta: {
-          title: articleMeta.title
+          title: articleMeta.title ?? articleMeta.h1
         },
         component: articleComponent
       }
@@ -91,7 +91,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: `/${guidesMeta.id}/${nouvelArticleSansDossier.id}`,
     name: nouvelArticleSansDossier.id,
-    meta: { title: nouvelArticleSansDossier.title },
+    meta: { title: nouvelArticleSansDossier.title ?? nouvelArticleSansDossier.h1 },
     component: async () => await import('./views/Articles/NouvelArticleSansDossier.vue')
   },
   useGlobalSearchPageRoutes({

@@ -1,5 +1,6 @@
 <template>
   <SimplifionsArticleLayout
+    :h1="article.h1"
     :title="article.title"
     :lead="article.description"
     :kicker="articleKicker"
@@ -202,7 +203,7 @@
 <script lang="ts">
 export const articleMeta = {
   id: 'les-apis-franceconnectees',
-  title: 'Les APIs FranceConnectées',
+  h1: 'Les APIs FranceConnectées',
   description:
     `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
   articleTags: [

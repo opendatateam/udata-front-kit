@@ -18,17 +18,24 @@
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
-          <p class="fr-card__desc">
+          <p v-if="showDescription" class="fr-card__desc">
             {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
           </p>
 
           <div class="fr-card__end">
-            <SimplifionsTags :topic="topic" :page-key="pageKey" />
+            <SimplifionsTags
+              :topic="topic"
+              :page-key="pageKey"
+              :show-target-users="showTargetUsers"
+              :show-fournisseurs="showFournisseurs"
+              :hide-simplification="!showSimplificationTags"
+              :show-categorie-de-solution="showCategorieDeSolution"
+            />
           </div>
         </div>
       </div>
       <div class="fr-card__header">
-        <div v-if="imageUrl" class="fr-card__img topic-image-container fr-mx-0">
+        <div v-if="showImage && imageUrl" class="fr-card__img topic-image-container fr-mx-0">
           <img
             :src="imageUrl"
             :alt="topic.name"
@@ -46,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCurrentPageConf } from '@/router/utils'
+import { useRoute } from 'vue-router'
 import { stripFromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type { TopicSolution } from '../model/topics'
@@ -54,14 +61,29 @@ import DraftTag from './DraftTag.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
-const { pageKey } = useCurrentPageConf()
-
-const props = defineProps({
-  topic: {
-    type: Object as () => TopicSolution,
-    required: true
+const props = withDefaults(
+  defineProps<{
+    topic: TopicSolution
+    pageKey?: string
+    showDescription?: boolean
+    showImage?: boolean
+    showTargetUsers?: boolean
+    showFournisseurs?: boolean
+    showSimplificationTags?: boolean
+    showCategorieDeSolution?: boolean
+  }>(),
+  {
+    showDescription: true,
+    showImage: true,
+    showTargetUsers: true,
+    showFournisseurs: true,
+    showSimplificationTags: true,
+    showCategorieDeSolution: true
   }
-})
+)
+
+const route = useRoute()
+const pageKey = computed(() => props.pageKey ?? (route.meta.pageKey as string | undefined) ?? 'solutions')
 
 const solution = props.topic.extras['simplifions-v2-solutions']
 

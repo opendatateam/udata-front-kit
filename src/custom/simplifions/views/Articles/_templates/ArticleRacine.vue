@@ -1,5 +1,6 @@
 <template>
   <SimplifionsArticleLayout
+    :h1="article.h1"
     :title="article.title"
     :lead="article.description"
     :kicker="articleKicker"
@@ -26,7 +27,8 @@
 <script lang="ts">
 export const articleMeta = {
   id: 'mon-article',                       // → URL : /guides/mon-article
-  title: "Titre de l'article",
+  h1: "Titre de l'article",
+  // title: 'Titre SEO (optionnel, fallback sur h1)',
   description: 'Résumé affiché dans la carte et le bandeau hero.',
 
   heroBackdropGradient: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)',
@@ -34,7 +36,7 @@ export const articleMeta = {
 
   // --- Optionnel ---
   // imageSrc: '/static/simplifions/assets/mon-image.jpg',
-  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares'
+  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares' | 'veille'
   // showNoDevelopmentBadge: true,
   // articleTags: [{ label: 'Mon public' }, { label: 'Autre public', href: '/solutions?audience=xxx' }]
 } as const
@@ -45,10 +47,48 @@ export const articleMeta = {
 //  - imports en '../../' (pas '../../../')
 //  - premier argument de buildSimplifionsArticlePageMeta = null (pas de themeMeta)
 //  - pas de quatrième argument folderPathPrefix
-import SimplifionsArticleLayout from '../../components/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../components/SimplifionsArticleSection.vue'
-import { buildSimplifionsArticlePageMeta } from '../../model/articles'
-import { guidesMeta } from './meta'
+import SimplifionsArticleLayout from '../../../components/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../../components/SimplifionsArticleSection.vue'
+import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
+import { guidesMeta } from '../meta'
+
+// --- Spotlight : mettre une solution ou un cas d'usage en avant avec un commentaire ---
+// import SimplifionsTopicSpotlight from '../../../components/SimplifionsTopicSpotlight.vue'
+//
+// Dans le template (aucun import supplémentaire, aucun fetch à écrire) :
+// <SimplifionsTopicSpotlight slug="mon-slug" page-key="solutions">
+//   <p>Mon commentaire éditorial, avec du <strong>gras</strong> ou des liens.</p>
+//   <router-link class="fr-btn fr-btn--sm fr-btn--secondary" to="/solutions/mon-slug">
+//     Voir la fiche complète
+//   </router-link>
+// </SimplifionsTopicSpotlight>
+//
+// Pour un cas d'usage : page-key="cas-d-usages"
+// Props optionnelles pour enrichir la carte (toutes à false par défaut) :
+//   :show-description="true"  :show-image="true"  :show-target-users="true"
+//   :show-fournisseurs="true"  :show-simplification-tags="true"  :show-categorie-de-solution="true"
+
+// --- Grille de cartes par slug (solutions ou cas d'usages) ---
+// import { useTopicsBySlug } from '../../../composables/useTopicsBySlug'
+// import type { TopicSolution } from '../../../model/topics'
+// import type { TopicCasUsage } from '../../../model/topics'
+// import SimplifionsSolutionCard from '../../../components/SimplifionsSolutionCard.vue'
+// import SimplifionsCasDusageCard from '../../../components/SimplifionsCasDusageCard.vue'
+//
+// const { topics: mesSolutions, loading: solutionsLoading } = useTopicsBySlug<TopicSolution>([
+//   'slug-solution-1', 'slug-solution-2'
+// ])
+// const { topics: mesCasUsages, loading: casUsagesLoading } = useTopicsBySlug<TopicCasUsage>([
+//   'slug-cas-usage-1'
+// ])
+//
+// Dans le template :
+// <div v-for="s in mesSolutions" :key="s.id">
+//   <SimplifionsSolutionCard :topic="s" page-key="solutions" />
+// </div>
+// <div v-for="cu in mesCasUsages" :key="cu.id">
+//   <SimplifionsCasDusageCard :topic="cu" page-key="cas-d-usages" />
+// </div>
 
 const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(
   null,        // ← pas de dossier (themeMeta)
