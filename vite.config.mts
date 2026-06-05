@@ -125,7 +125,6 @@ export default defineConfig(({ mode }) => {
         'debug',
         'extend',
         'rehype-highlight',
-        'swagger-ui-dist',
         'unist-util-find',
         'unist-util-find-all-between',
         'vue',
