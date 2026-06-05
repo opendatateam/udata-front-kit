@@ -36,7 +36,7 @@
     "@json2csv/plainjs": "^7.0.6",
     "@sentry/vite-plugin": "^4.6.1",
     "@sentry/vue": "^10.27.0",
-    "@unhead/vue": "^1.11.20",
+    "@unhead/vue": "^2.1.15",
     "@vueform/multiselect": "^2.6.11",
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^12.8.2",
