@@ -28,4 +28,8 @@ onMounted(() => register?.(props.id, props.label))
   padding: 2px 4px;
   display: inline-block;
 }
+
+.article-section:first-of-type .article-section__title {
+  margin-top: 0;
+}
 </style>
