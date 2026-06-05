@@ -137,22 +137,22 @@
     <p>Voici trois sites publics, gratuits, accessibles aux agents publics et permettant aux agents publics de consulter des données protégées dans le strict cadre de leur mission :</p>
 
    
-      <SimplifionsTopicSpotlight slug="formulaire-de-collecte-du-quotient-familial" page-key="solutions">
+      <SimplifionsArticleTopicSpotlight slug="formulaire-de-collecte-du-quotient-familial" page-key="solutions">
       <p>
     Lorem Ipsum
       </p>
-    </SimplifionsTopicSpotlight>
-  <SimplifionsTopicSpotlight slug="annuaire-des-entreprises" page-key="solutions">
+    </SimplifionsArticleTopicSpotlight>
+  <SimplifionsArticleTopicSpotlight slug="annuaire-des-entreprises" page-key="solutions">
       <p>
         L'annuaire des entreprises est le point d'entrée pour consulter les données
         administratives des entreprises et associations. Il est accessible gratuitement et à tous pour les données en open data. Vos agents peuvent accéder à des données protégées, via l'espace agent.
       </p>
-    </SimplifionsTopicSpotlight>
-      <SimplifionsTopicSpotlight slug="data-subvention" page-key="solutions">
+    </SimplifionsArticleTopicSpotlight>
+      <SimplifionsArticleTopicSpotlight slug="data-subvention" page-key="solutions">
       <p>
         Lorem Ipsum
       </p>
-    </SimplifionsTopicSpotlight>
+    </SimplifionsArticleTopicSpotlight>
 
     
 
@@ -305,7 +305,7 @@
       Avant d'aller plus loin, vérifiez ces points dans votre collectivité.
     </p>
 
-    <SimplifionsChecklist>
+    <SimplifionsArticleChecklist>
        <li>
         Vos agents chargés des <b>démarches des particuliers</b> basées sur le quotient familial connaissent
          <router-link
@@ -339,7 +339,7 @@
        <li>
         Pour bénéficier des données disponibles dans l'API Entreprise et l'API Particulier, vous avez consulté la liste des logiciels qui sont raccordés. <a href="#logiciels-editeurs-api-particulier-et-entreprise" class="fr-link fr-icon-arrow-up-line fr-link--icon-right">En savoir plus</a>.
       </li>
-    </SimplifionsChecklist>
+    </SimplifionsArticleChecklist>
     </ArticleSection>
 
     <ArticleSection id="cta" label="Pour aller plus loin">
@@ -369,11 +369,11 @@ export const articleMeta = {
 </script>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../../components/SimplifionsArticleLayout.vue'
+import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
 import SimplifionsSolutionCard from '../../../components/SimplifionsSolutionCard.vue'
-import SimplifionsChecklist from '../../../components/SimplifionsChecklist.vue'
-import SimplifionsTopicSpotlight from '../../../components/SimplifionsTopicSpotlight.vue'
-import ArticleSection from '../../../components/SimplifionsArticleSection.vue'
+import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
+import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
+import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
 import { useTopicsBySlug } from '../../../composables/useTopicsBySlug'
 import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
 import type { TopicSolution } from '../../../model/topics'

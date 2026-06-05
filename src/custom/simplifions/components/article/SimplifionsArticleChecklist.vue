@@ -1,5 +1,5 @@
 <template>
-  <ul class="checklist">
+  <ul class="checklist" role="list">
     <slot />
   </ul>
 </template>

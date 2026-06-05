@@ -43,23 +43,23 @@ export const articleMeta = {
 </script>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../../../components/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../../components/SimplifionsArticleSection.vue'
+import SimplifionsArticleLayout from '../../../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../../../components/article/SimplifionsArticleSection.vue'
 import { useTopicsBySlug } from '../../../../composables/useTopicsBySlug'
 import { buildSimplifionsArticlePageMeta } from '../../../../model/articles'
 import { guidesMeta } from '../../meta'
 import { themeMeta } from './index'
 
 // --- Spotlight : mettre une solution ou un cas d'usage en avant avec un commentaire ---
-// import SimplifionsTopicSpotlight from '../../../../components/SimplifionsTopicSpotlight.vue'
+// import SimplifionsArticleTopicSpotlight from '../../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 //
 // Dans le template (aucun import supplémentaire, aucun fetch à écrire) :
-// <SimplifionsTopicSpotlight slug="mon-slug" page-key="solutions">
+// <SimplifionsArticleTopicSpotlight slug="mon-slug" page-key="solutions">
 //   <p>Mon commentaire éditorial, avec du <strong>gras</strong> ou des liens.</p>
 //   <router-link class="fr-btn fr-btn--sm fr-btn--secondary" to="/solutions/mon-slug">
 //     Voir la fiche complète
 //   </router-link>
-// </SimplifionsTopicSpotlight>
+// </SimplifionsArticleTopicSpotlight>
 //
 // Pour un cas d'usage : page-key="cas-d-usages"
 // Props optionnelles pour enrichir la carte (toutes à false par défaut) :

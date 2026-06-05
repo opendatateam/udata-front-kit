@@ -217,8 +217,8 @@ export const articleMeta = {
 </script>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../../components/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../components/SimplifionsArticleSection.vue'
+import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
 import SimplifionsDataApi from '../../../components/SimplifionsDataApi.vue'
 import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
 import { grist } from '../../../grist'

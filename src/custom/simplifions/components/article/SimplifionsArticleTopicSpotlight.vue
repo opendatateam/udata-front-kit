@@ -31,9 +31,9 @@
 
 <script setup lang="ts">
 import type { TopicCasUsage, TopicSolution } from '../model/topics'
-import { useTopicsBySlug } from '../composables/useTopicsBySlug'
-import SimplifionsSolutionCard from './SimplifionsSolutionCard.vue'
-import SimplifionsCasDusageCard from './SimplifionsCasDusageCard.vue'
+import { useTopicsBySlug } from '../../composables/useTopicsBySlug'
+import SimplifionsSolutionCard from '../SimplifionsSolutionCard.vue'
+import SimplifionsCasDusageCard from '../SimplifionsCasDusageCard.vue'
 
 const props = withDefaults(
   defineProps<{
