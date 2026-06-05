@@ -105,7 +105,8 @@ export default defineConfig(({ mode }) => {
         '@siteConfig': fileURLToPath(new URL(configDir, import.meta.url)),
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         vue: 'vue/dist/vue.esm-bundler.js',
-        // xmlbuilder2 uses Node's EventEmitter — polyfill it for the browser
+        // FIXME: xmlbuilder2 uses Node's EventEmitter, requiring this polyfill for the browser.
+        // Replace xmlbuilder2 with native DOM APIs (document.implementation.createDocument + XMLSerializer).
         events: 'eventemitter3'
       }
     },
