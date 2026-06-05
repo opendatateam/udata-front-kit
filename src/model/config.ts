@@ -1,3 +1,9 @@
+import type { BuiltInFilterKey } from '@datagouv/components-next'
+import type { DsfrFooterProps } from '@gouvminint/vue-dsfr'
+
+export const CUSTOM_FILTER_TYPES = ['select', 'organization_custom'] as const
+export type CustomFilterType = (typeof CUSTOM_FILTER_TYPES)[number]
+
 export interface TopicsConf {
   can_add_topics: {
     everyone: boolean
@@ -15,6 +21,10 @@ export interface StaticPageConfig {
   id: string
   route: string
   url: string
+  meta?: {
+    title?: string
+    description?: string
+  }
 }
 
 export interface MenuConfig {
@@ -35,13 +45,10 @@ export interface PageFilterFormConf {
 export interface PageFilterConf {
   name: string
   id: string
-  type:
-    | 'spatial_zone'
-    | 'spatial_granularity'
-    | 'select'
-    | 'checkbox'
-    | 'organization'
-    | 'private'
+  type: CustomFilterType | BuiltInFilterKey
+  advanced?: boolean
+  // Page keys this filter applies to in multi-type search. Defaults to the owning page only.
+  applies_to_pages?: string[]
   child: string | null
   color: string | null
   default_option: string | null
@@ -49,7 +56,6 @@ export interface PageFilterConf {
   use_filter_prefix: boolean | null
   api_param: string | null
   form: PageFilterFormConf | null
-  authenticated: boolean | null
   hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
@@ -65,6 +71,7 @@ export type PageBannerConf = {
 
 export type PageSearchConf = {
   input: string
+  placeholder?: string | null
 }
 
 export type PageLabelsConf = {
@@ -74,7 +81,10 @@ export type PageLabelsConf = {
   feminine?: boolean
 }
 
+export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
+
 export type PageConf = {
+  object_type: PageObjectType
   list_all: boolean
   filter_prefix: string | null
   universe_query: PageUniverseQueryConf | null
@@ -97,6 +107,10 @@ export type PageConf = {
     }
   }
   editable: boolean
+  meta?: {
+    title?: string
+    description?: string
+  }
   filters: PageFilterConf[]
 }
 
@@ -112,14 +126,34 @@ export type DatasetsConf = {
   show_extended_information_panel: boolean
 }
 
-export type HeaderSearchConf = {
-  display: boolean
-  placeholder?: string
-  dropdown?: { text: string; route: string }[]
+interface Logo {
+  src?: string
+  width?: string
+  height?: string
 }
 
-export interface WebsiteConfig {
+export type HeaderConf = {
+  admin_shortcut: boolean
+  logo?: Logo
+  title_image?: Logo
+  description?: string
+  beta: boolean
+  search: {
+    display: boolean
+    placeholder?: string
+  }
+}
+
+export type FooterConf = {
+  logo?: Logo
+  phrase?: string
+  external_links?: DsfrFooterProps['ecosystemLinks']
+  mandatory_links?: DsfrFooterProps['mandatoryLinks']
+}
+
+export type WebsiteConfig = {
   title: string
+  rf_title: string
   seo?: {
     canonical_url?: string
     meta?: {
@@ -128,9 +162,8 @@ export interface WebsiteConfig {
       robots?: string
     }
   }
-  header: {
-    search: HeaderSearchConf
-  }
+  header: HeaderConf
+  footer: FooterConf
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
@@ -142,4 +175,20 @@ export type SentryConfig = {
   tracesSampleRate?: number
   replaysSessionSampleRate?: number
   replaysOnErrorSampleRate?: number
+}
+
+export type OrganizationsConfig = {
+  datasets?: string
+  dataservices?: string
+  bouquets?: string
+  page?: {
+    breadcrumb_title?: string
+    labels?: {
+      singular?: string
+    }
+    meta?: {
+      title?: string
+      description?: string
+    }
+  }
 }

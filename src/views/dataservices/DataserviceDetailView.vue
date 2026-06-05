@@ -6,6 +6,7 @@ import {
   ReadMore,
   SimpleBanner
 } from '@datagouv/components-next'
+import { capitalize } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
@@ -13,15 +14,13 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
-import SwaggerClient from '@datagouv/components-next/src/components/ResourceAccordion/Swagger.client.vue'
+import { useLabels } from '@/utils/labels'
+import { useMeta } from '@/utils/seo'
+import { OpenApiViewer } from '@datagouv/components-next'
 
 const route = useRouteParamsAsString()
 const dataserviceId = route.params.item_id
@@ -36,8 +35,9 @@ const total = computed(
 )
 
 const { pageKey, meta, pageConf } = useCurrentPageConf()
+const labels = useLabels(pageConf.labels)
 
-const CardComponent = useAsyncComponent(() => meta?.cardComponent, {
+const CardComponent = useAsyncComponent(() => meta?.datasetCardComponent, {
   fallback: DatasetCard
 })
 const showDiscussions = pageConf.resources_tabs.discussions.display
@@ -61,10 +61,6 @@ const goToPage = (page: number) => {
   currentPage.value = page + 1
   loadDatasets()
 }
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const links = computed(() => {
   const breadcrumbs = [{ to: '/', text: 'Accueil' }]
@@ -107,13 +103,18 @@ const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
 
+useMeta({
+  title: () =>
+    dataservice.value?.title &&
+    `${capitalize(labels.singular)} - ${dataservice.value.title}`,
+  description: () => dataservice.value?.description,
+  canonicalUrl: () => dataservice.value?.self_web_url
+})
+
 onMounted(() => {
   dataserviceStore
     .load(dataserviceId, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      setAccessibilityProperties(dataservice.value?.title)
-      loadDatasets()
-    })
+    .then(loadDatasets)
 })
 </script>
 
@@ -237,7 +238,7 @@ onMounted(() => {
         <VIconCustom v-if="isSwaggerOpened" name="arrow-up-s-line" />
         <VIconCustom v-else name="arrow-down-s-line" />
       </button>
-      <SwaggerClient
+      <OpenApiViewer
         v-if="isSwaggerOpened"
         :url="dataservice.machine_documentation_url"
       />

@@ -315,10 +315,12 @@ cmd_deploy() {
   info "Deploying: $merge_branch → $target_branch"
   info "Site: $site, Env: $env, Version: $version"
 
-  # Translate site name for commit message (ecospheres -> ecologie)
+  # Translate site name for commit message (ecospheres -> ecologie, meteo-france -> meteo)
   local site_for_infra="$site"
   if [[ "$site" == "ecospheres" ]]; then
     site_for_infra="ecologie"
+  elif [[ "$site" == "meteo-france" ]]; then
+    site_for_infra="meteo"
   fi
 
   # Merge PR and delete merge branches locally and remotely

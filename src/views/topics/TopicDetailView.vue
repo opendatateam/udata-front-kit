@@ -3,10 +3,9 @@ import {
   OrganizationNameWithCertificate,
   ReadMore
 } from '@datagouv/components-next'
-import { useHead } from '@unhead/vue'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
-import { computed, inject, nextTick, ref, watch, watchEffect } from 'vue'
+import { capitalize, computed, nextTick, ref, watch, watchEffect } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 import { useRouter } from 'vue-router'
 
@@ -20,10 +19,6 @@ import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
 import {
@@ -37,6 +32,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
@@ -53,10 +49,6 @@ const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
 const showCloneModal = ref(false)
 const cloneKeepDatasets = ref(false)
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const description = computed(() => descriptionFromMarkdown(topic))
 
@@ -193,29 +185,9 @@ const togglePublish = () => {
     .finally(() => loader.hide())
 }
 
-const metaDescription = (): string | undefined => {
-  return topic.value?.description ?? ''
-}
-
-const metaKeywords = computed(() => {
-  const tags = topic.value?.tags
-  if (!tags?.length) return undefined
-  const prefix = pageConf.filter_prefix
-  const keywords = prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
-  return keywords.length ? keywords.join(', ') : undefined
-})
-
 const metaTitle = computed(() => {
   return topic.value?.name
 })
-
-const metaLink = (): string => {
-  const resolved = router.resolve({
-    name: `${pageKey}_detail`,
-    params: { item_id: topic.value?.slug }
-  })
-  return `${window.location.origin}${resolved.href}`
-}
 
 const handleNavigateToFactor = (elementId: string) => {
   activeTab.value = 0
@@ -224,22 +196,22 @@ const handleNavigateToFactor = (elementId: string) => {
   })
 }
 
-useHead({
-  meta: () => [
-    {
-      property: 'og:title',
-      content: `${metaTitle.value} | ${config.website.title}`
-    },
-    { name: 'description', content: metaDescription() },
-    { property: 'og:description', content: metaDescription() },
-    ...(metaKeywords.value != null
-      ? [{ name: 'keywords', content: metaKeywords.value }]
-      : []),
-    ...(topic.value?.private
-      ? [{ name: 'robots', content: 'noindex, nofollow' }]
-      : [])
-  ],
-  link: [{ rel: 'canonical', href: metaLink }]
+useMeta({
+  title: () =>
+    metaTitle.value && `${capitalize(labels.singular)} - ${metaTitle.value}`,
+  description: () => topic.value?.description,
+  keywords: () => {
+    const tags = topic.value?.tags
+    if (!tags?.length) return undefined
+    const prefix = pageConf.filter_prefix
+    return prefix ? tags.filter((t) => !t.startsWith(prefix)) : tags
+  },
+  canonicalUrl: useCanonicalUrl(() => {
+    const slug = topic.value?.slug
+    if (!slug) return null
+    return { name: `${pageKey}_detail`, params: { item_id: slug } }
+  }),
+  noIndex: () => topic.value?.private
 })
 
 // Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
@@ -291,7 +263,6 @@ watch(
             params: { item_id: topic.value.slug }
           })
         }
-        setAccessibilityProperties(metaTitle.value)
       })
       .finally(() => {
         // Only auto-hide if there's no custom description component
