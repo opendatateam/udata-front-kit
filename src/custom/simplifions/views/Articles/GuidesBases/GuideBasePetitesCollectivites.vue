@@ -48,7 +48,7 @@
 
     <h3>Une obligation, le Dîtes-le nous une fois</h3>
 
-      <p class="text-lg">
+      <p>
         Ce principe s'incarne dans l'obligation légale du
         <strong>Dites-le nous une fois</strong>, qui exige de l'administration
         qu'elle récupère les données administratives requises pour une démarche directement auprès de l'administration, si cela est possible.
@@ -222,7 +222,7 @@
 
 
  <h3 id="logiciels-editeurs-api-particulier-et-entreprise">Les logiciels raccordés à l'API Entreprise et à l'API Particulier</h3>
-    <p class="fr-text--lg">
+    <p>
       Pour permettre aux administrations et collectivités de simplifier leurs démarches par la donnée, la direction interministerielle du numérique (DINUM) a mis en place deux briques informatiques chargées de regrouper et de distribuer par un même tuyau les données des particuliers et les données des entreprises et associations :
     </p>    
     <ul>
@@ -264,20 +264,6 @@
       <SimplifionsArticleTopicSpotlight :slugs="['subventions-des-associations-attribution', 'marches-publics-depot-et-instruction-des-candidatures']" page-key="cas-d-usages" :show-arrow="true">
         <p><b>Pour vos démarches auprès des entreprises et des associations</b> de nombreuses données sont déjà disponibles.</p>
       </SimplifionsArticleTopicSpotlight>
-    
-
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <template v-if="portailsLoading">
-          <div v-for="n in 3" :key="n" class="fr-col-12 fr-col-lg-4">
-            <div class="fr-card guide-card-skeleton" aria-hidden="true" />
-          </div>
-        </template>
-        <template v-else>
-          <div v-for="solution in portailsSolutions" :key="solution.id" class="fr-col-12 fr-col-lg-4">
-            <SimplifionsSolutionCard :topic="solution" page-key="solutions" :show-description="false" :show-fournisseurs="false" :show-simplification-tags="false" />
-          </div>
-        </template>
-      </div>
     </ArticleSection>
 
     <ArticleSection id="checklist" label="Récapitulatif">
@@ -328,9 +314,14 @@
 
     <ArticleSection id="cta" label="Pour aller plus loin">
 
-    <p class="fr-text--lead guide-section-lead">
-      Si votre collectivité veut aller plus loin, la prochaine étape est de consulter les différentes démarches référencées sur Simplifions, identifier de nouveaux logiciels métiers que vous pourriez utiliser, voir même commencer à vous familiariser avec les API et bases de données directement.
+    <p class="fr-text--lg">
+      Pour allers plus loin, les prochaines étapes :
     </p>
+    <ul class="fr-text--lg fr-mb-4w">
+      <li>consulter les différentes démarches référencées sur Simplifions ;</li>
+      <li>identifier de nouveaux logiciels métiers que vous pourriez utiliser ;</li>
+      <li>vous familiariser avec les API et bases de données et peut-être en intégrer certaines directement dans votre système d'information.</li>
+    </ul>
 
     <div class="fr-grid-row fr-grid-row--center">
       <router-link
