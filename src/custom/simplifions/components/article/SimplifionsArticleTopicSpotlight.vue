@@ -11,6 +11,7 @@
           :page-key="pageKey"
           :show-description="showDescription"
           :show-image="showImage"
+          :show-operateur-tag="showOperateurTag"
           :show-target-users="showTargetUsers"
           :show-fournisseurs="showFournisseurs"
           :show-simplification-tags="showSimplificationTags"
@@ -46,6 +47,7 @@ const props = withDefaults(
     pageKey: 'solutions' | 'cas-d-usages'
     showDescription?: boolean
     showImage?: boolean
+    showOperateurTag?: boolean
     showTargetUsers?: boolean
     showFournisseurs?: boolean
     showSimplificationTags?: boolean
@@ -55,6 +57,7 @@ const props = withDefaults(
   {
     showDescription: false,
     showImage: true,
+    showOperateurTag: true,
     showTargetUsers: false,
     showFournisseurs: false,
     showSimplificationTags: false,

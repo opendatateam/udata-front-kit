@@ -158,9 +158,14 @@ import { guidesMeta } from '../meta'
 // import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 // import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
 //
-// Props optionnelles du Spotlight (toutes à false par défaut) :
-//   :show-description="true"  :show-image="true"  :show-target-users="true"
-//   :show-fournisseurs="true"  :show-simplification-tags="true"  :show-categorie-de-solution="true"
+// Props optionnelles du Spotlight (valeurs par défaut entre parenthèses) :
+//   :show-description="true"      (false) affiche la description
+//   :show-image="false"           (true)  cache l'image
+//   :show-operateur-tag="true"    (true)  badge fournisseur — s'affiche dans le body si show-image=false
+//   :show-target-users="true"     (false) tags "à destination de"
+//   :show-fournisseurs="true"     (false) tags fournisseurs de données
+//   :show-simplification-tags="true" (false) tags de simplification
+//   :show-categorie-de-solution="true" (false) catégorie de solution
 
 // --- Grille de cartes par slug — SOLUTIONS ---
 // import { useTopicsBySlug } from '../../../composables/useTopicsBySlug'

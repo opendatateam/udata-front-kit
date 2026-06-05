@@ -11,7 +11,7 @@
         <div class="fr-card__content">
           <div class="fr-grid-row">
             <SimplifionsSolutionOperateurTag
-              v-if="!imageUrl"
+              v-if="showOperateurTag && (!imageUrl || !showImage)"
               :topic-solution="topic"
             />
             <DraftTag v-if="topic.private" class="fr-ml-auto" />
@@ -46,6 +46,7 @@
           />
           <div class="topic-image-overlay"></div>
           <SimplifionsSolutionOperateurTag
+            v-if="showOperateurTag"
             :topic-solution="topic"
             class="badge-absolute"
           />
@@ -71,6 +72,7 @@ const props = withDefaults(
     pageKey?: string
     showDescription?: boolean
     showImage?: boolean
+    showOperateurTag?: boolean
     showTargetUsers?: boolean
     showFournisseurs?: boolean
     showSimplificationTags?: boolean
@@ -80,6 +82,7 @@ const props = withDefaults(
   {
     showDescription: true,
     showImage: true,
+    showOperateurTag: true,
     showTargetUsers: true,
     showFournisseurs: true,
     showSimplificationTags: true,
