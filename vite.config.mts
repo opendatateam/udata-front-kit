@@ -104,7 +104,9 @@ export default defineConfig(({ mode }) => {
         '@root': resolve(__dirname, './'),
         '@siteConfig': fileURLToPath(new URL(configDir, import.meta.url)),
         '@': fileURLToPath(new URL('./src', import.meta.url)),
-        vue: 'vue/dist/vue.esm-bundler.js'
+        vue: 'vue/dist/vue.esm-bundler.js',
+        // xmlbuilder2 uses Node's EventEmitter — polyfill it for the browser
+        events: 'eventemitter3'
       }
     },
     test: {
@@ -135,6 +137,8 @@ export default defineConfig(({ mode }) => {
         'geoportal-access-lib',
         // Include maplibre-gl to ensure proper bundling with esbuild class field support
         'maplibre-gl',
+        // xmlbuilder2 uses CJS require('events') which needs pre-bundling to resolve the alias
+        'xmlbuilder2',
         // leaflet is a dep of @datagouv/components-next which is excluded from optimizeDeps
         'leaflet'
       ],
