@@ -1,7 +1,7 @@
 <template>
-  <ol class="timeline" role="list">
+  <ul class="timeline">
     <slot />
-  </ol>
+  </ul>
 </template>
 
 <script setup lang="ts">
