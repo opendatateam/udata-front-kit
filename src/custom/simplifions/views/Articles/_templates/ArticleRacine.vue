@@ -76,6 +76,52 @@
         </router-link>
       </div>
       -->
+
+      <!-- GRILLE DE CARTES — SOLUTIONS
+           Grille 3 colonnes avec skeleton pendant le chargement.
+           Imports et composables requis : voir script ci-dessous (variante solutions).
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <template v-if="solutionsLoading">
+          <div v-for="n in 3" :key="n" class="fr-col-12 fr-col-lg-4">
+            <div class="fr-card guide-card-skeleton" aria-hidden="true" />
+          </div>
+        </template>
+        <template v-else>
+          <div v-for="solution in mesSolutions" :key="solution.id" class="fr-col-12 fr-col-lg-4">
+            <SimplifionsSolutionCard
+              :topic="solution"
+              page-key="solutions"
+              :show-description="false"
+              :show-fournisseurs="false"
+              :show-simplification-tags="false"
+            />
+          </div>
+        </template>
+      </div>
+      -->
+
+      <!-- GRILLE DE CARTES — CAS D'USAGES
+           Même pattern, variante pour les cas d'usages.
+           Imports et composables requis : voir script ci-dessous (variante cas d'usages).
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <template v-if="casUsagesLoading">
+          <div v-for="n in 3" :key="n" class="fr-col-12 fr-col-lg-4">
+            <div class="fr-card guide-card-skeleton" aria-hidden="true" />
+          </div>
+        </template>
+        <template v-else>
+          <div v-for="cu in mesCasUsages" :key="cu.id" class="fr-col-12 fr-col-lg-4">
+            <SimplifionsCasDusageCard
+              :topic="cu"
+              page-key="cas-d-usages"
+              :show-description="false"
+              :show-fournisseurs="false"
+              :show-simplification-tags="false"
+            />
+          </div>
+        </template>
+      </div>
+      -->
     </ArticleSection>
   </SimplifionsArticleLayout>
 </template>
@@ -116,27 +162,37 @@ import { guidesMeta } from '../meta'
 //   :show-description="true"  :show-image="true"  :show-target-users="true"
 //   :show-fournisseurs="true"  :show-simplification-tags="true"  :show-categorie-de-solution="true"
 
-// --- Grille de cartes par slug (solutions ou cas d'usages) ---
+// --- Grille de cartes par slug — SOLUTIONS ---
 // import { useTopicsBySlug } from '../../../composables/useTopicsBySlug'
 // import type { TopicSolution } from '../../../model/topics'
-// import type { TopicCasUsage } from '../../../model/topics'
 // import SimplifionsSolutionCard from '../../../components/SimplifionsSolutionCard.vue'
-// import SimplifionsCasDusageCard from '../../../components/SimplifionsCasDusageCard.vue'
 //
 // const { topics: mesSolutions, loading: solutionsLoading } = useTopicsBySlug<TopicSolution>([
-//   'slug-solution-1', 'slug-solution-2'
-// ])
-// const { topics: mesCasUsages, loading: casUsagesLoading } = useTopicsBySlug<TopicCasUsage>([
-//   'slug-cas-usage-1'
+//   'slug-solution-1', 'slug-solution-2', 'slug-solution-3'
 // ])
 //
-// Dans le template :
-// <div v-for="s in mesSolutions" :key="s.id">
-//   <SimplifionsSolutionCard :topic="s" page-key="solutions" />
-// </div>
-// <div v-for="cu in mesCasUsages" :key="cu.id">
-//   <SimplifionsCasDusageCard :topic="cu" page-key="cas-d-usages" />
-// </div>
+// --- Grille de cartes par slug — CAS D'USAGES ---
+// import type { TopicCasUsage } from '../../../model/topics'
+// import SimplifionsCasDusageCard from '../../../components/SimplifionsCasDusageCard.vue'
+//
+// const { topics: mesCasUsages, loading: casUsagesLoading } = useTopicsBySlug<TopicCasUsage>([
+//   'slug-cas-usage-1', 'slug-cas-usage-2'
+// ])
+//
+// Le skeleton (placeholder gris animé) s'affiche pendant le chargement.
+// Ajuster le "3" dans v-for="n in 3" selon le nombre de slugs attendus.
+//
+// Style skeleton requis dans <style scoped> :
+// .guide-card-skeleton {
+//   height: 200px;
+//   background: var(--background-alt-grey);
+//   border-radius: 4px;
+//   animation: pulse 1.5s ease-in-out infinite;
+// }
+// @keyframes pulse {
+//   0%, 100% { opacity: 1; }
+//   50% { opacity: 0.5; }
+// }
 
 const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(
   null,        // ← pas de dossier (themeMeta)
