@@ -31,6 +31,9 @@
               :hide-simplification="!showSimplificationTags"
               :show-categorie-de-solution="showCategorieDeSolution"
             />
+            <div v-if="showArrow" class="card-arrow" aria-hidden="true">
+              <span class="fr-icon-arrow-right-line" />
+            </div>
           </div>
         </div>
       </div>
@@ -57,6 +60,7 @@ import { useRoute } from 'vue-router'
 import { stripFromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type { TopicSolution } from '../model/topics'
+import { injectArticleTopicsRegistry } from '../composables/useArticleTopicsRegistry'
 import DraftTag from './DraftTag.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
@@ -71,6 +75,7 @@ const props = withDefaults(
     showFournisseurs?: boolean
     showSimplificationTags?: boolean
     showCategorieDeSolution?: boolean
+    showArrow?: boolean
   }>(),
   {
     showDescription: true,
@@ -78,7 +83,8 @@ const props = withDefaults(
     showTargetUsers: true,
     showFournisseurs: true,
     showSimplificationTags: true,
-    showCategorieDeSolution: true
+    showCategorieDeSolution: true,
+    showArrow: false
   }
 )
 
@@ -88,6 +94,9 @@ const pageKey = computed(() => props.pageKey ?? (route.meta.pageKey as string | 
 const solution = props.topic.extras['simplifions-v2-solutions']
 
 const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
+
+const registry = injectArticleTopicsRegistry()
+onMounted(() => registry?.register(props.topic.slug, 'solutions'))
 </script>
 
 <style scoped>
@@ -136,5 +145,12 @@ const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 .fr-card__desc {
   color: var(--text-default-grey);
   font-size: 1rem;
+}
+
+.card-arrow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+  color: var(--text-action-high-blue-france);
 }
 </style>

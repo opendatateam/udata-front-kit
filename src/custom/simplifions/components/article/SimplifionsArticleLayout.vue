@@ -1,5 +1,8 @@
 <template>
   <div class="article-page">
+    <div v-if="breadcrumbLinks.length" class="fr-container article-hero__breadcrumb">
+        <DsfrBreadcrumb :links="breadcrumbLinks" />
+      </div>
     <header class="article-hero">
       <div
         v-if="heroImageSrc"
@@ -14,9 +17,7 @@
         aria-hidden="true"
       ></div>
 
-      <div v-if="breadcrumbLinks.length" class="fr-container article-hero__breadcrumb">
-        <DsfrBreadcrumb :links="breadcrumbLinks" />
-      </div>
+      
 
       <div class="fr-container article-hero__inner">
         <div class="article-hero__panel" :style="heroPanelStyle">
@@ -55,7 +56,7 @@
     <div class="fr-container article-shell">
       <div class="fr-grid-row fr-grid-row--gutters article-grid">
         <aside class="fr-col-12 fr-col-lg-3 article-toc-col">
-          <nav class="fr-sidemenu article-toc" role="navigation" aria-labelledby="article-sidemenu-title">
+          <nav class="fr-sidemenu article-toc " role="navigation" aria-labelledby="article-sidemenu-title">
             <div class="fr-sidemenu__inner">
               <button
                 class="fr-sidemenu__btn"
@@ -93,6 +94,8 @@
         </main>
       </div>
     </div>
+
+    <SimplifionsArticleTopicsCarousel :entries="topicEntries" :gradient="heroBackdropGradient" />
   </div>
 </template>
 
@@ -101,6 +104,8 @@ import { provide } from 'vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { articleSectionKey } from './articleSectionKey'
+import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
+import SimplifionsArticleTopicsCarousel from './SimplifionsArticleTopicsCarousel.vue'
 
 type ArticleSection = {
   id: string
@@ -165,6 +170,8 @@ useMeta({
 
 const sections = ref<ArticleSection[]>([])
 provide(articleSectionKey, (id, label) => sections.value.push({ id, label }))
+
+const topicEntries = provideArticleTopicsRegistry()
 
 const sidemenuExpanded = ref(true)
 
@@ -306,7 +313,11 @@ onBeforeUnmount(() => {
 .article-hero__breadcrumb {
   position: relative;
   z-index: 2;
-  padding-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.article-hero__breadcrumb :deep(nav) {
+  margin-bottom: 1rem;
 }
 
 .article-hero__panel {
@@ -375,7 +386,7 @@ onBeforeUnmount(() => {
 
 .article-shell {
   padding-top: 2rem;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem;
 }
 
 .article-grid {

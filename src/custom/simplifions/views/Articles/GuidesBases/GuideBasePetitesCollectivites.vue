@@ -137,20 +137,19 @@
     <p>Voici trois sites publics, gratuits, accessibles aux agents publics et permettant aux agents publics de consulter des données protégées dans le strict cadre de leur mission :</p>
 
    
-      <SimplifionsArticleTopicSpotlight slug="formulaire-de-collecte-du-quotient-familial" page-key="solutions">
+  <SimplifionsArticleTopicSpotlight :slugs="['formulaire-de-collecte-du-quotient-familial']" page-key="solutions" :show-target-users="true" :show-arrow="true" >
+    <p>
+     <b>Votre collectivité applique certaines tarifications sur la base du quotient familial de la CAF ou de la MSA ?</b> Cet outil vous permet de collecter le QF de vos usagers utilisant FranceConnect. Ils n'ont qu'à se rendre sur le site, s'authentifier via FranceConnect et valider le transfert de leur quotient familial vers votre collectivité. Vos agents pourront alors récupérer le QF depuis un portail dédié (portail HubEE). 
+    </p>
+  </SimplifionsArticleTopicSpotlight>
+  <SimplifionsArticleTopicSpotlight :slugs="['annuaire-des-entreprises']" page-key="solutions" :show-target-users="true" :show-arrow="true" >
       <p>
-    Lorem Ipsum
+        <b>Votre collectivité a besoin de données concernant les entreprises et les associations ?</b> L'annuaire des entreprises est le point d'entrée pour consulter ce type de données. Accessible gratuitement à tous pour les données en open data, il permet également à vos agents de consulter de la donnée protégée. La consultation de ce type de données se fait via un espace qui leur est dédié et uniquement dans le cadre de leurs missions.
       </p>
     </SimplifionsArticleTopicSpotlight>
-  <SimplifionsArticleTopicSpotlight slug="annuaire-des-entreprises" page-key="solutions">
+      <SimplifionsArticleTopicSpotlight :slugs="['data-subvention']" page-key="solutions" :show-target-users="true" :show-arrow="true" >
       <p>
-        L'annuaire des entreprises est le point d'entrée pour consulter les données
-        administratives des entreprises et associations. Il est accessible gratuitement et à tous pour les données en open data. Vos agents peuvent accéder à des données protégées, via l'espace agent.
-      </p>
-    </SimplifionsArticleTopicSpotlight>
-      <SimplifionsArticleTopicSpotlight slug="data-subvention" page-key="solutions">
-      <p>
-        Lorem Ipsum
+        <b>Votre collectivité a besoin de connaître les subventions déjà versées à une association ?</b> Le portail Data.Subvention, uniquement accessibles aux agents publics, permet de consulter ce type d'informations.
       </p>
     </SimplifionsArticleTopicSpotlight>
 
@@ -166,20 +165,21 @@
 
     <p >
       Ils permettent notamment de couvrir une partie des besoins de nombreux
-      cas d'usages. C'est un premier pas pour vos agents pour récupérer les données. Vos
-      agents peuvent les consulter en ligne après s'être authentifiés. Les données sont tenues à jour
+      cas d'usages. C'est un premier pas pour les agents pour récupérer les données. Les agents peuvent les consulter en ligne après s'être authentifiés. Les données sont tenues à jour
       le plus fréquemment possible. En revanche, la donnée n'est pas
       directement déposée dans les outils métiers des agents. C'est à eux de
       se rendre sur le site et de copier, coller ou télécharger les
       informations nécessaires pour instruire les démarches.
     </p>
 
-     <router-link
-      class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
-      to="/solutions?categorie-de-solution=portail-consultation"
-            >
+    <div class="fr-grid-row fr-grid-row--center">
+      <router-link
+        class="fr-btn fr-btn--secondary fr-icon-arrow-right-line fr-btn--icon-right"
+        to="/solutions?categorie-de-solution=portail-consultation"
+      >
         Tous les portails de consultation référencés
       </router-link>
+    </div>
 
     </ArticleSection>
 
@@ -251,12 +251,20 @@
     </div>
     </ArticleSection>
 
-    <ArticleSection id="demarches-simplifiables" label="Les 3 démarches faciles à simplifier">
-      <template #heading>Les 3 démarches faciles à simplifier, sans ressources supplémentaires</template>
+    <ArticleSection id="demarches-faciles-a-simplifier" label="Démarches faciles à simplifier">
+      <template #heading>Les démarches faciles à simplifier, sans ressources supplémentaires</template>
 
       <p class="fr-text--lg">
      Voici quelques démarches où il vous est déjà possible de récupérer des données sans les demander aux usagers :
       </p>
+
+      <SimplifionsArticleTopicSpotlight :slugs="['tarification-sociale-municipale-a-lenfance', 'tarification-cantine-scolaire-a-1-eur']" page-key="cas-d-usages" :show-arrow="true">
+        <p><b>Vos tarifications municipales se basent sur le quotient familial de la CAF ou de la MSA ?</b> Celui-ci peut être récupéré facilement et sans ressources supplémentaires par les agents publics.</p>
+      </SimplifionsArticleTopicSpotlight>
+      <SimplifionsArticleTopicSpotlight :slugs="['subventions-des-associations-attribution', 'marches-publics-depot-et-instruction-des-candidatures']" page-key="cas-d-usages" :show-arrow="true">
+        <p><b>Pour vos démarches auprès des entreprises et des associations</b> de nombreuses données sont déjà disponibles.</p>
+      </SimplifionsArticleTopicSpotlight>
+    
 
       <div class="fr-grid-row fr-grid-row--gutters">
         <template v-if="portailsLoading">
@@ -270,33 +278,6 @@
           </div>
         </template>
       </div>
-
-
-      <div class="fr-my-4w fr-highlight fr-highlight--green-menthe">
-        <p class="fr-mb-0 fr-text--lg">
-          Tous ces sites sont accessibles aux agents publics, gratuitement, sous
-          réserve d'une utilisation adaptée, dans le strict cadre de leurs
-          missions.
-        </p>
-      </div>
-
-      <p >
-        Ils permettent notamment de couvrir une partie des besoins de nombreux
-        cas d'usages. C'est un premier pas pour vos agents pour récupérer les données. Vos
-        agents peuvent les consulter en ligne après s'être authentifiés. Les données sont tenues à jour
-        le plus fréquemment possible. En revanche, la donnée n'est pas
-        directement déposée dans les outils métiers des agents. C'est à eux de
-        se rendre sur le site et de copier, coller ou télécharger les
-        informations nécessaires pour instruire les démarches.
-      </p>
-
-     <router-link
-      class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
-      to="/solutions?categorie-de-solution=portail-consultation"
-            >
-        Tous les portails de consultation référencés
-      </router-link>
-
     </ArticleSection>
 
     <ArticleSection id="checklist" label="Récapitulatif">
@@ -307,7 +288,7 @@
 
     <SimplifionsArticleChecklist>
        <li>
-        Vos agents chargés des <b>démarches des particuliers</b> basées sur le quotient familial connaissent
+        Les agents chargés des <b>démarches des particuliers</b> basées sur le quotient familial connaissent
          <router-link
       class="fr-link"
       to="/solutions/formulaire-de-collecte-du-quotient-familial"
@@ -316,7 +297,7 @@
       </router-link>.
       </li>
       <li>
-        Vos agents chargés des <b>démarches des entreprises et associations</b> connaissent
+        Les agents chargés des <b>démarches des entreprises et associations</b> connaissent
          <router-link
       class="fr-link"
       to="/solutions/annuaire-des-entreprises"
@@ -325,7 +306,7 @@
       </router-link> et son espace agent.
       </li>
       <li>
-        Vos agents chargés de la délivrance des <b>subventions aux associations</b> connaissent
+        Les agents chargés de la délivrance des <b>subventions aux associations</b> connaissent
          <router-link
       class="fr-link"
       to="/solutions/data-subvention"
@@ -334,10 +315,13 @@
       </router-link>.
       </li>
       <li>
-        Vous avez connaissance des <b>données auxquelles vos logiciels éditeurs sont raccordés</b>. <a href="#logiciels-editeurs-donnees-integrees" class="fr-link fr-icon-arrow-up-line fr-link--icon-right">En savoir plus</a>.
+        Vous avez connaissance des <b>données auxquelles vos logiciels éditeurs sont raccordés</b>. <a href="#logiciels-editeurs-donnees-integrees" class=" fr-icon-arrow-up-line fr-link--icon-right">Lire la section concernée</a>.
       </li>
        <li>
-        Pour bénéficier des données disponibles dans l'API Entreprise et l'API Particulier, vous avez consulté la liste des logiciels qui sont raccordés. <a href="#logiciels-editeurs-api-particulier-et-entreprise" class="fr-link fr-icon-arrow-up-line fr-link--icon-right">En savoir plus</a>.
+        Pour bénéficier des données disponibles dans l'API Entreprise et l'API Particulier, vous avez consulté la liste des logiciels qui sont raccordés. <a href="#logiciels-editeurs-api-particulier-et-entreprise" class="fr-icon-arrow-up-line fr-link--icon-right">Lire la section concernée</a>.
+      </li>
+      <li>
+        Vous avez passé en revue les démarches les plus faciles à simplifier. <a href="#demarches-faciles-a-simplifier" class=" fr-icon-arrow-up-line fr-link--icon-right">Lire la section concernée</a>.
       </li>
     </SimplifionsArticleChecklist>
     </ArticleSection>
@@ -347,6 +331,15 @@
     <p class="fr-text--lead guide-section-lead">
       Si votre collectivité veut aller plus loin, la prochaine étape est de consulter les différentes démarches référencées sur Simplifions, identifier de nouveaux logiciels métiers que vous pourriez utiliser, voir même commencer à vous familiariser avec les API et bases de données directement.
     </p>
+
+    <div class="fr-grid-row fr-grid-row--center">
+      <router-link
+        class="fr-btn fr-icon-arrow-right-line fr-btn--icon-right"
+        to="/cas-d-usages"
+      >
+        Consulter le catalogue des démarches
+      </router-link>
+    </div>
 
     </ArticleSection>
   </SimplifionsArticleLayout>
@@ -360,7 +353,7 @@ export const articleMeta = {
   description:
     `Petites collectivités, simplifiez vos démarches administratives sans développement : portails publics gratuits et logiciels éditeurs déjà raccordés aux données vous permettent d'éviter de les redemander aux usagers.`,
   imageSrc: '/static/simplifions/assets/image-guide-de-base-collectivites-guichet-mairie-2.jpg',
-  articleTags: [{ label: 'Petites communes' }, { label: 'Maires' }],
+  articleTags: [{ label: 'Petites communes' }, { label: 'Maires et adjoints' }, { label: 'Agent informaticien' }],
   articleCategory: 'guide',
   showNoDevelopmentBadge: true,
   heroBackdropGradient: 'linear-gradient(135deg, #34BAB5 0%, #d2e2f6 100%)',

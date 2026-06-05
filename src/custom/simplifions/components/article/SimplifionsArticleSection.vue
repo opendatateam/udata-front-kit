@@ -22,8 +22,7 @@ onMounted(() => register?.(props.id, props.label))
 
 <style scoped>
 .article-section__title {
-  margin-top: 2rem;
-  margin-bottom: 0;
+  margin-top: 4rem;
   color: var(--text-default-grey);
   background-color: rgb(167, 212, 205);
   padding: 2px 4px;

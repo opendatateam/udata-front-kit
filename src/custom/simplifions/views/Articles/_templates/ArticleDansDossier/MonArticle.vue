@@ -54,13 +54,14 @@ import { themeMeta } from './index'
 // import SimplifionsArticleTopicSpotlight from '../../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 //
 // Dans le template (aucun import supplémentaire, aucun fetch à écrire) :
-// <SimplifionsArticleTopicSpotlight slug="mon-slug" page-key="solutions">
+// <SimplifionsArticleTopicSpotlight :slugs="['mon-slug']" page-key="solutions">
 //   <p>Mon commentaire éditorial, avec du <strong>gras</strong> ou des liens.</p>
 //   <router-link class="fr-btn fr-btn--sm fr-btn--secondary" to="/solutions/mon-slug">
 //     Voir la fiche complète
 //   </router-link>
 // </SimplifionsArticleTopicSpotlight>
 //
+// Plusieurs topics : :slugs="['slug-1', 'slug-2']"
 // Pour un cas d'usage : page-key="cas-d-usages"
 // Props optionnelles pour enrichir la carte (toutes à false par défaut) :
 //   :show-description="true"  :show-image="true"  :show-target-users="true"
