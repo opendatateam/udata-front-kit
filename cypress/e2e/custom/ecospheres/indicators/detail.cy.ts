@@ -54,6 +54,7 @@ describe('Indicator Detail View', () => {
 
         // Couverture temporelle
         cy.contains('Couverture temporelle').should('be.visible')
+        cy.contains('2020 à 2022').should('be.visible')
 
         // Unité
         cy.contains('Unité').should('be.visible')
@@ -64,10 +65,10 @@ describe('Indicator Detail View', () => {
         cy.contains('Région française').should('be.visible')
 
         // Date de création
-        cy.contains('Date de création').should('be.visible')
+        cy.contains('h3', 'Date de création').parent().contains('2025')
 
         // Date de mise à jour
-        cy.contains('Date de mise à jour').should('be.visible')
+        cy.contains('h3', 'Date de mise à jour').parent().contains('2025')
 
         // Identifiant
         cy.contains('Identifiant').should('be.visible')
@@ -75,6 +76,7 @@ describe('Indicator Detail View', () => {
 
         // Licence
         cy.contains('Licence').should('be.visible')
+        cy.contains('Licence Ouverte / Open Licence').should('be.visible')
 
         // Fréquence de mise à jour
         cy.contains('Fréquence de mise à jour').should('be.visible')
