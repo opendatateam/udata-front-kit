@@ -47,45 +47,47 @@ describe('Indicator Detail View', () => {
     })
 
     it('should display all metadata', () => {
-      // Couverture géographique
-      cy.contains('Couverture géographique').should('be.visible')
-      cy.contains('Île-de-France').should('be.visible')
+      cy.get('#tab-content-infos').within(() => {
+        // Couverture géographique
+        cy.contains('Couverture géographique').should('be.visible')
+        cy.contains('Île-de-France').should('be.visible')
 
-      // Couverture temporelle
-      cy.contains('Couverture temporelle').should('be.visible')
+        // Couverture temporelle
+        cy.contains('Couverture temporelle').should('be.visible')
 
-      // Unité
-      cy.contains('Unité').should('be.visible')
-      cy.contains('kg CO2').should('be.visible')
+        // Unité
+        cy.contains('Unité').should('be.visible')
+        cy.contains('kg CO2').should('be.visible')
 
-      // Mailles
-      cy.contains('Mailles').should('be.visible')
-      cy.contains('Région française').should('be.visible')
+        // Mailles
+        cy.contains('Mailles').should('be.visible')
+        cy.contains('Région française').should('be.visible')
 
-      // Date de création
-      cy.contains('Date de création').should('be.visible')
+        // Date de création
+        cy.contains('Date de création').should('be.visible')
 
-      // Date de mise à jour
-      cy.contains('Date de mise à jour').should('be.visible')
+        // Date de mise à jour
+        cy.contains('Date de mise à jour').should('be.visible')
 
-      // Identifiant
-      cy.contains('Identifiant').should('be.visible')
-      cy.contains(indicator.id).should('be.visible')
+        // Identifiant
+        cy.contains('Identifiant').should('be.visible')
+        cy.contains(indicator.id).should('be.visible')
 
-      // Licence
-      cy.contains('Licence').should('be.visible')
+        // Licence
+        cy.contains('Licence').should('be.visible')
 
-      // Fréquence de mise à jour
-      cy.contains('Fréquence de mise à jour').should('be.visible')
-      cy.contains('Annuelle').should('be.visible')
+        // Fréquence de mise à jour
+        cy.contains('Fréquence de mise à jour').should('be.visible')
+        cy.contains('Annuelle').should('be.visible')
 
-      // Prochaine mise à jour attendue (Q → T replacement)
-      cy.contains('Prochaine mise à jour attendue').should('be.visible')
-      cy.contains('T3 2025').should('be.visible')
+        // Prochaine mise à jour attendue (Q → T replacement)
+        cy.contains('Prochaine mise à jour attendue').should('be.visible')
+        cy.contains('T3 2025').should('be.visible')
 
-      // Mots-clés et extras
-      cy.contains('Voir les mots-clés').should('be.visible')
-      cy.contains('Voir les extras').should('be.visible')
+        // Mots-clés et extras
+        cy.contains('Voir les mots-clés').should('be.visible')
+        cy.contains('Voir les extras').should('be.visible')
+      })
     })
   })
 
