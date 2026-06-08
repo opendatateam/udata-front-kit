@@ -56,7 +56,6 @@ export interface PageFilterConf {
   use_filter_prefix: boolean | null
   api_param: string | null
   form: PageFilterFormConf | null
-  hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
 

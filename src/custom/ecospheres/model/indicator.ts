@@ -33,6 +33,7 @@ export interface IndicatorExtrasData {
   y_start_at_zero?: boolean
   ignore_format_big_number?: boolean
   enable_visualization?: boolean
+  next_expected_update_quarter?: string
 }
 
 export type IndicatorExtras = DatasetV2WithFullObject['extras'] & {
