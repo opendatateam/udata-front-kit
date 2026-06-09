@@ -1,49 +1,74 @@
-# À propos du Point d'accès unique aux données d'accessibilité (PAUDA)
+# Qu'est-ce que le Point d'accès unique aux données d'accessibilité (PAUDA)
 
-### Qu'est-ce que PAUDA ?
+## Présentation générale
 
-PAUDA (accessibilite.data.gouv.fr) est le Point d'accès unique aux données d'accessibilité. Il a pour objectif de faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité.
+PAUDA est l'abréviation du Point d'Accès Unique aux Données d'Accessibilité. PAUDA est disponible à l'adresse [accessibilite.data.gouv.fr](https://accessibilite.data.gouv.fr)
 
-PAUDA est avant tout un guichet d'entrée pour les recherches de données d’accessibilité, qui renverra vers les bases de données existantes à commencer par data.gouv.fr
+PAUDA n'est pas nouveau portail de données. C’est une version thématique du catalogue de [data.gouv.fr](https://data.gouv.fr) sur le modèle de [meteo.data.gouv.fr](https://meteo.data.gouv.fr) ou [transport.data.gouv.fr](https://transport.data.gouv.fr). Toutes les données disponibles ici le sont dans les mêmes conditions que sur data.gouv.fr.
 
-L'ensemble des jeux de données référencés sont des **données ouvertes**. On entend par données ouvertes (open data) toutes données en accès libre, gratuites et facilement réutilisables par toutes et tous. Ces données peuvent être produites par l'administration, mais aussi par des acteurs privés ou encore des citoyens.
+### Notre vision et notre mission
 
-PAUDA ne concernent pas les **données restreintes** qui, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel. Ce type de données n'est pas utilisé sur notre plateforme.
+La vision de PAUDA est de valoriser toutes les données existantes en lien avec l'accessibilité. Ces données font connaître ce qui existe en matière d’accessibilité.
 
-Les jeux de données valorisés par PAUDA sont classés par **bouquets**, qui sont un ensemble contextualisé de données ou d’indicateurs répondant à une problématique donnée. Par ensemble contextualisé, on veut dire que les données sont regroupées par thèmes / sujets / ou tout type de regroupement pertinent, permettant de répondre à une problématique. Ex : le bouquet culture pour réunir tous les jeux de données sur l’accessibilité de la culture.
+Notre mission est de mettre en avant et ouvrir toutes les données d'accessibilité pour permettre à toutes et tous&nbsp;:
 
-PAUDA est progressivement enrichie de nouveaux bouquets et de nouvelles données ouvertes. De nouvelles fonctionnalités font aussi régulièrement leurs apparitions afin de faciliter la création, la recherche et le suivi de bouquets.
+- d'évaluer rapidement l'accessibilité d'un territoire&nbsp;;
+- de trouver des informations détaillées sur l'accessibilité&nbsp;;
+- d'innover au service des personnes en situation de handicap.
 
 ### À qui s'adresse cette plateforme ?
 
-À toutes les structures et personnes pouvant trouver une utilité à l’utilisation de données d’accessibilité. Ainsi, de façon non exhaustive, les principaux destinataires sont :
+À toutes les structures et personnes pouvant trouver une utilité à l’utilisation de données d’accessibilité. Ainsi, de façon non exhaustive, les principaux destinataires sont&nbsp;:
 
-- Les agents publics des administrations centrales, des services déconcentrés de l'État, des établissements publics et des administrations territoriales œuvrant au déploiement des politiques publiques d'accessibilité
-- La société civile, incluant les personnes directement concernées ou leurs proches,
+- Les agents des administrations centrales, des services déconcentrés de l'État, des établissements publics et des collectivités qui participent au déploiement des politiques publiques d'accessibilité&nbsp;;
+- La société civile, dont les personnes directement concernées et leurs proches&nbsp;;
 - Le secteur privé, associatif comme commercial.
 
-### Quelles données sont mises à disposition ?
+### Les informations disponibles sur PAUDA
 
-Pour le moment, seules les données référencées par data.gouv.fr sont valorisées par PAUDA.
+L'ensemble des jeux de données référencés sont des données ouvertes. On entend par données ouvertes (dites <span lang="en">open data</span>) toutes données en accès libre, gratuites et réutilisables par toutes et tous. Ces données peuvent être produites par l'administration, mais aussi par des acteurs privés ou encore des citoyens.
 
-### Un énième portail de données ?
+PAUDA ne concernent pas les données restreintes qui, contrairement aux données ouvertes, sont des informations soumises à des restrictions d'accès et de diffusion en raison de leur caractère sensible ou confidentiel, comme les données personnelles. Ce type de données n'est pas utilisé sur notre plateforme.
 
-accessibilité.data.gouv.fr n’est pas un nouveau portail de données. C’est une exposition thématique du catalogue de data.gouv.fr sur le modèle de meteo.data.gouv.fr ou transport.data.gouv.fr. Toutes les données disponibles ici le sont dans les mêmes conditions que sur data.gouv.fr.
+Les jeux de données valorisés par PAUDA sont classés par thèmes. Ces thèmes permettent de regrouper les informations dans un ensemble commun. Par exemple, certains thèmes sont&nbsp;: le Tourisme, l'Autonomie ou l'Enseignement.
 
-### Qui est derrière cette plateforme ?
+## La communauté PAUDA
 
-Cette plateforme est le fruit d'une collaboration entre la Délégation Interministérielle à l'Accessibilité, la Fabrique de la Donnée territoriale (portée par l'IGN), l'équipe de data.gouv.fr et l'équipe de beta.gouv.fr. Celle-ci s'inscrit dans une démarche plus large de [construction de communs numériques facilitant la création de plateformes thématiques exposant de la donnée publique](https://github.com/opendatateam/udata-front-kit).
+### Les porteurs de projet
 
-### Comment est-elle gérée ?
+Notre projet est porté principalement par&nbsp;:
 
-Un gestionnaire de patrimoine a été mis en place afin de faciliter le suivi des données d'une organisation moissonnée par data.gouv.fr. Il s'adresse principalement aux gestionnaires de catalogue et administrateurs de données locales et a pour objectif de faciliter l'identification d'éventuels problèmes de qualité des métadonnées.
+- La Délégation interministérielle à l'accessibilité (DIA)&nbsp;;
+- L'Institut national de l'information géographique et forestière (IGN) via la Fabrique de la donnée territoriale&nbsp;;
+- La Direction interministérielle du numérique (DINUM) via data.gouv.fr et [beta.gouv.fr](https://beta.gouv.fr).
 
-Concernant les catalogues GeoNetwork, l'outil ISOmorphe d'application de correctifs sur la structure des métadonnées des fiches XML ISO 19139 a été développé afin d'améliorer l'interopérabilité des métadonnées moissonnées.
+En complément, le projet est activement soutenu par&nbsp;:
 
-### Un retour, une question ?
+- Le Commissariat général au développement durable (CGDD)&nbsp;;
+- La Délégation ministérielle à l'accessibilité (DMA).
 
-Vos retours sont bienvenus pour nous permettre d'améliorer la plateforme !
+### Nos soutiens
 
-Si vous avez une question qui porte sur les données, vous pouvez vous adresser au propriétaire de la donnée en commentant le jeu de données ou le bouquet concernant votre demande (onglet discussion de la page de chaque jeu de donnée et bouquet).
+Nous avons la chance de pouvoir compter sur le soutien financier de la Caisse nationale pour la solidarité à l’autonomie (CNSA). Leur participation pour 2026 est de 64220 euros. Elle finance intégralement l'équipe de PAUDA, composée de trois personnes.
 
-Si vous avez une question sur le fonctionnement de la plateforme, vous pouvez [écrire à l'équipe d'accessibilité.data.gouv.fr](mailto:tu-tho.thai.ext@beta.gouv.fr).
+En complément, nous comptons sur le soutien de&nbsp;:
+
+- Association des maires ruraux de France (AMRF)&nbsp;;
+- France Urbaine&nbsp;;
+- Départements de France&nbsp;;
+- Régions de France&nbsp;;
+- Collectif français du handicap visuel (ex- Confédération française pour la promotion sociale des aveugles et amblyopes (CFPSAA))&nbsp;;
+- Union des associations nationales pour l'inclusion des malentendants et des sourds (Unanimes)&nbsp;;
+- Union nationale des associations de parents d’enfants déficients auditifs (Unapeda)&nbsp;;
+- Union nationale des associations de parents d'enfants inadaptés (Unapei).
+
+## Nous contacter
+
+Pour&nbsp;:
+
+- Nous partager des jeux de données en lien avec l'accessibilité&nbsp;;
+- Réutiliser des jeux de données&nbsp;;
+- Tout projet en lien avec les données d'accessibilité&nbsp;;
+- Nous soutenir dans le développement de la plateforme.
+
+Par email&nbsp;: [contact@accessibilite.data.gouv.fr](mailto:contact@accessibilite.data.gouv.fr)
