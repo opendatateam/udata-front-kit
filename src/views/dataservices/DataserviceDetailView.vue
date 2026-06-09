@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components-next'
-import {
-  DatasetCard,
-  OrganizationNameWithCertificate,
-  ReadMore,
-  SimpleBanner
-} from '@datagouv/components-next'
+import { DatasetCard, ReadMore, SimpleBanner } from '@datagouv/components-next'
 import { capitalize } from 'vue'
 
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
-import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import SidebarItem from '@/components/SidebarItem.vue'
+import SidebarList from '@/components/SidebarList.vue'
+import SidebarOwner from '@/components/SidebarOwner.vue'
 import VIconCustom from '@/components/VIconCustom.vue'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
@@ -132,78 +129,68 @@ onMounted(() => {
         </ReadMore>
       </div>
       <div class="fr-col-12 fr-col-md-4">
-        <!-- Producer -->
-        <h2 id="producer" class="subtitle fr-mb-1v">
-          <span>Producteur</span>
-        </h2>
-        <div
-          v-if="dataservice.organization"
-          class="fr-grid-row fr-grid-row--middle"
-        >
-          <OrganizationLogo
-            :object="dataservice"
-            :size="32"
-            class="fr-mr-1-5v"
-          />
-          <p class="fr-col fr-m-0">
-            <a class="fr-link" :href="dataservice.organization.page">
-              <OrganizationNameWithCertificate
-                :organization="dataservice.organization"
-              />
-            </a>
-          </p>
-        </div>
-        <!-- contact points -->
-        <template v-if="dataservice.contact_points?.length">
-          <h2 id="attributions" class="subtitle fr-mb-1v fr-mt-3v">Contact</h2>
-          <ContactPoints :contact-points="dataservice.contact_points" />
-        </template>
-        <!-- last update -->
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-        <div>{{ formatDate(dataservice.metadata_modified_at, true) }}</div>
-        <!-- rate limiting -->
-        <template v-if="dataservice.rate_limiting">
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Limite d'appels</h2>
-          <div>{{ dataservice.rate_limiting }}</div>
-        </template>
-        <!-- availability -->
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Taux de disponibilité</h2>
-        <div v-if="dataservice.availability">
-          {{ dataservice.availability }}%
-        </div>
-        <div v-else>Non communiqué</div>
-        <!-- access_type -->
-        <h2 class="subtitle fr-mt-3v fr-mb-1v">Accès</h2>
-        <DsfrBadge
-          v-if="dataservice.access_type === 'open'"
-          type="success"
-          label="Ouvert"
-          class="fr-mb-1v"
-          :no-icon="true"
-        ></DsfrBadge>
-        <DsfrBadge
-          v-if="dataservice.access_type === 'open_with_account'"
-          type="warning"
-          label="Ouvert avec compte"
-          class="fr-mb-1v"
-          :no-icon="true"
-        ></DsfrBadge>
-        <DsfrBadge
-          v-if="dataservice.access_type === 'restricted'"
-          type="warning"
-          label="Restreint"
-          class="fr-mb-1v"
-          :no-icon="true"
-        ></DsfrBadge>
-        <div v-if="dataservice.authorization_request_url" class="fr-mt-0">
-          <a
-            :href="dataservice.authorization_request_url"
-            rel="ugc nofollow noopener"
-            target="_blank"
-            class="fr-text--sm fr-link"
-            >Faire une demande d'habilitation</a
+        <SidebarList>
+          <!-- Producer -->
+          <SidebarItem id="producer" term="Producteur">
+            <SidebarOwner :object="dataservice" />
+          </SidebarItem>
+          <!-- contact points -->
+          <SidebarItem
+            v-if="dataservice.contact_points?.length"
+            id="attributions"
+            term="Contact"
           >
-        </div>
+            <ContactPoints :contact-points="dataservice.contact_points" />
+          </SidebarItem>
+          <!-- last update -->
+          <SidebarItem term="Dernière mise à jour">
+            {{ formatDate(dataservice.metadata_modified_at, true) }}
+          </SidebarItem>
+          <!-- rate limiting -->
+          <SidebarItem v-if="dataservice.rate_limiting" term="Limite d'appels">
+            {{ dataservice.rate_limiting }}
+          </SidebarItem>
+          <!-- availability -->
+          <SidebarItem term="Taux de disponibilité">
+            <template v-if="dataservice.availability">
+              {{ dataservice.availability }}%
+            </template>
+            <template v-else>Non communiqué</template>
+          </SidebarItem>
+          <!-- access_type -->
+          <SidebarItem term="Accès">
+            <DsfrBadge
+              v-if="dataservice.access_type === 'open'"
+              type="success"
+              label="Ouvert"
+              class="fr-mb-1v"
+              :no-icon="true"
+            ></DsfrBadge>
+            <DsfrBadge
+              v-if="dataservice.access_type === 'open_with_account'"
+              type="warning"
+              label="Ouvert avec compte"
+              class="fr-mb-1v"
+              :no-icon="true"
+            ></DsfrBadge>
+            <DsfrBadge
+              v-if="dataservice.access_type === 'restricted'"
+              type="warning"
+              label="Restreint"
+              class="fr-mb-1v"
+              :no-icon="true"
+            ></DsfrBadge>
+            <div v-if="dataservice.authorization_request_url" class="fr-mt-0">
+              <a
+                :href="dataservice.authorization_request_url"
+                rel="ugc nofollow noopener"
+                target="_blank"
+                class="fr-text--sm fr-link"
+                >Faire une demande d'habilitation</a
+              >
+            </div>
+          </SidebarItem>
+        </SidebarList>
         <!-- metrics -->
         <MetricsStatBoxes
           object-type="dataservice"
