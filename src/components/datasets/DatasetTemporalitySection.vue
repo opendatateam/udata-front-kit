@@ -38,10 +38,10 @@ const harvestModifiedAt = harvest?.modified_at
           formatDate(harvestIssuedAt)
         }}</DescriptionListDetails>
       </div>
-      <div>
+      <div v-if="harvestModifiedAt">
         <DescriptionListTerm>Dernière révision</DescriptionListTerm>
         <DescriptionListDetails>{{
-          formatDate(harvestModifiedAt ?? dataset.last_update)
+          formatDate(harvestModifiedAt)
         }}</DescriptionListDetails>
       </div>
       <div v-if="dataset.frequency">
