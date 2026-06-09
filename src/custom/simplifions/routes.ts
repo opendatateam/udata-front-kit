@@ -5,9 +5,11 @@ import { RouterView, type RouteRecordRaw } from 'vue-router'
 import { articleMeta as apiFranceConnecteesArticleMeta } from './views/Articles/ApisFranceConnectees/ApisFranceConnectees.vue'
 import { themeMeta as apiFranceConnecteesFolderMeta } from './views/Articles/ApisFranceConnectees'
 import { articleMeta as guidesDeBaseArticleMeta } from './views/Articles/GuidesBases/GuideBasePetitesCollectivites.vue'
+import { articleMeta as guidesDeBaseAPIArticleMeta } from './views/Articles/GuidesBases/GuideBaseQuestCeQuUneAPI.vue'
 import { themeMeta as guidesDeBaseFolderMeta } from './views/Articles/GuidesBases'
 import { themeMeta as guidesMeta } from './views/Articles'
 import { articleMeta as nouvelArticleSansDossier } from './views/Articles/NouvelArticleSansDossier.vue'
+import { articleMeta as ditesLeNousUneFois } from './views/Articles/ArticleChronologieJuridiqueDLNUF.vue'
 
 const topicConf = {
   displayMetadata: false,
@@ -16,9 +18,8 @@ const topicConf = {
 
 const buildArticleFolderRoute = (
   folderMeta: SimplifionsFolderMeta,
-  articleMeta: SimplifionsArticleMeta,
   articles: readonly SimplifionsArticleCard[],
-  articleComponent: () => Promise<unknown>
+  articleRoutes: { meta: SimplifionsArticleMeta, component: () => Promise<unknown> }[]
 ): RouteRecordRaw => {
   return {
     path: `/${guidesMeta.id}/${folderMeta.id}`,
@@ -45,14 +46,12 @@ const buildArticleFolderRoute = (
           articles
         }
       },
-      {
-        path: articleMeta.id,
-        name: articleMeta.id,
-        meta: {
-          title: articleMeta.title ?? articleMeta.h1
-        },
-        component: articleComponent
-      }
+      ...articleRoutes.map(({ meta, component }) => ({
+        path: meta.id,
+        name: meta.id,
+        meta: { title: meta.title ?? meta.h1 },
+        component
+      }))
     ]
   }
 }
@@ -74,9 +73,8 @@ export const routes: RouteRecordRaw[] = [
   },
   buildArticleFolderRoute(
     apiFranceConnecteesFolderMeta,
-    apiFranceConnecteesArticleMeta,
     [buildSimplifionsArticleCard(apiFranceConnecteesFolderMeta, apiFranceConnecteesArticleMeta, `/${guidesMeta.id}`)],
-    async () => await import('./views/Articles/ApisFranceConnectees/ApisFranceConnectees.vue')
+    [{ meta: apiFranceConnecteesArticleMeta, component: async () => await import('./views/Articles/ApisFranceConnectees/ApisFranceConnectees.vue') }]
   ),
   {
     path: '/apis-franceconnectees',
@@ -84,15 +82,26 @@ export const routes: RouteRecordRaw[] = [
   },
   buildArticleFolderRoute(
     guidesDeBaseFolderMeta,
-    guidesDeBaseArticleMeta,
-    [buildSimplifionsArticleCard(guidesDeBaseFolderMeta, guidesDeBaseArticleMeta, `/${guidesMeta.id}`)],
-    async () => await import('./views/Articles/GuidesBases/GuideBasePetitesCollectivites.vue')
+    [
+      buildSimplifionsArticleCard(guidesDeBaseFolderMeta, guidesDeBaseArticleMeta, `/${guidesMeta.id}`),
+      buildSimplifionsArticleCard(guidesDeBaseFolderMeta, guidesDeBaseAPIArticleMeta, `/${guidesMeta.id}`)
+    ],
+    [
+      { meta: guidesDeBaseArticleMeta, component: async () => await import('./views/Articles/GuidesBases/GuideBasePetitesCollectivites.vue') },
+      { meta: guidesDeBaseAPIArticleMeta, component: async () => await import('./views/Articles/GuidesBases/GuideBaseQuestCeQuUneAPI.vue') }
+    ]
   ),
   {
     path: `/${guidesMeta.id}/${nouvelArticleSansDossier.id}`,
     name: nouvelArticleSansDossier.id,
     meta: { title: nouvelArticleSansDossier.title ?? nouvelArticleSansDossier.h1 },
     component: async () => await import('./views/Articles/NouvelArticleSansDossier.vue')
+  },
+  {
+    path: `/${guidesMeta.id}/${ditesLeNousUneFois.id}`,
+    name: ditesLeNousUneFois.id,
+    meta: { title: ditesLeNousUneFois.title ?? ditesLeNousUneFois.h1 },
+    component: async () => await import('./views/Articles/ArticleChronologieJuridiqueDLNUF.vue')
   },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',

@@ -2,9 +2,10 @@ import type { FeaturedItem, SimplifionsArticleCard } from '../../model/articles'
 import { buildSimplifionsArticleCard } from '../../model/articles'
 import { articleMeta as apiFranceConnecteesArticleMeta } from './ApisFranceConnectees/ApisFranceConnectees.vue'
 import { articleMeta as nouvelArticleSansDossier } from './NouvelArticleSansDossier.vue'
-import { articleMeta as ditesLeNousUneFois } from './DitesLeNousUneFois.vue'
+import { articleMeta as ditesLeNousUneFois } from './ArticleChronologieJuridiqueDLNUF.vue'
 import { themeMeta as apiFranceConnecteesFolderMeta } from './ApisFranceConnectees'
 import { articleMeta as guideBaseArticleMeta } from './GuidesBases/GuideBasePetitesCollectivites.vue'
+import { articleMeta as guideBaseAPIArticleMeta } from './GuidesBases/GuideBaseQuestCeQuUneAPI.vue'
 import { themeMeta as guideBaseFolderMeta } from './GuidesBases'
 import { guidesMeta } from './meta'
 
@@ -15,7 +16,10 @@ const parentPath = `/${guidesMeta.id}`
 export const folders = [
   {
     meta: guideBaseFolderMeta,
-    articles: [buildSimplifionsArticleCard(guideBaseFolderMeta, guideBaseArticleMeta, parentPath)]
+    articles: [
+      buildSimplifionsArticleCard(guideBaseFolderMeta, guideBaseArticleMeta, parentPath),
+      buildSimplifionsArticleCard(guideBaseFolderMeta, guideBaseAPIArticleMeta, parentPath)
+    ]
   },
   {
     meta: apiFranceConnecteesFolderMeta,
