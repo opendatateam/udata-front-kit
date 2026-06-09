@@ -2,13 +2,12 @@ import { useGlobalSearchPageRoutes } from '@/router/utils'
 import type { SimplifionsArticleCard, SimplifionsArticleMeta, SimplifionsFolderMeta } from './model/articles'
 import { buildSimplifionsArticleCard } from './model/articles'
 import { RouterView, type RouteRecordRaw } from 'vue-router'
-import { articleMeta as apiFranceConnecteesArticleMeta } from './views/Articles/ApisFranceConnectees/ApisFranceConnectees.vue'
+import { articleMeta as apiFranceConnecteesArticleMeta } from './views/Articles/ApisFranceConnectees/ArticleApisFranceConnectees.vue'
 import { themeMeta as apiFranceConnecteesFolderMeta } from './views/Articles/ApisFranceConnectees'
-import { articleMeta as guidesDeBaseArticleMeta } from './views/Articles/GuidesBases/GuideBasePetitesCollectivites.vue'
-import { articleMeta as guidesDeBaseAPIArticleMeta } from './views/Articles/GuidesBases/GuideBaseQuestCeQuUneAPI.vue'
+import { articleMeta as guidesDeBaseArticleMeta } from './views/Articles/GuidesBases/ArticleGuideBasePetitesCollectivites.vue'
+import { articleMeta as guidesDeBaseAPIArticleMeta } from './views/Articles/GuidesBases/ArticleGuideBaseQuestCeQuUneAPI.vue'
 import { themeMeta as guidesDeBaseFolderMeta } from './views/Articles/GuidesBases'
 import { themeMeta as guidesMeta } from './views/Articles'
-import { articleMeta as nouvelArticleSansDossier } from './views/Articles/NouvelArticleSansDossier.vue'
 import { articleMeta as ditesLeNousUneFois } from './views/Articles/ArticleChronologieJuridiqueDLNUF.vue'
 
 const topicConf = {
@@ -74,7 +73,7 @@ export const routes: RouteRecordRaw[] = [
   buildArticleFolderRoute(
     apiFranceConnecteesFolderMeta,
     [buildSimplifionsArticleCard(apiFranceConnecteesFolderMeta, apiFranceConnecteesArticleMeta, `/${guidesMeta.id}`)],
-    [{ meta: apiFranceConnecteesArticleMeta, component: async () => await import('./views/Articles/ApisFranceConnectees/ApisFranceConnectees.vue') }]
+    [{ meta: apiFranceConnecteesArticleMeta, component: async () => await import('./views/Articles/ApisFranceConnectees/ArticleApisFranceConnectees.vue') }]
   ),
   {
     path: '/apis-franceconnectees',
@@ -87,16 +86,10 @@ export const routes: RouteRecordRaw[] = [
       buildSimplifionsArticleCard(guidesDeBaseFolderMeta, guidesDeBaseAPIArticleMeta, `/${guidesMeta.id}`)
     ],
     [
-      { meta: guidesDeBaseArticleMeta, component: async () => await import('./views/Articles/GuidesBases/GuideBasePetitesCollectivites.vue') },
-      { meta: guidesDeBaseAPIArticleMeta, component: async () => await import('./views/Articles/GuidesBases/GuideBaseQuestCeQuUneAPI.vue') }
+      { meta: guidesDeBaseArticleMeta, component: async () => await import('./views/Articles/GuidesBases/ArticleGuideBasePetitesCollectivites.vue') },
+      { meta: guidesDeBaseAPIArticleMeta, component: async () => await import('./views/Articles/GuidesBases/ArticleGuideBaseQuestCeQuUneAPI.vue') }
     ]
   ),
-  {
-    path: `/${guidesMeta.id}/${nouvelArticleSansDossier.id}`,
-    name: nouvelArticleSansDossier.id,
-    meta: { title: nouvelArticleSansDossier.title ?? nouvelArticleSansDossier.h1 },
-    component: async () => await import('./views/Articles/NouvelArticleSansDossier.vue')
-  },
   {
     path: `/${guidesMeta.id}/${ditesLeNousUneFois.id}`,
     name: ditesLeNousUneFois.id,

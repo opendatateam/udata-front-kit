@@ -1,11 +1,10 @@
 import type { FeaturedItem, SimplifionsArticleCard } from '../../model/articles'
 import { buildSimplifionsArticleCard } from '../../model/articles'
-import { articleMeta as apiFranceConnecteesArticleMeta } from './ApisFranceConnectees/ApisFranceConnectees.vue'
-import { articleMeta as nouvelArticleSansDossier } from './NouvelArticleSansDossier.vue'
+import { articleMeta as apiFranceConnecteesArticleMeta } from './ApisFranceConnectees/ArticleApisFranceConnectees.vue'
 import { articleMeta as ditesLeNousUneFois } from './ArticleChronologieJuridiqueDLNUF.vue'
 import { themeMeta as apiFranceConnecteesFolderMeta } from './ApisFranceConnectees'
-import { articleMeta as guideBaseArticleMeta } from './GuidesBases/GuideBasePetitesCollectivites.vue'
-import { articleMeta as guideBaseAPIArticleMeta } from './GuidesBases/GuideBaseQuestCeQuUneAPI.vue'
+import { articleMeta as guideBaseArticleMeta } from './GuidesBases/ArticleGuideBasePetitesCollectivites.vue'
+import { articleMeta as guideBaseAPIArticleMeta } from './GuidesBases/ArticleGuideBaseQuestCeQuUneAPI.vue'
 import { themeMeta as guideBaseFolderMeta } from './GuidesBases'
 import { guidesMeta } from './meta'
 
@@ -30,7 +29,6 @@ export const folders = [
 export const articles = folders.flatMap((f) => f.articles)
 
 export const rootArticles: SimplifionsArticleCard[] = [
-  buildSimplifionsArticleCard(null, nouvelArticleSansDossier, parentPath),
   buildSimplifionsArticleCard(null, ditesLeNousUneFois, parentPath)
 ]
 
