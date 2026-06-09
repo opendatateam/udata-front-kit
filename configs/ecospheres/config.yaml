@@ -282,7 +282,7 @@ pages:
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
     filter_prefix:
-    title: Toutes les données
+    title: Les données de la transition écologique
     breadcrumb_title: Données
     labels:
       singular: jeu de données
@@ -400,7 +400,7 @@ pages:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
     filter_prefix: ecospheres-indicateurs
-    title: Indicateurs phares
+    title: Les indicateurs territoriaux de planification écologique
     breadcrumb_title: Indicateurs
     labels:
       singular: indicateur
@@ -573,7 +573,7 @@ pages:
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
     filter_prefix:
-    title: API
+    title: Les API de la transition écologique
     breadcrumb_title: API
     labels:
       singular: API
@@ -612,7 +612,7 @@ pages:
     universe_query:
       tag: univers-ecospheres
     filter_prefix: ecospheres
-    title: Collections thématiques
+    title: Collections de données sur la transition écologique
     breadcrumb_title: Collections
     labels:
       singular: collection
