@@ -137,17 +137,17 @@
     <p>Voici trois sites publics, gratuits, accessibles aux agents publics et permettant aux agents publics de consulter des données protégées dans le strict cadre de leur mission :</p>
 
    
-  <SimplifionsArticleTopicSpotlight :slugs="['formulaire-de-collecte-du-quotient-familial']" page-key="solutions" :show-target-users="true" :show-arrow="true" >
+  <SimplifionsArticleTopicSpotlight :slugs="['formulaire-de-collecte-du-quotient-familial']" page-key="solutions" :show-image="false" :show-operateur-tag="true" :show-target-users="true" :show-arrow="true" >
     <p>
      <b>Votre collectivité applique certaines tarifications sur la base du quotient familial de la CAF ou de la MSA ?</b> Cet outil vous permet de collecter le QF de vos usagers utilisant FranceConnect. Ils n'ont qu'à se rendre sur le site, s'authentifier via FranceConnect et valider le transfert de leur quotient familial vers votre collectivité. Vos agents pourront alors récupérer le QF depuis un portail dédié (portail HubEE). 
     </p>
   </SimplifionsArticleTopicSpotlight>
-  <SimplifionsArticleTopicSpotlight :slugs="['annuaire-des-entreprises']" page-key="solutions" :show-target-users="true" :show-arrow="true" >
+  <SimplifionsArticleTopicSpotlight :slugs="['annuaire-des-entreprises']" page-key="solutions" :show-image="false" :show-operateur-tag="true" :show-target-users="true" :show-arrow="true" >
       <p>
         <b>Votre collectivité a besoin de données concernant les entreprises et les associations ?</b> L'annuaire des entreprises est le point d'entrée pour consulter ce type de données. Accessible gratuitement à tous pour les données en open data, il permet également à vos agents de consulter de la donnée protégée. La consultation de ce type de données se fait via un espace qui leur est dédié et uniquement dans le cadre de leurs missions.
       </p>
     </SimplifionsArticleTopicSpotlight>
-      <SimplifionsArticleTopicSpotlight :slugs="['data-subvention']" page-key="solutions" :show-target-users="true" :show-arrow="true" >
+      <SimplifionsArticleTopicSpotlight :slugs="['data-subvention']" page-key="solutions" :show-image="false" :show-operateur-tag="true" :show-target-users="true" :show-arrow="true" >
       <p>
         <b>Votre collectivité a besoin de connaître les subventions déjà versées à une association ?</b> Le portail Data.Subvention, uniquement accessibles aux agents publics, permet de consulter ce type d'informations.
       </p>
@@ -315,7 +315,7 @@
     <ArticleSection id="cta" label="Pour aller plus loin">
 
     <p class="fr-text--lg">
-      Pour allers plus loin, les prochaines étapes :
+      Pour aller plus loin, les prochaines étapes :
     </p>
     <ul class="fr-text--lg fr-mb-4w">
       <li>consulter les différentes démarches référencées sur Simplifions ;</li>
