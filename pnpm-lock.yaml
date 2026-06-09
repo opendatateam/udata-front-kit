@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       '@datagouv/components-next':
-        specifier: file:.yalc/@datagouv/components-next
-        version: file:.yalc/@datagouv/components-next(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
+        specifier: 1.2.0
+        version: 1.2.0(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       '@gouvfr/dsfr':
         specifier: ~1.14.3
         version: 1.14.4
@@ -483,8 +483,11 @@ packages:
         integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==
       }
 
-  '@datagouv/components-next@file:.yalc/@datagouv/components-next':
-    resolution: { directory: .yalc/@datagouv/components-next, type: directory }
+  '@datagouv/components-next@1.2.0':
+    resolution:
+      {
+        integrity: sha512-oHmosjaNlQ9+8rUtQ8Zy0j+mCwNvi/TOB7p/htkTMllLOsuo2XUfIaouU49S0TsHxlYvGIfQSjrReEOwSTFAaw==
+      }
     engines:
       {
         node: '>= 20.0.0',
@@ -493,6 +496,7 @@ packages:
         yarn: use-pnpm-instead
       }
     peerDependencies:
+      echarts: ^6.0.0
       vue: ^3.5.13
       vue-router: ^4.5.0 || ^5.0.0
 
@@ -8523,7 +8527,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@datagouv/components-next@file:.yalc/@datagouv/components-next(core-js@3.47.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
+  '@datagouv/components-next@1.2.0(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
     dependencies:
       '@floating-ui/vue': 1.1.11(vue@3.5.30(typescript@5.7.3))
       '@headlessui/vue': 1.7.23(vue@3.5.30(typescript@5.7.3))
