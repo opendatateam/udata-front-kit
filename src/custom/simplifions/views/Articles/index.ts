@@ -47,5 +47,7 @@ export const articleById = (id: string): FeaturedItem => {
 // L'ordre ici = l'ordre dans le carrousel. Commenter une ligne = retirer de la une.
 export const featuredItems: FeaturedItem[] = [
   articleById('guide-base-petites-collectivites'),
-  folderById('api-franceconnectees')
+  articleById('qu-est-ce-qu-une-api'),
+  articleById('les-apis-franceconnectees'),
+ // folderById('api-franceconnectees')
 ]
