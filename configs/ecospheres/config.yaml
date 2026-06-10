@@ -396,6 +396,7 @@ pages:
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
+    icon: fr-icon-lightbulb-line
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
