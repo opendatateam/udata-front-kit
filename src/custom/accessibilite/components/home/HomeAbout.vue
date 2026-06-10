@@ -30,7 +30,7 @@ import { DsfrButton } from '@gouvminint/vue-dsfr'
           </p>
           <DsfrButton
             label="Contactez-nous"
-            icon="ri:arrow-right-line"
+            icon="fr-icon-arrow-right-line"
             :icon-right="true"
           />
         </div>
