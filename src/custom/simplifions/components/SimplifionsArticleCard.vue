@@ -111,8 +111,9 @@ defineProps<{
 
 .simplifions-article-card__badges li,
 .simplifions-article-card__tags li {
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-right: 0.05rem;
+  margin-bottom: 0.05rem;
+  line-height: 1;
 }
 
 .simplifions-article-card :deep(.fr-card__content) {
