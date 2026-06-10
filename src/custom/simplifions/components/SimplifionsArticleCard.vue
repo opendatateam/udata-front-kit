@@ -44,11 +44,13 @@
         >
       </div>
 
-      <div
-        v-if="article.badges.length"
-        class="simplifions-article-card__overlays"
-      >
-        <ul class="fr-badges-group simplifions-article-card__badges">
+      <div v-if="hasCustomImage" class="simplifions-article-card__image-overlay" />
+
+      <div class="simplifions-article-card__overlays">
+        <ul
+          v-if="article.badges.length"
+          class="fr-badges-group simplifions-article-card__badges"
+        >
           <li
             v-for="badge in article.badges"
             :key="badge.label"
@@ -56,17 +58,46 @@
             <p :class="badge.className">{{ badge.label }}</p>
           </li>
         </ul>
+
+        <img
+          :src="pictoSrc"
+          class="simplifions-article-card__picto"
+          aria-hidden="true"
+          alt=""
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { SimplifionsArticleCard } from '../model/articles'
+import type { SimplifionsArticleCard, SimplifionsArticleCategory } from '../model/articles'
+import PictoGuideRaw from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/catalog.svg?raw'
+import PictoListeRaw from '@gouvfr/dsfr/dist/artwork/pictograms/document/document.svg?raw'
+import PictoPalmaresRaw from '@gouvfr/dsfr/dist/artwork/pictograms/system/success.svg?raw'
+import PictoVeilleRaw from '@gouvfr/dsfr/dist/artwork/pictograms/document/document-search.svg?raw'
 
-defineProps<{
+const toDataUrl = (svgRaw: string) =>
+  `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svgRaw.replace(/#E1000F/gi, '#3f3a20'))}`
+
+const PICTO_BY_CATEGORY: Record<SimplifionsArticleCategory, string> = {
+  guide: toDataUrl(PictoGuideRaw),
+  liste: toDataUrl(PictoListeRaw),
+  palmares: toDataUrl(PictoPalmaresRaw),
+  veille: toDataUrl(PictoVeilleRaw),
+}
+
+const props = defineProps<{
   article: SimplifionsArticleCard
 }>()
+
+const pictoSrc = computed(
+  () => props.article.articleCategory
+    ? PICTO_BY_CATEGORY[props.article.articleCategory]
+    : PICTO_BY_CATEGORY.guide
+)
+
+const hasCustomImage = computed(() => !props.article.imageSrc.startsWith('data:'))
 </script>
 
 <style scoped>
@@ -99,8 +130,25 @@ defineProps<{
   justify-content: flex-start;
   gap: 0.5rem;
   padding: 1rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.simplifions-article-card__image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.55);
   z-index: 1;
   pointer-events: none;
+}
+
+.simplifions-article-card__picto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6rem;
+  height: 6rem;
 }
 
 .simplifions-article-card__badges,
@@ -114,17 +162,5 @@ defineProps<{
   margin-right: 0.05rem;
   margin-bottom: 0.05rem;
   line-height: 1;
-}
-
-.simplifions-article-card :deep(.fr-card__content) {
-  text-align: left;
-}
-
-.simplifions-article-card :deep(.fr-card__title) {
-  text-align: left;
-}
-
-.simplifions-article-card :deep(.fr-card__desc) {
-  text-align: left;
 }
 </style>

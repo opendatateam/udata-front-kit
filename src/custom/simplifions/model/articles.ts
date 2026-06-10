@@ -36,6 +36,7 @@ export type SimplifionsArticleCard = {
   to: string
   imageSrc: string
   heroBackdropGradient: string
+  articleCategory?: SimplifionsArticleCategory
   badges: SimplifionsArticleCardBadge[]
   tags: SimplifionsArticleAudienceTag[]
 }
@@ -133,6 +134,7 @@ export const buildSimplifionsArticleCard = (
       articleMeta.imageSrc ??
       buildSimplifionsGradientImage(articleMeta.heroBackdropGradient),
     heroBackdropGradient: articleMeta.heroBackdropGradient,
+    articleCategory: articleMeta.articleCategory,
     badges: [
       ...buildArticleCategoryBadge(articleMeta.articleCategory),
       ...buildArticleSpecialBadge(articleMeta.showNoDevelopmentBadge)

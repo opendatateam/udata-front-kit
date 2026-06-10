@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-tile fr-enlarge-link folder-card">
+  <div class="fr-tile fr-enlarge-link fr-tile--sm fr-tile--vertical folder-card">
     <div class="fr-tile__body">
       <div class="fr-tile__content">
         <h3 class="fr-tile__title">
@@ -11,10 +11,19 @@
         </p>
       </div>
     </div>
+    <div class="fr-tile__header">
+      <div class="fr-tile__pictogram">
+        <img :src="bindersPictoSrc" aria-hidden="true" alt="" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import BindersPictoRaw from '@gouvfr/dsfr/dist/artwork/pictograms/document/binders.svg?raw'
+
+const bindersPictoSrc = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(BindersPictoRaw.replace(/#E1000F/gi, '#3f3a20'))}`
+
 defineProps<{
   title: string
   description: string
