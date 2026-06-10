@@ -158,8 +158,8 @@
 <script lang="ts">
 export const articleMeta = {
   id: 'mon-article',                       // → URL : /guides/mon-dossier/mon-article
-  h1: "Titre de l'article",
-  // title: 'Titre SEO (optionnel, fallback sur h1)',
+  h1: "Titre de l'article",               // affiché dans la page
+  title: 'Titre SEO de l\'article — concis et optimisé pour les moteurs de recherche',
   description: 'Résumé affiché dans la carte et le bandeau hero.',
 
   heroBackdropGradient: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)',

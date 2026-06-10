@@ -256,11 +256,11 @@ import { articleMeta as monArticleRacineMeta } from './views/Articles/ArticleMon
 | Champ | Type | Requis | Description |
 |---|---|---|---|
 | `id` | `string` | oui | Identifiant unique et segment d'URL de l'article |
-| `h1` | `string` | oui | Titre principal affiché dans le hero et la carte |
-| `description` | `string` | oui | Résumé (hero lead + carte) |
+| `h1` | `string` | oui | Titre affiché dans la page (peut être long) |
+| `title` | `string` | oui | Titre `<title>` HTML — concis, optimisé SEO |
+| `description` | `string` | oui | Meta description et résumé hero/carte |
 | `heroBackdropGradient` | `string` | oui | Dégradé CSS du bandeau hero |
 | `heroPanelBackground` | `string` | oui | Couleur de fond du panneau titre |
-| `title` | `string` | non | Titre SEO alternatif ; fallback sur `h1` si absent |
 | `imageSrc` | `string` | non | Chemin de l'image hero ; fallback = dégradé SVG généré |
 | `articleCategory` | `'guide' \| 'liste' \| 'palmares' \| 'veille'` | non | Badge catégorie + pictogramme de la carte |
 | `showNoDevelopmentBadge` | `boolean` | non | Badge "Sans développement" |

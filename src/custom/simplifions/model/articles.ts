@@ -13,7 +13,7 @@ export type SimplifionsFolderMeta = {
 export type SimplifionsArticleMeta = {
   id: string
   h1: string
-  title?: string
+  title: string
   description: string
 }
 
