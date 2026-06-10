@@ -53,6 +53,35 @@
       <!-- <template #heading>Titre long de la deuxième section</template> -->
       <p>Contenu de la deuxième section.</p>
 
+      <!-- FIGURE / CAPTURE D'ÉCRAN
+           Image avec légende stylisée. Import requis : SimplifionsArticleFigure (voir script ci-dessous)
+      <SimplifionsArticleFigure
+        src="/static/simplifions/assets/mon-image.png"
+        alt="Description de l'image"
+      >
+        Légende affichée sous l'image (peut contenir du HTML, ex. <a href="#section">lien</a>).
+      </SimplifionsArticleFigure>
+      -->
+
+      <!-- TIMELINE
+           Chronologie verticale. Import requis : SimplifionsArticleTimeline (voir script ci-dessous)
+      <SimplifionsArticleTimeline>
+        <li>
+          <time datetime="2024">2024</time>
+          <span class="timeline-tag">Loi</span>
+          <p><strong>Titre de l'événement</strong> — Description de l'événement.</p>
+          <a href="https://..." target="_blank" rel="noopener noreferrer"
+             class="fr-link fr-link--icon-right fr-icon-external-link-line">
+            Lien source<span class="fr-sr-only"> (ouvre une nouvelle fenêtre)</span>
+          </a>
+        </li>
+      </SimplifionsArticleTimeline>
+      Classes disponibles sur <span class="timeline-tag"> :
+        (défaut) = badge bleu
+        timeline-tag--eu = badge violet (contexte européen)
+        timeline-tag--rapport = badge beige (rapport / publication)
+      -->
+
       <!-- CHECKLIST
            Liste de points à cocher, fond beige, icône verte. Aucun import requis.
       <SimplifionsArticleChecklist>
@@ -155,6 +184,8 @@ import { themeMeta } from './index'
 // --- Imports optionnels selon les composants utilisés ---
 // import SimplifionsArticleTopicSpotlight from '../../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 // import SimplifionsArticleChecklist from '../../../../components/article/SimplifionsArticleChecklist.vue'
+// import SimplifionsArticleFigure from '../../../../components/article/SimplifionsArticleFigure.vue'
+// import SimplifionsArticleTimeline from '../../../../components/article/SimplifionsArticleTimeline.vue'
 //
 // Props optionnelles du Spotlight (valeurs par défaut entre parenthèses) :
 //   :show-description="true"      (false) affiche la description

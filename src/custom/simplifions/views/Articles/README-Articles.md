@@ -19,17 +19,17 @@ Les deux templates sont identiques côté contenu (mêmes props, même `<Article
 
 ```
 Articles/
-  meta.ts                         ← métadonnées de la page /guides (à ne pas modifier)
-  index.ts                        ← registre global (dossiers + articles racines)
+  meta.ts                                   ← métadonnées de la page /guides (à ne pas modifier)
+  index.ts                                  ← registre global (dossiers + articles racines)
   _templates/
     ArticleDansDossier/
-      index.ts                    ← template : métadonnées du dossier
-      MonArticle.vue              ← template : article dans un dossier
-    ArticleRacine.vue             ← template : article sans dossier
+      index.ts                              ← template : métadonnées du dossier
+      MonArticle.vue                        ← template : article dans un dossier
+    ArticleRacine.vue                       ← template : article sans dossier
   MonDossier/
-    index.ts                      ← métadonnées du dossier
-    MonArticle.vue                ← contenu + métadonnées de l'article
-  MonArticleRacine.vue            ← exemple d'article sans dossier
+    index.ts                                ← métadonnées du dossier
+    ArticleMonNom.vue                       ← contenu + métadonnées de l'article
+  ArticleMonNomRacine.vue                   ← exemple d'article sans dossier
 ```
 
 ---
@@ -50,7 +50,7 @@ export const themeMeta = {
 }
 ```
 
-### Fichier 2 : `MonDossier/MonArticle.vue`
+### Fichier 2 : `MonDossier/ArticleMonNom.vue`
 
 Le fichier utilise deux blocs `<script>` : le premier exporte les métadonnées (lisibles par les autres fichiers), le second contient la logique Vue.
 
@@ -59,6 +59,7 @@ Les sections du sommaire latéral se déclarent directement dans le template ave
 ```vue
 <template>
   <SimplifionsArticleLayout
+    :h1="article.h1"
     :title="article.title"
     :lead="article.description"
     :kicker="articleKicker"
@@ -84,7 +85,8 @@ Les sections du sommaire latéral se déclarent directement dans le template ave
 <script lang="ts">
 export const articleMeta = {
   id: 'mon-article',                       // → URL : /guides/mon-dossier/mon-article
-  title: "Titre de l'article",
+  h1: "Titre de l'article",
+  // title: 'Titre SEO (optionnel, fallback sur h1)',
   description: 'Résumé affiché dans la carte et le bandeau hero.',
 
   heroBackdropGradient: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)',
@@ -92,16 +94,16 @@ export const articleMeta = {
 
   // --- Optionnel ---
   // imageSrc: '/static/simplifions/assets/mon-image.jpg',
-  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares'  | 'veille'
+  // articleCategory: 'guide' as const,   // 'guide' | 'liste' | 'palmares' | 'veille'
   // showNoDevelopmentBadge: true,
   // articleTags: [{ label: 'Mon public' }, { label: 'Autre public', href: '/solutions?audience=xxx' }]
 } as const
 </script>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../../components/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../components/SimplifionsArticleSection.vue'
-import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
+import SimplifionsArticleLayout from '../../../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../../../components/article/SimplifionsArticleSection.vue'
+import { buildSimplifionsArticlePageMeta } from '../../../../model/articles'
 import { guidesMeta } from '../../meta'
 import { themeMeta } from './index'
 
@@ -121,7 +123,7 @@ const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageM
 Ajouter l'entrée dans `folders`.
 
 ```ts
-import { articleMeta as monArticleMeta } from './MonDossier/MonArticle.vue'
+import { articleMeta as monArticleMeta } from './MonDossier/ArticleMonNom.vue'
 import { themeMeta as monDossierMeta } from './MonDossier'
 
 const parentPath = `/${guidesMeta.id}`   // déjà défini dans le fichier
@@ -138,15 +140,14 @@ export const folders = [
 ### Fichier 4 : `routes.ts`
 
 ```ts
-import { articleMeta as monArticleMeta } from './views/Articles/MonDossier/MonArticle.vue'
+import { articleMeta as monArticleMeta } from './views/Articles/MonDossier/ArticleMonNom.vue'
 import { themeMeta as monDossierMeta } from './views/Articles/MonDossier'
 
 // Dans routes[] :
 buildArticleFolderRoute(
   monDossierMeta,
-  monArticleMeta,
   [buildSimplifionsArticleCard(monDossierMeta, monArticleMeta, `/${guidesMeta.id}`)],
-  async () => await import('./views/Articles/MonDossier/MonArticle.vue')
+  [{ meta: monArticleMeta, component: async () => await import('./views/Articles/MonDossier/ArticleMonNom.vue') }]
 )
 ```
 
@@ -158,16 +159,16 @@ buildArticleFolderRoute(
 
 ## Cas 2 — Article sans dossier (racine)
 
-**Point de départ** : copier `_templates/ArticleRacine.vue` et le renommer.
+**Point de départ** : copier `_templates/ArticleRacine.vue` et le renommer en `ArticleMonNom.vue`.
 
 Les différences avec un article en dossier sont dans le bloc `<script setup>` uniquement :
 
 ```vue
 <script setup lang="ts">
-// Imports en '../../' (un niveau au-dessus du dossier de l'article, pas deux)
-import SimplifionsArticleLayout from '../../components/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../components/SimplifionsArticleSection.vue'
-import { buildSimplifionsArticlePageMeta } from '../../model/articles'
+// Imports en '../../../' (un niveau moins profond qu'un article en dossier)
+import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
+import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
 import { guidesMeta } from './meta'
 
 const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(
@@ -179,32 +180,12 @@ const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageM
 </script>
 ```
 
-Versus un article en dossier :
-
-```vue
-<script setup lang="ts">
-// Imports en '../../../' (trois niveaux : dossier article → Articles → custom → components)
-import SimplifionsArticleLayout from '../../../components/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../components/SimplifionsArticleSection.vue'
-import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
-import { guidesMeta } from '../../meta'   // ← '../../meta', pas '../../index' (évite les imports circulaires)
-import { themeMeta } from './index'
-
-const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(
-  themeMeta,   // ← themeMeta du dossier
-  articleMeta,
-  [{ to: `/${guidesMeta.id}`, text: guidesMeta.title }],
-  `/${guidesMeta.id}`   // ← préfixe pour construire l'URL du dossier dans le breadcrumb
-)
-</script>
-```
-
 ### `Articles/index.ts`
 
 Ajouter dans `rootArticles`.
 
 ```ts
-import { articleMeta as monArticleRacineMeta } from './MonArticleRacine.vue'
+import { articleMeta as monArticleRacineMeta } from './ArticleMonNomRacine.vue'
 
 export const rootArticles: SimplifionsArticleCard[] = [
   // ... articles existants ...
@@ -215,14 +196,14 @@ export const rootArticles: SimplifionsArticleCard[] = [
 ### `routes.ts`
 
 ```ts
-import { articleMeta as monArticleRacineMeta } from './views/Articles/MonArticleRacine.vue'
+import { articleMeta as monArticleRacineMeta } from './views/Articles/ArticleMonNomRacine.vue'
 
 // Dans routes[] :
 {
   path: `/${guidesMeta.id}/${monArticleRacineMeta.id}`,
   name: monArticleRacineMeta.id,
-  meta: { title: monArticleRacineMeta.title },
-  component: async () => await import('./views/Articles/MonArticleRacine.vue')
+  meta: { title: monArticleRacineMeta.title ?? monArticleRacineMeta.h1 },
+  component: async () => await import('./views/Articles/ArticleMonNomRacine.vue')
 }
 ```
 
@@ -249,19 +230,43 @@ import { articleMeta as monArticleRacineMeta } from './views/Articles/MonArticle
 
 ---
 
+## Le composant SimplifionsArticleFigure
+
+`<SimplifionsArticleFigure>` encapsule le pattern `<figure>` + `<img>` + `<figcaption>` utilisé pour les captures d'écran dans les articles. Import depuis `components/article/SimplifionsArticleFigure.vue`.
+
+```html
+<SimplifionsArticleFigure
+  src="/static/simplifions/assets/mon-image.png"
+  alt="Description de l'image pour les lecteurs d'écran"
+>
+  Légende affichée sous l'image.
+</SimplifionsArticleFigure>
+```
+
+| Prop | Description |
+|---|---|
+| `src` | Chemin de l'image |
+| `alt` | Texte alternatif |
+| slot default | Contenu de la légende (peut contenir du HTML, ex. `<a>`) |
+
+---
+
 ## Référence des champs `articleMeta`
 
 | Champ | Type | Requis | Description |
 |---|---|---|---|
 | `id` | `string` | oui | Identifiant unique et segment d'URL de l'article |
-| `title` | `string` | oui | Titre affiché dans le hero et la carte |
+| `h1` | `string` | oui | Titre principal affiché dans le hero et la carte |
 | `description` | `string` | oui | Résumé (hero lead + carte) |
 | `heroBackdropGradient` | `string` | oui | Dégradé CSS du bandeau hero |
 | `heroPanelBackground` | `string` | oui | Couleur de fond du panneau titre |
-| `imageSrc` | `string` | non | Chemin de l'image hero ; fallback = dégradé SVG |
-| `articleCategory` | `'guide' \| 'liste' \| 'palmares' \| 'veille'` | non | Badge catégorie |
+| `title` | `string` | non | Titre SEO alternatif ; fallback sur `h1` si absent |
+| `imageSrc` | `string` | non | Chemin de l'image hero ; fallback = dégradé SVG généré |
+| `articleCategory` | `'guide' \| 'liste' \| 'palmares' \| 'veille'` | non | Badge catégorie + pictogramme de la carte |
 | `showNoDevelopmentBadge` | `boolean` | non | Badge "Sans développement" |
 | `articleTags` | `{ label: string; href?: string }[]` | non | Tags audience dans le hero |
+
+> **Pictogramme de carte** : `articleCategory` détermine automatiquement le pictogramme affiché sur la carte — `catalog` pour `guide`, `document` pour `liste`, `success` pour `palmares`, `document-search` pour `veille`. Sans catégorie, `catalog` est utilisé par défaut.
 
 ## Référence des champs `themeMeta` (dossier)
 
