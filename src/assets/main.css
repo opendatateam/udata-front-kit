@@ -182,6 +182,14 @@ body {
   border-color: var(--border-default-grey);
 }
 
+/* ===== GlobalSearch ===== */
+
+/* Match DSFR string icon size to upstream SVG icon size (w-4 h-4 = 1rem) */
+label:has(input[name='search-type']) span[aria-hidden='true']::before,
+label:has(input[name='search-type']) span[aria-hidden='true']::after {
+  --icon-size: 1rem;
+}
+
 /* ===== Utilities for @datagouv/components-next (upstream does not bundle these) ===== */
 
 .divide-y > :not(:last-child) {
@@ -266,7 +274,7 @@ body {
 }
 
 .hero-banner {
-  h2 {
+  > div > p:first-child {
     font-size: 1.25em;
     font-weight: 400;
   }
