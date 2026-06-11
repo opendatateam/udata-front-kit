@@ -255,6 +255,7 @@ onMounted(() => {
                 :show-description="false"
                 :dataset="dataset"
                 :dataset-url="getDatasetPage(dataset.id)"
+                title-tag="p"
               />
             </div>
           </div>
