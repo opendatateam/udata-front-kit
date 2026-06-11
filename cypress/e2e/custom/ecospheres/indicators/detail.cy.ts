@@ -65,10 +65,10 @@ describe('Indicator Detail View', () => {
         cy.contains('Région française').should('be.visible')
 
         // Date de création
-        cy.contains('h3', 'Date de création').parent().contains('2025')
+        cy.contains('dt', 'Date de création').parent().contains('2025')
 
         // Date de mise à jour
-        cy.contains('h3', 'Date de mise à jour').parent().contains('2025')
+        cy.contains('dt', 'Date de mise à jour').parent().contains('2025')
 
         // Identifiant
         cy.contains('Identifiant').should('be.visible')
