@@ -3,8 +3,10 @@ import { formatDate } from '@/utils'
 import {
   CopyButton,
   DateRangeDetails,
+  DescriptionListDetails,
   ExtraAccordion,
-  LicenseBadge
+  LicenseBadge,
+  Tag
 } from '@datagouv/components-next'
 import { computed, toRef } from 'vue'
 import type { Indicator } from '../../model/indicator'
@@ -86,6 +88,17 @@ const { unite, mailles } = useIndicatorExtras(indicator)
       </InformationPanelItem>
       <InformationPanelItem v-if="indicator.license" title="Licence">
         <LicenseBadge :license="indicator.license" />
+      </InformationPanelItem>
+      <InformationPanelItem
+        v-if="indicator.tags && indicator.tags.length"
+        title="Mots-clés"
+        is-row
+      >
+        <DescriptionListDetails class="flex flex-wrap gap-2 items-start">
+          <Tag v-for="tag in indicator.tags" :key="tag" type="secondary">
+            {{ tag }}
+          </Tag>
+        </DescriptionListDetails>
       </InformationPanelItem>
     </InformationPanelSection>
 
