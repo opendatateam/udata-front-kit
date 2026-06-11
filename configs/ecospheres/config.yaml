@@ -305,7 +305,7 @@ pages:
     editable: true
     meta:
       title: 'Jeux de données publics sur la transition écologique : climat, énergie, biodiversité'
-      description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile
+      description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile.
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -395,6 +395,7 @@ pages:
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
+    icon: fr-icon-lightbulb-line
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
@@ -422,8 +423,8 @@ pages:
         display: true
     editable: false
     meta:
-      title: Sélection de jeux de données sur la planification écologique
-      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimenté par l'administration et la société civile
+      title: Sélection d'indicateurs sur la transition écologique
+      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimentée par l'administration et la société civile.
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -569,7 +570,7 @@ pages:
     editable: false
     meta:
       title: Sélection d’API sur la transition écologique
-      description: Vous recherchez une API sur la transition écologique pour automatiser des tâches depuis vos serveurs ? Explorez notre sélection
+      description: Vous recherchez une API sur la transition écologique pour automatiser des tâches depuis vos serveurs ? Explorez notre sélection.
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -595,6 +596,7 @@ pages:
     search:
       input: Rechercher une collection thématique
       placeholder: null
+    default_sort: -last_modified
     banner:
       title: Ensembles de jeux de données et d’indicateurs regroupés autour d’une politique publique ou d’un projet.
       content: |
@@ -609,8 +611,8 @@ pages:
         display: true
     editable: true
     meta:
-      title: Collections thématiques des jeux de données sur la transition écologique
-      description: Vous recherchez des familles de jeux de données sur la transition écologique ? Explorez rapidement notre notre catalogue
+      title: Collections thématiques de jeux de données sur la transition écologique
+      description: Vous recherchez des ensembles de jeux de données sur la transition écologique ? Explorez rapidement notre catalogue.
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -673,12 +675,12 @@ ecospheres:
         slug: elaboration-ou-evolution-dun-document-durbanisme
     about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le laboratoire d'innovation au service de la transition écologique, au sein du Commissariat Général au Développement Durable (CGDD)."
     news:
-      - date: 17 avril 2026
-        title: Nouveaux indicateurs sur les achats durables
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-17-avril-2026-nouveaux-indicateurs-sur-les-achats-durables
-      - date: 9 avril 2026
-        title: Nouvel indicateur sur les émissions de polluants
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-9-avril-2026-nouvel-indicateur-sur-les-emissions-de-polluants
-      - date: 7 avril 2026
-        title: Modification de l'indicateur sur les prélèvements d'eau par usage
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-7-avril-2026-modification-de-lindicateur-sur-les-prelevements-deau-par-usage
+      - date: 11 juin 2026
+        title: Recherche unifiée
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-11-juin-2026-recherche-unifiee
+      - date: 8 juin 2026
+        title: Nouveaux indicateurs sur la forêt
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-8-juin-2026-nouveaux-indicateurs-sur-la-forets
+      - date: 25 mai 2026
+        title: Vers la mutualisation de plugins QGIS pour l'analyse territoriale
+        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-25-mai-2026-vers-la-mutualisation-de-plugin-qgis-pour-lanalyse-territoriale
