@@ -57,19 +57,6 @@ const { unite, mailles } = useIndicatorExtras(indicator)
         title="Date de mise à jour"
         :value="formatDate(indicator.last_update)"
       />
-      <InformationPanelItem title="Identifiant">
-        {{ indicator.id }}
-        <CopyButton
-          class="!-mt-0.5"
-          label="Copier l'identifiant"
-          copied-label="Identifiant copié"
-          :text="indicator.id"
-          :hide-label="true"
-        />
-      </InformationPanelItem>
-      <InformationPanelItem v-if="indicator.license" title="Licence">
-        <LicenseBadge :license="indicator.license" />
-      </InformationPanelItem>
       <InformationPanelItem
         v-if="indicator.frequency"
         title="Fréquence de mise à jour"
@@ -87,6 +74,19 @@ const { unite, mailles } = useIndicatorExtras(indicator)
           ].next_expected_update_quarter.replace('Q', 'T')
         "
       />
+      <InformationPanelItem title="Identifiant">
+        {{ indicator.id }}
+        <CopyButton
+          class="!-mt-0.5"
+          label="Copier l'identifiant"
+          copied-label="Identifiant copié"
+          :text="indicator.id"
+          :hide-label="true"
+        />
+      </InformationPanelItem>
+      <InformationPanelItem v-if="indicator.license" title="Licence">
+        <LicenseBadge :license="indicator.license" />
+      </InformationPanelItem>
     </InformationPanelSection>
 
     <!-- Tags -->
