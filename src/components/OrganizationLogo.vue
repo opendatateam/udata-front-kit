@@ -1,36 +1,23 @@
 <script setup lang="ts">
-import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
+import type { OrganizationReference } from '@datagouv/components-next'
 import { computed } from 'vue'
 
 import config from '@/config'
-import type { ExtendedDatasetV2WithFullObject } from '@/model/dataset'
-import type { Topic } from '@/model/topic'
 
-const props = defineProps({
-  object: {
-    type: Object as () =>
-      | DatasetV2
-      | ExtendedDatasetV2WithFullObject
-      | Topic
-      | Dataservice,
-    required: true
-  },
-  size: {
-    type: Number,
-    default: 32
-  },
-  padding: {
-    type: Number,
-    default: 6
-  }
-})
+const props = withDefaults(
+  defineProps<{
+    object: { organization?: OrganizationReference | null }
+    size?: number
+    padding?: number
+  }>(),
+  { size: 32, padding: 6 }
+)
 
-const logoSrc = computed(() => {
-  return (
+const logoSrc = computed(
+  () =>
     props.object.organization?.logo_thumbnail ||
     `${config.datagouvfr.base_url}/_themes/gouvfr/img/placeholders/organization.png`
-  )
-})
+)
 
 const style = computed(() => {
   const outerSize = props.size + props.padding * 2 + 1

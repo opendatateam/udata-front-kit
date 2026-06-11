@@ -3,6 +3,7 @@ import { Toaster } from '@datagouv/components-next'
 
 import config from '@/config'
 
+import { DsfrFooter } from '@gouvminint/vue-dsfr'
 import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import LiveRegion from './components/LiveRegion.vue'
@@ -13,6 +14,7 @@ import {
 } from './model/injectionKeys'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
+import { useWebsiteConfig } from './utils/config'
 
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
@@ -87,15 +89,8 @@ onMounted(() => {
   userStore.init()
 })
 
-const logoService = config.website.service_logo
-const logoText = config.website.rf_title
-const serviceTitle = config.website.title
-const logoOperator = config.website.logo_operator?.src
-const logoOperatorHeight = config.website.logo_operator?.header?.height
-const logoOperatorWidth = config.website.logo_operator?.header?.width
-const footerPhrase = config.website.footer_phrase
-const footerExternalLinks = config.website.footer_external_links
-const footerMandatoryLinks = config.website.footer_mandatory_links
+const { footer, rf_title, title } = useWebsiteConfig()
+const { logo, phrase, external_links, mandatory_links } = footer
 
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
@@ -137,8 +132,6 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   <HeaderComponent
     :user-name="userName"
     :quick-links="quickLinks"
-    :logo-operator-height
-    :logo-operator-width
     :custom-search="true"
   />
 
@@ -147,17 +140,16 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   </main>
 
   <DsfrFooter
-    :logo-text="logoText"
-    :operator-img-src="logoOperator"
+    :logo-text="rf_title"
+    :operator-img-src="logo?.src"
     :operator-img-style="{
-      height: logoOperatorHeight,
-      width: logoOperatorWidth
+      height: logo?.height,
+      width: logo?.width
     }"
-    :service-logo-src="logoService"
-    :desc-text="footerPhrase"
-    :ecosystem-links="footerExternalLinks"
-    :mandatory-links="footerMandatoryLinks"
-    :home-title="`Retour à l'accueil du site - ${serviceTitle}`"
+    :desc-text="phrase"
+    :ecosystem-links="external_links"
+    :mandatory-links="mandatory_links"
+    :home-title="`Retour à l'accueil du site - ${title}`"
   />
 </template>
 
