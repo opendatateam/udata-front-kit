@@ -282,7 +282,7 @@ pages:
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
     filter_prefix:
-    title: Les données de la transition écologique
+    title: Toutes les données
     breadcrumb_title: Données
     labels:
       singular: jeu de données
@@ -306,7 +306,7 @@ pages:
     editable: true
     meta:
       title: 'Jeux de données publics sur la transition écologique : climat, énergie, biodiversité'
-      description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile
+      description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile.
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -401,7 +401,7 @@ pages:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
     filter_prefix: ecospheres-indicateurs
-    title: Les indicateurs territoriaux de planification écologique
+    title: Indicateurs phares
     breadcrumb_title: Indicateurs
     labels:
       singular: indicateur
@@ -424,8 +424,8 @@ pages:
         display: true
     editable: false
     meta:
-      title: Sélection de jeux de données sur la planification écologique
-      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimenté par l'administration et la société civile
+      title: Sélection d'indicateurs sur la transition écologique
+      description: Vous recherchez des données sur la planification écologique ? Explorez la sélection de ecologie.data.gouv.fr alimentée par l'administration et la société civile.
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -574,7 +574,7 @@ pages:
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
     filter_prefix:
-    title: Les API de la transition écologique
+    title: API
     breadcrumb_title: API
     labels:
       singular: API
@@ -597,7 +597,7 @@ pages:
     editable: false
     meta:
       title: Sélection d’API sur la transition écologique
-      description: Vous recherchez une API sur la transition écologique pour automatiser des tâches depuis vos serveurs ? Explorez notre sélection
+      description: Vous recherchez une API sur la transition écologique pour automatiser des tâches depuis vos serveurs ? Explorez notre sélection.
     filters:
       - id: last_update_range
         name: Date de mise à jour
@@ -613,7 +613,7 @@ pages:
     universe_query:
       tag: univers-ecospheres
     filter_prefix: ecospheres
-    title: Collections de données sur la transition écologique
+    title: Collections thématiques
     breadcrumb_title: Collections
     labels:
       singular: collection
@@ -638,8 +638,8 @@ pages:
         display: true
     editable: true
     meta:
-      title: Collections thématiques des jeux de données sur la transition écologique
-      description: Vous recherchez des familles de jeux de données sur la transition écologique ? Explorez rapidement notre notre catalogue
+      title: Collections thématiques de jeux de données sur la transition écologique
+      description: Vous recherchez des ensembles de jeux de données sur la transition écologique ? Explorez rapidement notre catalogue.
     filters:
       - id: last_update_range
         name: Date de mise à jour
