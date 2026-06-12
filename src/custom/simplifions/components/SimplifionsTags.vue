@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--Texte pour préciser les usagers et les fournisseurs de service-->
-    <div v-if="groupedTags['target-users']" class="fr-card__detail">
+    <div v-if="showTargetUsers && groupedTags['target-users']" class="fr-card__detail">
       <p class="fr-mb-1w white-space-normal">
         Pour simplifier les démarches des
         <HumanReadableList
@@ -10,7 +10,7 @@
       </p>
     </div>
     <div
-      v-if="orderedFournisseursDeService.length > 0"
+      v-if="showFournisseurs && orderedFournisseursDeService.length > 0"
       class="fr-card__detail fr-text--right"
     >
       <p class="fr-mb-1w white-space-normal">
@@ -55,9 +55,13 @@ const props = withDefaults(
     pageKey: string
     showCategorieDeSolution?: boolean
     hideSimplification?: boolean
+    showTargetUsers?: boolean
+    showFournisseurs?: boolean
   }>(),
   {
-    showCategorieDeSolution: true
+    showCategorieDeSolution: true,
+    showTargetUsers: true,
+    showFournisseurs: true
   }
 )
 
