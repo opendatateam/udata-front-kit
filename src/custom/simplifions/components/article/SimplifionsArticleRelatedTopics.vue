@@ -135,18 +135,20 @@ const itemWidth = () => {
 const prev = () => track.value?.scrollBy({ left: -itemWidth(), behavior: 'smooth' })
 const next = () => track.value?.scrollBy({ left: itemWidth(), behavior: 'smooth' })
 
+const ro = new ResizeObserver(() => {
+  updateScrollState()
+  alignHeaderHeights()
+})
+
 onMounted(async () => {
   if (!track.value) return
-  const el = track.value
   await nextTick()
   updateScrollState()
   alignHeaderHeights()
-  const ro = new ResizeObserver(() => {
-    updateScrollState()
-    alignHeaderHeights()
-  })
-  ro.observe(el)
+  ro.observe(track.value)
 })
+
+onUnmounted(() => ro.disconnect())
 </script>
 
 <style scoped>
