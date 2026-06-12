@@ -267,7 +267,6 @@ definitions: &definitions
 #         api_param: {string?}        # API query parameter name to use (optional, defaults to "tag")
 #         default_option: {string?}   # default option for the filter (optional)
 #         default_value: {string?}    # default value for the filter (optional)
-#         hide_on_list: {bool?}       # do not display filter on list page (optional, defaults to false)
 #         advanced: {bool?}           # show in the advanced (collapsed) section of GlobalSearch; omit for basic (always visible)
 #                                     # ⚠️ only applicable to data.gouv.fr native filters (eg badge)
 #         values:                     # list of values for this filter
@@ -430,32 +429,6 @@ pages:
       - id: last_update_range
         name: Date de mise à jour
         type: last_update_range
-      - id: theme
-        name: Thématique
-        default_option: Toutes les thématiques
-        type: select
-        color: green-menthe
-        use_filter_prefix: true
-        hide_on_list: true
-        values: *fnv_themes
-      - id: enjeu
-        name: Enjeu
-        default_option: Tous les enjeux
-        type: select
-        color: blue-ecume
-        use_filter_prefix: true
-        hide_on_list: true
-        values:
-          - id: adaptation-climat
-            name: Adaptation climat
-          - id: attenuation-climat
-            name: Atténuation climat
-          - id: biodiversite
-            name: Biodiversité
-          - id: ressources
-            name: Ressources
-          - id: sante
-            name: Santé
       - id: secteur
         name: Secteur
         default_option: Tous les secteurs

@@ -10,6 +10,7 @@ describe('Indicator Detail View', () => {
   beforeEach(() => {
     cy.mockMatomo()
     cy.mockStaticDatagouv()
+    cy.mockSpatialLevels()
 
     indicator = createIndicator({}, { enable_visualization: false })
     cy.mockDatasetAndRelatedObjects(indicator)
@@ -27,49 +28,68 @@ describe('Indicator Detail View', () => {
     })
   })
 
-  describe('Custom Metadata In Informations Tab', () => {
-    it('should display the thématique', () => {
+  describe('Tags display', () => {
+    it('should display the secteur tag', () => {
       cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Thématique').should('be.visible')
-      cy.contains('Mieux consommer').should('be.visible')
-    })
-
-    it('should display the enjeu', () => {
-      cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Enjeu').should('be.visible')
-      cy.contains('Biodiversité').should('be.visible')
-    })
-
-    it('should display the secteur', () => {
-      cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Secteur').should('be.visible')
       cy.contains('Energie').should('be.visible')
     })
 
-    it('should display the levier', () => {
+    it('should display the levier tag', () => {
       cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Levier').should('be.visible')
       cy.contains('Biogaz').should('be.visible')
-    })
-
-    it('should display the unité', () => {
-      cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Unité').should('be.visible')
-      cy.contains('kg CO2').should('be.visible')
     })
   })
 
-  describe('Custom Metadata In Technical Details Tab', () => {
+  describe('Informations Tab', () => {
     beforeEach(() => {
       cy.visit(`/indicators/${indicator.id}`)
-      cy.contains('Détails technique').click()
+      cy.contains('Informations').click()
     })
 
-    it('should display the granularité de la couverture territoriale', () => {
-      cy.contains('Granularité de la couverture territoriale').should(
-        'be.visible'
-      )
-      cy.contains('Région française').should('be.visible')
+    it('should display all metadata', () => {
+      cy.get('#tab-content-infos').within(() => {
+        // Couverture géographique
+        cy.contains('Couverture géographique').should('be.visible')
+        cy.contains('Île-de-France').should('be.visible')
+
+        // Couverture temporelle
+        cy.contains('Couverture temporelle').should('be.visible')
+        cy.contains('2020 à 2022').should('be.visible')
+
+        // Unité
+        cy.contains('Unité').should('be.visible')
+        cy.contains('kg CO2').should('be.visible')
+
+        // Mailles
+        cy.contains('Mailles').should('be.visible')
+        cy.contains('Région française').should('be.visible')
+
+        // Date de création
+        cy.contains('dt', 'Date de création').parent().contains('2025')
+
+        // Date de mise à jour
+        cy.contains('dt', 'Date de mise à jour').parent().contains('2025')
+
+        // Identifiant
+        cy.contains('Identifiant').should('be.visible')
+        cy.contains(indicator.id).should('be.visible')
+
+        // Licence
+        cy.contains('Licence').should('be.visible')
+        cy.contains('Licence Ouverte / Open Licence').should('be.visible')
+
+        // Fréquence de mise à jour
+        cy.contains('Fréquence de mise à jour').should('be.visible')
+        cy.contains('Annuelle').should('be.visible')
+
+        // Prochaine mise à jour attendue (Q → T replacement)
+        cy.contains('Prochaine mise à jour attendue').should('be.visible')
+        cy.contains('T3 2025').should('be.visible')
+
+        // Mots-clés et extras
+        cy.contains('Voir les mots-clés').should('be.visible')
+        cy.contains('Voir les extras').should('be.visible')
+      })
     })
   })
 
