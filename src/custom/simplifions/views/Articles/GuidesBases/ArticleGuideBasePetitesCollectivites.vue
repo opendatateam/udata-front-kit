@@ -354,21 +354,13 @@ export const articleMeta = {
 
 <script setup lang="ts">
 import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
-import SimplifionsSolutionCard from '../../../components/SimplifionsSolutionCard.vue'
 import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
 import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
-import { useTopicsBySlug } from '../../../composables/useTopicsBySlug'
 import { buildSimplifionsArticlePageMeta } from '../../../model/articles'
-import type { TopicSolution } from '../../../model/topics'
 import { guidesMeta } from '../meta'
 import { themeMeta } from './index'
 
-const { topics: portailsSolutions, loading: portailsLoading } = useTopicsBySlug<TopicSolution>([
-  'formulaire-de-collecte-du-quotient-familial',
-  'annuaire-des-entreprises',
-  'data-subvention'
-])
 
 
 const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageMeta(

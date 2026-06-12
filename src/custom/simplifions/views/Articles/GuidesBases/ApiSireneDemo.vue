@@ -84,7 +84,7 @@
 const siretInput = ref('')
 const loading = ref(false)
 const error = ref('')
-const result = ref<Record<string, any> | null>(null)
+const result = ref<Record<string, unknown> | null>(null)
 
 const onInput = () => {
   error.value = ''

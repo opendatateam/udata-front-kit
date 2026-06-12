@@ -58,6 +58,7 @@ const props = withDefaults(
     showArrow?: boolean
   }>(),
   {
+    pageKey: undefined,
     showDescription: true,
     showTargetUsers: true,
     showFournisseurs: true,

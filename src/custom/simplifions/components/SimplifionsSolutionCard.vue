@@ -81,6 +81,7 @@ const props = withDefaults(
     showArrow?: boolean
   }>(),
   {
+    pageKey: undefined,
     showDescription: true,
     showImage: true,
     showOperateurTag: true,
