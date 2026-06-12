@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import config from '@/config'
 
-import SimplifionsArticleCarousel from '../components/SimplifionsArticleCarousel.vue'
+import SimplifionsArticlesSelection from '../components/SimplifionsArticlesSelection.vue'
 import { featuredItems } from './Articles'
 
 const colorsBanner = config.website.home_banner_colors
@@ -187,7 +187,7 @@ const niveauxDeSimplification = [
       <p class="fr-mb-5w fr-text--lg fr-text--center">
         Consulter nos différents dossiers et articles pour comprendre et choisir :
       </p>
-      <SimplifionsArticleCarousel :items="featuredItems" />
+      <SimplifionsArticlesSelection :items="featuredItems" />
     </div>
   </section>
 

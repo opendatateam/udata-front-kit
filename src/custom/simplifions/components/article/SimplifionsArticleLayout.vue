@@ -95,7 +95,7 @@
       </div>
     </div>
 
-    <SimplifionsArticleTopicsCarousel :entries="topicEntries" :gradient="heroBackdropGradient" />
+    <SimplifionsArticleRelatedTopics :entries="topicEntries" :gradient="heroBackdropGradient" />
   </div>
 </template>
 
@@ -105,7 +105,7 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { articleSectionKey } from './articleSectionKey'
 import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
-import SimplifionsArticleTopicsCarousel from './SimplifionsArticleTopicsCarousel.vue'
+import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
 type ArticleSection = {
   id: string
