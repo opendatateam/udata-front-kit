@@ -256,16 +256,16 @@ onMounted(() => {
 
   observer = new IntersectionObserver(
     (entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-      if (visible?.target instanceof HTMLElement && visible.target.id) {
-        activeSection.value = visible.target.id
+      for (const entry of entries) {
+        if (entry.isIntersecting && entry.target instanceof HTMLElement && entry.target.id) {
+          activeSection.value = entry.target.id
+        }
       }
     },
     {
       root: null,
-      threshold: [0.1, 0.2, 0.35, 0.5]
+      rootMargin: '-10% 0px -80% 0px',
+      threshold: 0
     }
   )
 
