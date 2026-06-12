@@ -1,5 +1,5 @@
 <template>
-  <section v-if="shuffledEntries.length > 0" class="topics-carousel fr-mt-6w fr-py-5w" :style="{ backgroundImage: gradient }">
+  <section v-if="resolvedEntries.length > 0" class="topics-carousel fr-mt-6w fr-py-5w" :style="{ backgroundImage: gradient }">
     <div class="fr-container fr-mb-3w">
       <h2 class="fr-h5 fr-mb-0">
         Sont mentionnés dans cet article :
@@ -8,13 +8,13 @@
     <div ref="track" class="topics-carousel__track-wrapper" @scroll.passive="onScroll">
       <ul class="topics-carousel__track fr-container fr-pb-3w" role="list">
         <li
-          v-for="entry in shuffledEntries"
+          v-for="entry in resolvedEntries"
           :key="entry.slug"
           class="topics-carousel__item"
         >
           <SimplifionsSolutionCard
             v-if="entry.pageKey === 'solutions'"
-            :topic="topicBySlug(entry.slug) as TopicSolution"
+            :topic="entry.topic as TopicSolution"
             :page-key="entry.pageKey"
             :show-description="false"
             :show-image="true"
@@ -22,7 +22,7 @@
             :show-simplification-tags="false"/>
           <SimplifionsCasDusageCard
             v-else
-            :topic="topicBySlug(entry.slug) as TopicCasUsage"
+            :topic="entry.topic as TopicCasUsage"
             :page-key="entry.pageKey"
             :show-description="false"
             :show-fournisseurs="false"
@@ -93,8 +93,12 @@ watch(
   { immediate: true }
 )
 
-const topicBySlug = (slug: string) =>
-  topics.value.find((t) => t.slug === slug)
+const resolvedEntries = computed(() =>
+  shuffledEntries.value.flatMap((entry) => {
+    const topic = topics.value.find((t) => t.slug === entry.slug)
+    return topic ? [{ ...entry, topic }] : []
+  })
+)
 
 // Navigation
 const track = ref<HTMLElement | null>(null)
