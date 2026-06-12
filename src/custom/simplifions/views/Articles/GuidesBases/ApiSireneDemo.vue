@@ -84,7 +84,20 @@
 const siretInput = ref('')
 const loading = ref(false)
 const error = ref('')
-const result = ref<Record<string, unknown> | null>(null)
+type SireneEntreprise = {
+  nom_complet?: string
+  nom_raison_sociale?: string
+  nature_juridique?: string
+  etat_administratif?: string
+  siege?: {
+    siret?: string
+    adresse?: string
+    activite_principale?: string
+    libelle_nature_juridique?: string
+  }
+}
+
+const result = ref<SireneEntreprise | null>(null)
 
 const onInput = () => {
   error.value = ''
