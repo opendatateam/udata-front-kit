@@ -379,6 +379,6 @@ const { article, articleKicker, breadcrumbLinks } = buildSimplifionsArticlePageM
 
 <style scoped>
 .icon-green {
-  color: #27a658;
+  color: var(--text-default-success);
 }
 </style>

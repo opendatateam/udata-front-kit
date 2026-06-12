@@ -155,9 +155,6 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
 <!-- global styles -->
 <style>
-.fr-footer {
-  margin-top: 0 !important;
-}
 .es__tiles__list {
   list-style-type: none;
 }
