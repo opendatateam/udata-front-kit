@@ -2,7 +2,7 @@
 
 Quelques définitions en lien avec le PAUDA en français simplifié.
 
-## <span class="sr-only">lettre </span>A
+## A
 
 <dl>
 	<dt>Accessibilité</dt>
@@ -13,14 +13,14 @@ Quelques définitions en lien avec le PAUDA en français simplifié.
 	<dd>L’autonomie est la capacité d’une personne à faire des choses seule dans la vie de tous les jours. La perte d’autonomie apparaît quand une personne a besoin d’aide ou d'adaptations pour faire certaines choses du quotidien.</dd>
 </dl>
 
-## <span class="sr-only">lettre </span>C
+## C
 
 <dl>
 	<dt>Carte</dt>
 	<dd>Une carte est un support visuel qui montre un territoire. Elle permet de repérer des lieux, des services et des informations.</dd>
 </dl>
 
-## <span class="sr-only">lettre </span>D
+## D
 
 <dl>
 	<dt>Donnée</dt>
@@ -29,28 +29,28 @@ Quelques définitions en lien avec le PAUDA en français simplifié.
 	<dd>Les données d’accessibilité sont des informations qui indiquent si un lieu ou un service est accessible ou non.</dd>
 </dl>
 
-## <span class="sr-only">lettre </span>E
+## E
 
 <dl>
 	<dt>Établissement recevant du public (ERP)</dt>
 	<dd>Un établissement recevant du public est un lieu, public ou privé, où des personnes extérieures sont admises. Les établissement recevant du public doivent respecter des règles de sécurité et d’accessibilité.</dd>
 </dl>
 
-## <span class="sr-only">lettre </span>H
+## H
 
 <dl>
 	<dt>Handicap</dt>
 	<dd>Le handicap désigne les difficultés qu’une personne peut rencontrer dans sa vie quotidienne lorsque l’environnement n’est pas accessible.</dd>
 </dl>
 
-## <span class="sr-only">lettre </span>J
+## J
 
 <dl>
 	<dt>Jeu de données</dt>
 	<dd>Un jeu de données est un ensemble de données qui traitent d’un même sujet, par exemple un lieu, un service ou un territoire.</dd>
 </dl>
 
-## <span class="sr-only">lettre </span>P
+## P
 
 <dl>
 	<dt>Personne en situation de handicap (PSH)</dt>
@@ -59,7 +59,7 @@ Quelques définitions en lien avec le PAUDA en français simplifié.
 	<dd>Une personne à mobilité réduite est une personne qui a des difficultés à se déplacer, de manière temporaire ou permanente. Ces difficultés peuvent être liées à une situation de handicap, à l’âge, à une maladie, à une blessure ou à une situation particulière, comme pousser une poussette ou porter une charge lourde.</dd>
 </dl>
 
-## <span class="sr-only">lettre </span>T
+## T
 
 <dl>
 	<dt>Thème</dt>

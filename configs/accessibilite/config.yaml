@@ -99,6 +99,7 @@ website:
         summary:
           display: true
           inline: true
+          title: 'Accès par lettre pour trouver un mot expliqué'
         url: '/static/accessibilite/pages/glossaire.md'
       - title: 'Pourquoi ce site ?'
         id: 'about'

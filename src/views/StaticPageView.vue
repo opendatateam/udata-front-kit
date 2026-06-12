@@ -31,8 +31,9 @@ const links = computed(() => [
   { text: pageConfig.value?.title || '' }
 ])
 
-const showSummary = computed(() => pageConfig.value?.summary.display)
-const isInlineSummary = computed(() => pageConfig.value?.summary.inline)
+const showSummary = computed(() => pageConfig.value?.summary?.display)
+const isInlineSummary = computed(() => pageConfig.value?.summary?.inline)
+const titleSummary = computed(() => pageConfig.value?.summary?.title)
 
 const headingList = computed(() => {
   if (!showSummary.value) return
@@ -68,7 +69,7 @@ watchEffect(async () => {
   >
     <div class="fr-container">
       <DsfrSummary
-        title="Sommaire de la page"
+        :title="titleSummary"
         :class="{ 'summary--inline': isInlineSummary }"
         :anchors="headingList"
       />

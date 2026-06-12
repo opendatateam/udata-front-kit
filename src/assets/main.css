@@ -409,10 +409,20 @@ dl > dt {
 .summary--inline ol {
   display: flex;
   flex-flow: row wrap;
-  gap: 0.5rem 2rem;
+  gap: 1rem;
 
   li {
     margin: 0;
+  }
+
+  li a {
+    /* extends the clickable zone for inline items */
+    padding: 0 0.5rem 0.25rem;
+    font-size: 1rem;
+  }
+
+  li a::before {
+    content: none;
   }
 }
 
@@ -450,7 +460,12 @@ Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2
   color: #757575;
 }
 
-/* Accessibilite custom styles */
+/* Dsfr summary has a font-size of 12px by default */
+.fr-summary li a {
+  font-size: 1rem;
+}
+
+/* ===== Accessibilite custom styles ===== */
 
 .accessibilite .editorial {
   max-inline-size: 80ch;

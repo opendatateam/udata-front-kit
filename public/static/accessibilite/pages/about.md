@@ -71,4 +71,4 @@ Pour&nbsp;:
 - Tout projet en lien avec les données d'accessibilité&nbsp;;
 - Nous soutenir dans le développement de la plateforme.
 
-Par email&nbsp;: [accessibilite@data.gouv.fr](mailto:accessibilite@data.gouv.fr)
+Par email&nbsp;: [accessibilite@data.gouv.fr](mailto:accessibilite@data.gouv.fr?subject=Prise%20de%20contact%20-%20PAUDA)
