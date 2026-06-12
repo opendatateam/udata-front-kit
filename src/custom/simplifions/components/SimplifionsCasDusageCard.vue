@@ -45,7 +45,8 @@ import { useRoute } from 'vue-router'
 import { stripFromMarkdown } from '@/utils'
 import { useFormatDate } from '@datagouv/components-next'
 import type { TopicCasUsage } from '../model/topics'
-import { injectArticleTopicsRegistry } from '../composables/useArticleTopicsRegistry'
+import { inject } from 'vue'
+import { articleTopicsRegistryKey } from './article/articleTopicsRegistryKey'
 import DraftTag from './DraftTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
@@ -79,8 +80,8 @@ const hasTagSection = computed(
 )
 const { formatRelativeIfRecentDate } = useFormatDate()
 
-const registry = injectArticleTopicsRegistry()
-onMounted(() => registry?.register(props.topic.slug, 'cas-d-usages'))
+const register = inject(articleTopicsRegistryKey)
+onMounted(() => register?.(props.topic.slug, 'cas-d-usages'))
 </script>
 
 <style scoped>

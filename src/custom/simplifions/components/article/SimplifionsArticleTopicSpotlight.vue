@@ -37,7 +37,8 @@
 <script setup lang="ts">
 import type { TopicCasUsage, TopicSolution } from '../../model/topics'
 import { useTopicsBySlug } from '../../composables/useTopicsBySlug'
-import { injectArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
+import { inject } from 'vue'
+import { articleTopicsRegistryKey } from './articleTopicsRegistryKey'
 import SimplifionsSolutionCard from '../SimplifionsSolutionCard.vue'
 import SimplifionsCasDusageCard from '../SimplifionsCasDusageCard.vue'
 
@@ -69,9 +70,9 @@ const props = withDefaults(
 const { topics } = useTopicsBySlug(props.slugs)
 const isMulti = computed(() => props.slugs.length >= 2)
 
-const registry = injectArticleTopicsRegistry()
+const register = inject(articleTopicsRegistryKey)
 onMounted(() => {
-  props.slugs.forEach((slug) => registry?.register(slug, props.pageKey))
+  props.slugs.forEach((slug) => register?.(slug, props.pageKey))
 })
 </script>
 

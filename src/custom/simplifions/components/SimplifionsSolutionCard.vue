@@ -61,7 +61,8 @@ import { useRoute } from 'vue-router'
 import { stripFromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
 import type { TopicSolution } from '../model/topics'
-import { injectArticleTopicsRegistry } from '../composables/useArticleTopicsRegistry'
+import { inject } from 'vue'
+import { articleTopicsRegistryKey } from './article/articleTopicsRegistryKey'
 import DraftTag from './DraftTag.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
@@ -98,8 +99,8 @@ const solution = props.topic.extras['simplifions-v2-solutions']
 
 const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 
-const registry = injectArticleTopicsRegistry()
-onMounted(() => registry?.register(props.topic.slug, 'solutions'))
+const register = inject(articleTopicsRegistryKey)
+onMounted(() => register?.(props.topic.slug, 'solutions'))
 </script>
 
 <style scoped>

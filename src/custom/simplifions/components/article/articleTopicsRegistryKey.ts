@@ -5,10 +5,6 @@ export type ArticleTopicEntry = {
   pageKey: 'solutions' | 'cas-d-usages'
 }
 
-export type ArticleTopicsRegistry = {
-  register: (slug: string, pageKey: 'solutions' | 'cas-d-usages') => void
-  entries: Readonly<ArticleTopicEntry[]>
-}
-
-export const articleTopicsRegistryKey: InjectionKey<ArticleTopicsRegistry> =
-  Symbol('articleTopicsRegistry')
+export const articleTopicsRegistryKey: InjectionKey<
+  (slug: string, pageKey: 'solutions' | 'cas-d-usages') => void
+> = Symbol('articleTopicsRegistry')

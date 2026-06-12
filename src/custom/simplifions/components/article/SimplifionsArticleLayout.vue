@@ -104,7 +104,7 @@ import { provide } from 'vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { articleSectionKey } from './articleSectionKey'
-import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
+import { articleTopicsRegistryKey, type ArticleTopicEntry } from './articleTopicsRegistryKey'
 import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
 type ArticleSection = {
@@ -171,7 +171,12 @@ useMeta({
 const sections = ref<ArticleSection[]>([])
 provide(articleSectionKey, (id, label) => sections.value.push({ id, label }))
 
-const topicEntries = provideArticleTopicsRegistry()
+const topicEntries = reactive<ArticleTopicEntry[]>([])
+provide(articleTopicsRegistryKey, (slug, pageKey) => {
+  if (!topicEntries.some((e) => e.slug === slug)) {
+    topicEntries.push({ slug, pageKey })
+  }
+})
 
 const sidemenuExpanded = ref(true)
 
