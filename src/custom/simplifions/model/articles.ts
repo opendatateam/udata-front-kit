@@ -34,7 +34,7 @@ export type SimplifionsArticleCard = {
   title: string
   description: string
   to: string
-  imageSrc: string
+  imageSrc?: string
   heroBackdropGradient: string
   articleCategory?: SimplifionsArticleCategory
   badges: SimplifionsArticleCardBadge[]
@@ -49,29 +49,6 @@ type SimplifionsArticleMetaForCard = SimplifionsArticleMeta & {
   showNoDevelopmentBadge?: boolean
 }
 
-const colorFromGradient = (gradient: string): string[] => {
-  const colors = gradient.match(/#[0-9a-fA-F]{3,8}/g) ?? []
-  if (colors.length >= 2) return [colors[0]!, colors[1]!]
-  if (colors.length === 1) return [colors[0]!, colors[0]!]
-  return ['#1b1b35', '#1e1e1e']
-}
-
-export const buildSimplifionsGradientImage = (gradient: string): string => {
-  const [start, end] = colorFromGradient(gradient)
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${start}" />
-          <stop offset="100%" stop-color="${end}" />
-        </linearGradient>
-      </defs>
-      <rect width="1600" height="900" fill="url(#g)" />
-    </svg>
-  `
-
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg.trim())}`
-}
 
 const buildArticleCategoryBadge = (
   articleCategory?: SimplifionsArticleCategory
@@ -130,9 +107,7 @@ export const buildSimplifionsArticleCard = (
     to: folderMeta
       ? `${parentPath}/${folderMeta.id}/${articleMeta.id}`
       : `${parentPath}/${articleMeta.id}`,
-    imageSrc:
-      articleMeta.imageSrc ??
-      buildSimplifionsGradientImage(articleMeta.heroBackdropGradient),
+    imageSrc: articleMeta.imageSrc,
     heroBackdropGradient: articleMeta.heroBackdropGradient,
     articleCategory: articleMeta.articleCategory,
     badges: [

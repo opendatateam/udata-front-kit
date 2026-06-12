@@ -36,15 +36,19 @@
     </div>
 
     <div class="fr-card__header simplifions-article-card__header">
-      <div class="fr-card__img simplifions-article-card__media">
+      <div
+        class="fr-card__img simplifions-article-card__media"
+        :style="!article.imageSrc ? { background: article.heroBackdropGradient } : {}"
+      >
         <img
+          v-if="article.imageSrc"
           class="fr-responsive-img simplifions-article-card__image"
           :src="article.imageSrc"
           alt=""
         >
       </div>
 
-      <div v-if="hasCustomImage" class="simplifions-article-card__image-overlay" />
+      <div v-if="article.imageSrc" class="simplifions-article-card__image-overlay" />
 
       <div class="simplifions-article-card__overlays">
         <ul
@@ -97,7 +101,6 @@ const pictoSrc = computed(
     : PICTO_BY_CATEGORY.guide
 )
 
-const hasCustomImage = computed(() => !props.article.imageSrc.startsWith('data:'))
 </script>
 
 <style scoped>
