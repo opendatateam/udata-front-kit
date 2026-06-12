@@ -85,30 +85,35 @@ website:
       to: /
     - text: Toutes les données
       to: /datasets
-    - text: Données par thème
-      to: /themes
+    # - text: Données par thème
+    #   to: /themes
     - text: Mots expliqués
       to: /glossaire
-    - text: Qu’est-ce que PAUDA ?
+    - text: Pourquoi ce site ?
       to: /about
   router:
     static_pages:
       - title: 'Mots expliqués'
         id: 'glossaire'
         route: '/glossaire'
+        summary:
+          display: true
+          inline: true
         url: '/static/accessibilite/pages/glossaire.md'
-      - title: 'Qu’est-ce que PAUDA ?'
+      - title: 'Pourquoi ce site ?'
         id: 'about'
         route: '/about'
         url: '/static/accessibilite/pages/about.md'
+        summary:
+          display: true
   sitemap:
     - name: Accueil
       path: /
     - name: Toutes les données
       path: /datasets
-    - name: Données par thème
-      path: /themes
-    - name: Qu’est-ce que PAUDA ?
+    # - name: Données par thème
+    #   path: /themes
+    - name: Pourquoi ce site ?
       path: /about
   show_quality_component: true
   oauth_option: true
@@ -177,7 +182,7 @@ pages:
   # THÈMES (BOUQUETS)
   themes:
     object_type: topics
-    list_all: true
+    list_all: false
     universe_query:
       tag: accessibilite-univers
     filter_prefix: accessibilite-univers
@@ -215,8 +220,10 @@ pages:
             name: Tourisme
           - id: accessibilite-quotidienne
             name: Vie quotidienne
-          - id: accessibilite-numerique
-            name: Numérique
+          - id: accessibilite-loisirs
+            name: Loisirs
+          - id: accessibilite-communication
+            name: Communication
           - id: accessibilite-enseignement
             name: Enseignement
           - id: accessibilite-sante
@@ -225,8 +232,6 @@ pages:
             name: Logement
           - id: accessibilite-autonomie
             name: Autonomie
-          - id: autre
-            name: Autre
       - name: Couverture territoriale
         default_option:
         id: geozone

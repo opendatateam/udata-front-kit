@@ -1,22 +1,8 @@
-<nav class="fr-summary" role="navigation" aria-labelledby="fr-summary-title">
-	<h2 id="fr-summary-title" class="fr-summary__title">Table des matières</h2>
-	<ol class="glossary" role=list>
-		<li><a id="summary-link-1" class="fr-summary__link" href="#a">A</a></li>
-		<li><a id="summary-link-2" class="fr-summary__link" href="#c">C</a></li>
-		<li><a id="summary-link-3" class="fr-summary__link" href="#d">D</a></li>
-		<li><a id="summary-link-4" class="fr-summary__link" href="#e">E</a></li>
-		<li><a id="summary-link-5" class="fr-summary__link" href="#h">H</a></li>
-		<li><a id="summary-link-6" class="fr-summary__link" href="#j">J</a></li>
-		<li><a id="summary-link-6" class="fr-summary__link" href="#p">P</a></li>
-		<li><a id="summary-link-8" class="fr-summary__link" href="#t">T</a></li>
-	</ol>
-</nav>
-
 # Mots expliqués
 
 Quelques définitions en lien avec le PAUDA en français simplifié.
 
-## A
+## <span class="sr-only">lettre </span>A
 
 <dl>
 	<dt>Accessibilité</dt>
@@ -27,14 +13,14 @@ Quelques définitions en lien avec le PAUDA en français simplifié.
 	<dd>L’autonomie est la capacité d’une personne à faire des choses seule dans la vie de tous les jours. La perte d’autonomie apparaît quand une personne a besoin d’aide ou d'adaptations pour faire certaines choses du quotidien.</dd>
 </dl>
 
-## C
+## <span class="sr-only">lettre </span>C
 
 <dl>
 	<dt>Carte</dt>
 	<dd>Une carte est un support visuel qui montre un territoire. Elle permet de repérer des lieux, des services et des informations.</dd>
 </dl>
 
-## D
+## <span class="sr-only">lettre </span>D
 
 <dl>
 	<dt>Donnée</dt>
@@ -43,28 +29,28 @@ Quelques définitions en lien avec le PAUDA en français simplifié.
 	<dd>Les données d’accessibilité sont des informations qui indiquent si un lieu ou un service est accessible ou non.</dd>
 </dl>
 
-## E
+## <span class="sr-only">lettre </span>E
 
 <dl>
 	<dt>Établissement recevant du public (ERP)</dt>
 	<dd>Un établissement recevant du public est un lieu, public ou privé, où des personnes extérieures sont admises. Les établissement recevant du public doivent respecter des règles de sécurité et d’accessibilité.</dd>
 </dl>
 
-## H
+## <span class="sr-only">lettre </span>H
 
 <dl>
 	<dt>Handicap</dt>
 	<dd>Le handicap désigne les difficultés qu’une personne peut rencontrer dans sa vie quotidienne lorsque l’environnement n’est pas accessible.</dd>
 </dl>
 
-## J
+## <span class="sr-only">lettre </span>J
 
 <dl>
 	<dt>Jeu de données</dt>
 	<dd>Un jeu de données est un ensemble de données qui traitent d’un même sujet, par exemple un lieu, un service ou un territoire.</dd>
 </dl>
 
-## P
+## <span class="sr-only">lettre </span>P
 
 <dl>
 	<dt>Personne en situation de handicap (PSH)</dt>
@@ -73,7 +59,7 @@ Quelques définitions en lien avec le PAUDA en français simplifié.
 	<dd>Une personne à mobilité réduite est une personne qui a des difficultés à se déplacer, de manière temporaire ou permanente. Ces difficultés peuvent être liées à une situation de handicap, à l’âge, à une maladie, à une blessure ou à une situation particulière, comme pousser une poussette ou porter une charge lourde.</dd>
 </dl>
 
-## T
+## <span class="sr-only">lettre </span>T
 
 <dl>
 	<dt>Thème</dt>

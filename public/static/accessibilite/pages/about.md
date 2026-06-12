@@ -71,4 +71,4 @@ Pour&nbsp;:
 - Tout projet en lien avec les données d'accessibilité&nbsp;;
 - Nous soutenir dans le développement de la plateforme.
 
-Par email&nbsp;: [contact@accessibilite.data.gouv.fr](mailto:contact@accessibilite.data.gouv.fr)
+Par email&nbsp;: [accessibilite@data.gouv.fr](mailto:accessibilite@data.gouv.fr)

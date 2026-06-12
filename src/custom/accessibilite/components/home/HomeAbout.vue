@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-import { DsfrButton } from '@gouvminint/vue-dsfr'
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <section class="fr-pt-7w fr-pb-10w fr-background-alt--yellow-moutarde">
@@ -28,11 +26,9 @@ import { DsfrButton } from '@gouvminint/vue-dsfr'
             d'expérience et exprimez vos besoins en matière de données
             d'accessibilité.
           </p>
-          <DsfrButton
-            label="Contactez-nous"
-            icon="fr-icon-arrow-right-line"
-            :icon-right="true"
-          />
+          <a class="fr-btn" href="mailto:accessibilite@data.gouv.fr">
+            Contactez-nous
+          </a>
         </div>
       </div>
     </div>
