@@ -8,7 +8,6 @@ import { articleMeta as guidesDeBaseArticleMeta } from './views/Articles/GuidesB
 import { articleMeta as guidesDeBaseAPIArticleMeta } from './views/Articles/GuidesBases/ArticleGuideBaseQuestCeQuUneAPI.vue'
 import { themeMeta as guidesDeBaseFolderMeta } from './views/Articles/GuidesBases'
 import { themeMeta as guidesMeta } from './views/Articles'
-// import { articleMeta as ditesLeNousUneFois } from './views/Articles/ArticleChronologieJuridiqueDLNUF.vue'
 
 const topicConf = {
   displayMetadata: false,
@@ -90,12 +89,6 @@ export const routes: RouteRecordRaw[] = [
       { meta: guidesDeBaseAPIArticleMeta, component: async () => await import('./views/Articles/GuidesBases/ArticleGuideBaseQuestCeQuUneAPI.vue') }
     ]
   ),
-  // { // BROUILLON — décommenter pour publier
-  //   path: `/${guidesMeta.id}/${ditesLeNousUneFois.id}`,
-  //   name: ditesLeNousUneFois.id,
-  //   meta: { title: ditesLeNousUneFois.title ?? ditesLeNousUneFois.h1 },
-  //   component: async () => await import('./views/Articles/ArticleChronologieJuridiqueDLNUF.vue')
-  // },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,

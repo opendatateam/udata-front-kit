@@ -14,9 +14,6 @@
         </p>
         <div class="date-topic fr-grid-row fr-grid-row--right fr-mt-1w">
           <DraftTag v-if="topic.private" class="fr-mr-1v" />
-         <!--  <div class="fr-ml-auto fr-mb-0 fr-text--xs">
-            Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
-          </div> -->
         </div>
         <div v-if="showArrow && !hasTagSection" class="card-arrow" aria-hidden="true">
           <span class="fr-icon-arrow-right-line" />
@@ -43,7 +40,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { stripFromMarkdown } from '@/utils'
-import { useFormatDate } from '@datagouv/components-next'
 import type { TopicCasUsage } from '../model/topics'
 import { inject } from 'vue'
 import { articleTopicsRegistryKey } from './article/articleTopicsRegistryKey'
@@ -78,7 +74,6 @@ const pageKey = computed(
 const hasTagSection = computed(
   () => props.showTargetUsers || props.showFournisseurs || props.showSimplificationTags || props.showCategorieDeSolution
 )
-const { formatRelativeIfRecentDate } = useFormatDate()
 
 const register = inject(articleTopicsRegistryKey)
 onMounted(() => register?.(props.topic.slug, 'cas-d-usages'))
