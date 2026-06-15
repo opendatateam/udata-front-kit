@@ -46,11 +46,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
 import { grist } from '../grist.ts'
-import type { TopicSolutionsExtras } from '../model/topics'
+import type { TopicSolution } from '../model/topics'
 import DraftTag from './DraftTag.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
@@ -59,14 +58,12 @@ const { pageKey } = useCurrentPageConf()
 
 const props = defineProps({
   topic: {
-    type: Object as () => Topic,
+    type: Object as () => TopicSolution,
     required: true
   }
 })
 
-const solution = (props.topic.extras as TopicSolutionsExtras)[
-  'simplifions-v2-solutions'
-]
+const solution = props.topic.extras['simplifions-v2-solutions']
 
 const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 </script>

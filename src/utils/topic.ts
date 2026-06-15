@@ -36,7 +36,7 @@ export const cloneTopic = async (
     if (!keepDatasets) {
       factor.element = null
       factor.extras[topicsExtrasKey].uri = null
-      factor.extras[topicsExtrasKey].availability = Availability.NOT_AVAILABLE
+      factor.extras[topicsExtrasKey].availability = Availability.MISSING
     }
     return factor
   })
@@ -76,6 +76,8 @@ export function useExtras(topic: Ref<Topic | null | undefined>): {
             console.error('Failed fetching cloned_from', err.response?.data)
             clonedFrom.value = null
           })
+      } else {
+        clonedFrom.value = null
       }
     },
     { immediate: true }

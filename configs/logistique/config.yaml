@@ -21,7 +21,6 @@ website:
     robots_txt:
       disallow:
         - /admin
-        - /datasets
     sitemap_xml:
       topics_pages:
         - bouquets
@@ -30,11 +29,6 @@ website:
   formatted_title: '<i>logistique.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'MINISTÈRE<br>
     DE LA TRANSITION<br>ECOLOGIQUE'
-  service_logo: '/static/logos/logistique-logo.svg'
-  badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
     title: 'Les données ouvertes de la logistique'
@@ -73,8 +67,27 @@ website:
         sub_section_tiles:
         sub_section_buttons:
     meta_description:
+  footer:
+    logo:
+    phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
+    external_links:
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+    mandatory_links:
+      - label: 'Licences'
+        to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        to: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        to: 'https://www.data.gouv.fr/fr/suivi/'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
   header:
+    logo:
+    title_image:
+      src: '/static/logos/logistique-logo.svg'
     admin_shortcut: false
+    beta: true
     button:
       display: true
       label: 'Donnez votre avis'
@@ -99,9 +112,6 @@ website:
     - text: A propos
       to: /about
   router:
-    disable:
-      - organizations_routes
-      - topics
     static_pages:
       - title: 'A propos'
         id: 'about'
@@ -113,20 +123,6 @@ website:
         url: '/static/logistique/pages/accessibility.md'
   show_quality_component: true
   oauth_option: true
-  footer_phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives à logistique réalisé en collaboration avec la DGITM.'
-  footer_external_links:
-    - label: 'data.gouv.fr'
-      href: 'https://www.data.gouv.fr'
-  footer_mandatory_links:
-    - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
-    - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
-      to: '/accessibility'
-  logo_operator:
   notice:
     display: false
     content: Notice avec un [lien beta](/beta) et du _style_
@@ -136,7 +132,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 20
+    topics_drafts_list: 9
     files_list: 6
   home_banner_colors:
     - '#D2EAF7'
@@ -161,6 +157,7 @@ website:
 pages:
   # DATASETS
   datasets:
+    object_type: datasets
     list_all: true
     universe_query:
       topic: 66d5caab2ef9e95fc1625446
@@ -173,6 +170,7 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -186,6 +184,7 @@ pages:
     filters: []
   # BOUQUETS
   bouquets:
+    object_type: topics
     list_all: true
     universe_query:
       tag: logistique
@@ -198,6 +197,7 @@ pages:
       extended: bouquet de données
     search:
       input: Filtrer les bouquets
+      placeholder: null
     banner:
     resources_tabs:
       discussions:
@@ -233,7 +233,7 @@ pages:
       - name: Couverture territoriale
         default_option:
         id: geozone
-        type: spatial_zone
+        type: geozone
 
 # list of organisations' ids that should be handled by the portal
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
