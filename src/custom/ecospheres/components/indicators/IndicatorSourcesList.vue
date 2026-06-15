@@ -20,9 +20,9 @@ const { sources, calcul } = useIndicatorExtras(indicator)
 
 <template>
   <template v-for="(source, idx) in sources" :key="source.url">
-    <h2 class="subtitle subtitle--uppercase">
+    <h3 class="subtitle subtitle--uppercase">
       {{ `Source ${idx + 1} : ${source.nom}` }}
-    </h2>
+    </h3>
     <InformationPanelSection>
       <template #description>
         <!-- eslint-disable-next-line vue/no-v-html -->

@@ -32,6 +32,9 @@ describe('Topic Elements - Permissions and Access Control', () => {
       cy.get('.test__add_dataset_btn').should('not.exist')
       cy.get('.test__edit_factor_btn').should('not.exist')
       cy.get('.test__delete_factor_btn').should('not.exist')
+
+      // Verify permalink button is present for everyone
+      cy.get('.test__permalink_factor_btn').should('exist')
     })
 
     it('should show edit controls for topic owners', () => {
@@ -40,8 +43,9 @@ describe('Topic Elements - Permissions and Access Control', () => {
 
       // Verify edit controls are present
       cy.get('.test__add_dataset_btn').should('be.visible')
-      cy.get('.test__edit_factor_btn').should('have.length.at.least', 1)
-      cy.get('.test__delete_factor_btn').should('have.length.at.least', 1)
+      cy.get('.test__edit_factor_btn').should('exist')
+      cy.get('.test__delete_factor_btn').should('exist')
+      cy.get('.test__permalink_factor_btn').should('exist')
     })
   })
 })

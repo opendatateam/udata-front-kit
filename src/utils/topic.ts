@@ -36,7 +36,7 @@ export const cloneTopic = async (
     if (!keepDatasets) {
       factor.element = null
       factor.extras[topicsExtrasKey].uri = null
-      factor.extras[topicsExtrasKey].availability = Availability.NOT_AVAILABLE
+      factor.extras[topicsExtrasKey].availability = Availability.MISSING
     }
     return factor
   })

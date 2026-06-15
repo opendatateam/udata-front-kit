@@ -15,8 +15,12 @@ const errorMessages = (topicName: string) =>
       message: `Veuillez sélectionner un ${topicName}.`
     },
     {
-      inputName: 'group',
-      message: 'Le nom du regroupement est limité à 100 caractères.'
+      inputName: 'availability',
+      message: 'Un jeu de données ou une disponibilité doit être sélectionné.'
+    },
+    {
+      inputName: 'availabilityUrl',
+      message: 'Une URL doit être renseignée.'
     },
     { inputName: 'title', message: 'Le libellé doit être renseigné.' },
     {
@@ -24,12 +28,8 @@ const errorMessages = (topicName: string) =>
       message: "La raison d'utilisation ne doit pas être vide."
     },
     {
-      inputName: 'availability',
-      message: 'Un jeu de données ou une disponibilité doit être sélectionné.'
-    },
-    {
-      inputName: 'availabilityUrl',
-      message: 'Une URL doit être renseignée.'
+      inputName: 'group',
+      message: 'Le nom du regroupement est limité à 100 caractères.'
     }
   ] as const
 

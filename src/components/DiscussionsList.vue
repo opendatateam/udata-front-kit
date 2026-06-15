@@ -196,9 +196,9 @@ watch(
       :key="discussion.id"
       class="fr-mb-6w"
     >
-      <h3 :id="discussion.id" class="discussion-title fr-mb-3v">
+      <p :id="discussion.id" class="discussion-title fr-mb-3v">
         {{ discussion.title }}
-      </h3>
+      </p>
       <div class="discussion-subtitle">
         <div class="avatar">
           <img
@@ -330,6 +330,7 @@ watch(
 .discussion-title {
   font-size: 1.125rem;
   font-weight: bold;
+  color: var(--text-title-grey);
 }
 
 .discussion-subtitle {
