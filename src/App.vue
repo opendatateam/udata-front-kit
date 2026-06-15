@@ -33,9 +33,10 @@ const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
   if (!config.website.notice?.display) return
-  return fromMarkdown(config.website.notice?.content, true)
+  return fromMarkdown(config.website.notice?.content, true).html
 })
 
+const siteID = config.site_id
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
 const userName = computed(() => userStore.userName)
@@ -135,7 +136,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :custom-search="true"
   />
 
-  <main id="main-content" role="main">
+  <main id="main-content" :class="siteID" role="main">
     <RouterView />
   </main>
 

@@ -56,7 +56,6 @@ export interface PageFilterConf {
   use_filter_prefix: boolean | null
   api_param: string | null
   form: PageFilterFormConf | null
-  hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
 
@@ -90,6 +89,7 @@ export type PageConf = {
   universe_query: PageUniverseQueryConf | null
   title: string
   breadcrumb_title: string | null
+  icon?: string
   labels: PageLabelsConf
   search: PageSearchConf
   banner: PageBannerConf | null

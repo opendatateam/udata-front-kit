@@ -179,7 +179,7 @@
         </h3>
         <p
           v-if="solution.Cette_solution_permet"
-          v-html="fromMarkdown(solution.Cette_solution_permet)"
+          v-html="fromMarkdown(solution.Cette_solution_permet).html"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -197,7 +197,7 @@
         </h3>
         <p
           v-if="solution.Cette_solution_ne_permet_pas"
-          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas)"
+          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas).html"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>

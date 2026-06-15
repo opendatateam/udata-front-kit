@@ -133,19 +133,19 @@ onMounted(() => {
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable vue/no-v-html -->
-      <h2
+      <p
         :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
         v-html="pageConf.banner.title"
       />
       <div
         v-if="pageConf.banner.content"
-        v-html="fromMarkdown(pageConf.banner.content)"
+        v-html="fromMarkdown(pageConf.banner.content).html"
       />
       <!-- eslint-enable vue/no-v-html -->
     </div>
   </section>
 
-  <div class="fr-container fr-mb-4w">
+  <section class="fr-container fr-mb-4w">
     <h2 v-if="pageConf.search?.input" class="fr-mb-2w">
       {{ pageConf.search.input }}
     </h2>
@@ -215,5 +215,5 @@ onMounted(() => {
         </template>
       </GlobalSearch>
     </Suspense>
-  </div>
+  </section>
 </template>
