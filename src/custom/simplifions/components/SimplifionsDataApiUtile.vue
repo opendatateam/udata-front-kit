@@ -9,7 +9,7 @@
     <div
       v-if="customDescription && customDescription.length > 0"
       class="api-or-dataset-utile-description"
-      v-html="fromMarkdown(customDescription)"
+      v-html="fromMarkdown(customDescription).html"
     ></div>
     <!-- eslint-enable vue/no-v-html -->
   </div>

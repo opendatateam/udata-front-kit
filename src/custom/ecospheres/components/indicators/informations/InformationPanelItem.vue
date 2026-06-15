@@ -33,7 +33,7 @@ const _class = props.isRow ? ['fr-col-12'] : ['fr-col-12', 'fr-col-sm-6']
       <div
         v-else-if="isMarkdown"
         class="markdown"
-        v-html="fromMarkdown(value)"
+        v-html="fromMarkdown(value).html"
       />
       <p v-else class="fr-m-0">{{ value }}</p>
     </dd>

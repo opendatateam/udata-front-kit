@@ -47,6 +47,7 @@
             <img
               v-if="recommandation.Image?.length"
               :src="grist.imageUrl(recommandation.Image[0])"
+              alt=""
               class="fr-responsive-img fr-ratio-16x9"
             />
           </div>
@@ -71,7 +72,9 @@
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
-              v-html="fromMarkdown(recommandation.Donnees_utiles_disponibles)"
+              v-html="
+                fromMarkdown(recommandation.Donnees_utiles_disponibles).html
+              "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
           </div>

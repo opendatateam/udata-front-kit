@@ -20,28 +20,14 @@ const markedOptions = {
  */
 export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
   if (ref.value?.description) {
-    return fromMarkdown(ref.value[attr])
+    return fromMarkdown(ref.value[attr]).html
   }
-}
-
-/**
- * Parse markdown to HTML
- */
-export const fromMarkdown = (value: string | null, inline: boolean = false) => {
-  if (!value) return ''
-  const fn = inline ? marked.parseInline : marked.parse
-  const parsed = fn(value, markedOptions)
-  // type cast to string because we don't use async mode of marked
-  return DOMPurify.sanitize(parsed as string)
 }
 
 /**
  * Parse markdown to HTML with headings
  */
-export const fromMarkdownWithHeadings = (
-  value: string | null,
-  inline: boolean = false
-) => {
+export const fromMarkdown = (value: string | null, inline: boolean = false) => {
   if (!value) return { html: '', headings: [] }
   let headings: HeadingData[] = []
   marked.use(gfmHeadingId(), {

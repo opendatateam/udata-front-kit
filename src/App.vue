@@ -33,7 +33,7 @@ const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
   if (!config.website.notice?.display) return
-  return fromMarkdown(config.website.notice?.content, true)
+  return fromMarkdown(config.website.notice?.content, true).html
 })
 
 const siteID = config.site_id

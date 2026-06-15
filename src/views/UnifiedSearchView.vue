@@ -139,7 +139,7 @@ onMounted(() => {
       />
       <div
         v-if="pageConf.banner.content"
-        v-html="fromMarkdown(pageConf.banner.content)"
+        v-html="fromMarkdown(pageConf.banner.content).html"
       />
       <!-- eslint-enable vue/no-v-html -->
     </div>

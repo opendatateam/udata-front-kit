@@ -6,7 +6,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
 import { pageStore } from '@/store/StaticPageStore'
-import { fromMarkdown, fromMarkdownWithHeadings } from '@/utils'
+import { fromMarkdown } from '@/utils'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { DsfrSummary } from '@gouvminint/vue-dsfr'
 
@@ -34,13 +34,12 @@ const links = computed(() => [
 const showSummary = computed(() => pageConfig.value?.summary?.display)
 const isInlineSummary = computed(() => pageConfig.value?.summary?.inline)
 const titleSummary = computed(() => pageConfig.value?.summary?.title)
+const markdown = computed(() => fromMarkdown(content.value))
 
 const headingList = computed(() => {
   if (!showSummary.value) return
-
-  const { headings } = fromMarkdownWithHeadings(content.value)
   // Only keep h2s because DsfrSummary does not support nesting
-  const h2s = headings?.filter((hx) => hx.level === 2)
+  const h2s = markdown.value.headings?.filter((hx) => hx.level === 2)
 
   return h2s?.map((hx) => {
     return { link: `#${hx.id}`, name: hx.raw }
@@ -76,14 +75,7 @@ watchEffect(async () => {
     </div>
   </div>
   <GenericContainer>
-    <!-- eslint-disable vue/no-v-html -->
-    <div
-      class="editorial"
-      v-html="
-        showSummary
-          ? fromMarkdownWithHeadings(content).html
-          : fromMarkdown(content)
-      "
-    />
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div class="editorial" v-html="markdown.html" />
   </GenericContainer>
 </template>

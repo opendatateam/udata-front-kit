@@ -85,8 +85,8 @@ website:
       to: /
     - text: Toutes les données
       to: /datasets
-    # - text: Données par thème
-    #   to: /themes
+    - text: Données par thème
+      to: /themes
     - text: Mots expliqués
       to: /glossaire
     - text: Pourquoi ce site ?
@@ -112,8 +112,8 @@ website:
       path: /
     - name: Toutes les données
       path: /datasets
-    # - name: Données par thème
-    #   path: /themes
+    - name: Données par thème
+      path: /themes
     - name: Pourquoi ce site ?
       path: /about
   show_quality_component: true
@@ -149,7 +149,7 @@ website:
   topics:
     can_add_topics:
       everyone: false
-      authorized_users: ['69e0effc2ca128bf0bf1fea9']
+      authorized_users: ['69e0effc2ca128bf0bf1fea9', '69e0f509cf1ecaf5f33f2977']
 
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
@@ -183,7 +183,7 @@ pages:
   # THÈMES (BOUQUETS)
   themes:
     object_type: topics
-    list_all: false
+    list_all: true
     universe_query:
       tag: accessibilite-univers
     filter_prefix: accessibilite-univers
