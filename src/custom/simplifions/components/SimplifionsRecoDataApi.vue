@@ -35,7 +35,9 @@
           <!-- eslint-disable vue/no-v-html -->
           <div
             class="fr-ml-3w"
-            v-html="fromMarkdown(recommandation.Donnees_utiles_disponibles)"
+            v-html="
+              fromMarkdown(recommandation.Donnees_utiles_disponibles).html
+            "
           ></div>
           <!-- eslint-enable vue/no-v-html -->
         </div>

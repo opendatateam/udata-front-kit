@@ -89,18 +89,24 @@ website:
       to: /themes
     - text: Mots expliqués
       to: /glossaire
-    - text: Qu’est-ce que PAUDA ?
+    - text: Pourquoi ce site ?
       to: /about
   router:
     static_pages:
       - title: 'Mots expliqués'
         id: 'glossaire'
         route: '/glossaire'
+        summary:
+          display: true
+          inline: true
+          title: 'Accès par lettre pour trouver un mot expliqué'
         url: '/static/accessibilite/pages/glossaire.md'
-      - title: 'Qu’est-ce que PAUDA ?'
+      - title: 'Pourquoi ce site ?'
         id: 'about'
         route: '/about'
         url: '/static/accessibilite/pages/about.md'
+        summary:
+          display: true
   sitemap:
     - name: Accueil
       path: /
@@ -108,7 +114,7 @@ website:
       path: /datasets
     - name: Données par thème
       path: /themes
-    - name: Qu’est-ce que PAUDA ?
+    - name: Pourquoi ce site ?
       path: /about
   show_quality_component: true
   oauth_option: true
@@ -143,7 +149,7 @@ website:
   topics:
     can_add_topics:
       everyone: false
-      authorized_users: ['69e0effc2ca128bf0bf1fea9']
+      authorized_users: ['69e0effc2ca128bf0bf1fea9', '69e0f509cf1ecaf5f33f2977']
 
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
@@ -215,8 +221,10 @@ pages:
             name: Tourisme
           - id: accessibilite-quotidienne
             name: Vie quotidienne
-          - id: accessibilite-numerique
-            name: Numérique
+          - id: accessibilite-loisirs
+            name: Loisirs
+          - id: accessibilite-communication
+            name: Communication
           - id: accessibilite-enseignement
             name: Enseignement
           - id: accessibilite-sante
@@ -225,8 +233,6 @@ pages:
             name: Logement
           - id: accessibilite-autonomie
             name: Autonomie
-          - id: autre
-            name: Autre
       - name: Couverture territoriale
         default_option:
         id: geozone

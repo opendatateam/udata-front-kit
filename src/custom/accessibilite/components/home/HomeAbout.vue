@@ -1,5 +1,33 @@
 <script lang="ts" setup>
 import { DsfrButton } from '@gouvminint/vue-dsfr'
+import { useClipboard } from '@vueuse/core'
+
+const emailAddress = ref('accessibilite@data.gouv.fr')
+const { copy, copied, isSupported } = useClipboard({ copiedDuring: 3000 })
+
+const alreadyCopied = ref(false)
+const handleCopy = () => {
+  copy(emailAddress.value)
+  // avoid text flashing on button from synchronous 'setButtonText' computed
+  setTimeout(() => {
+    alreadyCopied.value = true
+  }, 100)
+}
+
+const setButtonText = computed(() => {
+  /** since the button's text changes, it needs to be announced with an aria-live region. To avoid repeating the same text when the button resets, we use a third text when the address has already been copied before.
+   */
+  let text = "Copier l'email"
+
+  if (!copied.value && alreadyCopied.value) {
+    text = "Copier de nouveau l'email"
+  }
+  if (copied.value) {
+    text = 'Email copié !'
+  }
+
+  return text
+})
 </script>
 
 <template>
@@ -28,11 +56,26 @@ import { DsfrButton } from '@gouvminint/vue-dsfr'
             d'expérience et exprimez vos besoins en matière de données
             d'accessibilité.
           </p>
-          <DsfrButton
-            label="Contactez-nous"
-            icon="fr-icon-arrow-right-line"
-            :icon-right="true"
-          />
+          <h3>Contactez-nous sur&nbsp;:</h3>
+          <p>
+            <a
+              class="fr-link"
+              :href="`mailto:${emailAddress}?subject=Prise%20de%20contact%20-%20PAUDA`"
+              >{{ emailAddress }}
+              <span class="sr-only">(ouvre un logiciel de messagerie)</span></a
+            >&nbsp;
+            <DsfrButton
+              v-if="isSupported"
+              class="fr-my-1v"
+              aria-live="polite"
+              :label="setButtonText"
+              size="sm"
+              secondary
+              :icon="copied ? 'fr-icon-check-line' : ''"
+              icon-right
+              @click="handleCopy"
+            />
+          </p>
         </div>
       </div>
     </div>

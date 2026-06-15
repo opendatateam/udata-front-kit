@@ -1,17 +1,3 @@
-<nav class="fr-summary" role="navigation" aria-labelledby="fr-summary-title">
-	<h2 id="fr-summary-title" class="fr-summary__title">Table des matières</h2>
-	<ol class="glossary" role=list>
-		<li><a id="summary-link-1" class="fr-summary__link" href="#a">A</a></li>
-		<li><a id="summary-link-2" class="fr-summary__link" href="#c">C</a></li>
-		<li><a id="summary-link-3" class="fr-summary__link" href="#d">D</a></li>
-		<li><a id="summary-link-4" class="fr-summary__link" href="#e">E</a></li>
-		<li><a id="summary-link-5" class="fr-summary__link" href="#h">H</a></li>
-		<li><a id="summary-link-6" class="fr-summary__link" href="#j">J</a></li>
-		<li><a id="summary-link-6" class="fr-summary__link" href="#p">P</a></li>
-		<li><a id="summary-link-8" class="fr-summary__link" href="#t">T</a></li>
-	</ol>
-</nav>
-
 # Mots expliqués
 
 Quelques définitions en lien avec le PAUDA en français simplifié.

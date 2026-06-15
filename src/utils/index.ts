@@ -1,6 +1,10 @@
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
-import { gfmHeadingId } from 'marked-gfm-heading-id'
+import {
+  getHeadingList,
+  gfmHeadingId,
+  type HeadingData
+} from 'marked-gfm-heading-id'
 import { stripHtml } from 'string-strip-html'
 import type { Ref } from 'vue'
 
@@ -15,20 +19,29 @@ const markedOptions = {
  * Parse description from markdown to HTML
  */
 export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
-  if (ref.value?.description) {
-    return fromMarkdown(ref.value[attr])
+  if (ref.value[attr]) {
+    return fromMarkdown(ref.value[attr]).html
   }
 }
 
 /**
- * Parse markdown to HTML
+ * Parse markdown to HTML with headings
  */
 export const fromMarkdown = (value: string | null, inline: boolean = false) => {
-  if (!value) return ''
+  if (!value) return { html: '', headings: [] }
+  let headings: HeadingData[] = []
+  marked.use(gfmHeadingId(), {
+    hooks: {
+      postprocess(html) {
+        headings = getHeadingList()
+        return html
+      }
+    }
+  })
   const fn = inline ? marked.parseInline : marked.parse
   const parsed = fn(value, markedOptions)
   // type cast to string because we don't use async mode of marked
-  return DOMPurify.sanitize(parsed as string)
+  return { html: DOMPurify.sanitize(parsed as string), headings }
 }
 
 /**
