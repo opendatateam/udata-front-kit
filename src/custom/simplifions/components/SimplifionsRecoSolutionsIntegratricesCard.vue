@@ -45,6 +45,40 @@
         </div>
       </div>
 
+      <!-- Integration score -->
+      <div
+        v-if="integrationScore && integrationScore.totalCount > 0"
+        class="integration-indicator fr-p-1w fr-mt-2w"
+      >
+        <span
+          :class="[
+            'integration-indicator__count fr-text--sm fr-text--bold',
+            colorClass
+          ]"
+        >
+          {{ integrationScore.integratedCount }}/{{
+            integrationScore.totalCount
+          }}
+        </span>
+        <TooltipWrapper placement="top" class="integration-indicator__label">
+          <template #trigger>
+            <span class="fr-text--xs">
+              {{ typeLabel ?? 'API' }} utiles {{ nomFournisseur }}
+            </span>
+          </template>
+          <span
+            :class="[
+              'integration-indicator__count fr-text--sm fr-text--bold',
+              colorClass
+            ]"
+            >{{ integrationScore.integratedCount }}</span
+          >
+          {{ typeLabel ?? 'API' }} "<strong>{{ nomFournisseur }}</strong
+          >" sur les {{ integrationScore.totalCount }} utiles pour ce cas
+          d'usage ont été intégrées par cette solution.
+        </TooltipWrapper>
+      </div>
+
       <!-- Arrow -->
       <div class="solution-integratrice-card__arrow fr-mt-0">
         <span
@@ -63,6 +97,7 @@
 </template>
 
 <script setup lang="ts">
+import TooltipWrapper from '@/components/TooltipWrapper.vue'
 import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
 import type { SolutionRecord } from '../model/grist'
@@ -71,6 +106,9 @@ import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.v
 
 const props = defineProps<{
   solution: SolutionRecord
+  integrationScore?: { integratedCount: number; totalCount: number }
+  nomFournisseur?: string
+  typeLabel?: string
 }>()
 
 const solutionTopic = ref<Topic | undefined>(undefined)
@@ -89,6 +127,16 @@ const simplificationTags = computed(() => {
   return topicTags.value.filter((tag) => tag.type === 'types-de-simplification')
 })
 
+const colorClass = computed(() => {
+  if (!props.integrationScore) return ''
+  const { integratedCount, totalCount } = props.integrationScore
+  const pct = totalCount > 0 ? (integratedCount / totalCount) * 100 : 0
+  if (pct >= 75) return 'indicator--green'
+  if (pct >= 50) return 'indicator--yellow'
+  if (pct >= 25) return 'indicator--orange'
+  return 'indicator--red'
+})
+
 const getShortLabelSimplificationTag = (name: string) => {
   if (name.includes('Accès facile')) return '💠'
   if (name.includes('Dites-le nous une fois')) return '💠💠'
@@ -98,6 +146,8 @@ const getShortLabelSimplificationTag = (name: string) => {
 </script>
 
 <style scoped>
+@import './integration-indicator.css';
+
 .solution-integratrice-card-link {
   display: block;
   text-decoration: none;
@@ -107,17 +157,17 @@ const getShortLabelSimplificationTag = (name: string) => {
 .solution-integratrice-card {
   background-color: white;
   border-bottom: 4px solid var(--blue-france-sun-113-625);
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 4rem;
   position: relative;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .solution-integratrice-card:hover {
-  background-color: #f9f9f9;
+  background-color: var(--background-alt-grey);
 }
 
 .solution-integratrice-card--loading {
-  background-color: #f9f9f9;
+  background-color: var(--background-alt-grey);
   padding: 2rem;
 }
 
@@ -149,6 +199,11 @@ const getShortLabelSimplificationTag = (name: string) => {
 
 .solution-integratrice-card__arrow .fr-icon-arrow-right-line {
   color: var(--blue-france-sun-113-625);
+}
+
+.integration-indicator__label {
+  line-height: 0.1;
+  margin-bottom: 0;
 }
 
 .fr-tags-group {

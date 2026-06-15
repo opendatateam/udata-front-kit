@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import config from '@/config'
+import type { StaticPageConfig } from '@/model/config'
 import { pageStore } from '@/store/StaticPageStore'
 import { fromMarkdown } from '@/utils'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const store = pageStore()
-const router = useRouter()
+const route = useRoute()
 const content = computed(() => store.content)
-const title = computed(() => router.currentRoute.value.meta.title)
 const props = defineProps({
   url: {
     type: String,
@@ -17,10 +19,22 @@ const props = defineProps({
   }
 })
 
+const pageConfig = computed(() =>
+  config.website.router.static_pages?.find(
+    (p: StaticPageConfig) => p.id === route.name
+  )
+)
+
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
-  { text: title.value || '' }
+  { text: pageConfig.value?.title || '' }
 ])
+
+useMeta({
+  title: () => pageConfig.value?.meta?.title ?? pageConfig.value?.title,
+  description: () => pageConfig.value?.meta?.description,
+  canonicalUrl: useCanonicalUrl()
+})
 
 watchEffect(async () => {
   if (!props.url) return

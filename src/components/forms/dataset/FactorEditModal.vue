@@ -60,12 +60,11 @@ const validateFields = () => {
   if (!modalFactor?.title.trim()) {
     formErrors.value.push('title')
   }
-  if (!modalFactor?.description?.trim()) {
-    formErrors.value.push('purpose')
-  }
   if (
-    !modalFactor?.siteExtras.uri &&
-    modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE
+    // NOT_AVAILABLE is not allowed anymore in edit/creation
+    modalFactor?.siteExtras.availability === Availability.NOT_AVAILABLE ||
+    (!modalFactor?.siteExtras.uri &&
+      modalFactor?.siteExtras.availability === Availability.LOCAL_AVAILABLE)
   ) {
     formErrors.value.push('availability')
   }
