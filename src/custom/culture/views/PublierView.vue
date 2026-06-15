@@ -2,26 +2,15 @@
 import '@gouvfr/dsfr-chart/BarChart'
 import '@gouvfr/dsfr-chart/BarChart/css'
 
-import { useHead } from '@unhead/vue'
+import { useMeta } from '@/utils/seo'
 import { computed, onMounted, ref } from 'vue'
 
 import { fromMarkdown } from '@/utils'
 
-useHead({
-  meta: [
-    { property: 'og:title', content: 'Publier - culture.data.gouv.fr' },
-    {
-      name: 'description',
-      content:
-        'Découvrez comment ajouter vos jeux de données au sein de la transversale des données de la culture'
-    },
-    {
-      property: 'og:description',
-      content:
-        'Découvrez comment ajouter vos jeux de données au sein de la transversale des données de la culture'
-    }
-  ],
-  link: [{ rel: 'canonical', href: window.location.origin + '/publier' }]
+useMeta({
+  description: () =>
+    'Découvrez comment ajouter vos jeux de données au sein de la transversale des données de la culture',
+  canonicalUrl: () => `${window.location.origin}/publier`
 })
 
 interface PublierContent {

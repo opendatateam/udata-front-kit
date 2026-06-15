@@ -45,17 +45,13 @@
 
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
-import type { Topic } from '@/model/topic'
 import { useTagsByRef } from '@/utils/tags'
-import type {
-  TopicCasUsagesExtras,
-  TopicSolutionsExtras
-} from '../model/topics'
+import type { TopicCasUsage, TopicSolution } from '../model/topics'
 import HumanReadableList from './HumanReadableList.vue'
 
 const props = withDefaults(
   defineProps<{
-    topic: Topic
+    topic: TopicCasUsage | TopicSolution
     pageKey: string
     showCategorieDeSolution?: boolean
     hideSimplification?: boolean
@@ -82,9 +78,7 @@ const groupedTags = computed(() => {
 const hideSimplification = computed(() => props.hideSimplification)
 
 const orderedFournisseursDeService = computed(() => {
-  const extras = props.topic.extras as
-    | TopicCasUsagesExtras
-    | TopicSolutionsExtras
+  const extras = props.topic.extras
   const extrasForObject =
     'simplifions-v2-cas-d-usages' in extras
       ? extras['simplifions-v2-cas-d-usages']

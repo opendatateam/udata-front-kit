@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-import config from '@/config'
-import type { DsfrHeaderProps } from '@gouvminint/vue-dsfr'
+import { useWebsiteConfig } from '@/utils/config'
+import { DsfrHeader, type DsfrHeaderProps } from '@gouvminint/vue-dsfr'
 import Navigation from '../NavigationComponent.vue'
 import SearchComponent from '../SearchComponent.vue'
 
 type Props = {
   userName: string | undefined
-  logoOperatorHeight: string | undefined
-  logoOperatorWidth: string | undefined
   customSearch: boolean
 }
 
@@ -16,7 +14,6 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgStyle: () => ({}),
   searchLabel: 'Rechercher',
   quickLinks: () => [],
-  showSearch: config.website.header.search.display,
   customSearch: false
 })
 
@@ -34,66 +31,51 @@ const closeModal = () => {
   }
 }
 
-const logoText = config.website.rf_title
-const serviceTitle = config.website.title
-const serviceLogo = config.website.service_logo
-const logoOperator = config.website.logo_operator?.src
-const showLogoOperatorInHeader =
-  config.website.logo_operator?.show_in_header ?? true
-const showBadge = config.website.badge.display
-const badgeText = config.website.badge.text
-const badgeStyle = config.website.badge.style
-const dropdown = config.website.header.search.dropdown ?? undefined
+const { header, rf_title, title } = useWebsiteConfig()
+const { logo, title_image, description, beta, search } = header
 </script>
 
 <template>
   <DsfrHeader
     ref="headerRef"
     home-to="/"
-    :logo-text
-    :service-title="serviceLogo ? undefined : serviceTitle"
-    :operator-img-src="showLogoOperatorInHeader ?? logoOperator"
-    :operator-img-alt
-    :operator-img-style
-    service-description=""
+    :logo-text="rf_title"
+    :service-title="title_image ? undefined : title"
+    :service-description="description"
     :quick-links
-    :show-search="showSearch && !customSearch"
-    :home-label="`Retour à l'accueil du site - ${serviceTitle}`"
+    :show-search="search.display && !customSearch"
+    :home-label="`Retour à l'accueil du site - ${title}`"
+    :show-beta="beta"
   >
-    <!-- needed because of logo + badge -->
-    <template #operator>
-      <div v-if="showLogoOperatorInHeader && logoOperator">
+    <!-- needed because of logo + title image -->
+    <template v-if="logo || title_image" #operator>
+      <div v-if="logo">
         <img
-          class="fr-responsive-img operator-logo"
-          :src="logoOperator"
+          class="fr-responsive-img header-logo"
+          :src="logo.src"
           alt=""
           :style="operatorImgStyle"
-          :height="logoOperatorHeight"
-          :width="logoOperatorWidth"
+          :height="logo.height"
+          :width="logo.width"
         />
       </div>
-      <div v-if="serviceLogo">
+      <div v-if="title_image">
         <img
-          class="fr-responsive-img service-logo"
-          :src="serviceLogo"
-          :alt="serviceTitle"
+          class="fr-responsive-img title-image"
+          :src="title_image.src"
+          :alt="title"
+          :height="title_image.height"
+          :width="title_image.width"
         />
       </div>
-      <p
-        v-if="showBadge"
-        :class="`fr-badge fr-badge--sm fr-badge--${badgeStyle}`"
-      >
-        {{ badgeText }}
-      </p>
     </template>
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="customSearch && showSearch"
+        v-if="customSearch && search.display"
         id="header-select-search"
         class="custom-search"
         :search-label="searchLabel"
-        :dropdown="dropdown"
         :placeholder="searchLabel"
         @do-search="closeModal"
       />
@@ -107,12 +89,21 @@ const dropdown = config.website.header.search.dropdown ?? undefined
 </template>
 
 <style scoped>
-.operator-logo {
-  inline-size: v-bind(logoOperatorWidth);
-  block-size: v-bind(logoOperatorHeight);
+.header-logo,
+.title-image {
+  /* take values from config */
+  --width: v-bind(logo?.width);
+  --height: v-bind(logo?.height);
+  /* if no cusotm values limit height to 35px */
+  inline-size: var(--width, auto);
+  block-size: var(--height, 35px);
+  /* keep the original image ratio in case of wrong values */
+  object-fit: contain;
 }
-.service-logo {
-  max-block-size: 35px;
+
+.title-image {
+  --width: v-bind(title_image?.width);
+  --height: v-bind(title_image?.height);
 }
 :deep(.fr-header__brand-top) {
   flex-wrap: wrap;
@@ -135,6 +126,11 @@ const dropdown = config.website.header.search.dropdown ?? undefined
       order: 2;
     }
   }
+}
+/* override green beta badge */
+:deep(.fr-header__service .fr-badge) {
+  background-color: var(--background-contrast-blue-cumulus);
+  color: var(--text-label-blue-cumulus);
 }
 :deep(.fr-header__tools-links) {
   flex-wrap: wrap;

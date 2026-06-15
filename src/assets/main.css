@@ -182,6 +182,14 @@ body {
   border-color: var(--border-default-grey);
 }
 
+/* ===== GlobalSearch ===== */
+
+/* Match DSFR string icon size to upstream SVG icon size (w-4 h-4 = 1rem) */
+label:has(input[name='search-type']) span[aria-hidden='true']::before,
+label:has(input[name='search-type']) span[aria-hidden='true']::after {
+  --icon-size: 1rem;
+}
+
 /* ===== Utilities for @datagouv/components-next (upstream does not bundle these) ===== */
 
 .divide-y > :not(:last-child) {
@@ -266,7 +274,7 @@ body {
 }
 
 .hero-banner {
-  h2 {
+  > div > p:first-child {
     font-size: 1.25em;
     font-weight: 400;
   }
@@ -382,13 +390,40 @@ body {
     font-weight: normal;
     text-transform: uppercase;
   }
+  dd + dt {
+    margin-block-start: 1rem;
+  }
 }
 
 /* ===== Lists ===== */
 
-/* Remove list styles on ul, ol elements with a list role, which tells browsers the list still behave as a list even without default styles */
+/* Remove list styles on ul, ol elements with a list role, which tells browsers the list still behaves as a list even without default styles */
 :where(ol, ul)[role='list'] {
   list-style: none;
+}
+
+dl > dt {
+  font-weight: bold;
+}
+
+.glossary {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+
+  li {
+    margin: 0;
+  }
+
+  li a::before {
+    content: none;
+  }
+}
+
+/* ===== Pagination ===== */
+
+.fr-pagination .fr-pagination__list {
+  justify-content: center;
 }
 
 /* ===== DSFR Fixes ===== */
