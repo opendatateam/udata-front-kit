@@ -1,0 +1,33 @@
+.integration-indicator {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  background-color: var(--background-alt-grey);
+  border-radius: 4px;
+}
+
+.integration-indicator > * {
+  margin: 0 !important;
+}
+
+.integration-indicator__label {
+  color: var(--text-mention-grey);
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+.integration-indicator__count.indicator--green {
+  background-color: rgb(184, 254, 201);
+}
+
+.integration-indicator__count.indicator--yellow {
+  background-color: rgb(254, 240, 184);
+}
+
+.integration-indicator__count.indicator--orange {
+  background-color: rgb(254, 224, 184);
+}
+
+.integration-indicator__count.indicator--red {
+  background-color: rgb(254, 201, 201);
+}

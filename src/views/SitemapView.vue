@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import GenericContainer from '@/components/GenericContainer.vue'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 type SitemapConfig = {
   name: string
@@ -14,6 +15,8 @@ defineProps({
 })
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'Plan du site' }]
+
+useMeta({ description: () => undefined, canonicalUrl: useCanonicalUrl() })
 </script>
 
 <template>
