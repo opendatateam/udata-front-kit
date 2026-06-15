@@ -19,7 +19,7 @@ const markedOptions = {
  * Parse description from markdown to HTML
  */
 export const descriptionFromMarkdown = (ref: Ref, attr = 'description') => {
-  if (ref.value?.description) {
+  if (ref.value[attr]) {
     return fromMarkdown(ref.value[attr]).html
   }
 }
