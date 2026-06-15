@@ -108,8 +108,8 @@ website:
     - label: 'Accessibilité : partiellement conforme'
       to: '/accessibility'
   notice:
-    display: false
-    content: Vous naviguez sur une version beta d'ecologie.data.gouv.
+    display: true
+    content: "📢 Webinaire 25/06 à 14h : actualités, retours d'expérience, temps d'échange 👉 [Je m'inscris](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/9yj7tx1Cxx6ekXmpj4WqUZ/68) !"
     closeable: false
   # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
