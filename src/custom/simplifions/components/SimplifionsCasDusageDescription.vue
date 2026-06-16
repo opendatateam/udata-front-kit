@@ -166,6 +166,7 @@ import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist.ts'
+import { useHashScroll } from '../useHashScroll'
 import type { CasUsage, Recommandation } from '../model/grist'
 import type { TopicCasUsage } from '../model/topics'
 import DraftTag from './DraftTag.vue'
@@ -183,6 +184,11 @@ const casUsageId = props.topic.extras['simplifions-v2-cas-d-usages'].id
 
 const casUsage = ref<CasUsage | undefined>(undefined)
 const recommandations = ref<Recommandation[] | undefined>(undefined)
+
+useHashScroll({
+  ready: () => !!casUsage.value,
+  containerSelector: '.test_cas-d-usage-description'
+})
 
 grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
   casUsage.value = data.fields as CasUsage

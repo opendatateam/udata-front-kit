@@ -335,6 +335,7 @@ import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
+import { useHashScroll } from '../useHashScroll'
 import type {
   ApiEtDatasetsIntegresRecord,
   ApiOrDataset,
@@ -550,6 +551,14 @@ const filteredAndSortedSolutions = computed(() => {
 const onFiltersUpdate = (filters: IntegrateursFilters) => {
   integrateursFilters.value = filters
 }
+
+useHashScroll({
+  ready: () => !!solution.value,
+  containerSelector: '.solution-description',
+  hashConditions: {
+    '#solutions-integratices': () => solutionsIntegratices.value.length > 0
+  }
+})
 </script>
 
 <style scoped>
