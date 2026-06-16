@@ -1,12 +1,10 @@
-import { nextTick, watchEffect } from 'vue'
+import { nextTick, onUnmounted, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import { useDebounceFn } from '@vueuse/core'
 
 interface UseHashScrollOptions {
-  // base condition: is the page's primary data loaded?
   ready: () => boolean
-  // CSS selector of the container to observe for layout stability
   containerSelector: string
-  // per-hash extra conditions (for sections with conditional rendering)
   hashConditions?: Record<string, () => boolean>
   debounceMs?: number
 }
@@ -19,44 +17,38 @@ export function useHashScroll({
 }: UseHashScrollOptions): void {
   const route = useRoute()
   let scrollHandled = false
+  let observer: ResizeObserver | null = null
+
+  const scrollToElement = useDebounceFn((el: Element) => {
+    if (!el.isConnected) return
+    observer?.disconnect()
+    observer = null
+    el.scrollIntoView({ behavior: 'smooth' })
+  }, debounceMs)
+
+  onUnmounted(() => {
+    observer?.disconnect()
+    observer = null
+  })
 
   watchEffect(async () => {
     const hash = route.hash
-
     if (scrollHandled || !hash || !ready()) return
-
     const extraCondition = hashConditions?.[hash]
     if (extraCondition && !extraCondition()) return
 
+    // Element already in DOM: scrollBehavior handles it, no need to intervene
+    if (document.querySelector(hash)) return
+
     scrollHandled = true
     await nextTick()
-    scrollToStable(hash, containerSelector, debounceMs)
+
+    const el = document.querySelector(hash)
+    if (!el) return
+
+    observer = new ResizeObserver(() => scrollToElement(el))
+    const container = document.querySelector(containerSelector)
+    if (container) observer.observe(container)
+    scrollToElement(el)
   })
-}
-
-// Waits for the container to stop resizing (debounced) before scrolling.
-// This handles async child components that expand after the initial render.
-function scrollToStable(
-  hash: string,
-  containerSelector: string,
-  debounceMs: number
-) {
-  const el = document.querySelector(hash)
-  if (!el) return
-
-  let timer: ReturnType<typeof setTimeout>
-  const scheduleScroll = () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      observer.disconnect()
-      el.scrollIntoView({ behavior: 'smooth' })
-    }, debounceMs)
-  }
-
-  const observer = new ResizeObserver(scheduleScroll)
-  const container = document.querySelector(containerSelector)
-  if (container) observer.observe(container)
-
-  scheduleScroll()
-  setTimeout(() => observer.disconnect(), 3000)
 }
