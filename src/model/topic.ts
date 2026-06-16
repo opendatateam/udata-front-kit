@@ -8,6 +8,7 @@ export type SiteId = 'siteId'
 
 export enum Availability {
   MISSING = 'missing',
+  // kept for backward compatibility with existing data — no longer offered in the UI
   NOT_AVAILABLE = 'not available',
   LOCAL_AVAILABLE = 'available',
   URL_AVAILABLE = 'url available',
@@ -117,4 +118,28 @@ export type TopicPostData = Omit<Topic, 'elements' | 'id' | 'slug'> & {
   id?: string
   slug?: string
   elements?: Factor[]
+}
+
+export interface TopicSearchParams {
+  q?: string
+  tag?: string[]
+  featured?: boolean
+  last_update_range?: 'last_30_days' | 'last_12_months' | 'last_3_years'
+  organization?: string
+  producer_type?:
+    | 'local-authority'
+    | 'not-specified'
+    | 'public-service'
+    | 'association'
+    | 'user'
+    | 'company'
+  sort?:
+    | 'name'
+    | 'created'
+    | 'last_modified'
+    | '-name'
+    | '-created'
+    | '-last_modified'
+  page?: number
+  page_size?: number
 }

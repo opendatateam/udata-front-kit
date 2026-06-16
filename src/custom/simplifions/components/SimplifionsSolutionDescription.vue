@@ -179,7 +179,7 @@
         </h3>
         <p
           v-if="solution.Cette_solution_permet"
-          v-html="fromMarkdown(solution.Cette_solution_permet)"
+          v-html="fromMarkdown(solution.Cette_solution_permet).html"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -197,7 +197,7 @@
         </h3>
         <p
           v-if="solution.Cette_solution_ne_permet_pas"
-          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas)"
+          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas).html"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -332,7 +332,6 @@
 
 <script setup lang="ts">
 import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
-import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
@@ -344,7 +343,7 @@ import type {
   Solution,
   SolutionRecord
 } from '../model/grist'
-import type { TopicSolutionsExtras } from '../model/topics'
+import type { TopicSolution } from '../model/topics'
 import DraftTag from './DraftTag.vue'
 import HumanReadableList from './HumanReadableList.vue'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
@@ -357,14 +356,12 @@ import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.v
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
-  topic: Topic
+  topic: TopicSolution
   pageKey: string
   hideLoader: (() => void) | null
 }>()
 
-const solutionId = (props.topic.extras as TopicSolutionsExtras)[
-  'simplifions-v2-solutions'
-].id
+const solutionId = props.topic.extras['simplifions-v2-solutions'].id
 
 const solution = ref<Solution | undefined>(undefined)
 const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
