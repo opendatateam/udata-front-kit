@@ -187,7 +187,7 @@ pages:
     universe_query:
       tag: accessibilite-univers
     filter_prefix: accessibilite-univers
-    title: Thèmes
+    title: Données par thèmes
     breadcrumb_title: Thèmes
     labels:
       singular: thème
@@ -233,6 +233,8 @@ pages:
             name: Logement
           - id: accessibilite-autonomie
             name: Autonomie
+          - id: accessibilite-emploi
+            name: Emploi
       - name: Couverture territoriale
         default_option:
         id: geozone

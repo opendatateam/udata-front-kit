@@ -48,4 +48,7 @@ form :deep(.fr-input) {
   flex: 1 1 70%;
   box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
 }
+form :deep(.fr-btn) {
+  flex: 0 1 fit-content;
+}
 </style>
