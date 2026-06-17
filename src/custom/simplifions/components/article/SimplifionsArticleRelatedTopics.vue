@@ -40,7 +40,7 @@ import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import SimplifionsSolutionCard from '../SimplifionsSolutionCard.vue'
 import SimplifionsCasDusageCard from '../SimplifionsCasDusageCard.vue'
-import CarouselTrack from '../CarouselTrack.vue'
+import CarouselTrack from '../articles_section/CarouselTrack.vue'
 
 const props = defineProps<{
   entries: readonly ArticleTopicEntry[]

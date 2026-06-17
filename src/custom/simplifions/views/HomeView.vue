@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import config from '@/config'
 
-import SimplifionsArticlesSelection from '../components/SimplifionsArticlesSelection.vue'
+import SimplifionsArticlesSelection from '../components/articles_section/SimplifionsArticlesSelection.vue'
 import { featuredItems } from './Articles'
 
 const colorsBanner = config.website.home_banner_colors

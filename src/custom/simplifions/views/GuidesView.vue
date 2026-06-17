@@ -46,8 +46,8 @@
 
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import SimplifionsArticleCard from '../components/SimplifionsArticleCard.vue'
-import SimplifionsFolderCard from '../components/SimplifionsFolderCard.vue'
+import SimplifionsArticleCard from '../components/articles_section/SimplifionsArticleCard.vue'
+import SimplifionsFolderCard from '../components/articles_section/SimplifionsFolderCard.vue'
 import { folders, rootArticles, themeMeta } from './Articles'
 
 const breadcrumbLinks = [

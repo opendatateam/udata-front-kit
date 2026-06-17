@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import type { SimplifionsArticleCard } from '../model/articles'
+import type { SimplifionsArticleCard } from '../../model/articles'
 import ArticleCard from './SimplifionsArticleCard.vue'
 
 const props = withDefaults(

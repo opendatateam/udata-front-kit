@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FeaturedItem } from '../model/articles'
+import type { FeaturedItem } from '../../model/articles'
 import SimplifionsFolderCard from './SimplifionsFolderCard.vue'
 import SimplifionsArticleCard from './SimplifionsArticleCard.vue'
 import CarouselTrack from './CarouselTrack.vue'

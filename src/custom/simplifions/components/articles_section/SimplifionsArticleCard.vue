@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SimplifionsArticleCard, SimplifionsArticleCategory } from '../model/articles'
+import type { SimplifionsArticleCard, SimplifionsArticleCategory } from '../../model/articles'
 import PictoGuideRaw from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/catalog.svg?raw'
 import PictoListeRaw from '@gouvfr/dsfr/dist/artwork/pictograms/document/document.svg?raw'
 import PictoPalmaresRaw from '@gouvfr/dsfr/dist/artwork/pictograms/system/success.svg?raw'

@@ -30,7 +30,7 @@ const buildArticleFolderRoute = (
           title: folderMeta.title
         },
         component: async () =>
-          await import('./components/SimplifionsArticleFolderView.vue'),
+          await import('./components/articles_section/SimplifionsArticleFolderView.vue'),
         props: {
           title: folderMeta.title,
           lead: folderMeta.description,
