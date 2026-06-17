@@ -4,7 +4,7 @@ site_id: accessibilite
 
 datagouvfr:
   # data.gouv.fr base URL
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 682c45ba772ed4a274715025
   tabular_api_url: https://tabular-api.data.gouv.fr
@@ -120,7 +120,7 @@ website:
   show_quality_component: true
   oauth_option: true
   notice:
-    display: true
+    display: false
     content: ⚠️ Vous naviguez sur une version de développement d'accessibilite.data.gouv.fr ⚠️
     closeable: false
   # debounce high enough for accessibility (screen readers will announce results)
@@ -150,7 +150,13 @@ website:
   topics:
     can_add_topics:
       everyone: false
-      authorized_users: ['69e0effc2ca128bf0bf1fea9', '69e0f509cf1ecaf5f33f2977']
+      authorized_users:
+        [
+          '69e0effc2ca128bf0bf1fea9',
+          '69e0f509cf1ecaf5f33f2977',
+          '659ea99505a29ce20670ed92',
+          '6a0b08a22d1cca9afc22d3d0'
+        ]
 
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
