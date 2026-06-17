@@ -354,7 +354,7 @@ Grille 3 colonnes avec skeleton pendant le chargement. Imports et composables re
 ```
 
 ```ts
-import { useTopicsBySlug } from '../../../composables/useTopicsBySlug'
+import { useTopicsBySlug } from '../../../components/article/useTopicsBySlug.ts'
 import type { TopicSolution } from '../../../model/topics'
 import SimplifionsSolutionCard from '../../../components/SimplifionsSolutionCard.vue'
 

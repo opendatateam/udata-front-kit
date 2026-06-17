@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import type { TopicCasUsage, TopicSolution } from '../../model/topics'
-import { useTopicsBySlug } from '../../composables/useTopicsBySlug'
+import { useTopicsBySlug } from './useTopicsBySlug.ts'
 import { inject } from 'vue'
 import { articleTopicsRegistryKey } from './articleTopicsRegistryKey'
 import SimplifionsSolutionCard from '../SimplifionsSolutionCard.vue'
