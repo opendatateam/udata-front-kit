@@ -15,6 +15,8 @@ export const UserFactory = build<User>({
     since: new Date().toISOString(),
     organizations: [],
     last_login_at: null,
+    password_rotation_demanded: null,
+    password_rotation_performed: null,
     metrics: {
       datasets: 0,
       dataservices: 0,

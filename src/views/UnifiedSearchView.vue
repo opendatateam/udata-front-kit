@@ -8,6 +8,7 @@ import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import {
   DataserviceCard,
   DatasetCard,
@@ -37,6 +38,11 @@ const links = computed(() => [
 const CardComponent = useAsyncComponent(
   () => route.meta.cardComponent as (() => Promise<Component>) | undefined
 )
+
+const createUrl = computed(() => ({
+  name: `${pageKey.value}_add`,
+  query: route.query
+}))
 
 // localType is needed because pageKey is read-only (derived from route), but
 // GlobalSearch needs a writable ref to track the active type (v-model:type).
@@ -73,15 +79,16 @@ watch(localType, async (newType) => {
   }
 })
 
+useMeta({
+  description: () => pageConf.value?.meta?.description,
+  canonicalUrl: useCanonicalUrl()
+})
+
 onMounted(() => {
   if (!pageConf.value.list_all) {
     router.push({ name: 'not_found' })
   }
 })
-const createUrl = computed(() => ({
-  name: `${pageKey.value}_add`,
-  query: route.query
-}))
 </script>
 
 <template>
@@ -96,12 +103,26 @@ const createUrl = computed(() => ({
         v-if="
           pageConf.object_type === 'topics' && userStore.canAddTopic(pageKey)
         "
-        class="fr-col-auto fr-grid-row fr-grid-row--middle"
+        class="fr-col-auto fr-grid-row fr-grid-row--middle fr-grid-row--gutters"
       >
-        <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-          <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
-          Ajouter {{ labels.articles.un }} {{ labels.singular }}
-        </router-link>
+        <div class="fr-col-auto">
+          <router-link :to="createUrl" class="fr-btn fr-mb-1w">
+            <VIconCustom
+              name="add-circle-line"
+              class="fr-mr-1w"
+              align="middle"
+            />
+            Ajouter {{ labels.articles.un }} {{ labels.singular }}
+          </router-link>
+        </div>
+        <div class="fr-col-auto">
+          <router-link
+            :to="{ name: `${pageKey}_drafts` }"
+            class="fr-btn fr-btn--secondary fr-mb-1w"
+          >
+            Mes brouillons
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -112,24 +133,28 @@ const createUrl = computed(() => ({
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable vue/no-v-html -->
-      <h2
+      <p
         :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
         v-html="pageConf.banner.title"
       />
       <div
         v-if="pageConf.banner.content"
-        v-html="fromMarkdown(pageConf.banner.content)"
+        v-html="fromMarkdown(pageConf.banner.content).html"
       />
       <!-- eslint-enable vue/no-v-html -->
     </div>
   </section>
 
-  <div class="fr-container fr-mb-4w">
+  <section class="fr-container fr-mb-4w">
     <h2 v-if="pageConf.search?.input" class="fr-mb-2w">
       {{ pageConf.search.input }}
     </h2>
     <Suspense>
-      <GlobalSearch v-model:type="localType" :config="route.meta.searchConfig!">
+      <GlobalSearch
+        v-model:type="localType"
+        :config="route.meta.searchConfig!"
+        :auto-focus="false"
+      >
         <template v-if="route.meta.customFilters?.length" #custom-filters-top>
           <template
             v-for="filter in route.meta.customFilters"
@@ -190,5 +215,5 @@ const createUrl = computed(() => ({
         </template>
       </GlobalSearch>
     </Suspense>
-  </div>
+  </section>
 </template>

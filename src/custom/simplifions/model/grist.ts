@@ -45,6 +45,7 @@ export type Recommandation = {
   Solutions_integratrices_categorie_logiciel_metier: number[]
   Solutions_integratrices_categorie_briques_techniques: number[]
   Solutions_integratrices_categorie_portail_de_consultation: number[]
+  Type_de_recommandation: string | null
 }
 export type RecommandationRecord = GristRecord & {
   fields: Recommandation

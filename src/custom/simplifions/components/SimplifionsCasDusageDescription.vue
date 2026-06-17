@@ -90,7 +90,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <p
           v-if="casUsage.Contexte"
-          v-html="fromMarkdown(casUsage.Contexte)"
+          v-html="fromMarkdown(casUsage.Contexte).html"
         ></p>
         <!-- eslint-enable vue/no-v-html -->
 
@@ -109,7 +109,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <p
           v-if="casUsage.Cadre_juridique"
-          v-html="fromMarkdown(casUsage.Cadre_juridique)"
+          v-html="fromMarkdown(casUsage.Cadre_juridique).html"
         ></p>
         <!-- eslint-enable vue/no-v-html -->
         <p v-else class="fr-text--sm">

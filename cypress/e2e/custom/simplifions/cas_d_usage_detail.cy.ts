@@ -1,3 +1,4 @@
+import { apiOrDatasetFactory } from '../../../support/factories/custom/simplifions/grist_factory'
 import {
   mockApidatasetRecommandations,
   mockApiOrDatasetUtiles,
@@ -306,6 +307,95 @@ describe("Simplifions Cas d'usages Show page for cas d'usage with integrating so
     cy.get('.solution-integratrice-card').should(
       'contain.text',
       'The Best Editor Solution'
+    )
+  })
+})
+
+describe("Simplifions Cas d'usages Show page - integration score on solution cards", () => {
+  // Creates 3 API records, mocks the APIs_et_datasets table, and returns their IDs.
+  // The component fetches these records to render the "API et données utiles" accordion.
+  const mockUsefulApis = () => {
+    const gristApis = apiOrDatasetFactory.many(3)
+    cy.mockGristRecords('APIs_et_datasets', gristApis)
+    return gristApis.map((a) => a.id)
+  }
+
+  const setup = (recommandationOverrides = {}) => {
+    cy.baseMocksForSimplifions()
+    const usefulApiIds = mockUsefulApis()
+
+    // Integrating solution: integrates 2 of the 3 useful APIs, plus 1 unrelated
+    const { gristSolution: gristIntegrateur } = mockSolution({
+      Nom: 'Solution Intégratrice',
+      Visible_sur_simplifions: true,
+      API_ou_datasets_integres: [usefulApiIds[0], usefulApiIds[1], 99999],
+      liste_categories_de_solution: ['Logiciel métier'],
+      Type_de_solution: ['Logiciel métier']
+    })
+
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: usefulApiIds,
+      Descriptions_des_API_et_datasets_utiles_fournis: [],
+      Ces_logiciels_l_integrent_deja: [],
+      Solutions_integratrices_categorie_logiciel_metier: [gristIntegrateur.id],
+      ...recommandationOverrides
+    })
+
+    const { topicCasUsage } = mockCasUsage({}, [gristRecommandation])
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+  }
+
+  it('should display the X/Y integration score on the card', () => {
+    setup()
+    cy.get('.integration-indicator').should('exist')
+    cy.get('.integration-indicator__count').should('contain.text', '2/3')
+  })
+
+  it('should not display a score when the recommandation has no useful APIs', () => {
+    cy.baseMocksForSimplifions()
+
+    const { gristSolution: gristIntegrateur } = mockSolution({
+      Nom: 'Solution Sans Score',
+      Visible_sur_simplifions: true,
+      API_ou_datasets_integres: [101, 102],
+      liste_categories_de_solution: ['Logiciel métier']
+    })
+
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: [],
+      Descriptions_des_API_et_datasets_utiles_fournis: [],
+      Ces_logiciels_l_integrent_deja: [],
+      Solutions_integratrices_categorie_logiciel_metier: [gristIntegrateur.id]
+    })
+
+    const { topicCasUsage } = mockCasUsage({}, [gristRecommandation])
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+
+    cy.get('.integration-indicator').should('not.exist')
+  })
+
+  it('should use "API" label when Type_de_recommandation is API', () => {
+    setup({ Type_de_recommandation: 'API' })
+    cy.get('.integration-indicator__label').should('contain.text', 'API')
+    cy.get('.integration-indicator__label').should(
+      'not.contain.text',
+      'jeu de données'
+    )
+  })
+
+  it('should use "jeu de données" label when Type_de_recommandation is Jeu de données', () => {
+    setup({ Type_de_recommandation: 'Jeu de données' })
+    cy.get('.integration-indicator__label').should(
+      'contain.text',
+      'jeu de données'
+    )
+  })
+
+  it('should fall back to "API ou jeu de données" label when Type_de_recommandation is null', () => {
+    setup({ Type_de_recommandation: null })
+    cy.get('.integration-indicator__label').should(
+      'contain.text',
+      'API ou jeu de données'
     )
   })
 })

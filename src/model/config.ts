@@ -1,4 +1,5 @@
 import type { BuiltInFilterKey } from '@datagouv/components-next'
+import type { DsfrFooterProps } from '@gouvminint/vue-dsfr'
 
 export const CUSTOM_FILTER_TYPES = ['select', 'organization_custom'] as const
 export type CustomFilterType = (typeof CUSTOM_FILTER_TYPES)[number]
@@ -20,6 +21,10 @@ export interface StaticPageConfig {
   id: string
   route: string
   url: string
+  meta?: {
+    title?: string
+    description?: string
+  }
 }
 
 export interface MenuConfig {
@@ -51,7 +56,6 @@ export interface PageFilterConf {
   use_filter_prefix: boolean | null
   api_param: string | null
   form: PageFilterFormConf | null
-  hide_on_list: boolean | null
   values: PageFilterValueConf[]
 }
 
@@ -85,6 +89,7 @@ export type PageConf = {
   universe_query: PageUniverseQueryConf | null
   title: string
   breadcrumb_title: string | null
+  icon?: string
   labels: PageLabelsConf
   search: PageSearchConf
   banner: PageBannerConf | null
@@ -102,6 +107,10 @@ export type PageConf = {
     }
   }
   editable: boolean
+  meta?: {
+    title?: string
+    description?: string
+  }
   filters: PageFilterConf[]
 }
 
@@ -117,13 +126,34 @@ export type DatasetsConf = {
   show_extended_information_panel: boolean
 }
 
-export type HeaderSearchConf = {
-  display: boolean
-  placeholder?: string
+interface Logo {
+  src?: string
+  width?: string
+  height?: string
 }
 
-export interface WebsiteConfig {
+export type HeaderConf = {
+  admin_shortcut: boolean
+  logo?: Logo
+  title_image?: Logo
+  description?: string
+  beta: boolean
+  search: {
+    display: boolean
+    placeholder?: string
+  }
+}
+
+export type FooterConf = {
+  logo?: Logo
+  phrase?: string
+  external_links?: DsfrFooterProps['ecosystemLinks']
+  mandatory_links?: DsfrFooterProps['mandatoryLinks']
+}
+
+export type WebsiteConfig = {
   title: string
+  rf_title: string
   seo?: {
     canonical_url?: string
     meta?: {
@@ -132,9 +162,8 @@ export interface WebsiteConfig {
       robots?: string
     }
   }
-  header: {
-    search: HeaderSearchConf
-  }
+  header: HeaderConf
+  footer: FooterConf
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
@@ -146,4 +175,20 @@ export type SentryConfig = {
   tracesSampleRate?: number
   replaysSessionSampleRate?: number
   replaysOnErrorSampleRate?: number
+}
+
+export type OrganizationsConfig = {
+  datasets?: string
+  dataservices?: string
+  bouquets?: string
+  page?: {
+    breadcrumb_title?: string
+    labels?: {
+      singular?: string
+    }
+    meta?: {
+      title?: string
+      description?: string
+    }
+  }
 }

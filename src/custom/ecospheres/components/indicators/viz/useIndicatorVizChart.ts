@@ -104,6 +104,7 @@ export function useIndicatorVizChart(
   let chartInstance: Chart | null = null
   let currentType: 'bar' | 'line' | null = null
   let currentIsMultiSeries: boolean | null = null
+  const hasNoData = ref(false)
 
   function destroyChart() {
     if (chartInstance) {
@@ -115,10 +116,11 @@ export function useIndicatorVizChart(
   }
 
   function createOrUpdateChart(newSeries: IndicatorVizChartSeries[]) {
-    const hasNoData =
+    const noData =
       newSeries.length === 0 || newSeries.every((s) => s.data.length === 0)
-    if (!canvasRef.value || hasNoData) {
-      if (hasNoData) debug.warn('No data to display')
+    hasNoData.value = noData
+    if (!canvasRef.value || noData) {
+      if (noData) debug.warn('No data to display')
       return
     }
     debug.log(`⚙️ Computing chart`, { datasetsCount: newSeries.length })
@@ -152,7 +154,10 @@ export function useIndicatorVizChart(
   })
   watch(canvasRef, (canvas) => {
     if (!canvas) destroyChart()
+    else createOrUpdateChart(series.value)
   })
 
   onBeforeUnmount(destroyChart)
+
+  return { hasNoData }
 }
