@@ -335,7 +335,6 @@ import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
-import { useHashScroll } from '../useHashScroll'
 import type {
   ApiEtDatasetsIntegresRecord,
   ApiOrDataset,
@@ -345,6 +344,7 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import type { TopicSolution } from '../model/topics'
+import { useHashScroll } from '../useHashScroll'
 import DraftTag from './DraftTag.vue'
 import HumanReadableList from './HumanReadableList.vue'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
@@ -554,7 +554,6 @@ const onFiltersUpdate = (filters: IntegrateursFilters) => {
 
 useHashScroll({
   ready: () => !!solution.value,
-  containerSelector: '.solution-description',
   hashConditions: {
     '#solutions-integratices': () => solutionsIntegratices.value.length > 0
   }

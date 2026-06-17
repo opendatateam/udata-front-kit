@@ -112,9 +112,10 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
         return false
       }
       if (to.hash !== '') {
-        return {
-          el: to.hash
+        if (document.querySelector(to.hash)) {
+          return { el: to.hash }
         }
+        return false
       }
       // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
       if (to.meta.searchConfig && from.meta.searchConfig) {
