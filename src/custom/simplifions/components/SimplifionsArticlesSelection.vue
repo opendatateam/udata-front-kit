@@ -1,7 +1,7 @@
 <template>
   <div class="carousel">
-    <div ref="track" class="carousel__track" @scroll.passive="onScroll">
-      <div v-for="(item, index) in items" :key="index" class="carousel__item">
+    <CarouselTrack>
+      <li v-for="(item, index) in items" :key="index" class="carousel__item">
         <SimplifionsFolderCard
           v-if="item.type === 'folder'"
           :title="item.meta.title"
@@ -13,27 +13,8 @@
           v-else
           :article="item.card"
         />
-      </div>
-    </div>
-
-    <div v-show="hasOverflow" class="carousel__nav">
-      <button
-        class="fr-link fr-link--sm fr-link--icon-left fr-icon-arrow-left-s-line"
-        aria-label="Précédent"
-        :disabled="!canPrev"
-        @click="prev"
-      >
-        Précédent
-      </button>
-      <button
-        class="fr-link fr-link--sm fr-link--icon-right fr-icon-arrow-right-s-line"
-        aria-label="Suivant"
-        :disabled="!canNext"
-        @click="next"
-      >
-        Suivant
-      </button>
-    </div>
+      </li>
+    </CarouselTrack>
 
     <div class="carousel__cta">
       <RouterLink
@@ -50,38 +31,15 @@
 import type { FeaturedItem } from '../model/articles'
 import SimplifionsFolderCard from './SimplifionsFolderCard.vue'
 import SimplifionsArticleCard from './SimplifionsArticleCard.vue'
-import { useCarouselScroll } from '../composables/useCarouselScroll'
+import CarouselTrack from './CarouselTrack.vue'
 
 defineProps<{ items: FeaturedItem[] }>()
-
-const { track, hasOverflow, canPrev, canNext, onScroll, prev, next } =
-  useCarouselScroll('.carousel__item')
 </script>
 
 <style scoped>
-.carousel__track {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.carousel__track::-webkit-scrollbar {
-  display: none;
-}
-
 .carousel__item {
   flex: 0 0 calc(33.333% - 0.667rem);
   scroll-snap-align: start;
-}
-
-.carousel__nav {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  margin-top: 1rem;
 }
 
 .carousel__cta {
