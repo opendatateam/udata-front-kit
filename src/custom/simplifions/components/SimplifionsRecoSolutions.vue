@@ -99,7 +99,7 @@
               v-html="
                 fromMarkdown(
                   recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
-                )
+                ).html
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
