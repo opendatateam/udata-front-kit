@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import type { FeaturedItem } from '../model/articles'
 import SimplifionsFolderCard from './SimplifionsFolderCard.vue'
 import SimplifionsArticleCard from './SimplifionsArticleCard.vue'
@@ -86,6 +86,7 @@ onMounted(async () => {
     scrollLeft.value = el.scrollLeft
   })
   ro.observe(el)
+  onUnmounted(() => ro.disconnect())
 })
 </script>
 
