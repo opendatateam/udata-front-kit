@@ -168,6 +168,7 @@ import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist.ts'
 import type { CasUsage, Recommandation } from '../model/grist'
 import type { TopicCasUsage } from '../model/topics'
+import { useHashScroll } from '../useHashScroll'
 import DraftTag from './DraftTag.vue'
 import SimplifionsRecoDataApi from './SimplifionsRecoDataApi.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
@@ -183,6 +184,10 @@ const casUsageId = props.topic.extras['simplifions-v2-cas-d-usages'].id
 
 const casUsage = ref<CasUsage | undefined>(undefined)
 const recommandations = ref<Recommandation[] | undefined>(undefined)
+
+useHashScroll({
+  ready: () => !!casUsage.value
+})
 
 grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
   casUsage.value = data.fields as CasUsage
