@@ -70,7 +70,7 @@ const props = withDefaults(
 const { topics } = useTopicsBySlug(props.slugs)
 const isMulti = computed(() => props.slugs.length >= 2)
 
-const register = inject(articleTopicsRegistryKey)
+const register = inject(articleTopicsRegistryKey, undefined)
 onMounted(() => {
   props.slugs.forEach((slug) => register?.(slug, props.pageKey))
 })

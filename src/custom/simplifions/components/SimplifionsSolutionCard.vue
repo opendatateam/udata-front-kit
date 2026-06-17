@@ -100,7 +100,7 @@ const solution = props.topic.extras['simplifions-v2-solutions']
 
 const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 
-const register = inject(articleTopicsRegistryKey)
+const register = inject(articleTopicsRegistryKey, undefined)
 onMounted(() => register?.(props.topic.slug, 'solutions'))
 </script>
 

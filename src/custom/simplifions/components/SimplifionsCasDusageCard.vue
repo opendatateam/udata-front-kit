@@ -76,7 +76,7 @@ const hasTagSection = computed(
   () => props.showTargetUsers || props.showFournisseurs || props.showSimplificationTags || props.showCategorieDeSolution
 )
 
-const register = inject(articleTopicsRegistryKey)
+const register = inject(articleTopicsRegistryKey, undefined)
 onMounted(() => register?.(props.topic.slug, 'cas-d-usages'))
 </script>
 
