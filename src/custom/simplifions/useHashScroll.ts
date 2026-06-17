@@ -34,13 +34,10 @@ export function useHashScroll({
     const extraCondition = hashConditions?.[hash]
     if (extraCondition && !extraCondition()) return
 
-    // Element already in DOM: scrollBehavior handles it
-    if (document.querySelector(hash)) {
-      cleanup()
-      return
-    }
-
     cleanup()
+
+    // Element already in DOM: scrollBehavior handles it
+    if (document.querySelector(hash)) return
 
     observer = new MutationObserver(() => {
       const el = document.querySelector(hash)
