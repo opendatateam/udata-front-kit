@@ -263,6 +263,13 @@ Cypress.Commands.add('mockDataserviceMetricsApi', (dataserviceId) => {
   ).as(`get_metrics_total_${dataserviceId}`)
 })
 
+Cypress.Commands.add('mockSearch', (type, data = []) => {
+  cy.intercept('GET', datagouvUrlRegex(`${type}/search`), {
+    statusCode: 200,
+    body: datagouvResponseBuilder(data)
+  }).as(`search_${type}`)
+})
+
 Cypress.Commands.add(
   'mockDatasetAndRelatedObjects',
   (

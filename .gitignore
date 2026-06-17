@@ -18,3 +18,8 @@ cypress/downloads
 .secrets
 .github/**/act*.json
 
+# MacOS
+.DS_Store
+
+# vscode
+.vscode/settings.json

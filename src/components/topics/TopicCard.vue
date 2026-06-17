@@ -33,6 +33,10 @@ const props = defineProps({
   hideDescription: {
     type: Boolean,
     default: false
+  },
+  showDraftPill: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -57,7 +61,7 @@ const tags = useTags(props.pageKey, props.topic)
 <template>
   <article class="fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link">
     <div
-      v-if="topic.private"
+      v-if="showDraftPill && topic.private"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
@@ -117,7 +121,7 @@ const tags = useTags(props.pageKey, props.topic)
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
 
-    <div class="fr-grid-row flex-gap">
+    <div class="fr-grid-row flex-gap card-footer">
       <span class="fr-tag">
         <VIconCustom
           name="database-line"

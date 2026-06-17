@@ -4,14 +4,14 @@ site_id: accessibilite
 
 datagouvfr:
   # data.gouv.fr base URL
-  base_url: https://www.data.gouv.fr
+  base_url: https://demo.data.gouv.fr
   # oauth settings
   oauth_client_id: 682c45ba772ed4a274715025
   tabular_api_url: https://tabular-api.data.gouv.fr
 
 # UI customizations
 website:
-  title: 'accessibilite.data.gouv.fr'
+  title: "Point d'accès unique aux données d'accessibilité"
   seo:
     canonical_url: https://accessibilite.data.gouv.fr
     meta:
@@ -22,7 +22,6 @@ website:
     robots_txt:
       disallow:
         - /admin
-        - /datasets
     sitemap_xml:
       topics_pages:
         - themes
@@ -31,48 +30,52 @@ website:
   formatted_title: '<b>accessibilite.data.gouv.fr</b>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
-  service_logo: '/static/logos/accessibilite-logo.svg'
-  badge:
-    display: true
-    text: 'BETA'
-    style: 'blue-cumulus'
   # leave empty if not pertinent
   homepage:
-    title: "Le Point d'Accès Unique aux Données d'Accessibilité"
-    subtitle: "accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite."
+    title:
+    subtitle:
     sections:
-      - title: Des thèmes permettant de classer les jeux de données et de mieux visualiser les politiques publiques en faveur de l'accessibilité
+      - title:
         content:
         sub_section_datasets:
         sub_section_cards:
-          title:
-          cards:
-            - name: 'Tourisme'
-              description: 'Toutes les données liées au tourisme accessible (mobilités, établissements recevant du public, etc.)'
-              url: 'themes?theme=accessibilite-tourisme'
-              image_url: '/static/accessibilite/assets/tourisme-handicap.jpg'
-            - name: 'Établissements recevant du public'
-              description: 'Données sur tous les établissements recevant du public (établissements scolaires, de santé, etc.)'
-              url: 'themes?theme=accessibilite-des-lieux'
-              image_url: '/static/accessibilite/assets/accessibilite-des-lieux.jpg'
-            - name: 'Numérique'
-              description: "Les données en lien avec l'accessibilité numérique"
-              url: 'themes?theme=accessibilite-numerique'
-              image_url: '/static/accessibilite/assets/accessibilite-numerique.jpg'
         sub_section_tiles:
         sub_section_buttons:
     meta_description: accessibilite.data.gouv.fr référence et centralise les données relatives à l'accesssibilité.
+  footer:
+    logo:
+      src: /static/logos/accessibilite-logo.svg
+      width: 120px
+      height: 49px
+    phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
+    external_links:
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+    mandatory_links:
+      - label: 'Licences'
+        to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        to: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        to: 'https://www.data.gouv.fr/fr/suivi/'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
   header:
     admin_shortcut: false
+    logo:
+      src: /static/logos/accessibilite-logo.svg
+    title_image:
+    description: accessibilite.data.gouv.fr
+    beta: true
     button:
       display: false
       label: 'Donnez votre avis'
       link:
     search:
-      display: true
+      display: false
       placeholder: Rechercher...
   search_bar:
-    display: true
+    display: false
     placeholder: Rechercher un jeu de données
   secondary_search:
     display: false
@@ -81,51 +84,41 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Données
+    - text: Toutes les données
       to: /datasets
-    # - text: Thèmes
-    # to: /themes
-    - text: À propos
+    - text: Données par thème
+      to: /themes
+    - text: Mots expliqués
+      to: /glossaire
+    - text: Pourquoi ce site ?
       to: /about
   router:
-    disable:
-      - organizations_routes
-      - topics
     static_pages:
-      - title: 'À propos'
+      - title: 'Mots expliqués'
+        id: 'glossaire'
+        route: '/glossaire'
+        summary:
+          display: true
+          inline: true
+          title: 'Accès par lettre pour trouver un mot expliqué'
+        url: '/static/accessibilite/pages/glossaire.md'
+      - title: 'Pourquoi ce site ?'
         id: 'about'
         route: '/about'
         url: '/static/accessibilite/pages/about.md'
+        summary:
+          display: true
   sitemap:
     - name: Accueil
       path: /
-    - name: Données
+    - name: Toutes les données
       path: /datasets
-    # - name: Thèmes
-    #  path: /themes
-    - name: À propos
+    - name: Données par thème
+      path: /themes
+    - name: Pourquoi ce site ?
       path: /about
   show_quality_component: true
   oauth_option: true
-  footer_phrase: "Ce site est une déclinaison thématique de data.gouv.fr pour les données relatives à l'accessibilité."
-  footer_external_links:
-    - label: 'data.gouv.fr'
-      href: 'https://www.data.gouv.fr'
-  footer_mandatory_links:
-    - label: 'Licences'
-      href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
-    - label: "Conditions générales d'utilisation"
-      href: 'https://www.data.gouv.fr/fr/terms/'
-    - label: 'Politique de confidentialité'
-      href: 'https://www.data.gouv.fr/fr/suivi/'
-    - label: 'Accessibilité : non conforme'
-      to: '/accessibility'
-  logo_operator:
-    src:
-    show_in_header: false
-    footer:
-      width:
-      height:
   notice:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'accessibilite.data.gouv.fr ⚠️
@@ -135,7 +128,7 @@ website:
   # display settings
   pagination_sizes:
     organizations_list: 9
-    topics_list: 20
+    topics_drafts_list: 9
     files_list: 6
   home_banner_colors:
     - '#FFFFFF'
@@ -156,8 +149,8 @@ website:
     show_extended_information_panel: false
   topics:
     can_add_topics:
-      everyone: true
-      authorized_users:
+      everyone: false
+      authorized_users: ['69e0effc2ca128bf0bf1fea9', '69e0f509cf1ecaf5f33f2977']
 
 # cf configs/ecospheres/config.yaml for pages config format details
 pages:
@@ -191,11 +184,11 @@ pages:
   # THÈMES (BOUQUETS)
   themes:
     object_type: topics
-    list_all: false
+    list_all: true
     universe_query:
       tag: accessibilite-univers
     filter_prefix: accessibilite-univers
-    title: Thèmes
+    title: Données par thèmes
     breadcrumb_title: Thèmes
     labels:
       singular: thème
@@ -220,19 +213,29 @@ pages:
         default_option: Toutes les thématiques
         id: theme
         type: select
-        color: green-emeraude
+        color: blue-ecume
         use_filter_prefix: true
         form:
           required: true
         values:
           - id: accessibilite-tourisme
-            name: Tourisme accessible
-          - id: accessibilite-des-lieux
-            name: Accessibilité des établissements recevant du public
-          - id: accessibilite-numerique
-            name: Accessibilité numérique
-          - id: autre
-            name: Autre
+            name: Tourisme
+          - id: accessibilite-quotidienne
+            name: Vie quotidienne
+          - id: accessibilite-loisirs
+            name: Loisirs
+          - id: accessibilite-communication
+            name: Communication
+          - id: accessibilite-enseignement
+            name: Enseignement
+          - id: accessibilite-sante
+            name: Santé
+          - id: accessibilite-logement
+            name: Logement
+          - id: accessibilite-autonomie
+            name: Autonomie
+          - id: accessibilite-emploi
+            name: Emploi
       - name: Couverture territoriale
         default_option:
         id: geozone
@@ -242,3 +245,42 @@ pages:
 # to find an id go to https://www.data.gouv.fr/fr/organizations/ministere-de-la-transition-ecologique/
 # then Informations > ID at the bottom of the page
 organizations:
+
+accessibilite:
+  homepage:
+    sponsors:
+      - name: Délégation interministérielle à l'accessibilité
+        logo: logo-DIA
+      - name: La fabrique de la donnée territoriale
+        logo: logo-fabrique-territoriale
+      - name: Institut national de l'information géographique et forestière
+        logo: logo-IGN
+      - name: Caisse nationale pour la solidarité à l’autonomie
+        logo: logo-cnsa
+      - name: beta.gouv
+        logo: logo-beta.gouv
+      - name: Commissariat général au développement durable
+        logo: logo-ecolab
+      - name: datagouv
+        logo: logo-datagouv
+      - name: Direction interministérielle du numérique
+        logo: logo-DINUM
+      - name: Délégation ministérielle à l'accessibilité
+        logo: logo-DMA
+    partners:
+      - name: Association des maires ruraux de France
+        logo: logo-amrf
+      - name: collectif handicap visuel
+        logo: logo-collectif-handicap-visuel
+      - name: Départements de France
+        logo: logo-departements
+      - name: France urbaine
+        logo: logo-france-urbaine
+      - name: Régions de France
+        logo: logo-regions-france
+      - name: Union des associations nationales pour l'inclusion des malentendants et des sourds
+        logo: logo-unanimes
+      - name: Union nationale des associations de parents d’enfants déficients auditifs
+        logo: logo-unapeda
+      - name: Union nationale des associations de parents d'enfants inadaptés
+        logo: logo-unapei

@@ -50,26 +50,47 @@ export function createIndicator(
           }
         }
       ],
+      next_expected_update_quarter: 'Q3 2025',
       ...extraOverrides
     }
   }
 
-  // DatasetV2WithFullObject replaces license/frequency/spatial with richer objects; license/frequency default to null.
+  // DatasetV2WithFullObject replaces license/frequency/spatial with richer objects.
   return {
     ...dataset,
-    license: null,
-    frequency: null,
-    spatial: { granularity: { id: 'fr:region', name: 'Région' }, zones: [] },
+    temporal_coverage: { start: '2020-01-01', end: '2022-12-31' },
+    license: {
+      id: 'fr-lo',
+      title: 'Licence Ouverte / Open Licence',
+      alternate_titles: [],
+      alternate_urls: [],
+      flags: [],
+      maintainer: 'Etalab',
+      url: 'https://www.etalab.gouv.fr/licence-ouverte-open-licence'
+    },
+    frequency: { id: 'annual', label: 'Annuelle' },
+    spatial: {
+      granularity: { id: 'fr:region', name: 'Région française' },
+      zones: [
+        {
+          code: '11',
+          id: 'fr:region:11',
+          level: 'fr:region',
+          name: 'Île-de-France',
+          uri: ''
+        }
+      ]
+    },
     extras
   }
 }
 
-export function createIndicatorResource() {
+export function createIndicatorResource(maille: string = 'region') {
   return resourceFactory.one({
     overrides: {
       extras: {
         'ecospheres-indicateurs': {
-          maille: 'region',
+          maille,
           'value-column': 'value',
           axes: {
             annee: ['2020', '2021', '2022'],
