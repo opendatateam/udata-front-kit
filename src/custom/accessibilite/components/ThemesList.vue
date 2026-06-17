@@ -5,12 +5,28 @@ import { useUniverseQuery } from '@/utils/universe'
 
 import { DsfrTile } from '@gouvminint/vue-dsfr'
 
+interface Props {
+  title?: string
+  titleLevel?: 'h1' | 'h2' | 'h3' | 'h4'
+  themesDisplay?: number
+}
+
+const {
+  title = 'Explorer par thème',
+  titleLevel = 'h2',
+  themesDisplay = 9
+} = defineProps<Props>()
+
 const topicsAPI = new TopicsAPI()
 const topics = ref<Topic[] | null>(null)
 
 onMounted(async () => {
   const response = await topicsAPI.list({
-    params: { ...useUniverseQuery('themes', {}), page: 1, page_size: 8 }
+    params: {
+      ...useUniverseQuery('themes', {}),
+      page: 1,
+      page_size: themesDisplay
+    }
   })
   topics.value = response.data
 })
@@ -24,7 +40,9 @@ const themeIcon = (tags: string[]) => {
 <template>
   <section class="fr-background-alt--yellow-moutarde fr-py-7w">
     <div class="fr-container">
-      <h2>Explorer par thème</h2>
+      <slot name="title">
+        <component :is="titleLevel">{{ title }}</component>
+      </slot>
       <ul v-if="topics" class="themes-list" role="list">
         <li v-for="topic in topics" :key="topic.id">
           <DsfrTile
