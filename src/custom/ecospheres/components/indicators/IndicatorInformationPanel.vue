@@ -102,19 +102,8 @@ const { unite, mailles } = useIndicatorExtras(indicator)
       </InformationPanelItem>
     </InformationPanelSection>
 
-    <!-- Tags -->
+    <!-- Extras -->
     <div class="pt-6">
-      <ExtraAccordion
-        v-if="indicator.tags?.length"
-        button-text="Voir les mots-clés"
-        title-text="Mots-clés"
-        :extra="
-          Object.fromEntries(indicator.tags.map((item, idx) => [idx, item]))
-        "
-        title-level="h3"
-      />
-
-      <!-- Extras -->
       <ExtraAccordion
         v-if="indicator.extras && Object.keys(indicator.extras).length"
         button-text="Voir les extras"

@@ -1,33 +1,29 @@
 <script lang="ts" setup>
-import { DsfrButton } from '@gouvminint/vue-dsfr'
+import { DsfrAlert, DsfrButton } from '@gouvminint/vue-dsfr'
 import { useClipboard } from '@vueuse/core'
 
 const emailAddress = ref('accessibilite@data.gouv.fr')
-const { copy, copied, isSupported } = useClipboard({ copiedDuring: 3000 })
+const { copy, isSupported } = useClipboard()
+
+const copyAlert = useTemplateRef('copyAlert')
+const copyButton = useTemplateRef('copyButton')
 
 const alreadyCopied = ref(false)
+const showAlert = ref(false)
+
 const handleCopy = () => {
   copy(emailAddress.value)
-  // avoid text flashing on button from synchronous 'setButtonText' computed
+  alreadyCopied.value = true
+  showAlert.value = true
   setTimeout(() => {
-    alreadyCopied.value = true
+    copyAlert.value?.$el.children[1].focus()
   }, 100)
 }
 
-const setButtonText = computed(() => {
-  /** since the button's text changes, it needs to be announced with an aria-live region. To avoid repeating the same text when the button resets, we use a third text when the address has already been copied before.
-   */
-  let text = "Copier l'email"
-
-  if (!copied.value && alreadyCopied.value) {
-    text = "Copier de nouveau l'email"
-  }
-  if (copied.value) {
-    text = 'Email copié !'
-  }
-
-  return text
-})
+const closeAlert = () => {
+  showAlert.value = false
+  copyButton.value?.focus()
+}
 </script>
 
 <template>
@@ -47,7 +43,7 @@ const setButtonText = computed(() => {
           <h2>Construisons ce portail thématique ensemble</h2>
           <p>
             Collectivités, associations, élu·es, entreprises, chargé·es de
-            politiques publiques en faveur de l'accessibilité, citoyen·es, nous
+            politiques publiques en faveur de l'accessibilité, citoyen·nes, nous
             comptons sur vous pour enrichir ce portail avec des données
             d'accessibilité.
           </p>
@@ -66,16 +62,24 @@ const setButtonText = computed(() => {
             >&nbsp;
             <DsfrButton
               v-if="isSupported"
+              ref="copyButton"
               class="fr-my-1v"
-              aria-live="polite"
-              :label="setButtonText"
+              label="Copier l'e-mail"
               size="sm"
               secondary
-              :icon="copied ? 'fr-icon-check-line' : ''"
-              icon-right
               @click="handleCopy"
             />
           </p>
+          <DsfrAlert
+            v-if="alreadyCopied && showAlert"
+            ref="copyAlert"
+            type="success"
+            description="E-mail copié !"
+            :closeable="true"
+            title-tag="h3"
+            small
+            @close="closeAlert"
+          />
         </div>
       </div>
     </div>

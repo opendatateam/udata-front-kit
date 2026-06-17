@@ -21,9 +21,20 @@ export const routes: RouteRecordRaw[] = [
   useGlobalSearchPageRoutes({
     pageKey: 'datasets'
   }),
+  {
+    path: '/themes',
+    name: 'themes',
+    meta: {
+      title: 'Données par thème',
+      pageKey: 'themes'
+    },
+    component: async () => await import('./views/ThemesView.vue')
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'themes',
-    topicConf
+    topicConf,
+    // TODO: see if this can be linked `pages.xxx.list_all` parameter
+    renderRootPage: false
   }),
   ...useTopicAdminPagesRoutes({
     pageKey: 'themes',
