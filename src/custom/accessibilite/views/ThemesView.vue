@@ -47,9 +47,7 @@ const doSearch = (q: string) => {
       <div class="fr-grid-row fr-grid-row--middle justify-between fr-mb-3w">
         <h1 class="fr-mb-0">{{ pageConf.title }}</h1>
         <div
-          v-if="
-            pageConf.object_type === 'topics' && userStore.canAddTopic(pageKey)
-          "
+          v-if="userStore.canAddTopic(pageKey)"
           class="fr-col-auto fr-grid-row fr-grid-row--middle fr-grid-row--gutters"
         >
           <div class="fr-col-auto">

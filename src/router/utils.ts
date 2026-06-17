@@ -263,6 +263,20 @@ export const useGlobalSearchPageRoutes = ({
     datasets: () => import('@/views/datasets/DatasetDetailView.vue')
   }
 
+  const childrenPages = {
+    path: renderRootPage ? ':item_id' : `/${pageKey}/:item_id`,
+    name: `${pageKey}_detail`,
+    component: detailsViewComponent ?? defaultDetailsViews[objectType],
+    meta: {
+      pageKey,
+      descriptionComponent,
+      cardComponent,
+      datasetCardComponent
+    },
+    // this forces the component to be recreated when switching page type
+    props: () => ({ key: pageKey, ...topicConf })
+  }
+
   const rootPage = {
     path: `/${pageKey}`,
     children: [
@@ -279,34 +293,8 @@ export const useGlobalSearchPageRoutes = ({
         },
         component: () => import('@/views/UnifiedSearchView.vue')
       },
-      {
-        path: ':item_id',
-        name: `${pageKey}_detail`,
-        component: detailsViewComponent ?? defaultDetailsViews[objectType],
-        meta: {
-          pageKey,
-          descriptionComponent,
-          cardComponent,
-          datasetCardComponent
-        },
-        // this forces the component to be recreated when switching page type
-        props: () => ({ key: pageKey, ...topicConf })
-      }
+      childrenPages
     ]
-  }
-
-  const childrenPages = {
-    path: `/${pageKey}/:item_id`,
-    name: `${pageKey}_detail`,
-    component: detailsViewComponent ?? defaultDetailsViews[objectType],
-    meta: {
-      pageKey,
-      descriptionComponent,
-      cardComponent,
-      datasetCardComponent
-    },
-    // this forces the component to be recreated when switching page type
-    props: () => ({ key: pageKey, ...topicConf })
   }
 
   return renderRootPage ? rootPage : childrenPages

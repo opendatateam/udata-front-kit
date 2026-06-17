@@ -29,6 +29,7 @@ const handleSearch = () => {
 
 <style scoped>
 form {
+  max-inline-size: 80ch;
   flex-flow: row wrap;
   gap: 0.5rem 0;
 }
