@@ -33,6 +33,7 @@ export const routes: RouteRecordRaw[] = [
   useGlobalSearchPageRoutes({
     pageKey: 'themes',
     topicConf,
+    // TODO: see if this can be linked `pages.xxx.list_all` parameter
     renderRootPage: false
   }),
   ...useTopicAdminPagesRoutes({
