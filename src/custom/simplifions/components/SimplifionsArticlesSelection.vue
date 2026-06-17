@@ -47,47 +47,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import type { FeaturedItem } from '../model/articles'
 import SimplifionsFolderCard from './SimplifionsFolderCard.vue'
 import SimplifionsArticleCard from './SimplifionsArticleCard.vue'
+import { useCarouselScroll } from '../composables/useCarouselScroll'
 
 defineProps<{ items: FeaturedItem[] }>()
 
-const track = ref<HTMLElement | null>(null)
-const scrollLeft = ref(0)
-const scrollMax = ref(0)
-
-const hasOverflow = computed(() => scrollMax.value > 0)
-const canPrev = computed(() => scrollLeft.value > 4)
-const canNext = computed(() => scrollLeft.value < scrollMax.value - 4)
-
-const onScroll = () => {
-  if (!track.value) return
-  scrollLeft.value = track.value.scrollLeft
-}
-
-const itemWidth = () => {
-  const item = track.value?.querySelector('.carousel__item') as HTMLElement | null
-  if (!item) return 300
-  return item.offsetWidth + 16
-}
-
-const prev = () => track.value?.scrollBy({ left: -itemWidth(), behavior: 'smooth' })
-const next = () => track.value?.scrollBy({ left: itemWidth(), behavior: 'smooth' })
-
-onMounted(async () => {
-  if (!track.value) return
-  const el = track.value
-  await nextTick()
-  scrollMax.value = el.scrollWidth - el.clientWidth
-  const ro = new ResizeObserver(() => {
-    scrollMax.value = el.scrollWidth - el.clientWidth
-    scrollLeft.value = el.scrollLeft
-  })
-  ro.observe(el)
-  onUnmounted(() => ro.disconnect())
-})
+const { track, hasOverflow, canPrev, canNext, onScroll, prev, next } =
+  useCarouselScroll('.carousel__item')
 </script>
 
 <style scoped>

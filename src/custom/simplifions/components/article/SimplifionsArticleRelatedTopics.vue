@@ -59,6 +59,7 @@ import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import SimplifionsSolutionCard from '../SimplifionsSolutionCard.vue'
 import SimplifionsCasDusageCard from '../SimplifionsCasDusageCard.vue'
+import { useCarouselScroll } from '../../composables/useCarouselScroll'
 
 const props = defineProps<{
   entries: readonly ArticleTopicEntry[]
@@ -101,19 +102,8 @@ const resolvedEntries = computed(() =>
 )
 
 // Navigation
-const track = ref<HTMLElement | null>(null)
-const scrollLeft = ref(0)
-const scrollMax = ref(0)
-
-const hasOverflow = computed(() => scrollMax.value > 0)
-const canPrev = computed(() => scrollLeft.value > 4)
-const canNext = computed(() => scrollLeft.value < scrollMax.value - 4)
-
-const updateScrollState = () => {
-  if (!track.value) return
-  scrollMax.value = track.value.scrollWidth - track.value.clientWidth
-  scrollLeft.value = track.value.scrollLeft
-}
+const { track, hasOverflow, canPrev, canNext, onScroll, prev, next, updateScrollState } =
+  useCarouselScroll('.topics-carousel__item', () => alignHeaderHeights())
 
 const alignHeaderHeights = () => {
   if (!track.value) return
@@ -124,35 +114,6 @@ const alignHeaderHeights = () => {
   const max = Math.max(...headers.map((h) => h.offsetHeight))
   if (max > 0) headers.forEach((h) => (h.style.height = `${max}px`))
 }
-
-const onScroll = () => {
-  if (!track.value) return
-  scrollLeft.value = track.value.scrollLeft
-}
-
-const itemWidth = () => {
-  const item = track.value?.querySelector('.topics-carousel__item') as HTMLElement | null
-  if (!item) return 296
-  return item.offsetWidth + 16
-}
-
-const prev = () => track.value?.scrollBy({ left: -itemWidth(), behavior: 'smooth' })
-const next = () => track.value?.scrollBy({ left: itemWidth(), behavior: 'smooth' })
-
-const ro = new ResizeObserver(() => {
-  updateScrollState()
-  alignHeaderHeights()
-})
-
-onMounted(async () => {
-  if (!track.value) return
-  await nextTick()
-  updateScrollState()
-  alignHeaderHeights()
-  ro.observe(track.value)
-})
-
-onUnmounted(() => ro.disconnect())
 </script>
 
 <style scoped>
