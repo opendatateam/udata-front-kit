@@ -208,8 +208,7 @@ export const articleMeta = {
   description:
     `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
   articleTags: [
-    { label: "Direction des systèmes d'information" },
-    { label: 'Développeurs' }
+    { label: "Toutes les administrations" }
   ],
   articleCategory: 'liste',
   heroBackdropGradient: 'linear-gradient(135deg, #a19237 0%, #fddede 100%)',
