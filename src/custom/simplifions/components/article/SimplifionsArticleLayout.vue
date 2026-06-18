@@ -77,6 +77,7 @@
                       class="fr-sidemenu__link"
                       :aria-current="activeSection === section.id ? 'page' : undefined"
                       :href="`#${section.id}`"
+                      @click="activeSection = section.id"
                     >
                       {{ section.label }}
                     </a>
