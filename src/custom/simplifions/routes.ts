@@ -26,6 +26,17 @@ export const routes: RouteRecordRaw[] = [
         './views/Articles/ApisFranceConnectees/ArticleApisFranceConnectees.vue'
       )
   },
+  {
+    path: '/guide-base-petites-collectivites',
+    name: 'guide-base-petites-collectivites',
+    meta: {
+      title: 'Guide de base pour les petites collectivités'
+    },
+    component: async () =>
+      await import(
+        './views/Articles/GuidesBases/ArticleGuideBasePetitesCollectivites.vue'
+      )
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,
