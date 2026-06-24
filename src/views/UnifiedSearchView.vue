@@ -2,7 +2,7 @@
 import SearchOrganizationFilter from '@/components/search/SearchOrganizationFilter.vue'
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -107,11 +107,7 @@ onMounted(() => {
       >
         <div class="fr-col-auto">
           <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-            <VIconCustom
-              name="add-circle-line"
-              class="fr-mr-1w"
-              align="middle"
-            />
+            <VIconDsfr name="add-circle-line" class="fr-mr-1w" align="middle" />
             Ajouter {{ labels.articles.un }} {{ labels.singular }}
           </router-link>
         </div>
