@@ -101,16 +101,18 @@
           </nav>
         </aside>
 
-        <main
-          ref="articleRef"
-          class="fr-col-12 fr-col-lg-9 article-content-col"
-        >
+        <div ref="articleRef" class="fr-col-12 fr-col-lg-9 article-content-col">
           <div class="article-content">
             <slot />
           </div>
-        </main>
+        </div>
       </div>
     </div>
+
+    <SimplifionsArticleRelatedTopics
+      :entries="topicEntries"
+      :gradient="heroBackdropGradient"
+    />
   </div>
 </template>
 
@@ -118,7 +120,9 @@
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { provide } from 'vue'
+import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
 import { articleSectionKey } from './articleSectionKey'
+import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
 type ArticleSection = {
   id: string
@@ -148,9 +152,8 @@ const props = withDefaults(
     articleCategory?: ArticleCategory
     showNoDevelopmentBadge?: boolean
     breadcrumbLinks?: readonly BreadcrumbItem[]
-    // CSS gradient or color for the hero backdrop when no image is provided.
-    // Recommended DSFR values: #1b1b35 (blue-france-75), #21213f (blue-france-100),
-    // #1e1e1e (grey-75), var(--background-alt-blue-france).
+    // CSS gradient for the hero backdrop when no image is provided.
+    // Must be a valid CSS gradient value (e.g. 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)').
     heroBackdropGradient?: string
     // Background color of the light panel containing the kicker, title and lead.
     // Recommended DSFR values: var(--background-alt-beige-gris-galet),
@@ -181,6 +184,8 @@ useMeta({
 const sections = ref<ArticleSection[]>([])
 provide(articleSectionKey, (id, label) => sections.value.push({ id, label }))
 
+const topicEntries = provideArticleTopicsRegistry()
+
 const sidemenuExpanded = ref(true)
 
 const articleRef = ref<HTMLElement | null>(null)
@@ -200,9 +205,6 @@ const heroImageStyle = computed(() => ({
 const heroPanelStyle = computed(() => ({
   backgroundColor: props.heroPanelBackground
 }))
-
-const articleTags = computed(() => props.articleTags)
-const breadcrumbLinks = computed(() => props.breadcrumbLinks)
 
 const categoryBadge = computed<ArticleBadge | null>(() => {
   if (!props.articleCategory) return null
@@ -246,7 +248,7 @@ const articleBadges = computed(() =>
 )
 
 const hasMeta = computed(
-  () => articleTags.value.length > 0 || articleBadges.value.length > 0
+  () => props.articleTags.length > 0 || articleBadges.value.length > 0
 )
 
 onMounted(() => {
@@ -261,6 +263,7 @@ onMounted(() => {
 
   if (!targets.length || typeof IntersectionObserver === 'undefined') return
 
+  const elementById = new Map(targets.map((el) => [el.id, el]))
   const visibleSections = new Set<string>()
 
   observer = new IntersectionObserver(
@@ -286,7 +289,7 @@ onMounted(() => {
       const zoneTop = window.innerHeight * 0.1
       let last = ''
       for (const section of sections.value) {
-        const el = container.querySelector<HTMLElement>(`#${section.id}`)
+        const el = elementById.get(section.id)
         if (el && el.getBoundingClientRect().top < zoneTop) last = section.id
       }
       if (last) activeSection.value = last
@@ -319,14 +322,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-.article-hero__backdrop {
-  position: absolute;
-  inset: 0 0 60px 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
+.article-hero__backdrop,
 .article-hero__media {
   position: absolute;
   inset: 0 0 60px 0;

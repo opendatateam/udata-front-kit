@@ -106,7 +106,8 @@ const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 
 <style scoped>
 .simplifions-card-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1rem;
   background: none;
 }

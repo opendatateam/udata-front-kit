@@ -45,6 +45,7 @@
 <script setup lang="ts">
 import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
+import { injectArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
 import type { TopicCasUsage, TopicSolution } from '../../model/topics'
 import SimplifionsCasDusageCard from '../SimplifionsCasDusageCard.vue'
 import SimplifionsSolutionCard from '../SimplifionsSolutionCard.vue'
@@ -96,6 +97,8 @@ onBeforeUnmount(() => {
   cancelled = true
 })
 
+const registry = injectArticleTopicsRegistry()
+
 onMounted(async () => {
   const results = await Promise.allSettled(
     props.slugs.map((slug) => topicStore.load(slug))
@@ -105,6 +108,13 @@ onMounted(async () => {
     .filter((r): r is PromiseFulfilledResult<Topic> => r.status === 'fulfilled')
     .map((r) => r.value)
   loading.value = false
+  topics.value.forEach((topic) =>
+    registry?.register(
+      topic.slug,
+      props.pageKey,
+      topic as unknown as TopicSolution | TopicCasUsage
+    )
+  )
 })
 </script>
 
@@ -185,6 +195,10 @@ onMounted(async () => {
 
 .spotlight__comment :deep(p + p) {
   margin-top: 0.5rem;
+}
+
+.spotlight__cards :deep(.header-topic) {
+  flex-grow: 1;
 }
 
 @media (max-width: 48rem) {
