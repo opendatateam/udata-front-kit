@@ -120,12 +120,7 @@ const tags = useTags(props.pageKey, props.topic)
 
     <div class="fr-grid-row flex-gap card-footer">
       <span class="fr-tag">
-        <VIconDsfr
-          name="database-line"
-          class="fr-mr-1v"
-          size="lg"
-          align="text-top"
-        />
+        <VIconDsfr name="database-line" class="fr-mr-1v" align="text-top" />
         <span class="fr-mr-1v">
           {{
             `${nbFactors > 0 ? nbFactors : 'Aucune'} donnée${nbFactors > 1 ? 's' : ''}`
@@ -134,12 +129,7 @@ const tags = useTags(props.pageKey, props.topic)
       </span>
 
       <span v-if="spatialCoverage" class="fr-tag">
-        <VIconDsfr
-          name="road-map-line"
-          class="fr-mr-1v"
-          size="lg"
-          align="text-top"
-        />
+        <VIconDsfr name="road-map-line" class="fr-mr-1v" align="text-top" />
         <span class="fr-mr-1v">
           {{ spatialCoverage.name }}
         </span>

@@ -26,11 +26,11 @@ withDefaults(
 
 <style scoped>
 .v-icon-ri {
-  --icon-size: 1.5rem;
+  --icon-size: 1.25rem;
   width: var(--icon-size);
   height: var(--icon-size);
 }
 .v-icon-ri--sm {
-  --icon-size: 1rem;
+  --icon-size: 0.9rem;
 }
 </style>
