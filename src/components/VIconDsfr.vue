@@ -4,7 +4,8 @@ import type { Property } from 'csstype'
 defineProps({
   name: {
     type: String,
-    required: true
+    required: true,
+    validator: (value: string) => !value.includes(':')
   },
   small: {
     type: Boolean,

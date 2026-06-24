@@ -4,7 +4,7 @@ import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
 import { formatDate } from '@/utils'
@@ -89,7 +89,7 @@ const showHarvestQualityWarning = computed(() => {
       v-if="showHarvestQualityWarning"
       class="text-mention-grey fr-text--sm fr-my-1v"
     >
-      <VIconCustom name="warning-line" class="fr-icon--sm" />
+      <VIconDsfr name="warning-line" class="fr-icon--sm" />
       La qualité des métadonnées peut être trompeuse car les métadonnées de la
       source originale peuvent avoir été perdues lors de leur récupération. Nous
       travaillons actuellement à améliorer la situation.

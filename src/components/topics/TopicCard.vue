@@ -8,7 +8,7 @@ import { type RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
@@ -114,16 +114,13 @@ const tags = useTags(props.pageKey, props.topic)
     </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-425">
-      <VIconCustom
-        name="time-line"
-        class="fr-mr-1w text-grey-425 fr-icon--sm"
-      />
+      <VIconDsfr name="time-line" class="fr-mr-1w text-grey-425 fr-icon--sm" />
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
 
     <div class="fr-grid-row flex-gap card-footer">
       <span class="fr-tag">
-        <VIconCustom
+        <VIconDsfr
           name="database-line"
           class="fr-mr-1v"
           size="lg"
@@ -137,7 +134,7 @@ const tags = useTags(props.pageKey, props.topic)
       </span>
 
       <span v-if="spatialCoverage" class="fr-tag">
-        <VIconCustom
+        <VIconDsfr
           name="road-map-line"
           class="fr-mr-1v"
           size="lg"
