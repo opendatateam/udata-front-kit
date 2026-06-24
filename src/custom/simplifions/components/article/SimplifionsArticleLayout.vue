@@ -115,6 +115,7 @@
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { provide } from 'vue'
+import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
 import { articleSectionKey } from './articleSectionKey'
 
 type ArticleSection = {
@@ -176,6 +177,8 @@ useMeta({
 
 const sections = ref<ArticleSection[]>([])
 provide(articleSectionKey, (id, label) => sections.value.push({ id, label }))
+
+const topicEntries = provideArticleTopicsRegistry()
 
 const sidemenuExpanded = ref(true)
 
