@@ -108,6 +108,11 @@
         </div>
       </div>
     </div>
+
+    <SimplifionsArticleRelatedTopics
+      :entries="topicEntries"
+      :gradient="heroBackdropGradient"
+    />
   </div>
 </template>
 
@@ -117,6 +122,7 @@ import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { provide } from 'vue'
 import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
 import { articleSectionKey } from './articleSectionKey'
+import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
 type ArticleSection = {
   id: string
