@@ -23,7 +23,7 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () =>
       await import(
-        './views/Articles/ApisFranceConnectees/ArticleApisFranceConnectees.vue'
+        './views/articles/apis-france-connectees/ArticleApisFranceConnectees.vue'
       )
   },
   {
@@ -34,7 +34,7 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () =>
       await import(
-        './views/Articles/GuidesBases/ArticleGuideBasePetitesCollectivites.vue'
+        './views/articles/guides-bases/ArticleGuideBasePetitesCollectivites.vue'
       )
   },
   useGlobalSearchPageRoutes({
