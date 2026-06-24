@@ -115,14 +115,13 @@ const hasTagSection = computed(
 }
 .topic-card:hover {
   background-color: var(--background-alt-grey);
-  opacity: 50;
+  opacity: 0.9;
 }
 .header-topic {
   background-color: rgba(209, 221, 244, 0.5);
   color: #465f9d;
   padding: 16px;
   gap: 10px;
-  opacity: 0px;
   min-height: 60px;
 }
 .topic-card:hover .header-topic {
