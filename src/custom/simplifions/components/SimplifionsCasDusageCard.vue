@@ -89,7 +89,8 @@ const hasTagSection = computed(
 
 <style scoped>
 .simplifions-card-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1rem;
   background: none;
 }
@@ -111,7 +112,11 @@ const hasTagSection = computed(
   -webkit-box-orient: vertical;
 }
 .topic-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   border: 1px solid #ebebeb;
+  background-color: var(--background-default-grey);
 }
 .topic-card:hover {
   background-color: var(--background-alt-grey);
@@ -127,9 +132,7 @@ const hasTagSection = computed(
 .topic-card:hover .header-topic {
   background-color: rgba(188, 199, 219, 0.5);
 }
-.topic-card:hover .description-topic {
-  background-color: #f0f0f0;
-}
+
 .title-topic {
   font-family: Marianne;
   color: #465f9d;
@@ -155,7 +158,6 @@ const hasTagSection = computed(
 .description-topic {
   padding: 16px;
   min-height: 80px;
-  background-color: var(--background-default-grey);
 }
 .date-topic {
   color: #6b7280; /* gris moyen */
