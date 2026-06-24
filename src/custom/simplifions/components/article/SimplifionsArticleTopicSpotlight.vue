@@ -197,6 +197,10 @@ onMounted(async () => {
   margin-top: 0.5rem;
 }
 
+.spotlight__cards :deep(.header-topic) {
+  flex-grow: 1;
+}
+
 @media (max-width: 48rem) {
   .spotlight--single {
     grid-template-columns: 1fr;
