@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       '@datagouv/components-next':
-        specifier: 1.0.2-dev.126
-        version: 1.0.2-dev.126(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
+        specifier: 1.3.0
+        version: 1.3.0(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       '@gouvfr/dsfr':
         specifier: ~1.14.4
         version: 1.14.4
@@ -50,8 +50,8 @@ importers:
         specifier: ^4.5.1
         version: 4.5.1
       dompurify:
-        specifier: ^3.4.0
-        version: 3.4.0
+        specifier: ^3.4.9
+        version: 3.4.11
       maplibre-gl:
         specifier: ^5.13.0
         version: 5.13.0
@@ -483,10 +483,10 @@ packages:
         integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==
       }
 
-  '@datagouv/components-next@1.0.2-dev.126':
+  '@datagouv/components-next@1.3.0':
     resolution:
       {
-        integrity: sha512-vBmQ32ICzDuEax+2eN0xLOi77BwlUvkrY2xxFCxahJ8qFbFABIhtMPlxgi9FHV3mngwySUb5r1g+aurDMhyXjA==
+        integrity: sha512-Y5/Gev4bOCGIURJpF9eXB8pAPIEyQ0co8FLglLSy24HYNixlyXgfTwF8PA4+lSkZn+xrQ9sbimQ64XEdmvWy9Q==
       }
     engines:
       {
@@ -1102,10 +1102,10 @@ packages:
         integrity: sha512-anR8WxKIgZUJQLlZtID0v06wd9Q//9K/6lLLU3dOzmeO/xLEzAwmEqP24jEnEUBcnZGkM4vidz9H6Q4guNAAlw==
       }
 
-  '@maplibre/mlt@1.1.11':
+  '@maplibre/mlt@1.1.12':
     resolution:
       {
-        integrity: sha512-dKvjKdITw9d0y3ndGkSqLUEpWCizMtdq8NB06cHohH/JZ2sJoM7dClR9wzJLUWykjbw9RXDFmhjjNBnNW27mzw==
+        integrity: sha512-ZeK5w2TTeHOajcLaEQs1KZXw2V9wIKo1PmThlxlsHoXsQsYlBqLJzPOd6tJHRtGTChUY3DPPmjXRArYVvAbmZw==
       }
 
   '@maplibre/vt-pbf@4.0.3':
@@ -3412,10 +3412,10 @@ packages:
         integrity: sha512-nolgK9JcaUXMSmW+j1yaSvaEaoXYHwWyGJlkoCTghc97KgGDDSnpoU/PlEnw63Ah+TGKFOyY+X5LnxaWbCSfXg==
       }
 
-  dompurify@3.4.10:
+  dompurify@3.4.11:
     resolution:
       {
-        integrity: sha512-0xzNv0e7oYC6yyuOGZIABPM4qtg3QxLFniDNPP4ZP90wR8Yq3zgwpRbrNiT4N3IKqDbbYFEJLV+JWEs19aZ//w==
+        integrity: sha512-zhlUV12GsaRzMsf9q5M254YhA4+VuF0fG+QFqu6aYpoGlKtz+w8//jBcGVYBgQkR5GHjUomejY84AV+/uPbWdw==
       }
 
   domutils@2.8.0:
@@ -4158,6 +4158,13 @@ packages:
         integrity: sha512-TC0NKVHcJZ9QvkEDyuMB327lT0xQIcZoIE3aSNOHN4Bkt1TcF+D/zAMQTl2AVTAYdrLAqFl6bhTWn5r7VJvkpw==
       }
     engines: { node: '>=20' }
+
+  geotiff@2.1.3:
+    resolution:
+      {
+        integrity: sha512-PT6uoF5a1+kbC3tHmZSUsLHBp2QJlHasxxxxPW47QIY1VBKpFB+FcDvX+MxER6UzgLQZ0xDzJ9s48B9JbOCTqA==
+      }
+    engines: { node: '>=10.19' }
 
   geotiff@3.0.5:
     resolution:
@@ -5987,6 +5994,12 @@ packages:
     peerDependencies:
       ol: '*'
 
+  ol@10.7.0:
+    resolution:
+      {
+        integrity: sha512-122U5gamPqNgLpLOkogFJhgpywvd/5en2kETIDW+Ubfi9lPnZ0G9HWRdG+CX0oP8od2d6u6ky3eewIYYlrVczw==
+      }
+
   ol@10.9.0:
     resolution:
       {
@@ -7540,6 +7553,12 @@ packages:
         integrity: sha512-MSd8OUGISqHdVvfY9TPhyK2VdUrPgxkUtWSuMHF6XAAFuL4LokseigBnZtPnJMu+FbynTkFNnFlyjxpVKujMRg==
       }
 
+  unist-util-visit@5.0.0:
+    resolution:
+      {
+        integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==
+      }
+
   unist-util-visit@5.1.0:
     resolution:
       {
@@ -8250,6 +8269,12 @@ packages:
         integrity: sha512-oEGMDB6pOP2S6OwRR4PdVv610zrjnA3Bh+JnSG12fYJlBKjtNAoEb5fSUoCOOINlH96I2fU38/A2UpRKs67xYQ==
       }
 
+  zstddec@0.1.0:
+    resolution:
+      {
+        integrity: sha512-w2NTI8+3l3eeltKAdK8QpiLo/flRAr2p8AGeakfMZOXBxOg9HIu4LVDxBi81sYgVhFhdJjv1OrB5ssI8uFPoLg==
+      }
+
   zstddec@0.2.0:
     resolution:
       {
@@ -8508,7 +8533,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@datagouv/components-next@1.0.2-dev.126(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
+  '@datagouv/components-next@1.3.0(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
     dependencies:
       '@floating-ui/vue': 1.1.11(vue@3.5.30(typescript@5.7.3))
       '@headlessui/vue': 1.7.23(vue@3.5.30(typescript@5.7.3))
@@ -8518,7 +8543,7 @@ snapshots:
       '@vueuse/core': 14.3.0(vue@3.5.30(typescript@5.7.3))
       '@vueuse/router': 14.3.0(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       chart.js: 4.5.1
-      dompurify: 3.4.10
+      dompurify: 3.4.11
       echarts: 6.1.0
       geopf-extensions-openlayers: 1.0.0-beta.11
       leaflet: 1.9.4
@@ -8638,7 +8663,7 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
-  '@eslint-community/eslint-utils@4.9.0(eslint@9.39.1(supports-color@8.1.1))':
+  '@eslint-community/eslint-utils@4.9.0(eslint@9.39.1)':
     dependencies:
       eslint: 9.39.1(supports-color@8.1.1)
       eslint-visitor-keys: 3.4.3
@@ -8875,7 +8900,7 @@ snapshots:
     dependencies:
       '@mapbox/point-geometry': 1.1.0
 
-  '@maplibre/mlt@1.1.11':
+  '@maplibre/mlt@1.1.12':
     dependencies:
       '@mapbox/point-geometry': 1.1.0
 
@@ -9415,7 +9440,7 @@ snapshots:
 
   '@typescript-eslint/utils@8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1)
       '@typescript-eslint/scope-manager': 8.48.0
       '@typescript-eslint/types': 8.48.0
       '@typescript-eslint/typescript-estree': 8.48.0(typescript@5.7.3)
@@ -10268,7 +10293,7 @@ snapshots:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
-  dompurify@3.4.10:
+  dompurify@3.4.11:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -10434,7 +10459,7 @@ snapshots:
 
   eslint-plugin-vue@9.33.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1)
       eslint: 9.39.1(supports-color@8.1.1)
       globals: 13.24.0
       natural-compare: 1.4.0
@@ -10469,7 +10494,7 @@ snapshots:
 
   eslint@9.39.1(supports-color@8.1.1):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1)
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.21.1(supports-color@8.1.1)
       '@eslint/config-helpers': 0.4.2
@@ -10760,14 +10785,14 @@ snapshots:
       ajv-formats: 3.0.1(ajv@8.18.0)
       clusterize.js: 1.0.0
       doctoc: 2.4.1
-      dompurify: 3.4.10
+      dompurify: 3.4.0
       eventbusjs: 0.2.0
       geoportal-access-lib: 3.4.6
       loglevel: 1.9.2
       marked: 16.4.2
-      ol: 10.9.0
-      ol-contextmenu: 5.5.0(ol@10.9.0)
-      ol-mapbox-style: 12.6.1(ol@10.9.0)
+      ol: 10.7.0
+      ol-contextmenu: 5.5.0(ol@10.7.0)
+      ol-mapbox-style: 12.6.1(ol@10.7.0)
       proj4: 2.15.0
       sortablejs: 1.15.3
       typescript: 5.7.3
@@ -10784,6 +10809,17 @@ snapshots:
       node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
+
+  geotiff@2.1.3:
+    dependencies:
+      '@petamoriken/float16': 3.9.3
+      lerc: 3.0.0
+      pako: 2.1.0
+      parse-headers: 2.0.6
+      quick-lru: 6.1.2
+      web-worker: 1.5.0
+      xml-utils: 1.10.2
+      zstddec: 0.1.0
 
   geotiff@3.0.5:
     dependencies:
@@ -10947,7 +10983,7 @@ snapshots:
       mdast-util-to-hast: 13.2.1
       parse5: 7.3.0
       unist-util-position: 5.0.0
-      unist-util-visit: 5.1.0
+      unist-util-visit: 5.0.0
       vfile: 6.0.3
       web-namespaces: 2.0.1
       zwitch: 2.0.4
@@ -11455,7 +11491,7 @@ snapshots:
       '@mapbox/whoots-js': 3.1.0
       '@maplibre/geojson-vt': 6.1.0
       '@maplibre/maplibre-gl-style-spec': 24.10.0
-      '@maplibre/mlt': 1.1.11
+      '@maplibre/mlt': 1.1.12
       '@maplibre/vt-pbf': 4.3.2
       '@types/geojson': 7946.0.16
       earcut: 3.0.2
@@ -11642,7 +11678,7 @@ snapshots:
       micromark-util-sanitize-uri: 2.0.1
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
-      unist-util-visit: 5.1.0
+      unist-util-visit: 5.0.0
       vfile: 6.0.3
 
   mdast-util-to-markdown@0.6.5:
@@ -11663,7 +11699,7 @@ snapshots:
       mdast-util-to-string: 4.0.0
       micromark-util-classify-character: 2.0.1
       micromark-util-decode-string: 2.0.1
-      unist-util-visit: 5.1.0
+      unist-util-visit: 5.0.0
       zwitch: 2.0.4
 
   mdast-util-to-string@2.0.0: {}
@@ -12058,16 +12094,24 @@ snapshots:
       node-fetch-native: 1.6.7
       ufo: 1.6.1
 
-  ol-contextmenu@5.5.0(ol@10.9.0):
+  ol-contextmenu@5.5.0(ol@10.7.0):
     dependencies:
-      ol: 10.9.0
+      ol: 10.7.0
       tiny-emitter: 2.1.0
 
-  ol-mapbox-style@12.6.1(ol@10.9.0):
+  ol-mapbox-style@12.6.1(ol@10.7.0):
     dependencies:
       '@maplibre/maplibre-gl-style-spec': 23.3.0
       mapbox-to-css-font: 3.2.0
-      ol: 10.9.0
+      ol: 10.7.0
+
+  ol@10.7.0:
+    dependencies:
+      '@types/rbush': 4.0.0
+      earcut: 3.0.2
+      geotiff: 2.1.3
+      pbf: 4.0.1
+      rbush: 4.0.1
 
   ol@10.9.0:
     dependencies:
@@ -12372,7 +12416,7 @@ snapshots:
       '@types/hast': 3.0.4
       hast-util-to-text: 4.0.2
       lowlight: 3.3.0
-      unist-util-visit: 5.1.0
+      unist-util-visit: 5.0.0
       vfile: 6.0.3
 
   rehype-raw@7.0.0:
@@ -12392,7 +12436,7 @@ snapshots:
       github-slugger: 2.0.0
       hast-util-heading-rank: 3.0.0
       hast-util-to-string: 3.0.1
-      unist-util-visit: 5.1.0
+      unist-util-visit: 5.0.0
 
   rehype-stringify@10.0.1:
     dependencies:
@@ -13039,6 +13083,12 @@ snapshots:
       unist-util-is: 5.2.1
       unist-util-visit-parents: 5.1.3
 
+  unist-util-visit@5.0.0:
+    dependencies:
+      '@types/unist': 3.0.3
+      unist-util-is: 6.0.1
+      unist-util-visit-parents: 6.0.2
+
   unist-util-visit@5.1.0:
     dependencies:
       '@types/unist': 3.0.3
@@ -13489,6 +13539,8 @@ snapshots:
   zrender@6.1.0:
     dependencies:
       tslib: 2.3.0
+
+  zstddec@0.1.0: {}
 
   zstddec@0.2.0: {}
 

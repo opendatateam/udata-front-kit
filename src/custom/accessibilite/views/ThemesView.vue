@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { useUserStore } from '@/store/UserStore'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
@@ -52,7 +52,7 @@ const doSearch = (q: string) => {
         >
           <div class="fr-col-auto">
             <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-              <VIconCustom
+              <VIconDsfr
                 name="add-circle-line"
                 class="fr-mr-1w"
                 align="middle"
