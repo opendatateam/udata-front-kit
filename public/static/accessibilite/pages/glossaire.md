@@ -6,7 +6,7 @@ Quelques définitions en lien avec le PAUDA en français simplifié.
 
 <dl>
 	<dt>Accessibilité</dt>
-	<dd>L’accessibilité signifie que les lieux, les services et les informations peuvent être utilisés par le plus grand nombre de personnes, y compris par les personnes en situation de handicap. Elle concerne par exemple les bâtiments et les déplacements, les sites internet et applications, ainsi que les services par téléphone.</dd>
+	<dd>L’accessibilité signifie que les lieux, les services et les informations peuvent être utilisés par le plus grand nombre de personnes, y compris par les personnes en situation de handicap. Elle concerne par exemple les bâtiments et les déplacements, les sites web et applications, ainsi que les services par téléphone.</dd>
 	<dt>Accessibilité universelle</dt>
 	<dd>L’accessibilité universelle consiste à concevoir les lieux, les services et les informations de manière à ce qu’ils puissent être utilisés par le plus grand nombre de personnes, dès le départ, sans besoin d’adaptation.</dd>
 	<dt>Autonomie</dt>
