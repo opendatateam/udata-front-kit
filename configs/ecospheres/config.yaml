@@ -105,8 +105,8 @@ website:
     name:
     link:
   notice:
-    display: true
-    content: "📢 Webinaire 25/06 à 14h : actualités, retours d'expérience, temps d'échange 👉 [Je m'inscris](https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/9yj7tx1Cxx6ekXmpj4WqUZ/68) !"
+    display: false
+    content: Vous naviguez sur une version beta d'ecologie.data.gouv.
     closeable: false
   # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
