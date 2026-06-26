@@ -62,7 +62,7 @@
           </div>
           <ul v-else-if="sortedUsefulDataApiFourniesParLaSolution?.length">
             <li
-              v-for="usefulRecord in sortedUsefulDataApiFourniesParLaSolution"
+              v-for="usefulRecord in visibleDataApiUtiles"
               :key="usefulRecord.fields.UID_datagouv"
             >
               <SimplifionsDataApiUtile
@@ -74,6 +74,14 @@
               />
             </li>
           </ul>
+          <button
+            v-if="sortedUsefulDataApiFourniesParLaSolution && sortedUsefulDataApiFourniesParLaSolution.length > MAX_VISIBLE_APIDATA_UTILES"
+            class="fr-btn fr-btn--tertiary fr-btn--icon-right fr-mb-1w"
+            :class="showAllApis ? 'fr-icon-subtract-line' : 'fr-icon-add-line'"
+            @click="showAllApis = !showAllApis"
+          >
+            {{ showAllApis ? 'Voir moins' : `Consulter les ${sortedUsefulDataApiFourniesParLaSolution.length - visibleDataApiUtiles.length} autres API et données utiles` }}
+          </button>
 
           <div class="fr-btns-group fr-btns-group--inline fr-mt-2w">
             <router-link
@@ -92,18 +100,6 @@
             >
               Demander un accès à la solution pour ce cas d'usage
             </a>
-          </div>
-
-          <div
-            v-if="sortedUsefulDataApiFourniesParLaSolution?.length"
-            class="fr-mt-3w"
-          >
-            <SimplifionsDataApi
-              v-for="usefulRecord in sortedUsefulDataApiFourniesParLaSolution"
-              :key="usefulRecord.fields.UID_datagouv"
-              :api-or-dataset="usefulRecord.fields"
-              title-tag="h6"
-            />
           </div>
         </template>
 
@@ -264,6 +260,13 @@ const isSolution = !!recommandation.Solution_recommandee
 const topicSlug = ref<string | undefined>(undefined)
 const usefulDataApiFourniesParLaSolution = ref<ApiOrDatasetRecord[] | undefined>(undefined)
 const customDescriptions = ref<Record<number, ApiOrDatasetUtiles>>({})
+const showAllApis = ref(false)
+const MAX_VISIBLE_APIDATA_UTILES = 5
+const visibleDataApiUtiles = computed(() =>
+  showAllApis.value
+    ? (sortedUsefulDataApiFourniesParLaSolution.value ?? [])
+    : (sortedUsefulDataApiFourniesParLaSolution.value?.slice(0, MAX_VISIBLE_APIDATA_UTILES) ?? [])
+)
 
 if (isSolution) {
   const topicsAPI = new TopicsAPI({ version: 2 })
@@ -402,6 +405,8 @@ if (recommandation.Solutions_integratrices_categorie_portail_de_consultation?.le
   })
 }
 
+const usefulApiIds = new Set(recommandation.API_et_datasets_utiles_fournis ?? [])
+
 const integrationScorePerSolution = computed(() => {
   const allSolutions = [
     ...integratingSolutionsLogicielsMetiers.value,
@@ -409,7 +414,6 @@ const integrationScorePerSolution = computed(() => {
     ...integratingSolutionsPortailsConsultation.value
   ]
   if (isSolution) {
-    const usefulApiIds = new Set(recommandation.API_et_datasets_utiles_fournis ?? [])
     const totalCount = usefulApiIds.size
     return new Map(
       allSolutions.map((solution) => [
