@@ -23,7 +23,7 @@ const props = defineProps({
   },
   headingLevel: {
     type: String,
-    default: 'h3'
+    default: 'p'
   },
   isEdit: {
     type: Boolean,
