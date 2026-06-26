@@ -57,39 +57,13 @@
         <template #title>Par l'API directement</template>
 
         <template v-if="isSolution">
-          <div v-if="usefulDataApiFourniesParLaSolution === undefined">
-            Chargement des données en cours...
-          </div>
-          <ul v-else-if="sortedUsefulDataApiFourniesParLaSolution?.length">
-            <li
-              v-for="usefulRecord in visibleDataApiUtiles"
-              :key="usefulRecord.fields.UID_datagouv"
-            >
-              <SimplifionsDataApiUtile
-                :api-or-dataset="usefulRecord.fields"
-                :custom-description="
-                  customDescriptions[usefulRecord.id]
-                    ?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
-                "
-              />
-            </li>
-          </ul>
-          <button
-            v-if="sortedUsefulDataApiFourniesParLaSolution && sortedUsefulDataApiFourniesParLaSolution.length > MAX_VISIBLE_APIDATA_UTILES"
-            class="fr-btn fr-btn--tertiary fr-btn--icon-right fr-mb-1w"
-            :class="showAllApis ? 'fr-icon-subtract-line' : 'fr-icon-add-line'"
-            @click="showAllApis = !showAllApis"
-          >
-            {{ showAllApis ? 'Voir moins' : `Consulter les ${sortedUsefulDataApiFourniesParLaSolution.length - visibleDataApiUtiles.length} autres API et données utiles` }}
-          </button>
-
           <div class="fr-btns-group fr-btns-group--inline fr-mt-2w">
             <router-link
               v-if="topicSlug"
               class="fr-btn fr-btn--secondary"
               :to="{ name: 'solutions_detail', params: { item_id: topicSlug } }"
             >
-              Voir la solution
+              Consulter la solution
             </router-link>
             <a
               v-if="recommandation.access_link_with_fallback"
@@ -101,6 +75,70 @@
               Demander un accès à la solution pour ce cas d'usage
             </a>
           </div>
+          
+          <div v-if="usefulDataApiFourniesParLaSolution === undefined">
+            Chargement des données en cours...
+          </div>
+          <div v-else-if="sortedUsefulEndpoints?.length">
+            <div v-if="endpointsAvecDescription.length" class="fr-table fr-table--no-caption fr-table--sm">
+              <p class="fr-text--bold">Sous-parties de l'API qui permettent d'accéder aux données :</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Endpoints de l'API</th>
+                    <th>Utilité pour ce cas d'usage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="usefulRecord in visibleDataApiUtiles"
+                    :key="usefulRecord.fields.UID_datagouv"
+                  >
+                    <td>
+                      <b>{{ usefulRecord.fields.Nom }}</b><br /><a
+                        :href="`https://www.data.gouv.fr/fr/${datagouvUrlType(usefulRecord.fields)}/${usefulRecord.fields.UID_datagouv}`"
+                        target="_blank" class="fr-link fr-link--xs"
+                      >Documentation</a>
+                    </td>
+                    <!-- eslint-disable vue/no-v-html -->
+                    <td
+                      class="fr-text--sm"
+                      v-html="fromMarkdown(customDescriptions[usefulRecord.id]?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage ?? null).html"
+                    ></td>
+                    <!-- eslint-enable vue/no-v-html -->
+                  </tr>
+                </tbody>
+              </table>
+              <button
+                v-if="endpointsAvecDescription.length > MAX_VISIBLE_APIDATA_UTILES"
+                class="fr-btn fr-btn--tertiary fr-btn--sm fr-btn--icon-right fr-mb-1w"
+                :class="showAllApis ? 'fr-icon-subtract-line' : 'fr-icon-add-line'"
+                @click="showAllApis = !showAllApis"
+              >
+                {{ showAllApis ? 'Voir moins' : `Consulter les ${endpointsAvecDescription.length - visibleDataApiUtiles.length} autres endpoints utiles` }}
+              </button>
+            </div>
+
+            <div v-if="endpointsSansDescription.length" class="fr-mt-2w">
+              <p class=" fr-text--bold fr-mb-1w">Ces endpoints sont également utiles :</p>
+              <ul class="fr-grid-row fr-grid-row--gutters fr-p-0">
+                <li
+                  v-for="record in endpointsSansDescription"
+                  :key="record.fields.UID_datagouv"
+                  class="fr-col-12 fr-col-md-6 fr-mb-0 fr-p-0"
+                >
+                  <a
+                    :href="`https://www.data.gouv.fr/fr/${datagouvUrlType(record.fields)}/${record.fields.UID_datagouv}`"
+                    target="_blank"
+                    class="fr-text--xs"
+                  > {{ record.fields.Nom }}</a>
+                 
+                </li>
+              </ul>
+            </div>
+          </div>
+
+
         </template>
 
         <template v-else>
@@ -246,7 +284,6 @@ import type {
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import SimplifionsDataApi from './SimplifionsDataApi.vue'
-import SimplifionsDataApiUtile from './SimplifionsDataApiUtile.vue'
 import SimplifionsRecoSolutionsIntegratricesCard from './SimplifionsRecoSolutionsIntegratricesCard.vue'
 
 const props = defineProps<{
@@ -262,10 +299,23 @@ const usefulDataApiFourniesParLaSolution = ref<ApiOrDatasetRecord[] | undefined>
 const customDescriptions = ref<Record<number, ApiOrDatasetUtiles>>({})
 const showAllApis = ref(false)
 const MAX_VISIBLE_APIDATA_UTILES = 5
+
+const endpointsAvecDescription = computed(() =>
+  sortedUsefulEndpoints.value?.filter(
+    (r) => !!customDescriptions.value[r.id]?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
+  ) ?? []
+)
+
+const endpointsSansDescription = computed(() =>
+  sortedUsefulEndpoints.value?.filter(
+    (r) => !customDescriptions.value[r.id]?.En_quoi_cette_API_ou_dataset_est_utile_pour_ce_cas_d_usage
+  ) ?? []
+)
+
 const visibleDataApiUtiles = computed(() =>
   showAllApis.value
-    ? (sortedUsefulDataApiFourniesParLaSolution.value ?? [])
-    : (sortedUsefulDataApiFourniesParLaSolution.value?.slice(0, MAX_VISIBLE_APIDATA_UTILES) ?? [])
+    ? endpointsAvecDescription.value
+    : endpointsAvecDescription.value.slice(0, MAX_VISIBLE_APIDATA_UTILES)
 )
 
 if (isSolution) {
@@ -304,7 +354,7 @@ if (isSolution) {
   }
 }
 
-const sortedUsefulDataApiFourniesParLaSolution = computed(() => {
+const sortedUsefulEndpoints = computed(() => {
   return usefulDataApiFourniesParLaSolution.value?.slice().sort((a, b) => {
     const aCustomDescription = customDescriptions.value[a.id]
     const bCustomDescription = customDescriptions.value[b.id]
@@ -367,6 +417,14 @@ const typeLabel = computed(() => {
   if (t === 'Jeu de données') return 'jeu de données'
   return 'API ou jeu de données'
 })
+
+const datagouvUrlType = (apiOrDataset: ApiOrDataset) => {
+  switch (apiOrDataset.Type) {
+    case 'API': return 'dataservices'
+    case 'Jeu de données': return 'datasets'
+    default: throw new Error(`Unknown type: ${apiOrDataset.Type}`)
+  }
+}
 
 const fetchSolutionsForCategory = async (ids: number[]) => {
   const data = await grist.getRecordsByIds('Solutions', ids)
@@ -449,6 +507,7 @@ const activePortailsAccordion = ref(-1)
 </script>
 
 <style scoped>
+
 .reco-card {
   background-color: var(--background-alt-beige-gris-galet);
   border-radius: 4px;
@@ -475,5 +534,10 @@ const activePortailsAccordion = ref(-1)
 
 .accordion-empty :deep(.fr-accordion__btn::after) {
   color: var(--text-disabled-grey);
+}
+
+.fr-text--sm :deep(p) {
+  font-size: inherit;
+  line-height: inherit;
 }
 </style>
