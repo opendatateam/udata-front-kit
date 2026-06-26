@@ -148,14 +148,11 @@ const props = withDefaults(
     articleCategory?: ArticleCategory
     showNoDevelopmentBadge?: boolean
     breadcrumbLinks?: readonly BreadcrumbItem[]
-    // CSS gradient or color for the hero backdrop when no image is provided.
-    // Recommended DSFR values: #1b1b35 (blue-france-75), #21213f (blue-france-100),
-    // #1e1e1e (grey-75), var(--background-alt-blue-france).
+    // CSS gradient or image url() for the hero backdrop when no image is provided.
+    // Example: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)'
     heroBackdropGradient?: string
     // Background color of the light panel containing the kicker, title and lead.
-    // Recommended DSFR values: var(--background-alt-beige-gris-galet),
-    // var(--background-alt-grey), var(--background-contrast-grey),
-    // var(--background-elevated-grey).
+    // Recommended DSFR values: var(--background-alt-beige-gris-galet)
     heroPanelBackground?: string
   }>(),
   {
