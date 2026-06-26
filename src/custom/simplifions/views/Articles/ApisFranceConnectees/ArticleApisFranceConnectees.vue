@@ -311,8 +311,8 @@ import type { ApiOrDataset } from '../../../model/grist'
 
 const articleMeta = {
   h1: 'Les APIs FranceConnectées',
-  // title: recommandé ≤ 60 caractères pour les moteurs de recherche
-  title: `Administrations et collectivités, utilisez les API FranceConnectées pour simplifier les démarches des particuliers qui se connectent via FranceConnect. Ce guide les référence et permet de comprendre leur principe.`,
+  // title: recommended ≤ 60 characters for search engines
+  title: `Administrations, pré-remplissez les démarches FranceConnectées`,
   description: `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
   articleTags: [{ label: 'Toutes les administrations' }],
   articleCategory: 'liste' as const,
