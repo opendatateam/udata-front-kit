@@ -1,7 +1,6 @@
 <template>
   <SimplifionsArticleLayout
     :h1="articleMeta.h1"
-    :title="articleMeta.title"
     :lead="articleMeta.description"
     :article-tags="articleMeta.articleTags"
     :article-category="articleMeta.articleCategory"
@@ -9,6 +8,7 @@
     :hero-panel-background="articleMeta.heroPanelBackground"
     :breadcrumb-links="breadcrumbLinks"
   >
+    <template #meta-title>{{ articleMeta.title }}</template>
     <ArticleSection id="definition" label="Définition">
       <p class="fr-text--lead fr-text--center">
         Dans l'administration, on parle d'<i

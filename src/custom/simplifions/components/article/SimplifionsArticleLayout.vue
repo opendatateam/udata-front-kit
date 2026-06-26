@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
-import { provide } from 'vue'
+import { provide, useSlots } from 'vue'
 import { articleSectionKey } from './articleSectionKey'
 
 type ArticleSection = {
@@ -140,7 +140,6 @@ type ArticleBadge = {
 const props = withDefaults(
   defineProps<{
     h1: string
-    title?: string
     lead?: string
     kicker?: string
     heroImageSrc?: string
@@ -156,7 +155,6 @@ const props = withDefaults(
     heroPanelBackground?: string
   }>(),
   {
-    title: undefined,
     lead: undefined,
     kicker: '',
     heroImageSrc: '',
@@ -169,8 +167,18 @@ const props = withDefaults(
   }
 )
 
+const slots = useSlots()
+const metaTitle = computed(() => {
+  const slot = slots['meta-title']
+  if (!slot) return props.h1
+  return slot()
+    .map((n) => (typeof n.children === 'string' ? n.children : ''))
+    .join('')
+    .trim() || props.h1
+})
+
 useMeta({
-  title: () => props.title ?? props.h1,
+  title: metaTitle,
   description: () => props.lead,
   canonicalUrl: useCanonicalUrl()
 })
