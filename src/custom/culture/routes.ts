@@ -1,4 +1,4 @@
-import { useDatasetSearchPageRoutes } from '@/router/utils'
+import { useGlobalSearchPageRoutes } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const routes: RouteRecordRaw[] = [
@@ -34,12 +34,10 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () => await import('./views/DemarcheView.vue')
   },
-  useDatasetSearchPageRoutes({
-    pageKey: 'datasets',
-    metaTitle: 'Données'
+  useGlobalSearchPageRoutes({
+    pageKey: 'datasets'
   }),
-  useDatasetSearchPageRoutes({
-    pageKey: 'univers-deps',
-    metaTitle: 'Données du DEPS'
+  useGlobalSearchPageRoutes({
+    pageKey: 'univers-deps'
   })
 ]

@@ -26,7 +26,7 @@ const { link, ctaLabel } = defineProps<Props>()
           class="fr-card__desc custom-links custom-card-desc culture-card-description"
         >
           <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="fromMarkdown(description)"></div>
+          <div v-html="fromMarkdown(description).html"></div>
         </div>
       </div>
       <div v-if="ctaLabel || link" class="fr-card__cta">

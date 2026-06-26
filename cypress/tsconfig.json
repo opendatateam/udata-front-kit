@@ -1,17 +1,12 @@
 {
   "extends": "../tsconfig.app.json",
-  "include": [
-    "../node_modules/cypress",
-    "./**/*.ts",
-    "./**/*.js",
-    "../src/**/*"
-  ],
+  "include": ["../env.d.ts", "./**/*.ts"],
   "compilerOptions": {
+    "composite": false,
     "isolatedModules": false,
-    "target": "es5",
-    "lib": ["es5", "dom"],
+    "target": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": ["cypress", "node"],
-    "baseUrl": "..",
     "paths": {
       "@/*": ["./src/*"]
     }
