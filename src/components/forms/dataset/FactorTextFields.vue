@@ -46,7 +46,7 @@ const labels = computed(() => props.labels ?? useLabels(pageConf.labels))
   <div class="fr-input-group">
     <label class="fr-label" for="input-purpose"
       >Raison d'utilisation dans {{ labels.articles.ce }}
-      {{ labels.singular }} (obligatoire)</label
+      {{ labels.singular }} (facultatif)</label
     >
     <p id="purpose-description" class="fr-mt-1v fr-mb-2v fr-text--sm">
       Renseignez les motifs métier ou techniques motivant la sélection de ce jeu

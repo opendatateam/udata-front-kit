@@ -1,4 +1,8 @@
-import type { Topic } from '@/model/topic'
+import {
+  createTestTopic,
+  mockTopicAndRelatedObjects,
+  mockTopicElementsByClass
+} from './support'
 
 describe('Ecospheres - Topic (Collection) Creation', () => {
   const universeTag =
@@ -21,23 +25,19 @@ describe('Ecospheres - Topic (Collection) Creation', () => {
     // Visit the collection creation page
     cy.visit('/admin/bouquets/add')
 
+    const createdTopic = createTestTopic({ slug: 'test-bouquet-slug' })
+
     // Mock the POST request for creating the topic/collection
     cy.intercept('POST', '**/topics/', (req) => {
-      // Create a response based on the request body
-      const createdTopic: Topic = {
-        ...req.body,
-        id: 'created-topic-id-123',
-        slug: 'test-bouquet-slug',
-        created_at: new Date().toISOString(),
-        last_modified: new Date().toISOString(),
-        page: 'bouquets'
-      }
-
       req.reply({
         statusCode: 201,
-        body: createdTopic
+        body: { ...createdTopic, ...req.body }
       })
     }).as('createTopic')
+
+    // Mock detail-page APIs triggered after redirect
+    mockTopicAndRelatedObjects(createdTopic)
+    mockTopicElementsByClass(createdTopic.id, [], [], [])
 
     // Fill in the required form fields
     cy.get('#input-name').type('Test Collection for Filter Tags')
