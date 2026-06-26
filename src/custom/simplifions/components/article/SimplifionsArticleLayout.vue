@@ -2,11 +2,11 @@
   <div class="article-page">
     <div
       v-if="breadcrumbLinks.length"
-      class="fr-container article-hero__breadcrumb"
+      class="fr-container article-hero__breadcrumb fr-pt-3v fr-pt-md-0"
     >
-      <DsfrBreadcrumb :links="breadcrumbLinks" />
+      <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-4v" />
     </div>
-    <header class="article-hero">
+    <header class="article-hero fr-pb-3v fr-pb-md-4v">
       <div
         v-if="heroImageSrc"
         class="article-hero__media"
@@ -20,39 +20,39 @@
         aria-hidden="true"
       ></div>
 
-      <div class="fr-container article-hero__inner">
-        <div class="article-hero__panel" :style="heroPanelStyle">
-          <div v-if="hasMeta" class="article-hero__meta">
-            <ul v-if="articleBadges.length" class="article-hero__badge-list">
+      <div class="fr-container article-hero__inner fr-mb-4v fr-mb-md-8v">
+        <div class="article-hero__panel fr-pt-4v fr-px-4v fr-pb-5v fr-pt-md-6v fr-px-md-7v fr-pb-md-7v" :style="heroPanelStyle">
+          <div v-if="hasMeta" class="article-hero__meta fr-mb-3v fr-mb-md-4v">
+            <ul v-if="articleBadges.length" class="article-hero__badge-list fr-p-0 fr-m-0">
               <li v-for="badge in articleBadges" :key="badge.label">
-                <p :class="badge.className">
+                <p :class="[badge.className, 'fr-m-0']">
                   {{ badge.label }}
                 </p>
               </li>
             </ul>
-            <ul v-if="articleTags.length" class="article-hero__tag-list">
+            <ul v-if="articleTags.length" class="article-hero__tag-list fr-p-0 fr-m-0">
               <li v-for="tag in articleTags" :key="tag.label">
-                <a v-if="tag.href" class="fr-tag fr-tag--sm" :href="tag.href">
+                <a v-if="tag.href" class="fr-tag fr-tag--sm fr-m-0" :href="tag.href">
                   {{ tag.label }}
                 </a>
-                <p v-else class="fr-tag fr-tag--sm">
+                <p v-else class="fr-tag fr-tag--sm fr-m-0">
                   {{ tag.label }}
                 </p>
               </li>
             </ul>
           </div>
-          <p v-if="kicker" class="article-hero__kicker">{{ kicker }}</p>
-          <h1 class="article-hero__title">{{ h1 }}</h1>
-          <p v-if="lead" class="article-hero__lead">
+          <p v-if="kicker" class="article-hero__kicker fr-text--sm fr-mb-3v fr-py-1v fr-px-3v">{{ kicker }}</p>
+          <h1 class="article-hero__title fr-m-0">{{ h1 }}</h1>
+          <p v-if="lead" class="article-hero__lead fr-mt-4v">
             {{ lead }}
           </p>
         </div>
       </div>
     </header>
 
-    <div class="fr-container article-shell">
+    <div class="fr-container article-shell fr-py-8v">
       <div class="fr-grid-row fr-grid-row--gutters article-grid">
-        <aside class="fr-col-12 fr-col-lg-3 article-toc-col">
+        <aside class="fr-col-12 fr-col-lg-3 article-toc-col fr-mb-4v fr-mb-md-0">
           <nav
             class="fr-sidemenu article-toc"
             role="navigation"
@@ -312,24 +312,14 @@ onBeforeUnmount(() => {
   color: var(--text-inverted-grey);
   position: relative;
   min-height: clamp(16rem, 24vw, 21rem);
-  padding: 0 0 1rem;
   overflow: hidden;
 }
 
-.article-hero__backdrop {
-  position: absolute;
-  inset: 0 0 60px 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
+.article-hero__backdrop,
 .article-hero__media {
   position: absolute;
   inset: 0 0 60px 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: center / cover no-repeat;
 }
 
 .article-hero__inner {
@@ -347,25 +337,18 @@ onBeforeUnmount(() => {
   background-color: rgba(255, 255, 255, 0.75);
 }
 
-.article-hero__breadcrumb :deep(nav) {
-  margin-bottom: 1rem;
-}
 
 .article-hero__panel {
   position: relative;
   z-index: 1;
   width: min(75%, 64rem);
-  padding: 1.5rem 1.75rem 1.75rem;
   color: var(--text-title-grey);
-  border-radius: 0;
-  box-shadow: none;
 }
 
 .article-hero__meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-bottom: 1rem;
 }
 
 .article-hero__tag-list,
@@ -373,8 +356,6 @@ onBeforeUnmount(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  padding: 0;
-  margin: 0;
   list-style: none;
 }
 
@@ -383,19 +364,12 @@ onBeforeUnmount(() => {
   display: flex;
 }
 
-.article-hero__tag-list .fr-tag,
-.article-hero__badge-list .fr-badge {
-  margin: 0;
-}
 
 .article-hero__kicker {
   display: inline-flex;
   align-items: center;
-  margin: 0 0 0.875rem;
-  padding: 0.3rem 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-title-blue-france);
   background-color: var(--background-default-grey);
@@ -403,21 +377,14 @@ onBeforeUnmount(() => {
 }
 
 .article-hero__title {
-  margin: 0;
   font-size: clamp(2rem, 3.8vw, 3.4rem);
   line-height: 1.05;
 }
 
 .article-hero__lead {
-  margin: 1.15rem 0 0;
   font-size: clamp(1.08rem, 1.2vw, 1.28rem);
   line-height: 1.65;
   color: var(--text-default-grey);
-}
-
-.article-shell {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 }
 
 .article-grid {
@@ -445,31 +412,17 @@ onBeforeUnmount(() => {
   max-width: var(--article-content-max);
 }
 
-@media (max-width: 62rem) {
+@media (max-width: 48em) {
   .article-hero {
     min-height: 16rem;
-    padding-bottom: 0.75rem;
-  }
-
-  .article-hero__backdrop {
-    inset: 0 0 60px 0;
   }
 
   .article-hero__inner {
     margin-top: 4.5rem;
   }
 
-  .article-hero__breadcrumb {
-    padding-top: 0.75rem;
-  }
-
   .article-hero__panel {
     width: 100%;
-    padding: 1.1rem 1.1rem 1.25rem;
-  }
-
-  .article-hero__meta {
-    margin-bottom: 0.75rem;
   }
 
   .article-hero__title {
@@ -477,25 +430,13 @@ onBeforeUnmount(() => {
     font-size: clamp(1.8rem, 7vw, 2.5rem);
   }
 
-  .article-hero__lead {
-    font-size: 1.05rem;
-  }
-
   .article-toc-col {
     position: static;
-    top: auto;
     height: auto;
-    margin-bottom: 1rem;
   }
 
   .article-content {
     max-width: none;
-  }
-}
-
-@media (min-width: 90rem) {
-  .article-hero__panel {
-    width: min(66.666%, 58rem);
   }
 }
 </style>
