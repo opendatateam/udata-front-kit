@@ -496,6 +496,10 @@ const tabTitles = computed(() => {
 })
 
 const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
+
+watch(tabTitles, () => {
+  activeTab.value = 0
+})
 </script>
 
 <style scoped>

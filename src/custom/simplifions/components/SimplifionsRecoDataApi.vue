@@ -356,6 +356,10 @@ const tabTitles = computed(() => {
   return titles
 })
 
+watch(tabTitles, () => {
+  activeTab.value = 0
+})
+
 const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
 </script>
 
