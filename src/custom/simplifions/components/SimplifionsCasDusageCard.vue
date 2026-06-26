@@ -9,38 +9,82 @@
         <h3 class="title-topic fr-text--lead">
           {{ topic.name }}
         </h3>
-        <p class="fr-mb-1w">
+        <p v-if="showDescription" class="fr-mb-1w">
           {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
         </p>
         <div class="date-topic fr-grid-row fr-grid-row--right fr-mt-1w">
           <DraftTag v-if="topic.private" class="fr-mr-1v" />
-          <div class="fr-ml-auto fr-mb-0 fr-text--xs">
-            Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
-          </div>
+        </div>
+        <div
+          v-if="showArrow && !hasTagSection"
+          class="card-arrow"
+          aria-hidden="true"
+        >
+          <span class="fr-icon-arrow-right-line" />
         </div>
       </div>
       <!--Texte pour préciser les usagers et les fournisseurs de service-->
-      <div class="description-topic">
-        <SimplifionsTags :topic="topic" :page-key="pageKey" />
+      <div v-if="hasTagSection" class="description-topic">
+        <SimplifionsTags
+          :topic="topic"
+          :page-key="pageKey"
+          :show-target-users="showTargetUsers"
+          :show-fournisseurs="showFournisseurs"
+          :hide-simplification="!showSimplificationTags"
+          :show-categorie-de-solution="showCategorieDeSolution"
+        />
+        <div v-if="showArrow" class="card-arrow" aria-hidden="true">
+          <span class="fr-icon-arrow-right-line" />
+        </div>
       </div>
     </div>
   </router-link>
 </template>
 
 <script setup lang="ts">
-import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
-import { useFormatDate } from '@datagouv/components-next'
+import { useRoute } from 'vue-router'
 import type { TopicCasUsage } from '../model/topics'
 import DraftTag from './DraftTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
-defineProps<{
-  topic: TopicCasUsage
-}>()
+const props = withDefaults(
+  defineProps<{
+    topic: TopicCasUsage
+    pageKey?: string
+    showDescription?: boolean
+    showTargetUsers?: boolean
+    showFournisseurs?: boolean
+    showSimplificationTags?: boolean
+    showCategorieDeSolution?: boolean
+    showArrow?: boolean
+  }>(),
+  {
+    pageKey: undefined,
+    showDescription: true,
+    showTargetUsers: true,
+    showFournisseurs: true,
+    showSimplificationTags: true,
+    showCategorieDeSolution: true,
+    showArrow: false
+  }
+)
 
-const { pageKey } = useCurrentPageConf()
-const { formatRelativeIfRecentDate } = useFormatDate()
+const route = useRoute()
+const pageKey = computed(
+  () =>
+    props.pageKey ??
+    (route.meta.pageKey as string | undefined) ??
+    'cas-d-usages'
+)
+
+const hasTagSection = computed(
+  () =>
+    props.showTargetUsers ||
+    props.showFournisseurs ||
+    props.showSimplificationTags ||
+    props.showCategorieDeSolution
+)
 </script>
 
 <style scoped>
@@ -50,12 +94,7 @@ const { formatRelativeIfRecentDate } = useFormatDate()
   background: none;
 }
 
-.owner-avatar {
-  margin-bottom: -6px;
-  display: inline-block;
-}
-.fr-card__detail,
-:deep(h3) {
+.fr-card__detail {
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -75,7 +114,7 @@ const { formatRelativeIfRecentDate } = useFormatDate()
   border: 1px solid #ebebeb;
 }
 .topic-card:hover {
-  background-color: #f6f6f6;
+  background-color: var(--background-alt-grey);
   opacity: 50;
 }
 .header-topic {
@@ -88,6 +127,9 @@ const { formatRelativeIfRecentDate } = useFormatDate()
 }
 .topic-card:hover .header-topic {
   background-color: rgba(188, 199, 219, 0.5);
+}
+.topic-card:hover .description-topic {
+  background-color: #f0f0f0;
 }
 .title-topic {
   font-family: Marianne;
@@ -112,19 +154,27 @@ const { formatRelativeIfRecentDate } = useFormatDate()
   line-height: 21px;
 }
 .description-topic {
-  margin: 16px;
+  padding: 16px;
   min-height: 80px;
+  background-color: var(--background-default-grey);
 }
 .date-topic {
   color: #6b7280; /* gris moyen */
 }
 
+.card-arrow {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem 0.5rem;
+  color: var(--text-action-high-blue-france);
+}
+
 .topic-card--private .header-topic {
-  background-color: #f6f6f6;
-  color: #666; /* gris moyen */
+  background-color: var(--background-alt-grey);
+  color: var(--text-mention-grey); /* gris moyen */
 }
 .topic-card--private:hover .header-topic {
   background-color: #e7e7e7 !important;
-  color: #666; /* gris moyen */
+  color: var(--text-mention-grey); /* gris moyen */
 }
 </style>
