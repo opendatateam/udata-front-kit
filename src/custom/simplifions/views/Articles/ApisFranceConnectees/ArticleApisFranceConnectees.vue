@@ -3,12 +3,14 @@
     :h1="articleMeta.h1"
     :lead="articleMeta.description"
     :article-tags="articleMeta.articleTags"
-    :article-category="articleMeta.articleCategory"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
     :breadcrumb-links="breadcrumbLinks"
   >
     <template #meta-title>{{ articleMeta.title }}</template>
+    <template #badges>
+      <p class="fr-badge fr-badge--md fr-badge--green-menthe fr-m-0">Liste</p>
+    </template>
     <ArticleSection id="definition" label="Définition">
       <p class="fr-text--lead fr-text--center">
         Dans l'administration, on parle d'<i
@@ -315,7 +317,6 @@ const articleMeta = {
   title: `Administrations, pré-remplissez les démarches FranceConnectées`,
   description: `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
   articleTags: [{ label: 'Toutes les administrations' }],
-  articleCategory: 'liste' as const,
   heroBackdropGradient: 'linear-gradient(135deg, #a19237 0%, #fddede 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }

@@ -23,7 +23,8 @@
       <div class="fr-container article-hero__inner fr-mb-4v fr-mb-md-8v">
         <div class="article-hero__panel fr-pt-4v fr-px-4v fr-pb-5v fr-pt-md-6v fr-px-md-7v fr-pb-md-7v" :style="heroPanelStyle">
           <div v-if="hasMeta" class="article-hero__meta fr-mb-3v fr-mb-md-4v">
-            <ul v-if="articleBadges.length" class="article-hero__badge-list fr-p-0 fr-m-0">
+            <ul v-if="slots.badges || articleBadges.length" class="article-hero__badge-list fr-p-0 fr-m-0">
+              <li v-if="slots.badges"><slot name="badges" /></li>
               <li v-for="badge in articleBadges" :key="badge.label">
                 <p :class="[badge.className, 'fr-m-0']">
                   {{ badge.label }}
@@ -130,8 +131,6 @@ type ArticleAudienceTag = {
   href?: string
 }
 
-type ArticleCategory = 'guide' | 'liste' | 'palmares' | 'veille'
-
 type ArticleBadge = {
   label: string
   className: string
@@ -144,7 +143,6 @@ const props = withDefaults(
     kicker?: string
     heroImageSrc?: string
     articleTags?: readonly ArticleAudienceTag[]
-    articleCategory?: ArticleCategory
     showNoDevelopmentBadge?: boolean
     breadcrumbLinks?: readonly BreadcrumbItem[]
     // CSS gradient or image url() for the hero backdrop when no image is provided.
@@ -159,7 +157,6 @@ const props = withDefaults(
     kicker: '',
     heroImageSrc: '',
     articleTags: () => [],
-    articleCategory: undefined,
     showNoDevelopmentBadge: false,
     heroBackdropGradient: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)',
     heroPanelBackground: 'var(--background-alt-beige-gris-galet)',
@@ -209,31 +206,6 @@ const heroPanelStyle = computed(() => ({
 const articleTags = computed(() => props.articleTags)
 const breadcrumbLinks = computed(() => props.breadcrumbLinks)
 
-const categoryBadge = computed<ArticleBadge | null>(() => {
-  if (!props.articleCategory) return null
-
-  const byCategory: Record<ArticleCategory, ArticleBadge> = {
-    guide: {
-      label: 'Guide',
-      className: 'fr-badge fr-badge--md fr-badge--pink-macaron'
-    },
-    liste: {
-      label: 'Liste',
-      className: 'fr-badge fr-badge--md fr-badge--green-menthe'
-    },
-    palmares: {
-      label: 'Palmarès',
-      className: 'fr-badge fr-badge--md fr-badge--brown-caramel'
-    },
-    veille: {
-      label: 'Veille',
-      className: 'fr-badge fr-badge--md fr-badge--brown-caramel'
-    }
-  }
-
-  return byCategory[props.articleCategory]
-})
-
 const specialBadge = computed<ArticleBadge | null>(() => {
   if (!props.showNoDevelopmentBadge) return null
 
@@ -245,13 +217,14 @@ const specialBadge = computed<ArticleBadge | null>(() => {
 })
 
 const articleBadges = computed(() =>
-  [categoryBadge.value, specialBadge.value].filter(
-    (badge): badge is ArticleBadge => badge !== null
-  )
+  [specialBadge.value].filter((badge): badge is ArticleBadge => badge !== null)
 )
 
 const hasMeta = computed(
-  () => articleTags.value.length > 0 || articleBadges.value.length > 0
+  () =>
+    articleTags.value.length > 0 ||
+    articleBadges.value.length > 0 ||
+    !!slots.badges
 )
 
 onMounted(() => {
