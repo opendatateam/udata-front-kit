@@ -1,5 +1,5 @@
 <template>
-  <div class="api-or-dataset-utile">
+  <div class="fr-text--sm">
     <a
       :href="`https://www.data.gouv.fr/fr/${datagouvType}/${apiOrDataset.UID_datagouv}`"
       target="_blank"
@@ -8,7 +8,7 @@
     <!-- eslint-disable vue/no-v-html -->
     <div
       v-if="customDescription && customDescription.length > 0"
-      class="api-or-dataset-utile-description"
+      class="fr-text--sm"
       v-html="fromMarkdown(customDescription).html"
     ></div>
     <!-- eslint-enable vue/no-v-html -->
@@ -37,3 +37,11 @@ const datagouvType = computed(() => {
   }
 })
 </script>
+
+<style scoped>
+.fr-text--sm :deep(p) {
+  font-size: inherit;
+  line-height: inherit;
+}
+</style>
+
