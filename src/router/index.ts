@@ -5,8 +5,6 @@ import type { StaticPageConfig } from '@/model/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 
-const disableRoutes: string[] = config.website.router.disable ?? []
-
 // common/default routes
 const defaultRoutes: RouteRecordRaw[] = [
   // home
@@ -18,28 +16,6 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: async () => await import('@/views/HomeView.vue')
   },
-  // organizations
-  {
-    path: '/organizations',
-    name: 'organizations_routes',
-    children: [
-      {
-        path: '',
-        name: 'organizations',
-        meta: {
-          title: 'Organisations'
-        },
-        component: async () =>
-          await import('@/views/organizations/OrganizationsListView.vue')
-      },
-      {
-        path: ':oid',
-        name: 'organization_detail',
-        component: async () =>
-          await import('@/views/organizations/OrganizationDetailView.vue')
-      }
-    ]
-  },
   // technical pages
   {
     path: '/404',
@@ -49,10 +25,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: NotFoundView
   }
-].filter((route) => {
-  if (route.name === undefined) return true
-  return !disableRoutes.includes(route.name)
-})
+]
 
 // static pages
 const pages = (config.website.router.static_pages ?? []).map(
@@ -61,10 +34,7 @@ const pages = (config.website.router.static_pages ?? []).map(
       path: item.route,
       name: item.id,
       component: StaticPageView,
-      props: { url: item.url },
-      meta: {
-        title: item.title
-      }
+      props: { url: item.url }
     }
   }
 )
@@ -136,15 +106,22 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   return createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
-    scrollBehavior(to, _from, savedPosition) {
+    scrollBehavior(to, from, savedPosition) {
       // Skip auto-scroll for factor hashes - we handle scrolling manually in TopicDetailView
       if (to.hash.startsWith('#factor-')) {
         return false
       }
       if (to.hash !== '') {
-        return {
-          el: to.hash
+        // Only scroll if the element is already in the DOM. If it isn't (async content),
+        // useHashScroll in the target component can take over if wired.
+        if (document.querySelector(to.hash)) {
+          return { el: to.hash }
         }
+        return false
+      }
+      // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
+      if (to.meta.searchConfig && from.meta.searchConfig) {
+        return false
       }
       if (savedPosition !== null) {
         return savedPosition

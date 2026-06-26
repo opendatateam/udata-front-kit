@@ -3,12 +3,12 @@ import {
   OrganizationNameWithCertificate,
   useFormatDate
 } from '@datagouv/components-next'
-import { toRef } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
+import { computed, toRef } from 'vue'
+import { type RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import TagComponent from '@/components/TagComponent.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import type { Topic } from '@/model/topic'
 import { stripFromMarkdown } from '@/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
@@ -26,7 +26,15 @@ const props = defineProps({
     type: Object as () => Topic,
     required: true
   },
+  topicUrl: {
+    type: Object as () => RouteLocationRaw,
+    default: null
+  },
   hideDescription: {
+    type: Boolean,
+    default: false
+  },
+  showDraftPill: {
     type: Boolean,
     default: false
   }
@@ -39,10 +47,13 @@ const { nbFactors } = useTopicFactors(topicRef)
 
 const ownerName = useOwnerName(props.topic)
 
-const topicLink: RouteLocationRaw = {
-  name: `${props.pageKey}_detail`,
-  params: { item_id: props.topic.slug }
-}
+const topicLink = computed<RouteLocationRaw>(
+  () =>
+    props.topicUrl ?? {
+      name: `${props.pageKey}_detail`,
+      params: { item_id: props.topic.slug }
+    }
+)
 
 const tags = useTags(props.pageKey, props.topic)
 </script>
@@ -50,7 +61,7 @@ const tags = useTags(props.pageKey, props.topic)
 <template>
   <article class="fr-px-3w fr-py-2w border border-default-grey fr-enlarge-link">
     <div
-      v-if="topic.private"
+      v-if="showDraftPill && topic.private"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v"
     >
       <p class="fr-badge fr-badge--mention-grey fr-mr-1w">Brouillon</p>
@@ -103,21 +114,13 @@ const tags = useTags(props.pageKey, props.topic)
     </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-425">
-      <VIconCustom
-        name="time-line"
-        class="fr-mr-1w text-grey-425 fr-icon--sm"
-      />
+      <VIconDsfr name="time-line" class="fr-mr-1w text-grey-425 fr-icon--sm" />
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
 
-    <div class="fr-grid-row flex-gap">
+    <div class="fr-grid-row flex-gap card-footer">
       <span class="fr-tag">
-        <VIconCustom
-          name="database-line"
-          class="fr-mr-1v"
-          size="lg"
-          align="text-top"
-        />
+        <VIconDsfr name="database-line" class="fr-mr-1v" align="text-top" />
         <span class="fr-mr-1v">
           {{
             `${nbFactors > 0 ? nbFactors : 'Aucune'} donnée${nbFactors > 1 ? 's' : ''}`
@@ -126,12 +129,7 @@ const tags = useTags(props.pageKey, props.topic)
       </span>
 
       <span v-if="spatialCoverage" class="fr-tag">
-        <VIconCustom
-          name="road-map-line"
-          class="fr-mr-1v"
-          size="lg"
-          align="text-top"
-        />
+        <VIconDsfr name="road-map-line" class="fr-mr-1v" align="text-top" />
         <span class="fr-mr-1v">
           {{ spatialCoverage.name }}
         </span>

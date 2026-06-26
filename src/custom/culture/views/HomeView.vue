@@ -1,27 +1,15 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
 import { onMounted, ref } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
 import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
 import { fromMarkdown } from '@/utils'
+import { useMeta } from '@/utils/seo'
 
-useHead({
-  meta: [
-    { property: 'og:title', content: config.website.title },
-    {
-      name: 'description',
-      content:
-        'culture.data.gouv.fr référence et centralise les données du domaine de la culture.'
-    },
-    {
-      property: 'og:description',
-      content:
-        'culture.data.gouv.fr référence et centralise les données du domaine de la culture.'
-    }
-  ],
-  link: [{ rel: 'canonical', href: window.location.origin }]
+useMeta({
+  description: () => config.website.homepage.meta_description,
+  canonicalUrl: () => window.location.origin
 })
 
 interface Section {
@@ -286,7 +274,7 @@ onMounted(() => {
                 <h4 class="fr-h6 fr-mb-2w">{{ item.fields.title }}</h4>
                 <div class="fr-text--sm fr-mb-3w">
                   <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                  <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
                 <a
                   v-if="item.fields.ctaLink && item.fields.ctaLabel"
@@ -314,7 +302,7 @@ onMounted(() => {
             :key="item.id"
           >
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="fromMarkdown(item.fields.content)"></div>
+            <div v-html="fromMarkdown(item.fields.content).html"></div>
           </div>
         </section>
 
@@ -332,7 +320,7 @@ onMounted(() => {
                   :key="item.id"
                 >
                   <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                  <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
                 <br />
                 <a
