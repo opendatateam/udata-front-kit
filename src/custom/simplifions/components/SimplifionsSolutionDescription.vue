@@ -563,7 +563,7 @@ useHashScroll({
 <style scoped>
 h2.colored-title {
   color: black;
-  background-color: rgb(167, 212, 205);
+  background-color: var(--simplifions-h2-highlightt);
   padding: 2px 4px;
   display: inline-block;
 }

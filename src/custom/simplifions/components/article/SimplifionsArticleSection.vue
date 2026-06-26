@@ -24,7 +24,7 @@ onMounted(() => register?.(props.id, props.label))
 .article-section__title {
   margin-top: 4rem;
   color: var(--text-default-grey);
-  background-color: rgb(167, 212, 205);
+  background-color: var(--simplifions-h2-highlight);
   padding: 2px 4px;
   display: inline-block;
 }
