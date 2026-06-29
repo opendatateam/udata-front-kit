@@ -39,6 +39,7 @@
               <a
                 target="_blank"
                 href="https://franceconnect.gouv.fr/partenaires"
+                rel="noopener noreferrer"
                 >FranceConnect</a
               >
               comme modalité d'appel.</b
