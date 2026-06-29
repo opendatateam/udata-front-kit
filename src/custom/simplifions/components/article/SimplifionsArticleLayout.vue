@@ -129,6 +129,7 @@ type ArticleAudienceTag = {
 const props = withDefaults(
   defineProps<{
     h1: string
+    title?: string
     lead?: string
     kicker?: string
     heroImageSrc?: string
@@ -142,6 +143,7 @@ const props = withDefaults(
     heroPanelBackground?: string
   }>(),
   {
+    title: undefined,
     lead: undefined,
     kicker: '',
     heroImageSrc: '',
@@ -153,14 +155,7 @@ const props = withDefaults(
 )
 
 const slots = useSlots()
-const metaTitle = computed(() => {
-  const slot = slots['meta-title']
-  if (!slot) return props.h1
-  return slot()
-    .map((n) => (typeof n.children === 'string' ? n.children : ''))
-    .join('')
-    .trim() || props.h1
-})
+const metaTitle = computed(() => props.title ?? props.h1)
 
 useMeta({
   title: metaTitle,

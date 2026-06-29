@@ -1,13 +1,13 @@
 <template>
   <SimplifionsArticleLayout
     :h1="articleMeta.h1"
+    :title="articleMeta.title"
     :lead="articleMeta.description"
     :article-tags="articleMeta.articleTags"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
     :breadcrumb-links="breadcrumbLinks"
   >
-    <template #meta-title>{{ articleMeta.title }}</template>
     <template #badges>
       <p class="fr-badge fr-badge--md fr-badge--green-menthe fr-m-0">Liste</p>
     </template>
