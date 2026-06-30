@@ -74,143 +74,144 @@
       title-tag="h5"
       @resource-fetched="handleResourceFetched"
     />
-      <div v-if="hasIntegratingSolutions" class="fr-col-12 fr-p-0 fr-mt-4w">
-        <DsfrAccordionsGroup v-model="activeIntegratingAccordion">
-          <DsfrAccordion title-tag="h5">
-            <template #title>
-              <strong
-                >Solutions intégrant «&nbsp;{{
-                  recommandation.Nom_de_la_recommandation
-                }}&nbsp;»</strong
-              >
-            </template>
-            <DsfrTabs
-              v-model="activeTab"
-              tab-list-name="Catégories de solutions intégratrices"
-              :tab-titles="tabTitles"
+
+    <div v-if="hasIntegratingSolutions" class="fr-col-12 fr-p-0 fr-mt-4w">
+      <DsfrAccordionsGroup v-model="activeIntegratingAccordion">
+        <DsfrAccordion title-tag="h5">
+          <template #title>
+            <strong
+              >Solutions intégrant «&nbsp;{{
+                recommandation.Nom_de_la_recommandation
+              }}&nbsp;»</strong
             >
-              <DsfrTabContent
-                v-if="integratingSolutionsLogicielsMetiers?.length"
-                :panel-id="`${uid}-tab-content-logiciel-metier`"
-                :tab-id="`${uid}-tab-logiciel-metier`"
-                style="background-color: white"
+          </template>
+          <DsfrTabs
+            v-model="activeTab"
+            tab-list-name="Catégories de solutions intégratrices"
+            :tab-titles="tabTitles"
+          >
+            <DsfrTabContent
+              v-if="integratingSolutionsLogicielsMetiers?.length"
+              :panel-id="`${uid}-tab-content-logiciel-metier`"
+              :tab-id="`${uid}-tab-logiciel-metier`"
+              style="background-color: white"
+            >
+              <p>
+                <strong>Liste des logiciels métier, sur étagère</strong>
+                conçus pour le cas d'usage «<i
+                  >&nbsp;{{
+                    recommandation.Nom_complet_du_cas_d_usage
+                  }}&nbsp;</i
+                >» :
+              </p>
+              <div
+                class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
               >
-                <p>
-                  <strong>Liste des logiciels métier, sur étagère</strong>
-                  conçus pour le cas d’usage «<i
-                    >&nbsp;{{
-                      recommandation.Nom_complet_du_cas_d_usage
-                    }}&nbsp;</i
-                  >» :
-                </p>
                 <div
-                  class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
+                  v-for="solution in integratingSolutionsLogicielsMetiers"
+                  :key="solution.id"
+                  class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                 >
-                  <div
-                    v-for="solution in integratingSolutionsLogicielsMetiers"
-                    :key="solution.id"
-                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
-                  >
-                    <SimplifionsRecoSolutionsIntegratricesCard
-                      :solution="solution"
-                      :integration-score="
-                        integrationScorePerSolution.get(solution.id)
-                      "
-                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-                      :type-label="typeLabel"
-                    />
-                  </div>
+                  <SimplifionsRecoSolutionsIntegratricesCard
+                    :solution="solution"
+                    :integration-score="
+                      integrationScorePerSolution.get(solution.id)
+                    "
+                    :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                    :type-label="typeLabel"
+                  />
                 </div>
-              </DsfrTabContent>
+              </div>
+            </DsfrTabContent>
 
-              <DsfrTabContent
-                v-if="integratingSolutionsBriquesTechniques?.length"
-                :panel-id="`${uid}-tab-content-brique-technique`"
-                :tab-id="`${uid}-tab-brique-technique`"
-                style="background-color: white"
+            <DsfrTabContent
+              v-if="integratingSolutionsBriquesTechniques?.length"
+              :panel-id="`${uid}-tab-content-brique-technique`"
+              :tab-id="`${uid}-tab-brique-technique`"
+              style="background-color: white"
+            >
+              <p>
+                <strong>Briques techniques logicielles</strong> destinées à
+                être intégrées dans un système informatique existant et
+                conçues pour le cas d'usage «<i
+                  >&nbsp;{{
+                    recommandation.Nom_complet_du_cas_d_usage
+                  }}&nbsp;</i
+                >» :
+              </p>
+              <div
+                class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
               >
-                <p>
-                  <strong>Briques techniques logicielles</strong> destinées à
-                  être intégrées dans un système informatique existant et
-                  conçues pour le cas d’usage «<i
-                    >&nbsp;{{
-                      recommandation.Nom_complet_du_cas_d_usage
-                    }}&nbsp;</i
-                  >» :
-                </p>
                 <div
-                  class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
+                  v-for="solution in integratingSolutionsBriquesTechniques"
+                  :key="solution.id"
+                  class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                 >
-                  <div
-                    v-for="solution in integratingSolutionsBriquesTechniques"
-                    :key="solution.id"
-                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
-                  >
-                    <SimplifionsRecoSolutionsIntegratricesCard
-                      :solution="solution"
-                      :integration-score="
-                        integrationScorePerSolution.get(solution.id)
-                      "
-                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-                      :type-label="typeLabel"
-                    />
-                  </div>
+                  <SimplifionsRecoSolutionsIntegratricesCard
+                    :solution="solution"
+                    :integration-score="
+                      integrationScorePerSolution.get(solution.id)
+                    "
+                    :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                    :type-label="typeLabel"
+                  />
                 </div>
-              </DsfrTabContent>
+              </div>
+            </DsfrTabContent>
 
-              <DsfrTabContent
-                v-if="integratingSolutionsPortailsConsultation?.length"
-                :panel-id="`${uid}-tab-content-portail-consultation`"
-                :tab-id="`${uid}-tab-portail-consultation`"
-                style="background-color: white"
+            <DsfrTabContent
+              v-if="integratingSolutionsPortailsConsultation?.length"
+              :panel-id="`${uid}-tab-content-portail-consultation`"
+              :tab-id="`${uid}-tab-portail-consultation`"
+              style="background-color: white"
+            >
+              <p>
+                <b
+                  >Ces sites vous permettent de consulter certaines des
+                  données utiles pour ce cas d'usage :</b
+                >
+              </p>
+              <div
+                class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight"
               >
-                <p>
-                  <b
-                    >Ces sites vous permettent de consulter certaines des
-                    données utiles pour ce cas d’usage :</b
-                  >
+                <p class="fr-mb-0">
+                  💡 Pour vraiment simplifier la vie des usagers,
+                  l'intégration directe de cette API ou de jeu de données dans
+                  vos logiciels métiers est à privilégier car elle permet de
+                  mettre en oeuvre le <i>dites-le-nous une fois</i> et la
+                  proactivité !
                 </p>
+              </div>
+              <div
+                class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
+              >
                 <div
-                  class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight"
+                  v-for="solution in integratingSolutionsPortailsConsultation"
+                  :key="solution.id"
+                  class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
                 >
-                  <p class="fr-mb-0">
-                    💡 Pour vraiment simplifier la vie des usagers,
-                    l'intégration directe de cette API ou de jeu de données dans
-                    vos logiciels métiers est à privilégier car elle permet de
-                    mettre en oeuvre le <i>dites-le-nous une fois</i> et la
-                    proactivité !
-                  </p>
+                  <SimplifionsRecoSolutionsIntegratricesCard
+                    :solution="solution"
+                    :integration-score="
+                      integrationScorePerSolution.get(solution.id)
+                    "
+                    :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+                    :type-label="typeLabel"
+                  />
                 </div>
-                <div
-                  class="reco-solution fr-grid-row fr-grid-row--gutters fr-mt-2w"
-                >
-                  <div
-                    v-for="solution in integratingSolutionsPortailsConsultation"
-                    :key="solution.id"
-                    class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
-                  >
-                    <SimplifionsRecoSolutionsIntegratricesCard
-                      :solution="solution"
-                      :integration-score="
-                        integrationScorePerSolution.get(solution.id)
-                      "
-                      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-                      :type-label="typeLabel"
-                    />
-                  </div>
-                </div>
-              </DsfrTabContent>
-            </DsfrTabs>
-            <p class="fr-text--sm fr-mx-3w fr-mt-2w">
-              <i
-                >Une solution n'est pas listée parmi les solutions intégrant
-                «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;» ?
-              </i>
-              <a href="#modification-contenu">✒️ Proposer un contenu</a>.
-            </p>
-          </DsfrAccordion>
-        </DsfrAccordionsGroup>
-      </div>
+              </div>
+            </DsfrTabContent>
+          </DsfrTabs>
+          <p class="fr-text--sm fr-mx-3w fr-mt-2w">
+            <i
+              >Une solution n'est pas listée parmi les solutions intégrant
+              «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;» ?
+            </i>
+            <a href="#modification-contenu">✒️ Proposer un contenu</a>.
+          </p>
+        </DsfrAccordion>
+      </DsfrAccordionsGroup>
+    </div>
   </div>
 </template>
 
