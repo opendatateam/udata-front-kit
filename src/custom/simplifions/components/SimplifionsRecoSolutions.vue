@@ -160,7 +160,7 @@
                 v-if="integratingSolutionsLogicielsMetiers?.length"
                 panel-id="tab-content-logiciel-metier"
                 tab-id="tab-logiciel-metier"
-                style="background-color: white"
+                class="tab-bg-white"
               >
                 <p>
                   <strong>Liste des logiciels métier, sur étagère</strong>
@@ -194,7 +194,7 @@
                 v-if="integratingSolutionsBriquesTechniques?.length"
                 panel-id="tab-content-brique-technique"
                 tab-id="tab-brique-technique"
-                style="background-color: white"
+                class="tab-bg-white"
               >
                 <p>
                   <strong>Briques techniques logicielles</strong> destinées à
@@ -229,7 +229,7 @@
                 v-if="integratingSolutionsPortailsConsultation?.length"
                 panel-id="tab-content-portail-consultation"
                 tab-id="tab-portail-consultation"
-                style="background-color: white"
+                class="tab-bg-white"
               >
                 <p>
                   <b
@@ -519,6 +519,9 @@ const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
 
 .reco-section {
   display: flex;
+}
+.tab-bg-white {
+  background-color: white;
 }
 
 :deep(.fr-accordion__btn[aria-expanded='true']) {
