@@ -6,6 +6,8 @@ import {
   DatasetInformationSection,
   DatasetSchemaSection,
   DatasetSpatialSection,
+  DescriptionListDetails,
+  DescriptionListTerm,
   ExtraAccordion
 } from '@datagouv/components-next'
 
@@ -38,6 +40,12 @@ const goToHarvester = (sourceId: string) => {
       <template #map="{ geojson }">
         <LeafletMap :geojson="geojson" width="350px" height="350px" />
       </template>
+      <div v-if="dataset.extras?.dcat?.spatial_resolution">
+        <DescriptionListTerm>Niveau de détail</DescriptionListTerm>
+        <DescriptionListDetails>{{
+          dataset.extras.dcat.spatial_resolution
+        }}</DescriptionListDetails>
+      </div>
     </DatasetSpatialSection>
     <!-- Suspense component (experimental) is required here because `DatasetSchemaSection`
         is a component with an async setup(). If Suspense is removed from vue, `DatasetSchemaSection` must be
