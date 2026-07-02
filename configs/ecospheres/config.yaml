@@ -91,9 +91,9 @@ website:
       width: 192px
       height: 35px
     button:
-      display: true
+      display: false
       label: 'Donnez votre avis'
-      link: https://tally.so/r/wLWrzp
+      link: https://grist.numerique.gouv.fr/o/ecospheres/forms/dr3oLSZ7hZUeZchdd5wJE9/4
     search:
       display: false
       placeholder:
@@ -105,8 +105,8 @@ website:
     name:
     link:
   notice:
-    display: false
-    content: Vous naviguez sur une version beta d'ecologie.data.gouv.
+    display: true
+    content: 📢 Votre avis compte ! [Je réponds au questionnaire](https://grist.numerique.gouv.fr/o/ecospheres/forms/dr3oLSZ7hZUeZchdd5wJE9/4) (< 2 min). Vous avez des questions ? [Rejoignez nos permanences](https://guides.data.gouv.fr/ecologie.data.gouv.fr/faire-un-retour).
     closeable: false
   # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
