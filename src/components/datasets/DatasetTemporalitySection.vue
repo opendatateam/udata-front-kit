@@ -29,7 +29,7 @@ const harvestModifiedAt = harvest?.modified_at
       <div>
         <DescriptionListTerm>Création</DescriptionListTerm>
         <DescriptionListDetails>{{
-          formatDate(harvestCreatedAt ?? dataset.created_at)
+          formatDate(harvestCreatedAt)
         }}</DescriptionListDetails>
       </div>
       <div v-if="harvestIssuedAt">
