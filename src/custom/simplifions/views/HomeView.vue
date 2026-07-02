@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import config from '@/config'
 
+import SimplifionsArticlesSelection from '../components/articles_section/SimplifionsArticlesSelection.vue'
+import { featuredItems } from './Articles'
+
 const colorsBanner = config.website.home_banner_colors
 
 const fournisseursDeService = [
@@ -165,7 +168,7 @@ const niveauxDeSimplification = [
         </div>
       </div>
     </div>
-    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
+    <div class="fr-mt-4w fr-mb-6w fr-col-md-12 fr-grid-row fr-grid-row--center">
       <router-link to="/cas-d-usages" class="button-link">
         <button
           class="fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
@@ -175,6 +178,18 @@ const niveauxDeSimplification = [
       </router-link>
     </div>
   </div>
+
+  <section class="home-articles-section">
+    <div class="fr-container">
+      <h2 class="fr-h1 fr-text--center">
+        Guides et recommandations
+      </h2>
+      <p class="fr-mb-5w fr-text--lg fr-text--center">
+        Consulter nos différents dossiers et articles pour comprendre et choisir :
+      </p>
+      <SimplifionsArticlesSelection :items="featuredItems" />
+    </div>
+  </section>
 
   <div class="fr-container hero-text">
     <h2
@@ -509,6 +524,17 @@ const niveauxDeSimplification = [
 </template>
 
 <style scoped>
+.home-articles-section {
+  padding: 4rem 0;
+  background: var(--background-alt-blue-france);
+}
+
+@media (max-width: 62rem) {
+  .home-articles-section {
+    padding: 3rem 0;
+  }
+}
+
 .fr-container {
   text-align: center;
   margin-left: auto;

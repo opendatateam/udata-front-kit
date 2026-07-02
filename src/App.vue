@@ -141,7 +141,6 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   </main>
 
   <DsfrFooter
-    class="fr-mt-16w"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
     :operator-img-style="{
