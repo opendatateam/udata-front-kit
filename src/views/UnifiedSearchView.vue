@@ -44,20 +44,15 @@ const createUrl = computed(() => ({
   query: route.query
 }))
 
-// localType is needed because pageKey is read-only (derived from route), but
-// GlobalSearch needs a writable ref to track the active type (v-model:type).
-// When the user switches type, localType changes and the watch below navigates.
-// This watch keeps localType in sync when the route changes externally.
-const localType = ref(pageKey.value)
-watch(pageKey, (newKey) => {
-  localType.value = newKey
-})
-
-// When the user switches type, navigate to the new route. The guard prevents
-// a loop: when pageKey changes externally and syncs localType (watch above),
-// this fires but newType === pageKey.value so the push is skipped.
-watch(localType, async (newType) => {
-  if (newType !== pageKey.value) {
+// pageKey is read-only (derived from the route) so we need a writable computed
+// for v-model:type. A ref + watch doesn't work here: the watch fires after the
+// Vue flush, by which point GlobalSearch has already reacted to the type change
+// and issued a competing navigation that cancels ours. The computed setter runs
+// synchronously, so our router.push() starts before any watchers fire.
+const localType = computed({
+  get: () => pageKey.value,
+  set: async (newType) => {
+    if (newType === pageKey.value) return
     const scrollY = window.scrollY
     const { page, ...allQuery } = route.query
     // Org filter values are type-specific (different list per type) — don't carry them over
