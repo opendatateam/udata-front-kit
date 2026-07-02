@@ -21,14 +21,27 @@
       ></div>
 
       <div class="fr-container article-hero__inner fr-mb-4v fr-mb-md-8v">
-        <div class="article-hero__panel fr-pt-4v fr-px-4v fr-pb-5v fr-pt-md-6v fr-px-md-7v fr-pb-md-7v" :style="heroPanelStyle">
+        <div
+          class="article-hero__panel fr-pt-4v fr-px-4v fr-pb-5v fr-pt-md-6v fr-px-md-7v fr-pb-md-7v"
+          :style="heroPanelStyle"
+        >
           <div v-if="hasMeta" class="article-hero__meta fr-mb-3v fr-mb-md-4v">
-            <ul v-if="slots.badges" class="article-hero__badge-list fr-p-0 fr-m-0">
+            <ul
+              v-if="slots.badges"
+              class="article-hero__badge-list fr-p-0 fr-m-0"
+            >
               <li><slot name="badges" /></li>
             </ul>
-            <ul v-if="articleTags.length" class="article-hero__tag-list fr-p-0 fr-m-0">
+            <ul
+              v-if="articleTags.length"
+              class="article-hero__tag-list fr-p-0 fr-m-0"
+            >
               <li v-for="tag in articleTags" :key="tag.label">
-                <a v-if="tag.href" class="fr-tag fr-tag--sm fr-m-0" :href="tag.href">
+                <a
+                  v-if="tag.href"
+                  class="fr-tag fr-tag--sm fr-m-0"
+                  :href="tag.href"
+                >
                   {{ tag.label }}
                 </a>
                 <p v-else class="fr-tag fr-tag--sm fr-m-0">
@@ -37,7 +50,12 @@
               </li>
             </ul>
           </div>
-          <p v-if="kicker" class="article-hero__kicker fr-text--sm fr-mb-3v fr-py-1v fr-px-3v">{{ kicker }}</p>
+          <p
+            v-if="kicker"
+            class="article-hero__kicker fr-text--sm fr-mb-3v fr-py-1v fr-px-3v"
+          >
+            {{ kicker }}
+          </p>
           <h1 class="article-hero__title fr-m-0">{{ h1 }}</h1>
           <p v-if="lead" class="article-hero__lead fr-mt-4v">
             {{ lead }}
@@ -48,7 +66,9 @@
 
     <div class="fr-container article-shell fr-py-8v">
       <div class="fr-grid-row fr-grid-row--gutters article-grid">
-        <aside class="fr-col-12 fr-col-lg-3 article-toc-col fr-mb-4v fr-mb-md-0">
+        <aside
+          class="fr-col-12 fr-col-lg-3 article-toc-col fr-mb-4v fr-mb-md-0"
+        >
           <nav
             class="fr-sidemenu article-toc"
             role="navigation"
@@ -186,12 +206,7 @@ const heroPanelStyle = computed(() => ({
   backgroundColor: props.heroPanelBackground
 }))
 
-const articleTags = computed(() => props.articleTags)
-const breadcrumbLinks = computed(() => props.breadcrumbLinks)
-
-const hasMeta = computed(
-  () => articleTags.value.length > 0 || !!slots.badges
-)
+const hasMeta = computed(() => props.articleTags.length > 0 || !!slots.badges)
 
 onMounted(() => {
   activeSection.value = sections.value[0]?.id ?? ''
@@ -284,7 +299,6 @@ onBeforeUnmount(() => {
   background-color: rgba(255, 255, 255, 0.75);
 }
 
-
 .article-hero__panel {
   position: relative;
   z-index: 1;
@@ -310,7 +324,6 @@ onBeforeUnmount(() => {
 .article-hero__badge-list > li {
   display: flex;
 }
-
 
 .article-hero__kicker {
   display: inline-flex;
