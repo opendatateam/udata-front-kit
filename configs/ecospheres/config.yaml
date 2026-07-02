@@ -89,7 +89,7 @@ website:
       width: 192px
       height: 35px
     button:
-      display: true
+      display: false
       label: 'Donnez votre avis'
       link: https://tally.so/r/wLWrzp
     search:
