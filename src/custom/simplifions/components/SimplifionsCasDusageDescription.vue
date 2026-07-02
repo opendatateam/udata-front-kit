@@ -212,7 +212,7 @@ grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
 <style scoped>
 .h2-cas-usage {
   color: black;
-  background-color: rgb(167, 212, 205);
+  background-color: var(--simplifions-h2-highlight);
   padding: 2px 4px;
   display: inline-block;
 }

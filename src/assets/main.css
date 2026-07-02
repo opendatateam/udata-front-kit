@@ -465,6 +465,12 @@ Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2
   font-size: 1rem;
 }
 
+/* ===== Simplifions custom styles ===== */
+
+:root {
+  --simplifions-h2-highlight: rgb(167, 212, 205);
+}
+
 /* ===== Accessibilite custom styles ===== */
 
 .accessibilite .editorial {
