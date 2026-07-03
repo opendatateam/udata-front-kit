@@ -1,0 +1,50 @@
+import type { FeaturedItem, SimplifionsArticleCard } from '../../model/articles'
+import { buildSimplifionsArticleCard } from '../../model/articles'
+import { articleMeta as apiFranceConnecteesArticleMeta } from './ApisFranceConnectees/ArticleApisFranceConnectees.vue'
+import { themeMeta as apiFranceConnecteesFolderMeta } from './ApisFranceConnectees'
+import { articleMeta as guideBaseArticleMeta } from './GuidesBases/ArticleGuideBasePetitesCollectivites.vue'
+import { articleMeta as guideBaseAPIArticleMeta } from './GuidesBases/ArticleGuideBaseQuestCeQuUneAPI.vue'
+import { themeMeta as guideBaseFolderMeta } from './GuidesBases'
+import { guidesMeta } from './meta'
+
+export { guidesMeta as themeMeta } from './meta'
+
+const parentPath = `/${guidesMeta.id}`
+
+export const folders = [
+  {
+    meta: guideBaseFolderMeta,
+    articles: [
+      buildSimplifionsArticleCard(guideBaseFolderMeta, guideBaseArticleMeta, parentPath),
+      buildSimplifionsArticleCard(guideBaseFolderMeta, guideBaseAPIArticleMeta, parentPath)
+    ]
+  },
+  {
+    meta: apiFranceConnecteesFolderMeta,
+    articles: [buildSimplifionsArticleCard(apiFranceConnecteesFolderMeta, apiFranceConnecteesArticleMeta, parentPath)]
+  }
+]
+
+export const articles = folders.flatMap((f) => f.articles)
+
+export const rootArticles: SimplifionsArticleCard[] = []
+
+export const folderById = (id: string): FeaturedItem => {
+  const f = folders.find((f) => f.meta.id === id)!
+  return { type: 'folder', meta: f.meta, to: `${parentPath}/${f.meta.id}`, articleCount: f.articles.length }
+}
+
+export const articleById = (id: string): FeaturedItem => {
+  const allCards = [...articles, ...rootArticles]
+  const card = allCards.find((a) => a.id === id)!
+  return { type: 'article', card }
+}
+
+// ← Modifier cette liste pour changer ce qui apparaît en une sur la page d'accueil.
+// L'ordre ici = l'ordre dans le carrousel. Commenter une ligne = retirer de la une.
+export const featuredItems: FeaturedItem[] = [
+  articleById('guide-base-petites-collectivites'),
+  articleById('qu-est-ce-qu-une-api'),
+  articleById('les-apis-franceconnectees'),
+ // folderById('api-franceconnectees')
+]
