@@ -17,31 +17,32 @@ const props = defineProps<{
 const { formatDate } = useFormatDate()
 
 const harvest = props.dataset.harvest as TypedHarvest
-const harvestCreatedAt = harvest?.created_at
-const harvestIssuedAt = harvest?.issued_at
-const harvestModifiedAt = harvest?.modified_at
+const createdAt = harvest ? harvest?.created_at : props.dataset.created_at
+const issuedAt = harvest?.issued_at
+const modifiedAt = harvest ? harvest?.modified_at : props.dataset.last_update
+const modifiedLabel = harvest ? 'révision' : 'mise à jour'
 </script>
 
 <template>
   <div class="space-y-1 py-6">
     <h3 class="uppercase text-gray-plain text-sm font-bold">Temporalité</h3>
     <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 p-0">
-      <div>
+      <div v-if="createdAt">
         <DescriptionListTerm>Création</DescriptionListTerm>
         <DescriptionListDetails>{{
-          formatDate(harvestCreatedAt)
+          formatDate(createdAt)
         }}</DescriptionListDetails>
       </div>
-      <div v-if="harvestIssuedAt">
+      <div v-if="issuedAt">
         <DescriptionListTerm>Publication</DescriptionListTerm>
         <DescriptionListDetails>{{
-          formatDate(harvestIssuedAt)
+          formatDate(issuedAt)
         }}</DescriptionListDetails>
       </div>
-      <div v-if="harvestModifiedAt">
-        <DescriptionListTerm>Dernière révision</DescriptionListTerm>
+      <div v-if="modifiedAt">
+        <DescriptionListTerm>Dernière {{ modifiedLabel }}</DescriptionListTerm>
         <DescriptionListDetails>{{
-          formatDate(harvestModifiedAt)
+          formatDate(modifiedAt)
         }}</DescriptionListDetails>
       </div>
       <div v-if="dataset.frequency">
