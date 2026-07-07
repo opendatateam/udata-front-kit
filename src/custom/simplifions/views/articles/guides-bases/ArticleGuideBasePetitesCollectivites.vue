@@ -498,7 +498,7 @@ import SimplifionsArticleTopicSpotlight from '../../../components/article/Simpli
 const articleMeta = {
   h1: 'Guide de base pour les petites collectivités',
   title:
-    'Guide de base pour les petites communes : simplification des démarches en récupérant les données à la source, sans développements',
+    'Petites communes : un guide pour simplifier vos démarches',
   description:
     "Petites collectivités, simplifiez vos démarches administratives sans développement : portails publics gratuits et logiciels éditeurs déjà raccordés aux données vous permettent d'éviter de les redemander aux usagers.",
   imageSrc:
