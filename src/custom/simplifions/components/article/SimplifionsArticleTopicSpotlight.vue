@@ -113,6 +113,7 @@ onMounted(async () => {
 
 <style scoped>
 .spotlight {
+  display: grid;
   padding: 1.5rem;
   background: var(--background-alt-beige-gris-galet);
   margin-bottom: 1.5rem;
@@ -120,7 +121,6 @@ onMounted(async () => {
 
 /* 1 slug : commentaire à droite, carte à gauche */
 .spotlight--single {
-  display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   grid-template-areas: 'cards comment';
   gap: 1.5rem;
@@ -129,7 +129,6 @@ onMounted(async () => {
 
 /* 2+ slugs : commentaire en haut pleine largeur, cartes en row en dessous */
 .spotlight--multi {
-  display: grid;
   grid-template-columns: 1fr;
   grid-template-areas:
     'comment'
@@ -184,10 +183,6 @@ onMounted(async () => {
 .spotlight__comment :deep(p) {
   margin: 0;
   line-height: 1.6;
-}
-
-.spotlight__comment :deep(p + p) {
-  margin-top: 0.5rem;
 }
 
 @media (max-width: 48rem) {
