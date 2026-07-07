@@ -16,7 +16,7 @@
           <DraftTag v-if="topic.private" class="fr-mr-1v" />
         </div>
         <div
-          v-if="showArrow && !hasTagSection"
+          v-if="showArrow && !hasDetails"
           class="card-arrow"
           aria-hidden="true"
         >
@@ -24,7 +24,7 @@
         </div>
       </div>
       <!--Texte pour préciser les usagers et les fournisseurs de service-->
-      <div v-if="hasTagSection" class="description-topic">
+      <div v-if="hasDetails" class="description-topic">
         <SimplifionsTags
           :topic="topic"
           :page-key="pageKey"
@@ -78,7 +78,7 @@ const pageKey = computed(
     'cas-d-usages'
 )
 
-const hasTagSection = computed(
+const hasDetails = computed(
   () =>
     props.showTargetUsers ||
     props.showFournisseurs ||
