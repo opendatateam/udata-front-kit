@@ -94,14 +94,7 @@ const hasTagSection = computed(
   background: none;
 }
 
-.fr-card__detail {
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-  line-height: inherit;
-}
+
 .description p {
   overflow: hidden;
   text-overflow: ellipsis;
