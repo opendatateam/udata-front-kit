@@ -64,7 +64,7 @@ const props = withDefaults(
   }>(),
   {
     showDescription: false,
-    showImage: true,
+    showImage: false,
     showOperateurTag: true,
     showTargetUsers: false,
     showFournisseurs: false,

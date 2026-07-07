@@ -165,7 +165,6 @@
       <SimplifionsArticleTopicSpotlight
         :slugs="['formulaire-de-collecte-du-quotient-familial']"
         page-key="solutions"
-        :show-image="false"
         :show-operateur-tag="true"
         :show-target-users="true"
         :show-fournisseurs="false"
@@ -187,7 +186,6 @@
       <SimplifionsArticleTopicSpotlight
         :slugs="['annuaire-des-entreprises']"
         page-key="solutions"
-        :show-image="false"
         :show-operateur-tag="true"
         :show-target-users="true"
         :show-arrow="true"
@@ -208,7 +206,6 @@
       <SimplifionsArticleTopicSpotlight
         :slugs="['data-subvention']"
         page-key="solutions"
-        :show-image="false"
         :show-operateur-tag="true"
         :show-target-users="true"
         :show-arrow="true"
