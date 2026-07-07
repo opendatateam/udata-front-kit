@@ -1,6 +1,6 @@
 <template>
   <div
-    class="spotlight"
+    class="spotlight fr-p-6v fr-mb-6v"
     :class="isMulti ? 'spotlight--multi' : 'spotlight--single'"
   >
     <div class="spotlight__comment">
@@ -114,9 +114,7 @@ onMounted(async () => {
 <style scoped>
 .spotlight {
   display: grid;
-  padding: 1.5rem;
   background: var(--background-alt-beige-gris-galet);
-  margin-bottom: 1.5rem;
 }
 
 /* 1 slug : commentaire à droite, carte à gauche */

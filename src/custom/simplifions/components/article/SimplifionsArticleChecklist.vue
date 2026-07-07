@@ -1,5 +1,5 @@
 <template>
-  <ul class="checklist" role="list">
+  <ul class="checklist fr-p-0 fr-m-0" role="list">
     <slot />
   </ul>
 </template>
@@ -9,8 +9,6 @@
 <style scoped>
 .checklist {
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 :deep(li) {
