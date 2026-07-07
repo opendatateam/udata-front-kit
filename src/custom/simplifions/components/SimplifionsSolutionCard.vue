@@ -141,7 +141,7 @@ const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 
 .topic-card--private {
   background-color: var(--background-alt-grey);
-  color: #6b7280; /* gris moyen */
+  color: var(--text-mention-grey);
 }
 
 .fr-card__title {

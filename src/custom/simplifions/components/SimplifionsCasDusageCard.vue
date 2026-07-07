@@ -95,34 +95,24 @@ const hasTagSection = computed(
 }
 
 
-.description p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
 .topic-card {
-  border: 1px solid #ebebeb;
+  border: 1px solid var(--border-default-grey);
 }
 .topic-card:hover {
   background-color: var(--background-alt-grey);
-  opacity: 50;
 }
 .header-topic {
   background-color: rgba(209, 221, 244, 0.5);
   color: #465f9d;
   padding: 16px;
   gap: 10px;
-  opacity: 0px;
   min-height: 60px;
 }
 .topic-card:hover .header-topic {
   background-color: rgba(188, 199, 219, 0.5);
 }
 .topic-card:hover .description-topic {
-  background-color: #f0f0f0;
+  background-color: var(--background-alt-grey);
 }
 .title-topic {
   font-family: Marianne;
@@ -145,15 +135,14 @@ const hasTagSection = computed(
   font-size: 14px;
   font-weight: 400;
   line-height: 21px;
+  color: var(--text-mention-grey);
 }
 .description-topic {
   padding: 16px;
   min-height: 80px;
   background-color: var(--background-default-grey);
 }
-.date-topic {
-  color: #6b7280; /* gris moyen */
-}
+
 
 .card-arrow {
   display: flex;
@@ -167,7 +156,7 @@ const hasTagSection = computed(
   color: var(--text-mention-grey); /* gris moyen */
 }
 .topic-card--private:hover .header-topic {
-  background-color: #e7e7e7 !important;
-  color: var(--text-mention-grey); /* gris moyen */
+  background-color: var(--background-alt-grey);
+  color: var(--text-mention-grey);
 }
 </style>
