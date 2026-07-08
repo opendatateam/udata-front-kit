@@ -41,7 +41,9 @@ const goToHarvester = (sourceId: string) => {
         <LeafletMap :geojson="geojson" width="350px" height="350px" />
       </template>
       <div v-if="dataset.extras?.dcat?.spatial_resolution">
-        <DescriptionListTerm>Niveau de détail</DescriptionListTerm>
+        <DescriptionListTerm
+          >Résolution ou échelle équivalente</DescriptionListTerm
+        >
         <DescriptionListDetails>{{
           dataset.extras.dcat.spatial_resolution
         }}</DescriptionListDetails>
