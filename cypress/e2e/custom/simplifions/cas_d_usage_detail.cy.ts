@@ -66,11 +66,12 @@ describe("Simplifions Cas d'usages Show Page", () => {
   it('should link to solutions recommendations', () => {
     cy.wait('@get_topics_aides-publiques-entreprises-sourcage')
     // Check that the solutions recommendations are visible
-    cy.get('.reco-solution').should('have.length', 1)
+    cy.get('.reco-card').should('have.length', 1)
 
     // Click on the first solution recommendation
-    cy.get('.reco-solution:first').within(() => {
-      cy.get('a.solution-link').click()
+    cy.get('.reco-card:first').within(() => {
+      cy.get('.fr-accordion__btn').first().click()
+      cy.get('a.test__solution-link').click()
     })
 
     // Check that the solution detail page is loaded
@@ -83,7 +84,7 @@ describe("Simplifions Cas d'usages Show Page", () => {
   })
 
   it('should not display the access link when no access link is provided', () => {
-    cy.get('.reco-solution .access-link').should('not.exist')
+    cy.get('.reco-card .test__access-link').should('not.exist')
   })
 
   describe('with an access link in recommandation grist data', () => {
@@ -108,9 +109,9 @@ describe("Simplifions Cas d'usages Show Page", () => {
     })
 
     it('should have a functional access link', () => {
-      cy.get('.reco-solution .access-link').should(
+      cy.get('.reco-card .test__access-link').should(
         'contain.text',
-        "Demande d'accès"
+        'Demander un accès'
       )
     })
   })
@@ -134,14 +135,14 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
   })
 
   it('should display the recommandations of APIs or datasets', () => {
-    cy.get('.reco-data-api-card').should('have.length', 2)
+    cy.get('.reco-card').should('have.length', 2)
     cy.get('.api-or-dataset-card').should('have.length', 2)
     cy.get('.dataset-card').should('have.length', 1)
     cy.get('.dataservice-card').should('have.length', 1)
   })
 
   it('should not display the access link when no access link is provided', () => {
-    cy.get('.reco-data-api-card .access-link').should('not.exist')
+    cy.get('.reco-card .test__access-link').should('not.exist')
   })
 
   describe('with an access link in recommandation grist data', () => {
@@ -162,9 +163,9 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
     })
 
     it('should have a functional access link', () => {
-      cy.get('.reco-data-api-card .access-link').should(
+      cy.get('.reco-card .test__access-link').should(
         'contain.text',
-        "Demande d'accès"
+        'Demander un accès'
       )
     })
   })
@@ -195,9 +196,9 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
     })
 
     it('should display the access link from dataservice authorization_request_url', () => {
-      cy.get('.reco-data-api-card .access-link').should('exist')
-      cy.get('.reco-data-api-card .access-link')
-        .should('contain.text', "Demande d'accès")
+      cy.get('.reco-card .test__access-link').should('exist')
+      cy.get('.reco-card .test__access-link')
+        .should('contain.text', 'Demander un accès')
         .and('have.attr', 'href', 'https://dataservice-auth.example.com')
     })
   })
@@ -230,9 +231,9 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
     })
 
     it('should prioritize recommandation URL over dataservice authorization_request_url', () => {
-      cy.get('.reco-data-api-card .access-link').should('exist')
-      cy.get('.reco-data-api-card .access-link')
-        .should('contain.text', "Demande d'accès")
+      cy.get('.reco-card .test__access-link').should('exist')
+      cy.get('.reco-card .test__access-link')
+        .should('contain.text', 'Demander un accès')
         .and('have.attr', 'href', 'https://recommandation-url.example.com')
     })
   })
@@ -262,19 +263,19 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
     cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
   })
 
-  it('should display the dataservices and datasets useful inside the recommandationsolution', () => {
-    cy.get('.reco-solution').should(
+  it('should display the dataservices and datasets useful inside the recommandation', () => {
+    cy.get('.reco-card').should(
       'contain.text',
-      'API et données utiles, fournies par la solution'
+      'Endpoints de l\'API utiles pour ce cas d\'usage'
     )
-    cy.get('.api-or-dataset-utile').should('have.length', 2)
+    cy.get('.test__api-or-dataset-utile').should('have.length', 2)
   })
 
   it('should display the custom description of the api or dataset utile', () => {
     // Check that the dataservices custom description is visible
-    cy.get('.api-or-dataset-utile').should('have.length', 2)
-    cy.get('.api-or-dataset-utile-description').should('have.length', 1)
-    cy.get('.api-or-dataset-utile-description').should(
+    cy.get('.test__api-or-dataset-utile').should('have.length', 2)
+    cy.get('.test__api-or-dataset-utile-description').should('have.length', 1)
+    cy.get('.test__api-or-dataset-utile-description').should(
       'contain.text',
       'This is a custom description'
     )
