@@ -48,7 +48,7 @@
 
     <div class="fr-mt-2w fr-mx-2w">
     <h5 class="fr-text--lg fr-mb-2w">
-      <span aria-hidden="true" class="fr-icon-arrow-right-circle-fill icon-black"></span>
+      <span aria-hidden="true" class="fr-icon-arrow-right-circle-fill"></span>
       Moyens d'accès à ces données :
     </h5>
 
@@ -641,15 +641,10 @@ watch(activeApiAccordion, (val) => {
 
 .reco-card {
   background-color: var(--background-alt-beige-gris-galet);
-  border-radius: 4px;
 }
 
 .icon-green {
-  color: #27a658;
-}
-
-.icon-black {
-  color: var(--text-title-grey);
+  color: var(--text-default-success);
 }
 
 :deep(.fr-accordion__btn[aria-expanded='true']) {
