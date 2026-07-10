@@ -102,7 +102,7 @@
                       <thead>
                         <tr class="">
                           <th class="fr-col--md fr-py-2w" scope="col">Endpoints utiles de l'API</th>
-                          <th class="fr-col--lg fr-py-2w" scope="col">Description de l'utilité pour ce cas d'usage</th>
+                          <th class="fr-col--lg fr-py-2w" scope="col">Description de l'utilité pour le cas d'usage «&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;»</th>
                         </tr>
                       </thead>
                       <tbody ref="tableBodyRef">
